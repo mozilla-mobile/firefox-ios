@@ -4,10 +4,19 @@
 
 import Common
 import Redux
+import Storage
 
 /// Defines actions sent to Redux for Sync tab in tab tray
 enum RemoteTabsPanelAction: Action {
     case panelDidAppear
     case refreshCachedTabs
     case refreshTabs
+    case refreshDidFail(RemoteTabsPanelEmptyStateReason)
+    case cachedTabsAvailable(RemoteTabsPanelCachedResults)
+    case refreshDidSucceed([ClientAndTabs])
+}
+
+struct RemoteTabsPanelCachedResults {
+    let clientAndTabs: [ClientAndTabs]
+    let isUpdating: Bool // Whether we are also fetching updates to cached tabs
 }

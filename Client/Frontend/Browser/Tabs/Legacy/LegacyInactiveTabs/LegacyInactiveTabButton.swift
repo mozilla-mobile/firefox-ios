@@ -6,7 +6,7 @@ import Common
 import Foundation
 import Shared
 
-class InactiveTabButton: UITableViewCell, ThemeApplicable, ReusableCell {
+class LegacyInactiveTabButton: UITableViewCell, ThemeApplicable, ReusableCell {
     private struct UX {
         static let ImageSize: CGFloat = 29
         static let BorderViewMargin: CGFloat = 16

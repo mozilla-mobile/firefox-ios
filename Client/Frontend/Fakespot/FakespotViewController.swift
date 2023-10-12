@@ -353,6 +353,7 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
                     self.viewModel.recordTelemetry(for: .messageCard(.needsAnalysis))
                 }
                 view.configure(viewModel.needsAnalysisViewModel)
+                TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingSurfaceStaleAnalysisShown)
                 return view
 
             case .analysisInProgress:

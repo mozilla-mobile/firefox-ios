@@ -4,4 +4,4 @@
 
 import Foundation
 
-struct TabTrayModel {}
+struct TabTrayState {}

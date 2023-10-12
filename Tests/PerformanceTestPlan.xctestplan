@@ -56,7 +56,7 @@
         "OpeningScreenTests",
         "PerformanceTests\/testPerfTabs_3_20tabTray()",
         "PerformanceTests\/testPerfTabs_4_1280tabTray()",
-        "PhotonActionSheetTest",
+        "PhotonActionSheetTests",
         "PocketTest",
         "PrivateBrowsingTest",
         "PrivateBrowsingTestIpad",

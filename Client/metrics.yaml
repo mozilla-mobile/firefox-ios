@@ -731,19 +731,6 @@ shopping:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-09-06"
 
-  settings_component_opted_out:
-    type: event
-    description: |
-      Records when the 'Turn Off Review Quality Check' button was tapped
-      in Settings Card View
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/16185
-    data_reviews:
-     - https://github.com/mozilla-mobile/firefox-ios/pull/16351
-    notification_emails:
-     - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-11"
-
   surface_settings_expand_clicked:
     type: event
     description: |
@@ -890,6 +877,66 @@ shopping:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-10-05"
+
+  surface_stale_analysis_shown:
+    type: event
+    description: |
+      Records an event when the "New info to check" card is shown.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16632
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16782
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-10-05"
+
+shopping.settings:
+  nimbus_disabled_shopping:
+    type: boolean
+    lifetime: application
+    description: |
+      Indicates if Nimbus has disabled the use the shopping component.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16694
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16780
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-09-29"
+    send_in_pings:
+      - metrics
+
+  component_opted_out:
+    type: boolean
+    lifetime: application
+    description: |
+      Indicates if the user has opted out of using the shopping component.
+      Set in BrowserViewController and updated when changed by user.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16694
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16780
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-09-29"
+    send_in_pings:
+      - metrics
+
+  user_has_onboarded:
+    type: boolean
+    lifetime: application
+    description: |
+      Indicates if the user has completed the Shopping product Onboarding
+      experience. Set in BrowserViewController and updated when changed by user.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16694
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16780
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-09-29"
+    send_in_pings:
+      - metrics
 
 # Key Commands
 key_commands:
@@ -4314,8 +4361,8 @@ credit_card:
     type: event
     description: |
       Recorded when a user taps a card from bottom sheet
-      select a card flow and the credit card does not
-      get autofilled on the webpage page
+      select a card flow and the credit card gets 
+      autofilled on the webpage
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-6703
     data_reviews:
@@ -4328,7 +4375,7 @@ credit_card:
     description: |
       Recorded when a user taps a card from bottom sheet
       select a card flow and the credit card does not
-      get autofilled on the webpage page
+      get autofilled on the webpage
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-6703
     data_reviews:

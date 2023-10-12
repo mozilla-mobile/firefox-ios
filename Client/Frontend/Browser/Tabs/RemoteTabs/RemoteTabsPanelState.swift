@@ -7,14 +7,16 @@ import Redux
 import Shared
 import Storage
 
-/// Status of tab refresh.
+/// Status of Sync tab refresh.
 enum RemoteTabsPanelRefreshState {
-    case loaded
+    /// Not performing any type of refresh.
+    case idle
+    /// Currently performing a refresh of the user's tabs.
     case refreshing
 }
 
 /// Replaces RemoteTabsErrorDataSource.ErrorType
-enum RemoteTabsPanelEmptyState {
+enum RemoteTabsPanelEmptyStateReason {
     case notLoggedIn
     case noClients
     case noTabs
@@ -35,10 +37,9 @@ enum RemoteTabsPanelEmptyState {
 /// State for RemoteTabsPanel. WIP.
 struct RemoteTabsPanelState: ScreenState, Equatable {
     let refreshState: RemoteTabsPanelRefreshState
+    let allowsRefresh: Bool
     let clientAndTabs: [ClientAndTabs]
-    let allowsRefresh: Bool                                // True if `hasSyncableAccount()`
-    let showingEmptyState: RemoteTabsPanelEmptyState?      // If showing empty (or error) state
-    let syncIsSupported: Bool                              // Reference: `prefs.boolForKey(PrefsKeys.TabSyncEnabled)`
+    let showingEmptyState: RemoteTabsPanelEmptyStateReason?// If showing empty (or error) state
 
     init(_ appState: AppState) {
         guard let panelState = store.state.screenState(RemoteTabsPanelState.self, for: .remoteTabsPanel) else {
@@ -47,36 +48,59 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
         }
 
         self.init(refreshState: panelState.refreshState,
-                  clientAndTabs: panelState.clientAndTabs,
                   allowsRefresh: panelState.allowsRefresh,
-                  showingEmptyState: panelState.showingEmptyState,
-                  syncIsSupported: panelState.syncIsSupported)
+                  clientAndTabs: panelState.clientAndTabs,
+                  showingEmptyState: panelState.showingEmptyState)
     }
 
     init() {
-        self.init(refreshState: .loaded,
-                  clientAndTabs: [],
+        self.init(refreshState: .idle,
                   allowsRefresh: true,
-                  showingEmptyState: .noTabs,
-                  syncIsSupported: true)
+                  clientAndTabs: [],
+                  showingEmptyState: .noTabs)
     }
 
     init(refreshState: RemoteTabsPanelRefreshState,
-         clientAndTabs: [ClientAndTabs],
          allowsRefresh: Bool,
-         showingEmptyState: RemoteTabsPanelEmptyState?,
-         syncIsSupported: Bool) {
+         clientAndTabs: [ClientAndTabs],
+         showingEmptyState: RemoteTabsPanelEmptyStateReason?) {
         self.refreshState = refreshState
-        self.clientAndTabs = clientAndTabs
         self.allowsRefresh = allowsRefresh
+        self.clientAndTabs = clientAndTabs
         self.showingEmptyState = showingEmptyState
-        self.syncIsSupported = syncIsSupported
     }
 
     static let reducer: Reducer<Self> = { state, action in
         // TODO: Additional Reducer support forthcoming. [FXIOS-7512]
         switch action {
-        default: return state
+        case RemoteTabsPanelAction.refreshTabs:
+            let newState = RemoteTabsPanelState(refreshState: .refreshing,
+                                                allowsRefresh: state.allowsRefresh,
+                                                clientAndTabs: state.clientAndTabs,
+                                                showingEmptyState: state.showingEmptyState)
+            return newState
+        case RemoteTabsPanelAction.refreshDidFail:
+            // Refresh failed. Show error empty state.
+            let newState = RemoteTabsPanelState(refreshState: .idle,
+                                                allowsRefresh: state.allowsRefresh,
+                                                clientAndTabs: state.clientAndTabs,
+                                                showingEmptyState: .failedToSync)
+            return newState
+        case RemoteTabsPanelAction.refreshDidSucceed(let newClientAndTabs):
+            // Send client and tabs state, ensure empty state is nil and refresh is idle
+            let newState = RemoteTabsPanelState(refreshState: .idle,
+                                                allowsRefresh: state.allowsRefresh,
+                                                clientAndTabs: newClientAndTabs,
+                                                showingEmptyState: nil)
+            return newState
+        case RemoteTabsPanelAction.cachedTabsAvailable(let cachedResults):
+            let newState = RemoteTabsPanelState(refreshState: cachedResults.isUpdating ? .refreshing : .idle,
+                                                allowsRefresh: state.allowsRefresh,
+                                                clientAndTabs: cachedResults.clientAndTabs,
+                                                showingEmptyState: nil)
+            return newState
+        default:
+            return state
         }
     }
 }

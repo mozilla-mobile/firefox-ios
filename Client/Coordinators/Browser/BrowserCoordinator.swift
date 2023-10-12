@@ -320,6 +320,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - SettingsCoordinatorDelegate
+
     func openURLinNewTab(_ url: URL) {
         browserViewController.openURLInNewTab(url)
     }
@@ -330,6 +331,24 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - LibraryCoordinatorDelegate
+
+    func openRecentlyClosedSiteInSameTab(_ url: URL) {
+        browserViewController.openRecentlyClosedSiteInSameTab(url)
+    }
+
+    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
+        browserViewController.openRecentlyClosedSiteInNewTab(url, isPrivate: isPrivate)
+    }
+
+    func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
+        browserViewController.libraryPanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate)
+        router.dismiss()
+    }
+
+    func libraryPanel(didSelectURL url: URL, visitType: Storage.VisitType) {
+        browserViewController.libraryPanel(didSelectURL: url, visitType: visitType)
+        router.dismiss()
+    }
 
     func didFinishLibrary(from coordinator: LibraryCoordinator) {
         router.dismiss(animated: true, completion: nil)
@@ -417,18 +436,6 @@ class BrowserCoordinator: BaseCoordinator,
         let bottomSheetCoordinator = CredentialAutofillCoordinator(profile: profile, router: router, parentCoordinator: self)
         add(child: bottomSheetCoordinator)
         return bottomSheetCoordinator
-    }
-
-    // MARK: - LibraryPanelDelegate
-
-    func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
-        browserViewController.libraryPanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate)
-        router.dismiss()
-    }
-
-    func libraryPanel(didSelectURL url: URL, visitType: Storage.VisitType) {
-        browserViewController.libraryPanel(didSelectURL: url, visitType: visitType)
-        router.dismiss()
     }
 
     // MARK: - ParentCoordinatorDelegate

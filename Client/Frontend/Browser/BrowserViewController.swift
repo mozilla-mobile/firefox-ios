@@ -18,7 +18,8 @@ import ComponentLibrary
 class BrowserViewController: UIViewController,
                              SearchBarLocationProvider,
                              Themeable,
-                             LibraryPanelDelegate {
+                             LibraryPanelDelegate,
+                             RecentlyClosedPanelDelegate {
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
         static let ActionSheetTitleMaxLength = 120
@@ -486,6 +487,9 @@ class BrowserViewController: UIViewController,
         profile.syncManager.updateCreditCardAutofillStatus(value: autofillCreditCardStatus)
         // Credit card initial setup telemetry
         creditCardInitialSetupTelemetry()
+
+        // Send settings telemetry for Fakespot
+        FakespotUtils().addSettingTelemetry()
     }
 
     private func setupAccessibleActions() {
@@ -633,7 +637,7 @@ class BrowserViewController: UIViewController,
 
     private func prepareURLOnboardingContextualHint() {
         guard contextHintVC.shouldPresentHint(),
-              featureFlags.isFeatureEnabled(.contextualHintForToolbar, checking: .buildOnly)
+              featureFlags.isFeatureEnabled(.isToolbarCFREnabled, checking: .buildOnly)
         else { return }
 
         contextHintVC.configure(
@@ -655,11 +659,6 @@ class BrowserViewController: UIViewController,
     override func viewWillDisappear(_ animated: Bool) {
         screenshotHelper.viewIsVisible = false
         super.viewWillDisappear(animated)
-    }
-
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        adjustURLBarHeightBasedOnLocationViewHeight()
     }
 
     override func viewDidLayoutSubviews() {
@@ -840,35 +839,6 @@ class BrowserViewController: UIViewController,
         let toolBarHeight = showToolBar ? UIConstants.BottomToolbarHeight : 0
         let spacerHeight = keyboardHeight - toolBarHeight
         overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
-    }
-
-    /// Used for dynamic type height adjustment
-    private func adjustURLBarHeightBasedOnLocationViewHeight() {
-        // Make sure that we have a height to actually base our calculations on
-        guard urlBar.locationContainer.bounds.height != 0 else { return }
-        let locationViewHeight = urlBar.locationView.bounds.height
-        let padding: CGFloat = 12
-        let heightWithPadding = locationViewHeight + padding
-
-        // Adjustment for landscape on the urlbar
-        // need to account for inset and remove it when keyboard is showing
-        let showToolBar = shouldShowToolbarForTraitCollection(traitCollection)
-        let isKeyboardShowing = keyboardState != nil && keyboardState?.intersectionHeightForView(view) != 0
-        if !showToolBar && isBottomSearchBar && !isKeyboardShowing {
-            overKeyboardContainer.addBottomInsetSpacer(spacerHeight: UIConstants.BottomInset)
-        } else if !showToolBar, zoomPageBar != nil {
-            overKeyboardContainer.addBottomInsetSpacer(spacerHeight: UIConstants.BottomInset)
-        } else {
-            overKeyboardContainer.removeBottomInsetSpacer()
-        }
-
-        // We have to deactivate the original constraint, and remake the constraint
-        // or else funky conflicts happen
-        urlBarHeightConstraint.deactivate()
-        urlBar.snp.makeConstraints { make in
-            let height = heightWithPadding > UIConstants.TopToolbarHeightMax ? UIConstants.TopToolbarHeight : heightWithPadding
-            urlBarHeightConstraint = make.height.equalTo(height).constraint
-        }
     }
 
     // MARK: - Tabs Queue
@@ -1923,6 +1893,16 @@ class BrowserViewController: UIViewController,
         })
         self.show(toast: toast)
     }
+
+    // MARK: - RecentlyClosedPanelDelegate
+
+    func openRecentlyClosedSiteInSameTab(_ url: URL) {
+        tabTrayOpenRecentlyClosedTab(url)
+    }
+
+    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
+        tabManager.selectTab(tabManager.addTab(URLRequest(url: url)))
+    }
 }
 
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
@@ -2103,17 +2083,6 @@ extension BrowserViewController: LegacyTabDelegate {
 
     func tab(_ tab: Tab, didRemoveSnackbar bar: SnackBar) {
         bottomContentStackView.removeArrangedView(bar)
-    }
-}
-
-// MARK: - RecentlyClosedPanelDelegate
-extension BrowserViewController: RecentlyClosedPanelDelegate {
-    func openRecentlyClosedSiteInSameTab(_ url: URL) {
-        tabTrayOpenRecentlyClosedTab(url)
-    }
-
-    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
-        tabManager.selectTab(tabManager.addTab(URLRequest(url: url)))
     }
 }
 
