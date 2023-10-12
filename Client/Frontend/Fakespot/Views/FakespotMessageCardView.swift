@@ -73,24 +73,6 @@ struct FakespotMessageCardViewModel {
         }
     }
 
-    func sendTelemetryOnAppear() {
-        switch self.type {
-        case .confirmation:
-            return
-        case .warning:
-            return
-        case .info:
-            return
-        case .infoLoading:
-            return
-        case .error:
-            return
-        case .infoTransparent:
-            TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingSurfaceStaleAnalysisShown)
-            return
-        }
-    }
-
     var type: CardType = .confirmation
     var title: String
     var description: String?
@@ -277,7 +259,6 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
             return viewModel.type.cardBackground(theme: theme)
         })
         cardView.configure(cardModel)
-        viewModel.sendTelemetryOnAppear()
     }
 
     private func setupLayout() {
