@@ -26,7 +26,7 @@ class AppSendTabDelegate: SendTabDelegate {
     private let logger: Logger
     private var applicationHelper: ApplicationHelper
 
-    init(app: UIApplication, 
+    init(app: UIApplication,
          logger: Logger = DefaultLogger.shared,
          applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
         self.app = app
