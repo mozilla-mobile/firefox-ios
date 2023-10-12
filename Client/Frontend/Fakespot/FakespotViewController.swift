@@ -45,7 +45,7 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
     private lazy var headerView: UIView = .build()
 
     private lazy var titleLabel: UILabel = .build { label in
-        label.text = .Shopping.SheetHeaderTitle // + " " + .Shopping.SheetHeaderTitle + " " + .Shopping.SheetHeaderTitle
+        label.text = .Shopping.SheetHeaderTitle
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .headline,
