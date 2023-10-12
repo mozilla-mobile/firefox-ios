@@ -55,6 +55,9 @@ struct FakespotOptInCardViewModel {
          tabManager: TabManager = AppContainer.shared.resolve()) {
         self.tabManager = tabManager
         prefs = profile.prefs
+
+        prefs.setBool(true, forKey: PrefsKeys.Shopping2023OptInSeen)
+        FakespotUtils().addSettingTelemetry()
     }
 
     // MARK: Actions

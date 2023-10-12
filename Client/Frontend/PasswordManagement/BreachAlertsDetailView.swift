@@ -83,7 +83,7 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
         let label = UILabel()
         label.text = .BreachAlertsDescription
         label.numberOfLines = 0
-        label.font = LegacyDynamicFontHelper.defaultHelper.DeviceFontSmall
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 16, weight: .medium)
         label.isAccessibilityElement = true
         label.accessibilityTraits = .staticText
         return label

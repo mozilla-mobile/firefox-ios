@@ -958,6 +958,15 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         if status != SQLITE_OK {
             return createErr("During: Opening Database with Flags", status: Int(status))
         }
+        guard let _ = self.cipherVersion else {
+            // XXX: Temporarily remove this assertion until we find a way to
+            // reuse the copy of sqlcipher that comes with the Rust components.
+            // return createErr("Expected SQLCipher, got SQLite", status: Int(-1))
+            logger.log("Database \(self.filename) was not opened with SQLCipher",
+                       level: .warning,
+                       category: .storage)
+            return nil
+        }
 
         // Since we're using SQLCipher, ensure that `cipher_memory_security` is
         // turned off. Otherwise, there is a HUGE performance penalty.
