@@ -240,11 +240,6 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         titleStackView.layoutIfNeeded()
     }
 
-    private func widthOfString(_ string: String, usingFont font: UIFont) -> CGFloat {
-        let attributes: [NSAttributedString.Key: Any] = [.font: font]
-        return string.size(withAttributes: attributes).width
-    }
-
     private func updateContent() {
         contentStackView.removeAllArrangedViews()
 
@@ -412,6 +407,14 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        adjustLayout()
+        coordinator.animate(alongsideTransition: { _ in
+            self.adjustLayout()
+        }, completion: nil)
+    }
+
+    // MARK: Helper methods
+    private func widthOfString(_ string: String, usingFont font: UIFont) -> CGFloat {
+        let attributes: [NSAttributedString.Key: Any] = [.font: font]
+        return string.size(withAttributes: attributes).width
     }
 }
