@@ -17,8 +17,3 @@ The `CardView` is a subclass of the `UIView`. You should configure the card view
 ### View Model
 
 - ``CardViewModel``
-
-
-
-
-
