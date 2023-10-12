@@ -26,6 +26,10 @@ class FakespotViewModel {
                     ]
                 }
 
+                if product.grade == nil {
+                    recordNoReviewReliabilityAvailableTelemetry()
+                }
+
                 if product.cannotBeAnalyzedCardVisible {
                     return [
                         .messageCard(.productCannotBeAnalyzed),
@@ -309,6 +313,14 @@ class FakespotViewModel {
     }
 
     // MARK: - Telemetry
+    private static func recordNoReviewReliabilityAvailableTelemetry() {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .navigate,
+            object: .shoppingBottomSheet
+        )
+    }
+
     func recordDismissTelemetry(by action: TelemetryWrapper.EventExtraKey.Shopping) {
         TelemetryWrapper.recordEvent(
             category: .action,

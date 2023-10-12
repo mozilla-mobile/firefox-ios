@@ -1121,6 +1121,8 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.surfaceAnalyzeReviewsNoneAvailableClicked.record()
         case (.action, .tap, .shoppingNeedsAnalysisCardViewPrimaryButton, _, _):
             GleanMetrics.Shopping.surfaceReanalyzeClicked.record()
+        case (.action, .navigate, .shoppingBottomSheet, _, _):
+            GleanMetrics.Shopping.surfaceNoReviewReliabilityAvailable.record()
         case (.action, .view, .shoppingSurfaceStaleAnalysisShown, _, _):
             GleanMetrics.Shopping.surfaceStaleAnalysisShown.record()
         case(.information, .settings, .shoppingNimbusDisabled, _, let extras):
