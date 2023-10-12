@@ -1484,27 +1484,66 @@ workflows:
         title: Firebase Build for Testing Physical Devices
         inputs:
         - content: |
+            #!/usr/bin/env bash
             set -euxo pipefail
+
+            DERIVED_DATA_DIR="/Users/vagrant/git/DerivedData"
+            PROJECT="/Users/vagrant/git/Client.xcodeproj"
+            SCHEME="Fennec_Enterprise"
+            SDK="iphoneos"
+            DESTINATION="generic/platform=iOS"
+            PRODUCTS_DIR="$DERIVED_DATA_DIR/Build/Products"
+            TEST_PLAN="Fennec_Enterprise_PerformanceTestPlan"
+
             echo "-- build-for-testing --"
             mkdir DerivedData
             xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
-            xcodebuild build-for-testing -project /Users/vagrant/git/Client.xcodeproj \
-                -scheme Fennec_Enterprise \
-                -sdk iphoneos \
-                -destination "generic/platform=iOS" \
-                -derivedDataPath "/Users/vagrant/git/DerivedData"
+            xcodebuild build-for-testing -project $PROJECT \
+                -scheme $SCHEME \
+                -sdk $SDK \
+                -destination "$DESTINATION" \
+                -derivedDataPath "$DERIVED_DATA_DIR"
+
+            echo "-- verify build artifacts --"
+
+            if [[ ! -d "$PRODUCTS_DIR" ]]; then
+                echo "Error: $PRODUCTS_DIR was not created. Check your build steps and try again."
+                exit 1
+            fi
+
+            if [[ -z $(find "$PRODUCTS_DIR" -type f -name "$TEST_PLAN*.xctestrun") ]]; then
+                echo "Error: Missing $TEST_PLAN. Check your scheme and ensure the Test Plan is added."
+                echo "The files in $PRODUCTS_DIR are:"
+                ls -l "$PRODUCTS_DIR"
+                echo "The available test plans in this environment are:"
+                awk '/<TestPlanReference/,/<\/TestPlanReference>/' \
+                    $PROJECT/xcshareddata/xcschemes/$SCHEME.xcscheme | \
+                    grep "reference" | \
+                    cut -d '"' -f 2 | \
+                    sed -n 's|container:Tests/\(.*\).xctestplan|\1|p'
+                exit 1
+            fi
+
+            if [[ ! -d "$PRODUCTS_DIR/Fennec_Enterprise-$SDK" ]]; then
+                echo "Error: Missing sdk for iPhone OS. Check your build sdk argument and try again."
+                echo "The files in $PRODUCTS_DIR are:"
+                ls -l "$PRODUCTS_DIR"
+                echo "The available sdks in this environment are:"
+                xcodebuild -showsdks | grep -E 'iphoneos|iphonesimulator'
+                exit 1
+            fi
     - script@1.1:
         title: Create .zip artifact for Firebase Testing
         inputs:
         - content: |
+            #!/usr/bin/env bash
             set -euxo pipefail
-            echo "-- create .zip artifact --"
-            ls /Users/vagrant/git/DerivedData
-            ls /Users/vagrant/git/DerivedData/Build/Products
 
-            cd DerivedData/Build/Products
-            zip -r Fennec_Enterprise.zip Fennec_Enterprise-iphoneos Fennec_Enterprise_PerformanceTestPlan_iphoneos16.4-arm64.xctestrun
-            mv Fennec_Enterprise.zip /Users/vagrant/git/Fennec_Enterprise.zip
+            echo "-- create .zip artifact --"
+            PRODUCTS_DIR="/Users/vagrant/git/DerivedData/Build/Products"
+
+            ( cd "$PRODUCTS_DIR" && zip -r Fennec_Enterprise.zip Fennec_Enterprise-iphoneos Fennec_Enterprise_PerformanceTestPlan*.xctestrun )
+            mv "$PRODUCTS_DIR/Fennec_Enterprise.zip /Users/vagrant/git/Fennec_Enterprise.zip
     - cache-pull@2.7.2:
         inputs:
         - cache_paths: "$HOME/google-cloud-sdk"
@@ -1534,6 +1573,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -ex
+
             TIMESTAMP=$(date "+%Y%m%d%H%M%S")
             RESULTS_DIR="firefox_ios_performance_tests_$TIMESTAMP"
             GOOGLE_CLOUD_BUCKET="firefox_ios_test_artifacts"
@@ -1564,9 +1604,8 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             # fail if any commands fails
-            set -e
-            # debug log
-            set -x
+            set -ex
+
             # get dependency
             cd ./test-fixtures && git clone https://github.com/isabelrios/xcresult_extract.git
 
