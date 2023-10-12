@@ -20,7 +20,7 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         static let betaCornerRadius: CGFloat = 8
         static let betaHorizontalSpace: CGFloat = 6
         static let betaVerticalSpace: CGFloat = 4
-        static let betaMinWidth: CGFloat = 36.5
+        static let betaMinWidth: CGFloat = 30
         static let closeButtonWidthHeight: CGFloat = 30
         static let scrollViewTopSpacing: CGFloat = 12
         static let scrollContentTopPadding: CGFloat = 16
