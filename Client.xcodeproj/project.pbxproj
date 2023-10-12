@@ -19385,7 +19385,7 @@
 			repositoryURL = "https://github.com/kif-framework/KIF.git";
 			requirement = {
 				kind = exactVersion;
-				version = 3.8.7;
+				version = 3.8.9;
 			};
 		};
 		433F87D62788F34500693368 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
