@@ -26,15 +26,17 @@ class FakespotViewModel {
                     ]
                 }
 
-                if product.cannotBeAnalyzedCardVisible {
+                if product.grade == nil {
                     recordNoReviewReliabilityAvailableTelemetry()
+                }
+
+                if product.cannotBeAnalyzedCardVisible {
                     return [
                         .messageCard(.productCannotBeAnalyzed),
                         .qualityDeterminationCard,
                         .settingsCard
                     ]
                 } else if product.notAnalyzedCardVisible {
-                    recordNoReviewReliabilityAvailableTelemetry()
                     // Don't show not analyzed message card if analysis is in progress
                     var cards: [ViewElement] = []
 
@@ -50,7 +52,6 @@ class FakespotViewModel {
                     ]
                     return cards
                 } else if product.notEnoughReviewsCardVisible {
-                    recordNoReviewReliabilityAvailableTelemetry()
                     return [
                         .messageCard(.notEnoughReviews),
                         .qualityDeterminationCard,
