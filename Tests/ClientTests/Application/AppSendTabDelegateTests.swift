@@ -6,19 +6,40 @@ import XCTest
 @testable import Client
 
 final class AppSendTabDelegateTests: XCTestCase {
+    private var applicationStateProvider: MockApplicationStateProvider!
     private var applicationHelper: MockApplicationHelper!
 
     override func setUp() {
         super.setUp()
+        self.applicationStateProvider = MockApplicationStateProvider()
         self.applicationHelper = MockApplicationHelper()
     }
 
     override func tearDown() {
         super.tearDown()
+        self.applicationStateProvider = nil
         self.applicationHelper = nil
     }
 
-    func testOpenSendTabs() {
+    func testOpenSendTabs_inactiveState_doesntCallDeeplink() {
+        applicationStateProvider.applicationState = .inactive
+        let url = URL(string: "https://mozilla.com", invalidCharacters: false)!
+        let subject = createSubject()
+        subject.openSendTabs(for: [url])
+
+        XCTAssertEqual(applicationHelper.openURLCalled, 0)
+    }
+
+    func testOpenSendTabs_backgroundState_doesntCallDeeplink() {
+        applicationStateProvider.applicationState = .background
+        let url = URL(string: "https://mozilla.com", invalidCharacters: false)!
+        let subject = createSubject()
+        subject.openSendTabs(for: [url])
+
+        XCTAssertEqual(applicationHelper.openURLCalled, 0)
+    }
+
+    func testOpenSendTabs_activeWithOneURL_callsDeeplink() {
         let url = URL(string: "https://mozilla.com", invalidCharacters: false)!
         let subject = createSubject()
         subject.openSendTabs(for: [url])
@@ -28,7 +49,7 @@ final class AppSendTabDelegateTests: XCTestCase {
         XCTAssertEqual(applicationHelper.lastOpenURL, expectedURL)
     }
 
-    func testOpenSendTabs_multipleURLs() {
+    func testOpenSendTabs_activeWithMultipleURLs_callsDeeplink() {
         let url = URL(string: "https://mozilla.com", invalidCharacters: false)!
         let subject = createSubject()
         subject.openSendTabs(for: [url, url, url])
@@ -36,13 +57,18 @@ final class AppSendTabDelegateTests: XCTestCase {
         XCTAssertEqual(applicationHelper.openURLCalled, 3)
     }
 
-    // MARK: - Helper
+    // MARK: - Helper methods
 
     func createSubject() -> AppSendTabDelegate {
-        let subject = AppSendTabDelegate(app: UIApplication.shared,
+        let subject = AppSendTabDelegate(app: applicationStateProvider,
                                          applicationHelper: applicationHelper,
                                          mainQueue: MockDispatchQueue())
         trackForMemoryLeaks(subject)
         return subject
     }
+}
+
+// MARK: MockApplicationStateProvider
+class MockApplicationStateProvider: ApplicationStateProvider {
+    var applicationState: UIApplication.State = .active
 }

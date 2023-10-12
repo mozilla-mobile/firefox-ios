@@ -20,12 +20,12 @@ extension UIApplication {
 /// Thus, push notifications are not needed to receive sent tabs, they can be handled
 /// when the app performs a sync.
 class AppSendTabDelegate: SendTabDelegate {
-    private let app: UIApplication
+    private let app: ApplicationStateProvider
     private let logger: Logger
     private var applicationHelper: ApplicationHelper
     private var mainQueue: DispatchQueueInterface
 
-    init(app: UIApplication,
+    init(app: ApplicationStateProvider,
          logger: Logger = DefaultLogger.shared,
          applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
          mainQueue: DispatchQueueInterface = DispatchQueue.main) {
