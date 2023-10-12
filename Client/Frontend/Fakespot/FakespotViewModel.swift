@@ -252,6 +252,7 @@ class FakespotViewModel {
                 guard let self else { return }
                 await self.fetchProductAnalysis()
                 do {
+                    // A product might be already in analysis status so we listen for progress until it's completed, then fetch new information
                     for try await status in self.observeProductAnalysisStatus() where status == .completed {
                         await self.fetchProductAnalysis(showLoading: false)
                     }
@@ -262,7 +263,7 @@ class FakespotViewModel {
 
     func triggerProductAnalysis() {
         observeProductTask = Task { @MainActor [weak self] in
-            try? await self?.triggerProductAnalyze()
+            await self?.triggerProductAnalyze()
         }
     }
 
@@ -279,9 +280,15 @@ class FakespotViewModel {
         }
     }
 
-    private func triggerProductAnalyze() async throws {
+    private func triggerProductAnalyze() async {
         _ = try? await shoppingProduct.triggerProductAnalyze()
-        for try await status in observeProductAnalysisStatus() where status == .completed {
+        do {
+            // Listen for analysis status until it's completed, then fetch new information
+            for try await status in observeProductAnalysisStatus() where status == .completed {
+                await fetchProductAnalysis()
+            }
+        } catch {
+            // Sometimes we get an error that product is not found in analysis so we fetch new information
             await fetchProductAnalysis()
         }
     }
