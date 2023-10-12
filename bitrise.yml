@@ -1493,7 +1493,7 @@ workflows:
             SDK="iphoneos"
             DESTINATION="generic/platform=iOS"
             PRODUCTS_DIR="$DERIVED_DATA_DIR/Build/Products"
-            TEST_PLAN="Fennec_Enterprise_PerformanceTestPlan"
+            TEST_PLAN="$SCHEME_PerformanceTestPlan"
 
             echo "-- build-for-testing --"
             mkdir DerivedData
@@ -1524,7 +1524,7 @@ workflows:
                 exit 1
             fi
 
-            if [[ ! -d "$PRODUCTS_DIR/Fennec_Enterprise-$SDK" ]]; then
+            if [[ ! -d "$PRODUCTS_DIR/$SCHEME-$SDK" ]]; then
                 echo "Error: Missing sdk for iPhone OS. Check your build sdk argument and try again."
                 echo "The files in $PRODUCTS_DIR are:"
                 ls -l "$PRODUCTS_DIR"
@@ -1539,11 +1539,16 @@ workflows:
             #!/usr/bin/env bash
             set -euxo pipefail
 
-            echo "-- create .zip artifact --"
             PRODUCTS_DIR="/Users/vagrant/git/DerivedData/Build/Products"
+            SCHEME="Fennec_Enterprise"
+            SDK="iphoneos"
+            TEST_PLAN="PerformanceTestPlan"
+            FIREBASE_ZIP="/Users/vagrant/git/Fennec_Enterprise.zip"
 
-            ( cd "$PRODUCTS_DIR" && zip -r Fennec_Enterprise.zip Fennec_Enterprise-iphoneos Fennec_Enterprise_PerformanceTestPlan*.xctestrun )
-            mv "$PRODUCTS_DIR/Fennec_Enterprise.zip /Users/vagrant/git/Fennec_Enterprise.zip
+            echo "-- create .zip artifact --"
+
+            ( cd "$PRODUCTS_DIR" && zip -r $SCHEME.zip $SCHEME-$SDK $SCHEME_$TEST_PLAN*.xctestrun )
+            mv "$PRODUCTS_DIR/$SCHEME.zip $FIREBASE_ZIP
     - cache-pull@2.7.2:
         inputs:
         - cache_paths: "$HOME/google-cloud-sdk"
@@ -1580,6 +1585,7 @@ workflows:
             DEVICE_MODEL="iphone14pro" # if updating device model and version, also update firebase-performance.kind
             DEVICE_VERSION="16.6"
             XCRESULT_PATH="gs://$GOOGLE_CLOUD_BUCKET/$RESULTS_DIR/$DEVICE_MODEL-$DEVICE_VERSION-en-portrait/TestLogs/"
+            FIREBASE_ZIP="/Users/vagrant/git/Fennec_Enterprise.zip" # this should be the same as the artifact created in the previous step
 
             curl -o /tmp/key-file.json $BITRISEIO_GOOGLE_APPLICATION_CREDENTIALS_URL 
             $HOME/google-cloud-sdk/bin/gcloud version
@@ -1587,13 +1593,12 @@ workflows:
             $HOME/google-cloud-sdk/bin/gcloud config set project "$GOOGLE_CLOUD_PROJECT"
 
             FIREBASE_TEST_RESULT=$($HOME/google-cloud-sdk/bin/gcloud firebase test ios run \
-                --test /Users/vagrant/git/Fennec_Enterprise.zip \
+                --test $FIREBASE_ZIP \
                 --device model="$DEVICE_MODEL",version="$DEVICE_VERSION" \
                 --client-details=matrixLabel="Bitrise" \
                 --num-flaky-test-attempts=2 \
                 --results-bucket="$GOOGLE_CLOUD_BUCKET" \
                 --results-dir="$RESULTS_DIR")
-
 
             FIREBASE_XCRESULT_PATH=$($HOME/google-cloud-sdk/bin/gsutil ls $XCRESULT_PATH | grep ".xcresult")
             envman add --key FIREBASE_XCRESULT_PATH --value "$FIREBASE_XCRESULT_PATH"
