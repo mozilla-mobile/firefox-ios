@@ -30,7 +30,7 @@ let package = Package(
             branch: "master"),
         .package(
             url: "https://github.com/onevcat/Kingfisher.git",
-            exact: "7.6.2"),
+            exact: "7.9.1"),
         .package(
             url: "https://github.com/AliSoftware/Dip.git",
             exact: "7.1.1"),
