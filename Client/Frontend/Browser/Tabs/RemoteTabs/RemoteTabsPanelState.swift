@@ -32,6 +32,16 @@ enum RemoteTabsPanelEmptyStateReason {
         case .syncDisabledByUser: return .TabsTray.Sync.SyncTabsDisabled
         }
     }
+
+    /// Whether this state allows the user to refresh tabs.
+    var allowsRefresh: Bool {
+        switch self {
+        case .notLoggedIn, .syncDisabledByUser:
+            return false
+        default:
+            return true
+        }
+    }
 }
 
 /// State for RemoteTabsPanel. WIP.
@@ -84,14 +94,9 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
             return newState
         case RemoteTabsPanelAction.refreshDidFail(let reason):
             // Refresh failed. Show error empty state.
-            let allowsRefresh: Bool = {
-                switch reason {
-                case .notLoggedIn, .syncDisabledByUser: return false
-                default: return true
-                }
-            }()
+            let allowsRefresh = reason.allowsRefresh
             let newState = RemoteTabsPanelState(refreshState: .idle,
-                                                allowsRefresh: state.allowsRefresh,
+                                                allowsRefresh: allowsRefresh,
                                                 clientAndTabs: state.clientAndTabs,
                                                 showingEmptyState: .failedToSync)
             return newState
