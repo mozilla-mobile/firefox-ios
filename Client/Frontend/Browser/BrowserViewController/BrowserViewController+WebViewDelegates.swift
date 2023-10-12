@@ -533,6 +533,14 @@ extension BrowserViewController: WKNavigationDelegate {
                 webView.customUserAgent = UserAgent.getUserAgent(domain: url.baseDomain ?? "")
             }
 
+            if navigationAction.navigationType == .linkActivated {
+                linkedTapped = true
+                DispatchQueue.global(qos: .background).async {
+                    Thread.sleep(forTimeInterval: 2)
+                    self.linkedTapped = false
+                }
+            }
+
             decisionHandler(.allow)
             return
         }

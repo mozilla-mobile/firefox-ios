@@ -55,6 +55,7 @@ class BrowserViewController: UIViewController,
     var isCrashAlertShowing = false
     var currentMiddleButtonState: MiddleButtonState?
     var openedUrlFromExternalSource = false
+    var linkedTapped = false
     var passBookHelper: OpenPassBookHelper?
     var overlayManager: OverlayModeManager
     var appAuthenticator: AppAuthenticationProtocol
@@ -361,6 +362,13 @@ class BrowserViewController: UIViewController,
 
     @objc
     func appDidEnterBackgroundNotification() {
+        if linkedTapped {
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .tap,
+                object: .shoppingLinkTapped
+            )
+        }
         displayedPopoverController?.dismiss(animated: false) {
             self.updateDisplayedPopoverProperties = nil
             self.displayedPopoverController = nil

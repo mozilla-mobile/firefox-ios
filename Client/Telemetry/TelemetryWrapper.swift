@@ -398,6 +398,7 @@ extension TelemetryWrapper {
         case shoppingPoweredByFakespotLabel = "shopping-powered-by-fakespot-label"
         case shoppingNoAnalysisCardViewPrimaryButton = "shopping-no-analysis-card-view-primary-button"
         case shoppingNeedsAnalysisCardViewPrimaryButton = "shopping-needs-analysis-card-view-primary-button"
+        case shoppingLinkTapped = "link-tapped"
         case keyCommand = "key-command"
         case locationBar = "location-bar"
         case messaging = "messaging"
@@ -1102,6 +1103,8 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.surfaceAnalyzeReviewsNoneAvailableClicked.record()
         case (.action, .tap, .shoppingNeedsAnalysisCardViewPrimaryButton, _, _):
             GleanMetrics.Shopping.surfaceReanalyzeClicked.record()
+        case (.action, .tap, .shoppingLinkTapped, _, _):
+            GleanMetrics.Shopping.redirectedToExternalApp.record()
 
         // MARK: Onboarding
         case (.action, .view, .onboardingCardView, _, let extras):
