@@ -50,6 +50,9 @@ final class NimbusFeatureFlagLayer {
         case .feltPrivacyUI:
             return checkFeltPrivacyUIFeature(from: nimbus)
 
+        case .qrCodeCoordinatorRefactor:
+            return checkQRCodeCoordinatorRefactorFeature(from: nimbus)
+
         case .reduxIntegration:
             return checkReduxIntegrationFeature(from: nimbus)
 
@@ -177,6 +180,10 @@ final class NimbusFeatureFlagLayer {
     private func checkReduxIntegrationFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.reduxIntegrationFeature.value()
         return config.enabled
+    }
+
+    private func checkQRCodeCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.qrCodeCoordinatorRefactor.value().enabled
     }
 
     private func checkTabTrayRefactorFeature(from nimbus: FxNimbus) -> Bool {

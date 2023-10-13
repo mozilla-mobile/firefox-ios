@@ -1484,27 +1484,71 @@ workflows:
         title: Firebase Build for Testing Physical Devices
         inputs:
         - content: |
+            #!/usr/bin/env bash
             set -euxo pipefail
+
+            DERIVED_DATA_DIR="/Users/vagrant/git/DerivedData"
+            PROJECT="/Users/vagrant/git/Client.xcodeproj"
+            SCHEME="Fennec_Enterprise"
+            SDK="iphoneos"
+            DESTINATION="generic/platform=iOS"
+            PRODUCTS_DIR="${DERIVED_DATA_DIR}/Build/Products"
+            TEST_PLAN="${SCHEME}_PerformanceTestPlan"
+
             echo "-- build-for-testing --"
             mkdir DerivedData
             xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
-            xcodebuild build-for-testing -project /Users/vagrant/git/Client.xcodeproj \
-                -scheme Fennec_Enterprise \
-                -sdk iphoneos \
-                -destination "generic/platform=iOS" \
-                -derivedDataPath "/Users/vagrant/git/DerivedData"
+            xcodebuild build-for-testing -project "$PROJECT" \
+                -scheme "$SCHEME" \
+                -sdk "$SDK" \
+                -destination "$DESTINATION" \
+                -derivedDataPath "${DERIVED_DATA_DIR}"
+
+            echo "-- verify build artifacts --"
+
+            if [[ ! -d "$PRODUCTS_DIR" ]]; then
+                echo "Error: $PRODUCTS_DIR was not created. Check your build steps and try again."
+                exit 1
+            fi
+
+            if [[ -z $(find "$PRODUCTS_DIR" -type f -name "${TEST_PLAN}*.xctestrun") ]]; then
+                echo "Error: Missing $TEST_PLAN. Check your scheme and ensure the Test Plan is added."
+                echo "The files in $PRODUCTS_DIR are:"
+                ls -l "$PRODUCTS_DIR"
+                echo "The available test plans for this scheme, $SCHEME, are:"
+                awk '/<TestPlanReference/,/<\/TestPlanReference>/' \
+                    "${PROJECT}/xcshareddata/xcschemes/${SCHEME}.xcscheme" | \
+                    grep "reference" | \
+                    cut -d '"' -f 2 | \
+                    sed -n 's|container:Tests/\(.*\).xctestplan|\1|p'
+                exit 1
+            fi
+
+            if [[ ! -d "${PRODUCTS_DIR}/${SCHEME}-${SDK}" ]]; then
+                echo "Error: Missing sdk for iPhone OS. Check your build sdk argument and try again."
+                echo "The files in $PRODUCTS_DIR are:"
+                ls -l "$PRODUCTS_DIR"
+                echo "The available sdks in this environment are:"
+                xcodebuild -showsdks | grep -E 'iphoneos|iphonesimulator'
+                exit 1
+            fi
     - script@1.1:
         title: Create .zip artifact for Firebase Testing
         inputs:
         - content: |
+            #!/usr/bin/env bash
             set -euxo pipefail
-            echo "-- create .zip artifact --"
-            ls /Users/vagrant/git/DerivedData
-            ls /Users/vagrant/git/DerivedData/Build/Products
 
-            cd DerivedData/Build/Products
-            zip -r Fennec_Enterprise.zip Fennec_Enterprise-iphoneos Fennec_Enterprise_PerformanceTestPlan_iphoneos16.4-arm64.xctestrun
-            mv Fennec_Enterprise.zip /Users/vagrant/git/Fennec_Enterprise.zip
+            PRODUCTS_DIR="/Users/vagrant/git/DerivedData/Build/Products"
+            SCHEME="Fennec_Enterprise"
+            SDK="iphoneos"
+            TEST_PLAN="${SCHEME}_PerformanceTestPlan"
+            TARGET_ARCHIVE="/Users/vagrant/git/Fennec_Enterprise.zip"
+
+            echo "-- create .zip artifact --"
+            # do not double-quote $TEST_PLAN, as it is a wildcard and we need it to expand
+            ( cd "$PRODUCTS_DIR" && zip -r "${SCHEME}.zip" "${SCHEME}-${SDK}" ${TEST_PLAN}*.xctestrun )
+            mv "${PRODUCTS_DIR}/${SCHEME}.zip" "$TARGET_ARCHIVE"
     - cache-pull@2.7.2:
         inputs:
         - cache_paths: "$HOME/google-cloud-sdk"
@@ -1534,28 +1578,29 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -ex
+
             TIMESTAMP=$(date "+%Y%m%d%H%M%S")
-            RESULTS_DIR="firefox_ios_performance_tests_$TIMESTAMP"
+            RESULTS_DIR="firefox_ios_performance_tests_${TIMESTAMP}"
             GOOGLE_CLOUD_BUCKET="firefox_ios_test_artifacts"
             DEVICE_MODEL="iphone14pro" # if updating device model and version, also update firebase-performance.kind
             DEVICE_VERSION="16.6"
-            XCRESULT_PATH="gs://$GOOGLE_CLOUD_BUCKET/$RESULTS_DIR/$DEVICE_MODEL-$DEVICE_VERSION-en-portrait/TestLogs/"
+            XCRESULT_PATH="gs://${GOOGLE_CLOUD_BUCKET}/${RESULTS_DIR}/${DEVICE_MODEL}-${DEVICE_VERSION}-en-portrait/TestLogs/"
+            TARGET_ARCHIVE="/Users/vagrant/git/Fennec_Enterprise.zip" # this should be the same as the artifact created in the previous step
 
-            curl -o /tmp/key-file.json $BITRISEIO_GOOGLE_APPLICATION_CREDENTIALS_URL 
+            curl -o /tmp/key-file.json "$BITRISEIO_GOOGLE_APPLICATION_CREDENTIALS_URL"
             $HOME/google-cloud-sdk/bin/gcloud version
             $HOME/google-cloud-sdk/bin/gcloud auth activate-service-account -q --key-file /tmp/key-file.json
             $HOME/google-cloud-sdk/bin/gcloud config set project "$GOOGLE_CLOUD_PROJECT"
 
             FIREBASE_TEST_RESULT=$($HOME/google-cloud-sdk/bin/gcloud firebase test ios run \
-                --test /Users/vagrant/git/Fennec_Enterprise.zip \
+                --test "$TARGET_ARCHIVE" \
                 --device model="$DEVICE_MODEL",version="$DEVICE_VERSION" \
                 --client-details=matrixLabel="Bitrise" \
                 --num-flaky-test-attempts=2 \
                 --results-bucket="$GOOGLE_CLOUD_BUCKET" \
                 --results-dir="$RESULTS_DIR")
 
-
-            FIREBASE_XCRESULT_PATH=$($HOME/google-cloud-sdk/bin/gsutil ls $XCRESULT_PATH | grep ".xcresult")
+            FIREBASE_XCRESULT_PATH=$("${HOME}/google-cloud-sdk/bin/gsutil" ls "$XCRESULT_PATH" | grep ".xcresult")
             envman add --key FIREBASE_XCRESULT_PATH --value "$FIREBASE_XCRESULT_PATH"
     - script@1.1:
         is_always_run: true
@@ -1564,16 +1609,15 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             # fail if any commands fails
-            set -e
-            # debug log
-            set -x
+            set -ex
+
             # get dependency
             cd ./test-fixtures && git clone https://github.com/isabelrios/xcresult_extract.git
 
             # pull firebase xcresult and rename it to extract measurement data
             mkdir test_firebase_xcresult
 
-            $HOME/google-cloud-sdk/bin/gsutil -m cp -r $FIREBASE_XCRESULT_PATH ./test_firebase_xcresult &
+            $HOME/google-cloud-sdk/bin/gsutil -m cp -r "$FIREBASE_XCRESULT_PATH" ./test_firebase_xcresult &
 
             # Get the process ID of the backgrounded gsutil command
             PID=$!
@@ -1598,7 +1642,7 @@ workflows:
                 rm -rf ./test_firebase_xcresult
                 mkdir ./test_firebase_xcresult
                 echo "Retrying xcresult copy without multi-processing..."
-                $HOME/google-cloud-sdk/bin/gsutil cp -r $FIREBASE_XCRESULT_PATH ./test_firebase_xcresult
+                $HOME/google-cloud-sdk/bin/gsutil cp -r "$FIREBASE_XCRESULT_PATH" ./test_firebase_xcresult
             fi
 
             mv ./test_firebase_xcresult/*.xcresult ./test_firebase_xcresult/Test-Fennec-test.xcresult
@@ -1606,12 +1650,16 @@ workflows:
             # firebase xcresult needs to be in the Test dir created during earlier build-for-testing step
             FIREBASE_XCRESULT="./test_firebase_xcresult/Test-Fennec-test.xcresult"
             CLIENT_PATH=$(ls /Users/vagrant/Library/Developer/Xcode/DerivedData | grep 'Client-')
-            BITRISE_XCRESULT="/Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test/Test-Fennec-test.xcresult"
-            mv $FIREBASE_XCRESULT $BITRISE_XCRESULT
+            BITRISE_XCRESULT="/Users/vagrant/Library/Developer/Xcode/DerivedData/${CLIENT_PATH}/Logs/Test/Test-Fennec-test.xcresult"
+            mv "$FIREBASE_XCRESULT" "$BITRISE_XCRESULT"
 
             # create and print perf data object for perfherder ingest via taskcluster log output
-            xcrun xcresulttool graph --path $BITRISE_XCRESULT
+            xcrun xcresulttool graph --path "$BITRISE_XCRESULT"
             ls ..
+            # If this ever breaks, check the xcresult_extract.py function find_xcresult_path 
+            # and figure out exactly what it is doing because we are using Fennec as the scheme
+            # and it works for both Fennec and Fennec_Enterprise, but I don't know why.
+            # I would change it here but I am too afraid to break it.
             python3 xcresult_extract/xcresult_extract.py -project ../Client.xcodeproj -scheme Fennec
             cat data.txt
             sed 's/.*=//;s/'\''/"/g' data.txt > test.json
