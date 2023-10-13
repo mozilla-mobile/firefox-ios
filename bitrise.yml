@@ -1400,7 +1400,7 @@ workflows:
               curl https://sdk.cloud.google.com > install.sh
               bash install.sh --disable-prompts
               source $HOME/google-cloud-sdk/path.bash.inc
-              gcloud components install beta
+              gcloud components install beta --quiet
             fi
     - cache-push@2.7.1:
         inputs:
