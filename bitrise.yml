@@ -1412,7 +1412,7 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            set -e 
+            set -ex
             curl -o /tmp/key-file.json $BITRISEIO_GOOGLE_APPLICATION_CREDENTIALS_URL 
             $HOME/google-cloud-sdk/bin/gcloud version
             $HOME/google-cloud-sdk/bin/gcloud auth activate-service-account -q --key-file /tmp/key-file.json
@@ -1426,7 +1426,10 @@ workflows:
                 --no-record-video \
                 --client-details=matrixLabel="Bitrise" \
                 2>&1 | tee /dev/stdout)
-            envman add --key GCLOUD_EXIT_CODE --value ${PIPESTATUS[0]}
+            
+            GCLOUD_EXITCODE=${PIPESTATUS[0]}
+
+            envman add --key GCLOUD_EXIT_CODE --value "$GCLOUD_EXITCODE"
             MATRIX_WEBLINK=$(echo "$GCLOUD_OUTPUT" | grep 'https://console.firebase.google.com/project' | awk -F '[][]' '{print $2}' | head -n 1)
             envman add --key MATRIX_WEBLINK --value "$MATRIX_WEBLINK"
     - script@1:
