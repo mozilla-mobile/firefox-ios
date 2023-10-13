@@ -1032,8 +1032,7 @@ extension TelemetryWrapper {
         case(.action, .change, .loginsModified, _, _):
             GleanMetrics.Logins.modified.add()
         case(.action, .tap, .loginsSyncEnabled, _, let extras):
-            if let isEnabled = extras?[EventExtraKey.isLoginSyncEnabled.rawValue]
-                as? Bool {
+            if let isEnabled = extras?[EventExtraKey.isLoginSyncEnabled.rawValue] as? Bool {
                 let isEnabledExtra = GleanMetrics.Logins.SyncEnabledExtra(isEnabled: isEnabled)
                 GleanMetrics.Logins.syncEnabled.record(isEnabledExtra)
             } else {

@@ -155,8 +155,7 @@ class SyncContentSettingsViewController: SettingsTableViewController, FeatureFla
         return { [unowned self] enabled in
             if engineName == .creditcards {
                 self.creditCardSyncEnabledTelemetry(status: enabled)
-            }
-            else if engineName == .passwords {
+            } else if engineName == .passwords {
                 self.loginsSyncEnabledTelemetry(status: enabled)
             }
 
@@ -187,7 +186,7 @@ class SyncContentSettingsViewController: SettingsTableViewController, FeatureFla
             method: .tap,
             object: .loginsSyncEnabled,
             extras: [
-                TelemetryWrapper.ExtraKey.isCreditCardSyncToggleEnabled.rawValue: status
+                TelemetryWrapper.ExtraKey.isLoginSyncEnabled.rawValue: status
             ]
         )
     }

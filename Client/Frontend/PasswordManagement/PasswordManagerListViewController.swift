@@ -215,6 +215,18 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
                                      method: .delete,
                                      object: .loginsDeleted)
     }
+
+    private func sendLoginsManagementAddTappedTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .loginsManagementAddTapped)
+    }
+
+    private func sendLoginsManagementLoginsTappedTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .loginsManagementLoginsTapped)
+    }
 }
 
 extension PasswordManagerListViewController: UISearchResultsUpdating {
@@ -276,6 +288,7 @@ private extension PasswordManagerListViewController {
                 DispatchQueue.main.async {
                     self?.loadLogins()
                     self?.tableView.reloadData()
+                    self?.sendLoginsManagementAddTappedTelemetry()
                 }
             }
         }
@@ -397,7 +410,7 @@ extension PasswordManagerListViewController: UITableViewDelegate {
                 login: login,
                 breachRecord: breachRecord
             )
-
+            sendLoginsManagementLoginsTappedTelemetry()
             coordinator?.pressedPasswordDetail(model: detailViewModel)
         }
     }

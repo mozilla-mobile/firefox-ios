@@ -174,7 +174,7 @@ class Authenticator {
     // MARK: Telemetry
     private static func sendLoginsPasswordDetectedTelemetry() {
         TelemetryWrapper.recordEvent(category: .information,
-                                     method: .view,
+                                     method: .emailLogin,
                                      object: .loginsPasswordDetected)
     }
 
