@@ -87,13 +87,6 @@ class RemoteTabsTableViewController: UITableViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         (navigationController as? ThemedNavigationController)?.applyTheme()
-
-        // Add a refresh control if the user is logged in and the control
-        // was not added before. If the user is not logged in, remove any
-        // existing control.
-        if state.allowsRefresh && refreshControl == nil {
-            addRefreshControl()
-        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -119,6 +112,15 @@ class RemoteTabsTableViewController: UITableViewController,
 
         if state.refreshState != .refreshing {
             endRefreshing()
+        }
+
+        // Add a refresh control if the user is logged in and the control
+        // was not added before. If the user is not logged in, remove any
+        // existing control.
+        if state.allowsRefresh && refreshControl == nil {
+            addRefreshControl()
+        } else if !state.allowsRefresh {
+            removeRefreshControl()
         }
 
         tableView.reloadData()
@@ -157,7 +159,9 @@ class RemoteTabsTableViewController: UITableViewController,
             endRefreshing()
             return
         }
-
+        guard state.refreshState == .idle else {
+            return
+        }
         refreshControl?.beginRefreshing()
         remoteTabsPanel?.tableViewControllerDidPullToRefresh()
     }

@@ -2233,6 +2233,7 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
+        tabManager.startAtHomeCheck()
         updateTabCountUsingTabManager(tabManager)
         openUrlAfterRestore()
     }
