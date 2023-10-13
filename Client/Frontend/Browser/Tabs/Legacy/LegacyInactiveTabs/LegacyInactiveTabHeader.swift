@@ -53,7 +53,7 @@ class LegacyInactiveTabHeader: UITableViewHeaderFooterView, ReusableCell {
 
         isAccessibilityElement = true
         accessibilityTraits = .button
-        accessibilityIdentifier = AccessibilityIdentifiers.TabTray.inactiveTabHeader
+        accessibilityIdentifier = AccessibilityIdentifiers.TabTray.InactiveTabs.headerView
 
         NSLayoutConstraint.activate([
             titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),

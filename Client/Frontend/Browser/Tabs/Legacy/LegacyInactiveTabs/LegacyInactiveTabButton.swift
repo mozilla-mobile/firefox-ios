@@ -35,7 +35,7 @@ class LegacyInactiveTabButton: UITableViewCell, ThemeApplicable, ReusableCell {
         button.layer.cornerRadius = 13.5
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.clear.cgColor
-        button.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.inactiveTabDeleteButton
+        button.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.InactiveTabs.deleteButton
         button.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
