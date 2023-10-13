@@ -9,6 +9,7 @@ import XCTest
 // Tests for both platforms
 class DesktopModeTestsIpad: IpadOnlyTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306852
+    // smoketest
     func testLongPressReload() {
         if skipPlatform { return }
         navigator.nowAt(NewTabScreen)
@@ -176,7 +177,8 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/52777
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306852
+    // smoketest
     func testLongPressReload() {
         if skipPlatform { return }
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
