@@ -6,16 +6,17 @@ import Common
 import Foundation
 import UIKit
 
+/// Protocol followed by child of the bottom sheet, which holds the content shown in the bottom sheet.
 public protocol BottomSheetChild: UIViewController {
     /// Tells the child that the bottom sheet will get dismissed
     func willDismiss()
 }
 
+/// Protocol followed by the bottom sheet view controller. Gives the possibility to dismiss the bottom sheet.
 public protocol BottomSheetDismissProtocol {
     func dismissSheetViewController(completion: (() -> Void)?)
 }
 
-/// A container that present from the bottom as a sheet
 public class BottomSheetViewController: UIViewController,
                                         BottomSheetDismissProtocol,
                                         Themeable,
