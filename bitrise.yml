@@ -1391,7 +1391,7 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            set -e
+            set -ex
              
             if [ -e $HOME/sdk/google-cloud-sdk ]; then
               echo "Google Cloud SDK found, skipping installation..."
