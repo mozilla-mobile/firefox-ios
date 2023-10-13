@@ -3879,8 +3879,8 @@ extension String {
         public static let OptInCardCopy = MZLocalizedString(
             key: "Shopping.OptInCard.FirstParagraph.Title.v120",
             tableName: "Shopping",
-            value: "See how reliable product reviews are on %1$@ before you buy. Review checker, an experimental feature from %4$@, is built right into the browser. It works on %2$@ and %3$@, too.\n\nUsing the power of %5$@ by %6$@, we help you avoid biased and inauthentic reviews. Our AI model is always improving to protect you as you shop.",
-            comment: "Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon), and the second and third parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. The fourth parameter will be replaced by the app name. And the fifth and sixth parameter are the Fakespot app name and the company name of Mozilla.")
+            value: "See how reliable product reviews are on %1$@ before you buy. Review checker, an experimental feature from %2$@, is built right into the browser. It works on %3$@ and  %4$@, too.\n\nUsing the power of %5$@ by %6$@, we help you avoid biased and inauthentic reviews. Our AI model is always improving to protect you as you shop.",
+            comment: "Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. The third and fourth parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. The fifth and sixth parameter are the Fakespot app name and the company name of Mozilla.")
         public static let OptInCardLearnMoreButtonTitle = MZLocalizedString(
             key: "Shopping.OptInCard.LearnMoreButtonTitle.Title.v120",
             tableName: "Shopping",
