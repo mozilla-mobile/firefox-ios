@@ -12,7 +12,7 @@ class LoginsHelper: TabContentScript {
     fileprivate weak var tab: Tab?
     fileprivate let profile: Profile
     fileprivate var snackBar: SnackBar?
-
+    fileprivate let themeManager: ThemeManager
     // Exposed for mocking purposes
     var logins: RustLogins {
         return profile.logins
@@ -22,9 +22,10 @@ class LoginsHelper: TabContentScript {
         return "LoginsHelper"
     }
 
-    required init(tab: Tab, profile: Profile) {
+    required init(tab: Tab, profile: Profile, themeManager: ThemeManager) {
         self.tab = tab
         self.profile = profile
+        self.themeManager = themeManager
     }
 
     func scriptMessageHandlerName() -> String? {
@@ -184,6 +185,9 @@ class LoginsHelper: TabContentScript {
             self.snackBar = nil
             _ = self.profile.logins.addLogin(login: login)
         }
+        dontSave.applyTheme(theme: themeManager.currentTheme)
+        save.applyTheme(theme: themeManager.currentTheme)
+        snackBar?.applyTheme(theme: themeManager.currentTheme)
         snackBar?.addButton(dontSave)
         snackBar?.addButton(save)
         tab?.addSnackbar(snackBar!)
@@ -214,6 +218,9 @@ class LoginsHelper: TabContentScript {
             self.snackBar = nil
             _ = self.profile.logins.updateLogin(id: old.id, login: new)
         }
+        dontSave.applyTheme(theme: themeManager.currentTheme)
+        update.applyTheme(theme: themeManager.currentTheme)
+        snackBar?.applyTheme(theme: themeManager.currentTheme)
         snackBar?.addButton(dontSave)
         snackBar?.addButton(update)
         tab?.addSnackbar(snackBar!)

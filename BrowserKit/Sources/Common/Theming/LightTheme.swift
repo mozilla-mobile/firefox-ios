@@ -91,4 +91,20 @@ private struct LightColourPalette: ThemeColourPalette {
 
     // MARK: - Shadow
     var shadowDefault: UIColor = FXColors.DarkGrey40.withAlphaComponent(0.16)
+    
+    // MARK: - Snackbar
+    var snackBarTitle: UIColor = FXColors.Blue40 // UIColor.Photon.Blue40
+    var snackBarBorder: UIColor = FXColors.LightGrey30 // UIColor.Photon.Grey30// 0xd7d7db
+    var snackBarHighlight: UIColor = UIColor(rgb: 0xccdded).withAlphaComponent(0.9) // UIColor.LegacyDefaults.iOSTextHighlightBlue.withAlphaComponent(0.9)
+    var snackBarHighlightText: UIColor = FXColors.Blue40 // UIColor.Photon.Blue40
+    
+    // MARK: - Browser
+    var browserBackground: UIColor = FXColors.DarkGrey10 // UIColor.Photon.Grey10
+    
+    // MARK: - TableView
+    var tableViewRowText: UIColor = FXColors.LightGrey90 //UIColor.Photon.Grey90 
+    var tableViewDisabledRowText: UIColor = FXColors.LightGrey40 //UIColor.Photon.Grey40
+    
+    // MARK: - TabTrayColor
+    var tabTitleStyle: UIBlurEffect.Style = .extraLight
 }

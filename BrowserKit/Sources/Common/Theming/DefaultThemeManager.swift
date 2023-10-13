@@ -60,6 +60,10 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         return currentTheme.type.getInterfaceStyle()
     }
 
+    public func getStatusBarStyle() -> UIStatusBarStyle {
+        return .default
+    }
+    
     public func changeCurrentTheme(_ newTheme: ThemeType) {
         guard currentTheme.type != newTheme else { return }
         currentTheme = newThemeForType(newTheme)
@@ -82,6 +86,10 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         changeCurrentTheme(getSystemThemeType())
     }
 
+    public func isSystemThemeOn() -> Bool {
+        userDefaults.bool(forKey: ThemeKeys.systemThemeIsOn)
+    }
+    
     public func setSystemTheme(isOn: Bool) {
         userDefaults.set(isOn, forKey: ThemeKeys.systemThemeIsOn)
 
@@ -100,6 +108,14 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         brightnessChanged()
     }
 
+    public func isAutomaticBrightnessOn() -> Bool {
+        userDefaults.bool(forKey: ThemeKeys.AutomaticBrightness.isOn)
+    }
+    
+    public func getAutomaticBrightnessValue() -> Float {
+        userDefaults.float(forKey: ThemeKeys.AutomaticBrightness.thresholdValue)
+    }
+    
     public func setAutomaticBrightnessValue(_ value: Float) {
         userDefaults.set(value, forKey: ThemeKeys.AutomaticBrightness.thresholdValue)
         brightnessChanged()
@@ -143,7 +159,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         }
     }
 
-    private func updateThemeBasedOnBrightness() {
+    public func updateThemeBasedOnBrightness() {
         let thresholdValue = userDefaults.float(forKey: ThemeKeys.AutomaticBrightness.thresholdValue)
         let currentValue = Float(UIScreen.main.brightness)
 

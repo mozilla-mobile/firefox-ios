@@ -31,12 +31,11 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     lazy var isReduxIntegrationEnabled: Bool = ReduxFlagManager.isReduxEnabled
 
     var isAutoBrightnessOn: Bool {
-        return isReduxIntegrationEnabled ? themeState.isAutomaticBrightnessEnable
-         : LegacyThemeManager.instance.automaticBrightnessIsOn
+        return isReduxIntegrationEnabled ? themeState.isAutomaticBrightnessEnable : themeManager.isAutomaticBrightnessOn()
     }
 
     var isSystemThemeOn: Bool {
-        return isReduxIntegrationEnabled ? themeState.useSystemAppearance : LegacyThemeManager.instance.systemThemeIsOn
+        return isReduxIntegrationEnabled ? themeState.useSystemAppearance : themeManager.isSystemThemeOn()
     }
 
     var manualThemeType: ThemeType {
@@ -93,7 +92,6 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         if isReduxIntegrationEnabled {
             store.dispatch(ThemeSettingsAction.toggleUseSystemAppearance(control.isOn))
         } else {
-            LegacyThemeManager.instance.systemThemeIsOn = control.isOn
             themeManager.setSystemTheme(isOn: control.isOn)
         }
 
@@ -101,9 +99,9 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
             // Reset the user interface style to the default before choosing our theme
             UIApplication.shared.delegate?.window??.overrideUserInterfaceStyle = .unspecified
             let userInterfaceStyle = traitCollection.userInterfaceStyle
-            LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? LegacyDarkTheme() : LegacyNormalTheme()
-        } else if LegacyThemeManager.instance.automaticBrightnessIsOn {
-            LegacyThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
+            themeManager.changeCurrentTheme(userInterfaceStyle == .dark ? .dark : .light)
+        } else if themeManager.isAutomaticBrightnessOn() {
+            themeManager.updateThemeBasedOnBrightness()
         }
 
         // Switch animation must begin prior to scheduling table view update animation
@@ -117,7 +115,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
 
     @objc
     func systemBrightnessChanged() {
-        guard LegacyThemeManager.instance.automaticBrightnessIsOn else { return }
+        guard themeManager.isAutomaticBrightnessOn() else { return }
 
         if isReduxIntegrationEnabled {
             store.dispatch(ThemeSettingsAction.receivedSystemBrightnessChange)
@@ -127,10 +125,10 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
 
     /// Update Theme if user or system brightness change due to user action
     func brightnessChanged() {
-        guard LegacyThemeManager.instance.automaticBrightnessIsOn else { return }
+        guard themeManager.isAutomaticBrightnessOn() else { return }
 
         if !isReduxIntegrationEnabled {
-            LegacyThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
+            themeManager.updateThemeBasedOnBrightness()
         }
         applyTheme()
     }
@@ -143,7 +141,6 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
             store.dispatch(ThemeSettingsAction.updateUserBrightness(control.value))
         } else {
             themeManager.setAutomaticBrightnessValue(control.value)
-            LegacyThemeManager.instance.automaticBrightnessValue = control.value
             brightnessChanged()
         }
     }
@@ -235,7 +232,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
             control.accessibilityIdentifier = "SystemThemeSwitchValue"
             control.onTintColor = themeManager.currentTheme.colors.actionPrimary
             control.addTarget(self, action: #selector(systemThemeSwitchValueChanged), for: .valueChanged)
-            control.isOn = isReduxIntegrationEnabled ? themeState.useSystemAppearance : LegacyThemeManager.instance.systemThemeIsOn
+            control.isOn = isReduxIntegrationEnabled ? themeState.useSystemAppearance : themeManager.isSystemThemeOn()
 
             cell.accessoryView = control
         case .automaticBrightness:
@@ -290,7 +287,6 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         if isReduxIntegrationEnabled {
             store.dispatch(ThemeSettingsAction.enableAutomaticBrightness(isOn))
         } else {
-            LegacyThemeManager.instance.automaticBrightnessIsOn = isOn
             themeManager.setAutomaticBrightness(isOn: isOn)
         }
 
@@ -307,7 +303,6 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
             let themeName: ThemeType = isLightTheme ? .light : .dark
             store.dispatch(ThemeSettingsAction.switchManualTheme(themeName))
         } else {
-            LegacyThemeManager.instance.current = isLightTheme ? LegacyNormalTheme() : LegacyDarkTheme()
             themeManager.changeCurrentTheme(isLightTheme ? .light : .dark)
         }
         TelemetryWrapper.recordEvent(category: .action,
@@ -347,8 +342,8 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
                 cell.textLabel?.text = .DisplayThemeOptionDark
             }
 
-            let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-            if (indexPath.row == 0 && theme == .normal) ||
+            let theme = themeManager.currentTheme.type
+            if (indexPath.row == 0 && theme == .light) ||
                 (indexPath.row == 1 && theme == .dark) {
                 cell.accessoryType = .checkmark
                 tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
@@ -366,7 +361,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
             slider.value = themeState.userBrightnessThreshold
             deviceBrightnessIndicator.value = themeState.systemBrightness
         } else {
-            slider.value = Float(LegacyThemeManager.instance.automaticBrightnessValue)
+            slider.value = Float(themeManager.getAutomaticBrightnessValue())
             deviceBrightnessIndicator.value = Float(UIScreen.main.brightness)
         }
         deviceBrightnessIndicator.isUserInteractionEnabled = false

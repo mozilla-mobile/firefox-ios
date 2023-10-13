@@ -9,6 +9,7 @@ import XCTest
 class TabCellTests: XCTestCase {
     override func setUp() {
         super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
     }
 
     func testTabCellDeinit() {

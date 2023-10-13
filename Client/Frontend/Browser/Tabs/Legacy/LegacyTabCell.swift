@@ -70,7 +70,7 @@ class LegacyTabCell: UICollectionViewCell,
     }
 
     // TODO: Handle visual effects theming FXIOS-5064
-    private var title = UIVisualEffectView(effect: UIBlurEffect(style: UIColor.legacyTheme.tabTray.tabTitleBlur))
+    private var title: UIVisualEffectView!
     var animator: SwipeAnimator?
     var isSelectedTab = false
 
@@ -93,7 +93,8 @@ class LegacyTabCell: UICollectionViewCell,
         self.accessibilityCustomActions = [
             UIAccessibilityCustomAction(name: .TabTrayCloseAccessibilityCustomAction, target: self.animator, selector: #selector(SwipeAnimator.closeWithoutGesture))
         ]
-
+        let themeManager: ThemeManager = AppContainer.shared.resolve()
+        title = UIVisualEffectView(effect: UIBlurEffect(style: themeManager.currentTheme.colors.tabTitleStyle))
         backgroundHolder.addSubview(title)
         title.translatesAutoresizingMaskIntoConstraints = false
         title.contentView.addSubview(self.closeButton)

@@ -4,6 +4,10 @@
 
 import Foundation
 
+public protocol PrivateModeUI {
+    func applyUIMode(isPrivate: Bool, theme: Theme)
+}
+
 // Used to pass in a theme to a view or cell to apply a theme
 public protocol ThemeApplicable {
     func applyTheme(theme: Theme)

@@ -3,11 +3,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
 
 class ThemeSetting: Setting {
     private weak var settingsDelegate: GeneralSettingsDelegate?
     private let profile: Profile
-
+    private let themeManager: ThemeManager
     override var accessoryView: UIImageView? {
         return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
     }
@@ -18,11 +19,11 @@ class ThemeSetting: Setting {
     }
 
     override var status: NSAttributedString {
-        if LegacyThemeManager.instance.systemThemeIsOn {
+        if themeManager.isSystemThemeOn() {
             return NSAttributedString(string: .SystemThemeSectionHeader)
-        } else if !LegacyThemeManager.instance.automaticBrightnessIsOn {
+        } else if !themeManager.isAutomaticBrightnessOn() {
             return NSAttributedString(string: .DisplayThemeManualStatusLabel)
-        } else if LegacyThemeManager.instance.automaticBrightnessIsOn {
+        } else if themeManager.isAutomaticBrightnessOn() {
             return NSAttributedString(string: .DisplayThemeAutomaticStatusLabel)
         }
         return NSAttributedString(string: "")
@@ -31,6 +32,7 @@ class ThemeSetting: Setting {
     init(settings: SettingsTableViewController,
          settingsDelegate: GeneralSettingsDelegate?) {
         self.profile = settings.profile
+        self.themeManager = settings.themeManager
         self.settingsDelegate = settingsDelegate
         super.init(title: NSAttributedString(string: .SettingsDisplayThemeTitle,
                                              attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))

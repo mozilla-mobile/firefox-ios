@@ -31,8 +31,7 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
 
     private lazy var smallFaviconView: FaviconImageView = .build()
     private lazy var favicon: FaviconImageView = .build()
-    private var title =
-        UIVisualEffectView(effect: UIBlurEffect(style: UIColor.legacyTheme.tabTray.tabTitleBlur))
+    private var title: UIVisualEffectView!
 
     // MARK: - UI
 
@@ -85,7 +84,8 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
                                         target: self.animator,
                                         selector: #selector(SwipeAnimator.closeWithoutGesture))
         ]
-
+        let themeManager: ThemeManager = AppContainer.shared.resolve()
+        title = UIVisualEffectView(effect: UIBlurEffect(style: themeManager.currentTheme.colors.tabTitleStyle))
         backgroundHolder.addSubview(title)
         title.translatesAutoresizingMaskIntoConstraints = false
         title.contentView.addSubview(self.closeButton)

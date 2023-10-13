@@ -15,6 +15,9 @@ class SnackButton: UIButton {
     let callback: SnackBarCallback?
     var bar: SnackBar?
 
+    private var separatorColor: UIColor!
+    private var highlightColor: UIColor!
+    
     private struct UX {
         static let borderWidth: CGFloat = 0.5
         static let fontSize: CGFloat = 17
@@ -22,7 +25,7 @@ class SnackButton: UIButton {
 
     override open var isHighlighted: Bool {
         didSet {
-            self.backgroundColor = isHighlighted ? UIColor.legacyTheme.snackbar.highlight : .clear
+            self.backgroundColor = isHighlighted ? highlightColor : .clear
         }
     }
 
@@ -38,8 +41,6 @@ class SnackButton: UIButton {
         }
         titleLabel?.adjustsFontForContentSizeCategory = true
         setTitle(title, for: .normal)
-        setTitleColor(UIColor.legacyTheme.snackbar.highlightText, for: .highlighted)
-        setTitleColor(UIColor.legacyTheme.snackbar.title, for: .normal)
         addTarget(self, action: #selector(onClick), for: .touchUpInside)
         self.accessibilityIdentifier = accessibilityIdentifier
     }
@@ -54,7 +55,7 @@ class SnackButton: UIButton {
     }
 
     func drawSeparator() {
-        let separator: UIView = .build { $0.backgroundColor = UIColor.legacyTheme.snackbar.border }
+        let separator: UIView = .build { $0.backgroundColor = self.separatorColor }
         addSubview(separator)
         NSLayoutConstraint.activate([
             separator.topAnchor.constraint(equalTo: topAnchor),
@@ -62,5 +63,14 @@ class SnackButton: UIButton {
             separator.leadingAnchor.constraint(equalTo: leadingAnchor),
             separator.widthAnchor.constraint(equalToConstant: UX.borderWidth)
         ])
+    }
+}
+
+extension SnackButton: ThemeApplicable {
+    func applyTheme(theme: Theme) {
+        highlightColor = theme.colors.snackBarHighlight
+        setTitleColor(theme.colors.snackBarHighlightText, for: .highlighted)
+        setTitleColor(theme.colors.snackBarTitle, for: .normal)
+        separatorColor = theme.colors.snackBarBorder
     }
 }

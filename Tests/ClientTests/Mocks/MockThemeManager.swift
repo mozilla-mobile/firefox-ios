@@ -13,6 +13,10 @@ class MockThemeManager: ThemeManager {
         return .light
     }
 
+    func getStatusBarStyle() -> UIStatusBarStyle {
+        .default
+    }
+    
     func changeCurrentTheme(_ newTheme: ThemeType) {
         switch newTheme {
         case .light:
@@ -24,10 +28,18 @@ class MockThemeManager: ThemeManager {
 
     func systemThemeChanged() {}
 
+    func isSystemThemeOn() -> Bool { true }
+    
     func setSystemTheme(isOn: Bool) {}
 
+    func isAutomaticBrightnessOn() -> Bool { false }
+    
+    func updateThemeBasedOnBrightness() { }
+    
     func setAutomaticBrightness(isOn: Bool) {}
 
+    func getAutomaticBrightnessValue() -> Float { return 1 }
+    
     func setAutomaticBrightnessValue(_ value: Float) {
         let screenLessThanPref = Float(UIScreen.main.brightness) < value
 

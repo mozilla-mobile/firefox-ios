@@ -86,4 +86,20 @@ public protocol ThemeColourPalette {
 
     // MARK: - Shadow
     var shadowDefault: UIColor { get }
+    
+    // MARK: - Snackbar
+    var snackBarTitle: UIColor { get }
+    var snackBarHighlight: UIColor { get }
+    var snackBarHighlightText: UIColor { get }
+    var snackBarBorder: UIColor { get }
+    
+    // MARK: - Browser
+    var browserBackground: UIColor { get }
+    
+    // MARK: - TableView
+    var tableViewRowText: UIColor { get }
+    var tableViewDisabledRowText: UIColor { get }
+    
+    // MARK: - TabTrayColor
+    var tabTitleStyle: UIBlurEffect.Style { get }
 }

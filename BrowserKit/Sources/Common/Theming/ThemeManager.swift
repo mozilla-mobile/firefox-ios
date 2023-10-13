@@ -9,9 +9,14 @@ public protocol ThemeManager {
     var window: UIWindow? { get set }
 
     func getInterfaceStyle() -> UIUserInterfaceStyle
+    func getStatusBarStyle() -> UIStatusBarStyle
     func changeCurrentTheme(_ newTheme: ThemeType)
     func systemThemeChanged()
+    func isSystemThemeOn() -> Bool
     func setSystemTheme(isOn: Bool)
+    func updateThemeBasedOnBrightness()
+    func isAutomaticBrightnessOn() -> Bool
     func setAutomaticBrightness(isOn: Bool)
+    func getAutomaticBrightnessValue() -> Float
     func setAutomaticBrightnessValue(_ value: Float)
 }

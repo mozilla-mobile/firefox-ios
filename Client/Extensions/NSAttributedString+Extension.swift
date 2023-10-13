@@ -3,11 +3,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
 
 // MARK: - Common UITableView text styling
 extension NSAttributedString {
-    static func tableRowTitle(_ string: String, enabled: Bool) -> NSAttributedString {
-        let color = enabled ? [NSAttributedString.Key.foregroundColor: UIColor.legacyTheme.tableView.rowText] : [NSAttributedString.Key.foregroundColor: UIColor.legacyTheme.tableView.disabledRowText]
+    static func tableRowTitle(_ string: String, theme: Theme, enabled: Bool) -> NSAttributedString {
+        let color = enabled ? [NSAttributedString.Key.foregroundColor: theme.colors.tableViewRowText] : [NSAttributedString.Key.foregroundColor: theme.colors.tableViewDisabledRowText]
         return NSAttributedString(string: string, attributes: color)
     }
 }

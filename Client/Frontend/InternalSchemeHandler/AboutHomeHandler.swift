@@ -2,6 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
+
 class AboutHomeHandler: InternalSchemeResponse {
     static let path = "about/home"
 
@@ -9,7 +11,8 @@ class AboutHomeHandler: InternalSchemeResponse {
     func response(forRequest request: URLRequest) -> (URLResponse, Data)? {
         guard let url = request.url else { return nil }
         let response = InternalSchemeHandler.response(forUrl: url)
-        let backgroundColor = UIColor.legacyTheme.browser.background.hexString
+        let themeManager: ThemeManager = AppContainer.shared.resolve()
+        let backgroundColor = themeManager.currentTheme.colors.browserBackground.hexString
         // Blank page with a color matching the background of the panels which is displayed for a split-second until the panel shows.
         let html = """
             <!DOCTYPE html>

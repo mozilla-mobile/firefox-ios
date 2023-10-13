@@ -457,7 +457,8 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         let nightModeTitle: String = nightModeEnabled ? .AppMenu.AppMenuTurnOffNightMode : .AppMenu.AppMenuTurnOnNightMode
         let nightMode = SingleActionViewModel(title: nightModeTitle,
                                               iconString: ImageIdentifiers.nightMode,
-                                              isEnabled: nightModeEnabled) { _ in
+                                              isEnabled: nightModeEnabled) { [weak self] _ in
+            guard let self = self else { return }
             NightModeHelper.toggle(tabManager: self.tabManager)
 
             if nightModeEnabled {
@@ -467,15 +468,13 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             }
 
             // If we've enabled night mode and the theme is normal, enable dark theme
-            if NightModeHelper.isActivated(), LegacyThemeManager.instance.currentName == .normal {
-                LegacyThemeManager.instance.current = LegacyDarkTheme()
+            if NightModeHelper.isActivated(), self.themeManager.currentTheme.type == .light {
                 self.themeManager.changeCurrentTheme(.dark)
                 NightModeHelper.setEnabledDarkTheme(darkTheme: true)
             }
 
             // If we've disabled night mode and dark theme was activated by it then disable dark theme
-            if !NightModeHelper.isActivated(), NightModeHelper.hasEnabledDarkTheme(), LegacyThemeManager.instance.currentName == .dark {
-                LegacyThemeManager.instance.current = LegacyNormalTheme()
+            if !NightModeHelper.isActivated(), NightModeHelper.hasEnabledDarkTheme(), self.themeManager.currentTheme.type == .dark {
                 self.themeManager.changeCurrentTheme(.light)
                 NightModeHelper.setEnabledDarkTheme(darkTheme: false)
             }

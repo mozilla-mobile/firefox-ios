@@ -49,9 +49,9 @@ class LocalDesktopFolder: FxBookmarkNode {
 }
 
 extension LocalDesktopFolder: BookmarksFolderCell {
-    func getViewModel() -> OneLineTableViewCellViewModel {
+    func getViewModel(theme: Theme) -> OneLineTableViewCellViewModel {
         return OneLineTableViewCellViewModel(title: LocalizedRootBookmarkFolderStrings[guid],
-                                             leftImageView: leftImageView,
+                                             leftImageView: getLeftImageView(theme: theme),
                                              accessoryView: nil,
                                              accessoryType: .disclosureIndicator)
     }

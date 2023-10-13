@@ -8,7 +8,7 @@ import Common
 
 /// Used to setup bookmarks and folder cell in Bookmarks panel, getting their viewModel
 protocol BookmarksFolderCell {
-    func getViewModel() -> OneLineTableViewCellViewModel
+    func getViewModel(theme: Theme) -> OneLineTableViewCellViewModel
 
     func didSelect(profile: Profile,
                    libraryPanelDelegate: LibraryPanelDelegate?,
@@ -17,7 +17,7 @@ protocol BookmarksFolderCell {
 }
 
 extension BookmarkFolderData: BookmarksFolderCell {
-    func getViewModel() -> OneLineTableViewCellViewModel {
+    func getViewModel(theme: Theme) -> OneLineTableViewCellViewModel {
         var title: String
         if isRoot, let localizedString = LocalizedRootBookmarkFolderStrings[guid] {
             title = localizedString
@@ -26,7 +26,7 @@ extension BookmarkFolderData: BookmarksFolderCell {
         }
 
         return OneLineTableViewCellViewModel(title: title,
-                                             leftImageView: leftImageView,
+                                             leftImageView: getLeftImageView(theme: theme),
                                              accessoryView: nil,
                                              accessoryType: .disclosureIndicator)
     }
@@ -49,7 +49,7 @@ extension BookmarkFolderData: BookmarksFolderCell {
 }
 
 extension BookmarkItemData: BookmarksFolderCell {
-    func getViewModel() -> OneLineTableViewCellViewModel {
+    func getViewModel(theme: Theme) -> OneLineTableViewCellViewModel {
         var title: String
         if self.title.isEmpty {
             title = url
@@ -86,8 +86,8 @@ extension BookmarkItemData: BookmarksFolderCell {
 
 // MARK: FxBookmarkNode viewModel helper
 extension FxBookmarkNode {
-    var leftImageView: UIImage? {
-        return LegacyThemeManager.instance.currentName == .dark ? bookmarkFolderIconDark : bookmarkFolderIconNormal
+    func getLeftImageView(theme: Theme) -> UIImage? {
+        theme.type == .dark ? bookmarkFolderIconDark : bookmarkFolderIconNormal
     }
 
     var chevronImage: UIImage? {

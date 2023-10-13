@@ -61,6 +61,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     private let tabEventHandlers: [TabEventHandler]
     let store: LegacyTabManagerStore
     let profile: Profile
+    private lazy var themeManager: ThemeManager = AppContainer.shared.resolve()
     var isRestoringTabs = false
     var tabs = [Tab]()
     private var _selectedIndex = -1
@@ -298,7 +299,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         }
         if let tab = selectedTab {
             TabEvent.post(.didGainFocus, for: tab)
-            tab.applyTheme()
+            tab.applyTheme(theme: themeManager.currentTheme)
         }
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .tab)
 
@@ -564,7 +565,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
                 // If we're showing "about:blank" in a webview, set
                 // the <html> `background-color` to match the theme.
                 if let webView = tab.webView {
-                    webView.applyTheme()
+                    webView.applyTheme(theme: themeManager.currentTheme)
                 }
                 break
             default:

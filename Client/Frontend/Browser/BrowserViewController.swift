@@ -215,7 +215,7 @@ class BrowserViewController: UIViewController,
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        LegacyThemeManager.instance.statusBarStyle
+        themeManager.getStatusBarStyle()
     }
 
     @objc
@@ -454,8 +454,6 @@ class BrowserViewController: UIViewController,
         // links into the view from other apps.
         let dropInteraction = UIDropInteraction(delegate: self)
         view.addInteraction(dropInteraction)
-
-        updateLegacyTheme()
 
         searchTelemetry = SearchTelemetry()
 
@@ -702,16 +700,8 @@ class BrowserViewController: UIViewController,
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             themeManager.systemThemeChanged()
-            updateLegacyTheme()
         }
         setupMiddleButtonStatus(isLoading: false)
-    }
-
-    private func updateLegacyTheme() {
-        if !NightModeHelper.isActivated() && LegacyThemeManager.instance.systemThemeIsOn {
-            let userInterfaceStyle = traitCollection.userInterfaceStyle
-            LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? LegacyDarkTheme() : LegacyNormalTheme()
-        }
     }
 
     // MARK: - Constraints
@@ -1796,11 +1786,11 @@ class BrowserViewController: UIViewController,
 
         // Update the `background-color` of any blank webviews.
         let webViews = tabManager.tabs.compactMap({ $0.webView })
-        webViews.forEach({ $0.applyTheme() })
+        webViews.forEach({ $0.applyTheme(theme: themeManager.currentTheme) })
 
         let tabs = tabManager.tabs
         tabs.forEach {
-            $0.applyTheme()
+            $0.applyTheme(theme: themeManager.currentTheme)
         }
 
         guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
@@ -1943,7 +1933,7 @@ extension BrowserViewController: LegacyTabDelegate {
 
         // only add the logins helper if the tab is not a private browsing tab
         if !tab.isPrivate {
-            let logins = LoginsHelper(tab: tab, profile: profile)
+            let logins = LoginsHelper(tab: tab, profile: profile, themeManager: themeManager)
             tab.addContentScript(logins, name: LoginsHelper.name())
         }
 

@@ -17,10 +17,12 @@ class SnackBar: UIView {
     private var scrollViewHeightConstraint = NSLayoutConstraint()
     private var buttonsViewConstraints = [NSLayoutConstraint]()
 
+    private var borderColor: UIColor!
+    
     private lazy var scrollView: UIScrollView = .build()
     private lazy var buttonsView: UIStackView = .build { $0.distribution = .fillEqually }
     private lazy var backgroundView: UIVisualEffectView = .build { $0.effect = UIBlurEffect(style: .extraLight) }
-    private lazy var separator: UIView = .build { $0.backgroundColor = UIColor.legacyTheme.snackbar.border }
+    private lazy var separator: UIView = .build { $0.backgroundColor = self.borderColor }
 
     private lazy var imageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
@@ -54,7 +56,6 @@ class SnackBar: UIView {
         imageView.image = img ?? UIImage(named: StandardImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysOriginal)
         textLabel.text = text
         setupLayout()
-        setupUI()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -65,7 +66,7 @@ class SnackBar: UIView {
         backgroundColor = UIColor.clear
         clipsToBounds = true // overridden by masksToBounds = false
         layer.borderWidth = UX.borderWidth
-        layer.borderColor = UIColor.legacyTheme.snackbar.border.cgColor
+        layer.borderColor = borderColor.cgColor
         layer.cornerRadius = 8
         layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
     }
@@ -176,5 +177,12 @@ class SnackBar: UIView {
         if buttonsView.arrangedSubviews.count != 1 {
             snackButton.drawSeparator()
         }
+    }
+}
+
+extension SnackBar: ThemeApplicable {
+    func applyTheme(theme: Theme) {
+        borderColor = theme.colors.snackBarBorder
+        setupUI()
     }
 }

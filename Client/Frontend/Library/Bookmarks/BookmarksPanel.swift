@@ -424,7 +424,7 @@ class BookmarksPanel: SiteTableViewController,
             }
             cell.tag = indexPath.item
 
-            let viewModel = bookmarkCell.getViewModel()
+            let viewModel = bookmarkCell.getViewModel(theme: themeManager.currentTheme)
 
             if let site = site,
                viewModel.leftImageView == nil {
