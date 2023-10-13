@@ -271,6 +271,16 @@ final class SettingsCoordinatorTests: XCTestCase {
         XCTAssertTrue(subject.childCoordinators.first is QRCodeCoordinator)
     }
 
+    func testShowQRCode_presentsQRCodeNavigationController() {
+        let subject = createSubject()
+        let delegate = MockQRCodeViewControllerDelegate()
+
+        subject.showQRCode(delegate: delegate)
+
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(mockRouter.presentedViewController is QRCodeNavigationController)
+    }
+
     func testDidFinishShowingSettings_callsDidFinish() {
         let subject = createSubject()
         subject.parentCoordinator = delegate

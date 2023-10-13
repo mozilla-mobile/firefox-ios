@@ -10,7 +10,7 @@ protocol LaunchCoordinatorDelegate: AnyObject {
 }
 
 // Manages different types of onboarding that gets shown at the launch of the application
-class LaunchCoordinator: BaseCoordinator, 
+class LaunchCoordinator: BaseCoordinator,
                          SurveySurfaceViewControllerDelegate,
                          QRCodeNavigationHandler,
                          ParentCoordinatorDelegate {
@@ -130,9 +130,9 @@ class LaunchCoordinator: BaseCoordinator,
         surveySurface.delegate = self
         router.present(surveySurface, animated: false)
     }
-    
+
     // MARK: - QRCodeNavigationHandler
-    
+
     func showQRCode(delegate: QRCodeViewControllerDelegate) {
         let coordinator = makeQRCodeCoordinator()
         coordinator.showQRCode(delegate: delegate)
@@ -146,9 +146,9 @@ class LaunchCoordinator: BaseCoordinator,
         add(child: qrCodeCoordinator)
         return qrCodeCoordinator
     }
-    
+
     // MARK: - ParentCoordinatorDelegate
-    
+
     func didFinish(from childCoordinator: Coordinator) {
         remove(child: childCoordinator)
     }

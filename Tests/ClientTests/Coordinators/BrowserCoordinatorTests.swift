@@ -242,6 +242,13 @@ final class BrowserCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertTrue(subject.childCoordinators.first is QRCodeCoordinator)
+    }
+
+    func testShowQRCode_presentsQRCodeNavigationController() {
+        let subject = createSubject()
+
+        subject.showQRCode()
+
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is QRCodeNavigationController)
     }
