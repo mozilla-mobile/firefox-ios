@@ -38,7 +38,7 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
     }
 
     func testFeatureFlagDisablesSection() {
-        featureFlags.set(feature: .pocket, to: false)
+        profile.prefs.setBool(false, forKey: PrefsKeys.UserFeatureFlagPrefs.ASPocketStories)
         let subject = createSubject()
         XCTAssertFalse(subject.isEnabled)
     }
@@ -218,6 +218,7 @@ extension PocketViewModelTests {
         let subject = PocketViewModel(pocketDataAdaptor: adaptor,
                                       isZeroSearch: isZeroSearch,
                                       theme: LightTheme(),
+                                      prefs: profile.prefs,
                                       wallpaperManager: WallpaperManager())
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

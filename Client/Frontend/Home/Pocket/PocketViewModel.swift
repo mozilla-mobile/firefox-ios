@@ -29,14 +29,17 @@ class PocketViewModel {
     private var dataAdaptor: PocketDataAdaptor
     private var pocketStoriesViewModels = [PocketStandardCellViewModel]()
     private var wallpaperManager: WallpaperManager
+    private var prefs: Prefs
 
     init(pocketDataAdaptor: PocketDataAdaptor,
          isZeroSearch: Bool = false,
          theme: Theme,
+         prefs: Prefs,
          wallpaperManager: WallpaperManager) {
         self.dataAdaptor = pocketDataAdaptor
         self.isZeroSearch = isZeroSearch
         self.theme = theme
+        self.prefs = prefs
         self.wallpaperManager = wallpaperManager
     }
 
@@ -119,7 +122,7 @@ class PocketViewModel {
 }
 
 // MARK: HomeViewModelProtocol
-extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
+extension PocketViewModel: HomepageViewModelProtocol {
     var sectionType: HomepageSectionType {
         return .pocket
     }
@@ -184,10 +187,8 @@ extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     var isEnabled: Bool {
-        // For Pocket, the user preference check returns a user preference if it exists in
-        // UserDefaults, and, if it does not, it will return a default preference based on
-        // a (nimbus pocket section enabled && Pocket.isLocaleSupported) check
-        return featureFlags.isFeatureEnabled(.pocket, checking: .buildAndUser)
+        let isFeatureEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true
+        return isFeatureEnabled && PocketProvider.islocaleSupported(Locale.current.identifier)
     }
 
     var hasData: Bool {
