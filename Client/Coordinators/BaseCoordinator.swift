@@ -11,6 +11,7 @@ open class BaseCoordinator: NSObject, Coordinator {
     var childCoordinators: [Coordinator] = []
     var router: Router
     var logger: Logger
+    var isDismissable: Bool { true }
 
     init(router: Router,
          logger: Logger = DefaultLogger.shared) {
@@ -49,6 +50,14 @@ open class BaseCoordinator: NSObject, Coordinator {
         for childCoordinator in childCoordinators {
             if let matchingCoordinator = childCoordinator.findAndHandle(route: route) {
                 savedRoute = nil
+
+                // Dismiss any child of the matching coordinator that handles a route
+                for child in matchingCoordinator.childCoordinators {
+                    guard child.isDismissable else { continue }
+                    matchingCoordinator.router.dismiss()
+                    matchingCoordinator.remove(child: child)
+                }
+
                 return matchingCoordinator
             }
         }

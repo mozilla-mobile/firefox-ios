@@ -14,10 +14,14 @@ struct CoordinatorFlagManager {
     }
 
     static var isShareExtensionCoordinatorEnabled: Bool {
-        NimbusManager.shared.featureFlagLayer.checkNimbusConfigFor(.shareExtensionCoordinatorRefactor)
+        return NimbusManager.shared.featureFlagLayer.checkNimbusConfigFor(.shareExtensionCoordinatorRefactor)
     }
 
     static var isCredentialAutofillCoordinatorEnabled: Bool {
-        NimbusManager.shared.featureFlagLayer.checkNimbusConfigFor(.credentialAutofillCoordinatorRefactor)
+        return NimbusManager.shared.featureFlagLayer.checkNimbusConfigFor(.credentialAutofillCoordinatorRefactor)
+    }
+
+    static var isQRCodeCoordinatorEnabled: Bool {
+        return NimbusManager.shared.featureFlagLayer.checkNimbusConfigFor(.qrCodeCoordinatorRefactor)
     }
 }

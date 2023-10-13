@@ -36,7 +36,7 @@ struct ProductAnalysisData: Codable {
     }
 
     var notEnoughReviewsCardVisible: Bool {
-        (grade == nil || adjustedRating == nil) && needsAnalysis == true
+        (grade == nil || adjustedRating == nil) || productId == nil
     }
 }
 

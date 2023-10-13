@@ -21,8 +21,15 @@ open class SQLiteQueue: TabQueue {
         return ShareItem(url: row["url"] as! String, title: row["title"] as? String)
     }
 
-    open func getQueuedTabs() -> Deferred<Maybe<Cursor<ShareItem>>> {
-        return db.runQuery("SELECT url, title FROM queue", args: nil, factory: self.factory)
+    open func getQueuedTabs(completion: @escaping ([ShareItem]) -> Void) {
+        let sql = "SELECT url, title FROM queue"
+        let deferredResponse = db.runQuery(sql, args: nil, factory: self.factory) >>== { cursor in
+            return deferMaybe(cursor.asArray())
+        }
+
+        deferredResponse.upon { result in
+            completion(result.successValue ?? [])
+        }
     }
 
     open func clearQueuedTabs() -> Success {

@@ -386,6 +386,18 @@ class TelemetryWrapperTests: XCTestCase {
     func test_redirectedToExternalApp_GleanIsCalled() {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingLinkTapped)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.redirectedToExternalApp)
+    }
+
+    func test_surfaceNoReviewReliabilityAvailable_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .navigate, object: .shoppingBottomSheet)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceNoReviewReliabilityAvailable)
+    }
+
+    func test_shoppingShoppingSurfaceStaleAnalysisShown_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingSurfaceStaleAnalysisShown)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceStaleAnalysisShown)
+    }
+
     func test_shoppingNimbusDisabled_GleanIsCalled() {
         TelemetryWrapper.recordEvent(
             category: .information,

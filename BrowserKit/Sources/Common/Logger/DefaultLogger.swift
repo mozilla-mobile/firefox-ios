@@ -29,6 +29,10 @@ public class DefaultLogger: Logger {
         crashManager?.setup(sendUsageData: sendUsageData)
     }
 
+    public func logCustomError(error: Error) {
+        crashManager?.captureError(error: error)
+    }
+
     public func log(_ message: String,
                     level: LoggerLevel,
                     category: LoggerCategory,

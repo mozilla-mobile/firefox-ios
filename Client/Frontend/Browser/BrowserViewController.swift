@@ -60,6 +60,7 @@ class BrowserViewController: UIViewController,
     var overlayManager: OverlayModeManager
     var appAuthenticator: AppAuthenticationProtocol
     var contextHintVC: ContextualHintViewController
+    private var backgroundTabLoader: DefaultBackgroundTabLoader
 
     // popover rotation handling
     var displayedPopoverController: UIViewController?
@@ -186,6 +187,7 @@ class BrowserViewController: UIViewController,
         let contextualViewProvider = ContextualHintViewProvider(forHintType: .toolbarLocation,
                                                                 with: profile)
         self.contextHintVC = ContextualHintViewController(with: contextualViewProvider)
+        self.backgroundTabLoader = DefaultBackgroundTabLoader(tabQueue: profile.queue)
         super.init(nibName: nil, bundle: nil)
         didInit()
     }
@@ -231,19 +233,12 @@ class BrowserViewController: UIViewController,
 
     @objc
     func openTabNotification(notification: Notification) {
+        // Remove this notification only used for debug settings with FXIOS-7550
         guard let openTabObject = notification.object as? OpenTabNotificationObject else {
             return
         }
 
         switch openTabObject.type {
-        case .loadQueuedTabs(let urls):
-            loadQueuedTabs(receivedURLs: urls)
-        case .openNewTab:
-            openBlankNewTab(focusLocationField: true)
-        case .openSearchNewTab(let searchTerm):
-            openSearchNewTab(searchTerm)
-        case .switchToTabForURLOrOpen(let url):
-            switchToTabForURLOrOpen(url)
         case .debugOption(let numberOfTabs, let url):
             debugOpen(numberOfNewTabs: numberOfTabs, at: url)
         }
@@ -437,7 +432,7 @@ class BrowserViewController: UIViewController,
         // When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
         // So, we delay five seconds because we need to wait for `Profile` to be initialized and setup for use.
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
-            self?.loadQueuedTabs()
+            self?.backgroundTabLoader.loadBackgroundTabs()
         }
     }
 
@@ -847,57 +842,6 @@ class BrowserViewController: UIViewController,
         let toolBarHeight = showToolBar ? UIConstants.BottomToolbarHeight : 0
         let spacerHeight = keyboardHeight - toolBarHeight
         overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
-    }
-
-    // MARK: - Tabs Queue
-
-    func loadQueuedTabs(receivedURLs: [URL]? = nil) {
-        // Chain off of a trivial deferred in order to run on the background queue.
-        succeed().upon { res in
-            self.dequeueQueuedTabs(receivedURLs: receivedURLs ?? [])
-        }
-    }
-
-    fileprivate func dequeueQueuedTabs(receivedURLs: [URL]) {
-        ensureBackgroundThread { [weak self] in
-            guard let self = self else { return }
-
-            self.profile.queue.getQueuedTabs() >>== { cursor in
-                // This assumes that the DB returns rows in some kind of sane order.
-                // It does in practice, so WFM.
-                let cursorCount = cursor.count
-                if cursorCount > 0 {
-                    // Filter out any tabs received by a push notification to prevent dupes.
-                    let urls = cursor.compactMap { $0?.url.asURL }.filter { !receivedURLs.contains($0) }
-                    if !urls.isEmpty {
-                        DispatchQueue.main.async {
-                            let shouldSelectTab = !self.overlayManager.inOverlayMode
-                            self.tabManager.addTabsForURLs(urls, zombie: false, shouldSelectTab: shouldSelectTab)
-                        }
-                    }
-
-                    // Clear *after* making an attempt to open. We're making a bet that
-                    // it's better to run the risk of perhaps opening twice on a crash,
-                    // rather than losing data.
-                    self.profile.queue.clearQueuedTabs()
-                }
-
-                // Then, open any received URLs from push notifications.
-                if !receivedURLs.isEmpty {
-                    DispatchQueue.main.async {
-                        self.tabManager.addTabsForURLs(receivedURLs, zombie: false)
-                    }
-                }
-
-                if !receivedURLs.isEmpty || cursorCount > 0 {
-                    // Because the notification service runs as a separate process
-                    // we need to make sure that our account manager picks up any persisted state
-                    // the notification services persisted.
-                    self.profile.rustFxA.accountManager.peek()?.resetPersistedAccount()
-                    self.profile.rustFxA.accountManager.peek()?.deviceConstellation()?.refreshState()
-                }
-            }
-        }
     }
 
     // Because crashedLastLaunch is sticky, it does not get reset, we need to remember its
@@ -2297,6 +2241,7 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
+        tabManager.startAtHomeCheck()
         updateTabCountUsingTabManager(tabManager)
         openUrlAfterRestore()
     }

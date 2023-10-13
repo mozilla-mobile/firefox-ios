@@ -40,7 +40,7 @@ final class FakespotViewModelTests: XCTestCase {
 
         await viewModel.fetchProductAnalysis()
         switch viewModel.state {
-        case .loaded(let data, _):
+        case .loaded(let data, _, _):
             XCTAssertNotNil(data)
         default:
             XCTFail("Unexpected state")
