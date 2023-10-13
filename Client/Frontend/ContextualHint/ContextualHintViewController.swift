@@ -57,21 +57,11 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
         onViewSummoned = nil
         view.setNeedsLayout()
         view.layoutIfNeeded()
-
-        // Portrait orientation: lock enable
-        OrientationLockUtility.lockOrientation(UIInterfaceOrientationMask.portrait,
-                                               andRotateTo: UIInterfaceOrientation.portrait)
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         viewProvider.markContextualHintPresented()
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        // Portrait orientation: lock disable
-        OrientationLockUtility.lockOrientation(UIInterfaceOrientationMask.all)
     }
 
     override func viewDidLayoutSubviews() {
