@@ -4,9 +4,6 @@
 
 import UIKit
 
-/// This class is a button that enables resizing with dynamic type
-/// This is a building block component for developement purpose, and isn't the designer component in itself.
-/// See `RoundedButton` for the designer button component (to be done with FXIOS-6948 #15441)
 open class ResizableButton: UIButton {
     public struct UX {
         public static let buttonEdgeSpacing: CGFloat = 8
