@@ -24,7 +24,7 @@ jobs:
       # Must be set to this for deploying to GitHub Pages
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: macos-13
+    runs-on: macos-14
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
