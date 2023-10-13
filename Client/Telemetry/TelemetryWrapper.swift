@@ -1747,10 +1747,10 @@ extension TelemetryWrapper {
         case (.action, .tap, .shareSheet, .shareSaveToPocket, _):
             GleanMetrics.ShareSheet.saveToPocketTapped.record()
 
-        // MARK: - Errors
+        // MARK: - App Errors
         case(.information, .error, .app, .largeFileWrite, let extras):
             if let quantity = extras?[EventExtraKey.size.rawValue] as? Int32 {
-                let properties = GleanMetrics.AppErrors.LargeFileWriteExtra(fileSize: quantity)
+                let properties = GleanMetrics.AppErrors.LargeFileWriteExtra(size: quantity)
                 GleanMetrics.AppErrors.largeFileWrite.record(properties)
             }
         default:

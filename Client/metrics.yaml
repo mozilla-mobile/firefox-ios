@@ -4533,7 +4533,7 @@ app_errors:
     description: |
       Recorded when a very large file is written to disk
     extra_keys:
-      file_size:
+      size:
         description: |
           The size of the file that was written
         type: quantity
