@@ -3689,7 +3689,7 @@ extension String {
         public static let ReliabilityRatingC = MZLocalizedString(
             key: "Shopping.ReviewQuality.ReliabilityRating.C.Description.v120",
             tableName: "Shopping",
-            value: "Only some reliable reviews",
+            value: "Mix of reliable and unreliable reviews",
             comment: "Description of the reliability rating 'C' displayed in the shopping review quality bottom sheet.")
         public static let ReliabilityRatingDF = MZLocalizedString(
             key: "Shopping.ReviewQuality.ReliabilityRating.DF.Description.v120",
@@ -3879,7 +3879,7 @@ extension String {
         public static let OptInCardCopy = MZLocalizedString(
             key: "Shopping.OptInCard.FirstParagraph.Title.v120",
             tableName: "Shopping",
-            value: "See how reliable product reviews are on %1$@ before you buy. Review checker, an experimental feature from %4$@, is built right into the browser. It works on %2$@ and  %3$@, too.\n\nUsing the power of %5$@ by %6$@, we help you avoid biased and inauthentic reviews. Our AI model is always improving to protect you as you shop.",
+            value: "See how reliable product reviews are on %1$@ before you buy. Review checker, an experimental feature from %4$@, is built right into the browser. It works on %2$@ and %3$@, too.\n\nUsing the power of %5$@ by %6$@, we help you avoid biased and inauthentic reviews. Our AI model is always improving to protect you as you shop.",
             comment: "Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon), and the second and third parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. The fourth parameter will be replaced by the app name. And the fifth and sixth parameter are the Fakespot app name and the company name of Mozilla.")
         public static let OptInCardLearnMoreButtonTitle = MZLocalizedString(
             key: "Shopping.OptInCard.LearnMoreButtonTitle.Title.v120",
@@ -3914,7 +3914,7 @@ extension String {
         public static let WarningCardCheckNoConnectionTitle = MZLocalizedString(
             key: "Shopping.WarningCard.CheckNoConnection.Title.v120",
             tableName: "Shopping",
-            value: "No network connection",
+            value: "No Network Connection",
             comment: "Title for error card displayed to the user when the device is disconnected from the network.")
         public static let WarningCardCheckNoConnectionDescription = MZLocalizedString(
             key: "Shopping.WarningCard.CheckNoConnection.Description.v120",
@@ -3949,7 +3949,7 @@ extension String {
         public static let InfoCardNotEnoughReviewsDescription = MZLocalizedString(
             key: "Shopping.InfoCard.NotEnoughReviews.Description.v120",
             tableName: "Shopping",
-            value: "When this product has more reviews, we’ll be able to analyze them.",
+            value: "When this product has more reviews, we’ll be able to check their quality.",
             comment: "Description for info card when there are not enough reviews for a product")
         public static let InfoCardNeedsAnalysisTitle = MZLocalizedString(
             key: "Shopping.InfoCard.NeedsAnalysis.Title.v120",
