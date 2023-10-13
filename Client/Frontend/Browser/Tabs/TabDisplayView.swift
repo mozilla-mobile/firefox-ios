@@ -60,8 +60,8 @@ class TabDisplayView: UIView,
 
     override init(frame: CGRect) {
         state = TabDisplayViewState(isPrivateTabs: false,
-                                              isInactiveTabEmpty: false,
-                                              isInactiveTabsExpanded: true)
+                                    isInactiveTabEmpty: false,
+                                    isInactiveTabsExpanded: true)
         self.inactiveTabsSectionManager = InactiveTabsSectionManager()
         super.init(frame: frame)
         setupLayout()
