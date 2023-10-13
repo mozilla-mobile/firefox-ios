@@ -65,6 +65,7 @@ class ShadowCardViewViewController: UIViewController, Themeable {
     // MARK: Themeable
 
     func applyTheme() {
+        contentLabel.textColor = themeManager.currentTheme.colors.textPrimary
         view.backgroundColor = themeManager.currentTheme.colors.layer1
     }
 }
