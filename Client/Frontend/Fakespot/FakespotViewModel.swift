@@ -30,9 +30,9 @@ class FakespotViewModel {
                     recordNoReviewReliabilityAvailableTelemetry()
                 }
 
-                if product.cannotBeAnalyzedCardVisible {
+                if product.productNotSupportedCardVisible {
                     return [
-                        .messageCard(.productCannotBeAnalyzed),
+                        .messageCard(.productNotSupported),
                         .qualityDeterminationCard,
                         .settingsCard
                     ]
@@ -126,7 +126,7 @@ class FakespotViewModel {
         case messageCard(MessageType)
         enum MessageType {
             case genericError
-            case productCannotBeAnalyzed
+            case productNotSupported
             case noConnectionError
             case notEnoughReviews
             case needsAnalysis
@@ -201,7 +201,7 @@ class FakespotViewModel {
         a11yDescriptionIdentifier: AccessibilityIdentifiers.Shopping.GenericErrorInfoCard.description
     )
 
-    let doesNotAnalyzeReviewsViewModel = FakespotMessageCardViewModel(
+    let notSupportedProductViewModel = FakespotMessageCardViewModel(
         type: .info,
         title: .Shopping.InfoCardFakespotDoesNotAnalyzeReviewsTitle,
         description: .Shopping.InfoCardFakespotDoesNotAnalyzeReviewsDescription,
