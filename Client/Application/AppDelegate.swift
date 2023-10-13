@@ -44,6 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var backgroundWorkUtility: BackgroundFetchAndProcessingUtility?
     private var widgetManager: TopSitesWidgetManager?
     private var menuBuilderHelper: MenuBuilderHelper?
+    private var metricKitWrapper = MetricKitWrapper()
 
     /// Tracking active status of the application.
     private var isActive = false

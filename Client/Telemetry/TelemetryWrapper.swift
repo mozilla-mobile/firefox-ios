@@ -385,6 +385,7 @@ extension TelemetryWrapper {
         case invertColors = "invert-colors"
         case switchControl = "switch-control"
         case dynamicTextSize = "dynamic-text-size"
+        case error = "error"
     }
 
     public enum EventObject: String {
@@ -656,6 +657,7 @@ extension TelemetryWrapper {
         case searchHighlights = "search-highlights"
         case shoppingCFRsDisplayed = "shopping-cfrs-displayed"
         case awesomebarShareTap = "awesomebar-share-tap"
+        case largeFileWrite = "large-file-write"
     }
 
     public enum EventExtraKey: String, CustomStringConvertible {
@@ -1744,6 +1746,13 @@ extension TelemetryWrapper {
             GleanMetrics.ShareSheet.pocketActionTapped.record()
         case (.action, .tap, .shareSheet, .shareSaveToPocket, _):
             GleanMetrics.ShareSheet.saveToPocketTapped.record()
+
+        // MARK: - Errors
+        case(.information, .error, .app, .largeFileWrite, let extras):
+            if let quantity = extras?[EventExtraKey.size.rawValue] as? Int32 {
+                let properties = GleanMetrics.AppErrors.LargeFileWriteExtra(fileSize: quantity)
+                GleanMetrics.AppErrors.largeFileWrite.record(properties)
+            }
         default:
             recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
         }
