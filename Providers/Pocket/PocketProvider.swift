@@ -33,6 +33,7 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
     private static let SupportedLocales = ["en_CA", "en_US", "en_GB", "en_ZA", "de_DE", "de_AT", "de_CH"]
 
     private let pocketGlobalFeed: String
+    private var prefs: Prefs
 
     static let GlobalFeed = "https://getpocket.cdn.mozilla.net/v3/firefox/global-recs"
     static let MoreStoriesURL = {
@@ -45,8 +46,10 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
     }()
 
     // Allow endPoint to be overriden for testing
-    init(endPoint: String = PocketProvider.GlobalFeed) {
+    init(endPoint: String = PocketProvider.GlobalFeed,
+         prefs: Prefs) {
         self.pocketGlobalFeed = endPoint
+        self.prefs = prefs
     }
 
     var urlCache: URLCache {
@@ -65,7 +68,7 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
 
     // Fetch items from the global pocket feed
     func fetchStories(items: Int, completion: @escaping (StoryResult) -> Void) {
-        let isFeatureEnabled = featureFlags.isFeatureEnabled(.pocket, checking: .buildOnly)
+        let isFeatureEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true
         let isCurrentLocaleSupported = PocketProvider.islocaleSupported(Locale.current.identifier)
 
         // Check if we should use mock data

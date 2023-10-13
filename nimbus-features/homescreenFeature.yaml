@@ -13,7 +13,6 @@ features:
             "jump-back-in": true,
             "recently-saved": true,
             "recent-explorations": true,
-            "pocket": true
           }
       pocket-sponsored-stories:
         description: >
@@ -29,7 +28,6 @@ features:
             "jump-back-in": true,
             "recently-saved": true,
             "recent-explorations": true,
-            "pocket": true
           },
           "pocket-sponsored-stories": true
         }
@@ -40,7 +38,6 @@ features:
             "jump-back-in": true,
             "recently-saved": true,
             "recent-explorations": true,
-            "pocket": true
           },
           "pocket-sponsored-stories": false
         }
@@ -57,5 +54,3 @@ enums:
         description: The tabs the user was looking immediately before being interrupted.
       recent-explorations:
         description: The tab groups
-      pocket:
-        description: The pocket section. This should only be available in the US.

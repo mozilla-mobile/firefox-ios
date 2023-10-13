@@ -23,7 +23,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case isToolbarCFREnabled
     case jumpBackIn
     case libraryCoordinatorRefactor
-    case pocket
     case qrCodeCoordinatorRefactor
     case recentlySaved
     case reduxIntegration
@@ -68,8 +67,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.InactiveTabs
         case .jumpBackIn:
             return FlagKeys.JumpBackInSection
-        case .pocket:
-            return FlagKeys.ASPocketStories
         case .recentlySaved:
             return FlagKeys.RecentlySavedSection
         case .topSites:
@@ -114,13 +111,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         }
 
         let nimbusValue = nimbusLayer.checkNimbusConfigFor(featureID)
-
-        switch featureID {
-        case .pocket:
-            return nimbusValue && PocketProvider.islocaleSupported(Locale.current.identifier)
-        default:
-            return nimbusValue
-        }
+        return nimbusValue
     }
 
     /// Returns whether or not the feature's state was changed by the user. If no

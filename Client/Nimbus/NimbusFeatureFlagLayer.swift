@@ -23,7 +23,6 @@ final class NimbusFeatureFlagLayer {
             return checkCredentialAutofillCoordinatorRefactorFeature(from: nimbus)
 
         case .jumpBackIn,
-                .pocket,
                 .recentlySaved,
                 .historyHighlights,
                 .topSites:
@@ -117,7 +116,6 @@ final class NimbusFeatureFlagLayer {
         case .jumpBackIn: nimbusID = HomeScreenSection.jumpBackIn
         case .recentlySaved: nimbusID = HomeScreenSection.recentlySaved
         case .historyHighlights: nimbusID = HomeScreenSection.recentExplorations
-        case .pocket: nimbusID = HomeScreenSection.pocket
         default: return false
         }
 
@@ -171,10 +169,6 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.wallpaperFeature.value()
 
         return config.configuration.version.rawValue
-    }
-
-    private func checkNimbusForPocketSponsoredStoriesFeature(using nimbus: FxNimbus) -> Bool {
-        return nimbus.features.homescreenFeature.value().pocketSponsoredStories
     }
 
     private func checkReduxIntegrationFeature(from nimbus: FxNimbus) -> Bool {
