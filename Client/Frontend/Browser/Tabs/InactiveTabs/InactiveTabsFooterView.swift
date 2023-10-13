@@ -25,7 +25,7 @@ class InactiveTabsFooterView: UICollectionReusableView, ReusableCell, ThemeAppli
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .body,
             size: UX.buttonFontSize)
-        button.setImage(UIImage(systemName: ImageIdentifiers.trash), for: .normal)
+        button.setImage(UIImage(systemName: StandardImageIdentifiers.Large.delete), for: .normal)
         button.setTitle(.TabsTray.InactiveTabs.CloseAllInactiveTabsButton, for: .normal)
         button.titleLabel?.textAlignment = .center
         button.titleLabel?.lineBreakMode = .byTruncatingTail

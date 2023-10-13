@@ -24,9 +24,10 @@ class InactiveTabsSectionManager {
 
     func layoutSection(_ layoutEnvironment: NSCollectionLayoutEnvironment,
                        isExpanded: Bool) -> NSCollectionLayoutSection {
-        var config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
+        var config = UICollectionLayoutListConfiguration(appearance: .grouped)
         config.headerMode = .firstItemInSection
         config.footerMode = .supplementary
+        config.showsSeparators = false
         config.trailingSwipeActionsConfigurationProvider = trailingSwipeClosure
         let section = NSCollectionLayoutSection.list(using: config, layoutEnvironment: layoutEnvironment)
 
