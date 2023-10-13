@@ -43,6 +43,7 @@ class ContextualHintViewViewController: UIViewController, Themeable {
             self?.dismiss(animated: true, completion: nil)
         }
         hintView.configure(viewModel: viewModel)
+        hintView.applyTheme(theme: themeManager.currentTheme)
 
         setupView()
     }
