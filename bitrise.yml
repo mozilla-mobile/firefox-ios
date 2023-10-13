@@ -1398,7 +1398,7 @@ workflows:
             else
               echo "Google Cloud SDK not found, installing..."
               curl https://sdk.cloud.google.com > install.sh
-              bash install.sh --disable-prompts
+              bash install.sh --disable-prompts --install-dir=$HOME/sdk
               source $HOME/sdk/google-cloud-sdk/path.bash.inc
               gcloud components install beta --quiet
             fi
