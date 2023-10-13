@@ -5,18 +5,6 @@
 import Common
 import UIKit
 
-struct TabDisplayViewState {
-    var isPrivateTabs: Bool
-    var isInactiveTabEmpty: Bool
-    var isInactiveTabsExpanded = false
-    var inactiveTabs = ["One",
-                        "Two",
-                        "Three",
-                        "Four",
-                        "Five",
-                        "Six"]
-}
-
 class TabDisplayView: UIView,
                       ThemeApplicable,
                       UICollectionViewDataSource,
@@ -30,7 +18,7 @@ class TabDisplayView: UIView,
         case inactiveTabs
     }
 
-    var state: TabDisplayViewState
+    var state: TabTrayState
     var inactiveTabsSectionManager: InactiveTabsSectionManager
     var theme: Theme?
 
@@ -59,9 +47,10 @@ class TabDisplayView: UIView,
     }()
 
     override init(frame: CGRect) {
-        state = TabDisplayViewState(isPrivateTabs: false,
-                                    isInactiveTabEmpty: false,
-                                    isInactiveTabsExpanded: true)
+        state = TabTrayState(isPrivateMode: false,
+                             isPrivateTabsEmpty: false,
+                             isInactiveTabEmpty: false,
+                             isInactiveTabsExpanded: true)
         self.inactiveTabsSectionManager = InactiveTabsSectionManager()
         super.init(frame: frame)
         setupLayout()
@@ -118,7 +107,7 @@ class TabDisplayView: UIView,
         case .inactiveTabs:
             // Hide inactive tray if there are no inactive tabs or if is PrivateTabs
             guard !state.isInactiveTabEmpty,
-                  !state.isPrivateTabs else { return 0 }
+                  !state.isPrivateMode else { return 0 }
 
             return state.isInactiveTabsExpanded ? state.inactiveTabs.count : 0
         default:
