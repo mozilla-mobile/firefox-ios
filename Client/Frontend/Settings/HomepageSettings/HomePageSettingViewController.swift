@@ -29,8 +29,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     }
 
     var isPocketSectionEnabled: Bool {
-        let isFeatureEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true
-        return isFeatureEnabled && PocketProvider.islocaleSupported(Locale.current.identifier)
+        return PocketProvider.islocaleSupported(Locale.current.identifier)
     }
 
     var isHistoryHighlightsSectionEnabled: Bool {
