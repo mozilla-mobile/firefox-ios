@@ -1385,26 +1385,26 @@ workflows:
     - deploy-to-bitrise-io@2: {}
     - cache-pull@2.7.2:
         inputs:
-        - cache_paths: "$HOME/google-cloud-sdk"
+        - cache_paths: "$HOME/sdk/google-cloud-sdk"
     - script@1:
         title: Install Google Cloud SDK
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            set -e
+            set -ex
              
-            if [ -e $HOME/google-cloud-sdk ]; then
+            if [ -e $HOME/sdk/google-cloud-sdk ]; then
               echo "Google Cloud SDK found, skipping installation..."
             else
               echo "Google Cloud SDK not found, installing..."
               curl https://sdk.cloud.google.com > install.sh
-              bash install.sh --disable-prompts
-              source $HOME/google-cloud-sdk/path.bash.inc
-              gcloud components install beta
+              bash install.sh --disable-prompts --install-dir=$HOME/sdk
+              source $HOME/sdk/google-cloud-sdk/path.bash.inc
+              gcloud components install beta --quiet
             fi
     - cache-push@2.7.1:
         inputs:
-        - cache_paths: "$HOME/google-cloud-sdk"
+        - cache_paths: "$HOME/sdk/google-cloud-sdk"
         - ignore_check_on_paths: "!/Users/vagrant/Library/Developer/Xcode/DerivedData/**"
         - compress_archive: "true"
     - script@1:
@@ -1414,10 +1414,10 @@ workflows:
             #!/usr/bin/env bash
             set -ex
             curl -o /tmp/key-file.json $BITRISEIO_GOOGLE_APPLICATION_CREDENTIALS_URL 
-            $HOME/google-cloud-sdk/bin/gcloud version
-            $HOME/google-cloud-sdk/bin/gcloud auth activate-service-account -q --key-file /tmp/key-file.json
-            $HOME/google-cloud-sdk/bin/gcloud config set project "$GOOGLE_CLOUD_PROJECT"
-            GCLOUD_OUTPUT=$($HOME/google-cloud-sdk/bin/gcloud beta firebase test ios run \
+            $HOME/sdk/google-cloud-sdk/bin/gcloud version
+            $HOME/sdk/google-cloud-sdk/bin/gcloud auth activate-service-account -q --key-file /tmp/key-file.json
+            $HOME/sdk/google-cloud-sdk/bin/gcloud config set project "$GOOGLE_CLOUD_PROJECT"
+            GCLOUD_OUTPUT=$($HOME/sdk/google-cloud-sdk/bin/gcloud beta firebase test ios run \
                 --type robo \
                 --app "$BITRISE_IPA_PATH" \
                 --device=model=iphone13pro,version=15.7 \
@@ -1425,6 +1425,7 @@ workflows:
                 --results-bucket=firefox_ios_test_artifacts \
                 --no-record-video \
                 --client-details=matrixLabel="Bitrise" \
+                --quiet \
                 2>&1 | tee /dev/stdout)
             
             GCLOUD_EXITCODE=${PIPESTATUS[0]}
