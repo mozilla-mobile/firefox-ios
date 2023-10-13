@@ -110,8 +110,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return true
         }
 
-        let nimbusValue = nimbusLayer.checkNimbusConfigFor(featureID)
-        return nimbusValue
+        return nimbusLayer.checkNimbusConfigFor(featureID)
     }
 
     /// Returns whether or not the feature's state was changed by the user. If no
