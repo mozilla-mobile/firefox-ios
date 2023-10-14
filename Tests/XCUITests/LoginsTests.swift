@@ -62,6 +62,7 @@ class LoginTest: BaseTestCase {
         mozWaitForElementToExist(passcodeInput, timeout: 20)
         passcodeInput.tap()
         passcodeInput.typeText("foo\n")
+        mozWaitForElementToNotExist(passcodeInput)
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306961
@@ -104,7 +105,7 @@ class LoginTest: BaseTestCase {
         openLoginsSettings()
         mozWaitForElementToExist(app.tables["Login List"])
         XCTAssertTrue(app.staticTexts[domain].exists)
-        // XCTAssertTrue(app.staticTexts[domainLogin].exists)
+        XCTAssertTrue(app.staticTexts[domainLogin].exists)
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
         // Check to see how it works with multiple entries in the list- in this case, two for now
         app.buttons["Settings"].tap()
@@ -146,6 +147,7 @@ class LoginTest: BaseTestCase {
         openLoginsSettings()
         XCTAssertTrue(app.staticTexts[domain].exists)
         XCTAssertTrue(app.staticTexts[domainLogin].exists)
+        XCTAssertTrue(app.buttons["Edit"].isHittable)
         app.buttons["Edit"].tap()
 
         XCTAssertTrue(app.buttons["Select All"].exists)
