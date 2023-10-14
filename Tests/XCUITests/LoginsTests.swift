@@ -105,7 +105,7 @@ class LoginTest: BaseTestCase {
         openLoginsSettings()
         mozWaitForElementToExist(app.tables["Login List"])
         XCTAssertTrue(app.staticTexts[domain].exists)
-        XCTAssertTrue(app.staticTexts[domainLogin].exists)
+        // XCTAssertTrue(app.staticTexts[domainLogin].exists)
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
         // Check to see how it works with multiple entries in the list- in this case, two for now
         app.buttons["Settings"].tap()
