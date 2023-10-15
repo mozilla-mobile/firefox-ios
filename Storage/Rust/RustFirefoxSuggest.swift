@@ -29,10 +29,16 @@ public actor RustFirefoxSuggest {
         includeSponsored: Bool,
         includeNonSponsored: Bool
     ) async throws -> [RustFirefoxSuggestion] {
+        var providers = [SuggestionProvider]()
+        if includeSponsored {
+            providers.append(.amp)
+        }
+        if includeNonSponsored {
+            providers.append(.wikipedia)
+        }
         return try store.query(query: SuggestionQuery(
             keyword: keyword,
-            includeSponsored: includeSponsored,
-            includeNonSponsored: includeNonSponsored
+            providers: providers
         )).compactMap(RustFirefoxSuggestion.init)
     }
 
