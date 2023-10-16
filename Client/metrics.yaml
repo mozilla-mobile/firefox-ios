@@ -350,12 +350,12 @@ app_menu:
     description: |
       Records when the user taps Passwords in the app menu
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/14902
+      - https://github.com/mozilla-mobile/firefox-ios/issues/149022023-06-01
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16685
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-10-01"
+    expires: "2023-06-01"
 
 # Bookmark metrics
 bookmarks:
@@ -2516,7 +2516,7 @@ logins:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16685
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-10-01"
+    expires: "2023-06-01"
   autofill_prompt_shown:
     type: event
     description: |
@@ -2527,7 +2527,7 @@ logins:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16685
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-10-01"
+    expires: "2023-06-01"
   autofill_prompt_dismissed:
     type: event
     description: |
@@ -2538,7 +2538,7 @@ logins:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16685
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-10-01"
+    expires: "2023-06-01"
   autofilled:
     type: event
     description: |
@@ -2549,7 +2549,7 @@ logins:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16685
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-10-01"
+    expires: "2023-06-01"
   autofill_failed:
     type: event
     description: |
@@ -2560,7 +2560,7 @@ logins:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16685
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-10-01"
+    expires: "2023-06-01"
   management_add_tapped:
     type: event
     description: |
@@ -2571,7 +2571,7 @@ logins:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16685
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-10-01"
+    expires: "2023-06-01"
   management_logins_tapped:
     type: event
     description: |
@@ -2582,7 +2582,7 @@ logins:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16685
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-10-01"
+    expires: "2023-06-01"
   saved:
     type: counter
     description: |
@@ -2593,7 +2593,7 @@ logins:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16685
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-10-01"
+    expires: "2023-06-01"
     unit: counter of logins.saved
   saved_all:
     type: quantity
@@ -2605,7 +2605,7 @@ logins:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16685
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-10-01"
+    expires: "2023-06-01"
     unit: quantity of logins.saved_all
   deleted:
     type: counter
@@ -2617,7 +2617,7 @@ logins:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16685
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-10-01"
+    expires: "2023-06-01"
     unit: counter of logins.deleted
   modified:
     type: counter
@@ -2629,7 +2629,7 @@ logins:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16685
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-10-01"
+    expires: "2023-06-01"
     unit: counter of logins.modified
   sync_enabled:
     type: event
@@ -2648,7 +2648,7 @@ logins:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16685
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-10-01"
+    expires: "2023-06-01"
 # QR Code metrics
 qr_code:
   scanned:
@@ -2801,7 +2801,7 @@ settings_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16685
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-10-01"
+    expires: "2023-06-01"
 # Search and search releated metrics
 search:
   counts:
