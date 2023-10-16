@@ -402,6 +402,8 @@ class FakespotViewController:
             }
         }
 
+        // in iOS 15 modals with a large detent read content underneath the modal in voice over
+        // to prevent this we manually turn this off
         view.accessibilityViewIsModal = currentDetent == .large ? true : false
     }
 
