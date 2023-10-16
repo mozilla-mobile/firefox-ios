@@ -939,10 +939,10 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     // MARK: - Start at Home
 
     /// Public interface for checking whether the StartAtHome Feature should run.
-    func startAtHomeCheck() {
+    func startAtHomeCheck() -> Bool {
         let startAtHomeManager = StartAtHomeHelper(prefs: profile.prefs, isRestoringTabs: isRestoringTabs)
 
-        guard !startAtHomeManager.shouldSkipStartHome else { return }
+        guard !startAtHomeManager.shouldSkipStartHome else { return false }
 
         if startAtHomeManager.shouldStartAtHome() {
             let wasLastSessionPrivate = selectedTab?.isPrivate ?? false
@@ -957,7 +957,9 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
                        level: .debug,
                        category: .tabs)
             selectTab(tabToSelect)
+            return true
         }
+        return false
     }
 
     /// Provides a tab on which to open if the start at home feature is enabled. This tab

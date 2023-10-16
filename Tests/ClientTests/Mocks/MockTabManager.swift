@@ -93,7 +93,9 @@ class MockTabManager: TabManager {
 
     func restoreTabs(_ forced: Bool) {}
 
-    func startAtHomeCheck() {}
+    func startAtHomeCheck() -> Bool {
+        false
+    }
 
     func hasTabsToRestoreAtStartup() -> Bool {
         return false
