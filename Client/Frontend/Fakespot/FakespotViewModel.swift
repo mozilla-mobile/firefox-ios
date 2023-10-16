@@ -54,7 +54,7 @@ class FakespotViewModel {
                 } else if product.notEnoughReviewsCardVisible {
                     var cards: [ViewElement] = []
 
-                    if analysisCount > 1 {
+                    if analysisCount > 0 {
                         cards.append(.messageCard(.notEnoughReviews))
                     } else {
                         cards.append(.noAnalysisCard)
@@ -240,7 +240,7 @@ class FakespotViewModel {
     let reviewQualityCardViewModel = FakespotReviewQualityCardViewModel()
     var optInCardViewModel = FakespotOptInCardViewModel()
 
-    private var analysisCount = 0
+    private var analyzeCount = 0
 
     init(shoppingProduct: ShoppingProduct,
          profile: Profile = AppContainer.shared.resolve()) {
@@ -257,7 +257,7 @@ class FakespotViewModel {
                 await self.fetchProductAnalysis()
                 do {
                     // A product might be already in analysis status so we listen for progress until it's completed, then fetch new information
-                    for try await status in self.observeProductAnalysisStatus() where status == .completed {
+                    for try await status in self.observeProductAnalysisStatus() where status.isAnalyzing == false {
                         await self.fetchProductAnalysis(showLoading: false)
                     }
                 } catch {}
@@ -272,23 +272,27 @@ class FakespotViewModel {
     }
 
     func fetchProductAnalysis(showLoading: Bool = true) async {
-        analysisCount += 1
         if showLoading { state = .loading }
         do {
             let product = try await shoppingProduct.fetchProductAnalysisData()
             let needsAnalysis = product?.needsAnalysis ?? false
             let analysis: AnalysisStatus? = needsAnalysis ? try? await shoppingProduct.getProductAnalysisStatus()?.status : nil
-            state = .loaded(product, analysis, analysisCount: analysisCount)
+            state = .loaded(product, analysis, analysisCount: analyzeCount)
         } catch {
             state = .error(error)
         }
     }
 
     private func triggerProductAnalyze() async {
-        _ = try? await shoppingProduct.triggerProductAnalyze()
+        analyzeCount += 1
+        let status = try? await shoppingProduct.triggerProductAnalyze()
+        guard status?.isAnalyzing == true else {
+            await fetchProductAnalysis()
+            return
+        }
         do {
             // Listen for analysis status until it's completed, then fetch new information
-            for try await status in observeProductAnalysisStatus() where status == .completed {
+            for try await status in observeProductAnalysisStatus() where status.isAnalyzing == false {
                 await fetchProductAnalysis()
             }
         } catch {

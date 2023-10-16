@@ -12,6 +12,7 @@ enum AnalysisStatus: String, Decodable {
     case notAnalyzable = "not_analyzable"
     case notFound = "not_found"
     case unprocessable = "unprocessable"
+    case stale = "stale"
 
     var isAnalyzing: Bool {
         switch self {
