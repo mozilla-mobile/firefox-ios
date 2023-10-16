@@ -27,7 +27,7 @@ public class LinkButton: ResizableButton, ThemeApplicable {
                                          right: UX.buttonHorizontalInset)
     }
 
-    public func configure(viewModel: PrimaryRoundedButtonViewModel) {
+    public func configure(viewModel: LinkButtonViewModel) {
         accessibilityIdentifier = viewModel.a11yIdentifier
         setTitle(viewModel.title, for: .normal)
     }
