@@ -30,7 +30,7 @@ class JumpBackInViewModel: FeatureFlaggable {
     var mostRecentSyncedTab: JumpBackInSyncedTab?
 
     // Raw data to calculate what we can show to the user
-    var recentTabs: [Tab] = [Tab]()
+    private var recentTabs: [Tab] = [Tab]()
     var recentSyncedTab: JumpBackInSyncedTab?
 
     private var jumpBackInDataAdaptor: JumpBackInDataAdaptor
@@ -165,10 +165,9 @@ private extension JumpBackInViewModel {
         from tabs: [Tab],
         withMaxTabsCount maxTabs: Int
     ) -> JumpBackInList {
-        let recentTabs = filter(
-            tabs: tabs,
-            withMaxTabsCount: maxTabs
-        )
+        Task { @MainActor in
+            self.recentTabs = await self.jumpBackInDataAdaptor.getRecentTabData()
+        }
 
         return JumpBackInList(tabs: recentTabs)
     }
