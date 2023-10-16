@@ -68,7 +68,6 @@ public struct PrefsKeys {
 
     // For ease of use, please list keys alphabetically.
     public struct FeatureFlags {
-        public static let ASPocketStories = "ASPocketStoriesUserPrefsKey"
         public static let CustomWallpaper = "CustomWallpaperUserPrefsKey"
         public static let FirefoxSuggest = "FirefoxSuggest"
         public static let HistoryHighlightsSection = "HistoryHighlightsSectionUserPrefsKey"
@@ -81,6 +80,7 @@ public struct PrefsKeys {
     }
 
     public struct UserFeatureFlagPrefs {
+        public static let ASPocketStories = "ASPocketStoriesUserPrefsKey"
         public static let SponsoredShortcuts = "SponsoredShortcutsUserPrefsKey"
         public static let StartAtHome = "StartAtHomeUserPrefsKey"
     }

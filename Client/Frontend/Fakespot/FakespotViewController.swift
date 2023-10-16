@@ -334,9 +334,9 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
                 view.configure(viewModel.noConnectionViewModel)
                 return view
 
-            case .productCannotBeAnalyzed:
+            case .productNotSupported:
                 let view: FakespotMessageCardView = .build()
-                view.configure(viewModel.doesNotAnalyzeReviewsViewModel)
+                view.configure(viewModel.notSupportedProductViewModel)
                 return view
 
             case .notEnoughReviews:

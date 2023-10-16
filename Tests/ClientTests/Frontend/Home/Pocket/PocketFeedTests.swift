@@ -4,6 +4,7 @@
 
 import UIKit
 import GCDWebServers
+import Shared
 import XCTest
 
 @testable import Client
@@ -41,7 +42,7 @@ class PocketStoriesTests: XCTestCase {
 
     func testPocketStoriesCaching() {
         let expect = expectation(description: "Pocket")
-        let pocketFeed = PocketProvider(endPoint: pocketAPI)
+        let pocketFeed = PocketProvider(endPoint: pocketAPI, prefs: MockProfilePrefs())
         let feedNumber = 11
 
         pocketFeed.fetchStories(items: feedNumber) { result in

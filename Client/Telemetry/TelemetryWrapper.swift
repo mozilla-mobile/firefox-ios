@@ -214,7 +214,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
     func recordFinishedLaunchingPreferenceMetrics(notification: NSNotification) {
         guard let profile = self.profile else { return }
         // Pocket stories visible
-        if let pocketStoriesVisible = profile.prefs.boolForKey(PrefsKeys.FeatureFlags.ASPocketStories) {
+        if let pocketStoriesVisible = profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) {
             GleanMetrics.FirefoxHomePage.pocketStoriesVisible.set(pocketStoriesVisible)
         } else {
             GleanMetrics.FirefoxHomePage.pocketStoriesVisible.set(true)
@@ -324,7 +324,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         let isRecentlySavedEnabled = featureFlags.isFeatureEnabled(.recentlySaved, checking: .buildAndUser)
         GleanMetrics.Preferences.recentlySaved.set(isRecentlySavedEnabled)
 
-        let isPocketEnabled = featureFlags.isFeatureEnabled(.pocket, checking: .buildAndUser)
+        let isFeatureEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true
+        let isPocketEnabled = isFeatureEnabled && PocketProvider.islocaleSupported(Locale.current.identifier)
         GleanMetrics.Preferences.pocket.set(isPocketEnabled)
 
         let startAtHomeOption = prefs.stringForKey(PrefsKeys.UserFeatureFlagPrefs.StartAtHome) ?? StartAtHomeSetting.afterFourHours.rawValue
