@@ -134,17 +134,14 @@ class LaunchCoordinator: BaseCoordinator,
     // MARK: - QRCodeNavigationHandler
 
     func showQRCode(delegate: QRCodeViewControllerDelegate) {
-        let coordinator = makeQRCodeCoordinator()
-        coordinator.showQRCode(delegate: delegate)
-    }
-
-    private func makeQRCodeCoordinator() -> QRCodeCoordinator {
+        var coordinator: QRCodeCoordinator
         if let qrCodeCoordinator = childCoordinators.first(where: { $0 is QRCodeCoordinator }) as? QRCodeCoordinator {
-            return qrCodeCoordinator
+            coordinator = qrCodeCoordinator
+        } else {
+            coordinator = QRCodeCoordinator(parentCoordinator: self, router: router)
+            add(child: coordinator)
         }
-        let qrCodeCoordinator = QRCodeCoordinator(parentCoordinator: self, router: router)
-        add(child: qrCodeCoordinator)
-        return qrCodeCoordinator
+        coordinator.showQRCode(delegate: delegate)
     }
 
     // MARK: - ParentCoordinatorDelegate
