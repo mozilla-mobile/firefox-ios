@@ -12,7 +12,7 @@ public struct LinkButtonViewModel {
     public let fontSize: CGFloat
     public let textAlignment: NSTextAlignment
 
-    public init(title: String, 
+    public init(title: String,
                 a11yIdentifier: String,
                 fontSize: CGFloat = 16,
                 textAlignment: NSTextAlignment = .left) {
