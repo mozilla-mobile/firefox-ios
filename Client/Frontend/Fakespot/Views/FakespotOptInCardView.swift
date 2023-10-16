@@ -16,7 +16,6 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
         static let termsOfUseButtonInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         static let disclaimerTextLabelFontSize: CGFloat = 13
         static let disclaimerBlockInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        static let learnMoreInsets = UIEdgeInsets(top: -10, left: 0, bottom: 10, right: 0)
         static let termsOfUseButtonTitleFontSize: CGFloat = 13
         static let privacyPolicyButtonTitleFontSize: CGFloat = 13
         static let mainButtonFontSize: CGFloat = 16
@@ -80,7 +79,6 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
         button.addTarget(self, action: #selector(self.didTapLearnMore), for: .touchUpInside)
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
                                                                          size: UX.learnMoreButtonFontSize)
-        button.contentEdgeInsets = UX.learnMoreInsets
     }
 
     private lazy var termsOfUseButton: ResizableButton = .build { button in
