@@ -62,6 +62,7 @@ class LoginTest: BaseTestCase {
         mozWaitForElementToExist(passcodeInput, timeout: 20)
         passcodeInput.tap()
         passcodeInput.typeText("foo\n")
+        mozWaitForElementToNotExist(passcodeInput)
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306961
@@ -146,6 +147,7 @@ class LoginTest: BaseTestCase {
         openLoginsSettings()
         XCTAssertTrue(app.staticTexts[domain].exists)
         XCTAssertTrue(app.staticTexts[domainLogin].exists)
+        XCTAssertTrue(app.buttons["Edit"].isHittable)
         app.buttons["Edit"].tap()
 
         XCTAssertTrue(app.buttons["Select All"].exists)

@@ -57,7 +57,6 @@
         "DataManagementTests\/testWebSiteDataOptions()",
         "DatabaseFixtureTest",
         "DesktopModeTestsIphone\/testClearPrivateData()",
-        "DesktopModeTestsIphone\/testLongPressReload()",
         "DesktopModeTestsIphone\/testPrivateModeOffAlsoRemovesFromNormalMode()",
         "DesktopModeTestsIphone\/testPrivateModeOnHasNoAffectOnNormalMode()",
         "DesktopModeTestsIphone\/testSameHostInMultipleTabs()",
