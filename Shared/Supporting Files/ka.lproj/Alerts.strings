@@ -5,7 +5,7 @@
 "Alerts.RestoreTabs.Button.Yes.v109" = "ჩანართების აღდგენა";
 
 /* The body of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. */
-"Alerts.RestoreTabs.Message.v109" = "ვწუხვართ ამის გამო. აღადგინეთ ჩანართები, რომ განაგრძოთ იქიდან, სადაც გაჩერდით.";
+"Alerts.RestoreTabs.Message.v109" = "ვწუხვართ ამის გამო. აღადგინეთ ჩანართები, რომ განაგრძოთ იქიდან, სადაც შეჩერდით.";
 
 /* The title of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. The placeholder will be the Firefox name. */
 "Alerts.RestoreTabs.Title.v109.v2" = "%@ უეცრად გაითიშა. აღდგეს ჩანართები?";

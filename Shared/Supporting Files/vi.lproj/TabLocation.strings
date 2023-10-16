@@ -13,6 +13,3 @@
 /* Accessibility label for the share button in url bar */
 "TabLocation.Share.A11y.Label.v119" = "Chia sẻ trang này";
 
-/* Accessibility label for the shopping button in url bar */
-"TabLocation.Shopping.A11y.Label.v119" = "Trình kiểm tra đánh giá";
-

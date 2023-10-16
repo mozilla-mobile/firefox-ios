@@ -13,6 +13,3 @@
 /* Accessibility label for the share button in url bar */
 "TabLocation.Share.A11y.Label.v119" = "Partekatu orri hau";
 
-/* Accessibility label for the shopping button in url bar */
-"TabLocation.Shopping.A11y.Label.v119" = "Balorazioen egiaztatzailea";
-
