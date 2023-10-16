@@ -662,7 +662,7 @@ extension TelemetryWrapper {
         case isRestoreTabsStarted = "is-restore-tabs-started"
         case awesomebarSearchTapType = "awesomebarSearchTapType"
         case size = "size"
-        
+
         case preference = "pref"
         case preferenceChanged = "to"
         case isPrivate = "is-private"
