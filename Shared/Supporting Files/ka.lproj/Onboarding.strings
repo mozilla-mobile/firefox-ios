@@ -26,7 +26,7 @@
 "Onboarding.Notification.Continue.Action.v114" = "გაგრძელება";
 
 /* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Description.v114" = "გაგზავნეთ ჩანართები მოწყობილობებს შორის და მიიღეთ რჩევები, როგორ გამოიყენოთ სრულყოფილად %@.";
+"Onboarding.Notification.Description.v114" = "გაგზავნეთ ჩანართები მოწყობილობებს შორის და მიიღეთ რჩევები, როგორ გამოიყენოთ შედეგიანად %@.";
 
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Skip.Action.v115" = "გამოტოვება";
@@ -38,7 +38,7 @@
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "შეტყობინებების ჩართვა";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
-"Onboarding.Sync.Description.v114" = "წამოიღეთ ჩანართები და პაროლები სხვა მოწყობილობებიდან, რომ განაგრძოთ იქიდან, სადაც გაჩერდით.";
+"Onboarding.Sync.Description.v114" = "წამოიღეთ ჩანართები და პაროლები სხვა მოწყობილობებიდან, რომ განაგრძოთ იქიდან, სადაც შეჩერდით.";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.SignIn.Action.v114" = "შესვლა";

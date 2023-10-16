@@ -13,6 +13,3 @@
 /* Accessibility label for the share button in url bar */
 "TabLocation.Share.A11y.Label.v119" = "ਇਹ ਸਫ਼ੇ ਨੂੰ ਸਾਂਝਾ ਕਰੋ";
 
-/* Accessibility label for the shopping button in url bar */
-"TabLocation.Shopping.A11y.Label.v119" = "ਪੜਤਾਲ ਜਾਂਚਕਰਤਾ";
-

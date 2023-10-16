@@ -392,7 +392,7 @@
 "fxa.signin.qr-link-instruction" = "පරිගණකයෙහි ෆයර්ෆොක්ස් විවෘත කර firefox.com/pair වෙත යන්න";
 
 /* FxA sign in view qr code scan button */
-"fxa.signin.ready-to-scan" = "පරිලෝකනයට සූදානම්";
+"fxa.signin.ready-to-scan" = "පරිලෝකනයට ඔබන්න";
 
 /* FxA sign in view email login button */
 "fxa.signin.use-email-instead" = "වි-තැපෑල යොදාගන්න";
