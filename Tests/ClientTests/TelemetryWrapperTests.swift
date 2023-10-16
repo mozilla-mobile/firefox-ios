@@ -704,16 +704,16 @@ class TelemetryWrapperTests: XCTestCase {
 
     // MARK: Logins and Passwords
     func test_loginsPasswordDetected_GleanIsCalled() {
-        TelemetryWrapper.recordEvent(category: .action, method: .emailLogin, object: .loginsPasswordDetected)
+        TelemetryWrapper.recordEvent(category: .information, method: .emailLogin, object: .loginsPasswordDetected)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Logins.passwordDetected)
     }
 
-    func test_loginsAutofillPropmtShown_GleanIsCalled() {
+    func test_loginsAutofillPromptShown_GleanIsCalled() {
         TelemetryWrapper.recordEvent(category: .action, method: .view, object: .loginsAutofillPromptShown)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Logins.autofillPromptShown)
     }
 
-    func test_loginsAutofillPropmtDismissed_GleanIsCalled() {
+    func test_loginsAutofillPromptDismissed_GleanIsCalled() {
         TelemetryWrapper.recordEvent(category: .action, method: .close, object: .loginsAutofillPromptDismissed)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Logins.autofillPromptDismissed)
     }
