@@ -5,7 +5,8 @@
 import Foundation
 import XCTest
 import MozillaAppServices
-import Account
+@testable import Account
+@testable import Client
 
 class AutopushTests: XCTestCase {
     private var mockPushManager: MockPushManager!
