@@ -13,7 +13,7 @@ class XCRun(object):
         self.logger.info('Running: {}'.format(' '.join(args)))
         subprocess.check_call(args)
 
-    def boot(self, device='iPhone 14'):
+    def boot(self, device='iPhone 15'):
         self._run('boot', device)
 
     def install(self, device='all'):

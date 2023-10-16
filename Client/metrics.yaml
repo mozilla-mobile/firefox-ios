@@ -658,6 +658,18 @@ downloads:
 
 # Shopping Experience (Fakespot)
 shopping:
+  product_page_visits:
+    type: counter
+    description: |
+      A count of the number of eligible product pages the user has visited.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16539
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16635
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-10-01"
+    unit: counter of product pages
   address_bar_icon_clicked:
     type: event
     description: |
@@ -716,6 +728,12 @@ shopping:
     type: event
     description: |
       Records when the surface (bottom sheet) is displayed
+    extra_keys:
+      size:
+        type: string
+        description: |
+          Records the state of the bottom sheet:
+          "half-view / full-view"
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/16248
     data_reviews:
@@ -723,19 +741,6 @@ shopping:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-09-06"
-
-  settings_component_opted_out:
-    type: event
-    description: |
-      Records when the 'Turn Off Review Quality Check' button was tapped
-      in Settings Card View
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/16185
-    data_reviews:
-     - https://github.com/mozilla-mobile/firefox-ios/pull/16351
-    notification_emails:
-     - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-11"
 
   surface_settings_expand_clicked:
     type: event
@@ -857,6 +862,104 @@ shopping:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-09-29"
+
+  surface_analyze_reviews_none_available_clicked:
+    type: event
+    description: |
+      Records an event when the user taps on
+      analyzer button from the 'No Analysis Card'.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16631
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16721
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-10-05"
+
+  surface_reanalyze_clicked:
+    type: event
+    description: |
+      Records an event when the user taps on
+      primary button from the 'Needs Analysis Card'.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16631
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16721
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-10-05"
+
+  surface_no_review_reliability_available:
+    type: event
+    description: |
+      Records an event when the Fakespot API doesn't return a grade.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16630
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16750
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-10-09"
+
+  surface_stale_analysis_shown:
+    type: event
+    description: |
+      Records an event when the "New info to check" card is shown.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16632
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16782
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-10-05"
+
+shopping.settings:
+  nimbus_disabled_shopping:
+    type: boolean
+    lifetime: application
+    description: |
+      Indicates if Nimbus has disabled the use the shopping component.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16694
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16780
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-09-29"
+    send_in_pings:
+      - metrics
+
+  component_opted_out:
+    type: boolean
+    lifetime: application
+    description: |
+      Indicates if the user has opted out of using the shopping component.
+      Set in BrowserViewController and updated when changed by user.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16694
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16780
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-09-29"
+    send_in_pings:
+      - metrics
+
+  user_has_onboarded:
+    type: boolean
+    lifetime: application
+    description: |
+      Indicates if the user has completed the Shopping product Onboarding
+      experience. Set in BrowserViewController and updated when changed by user.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16694
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16780
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-09-29"
+    send_in_pings:
+      - metrics
 
 # Key Commands
 key_commands:
@@ -4436,8 +4539,8 @@ credit_card:
     type: event
     description: |
       Recorded when a user taps a card from bottom sheet
-      select a card flow and the credit card does not
-      get autofilled on the webpage page
+      select a card flow and the credit card gets 
+      autofilled on the webpage
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-6703
     data_reviews:
@@ -4450,7 +4553,7 @@ credit_card:
     description: |
       Recorded when a user taps a card from bottom sheet
       select a card flow and the credit card does not
-      get autofilled on the webpage page
+      get autofilled on the webpage
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-6703
     data_reviews:

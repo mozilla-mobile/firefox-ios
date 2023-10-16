@@ -6,7 +6,7 @@ import Common
 import Foundation
 import Shared
 
-class InactiveTabHeader: UITableViewHeaderFooterView, ReusableCell {
+class LegacyInactiveTabHeader: UITableViewHeaderFooterView, ReusableCell {
     var state: ExpandButtonState? {
         willSet(state) {
             moreButton.setImage(state?.image, for: .normal)
@@ -53,7 +53,7 @@ class InactiveTabHeader: UITableViewHeaderFooterView, ReusableCell {
 
         isAccessibilityElement = true
         accessibilityTraits = .button
-        accessibilityIdentifier = AccessibilityIdentifiers.TabTray.inactiveTabHeader
+        accessibilityIdentifier = AccessibilityIdentifiers.TabTray.InactiveTabs.headerView
 
         NSLayoutConstraint.activate([
             titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),

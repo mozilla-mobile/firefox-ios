@@ -2,13 +2,22 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
+import Shared
 
 /// Utility functions related to Fakespot
-public struct FakespotUtils {
+public struct FakespotUtils: FeatureFlaggable {
     public static var learnMoreUrl: URL? {
         // Returns the predefined URL associated to learn more button action.
-        return URL(string: "https://support.mozilla.org/kb/review-checker-review-quality")
+        guard let url = SupportUtils.URLForTopic("review_checker_mobile") else { return nil }
+
+        let queryItems = [URLQueryItem(name: "utm_campaign", value: "fakespot-by-mozilla"),
+                          URLQueryItem(name: "utm_term", value: "core-sheet")]
+        var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        urlComponents?.queryItems = queryItems
+
+        return urlComponents?.url
     }
 
     public static var privacyPolicyUrl: URL? {
@@ -23,6 +32,38 @@ public struct FakespotUtils {
 
     public static var fakespotUrl: URL? {
         // Returns the predefined URL associated to Fakespot button action.
-        return URL(string: "https://www.fakespot.com/review-checker?utm_source=review-checker&utm_campaign=fakespot-by-mozilla&utm_medium=inproduct&utm_term=core-sheet")
+        return URL(string: "https://www.fakespot.com/our-mission?utm_source=review-checker&utm_campaign=fakespot-by-mozilla&utm_medium=inproduct&utm_term=core-sheet")
+    }
+
+    func addSettingTelemetry(profile: Profile = AppContainer.shared.resolve()) {
+        let isFeatureEnabled = featureFlags.isFeatureEnabled(.fakespotFeature, checking: .buildOnly)
+        TelemetryWrapper.recordEvent(
+            category: .information,
+            method: .settings,
+            object: .shoppingNimbusDisabled,
+            extras: [
+                TelemetryWrapper.ExtraKey.Shopping.isNimbusDisabled.rawValue: !isFeatureEnabled
+            ]
+        )
+
+        let isOptedOut = profile.prefs.boolForKey(PrefsKeys.Shopping2023ExplicitOptOut) ?? false
+        TelemetryWrapper.recordEvent(
+            category: .information,
+            method: .settings,
+            object: .shoppingComponentOptedOut,
+            extras: [
+                TelemetryWrapper.ExtraKey.Shopping.isComponentOptedOut.rawValue: isOptedOut
+            ]
+        )
+
+        let isUserOnboarded = profile.prefs.boolForKey(PrefsKeys.Shopping2023OptInSeen) ?? false
+        TelemetryWrapper.recordEvent(
+            category: .information,
+            method: .settings,
+            object: .shoppingUserHasOnboarded,
+            extras: [
+                TelemetryWrapper.ExtraKey.Shopping.isUserOnboarded.rawValue: isUserOnboarded
+            ]
+        )
     }
 }

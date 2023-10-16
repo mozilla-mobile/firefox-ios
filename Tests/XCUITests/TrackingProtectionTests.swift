@@ -11,8 +11,9 @@ let websiteWithBlockedElements = "twitter.com"
 let differentWebsite = path(forTestPage: "test-example.html")
 
 class TrackingProtectionTests: BaseTestCase {
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307059
     // Smoketest
-    func testTrackingProtection() {
+    func testStandardProtectionLevel() {
         navigator.goto(URLBarOpen)
         mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
         navigator.back()
@@ -73,7 +74,8 @@ class TrackingProtectionTests: BaseTestCase {
         app.buttons["Done"].tap()
     }
 
-    func testETPLockMenu() {
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2319381
+    func testLockIconMenu() {
         navigator.openURL(differentWebsite)
         waitUntilPageLoad()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
@@ -106,7 +108,8 @@ class TrackingProtectionTests: BaseTestCase {
         XCTAssertFalse(app.switches.element.exists)
     }
 
-    func testBasicMoreInfo() {
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2318742
+    func testProtectionLevelMoreInfoMenu() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(TrackingProtectionSettings)
         // See Basic mode info
@@ -129,7 +132,7 @@ class TrackingProtectionTests: BaseTestCase {
         app.buttons["Tracking Protection"].tap()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/1510468
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307061
     func testLockIconSecureConnection() {
         navigator.openURL("https://www.Mozilla.org")
         waitUntilPageLoad()

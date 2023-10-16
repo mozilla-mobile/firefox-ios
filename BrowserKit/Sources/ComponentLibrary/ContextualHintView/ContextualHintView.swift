@@ -19,9 +19,7 @@ public class ContextualHintView: UIView, ThemeApplicable {
         static let descriptionTextSize: CGFloat = 17
         static let stackViewLeading: CGFloat = 16
         static let stackViewTopArrowTopConstraint: CGFloat = 16
-        static let stackViewTopArrowBottomConstraint: CGFloat = 10
         static let stackViewBottomArrowTopConstraint: CGFloat = 5
-        static let stackViewBottomArrowBottomConstraint: CGFloat = 21
         static let stackViewTrailing: CGFloat = 3
         static let heightSpacing: CGFloat = UX.stackViewTopArrowTopConstraint + UX.stackViewBottomArrowTopConstraint
     }
@@ -100,7 +98,6 @@ public class ContextualHintView: UIView, ThemeApplicable {
     private func setupConstraints() {
         let isArrowUp = viewModel.arrowDirection == .up
         let topPadding = isArrowUp ? UX.stackViewTopArrowTopConstraint : UX.stackViewBottomArrowTopConstraint
-        let bottomPadding = isArrowUp ? UX.stackViewTopArrowBottomConstraint : UX.stackViewBottomArrowBottomConstraint
         let closeButtonPadding = isArrowUp ? UX.closeButtonTop : UX.closeButtonBottom
 
         NSLayoutConstraint.activate([
@@ -128,7 +125,7 @@ public class ContextualHintView: UIView, ThemeApplicable {
                                                constant: UX.stackViewLeading),
             stackView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor,
                                                 constant: -UX.closeButtonSize.width - UX.stackViewTrailing),
-            stackView.bottomAnchor.constraint(equalTo: contentContainer.bottomAnchor, constant: bottomPadding),
+            stackView.bottomAnchor.constraint(equalTo: contentContainer.bottomAnchor)
         ])
 
         setNeedsLayout()

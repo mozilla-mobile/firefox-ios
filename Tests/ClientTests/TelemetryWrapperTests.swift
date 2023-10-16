@@ -242,6 +242,14 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.addressBarIconClicked)
     }
 
+    func test_productPageVisits_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .view,
+                                     object: .shoppingProductPageVisits)
+
+        testCounterMetricRecordingSuccess(metric: GleanMetrics.Shopping.productPageVisits)
+    }
+
     func test_shoppingAddressBarIconDisplayed_GleanIsCalled() {
         TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingButton)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.addressBarIconDisplayed)
@@ -297,19 +305,27 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceShowMoreRecentReviewsClicked)
 	}
 
-    func test_shoppingSurfaceDisplayed_GleanIsCalled() {
-        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingBottomSheet)
+    func test_shoppingSurfaceDisplayeddWithExtras_GleanIsCalledFullViewState() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .view,
+                                     object: .shoppingBottomSheet,
+                                     extras: [TelemetryWrapper.ExtraKey.size.rawValue:
+                                                TelemetryWrapper.EventExtraKey.Shopping.fullView.rawValue])
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceDisplayed)
+    }
+
+    func test_shoppingSurfaceDisplayeddWithExtras_GleanIsCalledHalfViewState() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .view,
+                                     object: .shoppingBottomSheet,
+                                     extras: [TelemetryWrapper.ExtraKey.size.rawValue:
+                                                TelemetryWrapper.EventExtraKey.Shopping.halfView.rawValue])
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceDisplayed)
     }
 
     func test_shoppingOnboardingDisplayed_GleanIsCalled() {
         TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingOnboarding)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceOnboardingDisplayed)
-    }
-
-    func test_shoppingSettingsComponentOptedOut_GleanIsCalled() {
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingSettingsCardTurnOffButton)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.settingsComponentOptedOut)
     }
 
     func test_surfaceSettingsExpandClicked_GleanIsCalled() {
@@ -355,6 +371,65 @@ class TelemetryWrapperTests: XCTestCase {
     func test_surfacePoweredByFakespotLinkClicked_GleanIsCalled() {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingPoweredByFakespotLabel)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfacePoweredByFakespotLinkClicked)
+    }
+
+    func test_surfaceAnalyzeReviewsNoneAvailableClicked_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingNoAnalysisCardViewPrimaryButton)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceAnalyzeReviewsNoneAvailableClicked)
+    }
+
+    func test_surfaceReanalyzeClicked_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingNeedsAnalysisCardViewPrimaryButton)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceReanalyzeClicked)
+    }
+
+    func test_surfaceNoReviewReliabilityAvailable_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .navigate, object: .shoppingBottomSheet)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceNoReviewReliabilityAvailable)
+    }
+
+    func test_shoppingShoppingSurfaceStaleAnalysisShown_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingSurfaceStaleAnalysisShown)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceStaleAnalysisShown)
+    }
+
+    func test_shoppingNimbusDisabled_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(
+            category: .information,
+            method: .settings,
+            object: .shoppingNimbusDisabled,
+            extras: [
+                TelemetryWrapper.ExtraKey.Shopping.isNimbusDisabled.rawValue: true
+            ])
+        testBoolMetricSuccess(metric: GleanMetrics.ShoppingSettings.nimbusDisabledShopping,
+                              expectedValue: true,
+                              failureMessage: "Should be true")
+    }
+
+    func test_shoppingComponentOptedOut_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(
+            category: .information,
+            method: .settings,
+            object: .shoppingComponentOptedOut,
+            extras: [
+                TelemetryWrapper.ExtraKey.Shopping.isComponentOptedOut.rawValue: true
+            ])
+        testBoolMetricSuccess(metric: GleanMetrics.ShoppingSettings.componentOptedOut,
+                              expectedValue: true,
+                              failureMessage: "Should be true")
+    }
+
+    func test_shoppingUserHasOnboarded_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(
+            category: .information,
+            method: .settings,
+            object: .shoppingUserHasOnboarded,
+            extras: [
+                TelemetryWrapper.ExtraKey.Shopping.isUserOnboarded.rawValue: true
+            ])
+        testBoolMetricSuccess(metric: GleanMetrics.ShoppingSettings.userHasOnboarded,
+                              expectedValue: true,
+                              failureMessage: "Should be true")
     }
 
     // MARK: - Onboarding

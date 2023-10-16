@@ -10,13 +10,13 @@ class FileAccessorTests: XCTestCase {
     fileprivate var testDir: String!
     fileprivate var files: FileAccessor!
 
-    override func setUp() {
-        super.setUp()
+    override func setUpWithError() throws {
+        try super.setUpWithError()
         let docPath: NSString = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
         files = FileAccessor(rootPath: docPath.appendingPathComponent("filetest"))
 
-        testDir = try! files.getAndEnsureDirectory()
-        try! files.removeFilesInDirectory()
+        testDir = try files.getAndEnsureDirectory()
+        try files.removeFilesInDirectory()
     }
 
     override func tearDown() {

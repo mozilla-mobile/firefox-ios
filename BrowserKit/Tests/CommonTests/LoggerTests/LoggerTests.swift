@@ -219,4 +219,9 @@ class MockCrashManager: CrashManager {
         self.level = level
         self.extraEvents = extraEvents
     }
+
+    var error: Error?
+    func captureError(error: Error) {
+        self.error = error
+    }
 }

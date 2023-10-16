@@ -305,7 +305,7 @@ class TabDisplayManagerTests: XCTestCase {
     func testInactiveTabs_grid_closeTabs() {
         let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
         tabDisplayManager.tabDisplayType = .TabGrid
-        tabDisplayManager.inactiveViewModel = InactiveTabViewModel(theme: LightTheme())
+        tabDisplayManager.inactiveViewModel = LegacyInactiveTabViewModel(theme: LightTheme())
 
         // Add four tabs (2 inactive, 2 active)
         let inactiveTab1 = manager.addTab()
@@ -333,7 +333,7 @@ class TabDisplayManagerTests: XCTestCase {
     func testInactiveTabs_grid_undoSingleTab() {
         let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
         tabDisplayManager.tabDisplayType = .TabGrid
-        tabDisplayManager.inactiveViewModel = InactiveTabViewModel(theme: LightTheme())
+        tabDisplayManager.inactiveViewModel = LegacyInactiveTabViewModel(theme: LightTheme())
 
         // Add three tabs (2 inactive, 1 active)
         let inactiveTab1 = manager.addTab()
@@ -363,7 +363,7 @@ class TabDisplayManagerTests: XCTestCase {
     func testInactiveTabs_grid_closeSingleTab() {
         let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
         tabDisplayManager.tabDisplayType = .TabGrid
-        tabDisplayManager.inactiveViewModel = InactiveTabViewModel(theme: LightTheme())
+        tabDisplayManager.inactiveViewModel = LegacyInactiveTabViewModel(theme: LightTheme())
 
         // Add three tabs (2 inactive, 1 active)
         let inactiveTab1 = manager.addTab()
@@ -396,7 +396,7 @@ class TabDisplayManagerTests: XCTestCase {
     func testInactiveTabs_grid_undoCloseTabs() {
         let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
         tabDisplayManager.tabDisplayType = .TabGrid
-        tabDisplayManager.inactiveViewModel = InactiveTabViewModel(theme: LightTheme())
+        tabDisplayManager.inactiveViewModel = LegacyInactiveTabViewModel(theme: LightTheme())
 
         // Add four tabs (2 inactive, 2 active)
         let inactiveTab1 = manager.addTab()
@@ -577,7 +577,7 @@ class MockCollectionView: UICollectionView {
         super.init(frame: frame, collectionViewLayout: collectionViewLayout)
 
         register(TopTabCell.self, forCellWithReuseIdentifier: TopTabCell.cellIdentifier)
-        register(InactiveTabCell.self, forCellWithReuseIdentifier: InactiveTabCell.cellIdentifier)
+        register(LegacyInactiveTabCell.self, forCellWithReuseIdentifier: LegacyInactiveTabCell.cellIdentifier)
     }
 
     required init?(coder: NSCoder) {

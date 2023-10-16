@@ -39,9 +39,17 @@ public actor DefaultDiskImageStore: DiskImageStore {
                 quality: Float,
                 logger: Logger = DefaultLogger.shared) {
         self.files = files
-        self.filesDir = try! files.getAndEnsureDirectory(namespace)
         self.quality = CGFloat(quality)
         self.logger = logger
+
+        do {
+            self.filesDir = try files.getAndEnsureDirectory(namespace)
+        } catch {
+            logger.log("Could not create directory at root path: \(error)",
+                       level: .fatal,
+                       category: .storage)
+            fatalError("Could not create directory at root path: \(error)")
+        }
 
         // Build an in-memory set of keys from the existing images on disk.
         var keys = [String]()

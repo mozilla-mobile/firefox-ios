@@ -68,7 +68,6 @@ public struct PrefsKeys {
 
     // For ease of use, please list keys alphabetically.
     public struct FeatureFlags {
-        public static let ASPocketStories = "ASPocketStoriesUserPrefsKey"
         public static let CustomWallpaper = "CustomWallpaperUserPrefsKey"
         public static let FirefoxSuggest = "FirefoxSuggest"
         public static let HistoryHighlightsSection = "HistoryHighlightsSectionUserPrefsKey"
@@ -81,6 +80,7 @@ public struct PrefsKeys {
     }
 
     public struct UserFeatureFlagPrefs {
+        public static let ASPocketStories = "ASPocketStoriesUserPrefsKey"
         public static let SponsoredShortcuts = "SponsoredShortcutsUserPrefsKey"
         public static let StartAtHome = "StartAtHomeUserPrefsKey"
     }
@@ -127,6 +127,8 @@ public struct PrefsKeys {
     // Shopping Keys
     public static let Shopping2023EnableAds = "Shopping2023EnableAdsKey"
     public static let Shopping2023OptIn = "Shopping2023OptInKey"
+    public static let Shopping2023OptInSeen = "Shopping2023OptInSeenKey"
+    public static let Shopping2023ExplicitOptOut = "Shopping2023ExplicitOptOutKey"
 
     // WallpaperManager Keys - Legacy
     public static let WallpaperManagerCurrentWallpaperObject = "WallpaperManagerCurrentWallpaperObject"

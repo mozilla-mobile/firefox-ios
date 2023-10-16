@@ -5,6 +5,7 @@
 import Foundation
 import UIKit
 
+/// The view model used to configure a `BottomSheetViewController`
 public struct BottomSheetViewModel {
     private struct UX {
         static let cornerRadius: CGFloat = 8

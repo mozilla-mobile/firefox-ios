@@ -4,6 +4,7 @@
 
 import UIKit
 import GCDWebServers
+import Shared
 import XCTest
 
 @testable import Client
@@ -13,9 +14,9 @@ class PocketStoriesTests: XCTestCase {
     var webServer: GCDWebServer!
 
     /// Setup a basic web server that binds to a random port and that has one default handler on /hello
-    fileprivate func setupWebServer() {
+    fileprivate func setupWebServer() throws {
         let path = Bundle(for: type(of: self)).path(forResource: "pocketglobalfeed", ofType: "json")
-        let data = try! Data(contentsOf: URL(fileURLWithPath: path!))
+        let data = try Data(contentsOf: URL(fileURLWithPath: path!))
 
         webServer = GCDWebServer()
         webServer.addHandler(forMethod: "GET", path: "/pocketglobalfeed", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse in
@@ -28,9 +29,9 @@ class PocketStoriesTests: XCTestCase {
         pocketAPI = "http://localhost:\(webServer.port)/pocketglobalfeed"
     }
 
-    override func setUp() {
-        super.setUp()
-        setupWebServer()
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        try setupWebServer()
     }
 
     override func tearDown() {
@@ -41,7 +42,7 @@ class PocketStoriesTests: XCTestCase {
 
     func testPocketStoriesCaching() {
         let expect = expectation(description: "Pocket")
-        let pocketFeed = PocketProvider(endPoint: pocketAPI)
+        let pocketFeed = PocketProvider(endPoint: pocketAPI, prefs: MockProfilePrefs())
         let feedNumber = 11
 
         pocketFeed.fetchStories(items: feedNumber) { result in

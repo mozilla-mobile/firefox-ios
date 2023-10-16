@@ -13,7 +13,7 @@ enum InactiveTabSection: Int, CaseIterable {
     case closeAllTabsButton
 }
 
-protocol InactiveTabsDelegate: AnyObject {
+protocol LegacyInactiveTabsDelegate: AnyObject {
     func toggleInactiveTabSection(hasExpanded: Bool)
     func didSelectInactiveTab(tab: Tab?)
     func didTapCloseInactiveTabs(tabsCount: Int)
@@ -22,7 +22,7 @@ protocol InactiveTabsDelegate: AnyObject {
     func presentCFR()
 }
 
-class InactiveTabCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
+class LegacyInactiveTabCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     struct UX {
         static let HeaderAndRowHeight: CGFloat = 48
         static let CloseAllTabRowHeight: CGFloat = 88
@@ -32,16 +32,19 @@ class InactiveTabCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     }
 
     // MARK: - Properties
-    var inactiveTabsViewModel: InactiveTabViewModel?
+    var inactiveTabsViewModel: LegacyInactiveTabViewModel?
     var hasExpanded = false
-    weak var delegate: InactiveTabsDelegate?
+    weak var delegate: LegacyInactiveTabsDelegate?
 
     // Views
     lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
-        tableView.register(InactiveTabItemCell.self, forCellReuseIdentifier: InactiveTabItemCell.cellIdentifier)
-        tableView.register(InactiveTabButton.self, forCellReuseIdentifier: InactiveTabButton.cellIdentifier)
-        tableView.register(InactiveTabHeader.self, forHeaderFooterViewReuseIdentifier: InactiveTabHeader.cellIdentifier)
+        tableView.register(LegacyInactiveTabItemCell.self,
+                           forCellReuseIdentifier: LegacyInactiveTabItemCell.cellIdentifier)
+        tableView.register(LegacyInactiveTabButton.self,
+                           forCellReuseIdentifier: LegacyInactiveTabButton.cellIdentifier)
+        tableView.register(LegacyInactiveTabHeader.self,
+                           forHeaderFooterViewReuseIdentifier: LegacyInactiveTabHeader.cellIdentifier)
         tableView.allowsMultipleSelectionDuringEditing = false
         tableView.sectionHeaderHeight = 0
         tableView.sectionFooterHeight = 0
@@ -62,7 +65,7 @@ class InactiveTabCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     }
 
     // MARK: - Initializers
-    convenience init(viewModel: InactiveTabViewModel) {
+    convenience init(viewModel: LegacyInactiveTabViewModel) {
         self.init()
         inactiveTabsViewModel = viewModel
     }
@@ -105,7 +108,7 @@ class InactiveTabCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
-extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
+extension LegacyInactiveTabCell: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
         return InactiveTabSection.allCases.count
     }
@@ -128,7 +131,7 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch InactiveTabSection(rawValue: indexPath.section) {
         case .inactive, .none:
-            return InactiveTabCell.UX.HeaderAndRowHeight
+            return LegacyInactiveTabCell.UX.HeaderAndRowHeight
         case .closeAllTabsButton:
             return UITableView.automaticDimension
         }
@@ -137,16 +140,16 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch InactiveTabSection(rawValue: indexPath.section) {
         case .inactive:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: InactiveTabItemCell.cellIdentifier,
-                                                           for: indexPath) as? InactiveTabItemCell
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: LegacyInactiveTabItemCell.cellIdentifier,
+                                                           for: indexPath) as? LegacyInactiveTabItemCell
             else {
                 return UITableViewCell()
             }
 
             guard let tab = inactiveTabsViewModel?.inactiveTabs[indexPath.item] else { return cell }
 
-            let viewModel = InactiveTabItemCellModel(title: tab.getTabTrayTitle(),
-                                                     website: getTabDomainUrl(tab: tab))
+            let viewModel = LegacyInactiveTabItemCellModel(title: tab.getTabTrayTitle(),
+                                                           website: getTabDomainUrl(tab: tab))
             cell.configureCell(viewModel: viewModel)
             if let theme = inactiveTabsViewModel?.theme {
                 cell.applyTheme(theme: theme)
@@ -155,8 +158,8 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
             return cell
 
         case .closeAllTabsButton:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: InactiveTabButton.cellIdentifier,
-                                                           for: indexPath) as? InactiveTabButton
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: LegacyInactiveTabButton.cellIdentifier,
+                                                           for: indexPath) as? LegacyInactiveTabButton
             else {
                 return UITableViewCell()
             }
@@ -215,7 +218,7 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         switch InactiveTabSection(rawValue: section) {
         case .inactive, .none:
-            guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: InactiveTabHeader.cellIdentifier) as? InactiveTabHeader else { return nil }
+            guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: LegacyInactiveTabHeader.cellIdentifier) as? LegacyInactiveTabHeader else { return nil }
             headerView.state = hasExpanded ? .down : .trailing
             headerView.title = String.TabsTrayInactiveTabsSectionTitle
             headerView.accessibilityLabel = hasExpanded ?
@@ -296,7 +299,7 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         switch InactiveTabSection(rawValue: section) {
         case .inactive, .none:
-            return InactiveTabCell.UX.HeaderAndRowHeight
+            return LegacyInactiveTabCell.UX.HeaderAndRowHeight
         case .closeAllTabsButton:
             return CGFloat.leastNormalMagnitude
         }

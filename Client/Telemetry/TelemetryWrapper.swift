@@ -214,7 +214,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
     func recordFinishedLaunchingPreferenceMetrics(notification: NSNotification) {
         guard let profile = self.profile else { return }
         // Pocket stories visible
-        if let pocketStoriesVisible = profile.prefs.boolForKey(PrefsKeys.FeatureFlags.ASPocketStories) {
+        if let pocketStoriesVisible = profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) {
             GleanMetrics.FirefoxHomePage.pocketStoriesVisible.set(pocketStoriesVisible)
         } else {
             GleanMetrics.FirefoxHomePage.pocketStoriesVisible.set(true)
@@ -324,7 +324,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         let isRecentlySavedEnabled = featureFlags.isFeatureEnabled(.recentlySaved, checking: .buildAndUser)
         GleanMetrics.Preferences.recentlySaved.set(isRecentlySavedEnabled)
 
-        let isPocketEnabled = featureFlags.isFeatureEnabled(.pocket, checking: .buildAndUser)
+        let isFeatureEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true
+        let isPocketEnabled = isFeatureEnabled && PocketProvider.islocaleSupported(Locale.current.identifier)
         GleanMetrics.Preferences.pocket.set(isPocketEnabled)
 
         let startAtHomeOption = prefs.stringForKey(PrefsKeys.UserFeatureFlagPrefs.StartAtHome) ?? StartAtHomeSetting.afterFourHours.rawValue
@@ -399,8 +400,8 @@ extension TelemetryWrapper {
         case downloadsPanel = "downloads-panel"
         case shoppingButton = "shopping-button"
         case shoppingBottomSheet = "shopping-bottom-sheet"
+        case shoppingProductPageVisits = "product_page_visits"
         case shoppingRecentReviews = "shopping-recent-reviews"
-        case shoppingSettingsCardTurnOffButton = "shopping-settings-card-turn-off-button"
         case shoppingSettingsChevronButton = "shopping-settings-chevron-button"
         case shoppingOnboarding = "shopping-onboarding"
         case shoppingOptIn = "shopping-opt-in"
@@ -410,6 +411,12 @@ extension TelemetryWrapper {
         case shoppingLearnMoreButton = "shopping-learn-more-button"
         case shoppingLearnMoreReviewQualityButton = "shopping-learn-more-review-quality-button"
         case shoppingPoweredByFakespotLabel = "shopping-powered-by-fakespot-label"
+        case shoppingNoAnalysisCardViewPrimaryButton = "shopping-no-analysis-card-view-primary-button"
+        case shoppingNeedsAnalysisCardViewPrimaryButton = "shopping-needs-analysis-card-view-primary-button"
+        case shoppingSurfaceStaleAnalysisShown = "shopping-surface-stale-analysis-shown"
+        case shoppingNimbusDisabled = "shopping-nimbus-disabled"
+        case shoppingComponentOptedOut = "shopping-component-opted-out"
+        case shoppingUserHasOnboarded = "shopping-user-has-onboarded"
         case keyCommand = "key-command"
         case locationBar = "location-bar"
         case messaging = "messaging"
@@ -680,6 +687,7 @@ extension TelemetryWrapper {
         case preferenceChanged = "to"
         case isPrivate = "is-private"
         case action = "action"
+        case size = "size"
 
         case wallpaperName = "wallpaperName"
         case wallpaperType = "wallpaperType"
@@ -746,11 +754,18 @@ extension TelemetryWrapper {
         case isLoginSyncEnabled = "sync-enabled"
         // Shopping Experience
         public enum Shopping: String {
+            // Extra Keys for `surface_closed` event
             case clickOutside = "click-outside"
             case interactionWithALink = "interaction-with-a-link"
             case swipingTheSurfaceHandle = "swiping-the-surface-handle"
             case optingOutOfTheFeature = "opting-out-of-the-feature"
             case closeButton = "close-button"
+            case isNimbusDisabled = "is-nimbus-disabled"
+            case isComponentOptedOut = "is-component-opted-out"
+            case isUserOnboarded = "is-user-onboarded"
+            // Extra Keys for `surface_displayed` event
+            case halfView = "half-view"
+            case fullView = "full-view"
         }
     }
 
@@ -1126,10 +1141,18 @@ extension TelemetryWrapper {
             }
         case (.action, .tap, .shoppingRecentReviews, _, _):
             GleanMetrics.Shopping.surfaceShowMoreRecentReviewsClicked.record()
-        case (.action, .view, .shoppingBottomSheet, _, _):
-            GleanMetrics.Shopping.surfaceDisplayed.record()
-        case (.action, .tap, .shoppingSettingsCardTurnOffButton, _, _):
-            GleanMetrics.Shopping.settingsComponentOptedOut.record()
+        case (.action, .view, .shoppingBottomSheet, _, let extras):
+            if let size = extras?[EventExtraKey.size.rawValue] as? String {
+                let sizeExtra = GleanMetrics.Shopping.SurfaceDisplayedExtra(size: size)
+                GleanMetrics.Shopping.surfaceDisplayed.record(sizeExtra)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
         case (.action, .view, .shoppingSettingsChevronButton, _, _):
             GleanMetrics.Shopping.surfaceSettingsExpandClicked.record()
         case (.action, .view, .shoppingOnboarding, _, _):
@@ -1148,8 +1171,54 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.surfaceShowQualityExplainerClicked.record()
         case (.action, .navigate, .shoppingButton, .shoppingCFRsDisplayed, _):
             GleanMetrics.Shopping.addressBarFeatureCalloutDisplayed.record()
+        case (.information, .view, .shoppingProductPageVisits, _, _):
+            GleanMetrics.Shopping.productPageVisits.add()
         case (.action, .tap, .shoppingPoweredByFakespotLabel, _, _):
             GleanMetrics.Shopping.surfacePoweredByFakespotLinkClicked.record()
+        case (.action, .tap, .shoppingNoAnalysisCardViewPrimaryButton, _, _):
+            GleanMetrics.Shopping.surfaceAnalyzeReviewsNoneAvailableClicked.record()
+        case (.action, .tap, .shoppingNeedsAnalysisCardViewPrimaryButton, _, _):
+            GleanMetrics.Shopping.surfaceReanalyzeClicked.record()
+        case (.action, .navigate, .shoppingBottomSheet, _, _):
+            GleanMetrics.Shopping.surfaceNoReviewReliabilityAvailable.record()
+        case (.action, .view, .shoppingSurfaceStaleAnalysisShown, _, _):
+            GleanMetrics.Shopping.surfaceStaleAnalysisShown.record()
+        case(.information, .settings, .shoppingNimbusDisabled, _, let extras):
+            if let isDisabled = extras?[EventExtraKey.Shopping.isNimbusDisabled.rawValue]
+                as? Bool {
+                GleanMetrics.ShoppingSettings.nimbusDisabledShopping.set(isDisabled)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
+        case(.information, .settings, .shoppingComponentOptedOut, _, let extras):
+            if let isOptedOut = extras?[EventExtraKey.Shopping.isComponentOptedOut.rawValue]
+                as? Bool {
+                GleanMetrics.ShoppingSettings.componentOptedOut.set(isOptedOut)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
+        case(.information, .settings, .shoppingUserHasOnboarded, _, let extras):
+            if let isOnboarded = extras?[EventExtraKey.Shopping.isUserOnboarded.rawValue]
+                as? Bool {
+                GleanMetrics.ShoppingSettings.userHasOnboarded.set(isOnboarded)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
 
         // MARK: Onboarding
         case (.action, .view, .onboardingCardView, _, let extras):

@@ -148,9 +148,10 @@ class HomepageViewModel: FeatureFlaggable {
             historyHighlightsDataAdaptor: historyDataAdaptor,
             wallpaperManager: wallpaperManager)
 
-        let pocketDataAdaptor = PocketDataAdaptorImplementation(pocketAPI: PocketProvider())
+        let pocketDataAdaptor = PocketDataAdaptorImplementation(pocketAPI: PocketProvider(prefs: profile.prefs))
         self.pocketViewModel = PocketViewModel(pocketDataAdaptor: pocketDataAdaptor,
                                                theme: theme,
+                                               prefs: profile.prefs,
                                                wallpaperManager: wallpaperManager)
         pocketDataAdaptor.delegate = pocketViewModel
 

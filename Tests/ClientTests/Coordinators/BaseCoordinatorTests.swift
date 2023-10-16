@@ -74,4 +74,42 @@ final class BaseCoordinatorTests: XCTestCase {
         XCTAssertNil(matchingCoordinator)
         XCTAssertNotNil(subject.savedRoute)
     }
+
+    func testRemoveDismissableFromChild() {
+        // Given
+        let subject = BaseCoordinator(router: router)
+        let childCoordinator = MockSearchHandlerRouteCoordinator(router: router)
+        let grandChildCoordinator = BaseCoordinator(router: router)
+
+        subject.add(child: childCoordinator)
+        childCoordinator.add(child: grandChildCoordinator)
+
+        // When
+        let route = Route.search(url: URL(string: "https://www.google.com"), isPrivate: false)
+        let matchingCoordinator = subject.findAndHandle(route: route)
+
+        // Then
+        XCTAssertEqual(matchingCoordinator?.childCoordinators.count, 0, "Child was removed")
+    }
+
+    func testDoesntRemoveNotDismissableFromChild() {
+        // Given
+        let subject = BaseCoordinator(router: router)
+        let childCoordinator = MockSearchHandlerRouteCoordinator(router: router)
+        let grandChildCoordinator = NonDismissableCoordinator(router: router)
+
+        subject.add(child: childCoordinator)
+        childCoordinator.add(child: grandChildCoordinator)
+
+        // When
+        let route = Route.search(url: URL(string: "https://www.google.com"), isPrivate: false)
+        let matchingCoordinator = subject.findAndHandle(route: route)
+
+        // Then
+        XCTAssertEqual(matchingCoordinator?.childCoordinators.count, 1, "Child was not removed")
+    }
+}
+
+class NonDismissableCoordinator: BaseCoordinator {
+    override var isDismissable: Bool { false }
 }

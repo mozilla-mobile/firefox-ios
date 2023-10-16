@@ -15,14 +15,14 @@ final class NimbusFeatureFlagLayer {
             return checkGeneralFeature(for: featureID, from: nimbus)
 
         case .bottomSearchBar,
-                .searchHighlights:
+                .searchHighlights,
+                .isToolbarCFREnabled:
             return checkAwesomeBarFeature(for: featureID, from: nimbus)
 
         case .credentialAutofillCoordinatorRefactor:
             return checkCredentialAutofillCoordinatorRefactorFeature(from: nimbus)
 
         case .jumpBackIn,
-                .pocket,
                 .recentlySaved,
                 .historyHighlights,
                 .topSites:
@@ -48,6 +48,9 @@ final class NimbusFeatureFlagLayer {
 
         case .feltPrivacyUI:
             return checkFeltPrivacyUIFeature(from: nimbus)
+
+        case .qrCodeCoordinatorRefactor:
+            return checkQRCodeCoordinatorRefactorFeature(from: nimbus)
 
         case .reduxIntegration:
             return checkReduxIntegrationFeature(from: nimbus)
@@ -97,6 +100,7 @@ final class NimbusFeatureFlagLayer {
         switch featureID {
         case .bottomSearchBar: return config.position.isPositionFeatureEnabled
         case .searchHighlights: return config.searchHighlights
+        case .isToolbarCFREnabled: return config.position.isToolbarCfrOn
         default: return false
         }
     }
@@ -112,7 +116,6 @@ final class NimbusFeatureFlagLayer {
         case .jumpBackIn: nimbusID = HomeScreenSection.jumpBackIn
         case .recentlySaved: nimbusID = HomeScreenSection.recentlySaved
         case .historyHighlights: nimbusID = HomeScreenSection.recentExplorations
-        case .pocket: nimbusID = HomeScreenSection.pocket
         default: return false
         }
 
@@ -168,13 +171,13 @@ final class NimbusFeatureFlagLayer {
         return config.configuration.version.rawValue
     }
 
-    private func checkNimbusForPocketSponsoredStoriesFeature(using nimbus: FxNimbus) -> Bool {
-        return nimbus.features.homescreenFeature.value().pocketSponsoredStories
-    }
-
     private func checkReduxIntegrationFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.reduxIntegrationFeature.value()
         return config.enabled
+    }
+
+    private func checkQRCodeCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.qrCodeCoordinatorRefactor.value().enabled
     }
 
     private func checkTabTrayRefactorFeature(from nimbus: FxNimbus) -> Bool {

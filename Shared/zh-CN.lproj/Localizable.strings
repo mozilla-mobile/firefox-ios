@@ -368,10 +368,10 @@
 "FirefoxHomepage.JumpBackIn.TabPickup.v104" = "接收标签页";
 
 /* This string will show under the description on pocket story, indicating that the story is sponsored. */
-"FirefoxHomepage.Pocket.Sponsored.v103" = "赞助项目";
+"FirefoxHomepage.Pocket.Sponsored.v103" = "赞助推广";
 
 /* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
-"FirefoxHomepage.Shortcuts.Sponsored.v100" = "赞助项目";
+"FirefoxHomepage.Shortcuts.Sponsored.v100" = "赞助推广";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "前进";

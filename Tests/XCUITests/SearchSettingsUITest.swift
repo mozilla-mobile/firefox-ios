@@ -35,7 +35,7 @@ class SearchSettingsUITests: BaseTestCase {
         XCTAssertTrue(app.buttons["Edit"].isEnabled)
         app.buttons["Edit"].tap()
 
-        mozWaitForElementToExist(app.tables.buttons["Delete \(customSearchEngine["name"]!)"])
+        mozWaitForElementToExist(app.tables.buttons["Remove \(customSearchEngine["name"]!)"])
     }
 
     private func addCustomSearchEngine() {
@@ -110,7 +110,7 @@ class SearchSettingsUITests: BaseTestCase {
         XCTAssertTrue(app.buttons["Done"].isEnabled)
         // Remove the custom search engine and check that edit is disabled
         let tablesQuery = app.tables
-        tablesQuery.buttons["Delete \(customSearchEngine["name"]!)"].tap()
+        tablesQuery.buttons["Remove \(customSearchEngine["name"]!)"].tap()
         tablesQuery.buttons[AccessibilityIdentifiers.Settings.Search.deleteButton].tap()
         XCTAssertFalse(app.buttons["Edit"].isEnabled)
     }

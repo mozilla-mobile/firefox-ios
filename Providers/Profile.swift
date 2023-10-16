@@ -119,8 +119,10 @@ protocol Profile: AnyObject {
     func removeAccount()
 
     func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
-    func getCachedClientsAndTabs(completion: @escaping ([ClientAndTabs]) -> Void)
     func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
+
+    func getClientsAndTabs(completion: @escaping ([ClientAndTabs]?) -> Void)
+    func getCachedClientsAndTabs(completion: @escaping ([ClientAndTabs]?) -> Void)
 
     func cleanupHistoryIfNeeded()
 
@@ -203,6 +205,16 @@ extension Profile {
 
 open class BrowserProfile: Profile {
     private let logger: Logger
+    private lazy var directory: String = {
+        do {
+            return try self.files.getAndEnsureDirectory()
+        } catch {
+            logger.log("Could not create directory at root path: \(error)",
+                       level: .fatal,
+                       category: .setup)
+            fatalError("Could not create directory at root path: \(error)")
+        }
+    }()
     fileprivate let name: String
     fileprivate let keychain: MZKeychainWrapper
     var isShutdown = false
@@ -270,40 +282,8 @@ open class BrowserProfile: Profile {
             prefs.clearAll()
         }
 
-        // Set up logging from Rust.
-        if !RustLog.shared.tryEnable({ (level, tag, message) -> Bool in
-            let logString = "[RUST][\(tag ?? "no-tag")] \(message)"
-
-            switch level {
-            case .trace:
-                break
-            case .debug:
-                logger.log(logString,
-                           level: .debug,
-                           category: .sync)
-            case .info:
-                logger.log(logString,
-                           level: .info,
-                           category: .sync)
-            case .warn:
-                logger.log(logString,
-                           level: .warning,
-                           category: .sync)
-            case .error:
-                logger.log(logString,
-                           level: .warning,
-                           category: .sync)
-            }
-
-            return true
-        }) {
-            logger.log("Unable to enable logging from Rust",
-                       level: .warning,
-                       category: .setup)
-        }
-
-        // By default, filter logging from Rust below `.info` level.
-        try? RustLog.shared.setLevelFilter(filter: .info)
+        setLogger(logger: ForwardOnLog(logger: self.logger))
+        setMaxLevel(level: Level.info)
 
         // Initiating the sync manager has to happen prior to the databases being opened,
         // because opening them can trigger events to which the SyncManager listens.
@@ -452,8 +432,8 @@ open class BrowserProfile: Profile {
         return SQLiteMetadata(db: self.database)
     }()
 
-    lazy var placesDbPath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("places.db").path
-    lazy var browserDbPath =  URL(fileURLWithPath: (try! self.files.getAndEnsureDirectory())).appendingPathComponent("browser.db").path
+    lazy var browserDbPath = URL(fileURLWithPath: directory).appendingPathComponent("browser.db").path
+    lazy var placesDbPath = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("places.db").path
     lazy var places = RustPlaces(databasePath: self.placesDbPath)
 
     public func migrateHistoryToPlaces(callback: @escaping (HistoryMigrationResult) -> Void, errCallback: @escaping (Error?) -> Void) {
@@ -472,11 +452,11 @@ open class BrowserProfile: Profile {
         )
     }
 
-    lazy var tabsDbPath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("tabs.db").path
+    lazy var tabsDbPath = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("tabs.db").path
 
     lazy var tabs = RustRemoteTabs(databasePath: tabsDbPath)
 
-    lazy var autofillDbPath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("autofill.db").path
+    lazy var autofillDbPath = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("autofill.db").path
 
     lazy var autofill = RustAutofill(databasePath: autofillDbPath)
 
@@ -528,10 +508,17 @@ open class BrowserProfile: Profile {
         return self.syncManager.syncTabs() >>> { self.retrieveTabData() }
     }
 
-    public func getCachedClientsAndTabs(completion: @escaping ([ClientAndTabs]) -> Void) {
+    public func getClientsAndTabs(completion: @escaping ([ClientAndTabs]?) -> Void) {
+        let deferredResponse = self.syncManager.syncTabs() >>> { self.retrieveTabData() }
+        deferredResponse.upon { result in
+            completion(result.successValue)
+        }
+    }
+
+    public func getCachedClientsAndTabs(completion: @escaping ([ClientAndTabs]?) -> Void) {
         let defferedResponse = self.retrieveTabData()
         defferedResponse.upon { result in
-            completion(result.successValue ?? [])
+            completion(result.successValue)
         }
     }
 
@@ -619,10 +606,10 @@ open class BrowserProfile: Profile {
 
     lazy var logins: RustLogins = {
         // TODO: #16076 - We should avoid force unwraps
-        let databasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("loginsPerField.db").path
+        let databasePath = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("loginsPerField.db").path
         // Though we don't migrate SQLCipher DBs anymore, we keep this call to
         // delete any existing DBs if they still exist
-        let sqlCipherDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("logins.db").path
+        let sqlCipherDatabasePath = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("logins.db").path
 
         return RustLogins(sqlCipherDatabasePath: sqlCipherDatabasePath, databasePath: databasePath)
     }()
