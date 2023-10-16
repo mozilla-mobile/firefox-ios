@@ -4526,3 +4526,21 @@ baseline.validation:
     expires: 2023-12-31
     data_sensitivity:
       - interaction
+
+app_errors:
+  large_file_write:
+    type: event
+    description: |
+      Recorded when a very large file is written to disk
+    extra_keys:
+      size:
+        description: |
+          The size of the file that was written
+        type: quantity
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-7558
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16826
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never

@@ -751,6 +751,19 @@ class TelemetryWrapperTests: XCTestCase {
 //        TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: .fxaLoginCompleteWebpage, value: nil)
 //        XCTAssertTrue(try Experiments.shared.createMessageHelper().evalJexl(expression: "'sync.login_completed_view'|eventSum('Days', 1, 0) > 0"))
     }
+
+    // MARK: - App Errors
+
+    func test_error_largeFileWriteIsCalled() {
+        let eventExtra = [TelemetryWrapper.EventExtraKey.size.rawValue: Int32(1000)]
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .error,
+                                     object: .app,
+                                     value: .largeFileWrite,
+                                     extras: eventExtra)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.AppErrors.largeFileWrite)
+    }
 }
 
 // MARK: - Helper functions to test telemetry
