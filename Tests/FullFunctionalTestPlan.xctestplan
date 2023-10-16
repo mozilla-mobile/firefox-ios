@@ -53,6 +53,7 @@
         "DatabaseFixtureTest\/testPerfHistory4000startUp()",
         "DesktopModeTestsIpad",
         "DesktopModeTestsIphone\/testChangeModeInSameTab()",
+        "DesktopModeTestsIphone\/testLongPressReload()",
         "DomainAutocompleteTest\/testDeletingCharsUpdateTheResults()",
         "DownloadsTests\/testDownloadFile()",
         "DownloadsTests\/testToastButtonToGoToDownloads()",

@@ -18,6 +18,10 @@ class ClipBoardTests: BaseTestCase {
         navigator.goto(URLBarOpen)
         mozWaitForElementToExist(app.textFields["address"])
         app.textFields["address"].tap()
+        if iPad() {
+            app.textFields["address"].tap()
+            app.menuItems["Select All"].tap()
+        }
         mozWaitForElementToExist(app.menuItems["Copy"])
         app.menuItems["Copy"].tap()
         app.typeText("\r")
@@ -45,6 +49,7 @@ class ClipBoardTests: BaseTestCase {
     }
 
     // This test is disabled in release, but can still run on master
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2325688
     func testClipboard() {
         navigator.nowAt(NewTabScreen)
         navigator.openURL(url)
@@ -62,6 +67,7 @@ class ClipBoardTests: BaseTestCase {
         mozWaitForValueContains(app.textFields["address"], value: "www.example.com")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2325691
     // Smoketest
     func testClipboardPasteAndGo() {
         navigator.openURL(url)
