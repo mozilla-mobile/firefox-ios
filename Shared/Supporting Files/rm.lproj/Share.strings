@@ -1,0 +1,6 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "Ti n'has connectà nagins auters apparats cun quest conto che pudessan vegnir sincronisads.";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "Ti n'es betg annunzià cun tes conto.";
+

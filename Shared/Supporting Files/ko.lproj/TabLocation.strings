@@ -13,6 +13,3 @@
 /* Accessibility label for the share button in url bar */
 "TabLocation.Share.A11y.Label.v119" = "이 페이지 공유";
 
-/* Accessibility label for the shopping button in url bar */
-"TabLocation.Shopping.A11y.Label.v119" = "리뷰 검사기";
-

@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Infurmaziuns d'annunzia memorisadas vegnan mussadas qua. Sche ti has memorisà tias infurmaziuns d'annunzia en Firefox sin in auter apparat, t'annunzia en tes conto da Firefox.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "Infurmaziuns d'annunzia memorisadas vegnan mussadas qua. Sche ti has memorisà tias infurmaziuns d'annunzia en %@ sin in auter apparat, t'annunzia en tes conto.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Chattà naginas infurmaziuns d'annunzia";
 
