@@ -10,7 +10,10 @@ protocol LaunchCoordinatorDelegate: AnyObject {
 }
 
 // Manages different types of onboarding that gets shown at the launch of the application
-class LaunchCoordinator: BaseCoordinator, SurveySurfaceViewControllerDelegate {
+class LaunchCoordinator: BaseCoordinator,
+                         SurveySurfaceViewControllerDelegate,
+                         QRCodeNavigationHandler,
+                         ParentCoordinatorDelegate {
     private let profile: Profile
     private let isIphone: Bool
     weak var parentCoordinator: LaunchCoordinatorDelegate?
@@ -47,6 +50,7 @@ class LaunchCoordinator: BaseCoordinator, SurveySurfaceViewControllerDelegate {
                                             model: onboardingModel,
                                             telemetryUtility: telemetryUtility)
         let introViewController = IntroViewController(viewModel: introViewModel)
+        introViewController.qrCodeNavigationHandler = self
         introViewController.didFinishFlow = { [weak self] in
             guard let self = self else { return }
             self.parentCoordinator?.didFinishLaunch(from: self)
@@ -73,6 +77,7 @@ class LaunchCoordinator: BaseCoordinator, SurveySurfaceViewControllerDelegate {
     private func presentUpdateOnboarding(with updateViewModel: UpdateViewModel,
                                          isFullScreen: Bool) {
         let updateViewController = UpdateViewController(viewModel: updateViewModel)
+        updateViewController.qrCodeNavigationHandler = self
         updateViewController.didFinishFlow = { [weak self] in
             guard let self = self else { return }
             self.parentCoordinator?.didFinishLaunch(from: self)
@@ -124,6 +129,25 @@ class LaunchCoordinator: BaseCoordinator, SurveySurfaceViewControllerDelegate {
         surveySurface.modalPresentationStyle = .fullScreen
         surveySurface.delegate = self
         router.present(surveySurface, animated: false)
+    }
+
+    // MARK: - QRCodeNavigationHandler
+
+    func showQRCode(delegate: QRCodeViewControllerDelegate) {
+        var coordinator: QRCodeCoordinator
+        if let qrCodeCoordinator = childCoordinators.first(where: { $0 is QRCodeCoordinator }) as? QRCodeCoordinator {
+            coordinator = qrCodeCoordinator
+        } else {
+            coordinator = QRCodeCoordinator(parentCoordinator: self, router: router)
+            add(child: coordinator)
+        }
+        coordinator.showQRCode(delegate: delegate)
+    }
+
+    // MARK: - ParentCoordinatorDelegate
+
+    func didFinish(from childCoordinator: Coordinator) {
+        remove(child: childCoordinator)
     }
 
     // MARK: - SurveySurfaceViewControllerDelegate

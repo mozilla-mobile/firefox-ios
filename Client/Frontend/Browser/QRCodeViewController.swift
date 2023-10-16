@@ -22,7 +22,7 @@ class QRCodeViewController: UIViewController {
         static let scanLineHeight: CGFloat = 6
     }
 
-    var qrCodeDelegate: QRCodeViewControllerDelegate?
+    weak var qrCodeDelegate: QRCodeViewControllerDelegate?
 
     private lazy var captureSession: AVCaptureSession = {
         let session = AVCaptureSession()

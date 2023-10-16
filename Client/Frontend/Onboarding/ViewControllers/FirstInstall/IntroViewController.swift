@@ -26,6 +26,7 @@ class IntroViewController: UIViewController,
     var themeObserver: NSObjectProtocol?
     var userDefaults: UserDefaultsInterface
     var hasRegisteredForDefaultBrowserNotification = false
+    weak var qrCodeNavigationHandler: QRCodeNavigationHandler?
 
     private lazy var closeButton: UIButton = .build { button in
         button.setImage(UIImage(named: StandardImageIdentifiers.ExtraLarge.crossCircleFill), for: .normal)
@@ -241,12 +242,14 @@ extension IntroViewController: OnboardingCardDelegate {
             let fxaPrams = FxALaunchParams(entrypoint: .introOnboarding, query: [:])
             presentSignToSync(
                 with: fxaPrams,
-                selector: #selector(dismissSignInViewController)
-            ) {
-                self.showNextPage(from: cardName) {
-                    self.showNextPageCompletionForLastCard()
-                }
-            }
+                selector: #selector(dismissSignInViewController),
+                completion: {
+                    self.showNextPage(from: cardName) {
+                        self.showNextPageCompletionForLastCard()
+                    }
+                },
+                qrCodeNavigationHandler: qrCodeNavigationHandler
+            )
         case .setDefaultBrowser:
             introViewModel.chosenOptions.insert(.setAsDefaultBrowser)
             introViewModel.updateOnboardingUserActivationEvent()
