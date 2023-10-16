@@ -755,8 +755,8 @@ extension HomepageViewController: HomepageViewModelDelegate {
             guard let self = self else { return }
 
             self.viewModel.refreshData(for: self.traitCollection, size: self.view.frame.size)
-            self.collectionView.collectionViewLayout.invalidateLayout()
             self.collectionView.reloadData()
+            self.collectionView.collectionViewLayout.invalidateLayout()
             self.logger.log("Amount of sections shown is \(self.viewModel.shownSections.count)",
                             level: .debug,
                             category: .homepage)
