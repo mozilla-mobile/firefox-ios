@@ -572,10 +572,6 @@ class SearchViewController: SiteTableViewController,
         }
     }
 
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return super.tableView(tableView, heightForRowAt: indexPath)
-    }
-
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard shouldShowHeader(for: section) else { return 0 }
 

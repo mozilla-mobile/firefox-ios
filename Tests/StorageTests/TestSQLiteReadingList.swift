@@ -18,10 +18,6 @@ class TestSQLiteReadingList: XCTestCase {
         self.readingList = SQLiteReadingList(db: db)
     }
 
-    override func tearDown() {
-        super.tearDown()
-    }
-
     func testCreateRecord() {
         let result = readingList.createRecordWithURL(
             "http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance",

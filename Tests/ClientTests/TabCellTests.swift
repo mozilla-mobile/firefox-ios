@@ -7,10 +7,6 @@
 import XCTest
 
 class TabCellTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-    }
-
     func testTabCellDeinit() {
         let subject = TabCell(frame: .zero)
         trackForMemoryLeaks(subject)

@@ -150,10 +150,6 @@ class LegacyTabCell: UICollectionViewCell,
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
-    }
-
     // MARK: - Configure tab cell with a Tab
     func configureLegacyCellWith(tab: Tab, isSelected selected: Bool, theme: Theme) {
         isSelectedTab = selected
