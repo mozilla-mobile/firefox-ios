@@ -7,7 +7,12 @@ import ComponentLibrary
 import UIKit
 import Shared
 
-class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptivePresentationControllerDelegate {
+class FakespotViewController:
+    UIViewController,
+    Themeable,
+    Notifiable,
+    UIAdaptivePresentationControllerDelegate,
+    UISheetPresentationControllerDelegate {
     private struct UX {
         static let headerTopSpacing: CGFloat = 22
         static let headerHorizontalSpacing: CGFloat = 18
@@ -108,6 +113,10 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         super.viewDidLoad()
         presentationController?.delegate = self
 
+        if #available(iOS 15.0, *) {
+            sheetPresentationController?.delegate = self
+        }
+
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
 
@@ -131,6 +140,7 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         super.viewDidAppear(animated)
         guard #available(iOS 15.0, *) else { return }
         viewModel.recordBottomSheetDisplayed(presentationController)
+        updateModalA11y()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -378,6 +388,25 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         viewModel.onViewControllerDeinit()
     }
 
+    @available(iOS 15.0, *)
+    private func updateModalA11y() {
+        var currentDetent: UISheetPresentationController.Detent.Identifier? = viewModel.getCurrentDetent(for: sheetPresentationController)
+
+        if currentDetent == nil,
+           let sheetPresentationController,
+           let firstDetent = sheetPresentationController.detents.first {
+            if firstDetent == .medium() {
+                currentDetent = .medium
+            } else if firstDetent == .large() {
+                currentDetent = .large
+            }
+        }
+
+        // in iOS 15 modals with a large detent read content underneath the modal in voice over
+        // to prevent this we manually turn this off
+        view.accessibilityViewIsModal = currentDetent == .large ? true : false
+    }
+
     // MARK: - UIAdaptivePresentationControllerDelegate
 
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
@@ -390,5 +419,12 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         } else {
             viewModel.recordDismissTelemetry(by: .clickOutside)
         }
+    }
+
+    // MARK: - UISheetPresentationControllerDelegate
+
+    @available(iOS 15.0, *)
+    func sheetPresentationControllerDidChangeSelectedDetentIdentifier(_ sheetPresentationController: UISheetPresentationController) {
+        updateModalA11y()
     }
 }
