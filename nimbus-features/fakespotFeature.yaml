@@ -33,7 +33,7 @@ features:
       - channel: beta
         value:
           status: true
-          product-recommendations: true
+          product-recommendations: false
       - channel: developer
         value:
           status: true
