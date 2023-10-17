@@ -55,6 +55,7 @@ class BrowserViewController: UIViewController,
     var urlFromAnotherApp: UrlToOpenModel?
     var isCrashAlertShowing = false
     var currentMiddleButtonState: MiddleButtonState?
+    var didStartAtHome = false
     var openedUrlFromExternalSource = false
     var passBookHelper: OpenPassBookHelper?
     var overlayManager: OverlayModeManager
@@ -419,7 +420,7 @@ class BrowserViewController: UIViewController,
             urlBar.locationView.tabDidChangeContentBlocking(tab)
         }
 
-        tabManager.startAtHomeCheck()
+        _ = tabManager.startAtHomeCheck()
         updateWallpaperMetadata()
 
         // When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
@@ -2234,7 +2235,7 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
-        tabManager.startAtHomeCheck()
+        didStartAtHome = tabManager.startAtHomeCheck()
         updateTabCountUsingTabManager(tabManager)
         openUrlAfterRestore()
     }

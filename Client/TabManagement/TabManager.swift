@@ -42,7 +42,7 @@ protocol TabManager: AnyObject {
     func moveTab(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int)
     func preserveTabs()
     func restoreTabs(_ forced: Bool)
-    func startAtHomeCheck()
+    func startAtHomeCheck() -> Bool
     func hasTabsToRestoreAtStartup() -> Bool
     func getTabForUUID(uuid: String) -> Tab?
     func getTabForURL(_ url: URL) -> Tab?
