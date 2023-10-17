@@ -176,15 +176,16 @@ class LegacyTabCell: UICollectionViewCell,
         faviconBG.isHidden = true
 
         // Regular screenshot for home or internal url when tab has home screenshot
-        if let url = tab.url, let tabScreenshot = tab.screenshot, (url.absoluteString.starts(with: "internal") &&
-            tab.hasHomeScreenshot) {
+        if let url = tab.url,
+            let tabScreenshot = tab.screenshot,
+            url.absoluteString.starts(with: "internal"),
+            tab.hasHomeScreenshot {
             let defaultImage = UIImage(named: StandardImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysTemplate)
             smallFaviconView.manuallySetImage(defaultImage ?? UIImage())
             screenshotView.image = tabScreenshot
 
         // Favicon or letter image when home screenshot is present for a regular (non-internal) url
-        } else if let url = tab.url, (!url.absoluteString.starts(with: "internal") &&
-            tab.hasHomeScreenshot) {
+        } else if let url = tab.url, !url.absoluteString.starts(with: "internal"), tab.hasHomeScreenshot {
             let defaultImage = UIImage(named: StandardImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysTemplate)
             smallFaviconView.manuallySetImage(defaultImage ?? UIImage())
             faviconBG.isHidden = false
