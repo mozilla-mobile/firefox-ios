@@ -236,16 +236,16 @@ class FakespotViewController:
     private func adjustLayout() {
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
         let titleTextWidth = widthOfString(titleLabel.text!, usingFont: titleLabel.font)
-        let maxLabelWidth = headerView.frame.width - widthOfString(betaLabel.text!, usingFont: betaLabel.font)
+        let borderWidth = contentSizeCategory.isAccessibilityCategory ? UX.betaBorderWidthA11ySize : UX.betaBorderWidth
+        let maxLabelWidth = headerView.frame.width - widthOfString(betaLabel.text!, usingFont: betaLabel.font) - 2 * borderWidth - 2 * UX.betaHorizontalSpace - UX.titleStackSpacing
+        betaView.layer.borderWidth = borderWidth
 
         if contentSizeCategory.isAccessibilityCategory || titleTextWidth > maxLabelWidth {
             titleStackView.axis = .vertical
             titleStackView.alignment = .leading
-            betaView.layer.borderWidth = contentSizeCategory.isAccessibilityCategory ? UX.betaBorderWidthA11ySize : UX.betaBorderWidth
         } else {
             titleStackView.axis = .horizontal
             titleStackView.alignment = .center
-            betaView.layer.borderWidth = UX.betaBorderWidth
         }
         titleStackView.setNeedsLayout()
         titleStackView.layoutIfNeeded()
