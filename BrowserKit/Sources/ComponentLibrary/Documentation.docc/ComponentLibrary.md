@@ -34,6 +34,8 @@ Buildings blocks are classes uses by devs to enabled General or Feature componen
 - ``CardView``
 - ``CollapsibleCardView``
 - ``ContextualHintView``
+- ``LinkButton``
+- ``PaddedSwitch``
 - ``PrimaryRoundedButton``
 - ``SecondaryRoundedButton``
 - ``ShadowCardView``
