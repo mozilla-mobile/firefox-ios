@@ -759,8 +759,15 @@ extension BrowserViewController: WKNavigationDelegate {
         self.scrollController.resetZoomState()
 
         if tabManager.selectedTab === tab {
+            if let currentItem = webView.backForwardList.currentItem {
+                if !backListHistory.contains(currentItem) {
+                    self.scrollController.showToolbars(animated: false)
+                }
+            }
             updateUIForReaderHomeStateForTab(tab, focusUrlBar: true)
         }
+
+        backListHistory = webView.backForwardList.backList
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
