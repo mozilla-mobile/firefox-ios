@@ -31,10 +31,6 @@ class TabsSettingsViewController: SettingsTableViewController, FeatureFlaggable 
         return sectionItems
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.keyboardDismissMode = .onDrag

@@ -17,10 +17,6 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
     }
 
-    override func tearDown() {
-        super.tearDown()
-    }
-
     // MARK: - Tests
     func testExpectedCoreFeatures() {
         let adjustSetting = featureFlags.isCoreFeatureEnabled(.adjustEnvironmentProd)
