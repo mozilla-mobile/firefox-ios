@@ -51,6 +51,7 @@ class CollapsibleCardViewViewController: UIViewController, Themeable {
         cardView.configure(viewModel)
 
         cardView.applyTheme(theme: themeManager.currentTheme)
+        contentView.applyTheme(theme: themeManager.currentTheme)
     }
 
     private func setupView() {

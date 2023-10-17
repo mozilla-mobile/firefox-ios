@@ -7,8 +7,6 @@ import UIKit
 
 class InactiveTabsFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable {
     struct UX {
-        static let imageSize: CGFloat = 29
-        static let borderViewMargin: CGFloat = 16
         static let buttonInset: CGFloat = 14
         static let buttonImagePadding: CGFloat = 11
         static let buttonFontSize: CGFloat = 16
@@ -22,25 +20,21 @@ class InactiveTabsFooterView: UICollectionReusableView, ReusableCell, ThemeAppli
     // MARK: - Properties
     var buttonClosure: (() -> Void)?
 
-    let containerView = UIView()
-    var shouldLeftAlignTitle = false
-
     // MARK: - UI Elements
-    private lazy var roundedButton: UIButton = {
-        let button = UIButton()
+    private lazy var roundedButton: UIButton = .build { button in
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .body,
             size: UX.buttonFontSize)
-        button.setImage(UIImage(systemName: "trash"), for: .normal)
+        button.setImage(UIImage(systemName: StandardImageIdentifiers.Large.delete), for: .normal)
         button.setTitle(.TabsTray.InactiveTabs.CloseAllInactiveTabsButton, for: .normal)
         button.titleLabel?.textAlignment = .center
         button.titleLabel?.lineBreakMode = .byTruncatingTail
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.layer.borderWidth = UX.buttonBorderWidth
-        button.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+        button.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.InactiveTabs.deleteButton
+        button.addTarget(self, action: #selector(self.buttonPressed), for: .touchUpInside)
+    }
 
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -68,6 +62,7 @@ class InactiveTabsFooterView: UICollectionReusableView, ReusableCell, ThemeAppli
         )
 
         let horizontalOffSet: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? UX.iPadOffset : UX.iPhoneOffset
+        accessibilityIdentifier = AccessibilityIdentifiers.TabTray.InactiveTabs.footerView
 
         NSLayoutConstraint.activate([
             roundedButton.centerXAnchor.constraint(equalTo: centerXAnchor),

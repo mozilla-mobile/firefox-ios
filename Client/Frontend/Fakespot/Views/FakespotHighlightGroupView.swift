@@ -73,9 +73,9 @@ class FakespotHighlightGroupView: UIView, ThemeApplicable, Notifiable {
         highlightLabel.textColor = theme.colors.textPrimary
     }
 
-    func showPreview(_ showPreview: Bool, showFade: Bool) {
+    func showPreview(_ showPreview: Bool) {
         highlightLabel.numberOfLines = showPreview ? 2 : 0
-        highlightLabel.isShowingFade = showFade
+        highlightLabel.isShowingFade = showPreview
     }
 
     private func setupLayout() {

@@ -26,6 +26,7 @@ class InactiveTabsHeaderView: UICollectionReusableView, ReusableCell, ThemeAppli
             size: UX.titleFontSize)
         titleLabel.text = String.TabsTrayInactiveTabsSectionTitle
         titleLabel.adjustsFontForContentSizeCategory = true
+        titleLabel.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.InactiveTabs.headerLabel
         titleLabel.minimumScaleFactor = UX.titleMinimumScaleFactor
         titleLabel.adjustsFontSizeToFitWidth = true
     }
@@ -33,6 +34,7 @@ class InactiveTabsHeaderView: UICollectionReusableView, ReusableCell, ThemeAppli
     lazy var moreButton: UIButton = .build { button in
         button.isHidden = true
         button.setImage(self.state?.image, for: .normal)
+        button.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.InactiveTabs.headerButton
         button.contentHorizontalAlignment = .trailing
     }
 
@@ -52,7 +54,7 @@ class InactiveTabsHeaderView: UICollectionReusableView, ReusableCell, ThemeAppli
 
         isAccessibilityElement = true
         accessibilityTraits = .button
-        accessibilityIdentifier = AccessibilityIdentifiers.TabTray.inactiveTabHeader
+        accessibilityIdentifier = AccessibilityIdentifiers.TabTray.InactiveTabs.headerView
 
         NSLayoutConstraint.activate([
             titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
@@ -66,12 +68,6 @@ class InactiveTabsHeaderView: UICollectionReusableView, ReusableCell, ThemeAppli
             moreButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
             moreButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -UX.buttonBottomPadding),
         ])
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        moreButton.setTitle(nil, for: .normal)
-        titleLabel.text = nil
     }
 
     func applyTheme(theme: Theme) {

@@ -162,6 +162,8 @@ extension FxAWebViewModel {
             case .login:
                 if let data = data {
                     onLogin(data: data, webView: webView)
+                } else {
+                    onDismissController?()
                 }
             case .changePassword:
                 if let data = data {

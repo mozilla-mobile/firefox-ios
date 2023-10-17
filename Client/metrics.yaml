@@ -657,7 +657,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16635
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-10-01"
+    expires: "2024-06-01"
     unit: counter of product pages
   address_bar_icon_clicked:
     type: event
@@ -669,7 +669,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/15780
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-07-27"
+    expires: "2024-06-01"
 
   address_bar_icon_displayed:
     type: event
@@ -681,7 +681,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16282
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-07"
+    expires: "2024-06-01"
 
   surface_closed:
     type: event
@@ -699,7 +699,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/15780
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-07-27"
+    expires: "2024-06-01"
 
   surface_show_more_recent_reviews_clicked:
     type: event
@@ -711,7 +711,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16279
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-07-27"
+    expires: "2024-06-01"
     
   surface_displayed:
     type: event
@@ -729,20 +729,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16272
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-06"
-
-  settings_component_opted_out:
-    type: event
-    description: |
-      Records when the 'Turn Off Review Quality Check' button was tapped
-      in Settings Card View
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/16185
-    data_reviews:
-     - https://github.com/mozilla-mobile/firefox-ios/pull/16351
-    notification_emails:
-     - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-11"
+    expires: "2024-06-01"
 
   surface_settings_expand_clicked:
     type: event
@@ -754,7 +741,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16367
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-12"
+    expires: "2024-06-01"
 
   surface_onboarding_displayed:
     type: event
@@ -766,7 +753,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16506
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-15"
+    expires: "2024-06-01"
 
   surface_opt_in_accepted:
     type: event
@@ -778,7 +765,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16411
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-15"
+    expires: "2024-06-01"
 
   surface_not_now_clicked:
     type: event
@@ -790,7 +777,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16411
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-15"
+    expires: "2024-06-01"
 
   surface_show_terms_clicked:
     type: event
@@ -802,7 +789,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16411
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-15"
+    expires: "2024-06-01"
 
   surface_show_privacy_policy_clicked:
     type: event
@@ -814,7 +801,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16411
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-15"
+    expires: "2024-06-01"
 
   surface_learn_more_clicked:
     type: event
@@ -826,7 +813,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16411
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-15"
+    expires: "2024-06-01"
 
   surface_show_quality_explainer_clicked:
     type: event
@@ -838,7 +825,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16503
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-20"
+    expires: "2024-06-01"
 
   address_bar_feature_callout_displayed:
     type: event
@@ -850,7 +837,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16593
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-25"
+    expires: "2024-06-01"
 
   surface_powered_by_fakespot_link_clicked:
     type: event
@@ -863,7 +850,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16655
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-29"
+    expires: "2024-06-01"
 
   surface_analyze_reviews_none_available_clicked:
     type: event
@@ -876,7 +863,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16721
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-10-05"
+    expires: "2024-06-01"
 
   surface_reanalyze_clicked:
     type: event
@@ -889,7 +876,79 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16721
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-10-05"
+    expires: "2024-06-01"
+
+  surface_no_review_reliability_available:
+    type: event
+    description: |
+      Records an event when the Fakespot API doesn't return a grade.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16630
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16750
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
+
+  surface_stale_analysis_shown:
+    type: event
+    description: |
+      Records an event when the "New info to check" card is shown.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16632
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16782
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
+
+shopping.settings:
+  nimbus_disabled_shopping:
+    type: boolean
+    lifetime: application
+    description: |
+      Indicates if Nimbus has disabled the use the shopping component.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16694
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16780
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
+    send_in_pings:
+      - metrics
+
+  component_opted_out:
+    type: boolean
+    lifetime: application
+    description: |
+      Indicates if the user has opted out of using the shopping component.
+      Set in BrowserViewController and updated when changed by user.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16694
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16780
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
+    send_in_pings:
+      - metrics
+
+  user_has_onboarded:
+    type: boolean
+    lifetime: application
+    description: |
+      Indicates if the user has completed the Shopping product Onboarding
+      experience. Set in BrowserViewController and updated when changed by user.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16694
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16780
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
+    send_in_pings:
+      - metrics
 
 # Key Commands
 key_commands:
@@ -4467,3 +4526,21 @@ baseline.validation:
     expires: 2023-12-31
     data_sensitivity:
       - interaction
+
+app_errors:
+  large_file_write:
+    type: event
+    description: |
+      Recorded when a very large file is written to disk
+    extra_keys:
+      size:
+        description: |
+          The size of the file that was written
+        type: quantity
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-7558
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16826
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never

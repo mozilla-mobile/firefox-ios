@@ -37,6 +37,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
+    weak var qrCodeNavigationHandler: QRCodeNavigationHandler?
 
     /// This variable is used to track parent page that launched this sign in VC.
     /// telemetryObject deduced from parentType initializer is sent with telemetry events on button click
@@ -278,7 +279,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     }
 }
 
-// MARK: QRCodeViewControllerDelegate Functions
+// MARK: - QRCodeViewControllerDelegate Functions
 extension FirefoxAccountSignInViewController: QRCodeViewControllerDelegate {
     func didScanQRCodeWithURL(_ url: URL) {
         let shouldAskForPermission = OnboardingNotificationCardHelper().shouldAskForNotificationsPermission(telemetryObj: telemetryObject)

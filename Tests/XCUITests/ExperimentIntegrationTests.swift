@@ -5,6 +5,8 @@
 import XCTest
 
 final class ExperimentIntegrationTests: BaseTestCase {
+    var secretMenu = false
+
     override func setUpApp() {
         app.activate()
         let closeButton = app.buttons["CloseButton"]
@@ -12,6 +14,40 @@ final class ExperimentIntegrationTests: BaseTestCase {
             closeButton.tap()
         }
         super.setUpScreenGraph()
+    }
+
+    func enableSecretMenu() {
+        let element = app.tables.cells.containing(
+            NSPredicate(format: "identifier CONTAINS 'FxVersion'")
+        )
+        for _ in 0...5 {
+            element.element.tap()
+        }
+        secretMenu = true
+    }
+
+    func checkExperimentEnrollment(experimentName: String) -> Bool {
+        navigator.goto(SettingsScreen)
+
+        if !secretMenu {
+            enableSecretMenu()
+        }
+        let experiments = app.tables.cells.containing(NSPredicate(format: "label CONTAINS 'Experiments'"))
+        experiments.element.tap()
+
+        let experiment = app.tables.cells.containing(NSPredicate(format: "label CONTAINS '\(experimentName)'"))
+        XCTAssertNotNil(experiment)
+
+        experiment.element.tap()
+
+        let checkmark = app.buttons.matching(
+            NSPredicate(format: "label CONTAINS 'checkmark'")
+        )
+        if checkmark.element.exists {
+            return true
+        } else {
+            return false
+        }
     }
 
     func testVerifyExperimentEnrolled() throws {
@@ -22,20 +58,10 @@ final class ExperimentIntegrationTests: BaseTestCase {
         navigator.goto(SettingsScreen)
 
         // enable experiments secret menu
-        let element = app.tables.cells.containing(
-            NSPredicate(format: "identifier CONTAINS 'FxVersion'")
-        )
-        for _ in 0...5 {
-            element.element.tap()
-        }
-
-        // open experiments menu
-        let experiments = app.tables.cells.containing(NSPredicate(format: "label CONTAINS 'Experiments'"))
-        experiments.element.tap()
+        enableSecretMenu()
 
         // match json experiment name
-        let experiment = app.tables.cells.containing(NSPredicate(format: "label CONTAINS 'Viewpoint'"))
-        XCTAssertNotNil(experiment)
+        XCTAssertTrue(checkExperimentEnrollment(experimentName: "Viewpoint"))
     }
 
     func testMessageNavigatesCorrectly() throws {
@@ -69,7 +95,7 @@ final class ExperimentIntegrationTests: BaseTestCase {
         let surveyLink = app.buttons.matching(
             NSPredicate(format: "identifier CONTAINS 'takeSurveyButton'")
         )
-        _ = app.buttons.matching(
+        app.buttons.matching(
             NSPredicate(format: "identifier CONTAINS 'dismissSurveyButton'")
         )
 
@@ -101,5 +127,15 @@ final class ExperimentIntegrationTests: BaseTestCase {
 
         let tabsOpen = app.buttons["Show Tabs"].value
         XCTAssertEqual("1", tabsOpen as? String)
+    }
+
+    func testStudiesToggleDisablesExperiment() {
+        navigator.goto(SettingsScreen)
+        let studiesToggle = app.switches.matching(
+            NSPredicate(format: "identifier CONTAINS 'settings.studiesToggle'")
+        )
+
+        studiesToggle.element.tap()
+        XCTAssertFalse(checkExperimentEnrollment(experimentName: "Viewpoint"))
     }
 }

@@ -7,7 +7,12 @@ import ComponentLibrary
 import UIKit
 import Shared
 
-class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptivePresentationControllerDelegate {
+class FakespotViewController:
+    UIViewController,
+    Themeable,
+    Notifiable,
+    UIAdaptivePresentationControllerDelegate,
+    UISheetPresentationControllerDelegate {
     private struct UX {
         static let headerTopSpacing: CGFloat = 22
         static let headerHorizontalSpacing: CGFloat = 18
@@ -108,6 +113,10 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         super.viewDidLoad()
         presentationController?.delegate = self
 
+        if #available(iOS 15.0, *) {
+            sheetPresentationController?.delegate = self
+        }
+
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
 
@@ -131,6 +140,7 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         super.viewDidAppear(animated)
         guard #available(iOS 15.0, *) else { return }
         viewModel.recordBottomSheetDisplayed(presentationController)
+        updateModalA11y()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -241,7 +251,9 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
             contentStackView.addArrangedSubview(view)
 
             if let loadingView = view as? FakespotLoadingView {
-                loadingView.animate()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    loadingView.animate()
+                }
             }
         }
         applyTheme()
@@ -311,17 +323,11 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
                  view?.updateLayoutForInProgress()
                  self?.onNeedsAnalysisTap()
              }
-             viewModel.onAnalysisStatusChange = { [weak view, weak self] in
-                 self?.onAnalysisStatusChange(sender: view)
-             }
              view.configure(viewModel.noAnalysisCardViewModel)
              return view
 
         case .progressAnalysisCard:
              let view: FakespotNoAnalysisCardView = .build()
-             viewModel.onAnalysisStatusChange = { [weak view, weak self] in
-                 self?.onAnalysisStatusChange(sender: view)
-             }
              view.configure(viewModel.noAnalysisCardViewModel)
              view.updateLayoutForInProgress()
              return view
@@ -338,9 +344,9 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
                 view.configure(viewModel.noConnectionViewModel)
                 return view
 
-            case .productCannotBeAnalyzed:
+            case .productNotSupported:
                 let view: FakespotMessageCardView = .build()
-                view.configure(viewModel.doesNotAnalyzeReviewsViewModel)
+                view.configure(viewModel.notSupportedProductViewModel)
                 return view
 
             case .notEnoughReviews:
@@ -357,28 +363,14 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
                     self.viewModel.recordTelemetry(for: .messageCard(.needsAnalysis))
                 }
                 view.configure(viewModel.needsAnalysisViewModel)
-                viewModel.onAnalysisStatusChange = { [weak view, weak self] in
-                    self?.onAnalysisStatusChange(sender: view)
-                }
+                TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingSurfaceStaleAnalysisShown)
                 return view
 
             case .analysisInProgress:
                 let view: FakespotMessageCardView = .build()
                 view.configure(viewModel.analysisProgressViewModel)
-                viewModel.onAnalysisStatusChange = { [weak view, weak self] in
-                    self?.onAnalysisStatusChange(sender: view)
-                }
                 return view
             }
-        }
-    }
-
-    private func onAnalysisStatusChange(sender: UIView?) {
-        guard viewModel.analysisStatus?.isAnalyzing == true else {
-            ensureMainThread {
-                sender?.removeFromSuperview()
-            }
-            return
         }
     }
 
@@ -396,6 +388,25 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         viewModel.onViewControllerDeinit()
     }
 
+    @available(iOS 15.0, *)
+    private func updateModalA11y() {
+        var currentDetent: UISheetPresentationController.Detent.Identifier? = viewModel.getCurrentDetent(for: sheetPresentationController)
+
+        if currentDetent == nil,
+           let sheetPresentationController,
+           let firstDetent = sheetPresentationController.detents.first {
+            if firstDetent == .medium() {
+                currentDetent = .medium
+            } else if firstDetent == .large() {
+                currentDetent = .large
+            }
+        }
+
+        // in iOS 15 modals with a large detent read content underneath the modal in voice over
+        // to prevent this we manually turn this off
+        view.accessibilityViewIsModal = currentDetent == .large ? true : false
+    }
+
     // MARK: - UIAdaptivePresentationControllerDelegate
 
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
@@ -408,5 +419,12 @@ class FakespotViewController: UIViewController, Themeable, Notifiable, UIAdaptiv
         } else {
             viewModel.recordDismissTelemetry(by: .clickOutside)
         }
+    }
+
+    // MARK: - UISheetPresentationControllerDelegate
+
+    @available(iOS 15.0, *)
+    func sheetPresentationControllerDidChangeSelectedDetentIdentifier(_ sheetPresentationController: UISheetPresentationController) {
+        updateModalA11y()
     }
 }

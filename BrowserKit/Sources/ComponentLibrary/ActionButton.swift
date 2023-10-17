@@ -4,7 +4,6 @@
 
 import UIKit
 
-// A convenience button class to add a closure as an action on a button instead of a selector
 public class ActionButton: ResizableButton {
     public var touchUpAction: ((UIButton) -> Void)? {
         didSet {

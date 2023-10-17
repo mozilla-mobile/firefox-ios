@@ -45,7 +45,7 @@ class CardViewViewController: UIViewController, Themeable {
 
         contentLabel.text = loremIpsum
         let viewModel = CardViewModel(view: contentLabel, a11yId: "CardView", backgroundColor: { theme in
-            return theme.colors.layerAccentPrivateNonOpaque
+            return theme.colors.layer3
         })
         cardView.configure(viewModel)
 
@@ -67,6 +67,7 @@ class CardViewViewController: UIViewController, Themeable {
     // MARK: Themeable
 
     func applyTheme() {
+        contentLabel.textColor = themeManager.currentTheme.colors.textPrimary
         view.backgroundColor = themeManager.currentTheme.colors.layer1
     }
 }

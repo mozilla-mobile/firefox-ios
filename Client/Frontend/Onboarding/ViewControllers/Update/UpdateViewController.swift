@@ -23,6 +23,7 @@ class UpdateViewController: UIViewController,
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
+    weak var qrCodeNavigationHandler: QRCodeNavigationHandler?
 
     private lazy var closeButton: UIButton = .build { button in
         button.setImage(UIImage(named: StandardImageIdentifiers.ExtraLarge.crossCircleFill), for: .normal)
@@ -213,10 +214,12 @@ extension UpdateViewController: OnboardingCardDelegate {
             let fxaParams = FxALaunchParams(entrypoint: .updateOnboarding, query: [:])
             presentSignToSync(
                 with: fxaParams,
-                selector: #selector(dismissSignInViewController)
-            ) {
-                self.closeUpdate()
-            }
+                selector: #selector(dismissSignInViewController),
+                completion: {
+                    self.closeUpdate()
+                },
+                qrCodeNavigationHandler: qrCodeNavigationHandler
+            )
         case .readPrivacyPolicy:
             presentPrivacyPolicy(
                 from: cardName,

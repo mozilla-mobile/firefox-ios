@@ -107,7 +107,7 @@ class ToolbarTests: BaseTestCase {
             waitUntilPageLoad()
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
             let PageOptionsMenu = app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
-            let statusbarElement: XCUIElement = XCUIApplication(bundleIdentifier: "com.apple.springboard").statusBars.firstMatch
+            let statusbarElement: XCUIElement = XCUIApplication(bundleIdentifier: "com.apple.springboard").statusBars.element(boundBy: 1)
             app.swipeUp()
             XCTAssertFalse(PageOptionsMenu.isHittable)
             statusbarElement.tap(force: true)
