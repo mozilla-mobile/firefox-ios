@@ -3871,6 +3871,11 @@ extension String {
             tableName: "Shopping",
             value: "Learn more about how %@ determines review quality",
             comment: "The title of the learn more button from How we determine review quality card displayed in the shopping review quality bottom sheet. The placeholder will be replaced with the Fakespot app name.")
+        public static let ReliabilityScoreGradeA11yLabel = MZLocalizedString(
+            key: "Shopping.ReliabilityScore.Grade.A11y.Label.v120",
+            tableName: "Shopping",
+            value: "Grade %@",
+            comment: "Accessibility label for the Grade labels used in 'How we determine review quality' card and 'How reliable are these reviews' card displayed in the shopping review quality bottom sheet. The placeholder will be replaced by a grade letter (e.g. A).")
         public static let OptInCardHeaderTitle = MZLocalizedString(
             key: "Shopping.OptInCard.HeaderLabel.Title.v120",
             tableName: "Shopping",

@@ -39,6 +39,8 @@ final class FakespotReliabilityScoreView: UIView, Notifiable, ThemeApplicable {
         setupLayout()
         setupView()
         reliabilityLetterLabel.text = grade.rawValue
+        reliabilityLetterLabel.accessibilityLabel = String(format: .Shopping.ReliabilityScoreGradeA11yLabel,
+                                                           grade.rawValue)
     }
 
     required init?(coder: NSCoder) {
