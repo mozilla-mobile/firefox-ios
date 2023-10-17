@@ -21,7 +21,7 @@ class CardContentView: UIView, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func applyTheme(theme: Common.Theme) {
+    func applyTheme(theme: Theme) {
         contentLabel.textColor = theme.colors.textPrimary
     }
 
@@ -35,4 +35,4 @@ class CardContentView: UIView, ThemeApplicable {
             contentLabel.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor)
         ])
     }
-    }
+}

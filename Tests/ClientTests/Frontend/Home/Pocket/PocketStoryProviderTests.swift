@@ -9,10 +9,6 @@ import Shared
 class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
     var subject: StoryProvider!
 
-    override func setUp() {
-        super.setUp()
-    }
-
     override func tearDown() {
         super.tearDown()
         subject = nil

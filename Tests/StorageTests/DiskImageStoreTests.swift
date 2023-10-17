@@ -19,10 +19,6 @@ class DiskImageStoreTests: XCTestCase {
         clearStore()
     }
 
-    override func tearDown() {
-        super.tearDown()
-    }
-
     func testSaveImageForKey() async throws {
         let testKey = "testImageKey"
         let testImage = makeImageWithColor(UIColor.red, size: CGSize(width: 100, height: 100))

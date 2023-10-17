@@ -168,6 +168,9 @@ shopping2023:
     product-recommendations:
       type: boolean
       description: "If true, recommended products feature is enabled\n to be shown to the user based on their preference.\n"
+    relay:
+      type: string
+      description: "Configurable relay URL for production environment\n"
     status:
       type: boolean
       description: "Whether the Fakespot feature is enabled or disabled\n"

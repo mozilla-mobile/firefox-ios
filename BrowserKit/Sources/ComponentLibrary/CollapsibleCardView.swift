@@ -5,6 +5,7 @@
 import Common
 import UIKit
 
+/// The view model used to configure a `CollapsibleCardView`
 public struct CollapsibleCardViewModel {
     public typealias ExpandState = CollapsibleCardView.ExpandButtonState
 

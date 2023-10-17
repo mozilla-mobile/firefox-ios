@@ -38,10 +38,6 @@ class CreditCardBottomSheetFooterView: UITableViewHeaderFooterView, ReusableCell
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-    }
-
     func applyTheme(theme: Theme) {
         contentView.backgroundColor = theme.colors.layer1
         manageCardsButton.setTitleColor(theme.colors.textAccent, for: .normal)

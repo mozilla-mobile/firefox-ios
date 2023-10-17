@@ -31,6 +31,7 @@ class Authenticator {
 
         // If we have some credentials, we'll show a prompt with them.
         if let credential = credential {
+            sendLoginsPasswordDetectedTelemetry()
             return promptForUsernamePassword(viewController, credentials: credential, protectionSpace: challenge.protectionSpace, loginsHelper: loginsHelper)
         }
 
@@ -38,6 +39,7 @@ class Authenticator {
         if let loginsHelper = loginsHelper {
             return findMatchingCredentialsForChallenge(challenge, fromLoginsProvider: loginsHelper.logins).bindQueue(.main) { result in
                 guard let credentials = result.successValue else {
+                    sendLoginsAutofillFailedTelemetry()
                     return deferMaybe(result.failureValue ?? LoginRecordError(description: "Unknown error when finding credentials"))
                 }
                 return self.promptForUsernamePassword(viewController, credentials: credentials, protectionSpace: challenge.protectionSpace, loginsHelper: loginsHelper)
@@ -138,6 +140,7 @@ class Authenticator {
             }
 
                 let login = LoginEntry(credentials: URLCredential(user: user, password: pass, persistence: .forSession), protectionSpace: protectionSpace)
+                self.sendLoginsAutofilledTelemetry()
                 deferred.fill(Maybe(success: login))
                 loginsHelper?.setCredentials(login)
         }
@@ -145,6 +148,7 @@ class Authenticator {
 
         // Add a cancel button.
         let cancel = UIAlertAction(title: .AuthenticatorCancel, style: .cancel) { (action) -> Void in
+            self.sendLoginsAutofillPromptDismissedTelemetry()
             deferred.fill(Maybe(failure: LoginRecordError(description: "Save password cancelled")))
         }
         alert.addAction(cancel, accessibilityIdentifier: "authenticationAlert.cancel")
@@ -162,7 +166,39 @@ class Authenticator {
             textfield.text = credentials?.password
         }
 
+        self.sendLoginsAutofillPromptShownTelemetry()
         viewController.present(alert, animated: true) { () -> Void in }
         return deferred
+    }
+
+    // MARK: Telemetry
+    private static func sendLoginsPasswordDetectedTelemetry() {
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .emailLogin,
+                                     object: .loginsPasswordDetected)
+    }
+
+    private static func sendLoginsAutofillPromptShownTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .view,
+                                     object: .loginsAutofillPromptShown)
+    }
+
+    private static func sendLoginsAutofillPromptDismissedTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .close,
+                                     object: .loginsAutofillPromptDismissed)
+    }
+
+    private static func sendLoginsAutofilledTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .loginsAutofilled)
+    }
+
+    private static func sendLoginsAutofillFailedTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .loginsAutofillFailed)
     }
 }

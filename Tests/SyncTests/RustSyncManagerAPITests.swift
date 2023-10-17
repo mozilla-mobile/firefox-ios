@@ -9,10 +9,6 @@ import Common
 class RustSyncManagerAPITests: XCTestCase {
     var rustSyncManagerApi: RustSyncManagerAPI!
 
-    override func setUp() {
-        super.setUp()
-    }
-
     func testReportSyncTelemetry() {
         self.rustSyncManagerApi = RustSyncManagerAPI()
         let expectation = expectation(description: "Completed telemetry reporting")

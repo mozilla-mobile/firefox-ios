@@ -4,6 +4,7 @@
 
 import UIKit
 
+/// The view model used to configure a `ContextualHintView`
 public struct ContextualHintViewModel {
     public var isActionType: Bool
     public var actionButtonTitle: String

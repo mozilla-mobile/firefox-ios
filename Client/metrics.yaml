@@ -345,6 +345,17 @@ app_menu:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-12-01"
+  passwords:
+    type: event
+    description: |
+      Records when the user taps Passwords in the app menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14902
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16685
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
 
 # Bookmark metrics
 bookmarks:
@@ -657,7 +668,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16635
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-10-01"
+    expires: "2024-06-01"
     unit: counter of product pages
   address_bar_icon_clicked:
     type: event
@@ -669,7 +680,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/15780
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-07-27"
+    expires: "2024-06-01"
 
   address_bar_icon_displayed:
     type: event
@@ -681,7 +692,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16282
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-07"
+    expires: "2024-06-01"
 
   surface_closed:
     type: event
@@ -699,7 +710,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/15780
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-07-27"
+    expires: "2024-06-01"
 
   surface_show_more_recent_reviews_clicked:
     type: event
@@ -711,7 +722,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16279
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-07-27"
+    expires: "2024-06-01"
     
   surface_displayed:
     type: event
@@ -729,7 +740,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16272
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-06"
+    expires: "2024-06-01"
 
   surface_settings_expand_clicked:
     type: event
@@ -741,7 +752,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16367
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-12"
+    expires: "2024-06-01"
 
   surface_onboarding_displayed:
     type: event
@@ -753,7 +764,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16506
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-15"
+    expires: "2024-06-01"
 
   surface_opt_in_accepted:
     type: event
@@ -765,7 +776,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16411
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-15"
+    expires: "2024-06-01"
 
   surface_not_now_clicked:
     type: event
@@ -777,7 +788,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16411
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-15"
+    expires: "2024-06-01"
 
   surface_show_terms_clicked:
     type: event
@@ -789,7 +800,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16411
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-15"
+    expires: "2024-06-01"
 
   surface_show_privacy_policy_clicked:
     type: event
@@ -801,7 +812,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16411
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-15"
+    expires: "2024-06-01"
 
   surface_learn_more_clicked:
     type: event
@@ -813,7 +824,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16411
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-15"
+    expires: "2024-06-01"
 
   surface_show_quality_explainer_clicked:
     type: event
@@ -825,7 +836,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16503
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-20"
+    expires: "2024-06-01"
 
   address_bar_feature_callout_displayed:
     type: event
@@ -837,7 +848,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16593
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-25"
+    expires: "2024-06-01"
 
   surface_powered_by_fakespot_link_clicked:
     type: event
@@ -850,7 +861,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16655
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-29"
+    expires: "2024-06-01"
 
   surface_analyze_reviews_none_available_clicked:
     type: event
@@ -863,7 +874,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16721
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-10-05"
+    expires: "2024-06-01"
 
   surface_reanalyze_clicked:
     type: event
@@ -876,7 +887,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16721
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-10-05"
+    expires: "2024-06-01"
 
   surface_no_review_reliability_available:
     type: event
@@ -888,7 +899,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16750
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-10-09"
+    expires: "2024-06-01"
 
   surface_stale_analysis_shown:
     type: event
@@ -900,7 +911,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16782
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-10-05"
+    expires: "2024-06-01"
 
 shopping.settings:
   nimbus_disabled_shopping:
@@ -914,7 +925,7 @@ shopping.settings:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16780
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-29"
+    expires: "2024-06-01"
     send_in_pings:
       - metrics
 
@@ -930,7 +941,7 @@ shopping.settings:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16780
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-29"
+    expires: "2024-06-01"
     send_in_pings:
       - metrics
 
@@ -946,7 +957,7 @@ shopping.settings:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16780
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-09-29"
+    expires: "2024-06-01"
     send_in_pings:
       - metrics
 
@@ -2596,6 +2607,151 @@ preferences:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-12-01"
 
+# Password Manager metrics
+logins:
+  password_detected:
+    type: event
+    description: |
+      Records when a username and password pair was detected
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14902
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16685
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
+  autofill_prompt_shown:
+    type: event
+    description: |
+      Records when the Password autofill prompt was shown
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14902
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16685
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
+  autofill_prompt_dismissed:
+    type: event
+    description: |
+      Records when the Password autofill prompt was dismissed.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14902
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16685
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
+  autofilled:
+    type: event
+    description: |
+      Records when the user has autofilled a login.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14902
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16685
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
+  autofill_failed:
+    type: event
+    description: |
+      Records when the user has failed to autofill a password.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14902
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16685
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
+  management_add_tapped:
+    type: event
+    description: |
+      Records when the user has tapped the add button through password management in the settings menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14902
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16685
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
+  management_logins_tapped:
+    type: event
+    description: |
+      Records when the user has tapped on a saved login through password management in the setting menu.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14902
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16685
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
+  saved:
+    type: counter
+    description: |
+      A counter of the number of passwords that have been saved by the user.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14902
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16685
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
+    unit: counter of logins.saved
+  saved_all:
+    type: quantity
+    description: |
+      Record the number of ALL the passwords that have been currently stored by the user.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14902
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16685
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
+    unit: quantity of logins.saved_all
+  deleted:
+    type: counter
+    description: |
+      A counter of the number of passwords that have been deleted by the user.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14902
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16685
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
+    unit: counter of logins.deleted
+  modified:
+    type: counter
+    description: |
+      A counter of the number of passwords that have been modified by the user.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14902
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16685
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
+    unit: counter of logins.modified
+  sync_enabled:
+    type: event
+    description: |
+      Whether the user has logins enabled in sync option
+    send_in_pings:
+      - events
+    extra_keys:
+      is_enabled:
+        type: boolean
+        description: |
+          Is enabled when the sync is started
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14902
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16685
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
 # QR Code metrics
 qr_code:
   scanned:
@@ -2738,7 +2894,17 @@ settings_menu:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-12-01"
-
+  passwords:
+    type: event
+    description: |
+      Records when the user taps Passwords in the settings menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14902
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16685
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
 # Search and search releated metrics
 search:
   counts:
@@ -4526,3 +4692,21 @@ baseline.validation:
     expires: 2023-12-31
     data_sensitivity:
       - interaction
+
+app_errors:
+  large_file_write:
+    type: event
+    description: |
+      Recorded when a very large file is written to disk
+    extra_keys:
+      size:
+        description: |
+          The size of the file that was written
+        type: quantity
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-7558
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16826
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never

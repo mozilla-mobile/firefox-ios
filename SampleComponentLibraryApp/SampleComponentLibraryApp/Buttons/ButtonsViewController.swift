@@ -14,6 +14,7 @@ class ButtonsViewController: UIViewController, Themeable {
 
     private lazy var primaryButton: PrimaryRoundedButton = .build { _ in }
     private lazy var secondaryButton: SecondaryRoundedButton = .build { _ in }
+    private lazy var linkButton: LinkButton = .build { _ in }
 
     private lazy var buttonStackView: UIStackView = .build { stackView in
         stackView.distribution = .fillEqually
@@ -46,14 +47,20 @@ class ButtonsViewController: UIViewController, Themeable {
                                                                  a11yIdentifier: "a11ySecondary")
         secondaryButton.configure(viewModel: secondaryViewModel)
 
+        let linkButtonViewModel = LinkButtonViewModel(title: "This is a link",
+                                                      a11yIdentifier: "a11yLink")
+        linkButton.configure(viewModel: linkButtonViewModel)
+
         primaryButton.applyTheme(theme: themeManager.currentTheme)
         secondaryButton.applyTheme(theme: themeManager.currentTheme)
+        linkButton.applyTheme(theme: themeManager.currentTheme)
     }
 
     private func setupView() {
         view.addSubview(buttonStackView)
         buttonStackView.addArrangedSubview(primaryButton)
         buttonStackView.addArrangedSubview(secondaryButton)
+        buttonStackView.addArrangedSubview(linkButton)
 
         NSLayoutConstraint.activate([
             buttonStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),

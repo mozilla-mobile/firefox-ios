@@ -208,6 +208,25 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
         let areAllSelected = viewModel.listSelectionHelper.numberOfSelectedCells == viewModel.count
         selectionButton.setTitle(areAllSelected ? .LoginListDeselctAll : .LoginListSelctAll, for: [])
     }
+
+    // MARK: Telemetry
+    private func sendLoginsDeletedTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .delete,
+                                     object: .loginsDeleted)
+    }
+
+    private func sendLoginsManagementAddTappedTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .loginsManagementAddTapped)
+    }
+
+    private func sendLoginsManagementLoginsTappedTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .loginsManagementLoginsTapped)
+    }
 }
 
 extension PasswordManagerListViewController: UISearchResultsUpdating {
@@ -269,6 +288,7 @@ private extension PasswordManagerListViewController {
                 DispatchQueue.main.async {
                     self?.loadLogins()
                     self?.tableView.reloadData()
+                    self?.sendLoginsManagementAddTappedTelemetry()
                 }
             }
         }
@@ -305,6 +325,7 @@ private extension PasswordManagerListViewController {
                 self.viewModel.profile.logins.deleteLogins(ids: guidsToDelete).uponQueue(.main) { _ in
                     self.cancelSelection()
                     self.loadLogins()
+                    self.sendLoginsDeletedTelemetry()
                 }
             }, hasSyncedLogins: yes.successValue ?? true)
 
@@ -389,7 +410,7 @@ extension PasswordManagerListViewController: UITableViewDelegate {
                 login: login,
                 breachRecord: breachRecord
             )
-
+            sendLoginsManagementLoginsTappedTelemetry()
             coordinator?.pressedPasswordDetail(model: detailViewModel)
         }
     }

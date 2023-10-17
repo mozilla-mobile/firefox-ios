@@ -88,6 +88,7 @@ final class PasswordManagerViewModel {
                     completion([])
                     return
                 }
+                self.sendLoginsSavedAllTelemetry(numberOfSavedLogins: logins.count)
                 completion(logins.asArray())
             }
         }
@@ -157,6 +158,9 @@ final class PasswordManagerViewModel {
 
     public func save(loginRecord: LoginEntry, completion: @escaping ((String?) -> Void)) {
         profile.logins.addLogin(login: loginRecord).upon { result in
+            if result.isSuccess {
+                self.sendLoginsSavedTelemetry()
+            }
             completion(result.successValue)
         }
     }
@@ -175,6 +179,21 @@ final class PasswordManagerViewModel {
         static let searchHeight: CGFloat = 58
         static let selectionButtonFont = UIFont.systemFont(ofSize: 16)
         static let noResultsFont = UIFont.systemFont(ofSize: 16)
+    }
+
+    // MARK: Telemetry
+    private func sendLoginsSavedTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .add,
+                                     object: .loginsSaved)
+    }
+
+    private func sendLoginsSavedAllTelemetry(numberOfSavedLogins: Int) {
+        let savedLoginsExtra = [TelemetryWrapper.EventExtraKey.loginsQuantity.rawValue: Int64(numberOfSavedLogins)]
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .foreground,
+                                     object: .loginsSavedAll,
+                                     extras: savedLoginsExtra)
     }
 }
 

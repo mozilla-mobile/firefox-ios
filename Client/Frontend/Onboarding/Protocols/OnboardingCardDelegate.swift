@@ -35,7 +35,9 @@ protocol OnboardingCardDelegate: AnyObject {
         selector: Selector?,
         completion: @escaping () -> Void,
         flowType: FxAPageType,
-        referringPage: ReferringPage)
+        referringPage: ReferringPage,
+        qrCodeNavigationHandler: QRCodeNavigationHandler?
+    )
 
     func showNextPage(from cardNamed: String, completionIfLastCard completion: (() -> Void)?)
     func pageChanged(from cardName: String)
@@ -109,7 +111,8 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
         selector: Selector?,
         completion: @escaping () -> Void,
         flowType: FxAPageType = .emailLoginFlow,
-        referringPage: ReferringPage = .onboarding
+        referringPage: ReferringPage = .onboarding,
+        qrCodeNavigationHandler: QRCodeNavigationHandler?
     ) {
         let singInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(
             fxaOptions,
@@ -123,6 +126,7 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
             action: selector)
         buttonItem.tintColor = themeManager.currentTheme.colors.actionPrimary
         singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
+        (singInSyncVC as? FirefoxAccountSignInViewController)?.qrCodeNavigationHandler = qrCodeNavigationHandler
 
         let controller = DismissableNavigationViewController(rootViewController: singInSyncVC)
         controller.onViewDismissed = completion
