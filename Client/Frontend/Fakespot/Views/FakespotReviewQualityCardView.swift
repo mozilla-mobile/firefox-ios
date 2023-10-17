@@ -203,6 +203,18 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
         setupLayout()
+
+        headlineStackView.accessibilityElements = [headlineLabel, subHeadlineLabel]
+        ratingsStackView.accessibilityElements = [
+            aReliabilityScoreView,
+            bReliabilityScoreView,
+            reliableReviewsLabel,
+            cReliabilityScoreView,
+            mixReliableReviewsLabel,
+            dReliabilityScoreView,
+            fReliabilityScoreView,
+            unreliableReviewsLabel]
+        contentStackView.accessibilityElements = [headlineStackView, ratingsStackView, footerStackView, learnMoreButton]
     }
 
     required init?(coder: NSCoder) {
