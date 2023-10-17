@@ -785,7 +785,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getPasswordAction(navigationController: UINavigationController?) -> PhotonRowActions? {
         guard PasswordManagerListViewController.shouldShowAppMenuShortcut(forPrefs: profile.prefs) else { return nil }
-
+        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .logins)
         return SingleActionViewModel(title: .AppMenu.AppMenuPasswords,
                                      iconString: StandardImageIdentifiers.Large.login,
                                      iconType: .Image,

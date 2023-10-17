@@ -29,5 +29,6 @@ class PasswordManagerSetting: Setting {
 
     override func onClick(_: UINavigationController?) {
         settingsDelegate?.pressedPasswords()
+        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .settingsMenuPasswords)
     }
 }
