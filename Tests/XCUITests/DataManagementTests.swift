@@ -6,6 +6,7 @@ import XCTest
 
 class DataManagementTests: BaseTestCase {
     // Testing the search bar, and clear website data option
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307015
     func testWebSiteDataOptions() {
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
@@ -29,4 +30,18 @@ class DataManagementTests: BaseTestCase {
         let expectedWebsitesCleared = app.tables.cells.count
         XCTAssertEqual(expectedWebsitesCleared, 1)
     }
-}
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307017
+    // Smoketest
+    func testWebSiteDataEnterFirstTime() {
+        navigator.openURL("example.com")
+        waitUntilPageLoad()
+        navigator.goto(WebsiteDataSettings)
+        mozWaitForElementToExist(app.tables.otherElements["Website Data"], timeout: 3)
+        XCTAssertTrue(app.staticTexts["example.com"].exists, "The website visited is not displayed on Website Data")
+        // There should be 4 entries. One is the website visited and 3 for extrainfo from the page.
+        // This assert will remain commented until a way is found of having website data clean on the first run
+        // This is to avoid intermittent failings
+        // XCTAssertEqual(app.tables.staticTexts.count, 4)
+    }
+ }
