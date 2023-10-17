@@ -534,10 +534,14 @@ extension BrowserViewController: WKNavigationDelegate {
             }
 
             if navigationAction.navigationType == .linkActivated {
-                linkedTapped = true
+                if UIApplication.shared.canOpenURL(url) {
+                    guard NimbusFakespotFeatureLayer().getSiteConfig(siteName: url.shortDomain ?? "") != nil else { return }
+                    shoppingLinkedTapped = true
+                }
+
                 DispatchQueue.global(qos: .background).async {
                     Thread.sleep(forTimeInterval: 2)
-                    self.linkedTapped = false
+                    self.shoppingLinkedTapped = false
                 }
             }
 

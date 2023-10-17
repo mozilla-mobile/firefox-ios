@@ -55,7 +55,7 @@ class BrowserViewController: UIViewController,
     var isCrashAlertShowing = false
     var currentMiddleButtonState: MiddleButtonState?
     var openedUrlFromExternalSource = false
-    var linkedTapped = false
+    var shoppingLinkedTapped = false
     var passBookHelper: OpenPassBookHelper?
     var overlayManager: OverlayModeManager
     var appAuthenticator: AppAuthenticationProtocol
@@ -357,7 +357,7 @@ class BrowserViewController: UIViewController,
 
     @objc
     func appDidEnterBackgroundNotification() {
-        if linkedTapped {
+        if shoppingLinkedTapped {
             TelemetryWrapper.recordEvent(
                 category: .action,
                 method: .tap,
