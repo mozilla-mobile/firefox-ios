@@ -3855,12 +3855,12 @@ extension String {
             key: "Shopping.ReviewQualityCard.UnreliableReviews.Label.v120",
             tableName: "Shopping",
             value: "Unreliable reviews. We believe the reviews are likely fake or from biased reviewers.",
-            comment: "Unnreliable reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet.")
+            comment: "Unreliable reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet.")
         public static let ReviewQualityCardAdjustedRatingLabel = MZLocalizedString(
             key: "Shopping.ReviewQualityCard.AdjustedRating.Label.v120",
             tableName: "Shopping",
             value: "*The adjusted rating* is based only on reviews we believe to be reliable.",
-            comment: "Adujusted rating label from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
+            comment: "Adjusted rating label from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
         public static let ReviewQualityCardHighlightsLabel = MZLocalizedString(
             key: "Shopping.ReviewQualityCard.Highlights.Label.v120",
             tableName: "Shopping",
