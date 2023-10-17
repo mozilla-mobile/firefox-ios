@@ -38,7 +38,6 @@ class EmptyPrivateTabsView: UIView {
         label.adjustsFontForContentSizeCategory = true
         label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .title2,
                                                             size: UX.titleSizeFont)
-        label.numberOfLines = 0
         label.text =  .PrivateBrowsingTitle
         label.textAlignment = .center
     }
@@ -54,6 +53,7 @@ class EmptyPrivateTabsView: UIView {
 
     let learnMoreButton: UIButton = .build { button in
         button.setTitle( .PrivateBrowsingLearnMore, for: [])
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
                                                                          size: UX.buttonSizeFont)
     }

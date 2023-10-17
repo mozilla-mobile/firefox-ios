@@ -70,16 +70,24 @@ open class ClientSyncManagerSpy: ClientSyncManager {
     }
 }
 
-open class MockTabQueue: TabQueue {
-    open func addToQueue(_ tab: ShareItem) -> Success {
+final class MockTabQueue: TabQueue {
+    var queuedTabs = [ShareItem]()
+    var getQueuedTabsCalled = 0
+    var addToQueueCalled = 0
+    var clearQueuedTabsCalled = 0
+
+    func addToQueue(_ tab: ShareItem) -> Success {
+        addToQueueCalled += 1
         return succeed()
     }
 
-    open func getQueuedTabs() -> Deferred<Maybe<Cursor<ShareItem>>> {
-        return deferMaybe(ArrayCursor<ShareItem>(data: []))
+    func getQueuedTabs(completion: @escaping ([ShareItem]) -> Void) {
+        getQueuedTabsCalled += 1
+        return completion(queuedTabs)
     }
 
-    open func clearQueuedTabs() -> Success {
+    func clearQueuedTabs() -> Success {
+        clearQueuedTabsCalled += 1
         return succeed()
     }
 }
@@ -271,7 +279,11 @@ open class MockProfile: Client.Profile {
 
     var mockClientAndTabs = [ClientAndTabs]()
 
-    public func getCachedClientsAndTabs(completion: @escaping ([ClientAndTabs]) -> Void) {
+    public func getCachedClientsAndTabs(completion: @escaping ([ClientAndTabs]?) -> Void) {
+        completion(mockClientAndTabs)
+    }
+
+    public func getClientsAndTabs(completion: @escaping ([ClientAndTabs]?) -> Void) {
         completion(mockClientAndTabs)
     }
 

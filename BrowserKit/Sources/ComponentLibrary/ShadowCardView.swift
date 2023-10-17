@@ -5,6 +5,7 @@
 import Common
 import UIKit
 
+/// The view model used to configure a ShadowCardView
 public struct ShadowCardViewModel {
     public let view: UIView
     public let a11yId: String

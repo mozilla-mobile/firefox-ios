@@ -50,8 +50,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/adjust/ios_sdk.git",
       "state" : {
-        "revision" : "6ae03883c3b7d22e72e2a5937ad5dd8765d9c31d",
-        "version" : "4.33.4"
+        "revision" : "20c2666082c372f9f2c0adf871d8cef195d011f7",
+        "version" : "4.35.2"
       }
     },
     {
@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/kif-framework/KIF.git",
       "state" : {
-        "revision" : "60c0b1b429ba15c065c5cc67609371fe8cfcb7bf",
-        "version" : "3.8.7"
+        "revision" : "6c3ff27d9449eab614dae63e571596e4982a5205",
+        "version" : "3.8.9"
       }
     },
     {
@@ -68,8 +68,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher.git",
       "state" : {
-        "revision" : "af4be924ad984cf4d16f4ae4df424e79a443d435",
-        "version" : "7.6.2"
+        "revision" : "b6f62758f21a8c03cd64f4009c037cfa580a256e",
+        "version" : "7.9.1"
       }
     },
     {
@@ -86,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mozilla/rust-components-swift.git",
       "state" : {
-        "revision" : "5394b003c128218227ac9e70ff9547df876b2fa4",
-        "version" : "120.0.20230929050248"
+        "revision" : "17de69a48669e52bb22e15eabfa7181a87e04ead",
+        "version" : "120.0.20231013050343"
       }
     },
     {
@@ -95,8 +95,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa.git",
       "state" : {
-        "revision" : "259d8bc75aa4028416535d35840ff19fc7661292",
-        "version" : "8.9.3"
+        "revision" : "7b0d185631a6d4b7756468efa464a68725c061d2",
+        "version" : "8.13.1"
       }
     },
     {

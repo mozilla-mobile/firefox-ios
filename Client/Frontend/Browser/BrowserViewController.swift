@@ -18,7 +18,9 @@ import ComponentLibrary
 class BrowserViewController: UIViewController,
                              SearchBarLocationProvider,
                              Themeable,
-                             LibraryPanelDelegate {
+                             LibraryPanelDelegate,
+                             RecentlyClosedPanelDelegate,
+                             QRCodeViewControllerDelegate {
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
         static let ActionSheetTitleMaxLength = 120
@@ -58,6 +60,7 @@ class BrowserViewController: UIViewController,
     var overlayManager: OverlayModeManager
     var appAuthenticator: AppAuthenticationProtocol
     var contextHintVC: ContextualHintViewController
+    private var backgroundTabLoader: DefaultBackgroundTabLoader
 
     // popover rotation handling
     var displayedPopoverController: UIViewController?
@@ -184,6 +187,7 @@ class BrowserViewController: UIViewController,
         let contextualViewProvider = ContextualHintViewProvider(forHintType: .toolbarLocation,
                                                                 with: profile)
         self.contextHintVC = ContextualHintViewController(with: contextualViewProvider)
+        self.backgroundTabLoader = DefaultBackgroundTabLoader(tabQueue: profile.queue)
         super.init(nibName: nil, bundle: nil)
         didInit()
     }
@@ -229,19 +233,12 @@ class BrowserViewController: UIViewController,
 
     @objc
     func openTabNotification(notification: Notification) {
+        // Remove this notification only used for debug settings with FXIOS-7550
         guard let openTabObject = notification.object as? OpenTabNotificationObject else {
             return
         }
 
         switch openTabObject.type {
-        case .loadQueuedTabs(let urls):
-            loadQueuedTabs(receivedURLs: urls)
-        case .openNewTab:
-            openBlankNewTab(focusLocationField: true)
-        case .openSearchNewTab(let searchTerm):
-            openSearchNewTab(searchTerm)
-        case .switchToTabForURLOrOpen(let url):
-            switchToTabForURLOrOpen(url)
         case .debugOption(let numberOfTabs, let url):
             debugOpen(numberOfNewTabs: numberOfTabs, at: url)
         }
@@ -428,7 +425,7 @@ class BrowserViewController: UIViewController,
         // When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
         // So, we delay five seconds because we need to wait for `Profile` to be initialized and setup for use.
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
-            self?.loadQueuedTabs()
+            self?.backgroundTabLoader.loadBackgroundTabs()
         }
     }
 
@@ -486,6 +483,9 @@ class BrowserViewController: UIViewController,
         profile.syncManager.updateCreditCardAutofillStatus(value: autofillCreditCardStatus)
         // Credit card initial setup telemetry
         creditCardInitialSetupTelemetry()
+
+        // Send settings telemetry for Fakespot
+        FakespotUtils().addSettingTelemetry()
     }
 
     private func setupAccessibleActions() {
@@ -633,7 +633,7 @@ class BrowserViewController: UIViewController,
 
     private func prepareURLOnboardingContextualHint() {
         guard contextHintVC.shouldPresentHint(),
-              featureFlags.isFeatureEnabled(.contextualHintForToolbar, checking: .buildOnly)
+              featureFlags.isFeatureEnabled(.isToolbarCFREnabled, checking: .buildOnly)
         else { return }
 
         contextHintVC.configure(
@@ -655,11 +655,6 @@ class BrowserViewController: UIViewController,
     override func viewWillDisappear(_ animated: Bool) {
         screenshotHelper.viewIsVisible = false
         super.viewWillDisappear(animated)
-    }
-
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        adjustURLBarHeightBasedOnLocationViewHeight()
     }
 
     override func viewDidLayoutSubviews() {
@@ -840,86 +835,6 @@ class BrowserViewController: UIViewController,
         let toolBarHeight = showToolBar ? UIConstants.BottomToolbarHeight : 0
         let spacerHeight = keyboardHeight - toolBarHeight
         overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
-    }
-
-    /// Used for dynamic type height adjustment
-    private func adjustURLBarHeightBasedOnLocationViewHeight() {
-        // Make sure that we have a height to actually base our calculations on
-        guard urlBar.locationContainer.bounds.height != 0 else { return }
-        let locationViewHeight = urlBar.locationView.bounds.height
-        let padding: CGFloat = 12
-        let heightWithPadding = locationViewHeight + padding
-
-        // Adjustment for landscape on the urlbar
-        // need to account for inset and remove it when keyboard is showing
-        let showToolBar = shouldShowToolbarForTraitCollection(traitCollection)
-        let isKeyboardShowing = keyboardState != nil && keyboardState?.intersectionHeightForView(view) != 0
-        if !showToolBar && isBottomSearchBar && !isKeyboardShowing {
-            overKeyboardContainer.addBottomInsetSpacer(spacerHeight: UIConstants.BottomInset)
-        } else if !showToolBar, zoomPageBar != nil {
-            overKeyboardContainer.addBottomInsetSpacer(spacerHeight: UIConstants.BottomInset)
-        } else {
-            overKeyboardContainer.removeBottomInsetSpacer()
-        }
-
-        // We have to deactivate the original constraint, and remake the constraint
-        // or else funky conflicts happen
-        urlBarHeightConstraint.deactivate()
-        urlBar.snp.makeConstraints { make in
-            let height = heightWithPadding > UIConstants.TopToolbarHeightMax ? UIConstants.TopToolbarHeight : heightWithPadding
-            urlBarHeightConstraint = make.height.equalTo(height).constraint
-        }
-    }
-
-    // MARK: - Tabs Queue
-
-    func loadQueuedTabs(receivedURLs: [URL]? = nil) {
-        // Chain off of a trivial deferred in order to run on the background queue.
-        succeed().upon { res in
-            self.dequeueQueuedTabs(receivedURLs: receivedURLs ?? [])
-        }
-    }
-
-    fileprivate func dequeueQueuedTabs(receivedURLs: [URL]) {
-        ensureBackgroundThread { [weak self] in
-            guard let self = self else { return }
-
-            self.profile.queue.getQueuedTabs() >>== { cursor in
-                // This assumes that the DB returns rows in some kind of sane order.
-                // It does in practice, so WFM.
-                let cursorCount = cursor.count
-                if cursorCount > 0 {
-                    // Filter out any tabs received by a push notification to prevent dupes.
-                    let urls = cursor.compactMap { $0?.url.asURL }.filter { !receivedURLs.contains($0) }
-                    if !urls.isEmpty {
-                        DispatchQueue.main.async {
-                            let shouldSelectTab = !self.overlayManager.inOverlayMode
-                            self.tabManager.addTabsForURLs(urls, zombie: false, shouldSelectTab: shouldSelectTab)
-                        }
-                    }
-
-                    // Clear *after* making an attempt to open. We're making a bet that
-                    // it's better to run the risk of perhaps opening twice on a crash,
-                    // rather than losing data.
-                    self.profile.queue.clearQueuedTabs()
-                }
-
-                // Then, open any received URLs from push notifications.
-                if !receivedURLs.isEmpty {
-                    DispatchQueue.main.async {
-                        self.tabManager.addTabsForURLs(receivedURLs, zombie: false)
-                    }
-                }
-
-                if !receivedURLs.isEmpty || cursorCount > 0 {
-                    // Because the notification service runs as a separate process
-                    // we need to make sure that our account manager picks up any persisted state
-                    // the notification services persisted.
-                    self.profile.rustFxA.accountManager.peek()?.resetPersistedAccount()
-                    self.profile.rustFxA.accountManager.peek()?.deviceConstellation()?.refreshState()
-                }
-            }
-        }
     }
 
     // Because crashedLastLaunch is sticky, it does not get reset, we need to remember its
@@ -1923,27 +1838,19 @@ class BrowserViewController: UIViewController,
         })
         self.show(toast: toast)
     }
-}
 
-extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
-    func shouldDisplay(clipBoardURL url: URL) {
-        let viewModel = ButtonToastViewModel(labelText: .GoToCopiedLink,
-                                             descriptionText: url.absoluteDisplayString,
-                                             buttonText: .GoButtonTittle)
-        let toast = ButtonToast(viewModel: viewModel,
-                                theme: themeManager.currentTheme,
-                                completion: { [weak self] buttonPressed in
-            if buttonPressed {
-                let isPrivate = self?.tabManager.selectedTab?.isPrivate ?? false
-                self?.openURLInNewTab(url, isPrivate: isPrivate)
-            }
-        })
-        clipboardBarDisplayHandler?.clipboardToast = toast
-        show(toast: toast, duration: ClipboardBarDisplayHandler.UX.toastDelay)
+    // MARK: - RecentlyClosedPanelDelegate
+
+    func openRecentlyClosedSiteInSameTab(_ url: URL) {
+        tabTrayOpenRecentlyClosedTab(url)
     }
-}
 
-extension BrowserViewController: QRCodeViewControllerDelegate {
+    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
+        tabManager.selectTab(tabManager.addTab(URLRequest(url: url)))
+    }
+
+    // MARK: - QRCodeViewControllerDelegate
+
     func didScanQRCodeWithURL(_ url: URL) {
         guard let tab = tabManager.selectedTab else { return }
         finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
@@ -1969,6 +1876,24 @@ extension BrowserViewController: QRCodeViewControllerDelegate {
         default:
             defaultAction()
         }
+    }
+}
+
+extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
+    func shouldDisplay(clipBoardURL url: URL) {
+        let viewModel = ButtonToastViewModel(labelText: .GoToCopiedLink,
+                                             descriptionText: url.absoluteDisplayString,
+                                             buttonText: .GoButtonTittle)
+        let toast = ButtonToast(viewModel: viewModel,
+                                theme: themeManager.currentTheme,
+                                completion: { [weak self] buttonPressed in
+            if buttonPressed {
+                let isPrivate = self?.tabManager.selectedTab?.isPrivate ?? false
+                self?.openURLInNewTab(url, isPrivate: isPrivate)
+            }
+        })
+        clipboardBarDisplayHandler?.clipboardToast = toast
+        show(toast: toast, duration: ClipboardBarDisplayHandler.UX.toastDelay)
     }
 }
 
@@ -2103,17 +2028,6 @@ extension BrowserViewController: LegacyTabDelegate {
 
     func tab(_ tab: Tab, didRemoveSnackbar bar: SnackBar) {
         bottomContentStackView.removeArrangedView(bar)
-    }
-}
-
-// MARK: - RecentlyClosedPanelDelegate
-extension BrowserViewController: RecentlyClosedPanelDelegate {
-    func openRecentlyClosedSiteInSameTab(_ url: URL) {
-        tabTrayOpenRecentlyClosedTab(url)
-    }
-
-    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
-        tabManager.selectTab(tabManager.addTab(URLRequest(url: url)))
     }
 }
 
@@ -2290,6 +2204,11 @@ extension BrowserViewController: TabManagerDelegate {
             topTabsDidChangeTab()
         }
 
+       /// If the selectedTab is showing an error page trigger a reload
+        if let url = selected?.url, let internalUrl = InternalURL(url), internalUrl.isErrorPage {
+            selected?.reloadPage()
+            return
+        }
         updateInContentHomePanel(selected?.url as URL?, focusUrlBar: true)
     }
 
@@ -2315,6 +2234,7 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
+        tabManager.startAtHomeCheck()
         updateTabCountUsingTabManager(tabManager)
         openUrlAfterRestore()
     }

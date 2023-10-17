@@ -8,32 +8,25 @@ import UIKit
 class TabDisplayViewController: UIViewController,
                                 Themeable,
                                 EmptyPrivateTabsViewDelegate {
-    struct UX {}
-
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
 
     // MARK: UI elements
-    private var backgroundPrivacyOverlay: UIView = .build { _ in }
     private var tabDisplayView: TabDisplayView = .build { _ in }
-
-    private lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
-        let emptyView = EmptyPrivateTabsView()
-        return emptyView
-    }()
+    private var backgroundPrivacyOverlay: UIView = .build { _ in }
+    private lazy var emptyPrivateTabsView: EmptyPrivateTabsView = .build { _ in }
 
     // MARK: Redux state
-    var isPrivateMode: Bool
-    var privateTabsAreEmpty: Bool {
-        // TODO: FXIOS-6937 Use var from state if private tabs are empty
-        return isPrivateMode && true
-    }
+    var state: TabTrayState
 
     init(isPrivateMode: Bool,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
-        self.isPrivateMode = isPrivateMode
+        // TODO: FXIOS-6936 Integrate Redux state
+        self.state = TabTrayState(isPrivateMode: isPrivateMode,
+                                  isPrivateTabsEmpty: true,
+                                  isInactiveTabEmpty: false)
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
@@ -51,10 +44,9 @@ class TabDisplayViewController: UIViewController,
         applyTheme()
     }
 
-    private func setupView() {
+    func setupView() {
         view.addSubview(tabDisplayView)
         view.addSubview(backgroundPrivacyOverlay)
-        view.insertSubview(emptyPrivateTabsView, aboveSubview: tabDisplayView)
 
         NSLayoutConstraint.activate([
             tabDisplayView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -65,20 +57,31 @@ class TabDisplayViewController: UIViewController,
             backgroundPrivacyOverlay.topAnchor.constraint(equalTo: view.topAnchor),
             backgroundPrivacyOverlay.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             backgroundPrivacyOverlay.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            backgroundPrivacyOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            backgroundPrivacyOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
 
+        backgroundPrivacyOverlay.isHidden = !state.isPrivateMode
+        setupEmptyView()
+    }
+
+    func setupEmptyView() {
+        guard state.isPrivateMode, state.isPrivateTabsEmpty else { return }
+
+        view.insertSubview(emptyPrivateTabsView, aboveSubview: tabDisplayView)
+        NSLayoutConstraint.activate([
             emptyPrivateTabsView.topAnchor.constraint(equalTo: view.topAnchor),
             emptyPrivateTabsView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             emptyPrivateTabsView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             emptyPrivateTabsView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
-
-        backgroundPrivacyOverlay.isHidden = !isPrivateMode
-        emptyPrivateTabsView.isHidden = !privateTabsAreEmpty
+        emptyPrivateTabsView.isHidden = false
+        tabDisplayView.isHidden = true
+        backgroundPrivacyOverlay.isHidden = true
     }
 
     func applyTheme() {
         backgroundPrivacyOverlay.backgroundColor = themeManager.currentTheme.colors.layerScrim
+        tabDisplayView.applyTheme(theme: themeManager.currentTheme)
     }
 
     // MARK: EmptyPrivateTabsViewDelegate

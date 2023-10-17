@@ -5,6 +5,7 @@
 import Common
 import UIKit
 
+/// The view model used to configure a `CollapsibleCardView`
 public struct CollapsibleCardViewModel {
     public typealias ExpandState = CollapsibleCardView.ExpandButtonState
 
@@ -101,7 +102,9 @@ public class CollapsibleCardView: ShadowCardView, UIGestureRecognizerDelegate {
 
     lazy var titleLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .subheadline, size: 15.0)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
+                                                            size: 15.0,
+                                                            weight: .semibold)
         label.numberOfLines = 0
     }
 

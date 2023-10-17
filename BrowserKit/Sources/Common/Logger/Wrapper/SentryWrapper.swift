@@ -11,6 +11,7 @@ public protocol SentryWrapper {
 
     func startWithConfigureOptions(configure options: @escaping (Options) -> Void)
     func captureMessage(message: String, with scopeBlock: @escaping (Scope) -> Void)
+    func captureError(error: Error)
     func addBreadcrumb(crumb: Breadcrumb)
     func configureScope(scope: @escaping (Scope) -> Void)
 }
@@ -38,6 +39,10 @@ public class DefaultSentry: SentryWrapper {
 
     public func captureMessage(message: String, with scopeBlock: @escaping (Scope) -> Void) {
         SentrySDK.capture(message: message, block: scopeBlock)
+    }
+
+    public func captureError(error: Error) {
+        SentrySDK.capture(error: error)
     }
 
     public func addBreadcrumb(crumb: Breadcrumb) {

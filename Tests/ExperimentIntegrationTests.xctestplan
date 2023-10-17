@@ -51,7 +51,7 @@
         "OnboardingTests",
         "OpeningScreenTests",
         "PerformanceTests",
-        "PhotonActionSheetTest",
+        "PhotonActionSheetTests",
         "PocketTest",
         "PrivateBrowsingTest",
         "PrivateBrowsingTestIpad",

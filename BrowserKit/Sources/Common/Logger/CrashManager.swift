@@ -8,12 +8,26 @@ import Sentry
 // MARK: - CrashManager
 public protocol CrashManager {
     var crashedLastLaunch: Bool { get }
-
+    func captureError(error: Error)
     func setup(sendUsageData: Bool)
     func send(message: String,
               category: LoggerCategory,
               level: LoggerLevel,
               extraEvents: [String: String]?)
+}
+
+/**
+ *Crash report for rust errors
+ *
+ * We implement this on exception classes that correspond to Rust errors to
+ * customize how the crash reports look.
+ *
+ * CrashReporting implementors should test if exceptions implement this
+ * interface.  If so, they should try to customize their crash reports to match.
+ */
+public protocol CustomCrashReport {
+    var typeName: String { get set }
+    var message: String { get set }
 }
 
 public class DefaultCrashManager: CrashManager {
@@ -95,12 +109,32 @@ public class DefaultCrashManager: CrashManager {
             }
             // Turn Sentry breadcrumbs off since we have our own log swizzling
             options.enableAutoBreadcrumbTracking = false
+            options.beforeSend = { event in
+                if event.error.self is CustomCrashReport {
+                    self.alterEventForCustomCrash(event: event, crash: event.error as! CustomCrashReport)
+                }
+                return event
+            }
         })
         enabled = true
 
         configureScope()
         configureIdentifier()
         setupIgnoreException()
+    }
+
+    private func alterEventForCustomCrash(event: Sentry.Event, crash: CustomCrashReport) {
+        event.fingerprint = [crash.typeName]
+        // Sentry supports multiple exceptions in an event, modifying
+        // the top-level one controls how the event is displayed
+        //
+        // It's technically possible for the event to have a null
+        // or empty exception list, but that shouldn't happen in
+        // practice.
+        if event.exceptions?.first != nil {
+            event.exceptions?.first?.type = crash.typeName
+            event.exceptions?.first?.value = crash.message
+        }
     }
 
     public func send(message: String,
@@ -133,6 +167,15 @@ public class DefaultCrashManager: CrashManager {
             scope.setEnvironment(event.environment)
             scope.setExtras(event.extra)
         })
+    }
+
+    public func captureError(error: Error) {
+        // Using `shouldSendEventFor` below to prevent errors being sent
+        // in channels other than beta or release so there's only one place
+        // to control what gets sent.
+        guard shouldSendEventFor(.fatal) else { return }
+
+        sentryWrapper.captureError(error: error)
     }
 
     private func addBreadcrumb(message: String, category: LoggerCategory, level: LoggerLevel) {

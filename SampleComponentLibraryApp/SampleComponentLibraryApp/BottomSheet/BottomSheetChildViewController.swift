@@ -64,6 +64,7 @@ class BottomSheetChildViewController: UIViewController, BottomSheetChild, Themea
     // MARK: Themeable
 
     func applyTheme() {
+        contentLabel.textColor = themeManager.currentTheme.colors.textPrimary
         view.backgroundColor = themeManager.currentTheme.colors.layer1
     }
 }

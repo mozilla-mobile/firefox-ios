@@ -235,6 +235,24 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.presentedViewController is DevicePasscodeRequiredViewController)
     }
 
+    func testShowQRCode_addsQRCodeCoordinator() {
+        let subject = createSubject()
+
+        subject.showQRCode()
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is QRCodeCoordinator)
+    }
+
+    func testShowQRCode_presentsQRCodeNavigationController() {
+        let subject = createSubject()
+
+        subject.showQRCode()
+
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(mockRouter.presentedViewController is QRCodeNavigationController)
+    }
+
     // MARK: - ParentCoordinatorDelegate
 
     func testRemoveChildCoordinator_whenDidFinishCalled() {
@@ -766,6 +784,24 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertTrue(mbvc.didRequestToOpenInNewTabCalled)
         XCTAssertEqual(mbvc.lastOpenedURL, url)
         XCTAssertTrue(mbvc.isPrivate)
+    }
+
+    func testOpenRecentlyClosedTabInSameTab_callsReletedMethodInBrowserViewController() {
+        let subject = createSubject()
+        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        subject.browserViewController = mbvc
+
+        subject.openRecentlyClosedSiteInSameTab(URL(string: "https://www.google.com")!)
+
+        XCTAssertEqual(mbvc.didOpenRecentlyClosedSiteInSameTab, 1)
+    }
+
+    func testOpenRecentlyClosedSiteInNewTab_addsOneTabToTabManager() {
+        let subject = createSubject()
+
+        subject.openRecentlyClosedSiteInNewTab(URL(string: "https://www.google.com")!, isPrivate: false)
+
+        XCTAssertEqual(tabManager.lastSelectedTabs.count, 1)
     }
 
     // MARK: - Fakespot

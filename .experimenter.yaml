@@ -106,6 +106,14 @@ private-browsing:
     felt-privacy-enabled:
       type: boolean
       description: "If true, enable felt privacy related UI"
+qr-code-coordinator-refactor:
+  description: "The feature for managing the roll out of the qrCode coordinator.\n"
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    enabled:
+      type: boolean
+      description: "Enables the feature\n"
 redux-integration-feature:
   description: "This feature is for managing the roll out of the Redux integration feature\n"
   hasExposure: true

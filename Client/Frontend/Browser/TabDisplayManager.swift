@@ -65,7 +65,7 @@ struct TabDisplayOrder: Codable {
 class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
     // MARK: - Variables
     var performingChainedOperations = false
-    var inactiveViewModel: InactiveTabViewModel?
+    var inactiveViewModel: LegacyInactiveTabViewModel?
     var isInactiveViewExpanded = false
     var dataStore = WeakList<Tab>()
     var operations = [(TabAnimationType, (() -> Void))]()
@@ -197,7 +197,7 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
 
         super.init()
         setupNotifications(forObserver: self, observing: [.DidTapUndoCloseAllTabToast])
-        self.inactiveViewModel = InactiveTabViewModel(theme: theme)
+        self.inactiveViewModel = LegacyInactiveTabViewModel(theme: theme)
         tabManager.addDelegate(self)
         register(self, forTabEvents: .didChangeURL, .didSetScreenshot)
         self.dataStore.removeAll()
@@ -483,7 +483,7 @@ extension LegacyTabDisplayManager: UICollectionViewDataSource {
 
         switch TabDisplaySection(rawValue: indexPath.section) {
         case .inactiveTabs:
-            if let inactiveCell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabCell.cellIdentifier, for: indexPath) as? InactiveTabCell {
+            if let inactiveCell = collectionView.dequeueReusableCell(withReuseIdentifier: LegacyInactiveTabCell.cellIdentifier, for: indexPath) as? LegacyInactiveTabCell {
                 inactiveCell.inactiveTabsViewModel = inactiveViewModel
                 inactiveCell.applyTheme(theme: theme)
                 inactiveCell.hasExpanded = isInactiveViewExpanded
@@ -515,7 +515,7 @@ extension LegacyTabDisplayManager: UICollectionViewDataSource {
 }
 
 // MARK: - InactiveTabsDelegate
-extension LegacyTabDisplayManager: InactiveTabsDelegate {
+extension LegacyTabDisplayManager: LegacyInactiveTabsDelegate {
     func closeInactiveTab(_ tab: Tab, index: Int) {
         tabManager.backupCloseTab = BackupCloseTab(tab: tab, restorePosition: index)
         removeSingleInactiveTab(tab)

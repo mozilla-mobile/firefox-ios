@@ -123,9 +123,8 @@ class DownloadsTests: BaseTestCase {
             app.buttons["Close"].tap()
         } else {
             // Workaround to close the context menu.
-            // XCUITest does not allow me to click the greyed out portion of the app.
-            app.otherElements["ActivityListView"].cells["XCElementSnapshotPrivilegedValuePlaceholder"].firstMatch.tap()
-            app.navigationBars["Add Tag"].buttons["Done"].tap()
+            // XCUITest does not allow me to click the greyed out portion of the app without the force option.
+            app.buttons["Done"].tap(force: true)
         }
     }
 
@@ -145,9 +144,8 @@ class DownloadsTests: BaseTestCase {
             app.buttons["Close"].tap()
         } else {
             // Workaround to close the context menu.
-            // XCUITest does not allow me to click the greyed out portion of the app.
-            app.otherElements["ActivityListView"].cells["XCElementSnapshotPrivilegedValuePlaceholder"].firstMatch.tap()
-            app.navigationBars["Add Tag"].buttons["Done"].tap()
+            // XCUITest does not allow me to click the greyed out portion of the app without the force option.
+            app.buttons["Done"].tap(force: true)
         }
      }
 

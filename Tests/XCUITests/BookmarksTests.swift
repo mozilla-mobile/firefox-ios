@@ -181,7 +181,7 @@ class BookmarksTests: BaseTestCase {
         navigator.nowAt(MobileBookmarks)
         // Now remove the folder
         navigator.performAction(Action.RemoveItemMobileBookmarks)
-        mozWaitForElementToExist(app.buttons["Delete Test Folder"])
+        mozWaitForElementToExist(app.buttons["Remove Test Folder"])
         navigator.performAction(Action.ConfirmRemoveItemMobileBookmarks)
         // Verify that there are only 1 cell (desktop bookmark folder)
         checkItemsInBookmarksList(items: 1)

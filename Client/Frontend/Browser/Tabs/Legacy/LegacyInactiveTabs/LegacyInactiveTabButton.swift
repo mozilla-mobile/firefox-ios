@@ -6,7 +6,7 @@ import Common
 import Foundation
 import Shared
 
-class InactiveTabButton: UITableViewCell, ThemeApplicable, ReusableCell {
+class LegacyInactiveTabButton: UITableViewCell, ThemeApplicable, ReusableCell {
     private struct UX {
         static let ImageSize: CGFloat = 29
         static let BorderViewMargin: CGFloat = 16
@@ -35,7 +35,7 @@ class InactiveTabButton: UITableViewCell, ThemeApplicable, ReusableCell {
         button.layer.cornerRadius = 13.5
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.clear.cgColor
-        button.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.inactiveTabDeleteButton
+        button.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.InactiveTabs.deleteButton
         button.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button

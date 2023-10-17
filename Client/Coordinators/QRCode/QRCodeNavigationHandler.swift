@@ -4,4 +4,7 @@
 
 import Foundation
 
-struct TabTrayModel {}
+protocol QRCodeNavigationHandler: AnyObject {
+    /// Shows the QRCodeViewController
+    func showQRCode(delegate: QRCodeViewControllerDelegate)
+}

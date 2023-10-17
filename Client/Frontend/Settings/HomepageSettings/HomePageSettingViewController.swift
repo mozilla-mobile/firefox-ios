@@ -29,7 +29,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     }
 
     var isPocketSectionEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.pocket, checking: .buildOnly)
+        return PocketProvider.islocaleSupported(Locale.current.identifier)
     }
 
     var isHistoryHighlightsSectionEnabled: Bool {
@@ -133,11 +133,13 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             PocketAppName.shortName.rawValue)
 
         let pocketSetting = BoolSetting(
-            with: .pocket,
-            titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.ThoughtProvokingStories),
-            statusText: NSAttributedString(string: pocketStatusText)) { [weak self] _ in
-                self?.tableView.reloadData()
-        }
+            prefs: profile.prefs,
+            theme: themeManager.currentTheme,
+            prefKey: PrefsKeys.UserFeatureFlagPrefs.ASPocketStories,
+            defaultValue: true,
+            titleText: .Settings.Homepage.CustomizeFirefoxHome.ThoughtProvokingStories,
+            statusText: pocketStatusText
+        )
 
         let jumpBackInSetting = BoolSetting(with: .jumpBackIn,
                                             titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.JumpBackIn))
