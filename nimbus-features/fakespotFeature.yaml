@@ -9,6 +9,12 @@ features:
           Whether the Fakespot feature is enabled or disabled
         type: Boolean
         default: false
+      product-recommendations:
+        description: >
+          If true, recommended products feature is enabled
+           to be shown to the user based on their preference.
+        type: Boolean
+        default: false
       config:
         type: Map<String, WebsiteConfig>
         description: >
@@ -27,9 +33,11 @@ features:
       - channel: beta
         value:
           status: true
+          product-recommendations: true
       - channel: developer
         value:
           status: true
+          product-recommendations: true
 
 objects:
   WebsiteConfig:
