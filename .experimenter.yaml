@@ -165,6 +165,9 @@ shopping2023:
     config:
       type: json
       description: "A Map of website configurations\n"
+    relay:
+      type: string
+      description: "Configurable relay URL for production environment\n"
     status:
       type: boolean
       description: "Whether the Fakespot feature is enabled or disabled\n"
