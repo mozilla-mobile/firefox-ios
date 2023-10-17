@@ -205,7 +205,7 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
 
         for (_, group) in groupsToShow.enumerated() {
             highlightStackView.addArrangedSubview(group)
-            group.showPreview(isShowingPreview, showFade: shouldShowFade)
+            group.showPreview(shouldShowFade)
         }
     }
 

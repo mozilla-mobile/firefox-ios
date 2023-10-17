@@ -18,6 +18,7 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate,
     var showExperimentsCalled = 0
     var showPasswordManagerCalled = 0
     var savedShouldShowOnboarding = false
+    var showQRCodeCalled = 0
 
     func showDevicePassCode() {
         showDevicePassCodeCalled += 1
@@ -40,6 +41,10 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate,
     func showPasswordManager(shouldShowOnboarding: Bool) {
         savedShouldShowOnboarding = shouldShowOnboarding
         showPasswordManagerCalled += 1
+    }
+
+    func showQRCode(delegate: QRCodeViewControllerDelegate) {
+        showQRCodeCalled += 1
     }
 
     // MARK: GeneralSettingsDelegate

@@ -5,6 +5,7 @@
 import UIKit
 import Common
 
+/// The view model used to configure a `ActionFooterView`
 public struct ActionFooterViewModel {
     let title: String
     let actionTitle: String
@@ -43,7 +44,7 @@ public final class ActionFooterView: UIView, ThemeApplicable {
         label.adjustsFontForContentSizeCategory = true
     }
 
-    private lazy var primaryButton: ResizableButton = .build { button in
+    private lazy var linkButton: ResizableButton = .build { button in
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
             withTextStyle: .footnote,
             size: UX.buttonSize)
@@ -65,10 +66,10 @@ public final class ActionFooterView: UIView, ThemeApplicable {
     public func configure(viewModel: ActionFooterViewModel) {
         self.viewModel = viewModel
         titleLabel.text = viewModel.title
-        primaryButton.setTitle(viewModel.actionTitle, for: .normal)
+        linkButton.setTitle(viewModel.actionTitle, for: .normal)
 
         titleLabel.accessibilityIdentifier = viewModel.a11yTitleIdentifier
-        primaryButton.accessibilityIdentifier = viewModel.a11yActionIdentifier
+        linkButton.accessibilityIdentifier = viewModel.a11yActionIdentifier
     }
 
     @objc
@@ -78,24 +79,24 @@ public final class ActionFooterView: UIView, ThemeApplicable {
 
     private func setupLayout() {
         addSubview(titleLabel)
-        addSubview(primaryButton)
+        addSubview(linkButton)
 
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: topAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: primaryButton.topAnchor),
+            titleLabel.bottomAnchor.constraint(equalTo: linkButton.topAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
 
-            primaryButton.bottomAnchor.constraint(equalTo: bottomAnchor),
-            primaryButton.leadingAnchor.constraint(equalTo: leadingAnchor),
-            primaryButton.trailingAnchor.constraint(equalTo: trailingAnchor)
+            linkButton.bottomAnchor.constraint(equalTo: bottomAnchor),
+            linkButton.leadingAnchor.constraint(equalTo: leadingAnchor),
+            linkButton.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
     }
 
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Common.Theme) {
-        primaryButton.setTitleColor(theme.colors.actionPrimary, for: .normal)
-        primaryButton.setTitleColor(theme.colors.actionPrimaryHover, for: .highlighted)
+        linkButton.setTitleColor(theme.colors.actionPrimary, for: .normal)
+        linkButton.setTitleColor(theme.colors.actionPrimaryHover, for: .highlighted)
         titleLabel.textColor = theme.colors.textSecondary
     }
 }

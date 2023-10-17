@@ -24,14 +24,11 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         static let dismissButtonSize = CGSize(width: 16, height: 16)
         static let dismissButtonSpacing: CGFloat = 12
         static let standardSpacing: CGFloat = 16
-        static let buttonVerticalInset: CGFloat = 12
-        static let buttonHorizontalInset: CGFloat = 16
         static let topCardSafeSpace: CGFloat = 16
         static let bottomCardSafeSpace: CGFloat = 32
         // Max font size
         static let bannerTitleFontSize: CGFloat = 16
         static let descriptionTextFontSize: CGFloat = 15
-        static let buttonFontSize: CGFloat = 16
     }
 
     // MARK: - Properties
@@ -62,18 +59,8 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         label.accessibilityIdentifier = a11y.descriptionLabel
     }
 
-    private lazy var ctaButton: ActionButton = .build { [weak self] button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body,
-                                                                             size: UX.buttonFontSize)
-
-        button.layer.cornerRadius = UIFontMetrics.default.scaledValue(for: UX.cornerRadius)
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.accessibilityIdentifier = a11y.ctaButton
-        button.addTarget(self, action: #selector(self?.handleCTA), for: .touchUpInside)
-        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
-                                                left: UX.buttonHorizontalInset,
-                                                bottom: UX.buttonVerticalInset,
-                                                right: UX.buttonHorizontalInset)
+    private lazy var ctaButton: PrimaryRoundedButton = .build { button in
+        button.addTarget(self, action: #selector(self.handleCTA), for: .touchUpInside)
     }
 
     private lazy var dismissButton: UIButton = .build { [weak self] button in
@@ -117,6 +104,7 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         }
 
         applyTheme(theme: theme)
+        ctaButton.applyTheme(theme: theme)
     }
 
     // MARK: - Layout
@@ -184,7 +172,11 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     /// Apply message data, including handling of cases where certain parts of the message are missing.
     private func applyGleanMessage(_ message: GleanPlumbMessage) {
         if let buttonLabel = message.data.buttonLabel {
-            ctaButton.setTitle(buttonLabel, for: .normal)
+            let buttonViewModel = PrimaryRoundedButtonViewModel(
+                title: buttonLabel,
+                a11yIdentifier: a11y.ctaButton
+            )
+            ctaButton.configure(viewModel: buttonViewModel)
         } else {
             ctaButton.removeFromSuperview()
             let cardTapped = UITapGestureRecognizer(target: self, action: #selector(handleCTA))
@@ -234,8 +226,6 @@ extension HomepageMessageCardCell: ThemeApplicable {
         bannerTitle.textColor = theme.colors.textPrimary
         descriptionText.textColor = theme.colors.textPrimary
         dismissButton.imageView?.tintColor = theme.colors.textPrimary
-        ctaButton.backgroundColor = theme.colors.actionPrimary
-        ctaButton.setTitleColor(theme.colors.textInverted, for: .normal)
         backgroundColor = .clear
 
         adjustBlur(theme: theme)

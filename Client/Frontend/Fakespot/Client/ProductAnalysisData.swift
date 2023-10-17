@@ -31,12 +31,12 @@ struct ProductAnalysisData: Codable {
         productId == nil && needsAnalysis == true
     }
 
-    var cannotBeAnalyzedCardVisible: Bool {
+    var productNotSupportedCardVisible: Bool {
         pageNotSupported == true
     }
 
     var notEnoughReviewsCardVisible: Bool {
-        (grade == nil || adjustedRating == nil) && needsAnalysis == true
+        (grade == nil || adjustedRating == nil) || productId == nil
     }
 }
 

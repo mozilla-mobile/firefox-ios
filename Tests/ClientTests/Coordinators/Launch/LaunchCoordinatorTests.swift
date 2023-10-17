@@ -128,6 +128,28 @@ final class LaunchCoordinatorTests: XCTestCase {
         XCTAssertNotNil(pushedVC as? SurveySurfaceViewController)
     }
 
+    // MARK: - QRCodeNavigationHandler
+
+    func testShowQRCode_addsChildQRCodeCoordinator() {
+        let subject = createSubject(isIphone: true)
+        let delegate = MockQRCodeViewControllerDelegate()
+
+        subject.showQRCode(delegate: delegate)
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is QRCodeCoordinator)
+    }
+
+    func testShowQRCode_presentsQRCodeNavigationController() {
+        let subject = createSubject(isIphone: true)
+        let delegate = MockQRCodeViewControllerDelegate()
+
+        subject.showQRCode(delegate: delegate)
+
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(mockRouter.presentedViewController is QRCodeNavigationController)
+    }
+
     // MARK: - Delegates
     func testStart_surveySetsDelegate() throws {
         let messageManager = MockGleanPlumbMessageManagerProtocol()

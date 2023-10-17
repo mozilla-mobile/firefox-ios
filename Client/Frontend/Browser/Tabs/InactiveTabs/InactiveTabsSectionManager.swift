@@ -11,26 +11,27 @@ class InactiveTabsSectionManager {
         static let footerEstimatedHeight: CGFloat = 88
     }
 
-    var items = ["One",
-                 "Two",
-                 "Three",
-                 "Four",
-                 "Five",
-                 "Six"]
-    var collectionViewWidth: Double
-
-    init( collectionViewWidth: Double) {
-        self.collectionViewWidth = collectionViewWidth
+    private var trailingSwipeClosure: UICollectionLayoutListConfiguration.SwipeActionsConfigurationProvider? = { indexPath in
+        let deleteAction = UIContextualAction(
+            style: .destructive,
+            title: .TabsTray.InactiveTabs.CloseInactiveTabSwipeActionTitle) { _, _, completion in
+            // TODO: FXIOS-6936 Handle action
+            completion(true)
+        }
+        deleteAction.backgroundColor = .systemGreen
+        return UISwipeActionsConfiguration(actions: [deleteAction])
     }
 
-    func layoutSection(
-        _ layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
-        var sectionConfig = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
-        sectionConfig.headerMode = .firstItemInSection
-        let section = NSCollectionLayoutSection.list(using: sectionConfig,
-                                                     layoutEnvironment: layoutEnvironment)
+    func layoutSection(_ layoutEnvironment: NSCollectionLayoutEnvironment,
+                       isExpanded: Bool) -> NSCollectionLayoutSection {
+        var config = UICollectionLayoutListConfiguration(appearance: .grouped)
+        config.headerMode = .firstItemInSection
+        config.footerMode = .supplementary
+        config.showsSeparators = false
+        config.trailingSwipeActionsConfigurationProvider = trailingSwipeClosure
+        let section = NSCollectionLayoutSection.list(using: config, layoutEnvironment: layoutEnvironment)
 
-        // Supplementary Items: Header and Footer
+        // Supplementary Item
         let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                 heightDimension: .estimated(UX.headerEstimatedHeight))
         let header = NSCollectionLayoutBoundarySupplementaryItem(
@@ -44,8 +45,8 @@ class InactiveTabsSectionManager {
             layoutSize: footerSize,
             elementKind: UICollectionView.elementKindSectionFooter,
             alignment: .bottom)
-        section.boundarySupplementaryItems = [header, footer]
 
+        section.boundarySupplementaryItems = isExpanded ? [header, footer] : [header]
         return section
     }
 }

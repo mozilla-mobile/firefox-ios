@@ -21,7 +21,3 @@ public struct ShareItem {
         return URL(string: url, invalidCharacters: false)?.isWebPage() ?? false
     }
 }
-
-public protocol ShareToDestination {
-    func shareItem(_ item: ShareItem) -> Success
-}
