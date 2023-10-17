@@ -3,10 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
 
 private struct PrintedPageUX {
     static let PageInsets = CGFloat(36.0)
-    static let PageTextFont = LegacyDynamicFontHelper.defaultHelper.DefaultSmallFont
+    static let PageTextFont = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 12, weight: .regular)
     static let PageMarginScale = CGFloat(0.5)
 }
 
