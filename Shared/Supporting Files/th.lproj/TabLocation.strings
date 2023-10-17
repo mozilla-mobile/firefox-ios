@@ -7,6 +7,3 @@
 /* Accessibility label for the share button in url bar */
 "TabLocation.Share.A11y.Label.v119" = "แบ่งปันหน้านี้";
 
-/* Accessibility label for the shopping button in url bar */
-"TabLocation.Shopping.A11y.Label.v119" = "ตัวตรวจสอบบทวิจารณ์";
-

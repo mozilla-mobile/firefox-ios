@@ -76,9 +76,6 @@
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Welcome.Description.TreatementA.v114" = "%@ ludźi nad dobytki staja a škita wašu priwatnosć, hdyž přehladujece.";
 
-/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Description.v114" = "%@ ludźi nad dobytki staja a škita wašu priwatnosć, hdyž přehladujece.";
-
 /* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Link.Action.v114" = "Zhońće wjace w našej zdźělence priwatnosće";
 

@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Zachowane dane logowania będą wyświetlane w tym miejscu. Jeśli zachowano dane logowania w Firefoksie na innym urządzeniu, zaloguj się na koncie Firefoksa.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "Zachowane dane logowania będą wyświetlane w tym miejscu. Jeśli zachowano dane logowania w przeglądarce %@ na innym urządzeniu, zaloguj się na swoim koncie.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Brak danych logowania";
 

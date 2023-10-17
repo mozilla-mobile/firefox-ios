@@ -10,6 +10,12 @@
 /* This is the swipe action title for closing an inactive tab by swiping, located in the Inactive Tabs section of the Tabs Tray */
 "InactiveTabs.TabTray.CloseSwipeActionTitle.v115" = "Tanca";
 
+/* Users can disable syncing tabs from other devices. In the Sync Tabs panel of the Tab Tray, we inform the user tab syncing can be switched back on to view those tabs. */
+"TabsTray.Sync.SyncTabsDisabled.v116" = "Activeu la sincronització de pestanyes per veure una llista de les pestanyes que teniu obertes en altres dispositius.";
+
 /* Button label to sync tabs in your Firefox Account */
 "TabsTray.SyncTabs.SyncTabsButton.Title.v109" = "Sincronitza les pestanyes";
+
+/* Button label to sync tabs in your account */
+"TabsTray.SyncTabs.SyncTabsButton.Title.v119" = "Sincronitza les pestanyes";
 

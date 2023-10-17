@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Konservitaj legitimiloj aperos ĉi tie. Se vi konservis viajn legitimilojn en Firefox en alia aparato, komencu seancon en via konto de Firefox.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "Konservitaj legitimiloj aperos ĉi tie. Se vi konservis viajn legitimilojn en %@ en alia aparato, komencu seancon en via konto.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Neniu legitimilo trovita";
 

@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Gemte logins vil blive vist her. Hvis du har gemt dine logins i Firefox på en anden enhed, skal du logge ind på din Firefox-konto.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "Gemte logins vil blive vist her. Hvis du har gemt dine logins i %@ på en anden enhed, skal du logge ind på din konto.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Ingen logins fundet";
 

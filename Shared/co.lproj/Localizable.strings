@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "L’identificazioni di cunnessione arregistrate seranu affissate quì. S’è vo avete arregistratu e vostre identificazioni di cunnessione Firefox nant’à un altru apparechju, cunnittitevi à u vostru contu Firefox.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "L’identificazioni di cunnessione arregistrate seranu affissate quì. S’è vo avete arregistratu e vostre identificazioni di cunnessione in %@ nant’à un altru apparechju, cunnittitevi à u vostru contu.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Alcuna identificazione di cunnessione trova";
 
