@@ -408,29 +408,49 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
 
 // MARK: History APIs
 
-extension VisitTransition {
-    public static func fromVisitType(visitType: VisitType) -> Self {
-        switch visitType {
-        case .unknown:
-            return VisitTransition.link
-        case .link:
-            return VisitTransition.link
-        case .typed:
-            return VisitTransition.typed
-        case .bookmark:
-            return VisitTransition.bookmark
-        case .embed:
-            return VisitTransition.embed
-        case .permanentRedirect:
-            return VisitTransition.redirectPermanent
-        case .temporaryRedirect:
-            return VisitTransition.redirectTemporary
-        case .download:
-            return VisitTransition.download
-        case .framedLink:
-            return VisitTransition.framedLink
-        case .recentlyClosed:
-            return VisitTransition.link
+// WKWebView has these:
+/*
+WKNavigationTypeLinkActivated,
+WKNavigationTypeFormSubmitted,
+WKNavigationTypeBackForward,
+WKNavigationTypeReload,
+WKNavigationTypeFormResubmitted,
+WKNavigationTypeOther = -1,
+*/
+
+// Enums in Swift aren't implicitly defaulted to Int, and Uniffi doesn't 
+// provide an easy way to define the enum type we should remove this once
+// https://github.com/mozilla/uniffi-rs/issues/1792 is implemented
+extension VisitType {
+    public static func fromRawValue(rawValue: Int?) -> Self {
+        switch rawValue {
+        case 1: return .link
+        case 2: return .typed
+        case 3: return .bookmark
+        case 4: return .embed
+        case 5: return .redirectPermanent
+        case 6: return .redirectTemporary
+        case 7: return .download
+        case 8: return .framedLink
+        case 9: return .reload
+        case 10: return .updatePlace
+        // .unknown and .recentlyClosed used to just == .link
+        default: return .link
+        }
+    }
+
+    public var rawValue: Int? {
+        switch self {
+        case .link:              return 1
+        case .typed:             return 2
+        case .bookmark:          return 3
+        case .embed:             return 4
+        case .redirectPermanent: return 5
+        case .redirectTemporary: return 6
+        case .download:          return 7
+        case .framedLink:        return 8
+        case .reload:            return 9
+        case .updatePlace:       return 10
         }
     }
 }
@@ -523,7 +543,7 @@ extension RustPlaces {
                     title = info.url
                 }
                 let site = Site(url: info.url, title: title)
-                site.latestVisit = Visit(date: UInt64(info.timestamp) * 1000)
+                site.latestVisit = Visit(date: UInt64(info.timestamp) * 1000, type: info.visitType)
                 return site
             }.uniqued()
             result.fill(Maybe(success: ArrayCursor(data: sites)))

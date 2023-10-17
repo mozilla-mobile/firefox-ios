@@ -189,7 +189,7 @@ extension TopSitesHelperTests {
 
     func addFrecencySitesToPlaces(_ sites: [Site], places: RustPlaces) {
         for site in sites {
-            let visit = VisitObservation(url: site.url, title: site.title, visitType: VisitTransition.link)
+            let visit = VisitObservation(url: site.url, title: site.title, visitType: .link)
             // force synchronous call
             _ = places.applyObservation(visitObservation: visit).value
         }

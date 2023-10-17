@@ -2627,7 +2627,7 @@ extension BrowserViewController: TabTrayDelegate {
 
     func tabTrayOpenRecentlyClosedTab(_ url: URL) {
         guard let tab = self.tabManager.selectedTab else { return }
-        self.finishEditingAndSubmit(url, visitType: .recentlyClosed, forTab: tab)
+        self.finishEditingAndSubmit(url, visitType: .link, forTab: tab)
     }
 
     // This function animates and resets the tab chrome transforms when
