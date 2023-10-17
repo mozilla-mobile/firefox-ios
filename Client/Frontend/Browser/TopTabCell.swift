@@ -35,7 +35,7 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, LegacyTabTrayCell, Reus
         label.textAlignment = .natural
         label.isUserInteractionEnabled = false
         label.lineBreakMode = .byCharWrapping
-        label.font = LegacyDynamicFontHelper.defaultHelper.DefaultSmallFont
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 12, weight: .regular)
         label.semanticContentAttribute = .forceLeftToRight
         label.isAccessibilityElement = false
     }
