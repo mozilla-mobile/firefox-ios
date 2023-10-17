@@ -24,10 +24,6 @@ class VersionSetting: Setting {
                                   attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
     }
 
-    override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
-        super.onConfigureCell(cell, theme: theme)
-    }
-
     override func onClick(_ navigationController: UINavigationController?) {
         settingsDelegate?.pressedVersion()
     }
