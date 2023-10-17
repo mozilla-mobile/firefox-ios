@@ -27,7 +27,7 @@ class FakespotTests: BaseTestCase {
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton])
             app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton].tap()
             mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
-            XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle].label, "Review checker")
+            XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle].label, "Review Checker")
 
             // Close the popover
             app.otherElements.buttons[AccessibilityIdentifiers.Shopping.sheetCloseButton].tap()
