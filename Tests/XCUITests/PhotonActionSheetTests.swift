@@ -64,15 +64,19 @@ class PhotonActionSheetTests: BaseTestCase {
 
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton], timeout: 10)
         app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
+        mozWaitForElementToExist(app.navigationBars["UIActivityContentView"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.collectionViews.cells["Copy"])
+        mozWaitForElementToExist(app.collectionViews.cells["Send Link to Device"])
+        mozWaitForElementToExist(app.collectionViews.cells["Markup"])
+        mozWaitForElementToExist(app.collectionViews.cells["Print"])
 
         // This is not ideal but only way to get the element on iPhone 8
-        // for iPhone 11, that would be boundBy: 2
-        mozWaitForElementToExist(app.collectionViews.cells["Copy"], timeout: TIMEOUT)
-
+        // for iPhone 11, that would be boundBy: 2ß
         var  fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 3)
         if iPad() {
             fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 2)
         }
+
         mozWaitForElementToExist(fennecElement, timeout: 5)
         fennecElement.tap()
         mozWaitForElementToExist(app.navigationBars["ShareTo.ShareView"], timeout: TIMEOUT)
