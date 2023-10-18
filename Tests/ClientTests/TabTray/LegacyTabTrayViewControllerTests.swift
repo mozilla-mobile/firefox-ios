@@ -11,7 +11,7 @@ import Common
 import Shared
 
 final class LegacyTabTrayViewControllerTests: XCTestCase {
-    var profile: TabManagerMockProfile!
+    var profile: MockProfile!
     var manager: TabManager!
     var tabTray: LegacyTabTrayViewController!
     var gridTab: LegacyGridTabViewController!
@@ -22,8 +22,8 @@ final class LegacyTabTrayViewControllerTests: XCTestCase {
         super.setUp()
 
         DependencyHelperMock().bootstrapDependencies()
-        profile = TabManagerMockProfile()
-        manager = LegacyTabManager(profile: profile, imageStore: nil)
+        profile = MockProfile()
+        manager = TabManagerImplementation(profile: profile, imageStore: nil)
         urlBar = MockURLBarView()
         overlayManager = MockOverlayModeManager()
         overlayManager.setURLBar(urlBarView: urlBar)
@@ -67,16 +67,6 @@ final class LegacyTabTrayViewControllerTests: XCTestCase {
 //        }
 //
 //        waitForExpectations(timeout: 3.0)
-    }
-
-    func testTabTrayInPrivateMode_WhenTabIsCreated() {
-        tabTray.viewModel.segmentToFocus = LegacyTabTrayViewModel.Segment.privateTabs
-        tabTray.viewDidLoad()
-        tabTray.didTapAddTab(UIBarButtonItem())
-        tabTray.didTapDone()
-
-        let privateState = UserDefaults.standard.bool(forKey: PrefsKeys.LastSessionWasPrivate)
-        XCTAssertTrue(privateState)
     }
 
     func testTabTrayRevertToRegular_ForNoPrivateTabSelected() {

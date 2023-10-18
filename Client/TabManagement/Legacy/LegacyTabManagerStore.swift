@@ -12,19 +12,10 @@ protocol LegacyTabManagerStore {
     var hasTabsToRestoreAtStartup: Bool { get }
     var tabs: [LegacySavedTab] { get }
 
-    func preserveTabs(_ tabs: [Tab],
-                      selectedTab: Tab?)
-
     func restoreStartupTabs(clearPrivateTabs: Bool,
                             addTabClosure: @escaping (Bool) -> Tab) -> Tab?
 
     func clearArchive()
-}
-
-extension LegacyTabManagerStore {
-    func preserveTabs(_ tabs: [Tab], selectedTab: Tab?) {
-        preserveTabs(tabs, selectedTab: selectedTab)
-    }
 }
 
 class LegacyTabManagerStoreImplementation: LegacyTabManagerStore, FeatureFlaggable {
@@ -62,38 +53,6 @@ class LegacyTabManagerStoreImplementation: LegacyTabManagerStore, FeatureFlaggab
         self.logger = logger
         self.tabDataRetriever = LegacyTabDataRetrieverImplementation(fileManager: fileManager)
         tabDataRetriever.tabsStateArchivePath = tabsStateArchivePath()
-    }
-
-    // MARK: - Saving
-
-    /// Async write of the tab state. In most cases, code doesn't care about performing an operation
-    /// after this completes. Write failures (i.e. due to read locks) are considered inconsequential, as preserveTabs will be called frequently.
-    /// - Parameters:
-    ///   - tabs: The tabs to preserve
-    ///   - selectedTab: One of the saved tabs will be saved as the selected tab.
-    func preserveTabs(_ tabs: [Tab], selectedTab: Tab?) {
-        guard let savedTabs = prepareSavedTabs(fromTabs: tabs, selectedTab: selectedTab) else {
-            clearArchive()
-            return
-        }
-
-        // Preserving tabs is a main-only operation
-        ensureMainThread { [self] in
-            writeOperation.cancel()
-
-            let path = tabsStateArchivePath()
-            let tabStateData = archive(savedTabs: savedTabs)
-            let simpleTabs = SimpleTab.convertToSimpleTabs(savedTabs)
-
-            writeOperation = DispatchWorkItem { [weak self] in
-                SimpleTab.saveSimpleTab(tabs: simpleTabs)
-                self?.write(tabStateData: tabStateData, path: path)
-            }
-
-            // Delay by 100ms to debounce repeated calls to preserveTabs in quick succession.
-            // Notice above that a repeated 'preserveTabs' call will 'cancel()' a pending write operation.
-            serialQueue.asyncAfter(deadline: .now() + .milliseconds(100), execute: writeOperation)
-        }
     }
 
     // MARK: - Restoration
@@ -150,21 +109,6 @@ class LegacyTabManagerStoreImplementation: LegacyTabManagerStore, FeatureFlaggab
     }
 
     // MARK: - Private
-
-    private func archive(savedTabs: [LegacySavedTab]) -> Data? {
-        let archiver = NSKeyedArchiver(requiringSecureCoding: false)
-        do {
-            try archiver.encodeEncodable(savedTabs, forKey: tabsKey)
-        } catch let error {
-            logger.log("Archiving savedTabs failed",
-                       level: .warning,
-                       category: .tabs,
-                       description: error.localizedDescription)
-            return nil
-        }
-
-        return archiver.encodedData
-    }
 
     var tabs: [LegacySavedTab] {
         guard let tabData = tabDataRetriever.getTabData() else {
@@ -225,21 +169,6 @@ class LegacyTabManagerStoreImplementation: LegacyTabManagerStore, FeatureFlaggab
         }
 
         return savedTabs.isEmpty ? nil : savedTabs
-    }
-
-    private func write(tabStateData: Data?, path: URL?) {
-        guard let data = tabStateData, let path = path else { return }
-        do {
-            try data.write(to: path, options: [])
-            logger.log("PreserveTabs write succeeded with bytes count: \(data.count)",
-                       level: .debug,
-                       category: .tabs)
-        } catch {
-            // Failure could happen when restoring
-            logger.log("PreserveTabs write failed with bytes count: \(data.count)",
-                       level: .debug,
-                       category: .tabs)
-        }
     }
 }
 
