@@ -203,6 +203,8 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
         setupLayout()
+
+        updateA11yElementOrder()
     }
 
     required init?(coder: NSCoder) {
@@ -259,6 +261,20 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
 
         setNeedsLayout()
         layoutIfNeeded()
+    }
+
+    private func updateA11yElementOrder() {
+        headlineStackView.accessibilityElements = [headlineLabel, subHeadlineLabel]
+        ratingsStackView.accessibilityElements = [
+            aReliabilityScoreView,
+            bReliabilityScoreView,
+            reliableReviewsLabel,
+            cReliabilityScoreView,
+            mixReliableReviewsLabel,
+            dReliabilityScoreView,
+            fReliabilityScoreView,
+            unreliableReviewsLabel]
+        contentStackView.accessibilityElements = [headlineStackView, ratingsStackView, footerStackView, learnMoreButton]
     }
 
     @objc
