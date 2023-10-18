@@ -33,7 +33,6 @@ class FakespotViewController:
         static let scrollContentHorizontalPadding: CGFloat = 16
         static let scrollContentStackSpacing: CGFloat = 16
     }
-    private var hasViewAppeared = false
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
@@ -133,6 +132,11 @@ class FakespotViewController:
         applyTheme()
     }
 
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
+        adjustLayout()
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         viewModel.isSwiping = false
@@ -140,8 +144,6 @@ class FakespotViewController:
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        adjustLayout()
-        hasViewAppeared = true
         guard #available(iOS 15.0, *) else { return }
         viewModel.recordBottomSheetDisplayed(presentationController)
         updateModalA11y()
@@ -149,7 +151,6 @@ class FakespotViewController:
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        hasViewAppeared = false
         notificationCenter.post(name: .FakespotViewControllerDidDismiss, withObject: nil)
     }
 
@@ -234,11 +235,16 @@ class FakespotViewController:
     }
 
     private func adjustLayout() {
-        let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
+        var headerViewWidth = headerView.frame.width
+        if headerViewWidth == 0 {
+            headerViewWidth = view.frame.width - UX.headerHorizontalSpacing * 2
+        }
+
+        let betaViewWidth = betaView.frame.width
         let titleTextWidth = widthOfString(titleLabel.text!, usingFont: titleLabel.font)
-        let borderWidth = contentSizeCategory.isAccessibilityCategory ? UX.betaBorderWidthA11ySize : UX.betaBorderWidth
-        let maxLabelWidth = headerView.frame.width - widthOfString(betaLabel.text!, usingFont: betaLabel.font) - 2 * borderWidth - 2 * UX.betaHorizontalSpace - UX.titleStackSpacing
-        betaView.layer.borderWidth = borderWidth
+        let maxLabelWidth = headerViewWidth - betaViewWidth
+        let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
+        betaView.layer.borderWidth = contentSizeCategory.isAccessibilityCategory ? UX.betaBorderWidthA11ySize : UX.betaBorderWidth
 
         if contentSizeCategory.isAccessibilityCategory || titleTextWidth > maxLabelWidth {
             titleStackView.axis = .vertical
@@ -432,9 +438,7 @@ class FakespotViewController:
     // MARK: View Transitions
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        if hasViewAppeared {
-            adjustLayout()
-        }
+        adjustLayout()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
