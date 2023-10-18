@@ -82,7 +82,7 @@ final class EventQueue<QueueEventType: Hashable> {
     private func allDependenciesSatisified(_ action: EnqueuedAction) -> Bool {
         let events = action.dependencies
         guard !events.isEmpty else { return true }
-        if events.contains(where: { signalledEvents.contains($0) }) {
+        if events.contains(where: { signalledEvents.contains($0) == false }) {
             return false
         }
         return true
