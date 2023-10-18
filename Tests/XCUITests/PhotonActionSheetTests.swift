@@ -75,7 +75,7 @@ class PhotonActionSheetTests: BaseTestCase {
         }
         mozWaitForElementToExist(fennecElement, timeout: 5)
         fennecElement.tap()
-        mozWaitForElementToExist(app.navigationBars["ShareTo.ShareView"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.navigationBars["ShareTo.ShareView"])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306841

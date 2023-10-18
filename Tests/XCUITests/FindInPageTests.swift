@@ -173,12 +173,11 @@ class FindInPageTests: BaseTestCase {
         // Find in page is correctly launched, bar with text pre-filled and
         // the buttons to find next and previous
         if !iPad() {
-            mozWaitForElementToExist(app.buttons["Forward"])
-            app.buttons["Forward"].firstMatch.tap()
-            mozWaitForElementToExist(app.buttons["Forward"])
-            app.buttons["Forward"].firstMatch.tap()
-            mozWaitForElementToExist(app.buttons["Forward"])
-            app.buttons["Forward"].firstMatch.tap()
+            while !app.collectionViews.menuItems["Search with Firefox"].exists {
+                app.buttons["Forward"].firstMatch.tap()
+                mozWaitForElementToExist(app.collectionViews.menuItems.firstMatch)
+                mozWaitForElementToExist(app.buttons["Forward"])
+            }
         }
         mozWaitForElementToExist(app.menuItems["Find in Page"])
         app.menuItems["Find in Page"].tap()
