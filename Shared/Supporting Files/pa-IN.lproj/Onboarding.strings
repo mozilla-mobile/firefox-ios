@@ -76,9 +76,6 @@
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Welcome.Description.TreatementA.v114" = "%@ ਫਾਇਦੇ ਨਾਲੋਂ ਲੋਕਾਂ ਨੂੰ ਪਹਿਲ ਦਿੰਦਾ ਹੈ ਅਤੇ ਜਦੋਂ ਤੁਸੀਂ ਬਰਾਊਜ਼ ਕਰਦੇ ਹੋ ਤਾਂ ਤੁਹਾਡੀ ਪਰਦੇਦਾਰੀ ਨੂੰ ਰਖਵਾਲੀ ਕਰਦਾ ਹੈ।";
 
-/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Description.v114" = "%@ ਫਾਇਦੇ ਨਾਲੋਂ ਲੋਕਾਂ ਨੂੰ ਪਹਿਲ ਦਿੰਦਾ ਹੈ ਅਤੇ ਜਦੋਂ ਤੁਸੀਂ ਬਰਾਊਜ਼ ਕਰਦੇ ਹੋ ਤਾਂ ਤੁਹਾਡੀ ਪਰਦੇਦਾਰੀ ਨੂੰ ਰਖਵਾਲੀ ਕਰਦਾ ਹੈ।";
-
 /* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Link.Action.v114" = "ਸਾਡੀ ਪਰਦੇਦਾਰੀ ਸੂਚਨਾ ਵਿੱਚ ਹੋਰ ਜਾਣਕਾਰੀ ਲਵੋ";
 

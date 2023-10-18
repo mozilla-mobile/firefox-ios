@@ -482,7 +482,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             title: "\(CardElementNames.placeholderString)",
             type: .freshInstall)]
 
-        FxNimbus.shared.features.onboardingFrameworkFeature.with(initializer: { _ in
+        FxNimbus.shared.features.onboardingFrameworkFeature.with(initializer: { _, _ in
             OnboardingFrameworkFeature(cards: dictionary, dismissable: true)
         })
     }

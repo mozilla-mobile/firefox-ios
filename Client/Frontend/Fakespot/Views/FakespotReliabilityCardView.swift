@@ -83,6 +83,8 @@ class FakespotReliabilityCardView: UIView, ThemeApplicable {
         titleLabel.accessibilityIdentifier = viewModel.titleA11yId
 
         reliabilityLetterLabel.text = viewModel.grade.rawValue
+        reliabilityLetterLabel.accessibilityLabel = String(format: .Shopping.ReliabilityScoreGradeA11yLabel,
+                                                           viewModel.grade.rawValue)
         reliabilityLetterLabel.accessibilityIdentifier = viewModel.gradeLetterA11yId
         reliabilityDescriptionLabel.text = viewModel.grade.description
         reliabilityDescriptionLabel.accessibilityIdentifier = viewModel.gradeDescriptionA11yId

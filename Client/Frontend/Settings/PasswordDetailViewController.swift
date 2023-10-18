@@ -320,6 +320,7 @@ extension PasswordDetailViewController {
     func deleteLogin() {
         viewModel.profile.hasSyncedLogins().uponQueue(.main) { yes in
             self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
+                self.sendLoginsDeletedTelemetry()
                 self.viewModel.profile.logins.deleteLogin(id: self.viewModel.login.id).uponQueue(.main) { _ in
                     _ = self.navigationController?.popViewController(animated: true)
                 }
@@ -438,5 +439,12 @@ extension PasswordDetailViewController: LoginDetailTableViewCellDelegate {
             return item
         }
         return nil
+    }
+
+    // MARK: Telemetry
+    private func sendLoginsDeletedTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .delete,
+                                     object: .loginsDeleted)
     }
 }

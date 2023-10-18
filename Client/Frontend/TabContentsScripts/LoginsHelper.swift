@@ -182,6 +182,7 @@ class LoginsHelper: TabContentScript {
         let save = SnackButton(title: .LoginsHelperSaveLoginButtonTitle, accessibilityIdentifier: "SaveLoginPrompt.saveLoginButton", bold: true) { bar in
             self.tab?.removeSnackbar(bar)
             self.snackBar = nil
+            self.sendLoginsSavedTelemetry()
             _ = self.profile.logins.addLogin(login: login)
         }
         snackBar?.addButton(dontSave)
@@ -212,6 +213,7 @@ class LoginsHelper: TabContentScript {
         let update = SnackButton(title: .LoginsHelperUpdateButtonTitle, accessibilityIdentifier: "UpdateLoginPrompt.updateButton", bold: true) { bar in
             self.tab?.removeSnackbar(bar)
             self.snackBar = nil
+            self.sendLoginsModifiedTelemetry()
             _ = self.profile.logins.updateLogin(id: old.id, login: new)
         }
         snackBar?.addButton(dontSave)
@@ -251,5 +253,17 @@ class LoginsHelper: TabContentScript {
             let injectJavaScript = "window.__firefox__.logins.inject(\(injected))"
             self.tab?.webView?.evaluateJavascriptInDefaultContentWorld(injectJavaScript)
         }
+    }
+
+    private func sendLoginsModifiedTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .change,
+                                     object: .loginsModified)
+    }
+
+    private func sendLoginsSavedTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .add,
+                                     object: .loginsSaved)
     }
 }

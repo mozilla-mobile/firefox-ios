@@ -55,6 +55,7 @@ class BrowserViewController: UIViewController,
     var urlFromAnotherApp: UrlToOpenModel?
     var isCrashAlertShowing = false
     var currentMiddleButtonState: MiddleButtonState?
+    var didStartAtHome = false
     var openedUrlFromExternalSource = false
     var passBookHelper: OpenPassBookHelper?
     var overlayManager: OverlayModeManager
@@ -419,7 +420,7 @@ class BrowserViewController: UIViewController,
             urlBar.locationView.tabDidChangeContentBlocking(tab)
         }
 
-        tabManager.startAtHomeCheck()
+        _ = tabManager.startAtHomeCheck()
         updateWallpaperMetadata()
 
         // When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
@@ -1587,7 +1588,7 @@ class BrowserViewController: UIViewController,
                 urlBar.locationView.tabDidChangeContentBlocking(tab)
             }
 
-            if (!InternalURL.isValid(url: url) || url.isReaderModeURL), !url.isFileURL {
+            if (!InternalURL.isValid(url: url) || url.isReaderModeURL) && !url.isFileURL {
                 postLocationChangeNotificationForTab(tab, navigation: navigation)
                 tab.readabilityResult = nil
                 webView.evaluateJavascriptInDefaultContentWorld("\(ReaderModeNamespace).checkReadability()")
@@ -2234,7 +2235,7 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
-        tabManager.startAtHomeCheck()
+        didStartAtHome = tabManager.startAtHomeCheck()
         updateTabCountUsingTabManager(tabManager)
         openUrlAfterRestore()
     }
@@ -2626,7 +2627,7 @@ extension BrowserViewController: TabTrayDelegate {
 
     func tabTrayOpenRecentlyClosedTab(_ url: URL) {
         guard let tab = self.tabManager.selectedTab else { return }
-        self.finishEditingAndSubmit(url, visitType: .recentlyClosed, forTab: tab)
+        self.finishEditingAndSubmit(url, visitType: .link, forTab: tab)
     }
 
     // This function animates and resets the tab chrome transforms when

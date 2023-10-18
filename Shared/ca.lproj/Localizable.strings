@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Els inicis de sessió desats es mostraran aquí. Si heu desat inicis de sessió al Firefox en un altre dispositiu, inicieu la sessió al vostre compte del Firefox.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "Els inicis de sessió desats es mostraran aquí. Si heu desat inicis de sessió al %@ en un altre dispositiu, inicieu la sessió al vostre compte.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "No s'ha trobat cap inici de sessió";
 

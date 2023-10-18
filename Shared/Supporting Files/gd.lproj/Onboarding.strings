@@ -76,9 +76,6 @@
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Welcome.Description.TreatementA.v114" = "Tha daoine nas cudromaiche dha %@ na prothaid agus dìonaidh e do phrìobhaideachd fhad ’s a nì thusa brabhsadh.";
 
-/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Description.v114" = "Tha daoine nas cudromaiche dha %@ na prothaid agus dìonaidh e do phrìobhaideachd fhad ’s a nì thusa brabhsadh.";
-
 /* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Link.Action.v114" = "Faigh barrachd fiosrachaidh ann an aithris na prìobhaideachd againn";
 

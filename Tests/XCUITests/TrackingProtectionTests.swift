@@ -145,7 +145,7 @@ class TrackingProtectionTests: BaseTestCase {
         // Dismiss the view and visit "badssl.com". Tap on "expired"
         app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].tap(force: true)
         navigator.nowAt(BrowserTab)
-        navigator.openURL("https://www.badssl.com")
+        navigator.openNewURL(urlString: "https://www.badssl.com")
         waitUntilPageLoad()
         app.links["expired"].tap()
         waitUntilPageLoad()

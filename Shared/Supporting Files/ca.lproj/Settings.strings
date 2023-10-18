@@ -4,6 +4,9 @@
 /* Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered. */
 "CreditCard.Settings.EmptyListTitle.v112" = "Desa les targetes de crèdit en el %@";
 
+/* Accessibility label for a credit card list item in autofill settings screen. The first parameter is the credit card issuer (e.g. Visa). The second parameter is is the name of the credit card holder. The third parameter is the last 4 digits of the credit card. The fourth parameter is the card's expiration date. */
+"CreditCard.Settings.ListItemA11y.v118" = "%1$@, emesa a %2$@, acabada en %3$@, caduca el %4$@";
+
 /* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string indicates to users that they can deny Firefox from remembering the card that is being used. */
 "CreditCard.Settings.NotNow.v112" = "Ara no";
 
@@ -27,6 +30,12 @@
 
 /* When a user is in the process of making a purchase, and has at least one saved card, we show this label inside the keyboard hint. This indicates to the user that there are stored cards available for use on this pending purchase. */
 "CreditCards.Settings.UseSavedCardFromKeyboard.v112" = "Utilitza una targeta desada";
+
+/* Settings section title for the old Firefox account */
+"FxA.FirefoxAccount.v119" = "Compte";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title.v119" = "Compte";
 
 /* This is the description for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
 "Settings.Notifications.SyncNotificationsStatus.v112" = "S'ha d'activar per a rebre pestanyes i per a notificar-vos quan inicieu la sessió en un altre dispositiu.";

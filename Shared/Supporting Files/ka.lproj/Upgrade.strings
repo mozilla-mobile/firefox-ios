@@ -2,7 +2,7 @@
 "Upgrade.SyncSign.Action.v114" = "შესვლა";
 
 /* Description string used to to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
-"Upgrade.SyncSign.Description.v114" = "განაგრძეთ, სადაც გაჩერდით სხვა მოწყობილობიდან ჩანართების წამოღებით ახლა უკვე საწყის გვერდზე.";
+"Upgrade.SyncSign.Description.v114" = "განაგრძეთ იქიდან, სადაც შეჩერდით, სხვა მოწყობილობიდან ჩანართების წამოღებით ახლა უკვე საწყის გვერდზე.";
 
 /* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
 "Upgrade.SyncSign.Title.v114" = "ეკრანებს შორის გადართვა ჯერ არნახული სიმარტივით";

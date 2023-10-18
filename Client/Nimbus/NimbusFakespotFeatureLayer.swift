@@ -6,6 +6,7 @@ import Foundation
 
 protocol NimbusFakespotFeatureLayerProtocol {
     func getSiteConfig(siteName: String) -> WebsiteConfig?
+    var relayURL: URL? { get }
 }
 
 class NimbusFakespotFeatureLayer: NimbusFakespotFeatureLayerProtocol {
@@ -17,5 +18,9 @@ class NimbusFakespotFeatureLayer: NimbusFakespotFeatureLayerProtocol {
 
     func getSiteConfig(siteName: String) -> WebsiteConfig? {
         nimbus.features.shopping2023.value().config[siteName]
+    }
+
+    var relayURL: URL? {
+        URL(string: nimbus.features.shopping2023.value().relay)
     }
 }

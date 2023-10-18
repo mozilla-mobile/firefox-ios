@@ -110,7 +110,7 @@ enum FakespotEnvironment {
         case .staging:
             return URL(string: "https://mozilla-ohttp-dev.fastly-edge.com/")
         case .prod:
-            return URL(string: "https://mozilla-ohttp-fakespot.fastly-edge.com/")
+            return NimbusFakespotFeatureLayer().relayURL
         }
     }
 }

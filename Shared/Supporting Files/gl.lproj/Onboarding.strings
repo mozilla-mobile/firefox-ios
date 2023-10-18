@@ -76,9 +76,6 @@
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Welcome.Description.TreatementA.v114" = "%@ pon á xente por riba dos beneficios e defende a súa privacidade mentres navega.";
 
-/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Description.v114" = "%@ pon á xente por riba dos beneficios e defende a súa privacidade mentres navega.";
-
 /* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Link.Action.v114" = "Obtéña máis información no noso aviso de privacidade";
 

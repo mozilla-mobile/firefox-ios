@@ -30,7 +30,7 @@ extension BrowserDBSQLite {
 
         let latest = max(local, remote, either)
         if latest > 0 {
-            site.latestVisit = Visit(date: latest, type: VisitType.unknown)
+            site.latestVisit = Visit(date: latest, type: .link)
         }
         return site
     }

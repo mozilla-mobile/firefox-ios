@@ -9,10 +9,10 @@ import Storage
 import XCTest
 
 class TestHistory: ProfileTest {
-    fileprivate func addSite(_ places: RustPlaces, url: String, title: String, bool: Bool = true) {
+    fileprivate func addSite(_ places: RustPlaces, url: String, title: String, bool: Bool = true, visitType: VisitType = .link) {
         _ = places.reopenIfClosed()
         let site = Site(url: url, title: title)
-        let visit = VisitObservation(url: site.url, title: site.title, visitType: VisitTransition.link)
+        let visit = VisitObservation(url: site.url, title: site.title, visitType: visitType)
         let res = places.applyObservation(visitObservation: visit).value
         XCTAssertEqual(bool, res.isSuccess, "Site added: \(url)., error value: \(res.failureValue ?? "wow")")
     }
@@ -156,6 +156,46 @@ class TestHistory: ProfileTest {
             }
 
             self.waitForExpectations(timeout: 100, handler: nil)
+        }
+    }
+
+    // Test different visit types and their conversions
+    func testVisitTypes() {
+        withTestProfile { profile -> Void in
+            let places = profile.places
+            self.addSite(places, url: "http://url1/", title: "title 1", visitType: .link)
+            self.addSite(places, url: "http://url2/", title: "title 2", visitType: .bookmark)
+            self.addSite(places, url: "http://url3/", title: "title 3", visitType: .reload)
+
+            if let cursor = places.getSitesWithBound(limit: 100, offset: 0, excludedTypes: VisitTransitionSet(0)).value.successValue {
+                XCTAssertEqual(cursor.status, CursorStatus.success, "Returned success \(cursor.statusMessage).")
+                XCTAssertEqual(cursor.count, 3)
+
+                // Sites will be in order of latest visited (so url3)
+                var site = cursor[0]!
+                XCTAssertEqual(site.title, "title 3")
+                XCTAssertEqual(site.url, "http://url3/")
+                var visitType = site.latestVisit!.type
+                XCTAssertEqual(visitType, .reload)
+                XCTAssertEqual(visitType.rawValue, 9)
+
+                site = cursor[1]!
+                XCTAssertEqual(site.title, "title 2")
+                XCTAssertEqual(site.url, "http://url2/")
+                visitType = site.latestVisit!.type
+                XCTAssertEqual(visitType, .bookmark)
+                XCTAssertEqual(visitType.rawValue, 3)
+
+                site = cursor[2]!
+                XCTAssertEqual(site.title, "title 1")
+                XCTAssertEqual(site.url, "http://url1/")
+                visitType = site.latestVisit!.type
+                XCTAssertEqual(visitType, .link)
+                XCTAssertEqual(visitType.rawValue, 1)
+            } else {
+                XCTFail("Couldn't get cursor.")
+            }
+            self.clear(places)
         }
     }
 

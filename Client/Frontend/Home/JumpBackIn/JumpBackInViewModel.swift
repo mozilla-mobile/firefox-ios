@@ -153,6 +153,10 @@ class JumpBackInViewModel: FeatureFlaggable {
 // MARK: - Private: Prepare UI data
 private extension JumpBackInViewModel {
     private func refreshData(maxItemsToDisplay: JumpBackInDisplayGroupCount) {
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            self.recentTabs = await self.jumpBackInDataAdaptor.getRecentTabData()
+        }
         jumpBackInList = createJumpBackInList(
             from: recentTabs,
             withMaxTabsCount: maxItemsToDisplay.tabsCount
@@ -167,8 +171,7 @@ private extension JumpBackInViewModel {
     ) -> JumpBackInList {
         let recentTabs = filter(
             tabs: tabs,
-            withMaxTabsCount: maxTabs
-        )
+            withMaxTabsCount: maxTabs)
 
         return JumpBackInList(tabs: recentTabs)
     }
