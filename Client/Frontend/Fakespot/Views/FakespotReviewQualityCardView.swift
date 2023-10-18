@@ -261,7 +261,6 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
         }
 
         setNeedsLayout()
-        layoutIfNeeded()
     }
 
     private func updateA11yElementOrder() {
