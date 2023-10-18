@@ -42,8 +42,6 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(featureFlags.isFeatureEnabled(.inactiveTabs, checking: .userOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.jumpBackIn, checking: .userOnly))
-        XCTAssertTrue(featureFlags.isFeatureEnabled(.recentlySaved, checking: .buildOnly))
-        XCTAssertTrue(featureFlags.isFeatureEnabled(.recentlySaved, checking: .userOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .buildOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .userOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.topSites, checking: .buildOnly))

@@ -11,7 +11,6 @@ features:
           {
             "top-sites": true,
             "jump-back-in": true,
-            "recently-saved": true,
             "recent-explorations": true,
           }
       pocket-sponsored-stories:
@@ -26,7 +25,6 @@ features:
           "sections-enabled": {
             "top-sites": true,
             "jump-back-in": true,
-            "recently-saved": true,
             "recent-explorations": true,
           },
           "pocket-sponsored-stories": true
@@ -36,7 +34,6 @@ features:
           "sections-enabled": {
             "top-sites": true,
             "jump-back-in": true,
-            "recently-saved": true,
             "recent-explorations": true,
           },
           "pocket-sponsored-stories": false
@@ -48,8 +45,6 @@ enums:
     variants:
       top-sites:
         description: The frecency and pinned sites.
-      recently-saved:
-        description: The sites the user has bookmarked recently.
       jump-back-in:
         description: The tabs the user was looking immediately before being interrupted.
       recent-explorations:

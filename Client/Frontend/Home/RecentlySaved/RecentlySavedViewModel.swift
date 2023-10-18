@@ -112,7 +112,7 @@ extension RecentlySavedViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     var isEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.recentlySaved, checking: .buildAndUser)
+        return profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.RecentlySavedSection) ?? true
     }
 
     var hasData: Bool {
