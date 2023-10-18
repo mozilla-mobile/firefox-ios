@@ -113,10 +113,7 @@ class FakespotViewController:
     override func viewDidLoad() {
         super.viewDidLoad()
         presentationController?.delegate = self
-
-        if #available(iOS 15.0, *) {
-            sheetPresentationController?.delegate = self
-        }
+        sheetPresentationController?.delegate = self
 
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
@@ -144,7 +141,6 @@ class FakespotViewController:
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        guard #available(iOS 15.0, *) else { return }
         viewModel.recordBottomSheetDisplayed(presentationController)
         updateModalA11y()
     }
@@ -402,7 +398,6 @@ class FakespotViewController:
         viewModel.onViewControllerDeinit()
     }
 
-    @available(iOS 15.0, *)
     private func updateModalA11y() {
         var currentDetent: UISheetPresentationController.Detent.Identifier? = viewModel.getCurrentDetent(for: sheetPresentationController)
 
@@ -425,7 +420,6 @@ class FakespotViewController:
 
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         delegate?.fakespotControllerDidDismiss()
-        guard #available(iOS 15.0, *) else { return }
         let currentDetent = viewModel.getCurrentDetent(for: presentationController)
 
         if viewModel.isSwiping || currentDetent == .large {
@@ -453,9 +447,8 @@ class FakespotViewController:
         let attributes: [NSAttributedString.Key: Any] = [.font: font]
         return string.size(withAttributes: attributes).width
     }
-    // MARK: - UISheetPresentationControllerDelegate
 
-    @available(iOS 15.0, *)
+    // MARK: - UISheetPresentationControllerDelegate
     func sheetPresentationControllerDidChangeSelectedDetentIdentifier(_ sheetPresentationController: UISheetPresentationController) {
         updateModalA11y()
     }
