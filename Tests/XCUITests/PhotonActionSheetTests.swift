@@ -97,6 +97,8 @@ class PhotonActionSheetTests: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2323203
     func testShareSheetSendToDevice() {
         openNewShareSheet()
+        mozWaitForElementToExist(app.staticTexts["Open in Firefox"])
+        mozWaitForElementToExist(app.staticTexts["Send to Device"])
         app.staticTexts["Send to Device"].tap()
         mozWaitForElementToExist(app.navigationBars.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton], timeout: 10)
 
