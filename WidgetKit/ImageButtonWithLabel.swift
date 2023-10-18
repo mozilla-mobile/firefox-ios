@@ -89,7 +89,6 @@ struct ImageButtonWithLabel: View {
                                 .frame(height: 24.0)
                         } else {
                             Image(link.imageName)
-                                .renderingMode(.template)
                                 .scaledToFit()
                                 .frame(height: 24.0)
                         }
