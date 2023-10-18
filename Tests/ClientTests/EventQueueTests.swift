@@ -104,4 +104,17 @@ final class EventQueueTests: XCTestCase {
         XCTAssertTrue(action1Run)
         XCTAssertFalse(action2Run)
     }
+
+    func testActionsAlwaysRunOnMainThread() {
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.queue.wait(for: .startingEvent) {
+                // Currently we always expect actions to be called on main thread
+                XCTAssert(Thread.isMainThread)
+            }
+        }
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.queue.signal(event: .startingEvent)
+        }
+        wait(1)
+    }
 }
