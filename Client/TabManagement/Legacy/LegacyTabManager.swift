@@ -798,27 +798,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         delegates.forEach { $0.get()?.tabManagerDidRemoveAllTabs(self, toast: toast) }
     }
 
-    // MARK: - TabEventHandler
-    func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
-        guard tab.screenshot != nil else {
-            // Remove screenshot from image store so we can use favicon
-            // when a screenshot isn't available for the associated tab url
-            removeScreenshot(tab: tab)
-            return
-        }
-        storeScreenshot(tab: tab)
-    }
-
-    func storeScreenshot(tab: Tab) {
-        store.preserveScreenshot(forTab: tab)
-        storeChanges()
-    }
-
-    func removeScreenshot(tab: Tab) {
-        store.removeScreenshot(forTab: tab)
-        storeChanges()
-    }
-
     // MARK: - Private
     @objc
     private func blockPopUpDidChange() {
