@@ -109,9 +109,23 @@ final class EventQueueTests: XCTestCase {
         var actionRun = false
         XCTAssertFalse(queue.hasSignalled(.startingEvent))
         let token = queue.wait(for: .startingEvent, then: { actionRun = true })
-        queue.cancelAction(token: token)
+        let wasCancelled = queue.cancelAction(token: token)
         queue.signal(event: .startingEvent)
         XCTAssertFalse(actionRun)
+        XCTAssertTrue(wasCancelled)
+    }
+
+    func testActionCancellationFailed() {
+        var actionRun = false
+        XCTAssertFalse(queue.hasSignalled(.startingEvent))
+        let token = queue.wait(for: .startingEvent, then: { actionRun = true })
+
+        queue.signal(event: .startingEvent)
+
+        let wasCancelled = queue.cancelAction(token: token)
+
+        XCTAssertTrue(actionRun)
+        XCTAssertFalse(wasCancelled)
     }
 
     func testActionsAlwaysRunOnMainThread() {
