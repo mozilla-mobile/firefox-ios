@@ -12,13 +12,13 @@ public class ThemedSwitch: UISwitch, ThemeApplicable {
     private var enabledOffColor: UIColor?
     private var disabledOffColor: UIColor?
 
-    public override var isEnabled: Bool {
+    override public var isEnabled: Bool {
         didSet {
             onTintColor = isEnabled ? enabledOnColor: disabledOnColor
         }
     }
 
-    public override var isOn: Bool {
+    override public var isOn: Bool {
         didSet {
             tintColor = isOn ? enabledOffColor: disabledOffColor
         }
