@@ -76,7 +76,6 @@ class PhotonActionSheetTests: BaseTestCase {
         if iPad() {
             fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 2)
         }
-
         mozWaitForElementToExist(fennecElement, timeout: 5)
         fennecElement.tap()
         mozWaitForElementToExist(app.navigationBars["ShareTo.ShareView"], timeout: TIMEOUT)
