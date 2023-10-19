@@ -94,16 +94,21 @@ class ShoppingProduct: FeatureFlaggable {
                 // If it succeeds, the 'return' statement will immediately exit the function,
                 // returning the loaded 'ProductAnalysisData'.
                 return try await client.fetchProductAnalysisData(productId: product.id, website: product.host)
-            } catch OhttpError.RelayFailed {
-                // If a RelayFailed error occurs, we use 'continue' to go back to the
-                // beginning of the loop and try again. This means we will retry the
-                // 'fetch(_ type:, url:, requestBody:)' operation.
-                let backOff = retryTimeout * Int(pow(2, Double(failCount - 1)))
-                try? await Task.sleep(nanoseconds: NSEC_PER_MSEC * UInt64(backOff))
-                continue
             } catch {
-                // For any other error, we rethrow it to handle it at a higher level.
-                throw error
+                // If 500 error occurs during the attempt, we use 'continue'
+                // to go back to the beginning of the loop and try again.
+                // This means we will retry the 'fetch(_ type:, url:, requestBody:)' operation.
+                if case OhttpError.RelayFailed = error {
+                    let backOff = retryTimeout * Int(pow(2, Double(failCount - 1)))
+                    try? await Task.sleep(nanoseconds: NSEC_PER_MSEC * UInt64(backOff))
+                    continue
+                } else if (error as NSError).code == 500 {
+                    let backOff = retryTimeout * Int(pow(2, Double(failCount - 1)))
+                    try? await Task.sleep(nanoseconds: NSEC_PER_MSEC * UInt64(backOff))
+                    continue
+                } else {
+                    throw error
+                }
             }
         }
 
