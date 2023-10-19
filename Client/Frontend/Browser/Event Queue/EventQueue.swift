@@ -60,7 +60,7 @@ final class EventQueue<QueueEventType: Hashable> {
     /// case the action will be immediately run before the function returns.
     @discardableResult
     func wait(for events: [QueueEventType], then action: @escaping EventQueueAction) -> EnqueuedActionToken {
-        let token = UUID()
+        let token = EnqueuedActionToken()
         ensureMainThread { [weak self] in
             guard let self else { return }
             let enqueued = EnqueuedAction(token: token, action: action, dependencies: events)
