@@ -26,7 +26,7 @@
         "DesktopModeTestsIpad",
         "DesktopModeTestsIphone",
         "DisplaySettingTests",
-        "DomainAutocompleteTest",
+        "DomainAutocompleteTests",
         "DownloadsTests",
         "DragAndDropTestIpad",
         "DragAndDropTests",

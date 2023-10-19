@@ -30,7 +30,7 @@
         "DesktopModeTestsIpad",
         "DesktopModeTestsIphone",
         "DisplaySettingTests",
-        "DomainAutocompleteTest",
+        "DomainAutocompleteTests",
         "DownloadFilesTests",
         "DownloadsTests",
         "DragAndDropTestIpad",
