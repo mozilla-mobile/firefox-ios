@@ -48,10 +48,8 @@ final class EventQueue<QueueEventType: Hashable> {
     /// immediately.
     /// - Parameters:
     ///   - events: the dependent events.
-    ///   - action: the action or work to perform. Currently by default these will
-    ///   always be called on the main thread.
-    /// - Returns: a discardable token that can be used to later remove or cancel the
-    /// event (if needed).
+    ///   - action: the action or work to perform. Called on main thread by default.
+    /// - Returns: a token that can be used to cancel the action.
     ///
     /// Notes: the token return value may not be immediately usable if this
     /// function is called off of the main thread (since the actual action may not be
