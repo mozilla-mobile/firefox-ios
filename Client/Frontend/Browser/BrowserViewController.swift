@@ -1428,10 +1428,14 @@ class BrowserViewController: UIViewController,
     }
 
     func handleQRCode() {
-        let qrCodeViewController = QRCodeViewController()
-        qrCodeViewController.qrCodeDelegate = self
-        presentedViewController?.dismiss(animated: true)
-        present(UINavigationController(rootViewController: qrCodeViewController), animated: true, completion: nil)
+        if CoordinatorFlagManager.isQRCodeCoordinatorEnabled {
+            navigationHandler?.showQRCode()
+        } else {
+            let qrCodeViewController = QRCodeViewController()
+            qrCodeViewController.qrCodeDelegate = self
+            presentedViewController?.dismiss(animated: true)
+            present(UINavigationController(rootViewController: qrCodeViewController), animated: true, completion: nil)
+        }
     }
 
     func handleClosePrivateTabs() {
