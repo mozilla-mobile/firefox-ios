@@ -83,11 +83,11 @@ final class EventQueueTests: XCTestCase {
         }
 
         wait(2.0)
- 
+
         XCTAssertFalse(actionRun)
     }
 
-    func testEventWithAssociatedValue() {
+    func testContextSpecificEventWithAssociatedValue() {
         var action1Run = false
         var action2Run = false
 
@@ -103,6 +103,17 @@ final class EventQueueTests: XCTestCase {
         wait(2)
         XCTAssertTrue(action1Run)
         XCTAssertFalse(action2Run)
+    }
+
+    func testActionCancellation() {
+        var actionRun = false
+        XCTAssertFalse(queue.hasSignalled(.startingEvent))
+        let token = queue.wait(for: .startingEvent, then: {
+            actionRun = true
+        })
+        queue.cancelAction(token: token)
+        queue.signal(event: .startingEvent)
+        XCTAssertFalse(actionRun)
     }
 
     func testActionsAlwaysRunOnMainThread() {

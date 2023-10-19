@@ -71,8 +71,9 @@ final class EventQueue<QueueEventType: Hashable> {
     }
 
     /// Qeues a particular action for a single dependency.
-    func wait(for event: QueueEventType, then action: @escaping EventQueueAction) {
-        wait(for: [event], then: action)
+    @discardableResult
+    func wait(for event: QueueEventType, then action: @escaping EventQueueAction) -> EnqueuedActionToken {
+        return wait(for: [event], then: action)
     }
 
     /// Used to check whether a particular event has occurred.
