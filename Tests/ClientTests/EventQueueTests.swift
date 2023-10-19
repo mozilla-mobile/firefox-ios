@@ -6,6 +6,7 @@
 import XCTest
 import Foundation
 import Shared
+import Common
 
 enum TestEvent: AppEventType {
     case startingEvent
