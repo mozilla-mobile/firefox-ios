@@ -43,4 +43,26 @@ c2l0cyI6W3siZGF0ZSI6MTMxOTE0OTAxMjM3MjQyNSwidHlwZSI6MX1dfQ==
     func testBadBase64() {
         XCTAssertNil(Bytes.decodeBase64(invalidB64))
     }
+
+    func testBase64DecodeUrlSafe() {
+        var decodedData = Bytes.base64urlSafeDecodedData("VGhpcyB3b3JrcyE")
+        var decodedString = String(data: decodedData!, encoding: .utf8)
+        XCTAssertEqual(decodedString, "This works!")
+
+        decodedData = Bytes.base64urlSafeDecodedData("cUw4UjRRSWNRL1pzUnFPQWJlUmZjWmhpbE4vTWtzUnREYUVyTUErPQ")
+        decodedString = String(data: decodedData!, encoding: .utf8)
+        XCTAssertEqual(decodedString, "qL8R4QIcQ/ZsRqOAbeRfcZhilN/MksRtDaErMA+=")
+
+        decodedData = Bytes.base64urlSafeDecodedData("VGhpcytzaG91bGQvd29yay1maW5l")
+        decodedString = String(data: decodedData!, encoding: .utf8)
+        XCTAssertEqual(decodedString, "This+should/work-fine")
+
+        decodedData = Bytes.base64urlSafeDecodedData("c29tZS90b2tlbi9zZXJ2ZXIvc3R1ZmY=")
+        decodedString = String(data: decodedData!, encoding: .utf8)
+        XCTAssertEqual(decodedString, "some/token/server/stuff")
+
+        decodedData = Bytes.base64urlSafeDecodedData("c3ViamVjdHM_X2Q")
+        decodedString = String(data: decodedData!, encoding: .utf8)
+        XCTAssertEqual(decodedString, "subjects?_d")
+    }
 }

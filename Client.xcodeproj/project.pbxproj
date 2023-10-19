@@ -225,6 +225,7 @@
 		2FCAE2781ABB531100877008 /* Visit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE25C1ABB531100877008 /* Visit.swift */; };
 		2FCAE2841ABB533A00877008 /* MockFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2791ABB533A00877008 /* MockFiles.swift */; };
 		2FDB10931A9FBEC5006CF312 /* PrefsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDB10921A9FBEC5006CF312 /* PrefsTests.swift */; };
+		2FDBCF611ABFC9DE00AFF7F0 /* SyncAuthState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDBCF601ABFC9DE00AFF7F0 /* SyncAuthState.swift */; };
 		2FDE87FE1ABB3817005317B1 /* LegacyRemoteTabsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDE87FD1ABB3817005317B1 /* LegacyRemoteTabsPanel.swift */; };
 		318FB6EB1DB5600D0004E40F /* SQLiteHistoryFactories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318FB6EA1DB5600D0004E40F /* SQLiteHistoryFactories.swift */; };
 		31ADB5DA1E58CEC300E87909 /* ClipboardBarDisplayHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31ADB5D91E58CEC300E87909 /* ClipboardBarDisplayHandler.swift */; };
@@ -590,6 +591,7 @@
 		8A3EF7FD2A2FCFAC00796E3A /* AppReviewPromptSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF7FC2A2FCFAC00796E3A /* AppReviewPromptSetting.swift */; };
 		8A3EF7FF2A2FCFBB00796E3A /* ChangeToChinaSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF7FE2A2FCFBB00796E3A /* ChangeToChinaSetting.swift */; };
 		8A3EF8012A2FCFC900796E3A /* FasterInactiveTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF8002A2FCFC900796E3A /* FasterInactiveTabs.swift */; };
+		8A3EF8052A2FCFE500796E3A /* ForgetSyncAuthStateDebugSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF8042A2FCFE500796E3A /* ForgetSyncAuthStateDebugSetting.swift */; };
 		8A3EF8072A2FCFF700796E3A /* SentryIDSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF8062A2FCFF700796E3A /* SentryIDSetting.swift */; };
 		8A3EF8092A2FD02B00796E3A /* ExperimentsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF8082A2FD02B00796E3A /* ExperimentsSettings.swift */; };
 		8A3EF80D2A2FD04D00796E3A /* ResetWallpaperOnboardingPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF80C2A2FD04D00796E3A /* ResetWallpaperOnboardingPage.swift */; };
@@ -2379,6 +2381,7 @@
 		2FCAE33D1ABB5F1800877008 /* Storage-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Storage-Bridging-Header.h"; sourceTree = "<group>"; };
 		2FCF4713ABA14D85F70567AC /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = kk.lproj/Today.strings; sourceTree = "<group>"; };
 		2FDB10921A9FBEC5006CF312 /* PrefsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefsTests.swift; sourceTree = "<group>"; };
+		2FDBCF601ABFC9DE00AFF7F0 /* SyncAuthState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncAuthState.swift; sourceTree = "<group>"; };
 		2FDE46BCA5E27EF7DC02CE20 /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		2FDE87FD1ABB3817005317B1 /* LegacyRemoteTabsPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LegacyRemoteTabsPanel.swift; sourceTree = "<group>"; };
 		2FEBABAE1AB3659000DB5728 /* ResultTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultTests.swift; sourceTree = "<group>"; };
@@ -4971,6 +4974,7 @@
 		8A3EF7FC2A2FCFAC00796E3A /* AppReviewPromptSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppReviewPromptSetting.swift; sourceTree = "<group>"; };
 		8A3EF7FE2A2FCFBB00796E3A /* ChangeToChinaSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeToChinaSetting.swift; sourceTree = "<group>"; };
 		8A3EF8002A2FCFC900796E3A /* FasterInactiveTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FasterInactiveTabs.swift; sourceTree = "<group>"; };
+		8A3EF8042A2FCFE500796E3A /* ForgetSyncAuthStateDebugSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgetSyncAuthStateDebugSetting.swift; sourceTree = "<group>"; };
 		8A3EF8062A2FCFF700796E3A /* SentryIDSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentryIDSetting.swift; sourceTree = "<group>"; };
 		8A3EF8082A2FD02B00796E3A /* ExperimentsSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperimentsSettings.swift; sourceTree = "<group>"; };
 		8A3EF80C2A2FD04D00796E3A /* ResetWallpaperOnboardingPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetWallpaperOnboardingPage.swift; sourceTree = "<group>"; };
@@ -7586,6 +7590,7 @@
 				2F14E1391ABB890800FF98DB /* Account-Bridging-Header.h */,
 				3905B4D41E8E7A6B0027D953 /* FxAPushMessageHandler.swift */,
 				2FA436271ABB8436008031D1 /* HawkHelper.swift */,
+				2FDBCF601ABFC9DE00AFF7F0 /* SyncAuthState.swift */,
 				2FA436281ABB8436008031D1 /* TokenServerClient.swift */,
 				2FA435FD1ABB83B4008031D1 /* Supporting Files */,
 			);
@@ -8349,6 +8354,7 @@
 				8A3EF8002A2FCFC900796E3A /* FasterInactiveTabs.swift */,
 				BCFF93F12AAF9688005B5B71 /* FirefoxSuggestSettings.swift */,
 				8A3EF7FA2A2FCF9D00796E3A /* ForceCrashSetting.swift */,
+				8A3EF8042A2FCFE500796E3A /* ForgetSyncAuthStateDebugSetting.swift */,
 				8A3EF7EF2A2FCF3100796E3A /* HiddenSettings.swift */,
 				8A3EF8142A2FD08800796E3A /* OpenFiftyTabsDebugOption.swift */,
 				8A3EF8122A2FD07A00796E3A /* ResetContextualHints.swift */,
@@ -12133,6 +12139,7 @@
 				EB07F860240D696000924860 /* PushNotificationSetup.swift in Sources */,
 				C8E2E80D23D20FB3005AACE6 /* RustFirefoxAccounts.swift in Sources */,
 				C8E2E80C23D20FB3005AACE6 /* Avatar.swift in Sources */,
+				2FDBCF611ABFC9DE00AFF7F0 /* SyncAuthState.swift in Sources */,
 				96666D0229969F7D00A4029F /* GeneralizedImageFetcher.swift in Sources */,
 				45355B272A269EAC00B1EA8E /* PushConfiguration.swift in Sources */,
 				2FA436351ABB8436008031D1 /* TokenServerClient.swift in Sources */,
@@ -12458,6 +12465,7 @@
 				C2D1A10D2A66C70000205DCC /* BookmarksCoordinator.swift in Sources */,
 				396E38F11EE0C8EC00CC180F /* FxAPushMessageHandler.swift in Sources */,
 				8A76B01629F6EB3900A82607 /* ScreenshotService.swift in Sources */,
+				8A3EF8052A2FCFE500796E3A /* ForgetSyncAuthStateDebugSetting.swift in Sources */,
 				E4CD9F6D1A77DD2800318571 /* ReaderModeStyleViewController.swift in Sources */,
 				E13E9AB52AAB0FB5001A0E9D /* FakespotViewModel.swift in Sources */,
 				8A5D1CBD2A30DC4E005AD35C /* AccountStatusSetting.swift in Sources */,
