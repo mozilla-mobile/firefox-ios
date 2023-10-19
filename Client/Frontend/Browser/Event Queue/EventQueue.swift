@@ -22,17 +22,20 @@ final class EventQueue<QueueEventType: Hashable> {
     private var actions: [EnqueuedAction] = []
     private var signalledEvents = Set<QueueEventType>()
     private let logger: Logger
+    private let mainQueue: DispatchQueueInterface
 
     // MARK: - Initializer
 
-    init(logger: Logger = DefaultLogger.shared) {
+    init(logger: Logger = DefaultLogger.shared,
+         mainQueue: DispatchQueueInterface = DispatchQueue.main) {
         self.logger = logger
+        self.mainQueue = mainQueue
     }
 
     /// Signals that a specific event has occurred. Currently signalling the same
     /// event more than once is considered a usage error.
     func signal(event: QueueEventType) {
-        ensureMainThread { [weak self] in
+        mainQueue.ensureMainThread { [weak self] in
             guard let self else { return }
             guard !self.signalledEvents.contains(event) else {
                 logger.log("Signalling duplicate event: \(event)", level: .warning, category: .library)
@@ -59,7 +62,7 @@ final class EventQueue<QueueEventType: Hashable> {
     @discardableResult
     func wait(for events: [QueueEventType], then action: @escaping EventQueueAction) -> ActionToken {
         let token = ActionToken()
-        ensureMainThread { [weak self] in
+        mainQueue.ensureMainThread { [weak self] in
             guard let self else { return }
             let enqueued = EnqueuedAction(token: token, action: action, dependencies: events)
             self.actions.append(enqueued)
