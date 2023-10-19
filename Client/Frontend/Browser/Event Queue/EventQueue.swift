@@ -6,13 +6,13 @@ import Foundation
 import Common
 
 typealias EventQueueAction = (() -> Void)
-typealias EnqueuedActionToken = UUID
+typealias ActionToken = UUID
 
 let DefaultEventQueue = EventQueue<AppEvent>()
 
 final class EventQueue<QueueEventType: Hashable> {
     struct EnqueuedAction {
-        let token: EnqueuedActionToken
+        let token: ActionToken
         let action: EventQueueAction
         let dependencies: [QueueEventType]
     }
@@ -59,8 +59,8 @@ final class EventQueue<QueueEventType: Hashable> {
     /// also will have no usefulness if all dependencies are already satisfied, in which
     /// case the action will be immediately run before the function returns.
     @discardableResult
-    func wait(for events: [QueueEventType], then action: @escaping EventQueueAction) -> EnqueuedActionToken {
-        let token = EnqueuedActionToken()
+    func wait(for events: [QueueEventType], then action: @escaping EventQueueAction) -> ActionToken {
+        let token = ActionToken()
         ensureMainThread { [weak self] in
             guard let self else { return }
             let enqueued = EnqueuedAction(token: token, action: action, dependencies: events)
@@ -72,7 +72,7 @@ final class EventQueue<QueueEventType: Hashable> {
 
     /// Qeues a particular action for a single dependency.
     @discardableResult
-    func wait(for event: QueueEventType, then action: @escaping EventQueueAction) -> EnqueuedActionToken {
+    func wait(for event: QueueEventType, then action: @escaping EventQueueAction) -> ActionToken {
         return wait(for: [event], then: action)
     }
 
@@ -89,7 +89,7 @@ final class EventQueue<QueueEventType: Hashable> {
     /// Note: if the token is invalid or the action has already been executed (or not yet enqueued) then
     /// this function has no effect.
     @discardableResult
-    func cancelAction(token: EnqueuedActionToken) -> Bool {
+    func cancelAction(token: ActionToken) -> Bool {
         assert(Thread.isMainThread, "Expects to be called on the main thread.")
         guard let idx = actions.firstIndex(where: { $0.token == token }) else { return false }
         actions.remove(at: idx)
