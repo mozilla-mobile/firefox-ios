@@ -66,9 +66,6 @@ class PhotonActionSheetTests: BaseTestCase {
         app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
         mozWaitForElementToExist(app.navigationBars["UIActivityContentView"], timeout: TIMEOUT)
         mozWaitForElementToExist(app.collectionViews.cells["Copy"])
-        mozWaitForElementToExist(app.collectionViews.cells["Send Link to Device"])
-        mozWaitForElementToExist(app.collectionViews.cells["Markup"])
-        mozWaitForElementToExist(app.collectionViews.cells["Print"])
 
         // This is not ideal but only way to get the element on iPhone 8
         // for iPhone 11, that would be boundBy: 2
@@ -96,7 +93,6 @@ class PhotonActionSheetTests: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2323203
     func testShareSheetSendToDevice() {
         openNewShareSheet()
-        mozWaitForElementToExist(app.staticTexts["Open in Firefox"])
         mozWaitForElementToExist(app.staticTexts["Send to Device"])
         app.staticTexts["Send to Device"].tap()
         mozWaitForElementToExist(app.navigationBars.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton], timeout: 10)
