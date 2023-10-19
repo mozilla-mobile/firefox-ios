@@ -259,8 +259,6 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
             abRatingsReliableLabelStackView.spacing = UX.abdfRatingsStackViewSpacing
             dfRatingsReliableLabelStackView.spacing = UX.abdfRatingsStackViewSpacing
         }
-
-        setNeedsLayout()
     }
 
     private func updateA11yElementOrder() {
