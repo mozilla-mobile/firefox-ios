@@ -3859,7 +3859,7 @@ extension String {
         public static let ReviewQualityCardAdjustedRatingLabel = MZLocalizedString(
             key: "Shopping.ReviewQualityCard.AdjustedRating.Label.v120",
             tableName: "Shopping",
-            value: "*The adjusted rating* is based only on reviews we believe to be reliable.",
+            value: "The *adjusted rating* is based only on reviews we believe to be reliable.",
             comment: "Adjusted rating label from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
         public static let ReviewQualityCardHighlightsLabel = MZLocalizedString(
             key: "Shopping.ReviewQualityCard.Highlights.Label.v120",

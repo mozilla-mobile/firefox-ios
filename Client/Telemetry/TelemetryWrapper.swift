@@ -321,7 +321,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         let isRecentlyVisitedEnabled = featureFlags.isFeatureEnabled(.historyHighlights, checking: .buildAndUser)
         GleanMetrics.Preferences.recentlyVisited.set(isRecentlyVisitedEnabled)
 
-        let isRecentlySavedEnabled = featureFlags.isFeatureEnabled(.recentlySaved, checking: .buildAndUser)
+        let isRecentlySavedEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.RecentlySavedSection) ?? true
         GleanMetrics.Preferences.recentlySaved.set(isRecentlySavedEnabled)
 
         let isFeatureEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true

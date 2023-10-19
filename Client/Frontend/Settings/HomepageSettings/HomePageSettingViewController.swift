@@ -19,10 +19,6 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
         return featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildOnly)
     }
 
-    var isRecentlySavedSectionEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.recentlySaved, checking: .buildOnly)
-    }
-
     var isWallpaperSectionEnabled: Bool {
         return wallpaperManager.canSettingsBeShown &&
             featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
@@ -144,8 +140,13 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
         let jumpBackInSetting = BoolSetting(with: .jumpBackIn,
                                             titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.JumpBackIn))
 
-        let recentlySavedSetting = BoolSetting(with: .recentlySaved,
-                                               titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.RecentlySaved))
+        let recentlySavedSetting = BoolSetting(
+            prefs: profile.prefs,
+            theme: themeManager.currentTheme,
+            prefKey: PrefsKeys.UserFeatureFlagPrefs.RecentlySavedSection,
+            defaultValue: true,
+            titleText: .Settings.Homepage.CustomizeFirefoxHome.RecentlySaved
+        )
 
         let historyHighlightsSetting = BoolSetting(with: .historyHighlights,
                                                    titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.RecentlyVisited))
@@ -160,9 +161,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             sectionItems.append(jumpBackInSetting)
         }
 
-        if isRecentlySavedSectionEnabled {
-            sectionItems.append(recentlySavedSetting)
-        }
+        sectionItems.append(recentlySavedSetting)
 
         if isHistoryHighlightsSectionEnabled {
             sectionItems.append(historyHighlightsSetting)

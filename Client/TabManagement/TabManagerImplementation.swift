@@ -132,6 +132,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             return
         }
         await generateTabs(from: windowData)
+        cleanUpUnusedScreenshots()
 
         for delegate in delegates {
             ensureMainThread {
@@ -318,6 +319,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     }
 
     // MARK: - Select Tab
+
     override func selectTab(_ tab: Tab?, previous: Tab? = nil) {
         guard shouldUseNewTabStore(),
               let tab = tab,
@@ -363,39 +365,40 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         return false
     }
 
-    // MARK: - Save screenshot
-    override func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
-        guard shouldUseNewTabStore()
-        else {
-            super.tabDidSetScreenshot(tab, hasHomeScreenshot: hasHomeScreenshot)
+    // MARK: - Screenshots
+
+    func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
+        guard tab.screenshot != nil else {
+            // Remove screenshot from image store so we can use favicon
+            // when a screenshot isn't available for the associated tab url
+            removeScreenshot(tab: tab)
             return
         }
 
         storeScreenshot(tab: tab)
     }
 
-    override func storeScreenshot(tab: Tab) {
-        guard shouldUseNewTabStore(),
-              let screenshot = tab.screenshot
-        else {
-            super.storeScreenshot(tab: tab)
-            return
-        }
+    func storeScreenshot(tab: Tab) {
+        guard let screenshot = tab.screenshot else { return }
 
         Task {
             try? await imageStore?.saveImageForKey(tab.tabUUID, image: screenshot)
         }
     }
 
-    override func removeScreenshot(tab: Tab) {
-        guard shouldUseNewTabStore()
-        else {
-            super.removeScreenshot(tab: tab)
-            return
-        }
-
+    func removeScreenshot(tab: Tab) {
         Task {
             await imageStore?.deleteImageForKey(tab.tabUUID)
+        }
+    }
+
+    func cleanUpUnusedScreenshots() {
+        // Clean up any screenshots that are no longer associated with a tab.
+        var savedUUIDs = Set<String>()
+        tabs.forEach { savedUUIDs.insert($0.screenshotUUID?.uuidString ?? "") }
+        let savedUUIDsCopy = savedUUIDs
+        Task {
+            try? await imageStore?.clearAllScreenshotsExcluding(savedUUIDsCopy)
         }
     }
 

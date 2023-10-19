@@ -12,9 +12,6 @@ protocol LegacyTabManagerStore {
     var hasTabsToRestoreAtStartup: Bool { get }
     var tabs: [LegacySavedTab] { get }
 
-    func preserveScreenshot(forTab tab: Tab?)
-    func removeScreenshot(forTab tab: Tab?)
-
     func preserveTabs(_ tabs: [Tab],
                       selectedTab: Tab?)
 
@@ -65,24 +62,6 @@ class LegacyTabManagerStoreImplementation: LegacyTabManagerStore, FeatureFlaggab
         self.logger = logger
         self.tabDataRetriever = LegacyTabDataRetrieverImplementation(fileManager: fileManager)
         tabDataRetriever.tabsStateArchivePath = tabsStateArchivePath()
-    }
-
-    // MARK: - Screenshots
-
-    func preserveScreenshot(forTab tab: Tab?) {
-        if let tab = tab, let screenshot = tab.screenshot, let uuidString = tab.screenshotUUID?.uuidString {
-            Task {
-                try? await imageStore?.saveImageForKey(uuidString, image: screenshot)
-            }
-        }
-    }
-
-    func removeScreenshot(forTab tab: Tab?) {
-        if let tab = tab, let screenshotUUID = tab.screenshotUUID {
-            Task {
-                await imageStore?.deleteImageForKey(screenshotUUID.uuidString)
-            }
-        }
     }
 
     // MARK: - Saving

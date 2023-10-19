@@ -61,7 +61,7 @@
         "DesktopModeTestsIphone\/testPrivateModeOnHasNoAffectOnNormalMode()",
         "DesktopModeTestsIphone\/testSameHostInMultipleTabs()",
         "DisplaySettingTests",
-        "DomainAutocompleteTest",
+        "DomainAutocompleteTests",
         "DownloadsTests\/testDeleteDownloadedFile()",
         "DownloadsTests\/testDownloadBLOBFile()",
         "DownloadsTests\/testDownloadFileContextMenu()",
