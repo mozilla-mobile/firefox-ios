@@ -104,8 +104,6 @@ public class CollapsibleCardView: ShadowCardView, UIGestureRecognizerDelegate {
     
     private lazy var headerView: UIView = .build { _ in }
     private lazy var containerView: UIView = .build { _ in }
-    private var containerHeightConstraint: NSLayoutConstraint?
-    private var containerBottomConstraint: NSLayoutConstraint?
     private var tapRecognizer: UITapGestureRecognizer!
 
     lazy var titleLabel: UILabel = .build { label in
