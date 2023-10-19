@@ -71,7 +71,7 @@ class FakespotViewController:
 
     private lazy var betaLabel: UILabel = .build { label in
         label.text = .Shopping.SheetHeaderBetaTitle
-        label.numberOfLines = 0
+        label.numberOfLines = 1
         label.adjustsFontForContentSizeCategory = true
         label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
                                                             size: UX.betaLabelFontSize)
