@@ -6,11 +6,13 @@ import Foundation
 import Common
 
 typealias EventQueueAction = (() -> Void)
+typealias EnqueuedActionToken = UUID
 
 let DefaultEventQueue = EventQueue<AppEvent>()
 
 final class EventQueue<QueueEventType: Hashable> {
     struct EnqueuedAction {
+        let token: EnqueuedActionToken
         let action: EventQueueAction
         let dependencies: [QueueEventType]
     }
@@ -48,13 +50,24 @@ final class EventQueue<QueueEventType: Hashable> {
     ///   - events: the dependent events.
     ///   - action: the action or work to perform. Currently by default these will
     ///   always be called on the main thread.
-    func wait(for events: [QueueEventType], then action: @escaping EventQueueAction) {
+    /// - Returns: a discardable token that can be used to later remove or cancel the
+    /// event (if needed).
+    ///
+    /// Notes: the token return value may not be immediately usable if this
+    /// function is called off of the main thread (since the actual action may not be
+    /// enqueued until the subsequent main thread run loop has a chance to execute). It
+    /// also will have no usefulness if all dependencies are already satisfied, in which
+    /// case the action will be immediately run before the function returns.
+    @discardableResult
+    func wait(for events: [QueueEventType], then action: @escaping EventQueueAction) -> EnqueuedActionToken {
+        let token = UUID()
         ensureMainThread { [weak self] in
             guard let self else { return }
-            let enqueued = EnqueuedAction(action: action, dependencies: Array(events))
+            let enqueued = EnqueuedAction(token: token, action: action, dependencies: events)
             self.actions.append(enqueued)
             self.processActions()
         }
+        return token
     }
 
     /// Qeues a particular action for a single dependency.
@@ -65,7 +78,21 @@ final class EventQueue<QueueEventType: Hashable> {
     /// Used to check whether a particular event has occurred.
     /// - Returns: true if the event has occurred.
     func hasSignalled(_ event: QueueEventType) -> Bool {
+        assert(Thread.isMainThread, "Expects to be called on the main thread.")
         return signalledEvents.contains(event)
+    }
+
+    /// Used to cancel an enqueued action using the token that was provided when the action was enqueued.
+    /// - Returns: true if the action was canceled.
+    ///
+    /// Note: if the token is invalid or the action has already been executed (or not yet enqueued) then
+    /// this function has no effect.
+    @discardableResult
+    func cancelAction(token: EnqueuedActionToken) -> Bool {
+        assert(Thread.isMainThread, "Expects to be called on the main thread.")
+        guard let idx = actions.firstIndex(where: { $0.token == token }) else { return false }
+        actions.remove(at: idx)
+        return true
     }
 
     // MARK: - Internal Utility
