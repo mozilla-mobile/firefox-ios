@@ -31,46 +31,36 @@ final class EventQueueTests: XCTestCase {
     }
 
     func testBasicSingleEventActionIsFired() {
-        let expectation = self.expectation(description: "Event queue test")
+        var actionRun = false
 
         XCTAssertFalse(queue.hasSignalled(.startingEvent))
-        queue.wait(for: .startingEvent) {
-            expectation.fulfill()
-        }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.queue.signal(event: .startingEvent)
-        }
+        queue.wait(for: .startingEvent) { actionRun = true }
+        self.queue.signal(event: .startingEvent)
 
-        waitForExpectations(timeout: 1)
+        XCTAssertTrue(actionRun)
     }
 
     func testBasicActionIsNeverFiredIfNoEvent() {
         XCTAssertFalse(queue.hasSignalled(.startingEvent))
         var actionRun = false
-        queue.wait(for: .startingEvent) {
-            actionRun = true
-        }
-        wait(2.0)
+        queue.wait(for: .startingEvent) { actionRun = true }
+        // Signal an event, but not the one our action is dependent on
+        queue.signal(event: .middleEvent)
         XCTAssertFalse(actionRun)
     }
 
     func testMultiEventActionIsFired() {
-        let expectation = self.expectation(description: "Event queue test")
+        var actionRun = false
 
-        queue.wait(for: [.startingEvent, .middleEvent]) {
-            expectation.fulfill()
-        }
+        queue.wait(for: [.startingEvent, .middleEvent]) { actionRun = true }
+        XCTAssertFalse(actionRun)
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-            self.queue.signal(event: .startingEvent)
+        self.queue.signal(event: .startingEvent)
+        XCTAssertFalse(actionRun)
 
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                self.queue.signal(event: .middleEvent)
-            }
-        }
-
-        waitForExpectations(timeout: 1)
+        self.queue.signal(event: .middleEvent)
+        XCTAssertTrue(actionRun)
     }
 
     func testMultiEventActionNotFiredIfOnlyOneEventOccurs() {
@@ -79,11 +69,7 @@ final class EventQueueTests: XCTestCase {
             actionRun = true
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-            self.queue.signal(event: .startingEvent)
-        }
-
-        wait(2.0)
+        self.queue.signal(event: .startingEvent)
 
         XCTAssertFalse(actionRun)
     }
@@ -101,7 +87,7 @@ final class EventQueueTests: XCTestCase {
         }
 
         queue.signal(event: .contextualEvent(1))
-        wait(2)
+
         XCTAssertTrue(action1Run)
         XCTAssertFalse(action2Run)
     }
