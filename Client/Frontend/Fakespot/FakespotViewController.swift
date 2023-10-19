@@ -229,24 +229,31 @@ class FakespotViewController:
     }
 
     private func adjustLayout() {
-        var headerViewWidth = headerView.frame.width
-        if headerViewWidth == 0 {
-            headerViewWidth = view.frame.width - UX.headerHorizontalSpacing * 2
-        }
+        guard let titleLabelText = titleLabel.text, let betaLabelText = betaLabel.text else { return }
 
-        let betaViewWidth = betaView.frame.width
-        let titleTextWidth = widthOfString(titleLabel.text!, usingFont: titleLabel.font)
-        let maxLabelWidth = headerViewWidth - betaViewWidth
+        var availableTitleStackWidth = headerView.frame.width
+        if availableTitleStackWidth == 0 {
+            // calculate the width if auto-layout doesn't have it yet
+            availableTitleStackWidth = view.frame.width - UX.headerHorizontalSpacing * 2
+        }
+        availableTitleStackWidth -= UX.closeButtonWidthHeight + UX.titleCloseSpacing // remove close button and spacing
+        let titleTextWidth = widthOfString(titleLabelText, usingFont: titleLabel.font)
+
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
+        let betaLabelWidth = widthOfString(betaLabelText, usingFont: betaLabel.font)
+        let betaViewWidth = betaLabelWidth + UX.betaHorizontalSpace * 2
+        let maxTitleWidth = availableTitleStackWidth - betaViewWidth - UX.titleStackSpacing
+
         betaView.layer.borderWidth = contentSizeCategory.isAccessibilityCategory ? UX.betaBorderWidthA11ySize : UX.betaBorderWidth
 
-        if contentSizeCategory.isAccessibilityCategory || titleTextWidth > maxLabelWidth {
+        if contentSizeCategory.isAccessibilityCategory || titleTextWidth > maxTitleWidth {
             titleStackView.axis = .vertical
             titleStackView.alignment = .leading
         } else {
             titleStackView.axis = .horizontal
             titleStackView.alignment = .center
         }
+
         titleStackView.setNeedsLayout()
         titleStackView.layoutIfNeeded()
     }
@@ -442,8 +449,12 @@ class FakespotViewController:
 
     // MARK: Helper methods
     private func widthOfString(_ string: String, usingFont font: UIFont) -> CGFloat {
-        let attributes: [NSAttributedString.Key: Any] = [.font: font]
-        return string.size(withAttributes: attributes).width
+        let label = UILabel(frame: CGRect.zero)
+        label.text = string
+        label.font = font
+        label.adjustsFontForContentSizeCategory = true
+        label.sizeToFit()
+        return label.frame.width
     }
 
     // MARK: - UISheetPresentationControllerDelegate
