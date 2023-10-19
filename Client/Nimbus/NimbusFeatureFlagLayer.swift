@@ -23,8 +23,7 @@ final class NimbusFeatureFlagLayer {
             return checkCredentialAutofillCoordinatorRefactorFeature(from: nimbus)
 
         case .jumpBackIn,
-                .historyHighlights,
-                .topSites:
+                .historyHighlights:
             return checkHomescreenSectionsFeature(for: featureID, from: nimbus)
 
         case .contextualHintForToolbar:
@@ -111,7 +110,6 @@ final class NimbusFeatureFlagLayer {
         var nimbusID: HomeScreenSection
 
         switch featureID {
-        case .topSites: nimbusID = HomeScreenSection.topSites
         case .jumpBackIn: nimbusID = HomeScreenSection.jumpBackIn
         case .historyHighlights: nimbusID = HomeScreenSection.recentExplorations
         default: return false
