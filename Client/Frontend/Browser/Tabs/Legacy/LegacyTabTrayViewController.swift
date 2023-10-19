@@ -17,6 +17,7 @@ enum TabTrayViewAction {
 protocol TabTrayViewDelegate: UIViewController {
     func didTogglePrivateMode(_ togglePrivateModeOn: Bool)
     func performToolbarAction(_ action: TabTrayViewAction, sender: UIBarButtonItem)
+    func performDoneButtonAction()
 }
 // swiftlint:enable class_delegate_protocol
 
@@ -572,9 +573,7 @@ extension LegacyTabTrayViewController {
     @objc
     func didTapDone() {
         notificationCenter.post(name: .TabsTrayDidClose)
-        // Update Private mode when closing TabTray, if the mode toggle but no tab is pressed with return to previous state
-        updatePrivateUIState()
-        viewModel.tabTrayView.didTogglePrivateMode(viewModel.tabManager.selectedTab?.isPrivate ?? false)
+        viewModel.tabTrayView.performDoneButtonAction()
         if viewModel.segmentToFocus == .privateTabs {
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,

@@ -679,6 +679,10 @@ extension LegacyGridTabViewController {
         controller.popoverPresentationController?.barButtonItem = sender
         present(controller, animated: true, completion: nil)
     }
+    
+    func performDoneButtonAction() {
+        self.tabDisplayManager.selectMostRecentTab()
+    }
 }
 
 // MARK: - DevicePickerViewControllerDelegate

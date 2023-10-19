@@ -298,12 +298,7 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
         }
 
         if shouldSelectMostRecentTab {
-            getTabsAndUpdateInactiveState { [weak self] tabsToDisplay in
-                let tab = mostRecentTab(inTabs: tabsToDisplay) ?? tabsToDisplay.last
-                if let tab = tab {
-                    self?.tabManager.selectTab(tab)
-                }
-            }
+            selectMostRecentTab()
         }
 
         refreshStore(evenIfHidden: false, shouldAnimate: true)
@@ -312,6 +307,15 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
         NotificationCenter.default.post(name: .TabsPrivacyModeChanged, object: notificationObject)
     }
 
+    func selectMostRecentTab() {
+        getTabsAndUpdateInactiveState { [weak self] tabsToDisplay in
+            let tab = mostRecentTab(inTabs: tabsToDisplay) ?? tabsToDisplay.last
+            if let tab = tab {
+                self?.tabManager.selectTab(tab)
+            }
+        }
+    }
+    
     /// Find the previously selected cell, which is still displayed as selected
     /// - Parameters:
     ///   - currentlySelected: The currently selected tab
