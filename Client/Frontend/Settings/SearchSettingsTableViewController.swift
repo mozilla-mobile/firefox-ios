@@ -4,7 +4,7 @@
 
 import UIKit
 import Shared
-
+import ComponentLibrary
 protocol SearchEnginePickerDelegate: AnyObject {
     func searchEnginePicker(_ searchEnginePicker: SearchEnginePicker?, didSelectSearchEngine engine: OpenSearchEngine?)
 }
@@ -104,8 +104,9 @@ class SearchSettingsTableViewController: ThemedTableViewController {
             case ItemDefaultSuggestions:
                 cell.textLabel?.text = .SearchSettingsShowSearchSuggestions
                 cell.textLabel?.numberOfLines = 0
-                let toggle = UISwitch()
-                toggle.onTintColor = themeManager.currentTheme.colors.actionPrimary
+                let toggle = ThemedSwitch()
+                toggle.applyTheme(theme: themeManager.currentTheme)
+                toggle.isEnabled = true
                 toggle.addTarget(self, action: #selector(didToggleSearchSuggestions), for: .valueChanged)
                 toggle.isOn = model.shouldShowSearchSuggestions
                 cell.editingAccessoryView = toggle
@@ -121,8 +122,9 @@ class SearchSettingsTableViewController: ThemedTableViewController {
                 engine = model.orderedEngines[index]
                 cell.showsReorderControl = true
 
-                let toggle = UISwitch()
-                toggle.onTintColor = themeManager.currentTheme.colors.actionPrimary
+                let toggle = ThemedSwitch()
+                toggle.applyTheme(theme: themeManager.currentTheme)
+                toggle.isEnabled = true
                 // This is an easy way to get from the toggle control to the corresponding index.
                 toggle.tag = index
                 toggle.addTarget(self, action: #selector(didToggleEngine), for: .valueChanged)
@@ -329,7 +331,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
 // MARK: - Selectors
 extension SearchSettingsTableViewController {
     @objc
-    func didToggleEngine(_ toggle: UISwitch) {
+    func didToggleEngine(_ toggle: ThemedSwitch) {
         let engine = model.orderedEngines[toggle.tag] // The tag is 1-based.
         if toggle.isOn {
             model.enableEngine(engine)
@@ -339,7 +341,7 @@ extension SearchSettingsTableViewController {
     }
 
     @objc
-    func didToggleSearchSuggestions(_ toggle: UISwitch) {
+    func didToggleSearchSuggestions(_ toggle: ThemedSwitch) {
         // Setting the value in settings dismisses any opt-in.
         model.shouldShowSearchSuggestions = toggle.isOn
     }
