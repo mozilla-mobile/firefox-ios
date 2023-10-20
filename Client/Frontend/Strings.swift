@@ -3780,12 +3780,12 @@ extension String {
             key: "Shopping.SettingsCard.Expanded.AccessibilityLabel.v120",
             tableName: "Shopping",
             value: "Expand Settings Card",
-            comment: "Accessibility label for the down chevron icon used to expand or show the details of the 'Settings Card' within the shopping review quality bottom sheet.")
+            comment: "Accessibility label for the down chevron icon used to expand or show the details of the Settings Card within the shopping product review bottom sheet.")
         public static let SettingsCardCollapsedAccessibilityLabel = MZLocalizedString(
             key: "Shopping.SettingsCard.Collapsed.AccessibilityLabel.v120",
             tableName: "Shopping",
             value: "Collapse Settings Card",
-            comment: "Accessibility label for the up chevron icon used to collapse or minimize the 'Settings Card' within the shopping review quality bottom sheet.")
+            comment: "Accessibility label for the up chevron icon used to collapse or minimize the Settings Card within the shopping product review bottom sheet.")
         public static let SettingsCardFooterAction = MZLocalizedString(
             key: "Shopping.SettingsCard.Footer.Action.v120",
             tableName: "Shopping",
