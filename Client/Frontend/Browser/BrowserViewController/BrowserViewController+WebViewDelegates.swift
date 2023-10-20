@@ -538,16 +538,31 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         if !(url.scheme?.contains("firefox") ?? true) {
-            showSnackbar(forExternalUrl: url, tab: tab) { isOk in
-                guard isOk else { return }
-                UIApplication.shared.open(url, options: [:]) { openedURL in
-                    // Do not show error message for JS navigated links or redirect as it's not the result of a user action.
-                    if !openedURL, navigationAction.navigationType == .linkActivated {
-                        let alert = UIAlertController(title: .UnableToOpenURLErrorTitle, message: .UnableToOpenURLError, preferredStyle: .alert)
-                        alert.addAction(UIAlertAction(title: .OKString, style: .default, handler: nil))
-                        self.present(alert, animated: true, completion: nil)
+            func cancelHandlerAndLoadInWebview() {
+                decisionHandler(.cancel)
+                webView.load(navigationAction.request)
+            }
+            let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+
+            if !isPrivate && UIApplication.shared.canOpenURL(url) {
+                showSnackbar(forExternalUrl: url, tab: tab) { isOk in
+                    if isOk {
+                        UIApplication.shared.open(url, options: [:]) { openedURL in
+                            // Do not show error message for JS navigated links or redirect as it's not the result of a user action.
+                            if !openedURL, navigationAction.navigationType == .linkActivated {
+                                let alert = UIAlertController(title: .UnableToOpenURLErrorTitle, message: .UnableToOpenURLError, preferredStyle: .alert)
+                                alert.addAction(UIAlertAction(title: .OKString, style: .default, handler: nil))
+                                self.present(alert, animated: true, completion: nil)
+                            }
+                        }
+                    } else {
+                        cancelHandlerAndLoadInWebview()
+                        return
                     }
                 }
+            } else {
+                cancelHandlerAndLoadInWebview()
+                return
             }
         }
 
