@@ -6,6 +6,7 @@ import Common
 import Foundation
 import Redux
 import Shared
+import ComponentLibrary
 
 class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     typealias SubscriberStateType = ThemeSettingsState
@@ -231,7 +232,8 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
             cell.textLabel?.numberOfLines = 0
             cell.textLabel?.lineBreakMode = .byWordWrapping
 
-            let control = UISwitch()
+            let control = ThemedSwitch()
+            control.applyTheme(theme: themeManager.currentTheme)
             control.accessibilityIdentifier = "SystemThemeSwitchValue"
             control.onTintColor = themeManager.currentTheme.colors.actionPrimary
             control.addTarget(self, action: #selector(systemThemeSwitchValueChanged), for: .valueChanged)
