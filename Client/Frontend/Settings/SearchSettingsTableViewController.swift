@@ -4,6 +4,7 @@
 
 import UIKit
 import Shared
+import ComponentLibrary
 
 protocol SearchEnginePickerDelegate: AnyObject {
     func searchEnginePicker(_ searchEnginePicker: SearchEnginePicker?, didSelectSearchEngine engine: OpenSearchEngine?)
@@ -104,7 +105,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
             case ItemDefaultSuggestions:
                 cell.textLabel?.text = .SearchSettingsShowSearchSuggestions
                 cell.textLabel?.numberOfLines = 0
-                let toggle = UISwitch()
+                let toggle = ThemedSwitch()
                 toggle.onTintColor = themeManager.currentTheme.colors.actionPrimary
                 toggle.addTarget(self, action: #selector(didToggleSearchSuggestions), for: .valueChanged)
                 toggle.isOn = model.shouldShowSearchSuggestions
@@ -121,7 +122,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
                 engine = model.orderedEngines[index]
                 cell.showsReorderControl = true
 
-                let toggle = UISwitch()
+                let toggle = ThemedSwitch()
                 toggle.onTintColor = themeManager.currentTheme.colors.actionPrimary
                 // This is an easy way to get from the toggle control to the corresponding index.
                 toggle.tag = index
