@@ -1,66 +1,59 @@
-disabled_rules: # rule identifiers to exclude from running
-# Auto-correctable rules
-- trailing_comma
-
-# Disabled all default rules
-- block_based_kvo
-- closure_parameter_position
-- custom_rules
-- cyclomatic_complexity
-- deployment_target
-- discouraged_direct_init
-- discarded_notification_center_observer
-- duplicate_enum_cases
-- duplicate_imports
-- duplicated_key_in_dictionary_literal
-- fallthrough
-- file_length
-- force_cast
-- function_body_length
-- function_parameter_count
-- generic_type_name
-- identifier_name
-- is_disjoint
-- legacy_random
-- line_length
-- missing_docs
-- multiple_closures_with_trailing_closure
-- nesting
-- no_fallthrough_only
-- notification_center_detachment
-- nsobject_prefer_isequal
-- private_unit_test
-- reduce_boolean
-- redundant_set_access_control
-- self_in_property_initialization
-- shorthand_operator
-- superfluous_disable_command
-- todo
-- type_name
-- type_body_length
-- unneeded_break_in_switch
-- unused_capture_list
-- unused_closure_parameter
-- unused_control_flow_label
-- unused_enumerated
-- valid_ibinspectable
-- weak_delegate
-- xctfail_message
-
-opt_in_rules: # some rules are only opt-in
-# These rules were originally opted into. Disabling for now to get
-# Swiftlint up and running.
-  # - statement_position
-  - file_header
-  # - deployment_target
-  # - discouraged_optional_collection
-  # - prohibited_interface_builder
-  # - prohibited_super_call
-  # - protocol_property_accessors_order
+only_rules: # Only enforce these rules, ignore all others
+  - blanket_disable_command
+  - class_delegate_protocol
+  - colon
+  - comma
+  - comment_spacing
+  - compiler_protocol_init
+  - computed_accessors_order
+  - control_statement
+  - duplicate_conditions
+  - dynamic_inline
+  - empty_enum_arguments
+  - empty_parameters
+  - empty_parentheses_with_trailing_closure
+  - for_where
+  - force_try
+  - implicit_getter
+  - inclusive_language
+  - invalid_swiftlint_command
+  - large_tuple
+  - leading_whitespace
+  - legacy_cggeometry_functions
+  - legacy_constant
+  - legacy_constructor
+  - legacy_hashing
+  - legacy_nsgeometry_functions
+  - mark
+  - no_space_in_method_call
+  - ns_number_init_as_function_reference
+  - operator_whitespace
+  - orphaned_doc_comment
+  - private_over_fileprivate
+  - protocol_property_accessors_order
+  - redundant_discardable_let
   - redundant_objc_attribute
+  - redundant_optional_initialization
+  - redundant_string_enum_value
+  - redundant_void_return
+  - return_arrow_whitespace
+  - statement_position
+  - switch_case_alignment
+  - syntactic_sugar
+  - trailing_newline
+  - trailing_semicolon
+  - trailing_whitespace
+  - unavailable_condition
+  - unneeded_override
+  - unneeded_synthesized_initializer
+  - unused_optional_binding
+  - unused_setter_value
+  - vertical_parameter_alignment
+  - vertical_whitespace
+  - void_function_in_ternary
+  - void_return
+  - file_header
   - redundant_type_annotation
-  # Find all the available rules by running:
-  # swiftlint rules
   - attributes
   - closing_brace
   - closure_end_indentation
@@ -82,11 +75,19 @@ opt_in_rules: # some rules are only opt-in
   - multiline_arguments
   - opening_brace
   - overridden_super_call
-  - return_arrow_whitespace
   - vertical_parameter_alignment_on_call
   - vertical_whitespace_closing_braces
   - vertical_whitespace_opening_braces
   - yoda_condition
+
+# These rules were originally opted into. Disabling for now to get
+# Swiftlint up and running.
+
+  # - deployment_target
+  # - discouraged_optional_collection
+  # - prohibited_interface_builder
+  # - prohibited_super_call
+  # - protocol_property_accessors_order
 
 file_header:
   required_string: |
