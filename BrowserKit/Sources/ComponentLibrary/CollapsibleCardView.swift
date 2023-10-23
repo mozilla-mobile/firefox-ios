@@ -16,13 +16,13 @@ public struct CollapsibleCardViewModel {
     public let titleA11yId: String
 
     public let expandButtonA11yId: String
-    public let expandButtonA11yLabelExpanded: String
-    public let expandButtonA11yLabelCollapsed: String
+    public let expandButtonA11yLabelExpand: String
+    public let expandButtonA11yLabelCollapse: String
 
     public var expandState: ExpandState = .collapsed
 
     public var expandButtonA11yLabel: String {
-        return expandState == .expanded ? expandButtonA11yLabelExpanded : expandButtonA11yLabelCollapsed
+        return expandState == .expanded ? expandButtonA11yLabelCollapse : expandButtonA11yLabelExpand
     }
 
     public var telemetryCallback: ((_ expandState: ExpandState) -> Void)?
@@ -34,8 +34,8 @@ public struct CollapsibleCardViewModel {
                 title: String,
                 titleA11yId: String,
                 expandButtonA11yId: String,
-                expandButtonA11yLabelExpanded: String,
-                expandButtonA11yLabelCollapsed: String,
+                expandButtonA11yLabelExpand: String,
+                expandButtonA11yLabelCollapse: String,
                 expandState: ExpandState = .collapsed,
                 telemetryCallback: ((_ expandState: ExpandState) -> Void)? = nil) {
         self.contentView = contentView
@@ -43,8 +43,8 @@ public struct CollapsibleCardViewModel {
         self.title = title
         self.titleA11yId = titleA11yId
         self.expandButtonA11yId = expandButtonA11yId
-        self.expandButtonA11yLabelExpanded = expandButtonA11yLabelExpanded
-        self.expandButtonA11yLabelCollapsed = expandButtonA11yLabelCollapsed
+        self.expandButtonA11yLabelExpand = expandButtonA11yLabelExpand
+        self.expandButtonA11yLabelCollapse = expandButtonA11yLabelCollapse
         self.expandState = expandState
         self.telemetryCallback = telemetryCallback
     }
@@ -88,8 +88,8 @@ public class CollapsibleCardView: ShadowCardView, UIGestureRecognizerDelegate {
         title: "",
         titleA11yId: "",
         expandButtonA11yId: "",
-        expandButtonA11yLabelExpanded: "",
-        expandButtonA11yLabelCollapsed: "",
+        expandButtonA11yLabelExpand: "",
+        expandButtonA11yLabelCollapse: "",
         expandState: .collapsed)
 
     // UI

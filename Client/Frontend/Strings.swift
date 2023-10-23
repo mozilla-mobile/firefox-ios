@@ -3776,12 +3776,12 @@ extension String {
             tableName: "Shopping",
             value: "Turn Off Review Checker",
             comment: "Label of the button from settings card displayed in the shopping review quality bottom sheet.")
-        public static let SettingsCardExpandedAccessibilityLabel = MZLocalizedString(
+        public static let SettingsCardExpandAccessibilityLabel = MZLocalizedString(
             key: "Shopping.SettingsCard.Expanded.AccessibilityLabel.v120",
             tableName: "Shopping",
             value: "Expand Settings Card",
             comment: "Accessibility label for the down chevron icon used to expand or show the details of the Settings Card within the shopping product review bottom sheet.")
-        public static let SettingsCardCollapsedAccessibilityLabel = MZLocalizedString(
+        public static let SettingsCardCollapseAccessibilityLabel = MZLocalizedString(
             key: "Shopping.SettingsCard.Collapsed.AccessibilityLabel.v120",
             tableName: "Shopping",
             value: "Collapse Settings Card",
@@ -3821,15 +3821,15 @@ extension String {
             tableName: "Shopping",
             value: "How we determine review quality",
             comment: "Title of the 'How we determine review quality' card displayed in the shopping review quality bottom sheet.")
-        public static let ReviewQualityCardExpandedAccessibilityLabel = MZLocalizedString(
+        public static let ReviewQualityCardExpandAccessibilityLabel = MZLocalizedString(
             key: "Shopping.ReviewQualityCard.Expanded.AccessibilityLabel.v120",
             tableName: "Shopping",
-            value: "Expand card How we determine review quality",
+            value: "Expand How we determine review quality card",
             comment: "Accessibility label for the down chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet.")
-        public static let ReviewQualityCardCollapsedAccessibilityLabel = MZLocalizedString(
+        public static let ReviewQualityCardCollapseAccessibilityLabel = MZLocalizedString(
             key: "Shopping.ReviewQualityCard.Collapsed.AccessibilityLabel.v120",
             tableName: "Shopping",
-            value: "Collapse card How we determine review quality",
+            value: "Collapse How we determine review quality Card",
             comment: "Accessibility label for the up chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet.")
         public static let ReviewQualityCardHeadlineLabel = MZLocalizedString(
             key: "Shopping.ReviewQualityCard.Headline.Label.v120",
