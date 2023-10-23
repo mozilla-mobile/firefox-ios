@@ -74,7 +74,7 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
         view.spacing = UX.highlightSpacing
     }
 
-    private lazy var moreButton: ActionButton = .build { button in
+    private lazy var moreButton: SecondaryRoundedButton = .build { button in
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
             withTextStyle: .body,
             size: UX.buttonFontSize,
