@@ -3822,12 +3822,12 @@ extension String {
             value: "How we determine review quality",
             comment: "Title of the 'How we determine review quality' card displayed in the shopping review quality bottom sheet.")
         public static let ReviewQualityCardExpandAccessibilityLabel = MZLocalizedString(
-            key: "Shopping.ReviewQualityCard.Expanded.AccessibilityLabel.v120",
+            key: "Shopping.ReviewQualityCard.Expand.AccessibilityLabel.v120",
             tableName: "Shopping",
             value: "Expand How we determine review quality card",
             comment: "Accessibility label for the down chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet.")
         public static let ReviewQualityCardCollapseAccessibilityLabel = MZLocalizedString(
-            key: "Shopping.ReviewQualityCard.Collapsed.AccessibilityLabel.v120",
+            key: "Shopping.ReviewQualityCard.Collapse.AccessibilityLabel.v120",
             tableName: "Shopping",
             value: "Collapse How we determine review quality Card",
             comment: "Accessibility label for the up chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet.")
