@@ -2,6 +2,23 @@ features:
   messaging:
     description: >
       The in-app messaging system
+    meta-bug: ~
+    documentation:
+      - name: User documentation
+        url:  https://experimenter.info/messaging/mobile-messaging
+    contacts:
+      # Nimbus team
+      - jhugman@mozilla.com
+      - brennie@mozilla.com
+      # iOS team
+      - gbuciu@mozilla.com
+      - wteichmann@mozilla.com
+    events:
+      - https://dictionary.telemetry.mozilla.org/apps/firefox_ios/metrics/messaging_shown
+      - https://dictionary.telemetry.mozilla.org/apps/firefox_ios/metrics/messaging_clicked
+      - https://dictionary.telemetry.mozilla.org/apps/firefox_ios/metrics/messaging_expired
+      - https://dictionary.telemetry.mozilla.org/apps/firefox_ios/metrics/messaging_dismissed
+      - https://dictionary.telemetry.mozilla.org/apps/firefox_ios/metrics/messaging_malformed
 
     # Allow the feature to be enrolled in more than one experiment at the same time.
     allow-coenrollment: true
