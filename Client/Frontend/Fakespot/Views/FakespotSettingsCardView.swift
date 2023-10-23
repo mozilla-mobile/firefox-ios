@@ -13,16 +13,16 @@ class FakespotSettingsCardViewModel {
     private let tabManager: TabManager
 
     let cardA11yId: String = a11yIds.card
-    let showProductsLabelTitle = String(format: .Shopping.SettingsCardRecommendedProductsLabel,
-                                        AppName.shortName.rawValue)
+    let showProductsLabelTitle = String.localizedStringWithFormat(.Shopping.SettingsCardRecommendedProductsLabel,
+                                                                  AppName.shortName.rawValue)
     let showProductsLabelTitleA11yId: String = a11yIds.productsLabel
     let turnOffButtonTitle: String = .Shopping.SettingsCardTurnOffButton
     let turnOffButtonTitleA11yId: String = a11yIds.turnOffButton
     let recommendedProductsSwitchA11yId: String = a11yIds.recommendedProductsSwitch
     let footerTitle: String = ""
-    let footerActionTitle = String(format: .Shopping.SettingsCardFooterAction,
-                                   FakespotName.shortName.rawValue,
-                                   MozillaName.shortName.rawValue)
+    let footerActionTitle = String.localizedStringWithFormat(.Shopping.SettingsCardFooterAction,
+                                                             FakespotName.shortName.rawValue,
+                                                             MozillaName.shortName.rawValue)
     let footerA11yTitleIdentifier: String = a11yIds.footerTitle
     let footerA11yActionIdentifier: String = a11yIds.footerAction
     let footerActionUrl = FakespotUtils.fakespotUrl

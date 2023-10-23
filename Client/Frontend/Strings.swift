@@ -3795,7 +3795,7 @@ extension String {
             key: "Shopping.NoAnalysisCard.HeadlineLabel.Title.v120",
             tableName: "Shopping",
             value: "No info about these reviews yet",
-            comment: "Text for the Headline Label, from No Analysis Card View displayed in the shopping review quality bottom sheet.")
+            comment: "Title for card displayed when a shopping product has not been analysed yet.")
         public static let NoAnalysisCardBodyLabelTitle = MZLocalizedString(
             key: "Shopping.NoAnalysisCard.BodyLabel.Title.v120",
             tableName: "Shopping",
@@ -3810,12 +3810,12 @@ extension String {
             key: "Shopping.NoAnalysisCard.InProgress.Headline.Title.v120",
             tableName: "Shopping",
             value: "Checking review quality",
-            comment: "Headline of the No Analysis Card when the analysis is in progress displayed in the shopping review quality bottom sheet.")
+            comment: "Title for the card displayed when a shopping product has not been analysed yet but the analysis is in progress.")
         public static let NoAnalysisCardInProgressBodyLabel = MZLocalizedString(
             key: "Shopping.NoAnalysisCard.InProgress.Body.Label.v120",
             tableName: "Shopping",
             value: "This could take about 60 seconds.",
-            comment: "Description of the No Analysis Card when the analysis is in progress displayed in the shopping review quality bottom sheet.")
+            comment: "Description for the card displayed when a shopping product has not been analysed yet but the analysis is in progress.")
         public static let ReviewQualityCardLabelTitle = MZLocalizedString(
             key: "Shopping.ReviewQualityCard.Label.Title.v120",
             tableName: "Shopping",
@@ -3875,17 +3875,22 @@ extension String {
             key: "Shopping.ReliabilityScore.Grade.A11y.Label.v120",
             tableName: "Shopping",
             value: "Grade %@",
-            comment: "Accessibility label for the Grade labels used in 'How we determine review quality' card and 'How reliable are these reviews' card displayed in the shopping review quality bottom sheet. The placeholder will be replaced by a grade letter (e.g. A).")
+            comment: "Accessibility label for the Grade labels used in 'How we determine review quality' card and 'How reliable are these reviews' card displayed in the shopping review quality bottom sheet. The placeholder will be replaced by a grade letter (e.g. A). The grading system contains letters from A-F.")
         public static let OptInCardHeaderTitle = MZLocalizedString(
             key: "Shopping.OptInCard.HeaderLabel.Title.v120",
             tableName: "Shopping",
             value: "Try our trusted guide to product reviews",
             comment: "Label for the header of the Shopping Experience Opt In onboarding Card (Fakespot)")
-        public static let OptInCardCopy = MZLocalizedString(
-            key: "Shopping.OptInCard.FirstParagraph.Title.v120",
+        public static let OptInCardFirstParagraph = MZLocalizedString(
+            key: "Shopping.OptInCard.FirstParagraph.Description.v120",
             tableName: "Shopping",
-            value: "See how reliable product reviews are on %1$@ before you buy. Review checker, an experimental feature from %2$@, is built right into the browser. It works on %3$@ and  %4$@, too.\n\nUsing the power of %5$@ by %6$@, we help you avoid biased and inauthentic reviews. Our AI model is always improving to protect you as you shop.",
-            comment: "Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. The third and fourth parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. The fifth and sixth parameter are the Fakespot app name and the company name of Mozilla.")
+            value: "See how reliable product reviews are on %1$@ before you buy. Review checker, an experimental feature from %2$@, is built right into the browser. It works on %3$@ and  %4$@, too.",
+            comment: "Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. The third and fourth parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter.")
+        public static let OptInCardSecondParagraph = MZLocalizedString(
+            key: "Shopping.OptInCard.SecondParagraph.Description.v120",
+            tableName: "Shopping",
+            value: "Using the power of %1$@ by %2$@, we help you avoid biased and inauthentic reviews. Our AI model is always improving to protect you as you shop.",
+            comment: "Label for the second paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be replaced by the Fakespot app name. The second parameter will be replaced the company name of Mozilla.")
         public static let OptInCardLearnMoreButtonTitle = MZLocalizedString(
             key: "Shopping.OptInCard.LearnMoreButtonTitle.Title.v120",
             tableName: "Shopping",
