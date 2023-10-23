@@ -36,12 +36,15 @@ workflows:
             echo "-- build-for-testing --"
             mkdir DerivedData
             xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
-            xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 15,OS=17.0" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
+            xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 15,OS=17.0.1" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
+
+            ls /Users/vagrant/git/DerivedData/Build/Products
+            ls /Users/vagrant/git/DerivedData
     - xcode-test-without-building@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         timeout: 600
         inputs:
-        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0
+        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0.1
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"
             "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_UnitTest_iphonesimulator17.0-arm64.xctestrun"
@@ -177,7 +180,7 @@ workflows:
         timeout: 1200
         title: UI Smoketest2
         inputs:
-        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0
+        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0.1
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"
             "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
             "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
@@ -222,7 +225,7 @@ workflows:
         timeout: 1200
         title: UI Smoketest
         inputs:
-        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0
+        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0.1
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"
             "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
             "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
@@ -267,7 +270,7 @@ workflows:
         timeout: 1200
         title: UI Smoketest3
         inputs:
-        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0
+        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0.1
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"
             "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
             "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
@@ -312,7 +315,7 @@ workflows:
         timeout: 1200
         title: UI Smoketest4
         inputs:
-        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0
+        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0.1
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"
             "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
             "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
@@ -738,7 +741,7 @@ workflows:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
         - scheme: Fennec
-        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0
+        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0.1
     - deploy-to-bitrise-io@2.2: {}
     - cache-push@2.4: {}
     - slack@3.1:
@@ -776,28 +779,28 @@ workflows:
         inputs:
         - scheme: Fennec
         - test_plan: "SmokeXCUITests"
-        - destination: platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation),OS=17.0
+        - destination: platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation),OS=17.0.1
         description: This Workflow is to run SmokeTest on iPad simulator device
     - xcode-test@4.5:
         is_always_run: true
         inputs:
         - scheme: Fennec
         - test_plan: "Smoketest2"
-        - destination: platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation),OS=17.0
+        - destination: platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation),OS=17.0.1
         description: This Workflow is to run SmokeTest on iPad simulator device Smoketest2
     - xcode-test@4.5:
         is_always_run: true
         inputs:
         - scheme: Fennec
         - test_plan: "Smoketest3"
-        - destination: platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation),OS=17.0
+        - destination: platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation),OS=17.0.1
         description: This Workflow is to run SmokeTest on iPad simulator device Smoketest3
     - xcode-test@4.5:
         is_always_run: true
         inputs:
         - scheme: Fennec
         - test_plan: "Smoketest4"
-        - destination: platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation),OS=17.0
+        - destination: platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation),OS=17.0.1
         description: This Workflow is to run SmokeTest on iPad simulator device Smoketest4
     meta:
       bitrise.io:
@@ -1321,7 +1324,7 @@ workflows:
     - xcode-test@4.5:
         inputs:
         - scheme: Fennec
-        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0
+        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0.1
         - test_plan: PerformanceTestPlan   
     - script@1.1:
         is_always_run: true

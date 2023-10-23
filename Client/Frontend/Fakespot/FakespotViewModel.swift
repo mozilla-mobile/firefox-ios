@@ -339,7 +339,6 @@ class FakespotViewModel {
         observeProductTask?.cancel()
     }
 
-    @available(iOS 15.0, *)
     func getCurrentDetent(for presentedController: UIPresentationController?) -> UISheetPresentationController.Detent.Identifier? {
         guard let sheetController = presentedController as? UISheetPresentationController else { return nil }
         return sheetController.selectedDetentIdentifier
@@ -375,7 +374,6 @@ class FakespotViewModel {
         }
     }
 
-    @available(iOS 15.0, *)
     func recordBottomSheetDisplayed(_ presentedController: UIPresentationController?) {
         let currentDetent = getCurrentDetent(for: presentedController)
         let state: TelemetryWrapper.EventExtraKey.Shopping = currentDetent == .large ? .fullView : .halfView

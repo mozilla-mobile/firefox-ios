@@ -61,6 +61,7 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
                                                             size: UX.titleFontSize,
                                                             weight: .semibold)
         label.numberOfLines = 0
+        label.accessibilityTraits.insert(.header)
     }
 
     private lazy var contentStackView: UIStackView = .build { view in
