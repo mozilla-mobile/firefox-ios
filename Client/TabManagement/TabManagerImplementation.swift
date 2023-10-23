@@ -224,12 +224,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         // Only preserve tabs after the restore has finished
         guard tabRestoreHasFinished else { return }
 
-        // For now we want to continue writing to both data stores so that we can revert to the old system if needed
-        super.preserveTabs()
-        guard shouldUseNewTabStore() else { return }
-
         logger.log("Preserve tabs started", level: .debug, category: .tabs)
-
         preserveTabs(forced: false)
     }
 
@@ -287,12 +282,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
     /// storeChanges is called when a web view has finished loading a page
     override func storeChanges() {
-        guard shouldUseNewTabStore()
-        else {
-            super.storeChanges()
-            return
-        }
-
         saveTabs(toProfile: profile, normalTabs)
         preserveTabs()
         saveCurrentTabSessionData()
@@ -392,7 +381,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         }
     }
 
-    func cleanUpUnusedScreenshots() {
+    private func cleanUpUnusedScreenshots() {
         // Clean up any screenshots that are no longer associated with a tab.
         var savedUUIDs = Set<String>()
         tabs.forEach { savedUUIDs.insert($0.screenshotUUID?.uuidString ?? "") }
