@@ -3777,12 +3777,12 @@ extension String {
             value: "Turn Off Review Checker",
             comment: "Label of the button from settings card displayed in the shopping review quality bottom sheet.")
         public static let SettingsCardExpandAccessibilityLabel = MZLocalizedString(
-            key: "Shopping.SettingsCard.Expanded.AccessibilityLabel.v120",
+            key: "Shopping.SettingsCard.Expand.AccessibilityLabel.v120",
             tableName: "Shopping",
             value: "Expand Settings Card",
             comment: "Accessibility label for the down chevron icon used to expand or show the details of the Settings Card within the shopping product review bottom sheet.")
         public static let SettingsCardCollapseAccessibilityLabel = MZLocalizedString(
-            key: "Shopping.SettingsCard.Collapsed.AccessibilityLabel.v120",
+            key: "Shopping.SettingsCard.Collapse.AccessibilityLabel.v120",
             tableName: "Shopping",
             value: "Collapse Settings Card",
             comment: "Accessibility label for the up chevron icon used to collapse or minimize the Settings Card within the shopping product review bottom sheet.")
