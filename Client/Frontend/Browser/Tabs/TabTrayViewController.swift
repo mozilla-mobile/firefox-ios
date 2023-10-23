@@ -40,13 +40,13 @@ class TabTrayViewController: UIViewController,
     var didSelectUrl: ((URL, Storage.VisitType) -> Void)?
 
     // MARK: - Redux state
-    var selectedSegment: TabTrayPanelType = .tabs
+    var selectedPanel: TabTrayPanelType?
     lazy var layout: LegacyTabTrayViewModel.Layout = {
         return shouldUseiPadSetup() ? .regular : .compact
     }()
 
     var isSyncTabsPanel: Bool {
-        return selectedSegment == .syncedTabs
+        return selectedPanel == .syncedTabs
     }
 
     var hasSyncableAccount: Bool {
@@ -172,11 +172,11 @@ class TabTrayViewController: UIViewController,
         }
     }
 
-    init(selectedSegment: TabTrayPanelType,
+    init(/*selectedPanel: TabTrayPanelType,*/
          delegate: TabTrayViewControllerDelegate,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          and notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.selectedSegment = selectedSegment
+//        self.selectedPanel = selectedPanel
         self.delegate = delegate
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
@@ -251,17 +251,15 @@ class TabTrayViewController: UIViewController,
     // MARK: Private
     private func setupView() {
         // Should use Regular layout used for iPad
-        if isRegularLayout {
-            setupForiPad()
-        } else {
+        guard isRegularLayout else {
             setupForiPhone()
+            return
         }
-
-        showPanel(getChildViewController())
+        setupForiPad()
     }
 
-    private func getChildViewController() -> UIViewController {
-        switch selectedSegment {
+    private func getChildViewController(panelType: TabTrayPanelType) -> UIViewController {
+        switch panelType {
         case .tabs:
             return TabDisplayViewController(isPrivateMode: false)
         case .privateTabs:
@@ -294,7 +292,9 @@ class TabTrayViewController: UIViewController,
     }
 
     private func updateTitle() {
-        navigationItem.title = selectedSegment.navTitle
+        guard let panel = selectedPanel else { return }
+
+        navigationItem.title = panel.navTitle
     }
 
     private func setupForiPad() {
@@ -315,7 +315,7 @@ class TabTrayViewController: UIViewController,
     }
 
     private func updateToolbarItems() {
-        // if iPad
+        // iPad configuration
         guard !isRegularLayout else {
             setupToolbarForIpad()
             return
@@ -368,7 +368,11 @@ class TabTrayViewController: UIViewController,
 
     // MARK: Child panels
     func setupOpenPanel(panelType: TabTrayPanelType) {
-        
+        guard selectedPanel != panelType else { return }
+
+        selectedPanel = panelType
+        hideCurrentPanel()
+        showPanel(getChildViewController(panelType: panelType))
     }
 
     private func showPanel(_ panel: UIViewController) {
@@ -401,13 +405,15 @@ class TabTrayViewController: UIViewController,
     }
 
     private func segmentPanelChange() {
+        guard let panelType = selectedPanel else { return }
+
         hideCurrentPanel()
-        showPanel(getChildViewController())
+        showPanel(getChildViewController(panelType: panelType))
     }
 
     @objc
     private func segmentChanged() {
-        selectedSegment = TabTrayPanelType(rawValue: segmentedControl.selectedSegmentIndex) ?? .tabs
+        selectedPanel = TabTrayPanelType(rawValue: segmentedControl.selectedSegmentIndex)
         updateTitle()
         updateLayout()
         segmentPanelChange()

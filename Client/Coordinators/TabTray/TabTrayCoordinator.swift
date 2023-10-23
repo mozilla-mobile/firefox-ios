@@ -22,8 +22,7 @@ class TabTrayCoordinator: BaseCoordinator, TabTrayViewControllerDelegate, TabTra
     }
 
     private func initializeTabTrayViewController() {
-        tabTrayViewController = TabTrayViewController(selectedSegment: .tabs,
-                                                      delegate: self)
+        tabTrayViewController = TabTrayViewController(delegate: self)
         router.setRootViewController(tabTrayViewController)
         tabTrayViewController.childPanelControllers = makeChildPanels()
         tabTrayViewController.delegate = self
@@ -46,6 +45,7 @@ class TabTrayCoordinator: BaseCoordinator, TabTrayViewControllerDelegate, TabTra
     }
 
     func start(panelType: TabTrayPanelType, navigationController: UINavigationController) {
+        tabTrayViewController.setupOpenPanel(panelType: panelType)
     }
 
     func didDismissTabTray() {
