@@ -31,6 +31,12 @@
 /* When a user is in the process of making a purchase, and has at least one saved card, we show this label inside the keyboard hint. This indicates to the user that there are stored cards available for use on this pending purchase. */
 "CreditCards.Settings.UseSavedCardFromKeyboard.v112" = "Bruk lagret kort";
 
+/* Settings section title for the old Firefox account */
+"FxA.FirefoxAccount.v119" = "Konto";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title.v119" = "Konto";
+
 /* This is the description for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
 "Settings.Notifications.SyncNotificationsStatus.v112" = "Dette må være slått på for å motta faner og bli varslet når du logger inn på en annen enhet.";
 

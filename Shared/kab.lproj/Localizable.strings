@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Inekcamen ittwaskelsen ad ttwaseknen da. Ma yella teskelseḍ inekcam-inek·inem Firefox deg ibenk-nniḍen, qqen ɣer umiḍan Firefox.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "Inekcamen ittwaskelsen ad ttwaseknen da. Ma yella teskelseḍ inekcam-ik·im ɣer %@ deg ibenk niḍen, qqen ɣer umiḍan-ik.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Ulac inek am yettwafen";
 

@@ -122,7 +122,7 @@
 "Bookmarks.Title.Label" = "Cím";
 
 /* Describes the date on which the breach occurred */
-"BreachAlerts.BreachDate" = "Az adatsértés ekkor történt:";
+"BreachAlerts.BreachDate" = "Az adatvédelmi incidens ekkor történt:";
 
 /* Description of what a breach is */
 "BreachAlerts.Description" = "A jelszavak kiszivárogtak, vagy ellopták őket a a legutóbbi megváltoztatása óta. A fiókja megvédéséhez jelentkezzen be a webhelyre, és változtassa meg a jelszavát.";
@@ -134,7 +134,7 @@
 "BreachAlerts.Link" = "Ugrás:";
 
 /* Title for the Breached Login Detail View. */
-"BreachAlerts.Title" = "Weboldalon történt adatsértés";
+"BreachAlerts.Title" = "Weboldalon történt adatvédelmi incidens";
 
 /* Accessibility label for brightness adjustment slider in Reader Mode display settings */
 "Brightness" = "Fényerő";
