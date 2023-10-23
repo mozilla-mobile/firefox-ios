@@ -60,11 +60,9 @@ class AppDataUsageReportSetting: HiddenSetting {
                         // This allows us to basically tally up the total sizes for parent
                         // directories along with nested child directories (if needed) all at
                         // the same time.
-                        for dir in directoriesAndSizes.keys {
-                            if path.hasPrefix(dir) {
-                                let newSize = (directoriesAndSizes[dir] ?? 0) + size
-                                directoriesAndSizes[dir] = newSize
-                            }
+                        for dir in directoriesAndSizes.keys where path.hasPrefix(dir) {
+                            let newSize = (directoriesAndSizes[dir] ?? 0) + size
+                            directoriesAndSizes[dir] = newSize
                         }
                         // For internal debugging purposes
                         // print("File \(path) size = \((values.fileSize ?? 0) / 1024) kb")
