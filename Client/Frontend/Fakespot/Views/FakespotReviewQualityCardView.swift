@@ -294,8 +294,8 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
             title: .Shopping.ReviewQualityCardLabelTitle,
             titleA11yId: AccessibilityIdentifiers.Shopping.ReviewQualityCard.title,
             expandButtonA11yId: AccessibilityIdentifiers.Shopping.ReviewQualityCard.expandButton,
-            expandButtonA11yLabelExpanded: .Shopping.ReviewQualityCardExpandedAccessibilityLabel,
-            expandButtonA11yLabelCollapsed: .Shopping.ReviewQualityCardCollapsedAccessibilityLabel)
+            expandButtonA11yLabelExpand: .Shopping.ReviewQualityCardExpandAccessibilityLabel,
+            expandButtonA11yLabelCollapse: .Shopping.ReviewQualityCardCollapseAccessibilityLabel)
         collapsibleContainer.configure(viewModel)
     }
 

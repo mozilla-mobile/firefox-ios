@@ -187,8 +187,8 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
             title: .Shopping.SettingsCardLabelTitle,
             titleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.title,
             expandButtonA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.expandButton,
-            expandButtonA11yLabelExpanded: .Shopping.SettingsCardExpandedAccessibilityLabel,
-            expandButtonA11yLabelCollapsed: .Shopping.SettingsCardCollapsedAccessibilityLabel) { state in
+            expandButtonA11yLabelExpand: .Shopping.SettingsCardExpandAccessibilityLabel,
+            expandButtonA11yLabelCollapse: .Shopping.SettingsCardCollapseAccessibilityLabel) { state in
                 if state == .expanded {
                     TelemetryWrapper.recordEvent(category: .action,
                                                  method: .view,

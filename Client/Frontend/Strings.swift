@@ -3760,7 +3760,7 @@ extension String {
             key: "Shopping.HighlightsCard.Packaging.Title.v120",
             tableName: "Shopping",
             value: "Packaging",
-            comment: "Section title of the review highlights displayed in the shopping review quality bottom sheet.")
+            comment: "Section title of the review highlights displayed in the shopping review quality bottom sheet, specifically focusing on the quality, design, and condition of the product's packaging. This may include details about the box, protective materials, presentation, and overall packaging experience.")
         public static let SettingsCardLabelTitle = MZLocalizedString(
             key: "Shopping.SettingsCard.Label.Title.v120",
             tableName: "Shopping",
@@ -3772,20 +3772,20 @@ extension String {
             value: "Show products recommended by %@",
             comment: "Label of the switch from settings card displayed in the shopping review quality bottom sheet. The placeholder will be replaced with the app name.")
         public static let SettingsCardTurnOffButton = MZLocalizedString(
-            key: "Shopping.SettingsCard.TurnOff.Button.v120",
+            key: "Shopping.SettingsCard.TurnOffButton.Title.v120",
             tableName: "Shopping",
             value: "Turn Off Review Checker",
             comment: "Label of the button from settings card displayed in the shopping review quality bottom sheet.")
-        public static let SettingsCardExpandedAccessibilityLabel = MZLocalizedString(
-            key: "Shopping.SettingsCard.Expanded.AccessibilityLabel.v120",
+        public static let SettingsCardExpandAccessibilityLabel = MZLocalizedString(
+            key: "Shopping.SettingsCard.Expand.AccessibilityLabel.v120",
             tableName: "Shopping",
-            value: "Settings Card Expanded",
-            comment: "Accessibility label for the down chevron, from Settings Card View displayed in the shopping review quality bottom sheet.")
-        public static let SettingsCardCollapsedAccessibilityLabel = MZLocalizedString(
-            key: "Shopping.SettingsCard.Collapsed.AccessibilityLabel.v120",
+            value: "Expand Settings Card",
+            comment: "Accessibility label for the down chevron icon used to expand or show the details of the Settings Card within the shopping product review bottom sheet.")
+        public static let SettingsCardCollapseAccessibilityLabel = MZLocalizedString(
+            key: "Shopping.SettingsCard.Collapse.AccessibilityLabel.v120",
             tableName: "Shopping",
-            value: "Settings Card Collapsed",
-            comment: "Accessibility label for the up chevron, from Settings Card View displayed in the shopping review quality bottom sheet.")
+            value: "Collapse Settings Card",
+            comment: "Accessibility label for the up chevron icon used to collapse or minimize the Settings Card within the shopping product review bottom sheet.")
         public static let SettingsCardFooterAction = MZLocalizedString(
             key: "Shopping.SettingsCard.Footer.Action.v120",
             tableName: "Shopping",
@@ -3800,12 +3800,12 @@ extension String {
             key: "Shopping.NoAnalysisCard.BodyLabel.Title.v120",
             tableName: "Shopping",
             value: "To know whether this product’s reviews are reliable, check the review quality. It only takes about 60 seconds.",
-            comment: "Text for the body label, from No Analysis Card View displayed in the shopping review quality bottom sheet.")
+            comment: "Text for the body label, to check the reliability of a product.")
         public static let NoAnalysisCardAnalyzerButtonTitle = MZLocalizedString(
             key: "Shopping.NoAnalysisCard.AnalyzerButton.Title.v120",
             tableName: "Shopping",
             value: "Check Review Quality",
-            comment: "Text for the analyzer button, from No Analysis Card View displayed in the shopping review quality bottom sheet.")
+            comment: "Text for the analyzer button displayed when an analysis can be updated for a product.")
         public static let NoAnalysisCardInProgressTitle = MZLocalizedString(
             key: "Shopping.NoAnalysisCard.InProgress.Headline.Title.v120",
             tableName: "Shopping",
@@ -3821,15 +3821,15 @@ extension String {
             tableName: "Shopping",
             value: "How we determine review quality",
             comment: "Title of the 'How we determine review quality' card displayed in the shopping review quality bottom sheet.")
-        public static let ReviewQualityCardExpandedAccessibilityLabel = MZLocalizedString(
-            key: "Shopping.ReviewQualityCard.Expanded.AccessibilityLabel.v120",
+        public static let ReviewQualityCardExpandAccessibilityLabel = MZLocalizedString(
+            key: "Shopping.ReviewQualityCard.Expand.AccessibilityLabel.v120",
             tableName: "Shopping",
-            value: "How we determine review quality Card Expanded",
+            value: "Expand How we determine review quality card",
             comment: "Accessibility label for the down chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet.")
-        public static let ReviewQualityCardCollapsedAccessibilityLabel = MZLocalizedString(
-            key: "Shopping.ReviewQualityCard.Collapsed.AccessibilityLabel.v120",
+        public static let ReviewQualityCardCollapseAccessibilityLabel = MZLocalizedString(
+            key: "Shopping.ReviewQualityCard.Collapse.AccessibilityLabel.v120",
             tableName: "Shopping",
-            value: "How we determine review quality Card Collapsed",
+            value: "Collapse How we determine review quality Card",
             comment: "Accessibility label for the up chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet.")
         public static let ReviewQualityCardHeadlineLabel = MZLocalizedString(
             key: "Shopping.ReviewQualityCard.Headline.Label.v120",
