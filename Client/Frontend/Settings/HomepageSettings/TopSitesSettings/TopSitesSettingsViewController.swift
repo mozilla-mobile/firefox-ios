@@ -27,8 +27,13 @@ class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlagga
     // MARK: - Methods
     override func generateSettings() -> [SettingSection] {
         var sections = [Setting]()
-        let topSitesSetting = BoolSetting(with: .topSites,
-                                          titleText: NSAttributedString(string: .Settings.Homepage.Shortcuts.ShortcutsToggle))
+        let topSitesSetting = BoolSetting(
+            prefs: profile.prefs,
+            theme: themeManager.currentTheme,
+            prefKey: PrefsKeys.UserFeatureFlagPrefs.TopSiteSection,
+            defaultValue: true,
+            titleText: .Settings.Homepage.Shortcuts.ShortcutsToggle
+        )
         sections.append(topSitesSetting)
 
         let sponsoredShortcutSetting = BoolSetting(

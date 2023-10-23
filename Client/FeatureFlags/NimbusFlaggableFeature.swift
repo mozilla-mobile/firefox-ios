@@ -31,7 +31,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case shareSheetChanges
     case shareToolbarChanges
     case tabTrayRefactor
-    case topSites
     case wallpapers
     case wallpaperOnboardingSheet
     case wallpaperVersion
@@ -66,8 +65,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.InactiveTabs
         case .jumpBackIn:
             return FlagKeys.JumpBackInSection
-        case .topSites:
-            return FlagKeys.TopSiteSection
         case .wallpapers:
             return FlagKeys.CustomWallpaper
 

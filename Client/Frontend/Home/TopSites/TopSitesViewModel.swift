@@ -144,7 +144,7 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     var isEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.topSites, checking: .buildAndUser)
+        return profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.TopSiteSection) ?? true
     }
 
     func numberOfItemsInSection() -> Int {
