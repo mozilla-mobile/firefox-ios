@@ -1025,12 +1025,12 @@ extension String {
                 key: "Onboarding.Welcome.Title.TreatementA.v120",
                 tableName: "Onboarding",
                 value: "We love keeping you safe",
-                comment: "String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name.")
+                comment: "String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens.")
             public static let DescriptionTreatementA = MZLocalizedString(
                 key: "Onboarding.Welcome.Description.TreatementA.v120",
                 tableName: "Onboarding",
                 value: "Our non-profit backed browser helps stop companies from secretly following you around the web.",
-                comment: "String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name.")
+                comment: "String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens.")
             public static let GetStartedAction = MZLocalizedString(
                 key: "Onboarding.Welcome.Action.v114",
                 tableName: "Onboarding",
