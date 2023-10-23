@@ -48,7 +48,6 @@ class IntegrationTests: BaseTestCase {
             return true
         }
         app.swipeDown()
-        sleep(5)
     }
 
     private func signInFxAccounts() {
@@ -99,7 +98,7 @@ class IntegrationTests: BaseTestCase {
         navigator.performAction(Action.OpenEmailToSignIn)
 
         mozWaitForElementToExist(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: TIMEOUT_LONG)
-        mozWaitForElementToExist(app.webViews.staticTexts["Continue to your Mozilla account"], timeout: TIMEOUT_LONG)
+        mozWaitForElementToExist(app.webViews.staticTexts["Continue to Firefox accounts"], timeout: TIMEOUT_LONG)
         mozWaitForElementToExist(app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField])
         mozWaitForElementToExist(app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton])
     }
