@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Lagrede innlogginger vises her. Hvis du lagret innloggingene dine i Firefox på en annen enhet, logger du inn på Firefox-kontoen din.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "Lagrede innlogginger vises her. Hvis du lagret innloggingene dine i %@ på en annen enhet, logger du inn på kontoen din.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Fant ingen innlogginger";
 
