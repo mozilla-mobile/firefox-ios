@@ -6,6 +6,7 @@ import Account
 import Common
 import Foundation
 import Shared
+import ComponentLibrary
 
 class ChinaSyncServiceSetting: Setting {
     private weak var settingsDelegate: SharedSettingsDelegate?
@@ -37,7 +38,8 @@ class ChinaSyncServiceSetting: Setting {
 
     override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
         super.onConfigureCell(cell, theme: theme)
-        let control = UISwitch()
+        let control = ThemedSwitch()
+        control.applyTheme(theme: theme)
         control.onTintColor = theme.colors.actionPrimary
         control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.isOn = prefs.boolForKey(prefKey) ?? AppInfo.isChinaEdition
