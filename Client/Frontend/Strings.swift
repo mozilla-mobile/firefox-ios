@@ -3795,7 +3795,7 @@ extension String {
             key: "Shopping.NoAnalysisCard.HeadlineLabel.Title.v120",
             tableName: "Shopping",
             value: "No info about these reviews yet",
-            comment: "Text for the Headline Label, from No Analysis Card View displayed in the shopping review quality bottom sheet.")
+            comment: "Title for card displayed when a shopping product has not been analysed yet.")
         public static let NoAnalysisCardBodyLabelTitle = MZLocalizedString(
             key: "Shopping.NoAnalysisCard.BodyLabel.Title.v120",
             tableName: "Shopping",
@@ -3810,12 +3810,12 @@ extension String {
             key: "Shopping.NoAnalysisCard.InProgress.Headline.Title.v120",
             tableName: "Shopping",
             value: "Checking review quality",
-            comment: "Headline of the No Analysis Card when the analysis is in progress displayed in the shopping review quality bottom sheet.")
+            comment: "Title for the card displayed when a shopping product has not been analysed yet but the analysis is in progress.")
         public static let NoAnalysisCardInProgressBodyLabel = MZLocalizedString(
             key: "Shopping.NoAnalysisCard.InProgress.Body.Label.v120",
             tableName: "Shopping",
             value: "This could take about 60 seconds.",
-            comment: "Description of the No Analysis Card when the analysis is in progress displayed in the shopping review quality bottom sheet.")
+            comment: "Description for the card displayed when a shopping product has not been analysed yet but the analysis is in progress.")
         public static let ReviewQualityCardLabelTitle = MZLocalizedString(
             key: "Shopping.ReviewQualityCard.Label.Title.v120",
             tableName: "Shopping",
@@ -3875,7 +3875,7 @@ extension String {
             key: "Shopping.ReliabilityScore.Grade.A11y.Label.v120",
             tableName: "Shopping",
             value: "Grade %@",
-            comment: "Accessibility label for the Grade labels used in 'How we determine review quality' card and 'How reliable are these reviews' card displayed in the shopping review quality bottom sheet. The placeholder will be replaced by a grade letter (e.g. A).")
+            comment: "Accessibility label for the Grade labels used in 'How we determine review quality' card and 'How reliable are these reviews' card displayed in the shopping review quality bottom sheet. The placeholder will be replaced by a grade letter (e.g. A). The grading system contains letters from A-F.")
         public static let OptInCardHeaderTitle = MZLocalizedString(
             key: "Shopping.OptInCard.HeaderLabel.Title.v120",
             tableName: "Shopping",
