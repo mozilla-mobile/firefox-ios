@@ -48,6 +48,7 @@ class IntegrationTests: BaseTestCase {
             return true
         }
         app.swipeDown()
+        sleep(5)
     }
 
     private func signInFxAccounts() {
@@ -82,7 +83,7 @@ class IntegrationTests: BaseTestCase {
 
     func testFxASyncHistory () {
         // History is generated using the DB so go directly to Sign in
-        // Sign into Mozilla account
+        // Sign into Mozilla Account
         navigator.goto(BrowserTabMenu)
         signInFxAccounts()
 
@@ -92,7 +93,7 @@ class IntegrationTests: BaseTestCase {
 
     func testFxASyncPageUsingChinaFxA () {
         // History is generated using the DB so go directly to Sign in
-        // Sign into Mozilla account
+        // Sign into Mozilla Account
         navigator.goto(BrowserTabMenu)
         navigator.goto(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
@@ -105,7 +106,7 @@ class IntegrationTests: BaseTestCase {
 
     func testFxASyncBookmark () {
         // Bookmark is added by the DB
-        // Sign into Mozilla account
+        // Sign into Mozilla Account
         navigator.openURL("example.com")
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: 5)
         navigator.goto(BrowserTabMenu)
@@ -119,7 +120,7 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncBookmarkDesktop () {
-        // Sign into Mozilla account
+        // Sign into Mozilla Account
         signInFxAccounts()
 
         // Wait for initial sync to complete
@@ -176,7 +177,7 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncHistoryDesktop () {
-        // Sign into Mozilla account
+        // Sign into Mozilla Account
         signInFxAccounts()
 
         // Wait for initial sync to complete
@@ -188,7 +189,7 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncPasswordDesktop () {
-        // Sign into Mozilla account
+        // Sign into Mozilla Account
         signInFxAccounts()
 
         // Wait for initial sync to complete
@@ -211,7 +212,7 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncTabsDesktop () {
-        // Sign into Mozilla account
+        // Sign into Mozilla Account
         signInFxAccounts()
 
         // Wait for initial sync to complete
@@ -230,7 +231,7 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxADisconnectConnect() {
-        // Sign into Mozilla account
+        // Sign into Mozilla Account
         signInFxAccounts()
 
         // Wait for initial sync to complete
