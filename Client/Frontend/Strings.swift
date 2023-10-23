@@ -3881,11 +3881,16 @@ extension String {
             tableName: "Shopping",
             value: "Try our trusted guide to product reviews",
             comment: "Label for the header of the Shopping Experience Opt In onboarding Card (Fakespot)")
-        public static let OptInCardCopy = MZLocalizedString(
-            key: "Shopping.OptInCard.FirstParagraph.Title.v120",
+        public static let OptInCardFirstParagraph = MZLocalizedString(
+            key: "Shopping.OptInCard.FirstParagraph.Description.v120",
             tableName: "Shopping",
-            value: "See how reliable product reviews are on %1$@ before you buy. Review checker, an experimental feature from %2$@, is built right into the browser. It works on %3$@ and  %4$@, too.\n\nUsing the power of %5$@ by %6$@, we help you avoid biased and inauthentic reviews. Our AI model is always improving to protect you as you shop.",
-            comment: "Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. The third and fourth parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. The fifth and sixth parameter are the Fakespot app name and the company name of Mozilla.")
+            value: "See how reliable product reviews are on %1$@ before you buy. Review checker, an experimental feature from %2$@, is built right into the browser. It works on %3$@ and  %4$@, too.",
+            comment: "Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. The third and fourth parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter.")
+        public static let OptInCardSecondParagraph = MZLocalizedString(
+            key: "Shopping.OptInCard.SecondParagraph.Description.v120",
+            tableName: "Shopping",
+            value: "Using the power of %1$@ by %2$@, we help you avoid biased and inauthentic reviews. Our AI model is always improving to protect you as you shop.",
+            comment: "Label for the second paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be replaced by the Fakespot app name. The second parameter will be replaced the company name of Mozilla.")
         public static let OptInCardLearnMoreButtonTitle = MZLocalizedString(
             key: "Shopping.OptInCard.LearnMoreButtonTitle.Title.v120",
             tableName: "Shopping",

@@ -11,7 +11,7 @@ import ComponentLibrary
 struct FakespotOptInCardViewModel {
     private struct UX {
         static let contentStackViewPadding: CGFloat = 16
-        static let bodyFirstParagraphLabelFontSize: CGFloat = 15
+        static let bodyLabelFontSize: CGFloat = 15
     }
 
     private let tabManager: TabManager
@@ -20,25 +20,28 @@ struct FakespotOptInCardViewModel {
     var productSitename: String?
 
     // MARK: Labels
-    let headerTitleLabel: String = .Shopping.OptInCardHeaderTitle
-    let headerLabelA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.headerTitle
-    let bodyFirstParagraphLabel: String = .Shopping.OptInCardCopy
-    let bodyFirstParagraphA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.optInCopy
-    let disclaimerTextLabel = String(format: .Shopping.OptInCardDisclaimerText,
-                                     FakespotName.shortName.rawValue,
-                                     MozillaName.shortName.rawValue)
-    let disclaimerTextLabelA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.disclaimerText
+    let headerTitle: String = .Shopping.OptInCardHeaderTitle
+    let headerA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.headerTitle
+    let bodyFirstParagraph: String = .Shopping.OptInCardFirstParagraph
+    let bodySecondParagraph = String.localizedStringWithFormat(.Shopping.OptInCardSecondParagraph,
+                                                               FakespotName.shortName.rawValue,
+                                                               MozillaName.shortName.rawValue)
+    let bodyA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.optInCopy
+    let disclaimer = String.localizedStringWithFormat(.Shopping.OptInCardDisclaimerText,
+                                                      FakespotName.shortName.rawValue,
+                                                      MozillaName.shortName.rawValue)
+    let disclaimerLabelA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.disclaimerText
 
     // MARK: Buttons
-    let learnMoreButton: String = .Shopping.OptInCardLearnMoreButtonTitle
+    let learnMoreButtonText: String = .Shopping.OptInCardLearnMoreButtonTitle
     let learnMoreButtonA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.learnMoreButton
-    let termsOfUseButton: String = .Shopping.OptInCardTermsOfUse
+    let termsOfUseButtonText: String = .Shopping.OptInCardTermsOfUse
     let termsOfUseButtonA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.termsOfUseButton
-    let privacyPolicyButton: String = .Shopping.OptInCardPrivacyPolicy
+    let privacyPolicyButtonText: String = .Shopping.OptInCardPrivacyPolicy
     let privacyPolicyButtonA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.privacyPolicyButton
-    let mainButton: String = .Shopping.OptInCardMainButtonTitle
+    let mainButtonText: String = .Shopping.OptInCardMainButtonTitle
     let mainButtonA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.mainButton
-    let secondaryButton: String = .Shopping.OptInCardSecondaryButtonTitle
+    let secondaryButtonText: String = .Shopping.OptInCardSecondaryButtonTitle
     let secondaryButtonA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.secondaryButton
 
     // MARK: Button Actions
@@ -110,20 +113,24 @@ struct FakespotOptInCardViewModel {
     }
 
     // MARK: Text methods
-    var firstParagraphText: NSAttributedString {
+    var bodyText: NSAttributedString {
         let websites = orderWebsites
         let font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                          size: UX.bodyFirstParagraphLabelFontSize)
+                                                          size: UX.bodyLabelFontSize)
         let boldFont = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body,
-                                                                  size: UX.bodyFirstParagraphLabelFontSize)
-        let plainText = String.localizedStringWithFormat(bodyFirstParagraphLabel,
+                                                                  size: UX.bodyLabelFontSize)
+        let combinedString = String(format: "%@\n\n%@", bodyFirstParagraph, bodySecondParagraph)
+
+        let plainText = String.localizedStringWithFormat(combinedString,
                                                          websites[0],
                                                          AppName.shortName.rawValue,
                                                          websites[1],
-                                                         websites[2],
-                                                         FakespotName.shortName.rawValue,
-                                                         MozillaName.shortName.rawValue)
-        return plainText.attributedText(boldPartsOfString: websites, initialFont: font, boldFont: boldFont)
+                                                         websites[2])
+        let finalString = plainText.attributedText(boldPartsOfString: websites,
+                                                   initialFont: font,
+                                                   boldFont: boldFont)
+
+        return finalString
     }
 
     var disclaimerText: NSAttributedString {
@@ -136,6 +143,6 @@ struct FakespotOptInCardViewModel {
             .paragraphStyle: paragraphStyle
         ]
 
-        return NSAttributedString(string: disclaimerTextLabel, attributes: attributes)
+        return NSAttributedString(string: disclaimer, attributes: attributes)
     }
 }
