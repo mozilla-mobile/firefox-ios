@@ -7430,6 +7430,14 @@
 			path = TabTray;
 			sourceTree = "<group>";
 		};
+		21FBB4032ADECEFF002D9AB7 /* TabTray */ = {
+			isa = PBXGroup;
+			children = (
+				21420EF62ABA338D00B28550 /* TabTrayCoordinator.swift */,
+			);
+			path = TabTray;
+			sourceTree = "<group>";
+		};
 		23ED80FD25C899D700D0E9D5 /* DefaultBrowserOnboarding */ = {
 			isa = PBXGroup;
 			children = (
@@ -8487,6 +8495,7 @@
 				8AF10D8D29D773FC0086351D /* Scene */,
 				8A93F86E29D3A147004159D9 /* Router */,
 				C29B64EC2AD937C200F3244B /* QRCode */,
+				21FBB4032ADECEFF002D9AB7 /* TabTray */,
 				8A1E93E92A3CDC6100DD540A /* BaseCoordinator.swift */,
 				8A93F85D29D36DA9004159D9 /* Coordinator.swift */,
 				8A76B01329F6E45600A82607 /* CoordinatorFlagManager.swift */,
@@ -8496,7 +8505,6 @@
 				C23889DE2A4EFCE500429673 /* ShareExtensionCoordinator.swift */,
 				C23889E02A4F3E7200429673 /* ParentCoordinatorDelegate.swift */,
 				C2D80BE62AADE38100CDF7A9 /* CredentialAutofillCoordinator.swift */,
-				21420EF62ABA338D00B28550 /* TabTrayCoordinator.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";

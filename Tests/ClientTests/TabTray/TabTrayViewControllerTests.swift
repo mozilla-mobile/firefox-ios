@@ -84,7 +84,7 @@ final class TabTrayViewControllerTests: XCTestCase {
     }
 
     // MARK: - Private
-    private func createSubject(selectedSegment: LegacyTabTrayViewModel.Segment = .tabs,
+    private func createSubject(selectedSegment: TabTrayPanelType = .tabs,
                                file: StaticString = #file,
                                line: UInt = #line) -> TabTrayViewController {
         let subject = TabTrayViewController(selectedSegment: selectedSegment,

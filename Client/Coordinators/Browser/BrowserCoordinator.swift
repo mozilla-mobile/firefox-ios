@@ -479,7 +479,7 @@ class BrowserCoordinator: BaseCoordinator,
         )
         tabTrayCoordinator.parentCoordinator = self
         add(child: tabTrayCoordinator)
-        tabTrayCoordinator.start()
+        tabTrayCoordinator.start(with: .tabs)
 
         router.present(navigationController)
     }

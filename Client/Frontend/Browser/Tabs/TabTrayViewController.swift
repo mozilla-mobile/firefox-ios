@@ -26,22 +26,24 @@ class TabTrayViewController: UIViewController,
         static let fixedSpaceWidth: CGFloat = 32
     }
 
+    // MARK: Theme
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
+
+    // MARK: Child panel and navigation
+    var childPanelControllers = [UINavigationController]()
     weak var  delegate: TabTrayViewControllerDelegate?
-    private var titleWidthConstraint: NSLayoutConstraint?
-    private var containerView: UIView = .build { _ in }
+    weak var navigationHandler: TabTrayNavigationHandler?
 
     var openInNewTab: ((URL, Bool) -> Void)?
     var didSelectUrl: ((URL, Storage.VisitType) -> Void)?
 
     // MARK: - Redux state
+    var selectedSegment: TabTrayPanelType = .tabs
     lazy var layout: LegacyTabTrayViewModel.Layout = {
         return shouldUseiPadSetup() ? .regular : .compact
     }()
-
-    var selectedSegment: LegacyTabTrayViewModel.Segment = .tabs
 
     var isSyncTabsPanel: Bool {
         return selectedSegment == .syncedTabs
@@ -60,6 +62,8 @@ class TabTrayViewController: UIViewController,
     }
 
     // MARK: - UI
+    private var titleWidthConstraint: NSLayoutConstraint?
+    private var containerView: UIView = .build { _ in }
     private lazy var navigationToolbar: UIToolbar = .build { [self] toolbar in
         toolbar.delegate = self
         toolbar.setItems([UIBarButtonItem(customView: segmentedControl)], animated: false)
@@ -84,10 +88,10 @@ class TabTrayViewController: UIViewController,
 
     var segmentControlItems: [Any] {
         let iPhoneItems = [
-            LegacyTabTrayViewModel.Segment.tabs.image!.overlayWith(image: countLabel),
-            LegacyTabTrayViewModel.Segment.privateTabs.image!,
-            LegacyTabTrayViewModel.Segment.syncedTabs.image!]
-        return isRegularLayout ? LegacyTabTrayViewModel.Segment.allCases.map { $0.label } : iPhoneItems
+            TabTrayPanelType.tabs.image!.overlayWith(image: countLabel),
+            TabTrayPanelType.privateTabs.image!,
+            TabTrayPanelType.syncedTabs.image!]
+        return isRegularLayout ? TabTrayPanelType.allCases.map { $0.label } : iPhoneItems
     }
 
     private lazy var deleteButton: UIBarButtonItem = {
@@ -168,7 +172,7 @@ class TabTrayViewController: UIViewController,
         }
     }
 
-    init(selectedSegment: LegacyTabTrayViewModel.Segment,
+    init(selectedSegment: TabTrayPanelType,
          delegate: TabTrayViewControllerDelegate,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          and notificationCenter: NotificationProtocol = NotificationCenter.default) {
@@ -343,7 +347,7 @@ class TabTrayViewController: UIViewController,
         segmentedControl.translatesAutoresizingMaskIntoConstraints = true
         segmentedControl.accessibilityIdentifier = a11yId
 
-        let segmentToFocus = LegacyTabTrayViewModel.Segment.tabs
+        let segmentToFocus = TabTrayPanelType.tabs
         segmentedControl.selectedSegmentIndex = segmentToFocus.rawValue
         segmentedControl.addTarget(self, action: action, for: .valueChanged)
         return segmentedControl
@@ -363,6 +367,10 @@ class TabTrayViewController: UIViewController,
     }
 
     // MARK: Child panels
+    func setupOpenPanel(panelType: TabTrayPanelType) {
+        
+    }
+
     private func showPanel(_ panel: UIViewController) {
         addChild(panel)
         panel.beginAppearanceTransition(true, animated: true)
@@ -399,7 +407,7 @@ class TabTrayViewController: UIViewController,
 
     @objc
     private func segmentChanged() {
-        selectedSegment = LegacyTabTrayViewModel.Segment(rawValue: segmentedControl.selectedSegmentIndex) ?? .tabs
+        selectedSegment = TabTrayPanelType(rawValue: segmentedControl.selectedSegmentIndex) ?? .tabs
         updateTitle()
         updateLayout()
         segmentPanelChange()

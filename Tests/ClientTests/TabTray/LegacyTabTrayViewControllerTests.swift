@@ -72,7 +72,7 @@ final class LegacyTabTrayViewControllerTests: XCTestCase {
     func testTabTrayRevertToRegular_ForNoPrivateTabSelected() {
         // If the user selects Private mode but doesn't focus or creates a new tab
         // we considered that regular is actually active
-        tabTray.viewModel.segmentToFocus = LegacyTabTrayViewModel.Segment.privateTabs
+        tabTray.viewModel.segmentToFocus = TabTrayPanelType.privateTabs
         tabTray.viewDidLoad()
         tabTray.didTapDone()
 
@@ -81,7 +81,7 @@ final class LegacyTabTrayViewControllerTests: XCTestCase {
     }
 
     func testInOverlayMode_ForHomepageNewTabSettings() {
-        tabTray.viewModel.segmentToFocus = LegacyTabTrayViewModel.Segment.privateTabs
+        tabTray.viewModel.segmentToFocus = TabTrayPanelType.privateTabs
         tabTray.viewDidLoad()
         profile.prefs.setString(NewTabPage.topSites.rawValue, forKey: NewTabAccessors.NewTabPrefKey)
         tabTray.viewModel.didTapAddTab(UIBarButtonItem())
