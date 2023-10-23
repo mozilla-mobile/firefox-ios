@@ -1,0 +1,18 @@
+# The configuration for the addressAutofillFeature feature
+features:
+  address-autofill-feature:
+    description: >
+      Feature description
+    variables:
+      status:
+        description: >
+          Variable description
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          status: false
+      - channel: developer
+        value:
+          status: false

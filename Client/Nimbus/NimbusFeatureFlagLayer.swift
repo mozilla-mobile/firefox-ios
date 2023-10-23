@@ -11,13 +11,19 @@ final class NimbusFeatureFlagLayer {
                                      from nimbus: FxNimbus = FxNimbus.shared
     ) -> Bool {
         switch featureID {
-        case .reportSiteIssue:
-            return checkGeneralFeature(for: featureID, from: nimbus)
+        case .addressAutofill:
+            return checkAddressAutofill(from: nimbus)
 
         case .bottomSearchBar,
                 .searchHighlights,
                 .isToolbarCFREnabled:
             return checkAwesomeBarFeature(for: featureID, from: nimbus)
+
+        case .contextualHintForToolbar:
+            return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
+
+        case .creditCardAutofillStatus:
+            return checkNimbusForCreditCardAutofill(for: featureID, from: nimbus)
 
         case .credentialAutofillCoordinatorRefactor:
             return checkCredentialAutofillCoordinatorRefactorFeature(from: nimbus)
@@ -27,8 +33,8 @@ final class NimbusFeatureFlagLayer {
                 .topSites:
             return checkHomescreenSectionsFeature(for: featureID, from: nimbus)
 
-        case .contextualHintForToolbar:
-            return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
+        case .inactiveTabs:
+            return checkTabTrayFeature(for: featureID, from: nimbus)
 
         case .libraryCoordinatorRefactor:
             return checkLibraryCoordinatorRefactorFeature(from: nimbus)
@@ -38,9 +44,6 @@ final class NimbusFeatureFlagLayer {
 
         case .firefoxSuggestFeature:
             return checkFirefoxSuggestFeature(from: nimbus)
-
-        case .inactiveTabs:
-            return checkTabTrayFeature(for: featureID, from: nimbus)
 
         case .historyGroups:
             return checkGroupingFeature(for: featureID, from: nimbus)
@@ -54,6 +57,9 @@ final class NimbusFeatureFlagLayer {
         case .reduxIntegration:
             return checkReduxIntegrationFeature(from: nimbus)
 
+        case .reportSiteIssue:
+            return checkGeneralFeature(for: featureID, from: nimbus)
+
         case .shareExtensionCoordinatorRefactor:
             return checkShareExtensionCoordinatorRefactorFeature(from: nimbus)
 
@@ -63,16 +69,13 @@ final class NimbusFeatureFlagLayer {
 
         case .tabTrayRefactor:
             return checkTabTrayRefactorFeature(from: nimbus)
-
+            
         case .wallpapers,
                 .wallpaperVersion:
             return checkNimbusForWallpapersFeature(using: nimbus)
 
         case .wallpaperOnboardingSheet:
             return checkNimbusForWallpaperOnboarding(using: nimbus)
-
-        case .creditCardAutofillStatus:
-            return checkNimbusForCreditCardAutofill(for: featureID, from: nimbus)
 
         case .zoomFeature:
             return checkZoomFeature(from: nimbus)
@@ -246,6 +249,12 @@ final class NimbusFeatureFlagLayer {
 
     private func checkFakespotFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.shopping2023.value()
+
+        return config.status
+    }
+
+    private func checkAddressAutofill(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.addressAutofillFeature.value()
 
         return config.status
     }
