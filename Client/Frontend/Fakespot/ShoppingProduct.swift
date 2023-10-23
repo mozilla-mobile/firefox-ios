@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import MozillaAppServices
 
 /// Represents a parsed product for a URL.
 ///
@@ -97,7 +98,11 @@ class ShoppingProduct: FeatureFlaggable {
                 // If 500 error occurs during the attempt, we use 'continue'
                 // to go back to the beginning of the loop and try again.
                 // This means we will retry the 'fetch(_ type:, url:, requestBody:)' operation.
-                if (error as NSError).code == 500 {
+                if case OhttpError.RelayFailed = error {
+                    let backOff = retryTimeout * Int(pow(2, Double(failCount - 1)))
+                    try? await Task.sleep(nanoseconds: NSEC_PER_MSEC * UInt64(backOff))
+                    continue
+                } else if (error as NSError).code == 500 {
                     let backOff = retryTimeout * Int(pow(2, Double(failCount - 1)))
                     try? await Task.sleep(nanoseconds: NSEC_PER_MSEC * UInt64(backOff))
                     continue

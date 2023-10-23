@@ -4,6 +4,7 @@
 
 import XCTest
 @testable import Client
+import MozillaAppServices
 
 final class ShoppingProductTests: XCTestCase {
     var client: TestFakespotClient!
@@ -139,6 +140,16 @@ final class ShoppingProductTests: XCTestCase {
     func testFetchingProductAnalysisData_WithThrowingServerError_RetriesClientAPI() async {
         let url = URL(string: "https://www.amazon.com/Under-Armour-Charged-Assert-Running/dp/B087T8Q2C4")!
         let client = ThrowingFakeSpotClient(error: NSError(domain: "HTTP Error", code: 500, userInfo: nil))
+        let sut = ShoppingProduct(url: url, client: client)
+        _ = try? await sut.fetchProductAnalysisData(maxRetries: 3)
+
+        let expected = 4 // 3 + the original API call
+        XCTAssertEqual(client.fetchProductAnalysisDataCallCount, expected)
+    }
+
+    func testFetchingProductAnalysisData_WithThrowingRelayError_RetriesClientAPI() async {
+        let url = URL(string: "https://www.amazon.com/Under-Armour-Charged-Assert-Running/dp/B087T8Q2C4")!
+        let client = ThrowingFakeSpotClient(error: OhttpError.RelayFailed(message: "Relay error"))
         let sut = ShoppingProduct(url: url, client: client)
         _ = try? await sut.fetchProductAnalysisData(maxRetries: 3)
 
