@@ -34,14 +34,12 @@ class FakespotCoordinator: BaseCoordinator, FakespotViewControllerDelegate, Feat
             client: FakespotClient(environment: environment)))
         let fakespotViewController = FakespotViewController(viewModel: viewModel)
         fakespotViewController.delegate = self
-        if #available(iOS 15.0, *) {
-            if let sheet = fakespotViewController.sheetPresentationController {
-                sheet.detents = [.medium(), .large()]
+        if let sheet = fakespotViewController.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
 
-                // Show onboarding in full height
-                if !isOptedIn {
-                    sheet.selectedDetentIdentifier = .large
-                }
+            // Show onboarding in full height
+            if !isOptedIn {
+                sheet.selectedDetentIdentifier = .large
             }
         }
         router.present(fakespotViewController, animated: true)

@@ -32,7 +32,6 @@ class FakespotViewController:
         static let scrollContentHorizontalPadding: CGFloat = 16
         static let scrollContentStackSpacing: CGFloat = 16
     }
-
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
@@ -73,10 +72,11 @@ class FakespotViewController:
 
     private lazy var betaLabel: UILabel = .build { label in
         label.text = .Shopping.SheetHeaderBetaTitle
-        label.numberOfLines = 0
+        label.numberOfLines = 1
         label.adjustsFontForContentSizeCategory = true
         label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
                                                             size: UX.betaLabelFontSize)
+        label.textAlignment = .center
         label.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.sheetHeaderBetaLabel
     }
 
@@ -113,10 +113,7 @@ class FakespotViewController:
     override func viewDidLoad() {
         super.viewDidLoad()
         presentationController?.delegate = self
-
-        if #available(iOS 15.0, *) {
-            sheetPresentationController?.delegate = self
-        }
+        sheetPresentationController?.delegate = self
 
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
@@ -132,6 +129,11 @@ class FakespotViewController:
         applyTheme()
     }
 
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
+        adjustLayout()
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         viewModel.isSwiping = false
@@ -139,7 +141,6 @@ class FakespotViewController:
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        guard #available(iOS 15.0, *) else { return }
         viewModel.recordBottomSheetDisplayed(presentationController)
         updateModalA11y()
     }
@@ -224,24 +225,38 @@ class FakespotViewController:
             betaLabel.topAnchor.constraint(equalTo: betaView.topAnchor, constant: UX.betaVerticalSpace),
             betaLabel.leadingAnchor.constraint(equalTo: betaView.leadingAnchor, constant: UX.betaHorizontalSpace),
             betaLabel.trailingAnchor.constraint(equalTo: betaView.trailingAnchor, constant: -UX.betaHorizontalSpace),
-            betaLabel.bottomAnchor.constraint(equalTo: betaView.bottomAnchor, constant: -UX.betaVerticalSpace)
+            betaLabel.bottomAnchor.constraint(equalTo: betaView.bottomAnchor, constant: -UX.betaVerticalSpace),
         ])
-
-        adjustLayout()
     }
 
     private func adjustLayout() {
-        let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
+        guard let titleLabelText = titleLabel.text, let betaLabelText = betaLabel.text else { return }
 
-        if contentSizeCategory.isAccessibilityCategory {
+        var availableTitleStackWidth = headerView.frame.width
+        if availableTitleStackWidth == 0 {
+            // calculate the width if auto-layout doesn't have it yet
+            availableTitleStackWidth = view.frame.width - UX.headerHorizontalSpacing * 2
+        }
+        availableTitleStackWidth -= UX.closeButtonWidthHeight + UX.titleCloseSpacing // remove close button and spacing
+        let titleTextWidth = widthOfString(titleLabelText, usingFont: titleLabel.font)
+
+        let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
+        let betaLabelWidth = widthOfString(betaLabelText, usingFont: betaLabel.font)
+        let betaViewWidth = betaLabelWidth + UX.betaHorizontalSpace * 2
+        let maxTitleWidth = availableTitleStackWidth - betaViewWidth - UX.titleStackSpacing
+
+        betaView.layer.borderWidth = contentSizeCategory.isAccessibilityCategory ? UX.betaBorderWidthA11ySize : UX.betaBorderWidth
+
+        if contentSizeCategory.isAccessibilityCategory || titleTextWidth > maxTitleWidth {
             titleStackView.axis = .vertical
             titleStackView.alignment = .leading
-            betaView.layer.borderWidth = UX.betaBorderWidthA11ySize
         } else {
             titleStackView.axis = .horizontal
             titleStackView.alignment = .center
-            betaView.layer.borderWidth = UX.betaBorderWidth
         }
+
+        titleStackView.setNeedsLayout()
+        titleStackView.layoutIfNeeded()
     }
 
     private func updateContent() {
@@ -389,7 +404,6 @@ class FakespotViewController:
         viewModel.onViewControllerDeinit()
     }
 
-    @available(iOS 15.0, *)
     private func updateModalA11y() {
         var currentDetent: UISheetPresentationController.Detent.Identifier? = viewModel.getCurrentDetent(for: sheetPresentationController)
 
@@ -412,7 +426,6 @@ class FakespotViewController:
 
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         delegate?.fakespotControllerDidDismiss()
-        guard #available(iOS 15.0, *) else { return }
         let currentDetent = viewModel.getCurrentDetent(for: presentationController)
 
         if viewModel.isSwiping || currentDetent == .large {
@@ -422,9 +435,30 @@ class FakespotViewController:
         }
     }
 
-    // MARK: - UISheetPresentationControllerDelegate
+    // MARK: View Transitions
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        adjustLayout()
+    }
 
-    @available(iOS 15.0, *)
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: { _ in
+            self.adjustLayout()
+        }, completion: nil)
+    }
+
+    // MARK: Helper methods
+    private func widthOfString(_ string: String, usingFont font: UIFont) -> CGFloat {
+        let label = UILabel(frame: CGRect.zero)
+        label.text = string
+        label.font = font
+        label.adjustsFontForContentSizeCategory = true
+        label.sizeToFit()
+        return label.frame.width
+    }
+
+    // MARK: - UISheetPresentationControllerDelegate
     func sheetPresentationControllerDidChangeSelectedDetentIdentifier(_ sheetPresentationController: UISheetPresentationController) {
         updateModalA11y()
     }
