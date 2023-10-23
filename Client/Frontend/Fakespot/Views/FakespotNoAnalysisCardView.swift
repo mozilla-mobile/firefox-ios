@@ -60,6 +60,7 @@ final class FakespotNoAnalysisCardView: UIView, ThemeApplicable {
         label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .headline,
                                                             size: UX.headlineLabelFontSize,
                                                             weight: .bold)
+        label.accessibilityTraits.insert(.header)
     }
 
     private lazy var bodyLabel: UILabel = .build { label in
