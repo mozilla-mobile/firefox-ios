@@ -1,6 +1,6 @@
 ---
 address-autofill-feature:
-  description: "Feature description\n"
+  description: This property defines the address card autofill feature
   hasExposure: true
   exposureDescription: ""
   variables:
