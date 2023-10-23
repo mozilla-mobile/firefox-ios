@@ -24,7 +24,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case jumpBackIn
     case libraryCoordinatorRefactor
     case qrCodeCoordinatorRefactor
-    case recentlySaved
     case reduxIntegration
     case reportSiteIssue
     case searchHighlights
@@ -67,8 +66,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.InactiveTabs
         case .jumpBackIn:
             return FlagKeys.JumpBackInSection
-        case .recentlySaved:
-            return FlagKeys.RecentlySavedSection
         case .topSites:
             return FlagKeys.TopSiteSection
         case .wallpapers:

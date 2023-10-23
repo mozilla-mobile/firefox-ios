@@ -74,13 +74,13 @@ public struct PrefsKeys {
         public static let HistoryGroups = "HistoryGroupsUserPrefsKey"
         public static let InactiveTabs = "InactiveTabsUserPrefsKey"
         public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
-        public static let RecentlySavedSection = "RecentlySavedSectionUserPrefsKey"
         public static let SearchBarPosition = "SearchBarPositionUsersPrefsKey"
         public static let TopSiteSection = "TopSitesUserPrefsKey"
     }
 
     public struct UserFeatureFlagPrefs {
         public static let ASPocketStories = "ASPocketStoriesUserPrefsKey"
+        public static let RecentlySavedSection = "RecentlySavedSectionUserPrefsKey"
         public static let SponsoredShortcuts = "SponsoredShortcutsUserPrefsKey"
         public static let StartAtHome = "StartAtHomeUserPrefsKey"
     }

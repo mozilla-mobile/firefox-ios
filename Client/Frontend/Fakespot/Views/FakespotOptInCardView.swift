@@ -57,6 +57,7 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
         label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .headline,
                                                             size: UX.headerLabelFontSize,
                                                             weight: .medium)
+        label.accessibilityTraits.insert(.header)
     }
 
     private lazy var bodyFirstParagraphLabel: UILabel = .build { label in

@@ -39,6 +39,7 @@ class FakespotReliabilityCardView: UIView, ThemeApplicable {
                                                            size: UX.titleFontSize,
                                                            weight: .semibold)
         view.numberOfLines = 0
+        view.accessibilityTraits.insert(.header)
     }
 
     private lazy var reliabilityScoreView: UIView = .build { view in

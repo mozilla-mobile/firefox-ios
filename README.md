@@ -18,12 +18,15 @@ For bug fixes and features for a specific release, use the version branch.
 Getting involved
 ----------------
 
-We encourage you to participate in this open source project. We love Pull Requests, Issue Reports, Feature Requests or any kind of positive contribution. Please read the [Mozilla Community Participation Guidelines](https://www.mozilla.org/en-US/about/governance/policies/participation/) and our [Firefox for iOS contributing guidelines](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md) first.
+We encourage you to participate in this open source project. We love Pull Requests, Issue Reports, Feature Requests or any kind of positive contribution. Please read the [Mozilla Community Participation Guidelines](https://www.mozilla.org/en-US/about/governance/policies/participation/) and our [Contributing guidelines](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md) first. 
 
-- Chat: See [#fx-ios](https://chat.mozilla.org/#/room/#fx-ios:mozilla.org) for general discussion, or open a [Github discussion](https://github.com/mozilla-mobile/firefox-ios/discussions).
-- Issues: [File a new issue](https://github.com/mozilla-mobile/firefox-ios/issues/new/choose) • [Existing bugs](https://github.com/mozilla-mobile/firefox-ios/issues)
+- You can [file a new issue](https://github.com/mozilla-mobile/firefox-ios/issues/new/choose) or research [existing bugs](https://github.com/mozilla-mobile/firefox-ios/issues)
 
-Want to contribute on the codebase but don't know where to start? Here is a list of [issues that are contributor friendly](https://github.com/mozilla-mobile/firefox-ios/labels/Contributor%20OK). 
+If more information is required or you have any questions then we suggest reaching out to us via:
+- Chat on Element channel [#fx-ios](https://chat.mozilla.org/#/room/#fx-ios:mozilla.org) for general discussion, or write DMs to specific teammates for questions.
+- Open a [Github discussion](https://github.com/mozilla-mobile/firefox-ios/discussions) which can be used for general questions.
+
+Want to contribute on the codebase but don't know where to start? Here is a list of [issues that are contributor friendly](https://github.com/mozilla-mobile/firefox-ios/labels/Contributor%20OK), but make sure to read the [Contributing guidelines](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md) first. 
 
 Building the code
 -----------------

@@ -550,25 +550,7 @@ export const FormAutofillHeuristics = {
    *        all sections within its field details in the form.
    */
   getFormInfo(form) {
-    let elements = Array.from(form.elements).filter(element =>
-      lazy.FormAutofillUtils.isCreditCardOrAddressFieldType(element)
-    );
-
-    // Due to potential performance impact while running visibility check on
-    // a large amount of elements, a comprehensive visibility check
-    // (considering opacity and CSS visibility) is only applied when the number
-    // of eligible elements is below a certain threshold.
-    const runVisiblityCheck =
-      elements.length < lazy.FormAutofillUtils.visibilityCheckThreshold;
-    if (!runVisiblityCheck) {
-      lazy.log.debug(
-        `Skip running visibility check, because of too many elements (${elements.length})`
-      );
-    }
-
-    elements = elements.filter(element =>
-      lazy.FormAutofillUtils.isFieldVisible(element, runVisiblityCheck)
-    );
+    let elements = this.getFormElements(form);
 
     const scanner = new lazy.FieldScanner(elements, element =>
       this.inferFieldInfo(element, elements)
@@ -615,6 +597,44 @@ export const FormAutofillHeuristics = {
       (a, b) =>
         fields.indexOf(a.fieldDetails[0]) - fields.indexOf(b.fieldDetails[0])
     );
+  },
+
+  /**
+   * Get form elements that are of credit card or address type and filtered by either
+   * visibility or focusability - depending on the interactivity mode (default = focusability)
+   * This distinction is only temporary as we want to test switching from visibility mode
+   * to focusability mode. The visibility mode is then removed.
+   *
+   * @param {HTMLElement} form
+   * @returns {Array<HTMLElement>} elements filtered by interactivity mode (visibility or focusability)
+   */
+  getFormElements(form) {
+    let elements = Array.from(form.elements).filter(element =>
+      lazy.FormAutofillUtils.isCreditCardOrAddressFieldType(element)
+    );
+    const interactivityMode = lazy.FormAutofillUtils.interactivityCheckMode;
+
+    if (interactivityMode == "focusability") {
+      elements = elements.filter(element =>
+        lazy.FormAutofillUtils.isFieldFocusable(element)
+      );
+    } else if (interactivityMode == "visibility") {
+      // Due to potential performance impact while running visibility check on
+      // a large amount of elements, a comprehensive visibility check
+      // (considering opacity and CSS visibility) is only applied when the number
+      // of eligible elements is below a certain threshold.
+      const runVisiblityCheck =
+        elements.length < lazy.FormAutofillUtils.visibilityCheckThreshold;
+      if (!runVisiblityCheck) {
+        lazy.log.debug(
+          `Skip running visibility check, because of too many elements (${elements.length})`
+        );
+      }
+      elements = elements.filter(element =>
+        lazy.FormAutofillUtils.isFieldVisible(element, runVisiblityCheck)
+      );
+    }
+    return elements;
   },
 
   /**

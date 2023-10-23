@@ -8,7 +8,7 @@ let website = ["url": "mozilla.org", "value": "mozilla.org", "subDomain": "https
 
 let websiteExample = ["url": "www.example.com", "value": "www.example.com"]
 
-class DomainAutocompleteTest: BaseTestCase {
+class DomainAutocompleteTests: BaseTestCase {
     let testWithDB = ["test1Autocomplete", "test3AutocompleteDeletingChars", "test5NoMatches", "testMixedCaseAutocompletion", "testDeletingCharsUpdateTheResults"]
 
     // This DB contains 3 entries mozilla.com/github.com/git.es
@@ -30,6 +30,7 @@ class DomainAutocompleteTest: BaseTestCase {
         super.setUp()
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2334558
     func test1Autocomplete() {
         // Basic autocompletion cases
         // The autocomplete does not display the history item from the DB. Workaroud is to manually visit "mozilla.org".
@@ -56,6 +57,7 @@ class DomainAutocompleteTest: BaseTestCase {
     }
 
     // Test that deleting characters works correctly with autocomplete
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2334647
     func test3AutocompleteDeletingChars() {
         // The autocomplete does not display the history item from the DB. Workaroud is to manually visit "mozilla.org".
         navigator.openURL("mozilla.org")
@@ -81,6 +83,7 @@ class DomainAutocompleteTest: BaseTestCase {
         XCTAssertEqual(value as? String, website["value"]!, "Wrong autocompletion")
     }
     // Delete the entire string and verify that the home panels are shown again.
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2334648
     func test6DeleteEntireString() {
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("www.moz")
@@ -95,6 +98,7 @@ class DomainAutocompleteTest: BaseTestCase {
     }
 
     // Ensure that the scheme is included in the autocompletion.
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2334649
     func test4EnsureSchemeIncludedAutocompletion() {
         navigator.openURL(websiteExample["url"]!)
         waitUntilPageLoad()
@@ -106,6 +110,7 @@ class DomainAutocompleteTest: BaseTestCase {
     }
 
     // Non-matches.
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2334650
     func test5NoMatches() {
         navigator.openURL("twitter.com/login")
         waitUntilPageLoad()
@@ -152,6 +157,7 @@ class DomainAutocompleteTest: BaseTestCase {
     }
 
     // Test default domains.
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2334651
     func test2DefaultDomains() {
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("a")
@@ -173,6 +179,7 @@ class DomainAutocompleteTest: BaseTestCase {
     }
 
     // Test mixed case autocompletion.
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2334653
     func testMixedCaseAutocompletion() {
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("MoZ")
@@ -194,37 +201,5 @@ class DomainAutocompleteTest: BaseTestCase {
         let value3 = app.textFields["address"].value
         // No autocompletion, just what user typed
         XCTAssertEqual(value3 as? String, "    moz ", "Wrong autocompletion")
-    }
-
-    // This test is disabled for general schema due to bug 1494269
-    func testDeletingCharsUpdateTheResults() {
-        let url1 = ["url": "git.es", "label": "git.es - Dominio premium en venta"]
-        let url2 = ["url": "github.com", "label": "The world's leading software development platform · GitHub"]
-
-        navigator.goto(URLBarOpen)
-        app.typeText("gith")
-
-        mozWaitForElementToExist(app.tables["SiteTable"].cells.staticTexts[url2["label"]!])
-        // There should be only one matching entry
-        XCTAssertTrue(app.tables["SiteTable"].staticTexts[url2["label"]!].exists)
-        XCTAssertFalse(app.tables["SiteTable"].staticTexts[url1["label"]!].exists)
-
-        // Remove 2 chars ("th")  to have two coincidences with git
-        app.typeText("\u{0008}")
-        app.typeText("\u{0008}")
-
-        XCTAssertTrue(app.tables["SiteTable"].staticTexts[url2["label"]!].exists)
-        XCTAssertTrue(app.tables["SiteTable"].staticTexts[url1["label"]!].exists)
-
-        // Remove All chars so that there is not any matches
-        let charsAddressBar: String = (app.textFields["address"].value! as? String)!
-
-        for _ in 1...charsAddressBar.count {
-            app.typeText("\u{0008}")
-        }
-
-        mozWaitForElementToNotExist(app.tables["SiteTable"].staticTexts[url2["label"]!])
-        XCTAssertFalse(app.tables["SiteTable"].staticTexts[url2["label"]!].exists)
-        XCTAssertFalse(app.tables["SiteTable"].staticTexts[url1["label"]!].exists)
     }
 }

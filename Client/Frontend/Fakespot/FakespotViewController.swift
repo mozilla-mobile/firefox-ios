@@ -56,6 +56,7 @@ class FakespotViewController:
                                                             size: UX.titleLabelFontSize,
                                                             weight: .semibold)
         label.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.sheetHeaderTitle
+        label.accessibilityTraits.insert(.header)
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
 

@@ -15,6 +15,10 @@ class ButtonsViewController: UIViewController, Themeable {
     private lazy var primaryButton: PrimaryRoundedButton = .build { _ in }
     private lazy var secondaryButton: SecondaryRoundedButton = .build { _ in }
     private lazy var linkButton: LinkButton = .build { _ in }
+    private lazy var enabledOnSwitch: PaddedSwitch = .build { _ in }
+    private lazy var enabledOffSwitch: PaddedSwitch = .build { _ in }
+    private lazy var disabledOnSwitch: PaddedSwitch = .build { _ in }
+    private lazy var disabledOffSwitch: PaddedSwitch = .build { _ in }
 
     private lazy var buttonStackView: UIStackView = .build { stackView in
         stackView.distribution = .fillEqually
@@ -22,6 +26,10 @@ class ButtonsViewController: UIViewController, Themeable {
         stackView.axis = .vertical
         stackView.spacing = 16
     }
+
+    private lazy var offSwitchView: UIView = .build { _ in }
+
+    private lazy var onSwitchView: UIView = .build { _ in }
 
     init(themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.themeManager = themeManager
@@ -51,6 +59,34 @@ class ButtonsViewController: UIViewController, Themeable {
                                                       a11yIdentifier: "a11yLink")
         linkButton.configure(viewModel: linkButtonViewModel)
 
+        let paddedSwitchViewModelOnEnabled = PaddedSwitchViewModel(theme: themeManager.currentTheme,
+                                                                   isEnabled: true,
+                                                                   isOn: true,
+                                                                   a11yIdentifier: "paddedSwitchOnEnabled",
+                                                                   valueChangedClosure: {})
+        enabledOnSwitch.configure(with: paddedSwitchViewModelOnEnabled)
+
+        let paddedSwitchViewModelOffEnabled = PaddedSwitchViewModel(theme: themeManager.currentTheme,
+                                                                    isEnabled: true,
+                                                                    isOn: false,
+                                                                    a11yIdentifier: "paddedSwitchOffEnabled",
+                                                                    valueChangedClosure: {})
+        enabledOffSwitch.configure(with: paddedSwitchViewModelOffEnabled)
+
+        let paddedSwitchViewModelOnDisabled = PaddedSwitchViewModel(theme: themeManager.currentTheme,
+                                                                    isEnabled: false,
+                                                                    isOn: true,
+                                                                    a11yIdentifier: "paddedSwitchOnDisabled",
+                                                                    valueChangedClosure: {})
+        disabledOnSwitch.configure(with: paddedSwitchViewModelOnDisabled)
+
+        let paddedSwitchViewModelOffDisabled = PaddedSwitchViewModel(theme: themeManager.currentTheme,
+                                                                     isEnabled: false,
+                                                                     isOn: false,
+                                                                     a11yIdentifier: "paddedSwitchOffDisabled",
+                                                                     valueChangedClosure: {})
+        disabledOffSwitch.configure(with: paddedSwitchViewModelOffDisabled)
+
         primaryButton.applyTheme(theme: themeManager.currentTheme)
         secondaryButton.applyTheme(theme: themeManager.currentTheme)
         linkButton.applyTheme(theme: themeManager.currentTheme)
@@ -62,10 +98,34 @@ class ButtonsViewController: UIViewController, Themeable {
         buttonStackView.addArrangedSubview(secondaryButton)
         buttonStackView.addArrangedSubview(linkButton)
 
+        buttonStackView.addArrangedSubview(offSwitchView)
+        offSwitchView.addSubview(enabledOffSwitch)
+        offSwitchView.addSubview(disabledOffSwitch)
+
+        buttonStackView.addArrangedSubview(onSwitchView)
+        onSwitchView.addSubview(enabledOnSwitch)
+        onSwitchView.addSubview(disabledOnSwitch)
+
         NSLayoutConstraint.activate([
             buttonStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             buttonStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            buttonStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+            buttonStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+
+            enabledOffSwitch.leadingAnchor.constraint(equalTo: offSwitchView.leadingAnchor, constant: 0),
+            enabledOffSwitch.topAnchor.constraint(equalTo: offSwitchView.topAnchor, constant: 0),
+            enabledOffSwitch.bottomAnchor.constraint(equalTo: offSwitchView.bottomAnchor, constant: 0),
+            disabledOffSwitch.leadingAnchor.constraint(equalTo: enabledOffSwitch.trailingAnchor, constant: 24),
+            disabledOffSwitch.topAnchor.constraint(equalTo: offSwitchView.topAnchor, constant: 0),
+            disabledOffSwitch.bottomAnchor.constraint(equalTo: offSwitchView.bottomAnchor, constant: 0),
+            disabledOffSwitch.trailingAnchor.constraint(lessThanOrEqualTo: offSwitchView.trailingAnchor),
+
+            enabledOnSwitch.leadingAnchor.constraint(equalTo: onSwitchView.leadingAnchor, constant: 0),
+            enabledOnSwitch.topAnchor.constraint(equalTo: onSwitchView.topAnchor, constant: 0),
+            enabledOnSwitch.bottomAnchor.constraint(equalTo: onSwitchView.bottomAnchor, constant: 0),
+            disabledOnSwitch.leadingAnchor.constraint(equalTo: enabledOnSwitch.trailingAnchor, constant: 24),
+            disabledOnSwitch.topAnchor.constraint(equalTo: onSwitchView.topAnchor, constant: 0),
+            disabledOnSwitch.bottomAnchor.constraint(equalTo: onSwitchView.bottomAnchor, constant: 0),
+            disabledOnSwitch.trailingAnchor.constraint(lessThanOrEqualTo: onSwitchView.trailingAnchor)
         ])
     }
 
