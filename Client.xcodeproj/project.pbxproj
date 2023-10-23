@@ -11953,14 +11953,14 @@
 		};
 		5FA2232C27F6FA69005B3D87 /* Nimbus Feature Manifest Generator Script */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 12;
 			files = (
 			);
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/nimbus.fml.yaml",
-				"$(SRCROOT)/bin/nimbus-fml.sh",
+				"$(SOURCE_ROOT)/nimbus.fml.yaml",
 			);
 			name = "Nimbus Feature Manifest Generator Script";
 			outputFileListPaths = (
@@ -11970,7 +11970,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ $ACTION != \"indexbuild\" ]; then\n   bash $PWD/bin/nimbus-fml.sh --verbose\nfi\n";
+			shellScript = "if [ $ACTION != \"indexbuild\" ]; then\n   bash $SOURCE_ROOT/bin/nimbus-fml.sh --verbose\nfi\n";
 		};
 		871F34442AD0A291006E34EE /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
