@@ -55,7 +55,7 @@ class IntegrationTests: BaseTestCase {
         navigator.performAction(Action.OpenEmailToSignIn)
         sleep(5)
         mozWaitForElementToExist(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: TIMEOUT_LONG)
-        mozWaitForElementToExist(app.staticTexts["Continue to Firefox accounts"], timeout: TIMEOUT_LONG)
+        mozWaitForElementToExist(app.staticTexts["Continue to your Mozilla account"], timeout: TIMEOUT_LONG)
         userState.fxaUsername = ProcessInfo.processInfo.environment["FXA_EMAIL"]!
         userState.fxaPassword = ProcessInfo.processInfo.environment["FXA_PASSWORD"]!
         navigator.performAction(Action.FxATypeEmail)
@@ -82,7 +82,7 @@ class IntegrationTests: BaseTestCase {
 
     func testFxASyncHistory () {
         // History is generated using the DB so go directly to Sign in
-        // Sign into Firefox Accounts
+        // Sign into Mozilla account
         navigator.goto(BrowserTabMenu)
         signInFxAccounts()
 
@@ -92,20 +92,20 @@ class IntegrationTests: BaseTestCase {
 
     func testFxASyncPageUsingChinaFxA () {
         // History is generated using the DB so go directly to Sign in
-        // Sign into Firefox Accounts
+        // Sign into Mozilla account
         navigator.goto(BrowserTabMenu)
         navigator.goto(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
 
         mozWaitForElementToExist(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: TIMEOUT_LONG)
-        mozWaitForElementToExist(app.webViews.staticTexts["Continue to Firefox accounts"], timeout: TIMEOUT_LONG)
+        mozWaitForElementToExist(app.webViews.staticTexts["Continue to your Mozilla account"], timeout: TIMEOUT_LONG)
         mozWaitForElementToExist(app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField])
         mozWaitForElementToExist(app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton])
     }
 
     func testFxASyncBookmark () {
         // Bookmark is added by the DB
-        // Sign into Firefox Accounts
+        // Sign into Mozilla account
         navigator.openURL("example.com")
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: 5)
         navigator.goto(BrowserTabMenu)
@@ -113,13 +113,14 @@ class IntegrationTests: BaseTestCase {
         app.tables.otherElements[StandardImageIdentifiers.Large.bookmark].tap()
         navigator.nowAt(BrowserTab)
         signInFxAccounts()
+        mozWaitForElementToExist(app.staticTexts["Jump Back In"])
 
         // Wait for initial sync to complete
         waitForInitialSyncComplete()
     }
 
     func testFxASyncBookmarkDesktop () {
-        // Sign into Firefox Accounts
+        // Sign into Mozilla account
         signInFxAccounts()
 
         // Wait for initial sync to complete
@@ -133,6 +134,7 @@ class IntegrationTests: BaseTestCase {
         waitUntilPageLoad()
         navigator.goto(BrowserTabMenu)
         signInFxAccounts()
+        mozWaitForElementToExist(app.staticTexts["Jump Back In"])
 
         // Wait for initial sync to complete
         navigator.nowAt(BrowserTab)
@@ -141,7 +143,7 @@ class IntegrationTests: BaseTestCase {
         mozWaitForElementToExist(app.tables.cells.element(boundBy: 1), timeout: 10)
         app.tables.cells.element(boundBy: 1).tap()
         mozWaitForElementToExist(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"], timeout: 10)
-        XCTAssertEqual(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"].value! as! String, "Fennec (administrator) on iOS")
+        XCTAssertEqual(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"].value! as! String, "Fennec (cso) on iOS")
 
         // Sync again just to make sure to sync after new name is shown
         app.buttons["Settings"].tap()
@@ -176,7 +178,7 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncHistoryDesktop () {
-        // Sign into Firefox Accounts
+        // Sign into Mozilla account
         signInFxAccounts()
 
         // Wait for initial sync to complete
@@ -188,7 +190,7 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncPasswordDesktop () {
-        // Sign into Firefox Accounts
+        // Sign into Mozilla account
         signInFxAccounts()
 
         // Wait for initial sync to complete
@@ -211,7 +213,7 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncTabsDesktop () {
-        // Sign into Firefox Accounts
+        // Sign into Mozilla account
         signInFxAccounts()
 
         // Wait for initial sync to complete
@@ -230,7 +232,7 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxADisconnectConnect() {
-        // Sign into Firefox Accounts
+        // Sign into Mozilla account
         signInFxAccounts()
 
         // Wait for initial sync to complete
