@@ -382,6 +382,7 @@ extension PasswordDetailViewController {
                 self.onProfileDidFinishSyncing()
                 // Required to get UI to reload with changed state
                 self.tableView.reloadData()
+                self.sendLoginsModifiedTelemetry()
             }
         }
     }
@@ -446,5 +447,11 @@ extension PasswordDetailViewController: LoginDetailTableViewCellDelegate {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .delete,
                                      object: .loginsDeleted)
+    }
+
+    private func sendLoginsModifiedTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .change,
+                                     object: .loginsModified)
     }
 }
