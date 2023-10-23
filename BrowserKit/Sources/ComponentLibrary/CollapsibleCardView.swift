@@ -106,6 +106,7 @@ public class CollapsibleCardView: ShadowCardView, UIGestureRecognizerDelegate {
                                                             size: 15.0,
                                                             weight: .semibold)
         label.numberOfLines = 0
+        label.accessibilityTraits.insert(.header)
     }
 
     private lazy var expandButton: UIButton = .build { view in

@@ -140,6 +140,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.setContentCompressionResistancePriority(.required, for: .vertical)
+        label.accessibilityTraits.insert(.header)
     }
 
     private lazy var descriptionLabel: UILabel = .build { label in
