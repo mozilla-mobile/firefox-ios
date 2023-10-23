@@ -28,7 +28,7 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
 
     /// Determine if this hint is eligible to present, outside of Nimbus flag settings.
     func canPresent(_ hintType: ContextualHintType) -> Bool {
-        guard isDeviceReady, !isInOverlayMode else { return false }
+        guard !isInOverlayMode else { return false }
 
         var hintTypeShouldBePresented = false
 
@@ -49,11 +49,6 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
     }
 
     // MARK: - Private helpers
-
-    // Do not present contextual hint in landscape on iPhone
-    private var isDeviceReady: Bool {
-        !UIWindow.isLandscape || device.userInterfaceIdiom == .pad
-    }
 
     private var isInOverlayMode: Bool {
         guard overlayState != nil else { return false }
