@@ -77,10 +77,15 @@ class AppDataUsageReportSetting: HiddenSetting {
                 }
             }
         }
+
+        let directoriesAndSizesSorted = directoriesAndSizes
+            .map({ return ($0, $1) })
+            .sorted(by: { return $0.1 > $1.1 })
+
         var result = "FireFox Debug Utility: App Data Summary"
         result += "\n======================================="
         result += "\n"
-        for (dir, size) in directoriesAndSizes {
+        for (dir, size) in directoriesAndSizesSorted {
             result += "\nSize: \(size / 1024) kb \t\tDirectory: \t\(dir)"
         }
         result += "\n\n======================================="
