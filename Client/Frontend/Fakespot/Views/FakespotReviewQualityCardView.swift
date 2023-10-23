@@ -82,9 +82,9 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
     }
 
     private lazy var headlineLabel: UILabel = .build { label in
-        let text = String(format: .Shopping.ReviewQualityCardHeadlineLabel,
-                          FakespotName.shortName.rawValue,
-                          MozillaName.shortName.rawValue)
+        let text = String.localizedStringWithFormat(.Shopping.ReviewQualityCardHeadlineLabel,
+                                                    FakespotName.shortName.rawValue,
+                                                    MozillaName.shortName.rawValue)
         label.text = text
         label.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.ReviewQualityCard.headlineLabel
         label.numberOfLines = 0
@@ -188,7 +188,8 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
 
     private lazy var learnMoreButton: ResizableButton = .build { button in
         button.contentHorizontalAlignment = .leading
-        let title = String(format: .Shopping.ReviewQualityCardLearnMoreButtonTitle, FakespotName.shortName.rawValue)
+        let title = String.localizedStringWithFormat(.Shopping.ReviewQualityCardLearnMoreButtonTitle,
+                                                     FakespotName.shortName.rawValue)
         button.setTitle(title, for: .normal)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.ReviewQualityCard.learnMoreButtonTitle
         button.titleLabel?.adjustsFontForContentSizeCategory = true
