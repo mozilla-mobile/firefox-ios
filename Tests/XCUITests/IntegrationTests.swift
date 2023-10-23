@@ -113,7 +113,6 @@ class IntegrationTests: BaseTestCase {
         app.tables.otherElements[StandardImageIdentifiers.Large.bookmark].tap()
         navigator.nowAt(BrowserTab)
         signInFxAccounts()
-        mozWaitForElementToExist(app.staticTexts["Jump Back In"])
 
         // Wait for initial sync to complete
         waitForInitialSyncComplete()
@@ -134,7 +133,6 @@ class IntegrationTests: BaseTestCase {
         waitUntilPageLoad()
         navigator.goto(BrowserTabMenu)
         signInFxAccounts()
-        mozWaitForElementToExist(app.staticTexts["Jump Back In"])
 
         // Wait for initial sync to complete
         navigator.nowAt(BrowserTab)
