@@ -123,10 +123,23 @@ export const OSKeyStore = withNotImplementedError({
   ensureLoggedIn: () => true,
 });
 
+// Checks an element's focusability and accessibility via keyboard navigation
+const checkFocusability = element => {
+  return (
+    !element.disabled &&
+    !element.hidden &&
+    element.style.display != "none" &&
+    element.tabIndex != "-1"
+  );
+};
+
 // Define mock for Services
 // NOTE: Services is a global so we need to attach it to the window
 // eslint-disable-next-line no-shadow
 export const Services = withNotImplementedError({
+  focus: withNotImplementedError({
+    elementIsFocusable: checkFocusability,
+  }),
   intl: withNotImplementedError({
     getAvailableLocaleDisplayNames: () => [],
     getRegionDisplayNames: () => [],
