@@ -296,6 +296,9 @@ class TabLocationView: UIView, FeatureFlaggable {
         if !shouldHideButton {
             TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingButton)
             delegate?.tabLocationViewPresentCFR(at: shoppingButton)
+            setReaderModeState(.unavailable)
+        } else {
+            setReaderModeState(.available)
         }
     }
 
