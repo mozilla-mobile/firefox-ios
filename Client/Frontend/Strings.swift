@@ -182,7 +182,7 @@ extension String {
             public static let NotOptedInAction = MZLocalizedString(
                 key: "ContextualHints.Shopping.NotOptedInAction.v120",
                 tableName: "Shopping",
-                value: "Try review checker",
+                value: "Try Review Checker",
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing the Shopping feature. It indicates that a user can go directly to the Shopping feature by tapping the text of the action.")
             public static let OptedInBody = MZLocalizedString(
                 key: "ContextualHints.Shopping.OptedInBody.v120",
@@ -192,7 +192,7 @@ extension String {
             public static let OptedInAction = MZLocalizedString(
                 key: "ContextualHints.Shopping.OptedInAction.v120",
                 tableName: "Shopping",
-                value: "Open review checker",
+                value: "Open Review Checker",
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears after the user has opted in for the Shopping feature. It indicates that a user can directly open the review checker by tapping the text of the action.")
         }
     }
@@ -3789,7 +3789,7 @@ extension String {
         public static let SettingsCardFooterAction = MZLocalizedString(
             key: "Shopping.SettingsCard.Footer.Action.v120",
             tableName: "Shopping",
-            value: "Review checker is powered by %1$@ by %2$@",
+            value: "Review Checker is powered by %1$@ by %2$@",
             comment: "Action title of the footer underneath the Settings Card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla.")
         public static let NoAnalysisCardHeadlineLabelTitle = MZLocalizedString(
             key: "Shopping.NoAnalysisCard.HeadlineLabel.Title.v120",
@@ -3884,7 +3884,7 @@ extension String {
         public static let OptInCardFirstParagraph = MZLocalizedString(
             key: "Shopping.OptInCard.FirstParagraph.Description.v120",
             tableName: "Shopping",
-            value: "See how reliable product reviews are on %1$@ before you buy. Review checker, an experimental feature from %2$@, is built right into the browser. It works on %3$@ and %4$@, too.",
+            value: "See how reliable product reviews are on %1$@ before you buy. Review Checker, an experimental feature from %2$@, is built right into the browser. It works on %3$@ and %4$@, too.",
             comment: "Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. The third and fourth parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter.")
         public static let OptInCardSecondParagraph = MZLocalizedString(
             key: "Shopping.OptInCard.SecondParagraph.Description.v120",
