@@ -3,8 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 // /* eslint-disable mozilla/balanced-listeners, no-undef */
-import CreditCardHelper from "resource://gre/modules/shared/EntryFile.sys.mjs";
-import { CreditCardExtras } from "Assets/CC_Script/CreditCardExtras.ios.mjs";
+import FormAutofillHelper from "resource://gre/modules/shared/EntryFile.sys.mjs";
+import FormAutofillExtras from "Assets/CC_Script/FormAutofillExtras.ios.mjs";
 
 // Define supported message types.
 const messageTypes = {
@@ -41,31 +41,29 @@ const sendFillCreditCardFormMessage = sendMessage(
   messageTypes.FILL_CREDIT_CARD_FORM
 );
 
-// Create a CreditCardHelper object and expose it to the window object.
-// The CreditCardHelper should:
+// Create a FormAutofillHelper object and expose it to the window object.
+// The FormAutofillHelper should:
 // - expose a method .fillFormFields(payload) that can be called from swift to fill in data.
 // - call sendCaptureCreditCardFormMessage(payload) when a credit card form submission is detected.
 // - call sendFillCreditCardFormMessage(payload) when a credit card form is detected.
 // The implementation file can be changed in Client/Assets/CC_Script/Overrides.ios.js
-Object.defineProperty(window.__firefox__, "CreditCardHelper", {
+Object.defineProperty(window.__firefox__, "FormAutofillHelper", {
   enumerable: false,
   configurable: false,
   writable: false,
   value: Object.freeze(
-    new CreditCardHelper(
+    new FormAutofillHelper(
       sendCaptureCreditCardFormMessage,
       sendFillCreditCardFormMessage
     )
   ),
 });
 
-// Create a CreditCardExtras object and expose it to the window object.
-// CreditCardExtras class contains methods to focus next and previous input fields.
-Object.defineProperty(window.__firefox__, "CreditCardExtras", {
+// Create a FormAutofillExtras object and expose it to the window object.
+// FormAutofillExtras class contains methods to focus next and previous input fields.
+Object.defineProperty(window.__firefox__, "FormAutofillExtras", {
   enumerable: false,
   configurable: false,
   writable: false,
-  value: Object.freeze(
-    new CreditCardExtras()
-  ),
+  value: Object.freeze(new FormAutofillExtras()),
 });
