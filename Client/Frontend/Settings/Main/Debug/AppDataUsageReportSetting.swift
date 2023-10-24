@@ -18,6 +18,8 @@ class AppDataUsageReportSetting: HiddenSetting {
         showSimpleAlert("Summary generated. Text has been copied to the clipboard.")
     }
 
+    // MARK: - Internal Utilities
+
     private func showSimpleAlert(_ message: String) {
         let alert = UIAlertController(title: "App Data Usage",
                                       message: message,
@@ -29,51 +31,42 @@ class AppDataUsageReportSetting: HiddenSetting {
     private func generateAppDataSummary() -> String {
         var directoriesAndSizes: [String: UInt64] = [:]
         var largeFileWarnings: [String: UInt64] = [:]
-        let fileMgr = FileManager.default
+        let fileManager = FileManager.default
+        let warningSize = 100 * 1024 * 1024  // (100MB) File size threshold to log for report
 
-        let directories: [URL] = [fileMgr.urls(for: .cachesDirectory, in: .userDomainMask).first,
-                                  fileMgr.urls(for: .documentDirectory, in: .userDomainMask).first].compactMap({$0})
+        let cachesDirectory = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first
+        let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
+        let directories: [URL] = [cachesDirectory, documentsDirectory].compactMap({ $0 })
 
         for baseDirectory in directories {
-            guard let enumerator = FileManager.default.enumerator(at: baseDirectory,
-                                                                  includingPropertiesForKeys: [URLResourceKey.fileSizeKey],
-                                                                  options: [],
-                                                                  errorHandler: nil) else { continue }
+            guard let enumerator = fileManager.enumerator(at: baseDirectory,
+                                                          includingPropertiesForKeys: [URLResourceKey.fileSizeKey],
+                                                          options: [],
+                                                          errorHandler: nil) else { continue }
             for case let fileURL as URL in enumerator {
                 var isDir: ObjCBool = false
                 let path = fileURL.path
-                _ = fileMgr.fileExists(atPath: path, isDirectory: &isDir)
-                if !isDir.boolValue {
+                if fileManager.fileExists(atPath: path, isDirectory: &isDir) && !isDir.boolValue {
                     let parentDir = fileURL.deletingLastPathComponent().path
-                    if directoriesAndSizes[parentDir] == nil {
-                        directoriesAndSizes[parentDir] = 0
-                    }
+                    if directoriesAndSizes[parentDir] == nil { directoriesAndSizes[parentDir] = 0 }
                     do {
                         let values = try fileURL.resourceValues(forKeys: [URLResourceKey.fileSizeKey])
                         let size = UInt64(values.fileSize ?? 0)
 
-                        // Log any extra-large files that should be called out in the final report
-                        let warningSize = 100 * 1024 * 1024  // 100MB
                         if size >= warningSize { largeFileWarnings[path] = size }
 
                         // Find any directory whose path is a valid prefix for the file path
-                        // This allows us to basically tally up the total sizes for parent
-                        // directories along with nested child directories (if needed) all at
-                        // the same time.
+                        // This allows us to tally the total sizes for parent directories
+                        // along with nested children (if needed) at the same time.
                         for dir in directoriesAndSizes.keys where path.hasPrefix(dir) {
                             let newSize = (directoriesAndSizes[dir] ?? 0) + size
                             directoriesAndSizes[dir] = newSize
                         }
-                        // For internal debugging purposes
-                        // print("File \(path) size = \((values.fileSize ?? 0) / 1024) kb")
                     } catch {
-                        // Error checking cache file size
+                        print("Error checking file size: \(error)")
                     }
                 } else {
-                    // Begin tracking directory to our list
-                    if directoriesAndSizes[path] == nil {
-                        directoriesAndSizes[path] = 0
-                    }
+                    if directoriesAndSizes[path] == nil { directoriesAndSizes[path] = 0 }
                 }
             }
         }
