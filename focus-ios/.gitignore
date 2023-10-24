@@ -55,3 +55,7 @@ import-strings.log
 export-strings.log
 
 shavar-prod-lists
+
+# Nimbus build infrastructure, derived from https://github.com/mozilla/application-services
+bin/nimbus-fml.sh
+bin/nimbus-fml-configuration.local.sh
