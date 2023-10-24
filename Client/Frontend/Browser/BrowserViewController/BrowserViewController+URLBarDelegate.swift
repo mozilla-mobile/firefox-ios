@@ -143,6 +143,7 @@ extension BrowserViewController: URLBarDelegate {
         contextHintVC.configure(
             anchor: sourceView,
             withArrowDirection: isBottomSearchBar ? .down : .up,
+            andDelegate: self,
             presentedUsing: {
                 self.present(contextHintVC, animated: true)
                 TelemetryWrapper.recordEvent(category: .action,
