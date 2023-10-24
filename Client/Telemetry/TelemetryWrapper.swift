@@ -1070,6 +1070,13 @@ extension TelemetryWrapper {
             if let searchLocation = extras?[EventExtraKey.recordSearchLocation.rawValue] as? SearchesMeasurement.SearchLocation, let searchEngineID = extras?[EventExtraKey.recordSearchEngineID.rawValue] as? String? {
                 Telemetry.default.recordSearch(location: searchLocation, searchEngine: searchEngineID ?? "other")
                 GleanMetrics.Search.counts["\(searchEngineID ?? "custom").\(searchLocation.rawValue)"].add()
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
             }
 
         // MARK: Awesomebar Search Results
