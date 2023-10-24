@@ -28,11 +28,10 @@ open class RustFirefoxAccounts {
     public static let redirectURL = "urn:ietf:wg:oauth:2.0:oob:oauth-redirect-webchannel"
     // The value of the scope comes from https://searchfox.org/mozilla-central/rev/887d4b5da89a11920ed0fd96b7b7f066927a67db/services/fxaccounts/FxAccountsCommon.js#88
     public static let pushScope = "chrome://fxa-device-update"
-    public static var shared = RustFirefoxAccounts()
+    public static let shared = RustFirefoxAccounts()
     public var accountManager = Deferred<FxAccountManager>()
     private static var isInitializingAccountManager = false
     public var avatar: Avatar?
-    public let syncAuthState: SyncAuthState
     fileprivate static var prefs: Prefs?
     public let pushNotifications = PushNotificationSetup()
     private let logger: Logger
@@ -46,6 +45,9 @@ open class RustFirefoxAccounts {
      */
     public static func startup(prefs: Prefs,
                                logger: Logger = DefaultLogger.shared) -> Deferred<FxAccountManager> {
+        // In startup, we might not have called init yet but attempting to use
+        // any class properties will lead to a crash, so we call it first
+        _ = RustFirefoxAccounts.shared.accountManager
         assert(Thread.isMainThread)
         if !Thread.isMainThread {
             logger.log("Startup of RustFirefoxAccounts is happening OFF the main thread!",
@@ -80,19 +82,6 @@ open class RustFirefoxAccounts {
             }
         }
         return RustFirefoxAccounts.shared.accountManager
-    }
-
-    private static let prefKeySyncAuthStateUniqueID = "PrefKeySyncAuthStateUniqueID"
-    private static func syncAuthStateUniqueId(prefs: Prefs?) -> String {
-        let id: String
-        let key = RustFirefoxAccounts.prefKeySyncAuthStateUniqueID
-        if let _id = prefs?.stringForKey(key) {
-            id = _id
-        } else {
-            id = UUID().uuidString
-            prefs?.setString(id, forKey: key)
-        }
-        return id
     }
 
     @discardableResult
@@ -152,12 +141,7 @@ open class RustFirefoxAccounts {
         // before any Application Services component gets used.
         Viaduct.shared.useReqwestBackend()
 
-        let prefs = RustFirefoxAccounts.prefs
         self.logger = logger
-        let cache = KeychainCache.fromBranch("rustAccounts.syncAuthState",
-                                             withLabel: RustFirefoxAccounts.syncAuthStateUniqueId(prefs: prefs),
-                                             factory: syncAuthStateCachefromJSON)
-        syncAuthState = FirefoxAccountSyncAuthState(cache: cache)
 
         // Called when account is logged in for the first time, on every app start when the account is found (even if offline).
         NotificationCenter.default.addObserver(forName: .accountAuthenticated, object: nil, queue: .main) { [weak self] notification in
@@ -226,10 +210,8 @@ open class RustFirefoxAccounts {
         guard let accountManager = accountManager.peek() else { return }
         accountManager.logout { _ in }
         let prefs = RustFirefoxAccounts.prefs
-        prefs?.removeObjectForKey(RustFirefoxAccounts.prefKeySyncAuthStateUniqueID)
         prefs?.removeObjectForKey(prefKeyCachedUserProfile)
         prefs?.removeObjectForKey(PendingAccountDisconnectedKey)
-        self.syncAuthState.invalidate()
         cachedUserProfile = nil
         MZKeychainWrapper.sharedClientAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
     }
