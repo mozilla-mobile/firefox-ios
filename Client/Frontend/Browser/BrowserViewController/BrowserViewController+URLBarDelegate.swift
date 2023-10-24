@@ -36,7 +36,7 @@ extension BrowserViewController: URLBarDelegate {
         updateFindInPageVisibility(visible: false)
 
         guard !isTabTrayRefactorEnabled else {
-            navigationHandler?.showTabTray()
+            navigationHandler?.showTabTray(selectedPanel: focusedSegment ?? .tabs)
             return
         }
 

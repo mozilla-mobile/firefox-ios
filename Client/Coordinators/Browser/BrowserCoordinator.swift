@@ -450,7 +450,7 @@ class BrowserCoordinator: BaseCoordinator,
         coordinator.showQRCode(delegate: browserViewController)
     }
 
-    func showTabTray() {
+    func showTabTray(selectedPanel: TabTrayPanelType) {
         guard !childCoordinators.contains(where: { $0 is TabTrayCoordinator}) else {
             return // flow is already handled
         }
@@ -465,7 +465,7 @@ class BrowserCoordinator: BaseCoordinator,
         )
         tabTrayCoordinator.parentCoordinator = self
         add(child: tabTrayCoordinator)
-        tabTrayCoordinator.start(with: .tabs)
+        tabTrayCoordinator.start(with: selectedPanel)
 
         router.present(navigationController)
     }

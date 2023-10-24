@@ -46,18 +46,20 @@ class TabTrayCoordinator: BaseCoordinator, TabTrayViewControllerDelegate, TabTra
     func start(panelType: TabTrayPanelType, navigationController: UINavigationController) {
         switch panelType {
         case .tabs:
-            makeRegularTabsCoordinator(navigationController: navigationController)
+            makeTabsCoordinator(navigationController: navigationController)
         case .privateTabs:
-            makePrivateTabsCoordinator(navigationController: navigationController)
+            makeTabsCoordinator(navigationController: navigationController)
         case .syncedTabs:
             makeSyncedTabsCoordinator(navigationController: navigationController)
         }
     }
 
-    private func makeRegularTabsCoordinator(navigationController: UINavigationController) {
-    }
-
-    private func makePrivateTabsCoordinator(navigationController: UINavigationController) {
+    private func makeTabsCoordinator(navigationController: UINavigationController) {
+        let router = DefaultRouter(navigationController: navigationController)
+        let tabCoordinator = TabsCoordinator(parentCoordinator: parentCoordinator,
+                                             router: router)
+        add(child: tabCoordinator)
+        (navigationController.topViewController as? TabDisplayViewController)?.navigationHandler = tabCoordinator
     }
 
     private func makeSyncedTabsCoordinator(navigationController: UINavigationController) {

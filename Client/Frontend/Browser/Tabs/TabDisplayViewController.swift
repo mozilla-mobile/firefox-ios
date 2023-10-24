@@ -11,6 +11,7 @@ class TabDisplayViewController: UIViewController,
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
+    weak var navigationHandler: TabsNavigationHandler?
 
     // MARK: UI elements
     private var tabDisplayView: TabDisplayView = .build { _ in }

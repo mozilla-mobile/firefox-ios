@@ -65,7 +65,7 @@ class TabTrayViewController: UIViewController,
         return layout == .regular
     }
 
-    var currentPanel: UIViewController? {
+    var currentPanel: UINavigationController? {
         guard let index = selectedPanel?.rawValue else { return nil }
 
         return childPanelControllers[index]
@@ -371,6 +371,7 @@ class TabTrayViewController: UIViewController,
         updateLayout()
         hideCurrentPanel()
         showPanel(currentPanel)
+        navigationHandler?.start(panelType: panelType, navigationController: currentPanel)
     }
 
     private func showPanel(_ panel: UIViewController) {
