@@ -132,7 +132,6 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
             let defaultEngine = profile.searchEngines.defaultEngine
             settings["defaultSearchEngine"] = defaultEngine?.engineID ?? "custom"
 
-
             if let windowBounds = UIWindow.keyWindow?.bounds {
                 settings["windowWidth"] = String(describing: windowBounds.width)
                 settings["windowHeight"] = String(describing: windowBounds.height)
