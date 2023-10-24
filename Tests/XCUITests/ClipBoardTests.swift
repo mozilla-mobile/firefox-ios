@@ -19,7 +19,7 @@ class ClipBoardTests: BaseTestCase {
         mozWaitForElementToExist(app.textFields["address"])
         app.textFields["address"].tap()
         if iPad() {
-            app.textFields["address"].tap()
+            app.textFields["address"].press(forDuration: 1)
             app.menuItems["Select All"].tap()
         }
         mozWaitForElementToExist(app.menuItems["Copy"])
