@@ -96,6 +96,9 @@ class BrowserViewController: UIViewController,
         stackview.isClearBackground = true
     }
 
+    // The content stack view contains the contentContainer with homepage or browser and the shopping sidebar
+    var contentStackView: BaseAlphaStackView = .build { _ in }
+
     // The content container contains the homepage or webview. Embeded by the coordinator.
     var contentContainer: ContentContainer = .build { _ in }
 
@@ -388,7 +391,7 @@ class BrowserViewController: UIViewController,
 
         view.bringSubviewToFront(webViewContainerBackdrop)
         webViewContainerBackdrop.alpha = 1
-        contentContainer.alpha = 0
+        contentStackView.alpha = 0
         urlBar.locationContainer.alpha = 0
         presentedViewController?.popoverPresentationController?.containerView?.alpha = 0
         presentedViewController?.view.alpha = 0
@@ -403,7 +406,7 @@ class BrowserViewController: UIViewController,
             delay: 0,
             options: UIView.AnimationOptions(),
             animations: {
-                self.contentContainer.alpha = 1
+                self.contentStackView.alpha = 1
                 self.urlBar.locationContainer.alpha = 1
                 self.presentedViewController?.popoverPresentationController?.containerView?.alpha = 1
                 self.presentedViewController?.view.alpha = 1
@@ -569,7 +572,9 @@ class BrowserViewController: UIViewController,
         webViewContainerBackdrop.backgroundColor = UIColor.Photon.Ink90
         webViewContainerBackdrop.alpha = 0
         view.addSubview(webViewContainerBackdrop)
-        view.addSubview(contentContainer)
+        view.addSubview(contentStackView)
+
+        contentStackView.addArrangedSubview(contentContainer)
 
         topTouchArea = UIButton()
         topTouchArea.isAccessibilityElement = false
@@ -728,10 +733,10 @@ class BrowserViewController: UIViewController,
         }
 
         NSLayoutConstraint.activate([
-            contentContainer.topAnchor.constraint(equalTo: header.bottomAnchor),
-            contentContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            contentContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            contentContainer.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor),
+            contentStackView.topAnchor.constraint(equalTo: header.bottomAnchor),
+            contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            contentStackView.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor),
         ])
 
         updateHeaderConstraints()
