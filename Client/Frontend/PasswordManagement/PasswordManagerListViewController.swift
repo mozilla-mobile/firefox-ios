@@ -288,11 +288,10 @@ private extension PasswordManagerListViewController {
                 DispatchQueue.main.async {
                     self?.loadLogins()
                     self?.tableView.reloadData()
-                    self?.sendLoginsManagementAddTappedTelemetry()
                 }
             }
         }
-
+        sendLoginsManagementAddTappedTelemetry()
         coordinator?.pressedAddPassword(completion: completion)
     }
 
