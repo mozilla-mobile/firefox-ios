@@ -45,6 +45,7 @@ class TabDisplayViewController: UIViewController,
     }
 
     func setupView() {
+        navigationController?.setNavigationBarHidden(true, animated: false)
         view.addSubview(tabDisplayView)
         view.addSubview(backgroundPrivacyOverlay)
 

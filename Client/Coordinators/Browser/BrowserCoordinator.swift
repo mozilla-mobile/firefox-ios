@@ -17,7 +17,8 @@ class BrowserCoordinator: BaseCoordinator,
                           EnhancedTrackingProtectionCoordinatorDelegate,
                           FakespotCoordinatorDelegate,
                           ParentCoordinatorDelegate,
-                          TabManagerDelegate {
+                          TabManagerDelegate,
+                          TabTrayCoordinatorDelegate {
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
@@ -449,21 +450,6 @@ class BrowserCoordinator: BaseCoordinator,
         coordinator.showQRCode(delegate: browserViewController)
     }
 
-    // MARK: - ParentCoordinatorDelegate
-
-    func didFinish(from childCoordinator: Coordinator) {
-        remove(child: childCoordinator)
-    }
-
-    // MARK: - TabManagerDelegate
-
-    func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
-        // Once tab restore is made, if there's any saved route we make sure to call it
-        if let savedRoute {
-            findAndHandle(route: savedRoute)
-        }
-    }
-
     func showTabTray() {
         guard !childCoordinators.contains(where: { $0 is TabTrayCoordinator}) else {
             return // flow is already handled
@@ -482,5 +468,26 @@ class BrowserCoordinator: BaseCoordinator,
         tabTrayCoordinator.start(with: .tabs)
 
         router.present(navigationController)
+    }
+
+    // MARK: - ParentCoordinatorDelegate
+
+    func didFinish(from childCoordinator: Coordinator) {
+        remove(child: childCoordinator)
+    }
+
+    // MARK: - TabManagerDelegate
+
+    func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
+        // Once tab restore is made, if there's any saved route we make sure to call it
+        if let savedRoute {
+            findAndHandle(route: savedRoute)
+        }
+    }
+
+    // MARK: - TabTrayCoordinatorDelegate
+    func didDismissTabTray(from coordinator: TabTrayCoordinator) {
+        router.dismiss(animated: true, completion: nil)
+        remove(child: coordinator)
     }
 }

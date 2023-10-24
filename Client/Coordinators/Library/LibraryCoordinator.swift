@@ -130,8 +130,4 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
     func libraryPanel(didSelectURL url: URL, visitType: Storage.VisitType) {
         parentCoordinator?.libraryPanel(didSelectURL: url, visitType: visitType)
     }
-
-    func didFinish() {
-        parentCoordinator?.didFinishLibrary(from: self)
-    }
 }

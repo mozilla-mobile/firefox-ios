@@ -15,6 +15,10 @@ protocol TabTrayController: UIViewController,
     var didSelectUrl: ((_ url: URL, _ visitType: VisitType) -> Void)? { get set }
 }
 
+protocol TabTrayViewControllerDelegate: AnyObject {
+    func didFinish()
+}
+
 class TabTrayViewController: UIViewController,
                              TabTrayController,
                              UIToolbarDelegate {
@@ -59,6 +63,12 @@ class TabTrayViewController: UIViewController,
     // iPad Layout
     var isRegularLayout: Bool {
         return layout == .regular
+    }
+
+    var currentPanel: UIViewController? {
+        guard let index = selectedPanel?.rawValue else { return nil }
+
+        return childPanelControllers[index]
     }
 
     // MARK: - UI
@@ -172,11 +182,9 @@ class TabTrayViewController: UIViewController,
         }
     }
 
-    init(/*selectedPanel: TabTrayPanelType,*/
-         delegate: TabTrayViewControllerDelegate,
+    init(delegate: TabTrayViewControllerDelegate,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          and notificationCenter: NotificationProtocol = NotificationCenter.default) {
-//        self.selectedPanel = selectedPanel
         self.delegate = delegate
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
@@ -220,7 +228,7 @@ class TabTrayViewController: UIViewController,
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        delegate?.didDismissTabTray()
+        delegate?.didFinish()
     }
 
     private func updateLayout() {
@@ -256,19 +264,6 @@ class TabTrayViewController: UIViewController,
             return
         }
         setupForiPad()
-    }
-
-    private func getChildViewController(panelType: TabTrayPanelType) -> UIViewController {
-        switch panelType {
-        case .tabs:
-            return TabDisplayViewController(isPrivateMode: false)
-        case .privateTabs:
-            return TabDisplayViewController(isPrivateMode: true)
-        case .syncedTabs:
-            let panel = RemoteTabsPanel()
-            panel.remotePanelDelegate = self
-            return panel
-        }
     }
 
     private func setupForiPhone() {
@@ -368,11 +363,14 @@ class TabTrayViewController: UIViewController,
 
     // MARK: Child panels
     func setupOpenPanel(panelType: TabTrayPanelType) {
-        guard selectedPanel != panelType else { return }
-
         selectedPanel = panelType
+
+        guard let currentPanel = currentPanel else { return }
+
+        updateTitle()
+        updateLayout()
         hideCurrentPanel()
-        showPanel(getChildViewController(panelType: panelType))
+        showPanel(currentPanel)
     }
 
     private func showPanel(_ panel: UIViewController) {
@@ -404,19 +402,12 @@ class TabTrayViewController: UIViewController,
         }
     }
 
-    private func segmentPanelChange() {
-        guard let panelType = selectedPanel else { return }
-
-        hideCurrentPanel()
-        showPanel(getChildViewController(panelType: panelType))
-    }
-
     @objc
     private func segmentChanged() {
-        selectedPanel = TabTrayPanelType(rawValue: segmentedControl.selectedSegmentIndex)
-        updateTitle()
-        updateLayout()
-        segmentPanelChange()
+        guard let panelType = TabTrayPanelType(rawValue: segmentedControl.selectedSegmentIndex),
+              selectedPanel != panelType else { return }
+
+        setupOpenPanel(panelType: panelType)
     }
 
     @objc

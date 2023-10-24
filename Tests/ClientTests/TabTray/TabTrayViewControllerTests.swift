@@ -107,6 +107,6 @@ final class TabTrayViewControllerTests: XCTestCase {
 }
 
 // MARK: MockTabTrayViewControllerDelegate
-class MockTabTrayViewControllerDelegate: TabTrayViewControllerDelegate {
+class MockTabTrayViewControllerDelegate: TabTrayCoordinatorDelegate {
     func didDismissTabTray() {}
 }

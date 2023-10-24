@@ -4,8 +4,8 @@
 
 import Common
 
-protocol TabTrayViewControllerDelegate: AnyObject {
-    func didDismissTabTray()
+protocol TabTrayCoordinatorDelegate: AnyObject {
+    func didDismissTabTray(from coordinator: TabTrayCoordinator)
 }
 
 protocol TabTrayNavigationHandler: AnyObject {
@@ -14,7 +14,7 @@ protocol TabTrayNavigationHandler: AnyObject {
 
 class TabTrayCoordinator: BaseCoordinator, TabTrayViewControllerDelegate, TabTrayNavigationHandler {
     private var tabTrayViewController: TabTrayViewController!
-    weak var parentCoordinator: ParentCoordinatorDelegate?
+    weak var parentCoordinator: TabTrayCoordinatorDelegate?
 
     init(router: Router) {
         super.init(router: router)
@@ -25,7 +25,6 @@ class TabTrayCoordinator: BaseCoordinator, TabTrayViewControllerDelegate, TabTra
         tabTrayViewController = TabTrayViewController(delegate: self)
         router.setRootViewController(tabTrayViewController)
         tabTrayViewController.childPanelControllers = makeChildPanels()
-        tabTrayViewController.delegate = self
         tabTrayViewController.navigationHandler = self
     }
 
@@ -45,11 +44,34 @@ class TabTrayCoordinator: BaseCoordinator, TabTrayViewControllerDelegate, TabTra
     }
 
     func start(panelType: TabTrayPanelType, navigationController: UINavigationController) {
-        tabTrayViewController.setupOpenPanel(panelType: panelType)
+        switch panelType {
+        case .tabs:
+            makeRegularTabsCoordinator(navigationController: navigationController)
+        case .privateTabs:
+            makePrivateTabsCoordinator(navigationController: navigationController)
+        case .syncedTabs:
+            makeSyncedTabsCoordinator(navigationController: navigationController)
+        }
     }
 
-    func didDismissTabTray() {
+    private func makeRegularTabsCoordinator(navigationController: UINavigationController) {
+    }
+
+    private func makePrivateTabsCoordinator(navigationController: UINavigationController) {
+    }
+
+    private func makeSyncedTabsCoordinator(navigationController: UINavigationController) {
+        guard !childCoordinators.contains(where: { $0 is SyncedTabsCoordinator }) else { return }
+        let router = DefaultRouter(navigationController: navigationController)
+        let syncedCoordinator = SyncedTabsCoordinator(parentCoordinator: parentCoordinator,
+                                                      router: router)
+        add(child: syncedCoordinator)
+        (navigationController.topViewController as? RemoteTabsPanel)?.navigationHandler = syncedCoordinator
+    }
+
+    // MARK: - TabTrayViewControllerDelegate
+    func didFinish() {
         router.dismiss(animated: true, completion: nil)
-        parentCoordinator?.didFinish(from: self)
+        parentCoordinator?.didDismissTabTray(from: self)
     }
 }
