@@ -5,6 +5,7 @@
 import XCTest
 
 class DisplaySettingTests: BaseTestCase {
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2337485
     func testCheckDisplaySettingsDefault() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(DisplaySettings)
@@ -14,12 +15,14 @@ class DisplaySettingTests: BaseTestCase {
         XCTAssertEqual(switchValue as! String, "1")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2337487
     func testCheckSystemThemeChanges() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(DisplaySettings)
         mozWaitForElementToExist(app.switches["SystemThemeSwitchValue"])
         navigator.performAction(Action.SystemThemeSwitch)
         mozWaitForElementToExist(app.tables["DisplayTheme.Setting.Options"].otherElements.staticTexts["SWITCH MODE"])
+        mozWaitForElementToExist(app.tables["DisplayTheme.Setting.Options"].otherElements.staticTexts["THEME PICKER"])
 
         // Going back to Settings and Display settings keeps the value
         navigator.goto(SettingsScreen)
@@ -48,5 +51,6 @@ class DisplaySettingTests: BaseTestCase {
         let switchValueAfter = app.switches["SystemThemeSwitchValue"].value!
         XCTAssertEqual(switchValueAfter as! String, "1")
         XCTAssertFalse(app.tables["DisplayTheme.Setting.Options"].otherElements.staticTexts["SWITCH MODE"].exists)
+        XCTAssertFalse(app.tables["DisplayTheme.Setting.Options"].otherElements.staticTexts["THEME PICKER"].exists)
     }
 }

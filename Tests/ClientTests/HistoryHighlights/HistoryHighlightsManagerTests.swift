@@ -21,7 +21,7 @@ class HistoryHighlightsTests: XCTestCase {
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         DependencyHelperMock().bootstrapDependencies()
         profile.reopen()
-        let tabManager = LegacyTabManager(profile: profile, imageStore: nil)
+        let tabManager = TabManagerImplementation(profile: profile, imageStore: nil)
         entryProvider = HistoryHighlightsTestEntryProvider(with: profile, and: tabManager)
     }
 

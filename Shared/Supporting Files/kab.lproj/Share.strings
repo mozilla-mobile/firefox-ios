@@ -1,0 +1,6 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "Ur tesɛiḍ ara ibenkan niḍen yeqqnen ɣer umiḍan-a i wejden i umtawi.";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "Aql-ak ur teqqineḍ ara ɣer umiḍan-ik.";
+

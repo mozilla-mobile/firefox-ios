@@ -393,6 +393,7 @@ extension TelemetryWrapper {
         case app = "app"
         case bookmark = "bookmark"
         case awesomebarResults = "awesomebar-results"
+        case recordSearch = "record-search"
         case bookmarksPanel = "bookmarks-panel"
         case mobileBookmarks = "has-mobile-bookmarks"
         case download = "download"
@@ -684,6 +685,8 @@ extension TelemetryWrapper {
         case tabsQuantity = "tabsQuantity"
         case isRestoreTabsStarted = "is-restore-tabs-started"
         case awesomebarSearchTapType = "awesomebarSearchTapType"
+        case recordSearchLocation = "recordSearchLocation"
+        case recordSearchEngineID = "recordSearchEngineID"
 
         case preference = "pref"
         case preferenceChanged = "to"
@@ -1063,6 +1066,18 @@ extension TelemetryWrapper {
         // MARK: Start Search Button
         case (.action, .tap, .startSearchButton, _, _):
             GleanMetrics.Search.startSearchPressed.add()
+        case(.action, .tap, .recordSearch, _, let extras):
+            if let searchLocation = extras?[EventExtraKey.recordSearchLocation.rawValue] as? SearchesMeasurement.SearchLocation, let searchEngineID = extras?[EventExtraKey.recordSearchEngineID.rawValue] as? String? {
+                Telemetry.default.recordSearch(location: searchLocation, searchEngine: searchEngineID ?? "other")
+                GleanMetrics.Search.counts["\(searchEngineID ?? "custom").\(searchLocation.rawValue)"].add()
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
 
         // MARK: Awesomebar Search Results
         case (.action, .tap, .awesomebarResults, _, let extras):

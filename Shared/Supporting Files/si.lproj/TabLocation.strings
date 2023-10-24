@@ -13,3 +13,6 @@
 /* Accessibility label for the share button in url bar */
 "TabLocation.Share.A11y.Label.v119" = "මෙම පිටුව බෙදාගන්න";
 
+/* Accessibility label for the shopping button in url bar */
+"TabLocation.Shopping.A11y.Label.v120" = "සමාලෝචන සෝදිසිකරු";
+

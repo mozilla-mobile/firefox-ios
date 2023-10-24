@@ -5,6 +5,7 @@
 import UIKit
 import Shared
 import Common
+import ComponentLibrary
 
 class ClearPrivateDataTableViewController: ThemedTableViewController {
     private var clearButton: UITableViewCell?
@@ -97,7 +98,8 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
         } else if indexPath.section == sectionToggles {
             cell.textLabel?.text = clearables[indexPath.item].clearable.label
             cell.textLabel?.numberOfLines = 0
-            let control = UISwitch()
+            let control = ThemedSwitch()
+            control.applyTheme(theme: themeManager.currentTheme)
             control.onTintColor = themeManager.currentTheme.colors.actionPrimary
             control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
             control.isOn = toggles[indexPath.item]

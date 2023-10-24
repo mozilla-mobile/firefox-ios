@@ -9,7 +9,6 @@ features:
         type: Map<HomeScreenSection, Boolean>
         default:
           {
-            "top-sites": true,
             "jump-back-in": true,
             "recent-explorations": true,
           }
@@ -23,7 +22,6 @@ features:
       - channel: developer
         value: {
           "sections-enabled": {
-            "top-sites": true,
             "jump-back-in": true,
             "recent-explorations": true,
           },
@@ -32,7 +30,6 @@ features:
       - channel: beta
         value: {
           "sections-enabled": {
-            "top-sites": true,
             "jump-back-in": true,
             "recent-explorations": true,
           },
@@ -43,8 +40,6 @@ enums:
   HomeScreenSection:
     description: The identifiers for the sections of the homescreen.
     variants:
-      top-sites:
-        description: The frecency and pinned sites.
       jump-back-in:
         description: The tabs the user was looking immediately before being interrupted.
       recent-explorations:

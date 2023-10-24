@@ -28,7 +28,7 @@ class JumpBackInViewModelTests: XCTestCase {
         mockTabManager = MockTabManager()
         stubBrowserViewController = BrowserViewController(
             profile: mockProfile,
-            tabManager: LegacyTabManager(profile: mockProfile, imageStore: nil)
+            tabManager: TabManagerImplementation(profile: mockProfile, imageStore: nil)
         )
 
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)

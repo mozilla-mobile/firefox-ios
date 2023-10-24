@@ -28,7 +28,7 @@ class TabsQuantityTelemetryTests: XCTestCase {
     }
 
     func testTrackTabsQuantity_withNormalTab_gleanIsCalled() {
-        let tabManager = LegacyTabManager(profile: profile, imageStore: nil)
+        let tabManager = TabManagerImplementation(profile: profile, imageStore: nil)
         tabManager.addTab()
 
         TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
@@ -43,7 +43,7 @@ class TabsQuantityTelemetryTests: XCTestCase {
     }
 
     func testTrackTabsQuantity_withPrivateTab_gleanIsCalled() {
-        let tabManager = LegacyTabManager(profile: profile, imageStore: nil)
+        let tabManager = TabManagerImplementation(profile: profile, imageStore: nil)
         tabManager.addTab(isPrivate: true)
 
         TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
@@ -58,7 +58,7 @@ class TabsQuantityTelemetryTests: XCTestCase {
     }
 
     func testTrackTabsQuantity_ensureNoInactiveTabs_gleanIsCalled() {
-        let tabManager = LegacyTabManager(profile: profile, imageStore: nil)
+        let tabManager = TabManagerImplementation(profile: profile, imageStore: nil)
         tabManager.addTab()
 
         TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)

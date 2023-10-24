@@ -1,4 +1,13 @@
 /* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "Lidhje jo e sigurt. Mbrojtja e Thelluar Nga Gjurmimet është e çaktivizuar.";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.Secure.A11y.Label.v119" = "Lidhje e sigurt. Mbrojtja e Thelluar Nga Gjurmimet është e çaktivizuar.";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.NotSecure.A11y.Label.v119" = "Lidhje jo e sigurt";
+
+/* Accessibility label for the security icon in url bar */
 "TabLocation.ETP.On.Secure.A11y.Label.v119" = "Lidhje e sigurt";
 
 /* Accessibility label for the share button in url bar */

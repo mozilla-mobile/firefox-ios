@@ -1,4 +1,12 @@
 ---
+address-autofill-feature:
+  description: This property defines the address card autofill feature
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    status:
+      type: boolean
+      description: "Variable description\n"
 contextual-hint-feature:
   description: This set holds all features pertaining to contextual hints.
   hasExposure: true

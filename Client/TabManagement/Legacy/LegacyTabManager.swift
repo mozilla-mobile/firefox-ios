@@ -317,9 +317,8 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     }
 
     // MARK: - Clear and store
-    func preserveTabs() {
-        store.preserveTabs(tabs, selectedTab: selectedTab)
-    }
+    // TODO: FXIOS-7596 Remove when moving the TabManager protocol to TabManagerImplementation
+    func preserveTabs() { fatalError("should never be called") }
 
     func shouldClearPrivateTabs() -> Bool {
         return profile.prefs.boolForKey("settings.closePrivateTabs") ?? false
@@ -357,10 +356,8 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         }
     }
 
-    func storeChanges() {
-        saveTabs(toProfile: profile, normalTabs)
-        store.preserveTabs(tabs, selectedTab: selectedTab)
-    }
+    // TODO: FXIOS-7596 Remove when moving the TabManager protocol to TabManagerImplementation
+    func storeChanges() { fatalError("should never be called") }
 
     func hasTabsToRestoreAtStartup() -> Bool {
         return store.hasTabsToRestoreAtStartup
