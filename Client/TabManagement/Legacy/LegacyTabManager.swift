@@ -1018,28 +1018,3 @@ extension LegacyTabManager: WKNavigationDelegate {
         }
     }
 }
-
-// MARK: - Test cases helpers
-extension LegacyTabManager {
-    func testRemoveAll() {
-        assert(AppConstants.isRunningTest)
-        if !AppConstants.isRunningTest {
-            logger.log("This method was used outside of tests!",
-                       level: .warning,
-                       category: .tabs)
-        }
-
-        removeTabs(self.tabs)
-    }
-
-    func testClearArchive() {
-        assert(AppConstants.isRunningTest)
-        if !AppConstants.isRunningTest {
-            logger.log("This method was used outside of tests!",
-                       level: .warning,
-                       category: .tabs)
-        }
-
-        store.clearArchive()
-    }
-}

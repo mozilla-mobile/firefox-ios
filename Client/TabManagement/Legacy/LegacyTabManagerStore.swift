@@ -15,7 +15,6 @@ protocol LegacyTabManagerStore {
     func restoreStartupTabs(clearPrivateTabs: Bool,
                             addTabClosure: @escaping (Bool) -> Tab) -> Tab?
 
-    func clearArchive()
 }
 
 class LegacyTabManagerStoreImplementation: LegacyTabManagerStore, FeatureFlaggable {
@@ -93,19 +92,6 @@ class LegacyTabManagerStoreImplementation: LegacyTabManagerStore, FeatureFlaggab
         }
 
         return tabToSelect
-    }
-
-    func clearArchive() {
-        guard let path = tabsStateArchivePath() else { return }
-
-        do {
-            try fileManager.removeItem(at: path)
-        } catch let error {
-            logger.log("Clear archive couldn't be completed",
-                       level: .warning,
-                       category: .tabs,
-                       description: error.localizedDescription)
-        }
     }
 
     // MARK: - Private
