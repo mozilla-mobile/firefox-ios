@@ -12,7 +12,6 @@ class ForgetSyncAuthStateDebugSetting: HiddenSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        settings.profile.rustFxA.syncAuthState.invalidate()
         settings.tableView.reloadData()
     }
 }
