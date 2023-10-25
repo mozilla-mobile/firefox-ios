@@ -1069,8 +1069,8 @@ extension String {
             public static let Description = MZLocalizedString(
                 key: "Onboarding.Sync.Description.v120",
                 tableName: "Onboarding",
-                value: "When you’re signed in and synced, you’re safer. Firefox encrypts your passwords, bookmarks, and more.",
-                comment: "String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens.")
+                value: "When you’re signed in and synced, you’re safer. %@ encrypts your passwords, bookmarks, and more.",
+                comment: "String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name.")
             public static let SignInAction = MZLocalizedString(
                 key: "Onboarding.Sync.SignIn.Action.v114",
                 tableName: "Onboarding",
