@@ -74,6 +74,10 @@ public class DefaultLogger: Logger {
         fileManager.copyLogsToDocuments()
     }
 
+    public func deleteCachedLogFiles() {
+        fileManager.deleteCachedLogFiles()
+    }
+
     // MARK: - Private
 
     private func bundleExtraEvents(extra: [String: String]?,

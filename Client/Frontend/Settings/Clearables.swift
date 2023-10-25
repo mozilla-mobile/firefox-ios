@@ -71,8 +71,8 @@ class HistoryClearable: Clearable {
     }
 }
 
-// Clear the web cache. Note, this has to close all open tabs in order to ensure the data
-// cached in them isn't flushed to disk.
+// Clear cached data. This includes the web cache and old log data. Note: this has to close all open
+// tabs in order to ensure the data cached in them isn't flushed to disk.
 class CacheClearable: Clearable {
     var label: String { .ClearableCache }
     private let logger: Logger
@@ -85,8 +85,15 @@ class CacheClearable: Clearable {
         let dataTypes = Set([WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache])
         WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
 
+        // Clear in-memory reader cache (private browsing content etc.)
         MemoryReaderModeCache.sharedInstance.clear()
+
+        // Clear out any persistent cached readerized content on disk
         DiskReaderModeCache.sharedInstance.clear()
+
+        // Ensure all log files are cleared. A new log file will be immediately created as soon as our
+        // next log message is sent but any older cached log data will be reset to free up disk space.
+        logger.deleteCachedLogFiles()
 
         logger.log("CacheClearable succeeded.",
                    level: .debug,

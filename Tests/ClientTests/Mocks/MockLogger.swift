@@ -13,6 +13,11 @@ class MockLogger: Logger {
     func setup(sendUsageData: Bool) {}
     func configure(crashManager: Common.CrashManager) {}
     func copyLogsToDocuments() {}
+<<<<<<< HEAD
+=======
+    func logCustomError(error: Error) {}
+    func deleteCachedLogFiles() {}
+>>>>>>> 350e05bb9 (Bugfix FXIOS-7616 [v121] Fix errant log files remaining in Cache (#16970))
 
     func log(_ message: String,
              level: LoggerLevel,
