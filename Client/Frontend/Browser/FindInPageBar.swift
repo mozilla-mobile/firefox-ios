@@ -185,12 +185,12 @@ class FindInPageBar: UIView, ThemeApplicable {
     // MARK: - Theme Applicable
     func applyTheme(theme: Theme) {
         let colors = theme.colors
-        topBorder.backgroundColor = colors.layer5Hover
+        topBorder.backgroundColor = colors.borderPrimary
         searchText.textColor = colors.layerRatingF
-        matchCountView.textColor = colors.actionSecondaryHover
-        previousButton.setTitleColor(.black, for: .normal)
-        nextButton.setTitleColor(.black, for: .normal)
-        closeButton.setTitleColor(.black, for: .normal)
+        matchCountView.textColor = colors.actionSecondary
+        previousButton.setTitleColor(colors.textPrimary, for: .normal)
+        nextButton.setTitleColor(colors.textPrimary, for: .normal)
+        closeButton.setTitleColor(colors.textPrimary, for: .normal)
     }
 }
 
