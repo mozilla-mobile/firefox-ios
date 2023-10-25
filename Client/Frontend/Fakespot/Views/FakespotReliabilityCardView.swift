@@ -21,7 +21,7 @@ class FakespotReliabilityCardView: UIView, ThemeApplicable {
         static let horizontalPadding: CGFloat = 8
         static let cornerRadius: CGFloat = 4
         static let letterVerticalPadding: CGFloat = 4
-        static let letterHorizontalPadding: CGFloat = 4
+        static let letterHorizontalPadding: CGFloat = 7
         static let descriptionVerticalPadding: CGFloat = 6
         static let descriptionHorizontalPadding: CGFloat = 8
         static let titleFontSize: CGFloat = 15
