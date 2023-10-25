@@ -88,6 +88,7 @@
         "PerformanceTests",
         "PhotonActionSheetTests",
         "PocketTest",
+        "PocketTests",
         "PrivateBrowsingTest\/testClearIndexedDB()",
         "PrivateBrowsingTest\/testClosePrivateTabsOptionClosesPrivateTabs()",
         "PrivateBrowsingTest\/testPrivateBrowserPanelView()",

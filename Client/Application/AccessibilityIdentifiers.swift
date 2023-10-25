@@ -296,6 +296,14 @@ public struct AccessibilityIdentifiers {
         struct GroupedList {
             static let tableView = "grouped-items-table-view"
         }
+
+        struct ReadingListPanel {
+            static let tableView = "Reading list"
+        }
+
+        struct DownloadsPanel {
+            static let tableView = "DownloadsTable"
+        }
     }
 
     struct Onboarding {
