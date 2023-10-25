@@ -5,6 +5,7 @@
 import UIKit
 import Shared
 import ComponentLibrary
+
 protocol SearchEnginePickerDelegate: AnyObject {
     func searchEnginePicker(_ searchEnginePicker: SearchEnginePicker?, didSelectSearchEngine engine: OpenSearchEngine?)
 }
@@ -106,7 +107,6 @@ class SearchSettingsTableViewController: ThemedTableViewController {
                 cell.textLabel?.numberOfLines = 0
                 let toggle = ThemedSwitch()
                 toggle.applyTheme(theme: themeManager.currentTheme)
-                toggle.isEnabled = true
                 toggle.addTarget(self, action: #selector(didToggleSearchSuggestions), for: .valueChanged)
                 toggle.isOn = model.shouldShowSearchSuggestions
                 cell.editingAccessoryView = toggle
@@ -124,7 +124,6 @@ class SearchSettingsTableViewController: ThemedTableViewController {
 
                 let toggle = ThemedSwitch()
                 toggle.applyTheme(theme: themeManager.currentTheme)
-                toggle.isEnabled = true
                 // This is an easy way to get from the toggle control to the corresponding index.
                 toggle.tag = index
                 toggle.addTarget(self, action: #selector(didToggleEngine), for: .valueChanged)
