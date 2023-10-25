@@ -10,6 +10,7 @@ class HomeButtonTests: BaseTestCase {
         super.tearDown()
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306925
     func testGoHome() throws {
         if iPad() {
             waitForTabsButton()
