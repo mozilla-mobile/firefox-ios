@@ -16,8 +16,9 @@ class StartAtHomeHelperTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
+        DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
-        tabManager = LegacyTabManager(profile: profile, imageStore: nil)
+        tabManager = TabManagerImplementation(profile: profile, imageStore: nil)
 
         DependencyHelperMock().bootstrapDependencies()
     }

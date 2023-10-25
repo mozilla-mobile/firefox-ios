@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "การเข้าสู่ระบบที่บันทึกไว้จะแสดงที่นี่ หากคุณบันทึกการเข้าสู่ระบบลงใน Firefox บนอุปกรณ์อื่น ให้ลงชื่อเข้าใช้บัญชี Firefox ของคุณ";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "การเข้าสู่ระบบที่บันทึกไว้จะแสดงที่นี่ หากคุณบันทึกการเข้าสู่ระบบลงใน %@ บนอุปกรณ์อื่น ให้ลงชื่อเข้าใช้บัญชีของคุณ";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "ไม่พบการเข้าสู่ระบบ";
 

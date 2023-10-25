@@ -2,37 +2,12 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import XCTest
+import Foundation
 
-class SettingsTest: BaseTestCase {
-    func testHelpOpensSUMOInTab() {
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(SettingsScreen)
-        let settingsTableView = app.tables[AccessibilityIdentifiers.Settings.tableViewController]
-
-        while settingsTableView.staticTexts["Help"].exists == false {
-            settingsTableView.swipeUp()
-        }
-        let helpMenu = settingsTableView.cells["Help"]
-        XCTAssertTrue(helpMenu.isEnabled)
-        helpMenu.tap()
-
-        waitUntilPageLoad()
-        mozWaitForValueContains(app.textFields["url"], value: "support.mozilla.org")
-        mozWaitForElementToExist(app.webViews.staticTexts["Firefox for iOS Support"])
-
-        let numTabs = app.buttons["Show Tabs"].value
-        XCTAssertEqual("2", numTabs as? String, "Sume should be open in a different tab")
-    }
-
-    func testOpenSiriOption() {
-        waitForTabsButton()
-        navigator.nowAt(NewTabScreen)
-        navigator.performAction(Action.OpenSiriFromSettings)
-        mozWaitForElementToExist(app.cells["SiriSettings"], timeout: 5)
-    }
+class DefaultBrowserTests: BaseTestCase {
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306804
     /* Disable test since the option to set Firefox is not available in this build after issue #8513 landed, issue #8627
-    func testDefaultBrowser() {
+    func testSetFirefoxDefaultBrowserFromHomeScreenBanner() {
         // A default browser card should be available on the home screen
         mozWaitForElementToExist(app.staticTexts["Set links from websites, emails, and Messages to open automatically in Firefox."], timeout: 5)
         mozWaitForElementToExist(app.buttons["Learn More"], timeout: 5)

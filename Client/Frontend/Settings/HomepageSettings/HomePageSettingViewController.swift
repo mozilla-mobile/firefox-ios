@@ -243,7 +243,7 @@ extension HomePageSettingViewController {
         override var style: UITableViewCell.CellStyle { return .value1 }
 
         override var status: NSAttributedString {
-            let areShortcutsOn = featureFlags.isFeatureEnabled(.topSites, checking: .userOnly)
+            let areShortcutsOn = profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.TopSiteSection) ?? true
             let status: String = areShortcutsOn ? .Settings.Homepage.Shortcuts.ToggleOn : .Settings.Homepage.Shortcuts.ToggleOff
             return NSAttributedString(string: String(format: status))
         }

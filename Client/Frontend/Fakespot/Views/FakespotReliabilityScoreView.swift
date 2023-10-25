@@ -34,6 +34,7 @@ final class FakespotReliabilityScoreView: UIView, Notifiable, ThemeApplicable {
     init(grade: ReliabilityGrade) {
         self.grade = grade
         super.init(frame: .zero)
+        self.translatesAutoresizingMaskIntoConstraints = false
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
         setupLayout()

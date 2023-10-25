@@ -37,5 +37,9 @@ if [ "$1" == "--importLocales" ]; then
   exit 0
 fi
 
+# Download the nimbus-fml.sh script from application-services.
+NIMBUS_FML_FILE=./nimbus.fml.yaml
+curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/mozilla/application-services/main/components/nimbus/ios/scripts/bootstrap.sh | bash -s -- $NIMBUS_FML_FILE
+
 # Run and update content blocker
 ./content_blocker_update.sh

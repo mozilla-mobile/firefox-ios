@@ -605,7 +605,7 @@
 "LibraryPanel.History.ClearGroupedTabsTitle.v100" = "%@ のすべてのサイトを削除しますか？";
 
 /* Within the History Panel, users can open an action menu to clear recent history. */
-"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "履歴 (他の端末から同期されたものを含む)、Cookie および他のブラウジングデータを削除します。";
+"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "履歴 (他の端末から同期されたものを含む)、Cookie および他の閲覧データを削除します。";
 
 /* Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item. */
 "LibraryPanel.History.DeleteGroupedItem.v104" = "削除";
@@ -863,7 +863,7 @@
 "Menu.TrackingProtectionDescription.CryptominersNew" = "暗号通貨マイニングは仮想通貨の採掘のために、あなたのシステムの計算リソースを秘密裏に利用します。暗号通貨マイニングスクリプトは端末のバッテリーを消費し、コンピューターを遅くさせ、電気代を増やさせる可能性があります。";
 
 /* Description of fingerprinters. */
-"Menu.TrackingProtectionDescription.Fingerprinters" = "ユーザーのブラウザーおよびコンピューターの設定は個人特定に利用される可能性があります。フィンガープリントは、これらの個人を特定可能な様々な設定を収集してあなたのプロファイルを作成し、ブラウジングの追跡に使用されます。";
+"Menu.TrackingProtectionDescription.Fingerprinters" = "ユーザーのブラウザーおよびコンピューターの設定は個人特定に利用される可能性があります。フィンガープリントは、これらの個人を特定可能な様々な設定を収集してあなたのプロファイルを作成し、行動追跡に使用されます。";
 
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "ソーシャルネットワークは他のウェブサイトにトラッカーを配置して、あなたにターゲットを絞り、より完全なプロファイルを作成します。これらのトラッカーをブロックすると、ソーシャルメディア企業によるオンラインでのあなたの行動追跡を制限できます。";
@@ -1544,7 +1544,7 @@
 "Settings.TrackingProtection.LearnMore" = "詳細情報";
 
 /* Additional information about your Enhanced Tracking Protection */
-"Settings.TrackingProtection.ProtectionCellFooter" = "ターゲット型広告を減らし、ユーザーのブラウジングを追跡する広告を止めるのを助けます。";
+"Settings.TrackingProtection.ProtectionCellFooter" = "ターゲット型広告を減らし、ユーザーの行動を追跡する広告を阻止します。";
 
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer" = "サイトが期待通りに動作しない場合は、アドレスバー内の盾アイコンをタップして、そのページの強化型トラッキング防止をオフにしてください。";

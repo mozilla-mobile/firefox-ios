@@ -854,6 +854,23 @@ class TelemetryWrapperTests: XCTestCase {
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.AppErrors.largeFileWrite)
     }
+    // MARK: - RecordSearch
+    func test_RecordSearch_GleanIsCalledSearchSuggestion() {
+        let extras = [TelemetryWrapper.EventExtraKey.recordSearchLocation.rawValue: "suggestion",
+                      TelemetryWrapper.EventExtraKey.recordSearchEngineID.rawValue: "default"] as [String: Any]
+        TelemetryWrapper.gleanRecordEvent(category: .action,
+                                          method: .tap,
+                                          object: .recordSearch,
+                                          extras: extras)
+    }
+    func test_RecordSearch_GleanIsCalledSearchQuickSearch() {
+        let extras = [TelemetryWrapper.EventExtraKey.recordSearchLocation.rawValue: "quickSearch",
+                      TelemetryWrapper.EventExtraKey.recordSearchEngineID.rawValue: "default"] as [String: Any]
+        TelemetryWrapper.gleanRecordEvent(category: .action,
+                                          method: .tap,
+                                          object: .recordSearch,
+                                          extras: extras)
+    }
 }
 
 // MARK: - Helper functions to test telemetry

@@ -16,13 +16,13 @@ public struct CollapsibleCardViewModel {
     public let titleA11yId: String
 
     public let expandButtonA11yId: String
-    public let expandButtonA11yLabelExpanded: String
-    public let expandButtonA11yLabelCollapsed: String
+    public let expandButtonA11yLabelExpand: String
+    public let expandButtonA11yLabelCollapse: String
 
     public var expandState: ExpandState = .collapsed
 
     public var expandButtonA11yLabel: String {
-        return expandState == .expanded ? expandButtonA11yLabelExpanded : expandButtonA11yLabelCollapsed
+        return expandState == .expanded ? expandButtonA11yLabelCollapse : expandButtonA11yLabelExpand
     }
 
     public var telemetryCallback: ((_ expandState: ExpandState) -> Void)?
@@ -34,8 +34,8 @@ public struct CollapsibleCardViewModel {
                 title: String,
                 titleA11yId: String,
                 expandButtonA11yId: String,
-                expandButtonA11yLabelExpanded: String,
-                expandButtonA11yLabelCollapsed: String,
+                expandButtonA11yLabelExpand: String,
+                expandButtonA11yLabelCollapse: String,
                 expandState: ExpandState = .collapsed,
                 telemetryCallback: ((_ expandState: ExpandState) -> Void)? = nil) {
         self.contentView = contentView
@@ -43,8 +43,8 @@ public struct CollapsibleCardViewModel {
         self.title = title
         self.titleA11yId = titleA11yId
         self.expandButtonA11yId = expandButtonA11yId
-        self.expandButtonA11yLabelExpanded = expandButtonA11yLabelExpanded
-        self.expandButtonA11yLabelCollapsed = expandButtonA11yLabelCollapsed
+        self.expandButtonA11yLabelExpand = expandButtonA11yLabelExpand
+        self.expandButtonA11yLabelCollapse = expandButtonA11yLabelCollapse
         self.expandState = expandState
         self.telemetryCallback = telemetryCallback
     }
@@ -56,6 +56,7 @@ public class CollapsibleCardView: ShadowCardView, UIGestureRecognizerDelegate {
         static let horizontalPadding: CGFloat = 8
         static let titleHorizontalPadding: CGFloat = 8
         static let expandButtonSize = CGSize(width: 20, height: 20)
+        static let margins = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
     }
 
     public enum ExpandButtonState {
@@ -88,16 +89,21 @@ public class CollapsibleCardView: ShadowCardView, UIGestureRecognizerDelegate {
         title: "",
         titleA11yId: "",
         expandButtonA11yId: "",
-        expandButtonA11yLabelExpanded: "",
-        expandButtonA11yLabelCollapsed: "",
+        expandButtonA11yLabelExpand: "",
+        expandButtonA11yLabelCollapse: "",
         expandState: .collapsed)
 
     // UI
-    private lazy var rootView: UIView = .build { _ in }
+    private lazy var rootView: UIStackView = .build { stackView in
+        stackView.axis = .vertical
+        stackView.spacing = UX.verticalPadding
+        stackView.alignment = .center
+        stackView.isLayoutMarginsRelativeArrangement = true
+        stackView.layoutMargins = UX.margins
+    }
+
     private lazy var headerView: UIView = .build { _ in }
     private lazy var containerView: UIView = .build { _ in }
-    private var containerHeightConstraint: NSLayoutConstraint?
-    private var containerBottomConstraint: NSLayoutConstraint?
     private var tapRecognizer: UITapGestureRecognizer!
 
     lazy var titleLabel: UILabel = .build { label in
@@ -106,6 +112,7 @@ public class CollapsibleCardView: ShadowCardView, UIGestureRecognizerDelegate {
                                                             size: 15.0,
                                                             weight: .semibold)
         label.numberOfLines = 0
+        label.accessibilityTraits.insert(.header)
     }
 
     private lazy var expandButton: UIButton = .build { view in
@@ -168,24 +175,14 @@ public class CollapsibleCardView: ShadowCardView, UIGestureRecognizerDelegate {
 
         headerView.addSubview(titleLabel)
         headerView.addSubview(expandButton)
-        rootView.addSubview(headerView)
-        rootView.addSubview(containerView)
-
-        containerHeightConstraint = containerView.heightAnchor.constraint(equalToConstant: 0)
-        containerBottomConstraint = containerView.bottomAnchor.constraint(equalTo: rootView.bottomAnchor,
-                                                                          constant: -UX.verticalPadding)
-        containerBottomConstraint?.isActive = true
+        rootView.addArrangedSubview(headerView)
+        rootView.addArrangedSubview(containerView)
 
         NSLayoutConstraint.activate([
             headerView.leadingAnchor.constraint(equalTo: rootView.leadingAnchor,
                                                 constant: UX.titleHorizontalPadding),
-            headerView.topAnchor.constraint(equalTo: rootView.topAnchor,
-                                            constant: UX.verticalPadding),
             headerView.trailingAnchor.constraint(equalTo: rootView.trailingAnchor,
                                                  constant: -UX.titleHorizontalPadding),
-            headerView.bottomAnchor.constraint(equalTo: containerView.topAnchor,
-                                               constant: -UX.verticalPadding),
-
             titleLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor),
             titleLabel.topAnchor.constraint(equalTo: headerView.topAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: expandButton.leadingAnchor,
@@ -212,9 +209,7 @@ public class CollapsibleCardView: ShadowCardView, UIGestureRecognizerDelegate {
         viewModel.expandState = expandState
         expandButton.setImage(viewModel.expandState.image, for: .normal)
         expandButton.accessibilityLabel = viewModel.expandButtonA11yLabel
-        containerHeightConstraint?.isActive = isCollapsed
         containerView.isHidden = isCollapsed
-        containerBottomConstraint?.constant = isCollapsed ? 0 : -UX.verticalPadding
         UIAccessibility.post(notification: .layoutChanged, argument: nil)
     }
 

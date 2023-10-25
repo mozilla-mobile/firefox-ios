@@ -37,6 +37,7 @@ class FakespotAdjustRatingView: UIView, Notifiable, ThemeApplicable {
                                                             size: UX.titleFontSize,
                                                             weight: .semibold)
         label.numberOfLines = 0
+        label.accessibilityTraits.insert(.header)
     }
 
     private lazy var descriptionLabel: UILabel = .build { label in
