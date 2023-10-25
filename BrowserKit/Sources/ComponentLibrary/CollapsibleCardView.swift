@@ -101,7 +101,7 @@ public class CollapsibleCardView: ShadowCardView, UIGestureRecognizerDelegate {
         stackView.isLayoutMarginsRelativeArrangement = true
         stackView.layoutMargins = UX.margins
     }
-    
+
     private lazy var headerView: UIView = .build { _ in }
     private lazy var containerView: UIView = .build { _ in }
     private var tapRecognizer: UITapGestureRecognizer!
