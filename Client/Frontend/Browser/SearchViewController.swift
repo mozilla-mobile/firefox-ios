@@ -5,7 +5,6 @@
 import UIKit
 import Shared
 import Storage
-import Glean
 import Telemetry
 import Common
 import SiteImageView
@@ -361,9 +360,12 @@ class SearchViewController: SiteTableViewController,
             assertionFailure()
             return
         }
-
-        Telemetry.default.recordSearch(location: .quickSearch, searchEngine: engine.engineID ?? "other")
-        GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.quickSearch.rawValue)"].add()
+        let extras = [TelemetryWrapper.EventExtraKey.recordSearchLocation.rawValue: SearchesMeasurement.SearchLocation.quickSearch,
+                      TelemetryWrapper.EventExtraKey.recordSearchEngineID.rawValue: engine.engineID as Any] as [String: Any]
+        TelemetryWrapper.gleanRecordEvent(category: .action,
+                                          method: .tap,
+                                          object: .recordSearch,
+                                          extras: extras)
 
         searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: "")
     }
@@ -541,8 +543,12 @@ class SearchViewController: SiteTableViewController,
                   let url = defaultEngine.searchURLForQuery(suggestion)
             else { return }
 
-            Telemetry.default.recordSearch(location: .suggestion, searchEngine: defaultEngine.engineID ?? "other")
-            GleanMetrics.Search.counts["\(defaultEngine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.suggestion.rawValue)"].add()
+            let extras = [TelemetryWrapper.EventExtraKey.recordSearchLocation.rawValue: SearchesMeasurement.SearchLocation.suggestion,
+                          TelemetryWrapper.EventExtraKey.recordSearchEngineID.rawValue: defaultEngine.engineID as Any] as [String: Any]
+            TelemetryWrapper.gleanRecordEvent(category: .action,
+                                              method: .tap,
+                                              object: .recordSearch,
+                                              extras: extras)
             searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: suggestion)
         case .openedTabs:
             recordSearchListSelectionTelemetry(type: .openedTabs)

@@ -252,6 +252,7 @@ class LoginsHelper: TabContentScript {
             guard let injected = dict.asString else { return }
             let injectJavaScript = "window.__firefox__.logins.inject(\(injected))"
             self.tab?.webView?.evaluateJavascriptInDefaultContentWorld(injectJavaScript)
+            self.sendLoginsAutofilledTelemetry()
         }
     }
 
@@ -265,5 +266,11 @@ class LoginsHelper: TabContentScript {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .add,
                                      object: .loginsSaved)
+    }
+
+    private func sendLoginsAutofilledTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .loginsAutofilled)
     }
 }
