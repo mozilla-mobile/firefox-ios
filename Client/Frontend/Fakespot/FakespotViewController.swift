@@ -230,6 +230,8 @@ class FakespotViewController:
     }
 
     private func adjustLayout() {
+        closeButton.isHidden = FakespotUtils().shouldDisplayInSidebar()
+
         guard let titleLabelText = titleLabel.text, let betaLabelText = betaLabel.text else { return }
 
         var availableTitleStackWidth = headerView.frame.width
