@@ -68,7 +68,6 @@ open class BaseCoordinator: NSObject, Coordinator {
                 // Dismiss any child of the matching coordinator that handles a route
                 for child in matchingCoordinator.childCoordinators {
                     guard child.isDismissable else { continue }
-
                     matchingCoordinator.router.dismiss()
                     matchingCoordinator.remove(child: child)
                 }
