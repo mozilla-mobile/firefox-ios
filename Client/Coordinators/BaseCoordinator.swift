@@ -29,7 +29,7 @@ open class BaseCoordinator: NSObject, Coordinator {
         // coordinators were added as part of the handling for the route. This fixes FXIOS-7631
         // though we will probably want to revisit to investigate a more elegant solution.
         coordinator.newlyAdded = true
-        DispatchQueue.main.async { coordinator.newlyAdded = false }
+        DispatchQueue.main.async { [weak coordinator] in coordinator?.newlyAdded = false }
     }
 
     func remove(child coordinator: Coordinator?) {
