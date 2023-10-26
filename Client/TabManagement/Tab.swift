@@ -866,7 +866,7 @@ extension Tab: UIGestureRecognizerDelegate {
     func handleEdgeSwipeTabNavigation(_ sender: UIScreenEdgePanGestureRecognizer) {
         guard let webView = webView else { return }
 
-        if sender.state == .ended, (sender.velocity(in: webView).x > 150) {
+        if sender.state == .ended, sender.velocity(in: webView).x > 150 {
             TelemetryWrapper.recordEvent(category: .action, method: .swipe, object: .navigateTabHistoryBackSwipe)
         }
     }
