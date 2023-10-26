@@ -52,12 +52,13 @@ open class BaseCoordinator: NSObject, Coordinator {
                 savedRoute = nil
 
                 // Dismiss any child of the matching coordinator that handles a route
-                for child in matchingCoordinator.childCoordinators {
-                    guard child.isDismissable else { continue }
-                    guard shouldDismiss(coordinator: matchingCoordinator, for: route) else { continue }
+                if shouldDismiss(coordinator: matchingCoordinator, for: route) {
+                    for child in matchingCoordinator.childCoordinators {
+                        guard child.isDismissable else { continue }
 
-                    matchingCoordinator.router.dismiss()
-                    matchingCoordinator.remove(child: child)
+                        matchingCoordinator.router.dismiss()
+                        matchingCoordinator.remove(child: child)
+                    }
                 }
 
                 return matchingCoordinator
