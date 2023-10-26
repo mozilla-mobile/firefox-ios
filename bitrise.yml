@@ -1023,7 +1023,7 @@ workflows:
             # debug log
             set -x
 
-            ./content_blocker_update.sh
+            ./bootstrap.sh
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
@@ -1149,7 +1149,7 @@ workflows:
             # debug log
             set -x
 
-            ./content_blocker_update.sh
+            ./bootstrap.sh
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_BETA_VERSION"
@@ -1246,7 +1246,7 @@ workflows:
             # debug log
             set -x
 
-            ./content_blocker_update.sh
+            ./bootstrap.sh
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
