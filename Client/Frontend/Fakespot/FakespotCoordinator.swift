@@ -54,7 +54,7 @@ class FakespotCoordinator: BaseCoordinator, FakespotViewControllerDelegate, Feat
     }
 
     func shouldDisplayInSidebar() -> Bool {
-        return FakespotUtils.shouldDisplayInSidebar()
+        return FakespotUtils().shouldDisplayInSidebar()
     }
 
     func shouldDismiss() -> Bool {
