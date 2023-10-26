@@ -193,7 +193,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Cleanup can be a heavy operation, take it out of the startup path. Instead check after a few seconds.
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
-            self?.profile.cleanupHistoryIfNeeded()
+            // TODO: testing to see if this fixes https://mozilla-hub.atlassian.net/browse/FXIOS-7632
+            // self?.profile.cleanupHistoryIfNeeded()
             self?.ratingPromptManager.updateData()
         }
 
