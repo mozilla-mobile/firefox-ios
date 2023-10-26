@@ -41,6 +41,21 @@ class SurveySurfaceViewController: UIViewController, Themeable {
     var themeObserver: NSObjectProtocol?
     var imageViewYConstraint: NSLayoutConstraint!
 
+    // MARK: - Orientation
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+
+    override var shouldAutorotate: Bool {
+        return false
+    }
+
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        // This actually does the right thing on iPad where the modally
+        // presented version happily rotates with the iPad orientation.
+        return .portrait
+    }
+
     // MARK: - UI Elements
     // Other than the imageView, all elements begin with an alpha of 0.0 as,
     // they are meant to be invisible, and appear during the animation.
@@ -234,22 +249,5 @@ class SurveySurfaceViewController: UIViewController, Themeable {
 
         dismissSurveyButton.setTitleColor(theme.colors.textSecondaryAction, for: .normal)
         dismissSurveyButton.backgroundColor = theme.colors.actionSecondary
-    }
-}
-
-// MARK: - UIViewController setup
-extension SurveySurfaceViewController {
-    override var prefersStatusBarHidden: Bool {
-        return true
-    }
-
-    override var shouldAutorotate: Bool {
-        return false
-    }
-
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        // This actually does the right thing on iPad where the modally
-        // presented version happily rotates with the iPad orientation.
-        return .portrait
     }
 }
