@@ -108,7 +108,7 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
 
             if cfrCounter <= 2, !hasOptedIn, hasTimePassed {
                 // - Display CFR-1
-                profile.prefs.setInt(cfrCounter+1, forKey: PrefsKeys.ContextualHints.shoppingOnboardingCFRsCounterKey.rawValue)
+                profile.prefs.setInt(cfrCounter + 1, forKey: PrefsKeys.ContextualHints.shoppingOnboardingCFRsCounterKey.rawValue)
                 return true
             } else if cfrCounter < 4, hasOptedIn, hasTimePassed {
                 // - Display CFR-2
