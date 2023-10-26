@@ -103,7 +103,7 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
             let hasOptedIn = profile.prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false
             // Retrieve the last timestamp for Fakespot CFRs
             let lastTimestamp = profile.prefs.timestampForKey(PrefsKeys.FakespotLastCFRTimestamp)
-            // Check if 24 hours have passed since the last timestamp
+            // Check if 12 hours have passed since the last timestamp
             let hasTimePassed = lastTimestamp != nil ? Date.hasTimePassedBy(hours: 12, lastTimestamp: lastTimestamp!) : false
 
             if cfrCounter <= 2, !hasOptedIn, hasTimePassed {
