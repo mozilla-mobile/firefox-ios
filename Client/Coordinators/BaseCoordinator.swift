@@ -12,7 +12,7 @@ open class BaseCoordinator: NSObject, Coordinator {
     var router: Router
     var logger: Logger
     var isDismissable: Bool { true }
-    var newlyAdded: Bool = false
+    var newlyAdded = false
 
     init(router: Router,
          logger: Logger = DefaultLogger.shared) {
