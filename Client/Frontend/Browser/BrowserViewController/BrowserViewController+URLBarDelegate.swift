@@ -124,7 +124,7 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidPressShopping(_ urlBar: URLBarView, shoppingButton: UIButton) {
         guard let productURL = urlBar.currentURL else { return }
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingButton)
-        navigationHandler?.showFakespotFlow(productURL: productURL)
+        navigationHandler?.showFakespotFlow(productURL: productURL, sidebarContainer: contentStackView)
     }
 
     func urlBarPresentCFR(at sourceView: UIView) {
@@ -154,7 +154,7 @@ extension BrowserViewController: URLBarDelegate {
             andActionForButton: { [weak self] in
                 guard let self else { return }
                 guard let productURL = self.urlBar.currentURL else { return }
-                self.navigationHandler?.showFakespotFlow(productURL: productURL)
+                self.navigationHandler?.showFakespotFlow(productURL: productURL, sidebarContainer: contentStackView)
             },
             overlayState: overlayManager)
     }

@@ -394,14 +394,20 @@ class BrowserCoordinator: BaseCoordinator,
         showETPMenu(sourceView: sourceView)
     }
 
-    func showFakespotFlow(productURL: URL) {
-        guard !childCoordinators.contains(where: { $0 is FakespotCoordinator}) else {
+    func showFakespotFlow(productURL: URL, sidebarContainer: SidebarEnabledViewProtocol) {
+        let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator}) as? FakespotCoordinator
+        guard fakespotCoordinator == nil else {
+            // Close sidebar if necessary
+            if let fakespotCoordinator, fakespotCoordinator.shouldDismiss() {
+                fakespotCoordinator.fakespotControllerDidDismiss()
+            }
             return // flow is already handled
         }
+
         let coordinator = FakespotCoordinator(router: router)
         coordinator.parentCoordinator = self
         add(child: coordinator)
-        coordinator.start(productURL: productURL)
+        coordinator.start(productURL: productURL, sidebarContainer: sidebarContainer)
     }
 
     func showShareExtension(url: URL, sourceView: UIView, toastContainer: UIView, popoverArrowDirection: UIPopoverArrowDirection) {

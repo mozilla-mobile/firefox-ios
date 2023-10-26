@@ -32,7 +32,8 @@ protocol BrowserNavigationHandler: AnyObject {
 
     /// Initiates the presentation of the Fakespot flow for analyzing the authenticity of a product's reviews.
     /// - Parameter productURL: The URL of the product for which the reviews will be analyzed.
-    func showFakespotFlow(productURL: URL)
+    /// - Parameter sidebarContainer: The view that will contain the sidebar.
+    func showFakespotFlow(productURL: URL, sidebarContainer: SidebarEnabledViewProtocol)
 
     /// Shows a CreditCardAutofill view to select credit cards in order to autofill cards forms.
     func showCreditCardAutofill(creditCard: CreditCard?,

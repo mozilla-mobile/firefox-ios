@@ -66,4 +66,16 @@ public struct FakespotUtils: FeatureFlaggable {
             ]
         )
     }
+
+    static func isPadInMultitasking(device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) -> Bool {
+        guard device == .pad,
+              let window = UIWindow.keyWindow
+        else { return false }
+
+        return window.frame.width != window.screen.bounds.width || window.frame.height != window.screen.bounds.height
+    }
+
+    static func shouldDisplayInSidebar() -> Bool {
+        return UIDevice.current.userInterfaceIdiom == .pad && !FakespotUtils.isPadInMultitasking()
+    }
 }
