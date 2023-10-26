@@ -54,6 +54,8 @@ open class BaseCoordinator: NSObject, Coordinator {
                 // Dismiss any child of the matching coordinator that handles a route
                 for child in matchingCoordinator.childCoordinators {
                     guard child.isDismissable else { continue }
+                    guard shouldDismiss(coordinator: matchingCoordinator, for: route) else { continue }
+
                     matchingCoordinator.router.dismiss()
                     matchingCoordinator.remove(child: child)
                 }
@@ -66,5 +68,16 @@ open class BaseCoordinator: NSObject, Coordinator {
         savedRoute = route
         logger.log("Saved a route", level: .info, category: .coordinator)
         return nil
+    }
+
+    // Tentative fix for FXIOS-7631; this fixes the bug but may warrant add'tl team discussion/investigation to better
+    // understand the ideal way of addressing this. Related PR: https://github.com/mozilla-mobile/firefox-ios/pull/16789
+    private func shouldDismiss(coordinator: Coordinator, for route: Route) -> Bool {
+        switch route {
+        case .defaultBrowser(section: .tutorial):
+            return !(coordinator is BrowserCoordinator)
+        default:
+            return true
+        }
     }
 }
