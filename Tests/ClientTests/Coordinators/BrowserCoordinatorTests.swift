@@ -264,7 +264,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertTrue(presentedVC.topViewController is TabTrayViewController)
     }
 
-    func testDismissTabTray_removesChild()() throws {
+    func testDismissTabTray_removesChild() throws {
         let subject = createSubject()
         subject.showTabTray(selectedPanel: .tabs)
         guard let tabTrayCoordinator = subject.childCoordinators[0] as? TabTrayCoordinator else {
