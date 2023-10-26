@@ -57,7 +57,11 @@ class FakespotViewModel {
                     if analysisCount > 0 {
                         cards.append(.messageCard(.notEnoughReviews))
                     } else {
-                        cards.append(.noAnalysisCard)
+                        if analysisStatus?.isAnalyzing == true {
+                            cards.append(.progressAnalysisCard)
+                        } else {
+                            cards.append(.noAnalysisCard)
+                        }
                     }
 
                     cards += [
