@@ -5,8 +5,15 @@
 import Foundation
 
 struct TabTrayState {
+    var tabs = ["Tab1",
+                "Tab2",
+                "Tab3",
+                "Tab4",
+                "Tab5"]
     var isPrivateMode: Bool
     var isPrivateTabsEmpty: Bool
+
+    // MARK: Inactive tabs
     var isInactiveTabEmpty: Bool
     var isInactiveTabsExpanded = false
     var inactiveTabs = ["One",
@@ -15,4 +22,5 @@ struct TabTrayState {
                         "Four",
                         "Five",
                         "Six"]
+
 }

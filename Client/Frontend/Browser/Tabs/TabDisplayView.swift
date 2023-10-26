@@ -16,16 +16,19 @@ class TabDisplayView: UIView,
 
     enum TabDisplaySection: Int, CaseIterable {
         case inactiveTabs
+        case tabs
     }
 
     var state: TabTrayState
     var inactiveTabsSectionManager: InactiveTabsSectionManager
+    var tabsSectionManager: TabsSectionManager
     var theme: Theme?
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: bounds,
                                               collectionViewLayout: createLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.register(cellType: TabCell.self)
         collectionView.register(cellType: InactiveTabsCell.self)
         collectionView.register(
             InactiveTabsHeaderView.self,
@@ -52,6 +55,7 @@ class TabDisplayView: UIView,
                              isInactiveTabEmpty: false,
                              isInactiveTabsExpanded: true)
         self.inactiveTabsSectionManager = InactiveTabsSectionManager()
+        self.tabsSectionManager = TabsSectionManager()
         super.init(frame: frame)
         setupLayout()
     }
@@ -81,6 +85,8 @@ class TabDisplayView: UIView,
                 return self.inactiveTabsSectionManager.layoutSection(
                     layoutEnvironment,
                     isExpanded: state.isInactiveTabsExpanded)
+            case .tabs:
+                return self.tabsSectionManager.layoutSection(layoutEnvironment)
             }
         }
         return layout
@@ -110,7 +116,11 @@ class TabDisplayView: UIView,
                   !state.isPrivateMode else { return 0 }
 
             return state.isInactiveTabsExpanded ? state.inactiveTabs.count : 0
-        default:
+        case .tabs:
+            guard !state.tabs.isEmpty else { return 0 }
+
+            return state.tabs.count
+        case .none:
             return 0
         }
     }
