@@ -145,7 +145,7 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
     }()
 
     private lazy var segmentedControlIpad: UISegmentedControl = {
-        let items = LegacyTabTrayViewModel.Segment.allCases.map { $0.label }
+        let items = TabTrayPanelType.allCases.map { $0.label }
         return createSegmentedControl(items: items,
                                       action: #selector(segmentIpadChanged),
                                       a11yId: AccessibilityIdentifiers.TabTray.navBarSegmentedControl)
@@ -153,9 +153,9 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
 
     private lazy var segmentedControlIphone: UISegmentedControl = {
         let items = [
-            LegacyTabTrayViewModel.Segment.tabs.image!.overlayWith(image: countLabel),
-            LegacyTabTrayViewModel.Segment.privateTabs.image!,
-            LegacyTabTrayViewModel.Segment.syncedTabs.image!]
+            TabTrayPanelType.tabs.image!.overlayWith(image: countLabel),
+            TabTrayPanelType.privateTabs.image!,
+            TabTrayPanelType.syncedTabs.image!]
         return createSegmentedControl(items: items,
                                       action: #selector(segmentIphoneChanged),
                                       a11yId: AccessibilityIdentifiers.TabTray.navBarSegmentedControl)
@@ -178,7 +178,7 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
          tabToFocus: Tab? = nil,
          tabManager: TabManager,
          overlayManager: OverlayModeManager,
-         focusedSegment: LegacyTabTrayViewModel.Segment? = nil,
+         focusedSegment: TabTrayPanelType? = nil,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          and notificationCenter: NotificationProtocol = NotificationCenter.default,
          with nimbus: FxNimbus = FxNimbus.shared
@@ -301,7 +301,7 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
     }
 
     private func changePanel() {
-        let segment = LegacyTabTrayViewModel.Segment(rawValue: segmentedControlIphone.selectedSegmentIndex)
+        let segment = TabTrayPanelType(rawValue: segmentedControlIphone.selectedSegmentIndex)
         viewModel.segmentToFocus = segment
         switch segment {
         case .tabs:
@@ -366,7 +366,7 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
 
     private func updateToolbarItems(forSyncTabs showSyncItems: Bool = false) {
         // The "Synced" panel has different toolbar items so we handle them separately.
-        guard segmentedControlIphone.selectedSegmentIndex != LegacyTabTrayViewModel.Segment.syncedTabs.rawValue else {
+        guard segmentedControlIphone.selectedSegmentIndex != TabTrayPanelType.syncedTabs.rawValue else {
             updateSyncedToolbarItems(forSyncTabs: showSyncItems)
             return
         }
@@ -381,7 +381,7 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
     }
 
     private func updateSyncedToolbarItems(forSyncTabs showSyncItems: Bool = false) {
-        guard segmentedControlIphone.selectedSegmentIndex == LegacyTabTrayViewModel.Segment.syncedTabs.rawValue
+        guard segmentedControlIphone.selectedSegmentIndex == TabTrayPanelType.syncedTabs.rawValue
         else { return }
 
         switch viewModel.layout {
@@ -495,7 +495,7 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
         if segmentToFocus == nil {
             segmentToFocus = viewModel.tabManager.selectedTab?.isPrivate ?? false ? .privateTabs : .tabs
         }
-        segmentedControl.selectedSegmentIndex = segmentToFocus?.rawValue ?? LegacyTabTrayViewModel.Segment.tabs.rawValue
+        segmentedControl.selectedSegmentIndex = segmentToFocus?.rawValue ?? TabTrayPanelType.tabs.rawValue
         segmentedControl.addTarget(self, action: action, for: .valueChanged)
         return segmentedControl
     }

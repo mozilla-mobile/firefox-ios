@@ -17,7 +17,8 @@ class BrowserCoordinator: BaseCoordinator,
                           EnhancedTrackingProtectionCoordinatorDelegate,
                           FakespotCoordinatorDelegate,
                           ParentCoordinatorDelegate,
-                          TabManagerDelegate {
+                          TabManagerDelegate,
+                          TabTrayCoordinatorDelegate {
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
@@ -449,6 +450,26 @@ class BrowserCoordinator: BaseCoordinator,
         coordinator.showQRCode(delegate: browserViewController)
     }
 
+    func showTabTray(selectedPanel: TabTrayPanelType) {
+        guard !childCoordinators.contains(where: { $0 is TabTrayCoordinator}) else {
+            return // flow is already handled
+        }
+
+        let navigationController = DismissableNavigationViewController()
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        let modalPresentationStyle: UIModalPresentationStyle = isPad ? .fullScreen: .formSheet
+        navigationController.modalPresentationStyle = modalPresentationStyle
+
+        let tabTrayCoordinator = TabTrayCoordinator(
+            router: DefaultRouter(navigationController: navigationController)
+        )
+        tabTrayCoordinator.parentCoordinator = self
+        add(child: tabTrayCoordinator)
+        tabTrayCoordinator.start(with: selectedPanel)
+
+        router.present(navigationController)
+    }
+
     // MARK: - ParentCoordinatorDelegate
 
     func didFinish(from childCoordinator: Coordinator) {
@@ -464,23 +485,9 @@ class BrowserCoordinator: BaseCoordinator,
         }
     }
 
-    func showTabTray() {
-        guard !childCoordinators.contains(where: { $0 is TabTrayCoordinator}) else {
-            return // flow is already handled
-        }
-
-        let navigationController = DismissableNavigationViewController()
-        let isPad = UIDevice.current.userInterfaceIdiom == .pad
-        let modalPresentationStyle: UIModalPresentationStyle = isPad ? .fullScreen: .formSheet
-        navigationController.modalPresentationStyle = modalPresentationStyle
-
-        let tabTrayCoordinator = TabTrayCoordinator(
-            router: DefaultRouter(navigationController: navigationController)
-        )
-        tabTrayCoordinator.parentCoordinator = self
-        add(child: tabTrayCoordinator)
-        tabTrayCoordinator.start()
-
-        router.present(navigationController)
+    // MARK: - TabTrayCoordinatorDelegate
+    func didDismissTabTray(from coordinator: TabTrayCoordinator) {
+        router.dismiss(animated: true, completion: nil)
+        remove(child: coordinator)
     }
 }

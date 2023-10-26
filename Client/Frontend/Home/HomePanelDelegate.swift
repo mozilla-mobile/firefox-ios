@@ -9,7 +9,7 @@ protocol HomePanelDelegate: AnyObject {
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool)
     func homePanel(didSelectURL url: URL, visitType: VisitType, isGoogleTopSite: Bool)
     func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType)
-    func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab?, focusedSegment: LegacyTabTrayViewModel.Segment?)
+    func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab?, focusedSegment: TabTrayPanelType?)
     func homePanelDidRequestToOpenSettings(at settingsPage: Route.SettingsSection)
 }
 
@@ -19,7 +19,7 @@ extension HomePanelDelegate {
     }
 
     func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab? = nil,
-                                          focusedSegment: LegacyTabTrayViewModel.Segment? = nil) {
+                                          focusedSegment: TabTrayPanelType? = nil) {
         homePanelDidRequestToOpenTabTray(withFocusedTab: tabToFocus, focusedSegment: focusedSegment)
     }
 }
