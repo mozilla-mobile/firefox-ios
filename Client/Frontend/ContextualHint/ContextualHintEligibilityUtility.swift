@@ -90,10 +90,11 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
         return shouldCheckToolbarHasShown
     }
 
-    // There are 2 types of CFRs
-    //
-    // Shopping CFR-1: The user has not opted in for the Shopping Experience
-    // Shopping CFR-2: The user has opted in for the Shopping Experience
+    /// Determine if the Shopping CFRs should present.
+    /// There are 2 types of CFRs.
+    ///
+    /// - Shopping CFR-1: The user has not opted in for the Shopping Experience.
+    /// - Shopping CFR-2: The user has opted in for the Shopping Experience.
     private var canPresentShoppingCFR: Bool {
         guard !hasAlreadyBeenPresented(.shoppingExperience) else {
             // Retrieve the counter for shopping onboarding CFRs
@@ -102,16 +103,16 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
             let hasOptedIn = profile.prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false
             // Retrieve the last timestamp for Fakespot CFRs
             let lastTimestamp = profile.prefs.timestampForKey(PrefsKeys.FakespotLastCFRTimestamp)
-            // Check if 24 hours have passed since the last timestamp
-            let hasTimePassed = lastTimestamp != nil ? Date.hasTimePassedBy(hours: 24, lastTimestamp: lastTimestamp!) : false
+            // Check if 12 hours have passed since the last timestamp
+            let hasTimePassed = lastTimestamp != nil ? Date.hasTimePassedBy(hours: 12, lastTimestamp: lastTimestamp!) : false
 
-            if cfrCounter == 1, !hasOptedIn, hasTimePassed {
+            if cfrCounter <= 2, !hasOptedIn, hasTimePassed {
                 // - Display CFR-1
-                profile.prefs.setInt(2, forKey: PrefsKeys.ContextualHints.shoppingOnboardingCFRsCounterKey.rawValue)
+                profile.prefs.setInt(cfrCounter + 1, forKey: PrefsKeys.ContextualHints.shoppingOnboardingCFRsCounterKey.rawValue)
                 return true
-            } else if cfrCounter < 3, hasOptedIn, hasTimePassed {
+            } else if cfrCounter < 4, hasOptedIn, hasTimePassed {
                 // - Display CFR-2
-                profile.prefs.setInt(3, forKey: PrefsKeys.ContextualHints.shoppingOnboardingCFRsCounterKey.rawValue)
+                profile.prefs.setInt(4, forKey: PrefsKeys.ContextualHints.shoppingOnboardingCFRsCounterKey.rawValue)
                 return true
             }
             return false
