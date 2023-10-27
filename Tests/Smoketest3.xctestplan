@@ -93,6 +93,7 @@
         "PerformanceTests",
         "PhotonActionSheetTests",
         "PocketTest",
+        "PocketTests",
         "PrivateBrowsingTest",
         "PrivateBrowsingTestIpad",
         "ReadingListTests",

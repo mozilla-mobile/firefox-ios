@@ -77,6 +77,7 @@
         "PerformanceTests",
         "PhotonActionSheetTests",
         "PocketTest",
+        "PocketTests",
         "PrivateBrowsingTest",
         "PrivateBrowsingTestIpad",
         "PrivateBrowsingTestIphone",

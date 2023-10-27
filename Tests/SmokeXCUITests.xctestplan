@@ -138,6 +138,8 @@
         "PerformanceTests",
         "PhotonActionSheetTests",
         "PocketTest",
+        "PocketTests",
+        "PocketTests\/testPocketEnabledByDefault()",
         "PrivateBrowsingTest",
         "PrivateBrowsingTestIpad",
         "PrivateBrowsingTestIpad\/testClosePrivateTabsOptionClosesPrivateTabsShortCutiPad()",
