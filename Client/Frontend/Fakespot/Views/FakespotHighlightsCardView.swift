@@ -74,18 +74,8 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
         view.spacing = UX.highlightSpacing
     }
 
-    private lazy var moreButton: ActionButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .body,
-            size: UX.buttonFontSize,
-            weight: .semibold)
-        button.layer.cornerRadius = UX.buttonCornerRadius
-        button.titleLabel?.textAlignment = .center
+    private lazy var moreButton: SecondaryRoundedButton = .build { button in
         button.addTarget(self, action: #selector(self.showMoreAction), for: .touchUpInside)
-        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
-                                                left: UX.buttonHorizontalInset,
-                                                bottom: UX.buttonVerticalInset,
-                                                right: UX.buttonHorizontalInset)
     }
 
     private lazy var dividerView: UIView = .build()
@@ -125,8 +115,11 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
         titleLabel.text = viewModel.title
         titleLabel.accessibilityIdentifier = viewModel.titleA11yId
 
-        moreButton.setTitle(viewModel.moreButtonTitle, for: .normal)
-        moreButton.accessibilityIdentifier = viewModel.moreButtonA11yId
+        let moreButtonViewModel = SecondaryRoundedButtonViewModel(
+            title: viewModel.moreButtonTitle,
+            a11yIdentifier: viewModel.moreButtonA11yId
+        )
+        moreButton.configure(viewModel: moreButtonViewModel)
 
         if !viewModel.shouldShowMoreButton {
             // remove divider & button and adjust bottom spacing
@@ -144,8 +137,7 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
         highlightGroups.forEach { $0.applyTheme(theme: theme) }
 
         titleLabel.textColor = theme.colors.textPrimary
-        moreButton.setTitleColor(theme.colors.textOnLight, for: .normal)
-        moreButton.backgroundColor = theme.colors.actionSecondary
+        moreButton.applyTheme(theme: theme)
         dividerView.backgroundColor = theme.colors.borderPrimary
     }
 
@@ -189,10 +181,11 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
         isShowingPreview = !isShowingPreview
         updateHighlights()
 
-        moreButton.setTitle(
-            isShowingPreview ? viewModel.moreButtonTitle : viewModel.lessButtonTitle,
-            for: .normal)
-        moreButton.accessibilityIdentifier = isShowingPreview ? viewModel.moreButtonA11yId : viewModel.lessButtonA11yId
+        let moreButtonViewModel = SecondaryRoundedButtonViewModel(
+            title: isShowingPreview ? viewModel.moreButtonTitle : viewModel.lessButtonTitle,
+            a11yIdentifier: isShowingPreview ? viewModel.moreButtonA11yId : viewModel.lessButtonA11yId
+        )
+        moreButton.configure(viewModel: moreButtonViewModel)
 
         if !isShowingPreview {
             recordTelemetry()
