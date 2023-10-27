@@ -42,7 +42,7 @@ class DownloadsTests: BaseTestCase {
         XCTAssertTrue(app.tables["DownloadsTable"].exists)
         // Check that there is not any items and the default text shown is correct
         checkTheNumberOfDownloadedItems(items: 0)
-        XCTAssertTrue(app.staticTexts["Downloaded files will show up here."].exists)
+        mozWaitForElementToExist(app.staticTexts["Downloaded files will show up here."])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306897
@@ -57,8 +57,8 @@ class DownloadsTests: BaseTestCase {
         app.webViews.links[testFileName].firstMatch.tap()
 
         mozWaitForElementToExist(app.tables["Context Menu"], timeout: TIMEOUT)
-        XCTAssertTrue(app.tables["Context Menu"].staticTexts[testFileNameDownloadPanel].exists)
-        XCTAssertTrue(app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.download].exists)
+        mozWaitForElementToExist(app.tables["Context Menu"].staticTexts[testFileNameDownloadPanel])
+        mozWaitForElementToExist(app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.download])
         app.buttons["Cancel"].tap()
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
@@ -75,8 +75,8 @@ class DownloadsTests: BaseTestCase {
         mozWaitForElementToExist(app.tables["DownloadsTable"], timeout: TIMEOUT)
         // There should be one item downloaded. It's name and size should be shown
         checkTheNumberOfDownloadedItems(items: 1)
-        XCTAssertTrue(app.tables.cells.staticTexts[testFileNameDownloadPanel].exists)
-        XCTAssertTrue(app.tables.cells.staticTexts[testFileSize].exists)
+        mozWaitForElementToExist(app.tables.cells.staticTexts[testFileNameDownloadPanel])
+        mozWaitForElementToExist(app.tables.cells.staticTexts[testFileSize])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306899
@@ -90,7 +90,7 @@ class DownloadsTests: BaseTestCase {
         // There should be one item downloaded. It's name and size should be shown
         checkTheNumberOfDownloadedItems(items: 1)
         // We can only check for the BLOB file size since the name is generated
-        XCTAssertTrue(app.tables.cells.staticTexts[testBLOBFileSize].exists)
+        mozWaitForElementToExist(app.tables.cells.staticTexts[testBLOBFileSize])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306900
@@ -114,11 +114,11 @@ class DownloadsTests: BaseTestCase {
         app.tables.cells.staticTexts[testFileNameDownloadPanel].swipeLeft()
         mozWaitForElementToExist(shareButton)
         XCTAssertTrue(shareButton.exists)
-        XCTAssertTrue(app.tables.buttons.staticTexts["Delete"].exists)
+        mozWaitForElementToExist(app.tables.buttons.staticTexts["Delete"])
         shareButton.tap(force: true)
         mozWaitForElementToExist(app.tables["DownloadsTable"])
-        XCTAssertTrue(app.tables["DownloadsTable"].staticTexts[testFileNameDownloadPanel].exists)
-        XCTAssertTrue(app.collectionViews.cells["Copy"].exists)
+        mozWaitForElementToExist(app.tables["DownloadsTable"].staticTexts[testFileNameDownloadPanel])
+        mozWaitForElementToExist(app.collectionViews.cells["Copy"])
         if !iPad() {
             app.buttons["Close"].tap()
         } else {
@@ -138,8 +138,8 @@ class DownloadsTests: BaseTestCase {
         // Commenting out until share sheet can be managed with automated tests issue #5477
         app.tables.cells.staticTexts[testFileNameDownloadPanel].press(forDuration: 2)
         mozWaitForElementToExist(app.otherElements["ActivityListView"], timeout: TIMEOUT)
-        XCTAssertTrue(app.tables["DownloadsTable"].staticTexts[testFileNameDownloadPanel].exists)
-        XCTAssertTrue(app.collectionViews.cells["Copy"].exists)
+        mozWaitForElementToExist(app.tables["DownloadsTable"].staticTexts[testFileNameDownloadPanel])
+        mozWaitForElementToExist(app.collectionViews.cells["Copy"])
         if !iPad() {
             app.buttons["Close"].tap()
         } else {
