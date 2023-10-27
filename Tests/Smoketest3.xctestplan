@@ -53,6 +53,7 @@
         "HomePageSettingsUITests\/testChangeHomeSettingsLabel()",
         "HomePageSettingsUITests\/testCheckHomeSettingsByDefault()",
         "HomePageSettingsUITests\/testClipboard()",
+        "HomePageSettingsUITests\/testDisableTopSitesSettingsRemovesSection()",
         "HomePageSettingsUITests\/testJumpBackIn()",
         "HomePageSettingsUITests\/testRecentlySaved()",
         "HomePageSettingsUITests\/testSetCustomURLAsHome()",
