@@ -68,15 +68,16 @@ open class BaseCoordinator: NSObject, Coordinator {
             if let matchingCoordinator = childCoordinator.findAndHandle(route: route) {
                 savedRoute = nil
 
-                // Check first whether, during the recursive findAndHandle(route:), we have just added
-                // new children to this coordinator. If so, we want to skip dismissal (we shouldn't ever
-                // immediately dismiss coordinators that were just added and about to appear).
-                // Will be removed as part of larger refactors in [FXIOS-7641].
-                guard !matchingCoordinator.childCoordinators.contains(where: { $0.newlyAdded }) else { continue }
-
                 // Dismiss any child of the matching coordinator that handles a route
                 for child in matchingCoordinator.childCoordinators {
                     guard child.isDismissable else { continue }
+
+                    // Check first whether, during the recursive findAndHandle(route:), we have just added
+                    // this child to the coordinator. If so, we want to skip dismissal (we shouldn't ever
+                    // immediately dismiss coordinators that were just added and about to appear).
+                    // Will be removed as part of larger refactors in [FXIOS-7641].
+                    guard !child.newlyAdded else { continue }
+
                     matchingCoordinator.router.dismiss()
                     matchingCoordinator.remove(child: child)
                 }
