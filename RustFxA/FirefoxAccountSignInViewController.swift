@@ -103,14 +103,13 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         )
         button.configure(viewModel: viewModel)
         button.setImage(self.signinSyncQRImage?.tinted(withColor: .white), for: .highlighted)
-
         button.addTarget(self, action: #selector(self.scanbuttonTapped), for: .touchUpInside)
     }
 
     private lazy var emailButton: SecondaryRoundedButton = .build { button in
         let viewModel = SecondaryRoundedButtonViewModel(
-        title: .FxASignin_EmailSignin,
-        a11yIdentifier: AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSignInButton
+            title: .FxASignin_EmailSignin,
+            a11yIdentifier: AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSignInButton
         )
         button.configure(viewModel: viewModel)
         button.addTarget(self, action: #selector(self.emailLoginTapped), for: .touchUpInside)
@@ -171,8 +170,6 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         applyTheme()
-        scanButton.applyTheme(theme: theme)
-        emailButton.applyTheme(theme: theme)
     }
 
     // MARK: - Helpers
@@ -232,6 +229,10 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         view.backgroundColor = colors.layer1
         qrSignInLabel.textColor = colors.textPrimary
         instructionsLabel.textColor = colors.textPrimary
+
+        let theme = themeManager.currentTheme
+        scanButton.applyTheme(theme: theme)
+        emailButton.applyTheme(theme: theme)
     }
 
     // MARK: Button Tap Functions
