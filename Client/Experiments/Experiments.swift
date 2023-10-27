@@ -134,9 +134,12 @@ enum Experiments {
             defaults.set(false, forKey: NIMBUS_IS_FIRST_RUN_KEY)
         }
 
+        let isPhone = UIDevice.current.userInterfaceIdiom == .phone
+
         let customTargetingAttributes: [String: Any] =  [
             "isFirstRun": "\(isFirstRun)",
             "is_first_run": isFirstRun,
+            "is_phone": isPhone,
         ]
 
         // App settings, to allow experiments to target the app name and the
