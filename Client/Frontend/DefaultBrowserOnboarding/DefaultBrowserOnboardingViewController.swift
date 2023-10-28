@@ -126,19 +126,9 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         initialViewSetup()
         listenForThemeChange(view)
         applyTheme()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        // Portrait orientation: lock enable
-        OrientationLockUtility.lockOrientation(UIInterfaceOrientationMask.portrait,
-                                               andRotateTo: UIInterfaceOrientation.portrait)
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        // Portrait orientation: lock disable
-        OrientationLockUtility.lockOrientation(UIInterfaceOrientationMask.all)
+        if #available(iOS 16, *) {
+            setNeedsUpdateOfSupportedInterfaceOrientations()
+        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -277,5 +267,19 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         descriptionLabel3.textColor = theme.colors.textPrimary
 
         closeButton.tintColor = theme.colors.textSecondary
+    }
+
+    // MARK: - Orientation
+
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
+
+    override var shouldAutorotate: Bool {
+        return false
+    }
+
+    override var prefersStatusBarHidden: Bool {
+        return true
     }
 }
