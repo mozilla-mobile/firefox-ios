@@ -77,9 +77,9 @@ final class BaseCoordinatorTests: XCTestCase {
 
     func testRemoveDismissableFromChild() {
         // Given
-        let subject = BaseCoordinator(router: router)
-        let childCoordinator = MockSearchHandlerRouteCoordinator(router: router)
-        let grandChildCoordinator = BaseCoordinator(router: router)
+        let subject = BaseCoordinator(router: router, mainQueue: MockDispatchQueue())
+        let childCoordinator = MockSearchHandlerRouteCoordinator(router: router, mainQueue: MockDispatchQueue())
+        let grandChildCoordinator = BaseCoordinator(router: router, mainQueue: MockDispatchQueue())
 
         subject.add(child: childCoordinator)
         childCoordinator.add(child: grandChildCoordinator)
