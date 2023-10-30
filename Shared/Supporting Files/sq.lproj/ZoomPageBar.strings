@@ -1,3 +1,6 @@
+/* Accessibility label for closing the zoom panel in Zoom Page Bar */
+"Menu.ZoomPage.Close.AccessibilityLabel.v113" = "Mbyll Paneli Zoom-i";
+
 /* Accessibility label for current zoom level in Zoom Page Bar. The placeholder represents the zoom level */
 "Menu.ZoomPage.CurrentZoomLevel.AccessibilityLabel.v113" = "Shkallë e Tanishme Zoom-i: %@";
 
