@@ -2,7 +2,13 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-urls:
-  stage_server: "https://stage.experimenter.nonprod.dataops.mozgcp.net"
-  prod_server: "https://experimenter.services.mozilla.com"
-  telemetry_server: "http://10.10.1.198:5000" # must be changed
+"""Data class Models"""
+
+from pydantic import BaseModel
+
+
+class TelemetryModel(BaseModel):
+    """Experiment Telemetry model"""
+
+    branch: str
+    experiment: str

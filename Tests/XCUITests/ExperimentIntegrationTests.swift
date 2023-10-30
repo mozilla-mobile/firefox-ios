@@ -51,10 +51,6 @@ final class ExperimentIntegrationTests: BaseTestCase {
     }
 
     func testVerifyExperimentEnrolled() throws {
-        let toolbarClose = app.buttons.matching(NSPredicate(format: "label CONTAINS 'Close'"))
-
-        wait(forElement: toolbarClose.element, timeout: 15)
-        toolbarClose.element(boundBy: 0).tap()
         navigator.goto(SettingsScreen)
 
         // enable experiments secret menu
