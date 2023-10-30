@@ -20,8 +20,6 @@ class OnboardingCardViewController: UIViewController, Themeable {
         static let horizontalTopStackViewPaddingPad: CGFloat = 100
         static let horizontalTopStackViewPaddingPhone: CGFloat = 24
         static let scrollViewVerticalPadding: CGFloat = 62
-        static let buttonVerticalInset: CGFloat = 12
-        static let buttonHorizontalInset: CGFloat = 16
         static let buttonFontSize: CGFloat = 16
         static let titleFontSize: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 28 : 22
         static let descriptionBoldFontSize: CGFloat = 20
