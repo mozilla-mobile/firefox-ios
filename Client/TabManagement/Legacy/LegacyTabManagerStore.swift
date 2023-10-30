@@ -14,7 +14,6 @@ protocol LegacyTabManagerStore {
 
     func restoreStartupTabs(clearPrivateTabs: Bool,
                             addTabClosure: @escaping (Bool) -> Tab) -> Tab?
-
 }
 
 class LegacyTabManagerStoreImplementation: LegacyTabManagerStore, FeatureFlaggable {
@@ -22,7 +21,6 @@ class LegacyTabManagerStoreImplementation: LegacyTabManagerStore, FeatureFlaggab
     private let logger: Logger
     private let tabsKey = "tabs"
     private let prefs: Prefs
-    private let imageStore: DiskImageStore?
     private var fileManager: LegacyTabFileManager
     private var writeOperation = DispatchWorkItem {}
     private let serialQueue: DispatchQueueInterface
@@ -41,12 +39,10 @@ class LegacyTabManagerStoreImplementation: LegacyTabManagerStore, FeatureFlaggab
     // MARK: - Initializer
 
     init(prefs: Prefs,
-         imageStore: DiskImageStore?,
          fileManager: LegacyTabFileManager = FileManager.default,
          serialQueue: DispatchQueueInterface = DispatchQueue(label: "tab-manager-write-queue"),
          logger: Logger = DefaultLogger.shared) {
         self.prefs = prefs
-        self.imageStore = imageStore
         self.fileManager = fileManager
         self.serialQueue = serialQueue
         self.logger = logger
@@ -85,7 +81,7 @@ class LegacyTabManagerStoreImplementation: LegacyTabManagerStore, FeatureFlaggab
         for savedTab in savedTabs {
             // Provide an empty request to prevent a new tab from loading the home screen
             var tab = addTabClosure(savedTab.isPrivate)
-            tab = savedTab.configureSavedTabUsing(tab, imageStore: imageStore)
+            tab = savedTab.configureSavedTabUsing(tab)
             if savedTab.isSelected {
                 tabToSelect = tab
             }
@@ -114,7 +110,7 @@ class LegacyTabManagerStoreImplementation: LegacyTabManagerStore, FeatureFlaggab
     }
 
     private func savedTabError(description: String) -> [LegacySavedTab] {
-        logger.log("Failed to restore tabs",
+        logger.log("Failed to restore legacy tabs",
                    level: .warning,
                    category: .tabs,
                    description: description)
@@ -146,12 +142,6 @@ class LegacyTabManagerStoreImplementation: LegacyTabManagerStore, FeatureFlaggab
                     savedUUIDs.insert(uuidString)
                 }
             }
-        }
-
-        // Clean up any screenshots that are no longer associated with a tab.
-        let savedUUIDsCopy = savedUUIDs
-        Task {
-            try? await imageStore?.clearAllScreenshotsExcluding(savedUUIDsCopy)
         }
 
         return savedTabs.isEmpty ? nil : savedTabs

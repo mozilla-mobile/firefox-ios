@@ -151,7 +151,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     // MARK: - Initializer
 
     init(profile: Profile,
-         imageStore: DiskImageStore?,
          logger: Logger = DefaultLogger.shared
     ) {
         self.profile = profile
@@ -159,7 +158,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         self.tabEventHandlers = TabEventHandlers.create(with: profile)
         self.logger = logger
 
-        self.store = LegacyTabManagerStoreImplementation(prefs: profile.prefs, imageStore: imageStore)
+        self.store = LegacyTabManagerStoreImplementation(prefs: profile.prefs)
         super.init()
 
         register(self, forTabEvents: .didSetScreenshot)
