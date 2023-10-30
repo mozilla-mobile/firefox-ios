@@ -12,29 +12,26 @@ open class BaseCoordinator: NSObject, Coordinator {
     var router: Router
     var logger: Logger
     var isDismissable: Bool { true }
-
     var newlyAdded = false
-    private var isPerformingFindAndHandle = 0
+    private var mainQueue: DispatchQueueInterface
 
     init(router: Router,
-         logger: Logger = DefaultLogger.shared) {
+         logger: Logger = DefaultLogger.shared,
+         mainQueue: DispatchQueueInterface = DispatchQueue.main) {
         self.router = router
         self.logger = logger
+        self.mainQueue = mainQueue
     }
 
     func add(child coordinator: Coordinator) {
         childCoordinators.append(coordinator)
 
-        if isPerformingFindAndHandle > 0 {
-            // TODO: Will be removed once refactors from [FXIOS-7641] are in place.
-            // During findAndHandle(), set this flag on any newly-added child coordinators.
-            // We async-dispatch this to reset to false once the current run loop finishes. This
-            // allows us, during the recursive findAndHandle(route:), to check whether any children
-            // coordinators were added as part of the handling for the route. This fixes FXIOS-7631
-            // though we will probably want to revisit to investigate a more elegant solution.
-            coordinator.newlyAdded = true
-            DispatchQueue.main.async { [weak coordinator] in coordinator?.newlyAdded = false }
-        }
+        // Check first whether, during the recursive findAndHandle(route:), we have just added
+        // new children to this coordinator. If so, we want to skip dismissal (we shouldn't ever
+        // immediately dismiss coordinators that were just added and about to appear).
+        // Will be removed as part of larger refactors in [FXIOS-7641].
+        coordinator.newlyAdded = true
+        mainQueue.async { [weak coordinator] in coordinator?.newlyAdded = false }
     }
 
     func remove(child coordinator: Coordinator?) {
@@ -51,9 +48,6 @@ open class BaseCoordinator: NSObject, Coordinator {
 
     @discardableResult
     func findAndHandle(route: Route) -> Coordinator? {
-        isPerformingFindAndHandle += 1
-        defer { isPerformingFindAndHandle -= 1 }
-
         // If the app crashed last session then we abandon the deeplink
         guard !logger.crashedLastLaunch else { return nil }
 
