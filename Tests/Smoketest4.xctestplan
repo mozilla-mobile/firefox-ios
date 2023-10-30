@@ -65,7 +65,6 @@
         "LoginTest\/testLoginsListFromBrowserTabMenu()",
         "LoginTest\/testSavedLoginSelectUnselect()",
         "LoginTest\/testSearchLogin()",
-        "MailAppSettingsTests",
         "NavigationTest\/testCopyLink()",
         "NavigationTest\/testCopyLinkPrivateMode()",
         "NavigationTest\/testDownloadLink()",
