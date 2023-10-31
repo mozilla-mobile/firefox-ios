@@ -734,7 +734,6 @@
 		8AD40FD327BB068F00672675 /* MainMenuActionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FD227BB068F00672675 /* MainMenuActionHelper.swift */; };
 		8AD40FD527BB1C1000672675 /* LockButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FD427BB1C1000672675 /* LockButton.swift */; };
 		8AD5702F27AB4DEA005BFDC8 /* UIStackView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5702E27AB4DEA005BFDC8 /* UIStackView+Extension.swift */; };
-		8AD984F22AF1556C00B9FDA4 /* TrackingProtectionStats.js in Resources */ = {isa = PBXBuildFile; fileRef = D010187121AF0E63009CBB5A /* TrackingProtectionStats.js */; };
 		8ADAE41E2A33A0E2007BF926 /* ShowIntroductionSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADAE41D2A33A0E2007BF926 /* ShowIntroductionSetting.swift */; };
 		8ADAE4202A33A0FD007BF926 /* SendFeedbackSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADAE41F2A33A0FD007BF926 /* SendFeedbackSetting.swift */; };
 		8ADAE4222A33A113007BF926 /* SendAnonymousUsageDataSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADAE4212A33A113007BF926 /* SendAnonymousUsageDataSetting.swift */; };
@@ -5999,7 +5998,6 @@
 		CFE644C29D7FF659780311FC /* kn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kn; path = kn.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		D000661320472890009BA6F6 /* __firefox__.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = __firefox__.js; sourceTree = "<group>"; };
 		D01017F4219CB6BD009CBB5A /* DownloadContentScript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadContentScript.swift; sourceTree = "<group>"; };
-		D010187121AF0E63009CBB5A /* TrackingProtectionStats.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = TrackingProtectionStats.js; sourceTree = "<group>"; };
 		D0124D818D0CBBD1E7D135F2 /* hsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hsb; path = hsb.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D01345C293D64A6F2DCD796B /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		D0148A01220C8C93008A6EEF /* RustLoginsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustLoginsTests.swift; sourceTree = "<group>"; };
@@ -8715,7 +8713,6 @@
 			isa = PBXGroup;
 			children = (
 				8A1984CE2AF1599200AE3783 /* Lists */,
-				D010187121AF0E63009CBB5A /* TrackingProtectionStats.js */,
 				EBB894F5219398E500EB91A0 /* TrackingProtectionPageStats.swift */,
 				EBB894F7219398E500EB91A0 /* TabContentBlocker.swift */,
 				EBB894F8219398E500EB91A0 /* ContentBlocker.swift */,
@@ -11773,7 +11770,6 @@
 				D37524871C6E8B5A00A5F6C2 /* topdomains.txt in Resources */,
 				7B4980A81CE363ED0017547C /* Settings.xcassets in Resources */,
 				39F4C0FA2045D87400746155 /* FocusHelper.js in Resources */,
-				8AD984F22AF1556C00B9FDA4 /* TrackingProtectionStats.js in Resources */,
 				E1AF3562286DE5F800960045 /* Smoketest2.xctestplan in Resources */,
 				2F44FB2C1A9D5D8500FD20CC /* Library.xcassets in Resources */,
 				43175DB626B8774D00C41C31 /* Ads.js in Resources */,
