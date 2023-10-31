@@ -53,7 +53,7 @@ public struct TokenServerToken {
     }
 
     public func asJSON() -> [String: Any] {
-        let D: [String: Any] = [
+        let dictionnary: [String: Any] = [
             "id": id as AnyObject,
             "key": key as AnyObject,
             "api_endpoint": api_endpoint as AnyObject,
@@ -62,7 +62,7 @@ public struct TokenServerToken {
             "duration": NSNumber(value: durationInSeconds as UInt64),
             "remoteTimestamp": NSNumber(value: remoteTimestamp),
         ]
-        return D
+        return dictionnary
     }
 }
 
