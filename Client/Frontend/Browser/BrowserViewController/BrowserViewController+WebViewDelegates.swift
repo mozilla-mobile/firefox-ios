@@ -474,7 +474,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 TimerSnackBar.showAppStoreConfirmationBar(forTab: tab, appStoreURL: url, theme: self.themeManager.currentTheme) { _ in
                     // If a new window was opened for this URL (it will have no history), close it.
                     if tab.historyList.isEmpty {
-                        self.tabManager.removeTab(tab)
+                        self.tabManager.removeTab(tab) 
                     }
                 }
             }

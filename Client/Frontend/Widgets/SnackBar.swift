@@ -179,6 +179,6 @@ class SnackBar: UIView, ThemeApplicable {
         backgroundView.effect = UIBlurEffect(style: .extraLight)
         separator.backgroundColor = colors.borderPrimary
         layer.borderColor = colors.borderPrimary.cgColor
-        textLabel.textColor = colors.textOnLight
+        textLabel.textColor = colors.textOnLight 
     }
 }
