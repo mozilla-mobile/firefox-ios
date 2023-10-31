@@ -115,11 +115,7 @@ class LaunchCoordinator: BaseCoordinator,
         defaultOnboardingViewController.preferredContentSize = CGSize(
             width: ViewControllerConsts.PreferredSize.DBOnboardingViewController.width,
             height: ViewControllerConsts.PreferredSize.DBOnboardingViewController.height)
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            defaultOnboardingViewController.modalPresentationStyle = .fullScreen
-        } else {
-            defaultOnboardingViewController.modalPresentationStyle = .formSheet
-        }
+        defaultOnboardingViewController.modalPresentationStyle = UIDevice.current.userInterfaceIdiom == .phone ? .fullScreen : .formSheet
         router.present(defaultOnboardingViewController)
     }
 

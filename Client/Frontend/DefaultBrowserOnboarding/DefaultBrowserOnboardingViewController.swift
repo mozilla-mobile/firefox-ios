@@ -126,9 +126,6 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         initialViewSetup()
         listenForThemeChange(view)
         applyTheme()
-        if #available(iOS 16, *) {
-            setNeedsUpdateOfSupportedInterfaceOrientations()
-        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
