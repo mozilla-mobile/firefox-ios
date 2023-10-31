@@ -43,8 +43,10 @@ class ContextualHintViewProvider: ContextualHintPrefsKeysProvider, SearchBarLoca
     // MARK: - Interface
 
     func shouldPresentContextualHint() -> Bool {
-        let hintEligibilityUtility = ContextualHintEligibilityUtility(with: profile,
-                                                                      overlayState: overlayState)
+        let hintEligibilityUtility = ContextualHintEligibilityUtility(
+            with: profile,
+            overlayState: overlayState,
+            isCFRToolbarFeatureEnabled: featureFlags.isFeatureEnabled(.isToolbarCFREnabled, checking: .buildOnly))
 
         return hintEligibilityUtility.canPresent(hintType)
     }
