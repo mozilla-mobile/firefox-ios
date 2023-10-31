@@ -5,8 +5,9 @@
 import UIKit
 
 extension UIButton {
-    func setInsets(forContentPadding contentPadding: UIEdgeInsets,
-                   imageTitlePadding: CGFloat) {
+    public func setInsets(
+        forContentPadding contentPadding: UIEdgeInsets,
+        imageTitlePadding: CGFloat) {
         let isLTR = effectiveUserInterfaceLayoutDirection == .leftToRight
 
         contentEdgeInsets = UIEdgeInsets(
