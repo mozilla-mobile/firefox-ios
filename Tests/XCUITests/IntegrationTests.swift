@@ -69,6 +69,7 @@ class IntegrationTests: BaseTestCase {
 
     private func waitForInitialSyncComplete() {
         navigator.nowAt(BrowserTab)
+        waitForTabsButton()
         navigator.goto(SettingsScreen)
         mozWaitForElementToExist(app.staticTexts["ACCOUNT"], timeout: TIMEOUT_LONG)
         mozWaitForElementToNotExist(app.staticTexts["Sync and Save Data"])
