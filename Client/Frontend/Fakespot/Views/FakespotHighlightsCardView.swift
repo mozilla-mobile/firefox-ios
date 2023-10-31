@@ -17,6 +17,10 @@ struct FakespotHighlightsCardViewModel {
 
     let highlights: [FakespotHighlightGroup]
 
+    var longestTextFromReviews: String? {
+        highlights.first?.reviews.max()
+    }
+
     var highlightGroupViewModels: [FakespotHighlightGroupViewModel] {
         var highlightGroups: [FakespotHighlightGroupViewModel] = []
 
@@ -34,6 +38,11 @@ struct FakespotHighlightsCardViewModel {
 
     var shouldShowFadeInPreview: Bool {
         shouldShowMoreButton
+    }
+
+    var isOneHighlightGroupWithTwoReviews: Bool {
+        guard let firstItem = highlights.first else { return false }
+        return highlights.count == 1 && firstItem.reviews.count == 2
     }
 }
 
@@ -85,6 +94,12 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
     private var highlightPreviewGroups: [FakespotHighlightGroupView] = []
     private var viewModel: FakespotHighlightsCardViewModel?
     private var isShowingPreview = true
+
+    private var safeAreaEdgeInsets: UIEdgeInsets {
+        guard let firstScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return UIEdgeInsets() }
+        guard let firstWindow = firstScene.windows.first else { return UIEdgeInsets() }
+        return firstWindow.safeAreaInsets
+    }
 
     // MARK: - Inits
     override init(frame: CGRect) {
@@ -141,6 +156,36 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
         dividerView.backgroundColor = theme.colors.borderPrimary
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        guard let viewModel else { return }
+        guard viewModel.isOneHighlightGroupWithTwoReviews else { return }
+        guard let longestReview = viewModel.longestTextFromReviews else { return }
+
+        let highlightLabelWidth = longestReview.widthOfString(
+            usingFont: DefaultDynamicFontHelper.preferredFont(
+                withTextStyle: .subheadline,
+                size: UX.titleFontSize,
+                weight: .semibold
+            )
+        )
+
+        let highlightsGroupViewWidth = (bounds.width - safeAreaEdgeInsets.left * 2) -
+                                       (highlightGroups.first!.imageHeightConstraint?.constant ?? 24) -
+                                       (2 * UX.contentHorizontalSpace)
+
+        let areMoreThanTwoLines = highlightLabelWidth > highlightsGroupViewWidth
+
+        if areMoreThanTwoLines {
+            contentStackView.addArrangedSubview(dividerView)
+            contentStackView.addArrangedSubview(moreButton)
+        } else {
+            contentStackView.removeArrangedView(dividerView)
+            contentStackView.removeArrangedView(moreButton)
+        }
+        updateHighlights(areMoreThanTwoLines)
+    }
+
     private func setupLayout() {
         contentStackView.addArrangedSubview(highlightStackView)
         contentStackView.addArrangedSubview(dividerView)
@@ -192,9 +237,9 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
         }
     }
 
-    private func updateHighlights() {
+    private func updateHighlights(_ areMoreThanTwoLines: Bool = true) {
         highlightStackView.removeAllArrangedViews()
-        let shouldShowFade = isShowingPreview && viewModel?.shouldShowFadeInPreview ?? false
+        let shouldShowFade = isShowingPreview && areMoreThanTwoLines && viewModel?.shouldShowFadeInPreview ?? false
         let groupsToShow = isShowingPreview ? highlightPreviewGroups : highlightGroups
 
         for (_, group) in groupsToShow.enumerated() {
