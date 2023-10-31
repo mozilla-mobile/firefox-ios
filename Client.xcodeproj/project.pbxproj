@@ -429,7 +429,6 @@
 		5A3A7DD62889CF3D0065F81A /* RecentlySavedDataAdaptorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3A7DD52889CF3D0065F81A /* RecentlySavedDataAdaptorTests.swift */; };
 		5A3A7DDA2889EC4D0065F81A /* ReadingListMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3A7DD92889EC4D0065F81A /* ReadingListMock.swift */; };
 		5A3A7DDC2889EC5D0065F81A /* BookmarksHandlerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3A7DDB2889EC5D0065F81A /* BookmarksHandlerMock.swift */; };
-		5A430D792853DFDD00782BFF /* OrientationLockUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A430D782853DFDD00782BFF /* OrientationLockUtility.swift */; };
 		5A475E8E29DB89C7009C13FD /* TabManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A475E8929DB87F2009C13FD /* TabManagerTests.swift */; };
 		5A475E8F29DB89CE009C13FD /* MockTabDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A475E8C29DB888E009C13FD /* MockTabDataStore.swift */; };
 		5A475E9129DB8AA7009C13FD /* MockDiskImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A475E9029DB8AA7009C13FD /* MockDiskImageStore.swift */; };
@@ -4555,7 +4554,6 @@
 		5A3A7DD52889CF3D0065F81A /* RecentlySavedDataAdaptorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlySavedDataAdaptorTests.swift; sourceTree = "<group>"; };
 		5A3A7DD92889EC4D0065F81A /* ReadingListMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingListMock.swift; sourceTree = "<group>"; };
 		5A3A7DDB2889EC5D0065F81A /* BookmarksHandlerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksHandlerMock.swift; sourceTree = "<group>"; };
-		5A430D782853DFDD00782BFF /* OrientationLockUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrientationLockUtility.swift; sourceTree = "<group>"; };
 		5A475E8929DB87F2009C13FD /* TabManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManagerTests.swift; sourceTree = "<group>"; };
 		5A475E8C29DB888E009C13FD /* MockTabDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTabDataStore.swift; sourceTree = "<group>"; };
 		5A475E9029DB8AA7009C13FD /* MockDiskImageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDiskImageStore.swift; sourceTree = "<group>"; };
@@ -10324,7 +10322,6 @@
 				DFACBF80277B916B003D5F41 /* ConfigurableGradientView.swift */,
 				DFEA639D279F468A00D489C3 /* DynamicHeightCollectionView.swift */,
 				C8BA0E7527F20B8E00DD8214 /* HistoryDeletionUtility.swift */,
-				5A430D782853DFDD00782BFF /* OrientationLockUtility.swift */,
 				8A1E3BDE28CBA81E003388C4 /* SponsoredContentFilterUtility.swift */,
 				C2296FCB2A601C190046ECA6 /* IntensityVisualEffectView.swift */,
 				8A13FA8C2AD834FA007527AB /* BackgroundTabLoader.swift */,
@@ -13164,7 +13161,6 @@
 				C82F4C2B29AE2DF1005BD116 /* NotificationsSettingsViewController.swift in Sources */,
 				59A68B280D62462B85CF57A4 /* HistoryPanel.swift in Sources */,
 				C400467C1CF4E43E00B08303 /* BackForwardListViewController.swift in Sources */,
-				5A430D792853DFDD00782BFF /* OrientationLockUtility.swift in Sources */,
 				D5D237782640BBA600326204 /* ExperimentsSettingsViewController.swift in Sources */,
 				D3972BF31C22412B00035B87 /* ShareExtensionHelper.swift in Sources */,
 				F35B8D2D1D6383E9008E3D61 /* SessionRestoreHelper.swift in Sources */,
