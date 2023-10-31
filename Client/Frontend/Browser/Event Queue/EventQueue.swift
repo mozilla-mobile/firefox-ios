@@ -74,7 +74,9 @@ final class EventQueue<QueueEventType: Hashable> {
             self.signalledEvents[event] = .inProgress
         }
     }
-
+    /// Signals an activity event as having completed successfully.
+    /// Dependent actions will be executed (if all other dependencies
+    /// are satisfied).
     func completed(_ event: QueueEventType, error: Error? = nil) {
         mainQueue.ensureMainThread { [weak self] in
             guard let self else { return }
@@ -88,7 +90,9 @@ final class EventQueue<QueueEventType: Hashable> {
             self.processActions(for: event)
         }
     }
-
+    
+    /// Signals an activity event as having failed (completed with an error).
+    /// Dependent actions will not be executed.
     func failed(_ event: QueueEventType) {
         mainQueue.ensureMainThread { [weak self] in
             self?.signalledEvents[event] = .failed
