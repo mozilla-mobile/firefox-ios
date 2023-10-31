@@ -4,7 +4,6 @@
 
 import Common
 import Foundation
-import SnapKit
 import Shared
 
 protocol AlphaDimmable {
@@ -38,7 +37,7 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
 
     // MARK: - Spacer view
 
-    private var keyboardSpacerHeight: Constraint!
+    private var keyboardSpacerHeight: NSLayoutConstraint!
     private var keyboardSpacer: UIView?
 
     func addKeyboardSpacer(spacerHeight: CGFloat) {
@@ -59,9 +58,22 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
 
     private func setKeyboardSpacerHeight(height: CGFloat) {
         guard let keyboardSpacer = self.keyboardSpacer else { return }
-        keyboardSpacer.snp.remakeConstraints { remake in
-            keyboardSpacerHeight = remake.height.equalTo(height).constraint
+        keyboardSpacer.translatesAutoresizingMaskIntoConstraints = false
+        // Remove any existing height constraint on keyboardSpacer
+        if let existingHeightConstraint = keyboardSpacer.constraints.first(where: { $0.firstAttribute == .height && $0.secondItem == nil }) {
+            keyboardSpacer.removeConstraint(existingHeightConstraint)
         }
+
+        // Create and add the new height constraint
+        let heightConstraint = NSLayoutConstraint(item: keyboardSpacer,
+                                                  attribute: .height,
+                                                  relatedBy: .equal,
+                                                  toItem: nil,
+                                                  attribute: .notAnAttribute,
+                                                  multiplier: 1.0,
+                                                  constant: height)
+        keyboardSpacer.addConstraint(heightConstraint)
+        keyboardSpacerHeight = heightConstraint
     }
 
     func applyTheme(theme: Theme) {
