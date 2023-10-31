@@ -7,5 +7,6 @@ import Foundation
 protocol AppEventType: Hashable { }
 
 enum AppEvent: Int, AppEventType {
-    case profileDidFinishLoading // Integration forthcoming. [FXIOS-7606]
+    case tabRestoreHasFinished
+    case profileSyncing
 }

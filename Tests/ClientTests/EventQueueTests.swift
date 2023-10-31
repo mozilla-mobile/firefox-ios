@@ -13,6 +13,8 @@ enum TestEvent: AppEventType {
     case middleEvent
     case laterEvent
 
+    case activityEvent
+
     case contextualEvent(Int)
 }
 
@@ -126,5 +128,58 @@ final class EventQueueTests: XCTestCase {
             self.queue.signal(event: .startingEvent)
         }
         wait(1)
+    }
+
+    func testActivityEventStateChanges() {
+        var actionRun = false
+
+        XCTAssertTrue(queue.activityIsNotStarted(.startingEvent))
+        queue.wait(for: .activityEvent) { actionRun = true }
+
+        // Start event
+        self.queue.started(.activityEvent)
+        XCTAssertFalse(actionRun)
+        XCTAssertTrue(queue.activityIsInProgress(.activityEvent))
+
+        // Complete event
+        self.queue.completed(.activityEvent)
+        XCTAssertTrue(actionRun)
+        XCTAssertTrue(queue.activityIsCompleted(.activityEvent))
+    }
+
+    func testMultipleEventTypeDependencies() {
+        var actionRun = false
+
+        XCTAssertTrue(queue.activityIsNotStarted(.startingEvent))
+        queue.wait(for: [.startingEvent, .activityEvent], then: { actionRun = true })
+
+        queue.signal(event: .startingEvent)
+
+        XCTAssertFalse(actionRun)
+        queue.started(.activityEvent)
+
+        XCTAssertFalse(actionRun)
+        queue.completed(.activityEvent)
+
+        XCTAssertTrue(actionRun)
+        XCTAssertTrue(queue.activityIsCompleted(.activityEvent))
+    }
+
+    func testActivityDefaultStates() {
+        XCTAssert(queue.activityIsNotStarted(.activityEvent))
+        queue.started(.activityEvent)
+        XCTAssertFalse(queue.activityIsNotStarted(.activityEvent))
+    }
+
+    func testFailedState() {
+        var actionRun = false
+
+        XCTAssertTrue(queue.activityIsNotStarted(.startingEvent))
+        queue.wait(for: [.activityEvent], then: { actionRun = true })
+
+        queue.started(.activityEvent)
+        queue.failed(.activityEvent)
+        XCTAssertFalse(queue.activityIsNotStarted(.activityEvent))
+        XCTAssertFalse(actionRun)
     }
 }
