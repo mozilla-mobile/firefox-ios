@@ -90,7 +90,7 @@ final class EventQueue<QueueEventType: Hashable> {
             self.processActions(for: event)
         }
     }
-    
+
     /// Signals an activity event as having failed (completed with an error).
     /// Dependent actions will not be executed.
     func failed(_ event: QueueEventType) {
