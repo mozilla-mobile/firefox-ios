@@ -20,8 +20,6 @@ class OnboardingCardViewController: UIViewController, Themeable {
         static let horizontalTopStackViewPaddingPad: CGFloat = 100
         static let horizontalTopStackViewPaddingPhone: CGFloat = 24
         static let scrollViewVerticalPadding: CGFloat = 62
-        static let buttonVerticalInset: CGFloat = 12
-        static let buttonHorizontalInset: CGFloat = 16
         static let buttonFontSize: CGFloat = 16
         static let titleFontSize: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 28 : 22
         static let descriptionBoldFontSize: CGFloat = 20
@@ -124,18 +122,8 @@ class OnboardingCardViewController: UIViewController, Themeable {
         button.addTarget(self, action: #selector(self.secondaryAction), for: .touchUpInside)
     }
 
-    private lazy var linkButton: ResizableButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
-                                                                         size: UX.buttonFontSize)
-        button.titleLabel?.textAlignment = .center
+    private lazy var linkButton: LinkButton = .build { button in
         button.addTarget(self, action: #selector(self.linkButtonAction), for: .touchUpInside)
-        button.setTitleColor(.systemBlue, for: .normal)
-        button.backgroundColor = .clear
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
-                                                left: UX.buttonHorizontalInset,
-                                                bottom: UX.buttonVerticalInset,
-                                                right: UX.buttonHorizontalInset)
     }
 
     // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-6816
@@ -346,7 +334,14 @@ class OnboardingCardViewController: UIViewController, Themeable {
             linkButton.isHidden = true
             return
         }
-        linkButton.setTitle(buttonTitle, for: .normal)
+        let buttonViewModel = LinkButtonViewModel(
+            title: buttonTitle,
+            a11yIdentifier: "\(self.viewModel.a11yIdRoot)LinkButton",
+            fontSize: UX.buttonFontSize,
+            textAlignment: .center
+        )
+        linkButton.configure(viewModel: buttonViewModel)
+        linkButton.applyTheme(theme: themeManager.currentTheme)
     }
 
     // MARK: - Button Actions
