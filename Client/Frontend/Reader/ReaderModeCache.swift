@@ -34,7 +34,7 @@ protocol ReaderModeCache {
     func clear()
 }
 
-/// A non-persistent cache for reader mode  content for times when you don't want to write reader data to disk.
+/// A non-persistent cache for reader mode content for times when you don't want to write reader data to disk.
 /// For example, when the user is in a private tab, we want to make sure that we leave no trace on the file system
 class MemoryReaderModeCache: ReaderModeCache {
     var cache: NSCache<AnyObject, AnyObject>

@@ -10,6 +10,9 @@ protocol LoggerFileManager {
 
     /// Copy logs files from the cache to the documents folder so the user can access them
     func copyLogsToDocuments()
+
+    /// Deletes cached log files.
+    func deleteCachedLogFiles()
 }
 
 class DefaultLoggerFileManager: LoggerFileManager {
@@ -37,15 +40,25 @@ class DefaultLoggerFileManager: LoggerFileManager {
     }
 
     func copyLogsToDocuments() {
-        deleteOldLogs()
+        deleteOldDocumentDirectoryLogs()
         copyLogs()
     }
 
     // MARK: - Private
 
+    /// Deletes all log files in Caches (and Documents) directory.
+    func deleteCachedLogFiles() {
+        deleteOldLogs(inDocuments: false)
+        deleteOldLogs(inDocuments: true)
+    }
+
     /// Delete logs in Documents folder to make sure we can copy in the latest version of the logs file
-    private func deleteOldLogs() {
-        guard let logDirectoryPath = logFileDirectoryPath(inDocuments: true),
+    private func deleteOldDocumentDirectoryLogs() {
+        deleteOldLogs(inDocuments: true)
+    }
+
+    private func deleteOldLogs(inDocuments: Bool) {
+        guard let logDirectoryPath = logFileDirectoryPath(inDocuments: inDocuments),
               let logFiles = try? fileManager.contentsOfDirectoryAtPath(logDirectoryPath,
                                                                         withFilenamePrefix: fileNameRoot)
         else { return }

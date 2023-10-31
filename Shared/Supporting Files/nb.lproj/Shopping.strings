@@ -1,0 +1,63 @@
+/* Contextual hints are little popups that appear for the users informing them of new features. This one indicates that a user can tap on the shopping button to start using the Shopping feature. */
+"ContextualHints.Shopping.NotOptedIn.v120" = "Finn ut om du kan stole på vurderinger av dette produktet — før du kjøper.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing the Shopping feature. It indicates that a user can go directly to the Shopping feature by tapping the text of the action. */
+"ContextualHints.Shopping.NotOptedInAction.v120" = "Prøv vurderingskontrollør";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears after the user has opted in for the Shopping feature. It indicates that a user can directly open the review checker by tapping the text of the action. */
+"ContextualHints.Shopping.OptedInAction.v120" = "Åpne vurderingskontrollør";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one appears after the user has opted in and informs him if he wants use the review checker by tapping the Shopping button. */
+"ContextualHints.Shopping.OptedInBody.v120" = "Er disse anmeldelsene pålitelige? Sjekk nå for å se en justert vurdering.";
+
+/* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
+"Shopping.AdjustedRating.Description.v120" = "Upålitelige anmeldelser er fjernet";
+
+/* Accessibility label, associated to adjusted rating stars. %@ is a decimal value from 0 to 5 that will only use a tenth (example: 3.5). */
+"Shopping.AdjustedRating.StarsAccessibilityLabel.v120" = "%@ av 5 stjerner";
+
+/* Title of the adjusted rating card displayed in the shopping review quality bottom sheet. */
+"Shopping.AdjustedRating.Title.v120" = "Justert vurdering";
+
+/* Button text of the confirmation displayed in the shopping review quality bottom sheet. */
+"Shopping.ConfirmationCard.Button.Text.v120" = "Jeg forstår";
+
+/* Title of the confirmation displayed in the shopping review quality bottom sheet. */
+"Shopping.ConfirmationCard.Title.v120" = "Analyse er oppdatert";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Competitiveness.Title.v120" = "Konkurranseevne";
+
+/* Title of the button that shows less reviews in the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.LessButton.Title.v120" = "Vis mindre";
+
+/* Title of the button that shows more reviews in the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.MoreButton.Title.v120" = "Vis mer";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet, specifically focusing on the quality, design, and condition of the product's packaging. This may include details about the box, protective materials, presentation, and overall packaging experience. */
+"Shopping.HighlightsCard.Packaging.Title.v120" = "Emballasje";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Price.Title.v120" = "Pris";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Quality.Title.v120" = "Kvalitet";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Shipping.Title.v120" = "Frakt";
+
+/* Title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Title.v120" = "Høydepunkter fra nylige vurderinger";
+
+/* Title for info card when Fakespot cannot analyze reviews for a certain product type */
+"Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Description.v120" = "Dessverre kan vi ikke sjekke vurderingskvaliteten for visse typer produkter. For eksempel gavekort og strømming av video, musikk og spill.";
+
+/* Title for info card when Fakespot cannot analyze reviews for a certain product type */
+"Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Title.v120" = "Kan ikke kontrollere disse vurderingene";
+
+/* Primary action title for info card when the product needs analysis */
+"Shopping.InfoCard.NeedsAnalysis.PrimaryAction.v120" = "Sjekk nå";
+
+/* Title for info card when the product needs analysis */
+"Shopping.InfoCard.NeedsAnalysis.Title.v120" = "Ny informasjon å vurdere";
+

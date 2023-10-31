@@ -1,0 +1,54 @@
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Price.Title.v120" = "Fiyat";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Quality.Title.v120" = "Kalite";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Shipping.Title.v120" = "Kargo";
+
+/* Title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Title.v120" = "Öne çıkan son değerlendirmeler";
+
+/* Title for info card when Fakespot cannot analyze reviews for a certain product type */
+"Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Description.v120" = "Maalesef bazı ürün türlerinin değerlendirme kalitelerini kontrol edemiyoruz. Örneğin, hediye kartları ve video, müzik ve oyun akışı.";
+
+/* Title for info card when Fakespot cannot analyze reviews for a certain product type */
+"Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Title.v120" = "Bu değerlendirmeleri kontrol edemiyoruz";
+
+/* Primary action title for info card when the product needs analysis */
+"Shopping.InfoCard.NeedsAnalysis.PrimaryAction.v120" = "Şimdi kontrol et";
+
+/* Title for info card when the product needs analysis */
+"Shopping.InfoCard.NeedsAnalysis.Title.v120" = "Kontrol edilecek yeni bilgiler";
+
+/* Description for info card when no information is available at the moment */
+"Shopping.InfoCard.NoInfoAvailableRightNow.Description.v120" = "Sorunu çözmek için çalışıyoruz. Lütfen kısa süre sonra tekrar kontrol edin.";
+
+/* Title for info card when no information is available at the moment */
+"Shopping.InfoCard.NoInfoAvailableRightNow.Title.v120" = "Şu anda bilgi yok";
+
+/* Description for info card when there are not enough reviews for a product */
+"Shopping.InfoCard.NotEnoughReviews.Description.v120" = "Bu ürüne daha fazla değerlendirme geldiğinde değerlendirmelerin kalitelerini kontrol edebileceğiz.";
+
+/* Title for info card when there are not enough reviews for a product */
+"Shopping.InfoCard.NotEnoughReviews.Title.v120" = "Henüz yeterli değerlendirme yok";
+
+/* Description for info card when the product is in analysis mode */
+"Shopping.InfoCard.ProgressAnalysis.Description.v120" = "Yaklaşık 60 saniye sürebilir.";
+
+/* Title for info card when the product is in analysis mode */
+"Shopping.InfoCard.ProgressAnalysis.Title.v120" = "Değerlendirme kalitesi kontrol ediliyor";
+
+/* Text for the analyzer button displayed when an analysis can be updated for a product. */
+"Shopping.NoAnalysisCard.AnalyzerButton.Title.v120" = "Değerlendirme kalitesini kontrol et";
+
+/* Title for card displayed when a shopping product has not been analysed yet. */
+"Shopping.NoAnalysisCard.HeadlineLabel.Title.v120" = "Bu değerlendirmeler hakkında henüz bilgi yok";
+
+/* Description for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
+"Shopping.NoAnalysisCard.InProgress.Body.Label.v120" = "Yaklaşık 60 saniye sürebilir.";
+
+/* Title for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
+"Shopping.NoAnalysisCard.InProgress.Headline.Title.v120" = "Değerlendirme kalitesi kontrol ediliyor";
+

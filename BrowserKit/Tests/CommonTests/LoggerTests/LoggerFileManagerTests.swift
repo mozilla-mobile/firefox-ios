@@ -52,6 +52,16 @@ final class LoggerFileManagerTests: XCTestCase {
         XCTAssertEqual(fileManager.removeItemCalled, 1)
     }
 
+    func testDeleteCachedLogFiles_fileExistsWillDelete() {
+        fileManager.contentsOfDirectory = ["path/file1"]
+        fileManager.contentsOfDirectoryAtPath = ["path/file1"]
+
+        subject.deleteCachedLogFiles()
+        // Note: we expect this to be called twice since `deleteCachedLogFiles`
+        // will remove files from both /Caches/Logs and /Documents/Logs.
+        XCTAssertEqual(fileManager.removeItemCalled, 2)
+    }
+
     func testDeleteOldLogFiles_fileDoesntExistsDoesntDelete_andCopy() {
         fileManager.contentsOfDirectory = ["path/file1"]
 

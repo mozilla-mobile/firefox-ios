@@ -28,17 +28,26 @@
 /* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Notification.Description.v114" = "기기 간에 탭을 보내고 %@를 최대한 활용하는 방법에 대한 팁을 얻으세요.";
 
+/* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Notification.Description.v120" = "기기 간에 안전하게 탭을 보내고 %@의 다른 개인 정보 보호 기능을 찾아보세요.";
+
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Skip.Action.v115" = "건너뛰기";
 
 /* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Notification.Title.v114" = "알림은 %@로 더 많은 일을 할 수 있도록 도와줍니다.";
 
+/* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Notification.Title.v120" = "알림으로 %@를 더욱 안전하게 사용할 수 있습니다.";
+
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "알림 켜기";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
 "Onboarding.Sync.Description.v114" = "다른 기기에서 탭과 비밀번호를 가져와 중단한 부분부터 다시 시작하세요.";
+
+/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Sync.Description.v120" = "로그인하고 동기화하면 더 안전해집니다. %@는 비밀번호, 북마크 등을 암호화합니다.";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.SignIn.Action.v114" = "로그인";
@@ -48,6 +57,9 @@
 
 /* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
 "Onboarding.Sync.Title.v114" = "휴대전화에서 노트북으로 왔다가 다시 돌아가기";
+
+/* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
+"Onboarding.Sync.Title.v120" = "기기 간 이동 시 암호화 상태를 유지하세요";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.Classic.v114" = "클래식 배경화면";

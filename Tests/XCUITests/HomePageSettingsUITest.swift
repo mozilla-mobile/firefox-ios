@@ -37,6 +37,7 @@ class HomePageSettingsUITests: BaseTestCase {
         super.setUp()
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2339256
     func testCheckHomeSettingsByDefault() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
@@ -67,6 +68,7 @@ class HomePageSettingsUITests: BaseTestCase {
         XCTAssertTrue(app.tables.cells["HomeAsCustomURL"].exists)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2339257
     func testTyping() {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
@@ -92,6 +94,7 @@ class HomePageSettingsUITests: BaseTestCase {
         mozWaitForValueContains(app.textFields["url"], value: "example")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2339258
     func testClipboard() {
         navigator.nowAt(NewTabScreen)
         // Check that what's in clipboard is copied
@@ -107,6 +110,7 @@ class HomePageSettingsUITests: BaseTestCase {
         XCTAssertEqual(value, websiteUrl1)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2339260
     func testSetFirefoxHomeAsHome() {
         // Start by setting to History since FF Home is default
         waitForTabsButton()
@@ -128,6 +132,7 @@ class HomePageSettingsUITests: BaseTestCase {
         mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307031
     func testSetCustomURLAsHome() {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
@@ -147,6 +152,7 @@ class HomePageSettingsUITests: BaseTestCase {
         mozWaitForValueContains(app.textFields["url"], value: "mozilla")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2339489
     func testDisableTopSitesSettingsRemovesSection() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
         navigator.nowAt(NewTabScreen)
@@ -162,6 +168,7 @@ class HomePageSettingsUITests: BaseTestCase {
         mozWaitForElementToNotExist(app.collectionViews.cells.staticTexts["YouTube"])
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2339491
     func testChangeHomeSettingsLabel() {
         // Go to New Tab settings and select Custom URL option
         navigator.performAction(Action.SelectHomeAsCustomURL)
@@ -186,7 +193,7 @@ class HomePageSettingsUITests: BaseTestCase {
         XCTAssertEqual(numberOfTopSites, numberOfExpectedTopSites)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/1548961
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307033
     func testJumpBackIn() {
         navigator.openURL(path(forTestPage: exampleUrl))
         waitUntilPageLoad()
@@ -213,7 +220,7 @@ class HomePageSettingsUITests: BaseTestCase {
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/1548962
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307034
     func testRecentlySaved() {
         // Preconditons: Create 6 bookmarks & add 1 items to reading list
         bookmarkPages()
@@ -256,6 +263,8 @@ class HomePageSettingsUITests: BaseTestCase {
         checkRecentlySavedUpdated()
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306923
+    // Smoketest
     func testRecentlyVisited() {
         navigator.openURL(websiteUrl1)
         waitUntilPageLoad()
@@ -294,6 +303,8 @@ class HomePageSettingsUITests: BaseTestCase {
 //        XCTAssertFalse(app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell].staticTexts["Mozilla , Pages: 2"].exists)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306871
+    // Smoketest
     func testCustomizeHomepage() {
         if !iPad() {
             mozWaitForElementToExist(app.collectionViews["FxCollectionView"], timeout: TIMEOUT)

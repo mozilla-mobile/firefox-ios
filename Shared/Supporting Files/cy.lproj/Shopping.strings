@@ -1,0 +1,198 @@
+/* Contextual hints are little popups that appear for the users informing them of new features. This one indicates that a user can tap on the shopping button to start using the Shopping feature. */
+"ContextualHints.Shopping.NotOptedIn.v120" = "Darganfyddwch a allwch chi ymddiried yn adolygiadau’r cynnyrch hwn - cyn i chi brynu.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing the Shopping feature. It indicates that a user can go directly to the Shopping feature by tapping the text of the action. */
+"ContextualHints.Shopping.NotOptedInAction.v120" = "Rhowch gynnig ar y Gwirydd Adolygiadau";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears after the user has opted in for the Shopping feature. It indicates that a user can directly open the review checker by tapping the text of the action. */
+"ContextualHints.Shopping.OptedInAction.v120" = "Agor y Gwirydd Adolygiadau";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one appears after the user has opted in and informs him if he wants use the review checker by tapping the Shopping button. */
+"ContextualHints.Shopping.OptedInBody.v120" = "A yw’r adolygiadau hyn yn ddibynadwy? Gwiriwch nawr i weld sgôr wedi’i addasu.";
+
+/* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
+"Shopping.AdjustedRating.Description.v120" = "Dilëwyd adolygiadau annibynadwy";
+
+/* Accessibility label, associated to adjusted rating stars. %@ is a decimal value from 0 to 5 that will only use a tenth (example: 3.5). */
+"Shopping.AdjustedRating.StarsAccessibilityLabel.v120" = "%@ allan o 5 seren";
+
+/* Title of the adjusted rating card displayed in the shopping review quality bottom sheet. */
+"Shopping.AdjustedRating.Title.v120" = "Gradd wedi'i haddasu";
+
+/* Button text of the confirmation displayed in the shopping review quality bottom sheet. */
+"Shopping.ConfirmationCard.Button.Text.v120" = "Iawn";
+
+/* Title of the confirmation displayed in the shopping review quality bottom sheet. */
+"Shopping.ConfirmationCard.Title.v120" = "Mae’r Dadansoddiad yn Gyfredol";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Competitiveness.Title.v120" = "Cystadleurwydd";
+
+/* Title of the button that shows less reviews in the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.LessButton.Title.v120" = "Dangos Llai";
+
+/* Title of the button that shows more reviews in the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.MoreButton.Title.v120" = "Dangos Rhagor";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet, specifically focusing on the quality, design, and condition of the product's packaging. This may include details about the box, protective materials, presentation, and overall packaging experience. */
+"Shopping.HighlightsCard.Packaging.Title.v120" = "Pecynnu";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Price.Title.v120" = "Pris";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Quality.Title.v120" = "Ansawdd";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Shipping.Title.v120" = "Cludiant";
+
+/* Title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Title.v120" = "Uchafbwyntiau o adolygiadau diweddar";
+
+/* Title for info card when Fakespot cannot analyze reviews for a certain product type */
+"Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Description.v120" = "Yn anffodus, allwn ni ddim gwirio ansawdd adolygu rhai mathau o gynnyrch. Er enghraifft, cardiau rhodd a ffrydio fideo, cerddoriaeth a gemau.";
+
+/* Title for info card when Fakespot cannot analyze reviews for a certain product type */
+"Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Title.v120" = "Methu Gwirio’r Adolygiadau Hyn";
+
+/* Primary action title for info card when the product needs analysis */
+"Shopping.InfoCard.NeedsAnalysis.PrimaryAction.v120" = "Gwirio Nawr";
+
+/* Title for info card when the product needs analysis */
+"Shopping.InfoCard.NeedsAnalysis.Title.v120" = "Gwybodaeth Newydd i'w Gwirio";
+
+/* Description for info card when no information is available at the moment */
+"Shopping.InfoCard.NoInfoAvailableRightNow.Description.v120" = "Rydym yn gweithio i ddatrys y mater. Dewch nôl cyn bo hir.";
+
+/* Title for info card when no information is available at the moment */
+"Shopping.InfoCard.NoInfoAvailableRightNow.Title.v120" = "Dim Gwybodaeth ar Gael ar Hyn o Bryd";
+
+/* Description for info card when there are not enough reviews for a product */
+"Shopping.InfoCard.NotEnoughReviews.Description.v120" = "Pan fydd gan y cynnyrch hwn fwy o adolygiadau, byddwn yn gallu gwirio eu hansawdd.";
+
+/* Title for info card when there are not enough reviews for a product */
+"Shopping.InfoCard.NotEnoughReviews.Title.v120" = "Dim Digon o Adolygiadau Eto";
+
+/* Description for info card when the product is in analysis mode */
+"Shopping.InfoCard.ProgressAnalysis.Description.v120" = "Gall hyn gymryd tua 60 eiliad.";
+
+/* Title for info card when the product is in analysis mode */
+"Shopping.InfoCard.ProgressAnalysis.Title.v120" = "Yn gwirio ansawdd adolygiadau";
+
+/* Text for the analyzer button displayed when an analysis can be updated for a product. */
+"Shopping.NoAnalysisCard.AnalyzerButton.Title.v120" = "Gwirio Ansawdd yr Adolygiad";
+
+/* Text for the body label, to check the reliability of a product. */
+"Shopping.NoAnalysisCard.BodyLabel.Title.v120" = "I wybod a yw adolygiadau’r cynnyrch hwn yn ddibynadwy, gwiriwch ansawdd yr adolygiadau. Dim ond tua 60 eiliad y mae’n ei gymryd.";
+
+/* Title for card displayed when a shopping product has not been analysed yet. */
+"Shopping.NoAnalysisCard.HeadlineLabel.Title.v120" = "Dim gwybodaeth am yr adolygiadau hyn eto";
+
+/* Description for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
+"Shopping.NoAnalysisCard.InProgress.Body.Label.v120" = "Gall hyn gymryd tua 60 eiliad.";
+
+/* Title for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
+"Shopping.NoAnalysisCard.InProgress.Headline.Title.v120" = "Yn gwirio ansawdd adolygiadau";
+
+/* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. The third and fourth parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. */
+"Shopping.OptInCard.FirstParagraph.Description.v120" = "Gallwch weld pa mor ddibynadwy yw adolygiadau cynnyrch ar %1$@ cyn i chi brynu. Mae'r Gwirydd Adolygiadau, nodwedd arbrofol gan %2$@, wedi’i gynnwys yn y porwr. Mae’n gweithio ar %3$@ a %4$@ hefyd.";
+
+/* Label for the header of the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.HeaderLabel.Title.v120" = "Rhowch gynnig ar ein canllaw dibynadwy i adolygiadau cynnyrch";
+
+/* Label for the Learn more button in the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.LearnMoreButtonTitle.Title.v120" = "Darllen rhagor";
+
+/* Text for the main button of the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.MainButton.Title.v120" = "Iawn, Rhowch gynnig arni";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
+"Shopping.OptInCard.PrivacyPolicy.Button.Title.v120" = "Polisi preifatrwydd";
+
+/* Text for the secondary button of the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.SecondaryButton.Title.v120" = "Nid nawr";
+
+/* Label for the second paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be replaced by the Fakespot app name. The second parameter will be replaced the company name of Mozilla. */
+"Shopping.OptInCard.SecondParagraph.Description.v120" = "Gan ddefnyddio pŵer %1$@ gan %2$@, rydym yn eich helpu i osgoi adolygiadau rhagfarnllyd ac annilys. Mae ein model AI bob amser yn gwella i’ch diogelu wrth i chi siopa.";
+
+/* Show Firefox Browser Terms of Use page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
+"Shopping.OptInCard.TermsOfUse.Button.Title.v120" = "Amodau defnydd";
+
+/* Accessibility label for the Grade labels used in 'How we determine review quality' card and 'How reliable are these reviews' card displayed in the shopping review quality bottom sheet. The placeholder will be replaced by a grade letter (e.g. A). The grading system contains letters from A-F. */
+"Shopping.ReliabilityScore.Grade.A11y.Label.v120" = "Gradd %@";
+
+/* Title of the reliability card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQuality.ReliabilityCardTitle.v120" = "Pa mor ddibynadwy yw'r adolygiadau hyn?";
+
+/* Description of the reliability ratings for rating 'A' and 'B' displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQuality.ReliabilityRating.AB.Description.v120" = "Adolygiadau dibynadwy";
+
+/* Description of the reliability rating 'C' displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQuality.ReliabilityRating.C.Description.v120" = "Cymysgedd o adolygiadau dibynadwy ac annibynadwy";
+
+/* Description of the reliability ratings for rating 'D' and 'F' displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQuality.ReliabilityRating.DF.Description.v120" = "Adolygiadau annibynadwy";
+
+/* Adjusted rating label from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.AdjustedRating.Label.v120" = "Mae’r *graddio wedi’i addasu* yn seiliedig ar adolygiadau y credwn eu bod yn ddibynadwy yn unig.";
+
+/* Accessibility label for the up chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.Collapse.AccessibilityLabel.v120" = "Cau Sut rydym yn pennu Cerdyn ansawdd adolygu";
+
+/* Accessibility label for the down chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.Expand.AccessibilityLabel.v120" = "Agor Sut rydym yn pennu Cerdyn ansawdd adolygu";
+
+/* Label of the headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
+"Shopping.ReviewQualityCard.Headline.Label.v120" = "Rydym yn defnyddio technoleg AI o %1$@ gan %2$@ i wirio dibynadwyedd adolygiadau cynnyrch. Bydd hyn dim ond yn eich helpu i asesu ansawdd adolygiad, nid ansawdd y cynnyrch.";
+
+/* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.Highlights.Label.v120" = "Daw’r *Uchafbwyntiau* o adolygiadau %1@ o fewn yr 80 diwrnod diwethaf y credwn eu bod yn ddibynadwy.";
+
+/* Title of the 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.Label.Title.v120" = "Sut rydym yn mesur ansawdd adolygiadau";
+
+/* The title of the learn more button from How we determine review quality card displayed in the shopping review quality bottom sheet. The placeholder will be replaced with the Fakespot app name. */
+"Shopping.ReviewQualityCard.LearnMoreButton.Title.v120" = "Darllen rhagor am sut mae %@ yn pennu ansawdd adolygiadau";
+
+/* Mixed reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.MixedReviews.Label.v120" = "Rydym yn credu fod yna gymysgedd o adolygiadau dibynadwy ac annibynadwy";
+
+/* Reliable reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.ReliableReviews.Label.v120" = "Adolygiadau dibynadwy. Rydym yn credu fod yr adolygiadau'n debygol o fod gan gwsmeriaid go iawn sydd wedi gadael adolygiadau gonest, diduedd.";
+
+/* Label of the sub headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.SubHeadline.Label.v120" = "Rydym yn gosod *gradd llythyren* o A i F i adolygiadau pob cynnyrch.";
+
+/* Unreliable reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.UnreliableReviews.Label.v120" = "Adolygiadau annibynadwy. Rydym yn credu fod yr adolygiadau yn debygol o fod yn rhai ffug neu gan adolygwyr rhagfarnllyd.";
+
+/* Accessibility label for the up chevron icon used to collapse or minimize the Settings Card within the shopping product review bottom sheet. */
+"Shopping.SettingsCard.Collapse.AccessibilityLabel.v120" = "Cau Cerdyn Gosodiadau";
+
+/* Accessibility label for the down chevron icon used to expand or show the details of the Settings Card within the shopping product review bottom sheet. */
+"Shopping.SettingsCard.Expand.AccessibilityLabel.v120" = "Agor Cerdyn Gosodiadau";
+
+/* Action title of the footer underneath the Settings Card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
+"Shopping.SettingsCard.Footer.Action.v120" = "Mae’r Gwirydd Adolygiadau'n cael ei bweru gan %1$@ gan %2$@";
+
+/* Title of the settings card displayed in the shopping review quality bottom sheet. */
+"Shopping.SettingsCard.Label.Title.v120" = "Gosodiadau";
+
+/* Label of the switch from settings card displayed in the shopping review quality bottom sheet. The placeholder will be replaced with the app name. */
+"Shopping.SettingsCard.RecommendedProducts.Label.v120" = "Dangos cynnyrch sy'n cael ei argymell gan %@";
+
+/* Label of the button from settings card displayed in the shopping review quality bottom sheet. */
+"Shopping.SettingsCard.TurnOffButton.Title.v120" = "Diffodd y Gwirydd Adolygiadau";
+
+/* Beta label for the header of the Shopping Experience (Fakespot) sheet */
+"Shopping.Sheet.Beta.Title.v120" = "BETA";
+
+/* Label for the header of the Shopping Experience (Fakespot) sheet */
+"Shopping.Sheet.Title.v120" = "Gwirydd Adolygiadau";
+
+/* Text for body of error card displayed to the user when the device is disconnected from the network. */
+"Shopping.WarningCard.CheckNoConnection.Description.v120" = "Gwiriwch eich cysylltiad rhwydwaith ac yna ceisiwch ail-lwytho’r dudalen.";
+
+/* Title for error card displayed to the user when the device is disconnected from the network. */
+"Shopping.WarningCard.CheckNoConnection.Title.v120" = "Dim Cysylltiad Rhwydwaith";
+

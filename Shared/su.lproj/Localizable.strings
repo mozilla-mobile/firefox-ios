@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Login anu diteundeun bakal némbongan di dieu. Lamun anjeun neundeun login ka Firefox di séjén paranti, asup ka Firefox Account.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "Login anu diteundeun bakal némbongan di dieu. Lamun anjeun neundeun login ka %@ di séjén piranti, asup ka akun anjeun.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Taya login kapanggih";
 

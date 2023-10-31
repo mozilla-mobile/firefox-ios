@@ -84,7 +84,7 @@ public func syncAuthStateCachefromJSON(_ json: JSON) -> SyncAuthStateCache? {
                                      category: .sync)
             return nil
         }
-        if let token = TokenServerToken.fromJSON(json["token"]),
+        if let dictionaryObject = json["token"].dictionaryObject, let token = TokenServerToken.fromJSON(dictionaryObject),
            let forKey = json["forKey"].string?.hexDecodedData,
            let expiresAt = json["expiresAt"].int64 {
             return SyncAuthStateCache(token: token, forKey: forKey, expiresAt: Timestamp(expiresAt))

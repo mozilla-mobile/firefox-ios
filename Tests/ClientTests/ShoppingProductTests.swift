@@ -175,6 +175,27 @@ final class ShoppingProductTests: XCTestCase {
         let expected = 1
         XCTAssertEqual(client.fetchProductAnalysisDataCallCount, expected)
     }
+
+    func testReportProductBackInStock_WithInvalidURL_ReturnsNil() async throws {
+        let url = URL(string: "https://www.example.com")!
+
+        let sut = ShoppingProduct(url: url, client: client)
+        let reportStatus = try await sut.reportProductBackInStock()
+
+        XCTAssertNil(reportStatus)
+    }
+
+    func testReportProductBackInStock_WithValidURL_CallsClientAPI() async throws {
+        let url = URL(string: "https://www.amazon.com/Under-Armour-Charged-Assert-Running/dp/B087T8Q2C4")!
+
+        let sut = ShoppingProduct(url: url, client: client)
+        let reportStatus = try await sut.reportProductBackInStock()
+
+        XCTAssertNotNil(reportStatus)
+        XCTAssertTrue(client.reportProductBackInStockCalled)
+        XCTAssertEqual(client.productId, "B087T8Q2C4")
+        XCTAssertEqual(client.website, "amazon.com")
+    }
 }
 
 final class ThrowingFakeSpotClient: FakespotClientType {
@@ -182,6 +203,7 @@ final class ThrowingFakeSpotClient: FakespotClientType {
     var fetchProductAdDataCallCount = 0
     var triggerProductAnalyzeCallCount = 0
     var getProductAnalysisStatusCount = 0
+    var reportProductBackInStockCallCount = 0
 
     let error: Error
 
@@ -199,13 +221,18 @@ final class ThrowingFakeSpotClient: FakespotClientType {
         return []
     }
 
-    func triggerProductAnalyze(productId: String, website: String) async throws -> Client.ProductAnalyzeResponse {
+    func triggerProductAnalyze(productId: String, website: String) async throws -> ProductAnalyzeResponse {
         triggerProductAnalyzeCallCount += 1
         throw error
     }
 
-    func getProductAnalysisStatus(productId: String, website: String) async throws -> Client.ProductAnalysisStatusResponse {
+    func getProductAnalysisStatus(productId: String, website: String) async throws -> ProductAnalysisStatusResponse {
         getProductAnalysisStatusCount += 1
+        throw error
+    }
+
+    func reportProductBackInStock(productId: String, website: String) async throws -> ReportResponse {
+        reportProductBackInStockCallCount += 1
         throw error
     }
 }
@@ -218,6 +245,7 @@ final class TestFakespotClient: FakespotClientType {
     var fetchProductAnalysisDataCallCount = 0
     var triggerProductAnalyzeCallCalled = false
     var getProductAnalysisStatusCallCalled = false
+    var reportProductBackInStockCalled = false
 
     func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisData {
         self.fetchProductAnalysisDataCallCount += 1
@@ -234,18 +262,25 @@ final class TestFakespotClient: FakespotClientType {
         return []
     }
 
-    func triggerProductAnalyze(productId: String, website: String) async throws -> Client.ProductAnalyzeResponse {
+    func triggerProductAnalyze(productId: String, website: String) async throws -> ProductAnalyzeResponse {
         self.triggerProductAnalyzeCallCalled = true
         self.productId = productId
         self.website = website
         return .inProgress
     }
 
-    func getProductAnalysisStatus(productId: String, website: String) async throws -> Client.ProductAnalysisStatusResponse {
+    func getProductAnalysisStatus(productId: String, website: String) async throws -> ProductAnalysisStatusResponse {
         self.getProductAnalysisStatusCallCalled = true
         self.productId = productId
         self.website = website
         return .init(status: .inProgress, progress: 99.9)
+    }
+
+    func reportProductBackInStock(productId: String, website: String) async throws -> ReportResponse {
+        self.reportProductBackInStockCalled = true
+        self.productId = productId
+        self.website = website
+        return ReportResponse(message: .reportCreated)
     }
 }
 

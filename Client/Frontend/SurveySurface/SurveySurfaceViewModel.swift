@@ -30,20 +30,4 @@ class SurveySurfaceViewModel {
     func didTapDismissSurvey() {
         delegate?.didTapDismissSurvey()
     }
-
-    // MARK: - Orientation
-    /// As per design, we will be locking the orientation for the survey
-    /// surface to portait on iPhones.
-    func setOrientationLockTo(on: Bool) {
-        guard UIDevice.current.userInterfaceIdiom == .phone else { return }
-
-        if on {
-            // Portrait orientation: lock enable
-            OrientationLockUtility.lockOrientation(UIInterfaceOrientationMask.portrait,
-                                                   andRotateTo: UIInterfaceOrientation.portrait)
-        } else {
-            // Portrait orientation: lock disable
-            OrientationLockUtility.lockOrientation(UIInterfaceOrientationMask.all)
-        }
-    }
 }

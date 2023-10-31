@@ -1,8 +1,13 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
 import json
 import logging
 import os
 from pathlib import Path
 import subprocess
+import time
 
 import pytest
 import requests
@@ -12,6 +17,7 @@ import sys
 
 sys.path.append("../../")
 
+from ExperimentIntegrationTests.models.models import TelemetryModel
 from SyncIntegrationTests.xcodebuild import XCodeBuild
 from SyncIntegrationTests.xcrun import XCRun
 
@@ -161,6 +167,45 @@ def fixture_send_test_results():
             requests.post(f"{KLAATU_SERVER_URL}/test_results", files=files)    
         except requests.exceptions.ConnectionError:
             pass
+
+
+@pytest.fixture(name="check_ping_for_experiment")
+def fixture_check_ping_for_experiment(experiment_slug, variables):
+    def _check_ping_for_experiment(
+        branch=None, experiment=experiment_slug, reason=None
+    ):
+        model = TelemetryModel(branch=branch, experiment=experiment)
+
+        timeout = time.time() + 60 * 5
+        while time.time() < timeout:
+            data = requests.get(f"{variables['urls']['telemetry_server']}/pings").json()
+            events = []
+            for item in data:
+                event_items = item.get("events", [])
+                for event in event_items:
+                    if (
+                        "category" in event
+                        and "nimbus_events" in event["category"]
+                        and "extra" in event
+                        and "branch" in event["extra"]
+                    ):
+                        events.append(event)
+            for event in events:
+                event_name = event.get("name")
+                if (reason == "enrollment" and event_name == "enrollment") or (
+                    reason == "unenrollment"
+                    and event_name in ["unenrollment", "disqualification"]
+                ):
+                    telemetry_model = TelemetryModel(
+                        branch=event["extra"]["branch"],
+                        experiment=event["extra"]["experiment"],
+                    )
+                    if model == telemetry_model:
+                        return True
+            time.sleep(5)
+        return False
+
+    return _check_ping_for_experiment
 
 
 @pytest.fixture(name="setup_experiment")

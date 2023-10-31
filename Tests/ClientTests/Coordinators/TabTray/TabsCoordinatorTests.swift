@@ -5,18 +5,21 @@
 import XCTest
 @testable import Client
 
-final class TabTrayCoordinatorTests: XCTestCase {
+final class TabsCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
+    private var parentCoordinator: MockTabTrayCoordinatorDelegate!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        self.mockRouter = MockRouter(navigationController: MockNavigationController())
+        mockRouter = MockRouter(navigationController: MockNavigationController())
+        parentCoordinator = MockTabTrayCoordinatorDelegate()
     }
 
     override func tearDown() {
         super.tearDown()
-        self.mockRouter = nil
+        mockRouter = nil
+        parentCoordinator = nil
         DependencyHelperMock().reset()
     }
 
@@ -24,13 +27,12 @@ final class TabTrayCoordinatorTests: XCTestCase {
         let subject = createSubject()
 
         XCTAssertTrue(subject.childCoordinators.isEmpty)
-        XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
     }
 
     // MARK: - Helpers
     private func createSubject(file: StaticString = #file,
-                               line: UInt = #line) -> TabTrayCoordinator {
-        let subject = TabTrayCoordinator(router: mockRouter)
+                               line: UInt = #line) -> TabsCoordinator {
+        let subject = TabsCoordinator(parentCoordinator: parentCoordinator, router: mockRouter)
 
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

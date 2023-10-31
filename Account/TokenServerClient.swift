@@ -31,15 +31,15 @@ public struct TokenServerToken {
                self.api_endpoint == other.api_endpoint
     }
 
-    public static func fromJSON(_ json: JSON) -> TokenServerToken? {
+    public static func fromJSON(_ jsonDict: [String: Any]) -> TokenServerToken? {
         if let
-            id = json["id"].string,
-            let key = json["key"].string,
-            let api_endpoint = json["api_endpoint"].string,
-            let uid = json["uid"].int64,
-            let hashedFxAUID = json["hashed_fxa_uid"].string,
-            let durationInSeconds = json["duration"].int64,
-            let remoteTimestamp = json["remoteTimestamp"].int64 {
+            id = jsonDict["id"] as? String,
+            let key = jsonDict["key"] as? String,
+            let api_endpoint = jsonDict["api_endpoint"] as? String,
+            let uid = jsonDict["uid"] as? Int64,
+            let hashedFxAUID = jsonDict["hashed_fxa_uid"] as? String,
+            let durationInSeconds = jsonDict["duration"] as? Int64,
+            let remoteTimestamp = jsonDict["remoteTimestamp"] as? Int64 {
                 return TokenServerToken(
                     id: id,
                     key: key,
@@ -52,8 +52,8 @@ public struct TokenServerToken {
         return nil
     }
 
-    public func asJSON() -> JSON {
-        let D: [String: AnyObject] = [
+    public func asJSON() -> [String: Any] {
+        let dictionnary: [String: Any] = [
             "id": id as AnyObject,
             "key": key as AnyObject,
             "api_endpoint": api_endpoint as AnyObject,
@@ -62,7 +62,7 @@ public struct TokenServerToken {
             "duration": NSNumber(value: durationInSeconds as UInt64),
             "remoteTimestamp": NSNumber(value: remoteTimestamp),
         ]
-        return JSON(D as NSDictionary)
+        return dictionnary
     }
 }
 
