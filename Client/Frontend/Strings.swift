@@ -3981,6 +3981,21 @@ extension String {
             tableName: "Shopping",
             value: "This could take about 60 seconds.",
             comment: "Description for info card when the product is in analysis mode")
+        public static let InfoCardProductNotInStockTitle = MZLocalizedString(
+            key: "", // Shopping.InfoCard.ProductNotInStock.Title.v121
+            tableName: "Shopping",
+            value: "Product Is Not Available",
+            comment: "Title for info card when the product is not in stock or recently back in stock")
+        public static let InfoCardProductNotInStockDescription = MZLocalizedString(
+            key: "", // Shopping.InfoCard.ProductNotInStock.Description.v121
+            tableName: "Shopping",
+            value: "If you see this product is back in stock, report it and we’ll work on checking the reviews.",
+            comment: "Description for info card when the product is not in stock or recently back in stock")
+        public static let InfoCardProductNotInStockPrimaryAction = MZLocalizedString(
+            key: "", // Shopping.InfoCard.ProductNotInStock.PrimaryAction.v121
+            tableName: "Shopping",
+            value: "Report Product Back in Stock",
+            comment: "Primary action label when encouraging users to report a product back in stock")
     }
 }
 
