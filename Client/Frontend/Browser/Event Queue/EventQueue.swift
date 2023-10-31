@@ -143,7 +143,7 @@ final class EventQueue<QueueEventType: Hashable> {
     /// Shorthand for waiting on a single event. Convenience func.
     @discardableResult
     func wait(for event: QueueEventType, then action: @escaping EventQueueAction) -> ActionToken {
-        wait(for: [event], token: ActionToken(), then: action)
+        return wait(for: [event], token: ActionToken(), then: action)
     }
 
     /// Used to check whether a particular event has occurred.
