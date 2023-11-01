@@ -100,6 +100,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         defer {
             ensureMainThread { [weak self] in
                 self?.isRestoringTabs = false
+                self?.tabRestoreHasFinished = true
                 AppEventQueue.completed(.tabRestoration)
             }
         }
@@ -210,7 +211,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
     override func preserveTabs() {
         // Only preserve tabs after the restore has finished
-        guard AppEventQueue.activityIsCompleted(.tabRestoration) else { return }
+        guard tabRestoreHasFinished else { return }
 
         logger.log("Preserve tabs started", level: .debug, category: .tabs)
         preserveTabs(forced: false)
@@ -293,7 +294,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
     private func saveAllTabData() {
         // Only preserve tabs after the restore has finished
-        guard AppEventQueue.activityIsCompleted(.tabRestoration) else { return }
+        guard tabRestoreHasFinished else { return }
 
         saveCurrentTabSessionData()
         preserveTabs(forced: true)
