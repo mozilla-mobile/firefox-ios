@@ -7459,9 +7459,38 @@
 				219A0FD42ACC8506009A6D1A /* InactiveTabsCell.swift */,
 				219A0FD62ACC8C03009A6D1A /* InactiveTabsHeaderView.swift */,
 				219A0FD82ACC8C0F009A6D1A /* InactiveTabsFooterView.swift */,
-				219A0FDA2ACCCFFC009A6D1A /* InactiveTabsSectionManager.swift */,
 			);
 			path = InactiveTabs;
+			sourceTree = "<group>";
+		};
+		21C5B3572AF2A6D80093F366 /* LayoutManager */ = {
+			isa = PBXGroup;
+			children = (
+				219A0FDA2ACCCFFC009A6D1A /* InactiveTabsSectionManager.swift */,
+				21B359C52AEAC20300FF09E3 /* TabsSectionManager.swift */,
+			);
+			path = LayoutManager;
+			sourceTree = "<group>";
+		};
+		21C5B3582AF2A7130093F366 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				214EF4142AC5D5D0005BCCDA /* TabDisplayView.swift */,
+				1DDE3DB22AC34E1E0039363B /* TabCell.swift */,
+				43162A2E2492DB7800F91658 /* EmptyPrivateTabsView.swift */,
+				219A0FD32ACC84C5009A6D1A /* InactiveTabs */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		21C5B3592AF2A73F0093F366 /* State */ = {
+			isa = PBXGroup;
+			children = (
+				1DDE3DB62AC3820A0039363B /* TabCellState.swift */,
+				21E77E4F2AA8BAEC00FABA10 /* TabTrayState.swift */,
+				21996BAA2AE95AFC00E0D55F /* TabTrayPanelType.swift */,
+			);
+			path = State;
 			sourceTree = "<group>";
 		};
 		21D8EA942ABE0511003FF16E /* TabTray */ = {
@@ -7506,19 +7535,14 @@
 		23F2C365244E44FA00FA4496 /* Tabs */ = {
 			isa = PBXGroup;
 			children = (
-				219A0FD32ACC84C5009A6D1A /* InactiveTabs */,
 				212429F22AA27204002D57A8 /* Legacy */,
 				21357F2B293FDB07004BF9FD /* RemoteTabs */,
-				43162A2E2492DB7800F91658 /* EmptyPrivateTabsView.swift */,
-				1DDE3DB22AC34E1E0039363B /* TabCell.swift */,
-				1DDE3DB62AC3820A0039363B /* TabCellState.swift */,
+				21C5B3572AF2A6D80093F366 /* LayoutManager */,
+				21C5B3592AF2A73F0093F366 /* State */,
+				21C5B3582AF2A7130093F366 /* Views */,
 				21E77E4D2AA8BA5200FABA10 /* TabTrayViewController.swift */,
-				21E77E4F2AA8BAEC00FABA10 /* TabTrayState.swift */,
 				21E77E512AA8BE5C00FABA10 /* TabTrayFlagManager.swift */,
 				213BF7522AC21D1B00C53A64 /* TabDisplayViewController.swift */,
-				214EF4142AC5D5D0005BCCDA /* TabDisplayView.swift */,
-				21996BAA2AE95AFC00E0D55F /* TabTrayPanelType.swift */,
-				21B359C52AEAC20300FF09E3 /* TabsSectionManager.swift */,
 			);
 			path = Tabs;
 			sourceTree = "<group>";

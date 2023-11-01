@@ -22,5 +22,4 @@ struct TabTrayState {
                         "Four",
                         "Five",
                         "Six"]
-
 }

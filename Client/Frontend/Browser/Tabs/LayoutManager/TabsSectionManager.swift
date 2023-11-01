@@ -13,17 +13,6 @@ class TabsSectionManager {
         static let iPadTopSiteInset: CGFloat = 25
     }
 
-//    private var trailingSwipeClosure: UICollectionLayoutListConfiguration.SwipeActionsConfigurationProvider? = { indexPath in
-//        let deleteAction = UIContextualAction(
-//            style: .destructive,
-//            title: .TabsTray.InactiveTabs.CloseInactiveTabSwipeActionTitle) { _, _, completion in
-//            // TODO: FXIOS-6936 Handle action
-//            completion(true)
-//        }
-//        deleteAction.backgroundColor = .systemGreen
-//        return UISwipeActionsConfiguration(actions: [deleteAction])
-//    }
-
     static func leadingInset(traitCollection: UITraitCollection,
                              interfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) -> CGFloat {
         guard interfaceIdiom != .phone else { return UX.standardInset }
