@@ -5,7 +5,6 @@
 import Common
 import UIKit
 import Shared
-import SnapKit
 import Storage
 import SiteImageView
 
@@ -50,9 +49,11 @@ class CustomSearchViewController: SettingsTableViewController {
         super.viewDidLoad()
         title = .SettingsAddCustomEngineTitle
         view.addSubview(spinnerView)
-        spinnerView.snp.makeConstraints { make in
-            make.center.equalTo(self.view.snp.center)
-        }
+        spinnerView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            spinnerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            spinnerView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
     }
 
     private func addSearchEngine(_ searchQuery: String, title: String) {
@@ -255,16 +256,20 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         textField.delegate = self
         textField.backgroundColor = theme.colors.layer5
         textField.textColor = theme.colors.textPrimary
+        textField.translatesAutoresizingMaskIntoConstraints = false
         cell.isUserInteractionEnabled = true
         cell.accessibilityTraits = UIAccessibilityTraits.none
         cell.contentView.addSubview(textField)
         cell.selectionStyle = .none
 
-        textField.snp.makeConstraints { make in
-            make.height.equalTo(TextFieldHeight)
-            make.top.bottom.equalTo(0).inset(Padding / 2)
-            make.left.right.equalTo(cell.contentView).inset(Padding)
-        }
+        NSLayoutConstraint.activate([
+            textField.heightAnchor.constraint(equalToConstant: TextFieldHeight),
+            textField.topAnchor.constraint(equalTo: cell.contentView.topAnchor, constant: Padding / 2),
+            textField.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor, constant: -Padding / 2),
+            textField.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: Padding),
+            textField.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -Padding)
+        ])
+
         textField.layoutIfNeeded()
         placeholderLabel.frame = CGRect(width: TextLabelWidth, height: TextLabelHeight)
     }
