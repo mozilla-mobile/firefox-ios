@@ -8,7 +8,7 @@ import SwiftyJSON
 import MozillaAppServices
 
 public protocol JSONLiteralConvertible {
-    func asJSON() -> JSON
+    func asJSON() -> [String: Any]
 }
 
 open class KeychainCache<T: JSONLiteralConvertible> {
@@ -30,13 +30,13 @@ open class KeychainCache<T: JSONLiteralConvertible> {
     open class func fromBranch(_ branch: String,
                                withLabel label: String?,
                                withDefault defaultValue: T? = nil,
-                               factory: (JSON) -> T?,
+                               factory: ([String: Any]) -> T?,
                                logger: Logger = DefaultLogger.shared) -> KeychainCache<T> {
         if let l = label {
             let key = "\(branch).\(l)"
             MZKeychainWrapper.sharedClientAppContainerKeychain.ensureStringItemAccessibility(.afterFirstUnlock, forKey: key)
             if let s = MZKeychainWrapper.sharedClientAppContainerKeychain.string(forKey: key) {
-                if let t = factory(JSON(parseJSON: s)) {
+                if let dictionaryObject = JSON(parseJSON: s).dictionaryObject, let t = factory(dictionaryObject) {
                     logger.log("Read \(branch) from Keychain with label \(branch).\(l).",
                                level: .debug,
                                category: .storage)
@@ -66,7 +66,7 @@ open class KeychainCache<T: JSONLiteralConvertible> {
 
     open func checkpoint() {
         if let value = value,
-            let jsonString = value.asJSON().stringify() {
+           let jsonString = value.asJSON().asString {
             MZKeychainWrapper.sharedClientAppContainerKeychain.set(jsonString, forKey: "\(branch).\(label)", withAccessibility: .afterFirstUnlock)
         } else {
             MZKeychainWrapper.sharedClientAppContainerKeychain.removeObject(forKey: "\(branch).\(label)")
