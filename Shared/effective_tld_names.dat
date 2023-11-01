@@ -6710,7 +6710,7 @@ org.zw
 
 // newGTLDs
 
-// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2023-09-30T15:11:25Z
+// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2023-10-28T15:12:17Z
 // This list is auto-generated, don't edit it manually.
 // aaa : American Automobile Association, Inc.
 // https://www.iana.org/domains/root/db/aaa.html
@@ -7400,10 +7400,6 @@ cbn
 // https://www.iana.org/domains/root/db/cbre.html
 cbre
 
-// cbs : CBS Domains Inc.
-// https://www.iana.org/domains/root/db/cbs.html
-cbs
-
 // center : Binky Moon, LLC
 // https://www.iana.org/domains/root/db/center.html
 center
@@ -7491,10 +7487,6 @@ citic
 // city : Binky Moon, LLC
 // https://www.iana.org/domains/root/db/city.html
 city
-
-// cityeats : Lifestyle Domain Holdings, Inc.
-// https://www.iana.org/domains/root/db/cityeats.html
-cityeats
 
 // claims : Binky Moon, LLC
 // https://www.iana.org/domains/root/db/claims.html
@@ -7759,10 +7751,6 @@ dental
 // dentist : Dog Beach, LLC
 // https://www.iana.org/domains/root/db/dentist.html
 dentist
-
-// desi : Desi Networks LLC
-// https://www.iana.org/domains/root/db/desi.html
-desi
 
 // design : Registry Services, LLC
 // https://www.iana.org/domains/root/db/design.html
@@ -8163,10 +8151,6 @@ frl
 // frogans : OP3FT
 // https://www.iana.org/domains/root/db/frogans.html
 frogans
-
-// frontdoor : Lifestyle Domain Holdings, Inc.
-// https://www.iana.org/domains/root/db/frontdoor.html
-frontdoor
 
 // frontier : Frontier Communications Corporation
 // https://www.iana.org/domains/root/db/frontier.html
@@ -9672,7 +9656,7 @@ promo
 // https://www.iana.org/domains/root/db/properties.html
 properties
 
-// property : Internet Naming Company LLC
+// property : Digital Property Infrastructure Limited
 // https://www.iana.org/domains/root/db/property.html
 property
 
@@ -10087,10 +10071,6 @@ shouji
 // show : Binky Moon, LLC
 // https://www.iana.org/domains/root/db/show.html
 show
-
-// showtime : CBS Domains Inc.
-// https://www.iana.org/domains/root/db/showtime.html
-showtime
 
 // silk : Amazon Registry Services, Inc.
 // https://www.iana.org/domains/root/db/silk.html
@@ -11345,10 +11325,77 @@ myamaze.net
 // Submitted by AWS Security <psl-maintainers@amazon.com>
 // Subsections of Amazon/subsidiaries will appear until "concludes" tag
 
+// Amazon API Gateway
+// Submitted by AWS Security <psl-maintainers@amazon.com>
+// Reference: 4d863337-ff98-4501-a6f2-361eba8445d6
+execute-api.cn-north-1.amazonaws.com.cn
+execute-api.cn-northwest-1.amazonaws.com.cn
+execute-api.af-south-1.amazonaws.com
+execute-api.ap-east-1.amazonaws.com
+execute-api.ap-northeast-1.amazonaws.com
+execute-api.ap-northeast-2.amazonaws.com
+execute-api.ap-northeast-3.amazonaws.com
+execute-api.ap-south-1.amazonaws.com
+execute-api.ap-south-2.amazonaws.com
+execute-api.ap-southeast-1.amazonaws.com
+execute-api.ap-southeast-2.amazonaws.com
+execute-api.ap-southeast-3.amazonaws.com
+execute-api.ap-southeast-4.amazonaws.com
+execute-api.ca-central-1.amazonaws.com
+execute-api.eu-central-1.amazonaws.com
+execute-api.eu-central-2.amazonaws.com
+execute-api.eu-north-1.amazonaws.com
+execute-api.eu-south-1.amazonaws.com
+execute-api.eu-south-2.amazonaws.com
+execute-api.eu-west-1.amazonaws.com
+execute-api.eu-west-2.amazonaws.com
+execute-api.eu-west-3.amazonaws.com
+execute-api.il-central-1.amazonaws.com
+execute-api.me-central-1.amazonaws.com
+execute-api.me-south-1.amazonaws.com
+execute-api.sa-east-1.amazonaws.com
+execute-api.us-east-1.amazonaws.com
+execute-api.us-east-2.amazonaws.com
+execute-api.us-gov-east-1.amazonaws.com
+execute-api.us-gov-west-1.amazonaws.com
+execute-api.us-west-1.amazonaws.com
+execute-api.us-west-2.amazonaws.com
+
 // Amazon CloudFront
 // Submitted by Donavan Miller <donavanm@amazon.com>
 // Reference: 54144616-fd49-4435-8535-19c6a601bdb3
 cloudfront.net
+
+// Amazon Cognito
+// Submitted by AWS Security <psl-maintainers@amazon.com>
+// Reference: 7bee1013-f456-47df-bfe8-03c78d946d61
+auth.af-south-1.amazoncognito.com
+auth.ap-northeast-1.amazoncognito.com
+auth.ap-northeast-2.amazoncognito.com
+auth.ap-northeast-3.amazoncognito.com
+auth.ap-south-1.amazoncognito.com
+auth.ap-southeast-1.amazoncognito.com
+auth.ap-southeast-2.amazoncognito.com
+auth.ap-southeast-3.amazoncognito.com
+auth.ca-central-1.amazoncognito.com
+auth.eu-central-1.amazoncognito.com
+auth.eu-north-1.amazoncognito.com
+auth.eu-south-1.amazoncognito.com
+auth.eu-west-1.amazoncognito.com
+auth.eu-west-2.amazoncognito.com
+auth.eu-west-3.amazoncognito.com
+auth.il-central-1.amazoncognito.com
+auth.me-south-1.amazoncognito.com
+auth.sa-east-1.amazoncognito.com
+auth.us-east-1.amazoncognito.com
+auth-fips.us-east-1.amazoncognito.com
+auth.us-east-2.amazoncognito.com
+auth-fips.us-east-2.amazoncognito.com
+auth-fips.us-gov-west-1.amazoncognito.com
+auth.us-west-1.amazoncognito.com
+auth-fips.us-west-1.amazoncognito.com
+auth.us-west-2.amazoncognito.com
+auth-fips.us-west-2.amazoncognito.com
 
 // Amazon EC2
 // Submitted by Luke Wells <psl-maintainers@amazon.com>
@@ -11358,47 +11405,307 @@ cloudfront.net
 *.compute.amazonaws.com.cn
 us-east-1.amazonaws.com
 
+// Amazon EMR
+// Submitted by AWS Security <psl-maintainers@amazon.com>
+// Reference: 597f3f8e-9283-4e48-8e32-7ee25a1ff6ab
+emrappui-prod.cn-north-1.amazonaws.com.cn
+emrnotebooks-prod.cn-north-1.amazonaws.com.cn
+emrstudio-prod.cn-north-1.amazonaws.com.cn
+emrappui-prod.cn-northwest-1.amazonaws.com.cn
+emrnotebooks-prod.cn-northwest-1.amazonaws.com.cn
+emrstudio-prod.cn-northwest-1.amazonaws.com.cn
+emrappui-prod.af-south-1.amazonaws.com
+emrnotebooks-prod.af-south-1.amazonaws.com
+emrstudio-prod.af-south-1.amazonaws.com
+emrappui-prod.ap-east-1.amazonaws.com
+emrnotebooks-prod.ap-east-1.amazonaws.com
+emrstudio-prod.ap-east-1.amazonaws.com
+emrappui-prod.ap-northeast-1.amazonaws.com
+emrnotebooks-prod.ap-northeast-1.amazonaws.com
+emrstudio-prod.ap-northeast-1.amazonaws.com
+emrappui-prod.ap-northeast-2.amazonaws.com
+emrnotebooks-prod.ap-northeast-2.amazonaws.com
+emrstudio-prod.ap-northeast-2.amazonaws.com
+emrappui-prod.ap-northeast-3.amazonaws.com
+emrnotebooks-prod.ap-northeast-3.amazonaws.com
+emrstudio-prod.ap-northeast-3.amazonaws.com
+emrappui-prod.ap-south-1.amazonaws.com
+emrnotebooks-prod.ap-south-1.amazonaws.com
+emrstudio-prod.ap-south-1.amazonaws.com
+emrappui-prod.ap-southeast-1.amazonaws.com
+emrnotebooks-prod.ap-southeast-1.amazonaws.com
+emrstudio-prod.ap-southeast-1.amazonaws.com
+emrappui-prod.ap-southeast-2.amazonaws.com
+emrnotebooks-prod.ap-southeast-2.amazonaws.com
+emrstudio-prod.ap-southeast-2.amazonaws.com
+emrappui-prod.ap-southeast-3.amazonaws.com
+emrnotebooks-prod.ap-southeast-3.amazonaws.com
+emrstudio-prod.ap-southeast-3.amazonaws.com
+emrappui-prod.ca-central-1.amazonaws.com
+emrnotebooks-prod.ca-central-1.amazonaws.com
+emrstudio-prod.ca-central-1.amazonaws.com
+emrappui-prod.eu-central-1.amazonaws.com
+emrnotebooks-prod.eu-central-1.amazonaws.com
+emrstudio-prod.eu-central-1.amazonaws.com
+emrappui-prod.eu-north-1.amazonaws.com
+emrnotebooks-prod.eu-north-1.amazonaws.com
+emrstudio-prod.eu-north-1.amazonaws.com
+emrappui-prod.eu-south-1.amazonaws.com
+emrnotebooks-prod.eu-south-1.amazonaws.com
+emrstudio-prod.eu-south-1.amazonaws.com
+emrappui-prod.eu-west-1.amazonaws.com
+emrnotebooks-prod.eu-west-1.amazonaws.com
+emrstudio-prod.eu-west-1.amazonaws.com
+emrappui-prod.eu-west-2.amazonaws.com
+emrnotebooks-prod.eu-west-2.amazonaws.com
+emrstudio-prod.eu-west-2.amazonaws.com
+emrappui-prod.eu-west-3.amazonaws.com
+emrnotebooks-prod.eu-west-3.amazonaws.com
+emrstudio-prod.eu-west-3.amazonaws.com
+emrappui-prod.me-central-1.amazonaws.com
+emrnotebooks-prod.me-central-1.amazonaws.com
+emrstudio-prod.me-central-1.amazonaws.com
+emrappui-prod.me-south-1.amazonaws.com
+emrnotebooks-prod.me-south-1.amazonaws.com
+emrstudio-prod.me-south-1.amazonaws.com
+emrappui-prod.sa-east-1.amazonaws.com
+emrnotebooks-prod.sa-east-1.amazonaws.com
+emrstudio-prod.sa-east-1.amazonaws.com
+emrappui-prod.us-east-1.amazonaws.com
+emrnotebooks-prod.us-east-1.amazonaws.com
+emrstudio-prod.us-east-1.amazonaws.com
+emrappui-prod.us-east-2.amazonaws.com
+emrnotebooks-prod.us-east-2.amazonaws.com
+emrstudio-prod.us-east-2.amazonaws.com
+emrappui-prod.us-gov-east-1.amazonaws.com
+emrnotebooks-prod.us-gov-east-1.amazonaws.com
+emrstudio-prod.us-gov-east-1.amazonaws.com
+emrappui-prod.us-gov-west-1.amazonaws.com
+emrnotebooks-prod.us-gov-west-1.amazonaws.com
+emrstudio-prod.us-gov-west-1.amazonaws.com
+emrappui-prod.us-west-1.amazonaws.com
+emrnotebooks-prod.us-west-1.amazonaws.com
+emrstudio-prod.us-west-1.amazonaws.com
+emrappui-prod.us-west-2.amazonaws.com
+emrnotebooks-prod.us-west-2.amazonaws.com
+emrstudio-prod.us-west-2.amazonaws.com
+
+// Amazon Managed Workflows for Apache Airflow
+// Submitted by AWS Security <psl-maintainers@amazon.com>
+// Reference: 4ab55e6f-90c0-4a8d-b6a0-52ca5dbb1c2e
+*.cn-north-1.airflow.amazonaws.com.cn
+*.cn-northwest-1.airflow.amazonaws.com.cn
+*.ap-northeast-1.airflow.amazonaws.com
+*.ap-northeast-2.airflow.amazonaws.com
+*.ap-south-1.airflow.amazonaws.com
+*.ap-southeast-1.airflow.amazonaws.com
+*.ap-southeast-2.airflow.amazonaws.com
+*.ca-central-1.airflow.amazonaws.com
+*.eu-central-1.airflow.amazonaws.com
+*.eu-north-1.airflow.amazonaws.com
+*.eu-west-1.airflow.amazonaws.com
+*.eu-west-2.airflow.amazonaws.com
+*.eu-west-3.airflow.amazonaws.com
+*.sa-east-1.airflow.amazonaws.com
+*.us-east-1.airflow.amazonaws.com
+*.us-east-2.airflow.amazonaws.com
+*.us-west-2.airflow.amazonaws.com
+
 // Amazon S3
-// Submitted by Luke Wells <psl-maintainers@amazon.com>
-// Reference: d068bd97-f0a9-4838-a6d8-954b622ef4ae
+// Submitted by AWS Security <psl-maintainers@amazon.com>
+// Reference: 0e801048-08f2-4064-9cb8-e7373e0b57f4
+s3.dualstack.cn-north-1.amazonaws.com.cn
+s3-accesspoint.dualstack.cn-north-1.amazonaws.com.cn
+s3-website.dualstack.cn-north-1.amazonaws.com.cn
 s3.cn-north-1.amazonaws.com.cn
+s3-accesspoint.cn-north-1.amazonaws.com.cn
+s3-deprecated.cn-north-1.amazonaws.com.cn
+s3-object-lambda.cn-north-1.amazonaws.com.cn
+s3-website.cn-north-1.amazonaws.com.cn
+s3.dualstack.cn-northwest-1.amazonaws.com.cn
+s3-accesspoint.dualstack.cn-northwest-1.amazonaws.com.cn
+s3.cn-northwest-1.amazonaws.com.cn
+s3-accesspoint.cn-northwest-1.amazonaws.com.cn
+s3-object-lambda.cn-northwest-1.amazonaws.com.cn
+s3-website.cn-northwest-1.amazonaws.com.cn
+s3.dualstack.af-south-1.amazonaws.com
+s3-accesspoint.dualstack.af-south-1.amazonaws.com
+s3-website.dualstack.af-south-1.amazonaws.com
+s3.af-south-1.amazonaws.com
+s3-accesspoint.af-south-1.amazonaws.com
+s3-object-lambda.af-south-1.amazonaws.com
+s3-website.af-south-1.amazonaws.com
+s3.dualstack.ap-east-1.amazonaws.com
+s3-accesspoint.dualstack.ap-east-1.amazonaws.com
+s3.ap-east-1.amazonaws.com
+s3-accesspoint.ap-east-1.amazonaws.com
+s3-object-lambda.ap-east-1.amazonaws.com
+s3-website.ap-east-1.amazonaws.com
 s3.dualstack.ap-northeast-1.amazonaws.com
+s3-accesspoint.dualstack.ap-northeast-1.amazonaws.com
+s3-website.dualstack.ap-northeast-1.amazonaws.com
+s3.ap-northeast-1.amazonaws.com
+s3-accesspoint.ap-northeast-1.amazonaws.com
+s3-object-lambda.ap-northeast-1.amazonaws.com
+s3-website.ap-northeast-1.amazonaws.com
 s3.dualstack.ap-northeast-2.amazonaws.com
+s3-accesspoint.dualstack.ap-northeast-2.amazonaws.com
+s3-website.dualstack.ap-northeast-2.amazonaws.com
 s3.ap-northeast-2.amazonaws.com
+s3-accesspoint.ap-northeast-2.amazonaws.com
+s3-object-lambda.ap-northeast-2.amazonaws.com
 s3-website.ap-northeast-2.amazonaws.com
+s3.dualstack.ap-northeast-3.amazonaws.com
+s3-accesspoint.dualstack.ap-northeast-3.amazonaws.com
+s3-website.dualstack.ap-northeast-3.amazonaws.com
+s3.ap-northeast-3.amazonaws.com
+s3-accesspoint.ap-northeast-3.amazonaws.com
+s3-object-lambda.ap-northeast-3.amazonaws.com
+s3-website.ap-northeast-3.amazonaws.com
 s3.dualstack.ap-south-1.amazonaws.com
+s3-accesspoint.dualstack.ap-south-1.amazonaws.com
+s3-website.dualstack.ap-south-1.amazonaws.com
 s3.ap-south-1.amazonaws.com
+s3-accesspoint.ap-south-1.amazonaws.com
+s3-object-lambda.ap-south-1.amazonaws.com
 s3-website.ap-south-1.amazonaws.com
+s3.dualstack.ap-south-2.amazonaws.com
+s3-accesspoint.dualstack.ap-south-2.amazonaws.com
+s3.ap-south-2.amazonaws.com
+s3-accesspoint.ap-south-2.amazonaws.com
+s3-object-lambda.ap-south-2.amazonaws.com
+s3-website.ap-south-2.amazonaws.com
 s3.dualstack.ap-southeast-1.amazonaws.com
+s3-accesspoint.dualstack.ap-southeast-1.amazonaws.com
+s3-website.dualstack.ap-southeast-1.amazonaws.com
+s3.ap-southeast-1.amazonaws.com
+s3-accesspoint.ap-southeast-1.amazonaws.com
+s3-object-lambda.ap-southeast-1.amazonaws.com
+s3-website.ap-southeast-1.amazonaws.com
 s3.dualstack.ap-southeast-2.amazonaws.com
+s3-accesspoint.dualstack.ap-southeast-2.amazonaws.com
+s3-website.dualstack.ap-southeast-2.amazonaws.com
+s3.ap-southeast-2.amazonaws.com
+s3-accesspoint.ap-southeast-2.amazonaws.com
+s3-object-lambda.ap-southeast-2.amazonaws.com
+s3-website.ap-southeast-2.amazonaws.com
+s3.dualstack.ap-southeast-3.amazonaws.com
+s3-accesspoint.dualstack.ap-southeast-3.amazonaws.com
+s3.ap-southeast-3.amazonaws.com
+s3-accesspoint.ap-southeast-3.amazonaws.com
+s3-object-lambda.ap-southeast-3.amazonaws.com
+s3-website.ap-southeast-3.amazonaws.com
+s3.dualstack.ap-southeast-4.amazonaws.com
+s3-accesspoint.dualstack.ap-southeast-4.amazonaws.com
+s3.ap-southeast-4.amazonaws.com
+s3-accesspoint.ap-southeast-4.amazonaws.com
+s3-object-lambda.ap-southeast-4.amazonaws.com
+s3-website.ap-southeast-4.amazonaws.com
 s3.dualstack.ca-central-1.amazonaws.com
+s3-accesspoint.dualstack.ca-central-1.amazonaws.com
+s3-accesspoint-fips.dualstack.ca-central-1.amazonaws.com
+s3-fips.dualstack.ca-central-1.amazonaws.com
+s3-website.dualstack.ca-central-1.amazonaws.com
 s3.ca-central-1.amazonaws.com
+s3-accesspoint.ca-central-1.amazonaws.com
+s3-accesspoint-fips.ca-central-1.amazonaws.com
+s3-fips.ca-central-1.amazonaws.com
+s3-object-lambda.ca-central-1.amazonaws.com
 s3-website.ca-central-1.amazonaws.com
 s3.dualstack.eu-central-1.amazonaws.com
+s3-accesspoint.dualstack.eu-central-1.amazonaws.com
+s3-website.dualstack.eu-central-1.amazonaws.com
 s3.eu-central-1.amazonaws.com
+s3-accesspoint.eu-central-1.amazonaws.com
+s3-object-lambda.eu-central-1.amazonaws.com
 s3-website.eu-central-1.amazonaws.com
+s3.dualstack.eu-central-2.amazonaws.com
+s3-accesspoint.dualstack.eu-central-2.amazonaws.com
+s3.eu-central-2.amazonaws.com
+s3-accesspoint.eu-central-2.amazonaws.com
+s3-object-lambda.eu-central-2.amazonaws.com
+s3-website.eu-central-2.amazonaws.com
+s3.dualstack.eu-north-1.amazonaws.com
+s3-accesspoint.dualstack.eu-north-1.amazonaws.com
+s3.eu-north-1.amazonaws.com
+s3-accesspoint.eu-north-1.amazonaws.com
+s3-object-lambda.eu-north-1.amazonaws.com
+s3-website.eu-north-1.amazonaws.com
+s3.dualstack.eu-south-1.amazonaws.com
+s3-accesspoint.dualstack.eu-south-1.amazonaws.com
+s3-website.dualstack.eu-south-1.amazonaws.com
+s3.eu-south-1.amazonaws.com
+s3-accesspoint.eu-south-1.amazonaws.com
+s3-object-lambda.eu-south-1.amazonaws.com
+s3-website.eu-south-1.amazonaws.com
+s3.dualstack.eu-south-2.amazonaws.com
+s3-accesspoint.dualstack.eu-south-2.amazonaws.com
+s3.eu-south-2.amazonaws.com
+s3-accesspoint.eu-south-2.amazonaws.com
+s3-object-lambda.eu-south-2.amazonaws.com
+s3-website.eu-south-2.amazonaws.com
 s3.dualstack.eu-west-1.amazonaws.com
+s3-accesspoint.dualstack.eu-west-1.amazonaws.com
+s3-website.dualstack.eu-west-1.amazonaws.com
+s3.eu-west-1.amazonaws.com
+s3-accesspoint.eu-west-1.amazonaws.com
+s3-deprecated.eu-west-1.amazonaws.com
+s3-object-lambda.eu-west-1.amazonaws.com
+s3-website.eu-west-1.amazonaws.com
 s3.dualstack.eu-west-2.amazonaws.com
+s3-accesspoint.dualstack.eu-west-2.amazonaws.com
 s3.eu-west-2.amazonaws.com
+s3-accesspoint.eu-west-2.amazonaws.com
+s3-object-lambda.eu-west-2.amazonaws.com
 s3-website.eu-west-2.amazonaws.com
 s3.dualstack.eu-west-3.amazonaws.com
+s3-accesspoint.dualstack.eu-west-3.amazonaws.com
+s3-website.dualstack.eu-west-3.amazonaws.com
 s3.eu-west-3.amazonaws.com
+s3-accesspoint.eu-west-3.amazonaws.com
+s3-object-lambda.eu-west-3.amazonaws.com
 s3-website.eu-west-3.amazonaws.com
+s3.dualstack.il-central-1.amazonaws.com
+s3-accesspoint.dualstack.il-central-1.amazonaws.com
+s3.il-central-1.amazonaws.com
+s3-accesspoint.il-central-1.amazonaws.com
+s3-object-lambda.il-central-1.amazonaws.com
+s3-website.il-central-1.amazonaws.com
+s3.dualstack.me-central-1.amazonaws.com
+s3-accesspoint.dualstack.me-central-1.amazonaws.com
+s3.me-central-1.amazonaws.com
+s3-accesspoint.me-central-1.amazonaws.com
+s3-object-lambda.me-central-1.amazonaws.com
+s3-website.me-central-1.amazonaws.com
+s3.dualstack.me-south-1.amazonaws.com
+s3-accesspoint.dualstack.me-south-1.amazonaws.com
+s3.me-south-1.amazonaws.com
+s3-accesspoint.me-south-1.amazonaws.com
+s3-object-lambda.me-south-1.amazonaws.com
+s3-website.me-south-1.amazonaws.com
 s3.amazonaws.com
+s3-1.amazonaws.com
+s3-ap-east-1.amazonaws.com
 s3-ap-northeast-1.amazonaws.com
 s3-ap-northeast-2.amazonaws.com
+s3-ap-northeast-3.amazonaws.com
 s3-ap-south-1.amazonaws.com
 s3-ap-southeast-1.amazonaws.com
 s3-ap-southeast-2.amazonaws.com
 s3-ca-central-1.amazonaws.com
 s3-eu-central-1.amazonaws.com
+s3-eu-north-1.amazonaws.com
 s3-eu-west-1.amazonaws.com
 s3-eu-west-2.amazonaws.com
 s3-eu-west-3.amazonaws.com
 s3-external-1.amazonaws.com
+s3-fips-us-gov-east-1.amazonaws.com
 s3-fips-us-gov-west-1.amazonaws.com
+mrap.accesspoint.s3-global.amazonaws.com
+s3-me-south-1.amazonaws.com
 s3-sa-east-1.amazonaws.com
 s3-us-east-2.amazonaws.com
+s3-us-gov-east-1.amazonaws.com
 s3-us-gov-west-1.amazonaws.com
 s3-us-west-1.amazonaws.com
 s3-us-west-2.amazonaws.com
@@ -11408,22 +11715,181 @@ s3-website-ap-southeast-2.amazonaws.com
 s3-website-eu-west-1.amazonaws.com
 s3-website-sa-east-1.amazonaws.com
 s3-website-us-east-1.amazonaws.com
+s3-website-us-gov-west-1.amazonaws.com
 s3-website-us-west-1.amazonaws.com
 s3-website-us-west-2.amazonaws.com
 s3.dualstack.sa-east-1.amazonaws.com
+s3-accesspoint.dualstack.sa-east-1.amazonaws.com
+s3-website.dualstack.sa-east-1.amazonaws.com
+s3.sa-east-1.amazonaws.com
+s3-accesspoint.sa-east-1.amazonaws.com
+s3-object-lambda.sa-east-1.amazonaws.com
+s3-website.sa-east-1.amazonaws.com
 s3.dualstack.us-east-1.amazonaws.com
+s3-accesspoint.dualstack.us-east-1.amazonaws.com
+s3-accesspoint-fips.dualstack.us-east-1.amazonaws.com
+s3-fips.dualstack.us-east-1.amazonaws.com
+s3-website.dualstack.us-east-1.amazonaws.com
+s3.us-east-1.amazonaws.com
+s3-accesspoint.us-east-1.amazonaws.com
+s3-accesspoint-fips.us-east-1.amazonaws.com
+s3-deprecated.us-east-1.amazonaws.com
+s3-fips.us-east-1.amazonaws.com
+s3-object-lambda.us-east-1.amazonaws.com
+s3-website.us-east-1.amazonaws.com
 s3.dualstack.us-east-2.amazonaws.com
+s3-accesspoint.dualstack.us-east-2.amazonaws.com
+s3-accesspoint-fips.dualstack.us-east-2.amazonaws.com
+s3-fips.dualstack.us-east-2.amazonaws.com
 s3.us-east-2.amazonaws.com
+s3-accesspoint.us-east-2.amazonaws.com
+s3-accesspoint-fips.us-east-2.amazonaws.com
+s3-deprecated.us-east-2.amazonaws.com
+s3-fips.us-east-2.amazonaws.com
+s3-object-lambda.us-east-2.amazonaws.com
 s3-website.us-east-2.amazonaws.com
+s3.dualstack.us-gov-east-1.amazonaws.com
+s3-accesspoint.dualstack.us-gov-east-1.amazonaws.com
+s3-accesspoint-fips.dualstack.us-gov-east-1.amazonaws.com
+s3-fips.dualstack.us-gov-east-1.amazonaws.com
+s3.us-gov-east-1.amazonaws.com
+s3-accesspoint.us-gov-east-1.amazonaws.com
+s3-accesspoint-fips.us-gov-east-1.amazonaws.com
+s3-fips.us-gov-east-1.amazonaws.com
+s3-object-lambda.us-gov-east-1.amazonaws.com
+s3-website.us-gov-east-1.amazonaws.com
+s3.dualstack.us-gov-west-1.amazonaws.com
+s3-accesspoint.dualstack.us-gov-west-1.amazonaws.com
+s3-accesspoint-fips.dualstack.us-gov-west-1.amazonaws.com
+s3-fips.dualstack.us-gov-west-1.amazonaws.com
+s3.us-gov-west-1.amazonaws.com
+s3-accesspoint.us-gov-west-1.amazonaws.com
+s3-accesspoint-fips.us-gov-west-1.amazonaws.com
+s3-fips.us-gov-west-1.amazonaws.com
+s3-object-lambda.us-gov-west-1.amazonaws.com
+s3-website.us-gov-west-1.amazonaws.com
+s3.dualstack.us-west-1.amazonaws.com
+s3-accesspoint.dualstack.us-west-1.amazonaws.com
+s3-accesspoint-fips.dualstack.us-west-1.amazonaws.com
+s3-fips.dualstack.us-west-1.amazonaws.com
+s3-website.dualstack.us-west-1.amazonaws.com
+s3.us-west-1.amazonaws.com
+s3-accesspoint.us-west-1.amazonaws.com
+s3-accesspoint-fips.us-west-1.amazonaws.com
+s3-fips.us-west-1.amazonaws.com
+s3-object-lambda.us-west-1.amazonaws.com
+s3-website.us-west-1.amazonaws.com
+s3.dualstack.us-west-2.amazonaws.com
+s3-accesspoint.dualstack.us-west-2.amazonaws.com
+s3-accesspoint-fips.dualstack.us-west-2.amazonaws.com
+s3-fips.dualstack.us-west-2.amazonaws.com
+s3-website.dualstack.us-west-2.amazonaws.com
+s3.us-west-2.amazonaws.com
+s3-accesspoint.us-west-2.amazonaws.com
+s3-accesspoint-fips.us-west-2.amazonaws.com
+s3-deprecated.us-west-2.amazonaws.com
+s3-fips.us-west-2.amazonaws.com
+s3-object-lambda.us-west-2.amazonaws.com
+s3-website.us-west-2.amazonaws.com
+
+// Amazon SageMaker Notebook Instances
+// Submitted by AWS Security <psl-maintainers@amazon.com>
+// Reference: fe8c9e94-5a22-486d-8750-991a3a9b13c6
+notebook.af-south-1.sagemaker.aws
+notebook.ap-east-1.sagemaker.aws
+notebook.ap-northeast-1.sagemaker.aws
+notebook.ap-northeast-2.sagemaker.aws
+notebook.ap-northeast-3.sagemaker.aws
+notebook.ap-south-1.sagemaker.aws
+notebook.ap-south-2.sagemaker.aws
+notebook.ap-southeast-1.sagemaker.aws
+notebook.ap-southeast-2.sagemaker.aws
+notebook.ap-southeast-3.sagemaker.aws
+notebook.ap-southeast-4.sagemaker.aws
+notebook.ca-central-1.sagemaker.aws
+notebook.eu-central-1.sagemaker.aws
+notebook.eu-central-2.sagemaker.aws
+notebook.eu-north-1.sagemaker.aws
+notebook.eu-south-1.sagemaker.aws
+notebook.eu-south-2.sagemaker.aws
+notebook.eu-west-1.sagemaker.aws
+notebook.eu-west-2.sagemaker.aws
+notebook.eu-west-3.sagemaker.aws
+notebook.il-central-1.sagemaker.aws
+notebook.me-central-1.sagemaker.aws
+notebook.me-south-1.sagemaker.aws
+notebook.sa-east-1.sagemaker.aws
+notebook.us-east-1.sagemaker.aws
+notebook-fips.us-east-1.sagemaker.aws
+notebook.us-east-2.sagemaker.aws
+notebook-fips.us-east-2.sagemaker.aws
+notebook.us-gov-east-1.sagemaker.aws
+notebook-fips.us-gov-east-1.sagemaker.aws
+notebook.us-gov-west-1.sagemaker.aws
+notebook-fips.us-gov-west-1.sagemaker.aws
+notebook.us-west-1.sagemaker.aws
+notebook.us-west-2.sagemaker.aws
+notebook-fips.us-west-2.sagemaker.aws
+notebook.cn-north-1.sagemaker.com.cn
+notebook.cn-northwest-1.sagemaker.com.cn
+
+// Amazon SageMaker Studio
+// Submitted by AWS Security <psl-maintainers@amazon.com>
+// Reference: 057ee397-6bf8-4f20-b807-d7bc145ac980
+studio.af-south-1.sagemaker.aws
+studio.ap-east-1.sagemaker.aws
+studio.ap-northeast-1.sagemaker.aws
+studio.ap-northeast-2.sagemaker.aws
+studio.ap-northeast-3.sagemaker.aws
+studio.ap-south-1.sagemaker.aws
+studio.ap-southeast-1.sagemaker.aws
+studio.ap-southeast-2.sagemaker.aws
+studio.ap-southeast-3.sagemaker.aws
+studio.ca-central-1.sagemaker.aws
+studio.eu-central-1.sagemaker.aws
+studio.eu-north-1.sagemaker.aws
+studio.eu-south-1.sagemaker.aws
+studio.eu-west-1.sagemaker.aws
+studio.eu-west-2.sagemaker.aws
+studio.eu-west-3.sagemaker.aws
+studio.il-central-1.sagemaker.aws
+studio.me-central-1.sagemaker.aws
+studio.me-south-1.sagemaker.aws
+studio.sa-east-1.sagemaker.aws
+studio.us-east-1.sagemaker.aws
+studio.us-east-2.sagemaker.aws
+studio.us-gov-east-1.sagemaker.aws
+studio-fips.us-gov-east-1.sagemaker.aws
+studio.us-gov-west-1.sagemaker.aws
+studio-fips.us-gov-west-1.sagemaker.aws
+studio.us-west-1.sagemaker.aws
+studio.us-west-2.sagemaker.aws
+studio.cn-north-1.sagemaker.com.cn
+studio.cn-northwest-1.sagemaker.com.cn
 
 // Analytics on AWS
 // Submitted by AWS Security <psl-maintainers@amazon.com>
-// Reference: c02c3a80-f8a0-4fd2-b719-48ea8b7c28de
+// Reference: 955f9f40-a495-4e73-ae85-67b77ac9cadd
 analytics-gateway.ap-northeast-1.amazonaws.com
+analytics-gateway.ap-northeast-2.amazonaws.com
+analytics-gateway.ap-south-1.amazonaws.com
+analytics-gateway.ap-southeast-1.amazonaws.com
+analytics-gateway.ap-southeast-2.amazonaws.com
+analytics-gateway.eu-central-1.amazonaws.com
 analytics-gateway.eu-west-1.amazonaws.com
 analytics-gateway.us-east-1.amazonaws.com
 analytics-gateway.us-east-2.amazonaws.com
 analytics-gateway.us-west-2.amazonaws.com
+
+// AWS Amplify
+// Submitted by AWS Security <psl-maintainers@amazon.com>
+// Reference: 5ecce854-c033-4fc4-a755-1a9916d9a9bb
+*.amplifyapp.com
+
+// AWS App Runner
+// Submitted by AWS Security <psl-maintainers@amazon.com>
+// Reference: 6828c008-ba5d-442f-ade5-48da4e7c2316
+*.awsapprunner.com
 
 // AWS Cloud9
 // Submitted by: AWS Security <psl-maintainers@amazon.com>
@@ -11493,25 +11959,33 @@ vfs.cloud9.us-west-2.amazonaws.com
 webview-assets.cloud9.us-west-2.amazonaws.com
 
 // AWS Elastic Beanstalk
-// Submitted by Luke Wells <psl-maintainers@amazon.com>
-// Reference: aa202394-43a0-4857-b245-8db04549137e
+// Submitted by AWS Security <psl-maintainers@amazon.com>
+// Reference: bb5a965c-dec3-4967-aa22-e306ad064797
 cn-north-1.eb.amazonaws.com.cn
 cn-northwest-1.eb.amazonaws.com.cn
 elasticbeanstalk.com
+af-south-1.elasticbeanstalk.com
+ap-east-1.elasticbeanstalk.com
 ap-northeast-1.elasticbeanstalk.com
 ap-northeast-2.elasticbeanstalk.com
 ap-northeast-3.elasticbeanstalk.com
 ap-south-1.elasticbeanstalk.com
 ap-southeast-1.elasticbeanstalk.com
 ap-southeast-2.elasticbeanstalk.com
+ap-southeast-3.elasticbeanstalk.com
 ca-central-1.elasticbeanstalk.com
 eu-central-1.elasticbeanstalk.com
+eu-north-1.elasticbeanstalk.com
+eu-south-1.elasticbeanstalk.com
 eu-west-1.elasticbeanstalk.com
 eu-west-2.elasticbeanstalk.com
 eu-west-3.elasticbeanstalk.com
+il-central-1.elasticbeanstalk.com
+me-south-1.elasticbeanstalk.com
 sa-east-1.elasticbeanstalk.com
 us-east-1.elasticbeanstalk.com
 us-east-2.elasticbeanstalk.com
+us-gov-east-1.elasticbeanstalk.com
 us-gov-west-1.elasticbeanstalk.com
 us-west-1.elasticbeanstalk.com
 us-west-2.elasticbeanstalk.com
@@ -13619,6 +14093,10 @@ azurestaticapps.net
 1.azurestaticapps.net
 2.azurestaticapps.net
 3.azurestaticapps.net
+4.azurestaticapps.net
+5.azurestaticapps.net
+6.azurestaticapps.net
+7.azurestaticapps.net
 centralus.azurestaticapps.net
 eastasia.azurestaticapps.net
 eastus2.azurestaticapps.net

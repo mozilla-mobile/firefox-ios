@@ -17,13 +17,16 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
     var device: UIDeviceInterface
     // For contextual hints shown in Homepage that can overlap with keyboard being raised by user interaction
     private var overlayState: OverlayStateProtocol?
+    var isCFRToolbarFeatureEnabled: Bool
 
     init(with profile: Profile,
          overlayState: OverlayStateProtocol?,
-         device: UIDeviceInterface = UIDevice.current) {
+         device: UIDeviceInterface = UIDevice.current,
+         isCFRToolbarFeatureEnabled: Bool = false) {
         self.profile = profile
         self.overlayState = overlayState
         self.device = device
+        self.isCFRToolbarFeatureEnabled = isCFRToolbarFeatureEnabled
     }
 
     /// Determine if this hint is eligible to present, outside of Nimbus flag settings.
@@ -56,10 +59,11 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
         return overlayState?.inOverlayMode ?? false
     }
 
-    /// If device is iPhone we present JumpBackIn and SyncTab CFRs only after Toolbar CFR has been presented
-    /// The toolbar CFR is not presented on iPad so we bypass it
+    /// If device is iPhone we present JumpBackIn and SyncTab CFRs only after Toolbar CFR has been presented if the feature is enabled
+    /// If the Toolbar CFR flag is disabled or the device is iPad (toolbar CFR is not presented on iPad) we bypass it
     private var shouldCheckToolbarHasShown: Bool {
-        guard device.userInterfaceIdiom != .pad else { return true }
+        guard device.userInterfaceIdiom != .pad,
+              isCFRToolbarFeatureEnabled else { return true }
 
         return profile.prefs.boolForKey(CFRPrefsKeys.toolbarOnboardingKey.rawValue) ?? false
     }
@@ -67,7 +71,7 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
     /// Determine if the CFR for Jump Back In is presentable.
     ///
     /// It's presentable on these conditions:
-    /// - the Toolbar CFR has already been presented
+    /// - the Toolbar CFR has already been presented or the CFR toolbar flag is disabled
     /// - the JumpBackInSyncedTab CFR has NOT been presented already
     /// - the JumpBackIn CFR has NOT been presented yet
     private var canJumpBackInBePresented: Bool {
@@ -83,7 +87,7 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
     ///
     /// The context hint is presentable when certain conditions are met:
     /// - A synced tab appears in Jump Back In
-    /// - The Toolbar CFR has been presented
+    /// - The Toolbar CFR has already been presented or the CFR toolbar flag is disabled
     /// - This CFR hasn't already been presented
     /// - The Home Tab Banner isn't being displayed (not specified by Product, but the CFR might show when the anchor point isn't on screen)
     private var canPresentJumpBackInSyncedTab: Bool {
