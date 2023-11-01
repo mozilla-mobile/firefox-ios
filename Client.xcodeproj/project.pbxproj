@@ -7363,7 +7363,6 @@
 				1D2F68AE2ACB272500524B92 /* RemoteTabsTableViewController.swift */,
 				1D2F68AA2ACB262900524B92 /* RemoteTabsPanelAction.swift */,
 				1D8487B32AD0C6C100F7527C /* RemoteTabsPanelMiddleware.swift */,
-				1D2F68AC2ACB266300524B92 /* RemoteTabsPanelState.swift */,
 				210887CB293E8800000AB4EE /* RemoteTabsErrorCell.swift */,
 				1D2F68B02ACCA22000524B92 /* RemoteTabsEmptyView.swift */,
 				21357F2C293FDB60004BF9FD /* RemoteTabsErrorDataSource.swift */,
@@ -7486,6 +7485,7 @@
 		21C5B3592AF2A73F0093F366 /* State */ = {
 			isa = PBXGroup;
 			children = (
+				1D2F68AC2ACB266300524B92 /* RemoteTabsPanelState.swift */,
 				1DDE3DB62AC3820A0039363B /* TabCellState.swift */,
 				21E77E4F2AA8BAEC00FABA10 /* TabTrayState.swift */,
 				21996BAA2AE95AFC00E0D55F /* TabTrayPanelType.swift */,
@@ -7540,9 +7540,9 @@
 				21C5B3572AF2A6D80093F366 /* LayoutManager */,
 				21C5B3592AF2A73F0093F366 /* State */,
 				21C5B3582AF2A7130093F366 /* Views */,
+				213BF7522AC21D1B00C53A64 /* TabDisplayViewController.swift */,
 				21E77E4D2AA8BA5200FABA10 /* TabTrayViewController.swift */,
 				21E77E512AA8BE5C00FABA10 /* TabTrayFlagManager.swift */,
-				213BF7522AC21D1B00C53A64 /* TabDisplayViewController.swift */,
 			);
 			path = Tabs;
 			sourceTree = "<group>";

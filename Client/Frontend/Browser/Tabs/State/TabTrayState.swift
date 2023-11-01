@@ -15,7 +15,7 @@ struct TabTrayState {
 
     // MARK: Inactive tabs
     var isInactiveTabEmpty: Bool
-    var isInactiveTabsExpanded = false
+    var isInactiveTabsExpanded = true
     var inactiveTabs = ["One",
                         "Two",
                         "Three",

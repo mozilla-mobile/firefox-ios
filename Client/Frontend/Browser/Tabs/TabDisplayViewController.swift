@@ -14,9 +14,13 @@ class TabDisplayViewController: UIViewController,
     weak var navigationHandler: TabsNavigationHandler?
 
     // MARK: UI elements
-    private var tabDisplayView: TabDisplayView = .build { _ in }
-    private var backgroundPrivacyOverlay: UIView = .build { _ in }
-    private lazy var emptyPrivateTabsView: EmptyPrivateTabsView = .build { _ in }
+    private lazy var tabDisplayView: TabDisplayView = {
+        let view = TabDisplayView(state: self.state)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    private var backgroundPrivacyOverlay: UIView = .build()
+    private lazy var emptyPrivateTabsView: EmptyPrivateTabsView = .build()
 
     // MARK: Redux state
     var state: TabTrayState
@@ -26,7 +30,7 @@ class TabDisplayViewController: UIViewController,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
         // TODO: FXIOS-6936 Integrate Redux state
         self.state = TabTrayState(isPrivateMode: isPrivateMode,
-                                  isPrivateTabsEmpty: true,
+                                  isPrivateTabsEmpty: false,
                                   isInactiveTabEmpty: false)
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
@@ -62,12 +66,15 @@ class TabDisplayViewController: UIViewController,
             backgroundPrivacyOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
 
-        backgroundPrivacyOverlay.isHidden = !state.isPrivateMode
+        backgroundPrivacyOverlay.isHidden = true
         setupEmptyView()
     }
 
     func setupEmptyView() {
-        guard state.isPrivateMode, state.isPrivateTabsEmpty else { return }
+        guard state.isPrivateMode, state.isPrivateTabsEmpty else {
+            showEmptyView(shouldShowEmptyView: false)
+            return
+        }
 
         view.insertSubview(emptyPrivateTabsView, aboveSubview: tabDisplayView)
         NSLayoutConstraint.activate([
@@ -76,9 +83,12 @@ class TabDisplayViewController: UIViewController,
             emptyPrivateTabsView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             emptyPrivateTabsView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
-        emptyPrivateTabsView.isHidden = false
-        tabDisplayView.isHidden = true
-        backgroundPrivacyOverlay.isHidden = true
+        showEmptyView(shouldShowEmptyView: true)
+    }
+
+    private func showEmptyView(shouldShowEmptyView: Bool) {
+        emptyPrivateTabsView.isHidden = !shouldShowEmptyView
+        tabDisplayView.isHidden = shouldShowEmptyView
     }
 
     func applyTheme() {

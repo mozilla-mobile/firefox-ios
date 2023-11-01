@@ -19,9 +19,9 @@ class TabDisplayView: UIView,
         case tabs
     }
 
-    var state: TabTrayState
-    var inactiveTabsSectionManager: InactiveTabsSectionManager
-    var tabsSectionManager: TabsSectionManager
+    private var state: TabTrayState
+    private var inactiveTabsSectionManager: InactiveTabsSectionManager
+    private var tabsSectionManager: TabsSectionManager
     var theme: Theme?
 
     lazy var collectionView: UICollectionView = {
@@ -49,14 +49,11 @@ class TabDisplayView: UIView,
         return collectionView
     }()
 
-    override init(frame: CGRect) {
-        state = TabTrayState(isPrivateMode: false,
-                             isPrivateTabsEmpty: false,
-                             isInactiveTabEmpty: false,
-                             isInactiveTabsExpanded: true)
+    public init(state: TabTrayState) {
+        self.state = state
         self.inactiveTabsSectionManager = InactiveTabsSectionManager()
         self.tabsSectionManager = TabsSectionManager()
-        super.init(frame: frame)
+        super.init(frame: .zero)
         setupLayout()
     }
 
@@ -79,6 +76,10 @@ class TabDisplayView: UIView,
         let layout = UICollectionViewCompositionalLayout { [weak self]
             (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
             guard let self else { return nil }
+            guard !state.isPrivateMode else {
+                return self.tabsSectionManager.layoutSection(layoutEnvironment)
+            }
+
             let section = self.getSectionLayout(sectionIndex)
             switch section {
             case .inactiveTabs:
@@ -93,7 +94,7 @@ class TabDisplayView: UIView,
     }
 
     private func getSectionLayout(_ sectionIndex: Int) -> TabDisplaySection {
-        guard let section = TabDisplaySection(rawValue: sectionIndex) else { return .inactiveTabs }
+        guard let section = TabDisplaySection(rawValue: sectionIndex) else { return .tabs }
 
         return section
     }
@@ -103,13 +104,21 @@ class TabDisplayView: UIView,
         collectionView.backgroundColor = theme.colors.layer3
     }
 
+    func getTabDisplay(for section: Int) -> TabDisplaySection {
+        guard !state.isPrivateMode else { return .tabs }
+
+        return TabDisplaySection(rawValue: section) ?? .tabs
+    }
+
     // MARK: UICollectionViewDataSource
     func numberOfSections(in collectionView: UICollectionView) -> Int {
+        guard !state.isPrivateMode else { return 1 }
+
         return TabDisplaySection.allCases.count
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        switch TabDisplaySection(rawValue: section) {
+        switch getTabDisplay(for: section) {
         case .inactiveTabs:
             // Hide inactive tray if there are no inactive tabs or if is PrivateTabs
             guard !state.isInactiveTabEmpty,
@@ -120,8 +129,6 @@ class TabDisplayView: UIView,
             guard !state.tabs.isEmpty else { return 0 }
 
             return state.tabs.count
-        case .none:
-            return 0
         }
     }
 
@@ -129,7 +136,9 @@ class TabDisplayView: UIView,
                         viewForSupplementaryElementOfKind kind: String,
                         at indexPath: IndexPath)
     -> UICollectionReusableView {
-        switch TabDisplaySection(rawValue: indexPath.section) {
+        let reusableView = UICollectionReusableView()
+
+        switch getTabDisplay(for: indexPath.section) {
         case .inactiveTabs:
             if kind == UICollectionView.elementKindSectionHeader,
                let view = collectionView.dequeueReusableSupplementaryView(
@@ -164,15 +173,15 @@ class TabDisplayView: UIView,
                 return footerView
             }
 
-        default: return UICollectionReusableView()
+        default: return reusableView
         }
-        return UICollectionReusableView()
+        return reusableView
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
-        
-        switch TabDisplaySection(rawValue: indexPath.section) {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath)
+    -> UICollectionViewCell {
+        switch getTabDisplay(for: indexPath.section) {
         case .inactiveTabs:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabsCell.cellIdentifier, for: indexPath) as? InactiveTabsCell
             else { return UICollectionViewCell() }
@@ -196,8 +205,6 @@ class TabDisplayView: UIView,
                                         margin: 0)
             cell.configure(with: tabState, theme: theme)
             return cell
-        case .none:
-            return UICollectionViewCell()
         }
     }
 
