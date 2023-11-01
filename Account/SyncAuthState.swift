@@ -6,7 +6,6 @@ import Foundation
 import Common
 import MozillaAppServices
 import Shared
-import SwiftyJSON
 
 public let FxAClientErrorDomain = "org.mozilla.fxa.error"
 public let FxAClientUnknownError = NSError(
@@ -76,17 +75,17 @@ public protocol SyncAuthState {
     var clientName: String? { get set }
 }
 
-public func syncAuthStateCachefromJSON(_ json: JSON) -> SyncAuthStateCache? {
-    if let version = json["version"].int {
+public func syncAuthStateCachefromJSON(_ jsonDict: [String: Any]) -> SyncAuthStateCache? {
+    if let version = jsonDict["version"] as? Int {
         if version != CurrentSyncAuthStateCacheVersion {
             DefaultLogger.shared.log("Sync Auth State Cache is wrong version; dropping.",
                                      level: .warning,
                                      category: .sync)
             return nil
         }
-        if let dictionaryObject = json["token"].dictionaryObject, let token = TokenServerToken.fromJSON(dictionaryObject),
-           let forKey = json["forKey"].string?.hexDecodedData,
-           let expiresAt = json["expiresAt"].int64 {
+        if let dictionaryObject = jsonDict["token"] as? [String: Any], let token = TokenServerToken.fromJSON(dictionaryObject),
+           let forKey = (jsonDict["forKey"] as? String)?.hexDecodedData,
+           let expiresAt = jsonDict["expiresAt"] as? Int64 {
             return SyncAuthStateCache(token: token, forKey: forKey, expiresAt: Timestamp(expiresAt))
         }
     }
@@ -94,13 +93,13 @@ public func syncAuthStateCachefromJSON(_ json: JSON) -> SyncAuthStateCache? {
 }
 
 extension SyncAuthStateCache: JSONLiteralConvertible {
-    public func asJSON() -> JSON {
-        return JSON([
+    public func asJSON() -> [String: Any] {
+        [
             "version": CurrentSyncAuthStateCacheVersion,
             "token": token.asJSON(),
             "forKey": forKey.hexEncodedString,
             "expiresAt": NSNumber(value: expiresAt),
-        ] as NSDictionary)
+        ]
     }
 }
 
