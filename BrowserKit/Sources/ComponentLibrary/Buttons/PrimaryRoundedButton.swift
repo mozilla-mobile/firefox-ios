@@ -11,6 +11,13 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
         static let buttonVerticalInset: CGFloat = 12
         static let buttonHorizontalInset: CGFloat = 16
         static let buttonFontSize: CGFloat = 16
+
+        static let contentEdgeInsets = UIEdgeInsets(
+            top: buttonVerticalInset,
+            left: buttonHorizontalInset,
+            bottom: buttonVerticalInset,
+            right: buttonHorizontalInset
+        )
     }
 
     private var highlightedTintColor: UIColor!
@@ -31,15 +38,15 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
         layer.cornerRadius = UX.buttonCornerRadius
         titleLabel?.textAlignment = .center
         titleLabel?.adjustsFontForContentSizeCategory = true
-        contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
-                                         left: UX.buttonHorizontalInset,
-                                         bottom: UX.buttonVerticalInset,
-                                         right: UX.buttonHorizontalInset)
+        contentEdgeInsets = UX.contentEdgeInsets
     }
 
     public func configure(viewModel: PrimaryRoundedButtonViewModel) {
         accessibilityIdentifier = viewModel.a11yIdentifier
         setTitle(viewModel.title, for: .normal)
+
+        guard let imageTitlePadding = viewModel.imageTitlePadding else { return }
+        setInsets(forContentPadding: UX.contentEdgeInsets, imageTitlePadding: imageTitlePadding)
     }
 
     required init?(coder aDecoder: NSCoder) {

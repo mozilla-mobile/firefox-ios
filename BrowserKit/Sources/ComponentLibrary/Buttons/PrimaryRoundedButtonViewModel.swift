@@ -8,9 +8,11 @@ import Foundation
 public struct PrimaryRoundedButtonViewModel {
     public let title: String
     public let a11yIdentifier: String
+    public let imageTitlePadding: Double?
 
-    public init(title: String, a11yIdentifier: String) {
+    public init(title: String, a11yIdentifier: String, imageTitlePadding: Double? = nil) {
         self.title = title
         self.a11yIdentifier = a11yIdentifier
+        self.imageTitlePadding = imageTitlePadding
     }
 }
