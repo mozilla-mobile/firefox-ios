@@ -11,6 +11,7 @@ class TabsSectionManager {
         static let standardInset: CGFloat = 18
         static let iPadInset: CGFloat = 50
         static let iPadTopSiteInset: CGFloat = 25
+        static let verticalInset: CGFloat = 20
     }
 
     static func leadingInset(traitCollection: UITraitCollection,
@@ -33,20 +34,16 @@ class TabsSectionManager {
             heightDimension: .estimated(UX.cellEstimatedHeight)
         )
 
-//        let interface = TopSitesUIInterface(trait: traitCollection, availableWidth: size.width)
-//        let sectionDimension = dimensionManager.getSectionDimension(for: topSites,
-//                                                                    numberOfRows: topSitesDataAdaptor.numberOfRows,
-//                                                                    interface: interface)
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                        subitem: item,
                                                        count: 2)
         group.interItemSpacing = NSCollectionLayoutSpacing.fixed(UX.cardSpacing)
         let section = NSCollectionLayoutSection(group: group)
 
-        let leadingInset = TabsSectionManager.leadingInset(traitCollection: layoutEnvironment.traitCollection)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 20,
+        let horizontalInset = TabsSectionManager.leadingInset(traitCollection: layoutEnvironment.traitCollection)
+        section.contentInsets = NSDirectionalEdgeInsets(top: UX.verticalInset,
                                                         leading: leadingInset,
-                                                        bottom: 20,
+                                                        bottom: UX.verticalInset,
                                                         trailing: leadingInset)
         section.interGroupSpacing = UX.cardSpacing
 
