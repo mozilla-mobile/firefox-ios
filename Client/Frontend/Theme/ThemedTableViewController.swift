@@ -96,15 +96,19 @@ class ThemedHeaderFooterViewBordersHelper: ThemeApplicable {
         view.addSubview(topBorder)
         view.addSubview(bottomBorder)
 
-        topBorder.snp.makeConstraints { make in
-            make.left.right.top.equalTo(view)
-            make.height.equalTo(0.25)
-        }
-
-        bottomBorder.snp.makeConstraints { make in
-            make.left.right.bottom.equalTo(view)
-            make.height.equalTo(0.5)
-        }
+        topBorder.translatesAutoresizingMaskIntoConstraints = false
+        bottomBorder.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            topBorder.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            topBorder.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            topBorder.topAnchor.constraint(equalTo: view.topAnchor),
+            topBorder.heightAnchor.constraint(equalToConstant: 0.25),
+            
+            bottomBorder.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            bottomBorder.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            bottomBorder.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            bottomBorder.heightAnchor.constraint(equalToConstant: 0.5)
+        ])
     }
 
     func applyTheme(theme: Theme) {
