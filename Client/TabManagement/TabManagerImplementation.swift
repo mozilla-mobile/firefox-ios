@@ -98,11 +98,9 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
     private func buildTabRestore(window: WindowData?) async {
         defer {
-            ensureMainThread { [weak self] in
-                self?.isRestoringTabs = false
-                self?.tabRestoreHasFinished = true
-                AppEventQueue.completed(.tabRestoration)
-            }
+            isRestoringTabs = false
+            tabRestoreHasFinished = true
+            AppEventQueue.completed(.tabRestoration)
         }
 
         let nonPrivateTabs = window?.tabData.filter { !$0.isPrivate }
