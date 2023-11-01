@@ -163,11 +163,11 @@ class SyncNowSetting: WithAccountSetting {
     }
 
     private lazy var warningIcon: UIImageView = {
-        return UIImageView(image: UIImage(named: "AmberCaution"))
+        return UIImageView(image: UIImage(named: ImageIdentifiers.amberCaution))
     }()
 
     private lazy var errorIcon: UIImageView = {
-        return UIImageView(image: UIImage(named: "RedCaution"))
+        return UIImageView(image: UIImage(named: ImageIdentifiers.redCaution))
     }()
 
     private let syncSUMOURL = SupportUtils.URLForTopic("sync-status-ios")

@@ -10,6 +10,7 @@ import Foundation
 /// Sing the song if you must.
 public struct ImageIdentifiers {
     public static let addToReadingList = "addToReadingList"
+    public static let amberCaution = "AmberCaution"
     public static let badgeMask = "badge-mask"
     public static let circleFill = "circle.fill"
     public static let competitiveness = "competitiveness"
@@ -57,6 +58,7 @@ public struct ImageIdentifiers {
     public static let privateMaskSmall = "smallPrivateMask"
     public static let privateModeBadge = "privateModeBadge"
     public static let readingList = "menu-panel-ReadingList"
+    public static let redCaution = "RedCaution"
     public static let reportSiteIssue = "menu-reportSiteIssue"
     public static let settings = "menu-Settings"
     public static let share = "action_share"
