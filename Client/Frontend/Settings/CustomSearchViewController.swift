@@ -215,7 +215,7 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
     fileprivate let settingDidChange: ((String?) -> Void)?
     fileprivate let settingIsValid: ((String?) -> Bool)?
 
-    let textField = UITextView()
+    let textField: UITextView = .build()
     let placeholderLabel = UILabel()
     var keyboardType: UIKeyboardType = .default
 
@@ -258,7 +258,6 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         textField.delegate = self
         textField.backgroundColor = theme.colors.layer5
         textField.textColor = theme.colors.textPrimary
-        textField.translatesAutoresizingMaskIntoConstraints = false
         cell.isUserInteractionEnabled = true
         cell.accessibilityTraits = UIAccessibilityTraits.none
         cell.contentView.addSubview(textField)
