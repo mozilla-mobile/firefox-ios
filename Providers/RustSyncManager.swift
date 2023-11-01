@@ -160,6 +160,7 @@ public class RustSyncManager: NSObject, SyncManager {
     private func beginSyncing() {
         syncDisplayState = .inProgress
         notifySyncing(notification: .ProfileDidStartSyncing)
+        AppEventQueue.started(.profileSyncing)
     }
 
     private func resolveSyncState(result: SyncResult) -> SyncDisplayState {
@@ -203,6 +204,7 @@ public class RustSyncManager: NSObject, SyncManager {
         // db access from happening
         if !backgrounded {
             notifySyncing(notification: .ProfileDidFinishSyncing)
+            AppEventQueue.completed(.profileSyncing)
         }
     }
 
