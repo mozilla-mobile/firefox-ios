@@ -29,12 +29,11 @@ class CustomSearchViewController: SettingsTableViewController {
     private var urlString: String?
     private var engineTitle = ""
     var successCallback: (() -> Void)?
-    private lazy var spinnerView: UIActivityIndicatorView = {
-        let spinner = UIActivityIndicatorView(style: .medium)
+    private lazy var spinnerView: UIActivityIndicatorView = .build { [self] spinner in
+        spinner.style = .medium
         spinner.color = themeManager.currentTheme.colors.iconSpinner
         spinner.hidesWhenStopped = true
-        return spinner
-    }()
+    }
 
     init(faviconFetcher: SiteImageHandler = DefaultSiteImageHandler.factory()) {
         self.faviconFetcher = faviconFetcher
@@ -49,7 +48,10 @@ class CustomSearchViewController: SettingsTableViewController {
         super.viewDidLoad()
         title = .SettingsAddCustomEngineTitle
         view.addSubview(spinnerView)
-        spinnerView.translatesAutoresizingMaskIntoConstraints = false
+        setupConstraints()
+    }
+
+    func setupConstraints() {
         NSLayoutConstraint.activate([
             spinnerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             spinnerView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
