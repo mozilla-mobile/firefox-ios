@@ -170,14 +170,35 @@ class TabDisplayView: UIView,
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabsCell.cellIdentifier, for: indexPath) as? InactiveTabsCell
-        else { return UICollectionViewCell() }
 
-        cell.configure(text: state.inactiveTabs[indexPath.row])
-        if let theme = theme {
-            cell.applyTheme(theme: theme)
+        
+        switch TabDisplaySection(rawValue: indexPath.section) {
+        case .inactiveTabs:
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabsCell.cellIdentifier, for: indexPath) as? InactiveTabsCell
+            else { return UICollectionViewCell() }
+
+            cell.configure(text: state.inactiveTabs[indexPath.row])
+            if let theme = theme {
+                cell.applyTheme(theme: theme)
+            }
+            return cell
+        case .tabs:
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TabCell.cellIdentifier, for: indexPath) as? TabCell
+            else { return UICollectionViewCell() }
+
+            let tabState = TabCellState(isSelected: false,
+                                        isPrivate: false,
+                                        isFxHomeTab: false,
+                                        tabTitle: "\(indexPath.row)",
+                                        url: nil,
+                                        screenshot: nil,
+                                        hasHomeScreenshot: false,
+                                        margin: 0)
+            cell.configure(with: tabState, theme: theme)
+            return cell
+        case .none:
+            return UICollectionViewCell()
         }
-        return cell
     }
 
     @objc
