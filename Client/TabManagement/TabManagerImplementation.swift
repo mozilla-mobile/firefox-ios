@@ -291,9 +291,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         }
     }
 
-    // FIXME: Had to add this temporarily to fix unit tests
-    var tabRestoreHasFinished: Bool = true
-
     private func saveAllTabData() {
         // Only preserve tabs after the restore has finished
         guard AppEventQueue.activityIsCompleted(.tabRestoration) else { return }

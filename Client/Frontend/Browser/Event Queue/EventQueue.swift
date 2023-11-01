@@ -182,7 +182,6 @@ public final class EventQueue<QueueEventType: Hashable> {
     /// easily created between different events.
     func establishDependencies(for parentEvent: QueueEventType, against otherEvents: [QueueEventType]) {
         wait(for: otherEvents, token: ActionToken()) { [weak self] in
-            self?.logger.log("DBG: All dependent events complete. Signalling parent event: \(parentEvent)", level: .info, category: .library)
             self?.signal(event: parentEvent)
         }
     }
