@@ -95,7 +95,6 @@ class ThemedHeaderFooterViewBordersHelper: ThemeApplicable {
             topBorder.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             topBorder.topAnchor.constraint(equalTo: view.topAnchor),
             topBorder.heightAnchor.constraint(equalToConstant: 0.25),
-            
             bottomBorder.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             bottomBorder.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             bottomBorder.bottomAnchor.constraint(equalTo: view.bottomAnchor),
