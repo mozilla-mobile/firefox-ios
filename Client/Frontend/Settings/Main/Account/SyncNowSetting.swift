@@ -145,26 +145,37 @@ class SyncNowSetting: WithAccountSetting {
         // swiftlint:enable unused_setter_value
     }
 
-    private lazy var troubleshootButton: UIButton = {
-        let troubleshootButton = UIButton(type: .roundedRect)
+    private lazy var troubleshootButton: UIButton = .build { [weak self] troubleshootButton in
+        guard let self = self else { return }
         troubleshootButton.setTitle(.FirefoxSyncTroubleshootTitle, for: .normal)
         troubleshootButton.addTarget(self, action: #selector(self.troubleshoot), for: .touchUpInside)
+<<<<<<< HEAD
         troubleshootButton.tintColor = theme.colors.actionPrimary
         troubleshootButton.titleLabel?.font = LegacyDynamicFontHelper.defaultHelper.DefaultSmallFont
         troubleshootButton.sizeToFit()
         return troubleshootButton
     }()
+=======
+        troubleshootButton.setTitleColor(self.theme.colors.actionPrimary, for: .normal)
+        troubleshootButton.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
+                                                                                     size: 12,
+                                                                                     weight: .regular)
+    }
+
+    private lazy var accessoryViewContainer: UIStackView = .build { stackView in
+        stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.distribution = .fillProportionally
+        stackView.spacing = 4
+    }
+>>>>>>> 91dc2e117 (Refactor FXIOS-7656 [v119] Fix constraint crash in SyncNow settings cell (#17083))
 
     private lazy var warningIcon: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "AmberCaution"))
-        imageView.sizeToFit()
-        return imageView
+        return UIImageView(image: UIImage(named: ImageIdentifiers.amberCaution))
     }()
 
     private lazy var errorIcon: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "RedCaution"))
-        imageView.sizeToFit()
-        return imageView
+        return UIImageView(image: UIImage(named: ImageIdentifiers.redCaution))
     }()
 
     private let syncSUMOURL = SupportUtils.URLForTopic("sync-status-ios")
@@ -186,8 +197,7 @@ class SyncNowSetting: WithAccountSetting {
                     // add the red warning symbol
                     // add a link to the MANA page
                     cell.detailTextLabel?.attributedText = nil
-                    cell.accessoryView = troubleshootButton
-                    addIcon(errorIcon, toCell: cell)
+                    addAccessoryView(with: errorIcon, to: cell)
                 } else {
                     cell.detailTextLabel?.attributedText = status
                     cell.accessoryView = nil
@@ -196,8 +206,7 @@ class SyncNowSetting: WithAccountSetting {
                 // add the amber warning symbol
                 // add a link to the MANA page
                 cell.detailTextLabel?.attributedText = nil
-                cell.accessoryView = troubleshootButton
-                addIcon(warningIcon, toCell: cell)
+                addAccessoryView(with: warningIcon, to: cell)
             case .good:
                 cell.detailTextLabel?.attributedText = status
                 fallthrough
@@ -237,19 +246,11 @@ class SyncNowSetting: WithAccountSetting {
         }
     }
 
-    private func addIcon(_ image: UIImageView, toCell cell: UITableViewCell) {
-        cell.contentView.addSubview(image)
+    private func addAccessoryView(with image: UIImageView, to cell: UITableViewCell) {
+        accessoryViewContainer.addArrangedSubview(image)
+        accessoryViewContainer.addArrangedSubview(troubleshootButton)
 
-        cell.textLabel?.snp.updateConstraints { make in
-            make.leading.equalTo(image.snp.trailing).offset(5)
-            make.trailing.lessThanOrEqualTo(cell.contentView)
-            make.centerY.equalTo(cell.contentView)
-        }
-
-        image.snp.makeConstraints { make in
-            make.leading.equalTo(cell.contentView).offset(17)
-            make.top.equalTo(cell.textLabel!).offset(2)
-        }
+        cell.accessoryView = accessoryViewContainer
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
