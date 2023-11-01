@@ -73,15 +73,9 @@ class ThemedHeaderFooterViewBordersHelper: ThemeApplicable {
         case bottom
     }
 
-    fileprivate lazy var topBorder: UIView = {
-        let topBorder = UIView()
-        return topBorder
-    }()
+    private lazy var topBorder: UIView = .build()
 
-    fileprivate lazy var bottomBorder: UIView = {
-        let bottomBorder = UIView()
-        return bottomBorder
-    }()
+    private lazy var bottomBorder: UIView = .build()
 
     func showBorder(for location: BorderLocation, _ show: Bool) {
         switch location {
