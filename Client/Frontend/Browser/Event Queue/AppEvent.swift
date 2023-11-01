@@ -7,7 +7,6 @@ import Foundation
 public protocol AppEventType: Hashable { }
 
 public enum AppEvent: Int, AppEventType {
-
     // Events: Startup flow
     case startupFlowComplete
 
