@@ -13,6 +13,8 @@ enum TestEvent: AppEventType {
     case middleEvent
     case laterEvent
 
+    case activityEvent
+
     case contextualEvent(Int)
 }
 
@@ -126,5 +128,96 @@ final class EventQueueTests: XCTestCase {
             self.queue.signal(event: .startingEvent)
         }
         wait(1)
+    }
+
+    func testActivityEventStateChanges() {
+        var actionRun = false
+
+        XCTAssertTrue(queue.activityIsNotStarted(.startingEvent))
+        queue.wait(for: .activityEvent) { actionRun = true }
+
+        // Start event
+        self.queue.started(.activityEvent)
+        XCTAssertFalse(actionRun)
+        XCTAssertTrue(queue.activityIsInProgress(.activityEvent))
+
+        // Complete event
+        self.queue.completed(.activityEvent)
+        XCTAssertTrue(actionRun)
+        XCTAssertTrue(queue.activityIsCompleted(.activityEvent))
+    }
+
+    func testMultipleEventTypeDependencies() {
+        var actionRun = false
+
+        XCTAssertTrue(queue.activityIsNotStarted(.startingEvent))
+        queue.wait(for: [.startingEvent, .activityEvent], then: { actionRun = true })
+
+        queue.signal(event: .startingEvent)
+
+        XCTAssertFalse(actionRun)
+        queue.started(.activityEvent)
+
+        XCTAssertFalse(actionRun)
+        queue.completed(.activityEvent)
+
+        XCTAssertTrue(actionRun)
+        XCTAssertTrue(queue.activityIsCompleted(.activityEvent))
+    }
+
+    func testMultipleSequentialActivityEvents() {
+        var actionRun = false
+
+        // Enqueue and trigger 1st occurrence of activity event
+        queue.wait(for: [.activityEvent], then: { actionRun = true })
+        XCTAssertFalse(actionRun)
+        queue.started(.activityEvent)
+        XCTAssertFalse(actionRun)
+        queue.completed(.activityEvent)
+        // Expect action 1 run
+        XCTAssertTrue(actionRun)
+
+        // Trigger 2nd occurrence of activity event
+        actionRun = false
+        queue.started(.activityEvent)
+        queue.completed(.activityEvent)
+        // Expect action is not run a 2nd time (it should have been dequeued previously)
+        XCTAssertFalse(actionRun)
+
+        // Enqueue another action, since the event has already completed,
+        // we expect the action to run immediately
+        actionRun = false
+        queue.wait(for: [.activityEvent], then: { actionRun = true })
+        // Expect action 2 run immediately
+        XCTAssertTrue(actionRun)
+
+        // Enqueue another action, but this time trigger another occurrence
+        // of the event _before_ the action is enqueued. It should wait
+        // until the event finishes before running.
+        actionRun = false
+        queue.started(.activityEvent)
+        queue.wait(for: [.activityEvent], then: { actionRun = true })
+        XCTAssertFalse(actionRun)
+        // Finish event
+        queue.completed(.activityEvent)
+        XCTAssertTrue(actionRun)
+    }
+
+    func testActivityDefaultStates() {
+        XCTAssert(queue.activityIsNotStarted(.activityEvent))
+        queue.started(.activityEvent)
+        XCTAssertFalse(queue.activityIsNotStarted(.activityEvent))
+    }
+
+    func testFailedState() {
+        var actionRun = false
+
+        XCTAssertTrue(queue.activityIsNotStarted(.startingEvent))
+        queue.wait(for: [.activityEvent], then: { actionRun = true })
+
+        queue.started(.activityEvent)
+        queue.failed(.activityEvent)
+        XCTAssertFalse(queue.activityIsNotStarted(.activityEvent))
+        XCTAssertFalse(actionRun)
     }
 }
