@@ -149,13 +149,6 @@ class SyncNowSetting: WithAccountSetting {
         guard let self = self else { return }
         troubleshootButton.setTitle(.FirefoxSyncTroubleshootTitle, for: .normal)
         troubleshootButton.addTarget(self, action: #selector(self.troubleshoot), for: .touchUpInside)
-<<<<<<< HEAD
-        troubleshootButton.tintColor = theme.colors.actionPrimary
-        troubleshootButton.titleLabel?.font = LegacyDynamicFontHelper.defaultHelper.DefaultSmallFont
-        troubleshootButton.sizeToFit()
-        return troubleshootButton
-    }()
-=======
         troubleshootButton.setTitleColor(self.theme.colors.actionPrimary, for: .normal)
         troubleshootButton.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
                                                                                      size: 12,
@@ -168,7 +161,6 @@ class SyncNowSetting: WithAccountSetting {
         stackView.distribution = .fillProportionally
         stackView.spacing = 4
     }
->>>>>>> 91dc2e117 (Refactor FXIOS-7656 [v119] Fix constraint crash in SyncNow settings cell (#17083))
 
     private lazy var warningIcon: UIImageView = {
         return UIImageView(image: UIImage(named: ImageIdentifiers.amberCaution))
