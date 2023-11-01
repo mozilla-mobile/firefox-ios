@@ -90,8 +90,6 @@ class ThemedHeaderFooterViewBordersHelper: ThemeApplicable {
         view.addSubview(topBorder)
         view.addSubview(bottomBorder)
 
-        topBorder.translatesAutoresizingMaskIntoConstraints = false
-        bottomBorder.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             topBorder.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             topBorder.trailingAnchor.constraint(equalTo: view.trailingAnchor),
