@@ -841,6 +841,7 @@
 		96EB6C4027DBEE9800A9D159 /* SearchGroupedItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EB6C3F27DBEE9800A9D159 /* SearchGroupedItemsViewController.swift */; };
 		96EB6C4327DC205D00A9D159 /* SearchGroupedItemsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EB6C4227DC205D00A9D159 /* SearchGroupedItemsViewModel.swift */; };
 		96F8DA49280452CA00E53239 /* GleanPlumbContextProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F8DA48280452CA00E53239 /* GleanPlumbContextProvider.swift */; };
+		A5743A6B2AF278BC00865E84 /* SyncAuthStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5743A6A2AF278BC00865E84 /* SyncAuthStateTests.swift */; };
 		A83E5B1A1C1DA8BF0026D912 /* image.gif in Resources */ = {isa = PBXBuildFile; fileRef = A83E5B181C1DA8BF0026D912 /* image.gif */; };
 		A83E5B1B1C1DA8BF0026D912 /* image.png in Resources */ = {isa = PBXBuildFile; fileRef = A83E5B191C1DA8BF0026D912 /* image.png */; };
 		A83E5B1D1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E5B1C1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift */; };
@@ -5498,6 +5499,7 @@
 		A5624F1DA2ABA87677302EDA /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/Shared.strings; sourceTree = "<group>"; };
 		A56E4D2BB5542C88A788D957 /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		A5724A80AF359D2F273F343E /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		A5743A6A2AF278BC00865E84 /* SyncAuthStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncAuthStateTests.swift; sourceTree = "<group>"; };
 		A5B742BFB5D86708C670E5F0 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Menu.strings; sourceTree = "<group>"; };
 		A6344A31A1772F2093DD5BD4 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A6744466BAAD5FCBA6D62D4A /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -7686,6 +7688,7 @@
 				2FA4363A1ABB8448008031D1 /* HawkHelperTests.swift */,
 				39B0646D1E7ADA4B000BE173 /* Push */,
 				2FA4363C1ABB8448008031D1 /* TokenServerClientTests.swift */,
+				A5743A6A2AF278BC00865E84 /* SyncAuthStateTests.swift */,
 				2FA4360C1ABB83B4008031D1 /* Supporting Files */,
 			);
 			path = AccountTests;
@@ -12228,6 +12231,7 @@
 			files = (
 				2FA436421ABB8448008031D1 /* TokenServerClientTests.swift in Sources */,
 				2FA436401ABB8448008031D1 /* HawkHelperTests.swift in Sources */,
+				A5743A6B2AF278BC00865E84 /* SyncAuthStateTests.swift in Sources */,
 				4590912E2A2E4F7700061F0C /* AutopushTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
