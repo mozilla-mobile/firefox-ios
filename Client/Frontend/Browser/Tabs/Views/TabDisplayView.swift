@@ -19,10 +19,16 @@ class TabDisplayView: UIView,
         case tabs
     }
 
-    private var state: TabTrayState
+    private(set) var state: TabTrayState
     private var inactiveTabsSectionManager: InactiveTabsSectionManager
     private var tabsSectionManager: TabsSectionManager
     var theme: Theme?
+
+    private var shouldHideInactiveTabs: Bool {
+        guard !state.isPrivateMode else { return true }
+
+        return state.inactiveTabs.isEmpty
+    }
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: bounds,
@@ -76,7 +82,10 @@ class TabDisplayView: UIView,
         let layout = UICollectionViewCompositionalLayout { [weak self]
             (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
             guard let self else { return nil }
-            guard !state.isPrivateMode else {
+
+            // If on private mode or regular mode but without inactive
+            // tabs we return only the tabs layout
+            guard !shouldHideInactiveTabs else {
                 return self.tabsSectionManager.layoutSection(layoutEnvironment)
             }
 
@@ -93,26 +102,27 @@ class TabDisplayView: UIView,
         return layout
     }
 
+    func applyTheme(theme: Theme) {
+        self.theme = theme
+        collectionView.backgroundColor = theme.colors.layer3
+    }
+
+    // MARK: - Private helpers
     private func getSectionLayout(_ sectionIndex: Int) -> TabDisplaySection {
         guard let section = TabDisplaySection(rawValue: sectionIndex) else { return .tabs }
 
         return section
     }
 
-    func applyTheme(theme: Theme) {
-        self.theme = theme
-        collectionView.backgroundColor = theme.colors.layer3
-    }
-
-    func getTabDisplay(for section: Int) -> TabDisplaySection {
-        guard !state.isPrivateMode else { return .tabs }
+    private func getTabDisplay(for section: Int) -> TabDisplaySection {
+        guard !shouldHideInactiveTabs else { return .tabs }
 
         return TabDisplaySection(rawValue: section) ?? .tabs
     }
 
     // MARK: UICollectionViewDataSource
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        guard !state.isPrivateMode else { return 1 }
+        guard !shouldHideInactiveTabs else { return 1 }
 
         return TabDisplaySection.allCases.count
     }
@@ -120,10 +130,6 @@ class TabDisplayView: UIView,
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch getTabDisplay(for: section) {
         case .inactiveTabs:
-            // Hide inactive tray if there are no inactive tabs or if is PrivateTabs
-            guard !state.isInactiveTabEmpty,
-                  !state.isPrivateMode else { return 0 }
-
             return state.isInactiveTabsExpanded ? state.inactiveTabs.count : 0
         case .tabs:
             guard !state.tabs.isEmpty else { return 0 }
@@ -214,7 +220,7 @@ class TabDisplayView: UIView,
         collectionView.collectionViewLayout.invalidateLayout()
     }
 
-    func toggleInactiveTabSection(hasExpanded: Bool) {
+    private func toggleInactiveTabSection(hasExpanded: Bool) {
         state.isInactiveTabsExpanded = hasExpanded
         collectionView.reloadData()
     }

@@ -158,6 +158,7 @@
 		21E77E522AA8BE5C00FABA10 /* TabTrayFlagManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E77E512AA8BE5C00FABA10 /* TabTrayFlagManager.swift */; };
 		21E78A7028F9A8C500F8D687 /* MockUIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E78A6F28F9A8C500F8D687 /* MockUIDevice.swift */; };
 		21E78A7228F9A93100F8D687 /* UIDeviceInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E78A7128F9A93100F8D687 /* UIDeviceInterface.swift */; };
+		21ED80B32AF2E43A0065D4C7 /* TabDisplayViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21ED80B22AF2E43A0065D4C7 /* TabDisplayViewTests.swift */; };
 		21FA8FAE2AE856460013B815 /* TabsCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FA8FAD2AE856460013B815 /* TabsCoordinatorTests.swift */; };
 		21FA8FB02AE856590013B815 /* SyncedTabsCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FA8FAF2AE856590013B815 /* SyncedTabsCoordinatorTests.swift */; };
 		21FA8FB22AE856EB0013B815 /* MockTabTrayCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FA8FB12AE856EB0013B815 /* MockTabTrayCoordinatorDelegate.swift */; };
@@ -2224,6 +2225,7 @@
 		21E77E512AA8BE5C00FABA10 /* TabTrayFlagManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayFlagManager.swift; sourceTree = "<group>"; };
 		21E78A6F28F9A8C500F8D687 /* MockUIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUIDevice.swift; sourceTree = "<group>"; };
 		21E78A7128F9A93100F8D687 /* UIDeviceInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDeviceInterface.swift; sourceTree = "<group>"; };
+		21ED80B22AF2E43A0065D4C7 /* TabDisplayViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabDisplayViewTests.swift; sourceTree = "<group>"; };
 		21FA8FAD2AE856460013B815 /* TabsCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsCoordinatorTests.swift; sourceTree = "<group>"; };
 		21FA8FAF2AE856590013B815 /* SyncedTabsCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncedTabsCoordinatorTests.swift; sourceTree = "<group>"; };
 		21FA8FB12AE856EB0013B815 /* MockTabTrayCoordinatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTabTrayCoordinatorDelegate.swift; sourceTree = "<group>"; };
@@ -7498,6 +7500,7 @@
 			children = (
 				8AFE4C2027480D0B00B97C65 /* LegacyTabTrayViewControllerTests.swift */,
 				21D8EA922ABE04F7003FF16E /* TabTrayViewControllerTests.swift */,
+				21ED80B22AF2E43A0065D4C7 /* TabDisplayViewTests.swift */,
 				B640467D29B9B58200C5C7B6 /* TabLocationViewTests.swift */,
 			);
 			path = TabTray;
@@ -13287,6 +13290,7 @@
 				1DDE3DB52AC360EC0039363B /* TabCellTests.swift in Sources */,
 				8AFCE50729DE0CD500B1B253 /* LaunchCoordinatorTests.swift in Sources */,
 				961D6B832995AF84001B9CF1 /* GeneralizedImageFetcherTests.swift in Sources */,
+				21ED80B32AF2E43A0065D4C7 /* TabDisplayViewTests.swift in Sources */,
 				E1AEC177286E0CF500062E29 /* HistoryHighlightsViewModelTests.swift in Sources */,
 				2165B2C42860CB34004C0786 /* MockAdjustTelemetryData.swift in Sources */,
 				C29B64872AD69D0200F3244B /* QRCodeCoordinatorTests.swift in Sources */,

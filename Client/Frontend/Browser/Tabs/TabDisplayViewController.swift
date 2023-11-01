@@ -29,9 +29,7 @@ class TabDisplayViewController: UIViewController,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
         // TODO: FXIOS-6936 Integrate Redux state
-        self.state = TabTrayState(isPrivateMode: isPrivateMode,
-                                  isPrivateTabsEmpty: false,
-                                  isInactiveTabEmpty: false)
+        self.state = TabTrayState.getMockState(isPrivateMode: isPrivateMode)
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)

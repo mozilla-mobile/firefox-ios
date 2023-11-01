@@ -5,21 +5,26 @@
 import Foundation
 
 struct TabTrayState {
-    var tabs = ["Tab1",
-                "Tab2",
-                "Tab3",
-                "Tab4",
-                "Tab5"]
+    var tabs: [String]
     var isPrivateMode: Bool
-    var isPrivateTabsEmpty: Bool
 
     // MARK: Inactive tabs
-    var isInactiveTabEmpty: Bool
+    var inactiveTabs: [String]
     var isInactiveTabsExpanded = true
-    var inactiveTabs = ["One",
-                        "Two",
-                        "Three",
-                        "Four",
-                        "Five",
-                        "Six"]
+
+    var isPrivateTabsEmpty: Bool {
+        return isPrivateMode && tabs.isEmpty
+    }
+
+    // For test and mock purposes will be deleted once Redux is integrated
+    static func getMockState(isPrivateMode: Bool) -> TabTrayState {
+        let tabs = ["Tab1",
+                    "Tab2",
+                    "Tab3",
+                    "Tab4",
+                    "Tab5"]
+        return TabTrayState(tabs: tabs,
+                            isPrivateMode: isPrivateMode,
+                            inactiveTabs: tabs)
+    }
 }
