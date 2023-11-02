@@ -186,11 +186,11 @@ class FindInPageBar: UIView, ThemeApplicable {
     func applyTheme(theme: Theme) {
         let colors = theme.colors
         topBorder.backgroundColor = colors.borderPrimary
-        searchText.textColor = colors.textPrimary
+        searchText.textColor = theme.type == .light ? colors.textPrimary : colors.textInverted
         matchCountView.textColor = colors.actionSecondary
-        previousButton.setTitleColor(colors.textPrimary, for: .normal)
-        nextButton.setTitleColor(colors.textPrimary, for: .normal)
-        closeButton.setTitleColor(colors.textPrimary, for: .normal)
+        previousButton.setTitleColor(colors.iconPrimary, for: .normal)
+        nextButton.setTitleColor(colors.iconPrimary, for: .normal)
+        closeButton.setTitleColor(colors.iconPrimary, for: .normal)
     }
 }
 
