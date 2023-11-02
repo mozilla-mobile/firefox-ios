@@ -30,7 +30,7 @@ class DesktopModeTestsIpad: IpadOnlyTestCase {
         // https://github.com/mozilla-mobile/firefox-ios/issues/16810
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.performAction(Action.CloseURLBarOpen)
-        
+
         navigator.performAction(Action.AcceptRemovingAllTabs)
         waitUntilPageLoad()
 
