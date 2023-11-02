@@ -420,12 +420,7 @@ class BrowserViewController: UIViewController,
             urlBar.locationView.tabDidChangeContentBlocking(tab)
         }
 
-        if tabManager.startAtHomeCheck() {
-            guard let presentedViewController else { return }
-            if presentedViewController.modalPresentationStyle == .popover {
-                dismissVC()
-            }
-        }
+        _ = tabManager.startAtHomeCheck()
         updateWallpaperMetadata()
 
         // When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
