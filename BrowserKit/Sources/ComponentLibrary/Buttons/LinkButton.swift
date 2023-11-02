@@ -23,7 +23,6 @@ public class LinkButton: ResizableButton, ThemeApplicable {
         titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
                                                                   size: viewModel.fontSize)
         contentEdgeInsets = viewModel.contentEdgeInsets
-        titleLabel?.textAlignment = viewModel.textAlignment
         contentHorizontalAlignment = viewModel.contentHorizontalAlignment
     }
 

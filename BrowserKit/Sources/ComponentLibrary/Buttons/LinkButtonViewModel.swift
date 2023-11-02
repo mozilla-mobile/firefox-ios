@@ -11,19 +11,16 @@ public struct LinkButtonViewModel {
     public let a11yIdentifier: String
     public let fontSize: CGFloat
     public let contentEdgeInsets: UIEdgeInsets
-    public let textAlignment: NSTextAlignment
     public let contentHorizontalAlignment: UIControl.ContentHorizontalAlignment
 
     public init(title: String,
                 a11yIdentifier: String,
                 fontSize: CGFloat = 16,
                 contentEdgeInsets: UIEdgeInsets = .zero,
-                textAlignment: NSTextAlignment = .left,
                 contentHorizontalAlignment: UIControl.ContentHorizontalAlignment = .leading) {
         self.title = title
         self.a11yIdentifier = a11yIdentifier
         self.fontSize = fontSize
-        self.textAlignment = textAlignment
         self.contentEdgeInsets = contentEdgeInsets
         self.contentHorizontalAlignment = contentHorizontalAlignment
     }

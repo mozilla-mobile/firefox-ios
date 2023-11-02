@@ -344,7 +344,6 @@ class OnboardingCardViewController: UIViewController, Themeable {
                                             left: UX.buttonHorizontalInset,
                                             bottom: UX.buttonVerticalInset,
                                             right: UX.buttonHorizontalInset),
-            textAlignment: .center,
             contentHorizontalAlignment: .center
         )
         linkButton.configure(viewModel: buttonViewModel)
