@@ -3897,9 +3897,9 @@ extension String {
             value: "Learn more",
             comment: "Label for the Learn more button in the Shopping Experience Opt In onboarding Card (Fakespot)")
         public static let OptInCardDisclaimerText = MZLocalizedString(
-            key: "Shopping.OptInCard.Disclaimer.Title.v120",
+            key: "Shopping.OptInCard.Disclaimer.Text.v120",
             tableName: "Shopping",
-            value: "By selecting “Yes, Try It” you agree to the %@:",
+            value: "By selecting “Yes, Try It” you agree to the following from %@:",
             comment: "Text for the disclaimer that appears beneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replaced by the Fakespot app name.")
         public static let OptInCardPrivacyPolicy = MZLocalizedString(
             key: "Shopping.OptInCard.PrivacyPolicy.Button.Title.v120",
