@@ -29,6 +29,7 @@ class DesktopModeTestsIpad: IpadOnlyTestCase {
         // Workaround: Open a new tab before closing all tabs.
         // https://github.com/mozilla-mobile/firefox-ios/issues/16810
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.performAction(Action.CloseURLBarOpen)
         navigator.performAction(Action.AcceptRemovingAllTabs)
         waitUntilPageLoad()
 
@@ -204,6 +205,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         // Workaround: Open a new tab before closing all tabs.
         // https://github.com/mozilla-mobile/firefox-ios/issues/16810
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.performAction(Action.CloseURLBarOpen)
         navigator.performAction(Action.AcceptRemovingAllTabs)
         waitUntilPageLoad()
         navigator.nowAt(NewTabScreen)
