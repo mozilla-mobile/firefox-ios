@@ -434,6 +434,7 @@
 		5A47CFF52860FB8900B2B7BF /* AppLaunchUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A47CFF42860FB8900B2B7BF /* AppLaunchUtil.swift */; };
 		5A5AB980296CA03500485E06 /* SiteImageView in Frameworks */ = {isa = PBXBuildFile; productRef = 5A5AB97F296CA03500485E06 /* SiteImageView */; };
 		5A64225129CB506500EEC3E5 /* LegacyTabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A64225029CB506500EEC3E5 /* LegacyTabManager.swift */; };
+		5A68F0AB2AF2E5E00089AC62 /* TabDataStore in Frameworks */ = {isa = PBXBuildFile; productRef = 5A68F0AA2AF2E5E00089AC62 /* TabDataStore */; };
 		5A70EF0E295DFCCF00790249 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 5A70EF0D295DFCCF00790249 /* Common */; };
 		5A70EF10295DFD4900790249 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 5A70EF0F295DFD4900790249 /* Common */; };
 		5A70EF12295DFD6400790249 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 5A70EF11295DFD6400790249 /* Common */; };
@@ -7072,6 +7073,7 @@
 				5A87148A292EA1520039A5BD /* Fuzi in Frameworks */,
 				433F87D02788ECDD00693368 /* GCDWebServers in Frameworks */,
 				5A70EF10295DFD4900790249 /* Common in Frameworks */,
+				5A68F0AB2AF2E5E00089AC62 /* TabDataStore in Frameworks */,
 				C8CC4F8725253E79003FDE1F /* WidgetKit.framework in Frameworks */,
 				43118CDD251A9CA700F24376 /* Shared.framework in Frameworks */,
 				5A5AB980296CA03500485E06 /* SiteImageView in Frameworks */,
@@ -10932,6 +10934,7 @@
 				5A871489292EA1520039A5BD /* Fuzi */,
 				5A70EF0F295DFD4900790249 /* Common */,
 				5A5AB97F296CA03500485E06 /* SiteImageView */,
+				5A68F0AA2AF2E5E00089AC62 /* TabDataStore */,
 			);
 			productName = WidgetKitExtension;
 			productReference = 047F9B2724E1FE1C00CD7DF7 /* WidgetKitExtension.appex */;
@@ -19744,6 +19747,10 @@
 		5A5AB97F296CA03500485E06 /* SiteImageView */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SiteImageView;
+		};
+		5A68F0AA2AF2E5E00089AC62 /* TabDataStore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TabDataStore;
 		};
 		5A70EF0D295DFCCF00790249 /* Common */ = {
 			isa = XCSwiftPackageProductDependency;

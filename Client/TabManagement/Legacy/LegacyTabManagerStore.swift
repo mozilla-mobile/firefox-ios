@@ -114,7 +114,6 @@ class LegacyTabManagerStoreImplementation: LegacyTabManagerStore, FeatureFlaggab
                    level: .warning,
                    category: .tabs,
                    description: description)
-        SimpleTab.saveSimpleTab(tabs: nil)
         return [LegacySavedTab]()
     }
 
