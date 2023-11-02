@@ -193,6 +193,10 @@ function showContent() {
   if (contentElement) {
     contentElement.style.display = "block";
   }
+  var links = document.querySelectorAll('#reader-content a');
+  for (var i = 0; i < links.length; i++) {
+      links[i].removeAttribute('referrerpolicy');
+  }
 }
 
 function configureReader() {
