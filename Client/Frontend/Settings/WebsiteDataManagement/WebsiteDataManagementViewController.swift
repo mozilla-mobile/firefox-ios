@@ -70,6 +70,8 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         view.addSubview(loadingView)
         loadingView.applyTheme(theme: themeManager.currentTheme)
 
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        loadingView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
