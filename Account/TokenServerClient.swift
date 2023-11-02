@@ -174,7 +174,13 @@ open class TokenServerClient {
                 return
             }
 
-            let jsonDict = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+            let jsonDict: [String: Any]?
+            do {
+                jsonDict = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+            } catch {
+                deferred.fill(Maybe(failure: TokenServerError.local(error as NSError)))
+                return
+            }
             let remoteTimestampHeader = (response.allHeaderFields as NSDictionary)["x-timestamp"] as? String
             if let remoteError = TokenServerClient.remoteError(fromJSON: jsonDict, statusCode: response.statusCode, remoteTimestampHeader: remoteTimestampHeader) {
                 deferred.fill(Maybe(failure: remoteError))
