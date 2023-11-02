@@ -11,7 +11,7 @@ class ToolbarMenuTests: BaseTestCase {
         super.tearDown()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/50855
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306840
     func testToolbarMenu() {
         navigator.nowAt(NewTabScreen)
         let hamburgerMenu = app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
