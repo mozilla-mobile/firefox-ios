@@ -847,10 +847,6 @@ class BrowserViewController: UIViewController,
     }
 
     fileprivate func showRestoreTabsAlert() {
-        guard tabManager.hasTabsToRestoreAtStartup() else {
-            tabManager.selectTab(tabManager.addTab())
-            return
-        }
         let alert = UIAlertController.restoreTabsAlert(
             okayCallback: { _ in
                 let extra = [TelemetryWrapper.EventExtraKey.isRestoreTabsStarted.rawValue: true]

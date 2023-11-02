@@ -43,7 +43,6 @@ protocol TabManager: AnyObject {
     func preserveTabs()
     func restoreTabs(_ forced: Bool)
     func startAtHomeCheck() -> Bool
-    func hasTabsToRestoreAtStartup() -> Bool
     func getTabForUUID(uuid: String) -> Tab?
     func getTabForURL(_ url: URL) -> Tab?
     func expireSnackbars()
