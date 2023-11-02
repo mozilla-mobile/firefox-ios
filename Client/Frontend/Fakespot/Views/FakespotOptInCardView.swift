@@ -13,16 +13,22 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
         static let headerLabelFontSize: CGFloat = 28
         static let bodyLabelFontSize: CGFloat = 15
         static let learnMoreButtonFontSize: CGFloat = 15
-        static let termsOfUseButtonInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         static let disclaimerTextLabelFontSize: CGFloat = 13
-        static let disclaimerBlockInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        static let learnMoreInsets = UIEdgeInsets(top: -10, left: 0, bottom: 10, right: 0)
         static let termsOfUseButtonTitleFontSize: CGFloat = 13
         static let privacyPolicyButtonTitleFontSize: CGFloat = 13
         static let secondaryButtonFontSize: CGFloat = 13
-        static let contentStackViewSpacing: CGFloat = 12
-        static let contentStackViewPadding: CGFloat = 16
-        static let disclaimerStackViewSpacing: CGFloat = 3
+
+        static let privacyButtonInsets = UIEdgeInsets(top: 16, left: 16, bottom: 8, right: 16)
+        static let termsOfUseButtonInsets = UIEdgeInsets(top: 8, left: 16, bottom: 16, right: 16)
+        static let learnMoreInsets = UIEdgeInsets(top: 16, left: 0, bottom: 8, right: 0)
+        static let secondaryButtonInsets = UIEdgeInsets(top: 16, left: 16, bottom: 8, right: 16)
+        static let contentStackViewSpacing: CGFloat = 16
+        static let contentStackHorizontalPadding: CGFloat = 16
+        static let contentStackTopPadding: CGFloat = 16
+        static let contentStackBottomPadding: CGFloat = 8
+        static let disclaimerStackViewSpacing: CGFloat = 0
+        static let buttonAdjustedVerticalSpacing: CGFloat = 0
+        static let disclaimerAdjustedSpacing: CGFloat = 8
         static let optInImageViewIpadTopSpace: CGFloat = 30
         static let optInImageViewIpadBottomSpace: CGFloat = 40
     }
@@ -84,7 +90,7 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
     private lazy var termsOfUseButton: ResizableButton = .build { button in
         button.contentHorizontalAlignment = .leading
         button.buttonEdgeSpacing = 0
-        button.contentEdgeInsets = UX.disclaimerBlockInsets
+        button.contentEdgeInsets = UX.termsOfUseButtonInsets
         button.addTarget(self, action: #selector(self.didTapTermsOfUse), for: .touchUpInside)
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
                                                                          size: UX.termsOfUseButtonTitleFontSize)
@@ -93,7 +99,7 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
     private lazy var privacyPolicyButton: ResizableButton = .build { button in
         button.contentHorizontalAlignment = .leading
         button.buttonEdgeSpacing = 0
-        button.contentEdgeInsets = UX.disclaimerBlockInsets
+        button.contentEdgeInsets = UX.privacyButtonInsets
         button.addTarget(self, action: #selector(self.didTapPrivacyPolicy), for: .touchUpInside)
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
                                                                          size: UX.privacyPolicyButtonTitleFontSize)
@@ -106,6 +112,7 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
     private lazy var secondaryButton: ResizableButton = .build { button in
         button.contentHorizontalAlignment = .center
         button.buttonEdgeSpacing = 0
+        button.contentEdgeInsets = UX.secondaryButtonInsets
         button.addTarget(self, action: #selector(self.didTapSecondaryButton), for: .touchUpInside)
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
                                                                          size: UX.secondaryButtonFontSize)
@@ -136,8 +143,8 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
         disclaimerStackView.addArrangedSubview(disclaimerTextLabel)
         disclaimerStackView.addArrangedSubview(privacyPolicyButton)
         disclaimerStackView.addArrangedSubview(termsOfUseButton)
-        contentStackView.addArrangedSubview(disclaimerStackView)
 
+        contentStackView.addArrangedSubview(disclaimerStackView)
         contentStackView.addArrangedSubview(mainButton)
         contentStackView.addArrangedSubview(secondaryButton)
 
@@ -148,14 +155,18 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
             cardContainer.bottomAnchor.constraint(equalTo: bottomAnchor),
 
             contentStackView.topAnchor.constraint(equalTo: mainView.topAnchor,
-                                                  constant: UX.contentStackViewPadding),
+                                                  constant: UX.contentStackTopPadding),
             contentStackView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor,
-                                                     constant: -UX.contentStackViewPadding),
+                                                     constant: -UX.contentStackBottomPadding),
             contentStackView.leadingAnchor.constraint(equalTo: mainView.leadingAnchor,
-                                                      constant: UX.contentStackViewPadding),
+                                                      constant: UX.contentStackHorizontalPadding),
             contentStackView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor,
-                                                       constant: -UX.contentStackViewPadding),
+                                                       constant: -UX.contentStackHorizontalPadding),
         ])
+
+        contentStackView.setCustomSpacing(UX.buttonAdjustedVerticalSpacing, after: bodyLabel)
+        contentStackView.setCustomSpacing(UX.disclaimerAdjustedSpacing, after: disclaimerStackView)
+        contentStackView.setCustomSpacing(UX.buttonAdjustedVerticalSpacing, after: mainButton)
     }
 
     private func addVerticalSpaceToImageView() {
