@@ -12,15 +12,26 @@ open class BaseCoordinator: NSObject, Coordinator {
     var router: Router
     var logger: Logger
     var isDismissable: Bool { true }
+    var newlyAdded = false
+    private var mainQueue: DispatchQueueInterface
 
     init(router: Router,
-         logger: Logger = DefaultLogger.shared) {
+         logger: Logger = DefaultLogger.shared,
+         mainQueue: DispatchQueueInterface = DispatchQueue.main) {
         self.router = router
         self.logger = logger
+        self.mainQueue = mainQueue
     }
 
     func add(child coordinator: Coordinator) {
         childCoordinators.append(coordinator)
+
+        // Check first whether, during the recursive findAndHandle(route:), we have just added
+        // new children to this coordinator. If so, we want to skip dismissal (we shouldn't ever
+        // immediately dismiss coordinators that were just added and about to appear).
+        // Will be removed as part of larger refactors in [FXIOS-7641].
+        coordinator.newlyAdded = true
+        mainQueue.async { [weak coordinator] in coordinator?.newlyAdded = false }
     }
 
     func remove(child coordinator: Coordinator?) {
@@ -54,6 +65,13 @@ open class BaseCoordinator: NSObject, Coordinator {
                 // Dismiss any child of the matching coordinator that handles a route
                 for child in matchingCoordinator.childCoordinators {
                     guard child.isDismissable else { continue }
+
+                    // Check first whether, during the recursive findAndHandle(route:), we have just added
+                    // this child to the coordinator. If so, we want to skip dismissal (we shouldn't ever
+                    // immediately dismiss coordinators that were just added and about to appear).
+                    // Will be removed as part of larger refactors in [FXIOS-7641].
+                    guard !child.newlyAdded else { continue }
+
                     matchingCoordinator.router.dismiss()
                     matchingCoordinator.remove(child: child)
                 }

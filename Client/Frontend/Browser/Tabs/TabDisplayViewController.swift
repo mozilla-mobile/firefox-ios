@@ -11,6 +11,7 @@ class TabDisplayViewController: UIViewController,
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
+    weak var navigationHandler: TabsNavigationHandler?
 
     // MARK: UI elements
     private var tabDisplayView: TabDisplayView = .build { _ in }
@@ -45,6 +46,7 @@ class TabDisplayViewController: UIViewController,
     }
 
     func setupView() {
+        navigationController?.setNavigationBarHidden(true, animated: false)
         view.addSubview(tabDisplayView)
         view.addSubview(backgroundPrivacyOverlay)
 

@@ -12,6 +12,7 @@ class NightModeTests: BaseTestCase {
         mozWaitForElementToExist(app.tables.otherElements[ImageIdentifiers.nightMode])
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307056
     func testNightModeUI() {
         let url1 = "test-example.html"
         // Go to a webpage, and select night mode on and off, check it's applied or not

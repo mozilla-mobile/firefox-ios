@@ -389,7 +389,7 @@
 "fxa.signin.camera-signin" = "შედით კამერის მეშვეობით";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "ჩართეთ კომპიუტერში Firefox და გახსენით გვერდი firefox.com/pair";
+"fxa.signin.qr-link-instruction" = "გაუშვით კომპიუტერში Firefox და გახსენით გვერდი firefox.com/pair";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "მზადაა წასაკითხად";

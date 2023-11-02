@@ -137,8 +137,4 @@ class MockTabManager: TabManager {
                                  didClearTabs: @escaping (_ tabsToRemove: [Tab],
                                                           _ isPrivate: Bool,
                                                           _ previousTabUUID: String) -> Void) {}
-
-    func testRemoveAll() {}
-
-    func testClearArchive() {}
 }

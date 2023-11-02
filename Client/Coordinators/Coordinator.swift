@@ -10,6 +10,7 @@ protocol Coordinator: AnyObject {
     var childCoordinators: [Coordinator] { get }
     var router: Router { get }
     var logger: Logger { get }
+    var newlyAdded: Bool { get set }
 
     /// Determines whether this coordinator can be dismissed or not, in some cases the coordinator cannot be dismissed for example due to state saving.
     /// This isn't ideal for this pattern, but was deemed necessary to keep existing behavior while moving away from previous pattern. By default, all coordinators

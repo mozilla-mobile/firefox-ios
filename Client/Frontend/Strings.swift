@@ -3897,10 +3897,10 @@ extension String {
             value: "Learn more",
             comment: "Label for the Learn more button in the Shopping Experience Opt In onboarding Card (Fakespot)")
         public static let OptInCardDisclaimerText = MZLocalizedString(
-            key: "Shopping.OptInCard.DisclaimerText.Title.v120",
+            key: "Shopping.OptInCard.Disclaimer.Title.v120",
             tableName: "Shopping",
-            value: "By selecting “Yes, Try It” you agree to the %1$@ by %2$@:",
-            comment: "Text for the disclaimer that appears beneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla.")
+            value: "By selecting “Yes, Try It” you agree to the %@:",
+            comment: "Text for the disclaimer that appears beneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replaced by the Fakespot app name.")
         public static let OptInCardPrivacyPolicy = MZLocalizedString(
             key: "Shopping.OptInCard.PrivacyPolicy.Button.Title.v120",
             tableName: "Shopping",

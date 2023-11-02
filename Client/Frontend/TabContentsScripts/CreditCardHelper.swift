@@ -153,7 +153,7 @@ class CreditCardHelper: TabContentScript {
                 return
             }
 
-            let fillCreditCardInfoCallback = "__firefox__.CreditCardHelper.fillFormFields(\(jsonDataVal))"
+            let fillCreditCardInfoCallback = "__firefox__.FormAutofillHelper.fillFormFields(\(jsonDataVal))"
             webView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback, frame) { _, error in
                 guard let error = error else {
                     TelemetryWrapper.recordEvent(category: .action,
@@ -194,7 +194,7 @@ class CreditCardHelper: TabContentScript {
 
     static func focusNextInputField(tabWebView: WKWebView,
                                     logger: Logger) {
-        let fxWindowValExtras = "window.__firefox__.CreditCardExtras"
+        let fxWindowValExtras = "window.__firefox__.FormAutofillExtras"
         let fillCreditCardInfoCallback = "\(fxWindowValExtras).focusNextInputField()"
 
         tabWebView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback) { _, error in
@@ -207,7 +207,7 @@ class CreditCardHelper: TabContentScript {
 
     static func focusPreviousInputField(tabWebView: WKWebView,
                                         logger: Logger) {
-        let fxWindowValExtras = "window.__firefox__.CreditCardExtras"
+        let fxWindowValExtras = "window.__firefox__.FormAutofillExtras"
         let fillCreditCardInfoCallback = "\(fxWindowValExtras).focusPreviousInputField()"
 
         tabWebView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback) { _, error in

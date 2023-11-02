@@ -677,7 +677,7 @@
 "LoginsHelper.PromptSaveLogin.Title" = "לשמור את פרטי הכניסה %1$@ עבור %2$@?";
 
 /* Prompt for saving a password with no username. The parameter is the hostname of the site. */
-"LoginsHelper.PromptSavePassword.Title" = "האם לשמור ססמה עבור %@?";
+"LoginsHelper.PromptSavePassword.Title" = "לשמור ססמה עבור %@?";
 
 /* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
 "LoginsHelper.PromptUpdateLogin.Title.OneArg" = "האם לעדכן את הכניסה עבור %@?";

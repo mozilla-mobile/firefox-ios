@@ -5,7 +5,6 @@
 import { XPCOMUtils } from "resource://gre/modules/XPCOMUtils.sys.mjs";
 import { Region } from "resource://gre/modules/Region.sys.mjs";
 
-const ADDRESSES_FIRST_TIME_USE_PREF = "extensions.formautofill.firstTimeUse";
 const AUTOFILL_ADDRESSES_AVAILABLE_PREF =
   "extensions.formautofill.addresses.supported";
 // This pref should be refactored after the migration of the old bool pref
@@ -40,7 +39,6 @@ export const FormAutofill = {
   ENABLED_AUTOFILL_ADDRESSES_CAPTURE_V2_PREF,
   ENABLED_AUTOFILL_CREDITCARDS_PREF,
   ENABLED_AUTOFILL_CREDITCARDS_REAUTH_PREF,
-  ADDRESSES_FIRST_TIME_USE_PREF,
   AUTOFILL_CREDITCARDS_AUTOCOMPLETE_OFF_PREF,
   AUTOFILL_ADDRESSES_AUTOCOMPLETE_OFF_PREF,
 
@@ -223,11 +221,6 @@ XPCOMUtils.defineLazyPreferenceGetter(
   FormAutofill,
   "isAutofillCreditCardsHideUI",
   AUTOFILL_CREDITCARDS_HIDE_UI_PREF
-);
-XPCOMUtils.defineLazyPreferenceGetter(
-  FormAutofill,
-  "isAutofillAddressesFirstTimeUse",
-  ADDRESSES_FIRST_TIME_USE_PREF
 );
 XPCOMUtils.defineLazyPreferenceGetter(
   FormAutofill,

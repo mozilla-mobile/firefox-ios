@@ -48,7 +48,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
         showEnhancedTrackingProtectionCalled += 1
     }
 
-    func showTabTray() {
+    func showTabTray(selectedPanel: TabTrayPanelType) {
         showTabTrayCalled += 1
     }
 

@@ -17,7 +17,7 @@
 "About" = "Σχετικά";
 
 /* The title for the pinning a shortcut action */
-"ActivityStream.ContextMenu.AddToShortcuts" = "Προσθήκη στις συντομεύσεις";
+"ActivityStream.ContextMenu.AddToShortcuts" = "Προσθήκη συντόμευσης";
 
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite2" = "Καρφίτσωμα";

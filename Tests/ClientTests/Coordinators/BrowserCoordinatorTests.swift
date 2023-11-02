@@ -253,6 +253,31 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.presentedViewController is QRCodeNavigationController)
     }
 
+    func testShowTabTray() throws {
+        let subject = createSubject()
+        subject.showTabTray(selectedPanel: .tabs)
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertNotNil(subject.childCoordinators[0] as? TabTrayCoordinator)
+        let presentedVC = try XCTUnwrap(mockRouter.presentedViewController as? DismissableNavigationViewController)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(presentedVC.topViewController is TabTrayViewController)
+    }
+
+    func testDismissTabTray_removesChild() throws {
+        let subject = createSubject()
+        subject.showTabTray(selectedPanel: .tabs)
+        guard let tabTrayCoordinator = subject.childCoordinators[0] as? TabTrayCoordinator else {
+            XCTFail("Tab tray coordinator was expected to be resolved")
+            return
+        }
+
+        subject.didDismissTabTray(from: tabTrayCoordinator)
+
+        XCTAssertEqual(mockRouter.dismissCalled, 1)
+        XCTAssertTrue(subject.childCoordinators.isEmpty)
+    }
+
     // MARK: - ParentCoordinatorDelegate
 
     func testRemoveChildCoordinator_whenDidFinishCalled() {

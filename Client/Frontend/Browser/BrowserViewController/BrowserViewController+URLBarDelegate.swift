@@ -32,11 +32,11 @@ class DismissableNavigationViewController: UINavigationController, OnViewDismiss
 
 extension BrowserViewController: URLBarDelegate {
     func showTabTray(withFocusOnUnselectedTab tabToFocus: Tab? = nil,
-                     focusedSegment: LegacyTabTrayViewModel.Segment? = nil) {
+                     focusedSegment: TabTrayPanelType? = nil) {
         updateFindInPageVisibility(visible: false)
 
         guard !isTabTrayRefactorEnabled else {
-            navigationHandler?.showTabTray()
+            navigationHandler?.showTabTray(selectedPanel: focusedSegment ?? .tabs)
             return
         }
 
@@ -45,7 +45,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     private func showLegacyTabTrayViewController(withFocusOnUnselectedTab tabToFocus: Tab? = nil,
-                                                 focusedSegment: LegacyTabTrayViewModel.Segment? = nil) {
+                                                 focusedSegment: TabTrayPanelType? = nil) {
         self.tabTrayViewController = LegacyTabTrayViewController(
             tabTrayDelegate: self,
             profile: profile,

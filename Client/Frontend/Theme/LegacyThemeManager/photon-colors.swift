@@ -8,8 +8,6 @@ import UIKit
 
 extension UIColor {
     struct Photon {
-        static let LightGrey20 = UIColor(rgb: 0xf0f0f4)
-
         static let DarkGrey60 = UIColor(rgb: 0x2b2a33)
         static let DarkGrey90 = UIColor(rgb: 0x15141a)
 

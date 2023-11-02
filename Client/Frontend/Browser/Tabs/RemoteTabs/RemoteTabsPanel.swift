@@ -20,6 +20,7 @@ class RemoteTabsPanel: UIViewController,
     private(set) var state: RemoteTabsPanelState
     var tableViewController: RemoteTabsTableViewController
     weak var remotePanelDelegate: RemotePanelDelegate?
+    weak var navigationHandler: SyncedTabsNavigationHandler?
 
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
@@ -105,6 +106,7 @@ class RemoteTabsPanel: UIViewController,
     }
 
     private func setupLayout() {
+        navigationController?.setNavigationBarHidden(true, animated: false)
         tableViewController.view.translatesAutoresizingMaskIntoConstraints = false
         addChild(tableViewController)
         view.addSubview(tableViewController.view)

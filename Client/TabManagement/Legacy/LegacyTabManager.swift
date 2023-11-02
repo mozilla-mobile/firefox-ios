@@ -151,7 +151,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     // MARK: - Initializer
 
     init(profile: Profile,
-         imageStore: DiskImageStore?,
          logger: Logger = DefaultLogger.shared
     ) {
         self.profile = profile
@@ -159,7 +158,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         self.tabEventHandlers = TabEventHandlers.create(with: profile)
         self.logger = logger
 
-        self.store = LegacyTabManagerStoreImplementation(prefs: profile.prefs, imageStore: imageStore)
+        self.store = LegacyTabManagerStoreImplementation(prefs: profile.prefs)
         super.init()
 
         register(self, forTabEvents: .didSetScreenshot)
@@ -1016,30 +1015,5 @@ extension LegacyTabManager: WKNavigationDelegate {
                 tab.consecutiveCrashes = 0
             }
         }
-    }
-}
-
-// MARK: - Test cases helpers
-extension LegacyTabManager {
-    func testRemoveAll() {
-        assert(AppConstants.isRunningTest)
-        if !AppConstants.isRunningTest {
-            logger.log("This method was used outside of tests!",
-                       level: .warning,
-                       category: .tabs)
-        }
-
-        removeTabs(self.tabs)
-    }
-
-    func testClearArchive() {
-        assert(AppConstants.isRunningTest)
-        if !AppConstants.isRunningTest {
-            logger.log("This method was used outside of tests!",
-                       level: .warning,
-                       category: .tabs)
-        }
-
-        store.clearArchive()
     }
 }
