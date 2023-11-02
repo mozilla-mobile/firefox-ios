@@ -49,9 +49,13 @@ extension BackForwardListAnimator {
             backForward.view.frame = bvc.view.frame
             backForward.view.alpha = 0
             containerView.addSubview(backForward.view)
-            backForward.view.snp.updateConstraints { make in
-                make.edges.equalTo(containerView)
-            }
+            backForward.view.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                backForward.view.topAnchor.constraint(equalTo: containerView.topAnchor),
+                backForward.view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+                backForward.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+                backForward.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            ])
             backForward.view.layoutIfNeeded()
 
             UIView.animate(
