@@ -27,7 +27,7 @@ class TPS(object):
             'testing.tps.testPhase': phase,
             'testing.tps.ignoreUnusedEngines': ignore_unused_engines,
         })
-        args = ['-marionette']
+        args = ['-marionette','-headless']
         process_args = {'processOutputLine': [self._log]}
         self.logger.info('Running: {} {}'.format(self.firefox, ' '.join(args)))
         self.logger.info('Using profile at: {}'.format(self.profile.profile))

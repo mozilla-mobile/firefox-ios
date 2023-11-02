@@ -119,8 +119,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         await generateTabs(from: windowData)
         cleanUpUnusedScreenshots()
 
-        for delegate in delegates {
-            ensureMainThread {
+        await MainActor.run {
+            for delegate in delegates {
                 delegate.get()?.tabManagerDidRestoreTabs(self)
             }
         }
@@ -222,6 +222,10 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                                         activeTabId: activeTabID,
                                         tabData: self.generateTabDataForSaving())
             await tabDataStore.saveWindowData(window: windowData, forced: forced)
+
+            // Save simple tabs, used by widget extension
+            let simpleTabs = SimpleTab.convertToSimpleTabs(windowData.tabData)
+            SimpleTab.saveSimpleTab(tabs: simpleTabs)
 
             logger.log("Preserve tabs ended", level: .debug, category: .tabs)
         }
