@@ -134,10 +134,13 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
 
             defaultFooter.addSubview(button)
 
-            button.snp.makeConstraints { (make) in
-                make.top.equalTo(defaultFooter.titleLabel.snp.bottom)
-                make.leading.equalTo(defaultFooter.titleLabel)
-            }
+            button.translatesAutoresizingMaskIntoConstraints = false
+
+            NSLayoutConstraint.activate([
+                button.topAnchor.constraint(equalTo: defaultFooter.titleLabel.bottomAnchor),
+                button.leadingAnchor.constraint(equalTo: defaultFooter.titleLabel.leadingAnchor)
+            ])
+
             return defaultFooter
         }
 

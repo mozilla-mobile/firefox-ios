@@ -12,7 +12,44 @@ import XCTest
 // requests; we would need a third, and a guarantee of the server state, to test this completely.
 // The rule is: if you turn up with a never-before-seen client state; you win.  If you turn up with
 // a seen-before client state, you lose.
-class TokenServerClientTests {
+class TokenServerClientTests: XCTestCase {
+    func testTokenFromJSON() {
+        let id = "id"
+        let key = "key"
+        let apiEndpoint = "api_endpoint"
+        let uid = Int64(1)
+        let hashedFxAUID = "hashed_fxa_uid"
+        let durationInSeconds = Int64(Date.getCurrentPeriod())
+        let remoteTimestamp = Int64(Date.getCurrentPeriod())
+        let jsonDict: [String: Any] = createMockTokenServerTokenDictionary(id: id, key: key, apiEndpoint: apiEndpoint, uid: uid, hashedFxAUID: hashedFxAUID, durationInSeconds: durationInSeconds, remoteTimestamp: remoteTimestamp)
+        let tokenServerToken = TokenServerToken.fromJSON(jsonDict)
+
+        XCTAssertNotNil(tokenServerToken)
+        XCTAssertEqual(id, tokenServerToken!.id)
+        XCTAssertEqual(key, tokenServerToken!.key)
+        XCTAssertEqual(apiEndpoint, tokenServerToken!.api_endpoint)
+        XCTAssertEqual(UInt64(uid), tokenServerToken!.uid)
+        XCTAssertEqual(hashedFxAUID, tokenServerToken!.hashedFxAUID)
+        XCTAssertEqual(UInt64(durationInSeconds), tokenServerToken!.durationInSeconds)
+        XCTAssertEqual(UInt64(remoteTimestamp), tokenServerToken!.remoteTimestamp)
+    }
+
+    func testTokenAsJSON() {
+        let id = "id"
+        let key = "key"
+        let apiEndpoint = "api_endpoint"
+        let uid = Int64(1)
+        let hashedFxAUID = "hashed_fxa_uid"
+        let durationInSeconds = Int64(Date.getCurrentPeriod())
+        let remoteTimestamp = Int64(Date.getCurrentPeriod())
+
+        let tokenServerToken = TokenServerToken(id: id, key: key, api_endpoint: apiEndpoint, uid: UInt64(uid), hashedFxAUID: hashedFxAUID, durationInSeconds: UInt64(durationInSeconds), remoteTimestamp: UInt64(remoteTimestamp))
+
+        let jsonDict = tokenServerToken.asJSON()
+        let expectedJsonDict = createMockTokenServerTokenDictionary(id: id, key: key, apiEndpoint: apiEndpoint, uid: uid, hashedFxAUID: hashedFxAUID, durationInSeconds: durationInSeconds, remoteTimestamp: remoteTimestamp)
+        XCTAssertTrue(NSDictionary(dictionary: jsonDict).isEqual(to: expectedJsonDict))
+    }
+
     func testErrorOutput() {
         // Make sure we don't hide error details.
         let error = NSError(domain: "test", code: 123, userInfo: nil)
@@ -46,5 +83,10 @@ class TokenServerClientTests {
         // Arbitrary ports.
         XCTAssertEqual("http://test.com:8080", audienceFor("http://test.com:8080"))
         XCTAssertEqual("https://test.com:4430", audienceFor("https://test.com:4430"))
+    }
+
+    // MARK: Helpers
+    private func createMockTokenServerTokenDictionary(id: String, key: String, apiEndpoint: String, uid: Int64, hashedFxAUID: String, durationInSeconds: Int64, remoteTimestamp: Int64) -> [String: Any] {
+        ["id": id, "key": key, "api_endpoint": apiEndpoint, "uid": uid, "hashed_fxa_uid": hashedFxAUID, "duration": durationInSeconds, "remoteTimestamp": remoteTimestamp]
     }
 }

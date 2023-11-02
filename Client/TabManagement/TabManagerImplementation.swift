@@ -30,7 +30,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             self.imageStore = imageStore
             self.tabMigration = tabMigration
             self.notificationCenter = notificationCenter
-            super.init(profile: profile, imageStore: imageStore)
+            super.init(profile: profile)
 
             setupNotifications(forObserver: self,
                                observing: [UIApplication.willResignActiveNotification])
@@ -39,12 +39,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     // MARK: - Restore tabs
 
     override func restoreTabs(_ forced: Bool = false) {
-        guard shouldUseNewTabStore()
-        else {
-            super.restoreTabs(forced)
-            return
-        }
-
         guard !isRestoringTabs,
               forced || tabs.isEmpty
         else {
@@ -86,7 +80,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
     private func migrateAndRestore() {
         Task {
-            await buildTabRestore(window: await tabMigration.runMigration(savedTabs: store.tabs))
+            await buildTabRestore(window: await tabMigration.runMigration())
             logger.log("Tabs restore ended after migration", level: .debug, category: .tabs)
             logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
         }
@@ -98,15 +92,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             await buildTabRestore(window: await self.tabDataStore.fetchWindowData())
             logger.log("Tabs restore ended after fetching window data", level: .debug, category: .tabs)
             logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
-
-            // Safety check incase something went wrong during launch where a migration should have occured
-            if tabs.count <= 1 && store.tabs.count > 1 {
-                logger.log("Rerunning migration due to inconsistent tab counts, old tab store count: \(store.tabs.count)",
-                           level: .fatal,
-                           category: .tabs)
-                isRestoringTabs = true
-                migrateAndRestore()
-            }
         }
     }
 
