@@ -50,7 +50,7 @@ DerivedData
 /fastlane/templates
 
 # content blocking lists
-content-blocker-lib-ios/Lists/*
+Client/ContentBlocker/Lists/*
 
 #python environment
 python-env/
