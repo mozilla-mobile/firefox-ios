@@ -193,6 +193,7 @@ function showContent() {
   if (contentElement) {
     contentElement.style.display = "block";
   }
+  // [FXIOS-7681] [Bugzilla #1861405]
   var links = document.querySelectorAll('#reader-content a');
   for (var i = 0; i < links.length; i++) {
       links[i].setAttribute('referrerpolicy', 'no-referrer');
