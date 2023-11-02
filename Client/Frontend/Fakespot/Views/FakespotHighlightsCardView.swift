@@ -59,6 +59,7 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
         static let highlightSpacing: CGFloat = 16
         static let highlightStackBottomSpace: CGFloat = 16
         static let dividerHeight: CGFloat = 1
+        static let groupImageSize: CGFloat = 24
     }
 
     private lazy var cardContainer: ShadowCardView = .build()
@@ -152,32 +153,7 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        guard let viewModel else { return }
-        guard viewModel.isOneHighlightGroupWithTwoReviews else { return }
-        guard let longestReview = viewModel.longestTextFromReviews else { return }
-
-        let highlightLabelWidth = longestReview.width(
-            with: DefaultDynamicFontHelper.preferredFont(
-                withTextStyle: .subheadline,
-                size: UX.titleFontSize,
-                weight: .semibold
-            )
-        )
-
-        let highlightsGroupViewWidth = (bounds.width - UIWindow.safeAreaInsets.left * 2) -
-                                       (highlightGroups.first!.imageHeightConstraint?.constant ?? 24) -
-                                       (2 * UX.contentHorizontalSpace)
-
-        let areMoreThanTwoLines = highlightLabelWidth > highlightsGroupViewWidth
-
-        if areMoreThanTwoLines {
-            contentStackView.addArrangedSubview(dividerView)
-            contentStackView.addArrangedSubview(moreButton)
-        } else {
-            contentStackView.removeArrangedView(dividerView)
-            contentStackView.removeArrangedView(moreButton)
-        }
-        updateHighlights(areMoreThanTwoLines)
+        updateHighlightsViewLayoutIfNeeded()
     }
 
     private func setupLayout() {
@@ -211,6 +187,38 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
                                                        constant: -UX.contentHorizontalSpace),
             dividerView.heightAnchor.constraint(equalToConstant: UX.dividerHeight),
         ])
+    }
+
+    private func updateHighlightsViewLayoutIfNeeded() {
+        guard let viewModel,
+                  viewModel.isOneHighlightGroupWithTwoReviews,
+              let longestReview = viewModel.longestTextFromReviews,
+              let firstItem = highlightGroups.first else { return }
+
+        let highlightLabelWidth = longestReview.width(
+            with: DefaultDynamicFontHelper.preferredFont(
+                withTextStyle: .subheadline,
+                size: UX.titleFontSize,
+                weight: .semibold
+            )
+        )
+
+        // Calculates the width available for the highlights group view within the view's current bounds,
+        // considering safe area insets, image height constraints, and horizontal spacing.
+        let highlightsGroupViewWidth = (bounds.width - UIWindow.safeAreaInsets.left * 2) -
+                                       (firstItem.imageHeightConstraint?.constant ?? UX.groupImageSize) -
+                                       (2 * UX.contentHorizontalSpace)
+
+        let areMoreThanTwoLines = highlightLabelWidth > highlightsGroupViewWidth
+
+        if areMoreThanTwoLines {
+            contentStackView.addArrangedSubview(dividerView)
+            contentStackView.addArrangedSubview(moreButton)
+        } else {
+            contentStackView.removeArrangedView(dividerView)
+            contentStackView.removeArrangedView(moreButton)
+        }
+        updateHighlights(areMoreThanTwoLines)
     }
 
     @objc
