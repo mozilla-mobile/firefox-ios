@@ -131,14 +131,12 @@ public extension String {
         return nsString.substring(with: match.range(at: 1))
     }
 
-    /// Calculate and return the width of a string when rendered with a given font.
+    /// Calculates and returns the width of a string when rendered with a specified font.
     ///
-    /// - Parameters:
-    ///   - string: The input string for which you want to calculate the width.
-    ///   - font: The font that will be used to render the string.
+    /// - Parameter font: The font that will be used to render the string.
     ///
     /// - Returns: The width of the string when rendered with the specified font.
-    func widthOfString(usingFont font: UIFont) -> CGFloat {
+    func width(with font: UIFont) -> CGFloat {
         let label = UILabel(frame: CGRect.zero)
         label.text = self
         label.font = font

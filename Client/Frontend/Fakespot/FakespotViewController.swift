@@ -238,10 +238,10 @@ class FakespotViewController:
             availableTitleStackWidth = view.frame.width - UX.headerHorizontalSpacing * 2
         }
         availableTitleStackWidth -= UX.closeButtonWidthHeight + UX.titleCloseSpacing // remove close button and spacing
-        let titleTextWidth = titleLabelText.widthOfString(usingFont: titleLabel.font)
+        let titleTextWidth = titleLabelText.width(with: titleLabel.font)
 
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
-        let betaLabelWidth = betaLabelText.widthOfString(usingFont: betaLabel.font)
+        let betaLabelWidth = betaLabelText.width(with: betaLabel.font)
         let betaViewWidth = betaLabelWidth + UX.betaHorizontalSpace * 2
         let maxTitleWidth = availableTitleStackWidth - betaViewWidth - UX.titleStackSpacing
 
