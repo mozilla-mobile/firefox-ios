@@ -23,10 +23,10 @@ class DesktopModeTestsIpad: IpadOnlyTestCase {
 
         // Covering scenario that when reloading the page should preserve Desktop site
         navigator.performAction(Action.ReloadURL)
+        waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
-        navigator.goto(TabTray)
-        navigator.goto(CloseTabMenu)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.performAction(Action.AcceptRemovingAllTabs)
         waitUntilPageLoad()
 
@@ -196,10 +196,10 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
 
         // Covering scenario that when reloading the page should preserve Desktop site
         navigator.performAction(Action.ReloadURL)
+        waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
-        navigator.goto(TabTray)
-        navigator.goto(CloseTabMenu)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.performAction(Action.AcceptRemovingAllTabs)
         waitUntilPageLoad()
         navigator.nowAt(NewTabScreen)
