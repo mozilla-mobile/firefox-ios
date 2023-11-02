@@ -42,9 +42,9 @@ class TabsSectionManager {
 
         let horizontalInset = TabsSectionManager.leadingInset(traitCollection: layoutEnvironment.traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(top: UX.verticalInset,
-                                                        leading: leadingInset,
+                                                        leading: horizontalInset,
                                                         bottom: UX.verticalInset,
-                                                        trailing: leadingInset)
+                                                        trailing: horizontalInset)
         section.interGroupSpacing = UX.cardSpacing
 
         return section
