@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
-import SwiftyJSON
 
 public struct RemoteClient: Equatable {
     public let guid: GUID?
