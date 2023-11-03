@@ -44,14 +44,10 @@ class TabTrayViewController: UIViewController,
     var didSelectUrl: ((URL, Storage.VisitType) -> Void)?
 
     // MARK: - Redux state
-    var selectedPanel: TabTrayPanelType?
+    var state: TabTrayState
     lazy var layout: LegacyTabTrayViewModel.Layout = {
         return shouldUseiPadSetup() ? .regular : .compact
     }()
-
-    var isSyncTabsPanel: Bool {
-        return selectedPanel == .syncedTabs
-    }
 
     var hasSyncableAccount: Bool {
         // Temporary. Added for early testing.
@@ -60,13 +56,8 @@ class TabTrayViewController: UIViewController,
         return profile.hasSyncableAccount()
     }
 
-    // iPad Layout
-    var isRegularLayout: Bool {
-        return layout == .regular
-    }
-
     var currentPanel: UINavigationController? {
-        guard let index = selectedPanel?.rawValue else { return nil }
+        guard let index = state.selectedPanel?.rawValue else { return nil }
 
         return childPanelControllers[index]
     }
@@ -90,8 +81,7 @@ class TabTrayViewController: UIViewController,
         label.font = TabsButton.UX.titleFont
         label.layer.cornerRadius = TabsButton.UX.cornerRadius
         label.textAlignment = .center
-        // TODO: FXIOS-7356 Connect to regular tabs count
-        label.text = "0"
+        label.text = self.state.normalTabsCount
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -101,7 +91,7 @@ class TabTrayViewController: UIViewController,
             TabTrayPanelType.tabs.image!.overlayWith(image: countLabel),
             TabTrayPanelType.privateTabs.image!,
             TabTrayPanelType.syncedTabs.image!]
-        return isRegularLayout ? TabTrayPanelType.allCases.map { $0.label } : iPhoneItems
+        return state.isRegularLayout ? TabTrayPanelType.allCases.map { $0.label } : iPhoneItems
     }
 
     private lazy var deleteButton: UIBarButtonItem = {
@@ -185,6 +175,7 @@ class TabTrayViewController: UIViewController,
     init(delegate: TabTrayViewControllerDelegate,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          and notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.state = TabTrayState.getMockState(isPrivateMode: false)
         self.delegate = delegate
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
@@ -232,8 +223,8 @@ class TabTrayViewController: UIViewController,
     }
 
     private func updateLayout() {
-        navigationController?.isToolbarHidden = isRegularLayout
-        titleWidthConstraint?.isActive = isRegularLayout
+        navigationController?.isToolbarHidden = state.isRegularLayout
+        titleWidthConstraint?.isActive = state.isRegularLayout
 
         switch layout {
         case .compact:
@@ -259,7 +250,7 @@ class TabTrayViewController: UIViewController,
     // MARK: Private
     private func setupView() {
         // Should use Regular layout used for iPad
-        guard isRegularLayout else {
+        guard state.isRegularLayout else {
             setupForiPhone()
             return
         }
@@ -287,7 +278,7 @@ class TabTrayViewController: UIViewController,
     }
 
     private func updateTitle() {
-        guard let panel = selectedPanel else { return }
+        guard let panel = state.selectedPanel else { return }
 
         navigationItem.title = panel.navTitle
     }
@@ -311,17 +302,17 @@ class TabTrayViewController: UIViewController,
 
     private func updateToolbarItems() {
         // iPad configuration
-        guard !isRegularLayout else {
+        guard !state.isRegularLayout else {
             setupToolbarForIpad()
             return
         }
 
-        let toolbarItems = isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
+        let toolbarItems = state.isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
         setToolbarItems(toolbarItems, animated: true)
     }
 
     private func setupToolbarForIpad() {
-        if isSyncTabsPanel {
+        if state.isSyncTabsPanel {
             navigationItem.leftBarButtonItem = nil
             navigationItem.rightBarButtonItems = rightBarButtonItemsForSync
         } else {
@@ -330,7 +321,7 @@ class TabTrayViewController: UIViewController,
         }
 
         navigationController?.isToolbarHidden = true
-        let toolbarItems = isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
+        let toolbarItems = state.isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
         setToolbarItems(toolbarItems, animated: true)
     }
 
@@ -363,7 +354,8 @@ class TabTrayViewController: UIViewController,
 
     // MARK: Child panels
     func setupOpenPanel(panelType: TabTrayPanelType) {
-        selectedPanel = panelType
+        // TODO: Move to Reducer
+        state.selectedPanel = panelType
 
         guard let currentPanel = currentPanel else { return }
 
@@ -406,7 +398,7 @@ class TabTrayViewController: UIViewController,
     @objc
     private func segmentChanged() {
         guard let panelType = TabTrayPanelType(rawValue: segmentedControl.selectedSegmentIndex),
-              selectedPanel != panelType else { return }
+              state.selectedPanel != panelType else { return }
 
         setupOpenPanel(panelType: panelType)
     }

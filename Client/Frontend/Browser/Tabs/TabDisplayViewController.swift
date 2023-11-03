@@ -23,13 +23,13 @@ class TabDisplayViewController: UIViewController,
     private lazy var emptyPrivateTabsView: EmptyPrivateTabsView = .build()
 
     // MARK: Redux state
-    var state: TabTrayState
+    var state: TabViewState
 
     init(isPrivateMode: Bool,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
         // TODO: FXIOS-6936 Integrate Redux state
-        self.state = TabTrayState.getMockState(isPrivateMode: isPrivateMode)
+        self.state = TabViewState.getMockState(isPrivateMode: isPrivateMode)
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
