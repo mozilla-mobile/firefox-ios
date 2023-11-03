@@ -57,13 +57,21 @@ class SettingsCoordinator: BaseCoordinator,
         }
     }
 
-    override func handle(route: Route) -> Bool {
+    override func canHandle(route: Route) -> Bool {
         switch route {
-        case let .settings(section):
-            start(with: section)
+        case .settings:
             return true
         default:
             return false
+        }
+    }
+
+    override func handle(route: Route) {
+        switch route {
+        case let .settings(section):
+            start(with: section)
+        default:
+            break
         }
     }
 
