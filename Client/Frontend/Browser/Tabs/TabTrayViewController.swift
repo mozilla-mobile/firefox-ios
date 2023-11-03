@@ -73,7 +73,7 @@ class TabTrayViewController: UIViewController,
 
     // MARK: - UI
     private var titleWidthConstraint: NSLayoutConstraint?
-    private var containerView: UIView = .build { _ in }
+    private var containerView: UIView = .build()
     private lazy var navigationToolbar: UIToolbar = .build { [self] toolbar in
         toolbar.delegate = self
         toolbar.setItems([UIBarButtonItem(customView: segmentedControl)], animated: false)
@@ -386,7 +386,7 @@ class TabTrayViewController: UIViewController,
             panel.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             panel.view.topAnchor.constraint(equalTo: containerView.topAnchor),
             panel.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            panel.view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            panel.view.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor),
         ])
 
         panel.didMove(toParent: self)
