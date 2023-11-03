@@ -45,6 +45,28 @@ struct ProductAnalysisData: Codable {
 
     var reportProductInStockCardVisible: Bool { isProductDeleted }
 
+    init(
+        productId: String? = nil,
+        grade: ReliabilityGrade? = nil,
+        adjustedRating: Double? = nil,
+        needsAnalysis: Bool,
+        analysisUrl: URL? = nil,
+        highlights: Highlights? = nil,
+        pageNotSupported: Bool,
+        isProductDeletedReported: Bool,
+        isProductDeleted: Bool
+    ) {
+        self.productId = productId
+        self.grade = grade
+        self.adjustedRating = adjustedRating
+        self.needsAnalysis = needsAnalysis
+        self.analysisUrl = analysisUrl
+        self.highlights = highlights
+        self.pageNotSupported = pageNotSupported
+        self.isProductDeletedReported = isProductDeletedReported
+        self.isProductDeleted = isProductDeleted
+    }
+
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         productId = try container.decodeIfPresent(String.self, forKey: .productId)
