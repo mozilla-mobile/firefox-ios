@@ -124,7 +124,23 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidPressShopping(_ urlBar: URLBarView, shoppingButton: UIButton) {
         guard let productURL = urlBar.currentURL else { return }
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingButton)
-        navigationHandler?.showFakespotFlow(productURL: productURL, sidebarContainer: contentStackView)
+        handleFakespotFlow(productURL: productURL)
+    }
+
+    private func handleFakespotFlow(productURL: URL) {
+        guard !contentStackView.isSidebarVisible else {
+            // hide sidebar as user tapped on shopping icon for a second time
+            navigationHandler?.dismissFakespotSidebar(sidebarContainer: contentStackView, parentViewController: self)
+            return
+        }
+
+        if FakespotUtils().shouldDisplayInSidebar() {
+            navigationHandler?.showFakespotFlowAsSidebar(productURL: productURL,
+                                                         sidebarContainer: contentStackView,
+                                                         parentViewController: self)
+        } else {
+            navigationHandler?.showFakespotFlowAsModal(productURL: productURL)
+        }
     }
 
     func urlBarPresentCFR(at sourceView: UIView) {
@@ -154,7 +170,7 @@ extension BrowserViewController: URLBarDelegate {
             andActionForButton: { [weak self] in
                 guard let self else { return }
                 guard let productURL = self.urlBar.currentURL else { return }
-                self.navigationHandler?.showFakespotFlow(productURL: productURL, sidebarContainer: contentStackView)
+                self.handleFakespotFlow(productURL: productURL)
             },
             overlayState: overlayManager)
     }

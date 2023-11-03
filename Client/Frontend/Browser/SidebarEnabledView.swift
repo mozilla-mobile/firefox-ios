@@ -5,13 +5,17 @@
 import UIKit
 
 protocol SidebarEnabledViewProtocol: UIView {
-    func showSidebar(_ viewController: UIViewController)
-    func hideSidebar()
+    func showSidebar(_ viewController: UIViewController, parentViewController: UIViewController)
+    func hideSidebar(_ parentViewController: UIViewController)
 }
 
 class SidebarEnabledView: BaseAlphaStackView, SidebarEnabledViewProtocol {
     private enum UX {
         static let sidebarWidth: CGFloat = 360
+    }
+
+    var isSidebarVisible: Bool {
+        return arrangedSubviews.count > 1
     }
 
     override init(frame: CGRect) {
@@ -28,19 +32,26 @@ class SidebarEnabledView: BaseAlphaStackView, SidebarEnabledViewProtocol {
     }
 
     // MARK: SidebarEnabledViewProtocol
-    func showSidebar(_ viewController: UIViewController) {
+    func showSidebar(_ viewController: UIViewController, parentViewController: UIViewController) {
+        guard !isSidebarVisible else { return }
+
         addArrangedSubview(viewController.view)
+        parentViewController.addChild(viewController)
+        viewController.didMove(toParent: parentViewController)
 
         NSLayoutConstraint.activate([
             viewController.view.widthAnchor.constraint(equalToConstant: UX.sidebarWidth)
         ])
     }
 
-    func hideSidebar() {
-        if arrangedSubviews.count > 1 {
-            let view = arrangedSubviews[1]
-            removeArrangedSubview(view)
-            view.removeFromSuperview()
-        }
+    func hideSidebar(_ parentViewController: UIViewController) {
+        guard isSidebarVisible,
+                let fakespotViewController = parentViewController.children.first(where: { $0 is FakespotViewController })
+        else { return }
+
+        fakespotViewController.willMove(toParent: nil)
+        fakespotViewController.removeFromParent()
+        removeArrangedSubview(fakespotViewController.view)
+        fakespotViewController.view.removeFromSuperview()
     }
 }
