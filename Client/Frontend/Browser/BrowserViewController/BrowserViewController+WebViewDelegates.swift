@@ -367,6 +367,7 @@ extension BrowserViewController: WKUIDelegate {
 // MARK: - WKNavigationDelegate
 extension BrowserViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
+        print("YRD didReceiveServerRedirectForProvisionalNavigation")
         guard let tab = tabManager[webView] else { return }
 
         if !tab.adsTelemetryUrlList.isEmpty,
@@ -377,6 +378,7 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        print("YRD decidePolicyFor didStartProvisionalNavigation")
         if tabManager.selectedTab?.webView !== webView {
             return
         }
@@ -402,6 +404,7 @@ extension BrowserViewController: WKNavigationDelegate {
         decidePolicyFor navigationAction: WKNavigationAction,
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
     ) {
+        print("YRD decidePolicyFor action \(navigationAction.navigationType)")
         guard let url = navigationAction.request.url,
               let tab = tabManager[webView]
         else {
@@ -559,6 +562,7 @@ extension BrowserViewController: WKNavigationDelegate {
         decidePolicyFor navigationResponse: WKNavigationResponse,
         decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void
     ) {
+        print("YRD decidePolicyFor response \(navigationResponse)")
         let response = navigationResponse.response
         let responseURL = response.url
 
@@ -626,15 +630,19 @@ extension BrowserViewController: WKNavigationDelegate {
             // Clear the pending download web view so that subsequent navigations from the same
             // web view don't invoke another download.
             pendingDownloadWebView = nil
+            print("YRD create download helper")
 
             let downloadAction: (HTTPDownload) -> Void = { [weak self] download in
+                print("YRD enqueue download")
                 self?.downloadQueue.enqueue(download)
             }
 
             // Open our helper and cancel this response from the webview.
             if let downloadViewModel = downloadHelper.downloadViewModel(okAction: downloadAction) {
+                print("YRD present sheet")
                 presentSheetWith(viewModel: downloadViewModel, on: self, from: urlBar)
             }
+            print("YRD download helper cancel")
             decisionHandler(.cancel)
             return
         }
@@ -665,6 +673,7 @@ extension BrowserViewController: WKNavigationDelegate {
         didFailProvisionalNavigation navigation: WKNavigation!,
         withError error: Error
     ) {
+        print("YRD didFailProvisionalNavigation")
         // Ignore the "Frame load interrupted" error that is triggered when we cancel a request
         // to open an external application and hand it over to UIApplication.openURL(). The result
         // will be that we switch to the external app, for example the app store, while keeping the

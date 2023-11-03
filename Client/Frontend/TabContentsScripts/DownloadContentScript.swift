@@ -44,6 +44,7 @@ class DownloadContentScript: TabContentScript {
             return false
         }
         blobUrlForDownload = URL(string: safeUrl, invalidCharacters: false)
+        print("YRD request blob URL \(blobUrlForDownload)")
         tab.webView?.evaluateJavascriptInDefaultContentWorld("window.__firefox__.download('\(safeUrl)', '\(UserScriptManager.appIdToken)')")
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .downloadLinkButton)
         return true

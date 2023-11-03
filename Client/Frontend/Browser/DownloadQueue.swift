@@ -82,7 +82,12 @@ class HTTPDownload: Download {
         self.request = request
 
         // Verify scheme is a secure http or https scheme before moving forward with HTTPDownload initialization
-        guard let scheme = request.url?.scheme else { return nil }
+        var requestUrl = request.url
+        if let url = requestUrl, url.scheme == "blob" {
+            requestUrl = url.removeBlobFromUrl()
+        }
+
+        guard let scheme = requestUrl?.scheme else { return nil }
         guard scheme == "http" || scheme == "https" else { return nil }
 
         super.init()
