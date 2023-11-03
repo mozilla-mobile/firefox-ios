@@ -851,7 +851,7 @@ private extension BrowserViewController {
         ok.applyTheme(theme: themeManager.currentTheme)
         cancel.applyTheme(theme: themeManager.currentTheme)
         snackBar.applyTheme(theme: themeManager.currentTheme)
-        
+    
         snackBar.addButton(ok)
         snackBar.addButton(cancel)
         tab.addSnackbar(snackBar)

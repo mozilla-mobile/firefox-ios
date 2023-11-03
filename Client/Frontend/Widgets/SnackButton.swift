@@ -71,7 +71,7 @@ class SnackButton: UIButton, ThemeApplicable {
         let colors = theme.colors
         highlightedTintColor = colors.actionPrimaryHover
         normalTintColor = colors.actionPrimary
-        setTitleColor(colors.textOnLight, for: .normal) 
+        setTitleColor(colors.textOnLight, for: .normal)
         separator.backgroundColor = colors.borderPrimary
     }
 }
