@@ -4,13 +4,18 @@
 
 import Foundation
 
+enum TabTrayLayoutType: Equatable {
+    case regular // iPad
+    case compact // iPhone
+}
+
 struct TabTrayState {
     var isPrivateMode: Bool
     var tabViewState: TabViewState
     var remoteTabsState: RemoteTabsPanelState?
     var selectedPanel: TabTrayPanelType?
 
-    var layout: LegacyTabTrayViewModel.Layout = .compact
+    var layout: TabTrayLayoutType = .compact
     var normalTabsCount: String
     var navigationTitle: String
 
@@ -30,6 +35,6 @@ struct TabTrayState {
                             tabViewState: tabViewState,
                             remoteTabsState: nil,
                             normalTabsCount: "2",
-                            navigationTitle: "PEPE")
+                            navigationTitle: "")
     }
 }

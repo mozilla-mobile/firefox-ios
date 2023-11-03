@@ -45,7 +45,7 @@ class TabTrayViewController: UIViewController,
 
     // MARK: - Redux state
     var state: TabTrayState
-    lazy var layout: LegacyTabTrayViewModel.Layout = {
+    lazy var layout: TabTrayLayoutType = {
         return shouldUseiPadSetup() ? .regular : .compact
     }()
 
