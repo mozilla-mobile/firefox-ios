@@ -195,8 +195,9 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
               let longestReview = viewModel.longestTextFromReviews,
               let firstItem = highlightGroups.first else { return }
 
-        let highlightLabelWidth = longestReview.width(
-            with: DefaultDynamicFontHelper.preferredFont(
+        let highlightLabelWidth = FakespotUtils.widthOfString(
+            longestReview,
+            usingFont: DefaultDynamicFontHelper.preferredFont(
                 withTextStyle: .subheadline,
                 size: UX.titleFontSize,
                 weight: .semibold

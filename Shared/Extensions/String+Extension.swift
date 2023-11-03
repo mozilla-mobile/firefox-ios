@@ -131,20 +131,6 @@ public extension String {
         return nsString.substring(with: match.range(at: 1))
     }
 
-    /// Calculates and returns the width of a string when rendered with a specified font.
-    ///
-    /// - Parameter font: The font that will be used to render the string.
-    ///
-    /// - Returns: The width of the string when rendered with the specified font.
-    func width(with font: UIFont) -> CGFloat {
-        let label = UILabel(frame: CGRect.zero)
-        label.text = self
-        label.font = font
-        label.adjustsFontForContentSizeCategory = true
-        label.sizeToFit()
-        return label.frame.width
-    }
-
     /// Encode HTMLStrings
     /// Also used for Strings which are not sanitized for displaying
     /// - Returns: Encoded String
