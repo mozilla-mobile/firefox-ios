@@ -39,9 +39,7 @@ open class BaseCoordinator: NSObject, Coordinator {
         return false
     }
 
-    func handle(route: Route) { 
-        // Concrete subclasses can override.
-    }
+    func handle(route: Route) { }
 
     @discardableResult
     func findAndHandle(route: Route) -> Coordinator? {

@@ -171,24 +171,10 @@ class BrowserCoordinator: BaseCoordinator,
         }
 
         switch route {
-        case .searchQuery:
-            return true
-        case .search:
-            return true
-        case .searchURL:
-            return true
-        case .glean:
-            return true
-        case .homepanel:
+        case .searchQuery, .search, .searchURL, .glean, .homepanel, .action, .fxaSignIn, .defaultBrowser:
             return true
         case let .settings(section):
-            return canHandleSettings(with: section)
-        case .action:
-           return true
-        case .fxaSignIn:
-            return true
-        case .defaultBrowser:
-            return true
+            return canHandleSettings(with: section)        
         }
     }
 
