@@ -98,7 +98,6 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) not yet supported") }
 
     // MARK: - Configuration
-
     func configure(with state: TabCellState, theme: Theme?) {
         self.state = state
 

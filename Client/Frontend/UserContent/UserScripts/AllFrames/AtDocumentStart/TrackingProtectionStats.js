@@ -5,4 +5,4 @@
 
 "use strict";
 
-require("../../../../../../content-blocker-lib-ios/js/TrackingProtectionStats.js");
+require("../../../../../../Client/ContentBlocker/TrackingProtectionStats.js");

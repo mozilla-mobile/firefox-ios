@@ -7,7 +7,7 @@ import UIKit
 
 public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
     private struct UX {
-        static let buttonCornerRadius: CGFloat = 13
+        static let buttonCornerRadius: CGFloat = 12
         static let buttonVerticalInset: CGFloat = 12
         static let buttonHorizontalInset: CGFloat = 16
         static let buttonFontSize: CGFloat = 16

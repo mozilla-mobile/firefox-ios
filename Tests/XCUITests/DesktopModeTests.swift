@@ -23,13 +23,21 @@ class DesktopModeTestsIpad: IpadOnlyTestCase {
 
         // Covering scenario that when reloading the page should preserve Desktop site
         navigator.performAction(Action.ReloadURL)
+        waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
+        // Workaround: Open a new tab before closing all tabs.
+        // https://github.com/mozilla-mobile/firefox-ios/issues/16810
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
+
         navigator.performAction(Action.AcceptRemovingAllTabs)
+        waitUntilPageLoad()
 
         // Covering scenario that when closing a tab and re-opening should preserve Mobile mode
-        navigator.createNewTab()
         navigator.nowAt(NewTabScreen)
+        navigator.createNewTab()
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
@@ -193,9 +201,17 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
 
         // Covering scenario that when reloading the page should preserve Desktop site
         navigator.performAction(Action.ReloadURL)
+        waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
+        // Workaround: Open a new tab before closing all tabs.
+        // https://github.com/mozilla-mobile/firefox-ios/issues/16810
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
+
         navigator.performAction(Action.AcceptRemovingAllTabs)
+        waitUntilPageLoad()
         navigator.nowAt(NewTabScreen)
         // Covering scenario that when closing a tab and re-opening should preserve Desktop mode
         navigator.createNewTab()
