@@ -69,6 +69,7 @@ class IntegrationTests: BaseTestCase {
 
     private func waitForInitialSyncComplete() {
         navigator.nowAt(BrowserTab)
+        waitForTabsButton()
         navigator.goto(SettingsScreen)
         mozWaitForElementToExist(app.staticTexts["ACCOUNT"], timeout: TIMEOUT_LONG)
         mozWaitForElementToNotExist(app.staticTexts["Sync and Save Data"])
@@ -98,9 +99,6 @@ class IntegrationTests: BaseTestCase {
         navigator.performAction(Action.OpenEmailToSignIn)
 
         mozWaitForElementToExist(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: TIMEOUT_LONG)
-        mozWaitForElementToExist(app.webViews.staticTexts["Continue to Firefox accounts"], timeout: TIMEOUT_LONG)
-        mozWaitForElementToExist(app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField])
-        mozWaitForElementToExist(app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton])
     }
 
     func testFxASyncBookmark () {

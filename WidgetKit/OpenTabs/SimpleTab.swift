@@ -4,6 +4,7 @@
 
 import Common
 import Shared
+import TabDataStore
 
 private let userDefaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
 
@@ -42,17 +43,11 @@ extension SimpleTab {
         }
     }
 
-    static func convertToSimpleTabs(_ tabs: [LegacySavedTab]) -> [String: SimpleTab] {
+    static func convertToSimpleTabs(_ tabs: [TabData]) -> [String: SimpleTab] {
         var simpleTabs: [String: SimpleTab] = [:]
         for tab in tabs {
-            var url: URL?
             // Set URL
-            if tab.url != nil {
-                url = tab.url
-            // Check if session data urls have something
-            } else if tab.sessionData?.urls != nil {
-                url = tab.sessionData?.urls.last
-            }
+            let url = URL(string: tab.siteUrl)
 
             // Ignore `internal about` urls which corresponds to Home
             if url != nil, url!.absoluteString.starts(with: "internal://local/about/") {
@@ -67,8 +62,13 @@ extension SimpleTab {
             }
 
             // Key for simple tabs dictionary is tab UUID which is used to select proper tab when we send UUID to NavigationRouter class handle widget url
-            let uuidVal = tab.UUID ?? ""
-            let value = SimpleTab(title: title, url: url, lastUsedTime: tab.sessionData?.lastUsedTime ?? 0, faviconURL: tab.faviconURL, isPrivate: tab.isPrivate, uuid: uuidVal)
+            let uuidVal = tab.id.uuidString
+            let value = SimpleTab(title: title,
+                                  url: url,
+                                  lastUsedTime: tab.lastUsedTime.toTimestamp(),
+                                  faviconURL: tab.faviconURL,
+                                  isPrivate: tab.isPrivate,
+                                  uuid: uuidVal)
             simpleTabs[uuidVal] = value
         }
         return simpleTabs

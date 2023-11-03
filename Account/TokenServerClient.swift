@@ -4,7 +4,6 @@
 
 import Shared
 import Foundation
-import SwiftyJSON
 
 let TokenServerClientErrorDomain = "org.mozilla.token.error"
 let TokenServerClientUnknownError = TokenServerError.local(
@@ -111,8 +110,8 @@ open class TokenServerClient {
         }
     }
 
-    fileprivate class func remoteError(fromJSON json: JSON, statusCode: Int, remoteTimestampHeader: String?) -> TokenServerError? {
-        if json.error != nil {
+    fileprivate class func remoteError(fromJSON jsonDict: [String: Any]?, statusCode: Int, remoteTimestampHeader: String?) -> TokenServerError? {
+        guard let jsonDict = jsonDict else {
             return nil
         }
 
@@ -122,22 +121,22 @@ open class TokenServerClient {
 
         return TokenServerError.remote(
             code: Int32(statusCode),
-            status: json["status"].string,
+            status: jsonDict["status"] as? String,
             remoteTimestamp: parseTimestampHeader(remoteTimestampHeader))
     }
 
-    fileprivate class func token(fromJSON json: JSON, remoteTimestampHeader: String?) -> TokenServerToken? {
-        if json.error != nil {
+    fileprivate class func token(fromJSON jsonDict: [String: Any]?, remoteTimestampHeader: String?) -> TokenServerToken? {
+        guard let jsonDict = jsonDict else {
             return nil
         }
         if let
             remoteTimestamp = parseTimestampHeader(remoteTimestampHeader), // A token server that is not providing its timestamp is not healthy.
-            let id = json["id"].string,
-            let key = json["key"].string,
-            let api_endpoint = json["api_endpoint"].string,
-            let uid = json["uid"].int,
-            let hashedFxAUID = json["hashed_fxa_uid"].string,
-            let durationInSeconds = json["duration"].int64, durationInSeconds > 0 {
+            let id = jsonDict["id"] as? String,
+            let key = jsonDict["key"] as? String,
+            let api_endpoint = jsonDict["api_endpoint"] as? String,
+            let uid = jsonDict["uid"] as? Int,
+            let hashedFxAUID = jsonDict["hashed_fxa_uid"] as? String,
+            let durationInSeconds = jsonDict["duration"] as? Int64, durationInSeconds > 0 {
             return TokenServerToken(
                 id: id,
                 key: key,
@@ -175,14 +174,20 @@ open class TokenServerClient {
                 return
             }
 
-            let json = JSON(data)
+            let jsonDict: [String: Any]?
+            do {
+                jsonDict = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+            } catch {
+                deferred.fill(Maybe(failure: TokenServerError.local(error as NSError)))
+                return
+            }
             let remoteTimestampHeader = (response.allHeaderFields as NSDictionary)["x-timestamp"] as? String
-            if let remoteError = TokenServerClient.remoteError(fromJSON: json, statusCode: response.statusCode, remoteTimestampHeader: remoteTimestampHeader) {
+            if let remoteError = TokenServerClient.remoteError(fromJSON: jsonDict, statusCode: response.statusCode, remoteTimestampHeader: remoteTimestampHeader) {
                 deferred.fill(Maybe(failure: remoteError))
                 return
             }
 
-            if let token = TokenServerClient.token(fromJSON: json, remoteTimestampHeader: remoteTimestampHeader) {
+            if let token = TokenServerClient.token(fromJSON: jsonDict, remoteTimestampHeader: remoteTimestampHeader) {
                 deferred.fill(Maybe(success: token))
                 return
             }
