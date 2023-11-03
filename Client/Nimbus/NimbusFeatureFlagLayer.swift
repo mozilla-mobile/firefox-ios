@@ -50,6 +50,9 @@ final class NimbusFeatureFlagLayer {
         case .feltPrivacyUI:
             return checkFeltPrivacyUIFeature(from: nimbus)
 
+        case .fakespotBackInStock:
+            return checkProductBackInStockFakespotFeature(from: nimbus)
+
         case .qrCodeCoordinatorRefactor:
             return checkQRCodeCoordinatorRefactorFeature(from: nimbus)
 
@@ -249,6 +252,12 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.shopping2023.value()
 
         return config.status
+    }
+
+    private func checkProductBackInStockFakespotFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.shopping2023.value()
+
+        return config.backInStockReporting
     }
 
     private func checkAddressAutofill(from nimbus: FxNimbus) -> Bool {

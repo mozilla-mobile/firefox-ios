@@ -386,6 +386,14 @@ class FakespotViewController:
                 let view: FakespotMessageCardView = .build()
                 view.configure(viewModel.analysisProgressViewModel)
                 return view
+
+            case .reportProductInStock:
+                let view: FakespotMessageCardView = .build()
+                viewModel.reportProductInStockViewModel.primaryAction = { [weak self] in
+                    self?.viewModel.reportProductBackInStock()
+                }
+                view.configure(viewModel.reportProductInStockViewModel)
+                return view
             }
         }
     }
