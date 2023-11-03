@@ -50,7 +50,7 @@ final class NimbusFeatureFlagLayer {
         case .feltPrivacyUI:
             return checkFeltPrivacyUIFeature(from: nimbus)
 
-        case .productBackInStockFakespotFeature:
+        case .fakespotBackInStock:
             return checkProductBackInStockFakespotFeature(from: nimbus)
 
         case .qrCodeCoordinatorRefactor:
