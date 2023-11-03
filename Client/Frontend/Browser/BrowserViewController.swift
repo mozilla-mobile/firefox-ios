@@ -712,6 +712,15 @@ class BrowserViewController: UIViewController,
             updateLegacyTheme()
         }
         setupMiddleButtonStatus(isLoading: false)
+
+        if let productURL = urlBar.currentURL {
+            let needsUpdate = contentStackView.isSidebarVisible != FakespotUtils().shouldDisplayInSidebar()
+
+            if needsUpdate {
+                _ = dismissFakespotIfNeeded()
+                handleFakespotFlow(productURL: productURL)
+            }
+        }
     }
 
     private func updateLegacyTheme() {

@@ -42,7 +42,10 @@ protocol BrowserNavigationHandler: AnyObject {
                                    sidebarContainer: SidebarEnabledViewProtocol,
                                    parentViewController: UIViewController)
 
-    /// Initiates the sidebar dismissal  of the Fakespot flow for analyzing the authenticity of a product's reviews.
+    /// Initiates the modal dismissal of the Fakespot flow for analyzing the authenticity of a product's reviews.
+    func dismissFakespotModal()
+
+    /// Initiates the sidebar dismissal of the Fakespot flow for analyzing the authenticity of a product's reviews.
     /// - Parameter sidebarContainer: The view that contains the sidebar.
     /// - Parameter parentViewController: The view controller that the Fakespot flow is a child of.
     func dismissFakespotSidebar(sidebarContainer: SidebarEnabledViewProtocol, parentViewController: UIViewController)
