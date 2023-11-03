@@ -36,9 +36,9 @@ class TimerSnackBar: SnackBar {
             tab.removeSnackbar(bar)
             completion(false)
         }
-        bar.applyTheme(theme: theme)
         cancelButton.applyTheme(theme: theme)
-        openAppStore.applyTheme(theme: theme) 
+        openAppStore.applyTheme(theme: theme)
+        bar.applyTheme(theme: theme)
 
         bar.addButton(cancelButton)
         bar.addButton(openAppStore)

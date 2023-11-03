@@ -24,7 +24,7 @@ class SnackButton: UIButton, ThemeApplicable {
     }
 
     let separator: UIView = .build()
-    
+
     override open var isHighlighted: Bool {
         didSet {
             self.backgroundColor = isHighlighted ? highlightedTintColor : normalTintColor
@@ -71,7 +71,7 @@ class SnackButton: UIButton, ThemeApplicable {
         let colors = theme.colors
         highlightedTintColor = colors.actionPrimaryHover
         normalTintColor = colors.actionPrimary
-        setTitleColor(colors.textOnLight, for: .normal) 
+        setTitleColor(colors.textOnLight, for: .normal)
         separator.backgroundColor = colors.borderPrimary
     }
 }

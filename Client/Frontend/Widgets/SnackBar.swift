@@ -18,8 +18,8 @@ class SnackBar: UIView, ThemeApplicable {
     private var buttonsViewConstraints = [NSLayoutConstraint]()
 
     private lazy var scrollView: UIScrollView = .build()
-    private lazy var buttonsView: UIStackView = .build()
-    private lazy var backgroundView: UIVisualEffectView = .build()
+    private lazy var buttonsView: UIStackView = .build { $0.distribution = .fillEqually }
+    private lazy var backgroundView: UIVisualEffectView = .build { $0.effect = UIBlurEffect(style: .extraLight) }
     private lazy var separator: UIView = .build()
 
     private lazy var imageView: UIImageView = .build { imageView in
@@ -175,10 +175,8 @@ class SnackBar: UIView, ThemeApplicable {
     // MARK: - Theme Applicable
     func applyTheme(theme: Theme) {
         let colors = theme.colors
-        buttonsView.distribution = .fillEqually
-        backgroundView.effect = UIBlurEffect(style: .extraLight)
         separator.backgroundColor = colors.borderPrimary
         layer.borderColor = colors.borderPrimary.cgColor
-        textLabel.textColor = colors.textOnLight 
+        textLabel.textColor = colors.textOnLight
     }
 }
