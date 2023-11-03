@@ -126,7 +126,7 @@ final class SceneCoordinatorTests: XCTestCase {
     func testHandleShowOnboarding_returnsTrueAndShowsOnboarding() {
         let subject = createSubject()
 
-        let result = subject.handle(route: .action(action: .showIntroOnboarding))
+        let result = testCanHandleAndHandle(subject, route: .action(action: .showIntroOnboarding))
 
         XCTAssertTrue(result)
         XCTAssertEqual(subject.childCoordinators.count, 1)
@@ -142,5 +142,11 @@ final class SceneCoordinatorTests: XCTestCase {
         subject.router = mockRouter
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
+    }
+
+    private func testCanHandleAndHandle(_ subject: Coordinator, route: Route) -> Bool {
+        let result = subject.canHandle(route: route)
+        subject.handle(route: route)
+        return result
     }
 }
