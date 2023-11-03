@@ -20,6 +20,7 @@
 # 7. Add the "FML.swift" file in the `Generated` folder to your project.
 # 8. Add the same "FML.swift" from the `Generated` folder as Output Files of the newly created "Run Script" step.
 # 9. Start using the generated feature code.
+set -eo pipefail
 
 DIRNAME=$(dirname "$0")
 
@@ -93,7 +94,27 @@ if [ -z "$number_string" ]; then
     fi
 fi
 
-AS_VERSION=$(echo "$number_string" | sed 's/\.0\./\./g') # rust-component-swift tags have a middle `.0.` to force it to align with spm. We remove it
+## We try and differentiate between two version types.
+## Nightlies: 121.0.20231027173509 --> 121.20231027173509
+## Releases:  120.0.1 --> 120.0.1
+##            120.0.0 --> 120.0
+##            120.1.0 --> 120.1.0
+# Get the last component, i.e. the patch number…
+patch=${number_string##*.}
+# … and check if it's more that 2 digits in length
+if [[ ${#patch} -gt 2 ]] ; then
+    # If so, then it's likely a date stamp, so a nightly.
+    # We have a middle 0 which we need to get rid of,
+    # because taskcluster's versions are MAJOR.DATETIME
+    AS_VERSION=${number_string//\.0\./\.}
+else
+    # Otherwise, it's a release!
+    # These versions have rules about zero
+    # minor number and patch numbers, so we
+    # rationalize that.
+    AS_VERSION=${number_string/\.0\.0/.0}
+fi
+
 FRESHEN_FML=
 NIMBUS_DIR="$SOURCE_ROOT/build/nimbus"
 
