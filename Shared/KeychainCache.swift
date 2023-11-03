@@ -4,7 +4,6 @@
 
 import Common
 import Foundation
-import SwiftyJSON
 import MozillaAppServices
 
 public protocol JSONLiteralConvertible {
@@ -36,7 +35,7 @@ open class KeychainCache<T: JSONLiteralConvertible> {
             let key = "\(branch).\(l)"
             MZKeychainWrapper.sharedClientAppContainerKeychain.ensureStringItemAccessibility(.afterFirstUnlock, forKey: key)
             if let s = MZKeychainWrapper.sharedClientAppContainerKeychain.string(forKey: key) {
-                if let dictionaryObject = JSON(parseJSON: s).dictionaryObject, let t = factory(dictionaryObject) {
+                if let dictionaryObject = s.jsonDictionary, let t = factory(dictionaryObject) {
                     logger.log("Read \(branch) from Keychain with label \(branch).\(l).",
                                level: .debug,
                                category: .storage)
