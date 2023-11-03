@@ -25,7 +25,7 @@
 # Changes to the CI configuration must be reviewed a limited group of people.
 # We narrowed this down to make sure that no changes go unnoticed.
 
-/bitrise.yml @isabelrios @jevans-mozilla
+/bitrise.yml @isabelrios @jevans-mozilla @OrlaM
 
 # Changes to string files can be reviewed and approved by mergify
 

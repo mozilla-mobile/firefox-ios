@@ -19,7 +19,7 @@ class BaseTestCase: XCTestCase {
         app.terminate()
     }
 
-    //If it is a first run, first run window should be gone
+    // If it is a first run, first run window should be gone
     func dismissFirstRunUI() {
         let firstRunUI = XCUIApplication().buttons["OK, Got It!"]
         let onboardingUI = XCUIApplication().buttons["Skip"]
@@ -99,7 +99,6 @@ class BaseTestCase: XCTestCase {
                 timeout: finishLoadingTimeout)
         }
     }
-    
 
     func loadWebPage(_ url: String, waitForLoadToFinish: Bool = true) {
         waitForExistence(app.textFields["URLBar.urlText"], timeout: 3)
@@ -138,33 +137,32 @@ class BaseTestCase: XCTestCase {
         expectation(for: NSPredicate(format: "exists != true"), evaluatedWith: progressIndicator, handler: nil)
         waitForExpectations(timeout: finishLoadingTimeout, handler: nil)
     }
-    
+
     func mozTap(_ element: XCUIElement, timeout: TimeInterval = 10) {
         waitForExistence(element, timeout: timeout)
         element.tap()
     }
-    
+
     func mozTypeText(_ element: XCUIElement, text: String, timeout: TimeInterval = 10) {
         waitForExistence(element, timeout: timeout)
         element.typeText(text)
     }
-    
+
     func navigateToSettingSearchEngine() {
         let homeViewSettingsButton = app.homeViewSettingsButton
         let settingsButton = app.settingsButton
         let settingsViewControllerSearchCell = app.tables.cells["SettingsViewController.searchCell"]
-        
+
         mozTap(homeViewSettingsButton)
         mozTap(settingsButton)
         mozTap(settingsViewControllerSearchCell)
     }
-    
+
     func setDefaultSearchEngine(searchEngine: String) {
         let searchEngineSelection = app.staticTexts[searchEngine]
         let settingsViewControllerDoneButton = app.settingsViewControllerDoneButton
-        
+
         mozTap(searchEngineSelection)
         mozTap(settingsViewControllerDoneButton)
     }
 }
-                       

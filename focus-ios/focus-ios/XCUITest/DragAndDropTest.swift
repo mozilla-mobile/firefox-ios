@@ -4,7 +4,6 @@
 
 import XCTest
 
-
 class DragAndDropTest: BaseTestCase {
     let websiteWithSearchField = ["url": "https://developer.mozilla.org/en-US/search", "urlSearchField": "Site search..."]
 

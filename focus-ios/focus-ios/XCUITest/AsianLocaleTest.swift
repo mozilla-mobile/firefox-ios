@@ -10,27 +10,26 @@ class AsianLocaleTest: BaseTestCase {
         "Japanese": "モジラ",
         "Chinese": "因特網"
     ]
-    
+
     func searchForMozillaInLocale(localeName: String, searchText: String) {
         let urlBarDeleteButton = app.eraseButton
-        
+
         search(searchWord: searchText, waitForLoadToFinish: true)
         mozTap(urlBarDeleteButton)
         dismissURLBarFocused()
         checkForHomeScreen()
     }
-    
-	func testSearchInLocale() {
+
+    func testSearchInLocale() {
         // Test Setup
         dismissURLBarFocused()
         checkForHomeScreen()
         navigateToSettingSearchEngine()
         setDefaultSearchEngine(searchEngine: "Google")
-        
+
         // Test Steps
         for (localeName, searchText) in locales {
             searchForMozillaInLocale(localeName: localeName, searchText: searchText)
         }
-	}
-
+    }
 }

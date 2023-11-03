@@ -12,7 +12,7 @@ class SettingAppearanceTest: BaseTestCase {
     // Check for the basic appearance of the Settings Menu
     func testCheckSetting() {
         dismissURLBarFocused()
-        
+
         // Navigate to Settings
         waitForExistence(app.buttons["Settings"], timeout: 5)
         app.buttons["Settings"].tap()
@@ -20,7 +20,7 @@ class SettingAppearanceTest: BaseTestCase {
         let settingsButton = app.settingsButton
         waitForExistence(settingsButton, timeout: 10)
         settingsButton.tap()
-        
+
         // Check About page
         app.tables.firstMatch.swipeUp()
         let aboutCell = app.cells["settingsViewController.about"]
@@ -41,7 +41,7 @@ class SettingAppearanceTest: BaseTestCase {
         // Go back to Settings
         app.navigationBars.buttons.element(boundBy: 0).tap()
 
-        //Check the initial state of the switch values
+        // Check the initial state of the switch values
         let safariSwitch = app.tables.switches["Safari"]
         waitForExistence(app.tables.switches["Safari"], timeout: 5)
 
@@ -129,9 +129,7 @@ class SettingAppearanceTest: BaseTestCase {
 
         // Now in Safari
         let safariLabel = safariapp.otherElements["Address"]
-        if #available(iOS 15.0, *) {
-            // do nothing as the safari elements are not found yet
-        } else {
+        if #unavailable(iOS 15.0) {
             waitForValueContains(safariLabel, value: "google")
         }
 
@@ -225,7 +223,7 @@ class SettingAppearanceTest: BaseTestCase {
     // Smoketest
     func testSafariIntegration() {
         dismissURLBarFocused()
-        
+
         // Navigate to Settings
         waitForExistence(app.buttons["Settings"], timeout: 5)
         app.buttons["Settings"].tap()

@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
 * License, v. 2.0. If a copy of the MPL was not distributed with this
 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
- 
+
 import Foundation
 import XCTest
 
@@ -18,7 +18,7 @@ class BasicBrowsing: BaseTestCase {
         app.buttons["HomeView.settingsButton"].tap()
 
         // Tap Share button
-        
+
         let shareButton: XCUIElement
         if #available(iOS 14, *) {
             shareButton = app.cells.buttons["Share Page With..."]
@@ -35,7 +35,7 @@ class BasicBrowsing: BaseTestCase {
         waitForExistence(app.buttons["Add"], timeout: 10)
         XCTAssertTrue(app.buttons["Add"].exists)
     }
-    
+
     // Smoke test
     func testAdBlocking() {
         // Load URL

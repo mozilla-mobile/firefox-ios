@@ -62,10 +62,10 @@ class SearchSuggestionsPromptTest: BaseTestCase {
 
         // Ensure prompt disappears
         waitForNoExistence(app.otherElements["SearchSuggestionsPromptView"])
-        
+
         // Adding a delay in case of slow network
         sleep(4)
-        
+
         // Ensure search suggestions are shown
         checkSuggestions()
 
@@ -123,7 +123,7 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         waitForExistence(app.tables.switches["BlockerToggle.enableSearchSuggestions"], timeout: 5)
 
         app.tables.cells.switches["BlockerToggle.enableSearchSuggestions"].tap()
-        
+
         // Prompt should not display
         app.buttons["SettingsViewController.doneButton"].tap()
         typeInURLBar(text: "g")
@@ -153,7 +153,7 @@ class SearchSuggestionsPromptTest: BaseTestCase {
 
         // Adding a delay in case of slow network
         sleep(4)
-        
+
         // Ensure prompt disappears
         waitForNoExistence(app.otherElements["SearchSuggestionsPromptView"])
 

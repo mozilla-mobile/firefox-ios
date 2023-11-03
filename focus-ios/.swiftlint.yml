@@ -207,9 +207,8 @@ included: # paths to include during linting. `--path` is ignored if present.
 excluded: # paths to ignore during linting. Takes precedence over `included`.
   - Carthage
   - Pods
-  - XCUITest/
   - ClientTests/
-  - ScreenshotTests/
+  - focus-ios/ScreenshotTests/
   - Search/
   - Client/Assets/Search/get_supported_locales.swift
   - tools/

@@ -16,17 +16,17 @@ class SearchProviderTest: BaseTestCase {
     func testWikipediaSearchProvider() {
         searchProviderTestHelper(provider: "Wikipedia")
     }
-    
+
     func testAmazonSearchProvider() {
         searchProviderTestHelper(provider: "Amazon.com")
     }
-    
+
     func testSearchQuery() {
         searchQuery("test", provider: "Google")
         searchQuery("test", provider: "Amazon.com")
         searchQuery("test", provider: "DuckDuckGo")
     }
-    
+
     func searchProviderTestHelper(provider:String) {
         changeSearchProvider(provider: provider)
         doSearch(searchWord: "mozilla", provider: provider)
@@ -40,16 +40,16 @@ class SearchProviderTest: BaseTestCase {
         }
         checkForHomeScreen()
 	}
-    
+
     func searchQuery(_ query: String, provider: String) {
         let urlbarUrltextTextField = app.textFields["URLBar.urlText"]
         changeSearchProvider(provider: provider)
-        
+
         urlbarUrltextTextField.tap()
         urlbarUrltextTextField.typeText(query)
         app.buttons["OverlayView.searchButton"].firstMatch.tap()
         waitForWebPageLoad()
-        
+
         urlbarUrltextTextField.tap()
         waitForValueContains(urlbarUrltextTextField, value: query)
     }
@@ -63,7 +63,7 @@ class SearchProviderTest: BaseTestCase {
         let settingsButton = app.settingsButton
         waitForExistence(settingsButton, timeout: 10)
         settingsButton.tap()
-        
+
         waitForExistence(app.tables.cells["SettingsViewController.searchCell"])
         app.tables.cells["SettingsViewController.searchCell"].tap()
         app.tables.cells["addSearchEngine"].tap()
@@ -119,7 +119,7 @@ class SearchProviderTest: BaseTestCase {
         waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
         // Set search engine to Google
         app.buttons["HomeView.settingsButton"].tap()
-        
+
         let settingsButton = app.settingsButton
         waitForExistence(settingsButton, timeout: 10)
         settingsButton.tap()
@@ -157,7 +157,6 @@ class SearchProviderTest: BaseTestCase {
 				waitForValueContains(urlbarUrltextTextField, value: "amazon.com")
                 waitForValueContains(app.webViews.textFields.element(boundBy: 0),
                     value: searchWord)
-
 			default:
 				XCTFail("Invalid Search Provider")
 		}

@@ -61,7 +61,6 @@ workflows:
         - target: Blockzilla
         - shards: '2'
         - scheme: Focus
-        - test_plan: SmokeTest.xctestplan
         - debug_mode: 'true'
         - test_path: ''
         - file_type: ".swift"
@@ -95,13 +94,13 @@ workflows:
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Focus_FullFunctionalTests_iphonesimulator16.4-arm64.xctestrun" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Focus_SmokeTest_iphonesimulator16.4-arm64.xctestrun" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Focus_UnitTests_iphonesimulator16.4-arm64.xctestrun" \
-            "$BITRISE_SOURCE_DIR/SmokeTest.xctestplan" \
-            "$BITRISE_SOURCE_DIR/FullFunctionalTests.xctestplan" \
+            "$BITRISE_SOURCE_DIR/focus-ios/SmokeTest.xctestplan" \
+            "$BITRISE_SOURCE_DIR/focus-ios/FullFunctionalTests.xctestplan" \
             "$BITRISE_SOURCE_DIR/xcodebuild.log" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/FocusDebug-iphonesimulator/" \
             "$BITRISE_SOURCE_DIR/Blockzilla.xcodeproj/UnitTests.xctestplan" \
             "$BITRISE_SOURCE_DIR/Blockzilla/" \
-            "$BITRISE_SOURCE_DIR/XCUITest" \
+            "$BITRISE_SOURCE_DIR/focus-ios/XCUITest" \
             "$BITRISE_SOURCE_DIR/ClientTests" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/KlarDebug-iphonesimulator/Firefox\ Klar.app" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/KlarDebug-iphonesimulator/XCUITest-Runner.app" \
@@ -166,9 +165,9 @@ workflows:
         - content: |
             #!/usr/bin/env bash
             set -ex
-            ls ./Users/vagrant/git/XCUITest/
+            ls ./Users/vagrant/git/focus-ios/XCUITest/
             ls ./Users/vagrant/git/DerivedData/Build/Products
-            cp -r ./Users/vagrant/git/XCUITest/* .
+            cp -r ./Users/vagrant/git/focus-ios/XCUITest/* .
             mv ./Users/vagrant/git/* .
             ls -la
             echo "-- test-without-building --"

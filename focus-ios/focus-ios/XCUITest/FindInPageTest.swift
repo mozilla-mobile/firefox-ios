@@ -38,7 +38,7 @@ class FindInPageTest: BaseTestCase {
 
         waitForExistence(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
-        
+
         let findInPageButton = app.findInPageButton
         waitForExistence(findInPageButton, timeout: 10)
         findInPageButton.tap()

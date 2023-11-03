@@ -41,7 +41,7 @@ class OnboardingTest: XCTestCase {
     func testPressingDots() throws {
         let pageIndicatorButton = app.pageIndicators.firstMatch
         XCTAssertEqual(pageIndicatorButton.value as? String, "page 1 of 2")
-        
+
         waitForExistence(app.staticTexts["Welcome to Firefox Focus!"], timeout: 15)
         XCTAssert(app.images["icon_background"].exists)
         XCTAssert(app.buttons["Get Started"].isEnabled)
@@ -55,7 +55,7 @@ class OnboardingTest: XCTestCase {
         XCTAssert(app.buttons["Skip"].isEnabled)
         XCTAssert(app.buttons["icon_close"].isEnabled)
         pageIndicatorButton.tap()
-        
+
         XCTAssertEqual(pageIndicatorButton.value as? String, "page 1 of 2")
         waitForExistence(app.staticTexts["Welcome to Firefox Focus!"], timeout: 15)
         pageIndicatorButton.tap()
