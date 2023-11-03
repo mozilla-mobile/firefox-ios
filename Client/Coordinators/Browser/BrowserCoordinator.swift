@@ -275,7 +275,6 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.presentSignInViewController(fxaParams)
     }
 
-
     private func canHandleSettings(with section: Route.SettingsSection) -> Bool {
         guard !childCoordinators.contains(where: { $0 is SettingsCoordinator}) else {
             return false // route is handled with existing child coordinator
