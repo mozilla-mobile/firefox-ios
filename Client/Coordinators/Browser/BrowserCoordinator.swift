@@ -174,7 +174,7 @@ class BrowserCoordinator: BaseCoordinator,
         case .searchQuery, .search, .searchURL, .glean, .homepanel, .action, .fxaSignIn, .defaultBrowser:
             return true
         case let .settings(section):
-            return canHandleSettings(with: section)        
+            return canHandleSettings(with: section)
         }
     }
 
@@ -373,14 +373,14 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func settingsOpenPage(settings: Route.SettingsSection) {
-        _ = handleSettings(with: settings)
+        handleSettings(with: settings)
     }
 
     // MARK: - BrowserNavigationHandler
 
     func show(settings: Route.SettingsSection) {
         presentWithModalDismissIfNeeded {
-            _ = self.handleSettings(with: settings)
+            self.handleSettings(with: settings)
         }
     }
 

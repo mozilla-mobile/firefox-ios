@@ -16,6 +16,6 @@ class MockSearchHandlerRouteCoordinator: BaseCoordinator {
     }
 
     override func handle(route: Route) {
-        
+ 
     }
 }

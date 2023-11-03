@@ -34,7 +34,7 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
         router.push(launchScreenVC, animated: false)
     }
 
-    override func canHandle(route: Route) -> Bool{
+    override func canHandle(route: Route) -> Bool {
         switch route {
         case .action(action: .showIntroOnboarding):
             return canShowIntroOnboarding()

@@ -27,7 +27,7 @@ protocol Coordinator: AnyObject {
     /// - Parameter route: The Route to navigate to.
     /// - Returns: true if the route can be handled.
     func canHandle(route: Route) -> Bool
-    
+
     /// Searches for a coordinator to handle the given route by recursively checking `canHandle()` of all
     /// child coordinators.
     /// - Parameter route: The route to find a matching coordinator for.
