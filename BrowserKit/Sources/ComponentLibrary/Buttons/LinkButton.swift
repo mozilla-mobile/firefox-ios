@@ -13,6 +13,7 @@ public class LinkButton: ResizableButton, ThemeApplicable {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        configuration = UIButton.Configuration.plain()
         backgroundColor = .clear
         titleLabel?.adjustsFontForContentSizeCategory = true
     }
@@ -20,10 +21,15 @@ public class LinkButton: ResizableButton, ThemeApplicable {
     public func configure(viewModel: LinkButtonViewModel) {
         accessibilityIdentifier = viewModel.a11yIdentifier
         setTitle(viewModel.title, for: .normal)
-        titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                                  size: viewModel.fontSize)
-        contentEdgeInsets = viewModel.contentEdgeInsets
+        configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
+                                                                   size: viewModel.fontSize)
+            return outgoing
+        }
+        configuration?.contentInsets = viewModel.contentInsets
         contentHorizontalAlignment = viewModel.contentHorizontalAlignment
+        layoutIfNeeded()
     }
 
     required init?(coder aDecoder: NSCoder) {

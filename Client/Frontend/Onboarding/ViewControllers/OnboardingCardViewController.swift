@@ -340,10 +340,10 @@ class OnboardingCardViewController: UIViewController, Themeable {
             title: buttonTitle,
             a11yIdentifier: "\(self.viewModel.a11yIdRoot)LinkButton",
             fontSize: UX.buttonFontSize,
-            contentEdgeInsets: UIEdgeInsets(top: UX.buttonVerticalInset,
-                                            left: UX.buttonHorizontalInset,
-                                            bottom: UX.buttonVerticalInset,
-                                            right: UX.buttonHorizontalInset),
+            contentInsets: NSDirectionalEdgeInsets(top: UX.buttonVerticalInset,
+                                                   leading: UX.buttonHorizontalInset,
+                                                   bottom: UX.buttonVerticalInset,
+                                                   trailing: UX.buttonHorizontalInset),
             contentHorizontalAlignment: .center
         )
         linkButton.configure(viewModel: buttonViewModel)

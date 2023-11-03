@@ -15,8 +15,8 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
         static let learnMoreButtonFontSize: CGFloat = 15
         static let termsOfUseButtonInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         static let disclaimerTextLabelFontSize: CGFloat = 13
-        static let disclaimerBlockInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        static let learnMoreInsets = UIEdgeInsets(top: -10, left: 0, bottom: 10, right: 0)
+        static let disclaimerBlockInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16)
+        static let learnMoreInsets = NSDirectionalEdgeInsets(top: -10, leading: 0, bottom: 10, trailing: 0)
         static let termsOfUseButtonTitleFontSize: CGFloat = 13
         static let privacyPolicyButtonTitleFontSize: CGFloat = 13
         static let secondaryButtonFontSize: CGFloat = 13
@@ -189,7 +189,7 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
             title: viewModel.learnMoreButtonText,
             a11yIdentifier: viewModel.learnMoreButtonA11yId,
             fontSize: UX.learnMoreButtonFontSize,
-            contentEdgeInsets: UX.learnMoreInsets
+            contentInsets: UX.learnMoreInsets
         )
         learnMoreButton.configure(viewModel: learnMoreButtonViewModel)
 
@@ -197,7 +197,7 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
             title: viewModel.termsOfUseButtonText,
             a11yIdentifier: viewModel.termsOfUseButtonA11yId,
             fontSize: UX.termsOfUseButtonTitleFontSize,
-            contentEdgeInsets: UX.disclaimerBlockInsets
+            contentInsets: UX.disclaimerBlockInsets
         )
         termsOfUseButton.configure(viewModel: termsOfUseButtonViewModel)
 
@@ -205,7 +205,7 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
             title: viewModel.privacyPolicyButtonText,
             a11yIdentifier: viewModel.privacyPolicyButtonA11yId,
             fontSize: UX.privacyPolicyButtonTitleFontSize,
-            contentEdgeInsets: UX.disclaimerBlockInsets
+            contentInsets: UX.disclaimerBlockInsets
         )
         privacyPolicyButton.configure(viewModel: privacyButtonViewModel)
 
