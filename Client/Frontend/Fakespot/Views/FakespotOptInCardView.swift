@@ -219,6 +219,7 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
             title: viewModel.secondaryButtonText,
             a11yIdentifier: viewModel.secondaryButtonA11yId,
             fontSize: UX.secondaryButtonFontSize,
+            contentInsets: .zero,
             contentHorizontalAlignment: .center
         )
         secondaryButton.configure(viewModel: secondaryButtonViewModel)

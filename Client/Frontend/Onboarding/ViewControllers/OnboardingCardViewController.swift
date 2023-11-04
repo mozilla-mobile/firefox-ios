@@ -25,8 +25,6 @@ class OnboardingCardViewController: UIViewController, Themeable {
         static let descriptionBoldFontSize: CGFloat = 20
         static let descriptionFontSize: CGFloat = 17
         static let imageViewSize = CGSize(width: 240, height: 300)
-        static let buttonVerticalInset: CGFloat = 12
-        static let buttonHorizontalInset: CGFloat = 16
 
         // small device
         static let smallTitleFontSize: CGFloat = 20
@@ -340,10 +338,6 @@ class OnboardingCardViewController: UIViewController, Themeable {
             title: buttonTitle,
             a11yIdentifier: "\(self.viewModel.a11yIdRoot)LinkButton",
             fontSize: UX.buttonFontSize,
-            contentInsets: NSDirectionalEdgeInsets(top: UX.buttonVerticalInset,
-                                                   leading: UX.buttonHorizontalInset,
-                                                   bottom: UX.buttonVerticalInset,
-                                                   trailing: UX.buttonHorizontalInset),
             contentHorizontalAlignment: .center
         )
         linkButton.configure(viewModel: buttonViewModel)

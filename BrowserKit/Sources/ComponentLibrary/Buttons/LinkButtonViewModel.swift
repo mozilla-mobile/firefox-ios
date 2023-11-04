@@ -7,6 +7,11 @@ import Foundation
 
 /// The view model used to configure a `LinkButton`
 public struct LinkButtonViewModel {
+    public struct UX {
+        public static let verticalInset: CGFloat = 12
+        public static let horizontalInset: CGFloat = 16
+    }
+
     public let title: String
     public let a11yIdentifier: String
     public let fontSize: CGFloat
@@ -16,7 +21,10 @@ public struct LinkButtonViewModel {
     public init(title: String,
                 a11yIdentifier: String,
                 fontSize: CGFloat = 16,
-                contentInsets: NSDirectionalEdgeInsets = .zero,
+                contentInsets: NSDirectionalEdgeInsets = NSDirectionalEdgeInsets(top: UX.verticalInset,
+                                                                                 leading: UX.horizontalInset,
+                                                                                 bottom: UX.verticalInset,
+                                                                                 trailing: UX.horizontalInset),
                 contentHorizontalAlignment: UIControl.ContentHorizontalAlignment = .leading) {
         self.title = title
         self.a11yIdentifier = a11yIdentifier
