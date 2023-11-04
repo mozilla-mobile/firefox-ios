@@ -31,22 +31,28 @@ open class KeychainCache<T: JSONLiteralConvertible> {
                                withDefault defaultValue: T? = nil,
                                factory: ([String: Any]) -> T?,
                                logger: Logger = DefaultLogger.shared) -> KeychainCache<T> {
-        if let l = label {
-            let key = "\(branch).\(l)"
+        if let label = label {
+            let key = "\(branch).\(label)"
             MZKeychainWrapper.sharedClientAppContainerKeychain.ensureStringItemAccessibility(.afterFirstUnlock, forKey: key)
-            if let s = MZKeychainWrapper.sharedClientAppContainerKeychain.string(forKey: key) {
-                if let dictionaryObject = s.jsonDictionary, let t = factory(dictionaryObject) {
-                    logger.log("Read \(branch) from Keychain with label \(branch).\(l).",
-                               level: .debug,
-                               category: .storage)
-                    return KeychainCache(branch: branch, label: l, value: t)
+            if let keychainString = MZKeychainWrapper.sharedClientAppContainerKeychain.string(forKey: key) {
+                if let data = keychainString.data(using: .utf8), let dictionaryObject = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                    if let value = factory(dictionaryObject) {
+                        logger.log("Read \(branch) from Keychain with label \(branch).\(label).",
+                                   level: .debug,
+                                   category: .storage)
+                        return KeychainCache(branch: branch, label: label, value: value)
+                    } else {
+                        logger.log("Found \(branch) in Keychain with label \(branch).\(label), data parsed, but could not convert it.",
+                                   level: .warning,
+                                   category: .storage)
+                    }
                 } else {
-                    logger.log("Found \(branch) in Keychain with label \(branch).\(l), but could not parse it.",
+                    logger.log("Found \(branch) in Keychain with label \(branch).\(label), but could not parse it.",
                                level: .warning,
                                category: .storage)
                 }
             } else {
-                logger.log("Did not find \(branch) in Keychain with label \(branch).\(l).",
+                logger.log("Did not find \(branch) in Keychain with label \(branch).\(label).",
                            level: .warning,
                            category: .storage)
             }

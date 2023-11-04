@@ -35,13 +35,6 @@ public extension String {
         return data.sha256
     }
 
-    var jsonDictionary: [String: Any]? {
-        if let data = data(using: .utf8) {
-            return try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-        }
-        return nil
-    }
-
     var utf8EncodedData: Data {
         return data(using: .utf8, allowLossyConversion: false)!
     }
