@@ -1,5 +1,5 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one indicates that a user can tap on the shopping button to start using the Shopping feature. */
-"ContextualHints.Shopping.NotOptedIn.v120" = "გაარკვიეთ, სანდოა თუ არა გასაყიდი ნაწარმის მიმოხილვები — მის შეძენამდე.";
+"ContextualHints.Shopping.NotOptedIn.v120" = "გაარკვიეთ, სანდოა თუ არა გასაყიდი ნაწარმის მიმოხილვები — შეძენამდე.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing the Shopping feature. It indicates that a user can go directly to the Shopping feature by tapping the text of the action. */
 "ContextualHints.Shopping.NotOptedInAction.v120" = "გამოცადეთ მიმოხილვის შემმოწმებელი";
@@ -8,10 +8,10 @@
 "ContextualHints.Shopping.OptedInAction.v120" = "მიმოხილვის შემმოწმებლის გახსნა";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one appears after the user has opted in and informs him if he wants use the review checker by tapping the Shopping button. */
-"ContextualHints.Shopping.OptedInBody.v120" = "სანდოა ეს მიმოხილვები? შეამოწმეთ ახლავე შესწორებული შეფასების სანახავად.";
+"ContextualHints.Shopping.OptedInBody.v120" = "სანდოა ეს მიმოხილვები? გადაამოწმეთ ახლავე შესწორებული შეფასების სანახავად.";
 
 /* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
-"Shopping.AdjustedRating.Description.v120" = "არასანდო მიმოხილვები მოცილებულია";
+"Shopping.AdjustedRating.Description.v120" = "არასანდო მიმოხილვების გამოკლებით";
 
 /* Accessibility label, associated to adjusted rating stars. %@ is a decimal value from 0 to 5 that will only use a tenth (example: 3.5). */
 "Shopping.AdjustedRating.StarsAccessibilityLabel.v120" = "%@ ვარსკვლავი 5-იდან";
@@ -59,7 +59,7 @@
 "Shopping.InfoCard.NeedsAnalysis.PrimaryAction.v120" = "შემოწმება";
 
 /* Title for info card when the product needs analysis */
-"Shopping.InfoCard.NeedsAnalysis.Title.v120" = "ახალი მონაცემები შესამოწმებლად";
+"Shopping.InfoCard.NeedsAnalysis.Title.v120" = "ახალი მონაცემებია შესამოწმებელი";
 
 /* Description for info card when no information is available at the moment */
 "Shopping.InfoCard.NoInfoAvailableRightNow.Description.v120" = "ჩვენ ვმუშაობთ საკითხის გადასაწყვეტად. გთხოვთ, მოგვიანებით დაუბრუნდეთ.";
@@ -98,10 +98,10 @@
 "Shopping.OptInCard.Disclaimer.Title.v120" = "თუ მიუთითებთ „დიახ, მოისინჯოს“, ესე იგი თქვენთვის მისაღებია %@:";
 
 /* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. The third and fourth parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. */
-"Shopping.OptInCard.FirstParagraph.Description.v120" = "იხილეთ, რამდენად სანდოა გასაყიდი ნაწარმის მიმოხილვები %1$@ საიტზე მის შეძენამდე. მიმოხილვის შემმოწმებელი, საცდელი შესაძლებლობა, რომელსაც გთავაზობთ %2$@ და პირდაპირ ბრაუზერშივეა ჩაშენებული. მხარდაჭერილია %3$@ და აგრეთვე %4$@.";
+"Shopping.OptInCard.FirstParagraph.Description.v120" = "გადაამოწმეთ შეძენამდე, თუ რამდენად სანდოა გასაყიდი ნაწარმის მიმოხილვები საიტზე %1$@. მიმოხილვის შემმოწმებელი საცდელი შესაძლებლობაა %2$@-სგან და პირდაპირ ბრაუზერშივეა ჩაშენებული. მხარდაჭერილია %3$@ და აგრეთვე %4$@.";
 
 /* Label for the header of the Shopping Experience Opt In onboarding Card (Fakespot) */
-"Shopping.OptInCard.HeaderLabel.Title.v120" = "გამოცადეთ ჩვენი სანდო მეგზური საყიდლების მიმოხილვებისთვის";
+"Shopping.OptInCard.HeaderLabel.Title.v120" = "გამოცადეთ ჩვენი საიმედო მეგზური საყიდლების მიმოხილვებისთვის";
 
 /* Label for the Learn more button in the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.LearnMoreButtonTitle.Title.v120" = "ვრცლად";
@@ -128,16 +128,16 @@
 "Shopping.ReviewQuality.ReliabilityCardTitle.v120" = "რამდენად სანდოა ეს მიმოხილვები?";
 
 /* Description of the reliability ratings for rating 'A' and 'B' displayed in the shopping review quality bottom sheet. */
-"Shopping.ReviewQuality.ReliabilityRating.AB.Description.v120" = "სანდო მიმოხილვები";
+"Shopping.ReviewQuality.ReliabilityRating.AB.Description.v120" = "სანდოა მიმოხილვები";
 
 /* Description of the reliability rating 'C' displayed in the shopping review quality bottom sheet. */
-"Shopping.ReviewQuality.ReliabilityRating.C.Description.v120" = "შერეულად სანდო და არასანდო მიმოხილვები";
+"Shopping.ReviewQuality.ReliabilityRating.C.Description.v120" = "შერეულადაა სანდო და არასანდო მიმოხილვები";
 
 /* Description of the reliability ratings for rating 'D' and 'F' displayed in the shopping review quality bottom sheet. */
-"Shopping.ReviewQuality.ReliabilityRating.DF.Description.v120" = "არასანდო მიმოხილვები";
+"Shopping.ReviewQuality.ReliabilityRating.DF.Description.v120" = "არასანდოა მიმოხილვები";
 
 /* Adjusted rating label from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
-"Shopping.ReviewQualityCard.AdjustedRating.Label.v120" = "*შესწორებული შეფასება* ეყრდნობა მხოლოდ იმ მიმოხილვებს, რომლებიც სანდოდ მიგვაჩნია.";
+"Shopping.ReviewQualityCard.AdjustedRating.Label.v120" = "*შესწორებული შეფასება* ეყრდნობა მხოლოდ სანდოდ მიჩნეულ მიმოხილვებს.";
 
 /* Accessibility label for the up chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQualityCard.Collapse.AccessibilityLabel.v120" = "ხარისხის შემოწმების ჩვენი განმარტებითი ბარათის აკეცვა";
@@ -146,10 +146,10 @@
 "Shopping.ReviewQualityCard.Expand.AccessibilityLabel.v120" = "ხარისხის შემოწმების ჩვენი განმარტებითი ბარათის გაშლა";
 
 /* Label of the headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
-"Shopping.ReviewQualityCard.Headline.Label.v120" = "ჩვენ ვიყენებთ ხელოვნური ინტელექტის შესაძლებლობებს %2$@-ს საიტიდან %1$@ მიმოხილვების სანდოობის გადასამოწმებლად. ეს მხოლოდ მიმოხილვის ხარისხის შეფასებაში დაგეხმარებათ და არა – ნაწარმის ხარისხისა.";
+"Shopping.ReviewQualityCard.Headline.Label.v120" = "%1$@ %2$@-სგან ხელოვნური ინტელექტის შესაძლებლობებით ამოწმებს მიმოხილვების სანდოობას. ამით მხოლოდ მიმოხილვის ხარისხი დგინდება და არა – ნაწარმის ხარისხი.";
 
 /* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
-"Shopping.ReviewQualityCard.Highlights.Label.v120" = "*გამოსარჩევი* ბოლო 80 დღეში %1@ -ის მიმოხილვებიდან, რომლებიც სანდოდ მიგვაჩნია.";
+"Shopping.ReviewQualityCard.Highlights.Label.v120" = "*გამოსარჩევი* ბოლო 80 დღეში %1@ -ის სანდოდ მიჩნეული მიმოხილვებიდან.";
 
 /* Title of the 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQualityCard.Label.Title.v120" = "როგორ განისაზღვრება მიმოხილვის ხარისხი";
@@ -161,13 +161,13 @@
 "Shopping.ReviewQualityCard.MixedReviews.Label.v120" = "მიგვაჩნია, რომ შერეულადაა სანდო და არასანდო მიმოხილვები";
 
 /* Reliable reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
-"Shopping.ReviewQualityCard.ReliableReviews.Label.v120" = "სანდო მიმოხილვები. მიგვაჩნია, რომ ეს მიმოხილვები, სავარაუდოდ, ნამდვილი მომხმარებლებისგანაა დატოვებული პატიოსნად და მიუკერძოებლად.";
+"Shopping.ReviewQualityCard.ReliableReviews.Label.v120" = "სანდოა მიმოხილვები. მიგვაჩნია, რომ ეს მიმოხილვები მეტწილად ნამდვილი მომხმარებლების დატოვებულია პატიოსნად და მიუკერძოებლად.";
 
 /* Label of the sub headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "Shopping.ReviewQualityCard.SubHeadline.Label.v120" = "გასაყიდ ნაწარმზე თითოეულ მიმოხილვას ეწერება *ნიშნები* A-დან F-მდე.";
 
 /* Unreliable reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
-"Shopping.ReviewQualityCard.UnreliableReviews.Label.v120" = "არასანდო მიმოხილვები. მიგვაჩნია, რომ ეს მიმოხილვები, სავარაუდოდ, ყალბი ან მიკერძოებული მიმომხილველებისგანაა.";
+"Shopping.ReviewQualityCard.UnreliableReviews.Label.v120" = "არასანდოა მიმოხილვები. მიგვაჩნია, რომ ეს მიმოხილვები მეტწილად ყალბი ან მიკერძოებული მიმომხილველებისგანაა.";
 
 /* Accessibility label for the up chevron icon used to collapse or minimize the Settings Card within the shopping product review bottom sheet. */
 "Shopping.SettingsCard.Collapse.AccessibilityLabel.v120" = "პარამეტრების აკეცვა";
@@ -176,7 +176,7 @@
 "Shopping.SettingsCard.Expand.AccessibilityLabel.v120" = "პარამეტრების გაშლა";
 
 /* Action title of the footer underneath the Settings Card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
-"Shopping.SettingsCard.Footer.Action.v120" = "მიმოხილვის შემმოწმებელს უზრუნველყოფს %1$@ %2$@-სგან";
+"Shopping.SettingsCard.Footer.Action.v120" = "მიმოხილვის შემმოწმებლის უზრუნველმყოფია %1$@ %2$@-სგან";
 
 /* Title of the settings card displayed in the shopping review quality bottom sheet. */
 "Shopping.SettingsCard.Label.Title.v120" = "პარამეტრები";

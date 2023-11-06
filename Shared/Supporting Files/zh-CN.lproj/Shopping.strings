@@ -101,7 +101,7 @@
 "Shopping.OptInCard.FirstParagraph.Description.v120" = "购买前看看 %1$@ 上产品评论的可靠性。核查评价是来自 %2$@ 的实验性功能，它直接内置在浏览器中，同样也适用于 %3$@ 和 %4$@。";
 
 /* Label for the header of the Shopping Experience Opt In onboarding Card (Fakespot) */
-"Shopping.OptInCard.HeaderLabel.Title.v120" = "试试我们可信赖的商品评价指南";
+"Shopping.OptInCard.HeaderLabel.Title.v120" = "试试我们可信赖的商品评价向导";
 
 /* Label for the Learn more button in the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.LearnMoreButtonTitle.Title.v120" = "详细了解";
@@ -131,7 +131,7 @@
 "Shopping.ReviewQuality.ReliabilityRating.AB.Description.v120" = "可信评价";
 
 /* Description of the reliability rating 'C' displayed in the shopping review quality bottom sheet. */
-"Shopping.ReviewQuality.ReliabilityRating.C.Description.v120" = "介于可信与不可信评价之间的评价";
+"Shopping.ReviewQuality.ReliabilityRating.C.Description.v120" = "可信与不可信评价混杂";
 
 /* Description of the reliability ratings for rating 'D' and 'F' displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQuality.ReliabilityRating.DF.Description.v120" = "不可信评价";
@@ -176,7 +176,7 @@
 "Shopping.SettingsCard.Expand.AccessibilityLabel.v120" = "展开设置卡片";
 
 /* Action title of the footer underneath the Settings Card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
-"Shopping.SettingsCard.Footer.Action.v120" = "核查评价由 %2$@ 的 %1$@ 提供支持";
+"Shopping.SettingsCard.Footer.Action.v120" = "核查评价由 %2$@ 支持的 %1$@ 提供支持";
 
 /* Title of the settings card displayed in the shopping review quality bottom sheet. */
 "Shopping.SettingsCard.Label.Title.v120" = "设置";

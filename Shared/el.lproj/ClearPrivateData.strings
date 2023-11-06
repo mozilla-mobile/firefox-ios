@@ -2,7 +2,7 @@
 "Browsing History" = "Ιστορικό περιήγησης";
 
 /* Settings item for clearing the cache */
-"Cache" = "Κρυφή μνήμη";
+"Cache" = "Προσωρινή μνήμη";
 
 /* Settings item for clearing cookies */
 "Cookies" = "Cοokies";
@@ -11,7 +11,7 @@
 "Downloaded Files" = "Ληφθέντα αρχεία";
 
 /* Settings item for clearing website data */
-"Offline Website Data" = "Δεδομένα ιστοσελίδων εκτός σύνδεσης";
+"Offline Website Data" = "Δεδομένα ιστοτόπων εκτός σύνδεσης";
 
 /* Settings item for clearing passwords and login data */
 "Saved Logins" = "Αποθηκευμένες συνδέσεις";
