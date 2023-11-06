@@ -68,7 +68,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
         showFakespotFlowAsModalCalled += 1
     }
 
-    func showFakespotFlowAsSidebar(productURL: URL, 
+    func showFakespotFlowAsSidebar(productURL: URL,
                                    sidebarContainer: Client.SidebarEnabledViewProtocol,
                                    parentViewController: UIViewController) {
         showFakespotFlowAsSidebarCalled += 1
@@ -78,7 +78,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
         dismissFakespotModalCalled += 1
     }
 
-    func dismissFakespotSidebar(sidebarContainer: Client.SidebarEnabledViewProtocol, 
+    func dismissFakespotSidebar(sidebarContainer: Client.SidebarEnabledViewProtocol,
                                 parentViewController: UIViewController) {
         dismissFakespotSidebarCalled += 1
     }
