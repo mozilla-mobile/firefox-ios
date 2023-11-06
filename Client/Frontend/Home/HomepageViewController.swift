@@ -2,15 +2,16 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Shared
-import UIKit
-import Storage
-import MozillaAppServices
 import Common
 import ComponentLibrary
+import MozillaAppServices
+import Shared
+import Storage
+import Redux
+import UIKit
 
 class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, ContentContainable,
-                                SearchBarLocationProvider {
+                                SearchBarLocationProvider, StoreSubscriber {
     // MARK: - Typealiases
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
     typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
@@ -115,6 +116,10 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
         notificationCenter.removeObserver(self)
     }
 
+    func newState(state: AppState) {
+        print("RGB - \(state.isInPrivateMode)")
+    }
+
     // MARK: - View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -129,6 +134,7 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
+        store.subscribe(self)
 
         setupSectionsAction()
         reloadView()
