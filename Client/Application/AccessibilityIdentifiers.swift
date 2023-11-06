@@ -120,6 +120,13 @@ public struct AccessibilityIdentifiers {
         static let sheetHeaderBetaLabel = "Shopping.Sheet.HeaderBetaLabel"
         static let sheetCloseButton = "Shopping.Sheet.CloseButton"
 
+        struct ReportProductInStockCard {
+            static let card = "Shopping.ReportProductInStockCard.Card"
+            static let title = "Shopping.ReportProductInStockCard.Title"
+            static let description = "Shopping.ReportProductInStockCard.Description"
+            static let primaryAction = "Shopping.ReportProductInStockCard.PrimaryAction"
+        }
+
         struct AnalysisProgressInfoCard {
             static let card = "Shopping.AnalysisProgressInfoCard.Card"
             static let title = "Shopping.AnalysisProgressInfoCard.Title"

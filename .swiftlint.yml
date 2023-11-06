@@ -120,7 +120,8 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   # so must be excluded due to file_header rule
   - Package.swift
   - BrowserKit/Package.swift
-  - content-blocker-lib-ios/ContentBlockerGenerator/Package.swift
+  - Client/ContentBlocker/ContentBlockerGenerator/Package.swift
+  
 
 included:
   - /Users/vagrant/git

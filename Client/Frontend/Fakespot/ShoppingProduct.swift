@@ -57,6 +57,10 @@ class ShoppingProduct: FeatureFlaggable {
         return true
     }
 
+    var isProductBackInStockFeatureEnabled: Bool {
+        featureFlags.isFeatureEnabled(.fakespotBackInStock, checking: .buildOnly)
+    }
+
     var isShoppingButtonVisible: Bool {
         return product != nil && isFakespotFeatureEnabled
     }

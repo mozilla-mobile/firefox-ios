@@ -13,107 +13,113 @@ class FakespotViewModel {
         case loaded(ProductAnalysisData?, AnalysisStatus?, analysisCount: Int)
         case error(Error)
 
-        fileprivate var viewElements: [ViewElement] {
-            switch self {
-            case .loading:
-                return [.loadingView]
-            case let .loaded(product, analysisStatus, analysisCount):
-                guard let product else {
-                    return [
-                        .messageCard(.genericError),
-                        .qualityDeterminationCard,
-                        .settingsCard
-                    ]
-                }
-
-                if product.grade == nil {
-                    recordNoReviewReliabilityAvailableTelemetry()
-                }
-
-                if product.productNotSupportedCardVisible {
-                    return [
-                        .messageCard(.productNotSupported),
-                        .qualityDeterminationCard,
-                        .settingsCard
-                    ]
-                } else if product.notAnalyzedCardVisible {
-                    // Don't show not analyzed message card if analysis is in progress
-                    var cards: [ViewElement] = []
-
-                    if analysisStatus?.isAnalyzing == true {
-                        cards.append(.progressAnalysisCard)
-                    } else {
-                        cards.append(.noAnalysisCard)
-                    }
-
-                    cards += [
-                        .qualityDeterminationCard,
-                        .settingsCard
-                    ]
-                    return cards
-                } else if product.notEnoughReviewsCardVisible {
-                    var cards: [ViewElement] = []
-
-                    if analysisCount > 0 {
-                        cards.append(.messageCard(.notEnoughReviews))
-                    } else {
-                        if analysisStatus?.isAnalyzing == true {
-                            cards.append(.progressAnalysisCard)
-                        } else {
-                            cards.append(.noAnalysisCard)
-                        }
-                    }
-
-                    cards += [
-                        .qualityDeterminationCard,
-                        .settingsCard
-                    ]
-                    return cards
-                } else if product.needsAnalysisCardVisible {
-                    // Don't show needs analysis message card if analysis is in progress
-                    var cards: [ViewElement] = []
-
-                    if analysisStatus?.isAnalyzing == true {
-                        cards.append(.messageCard(.analysisInProgress))
-                    } else {
-                        cards.append(.messageCard(.needsAnalysis))
-                    }
-
-                    cards += [
-                        .reliabilityCard,
-                        .adjustRatingCard,
-                        .highlightsCard,
-                        .qualityDeterminationCard,
-                        .settingsCard
-                    ]
-
-                    return cards
-                } else {
-                    return [
-                        .reliabilityCard,
-                        .adjustRatingCard,
-                        .highlightsCard,
-                        .qualityDeterminationCard,
-                        .settingsCard
-                    ]
-                }
-            case let .error(error):
-                let baseElements = [ViewElement.qualityDeterminationCard, .settingsCard]
-                if let error = error as NSError?, error.domain == NSURLErrorDomain, error.code == -1009 {
-                    return [.messageCard(.noConnectionError)] + baseElements
-                } else {
-                    return [.messageCard(.genericError)] + baseElements
-                }
-            case .onboarding:
-                return [.onboarding]
-            }
-        }
-
         fileprivate var productData: ProductAnalysisData? {
             switch self {
             case .loading, .error, .onboarding: return nil
             case .loaded(let data, _, _): return data
             }
+        }
+    }
+
+    fileprivate func viewElements(for viewState: ViewState) -> [ViewElement] {
+        switch viewState {
+        case .loading:
+            return [.loadingView]
+        case let .loaded(product, analysisStatus, analysisCount):
+            guard let product else {
+                return [
+                    .messageCard(.genericError),
+                    .qualityDeterminationCard,
+                    .settingsCard
+                ]
+            }
+
+            if product.grade == nil {
+                Self.recordNoReviewReliabilityAvailableTelemetry()
+            }
+
+            if product.reportProductInStockCardVisible && shoppingProduct.isProductBackInStockFeatureEnabled {
+                return [
+                    .messageCard(.reportProductInStock),
+                    .qualityDeterminationCard,
+                    .settingsCard
+                ]
+            } else if product.productNotSupportedCardVisible {
+                return [
+                    .messageCard(.productNotSupported),
+                    .qualityDeterminationCard,
+                    .settingsCard
+                ]
+            } else if product.notAnalyzedCardVisible {
+                // Don't show not analyzed message card if analysis is in progress
+                var cards: [ViewElement] = []
+
+                if analysisStatus?.isAnalyzing == true {
+                    cards.append(.progressAnalysisCard)
+                } else {
+                    cards.append(.noAnalysisCard)
+                }
+
+                cards += [
+                    .qualityDeterminationCard,
+                    .settingsCard
+                ]
+                return cards
+            } else if product.notEnoughReviewsCardVisible {
+                var cards: [ViewElement] = []
+
+                if analysisCount > 0 {
+                    cards.append(.messageCard(.notEnoughReviews))
+                } else {
+                    if analysisStatus?.isAnalyzing == true {
+                        cards.append(.progressAnalysisCard)
+                    } else {
+                        cards.append(.noAnalysisCard)
+                    }
+                }
+
+                cards += [
+                    .qualityDeterminationCard,
+                    .settingsCard
+                ]
+                return cards
+            } else if product.needsAnalysisCardVisible {
+                // Don't show needs analysis message card if analysis is in progress
+                var cards: [ViewElement] = []
+
+                if analysisStatus?.isAnalyzing == true {
+                    cards.append(.messageCard(.analysisInProgress))
+                } else {
+                    cards.append(.messageCard(.needsAnalysis))
+                }
+
+                cards += [
+                    .reliabilityCard,
+                    .adjustRatingCard,
+                    .highlightsCard,
+                    .qualityDeterminationCard,
+                    .settingsCard
+                ]
+
+                return cards
+            } else {
+                return [
+                    .reliabilityCard,
+                    .adjustRatingCard,
+                    .highlightsCard,
+                    .qualityDeterminationCard,
+                    .settingsCard
+                ]
+            }
+        case let .error(error):
+            let baseElements = [ViewElement.qualityDeterminationCard, .settingsCard]
+            if let error = error as NSError?, error.domain == NSURLErrorDomain, error.code == -1009 {
+                return [.messageCard(.noConnectionError)] + baseElements
+            } else {
+                return [.messageCard(.genericError)] + baseElements
+            }
+        case .onboarding:
+            return [.onboarding]
         }
     }
 
@@ -135,6 +141,7 @@ class FakespotViewModel {
             case notEnoughReviews
             case needsAnalysis
             case analysisInProgress
+            case reportProductInStock
         }
     }
 
@@ -154,7 +161,7 @@ class FakespotViewModel {
     var viewElements: [ViewElement] {
         guard isOptedIn else { return [.onboarding] }
 
-        return state.viewElements
+        return viewElements(for: state)
     }
 
     private let prefs: Prefs
@@ -239,6 +246,17 @@ class FakespotViewModel {
         a11yTitleIdentifier: AccessibilityIdentifiers.Shopping.AnalysisProgressInfoCard.title
     )
 
+    lazy var reportProductInStockViewModel = FakespotMessageCardViewModel(
+        type: .info,
+        title: .Shopping.InfoCardProductNotInStockTitle,
+        description: .Shopping.InfoCardProductNotInStockDescription,
+        primaryActionText: .Shopping.InfoCardProductNotInStockPrimaryAction,
+        a11yCardIdentifier: AccessibilityIdentifiers.Shopping.ReportProductInStockCard.card,
+        a11yTitleIdentifier: AccessibilityIdentifiers.Shopping.ReportProductInStockCard.title,
+        a11yDescriptionIdentifier: AccessibilityIdentifiers.Shopping.ReportProductInStockCard.description,
+        a11yPrimaryActionIdentifier: AccessibilityIdentifiers.Shopping.ReportProductInStockCard.primaryAction
+    )
+
     let settingsCardViewModel = FakespotSettingsCardViewModel()
     var noAnalysisCardViewModel = FakespotNoAnalysisCardViewModel()
     let reviewQualityCardViewModel = FakespotReviewQualityCardViewModel()
@@ -302,6 +320,12 @@ class FakespotViewModel {
         } catch {
             // Sometimes we get an error that product is not found in analysis so we fetch new information
             await fetchProductAnalysis()
+        }
+    }
+
+    func reportProductBackInStock() {
+        Task {
+            _ = try? await shoppingProduct.reportProductBackInStock()
         }
     }
 

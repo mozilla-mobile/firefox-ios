@@ -63,22 +63,26 @@ const sendCaptureAddressFormMessage = addressSendMessage(
 // Create a FormAutofillHelper object and expose it to the window object.
 // The FormAutofillHelper should:
 // - expose a method .fillFormFields(payload) that can be called from swift to fill in data.
-// - call sendCaptureCreditCardFormMessage(payload) when a credit card form submission is detected.
-// - call sendFillCreditCardFormMessage(payload) when a credit card form is detected.
-// - call sendCaptureAddressFormMessage(payload) when a address form submission is detected.
-// - call sendFillAddressFormMessage(payload) when a address form is detected.
+// - call creditCard.submit(payload) when a credit card form submission is detected.
+// - call creditCard.autofill(payload) when a credit card form is detected.
+// - call address.submit(payload) when a address form submission is detected.
+// - call address.autofill(payload) when a address form is detected.
 // The implementation file can be changed in Client/Assets/CC_Script/Overrides.ios.js
 Object.defineProperty(window.__firefox__, "FormAutofillHelper", {
   enumerable: false,
   configurable: false,
   writable: false,
   value: Object.freeze(
-    new FormAutofillHelper(
-      sendCaptureCreditCardFormMessage,
-      sendFillCreditCardFormMessage,
-      sendCaptureAddressFormMessage,
-      sendFillAddressFormMessage
-    )
+    new FormAutofillHelper({
+      creditCard: {
+        submit: sendCaptureCreditCardFormMessage,
+        autofill: sendFillCreditCardFormMessage,
+      },
+      address: {
+        submit: sendCaptureAddressFormMessage,
+        autofill: sendFillAddressFormMessage,
+      },
+    })
   ),
 });
 

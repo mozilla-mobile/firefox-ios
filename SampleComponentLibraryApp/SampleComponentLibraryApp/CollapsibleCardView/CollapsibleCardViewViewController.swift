@@ -46,8 +46,8 @@ class CollapsibleCardViewViewController: UIViewController, Themeable {
             title: "Collapsible Card View Title",
             titleA11yId: "CollapsibleCardViewTitle",
             expandButtonA11yId: "CollapsibleCardViewExpandButton",
-            expandButtonA11yLabelExpanded: "Collapse card",
-            expandButtonA11yLabelCollapsed: "Expand card")
+            expandButtonA11yLabelExpand: "Collapse card",
+            expandButtonA11yLabelCollapse: "Expand card")
         cardView.configure(viewModel)
 
         cardView.applyTheme(theme: themeManager.currentTheme)
