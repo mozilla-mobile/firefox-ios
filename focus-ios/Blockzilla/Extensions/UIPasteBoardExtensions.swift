@@ -23,7 +23,7 @@ extension UIPasteboard {
     //
     func urlAsync(callback: @escaping (URL?) -> Void) {
         DispatchQueue.global().async {
-            let url = URL(string: UIPasteboard.general.string ?? "")
+            let url = URL(string: UIPasteboard.general.string ?? "", invalidCharacters: false)
             callback(url)
         }
     }

@@ -55,11 +55,14 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
             case .aboutCategories:
                 switch row {
                 case 0:
-                    return URL(string: "https://support.mozilla.org/\(AppInfo.config.supportPath)")
+                    return URL(string: "https://support.mozilla.org/\(AppInfo.config.supportPath)",
+                               invalidCharacters: false)
                 case 1:
-                    return URL(string: "https://www.mozilla.org/en-US/about/legal/terms/firefox/")
+                    return URL(string: "https://www.mozilla.org/en-US/about/legal/terms/firefox/",
+                               invalidCharacters: false)
                 case 2:
-                    return URL(string: "https://www.mozilla.org/privacy/firefox-focus")
+                    return URL(string: "https://www.mozilla.org/privacy/firefox-focus",
+                               invalidCharacters: false)
                 default:
                     return nil
                 }
@@ -175,7 +178,8 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
 
     fileprivate func aboutHeaderViewDidPressLearnMore(_ aboutHeaderView: AboutHeaderView) {
-        let url = URL(string: "https://www.mozilla.org/\(AppInfo.languageCode)/about/manifesto/")
+        let url = URL(string: "https://www.mozilla.org/\(AppInfo.languageCode)/about/manifesto/",
+                      invalidCharacters: false)
         pushSettingsContentViewControllerWithURL(url)
     }
 }

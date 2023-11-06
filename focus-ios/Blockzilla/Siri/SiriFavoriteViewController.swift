@@ -220,7 +220,7 @@ class SiriFavoriteViewController: UIViewController {
         if !sanitizedDomain.hasPrefix("http://") && !sanitizedDomain.hasPrefix("https://") {
             sanitizedDomain = String(format: "https://%@", sanitizedDomain)
         }
-        guard let url = URL(string: sanitizedDomain) else {
+        guard let url = URL(string: sanitizedDomain, invalidCharacters: false) else {
             Toast(text: UIConstants.strings.autocompleteAddCustomUrlError).show()
             return false
         }

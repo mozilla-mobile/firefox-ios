@@ -57,6 +57,13 @@ private var etldEntries: TLDEntryMap? = {
 
 // MARK: - Local Resource URL Extensions
 extension URL {
+    public init?(string: String, invalidCharacters: Bool) {
+        if #available(iOS 17, *) {
+            self.init(string: string, encodingInvalidCharacters: invalidCharacters)
+        } else {
+            self.init(string: string)
+        }
+    }
 
     public func allocatedFileSize() -> Int64 {
         // First try to get the total allocated size and in failing that, get the file allocated size

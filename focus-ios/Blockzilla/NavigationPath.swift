@@ -54,7 +54,7 @@ enum NavigationPath {
         }
         else if host == "open-url" {
             let urlString = unescape(string: query["url"]) ?? ""
-            guard let url = URL(string: urlString) else { return nil }
+            guard let url = URL(string: urlString, invalidCharacters: false) else { return nil }
             self = .url(url)
         } else if host == "open-text" || isHttpScheme {
             let text = unescape(string: query["text"]) ?? ""

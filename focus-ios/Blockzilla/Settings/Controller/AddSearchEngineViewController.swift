@@ -243,7 +243,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
 
         let searchString = template.replacingOccurrences(of: "%s", with: "Firefox Focus".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)
 
-        guard URL(string: searchString) != nil else {
+        guard URL(string: searchString, invalidCharacters: false) != nil else {
             presentRetryError()
             showIndicator(false)
             return
@@ -295,7 +295,9 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
             return false
         }
 
-        guard let url = URL(string: template.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed)!) else { return false }
+        guard let url = URL(string: template.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed)!,
+                            invalidCharacters: false)
+        else { return false }
         return url.isWebPage()
     }
 }

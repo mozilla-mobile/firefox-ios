@@ -292,7 +292,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             GleanMetrics.Siri.eraseAndOpen.record()
         case "org.mozilla.ios.Klar.openUrl":
             guard let urlString = userActivity.userInfo?["url"] as? String,
-                let url = URL(string: urlString) else { return false }
+                let url = URL(string: urlString, invalidCharacters: false) else { return false }
             browserViewController.resetBrowser(hidePreviousSession: true)
             browserViewController.ensureBrowsingMode()
             browserViewController.deactivateUrlBarOnHomeView()
@@ -403,25 +403,28 @@ extension AppDelegate {
         }
 
         if UserDefaults.standard.bool(forKey: GleanLogPingsToConsole) {
-            Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?logPings=true")!)
+            let url = URL(string: "focus-glean-settings://glean?logPings=true", invalidCharacters: false)!
+            Glean.shared.handleCustomUrl(url: url)
         }
 
         if UserDefaults.standard.bool(forKey: GleanEnableDebugView) {
             if let tag = UserDefaults.standard.string(forKey: GleanDebugViewTag), !tag.isEmpty, let encodedTag = tag.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed) {
-                Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?debugViewTag=\(encodedTag)")!)
+                let url = URL(string: "focus-glean-settings://glean?debugViewTag=\(encodedTag)", invalidCharacters: false)!
+                Glean.shared.handleCustomUrl(url: url)
             }
         }
 
         let channel = Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" ? "testflight" : "release"
         Glean.shared.initialize(uploadEnabled: Settings.getToggle(.sendAnonymousUsageData), configuration: Configuration(channel: channel), buildInfo: GleanMetrics.GleanBuild.info)
 
+        let url = URL(string: "firefox://", invalidCharacters: false)!
         // Send "at startup" telemetry
         GleanMetrics.Shortcuts.shortcutsOnHomeNumber.set(Int64(shortcutManager.shortcutsViewModels.count))
         GleanMetrics.TrackingProtection.hasAdvertisingBlocked.set(Settings.getToggle(.blockAds))
         GleanMetrics.TrackingProtection.hasAnalyticsBlocked.set(Settings.getToggle(.blockAnalytics))
         GleanMetrics.TrackingProtection.hasContentBlocked.set(Settings.getToggle(.blockOther))
         GleanMetrics.TrackingProtection.hasSocialBlocked.set(Settings.getToggle(.blockSocial))
-        GleanMetrics.MozillaProducts.hasFirefoxInstalled.set(UIApplication.shared.canOpenURL(URL(string: "firefox://")!))
+        GleanMetrics.MozillaProducts.hasFirefoxInstalled.set(UIApplication.shared.canOpenURL(url))
         GleanMetrics.Preferences.userTheme.set(UserDefaults.standard.theme.telemetryValue)
     }
 

@@ -963,7 +963,9 @@ class BrowserViewController: UIViewController {
 
         urlBarViewModel.canDelete = true
         guard let savedUrl = UserDefaults.standard.value(forKey: "favoriteUrl") as? String else { return }
-        if let currentDomain = url.baseDomain, let savedDomain = URL(string: savedUrl)?.baseDomain, currentDomain == savedDomain {
+        if let currentDomain = url.baseDomain,
+            let savedDomain = URL(string: savedUrl, invalidCharacters: false)?.baseDomain,
+            currentDomain == savedDomain {
             userActivity = SiriShortcuts().getActivity(for: .openURL)
         }
     }
@@ -1509,7 +1511,7 @@ extension BrowserViewController: HomeViewControllerDelegate {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.share, object: TelemetryEventObject.trackerStatsShareButton)
 
         let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
-        let appStoreUrl = URL(string: String(format: "https://mzl.la/2GZBav0"))
+        let appStoreUrl = URL(string: String(format: "https://mzl.la/2GZBav0"), invalidCharacters: false)
         // Add space after shareTrackerStatsText to add URL in sentence
         let shareTrackerStatsText = "%@, the privacy browser from Mozilla, has already blocked %@ trackers for me. Fewer ads and trackers following me around means faster browsing! Get Focus for yourself here"
         let text = String(format: shareTrackerStatsText + " ", AppInfo.productName, String(numberOfTrackersBlocked))
@@ -1945,7 +1947,7 @@ extension BrowserViewController: MenuActionable {
 
     func openInFirefox(url: URL) {
         guard let escaped = url.absoluteString.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed),
-              let firefoxURL = URL(string: "firefox://open-url?url=\(escaped)&private=true"),
+              let firefoxURL = URL(string: "firefox://open-url?url=\(escaped)&private=true", invalidCharacters: false),
               UIApplication.shared.canOpenURL(firefoxURL) else {
                   return
               }
@@ -1982,7 +1984,7 @@ extension BrowserViewController: MenuActionable {
         // Proceed only if a valid Google Chrome URI Scheme is available.
         guard let scheme = chromeScheme,
               let rangeForScheme = url.absoluteString.range(of: ":"),
-              let chromeURL = URL(string: scheme + url.absoluteString[rangeForScheme.lowerBound...]) else { return }
+              let chromeURL = URL(string: scheme + url.absoluteString[rangeForScheme.lowerBound...], invalidCharacters: false) else { return }
 
         // Open the URL with Chrome.
         UIApplication.shared.open(chromeURL, options: [:])
@@ -1991,11 +1993,11 @@ extension BrowserViewController: MenuActionable {
     }
 
     var canOpenInFirefox: Bool {
-        return UIApplication.shared.canOpenURL(URL(string: "firefox://")!)
+        return UIApplication.shared.canOpenURL(URL(string: "firefox://", invalidCharacters: false)!)
     }
 
     var canOpenInChrome: Bool {
-        return UIApplication.shared.canOpenURL(URL(string: "googlechrome://")!)
+        return UIApplication.shared.canOpenURL(URL(string: "googlechrome://", invalidCharacters: false)!)
     }
 
     func requestDesktopBrowsing() {

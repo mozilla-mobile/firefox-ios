@@ -132,7 +132,7 @@ class WebsiteAccessTests: BaseTestCase {
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()
         app.tables.cells["customURLS"].tap()
         app.navigationBars.buttons["editButton"].tap()
-        app.tables.cells["getfirefox.com"].buttons["Delete getfirefox.com"].tap()
+        app.tables.cells["getfirefox.com"].buttons["Remove getfirefox.com"].tap()
         app.tables.cells["getfirefox.com"].buttons["Delete"].tap()
 
         // Finish Editing

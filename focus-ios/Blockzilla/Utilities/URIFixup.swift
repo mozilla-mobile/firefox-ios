@@ -7,7 +7,7 @@ import Foundation
 class URIFixup {
     static func getURL(entry: String) -> URL? {
         let trimmed = entry.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-        guard let escaped = trimmed.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlAllowed) else {
+        guard let escaped = trimmed.addingPercentEncoding(withAllowedCharacters: CharacterSet.alphanumerics) else {
             return nil
         }
 
@@ -15,7 +15,9 @@ class URIFixup {
         // all valid requests starting with "http://", "about:", etc.
         // Also check with a regular expression if there is a port in the url
         // this will be handle later in this function adding http prefix
-        if let url = URL(string: trimmed), url.scheme != nil, trimmed.range(of: "\\b:[0-9]{1,5}", options: .regularExpression) == nil {
+        if let url = URL(string: trimmed, invalidCharacters: false),
+            url.scheme != nil,
+            trimmed.range(of: "\\b:[0-9]{1,5}", options: .regularExpression) == nil {
 
             // check for top-level domain if scheme is "http://" or "https://"
             if trimmed.hasPrefix("http://") || trimmed.hasPrefix("https://") {
@@ -43,7 +45,7 @@ class URIFixup {
 
         // If there is a ".", prepend "http://" and try again. Since this
         // is strictly an "http://" URL, we also require a host.
-        if let url = URL(string: finalurl), url.host != nil {
+        if let url = URL(string: finalurl, invalidCharacters: false), url.host != nil {
             return url
         }
 

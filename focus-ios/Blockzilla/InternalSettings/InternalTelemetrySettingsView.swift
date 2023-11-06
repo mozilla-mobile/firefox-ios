@@ -6,7 +6,8 @@ import Combine
 import SwiftUI
 import Glean
 
-private let GleanDebugViewURL = URL(string: "https://debug-ping-preview.firebaseapp.com")!
+private let GleanDebugViewURL = URL(string: "https://debug-ping-preview.firebaseapp.com",
+                                    invalidCharacters: false)!
 
 struct InternalTelemetrySettingsView {
     @ObservedObject var internalSettings = InternalSettings()
@@ -14,28 +15,34 @@ struct InternalTelemetrySettingsView {
 
 extension InternalTelemetrySettingsView {
     func sendPendingEventPings() {
-        Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?sendPing=events")!)
+        Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?sendPing=events",
+                                             invalidCharacters: false)!)
     }
 
     func sendPendingBaselinePings() {
-        Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?sendPing=baseline")!)
+        Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?sendPing=baseline",
+                                             invalidCharacters: false)!)
     }
 
     func sendPendingMetricsPings() {
-        Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?sendPing=metrics")!)
+        Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?sendPing=metrics",
+                                             invalidCharacters: false)!)
     }
 
     func sendPendingDeletionRequestPings() {
-        Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?sendPing=deletion-request")!)
+        Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?sendPing=deletion-request",
+                                             invalidCharacters: false)!)
     }
 
     func changeLogPingsToConsole(_ value: Bool) {
-        Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?logPings=\(value)")!)
+        Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?logPings=\(value)",
+                                             invalidCharacters: false)!)
     }
 
     func changeDebugViewTag(_ tag: String) {
         if let encodedTag = tag.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed) {
-            Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?debugViewTag=\(encodedTag)")!)
+            Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?debugViewTag=\(encodedTag)",
+                                                 invalidCharacters: false)!)
         }
     }
 }

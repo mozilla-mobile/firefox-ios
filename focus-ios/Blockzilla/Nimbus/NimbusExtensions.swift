@@ -26,7 +26,7 @@ extension NimbusServerSettings {
     static func getNimbusEndpoint(useStagingServer: Bool) -> URL? {
         let key = useStagingServer ? NimbusStagingServerURLKey : NimbusServerURLKey
         if let serverURLString = Bundle.main.object(forInfoDictionaryKey: key) as? String,
-            let serverURL = URL(string: serverURLString) {
+            let serverURL = URL(string: serverURLString, invalidCharacters: false) {
             return serverURL
         }
         return nil

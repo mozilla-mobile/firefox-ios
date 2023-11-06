@@ -174,7 +174,9 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
 
         guard !isLicensePage else {
             decisionHandler(.cancel)
-            guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else { return }
+            guard let settingsUrl = URL(string: UIApplication.openSettingsURLString,
+                                        invalidCharacters: false)
+            else { return }
             UIApplication.shared.open(settingsUrl, options: [:], completionHandler: nil)
             return
         }

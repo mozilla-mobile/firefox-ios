@@ -207,8 +207,8 @@ class SettingAppearanceTest: BaseTestCase {
         // Start Editing
         waitForHittable(app.navigationBars.buttons["editButton"])
         app.navigationBars.buttons["editButton"].tap()
-        waitForHittable(app.tables.cells["mozilla.org"].buttons["Delete mozilla.org"])
-        app.tables.cells["mozilla.org"].buttons["Delete mozilla.org"].tap()
+        waitForHittable(app.tables.cells["mozilla.org"].buttons["Remove mozilla.org"])
+        app.tables.cells["mozilla.org"].buttons["Remove mozilla.org"].tap()
         waitForHittable(app.tables.cells["mozilla.org"].buttons["Delete"])
         app.tables.cells["mozilla.org"].buttons["Delete"].tap()
 
@@ -234,7 +234,7 @@ class SettingAppearanceTest: BaseTestCase {
         waitForExistence(app.tables.cells["settingsViewController.themeCell"], timeout: 10)
         app.tables.cells["settingsViewController.themeCell"].swipeUp()
 
-        // Check that Safari toggle is off, swipe to get to Safarin Integration menu
+        // Check that Safari toggle is off, swipe to get to Safari Integration menu
         waitForExistence(app.otherElements["SIRI SHORTCUTS"], timeout: 10)
         app.otherElements["SIRI SHORTCUTS"].swipeUp()
         XCTAssertEqual(app.switches["BlockerToggle.Safari"].value! as! String, "0")
@@ -248,17 +248,19 @@ class SettingAppearanceTest: BaseTestCase {
         } else {
             iOS_Settings.cells.staticTexts["CONTENT_BLOCKERS"].tap()
         }
+        iOS_Settings.tables.cells.element(boundBy: 0).tap()
         iOS_Settings.tables.cells.switches.element(boundBy: 0).tap()
         iOS_Settings.terminate()
-        // Commenting this part due to error re-launching the app
-        /*XCUIDevice.shared.press(.home)
+
+        XCUIDevice.shared.press(.home)
         // Let's be sure the app is backgrounded
+        _ = app.wait(for: XCUIApplication.State.runningBackground, timeout: 45)
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         waitForExistence(springboard.icons["XCUITest-Runner"], timeout: 15)
 
         // Go back to the app to verify that the toggle has changed its value
         app.activate()
         waitForExistence(app.navigationBars["Settings"], timeout: 15)
-        XCTAssertEqual(app.switches["BlockerToggle.Safari"].value! as! String, "1")*/
+        XCTAssertEqual(app.switches["BlockerToggle.Safari"].value! as! String, "1")
     }
 }

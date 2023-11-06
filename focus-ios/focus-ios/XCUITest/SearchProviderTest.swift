@@ -52,6 +52,11 @@ class SearchProviderTest: BaseTestCase {
 
         urlbarUrltextTextField.tap()
         waitForValueContains(urlbarUrltextTextField, value: query)
+        if iPad() {
+            app.buttons["icon delete"].tap()
+        } else {
+            app.buttons["icon cancel"].tap()
+        }
     }
 
     func testAddRemoveCustomSearchProvider() {
@@ -84,8 +89,8 @@ class SearchProviderTest: BaseTestCase {
 
         // enter edit mode
         app.navigationBars.buttons["edit"].tap()
-        waitForExistence(app.tables.cells["MDN"].buttons["Delete MDN"])
-        app.tables.cells["MDN"].buttons["Delete MDN"].tap()
+        waitForExistence(app.tables.cells["MDN"].buttons["Remove MDN"])
+        app.tables.cells["MDN"].buttons["Remove MDN"].tap()
         waitForExistence(app.tables.cells["MDN"].buttons["Delete"])
         app.tables.cells["MDN"].buttons["Delete"].tap()
 

@@ -62,7 +62,8 @@ class URIFixupTests: XCTestCase {
                                "http://fire fox.com",
                                "mozilla",
                                "http://[2001:db8:85a3::8a2e:370:7334]",
-                               ":/#?&@%+~"]
+                               ":/#?&@%+~" // test failing on iOS 17
+                              ]
     
     func testValidURLsForHttpAndHttpsSchemes() {
         httpSchemeURLs.forEach {

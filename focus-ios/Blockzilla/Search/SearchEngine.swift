@@ -56,7 +56,7 @@ class SearchEngine: NSObject, NSCoding {
         let urlString = encodedSearchTemplate
             .replacingOccurrences(of: SearchTermComponent, with: escaped, options: .literal, range: nil)
             .replacingOccurrences(of: LocaleTermComponent, with: localeString, options: .literal, range: nil)
-        return URL(string: urlString)
+        return URL(string: urlString, invalidCharacters: false)
     }
 
     func urlForQuery(_ query: String) -> URL? {
@@ -74,7 +74,7 @@ class SearchEngine: NSObject, NSCoding {
             return nil
         }
 
-        return URL(string: urlString)
+        return URL(string: urlString, invalidCharacters: false)
     }
 
     func encode(with aCoder: NSCoder) {
@@ -110,7 +110,8 @@ class SearchEngine: NSObject, NSCoding {
     fileprivate func isSearchURLForEngine(_ url: URL?) -> Bool {
         guard let urlHost = url?.shortDisplayString,
             let queryEndIndex = searchTemplate.range(of: "?")?.lowerBound,
-            let templateURL = URL(string: String(searchTemplate[..<queryEndIndex])) else { return false }
+            let templateURL = URL(string: String(searchTemplate[..<queryEndIndex]), invalidCharacters: false)
+        else { return false }
         return urlHost == templateURL.shortDisplayString
     }
 
@@ -179,7 +180,7 @@ class SearchEngine: NSObject, NSCoding {
         } else {
             // Query arg may be exist inside fragment
             components = URLComponents()
-            components?.query = URL(string: template)?.fragment
+            components?.query = URL(string: template, invalidCharacters: false)?.fragment
             return extractQueryArg(in: components?.queryItems, for: placeholder)
         }
     }

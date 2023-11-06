@@ -430,7 +430,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         switch sections[indexPath.section] {
         case .defaultBrowser:
             GleanMetrics.SettingsScreen.setAsDefaultBrowserPressed.add()
-            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
+            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString, invalidCharacters: false)!,
+                                      options: [:])
         case .general:
             let themeVC = ThemeViewController(themeManager: themeManager)
             navigationController?.pushViewController(themeVC, animated: true)
@@ -465,7 +466,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 aboutClicked()
             } else if indexPath.row == 1 {
                 let appId = AppInfo.config.appId
-                if let reviewURL = URL(string: "https://itunes.apple.com/app/id\(appId)?action=write-review"), UIApplication.shared.canOpenURL(reviewURL) {
+                if let reviewURL = URL(string: "https://itunes.apple.com/app/id\(appId)?action=write-review",
+                                       invalidCharacters: false),
+                    UIApplication.shared.canOpenURL(reviewURL) {
                     UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
                 }
             } else {

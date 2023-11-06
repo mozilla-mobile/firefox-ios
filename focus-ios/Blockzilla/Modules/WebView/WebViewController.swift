@@ -111,7 +111,7 @@ class WebViewController: UIViewController, WebController {
     }
 
     func reset() {
-        browserView.load(URLRequest(url: URL(string: "about:blank")!))
+        browserView.load(URLRequest(url: URL(string: "about:blank", invalidCharacters: false)!))
         browserView.navigationDelegate = nil
         browserView.removeFromSuperview()
         setupWebview()
@@ -445,7 +445,7 @@ extension WebViewController: WKNavigationDelegate {
         // Check for passbook response
         if responseMimeType == "application/vnd.apple.pkpass" {
             decisionHandler(.allow)
-            browserView.load(URLRequest(url: URL(string: "about:blank")!))
+            browserView.load(URLRequest(url: URL(string: "about:blank", invalidCharacters: false)!))
 
             func presentPassErrorAlert() {
                 let passErrorAlert = UIAlertController(title: UIConstants.strings.addPassErrorAlertTitle, message: UIConstants.strings.addPassErrorAlertMessage, preferredStyle: .alert)
