@@ -693,11 +693,11 @@ class BrowserViewController: UIViewController,
 
         dismissVisibleMenus()
 
-        var needsUpdate = false
+        var fakespotNeedsUpdate = false
         if urlBar.currentURL != nil {
-            needsUpdate = contentStackView.isSidebarVisible != FakespotUtils().shouldDisplayInSidebar(viewSize: size)
+            fakespotNeedsUpdate = contentStackView.isSidebarVisible != FakespotUtils().shouldDisplayInSidebar(viewSize: size)
 
-            if needsUpdate {
+            if fakespotNeedsUpdate {
                 _ = dismissFakespotIfNeeded(animated: false)
             }
         }
@@ -710,7 +710,7 @@ class BrowserViewController: UIViewController,
                 self.present(popover, animated: true, completion: nil)
             }
 
-            if let productURL = self.urlBar.currentURL, needsUpdate {
+            if let productURL = self.urlBar.currentURL, fakespotNeedsUpdate {
                 self.handleFakespotFlow(productURL: productURL)
             }
         }, completion: { _ in
