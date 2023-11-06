@@ -40,10 +40,5 @@ extension UIWindow {
     static var statusBarHeight: CGFloat {
         keyWindow?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
     }
-
-    static var safeAreaInsets: UIEdgeInsets {
-        guard let keyWindow else { return UIEdgeInsets() }
-        return keyWindow.safeAreaInsets
-    }
 }
 // swiftlint:enable first_where

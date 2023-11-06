@@ -96,6 +96,11 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
     private var viewModel: FakespotHighlightsCardViewModel?
     private var isShowingPreview = true
 
+    private var safeAreaEdgeInsets: UIEdgeInsets {
+        guard let keyWindow = UIWindow.keyWindow else { return UIEdgeInsets() }
+        return keyWindow.safeAreaInsets
+    }
+
     // MARK: - Inits
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -206,7 +211,7 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
 
         // Calculates the width available for the highlights group view within the view's current bounds,
         // considering safe area insets, image height constraints, and horizontal spacing.
-        let highlightsGroupViewWidth = (bounds.width - UIWindow.safeAreaInsets.left * 2) -
+        let highlightsGroupViewWidth = (bounds.width - safeAreaEdgeInsets.left * 2) -
                                        (firstItem.imageHeightConstraint?.constant ?? UX.groupImageSize) -
                                        (2 * UX.contentHorizontalSpace)
 
