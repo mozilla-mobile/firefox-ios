@@ -18,11 +18,11 @@ struct TabCellState {
 
     let margin: CGFloat // (Changes depending on fullscreen)
 
-    static func emptyTabState() -> TabCellState {
+    static func emptyTabState(title: String) -> TabCellState {
         return TabCellState(isSelected: false,
                             isPrivate: false,
                             isFxHomeTab: false,
-                            tabTitle: "",
+                            tabTitle: title,
                             url: nil,
                             screenshot: nil,
                             hasHomeScreenshot: false,
