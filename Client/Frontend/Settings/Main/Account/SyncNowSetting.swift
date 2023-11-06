@@ -239,10 +239,12 @@ class SyncNowSetting: WithAccountSetting {
     }
 
     private func addAccessoryView(with image: UIImageView, to cell: UITableViewCell) {
-        accessoryViewContainer.addArrangedSubview(image)
-        accessoryViewContainer.addArrangedSubview(troubleshootButton)
-
-        cell.accessoryView = accessoryViewContainer
+        DispatchQueue.main.async { [weak self] in
+            guard let troubleshootButton = self?.troubleshootButton else { return }
+            self?.accessoryViewContainer.addArrangedSubview(image)
+            self?.accessoryViewContainer.addArrangedSubview(troubleshootButton )
+            cell.accessoryView = self?.accessoryViewContainer
+        }
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
