@@ -17,6 +17,10 @@ struct FakespotHighlightsCardViewModel {
 
     let highlights: [FakespotHighlightGroup]
 
+    var longestTextFromReviews: String? {
+        highlights.first?.reviews.max()
+    }
+
     var highlightGroupViewModels: [FakespotHighlightGroupViewModel] {
         var highlightGroups: [FakespotHighlightGroupViewModel] = []
 
@@ -35,6 +39,11 @@ struct FakespotHighlightsCardViewModel {
     var shouldShowFadeInPreview: Bool {
         shouldShowMoreButton
     }
+
+    var isOneHighlightGroupWithTwoReviews: Bool {
+        guard let firstItem = highlights.first else { return false }
+        return highlights.count == 1 && firstItem.reviews.count == 2
+    }
 }
 
 class FakespotHighlightsCardView: UIView, ThemeApplicable {
@@ -50,6 +59,7 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
         static let highlightSpacing: CGFloat = 16
         static let highlightStackBottomSpace: CGFloat = 16
         static let dividerHeight: CGFloat = 1
+        static let groupImageSize: CGFloat = 24
     }
 
     private lazy var cardContainer: ShadowCardView = .build()
@@ -85,6 +95,11 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
     private var highlightPreviewGroups: [FakespotHighlightGroupView] = []
     private var viewModel: FakespotHighlightsCardViewModel?
     private var isShowingPreview = true
+
+    private var safeAreaEdgeInsets: UIEdgeInsets {
+        guard let keyWindow = UIWindow.keyWindow else { return UIEdgeInsets() }
+        return keyWindow.safeAreaInsets
+    }
 
     // MARK: - Inits
     override init(frame: CGRect) {
@@ -141,6 +156,11 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
         dividerView.backgroundColor = theme.colors.borderPrimary
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        updateHighlightsViewLayoutIfNeeded()
+    }
+
     private func setupLayout() {
         contentStackView.addArrangedSubview(highlightStackView)
         contentStackView.addArrangedSubview(dividerView)
@@ -174,6 +194,39 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
         ])
     }
 
+    private func updateHighlightsViewLayoutIfNeeded() {
+        guard let viewModel,
+                  viewModel.isOneHighlightGroupWithTwoReviews,
+              let longestReview = viewModel.longestTextFromReviews,
+              let firstItem = highlightGroups.first else { return }
+
+        let highlightLabelWidth = FakespotUtils.widthOfString(
+            longestReview,
+            usingFont: DefaultDynamicFontHelper.preferredFont(
+                withTextStyle: .subheadline,
+                size: UX.titleFontSize,
+                weight: .semibold
+            )
+        )
+
+        // Calculates the width available for the highlights group view within the view's current bounds,
+        // considering safe area insets, image height constraints, and horizontal spacing.
+        let highlightsGroupViewWidth = (bounds.width - safeAreaEdgeInsets.left * 2) -
+                                       (firstItem.imageHeightConstraint?.constant ?? UX.groupImageSize) -
+                                       (2 * UX.contentHorizontalSpace)
+
+        let areMoreThanTwoLines = highlightLabelWidth > highlightsGroupViewWidth
+
+        if areMoreThanTwoLines {
+            contentStackView.addArrangedSubview(dividerView)
+            contentStackView.addArrangedSubview(moreButton)
+        } else {
+            contentStackView.removeArrangedView(dividerView)
+            contentStackView.removeArrangedView(moreButton)
+        }
+        updateHighlights(areMoreThanTwoLines)
+    }
+
     @objc
     private func showMoreAction() {
         guard let viewModel else { return }
@@ -192,9 +245,9 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
         }
     }
 
-    private func updateHighlights() {
+    private func updateHighlights(_ areMoreThanTwoLines: Bool = true) {
         highlightStackView.removeAllArrangedViews()
-        let shouldShowFade = isShowingPreview && viewModel?.shouldShowFadeInPreview ?? false
+        let shouldShowFade = isShowingPreview && areMoreThanTwoLines && viewModel?.shouldShowFadeInPreview ?? false
         let groupsToShow = isShowingPreview ? highlightPreviewGroups : highlightGroups
 
         for (_, group) in groupsToShow.enumerated() {

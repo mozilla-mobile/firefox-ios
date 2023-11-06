@@ -5,7 +5,6 @@
 import Common
 import UIKit
 import Shared
-import SnapKit
 import Storage
 import SiteImageView
 
@@ -30,12 +29,11 @@ class CustomSearchViewController: SettingsTableViewController {
     private var urlString: String?
     private var engineTitle = ""
     var successCallback: (() -> Void)?
-    private lazy var spinnerView: UIActivityIndicatorView = {
-        let spinner = UIActivityIndicatorView(style: .medium)
+    private lazy var spinnerView: UIActivityIndicatorView = .build { [self] spinner in
+        spinner.style = .medium
         spinner.color = themeManager.currentTheme.colors.iconSpinner
         spinner.hidesWhenStopped = true
-        return spinner
-    }()
+    }
 
     init(faviconFetcher: SiteImageHandler = DefaultSiteImageHandler.factory()) {
         self.faviconFetcher = faviconFetcher
@@ -50,9 +48,14 @@ class CustomSearchViewController: SettingsTableViewController {
         super.viewDidLoad()
         title = .SettingsAddCustomEngineTitle
         view.addSubview(spinnerView)
-        spinnerView.snp.makeConstraints { make in
-            make.center.equalTo(self.view.snp.center)
-        }
+        setupConstraints()
+    }
+
+    func setupConstraints() {
+        NSLayoutConstraint.activate([
+            spinnerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            spinnerView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
     }
 
     private func addSearchEngine(_ searchQuery: String, title: String) {
@@ -212,7 +215,7 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
     fileprivate let settingDidChange: ((String?) -> Void)?
     fileprivate let settingIsValid: ((String?) -> Bool)?
 
-    let textField = UITextView()
+    let textField: UITextView = .build()
     let placeholderLabel = UILabel()
     var keyboardType: UIKeyboardType = .default
 
@@ -260,11 +263,14 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         cell.contentView.addSubview(textField)
         cell.selectionStyle = .none
 
-        textField.snp.makeConstraints { make in
-            make.height.equalTo(TextFieldHeight)
-            make.top.bottom.equalTo(0).inset(Padding / 2)
-            make.left.right.equalTo(cell.contentView).inset(Padding)
-        }
+        NSLayoutConstraint.activate([
+            textField.heightAnchor.constraint(equalToConstant: TextFieldHeight),
+            textField.topAnchor.constraint(equalTo: cell.contentView.topAnchor, constant: Padding / 2),
+            textField.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor, constant: -Padding / 2),
+            textField.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: Padding),
+            textField.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -Padding)
+        ])
+
         textField.layoutIfNeeded()
         placeholderLabel.frame = CGRect(width: TextLabelWidth, height: TextLabelHeight)
     }

@@ -240,10 +240,10 @@ class FakespotViewController:
             availableTitleStackWidth = view.frame.width - UX.headerHorizontalSpacing * 2
         }
         availableTitleStackWidth -= UX.closeButtonWidthHeight + UX.titleCloseSpacing // remove close button and spacing
-        let titleTextWidth = widthOfString(titleLabelText, usingFont: titleLabel.font)
+        let titleTextWidth = FakespotUtils.widthOfString(titleLabelText, usingFont: titleLabel.font)
 
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
-        let betaLabelWidth = widthOfString(betaLabelText, usingFont: betaLabel.font)
+        let betaLabelWidth = FakespotUtils.widthOfString(betaLabelText, usingFont: betaLabel.font)
         let betaViewWidth = betaLabelWidth + UX.betaHorizontalSpace * 2
         let maxTitleWidth = availableTitleStackWidth - betaViewWidth - UX.titleStackSpacing
 
@@ -388,6 +388,16 @@ class FakespotViewController:
                 let view: FakespotMessageCardView = .build()
                 view.configure(viewModel.analysisProgressViewModel)
                 return view
+
+            case .reportProductInStock:
+                let view: FakespotMessageCardView = .build()
+                viewModel.reportProductInStockViewModel.primaryAction = { [weak view, weak self] in
+                    guard let self else { return }
+                    view?.configure(self.viewModel.reportingProductFeedbackViewModel)
+                    self.viewModel.reportProductBackInStock()
+                }
+                view.configure(viewModel.reportProductInStockViewModel)
+                return view
             }
         }
     }
@@ -448,16 +458,6 @@ class FakespotViewController:
         coordinator.animate(alongsideTransition: { _ in
             self.adjustLayout()
         }, completion: nil)
-    }
-
-    // MARK: Helper methods
-    private func widthOfString(_ string: String, usingFont font: UIFont) -> CGFloat {
-        let label = UILabel(frame: CGRect.zero)
-        label.text = string
-        label.font = font
-        label.adjustsFontForContentSizeCategory = true
-        label.sizeToFit()
-        return label.frame.width
     }
 
     // MARK: - UISheetPresentationControllerDelegate
