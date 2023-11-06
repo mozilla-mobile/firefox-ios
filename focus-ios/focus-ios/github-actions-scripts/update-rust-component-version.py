@@ -31,6 +31,7 @@ def read_rust_components_tag_version():
             # return the json with the RustComponent info
             json_new_version = i["state"]
     f.close()
+
     # Return the current version and commit
     return json_new_version["version"], json_new_version["revision"]
 
@@ -112,7 +113,7 @@ def main():
         update_proj_file(current_min_version, rust_component_repo_tag, BLOCKZILLA_PROJECT)
 
         # Save the newer version to be used in the PR info
-        f= open("github-actions-scripts/newest_tag.txt","w+")
+        f= open("focus-ios/github-actions-scripts/newest_tag.txt","w+")
         f.write(rust_component_repo_tag+"\n")
 
 if __name__ == '__main__':

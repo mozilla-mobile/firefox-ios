@@ -27,18 +27,18 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r ./github-actions-scripts/requirements.txt
+        pip install -r ./focus-ios/github-actions-scripts/requirements.txt
     - name: Modify SPM file
       run: |
-        python ./github-actions-scripts/update-rust-component-version.py
+        python ./focus-ios/github-actions-scripts/update-rust-component-version.py
     - name: Get new rust-component tag to be used in the PR info
       run: |
-        cd github-actions-scripts/
+        cd focus-ios/github-actions-scripts/
         chmod u+x read-rust-component-tag.sh
         echo "version=$(./read-rust-component-tag.sh)" >> $GITHUB_ENV
     - name: Remove temp file created to store the tag info
       run: |
-        cd github-actions-scripts/
+        cd focus-ios/github-actions-scripts/
         [ ! -e newest_tag.txt ] || rm newest_tag.txt
     - name: Script to check if branch exists to not commit again
       run: |-
