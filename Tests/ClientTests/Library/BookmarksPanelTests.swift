@@ -70,13 +70,6 @@ class BookmarksPanelTests: XCTestCase {
         let viewModel = photonSheet.viewModel.actions[0][0].items[0]
         _ = viewModel.tapHandler!(viewModel)
 
-        // If the library coordinator is enabled then the coordinator is responsible for the navigation.
-        // So the spy navigation controller will not push view controllers but the coordinator will do it.
-        if !CoordinatorFlagManager.isLibraryCoordinatorEnabled {
-            XCTAssertNotNil(mockNavigationController.pushedViewController)
-            XCTAssertTrue(mockNavigationController.pushedViewController is BookmarkDetailPanel)
-        }
-
         XCTAssertEqual(panel.state, .bookmarks(state: .itemEditModeInvalidField))
         let toolbarItems = panel.bottomToolbarItems
         // We need to account for the flexibleSpace item
@@ -97,13 +90,6 @@ class BookmarksPanelTests: XCTestCase {
         // Fake clicking on new folder action
         let viewModel = photonSheet.viewModel.actions[0][1].items[0]
         _ = viewModel.tapHandler!(viewModel)
-
-        // If the library coordinator is enabled then the coordinator is responsible for the navigation.
-        // So the spy navigation controller will not push view controllers but the coordinator will do it.
-        if !CoordinatorFlagManager.isLibraryCoordinatorEnabled {
-            XCTAssertNotNil(mockNavigationController.pushedViewController)
-            XCTAssertTrue(mockNavigationController.pushedViewController is BookmarkDetailPanel)
-        }
 
         XCTAssertEqual(panel.state, .bookmarks(state: .itemEditMode))
         let toolbarItems = panel.bottomToolbarItems

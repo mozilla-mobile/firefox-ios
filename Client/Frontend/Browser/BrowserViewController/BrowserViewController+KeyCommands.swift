@@ -35,17 +35,7 @@ extension BrowserViewController {
 
     @objc
     func openClearHistoryPanelKeyCommand() {
-        if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
-            navigationHandler?.show(homepanelSection: .history)
-        } else {
-            guard let libraryViewController = self.libraryViewController else {
-                let clearHistoryHelper = ClearHistorySheetProvider(profile: profile, tabManager: tabManager)
-                clearHistoryHelper.showClearRecentHistory(onViewController: self)
-                return
-            }
-
-            libraryViewController.viewModel.selectedPanel = .history
-        }
+        navigationHandler?.show(homepanelSection: .history)
         NotificationCenter.default.post(name: .OpenClearRecentHistory, object: nil)
     }
 

@@ -7,12 +7,6 @@ import Shared
 
 /// This is a temporary struct made to manage the coordinator multiple feature flag for conveniance
 struct CoordinatorFlagManager {
-    /// This will be removed with FXIOS-6530
-    static var isLibraryCoordinatorEnabled: Bool {
-        return LegacyFeatureFlagsManager.shared.isFeatureEnabled(.libraryCoordinatorRefactor,
-                                                                 checking: .buildOnly)
-    }
-
     static var isShareExtensionCoordinatorEnabled: Bool {
         return NimbusManager.shared.featureFlagLayer.checkNimbusConfigFor(.shareExtensionCoordinatorRefactor)
     }
