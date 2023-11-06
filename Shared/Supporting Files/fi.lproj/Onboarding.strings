@@ -28,17 +28,26 @@
 /* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Notification.Description.v114" = "Lähetä välilehtiä laitteidesi välillä ja hanki vinkkejä siitä, miten saat kaiken irti %@ista.";
 
+/* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Notification.Description.v120" = "Lähetä turvallisesti välilehtiä laitteidesi välillä ja tutustu muihin %@in tietosuojaominaisuuksiin.";
+
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Skip.Action.v115" = "Ohita";
 
 /* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Notification.Title.v114" = "Ilmoitukset auttavat sinua tekemään enemmän %@illa";
 
+/* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Notification.Title.v120" = "Ilmoitukset auttavat sinua pysymään paremmassa turvassa %@illa";
+
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "Ota ilmoitukset käyttöön";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
 "Onboarding.Sync.Description.v114" = "Nappaa välilehdet ja salasanat muilta laitteiltasi ja jatka siitä, mihin jäit.";
+
+/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Sync.Description.v120" = "Kun olet kirjautunut sisään ja synkronoitu, tietosi ovat paremmassa turvassa. %@ salaa salasanasi, kirjanmerkkisi ja paljon muuta.";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.SignIn.Action.v114" = "Kirjaudu sisään";
@@ -48,6 +57,9 @@
 
 /* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
 "Onboarding.Sync.Title.v114" = "Hyppää puhelimelta kannettavalle tietokoneelle ja takaisin";
+
+/* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
+"Onboarding.Sync.Title.v120" = "Pysy salattuna, kun vaihtelet laitteiden välillä";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.Classic.v114" = "Klassinen taustakuva";
@@ -84,6 +96,9 @@
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Welcome.Title.TreatementA.v114" = "Aseta %@ selaimeksesi";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Welcome.Title.TreatementA.v120" = "Turvaamisesi on tärkeää meille";
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Title.v114" = "Tervetuloa itsenäiseen internetiin";

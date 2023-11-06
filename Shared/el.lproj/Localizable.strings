@@ -8,7 +8,7 @@
 "A username and password are being requested by %@." = "Το %@ απαιτεί όνομα χρήστη και κωδικό πρόσβασης.";
 
 /* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
-"A username and password are being requested by %@. The site says: %@" = "Το %1$@ απαιτεί όνομα χρήστη και κωδικό πρόσβασης. Η ιστοσελίδα λέει: %2$@";
+"A username and password are being requested by %@. The site says: %@" = "Το %1$@ απαιτεί όνομα χρήστη και κωδικό πρόσβασης. Ο ιστότοπος δηλώνει: %2$@";
 
 /* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
 "Aa" = "Αα";
@@ -26,7 +26,7 @@
 "ActivityStream.ContextMenu.UnpinTopsite" = "Ξεκαρφίτσωμα";
 
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
-"ActivityStream.JumpBackIn.SectionTitle" = "Επιστροφή";
+"ActivityStream.JumpBackIn.SectionTitle" = "Άμεση επιστροφή";
 
 /* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
 "ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Καρτέλες: %d";
@@ -134,7 +134,7 @@
 "BreachAlerts.Link" = "Μετάβαση σε";
 
 /* Title for the Breached Login Detail View. */
-"BreachAlerts.Title" = "Παραβίαση ιστοσελίδας";
+"BreachAlerts.Title" = "Παραβίαση ιστοτόπου";
 
 /* Accessibility label for brightness adjustment slider in Reader Mode display settings */
 "Brightness" = "Φωτεινότητα";
@@ -143,10 +143,10 @@
 "Cancel" = "Ακύρωση";
 
 /* Accessibility hint for the color theme setting buttons in reader mode display settings */
-"Changes color theme." = "Αλλάζει το χρώμα θέματος.";
+"Changes color theme." = "Αλλάζει το σύνολο χρωμάτων.";
 
 /* Accessibility hint for the font type buttons in reader mode display settings */
-"Changes font type." = "Αλλάζει τον τύπο της γραμματοσειράς.";
+"Changes font type." = "Αλλάζει τον τύπο γραμματοσειράς.";
 
 /* The button to open a new tab with the copied link */
 "ClipboardToast.GoToCopiedLink.Button" = "Μετάβαση";
@@ -305,13 +305,13 @@
 "ErrorPages.Advanced.Button" = "Για προχωρημένους";
 
 /* Warning text when clicking the Advanced button on error pages */
-"ErrorPages.AdvancedWarning1.Text" = "Προειδοποίηση: δεν μπορούμε να επιβεβαιώσουμε ότι η σύνδεσή σας με αυτή την ιστοσελίδα είναι ασφαλής.";
+"ErrorPages.AdvancedWarning1.Text" = "Προειδοποίηση: δεν μπορούμε να επιβεβαιώσουμε ότι η σύνδεσή σας με αυτόν τον ιστότοπο είναι ασφαλής.";
 
 /* Additional warning text when clicking the Advanced button on error pages */
 "ErrorPages.AdvancedWarning2.Text" = "Ενδέχεται να είναι μια λάθος ρύθμιση ή αλλοίωση από τρίτους. Συνεχίστε αν αποδέχεστε τον πιθανό κίνδυνο.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "Ο ιδιοκτήτης του %@ δεν έχει ρυθμίσει σωστά την ιστοσελίδα του. Για την προστασία των πληροφοριών σας από κλοπή, το Firefox δεν έχει συνδεθεί σε αυτή την ιστοσελίδα.";
+"ErrorPages.CertWarning.Description" = "Ο ιδιοκτήτης του %@ δεν έχει ρυθμίσει σωστά τον ιστότοπό του. Για την προστασία των πληροφοριών σας από κλοπή, το Firefox δεν έχει συνδεθεί σε αυτόν τον ιστότοπο.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Αυτή η σύνδεση δεν είναι αξιόπιστη";
@@ -446,7 +446,7 @@
 "HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Σήμερα και χθες";
 
 /* Title for the History Panel empty state. */
-"HistoryPanel.EmptyState.Title" = "Οι πρόσφατες ιστοσελίδες σας θα εμφανίζονται εδώ.";
+"HistoryPanel.EmptyState.Title" = "Οι ιστότοποι που επισκεφτήκατε πρόσφατα θα εμφανίζονται εδώ.";
 
 /* Description for the empty synced tabs null state in the History Panel */
 "HistoryPanel.EmptySyncedTabsNullState.Description" = "Οι καρτέλες άλλων συσκευών εμφανίζονται εδώ.";
@@ -848,16 +848,16 @@
 "Menu.TrackingProtectionBlockedSocial.Title" = "Ιχνηλάτες κοινωνικών δικτύων";
 
 /* The title that shows the number of cross-site URLs blocked */
-"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Ιχνηλάτες μεταξύ ιστοσελίδων";
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Ιχνηλάτες μεταξύ ιστοτόπων";
 
 /* The title that shows the number of cryptomining scripts blocked */
 "Menu.TrackingProtectionCryptominersBlocked.Title" = "Cryptominers";
 
 /* Description of content trackers. */
-"Menu.TrackingProtectionDescription.ContentTrackers" = "Οι ιστοσελίδες μπορεί να φορτώνουν εξωτερικές διαφημίσεις, βίντεο και άλλο περιεχόμενο με κρυφούς ιχνηλάτες. Η φραγή τους συμβάλλει στην ταχύτερη φόρτωση ιστοσελίδων, αλλά κάποια κουμπιά, φόρμες και πεδία σύνδεσης ίσως να μη λειτουργούν.";
+"Menu.TrackingProtectionDescription.ContentTrackers" = "Οι ιστότοποι μπορεί να φορτώνουν εξωτερικές διαφημίσεις, βίντεο και άλλο περιεχόμενο με κρυφούς ιχνηλάτες. Η φραγή τους συμβάλλει στην ταχύτερη φόρτωση ιστοτόπων, αλλά κάποια κουμπιά, φόρμες και πεδία σύνδεσης ενδέχεται να μη λειτουργούν.";
 
 /* Description of cross-site trackers. */
-"Menu.TrackingProtectionDescription.CrossSiteNew" = "Αυτά τα cookies σας ακολουθούν από ιστοσελίδα σε ιστοσελίδα για να συλλέξουν δεδομένα σχετικά με το τι κάνετε στο διαδίκτυο. Δημιουργούνται από τρίτους, όπως διαφημιστές και εταιρείες ανάλυσης.";
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "Αυτά τα cookies σάς ακολουθούν από ιστότοπο σε ιστότοπο για να συλλέξουν δεδομένα σχετικά με το τι κάνετε στο διαδίκτυο. Δημιουργούνται από τρίτους, όπως διαφημιστές και εταιρείες ανάλυσης.";
 
 /* Description of cryptominers. */
 "Menu.TrackingProtectionDescription.CryptominersNew" = "Τα cryptominers χρησιμοποιούν κρυφά την υπολογιστική ισχύ του συστήματός σας για να εξορύξουν κρυπτονομίσματα. Τα σενάρια εξόρυξης κρυπτονομισμάτων εξαντλούν την μπαταρία σας, επιβραδύνουν τον υπολογιστή σας, ενώ ενδέχεται να δείτε αυξημένες χρεώσεις στο λογαριασμό τους ρεύματος.";
@@ -866,7 +866,7 @@
 "Menu.TrackingProtectionDescription.Fingerprinters" = "Οι ρυθμίσεις στο πρόγραμμα περιήγησης και στον υπολογιστή σας είναι μοναδικές. Τα fingerprinters συλλέγουν πολλές από αυτές τις μοναδικές ρυθμίσεις για να δημιουργήσουν ένα προφίλ για εσάς, το οποίο μπορεί να χρησιμοποιηθεί για να την καταγραφή της περιήγησής σας.";
 
 /* Description of social network trackers. */
-"Menu.TrackingProtectionDescription.SocialNetworksNew" = "Τα κοινωνικά δίκτυα τοποθετούν ιχνηλάτες σε άλλες ιστοσελίδες για να δημιουργήσουν ένα πιο ολοκληρωμένο και στοχευμένο προφίλ για εσάς. Η φραγή ιχνηλατών μειώνει αυτά που βλέπουν οι εταιρείες κοινωνικών μέσων.";
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "Τα μέσα κοινωνικής δικτύωσης τοποθετούν ιχνηλάτες σε άλλους ιστοτόπους για να δημιουργήσουν ένα πιο ολοκληρωμένο και στοχευμένο προφίλ για εσάς. Ο αποκλεισμός ιχνηλατών μειώνει αυτά που βλέπουν οι εταιρείες μέσω κοινωνικής δικτύωσης.";
 
 /* The title that shows the number of fingerprinting scripts blocked */
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "Fingerprinters";
@@ -1190,7 +1190,7 @@
 "Settings.CopyAppVersion.Title" = "Αντιγράφτηκε στο πρόχειρο";
 
 /* Default text in search bar for Data Management */
-"Settings.DataManagement.SearchLabel" = "Φιλτράρισμα ιστοσελίδων";
+"Settings.DataManagement.SearchLabel" = "Φιλτράρισμα ιστοτόπων";
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.DataManagement.SectionName" = "Διαχείριση δεδομένων";
@@ -1553,7 +1553,7 @@
 "Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Εάν ένας ιστότοπος δεν λειτουργεί όπως πρέπει, πατήστε το λουκέτο στη γραμμή διευθύνσεων και απενεργοποιήστε την Ενισχυμένη προστασία από καταγραφή για αυτήν τη σελίδα.";
 
 /* Description for standard level tracker protection */
-"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Επιτρέπει κάποια καταγραφή διαφημίσεων, ώστε να λειτουργούν σωστά οι ιστοσελίδες.";
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Επιτρέπει κάποια καταγραφή διαφημίσεων, ώστε να λειτουργούν σωστά οι ιστότοποι.";
 
 /* Description for strict level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Αποκλείει περισσότερους ιχνηλάτες, διαφημίσεις και αναδυόμενα. Οι σελίδες φορτώνονται ταχύτερα, αλλά ορισμένες λειτουργίες ενδέχεται να απουσιάζουν.";
@@ -1583,13 +1583,13 @@
 "Settings.WebsiteData.ButtonShowMore" = "Εμφάνιση περισσότερων";
 
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
-"Settings.WebsiteData.ConfirmPrompt" = "Αυτή η ενέργεια θα διαγράψει όλα τα δεδομένα ιστοσελίδων σας. Δεν μπορεί να αναιρεθεί.";
+"Settings.WebsiteData.ConfirmPrompt" = "Αυτή η ενέργεια θα διαγράψει όλα τα δεδομένα ιστοτόπων σας. Δεν είναι δυνατή η αναίρεσή της.";
 
 /* Description of the confirmation dialog shown when a user tries to clear some of their private data. */
 "Settings.WebsiteData.SelectedConfirmPrompt" = "Αυτή η ενέργεια θα διαγράψει τα επιλεγμένα στοιχεία. Δεν μπορεί να αναιρεθεί.";
 
 /* Title displayed in header of the Data Management panel. */
-"Settings.WebsiteData.Title" = "Δεδομένα ιστοσελίδων";
+"Settings.WebsiteData.Title" = "Δεδομένα ιστοτόπων";
 
 /* Action label on share extension to add page to the Firefox reading list. */
 "ShareExtension.AddToReadingListAction.Title" = "Προσθήκη στη λίστα ανάγνωσης";

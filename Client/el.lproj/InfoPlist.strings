@@ -11,13 +11,13 @@
 "NSFaceIDUsageDescription" = "Το Firefox απαιτεί το Face ID για την πρόσβαση σε αποθηκευμένες συνδέσεις και κρυπτογραφημένες κάρτες.";
 
 /* Privacy - Location When In Use Usage Description */
-"NSLocationWhenInUseUsageDescription" = "Οι ιστοσελίδες που επισκέπτεστε ίσως απαιτήσουν την τοποθεσία σας.";
+"NSLocationWhenInUseUsageDescription" = "Οι ιστότοποι που επισκέπτεστε ενδέχεται να ζητήσουν την τοποθεσία σας.";
 
 /* Privacy - Microphone Usage Description */
 "NSMicrophoneUsageDescription" = "Το Firefox χρησιμοποιεί το μικρόφωνο για την καταγραφή και τη μεταφόρτωση ήχου.";
 
 /* Privacy - Photo Library Additions Usage Description */
-"NSPhotoLibraryAddUsageDescription" = "Αυτό σας επιτρέπει να αποθηκεύετε φωτογραφίες.";
+"NSPhotoLibraryAddUsageDescription" = "Επιτρέπει την αποθήκευση φωτογραφιών.";
 
 /* (No Comment) */
 "Scan QR Code" = "Σάρωση κωδικού QR";
