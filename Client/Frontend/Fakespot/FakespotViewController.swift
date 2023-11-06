@@ -286,7 +286,7 @@ class FakespotViewController:
             let view: FakespotOptInCardView = .build()
             viewModel.optInCardViewModel.dismissViewController = { [weak self] action in
                 guard let self = self else { return }
-                self.delegate?.fakespotControllerDidDismiss()
+                self.delegate?.fakespotControllerDidDismiss(animated: true)
                 guard let action else { return }
                 viewModel.recordDismissTelemetry(by: action)
             }
@@ -319,7 +319,7 @@ class FakespotViewController:
             let reviewQualityCardView: FakespotReviewQualityCardView = .build()
             viewModel.reviewQualityCardViewModel.dismissViewController = { [weak self] in
                 guard let self = self else { return }
-                self.delegate?.fakespotControllerDidDismiss()
+                self.delegate?.fakespotControllerDidDismiss(animated: true)
             }
             reviewQualityCardView.configure(viewModel.reviewQualityCardViewModel)
             return reviewQualityCardView
@@ -329,7 +329,7 @@ class FakespotViewController:
             view.configure(viewModel.settingsCardViewModel)
             viewModel.settingsCardViewModel.dismissViewController = { [weak self] action in
                 guard let self = self else { return }
-                self.delegate?.fakespotControllerDidDismiss()
+                self.delegate?.fakespotControllerDidDismiss(animated: true)
                 guard let action else { return }
                 viewModel.recordDismissTelemetry(by: action)
             }
@@ -398,7 +398,7 @@ class FakespotViewController:
 
     @objc
     private func closeTapped() {
-        delegate?.fakespotControllerDidDismiss()
+        delegate?.fakespotControllerDidDismiss(animated: true)
         viewModel.recordDismissTelemetry(by: .closeButton)
     }
 
@@ -427,7 +427,7 @@ class FakespotViewController:
     // MARK: - UIAdaptivePresentationControllerDelegate
 
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        delegate?.fakespotControllerDidDismiss()
+        delegate?.fakespotControllerDidDismiss(animated: true)
         let currentDetent = viewModel.getCurrentDetent(for: presentationController)
 
         if viewModel.isSwiping || currentDetent == .large {

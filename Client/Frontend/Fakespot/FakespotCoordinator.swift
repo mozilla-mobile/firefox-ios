@@ -11,7 +11,7 @@ protocol FakespotCoordinatorDelegate: AnyObject {
 }
 
 protocol FakespotViewControllerDelegate: AnyObject {
-    func fakespotControllerDidDismiss()
+    func fakespotControllerDidDismiss(animated: Bool)
 }
 
 class FakespotCoordinator: BaseCoordinator, FakespotViewControllerDelegate, FeatureFlaggable {
@@ -51,11 +51,11 @@ class FakespotCoordinator: BaseCoordinator, FakespotViewControllerDelegate, Feat
     func fakespotControllerCloseSidebar(sidebarContainer: SidebarEnabledViewProtocol,
                                         parentViewController: UIViewController) {
         sidebarContainer.hideSidebar(parentViewController)
-        fakespotControllerDidDismiss()
+        fakespotControllerDidDismiss(animated: true)
     }
 
-    func fakespotControllerDidDismiss() {
-        router.dismiss(animated: true, completion: nil)
+    func fakespotControllerDidDismiss(animated: Bool) {
+        router.dismiss(animated: animated, completion: nil)
         parentCoordinator?.didFinish(from: self)
     }
 

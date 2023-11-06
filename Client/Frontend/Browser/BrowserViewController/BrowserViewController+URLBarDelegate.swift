@@ -131,21 +131,21 @@ extension BrowserViewController: URLBarDelegate {
         }
     }
 
-    internal func dismissFakespotIfNeeded() -> Bool {
+    internal func dismissFakespotIfNeeded(animated: Bool = true) -> Bool {
         if contentStackView.isSidebarVisible {
             // hide sidebar as user tapped on shopping icon for a second time
             navigationHandler?.dismissFakespotSidebar(sidebarContainer: contentStackView, parentViewController: self)
             return true
-        } else if presentedViewController as? FakespotViewController != nil{
+        } else if presentedViewController as? FakespotViewController != nil {
             // dismiss modal as user tapped on shopping icon for a second time
-            navigationHandler?.dismissFakespotModal()
+            navigationHandler?.dismissFakespotModal(animated: animated)
             return true
         }
         return false
     }
 
-    internal func handleFakespotFlow(productURL: URL) {
-        if FakespotUtils().shouldDisplayInSidebar() {
+    internal func handleFakespotFlow(productURL: URL, viewSize: CGSize? = nil) {
+        if FakespotUtils().shouldDisplayInSidebar(viewSize: viewSize) {
             navigationHandler?.showFakespotFlowAsSidebar(productURL: productURL,
                                                          sidebarContainer: contentStackView,
                                                          parentViewController: self)

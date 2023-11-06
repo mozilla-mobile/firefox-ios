@@ -43,7 +43,7 @@ final class FakespotCoordinatorTests: XCTestCase {
         let subject = createSubject()
 
         subject.start(productURL: exampleProduct)
-        subject.fakespotControllerDidDismiss()
+        subject.fakespotControllerDidDismiss(animated: false)
 
         XCTAssertEqual(mockRouter.dismissCalled, 1)
         XCTAssertTrue(subject.childCoordinators.isEmpty)

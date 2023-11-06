@@ -43,7 +43,8 @@ protocol BrowserNavigationHandler: AnyObject {
                                    parentViewController: UIViewController)
 
     /// Initiates the modal dismissal of the Fakespot flow for analyzing the authenticity of a product's reviews.
-    func dismissFakespotModal()
+    /// - Parameter animated: Determines whether the modal is dismissed with animation or not.
+    func dismissFakespotModal(animated: Bool)
 
     /// Initiates the sidebar dismissal of the Fakespot flow for analyzing the authenticity of a product's reviews.
     /// - Parameter sidebarContainer: The view that contains the sidebar.

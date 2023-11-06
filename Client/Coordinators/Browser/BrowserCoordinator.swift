@@ -409,11 +409,11 @@ class BrowserCoordinator: BaseCoordinator,
                                  parentViewController: parentViewController)
     }
 
-    func dismissFakespotModal() {
+    func dismissFakespotModal(animated: Bool = true) {
         guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator}) as? FakespotCoordinator else {
             return // there is no sidebar to close
         }
-        fakespotCoordinator.fakespotControllerDidDismiss()
+        fakespotCoordinator.fakespotControllerDidDismiss(animated: animated)
     }
 
     func dismissFakespotSidebar(sidebarContainer: SidebarEnabledViewProtocol, parentViewController: UIViewController) {

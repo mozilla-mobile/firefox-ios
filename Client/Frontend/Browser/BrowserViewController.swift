@@ -693,12 +693,25 @@ class BrowserViewController: UIViewController,
 
         dismissVisibleMenus()
 
+        var needsUpdate = false
+        if urlBar.currentURL != nil {
+            needsUpdate = contentStackView.isSidebarVisible != FakespotUtils().shouldDisplayInSidebar(viewSize: size)
+
+            if needsUpdate {
+                _ = dismissFakespotIfNeeded(animated: false)
+            }
+        }
+
         coordinator.animate(alongsideTransition: { context in
             self.scrollController.updateMinimumZoom()
             self.topTabsViewController?.scrollToCurrentTab(false, centerCell: false)
             if let popover = self.displayedPopoverController {
                 self.updateDisplayedPopoverProperties?()
                 self.present(popover, animated: true, completion: nil)
+            }
+
+            if let productURL = self.urlBar.currentURL, needsUpdate {
+                self.handleFakespotFlow(productURL: productURL)
             }
         }, completion: { _ in
             self.scrollController.setMinimumZoom()
@@ -712,15 +725,6 @@ class BrowserViewController: UIViewController,
             updateLegacyTheme()
         }
         setupMiddleButtonStatus(isLoading: false)
-
-        if let productURL = urlBar.currentURL {
-            let needsUpdate = contentStackView.isSidebarVisible != FakespotUtils().shouldDisplayInSidebar()
-
-            if needsUpdate {
-                _ = dismissFakespotIfNeeded()
-                handleFakespotFlow(productURL: productURL)
-            }
-        }
     }
 
     private func updateLegacyTheme() {
