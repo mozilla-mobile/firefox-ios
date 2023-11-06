@@ -8,10 +8,12 @@ struct ProductAnalysisData: Codable {
     let productId: String?
     let grade: ReliabilityGrade?
     let adjustedRating: Double?
-    let needsAnalysis: Bool?
+    let needsAnalysis: Bool
     let analysisUrl: URL?
     let highlights: Highlights?
-    let pageNotSupported: Bool?
+    let pageNotSupported: Bool
+    let isProductDeletedReported: Bool
+    let isProductDeleted: Bool
 
     private enum CodingKeys: String, CodingKey {
         case productId = "product_id"
@@ -21,6 +23,8 @@ struct ProductAnalysisData: Codable {
         case analysisUrl = "analysis_url"
         case highlights
         case pageNotSupported = "page_not_supported"
+        case isProductDeletedReported = "deleted_product_reported"
+        case isProductDeleted = "deleted_product"
     }
 
     var needsAnalysisCardVisible: Bool {
@@ -37,6 +41,43 @@ struct ProductAnalysisData: Codable {
 
     var notEnoughReviewsCardVisible: Bool {
         (grade == nil || adjustedRating == nil) || productId == nil
+    }
+
+    var reportProductInStockCardVisible: Bool { isProductDeleted }
+
+    init(
+        productId: String? = nil,
+        grade: ReliabilityGrade? = nil,
+        adjustedRating: Double? = nil,
+        needsAnalysis: Bool,
+        analysisUrl: URL? = nil,
+        highlights: Highlights? = nil,
+        pageNotSupported: Bool,
+        isProductDeletedReported: Bool,
+        isProductDeleted: Bool
+    ) {
+        self.productId = productId
+        self.grade = grade
+        self.adjustedRating = adjustedRating
+        self.needsAnalysis = needsAnalysis
+        self.analysisUrl = analysisUrl
+        self.highlights = highlights
+        self.pageNotSupported = pageNotSupported
+        self.isProductDeletedReported = isProductDeletedReported
+        self.isProductDeleted = isProductDeleted
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        productId = try container.decodeIfPresent(String.self, forKey: .productId)
+        grade = try container.decodeIfPresent(ReliabilityGrade.self, forKey: .grade)
+        adjustedRating = try container.decodeIfPresent(Double.self, forKey: .adjustedRating)
+        needsAnalysis = try container.decodeIfPresent(Bool.self, forKey: .needsAnalysis) ?? false
+        analysisUrl = try container.decodeIfPresent(URL.self, forKey: .analysisUrl)
+        highlights = try container.decodeIfPresent(Highlights.self, forKey: .highlights)
+        pageNotSupported = try container.decodeIfPresent(Bool.self, forKey: .pageNotSupported) ?? false
+        isProductDeletedReported = try container.decodeIfPresent(Bool.self, forKey: .isProductDeletedReported) ?? false
+        isProductDeleted = try container.decodeIfPresent(Bool.self, forKey: .isProductDeleted) ?? false
     }
 }
 

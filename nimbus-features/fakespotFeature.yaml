@@ -15,6 +15,12 @@ features:
            to be shown to the user based on their preference.
         type: Boolean
         default: false
+      back_in_stock_reporting:
+        description: >
+          If true, enables for users the reporting feature for
+          products back in stock.
+        type: Boolean
+        default: false
       config:
         type: Map<String, WebsiteConfig>
         description: >
@@ -39,10 +45,12 @@ features:
         value:
           status: true
           product-recommendations: false
+          back_in_stock_reporting: false
       - channel: developer
         value:
           status: true
           product-recommendations: true
+          back_in_stock_reporting: true
 
 objects:
   WebsiteConfig:
