@@ -23,11 +23,6 @@ struct TabTrayState {
         return selectedPanel == .syncedTabs
     }
 
-    // iPad Layout
-    var isRegularLayout: Bool {
-        return layout == .regular
-    }
-
     // For test and mock purposes will be deleted once Redux is integrated
     static func getMockState(isPrivateMode: Bool) -> TabTrayState {
         let tabViewState = TabViewState.getMockState(isPrivateMode: isPrivateMode)

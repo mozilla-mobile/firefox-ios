@@ -49,6 +49,11 @@ class TabTrayViewController: UIViewController,
         return shouldUseiPadSetup() ? .regular : .compact
     }()
 
+    // iPad Layout
+    var isRegularLayout: Bool {
+        return layout == .regular
+    }
+
     var hasSyncableAccount: Bool {
         // Temporary. Added for early testing.
         // Eventually we will update this to use Redux state. -mr
@@ -91,7 +96,7 @@ class TabTrayViewController: UIViewController,
             TabTrayPanelType.tabs.image!.overlayWith(image: countLabel),
             TabTrayPanelType.privateTabs.image!,
             TabTrayPanelType.syncedTabs.image!]
-        return state.isRegularLayout ? TabTrayPanelType.allCases.map { $0.label } : iPhoneItems
+        return isRegularLayout ? TabTrayPanelType.allCases.map { $0.label } : iPhoneItems
     }
 
     private lazy var deleteButton: UIBarButtonItem = {
@@ -223,8 +228,8 @@ class TabTrayViewController: UIViewController,
     }
 
     private func updateLayout() {
-        navigationController?.isToolbarHidden = state.isRegularLayout
-        titleWidthConstraint?.isActive = state.isRegularLayout
+        navigationController?.isToolbarHidden = isRegularLayout
+        titleWidthConstraint?.isActive = isRegularLayout
 
         switch layout {
         case .compact:
@@ -250,7 +255,7 @@ class TabTrayViewController: UIViewController,
     // MARK: Private
     private func setupView() {
         // Should use Regular layout used for iPad
-        guard state.isRegularLayout else {
+        guard isRegularLayout else {
             setupForiPhone()
             return
         }
@@ -302,7 +307,7 @@ class TabTrayViewController: UIViewController,
 
     private func updateToolbarItems() {
         // iPad configuration
-        guard !state.isRegularLayout else {
+        guard !isRegularLayout else {
             setupToolbarForIpad()
             return
         }
