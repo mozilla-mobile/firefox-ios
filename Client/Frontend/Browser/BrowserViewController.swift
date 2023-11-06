@@ -1723,29 +1723,15 @@ class BrowserViewController: UIViewController,
             case .deviceOwnerAuthenticated:
                 // Note: Since we are injecting card info, we pass on the frame
                 // for special iframe cases
-                if CoordinatorFlagManager.isCredentialAutofillCoordinatorEnabled {
-                    self.navigationHandler?.showCreditCardAutofill(creditCard: nil,
-                                                                   decryptedCard: nil,
-                                                                   viewType: .selectSavedCard,
-                                                                   frame: frame,
-                                                                   alertContainer: self.contentContainer)
-                } else {
-                    self.showBottomSheetCardViewController(creditCard: nil,
-                                                           decryptedCard: nil,
-                                                           viewType: .selectSavedCard,
-                                                           frame: frame)
-                }
+                self.navigationHandler?.showCreditCardAutofill(creditCard: nil,
+                                                               decryptedCard: nil,
+                                                               viewType: .selectSavedCard,
+                                                               frame: frame,
+                                                               alertContainer: self.contentContainer)
             case .deviceOwnerFailed:
                 break // Keep showing bvc
             case .passCodeRequired:
-                if CoordinatorFlagManager.isCredentialAutofillCoordinatorEnabled {
-                    self.navigationHandler?.showRequiredPassCode()
-                } else {
-                    let passcodeViewController = DevicePasscodeRequiredViewController()
-                    passcodeViewController.profile = self.profile
-                    self.navigationController?.pushViewController(passcodeViewController,
-                                                                  animated: true)
-                }
+                self.navigationHandler?.showRequiredPassCode()
             }
         }
     }
@@ -1755,17 +1741,11 @@ class BrowserViewController: UIViewController,
             existingCard, error in
             guard let existingCard = existingCard else {
                 DispatchQueue.main.async {
-                    if CoordinatorFlagManager.isCredentialAutofillCoordinatorEnabled {
-                        self.navigationHandler?.showCreditCardAutofill(creditCard: nil,
-                                                                       decryptedCard: fieldValues,
-                                                                       viewType: .save,
-                                                                       frame: nil,
-                                                                       alertContainer: self.contentContainer)
-                    } else {
-                        self.showBottomSheetCardViewController(creditCard: nil,
-                                                               decryptedCard: fieldValues,
-                                                               viewType: .save)
-                    }
+                    self.navigationHandler?.showCreditCardAutofill(creditCard: nil,
+                                                                   decryptedCard: fieldValues,
+                                                                   viewType: .save,
+                                                                   frame: nil,
+                                                                   alertContainer: self.contentContainer)
                 }
                 return
             }
@@ -1773,17 +1753,11 @@ class BrowserViewController: UIViewController,
             // card already saved should update if any of its other values are different
             if !fieldValues.isEqualToCreditCard(creditCard: existingCard) {
                 DispatchQueue.main.async {
-                    if CoordinatorFlagManager.isCredentialAutofillCoordinatorEnabled {
-                        self.navigationHandler?.showCreditCardAutofill(creditCard: existingCard,
-                                                                       decryptedCard: fieldValues,
-                                                                       viewType: .update,
-                                                                       frame: nil,
-                                                                       alertContainer: self.contentContainer)
-                    } else {
-                        self.showBottomSheetCardViewController(creditCard: existingCard,
-                                                               decryptedCard: fieldValues,
-                                                               viewType: .update)
-                    }
+                    self.navigationHandler?.showCreditCardAutofill(creditCard: existingCard,
+                                                                   decryptedCard: fieldValues,
+                                                                   viewType: .update,
+                                                                   frame: nil,
+                                                                   alertContainer: self.contentContainer)
                 }
             }
         }
@@ -2305,72 +2279,6 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
     // not as a full-screen modal, which is the default on compact device classes.
     func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
         return .none
-    }
-}
-
-extension BrowserViewController {
-    public func showBottomSheetCardViewController(creditCard: CreditCard?,
-                                                  decryptedCard: UnencryptedCreditCardFields?,
-                                                  viewType state: CreditCardBottomSheetState,
-                                                  frame: WKFrameInfo? = nil) {
-        let creditCardControllerViewModel = CreditCardBottomSheetViewModel(profile: profile,
-                                                                           creditCard: creditCard,
-                                                                           decryptedCreditCard: decryptedCard,
-                                                                           state: state)
-        let viewController = CreditCardBottomSheetViewController(viewModel: creditCardControllerViewModel)
-        viewController.didTapYesClosure = { error in
-            if let error = error {
-                SimpleToast().showAlertWithText(error.localizedDescription,
-                                                bottomContainer: self.contentContainer,
-                                                theme: self.themeManager.currentTheme)
-            } else {
-                // Save a card telemetry
-                if state == .save {
-                    TelemetryWrapper.recordEvent(category: .action,
-                                                 method: .tap,
-                                                 object: .creditCardSavePromptCreate)
-                }
-
-                // Save or update a card toast message
-                let saveSuccessMessage: String = .CreditCard.RememberCreditCard.CreditCardSaveSuccessToastMessage
-                let updateSuccessMessage: String = .CreditCard.UpdateCreditCard.CreditCardUpdateSuccessToastMessage
-                let toastMessage: String = state == .save ? saveSuccessMessage : updateSuccessMessage
-                SimpleToast().showAlertWithText(toastMessage,
-                                                bottomContainer: self.contentContainer,
-                                                theme: self.themeManager.currentTheme)
-            }
-        }
-
-        viewController.didTapManageCardsClosure = {
-            self.showCreditCardSettings()
-        }
-
-        viewController.didSelectCreditCardToFill = { [unowned self] plainTextCard in
-            guard let currentTab = self.tabManager.selectedTab else {
-                return
-            }
-            CreditCardHelper.injectCardInfo(logger: self.logger,
-                                            card: plainTextCard,
-                                            tab: currentTab,
-                                            frame: frame) { error in
-                guard let error = error else {
-                    return
-                }
-                self.logger.log("Credit card bottom sheet injection \(error)",
-                                level: .debug,
-                                category: .webview)
-            }
-        }
-
-        var bottomSheetViewModel = BottomSheetViewModel(closeButtonA11yLabel: .CloseButtonTitle)
-        bottomSheetViewModel.shouldDismissForTapOutside = false
-
-        let bottomSheetVC = BottomSheetViewController(
-            viewModel: bottomSheetViewModel,
-            childViewController: viewController
-        )
-
-        self.present(bottomSheetVC, animated: true, completion: nil)
     }
 }
 
