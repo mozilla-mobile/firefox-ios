@@ -8,27 +8,28 @@ import UIKit
 public class LinkButton: ResizableButton, ThemeApplicable {
     private struct UX {
         static let buttonCornerRadius: CGFloat = 13
-        static let buttonVerticalInset: CGFloat = 12
-        static let buttonHorizontalInset: CGFloat = 16
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        configuration = UIButton.Configuration.plain()
         backgroundColor = .clear
         titleLabel?.adjustsFontForContentSizeCategory = true
-        contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
-                                         left: UX.buttonHorizontalInset,
-                                         bottom: UX.buttonVerticalInset,
-                                         right: UX.buttonHorizontalInset)
     }
 
     public func configure(viewModel: LinkButtonViewModel) {
         accessibilityIdentifier = viewModel.a11yIdentifier
         setTitle(viewModel.title, for: .normal)
-        titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                                  size: viewModel.fontSize)
-        titleLabel?.textAlignment = viewModel.textAlignment
+        configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
+                                                                   size: viewModel.fontSize)
+            return outgoing
+        }
+        configuration?.contentInsets = viewModel.contentInsets
+        contentHorizontalAlignment = viewModel.contentHorizontalAlignment
+        layoutIfNeeded()
     }
 
     required init?(coder aDecoder: NSCoder) {
