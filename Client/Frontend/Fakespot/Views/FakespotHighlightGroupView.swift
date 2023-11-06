@@ -41,7 +41,7 @@ class FakespotHighlightGroupView: UIView, ThemeApplicable, Notifiable {
     }
 
     private var highlightLabelLeadingConstraint: NSLayoutConstraint?
-    private var imageHeightConstraint: NSLayoutConstraint?
+    private(set) var imageHeightConstraint: NSLayoutConstraint?
 
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
