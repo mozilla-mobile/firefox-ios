@@ -66,7 +66,7 @@ function checkReadability() {
       }
 
       const DOMPurify = require('dompurify');
-      const clean = DOMPurify.sanitize(docStr);
+      const clean = DOMPurify.sanitize(docStr, {WHOLE_DOCUMENT: true});
       var doc = new DOMParser().parseFromString(clean, "text/html");
       var readability = new Readability(uri, doc, { debug: DEBUG });
       readabilityResult = readability.parse();
