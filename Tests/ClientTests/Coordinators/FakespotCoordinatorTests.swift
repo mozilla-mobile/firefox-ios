@@ -33,7 +33,7 @@ final class FakespotCoordinatorTests: XCTestCase {
     func testFakespotStarts_presentsFakespotController() throws {
         let subject = createSubject()
 
-        subject.start(productURL: exampleProduct)
+        subject.startModal(productURL: exampleProduct)
 
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is FakespotViewController)
@@ -42,7 +42,7 @@ final class FakespotCoordinatorTests: XCTestCase {
     func testFakespotCoordinatorDelegate_didDidDismiss_callsRouterDismiss() throws {
         let subject = createSubject()
 
-        subject.start(productURL: exampleProduct)
+        subject.startModal(productURL: exampleProduct)
         subject.fakespotControllerDidDismiss(animated: false)
 
         XCTAssertEqual(mockRouter.dismissCalled, 1)
