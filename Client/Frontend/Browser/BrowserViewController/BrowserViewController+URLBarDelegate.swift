@@ -135,21 +135,38 @@ extension BrowserViewController: URLBarDelegate {
             return
         }
 
-        let contextualViewProvider = ContextualHintViewProvider(forHintType: .shoppingExperience,
-                                                                with: profile)
+        if shoppingContextHintVC == nil {
+            configureShoppingContextVC(at: sourceView)
+        } else {
+            shoppingContextHintVC = nil
+        }
+    }
 
-        let contextHintVC = ContextualHintViewController(with: contextualViewProvider)
+    private func configureShoppingContextVC(at sourceView: UIView) {
+        let viewProvider = ContextualHintViewProvider(
+            forHintType: .shoppingExperience,
+            with: profile
+        )
+        shoppingContextHintVC = ContextualHintViewController(
+            with: viewProvider
+        )
 
-        contextHintVC.configure(
+        guard let shoppingContextHintVC else { return }
+        shoppingContextHintVC.configure(
             anchor: sourceView,
             withArrowDirection: isBottomSearchBar ? .down : .up,
             andDelegate: self,
-            presentedUsing: {
-                self.present(contextHintVC, animated: true)
-                TelemetryWrapper.recordEvent(category: .action,
-                                             method: .navigate,
-                                             object: .shoppingButton,
-                                             value: .shoppingCFRsDisplayed)
+            presentedUsing: { [unowned self] in
+                self.present(shoppingContextHintVC, animated: true)
+                TelemetryWrapper.recordEvent(
+                    category: .action,
+                    method: .navigate,
+                    object: .shoppingButton,
+                    value: .shoppingCFRsDisplayed
+                )
+            },
+            actionOnDismiss: {
+                self.shoppingContextHintVC = nil
             },
             andActionForButton: { [weak self] in
                 guard let self else { return }

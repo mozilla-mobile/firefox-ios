@@ -61,6 +61,7 @@ class BrowserViewController: UIViewController,
     var overlayManager: OverlayModeManager
     var appAuthenticator: AppAuthenticationProtocol
     var contextHintVC: ContextualHintViewController
+    var shoppingContextHintVC: ContextualHintViewController?
     private var backgroundTabLoader: DefaultBackgroundTabLoader
 
     // popover rotation handling
