@@ -411,7 +411,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     func dismissFakespotModal(animated: Bool = true) {
         guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator}) as? FakespotCoordinator else {
-            return // there is no sidebar to close
+            return // there is no modal to close
         }
         fakespotCoordinator.fakespotControllerDidDismiss(animated: animated)
     }
