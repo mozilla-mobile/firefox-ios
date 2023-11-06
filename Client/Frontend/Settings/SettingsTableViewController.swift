@@ -830,10 +830,17 @@ class SettingsTableViewController: ThemedTableViewController {
         if let setting = section[indexPath.row] {
             let cell = dequeueCellFor(indexPath: indexPath, setting: setting)
             setting.onConfigureCell(cell, theme: themeManager.currentTheme)
-            cell.applyTheme(theme: themeManager.currentTheme)
             return cell
         }
         return super.tableView(tableView, cellForRowAt: indexPath)
+    }
+
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let section = settings[indexPath.section]
+        if let setting = section[indexPath.row], let themedCell = cell as? ThemedTableViewCell {
+            setting.onConfigureCell(themedCell, theme: themeManager.currentTheme)
+            themedCell.applyTheme(theme: themeManager.currentTheme)
+        }
     }
 
     private func dequeueCellFor(indexPath: IndexPath, setting: Setting) -> ThemedTableViewCell {
