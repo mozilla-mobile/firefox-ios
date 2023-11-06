@@ -257,6 +257,15 @@ class FakespotViewModel {
         a11yPrimaryActionIdentifier: AccessibilityIdentifiers.Shopping.ReportProductInStockCard.primaryAction
     )
 
+    lazy var reportingProductFeedbackViewModel = FakespotMessageCardViewModel(
+        type: .info,
+        title: .Shopping.InfoCardReportSubmittedByCurrentUserTitle,
+        description: .Shopping.InfoCardReportSubmittedByCurrentUserDescription,
+        a11yCardIdentifier: AccessibilityIdentifiers.Shopping.ReportingProductFeedbackCard.card,
+        a11yTitleIdentifier: AccessibilityIdentifiers.Shopping.ReportingProductFeedbackCard.title,
+        a11yDescriptionIdentifier: AccessibilityIdentifiers.Shopping.ReportingProductFeedbackCard.description
+    )
+
     let settingsCardViewModel = FakespotSettingsCardViewModel()
     var noAnalysisCardViewModel = FakespotNoAnalysisCardViewModel()
     let reviewQualityCardViewModel = FakespotReviewQualityCardViewModel()
