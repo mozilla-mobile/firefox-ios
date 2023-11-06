@@ -47,6 +47,12 @@
 		1D06AE6624FEE4D5000B092B /* TopSitesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D06AE6524FEE4D5000B092B /* TopSitesProvider.swift */; };
 		1D06AE6A24FEE8D6000B092B /* TabProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D06AE6924FEE8D6000B092B /* TabProvider.swift */; };
 		1D0BA05C24F46A0400D731B5 /* TopSitesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D0BA05B24F46A0400D731B5 /* TopSitesProvider.swift */; };
+		1D1933742AF2C8C8005089C9 /* EventQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78962ADF32590011E9F2 /* EventQueue.swift */; };
+		1D1933752AF2C8C9005089C9 /* EventQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78962ADF32590011E9F2 /* EventQueue.swift */; };
+		1D1933762AF2C8C9005089C9 /* EventQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78962ADF32590011E9F2 /* EventQueue.swift */; };
+		1D1933772AF2C8CE005089C9 /* AppEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78982ADF328E0011E9F2 /* AppEvent.swift */; };
+		1D1933782AF2C8CE005089C9 /* AppEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78982ADF328E0011E9F2 /* AppEvent.swift */; };
+		1D1933792AF2C8CF005089C9 /* AppEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78982ADF328E0011E9F2 /* AppEvent.swift */; };
 		1D2F68AB2ACB262900524B92 /* RemoteTabsPanelAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2F68AA2ACB262900524B92 /* RemoteTabsPanelAction.swift */; };
 		1D2F68AD2ACB266300524B92 /* RemoteTabsPanelState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2F68AC2ACB266300524B92 /* RemoteTabsPanelState.swift */; };
 		1D2F68AF2ACB272500524B92 /* RemoteTabsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2F68AE2ACB272500524B92 /* RemoteTabsTableViewController.swift */; };
@@ -12342,7 +12348,9 @@
 				45355B232A269E7100B1EA8E /* Autopush.swift in Sources */,
 				45355B262A269EAC00B1EA8E /* PushConfiguration.swift in Sources */,
 				396E38CC1EE0816C00CC180F /* Profile.swift in Sources */,
+				1D1933792AF2C8CF005089C9 /* AppEvent.swift in Sources */,
 				396E38DD1EE081DA00CC180F /* SyncDisplayState.swift in Sources */,
+				1D1933762AF2C8C9005089C9 /* EventQueue.swift in Sources */,
 				6025B10E267B6C7F00F59F6B /* LoginRecordExtension.swift in Sources */,
 				396E38F21EE0C8ED00CC180F /* FxAPushMessageHandler.swift in Sources */,
 				F8A0B08329AD64790091C75B /* RustSyncManager.swift in Sources */,
@@ -12505,9 +12513,11 @@
 				60CE80C12667780D004026C7 /* CredentialListPresenter.swift in Sources */,
 				F80DF73F27034F6400E4C37D /* LegacyDynamicFontHelper.swift in Sources */,
 				6025B111267B6EE100F59F6B /* CredentialWelcomeViewController.swift in Sources */,
+				1D1933742AF2C8C8005089C9 /* EventQueue.swift in Sources */,
 				C87DF962267246730097E707 /* photon-colors.swift in Sources */,
 				6025B10A267B6BB300F59F6B /* SelectPasswordCell.swift in Sources */,
 				8AB8574127D9630E0075C173 /* LegacyTheme.swift in Sources */,
+				1D1933772AF2C8CE005089C9 /* AppEvent.swift in Sources */,
 				F8324B122649B707007E4BFA /* Profile.swift in Sources */,
 				F8324B262649B76E007E4BFA /* SyncDisplayState.swift in Sources */,
 				C87DF976267246830097E707 /* LegacyThemeManager.swift in Sources */,
@@ -13566,6 +13576,8 @@
 				E1CD81C0290C5C9800124B27 /* DevicePickerTableViewCell.swift in Sources */,
 				E1CD81BA290C4ED900124B27 /* AccessibilityIdentifiers.swift in Sources */,
 				E1CD81BF290C5C9500124B27 /* DevicePickerTableViewHeaderCell.swift in Sources */,
+				1D1933782AF2C8CE005089C9 /* AppEvent.swift in Sources */,
+				1D1933752AF2C8C9005089C9 /* EventQueue.swift in Sources */,
 				E41A7D4B1A1BE04500245963 /* InitialViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

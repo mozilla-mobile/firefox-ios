@@ -424,8 +424,8 @@ class BrowserViewController: UIViewController,
         updateWallpaperMetadata()
 
         // When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
-        // So, we delay five seconds because we need to wait for `Profile` to be initialized and setup for use.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
+        // Make sure that our startup flow is completed and the Profile has been sync'd (at least once) before we load.
+        AppEventQueue.wait(for: [.startupFlowComplete, .profileSyncing, .tabRestoration]) { [weak self] in
             self?.backgroundTabLoader.loadBackgroundTabs()
         }
     }
