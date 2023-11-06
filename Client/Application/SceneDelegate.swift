@@ -59,8 +59,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         sceneCoordinator = SceneCoordinator(scene: scene)
         sceneCoordinator?.start()
 
-        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration]) {
-            self.handle(connectionOptions: connectionOptions)
+        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration]) { [weak self] in
+            self?.handle(connectionOptions: connectionOptions)
         }
     }
 
