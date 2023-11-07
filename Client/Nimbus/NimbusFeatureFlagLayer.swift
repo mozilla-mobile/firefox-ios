@@ -25,9 +25,6 @@ final class NimbusFeatureFlagLayer {
         case .creditCardAutofillStatus:
             return checkNimbusForCreditCardAutofill(for: featureID, from: nimbus)
 
-        case .credentialAutofillCoordinatorRefactor:
-            return checkCredentialAutofillCoordinatorRefactorFeature(from: nimbus)
-
         case .jumpBackIn,
                 .historyHighlights:
             return checkHomescreenSectionsFeature(for: featureID, from: nimbus)
@@ -137,11 +134,6 @@ final class NimbusFeatureFlagLayer {
 
         guard let status = config.featuresEnabled[nimbusID] else { return false }
         return status
-    }
-
-    private func checkCredentialAutofillCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.credentialAutofillCoordinatorRefactor.value()
-        return config.enabled
     }
 
     private func checkShareExtensionCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {

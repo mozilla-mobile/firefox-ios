@@ -63,6 +63,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         }
 
         isRestoringTabs = true
+        AppEventQueue.started(.tabRestoration)
 
         guard tabMigration.shouldRunMigration else {
             logger.log("Not running the migration",
@@ -99,6 +100,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         defer {
             isRestoringTabs = false
             tabRestoreHasFinished = true
+            AppEventQueue.completed(.tabRestoration)
         }
 
         let nonPrivateTabs = window?.tabData.filter { !$0.isPrivate }

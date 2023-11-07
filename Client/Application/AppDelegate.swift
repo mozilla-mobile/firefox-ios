@@ -97,6 +97,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                    level: .info,
                    category: .lifecycle)
 
+        // Establish event dependencies for startup flow
+        AppEventQueue.establishDependencies(for: .startupFlowComplete, against: [
+            .profileInitialized,
+            .preLaunchDependenciesComplete,
+            .postLaunchDependenciesComplete,
+            .accountManagerInitialized
+        ])
+
         // Then setup dependency container as it's needed for everything else
         DependencyHelper().bootstrapDependencies()
 

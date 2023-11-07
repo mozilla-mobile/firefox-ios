@@ -358,16 +358,11 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     // TODO: FXIOS-7596 Remove when moving the TabManager protocol to TabManagerImplementation
     func storeChanges() { fatalError("should never be called") }
 
-    func hasTabsToRestoreAtStartup() -> Bool {
-        return store.hasTabsToRestoreAtStartup
-    }
-
     func restoreTabs(_ forced: Bool = false) {
         defer { checkForSingleTab() }
         guard forced || tabs.isEmpty,
               !AppConstants.isRunningUITests,
-              !DebugSettingsBundleOptions.skipSessionRestore,
-              store.hasTabsToRestoreAtStartup
+              !DebugSettingsBundleOptions.skipSessionRestore
         else { return }
 
         isRestoringTabs = true

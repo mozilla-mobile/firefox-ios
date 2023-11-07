@@ -4,9 +4,21 @@
 
 import Foundation
 
-protocol AppEventType: Hashable { }
+public protocol AppEventType: Hashable { }
 
-enum AppEvent: Int, AppEventType {
-    case tabRestoreHasFinished
+public enum AppEvent: Int, AppEventType {
+    // Events: Startup flow
+    case startupFlowComplete
+
+    // Sub-Events for Startup Flow
+    case profileInitialized
+    case preLaunchDependenciesComplete
+    case postLaunchDependenciesComplete
+    case accountManagerInitialized
+
+    // Activities: Profile Syncing
     case profileSyncing
+
+    // Activites: Tabs
+    case tabRestoration
 }

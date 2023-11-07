@@ -11,10 +11,6 @@ struct CoordinatorFlagManager {
         return NimbusManager.shared.featureFlagLayer.checkNimbusConfigFor(.shareExtensionCoordinatorRefactor)
     }
 
-    static var isCredentialAutofillCoordinatorEnabled: Bool {
-        return NimbusManager.shared.featureFlagLayer.checkNimbusConfigFor(.credentialAutofillCoordinatorRefactor)
-    }
-
     static var isQRCodeCoordinatorEnabled: Bool {
         return NimbusManager.shared.featureFlagLayer.checkNimbusConfigFor(.qrCodeCoordinatorRefactor)
     }
