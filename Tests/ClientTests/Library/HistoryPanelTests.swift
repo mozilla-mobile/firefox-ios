@@ -12,7 +12,7 @@ class HistoryPanelTests: XCTestCase {
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         DependencyHelperMock().bootstrapDependencies()
     }
-    
+
     override func tearDown() {
         super.tearDown()
         DependencyHelperMock().reset()

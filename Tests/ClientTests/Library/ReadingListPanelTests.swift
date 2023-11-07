@@ -37,4 +37,3 @@ class ReadingListPanelTests: XCTestCase {
         return subject
     }
 }
-

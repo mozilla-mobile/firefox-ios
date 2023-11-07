@@ -192,7 +192,6 @@ class BookmarksPanelTests: XCTestCase {
         XCTAssertEqual(panel.state, .bookmarks(state: .itemEditModeInvalidField), "No state change when right top button is disabled")
     }
 
-
     func testBookmarksButtons_MainFolder() {
         let panel = createPanel()
 

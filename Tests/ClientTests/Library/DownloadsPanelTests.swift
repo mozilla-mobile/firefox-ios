@@ -36,4 +36,3 @@ class DownloadsPanelTests: XCTestCase {
         return subject
     }
 }
-

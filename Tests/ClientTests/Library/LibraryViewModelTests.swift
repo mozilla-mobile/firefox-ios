@@ -53,5 +53,4 @@ class LibraryViewModelTests: XCTestCase {
             }
         }
     }
-
 }
