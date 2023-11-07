@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct TabViewState {
+struct TabViewState: Equatable {
     var isPrivateMode: Bool
     var tabs: [TabCellState]
 
@@ -13,7 +13,8 @@ struct TabViewState {
     var isInactiveTabsExpanded = true
 
     var isPrivateTabsEmpty: Bool {
-        return isPrivateMode && tabs.isEmpty
+        guard isPrivateMode else { return false }
+        return tabs.isEmpty
     }
 
     // For test and mock purposes will be deleted once Redux is integrated

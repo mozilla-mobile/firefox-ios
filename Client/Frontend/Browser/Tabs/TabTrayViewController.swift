@@ -283,9 +283,9 @@ class TabTrayViewController: UIViewController,
     }
 
     private func updateTitle() {
-        guard let panel = state.selectedPanel else { return }
+        guard let navigationTitle = state.navigationTitle else { return }
 
-        navigationItem.title = panel.navTitle
+        navigationItem.title = navigationTitle
     }
 
     private func setupForiPad() {
