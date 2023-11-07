@@ -4010,12 +4010,12 @@ extension String {
             key: "", // Shopping.InfoCard.InfoComingSoon.Title.v121
             tableName: "Shopping",
             value: "Info Coming Soon",
-            comment: "Title for an information card that is displayed in the Shopping section when certain details about a product or feature are not currently available but are expected to be provided soon. The message should imply that the user can look forward to receiving more information shortly.")
+            comment: "Title for an information card that is displayed in the review checker section when certain details about a product or feature are not currently available but are expected to be provided soon. The message should imply that the user can look forward to receiving more information shortly.")
         public static let InfoCardInfoComingSoonDescription = MZLocalizedString(
             key: "", // Shopping.InfoCard.InfoComingSoon.Description.v121
             tableName: "Shopping",
             value: "We should have info about this product’s reviews within 24 hours. Please check back.",
-            comment: "Description text for an information card used in the Shopping section. This message is displayed when the reviews for a product are not yet available but are expected to be provided within the next 24 hours. It serves to inform users of the short wait for reviews and encourages them to return soon for the updated information.")
+            comment: "Description text for an information card used in the review checker section. This message is displayed when the reviews for a product are not yet available but are expected to be provided within the next 24 hours. It serves to inform users of the short wait for reviews and encourages them to return soon for the updated information.")
     }
 }
 
