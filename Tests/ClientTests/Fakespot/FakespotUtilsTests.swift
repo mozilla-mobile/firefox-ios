@@ -9,7 +9,7 @@ import XCTest
 final class FakespotUtilsTests: XCTestCase {
     func testIsPadInMultitasking_withIphone() {
         let device = UIUserInterfaceIdiom.phone
-        let keyWindow = UIWindow.keyWindow!
+        let keyWindow = UIWindow.attachedKeyWindow!
         let subject = FakespotUtils()
         XCTAssertFalse(subject.isPadInMultitasking(device: device, window: keyWindow, viewSize: keyWindow.frame.size),
                        "Should return false for an iPhone")
@@ -17,7 +17,7 @@ final class FakespotUtilsTests: XCTestCase {
 
     func testIsPadInMultitasking_withIpad_fullScreen() {
         let device = UIUserInterfaceIdiom.pad
-        let keyWindow = UIWindow.keyWindow!
+        let keyWindow = UIWindow.attachedKeyWindow!
         let subject = FakespotUtils()
         XCTAssertFalse(subject.isPadInMultitasking(device: device, window: keyWindow, viewSize: keyWindow.frame.size),
                        "Should return false on iPad in full screen")
@@ -25,7 +25,7 @@ final class FakespotUtilsTests: XCTestCase {
 
     func testIsPadInMultitasking_withIpad_splitScreen() {
         let device = UIUserInterfaceIdiom.pad
-        let keyWindow = UIWindow.keyWindow!
+        let keyWindow = UIWindow.attachedKeyWindow!
         let subject = FakespotUtils()
         XCTAssertTrue(subject.isPadInMultitasking(device: device, window: keyWindow, viewSize: CGSize.zero),
                       "Should return true on iPad in split screen")
@@ -33,15 +33,15 @@ final class FakespotUtilsTests: XCTestCase {
 
     func testShouldDisplayInSidebar_withIphone() {
         let device = UIUserInterfaceIdiom.phone
-        let keyWindow = UIWindow.keyWindow!
+        let keyWindow = UIWindow.attachedKeyWindow!
         let subject = FakespotUtils()
-        XCTAssertTrue(subject.shouldDisplayInSidebar(device: device, window: keyWindow, viewSize: keyWindow.frame.size),
-                      "Should return true for an iPhone")
+        XCTAssertFalse(subject.shouldDisplayInSidebar(device: device, window: keyWindow, viewSize: keyWindow.frame.size),
+                       "Should return false for an iPhone")
     }
 
     func testShouldDisplayInSidebar_withIpad_fullScreen() {
         let device = UIUserInterfaceIdiom.pad
-        let keyWindow = UIWindow.keyWindow!
+        let keyWindow = UIWindow.attachedKeyWindow!
         let subject = FakespotUtils()
         XCTAssertTrue(subject.shouldDisplayInSidebar(device: device, window: keyWindow, viewSize: keyWindow.frame.size),
                       "Should return true on iPad in full screen")
@@ -49,7 +49,7 @@ final class FakespotUtilsTests: XCTestCase {
 
     func testShouldDisplayInSidebar_withIpad_splitScreen() {
         let device = UIUserInterfaceIdiom.pad
-        let keyWindow = UIWindow.keyWindow!
+        let keyWindow = UIWindow.attachedKeyWindow!
         let subject = FakespotUtils()
         XCTAssertFalse(subject.shouldDisplayInSidebar(device: device, window: keyWindow, viewSize: CGSize.zero),
                        "Should return false on iPad in split screen")
