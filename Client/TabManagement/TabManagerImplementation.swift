@@ -15,7 +15,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     private let tabSessionStore: TabSessionStore
     private let imageStore: DiskImageStore?
     private let tabMigration: TabMigrationUtility
-    var tabRestoreHasFinished = false
     var notificationCenter: NotificationProtocol
 
     init(profile: Profile,
