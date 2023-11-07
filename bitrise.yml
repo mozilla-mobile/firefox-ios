@@ -67,19 +67,19 @@ workflows:
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/Client.app" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/XCUITests-Runner.app" \
             "$BITRISE_SOURCE_DIR/Client.xcodeproj" \
-            "$BITRISE_SOURCE_DIR/Tests/SmokeXCUITests.xctestplan" \
-            "$BITRISE_SOURCE_DIR/Tests/Smoketest2.xctestplan" \
-            "$BITRISE_SOURCE_DIR/Tests/Smoketest3.xctestplan" \
-            "$BITRISE_SOURCE_DIR/Tests/Smoketest4.xctestplan" \
+            "$BITRISE_SOURCE_DIR/firefox-ios/Tests/SmokeXCUITests.xctestplan" \
+            "$BITRISE_SOURCE_DIR/firefox-ios/Tests/Smoketest2.xctestplan" \
+            "$BITRISE_SOURCE_DIR/firefox-ios/Tests/Smoketest3.xctestplan" \
+            "$BITRISE_SOURCE_DIR/firefox-ios/Tests/Smoketest4.xctestplan" \
             "$BITRISE_SOURCE_DIR/xcodebuild.log" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_SmokeXCUITests_iphonesimulator17.0-arm64.xctestrun" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Smoketest2_iphonesimulator17.0-arm64.xctestrun" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Smoketest3_iphonesimulator17.0-arm64.xctestrun" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Smoketest4_iphonesimulator17.0-arm64.xctestrun" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/" \
-            "$BITRISE_SOURCE_DIR/Tests/UnitTest.xctestplan" \
+            "$BITRISE_SOURCE_DIR/firefox-ios/Tests/UnitTest.xctestplan" \
             "$BITRISE_SOURCE_DIR/Client/" \
-            "$BITRISE_SOURCE_DIR/Tests/XCUITests"
+            "$BITRISE_SOURCE_DIR/firefox-ios/Tests/XCUITests"
     - deploy-to-bitrise-io@2:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:

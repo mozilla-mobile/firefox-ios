@@ -241,32 +241,32 @@
       </CodeCoverageTargets>
       <TestPlans>
          <TestPlanReference
-            reference = "container:Tests/UnitTest.xctestplan"
+            reference = "container:firefox-ios/Tests/UnitTest.xctestplan"
             default = "YES">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:Tests/SmokeXCUITests.xctestplan">
+            reference = "container:firefox-ios/Tests/SmokeXCUITests.xctestplan">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:Tests/Smoketest4.xctestplan">
+            reference = "container:firefox-ios/Tests/Smoketest4.xctestplan">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:Tests/Smoketest2.xctestplan">
+            reference = "container:firefox-ios/Tests/Smoketest2.xctestplan">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:Tests/Smoketest3.xctestplan">
+            reference = "container:firefox-ios/Tests/Smoketest3.xctestplan">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:Tests/FullFunctionalTestPlan.xctestplan">
+            reference = "container:firefox-ios/Tests/FullFunctionalTestPlan.xctestplan">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:Tests/PerformanceTestPlan.xctestplan">
+            reference = "container:firefox-ios/Tests/PerformanceTestPlan.xctestplan">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:Tests/SyncIntegrationTestPlan.xctestplan">
+            reference = "container:firefox-ios/Tests/SyncIntegrationTestPlan.xctestplan">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:Tests/ExperimentIntegrationTests.xctestplan">
+            reference = "container:firefox-ios/Tests/ExperimentIntegrationTests.xctestplan">
          </TestPlanReference>
       </TestPlans>
       <Testables>
