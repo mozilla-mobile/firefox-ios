@@ -8293,10 +8293,8 @@
 			isa = PBXGroup;
 			children = (
 				7B60B0071BDE3AE10090C984 /* SnapshotHelper.swift */,
-				7B3632D21C2983F000D12AF9 /* L10nSnapshotTests */,
 			);
 			name = Snapshot;
-			path = ../..;
 			sourceTree = "<group>";
 		};
 		7B604FC11C496005006EEEC3 /* Frameworks */ = {
@@ -10070,7 +10068,7 @@
 		E15A8B2B286CFD48004BB2B8 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				7B3632E71C29879300D12AF9 /* Snapshot */,
+				7B3632D21C2983F000D12AF9 /* L10nSnapshotTests */,
 				EAF79C172A6F0B9500251CA4 /* ExperimentIntegrationTests.xctestplan */,
 				E1AF355B286DE5F600960045 /* FullFunctionalTestPlan.xctestplan */,
 				E1AF355F286DE5F700960045 /* PerformanceTestPlan.xctestplan */,
@@ -10602,6 +10600,7 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				7B3632E71C29879300D12AF9 /* Snapshot */,
 				D4AFA84B2AFA4FC6000BFEAA /* firefox-ios */,
 				962C6C39297054A700354BE8 /* Package.swift */,
 				962C6C3F2971F5D400354BE8 /* Dangerfile.swift */,

@@ -289,13 +289,13 @@ workflows:
     #- Decision_to_run_UI_Tests
     steps:
     - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
-        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+        #run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Pull artifacts
         inputs:
         - verbose: true
         - artifact_sources: stage_1.configure_build_fennec
     - script@1.1:
-        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+        #run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Unzip
         inputs:
         - content: |
@@ -311,7 +311,7 @@ workflows:
             echo "show dir"
             ls
     - xcode-test-without-building@0:
-        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+        #run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         timeout: 1200
         title: UI Smoketest4
         inputs:
@@ -321,7 +321,7 @@ workflows:
             "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest4_iphonesimulator17.0-arm64.xctestrun"
     - deploy-to-bitrise-io@2.1.1:
-        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+        #run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - pipeline_intermediate_files: '$BITRISE_XCRESULT_PATH:BITRISE_UITESTS_4_XCRESULT_PATH'
     meta:
