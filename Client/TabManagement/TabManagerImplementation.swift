@@ -37,7 +37,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
     // MARK: - Restore tabs
 
-    func restoreTabs(_ forced: Bool = false) {
+    override func restoreTabs(_ forced: Bool = false) {
         guard !isRestoringTabs,
               forced || tabs.isEmpty
         else {

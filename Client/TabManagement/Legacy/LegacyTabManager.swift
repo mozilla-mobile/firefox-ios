@@ -253,6 +253,9 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         return filterdTabs.first
     }
 
+    // TODO: FXIOS-7596 Remove when moving the TabManager protocol to TabManagerImplementation
+    func restoreTabs(_ forced: Bool = false) { fatalError("should never be called") }
+
     // MARK: - Select tab
 
     // TODO: FXIOS-7596 Remove when moving the TabManager protocol to TabManagerImplementation
