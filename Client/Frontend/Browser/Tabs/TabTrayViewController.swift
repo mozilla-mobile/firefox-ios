@@ -180,7 +180,7 @@ class TabTrayViewController: UIViewController,
     init(delegate: TabTrayViewControllerDelegate,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          and notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.state = TabTrayState.getMockState(isPrivateMode: false)
+        self.state = TabTrayState()
         self.delegate = delegate
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter

@@ -27,13 +27,34 @@ struct TabTrayState: ScreenState, Equatable {
         return selectedPanel == .syncedTabs
     }
 
-    // For test and mock purposes will be deleted once Redux is integrated
-    static func getMockState(isPrivateMode: Bool) -> TabTrayState {
-        let tabViewState = TabViewState.getMockState(isPrivateMode: isPrivateMode)
-        return TabTrayState(isPrivateMode: isPrivateMode,
-                            tabViewState: tabViewState,
-                            remoteTabsState: nil,
-                            normalTabsCount: "2")
+    init(_ appState: AppState) {
+        guard let panelState = store.state.screenState(TabTrayState.self, for: .tabsPanel) else {
+            self.init()
+            return
+        }
+
+        self.init(isPrivateMode: panelState.isPrivateMode,
+                  tabViewState: panelState.tabViewState,
+                  remoteTabsState: panelState.remoteTabsState,
+                  normalTabsCount: panelState.normalTabsCount)
+    }
+
+    init() {
+        let tabViewState = TabViewState.getMockState(isPrivateMode: false)
+        self.init(isPrivateMode: false,
+                  tabViewState: tabViewState,
+                  remoteTabsState: nil,
+                  normalTabsCount: "2")
+    }
+
+    init(isPrivateMode: Bool,
+         tabViewState: TabViewState,
+         remoteTabsState: RemoteTabsPanelState?,
+         normalTabsCount: String) {
+        self.isPrivateMode = isPrivateMode
+        self.tabViewState = tabViewState
+        self.remoteTabsState = remoteTabsState
+        self.normalTabsCount = normalTabsCount
     }
 
     static let reducer: Reducer<Self> = { state, action in
