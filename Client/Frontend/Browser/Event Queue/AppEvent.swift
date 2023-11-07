@@ -19,6 +19,9 @@ public enum AppEvent: Int, AppEventType {
     // Activities: Profile Syncing
     case profileSyncing
 
+    // Activities: Browser
+    case browserDidBecomeActive
+
     // Activites: Tabs
     case tabRestoration
 }

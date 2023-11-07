@@ -216,6 +216,11 @@ class BrowserViewController: UIViewController,
         tabManager.addDelegate(self)
         tabManager.addNavigationDelegate(self)
         downloadQueue.delegate = self
+        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration]) { [weak self] in
+            // Ensure we call into didBecomeActive at least once during startup flow (if needed)
+            guard !AppEventQueue.activityIsCompleted(.browserDidBecomeActive) else { return }
+            self?.browserDidBecomeActive()
+        }
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -416,6 +421,13 @@ class BrowserViewController: UIViewController,
 
         // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
         scrollController.showToolbars(animated: false)
+
+        browserDidBecomeActive()
+    }
+
+    func browserDidBecomeActive() {
+        AppEventQueue.started(.browserDidBecomeActive)
+        defer { AppEventQueue.completed(.browserDidBecomeActive) }
 
         // Update lock icon without redrawing the whole locationView
         if let tab = tabManager.selectedTab {
