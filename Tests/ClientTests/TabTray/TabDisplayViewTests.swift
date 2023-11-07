@@ -65,6 +65,67 @@ final class TabDisplayViewTests: XCTestCase {
         XCTAssertFalse(subject.state.isInactiveTabsExpanded)
     }
 
+    func testIsPrivateTabsEmpty() {
+        let subject = createSubject(isPrivateMode: true,
+                                    emptyTabs: true,
+                                    emptyInactiveTabs: true)
+
+        XCTAssertTrue(subject.state.isPrivateTabsEmpty)
+    }
+
+    func testIsPrivateTabsNotEmpty() {
+        let subject = createSubject(isPrivateMode: true,
+                                    emptyTabs: false,
+                                    emptyInactiveTabs: true)
+
+        XCTAssertFalse(subject.state.isPrivateTabsEmpty)
+    }
+
+    func testNumberOfSections_RegularTabsWithoutInactiveTabs() {
+        let subject = createSubject(isPrivateMode: false,
+                                    emptyTabs: false,
+                                    emptyInactiveTabs: true)
+
+        let numberOfSections = subject.collectionView.numberOfSections
+        XCTAssertEqual(numberOfSections, 1)
+    }
+
+    func testNumberOfSections_RegularTabsAndInactiveTabs() {
+        let subject = createSubject(isPrivateMode: false,
+                                    emptyTabs: false,
+                                    emptyInactiveTabs: false)
+
+        let numberOfSections = subject.collectionView.numberOfSections
+        XCTAssertEqual(numberOfSections, 2)
+    }
+
+    func testNumberOfSections_PrivateTabsAndInactiveTabs() {
+        let subject = createSubject(isPrivateMode: true,
+                                    emptyTabs: false,
+                                    emptyInactiveTabs: false)
+
+        let numberOfSections = subject.collectionView.numberOfSections
+        XCTAssertEqual(numberOfSections, 1)
+    }
+
+    func testNumberOfSections_PrivateTabsWithoutInactiveTabs() {
+        let subject = createSubject(isPrivateMode: true,
+                                    emptyTabs: false,
+                                    emptyInactiveTabs: true)
+
+        let numberOfSections = subject.collectionView.numberOfSections
+        XCTAssertEqual(numberOfSections, 1)
+    }
+
+    func testNumberOfSections_PrivateTabsWithEmptyTabs() {
+        let subject = createSubject(isPrivateMode: true,
+                                    emptyTabs: true,
+                                    emptyInactiveTabs: true)
+
+        let numberOfSections = subject.collectionView.numberOfSections
+        XCTAssertEqual(numberOfSections, 0)
+    }
+
     // MARK: - Private
     private func createSubject(isPrivateMode: Bool,
                                emptyTabs: Bool,
