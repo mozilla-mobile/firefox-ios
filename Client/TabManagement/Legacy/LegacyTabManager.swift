@@ -59,7 +59,6 @@ struct BackupCloseTab {
 class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler {
     // MARK: - Variables
     private let tabEventHandlers: [TabEventHandler]
-    let store: LegacyTabManagerStore
     let profile: Profile
     var isRestoringTabs = false
     var tabRestoreHasFinished = false
@@ -159,7 +158,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         self.tabEventHandlers = TabEventHandlers.create(with: profile)
         self.logger = logger
 
-        self.store = LegacyTabManagerStoreImplementation(prefs: profile.prefs)
         super.init()
 
         register(self, forTabEvents: .didSetScreenshot)
