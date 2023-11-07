@@ -15,8 +15,7 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
         static let topPaddingPhone: CGFloat = 0
         static let contentScalePhone: CGFloat = 1.0
         static var contentScaleIpad: CGFloat {
-            guard let isPortrait = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation.isPortrait else { return 1 }
-            if isPortrait {
+            if UIWindow.isPortrait {
                 return 0.84
             } else {
                 return 0.58

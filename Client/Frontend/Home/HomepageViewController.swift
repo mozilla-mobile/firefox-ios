@@ -230,8 +230,7 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
         view.addSubview(wallpaperView)
 
         // Constraint so wallpaper appears under the status bar
-        let window = UIApplication.shared.windows.first
-        let wallpaperTopConstant: CGFloat = window?.safeAreaInsets.top ?? statusBarFrame?.height ?? 0
+        let wallpaperTopConstant: CGFloat = view.window?.safeAreaInsets.top ?? statusBarFrame?.height ?? 0
 
         NSLayoutConstraint.activate([
             wallpaperView.topAnchor.constraint(equalTo: view.topAnchor, constant: -wallpaperTopConstant),
