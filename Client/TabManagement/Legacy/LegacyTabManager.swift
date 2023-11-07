@@ -71,9 +71,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     var tabDisplayType: TabDisplayType = .TabGrid
     let delaySelectingNewPopupTab: TimeInterval = 0.1
 
-    // Enables undo of recently closed tabs
-    var recentlyClosedForUndo = [LegacySavedTab]()
-
     var normalTabs: [Tab] {
         return tabs.filter { !$0.isPrivate }
     }
@@ -544,8 +541,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     // This is called by TabTrayVC when the private mode button is pressed and BEFORE we've switched to the new mode
     // we only want to remove all private tabs when leaving PBM and not when entering.
     func willSwitchTabMode(leavingPBM: Bool) {
-        recentlyClosedForUndo.removeAll()
-
         // Clear every time entering/exiting this mode.
         Tab.ChangeUserAgent.privateModeHostList = Set<String>()
     }
