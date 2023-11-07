@@ -404,7 +404,6 @@ extension BrowserViewController: WKNavigationDelegate {
         decidePolicyFor navigationAction: WKNavigationAction,
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
     ) {
-        print("YRD decidePolicyFor action \(navigationAction.navigationType)")
         guard let url = navigationAction.request.url,
               let tab = tabManager[webView]
         else {
@@ -536,6 +535,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 webView.customUserAgent = UserAgent.getUserAgent(domain: url.baseDomain ?? "")
             }
 
+            print("YRD blob decision allow")
             decisionHandler(.allow)
             return
         }
@@ -562,7 +562,7 @@ extension BrowserViewController: WKNavigationDelegate {
         decidePolicyFor navigationResponse: WKNavigationResponse,
         decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void
     ) {
-        print("YRD decidePolicyFor response \(navigationResponse)")
+        print("YRD decidePolicyFor response \(navigationResponse.response.url)")
         let response = navigationResponse.response
         let responseURL = response.url
 
@@ -633,7 +633,6 @@ extension BrowserViewController: WKNavigationDelegate {
             print("YRD create download helper")
 
             let downloadAction: (HTTPDownload) -> Void = { [weak self] download in
-                print("YRD enqueue download")
                 self?.downloadQueue.enqueue(download)
             }
 
