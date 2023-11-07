@@ -79,8 +79,8 @@ function checkReadability() {
 
       // Sanitize the title to prevent a malicious page from inserting HTML in the `<title>`.
       readabilityResult.title = escapeHTML(readabilityResult.title);
-      // Sanitize the credits to prevent a malicious page from inserting HTML in the `<credits>`.
-      readabilityResult.credits = escapeHTML(readabilityResult.credits);
+      // Sanitize the byline to prevent a malicious page from inserting HTML in the `<byline>`.
+      readabilityResult.byline = escapeHTML(readabilityResult.byline);
 
       debug({Type: "ReaderModeStateChange", Value: readabilityResult !== null ? "Available" : "Unavailable"});
       webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: readabilityResult !== null ? "Available" : "Unavailable"});
