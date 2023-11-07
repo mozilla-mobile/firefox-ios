@@ -25,13 +25,6 @@ open class BaseCoordinator: NSObject, Coordinator {
 
     func add(child coordinator: Coordinator) {
         childCoordinators.append(coordinator)
-
-        // Check first whether, during the recursive findAndHandle(route:), we have just added
-        // new children to this coordinator. If so, we want to skip dismissal (we shouldn't ever
-        // immediately dismiss coordinators that were just added and about to appear).
-        // Will be removed as part of larger refactors in [FXIOS-7641].
-        coordinator.newlyAdded = true
-        mainQueue.async { [weak coordinator] in coordinator?.newlyAdded = false }
     }
 
     func remove(child coordinator: Coordinator?) {
@@ -42,39 +35,43 @@ open class BaseCoordinator: NSObject, Coordinator {
         childCoordinators.remove(at: index)
     }
 
-    func handle(route: Route) -> Bool {
+    func canHandle(route: Route) -> Bool {
         return false
     }
+
+    func handle(route: Route) { }
 
     @discardableResult
     func findAndHandle(route: Route) -> Coordinator? {
         // If the app crashed last session then we abandon the deeplink
         guard !logger.crashedLastLaunch else { return nil }
 
+        guard let matchingCoordinator = find(route: route) else { return nil }
+
+        // Dismiss any child of the matching coordinator that handles a route
+        for child in matchingCoordinator.childCoordinators {
+            guard child.isDismissable else { continue }
+
+            matchingCoordinator.router.dismiss()
+            matchingCoordinator.remove(child: child)
+        }
+
+        matchingCoordinator.handle(route: route)
+        return matchingCoordinator
+    }
+
+    @discardableResult
+    func find(route: Route) -> Coordinator? {
         // Check if the current coordinator can handle the route.
-        if handle(route: route) {
+        if canHandle(route: route) {
             savedRoute = nil
             return self
         }
 
         // If not, recursively search through child coordinators.
         for childCoordinator in childCoordinators {
-            if let matchingCoordinator = childCoordinator.findAndHandle(route: route) {
+            if let matchingCoordinator = childCoordinator.find(route: route) {
                 savedRoute = nil
-
-                // Dismiss any child of the matching coordinator that handles a route
-                for child in matchingCoordinator.childCoordinators {
-                    guard child.isDismissable else { continue }
-
-                    // Check first whether, during the recursive findAndHandle(route:), we have just added
-                    // this child to the coordinator. If so, we want to skip dismissal (we shouldn't ever
-                    // immediately dismiss coordinators that were just added and about to appear).
-                    // Will be removed as part of larger refactors in [FXIOS-7641].
-                    guard !child.newlyAdded else { continue }
-
-                    matchingCoordinator.router.dismiss()
-                    matchingCoordinator.remove(child: child)
-                }
 
                 return matchingCoordinator
             }

@@ -294,7 +294,7 @@ final class SettingsCoordinatorTests: XCTestCase {
     func testHandleRouteSettings_generalIsHandled() {
         let subject = createSubject()
 
-        let result = subject.handle(route: .settings(section: .general))
+        let result = testCanHandleAndHandle(subject, route: .settings(section: .general))
 
         XCTAssertTrue(result)
     }
@@ -302,7 +302,7 @@ final class SettingsCoordinatorTests: XCTestCase {
     func testHandleRouteOther_notHandled() {
         let subject = createSubject()
 
-        let result = subject.handle(route: .homepanel(section: .downloads))
+        let result = testCanHandleAndHandle(subject, route: .homepanel(section: .downloads))
 
         XCTAssertFalse(result)
     }
@@ -519,6 +519,12 @@ final class SettingsCoordinatorTests: XCTestCase {
                                           wallpaperManager: wallpaperManager)
         trackForMemoryLeaks(subject)
         return subject
+    }
+
+    private func testCanHandleAndHandle(_ subject: Coordinator, route: Route) -> Bool {
+        let result = subject.canHandle(route: route)
+        subject.handle(route: route)
+        return result
     }
 }
 

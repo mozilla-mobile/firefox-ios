@@ -6,7 +6,7 @@ import UIKit
 @testable import Client
 
 class MockSearchHandlerRouteCoordinator: BaseCoordinator {
-    override func handle(route: Route) -> Bool {
+    override func canHandle(route: Route) -> Bool {
         switch route {
         case .search:
             return true
@@ -14,4 +14,6 @@ class MockSearchHandlerRouteCoordinator: BaseCoordinator {
             return false
         }
     }
+
+    override func handle(route: Route) { }
 }
