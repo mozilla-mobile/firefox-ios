@@ -104,7 +104,7 @@ class DevicePickerViewController: UITableViewController {
             self?.refreshControl?.endRefreshing()
         }
 
-        RustFirefoxAccounts.startup(prefs: profile.prefs).uponQueue(.main) { accountManager in
+        RustFirefoxAccounts.startup(prefs: profile.prefs) { accountManager in
             accountManager.deviceConstellation()?.refreshState()
         }
 
@@ -123,7 +123,7 @@ class DevicePickerViewController: UITableViewController {
     }
 
     private func loadList() {
-        RustFirefoxAccounts.startup(prefs: profile.prefs).uponQueue(.main) { [weak self] accountManager in
+        RustFirefoxAccounts.startup(prefs: profile.prefs) { [weak self] accountManager in
             guard let state = accountManager.deviceConstellation()?.state() else {
                 self?.loadingState = .loaded
                 return
@@ -267,7 +267,7 @@ class DevicePickerViewController: UITableViewController {
 
     @objc
     func refresh() {
-        RustFirefoxAccounts.shared.accountManager.peek()?.deviceConstellation()?.refreshState()
+        RustFirefoxAccounts.shared.accountManager?.deviceConstellation()?.refreshState()
         if let refreshControl = refreshControl {
             refreshControl.beginRefreshing()
             let height = -(refreshControl.bounds.size.height + (navigationController?.navigationBar.bounds.size.height ?? 0))
