@@ -38,8 +38,7 @@ class AppDataUsageReportSetting: HiddenSetting {
         let searchDirectories: [FileManager.SearchPathDirectory] =
         [.cachesDirectory, .documentDirectory, .applicationSupportDirectory, .downloadsDirectory]
         let directoryURLs: [URL] = searchDirectories
-            .map({ fileManager.urls(for: $0, in: .userDomainMask).first })
-            .compactMap({ $0 })
+            .compactMap({ fileManager.urls(for: $0, in: .userDomainMask).first })
 
         for baseDirectory in directoryURLs {
             guard let enumerator = fileManager.enumerator(at: baseDirectory,
