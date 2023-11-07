@@ -59,7 +59,7 @@
             reference = "container:focus-ios/SmokeTest.xctestplan">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:Blockzilla.xcodeproj/UnitTests.xctestplan">
+            reference = "container:focus-ios/UnitTests.xctestplan">
          </TestPlanReference>
       </TestPlans>
       <Testables>

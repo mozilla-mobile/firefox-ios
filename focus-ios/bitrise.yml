@@ -98,10 +98,10 @@ workflows:
             "$BITRISE_SOURCE_DIR/focus-ios/FullFunctionalTests.xctestplan" \
             "$BITRISE_SOURCE_DIR/xcodebuild.log" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/FocusDebug-iphonesimulator/" \
-            "$BITRISE_SOURCE_DIR/Blockzilla.xcodeproj/UnitTests.xctestplan" \
+            "$BITRISE_SOURCE_DIR/focus-ios/UnitTests.xctestplan" \
             "$BITRISE_SOURCE_DIR/Blockzilla/" \
             "$BITRISE_SOURCE_DIR/focus-ios/XCUITest" \
-            "$BITRISE_SOURCE_DIR/ClientTests" \
+            "$BITRISE_SOURCE_DIR/focus-ios/ClientTests" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/KlarDebug-iphonesimulator/Firefox\ Klar.app" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/KlarDebug-iphonesimulator/XCUITest-Runner.app" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Klar_FullFunctionalTests_iphonesimulator17.0-arm64.xctestrun" \
