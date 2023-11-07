@@ -89,7 +89,7 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.goto(SettingsScreen)
         let settingsTableView = app.tables[AccessibilityIdentifiers.Settings.tableViewController]
 
-        while settingsTableView.staticTexts["Close Private Tabs"].exists == false {
+        while settingsTableView.staticTexts["Close Private Tabs"].isHittable == false {
             settingsTableView.swipeUp()
         }
 
@@ -122,6 +122,9 @@ class PrivateBrowsingTest: BaseTestCase {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
         navigator.nowAt(BrowserTab)
         navigator.goto(SettingsScreen)
+        while settingsTableView.staticTexts["Close Private Tabs"].isHittable == false {
+            settingsTableView.swipeUp()
+        }
         closePrivateTabsSwitch.tap()
         navigator.goto(BrowserTab)
         waitForTabsButton()
@@ -223,7 +226,7 @@ fileprivate extension BaseTestCase {
         navigator.goto(SettingsScreen)
         let settingsTableView = app.tables[AccessibilityIdentifiers.Settings.tableViewController]
 
-        while settingsTableView.staticTexts["Close Private Tabs"].exists == false {
+        while settingsTableView.staticTexts["Close Private Tabs"].isHittable == false {
             settingsTableView.swipeUp()
         }
         let closePrivateTabsSwitch = settingsTableView.switches["settings.closePrivateTabs"]

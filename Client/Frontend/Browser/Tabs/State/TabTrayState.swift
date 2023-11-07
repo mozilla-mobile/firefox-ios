@@ -4,27 +4,32 @@
 
 import Foundation
 
+enum TabTrayLayoutType: Equatable {
+    case regular // iPad
+    case compact // iPhone
+}
+
 struct TabTrayState {
-    var tabs: [String]
     var isPrivateMode: Bool
+    var tabViewState: TabViewState
+    var remoteTabsState: RemoteTabsPanelState?
+    var selectedPanel: TabTrayPanelType?
 
-    // MARK: Inactive tabs
-    var inactiveTabs: [String]
-    var isInactiveTabsExpanded = true
+    var layout: TabTrayLayoutType = .compact
+    var normalTabsCount: String
+    var navigationTitle: String
 
-    var isPrivateTabsEmpty: Bool {
-        return isPrivateMode && tabs.isEmpty
+    var isSyncTabsPanel: Bool {
+        return selectedPanel == .syncedTabs
     }
 
     // For test and mock purposes will be deleted once Redux is integrated
     static func getMockState(isPrivateMode: Bool) -> TabTrayState {
-        let tabs = ["Tab1",
-                    "Tab2",
-                    "Tab3",
-                    "Tab4",
-                    "Tab5"]
-        return TabTrayState(tabs: tabs,
-                            isPrivateMode: isPrivateMode,
-                            inactiveTabs: tabs)
+        let tabViewState = TabViewState.getMockState(isPrivateMode: isPrivateMode)
+        return TabTrayState(isPrivateMode: isPrivateMode,
+                            tabViewState: tabViewState,
+                            remoteTabsState: nil,
+                            normalTabsCount: "2",
+                            navigationTitle: "")
     }
 }

@@ -71,10 +71,11 @@ final class TabDisplayViewTests: XCTestCase {
                                emptyInactiveTabs: Bool,
                                file: StaticString = #file,
                                line: UInt = #line) -> TabDisplayView {
-        let tabs: [String] = emptyTabs ? [String]() : ["Tab1", "Tab2"]
+        let tabs: [TabCellState] = emptyTabs ? [TabCellState]() : [TabCellState.emptyTabState(title: "Tab1"),
+                                                                   TabCellState.emptyTabState(title: "Tab2")]
         let inactiveTabs: [String] = emptyInactiveTabs ? [String]() : ["Inactive1", "Inactive2"]
-        let tatTrayState = TabTrayState(tabs: tabs,
-                                        isPrivateMode: isPrivateMode,
+        let tatTrayState = TabViewState(isPrivateMode: isPrivateMode,
+                                        tabs: tabs,
                                         inactiveTabs: inactiveTabs)
 
         let subject = TabDisplayView(state: tatTrayState)

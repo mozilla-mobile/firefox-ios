@@ -97,10 +97,6 @@ class MockTabManager: TabManager {
         false
     }
 
-    func hasTabsToRestoreAtStartup() -> Bool {
-        return false
-    }
-
     func getTabForUUID(uuid: String) -> Tab? {
         return nil
     }

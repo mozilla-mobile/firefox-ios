@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import MobileCoreServices
 import WebKit
+import UniformTypeIdentifiers
 
 class ShareExtensionHelper: NSObject, FeatureFlaggable {
     private weak var selectedTab: Tab?
@@ -143,10 +144,10 @@ extension ShareExtensionHelper: UIActivityItemSource {
         if isPasswordManager(activityType: activityType) {
             return browserFillIdentifier
         } else if isOpenByCopy(activityType: activityType) {
-            return url.isFile ? kUTTypeFileURL as String : kUTTypeURL as String
+            return url.isFile ? UTType.fileURL.identifier : UTType.url.identifier
         }
 
-        return activityType == nil ? browserFillIdentifier : kUTTypeURL as String
+        return activityType == nil ? browserFillIdentifier : UTType.url.identifier
     }
 
     private func isPasswordManager(activityType: UIActivity.ActivityType?) -> Bool {

@@ -69,10 +69,9 @@ class AppLaunchUtil {
             }
         }
 
-        SystemUtils.onFirstRun()
-
         RustFirefoxAccounts.startup(prefs: profile.prefs).uponQueue(.main) { _ in
             self.logger.log("RustFirefoxAccounts started", level: .info, category: .sync)
+            AppEventQueue.signal(event: .accountManagerInitialized)
         }
 
         // Add swizzle on UIViewControllers to automatically log when there's a new view showing
@@ -88,6 +87,7 @@ class AppLaunchUtil {
         logger.log("Prefs for migration is \(String(describing: profile.prefs.boolForKey(PrefsKeys.TabMigrationKey)))",
                    level: .debug,
                    category: .tabs)
+        AppEventQueue.signal(event: .preLaunchDependenciesComplete)
     }
 
     func setUpPostLaunchDependencies() {
@@ -114,6 +114,7 @@ class AppLaunchUtil {
 
         updateSessionCount()
         adjustHelper.setupAdjust()
+        AppEventQueue.signal(event: .postLaunchDependenciesComplete)
     }
 
     private func setUserAgent() {

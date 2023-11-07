@@ -146,7 +146,7 @@
 "Shopping.ReviewQualityCard.Expand.AccessibilityLabel.v120" = "Zabaldu 'Nola antzematen dugun balorazioen kalitatea' txartela";
 
 /* Label of the headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
-"Shopping.ReviewQualityCard.Headline.Label.v120" = "%1$@(r)en %1$@ Adimen Artifizial (AA) teknologia erabiltzen dugu produktuen balorazioen fidagarritasuna egiaztatzeko. Honek balorazioen kalitatea neurtzen lagunduko dizu, ez produktuen kalitatea.";
+"Shopping.ReviewQualityCard.Headline.Label.v120" = "%1$@(r)en %2$@ Adimen Artifizial (AA) teknologia erabiltzen dugu produktuen balorazioen fidagarritasuna egiaztatzeko. Honek balorazioen kalitatea neurtzen lagunduko dizu, ez produktuen kalitatea.";
 
 /* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "Shopping.ReviewQualityCard.Highlights.Label.v120" = "*Nabarmentzekoak* %1@(e)ko azken 80 egunetan fidagarriak direla uste ditugun balorazioak dira.";

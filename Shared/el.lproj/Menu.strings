@@ -41,10 +41,10 @@
 "Menu.SharePageAction.Title" = "Κοινή χρήση σελίδας με…";
 
 /* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
-"Menu.ViewDekstopSiteAction.Title" = "Απαίτηση ιστοσελίδας για υπολογιστές";
+"Menu.ViewDekstopSiteAction.Title" = "Έκδοση για υπολογιστές";
 
 /* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
-"Menu.ViewMobileSiteAction.Title" = "Απαίτηση ιστοσελίδας για κινητά";
+"Menu.ViewMobileSiteAction.Title" = "Έκδοση για κινητές συσκευές";
 
 /* Label for the button, displayed in the menu, used to navigate to the home page. */
 "SettingsMenu.OpenHomePageAction.Title" = "Αρχική σελίδα";
