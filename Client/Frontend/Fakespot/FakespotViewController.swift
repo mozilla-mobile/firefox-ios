@@ -396,6 +396,11 @@ class FakespotViewController:
                 }
                 view.configure(viewModel.reportProductInStockViewModel)
                 return view
+
+            case .infoComingSoonCard:
+                let view: FakespotMessageCardView = .build()
+                view.configure(viewModel.infoComingSoonCardViewModel)
+                return view
             }
         }
     }

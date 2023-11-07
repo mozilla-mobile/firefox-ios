@@ -3997,15 +3997,25 @@ extension String {
             value: "Report Product Back in Stock",
             comment: "Primary action label for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This primary action label is used for info card button where the user can report if it's back in stock.")
         public static let InfoCardReportSubmittedByCurrentUserTitle = MZLocalizedString(
-            key: "Shopping.InfoCard.ReportSubmittedByCurrentUser.Title.v121", // unique key identifier
+            key: "Shopping.InfoCard.ReportSubmittedByCurrentUser.Title.v121",
             tableName: "Shopping",
             value: "Thanks for Reporting!",
             comment: "This title is displayed on the information card as a confirmation message after a user reports that a previously out-of-stock product is now available. It's meant to acknowledge the user's contribution and encourage community engagement by letting them know their report has been successfully submitted.")
         public static let InfoCardReportSubmittedByCurrentUserDescription = MZLocalizedString(
-            key: "Shopping.InfoCard.ReportSubmittedByCurrentUser.Description.v121", // unique key identifier
+            key: "Shopping.InfoCard.ReportSubmittedByCurrentUser.Description.v121",
             tableName: "Shopping",
             value: "We should have info about this product’s reviews within 24 hours. Please check back.",
             comment: "This description appears beneath the confirmation title on the information card to inform the user that their report regarding the product stock status has been received and is being processed. It serves to set the expectation that the review information will be updated within 24 hours and invites the user to revisit the product page for updates.")
+        public static let InfoCardInfoComingSoonTitle = MZLocalizedString(
+            key: "", // Shopping.InfoCard.InfoComingSoon.Title.v121
+            tableName: "Shopping",
+            value: "Info Coming Soon",
+            comment: "Title for an information card that is displayed in the Shopping section when certain details about a product or feature are not currently available but are expected to be provided soon. The message should imply that the user can look forward to receiving more information shortly.")
+        public static let InfoCardInfoComingSoonDescription = MZLocalizedString(
+            key: "", // Shopping.InfoCard.InfoComingSoon.Description.v121
+            tableName: "Shopping",
+            value: "We should have info about this product’s reviews within 24 hours. Please check back.",
+            comment: "Description text for an information card used in the Shopping section. This message is displayed when the reviews for a product are not yet available but are expected to be provided within the next 24 hours. It serves to inform users of the short wait for reviews and encourages them to return soon for the updated information.")
     }
 }
 
