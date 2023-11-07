@@ -286,7 +286,7 @@ workflows:
   build_and_test_4_SmokeTest4:
     before_run:
     - 1_git_clone_and_post_clone
-    - Decision_to_run_UI_Tests
+    #- Decision_to_run_UI_Tests
     steps:
     - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
