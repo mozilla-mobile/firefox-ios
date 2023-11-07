@@ -94,6 +94,12 @@
 /* Title for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
 "Shopping.NoAnalysisCard.InProgress.Headline.Title.v120" = "Կարծիքի որակի ստուգում";
 
+/* Text for the disclaimer that appears beneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replaced by the Fakespot app name. */
+"Shopping.OptInCard.Disclaimer.Title.v120" = "Ընտրելով «Այո, փորձիր»՝ դուք ընդունում եք %@-ը.";
+
+/* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. The third and fourth parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. */
+"Shopping.OptInCard.FirstParagraph.Description.v120" = "Գնելուց առաջ տեսեք, թե որքան հուսալի են արտադրանքի կարծիքները %1$@-ում: Կարծիքների ստուգիչը %2$@-ի փորձարարական յուրահատկությունն է և ներկառուցված է հենց զննիչում: Այն աշխատում է նաև %3$@-ում և %4$@-ում:";
+
 /* Label for the header of the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.HeaderLabel.Title.v120" = "Փորձեք արտադրանքի կարծիքների մեր վստահելի ուղեցույցը";
 
@@ -108,6 +114,9 @@
 
 /* Text for the secondary button of the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.SecondaryButton.Title.v120" = "Ոչ հիմա";
+
+/* Label for the second paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be replaced by the Fakespot app name. The second parameter will be replaced the company name of Mozilla. */
+"Shopping.OptInCard.SecondParagraph.Description.v120" = "Օգտագործելով %1$@-ի հզորությունը %2$@-ի կողմից՝ մենք օգնում ենք ձեզ խուսափել կողմնակալ և ոչ վավերական կարծիքներից: Մեր AI մոդելը միշտ բարելավվում է՝ պաշտպանելու ձեզ գնումներ կատարելիս:";
 
 /* Show Firefox Browser Terms of Use page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
 "Shopping.OptInCard.TermsOfUse.Button.Title.v120" = "Օգտագործման պայմաններ";
@@ -136,8 +145,44 @@
 /* Accessibility label for the down chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQualityCard.Expand.AccessibilityLabel.v120" = "Ընդարձակել, թե ինչպես ենք որոշում վերանայման որակի քարտը";
 
+/* Label of the headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
+"Shopping.ReviewQualityCard.Headline.Label.v120" = "Մենք օգտագործում ենք AI տեխնոլոգիա %1$@-ից %2$@-ի կողմից՝ արտադրանքի կարծիքների հավաստիությունը ստուգելու համար: Սա միայն կօգնի ձեզ գնահատել կարծիքների որակը, այլ ոչ թե արտադրանքի որակը:";
+
+/* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.Highlights.Label.v120" = "*Գունանշումները* վերջին 80 օրվա ընթացքում %1@ կարծիքներից են, որոնք, մեր կարծիքով, հուսալի են:";
+
+/* Title of the 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.Label.Title.v120" = "Ինչպես ենք մենք որոշում կարծիքների որակը";
+
+/* The title of the learn more button from How we determine review quality card displayed in the shopping review quality bottom sheet. The placeholder will be replaced with the Fakespot app name. */
+"Shopping.ReviewQualityCard.LearnMoreButton.Title.v120" = "Իմացեք ավելին այն մասին, թե ինչպես է %@-ն որոշում վերանայման որակը";
+
+/* Mixed reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.MixedReviews.Label.v120" = "Մենք հավատում ենք, որ կա հուսալի և անվստահելի ակնարկների խառնուրդ";
+
+/* Reliable reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.ReliableReviews.Label.v120" = "Հուսալի կարծիքներ: Մենք կարծում ենք, որ կարծիքները, հավանաբար, իրական հաճախորդներից են, ովքեր թողել են ազնիվ, անաչառ կարծիքներ:";
+
+/* Label of the sub headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.SubHeadline.Label.v120" = "Մենք յուրաքանչյուր ապրանքի կարծիքներին տալիս ենք *տառային գնահատական*՝ A-ից մինչև F:";
+
+/* Unreliable reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.UnreliableReviews.Label.v120" = "Անվստահելի կարծիքներ: Մենք կարծում ենք, որ կարծիքները, հավանաբար, կեղծ են կամ կողմնակալ գրախոսների կողմից:";
+
+/* Accessibility label for the up chevron icon used to collapse or minimize the Settings Card within the shopping product review bottom sheet. */
+"Shopping.SettingsCard.Collapse.AccessibilityLabel.v120" = "Կոծկել կարգավորումների քարտը";
+
+/* Accessibility label for the down chevron icon used to expand or show the details of the Settings Card within the shopping product review bottom sheet. */
+"Shopping.SettingsCard.Expand.AccessibilityLabel.v120" = "Ընդարձակել կարգավորումների քարտը";
+
+/* Action title of the footer underneath the Settings Card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
+"Shopping.SettingsCard.Footer.Action.v120" = "Կարծիքների ստուգիչը ստեղծված է %1$@ %2$@-ի կողմից";
+
 /* Title of the settings card displayed in the shopping review quality bottom sheet. */
 "Shopping.SettingsCard.Label.Title.v120" = "Կարգավորումներ";
+
+/* Label of the switch from settings card displayed in the shopping review quality bottom sheet. The placeholder will be replaced with the app name. */
+"Shopping.SettingsCard.RecommendedProducts.Label.v120" = "Ցուցադրել %@-ի առաջարկած ապրանքները";
 
 /* Label of the button from settings card displayed in the shopping review quality bottom sheet. */
 "Shopping.SettingsCard.TurnOffButton.Title.v120" = "Անջատեք կարծիքների ստուգիչը";

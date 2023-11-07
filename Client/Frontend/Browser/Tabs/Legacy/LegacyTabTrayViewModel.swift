@@ -7,11 +7,6 @@ import Shared
 import Storage
 
 class LegacyTabTrayViewModel {
-    enum Layout: Equatable {
-        case regular // iPad
-        case compact // iPhone
-    }
-
     let profile: Profile
     let tabManager: TabManager
     let overlayManager: OverlayModeManager
@@ -21,7 +16,7 @@ class LegacyTabTrayViewModel {
     let syncedTabsController: LegacyRemoteTabsPanel
 
     var segmentToFocus: TabTrayPanelType?
-    var layout: Layout = .compact
+    var layout: TabTrayLayoutType = .compact
 
     var normalTabsCount: String {
         (tabManager.normalTabs.count < 100) ? tabManager.normalTabs.count.description : "\u{221E}"

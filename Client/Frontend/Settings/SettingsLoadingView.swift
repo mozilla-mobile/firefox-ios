@@ -4,7 +4,6 @@
 
 import Common
 import UIKit
-import SnapKit
 import Shared
 
 class SettingsLoadingView: UIView, ThemeApplicable {
@@ -14,11 +13,10 @@ class SettingsLoadingView: UIView, ThemeApplicable {
         }
     }
 
-    lazy var indicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .medium)
+    lazy var indicator: UIActivityIndicatorView = .build { indicator in
+        indicator.style = .medium
         indicator.hidesWhenStopped = false
-        return indicator
-    }()
+    }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -38,9 +36,9 @@ class SettingsLoadingView: UIView, ThemeApplicable {
     override internal func updateConstraints() {
         super.updateConstraints()
 
-        indicator.snp.remakeConstraints { make in
-            make.centerX.equalTo(self)
-            make.centerY.equalTo(self).offset(-(searchBarHeight / 2))
-        }
+        NSLayoutConstraint.activate([
+            indicator.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            indicator.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: -(searchBarHeight / 2))
+        ])
     }
 }

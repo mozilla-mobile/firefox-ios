@@ -9,12 +9,18 @@ import Shared
 import Common
 
 enum TestEvent: AppEventType {
+    // Standard test events
     case startingEvent
     case middleEvent
     case laterEvent
 
+    // Activity test event
     case activityEvent
 
+    // Nested (parent/hierarchical) test event
+    case parentEvent
+
+    // Contextual (associated value) test event
     case contextualEvent(Int)
 }
 
@@ -219,5 +225,37 @@ final class EventQueueTests: XCTestCase {
         queue.failed(.activityEvent)
         XCTAssertFalse(queue.activityIsNotStarted(.activityEvent))
         XCTAssertFalse(actionRun)
+    }
+
+    func testNestedDependencies() {
+        var actionRun = false
+
+        // Enqueue action
+        queue.wait(for: [.parentEvent, .activityEvent], then: { actionRun = true })
+        XCTAssertFalse(actionRun)
+
+        // Create a parent event that depends on 3 sub-events
+        queue.establishDependencies(for: .parentEvent, against: [
+            .startingEvent,
+            .middleEvent,
+            .laterEvent
+        ])
+
+        // Start and finish activity event
+        queue.started(.activityEvent)
+        queue.completed(.activityEvent)
+        // Action should not yet run
+        XCTAssertFalse(actionRun)
+
+        // Complete 2 of 3 sub-events of parent
+        queue.signal(event: .startingEvent)
+        queue.signal(event: .middleEvent)
+        // Action not run
+        XCTAssertFalse(actionRun)
+
+        // Complete 3rd sub-event of parent
+        queue.signal(event: .laterEvent)
+        // At this point all dependencies should be complete.
+        XCTAssertTrue(actionRun)
     }
 }

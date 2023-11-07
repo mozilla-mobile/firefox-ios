@@ -61,3 +61,63 @@
 /* Title for info card when the product needs analysis */
 "Shopping.InfoCard.NeedsAnalysis.Title.v120" = "Ny informasjon å vurdere";
 
+/* Description for info card when no information is available at the moment */
+"Shopping.InfoCard.NoInfoAvailableRightNow.Description.v120" = "Vi jobber med å løse dette problemet. Prøv på nytt, snart.";
+
+/* Title for info card when no information is available at the moment */
+"Shopping.InfoCard.NoInfoAvailableRightNow.Title.v120" = "Ingen informasjon tilgjengelig akkurat nå";
+
+/* Description for info card when there are not enough reviews for a product */
+"Shopping.InfoCard.NotEnoughReviews.Description.v120" = "Når dette produktet har flere vurderinger, kan vi sjekke kvaliteten.";
+
+/* Title for info card when there are not enough reviews for a product */
+"Shopping.InfoCard.NotEnoughReviews.Title.v120" = "Ikke nok vurderinger ennå";
+
+/* Description for info card when the product is in analysis mode */
+"Shopping.InfoCard.ProgressAnalysis.Description.v120" = "Dette kan ta cirka 60 sekunder.";
+
+/* Title for info card when the product is in analysis mode */
+"Shopping.InfoCard.ProgressAnalysis.Title.v120" = "Kontrollerer kvaliteten på vurderingen";
+
+/* Text for the analyzer button displayed when an analysis can be updated for a product. */
+"Shopping.NoAnalysisCard.AnalyzerButton.Title.v120" = "Kontrollerer kvaliteten på vurderingen";
+
+/* Text for the body label, to check the reliability of a product. */
+"Shopping.NoAnalysisCard.BodyLabel.Title.v120" = "For å vite om dette produktets anmeldelser er pålitelige, sjekk kvaliteten på anmeldelsen. Det tar bare cirka 60 sekunder.";
+
+/* Title for card displayed when a shopping product has not been analysed yet. */
+"Shopping.NoAnalysisCard.HeadlineLabel.Title.v120" = "Ingen informasjon om disse vurderingene ennå";
+
+/* Description for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
+"Shopping.NoAnalysisCard.InProgress.Body.Label.v120" = "Dette kan ta cirka 60 sekunder.";
+
+/* Title for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
+"Shopping.NoAnalysisCard.InProgress.Headline.Title.v120" = "Kontrollerer kvaliteten på vurderingen";
+
+/* Text for the disclaimer that appears beneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replaced by the Fakespot app name. */
+"Shopping.OptInCard.Disclaimer.Title.v120" = "Ved å velge «Ja, prøv det» godtar du %@:";
+
+/* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. The third and fourth parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. */
+"Shopping.OptInCard.FirstParagraph.Description.v120" = "Se hvor pålitelige produktanmeldelser er på %1$@ før du handler. Vurderingskontrollør, en eksperimentell funksjon fra %2$@, er innebygd rett i nettleseren. Det fungerer på %3$@ og %4$@ også.";
+
+/* Label for the header of the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.HeaderLabel.Title.v120" = "Prøv vår pålitelige guide til produktvurderinger";
+
+/* Label for the Learn more button in the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.LearnMoreButtonTitle.Title.v120" = "Les mer";
+
+/* Text for the main button of the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.MainButton.Title.v120" = "Ja, prøv det";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
+"Shopping.OptInCard.PrivacyPolicy.Button.Title.v120" = "Personvernbestemmelser";
+
+/* Text for the secondary button of the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.SecondaryButton.Title.v120" = "Ikke nå";
+
+/* Label for the second paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be replaced by the Fakespot app name. The second parameter will be replaced the company name of Mozilla. */
+"Shopping.OptInCard.SecondParagraph.Description.v120" = "Ved hjelp av %1$@ av %2$@ gjør vi det lettere for deg å unngå partiske og uekte anmeldelser. AI-modellen vår blir alltid bedre for å beskytte deg mens du handler.";
+
+/* Show Firefox Browser Terms of Use page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
+"Shopping.OptInCard.TermsOfUse.Button.Title.v120" = "Brukervilkår";
+

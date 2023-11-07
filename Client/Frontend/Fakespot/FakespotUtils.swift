@@ -35,6 +35,15 @@ public struct FakespotUtils: FeatureFlaggable {
         return URL(string: "https://www.fakespot.com/our-mission?utm_source=review-checker&utm_campaign=fakespot-by-mozilla&utm_medium=inproduct&utm_term=core-sheet")
     }
 
+    static func widthOfString(_ string: String, usingFont font: UIFont) -> CGFloat {
+        let label = UILabel(frame: CGRect.zero)
+        label.text = string
+        label.font = font
+        label.adjustsFontForContentSizeCategory = true
+        label.sizeToFit()
+        return label.frame.width
+    }
+
     func addSettingTelemetry(profile: Profile = AppContainer.shared.resolve()) {
         let isFeatureEnabled = featureFlags.isFeatureEnabled(.fakespotFeature, checking: .buildOnly)
         TelemetryWrapper.recordEvent(

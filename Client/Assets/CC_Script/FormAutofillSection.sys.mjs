@@ -433,7 +433,7 @@ export class FormAutofillSection {
         // Skip the field if the user has already entered text and that text is not the site prefilled value.
         continue;
       }
-      element.previewValue = value;
+      element.previewValue = value?.toString().replaceAll("*", "•");
       this.handler.changeFieldState(
         fieldDetail,
         value ? FIELD_STATES.PREVIEW : FIELD_STATES.NORMAL

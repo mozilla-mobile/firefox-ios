@@ -25,9 +25,6 @@ final class NimbusFeatureFlagLayer {
         case .creditCardAutofillStatus:
             return checkNimbusForCreditCardAutofill(for: featureID, from: nimbus)
 
-        case .credentialAutofillCoordinatorRefactor:
-            return checkCredentialAutofillCoordinatorRefactorFeature(from: nimbus)
-
         case .jumpBackIn,
                 .historyHighlights:
             return checkHomescreenSectionsFeature(for: featureID, from: nimbus)
@@ -49,6 +46,9 @@ final class NimbusFeatureFlagLayer {
 
         case .feltPrivacyUI:
             return checkFeltPrivacyUIFeature(from: nimbus)
+
+        case .fakespotBackInStock:
+            return checkProductBackInStockFakespotFeature(from: nimbus)
 
         case .qrCodeCoordinatorRefactor:
             return checkQRCodeCoordinatorRefactorFeature(from: nimbus)
@@ -141,11 +141,6 @@ final class NimbusFeatureFlagLayer {
 
     private func checkLibraryCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.libraryCoordinatorRefactor.value()
-        return config.enabled
-    }
-
-    private func checkCredentialAutofillCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.credentialAutofillCoordinatorRefactor.value()
         return config.enabled
     }
 
@@ -249,6 +244,12 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.shopping2023.value()
 
         return config.status
+    }
+
+    private func checkProductBackInStockFakespotFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.shopping2023.value()
+
+        return config.backInStockReporting
     }
 
     private func checkAddressAutofill(from nimbus: FxNimbus) -> Bool {

@@ -14,17 +14,17 @@ typealias ActionToken = UUID
 ///
 /// (Note: there is an additional implicit state, "not started", which is indicated
 /// by the event being absent from the event queue altogether.)
-enum QueueEventState: Int {
+public enum QueueEventState: Int {
     case inProgress
     case completed
     case failed
 }
 
 /// The default app-wide queue for Firefox.
-let AppEventQueue = EventQueue<AppEvent>()
+public let AppEventQueue = EventQueue<AppEvent>()
 
-final class EventQueue<QueueEventType: Hashable> {
-    struct EnqueuedAction {
+public final class EventQueue<QueueEventType: Hashable> {
+    public struct EnqueuedAction {
         let token: ActionToken
         let action: EventQueueAction
         let dependencies: [QueueEventType]
@@ -171,6 +171,19 @@ final class EventQueue<QueueEventType: Hashable> {
     func activityIsCompleted(_ event: QueueEventType) -> Bool {
         assert(Thread.isMainThread, "Expects to be called on the main thread.")
         return hasSignalled(event)
+    }
+
+    /// This function will automatically signal the parent event when all required sub-dependencies are
+    /// completed. This is simply a convenience for working with hierarchical or nested events.
+    ///
+    /// Example: our startup flow consists of multiple separate steps. All of these together are then part of
+    /// a parent event, .startupFlowComplete. Interested listeners can either depend on one or more individual
+    /// steps or they can listen for the parent event .startupFlowComplete. This allows relationships to be
+    /// easily created between different events.
+    func establishDependencies(for parentEvent: QueueEventType, against otherEvents: [QueueEventType]) {
+        wait(for: otherEvents, token: ActionToken()) { [weak self] in
+            self?.signal(event: parentEvent)
+        }
     }
 
     /// Used to cancel an enqueued action using the token that was provided when the action was enqueued.

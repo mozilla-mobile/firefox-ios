@@ -49,9 +49,9 @@ class TPAccessoryInfo: ThemedTableViewController {
         topStack.isLayoutMarginsRelativeArrangement = true
 
         sep.backgroundColor = themeManager.currentTheme.colors.borderPrimary
-        sep.snp.makeConstraints { make in
-            make.height.equalTo(0.5)
-            make.width.equalToSuperview()
+        sep.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
+        if let sepSuperView = sep.superview {
+            sep.widthAnchor.constraint(equalTo: sepSuperView.widthAnchor).isActive = true
         }
         return topStack
     }

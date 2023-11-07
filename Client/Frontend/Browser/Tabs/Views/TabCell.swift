@@ -23,9 +23,9 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     }
     // MARK: - Properties
 
-    private(set) var state = TabCellState.emptyTabState()
+    private(set) var state: TabCellState?
 
-    var isSelectedTab: Bool { return state.isSelected }
+    var isSelectedTab: Bool { return state?.isSelected ?? false }
     var animator: SwipeAnimator?
     weak var delegate: TabCellDelegate?
 
@@ -98,7 +98,6 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) not yet supported") }
 
     // MARK: - Configuration
-
     func configure(with state: TabCellState, theme: Theme?) {
         self.state = state
 

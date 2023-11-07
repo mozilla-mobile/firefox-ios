@@ -54,7 +54,6 @@ class DefaultTabMigrationUtility: TabMigrationUtility {
         do {
             let unarchiver = try NSKeyedUnarchiver(forReadingFrom: tabData)
             guard let tabs = unarchiver.decodeDecodable([LegacySavedTab].self, forKey: tabsKey) else {
-                // let message = "\(unarchiver.error?.localizedDescription ?? "Couldn't decode from tabsKey")"
                 return []
             }
             return tabs

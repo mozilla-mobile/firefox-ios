@@ -63,6 +63,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         }
 
         isRestoringTabs = true
+        AppEventQueue.started(.tabRestoration)
 
         guard tabMigration.shouldRunMigration else {
             logger.log("Not running the migration",
@@ -99,6 +100,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         defer {
             isRestoringTabs = false
             tabRestoreHasFinished = true
+            AppEventQueue.completed(.tabRestoration)
         }
 
         let nonPrivateTabs = window?.tabData.filter { !$0.isPrivate }
@@ -119,8 +121,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         await generateTabs(from: windowData)
         cleanUpUnusedScreenshots()
 
-        for delegate in delegates {
-            ensureMainThread {
+        await MainActor.run {
+            for delegate in delegates {
                 delegate.get()?.tabManagerDidRestoreTabs(self)
             }
         }
@@ -222,6 +224,10 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                                         activeTabId: activeTabID,
                                         tabData: self.generateTabDataForSaving())
             await tabDataStore.saveWindowData(window: windowData, forced: forced)
+
+            // Save simple tabs, used by widget extension
+            let simpleTabs = SimpleTab.convertToSimpleTabs(windowData.tabData)
+            SimpleTab.saveSimpleTab(tabs: simpleTabs)
 
             logger.log("Preserve tabs ended", level: .debug, category: .tabs)
         }

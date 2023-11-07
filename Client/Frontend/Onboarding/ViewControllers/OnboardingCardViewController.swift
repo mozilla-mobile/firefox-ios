@@ -338,7 +338,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
             title: buttonTitle,
             a11yIdentifier: "\(self.viewModel.a11yIdRoot)LinkButton",
             fontSize: UX.buttonFontSize,
-            textAlignment: .center
+            contentHorizontalAlignment: .center
         )
         linkButton.configure(viewModel: buttonViewModel)
         linkButton.applyTheme(theme: themeManager.currentTheme)

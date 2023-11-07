@@ -9,7 +9,6 @@ import Shared
 
 protocol LegacyTabManagerStore {
     var isRestoringTabs: Bool { get }
-    var hasTabsToRestoreAtStartup: Bool { get }
     var tabs: [LegacySavedTab] { get }
 
     func restoreStartupTabs(clearPrivateTabs: Bool,
@@ -30,10 +29,6 @@ class LegacyTabManagerStoreImplementation: LegacyTabManagerStore, FeatureFlaggab
 
     var isRestoringTabs: Bool {
         return lockedForReading
-    }
-
-    var hasTabsToRestoreAtStartup: Bool {
-        return !tabs.isEmpty
     }
 
     // MARK: - Initializer
@@ -114,7 +109,6 @@ class LegacyTabManagerStoreImplementation: LegacyTabManagerStore, FeatureFlaggab
                    level: .warning,
                    category: .tabs,
                    description: description)
-        SimpleTab.saveSimpleTab(tabs: nil)
         return [LegacySavedTab]()
     }
 

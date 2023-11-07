@@ -296,6 +296,8 @@ extension ProductAnalysisData {
         needsAnalysis: false,
         analysisUrl: URL(string: "https://www.example.com")!,
         highlights: Highlights(price: [], quality: [], competitiveness: [], shipping: [], packaging: []),
-        pageNotSupported: true
+        pageNotSupported: true,
+        isProductDeletedReported: false,
+        isProductDeleted: false
     )
 }

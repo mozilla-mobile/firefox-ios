@@ -13,8 +13,8 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case addressAutofill
     case bottomSearchBar
     case contextualHintForToolbar
-    case credentialAutofillCoordinatorRefactor
     case creditCardAutofillStatus
+    case fakespotBackInStock
     case fakespotFeature
     case feltPrivacyUI
     case firefoxSuggestFeature
@@ -73,7 +73,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         case .contextualHintForToolbar,
                 .addressAutofill,
                 .creditCardAutofillStatus,
-                .credentialAutofillCoordinatorRefactor,
+                .fakespotBackInStock,
                 .fakespotFeature,
                 .isToolbarCFREnabled,
                 .libraryCoordinatorRefactor,

@@ -70,13 +70,19 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         view.addSubview(loadingView)
         loadingView.applyTheme(theme: themeManager.currentTheme)
 
-        tableView.snp.makeConstraints { make in
-            make.edges.equalTo(view)
-        }
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        loadingView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-        loadingView.snp.makeConstraints { make in
-            make.edges.equalTo(tableView)
-        }
+            loadingView.topAnchor.constraint(equalTo: view.topAnchor),
+            loadingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            loadingView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            loadingView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
 
         viewModel.onViewModelChanged = { [weak self] in
             guard let self = self else { return }
