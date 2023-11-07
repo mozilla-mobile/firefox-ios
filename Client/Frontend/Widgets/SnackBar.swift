@@ -18,9 +18,15 @@ class SnackBar: UIView, ThemeApplicable {
     private var buttonsViewConstraints = [NSLayoutConstraint]()
 
     private lazy var scrollView: UIScrollView = .build()
-    private lazy var buttonsView: UIStackView = .build()
-    private lazy var backgroundView: UIVisualEffectView = .build()
     private lazy var separator: UIView = .build()
+    
+    private lazy var buttonsView: UIStackView = .build { stackView in
+        stackView.distribution = .fillEqually
+    }
+
+    private lazy var backgroundView: UIVisualEffectView = .build { visualEffectView in
+        visualEffectView.effect = UIBlurEffect(style: .extraLight)
+    }
 
     private lazy var imageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
@@ -175,8 +181,6 @@ class SnackBar: UIView, ThemeApplicable {
     // MARK: - Theme Applicable
     func applyTheme(theme: Theme) {
         let colors = theme.colors
-        buttonsView.distribution = .fillEqually
-        backgroundView.effect = UIBlurEffect(style: .extraLight)
         separator.backgroundColor = colors.borderPrimary
         layer.borderColor = colors.borderPrimary.cgColor
         textLabel.textColor = colors.textOnLight

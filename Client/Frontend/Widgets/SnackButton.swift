@@ -16,7 +16,8 @@ class SnackButton: UIButton, ThemeApplicable {
     var bar: SnackBar?
 
     private var highlightedTintColor: UIColor!
-    private var normalTintColor: UIColor!
+    private var normalTintColor: UIColor = .clear
+    private var themeTextColor: UIColor!
 
     private struct UX {
         static let borderWidth: CGFloat = 0.5
@@ -24,7 +25,7 @@ class SnackButton: UIButton, ThemeApplicable {
     }
 
     let separator: UIView = .build()
-    
+
     override open var isHighlighted: Bool {
         didSet {
             self.backgroundColor = isHighlighted ? highlightedTintColor : normalTintColor
@@ -70,8 +71,8 @@ class SnackButton: UIButton, ThemeApplicable {
     func applyTheme(theme: Theme) {
         let colors = theme.colors
         highlightedTintColor = colors.actionPrimaryHover
-        normalTintColor = colors.actionPrimary
-        setTitleColor(colors.textOnLight, for: .normal)
+        themeTextColor = theme.type == .light ? colors.textPrimary : colors.textInverted
+        setTitleColor(themeTextColor, for: .normal)
         separator.backgroundColor = colors.borderPrimary
     }
 }
