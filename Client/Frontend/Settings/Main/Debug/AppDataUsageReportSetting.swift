@@ -35,11 +35,13 @@ class AppDataUsageReportSetting: HiddenSetting {
         let fileManager = FileManager.default
         let warningSize = 100 * 1024 * 1024  // (100MB) File size threshold to log for report
 
-        let cachesDirectory = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first
-        let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
-        let directories: [URL] = [cachesDirectory, documentsDirectory].compactMap({ $0 })
+        let searchDirectories: [FileManager.SearchPathDirectory] =
+        [.cachesDirectory, .documentDirectory, .applicationSupportDirectory, .downloadsDirectory]
+        let directoryURLs: [URL] = searchDirectories
+            .map({ fileManager.urls(for: $0, in: .userDomainMask).first })
+            .compactMap({ $0 })
 
-        for baseDirectory in directories {
+        for baseDirectory in directoryURLs {
             guard let enumerator = fileManager.enumerator(at: baseDirectory,
                                                           includingPropertiesForKeys: [URLResourceKey.fileSizeKey],
                                                           options: [],
@@ -72,6 +74,18 @@ class AppDataUsageReportSetting: HiddenSetting {
             }
         }
 
+        // Attempt to calculate total space taken by UserDefaults plist
+        var userDefaultsSize: UInt64 = 0
+        let plistComponent = "/Preferences/\(Bundle.main.bundleIdentifier ?? "").plist"
+        if let prefsURL = fileManager
+            .urls(for: .libraryDirectory, in: .userDomainMask)
+            .first?
+            .appendingPathComponent(plistComponent) {
+            if let values = try? prefsURL.resourceValues(forKeys: [URLResourceKey.fileSizeKey]) {
+                userDefaultsSize = UInt64(values.fileSize ?? 0)
+            }
+        }
+
         let directoriesAndSizesSorted = directoriesAndSizes
             .map({ return ($0, $1) })
             .sorted(by: { return $0.1 > $1.1 })
@@ -82,6 +96,8 @@ class AppDataUsageReportSetting: HiddenSetting {
         for (dir, size) in directoriesAndSizesSorted {
             result += "\nSize: \(size / 1024) kb \t\tDirectory: \t\(dir)"
         }
+        result += "\n\n======================================="
+        result += "\nUser defaults: \(userDefaultsSize / 1024) kb"
         result += "\n\n======================================="
         result += "\nLarge files detected: \(largeFileWarnings.count)"
         for (file, size) in largeFileWarnings {
