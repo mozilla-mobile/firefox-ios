@@ -25,8 +25,7 @@ class SessionRestoreTests: KIFTestCase {
         var jsonDict = [String: Any]()
         jsonDict["history"] = [url1, url2, url3]
         jsonDict["currentPage"] = -1 as Any?
-        let json = JSON(jsonDict)
-        let escapedJSON = json.stringify()?.addingPercentEncoding(withAllowedCharacters: .URLAllowed)
+        let escapedJSON = jsonDict.asString?.addingPercentEncoding(withAllowedCharacters: .URLAllowed)
         _ = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
         let restoreURL = PrivilegedRequest(url: URL(string: "\(InternalURL.baseUrl)/\(InternalURL.Path.sessionrestore.rawValue)?history=\(escapedJSON!)")!).url
 
