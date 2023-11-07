@@ -1768,11 +1768,11 @@ class BrowserViewController: UIViewController,
 
         // Update the `background-color` of any blank webviews.
         let webViews = tabManager.tabs.compactMap({ $0.webView })
-        webViews.forEach({ $0.applyTheme() })
+        webViews.forEach({ $0.applyTheme(theme: currentTheme) })
 
         let tabs = tabManager.tabs
         tabs.forEach {
-            $0.applyTheme()
+            $0.applyTheme(theme: currentTheme)
         }
 
         guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
