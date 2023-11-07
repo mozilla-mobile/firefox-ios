@@ -32,26 +32,30 @@ features:
           cards:
             welcome:
               order: 10
-              title: Onboarding/Onboarding.Welcome.Title.TreatementA.v114
-              body: Onboarding/Onboarding.Welcome.Description.TreatementA.v114
-              image: welcome-globe
-              link:
-                title: Onboarding/Onboarding.Welcome.Link.Action.v114
-                url: "https://www.mozilla.org/privacy/firefox/"
+              title: Onboarding/Onboarding.Welcome.Title.TreatementA.v120
+              body: Onboarding/Onboarding.Welcome.Description.TreatementA.v120
               buttons:
                 primary:
                   title: Onboarding/Onboarding.Welcome.ActionTreatementA.v114
-                  action: set-default-browser
+                  action: open-instructions-popup
                 secondary:
                   title: Onboarding/Onboarding.Welcome.Skip.v114
                   action: next-card
+              instructions-popup:
+                title: Onboarding/DefaultBrowserPopup.Title.v114
+                button-title: Onboarding/DefaultBrowserPopup.ButtonTitle.v114
+                button-action: open-ios-fx-settings
+                instructions:
+                  - Onboarding/DefaultBrowserPopup.FirstLabel.v114
+                  - Onboarding/DefaultBrowserPopup.SecondLabel.v114
+                  - Onboarding/DefaultBrowserPopup.ThirdLabel.v114
               type: fresh-install
               prerequisites:
                 - ALWAYS
             notification-permissions:
               order: 30
-              title: Onboarding/Onboarding.Notification.Title.v114
-              body: Onboarding/Onboarding.Notification.Description.v114
+              title: Onboarding/Onboarding.Notification.Title.v120
+              body: Onboarding/Onboarding.Notification.Description.v120
               image: notifications
               buttons:
                 primary:
@@ -65,8 +69,8 @@ features:
                 - ALWAYS
             sign-to-sync:
               order: 20
-              title: Onboarding/Onboarding.Sync.Title.v114
-              body: Onboarding/Onboarding.Sync.Description.v114
+              title: Onboarding/Onboarding.Sync.Title.v120
+              body: Onboarding/Onboarding.Sync.Description.v120
               image: sync-devices
               buttons:
                 primary:
