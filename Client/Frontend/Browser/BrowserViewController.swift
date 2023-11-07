@@ -865,6 +865,7 @@ class BrowserViewController: UIViewController,
                 self.isCrashAlertShowing = false
                 self.tabManager.selectTab(self.tabManager.addTab())
                 self.openUrlAfterRestore()
+                AppEventQueue.signal(event: .tabRestoration)
             }
         )
         self.present(alert, animated: true, completion: nil)
