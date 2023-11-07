@@ -60,7 +60,7 @@ class BrowserViewController: UIViewController,
     var passBookHelper: OpenPassBookHelper?
     var overlayManager: OverlayModeManager
     var appAuthenticator: AppAuthenticationProtocol
-    var contextHintVC: ContextualHintViewController
+    var toolbarContextHintVC: ContextualHintViewController
     var shoppingContextHintVC: ContextualHintViewController?
     private var backgroundTabLoader: DefaultBackgroundTabLoader
 
@@ -188,7 +188,7 @@ class BrowserViewController: UIViewController,
         self.overlayManager = DefaultOverlayModeManager()
         let contextualViewProvider = ContextualHintViewProvider(forHintType: .toolbarLocation,
                                                                 with: profile)
-        self.contextHintVC = ContextualHintViewController(with: contextualViewProvider)
+        self.toolbarContextHintVC = ContextualHintViewController(with: contextualViewProvider)
         self.backgroundTabLoader = DefaultBackgroundTabLoader(tabQueue: profile.queue)
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -634,11 +634,11 @@ class BrowserViewController: UIViewController,
     }
 
     private func prepareURLOnboardingContextualHint() {
-        guard contextHintVC.shouldPresentHint(),
+        guard toolbarContextHintVC.shouldPresentHint(),
               featureFlags.isFeatureEnabled(.isToolbarCFREnabled, checking: .buildOnly)
         else { return }
 
-        contextHintVC.configure(
+        toolbarContextHintVC.configure(
             anchor: urlBar,
             withArrowDirection: isBottomSearchBar ? .down : .up,
             andDelegate: self,
@@ -649,9 +649,9 @@ class BrowserViewController: UIViewController,
 
     private func presentContextualHint() {
         if IntroScreenManager(prefs: profile.prefs).shouldShowIntroScreen { return }
-        present(contextHintVC, animated: true)
+        present(toolbarContextHintVC, animated: true)
 
-        UIAccessibility.post(notification: .layoutChanged, argument: contextHintVC)
+        UIAccessibility.post(notification: .layoutChanged, argument: toolbarContextHintVC)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
