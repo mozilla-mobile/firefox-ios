@@ -69,6 +69,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     let store: LegacyTabManagerStore
     let profile: Profile
     var isRestoringTabs = false
+    var tabRestoreHasFinished = false
     var tabs = [Tab]()
     var _selectedIndex = -1
     var selectedIndex: Int { return _selectedIndex }
@@ -459,7 +460,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
             $0.get()?.tabManager(self,
                                  didAddTab: tab,
                                  placeNextToParentTab: placeNextToParentTab,
-                                 isRestoring: store.isRestoringTabs)
+                                 isRestoring: !tabRestoreHasFinished)
         }
 
         if !zombie {
@@ -600,7 +601,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
         // Notify of tab removal
         ensureMainThread { [unowned self] in
-            delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: store.isRestoringTabs) }
+            delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: !tabRestoreHasFinished) }
             TabEvent.post(.didClose, for: tab)
         }
 
@@ -823,7 +824,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
     /// Public interface for checking whether the StartAtHome Feature should run.
     func startAtHomeCheck() -> Bool {
-        let startAtHomeManager = StartAtHomeHelper(prefs: profile.prefs, isRestoringTabs: isRestoringTabs)
+        let startAtHomeManager = StartAtHomeHelper(prefs: profile.prefs, isRestoringTabs: !tabRestoreHasFinished)
 
         guard !startAtHomeManager.shouldSkipStartHome else { return false }
 
