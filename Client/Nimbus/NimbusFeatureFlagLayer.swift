@@ -32,9 +32,6 @@ final class NimbusFeatureFlagLayer {
         case .inactiveTabs:
             return checkTabTrayFeature(for: featureID, from: nimbus)
 
-        case .libraryCoordinatorRefactor:
-            return checkLibraryCoordinatorRefactorFeature(from: nimbus)
-
         case .fakespotFeature:
             return checkFakespotFeature(from: nimbus)
 
@@ -137,11 +134,6 @@ final class NimbusFeatureFlagLayer {
 
         guard let status = config.featuresEnabled[nimbusID] else { return false }
         return status
-    }
-
-    private func checkLibraryCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.libraryCoordinatorRefactor.value()
-        return config.enabled
     }
 
     private func checkShareExtensionCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {

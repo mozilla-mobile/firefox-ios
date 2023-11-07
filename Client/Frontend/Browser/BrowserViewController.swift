@@ -38,7 +38,6 @@ class BrowserViewController: UIViewController,
     weak var browserDelegate: BrowserDelegate?
     weak var navigationHandler: BrowserNavigationHandler?
 
-    var libraryViewController: LibraryViewController?
     var urlBar: URLBarView!
     var urlBarHeightConstraint: Constraint!
     var clipboardBarDisplayHandler: ClipboardBarDisplayHandler?
@@ -978,36 +977,9 @@ class BrowserViewController: UIViewController,
     }
 
     func showLibrary(panel: LibraryPanelType) {
-        if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
-            DispatchQueue.main.async {
-                self.navigationHandler?.show(homepanelSection: panel.homepanelSection)
-            }
-        } else {
-            self.showLegacyLibrary(panel: panel)
+        DispatchQueue.main.async {
+            self.navigationHandler?.show(homepanelSection: panel.homepanelSection)
         }
-    }
-
-    func showLegacyLibrary(panel: LibraryPanelType? = nil) {
-        if let presentedViewController = self.presentedViewController {
-            presentedViewController.dismiss(animated: true, completion: nil)
-        }
-
-        // We should not set libraryViewController to nil because the library panel losses the currentState
-        let libraryViewController = self.libraryViewController ?? LibraryViewController(profile: profile, tabManager: tabManager)
-        libraryViewController.delegate = self
-        self.libraryViewController = libraryViewController
-
-        libraryViewController.setupOpenPanel(panelType: panel ?? . bookmarks)
-
-        // Reset history panel pagination to get latest history visit
-        if let historyPanel = libraryViewController.viewModel.panelDescriptors.first(where: {$0.panelType == .history}),
-           let vcPanel = historyPanel.viewController as? HistoryPanel {
-            vcPanel.viewModel.shouldResetHistory = true
-        }
-
-        let controller: DismissableNavigationViewController
-        controller = DismissableNavigationViewController(rootViewController: libraryViewController)
-        self.present(controller, animated: true, completion: nil)
     }
 
     fileprivate func createSearchControllerIfNeeded() {
