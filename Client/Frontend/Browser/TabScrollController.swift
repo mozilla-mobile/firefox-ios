@@ -310,16 +310,20 @@ private extension TabScrollingController {
         let isShownFromHidden = headerTopOffset == -topScrollHeight && headerOffset == 0
 
         let animation: () -> Void = {
-            if isShownFromHidden {
-                scrollView.contentOffset = CGPoint(x: initialContentOffset.x, y: initialContentOffset.y + self.topScrollHeight)
-            }
             self.headerTopOffset = headerOffset
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {  [weak self] in
+                self?.header?.updateAlphaForSubviews(alpha)
+                self?.header?.superview?.layoutIfNeeded()
+                self?.zoomPageBar?.updateAlphaForSubviews(alpha)
+                self?.zoomPageBar?.superview?.layoutIfNeeded()
+                if isShownFromHidden {
+                    guard let topScrollHeight = self?.topScrollHeight else { return }
+                    let contentOffset = CGPoint(x: initialContentOffset.x, y: initialContentOffset.y + topScrollHeight)
+                    scrollView.contentOffset = contentOffset
+                }
+            }
             self.bottomContainerOffset = bottomContainerOffset
             self.overKeyboardContainerOffset = overKeyboardOffset
-            self.header?.updateAlphaForSubviews(alpha)
-            self.header?.superview?.layoutIfNeeded()
-            self.zoomPageBar?.updateAlphaForSubviews(alpha)
-            self.zoomPageBar?.superview?.layoutIfNeeded()
         }
 
         if animated {
