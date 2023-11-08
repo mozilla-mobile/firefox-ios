@@ -834,22 +834,76 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = createSubject()
         subject.browserHasLoaded()
 
-        subject.showFakespotFlow(productURL: URL(string: "www.example.com")!)
+        subject.showFakespotFlowAsModal(productURL: URL(string: "www.example.com")!)
         let fakespotCoordinator = subject.childCoordinators[0] as! FakespotCoordinator
-        fakespotCoordinator.fakespotControllerDidDismiss()
+        fakespotCoordinator.fakespotControllerDidDismiss(animated: false)
 
         XCTAssertEqual(mockRouter.dismissCalled, 1)
         XCTAssertTrue(subject.childCoordinators.isEmpty)
     }
 
-    func testTappingShopping_startsFakespotCoordinator() {
+    func testTappingShopping_startsFakespotCoordinatorAsModal() {
         let subject = createSubject()
-        subject.showFakespotFlow(productURL: URL(string: "www.example.com")!)
+        subject.showFakespotFlowAsModal(productURL: URL(string: "www.example.com")!)
 
         XCTAssertNotNil(mockRouter.presentedViewController as? FakespotViewController)
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertNotNil(subject.childCoordinators[0] as? FakespotCoordinator)
+    }
+
+    func testTappingShopping_startsFakespotCoordinatorAsSidebar() {
+        let subject = createSubject()
+        let sidebarContainer = MockSidebarEnabledView(frame: CGRect.zero)
+        let viewController = UIViewController()
+        subject.showFakespotFlowAsSidebar(productURL: URL(string: "www.example.com")!,
+                                          sidebarContainer: sidebarContainer,
+                                          parentViewController: viewController)
+
+        XCTAssertEqual(sidebarContainer.showSidebarCalled, 1)
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertNotNil(subject.childCoordinators[0] as? FakespotCoordinator)
+    }
+
+    func testTappingShopping_dismissFakespotModal() {
+        let subject = createSubject()
+        subject.showFakespotFlowAsModal(productURL: URL(string: "www.example.com")!)
+        subject.dismissFakespotModal()
+
+        XCTAssertEqual(mockRouter.dismissCalled, 1)
+        XCTAssertTrue(subject.childCoordinators.isEmpty)
+    }
+
+    func testTappingShopping_dismissFakespotModal_noCoordinator() {
+        let subject = createSubject()
+        subject.dismissFakespotModal()
+
+        XCTAssertEqual(mockRouter.dismissCalled, 0)
+        XCTAssertTrue(subject.childCoordinators.isEmpty)
+    }
+
+    func testTappingShopping_dismissFakespotSidebar() {
+        let subject = createSubject()
+        let sidebarContainer = MockSidebarEnabledView(frame: CGRect.zero)
+        let viewController = UIViewController()
+        subject.showFakespotFlowAsSidebar(productURL: URL(string: "www.example.com")!,
+                                          sidebarContainer: sidebarContainer,
+                                          parentViewController: viewController)
+        subject.dismissFakespotSidebar(sidebarContainer: sidebarContainer, parentViewController: viewController)
+
+        XCTAssertEqual(mockRouter.dismissCalled, 1)
+        XCTAssertEqual(sidebarContainer.hideSidebarCalled, 1)
+        XCTAssertTrue(subject.childCoordinators.isEmpty)
+    }
+
+    func testTappingShopping_dismissFakespotSidebar_noCoordinator() {
+        let subject = createSubject()
+        let sidebarContainer = MockSidebarEnabledView(frame: CGRect.zero)
+        subject.dismissFakespotSidebar(sidebarContainer: sidebarContainer, parentViewController: UIViewController())
+
+        XCTAssertEqual(mockRouter.dismissCalled, 0)
+        XCTAssertEqual(sidebarContainer.hideSidebarCalled, 0)
+        XCTAssertTrue(subject.childCoordinators.isEmpty)
     }
 
     // MARK: - Helpers

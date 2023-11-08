@@ -403,14 +403,44 @@ class BrowserCoordinator: BaseCoordinator,
         showETPMenu(sourceView: sourceView)
     }
 
-    func showFakespotFlow(productURL: URL) {
-        guard !childCoordinators.contains(where: { $0 is FakespotCoordinator}) else {
-            return // flow is already handled
+    func showFakespotFlowAsModal(productURL: URL) {
+        guard let coordinator = makeFakespotCoordinator() else { return }
+        coordinator.startModal(productURL: productURL)
+    }
+
+    func showFakespotFlowAsSidebar(productURL: URL,
+                                   sidebarContainer: SidebarEnabledViewProtocol,
+                                   parentViewController: UIViewController) {
+        guard let coordinator = makeFakespotCoordinator() else { return }
+        coordinator.startSidebar(productURL: productURL,
+                                 sidebarContainer: sidebarContainer,
+                                 parentViewController: parentViewController)
+    }
+
+    func dismissFakespotModal(animated: Bool = true) {
+        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator}) as? FakespotCoordinator else {
+            return // there is no modal to close
         }
+        fakespotCoordinator.fakespotControllerDidDismiss(animated: animated)
+    }
+
+    func dismissFakespotSidebar(sidebarContainer: SidebarEnabledViewProtocol, parentViewController: UIViewController) {
+        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator}) as? FakespotCoordinator else {
+            return // there is no sidebar to close
+        }
+        fakespotCoordinator.fakespotControllerCloseSidebar(sidebarContainer: sidebarContainer,
+                                                           parentViewController: parentViewController)
+    }
+
+    private func makeFakespotCoordinator() -> FakespotCoordinator? {
+        guard !childCoordinators.contains(where: { $0 is FakespotCoordinator}) else {
+            return nil // flow is already handled
+        }
+
         let coordinator = FakespotCoordinator(router: router)
         coordinator.parentCoordinator = self
         add(child: coordinator)
-        coordinator.start(productURL: productURL)
+        return coordinator
     }
 
     func showShareExtension(url: URL, sourceView: UIView, toastContainer: UIView, popoverArrowDirection: UIPopoverArrowDirection) {
@@ -479,13 +509,11 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - ParentCoordinatorDelegate
-
     func didFinish(from childCoordinator: Coordinator) {
         remove(child: childCoordinator)
     }
 
     // MARK: - TabManagerDelegate
-
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
         // Once tab restore is made, if there's any saved route we make sure to call it
         if let savedRoute {

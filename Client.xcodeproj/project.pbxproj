@@ -1282,6 +1282,7 @@
 		E12BD0AE28AC38480029AAF0 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12BD0AD28AC38480029AAF0 /* UIImage+Extension.swift */; };
 		E12BD0B028AC3A7E0029AAF0 /* UIEdgeInsets+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12BD0AF28AC3A7E0029AAF0 /* UIEdgeInsets+Extension.swift */; };
 		E1312FD129D237EE008DDA85 /* NotificationSurfaceManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1312FD029D237EE008DDA85 /* NotificationSurfaceManagerTests.swift */; };
+		E1380B8D2AEA897C00630AFA /* SidebarEnabledView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1380B8C2AEA897C00630AFA /* SidebarEnabledView.swift */; };
 		E1390FB628B040E900C9EF3E /* WallpaperSelectorViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1390FB528B040E900C9EF3E /* WallpaperSelectorViewModelTests.swift */; };
 		E1390FB828B42EF200C9EF3E /* WallpaperManagerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1390FB728B42EF200C9EF3E /* WallpaperManagerMock.swift */; };
 		E13A72D9291154E600E9A99D /* ReusableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACDFAE274D4D6D00A94EEC /* ReusableCell.swift */; };
@@ -1334,6 +1335,8 @@
 		E18EA56F28AD3279003F97FC /* UIDevice+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18EA56E28AD3279003F97FC /* UIDevice+Extension.swift */; };
 		E18EA57128AD46D3003F97FC /* WallpaperCollectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18EA57028AD46D3003F97FC /* WallpaperCollectionType.swift */; };
 		E18F44072A951C330056160F /* FakespotHighlightGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18F44062A951C330056160F /* FakespotHighlightGroup.swift */; };
+		E19443F62AF9413300964EA5 /* FakespotUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19443F52AF9413300964EA5 /* FakespotUtilsTests.swift */; };
+		E19443F82AF953B000964EA5 /* MockSidebarEnabledView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19443F72AF953B000964EA5 /* MockSidebarEnabledView.swift */; };
 		E19B38B128A3E69300D8C541 /* WallpaperCollectionAvailabilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19B38B028A3E69300D8C541 /* WallpaperCollectionAvailabilityTests.swift */; };
 		E19B38B328A42D5E00D8C541 /* WallpaperCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19B38B228A42D5D00D8C541 /* WallpaperCollectionViewCell.swift */; };
 		E19B38B528A42EBC00D8C541 /* WallpaperCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19B38B428A42EBC00D8C541 /* WallpaperCellViewModel.swift */; };
@@ -6614,6 +6617,7 @@
 		E12BD0AD28AC38480029AAF0 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		E12BD0AF28AC3A7E0029AAF0 /* UIEdgeInsets+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIEdgeInsets+Extension.swift"; sourceTree = "<group>"; };
 		E1312FD029D237EE008DDA85 /* NotificationSurfaceManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSurfaceManagerTests.swift; sourceTree = "<group>"; };
+		E1380B8C2AEA897C00630AFA /* SidebarEnabledView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarEnabledView.swift; sourceTree = "<group>"; };
 		E1390FB528B040E900C9EF3E /* WallpaperSelectorViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperSelectorViewModelTests.swift; sourceTree = "<group>"; };
 		E1390FB728B42EF200C9EF3E /* WallpaperManagerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperManagerMock.swift; sourceTree = "<group>"; };
 		E13E9AB02AAB0FB4001A0E9D /* FakespotViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FakespotViewController.swift; path = Client/Frontend/Fakespot/FakespotViewController.swift; sourceTree = SOURCE_ROOT; };
@@ -6662,6 +6666,8 @@
 		E18EA56E28AD3279003F97FC /* UIDevice+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extension.swift"; sourceTree = "<group>"; };
 		E18EA57028AD46D3003F97FC /* WallpaperCollectionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperCollectionType.swift; sourceTree = "<group>"; };
 		E18F44062A951C330056160F /* FakespotHighlightGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotHighlightGroup.swift; sourceTree = "<group>"; };
+		E19443F52AF9413300964EA5 /* FakespotUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotUtilsTests.swift; sourceTree = "<group>"; };
+		E19443F72AF953B000964EA5 /* MockSidebarEnabledView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSidebarEnabledView.swift; sourceTree = "<group>"; };
 		E19B38B028A3E69300D8C541 /* WallpaperCollectionAvailabilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperCollectionAvailabilityTests.swift; sourceTree = "<group>"; };
 		E19B38B228A42D5D00D8C541 /* WallpaperCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WallpaperCollectionViewCell.swift; sourceTree = "<group>"; };
 		E19B38B428A42EBC00D8C541 /* WallpaperCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperCellViewModel.swift; sourceTree = "<group>"; };
@@ -8235,6 +8241,7 @@
 				C2D80BEC2AAF3C6B00CDF7A9 /* MockBrowserCoordinator.swift */,
 				C29B64822AD69C3E00F3244B /* MockQRCodeParentCoordinator.swift */,
 				21FA8FB12AE856EB0013B815 /* MockTabTrayCoordinatorDelegate.swift */,
+				E19443F72AF953B000964EA5 /* MockSidebarEnabledView.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -9937,6 +9944,7 @@
 				884CA7482344A301002E4711 /* TextContentDetector.swift */,
 				E1877A7F286E0EFD00F5BDF2 /* WebView */,
 				DA4F826629AD221600189590 /* ZoomPageBar.swift */,
+				E1380B8C2AEA897C00630AFA /* SidebarEnabledView.swift */,
 			);
 			path = Browser;
 			sourceTree = "<group>";
@@ -9988,6 +9996,7 @@
 				AB03032D2AB484B700DCD8EF /* FakespotOptInViewModelTests.swift */,
 				DF940A0A2A96316D00C1497D /* FakespotSettingsCardViewModelTests.swift */,
 				8C8D8C812AA2229200490D32 /* FakespotViewModelTests.swift */,
+				E19443F52AF9413300964EA5 /* FakespotUtilsTests.swift */,
 			);
 			path = Fakespot;
 			sourceTree = "<group>";
@@ -13176,6 +13185,7 @@
 				ABEF80D12A24D2BE003F52C4 /* CreditCardBottomSheetViewModel.swift in Sources */,
 				21AFCFF02AE80D370027E9CE /* SyncedTabsCoordinator.swift in Sources */,
 				43162A2F2492DB7800F91658 /* EmptyPrivateTabsView.swift in Sources */,
+				E1380B8D2AEA897C00630AFA /* SidebarEnabledView.swift in Sources */,
 				D0625C98208E87F10081F3B2 /* DownloadQueue.swift in Sources */,
 				9636D92E27F9E5D900771F5E /* GleanPlumbMessage.swift in Sources */,
 				8D8251811F4DE67F00780643 /* AdvancedAccountSettingViewController.swift in Sources */,
@@ -13298,6 +13308,7 @@
 				C29B64872AD69D0200F3244B /* QRCodeCoordinatorTests.swift in Sources */,
 				0BA8964B1A250E6500C1010C /* ProfileTest.swift in Sources */,
 				8AE80BAF2891960300BC12EA /* MockTraitCollection.swift in Sources */,
+				E19443F82AF953B000964EA5 /* MockSidebarEnabledView.swift in Sources */,
 				8A832A9729DCBD3C0025D5DD /* LaunchTypeTests.swift in Sources */,
 				8A28C628291028870078A81A /* CanRemoveQuickActionBookmarkTests.swift in Sources */,
 				03CCC9181AF05E7300DBF30D /* RelativeDatesTests.swift in Sources */,
@@ -13534,6 +13545,7 @@
 				F80D53CF2A09A3350047ED14 /* RustSyncManagerTests.swift in Sources */,
 				1D3C90882ACE1AF400304C87 /* RemoteTabPanelTests.swift in Sources */,
 				43446CF02412DDBE00F5C643 /* UpdateViewModelTests.swift in Sources */,
+				E19443F62AF9413300964EA5 /* FakespotUtilsTests.swift in Sources */,
 				8A93F86829D373B0004159D9 /* MockNavigationController.swift in Sources */,
 				8AE1E1D927B1BD380024C45E /* UIStackViewExtensionsTests.swift in Sources */,
 				3B6F40181DC7849C00656CC6 /* TopSitesViewModelTests.swift in Sources */,
