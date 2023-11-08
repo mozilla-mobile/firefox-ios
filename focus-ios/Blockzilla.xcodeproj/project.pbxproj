@@ -6496,7 +6496,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 121.0.20231104050329;
+				version = 121.0.20231107050313;
 			};
 		};
 		CDFA746D27ABD43D0055FE55 /* XCRemoteSwiftPackageReference "glean-swift" */ = {
