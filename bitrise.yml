@@ -41,7 +41,7 @@ workflows:
             ls /Users/vagrant/git/DerivedData/Build/Products
             ls /Users/vagrant/git/DerivedData
     - xcode-test-without-building@0:
-        #run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         timeout: 600
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0.1
@@ -331,7 +331,7 @@ workflows:
   send_slack_notification:
     steps:
     - slack@3.1:
-        run_if: '{{getenv "SHOW_WARNING_IN_SLACK" | eq "Show_Warnings" }}'
+        #run_if: '{{getenv "SHOW_WARNING_IN_SLACK" | eq "Show_Warnings" }}'
         inputs:
         - title: ''
         - author_name: ''
@@ -523,7 +523,7 @@ workflows:
 
             # Manual triggers leave empty commits. 
             # Check for empty commit/PR and exit blacklist check if found to avoid erroring out.
-            #echo "Files changed in commit/PR: $FILES_CHANGED"
+            echo "Files changed in commit/PR: $FILES_CHANGED"
             if [[ -z "$FILES_CHANGED" ]]; then
                 echo "No files changed in commit/PR. Skipping Blacklist check..."
                 envman add --key RUN_UI_TESTS --value Run_UI_Tests
