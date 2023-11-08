@@ -13,7 +13,17 @@ enum TabTrayLayoutType: Equatable {
 struct TabTrayState: ScreenState, Equatable {
     var isPrivateMode: Bool
     var selectedPanel: TabTrayPanelType?
-    var tabViewState: TabViewState
+    var tabs: [TabCellState]
+
+    // MARK: Inactive tabs
+    var inactiveTabs: [String]
+    var isInactiveTabsExpanded = true
+
+    var isPrivateTabsEmpty: Bool {
+        guard isPrivateMode else { return false }
+        return tabs.isEmpty
+    }
+
     var remoteTabsState: RemoteTabsPanelState?
 
     var layout: TabTrayLayoutType = .compact
@@ -34,38 +44,58 @@ struct TabTrayState: ScreenState, Equatable {
         }
 
         self.init(isPrivateMode: panelState.isPrivateMode,
-                  tabViewState: panelState.tabViewState,
+                  tabs: panelState.tabs,
                   remoteTabsState: panelState.remoteTabsState,
-                  normalTabsCount: panelState.normalTabsCount)
+                  normalTabsCount: panelState.normalTabsCount,
+                  inactiveTabs: panelState.inactiveTabs)
     }
 
     init() {
-        let tabViewState = TabViewState.getMockState(isPrivateMode: false)
         self.init(isPrivateMode: false,
-                  tabViewState: tabViewState,
+                  tabs: [TabCellState](),
                   remoteTabsState: nil,
-                  normalTabsCount: "2")
+                  normalTabsCount: "2",
+                  inactiveTabs: [String]())
     }
 
     init(isPrivateMode: Bool,
-         tabViewState: TabViewState,
+         tabs: [TabCellState],
          remoteTabsState: RemoteTabsPanelState?,
-         normalTabsCount: String) {
+         normalTabsCount: String,
+         inactiveTabs: [String] = [String]()) {
         self.isPrivateMode = isPrivateMode
-        self.tabViewState = tabViewState
+        self.tabs = tabs
         self.remoteTabsState = remoteTabsState
         self.normalTabsCount = normalTabsCount
+        self.inactiveTabs = inactiveTabs
     }
 
     static let reducer: Reducer<Self> = { state, action in
         // TODO: Complete in FXIOS-7359
-        return state
+        switch action {
+        case TabTrayAction.addNewTab(let isPrivate):
+            // Ignore isPrivate for now until connected to middleware
+            var tabs = [TabCellState]()
+            for index in 0...4 {
+                let cellState = TabCellState.emptyTabState(title: "Tab \(index)")
+                tabs.append(cellState)
+            }
+
+            let inactiveTabs =  ["Tab1", "Tab2", "Tab3"]
+
+            return TabTrayState(isPrivateMode: state.isPrivateMode,
+                                tabs: tabs,
+                                remoteTabsState: state.remoteTabsState,
+                                normalTabsCount: state.normalTabsCount,
+                                inactiveTabs: inactiveTabs)
+        default: return state
+        }
     }
 
     static func == (lhs: TabTrayState, rhs: TabTrayState) -> Bool {
         return lhs.isPrivateMode == rhs.isPrivateMode
         && lhs.selectedPanel == rhs.selectedPanel
         && lhs.layout == rhs.layout
-        && lhs.tabViewState == rhs.tabViewState
+        && lhs.tabs == rhs.tabs
     }
 }

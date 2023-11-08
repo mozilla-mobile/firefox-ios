@@ -409,10 +409,14 @@ class TabTrayViewController: UIViewController,
     }
 
     @objc
-    private func deleteTabsButtonTapped() {}
+    private func deleteTabsButtonTapped() {
+        store.dispatch(TabTrayAction.closeAllTabs)
+    }
 
     @objc
-    private func newTabButtonTapped() {}
+    private func newTabButtonTapped() {
+        store.dispatch(TabTrayAction.addNewTab(state.isPrivateMode))
+    }
 
     @objc
     private func doneButtonTapped() {
