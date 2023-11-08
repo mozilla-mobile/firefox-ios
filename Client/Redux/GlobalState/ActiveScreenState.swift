@@ -7,11 +7,14 @@ import Redux
 
 enum AppScreenState: Equatable {
     case themeSettings(ThemeSettingsState)
+    case tabsPanel(TabTrayState)
     case remoteTabsPanel(RemoteTabsPanelState)
 
     static let reducer: Reducer<Self> = { state, action in
         switch state {
         case .themeSettings(let state): return .themeSettings(ThemeSettingsState.reducer(state, action))
+        case .tabsPanel(let state): return
+                .tabsPanel(TabTrayState.reducer(state, action))
         case .remoteTabsPanel(let state): return .remoteTabsPanel(RemoteTabsPanelState.reducer(state, action))
         }
     }
@@ -21,6 +24,7 @@ enum AppScreenState: Equatable {
         switch self {
         case .themeSettings: return .themeSettings
         case .remoteTabsPanel: return .remoteTabsPanel
+        case .tabsPanel: return .tabsPanel
         }
     }
 }
@@ -45,6 +49,8 @@ struct ActiveScreensState: Equatable {
                 screens = screens.filter({ return $0.associatedAppScreen != screenType })
             case .showScreen(.themeSettings):
                 screens += [.themeSettings(ThemeSettingsState())]
+            case .showScreen(.tabsPanel):
+                screens += [.tabsPanel(TabTrayState())]
             case .showScreen(.remoteTabsPanel):
                 screens += [.remoteTabsPanel(RemoteTabsPanelState())]
             }
