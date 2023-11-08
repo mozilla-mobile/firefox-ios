@@ -134,24 +134,10 @@ extension BrowserViewController: URLBarDelegate {
             didStartAtHome = false
             return
         }
-
-        if shoppingContextHintVC == nil {
-            configureShoppingContextVC(at: sourceView)
-        } else {
-            shoppingContextHintVC = nil
-        }
+        configureShoppingContextVC(at: sourceView)
     }
 
     private func configureShoppingContextVC(at sourceView: UIView) {
-        let viewProvider = ContextualHintViewProvider(
-            forHintType: .shoppingExperience,
-            with: profile
-        )
-        shoppingContextHintVC = ContextualHintViewController(
-            with: viewProvider
-        )
-
-        guard let shoppingContextHintVC else { return }
         shoppingContextHintVC.configure(
             anchor: sourceView,
             withArrowDirection: isBottomSearchBar ? .down : .up,
@@ -164,9 +150,6 @@ extension BrowserViewController: URLBarDelegate {
                     object: .shoppingButton,
                     value: .shoppingCFRsDisplayed
                 )
-            },
-            actionOnDismiss: {
-                self.shoppingContextHintVC = nil
             },
             andActionForButton: { [weak self] in
                 guard let self else { return }

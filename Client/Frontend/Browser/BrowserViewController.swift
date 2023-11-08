@@ -61,7 +61,7 @@ class BrowserViewController: UIViewController,
     var overlayManager: OverlayModeManager
     var appAuthenticator: AppAuthenticationProtocol
     var toolbarContextHintVC: ContextualHintViewController
-    var shoppingContextHintVC: ContextualHintViewController?
+    let shoppingContextHintVC: ContextualHintViewController
     private var backgroundTabLoader: DefaultBackgroundTabLoader
 
     // popover rotation handling
@@ -189,6 +189,9 @@ class BrowserViewController: UIViewController,
         let contextualViewProvider = ContextualHintViewProvider(forHintType: .toolbarLocation,
                                                                 with: profile)
         self.toolbarContextHintVC = ContextualHintViewController(with: contextualViewProvider)
+        let shoppingViewProvider = ContextualHintViewProvider(forHintType: .shoppingExperience,
+                                                              with: profile)
+        shoppingContextHintVC = ContextualHintViewController(with: shoppingViewProvider)
         self.backgroundTabLoader = DefaultBackgroundTabLoader(tabQueue: profile.queue)
         super.init(nibName: nil, bundle: nil)
         didInit()
