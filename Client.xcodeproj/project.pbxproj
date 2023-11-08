@@ -134,6 +134,7 @@
 		2178A6A4291455F7002EC290 /* ReaderModeFontSizeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2178A6A3291455F7002EC290 /* ReaderModeFontSizeButton.swift */; };
 		217AEF76284666D4004EED37 /* IntroViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217AEF75284666D4004EED37 /* IntroViewModelTests.swift */; };
 		2197DF8A287624BF00215624 /* LibraryViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2197DF89287624BF00215624 /* LibraryViewModelTests.swift */; };
+		219914052AF963F900153598 /* TabTrayAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219914042AF963F900153598 /* TabTrayAction.swift */; };
 		21996BAB2AE95AFC00E0D55F /* TabTrayPanelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21996BAA2AE95AFC00E0D55F /* TabTrayPanelType.swift */; };
 		219A0FD52ACC8506009A6D1A /* InactiveTabsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219A0FD42ACC8506009A6D1A /* InactiveTabsCell.swift */; };
 		219A0FD72ACC8C03009A6D1A /* InactiveTabsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219A0FD62ACC8C03009A6D1A /* InactiveTabsHeaderView.swift */; };
@@ -2207,6 +2208,7 @@
 		217AEF75284666D4004EED37 /* IntroViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewModelTests.swift; sourceTree = "<group>"; };
 		2194437EA9B44A00EDC037FA /* gu-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "gu-IN"; path = "gu-IN.lproj/FindInPage.strings"; sourceTree = "<group>"; };
 		2197DF89287624BF00215624 /* LibraryViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewModelTests.swift; sourceTree = "<group>"; };
+		219914042AF963F900153598 /* TabTrayAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayAction.swift; sourceTree = "<group>"; };
 		21996BAA2AE95AFC00E0D55F /* TabTrayPanelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayPanelType.swift; sourceTree = "<group>"; };
 		219A0FD42ACC8506009A6D1A /* InactiveTabsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InactiveTabsCell.swift; sourceTree = "<group>"; };
 		219A0FD62ACC8C03009A6D1A /* InactiveTabsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InactiveTabsHeaderView.swift; sourceTree = "<group>"; };
@@ -7366,6 +7368,7 @@
 		212429F22AA27204002D57A8 /* Legacy */ = {
 			isa = PBXGroup;
 			children = (
+				2FDE87FD1ABB3817005317B1 /* LegacyRemoteTabsPanel.swift */,
 				216E9A3829D2119300ABE69B /* LegacyInactiveTabs */,
 				D301AAED1A3A55B70078DD1D /* LegacyGridTabViewController.swift */,
 				43BDBBFD2752FA8600254DE4 /* LegacyTabCell.swift */,
@@ -7380,13 +7383,10 @@
 		21357F2B293FDB07004BF9FD /* RemoteTabs */ = {
 			isa = PBXGroup;
 			children = (
-				2FDE87FD1ABB3817005317B1 /* LegacyRemoteTabsPanel.swift */,
 				1DEBC55D2AC4ED70006E4801 /* RemoteTabsPanel.swift */,
 				1D2F68AE2ACB272500524B92 /* RemoteTabsTableViewController.swift */,
 				1D2F68AA2ACB262900524B92 /* RemoteTabsPanelAction.swift */,
 				1D8487B32AD0C6C100F7527C /* RemoteTabsPanelMiddleware.swift */,
-				210887CB293E8800000AB4EE /* RemoteTabsErrorCell.swift */,
-				1D2F68B02ACCA22000524B92 /* RemoteTabsEmptyView.swift */,
 				21357F2C293FDB60004BF9FD /* RemoteTabsErrorDataSource.swift */,
 				21357F2E294237D8004BF9FD /* RemoteTabsClientAndTabsDataSource.swift */,
 			);
@@ -7474,6 +7474,14 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		219914032AF963E000153598 /* Action */ = {
+			isa = PBXGroup;
+			children = (
+				219914042AF963F900153598 /* TabTrayAction.swift */,
+			);
+			path = Action;
+			sourceTree = "<group>";
+		};
 		219A0FD32ACC84C5009A6D1A /* InactiveTabs */ = {
 			isa = PBXGroup;
 			children = (
@@ -7496,6 +7504,8 @@
 		21C5B3582AF2A7130093F366 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				210887CB293E8800000AB4EE /* RemoteTabsErrorCell.swift */,
+				1D2F68B02ACCA22000524B92 /* RemoteTabsEmptyView.swift */,
 				214EF4142AC5D5D0005BCCDA /* TabDisplayView.swift */,
 				1DDE3DB22AC34E1E0039363B /* TabCell.swift */,
 				43162A2E2492DB7800F91658 /* EmptyPrivateTabsView.swift */,
@@ -7562,6 +7572,7 @@
 				212429F22AA27204002D57A8 /* Legacy */,
 				21357F2B293FDB07004BF9FD /* RemoteTabs */,
 				21C5B3572AF2A6D80093F366 /* LayoutManager */,
+				219914032AF963E000153598 /* Action */,
 				21C5B3592AF2A73F0093F366 /* State */,
 				21C5B3582AF2A7130093F366 /* Views */,
 				213BF7522AC21D1B00C53A64 /* TabDisplayViewController.swift */,
@@ -12651,6 +12662,7 @@
 				EB1C84BF212EFFBF001489DF /* BrowserViewController+ReaderMode.swift in Sources */,
 				96D95016270238500079D39D /* Throttler.swift in Sources */,
 				8A93080B27C01AD60052167D /* SingleActionViewModel.swift in Sources */,
+				219914052AF963F900153598 /* TabTrayAction.swift in Sources */,
 				5AA0CC662A4B8F6100014E2A /* PasswordManagerCoordinator.swift in Sources */,
 				8A7368AD27924AAF005D7704 /* CanRemoveQuickActionBookmark.swift in Sources */,
 				8A0621B829428FBD005D1EFD /* OpenTabNotificationObject.swift in Sources */,
