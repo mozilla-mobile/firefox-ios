@@ -434,11 +434,11 @@ class BrowserViewController: UIViewController,
             urlBar.locationView.tabDidChangeContentBlocking(tab)
         }
 
-        if tabManager.startAtHomeCheck() {
+        didStartAtHome = tabManager.startAtHomeCheck()
+        if didStartAtHome {
             guard presentedViewController != nil else { return }
                 dismissVC()
         }
-        updateWallpaperMetadata()
 
         // When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
         // Make sure that our startup flow is completed and the Profile has been sync'd (at least once) before we load.
@@ -2216,7 +2216,6 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
-        didStartAtHome = tabManager.startAtHomeCheck()
         updateTabCountUsingTabManager(tabManager)
         openUrlAfterRestore()
     }
