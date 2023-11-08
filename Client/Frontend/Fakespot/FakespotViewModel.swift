@@ -139,6 +139,7 @@ class FakespotViewModel {
         case settingsCard
         case noAnalysisCard
         case progressAnalysisCard
+        case productAdCard
         case messageCard(MessageType)
         enum MessageType {
             case genericError
@@ -286,6 +287,19 @@ class FakespotViewModel {
     var noAnalysisCardViewModel = FakespotNoAnalysisCardViewModel()
     let reviewQualityCardViewModel = FakespotReviewQualityCardViewModel()
     var optInCardViewModel = FakespotOptInCardViewModel()
+
+    var productAdViewModel = FakespotAdViewModel(productAdsData: ProductAdsData(
+        name: "VIVO Electric Height Adjustable 63 × 55 inch Corner Stand Up Desk, Black 3 Part Table Top",
+        url: URL(string: "www.google.com", invalidCharacters: false)!,
+        imageUrl: URL(string: "https://img.freepik.com/free-photo/transparent-vivid-autumn-leaves_23-2148239689.jpg?w=2000&t=st=1699351827~exp=1699352427~hmac=2a72a9ca14a15325eea6ed6ba3bd30ce6a06734b69de0bcfcdf76de912d89cf2", invalidCharacters: false)!,
+        price: "448",
+        currency: "$",
+        grade: "d",
+        adjustedRating: 3.5,
+        analysisUrl: URL(string: "www.google.com", invalidCharacters: false)!,
+        sponsored: true,
+        aid: "aid string?"
+    ))
 
     private var analyzeCount = 0
 

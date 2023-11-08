@@ -264,6 +264,14 @@ public struct AccessibilityIdentifiers {
             static let mainButton = "Shopping.OptInCard.MainButton"
             static let secondaryButton = "Shopping.OptInCard.SecondaryButton"
         }
+
+        struct AdCard {
+            static let card = "Shopping.AdCard.Card"
+            static let title = "Shopping.AdCard.Title"
+            static let price = "Shopping.AdCard.PriceLabel"
+            static let productTitle = "Shopping.AdCard.ProductTitle"
+            static let description = "Shopping.AdCard.Description"
+        }
     }
 
     struct TabTray {
