@@ -12,7 +12,7 @@ class MockSidebarEnabledView: UIView, SidebarEnabledViewProtocol {
     func showSidebar(_ viewController: UIViewController, parentViewController: UIViewController) {
         showSidebarCalled += 1
     }
-    
+
     func hideSidebar(_ parentViewController: UIViewController) {
         hideSidebarCalled += 1
     }
