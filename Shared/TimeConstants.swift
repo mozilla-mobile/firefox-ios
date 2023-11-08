@@ -150,6 +150,8 @@ extension Date {
     /// - Returns: `true` if the specified time in hours has passed since the lastTimestamp; `false` otherwise.
     public static func hasTimePassedBy(hours: Timestamp,
                                        lastTimestamp: Timestamp) -> Bool {
+        guard Date.now() > lastTimestamp else { return false }
+
         let millisecondsInAnHour: Timestamp = 3_600_000 // Convert 1 hour to milliseconds
         let timeDifference = Date.now() - lastTimestamp
         return timeDifference >= hours * millisecondsInAnHour
