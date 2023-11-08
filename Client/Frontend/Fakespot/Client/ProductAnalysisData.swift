@@ -45,6 +45,8 @@ struct ProductAnalysisData: Codable {
 
     var reportProductInStockCardVisible: Bool { isProductDeleted }
 
+    var infoComingSoonCardVisible: Bool { isProductDeletedReported }
+
     init(
         productId: String? = nil,
         grade: ReliabilityGrade? = nil,
