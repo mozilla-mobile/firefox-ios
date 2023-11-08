@@ -918,9 +918,9 @@ shopping:
     description: |
       Records an event when a user reports a product as back in stock.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/?
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17145
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/?
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17230
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
