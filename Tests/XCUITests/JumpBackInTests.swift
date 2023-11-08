@@ -30,6 +30,7 @@ class JumpBackInTests: BaseTestCase {
         navigator.goto(NewTabScreen)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306922
     func testJumpBackInSection() {
         // Open a tab and visit a page
         navigator.openURL("https://www.example.com")
@@ -46,6 +47,8 @@ class JumpBackInTests: BaseTestCase {
         // I don't test for its existence.
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306920
+    // Smoketest
     func testPrivateTab() throws {
         throw XCTSkip("This test is flaky")
 //        // Visit https://www.twitter.com
