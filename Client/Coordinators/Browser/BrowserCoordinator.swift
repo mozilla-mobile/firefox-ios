@@ -100,7 +100,7 @@ class BrowserCoordinator: BaseCoordinator,
                                              sendToDeviceDelegate: sendToDeviceDelegate,
                                              statusBarScrollDelegate: statusBarScrollDelegate,
                                              overlayManager: overlayManager)
-        dismissModal()
+
         guard browserViewController.embedContent(homepageController) else { return }
         self.homepageViewController = homepageController
         homepageController.scrollToTop()
@@ -109,7 +109,6 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func show(webView: WKWebView) {
-        dismissModal()
         // Keep the webviewController in memory, update to newest webview when needed
         if let webviewController = webviewController {
             webviewController.update(webView: webView, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
@@ -157,12 +156,6 @@ class BrowserCoordinator: BaseCoordinator,
             }
             return homepageViewController
         }
-    }
-
-    /// Dismiss any popover modals presented on top of the browser when we show the webview or the homepage.
-    /// Aka any time we change tab, we want to make sure nothing is showing as leftover.
-    private func dismissModal() {
-        router.dismiss(animated: false, completion: nil)
     }
 
     // MARK: - Route handling
