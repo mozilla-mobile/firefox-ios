@@ -52,7 +52,7 @@ workflows:
     - save-spm-cache@1:
         is_always_run: true
     - script@1.1:
-        #run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Compress Derived Data
         is_always_run: true
         inputs:
@@ -81,7 +81,7 @@ workflows:
             "$BITRISE_SOURCE_DIR/Client/" \
             "$BITRISE_SOURCE_DIR/firefox-ios/Tests/XCUITests"
     - deploy-to-bitrise-io@2:
-        #run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
         - pipeline_intermediate_files: "$BITRISE_XCRESULT_PATH:BITRISE_XCRESULT_PATH"
@@ -286,16 +286,16 @@ workflows:
   build_and_test_4_SmokeTest4:
     before_run:
     - 1_git_clone_and_post_clone
-    #- Decision_to_run_UI_Tests
+    - Decision_to_run_UI_Tests
     steps:
     - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
-        #run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Pull artifacts
         inputs:
         - verbose: true
         - artifact_sources: stage_1.configure_build_fennec
     - script@1.1:
-        #run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Unzip
         inputs:
         - content: |
@@ -311,7 +311,7 @@ workflows:
             echo "show dir"
             ls
     - xcode-test-without-building@0:
-        #run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         timeout: 1200
         title: UI Smoketest4
         inputs:
@@ -321,7 +321,7 @@ workflows:
             "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest4_iphonesimulator17.0-arm64.xctestrun"
     - deploy-to-bitrise-io@2.1.1:
-        #run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - pipeline_intermediate_files: '$BITRISE_XCRESULT_PATH:BITRISE_UITESTS_4_XCRESULT_PATH'
     meta:
@@ -331,7 +331,7 @@ workflows:
   send_slack_notification:
     steps:
     - slack@3.1:
-        #run_if: '{{getenv "SHOW_WARNING_IN_SLACK" | eq "Show_Warnings" }}'
+        run_if: '{{getenv "SHOW_WARNING_IN_SLACK" | eq "Show_Warnings" }}'
         inputs:
         - title: ''
         - author_name: ''
@@ -511,24 +511,24 @@ workflows:
             # created when trying to find a diff on a commit that doesn't exist on origin/main
             # First check destination branch for PRs and then check $BITRISE_GIT_BRANCH for
             # merges to origin/main since the destination branch changes back to origin/main
-            #if [[ $BITRISEIO_GIT_BRANCH_DEST = release* ]] || [[ $BITRISEIO_GIT_BRANCH_DEST = epic* ]]; then
-            #    FILES_CHANGED=$(git diff --name-only $BITRISEIO_GIT_BRANCH_DEST..."$BITRISE_GIT_COMMIT")
-            #elif [[ $BITRISE_GIT_BRANCH = release* ]] || [[ $BITRISE_GIT_BRANCH = epic* ]]; then
-            #    echo "Skipping Blacklist check for Merging into $BITRISE_BIT_BRANCH..."
-            #    exit 0
-            #    FILES_CHANGED=$(git diff --name-only $BITRISE_GIT_BRANCH..."$BITRISE_GIT_COMMIT")
-            #else
-            #    FILES_CHANGED=$(git diff --name-only origin/main..."$BITRISE_GIT_COMMIT")
-            #fi
+            if [[ $BITRISEIO_GIT_BRANCH_DEST = release* ]] || [[ $BITRISEIO_GIT_BRANCH_DEST = epic* ]]; then
+                FILES_CHANGED=$(git diff --name-only $BITRISEIO_GIT_BRANCH_DEST..."$BITRISE_GIT_COMMIT")
+            elif [[ $BITRISE_GIT_BRANCH = release* ]] || [[ $BITRISE_GIT_BRANCH = epic* ]]; then
+                echo "Skipping Blacklist check for Merging into $BITRISE_BIT_BRANCH..."
+                exit 0
+                FILES_CHANGED=$(git diff --name-only $BITRISE_GIT_BRANCH..."$BITRISE_GIT_COMMIT")
+            else
+                FILES_CHANGED=$(git diff --name-only origin/main..."$BITRISE_GIT_COMMIT")
+            fi
 
             # Manual triggers leave empty commits. 
             # Check for empty commit/PR and exit blacklist check if found to avoid erroring out.
             #echo "Files changed in commit/PR: $FILES_CHANGED"
-            #if [[ -z "$FILES_CHANGED" ]]; then
-            #    echo "No files changed in commit/PR. Skipping Blacklist check..."
-            #    envman add --key RUN_UI_TESTS --value Run_UI_Tests
-            #    exit 0
-            #fi
+            if [[ -z "$FILES_CHANGED" ]]; then
+                echo "No files changed in commit/PR. Skipping Blacklist check..."
+                envman add --key RUN_UI_TESTS --value Run_UI_Tests
+                exit 0
+            fi
             
             # Match on file names in all directories and subdirectories
             #
@@ -547,17 +547,17 @@ workflows:
             # Test Helpers
             #   test-fixtures/.py$ -> matches all files whose file extension begin with 'py'
 
-            #DO_NOT_RUN_TESTS='^(.*[^bitrise]\.y[^/]*$|.*\.sh$|.*\.md$|.*\.lproj/.*|Sync*/*|fastlane/*|taskcluster/*|L10nSnapshotTests/*|test-fixtures/.*.py$)'
+            DO_NOT_RUN_TESTS='^(.*[^bitrise]\.y[^/]*$|.*\.sh$|.*\.md$|.*\.lproj/.*|Sync*/*|fastlane/*|taskcluster/*|L10nSnapshotTests/*|test-fixtures/.*.py$)'
 
             # Pass the FILES_CHANGED to grep to find any matches for the regex DO_NOT_RUN_TESTS
             # -v inverts the filtered results, returning any files not filtered by the regex
-            #if grep -v -E "${DO_NOT_RUN_TESTS}" <<< "${FILES_CHANGED}" && [ -n "$FILES_CHANGED" ];
-            #then
-            #    echo "Running UI Tests"
-            #    envman add --key RUN_UI_TESTS --value Run_UI_Tests
-            #else
-            #    echo "Not Running UI Tests"
-            #fi
+            if grep -v -E "${DO_NOT_RUN_TESTS}" <<< "${FILES_CHANGED}" && [ -n "$FILES_CHANGED" ];
+            then
+                echo "Running UI Tests"
+                envman add --key RUN_UI_TESTS --value Run_UI_Tests
+            else
+                echo "Not Running UI Tests"
+            fi
     - share-pipeline-variable@1:
         inputs:
         - variables: RUN_UI_TESTS
