@@ -9,6 +9,7 @@ let defaultSearchEngine2 = "Amazon.com"
 let customSearchEngine = ["name": "youtube", "url": "https://youtube.com/search?q=%s"]
 
 class SearchSettingsUITests: BaseTestCase {
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2353246
     func testDefaultSearchEngine() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SearchSettings)
@@ -23,6 +24,7 @@ class SearchSettingsUITests: BaseTestCase {
         mozWaitForElementToExist(app.tables.cells.staticTexts[defaultSearchEngine2])
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2353247
     func testCustomSearchEngineIsEditable() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SearchSettings)
@@ -53,6 +55,7 @@ class SearchSettingsUITests: BaseTestCase {
         mozWaitForElementToExist(app.tables.cells.staticTexts[customSearchEngine["name"]!])
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2353248
     func testCustomSearchEngineAsDefaultIsNotEditable() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SearchSettings)
@@ -72,6 +75,7 @@ class SearchSettingsUITests: BaseTestCase {
         XCTAssertFalse(app.buttons["Edit"].isEnabled)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2353249
     func testNavigateToSearchPickerTurnsOffEditing() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SearchSettings)
@@ -97,6 +101,7 @@ class SearchSettingsUITests: BaseTestCase {
         XCTAssertEqual(app.tables.cells.switches.count, app.tables.cells.count - 2)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2353250
     func testDeletingLastCustomEngineExitsEditing() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SearchSettings)
