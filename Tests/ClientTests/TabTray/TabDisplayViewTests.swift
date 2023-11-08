@@ -60,7 +60,6 @@ final class TabDisplayViewTests: XCTestCase {
         XCTAssertEqual(numberOfSections, 0)
     }
 
-
     func testAmountOfSections_ForPrivateTabsWithoutInactiveTabs() {
         let subject = createSubject(isPrivateMode: true,
                                     emptyTabs: false,
