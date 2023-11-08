@@ -228,11 +228,9 @@ final class EventQueueTests: XCTestCase {
     }
 
     func testNestedDependencies() {
-        var actionRun = false
-
         // Enqueue action
-        queue.wait(for: [.parentEvent, .activityEvent], then: { actionRun = true })
-        XCTAssertFalse(actionRun)
+        queue.wait(for: [.parentEvent, .activityEvent], then: {  })
+        XCTAssertFalse(queue.hasSignalled(.parentEvent))
 
         // Create a parent event that depends on 3 sub-events
         queue.establishDependencies(for: .parentEvent, against: [
@@ -245,17 +243,17 @@ final class EventQueueTests: XCTestCase {
         queue.started(.activityEvent)
         queue.completed(.activityEvent)
         // Action should not yet run
-        XCTAssertFalse(actionRun)
+        XCTAssertFalse(queue.hasSignalled(.parentEvent))
 
         // Complete 2 of 3 sub-events of parent
         queue.signal(event: .startingEvent)
         queue.signal(event: .middleEvent)
         // Action not run
-        XCTAssertFalse(actionRun)
+        XCTAssertFalse(queue.hasSignalled(.parentEvent))
 
         // Complete 3rd sub-event of parent
         queue.signal(event: .laterEvent)
         // At this point all dependencies should be complete.
-        XCTAssertTrue(actionRun)
+        XCTAssertTrue(queue.hasSignalled(.parentEvent))
     }
 }

@@ -36,6 +36,7 @@ public final class EventQueue<QueueEventType: Hashable> {
     private var signalledEvents: [QueueEventType: QueueEventState] = [:]
     private let logger: Logger
     private let mainQueue: DispatchQueueInterface
+    private var isProcessingActions = false
 
     // MARK: - Initializer
 
@@ -203,6 +204,16 @@ public final class EventQueue<QueueEventType: Hashable> {
 
     private func processActions(for event: QueueEventType? = nil) {
         assert(Thread.isMainThread, "Expects to be called on the main thread.")
+        guard !isProcessingActions else {
+            // processActions() does not support reentrancy. If this gets called
+            // recursively, defer next call to the subequent iteration of the MT
+            // run loop. This fixes some edge case bugs with nested dependencies
+            // which can potentially cause actions to be executed twice incorrectly.
+            mainQueue.async { [weak self] in self?.processActions() }
+            return
+        }
+        isProcessingActions = true
+        defer { isProcessingActions = false }
 
         for enqueued in actions where allDependenciesSatisified(enqueued) {
             enqueued.action()

@@ -187,9 +187,7 @@ class HistoryPanel: UIViewController,
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
-            viewModel.shouldResetHistory = true
-        }
+        viewModel.shouldResetHistory = true
         bottomStackView.isHidden = !viewModel.isSearchInProgress
         if viewModel.shouldResetHistory {
             fetchDataAndUpdateLayout()
@@ -634,13 +632,9 @@ extension HistoryPanel: UITableViewDelegate {
         case .clearHistory:
             showClearRecentHistory()
         case .recentlyClosed:
-            if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
-                guard viewModel.hasRecentlyClosed else { return }
-                refreshControl?.endRefreshing()
-                historyCoordinatorDelegate?.showRecentlyClosedTab()
-            } else {
-                navigateToRecentlyClosed()
-            }
+            guard viewModel.hasRecentlyClosed else { return }
+            refreshControl?.endRefreshing()
+            historyCoordinatorDelegate?.showRecentlyClosedTab()
         default: break
         }
     }
@@ -649,15 +643,7 @@ extension HistoryPanel: UITableViewDelegate {
         exitSearchState()
         updatePanelState(newState: .history(state: .inFolder))
 
-        if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
-            historyCoordinatorDelegate?.showSearchGroupedItems(asGroupItem)
-        } else {
-            let asGroupListViewModel = SearchGroupedItemsViewModel(asGroup: asGroupItem, presenter: .historyPanel)
-            let asGroupListVC = SearchGroupedItemsViewController(viewModel: asGroupListViewModel, profile: profile)
-            asGroupListVC.libraryPanelDelegate = libraryPanelDelegate
-            asGroupListVC.title = asGroupItem.displayTitle
-            navigationController?.pushViewController(asGroupListVC, animated: true)
-        }
+        historyCoordinatorDelegate?.showSearchGroupedItems(asGroupItem)
         TelemetryWrapper.recordEvent(category: .action, method: .navigate, object: .navigateToGroupHistory, value: nil, extras: nil)
     }
 
@@ -781,16 +767,6 @@ extension HistoryPanel {
                                                 theme: self.themeManager.currentTheme)
             }
         }
-    }
-
-    private func navigateToRecentlyClosed() {
-        guard viewModel.hasRecentlyClosed else { return }
-
-        let nextController = RecentlyClosedTabsPanel(profile: profile)
-        nextController.title = .RecentlyClosedTabsPanelTitle
-        nextController.libraryPanelDelegate = libraryPanelDelegate
-        refreshControl?.endRefreshing()
-        navigationController?.pushViewController(nextController, animated: true)
     }
 
     @objc

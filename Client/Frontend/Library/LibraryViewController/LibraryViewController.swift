@@ -26,7 +26,6 @@ class LibraryViewController: UIViewController, Themeable {
     var notificationCenter: NotificationProtocol
     weak var delegate: LibraryPanelDelegate?
     weak var navigationHandler: LibraryNavigationHandler?
-    var onViewDismissed: (() -> Void)?
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var logger: Logger
@@ -123,20 +122,12 @@ class LibraryViewController: UIViewController, Themeable {
         ])
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        onViewDismissed?()
-        onViewDismissed = nil
-    }
-
     override var preferredStatusBarStyle: UIStatusBarStyle {
         LegacyThemeManager.instance.statusBarStyle
     }
 
     func resetHistoryPanelPagination() {
-        if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
-            viewModel.resetHistoryPanelPagination()
-        }
+        viewModel.resetHistoryPanelPagination()
     }
 
     func updateViewWithState() {
@@ -204,25 +195,12 @@ class LibraryViewController: UIViewController, Themeable {
         guard let index = viewModel.selectedPanel?.rawValue,
               index < viewModel.panelDescriptors.count else { return }
 
-        if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
-            let panelDescriptor = viewModel.panelDescriptors[index]
-            if let panelVC = childPanelControllers[index].topViewController {
-                let panelNavigationController = childPanelControllers[index]
-                setupLibraryPanel(panelVC, accessibilityLabel: panelDescriptor.accessibilityLabel, accessibilityIdentifier: panelDescriptor.accessibilityIdentifier)
-                showPanel(panelNavigationController)
-                navigationHandler?.start(panelType: viewModel.selectedPanel ?? .bookmarks, navigationController: panelNavigationController)
-            }
-        } else {
-            viewModel.setupNavigationController()
-            if let panelVC = self.viewModel.panelDescriptors[index].viewController,
-               let navigationController = self.viewModel.panelDescriptors[index].navigationController {
-                let accessibilityLabel = self.viewModel.panelDescriptors[index].accessibilityLabel
-                let accessibilityId = self.viewModel.panelDescriptors[index].accessibilityIdentifier
-                setupLibraryPanel(panelVC,
-                                  accessibilityLabel: accessibilityLabel,
-                                  accessibilityIdentifier: accessibilityId)
-                self.showPanel(navigationController)
-            }
+        let panelDescriptor = viewModel.panelDescriptors[index]
+        if let panelVC = childPanelControllers[index].topViewController {
+            let panelNavigationController = childPanelControllers[index]
+            setupLibraryPanel(panelVC, accessibilityLabel: panelDescriptor.accessibilityLabel, accessibilityIdentifier: panelDescriptor.accessibilityIdentifier)
+            showPanel(panelNavigationController)
+            navigationHandler?.start(panelType: viewModel.selectedPanel ?? .bookmarks, navigationController: panelNavigationController)
         }
         librarySegmentControl.selectedSegmentIndex = viewModel.selectedPanel?.rawValue ?? 0
     }
@@ -263,12 +241,7 @@ class LibraryViewController: UIViewController, Themeable {
     }
 
     private func topLeftButtonSetup() {
-        var panelState: LibraryPanelMainState
-        if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
-            panelState = getCurrentPanelState()
-        } else {
-            panelState = viewModel.currentPanelState
-        }
+        var panelState = getCurrentPanelState()
         switch panelState {
         case .bookmarks(state: .inFolder),
              .history(state: .inFolder):
@@ -283,12 +256,7 @@ class LibraryViewController: UIViewController, Themeable {
     }
 
     private func topRightButtonSetup() {
-        var panelState: LibraryPanelMainState
-        if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
-            panelState = getCurrentPanelState()
-        } else {
-            panelState = viewModel.currentPanelState
-        }
+        var panelState = getCurrentPanelState()
         switch panelState {
         case .bookmarks(state: .inFolderEditMode):
             navigationItem.rightBarButtonItem = nil
@@ -324,13 +292,7 @@ class LibraryViewController: UIViewController, Themeable {
     }
 
     private func bottomToolbarButtonSetup() {
-        var panel: LibraryPanel?
-        if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
-            panel = getCurrentPanel()
-        } else {
-            panel = viewModel.currentPanel
-        }
-        guard let panel = panel else { return }
+        guard let panel = getCurrentPanel() else { return }
 
         let shouldHideBar = shouldHideBottomToolbar(panel: panel)
         navigationController?.setToolbarHidden(shouldHideBar, animated: true)

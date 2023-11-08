@@ -34,24 +34,37 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
         router.push(launchScreenVC, animated: false)
     }
 
-    override func handle(route: Route) -> Bool {
+    override func canHandle(route: Route) -> Bool {
         switch route {
         case .action(action: .showIntroOnboarding):
-            return showIntroOnboardingIfNeeded()
+            return canShowIntroOnboarding()
         default:
             return false
         }
     }
 
-    private func showIntroOnboardingIfNeeded() -> Bool {
+    override func handle(route: Route) {
+        switch route {
+        case .action(action: .showIntroOnboarding):
+            showIntroOnboardingIfNeeded()
+        default:
+            break
+        }
+    }
+
+    private func canShowIntroOnboarding() -> Bool {
+        let profile: Profile = AppContainer.shared.resolve()
+        let introManager = IntroScreenManager(prefs: profile.prefs)
+        let launchType = LaunchType.intro(manager: introManager)
+        return launchType.canLaunch(fromType: .SceneCoordinator)
+    }
+
+    private func showIntroOnboardingIfNeeded() {
         let profile: Profile = AppContainer.shared.resolve()
         let introManager = IntroScreenManager(prefs: profile.prefs)
         let launchType = LaunchType.intro(manager: introManager)
         if launchType.canLaunch(fromType: .SceneCoordinator) {
             startLaunch(with: launchType)
-            return true
-        } else {
-            return false
         }
     }
 

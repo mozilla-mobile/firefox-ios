@@ -21,7 +21,6 @@ include:
   - nimbus-features/firefoxSuggestFeature.yaml
   - nimbus-features/generalFeatures.yaml
   - nimbus-features/homescreenFeature.yaml
-  - nimbus-features/libraryCoordinatorRefactor.yaml
   - nimbus-features/messagingFeature.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml
   - nimbus-features/qrCodeCoordinatorRefactor.yaml

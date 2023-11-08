@@ -36,12 +36,4 @@ class LibraryPanelDescriptor {
         self.accessibilityIdentifier = accessibilityIdentifier
         self.panelType = panelType
     }
-
-    // Create navigation controller if it doesn't exist
-    func setupNavigationController() {
-        guard let viewController = viewController else { return }
-
-        // Don't create a new NavigationController every time
-        navigationController = navigationController ?? ThemedNavigationController(rootViewController: viewController)
-    }
 }

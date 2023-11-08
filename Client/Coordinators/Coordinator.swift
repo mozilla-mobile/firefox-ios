@@ -10,7 +10,6 @@ protocol Coordinator: AnyObject {
     var childCoordinators: [Coordinator] { get }
     var router: Router { get }
     var logger: Logger { get }
-    var newlyAdded: Bool { get set }
 
     /// Determines whether this coordinator can be dismissed or not, in some cases the coordinator cannot be dismissed for example due to state saving.
     /// This isn't ideal for this pattern, but was deemed necessary to keep existing behavior while moving away from previous pattern. By default, all coordinators
@@ -20,18 +19,25 @@ protocol Coordinator: AnyObject {
     /// Will hold the Route the coordinator was asked to navigate to in case the path could not be handled yet.
     var savedRoute: Route? { get set }
 
-    /// Handle the Route, this is implemented by each coordinator for Route they will handle.
-    /// When the coordinator cannot handle this particular Route, it returns false.
+    /// Handle the Route, if able. This is implemented by each coordinator for Route they will handle.
     /// - Parameter route: The Route to navigate to
-    /// - Returns: True when the Route was handled
-    func handle(route: Route) -> Bool
+    func handle(route: Route)
 
-    /// Finds a coordinator that can handle a given route by recursively searching through the current coordinator's child coordinators.
+    /// When the coordinator cannot handle this particular Route, it returns false.
+    /// - Parameter route: The Route to navigate to.
+    /// - Returns: true if the route can be handled.
+    func canHandle(route: Route) -> Bool
+
+    /// Searches for a coordinator to handle the given route by recursively checking `canHandle()` of all
+    /// child coordinators.
     /// - Parameter route: The route to find a matching coordinator for.
-    /// - Returns: An optional `Coordinator` instance that can handle the given `route`, or `nil` if no such coordinator was found.
-    ///
-    /// - DiscardableResult: The result of this method is marked as `@discardableResult` because the caller may choose not to use the returned
-    /// `Coordinator` instance, which is safe to do.
+    /// - Returns: A `Coordinator` that can handle the given `route`, or `nil` if none found.
+    @discardableResult
+    func find(route: Route) -> Coordinator?
+
+    /// Convenience. Calls into `find()` to identify the `Coordinator` to handle a route, and then
+    /// subsequently calls into `handle()` to perform the relevant actions on that route. Note that
+    /// prior to handling the route any children coordinators will be dismissed.
     @discardableResult
     func findAndHandle(route: Route) -> Coordinator?
 

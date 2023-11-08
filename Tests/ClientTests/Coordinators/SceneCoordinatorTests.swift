@@ -24,7 +24,7 @@ final class SceneCoordinatorTests: XCTestCase {
     }
 
     func testInitialState() {
-        let scene = UIApplication.shared.windows.first?.windowScene
+        let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene
         let subject = SceneCoordinator(scene: scene!)
         trackForMemoryLeaks(subject)
 
@@ -126,7 +126,7 @@ final class SceneCoordinatorTests: XCTestCase {
     func testHandleShowOnboarding_returnsTrueAndShowsOnboarding() {
         let subject = createSubject()
 
-        let result = subject.handle(route: .action(action: .showIntroOnboarding))
+        let result = testCanHandleAndHandle(subject, route: .action(action: .showIntroOnboarding))
 
         XCTAssertTrue(result)
         XCTAssertEqual(subject.childCoordinators.count, 1)
@@ -136,11 +136,17 @@ final class SceneCoordinatorTests: XCTestCase {
     // MARK: - Helpers
     private func createSubject(file: StaticString = #file,
                                line: UInt = #line) -> SceneCoordinator {
-        let scene = UIApplication.shared.windows.first?.windowScene
+        let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene
         let subject = SceneCoordinator(scene: scene!)
         // Replace created router from scene with a mock router so we don't trigger real navigation in our tests
         subject.router = mockRouter
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
+    }
+
+    private func testCanHandleAndHandle(_ subject: Coordinator, route: Route) -> Bool {
+        let result = subject.canHandle(route: route)
+        subject.handle(route: route)
+        return result
     }
 }
