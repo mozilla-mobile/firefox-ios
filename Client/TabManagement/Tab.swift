@@ -845,14 +845,7 @@ class Tab: NSObject, ThemeApplicable {
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
-        UITextField.appearance().keyboardAppearance = isPrivate ? .dark : (theme.type == .dark) ? .dark : .light
-    }
-
-    // MARK: - LegacyTheme
-
-    // This function needs to be in place since the LegacyTabManager still exists
-    func applyTheme() {
-        UITextField.appearance().keyboardAppearance = isPrivate ? .dark : (LegacyThemeManager.instance.currentName == .dark ? .dark : .light)
+        UITextField.appearance().keyboardAppearance = theme.type.keyboardAppearence(isPrivate: isPrivate)
     }
 }
 
@@ -1054,16 +1047,6 @@ class TabWebView: WKWebView, MenuHelperInterface, ThemeApplicable {
     func applyTheme(theme: Theme) {
         if url == nil {
             let backgroundColor = theme.colors.layer1.hexString
-            evaluateJavascriptInDefaultContentWorld("document.documentElement.style.backgroundColor = '\(backgroundColor)';")
-        }
-    }
-
-    // MARK: - LegacyTheme
-
-    // This function needs to be in place since the LegacyTabManager still exists
-    func applyTheme() {
-        if url == nil {
-            let backgroundColor = LegacyThemeManager.instance.current.browser.background.hexString
             evaluateJavascriptInDefaultContentWorld("document.documentElement.style.backgroundColor = '\(backgroundColor)';")
         }
     }

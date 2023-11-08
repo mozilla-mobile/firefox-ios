@@ -2120,6 +2120,11 @@ extension BrowserViewController: TabManagerDelegate {
 
                 let ui: [PrivateModeUI?] = [toolbar, topTabsViewController, urlBar]
                 ui.forEach { $0?.applyUIMode(isPrivate: tab.isPrivate, theme: themeManager.currentTheme) }
+            } else {
+                // Theme is applied to the tab and webView in the else case
+                // because in the if block is applied already to all the tabs and web views
+                tab.applyTheme(theme: themeManager.currentTheme)
+                webView.applyTheme(theme: themeManager.currentTheme)
             }
 
             readerModeCache = tab.isPrivate ? MemoryReaderModeCache.sharedInstance : DiskReaderModeCache.sharedInstance
