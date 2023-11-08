@@ -86,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mozilla/rust-components-swift.git",
       "state" : {
-        "revision" : "f435a8199ac25d597b392e4cccd896db8303c75a",
-        "version" : "121.0.20231103050336"
+        "revision" : "2096df389da50703e788dd0e6489e72bb3f087de",
+        "version" : "121.0.20231107050313"
       }
     },
     {
@@ -115,15 +115,6 @@
       "state" : {
         "revision" : "1080914828ef1c9ca9cd2bad50667b3d847dabff",
         "version" : "2.0.0"
-      }
-    },
-    {
-      "identity" : "swiftyjson",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SwiftyJSON/SwiftyJSON",
-      "state" : {
-        "revision" : "b3dcd7dbd0d488e1a7077cb33b00f2083e382f07",
-        "version" : "5.0.1"
       }
     },
     {

@@ -318,6 +318,7 @@ open class BrowserProfile: Profile {
         if let downloadsPath = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("Downloads").path {
             try? FileManager.default.createDirectory(atPath: downloadsPath, withIntermediateDirectories: true, attributes: nil)
         }
+        AppEventQueue.signal(event: .profileInitialized)
     }
 
     func reopen() {

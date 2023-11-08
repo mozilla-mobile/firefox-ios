@@ -230,6 +230,8 @@ class FakespotViewController:
     }
 
     private func adjustLayout() {
+        closeButton.isHidden = FakespotUtils().shouldDisplayInSidebar()
+
         guard let titleLabelText = titleLabel.text, let betaLabelText = betaLabel.text else { return }
 
         var availableTitleStackWidth = headerView.frame.width
@@ -238,10 +240,10 @@ class FakespotViewController:
             availableTitleStackWidth = view.frame.width - UX.headerHorizontalSpacing * 2
         }
         availableTitleStackWidth -= UX.closeButtonWidthHeight + UX.titleCloseSpacing // remove close button and spacing
-        let titleTextWidth = widthOfString(titleLabelText, usingFont: titleLabel.font)
+        let titleTextWidth = FakespotUtils.widthOfString(titleLabelText, usingFont: titleLabel.font)
 
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
-        let betaLabelWidth = widthOfString(betaLabelText, usingFont: betaLabel.font)
+        let betaLabelWidth = FakespotUtils.widthOfString(betaLabelText, usingFont: betaLabel.font)
         let betaViewWidth = betaLabelWidth + UX.betaHorizontalSpace * 2
         let maxTitleWidth = availableTitleStackWidth - betaViewWidth - UX.titleStackSpacing
 
@@ -284,7 +286,7 @@ class FakespotViewController:
             let view: FakespotOptInCardView = .build()
             viewModel.optInCardViewModel.dismissViewController = { [weak self] action in
                 guard let self = self else { return }
-                self.delegate?.fakespotControllerDidDismiss()
+                self.delegate?.fakespotControllerDidDismiss(animated: true)
                 guard let action else { return }
                 viewModel.recordDismissTelemetry(by: action)
             }
@@ -317,7 +319,7 @@ class FakespotViewController:
             let reviewQualityCardView: FakespotReviewQualityCardView = .build()
             viewModel.reviewQualityCardViewModel.dismissViewController = { [weak self] in
                 guard let self = self else { return }
-                self.delegate?.fakespotControllerDidDismiss()
+                self.delegate?.fakespotControllerDidDismiss(animated: true)
             }
             reviewQualityCardView.configure(viewModel.reviewQualityCardViewModel)
             return reviewQualityCardView
@@ -327,7 +329,7 @@ class FakespotViewController:
             view.configure(viewModel.settingsCardViewModel)
             viewModel.settingsCardViewModel.dismissViewController = { [weak self] action in
                 guard let self = self else { return }
-                self.delegate?.fakespotControllerDidDismiss()
+                self.delegate?.fakespotControllerDidDismiss(animated: true)
                 guard let action else { return }
                 viewModel.recordDismissTelemetry(by: action)
             }
@@ -389,10 +391,17 @@ class FakespotViewController:
 
             case .reportProductInStock:
                 let view: FakespotMessageCardView = .build()
-                viewModel.reportProductInStockViewModel.primaryAction = { [weak self] in
-                    self?.viewModel.reportProductBackInStock()
+                viewModel.reportProductInStockViewModel.primaryAction = { [weak view, weak self] in
+                    guard let self else { return }
+                    view?.configure(self.viewModel.reportingProductFeedbackViewModel)
+                    self.viewModel.reportProductBackInStock()
                 }
                 view.configure(viewModel.reportProductInStockViewModel)
+                return view
+
+            case .infoComingSoonCard:
+                let view: FakespotMessageCardView = .build()
+                view.configure(viewModel.infoComingSoonCardViewModel)
                 return view
             }
         }
@@ -404,7 +413,7 @@ class FakespotViewController:
 
     @objc
     private func closeTapped() {
-        delegate?.fakespotControllerDidDismiss()
+        delegate?.fakespotControllerDidDismiss(animated: true)
         viewModel.recordDismissTelemetry(by: .closeButton)
     }
 
@@ -433,7 +442,7 @@ class FakespotViewController:
     // MARK: - UIAdaptivePresentationControllerDelegate
 
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        delegate?.fakespotControllerDidDismiss()
+        delegate?.fakespotControllerDidDismiss(animated: true)
         let currentDetent = viewModel.getCurrentDetent(for: presentationController)
 
         if viewModel.isSwiping || currentDetent == .large {
@@ -454,16 +463,6 @@ class FakespotViewController:
         coordinator.animate(alongsideTransition: { _ in
             self.adjustLayout()
         }, completion: nil)
-    }
-
-    // MARK: Helper methods
-    private func widthOfString(_ string: String, usingFont font: UIFont) -> CGFloat {
-        let label = UILabel(frame: CGRect.zero)
-        label.text = string
-        label.font = font
-        label.adjustsFontForContentSizeCategory = true
-        label.sizeToFit()
-        return label.frame.width
     }
 
     // MARK: - UISheetPresentationControllerDelegate

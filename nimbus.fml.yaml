@@ -15,14 +15,12 @@ channels:
 include:
   - nimbus-features/addressAutofillFeature.yaml
   - nimbus-features/contextualHintFeature.yaml
-  - nimbus-features/credentialAutofillCoordinatorRefactor.yaml
   - nimbus-features/creditCardAutofillFeature.yaml
   - nimbus-features/fakespotFeature.yaml
   - nimbus-features/feltPrivacyFeature.yaml
   - nimbus-features/firefoxSuggestFeature.yaml
   - nimbus-features/generalFeatures.yaml
   - nimbus-features/homescreenFeature.yaml
-  - nimbus-features/libraryCoordinatorRefactor.yaml
   - nimbus-features/messagingFeature.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml
   - nimbus-features/qrCodeCoordinatorRefactor.yaml

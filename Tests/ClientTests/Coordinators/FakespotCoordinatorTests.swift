@@ -8,17 +8,21 @@ import WebKit
 @testable import Client
 
 final class FakespotCoordinatorTests: XCTestCase {
+    private var profile: MockProfile!
     private var mockRouter: MockRouter!
     let exampleProduct = URL(string: "https://www.amazon.com/Under-Armour-Charged-Assert-Running/dp/B087T8Q2C4")!
 
     override func setUp() {
         super.setUp()
+        self.profile = MockProfile()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         DependencyHelperMock().bootstrapDependencies()
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
     }
 
     override func tearDown() {
         super.tearDown()
+        self.profile = nil
         self.mockRouter = nil
         AppContainer.shared.reset()
     }
@@ -30,20 +34,48 @@ final class FakespotCoordinatorTests: XCTestCase {
         XCTAssertEqual(mockRouter.setRootViewControllerCalled, 0)
     }
 
-    func testFakespotStarts_presentsFakespotController() throws {
+    func testFakespotStarts_presentsFakespotControllerAsModal() throws {
         let subject = createSubject()
 
-        subject.start(productURL: exampleProduct)
+        subject.startModal(productURL: exampleProduct)
 
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is FakespotViewController)
     }
 
+    func testFakespotStarts_presentsFakespotControllerAsSidebar() throws {
+        let subject = createSubject()
+        let sidebarContainer = MockSidebarEnabledView(frame: CGRect.zero)
+        let viewController = UIViewController()
+
+        subject.startSidebar(productURL: exampleProduct,
+                             sidebarContainer: sidebarContainer,
+                             parentViewController: viewController)
+
+        XCTAssertEqual(sidebarContainer.showSidebarCalled, 1)
+    }
+
+    func testFakespotCoordinatorDelegate_CloseSidebar_callsRouterDismiss() throws {
+        let subject = createSubject()
+        let sidebarContainer = MockSidebarEnabledView(frame: CGRect.zero)
+        let viewController = UIViewController()
+
+        subject.startSidebar(productURL: exampleProduct,
+                             sidebarContainer: sidebarContainer,
+                             parentViewController: viewController)
+        subject.fakespotControllerCloseSidebar(sidebarContainer: sidebarContainer,
+                                               parentViewController: viewController)
+
+        XCTAssertEqual(sidebarContainer.hideSidebarCalled, 1)
+        XCTAssertEqual(mockRouter.dismissCalled, 1)
+        XCTAssertTrue(subject.childCoordinators.isEmpty)
+    }
+
     func testFakespotCoordinatorDelegate_didDidDismiss_callsRouterDismiss() throws {
         let subject = createSubject()
 
-        subject.start(productURL: exampleProduct)
-        subject.fakespotControllerDidDismiss()
+        subject.startModal(productURL: exampleProduct)
+        subject.fakespotControllerDidDismiss(animated: false)
 
         XCTAssertEqual(mockRouter.dismissCalled, 1)
         XCTAssertTrue(subject.childCoordinators.isEmpty)

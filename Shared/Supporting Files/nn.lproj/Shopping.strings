@@ -61,14 +61,26 @@
 /* Title for info card when the product needs analysis */
 "Shopping.InfoCard.NeedsAnalysis.Title.v120" = "Ny informasjon å vurdere";
 
+/* Description for info card when no information is available at the moment */
+"Shopping.InfoCard.NoInfoAvailableRightNow.Description.v120" = "Vi jobbar med å løyse problemet. Prøv på nytt, snart.";
+
+/* Title for info card when no information is available at the moment */
+"Shopping.InfoCard.NoInfoAvailableRightNow.Title.v120" = "Ingen informasjon tilgjengeleg akkurat no";
+
 /* Description for info card when there are not enough reviews for a product */
 "Shopping.InfoCard.NotEnoughReviews.Description.v120" = "Når dette produktet har fleire vurderingar, kan vi sjekke kvaliteten.";
+
+/* Title for info card when there are not enough reviews for a product */
+"Shopping.InfoCard.NotEnoughReviews.Title.v120" = "Ikkje nok vurderingar enno";
 
 /* Description for info card when the product is in analysis mode */
 "Shopping.InfoCard.ProgressAnalysis.Description.v120" = "Dette vil ta omlag 60 sekund.";
 
 /* Title for info card when the product is in analysis mode */
 "Shopping.InfoCard.ProgressAnalysis.Title.v120" = "Kontrollerer kvaliteten på vurderinga";
+
+/* Text for the analyzer button displayed when an analysis can be updated for a product. */
+"Shopping.NoAnalysisCard.AnalyzerButton.Title.v120" = "Kontroller kvaliteten på vurderinga";
 
 /* Text for the body label, to check the reliability of a product. */
 "Shopping.NoAnalysisCard.BodyLabel.Title.v120" = "For å vite om vurderingane av dette produktet er pålitelege, kontroller kvaliteten på vurderinga. Det tek berre omlag 60 sekund.";
@@ -87,6 +99,9 @@
 
 /* Label for the Learn more button in the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.LearnMoreButtonTitle.Title.v120" = "Les meir";
+
+/* Text for the main button of the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.MainButton.Title.v120" = "Ja, prøv det";
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
 "Shopping.OptInCard.PrivacyPolicy.Button.Title.v120" = "Personvernpraksis";

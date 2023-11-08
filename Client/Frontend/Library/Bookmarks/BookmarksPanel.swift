@@ -154,23 +154,13 @@ class BookmarksPanel: SiteTableViewController,
             guard let bookmarkFolder = self.viewModel.bookmarkFolder else { return }
 
             self.updatePanelState(newState: .bookmarks(state: .itemEditModeInvalidField))
-            if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
-                self.bookmarkCoordinatorDelegate?.showBookmarkDetail(
-                    bookmarkType: .bookmark,
-                    parentBookmarkFolder: bookmarkFolder,
-                    updatePanelState: { state in
-                        self.updatePanelState(newState: .bookmarks(state: state))
-                        self.sendPanelChangeNotification()
-                    })
-            } else {
-                let detailController = BookmarkDetailPanel(profile: self.profile,
-                                                           withNewBookmarkNodeType: .bookmark,
-                                                           parentBookmarkFolder: bookmarkFolder) { state in
+            self.bookmarkCoordinatorDelegate?.showBookmarkDetail(
+                bookmarkType: .bookmark,
+                parentBookmarkFolder: bookmarkFolder,
+                updatePanelState: { state in
                     self.updatePanelState(newState: .bookmarks(state: state))
                     self.sendPanelChangeNotification()
-                }
-                self.navigationController?.pushViewController(detailController, animated: true)
-            }
+                })
         }).items
     }
 
@@ -181,14 +171,7 @@ class BookmarksPanel: SiteTableViewController,
             guard let bookmarkFolder = self.viewModel.bookmarkFolder else { return }
 
             self.updatePanelState(newState: .bookmarks(state: .itemEditMode))
-            if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
-                self.bookmarkCoordinatorDelegate?.showBookmarkDetail(bookmarkType: .folder, parentBookmarkFolder: bookmarkFolder)
-            } else {
-                let detailController = BookmarkDetailPanel(profile: self.profile,
-                                                           withNewBookmarkNodeType: .folder,
-                                                           parentBookmarkFolder: bookmarkFolder)
-                self.navigationController?.pushViewController(detailController, animated: true)
-            }
+            self.bookmarkCoordinatorDelegate?.showBookmarkDetail(bookmarkType: .folder, parentBookmarkFolder: bookmarkFolder)
         }).items
     }
 
@@ -370,30 +353,19 @@ class BookmarksPanel: SiteTableViewController,
                 !(node is BookmarkSeparatorData),
                 isCurrentFolderEditable(at: indexPath) {
                 // Only show detail controller for editable nodes
-                if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
-                    bookmarkCoordinatorDelegate?.showBookmarkDetail(for: node, folder: bookmarkFolder)
-                    updatePanelState(newState: .bookmarks(state: .itemEditMode))
-                } else {
-                    showBookmarkDetailController(for: node, folder: bookmarkFolder)
-                }
+                bookmarkCoordinatorDelegate?.showBookmarkDetail(for: node, folder: bookmarkFolder)
+                updatePanelState(newState: .bookmarks(state: .itemEditMode))
             }
             return
         }
 
         updatePanelState(newState: .bookmarks(state: .inFolder))
-        if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
-            if let itemData = bookmarkCell as? BookmarkItemData,
-                let url = URL(string: itemData.url, invalidCharacters: false) {
-                libraryPanelDelegate?.libraryPanel(didSelectURL: url, visitType: .bookmark)
-            } else {
-                guard let folder = bookmarkCell as? FxBookmarkNode else { return }
-                bookmarkCoordinatorDelegate?.start(from: folder)
-            }
+        if let itemData = bookmarkCell as? BookmarkItemData,
+           let url = URL(string: itemData.url, invalidCharacters: false) {
+            libraryPanelDelegate?.libraryPanel(didSelectURL: url, visitType: .bookmark)
         } else {
-            bookmarkCell.didSelect(profile: profile,
-                                   libraryPanelDelegate: libraryPanelDelegate,
-                                   navigationController: navigationController,
-                                   logger: logger)
+            guard let folder = bookmarkCell as? FxBookmarkNode else { return }
+            bookmarkCoordinatorDelegate?.start(from: folder)
         }
     }
 
@@ -451,15 +423,6 @@ class BookmarksPanel: SiteTableViewController,
 
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return isCurrentFolderEditable(at: indexPath)
-    }
-
-    private func showBookmarkDetailController(for node: FxBookmarkNode, folder: FxBookmarkNode) {
-        TelemetryWrapper.recordEvent(category: .action, method: .change, object: .bookmark, value: .bookmarksPanel)
-        let detailController = BookmarkDetailPanel(profile: profile,
-                                                   bookmarkNode: node,
-                                                   parentBookmarkFolder: folder)
-        updatePanelState(newState: .bookmarks(state: .itemEditMode))
-        navigationController?.pushViewController(detailController, animated: true)
     }
 
     /// Root folders and local desktop folder cannot be moved or edited

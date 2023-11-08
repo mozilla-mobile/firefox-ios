@@ -19,6 +19,10 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
     var showTabTrayCalled = 0
     var showQrCodeCalled = 0
     var didFinishCalled = 0
+    var showFakespotFlowAsModalCalled = 0
+    var showFakespotFlowAsSidebarCalled = 0
+    var dismissFakespotModalCalled = 0
+    var dismissFakespotSidebarCalled = 0
 
     func show(settings: Route.SettingsSection) {
         showSettingsCalled += 1
@@ -58,5 +62,24 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
 
     func didFinish(from childCoordinator: Coordinator) {
         didFinishCalled += 1
+    }
+
+    func showFakespotFlowAsModal(productURL: URL) {
+        showFakespotFlowAsModalCalled += 1
+    }
+
+    func showFakespotFlowAsSidebar(productURL: URL,
+                                   sidebarContainer: Client.SidebarEnabledViewProtocol,
+                                   parentViewController: UIViewController) {
+        showFakespotFlowAsSidebarCalled += 1
+    }
+
+    func dismissFakespotModal(animated: Bool) {
+        dismissFakespotModalCalled += 1
+    }
+
+    func dismissFakespotSidebar(sidebarContainer: Client.SidebarEnabledViewProtocol,
+                                parentViewController: UIViewController) {
+        dismissFakespotSidebarCalled += 1
     }
 }

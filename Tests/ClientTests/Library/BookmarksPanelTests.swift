@@ -70,13 +70,6 @@ class BookmarksPanelTests: XCTestCase {
         let viewModel = photonSheet.viewModel.actions[0][0].items[0]
         _ = viewModel.tapHandler!(viewModel)
 
-        // If the library coordinator is enabled then the coordinator is responsible for the navigation.
-        // So the spy navigation controller will not push view controllers but the coordinator will do it.
-        if !CoordinatorFlagManager.isLibraryCoordinatorEnabled {
-            XCTAssertNotNil(mockNavigationController.pushedViewController)
-            XCTAssertTrue(mockNavigationController.pushedViewController is BookmarkDetailPanel)
-        }
-
         XCTAssertEqual(panel.state, .bookmarks(state: .itemEditModeInvalidField))
         let toolbarItems = panel.bottomToolbarItems
         // We need to account for the flexibleSpace item
@@ -97,13 +90,6 @@ class BookmarksPanelTests: XCTestCase {
         // Fake clicking on new folder action
         let viewModel = photonSheet.viewModel.actions[0][1].items[0]
         _ = viewModel.tapHandler!(viewModel)
-
-        // If the library coordinator is enabled then the coordinator is responsible for the navigation.
-        // So the spy navigation controller will not push view controllers but the coordinator will do it.
-        if !CoordinatorFlagManager.isLibraryCoordinatorEnabled {
-            XCTAssertNotNil(mockNavigationController.pushedViewController)
-            XCTAssertTrue(mockNavigationController.pushedViewController is BookmarkDetailPanel)
-        }
 
         XCTAssertEqual(panel.state, .bookmarks(state: .itemEditMode))
         let toolbarItems = panel.bottomToolbarItems
@@ -204,6 +190,110 @@ class BookmarksPanelTests: XCTestCase {
 
         panel.handleRightTopButton()
         XCTAssertEqual(panel.state, .bookmarks(state: .itemEditModeInvalidField), "No state change when right top button is disabled")
+    }
+
+    func testBookmarksButtons_MainFolder() {
+        let panel = createPanel()
+
+        let toolbarItems = panel.bottomToolbarItems
+        // We need to account for the flexibleSpace item
+        XCTAssertEqual(toolbarItems.count, 2, "Expected Edit button and flexibleSpace")
+        XCTAssertEqual(toolbarItems[1].title, "Edit")
+    }
+
+    func testBookmarksButtons_SubFolder() {
+        let panel = createPanel()
+
+        panel.updatePanelState(newState: .bookmarks(state: .inFolder))
+
+        let toolbarItems = panel.bottomToolbarItems
+        // We need to account for the flexibleSpace item
+        XCTAssertEqual(toolbarItems.count, 2, "Expected Edit button and flexibleSpace")
+        XCTAssertEqual(toolbarItems[1].title, "Edit")
+    }
+
+    func testBookmarks_FolderEditMode() {
+        let panel = createPanel()
+
+        panel.updatePanelState(newState: .bookmarks(state: .inFolder))
+        panel.enableEditMode()
+
+        let toolbarItems = panel.bottomToolbarItems
+        // We need to account for the flexibleSpace item
+        XCTAssertEqual(toolbarItems.count, 3, "Expected Add, Done button and flexibleSpace")
+    }
+
+    func testBookmarks_ItemEditMode() {
+        let panel = createPanel()
+
+        panel.updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
+        panel.presentInFolderActions()
+        panel.handleItemEditMode()
+
+        let toolbarItems = panel.bottomToolbarItems
+        // We need to account for the flexibleSpace item
+        XCTAssertEqual(toolbarItems.count, 3, "Expected Edit button and flexibleSpace")
+    }
+
+    func testBookmarks_MainFolderLeavingEdit() {
+        let panel = createPanel()
+
+        panel.updatePanelState(newState: .bookmarks(state: .itemEditMode))
+        panel.disableEditMode()
+
+        let toolbarItems = panel.bottomToolbarItems
+        // We need to account for the flexibleSpace item
+        XCTAssertEqual(toolbarItems.count, 2, "Expected Edit button and flexibleSpace")
+    }
+
+    func testBookmarksBack_ForInFolder() {
+        let panel = createPanel()
+
+        panel.updatePanelState(newState: .bookmarks(state: .inFolder))
+        panel.handleLeftTopButton()
+
+        let toolbarItems = panel.bottomToolbarItems
+        // We need to account for the flexibleSpace item
+        XCTAssertEqual(toolbarItems.count, 2, "Expected Edit button and flexibleSpace")
+    }
+
+    func testBookmarksBack_ForItemEditMode() {
+        let panel = createPanel()
+
+        panel.updatePanelState(newState: .bookmarks(state: .itemEditMode))
+        panel.handleLeftTopButton()
+
+        let toolbarItems = panel.bottomToolbarItems
+        // We need to account for the flexibleSpace item
+        XCTAssertEqual(toolbarItems.count, 3, "Expected Edit button and flexibleSpace")
+    }
+
+    func testBookmarksShouldDismissOnDone_ForMain() {
+        let panel = createPanel()
+
+        panel.updatePanelState(newState: .bookmarks(state: .mainView))
+        XCTAssertTrue(panel.shouldDismissOnDone())
+    }
+
+    func testBookmarksShouldDismissOnDone_ForInFolder() {
+        let panel = createPanel()
+
+        panel.updatePanelState(newState: .bookmarks(state: .inFolder))
+        XCTAssertTrue(panel.shouldDismissOnDone())
+    }
+
+    func testBookmarksShouldDismissOnDone_ForFolderEditMode() {
+        let panel = createPanel()
+
+        panel.updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
+        XCTAssertTrue(panel.shouldDismissOnDone())
+    }
+
+    func testBookmarksShouldDismissOnDone_ForItemEditMode() {
+        let panel = createPanel()
+
+        panel.updatePanelState(newState: .bookmarks(state: .itemEditMode))
+        XCTAssertFalse(panel.shouldDismissOnDone())
     }
 }
 

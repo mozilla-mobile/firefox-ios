@@ -124,7 +124,34 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidPressShopping(_ urlBar: URLBarView, shoppingButton: UIButton) {
         guard let productURL = urlBar.currentURL else { return }
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingButton)
-        navigationHandler?.showFakespotFlow(productURL: productURL)
+
+        let dismissedFakespot = dismissFakespotIfNeeded()
+        if !dismissedFakespot {
+            handleFakespotFlow(productURL: productURL)
+        }
+    }
+
+    internal func dismissFakespotIfNeeded(animated: Bool = true) -> Bool {
+        if contentStackView.isSidebarVisible {
+            // hide sidebar as user tapped on shopping icon for a second time
+            navigationHandler?.dismissFakespotSidebar(sidebarContainer: contentStackView, parentViewController: self)
+            return true
+        } else if presentedViewController as? FakespotViewController != nil {
+            // dismiss modal as user tapped on shopping icon for a second time
+            navigationHandler?.dismissFakespotModal(animated: animated)
+            return true
+        }
+        return false
+    }
+
+    internal func handleFakespotFlow(productURL: URL, viewSize: CGSize? = nil) {
+        if FakespotUtils().shouldDisplayInSidebar(viewSize: viewSize) {
+            navigationHandler?.showFakespotFlowAsSidebar(productURL: productURL,
+                                                         sidebarContainer: contentStackView,
+                                                         parentViewController: self)
+        } else {
+            navigationHandler?.showFakespotFlowAsModal(productURL: productURL)
+        }
     }
 
     func urlBarPresentCFR(at sourceView: UIView) {
@@ -154,7 +181,7 @@ extension BrowserViewController: URLBarDelegate {
             andActionForButton: { [weak self] in
                 guard let self else { return }
                 guard let productURL = self.urlBar.currentURL else { return }
-                self.navigationHandler?.showFakespotFlow(productURL: productURL)
+                self.handleFakespotFlow(productURL: productURL)
             },
             overlayState: overlayManager)
     }

@@ -312,26 +312,12 @@ class DownloadsPanel: UIViewController,
         if let downloadedFile = viewModel.downloadedFileForIndexPath(indexPath) {
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .download, value: .downloadsPanel)
             if downloadedFile.mimeType == MIMEType.Calendar {
-                if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
-                    navigationHandler?.showDocument(file: downloadedFile)
-                } else {
-                    let docController = UIDocumentInteractionController(url: downloadedFile.path)
-                    docController.delegate = self
-                    docController.presentPreview(animated: true)
-                }
+                navigationHandler?.showDocument(file: downloadedFile)
                 return
             }
 
-            if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
-                let cell = tableView.cellForRow(at: indexPath)
-                navigationHandler?.handleFile(downloadedFile, sourceView: cell ?? UIView())
-            } else {
-                guard downloadedFile.canShowInWebView else {
-                    shareDownloadedFile(downloadedFile, indexPath: indexPath)
-                    return
-                }
-                libraryPanelDelegate?.libraryPanel(didSelectURL: downloadedFile.path, visitType: VisitType.typed)
-            }
+            let cell = tableView.cellForRow(at: indexPath)
+            navigationHandler?.handleFile(downloadedFile, sourceView: cell ?? UIView())
         }
     }
 

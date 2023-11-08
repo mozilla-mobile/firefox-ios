@@ -11,24 +11,13 @@ extension LibraryViewController {
         guard let navController = children.first as? UINavigationController else { return }
 
         navController.popViewController(animated: true)
-        var panel: LibraryPanel?
-        if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
-            panel = getCurrentPanel()
-        } else {
-            panel = viewModel.currentPanel
-        }
+        var panel = getCurrentPanel()
         panel?.handleLeftTopButton()
     }
 
     @objc
     func topRightButtonAction() {
-        var panel: LibraryPanel?
-        if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
-            panel = getCurrentPanel()
-        } else {
-            panel = viewModel.currentPanel
-        }
-        guard let panel = panel else { return }
+        guard let panel = getCurrentPanel() else { return }
 
         if panel.shouldDismissOnDone() {
             dismiss(animated: true, completion: nil)

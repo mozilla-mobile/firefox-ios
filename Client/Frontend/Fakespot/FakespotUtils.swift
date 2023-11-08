@@ -35,6 +35,15 @@ public struct FakespotUtils: FeatureFlaggable {
         return URL(string: "https://www.fakespot.com/our-mission?utm_source=review-checker&utm_campaign=fakespot-by-mozilla&utm_medium=inproduct&utm_term=core-sheet")
     }
 
+    static func widthOfString(_ string: String, usingFont font: UIFont) -> CGFloat {
+        let label = UILabel(frame: CGRect.zero)
+        label.text = string
+        label.font = font
+        label.adjustsFontForContentSizeCategory = true
+        label.sizeToFit()
+        return label.frame.width
+    }
+
     func addSettingTelemetry(profile: Profile = AppContainer.shared.resolve()) {
         let isFeatureEnabled = featureFlags.isFeatureEnabled(.fakespotFeature, checking: .buildOnly)
         TelemetryWrapper.recordEvent(
@@ -65,5 +74,20 @@ public struct FakespotUtils: FeatureFlaggable {
                 TelemetryWrapper.ExtraKey.Shopping.isUserOnboarded.rawValue: isUserOnboarded
             ]
         )
+    }
+
+    func isPadInMultitasking(device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
+                             window: UIWindow? = UIWindow.attachedKeyWindow,
+                             viewSize: CGSize?) -> Bool {
+        guard device == .pad, let window else { return false }
+
+        let frameSize = viewSize ?? window.frame.size
+        return frameSize.width != window.screen.bounds.width || frameSize.height != window.screen.bounds.height
+    }
+
+    func shouldDisplayInSidebar(device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
+                                window: UIWindow? = UIWindow.attachedKeyWindow,
+                                viewSize: CGSize? = nil) -> Bool {
+        return device == .pad && !isPadInMultitasking(device: device, window: window, viewSize: viewSize)
     }
 }

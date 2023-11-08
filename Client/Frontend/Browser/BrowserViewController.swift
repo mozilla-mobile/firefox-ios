@@ -38,7 +38,6 @@ class BrowserViewController: UIViewController,
     weak var browserDelegate: BrowserDelegate?
     weak var navigationHandler: BrowserNavigationHandler?
 
-    var libraryViewController: LibraryViewController?
     var urlBar: URLBarView!
     var urlBarHeightConstraint: Constraint!
     var clipboardBarDisplayHandler: ClipboardBarDisplayHandler?
@@ -96,6 +95,9 @@ class BrowserViewController: UIViewController,
     var bottomContentStackView: BaseAlphaStackView = .build { stackview in
         stackview.isClearBackground = true
     }
+
+    // The content stack view contains the contentContainer with homepage or browser and the shopping sidebar
+    var contentStackView: SidebarEnabledView = .build()
 
     // The content container contains the homepage or webview. Embeded by the coordinator.
     var contentContainer: ContentContainer = .build { _ in }
@@ -392,7 +394,7 @@ class BrowserViewController: UIViewController,
 
         view.bringSubviewToFront(webViewContainerBackdrop)
         webViewContainerBackdrop.alpha = 1
-        contentContainer.alpha = 0
+        contentStackView.alpha = 0
         urlBar.locationContainer.alpha = 0
         presentedViewController?.popoverPresentationController?.containerView?.alpha = 0
         presentedViewController?.view.alpha = 0
@@ -407,7 +409,7 @@ class BrowserViewController: UIViewController,
             delay: 0,
             options: UIView.AnimationOptions(),
             animations: {
-                self.contentContainer.alpha = 1
+                self.contentStackView.alpha = 1
                 self.urlBar.locationContainer.alpha = 1
                 self.presentedViewController?.popoverPresentationController?.containerView?.alpha = 1
                 self.presentedViewController?.view.alpha = 1
@@ -428,8 +430,8 @@ class BrowserViewController: UIViewController,
         updateWallpaperMetadata()
 
         // When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
-        // So, we delay five seconds because we need to wait for `Profile` to be initialized and setup for use.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
+        // Make sure that our startup flow is completed and the Profile has been sync'd (at least once) before we load.
+        AppEventQueue.wait(for: [.startupFlowComplete, .profileSyncing, .tabRestoration]) { [weak self] in
             self?.backgroundTabLoader.loadBackgroundTabs()
         }
     }
@@ -573,7 +575,9 @@ class BrowserViewController: UIViewController,
         webViewContainerBackdrop.backgroundColor = UIColor.Photon.Ink90
         webViewContainerBackdrop.alpha = 0
         view.addSubview(webViewContainerBackdrop)
-        view.addSubview(contentContainer)
+        view.addSubview(contentStackView)
+
+        contentStackView.addArrangedSubview(contentContainer)
 
         topTouchArea = UIButton()
         topTouchArea.isAccessibilityElement = false
@@ -692,12 +696,25 @@ class BrowserViewController: UIViewController,
 
         dismissVisibleMenus()
 
+        var fakespotNeedsUpdate = false
+        if urlBar.currentURL != nil {
+            fakespotNeedsUpdate = contentStackView.isSidebarVisible != FakespotUtils().shouldDisplayInSidebar(viewSize: size)
+
+            if fakespotNeedsUpdate {
+                _ = dismissFakespotIfNeeded(animated: false)
+            }
+        }
+
         coordinator.animate(alongsideTransition: { context in
             self.scrollController.updateMinimumZoom()
             self.topTabsViewController?.scrollToCurrentTab(false, centerCell: false)
             if let popover = self.displayedPopoverController {
                 self.updateDisplayedPopoverProperties?()
                 self.present(popover, animated: true, completion: nil)
+            }
+
+            if let productURL = self.urlBar.currentURL, fakespotNeedsUpdate {
+                self.handleFakespotFlow(productURL: productURL)
             }
         }, completion: { _ in
             self.scrollController.setMinimumZoom()
@@ -732,10 +749,10 @@ class BrowserViewController: UIViewController,
         }
 
         NSLayoutConstraint.activate([
-            contentContainer.topAnchor.constraint(equalTo: header.bottomAnchor),
-            contentContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            contentContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            contentContainer.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor),
+            contentStackView.topAnchor.constraint(equalTo: header.bottomAnchor),
+            contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            contentStackView.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor),
         ])
 
         updateHeaderConstraints()
@@ -851,10 +868,6 @@ class BrowserViewController: UIViewController,
     }
 
     fileprivate func showRestoreTabsAlert() {
-        guard tabManager.hasTabsToRestoreAtStartup() else {
-            tabManager.selectTab(tabManager.addTab())
-            return
-        }
         let alert = UIAlertController.restoreTabsAlert(
             okayCallback: { _ in
                 let extra = [TelemetryWrapper.EventExtraKey.isRestoreTabsStarted.rawValue: true]
@@ -874,6 +887,7 @@ class BrowserViewController: UIViewController,
                 self.isCrashAlertShowing = false
                 self.tabManager.selectTab(self.tabManager.addTab())
                 self.openUrlAfterRestore()
+                AppEventQueue.signal(event: .tabRestoration)
             }
         )
         self.present(alert, animated: true, completion: nil)
@@ -986,36 +1000,9 @@ class BrowserViewController: UIViewController,
     }
 
     func showLibrary(panel: LibraryPanelType) {
-        if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
-            DispatchQueue.main.async {
-                self.navigationHandler?.show(homepanelSection: panel.homepanelSection)
-            }
-        } else {
-            self.showLegacyLibrary(panel: panel)
+        DispatchQueue.main.async {
+            self.navigationHandler?.show(homepanelSection: panel.homepanelSection)
         }
-    }
-
-    func showLegacyLibrary(panel: LibraryPanelType? = nil) {
-        if let presentedViewController = self.presentedViewController {
-            presentedViewController.dismiss(animated: true, completion: nil)
-        }
-
-        // We should not set libraryViewController to nil because the library panel losses the currentState
-        let libraryViewController = self.libraryViewController ?? LibraryViewController(profile: profile, tabManager: tabManager)
-        libraryViewController.delegate = self
-        self.libraryViewController = libraryViewController
-
-        libraryViewController.setupOpenPanel(panelType: panel ?? . bookmarks)
-
-        // Reset history panel pagination to get latest history visit
-        if let historyPanel = libraryViewController.viewModel.panelDescriptors.first(where: {$0.panelType == .history}),
-           let vcPanel = historyPanel.viewController as? HistoryPanel {
-            vcPanel.viewModel.shouldResetHistory = true
-        }
-
-        let controller: DismissableNavigationViewController
-        controller = DismissableNavigationViewController(rootViewController: libraryViewController)
-        self.present(controller, animated: true, completion: nil)
     }
 
     fileprivate func createSearchControllerIfNeeded() {
@@ -1727,29 +1714,15 @@ class BrowserViewController: UIViewController,
             case .deviceOwnerAuthenticated:
                 // Note: Since we are injecting card info, we pass on the frame
                 // for special iframe cases
-                if CoordinatorFlagManager.isCredentialAutofillCoordinatorEnabled {
-                    self.navigationHandler?.showCreditCardAutofill(creditCard: nil,
-                                                                   decryptedCard: nil,
-                                                                   viewType: .selectSavedCard,
-                                                                   frame: frame,
-                                                                   alertContainer: self.contentContainer)
-                } else {
-                    self.showBottomSheetCardViewController(creditCard: nil,
-                                                           decryptedCard: nil,
-                                                           viewType: .selectSavedCard,
-                                                           frame: frame)
-                }
+                self.navigationHandler?.showCreditCardAutofill(creditCard: nil,
+                                                               decryptedCard: nil,
+                                                               viewType: .selectSavedCard,
+                                                               frame: frame,
+                                                               alertContainer: self.contentContainer)
             case .deviceOwnerFailed:
                 break // Keep showing bvc
             case .passCodeRequired:
-                if CoordinatorFlagManager.isCredentialAutofillCoordinatorEnabled {
-                    self.navigationHandler?.showRequiredPassCode()
-                } else {
-                    let passcodeViewController = DevicePasscodeRequiredViewController()
-                    passcodeViewController.profile = self.profile
-                    self.navigationController?.pushViewController(passcodeViewController,
-                                                                  animated: true)
-                }
+                self.navigationHandler?.showRequiredPassCode()
             }
         }
     }
@@ -1759,17 +1732,11 @@ class BrowserViewController: UIViewController,
             existingCard, error in
             guard let existingCard = existingCard else {
                 DispatchQueue.main.async {
-                    if CoordinatorFlagManager.isCredentialAutofillCoordinatorEnabled {
-                        self.navigationHandler?.showCreditCardAutofill(creditCard: nil,
-                                                                       decryptedCard: fieldValues,
-                                                                       viewType: .save,
-                                                                       frame: nil,
-                                                                       alertContainer: self.contentContainer)
-                    } else {
-                        self.showBottomSheetCardViewController(creditCard: nil,
-                                                               decryptedCard: fieldValues,
-                                                               viewType: .save)
-                    }
+                    self.navigationHandler?.showCreditCardAutofill(creditCard: nil,
+                                                                   decryptedCard: fieldValues,
+                                                                   viewType: .save,
+                                                                   frame: nil,
+                                                                   alertContainer: self.contentContainer)
                 }
                 return
             }
@@ -1777,17 +1744,11 @@ class BrowserViewController: UIViewController,
             // card already saved should update if any of its other values are different
             if !fieldValues.isEqualToCreditCard(creditCard: existingCard) {
                 DispatchQueue.main.async {
-                    if CoordinatorFlagManager.isCredentialAutofillCoordinatorEnabled {
-                        self.navigationHandler?.showCreditCardAutofill(creditCard: existingCard,
-                                                                       decryptedCard: fieldValues,
-                                                                       viewType: .update,
-                                                                       frame: nil,
-                                                                       alertContainer: self.contentContainer)
-                    } else {
-                        self.showBottomSheetCardViewController(creditCard: existingCard,
-                                                               decryptedCard: fieldValues,
-                                                               viewType: .update)
-                    }
+                    self.navigationHandler?.showCreditCardAutofill(creditCard: existingCard,
+                                                                   decryptedCard: fieldValues,
+                                                                   viewType: .update,
+                                                                   frame: nil,
+                                                                   alertContainer: self.contentContainer)
                 }
             }
         }
@@ -2309,72 +2270,6 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
     // not as a full-screen modal, which is the default on compact device classes.
     func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
         return .none
-    }
-}
-
-extension BrowserViewController {
-    public func showBottomSheetCardViewController(creditCard: CreditCard?,
-                                                  decryptedCard: UnencryptedCreditCardFields?,
-                                                  viewType state: CreditCardBottomSheetState,
-                                                  frame: WKFrameInfo? = nil) {
-        let creditCardControllerViewModel = CreditCardBottomSheetViewModel(profile: profile,
-                                                                           creditCard: creditCard,
-                                                                           decryptedCreditCard: decryptedCard,
-                                                                           state: state)
-        let viewController = CreditCardBottomSheetViewController(viewModel: creditCardControllerViewModel)
-        viewController.didTapYesClosure = { error in
-            if let error = error {
-                SimpleToast().showAlertWithText(error.localizedDescription,
-                                                bottomContainer: self.contentContainer,
-                                                theme: self.themeManager.currentTheme)
-            } else {
-                // Save a card telemetry
-                if state == .save {
-                    TelemetryWrapper.recordEvent(category: .action,
-                                                 method: .tap,
-                                                 object: .creditCardSavePromptCreate)
-                }
-
-                // Save or update a card toast message
-                let saveSuccessMessage: String = .CreditCard.RememberCreditCard.CreditCardSaveSuccessToastMessage
-                let updateSuccessMessage: String = .CreditCard.UpdateCreditCard.CreditCardUpdateSuccessToastMessage
-                let toastMessage: String = state == .save ? saveSuccessMessage : updateSuccessMessage
-                SimpleToast().showAlertWithText(toastMessage,
-                                                bottomContainer: self.contentContainer,
-                                                theme: self.themeManager.currentTheme)
-            }
-        }
-
-        viewController.didTapManageCardsClosure = {
-            self.showCreditCardSettings()
-        }
-
-        viewController.didSelectCreditCardToFill = { [unowned self] plainTextCard in
-            guard let currentTab = self.tabManager.selectedTab else {
-                return
-            }
-            CreditCardHelper.injectCardInfo(logger: self.logger,
-                                            card: plainTextCard,
-                                            tab: currentTab,
-                                            frame: frame) { error in
-                guard let error = error else {
-                    return
-                }
-                self.logger.log("Credit card bottom sheet injection \(error)",
-                                level: .debug,
-                                category: .webview)
-            }
-        }
-
-        var bottomSheetViewModel = BottomSheetViewModel(closeButtonA11yLabel: .CloseButtonTitle)
-        bottomSheetViewModel.shouldDismissForTapOutside = false
-
-        let bottomSheetVC = BottomSheetViewController(
-            viewModel: bottomSheetViewModel,
-            childViewController: viewController
-        )
-
-        self.present(bottomSheetVC, animated: true, completion: nil)
     }
 }
 

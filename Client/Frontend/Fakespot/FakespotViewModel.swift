@@ -38,7 +38,13 @@ class FakespotViewModel {
                 Self.recordNoReviewReliabilityAvailableTelemetry()
             }
 
-            if product.reportProductInStockCardVisible && shoppingProduct.isProductBackInStockFeatureEnabled {
+            if product.infoComingSoonCardVisible && shoppingProduct.isProductBackInStockFeatureEnabled {
+                return [
+                    .messageCard(.infoComingSoonCard),
+                    .qualityDeterminationCard,
+                    .settingsCard
+                ]
+            } else if product.reportProductInStockCardVisible && shoppingProduct.isProductBackInStockFeatureEnabled {
                 return [
                     .messageCard(.reportProductInStock),
                     .qualityDeterminationCard,
@@ -142,6 +148,7 @@ class FakespotViewModel {
             case needsAnalysis
             case analysisInProgress
             case reportProductInStock
+            case infoComingSoonCard
         }
     }
 
@@ -255,6 +262,24 @@ class FakespotViewModel {
         a11yTitleIdentifier: AccessibilityIdentifiers.Shopping.ReportProductInStockCard.title,
         a11yDescriptionIdentifier: AccessibilityIdentifiers.Shopping.ReportProductInStockCard.description,
         a11yPrimaryActionIdentifier: AccessibilityIdentifiers.Shopping.ReportProductInStockCard.primaryAction
+    )
+
+    lazy var reportingProductFeedbackViewModel = FakespotMessageCardViewModel(
+        type: .info,
+        title: .Shopping.InfoCardReportSubmittedByCurrentUserTitle,
+        description: .Shopping.InfoCardReportSubmittedByCurrentUserDescription,
+        a11yCardIdentifier: AccessibilityIdentifiers.Shopping.ReportingProductFeedbackCard.card,
+        a11yTitleIdentifier: AccessibilityIdentifiers.Shopping.ReportingProductFeedbackCard.title,
+        a11yDescriptionIdentifier: AccessibilityIdentifiers.Shopping.ReportingProductFeedbackCard.description
+    )
+
+    lazy var infoComingSoonCardViewModel = FakespotMessageCardViewModel(
+        type: .info,
+        title: .Shopping.InfoCardInfoComingSoonTitle,
+        description: .Shopping.InfoCardInfoComingSoonDescription,
+        a11yCardIdentifier: AccessibilityIdentifiers.Shopping.InfoComingSoonCard.card,
+        a11yTitleIdentifier: AccessibilityIdentifiers.Shopping.InfoComingSoonCard.title,
+        a11yDescriptionIdentifier: AccessibilityIdentifiers.Shopping.InfoComingSoonCard.description
     )
 
     let settingsCardViewModel = FakespotSettingsCardViewModel()

@@ -19,7 +19,7 @@ class TabDisplayView: UIView,
         case tabs
     }
 
-    private(set) var state: TabTrayState
+    private(set) var state: TabViewState
     private var inactiveTabsSectionManager: InactiveTabsSectionManager
     private var tabsSectionManager: TabsSectionManager
     var theme: Theme?
@@ -55,7 +55,7 @@ class TabDisplayView: UIView,
         return collectionView
     }()
 
-    public init(state: TabTrayState) {
+    public init(state: TabViewState) {
         self.state = state
         self.inactiveTabsSectionManager = InactiveTabsSectionManager()
         self.tabsSectionManager = TabsSectionManager()

@@ -439,11 +439,7 @@ class ReadingListPanel: UITableViewController,
             profile.readingList.updateRecord(record, unread: false)
             // Reading list items are closest in concept to bookmarks.
             let visitType = VisitType.bookmark
-            if CoordinatorFlagManager.isLibraryCoordinatorEnabled {
-                navigationHandler?.openUrl(encodedURL, visitType: visitType)
-            } else {
-                libraryPanelDelegate?.libraryPanel(didSelectURL: encodedURL, visitType: visitType)
-            }
+            navigationHandler?.openUrl(encodedURL, visitType: visitType)
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: .readingListItem)
         }
     }

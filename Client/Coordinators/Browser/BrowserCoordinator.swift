@@ -160,7 +160,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - Route handling
 
-    override func handle(route: Route) -> Bool {
+    override func canHandle(route: Route) -> Bool {
         guard browserIsReady, !tabManager.isRestoringTabs else {
             let readyMessage = "browser is ready? \(browserIsReady)"
             let restoringMessage = "is restoring tabs? \(tabManager.isRestoringTabs)"
@@ -170,46 +170,51 @@ class BrowserCoordinator: BaseCoordinator,
             return false
         }
 
+        switch route {
+        case .searchQuery, .search, .searchURL, .glean, .homepanel, .action, .fxaSignIn, .defaultBrowser:
+            return true
+        case let .settings(section):
+            return canHandleSettings(with: section)
+        }
+    }
+
+    override func handle(route: Route) {
+        guard browserIsReady, !tabManager.isRestoringTabs else {
+            return
+        }
+
         logger.log("Handling a route", level: .info, category: .coordinator)
         switch route {
         case let .searchQuery(query):
             handle(query: query)
-            return true
 
         case let .search(url, isPrivate, options):
             handle(url: url, isPrivate: isPrivate, options: options)
-            return true
 
         case let .searchURL(url, tabId):
             handle(searchURL: url, tabId: tabId)
-            return true
 
         case let .glean(url):
             glean.handleDeeplinkUrl(url: url)
-            return true
 
         case let .homepanel(section):
             handle(homepanelSection: section)
-            return true
 
         case let .settings(section):
-            return handleSettings(with: section)
+            handleSettings(with: section)
 
         case let .action(routeAction):
             switch routeAction {
             case .closePrivateTabs:
                 handleClosePrivateTabs()
-                return true
             case .showQRCode:
                 handleQRCode()
-                return true
             case .showIntroOnboarding:
-                return showIntroOnboarding()
+                showIntroOnboarding()
             }
 
         case let .fxaSignIn(params):
             handle(fxaParams: params)
-            return true
 
         case let .defaultBrowser(section):
             switch section {
@@ -218,15 +223,13 @@ class BrowserCoordinator: BaseCoordinator,
             case .tutorial:
                 startLaunch(with: .defaultBrowser)
             }
-            return true
         }
     }
 
-    private func showIntroOnboarding() -> Bool {
+    private func showIntroOnboarding() {
         let introManager = IntroScreenManager(prefs: profile.prefs)
         let launchType = LaunchType.intro(manager: introManager)
         startLaunch(with: launchType)
-        return true
     }
 
     private func handleQRCode() {
@@ -272,11 +275,17 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.presentSignInViewController(fxaParams)
     }
 
-    private func handleSettings(with section: Route.SettingsSection) -> Bool {
+    private func canHandleSettings(with section: Route.SettingsSection) -> Bool {
         guard !childCoordinators.contains(where: { $0 is SettingsCoordinator}) else {
             return false // route is handled with existing child coordinator
         }
+        return true
+    }
 
+    private func handleSettings(with section: Route.SettingsSection) {
+        guard !childCoordinators.contains(where: { $0 is SettingsCoordinator}) else {
+            return // route is handled with existing child coordinator
+        }
         let navigationController = ThemedNavigationController()
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
         let modalPresentationStyle: UIModalPresentationStyle = isPad ? .fullScreen: .formSheet
@@ -291,7 +300,6 @@ class BrowserCoordinator: BaseCoordinator,
         router.present(navigationController) { [weak self] in
             self?.didFinishSettings(from: settingsCoordinator)
         }
-        return true
     }
 
     private func showLibrary(with homepanelSection: Route.HomepanelSection) {
@@ -364,14 +372,14 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func settingsOpenPage(settings: Route.SettingsSection) {
-        _ = handleSettings(with: settings)
+        handleSettings(with: settings)
     }
 
     // MARK: - BrowserNavigationHandler
 
     func show(settings: Route.SettingsSection) {
         presentWithModalDismissIfNeeded {
-            _ = self.handleSettings(with: settings)
+            self.handleSettings(with: settings)
         }
     }
 
@@ -395,14 +403,44 @@ class BrowserCoordinator: BaseCoordinator,
         showETPMenu(sourceView: sourceView)
     }
 
-    func showFakespotFlow(productURL: URL) {
-        guard !childCoordinators.contains(where: { $0 is FakespotCoordinator}) else {
-            return // flow is already handled
+    func showFakespotFlowAsModal(productURL: URL) {
+        guard let coordinator = makeFakespotCoordinator() else { return }
+        coordinator.startModal(productURL: productURL)
+    }
+
+    func showFakespotFlowAsSidebar(productURL: URL,
+                                   sidebarContainer: SidebarEnabledViewProtocol,
+                                   parentViewController: UIViewController) {
+        guard let coordinator = makeFakespotCoordinator() else { return }
+        coordinator.startSidebar(productURL: productURL,
+                                 sidebarContainer: sidebarContainer,
+                                 parentViewController: parentViewController)
+    }
+
+    func dismissFakespotModal(animated: Bool = true) {
+        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator}) as? FakespotCoordinator else {
+            return // there is no modal to close
         }
+        fakespotCoordinator.fakespotControllerDidDismiss(animated: animated)
+    }
+
+    func dismissFakespotSidebar(sidebarContainer: SidebarEnabledViewProtocol, parentViewController: UIViewController) {
+        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator}) as? FakespotCoordinator else {
+            return // there is no sidebar to close
+        }
+        fakespotCoordinator.fakespotControllerCloseSidebar(sidebarContainer: sidebarContainer,
+                                                           parentViewController: parentViewController)
+    }
+
+    private func makeFakespotCoordinator() -> FakespotCoordinator? {
+        guard !childCoordinators.contains(where: { $0 is FakespotCoordinator}) else {
+            return nil // flow is already handled
+        }
+
         let coordinator = FakespotCoordinator(router: router)
         coordinator.parentCoordinator = self
         add(child: coordinator)
-        coordinator.start(productURL: productURL)
+        return coordinator
     }
 
     func showShareExtension(url: URL, sourceView: UIView, toastContainer: UIView, popoverArrowDirection: UIPopoverArrowDirection) {
@@ -471,13 +509,11 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - ParentCoordinatorDelegate
-
     func didFinish(from childCoordinator: Coordinator) {
         remove(child: childCoordinator)
     }
 
     // MARK: - TabManagerDelegate
-
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
         // Once tab restore is made, if there's any saved route we make sure to call it
         if let savedRoute {
