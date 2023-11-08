@@ -437,7 +437,7 @@ class BrowserViewController: UIViewController,
         didStartAtHome = tabManager.startAtHomeCheck()
         if didStartAtHome {
             guard presentedViewController != nil else { return }
-                dismissVC()
+            dismissVC()
         }
 
         // When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
