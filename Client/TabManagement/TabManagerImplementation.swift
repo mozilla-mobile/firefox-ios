@@ -56,7 +56,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         else {
             if tabs.isEmpty {
                 let newTab = addTab()
-                super.selectTab(newTab)
+                selectTab(newTab)
             }
             return
         }
@@ -376,7 +376,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         }
         if let tab = selectedTab {
             TabEvent.post(.didGainFocus, for: tab)
-            tab.applyTheme()
         }
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .tab)
 
