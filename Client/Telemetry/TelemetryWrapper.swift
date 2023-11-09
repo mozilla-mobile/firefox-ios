@@ -415,6 +415,7 @@ extension TelemetryWrapper {
         case shoppingPoweredByFakespotLabel = "shopping-powered-by-fakespot-label"
         case shoppingNoAnalysisCardViewPrimaryButton = "shopping-no-analysis-card-view-primary-button"
         case shoppingNeedsAnalysisCardViewPrimaryButton = "shopping-needs-analysis-card-view-primary-button"
+        case shoppingProductBackInStockButton = "shopping-product-back-in-stock-button"
         case shoppingSurfaceStaleAnalysisShown = "shopping-surface-stale-analysis-shown"
         case shoppingNimbusDisabled = "shopping-nimbus-disabled"
         case shoppingComponentOptedOut = "shopping-component-opted-out"
@@ -1196,6 +1197,8 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.surfaceAnalyzeReviewsNoneAvailableClicked.record()
         case (.action, .tap, .shoppingNeedsAnalysisCardViewPrimaryButton, _, _):
             GleanMetrics.Shopping.surfaceReanalyzeClicked.record()
+        case (.action, .tap, .shoppingProductBackInStockButton, _, _):
+            GleanMetrics.Shopping.surfaceReactivatedButtonClicked.record()
         case (.action, .navigate, .shoppingBottomSheet, _, _):
             GleanMetrics.Shopping.surfaceNoReviewReliabilityAvailable.record()
         case (.action, .view, .shoppingSurfaceStaleAnalysisShown, _, _):
