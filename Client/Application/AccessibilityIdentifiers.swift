@@ -44,6 +44,10 @@ public struct AccessibilityIdentifiers {
         }
     }
 
+    struct ContextualHints {
+        static let actionButton = "ContextualHints.ActionButton"
+    }
+
     struct FirefoxHomepage {
         static let collectionView = "FxCollectionView"
 
