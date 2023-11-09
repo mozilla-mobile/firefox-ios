@@ -12,17 +12,16 @@ import Foundation
  */
 typealias SnackBarCallback = (_ bar: SnackBar) -> Void
 class SnackButton: UIButton, ThemeApplicable {
-    let callback: SnackBarCallback?
-    var bar: SnackBar?
-
-    private var highlightedTintColor: UIColor!
-    private var normalTintColor: UIColor = .clear
-    private var themeTextColor: UIColor!
-
     private struct UX {
         static let borderWidth: CGFloat = 0.5
         static let fontSize: CGFloat = 17
     }
+    
+    let callback: SnackBarCallback?
+    var bar: SnackBar?
+
+    private var highlightedTintColor: UIColor!
+    private var normalTintColor: UIColor!
 
     let separator: UIView = .build()
 
@@ -71,8 +70,9 @@ class SnackButton: UIButton, ThemeApplicable {
     func applyTheme(theme: Theme) {
         let colors = theme.colors
         highlightedTintColor = colors.actionPrimaryHover
-        themeTextColor = theme.type == .light ? colors.textPrimary : colors.textInverted
-        setTitleColor(themeTextColor, for: .normal)
+        normalTintColor = colors.actionPrimary
+        setTitleColor(colors.textInverted, for: .normal)
         separator.backgroundColor = colors.borderPrimary
+        backgroundColor = normalTintColor
     }
 }
