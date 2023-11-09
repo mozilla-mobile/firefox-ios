@@ -15,7 +15,8 @@ public class ContextualHintView: UIView, ThemeApplicable {
         static let closeButtonTrailing: CGFloat = 5
         static let closeButtonTop: CGFloat = 23
         static let closeButtonBottom: CGFloat = 12
-        static let closeButtonInset = UIEdgeInsets(top: 0, left: 7.5, bottom: 15, right: 7.5)
+        static let closeButtonInsets = NSDirectionalEdgeInsets(top: 0, leading: 7.5, bottom: 15, trailing: 7.5)
+        static let actionButtonInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         static let descriptionTextSize: CGFloat = 17
         static let stackViewLeading: CGFloat = 16
         static let stackViewTopArrowTopConstraint: CGFloat = 16
@@ -27,10 +28,12 @@ public class ContextualHintView: UIView, ThemeApplicable {
     // MARK: - UI Elements
     private lazy var contentContainer: UIView = .build { _ in }
 
-    private lazy var closeButton: ActionButton = .build { button in
+    private lazy var closeButton: UIButton = .build { button in
         button.setImage(UIImage(named: StandardImageIdentifiers.Medium.cross)?.withRenderingMode(.alwaysTemplate),
                         for: .normal)
-        button.contentEdgeInsets = UX.closeButtonInset
+        button.addTarget(self, action: #selector(self.didTapCloseButton), for: .touchUpInside)
+        button.configuration = .plain()
+        button.configuration?.contentInsets = UX.closeButtonInsets
     }
 
     private lazy var descriptionLabel: UILabel = .build { label in
@@ -39,10 +42,10 @@ public class ContextualHintView: UIView, ThemeApplicable {
         label.numberOfLines = 0
     }
 
-    private lazy var actionButton: ActionButton = .build { button in
+    private lazy var actionButton: LinkButton = .build { button in
         button.titleLabel?.textAlignment = .left
         button.titleLabel?.numberOfLines = 0
-        button.buttonEdgeSpacing = 0
+        button.addTarget(self, action: #selector(self.didTapActionButton), for: .touchUpInside)
     }
 
     private lazy var stackView: UIStackView = .build { stack in
@@ -75,6 +78,13 @@ public class ContextualHintView: UIView, ThemeApplicable {
     public func configure(viewModel: ContextualHintViewModel) {
         self.viewModel = viewModel
 
+        let actionButtonViewModel = LinkButtonViewModel(
+            title: viewModel.actionButtonTitle,
+            a11yIdentifier: viewModel.actionButtonA11yId,
+            contentInsets: UX.actionButtonInsets
+        )
+        actionButton.configure(viewModel: actionButtonViewModel)
+
         closeButton.accessibilityLabel = viewModel.closeButtonA11yLabel
         descriptionLabel.text = viewModel.description
 
@@ -90,9 +100,6 @@ public class ContextualHintView: UIView, ThemeApplicable {
         if viewModel.isActionType { stackView.addArrangedSubview(actionButton) }
 
         setupConstraints()
-
-        closeButton.touchUpAction = viewModel.closeButtonAction
-        actionButton.touchUpAction = viewModel.actionButtonAction
     }
 
     private func setupConstraints() {
@@ -130,6 +137,16 @@ public class ContextualHintView: UIView, ThemeApplicable {
 
         setNeedsLayout()
         layoutIfNeeded()
+    }
+
+    @objc
+    private func didTapCloseButton(sender: UIButton) {
+        viewModel.closeButtonAction?(sender)
+    }
+
+    @objc
+    private func didTapActionButton(sender: UIButton) {
+        viewModel.actionButtonAction?(sender)
     }
 
     public func applyTheme(theme: Theme) {
