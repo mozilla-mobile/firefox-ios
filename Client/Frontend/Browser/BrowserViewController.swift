@@ -445,8 +445,8 @@ class BrowserViewController: UIViewController,
         }
 
         // When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
-        // Make sure that our startup flow is completed and the Profile has been sync'd (at least once) before we load.
-        AppEventQueue.wait(for: [.startupFlowComplete, .profileSyncing, .tabRestoration]) { [weak self] in
+        // Make sure that our startup flow is completed and other tabs have been restored before we load.
+        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration]) { [weak self] in
             self?.backgroundTabLoader.loadBackgroundTabs()
         }
     }
