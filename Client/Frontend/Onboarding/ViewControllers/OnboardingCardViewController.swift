@@ -346,9 +346,6 @@ class OnboardingCardViewController: UIViewController, Themeable {
             linkButton.isHidden = true
             return
         }
-<<<<<<< HEAD
-        linkButton.setTitle(buttonTitle, for: .normal)
-=======
         let buttonViewModel = LinkButtonViewModel(
             title: buttonTitle,
             a11yIdentifier: "\(self.viewModel.a11yIdRoot)LinkButton",
@@ -357,7 +354,6 @@ class OnboardingCardViewController: UIViewController, Themeable {
         )
         linkButton.configure(viewModel: buttonViewModel)
         linkButton.applyTheme(theme: themeManager.currentTheme)
->>>>>>> 9aaa4be1f (Refactor FXIOS-7576 [v121] Replace link buttons in FakespotOptInCardView (#17132))
     }
 
     // MARK: - Button Actions
