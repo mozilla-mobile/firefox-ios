@@ -667,6 +667,29 @@ extension String {
                 value: "Our Sponsors & Your Privacy",
                 comment: "The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works.")
         }
+
+        public struct FeltPrivacyUI {
+            public static let Title = MZLocalizedString(
+                key: "FeltPrivacyUI.Title.v121",
+                tableName: "FirefoxHomepage",
+                value: "Leave no traces on this device",
+                comment: "The title for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode."
+            )
+
+            public static let Body = MZLocalizedString(
+                key: "FeltPrivacyUI.Title.v121",
+                tableName: "FirefoxHomepage",
+                value: "Leave no traces on this device",
+                comment: "The title for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode."
+            )
+
+            public static let Link = MZLocalizedString(
+                key: "FeltPrivacyUI.Title.v121",
+                tableName: "FirefoxHomepage",
+                value: "Leave no traces on this device",
+                comment: "The title for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode."
+            )
+        }
     }
 }
 
