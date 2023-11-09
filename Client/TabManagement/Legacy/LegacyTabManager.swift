@@ -297,7 +297,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         }
         if let tab = selectedTab {
             TabEvent.post(.didGainFocus, for: tab)
-            tab.applyTheme()
         }
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .tab)
 
@@ -552,11 +551,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
                 let url = NewTabHomePageAccessors.getHomePage(profile.prefs)!
                 tab.loadRequest(URLRequest(url: url))
             case .blankPage:
-                // If we're showing "about:blank" in a webview, set
-                // the <html> `background-color` to match the theme.
-                if let webView = tab.webView {
-                    webView.applyTheme()
-                }
                 break
             default:
                 // The common case, where the NewTabPage enum defines

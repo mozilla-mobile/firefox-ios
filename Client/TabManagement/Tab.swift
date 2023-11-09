@@ -62,7 +62,7 @@ enum TabUrlType: String {
     case googleTopSiteFollowOn
 }
 
-class Tab: NSObject {
+class Tab: NSObject, ThemeApplicable {
     static let privateModeKey = "PrivateModeKey"
     private var _isPrivate = false
     private(set) var isPrivate: Bool {
@@ -830,10 +830,6 @@ class Tab: NSObject {
         }
     }
 
-    func applyTheme() {
-        UITextField.appearance().keyboardAppearance = isPrivate ? .dark : (LegacyThemeManager.instance.currentName == .dark ? .dark : .light)
-    }
-
     func getProviderForUrl() -> SearchEngine {
         guard let url = self.webView?.url else {
             return .none
@@ -844,6 +840,12 @@ class Tab: NSObject {
         }
 
         return .none
+    }
+
+    // MARK: - ThemeApplicable
+
+    func applyTheme(theme: Theme) {
+        UITextField.appearance().keyboardAppearance = theme.type.keyboardAppearence(isPrivate: isPrivate)
     }
 }
 
@@ -954,7 +956,7 @@ protocol TabWebViewDelegate: AnyObject {
     func tabWebViewSearchWithFirefox(_ tabWebViewSearchWithFirefox: TabWebView, didSelectSearchWithFirefoxForSelection selection: String)
 }
 
-class TabWebView: WKWebView, MenuHelperInterface {
+class TabWebView: WKWebView, MenuHelperInterface, ThemeApplicable {
     var accessoryView = AccessoryViewProvider()
     private var logger: Logger = DefaultLogger.shared
     private weak var delegate: TabWebViewDelegate?
@@ -1002,15 +1004,6 @@ class TabWebView: WKWebView, MenuHelperInterface {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // Updates the `background-color` of the webview to match
-    // the theme if the webview is showing "about:blank" (nil).
-    func applyTheme() {
-        if url == nil {
-            let backgroundColor = LegacyThemeManager.instance.current.browser.background.hexString
-            evaluateJavascriptInDefaultContentWorld("document.documentElement.style.backgroundColor = '\(backgroundColor)';")
-        }
-    }
-
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         return super.canPerformAction(action, withSender: sender) || action == MenuHelper.SelectorFindInPage
     }
@@ -1045,5 +1038,16 @@ class TabWebView: WKWebView, MenuHelperInterface {
                 message: "Do not call evaluateJavaScript directly on TabWebViews, should only be called on super class")
     override func evaluateJavaScript(_ javaScriptString: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
         super.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
+    }
+
+    // MARK: - ThemeApplicable
+
+    /// Updates the `background-color` of the webview to match
+    /// the theme if the webview is showing "about:blank" (nil).
+    func applyTheme(theme: Theme) {
+        if url == nil {
+            let backgroundColor = theme.colors.layer1.hexString
+            evaluateJavascriptInDefaultContentWorld("document.documentElement.style.backgroundColor = '\(backgroundColor)';")
+        }
     }
 }
