@@ -19,9 +19,6 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
         static let learnMoreInsets = UIEdgeInsets(top: -10, left: 0, bottom: 10, right: 0)
         static let termsOfUseButtonTitleFontSize: CGFloat = 13
         static let privacyPolicyButtonTitleFontSize: CGFloat = 13
-        static let mainButtonFontSize: CGFloat = 16
-        static let mainButtonCornerRadius: CGFloat = 14
-        static let mainButtonInsets = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
         static let secondaryButtonFontSize: CGFloat = 13
         static let contentStackViewSpacing: CGFloat = 12
         static let contentStackViewPadding: CGFloat = 16
@@ -102,15 +99,8 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
                                                                          size: UX.privacyPolicyButtonTitleFontSize)
     }
 
-    private lazy var mainButton: ResizableButton = .build { button in
-        button.contentHorizontalAlignment = .center
-        button.buttonEdgeSpacing = 0
-        button.layer.cornerRadius = UX.mainButtonCornerRadius
-        button.contentEdgeInsets = UX.mainButtonInsets
+    private lazy var mainButton: PrimaryRoundedButton = .build { button in
         button.addTarget(self, action: #selector(self.didTapMainButton), for: .touchUpInside)
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .headline,
-                                                                         size: UX.mainButtonFontSize,
-                                                                         weight: .semibold)
     }
 
     private lazy var secondaryButton: ResizableButton = .build { button in
@@ -223,8 +213,11 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
         privacyPolicyButton.setTitle(viewModel.privacyPolicyButtonText, for: .normal)
         privacyPolicyButton.accessibilityIdentifier = viewModel.privacyPolicyButtonA11yId
 
-        mainButton.setTitle(viewModel.mainButtonText, for: .normal)
-        mainButton.accessibilityIdentifier = viewModel.mainButtonA11yId
+        let buttonViewModel = PrimaryRoundedButtonViewModel(
+            title: viewModel.mainButtonText,
+            a11yIdentifier: viewModel.mainButtonA11yId
+        )
+        mainButton.configure(viewModel: buttonViewModel)
 
         secondaryButton.setTitle(viewModel.secondaryButtonText, for: .normal)
         secondaryButton.accessibilityIdentifier = viewModel.secondaryButtonA11yId
@@ -250,8 +243,7 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
         learnMoreButton.setTitleColor(colors.textAccent, for: .normal)
         termsOfUseButton.setTitleColor(colors.textAccent, for: .normal)
         privacyPolicyButton.setTitleColor(colors.textAccent, for: .normal)
-        mainButton.setTitleColor(colors.textInverted, for: .normal)
-        mainButton.backgroundColor = colors.actionPrimary
+        mainButton.applyTheme(theme: theme)
         secondaryButton.setTitleColor(colors.textAccent, for: .normal)
     }
 }
