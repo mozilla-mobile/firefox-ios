@@ -15,7 +15,8 @@ public class ContextualHintView: UIView, ThemeApplicable {
         static let closeButtonTrailing: CGFloat = 5
         static let closeButtonTop: CGFloat = 23
         static let closeButtonBottom: CGFloat = 12
-        static let closeButtonInset = NSDirectionalEdgeInsets(top: 0, leading: 7.5, bottom: 15, trailing: 7.5)
+        static let closeButtonInsets = NSDirectionalEdgeInsets(top: 0, leading: 7.5, bottom: 15, trailing: 7.5)
+        static let actionButtonInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         static let descriptionTextSize: CGFloat = 17
         static let stackViewLeading: CGFloat = 16
         static let stackViewTopArrowTopConstraint: CGFloat = 16
@@ -32,7 +33,7 @@ public class ContextualHintView: UIView, ThemeApplicable {
                         for: .normal)
         button.addTarget(self, action: #selector(self.didTapCloseButton), for: .touchUpInside)
         button.configuration = .plain()
-        button.configuration?.contentInsets = UX.closeButtonInset
+        button.configuration?.contentInsets = UX.closeButtonInsets
     }
 
     private lazy var descriptionLabel: UILabel = .build { label in
@@ -79,13 +80,8 @@ public class ContextualHintView: UIView, ThemeApplicable {
 
         let actionButtonViewModel = LinkButtonViewModel(
             title: viewModel.actionButtonTitle,
-            a11yIdentifier: "",
-            contentInsets: NSDirectionalEdgeInsets(
-                top: 0,
-                leading: 0,
-                bottom: 0,
-                trailing: 0
-            )
+            a11yIdentifier: viewModel.actionButtonA11yId,
+            contentInsets: UX.actionButtonInsets
         )
         actionButton.configure(viewModel: actionButtonViewModel)
 
