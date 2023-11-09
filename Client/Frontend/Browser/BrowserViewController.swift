@@ -422,7 +422,10 @@ class BrowserViewController: UIViewController,
             urlBar.locationView.tabDidChangeContentBlocking(tab)
         }
 
-        _ = tabManager.startAtHomeCheck()
+        if tabManager.startAtHomeCheck() {
+            guard presentedViewController != nil else { return }
+                dismissVC()
+        }
         updateWallpaperMetadata()
 
         // When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
@@ -1759,11 +1762,11 @@ class BrowserViewController: UIViewController,
 
         // Update the `background-color` of any blank webviews.
         let webViews = tabManager.tabs.compactMap({ $0.webView })
-        webViews.forEach({ $0.applyTheme() })
+        webViews.forEach({ $0.applyTheme(theme: currentTheme) })
 
         let tabs = tabManager.tabs
         tabs.forEach {
-            $0.applyTheme()
+            $0.applyTheme(theme: currentTheme)
         }
 
         guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
@@ -2111,6 +2114,11 @@ extension BrowserViewController: TabManagerDelegate {
 
                 let ui: [PrivateModeUI?] = [toolbar, topTabsViewController, urlBar]
                 ui.forEach { $0?.applyUIMode(isPrivate: tab.isPrivate, theme: themeManager.currentTheme) }
+            } else {
+                // Theme is applied to the tab and webView in the else case
+                // because in the if block is applied already to all the tabs and web views
+                tab.applyTheme(theme: themeManager.currentTheme)
+                webView.applyTheme(theme: themeManager.currentTheme)
             }
 
             readerModeCache = tab.isPrivate ? MemoryReaderModeCache.sharedInstance : DiskReaderModeCache.sharedInstance

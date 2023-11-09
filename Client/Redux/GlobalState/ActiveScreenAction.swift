@@ -7,6 +7,7 @@ import Redux
 
 enum AppScreen {
     case themeSettings
+    case tabsPanel
     case remoteTabsPanel
 }
 
