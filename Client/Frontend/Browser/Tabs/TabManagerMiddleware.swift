@@ -8,6 +8,7 @@ import Redux
 class TabsPanelMiddleware {
     var tabs = [TabCellState]()
     var inactiveTabs = [String]()
+    var selectedPanel: TabTrayPanelType = .tabs
 
     init() {}
 
@@ -23,12 +24,18 @@ class TabsPanelMiddleware {
             DispatchQueue.main.async {
                 store.dispatch(TabTrayAction.didLoadTabData(tabsState))
             }
+        case TabTrayAction.addNewTab(let isPrivate):
+            self.addNewTab()
+            DispatchQueue.main.async {
+                store.dispatch(TabTrayAction.addedNewTab(self.tabs))
+            }
         default:
             break
         }
     }
 
     func getMockData(for panelType: TabTrayPanelType) -> TabTrayState {
+        selectedPanel = panelType
         guard panelType != .syncedTabs else { return TabTrayState() }
 
         for index in 0...2 {
@@ -40,10 +47,17 @@ class TabsPanelMiddleware {
         inactiveTabs =  !isPrivate ? ["Tab1", "Tab2", "Tab3"] : [String]()
 
         return TabTrayState(isPrivateMode: isPrivate,
-                            selectedPanel: .tabs,
+                            selectedPanel: panelType,
                             tabs: tabs,
                             remoteTabsState: nil,
                             normalTabsCount: "\(tabs.count)",
                             inactiveTabs: inactiveTabs)
+    }
+
+    func addNewTab() {
+        let cellState = TabCellState.emptyTabState(title: "New tab")
+        tabs.append(cellState)
+
+        return tabs
     }
 }

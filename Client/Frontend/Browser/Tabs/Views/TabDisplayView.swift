@@ -68,8 +68,6 @@ class TabDisplayView: UIView,
 
     func newState(state: TabTrayState) {
         tabTrayState = state
-        print("YRD state \(tabTrayState.isPrivateMode) & tabs \(tabTrayState.tabs.count)")
-        collectionView.collectionViewLayout.invalidateLayout()
         collectionView.reloadData()
     }
 
@@ -85,7 +83,6 @@ class TabDisplayView: UIView,
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
-        print("YRD createLayout \(tabTrayState.tabs.count)")
         let layout = UICollectionViewCompositionalLayout { [weak self]
             (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
             guard let self else { return nil }
@@ -122,7 +119,6 @@ class TabDisplayView: UIView,
     }
 
     private func getTabDisplay(for section: Int) -> TabDisplaySection {
-        print("YRD getTabDisplay \(tabTrayState.tabs.count)")
         guard !shouldHideInactiveTabs else { return .tabs }
 
         return TabDisplaySection(rawValue: section) ?? .tabs
@@ -130,7 +126,6 @@ class TabDisplayView: UIView,
 
     // MARK: UICollectionViewDataSource
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        print("YRD getTabDisplay \(tabTrayState.tabs.count)")
         guard !tabTrayState.isPrivateTabsEmpty else { return 0 }
 
         guard !shouldHideInactiveTabs else { return 1 }
@@ -154,7 +149,6 @@ class TabDisplayView: UIView,
                         at indexPath: IndexPath)
     -> UICollectionReusableView {
         let reusableView = UICollectionReusableView()
-
         switch getTabDisplay(for: indexPath.section) {
         case .inactiveTabs:
             if kind == UICollectionView.elementKindSectionHeader,

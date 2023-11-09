@@ -79,8 +79,14 @@ struct TabTrayState: ScreenState, Equatable {
         print("YRD action \(action)")
         switch action {
         case TabTrayAction.didLoadTabData(let newState):
-            print("YRD handle didLoadTabData")
             return newState
+        case TabTrayAction.addedNewTab(let tabs):
+            return TabTrayState(isPrivateMode: state.isPrivateMode,
+                                selectedPanel: state.selectedPanel,
+                                tabs: tabs,
+                                remoteTabsState: nil,
+                                normalTabsCount: state.normalTabsCount,
+                                inactiveTabs: state.inactiveTabs)
         default:
             print("YRD handle default")
             return state

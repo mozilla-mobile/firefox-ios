@@ -19,4 +19,5 @@ enum TabTrayAction: Action {
 
     // Middleware actions
     case didLoadTabData(TabTrayState)
+    case addedNewTab([TabCellState])
 }

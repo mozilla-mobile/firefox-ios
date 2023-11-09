@@ -22,7 +22,6 @@ class TabTrayCoordinator: BaseCoordinator, TabTrayViewControllerDelegate, TabTra
     }
 
     private func initializeTabTrayViewController() {
-        print("YRD initializeTabTrayViewController")
         tabTrayViewController = TabTrayViewController(delegate: self)
         router.setRootViewController(tabTrayViewController)
         tabTrayViewController.childPanelControllers = makeChildPanels()
@@ -30,12 +29,10 @@ class TabTrayCoordinator: BaseCoordinator, TabTrayViewControllerDelegate, TabTra
     }
 
     func start(with tabTraySection: TabTrayPanelType) {
-        print("YRD start with panel")
         tabTrayViewController.setupOpenPanel(panelType: tabTraySection)
     }
 
     private func makeChildPanels() -> [UINavigationController] {
-        print("YRD makeChildPanels")
         let regularTabsPanel = TabDisplayViewController(isPrivateMode: false)
         let privateTabsPanel = TabDisplayViewController(isPrivateMode: true)
         let syncTabs = RemoteTabsPanel()
@@ -47,7 +44,6 @@ class TabTrayCoordinator: BaseCoordinator, TabTrayViewControllerDelegate, TabTra
     }
 
     func start(panelType: TabTrayPanelType, navigationController: UINavigationController) {
-        print("YRD start panels with navController")
         switch panelType {
         case .tabs:
             makeTabsCoordinator(navigationController: navigationController)

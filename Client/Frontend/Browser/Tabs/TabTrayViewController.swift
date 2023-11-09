@@ -248,12 +248,9 @@ class TabTrayViewController: UIViewController,
     }
 
     func newState(state: TabTrayState) {
-        ensureMainThread { [weak self] in
-            guard let self else { return }
-            tabTrayState = state
-            guard let currentPanel = currentPanel?.children[0] as? TabTrayChildPanels else { return }
-            currentPanel.updateState(state: tabTrayState)
-        }
+        tabTrayState = state
+        guard let currentPanel = currentPanel?.children[0] as? TabTrayChildPanels else { return }
+        currentPanel.updateState(state: tabTrayState)
     }
 
     private func updateLayout() {
@@ -388,7 +385,7 @@ class TabTrayViewController: UIViewController,
     func setupOpenPanel(panelType: TabTrayPanelType) {
         tabTrayState.selectedPanel = panelType
 
-        guard let currentPanel = currentPanel as? UINavigationController else { return }
+        guard let currentPanel = currentPanel else { return }
 
         updateTitle()
         updateLayout()
