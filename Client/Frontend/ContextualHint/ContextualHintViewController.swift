@@ -73,9 +73,6 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
             systemSize.width += UX.contextualHintLandscapeExtraWidth
         }
         preferredContentSize = systemSize
-
-        print("systemSize = \(systemSize)")
-        print("preferredContentSize = \(preferredContentSize)")
     }
 
     override func viewDidDisappear(_ animated: Bool) {
