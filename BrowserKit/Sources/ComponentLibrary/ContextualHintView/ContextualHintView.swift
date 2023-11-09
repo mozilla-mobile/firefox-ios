@@ -45,7 +45,6 @@ public class ContextualHintView: UIView, ThemeApplicable {
         button.titleLabel?.textAlignment = .left
         button.titleLabel?.numberOfLines = 0
         button.addTarget(self, action: #selector(self.didTapActionButton), for: .touchUpInside)
-        button.configuration = .plain()
     }
 
     private lazy var stackView: UIStackView = .build { stack in
