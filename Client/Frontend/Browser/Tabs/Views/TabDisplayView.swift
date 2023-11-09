@@ -9,7 +9,8 @@ class TabDisplayView: UIView,
                       ThemeApplicable,
                       UICollectionViewDataSource,
                       UICollectionViewDelegate,
-                      UICollectionViewDelegateFlowLayout {
+                      UICollectionViewDelegateFlowLayout,
+                      TabCellDelegate {
     struct UX {
         static let cornerRadius: CGFloat = 6.0
     }
@@ -206,15 +207,8 @@ class TabDisplayView: UIView,
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TabCell.cellIdentifier, for: indexPath) as? TabCell
             else { return UICollectionViewCell() }
 
-            let tabState = TabCellState(isSelected: false,
-                                        isPrivate: false,
-                                        isFxHomeTab: false,
-                                        tabTitle: "\(indexPath.row)",
-                                        url: nil,
-                                        screenshot: nil,
-                                        hasHomeScreenshot: false,
-                                        margin: 0)
-            cell.configure(with: tabState, theme: theme)
+            let tabState = tabTrayState.tabs[indexPath.row]
+            cell.configure(with: tabState, theme: theme, delegate: self)
             return cell
         }
     }
@@ -228,5 +222,12 @@ class TabDisplayView: UIView,
     private func toggleInactiveTabSection(hasExpanded: Bool) {
         tabTrayState.isInactiveTabsExpanded = hasExpanded
         collectionView.reloadData()
+    }
+
+    // MARK: - TabCellDelegate
+    func tabCellDidClose(_ cell: TabCell) {
+        if let indexPath = collectionView.indexPath(for: cell) {
+            store.dispatch(TabTrayAction.closeTab(indexPath.row))
+        }
     }
 }

@@ -10,7 +10,7 @@ enum TabTrayAction: Action {
     case changePanel(TabTrayPanelType)
     case openExistingTab
     case addNewTab(Bool) // isPrivate
-    case closeTab
+    case closeTab(Int)
     case closeAllTabs
     case closeInactiveTab
 
@@ -19,5 +19,7 @@ enum TabTrayAction: Action {
 
     // Middleware actions
     case didLoadTabData(TabTrayState)
-    case addedNewTab([TabCellState])
+    // Response to all user actions involving tabs ex: add, close and close all tabs
+    case refreshTab([TabCellState])
+
 }

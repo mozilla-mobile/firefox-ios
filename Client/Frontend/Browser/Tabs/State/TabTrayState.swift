@@ -80,7 +80,7 @@ struct TabTrayState: ScreenState, Equatable {
         switch action {
         case TabTrayAction.didLoadTabData(let newState):
             return newState
-        case TabTrayAction.addedNewTab(let tabs):
+        case TabTrayAction.refreshTab(let tabs):
             return TabTrayState(isPrivateMode: state.isPrivateMode,
                                 selectedPanel: state.selectedPanel,
                                 tabs: tabs,

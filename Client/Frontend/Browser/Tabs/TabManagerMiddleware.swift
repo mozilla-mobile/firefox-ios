@@ -27,7 +27,17 @@ class TabsPanelMiddleware {
         case TabTrayAction.addNewTab(let isPrivate):
             self.addNewTab()
             DispatchQueue.main.async {
-                store.dispatch(TabTrayAction.addedNewTab(self.tabs))
+                store.dispatch(TabTrayAction.refreshTab(self.tabs))
+            }
+        case TabTrayAction.closeTab(let index):
+            self.closeTab(for: index)
+            DispatchQueue.main.async {
+                store.dispatch(TabTrayAction.refreshTab(self.tabs))
+            }
+        case TabTrayAction.closeAllTabs:
+            self.closeAllTabs()
+            DispatchQueue.main.async {
+                store.dispatch(TabTrayAction.refreshTab(self.tabs))
             }
         default:
             break
@@ -54,10 +64,16 @@ class TabsPanelMiddleware {
                             inactiveTabs: inactiveTabs)
     }
 
-    func addNewTab() {
+    private func addNewTab() {
         let cellState = TabCellState.emptyTabState(title: "New tab")
         tabs.append(cellState)
+    }
 
-        return tabs
+    private func closeTab(for index: Int) {
+        tabs.remove(at: index)
+    }
+
+    private func closeAllTabs() {
+        tabs.removeAll()
     }
 }
