@@ -353,11 +353,6 @@ class FakespotViewController:
         case .productAdCard:
             let view: FakespotAdView = .build()
 
-            viewModel.productAdViewModel.dismissViewController = { [weak self] in
-                guard let self = self else { return }
-                self.delegate?.fakespotControllerDidDismiss(animated: true)
-            }
-            view.configure(viewModel.productAdViewModel)
             return view
 
         case .messageCard(let messageType):
