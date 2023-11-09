@@ -41,17 +41,11 @@ public class ContextualHintView: UIView, ThemeApplicable {
         label.numberOfLines = 0
     }
 
-    private lazy var actionButton: UIButton = .build { button in
+    private lazy var actionButton: LinkButton = .build { button in
         button.titleLabel?.textAlignment = .left
         button.titleLabel?.numberOfLines = 0
         button.addTarget(self, action: #selector(self.didTapActionButton), for: .touchUpInside)
         button.configuration = .plain()
-        button.configuration?.contentInsets = NSDirectionalEdgeInsets(
-            top: 0,
-            leading: 0,
-            bottom: 0,
-            trailing: 0
-        )
     }
 
     private lazy var stackView: UIStackView = .build { stack in
@@ -83,6 +77,18 @@ public class ContextualHintView: UIView, ThemeApplicable {
 
     public func configure(viewModel: ContextualHintViewModel) {
         self.viewModel = viewModel
+
+        let actionButtonViewModel = LinkButtonViewModel(
+            title: viewModel.actionButtonTitle,
+            a11yIdentifier: "",
+            contentInsets: NSDirectionalEdgeInsets(
+                top: 0,
+                leading: 0,
+                bottom: 0,
+                trailing: 0
+            )
+        )
+        actionButton.configure(viewModel: actionButtonViewModel)
 
         closeButton.accessibilityLabel = viewModel.closeButtonA11yLabel
         descriptionLabel.text = viewModel.description
