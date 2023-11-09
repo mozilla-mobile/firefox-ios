@@ -5,22 +5,21 @@
 import Common
 import UIKit
 
-public class LinkButton: ResizableButton, ThemeApplicable {
-    private struct UX {
-        static let buttonCornerRadius: CGFloat = 13
-    }
-
+public class LinkButton: UIButton, ThemeApplicable {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         configuration = UIButton.Configuration.plain()
         backgroundColor = .clear
         titleLabel?.adjustsFontForContentSizeCategory = true
+        titleLabel?.numberOfLines = 0
+        titleLabel?.lineBreakMode = .byWordWrapping
     }
 
     public func configure(viewModel: LinkButtonViewModel) {
         accessibilityIdentifier = viewModel.a11yIdentifier
-        setTitle(viewModel.title, for: .normal)
+
+        configuration?.title = viewModel.title
         configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
             outgoing.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,

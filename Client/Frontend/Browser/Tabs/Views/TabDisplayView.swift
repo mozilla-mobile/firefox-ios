@@ -122,6 +122,8 @@ class TabDisplayView: UIView,
 
     // MARK: UICollectionViewDataSource
     func numberOfSections(in collectionView: UICollectionView) -> Int {
+        guard !state.isPrivateTabsEmpty else { return 0 }
+
         guard !shouldHideInactiveTabs else { return 1 }
 
         return TabDisplaySection.allCases.count

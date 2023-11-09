@@ -383,6 +383,11 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceReanalyzeClicked)
     }
 
+    func test_surfaceReactivatedButtonClicked_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingProductBackInStockButton)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceReactivatedButtonClicked)
+    }
+
     func test_surfaceNoReviewReliabilityAvailable_GleanIsCalled() {
         TelemetryWrapper.recordEvent(category: .action, method: .navigate, object: .shoppingBottomSheet)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceNoReviewReliabilityAvailable)

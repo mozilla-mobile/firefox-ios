@@ -180,7 +180,7 @@ class TabTrayViewController: UIViewController,
     init(delegate: TabTrayViewControllerDelegate,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          and notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.state = TabTrayState.getMockState(isPrivateMode: false)
+        self.state = TabTrayState()
         self.delegate = delegate
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
@@ -283,9 +283,9 @@ class TabTrayViewController: UIViewController,
     }
 
     private func updateTitle() {
-        guard let panel = state.selectedPanel else { return }
+        guard let navigationTitle = state.navigationTitle else { return }
 
-        navigationItem.title = panel.navTitle
+        navigationItem.title = navigationTitle
     }
 
     private func setupForiPad() {
