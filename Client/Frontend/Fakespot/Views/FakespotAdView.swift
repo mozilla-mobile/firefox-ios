@@ -10,11 +10,14 @@ import ComponentLibrary
 // MARK: View Model
 struct FakespotAdViewModel {
     let title: String = .Shopping.AdCardTitleLabel
+    let footerText: String = .localizedStringWithFormat(.Shopping.AdCardFooterLabel,
+                                                        FakespotName.shortName.rawValue)
     let titleA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.title
     let cardA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.card
     let priceA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.price
     let productTitleA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.productTitle
     let descriptionA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.description
+    let footerA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.footer
 
     private let tabManager: TabManager
     var dismissViewController: (() -> Void)?
@@ -62,7 +65,6 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
     private var viewModel: FakespotAdViewModel?
 
     private lazy var titleLabel: UILabel = .build { label in
-        label.text = .Shopping.AdCardTitleLabel
         label.adjustsFontForContentSizeCategory = true
         label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
                                                             size: UX.labelFontSize,
@@ -72,8 +74,6 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
     }
 
     private lazy var footerLabel: UILabel = .build { label in
-        label.text = String.localizedStringWithFormat(.Shopping.AdCardFooterLabel,
-                                                      FakespotName.shortName.rawValue)
         label.adjustsFontForContentSizeCategory = true
         label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .footnote,
                                                             size: UX.descriptionFontSize,
@@ -126,7 +126,11 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
     func configure(_ viewModel: FakespotAdViewModel) {
         self.viewModel = viewModel
         let productAdsData = viewModel.productAdsData
+        titleLabel.text = viewModel.title
         titleLabel.accessibilityIdentifier = viewModel.titleA11yId
+
+        footerLabel.text = viewModel.footerText
+        footerLabel.accessibilityIdentifier = viewModel.footerA11yId
 
         priceLabel.text = productAdsData.currency + productAdsData.price
         priceLabel.accessibilityIdentifier = viewModel.priceA11yId

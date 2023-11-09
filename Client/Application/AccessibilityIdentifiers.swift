@@ -271,6 +271,7 @@ public struct AccessibilityIdentifiers {
             static let price = "Shopping.AdCard.PriceLabel"
             static let productTitle = "Shopping.AdCard.ProductTitle"
             static let description = "Shopping.AdCard.Description"
+            static let footer = "Shopping.AdCard.Footer"
         }
     }
 
