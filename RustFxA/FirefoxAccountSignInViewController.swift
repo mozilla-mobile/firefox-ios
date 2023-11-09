@@ -83,7 +83,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         label.adjustsFontForContentSizeCategory = true
 
         let placeholder = "firefox.com/pair"
-        RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { manager in
+        if let manager = RustFirefoxAccounts.shared.accountManager {
             manager.getPairingAuthorityURL { result in
                 guard let url = try? result.get(), let host = url.host else { return }
 

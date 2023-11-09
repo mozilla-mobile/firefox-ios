@@ -10,7 +10,7 @@ open class PushNotificationSetup {
     /// Disables FxA push notifications for the user
     public func disableNotifications() {
         MZKeychainWrapper.sharedClientAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
-        RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { accountManager in
+        if let accountManager = RustFirefoxAccounts.shared.accountManager {
             let subscriptionEndpoint = accountManager.deviceConstellation()?.state()?.localDevice?.pushSubscription?.endpoint
             if let subscriptionEndpoint = subscriptionEndpoint, subscriptionEndpoint.isEmpty {
                 // Already disabled, lets quit early
@@ -30,7 +30,7 @@ open class PushNotificationSetup {
         let devicePush = DevicePushSubscription(endpoint: endpoint,
                                                 publicKey: publicKey,
                                                 authKey: authKey)
-        RustFirefoxAccounts.shared.accountManager.upon { accountManager in
+        if let accountManager = RustFirefoxAccounts.shared.accountManager {
             let currentSubscription = accountManager.deviceConstellation()?.state()?.localDevice?.pushSubscription
             if currentSubscription == devicePush {
                 return

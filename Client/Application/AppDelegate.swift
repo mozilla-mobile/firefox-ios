@@ -90,6 +90,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                nightlyAppVersion: AppConstants.nightlyAppVersion,
                                                sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
 
+        // Set-up Rust network stack. Note that this has to be called
+        // before any Application Services component gets used.
+        Viaduct.shared.useReqwestBackend()
+
         // Configure logger so we can start tracking logs early
         logger.configure(crashManager: DefaultCrashManager())
         initializeRustErrors(logger: logger)

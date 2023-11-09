@@ -438,7 +438,7 @@ public class RustSyncManager: NSObject, SyncManager {
         let deferred = Deferred<Maybe<SyncResult>>()
 
         logger.log("Syncing \(engines)", level: .info, category: .sync)
-        self.profile?.rustFxA.accountManager.upon { accountManager in
+        if let accountManager = RustFirefoxAccounts.shared.accountManager {
             guard let device = accountManager.deviceConstellation()?
                 .state()?
                 .localDevice else {
@@ -446,7 +446,7 @@ public class RustSyncManager: NSObject, SyncManager {
                                 level: .warning,
                                 category: .sync)
                 deferred.fill(Maybe(failure: DeviceIdError()))
-                return
+                return deferred
             }
 
             accountManager.getAccessToken(scope: OAuthScope.oldSync) { result in

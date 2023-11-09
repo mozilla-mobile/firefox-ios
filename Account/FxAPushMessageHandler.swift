@@ -30,7 +30,7 @@ extension FxAPushMessageHandler {
         // and `startup` asserts that we are on the main thread. Otherwise the notification
         // service will crash.
         DispatchQueue.main.async {
-            RustFirefoxAccounts.reconfig(prefs: self.profile.prefs).upon { accountManager in
+            RustFirefoxAccounts.reconfig(prefs: self.profile.prefs) { accountManager in
                 accountManager.deviceConstellation()?.handlePushMessage(pushPayload: message) {
                     result in
                     guard case .success(let event) = result else {

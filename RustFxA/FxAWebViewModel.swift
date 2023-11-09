@@ -79,7 +79,7 @@ class FxAWebViewModel {
     }
 
     func setupFirstPage(completion: @escaping (URLRequest, TelemetryWrapper.EventMethod?) -> Void) {
-        profile.rustFxA.accountManager.uponQueue(.main) { accountManager in
+        if let accountManager = profile.rustFxA.accountManager {
             let entrypoint = self.deepLinkParams.entrypoint.rawValue
             accountManager.getManageAccountURL(entrypoint: "ios_settings_\(entrypoint)") { [weak self] result in
                 guard let self = self else { return }
@@ -177,7 +177,7 @@ extension FxAWebViewModel {
                 profile.removeAccount()
                 onDismissController?()
             case .profileChanged:
-                profile.rustFxA.accountManager.peek()?.refreshProfile(ignoreCache: true)
+                profile.rustFxA.accountManager?.refreshProfile(ignoreCache: true)
                 // dismiss keyboard after changing profile in order to see notification view
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             }
@@ -205,7 +205,7 @@ extension FxAWebViewModel {
     /// user info (for settings), or by passing CWTS setup info (in case the user is
     /// signing up for an account). This latter case is also used for the sign-in state.
     private func onSessionStatus(id: Int, webView: WKWebView) {
-        guard let fxa = profile.rustFxA.accountManager.peek() else { return }
+        guard let fxa = profile.rustFxA.accountManager else { return }
         let cmd = "fxaccounts:fxa_status"
         let typeId = "account_updates"
         let data: String
@@ -249,7 +249,7 @@ extension FxAWebViewModel {
         }
 
         let auth = FxaAuthData(code: code, state: state, actionQueryParam: "signin")
-        profile.rustFxA.accountManager.peek()?.finishAuthentication(authData: auth) { _ in
+        profile.rustFxA.accountManager?.finishAuthentication(authData: auth) { _ in
             self.profile.syncManager.onAddedAccount()
 
             // only ask for notification permission if it's not onboarding related (e.g. settings) or if the onboarding flow is missing the notifications card
@@ -279,7 +279,7 @@ extension FxAWebViewModel {
               let sessionToken = data["sessionToken"] as? String
         else { return }
 
-        profile.rustFxA.accountManager.peek()?.handlePasswordChanged(newSessionToken: sessionToken) {
+        profile.rustFxA.accountManager?.handlePasswordChanged(newSessionToken: sessionToken) {
             NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
         }
     }

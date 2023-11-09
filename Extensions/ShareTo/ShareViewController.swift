@@ -106,7 +106,7 @@ class ShareViewController: UIViewController {
         }
 
         let profile = BrowserProfile(localName: "profile")
-        RustFirefoxAccounts.startup(prefs: profile.prefs).uponQueue(.main) { _ in }
+        RustFirefoxAccounts.startup(prefs: profile.prefs) { _ in }
     }
 
     private func setupRows() {
@@ -385,7 +385,7 @@ extension ShareViewController {
 
         gesture.isEnabled = false
         view.isUserInteractionEnabled = false
-        RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { _ in
+        if RustFirefoxAccounts.shared.accountManager != nil {
             self.view.isUserInteractionEnabled = true
             self.sendToDevice = SendToDevice()
             guard let sendToDevice = self.sendToDevice else { return }
