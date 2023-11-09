@@ -10,13 +10,21 @@ import Storage
 import Redux
 import UIKit
 
-class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, ContentContainable,
-                                SearchBarLocationProvider, StoreSubscriber {
+class HomepageViewController: 
+    UIViewController,
+    FeatureFlaggable,
+    Themeable,
+    ContentContainable,
+    SearchBarLocationProvider,
+    StoreSubscriber {
+
     // MARK: - Typealiases
+
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
     typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
 
     // MARK: - Operational Variables
+
     weak var homePanelDelegate: HomePanelDelegate?
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     weak var sendToDeviceDelegate: SendToDeviceDelegate? {
@@ -117,6 +125,7 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
     }
 
     func newState(state: AppState) {
+        // TODO: Multiple tickets for Felt Privacy
         print("RGB - \(state.isInPrivateMode)")
     }
 
