@@ -12,7 +12,7 @@ enum TabTrayLayoutType: Equatable {
 
 struct TabTrayState: ScreenState, Equatable {
     var isPrivateMode: Bool
-    var selectedPanel: TabTrayPanelType?
+    var selectedPanel: TabTrayPanelType
     var tabs: [TabCellState]
 
     // MARK: Inactive tabs
@@ -29,8 +29,8 @@ struct TabTrayState: ScreenState, Equatable {
     var layout: TabTrayLayoutType = .compact
     // TODO: FXIOS-7359 Move logic to show "\u{221E}" over 100 tabs to reducer
     var normalTabsCount: String
-    var navigationTitle: String? {
-        return selectedPanel?.navTitle
+    var navigationTitle: String {
+        return selectedPanel.navTitle
     }
 
     var isSyncTabsPanel: Bool {
@@ -44,6 +44,7 @@ struct TabTrayState: ScreenState, Equatable {
         }
 
         self.init(isPrivateMode: panelState.isPrivateMode,
+                  selectedPanel: panelState.selectedPanel,
                   tabs: panelState.tabs,
                   remoteTabsState: panelState.remoteTabsState,
                   normalTabsCount: panelState.normalTabsCount,
@@ -52,18 +53,21 @@ struct TabTrayState: ScreenState, Equatable {
 
     init() {
         self.init(isPrivateMode: false,
+                  selectedPanel: .tabs,
                   tabs: [TabCellState](),
                   remoteTabsState: nil,
-                  normalTabsCount: "2",
+                  normalTabsCount: "0",
                   inactiveTabs: [String]())
     }
 
     init(isPrivateMode: Bool,
+         selectedPanel: TabTrayPanelType,
          tabs: [TabCellState],
          remoteTabsState: RemoteTabsPanelState?,
          normalTabsCount: String,
          inactiveTabs: [String] = [String]()) {
         self.isPrivateMode = isPrivateMode
+        self.selectedPanel = selectedPanel
         self.tabs = tabs
         self.remoteTabsState = remoteTabsState
         self.normalTabsCount = normalTabsCount
@@ -71,24 +75,15 @@ struct TabTrayState: ScreenState, Equatable {
     }
 
     static let reducer: Reducer<Self> = { state, action in
-        // TODO: Complete in FXIOS-7359
+        // TODO: All actions will ignore data until middleware is connected
+        print("YRD action \(action)")
         switch action {
-        case TabTrayAction.addNewTab(let isPrivate):
-            // Ignore isPrivate for now until connected to middleware
-            var tabs = [TabCellState]()
-            for index in 0...4 {
-                let cellState = TabCellState.emptyTabState(title: "Tab \(index)")
-                tabs.append(cellState)
-            }
-
-            let inactiveTabs =  ["Tab1", "Tab2", "Tab3"]
-
-            return TabTrayState(isPrivateMode: state.isPrivateMode,
-                                tabs: tabs,
-                                remoteTabsState: state.remoteTabsState,
-                                normalTabsCount: state.normalTabsCount,
-                                inactiveTabs: inactiveTabs)
-        default: return state
+        case TabTrayAction.didLoadTabData(let newState):
+            print("YRD handle didLoadTabData")
+            return newState
+        default:
+            print("YRD handle default")
+            return state
         }
     }
 
