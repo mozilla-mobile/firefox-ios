@@ -220,6 +220,11 @@ class BrowserViewController: UIViewController,
         tabManager.addDelegate(self)
         tabManager.addNavigationDelegate(self)
         downloadQueue.delegate = self
+        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration]) { [weak self] in
+            // Ensure we call into didBecomeActive at least once during startup flow (if needed)
+            guard !AppEventQueue.activityIsCompleted(.browserDidBecomeActive) else { return }
+            self?.browserDidBecomeActive()
+        }
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -421,16 +426,23 @@ class BrowserViewController: UIViewController,
         // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
         scrollController.showToolbars(animated: false)
 
+        browserDidBecomeActive()
+    }
+
+    func browserDidBecomeActive() {
+        AppEventQueue.started(.browserDidBecomeActive)
+        defer { AppEventQueue.completed(.browserDidBecomeActive) }
+
         // Update lock icon without redrawing the whole locationView
         if let tab = tabManager.selectedTab {
             urlBar.locationView.tabDidChangeContentBlocking(tab)
         }
 
-        if tabManager.startAtHomeCheck() {
+        didStartAtHome = tabManager.startAtHomeCheck()
+        if didStartAtHome {
             guard presentedViewController != nil else { return }
-                dismissVC()
+            dismissVC()
         }
-        updateWallpaperMetadata()
 
         // When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
         // Make sure that our startup flow is completed and the Profile has been sync'd (at least once) before we load.
@@ -2208,7 +2220,6 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
-        didStartAtHome = tabManager.startAtHomeCheck()
         updateTabCountUsingTabManager(tabManager)
         openUrlAfterRestore()
     }
