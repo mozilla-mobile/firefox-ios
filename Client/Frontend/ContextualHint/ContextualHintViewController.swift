@@ -143,7 +143,8 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
                                                 actionButtonTitle: viewProvider.getCopyFor(.action),
                                                 description: viewProvider.getCopyFor(.description),
                                                 arrowDirection: arrowDirection,
-                                                closeButtonA11yLabel: .ContextualHints.ContextualHintsCloseAccessibility)
+                                                closeButtonA11yLabel: .ContextualHints.ContextualHintsCloseAccessibility,
+                                                actionButtonA11yId: AccessibilityIdentifiers.ContextualHints.actionButton)
         viewModel.closeButtonAction = { [weak self] _ in
             self?.dismissAnimated()
         }

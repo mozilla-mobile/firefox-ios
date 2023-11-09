@@ -11,6 +11,7 @@ public struct ContextualHintViewModel {
     public var description: String
     public var arrowDirection: UIPopoverArrowDirection
     public var closeButtonA11yLabel: String
+    public var actionButtonA11yId: String
 
     public var closeButtonAction: ((UIButton) -> Void)?
     public var actionButtonAction: ((UIButton) -> Void)?
@@ -19,11 +20,13 @@ public struct ContextualHintViewModel {
                 actionButtonTitle: String,
                 description: String,
                 arrowDirection: UIPopoverArrowDirection,
-                closeButtonA11yLabel: String) {
+                closeButtonA11yLabel: String,
+                actionButtonA11yId: String) {
         self.isActionType = isActionType
         self.actionButtonTitle = actionButtonTitle
         self.description = description
         self.arrowDirection = arrowDirection
         self.closeButtonA11yLabel = closeButtonA11yLabel
+        self.actionButtonA11yId = actionButtonA11yId
     }
 }
