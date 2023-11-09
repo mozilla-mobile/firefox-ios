@@ -673,22 +673,19 @@ extension String {
                 key: "FeltPrivacyUI.Title.v121",
                 tableName: "FirefoxHomepage",
                 value: "Leave no traces on this device",
-                comment: "The title for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode."
-            )
+                comment: "The title for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode.")
 
             public static let Body = MZLocalizedString(
-                key: "FeltPrivacyUI.Title.v121",
+                key: "FeltPrivacyUI.Body.v121",
                 tableName: "FirefoxHomepage",
-                value: "Leave no traces on this device",
-                comment: "The title for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode."
-            )
+                value: "%@ deletes your cookies, history, and site data when you close all your private windows.",
+                comment: "The body of the message for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. Placeholder refers to app name.")
 
             public static let Link = MZLocalizedString(
-                key: "FeltPrivacyUI.Title.v121",
+                key: "FeltPrivacyUI.Link.v121",
                 tableName: "FirefoxHomepage",
-                value: "Leave no traces on this device",
-                comment: "The title for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode."
-            )
+                value: "Who might be able to see my activity?",
+                comment: "The link for the card that educates users about how private mode works. The link redirects to an external site for more information. The card shows up on the homepage when in the new privacy mode.")
         }
     }
 }
