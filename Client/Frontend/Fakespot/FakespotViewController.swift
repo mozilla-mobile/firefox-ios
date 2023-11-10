@@ -141,13 +141,14 @@ class FakespotViewController:
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        notificationCenter.post(name: .FakespotViewControllerDidAppear)
         viewModel.recordBottomSheetDisplayed(presentationController)
         updateModalA11y()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        notificationCenter.post(name: .FakespotViewControllerDidDismiss, withObject: nil)
+        notificationCenter.post(name: .FakespotViewControllerDidDismiss)
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
