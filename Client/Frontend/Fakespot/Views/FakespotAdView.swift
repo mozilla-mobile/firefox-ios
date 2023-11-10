@@ -147,9 +147,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
             contentInsets: UX.linkInsets
         )
         productLinkButton.configure(viewModel: productLinkButtonViewModel)
-
-        let grade = ReliabilityGrade(rawValue: productAdsData.grade.uppercased()) ?? .a
-        gradeReliabilityScoreView.grade = grade
+        gradeReliabilityScoreView.configure(grade: productAdsData.grade)
         Task {
             await productImageView.loadImage(from: productAdsData.imageUrl)
         }
@@ -212,7 +210,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
             secondRowStackView.axis = .horizontal
             spacer.isHidden = true
         }
-        setupLayout()
+        setupSubviews()
         setNeedsLayout()
         layoutIfNeeded()
     }
@@ -243,9 +241,6 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
 
         secondRowStackView.addArrangedSubview(productImageView)
         secondRowStackView.addArrangedSubview(productLinkButton)
-
-        gradeReliabilityScoreView.setContentHuggingPriority(.required, for: .vertical)
-        gradeReliabilityScoreView.setContentCompressionResistancePriority(.required, for: .vertical)
 
         secondRowStackView.addArrangedSubview(gradeReliabilityScoreView)
         secondRowStackView.distribution = .fillProportionally
@@ -282,6 +277,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         gradeStackView.axis = .horizontal
         gradeStackView.spacing = UX.hStackSpacing
         gradeStackView.distribution = .fill
+        gradeReliabilityScoreView.heightAnchor.constraint(equalTo: starRatingView.heightAnchor, multiplier: 1.0).isActive = true
         contentStackView.addArrangedSubview(gradeStackView)
 
         // fourth line
@@ -313,7 +309,6 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         priceLabel.textColor = theme.colors.textPrimary
         footerLabel.textColor = theme.colors.textSecondary
         productLinkButton.setTitleColor(theme.colors.textAccent, for: .normal)
-        gradeReliabilityScoreView.layer.backgroundColor = gradeReliabilityScoreView.grade.color(theme: theme).cgColor
         gradeReliabilityScoreView.applyTheme(theme: theme)
         productImageView.theme = theme
     }

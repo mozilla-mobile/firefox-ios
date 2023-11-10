@@ -4020,7 +4020,7 @@ extension String {
             key: "Shopping.AdCard.Title.v121",
             tableName: "Shopping",
             value: "More to consider",
-            comment: "This is displayed above a product image, suggested as an alternative to the product reviewed.")
+            comment: "Title label for the Fakespot Ad card. This is displayed above a product image, suggested as an alternative to the product reviewed.")
         public static let AdCardFooterLabel = MZLocalizedString(
             key: "Shopping.AdCard.Footer.v121",
             tableName: "Shopping",
