@@ -119,7 +119,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         super.init(frame: frame)
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
-        setupLayout()
+        setupConstraints()
     }
 
     // MARK: Configuration
@@ -165,7 +165,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
     private var productImageWidthConstraint: NSLayoutConstraint?
 
     // MARK: Layout Setup
-    private func setupLayout() {
+    private func setupConstraints() {
         if !self.subviews.contains(cardContainer) {
             addSubview(cardContainer)
             insertSubview(footerLabel, belowSubview: cardContainer)
@@ -194,7 +194,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
             footerLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
 
-        setupSubviews()
+        setupLayout()
     }
 
     private func adjustLayout() {
@@ -210,13 +210,13 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
             secondRowStackView.axis = .horizontal
             spacer.isHidden = true
         }
-        setupSubviews()
+        setupLayout()
         setNeedsLayout()
         layoutIfNeeded()
     }
 
     // MARK: Subviews Setup
-    fileprivate func setupSubviews() {
+    fileprivate func setupLayout() {
         secondRowStackView.removeAllArrangedViews()
         thirdRowStackView.removeAllArrangedViews()
         contentStackView.removeAllArrangedViews()
