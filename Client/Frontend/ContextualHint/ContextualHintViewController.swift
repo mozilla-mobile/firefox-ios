@@ -11,7 +11,7 @@ import Shared
 class ContextualHintViewController: UIViewController, OnViewDismissable, Themeable, UIAdaptivePresentationControllerDelegate {
     private struct UX {
         static let contextualHintWidth: CGFloat = 350
-        static let contextualHintLandscapeExtraWidth: CGFloat = 100
+        static let contextualHintLandscapeExtraWidth: CGFloat = 60
     }
 
     // MARK: - UI Elements
@@ -194,8 +194,6 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        coordinator.animate(alongsideTransition: nil) { _ in
-            self.view.setNeedsLayout()
-        }
+        self.view.setNeedsLayout()
     }
 }
