@@ -1191,6 +1191,8 @@
 		D433852C27ABC8150069DD33 /* MappaMundi in Frameworks */ = {isa = PBXBuildFile; productRef = D433852B27ABC8150069DD33 /* MappaMundi */; };
 		D437C4FD25FF5A3E00316F2C /* L10nMktSuiteSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D437C4FC25FF5A3E00316F2C /* L10nMktSuiteSnapshotTests.swift */; };
 		D4859A7727328569009A2390 /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84266742728462900382274 /* AccessibilityIdentifiers.swift */; };
+		D4AFA84E2AFA5482000BFEAA /* ExperimentIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AFA84D2AFA5482000BFEAA /* ExperimentIntegrationTests.swift */; };
+		D4AFAB0E2AFA8F9A000BFEAA /* SyncIntegrationTests in Resources */ = {isa = PBXBuildFile; fileRef = D4AFAB0D2AFA8F99000BFEAA /* SyncIntegrationTests */; };
 		D4C35391283500A600F7DC7D /* PerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C35390283500A600F7DC7D /* PerformanceTests.swift */; };
 		D4C4BDCE2253725E00986F04 /* LibraryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C4BDCD2253725E00986F04 /* LibraryTests.swift */; };
 		D51EA5BA26406A0000334331 /* ExperimentsBranchesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D51EA5B926406A0000334331 /* ExperimentsBranchesViewController.swift */; };
@@ -1470,7 +1472,6 @@
 		E6EAC5961B29CB3A00E1DE1E /* scrollablePage.html in Resources */ = {isa = PBXBuildFile; fileRef = E6EAC5951B29CB3A00E1DE1E /* scrollablePage.html */; };
 		E6F9653C1B2F1D5D0034B023 /* NSURLExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F9653B1B2F1D5D0034B023 /* NSURLExtensionsTests.swift */; };
 		E6FF6ACA1D873CFF0070C294 /* PageMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FF6AC91D873CFF0070C294 /* PageMetadata.swift */; };
-		EA8AE4462A61A85400C9C165 /* ExperimentIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA8AE4452A61A85400C9C165 /* ExperimentIntegrationTests.swift */; };
 		EB07F860240D696000924860 /* PushNotificationSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07F85E240D695F00924860 /* PushNotificationSetup.swift */; };
 		EB1C84BF212EFFBF001489DF /* BrowserViewController+ReaderMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1C84B6212EFFBF001489DF /* BrowserViewController+ReaderMode.swift */; };
 		EB3A38A02032673E004C6E67 /* DatabaseFixtureTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3A38912032673D004C6E67 /* DatabaseFixtureTest.swift */; };
@@ -4859,7 +4860,6 @@
 		7BC3434BA1F23258B3C6622C /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cy; path = "cy.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		7BD94478AB4C7DB2706F7AAF /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cy; path = cy.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		7BEB644D1C7345600092C02E /* L10nSnapshotTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = L10nSnapshotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		7BEB644E1C7345600092C02E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = L10nSnapshotTests/Info.plist; sourceTree = SOURCE_ROOT; };
 		7BEFC67F1BFF68C30059C952 /* QuickActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickActions.swift; sourceTree = "<group>"; };
 		7C0C4902A319FAC7A18682E9 /* lv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lv; path = lv.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		7C1043E3AE32A70E1EC5383A /* su */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = su; path = su.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
@@ -6174,6 +6174,9 @@
 		D46830A328914E2C00CCDE3A /* et */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = et; path = et.lproj/Today.strings; sourceTree = "<group>"; };
 		D486426E953609DD218A8798 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		D4A2419292C555D02004A495 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Storage.strings"; sourceTree = "<group>"; };
+		D4AFA84D2AFA5482000BFEAA /* ExperimentIntegrationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExperimentIntegrationTests.swift; sourceTree = "<group>"; };
+		D4AFA84F2AFA55DB000BFEAA /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		D4AFAB0D2AFA8F99000BFEAA /* SyncIntegrationTests */ = {isa = PBXFileReference; lastKnownFileType = folder; path = SyncIntegrationTests; sourceTree = "<group>"; };
 		D4B5444899A0721B899F9E46 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D4BF6AA72893DDA6001B5130 /* en-US */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-US"; path = "en-US.lproj/WidgetIntents.strings"; sourceTree = "<group>"; };
 		D4BF6AA82893DDA7001B5130 /* en-US */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-US"; path = "en-US.lproj/3DTouchActions.strings"; sourceTree = "<group>"; };
@@ -6864,7 +6867,6 @@
 		E9BB4AED8B0289EEF125BBC5 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		E9DF434082AADD254ECE2489 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/ClearPrivateData.strings"; sourceTree = "<group>"; };
 		E9EF4766A9B41B1946116153 /* kn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kn; path = kn.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		EA8AE4452A61A85400C9C165 /* ExperimentIntegrationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExperimentIntegrationTests.swift; path = Tests/XCUITests/ExperimentIntegrationTests.swift; sourceTree = "<group>"; };
 		EAAD40AA9E3874E1EA267550 /* jv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = jv; path = jv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EAF79C172A6F0B9500251CA4 /* ExperimentIntegrationTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = ExperimentIntegrationTests.xctestplan; sourceTree = "<group>"; };
 		EB07F85E240D695F00924860 /* PushNotificationSetup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushNotificationSetup.swift; sourceTree = "<group>"; };
@@ -7928,6 +7930,7 @@
 		3BFE4B081D342FB900DDF53F /* XCUITests */ = {
 			isa = PBXGroup;
 			children = (
+				D4AFA84D2AFA5482000BFEAA /* ExperimentIntegrationTests.swift */,
 				782B0A352AB41DFC0049EE1A /* FakespotTests.swift */,
 				787EDD832943EE75002B93AE /* JumpBackInTests.swift */,
 				4F2A06BD26F8E46E0017DA05 /* TabCounterTests.swift */,
@@ -8277,7 +8280,6 @@
 		7B3632D21C2983F000D12AF9 /* L10nSnapshotTests */ = {
 			isa = PBXGroup;
 			children = (
-				7BEB644E1C7345600092C02E /* Info.plist */,
 				E40AFC641DD0F25500DA5651 /* L10nBaseSnapshotTests.swift */,
 				E40AFC6B1DD128DA00DA5651 /* L10nSuite1SnapshotTests.swift */,
 				E40AFC531DD0E93300DA5651 /* L10nPermissionStringsSnapshotTests.swift */,
@@ -8291,7 +8293,6 @@
 			isa = PBXGroup;
 			children = (
 				7B60B0071BDE3AE10090C984 /* SnapshotHelper.swift */,
-				7B3632D21C2983F000D12AF9 /* L10nSnapshotTests */,
 			);
 			name = Snapshot;
 			sourceTree = "<group>";
@@ -9939,6 +9940,15 @@
 			path = Browser;
 			sourceTree = "<group>";
 		};
+		D4AFA84B2AFA4FC6000BFEAA /* firefox-ios */ = {
+			isa = PBXGroup;
+			children = (
+				D4AFA84F2AFA55DB000BFEAA /* README.md */,
+				E15A8B2B286CFD48004BB2B8 /* Tests */,
+			);
+			path = "firefox-ios";
+			sourceTree = "<group>";
+		};
 		D51EA5B82640697100334331 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -10058,6 +10068,8 @@
 		E15A8B2B286CFD48004BB2B8 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				D4AFAB0D2AFA8F99000BFEAA /* SyncIntegrationTests */,
+				7B3632D21C2983F000D12AF9 /* L10nSnapshotTests */,
 				EAF79C172A6F0B9500251CA4 /* ExperimentIntegrationTests.xctestplan */,
 				E1AF355B286DE5F600960045 /* FullFunctionalTestPlan.xctestplan */,
 				E1AF355F286DE5F700960045 /* PerformanceTestPlan.xctestplan */,
@@ -10589,7 +10601,8 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
-				EA8AE4452A61A85400C9C165 /* ExperimentIntegrationTests.swift */,
+				7B3632E71C29879300D12AF9 /* Snapshot */,
+				D4AFA84B2AFA4FC6000BFEAA /* firefox-ios */,
 				962C6C39297054A700354BE8 /* Package.swift */,
 				962C6C3F2971F5D400354BE8 /* Dangerfile.swift */,
 				962C6C3B297054EC00354BE8 /* Sources */,
@@ -10606,11 +10619,9 @@
 				D34DC84C1A16C40C00D49B7B /* Providers */,
 				39F99FC71E3A6DB700F353B4 /* Push */,
 				E4E0BB141AFBC9E4008D6260 /* Shared */,
-				7B3632E71C29879300D12AF9 /* Snapshot */,
 				2FCAE21B1ABB51F800877008 /* Storage */,
 				28CE83B91A1D1D3200576538 /* Sync */,
 				28CE83EF1A1D246900576538 /* Third-Party Source */,
-				E15A8B2B286CFD48004BB2B8 /* Tests */,
 				43BE578B278BA4D900491291 /* RustMozillaAppServices-Info.plist */,
 				C2446B2E2A856BEA000C527D /* Recovered References */,
 			);
@@ -11823,6 +11834,7 @@
 				8AA1A8892AF2A0C90026B0E0 /* disconnect-block-cookies-advertising.json in Resources */,
 				8AA1A88A2AF2A0C90026B0E0 /* disconnect-block-cookies-content.json in Resources */,
 				8AA1A88B2AF2A0C90026B0E0 /* disconnect-block-content.json in Resources */,
+				D4AFAB0E2AFA8F9A000BFEAA /* SyncIntegrationTests in Resources */,
 				8AA1A88C2AF2A0C90026B0E0 /* disconnect-block-advertising.json in Resources */,
 				8AA1A88D2AF2A0C90026B0E0 /* disconnect-block-cookies-analytics.json in Resources */,
 				43F92B3829E9F52B000C0F17 /* AutofillAllFramesAtDocumentStart.js in Resources */,
@@ -12358,7 +12370,6 @@
 			files = (
 				2CA16FDE1E5F089100332277 /* SearchTest.swift in Sources */,
 				0BF0DB4A1E57B05E009172B0 /* LaunchArguments.swift in Sources */,
-				EA8AE4462A61A85400C9C165 /* ExperimentIntegrationTests.swift in Sources */,
 				8A9F0B5827C59E1800FE09AE /* ImageIdentifiers.swift in Sources */,
 				3B546EC01D95ECAE00BDBE36 /* ActivityStreamTest.swift in Sources */,
 				2CCB296720A99C9500121DD8 /* LoginsTests.swift in Sources */,
@@ -12396,6 +12407,7 @@
 				39C261CC2018DE21009D97BD /* FxScreenGraphTests.swift in Sources */,
 				787EDD852943EE75002B93AE /* JumpBackInTests.swift in Sources */,
 				B15058812AA0A878008B7382 /* OpeningScreenTests.swift in Sources */,
+				D4AFA84E2AFA5482000BFEAA /* ExperimentIntegrationTests.swift in Sources */,
 				3DEFED081F55EBE300F8620C /* TrackingProtectionTests.swift in Sources */,
 				2CEDADA220207EC400223A89 /* SyncFAUITests.swift in Sources */,
 				C84266772728462900382274 /* AccessibilityIdentifiers.swift in Sources */,
@@ -17896,8 +17908,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = Tests/SyncTests/Info.plist;
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Tests/SyncTests/SyncTests-Bridging-Header.h";
+				INFOPLIST_FILE = "firefox-ios/Tests/SyncTests/Info.plist";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/firefox-ios/Tests/SyncTests/SyncTests-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Fennec;
@@ -17953,7 +17965,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = Tests/AccountTests/Info.plist;
+				INFOPLIST_FILE = "firefox-ios/Tests/AccountTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -17974,7 +17986,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = Tests/StorageTests/Info.plist;
+				INFOPLIST_FILE = "firefox-ios/Tests/StorageTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18055,7 +18067,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = Tests/StoragePerfTests/Info.plist;
+				INFOPLIST_FILE = "firefox-ios/Tests/StoragePerfTests/Info.plist";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Fennec;
@@ -18064,7 +18076,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = Tests/StoragePerfTests/Info.plist;
+				INFOPLIST_FILE = "firefox-ios/Tests/StoragePerfTests/Info.plist";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Firefox;
@@ -18073,7 +18085,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = Tests/StoragePerfTests/Info.plist;
+				INFOPLIST_FILE = "firefox-ios/Tests/StoragePerfTests/Info.plist";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = FirefoxBeta;
@@ -18085,10 +18097,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = Tests/XCUITests/Info.plist;
+				INFOPLIST_FILE = "firefox-ios/Tests/XCUITests/Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PROVISIONING_PROFILE_SPECIFIER = "org.mozilla.ios.XCUITests 2021-08-12";
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Tests/XCUITests/XCUITests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/firefox-ios/Tests/XCUITests/XCUITests-Bridging-Header.h";
 				TEST_TARGET_NAME = Client;
 			};
 			name = Fennec;
@@ -18100,7 +18112,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = Tests/XCUITests/Info.plist;
+				INFOPLIST_FILE = "firefox-ios/Tests/XCUITests/Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.XCUITests";
 				TEST_TARGET_NAME = Client;
@@ -18114,7 +18126,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = Tests/XCUITests/Info.plist;
+				INFOPLIST_FILE = "firefox-ios/Tests/XCUITests/Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.XCUITests";
 				TEST_TARGET_NAME = Client;
@@ -18295,8 +18307,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = Tests/UITests/Info.plist;
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Tests/UITests/UITests-Bridging-Header.h";
+				INFOPLIST_FILE = "firefox-ios/Tests/UITests/Info.plist";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/firefox-ios/Tests/UITests/UITests-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 				VALIDATE_WORKSPACE = YES;
 			};
@@ -18305,7 +18317,7 @@
 		D39FA1691A83E0EC00EE869C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Tests/UITests/Info.plist;
+				INFOPLIST_FILE = "firefox-ios/Tests/UITests/Info.plist";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 				VALIDATE_WORKSPACE = YES;
 			};
@@ -18357,7 +18369,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = Tests/ClientTests/Info.plist;
+				INFOPLIST_FILE = "firefox-ios/Tests/ClientTests/Info.plist";
 				PRODUCT_NAME = ClientTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18425,7 +18437,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				INFOPLIST_FILE = Tests/StorageTests/Info.plist;
+				INFOPLIST_FILE = "firefox-ios/Tests/StorageTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18459,7 +18471,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				INFOPLIST_FILE = Tests/AccountTests/Info.plist;
+				INFOPLIST_FILE = "firefox-ios/Tests/AccountTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18482,8 +18494,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = Tests/SyncTests/Info.plist;
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Tests/SyncTests/SyncTests-Bridging-Header.h";
+				INFOPLIST_FILE = "firefox-ios/Tests/SyncTests/Info.plist";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/firefox-ios/Tests/SyncTests/SyncTests-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Firefox;
@@ -18525,7 +18537,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = Tests/SyncTelemetryTests/Info.plist;
+				INFOPLIST_FILE = "firefox-ios/Tests/SyncTelemetryTests/Info.plist";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Fennec;
@@ -18534,7 +18546,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = Tests/SyncTelemetryTests/Info.plist;
+				INFOPLIST_FILE = "firefox-ios/Tests/SyncTelemetryTests/Info.plist";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Fennec_Enterprise;
@@ -18543,7 +18555,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = Tests/SyncTelemetryTests/Info.plist;
+				INFOPLIST_FILE = "firefox-ios/Tests/SyncTelemetryTests/Info.plist";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Firefox;
@@ -18552,7 +18564,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = Tests/SyncTelemetryTests/Info.plist;
+				INFOPLIST_FILE = "firefox-ios/Tests/SyncTelemetryTests/Info.plist";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = FirefoxBeta;
@@ -18696,7 +18708,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = Tests/ClientTests/Info.plist;
+				INFOPLIST_FILE = "firefox-ios/Tests/ClientTests/Info.plist";
 				PRODUCT_NAME = ClientTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18706,8 +18718,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = Tests/UITests/Info.plist;
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Tests/UITests/UITests-Bridging-Header.h";
+				INFOPLIST_FILE = "firefox-ios/Tests/UITests/Info.plist";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/firefox-ios/Tests/UITests/UITests-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 				VALIDATE_WORKSPACE = YES;
 			};
@@ -18717,7 +18729,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = Tests/StorageTests/Info.plist;
+				INFOPLIST_FILE = "firefox-ios/Tests/StorageTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18727,7 +18739,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = Tests/AccountTests/Info.plist;
+				INFOPLIST_FILE = "firefox-ios/Tests/AccountTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18737,8 +18749,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = Tests/SyncTests/Info.plist;
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Tests/SyncTests/SyncTests-Bridging-Header.h";
+				INFOPLIST_FILE = "firefox-ios/Tests/SyncTests/Info.plist";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/firefox-ios/Tests/SyncTests/SyncTests-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Fennec_Enterprise;
@@ -18747,7 +18759,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = Tests/SharedTests/Info.plist;
+				INFOPLIST_FILE = "firefox-ios/Tests/SharedTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18778,7 +18790,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.XCUITests;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Fennec Enterprise XCUITests";
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Tests/XCUITests/XCUITests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/firefox-ios/Tests/XCUITests/XCUITests-Bridging-Header.h";
 				TEST_TARGET_NAME = Client;
 			};
 			name = Fennec_Enterprise;
@@ -18787,7 +18799,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = Tests/StoragePerfTests/Info.plist;
+				INFOPLIST_FILE = "firefox-ios/Tests/StoragePerfTests/Info.plist";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Fennec_Enterprise;
@@ -18796,7 +18808,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = Tests/SharedTests/Info.plist;
+				INFOPLIST_FILE = "firefox-ios/Tests/SharedTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18806,7 +18818,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = Tests/SharedTests/Info.plist;
+				INFOPLIST_FILE = "firefox-ios/Tests/SharedTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18858,7 +18870,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = Tests/ClientTests/Info.plist;
+				INFOPLIST_FILE = "firefox-ios/Tests/ClientTests/Info.plist";
 				PRODUCT_NAME = ClientTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18924,7 +18936,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				INFOPLIST_FILE = Tests/StorageTests/Info.plist;
+				INFOPLIST_FILE = "firefox-ios/Tests/StorageTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18959,7 +18971,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				INFOPLIST_FILE = Tests/AccountTests/Info.plist;
+				INFOPLIST_FILE = "firefox-ios/Tests/AccountTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18988,8 +19000,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = Tests/SyncTests/Info.plist;
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Tests/SyncTests/SyncTests-Bridging-Header.h";
+				INFOPLIST_FILE = "firefox-ios/Tests/SyncTests/Info.plist";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/firefox-ios/Tests/SyncTests/SyncTests-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = FirefoxBeta;
@@ -18998,7 +19010,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = Tests/SharedTests/Info.plist;
+				INFOPLIST_FILE = "firefox-ios/Tests/SharedTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -19347,7 +19359,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = Tests/ClientTests/Info.plist;
+				INFOPLIST_FILE = "firefox-ios/Tests/ClientTests/Info.plist";
 				PRODUCT_NAME = ClientTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};

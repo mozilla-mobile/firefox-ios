@@ -49,7 +49,7 @@
       region = "US">
       <TestPlans>
          <TestPlanReference
-            reference = "container:Tests/PerformanceTestPlan.xctestplan"
+            reference = "container:firefox-ios/Tests/PerformanceTestPlan.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>
