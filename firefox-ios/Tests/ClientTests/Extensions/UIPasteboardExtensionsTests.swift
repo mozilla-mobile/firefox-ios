@@ -4,6 +4,7 @@
 
 import MobileCoreServices
 import UIKit
+import UniformTypeIdentifiers
 import XCTest
 
 class UIPasteboardExtensionsTests: XCTestCase {
@@ -25,7 +26,7 @@ class UIPasteboardExtensionsTests: XCTestCase {
         let data = try Data(contentsOf: URL(fileURLWithPath: path))
         let url = URL(string: "http://foo.bar")!
         pasteboard.addImageWithData(data, forURL: url)
-        verifyPasteboard(expectedURL: url, expectedImageTypeKey: kUTTypePNG)
+        verifyPasteboard(expectedURL: url, expectedImageTypeKey: UTType.png.identifier)
     }
 
     func testAddGIFImage() throws {
@@ -33,13 +34,13 @@ class UIPasteboardExtensionsTests: XCTestCase {
         let data = try Data(contentsOf: URL(fileURLWithPath: path))
         let url = URL(string: "http://foo.bar")!
         pasteboard.addImageWithData(data, forURL: url)
-        verifyPasteboard(expectedURL: url, expectedImageTypeKey: kUTTypeGIF)
+        verifyPasteboard(expectedURL: url, expectedImageTypeKey: UTType.gif.identifier)
     }
 
-    fileprivate func verifyPasteboard(expectedURL: URL, expectedImageTypeKey: CFString) {
+    fileprivate func verifyPasteboard(expectedURL: URL, expectedImageTypeKey: String) {
         XCTAssertEqual(pasteboard.items.count, 1)
         XCTAssertEqual(pasteboard.items[0].count, 2)
-        XCTAssertEqual(pasteboard.items[0][kUTTypeURL as String] as? URL, expectedURL)
-        XCTAssertNotNil(pasteboard.items[0][expectedImageTypeKey as String])
+        XCTAssertEqual(pasteboard.items[0][UTType.url.identifier] as? URL, expectedURL)
+        XCTAssertNotNil(pasteboard.items[0][expectedImageTypeKey])
     }
 }
