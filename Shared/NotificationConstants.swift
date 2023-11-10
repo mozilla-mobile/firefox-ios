@@ -54,6 +54,8 @@ extension Notification.Name {
 
     public static let FakespotViewControllerDidDismiss = Notification.Name("FakespotViewControllerDidDismiss")
 
+    public static let FakespotViewControllerDidAppear = Notification.Name("FakespotViewControllerDidAppear")
+
     public static let FileDidDownload = Notification.Name("FileDidDownload")
 
     public static let SearchBarPositionDidChange = Notification.Name("SearchBarPositionDidChange")
