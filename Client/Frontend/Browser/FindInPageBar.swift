@@ -29,6 +29,7 @@ class FindInPageBar: UIView, ThemeApplicable {
         textField.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .callout, size: UX.fontSize)
         textField.setContentHuggingPriority(.defaultLow, for: .horizontal)
         textField.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        textField.adjustsFontForContentSizeCategory = true
         textField.autocapitalizationType = .none
         textField.autocorrectionType = .no
         textField.inputAssistantItem.leadingBarButtonGroups = []
@@ -45,6 +46,7 @@ class FindInPageBar: UIView, ThemeApplicable {
         label.accessibilityIdentifier = "FindInPage.matchCount"
         label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+        label.adjustsFontForContentSizeCategory = true
     }
 
     private lazy var previousButton: UIButton = .build { button in
@@ -117,24 +119,26 @@ class FindInPageBar: UIView, ThemeApplicable {
             matchCountView.centerYAnchor.constraint(equalTo: centerYAnchor),
 
             previousButton.leadingAnchor.constraint(equalTo: matchCountView.trailingAnchor),
-            previousButton.widthAnchor.constraint(greaterThanOrEqualTo: heightAnchor),
+            previousButton.widthAnchor.constraint(equalTo: heightAnchor),
+            previousButton.heightAnchor.constraint(equalTo: heightAnchor),
             previousButton.centerYAnchor.constraint(equalTo: centerYAnchor),
 
             nextButton.leadingAnchor.constraint(equalTo: previousButton.trailingAnchor),
-            nextButton.widthAnchor.constraint(greaterThanOrEqualTo: heightAnchor),
+            nextButton.widthAnchor.constraint(equalTo: heightAnchor),
+            nextButton.heightAnchor.constraint(equalTo: heightAnchor),
             nextButton.centerYAnchor.constraint(equalTo: centerYAnchor),
 
             closeButton.leadingAnchor.constraint(equalTo: nextButton.trailingAnchor),
-            closeButton.widthAnchor.constraint(greaterThanOrEqualTo: heightAnchor),
+            closeButton.widthAnchor.constraint(equalTo: heightAnchor),
+            closeButton.heightAnchor.constraint(equalTo: heightAnchor),
             closeButton.trailingAnchor.constraint(equalTo: trailingAnchor),
             closeButton.centerYAnchor.constraint(equalTo: centerYAnchor),
 
             topBorder.heightAnchor.constraint(equalToConstant: 1),
-            topBorder.leftAnchor.constraint(equalTo: leftAnchor),
-            topBorder.rightAnchor.constraint(equalTo: rightAnchor),
+            topBorder.leadingAnchor.constraint(equalTo: leadingAnchor),
+            topBorder.trailingAnchor.constraint(equalTo: trailingAnchor),
             topBorder.topAnchor.constraint(equalTo: topAnchor)
         ])
-
     }
 
     required init?(coder aDecoder: NSCoder) {
