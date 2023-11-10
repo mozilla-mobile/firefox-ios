@@ -52,12 +52,13 @@ public final class EventQueue<QueueEventType: Hashable> {
 
     // MARK: - Public API
 
-    /// Queues a particular action for execution once the provided events or activities
-    /// have completed. If the dependencies have already all occurred, the block is executed
-    /// immediately. An optional ActionToken may be provided explicitly for particular
-    /// action, if so any subsequent calls to this function will _not_ enqueue that
-    /// action again if it is already pending execution. This provides a convenience for
-    /// automatically avoiding duplicate work.
+    /// Queues a particular action for execution once the required events or activities
+    /// have completed. If the dependencies have already been completed, the action is
+    /// executed immediately. An optional ActionToken may be provided explicitly for a
+    /// particular action; if so, any subsequent calls to this function will _not_ enqueue
+    /// that action again if it is already pending execution. This provides a convenience
+    /// for de-duplicating calls that might accidentally enqueue the same action twice.
+    /// 
     /// - Parameters:
     ///   - events: the dependent events.
     ///   - token: an optional UUID that identifies the specific work being enqueued. If
