@@ -7,12 +7,12 @@ import Foundation
 import Shared
 
 class SnackBar: UIView, ThemeApplicable {
-    let snackbarClassIdentifier: String
-
     private struct UX {
         static let borderWidth: CGFloat = 0.5
         static let fontSize: CGFloat = 17
     }
+
+    let snackbarClassIdentifier: String
 
     private var scrollViewHeightConstraint = NSLayoutConstraint()
     private var buttonsViewConstraints = [NSLayoutConstraint]()

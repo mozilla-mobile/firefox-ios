@@ -16,7 +16,7 @@ class SnackButton: UIButton, ThemeApplicable {
         static let borderWidth: CGFloat = 0.5
         static let fontSize: CGFloat = 17
     }
-    
+
     let callback: SnackBarCallback?
     var bar: SnackBar?
 
