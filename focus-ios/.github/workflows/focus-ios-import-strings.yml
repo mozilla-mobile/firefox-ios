@@ -31,7 +31,7 @@ jobs:
     - name: Get the current date for PR title
       run: echo "current_date=$(date +"%m-%d-%Y")" >> $GITHUB_ENV
     - name: Run script to import strings
-      run: sh ./tools/import-strings.sh
+      run: sh ./focus-ios/tools/import-strings.sh
     - name: Update new strings
       run: |-
         git diff || (git add Blockzilla/*/*.lproj/* Blockzilla/*.lproj/* Blockzilla.xcodeproj/project.pbxproj)

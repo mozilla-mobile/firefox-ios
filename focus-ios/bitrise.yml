@@ -395,7 +395,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -x
-            tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+            focus-ios/tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
               --org mozilla --project focus-ios "$BITRISE_DSYM_DIR_PATH"
     - xcode-archive@3:
         inputs:
@@ -413,7 +413,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -x
-            tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+            focus-ios/tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
               --org mozilla --project klar-ios "$BITRISE_DSYM_DIR_PATH"
     meta:
       bitrise.io:
