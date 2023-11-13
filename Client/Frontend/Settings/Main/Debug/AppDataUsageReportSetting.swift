@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Common
 
 class AppDataUsageReportSetting: HiddenSetting {
     override var title: NSAttributedString? {
@@ -37,8 +38,14 @@ class AppDataUsageReportSetting: HiddenSetting {
 
         let searchDirectories: [FileManager.SearchPathDirectory] =
         [.cachesDirectory, .documentDirectory, .applicationSupportDirectory, .downloadsDirectory]
-        let directoryURLs: [URL] = searchDirectories
+        var directoryURLs: [URL] = searchDirectories
             .compactMap({ fileManager.urls(for: $0, in: .userDomainMask).first })
+
+        // Also calculate usage of database and other Profile data in shared container
+        let containerID = AppInfo.sharedContainerIdentifier
+        if let containerURL = fileManager.containerURL(forSecurityApplicationGroupIdentifier: containerID) {
+            directoryURLs.append(containerURL)
+        }
 
         for baseDirectory in directoryURLs {
             guard let enumerator = fileManager.enumerator(at: baseDirectory,
