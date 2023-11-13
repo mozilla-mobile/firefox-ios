@@ -351,6 +351,11 @@ class FakespotViewController:
              view.updateLayoutForInProgress()
              return view
 
+        case .productAdCard:
+            let view: FakespotAdView = .build()
+
+            return view
+
         case .messageCard(let messageType):
             switch messageType {
             case .genericError:

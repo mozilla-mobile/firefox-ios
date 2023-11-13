@@ -4036,6 +4036,16 @@ extension String {
             tableName: "Shopping",
             value: "We should have info about this product’s reviews within 24 hours. Please check back.",
             comment: "Description text for an information card used in the review checker section. This message is displayed when the reviews for a product are not yet available but are expected to be provided within the next 24 hours. It serves to inform users of the short wait for reviews and encourages them to return soon for the updated information.")
+        public static let AdCardTitleLabel = MZLocalizedString(
+            key: "Shopping.AdCard.Title.v121",
+            tableName: "Shopping",
+            value: "More to consider",
+            comment: "Title label for the Fakespot Ad card. This is displayed above a product image, suggested as an alternative to the product reviewed.")
+        public static let AdCardFooterLabel = MZLocalizedString(
+            key: "Shopping.AdCard.Footer.v121",
+            tableName: "Shopping",
+            value: "Ad by %@",
+            comment: "Footer label from the Fakespot Ad card displayed for the related product we advertise. This is displayed below the ad card, suggested as an alternative to the product reviewed. The first parameter will be replaced by the Fakespot app name")
     }
 }
 

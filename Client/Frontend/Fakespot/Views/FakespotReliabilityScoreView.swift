@@ -39,13 +39,17 @@ final class FakespotReliabilityScoreView: UIView, Notifiable, ThemeApplicable {
                            observing: [.DynamicFontChanged])
         setupLayout()
         setupView()
-        reliabilityLetterLabel.text = grade.rawValue
-        reliabilityLetterLabel.accessibilityLabel = String(format: .Shopping.ReliabilityScoreGradeA11yLabel,
-                                                           grade.rawValue)
+        configure(grade: grade)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    public func configure(grade: ReliabilityGrade) {
+        reliabilityLetterLabel.text = grade.rawValue
+        reliabilityLetterLabel.accessibilityLabel = String(format: .Shopping.ReliabilityScoreGradeA11yLabel,
+                                                           grade.rawValue)
     }
 
     private func setupLayout() {
