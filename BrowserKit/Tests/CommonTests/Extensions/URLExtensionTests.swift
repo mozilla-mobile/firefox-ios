@@ -154,8 +154,15 @@ final class URLExtensionTests: XCTestCase {
         XCTAssertNil(url.host)
     }
 
-    func testRemoveBlobFromUrl() {
+    func testRemoveBlobFromUrl_WithBlob() {
         let url = URL(string: "blob:https://example.blob.com")!
+
+        let originalURL = url.removeBlobFromUrl()
+        XCTAssertEqual(originalURL, URL(string: "https://example.blob.com"))
+    }
+
+    func testRemoveBlobFromUrl_WithoutBlob() {
+        let url = URL(string: "https://example.blob.com")!
 
         let originalURL = url.removeBlobFromUrl()
         XCTAssertEqual(originalURL, URL(string: "https://example.blob.com"))
