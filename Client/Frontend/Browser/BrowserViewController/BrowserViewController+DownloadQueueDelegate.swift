@@ -8,7 +8,6 @@ import Shared
 
 extension BrowserViewController: DownloadQueueDelegate {
     func downloadQueue(_ downloadQueue: DownloadQueue, didStartDownload download: Download) {
-        print("YRD didStartDownload")
         // If no other download toast is shown, create a new download toast and show it.
         guard let downloadToast = self.downloadToast else {
             let downloadToast = DownloadToast(download: download,
@@ -37,13 +36,10 @@ extension BrowserViewController: DownloadQueueDelegate {
     }
 
     func downloadQueue(_ downloadQueue: DownloadQueue, didDownloadCombinedBytes combinedBytesDownloaded: Int64, combinedTotalBytesExpected: Int64?) {
-        print("YRD didFinishDownloadingTo")
         downloadToast?.combinedBytesDownloaded = combinedBytesDownloaded
     }
 
-    func downloadQueue(_ downloadQueue: DownloadQueue, download: Download, didFinishDownloadingTo location: URL) {
-        print("YRD didFinishDownloadingTo")
-    }
+    func downloadQueue(_ downloadQueue: DownloadQueue, download: Download, didFinishDownloadingTo location: URL) {}
 
     func downloadQueue(_ downloadQueue: DownloadQueue, didCompleteWithError error: Error?) {
         guard let downloadToast = self.downloadToast,

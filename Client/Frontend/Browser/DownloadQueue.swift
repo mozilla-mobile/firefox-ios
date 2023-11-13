@@ -144,7 +144,6 @@ extension HTTPDownload: URLSessionTaskDelegate, URLSessionDownloadDelegate {
             resumeData != nil {
             return
         }
-        print("YRD didCompleteWithError \(task.response)")
         delegate?.download(self, didCompleteWithError: error)
     }
 
@@ -171,7 +170,6 @@ class BlobDownload: Download {
     private let data: Data
 
     init(filename: String, mimeType: String, size: Int64, data: Data) {
-        print("YRD init blobDownload")
         self.data = data
 
         super.init()
@@ -225,7 +223,6 @@ class DownloadQueue {
 
     func enqueue(_ download: Download) {
         // Clear the download stats if the queue was empty at the start.
-        print("YRD enqueue download")
         if downloads.isEmpty {
             combinedBytesDownloaded = 0
             combinedTotalBytesExpected = 0
@@ -266,7 +263,6 @@ class DownloadQueue {
 
 extension DownloadQueue: DownloadDelegate {
     func download(_ download: Download, didCompleteWithError error: Error?) {
-        print("YRD DownloadQueue with error \(error)")
         guard let error = error, let index = downloads.firstIndex(of: download) else { return }
 
         lastDownloadError = error
@@ -283,7 +279,6 @@ extension DownloadQueue: DownloadDelegate {
     }
 
     func download(_ download: Download, didFinishDownloadingTo location: URL) {
-        print("YRD didFinishDownload with url \(location)")
         guard let index = downloads.firstIndex(of: download) else { return }
 
         downloads.remove(at: index)

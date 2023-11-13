@@ -94,7 +94,6 @@ class DownloadHelper: NSObject {
     }
 
     func downloadViewModel(okAction: @escaping (HTTPDownload) -> Void) -> PhotonActionSheetViewModel? {
-        print("YRD download view model")
         var requestUrl = request.url
         if let url = requestUrl, url.scheme == "blob" {
             requestUrl = url.removeBlobFromUrl()
