@@ -3747,9 +3747,9 @@ extension String {
             value: "Adjusted rating",
             comment: "Title of the adjusted rating card displayed in the shopping review quality bottom sheet.")
         public static let AdjustedRatingDescription = MZLocalizedString(
-            key: "Shopping.AdjustedRating.Description.v120",
+            key: "Shopping.AdjustedRating.Description.v121",
             tableName: "Shopping",
-            value: "Unreliable reviews removed",
+            value: "Based on reliable reviews",
             comment: "Description adjusted of the rating card displayed in the shopping review quality bottom sheet.")
         public static let AdjustedRatingStarsAccessibilityLabel = MZLocalizedString(
             key: "Shopping.AdjustedRating.StarsAccessibilityLabel.v120",
