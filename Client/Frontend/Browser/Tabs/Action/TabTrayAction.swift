@@ -12,7 +12,7 @@ enum TabTrayAction: Action {
     case addNewTab(Bool) // isPrivate
     case closeTab(Int)
     case closeAllTabs
-    case closeInactiveTab
+    case moveTab(Int, Int)
 
     // Private tabs action
     case learnMorePrivateMode

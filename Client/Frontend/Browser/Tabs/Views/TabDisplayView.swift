@@ -51,6 +51,8 @@ class TabDisplayView: UIView,
         collectionView.dragInteractionEnabled = true
         collectionView.dataSource = self
         collectionView.delegate = self
+        collectionView.dragDelegate = self
+        collectionView.dropDelegate = self
         collectionView.collectionViewLayout = createLayout()
         return collectionView
     }()
@@ -229,5 +231,45 @@ class TabDisplayView: UIView,
         if let indexPath = collectionView.indexPath(for: cell) {
             store.dispatch(TabTrayAction.closeTab(indexPath.row))
         }
+    }
+}
+
+// MARK: - Drag and Drop delegates
+extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDelegate {
+    func collectionView(_ collectionView: UICollectionView,
+                        itemsForBeginning session: UIDragSession,
+                        at indexPath: IndexPath) -> [UIDragItem] {
+        guard let section = TabDisplayView.TabDisplaySection(rawValue: indexPath.section),
+              section == .tabs
+        else { return [] }
+
+        // TODO: Add telemetry
+        let itemProvider = NSItemProvider()
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = tabTrayState.tabs[indexPath.row]
+        return [dragItem]
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        dropSessionDidUpdate session: UIDropSession,
+                        withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+        return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        performDropWith coordinator: UICollectionViewDropCoordinator) {
+        guard collectionView.hasActiveDrag,
+              let destinationIndexPath = coordinator.destinationIndexPath,
+              let dragItem = coordinator.items.first?.dragItem,
+              let tab = dragItem.localObject as? TabCellState,
+              let sourceIndex = tabTrayState.tabs.firstIndex(of: tab) else { return }
+
+        let section = destinationIndexPath.section
+        let start = IndexPath(row: sourceIndex, section: section)
+        let end = IndexPath(row: destinationIndexPath.item, section: section)
+//        store.dispatch(TabTrayAction.moveTab(start, end))
+        coordinator.drop(dragItem, toItemAt: destinationIndexPath)
+
+        collectionView.moveItem(at: start, to: end)
     }
 }
