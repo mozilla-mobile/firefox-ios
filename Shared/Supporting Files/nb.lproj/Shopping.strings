@@ -94,9 +94,6 @@
 /* Title for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
 "Shopping.NoAnalysisCard.InProgress.Headline.Title.v120" = "Kontrollerer kvaliteten på vurderingen";
 
-/* Text for the disclaimer that appears beneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replaced by the Fakespot app name. */
-"Shopping.OptInCard.Disclaimer.Title.v120" = "Ved å velge «Ja, prøv det» godtar du %@:";
-
 /* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. The third and fourth parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. */
 "Shopping.OptInCard.FirstParagraph.Description.v120" = "Se hvor pålitelige produktanmeldelser er på %1$@ før du handler. Vurderingskontrollør, en eksperimentell funksjon fra %2$@, er innebygd rett i nettleseren. Det fungerer på %3$@ og %4$@ også.";
 
@@ -120,4 +117,82 @@
 
 /* Show Firefox Browser Terms of Use page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
 "Shopping.OptInCard.TermsOfUse.Button.Title.v120" = "Brukervilkår";
+
+/* Accessibility label for the Grade labels used in 'How we determine review quality' card and 'How reliable are these reviews' card displayed in the shopping review quality bottom sheet. The placeholder will be replaced by a grade letter (e.g. A). The grading system contains letters from A-F. */
+"Shopping.ReliabilityScore.Grade.A11y.Label.v120" = "Karakter %@";
+
+/* Title of the reliability card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQuality.ReliabilityCardTitle.v120" = "Hvor pålitelige er disse vurderingene?";
+
+/* Description of the reliability ratings for rating 'A' and 'B' displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQuality.ReliabilityRating.AB.Description.v120" = "Pålitelige vurderinger";
+
+/* Description of the reliability rating 'C' displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQuality.ReliabilityRating.C.Description.v120" = "Blanding av pålitelige og upålitelige vurderinger";
+
+/* Description of the reliability ratings for rating 'D' and 'F' displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQuality.ReliabilityRating.DF.Description.v120" = "Upålitelige vurderinger";
+
+/* Adjusted rating label from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.AdjustedRating.Label.v120" = "Den *justerte vurderingen* er kun basert på vurderinger vi mener er pålitelige.";
+
+/* Accessibility label for the up chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.Collapse.AccessibilityLabel.v120" = "Skjul «Hvordan vi bestemmer vurderingskvalitet»-kortet";
+
+/* Accessibility label for the down chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.Expand.AccessibilityLabel.v120" = "Utvid «Hvordan vi bestemmer vurderingskvalitet»-kortet";
+
+/* Label of the headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
+"Shopping.ReviewQualityCard.Headline.Label.v120" = "Vi bruker kunstig intelligens (AI) fra %1$@ fra %2$@ for å sjekke påliteligheten til produktvurderinger. Dette vil bare hjelpe deg med å bedømme kvaliteten av vurderinger, ikke kvaliteten på selve produktetet.";
+
+/* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.Highlights.Label.v120" = "*Høydepunkter* er fra %1@ vurderinger i løpet av de siste 80 dagene som vi mener er pålitelige.";
+
+/* Title of the 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.Label.Title.v120" = "Hvordan vi avgjør vurderingskvalitet";
+
+/* The title of the learn more button from How we determine review quality card displayed in the shopping review quality bottom sheet. The placeholder will be replaced with the Fakespot app name. */
+"Shopping.ReviewQualityCard.LearnMoreButton.Title.v120" = "Finn ut mer om hvordan %@ avgjør vurderingskvalitet";
+
+/* Mixed reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.MixedReviews.Label.v120" = "Vi tror det er en blanding av pålitelige og upålitelige vurderinger";
+
+/* Reliable reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.ReliableReviews.Label.v120" = "Pålitelige vurderinger. Vi tror at vurderingene sannsynligvis kommer fra ekte kunder som har gitt ærlige, objektive anmeldelser.";
+
+/* Label of the sub headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.SubHeadline.Label.v120" = "Vi tildeler hvert produkts vurderinger en *bokstavkarakter* fra A til F.";
+
+/* Unreliable reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.UnreliableReviews.Label.v120" = "Upålitelige vurderinger. Vi mener vurderingene sannsynligvis er falske eller fra partiske anmeldere.";
+
+/* Accessibility label for the up chevron icon used to collapse or minimize the Settings Card within the shopping product review bottom sheet. */
+"Shopping.SettingsCard.Collapse.AccessibilityLabel.v120" = "Skjul «Innstillinger»-kortet";
+
+/* Accessibility label for the down chevron icon used to expand or show the details of the Settings Card within the shopping product review bottom sheet. */
+"Shopping.SettingsCard.Expand.AccessibilityLabel.v120" = "Utvid «Innstillinger»-kortet";
+
+/* Action title of the footer underneath the Settings Card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
+"Shopping.SettingsCard.Footer.Action.v120" = "Vurderingskontrolløren drives av %1$@ av %2$@";
+
+/* Title of the settings card displayed in the shopping review quality bottom sheet. */
+"Shopping.SettingsCard.Label.Title.v120" = "Innstillinger";
+
+/* Label of the switch from settings card displayed in the shopping review quality bottom sheet. The placeholder will be replaced with the app name. */
+"Shopping.SettingsCard.RecommendedProducts.Label.v120" = "Vis produkter anbefalt av %@";
+
+/* Label of the button from settings card displayed in the shopping review quality bottom sheet. */
+"Shopping.SettingsCard.TurnOffButton.Title.v120" = "Slå av vurderingskontrolløren";
+
+/* Beta label for the header of the Shopping Experience (Fakespot) sheet */
+"Shopping.Sheet.Beta.Title.v120" = "BETA";
+
+/* Label for the header of the Shopping Experience (Fakespot) sheet */
+"Shopping.Sheet.Title.v120" = "Vurderingskontrollør";
+
+/* Text for body of error card displayed to the user when the device is disconnected from the network. */
+"Shopping.WarningCard.CheckNoConnection.Description.v120" = "Kontroller nettverkstilkoblingen og prøv å laste inn siden på nytt.";
+
+/* Title for error card displayed to the user when the device is disconnected from the network. */
+"Shopping.WarningCard.CheckNoConnection.Title.v120" = "Ingen nettverkstilkobling";
 

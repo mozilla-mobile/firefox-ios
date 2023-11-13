@@ -125,7 +125,7 @@
 "Shopping.ReviewQuality.ReliabilityRating.DF.Description.v120" = "Upålitelege vurderingar";
 
 /* Title of the 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
-"Shopping.ReviewQualityCard.Label.Title.v120" = "Korleis vi bestemmer kvaliteten på ei vurdering";
+"Shopping.ReviewQualityCard.Label.Title.v120" = "Korleis vi avgjer kvaliteten på ei vurdering";
 
 /* Reliable reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQualityCard.ReliableReviews.Label.v120" = "Pålitelege vurderingar. Vi meinar at vureringane truleg kjem frå ekte kundar som har lagt att ærlege, upartiske vurderingar.";

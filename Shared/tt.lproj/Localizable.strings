@@ -649,6 +649,9 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Сөзгеч";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "Сакланган логиннар монда күрсәтеләчәк. Логиннарыгызны %@ эченә башка җиһаздан саклаган булсагыз, хисабыгызга керегез.";
+
 /* Title for the list of logins */
 "LoginsList.Title" = "САКЛАНГАН ЛОГИННАР";
 
