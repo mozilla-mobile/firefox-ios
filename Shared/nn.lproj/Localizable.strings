@@ -296,7 +296,7 @@
 "DownloadsPanel.EmptyState.Title" = "Nedlasta filer vil visast her.";
 
 /* Action button for sharing downloaded files in the Downloads panel. */
-"DownloadsPanel.Share.Title" = "Del";
+"DownloadsPanel.Share.Title" = "Dele";
 
 /* Text message in the settings table view */
 "Enter your password to connect" = "Skriv inn passord for å kople til";
@@ -485,7 +485,7 @@
 "HomePanel.ContextMenu.RemoveBookmark" = "Fjern bokmerke";
 
 /* The title for the Share context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.Share" = "Del";
+"HomePanel.ContextMenu.Share" = "Dele";
 
 /* A label indicating the keyboard shortcut to navigate backwards, through session history, inside the current tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.Back.DiscoveryTitle" = "Tilbake";
@@ -821,7 +821,7 @@
 "Menu.RemoveReadingList.Label.v99" = "Fjern";
 
 /* Label for the share button in the menu page. Pressing this button open the share menu to share the current website. */
-"Menu.Share.v99" = "Del";
+"Menu.Share.v99" = "Dele";
 
 /* Label for the Firefox Sync button in the menu page. Pressing this button open the sign in to Firefox page service to sync and save data. */
 "Menu.SyncAndSaveData.v103" = "Synkroniser og lagre data";

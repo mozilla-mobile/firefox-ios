@@ -8,7 +8,7 @@
 "DefaultBrowserCard.Button.v2" = "Μάθετε πώς";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Ρύθμιση συνδέσμων ιστοσελίδων, email και μηνυμάτων ώστε να ανοίγουν στο Firefox.";
+"DefaultBrowserCard.Description" = "Ρύθμιση του Firefox για αυτόματο άνοιγμα συνδέσμων από ιστοτόπους, email και μηνύματα.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Description.v108" = "Επιλέξτε το Firefox ως το προεπιλεγμένο πρόγραμμα περιήγησής σας για αυτόματη ταχύτητα, ασφάλεια και ιδιωτικότητα.";
