@@ -28,17 +28,26 @@
 /* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Notification.Description.v114" = "在您的不同裝置間傳送分頁，並取得如何讓 %@ 發揮最大功效的使用小秘訣。";
 
+/* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Notification.Description.v120" = "在您的不同裝置間，安全地傳送分頁，並且探索 %@ 當中其他保護隱私權的相關功能。";
+
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Skip.Action.v115" = "略過";
 
 /* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Notification.Title.v114" = "透過通知，可幫助您使用 %@ 做到更多事";
 
+/* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Notification.Title.v120" = "透過通知功能，讓您使用 %@ 更安全";
+
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "開啟通知";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
 "Onboarding.Sync.Description.v114" = "同步您其他裝置上的分頁與密碼，從中斷的地方繼續上網。";
+
+/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Sync.Description.v120" = "登入並同步資料後就更安全了，%@ 會加密您的密碼、書籤等資料再同步。";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.SignIn.Action.v114" = "登入";
@@ -48,6 +57,9 @@
 
 /* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
 "Onboarding.Sync.Title.v114" = "在手機與筆電間快速切換";
+
+/* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
+"Onboarding.Sync.Title.v120" = "在不同裝置間切換時保持加密";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.Classic.v114" = "經典背景圖";
@@ -76,6 +88,12 @@
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Welcome.Description.TreatementA.v114" = "%@ 把人們放在利益之上，在上網時捍衛您的隱私。";
 
+/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Welcome.Description.TreatementA.v120" = "我們這套由非營利組織所開發的瀏覽器會自動封鎖讓大企業在網路上偷偷跟蹤您的程式。";
+
+/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Welcome.Description.v120" = "我們這套由非營利組織所開發的瀏覽器會自動封鎖讓大企業在網路上偷偷跟蹤您的程式。";
+
 /* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Link.Action.v114" = "可以到我們的隱私權公告了解更多資訊";
 
@@ -84,6 +102,9 @@
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Welcome.Title.TreatementA.v114" = "將 %@ 設為主力瀏覽器";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Welcome.Title.TreatementA.v120" = "我們希望確保您上網安全";
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Title.v114" = "歡迎來到一個更加獨立的網路環境";

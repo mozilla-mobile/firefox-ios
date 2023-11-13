@@ -824,7 +824,7 @@
 "Menu.Share.v99" = "Ndajeni me të tjerët";
 
 /* Label for the Firefox Sync button in the menu page. Pressing this button open the sign in to Firefox page service to sync and save data. */
-"Menu.SyncAndSaveData.v103" = "Njëkohëso dhe Ruaj të Dhëna";
+"Menu.SyncAndSaveData.v103" = "Njëkohësoni dhe Ruani të Dhëna";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "Skeda u Dërgua";
@@ -1499,10 +1499,10 @@
 "Settings.Sync.ButtonDescription.v103" = "Bëni hyrjen, që të njëkohësoni skeda, faqerojtës, fjalëkalime, etj.";
 
 /* Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data. */
-"Settings.Sync.ButtonTitle.v103" = "Njëkohëso dhe Ruaj të Dhëna";
+"Settings.Sync.ButtonTitle.v103" = "Njëkohësoni dhe Ruani të Dhëna";
 
 /* Title for the page where the user sign in to their Firefox Sync account. */
-"Settings.Sync.SignInView.Title.v103" = "Njëkohëso dhe Ruaj të Dhëna";
+"Settings.Sync.SignInView.Title.v103" = "Njëkohësoni dhe Ruani të Dhëna";
 
 /* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
 "Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Skedat Jo Aktive";

@@ -86,5 +86,8 @@
 "Onboarding.Welcome.Title.TreatementA.v114" = "%@-ны көн саен куллана торган браузерыгыз итегез";
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Welcome.Title.TreatementA.v120" = "Иминлегегез безнең өчен бик мөһим";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Title.v114" = "Бәйсез интернетка рәхим итегез";
 
