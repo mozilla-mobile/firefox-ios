@@ -16,7 +16,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
     let profile: Profile = AppContainer.shared.resolve()
-    let tabManager: TabManager = AppContainer.shared.resolve()
     var sessionManager: AppSessionProvider = AppContainer.shared.resolve()
     var downloadQueue: DownloadQueue = AppContainer.shared.resolve()
 
