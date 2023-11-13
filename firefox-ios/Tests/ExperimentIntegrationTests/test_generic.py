@@ -1,5 +1,6 @@
 import pytest
 
+
 @pytest.mark.parametrize("load_branches", [("branch")], indirect=True)
 def test_experiment_unenrolls_after_studies_toggle(xcodebuild, setup_experiment, start_app, load_branches):
     xcodebuild.install()
