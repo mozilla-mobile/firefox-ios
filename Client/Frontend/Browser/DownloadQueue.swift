@@ -79,24 +79,17 @@ class HTTPDownload: Download {
     init?(cookieStore: WKHTTPCookieStore, preflightResponse: URLResponse, request: URLRequest) {
         self.cookieStore = cookieStore
         self.preflightResponse = preflightResponse
-        self.request = request
 
-        // Verify scheme is a secure http or https scheme before moving forward with HTTPDownload initialization
-        var requestUrl = request.url
-        if let url = requestUrl, url.scheme == "blob" {
-            requestUrl = url.removeBlobFromUrl()
-        }
-
-        /*
+        // Remove blobl from url to pass the rest of the checks
+        var tempRequest = request
          if let url = request.url, url.scheme == "blob" {
              let requestUrl = url.removeBlobFromUrl()
-             self.request = URLRequest(url: requestUrl)
-         } else {
-             self.request = request
+             tempRequest = URLRequest(url: requestUrl)
          }
-         */
+         self.request = tempRequest
 
-        guard let scheme = requestUrl?.scheme else { return nil }
+        // Verify scheme is a secure http or https scheme before moving forward with HTTPDownload initialization
+        guard let scheme = self.request.url?.scheme else { return nil }
         guard scheme == "http" || scheme == "https" else { return nil }
 
         super.init()
@@ -112,7 +105,7 @@ class HTTPDownload: Download {
         self.totalBytesExpected = preflightResponse.expectedContentLength > 0 ? preflightResponse.expectedContentLength : nil
 
         self.session = URLSession(configuration: .ephemeral, delegate: self, delegateQueue: .main)
-        self.task = session?.downloadTask(with: request)
+        self.task = session?.downloadTask(with: self.request)
     }
 
     override func cancel() {
