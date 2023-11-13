@@ -53,94 +53,11 @@
       ],
       "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('113.!') >= 0)))",
       "startDate": "2023-04-17",
-      "enrollmentEndDate": "2023-04-24",
+      "enrollmentEndDate": null,
       "endDate": null,
       "proposedDuration": 28,
       "proposedEnrollment": 7,
       "referenceBranch": "treatment-a",
-      "featureValidationOptOut": false,
-      "localizations": null,
-      "locales": null
-    },
-    {
-      "schemaVersion": "1.12.0",
-      "slug": "release-ios-set-to-default-instructions-no-x-treatment-b-rolloutv2",
-      "id": "release-ios-set-to-default-instructions-no-x-treatment-b-rolloutv2",
-      "arguments": {},
-      "application": "org.mozilla.ios.Firefox",
-      "appName": "firefox_ios",
-      "appId": "org.mozilla.ios.Firefox",
-      "channel": "release",
-      "userFacingName": "[release] iOS set to default instructions / no X - Treatment B Rolloutv2",
-      "userFacingDescription": "Onboarding experiment with showing instructions for how to set to default and removing X",
-      "isEnrollmentPaused": false,
-      "isRollout": true,
-      "bucketConfig": {
-        "randomizationUnit": "nimbus_id",
-        "namespace": "ios-onboarding-framework-feature-release-mobile_first_run-rollout-2",
-        "start": 0,
-        "count": 10000,
-        "total": 10000
-      },
-      "featureIds": [
-        "onboarding-framework-feature"
-      ],
-      "probeSets": [],
-      "outcomes": [
-        {
-          "slug": "default_browser",
-          "priority": "primary"
-        },
-        {
-          "slug": "onboarding",
-          "priority": "primary"
-        }
-      ],
-      "branches": [
-        {
-          "slug": "treatment-b",
-          "ratio": 1,
-          "feature": {
-            "featureId": "this-is-included-for-mobile-pre-96-support",
-            "enabled": false,
-            "value": {}
-          },
-          "features": [
-            {
-              "featureId": "onboarding-framework-feature",
-              "enabled": true,
-              "value": {
-                "cards": {
-                  "welcome": {
-                    "buttons": {
-                      "primary": {
-                        "action": "open-instructions-popup"
-                      }
-                    },
-                    "instructions-popup": {
-                      "title": "Onboarding/DefaultBrowserPopup.Title.v114",
-                      "button-title": "Onboarding/DefaultBrowserPopup.ButtonTitle.v114",
-                      "instructions": [
-                        "Onboarding/DefaultBrowserPopup.FirstLabel.v114",
-                        "Onboarding/DefaultBrowserPopup.SecondLabel.v114",
-                        "Onboarding/DefaultBrowserPopup.ThirdLabel.v114"
-                      ],
-                      "button-action": "open-ios-fx-settings"
-                    }
-                  }
-                }
-              }
-            }
-          ]
-        }
-      ],
-      "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('118.!') >= 0)))",
-      "startDate": "2023-10-05",
-      "enrollmentEndDate": "2023-10-17",
-      "endDate": null,
-      "proposedDuration": 28,
-      "proposedEnrollment": 7,
-      "referenceBranch": "treatment-b",
       "featureValidationOptOut": false,
       "localizations": null,
       "locales": null

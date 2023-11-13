@@ -69,7 +69,7 @@ class AppLaunchUtil {
             }
         }
 
-        RustFirefoxAccounts.startup(prefs: profile.prefs).uponQueue(.main) { _ in
+        RustFirefoxAccounts.startup(prefs: profile.prefs) { _ in
             self.logger.log("RustFirefoxAccounts started", level: .info, category: .sync)
             AppEventQueue.signal(event: .accountManagerInitialized)
         }

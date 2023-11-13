@@ -227,4 +227,17 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
         let result = subject.canPresent(.shoppingExperience)
         XCTAssertFalse(result)
     }
+
+    func test_canPresentShoppingCFR_TwoConsecutiveCFRs_UserHasNotOptedIn_() {
+        let lastTimestamp: Timestamp = 1695719918000 // Date and time (GMT): Tuesday, 26 September 2023 09:18:38
+
+        profile.prefs.setBool(true, forKey: CFRPrefsKeys.shoppingOnboardingKey.rawValue)
+        profile.prefs.setTimestamp(lastTimestamp, forKey: PrefsKeys.FakespotLastCFRTimestamp)
+        profile.prefs.setBool(false, forKey: PrefsKeys.Shopping2023OptIn)
+
+        let canPresentFirstCFR = subject.canPresent(.shoppingExperience)
+        XCTAssertTrue(canPresentFirstCFR)
+        let canPresentSecondCFR = subject.canPresent(.shoppingExperience)
+        XCTAssertFalse(canPresentSecondCFR)
+    }
 }

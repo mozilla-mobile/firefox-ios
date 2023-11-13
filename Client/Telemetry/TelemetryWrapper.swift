@@ -177,7 +177,6 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         // Save the profile so we can record settings from it when the notification below fires.
         self.profile = profile
 
-        setSyncDeviceId()
         SponsoredTileTelemetry.setupContextId()
 
         // Register an observer to record settings and other metrics that are more appropriate to
@@ -194,20 +193,6 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
             name: UIApplication.didFinishLaunchingNotification,
             object: nil
         )
-    }
-
-    // Sets hashed fxa sync device id for glean deletion ping
-    func setSyncDeviceId() {
-        // Grab our token so we can use the hashed_fxa_uid and clientGUID for deletion-request ping
-        guard let accountManager = RustFirefoxAccounts.shared.accountManager.peek(),
-              let state = accountManager.deviceConstellation()?.state(),
-              let clientGUID = state.localDevice?.id
-        else { return }
-
-        RustFirefoxAccounts.shared.syncAuthState.token(Date.now(), canBeExpired: true) >>== { (token, _) in
-            let deviceId = (clientGUID + token.hashedFxAUID).sha256.hexEncodedString
-            GleanMetrics.Deletion.syncDeviceId.set(deviceId)
-        }
     }
 
     @objc
@@ -415,6 +400,7 @@ extension TelemetryWrapper {
         case shoppingPoweredByFakespotLabel = "shopping-powered-by-fakespot-label"
         case shoppingNoAnalysisCardViewPrimaryButton = "shopping-no-analysis-card-view-primary-button"
         case shoppingNeedsAnalysisCardViewPrimaryButton = "shopping-needs-analysis-card-view-primary-button"
+        case shoppingProductBackInStockButton = "shopping-product-back-in-stock-button"
         case shoppingSurfaceStaleAnalysisShown = "shopping-surface-stale-analysis-shown"
         case shoppingNimbusDisabled = "shopping-nimbus-disabled"
         case shoppingComponentOptedOut = "shopping-component-opted-out"
@@ -1196,6 +1182,8 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.surfaceAnalyzeReviewsNoneAvailableClicked.record()
         case (.action, .tap, .shoppingNeedsAnalysisCardViewPrimaryButton, _, _):
             GleanMetrics.Shopping.surfaceReanalyzeClicked.record()
+        case (.action, .tap, .shoppingProductBackInStockButton, _, _):
+            GleanMetrics.Shopping.surfaceReactivatedButtonClicked.record()
         case (.action, .navigate, .shoppingBottomSheet, _, _):
             GleanMetrics.Shopping.surfaceNoReviewReliabilityAvailable.record()
         case (.action, .view, .shoppingSurfaceStaleAnalysisShown, _, _):

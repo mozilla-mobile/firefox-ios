@@ -59,7 +59,8 @@ class BrowserViewController: UIViewController,
     var passBookHelper: OpenPassBookHelper?
     var overlayManager: OverlayModeManager
     var appAuthenticator: AppAuthenticationProtocol
-    var contextHintVC: ContextualHintViewController
+    var toolbarContextHintVC: ContextualHintViewController
+    let shoppingContextHintVC: ContextualHintViewController
     private var backgroundTabLoader: DefaultBackgroundTabLoader
 
     // popover rotation handling
@@ -189,7 +190,10 @@ class BrowserViewController: UIViewController,
         self.overlayManager = DefaultOverlayModeManager()
         let contextualViewProvider = ContextualHintViewProvider(forHintType: .toolbarLocation,
                                                                 with: profile)
-        self.contextHintVC = ContextualHintViewController(with: contextualViewProvider)
+        self.toolbarContextHintVC = ContextualHintViewController(with: contextualViewProvider)
+        let shoppingViewProvider = ContextualHintViewProvider(forHintType: .shoppingExperience,
+                                                              with: profile)
+        shoppingContextHintVC = ContextualHintViewController(with: shoppingViewProvider)
         self.backgroundTabLoader = DefaultBackgroundTabLoader(tabQueue: profile.queue)
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -216,6 +220,11 @@ class BrowserViewController: UIViewController,
         tabManager.addDelegate(self)
         tabManager.addNavigationDelegate(self)
         downloadQueue.delegate = self
+        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration]) { [weak self] in
+            // Ensure we call into didBecomeActive at least once during startup flow (if needed)
+            guard !AppEventQueue.activityIsCompleted(.browserDidBecomeActive) else { return }
+            self?.browserDidBecomeActive()
+        }
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -417,20 +426,27 @@ class BrowserViewController: UIViewController,
         // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
         scrollController.showToolbars(animated: false)
 
+        browserDidBecomeActive()
+    }
+
+    func browserDidBecomeActive() {
+        AppEventQueue.started(.browserDidBecomeActive)
+        defer { AppEventQueue.completed(.browserDidBecomeActive) }
+
         // Update lock icon without redrawing the whole locationView
         if let tab = tabManager.selectedTab {
             urlBar.locationView.tabDidChangeContentBlocking(tab)
         }
 
-        if tabManager.startAtHomeCheck() {
+        didStartAtHome = tabManager.startAtHomeCheck()
+        if didStartAtHome {
             guard presentedViewController != nil else { return }
-                dismissVC()
+            dismissVC()
         }
-        updateWallpaperMetadata()
 
         // When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
-        // Make sure that our startup flow is completed and the Profile has been sync'd (at least once) before we load.
-        AppEventQueue.wait(for: [.startupFlowComplete, .profileSyncing, .tabRestoration]) { [weak self] in
+        // Make sure that our startup flow is completed and other tabs have been restored before we load.
+        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration]) { [weak self] in
             self?.backgroundTabLoader.loadBackgroundTabs()
         }
     }
@@ -640,11 +656,11 @@ class BrowserViewController: UIViewController,
     }
 
     private func prepareURLOnboardingContextualHint() {
-        guard contextHintVC.shouldPresentHint(),
+        guard toolbarContextHintVC.shouldPresentHint(),
               featureFlags.isFeatureEnabled(.isToolbarCFREnabled, checking: .buildOnly)
         else { return }
 
-        contextHintVC.configure(
+        toolbarContextHintVC.configure(
             anchor: urlBar,
             withArrowDirection: isBottomSearchBar ? .down : .up,
             andDelegate: self,
@@ -655,9 +671,9 @@ class BrowserViewController: UIViewController,
 
     private func presentContextualHint() {
         if IntroScreenManager(prefs: profile.prefs).shouldShowIntroScreen { return }
-        present(contextHintVC, animated: true)
+        present(toolbarContextHintVC, animated: true)
 
-        UIAccessibility.post(notification: .layoutChanged, argument: contextHintVC)
+        UIAccessibility.post(notification: .layoutChanged, argument: toolbarContextHintVC)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -1762,11 +1778,11 @@ class BrowserViewController: UIViewController,
 
         // Update the `background-color` of any blank webviews.
         let webViews = tabManager.tabs.compactMap({ $0.webView })
-        webViews.forEach({ $0.applyTheme() })
+        webViews.forEach({ $0.applyTheme(theme: currentTheme) })
 
         let tabs = tabManager.tabs
         tabs.forEach {
-            $0.applyTheme()
+            $0.applyTheme(theme: currentTheme)
         }
 
         guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
@@ -2114,6 +2130,11 @@ extension BrowserViewController: TabManagerDelegate {
 
                 let ui: [PrivateModeUI?] = [toolbar, topTabsViewController, urlBar]
                 ui.forEach { $0?.applyUIMode(isPrivate: tab.isPrivate, theme: themeManager.currentTheme) }
+            } else {
+                // Theme is applied to the tab and webView in the else case
+                // because in the if block is applied already to all the tabs and web views
+                tab.applyTheme(theme: themeManager.currentTheme)
+                webView.applyTheme(theme: themeManager.currentTheme)
             }
 
             readerModeCache = tab.isPrivate ? MemoryReaderModeCache.sharedInstance : DiskReaderModeCache.sharedInstance
@@ -2199,7 +2220,6 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
-        didStartAtHome = tabManager.startAtHomeCheck()
         updateTabCountUsingTabManager(tabManager)
         openUrlAfterRestore()
     }

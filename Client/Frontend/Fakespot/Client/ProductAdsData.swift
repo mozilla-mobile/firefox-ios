@@ -10,7 +10,7 @@ struct ProductAdsData: Codable {
     let imageUrl: URL
     let price: String
     let currency: String
-    let grade: String
+    let grade: ReliabilityGrade
     let adjustedRating: Double
     let analysisUrl: URL
     let sponsored: Bool

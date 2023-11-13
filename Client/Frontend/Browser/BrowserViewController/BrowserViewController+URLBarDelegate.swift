@@ -161,22 +161,22 @@ extension BrowserViewController: URLBarDelegate {
             didStartAtHome = false
             return
         }
+        configureShoppingContextVC(at: sourceView)
+    }
 
-        let contextualViewProvider = ContextualHintViewProvider(forHintType: .shoppingExperience,
-                                                                with: profile)
-
-        let contextHintVC = ContextualHintViewController(with: contextualViewProvider)
-
-        contextHintVC.configure(
+    private func configureShoppingContextVC(at sourceView: UIView) {
+        shoppingContextHintVC.configure(
             anchor: sourceView,
             withArrowDirection: isBottomSearchBar ? .down : .up,
             andDelegate: self,
-            presentedUsing: {
-                self.present(contextHintVC, animated: true)
-                TelemetryWrapper.recordEvent(category: .action,
-                                             method: .navigate,
-                                             object: .shoppingButton,
-                                             value: .shoppingCFRsDisplayed)
+            presentedUsing: { [unowned self] in
+                self.present(shoppingContextHintVC, animated: true)
+                TelemetryWrapper.recordEvent(
+                    category: .action,
+                    method: .navigate,
+                    object: .shoppingButton,
+                    value: .shoppingCFRsDisplayed
+                )
             },
             andActionForButton: { [weak self] in
                 guard let self else { return }

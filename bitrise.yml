@@ -67,19 +67,19 @@ workflows:
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/Client.app" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/XCUITests-Runner.app" \
             "$BITRISE_SOURCE_DIR/Client.xcodeproj" \
-            "$BITRISE_SOURCE_DIR/Tests/SmokeXCUITests.xctestplan" \
-            "$BITRISE_SOURCE_DIR/Tests/Smoketest2.xctestplan" \
-            "$BITRISE_SOURCE_DIR/Tests/Smoketest3.xctestplan" \
-            "$BITRISE_SOURCE_DIR/Tests/Smoketest4.xctestplan" \
+            "$BITRISE_SOURCE_DIR/firefox-ios/Tests/SmokeXCUITests.xctestplan" \
+            "$BITRISE_SOURCE_DIR/firefox-ios/Tests/Smoketest2.xctestplan" \
+            "$BITRISE_SOURCE_DIR/firefox-ios/Tests/Smoketest3.xctestplan" \
+            "$BITRISE_SOURCE_DIR/firefox-ios/Tests/Smoketest4.xctestplan" \
             "$BITRISE_SOURCE_DIR/xcodebuild.log" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_SmokeXCUITests_iphonesimulator17.0-arm64.xctestrun" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Smoketest2_iphonesimulator17.0-arm64.xctestrun" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Smoketest3_iphonesimulator17.0-arm64.xctestrun" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Smoketest4_iphonesimulator17.0-arm64.xctestrun" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/" \
-            "$BITRISE_SOURCE_DIR/Tests/UnitTest.xctestplan" \
+            "$BITRISE_SOURCE_DIR/firefox-ios/Tests/UnitTest.xctestplan" \
             "$BITRISE_SOURCE_DIR/Client/" \
-            "$BITRISE_SOURCE_DIR/Tests/XCUITests"
+            "$BITRISE_SOURCE_DIR/firefox-ios/Tests/XCUITests"
     - deploy-to-bitrise-io@2:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
@@ -541,13 +541,14 @@ workflows:
             #   taskcluster/* -> matches all files in the taskcluster directory
             #
             # Features tested outside bitrise
-            #   Sync*/* -> matches all files in the Sync,SyncIntegrationTests,SyncTelemetry directories
-            #   L10nSnapshotTests/* -> matches all files in the L10nSnapshotTests directory
+            #   Sync*/* -> matches all files in the Sync, SyncTelemetry
+            #   firefox-ios/Tests/Sync*/* -> matches all files in SyncIntegrationTests directories
+            #   firefox-ios/Tests/L10nSnapshotTests/* -> matches all files in the L10nSnapshotTests directory
             #
             # Test Helpers
             #   test-fixtures/.py$ -> matches all files whose file extension begin with 'py'
 
-            DO_NOT_RUN_TESTS='^(.*[^bitrise]\.y[^/]*$|.*\.sh$|.*\.md$|.*\.lproj/.*|Sync*/*|fastlane/*|taskcluster/*|L10nSnapshotTests/*|test-fixtures/.*.py$)'
+            DO_NOT_RUN_TESTS='^(.*[^bitrise]\.y[^/]*$|.*\.sh$|.*\.md$|.*\.lproj/.*|Sync*/*|firefox-ios/Tests/Sync*/*|fastlane/*|taskcluster/*|firefox-ios/Tests/L10nSnapshotTests/*|test-fixtures/.*.py$)'
 
             # Pass the FILES_CHANGED to grep to find any matches for the regex DO_NOT_RUN_TESTS
             # -v inverts the filtered results, returning any files not filtered by the regex

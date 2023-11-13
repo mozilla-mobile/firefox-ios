@@ -139,6 +139,7 @@ class FakespotViewModel {
         case settingsCard
         case noAnalysisCard
         case progressAnalysisCard
+        case productAdCard
         case messageCard(MessageType)
         enum MessageType {
             case genericError
@@ -349,6 +350,7 @@ class FakespotViewModel {
     }
 
     func reportProductBackInStock() {
+        recordTelemetry(for: .messageCard(.reportProductInStock))
         Task {
             _ = try? await shoppingProduct.reportProductBackInStock()
         }
@@ -422,6 +424,12 @@ class FakespotViewModel {
                 category: .action,
                 method: .tap,
                 object: .shoppingNeedsAnalysisCardViewPrimaryButton
+            )
+        case .messageCard(.reportProductInStock):
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .tap,
+                object: .shoppingProductBackInStockButton
             )
         default: break
         }

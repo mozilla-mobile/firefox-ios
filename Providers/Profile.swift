@@ -490,7 +490,7 @@ open class BrowserProfile: Profile {
     func retrieveTabData() -> Deferred<Maybe<[ClientAndTabs]>> {
         logger.log("Getting all tabs and clients", level: .debug, category: .tabs)
 
-        guard let accountManager = self.rustFxA.accountManager.peek(),
+        guard let accountManager = self.rustFxA.accountManager,
               let state = accountManager.deviceConstellation()?.state()
         else {
             return deferMaybe([])
@@ -554,10 +554,10 @@ open class BrowserProfile: Profile {
 
     public func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success {
         let deferred = Success()
-        RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { accountManager in
+        if let accountManager = RustFirefoxAccounts.shared.accountManager {
             guard let constellation = accountManager.deviceConstellation() else {
                 deferred.fill(Maybe(failure: NoAccountError()))
-                return
+                return deferred
             }
             devices.forEach {
                 if let id = $0.id {
@@ -590,7 +590,7 @@ open class BrowserProfile: Profile {
             return
         }
         self.prefs.setTimestamp(now, forKey: PrefsKeys.PollCommandsTimestamp)
-        self.rustFxA.accountManager.upon { accountManager in
+        if let accountManager = self.rustFxA.accountManager {
             accountManager.deviceConstellation()?.pollForCommands { commands in
                 guard let commands = try? commands.get() else { return }
                 let urls = commands.compactMap { command in

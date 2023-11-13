@@ -44,6 +44,10 @@ public struct AccessibilityIdentifiers {
         }
     }
 
+    struct ContextualHints {
+        static let actionButton = "ContextualHints.ActionButton"
+    }
+
     struct FirefoxHomepage {
         static let collectionView = "FxCollectionView"
 
@@ -263,6 +267,15 @@ public struct AccessibilityIdentifiers {
             static let privacyPolicyButton = "Shopping.OptInCard.PrivacyPolicyButton"
             static let mainButton = "Shopping.OptInCard.MainButton"
             static let secondaryButton = "Shopping.OptInCard.SecondaryButton"
+        }
+
+        struct AdCard {
+            static let card = "Shopping.AdCard.Card"
+            static let title = "Shopping.AdCard.Title"
+            static let price = "Shopping.AdCard.PriceLabel"
+            static let productTitle = "Shopping.AdCard.ProductTitle"
+            static let description = "Shopping.AdCard.Description"
+            static let footer = "Shopping.AdCard.Footer"
         }
     }
 

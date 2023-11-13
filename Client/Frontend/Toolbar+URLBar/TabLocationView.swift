@@ -153,7 +153,7 @@ class TabLocationView: UIView, FeatureFlaggable {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupNotifications(forObserver: self, observing: [.FakespotViewControllerDidDismiss])
+        setupNotifications(forObserver: self, observing: [.FakespotViewControllerDidDismiss, .FakespotViewControllerDidAppear])
         register(self, forTabEvents: .didGainFocus, .didToggleDesktopMode, .didChangeContentBlocking)
         longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressLocation))
         longPressRecognizer.delegate = self
@@ -378,6 +378,8 @@ extension TabLocationView: Notifiable {
         switch notification.name {
         case .FakespotViewControllerDidDismiss:
             shoppingButton.isSelected = false
+        case .FakespotViewControllerDidAppear:
+            shoppingButton.isSelected = true
         default: break
         }
     }

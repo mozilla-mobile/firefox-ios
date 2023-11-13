@@ -35,4 +35,16 @@ public enum ThemeType: String {
             return "\(name)_dark"
         }
     }
+
+    public func keyboardAppearence(isPrivate: Bool) -> UIKeyboardAppearance {
+        if isPrivate {
+            return .dark
+        }
+        return switch self {
+        case .dark:
+            .dark
+        case .light:
+            .light
+        }
+    }
 }

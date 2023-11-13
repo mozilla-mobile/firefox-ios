@@ -667,6 +667,26 @@ extension String {
                 value: "Our Sponsors & Your Privacy",
                 comment: "The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works.")
         }
+
+        public struct FeltPrivacyUI {
+            public static let Title = MZLocalizedString(
+                key: "FeltPrivacyUI.Title.v121",
+                tableName: "FirefoxHomepage",
+                value: "Leave no traces on this device",
+                comment: "The title for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode.")
+
+            public static let Body = MZLocalizedString(
+                key: "FeltPrivacyUI.Body.v121",
+                tableName: "FirefoxHomepage",
+                value: "%@ deletes your cookies, history, and site data when you close all your private windows.",
+                comment: "The body of the message for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. Placeholder refers to app name.")
+
+            public static let Link = MZLocalizedString(
+                key: "FeltPrivacyUI.Link.v121",
+                tableName: "FirefoxHomepage",
+                value: "Who might be able to see my activity?",
+                comment: "The link for the card that educates users about how private mode works. The link redirects to an external site for more information. The card shows up on the homepage when in the new privacy mode.")
+        }
     }
 }
 
@@ -4016,6 +4036,16 @@ extension String {
             tableName: "Shopping",
             value: "We should have info about this product’s reviews within 24 hours. Please check back.",
             comment: "Description text for an information card used in the review checker section. This message is displayed when the reviews for a product are not yet available but are expected to be provided within the next 24 hours. It serves to inform users of the short wait for reviews and encourages them to return soon for the updated information.")
+        public static let AdCardTitleLabel = MZLocalizedString(
+            key: "Shopping.AdCard.Title.v121",
+            tableName: "Shopping",
+            value: "More to consider",
+            comment: "Title label for the Fakespot Ad card. This is displayed above a product image, suggested as an alternative to the product reviewed.")
+        public static let AdCardFooterLabel = MZLocalizedString(
+            key: "Shopping.AdCard.Footer.v121",
+            tableName: "Shopping",
+            value: "Ad by %@",
+            comment: "Footer label from the Fakespot Ad card displayed for the related product we advertise. This is displayed below the ad card, suggested as an alternative to the product reviewed. The first parameter will be replaced by the Fakespot app name")
     }
 }
 
