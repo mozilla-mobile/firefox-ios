@@ -301,10 +301,13 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     // MARK: - Select Tab
 
     override func selectTab(_ tab: Tab?, previous: Tab? = nil) {
+        let url = tab?.url
         guard shouldUseNewTabStore(),
               let tab = tab,
               let tabUUID = UUID(uuidString: tab.tabUUID)
         else {
+            willSelectTab(url)
+            defer { didSelectTab(url) }
             super.selectTab(tab, previous: previous)
             return
         }
@@ -315,10 +318,13 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         guard !AppConstants.isRunningUITests,
               !DebugSettingsBundleOptions.skipSessionRestore
         else {
+            willSelectTab(url)
+            defer { didSelectTab(url) }
             super.selectTab(tab, previous: previous)
             return
         }
 
+        willSelectTab(url)
         Task(priority: .high) {
             if tab.isFxHomeTab {
                 await selectTabWithSession(tab: tab,
@@ -330,7 +336,18 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                                            previous: previous,
                                            sessionData: sessionData)
             }
+            didSelectTab(url)
         }
+    }
+
+    private func willSelectTab(_ url: URL?) {
+        guard let url else { return }
+        AppEventQueue.started(.selectTab(url))
+    }
+
+    private func didSelectTab(_ url: URL?) {
+        guard let url else { return }
+        AppEventQueue.completed(.selectTab(url))
     }
 
     @MainActor
