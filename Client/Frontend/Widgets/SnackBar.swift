@@ -19,7 +19,7 @@ class SnackBar: UIView, ThemeApplicable {
 
     private lazy var scrollView: UIScrollView = .build()
     private lazy var separator: UIView = .build()
-    
+
     private lazy var buttonsView: UIStackView = .build { stackView in
         stackView.distribution = .fillEqually
     }
