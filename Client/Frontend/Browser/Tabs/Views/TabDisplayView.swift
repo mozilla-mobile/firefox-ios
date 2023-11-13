@@ -267,7 +267,7 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
         let section = destinationIndexPath.section
         let start = IndexPath(row: sourceIndex, section: section)
         let end = IndexPath(row: destinationIndexPath.item, section: section)
-//        store.dispatch(TabTrayAction.moveTab(start, end))
+        store.dispatch(TabTrayAction.moveTab(start.row, end.row))
         coordinator.drop(dragItem, toItemAt: destinationIndexPath)
 
         collectionView.moveItem(at: start, to: end)

@@ -75,8 +75,6 @@ struct TabTrayState: ScreenState, Equatable {
     }
 
     static let reducer: Reducer<Self> = { state, action in
-        // TODO: All actions will ignore data until middleware is connected
-        print("YRD action \(action)")
         switch action {
         case TabTrayAction.didLoadTabData(let newState):
             return newState
@@ -88,7 +86,6 @@ struct TabTrayState: ScreenState, Equatable {
                                 normalTabsCount: state.normalTabsCount,
                                 inactiveTabs: state.inactiveTabs)
         default:
-            print("YRD handle default")
             return state
         }
     }

@@ -29,6 +29,11 @@ class TabsPanelMiddleware {
             DispatchQueue.main.async {
                 store.dispatch(TabTrayAction.refreshTab(self.tabs))
             }
+        case TabTrayAction.moveTab(let originIndex, let destinationIndex):
+            self.moveTab(from: originIndex, to: destinationIndex)
+            DispatchQueue.main.async {
+                store.dispatch(TabTrayAction.refreshTab(self.tabs))
+            }
         case TabTrayAction.closeTab(let index):
             self.closeTab(for: index)
             DispatchQueue.main.async {
@@ -67,6 +72,10 @@ class TabsPanelMiddleware {
     private func addNewTab() {
         let cellState = TabCellState.emptyTabState(title: "New tab")
         tabs.append(cellState)
+    }
+
+    private func moveTab(from originIndex: Int, to destinationIndex: Int) {
+        tabs.move(fromOffsets: IndexSet(integer: originIndex), toOffset: destinationIndex)
     }
 
     private func closeTab(for index: Int) {
