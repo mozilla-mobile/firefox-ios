@@ -440,7 +440,7 @@ class BrowserViewController: UIViewController,
 
         didStartAtHome = tabManager.startAtHomeCheck()
         if didStartAtHome {
-            guard presentedViewController != nil else { return }
+            guard !dismissFakespotIfNeeded(), presentedViewController != nil else { return }
             dismissVC()
         }
 
