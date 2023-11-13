@@ -57,7 +57,6 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
     // MARK: Views
     private lazy var cardContainer: ShadowCardView = .build()
     private lazy var productImageView: FakespotImageLoadingView = .build { imageView in
-        imageView.image = UIImage(named: ImageIdentifiers.signinSync)
         imageView.contentMode = .scaleAspectFit
     }
 
@@ -92,7 +91,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         button.addTarget(self, action: #selector(self.didTapProductLink), for: .touchUpInside)
     }
 
-    private lazy var gradeReliabilityScoreView = FakespotReliabilityScoreView(grade: .a)
+    private lazy var gradeReliabilityScoreView = FakespotReliabilityScoreView(grade: .f)
 
     private lazy var starRatingView: FakespotStarRatingView = .build()
 
@@ -119,7 +118,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         super.init(frame: frame)
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
-        setupConstraints()
+        setupLayout()
     }
 
     // MARK: Configuration
@@ -165,11 +164,9 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
     private var productImageWidthConstraint: NSLayoutConstraint?
 
     // MARK: Layout Setup
-    private func setupConstraints() {
-        if !self.subviews.contains(cardContainer) {
-            addSubview(cardContainer)
-            insertSubview(footerLabel, belowSubview: cardContainer)
-        }
+    private func setupLayout() {
+        addSubview(cardContainer)
+        insertSubview(footerLabel, belowSubview: cardContainer)
         // normal setup
         let starsHeight = min(UIFontMetrics.default.scaledValue(for: UX.starSize), UX.starMaxSize)
         let imageWidth = min(UIFontMetrics.default.scaledValue(for: UX.productImageMinWidth), UX.productImageMaxWidth)
@@ -194,10 +191,14 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
             footerLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
 
-        setupLayout()
+        adjustLayout()
     }
 
     private func adjustLayout() {
+        secondRowStackView.removeAllArrangedViews()
+        thirdRowStackView.removeAllArrangedViews()
+        contentStackView.removeAllArrangedViews()
+
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
         starRatingHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: UX.starSize), UX.starMaxSize)
         productImageHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: UX.productImageMinHeight), UX.productImageMaxHeight)
@@ -206,27 +207,14 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         if contentSizeCategory.isAccessibilityCategory {
             secondRowStackView.axis = .vertical
             spacer.isHidden = false
+            setupLayoutForAccessibilityView()
         } else {
             secondRowStackView.axis = .horizontal
             spacer.isHidden = true
-        }
-        setupLayout()
-        setNeedsLayout()
-        layoutIfNeeded()
-    }
-
-    // MARK: Subviews Setup
-    fileprivate func setupLayout() {
-        secondRowStackView.removeAllArrangedViews()
-        thirdRowStackView.removeAllArrangedViews()
-        contentStackView.removeAllArrangedViews()
-
-        let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
-        if contentSizeCategory.isAccessibilityCategory {
-            setupLayoutForAccessibilityView()
-        } else {
             setupLayoutForDefaultView()
         }
+        setNeedsLayout()
+        layoutIfNeeded()
     }
 
     private func setupLayoutForDefaultView() {
@@ -241,9 +229,8 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
 
         secondRowStackView.addArrangedSubview(productImageView)
         secondRowStackView.addArrangedSubview(productLinkButton)
-
         secondRowStackView.addArrangedSubview(gradeReliabilityScoreView)
-        secondRowStackView.distribution = .fillProportionally
+        secondRowStackView.distribution = .fill
         secondRowStackView.alignment = .top
 
         // third line
@@ -253,10 +240,11 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         thirdRowStackView.distribution = .fill
         thirdRowStackView.alignment = .leading
 
-        priceLabel.heightAnchor.constraint(equalTo: starRatingView.heightAnchor, multiplier: 1.0).isActive = true
+        priceLabel.centerYAnchor.constraint(equalTo: starRatingView.centerYAnchor).isActive = true
+
         contentStackView.addArrangedSubview(secondRowStackView)
         contentStackView.addArrangedSubview(thirdRowStackView)
-        contentStackView.distribution = .fillProportionally
+        contentStackView.distribution = .fill
     }
 
     private func setupLayoutForAccessibilityView() {
@@ -277,7 +265,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         gradeStackView.axis = .horizontal
         gradeStackView.spacing = UX.hStackSpacing
         gradeStackView.distribution = .fill
-        gradeReliabilityScoreView.heightAnchor.constraint(equalTo: starRatingView.heightAnchor, multiplier: 1.0).isActive = true
+        gradeReliabilityScoreView.centerYAnchor.constraint(equalTo: starRatingView.centerYAnchor).isActive = true
         contentStackView.addArrangedSubview(gradeStackView)
 
         // fourth line
