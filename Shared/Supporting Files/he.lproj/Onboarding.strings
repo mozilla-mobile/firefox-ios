@@ -61,6 +61,9 @@
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Welcome.ActionTreatementA.v114" = "הגדרה כדפדפן ברירת המחדל";
 
+/* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Welcome.Link.Action.v114" = "מידע נוסף בהצהרת הפרטיות שלנו";
+
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
 "Onboarding.Welcome.Skip.v114" = "דילוג";
 

@@ -94,9 +94,6 @@
 /* Title for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
 "Shopping.NoAnalysisCard.InProgress.Headline.Title.v120" = "Kontrollerer kvaliteten af anmeldelser";
 
-/* Text for the disclaimer that appears beneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replaced by the Fakespot app name. */
-"Shopping.OptInCard.Disclaimer.Title.v120" = "Ved at vælge \"Ja, prøv det\" accepterer du %@s: ";
-
 /* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. The third and fourth parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. */
 "Shopping.OptInCard.FirstParagraph.Description.v120" = "Se, hvor pålidelige anmeldelserne af produkter på %1$@ er, før du handler. Verificering af anmeldelser, en eksperimentel funktion fra %2$@, er indbygget i browseren. Funktionen virker også på %3$@ og %4$@.";
 
@@ -121,6 +118,9 @@
 /* Show Firefox Browser Terms of Use page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
 "Shopping.OptInCard.TermsOfUse.Button.Title.v120" = "Betingelser for brug";
 
+/* Accessibility label for the Grade labels used in 'How we determine review quality' card and 'How reliable are these reviews' card displayed in the shopping review quality bottom sheet. The placeholder will be replaced by a grade letter (e.g. A). The grading system contains letters from A-F. */
+"Shopping.ReliabilityScore.Grade.A11y.Label.v120" = "Karakter %@";
+
 /* Title of the reliability card displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQuality.ReliabilityCardTitle.v120" = "Hvor pålidelige er anmeldelserne?";
 
@@ -135,6 +135,12 @@
 
 /* Adjusted rating label from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "Shopping.ReviewQualityCard.AdjustedRating.Label.v120" = "Den *justerede bedømmelse* er udelukkende baseret på anmeldelser, som vi vurderer er pålidelige.";
+
+/* Accessibility label for the up chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.Collapse.AccessibilityLabel.v120" = "Skjul kortet \"Sådan afgør vi kvaliteten af anmeldelser\"";
+
+/* Accessibility label for the down chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.Expand.AccessibilityLabel.v120" = "Vis kortet \"Sådan afgør vi kvaliteten af anmeldelser\"";
 
 /* Label of the headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
 "Shopping.ReviewQualityCard.Headline.Label.v120" = "Vi bruger kunstig intelligens fra %1$@ fra %2$@ til at kontrollere pålideligheden af produktanmeldelser. Dette hjælper dig kun med at bedømme kvaliteten af anmeldelserne, ikke selve produkternes kvalitet.";
