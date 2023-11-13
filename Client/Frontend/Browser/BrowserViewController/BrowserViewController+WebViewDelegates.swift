@@ -471,7 +471,7 @@ extension BrowserViewController: WKNavigationDelegate {
             DispatchQueue.main.asyncAfter(deadline: .now() + tabManager.delaySelectingNewPopupTab + 0.1) {
                 // Show only if no other snack bar
                 guard let tab = self.tabManager.selectedTab, tab.bars.isEmpty else { return }
-                TimerSnackBar.showAppStoreConfirmationBar(forTab: tab, appStoreURL: url) { _ in
+                TimerSnackBar.showAppStoreConfirmationBar(forTab: tab, appStoreURL: url, theme: self.themeManager.currentTheme) { _ in
                     // If a new window was opened for this URL (it will have no history), close it.
                     if tab.historyList.isEmpty {
                         self.tabManager.removeTab(tab)
@@ -848,6 +848,10 @@ private extension BrowserViewController {
             tab.removeSnackbar(bar)
             completion(false)
         }
+        ok.applyTheme(theme: themeManager.currentTheme)
+        cancel.applyTheme(theme: themeManager.currentTheme)
+        snackBar.applyTheme(theme: themeManager.currentTheme)
+
         snackBar.addButton(ok)
         snackBar.addButton(cancel)
         tab.addSnackbar(snackBar)
