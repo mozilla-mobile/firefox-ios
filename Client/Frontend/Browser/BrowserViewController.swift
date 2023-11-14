@@ -54,7 +54,6 @@ class BrowserViewController: UIViewController,
     var urlFromAnotherApp: UrlToOpenModel?
     var isCrashAlertShowing = false
     var currentMiddleButtonState: MiddleButtonState?
-    var didStartAtHome = false
     var openedUrlFromExternalSource = false
     var passBookHelper: OpenPassBookHelper?
     var overlayManager: OverlayModeManager
@@ -437,17 +436,19 @@ class BrowserViewController: UIViewController,
         if let tab = tabManager.selectedTab {
             urlBar.locationView.tabDidChangeContentBlocking(tab)
         }
-
-        didStartAtHome = tabManager.startAtHomeCheck()
-        if didStartAtHome {
-            guard presentedViewController != nil else { return }
-            dismissVC()
-        }
+        dismissModalsIfStartAtHome()
 
         // When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
         // Make sure that our startup flow is completed and other tabs have been restored before we load.
         AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration]) { [weak self] in
             self?.backgroundTabLoader.loadBackgroundTabs()
+        }
+    }
+
+    private func dismissModalsIfStartAtHome() {
+        if tabManager.startAtHomeCheck() {
+            guard !dismissFakespotIfNeeded(), presentedViewController != nil else { return }
+            dismissVC()
         }
     }
 
