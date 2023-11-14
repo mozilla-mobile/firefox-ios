@@ -79,10 +79,17 @@ class HTTPDownload: Download {
     init?(cookieStore: WKHTTPCookieStore, preflightResponse: URLResponse, request: URLRequest) {
         self.cookieStore = cookieStore
         self.preflightResponse = preflightResponse
-        self.request = request
+
+        // Remove blobl from url to pass the rest of the checks
+        var tempRequest = request
+         if let url = request.url, url.scheme == "blob" {
+             let requestUrl = url.removeBlobFromUrl()
+             tempRequest = URLRequest(url: requestUrl)
+         }
+         self.request = tempRequest
 
         // Verify scheme is a secure http or https scheme before moving forward with HTTPDownload initialization
-        guard let scheme = request.url?.scheme else { return nil }
+        guard let scheme = self.request.url?.scheme else { return nil }
         guard scheme == "http" || scheme == "https" else { return nil }
 
         super.init()
@@ -98,7 +105,7 @@ class HTTPDownload: Download {
         self.totalBytesExpected = preflightResponse.expectedContentLength > 0 ? preflightResponse.expectedContentLength : nil
 
         self.session = URLSession(configuration: .ephemeral, delegate: self, delegateQueue: .main)
-        self.task = session?.downloadTask(with: request)
+        self.task = session?.downloadTask(with: self.request)
     }
 
     override func cancel() {
@@ -137,7 +144,6 @@ extension HTTPDownload: URLSessionTaskDelegate, URLSessionDownloadDelegate {
             resumeData != nil {
             return
         }
-
         delegate?.download(self, didCompleteWithError: error)
     }
 
@@ -161,7 +167,7 @@ extension HTTPDownload: URLSessionTaskDelegate, URLSessionDownloadDelegate {
 }
 
 class BlobDownload: Download {
-    fileprivate let data: Data
+    private let data: Data
 
     init(filename: String, mimeType: String, size: Int64, data: Data) {
         self.data = data

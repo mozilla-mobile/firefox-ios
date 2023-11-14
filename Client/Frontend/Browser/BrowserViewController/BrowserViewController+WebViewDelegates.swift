@@ -532,7 +532,6 @@ extension BrowserViewController: WKNavigationDelegate {
             } else {
                 webView.customUserAgent = UserAgent.getUserAgent(domain: url.baseDomain ?? "")
             }
-
             decisionHandler(.allow)
             return
         }
