@@ -15,9 +15,9 @@ let DefaultTimeoutTimeInterval = 10.0 // Seconds.  We'll want some telemetry on 
  */
 class SettingsContentViewController: UIViewController, WKNavigationDelegate, Themeable {
     private struct UX {
-        static let errorLeadingAnchor: CGFloat = 20
-        static let errorTrailingAnchor: CGFloat = -20
-        static let errorHeightAnchor: CGFloat = 44
+        static let errorLeadingPadding: CGFloat = 20
+        static let errorTrailingPadding: CGFloat = -20
+        static let errorHeightPadding: CGFloat = 44
     }
 
     var themeManager: ThemeManager
@@ -170,9 +170,9 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
 
             error.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             error.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            error.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.errorLeadingAnchor),
-            error.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: UX.errorTrailingAnchor),
-            error.heightAnchor.constraint(equalToConstant: UX.errorHeightAnchor)
+            error.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.errorLeadingPadding),
+            error.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: UX.errorTrailingPadding),
+            error.heightAnchor.constraint(equalToConstant: UX.errorHeightPadding)
         ])
 
         return InterstitialViews(view: view, activityView: spinner, label: error)
