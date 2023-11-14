@@ -4,7 +4,6 @@
 
 import Foundation
 
-/// WIP. Defines tab-specific state that is reflected in the new TabCell.
 struct TabCellState: Equatable {
     let isSelected: Bool
     let isPrivate: Bool

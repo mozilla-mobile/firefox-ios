@@ -13,17 +13,7 @@ enum TabTrayLayoutType: Equatable {
 struct TabTrayState: ScreenState, Equatable {
     var isPrivateMode: Bool
     var selectedPanel: TabTrayPanelType
-    var tabs: [TabCellState]
-
-    // MARK: Inactive tabs
-    var inactiveTabs: [String]
-    var isInactiveTabsExpanded: Bool
-
-    var isPrivateTabsEmpty: Bool {
-        guard isPrivateMode else { return false }
-        return tabs.isEmpty
-    }
-
+    var tabsState: TabsState
     var remoteTabsState: RemoteTabsPanelState?
 
     var layout: TabTrayLayoutType = .compact
@@ -45,59 +35,61 @@ struct TabTrayState: ScreenState, Equatable {
 
         self.init(isPrivateMode: panelState.isPrivateMode,
                   selectedPanel: panelState.selectedPanel,
-                  tabs: panelState.tabs,
+                  tabsState: panelState.tabsState,
                   remoteTabsState: panelState.remoteTabsState,
-                  normalTabsCount: panelState.normalTabsCount,
-                  inactiveTabs: panelState.inactiveTabs,
-                  isInactiveTabsExpanded: panelState.isInactiveTabsExpanded)
+                  normalTabsCount: panelState.normalTabsCount)
     }
 
     init() {
         self.init(isPrivateMode: false,
                   selectedPanel: .tabs,
-                  tabs: [TabCellState](),
+                  tabsState: TabsState(),
                   remoteTabsState: nil,
-                  normalTabsCount: "0",
-                  inactiveTabs: [String](),
-                  isInactiveTabsExpanded: false)
+                  normalTabsCount: "0")
     }
 
     init(isPrivateMode: Bool,
          selectedPanel: TabTrayPanelType,
-         tabs: [TabCellState],
+         tabsState: TabsState,
          remoteTabsState: RemoteTabsPanelState?,
-         normalTabsCount: String,
-         inactiveTabs: [String],
-         isInactiveTabsExpanded: Bool) {
+         normalTabsCount: String) {
         self.isPrivateMode = isPrivateMode
         self.selectedPanel = selectedPanel
-        self.tabs = tabs
+        self.tabsState = tabsState
         self.remoteTabsState = remoteTabsState
         self.normalTabsCount = normalTabsCount
-        self.inactiveTabs = inactiveTabs
-        self.isInactiveTabsExpanded = isInactiveTabsExpanded
     }
 
-    static let reducer: Reducer<Self> = { state, action in
+    static let reducer: Reducer<Self> = {
+        state,
+        action in
         switch action {
-        case TabTrayAction.didLoadTabData(let newState):
-            return newState
+        case TabTrayAction.didLoadTabData(let tabsState):
+            return TabTrayState(isPrivateMode: state.isPrivateMode,
+                                selectedPanel: state.selectedPanel,
+                                tabsState: tabsState,
+                                remoteTabsState: nil,
+                                normalTabsCount: state.normalTabsCount)
         case TabTrayAction.refreshTab(let tabs):
+            let newTabState = TabsState(isPrivateMode: state.tabsState.isPrivateMode,
+                                        tabs: tabs,
+                                        inactiveTabs: state.tabsState.inactiveTabs,
+                                        isInactiveTabsExpanded: state.tabsState.isInactiveTabsExpanded)
             return TabTrayState(isPrivateMode: state.isPrivateMode,
                                 selectedPanel: state.selectedPanel,
-                                tabs: tabs,
+                                tabsState: newTabState,
                                 remoteTabsState: nil,
-                                normalTabsCount: state.normalTabsCount,
-                                inactiveTabs: state.inactiveTabs,
-                                isInactiveTabsExpanded: state.isInactiveTabsExpanded)
+                                normalTabsCount: state.normalTabsCount)
         case TabTrayAction.toggleInactiveTabs(let tabsExpandedNewState):
+            let newTabState = TabsState(isPrivateMode: state.tabsState.isPrivateMode,
+                                        tabs: state.tabsState.tabs,
+                                        inactiveTabs: state.tabsState.inactiveTabs,
+                                        isInactiveTabsExpanded: tabsExpandedNewState)
             return TabTrayState(isPrivateMode: state.isPrivateMode,
                                 selectedPanel: state.selectedPanel,
-                                tabs: state.tabs,
+                                tabsState: newTabState,
                                 remoteTabsState: nil,
-                                normalTabsCount: state.normalTabsCount,
-                                inactiveTabs: state.inactiveTabs,
-                                isInactiveTabsExpanded: tabsExpandedNewState)
+                                normalTabsCount: state.normalTabsCount)
         default:
             return state
         }
@@ -107,6 +99,5 @@ struct TabTrayState: ScreenState, Equatable {
         return lhs.isPrivateMode == rhs.isPrivateMode
         && lhs.selectedPanel == rhs.selectedPanel
         && lhs.layout == rhs.layout
-        && lhs.tabs == rhs.tabs
     }
 }

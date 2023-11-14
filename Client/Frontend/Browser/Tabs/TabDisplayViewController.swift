@@ -16,7 +16,7 @@ class TabDisplayViewController: UIViewController,
 
     // MARK: UI elements
     private lazy var tabDisplayView: TabDisplayView = {
-        let view = TabDisplayView(state: self.tabTrayState)
+        let view = TabDisplayView(state: self.tabsState)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -24,13 +24,13 @@ class TabDisplayViewController: UIViewController,
     private lazy var emptyPrivateTabsView: EmptyPrivateTabsView = .build()
 
     // MARK: Redux state
-    var tabTrayState: TabTrayState
+    var tabsState: TabsState
 
     init(isPrivateMode: Bool,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
         // TODO: FXIOS-6936 Integrate Redux state
-        self.tabTrayState = TabTrayState()
+        self.tabsState = TabsState()
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
@@ -70,7 +70,7 @@ class TabDisplayViewController: UIViewController,
     }
 
     func setupEmptyView() {
-        guard tabTrayState.isPrivateMode, tabTrayState.isPrivateTabsEmpty else {
+        guard tabsState.isPrivateMode, tabsState.isPrivateTabsEmpty else {
             showEmptyView(shouldShowEmptyView: false)
             return
         }
@@ -96,8 +96,8 @@ class TabDisplayViewController: UIViewController,
     }
 
     func updateState(state: TabTrayState) {
-        tabTrayState = state
-        tabDisplayView.newState(state: tabTrayState)
+        tabsState = state.tabsState
+        tabDisplayView.newState(state: tabsState)
     }
 
     // MARK: EmptyPrivateTabsViewDelegate
