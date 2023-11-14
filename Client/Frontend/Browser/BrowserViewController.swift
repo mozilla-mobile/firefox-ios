@@ -436,7 +436,7 @@ class BrowserViewController: UIViewController,
         if let tab = tabManager.selectedTab {
             urlBar.locationView.tabDidChangeContentBlocking(tab)
         }
-        dismissVCsIfStartAtHome()
+        dismissModalsIfStartAtHome()
 
         // When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
         // Make sure that our startup flow is completed and other tabs have been restored before we load.
@@ -445,7 +445,7 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func dismissVCsIfStartAtHome() {
+    private func dismissModalsIfStartAtHome() {
         let didStartAtHome = tabManager.startAtHomeCheck()
         if didStartAtHome {
             guard !dismissFakespotIfNeeded(), presentedViewController != nil else { return }
