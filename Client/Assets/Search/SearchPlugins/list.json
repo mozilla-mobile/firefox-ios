@@ -97,7 +97,7 @@
     "bn-IN": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-m", "amazondotcom", "bing", "rediff", "wikipedia-bn"
+          "google-b-m", "amazondotcom", "bing", "wikipedia-bn"
         ]
       }
     },
@@ -167,7 +167,7 @@
     "el": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-m", "bing", "ebay", "skroutz", "wikipedia-el"
+          "google-b-m", "bing", "ebay", "wikipedia-el"
         ]
       }
     },
@@ -267,7 +267,7 @@
     "eo": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-m", "bing", "ddg", "ebay", "reta-vortaro", "wikipedia-eo"
+          "google-b-m", "bing", "ddg", "ebay", "wikipedia-eo"
         ]
       }
     },
@@ -314,7 +314,7 @@
     "eu": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-m", "bing", "elebila", "wikipedia-eu"
+          "google-b-m", "bing", "wikipedia-eu"
         ]
       }
     },
@@ -349,7 +349,7 @@
     "fy-NL": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-m", "bolcom-fy-NL", "wikipedia-fy-NL"
+          "google-b-m", "wikipedia-fy-NL"
         ]
       },
       "experimental-hidden": {
@@ -424,7 +424,7 @@
     "hu": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-m", "ebay", "sztaki-en-hu", "vatera", "wikipedia-hu"
+          "google-b-m", "ebay", "vatera", "wikipedia-hu"
         ]
       }
     },
@@ -452,7 +452,7 @@
     "is": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-m", "amazondotcom", "bing", "leit-is", "wikipedia-is"
+          "google-b-m", "amazondotcom", "bing", "wikipedia-is"
         ]
       }
     },
@@ -528,7 +528,7 @@
     "ko": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-m", "danawa-kr", "daum-kr", "ebay"
+          "google-b-m", "daum-kr", "ebay"
         ]
       }
     },
@@ -584,7 +584,7 @@
     "mr": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-m", "amazon-in", "bing", "rediff", "wikipedia-mr"
+          "google-b-m", "amazon-in", "bing", "wikipedia-mr"
         ]
       }
     },
@@ -685,7 +685,7 @@
     "rm": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-m", "bing", "ddg", "leo_ende_de", "pledarigrond", "wikipedia-rm"
+          "google-b-m", "bing", "ddg", "leo_ende_de", "wikipedia-rm"
         ]
       }
     },
@@ -726,7 +726,7 @@
     "sk": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-m", "ebay", "slovnik-sk", "wikipedia-sk"
+          "google-b-m", "ebay", "wikipedia-sk"
         ]
       }
     },
