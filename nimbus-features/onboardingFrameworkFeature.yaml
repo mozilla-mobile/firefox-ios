@@ -34,6 +34,10 @@ features:
               order: 10
               title: Onboarding/Onboarding.Welcome.Title.TreatementA.v120
               body: Onboarding/Onboarding.Welcome.Description.TreatementA.v120
+              image: welcome-globe
+              link:
+                title: Onboarding/Onboarding.Welcome.Link.Action.v114
+                url: "https://www.mozilla.org/privacy/firefox/"
               buttons:
                 primary:
                   title: Onboarding/Onboarding.Welcome.ActionTreatementA.v114
