@@ -446,8 +446,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func dismissModalsIfStartAtHome() {
-        let didStartAtHome = tabManager.startAtHomeCheck()
-        if didStartAtHome {
+        if tabManager.startAtHomeCheck() {
             guard !dismissFakespotIfNeeded(), presentedViewController != nil else { return }
             dismissVC()
         }
