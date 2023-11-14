@@ -8,11 +8,11 @@ struct ComponentData {
     var data: [ComponentViewModel] {
         return [ButtonComponentsViewModel(),
                 FadeScrollViewComponentViewModel(),
+                ContextualHintViewComponentViewModel(),
                 BottomSheetComponentViewModel(),
                 CardViewComponentViewModel(),
                 ShadowCardViewComponentViewModel(),
                 CollapsibleCardViewComponentViewModel(),
-                ActionFooterComponentViewModel(),
-                ContextualHintViewComponentViewModel()]
+                ActionFooterComponentViewModel()]
     }
 }

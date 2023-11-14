@@ -11,6 +11,7 @@ import Shared
 class ContextualHintViewController: UIViewController, OnViewDismissable, Themeable, UIAdaptivePresentationControllerDelegate {
     private struct UX {
         static let contextualHintWidth: CGFloat = 350
+        static let contextualHintLandscapeExtraWidth: CGFloat = 60
     }
 
     // MARK: - UI Elements
@@ -67,7 +68,11 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         let targetSize = CGSize(width: UX.contextualHintWidth, height: UIView.layoutFittingCompressedSize.height)
-        preferredContentSize = hintView.systemLayoutSizeFitting(targetSize)
+        var systemSize = hintView.systemLayoutSizeFitting(targetSize)
+        if UIWindow.isLandscape {
+            systemSize.width += UX.contextualHintLandscapeExtraWidth
+        }
+        preferredContentSize = systemSize
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -186,5 +191,10 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
 
     func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
         false
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        self.view.setNeedsLayout()
     }
 }
