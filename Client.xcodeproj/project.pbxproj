@@ -18808,7 +18808,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 9G8J6YA743;
-				INFOPLIST_FILE = Tests/XCUITests/Info.plist;
+				INFOPLIST_FILE = firefox-ios/Tests/XCUITests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.XCUITests;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Fennec Enterprise XCUITests";
