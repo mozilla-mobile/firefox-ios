@@ -155,12 +155,6 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarPresentCFR(at sourceView: UIView) {
-        // Checks if the app started with the Homepage tab
-        // If true, don't show the CFR to avoid showing it on the Homepage
-        guard !didStartAtHome else {
-            didStartAtHome = false
-            return
-        }
         configureShoppingContextVC(at: sourceView)
     }
 

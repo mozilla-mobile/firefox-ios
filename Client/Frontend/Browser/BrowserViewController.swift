@@ -54,7 +54,6 @@ class BrowserViewController: UIViewController,
     var urlFromAnotherApp: UrlToOpenModel?
     var isCrashAlertShowing = false
     var currentMiddleButtonState: MiddleButtonState?
-    var didStartAtHome = false
     var openedUrlFromExternalSource = false
     var passBookHelper: OpenPassBookHelper?
     var overlayManager: OverlayModeManager
@@ -438,10 +437,11 @@ class BrowserViewController: UIViewController,
             urlBar.locationView.tabDidChangeContentBlocking(tab)
         }
 
-        didStartAtHome = tabManager.startAtHomeCheck()
+        let didStartAtHome = tabManager.startAtHomeCheck()
         if didStartAtHome {
-            guard !dismissFakespotIfNeeded(), presentedViewController != nil else { return }
-            dismissVC()
+            if !dismissFakespotIfNeeded(), presentedViewController != nil {
+                dismissVC()
+            }
         }
 
         // When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
