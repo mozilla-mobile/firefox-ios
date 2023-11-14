@@ -98,7 +98,7 @@ class FakespotViewController:
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
 
-        self.update(viewModel: viewModel, triggerFetch: false)
+        listenToStateChange()
     }
 
     required init?(coder: NSCoder) {
@@ -153,16 +153,22 @@ class FakespotViewController:
     }
 
     func update(viewModel: FakespotViewModel, triggerFetch: Bool = true) {
-        self.viewModel = viewModel
+        // Only update the model if the shopping product changed to avoid unnecessary API calls
+        guard self.viewModel.shoppingProduct != viewModel.shoppingProduct else { return }
 
+        self.viewModel = viewModel
+        listenToStateChange()
+
+        guard triggerFetch else { return }
+        viewModel.fetchProductIfOptedIn()
+    }
+
+    private func listenToStateChange() {
         viewModel.onStateChange = { [weak self] in
             ensureMainThread {
                 self?.updateContent()
             }
         }
-
-        guard triggerFetch else { return }
-        viewModel.fetchProductIfOptedIn()
     }
 
     func applyTheme() {
