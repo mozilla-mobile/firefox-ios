@@ -11,18 +11,23 @@ import Foundation
  * in a callback in the constructor (although these also style themselves appropriately).
  */
 typealias SnackBarCallback = (_ bar: SnackBar) -> Void
-class SnackButton: UIButton {
-    let callback: SnackBarCallback?
-    var bar: SnackBar?
-
+class SnackButton: UIButton, ThemeApplicable {
     private struct UX {
         static let borderWidth: CGFloat = 0.5
         static let fontSize: CGFloat = 17
     }
 
+    let callback: SnackBarCallback?
+    var bar: SnackBar?
+
+    private var highlightedTintColor: UIColor!
+    private var normalTintColor: UIColor!
+
+    let separator: UIView = .build()
+
     override open var isHighlighted: Bool {
         didSet {
-            self.backgroundColor = isHighlighted ? UIColor.legacyTheme.snackbar.highlight : .clear
+            self.backgroundColor = isHighlighted ? highlightedTintColor : normalTintColor
         }
     }
 
@@ -38,8 +43,6 @@ class SnackButton: UIButton {
         }
         titleLabel?.adjustsFontForContentSizeCategory = true
         setTitle(title, for: .normal)
-        setTitleColor(UIColor.legacyTheme.snackbar.highlightText, for: .highlighted)
-        setTitleColor(UIColor.legacyTheme.snackbar.title, for: .normal)
         addTarget(self, action: #selector(onClick), for: .touchUpInside)
         self.accessibilityIdentifier = accessibilityIdentifier
     }
@@ -54,7 +57,6 @@ class SnackButton: UIButton {
     }
 
     func drawSeparator() {
-        let separator: UIView = .build { $0.backgroundColor = UIColor.legacyTheme.snackbar.border }
         addSubview(separator)
         NSLayoutConstraint.activate([
             separator.topAnchor.constraint(equalTo: topAnchor),
@@ -62,5 +64,15 @@ class SnackButton: UIButton {
             separator.leadingAnchor.constraint(equalTo: leadingAnchor),
             separator.widthAnchor.constraint(equalToConstant: UX.borderWidth)
         ])
+    }
+
+    // MARK: - Theme Applicable
+    func applyTheme(theme: Theme) {
+        let colors = theme.colors
+        highlightedTintColor = colors.actionPrimaryHover
+        normalTintColor = colors.actionPrimary
+        setTitleColor(colors.textInverted, for: .normal)
+        separator.backgroundColor = colors.borderPrimary
+        backgroundColor = normalTintColor
     }
 }

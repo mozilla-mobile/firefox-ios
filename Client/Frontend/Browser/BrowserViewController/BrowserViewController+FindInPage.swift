@@ -26,9 +26,10 @@ extension BrowserViewController {
             self.view.layoutIfNeeded()
         })
 
-        findInPageBar.snp.makeConstraints { make in
-            make.height.equalTo(UIConstants.ToolbarHeight)
-        }
+        findInPageBar.heightAnchor.constraint(
+            greaterThanOrEqualToConstant: UIConstants.ToolbarHeight
+        ).isActive = true
+
         findInPageBar.applyTheme(theme: themeManager.currentTheme)
 
         updateViewConstraints()

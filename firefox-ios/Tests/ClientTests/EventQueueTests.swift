@@ -136,6 +136,44 @@ final class EventQueueTests: XCTestCase {
         wait(1)
     }
 
+    func testEventState_hasSignalled() {
+        XCTAssertFalse(queue.hasSignalled(.startingEvent))
+        queue.signal(event: .startingEvent)
+        XCTAssertTrue(queue.hasSignalled(.startingEvent))
+    }
+
+    func testEventState_isCompleted() {
+        XCTAssertFalse(queue.activityIsCompleted(.activityEvent))
+        queue.started(.activityEvent)
+        XCTAssertFalse(queue.activityIsCompleted(.activityEvent))
+        queue.completed(.activityEvent)
+        XCTAssertTrue(queue.activityIsCompleted(.activityEvent))
+    }
+
+    func testEventState_inProgress() {
+        XCTAssertFalse(queue.activityIsInProgress(.activityEvent))
+        queue.started(.activityEvent)
+        XCTAssertTrue(queue.activityIsInProgress(.activityEvent))
+        queue.completed(.activityEvent)
+        XCTAssertFalse(queue.activityIsInProgress(.activityEvent))
+    }
+
+    func testEventState_isFailed() {
+        XCTAssertFalse(queue.activityIsFailed(.activityEvent))
+        queue.started(.activityEvent)
+        XCTAssertFalse(queue.activityIsFailed(.activityEvent))
+        queue.failed(.activityEvent)
+        XCTAssertTrue(queue.activityIsFailed(.activityEvent))
+    }
+
+    func testEventState_isNotStarted() {
+        XCTAssertTrue(queue.activityIsNotStarted(.activityEvent))
+        queue.started(.activityEvent)
+        XCTAssertFalse(queue.activityIsNotStarted(.activityEvent))
+        queue.completed(.activityEvent)
+        XCTAssertFalse(queue.activityIsNotStarted(.activityEvent))
+    }
+
     func testActivityEventStateChanges() {
         var actionRun = false
 

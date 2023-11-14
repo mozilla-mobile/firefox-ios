@@ -5,6 +5,7 @@
 import MobileCoreServices
 import Shared
 import UIKit
+import UniformTypeIdentifiers
 
 extension UIPasteboard {
     func addImageWithData(_ data: Data, forURL url: URL) {
@@ -12,13 +13,13 @@ extension UIPasteboard {
 
         // Setting pasteboard.items allows us to set multiple representations for the same item.
         items = [[
-            kUTTypeURL as String: url,
+            UTType.url.identifier: url,
             imageTypeKey(isGIF): data
         ]]
     }
 
     fileprivate func imageTypeKey(_ isGIF: Bool) -> String {
-        return (isGIF ? kUTTypeGIF : kUTTypePNG) as String
+        return isGIF ? UTType.gif.identifier : UTType.png.identifier
     }
 
     private var syncURL: URL? {

@@ -22,5 +22,4 @@ class LegacyDarkTheme: LegacyNormalTheme {
     override var tableView: TableViewColor { return DarkTableViewColor() }
     override var browser: BrowserColor { return DarkBrowserColor() }
     override var tabTray: TabTrayColor { return DarkTabTrayColor() }
-    override var snackbar: SnackBarColor { return SnackBarColor() }
 }

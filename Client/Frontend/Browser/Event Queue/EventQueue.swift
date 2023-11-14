@@ -5,7 +5,12 @@
 import Foundation
 import Common
 
+/// The default app-wide queue for Firefox iOS.
+public let AppEventQueue = EventQueue<AppEvent>()
+
+/// Action taken when an event's dependencies are completed.
 typealias EventQueueAction = (() -> Void)
+/// Unique ID associated with an enqueued action.
 typealias ActionToken = UUID
 
 /// The state of an event. Typical one-shot events are placed into the .completed
@@ -20,9 +25,8 @@ public enum QueueEventState: Int {
     case failed
 }
 
-/// The default app-wide queue for Firefox.
-public let AppEventQueue = EventQueue<AppEvent>()
-
+/// A queue that provides synchronization between different areas of the codebase and coordinates
+/// actions that depend on one or more events or app states. For example events see: AppEvent.swift.
 public final class EventQueue<QueueEventType: Hashable> {
     public struct EnqueuedAction {
         let token: ActionToken
@@ -44,6 +48,56 @@ public final class EventQueue<QueueEventType: Hashable> {
          mainQueue: DispatchQueueInterface = DispatchQueue.main) {
         self.logger = logger
         self.mainQueue = mainQueue
+    }
+
+    // MARK: - Public API
+
+    /// Queues a particular action for execution once the required events or activities
+    /// have completed. If the dependencies have already been completed, the action is
+    /// executed immediately. An optional ActionToken may be provided explicitly for a
+    /// particular action; if so, any subsequent calls to this function will _not_ enqueue
+    /// that action again if it is already pending execution. This provides a convenience
+    /// for de-duplicating calls that might accidentally enqueue the same action twice.
+    /// 
+    /// - Parameters:
+    ///   - events: the dependent events.
+    ///   - token: an optional UUID that identifies the specific work being enqueued. If
+    ///   this is provided, it will be used as the token to identify the enqueued work.
+    ///   Callers may wish to provide this directly in order to allow for automatic
+    ///   deduplication, for example in scenarios where the same function may be called
+    ///   multiple times but you only want the action to be enqueued a single time.
+    ///   - action: the action or work to perform. Called on main thread by default.
+    /// - Returns: a token that can be used to cancel the action.
+    ///
+    /// Notes: the token return value may not be immediately usable if this
+    /// function is called off of the main thread (since the actual action may not be
+    /// enqueued until the subsequent main thread run loop has a chance to execute). It
+    /// also will have no usefulness if all dependencies are already satisfied, in which
+    /// case the action will be immediately run before the function returns.
+    @discardableResult
+    func wait(for events: [QueueEventType],
+              token: ActionToken = ActionToken(),
+              then action: @escaping EventQueueAction) -> ActionToken {
+        mainQueue.ensureMainThread { [weak self] in
+            guard let self else { return }
+
+            // If a specific ID has been provided for this action, ensure
+            guard !actions.contains(where: { $0.token == token }) else {
+                logger.log("Ignoring duplicate action (ID: \(token))", level: .info, category: .library)
+                return
+            }
+
+            let enqueued = EnqueuedAction(token: token, action: action, dependencies: events)
+            self.actions.append(enqueued)
+            self.processActions()
+        }
+        return token
+    }
+
+    /// Shorthand for waiting on a single event. Convenience.
+    @discardableResult
+    func wait(for event: QueueEventType, then action: @escaping EventQueueAction) -> ActionToken {
+        return wait(for: [event], token: ActionToken(), then: action)
     }
 
     /// Signals that a specific one-shot event has occurred. These types of events are states
@@ -100,77 +154,36 @@ public final class EventQueue<QueueEventType: Hashable> {
         }
     }
 
-    /// Queues a particular action for execution once the provided events or activities
-    /// have completed. If the dependencies have already all occurred, the block is executed
-    /// immediately. An optional ActionToken may be provided explicitly for particular
-    /// action, if so any subsequent calls to this function will _not_ enqueue that
-    /// action again if it is already pending execution. This provides a convenience for
-    /// automatically avoiding duplicate work.
-    /// - Parameters:
-    ///   - events: the dependent events.
-    ///   - token: an optional UUID that identifies the specific work being enqueued. If
-    ///   this is provided, it will be used as the token to identify the enqueued work.
-    ///   Callers may wish to provide this directly in order to allow for automatic
-    ///   deduplication, for example in scenarios where the same function may be called
-    ///   multiple times but you only want the action to be enqueued a single time.
-    ///   - action: the action or work to perform. Called on main thread by default.
-    /// - Returns: a token that can be used to cancel the action.
-    ///
-    /// Notes: the token return value may not be immediately usable if this
-    /// function is called off of the main thread (since the actual action may not be
-    /// enqueued until the subsequent main thread run loop has a chance to execute). It
-    /// also will have no usefulness if all dependencies are already satisfied, in which
-    /// case the action will be immediately run before the function returns.
-    @discardableResult
-    func wait(for events: [QueueEventType],
-              token: ActionToken = ActionToken(),
-              then action: @escaping EventQueueAction) -> ActionToken {
-        mainQueue.ensureMainThread { [weak self] in
-            guard let self else { return }
-
-            // If a specific ID has been provided for this action, ensure
-            guard !actions.contains(where: { $0.token == token }) else {
-                logger.log("Ignoring duplicate action (ID: \(token))", level: .info, category: .library)
-                return
-            }
-
-            let enqueued = EnqueuedAction(token: token, action: action, dependencies: events)
-            self.actions.append(enqueued)
-            self.processActions()
-        }
-        return token
-    }
-
-    /// Shorthand for waiting on a single event. Convenience func.
-    @discardableResult
-    func wait(for event: QueueEventType, then action: @escaping EventQueueAction) -> ActionToken {
-        return wait(for: [event], token: ActionToken(), then: action)
-    }
-
     /// Used to check whether a particular event has occurred.
     /// - Returns: true if the event has occurred.
-    func hasSignalled(_ event: QueueEventType) -> Bool {
-        assert(Thread.isMainThread, "Expects to be called on the main thread.")
-        return signalledEvents[event] == .completed
+    func hasSignalled(_ argEvent: QueueEventType) -> Bool {
+        return event(argEvent, isInState: .completed)
     }
 
-    func activityIsInProgress(_ event: QueueEventType) -> Bool {
-        assert(Thread.isMainThread, "Expects to be called on the main thread.")
-        return signalledEvents[event] == .inProgress
+    /// Used to check whether a particular activity is in progress.
+    /// - Returns: true if the event is in progress.
+    func activityIsInProgress(_ argEvent: QueueEventType) -> Bool {
+        return event(argEvent, isInState: .inProgress)
     }
 
-    func activityIsFailed(_ event: QueueEventType) -> Bool {
-        assert(Thread.isMainThread, "Expects to be called on the main thread.")
-        return signalledEvents[event] == .failed
+    /// Used to check whether a particular activity failed.
+    /// - Returns: true if the event failed.
+    func activityIsFailed(_ argEvent: QueueEventType) -> Bool {
+        return event(argEvent, isInState: .failed)
     }
 
-    func activityIsNotStarted(_ event: QueueEventType) -> Bool {
+    /// Used to check whether a particular activity has not yet started.
+    /// - Returns: true if the event hasn't started.
+    func activityIsNotStarted(_ argEvent: QueueEventType) -> Bool {
         assert(Thread.isMainThread, "Expects to be called on the main thread.")
-        return signalledEvents[event] == nil
+        return signalledEvents[argEvent] == nil
     }
 
+    /// Used to check whether a particular activity has completed.
+    /// This is effectively equivalent to `hasSignalled` since completed
+    /// activities share the same state as a signalled event (.completed).
+    /// - Returns: true if the activity has completed.
     func activityIsCompleted(_ event: QueueEventType) -> Bool {
-        assert(Thread.isMainThread, "Expects to be called on the main thread.")
         return hasSignalled(event)
     }
 
@@ -201,6 +214,11 @@ public final class EventQueue<QueueEventType: Hashable> {
     }
 
     // MARK: - Internal Utility
+
+    private func event(_ event: QueueEventType, isInState state: QueueEventState) -> Bool {
+        assert(Thread.isMainThread, "Expects to be called on the main thread.")
+        return signalledEvents[event] == state
+    }
 
     private func processActions(for event: QueueEventType? = nil) {
         assert(Thread.isMainThread, "Expects to be called on the main thread.")

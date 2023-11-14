@@ -98,5 +98,8 @@
 "Onboarding.Welcome.Title.TreatementA.v114" = "%@를 기본 브라우저로 설정해 보세요";
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Welcome.Title.TreatementA.v120" = "우리는 사용자를 안전하게 지키는 것을 좋아합니다";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Title.v114" = "나만의 인터넷에 오신 것을 환영합니다";
 
