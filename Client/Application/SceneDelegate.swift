@@ -14,21 +14,8 @@ import Common
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-    var logger: Logger = DefaultLogger.shared
-
-    /// This is a temporary work around until we have the architecture to properly replace the use cases where this code is used
-    /// Do not use in new code under any circumstances
-    var coordinatorBrowserViewController: BrowserViewController {
-        if let browserCoordinator = sceneCoordinator?.childCoordinators.first(where: { $0 as? BrowserCoordinator != nil }) as? BrowserCoordinator {
-            return browserCoordinator.browserViewController
-        } else {
-            logger.log("BrowserViewController couldn't be retrieved", level: .fatal, category: .lifecycle)
-            return BrowserViewController(profile: profile, tabManager: tabManager)
-        }
-    }
 
     let profile: Profile = AppContainer.shared.resolve()
-    let tabManager: TabManager = AppContainer.shared.resolve()
     var sessionManager: AppSessionProvider = AppContainer.shared.resolve()
     var downloadQueue: DownloadQueue = AppContainer.shared.resolve()
 
