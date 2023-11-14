@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
-import SnapKit
 import UIKit
 import WebKit
 import Common
@@ -96,20 +95,28 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
         super.viewDidLoad()
 
         self.settingsWebView = makeWebView()
-        view.addSubview(settingsWebView)
-        self.settingsWebView.snp.remakeConstraints { make in
-            make.edges.equalTo(self.view)
-        }
 
         // Destructuring let causes problems.
         let ret = makeInterstitialViews()
         self.interstitialView = ret.view
         self.interstitialSpinnerView = ret.activityView
         self.interstitialErrorView = ret.label
-        view.addSubview(interstitialView)
-        self.interstitialView.snp.remakeConstraints { make in
-            make.edges.equalTo(self.view)
-        }
+        view.addSubviews(settingsWebView, interstitialView)
+
+        settingsWebView.translatesAutoresizingMaskIntoConstraints = false
+        interstitialView.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            settingsWebView.topAnchor.constraint(equalTo: view.topAnchor),
+            settingsWebView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            settingsWebView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            settingsWebView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            interstitialView.topAnchor.constraint(equalTo: view.topAnchor),
+            interstitialView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            interstitialView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            interstitialView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
 
         startLoading()
 
@@ -144,7 +151,6 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
         let view = UIView()
         let spinner = UIActivityIndicatorView(style: .medium)
         spinner.color = themeManager.currentTheme.colors.iconSpinner
-        view.addSubview(spinner)
 
         let error = UILabel()
         if settingsTitle != nil {
@@ -153,20 +159,21 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
             error.textAlignment = .center
         }
         error.isHidden = true
-        view.addSubview(error)
+        view.addSubviews(spinner, error)
 
-        spinner.snp.makeConstraints { make in
-            make.center.equalTo(view)
-            return
-        }
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        error.translatesAutoresizingMaskIntoConstraints = false
 
-        error.snp.makeConstraints { make in
-            make.center.equalTo(view)
-            make.left.equalTo(view.snp.left).offset(20)
-            make.right.equalTo(view.snp.right).offset(-20)
-            make.height.equalTo(44)
-            return
-        }
+        NSLayoutConstraint.activate([
+            spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+
+            error.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            error.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            error.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            error.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            error.heightAnchor.constraint(equalToConstant: 44)
+        ])
 
         return InterstitialViews(view: view, activityView: spinner, label: error)
     }
