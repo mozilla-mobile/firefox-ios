@@ -11,6 +11,7 @@ final class FakespotCoordinatorTests: XCTestCase {
     private var profile: MockProfile!
     private var mockRouter: MockRouter!
     let exampleProduct = URL(string: "https://www.amazon.com/Under-Armour-Charged-Assert-Running/dp/B087T8Q2C4")!
+    let exampleProduct2 = URL(string: "https://www.amazon.com/ESpefy-Frame-Dual-Workstation-Black/dp/B0B88PNFDJ")!
 
     override func setUp() {
         super.setUp()
@@ -79,6 +80,24 @@ final class FakespotCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(mockRouter.dismissCalled, 1)
         XCTAssertTrue(subject.childCoordinators.isEmpty)
+    }
+
+    func testUpdateSidebar_withOtherProduct_updatesSidebar() {
+        let subject = createSubject()
+        let sidebarContainer = MockSidebarEnabledView(frame: CGRect.zero)
+        let viewController = UIViewController()
+
+        subject.startSidebar(productURL: exampleProduct,
+                             sidebarContainer: sidebarContainer,
+                             parentViewController: viewController)
+
+        XCTAssertEqual(sidebarContainer.showSidebarCalled, 1)
+
+        subject.updateSidebar(productURL: exampleProduct2,
+                              sidebarContainer: sidebarContainer,
+                              parentViewController: viewController)
+
+        XCTAssertEqual(sidebarContainer.updateSidebarCalled, 1)
     }
 
     // MARK: - Helpers
