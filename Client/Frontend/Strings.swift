@@ -203,6 +203,11 @@ extension String {
     public struct CreditCard {
         // Settings / Empty State / Keyboard input accessory view
         public struct Settings {
+            public static let AddCardAccessibilityLabel = MZLocalizedString(
+                key: "CreditCard.Settings.AddCard.AccessibilityLabel.v121",
+                tableName: "Settings",
+                value: "Add Card",
+                comment: "Accessibility label for the add button in autofill settings screen. Pressing this button presents a modal that allows users to add a card by entering the credit card information.")
             public static let EmptyListTitle = MZLocalizedString(
                 key: "CreditCard.Settings.EmptyListTitle.v112",
                 tableName: "Settings",

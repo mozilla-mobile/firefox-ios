@@ -25,10 +25,12 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
     var creditCardTableViewController: CreditCardTableViewController
 
     private lazy var addCreditCardButton: UIBarButtonItem = {
-        return UIBarButtonItem(image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus),
-                               style: .plain,
-                               target: self,
-                               action: #selector(addCreditCard))
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus),
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(addCreditCard))
+        button.accessibilityLabel = .CreditCard.Settings.AddCardAccessibilityLabel
+        return button
     }()
 
     // MARK: Initializers
