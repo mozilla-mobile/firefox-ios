@@ -19,6 +19,10 @@ class NotificationService: UNNotificationServiceExtension {
     // AppDelegate.application(_:didReceiveRemoteNotification:completionHandler:)
     // Once the notification is tapped, then the same userInfo is passed to the same method in the AppDelegate.
     override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
+        // Set-up Rust network stack. This is needed in addition to the call
+        // from the AppDelegate due to the fact that this uses a separate process
+        Viaduct.shared.useReqwestBackend()
+
         let userInfo = request.content.userInfo
 
         let content = request.content.mutableCopy() as! UNMutableNotificationContent
