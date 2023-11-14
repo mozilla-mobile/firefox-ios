@@ -16,34 +16,22 @@ class TabsPanelMiddleware {
         switch action {
         case TabTrayAction.tabTrayDidLoad(let panelType):
             let tabsState = self.getMockData(for: panelType)
-            DispatchQueue.main.async {
-                store.dispatch(TabTrayAction.didLoadTabData(tabsState))
-            }
+            store.dispatch(TabTrayAction.didLoadTabData(tabsState))
         case TabTrayAction.changePanel(let panelType):
             let tabsState = self.getMockData(for: panelType)
-            DispatchQueue.main.async {
-                store.dispatch(TabTrayAction.didLoadTabData(tabsState))
-            }
+            store.dispatch(TabTrayAction.didLoadTabData(tabsState))
         case TabTrayAction.addNewTab(let isPrivate):
             self.addNewTab()
-            DispatchQueue.main.async {
-                store.dispatch(TabTrayAction.refreshTab(self.tabs))
-            }
+            store.dispatch(TabTrayAction.refreshTab(self.tabs))
         case TabTrayAction.moveTab(let originIndex, let destinationIndex):
             self.moveTab(from: originIndex, to: destinationIndex)
-            DispatchQueue.main.async {
-                store.dispatch(TabTrayAction.refreshTab(self.tabs))
-            }
+            store.dispatch(TabTrayAction.refreshTab(self.tabs))
         case TabTrayAction.closeTab(let index):
             self.closeTab(for: index)
-            DispatchQueue.main.async {
-                store.dispatch(TabTrayAction.refreshTab(self.tabs))
-            }
+            store.dispatch(TabTrayAction.refreshTab(self.tabs))
         case TabTrayAction.closeAllTabs:
             self.closeAllTabs()
-            DispatchQueue.main.async {
-                store.dispatch(TabTrayAction.refreshTab(self.tabs))
-            }
+            store.dispatch(TabTrayAction.refreshTab(self.tabs))
         default:
             break
         }

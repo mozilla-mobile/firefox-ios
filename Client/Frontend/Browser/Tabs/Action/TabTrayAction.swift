@@ -21,5 +21,4 @@ enum TabTrayAction: Action {
     case didLoadTabData(TabTrayState)
     // Response to all user actions involving tabs ex: add, close and close all tabs
     case refreshTab([TabCellState])
-
 }
