@@ -3746,10 +3746,16 @@ extension String {
             tableName: "Shopping",
             value: "Adjusted rating",
             comment: "Title of the adjusted rating card displayed in the shopping review quality bottom sheet.")
-        public static let AdjustedRatingDescription = MZLocalizedString(
+        public static let AdjustedRatingDescriptionNotUsed = MZLocalizedString(
             key: "Shopping.AdjustedRating.Description.v120",
             tableName: "Shopping",
             value: "Unreliable reviews removed",
+            comment: "Description adjusted of the rating card displayed in the shopping review quality bottom sheet.",
+            lastUsedInVersion: 120)
+        public static let AdjustedRatingDescription = MZLocalizedString(
+            key: "Shopping.AdjustedRating.Description.v121",
+            tableName: "Shopping",
+            value: "Based on reliable reviews",
             comment: "Description adjusted of the rating card displayed in the shopping review quality bottom sheet.")
         public static let AdjustedRatingStarsAccessibilityLabel = MZLocalizedString(
             key: "Shopping.AdjustedRating.StarsAccessibilityLabel.v120",
