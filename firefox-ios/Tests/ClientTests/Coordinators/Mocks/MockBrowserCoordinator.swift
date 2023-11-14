@@ -23,6 +23,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
     var showFakespotFlowAsSidebarCalled = 0
     var dismissFakespotModalCalled = 0
     var dismissFakespotSidebarCalled = 0
+    var updateFakespotSidebarCalled = 0
 
     func show(settings: Route.SettingsSection) {
         showSettingsCalled += 1
@@ -81,5 +82,11 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
     func dismissFakespotSidebar(sidebarContainer: Client.SidebarEnabledViewProtocol,
                                 parentViewController: UIViewController) {
         dismissFakespotSidebarCalled += 1
+    }
+
+    func updateFakespotSidebar(productURL: URL,
+                               sidebarContainer: SidebarEnabledViewProtocol,
+                               parentViewController: UIViewController) {
+        updateFakespotSidebarCalled += 1
     }
 }
