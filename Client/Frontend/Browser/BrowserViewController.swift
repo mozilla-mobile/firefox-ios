@@ -1601,7 +1601,9 @@ class BrowserViewController: UIViewController,
             }
 
             // Update Fakespot sidebar if necessary
-            updateFakespot(tab: tab)
+            if webViewStatus == .url {
+                updateFakespot(tab: tab)
+            }
 
             TabEvent.post(.didChangeURL(url), for: tab)
         }
