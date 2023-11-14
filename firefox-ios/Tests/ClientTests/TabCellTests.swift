@@ -7,6 +7,18 @@
 import XCTest
 
 class TabCellTests: XCTestCase {
+    var cellDelegate: MockTabCellDelegate!
+
+    override func setUp() {
+        super.setUp()
+        cellDelegate = MockTabCellDelegate()
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        cellDelegate = nil
+    }
+
     func testTabCellDeinit() {
         let subject = TabCell(frame: .zero)
         trackForMemoryLeaks(subject)
@@ -15,14 +27,14 @@ class TabCellTests: XCTestCase {
     func testConfigureTabAXLabel() {
         let cell = TabCell(frame: .zero)
         let state = createDefaultState()
-        cell.configure(with: state, theme: nil)
+        cell.configure(with: state, theme: nil, delegate: cellDelegate)
         XCTAssert(cell.accessibilityLabel!.contains(state.tabTitle))
     }
 
     func testConfigureTabAXHint() {
         let cell = TabCell(frame: .zero)
         let state = createDefaultState()
-        cell.configure(with: state, theme: nil)
+        cell.configure(with: state, theme: nil, delegate: cellDelegate)
         XCTAssertEqual(cell.accessibilityHint!,
                        String.TabTraySwipeToCloseAccessibilityHint)
     }
@@ -30,7 +42,7 @@ class TabCellTests: XCTestCase {
     func testConfigureTabSelectedState() {
         let cell = TabCell(frame: .zero)
         let state = createDefaultState()
-        cell.configure(with: state, theme: nil)
+        cell.configure(with: state, theme: nil, delegate: cellDelegate)
         XCTAssertEqual(cell.isSelectedTab,
                        state.isSelected)
     }
@@ -44,5 +56,13 @@ class TabCellTests: XCTestCase {
                             screenshot: nil,
                             hasHomeScreenshot: false,
                             margin: 0.0)
+    }
+}
+
+class MockTabCellDelegate: TabCellDelegate {
+    var tabCellClosedCounter = 0
+
+    func tabCellDidClose(_ cell: TabCell) {
+        tabCellClosedCounter += 1
     }
 }

@@ -140,7 +140,6 @@
 		219A0FD72ACC8C03009A6D1A /* InactiveTabsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219A0FD62ACC8C03009A6D1A /* InactiveTabsHeaderView.swift */; };
 		219A0FD92ACC8C0F009A6D1A /* InactiveTabsFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219A0FD82ACC8C0F009A6D1A /* InactiveTabsFooterView.swift */; };
 		219A0FDB2ACCCFFC009A6D1A /* InactiveTabsSectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219A0FDA2ACCCFFC009A6D1A /* InactiveTabsSectionManager.swift */; };
-		219CAE1F2AF578F900E3DE02 /* TabViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219CAE1E2AF578F900E3DE02 /* TabViewState.swift */; };
 		21A1C3C72996AFF800181B7C /* OverlayModeManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A1C3C62996AFF800181B7C /* OverlayModeManagerTests.swift */; };
 		21A43CDD291461C700B1206D /* ReaderModeFontTypeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A43CDC291461C700B1206D /* ReaderModeFontTypeButton.swift */; };
 		21A7C44E283539170071D996 /* IntroViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7C44D283539170071D996 /* IntroViewModel.swift */; };
@@ -153,6 +152,7 @@
 		21BFEEF52A040EF40033048D /* TabMigrationUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BFEEF42A040EF40033048D /* TabMigrationUtility.swift */; };
 		21BFEEF82A05A0370033048D /* TabMigrationUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BFEEF62A05A0310033048D /* TabMigrationUtilityTests.swift */; };
 		21D0F62129B91BF500022292 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D0F62029B91BF500022292 /* ToastView.swift */; };
+		21D151262AFC28960062D891 /* TabManagerMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D151252AFC28960062D891 /* TabManagerMiddleware.swift */; };
 		21D7B60628077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D7B60528077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift */; };
 		21D8843F2A7959D000AF144C /* HomePageSettingViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D8843E2A7959D000AF144C /* HomePageSettingViewControllerTests.swift */; };
 		21D884412A79628E00AF144C /* MockSettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D884402A79628E00AF144C /* MockSettingsDelegate.swift */; };
@@ -2209,7 +2209,6 @@
 		219A0FD62ACC8C03009A6D1A /* InactiveTabsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InactiveTabsHeaderView.swift; sourceTree = "<group>"; };
 		219A0FD82ACC8C0F009A6D1A /* InactiveTabsFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InactiveTabsFooterView.swift; sourceTree = "<group>"; };
 		219A0FDA2ACCCFFC009A6D1A /* InactiveTabsSectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InactiveTabsSectionManager.swift; sourceTree = "<group>"; };
-		219CAE1E2AF578F900E3DE02 /* TabViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabViewState.swift; sourceTree = "<group>"; };
 		219F41288625C09DD40F008C /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		21A1C3C62996AFF800181B7C /* OverlayModeManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayModeManagerTests.swift; sourceTree = "<group>"; };
 		21A43CDC291461C700B1206D /* ReaderModeFontTypeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeFontTypeButton.swift; sourceTree = "<group>"; };
@@ -2223,6 +2222,7 @@
 		21BFEEF42A040EF40033048D /* TabMigrationUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabMigrationUtility.swift; sourceTree = "<group>"; };
 		21BFEEF62A05A0310033048D /* TabMigrationUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabMigrationUtilityTests.swift; sourceTree = "<group>"; };
 		21D0F62029B91BF500022292 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
+		21D151252AFC28960062D891 /* TabManagerMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManagerMiddleware.swift; sourceTree = "<group>"; };
 		21D7B60528077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryViewController+ToolbarActions.swift"; sourceTree = "<group>"; };
 		21D8843E2A7959D000AF144C /* HomePageSettingViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageSettingViewControllerTests.swift; sourceTree = "<group>"; };
 		21D884402A79628E00AF144C /* MockSettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSettingsDelegate.swift; sourceTree = "<group>"; };
@@ -7515,7 +7515,6 @@
 			children = (
 				1D2F68AC2ACB266300524B92 /* RemoteTabsPanelState.swift */,
 				1DDE3DB62AC3820A0039363B /* TabCellState.swift */,
-				219CAE1E2AF578F900E3DE02 /* TabViewState.swift */,
 				21E77E4F2AA8BAEC00FABA10 /* TabTrayState.swift */,
 				21996BAA2AE95AFC00E0D55F /* TabTrayPanelType.swift */,
 			);
@@ -7574,6 +7573,7 @@
 				213BF7522AC21D1B00C53A64 /* TabDisplayViewController.swift */,
 				21E77E4D2AA8BA5200FABA10 /* TabTrayViewController.swift */,
 				21E77E512AA8BE5C00FABA10 /* TabTrayFlagManager.swift */,
+				21D151252AFC28960062D891 /* TabManagerMiddleware.swift */,
 			);
 			path = Tabs;
 			sourceTree = "<group>";
@@ -12651,7 +12651,6 @@
 				8A7368AD27924AAF005D7704 /* CanRemoveQuickActionBookmark.swift in Sources */,
 				8A0621B829428FBD005D1EFD /* OpenTabNotificationObject.swift in Sources */,
 				C2296FCC2A601C190046ECA6 /* IntensityVisualEffectView.swift in Sources */,
-				219CAE1F2AF578F900E3DE02 /* TabViewState.swift in Sources */,
 				8ADC2A102A33758E00543DAA /* FxALaunchParams.swift in Sources */,
 				D3C3696E1CC6B78800348A61 /* LocalRequestHelper.swift in Sources */,
 				E17496382991A2720096900A /* AdaptiveStack.swift in Sources */,
@@ -12730,6 +12729,7 @@
 				F85C7F0E2711C556004BDBA4 /* SettingsViewController.swift in Sources */,
 				C8B509E3293FA39900AC013C /* AppVersionUpdateCheckerProtocol.swift in Sources */,
 				E1AFBAF9292EA0330065E35E /* SendToDeviceHelper.swift in Sources */,
+				21D151262AFC28960062D891 /* TabManagerMiddleware.swift in Sources */,
 				74C027451B2A348C001B1E88 /* LegacySessionData.swift in Sources */,
 				C84266752728462900382274 /* AccessibilityIdentifiers.swift in Sources */,
 				C8BD87622A0C257C00CD803A /* OnboardingCardInfoModelProtocol.swift in Sources */,

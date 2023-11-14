@@ -98,8 +98,9 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) not yet supported") }
 
     // MARK: - Configuration
-    func configure(with state: TabCellState, theme: Theme?) {
+    func configure(with state: TabCellState, theme: Theme?, delegate: TabCellDelegate) {
         self.state = state
+        self.delegate = delegate
 
         titleText.text = state.tabTitle
         accessibilityLabel = getA11yTitleLabel(state: state)
