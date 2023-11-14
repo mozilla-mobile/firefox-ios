@@ -14,6 +14,12 @@ let DefaultTimeoutTimeInterval = 10.0 // Seconds.  We'll want some telemetry on 
  * the user to navigate back to Settings.
  */
 class SettingsContentViewController: UIViewController, WKNavigationDelegate, Themeable {
+    private struct UX {
+        static let errorLeadingAnchor: CGFloat = 20
+        static let errorTrailingAnchor: CGFloat = -20
+        static let errorHeightAnchor: CGFloat = 44
+    }
+
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
@@ -39,7 +45,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
         }
     }
 
-    fileprivate var isError = false {
+    private var isError = false {
         didSet {
             if isError {
                 interstitialErrorView.isHidden = false
@@ -58,14 +64,14 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
     }
 
     // The view shown while the content is loading in the background web view.
-    fileprivate var interstitialView: UIView!
-    fileprivate var interstitialSpinnerView: UIActivityIndicatorView!
-    fileprivate var interstitialErrorView: UILabel!
+    private var interstitialView: UIView! = .build()
+    private var interstitialSpinnerView: UIActivityIndicatorView! = .build()
+    private var interstitialErrorView: UILabel! = .build()
 
     // The web view that displays content.
-    var settingsWebView: WKWebView!
+    private var settingsWebView: WKWebView! = .build()
 
-    fileprivate func startLoading(_ timeout: Double = DefaultTimeoutTimeInterval) {
+    private func startLoading(_ timeout: Double = DefaultTimeoutTimeInterval) {
         if self.isLoaded {
             return
         }
@@ -74,8 +80,8 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
         } else {
             self.timer = nil
         }
-        self.settingsWebView.load(PrivilegedRequest(url: url) as URLRequest)
-        self.interstitialSpinnerView.startAnimating()
+        settingsWebView.load(PrivilegedRequest(url: url) as URLRequest)
+        interstitialSpinnerView.startAnimating()
     }
 
     init(title: NSAttributedString? = nil,
@@ -94,7 +100,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.settingsWebView = makeWebView()
+        settingsWebView = makeWebView()
 
         // Destructuring let causes problems.
         let ret = makeInterstitialViews()
@@ -102,9 +108,6 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
         self.interstitialSpinnerView = ret.activityView
         self.interstitialErrorView = ret.label
         view.addSubviews(settingsWebView, interstitialView)
-
-        settingsWebView.translatesAutoresizingMaskIntoConstraints = false
-        interstitialView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
             settingsWebView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -129,7 +132,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
         config.preferences.javaScriptCanOpenWindowsAutomatically = false
 
         let webView = WKWebView(
-            frame: CGRect(width: 1, height: 1),
+            frame: view.bounds,
             configuration: config
         )
         webView.allowsLinkPreview = false
@@ -147,7 +150,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
         let label: UILabel
     }
 
-    fileprivate func makeInterstitialViews() -> InterstitialViews {
+    private func makeInterstitialViews() -> InterstitialViews {
         let view = UIView()
         let spinner = UIActivityIndicatorView(style: .medium)
         spinner.color = themeManager.currentTheme.colors.iconSpinner
@@ -161,18 +164,15 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
         error.isHidden = true
         view.addSubviews(spinner, error)
 
-        spinner.translatesAutoresizingMaskIntoConstraints = false
-        error.translatesAutoresizingMaskIntoConstraints = false
-
         NSLayoutConstraint.activate([
             spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor),
 
             error.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             error.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            error.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            error.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            error.heightAnchor.constraint(equalToConstant: 44)
+            error.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.errorLeadingAnchor),
+            error.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: UX.errorTrailingAnchor),
+            error.heightAnchor.constraint(equalToConstant: UX.errorHeightAnchor)
         ])
 
         return InterstitialViews(view: view, activityView: spinner, label: error)
