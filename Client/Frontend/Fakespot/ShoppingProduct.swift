@@ -179,6 +179,6 @@ class ShoppingProduct: FeatureFlaggable, Equatable {
     }
 
     static func == (lhs: ShoppingProduct, rhs: ShoppingProduct) -> Bool {
-        return lhs.url == rhs.url && lhs.product == rhs.product
+        return lhs.product == rhs.product
     }
 }

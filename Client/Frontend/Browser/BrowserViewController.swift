@@ -2175,6 +2175,9 @@ extension BrowserViewController: TabManagerDelegate {
                 // When this happens, the URL is nil, so try restoring the page upon selection.
                 tab.reload()
             }
+
+            // Update Fakespot sidebar if necessary
+            updateFakespot(tab: tab)
         }
 
         updateTabCountUsingTabManager(tabManager)
