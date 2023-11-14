@@ -351,9 +351,14 @@ class FakespotViewController:
              view.updateLayoutForInProgress()
              return view
 
-        case .productAdCard:
+        case .productAdCard(let ad):
             let view: FakespotAdView = .build()
-
+            var viewModel = FakespotAdViewModel(productAdsData: ad)
+            viewModel.dismissViewController = { [weak self] in
+                guard let self = self else { return }
+                self.delegate?.fakespotControllerDidDismiss(animated: true)
+            }
+            view.configure(viewModel)
             return view
 
         case .messageCard(let messageType):
