@@ -307,8 +307,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
               let tabUUID = UUID(uuidString: tab.tabUUID)
         else {
             willSelectTab(url)
-            defer { didSelectTab(url) }
             super.selectTab(tab, previous: previous)
+            didSelectTab(url)
             return
         }
 
@@ -319,8 +319,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
               !DebugSettingsBundleOptions.skipSessionRestore
         else {
             willSelectTab(url)
-            defer { didSelectTab(url) }
             super.selectTab(tab, previous: previous)
+            didSelectTab(url)
             return
         }
 
