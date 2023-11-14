@@ -11,7 +11,7 @@ class ContextualHintViewViewController: UIViewController, Themeable {
     private lazy var hintView: ContextualHintView = .build { _ in }
     private struct UX {
         static let contextualHintWidth: CGFloat = 350
-        static let contextualHintLandscapeExtraWidth: CGFloat = 100
+        static let contextualHintLandscapeExtraWidth: CGFloat = 60
     }
 
     var themeManager: ThemeManager
@@ -88,8 +88,6 @@ class ContextualHintViewViewController: UIViewController, Themeable {
     // MARK: View Transitions
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        coordinator.animate(alongsideTransition: nil) { _ in
-            self.view.setNeedsLayout()
-        }
+        self.view.setNeedsLayout()
     }
 }
