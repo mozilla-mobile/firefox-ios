@@ -906,6 +906,21 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertTrue(subject.childCoordinators.isEmpty)
     }
 
+    func testChangeShoppingURL_updatesSidebar() {
+        let subject = createSubject()
+        let sidebarContainer = MockSidebarEnabledView(frame: CGRect.zero)
+        let viewController = UIViewController()
+        subject.showFakespotFlowAsSidebar(productURL: URL(string: "www.example.com")!,
+                                          sidebarContainer: sidebarContainer,
+                                          parentViewController: viewController)
+
+        subject.updateFakespotSidebar(productURL: URL(string: "www.example2.com")!,
+                                      sidebarContainer: sidebarContainer,
+                                      parentViewController: viewController)
+
+        XCTAssertEqual(sidebarContainer.updateSidebarCalled, 1)
+    }
+
     // MARK: - Helpers
     private func createSubject(file: StaticString = #file,
                                line: UInt = #line) -> BrowserCoordinator {

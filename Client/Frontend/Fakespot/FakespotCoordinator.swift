@@ -59,13 +59,25 @@ class FakespotCoordinator: BaseCoordinator, FakespotViewControllerDelegate, Feat
         parentCoordinator?.didFinish(from: self)
     }
 
+    func updateSidebar(productURL: URL,
+                       sidebarContainer: SidebarEnabledViewProtocol,
+                       parentViewController: UIViewController) {
+        let viewModel = createFakespotViewModel(productURL: productURL)
+        sidebarContainer.updateSidebar(viewModel, parentViewController: parentViewController)
+    }
+
     private func createFakespotViewController(productURL: URL) -> FakespotViewController {
+        let viewModel = createFakespotViewModel(productURL: productURL)
+        let fakespotViewController = FakespotViewController(viewModel: viewModel)
+        fakespotViewController.delegate = self
+        return fakespotViewController
+    }
+
+    private func createFakespotViewModel(productURL: URL) -> FakespotViewModel {
         let environment = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI) ? FakespotEnvironment.staging : .prod
         let viewModel = FakespotViewModel(shoppingProduct: ShoppingProduct(
             url: productURL,
             client: FakespotClient(environment: environment)))
-        let fakespotViewController = FakespotViewController(viewModel: viewModel)
-        fakespotViewController.delegate = self
-        return fakespotViewController
+        return viewModel
     }
 }

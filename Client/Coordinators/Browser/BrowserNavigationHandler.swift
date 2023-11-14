@@ -51,6 +51,14 @@ protocol BrowserNavigationHandler: AnyObject {
     /// - Parameter parentViewController: The view controller that the Fakespot flow is a child of.
     func dismissFakespotSidebar(sidebarContainer: SidebarEnabledViewProtocol, parentViewController: UIViewController)
 
+    /// Initiates the update of the Fakespot sidebar for analyzing the authenticity of a product's reviews.
+    /// - Parameter productURL: The URL of the product for which the reviews will be analyzed. 
+    /// - Parameter sidebarContainer: The view that contains the sidebar.
+    /// - Parameter parentViewController: The view controller that the Fakespot flow is a child of.
+    func updateFakespotSidebar(productURL: URL,
+                               sidebarContainer: SidebarEnabledViewProtocol,
+                               parentViewController: UIViewController)
+
     /// Shows a CreditCardAutofill view to select credit cards in order to autofill cards forms.
     func showCreditCardAutofill(creditCard: CreditCard?,
                                 decryptedCard: UnencryptedCreditCardFields?,

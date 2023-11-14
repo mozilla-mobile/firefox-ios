@@ -1600,6 +1600,11 @@ class BrowserViewController: UIViewController,
                 webView.evaluateJavascriptInDefaultContentWorld("\(ReaderModeNamespace).checkReadability()")
             }
 
+            // Update Fakespot sidebar if necessary
+            if webViewStatus == .url {
+                updateFakespot(tab: tab)
+            }
+
             TabEvent.post(.didChangeURL(url), for: tab)
         }
 
@@ -1634,6 +1639,22 @@ class BrowserViewController: UIViewController,
                     self.screenshotHelper.takeScreenshot(tab)
                 }
             }
+        }
+    }
+
+    private func updateFakespot(tab: Tab) {
+        guard let webView = tab.webView, let url = webView.url else {
+            return
+        }
+
+        let environment = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI) ? FakespotEnvironment.staging : .prod
+        let product = ShoppingProduct(url: url, client: FakespotClient(environment: environment))
+        if product.product != nil && !tab.isPrivate, contentStackView.isSidebarVisible {
+            navigationHandler?.updateFakespotSidebar(productURL: url,
+                                                     sidebarContainer: contentStackView,
+                                                     parentViewController: self)
+        } else if contentStackView.isSidebarVisible {
+            _ = dismissFakespotIfNeeded(animated: true)
         }
     }
 
@@ -2156,6 +2177,9 @@ extension BrowserViewController: TabManagerDelegate {
                 // When this happens, the URL is nil, so try restoring the page upon selection.
                 tab.reload()
             }
+
+            // Update Fakespot sidebar if necessary
+            updateFakespot(tab: tab)
         }
 
         updateTabCountUsingTabManager(tabManager)

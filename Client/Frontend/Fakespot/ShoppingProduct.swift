@@ -23,7 +23,7 @@ struct Product: Equatable {
 /// Class for working with the products shopping API,
 /// with helpers for parsing the product from a URL
 /// and querying the shopping API for information on it.
-class ShoppingProduct: FeatureFlaggable {
+class ShoppingProduct: FeatureFlaggable, Equatable {
     private let url: URL
     private let nimbusFakespotFeatureLayer: NimbusFakespotFeatureLayerProtocol
     private let client: FakespotClientType
@@ -176,5 +176,9 @@ class ShoppingProduct: FeatureFlaggable {
 
         // Report the product as back in stock using the product ID and website
         return try await client.reportProductBackInStock(productId: product.id, website: product.host)
+    }
+
+    static func == (lhs: ShoppingProduct, rhs: ShoppingProduct) -> Bool {
+        return lhs.product == rhs.product
     }
 }

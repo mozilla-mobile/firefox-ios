@@ -35,7 +35,7 @@ class FakespotViewController:
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
-    private let viewModel: FakespotViewModel
+    private var viewModel: FakespotViewModel
     weak var delegate: FakespotViewControllerDelegate?
 
     private lazy var scrollView: UIScrollView = .build()
@@ -98,11 +98,7 @@ class FakespotViewController:
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
 
-        viewModel.onStateChange = { [weak self] in
-            ensureMainThread {
-                self?.updateContent()
-            }
-        }
+        listenToStateChange()
     }
 
     required init?(coder: NSCoder) {
@@ -154,6 +150,25 @@ class FakespotViewController:
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesMoved(touches, with: event)
         viewModel.isSwiping = true
+    }
+
+    func update(viewModel: FakespotViewModel, triggerFetch: Bool = true) {
+        // Only update the model if the shopping product changed to avoid unnecessary API calls
+        guard self.viewModel.shoppingProduct != viewModel.shoppingProduct else { return }
+
+        self.viewModel = viewModel
+        listenToStateChange()
+
+        guard triggerFetch else { return }
+        viewModel.fetchProductIfOptedIn()
+    }
+
+    private func listenToStateChange() {
+        viewModel.onStateChange = { [weak self] in
+            ensureMainThread {
+                self?.updateContent()
+            }
+        }
     }
 
     func applyTheme() {

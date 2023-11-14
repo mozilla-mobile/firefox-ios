@@ -8,6 +8,7 @@ import UIKit
 class MockSidebarEnabledView: UIView, SidebarEnabledViewProtocol {
     var showSidebarCalled = 0
     var hideSidebarCalled = 0
+    var updateSidebarCalled = 0
 
     func showSidebar(_ viewController: UIViewController, parentViewController: UIViewController) {
         showSidebarCalled += 1
@@ -15,5 +16,9 @@ class MockSidebarEnabledView: UIView, SidebarEnabledViewProtocol {
 
     func hideSidebar(_ parentViewController: UIViewController) {
         hideSidebarCalled += 1
+    }
+
+    func updateSidebar(_ viewModel: Client.FakespotViewModel, parentViewController: UIViewController) {
+        updateSidebarCalled += 1
     }
 }
