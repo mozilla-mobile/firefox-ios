@@ -13,12 +13,14 @@ enum TabTrayAction: Action {
     case closeTab(Int)
     case closeAllTabs
     case moveTab(Int, Int)
-
-    // Private tabs action
+    case toggleInactiveTabs(Bool)
+    case closeInactiveTabs(Int)
+    case closeAllInactiveTabs
     case learnMorePrivateMode
 
     // Middleware actions
     case didLoadTabData(TabTrayState)
     // Response to all user actions involving tabs ex: add, close and close all tabs
     case refreshTab([TabCellState])
+    case inactiveTabsChanged
 }

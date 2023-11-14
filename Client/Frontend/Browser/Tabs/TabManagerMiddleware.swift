@@ -48,13 +48,15 @@ class TabsPanelMiddleware {
 
         let isPrivate = panelType == .privateTabs
         inactiveTabs =  !isPrivate ? ["Tab1", "Tab2", "Tab3"] : [String]()
+        let isInactiveTabsExpanded = !isPrivate && !inactiveTabs.isEmpty
 
         return TabTrayState(isPrivateMode: isPrivate,
                             selectedPanel: panelType,
                             tabs: tabs,
                             remoteTabsState: nil,
                             normalTabsCount: "\(tabs.count)",
-                            inactiveTabs: inactiveTabs)
+                            inactiveTabs: inactiveTabs,
+                            isInactiveTabsExpanded: isInactiveTabsExpanded)
     }
 
     private func addNewTab() {

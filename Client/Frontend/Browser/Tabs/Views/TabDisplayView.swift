@@ -217,14 +217,10 @@ class TabDisplayView: UIView,
 
     @objc
     func toggleInactiveTab() {
-        toggleInactiveTabSection(hasExpanded: !tabTrayState.isInactiveTabsExpanded)
+        store.dispatch(TabTrayAction.toggleInactiveTabs(!tabTrayState.isInactiveTabsExpanded))
         collectionView.collectionViewLayout.invalidateLayout()
     }
 
-    private func toggleInactiveTabSection(hasExpanded: Bool) {
-        tabTrayState.isInactiveTabsExpanded = hasExpanded
-        collectionView.reloadData()
-    }
 
     // MARK: - TabCellDelegate
     func tabCellDidClose(_ cell: TabCell) {

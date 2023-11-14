@@ -88,7 +88,7 @@ final class TabDisplayViewTests: XCTestCase {
         let subject = createSubject(isPrivateMode: false,
                                     emptyTabs: false,
                                     emptyInactiveTabs: false)
-        subject.toggleInactiveTab()
+        subject.toggleInactiveTab() 
         XCTAssertFalse(subject.tabTrayState.isInactiveTabsExpanded)
     }
 
@@ -118,12 +118,14 @@ final class TabDisplayViewTests: XCTestCase {
         let tabs: [TabCellState] = emptyTabs ? [TabCellState]() : [TabCellState.emptyTabState(title: "Tab1"),
                                                                    TabCellState.emptyTabState(title: "Tab2")]
         let inactiveTabs: [String] = emptyInactiveTabs ? [String]() : ["Inactive1", "Inactive2"]
+        let isInactiveTabsExpanded = !isPrivateMode && !inactiveTabs.isEmpty
         let tabTrayState = TabTrayState(isPrivateMode: isPrivateMode,
                                         selectedPanel: selectedPanel,
                                         tabs: tabs,
                                         remoteTabsState: nil,
                                         normalTabsCount: "\(tabs.count)",
-                                        inactiveTabs: inactiveTabs)
+                                        inactiveTabs: inactiveTabs,
+                                        isInactiveTabsExpanded: isInactiveTabsExpanded)
 
         let subject = TabDisplayView(state: tabTrayState)
 
