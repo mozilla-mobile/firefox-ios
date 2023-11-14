@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
+import SnapKit
 import UIKit
 import WebKit
 import Common
@@ -15,8 +16,7 @@ let DefaultTimeoutTimeInterval = 10.0 // Seconds.  We'll want some telemetry on 
  */
 class SettingsContentViewController: UIViewController, WKNavigationDelegate, Themeable {
     private struct UX {
-        static let errorLeadingPadding: CGFloat = 20
-        static let errorTrailingPadding: CGFloat = -20
+        static let errorLeadingTrailingPadding: CGFloat = 20
         static let errorHeightPadding: CGFloat = 44
     }
 
@@ -45,7 +45,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
         }
     }
 
-    private var isError = false {
+    private lazy var isError = false {
         didSet {
             if isError {
                 interstitialErrorView.isHidden = false
@@ -64,12 +64,12 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
     }
 
     // The view shown while the content is loading in the background web view.
-    private var interstitialView: UIView! = .build()
-    private var interstitialSpinnerView: UIActivityIndicatorView! = .build()
-    private var interstitialErrorView: UILabel! = .build()
+    private lazy var interstitialView: UIView! = .build()
+    private lazy var interstitialSpinnerView: UIActivityIndicatorView! = .build()
+    private lazy var interstitialErrorView: UILabel! = .build()
 
     // The web view that displays content.
-    private var settingsWebView: WKWebView! = .build()
+    private lazy var settingsWebView: WKWebView! = .build()
 
     private func startLoading(_ timeout: Double = DefaultTimeoutTimeInterval) {
         if self.isLoaded {
@@ -131,10 +131,13 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
         let config = LegacyTabManager.makeWebViewConfig(isPrivate: true, prefs: nil)
         config.preferences.javaScriptCanOpenWindowsAutomatically = false
 
-        let webView = WKWebView(
-            frame: view.bounds,
-            configuration: config
-        )
+        let screenWidth = UIScreen.main.bounds.width
+        let screenHeight = UIScreen.main.bounds.height
+
+        let webViewFrame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
+        let webView = WKWebView(frame: webViewFrame, configuration: config)
+
+        webView.translatesAutoresizingMaskIntoConstraints = false
         webView.allowsLinkPreview = false
         webView.navigationDelegate = self
 
@@ -170,8 +173,8 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
 
             error.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             error.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            error.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.errorLeadingPadding),
-            error.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: UX.errorTrailingPadding),
+            error.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.errorLeadingTrailingPadding),
+            error.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.errorLeadingTrailingPadding),
             error.heightAnchor.constraint(equalToConstant: UX.errorHeightPadding)
         ])
 
