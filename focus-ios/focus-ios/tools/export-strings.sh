@@ -17,7 +17,7 @@ git clone https://github.com/mozilla-l10n/focusios-l10n.git focusios-l10n
 
 echo "[*] Cloning mozilla-mobile/LocalizationTools"
 [ -d focus-ios/tools/Localizations ] && rm -rf focus-ios/tools/Localizations
-git clone https://github.com/mozilla-mobile/LocalizationTools.git tools/Localizations
+git clone https://github.com/mozilla-mobile/LocalizationTools.git focus-ios/tools/Localizations
 
 echo "[*] Building tools/Localizations"
 (cd focus-ios/tools/Localizations && swift build)

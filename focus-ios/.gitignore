@@ -45,7 +45,7 @@ focusios-l10n
 export-locales-env
 
 # localization tools clone
-tools/Localizations
+focus-ios/tools/Localizations
 
 # Glean
 .venv/
