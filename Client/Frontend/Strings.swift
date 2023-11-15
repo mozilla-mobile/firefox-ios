@@ -5265,6 +5265,35 @@ extension String {
         comment: "Label for Cancel button")
 }
 
+// MARK: - SearchSettings
+extension String {
+    public static let SearchSettingsTitle = MZLocalizedString(
+        key: "SearchSettings.Title.Search.v106",
+        tableName: nil,
+        value: "Search",
+        comment: "Navigation title for search settings.")
+    public static let SearchSettingsDefaultSearchEngineAccessibilityLabel = MZLocalizedString(
+        key: "SearchSettings.Accessibility.DefaultSearchEngine.v106",
+        tableName: nil,
+        value: "Default Search Engine",
+        comment: "Accessibility label for default search engine setting.")
+    public static let SearchSettingsShowSearchSuggestions = MZLocalizedString(
+        key: "Show Search Suggestions",
+        tableName: nil,
+        value: nil,
+        comment: "Label for show search suggestions setting.")
+    public static let SearchSettingsDefaultSearchEngineTitle = MZLocalizedString(
+        key: "SearchSettings.Title.DefaultSearchEngine.v106",
+        tableName: nil,
+        value: "Default Search Engine",
+        comment: "Title for default search engine settings section.")
+    public static let SearchSettingsQuickSearchEnginesTitle = MZLocalizedString(
+        key: "Quick-Search Engines",
+        tableName: nil,
+        value: nil,
+        comment: "Title for quick-search engines settings section.")
+}
+
 // MARK: - SettingsContent
 extension String {
     public static let SettingsContentPageLoadError = MZLocalizedString(
