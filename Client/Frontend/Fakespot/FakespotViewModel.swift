@@ -61,7 +61,7 @@ class FakespotViewModel {
                 var cards: [ViewElement] = []
 
                 if analysisStatus?.isAnalyzing == true {
-                    cards.append(.progressAnalysisCard)
+                    cards.append(.messageCard(.analysisInProgress))
                 } else {
                     cards.append(.noAnalysisCard)
                 }
@@ -78,7 +78,7 @@ class FakespotViewModel {
                     cards.append(.messageCard(.notEnoughReviews))
                 } else {
                     if analysisStatus?.isAnalyzing == true {
-                        cards.append(.progressAnalysisCard)
+                        cards.append(.messageCard(.analysisInProgress))
                     } else {
                         cards.append(.noAnalysisCard)
                     }
