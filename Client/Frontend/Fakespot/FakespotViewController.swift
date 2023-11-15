@@ -50,7 +50,10 @@ class FakespotViewController:
         stackView.spacing = UX.scrollContentStackSpacing
     }
 
-    private lazy var shadowView: UIView = .build()
+    private lazy var shadowView: UIView = .build { view in
+        view.layer.shadowOffset = UX.shadowOffset
+        view.layer.shadowRadius = UX.shadowRadius
+    }
     private lazy var headerView: UIView = .build()
 
     private lazy var titleLabel: UILabel = .build { label in
@@ -306,18 +309,6 @@ class FakespotViewController:
         applyTheme()
     }
 
-    private func setupShadow() {
-        shadowView.layer.shadowOffset = UX.shadowOffset
-        shadowView.layer.shadowOpacity = UX.shadowOpacity
-        shadowView.layer.shadowRadius = UX.shadowRadius
-    }
-
-    private func removeShadow() {
-        shadowView.layer.shadowOffset = .zero
-        shadowView.layer.shadowOpacity = 0
-        shadowView.layer.shadowRadius = 0
-    }
-
     private func adjustShadowBasedOnIntersection() {
         let shadowViewFrameInSuperview = shadowView.convert(
             shadowView.bounds,
@@ -329,9 +320,17 @@ class FakespotViewController:
         )
 
         if shadowViewFrameInSuperview.intersects(contentStackViewFrameInSuperview) {
-            UIView.animate(withDuration: UX.animationDuration) { self.setupShadow() }
+            guard !viewModel.isViewIntersected else { return }
+            viewModel.isViewIntersected.toggle()
+            UIView.animate(withDuration: UX.animationDuration) {
+                self.shadowView.layer.shadowOpacity = UX.shadowOpacity
+            }
         } else {
-            UIView.animate(withDuration: UX.animationDuration) { self.removeShadow() }
+            guard viewModel.isViewIntersected else { return }
+            viewModel.isViewIntersected.toggle()
+            UIView.animate(withDuration: UX.animationDuration) {
+                self.shadowView.layer.shadowOpacity = 0
+            }
         }
     }
 
