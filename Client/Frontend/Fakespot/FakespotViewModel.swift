@@ -138,7 +138,6 @@ class FakespotViewModel {
         case qualityDeterminationCard
         case settingsCard
         case noAnalysisCard
-        case progressAnalysisCard
         case productAdCard
         case messageCard(MessageType)
         enum MessageType {
