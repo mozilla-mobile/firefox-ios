@@ -1635,12 +1635,12 @@ extension String {
                 key: "Settings.Search.ShowSuggestions.v121",
                 tableName: "Settings",
                 value: "Show Search Suggestions",
-                comment: "Label for show search suggestions setting, in the Search Settings page.")
+                comment: "Label for the `show search suggestions` setting, in the Search Settings page.")
             public static let DefaultSearchEngineTitle = MZLocalizedString(
                 key: "Settings.Search.DefaultSearchEngine.Title.v121",
                 tableName: "Settings",
                 value: "Default Search Engine",
-                comment: "Title for default search engine settings section in the Search page in the Settings menu.")
+                comment: "Title for the `default search engine` settings section in the Search page in the Settings menu.")
             public static let QuickSearchEnginesTitle = MZLocalizedString(
                 key: "Settings.Search.QuickEnginesTitle.v121",
                 tableName: "Settings",
@@ -1650,12 +1650,12 @@ extension String {
                 key: "Settings.Search.PrivateSession.Title.v121",
                 tableName: "Settings",
                 value: "Private Session",
-                comment: "Title for the Private Session settings section in the Search page in the Settings menu.")
+                comment: "Title for the `Private Session` settings section in the Search page in the Settings menu.")
             public static let PrivateSessionSetting = MZLocalizedString(
                 key: "Settings.Search.PrivateSession.Setting.v121",
                 tableName: "Settings",
                 value: "Turn off suggestions in private browsing",
-                comment: "Label for toggle. Explains that, in private browsing mode, search suggestions, the suggestions appearing at the top of the search bar, can be toggled on or off. Located in the Private Session section in the Search page in the Settings menu.")
+                comment: "Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in the Private Session section in the Search page in the Settings menu.")
 
             public struct AccessibilityLabels {
                 public static let DefaultSearchEngine = MZLocalizedString(
