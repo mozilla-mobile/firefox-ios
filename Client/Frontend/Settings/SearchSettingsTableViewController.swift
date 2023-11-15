@@ -110,7 +110,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
                 toggle.addTarget(self, action: #selector(didToggleSearchSuggestions), for: .valueChanged)
                 toggle.isOn = model.shouldShowSearchSuggestions
                 cell.editingAccessoryView = toggle
-                cell.selectionStyle = .blue
+                cell.selectionStyle = .none
             default:
                 // Should not happen.
                 break
@@ -137,7 +137,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
                 cell.imageView?.image = engine.image.createScaled(IconSize)
                 cell.imageView?.layer.cornerRadius = 4
                 cell.imageView?.layer.masksToBounds = true
-                cell.selectionStyle = .blue
+                cell.selectionStyle = .none
             } else {
                 cell.editingAccessoryType = .disclosureIndicator
                 cell.accessibilityLabel = .SettingsAddCustomEngineTitle
