@@ -50,7 +50,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = .SearchSettingsTitle
+        navigationItem.title = .Settings.Search.Title
 
         // To allow re-ordering the list of search engines at all times.
         tableView.isEditing = true
@@ -96,14 +96,14 @@ class SearchSettingsTableViewController: ThemedTableViewController {
             case ItemDefaultEngine:
                 engine = model.defaultEngine
                 cell.editingAccessoryType = .disclosureIndicator
-                cell.accessibilityLabel = .SearchSettingsDefaultSearchEngineAccessibilityLabel
+                cell.accessibilityLabel = .Settings.Search.AccessibilityLabels.DefaultSearchEngine
                 cell.accessibilityValue = engine.shortName
                 cell.textLabel?.text = engine.shortName
                 cell.imageView?.image = engine.image.createScaled(IconSize)
                 cell.imageView?.layer.cornerRadius = 4
                 cell.imageView?.layer.masksToBounds = true
             case ItemDefaultSuggestions:
-                cell.textLabel?.text = .SearchSettingsShowSearchSuggestions
+                cell.textLabel?.text = .Settings.Search.ShowSearchSuggestions
                 cell.textLabel?.numberOfLines = 0
                 let toggle = ThemedSwitch()
                 toggle.applyTheme(theme: themeManager.currentTheme)
@@ -235,9 +235,9 @@ class SearchSettingsTableViewController: ThemedTableViewController {
 
         var sectionTitle: String
         if section == SectionDefault {
-            sectionTitle = .SearchSettingsDefaultSearchEngineTitle
+            sectionTitle = .Settings.Search.DefaultSearchEngineTitle
         } else {
-            sectionTitle = .SearchSettingsQuickSearchEnginesTitle
+            sectionTitle = .Settings.Search.QuickSearchEnginesTitle
         }
         headerView.titleLabel.text = sectionTitle
 
