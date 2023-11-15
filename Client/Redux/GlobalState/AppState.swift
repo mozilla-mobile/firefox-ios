@@ -7,7 +7,7 @@ import Redux
 
 struct AppState: StateType {
     let activeScreens: ActiveScreensState
-    var isInPrivateMode: Bool
+    let isInPrivateMode: Bool
 
     static let reducer: Reducer<Self> = { state, action in
         switch action {
