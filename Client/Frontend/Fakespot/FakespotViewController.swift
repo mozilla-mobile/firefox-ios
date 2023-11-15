@@ -54,6 +54,7 @@ class FakespotViewController:
         view.layer.shadowOffset = UX.shadowOffset
         view.layer.shadowRadius = UX.shadowRadius
     }
+
     private lazy var headerView: UIView = .build()
 
     private lazy var titleLabel: UILabel = .build { label in
@@ -143,6 +144,7 @@ class FakespotViewController:
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         viewModel.isSwiping = false
+        shadowView.layer.shadowPath = UIBezierPath(rect: shadowView.bounds).cgPath
     }
 
     override func viewDidAppear(_ animated: Bool) {
