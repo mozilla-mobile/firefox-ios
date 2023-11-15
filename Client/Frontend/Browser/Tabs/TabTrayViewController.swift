@@ -16,10 +16,6 @@ protocol TabTrayController: UIViewController,
     var didSelectUrl: ((_ url: URL, _ visitType: VisitType) -> Void)? { get set }
 }
 
-protocol TabTrayChildPanels: UIViewController {
-    func updateState(state: TabTrayState)
-}
-
 protocol TabTrayViewControllerDelegate: AnyObject {
     func didFinish()
 }
@@ -201,7 +197,7 @@ class TabTrayViewController: UIViewController,
     }
 
     deinit {
-        store.dispatch(ActiveScreensStateAction.closeScreen(.tabsPanel))
+        store.dispatch(ActiveScreensStateAction.closeScreen(.tabsTray))
         store.unsubscribe(self)
     }
 
@@ -240,7 +236,7 @@ class TabTrayViewController: UIViewController,
     }
 
     private func subscribeRedux() {
-        store.dispatch(ActiveScreensStateAction.showScreen(.tabsPanel))
+        store.dispatch(ActiveScreensStateAction.showScreen(.tabsTray))
         store.dispatch(TabTrayAction.tabTrayDidLoad(tabTrayState.selectedPanel))
         store.subscribe(self, transform: {
             $0.select(TabTrayState.init)
@@ -248,9 +244,8 @@ class TabTrayViewController: UIViewController,
     }
 
     func newState(state: TabTrayState) {
+        print("YRD parent newState \(state.isPrivateMode)")
         tabTrayState = state
-        guard let currentPanel = currentPanel?.children[0] as? TabTrayChildPanels else { return }
-        currentPanel.updateState(state: tabTrayState)
     }
 
     private func updateLayout() {
@@ -434,12 +429,12 @@ class TabTrayViewController: UIViewController,
 
     @objc
     private func deleteTabsButtonTapped() {
-        store.dispatch(TabTrayAction.closeAllTabs)
+        store.dispatch(TabPanelAction.closeAllTabs)
     }
 
     @objc
     private func newTabButtonTapped() {
-        store.dispatch(TabTrayAction.addNewTab(tabTrayState.isPrivateMode))
+        store.dispatch(TabPanelAction.addNewTab(tabTrayState.isPrivateMode))
     }
 
     @objc

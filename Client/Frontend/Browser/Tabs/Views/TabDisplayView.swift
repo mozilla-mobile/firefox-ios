@@ -20,7 +20,6 @@ class TabDisplayView: UIView,
         case tabs
     }
 
-//    private(set) var tabTrayState: TabTrayState
     private(set) var tabsState: TabsState
     private var inactiveTabsSectionManager: InactiveTabsSectionManager
     private var tabsSectionManager: TabsSectionManager
@@ -218,14 +217,14 @@ class TabDisplayView: UIView,
 
     @objc
     func toggleInactiveTab() {
-        store.dispatch(TabTrayAction.toggleInactiveTabs(!tabsState.isInactiveTabsExpanded))
+        store.dispatch(TabPanelAction.toggleInactiveTabs(!tabsState.isInactiveTabsExpanded))
         collectionView.collectionViewLayout.invalidateLayout()
     }
 
     // MARK: - TabCellDelegate
     func tabCellDidClose(_ cell: TabCell) {
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
-        store.dispatch(TabTrayAction.closeTab(indexPath.row))
+        store.dispatch(TabPanelAction.closeTab(indexPath.row))
     }
 }
 
@@ -256,13 +255,13 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
         guard collectionView.hasActiveDrag,
               let destinationIndexPath = coordinator.destinationIndexPath,
               let dragItem = coordinator.items.first?.dragItem,
-              let tab = dragItem.localObject as? TabCellState,
+              let tab = dragItem.localObject as? TabCellModel,
               let sourceIndex = tabsState.tabs.firstIndex(of: tab) else { return }
 
         let section = destinationIndexPath.section
         let start = IndexPath(row: sourceIndex, section: section)
         let end = IndexPath(row: destinationIndexPath.item, section: section)
-        store.dispatch(TabTrayAction.moveTab(start.row, end.row))
+        store.dispatch(TabPanelAction.moveTab(start.row, end.row))
         coordinator.drop(dragItem, toItemAt: destinationIndexPath)
 
         collectionView.moveItem(at: start, to: end)

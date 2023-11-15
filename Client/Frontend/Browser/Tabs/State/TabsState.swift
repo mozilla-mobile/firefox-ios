@@ -3,10 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Redux
 
-struct TabsState: Equatable {
+struct TabsState: ScreenState, Equatable {
     var isPrivateMode: Bool
-    var tabs: [TabCellState]
+    var tabs: [TabCellModel]
     var isPrivateTabsEmpty: Bool {
         guard isPrivateMode else { return false }
         return tabs.isEmpty
@@ -16,20 +17,51 @@ struct TabsState: Equatable {
     var inactiveTabs: [String]
     var isInactiveTabsExpanded: Bool
 
+    init(_ appState: AppState) {
+        guard let panelState = store.state.screenState(TabsState.self, for: .tabsPanel) else {
+            self.init()
+            return
+        }
+
+        self.init(isPrivateMode: panelState.isPrivateMode,
+                  tabs: panelState.tabs,
+                  inactiveTabs: panelState.inactiveTabs,
+                  isInactiveTabsExpanded: panelState.isInactiveTabsExpanded)
+    }
+
     init() {
         self.init(isPrivateMode: false,
-                  tabs: [TabCellState](),
+                  tabs: [TabCellModel](),
                   inactiveTabs: [String](),
                   isInactiveTabsExpanded: false)
     }
 
     init(isPrivateMode: Bool,
-         tabs: [TabCellState],
+         tabs: [TabCellModel],
          inactiveTabs: [String],
          isInactiveTabsExpanded: Bool) {
         self.isPrivateMode = isPrivateMode
         self.tabs = tabs
         self.inactiveTabs = inactiveTabs
         self.isInactiveTabsExpanded = isInactiveTabsExpanded
+    }
+
+    static let reducer: Reducer<Self> = { state, action in
+        print("YRD child action \(action)")
+        switch action {
+        case TabPanelAction.didLoadTabPanel(let tabsState):
+            return tabsState
+        case TabPanelAction.refreshTab(let tabs):
+            return TabsState(isPrivateMode: state.isPrivateMode,
+                             tabs: tabs,
+                             inactiveTabs: state.inactiveTabs,
+                             isInactiveTabsExpanded: state.isInactiveTabsExpanded)
+        case TabPanelAction.toggleInactiveTabs(let tabsExpandedNewState):
+            return TabsState(isPrivateMode: state.isPrivateMode,
+                             tabs: state.tabs,
+                             inactiveTabs: state.inactiveTabs,
+                             isInactiveTabsExpanded: tabsExpandedNewState)
+        default: return state
+        }
     }
 }

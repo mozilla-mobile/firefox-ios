@@ -6,7 +6,7 @@ import Foundation
 import Redux
 
 class TabsPanelMiddleware {
-    var tabs = [TabCellState]()
+    var tabs = [TabCellModel]()
     var inactiveTabs = [String]()
     var selectedPanel: TabTrayPanelType = .tabs
 
@@ -15,23 +15,27 @@ class TabsPanelMiddleware {
     lazy var tabsPanelProvider: Middleware<AppState> = { state, action in
         switch action {
         case TabTrayAction.tabTrayDidLoad(let panelType):
-            let tabsState = self.getTabTrayState(for: panelType)
-            store.dispatch(TabTrayAction.didLoadTabData(tabsState.tabsState))
+            let tabTray = self.getTabTrayState(for: panelType)
+            store.dispatch(TabTrayAction.didLoadTabTray(tabTray))
         case TabTrayAction.changePanel(let panelType):
-            let tabsState = self.getTabTrayState(for: panelType)
-            store.dispatch(TabTrayAction.didLoadTabData(tabsState.tabsState))
-        case TabTrayAction.addNewTab(let isPrivate):
+            self.selectedPanel = panelType
+            let tabState = self.getTabsState(for: panelType)
+            store.dispatch(TabPanelAction.didLoadTabPanel(tabState))
+        case TabPanelAction.tabPanelDidLoad(let panelType):
+            let tabState = self.getTabsState(for: panelType)
+            store.dispatch(TabPanelAction.didLoadTabPanel(tabState))
+        case TabPanelAction.addNewTab(let isPrivate):
             self.addNewTab()
-            store.dispatch(TabTrayAction.refreshTab(self.tabs))
-        case TabTrayAction.moveTab(let originIndex, let destinationIndex):
+            store.dispatch(TabPanelAction.refreshTab(self.tabs))
+        case TabPanelAction.moveTab(let originIndex, let destinationIndex):
             self.moveTab(from: originIndex, to: destinationIndex)
-            store.dispatch(TabTrayAction.refreshTab(self.tabs))
-        case TabTrayAction.closeTab(let index):
+            store.dispatch(TabPanelAction.refreshTab(self.tabs))
+        case TabPanelAction.closeTab(let index):
             self.closeTab(for: index)
-            store.dispatch(TabTrayAction.refreshTab(self.tabs))
-        case TabTrayAction.closeAllTabs:
+            store.dispatch(TabPanelAction.refreshTab(self.tabs))
+        case TabPanelAction.closeAllTabs:
             self.closeAllTabs()
-            store.dispatch(TabTrayAction.refreshTab(self.tabs))
+            store.dispatch(TabPanelAction.refreshTab(self.tabs))
         default:
             break
         }
@@ -42,17 +46,16 @@ class TabsPanelMiddleware {
         guard panelType != .syncedTabs else { return TabTrayState() }
 
         let isPrivate = panelType == .privateTabs
-        let tabsState = getTabsState(isPrivate: isPrivate)
         return TabTrayState(isPrivateMode: isPrivate,
                             selectedPanel: panelType,
-                            tabsState: tabsState,
-                            remoteTabsState: nil,
                             normalTabsCount: "\(tabs.count)")
     }
 
-    func getTabsState(isPrivate: Bool) -> TabsState {
+    func getTabsState(for panelType: TabTrayPanelType) -> TabsState {
+        resetMock()
+        let isPrivate = panelType == .privateTabs
         for index in 0...2 {
-            let cellState = TabCellState.emptyTabState(title: "Tab \(index)")
+            let cellState = TabCellModel.emptyTabState(title: "Tab \(index)")
             tabs.append(cellState)
         }
         inactiveTabs =  !isPrivate ? ["Tab1", "Tab2", "Tab3"] : [String]()
@@ -65,7 +68,7 @@ class TabsPanelMiddleware {
     }
 
     private func addNewTab() {
-        let cellState = TabCellState.emptyTabState(title: "New tab")
+        let cellState = TabCellModel.emptyTabState(title: "New tab")
         tabs.append(cellState)
     }
 
@@ -79,5 +82,11 @@ class TabsPanelMiddleware {
 
     private func closeAllTabs() {
         tabs.removeAll()
+    }
+
+    private func resetMock() {
+        // Clean up array before getting the new panel
+        tabs.removeAll()
+        inactiveTabs.removeAll()
     }
 }

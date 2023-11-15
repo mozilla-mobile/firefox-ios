@@ -12,8 +12,7 @@ class RemoteTabsPanel: UIViewController,
                        Themeable,
                        RemoteTabsClientAndTabsDataSourceDelegate,
                        RemotePanelDelegateProvider,
-                       StoreSubscriber,
-                       TabTrayChildPanels {
+                       StoreSubscriber {
     typealias SubscriberStateType = RemoteTabsPanelState
 
     // MARK: - Properties
@@ -145,10 +144,6 @@ class RemoteTabsPanel: UIViewController,
             self.state = state
             tableViewController.newState(state: state)
         }
-    }
-
-    func updateState(state: TabTrayState) {
-        refreshTabs()
     }
 
     // MARK: - RemoteTabsClientAndTabsDataSourceDelegate

@@ -115,8 +115,8 @@ final class TabDisplayViewTests: XCTestCase {
                                file: StaticString = #file,
                                line: UInt = #line) -> TabDisplayView {
         let selectedPanel = isPrivateMode ? TabTrayPanelType.privateTabs : TabTrayPanelType.tabs
-        let tabs: [TabCellState] = emptyTabs ? [TabCellState]() : [TabCellState.emptyTabState(title: "Tab1"),
-                                                                   TabCellState.emptyTabState(title: "Tab2")]
+        let tabs: [TabCellModel] = emptyTabs ? [TabCellModel]() : [TabCellModel.emptyTabState(title: "Tab1"),
+                                                                   TabCellModel.emptyTabState(title: "Tab2")]
         let inactiveTabs: [String] = emptyInactiveTabs ? [String]() : ["Inactive1", "Inactive2"]
         let isInactiveTabsExpanded = !isPrivateMode && !inactiveTabs.isEmpty
         let tabTrayState = TabTrayState(isPrivateMode: isPrivateMode,
