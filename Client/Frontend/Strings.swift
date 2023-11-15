@@ -1034,18 +1034,6 @@ extension String {
                 tableName: "Onboarding",
                 value: "Our non-profit backed browser helps stop companies from secretly following you around the web.",
                 comment: "String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name.")
-            public static let TitleTreatmentANotUsed = MZLocalizedString(
-                key: "Onboarding.Welcome.Title.TreatementA.v114",
-                tableName: "Onboarding",
-                value: "Make %@ your go-to browser",
-                comment: "String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name.",
-                lastUsedInVersion: 114)
-            public static let DescriptionTreatementANotUsed = MZLocalizedString(
-                key: "Onboarding.Welcome.Description.TreatementA.v114",
-                tableName: "Onboarding",
-                value: "%@ puts people over profits and defends your privacy as you browse.",
-                comment: "String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name.",
-                lastUsedInVersion: 114)
             public static let TitleTreatmentA = MZLocalizedString(
                 key: "Onboarding.Welcome.Title.TreatementA.v120",
                 tableName: "Onboarding",
@@ -1074,18 +1062,6 @@ extension String {
         }
 
         public struct Sync {
-            public static let TitleNotUsed = MZLocalizedString(
-                key: "Onboarding.Sync.Title.v114",
-                tableName: "Onboarding",
-                value: "Hop from phone to laptop and back",
-                comment: "String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens.",
-                lastUsedInVersion: 114)
-            public static let DescriptionNotUsed = MZLocalizedString(
-                key: "Onboarding.Sync.Description.v114",
-                tableName: "Onboarding",
-                value: "Grab tabs and passwords from your other devices to pick up where you left off.",
-                comment: "String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens.",
-                lastUsedInVersion: 114)
             public static let Title = MZLocalizedString(
                 key: "Onboarding.Sync.Title.v120",
                 tableName: "Onboarding",
@@ -1109,18 +1085,6 @@ extension String {
         }
 
         public struct Notification {
-            public static let TitleNotUsed = MZLocalizedString(
-                key: "Onboarding.Notification.Title.v114",
-                tableName: "Onboarding",
-                value: "Notifications help you do more with %@",
-                comment: "String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name.",
-                lastUsedInVersion: 114)
-            public static let DescriptionNotUsed = MZLocalizedString(
-                key: "Onboarding.Notification.Description.v114",
-                tableName: "Onboarding",
-                value: "Send tabs between your devices and get tips about how to get the most out of %@.",
-                comment: "String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name.",
-                lastUsedInVersion: 114)
             public static let Title = MZLocalizedString(
                 key: "Onboarding.Notification.Title.v120",
                 tableName: "Onboarding",
