@@ -1659,7 +1659,7 @@ extension String {
 
             public struct AccessibilityLabels {
                 public static let DefaultSearchEngine = MZLocalizedString(
-                    key: "Settings.Search.Accessibility.DefaultSearchEngine.v106",
+                    key: "Settings.Search.Accessibility.DefaultSearchEngine.v121",
                     tableName: "Settings",
                     value: "Default Search Engine",
                     comment: "Accessibility label for default search engine setting.")
