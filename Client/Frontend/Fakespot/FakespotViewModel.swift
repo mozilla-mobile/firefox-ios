@@ -338,6 +338,12 @@ class FakespotViewModel {
             await fetchProductAnalysis()
             return
         }
+
+        if case .loaded(let productAnalysisData, _, _) = state {
+            // update the state to in progress so UI is updated
+            state = .loaded(productAnalysisData, status, analysisCount: analyzeCount)
+        }
+
         do {
             // Listen for analysis status until it's completed, then fetch new information
             for try await status in observeProductAnalysisStatus() where status.isAnalyzing == false {
