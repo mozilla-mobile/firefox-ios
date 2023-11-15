@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
-import SnapKit
 import UIKit
 import WebKit
 import Common
@@ -45,7 +44,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
         }
     }
 
-    private lazy var isError = false {
+    private var isError = false {
         didSet {
             if isError {
                 interstitialErrorView.isHidden = false
@@ -64,12 +63,12 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
     }
 
     // The view shown while the content is loading in the background web view.
-    private lazy var interstitialView: UIView! = .build()
-    private lazy var interstitialSpinnerView: UIActivityIndicatorView! = .build()
-    private lazy var interstitialErrorView: UILabel! = .build()
+    private lazy var interstitialView: UIView = .build()
+    private lazy var interstitialSpinnerView: UIActivityIndicatorView = .build()
+    private lazy var interstitialErrorView: UILabel = .build()
 
     // The web view that displays content.
-    private lazy var settingsWebView: WKWebView! = .build()
+    private lazy var settingsWebView: WKWebView = .build()
 
     private func startLoading(_ timeout: Double = DefaultTimeoutTimeInterval) {
         if self.isLoaded {
@@ -154,17 +153,22 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
     }
 
     private func makeInterstitialViews() -> InterstitialViews {
-        let view = UIView()
-        let spinner = UIActivityIndicatorView(style: .medium)
-        spinner.color = themeManager.currentTheme.colors.iconSpinner
+        let view: UIView = .build()
 
-        let error = UILabel()
-        if settingsTitle != nil {
-            error.text = .SettingsContentPageLoadError
-            error.textColor = themeManager.currentTheme.colors.textWarning
-            error.textAlignment = .center
+        let spinner: UIActivityIndicatorView = .build { indicatorView in
+            indicatorView.style = .medium
+            indicatorView.color = self.themeManager.currentTheme.colors.iconSpinner
         }
-        error.isHidden = true
+
+        let error: UILabel = .build { label in
+            if self.settingsTitle != nil {
+                label.text = .SettingsContentPageLoadError
+                label.textColor = self.themeManager.currentTheme.colors.textWarning
+                label.textAlignment = .center
+            }
+            label.isHidden = true
+        }
+
         view.addSubviews(spinner, error)
 
         NSLayoutConstraint.activate([
