@@ -25,6 +25,7 @@ class FirefoxSuggestTest: BaseTestCase {
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("sho")
         mozWaitForElementToExist(app.tables["SiteTable"])
-        mozWaitForElementToExist(app.staticTexts["Firefox Suggest"])
+        mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["Google Search"])
+        mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["Firefox Suggest"])
     }
 }
