@@ -1624,6 +1624,47 @@ extension String {
                     comment: "Title for the page where the user sign in to their Firefox Sync account.")
             }
         }
+
+        public struct Search {
+            public static let Title = MZLocalizedString(
+                key: "Settings.Search.PageTitle.v121",
+                tableName: "Settings",
+                value: "Search",
+                comment: "Navigation title for search page in the Settings menu.")
+            public static let ShowSearchSuggestions = MZLocalizedString(
+                key: "Settings.Search.ShowSuggestions.v121",
+                tableName: "Settings",
+                value: "Show Search Suggestions",
+                comment: "Label for the `show search suggestions` setting, in the Search Settings page.")
+            public static let DefaultSearchEngineTitle = MZLocalizedString(
+                key: "Settings.Search.DefaultSearchEngine.Title.v121",
+                tableName: "Settings",
+                value: "Default Search Engine",
+                comment: "Title for the `default search engine` settings section in the Search page in the Settings menu.")
+            public static let QuickSearchEnginesTitle = MZLocalizedString(
+                key: "Settings.Search.QuickEnginesTitle.v121",
+                tableName: "Settings",
+                value: "Quick-Search Engines",
+                comment: "Title for quick-search engines settings section in the Search page in the Settings menu.")
+            public static let PrivateSessionTitle = MZLocalizedString(
+                key: "Settings.Search.PrivateSession.Title.v121",
+                tableName: "Settings",
+                value: "Private Session",
+                comment: "Title for the `Private Session` settings section in the Search page in the Settings menu.")
+            public static let PrivateSessionSetting = MZLocalizedString(
+                key: "Settings.Search.PrivateSession.Setting.v121",
+                tableName: "Settings",
+                value: "Turn off suggestions in private browsing",
+                comment: "Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in the Private Session section in the Search page in the Settings menu.")
+
+            public struct AccessibilityLabels {
+                public static let DefaultSearchEngine = MZLocalizedString(
+                    key: "Settings.Search.Accessibility.DefaultSearchEngine.v121",
+                    tableName: "Settings",
+                    value: "Default Search Engine",
+                    comment: "Accessibility label for default search engine setting.")
+            }
+        }
     }
 }
 
@@ -5230,27 +5271,32 @@ extension String {
         key: "SearchSettings.Title.Search.v106",
         tableName: nil,
         value: "Search",
-        comment: "Navigation title for search settings.")
+        comment: "Navigation title for search settings.",
+        lastUsedInVersion: 120)
     public static let SearchSettingsDefaultSearchEngineAccessibilityLabel = MZLocalizedString(
         key: "SearchSettings.Accessibility.DefaultSearchEngine.v106",
         tableName: nil,
         value: "Default Search Engine",
-        comment: "Accessibility label for default search engine setting.")
+        comment: "Accessibility label for default search engine setting.",
+        lastUsedInVersion: 120)
     public static let SearchSettingsShowSearchSuggestions = MZLocalizedString(
         key: "Show Search Suggestions",
         tableName: nil,
         value: nil,
-        comment: "Label for show search suggestions setting.")
+        comment: "Label for show search suggestions setting.",
+        lastUsedInVersion: 120)
     public static let SearchSettingsDefaultSearchEngineTitle = MZLocalizedString(
         key: "SearchSettings.Title.DefaultSearchEngine.v106",
         tableName: nil,
         value: "Default Search Engine",
-        comment: "Title for default search engine settings section.")
-    public static let SearchSettingsQuickSearchEnginesTitle = MZLocalizedString(
+        comment: "Title for default search engine settings section.",
+        lastUsedInVersion: 120)
+ public static let SearchSettingsQuickSearchEnginesTitle = MZLocalizedString(
         key: "Quick-Search Engines",
         tableName: nil,
         value: nil,
-        comment: "Title for quick-search engines settings section.")
+        comment: "Title for quick-search engines settings section.",
+        lastUsedInVersion: 120)
 }
 
 // MARK: - SettingsContent
