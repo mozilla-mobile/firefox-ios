@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mozilla/glean-swift",
       "state" : {
-        "revision" : "63e6475bd275399b701951925c64fd4c9a5f7c2d",
-        "version" : "54.0.0"
+        "revision" : "24ed58dcc11c35460edf98975b19cce55e39790a",
+        "version" : "55.0.0"
       }
     },
     {
@@ -86,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mozilla/rust-components-swift.git",
       "state" : {
-        "revision" : "ff646fff2c4c8e21adedb064b03216ff10541d0d",
-        "version" : "121.0.20231109171254"
+        "revision" : "4d537655febba04634d5e35d15c6d1e0f38a86dc",
+        "version" : "121.0.20231113221234"
       }
     },
     {
