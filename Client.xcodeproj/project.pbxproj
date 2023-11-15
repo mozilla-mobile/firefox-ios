@@ -4830,7 +4830,7 @@
 		78784AF7A74084713651DC6D /* hsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hsb; path = hsb.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		787EDD832943EE75002B93AE /* JumpBackInTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpBackInTests.swift; sourceTree = "<group>"; };
 		78CD409D8D95F94C1738A444 /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
-		78FE1E872B040E7000338465 /* FirefoxSuggestTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxSuggestTest.swift; sourceTree = "<group>"; };
+		78FE1E872B040E7000338465 /* FirefoxSuggestTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxSuggestTest.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		797548C8B7F6A801A090D219 /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		79B14B7CBAE86AEB3730EB33 /* mr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = mr; path = mr.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		7A0C4AEAA9CB35000E35A5BB /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };

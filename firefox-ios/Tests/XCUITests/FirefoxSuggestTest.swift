@@ -4,11 +4,26 @@
 
 import XCTest
 
-final class FirefoxSuggestTest: BaseTestCase {
-
-
-    func testExample() throws {
-        sleep(10)
+class FirefoxSuggestTest: BaseTestCase {
+    override func setUp() {
+        super.setUp()
+        waitForTabsButton()
+        enableHiddenFeature(feature: "Firefox Suggest")
+        ingestNewSuggestions()
+        navigator.goto(NewTabScreen)
     }
-    
+
+    private func ingestNewSuggestions() {
+        mozWaitForElementToExist(app.staticTexts["Ingest new suggestions now"])
+        app.staticTexts["Ingest new suggestions now"].tap()
+        app.navigationBars.buttons["Settings"].tap()
+        navigator.nowAt(SettingsScreen)
+    }
+
+    func testFirefoxSuggestExists() {
+        navigator.goto(URLBarOpen)
+        app.textFields["address"].typeText("sho")
+        mozWaitForElementToExist(app.tables["SiteTable"])
+        mozWaitForElementToExist(app.staticTexts["Firefox Suggest"])
+    }
 }
