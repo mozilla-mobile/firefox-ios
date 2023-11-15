@@ -20,6 +20,7 @@ class FirefoxSuggestTest: BaseTestCase {
         navigator.nowAt(SettingsScreen)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2360075
     func testFirefoxSuggestExists() {
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("sho")
