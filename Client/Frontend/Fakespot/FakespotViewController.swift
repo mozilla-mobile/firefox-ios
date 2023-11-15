@@ -12,7 +12,8 @@ class FakespotViewController:
     Themeable,
     Notifiable,
     UIAdaptivePresentationControllerDelegate,
-    UISheetPresentationControllerDelegate {
+    UISheetPresentationControllerDelegate,
+    UIScrollViewDelegate {
     private struct UX {
         static let headerTopSpacing: CGFloat = 22
         static let headerHorizontalSpacing: CGFloat = 18
@@ -31,6 +32,10 @@ class FakespotViewController:
         static let scrollContentBottomPadding: CGFloat = 40
         static let scrollContentHorizontalPadding: CGFloat = 16
         static let scrollContentStackSpacing: CGFloat = 16
+        static let shadowRadius: CGFloat = 14
+        static let shadowOpacity: Float = 1
+        static let shadowOffset = CGSize(width: 0, height: 2)
+        static let animationDuration: TimeInterval = 0.2
     }
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
@@ -45,6 +50,7 @@ class FakespotViewController:
         stackView.spacing = UX.scrollContentStackSpacing
     }
 
+    private lazy var shadowView: UIView = .build()
     private lazy var headerView: UIView = .build()
 
     private lazy var titleLabel: UILabel = .build { label in
@@ -110,6 +116,7 @@ class FakespotViewController:
         super.viewDidLoad()
         presentationController?.delegate = self
         sheetPresentationController?.delegate = self
+        scrollView.delegate = self
 
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
@@ -173,7 +180,8 @@ class FakespotViewController:
 
     func applyTheme() {
         let theme = themeManager.currentTheme
-
+        shadowView.layer.shadowColor = theme.colors.shadowDefault.cgColor
+        shadowView.backgroundColor = theme.colors.layer1
         view.backgroundColor = theme.colors.layer1
         titleLabel.textColor = theme.colors.textPrimary
         betaLabel.textColor = theme.colors.textSecondary
@@ -198,7 +206,7 @@ class FakespotViewController:
         titleStackView.addArrangedSubview(titleLabel)
         titleStackView.addArrangedSubview(betaView)
         headerView.addSubviews(titleStackView, closeButton)
-        view.addSubviews(headerView, scrollView)
+        view.addSubviews(scrollView, shadowView, headerView)
 
         scrollView.addSubview(contentStackView)
         updateContent()
@@ -225,6 +233,11 @@ class FakespotViewController:
                                                 constant: UX.headerHorizontalSpacing),
             headerView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,
                                                  constant: -UX.headerHorizontalSpacing),
+
+            shadowView.topAnchor.constraint(equalTo: view.topAnchor),
+            shadowView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            shadowView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            shadowView.bottomAnchor.constraint(equalTo: scrollView.topAnchor),
 
             titleStackView.topAnchor.constraint(equalTo: headerView.topAnchor),
             titleStackView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor),
@@ -291,6 +304,35 @@ class FakespotViewController:
             }
         }
         applyTheme()
+    }
+
+    private func setupShadow() {
+        shadowView.layer.shadowOffset = UX.shadowOffset
+        shadowView.layer.shadowOpacity = UX.shadowOpacity
+        shadowView.layer.shadowRadius = UX.shadowRadius
+    }
+
+    private func removeShadow() {
+        shadowView.layer.shadowOffset = .zero
+        shadowView.layer.shadowOpacity = 0
+        shadowView.layer.shadowRadius = 0
+    }
+
+    private func adjustShadowBasedOnIntersection() {
+        let shadowViewFrameInSuperview = shadowView.convert(
+            shadowView.bounds,
+            to: view
+        )
+        let contentStackViewFrameInSuperview = contentStackView.convert(
+            contentStackView.bounds,
+            to: view
+        )
+
+        if shadowViewFrameInSuperview.intersects(contentStackViewFrameInSuperview) {
+            UIView.animate(withDuration: UX.animationDuration) { self.setupShadow() }
+        } else {
+            UIView.animate(withDuration: UX.animationDuration) { self.removeShadow() }
+        }
     }
 
     private func createContentView(viewElement: FakespotViewModel.ViewElement) -> UIView? {
@@ -489,5 +531,10 @@ class FakespotViewController:
     // MARK: - UISheetPresentationControllerDelegate
     func sheetPresentationControllerDidChangeSelectedDetentIdentifier(_ sheetPresentationController: UISheetPresentationController) {
         updateModalA11y()
+    }
+
+    // MARK: - UIScrollViewDelegate
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        adjustShadowBasedOnIntersection()
     }
 }
