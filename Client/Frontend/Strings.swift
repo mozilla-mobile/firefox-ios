@@ -5271,27 +5271,32 @@ extension String {
         key: "SearchSettings.Title.Search.v106",
         tableName: nil,
         value: "Search",
-        comment: "Navigation title for search settings.")
+        comment: "Navigation title for search settings.",
+        lastUsedInVersion: 120)
     public static let SearchSettingsDefaultSearchEngineAccessibilityLabel = MZLocalizedString(
         key: "SearchSettings.Accessibility.DefaultSearchEngine.v106",
         tableName: nil,
         value: "Default Search Engine",
-        comment: "Accessibility label for default search engine setting.")
+        comment: "Accessibility label for default search engine setting.",
+        lastUsedInVersion: 120)
     public static let SearchSettingsShowSearchSuggestions = MZLocalizedString(
         key: "Show Search Suggestions",
         tableName: nil,
         value: nil,
-        comment: "Label for show search suggestions setting.")
+        comment: "Label for show search suggestions setting.",
+        lastUsedInVersion: 120)
     public static let SearchSettingsDefaultSearchEngineTitle = MZLocalizedString(
         key: "SearchSettings.Title.DefaultSearchEngine.v106",
         tableName: nil,
         value: "Default Search Engine",
-        comment: "Title for default search engine settings section.")
-    public static let SearchSettingsQuickSearchEnginesTitle = MZLocalizedString(
+        comment: "Title for default search engine settings section.",
+        lastUsedInVersion: 120)
+ public static let SearchSettingsQuickSearchEnginesTitle = MZLocalizedString(
         key: "Quick-Search Engines",
         tableName: nil,
         value: nil,
-        comment: "Title for quick-search engines settings section.")
+        comment: "Title for quick-search engines settings section.",
+        lastUsedInVersion: 120)
 }
 
 // MARK: - SettingsContent
