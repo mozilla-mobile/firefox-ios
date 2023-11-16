@@ -88,9 +88,7 @@ public class RustAutofillEncryptionKeys {
     }
 
     func encryptCreditCardNum(creditCardNum: String) -> String? {
-        guard let key = self.keychain.string(forKey: self.ccKeychainKey) else {
-            return nil
-        }
+        guard let key = self.keychain.string(forKey: self.ccKeychainKey) else { return nil }
 
         do {
             return try encryptString(key: key, cleartext: creditCardNum)
