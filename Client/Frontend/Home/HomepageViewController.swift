@@ -425,7 +425,7 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
             contextualHintViewController.stopTimer()
             return
         }
-
+        contextualHintViewController.isPresenting = true
         present(contextualHintViewController, animated: true, completion: nil)
 
         UIAccessibility.post(notification: .layoutChanged, argument: contextualHintViewController)
