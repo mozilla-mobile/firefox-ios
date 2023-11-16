@@ -19,6 +19,7 @@ struct AppState: StateType {
                 case (.themeSettings(let state), .themeSettings): return state as? S
                 case (.tabsPanel(let state), .tabsPanel): return state as? S
                 case (.remoteTabsPanel(let state), .remoteTabsPanel): return state as? S
+                case (.fakespot(let state), .fakespot): return state as? S
                 default: return nil
                 }
             }

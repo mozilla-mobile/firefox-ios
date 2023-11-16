@@ -6,13 +6,81 @@ import Common
 import ComponentLibrary
 import UIKit
 import Shared
+import Redux
+
+struct FakespotState: ScreenState, Equatable {
+    var isSettingsExpanded: Bool
+    var isReviewQualityExpanded: Bool
+    let logger: Logger = DefaultLogger.shared
+
+    enum Action: Redux.Action {
+        case settingsStateDidChange
+        case reviewQualityDidChange
+        case urlDidChange
+    }
+
+    init() {
+        self.isSettingsExpanded = false
+        self.isReviewQualityExpanded = false
+    }
+
+    init(isSettingsExpanded: Bool, isReviewQualityExpanded: Bool) {
+        self.isSettingsExpanded = isSettingsExpanded
+        self.isReviewQualityExpanded = isReviewQualityExpanded
+    }
+
+    init(_ appState: AppState) {
+        guard let state = store.state.screenState(FakespotState.self, for: .fakespot) else {
+            self.init(isSettingsExpanded: false, isReviewQualityExpanded: false)
+            logger.log("Error retrieving screen state",
+                       level: .debug,
+                       category: .redux)
+            return
+        }
+
+        self.init(
+            isSettingsExpanded: state.isSettingsExpanded,
+            isReviewQualityExpanded: state.isReviewQualityExpanded
+        )
+    }
+
+    static let reducer: Reducer<Self> = { state, action in
+        switch action {
+        case Action.settingsStateDidChange:
+            var state = state
+            state.isSettingsExpanded.toggle()
+            return state
+        case Action.reviewQualityDidChange:
+            var state = state
+            state.isReviewQualityExpanded.toggle()
+            return state
+        case Action.urlDidChange:
+            return FakespotState(isSettingsExpanded: false, isReviewQualityExpanded: false)
+        default:
+            return state
+        }
+    }
+
+    static func == (lhs: FakespotState, rhs: FakespotState) -> Bool {
+        return lhs.isSettingsExpanded == rhs.isSettingsExpanded
+        && lhs.isReviewQualityExpanded == rhs.isReviewQualityExpanded
+    }
+}
 
 class FakespotViewController:
     UIViewController,
     Themeable,
     Notifiable,
     UIAdaptivePresentationControllerDelegate,
-    UISheetPresentationControllerDelegate {
+    UISheetPresentationControllerDelegate,
+    StoreSubscriber {
+    typealias SubscriberStateType = FakespotState
+    func newState(state: FakespotState) {
+        self.state = state
+    }
+
+    private var state: FakespotState
+
     private struct UX {
         static let headerTopSpacing: CGFloat = 22
         static let headerHorizontalSpacing: CGFloat = 18
@@ -96,6 +164,7 @@ class FakespotViewController:
         self.viewModel = viewModel
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
+        self.state = FakespotState()
         super.init(nibName: nil, bundle: nil)
 
         listenToStateChange()
@@ -108,6 +177,11 @@ class FakespotViewController:
     // MARK: - View setup & lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        store.dispatch(ActiveScreensStateAction.showScreen(.fakespot))
+        store.subscribe(self, transform: {
+            print("transform")
+            return $0.select(FakespotState.init)
+        })
         presentationController?.delegate = self
         sheetPresentationController?.delegate = self
 
@@ -155,7 +229,7 @@ class FakespotViewController:
     func update(viewModel: FakespotViewModel, triggerFetch: Bool = true) {
         // Only update the model if the shopping product changed to avoid unnecessary API calls
         guard self.viewModel.shoppingProduct != viewModel.shoppingProduct else { return }
-
+        store.dispatch(FakespotState.Action.urlDidChange)
         self.viewModel = viewModel
         listenToStateChange()
 
@@ -333,22 +407,30 @@ class FakespotViewController:
 
         case .qualityDeterminationCard:
             let reviewQualityCardView: FakespotReviewQualityCardView = .build()
+            viewModel.reviewQualityCardViewModel.expandState = state.isReviewQualityExpanded ? .expanded : .collapsed
             viewModel.reviewQualityCardViewModel.dismissViewController = { [weak self] in
                 guard let self = self else { return }
                 self.delegate?.fakespotControllerDidDismiss(animated: true)
+            }
+            viewModel.reviewQualityCardViewModel.onExpandStateChanged = { state in
+                store.dispatch(FakespotState.Action.reviewQualityDidChange)
             }
             reviewQualityCardView.configure(viewModel.reviewQualityCardViewModel)
             return reviewQualityCardView
 
         case .settingsCard:
             let view: FakespotSettingsCardView = .build()
-            view.configure(viewModel.settingsCardViewModel)
+            viewModel.settingsCardViewModel.expandState = state.isSettingsExpanded ? .expanded : .collapsed
             viewModel.settingsCardViewModel.dismissViewController = { [weak self] action in
                 guard let self = self else { return }
                 self.delegate?.fakespotControllerDidDismiss(animated: true)
                 guard let action else { return }
                 viewModel.recordDismissTelemetry(by: action)
             }
+            viewModel.settingsCardViewModel.onExpandStateChanged = { state in
+                store.dispatch(FakespotState.Action.settingsStateDidChange)
+            }
+            view.configure(viewModel.settingsCardViewModel)
             return view
 
         case .noAnalysisCard:

@@ -9,6 +9,7 @@ enum AppScreen {
     case themeSettings
     case tabsPanel
     case remoteTabsPanel
+    case fakespot
 }
 
 enum ActiveScreensStateAction: Action {

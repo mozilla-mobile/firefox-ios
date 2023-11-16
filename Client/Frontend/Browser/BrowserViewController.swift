@@ -1647,7 +1647,7 @@ class BrowserViewController: UIViewController,
         guard let webView = tab.webView, let url = webView.url else {
             return
         }
-
+        store.dispatch(FakespotState.Action.urlDidChange)
         let environment = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI) ? FakespotEnvironment.staging : .prod
         let product = ShoppingProduct(url: url, client: FakespotClient(environment: environment))
         if product.product != nil && !tab.isPrivate, contentStackView.isSidebarVisible {

@@ -27,6 +27,8 @@ class FakespotSettingsCardViewModel {
     let footerA11yActionIdentifier: String = a11yIds.footerAction
     let footerActionUrl = FakespotUtils.fakespotUrl
     var dismissViewController: ((TelemetryWrapper.EventExtraKey.Shopping?) -> Void)?
+    var onExpandStateChanged: ((CollapsibleCardView.ExpandButtonState) -> Void)?
+    var expandState: CollapsibleCardView.ExpandButtonState = .collapsed
 
     var isReviewQualityCheckOn: Bool {
         get { return prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false }
@@ -181,12 +183,14 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
             titleA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.title,
             expandButtonA11yId: AccessibilityIdentifiers.Shopping.SettingsCard.expandButton,
             expandButtonA11yLabelExpand: .Shopping.SettingsCardExpandAccessibilityLabel,
-            expandButtonA11yLabelCollapse: .Shopping.SettingsCardCollapseAccessibilityLabel) { state in
+            expandButtonA11yLabelCollapse: .Shopping.SettingsCardCollapseAccessibilityLabel,
+            expandState: viewModel.expandState) { state in
                 if state == .expanded {
                     TelemetryWrapper.recordEvent(category: .action,
                                                  method: .view,
                                                  object: .shoppingSettingsChevronButton)
                 }
+                viewModel.onExpandStateChanged?(state)
         }
         collapsibleContainer.configure(collapsibleCardViewModel)
         footerView.configure(viewModel: viewModel.footerModel)
