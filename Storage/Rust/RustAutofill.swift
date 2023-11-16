@@ -67,10 +67,10 @@ public class RustAutofill {
 
     public func addCreditCard(creditCard: UnencryptedCreditCardFields, completion: @escaping (CreditCard?, Error?) -> Void) {
         performDatabaseOperation { error in
-        if let error = error {
-            completion(nil, error)
-            return
-        }
+            if let error = error {
+                completion(nil, error)
+                return
+            }
             do {
                 let id = try self.storage?.addCreditCard(cc: creditCard.toUpdatableCreditCardFields())
                 completion(id!, nil)
@@ -88,12 +88,28 @@ public class RustAutofill {
         return keys.decryptCreditCardNum(encryptedCCNum: encryptedCCNum)
     }
 
+    public func getCreditCard(id: String, completion: @escaping (CreditCard?, Error?) -> Void) {
+        performDatabaseOperation { error in
+            if let error = error {
+                completion(nil, error)
+                return
+            }
+
+            do {
+                let record = try self.storage?.getCreditCard(guid: id)
+                completion(record, nil)
+            } catch let err as NSError {
+                completion(nil, err)
+            }
+        }
+    }
+
     public func listCreditCards(completion: @escaping ([CreditCard]?, Error?) -> Void) {
         performDatabaseOperation { error in
-        if let error = error {
-            completion(nil, error)
-            return
-        }
+            if let error = error {
+                completion(nil, error)
+                return
+            }
             do {
                 let records = try self.storage?.getAllCreditCards()
                 completion(records, nil)
@@ -105,10 +121,10 @@ public class RustAutofill {
 
     public func checkForCreditCardExistance(cardNumber: String, completion: @escaping (CreditCard?, Error?) -> Void) {
         performDatabaseOperation { error in
-        if let error = error {
-            completion(nil, error)
-            return
-        }
+            if let error = error {
+                completion(nil, error)
+                return
+            }
             do {
                 guard let records = try self.storage?.getAllCreditCards(),
                       let foundCard = records.first(where: { $0.ccNumberLast4 == cardNumber })
@@ -125,10 +141,10 @@ public class RustAutofill {
 
     public func updateCreditCard(id: String, creditCard: UnencryptedCreditCardFields, completion: @escaping (Bool, Error?) -> Void) {
         performDatabaseOperation { error in
-        if let error = error {
-            completion(false, error)
-            return
-        }
+            if let error = error {
+                completion(false, error)
+                return
+            }
             do {
                 try self.storage?.updateCreditCard(
                     guid: id,
@@ -143,10 +159,10 @@ public class RustAutofill {
 
     public func deleteCreditCard(id: String, completion: @escaping (Bool, Error?) -> Void) {
         performDatabaseOperation { error in
-        if let error = error {
-            completion(false, error)
-            return
-        }
+            if let error = error {
+                completion(false, error)
+                return
+            }
             do {
                 let existed = try self.storage?.deleteCreditCard(guid: id)
                 completion(existed!, nil)
@@ -158,10 +174,10 @@ public class RustAutofill {
 
     public func use(creditCard: CreditCard, completion: @escaping (Bool, Error?) -> Void) {
         performDatabaseOperation { error in
-        if let error = error {
-            completion(false, error)
-            return
-        }
+            if let error = error {
+                completion(false, error)
+                return
+            }
             do {
                 try self.storage?.touchCreditCard(guid: creditCard.guid)
                 completion(true, nil)
@@ -173,10 +189,10 @@ public class RustAutofill {
 
     public func scrubCreditCardNums(completion: @escaping (Bool, Error?) -> Void) {
         performDatabaseOperation { error in
-        if let error = error {
-            completion(false, error)
-            return
-        }
+            if let error = error {
+                completion(false, error)
+                return
+            }
             do {
                 try self.storage?.scrubEncryptedData()
                 completion(true, nil)
