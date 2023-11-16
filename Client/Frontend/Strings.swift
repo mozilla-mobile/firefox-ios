@@ -1024,6 +1024,11 @@ extension String {
         }
 
         public struct Welcome {
+            public static let CloseButtonAccessibilityLabel = MZLocalizedString(
+                key: "Onboarding.Welcome.Close.AccessibilityLabel.v121",
+                tableName: "Onboarding",
+                value: "Close and exit %@ onboarding",
+                comment: "Accessibility label for close button that dismisses the welcome onboarding screen. Placeholder is for the app name.")
             public static let Title = MZLocalizedString(
                 key: "Onboarding.Welcome.Title.v114",
                 tableName: "Onboarding",
@@ -3706,6 +3711,11 @@ extension String {
             tableName: "Shopping",
             value: "BETA",
             comment: "Beta label for the header of the Shopping Experience (Fakespot) sheet")
+        public static let CloseButtonAccessibilityLabel = MZLocalizedString(
+            key: "Shopping.Sheet.Close.AccessibilityLabel.v121",
+            tableName: "Shopping",
+            value: "Close Review Checker",
+            comment: "Accessibility label for close button that dismisses the Shopping Experience (Fakespot) sheet.")
         public static let ReliabilityCardTitle = MZLocalizedString(
             key: "Shopping.ReviewQuality.ReliabilityCardTitle.v120",
             tableName: "Shopping",
