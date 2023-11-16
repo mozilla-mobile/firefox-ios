@@ -7,7 +7,8 @@ import UIKit
 
 class TabDisplayViewController: UIViewController,
                                 Themeable,
-                                EmptyPrivateTabsViewDelegate {
+                                EmptyPrivateTabsViewDelegate,
+                                TabTrayChildPanels {
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
@@ -15,7 +16,7 @@ class TabDisplayViewController: UIViewController,
 
     // MARK: UI elements
     private lazy var tabDisplayView: TabDisplayView = {
-        let view = TabDisplayView(state: self.state)
+        let view = TabDisplayView(state: self.tabTrayState)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -23,13 +24,13 @@ class TabDisplayViewController: UIViewController,
     private lazy var emptyPrivateTabsView: EmptyPrivateTabsView = .build()
 
     // MARK: Redux state
-    var state: TabViewState
+    var tabTrayState: TabTrayState
 
     init(isPrivateMode: Bool,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
         // TODO: FXIOS-6936 Integrate Redux state
-        self.state = TabViewState.getMockState(isPrivateMode: isPrivateMode)
+        self.tabTrayState = TabTrayState()
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
@@ -69,7 +70,7 @@ class TabDisplayViewController: UIViewController,
     }
 
     func setupEmptyView() {
-        guard state.isPrivateMode, state.isPrivateTabsEmpty else {
+        guard tabTrayState.isPrivateMode, tabTrayState.isPrivateTabsEmpty else {
             showEmptyView(shouldShowEmptyView: false)
             return
         }
@@ -92,6 +93,11 @@ class TabDisplayViewController: UIViewController,
     func applyTheme() {
         backgroundPrivacyOverlay.backgroundColor = themeManager.currentTheme.colors.layerScrim
         tabDisplayView.applyTheme(theme: themeManager.currentTheme)
+    }
+
+    func updateState(state: TabTrayState) {
+        tabTrayState = state
+        tabDisplayView.newState(state: tabTrayState)
     }
 
     // MARK: EmptyPrivateTabsViewDelegate

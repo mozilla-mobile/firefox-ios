@@ -212,15 +212,16 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
         presentWithModalDismissIfNeeded(viewController, animated: true)
     }
 
-    func showToast(message: String, toastAction: MenuButtonToastAction, url: String?) {
+    func showToast(message: String, toastAction: MenuButtonToastAction) {
         switch toastAction {
         case .removeBookmark:
             let viewModel = ButtonToastViewModel(labelText: message,
                                                  buttonText: .UndoString,
                                                  textAlignment: .left)
             let toast = ButtonToast(viewModel: viewModel,
-                                    theme: themeManager.currentTheme) { isButtonTapped in
-                isButtonTapped ? self.addBookmark(url: url ?? "") : nil
+                                    theme: themeManager.currentTheme) { [weak self] isButtonTapped in
+                guard let strongSelf = self, let currentTab = strongSelf.tabManager.selectedTab else { return }
+                isButtonTapped ? strongSelf.addBookmark(url: currentTab.url?.absoluteString ?? "", title: currentTab.title) : nil
             }
             show(toast: toast)
         default:

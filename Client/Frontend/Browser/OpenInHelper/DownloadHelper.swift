@@ -58,9 +58,9 @@ struct MIMEType {
 }
 
 class DownloadHelper: NSObject {
-    fileprivate let request: URLRequest
-    fileprivate let preflightResponse: URLResponse
-    fileprivate let cookieStore: WKHTTPCookieStore
+    private let request: URLRequest
+    private let preflightResponse: URLResponse
+    private let cookieStore: WKHTTPCookieStore
 
     static func requestDownload(url: URL, tab: Tab) {
         let safeUrl = url.absoluteString.replacingOccurrences(of: "'", with: "%27")
@@ -94,7 +94,12 @@ class DownloadHelper: NSObject {
     }
 
     func downloadViewModel(okAction: @escaping (HTTPDownload) -> Void) -> PhotonActionSheetViewModel? {
-        guard let host = request.url?.host else { return nil }
+        var requestUrl = request.url
+        if let url = requestUrl, url.scheme == "blob" {
+            requestUrl = url.removeBlobFromUrl()
+        }
+
+        guard let host = requestUrl?.host else { return nil }
 
         guard let download = HTTPDownload(cookieStore: cookieStore,
                                           preflightResponse: preflightResponse,

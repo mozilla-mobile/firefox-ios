@@ -97,6 +97,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
                                                                 size: fontSize)
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)TitleLabel"
+        label.accessibilityTraits.insert(.header)
     }
 
     private lazy var descriptionLabel: UILabel = .build { label in

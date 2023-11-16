@@ -54,7 +54,6 @@ class BrowserViewController: UIViewController,
     var urlFromAnotherApp: UrlToOpenModel?
     var isCrashAlertShowing = false
     var currentMiddleButtonState: MiddleButtonState?
-    var didStartAtHome = false
     var openedUrlFromExternalSource = false
     var passBookHelper: OpenPassBookHelper?
     var overlayManager: OverlayModeManager
@@ -437,17 +436,19 @@ class BrowserViewController: UIViewController,
         if let tab = tabManager.selectedTab {
             urlBar.locationView.tabDidChangeContentBlocking(tab)
         }
-
-        didStartAtHome = tabManager.startAtHomeCheck()
-        if didStartAtHome {
-            guard presentedViewController != nil else { return }
-            dismissVC()
-        }
+        dismissModalsIfStartAtHome()
 
         // When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
         // Make sure that our startup flow is completed and other tabs have been restored before we load.
         AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration]) { [weak self] in
             self?.backgroundTabLoader.loadBackgroundTabs()
+        }
+    }
+
+    private func dismissModalsIfStartAtHome() {
+        if tabManager.startAtHomeCheck() {
+            guard !dismissFakespotIfNeeded(), presentedViewController != nil else { return }
+            dismissVC()
         }
     }
 
@@ -1133,7 +1134,7 @@ class BrowserViewController: UIViewController,
     func removeBookmark(url: String) {
         profile.places.deleteBookmarksWithURL(url: url).uponQueue(.main) { result in
             guard result.isSuccess else { return }
-            self.showToast(message: .AppMenu.RemoveBookmarkConfirmMessage, toastAction: .removeBookmark, url: url)
+            self.showToast(message: .AppMenu.RemoveBookmarkConfirmMessage, toastAction: .removeBookmark)
         }
     }
 
@@ -1600,6 +1601,11 @@ class BrowserViewController: UIViewController,
                 webView.evaluateJavascriptInDefaultContentWorld("\(ReaderModeNamespace).checkReadability()")
             }
 
+            // Update Fakespot sidebar if necessary
+            if webViewStatus == .url {
+                updateFakespot(tab: tab)
+            }
+
             TabEvent.post(.didChangeURL(url), for: tab)
         }
 
@@ -1634,6 +1640,22 @@ class BrowserViewController: UIViewController,
                     self.screenshotHelper.takeScreenshot(tab)
                 }
             }
+        }
+    }
+
+    private func updateFakespot(tab: Tab) {
+        guard let webView = tab.webView, let url = webView.url else {
+            return
+        }
+
+        let environment = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI) ? FakespotEnvironment.staging : .prod
+        let product = ShoppingProduct(url: url, client: FakespotClient(environment: environment))
+        if product.product != nil && !tab.isPrivate, contentStackView.isSidebarVisible {
+            navigationHandler?.updateFakespotSidebar(productURL: url,
+                                                     sidebarContainer: contentStackView,
+                                                     parentViewController: self)
+        } else if contentStackView.isSidebarVisible {
+            _ = dismissFakespotIfNeeded(animated: true)
         }
     }
 
@@ -2156,6 +2178,9 @@ extension BrowserViewController: TabManagerDelegate {
                 // When this happens, the URL is nil, so try restoring the page upon selection.
                 tab.reload()
             }
+
+            // Update Fakespot sidebar if necessary
+            updateFakespot(tab: tab)
         }
 
         updateTabCountUsingTabManager(tabManager)

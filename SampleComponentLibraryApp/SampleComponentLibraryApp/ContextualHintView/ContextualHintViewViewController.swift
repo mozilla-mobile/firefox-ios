@@ -9,6 +9,10 @@ import UIKit
 
 class ContextualHintViewViewController: UIViewController, Themeable {
     private lazy var hintView: ContextualHintView = .build { _ in }
+    private struct UX {
+        static let contextualHintWidth: CGFloat = 350
+        static let contextualHintLandscapeExtraWidth: CGFloat = 60
+    }
 
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
@@ -69,11 +73,21 @@ class ContextualHintViewViewController: UIViewController, Themeable {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        let targetSize = CGSize(width: 350, height: UIView.layoutFittingCompressedSize.height)
-        preferredContentSize = hintView.systemLayoutSizeFitting(targetSize)
+        let targetSize = CGSize(width: UX.contextualHintWidth, height: UIView.layoutFittingCompressedSize.height)
+        var systemSize = hintView.systemLayoutSizeFitting(targetSize)
+        if UIDevice.current.orientation.isLandscape {
+            systemSize.width += UX.contextualHintLandscapeExtraWidth
+        }
+        preferredContentSize = systemSize
     }
 
     // MARK: Themeable
 
     func applyTheme() {}
+
+    // MARK: View Transitions
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        self.view.setNeedsLayout()
+    }
 }

@@ -6,7 +6,7 @@ import Foundation
 
 public protocol AppEventType: Hashable { }
 
-public enum AppEvent: Int, AppEventType {
+public enum AppEvent: AppEventType {
     // Events: Startup flow
     case startupFlowComplete
 
@@ -24,4 +24,5 @@ public enum AppEvent: Int, AppEventType {
 
     // Activites: Tabs
     case tabRestoration
+    case selectTab(URL)
 }

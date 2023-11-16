@@ -27,6 +27,9 @@ class FindInPageBar: UIView, ThemeApplicable {
     private lazy var searchText: UITextField = .build { textField in
         textField.addTarget(self, action: #selector(self.didTextChange), for: .editingChanged)
         textField.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .callout, size: UX.fontSize)
+        textField.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        textField.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        textField.adjustsFontForContentSizeCategory = true
         textField.autocapitalizationType = .none
         textField.autocorrectionType = .no
         textField.inputAssistantItem.leadingBarButtonGroups = []
@@ -41,6 +44,9 @@ class FindInPageBar: UIView, ThemeApplicable {
         label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .callout, size: UX.fontSize)
         label.isHidden = true
         label.accessibilityIdentifier = "FindInPage.matchCount"
+        label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+        label.adjustsFontForContentSizeCategory = true
     }
 
     private lazy var previousButton: UIButton = .build { button in
@@ -104,41 +110,35 @@ class FindInPageBar: UIView, ThemeApplicable {
 
         addSubviews(searchText, matchCountView, previousButton, nextButton, closeButton, topBorder)
 
-        searchText.snp.makeConstraints { make in
-            make.leading.top.bottom.equalTo(self).inset(UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 0))
-        }
-        searchText.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        searchText.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        NSLayoutConstraint.activate([
+            searchText.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+            searchText.topAnchor.constraint(equalTo: topAnchor),
+            searchText.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-        matchCountView.snp.makeConstraints { make in
-            make.leading.equalTo(searchText.snp.trailing)
-            make.centerY.equalTo(self)
-        }
-        matchCountView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        matchCountView.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+            matchCountView.leadingAnchor.constraint(equalTo: searchText.trailingAnchor),
+            matchCountView.centerYAnchor.constraint(equalTo: centerYAnchor),
 
-        previousButton.snp.makeConstraints { make in
-            make.leading.equalTo(matchCountView.snp.trailing)
-            make.size.equalTo(self.snp.height)
-            make.centerY.equalTo(self)
-        }
+            previousButton.leadingAnchor.constraint(equalTo: matchCountView.trailingAnchor),
+            previousButton.widthAnchor.constraint(equalTo: heightAnchor),
+            previousButton.heightAnchor.constraint(equalTo: heightAnchor),
+            previousButton.centerYAnchor.constraint(equalTo: centerYAnchor),
 
-        nextButton.snp.makeConstraints { make in
-            make.leading.equalTo(previousButton.snp.trailing)
-            make.size.equalTo(self.snp.height)
-            make.centerY.equalTo(self)
-        }
+            nextButton.leadingAnchor.constraint(equalTo: previousButton.trailingAnchor),
+            nextButton.widthAnchor.constraint(equalTo: heightAnchor),
+            nextButton.heightAnchor.constraint(equalTo: heightAnchor),
+            nextButton.centerYAnchor.constraint(equalTo: centerYAnchor),
 
-        closeButton.snp.makeConstraints { make in
-            make.leading.equalTo(nextButton.snp.trailing)
-            make.size.equalTo(self.snp.height)
-            make.trailing.centerY.equalTo(self)
-        }
+            closeButton.leadingAnchor.constraint(equalTo: nextButton.trailingAnchor),
+            closeButton.widthAnchor.constraint(equalTo: heightAnchor),
+            closeButton.heightAnchor.constraint(equalTo: heightAnchor),
+            closeButton.trailingAnchor.constraint(equalTo: trailingAnchor),
+            closeButton.centerYAnchor.constraint(equalTo: centerYAnchor),
 
-        topBorder.snp.makeConstraints { make in
-            make.height.equalTo(1)
-            make.left.right.top.equalTo(self)
-        }
+            topBorder.heightAnchor.constraint(equalToConstant: 1),
+            topBorder.leadingAnchor.constraint(equalTo: leadingAnchor),
+            topBorder.trailingAnchor.constraint(equalTo: trailingAnchor),
+            topBorder.topAnchor.constraint(equalTo: topAnchor)
+        ])
     }
 
     required init?(coder aDecoder: NSCoder) {

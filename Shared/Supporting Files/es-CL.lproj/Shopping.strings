@@ -94,9 +94,6 @@
 /* Title for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
 "Shopping.NoAnalysisCard.InProgress.Headline.Title.v120" = "Comprobando la calidad de la reseña";
 
-/* Text for the disclaimer that appears beneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replaced by the Fakespot app name. */
-"Shopping.OptInCard.Disclaimer.Title.v120" = "Al seleccionar \"Sí, probarlo\", aceptas %@:";
-
 /* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. The third and fourth parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. */
 "Shopping.OptInCard.FirstParagraph.Description.v120" = "Mira cuán confiables son las reseñas de productos en %1$@ antes de comprar. El verificador de reseñas, una función experimental de %2$@, está integrado directamente en el navegador. También funciona en %3$@ y %4$@.";
 

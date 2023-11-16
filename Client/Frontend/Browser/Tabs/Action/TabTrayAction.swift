@@ -6,13 +6,19 @@ import Common
 import Redux
 
 enum TabTrayAction: Action {
-    case togglePrivateMode(Bool)
+    case tabTrayDidLoad(TabTrayPanelType)
+    case changePanel(TabTrayPanelType)
     case openExistingTab
     case addNewTab(Bool) // isPrivate
-    case closeTab
+    case closeTab(Int)
     case closeAllTabs
-    case closeInactiveTab
+    case moveTab(Int, Int)
 
     // Private tabs action
     case learnMorePrivateMode
+
+    // Middleware actions
+    case didLoadTabData(TabTrayState)
+    // Response to all user actions involving tabs ex: add, close and close all tabs
+    case refreshTab([TabCellState])
 }

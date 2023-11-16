@@ -432,6 +432,17 @@ class BrowserCoordinator: BaseCoordinator,
                                                            parentViewController: parentViewController)
     }
 
+    func updateFakespotSidebar(productURL: URL,
+                               sidebarContainer: SidebarEnabledViewProtocol,
+                               parentViewController: UIViewController) {
+        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator}) as? FakespotCoordinator else {
+            return // there is no sidebar
+        }
+        fakespotCoordinator.updateSidebar(productURL: productURL,
+                                          sidebarContainer: sidebarContainer,
+                                          parentViewController: parentViewController)
+    }
+
     private func makeFakespotCoordinator() -> FakespotCoordinator? {
         guard !childCoordinators.contains(where: { $0 is FakespotCoordinator}) else {
             return nil // flow is already handled
