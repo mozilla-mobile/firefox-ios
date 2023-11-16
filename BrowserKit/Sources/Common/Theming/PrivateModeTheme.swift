@@ -4,44 +4,46 @@
 
 import UIKit
 
-public struct DarkTheme: Theme {
-    public var type: ThemeType = .dark
-    public var colors: ThemeColourPalette = DarkColourPalette()
+public struct PrivateModeTheme: Theme {
+    public var type: ThemeType = .privateMode
+    public var colors: ThemeColourPalette = PrivateModeColorPalette()
 
     public init() {}
 }
 
-private struct DarkColourPalette: ThemeColourPalette {
+private struct PrivateModeColorPalette: ThemeColourPalette {
     // MARK: - Layers
-    var layer1: UIColor = FXColors.DarkGrey60
-    var layer2: UIColor = FXColors.DarkGrey30
-    var layer3: UIColor = FXColors.DarkGrey80
+    var layer1: UIColor = FXColors.Ink50
+    var layer2: UIColor = FXColors.Ink50
+    var layer3: UIColor = FXColors.Ink90
     var layer4: UIColor = FXColors.DarkGrey20.withAlphaComponent(0.7)
     var layer5: UIColor = FXColors.DarkGrey40
     var layer6: UIColor = FXColors.DarkGrey60
     var layer5Hover: UIColor = FXColors.DarkGrey20
     var layerScrim: UIColor = FXColors.DarkGrey90.withAlphaComponent(0.95)
     var layerGradient = Gradient(colors: [FXColors.Violet40, FXColors.Violet70])
-    var layerGradientOverlay = Gradient(colors: [FXColors.DarkGrey40.withAlphaComponent(0),
-                                                 FXColors.DarkGrey40.withAlphaComponent(0.4)])
+    var layerGradientOverlay = Gradient(colors: [
+        FXColors.DarkGrey40.withAlphaComponent(0),
+        FXColors.DarkGrey40.withAlphaComponent(0.4)
+    ])
     var layerAccentNonOpaque: UIColor = FXColors.Blue20.withAlphaComponent(0.2)
     var layerAccentPrivate: UIColor = FXColors.Purple60
     var layerAccentPrivateNonOpaque: UIColor = FXColors.Purple60.withAlphaComponent(0.3)
     var layerLightGrey30: UIColor = FXColors.LightGrey30
     var layerSepia: UIColor = FXColors.Orange05
     var layerHomepage = Gradient(colors: [
-        FXColors.DarkGrey60.withAlphaComponent(1),
-        FXColors.DarkGrey60.withAlphaComponent(1),
-        FXColors.DarkGrey60.withAlphaComponent(1)
+        FXColors.Ink05,
+        FXColors.Violet80,
+        FXColors.Purple70
     ])
     var layerInfo: UIColor = FXColors.Blue60.withAlphaComponent(0.8)
     var layerConfirmation: UIColor = FXColors.Green80
     var layerWarning: UIColor = FXColors.Yellow70.withAlphaComponent(0.77)
     var layerError: UIColor = FXColors.Pink80
-    var layerSearch: UIColor = FXColors.DarkGrey80
+    var layerSearch: UIColor = FXColors.Ink90
     var layerGradientURL = Gradient(colors: [
-        FXColors.DarkGrey80.withAlphaComponent(0),
-        FXColors.DarkGrey80.withAlphaComponent(1)
+        FXColors.Ink90.withAlphaComponent(0),
+        FXColors.Ink90.withAlphaComponent(1)
     ])
 
     // MARK: - Ratings
@@ -102,7 +104,7 @@ private struct DarkColourPalette: ThemeColourPalette {
     var borderAccentNonOpaque: UIColor = FXColors.Blue20.withAlphaComponent(0.2)
     var borderAccentPrivate: UIColor = FXColors.Purple60
     var borderInverted: UIColor = FXColors.DarkGrey90
-    var borderToolbarDivider: UIColor = FXColors.DarkGrey60
+    var borderToolbarDivider: UIColor = FXColors.Violet80
 
     // MARK: - Shadow
     var shadowDefault: UIColor = FXColors.DarkGrey90.withAlphaComponent(0.16)
