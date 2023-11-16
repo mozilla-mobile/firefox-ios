@@ -268,8 +268,7 @@ public class RustAutofill {
     // MARK: - Private Helper Methods
 
     private func handleDatabaseError(_ error: NSError) {
-        // This is an unrecoverable
-        // state unless we can move the existing file to a backup
+        // This is an unrecoverable state unless we can move the existing file to a backup
         // location and start over.
         if let autofillStoreError = error as? AutofillApiError {
             logger.log("Rust Autofill store error when opening database",
