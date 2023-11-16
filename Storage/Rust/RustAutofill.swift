@@ -265,7 +265,7 @@ public class RustAutofill {
         throw AutofillEncryptionKeyError.illegalState
     }
 
-    // Private Helper Methods
+    // MARK: - Private Helper Methods
 
     private func handleDatabaseError(_ error: NSError) {
         // This is an unrecoverable
