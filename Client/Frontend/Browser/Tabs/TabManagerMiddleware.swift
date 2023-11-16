@@ -17,12 +17,8 @@ class TabsPanelMiddleware {
         case TabTrayAction.tabTrayDidLoad(let panelType):
             let tabTray = self.getTabTrayState(for: panelType)
             store.dispatch(TabTrayAction.didLoadTabTray(tabTray))
-        case TabTrayAction.changePanel(let panelType):
-            self.selectedPanel = panelType
-            let tabState = self.getTabsState(for: panelType)
-            store.dispatch(TabPanelAction.didLoadTabPanel(tabState))
-        case TabPanelAction.tabPanelDidLoad(let panelType):
-            let tabState = self.getTabsState(for: panelType)
+        case TabPanelAction.tabPanelDidLoad(let isPrivate):
+            let tabState = self.getTabsState(for: isPrivate)
             store.dispatch(TabPanelAction.didLoadTabPanel(tabState))
         case TabPanelAction.addNewTab(let isPrivate):
             self.addNewTab()
@@ -51,9 +47,8 @@ class TabsPanelMiddleware {
                             normalTabsCount: "\(tabs.count)")
     }
 
-    func getTabsState(for panelType: TabTrayPanelType) -> TabsState {
+    func getTabsState(for isPrivate: Bool) -> TabsState {
         resetMock()
-        let isPrivate = panelType == .privateTabs
         for index in 0...2 {
             let cellState = TabCellModel.emptyTabState(title: "Tab \(index)")
             tabs.append(cellState)

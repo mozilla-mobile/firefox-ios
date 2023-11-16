@@ -29,8 +29,8 @@ struct TabsState: ScreenState, Equatable {
                   isInactiveTabsExpanded: panelState.isInactiveTabsExpanded)
     }
 
-    init() {
-        self.init(isPrivateMode: false,
+    init(isPrivateMode: Bool = false) {
+        self.init(isPrivateMode: isPrivateMode,
                   tabs: [TabCellModel](),
                   inactiveTabs: [String](),
                   isInactiveTabsExpanded: false)

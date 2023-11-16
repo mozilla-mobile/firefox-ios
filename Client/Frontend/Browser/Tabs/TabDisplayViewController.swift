@@ -32,7 +32,7 @@ class TabDisplayViewController: UIViewController,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
         // TODO: FXIOS-6936 Integrate Redux state
-        self.tabsState = TabsState()
+        self.tabsState = TabsState(isPrivateMode: isPrivateMode)
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
@@ -40,11 +40,6 @@ class TabDisplayViewController: UIViewController,
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        store.dispatch(ActiveScreensStateAction.closeScreen(.tabsPanel))
-        store.unsubscribe(self)
     }
 
     override func viewDidLoad() {
@@ -56,11 +51,17 @@ class TabDisplayViewController: UIViewController,
         subscribeRedux()
     }
 
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        store.dispatch(ActiveScreensStateAction.closeScreen(.tabsPanel))
+        store.unsubscribe(self)
+    }
+
     private func subscribeRedux() {
         store.dispatch(ActiveScreensStateAction.showScreen(.tabsPanel))
-        store.dispatch(TabPanelAction.tabPanelDidLoad(.tabs))
+        store.dispatch(TabPanelAction.tabPanelDidLoad(tabsState.isPrivateMode))
         store.subscribe(self, transform: {
-            $0.select(TabsState.init)
+            return $0.select(TabsState.init)
         })
     }
 
@@ -68,6 +69,7 @@ class TabDisplayViewController: UIViewController,
         print("YRD tabs newState \(state.tabs.count)")
         tabsState = state
         tabDisplayView.newState(state: tabsState)
+        shouldShowEmptyView(tabsState.isPrivateTabsEmpty)
     }
 
     func setupView() {
@@ -93,7 +95,7 @@ class TabDisplayViewController: UIViewController,
 
     func setupEmptyView() {
         guard tabsState.isPrivateMode, tabsState.isPrivateTabsEmpty else {
-            showEmptyView(shouldShowEmptyView: false)
+            shouldShowEmptyView(false)
             return
         }
 
@@ -104,10 +106,10 @@ class TabDisplayViewController: UIViewController,
             emptyPrivateTabsView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             emptyPrivateTabsView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
-        showEmptyView(shouldShowEmptyView: true)
+        shouldShowEmptyView(true)
     }
 
-    private func showEmptyView(shouldShowEmptyView: Bool) {
+    private func shouldShowEmptyView(_ shouldShowEmptyView: Bool) {
         emptyPrivateTabsView.isHidden = !shouldShowEmptyView
         tabDisplayView.isHidden = shouldShowEmptyView
     }

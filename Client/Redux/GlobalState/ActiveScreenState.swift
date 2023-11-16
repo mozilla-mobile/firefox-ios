@@ -14,10 +14,8 @@ enum AppScreenState: Equatable {
     static let reducer: Reducer<Self> = { state, action in
         switch state {
         case .themeSettings(let state): return .themeSettings(ThemeSettingsState.reducer(state, action))
-        case .tabsTray(let state): return
-                .tabsTray(TabTrayState.reducer(state, action))
-        case .tabsPanel(let state): return
-                .tabsPanel(TabsState.reducer(state, action))
+        case .tabsTray(let state): return .tabsTray(TabTrayState.reducer(state, action))
+        case .tabsPanel(let state): return .tabsPanel(TabsState.reducer(state, action))
         case .remoteTabsPanel(let state): return .remoteTabsPanel(RemoteTabsPanelState.reducer(state, action))
         }
     }

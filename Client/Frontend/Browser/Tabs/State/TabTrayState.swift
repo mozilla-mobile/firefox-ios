@@ -26,7 +26,7 @@ struct TabTrayState: ScreenState, Equatable {
     }
 
     init(_ appState: AppState) {
-        guard let panelState = store.state.screenState(TabTrayState.self, for: .tabsPanel) else {
+        guard let panelState = store.state.screenState(TabTrayState.self, for: .tabsTray) else {
             self.init()
             return
         }
@@ -55,9 +55,15 @@ struct TabTrayState: ScreenState, Equatable {
         case TabTrayAction.didLoadTabTray(let state):
             return state
         case TabTrayAction.changePanel(let panelType):
-            return TabTrayState(isPrivateMode: panelType == .privateTabs,
+            let state =  TabTrayState(isPrivateMode: panelType == .privateTabs,
+                                      selectedPanel: panelType,
+                                      normalTabsCount: state.normalTabsCount)
+            return state
+        case TabPanelAction.didLoadTabPanel(let tabState):
+            let panelType = tabState.isPrivateMode ? TabTrayPanelType.privateTabs : TabTrayPanelType.tabs
+            return TabTrayState(isPrivateMode: tabState.isPrivateMode,
                                 selectedPanel: panelType,
-                                normalTabsCount: state.normalTabsCount)
+                                normalTabsCount: "\(tabState.tabs.count)")
         default:
             return state
         }

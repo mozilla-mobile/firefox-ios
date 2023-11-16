@@ -88,7 +88,7 @@ final class TabDisplayViewTests: XCTestCase {
         let subject = createSubject(isPrivateMode: false,
                                     emptyTabs: false,
                                     emptyInactiveTabs: false)
-        subject.toggleInactiveTab() 
+        subject.toggleInactiveTab()
         XCTAssertFalse(subject.tabTrayState.isInactiveTabsExpanded)
     }
 
