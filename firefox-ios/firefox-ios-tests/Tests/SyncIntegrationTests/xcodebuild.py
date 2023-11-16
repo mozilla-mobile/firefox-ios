@@ -54,10 +54,10 @@ class XCodeBuild(object):
         try:
             out = subprocess.check_output(
                 args,
-                cwd=os.chdir("../../.."),
+                cwd=os.chdir("../../../.."),
                 stderr=subprocess.STDOUT,
                 universal_newlines=True)
-            os.chdir("firefox-ios/Tests/SyncIntegrationTests")
+            os.chdir("firefox-ios/firefox-ios-tests/Tests/SyncIntegrationTests")
         except subprocess.CalledProcessError as e:
             out = e.output
             raise
