@@ -17,21 +17,31 @@ class TabsPanelMiddleware {
         case TabTrayAction.tabTrayDidLoad(let panelType):
             let tabTray = self.getTabTrayState(for: panelType)
             store.dispatch(TabTrayAction.didLoadTabTray(tabTray))
+
         case TabPanelAction.tabPanelDidLoad(let isPrivate):
             let tabState = self.getTabsState(for: isPrivate)
             store.dispatch(TabPanelAction.didLoadTabPanel(tabState))
+
+        case TabTrayAction.changePanel(let panelType):
+            let tabState = self.getTabsState(for: panelType == TabTrayPanelType.privateTabs)
+            store.dispatch(TabPanelAction.didLoadTabPanel(tabState))
+
         case TabPanelAction.addNewTab(let isPrivate):
             self.addNewTab()
             store.dispatch(TabPanelAction.refreshTab(self.tabs))
+
         case TabPanelAction.moveTab(let originIndex, let destinationIndex):
             self.moveTab(from: originIndex, to: destinationIndex)
             store.dispatch(TabPanelAction.refreshTab(self.tabs))
+
         case TabPanelAction.closeTab(let index):
             self.closeTab(for: index)
             store.dispatch(TabPanelAction.refreshTab(self.tabs))
+
         case TabPanelAction.closeAllTabs:
             self.closeAllTabs()
             store.dispatch(TabPanelAction.refreshTab(self.tabs))
+
         default:
             break
         }

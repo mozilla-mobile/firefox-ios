@@ -42,19 +42,17 @@ class TabDisplayViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        store.dispatch(ActiveScreensStateAction.closeScreen(.tabsPanel))
+        store.unsubscribe(self)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setupView()
         listenForThemeChange(view)
         applyTheme()
         subscribeRedux()
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        store.dispatch(ActiveScreensStateAction.closeScreen(.tabsPanel))
-        store.unsubscribe(self)
     }
 
     private func subscribeRedux() {
@@ -66,7 +64,6 @@ class TabDisplayViewController: UIViewController,
     }
 
     func newState(state: TabsState) {
-        print("YRD tabs newState \(state.tabs.count)")
         tabsState = state
         tabDisplayView.newState(state: tabsState)
         shouldShowEmptyView(tabsState.isPrivateTabsEmpty)

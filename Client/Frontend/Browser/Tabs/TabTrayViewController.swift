@@ -242,7 +242,6 @@ class TabTrayViewController: UIViewController,
     }
 
     func newState(state: TabTrayState) {
-        print("YRD parent newState \(state.isPrivateMode)")
         tabTrayState = state
     }
 

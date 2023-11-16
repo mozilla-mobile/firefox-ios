@@ -47,7 +47,6 @@ struct TabsState: ScreenState, Equatable {
     }
 
     static let reducer: Reducer<Self> = { state, action in
-        print("YRD child action \(action)")
         switch action {
         case TabPanelAction.didLoadTabPanel(let tabsState):
             return tabsState

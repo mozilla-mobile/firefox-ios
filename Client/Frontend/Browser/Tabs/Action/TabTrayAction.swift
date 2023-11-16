@@ -15,6 +15,7 @@ enum TabTrayAction: Action {
 
 enum TabPanelAction: Action {
     case tabPanelDidLoad(Bool)
+    case tabPanelDidAppear(Bool)
     case addNewTab(Bool)
     case closeTab(Int)
     case closeAllTabs
