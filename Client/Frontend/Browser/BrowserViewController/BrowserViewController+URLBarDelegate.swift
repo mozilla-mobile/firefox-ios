@@ -127,7 +127,12 @@ extension BrowserViewController: URLBarDelegate {
 
         let dismissedFakespot = dismissFakespotIfNeeded()
         if !dismissedFakespot {
+            // open flow
             handleFakespotFlow(productURL: productURL)
+            store.dispatch(FakespotAction.toggleAppearance(true))
+        } else {
+            // Fakespot was closed/dismissed
+            store.dispatch(FakespotAction.toggleAppearance(false))
         }
     }
 
