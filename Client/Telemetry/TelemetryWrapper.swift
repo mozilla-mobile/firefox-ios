@@ -471,6 +471,17 @@ extension TelemetryWrapper {
         case creditCardSyncEnabled = "creditCardSyncEnabled"
         case creditCardAutofillToggle = "creditCardAutofillToggle"
         case creditCardSyncToggle = "creditCardSyncToggle"
+        case creditCardAutofillPromptShown = "creditCard-autofill-prompt-shown"
+        case creditCardAutofillPromptExpanded = "creditCard-autofill-prompt-expanded"
+        case creditCardAutofillPromptDismissed = "creditCard-autofill-prompt-dismissed"
+        case creditCardSavePromptShown = "creditCard-save-prompt-shown"
+        case creditCardSavePromptUpdate = "creditCard-save-prompt-update"
+        case creditCardManagementAddTapped = "creditCard-management-add-tapped"
+        case creditCardManagementCardTapped = "creditCard-management-card-tapped"
+        case creditCardSaved = "creditCard-saved"
+        case creditCardSavedAll = "creditCard-saved-all"
+        case creditCardDeleted = "creditCard-deleted"
+        case creditCardModified = "creditCard-modified"
         case notificationPermission = "notificationPermission"
         case engagementNotification = "engagementNotification"
         // MARK: New Onboarding
@@ -739,6 +750,7 @@ extension TelemetryWrapper {
         case isCreditCardSyncToggleEnabled = "is-credit-card-sync-toggle-enabled"
         case isCreditCardAutofillEnabled = "is-credit-card-autofill-enabled"
         case isCreditCardSyncEnabled = "is-credit-card-sync-enabled"
+        case creditCardsQuantity = "credit-cards-quantity"
 
         // Password Manager
         case loginsQuantity = "loginsQuantity"
@@ -1002,6 +1014,32 @@ extension TelemetryWrapper {
                     value: value,
                     extras: extras)
             }
+        case(.action, .view, .creditCardAutofillPromptShown, _, _):
+            GleanMetrics.CreditCard.autofillPromptShown.record()
+        case(.action, .tap, .creditCardAutofillPromptExpanded, _, _):
+            GleanMetrics.CreditCard.autofillPromptExpanded.record()
+        case(.action, .close, .creditCardAutofillPromptDismissed, _, _):
+            GleanMetrics.CreditCard.autofillPromptDismissed.record()
+        case(.action, .view, .creditCardSavePromptShown, _, _):
+            GleanMetrics.CreditCard.savePromptShown.record()
+        case(.action, .tap, .creditCardSavePromptUpdate, _, _):
+            GleanMetrics.CreditCard.savePromptUpdate.record()
+        case(.action, .tap, .creditCardManagementAddTapped, _, _):
+            GleanMetrics.CreditCard.managementAddTapped.record()
+        case(.action, .tap, .creditCardManagementCardTapped, _, _):
+            GleanMetrics.CreditCard.managementCardTapped.record()
+        case(.action, .add, .creditCardSaved, _, _):
+            GleanMetrics.CreditCard.saved.add()
+        case(.information, .foreground, .creditCardSavedAll, _, let extras):
+            if let quantity = extras?[EventExtraKey.creditCardsQuantity.rawValue] as? Int64 {
+                GleanMetrics.CreditCard.savedAll.set(quantity)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+        case(.action, .delete, .creditCardDeleted, _, _):
+            GleanMetrics.CreditCard.deleted.add()
+        case(.action, .change, .creditCardModified, _, _):
+            GleanMetrics.CreditCard.modified.add()
         // MARK: Settings Menu
         case (.action, .open, .settingsMenuSetAsDefaultBrowser, _, _):
             GleanMetrics.SettingsMenu.setAsDefaultBrowserPressed.add()

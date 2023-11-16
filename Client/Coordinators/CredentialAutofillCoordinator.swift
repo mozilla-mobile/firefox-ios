@@ -53,11 +53,11 @@ class CredentialAutofillCoordinator: BaseCoordinator {
                                                 bottomContainer: alertContainer,
                                                 theme: self.themeManager.currentTheme)
             } else {
-                // Save a card telemetry
+                // send telemetry
                 if state == .save {
-                    TelemetryWrapper.recordEvent(category: .action,
-                                                 method: .tap,
-                                                 object: .creditCardSavePromptCreate)
+                    sendCreditCardSavePromptCreateTelemetry()
+                } else if state == .update {
+                    sendCreditCardSavePromptUpdateTelemetry()
                 }
 
                 // Save or update a card toast message
@@ -105,11 +105,41 @@ class CredentialAutofillCoordinator: BaseCoordinator {
             childViewController: viewController
         )
         router.present(bottomSheetVC)
+        if state == .save {
+            sendCreditCardSavePromptShownTelemetry()
+        } else if state == .selectSavedCard {
+            sendCreditCardAutofillPromptExpandedTelemetry()
+        }
     }
 
     func showPassCodeController() {
         let passwordController = DevicePasscodeRequiredViewController()
         passwordController.profile = profile
         router.present(passwordController)
+    }
+
+    // MARK: Telemetry
+    fileprivate func sendCreditCardSavePromptShownTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .view,
+                                     object: .creditCardSavePromptShown)
+    }
+
+    fileprivate func sendCreditCardSavePromptCreateTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .creditCardSavePromptCreate)
+    }
+
+    fileprivate func sendCreditCardSavePromptUpdateTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .creditCardSavePromptUpdate)
+    }
+
+    fileprivate func sendCreditCardAutofillPromptExpandedTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .creditCardAutofillPromptExpanded)
     }
 }
