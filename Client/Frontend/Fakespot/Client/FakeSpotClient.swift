@@ -72,7 +72,7 @@ enum FakespotEnvironment {
     }
 
     private var apiVersion: String {
-        return "/api/v1/fx"
+        return "/api/v2/fx"
     }
 
     private func buildURL(path: FakespotPath) -> URL? {
