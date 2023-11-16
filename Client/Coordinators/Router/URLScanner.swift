@@ -80,18 +80,16 @@ struct URLScanner {
     /// URL but using this function, it will add `url2` to the link of `url`.
     func fullURLQueryItem() -> String? {
         guard !queries.isEmpty else { return nil }
-        var result: String = ""
-        var hasScannedURL = false
-        for item in queries {
-            let isURLItem = hasScannedURL ? false : (item.name == "url")
-            if isURLItem {
-                result.append(item.value ?? "")
-                hasScannedURL = true
-            } else if hasScannedURL {
-                result.append("&\(item.name)=\(item.value ?? "")")
-            }
+
+        guard let url = value(query: "url")?.asURL else { return nil }
+        guard var components = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return nil }
+        guard let urlQueryIndex = queries.firstIndex(where: { $0.name == "url" }) else { return nil }
+
+        for queryIndex in (urlQueryIndex + 1)..<queries.count {
+            components.queryItems?.append(queries[queryIndex])
         }
-        return result.isEmpty ? nil : result
+
+        return components.string
     }
 
     /// Returns a Boolean value indicating whether the URL uses either the "http" or "https" scheme.

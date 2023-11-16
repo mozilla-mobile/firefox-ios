@@ -51,6 +51,22 @@ class URLScannerTests: XCTestCase {
         XCTAssertNil(scanner?.value(query: "nonexistent"))
     }
 
+    func testSimpleFullURLQueryItem() {
+        let urlString = "firefox://open-url?url=https://example.com/path"
+        let url = URL(string: urlString)!
+        let scanner = URLScanner(url: url)!
+        XCTAssertEqual(scanner.value(query: "url"), "https://example.com/path")
+        XCTAssertEqual(scanner.fullURLQueryItem(), "https://example.com/path")
+    }
+
+    func testSingleQueryFullURLQueryItem() {
+        let urlString = "firefox://open-url?url=https://example.com/path?arg1=a"
+        let url = URL(string: urlString)!
+        let scanner = URLScanner(url: url)!
+        XCTAssertEqual(scanner.value(query: "url"), "https://example.com/path?arg1=a")
+        XCTAssertEqual(scanner.fullURLQueryItem(), "https://example.com/path?arg1=a")
+    }
+
     func testTwoQueryParams() {
         let urlString = "firefox://open-url?url=https://example.com/path?arg1=a&arg2=b"
         let url = URL(string: urlString)!
