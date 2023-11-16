@@ -130,12 +130,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
         let config = LegacyTabManager.makeWebViewConfig(isPrivate: true, prefs: nil)
         config.preferences.javaScriptCanOpenWindowsAutomatically = false
 
-        let screenWidth = UIScreen.main.bounds.width
-        let screenHeight = UIScreen.main.bounds.height
-
-        let webViewFrame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
-        let webView = WKWebView(frame: webViewFrame, configuration: config)
-
+        let webView = WKWebView(frame: .zero, configuration: config)
         webView.translatesAutoresizingMaskIntoConstraints = false
         webView.allowsLinkPreview = false
         webView.navigationDelegate = self
