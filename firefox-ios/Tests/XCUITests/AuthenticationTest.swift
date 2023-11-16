@@ -7,6 +7,7 @@ import XCTest
 let testBasicHTTPAuthURL = "https://jigsaw.w3.org/HTTP/Basic/"
 
 class AuthenticationTest: BaseTestCase {
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2360560
     func testBasicHTTPAuthenticationPromptVisible() {
         mozWaitForElementToExist(app.textFields["url"], timeout: 5)
         navigator.nowAt(NewTabScreen)
