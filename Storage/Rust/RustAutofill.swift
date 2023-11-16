@@ -273,8 +273,7 @@ public class RustAutofill {
             _ = open()
         }
     }
-    
-    ///This function can be improved to capture more repeated code
+
     private func performDatabaseOperation(_ operation: @escaping (Error?) -> Void) {
         queue.async {
             guard self.isOpen else {
