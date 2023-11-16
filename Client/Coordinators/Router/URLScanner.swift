@@ -84,11 +84,7 @@ struct URLScanner {
         guard let url = value(query: "url")?.asURL else { return nil }
         guard var components = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return nil }
         guard let urlQueryIndex = queries.firstIndex(where: { $0.name == "url" }) else { return nil }
-
-        for queryIndex in (urlQueryIndex + 1)..<queries.count {
-            components.queryItems?.append(queries[queryIndex])
-        }
-
+        components.queryItems?.append(contentsOf: queries[((urlQueryIndex + 1)..<queries.count)])
         return components.string
     }
 
