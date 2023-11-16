@@ -162,6 +162,7 @@ class FakespotViewModel {
     let shoppingProduct: ShoppingProduct
     var onStateChange: (() -> Void)?
     var isSwiping = false
+    var isViewIntersected = false
 
     private var fetchProductTask: Task<Void, Never>?
     private var observeProductTask: Task<Void, Never>?
