@@ -33,7 +33,7 @@ extension TabManagerDelegate {
 
 // MARK: - WeakTabManagerDelegate
 // We can't use a WeakList here because this is a protocol.
-class WeakTabManagerDelegate {
+class WeakTabManagerDelegate: CustomDebugStringConvertible {
     weak var value: TabManagerDelegate?
 
     init(value: TabManagerDelegate) {
@@ -42,6 +42,13 @@ class WeakTabManagerDelegate {
 
     func get() -> TabManagerDelegate? {
         return value
+    }
+
+    var debugDescription: String {
+        let className = String(describing: type(of: self))
+        let memAddr = Unmanaged.passUnretained(self).toOpaque()
+        let valueStr = (value == nil ? "<nil>" : "\(value!)")
+        return "<\(className): \(memAddr)> Value: \(valueStr)"
     }
 }
 
