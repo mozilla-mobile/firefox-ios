@@ -7,10 +7,6 @@ import Shared
 
 /// This is a temporary struct made to manage the coordinator multiple feature flag for conveniance
 struct CoordinatorFlagManager {
-    static var isShareExtensionCoordinatorEnabled: Bool {
-        return NimbusManager.shared.featureFlagLayer.checkNimbusConfigFor(.shareExtensionCoordinatorRefactor)
-    }
-
     static var isQRCodeCoordinatorEnabled: Bool {
         return NimbusManager.shared.featureFlagLayer.checkNimbusConfigFor(.qrCodeCoordinatorRefactor)
     }

@@ -27,7 +27,6 @@ include:
   - nimbus-features/reduxIntegrationFeature.yaml
   - nimbus-features/searchFeature.yaml
   - nimbus-features/searchTermGroupsFeature.yaml
-  - nimbus-features/shareExtensionCoordinatorRefactor.yaml
   - nimbus-features/shareSheetFeature.yaml
   - nimbus-features/spotlightSearchFeature.yaml
   - nimbus-features/tabTrayFeature.yaml
