@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct ProductAnalysisData: Codable {
+struct ProductAnalysisResponse: Codable {
     let productId: String?
     let grade: ReliabilityGrade?
     let adjustedRating: Double?
@@ -14,6 +14,8 @@ struct ProductAnalysisData: Codable {
     let pageNotSupported: Bool
     let isProductDeletedReported: Bool
     let isProductDeleted: Bool
+    let notEnoughReviews: Bool
+    let lastAnalysisTime: Date?
 
     private enum CodingKeys: String, CodingKey {
         case productId = "product_id"
@@ -25,6 +27,8 @@ struct ProductAnalysisData: Codable {
         case pageNotSupported = "page_not_supported"
         case isProductDeletedReported = "deleted_product_reported"
         case isProductDeleted = "deleted_product"
+        case notEnoughReviews = "not_enough_reviews"
+        case lastAnalysisTime = "last_analysis_time"
     }
 
     var needsAnalysisCardVisible: Bool {
@@ -35,16 +39,9 @@ struct ProductAnalysisData: Codable {
         productId == nil && needsAnalysis == true
     }
 
-    var productNotSupportedCardVisible: Bool {
-        pageNotSupported == true
-    }
-
-    var notEnoughReviewsCardVisible: Bool {
-        (grade == nil || adjustedRating == nil) || productId == nil
-    }
-
+    var productNotSupportedCardVisible: Bool { pageNotSupported }
+    var notEnoughReviewsCardVisible: Bool { notEnoughReviews }
     var reportProductInStockCardVisible: Bool { isProductDeleted }
-
     var infoComingSoonCardVisible: Bool { isProductDeletedReported }
 
     init(
@@ -56,7 +53,9 @@ struct ProductAnalysisData: Codable {
         highlights: Highlights? = nil,
         pageNotSupported: Bool,
         isProductDeletedReported: Bool,
-        isProductDeleted: Bool
+        isProductDeleted: Bool,
+        notEnoughReviews: Bool,
+        lastAnalysisTime: Date?
     ) {
         self.productId = productId
         self.grade = grade
@@ -67,6 +66,8 @@ struct ProductAnalysisData: Codable {
         self.pageNotSupported = pageNotSupported
         self.isProductDeletedReported = isProductDeletedReported
         self.isProductDeleted = isProductDeleted
+        self.notEnoughReviews = notEnoughReviews
+        self.lastAnalysisTime = lastAnalysisTime
     }
 
     init(from decoder: Decoder) throws {
@@ -80,6 +81,8 @@ struct ProductAnalysisData: Codable {
         pageNotSupported = try container.decodeIfPresent(Bool.self, forKey: .pageNotSupported) ?? false
         isProductDeletedReported = try container.decodeIfPresent(Bool.self, forKey: .isProductDeletedReported) ?? false
         isProductDeleted = try container.decodeIfPresent(Bool.self, forKey: .isProductDeleted) ?? false
+        notEnoughReviews = try container.decodeIfPresent(Bool.self, forKey: .notEnoughReviews) ?? false
+        lastAnalysisTime = try container.decodeIfPresent(Date.self, forKey: .lastAnalysisTime)
     }
 }
 

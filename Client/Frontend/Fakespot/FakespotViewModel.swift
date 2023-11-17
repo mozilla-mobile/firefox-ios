@@ -10,10 +10,10 @@ class FakespotViewModel {
     enum ViewState {
         case loading
         case onboarding
-        case loaded(ProductAnalysisData?, AnalysisStatus?, analysisCount: Int)
+        case loaded(ProductAnalysisResponse?, AnalysisStatus?, analysisCount: Int)
         case error(Error)
 
-        fileprivate var productData: ProductAnalysisData? {
+        fileprivate var productData: ProductAnalysisResponse? {
             switch self {
             case .loading, .error, .onboarding: return nil
             case .loaded(let data, _, _): return data
