@@ -15,8 +15,6 @@ struct FakespotNoAnalysisCardViewModel {
     let bodyLabelA11yId: String = AccessibilityIdentifiers.Shopping.NoAnalysisCard.bodyTitle
     let analyzerButtonText: String = .Shopping.NoAnalysisCardAnalyzerButtonTitle
     let analyzerButtonA11yId: String = AccessibilityIdentifiers.Shopping.NoAnalysisCard.analyzerButtonTitle
-    let inProgressHeadlineText: String = .Shopping.NoAnalysisCardInProgressTitle
-    let inProgressBodyText: String = .Shopping.NoAnalysisCardInProgressBodyLabel
     var onTapStartAnalysis: (() -> Void)?
 
     func recordStartAnalysisTelemetry() {
@@ -39,7 +37,6 @@ final class FakespotNoAnalysisCardView: UIView, ThemeApplicable {
     }
 
     private var viewModel: FakespotNoAnalysisCardViewModel?
-    private var isAnalysisInProgress = false
 
     private lazy var cardContainer: ShadowCardView = .build()
     private lazy var mainView: UIView = .build()
@@ -78,7 +75,6 @@ final class FakespotNoAnalysisCardView: UIView, ThemeApplicable {
         view.axis = .horizontal
         view.spacing = UX.titleStackViewSpacing
     }
-    private lazy var activityIndicatorView: UIActivityIndicatorView = .build()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -114,7 +110,6 @@ final class FakespotNoAnalysisCardView: UIView, ThemeApplicable {
         let colors = theme.colors
         headlineLabel.textColor = colors.textPrimary
         bodyLabel.textColor = colors.textPrimary
-        activityIndicatorView.color = colors.textPrimary
     }
 
     private func setupLayout() {
@@ -150,19 +145,5 @@ final class FakespotNoAnalysisCardView: UIView, ThemeApplicable {
     private func didTapStartAnalysis() {
         viewModel?.onTapStartAnalysis?()
         viewModel?.recordStartAnalysisTelemetry()
-        updateLayoutForInProgress()
-    }
-
-    public func updateLayoutForInProgress() {
-        isAnalysisInProgress = true
-
-        contentStackView.removeArrangedSubview(analyzerButton)
-        analyzerButton.removeFromSuperview()
-
-        headlineLabel.text = viewModel?.inProgressHeadlineText
-        bodyLabel.text = viewModel?.inProgressBodyText
-
-        titleStackView.insertArrangedSubview(activityIndicatorView, at: 0)
-        activityIndicatorView.startAnimating()
     }
 }
