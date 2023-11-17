@@ -11,7 +11,7 @@ extension LibraryViewController {
         guard let navController = children.first as? UINavigationController else { return }
 
         navController.popViewController(animated: true)
-        var panel = getCurrentPanel()
+        let panel = getCurrentPanel()
         panel?.handleLeftTopButton()
     }
 
