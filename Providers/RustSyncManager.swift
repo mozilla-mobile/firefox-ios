@@ -328,6 +328,22 @@ public class RustSyncManager: NSObject, SyncManager {
         public let description = "Failed to get sync engine and key data."
     }
 
+    func shouldSyncLogins(completion: @escaping (Bool) -> Void) {
+        if !(self.prefs.boolForKey(PrefsKeys.HasVerifiedRustLogins) ?? false) {
+            // We should only sync logins when the verify logins step hasn't been successfully
+            // completed. Otherwise logins could exist in the database that can't be decrypted
+            // and would prevent logins from syncing if they're not removed.
+
+            self.profile?.logins.verifyLogins { successfullyVerified in
+                self.prefs.setBool(successfullyVerified, forKey: PrefsKeys.HasVerifiedRustLogins)
+                completion(successfullyVerified)
+            }
+        } else {
+            // Successful logins verification already occurred so login syncing can proceed
+            completion(true)
+        }
+    }
+
     func getEnginesAndKeys(engines: [RustSyncManagerAPI.TogglableEngine],
                            completion: @escaping (([String], [String: String])) -> Void) {
         var localEncryptionKeys: [String: String] = [:]
@@ -341,10 +357,12 @@ public class RustSyncManager: NSObject, SyncManager {
                     self.profile?.tabs.registerWithSyncManager()
                     rustEngines.append(engine.rawValue)
                 case .passwords:
-                    self.profile?.logins.registerWithSyncManager()
-                    if let key = loginKey {
-                        localEncryptionKeys[engine.rawValue] = key
-                        rustEngines.append(engine.rawValue)
+                    self.shouldSyncLogins { shouldSync in
+                        if shouldSync, let key = loginKey {
+                            self.profile?.logins.registerWithSyncManager()
+                            localEncryptionKeys[engine.rawValue] = key
+                            rustEngines.append(engine.rawValue)
+                        }
                     }
                 case .creditcards:
                     if self.creditCardAutofillEnabled {

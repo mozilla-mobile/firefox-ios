@@ -54,11 +54,33 @@ class MockRustLogins: RustLogins {
     }
 }
 
+class MockListLoginsFailure: RustLogins {
+    override func listLogins() -> Deferred<Maybe<[EncryptedLogin]>> {
+        let deferred = Deferred<Maybe<[EncryptedLogin]>>()
+        queue.async {
+            let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
+            deferred.fill(Maybe(failure: error as MaybeErrorType))
+        }
+        return deferred
+    }
+}
+
+class MockListLoginsEmpty: RustLogins {
+    override func listLogins() -> Deferred<Maybe<[EncryptedLogin]>> {
+        let deferred = Deferred<Maybe<[EncryptedLogin]>>()
+        queue.async {
+            deferred.fill(Maybe(success: [EncryptedLogin]()))
+        }
+        return deferred
+    }
+}
+
 class RustLoginsTests: XCTestCase {
     var files: FileAccessor!
     var logins: RustLogins!
     var mockLogins: MockRustLogins!
-    var encryptionKey: String!
+    var mockListLoginsFailure: MockListLoginsFailure!
+    var mockListLoginsEmpty: MockListLoginsEmpty!
 
     let keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
     let canaryPhraseKey = "canaryPhrase"
@@ -75,16 +97,13 @@ class RustLoginsTests: XCTestCase {
             let databasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true).appendingPathComponent("testLoginsPerField.db").path
             try? files.remove("testLoginsPerField.db")
 
-            if let key = try? createKey() {
-                encryptionKey = key
-            } else {
-                XCTFail("Encryption key wasn't created")
-            }
-
             logins = RustLogins(sqlCipherDatabasePath: sqlCipherDatabasePath, databasePath: databasePath)
             _ = logins.reopenIfClosed()
 
             mockLogins = MockRustLogins(sqlCipherDatabasePath: sqlCipherDatabasePath, databasePath: databasePath)
+
+            self.keychain.removeObject(forKey: self.canaryPhraseKey, withAccessibility: .afterFirstUnlock)
+            self.keychain.removeObject(forKey: self.loginKeychainKey, withAccessibility: .afterFirstUnlock)
         } else {
             XCTFail("Could not retrieve root directory")
         }
@@ -94,6 +113,42 @@ class RustLoginsTests: XCTestCase {
         super.tearDown()
         self.keychain.removeObject(forKey: self.canaryPhraseKey, withAccessibility: .afterFirstUnlock)
         self.keychain.removeObject(forKey: self.loginKeychainKey, withAccessibility: .afterFirstUnlock)
+    }
+
+    func setUpMockListLoginsFailure() {
+        files = MockFiles()
+
+        if let rootDirectory = try? files.getAndEnsureDirectory() {
+            let sqlCipherDatabasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true).appendingPathComponent("testlogins.db").path
+            try? files.remove("testlogins.db")
+
+            let databasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true).appendingPathComponent("testLoginsPerField.db").path
+            try? files.remove("testLoginsPerField.db")
+
+            mockListLoginsFailure = MockListLoginsFailure(sqlCipherDatabasePath: sqlCipherDatabasePath,
+                                                          databasePath: databasePath)
+            _ = mockListLoginsFailure.reopenIfClosed()
+        } else {
+            XCTFail("Could not retrieve root directory")
+        }
+    }
+
+    func setUpMockListLoginsEmpty() {
+        files = MockFiles()
+
+        if let rootDirectory = try? files.getAndEnsureDirectory() {
+            let sqlCipherDatabasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true).appendingPathComponent("testlogins.db").path
+            try? files.remove("testlogins.db")
+
+            let databasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true).appendingPathComponent("testLoginsPerField.db").path
+            try? files.remove("testLoginsPerField.db")
+
+            mockListLoginsEmpty = MockListLoginsEmpty(sqlCipherDatabasePath: sqlCipherDatabasePath,
+                                                      databasePath: databasePath)
+            _ = mockListLoginsEmpty.reopenIfClosed()
+        } else {
+            XCTFail("Could not retrieve root directory")
+        }
     }
 
     func addLogin() -> Deferred<Maybe<String>> {
@@ -226,6 +281,33 @@ class RustLoginsTests: XCTestCase {
             XCTAssertNotNil(self.keychain.string(forKey: self.loginKeychainKey))
 
             expectation.fulfill()
+        }
+        waitForExpectations(timeout: 5)
+    }
+
+    func testVerifyWithFailedList() {
+        // Mocking a failed call to listLogins within verifyLogins
+        setUpMockListLoginsFailure()
+
+        let exp = expectation(description: "\(#function)\(#line)")
+        mockListLoginsFailure.verifyLogins { result in
+            exp.fulfill()
+
+            // Check that verification failed
+            XCTAssertFalse(result)
+        }
+        waitForExpectations(timeout: 5)
+    }
+
+    func testVerifyWithNoLogins() {
+        setUpMockListLoginsEmpty()
+
+        let exp = expectation(description: "\(#function)\(#line)")
+        mockListLoginsEmpty.verifyLogins { result in
+            exp.fulfill()
+
+            // Check that verification succeeds when there are no saved logins
+            XCTAssertTrue(result)
         }
         waitForExpectations(timeout: 5)
     }

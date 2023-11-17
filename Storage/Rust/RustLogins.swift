@@ -547,6 +547,72 @@ public class RustLogins {
         }
     }
 
+    private func deleteInvalidLogins(key: String,
+                                     logins: [EncryptedLogin],
+                                     completion: @escaping (Bool) -> Void) {
+        // Create a list of IDs from saved logins that can't be decrypted
+        let loginsToDelete = logins
+            .filter { (try? decryptLogin(login: $0, encryptionKey: key)) == nil }
+            .map { $0.record.id }
+
+        // Delete all the logins that can't be decrypted
+        self.deleteLogins(ids: loginsToDelete).upon { deleteResults in
+            var verified = true
+            for result in deleteResults {
+                if case let .failure(err) = result {
+                    let errMsg = "Login could not be deleted during verification"
+                    self.logger.log(errMsg,
+                                    level: .warning,
+                                    category: .storage,
+                                    description: err.localizedDescription)
+                    verified = false
+                }
+            }
+            completion(verified)
+        }
+    }
+
+    public func verifyLogins(completion: @escaping (Bool) -> Void) {
+        queue.async {
+            self.listLogins().upon { loginResult in
+                switch loginResult {
+                case let .failure(error):
+                    self.logger.log("Logins could not be retrieved for verification",
+                                    level: .warning,
+                                    category: .storage,
+                                    description: error.localizedDescription)
+                    completion(false)
+                    return
+                case let .success(logins):
+                    guard !logins.isEmpty else {
+                        // If there are no logins we don't need to go through this verification
+                        // process in the future so we return true.
+                        completion(true)
+                        return
+                    }
+
+                    let rustKeys = RustLoginEncryptionKeys()
+                    guard let key = rustKeys.keychain.string(forKey: rustKeys.loginPerFieldKeychainKey) else {
+                        // If the key is missing during the verification process, we wipe the database and
+                        // recreate the key.
+                        self.resetLoginsAndKey(rustKeys: rustKeys) { resetResult in
+                            if case let .failure(error) = resetResult {
+                                self.logger.log("Logins and key could not be reset during verification",
+                                                level: .warning,
+                                                category: .storage,
+                                                description: error.localizedDescription)
+                            }
+                            return
+                        }
+                        completion(false)
+                        return
+                    }
+                    self.deleteInvalidLogins(key: key, logins: logins, completion: completion)
+                }
+            }
+        }
+    }
+
     private func close() -> NSError? {
         storage = nil
         isOpen = false
