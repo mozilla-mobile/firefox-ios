@@ -48,8 +48,11 @@ struct TabsState: ScreenState, Equatable {
 
     static let reducer: Reducer<Self> = { state, action in
         switch action {
-        case TabPanelAction.didLoadTabPanel(let tabsState):
-            return tabsState
+        case TabPanelAction.didLoadTabPanel(let tabsModel):
+            return TabsState(isPrivateMode: tabsModel.isPrivateMode,
+                             tabs: tabsModel.tabs,
+                             inactiveTabs: tabsModel.inactiveTabs,
+                             isInactiveTabsExpanded: tabsModel.isInactiveTabsExpanded)
         case TabPanelAction.refreshTab(let tabs):
             return TabsState(isPrivateMode: state.isPrivateMode,
                              tabs: tabs,

@@ -52,8 +52,10 @@ struct TabTrayState: ScreenState, Equatable {
 
     static let reducer: Reducer<Self> = { state, action in
         switch action {
-        case TabTrayAction.didLoadTabTray(let state):
-            return state
+        case TabTrayAction.didLoadTabTray(let tabTrayModel):
+            return TabTrayState(isPrivateMode: tabTrayModel.isPrivateMode,
+                                selectedPanel: tabTrayModel.selectedPanel,
+                                normalTabsCount: tabTrayModel.normalTabsCount)
         case TabTrayAction.changePanel(let panelType):
             return TabTrayState(isPrivateMode: panelType == .privateTabs,
                                 selectedPanel: panelType,

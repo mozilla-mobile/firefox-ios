@@ -15,15 +15,16 @@ class TabsPanelMiddleware {
     lazy var tabsPanelProvider: Middleware<AppState> = { state, action in
         switch action {
         case TabTrayAction.tabTrayDidLoad(let panelType):
-            let tabTray = self.getTabTrayState(for: panelType)
-            store.dispatch(TabTrayAction.didLoadTabTray(tabTray))
+            let tabTrayModel = self.getTabTrayModel(for: panelType)
+            store.dispatch(TabTrayAction.didLoadTabTray(tabTrayModel))
 
         case TabPanelAction.tabPanelDidLoad(let isPrivate):
-            let tabState = self.getTabsState(for: isPrivate)
+            let tabState = self.getTabsDisplayModel(for: isPrivate)
             store.dispatch(TabPanelAction.didLoadTabPanel(tabState))
 
         case TabTrayAction.changePanel(let panelType):
-            let tabState = self.getTabsState(for: panelType == TabTrayPanelType.privateTabs)
+            let isPrivate = panelType == TabTrayPanelType.privateTabs
+            let tabState = self.getTabsDisplayModel(for: isPrivate)
             store.dispatch(TabPanelAction.didLoadTabPanel(tabState))
 
         case TabPanelAction.addNewTab(let isPrivate):
@@ -47,17 +48,16 @@ class TabsPanelMiddleware {
         }
     }
 
-    func getTabTrayState(for panelType: TabTrayPanelType) -> TabTrayState {
+    func getTabTrayModel(for panelType: TabTrayPanelType) -> TabTrayModel {
         selectedPanel = panelType
-        guard panelType != .syncedTabs else { return TabTrayState() }
 
         let isPrivate = panelType == .privateTabs
-        return TabTrayState(isPrivateMode: isPrivate,
+        return TabTrayModel(isPrivateMode: isPrivate,
                             selectedPanel: panelType,
                             normalTabsCount: "\(tabs.count)")
     }
 
-    func getTabsState(for isPrivate: Bool) -> TabsState {
+    func getTabsDisplayModel(for isPrivate: Bool) -> TabDisplayModel {
         resetMock()
         for index in 0...2 {
             let cellState = TabCellModel.emptyTabState(title: "Tab \(index)")
@@ -66,10 +66,10 @@ class TabsPanelMiddleware {
         inactiveTabs =  !isPrivate ? ["Tab1", "Tab2", "Tab3"] : [String]()
         let isInactiveTabsExpanded = !isPrivate && !inactiveTabs.isEmpty
 
-        return TabsState(isPrivateMode: isPrivate,
-                         tabs: tabs,
-                         inactiveTabs: inactiveTabs,
-                         isInactiveTabsExpanded: isInactiveTabsExpanded)
+        return TabDisplayModel(isPrivateMode: isPrivate,
+                               tabs: tabs,
+                               inactiveTabs: inactiveTabs,
+                               isInactiveTabsExpanded: isInactiveTabsExpanded)
     }
 
     private func addNewTab() {

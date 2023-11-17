@@ -136,6 +136,8 @@
 		2197DF8A287624BF00215624 /* LibraryViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2197DF89287624BF00215624 /* LibraryViewModelTests.swift */; };
 		219914052AF963F900153598 /* TabTrayAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219914042AF963F900153598 /* TabTrayAction.swift */; };
 		219935E72B05447C00E5966F /* TabDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219935E62B05447C00E5966F /* TabDisplayModel.swift */; };
+		219935E92B070F9000E5966F /* TabPanelAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219935E82B070F9000E5966F /* TabPanelAction.swift */; };
+		219935EC2B07110900E5966F /* TabTrayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219935EB2B07110900E5966F /* TabTrayModel.swift */; };
 		21996BAB2AE95AFC00E0D55F /* TabTrayPanelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21996BAA2AE95AFC00E0D55F /* TabTrayPanelType.swift */; };
 		219A0FD52ACC8506009A6D1A /* InactiveTabsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219A0FD42ACC8506009A6D1A /* InactiveTabsCell.swift */; };
 		219A0FD72ACC8C03009A6D1A /* InactiveTabsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219A0FD62ACC8C03009A6D1A /* InactiveTabsHeaderView.swift */; };
@@ -2207,6 +2209,8 @@
 		2197DF89287624BF00215624 /* LibraryViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewModelTests.swift; sourceTree = "<group>"; };
 		219914042AF963F900153598 /* TabTrayAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayAction.swift; sourceTree = "<group>"; };
 		219935E62B05447C00E5966F /* TabDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabDisplayModel.swift; sourceTree = "<group>"; };
+		219935E82B070F9000E5966F /* TabPanelAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabPanelAction.swift; sourceTree = "<group>"; };
+		219935EB2B07110900E5966F /* TabTrayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayModel.swift; sourceTree = "<group>"; };
 		21996BAA2AE95AFC00E0D55F /* TabTrayPanelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayPanelType.swift; sourceTree = "<group>"; };
 		219A0FD42ACC8506009A6D1A /* InactiveTabsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InactiveTabsCell.swift; sourceTree = "<group>"; };
 		219A0FD62ACC8C03009A6D1A /* InactiveTabsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InactiveTabsHeaderView.swift; sourceTree = "<group>"; };
@@ -7478,8 +7482,19 @@
 			isa = PBXGroup;
 			children = (
 				219914042AF963F900153598 /* TabTrayAction.swift */,
+				219935E82B070F9000E5966F /* TabPanelAction.swift */,
 			);
 			path = Action;
+			sourceTree = "<group>";
+		};
+		219935EA2B0710E900E5966F /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				1DDE3DB62AC3820A0039363B /* TabCellModel.swift */,
+				219935E62B05447C00E5966F /* TabDisplayModel.swift */,
+				219935EB2B07110900E5966F /* TabTrayModel.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		219A0FD32ACC84C5009A6D1A /* InactiveTabs */ = {
@@ -7518,8 +7533,6 @@
 			isa = PBXGroup;
 			children = (
 				1D2F68AC2ACB266300524B92 /* RemoteTabsPanelState.swift */,
-				1DDE3DB62AC3820A0039363B /* TabCellModel.swift */,
-				219935E62B05447C00E5966F /* TabDisplayModel.swift */,
 				21EA46692B04130500AAAB2D /* TabsState.swift */,
 				21E77E4F2AA8BAEC00FABA10 /* TabTrayState.swift */,
 				21996BAA2AE95AFC00E0D55F /* TabTrayPanelType.swift */,
@@ -7575,6 +7588,7 @@
 				21C5B3572AF2A6D80093F366 /* LayoutManager */,
 				219914032AF963E000153598 /* Action */,
 				21C5B3592AF2A73F0093F366 /* State */,
+				219935EA2B0710E900E5966F /* Models */,
 				21C5B3582AF2A7130093F366 /* Views */,
 				213BF7522AC21D1B00C53A64 /* TabDisplayViewController.swift */,
 				21E77E4D2AA8BA5200FABA10 /* TabTrayViewController.swift */,
@@ -12817,6 +12831,7 @@
 				211F00AC27F4D918001D9189 /* HistoryPanel+Search.swift in Sources */,
 				96EB6C3827D821B800A9D159 /* HistoryPanelViewModel.swift in Sources */,
 				AB52ED3B2A0E8873001067F5 /* UserConversionMetrics.swift in Sources */,
+				219935EC2B07110900E5966F /* TabTrayModel.swift in Sources */,
 				8A3EF7F72A2FCF6D00796E3A /* ExportLogDataSetting.swift in Sources */,
 				43E69EC3254D081D00B591C2 /* SimpleTab.swift in Sources */,
 				8ADAE4202A33A0FD007BF926 /* SendFeedbackSetting.swift in Sources */,
@@ -12855,6 +12870,7 @@
 				5A64225129CB506500EEC3E5 /* LegacyTabManager.swift in Sources */,
 				8A93F86029D36EBD004159D9 /* Router.swift in Sources */,
 				C8417D222657F0600010B877 /* LibraryViewModel.swift in Sources */,
+				219935E92B070F9000E5966F /* TabPanelAction.swift in Sources */,
 				8A5D1CB22A30D756005AD35C /* SiriPageSetting.swift in Sources */,
 				39A359E41BFCCE94006B9E87 /* UserActivityHandler.swift in Sources */,
 				4331A9BD271D267E005E8080 /* ContextualHintViewProvider.swift in Sources */,
