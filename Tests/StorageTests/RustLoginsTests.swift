@@ -6,10 +6,63 @@ import XCTest
 import Shared
 @testable import Storage
 
+class MockRustLogins: RustLogins {
+    var logins = [Int: LoginEntry]()
+    var id = 0
+
+    override func reopenIfClosed() -> NSError? {
+        return nil
+    }
+
+    override func addLogin(login: LoginEntry) -> Deferred<Maybe<String>> {
+        let deferred = Deferred<Maybe<String>>()
+        queue.async {
+            self.id += 1
+            self.logins[self.id] = login
+            deferred.fill(Maybe(success: String(self.id)))
+        }
+        return deferred
+    }
+
+    public func mockListLogins() -> Deferred<Maybe<[LoginEntry]>> {
+        let deferred = Deferred<Maybe<[LoginEntry]>>()
+        queue.async {
+            let list = self.logins.map { (key, value) in
+                return value
+            }
+            deferred.fill(Maybe(success: list))
+        }
+        return deferred
+    }
+
+    override func wipeLocalEngine() -> Success {
+        let deferred = Success()
+        queue.async {
+            self.logins.removeAll()
+            self.id = 0
+            deferred.fill(Maybe(success: ()))
+        }
+        return deferred
+    }
+
+    override func hasSyncedLogins() -> Deferred<Maybe<Bool>> {
+        let deferred = Deferred<Maybe<Bool>>()
+        queue.async {
+            deferred.fill(Maybe(success: !self.logins.isEmpty))
+        }
+        return deferred
+    }
+}
+
 class RustLoginsTests: XCTestCase {
     var files: FileAccessor!
     var logins: RustLogins!
+    var mockLogins: MockRustLogins!
     var encryptionKey: String!
+
+    let keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
+    let canaryPhraseKey = "canaryPhrase"
+    let loginKeychainKey = "appservices.key.logins.perfield"
 
     override func setUp() {
         super.setUp()
@@ -30,9 +83,17 @@ class RustLoginsTests: XCTestCase {
 
             logins = RustLogins(sqlCipherDatabasePath: sqlCipherDatabasePath, databasePath: databasePath)
             _ = logins.reopenIfClosed()
+
+            mockLogins = MockRustLogins(sqlCipherDatabasePath: sqlCipherDatabasePath, databasePath: databasePath)
         } else {
             XCTFail("Could not retrieve root directory")
         }
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        self.keychain.removeObject(forKey: self.canaryPhraseKey, withAccessibility: .afterFirstUnlock)
+        self.keychain.removeObject(forKey: self.loginKeychainKey, withAccessibility: .afterFirstUnlock)
     }
 
     func addLogin() -> Deferred<Maybe<String>> {
@@ -117,5 +178,55 @@ class RustLoginsTests: XCTestCase {
         let getResult2 = logins.getLogin(id: login!.id).value
         XCTAssertTrue(getResult2.isSuccess)
         XCTAssertNil(getResult2.successValue!)
+    }
+
+    func testGetStoredKeyWithKeychainReset() {
+        // Here we are checking that, if the database has login records and the logins
+        // key data has been removed from the keychain, calling logins.getStoredKey will
+        // remove the logins from the database, recreate logins key data, and return the
+        // new key.
+
+        let login = LoginEntry(fromJSONDict: [
+            "hostname": "https://example.com",
+            "formSubmitUrl": "https://example.com",
+            "username": "username",
+            "password": "password"
+        ])
+        mockLogins.addLogin(login: login).upon { addResult in
+            XCTAssertTrue(addResult.isSuccess)
+            XCTAssertNotNil(addResult.successValue)
+        }
+
+        mockLogins.mockListLogins().upon { listResult in
+            XCTAssertTrue(listResult.isSuccess)
+            XCTAssertNotNil(listResult.successValue)
+            XCTAssertEqual(listResult.successValue!.count, 1)
+        }
+
+        // Simulate losing the key data while a logins record exists in the database
+        self.keychain.removeObject(forKey: self.canaryPhraseKey, withAccessibility: .afterFirstUnlock)
+        self.keychain.removeObject(forKey: self.loginKeychainKey, withAccessibility: .afterFirstUnlock)
+        XCTAssertNil(self.keychain.string(forKey: self.canaryPhraseKey))
+        XCTAssertNil(self.keychain.string(forKey: self.loginKeychainKey))
+
+        let expectation = expectation(description: "\(#function)\(#line)")
+        mockLogins.getStoredKey { result in
+            // Check that we successfully retrieved a key
+            XCTAssertNotNil(try? result.get())
+
+            // check that the logins were wiped from the database
+            self.mockLogins.mockListLogins().upon { listResult2 in
+                XCTAssertTrue(listResult2.isSuccess)
+                XCTAssertNotNil(listResult2.successValue)
+                XCTAssertEqual(listResult2.successValue!.count, 0)
+            }
+
+            // Check that new key data was created
+            XCTAssertNotNil(self.keychain.string(forKey: self.canaryPhraseKey))
+            XCTAssertNotNil(self.keychain.string(forKey: self.loginKeychainKey))
+
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 5)
     }
 }
