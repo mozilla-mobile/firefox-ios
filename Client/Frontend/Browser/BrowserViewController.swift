@@ -1693,6 +1693,7 @@ class BrowserViewController: UIViewController,
         } else if product.product != nil,
                   !tab.isPrivate,
                   FakespotUtils().shouldDisplayInSidebar(),
+                  isReduxIntegrationEnabled,
                   let fakespotState = store.state.screenState(FakespotState.self, for: .fakespot),
                   fakespotState.isOpenOnProductPage {
             handleFakespotFlow(productURL: url)
