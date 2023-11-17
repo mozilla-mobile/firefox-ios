@@ -421,6 +421,7 @@ extension PasswordDetailViewController: LoginDetailTableViewCellDelegate {
         guard let url = (viewModel.login.formSubmitUrl?.asURL ?? viewModel.login.hostname.asURL) else { return }
 
         coordinator?.openURL(url: url)
+        sendLoginsAutofilledTelemetry()
     }
 
     func shouldReturnAfterEditingDescription(_ cell: LoginDetailTableViewCell) -> Bool {
@@ -453,5 +454,11 @@ extension PasswordDetailViewController: LoginDetailTableViewCellDelegate {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .change,
                                      object: .loginsModified)
+    }
+
+    private func sendLoginsAutofilledTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .loginsAutofilled)
     }
 }
