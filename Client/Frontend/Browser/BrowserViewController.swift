@@ -1686,10 +1686,16 @@ class BrowserViewController: UIViewController,
 
         let environment = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI) ? FakespotEnvironment.staging : .prod
         let product = ShoppingProduct(url: url, client: FakespotClient(environment: environment))
-        if product.product != nil && !tab.isPrivate, contentStackView.isSidebarVisible {
+        if product.product != nil, !tab.isPrivate, contentStackView.isSidebarVisible {
             navigationHandler?.updateFakespotSidebar(productURL: url,
                                                      sidebarContainer: contentStackView,
                                                      parentViewController: self)
+        } else if product.product != nil,
+                  !tab.isPrivate,
+                  FakespotUtils().shouldDisplayInSidebar(),
+                  let fakespotState = store.state.screenState(FakespotState.self, for: .fakespot),
+                  fakespotState.isOpenOnProductPage {
+            handleFakespotFlow(productURL: url)
         } else if contentStackView.isSidebarVisible {
             _ = dismissFakespotIfNeeded(animated: true)
         }
