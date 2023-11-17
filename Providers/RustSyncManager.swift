@@ -334,43 +334,58 @@ public class RustSyncManager: NSObject, SyncManager {
         var rustEngines: [String] = []
         var registeredPlaces = false
 
-        for engine in engines.filter({ syncManagerAPI.rustTogglableEngines.contains($0) }) {
-            switch engine {
-            case .tabs:
-                profile?.tabs.registerWithSyncManager()
-                rustEngines.append(engine.rawValue)
-            case .passwords:
-                profile?.logins.registerWithSyncManager()
-                if let key = try? profile?.logins.getStoredKey() {
-                    localEncryptionKeys[engine.rawValue] = key
+        let registerEngines: (String?) -> Void = { loginKey in
+            for engine in engines.filter({ self.syncManagerAPI.rustTogglableEngines.contains($0) }) {
+                switch engine {
+                case .tabs:
+                    self.profile?.tabs.registerWithSyncManager()
                     rustEngines.append(engine.rawValue)
-                } else {
-                    logger.log("Login encryption key could not be retrieved for syncing",
-                               level: .warning,
-                               category: .sync)
-                }
-            case .creditcards:
-                if self.creditCardAutofillEnabled {
-                    profile?.autofill.registerWithSyncManager()
-                    if let key = try? profile?.autofill.getStoredKey() {
+                case .passwords:
+                    self.profile?.logins.registerWithSyncManager()
+                    if let key = loginKey {
                         localEncryptionKeys[engine.rawValue] = key
                         rustEngines.append(engine.rawValue)
-                    } else {
-                        logger.log("Credit card encryption key could not be retrieved for syncing",
-                                   level: .warning,
-                                   category: .sync)
                     }
+                case .creditcards:
+                    if self.creditCardAutofillEnabled {
+                        self.profile?.autofill.registerWithSyncManager()
+                        if let key = try? self.profile?.autofill.getStoredKey() {
+                            localEncryptionKeys[engine.rawValue] = key
+                            rustEngines.append(engine.rawValue)
+                        } else {
+                            self.logger.log("Credit card encryption key could not be retrieved for syncing",
+                                            level: .warning,
+                                            category: .sync)
+                        }
+                    }
+                case .bookmarks, .history:
+                    if !registeredPlaces {
+                        self.profile?.places.registerWithSyncManager()
+                        registeredPlaces = true
+                    }
+                    rustEngines.append(engine.rawValue)
                 }
-            case .bookmarks, .history:
-                if !registeredPlaces {
-                    profile?.places.registerWithSyncManager()
-                    registeredPlaces = true
-                }
-                rustEngines.append(engine.rawValue)
             }
         }
 
-        completion((rustEngines, localEncryptionKeys))
+        let shouldSyncLogins = engines.contains(RustSyncManagerAPI.TogglableEngine.passwords)
+        if shouldSyncLogins {
+            profile?.logins.getStoredKey { result in
+                switch result {
+                case .success(let key):
+                    registerEngines(key)
+                case .failure(let err):
+                    self.logger.log("Login encryption key could not be retrieved for syncing: \(err)",
+                                    level: .warning,
+                                    category: .sync)
+                    registerEngines(nil)
+                }
+                completion((rustEngines, localEncryptionKeys))
+            }
+        } else {
+            registerEngines(nil)
+            completion((rustEngines, localEncryptionKeys))
+        }
     }
 
     private func doSync(params: SyncParams, completion: @escaping (SyncResult) -> Void) {
