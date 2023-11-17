@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>%d tree(s)</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@trees@</string>
+		<key>trees</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d boom</string>
+			<key>other</key>
+			<string>%d bomen</string>
+		</dict>
+	</dict>
+	<key>%d search(es)</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@searches@</string>
+		<key>searches</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d zoekopdracht</string>
+			<key>other</key>
+			<string>%d zoekopdrachten</string>
+		</dict>
+	</dict>
+	<key>%d referral(s)</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@referrals@</string>
+		<key>referrals</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d verwijzing</string>
+			<key>other</key>
+			<string>%d verwijzingen</string>
+		</dict>
+	</dict>
+	<key>%d friend(s) joined</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@friends@</string>
+		<key>friends</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d vriend</string>
+			<key>other</key>
+			<string>%d vrienden</string>
+		</dict>
+	</dict>
+	<key>Tree(s) planted</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@Trees@</string>
+		<key>Trees</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Boom geplant</string>
+			<key>other</key>
+			<string>Bomen geplant</string>
+		</dict>
+	</dict>
+	<key>%d friend invite(s)</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@friends@</string>
+		<key>friends</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d vriend uitgenodigd</string>
+			<key>other</key>
+			<string>%d vrienden uitgenodigd</string>
+		</dict>
+	</dict>
+	<key>%d accepted invite(s)</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@invites@</string>
+		<key>invites</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d geaccepteerde uitnodiging</string>
+			<key>other</key>
+			<string>%d geaccepteerde uitnodigingen</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

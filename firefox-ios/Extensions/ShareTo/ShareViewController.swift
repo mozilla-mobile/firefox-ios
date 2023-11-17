@@ -78,7 +78,10 @@ class ShareViewController: UIViewController {
     private var actionRowHeights = [NSLayoutConstraint]()
     private var pageInfoRowTitleLabel: UILabel?
     private var pageInfoRowUrlLabel: UILabel?
-    private let themeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
+    /* Ecosia: Swap Theme Manager with Ecosia's
+    private let themeManager: ThemeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
+     */
+    private let themeManager = EcosiaThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
 
     weak var delegate: ShareControllerDelegate?
 

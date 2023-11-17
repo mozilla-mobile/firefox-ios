@@ -106,9 +106,19 @@ open class Snapshot: NSObject {
 
         do {
             let trimCharacterSet = CharacterSet.whitespacesAndNewlines
+<<<<<<< HEAD:firefox-ios/fastlane/SnapshotHelper.swift
             currentLocale = try String(contentsOf: path, encoding: .utf8).trimmingCharacters(in: trimCharacterSet)
         } catch {
             NSLog("Couldn't detect/set locale...")
+=======
+            locale = try String(contentsOf: path, encoding: .utf8).trimmingCharacters(in: trimCharacterSet)
+        } catch {
+            NSLog("Couldn't detect/set locale...")
+        }
+
+        if locale.isEmpty && !deviceLanguage.isEmpty {
+            locale = Locale(identifier: deviceLanguage).identifier
+>>>>>>> e06eb0f56b (Ecosia changes on Firefox v120):fastlane/SnapshotHelper.swift
         }
 
         if currentLocale.isEmpty && !deviceLanguage.isEmpty {
@@ -184,7 +194,7 @@ open class Snapshot: NSObject {
 
                 let path = screenshotsDir.appendingPathComponent("\(simulator)-\(name).png")
                 #if swift(<5.0)
-                    try UIImagePNGRepresentation(image)?.write(to: path, options: .atomic)
+                    UIImagePNGRepresentation(image)?.write(to: path, options: .atomic)
                 #else
                     try image.pngData()?.write(to: path, options: .atomic)
                 #endif
@@ -310,4 +320,8 @@ private extension CGFloat {
 
 // Please don't remove the lines below
 // They are used to detect outdated configuration files
+<<<<<<< HEAD:firefox-ios/fastlane/SnapshotHelper.swift
 // SnapshotHelperVersion [1.30]
+=======
+// SnapshotHelperVersion [1.28]
+>>>>>>> e06eb0f56b (Ecosia changes on Firefox v120):fastlane/SnapshotHelper.swift

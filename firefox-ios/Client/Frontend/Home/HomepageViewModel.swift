@@ -4,6 +4,7 @@
 
 import Common
 import Shared
+import Core
 
 protocol HomepageViewModelDelegate: AnyObject {
     func reloadView()
@@ -15,7 +16,9 @@ protocol HomepageDataModelDelegate: AnyObject {
 
 class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
     struct UX {
-        static let spacingBetweenSections: CGFloat = 62
+        // Ecosia: Update `spacingBetweenSections`
+        // static let spacingBetweenSections: CGFloat = 62
+        static let spacingBetweenSections: CGFloat = 32
         static let standardInset: CGFloat = 16
         static let iPadInset: CGFloat = 50
         static let iPadTopSiteInset: CGFloat = 25
@@ -67,9 +70,11 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
     var isZeroSearch: Bool {
         didSet {
             topSiteViewModel.isZeroSearch = isZeroSearch
-            jumpBackInViewModel.isZeroSearch = isZeroSearch
             bookmarksViewModel.isZeroSearch = isZeroSearch
-            pocketViewModel.isZeroSearch = isZeroSearch
+            // Ecosia: Remove `jumpBackIn` section reference
+            // jumpBackInViewModel.isZeroSearch = isZeroSearch
+            // Ecosia: Remove History Highlights and Pocket
+            // pocketViewModel.isZeroSearch = isZeroSearch
         }
     }
 
@@ -99,23 +104,40 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
     // Child View models
     private var childViewModels: [HomepageViewModelProtocol]
     var headerViewModel: HomepageHeaderViewModel
-    var messageCardViewModel: HomepageMessageCardViewModel
+    // Ecosia: Remove message Card  from HomePage
+    // var messageCardViewModel: HomepageMessageCardViewModel
     var topSiteViewModel: TopSitesViewModel
+    // TODO Ecosia upgrade: Check if we want to remove the new `bookmarksViewModel`
     var bookmarksViewModel: BookmarksViewModel
-    var jumpBackInViewModel: JumpBackInViewModel
+    // Ecosia: Remove `jumpBackIn` section reference
+    // var jumpBackInViewModel: JumpBackInViewModel
+    /* Ecosia: Remove History Highlights and Pocket
     var historyHighlightsViewModel: HistoryHighlightsViewModel
     var pocketViewModel: PocketViewModel
-    var customizeButtonViewModel: CustomizeHomepageSectionViewModel
+     */
+    // Ecosia: Remove `customizeHome` reference
+    // var customizeButtonViewModel: CustomizeHomepageSectionViewModel
 
     var shouldDisplayHomeTabBanner: Bool {
-        return messageCardViewModel.shouldDisplayMessageCard
+        false
+        // Ecosia: Remove message Card  from HomePage
+        // return messageCardViewModel.shouldDisplayMessageCard
     }
-
+    
+    // Ecosia: Add Ecosia's ViewModels
+    var bookmarkNudgeViewModel: NTPBookmarkNudgeCellViewModel
+    var libraryViewModel: NTPLibraryCellViewModel
+    var impactViewModel: NTPImpactCellViewModel
+    var newsViewModel: NTPNewsCellViewModel
+    var aboutEcosiaViewModel: NTPAboutEcosiaCellViewModel
+    var ntpCustomizationViewModel: NTPCustomizationCellViewModel
+    
     // MARK: - Initializers
     init(profile: Profile,
          isPrivate: Bool,
          tabManager: TabManager,
          nimbus: FxNimbus = FxNimbus.shared,
+         referrals: Referrals, // Ecosia: Add referrals
          isZeroSearch: Bool = false,
          theme: Theme,
          wallpaperManager: WallpaperManager = WallpaperManager(),
@@ -127,14 +149,24 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
         self.windowUUID = tabManager.windowUUID
 
         self.headerViewModel = HomepageHeaderViewModel(profile: profile, theme: theme, tabManager: tabManager)
+        /* Ecosia: Remove message Card  from HomePage
         let messageCardAdaptor = MessageCardDataAdaptorImplementation()
         self.messageCardViewModel = HomepageMessageCardViewModel(dataAdaptor: messageCardAdaptor, theme: theme)
         messageCardAdaptor.delegate = messageCardViewModel
+         */
         self.topSiteViewModel = TopSitesViewModel(profile: profile,
                                                   theme: theme,
                                                   wallpaperManager: wallpaperManager)
-        self.wallpaperManager = wallpaperManager
+        // Ecosia: Add Ecosia's ViewModels
+        self.libraryViewModel = NTPLibraryCellViewModel(theme: theme)
+        self.bookmarkNudgeViewModel = NTPBookmarkNudgeCellViewModel(theme: theme)
+        self.impactViewModel = NTPImpactCellViewModel(referrals: referrals, theme: theme)
+        self.newsViewModel = NTPNewsCellViewModel(theme: theme)
+        self.aboutEcosiaViewModel = NTPAboutEcosiaCellViewModel(theme: theme)
+        self.ntpCustomizationViewModel = NTPCustomizationCellViewModel(theme: theme)
 
+        self.wallpaperManager = wallpaperManager
+        /* Ecosia: Remove `jumpBackIn` section reference
         let jumpBackInAdaptor = JumpBackInDataAdaptorImplementation(profile: profile,
                                                                     tabManager: tabManager)
         self.jumpBackInViewModel = JumpBackInViewModel(
@@ -144,10 +176,11 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
             tabManager: tabManager,
             adaptor: jumpBackInAdaptor,
             wallpaperManager: wallpaperManager)
-
+         */
         self.bookmarksViewModel = BookmarksViewModel(profile: profile,
                                                      theme: theme,
                                                      wallpaperManager: wallpaperManager)
+        /* Ecosia: Remove History Highlights and Pocket
         let deletionUtility = HistoryDeletionUtility(with: profile)
         let historyDataAdaptor = HistoryHighlightsDataAdaptorImplementation(
             profile: profile,
@@ -166,8 +199,12 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
                                                prefs: profile.prefs,
                                                wallpaperManager: wallpaperManager)
         pocketDataAdaptor.delegate = pocketViewModel
-
-        self.customizeButtonViewModel = CustomizeHomepageSectionViewModel(theme: theme)
+         */
+        // Ecosia: Remove `customizeHome` reference
+        // self.customizeButtonViewModel = CustomizeHomepageSectionViewModel(theme: theme)
+        
+        /* 
+         Ecosia: Replace view models.
         self.childViewModels = [headerViewModel,
                                 messageCardViewModel,
                                 topSiteViewModel,
@@ -175,21 +212,38 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
                                 bookmarksViewModel,
                                 historyHighlightsViewModel,
                                 pocketViewModel,
-                                customizeButtonViewModel]
+                                customizeButtonViewModel
+        ]
+         */
+        self.childViewModels = [headerViewModel,
+                                bookmarkNudgeViewModel,
+                                libraryViewModel,
+                                topSiteViewModel,
+                                impactViewModel,
+                                newsViewModel,
+                                aboutEcosiaViewModel,
+                                ntpCustomizationViewModel]
         self.isPrivate = isPrivate
 
         self.nimbus = nimbus
+        // Ecosia: Add Ecosia's ViewModels delegates
+        newsViewModel.dataModelDelegate = self
         topSiteViewModel.delegate = self
-        historyHighlightsViewModel.delegate = self
         bookmarksViewModel.delegate = self
-        pocketViewModel.delegate = self
-        jumpBackInViewModel.delegate = self
-        messageCardViewModel.delegate = self
+        // Ecosia: Remove History Highlights and Pocket
+        // historyHighlightsViewModel.delegate = self
+        // Ecosia: Remove History Highlights and Pocket
+        // pocketViewModel.delegate = self
+        // Ecosia: Remove `jumpBackIn` section reference
+        // jumpBackInViewModel.delegate = self
+        // Ecosia: Remove message Card  from HomePage
+        // messageCardViewModel.delegate = self
 
+        /* Ecosia: Remove `jumpBackIn` section reference
         Task {
             await jumpBackInAdaptor.setDelegate(delegate: jumpBackInViewModel)
         }
-
+         */
         updateEnabledSections()
     }
 
@@ -219,10 +273,23 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
                                      value: trackingValue,
                                      extras: nil)
         childViewModels.forEach { $0.screenWasShown() }
+        
+        // Ecosia
+        if NTPTooltip.highlight() == .referralSpotlight {
+            Analytics.shared.showInvitePromo()
+        }
+        
+        if User.shared.showsBookmarksNTPNudgeCard() {
+            Analytics.shared.bookmarksNtp(action: .view)
+        }
+        
+        impactViewModel.subscribeToProjections()
     }
 
     func recordViewDisappeared() {
         viewAppeared = false
+        // Ecosia: Unsubscribe to projections
+        impactViewModel.unsubscribeToProjections()
     }
 
     // MARK: - Manage sections
@@ -247,18 +314,19 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
                            device: UIDevice.current.userInterfaceIdiom)
         }
     }
-
-    // MARK: - Section ViewModel helper
-
-    func getSectionViewModel(shownSection: Int) -> HomepageViewModelProtocol? {
-        guard let actualSectionNumber = shownSections[safe: shownSection]?.rawValue else { return nil }
-        return childViewModels[safe: actualSectionNumber]
-    }
 }
 
 // MARK: - HomepageDataModelDelegate
 extension HomepageViewModel: HomepageDataModelDelegate {
     func reloadView() {
         delegate?.reloadView()
+    }
+}
+
+// Ecosia: NTPLayoutHighlightDataSource
+extension HomepageViewModel: NTPLayoutHighlightDataSource {
+    func getSectionViewModel(shownSection: Int) -> HomepageViewModelProtocol? {
+        guard let actualSectionNumber = shownSections[safe: shownSection]?.rawValue else { return nil }
+        return childViewModels[safe: actualSectionNumber]
     }
 }

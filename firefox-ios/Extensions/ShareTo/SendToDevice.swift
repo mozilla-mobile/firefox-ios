@@ -12,7 +12,10 @@ class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewDelegate
     var sharedItem: ShareItem?
     weak var delegate: ShareControllerDelegate?
 
+    /* Ecosia: Swap Theme Manager with Ecosia's
     private let themeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
+     */
+    private let themeManager = EcosiaThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
 
     private var profile: Profile {
         let profile = BrowserProfile(localName: "profile")

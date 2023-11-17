@@ -10,12 +10,30 @@
       }
     },
     {
+      "identity" : "braze-swift-sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/braze-inc/braze-swift-sdk",
+      "state" : {
+        "revision" : "a3d83be34c5e3f32d91391544b2c18f707cd27eb",
+        "version" : "7.5.0"
+      }
+    },
+    {
       "identity" : "dip",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/AliSoftware/Dip.git",
       "state" : {
         "revision" : "c3b601df0ff22b06b6d5ff4943faf05c0bd3f9bb",
         "version" : "7.1.1"
+      }
+    },
+    {
+      "identity" : "fmdb",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ccgus/fmdb",
+      "state" : {
+        "revision" : "e6e1c0eff4f115c46a850db9dc92fb41a01a8b55",
+        "version" : "2.7.8"
       }
     },
     {
@@ -43,6 +61,15 @@
       "state" : {
         "revision" : "51794f8b74c55ebde6d1502b641eacc19176e139",
         "version" : "61.2.0"
+      }
+    },
+    {
+      "identity" : "ios-core",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ecosia/ios-core",
+      "state" : {
+        "branch" : "main",
+        "revision" : "9692f7ecc6ce80083574ec37428bc9aeef6bb9a4"
       }
     },
     {
@@ -100,6 +127,15 @@
       }
     },
     {
+      "identity" : "sdwebimage",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SDWebImage/SDWebImage.git",
+      "state" : {
+        "revision" : "59730af512c06fb569c119d737df4c1c499e001d",
+        "version" : "5.18.10"
+      }
+    },
+    {
       "identity" : "sentry-cocoa",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa.git",
@@ -151,6 +187,24 @@
       "state" : {
         "revision" : "a5c680f07b33f4cc9a451491b417b8119de23c6e",
         "version" : "0.17.0"
+      }
+    },
+    {
+      "identity" : "snowplow-ios-tracker",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/snowplow/snowplow-ios-tracker",
+      "state" : {
+        "revision" : "1e16a929cef8e944bd41dc36a1d2779e06bd0a3c",
+        "version" : "5.2.0"
+      }
+    },
+    {
+      "identity" : "swiftsoup",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/scinfu/SwiftSoup",
+      "state" : {
+        "branch" : "2.5.3",
+        "revision" : "f707b8680cddb96dc1855632340a572ef37bbb98"
       }
     },
     {

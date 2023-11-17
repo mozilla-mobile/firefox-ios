@@ -64,7 +64,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
         self.appAuthenticator = appAuthenticator
         self.applicationHelper = applicationHelper
 
-        super.init(windowUUID: tabManager.windowUUID)
+        // Ecosia: Update TableView to grouped style
+        // super.init(windowUUID: tabManager.windowUUID)
+        super.init(style: .insetGrouped)
+        
         self.profile = profile
         self.tabManager = tabManager
         self.settingsDelegate = delegate
@@ -193,6 +196,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     // MARK: - Generate Settings
 
     override func generateSettings() -> [SettingSection] {
+        /* Ecosia: Review Settings
         var settings = [SettingSection]()
         settings += getDefaultBrowserSetting()
         settings += getAccountSetting()
@@ -204,8 +208,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
         if showDebugSettings {
             settings += getDebugSettings()
         }
-
+         
         return settings
+         */
+        getEcosiaSettingsSectionsShowingDebug(showDebugSettings)
     }
 
     private func getDefaultBrowserSetting() -> [SettingSection] {
@@ -253,7 +259,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             BlockPopupSetting(settings: self),
             NoImageModeSetting(settings: self),
         ]
-
+        
         if isSearchBarLocationFeatureEnabled {
             generalSettings.insert(SearchBarSetting(settings: self, settingsDelegate: parentCoordinator), at: 5)
         }
@@ -341,7 +347,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         privacySettings.append(NotificationsSetting(theme: themeManager.getCurrentTheme(for: windowUUID),
                                                     profile: profile,
                                                     settingsDelegate: parentCoordinator))
-
+        
         privacySettings += [
             PrivacyPolicySetting(theme: themeManager.getCurrentTheme(for: windowUUID),
                                  settingsDelegate: parentCoordinator)

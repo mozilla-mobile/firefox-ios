@@ -58,7 +58,9 @@ enum JumpBackInSectionLayout: Equatable {
     ) -> JumpBackInDisplayGroupCount {
         return JumpBackInDisplayGroupCount(
             tabsCount: maxJumpBackInItemsToDisplay(device: device),
-            syncedTabCount: hasAccount ? JumpBackInViewModel.UX.maxDisplayedSyncedTabs : 0
+            // Ecosia: Remove `jumpBackIn` section reference
+            // syncedTabCount: hasAccount ? JumpBackInViewModel.UX.maxDisplayedSyncedTabs : 0
+            syncedTabCount: 0
         )
     }
 

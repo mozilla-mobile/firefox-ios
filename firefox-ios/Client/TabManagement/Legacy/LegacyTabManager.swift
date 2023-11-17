@@ -778,10 +778,18 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         }
 
         // Toast
+        /* Ecosia: Update Toast to look like v104
         let viewModel = ButtonToastViewModel(
             labelText: String.localizedStringWithFormat(
                 .TabsTray.CloseTabsToast.Title,
                 recentlyClosedTabs.count),
+            buttonText: .TabsTray.CloseTabsToast.Action)
+         */
+        let viewModel = ButtonToastViewModel(
+            labelText: String.localizedStringWithFormat(
+                .TabsTray.CloseTabsToast.Title,
+                recentlyClosedTabs.count),
+            imageName: "tabs",
             buttonText: .TabsTray.CloseTabsToast.Action)
         // Passing nil theme because themeManager is not available,
         // calling to applyTheme with proper theme before showing

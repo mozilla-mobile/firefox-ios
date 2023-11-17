@@ -10,12 +10,21 @@ class DefaultBrowserSetting: Setting {
     override var accessibilityIdentifier: String? { return "DefaultBrowserSettings" }
 
     init(theme: Theme) {
+        /* Ecosia: Update Title
         super.init(
             title: NSAttributedString(
                 string: String.DefaultBrowserMenuItem,
                 attributes: [NSAttributedString.Key.foregroundColor: theme.colors.actionPrimary]
             )
         )
+         */
+        super.init(title: .init(string: .localized(.setAsDefaultBrowser), attributes: [NSAttributedString.Key.foregroundColor: UIColor.legacyTheme.tableView.rowText]))
+    }
+    
+    // Ecosia: Override cell config to add image
+    override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
+        super.onConfigureCell(cell, theme: theme)
+        cell.imageView?.image = .init(themed: "yourImpact")
     }
 
     override func onClick(_ navigationController: UINavigationController?) {

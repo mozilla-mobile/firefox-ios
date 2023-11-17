@@ -41,7 +41,10 @@ extension SearchBarLocationProvider {
 
     var searchBarPosition: SearchBarPosition {
         guard let position: SearchBarPosition = featureFlags.getCustomState(for: .searchBarPosition) else {
+            /* Ecosia: Search Bar stays on top by default
             return .bottom
+             */
+            return .top
         }
 
         return position

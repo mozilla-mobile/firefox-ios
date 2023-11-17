@@ -8,6 +8,11 @@ import UIKit
 
 extension UIColor {
     struct Photon {
+        // TODO Ecosia Upgrade: Are LightGrey20 and DarkGrey30 used? (they were removed in Firefox)
+        static let LightGrey20 = UIColor(rgb: 0xf0f0f4)
+
+        // Ecosia: Add legacy color references from 9.1.0 App Version
+        static let DarkGrey30 = UIColor(rgb: 0x42414d)
         static let DarkGrey60 = UIColor(rgb: 0x2b2a33)
         static let DarkGrey90 = UIColor(rgb: 0x15141a)
 
@@ -28,6 +33,9 @@ extension UIColor {
         static let Grey40 = UIColor(rgb: 0xb1b1b3)
         static let Grey50 = UIColor(rgb: 0x737373)
         static let Grey60 = UIColor(rgb: 0x4a4a4f)
+        static let Grey70 = UIColor(rgb: 0x38383d)
+        // Ecosia: Add `Grey80` color
+        static let Grey80 = UIColor(rgb: 0x2a2a2e)
         static let Grey90 = UIColor(rgb: 0x0c0c0d)
     }
 }

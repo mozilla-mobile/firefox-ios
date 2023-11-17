@@ -1,0 +1,38 @@
+name: 'Cache Derived data'
+description: 'This action contains all the logic needed to cache the derived data'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Get Derived Data cache expiration Date
+      shell: bash
+      id: check-derived-data-cache-date
+      run: |
+        echo "::set-output name=date::$(date -v-5d '+%Y-%m-%d')"
+
+    - name: Restore derived data main branch cache
+      id: restore-derived-data-cache
+      uses: actions/cache/restore@v3
+      with:
+        path: DerivedData/
+        key: ${{ runner.os }}-derived-data-cache-${{ steps.check-derived-data-cache-date.outputs.date }}
+        lookup-only: true
+
+    - name: Tar derived data
+      if: steps.restore-derived-data-cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: mkdir -p DerivedData && tar cfPp DerivedData/dd.tar --format posix BuildDerivedData/
+
+    - name: Get today date
+      if: steps.restore-derived-data-cache.outputs.cache-hit != 'true'
+      shell: bash
+      id: get-today-date
+      run: |
+        echo "::set-output name=today-date::$(date -v-5d '+%Y-%m-%d')"
+
+    - name: Cache derived data main branch
+      if: steps.restore-derived-data-cache.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v3
+      with:
+        path: DerivedData/
+        key: ${{ runner.os }}-derived-data-cache-${{ steps.get-today-date.outputs.today-date }}

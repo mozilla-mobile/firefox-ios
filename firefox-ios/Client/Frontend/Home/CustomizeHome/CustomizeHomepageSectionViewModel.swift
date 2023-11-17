@@ -19,7 +19,8 @@ class CustomizeHomepageSectionViewModel {
 // MARK: HomeViewModelProtocol
 extension CustomizeHomepageSectionViewModel: HomepageViewModelProtocol {
     var sectionType: HomepageSectionType {
-        return .customizeHome
+        // Ecosia: Update `sectionType`
+        return .ntpCustomization
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {

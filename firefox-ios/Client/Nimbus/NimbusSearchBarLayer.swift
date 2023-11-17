@@ -7,8 +7,11 @@ import Foundation
 final class NimbusSearchBarLayer {
     // MARK: - Public methods
     public func getDefaultPosition(from nimbus: FxNimbus = FxNimbus.shared) -> SearchBarPosition {
+        /* Ecosia: Search Bar stays on top by default
         let isAtBottom = nimbus.features.search.value().awesomeBar.position.isBottom
 
         return isAtBottom ? .bottom : .top
+         */
+        .top
     }
 }

@@ -1,0 +1,3 @@
+- Our app does make use of Siri Intents. There is one Shortcut that can be configured to open a new tab. 
+- We provide iOS14 widgets for both iPad and iPhone. There is a Today Widget for lower iOS versions. They can be added via the usual way.
+- The main functionality of our app is browsing the web. So access to camera, photos and microphone is needed when a WKWebView requires access to provide these website's functionalities.

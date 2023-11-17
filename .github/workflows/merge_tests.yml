@@ -1,0 +1,38 @@
+name: Merge Unit Tests
+
+on:
+  pull_request:
+    paths:
+      - 'Client/**'
+      - 'Shared/**'
+      - 'Storage/**'
+    branches: [ main ]
+
+jobs:
+  execute_merge_tests:
+    runs-on: macos-13
+    name: Execute Merge Tests
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_14.3.1.app/Contents/Developer
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Prepare environment
+        uses: ./.github/actions/prepare_environment
+        with:
+          core-token: ${{ secrets.IOS_CORE_TOKEN }}
+  
+      - name: Evaluate Tests to execute
+        id: evaluate-tests-to-execute
+        uses: ./.github/actions/evaluate_tests_to_execute
+
+      - name: Perform Tests and Publish Test reports
+        id: perform-tests
+        uses: ./.github/actions/perform_tests
+        with:
+          needs-shared-tests: ${{ steps.evaluate-tests-to-execute.outputs.shared-module-changed }}
+          needs-storage-tests: ${{ steps.evaluate-tests-to-execute.outputs.storage-module-changed }}
+          needs-client-tests: ${{ steps.evaluate-tests-to-execute.outputs.client-module-changed }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}  

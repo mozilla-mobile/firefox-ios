@@ -6,22 +6,33 @@ labels: ''
 assignees: ''
 
 ---
-/date
-
-The following lists the actions to be taken by developers. For the full list of action taken by both release management and the developer team, please look at the documentation [here](https://github.com/mozilla-mobile/firefox-ios/wiki/Release-Checklist).
+Soft freeze:
+Hard freeze:
 
 ## Soft Freeze Items
+- [ ] Update Version Number in code (Eng task, use `update_version.sh`)
+- [ ] Update `Client/Info.plist` MozWhatsNewTopic (Eng task)
+- [ ] Create version specific Sentry project
+- [ ] Update SENTRY_DSN secret in Bitrise (per release)
+- [ ] Add Bitrise trigger for release branch
 
-- [ ]  Once release management has created the release branch, notify the team to aim new PRs at the updated fix version by updating the `Current PR Version` topic in the #ios-watercooler channel.
-- [ ]  Back ports bug fixes commits towards the release branch. Make sure to mark any tickets you [back port](https://github.com/mozilla-mobile/firefox-ios/wiki/Release-Checklist/_edit#back-port) with the proper `fix version` field in the Jira ticket, and mention any particularities QA need to be careful about when testing. 
-- [ ]  Update the PI request. Release management won't update the PI request with comments on what was back ported, so make sure you update the PI request with the latest information as well. Note that builds are preplanned each week to happen on Tuesday, Thursday and Sunday.
-- [ ]  Update Security Advisories if needed (see Security Advisories [page](https://github.com/mozilla-mobile/firefox-ios/wiki/Security-Advisories).
+### Soft Freeze Optional
+These items should be completed as soon as possible, preferrably on soft code
+freeze day. Due to timing issues, they may not be available until hard code
+freeze, and must be completed on hard freeze.
 
-### Notes for Hotfixes/Dot releases/Rapid releases
-
-For hotfixes, dot releases or rapid releases release management can handle the PI request updates since the number of back ports are normally low. 
+- [ ] Ensure string export was completed for L10N (if needed)
+- [ ] Check for [security advisories](https://github.com/mozilla-mobile/firefox-ios/wiki/Release-Build-Checklist/#security-advisories)
+- [ ] File P.I. request
 
 ## Hard Freeze Items
 
-- [ ]  Fix Release Blockers raised by the QA team. As QA regression tests, they'll open GitHub issues. Watch for new issues and ask Product which could be release blockers. After QA is done testing, you'll get a test report email indicating if the build is green/red. If it's red, there will be a list of critical issues that need to be addressed and back ported. See section about [back ports](https://github.com/mozilla-mobile/firefox-ios/wiki/Release-Checklist/_edit#back-port) for more information.
-- [ ]  Monitor crash rate through Xcode and Sentry.
+- [ ] Tag release in GitHub (Eng task)
+    - [ ] Link to commit diff between versions
+    - [ ] Add volunteer contributions
+- [ ] Release Notes updated
+- [ ] Get App Store screenshots and all locales if necessary
+- [ ] Submit build to Apple
+- [ ] Release with 7-day rollout
+
+See [Release build checklist wiki](https://github.com/mozilla-mobile/firefox-ios/wiki/Release-Build-Checklist-Details) for more detailed instructions.

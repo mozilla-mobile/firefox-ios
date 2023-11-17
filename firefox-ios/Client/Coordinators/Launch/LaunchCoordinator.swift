@@ -52,13 +52,15 @@ class LaunchCoordinator: BaseCoordinator,
                                             profile: profile,
                                             model: onboardingModel,
                                             telemetryUtility: telemetryUtility)
+        /* Ecosia: custom onboarding
         let introViewController = IntroViewController(viewModel: introViewModel, windowUUID: windowUUID)
         introViewController.qrCodeNavigationHandler = self
         introViewController.didFinishFlow = { [weak self] in
             guard let self = self else { return }
             self.parentCoordinator?.didFinishLaunch(from: self)
         }
-
+         */
+        let introViewController = Welcome(delegate: self)
         if isFullScreen {
             introViewController.modalPresentationStyle = .fullScreen
             router.present(introViewController, animated: false)
@@ -169,5 +171,12 @@ class LaunchCoordinator: BaseCoordinator,
     // MARK: - SurveySurfaceViewControllerDelegate
     func didFinish() {
         parentCoordinator?.didFinishLaunch(from: self)
+    }
+}
+
+// Ecosia: custom onboarding
+extension LaunchCoordinator: WelcomeDelegate {
+    func welcomeDidFinish(_ welcome: Welcome) {
+        self.parentCoordinator?.didFinishLaunch(from: self)
     }
 }

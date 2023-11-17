@@ -1,0 +1,66 @@
+version: 2.1
+
+parameters:
+  deploy-release:
+    type: boolean
+    default: false
+
+jobs:
+  build-testflight-deploy:
+    environment:
+      CI: true
+    macos:
+      xcode: "14.3.1"
+    resource_class: macos.x86.medium.gen2
+    steps:
+      - checkout
+      - run:
+          name: Check for MARKETING_VERSION change
+          command: |
+            # The cut -d ' ' -f3 takes the output from grep command as input.
+            # For example, let's assume that the Common.xcconfig file contains the following line:
+            # MARKETING_VERSION = 100.2.44
+            # grep will return -> MARKETING_VERSION = 100.2.44
+            # The cut command will then extract the third field from the input, using a space (' ') as the delimiter.
+            # Output: 100.2.44
+
+            CURRENT_VERSION=$(grep 'MARKETING_VERSION' Client/Configuration/Common.xcconfig | cut -d ' ' -f3)
+            git checkout $CIRCLE_BRANCH~1
+            OLD_VERSION=$(grep 'MARKETING_VERSION' Client/Configuration/Common.xcconfig | cut -d ' ' -f3)
+            if [ "$CURRENT_VERSION" = "$OLD_VERSION" ]; then
+              echo "MARKETING_VERSION has not changed. Exiting..."
+              circleci-agent step halt
+              exit 0
+            fi
+
+            git checkout $CIRCLE_BRANCH
+
+      - restore_cache:
+          key: 1-gems-{{ checksum "Gemfile.lock" }}
+      - run: bundle check || bundle install --path vendor/bundle
+      - save_cache:
+          key: 1-gems-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+      - run:
+          name: verify github
+          command: for ip in $(dig @8.8.8.8 github.com +short); do ssh-keyscan github.com,$ip; ssh-keyscan $ip; done 2>/dev/null >> ~/.ssh/known_hosts
+      - run:
+          name: extract Production XCConfig
+          command: echo "$PRODUCTION_XCCONFIG" | base64 --decode > Client/Configuration/Production.xcconfig
+      - run:
+          name: clean packages
+          command: xcodebuild -scheme Ecosia -project Client.xcodeproj clean
+      - run:
+          name: setup content blocking scripts
+          command: ./content_blocker_update.sh
+      - run:
+          name: Build and deploy to Testflight
+          no_output_timeout: 35m
+          command: bundle exec fastlane testflight_live
+              
+workflows:
+  deploy-release:
+    when: << pipeline.parameters.deploy-release >>
+    jobs:
+      - build-testflight-deploy

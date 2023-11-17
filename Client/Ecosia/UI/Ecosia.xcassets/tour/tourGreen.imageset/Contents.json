@@ -1,0 +1,22 @@
+{
+  "images" : [
+    {
+      "filename" : "Theme=Light, Variant=Green results.pdf",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "Theme=Dark, Variant=Green results.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

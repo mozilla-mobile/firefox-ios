@@ -151,13 +151,17 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
+        // TODO Ecosia upgrade: Check headerView effect
         headerView.effect = UIBlurEffect(style: theme.type.tabTitleBlurStyle())
+        /* Ecosia: Add legacy theme references
         backgroundHolder.backgroundColor = theme.colors.layer1
         closeButton.tintColor = theme.colors.indicatorActive
         titleText.textColor = theme.colors.textPrimary
         screenshotView.backgroundColor = theme.colors.layer1
         favicon.tintColor = theme.colors.textPrimary
         smallFaviconView.tintColor = theme.colors.textPrimary
+         */
+        self.ecosiaApplyTheme()
     }
 
     // MARK: - Configuration
@@ -312,6 +316,45 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
             return String.TabTrayCurrentlySelectedTabAccessibilityLabel
         } else {
             return baseName
+        }
+    }
+}
+
+// Ecosia: Add legacy theme references
+extension TabCell {
+    
+    func ecosiaApplyTheme() {
+        
+        backgroundHolder.backgroundColor = UIColor.legacyTheme.tabTray.cellBackground
+        screenshotView.backgroundColor = UIColor.legacyTheme.tabTray.screenshotBackground
+
+        let activeBGColor = state.isPrivate ? UIColor.legacyTheme.ecosia.tabSelectedPrivateBackground : UIColor.legacyTheme.ecosia.tabSelectedBackground
+        title.backgroundColor = isSelectedTab ? activeBGColor : UIColor.legacyTheme.ecosia.tabBackground
+
+        titleText.textColor = isSelectedTab ? UIColor.legacyTheme.ecosia.primaryTextInverted : UIColor.legacyTheme.ecosia.primaryText
+        favicon.tintColor = isSelectedTab ? UIColor.legacyTheme.ecosia.primaryTextInverted : UIColor.legacyTheme.ecosia.primaryText
+        closeButton.tintColor = isSelectedTab ? UIColor.legacyTheme.ecosia.primaryTextInverted : UIColor.legacyTheme.ecosia.primaryText
+
+        let borderWidth: CGFloat = 3
+        
+        if isSelectedTab {
+            // This creates a border around a tabcell. Using the shadow craetes a border _outside_ of the tab frame.
+            layer.masksToBounds = false
+            layer.shadowOpacity = 1
+            layer.shadowRadius = 0 // A 0 radius creates a solid border instead of a gradient blur
+            // create a frame that is "BorderWidth" size bigger than the cell
+            layer.shadowOffset = CGSize(width: -borderWidth, height: -borderWidth)
+            layer.shadowColor = activeBGColor.cgColor
+        } else if LegacyThemeManager.instance.current.isDark  {
+            layer.masksToBounds = true
+            layer.shadowOpacity = 0
+            layer.shadowOffset = .zero
+        } else {
+            layer.masksToBounds = false
+            layer.shadowOffset = .init(width: 0, height: 1)
+            layer.shadowOpacity = 1.0
+            layer.shadowColor = UIColor(white: 0.059, alpha: 0.18).cgColor
+            layer.shadowRadius = 2
         }
     }
 }

@@ -72,6 +72,13 @@ final class DefaultSearchPrefs {
         if let overrides = regionOverrides?[region] as? [String: Any] {
             usersEngineList = usersEngineList.map({ overrides[$0] as? String ?? $0 })
         }
+        
+        // Ecosia: Guarantee the global default engine is included
+        // This enables ecosia to be set as default even in locales where it normally is not listed
+        if !usersEngineList.contains(globalDefaultEngine) {
+            usersEngineList.append(globalDefaultEngine)
+        }
+        
         return usersEngineList
     }
 

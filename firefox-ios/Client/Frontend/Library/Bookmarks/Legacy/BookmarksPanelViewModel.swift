@@ -6,6 +6,7 @@ import Foundation
 import Common
 import Storage
 import Shared
+import Core
 
 import class MozillaAppServices.BookmarkFolderData
 import enum MozillaAppServices.BookmarkRoots
@@ -26,6 +27,11 @@ class BookmarksPanelViewModel {
     private var bookmarksHandler: BookmarksHandler
     private var flashLastRowOnNextReload = false
     private var logger: Logger
+    // Ecosia: Import Bookmarks Helper
+    private let bookmarksExchange: BookmarksExchangable
+    private var documentPickerPresentingViewController: UIViewController?
+    private var onImportDoneHandler: ((URL?, Error?) -> Void)?
+    private var onExportDoneHandler: ((Error?) -> Void)?
 
     /// By default our root folder is the mobile folder. Desktop folders are shown in the local desktop folders.
     init(profile: Profile,
@@ -36,6 +42,8 @@ class BookmarksPanelViewModel {
         self.bookmarksHandler = bookmarksHandler
         self.bookmarkFolderGUID = bookmarkFolderGUID
         self.logger = logger
+        // Ecosia: BookmarksExchange
+        self.bookmarksExchange = BookmarksExchange(profile: profile)
     }
 
     var shouldFlashRow: Bool {
@@ -114,9 +122,10 @@ class BookmarksPanelViewModel {
                 self.bookmarkFolder = mobileFolder
                 self.bookmarkNodes = mobileFolder.fxChildren ?? []
 
+                /* Ecosia: remove desktop folder
                 let desktopFolder = LocalDesktopFolder()
                 self.bookmarkNodes.insert(desktopFolder, at: 0)
-
+                 */
                 completion()
             }
     }
@@ -157,5 +166,119 @@ class BookmarksPanelViewModel {
     private func setErrorCase() {
         self.bookmarkFolder = nil
         self.bookmarkNodes = []
+    }
+}
+
+// Ecosia: Import Bookmarks Helper
+extension BookmarksPanelViewModel {
+    
+    func bookmarkExportSelected(in viewController: BookmarksPanel, onDone: @escaping (Error?) -> Void) {
+        Task {
+            self.onExportDoneHandler = onDone
+            do {
+                let bookmarks = try await getBookmarksForExport()
+                try await bookmarksExchange.export(bookmarks: bookmarks, in: viewController, barButtonItem: viewController.moreButton)
+                await notifyExportDone(nil)
+            } catch {
+                await notifyExportDone(error)
+            }
+        }
+    }
+    
+    func bookmarkImportSelected(in viewController: UIViewController, onDone: @escaping (URL?, Error?) -> Void) {
+        self.documentPickerPresentingViewController = viewController
+        self.onImportDoneHandler = onDone
+        let documentPicker = UIDocumentPickerViewController(documentTypes: ["public.html"], in: .open)
+        documentPicker.allowsMultipleSelection = false
+        documentPicker.delegate = self
+        viewController.present(documentPicker, animated: true)
+    }
+
+    // MARK: - Private
+    private func getBookmarksForExport() async throws -> [Core.BookmarkItem] {
+        return try await withCheckedThrowingContinuation { [weak self] continuation in
+            guard let self = self else {
+                return continuation.resume(returning: [])
+            }
+            
+            profile.places
+                .getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: true)
+                .uponQueue(.main) { result in
+                    guard let mobileFolder = result.successValue as? BookmarkFolderData else {
+                        self.setErrorCase()
+                        return
+                    }
+
+                    self.bookmarkFolder = mobileFolder
+                    let bookmarkNodes = mobileFolder.fxChildren ?? []
+
+                    let items: [Core.BookmarkItem] = bookmarkNodes
+                        .compactMap { $0 as? BookmarkNodeData }
+                        .compactMap { bookmarkNode in
+                            self.exportNode(bookmarkNode)
+                        }
+                    
+                    continuation.resume(returning: items)
+                }
+        }
+    }
+    
+    private func exportNode(_ node: BookmarkNodeData) -> Core.BookmarkItem? {
+        if let folder = node as? BookmarkFolderData {
+            return .folder(folder.title, folder.children?.compactMap { exportNode($0) } ?? [], .empty)
+        } else if let bookmark = node as? BookmarkItemData {
+            return .bookmark(bookmark.title, bookmark.url, .empty)
+        }
+        assertionFailure("This should not happen")
+        return nil
+    }
+    
+    @MainActor
+    private func notifyExportDone(_ error: Error?) {
+        onExportDoneHandler?(error)
+    }
+}
+
+extension BookmarksPanelViewModel: UIDocumentPickerDelegate {
+    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+        self.onImportDoneHandler?(nil, nil)
+    }
+
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        guard
+            let firstHtmlUrl = urls.first,
+            let viewController = documentPickerPresentingViewController
+        else { return }
+        handlePickedUrl(firstHtmlUrl, in: viewController)
+    }
+    
+    func handlePickedUrl(_ url: URL, in viewController: UIViewController) {
+        let scopedResourceAccess = url.startAccessingSecurityScopedResource()
+        var error: NSError? = nil
+        NSFileCoordinator().coordinate(readingItemAt: url, error: &error) { url in
+            Task {
+                defer {
+                    if scopedResourceAccess {
+                        url.stopAccessingSecurityScopedResource()
+                    }
+                }
+                do {
+                    try await bookmarksExchange.import(from: url, in: viewController)
+                    await notifyImportDone(url, nil)
+                } catch {
+                    await notifyImportDone(url, error)
+                }
+            }
+        }
+        if let error = error {
+            Task {
+                await notifyImportDone(url, error)
+            }
+        }
+    }
+    
+    @MainActor
+    private func notifyImportDone(_ url: URL, _ error: Error?) {
+        onImportDoneHandler?(url, error)
     }
 }

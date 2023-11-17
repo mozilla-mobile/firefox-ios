@@ -51,6 +51,8 @@ class OneLineTableViewCell: UITableViewCell,
     private lazy var bottomSeparatorView: UIView = .build { separatorLine in
         // separator hidden by default
         separatorLine.isHidden = true
+        // Ecosia: Add separator color
+        separatorLine.backgroundColor = UIColor.Photon.Grey40
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -137,10 +139,16 @@ class OneLineTableViewCell: UITableViewCell,
 
     override func prepareForReuse() {
         super.prepareForReuse()
-
         selectionStyle = .default
+        /* Ecosia: Update properties
         separatorInset = defaultSeparatorInset
         titleLabel.text = nil
+         */
+        accessoryView = nil
+        accessoryType = .none
+        separatorInset = defaultSeparatorInset
+        titleLabel.text = nil
+        leftImageView.image = nil
     }
 
     // To simplify setup, OneLineTableViewCell now has a viewModel
@@ -164,8 +172,18 @@ class OneLineTableViewCell: UITableViewCell,
         selectedView.backgroundColor = theme.colors.layer5Hover
         backgroundColor = theme.colors.layer5
         titleLabel.textColor = theme.colors.textPrimary
+        // Ecosia: Update custom theming
+        if theme.type == .dark {
+            self.backgroundColor = .Dark.Background.tertiary
+        } else {
+            self.backgroundColor = .Light.Background.primary
+        }
+        
         bottomSeparatorView.backgroundColor = theme.colors.borderPrimary
         accessoryView?.tintColor = theme.colors.iconSecondary
         leftImageView.tintColor = theme.colors.textPrimary
+        
+        // Ecosia: update tint color
+        tintColor = UIColor.legacyTheme.ecosia.primaryButton
     }
 }

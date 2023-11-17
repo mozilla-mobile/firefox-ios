@@ -1,0 +1,30 @@
+name: Regression Tests
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  execute_merge_tests:
+    runs-on: macos-13
+    name: Execute Merge Tests
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_14.3.1.app/Contents/Developer
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Prepare environment
+        uses: ./.github/actions/prepare_environment
+        with:
+          core-token: ${{ secrets.IOS_CORE_TOKEN }}
+  
+      - name: Perform Tests and Publish Test reports
+        id: perform-tests
+        uses: ./.github/actions/perform_tests
+        with:
+          needs-shared-tests: ${{ true }}
+          needs-storage-tests: ${{ true }}
+          needs-client-tests: ${{ true }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}

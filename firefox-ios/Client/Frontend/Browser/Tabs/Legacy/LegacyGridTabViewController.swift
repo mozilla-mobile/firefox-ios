@@ -57,7 +57,9 @@ class LegacyGridTabViewController: UIViewController,
     var currentWindowUUID: UUID? { windowUUID }
 
     var toolbarHeight: CGFloat {
-        return !shouldUseiPadSetup() ? view.safeAreaInsets.bottom : 0
+        // Ecosia: hide Toolbar
+        // return !shouldUseiPadSetup() ? view.safeAreaInsets.bottom : 0
+        return 0
     }
 
     // This is an optional variable used if we wish to focus a tab that is not the

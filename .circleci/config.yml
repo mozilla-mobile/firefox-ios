@@ -1,0 +1,96 @@
+version: 2.1
+
+setup: true
+
+jobs:
+
+  build-and-deploy-testflight-beta:
+    environment:
+      CI: true
+    macos:
+      xcode: "14.3.1"
+    resource_class: macos.x86.medium.gen2
+    steps:
+      - checkout
+      - restore_cache:
+          key: 1-gems-{{ checksum "Gemfile.lock" }}
+      - run: bundle check || bundle install --path vendor/bundle
+      - save_cache:
+          key: 1-gems-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+      - run:
+          name: verify github
+          command: for ip in $(dig @8.8.8.8 github.com +short); do ssh-keyscan github.com,$ip; ssh-keyscan $ip; done 2>/dev/null >> ~/.ssh/known_hosts
+      - run:
+          name: extract Staging XCConfig
+          command: echo "$STAGING_XCCONFIG" | base64 --decode > Client/Configuration/Staging.xcconfig
+      - run:
+          name: clean packages
+          command: xcodebuild -scheme Ecosia -project Client.xcodeproj clean
+      - run:
+          name: setup content blocking scripts
+          command: ./content_blocker_update.sh
+      - run:
+          name: Build and deploy to Testflight
+          command: bundle exec fastlane testflight_beta
+
+  build-and-deploy-appcenter:
+    environment:
+      CI: true
+    macos:
+      xcode: "14.3.1"
+    resource_class: macos.x86.medium.gen2
+    steps:
+      - checkout
+      - restore_cache:
+          key: 1-gems-{{ checksum "Gemfile.lock" }}
+      - run: bundle check || bundle install --path vendor/bundle
+      - save_cache:
+          key: 1-gems-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+      - run:
+          name: verify github
+          command: for ip in $(dig @8.8.8.8 github.com +short); do ssh-keyscan github.com,$ip; ssh-keyscan $ip; done 2>/dev/null >> ~/.ssh/known_hosts
+      - run:
+          name: extract Staging XCConfig
+          command: echo "$STAGING_XCCONFIG" | base64 --decode > Client/Configuration/Staging.xcconfig
+      - run:
+          name: clean packages
+          command: xcodebuild -scheme Ecosia -project Client.xcodeproj clean
+      - run:
+          name: setup content blocking scripts
+          command: ./content_blocker_update.sh
+      - run:
+          name: Build and deploy to AppCenter
+          command: bundle exec fastlane appcenter
+
+orbs:
+  path-filtering: circleci/path-filtering@0.1.1
+
+workflows:
+  build-and-upload-to-delivery-platforms:
+    jobs:
+      - path-filtering/filter:
+          filters:
+            branches:
+              only:
+                - /^.*main.*/
+          name: Deploy release version over Testflight if MARKETING_VERION file updated
+          config-path: .circleci/deploy-release.yml
+          mapping: |
+            Client/Configuration/Common.xcconfig deploy-release true
+      - build-and-deploy-testflight-beta:
+          name: Deploy beta version over Testflight
+          filters:
+            tags:
+              only: /^beta.*/
+            branches:
+              ignore: /.*/
+      - build-and-deploy-appcenter:
+          name: Deploy ad-hoc version over AppCenter
+          filters:
+            branches:
+              only: 
+                - /^.*main.*/

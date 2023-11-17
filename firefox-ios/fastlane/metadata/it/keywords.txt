@@ -1,0 +1,1 @@
+Clima,ambiente,albero,foresta pluviale,browser,web privato,motore di ricerca,piantagi,chrome,firefox

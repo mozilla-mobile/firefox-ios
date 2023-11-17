@@ -9,7 +9,9 @@ import Shared
 // Header view model for the Firefox Normal Homepage
 class HomepageHeaderViewModel {
     struct UX {
-        static let bottomSpacing: CGFloat = 30
+        // Ecosia: Update bottom spacing
+        // static let bottomSpacing: CGFloat = 30
+        static let bottomSpacing: CGFloat = 8
         static let topSpacing: CGFloat = 16
     }
 
@@ -47,13 +49,25 @@ extension HomepageHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
 
         let section = NSCollectionLayoutSection(group: group)
-
+        
+        /* Ecosia: Migrate the top edge inset calculation from older app version
         let leadingInset = HomepageViewModel.UX.leadingInset(traitCollection: traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(
             top: UX.topSpacing,
             leading: leadingInset,
             bottom: UX.bottomSpacing,
             trailing: leadingInset)
+         */
+        let height = max(UIScreen.main.bounds.width, UIScreen.main.bounds.height)
+        let pos: SearchBarPosition = LegacyFeatureFlagsManager.shared.getCustomState(for: .searchBarPosition) ?? .top
+        let factor = pos == .bottom ? 0.1 : 0.05
+
+        let leadingInset = HomepageViewModel.UX.leadingInset(traitCollection: traitCollection)
+        section.contentInsets = NSDirectionalEdgeInsets(
+            top: height * factor,
+            leading: 0,
+            bottom: UX.bottomSpacing,
+            trailing: 0)
 
         return section
     }
@@ -72,7 +86,9 @@ extension HomepageHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 }
 
 extension HomepageHeaderViewModel: HomepageSectionHandler {
+    
     func configure(_ cell: UICollectionViewCell, at indexPath: IndexPath) -> UICollectionViewCell {
+        /* Ecosia: Cell as NTPLogoCell
         guard let headerCell = cell as? LegacyHomepageHeaderCell else { return UICollectionViewCell() }
         headerCell.configure(
             with: HomepageHeaderCellViewModel(
@@ -85,5 +101,8 @@ extension HomepageHeaderViewModel: HomepageSectionHandler {
         )
         headerCell.applyTheme(theme: theme)
         return headerCell
+        */
+        guard let logoHeaderCell = cell as? NTPLogoCell else { return UICollectionViewCell() }
+        return logoHeaderCell
     }
 }

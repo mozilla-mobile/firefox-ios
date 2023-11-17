@@ -6,7 +6,9 @@ import Common
 import Foundation
 
 class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegate, FeatureFlaggable {
-    private lazy var launchScreen = LaunchScreenView.fromNib()
+    // Ecosia: Custom launch screen
+    // private lazy var launchScreen = LaunchScreenView.fromNib()
+    private lazy var launchScreen = EcosiaLaunchScreenView.fromNib()
     private weak var coordinator: LaunchFinishedLoadingDelegate?
     private var viewModel: LaunchScreenViewModel
     private var mainQueue: DispatchQueueInterface

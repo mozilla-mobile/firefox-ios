@@ -78,8 +78,10 @@ class DevicePickerViewController: UITableViewController {
     private var selectedIdentifiers = Set<String>() // Stores Device.id
     private var notification: Any?
     private var loadingState = LoadingState.loading
-
+    /* Ecosia: Swap Theme Manager with Ecosia's
     private let themeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
+     */
+    private let themeManager = EcosiaThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
 
     // ShareItem has been added as we are now using this class outside of the ShareTo extension to
     // provide Share To functionality

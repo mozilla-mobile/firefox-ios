@@ -1,0 +1,10 @@
+git_url("git@github.com:ecosia/IosSearchSigning.git")
+
+type("development") # The default type, can be: appstore, adhoc, enterprise or development
+
+app_identifier(["com.ecosia.ecosiaapp.firefox", "com.ecosia.ecosiaapp.firefox.WidgetKit", "com.ecosia.ecosiaapp.firefox.ShareTo", "com.ecosia.ecosiaapp", "com.ecosia.ecosiaapp.WidgetKit", "com.ecosia.ecosiaapp.ShareTo"])
+username("apple-dev@ecosia.org") # Your Apple Developer Portal username
+git_branch("main")
+
+# For all available options run `fastlane match --help`
+# Remove the # in the beginning of the line to enable the other options

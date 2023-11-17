@@ -7,6 +7,7 @@ import UIKit
 import Storage
 import Shared
 import SiteImageView
+import Core
 
 import class MozillaAppServices.BookmarkItemData
 import class MozillaAppServices.BookmarkSeparatorData
@@ -48,7 +49,15 @@ class LegacyBookmarksPanel: SiteTableViewController,
 
     private var toolbarButtonItems: [UIBarButtonItem] {
         switch state {
+        /* Ecosia: Split mainView and inFolder staes
         case .bookmarks(state: .mainView), .bookmarks(state: .inFolder):
+            bottomRightButton.title = .BookmarksEdit
+            return [flexibleSpace, bottomRightButton]
+         */
+        case .bookmarks(state: .mainView):
+            bottomRightButton.title = .BookmarksEdit
+            return [moreButton, flexibleSpace, bottomRightButton]
+        case .bookmarks(state: .inFolder):
             bottomRightButton.title = .BookmarksEdit
             return [flexibleSpace, bottomRightButton]
         case .bookmarks(state: .inFolderEditMode):
@@ -77,6 +86,17 @@ class LegacyBookmarksPanel: SiteTableViewController,
         button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomLeftButton
         return button
     }()
+    
+    // Ecosia: Import Bookmarks Helper
+    // Add `moreButton`
+    lazy var moreButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(title: .localized(.bookmarksPanelMore),
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(showMoreDialog))
+        button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomLeftButton
+        return button
+    }()
 
     private lazy var bottomRightButton: UIBarButtonItem = {
         let button = UIBarButtonItem(
@@ -87,6 +107,18 @@ class LegacyBookmarksPanel: SiteTableViewController,
         )
         button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomRightButton
         return button
+    }()
+    
+    // Ecosia: add bookmarks empty state
+    private lazy var emptyHeader = EmptyHeader(icon: "bookmarksEmpty", title: .localized(.noBookmarksYet), subtitle: .localized(.AddYourFavoritePages))
+    
+    // Ecosia: Tooltip
+    private let bookmarksTooltip: NTPTooltip = {
+        let tooltip = NTPTooltip()
+        tooltip.tailPosition = .leading
+        tooltip.setText(.localized(.bookmarksToolTipText))
+        tooltip.setLinkTitle(.localized(.learnMore))
+        return tooltip
     }()
 
     // MARK: - Init
@@ -127,6 +159,18 @@ class LegacyBookmarksPanel: SiteTableViewController,
         tableView.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.tableView
         tableView.allowsSelectionDuringEditing = true
         tableView.dragInteractionEnabled = false
+        // Ecosia: Update TableView properties
+        tableView.backgroundColor = themeManager.currentTheme.colors.layer6
+        tableView.contentInset.top = 32
+    }
+    
+    // Ecosia: Tooltip
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if EcosiaInstallType.get() == .upgrade && User.shared.showsBookmarksImportExportTooltip {
+            showBookmarksTooltip()
+        }
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -146,6 +190,34 @@ class LegacyBookmarksPanel: SiteTableViewController,
             if self?.viewModel.shouldFlashRow ?? false {
                 self?.flashRow()
             }
+            
+            // Ecosia: add bookmarks empty state
+            self?.updateEmptyView()
+        }
+    }
+    
+    // Ecosia: add bookmarks empty state
+    private func updateEmptyView() {
+        switch (viewModel.isRootNode, viewModel.bookmarkNodes.isEmpty) {
+        case (true, true): // is first level, no bookmarks -> show explainative empty view
+            // Ecosia: Add `bottomAnchorDelta` util to determine `bottomAnchor` margin
+            let navigationControllerHeight: CGFloat = (navigationController?.toolbar.bounds.size.height ?? 0)
+            let topAnchorDelta: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? -navigationControllerHeight : -navigationControllerHeight*3
+            /* Update EmptyBookmarksView initialization
+            let emptyBookmarksView = EmptyBookmarksView(
+                initialBottomMargin: -(navigationController?.toolbar.bounds.size.height ?? 0)
+            )
+             */
+            let emptyBookmarksView = EmptyBookmarksView(initialBottomMargin: topAnchorDelta)
+            emptyBookmarksView.delegate = self
+            tableView.tableHeaderView = nil
+            tableView.backgroundView = emptyBookmarksView
+        case (false, true): // is folder which is empty -> show "old" empty view
+            tableView.tableHeaderView = emptyHeader
+            tableView.backgroundView = nil
+        case (_, false): // got bookmarks, don't show any empty view
+            tableView.tableHeaderView = nil
+            tableView.backgroundView = nil
         }
     }
 
@@ -639,4 +711,137 @@ extension LegacyBookmarksPanel {
             }
         }
     }
+}
+
+// Ecosia: add bookmarks empty state
+extension BookmarksPanel: EmptyBookmarksViewDelegate {
+    func emptyBookmarksViewLearnMoreTapped(_ view: EmptyBookmarksView) {
+        libraryPanelDelegate?.libraryPanel(
+            didSelectURL: Environment.current.urlProvider.bookmarksHelp,
+            visitType: .link
+        )
+    }
+    
+    func emptyBookmarksViewImportBookmarksTapped(_ view: EmptyBookmarksView) {
+        importBookmarksActionHandler()
+    }
+}
+
+// Ecosia: Tooltip delegate
+extension BookmarksPanel: NTPTooltipDelegate {
+    func ntpTooltipTapped(_ tooltip: NTPTooltip?) {
+        hideBookmarksTooltip()
+    }
+    
+    func ntpTooltipCloseTapped(_ tooltip: NTPTooltip?) {
+        hideBookmarksTooltip()
+    }
+    
+    func ntpTooltipLinkTapped(_ tooltip: NTPTooltip?) {
+        libraryPanelDelegate?.libraryPanel(
+            didSelectURL: Environment.current.urlProvider.bookmarksHelp,
+            visitType: .link
+        )
+    }
+}
+
+// Ecosia: Import Bookmarks Helper
+extension BookmarksPanel {
+    
+    func importBookmarksActionHandler() {
+        Analytics.shared.bookmarksPerformImportExport(.import)
+        viewModel.bookmarkImportSelected(in: self) { [weak self] url, error in
+            self?.moreButton.isEnabled = true
+            
+            guard error != nil else {
+                self?.reloadData()
+                return
+            }
+            
+            let alert = UIAlertController(title: .localized(.bookmarksImportFailedTitle), message: .localized(.bookmarksImportExportFailedMessage), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: .CancelString, style: .cancel))
+            let retryAction = UIAlertAction(title: .localized(.retryMessage), style: .default) { [weak self] _ in
+                guard let self = self, let url = url else { return }
+                self.viewModel.handlePickedUrl(url, in: self)
+            }
+            alert.addAction(retryAction)
+            alert.preferredAction = retryAction
+            self?.present(alert, animated: true)
+        }
+    }
+    
+    func exportBookmarksActionHandler() {
+        Analytics.shared.bookmarksPerformImportExport(.export)
+        viewModel.bookmarkExportSelected(in: self) { [weak self] error in
+            self?.moreButton.isEnabled = true
+            
+            guard error != nil else {
+                self?.reloadData()
+                return
+            }
+            
+            let alert = UIAlertController(title: .localized(.bookmarksExportFailedTitle), message: .localized(.bookmarksImportExportFailedMessage), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: .CancelString, style: .cancel))
+            let retryAction = UIAlertAction(title: .localized(.retryMessage), style: .default) { [weak self] _ in
+                self?.exportBookmarksActionHandler()
+            }
+            alert.addAction(retryAction)
+            self?.present(alert, animated: true)
+        }
+    }
+    
+    @objc private func showMoreDialog() {
+        hideBookmarksTooltip()
+        moreButton.isEnabled = false
+        let importAction = UIAlertAction(title: .localized(.importBookmarks), style: .default, handler: { [weak self] _ in self?.importBookmarksActionHandler() })
+        let exportAction = UIAlertAction(title: .localized(.exportBookmarks), style: .default, handler: { [weak self] _ in self?.exportBookmarksActionHandler() })
+        exportAction.isEnabled = !viewModel.bookmarkNodes.isEmpty
+        let cancelAction = UIAlertAction(title: .CancelString, style: .cancel) { [weak self] _ in
+            self?.moreButton.isEnabled = true
+        }
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alert.popoverPresentationController?.barButtonItem = moreButton
+        [importAction, exportAction, cancelAction].forEach(alert.addAction)
+        present(alert, animated: true)
+    }
+    
+    private func showBookmarksTooltip() {
+        guard bookmarksTooltip.superview == nil else { return }
+        
+        bookmarksTooltip.delegate = self
+        bookmarksTooltip.alpha = 0.0
+        view.addSubview(self.bookmarksTooltip)
+
+        var constraints = [
+            bookmarksTooltip.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor, constant: 0),
+            bookmarksTooltip.trailingAnchor.constraint(lessThanOrEqualTo: view.layoutMarginsGuide.trailingAnchor, constant: 0),
+            bookmarksTooltip.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: 0),
+        ]
+                
+        if traitCollection.userInterfaceIdiom == .pad {
+            constraints.append(
+                bookmarksTooltip.widthAnchor.constraint(lessThanOrEqualToConstant: view.bounds.width / 2).priority(.defaultHigh)
+            )
+        }
+        
+        NSLayoutConstraint.activate(constraints)
+        
+        UIView.animate(withDuration: 0.3) {
+            self.bookmarksTooltip.alpha = 1.0
+        }
+    }
+    
+    private func hideBookmarksTooltip() {
+        User.shared.hideBookmarksImportExportTooltip()
+        
+        guard bookmarksTooltip.superview != nil else { return }
+        bookmarksTooltip.delegate = nil
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            self.bookmarksTooltip.alpha = 0.0
+        }) { _ in
+            self.bookmarksTooltip.removeFromSuperview()
+        }
+    }
+
 }

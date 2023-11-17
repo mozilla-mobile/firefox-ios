@@ -9,8 +9,12 @@ import Storage
 
 class TopSitesViewModel {
     struct UX {
-        static let cellEstimatedSize = CGSize(width: 85, height: 94)
-        static let cardSpacing: CGFloat = 16
+        // Ecosia: Update `cellEstimatedSize`
+        // static let cellEstimatedSize = CGSize(width: 85, height: 94)
+        static let cellEstimatedSize = CGSize(width: 100, height: 100)
+        // Ecosia: Update `cardSpacing`
+        // static let cardSpacing: CGFloat = 16
+        static let cardSpacing: CGFloat = 8
         static let minCards: Int = 4
     }
 
@@ -131,11 +135,14 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {
+        /* Ecosia: no header for top sites
         return LabelButtonHeaderViewModel(
             title: nil,
             titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.topSites,
             isButtonHidden: true,
             textColor: wallpaperManager.currentWallpaper.textColor)
+         */
+        .emptyHeader
     }
 
     var isEnabled: Bool {
@@ -165,9 +172,11 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                        subitem: item,
                                                        count: sectionDimension.numberOfTilesPerRow)
-        group.interItemSpacing = NSCollectionLayoutSpacing.fixed(UX.cardSpacing)
+        // Ecosia: Remove group spacing
+        // group.interItemSpacing = NSCollectionLayoutSpacing.fixed(UX.cardSpacing)
         let section = NSCollectionLayoutSection(group: group)
 
+        /* Ecosia: Use sectionType's section insets with updated bottom spacing
         let leadingInset = HomepageViewModel.UX.leadingInset(traitCollection: traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(
             top: 0,
@@ -175,6 +184,9 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
             bottom: HomepageViewModel.UX.spacingBetweenSections - TopSiteItemCell.UX.bottomSpace,
             trailing: leadingInset
         )
+         */
+        section.contentInsets = sectionType.sectionInsets(traitCollection, bottomSpacing: 24)
+
         section.interGroupSpacing = UX.cardSpacing
 
         return section

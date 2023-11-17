@@ -22,6 +22,7 @@ extension AppInfo {
 
     /// Return the keychain access group.
     public static func keychainAccessGroupWithPrefix(_ prefix: String) -> String {
+        /* Ecosia: Update group identifier
         var bundleIdentifier = baseBundleIdentifier
         if bundleIdentifier == "org.mozilla.ios.FennecEnterprise" {
             // Bug 1373726 - Base bundle identifier incorrectly generated for Nightly builds
@@ -29,6 +30,8 @@ extension AppInfo {
             bundleIdentifier = "org.mozilla.ios.Fennec.enterprise"
         }
         return prefix + "." + bundleIdentifier
+         */
+        ecosiaKeychainAccessGroupWithPrefix(prefix)
     }
 
     // Return the MozWhatsNewTopic key from the Info.plist
@@ -59,6 +62,7 @@ extension AppInfo {
     /// Return the shared container identifier (also known as the app group) to be used with for example background
     /// http requests. It is the base bundle identifier with a "group." prefix.
     public static var sharedContainerIdentifier: String {
+        /* Ecosia: Update group identifier
         var bundleIdentifier = baseBundleIdentifier
         if bundleIdentifier == "org.mozilla.ios.FennecEnterprise" {
             // Bug 1373726 - Base bundle identifier incorrectly generated for Nightly builds
@@ -66,5 +70,7 @@ extension AppInfo {
             bundleIdentifier = "org.mozilla.ios.Fennec.enterprise"
         }
         return "group." + bundleIdentifier
+         */
+        ecosiaSharedContainerIdentifier
     }
 }

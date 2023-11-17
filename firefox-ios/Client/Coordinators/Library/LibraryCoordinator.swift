@@ -71,8 +71,12 @@ class LibraryCoordinator: BaseCoordinator,
         return [
             ThemedNavigationController(rootViewController: bookmarksPanel, windowUUID: windowUUID),
             ThemedNavigationController(rootViewController: historyPanel, windowUUID: windowUUID),
+            /* Ecosia: Invert Download and Reading list positions in the LibraryViewController
             ThemedNavigationController(rootViewController: downloadsPanel, windowUUID: windowUUID),
             ThemedNavigationController(rootViewController: readingListPanel, windowUUID: windowUUID)
+             */
+            ThemedNavigationController(rootViewController: readingListPanel, windowUUID: windowUUID),
+            ThemedNavigationController(rootViewController: downloadsPanel, windowUUID: windowUUID)
         ]
     }
 

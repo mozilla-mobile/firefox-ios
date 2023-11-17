@@ -50,8 +50,12 @@ extension LibraryPanel {
 enum LibraryPanelType: Int, CaseIterable {
     case bookmarks = 0
     case history = 1
+    /* Ecosia: Invert Download and Reading list positions in the LibraryViewController
     case downloads = 2
     case readingList = 3
+     */
+    case readingList = 2
+    case downloads = 3
 
     var title: String {
         switch self {
@@ -97,15 +101,26 @@ class LibraryPanelHelper {
                 accessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.historyView,
                 panelType: .history),
 
+            /* Ecosia: Invert Download and Reading list positions in the LibraryViewController
+             LibraryPanelDescriptor(
+                accessibilityLabel: .LibraryPanelDownloadsAccessibilityLabel,
+                accessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.downloadsView,
+                panelType: .downloads),
+             
+            LibraryPanelDescriptor(
+                accessibilityLabel: .LibraryPanelReadingListAccessibilityLabel,
+                accessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.readingListView,
+                panelType: .readingList),
+             */
+            LibraryPanelDescriptor(
+                accessibilityLabel: .LibraryPanelReadingListAccessibilityLabel,
+                accessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.readingListView,
+                panelType: .readingList),
+            
             LibraryPanelDescriptor(
                 accessibilityLabel: .LibraryPanelDownloadsAccessibilityLabel,
                 accessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.downloadsView,
                 panelType: .downloads),
-
-            LibraryPanelDescriptor(
-                accessibilityLabel: .LibraryPanelReadingListAccessibilityLabel,
-                accessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.readingListView,
-                panelType: .readingList)
         ]
     }()
 }

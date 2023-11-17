@@ -77,6 +77,7 @@ extension AppDelegate {
     }
 }
 
+/* Ecosia: Deactivate Firefox Push Notification Bahviour
 extension AppDelegate: UNUserNotificationCenterDelegate {
     // Called when the user taps on a notification from the background.
     func userNotificationCenter(_ center: UNUserNotificationCenter,
@@ -164,3 +165,4 @@ extension AppDelegate {
                    category: .setup)
     }
 }
+*/

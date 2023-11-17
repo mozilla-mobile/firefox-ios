@@ -169,12 +169,20 @@ class LibraryViewController: UIViewController, Themeable {
         case 1:
             selectedPanel = .history
             eventValue = .historyPanel
+        /* Ecosia: Invert Download and Reading list positions in the LibraryViewController
         case 2:
             selectedPanel = .downloads
             eventValue = .downloadsPanel
         case 3:
             selectedPanel = .readingList
             eventValue = .readingListPanel
+         */
+        case 2:
+            selectedPanel = .readingList
+            eventValue = .readingListPanel
+        case 3:
+            selectedPanel = .downloads
+            eventValue = .downloadsPanel
         default:
             return
         }
@@ -317,7 +325,14 @@ class LibraryViewController: UIViewController, Themeable {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let standardAppearance = UIToolbarAppearance()
         standardAppearance.configureWithDefaultBackground()
+
+        /* Ecosia: Update theming
         standardAppearance.backgroundColor = theme.colors.layer1
+        */
+        standardAppearance.backgroundColor = theme.colors.layer6
+        standardAppearance.backgroundColor = .legacyTheme.ecosia.barBackground
+        standardAppearance.shadowColor = .legacyTheme.ecosia.barSeparator
+
         navigationController?.toolbar.standardAppearance = standardAppearance
         navigationController?.toolbar.compactAppearance = standardAppearance
         navigationController?.toolbar.scrollEdgeAppearance = standardAppearance
@@ -333,6 +348,8 @@ class LibraryViewController: UIViewController, Themeable {
         navigationController?.navigationBar.shadowImage = UIImage()
 
         let theme = themeManager.getCurrentTheme(for: windowUUID)
+        
+        /* Ecosia: Update background from layer1
         view.backgroundColor = theme.colors.layer1
         navigationController?.navigationBar.barTintColor = theme.colors.layer1
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
@@ -340,6 +357,15 @@ class LibraryViewController: UIViewController, Themeable {
         navigationController?.toolbar.barTintColor = theme.colors.layer1
         navigationController?.toolbar.tintColor = theme.colors.actionPrimary
         segmentControlToolbar.barTintColor = theme.colors.layer1
+         */
+        view.backgroundColor = theme.colors.layer3
+        navigationController?.navigationBar.barTintColor = themeManager.currentTheme.colors.layer6
+        navigationController?.navigationBar.tintColor = themeManager.currentTheme.colors.actionPrimary
+        navigationController?.navigationBar.backgroundColor = themeManager.currentTheme.colors.layer6
+        navigationController?.toolbar.barTintColor = themeManager.currentTheme.colors.layer6
+        navigationController?.toolbar.tintColor = themeManager.currentTheme.colors.actionPrimary
+        segmentControlToolbar.barTintColor = themeManager.currentTheme.colors.layer6
+
         segmentControlToolbar.tintColor = theme.colors.textPrimary
         segmentControlToolbar.isTranslucent = false
 

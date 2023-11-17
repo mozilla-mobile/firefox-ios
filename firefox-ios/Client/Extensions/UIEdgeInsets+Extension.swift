@@ -8,4 +8,9 @@ extension UIEdgeInsets {
     init(equalInset inset: CGFloat) {
         self.init(top: inset, left: inset, bottom: inset, right: inset)
     }
+    
+    // Ecosia: Add extension
+    init(horizontal inset: CGFloat) {
+        self.init(top: 0, left: inset, bottom: 0, right: inset)
+    }
 }

@@ -40,6 +40,8 @@ class SingleActionViewModel {
     private(set) var needsIconActionableTint: Bool
 
     var isEnabled: Bool // Used by toggles like night mode to switch tint color
+    // Ecosia: Add `isNew` bool
+    var isNew: Bool // Used to display the "New" badge
     private(set) var bold = false
     private(set) var tabCount: String?
     private(set) var tapHandler: ((SingleActionViewModel) -> Void)?
@@ -72,6 +74,7 @@ class SingleActionViewModel {
          badgeIconNamed: String? = nil,
          bold: Bool? = false,
          tabCount: String? = nil,
+         isNew: Bool = false, // Ecosia: Add `isNew` bool
          tapHandler: ((SingleActionViewModel) -> Void)? = nil) {
         self.title = title
         self.iconString = iconString
@@ -85,6 +88,7 @@ class SingleActionViewModel {
         self.text = text
         self.bold = bold ?? false
         self.tabCount = tabCount
+        self.isNew = isNew // Ecosia: Add `isNew` bool
         self.badgeIconName = badgeIconNamed
     }
 

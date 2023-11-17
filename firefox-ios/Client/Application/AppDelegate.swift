@@ -9,6 +9,7 @@ import UIKit
 import Common
 import Glean
 import TabDataStore
+import Core
 
 import class MozillaAppServices.Viaduct
 
@@ -29,7 +30,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         creditCardAutofillEnabled: creditCardAutofillStatus
     )
 
+    /* Ecosia: Swap Theme Manager with Ecosia's
     lazy var themeManager: ThemeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
+     */
+    lazy var themeManager: ThemeManager = EcosiaThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
     lazy var ratingPromptManager = RatingPromptManager(profile: profile)
     lazy var appSessionManager: AppSessionProvider = AppSessionManager()
     lazy var notificationSurfaceManager = NotificationSurfaceManager()
@@ -118,6 +122,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 firefoxSuggest: firefoxSuggest
             ))
         }
+        // Ecosia: Update EcosiaInstallType if needed
+        EcosiaInstallType.evaluateCurrentEcosiaInstallType()
+        // Ecosia: Disable BG sync //backgroundSyncUtil = BackgroundSyncUtil(profile: profile, application: application)
+        // Ecosia: lifecycle tracking
+        Analytics.shared.activity(.launch)
+        
+        /* 
+         Ecosia: Feature Management fetch
+         We perform the same configuration retrieval in
+         `applicationDidBecomeActive(:)` and sounds redundant;
+         However we need it here to make sure we retrieve the latest
+         flag state of the EngagementService.
+         Decouple the "loading" only from the filesystem of any
+         previously saved Model from the `Unleash.start(:)` will not
+         make any tangible difference in the process as we check if
+         any cached version of the Model is in place.
+         */
+        Task {
+            await FeatureManagement.fetchConfiguration()
+            // Ecosia: Engagement Service Initialization helper
+            ClientEngagementService.shared.initializeAndUpdateNotificationRegistrationIfNeeded(notificationCenterDelegate: self)
+        }
+        
+        // Ecosia: fetching statistics before they are used
+        Task.detached {
+            try? await Statistics.shared.fetchAndUpdate()
+        }
 
         let topSitesProvider = TopSitesProviderImplementation(
             placesFetcher: profile.places,
@@ -166,6 +197,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // self?.profile.cleanupHistoryIfNeeded()
             self?.ratingPromptManager.updateData()
         }
+
+        // Ecosia
+        Task {
+            await FeatureManagement.fetchConfiguration()
+        }
+        MMP.sendSession()
 
         DispatchQueue.global().async { [weak self] in
             self?.profile.pollCommands(forcePoll: false)
@@ -313,3 +350,16 @@ extension AppDelegate {
         return configuration
     }
 }
+
+// Ecosia: Conformance to UNUserNotificationCenterDelegate to enable APN
+
+extension AppDelegate: UNUserNotificationCenterDelegate {}
+
+// Ecosia: Register the APN device token
+
+extension AppDelegate {
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        ClientEngagementService.shared.registerDeviceToken(deviceToken)
+    }
+}
+

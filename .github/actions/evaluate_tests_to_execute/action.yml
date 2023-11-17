@@ -1,0 +1,27 @@
+name: 'Evaluate Tests to execute'
+description: 'This action contains all the usual steps needed to evaluate the tests to execute based on the files changed'
+
+outputs:
+  shared-module-changed:
+    description: "Flag stating that there have been changes in the shared module"
+    value: ${{ steps.filter-tests.outputs.shared-module-changed }}
+  storage-module-changed:
+    description: "Flag stating that there have been changes in the storage module"
+    value: ${{ steps.filter-tests.outputs.storage-module-changed }}
+  client-module-changed:
+    description: "Flag stating that there have been changes in the client module"
+    value: ${{ steps.filter-tests.outputs.client-module-changed }}
+
+runs:
+  using: "composite"
+  steps:
+    - uses: dorny/paths-filter@v2
+      id: filter-tests
+      with:
+        filters: |
+          shared-module-changed:
+            - 'Shared/**'
+          storage-module-changed:
+            - 'Storage/**'   
+          client-module-changed:
+            - 'Client/**'

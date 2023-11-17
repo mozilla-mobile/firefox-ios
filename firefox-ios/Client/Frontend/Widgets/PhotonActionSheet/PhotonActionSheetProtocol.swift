@@ -20,6 +20,37 @@ extension PhotonActionSheetProtocol {
     func presentSheetWith(viewModel: PhotonActionSheetViewModel,
                           on viewController: PresentableVC,
                           from view: UIView) {
+        // Ecosia: Ecosia: custom UI/UX for main menu
+        guard !viewModel.isMainMenu else {
+
+            // main menu should only be opened from the browser
+            guard let browser = self as? BrowserViewController else { return }
+            let sheet = PageActionMenu(viewModel: viewModel, delegate: browser)
+            sheet.modalPresentationStyle = viewModel.modalStyle
+
+            // iPhone
+            if #available(iOS 15.0, *), let sheet = sheet.sheetPresentationController {
+                sheet.detents = [.medium(), .large()]
+            }
+
+            // ipad
+            if let popoverVC = sheet.popoverPresentationController, sheet.modalPresentationStyle == .popover {
+                popoverVC.delegate = viewController
+                popoverVC.sourceView = view
+                popoverVC.sourceRect = view.bounds
+
+                let trait = viewController.traitCollection
+                if viewModel.isMainMenu {
+                    let margins = viewModel.getMainMenuPopOverMargins(trait: trait, view: view, presentedOn: viewController)
+                    popoverVC.popoverLayoutMargins = margins
+                }
+                popoverVC.permittedArrowDirections = [.up]
+            }
+
+            viewController.present(sheet, animated: true, completion: nil)
+            return
+        }
+
         // TODO: Regression testing needed here.
         guard let uuid = view.currentWindowUUID else { return }
 

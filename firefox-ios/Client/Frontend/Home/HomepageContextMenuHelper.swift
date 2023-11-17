@@ -64,6 +64,8 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         if sectionType == .topSites,
            let topSitesActions = getTopSitesActions(site: site, with: sourceView) {
             actions = topSitesActions
+        }
+            /* Ecosia: Remove History Highlights and Pocket
         } else if sectionType == .pocket,
                   let pocketActions = getPocketActions(site: site, with: sourceView) {
             actions = pocketActions
@@ -74,6 +76,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                   let jumpBackInActions = getJumpBackInActions(site: site, with: sourceView) {
             actions = jumpBackInActions
         }
+             */
 
         return actions
     }
@@ -91,11 +94,14 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                                with sourceView: UIView?,
                                sectionType: HomepageSectionType
     ) -> [PhotonRowActions]? {
+        /* Ecosia: Remove History Highlights and Pocket
         guard sectionType == .historyHighlights,
               let highlightsActions = getHistoryHighlightsActions(for: highlightItem, with: sourceView)
         else { return nil }
 
         return highlightsActions
+         */
+        return nil
     }
 
     // MARK: - Default actions
@@ -106,10 +112,12 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
             allowIconScaling: true
         ) { _ in
             self.delegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
-            sectionType.newPrivateTabActionTelemetry()
+            // Ecosia: Remove Telemetry section type helper
+            // sectionType.newPrivateTabActionTelemetry()
         }.items
     }
 
+    /* Ecosia: Remove History Highlights and Pocket
     // MARK: - History Highlights
 
     private func getHistoryHighlightsActions(
@@ -164,7 +172,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
         return [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, shareAction]
     }
-
+     */
     private func getOpenInNewTabAction(siteURL: URL, sectionType: HomepageSectionType) -> PhotonRowActions {
         return SingleActionViewModel(
             title: .OpenInNewTabContextMenuTitle,
@@ -172,7 +180,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
             allowIconScaling: true
         ) { _ in
             self.delegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
-
+            /* Ecosia: Remove History Highlights and Pocket
             if sectionType == .pocket {
                 let originExtras = TelemetryWrapper.getOriginExtras(isZeroSearch: self.viewModel.isZeroSearch)
                 TelemetryWrapper.recordEvent(category: .action,
@@ -180,6 +188,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                                              object: .pocketStory,
                                              extras: originExtras)
             }
+             */
         }.items
     }
 

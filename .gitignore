@@ -135,3 +135,31 @@ ContentBlockingLists/disconnect-*
 focus-ios/shavar-*
 firefox-ios/shavar-*
 shavar-*
+
+# bundler
+vendor/bundle
+.bundle/config
+
+# transifex
+/tx
+
+# Ecosia: Additional configs
+Staging.xcconfig
+Production.xcconfig
+.github/workflows/firefox-*.yml
+SourcePackages
+test_output
+.vscode
+EcosiaTests/Results
+
+# TODO Ecosia Upgrade: Remove once confirmed not needed
+# (they are still above but prefixed with `firefox-ios/`)
+Client/ContentBlocker/Lists/*
+Client/Assets/AllFramesAtDocumentStart.js
+Client/Assets/AllFramesAtDocumentEnd.js
+Client/Assets/MainFrameAtDocumentStart.js
+Client/Assets/MainFrameAtDocumentEnd.js
+Client/Assets/AutofillAllFramesAtDocumentStart.js
+Client/Assets/WebcompatAllFramesAtDocumentStart.js
+Client/Assets/*.js.LICENSE.txt
+/Storage/Generated

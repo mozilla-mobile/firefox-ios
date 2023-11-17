@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "bookmarkSuccess.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

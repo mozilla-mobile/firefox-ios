@@ -78,7 +78,9 @@ extension URL {
         return host
     }
 
-    var normalizedHostAndPath: String? {
+    // Ecosia: Make it public
+    // var normalizedHostAndPath: String? {
+    public var normalizedHostAndPath: String? {
         return normalizedHost.flatMap { $0 + self.path }
     }
 

@@ -8,8 +8,10 @@ import Common
 
 protocol TabToolbarProtocol: AnyObject {
     var tabToolbarDelegate: TabToolbarDelegate? { get set }
-
+    /* Ecosia: Change `addNewTabButton` to configurable CircleButton 
     var addNewTabButton: ToolbarButton { get }
+     */
+    var circleButton: CircleButton { get }
     var tabsButton: TabsButton { get }
     var appMenuButton: ToolbarButton { get }
     var bookmarksButton: ToolbarButton { get }
@@ -53,11 +55,23 @@ enum MiddleButtonState {
 @objcMembers
 open class TabToolbarHelper: NSObject {
     let toolbar: TabToolbarProtocol
+    /* Ecosia: Updates images in batch.
+       Some of them are the same but easier to solve when rebasing/merging
     let ImageSearch = UIImage.templateImageNamed(StandardImageIdentifiers.Large.search)
     let ImageNewTab = UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus)
     let ImageHome = UIImage.templateImageNamed(StandardImageIdentifiers.Large.home)
+     */
+    let ImageSearch = UIImage.templateImageNamed("searchUrl")
+    let ImageNewTab = UIImage.templateImageNamed("nav-add")
+    let ImageHome = UIImage.templateImageNamed("menu-Home")
+
+    // TODO Ecosia Upgrade: Do we need to update these two too?
     let ImageBookmark = UIImage.templateImageNamed(StandardImageIdentifiers.Large.bookmarkTrayFill)
     let ImageFire = UIImage.templateImageNamed(StandardImageIdentifiers.Large.dataClearance)
+
+    // TODO Ecosia Upgrade: Reload and Stop and no longer present
+    // let ImageReload = UIImage.templateImageNamed("nav-refresh")
+    // let ImageStop = UIImage.templateImageNamed("nav-stop")
 
     func setMiddleButtonState(_ state: MiddleButtonState) {
         let device = UIDevice.current.userInterfaceIdiom
@@ -143,12 +157,17 @@ open class TabToolbarHelper: NSObject {
         toolbar.tabsButton.largeContentTitle = .TabsButtonShowTabsAccessibilityLabel
         longPressGestureRecognizers.append(longPressGestureTabsButton)
 
+        /* Ecosia: Change `addNewTabButton` to configurable CircleButton
         toolbar.addNewTabButton.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus), for: .normal)
         toolbar.addNewTabButton.accessibilityLabel = .AddTabAccessibilityLabel
         toolbar.addNewTabButton.showsLargeContentViewer = true
         toolbar.addNewTabButton.largeContentTitle = .AddTabAccessibilityLabel
         toolbar.addNewTabButton.addTarget(self, action: #selector(didClickAddNewTab), for: .touchUpInside)
         toolbar.addNewTabButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.addNewTabButton
+         */
+        toolbar.circleButton.accessibilityLabel = .AddTabAccessibilityLabel
+        toolbar.circleButton.addTarget(self, action: #selector(didClickCircleButton), for: .touchUpInside)
+        toolbar.circleButton.accessibilityIdentifier = AccessibilityIdentifiers.Ecosia.TabToolbar.circleButton
 
         let appMenuImage = UIImage.templateImageNamed(StandardImageIdentifiers.Large.appMenu)
         toolbar.appMenuButton.contentMode = .center
@@ -233,10 +252,12 @@ open class TabToolbarHelper: NSObject {
         toolbar.tabToolbarDelegate?.tabToolbarDidPressBookmarks(toolbar, button: toolbar.appMenuButton)
     }
 
+    /* Ecosia: Change `addNewTabButton` to configurable CircleButton
     func didClickAddNewTab() {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .addNewTabButton)
         toolbar.tabToolbarDelegate?.tabToolbarDidPressAddNewTab(toolbar, button: toolbar.addNewTabButton)
     }
+     */
 
     func didPressMultiStateButton() {
         switch middleButtonState {
@@ -247,6 +268,18 @@ open class TabToolbarHelper: NSObject {
             toolbar.tabToolbarDelegate?.tabToolbarDidPressSearch(toolbar, button: toolbar.multiStateButton)
         case .fire:
             toolbar.tabToolbarDelegate?.tabToolbarDidPressDataClearance(toolbar, button: toolbar.multiStateButton)
+        }
+    }
+    
+    // Ecosia: Change addNewTabButton to configurable CircleButton
+    func didClickCircleButton() {
+        switch toolbar.circleButton.config {
+        case .search:
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .startSearchButton)
+            toolbar.tabToolbarDelegate?.tabToolbarDidPressSearch(toolbar, button: toolbar.circleButton)
+        case .newTab:
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .addNewTabButton)
+            toolbar.tabToolbarDelegate?.tabToolbarDidPressAddNewTab(toolbar, button: toolbar.circleButton)
         }
     }
 }

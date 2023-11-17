@@ -1,0 +1,17 @@
+# The Deliverfile allows you to store various App Store Connect metadata
+# For more information, check out the docs
+# https://docs.fastlane.tools/actions/deliver/
+
+itc_provider("33YMRSYD2L")
+app_identifier("com.ecosia.ecosiaapp")
+
+skip_app_version_update(true)
+skip_binary_upload(true)
+skip_screenshots(true)
+phased_release(true)
+
+skip_metadata(false)
+submit_for_review(false)
+edit_live(false)
+use_live_version(false)
+run_precheck_before_submit(false)

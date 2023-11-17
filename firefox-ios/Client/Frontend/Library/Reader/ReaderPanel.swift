@@ -292,13 +292,16 @@ class ReadingListPanel: UITableViewController,
 
             let scrollView = self.emptyStateViewA11YScroll
             let emptyView = self.emptyStateView
-
+            // Ecosia: Add `topAnchorDelta` util to determine `topAnchor` margin
+            let topAnchorDelta: CGFloat = UIDevice.current.userInterfaceIdiom == .phone ? -50 : 0
             if visible {
                 guard scrollView.superview == nil else { return }
                 scrollView.addSubview(emptyView)
                 NSLayoutConstraint.activate([
                     emptyView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-                    emptyView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+                    // Ecosia: Update reading list top anchor constant only if iPhone
+                    // emptyView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+                    emptyView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: topAnchorDelta),
                     emptyView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
                     emptyView.heightAnchor.constraint(greaterThanOrEqualTo: scrollView.heightAnchor)
                 ])
@@ -325,10 +328,13 @@ class ReadingListPanel: UITableViewController,
         return scrollView
     }()
 
+    private var emptyStateView = EmptyReadingListView()
+    /* Ecosia: Update Empty State View reference
     private lazy var emptyStateView: UIView = {
         return ReaderPanelEmptyStateView(windowUUID: self.windowUUID)
     }()
-
+     */
+    
     @objc
     fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         guard longPressGestureRecognizer.state == .began else { return }

@@ -1,0 +1,31 @@
+name: 'Perform Tests'
+description: 'This action contains all the usual steps needed to perform the unit tests'
+
+inputs:
+  needs-shared-tests:
+    description: 'Flag to determine whether the action needs to perform the Shared  module tests'
+    required: true
+  needs-storage-tests:
+    description: 'Flag to determine whether the action needs to perform the Storage module tests'
+    required: true
+  needs-client-tests:
+    description: 'Flag to determine whether the action needs to perform the Client module tests'
+    required: true
+  github-token:
+    description: 'The Github Token'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Run tests based on file changes
+      shell: bash
+      run: |
+        bundles_under_testing=$(echo "$(${{ inputs.needs-shared-tests }} && echo "SharedTests,")$(${{ inputs.needs-storage-tests }} && echo "StorageTests,")$(${{ inputs.needs-client-tests }} && echo "ClientTests,")" | sed 's/,$//')
+        bundle exec fastlane run run_tests only_testing:"$bundles_under_testing"
+
+    - name: Publish Test Report
+      uses: mikepenz/action-junit-report@v3.7.6
+      with:
+        report_paths: '**/test_output/xml/report.junit'
+        github_token: ${{ inputs.github-token }}

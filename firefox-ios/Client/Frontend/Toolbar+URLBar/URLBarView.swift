@@ -13,11 +13,17 @@ private struct URLBarViewUX {
     static let LocationHeight: CGFloat = 40
     static let ButtonHeight: CGFloat = 44
     static let LocationContentOffset: CGFloat = 8
-    static let TextFieldCornerRadius: CGFloat = 8
+    // Ecosia: Update Corner Radius
+    // static let TextFieldCornerRadius: CGFloat = 8
+    static let TextFieldCornerRadius: CGFloat = 22
     static let TextFieldBorderWidth: CGFloat = 0
-    static let TextFieldBorderWidthSelected: CGFloat = 4
+    // Ecosia: Update Border width in selected state
+    // static let TextFieldBorderWidthSelected: CGFloat = 4
+    static let TextFieldBorderWidthSelected: CGFloat = 2
     static let ProgressBarHeight: CGFloat = 3
-    static let SearchIconImageWidth: CGFloat = 30
+    // Ecosia: Update search icon size
+    static let SearchIconWidthSmall: CGFloat = 16
+    static let SearchIconWidthMedium: CGFloat = 24
     static let TabsButtonRotationOffset: CGFloat = 1.5
     static let TabsButtonHeight: CGFloat = 18.0
     static let ToolbarButtonInsets = UIEdgeInsets(equalInset: Padding)
@@ -80,7 +86,9 @@ class URLBarView: UIView,
             }
         }
     }
-    @objc dynamic lazy var locationActiveBorderColor: UIColor = .clear {
+    // Ecosia: Update `locationActiveBorderColor`
+    // @objc dynamic lazy var locationActiveBorderColor: UIColor = .clear {
+    @objc dynamic lazy var locationActiveBorderColor: UIColor = UIColor.legacyTheme.ecosia.primaryButton {
         didSet {
             if inOverlayMode {
                 locationContainer.layer.borderColor = locationActiveBorderColor.cgColor
@@ -113,12 +121,22 @@ class URLBarView: UIView,
     /// Overlay mode is the state where the lock/reader icons are hidden, the home panels are shown,
     /// and the Cancel button is visible (allowing the user to leave overlay mode).
     var inOverlayMode = false
+    
+    // Ecosia: Helper flags
+    var isPrivate = false
+    var isHome: Bool {
+        guard let url = currentURL else { return true }
+        return InternalURL(url)?.isAboutHomeURL == true
+    }
 
     lazy var locationView: TabLocationView = {
         let locationView = TabLocationView(windowUUID: windowUUID)
         locationView.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
         locationView.translatesAutoresizingMaskIntoConstraints = false
         locationView.delegate = self
+        // Ecosia: Update LocationView properties
+        locationView.layer.masksToBounds = true
+        locationView.clipsToBounds = true
         return locationView
     }()
 
@@ -164,8 +182,11 @@ class URLBarView: UIView,
 
     fileprivate lazy var showQRScannerButton: InsetButton = {
         let button = InsetButton()
+        /* Ecosia: Update QR Code image
         let qrCodeImage = UIImage.templateImageNamed(StandardImageIdentifiers.Large.qrCode)
         button.setImage(qrCodeImage, for: .normal)
+        */
+        button.setImage(UIImage.templateImageNamed("menu-ScanQRCode"), for: .normal)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Browser.UrlBar.scanQRCodeButton
         button.accessibilityLabel = .ScanQRCodeViewTitle
         button.showsLargeContentViewer = true
@@ -200,7 +221,10 @@ class URLBarView: UIView,
 
     var appMenuButton = ToolbarButton()
     var bookmarksButton = ToolbarButton()
+    /* Ecosia: Change `addNewTabButton` to configurable CircleButton
     var addNewTabButton = ToolbarButton()
+     */
+    var circleButton = CircleButton(config: .search)
     var forwardButton = ToolbarButton()
     var multiStateButton = ToolbarButton()
 
@@ -214,7 +238,7 @@ class URLBarView: UIView,
         self.tabsButton,
         self.bookmarksButton,
         self.appMenuButton,
-        self.addNewTabButton,
+        self.circleButton,
         self.forwardButton,
         self.backButton,
         self.multiStateButton]
@@ -226,16 +250,23 @@ class URLBarView: UIView,
 
         set(newURL) {
             locationView.url = newURL
+            
+            // Ecosia: update visibility of reload/multi-state button
+            if !inOverlayMode {
+                setNeedsUpdateConstraints()
+            }
         }
     }
 
     var profile: Profile
     let windowUUID: WindowUUID
-
+    
+    /* Ecosia: Remove private mode badge
     fileprivate lazy var privateModeBadge = BadgeWithBackdrop(
         imageName: StandardImageIdentifiers.Medium.privateModeCircleFillPurple,
         isPrivateBadge: true
     )
+    */
 
     fileprivate let warningMenuBadge = BadgeWithBackdrop(
         imageName: StandardImageIdentifiers.Large.warningFill,
@@ -291,9 +322,14 @@ class URLBarView: UIView,
             addSubview($0)
         }
 
+        // Ecosia: Update Search Engine Image
+        updateSearchEngineImage()
+
         profile.searchEnginesManager.delegate = self
 
+        /* Ecosia: Remove private mode badge
         privateModeBadge.add(toParent: self)
+        */
         warningMenuBadge.add(toParent: self)
 
         helper = TabToolbarHelper(toolbar: self)
@@ -332,16 +368,23 @@ class URLBarView: UIView,
         }
 
         searchIconImageView.snp.remakeConstraints { make in
+            /* Ecosia: Update search icon constraints
             let heightMin = URLBarViewUX.LocationHeight + (URLBarViewUX.TextFieldBorderWidthSelected * 2)
             make.height.greaterThanOrEqualTo(heightMin)
             make.centerY.equalTo(self)
             make.leading.equalTo(self.cancelButton.snp.trailing).offset(URLBarViewUX.LocationLeftPadding)
             make.width.equalTo(URLBarViewUX.SearchIconImageWidth)
+             */
+            make.centerY.equalTo(self)
+            make.leading.equalTo(self.locationContainer.snp.leading).offset(12)
+            make.size.equalTo(URLBarViewUX.SearchIconWidthSmall)
         }
 
         multiStateButton.snp.makeConstraints { make in
             make.leading.equalTo(self.forwardButton.snp.trailing)
-            make.centerY.equalTo(self)
+            // Ecosia: Update center Y constraint
+            // make.centerY.equalTo(self)
+            make.centerY.equalTo(self.locationContainer)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
 
@@ -357,7 +400,7 @@ class URLBarView: UIView,
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
 
-        addNewTabButton.snp.makeConstraints { make in
+        circleButton.snp.makeConstraints { make in
             make.trailing.equalTo(self.tabsButton.snp.leading)
             make.centerY.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
@@ -375,7 +418,9 @@ class URLBarView: UIView,
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
 
+        /* Ecosia: Remove private mode badge
         privateModeBadge.layout(onButton: tabsButton)
+        */
         warningMenuBadge.layout(onButton: appMenuButton)
     }
 
@@ -393,6 +438,7 @@ class URLBarView: UIView,
             make.height.equalTo(URLBarViewUX.urlBarLineHeight)
         }
 
+        /* Ecosia: custom progress bar
         progressBar.snp.remakeConstraints { make in
             if isBottomSearchBar {
                 make.bottom.equalTo(snp.top).inset(URLBarViewUX.ProgressBarHeight / 2)
@@ -403,9 +449,12 @@ class URLBarView: UIView,
             make.height.equalTo(URLBarViewUX.ProgressBarHeight)
             make.left.right.equalTo(self)
         }
-
+         */
+        
+        /* Ecosia: Update Overlay / Standard constraints
         if inOverlayMode {
-            searchIconImageView.alpha = 1
+            // Ecosia: Customise alpha
+            // searchIconImageView.alpha = 1
             // In overlay mode, we always show the location view full width
             self.locationContainer.layer.borderWidth = URLBarViewUX.TextFieldBorderWidthSelected
             self.locationContainer.snp.remakeConstraints { make in
@@ -434,7 +483,8 @@ class URLBarView: UIView,
                 )
             }
         } else {
-            searchIconImageView.alpha = 0
+            // Ecosia: Customise alpha
+            // searchIconImageView.alpha = 0
             self.locationContainer.snp.remakeConstraints { make in
                 if self.toolbarIsShowing {
                     // If we are showing a toolbar, show the text field next to the forward button
@@ -442,7 +492,7 @@ class URLBarView: UIView,
                     if self.topTabsIsShowing {
                         make.trailing.equalTo(self.bookmarksButton.snp.leading).offset(-URLBarViewUX.Padding)
                     } else {
-                        make.trailing.equalTo(self.addNewTabButton.snp.leading).offset(-URLBarViewUX.Padding)
+                        make.trailing.equalTo(self.circleButton.snp.leading).offset(-URLBarViewUX.Padding)
                     }
                 } else {
                     // Otherwise, left align the location view
@@ -467,6 +517,69 @@ class URLBarView: UIView,
                 )
             }
         }
+        */
+        if inOverlayMode {
+            // In overlay mode, we always show the location view full width
+            self.locationContainer.layer.borderWidth = URLBarViewUX.TextFieldBorderWidthSelected
+            self.locationContainer.snp.remakeConstraints { make in
+                let height = URLBarViewUX.LocationHeight + (URLBarViewUX.TextFieldBorderWidthSelected * 2)
+                make.height.equalTo(height)
+                make.trailing.equalTo(self.showQRScannerButton.snp.leading).offset(-URLBarViewUX.Padding)
+                make.leading.equalTo(self.cancelButton.snp.trailing)
+                make.centerY.equalTo(self)
+            }
+            self.locationView.snp.remakeConstraints { make in
+                make.top.bottom.trailing.equalTo(self.locationContainer).inset(UIEdgeInsets(equalInset: URLBarViewUX.TextFieldBorderWidthSelected))
+                make.leading.equalTo(self.searchIconImageView.snp.trailing)
+            }
+            self.locationTextField?.snp.remakeConstraints { make in
+                make.edges.equalTo(self.locationView).inset(UIEdgeInsets(top: 0, left: URLBarViewUX.LocationLeftPadding, bottom: 0, right: URLBarViewUX.LocationLeftPadding))
+            }
+        } else {
+            self.locationContainer.snp.remakeConstraints { make in
+                if self.toolbarIsShowing {
+                    // If we are showing a toolbar, show the text field next to the forward button
+                    make.leading.equalTo(self.forwardButton.snp.trailing).offset(URLBarViewUX.Padding)
+                    if topTabsIsShowing {
+                        make.trailing.equalTo(self.bookmarksButton.snp.leading).offset(-URLBarViewUX.Padding)
+                    } else {
+                        make.trailing.equalTo(self.circleButton.snp.leading).offset(-URLBarViewUX.Padding)
+                    }
+                } else {
+                    // Otherwise, left align the location view
+                    make.leading.trailing.equalTo(self).inset(UIEdgeInsets(top: 0, left: URLBarViewUX.LocationLeftPadding-1, bottom: 0, right: URLBarViewUX.LocationLeftPadding-1))
+                }
+                make.height.greaterThanOrEqualTo(URLBarViewUX.LocationHeight+2)
+                make.centerY.equalTo(self)
+            }
+
+            self.locationView.snp.remakeConstraints { make in
+                make.top.bottom.trailing.equalTo(self.locationContainer)
+                if isHome {
+                    make.leading.equalTo(searchIconImageView.snp.trailing).offset(8)
+                } else {
+                    make.leading.equalTo(self.locationContainer)
+                }
+            }
+
+            self.multiStateButton.snp.remakeConstraints { make in
+                if self.toolbarIsShowing {
+                    make.trailing.equalTo(self.circleButton.snp.leading)
+                } else {
+                    make.trailing.equalTo(self.safeArea.trailing)
+                }
+                make.centerY.equalTo(self.locationContainer)
+                make.size.equalTo(URLBarViewUX.ButtonHeight).priority(.high)
+            }
+        }
+
+        let width = inOverlayMode ? URLBarViewUX.SearchIconWidthMedium : URLBarViewUX.SearchIconWidthSmall
+        searchIconImageView.snp.updateConstraints { make in
+            make.size.equalTo(width)
+        }
+        
+        // Ecosia: Update search engine image after constraints update
+        updateSearchEngineImage()
     }
 
     @objc
@@ -612,7 +725,7 @@ class URLBarView: UIView,
         cancelButton.isHidden = false
         showQRScannerButton.isHidden = false
         progressBar.isHidden = false
-        addNewTabButton.isHidden = !toolbarIsShowing || topTabsIsShowing
+        circleButton.isHidden = !toolbarIsShowing || topTabsIsShowing
         appMenuButton.isHidden = !toolbarIsShowing
         bookmarksButton.isHidden = !toolbarIsShowing || !topTabsIsShowing
         forwardButton.isHidden = !toolbarIsShowing
@@ -629,11 +742,13 @@ class URLBarView: UIView,
         tabsButton.alpha = inOverlayMode ? 0 : 1
         appMenuButton.alpha = inOverlayMode ? 0 : 1
         bookmarksButton.alpha = inOverlayMode ? 0 : 1
-        addNewTabButton.alpha = inOverlayMode ? 0 : 1
+        circleButton.alpha = inOverlayMode ? 0 : 1
         forwardButton.alpha = inOverlayMode ? 0 : 1
         backButton.alpha = inOverlayMode ? 0 : 1
-        multiStateButton.alpha = inOverlayMode ? 0 : 1
-
+        // Ecosia: always hide multi state button
+        // multiStateButton.alpha = inOverlayMode ? 0 : 1
+        multiStateButton.alpha = 0
+        
         let borderColor = inOverlayMode ? locationActiveBorderColor : locationBorderColor
         locationContainer.layer.borderColor = borderColor.cgColor
 
@@ -657,7 +772,7 @@ class URLBarView: UIView,
         cancelButton.isHidden = !inOverlayMode
         showQRScannerButton.isHidden = !inOverlayMode
         progressBar.isHidden = inOverlayMode
-        addNewTabButton.isHidden = !toolbarIsShowing || topTabsIsShowing || inOverlayMode
+        circleButton.isHidden = !toolbarIsShowing || topTabsIsShowing || inOverlayMode
         appMenuButton.isHidden = !toolbarIsShowing || inOverlayMode
         bookmarksButton.isHidden = !toolbarIsShowing || inOverlayMode || !topTabsIsShowing
         forwardButton.isHidden = !toolbarIsShowing || inOverlayMode
@@ -666,7 +781,10 @@ class URLBarView: UIView,
         multiStateButton.isHidden = !toolbarIsShowing || inOverlayMode
 
         // badge isHidden is tied to private mode on/off, use alpha to hide in this case
+        /* Ecosia: Remove private mode badge
         [privateModeBadge, warningMenuBadge].forEach {
+        */
+        [warningMenuBadge].forEach {
             $0.badge.alpha = (!toolbarIsShowing || inOverlayMode) ? 0 : 1
             $0.backdrop.alpha = (!toolbarIsShowing || inOverlayMode) ? 0 : BadgeWithBackdrop.UX.backdropAlpha
         }
@@ -714,9 +832,11 @@ class URLBarView: UIView,
 
 extension URLBarView: TabToolbarProtocol {
     func privateModeBadge(visible: Bool) {
+        /* Ecosia: Remove private mode badge
         if UIDevice.current.userInterfaceIdiom != .pad {
             privateModeBadge.show(visible)
         }
+         */
     }
 
     func warningMenuBadge(setVisible: Bool) {
@@ -909,7 +1029,7 @@ extension URLBarView: ThemeApplicable {
 
         actionButtons.forEach { $0.applyTheme(theme: theme) }
         tabsButton.applyTheme(theme: theme)
-        addNewTabButton.applyTheme(theme: theme)
+        circleButton.applyTheme(theme: theme)
 
         cancelTintColor = theme.colors.textPrimary
         showQRButtonTintColor = theme.colors.textPrimary
@@ -917,10 +1037,19 @@ extension URLBarView: ThemeApplicable {
         line.backgroundColor = theme.colors.borderPrimary
 
         locationBorderColor = theme.colors.borderPrimary
-        locationView.backgroundColor = theme.colors.layer3
-        locationContainer.backgroundColor = theme.colors.layer3
+        // Ecosia: Take into account overlay mode for `locationView` background
+        // locationView.backgroundColor = theme.colors.layer3
+        // locationContainer.backgroundColor = theme.colors.layer3
+        locationView.backgroundColor = inOverlayMode ? UIColor.legacyTheme.ecosia.primaryBackground : UIColor.legacyTheme.ecosia.tertiaryBackground
+        locationContainer.backgroundColor = locationView.backgroundColor
 
+        /* Ecosia: Remove private mode badge
         privateModeBadge.badge.tintBackground(color: theme.colors.layer1)
+        */
+
+        // Ecosia: Update Search Image Color
+        searchIconImageView.tintColor = isPrivate ? UIColor.legacyTheme.ecosia.primaryText : UIColor.legacyTheme.ecosia.textfieldIconTint
+
         warningMenuBadge.badge.tintBackground(color: theme.colors.layer1)
     }
 }
@@ -928,9 +1057,14 @@ extension URLBarView: ThemeApplicable {
 // MARK: - PrivateModeUI
 extension URLBarView: PrivateModeUI {
     func applyUIMode(isPrivate: Bool, theme: Theme) {
+        
+        // Ecosia: Save `isPrivate` state
+        self.isPrivate = isPrivate
+        
+        /* Ecosia: Remove private mode badge
         if UIDevice.current.userInterfaceIdiom != .pad {
             privateModeBadge.show(isPrivate)
-        }
+        }*/
 
         let gradientStartColor = isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
         let gradientMiddleColor = isPrivate ? nil : theme.colors.iconAccentPink
@@ -944,5 +1078,22 @@ extension URLBarView: PrivateModeUI {
         locationTextField?.applyUIMode(isPrivate: isPrivate, theme: theme)
         locationTextField?.applyTheme(theme: theme)
         applyTheme(theme: theme)
+    }
+}
+
+// Ecosia: Update Search Engine Image
+extension URLBarView {
+    
+    func updateSearchEngineImage() {
+        if inOverlayMode {
+            if isPrivate {
+                searchIconImageView.image = .init(named: ImageIdentifiers.newPrivateTab)
+            } else {
+                searchIconImageView.image = .init(themed: "searchLogo")
+            }
+        } else {
+            searchIconImageView.image = .templateImageNamed("searchUrl")
+        }
+        searchIconImageView.isHidden = !isHome && !inOverlayMode
     }
 }

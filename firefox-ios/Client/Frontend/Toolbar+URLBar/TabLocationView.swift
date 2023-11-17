@@ -99,7 +99,10 @@ class TabLocationView: UIView, FeatureFlaggable {
     }
 
     private func setURLTextfieldPlaceholder(theme: Theme) {
+        /* Ecosia: Update Placeholder attributes
         let attributes = [NSAttributedString.Key.foregroundColor: theme.colors.textSecondary]
+        */
+        let attributes = [NSAttributedString.Key.foregroundColor: UIColor.legacyTheme.ecosia.secondaryText]
         urlTextField.attributedPlaceholder = NSAttributedString(
             string: .TabLocationURLPlaceholder,
             attributes: attributes
@@ -524,10 +527,17 @@ extension TabLocationView: AccessibilityActionsSource {
 extension TabLocationView: ThemeApplicable {
     func applyTheme(theme: Theme) {
         setURLTextfieldPlaceholder(theme: theme)
-        urlTextField.textColor = theme.colors.textPrimary
+        // Ecosia: Update `urlTextField` theme
+        // urlTextField.textColor = theme.colors.textPrimary
+        urlTextField.textColor = UIColor.legacyTheme.ecosia.primaryText
+        urlTextField.tintColor = .legacyTheme.ecosia.information
+
         readerModeButton.applyTheme(theme: theme)
         trackingProtectionButton.applyTheme(theme: theme)
         reloadButton.applyTheme(theme: theme)
+
+        // TODO Ecosia Upgrade: There is no more `menuBadge` which we updated color, was it renamed?
+        
         shoppingButton.tintColor = theme.colors.textPrimary
         shoppingButton.setImage(UIImage(named: StandardImageIdentifiers.Large.shopping)?
             .withTintColor(theme.colors.actionPrimary),

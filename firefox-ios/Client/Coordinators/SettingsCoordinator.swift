@@ -180,6 +180,11 @@ class SettingsCoordinator: BaseCoordinator,
     func didFinish() {
         parentCoordinator?.didFinishSettings(from: self)
     }
+    
+    // Ecosia: SettingsDelegate
+    func reloadHomepage() {
+        
+    }
 
     // MARK: - SettingsFlowDelegate
     func showDevicePassCode() {

@@ -295,12 +295,16 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
 
             privateModeButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             privateModeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            privateModeButton.widthAnchor.constraint(equalTo: view.heightAnchor),
-            privateModeButton.heightAnchor.constraint(equalTo: view.heightAnchor),
+            // Ecosia: Update constraint
+            // privateModeButton.widthAnchor.constraint(equalTo: view.heightAnchor),
+            // privateModeButton.heightAnchor.constraint(equalTo: view.heightAnchor),
+            privateModeButton.heightAnchor.constraint(equalTo: view.heightAnchor, constant: -8),
 
             topTabFader.topAnchor.constraint(equalTo: view.topAnchor),
             topTabFader.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            topTabFader.leadingAnchor.constraint(equalTo: privateModeButton.trailingAnchor),
+            // Ecosia: Update constraint
+            // topTabFader.leadingAnchor.constraint(equalTo: privateModeButton.trailingAnchor),
+            topTabFader.leadingAnchor.constraint(equalTo: privateModeButton.trailingAnchor, constant: 8),
             topTabFader.trailingAnchor.constraint(equalTo: newTab.leadingAnchor),
 
             collectionView.topAnchor.constraint(equalTo: topTabFader.topAnchor),

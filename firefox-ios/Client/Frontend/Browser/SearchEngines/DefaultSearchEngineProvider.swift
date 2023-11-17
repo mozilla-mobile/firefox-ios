@@ -102,7 +102,8 @@ class DefaultSearchEngineProvider: SearchEngineProvider {
                 }).compactMap({
                     parser.parse($0.path, engineID: $0.name)
                 }).sorted { e, _ in
-                    e.shortName == defaultEngineName
+                    // Ecosia: Add lowercased to ensure equality
+                    e.shortName.lowercased() == defaultEngineName.lowercased()
                 }
 
             completion(result)
