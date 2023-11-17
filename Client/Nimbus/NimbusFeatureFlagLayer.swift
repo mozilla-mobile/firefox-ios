@@ -56,9 +56,6 @@ final class NimbusFeatureFlagLayer {
         case .reportSiteIssue:
             return checkGeneralFeature(for: featureID, from: nimbus)
 
-        case .shareExtensionCoordinatorRefactor:
-            return checkShareExtensionCoordinatorRefactorFeature(from: nimbus)
-
         case .shareSheetChanges,
                 .shareToolbarChanges:
             return checkNimbusForShareSheet(for: featureID, from: nimbus)
@@ -134,11 +131,6 @@ final class NimbusFeatureFlagLayer {
 
         guard let status = config.featuresEnabled[nimbusID] else { return false }
         return status
-    }
-
-    private func checkShareExtensionCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.shareExtensionCoordinatorRefactor.value()
-        return config.enabled
     }
 
     private func checkNimbusForWallpapersFeature(using nimbus: FxNimbus) -> Bool {

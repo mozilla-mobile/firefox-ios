@@ -179,38 +179,16 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     ///   - sourceView: View to show the popover
     /// - Returns: Share action
     private func getShareAction(site: Site, sourceView: UIView?) -> PhotonRowActions {
-        return SingleActionViewModel(title: .ShareContextMenuTitle, iconString: ImageIdentifiers.share, tapHandler: { _ in
+        return SingleActionViewModel(title: .ShareContextMenuTitle,
+                                     iconString: ImageIdentifiers.share,
+                                     tapHandler: { _ in
             guard let url = URL(string: site.url, invalidCharacters: false) else { return }
 
-            if CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
-                self.browserNavigationHandler?.showShareExtension(
-                    url: url,
-                    sourceView: sourceView ?? UIView(),
-                    toastContainer: self.toastContainer,
-                    popoverArrowDirection: [.up, .down, .left])
-            } else {
-                let helper = ShareExtensionHelper(url: url, tab: nil)
-                let controller = helper.createActivityViewController { (_, activityType) in
-                    switch activityType {
-                    case CustomActivityAction.sendToDevice.actionType:
-                        self.showSendToDevice(site: site)
-                    case CustomActivityAction.copyLink.actionType:
-                        self.delegate?.showToast(message: .AppMenu.AppMenuCopyURLConfirmMessage)
-                    default: break
-                    }
-                }
-
-                if UIDevice.current.userInterfaceIdiom == .pad,
-                   let popoverController = controller.popoverPresentationController,
-                   let getSourceRect = self.getPopoverSourceRect {
-                    popoverController.sourceView = sourceView
-                    popoverController.sourceRect = getSourceRect(sourceView)
-                    popoverController.permittedArrowDirections = [.up, .down, .left]
-                    popoverController.delegate = self.delegate
-                }
-
-                self.delegate?.presentWithModalDismissIfNeeded(controller, animated: true)
-            }
+            self.browserNavigationHandler?.showShareExtension(
+                url: url,
+                sourceView: sourceView ?? UIView(),
+                toastContainer: self.toastContainer,
+                popoverArrowDirection: [.up, .down, .left])
         }).items
     }
 

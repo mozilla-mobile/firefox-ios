@@ -151,9 +151,8 @@ class BrowserCoordinator: BaseCoordinator,
             homepageViewController.libraryPanelDelegate = libraryPanelDelegate
             homepageViewController.sendToDeviceDelegate = sendToDeviceDelegate
             homepageViewController.statusBarScrollDelegate = statusBarScrollDelegate
-            if CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
-                homepageViewController.browserNavigationHandler = self
-            }
+            homepageViewController.browserNavigationHandler = self
+
             return homepageViewController
         }
     }
