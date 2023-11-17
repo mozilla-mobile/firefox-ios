@@ -12,6 +12,7 @@ public struct PrefsKeys {
 
     // Global sync state for rust sync manager
     public static let RustSyncManagerPersistedState = "rustSyncManagerPersistedStateKey"
+    public static let HasVerifiedRustLogins = "hasVerifiedRustLogins"
 
     public static let KeyLastSyncFinishTime = "lastSyncFinishTime"
     public static let KeyDefaultHomePageURL = "KeyDefaultHomePageURL"
