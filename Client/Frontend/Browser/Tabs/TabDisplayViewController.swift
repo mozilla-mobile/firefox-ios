@@ -17,7 +17,7 @@ class TabDisplayViewController: UIViewController,
     weak var navigationHandler: TabsNavigationHandler?
 
     // MARK: UI elements
-    private lazy var tabDisplayView: TabDisplayView = {
+    lazy var tabDisplayView: TabDisplayView = {
         let view = TabDisplayView(state: self.tabsState)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view

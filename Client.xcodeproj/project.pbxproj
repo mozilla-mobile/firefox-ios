@@ -138,6 +138,7 @@
 		219935E72B05447C00E5966F /* TabDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219935E62B05447C00E5966F /* TabDisplayModel.swift */; };
 		219935E92B070F9000E5966F /* TabPanelAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219935E82B070F9000E5966F /* TabPanelAction.swift */; };
 		219935EC2B07110900E5966F /* TabTrayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219935EB2B07110900E5966F /* TabTrayModel.swift */; };
+		219935F12B07DFA200E5966F /* TabDisplayViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219935F02B07DFA200E5966F /* TabDisplayViewControllerTests.swift */; };
 		21996BAB2AE95AFC00E0D55F /* TabTrayPanelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21996BAA2AE95AFC00E0D55F /* TabTrayPanelType.swift */; };
 		219A0FD52ACC8506009A6D1A /* InactiveTabsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219A0FD42ACC8506009A6D1A /* InactiveTabsCell.swift */; };
 		219A0FD72ACC8C03009A6D1A /* InactiveTabsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219A0FD62ACC8C03009A6D1A /* InactiveTabsHeaderView.swift */; };
@@ -2211,6 +2212,7 @@
 		219935E62B05447C00E5966F /* TabDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabDisplayModel.swift; sourceTree = "<group>"; };
 		219935E82B070F9000E5966F /* TabPanelAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabPanelAction.swift; sourceTree = "<group>"; };
 		219935EB2B07110900E5966F /* TabTrayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayModel.swift; sourceTree = "<group>"; };
+		219935F02B07DFA200E5966F /* TabDisplayViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabDisplayViewControllerTests.swift; sourceTree = "<group>"; };
 		21996BAA2AE95AFC00E0D55F /* TabTrayPanelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayPanelType.swift; sourceTree = "<group>"; };
 		219A0FD42ACC8506009A6D1A /* InactiveTabsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InactiveTabsCell.swift; sourceTree = "<group>"; };
 		219A0FD62ACC8C03009A6D1A /* InactiveTabsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InactiveTabsHeaderView.swift; sourceTree = "<group>"; };
@@ -7497,6 +7499,15 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		219935ED2B07B9B300E5966F /* Legacy */ = {
+			isa = PBXGroup;
+			children = (
+				8AFE4C2027480D0B00B97C65 /* LegacyTabTrayViewControllerTests.swift */,
+				B640467D29B9B58200C5C7B6 /* TabLocationViewTests.swift */,
+			);
+			path = Legacy;
+			sourceTree = "<group>";
+		};
 		219A0FD32ACC84C5009A6D1A /* InactiveTabs */ = {
 			isa = PBXGroup;
 			children = (
@@ -7543,10 +7554,12 @@
 		21D8EA942ABE0511003FF16E /* TabTray */ = {
 			isa = PBXGroup;
 			children = (
-				8AFE4C2027480D0B00B97C65 /* LegacyTabTrayViewControllerTests.swift */,
+				219935ED2B07B9B300E5966F /* Legacy */,
+				1D3C90872ACE1AF400304C87 /* RemoteTabPanelTests.swift */,
+				1D8487B52AD6038100F7527C /* RemoteTabPanelStateTests.swift */,
 				21D8EA922ABE04F7003FF16E /* TabTrayViewControllerTests.swift */,
 				21ED80B22AF2E43A0065D4C7 /* TabDisplayViewTests.swift */,
-				B640467D29B9B58200C5C7B6 /* TabLocationViewTests.swift */,
+				219935F02B07DFA200E5966F /* TabDisplayViewControllerTests.swift */,
 			);
 			path = TabTray;
 			sourceTree = "<group>";
@@ -10748,8 +10761,6 @@
 				0BA896491A250E6500C1010C /* ProfileTest.swift */,
 				8A11C8102731CFD700AC7318 /* ReaderModeStyleTests.swift */,
 				03CCC9171AF05E7300DBF30D /* RelativeDatesTests.swift */,
-				1D3C90872ACE1AF400304C87 /* RemoteTabPanelTests.swift */,
-				1D8487B52AD6038100F7527C /* RemoteTabPanelStateTests.swift */,
 				8A5C3BC4282ABF8E003A8CCF /* LegacyRemoteTabsPanelTests.swift */,
 				F80D53CD2A09A30F0047ED14 /* RustSyncManagerTests.swift */,
 				8A5D1CA12A30CF2E005AD35C /* Settings */,
@@ -13335,6 +13346,7 @@
 				8A28C628291028870078A81A /* CanRemoveQuickActionBookmarkTests.swift in Sources */,
 				03CCC9181AF05E7300DBF30D /* RelativeDatesTests.swift in Sources */,
 				F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */,
+				219935F12B07DFA200E5966F /* TabDisplayViewControllerTests.swift in Sources */,
 				E1AEC179286E0CF500062E29 /* FirefoxHomeViewModelTests.swift in Sources */,
 				DF940A0C2A96352B00C1497D /* FakespotSettingsCardViewModelTests.swift in Sources */,
 				281B2BEA1ADF4D90002917DC /* MockProfile.swift in Sources */,

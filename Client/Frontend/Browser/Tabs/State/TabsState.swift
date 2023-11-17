@@ -58,11 +58,11 @@ struct TabsState: ScreenState, Equatable {
                              tabs: tabs,
                              inactiveTabs: state.inactiveTabs,
                              isInactiveTabsExpanded: state.isInactiveTabsExpanded)
-        case TabPanelAction.toggleInactiveTabs(let tabsExpandedNewState):
+        case TabPanelAction.toggleInactiveTabs:
             return TabsState(isPrivateMode: state.isPrivateMode,
                              tabs: state.tabs,
                              inactiveTabs: state.inactiveTabs,
-                             isInactiveTabsExpanded: tabsExpandedNewState)
+                             isInactiveTabsExpanded: !state.isInactiveTabsExpanded)
         default: return state
         }
     }

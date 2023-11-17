@@ -217,7 +217,7 @@ class TabDisplayView: UIView,
 
     @objc
     func toggleInactiveTab() {
-        store.dispatch(TabPanelAction.toggleInactiveTabs(!tabsState.isInactiveTabsExpanded))
+        store.dispatch(TabPanelAction.toggleInactiveTabs)
         collectionView.collectionViewLayout.invalidateLayout()
     }
 
