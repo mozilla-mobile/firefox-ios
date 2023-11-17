@@ -140,8 +140,6 @@ features:
             URGENT:
               priority: 100
               max-display-count: 10
-      - channel: release
-        value:
           messages:
             default-browser:
               surface: new-tab-card

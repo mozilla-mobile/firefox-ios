@@ -10,12 +10,14 @@ features:
           A collection of out the box conditional expressions to be
           used in determining whether a card should show or not.
           Each entry maps to a valid JEXL expression.
-        type: Map<String, String>
+        type: Map<ConditionName, String>
+        string-alias: ConditionName
         default: {}
       cards:
         description: >
           The list of available cards for onboarding.
-        type: Map<String, NimbusOnboardingCardData>
+        type: Map<NimbusOnboardingCardKey, NimbusOnboardingCardData>
+        string-alias: NimbusOnboardingCardKey
         default: {}
       dismissable:
         description: >
@@ -167,17 +169,17 @@ objects:
           popup information
         default: null
       prerequisites:
-        type: List<String>
+        type: List<ConditionName>
         description: >
-          A list of strings corresponding to targeting expressions.
+          A list of ConditionName strings corresponding to targeting expressions.
           The card will be shown if all expressions `true` and if
           no expressions in the `disqualifiers` table are true, or
           if the `disqualifiers` table is empty.
         default: []
       disqualifiers:
-        type: List<String>
+        type: List<ConditionName>
         description: >
-          A list of strings corresponding to targeting expressions.
+          A list of ConditionName strings corresponding to targeting expressions.
           The card will not be shown if any expression is `true`.
         default: []
       type:
