@@ -34,9 +34,11 @@ class FakespotViewModel {
                 ]
             }
 
+            let minRating = product.adjustedRating ?? 0
             let productAdCard = productState
                 .productAds
-                .first
+                .sorted(by: { $0.adjustedRating > $1.adjustedRating })
+                .first(where: { $0.adjustedRating >= minRating }) // Choosing the product with the same or better rating to display
                 .map(ViewElement.productAdCard)
 
             if product.grade == nil {

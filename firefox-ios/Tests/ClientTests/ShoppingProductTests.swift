@@ -196,6 +196,68 @@ final class ShoppingProductTests: XCTestCase {
         XCTAssertEqual(client.productId, "B087T8Q2C4")
         XCTAssertEqual(client.website, "amazon.com")
     }
+
+    func testAdsWithRatingsHigherThanMinRating() {
+        let minRating = 4.0
+        let productAds = [
+            ProductAdsData(adjustedRating: 4.5),
+            ProductAdsData(adjustedRating: 4.7),
+            ProductAdsData(adjustedRating: 4.2)
+        ]
+
+        let selectedAdCard = productAds
+            .sorted(by: { $0.adjustedRating > $1.adjustedRating })
+            .first(where: { $0.adjustedRating >= minRating })
+
+        XCTAssertEqual(selectedAdCard, ProductAdsData(adjustedRating: 4.7), "The ad with the highest rating should be selected.")
+    }
+
+    func testAdsWithRatingsLowerThanMinRating() {
+        let minRating = 4.0
+        let productAds = [
+            ProductAdsData(adjustedRating: 3.5),
+            ProductAdsData(adjustedRating: 3.7),
+            ProductAdsData(adjustedRating: 3.2)
+        ]
+
+        let selectedAdCard = productAds
+            .sorted(by: { $0.adjustedRating > $1.adjustedRating })
+            .first(where: { $0.adjustedRating >= minRating })
+
+        XCTAssertNil(selectedAdCard)
+    }
+
+    func testAdsWithSomeRatingsEqualToMinRating() {
+        let minRating = 4.0
+        let productAds = [
+            ProductAdsData(adjustedRating: 4.0),
+            ProductAdsData(adjustedRating: 3.9),
+            ProductAdsData(adjustedRating: 4.2)
+        ]
+
+        let selectedAdCard = productAds
+            .sorted(by: { $0.adjustedRating > $1.adjustedRating })
+            .first(where: { $0.adjustedRating >= minRating })
+
+        XCTAssertEqual(selectedAdCard, ProductAdsData(adjustedRating: 4.2))
+    }
+}
+
+fileprivate extension ProductAdsData {
+    init(adjustedRating: Double) {
+        self.init(
+            name: "",
+            url: URL(string: "www.example.com")!,
+            imageUrl: URL(string: "www.example.com")!,
+            price: "",
+            currency: "",
+            grade: .a,
+            adjustedRating: adjustedRating,
+            analysisUrl: URL(string: "www.example.com")!,
+            sponsored: false,
+            aid: ""
+        )
+    }
 }
 
 final class ThrowingFakeSpotClient: FakespotClientType {
