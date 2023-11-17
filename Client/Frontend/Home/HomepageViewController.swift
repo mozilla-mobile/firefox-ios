@@ -426,7 +426,7 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
             contextualHintViewController.stopTimer()
             return
         }
-
+        contextualHintViewController.isPresenting = true
         present(contextualHintViewController, animated: true, completion: nil)
 
         UIAccessibility.post(notification: .layoutChanged, argument: contextualHintViewController)
@@ -739,12 +739,18 @@ extension HomepageViewController: UIPopoverPresentationControllerDelegate {
         popoverPresentationController.presentedViewController.dismiss(animated: false, completion: nil)
     }
 
-    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
-        return .none
-    }
-
     func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
         return true
+    }
+}
+
+// MARK: - UIAdaptivePresentationControllerDelegate
+extension HomepageViewController: UIAdaptivePresentationControllerDelegate {
+    func adaptivePresentationStyle(
+        for controller: UIPresentationController,
+        traitCollection: UITraitCollection
+    ) -> UIModalPresentationStyle {
+        .none
     }
 }
 
