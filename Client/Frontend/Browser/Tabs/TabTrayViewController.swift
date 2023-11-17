@@ -16,10 +16,6 @@ protocol TabTrayController: UIViewController,
     var didSelectUrl: ((_ url: URL, _ visitType: VisitType) -> Void)? { get set }
 }
 
-protocol TabTrayChildPanels: UIViewController {
-    func updateState(state: TabTrayState)
-}
-
 protocol TabTrayViewControllerDelegate: AnyObject {
     func didFinish()
 }
@@ -200,11 +196,6 @@ class TabTrayViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        store.dispatch(ActiveScreensStateAction.closeScreen(.tabsPanel))
-        store.unsubscribe(self)
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -237,20 +228,21 @@ class TabTrayViewController: UIViewController,
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         delegate?.didFinish()
+
+        store.dispatch(ActiveScreensStateAction.closeScreen(.tabsTray))
+        store.unsubscribe(self)
     }
 
     private func subscribeRedux() {
-        store.dispatch(ActiveScreensStateAction.showScreen(.tabsPanel))
+        store.dispatch(ActiveScreensStateAction.showScreen(.tabsTray))
         store.dispatch(TabTrayAction.tabTrayDidLoad(tabTrayState.selectedPanel))
         store.subscribe(self, transform: {
-            $0.select(TabTrayState.init)
+            return $0.select(TabTrayState.init)
         })
     }
 
     func newState(state: TabTrayState) {
         tabTrayState = state
-        guard let currentPanel = currentPanel?.children[0] as? TabTrayChildPanels else { return }
-        currentPanel.updateState(state: tabTrayState)
     }
 
     private func updateLayout() {
@@ -434,12 +426,12 @@ class TabTrayViewController: UIViewController,
 
     @objc
     private func deleteTabsButtonTapped() {
-        store.dispatch(TabTrayAction.closeAllTabs)
+        store.dispatch(TabPanelAction.closeAllTabs)
     }
 
     @objc
     private func newTabButtonTapped() {
-        store.dispatch(TabTrayAction.addNewTab(tabTrayState.isPrivateMode))
+        store.dispatch(TabPanelAction.addNewTab(tabTrayState.isPrivateMode))
     }
 
     @objc

@@ -3,16 +3,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Redux
 
-enum AppScreen {
-    case themeSettings
-    case tabsTray
-    case tabsPanel
-    case remoteTabsPanel
-}
-
-enum ActiveScreensStateAction: Action {
-    case showScreen(AppScreen)
-    case closeScreen(AppScreen)
+struct TabTrayModel: Equatable {
+    var isPrivateMode: Bool
+    var selectedPanel: TabTrayPanelType
+    var normalTabsCount: String
 }
