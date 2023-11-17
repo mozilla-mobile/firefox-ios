@@ -6,10 +6,88 @@ import XCTest
 import Shared
 @testable import Storage
 
+<<<<<<< HEAD:Tests/StorageTests/RustLoginsTests.swift
 class RustLoginsTests: XCTestCase {
     var files: FileAccessor!
     var logins: RustLogins!
     var encryptionKey: String!
+=======
+class MockRustLogins: RustLogins {
+    var logins = [Int: LoginEntry]()
+    var id = 0
+
+    override func reopenIfClosed() -> NSError? {
+        return nil
+    }
+
+    override func addLogin(login: LoginEntry) -> Deferred<Maybe<String>> {
+        let deferred = Deferred<Maybe<String>>()
+        queue.async {
+            self.id += 1
+            self.logins[self.id] = login
+            deferred.fill(Maybe(success: String(self.id)))
+        }
+        return deferred
+    }
+
+    public func mockListLogins() -> Deferred<Maybe<[LoginEntry]>> {
+        let deferred = Deferred<Maybe<[LoginEntry]>>()
+        queue.async {
+            let list = self.logins.map { (key, value) in
+                return value
+            }
+            deferred.fill(Maybe(success: list))
+        }
+        return deferred
+    }
+
+    override func wipeLocalEngine() -> Success {
+        let deferred = Success()
+        queue.async {
+            self.logins.removeAll()
+            self.id = 0
+            deferred.fill(Maybe(success: ()))
+        }
+        return deferred
+    }
+
+    override func hasSyncedLogins() -> Deferred<Maybe<Bool>> {
+        let deferred = Deferred<Maybe<Bool>>()
+        queue.async {
+            deferred.fill(Maybe(success: !self.logins.isEmpty))
+        }
+        return deferred
+    }
+}
+
+class MockListLoginsFailure: RustLogins {
+    override func listLogins() -> Deferred<Maybe<[EncryptedLogin]>> {
+        let deferred = Deferred<Maybe<[EncryptedLogin]>>()
+        queue.async {
+            let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
+            deferred.fill(Maybe(failure: error as MaybeErrorType))
+        }
+        return deferred
+    }
+}
+
+class MockListLoginsEmpty: RustLogins {
+    override func listLogins() -> Deferred<Maybe<[EncryptedLogin]>> {
+        let deferred = Deferred<Maybe<[EncryptedLogin]>>()
+        queue.async {
+            deferred.fill(Maybe(success: [EncryptedLogin]()))
+        }
+        return deferred
+    }
+}
+
+class RustLoginsTests: XCTestCase {
+    var files: FileAccessor!
+    var logins: RustLogins!
+    var mockLogins: MockRustLogins!
+    var mockListLoginsFailure: MockListLoginsFailure!
+    var mockListLoginsEmpty: MockListLoginsEmpty!
+>>>>>>> 4885190b0 (Add FXIOS-7781 [v121] Verification logic for logins syncing (#17355)):firefox-ios/Tests/StorageTests/RustLoginsTests.swift
 
     override func setUp() {
         super.setUp()
@@ -22,19 +100,66 @@ class RustLoginsTests: XCTestCase {
             let databasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true).appendingPathComponent("testLoginsPerField.db").path
             try? files.remove("testLoginsPerField.db")
 
-            if let key = try? createKey() {
-                encryptionKey = key
-            } else {
-                XCTFail("Encryption key wasn't created")
-            }
-
             logins = RustLogins(sqlCipherDatabasePath: sqlCipherDatabasePath, databasePath: databasePath)
             _ = logins.reopenIfClosed()
+<<<<<<< HEAD:Tests/StorageTests/RustLoginsTests.swift
+=======
+
+            mockLogins = MockRustLogins(sqlCipherDatabasePath: sqlCipherDatabasePath, databasePath: databasePath)
+
+            self.keychain.removeObject(forKey: self.canaryPhraseKey, withAccessibility: .afterFirstUnlock)
+            self.keychain.removeObject(forKey: self.loginKeychainKey, withAccessibility: .afterFirstUnlock)
+>>>>>>> 4885190b0 (Add FXIOS-7781 [v121] Verification logic for logins syncing (#17355)):firefox-ios/Tests/StorageTests/RustLoginsTests.swift
         } else {
             XCTFail("Could not retrieve root directory")
         }
     }
 
+<<<<<<< HEAD:Tests/StorageTests/RustLoginsTests.swift
+=======
+    override func tearDown() {
+        super.tearDown()
+        self.keychain.removeObject(forKey: self.canaryPhraseKey, withAccessibility: .afterFirstUnlock)
+        self.keychain.removeObject(forKey: self.loginKeychainKey, withAccessibility: .afterFirstUnlock)
+    }
+
+    func setUpMockListLoginsFailure() {
+        files = MockFiles()
+
+        if let rootDirectory = try? files.getAndEnsureDirectory() {
+            let sqlCipherDatabasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true).appendingPathComponent("testlogins.db").path
+            try? files.remove("testlogins.db")
+
+            let databasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true).appendingPathComponent("testLoginsPerField.db").path
+            try? files.remove("testLoginsPerField.db")
+
+            mockListLoginsFailure = MockListLoginsFailure(sqlCipherDatabasePath: sqlCipherDatabasePath,
+                                                          databasePath: databasePath)
+            _ = mockListLoginsFailure.reopenIfClosed()
+        } else {
+            XCTFail("Could not retrieve root directory")
+        }
+    }
+
+    func setUpMockListLoginsEmpty() {
+        files = MockFiles()
+
+        if let rootDirectory = try? files.getAndEnsureDirectory() {
+            let sqlCipherDatabasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true).appendingPathComponent("testlogins.db").path
+            try? files.remove("testlogins.db")
+
+            let databasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true).appendingPathComponent("testLoginsPerField.db").path
+            try? files.remove("testLoginsPerField.db")
+
+            mockListLoginsEmpty = MockListLoginsEmpty(sqlCipherDatabasePath: sqlCipherDatabasePath,
+                                                      databasePath: databasePath)
+            _ = mockListLoginsEmpty.reopenIfClosed()
+        } else {
+            XCTFail("Could not retrieve root directory")
+        }
+    }
+
+>>>>>>> 4885190b0 (Add FXIOS-7781 [v121] Verification logic for logins syncing (#17355)):firefox-ios/Tests/StorageTests/RustLoginsTests.swift
     func addLogin() -> Deferred<Maybe<String>> {
         let login = LoginEntry(fromJSONDict: [
             "hostname": "https://example.com",
@@ -118,4 +243,84 @@ class RustLoginsTests: XCTestCase {
         XCTAssertTrue(getResult2.isSuccess)
         XCTAssertNil(getResult2.successValue!)
     }
+<<<<<<< HEAD:Tests/StorageTests/RustLoginsTests.swift
+=======
+
+    func testGetStoredKeyWithKeychainReset() {
+        // Here we are checking that, if the database has login records and the logins
+        // key data has been removed from the keychain, calling logins.getStoredKey will
+        // remove the logins from the database, recreate logins key data, and return the
+        // new key.
+
+        let login = LoginEntry(fromJSONDict: [
+            "hostname": "https://example.com",
+            "formSubmitUrl": "https://example.com",
+            "username": "username",
+            "password": "password"
+        ])
+        mockLogins.addLogin(login: login).upon { addResult in
+            XCTAssertTrue(addResult.isSuccess)
+            XCTAssertNotNil(addResult.successValue)
+        }
+
+        mockLogins.mockListLogins().upon { listResult in
+            XCTAssertTrue(listResult.isSuccess)
+            XCTAssertNotNil(listResult.successValue)
+            XCTAssertEqual(listResult.successValue!.count, 1)
+        }
+
+        // Simulate losing the key data while a logins record exists in the database
+        self.keychain.removeObject(forKey: self.canaryPhraseKey, withAccessibility: .afterFirstUnlock)
+        self.keychain.removeObject(forKey: self.loginKeychainKey, withAccessibility: .afterFirstUnlock)
+        XCTAssertNil(self.keychain.string(forKey: self.canaryPhraseKey))
+        XCTAssertNil(self.keychain.string(forKey: self.loginKeychainKey))
+
+        let expectation = expectation(description: "\(#function)\(#line)")
+        mockLogins.getStoredKey { result in
+            // Check that we successfully retrieved a key
+            XCTAssertNotNil(try? result.get())
+
+            // check that the logins were wiped from the database
+            self.mockLogins.mockListLogins().upon { listResult2 in
+                XCTAssertTrue(listResult2.isSuccess)
+                XCTAssertNotNil(listResult2.successValue)
+                XCTAssertEqual(listResult2.successValue!.count, 0)
+            }
+
+            // Check that new key data was created
+            XCTAssertNotNil(self.keychain.string(forKey: self.canaryPhraseKey))
+            XCTAssertNotNil(self.keychain.string(forKey: self.loginKeychainKey))
+
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 5)
+    }
+
+    func testVerifyWithFailedList() {
+        // Mocking a failed call to listLogins within verifyLogins
+        setUpMockListLoginsFailure()
+
+        let exp = expectation(description: "\(#function)\(#line)")
+        mockListLoginsFailure.verifyLogins { result in
+            exp.fulfill()
+
+            // Check that verification failed
+            XCTAssertFalse(result)
+        }
+        waitForExpectations(timeout: 5)
+    }
+
+    func testVerifyWithNoLogins() {
+        setUpMockListLoginsEmpty()
+
+        let exp = expectation(description: "\(#function)\(#line)")
+        mockListLoginsEmpty.verifyLogins { result in
+            exp.fulfill()
+
+            // Check that verification succeeds when there are no saved logins
+            XCTAssertTrue(result)
+        }
+        waitForExpectations(timeout: 5)
+    }
+>>>>>>> 4885190b0 (Add FXIOS-7781 [v121] Verification logic for logins syncing (#17355)):firefox-ios/Tests/StorageTests/RustLoginsTests.swift
 }

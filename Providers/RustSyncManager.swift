@@ -326,6 +326,22 @@ public class RustSyncManager: NSObject, SyncManager {
         public let description = "Failed to get sync engine and key data."
     }
 
+    func shouldSyncLogins(completion: @escaping (Bool) -> Void) {
+        if !(self.prefs.boolForKey(PrefsKeys.HasVerifiedRustLogins) ?? false) {
+            // We should only sync logins when the verify logins step hasn't been successfully
+            // completed. Otherwise logins could exist in the database that can't be decrypted
+            // and would prevent logins from syncing if they're not removed.
+
+            self.profile?.logins.verifyLogins { successfullyVerified in
+                self.prefs.setBool(successfullyVerified, forKey: PrefsKeys.HasVerifiedRustLogins)
+                completion(successfullyVerified)
+            }
+        } else {
+            // Successful logins verification already occurred so login syncing can proceed
+            completion(true)
+        }
+    }
+
     func getEnginesAndKeys(engines: [RustSyncManagerAPI.TogglableEngine],
                            completion: @escaping (([String], [String: String])) -> Void) {
         var localEncryptionKeys: [String: String] = [:]
@@ -342,6 +358,7 @@ public class RustSyncManager: NSObject, SyncManager {
                 if let key = try? profile?.logins.getStoredKey() {
                     localEncryptionKeys[engine.rawValue] = key
                     rustEngines.append(engine.rawValue)
+<<<<<<< HEAD
                 } else {
                     logger.log("Login encryption key could not be retrieved for syncing",
                                level: .warning,
@@ -357,6 +374,15 @@ public class RustSyncManager: NSObject, SyncManager {
                         logger.log("Credit card encryption key could not be retrieved for syncing",
                                    level: .warning,
                                    category: .sync)
+=======
+                case .passwords:
+                    self.shouldSyncLogins { shouldSync in
+                        if shouldSync, let key = loginKey {
+                            self.profile?.logins.registerWithSyncManager()
+                            localEncryptionKeys[engine.rawValue] = key
+                            rustEngines.append(engine.rawValue)
+                        }
+>>>>>>> 4885190b0 (Add FXIOS-7781 [v121] Verification logic for logins syncing (#17355))
                     }
                 }
             case .bookmarks, .history:
