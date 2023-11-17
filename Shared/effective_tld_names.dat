@@ -6710,7 +6710,7 @@ org.zw
 
 // newGTLDs
 
-// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2023-10-28T15:12:17Z
+// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2023-11-03T15:13:18Z
 // This list is auto-generated, don't edit it manually.
 // aaa : American Automobile Association, Inc.
 // https://www.iana.org/domains/root/db/aaa.html
@@ -8764,10 +8764,6 @@ kids
 // https://www.iana.org/domains/root/db/kim.html
 kim
 
-// kinder : Ferrero Trading Lux S.A.
-// https://www.iana.org/domains/root/db/kinder.html
-kinder
-
 // kindle : Amazon Registry Services, Inc.
 // https://www.iana.org/domains/root/db/kindle.html
 kindle
@@ -9819,10 +9815,6 @@ rio
 // rip : Dog Beach, LLC
 // https://www.iana.org/domains/root/db/rip.html
 rip
-
-// rocher : Ferrero Trading Lux S.A.
-// https://www.iana.org/domains/root/db/rocher.html
-rocher
 
 // rocks : Dog Beach, LLC
 // https://www.iana.org/domains/root/db/rocks.html
@@ -13248,7 +13240,7 @@ freemyip.com
 // Submitted by Daniel A. Maierhofer <vorstand@funkfeuer.at>
 wien.funkfeuer.at
 
-// Futureweb OG : http://www.futureweb.at
+// Futureweb GmbH : https://www.futureweb.at
 // Submitted by Andreas Schnederle-Wagner <schnederle@futureweb.at>
 *.futurecms.at
 *.ex.futurecms.at
@@ -14176,6 +14168,9 @@ jp.ngrok.io
 sa.ngrok.io
 us.ngrok.io
 ngrok.pizza
+
+// Nicolaus Copernicus University in Torun - MSK TORMAN (https://www.man.torun.pl)
+torun.pl
 
 // Nimbus Hosting Ltd. : https://www.nimbushosting.co.uk/
 // Submitted by Nicholas Ford <nick@nimbushosting.co.uk>

@@ -1024,6 +1024,11 @@ extension String {
         }
 
         public struct Welcome {
+            public static let CloseButtonAccessibilityLabel = MZLocalizedString(
+                key: "Onboarding.Welcome.Close.AccessibilityLabel.v121",
+                tableName: "Onboarding",
+                value: "Close and exit %@ onboarding",
+                comment: "Accessibility label for close button that dismisses the welcome onboarding screen. Placeholder is for the app name.")
             public static let Title = MZLocalizedString(
                 key: "Onboarding.Welcome.Title.v114",
                 tableName: "Onboarding",
@@ -1034,18 +1039,6 @@ extension String {
                 tableName: "Onboarding",
                 value: "Our non-profit backed browser helps stop companies from secretly following you around the web.",
                 comment: "String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name.")
-            public static let TitleTreatmentANotUsed = MZLocalizedString(
-                key: "Onboarding.Welcome.Title.TreatementA.v114",
-                tableName: "Onboarding",
-                value: "Make %@ your go-to browser",
-                comment: "String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name.",
-                lastUsedInVersion: 114)
-            public static let DescriptionTreatementANotUsed = MZLocalizedString(
-                key: "Onboarding.Welcome.Description.TreatementA.v114",
-                tableName: "Onboarding",
-                value: "%@ puts people over profits and defends your privacy as you browse.",
-                comment: "String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name.",
-                lastUsedInVersion: 114)
             public static let TitleTreatmentA = MZLocalizedString(
                 key: "Onboarding.Welcome.Title.TreatementA.v120",
                 tableName: "Onboarding",
@@ -1074,18 +1067,6 @@ extension String {
         }
 
         public struct Sync {
-            public static let TitleNotUsed = MZLocalizedString(
-                key: "Onboarding.Sync.Title.v114",
-                tableName: "Onboarding",
-                value: "Hop from phone to laptop and back",
-                comment: "String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens.",
-                lastUsedInVersion: 114)
-            public static let DescriptionNotUsed = MZLocalizedString(
-                key: "Onboarding.Sync.Description.v114",
-                tableName: "Onboarding",
-                value: "Grab tabs and passwords from your other devices to pick up where you left off.",
-                comment: "String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens.",
-                lastUsedInVersion: 114)
             public static let Title = MZLocalizedString(
                 key: "Onboarding.Sync.Title.v120",
                 tableName: "Onboarding",
@@ -1109,18 +1090,6 @@ extension String {
         }
 
         public struct Notification {
-            public static let TitleNotUsed = MZLocalizedString(
-                key: "Onboarding.Notification.Title.v114",
-                tableName: "Onboarding",
-                value: "Notifications help you do more with %@",
-                comment: "String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name.",
-                lastUsedInVersion: 114)
-            public static let DescriptionNotUsed = MZLocalizedString(
-                key: "Onboarding.Notification.Description.v114",
-                tableName: "Onboarding",
-                value: "Send tabs between your devices and get tips about how to get the most out of %@.",
-                comment: "String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name.",
-                lastUsedInVersion: 114)
             public static let Title = MZLocalizedString(
                 key: "Onboarding.Notification.Title.v120",
                 tableName: "Onboarding",
@@ -1658,6 +1627,47 @@ extension String {
                     tableName: nil,
                     value: "Sync and Save Data",
                     comment: "Title for the page where the user sign in to their Firefox Sync account.")
+            }
+        }
+
+        public struct Search {
+            public static let Title = MZLocalizedString(
+                key: "Settings.Search.PageTitle.v121",
+                tableName: "Settings",
+                value: "Search",
+                comment: "Navigation title for search page in the Settings menu.")
+            public static let ShowSearchSuggestions = MZLocalizedString(
+                key: "Settings.Search.ShowSuggestions.v121",
+                tableName: "Settings",
+                value: "Show Search Suggestions",
+                comment: "Label for the `show search suggestions` setting, in the Search Settings page.")
+            public static let DefaultSearchEngineTitle = MZLocalizedString(
+                key: "Settings.Search.DefaultSearchEngine.Title.v121",
+                tableName: "Settings",
+                value: "Default Search Engine",
+                comment: "Title for the `default search engine` settings section in the Search page in the Settings menu.")
+            public static let QuickSearchEnginesTitle = MZLocalizedString(
+                key: "Settings.Search.QuickEnginesTitle.v121",
+                tableName: "Settings",
+                value: "Quick-Search Engines",
+                comment: "Title for quick-search engines settings section in the Search page in the Settings menu.")
+            public static let PrivateSessionTitle = MZLocalizedString(
+                key: "Settings.Search.PrivateSession.Title.v121",
+                tableName: "Settings",
+                value: "Private Session",
+                comment: "Title for the `Private Session` settings section in the Search page in the Settings menu.")
+            public static let PrivateSessionSetting = MZLocalizedString(
+                key: "Settings.Search.PrivateSession.Setting.v121",
+                tableName: "Settings",
+                value: "Turn off suggestions in private browsing",
+                comment: "Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in the Private Session section in the Search page in the Settings menu.")
+
+            public struct AccessibilityLabels {
+                public static let DefaultSearchEngine = MZLocalizedString(
+                    key: "Settings.Search.Accessibility.DefaultSearchEngine.v121",
+                    tableName: "Settings",
+                    value: "Default Search Engine",
+                    comment: "Accessibility label for default search engine setting.")
             }
         }
     }
@@ -3701,6 +3711,11 @@ extension String {
             tableName: "Shopping",
             value: "BETA",
             comment: "Beta label for the header of the Shopping Experience (Fakespot) sheet")
+        public static let CloseButtonAccessibilityLabel = MZLocalizedString(
+            key: "Shopping.Sheet.Close.AccessibilityLabel.v121",
+            tableName: "Shopping",
+            value: "Close Review Checker",
+            comment: "Accessibility label for close button that dismisses the Shopping Experience (Fakespot) sheet.")
         public static let ReliabilityCardTitle = MZLocalizedString(
             key: "Shopping.ReviewQuality.ReliabilityCardTitle.v120",
             tableName: "Shopping",
@@ -5266,27 +5281,32 @@ extension String {
         key: "SearchSettings.Title.Search.v106",
         tableName: nil,
         value: "Search",
-        comment: "Navigation title for search settings.")
+        comment: "Navigation title for search settings.",
+        lastUsedInVersion: 120)
     public static let SearchSettingsDefaultSearchEngineAccessibilityLabel = MZLocalizedString(
         key: "SearchSettings.Accessibility.DefaultSearchEngine.v106",
         tableName: nil,
         value: "Default Search Engine",
-        comment: "Accessibility label for default search engine setting.")
+        comment: "Accessibility label for default search engine setting.",
+        lastUsedInVersion: 120)
     public static let SearchSettingsShowSearchSuggestions = MZLocalizedString(
         key: "Show Search Suggestions",
         tableName: nil,
         value: nil,
-        comment: "Label for show search suggestions setting.")
+        comment: "Label for show search suggestions setting.",
+        lastUsedInVersion: 120)
     public static let SearchSettingsDefaultSearchEngineTitle = MZLocalizedString(
         key: "SearchSettings.Title.DefaultSearchEngine.v106",
         tableName: nil,
         value: "Default Search Engine",
-        comment: "Title for default search engine settings section.")
-    public static let SearchSettingsQuickSearchEnginesTitle = MZLocalizedString(
+        comment: "Title for default search engine settings section.",
+        lastUsedInVersion: 120)
+ public static let SearchSettingsQuickSearchEnginesTitle = MZLocalizedString(
         key: "Quick-Search Engines",
         tableName: nil,
         value: nil,
-        comment: "Title for quick-search engines settings section.")
+        comment: "Title for quick-search engines settings section.",
+        lastUsedInVersion: 120)
 }
 
 // MARK: - SettingsContent
