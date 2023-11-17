@@ -107,7 +107,7 @@ public class RustAutofillEncryptionKeys {
         return nil
     }
 
-    fileprivate func createCanary(text: String,
+    private func createCanary(text: String,
                                   key: String) throws -> String {
         return try encryptString(key: key, cleartext: text)
     }

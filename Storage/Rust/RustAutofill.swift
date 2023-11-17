@@ -29,7 +29,7 @@ public class RustAutofill {
         self.logger = logger
     }
 
-    public func open() -> NSError? {
+    internal func open() -> NSError? {
         do {
             try getStoredKey()
             storage = try AutofillStore(dbpath: databasePath)
@@ -41,7 +41,7 @@ public class RustAutofill {
         }
     }
 
-    public func close() -> NSError? {
+    internal func close() -> NSError? {
         storage = nil
         isOpen = false
         return nil
