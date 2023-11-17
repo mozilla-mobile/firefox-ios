@@ -30,7 +30,7 @@ public class RustAutofillEncryptionKeys {
         self.logger = logger
     }
 
-     func createAndStoreKey() throws -> String {
+    func createAndStoreKey() throws -> String {
         do {
             let secret = try createAutofillKey()
             let canary = try self.createCanary(text: canaryPhrase, key: secret)
@@ -108,7 +108,7 @@ public class RustAutofillEncryptionKeys {
     }
 
     private func createCanary(text: String,
-                                  key: String) throws -> String {
+                              key: String) throws -> String {
         return try encryptString(key: key, cleartext: text)
     }
 
