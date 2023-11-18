@@ -284,23 +284,6 @@ class BaseTestCase: XCTestCase {
     func waitForTabsButton() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 15)
     }
-
-    func enableHiddenFeature(feature: String) {
-        navigator.goto(SettingsScreen)
-        while !app.staticTexts["ABOUT"].exists {
-            app.swipeUp()
-        }
-        app.swipeUp()
-        while !app.staticTexts["DEBUG"].exists {
-            app.cells["FxVersion"].tap()
-            app.swipeUp()
-        }
-        while !app.staticTexts[feature].exists {
-            app.swipeUp()
-        }
-        mozWaitForElementToExist(app.staticTexts[feature])
-        app.staticTexts[feature].tap()
-    }
 }
 
 class IpadOnlyTestCase: BaseTestCase {
