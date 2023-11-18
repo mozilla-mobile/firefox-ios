@@ -5,25 +5,12 @@
 import XCTest
 
 class FirefoxSuggestTest: BaseTestCase {
-    override func setUp() {
-        super.setUp()
-        waitForTabsButton()
-        enableHiddenFeature(feature: "Firefox Suggest")
-        ingestNewSuggestions()
-        navigator.goto(NewTabScreen)
-    }
-
-    private func ingestNewSuggestions() {
-        mozWaitForElementToExist(app.staticTexts["Ingest new suggestions now"])
-        app.staticTexts["Ingest new suggestions now"].tap()
-        app.navigationBars.buttons["Settings"].tap()
-        navigator.nowAt(SettingsScreen)
-    }
-
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2360075
     func testFirefoxSuggestExists() {
+        navigator.openURL("www.example.com")
+        navigator.createNewTab()
         navigator.goto(URLBarOpen)
-        app.textFields["address"].typeText("sho")
+        app.textFields["address"].typeText("ex")
         mozWaitForElementToExist(app.tables["SiteTable"])
         mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["Google Search"])
         mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["Firefox Suggest"])
