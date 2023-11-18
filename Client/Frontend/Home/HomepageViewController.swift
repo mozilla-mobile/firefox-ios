@@ -230,7 +230,7 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
         view.addSubview(wallpaperView)
 
         // Constraint so wallpaper appears under the status bar
-        let wallpaperTopConstant: CGFloat = view.window?.safeAreaInsets.top ?? statusBarFrame?.height ?? 0
+        let wallpaperTopConstant: CGFloat = UIWindow.keyWindow?.safeAreaInsets.top ?? statusBarFrame?.height ?? 0
 
         NSLayoutConstraint.activate([
             wallpaperView.topAnchor.constraint(equalTo: view.topAnchor, constant: -wallpaperTopConstant),
@@ -425,7 +425,7 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
             contextualHintViewController.stopTimer()
             return
         }
-
+        contextualHintViewController.isPresenting = true
         present(contextualHintViewController, animated: true, completion: nil)
 
         UIAccessibility.post(notification: .layoutChanged, argument: contextualHintViewController)
@@ -738,12 +738,18 @@ extension HomepageViewController: UIPopoverPresentationControllerDelegate {
         popoverPresentationController.presentedViewController.dismiss(animated: false, completion: nil)
     }
 
-    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
-        return .none
-    }
-
     func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
         return true
+    }
+}
+
+// MARK: - UIAdaptivePresentationControllerDelegate
+extension HomepageViewController: UIAdaptivePresentationControllerDelegate {
+    func adaptivePresentationStyle(
+        for controller: UIPresentationController,
+        traitCollection: UITraitCollection
+    ) -> UIModalPresentationStyle {
+        .none
     }
 }
 

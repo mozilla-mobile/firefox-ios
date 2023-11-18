@@ -3852,16 +3852,18 @@ extension String {
             tableName: "Shopping",
             value: "Check Review Quality",
             comment: "Text for the analyzer button displayed when an analysis can be updated for a product.")
-        public static let NoAnalysisCardInProgressTitle = MZLocalizedString(
+        public static let NoAnalysisCardInProgressTitleNotUsed = MZLocalizedString(
             key: "Shopping.NoAnalysisCard.InProgress.Headline.Title.v120",
             tableName: "Shopping",
             value: "Checking review quality",
-            comment: "Title for the card displayed when a shopping product has not been analysed yet but the analysis is in progress.")
-        public static let NoAnalysisCardInProgressBodyLabel = MZLocalizedString(
+            comment: "Title for the card displayed when a shopping product has not been analysed yet but the analysis is in progress.",
+            lastUsedInVersion: 120)
+        public static let NoAnalysisCardInProgressBodyLabelNotUsed = MZLocalizedString(
             key: "Shopping.NoAnalysisCard.InProgress.Body.Label.v120",
             tableName: "Shopping",
             value: "This could take about 60 seconds.",
-            comment: "Description for the card displayed when a shopping product has not been analysed yet but the analysis is in progress.")
+            comment: "Description for the card displayed when a shopping product has not been analysed yet but the analysis is in progress.",
+            lastUsedInVersion: 120)
         public static let ReviewQualityCardLabelTitle = MZLocalizedString(
             key: "Shopping.ReviewQualityCard.Label.Title.v120",
             tableName: "Shopping",

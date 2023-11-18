@@ -61,7 +61,7 @@ class FakespotViewModel {
                 var cards: [ViewElement] = []
 
                 if analysisStatus?.isAnalyzing == true {
-                    cards.append(.progressAnalysisCard)
+                    cards.append(.messageCard(.analysisInProgress))
                 } else {
                     cards.append(.noAnalysisCard)
                 }
@@ -78,7 +78,7 @@ class FakespotViewModel {
                     cards.append(.messageCard(.notEnoughReviews))
                 } else {
                     if analysisStatus?.isAnalyzing == true {
-                        cards.append(.progressAnalysisCard)
+                        cards.append(.messageCard(.analysisInProgress))
                     } else {
                         cards.append(.noAnalysisCard)
                     }
@@ -138,7 +138,6 @@ class FakespotViewModel {
         case qualityDeterminationCard
         case settingsCard
         case noAnalysisCard
-        case progressAnalysisCard
         case productAdCard
         case messageCard(MessageType)
         enum MessageType {
@@ -339,6 +338,12 @@ class FakespotViewModel {
             await fetchProductAnalysis()
             return
         }
+
+        if case .loaded(let productAnalysisData, _, _) = state {
+            // update the state to in progress so UI is updated
+            state = .loaded(productAnalysisData, status, analysisCount: analyzeCount)
+        }
+
         do {
             // Listen for analysis status until it's completed, then fetch new information
             for try await status in observeProductAnalysisStatus() where status.isAnalyzing == false {

@@ -51,6 +51,67 @@ class URLScannerTests: XCTestCase {
         XCTAssertNil(scanner?.value(query: "nonexistent"))
     }
 
+    func testSimpleFullURLQueryItem() {
+        let urlString = "firefox://open-url?url=https://example.com/path"
+        let url = URL(string: urlString)!
+        let scanner = URLScanner(url: url)!
+        XCTAssertEqual(scanner.value(query: "url"), "https://example.com/path")
+        XCTAssertEqual(scanner.fullURLQueryItem(), "https://example.com/path")
+    }
+
+    func testPrecedingNonURLParamBeforeURLQueryItem() {
+        let urlString = "firefox://open-url?arg1=abc&url=https://example.com/path?arg1=a"
+        let url = URL(string: urlString)!
+        let scanner = URLScanner(url: url)!
+        XCTAssertEqual(scanner.value(query: "url"), "https://example.com/path?arg1=a")
+        XCTAssertEqual(scanner.value(query: "arg1"), "abc")
+        XCTAssertEqual(scanner.fullURLQueryItem(), "https://example.com/path?arg1=a")
+    }
+
+    func testSingleQueryFullURLQueryItem() {
+        let urlString = "firefox://open-url?url=https://example.com/path?arg1=a"
+        let url = URL(string: urlString)!
+        let scanner = URLScanner(url: url)!
+        XCTAssertEqual(scanner.value(query: "url"), "https://example.com/path?arg1=a")
+        XCTAssertEqual(scanner.fullURLQueryItem(), "https://example.com/path?arg1=a")
+    }
+
+    func testTwoQueryParams() {
+        let urlString = "firefox://open-url?url=https://example.com/path?arg1=a&arg2=b"
+        let url = URL(string: urlString)!
+        let scanner = URLScanner(url: url)!
+        // Currently we do _not_ expect URLComponents to include all parameters to the URL.
+        XCTAssertEqual(scanner.value(query: "url"), "https://example.com/path?arg1=a")
+        // If all parameters are expected, we can use fullURLQueryItem().
+        XCTAssertEqual(scanner.fullURLQueryItem(), "https://example.com/path?arg1=a&arg2=b")
+        XCTAssertEqual(scanner.fullURLQueryItem()?.asURL, URL(string: "https://example.com/path?arg1=a&arg2=b"))
+    }
+
+    func testMultipleQueryParams() {
+        let urlString = "firefox://open-url?url=https://example.com/path?arg1=a&arg2=b&arg3=c"
+        let url = URL(string: urlString)!
+        let scanner = URLScanner(url: url)!
+        XCTAssertEqual(scanner.value(query: "url"), "https://example.com/path?arg1=a")
+        XCTAssertEqual(scanner.fullURLQueryItem(), "https://example.com/path?arg1=a&arg2=b&arg3=c")
+        XCTAssertEqual(scanner.fullURLQueryItem()?.asURL, URL(string: "https://example.com/path?arg1=a&arg2=b&arg3=c"))
+    }
+
+    func testMultipleLevelsOfNestedURLs() {
+        let urlString = "firefox://open-url?url=https://example.com/path?arg1=a&anotherURL=https://test.com"
+        let url = URL(string: urlString)!
+        let scanner = URLScanner(url: url)!
+        XCTAssertEqual(scanner.fullURLQueryItem(), "https://example.com/path?arg1=a&anotherURL=https://test.com")
+    }
+
+    func testFullURLQueryItemForURLWithoutURLQuery() {
+        let urlString = "https://simpleURL.com/page?arg1=a&arg2=b"
+        let url = URL(string: urlString)!
+        let scanner = URLScanner(url: url)!
+        XCTAssertEqual(scanner.value(query: "arg1"), "a")
+        XCTAssertEqual(scanner.value(query: "arg2"), "b")
+        XCTAssertNil(scanner.fullURLQueryItem())
+    }
+
     func testOurScheme() {
         let urlString = "firefox://abcdefg/path/to/resource"
         let url = URL(string: urlString)!

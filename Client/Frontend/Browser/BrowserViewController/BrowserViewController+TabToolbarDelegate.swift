@@ -231,10 +231,6 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
         }
     }
 
-    func showMenuPresenter(url: URL, tab: Tab, view: UIView) {
-        presentActivityViewController(url, tab: tab, sourceView: view, sourceRect: view.bounds, arrowDirection: .up)
-    }
-
     func showFindInPage() {
         updateFindInPageVisibility(visible: true)
     }

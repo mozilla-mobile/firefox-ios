@@ -190,7 +190,8 @@ class DevicePickerViewController: UITableViewController {
         if !devices.isEmpty {
             if indexPath.section == 0 {
                 cell = tableView.dequeueReusableCell(withIdentifier: DevicePickerTableViewHeaderCell.cellIdentifier,
-                                                     for: indexPath) as? DevicePickerTableViewHeaderCell
+                                                     for: indexPath)
+                (cell as? DevicePickerTableViewHeaderCell)?.applyTheme(theme: themeManager.currentTheme)
             } else if let clientCell = tableView.dequeueReusableCell(
                 withIdentifier: DevicePickerTableViewCell.cellIdentifier,
                 for: indexPath) as? DevicePickerTableViewCell {

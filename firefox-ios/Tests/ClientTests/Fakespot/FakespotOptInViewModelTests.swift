@@ -15,6 +15,7 @@ final class FakespotOptInCardViewModelTests: XCTestCase {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         mockProfile = MockProfile()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         viewModel = FakespotOptInCardViewModel()
     }
 

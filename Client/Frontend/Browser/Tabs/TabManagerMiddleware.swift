@@ -6,7 +6,7 @@ import Foundation
 import Redux
 
 class TabsPanelMiddleware {
-    var tabs = [TabCellState]()
+    var tabs = [TabCellModel]()
     var inactiveTabs = [String]()
     var selectedPanel: TabTrayPanelType = .tabs
 
@@ -15,50 +15,65 @@ class TabsPanelMiddleware {
     lazy var tabsPanelProvider: Middleware<AppState> = { state, action in
         switch action {
         case TabTrayAction.tabTrayDidLoad(let panelType):
-            let tabsState = self.getMockData(for: panelType)
-            store.dispatch(TabTrayAction.didLoadTabData(tabsState))
+            let tabTrayModel = self.getTabTrayModel(for: panelType)
+            store.dispatch(TabTrayAction.didLoadTabTray(tabTrayModel))
+
+        case TabPanelAction.tabPanelDidLoad(let isPrivate):
+            let tabState = self.getTabsDisplayModel(for: isPrivate)
+            store.dispatch(TabPanelAction.didLoadTabPanel(tabState))
+
         case TabTrayAction.changePanel(let panelType):
-            let tabsState = self.getMockData(for: panelType)
-            store.dispatch(TabTrayAction.didLoadTabData(tabsState))
-        case TabTrayAction.addNewTab(let isPrivate):
+            let isPrivate = panelType == TabTrayPanelType.privateTabs
+            let tabState = self.getTabsDisplayModel(for: isPrivate)
+            store.dispatch(TabPanelAction.didLoadTabPanel(tabState))
+
+        case TabPanelAction.addNewTab(let isPrivate):
             self.addNewTab()
-            store.dispatch(TabTrayAction.refreshTab(self.tabs))
-        case TabTrayAction.moveTab(let originIndex, let destinationIndex):
+            store.dispatch(TabPanelAction.refreshTab(self.tabs))
+
+        case TabPanelAction.moveTab(let originIndex, let destinationIndex):
             self.moveTab(from: originIndex, to: destinationIndex)
-            store.dispatch(TabTrayAction.refreshTab(self.tabs))
-        case TabTrayAction.closeTab(let index):
+            store.dispatch(TabPanelAction.refreshTab(self.tabs))
+
+        case TabPanelAction.closeTab(let index):
             self.closeTab(for: index)
-            store.dispatch(TabTrayAction.refreshTab(self.tabs))
-        case TabTrayAction.closeAllTabs:
+            store.dispatch(TabPanelAction.refreshTab(self.tabs))
+
+        case TabPanelAction.closeAllTabs:
             self.closeAllTabs()
-            store.dispatch(TabTrayAction.refreshTab(self.tabs))
+            store.dispatch(TabPanelAction.refreshTab(self.tabs))
+
         default:
             break
         }
     }
 
-    func getMockData(for panelType: TabTrayPanelType) -> TabTrayState {
+    func getTabTrayModel(for panelType: TabTrayPanelType) -> TabTrayModel {
         selectedPanel = panelType
-        guard panelType != .syncedTabs else { return TabTrayState() }
-
-        for index in 0...2 {
-            let cellState = TabCellState.emptyTabState(title: "Tab \(index)")
-            tabs.append(cellState)
-        }
 
         let isPrivate = panelType == .privateTabs
-        inactiveTabs =  !isPrivate ? ["Tab1", "Tab2", "Tab3"] : [String]()
-
-        return TabTrayState(isPrivateMode: isPrivate,
+        return TabTrayModel(isPrivateMode: isPrivate,
                             selectedPanel: panelType,
-                            tabs: tabs,
-                            remoteTabsState: nil,
-                            normalTabsCount: "\(tabs.count)",
-                            inactiveTabs: inactiveTabs)
+                            normalTabsCount: "\(tabs.count)")
+    }
+
+    func getTabsDisplayModel(for isPrivate: Bool) -> TabDisplayModel {
+        resetMock()
+        for index in 0...2 {
+            let cellState = TabCellModel.emptyTabState(title: "Tab \(index)")
+            tabs.append(cellState)
+        }
+        inactiveTabs =  !isPrivate ? ["Tab1", "Tab2", "Tab3"] : [String]()
+        let isInactiveTabsExpanded = !isPrivate && !inactiveTabs.isEmpty
+
+        return TabDisplayModel(isPrivateMode: isPrivate,
+                               tabs: tabs,
+                               inactiveTabs: inactiveTabs,
+                               isInactiveTabsExpanded: isInactiveTabsExpanded)
     }
 
     private func addNewTab() {
-        let cellState = TabCellState.emptyTabState(title: "New tab")
+        let cellState = TabCellModel.emptyTabState(title: "New tab")
         tabs.append(cellState)
     }
 
@@ -72,5 +87,11 @@ class TabsPanelMiddleware {
 
     private func closeAllTabs() {
         tabs.removeAll()
+    }
+
+    private func resetMock() {
+        // Clean up array before getting the new panel
+        tabs.removeAll()
+        inactiveTabs.removeAll()
     }
 }
