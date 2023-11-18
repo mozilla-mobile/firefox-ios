@@ -82,7 +82,7 @@
         "FindInPageTests\/testFindInPageTwoWordsSearch()",
         "FindInPageTests\/testFindInPageTwoWordsSearchLargeDoc()",
         "FindInPageTests\/testQueryWithNoMatches()",
-        "FirefoxSuggestTest\/testFirefoxSuggestExists()",
+        "FirefoxSuggestTest",
         "FxScreenGraphTests",
         "HistoryTests",
         "HistoryTests\/testClearHistoryFromSettings()",

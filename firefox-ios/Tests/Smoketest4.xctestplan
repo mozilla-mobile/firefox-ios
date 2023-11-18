@@ -34,7 +34,7 @@
         "ExperimentIntegrationTests",
         "FakespotTests",
         "FindInPageTests",
-        "FirefoxSuggestTest\/testFirefoxSuggestExists()",
+        "FirefoxSuggestTest",
         "FxScreenGraphTests",
         "HistoryTests\/testClearHistoryFromSettings()",
         "HistoryTests\/testClearPrivateData()",
