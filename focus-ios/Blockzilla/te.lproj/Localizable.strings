@@ -172,6 +172,9 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "ఇంకా తెలుసుకోండి.";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "రేటు %@";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "అమరికలు";
 

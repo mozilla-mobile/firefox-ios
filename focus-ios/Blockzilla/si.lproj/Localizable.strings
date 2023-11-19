@@ -356,7 +356,7 @@
 "Settings.setAsDefaultBrowser" = "පෙරනිමි අතිරික්සුව කරන්න";
 
 /* %@ is the name of the app. Description for set as default browser option */
-"Settings.setAsDefaultBrowserDescription" = "%@ හි ස්වයංක්‍රීයව විවෘත වීමට අඩවි, වි-තැපැල් සහ පණිවිඩ වලින් සබැඳි සකසන්න.";
+"Settings.setAsDefaultBrowserDescription" = "%@ අතිරික්සුවේ ස්වයංක්‍රීයව විවෘත වීමට පණිවිඩ, වි-තැපැල් සහ අඩවිවල සබැඳි සකසන්න.";
 
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "පද්ධතියේ තේමාව";
@@ -623,7 +623,7 @@
 "URL.paste" = "අලවන්න";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "සොයන්න හෝ ලිපිනය යොදන්න";
+"URL.placeholderText" = "සොයන්න හෝ ලිපිනය ලියන්න";
 
 /* Label displayed for search button when typing in the URL bar */
 "URL.searchLabel" = "%@ සඳහා සොයන්න";

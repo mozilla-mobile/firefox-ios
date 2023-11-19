@@ -77,7 +77,7 @@
 "Autocomplete.customUrlAdded" = "ახალი საკუთარი URL დაემატა.";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"Autocomplete.defaultDescriptoin" = "ჩართეთ და %@ თავად დაასრულებს 450-ზე მეტ ცნობილ URL-ბმულს, მისამართების ველში აკრეფისას.";
+"Autocomplete.defaultDescriptoin" = "ჩართეთ და %@ თავად დაასრულებს 450-ზე მეტ ცნობილ URL-ბმულს მისამართების ველში აკრეფისას.";
 
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "გამორთულია";
