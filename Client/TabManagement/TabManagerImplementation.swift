@@ -302,6 +302,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     /// This function updates the _selectedIndex.
     /// Note: it is safe to call this with `tab` and `previous` as the same tab, for use in the case where the index of the tab has changed (such as after deletion).
     override func selectTab(_ tab: Tab?, previous: Tab? = nil) {
+        let url = tab?.url
         guard let tab = tab,
               let tabUUID = UUID(uuidString: tab.tabUUID)
         else {
