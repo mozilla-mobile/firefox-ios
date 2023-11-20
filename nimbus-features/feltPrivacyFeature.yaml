@@ -1,7 +1,7 @@
 # The configuration for the feltPrivacyFeature feature
 features:
-  private-browsing:
-    description: Private Browsing Mode
+  felt-privacy-feature:
+    description: The feature that enhances private browsing mode
     variables:
       simplified-ui-enabled:
         description: If true, enable simplified UI part of Felt Privacy

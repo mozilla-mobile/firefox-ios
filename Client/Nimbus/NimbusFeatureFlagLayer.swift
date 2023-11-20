@@ -170,7 +170,7 @@ final class NimbusFeatureFlagLayer {
         for featureID: NimbusFeatureFlagID,
         from nimbus: FxNimbus
     ) -> Bool {
-        let config = nimbus.features.privateBrowsing.value()
+        let config = nimbus.features.feltPrivacyFeature.value()
 
         switch featureID {
         case .feltPrivacySimplifiedUI: return config.simplifiedUiEnabled
