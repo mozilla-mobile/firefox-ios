@@ -200,24 +200,24 @@ final class ShoppingProductTests: XCTestCase {
     func testAdsWithRatingsHigherThanMinRating() {
         let minRating = 4.0
         let productAds = [
-            ProductAdsData(adjustedRating: 4.5),
-            ProductAdsData(adjustedRating: 4.7),
-            ProductAdsData(adjustedRating: 4.2)
+            ProductAdsResponse(adjustedRating: 4.5),
+            ProductAdsResponse(adjustedRating: 4.7),
+            ProductAdsResponse(adjustedRating: 4.2)
         ]
 
         let selectedAdCard = productAds
             .sorted(by: { $0.adjustedRating > $1.adjustedRating })
             .first(where: { $0.adjustedRating >= minRating })
 
-        XCTAssertEqual(selectedAdCard, ProductAdsData(adjustedRating: 4.7), "The ad with the highest rating should be selected.")
+        XCTAssertEqual(selectedAdCard, ProductAdsResponse(adjustedRating: 4.7), "The ad with the highest rating should be selected.")
     }
 
     func testAdsWithRatingsLowerThanMinRating() {
         let minRating = 4.0
         let productAds = [
-            ProductAdsData(adjustedRating: 3.5),
-            ProductAdsData(adjustedRating: 3.7),
-            ProductAdsData(adjustedRating: 3.2)
+            ProductAdsResponse(adjustedRating: 3.5),
+            ProductAdsResponse(adjustedRating: 3.7),
+            ProductAdsResponse(adjustedRating: 3.2)
         ]
 
         let selectedAdCard = productAds
@@ -230,20 +230,20 @@ final class ShoppingProductTests: XCTestCase {
     func testAdsWithSomeRatingsEqualToMinRating() {
         let minRating = 4.0
         let productAds = [
-            ProductAdsData(adjustedRating: 4.0),
-            ProductAdsData(adjustedRating: 3.9),
-            ProductAdsData(adjustedRating: 4.2)
+            ProductAdsResponse(adjustedRating: 4.0),
+            ProductAdsResponse(adjustedRating: 3.9),
+            ProductAdsResponse(adjustedRating: 4.2)
         ]
 
         let selectedAdCard = productAds
             .sorted(by: { $0.adjustedRating > $1.adjustedRating })
             .first(where: { $0.adjustedRating >= minRating })
 
-        XCTAssertEqual(selectedAdCard, ProductAdsData(adjustedRating: 4.2))
+        XCTAssertEqual(selectedAdCard, ProductAdsResponse(adjustedRating: 4.2))
     }
 }
 
-fileprivate extension ProductAdsData {
+fileprivate extension ProductAdsResponse {
     init(adjustedRating: Double) {
         self.init(
             name: "",
