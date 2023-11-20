@@ -90,9 +90,6 @@ extension Notification.Name {
     // fired when user taps on undo button on Toast
     public static let DidTapUndoCloseAllTabToast = Notification.Name("DidTapUndoCloseAllTabToast")
 
-    // Has to be used in combination of OpenTabNotificationObject
-    public static let OpenTabNotification = Notification.Name("OpenTabNotification")
-
     // MARK: Settings
 
     public static let BlockPopup = Notification.Name("BlockPopup")

@@ -546,7 +546,6 @@
 		8A04136B2825ABEA00D20B10 /* SponsoredTileTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A04136A2825ABEA00D20B10 /* SponsoredTileTelemetryTests.swift */; };
 		8A05B0052A69A0C40011B622 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 8A05B0042A69A0C40011B622 /* Common */; };
 		8A05B0072A69A25C0011B622 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 8A05B0062A69A25C0011B622 /* Common */; };
-		8A0621B829428FBD005D1EFD /* OpenTabNotificationObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0621B729428FBD005D1EFD /* OpenTabNotificationObject.swift */; };
 		8A07910F278F62F2005529CB /* AdjustHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A07910E278F62F2005529CB /* AdjustHelper.swift */; };
 		8A08EC6227EBDCA400E119C7 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4B334871BBF23F3004E2BFF /* iAd.framework */; };
 		8A08EC6427EBDCAD00E119C7 /* AdServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A08EC6327EBDCAC00E119C7 /* AdServices.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -5043,7 +5042,6 @@
 		8A05813728B56D9B00FD8D46 /* ta */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ta; path = ta.lproj/WidgetIntents.strings; sourceTree = "<group>"; };
 		8A05813928B56DB900FD8D46 /* bo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bo; path = bo.lproj/WidgetIntents.strings; sourceTree = "<group>"; };
 		8A05813B28B56DD700FD8D46 /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/WidgetIntents.strings; sourceTree = "<group>"; };
-		8A0621B729428FBD005D1EFD /* OpenTabNotificationObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenTabNotificationObject.swift; sourceTree = "<group>"; };
 		8A07910E278F62F2005529CB /* AdjustHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustHelper.swift; sourceTree = "<group>"; };
 		8A08EC6327EBDCAC00E119C7 /* AdServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdServices.framework; path = System/Library/Frameworks/AdServices.framework; sourceTree = SDKROOT; };
 		8A093D7C2A4B3E4F0099ABA5 /* DebugSettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugSettingsDelegate.swift; sourceTree = "<group>"; };
@@ -9999,7 +9997,6 @@
 				744ED5601DBFEB8D00A2B5BE /* MailtoLinkHandler.swift */,
 				D0C95E35200FDC5400E4E51C /* MetadataParserHelper.swift */,
 				74821FC41DB56A2500EEEA72 /* OpenWithSettingsViewController.swift */,
-				8A0621B729428FBD005D1EFD /* OpenTabNotificationObject.swift */,
 				D31CF65B1CC1959A001D0BD0 /* PrivilegedRequest.swift */,
 				FA6B2AC11D41F02D00429414 /* String+Punycode.swift */,
 				FA9294001D6584A200AC8D33 /* QRCode.xcassets */,
@@ -12751,7 +12748,6 @@
 				219914052AF963F900153598 /* TabTrayAction.swift in Sources */,
 				5AA0CC662A4B8F6100014E2A /* PasswordManagerCoordinator.swift in Sources */,
 				8A7368AD27924AAF005D7704 /* CanRemoveQuickActionBookmark.swift in Sources */,
-				8A0621B829428FBD005D1EFD /* OpenTabNotificationObject.swift in Sources */,
 				C2296FCC2A601C190046ECA6 /* IntensityVisualEffectView.swift in Sources */,
 				8ADC2A102A33758E00543DAA /* FxALaunchParams.swift in Sources */,
 				D3C3696E1CC6B78800348A61 /* LocalRequestHelper.swift in Sources */,
