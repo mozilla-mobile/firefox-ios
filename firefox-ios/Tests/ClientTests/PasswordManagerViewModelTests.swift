@@ -44,14 +44,19 @@ class PasswordManagerViewModelTests: XCTestCase {
                 "username": "username\(i)",
                 "password": "password\(i)"
             ])
-            let addResult = self.viewModel.profile.logins.addLogin(login: login)
-            XCTAssertTrue(addResult.value.isSuccess)
-            XCTAssertNotNil(addResult.value.successValue)
+            let addExp = expectation(description: "\(#function)\(#line)")
+            self.viewModel.profile.logins.addLogin(login: login).upon { addResult in
+                XCTAssertTrue(addResult.isSuccess)
+                XCTAssertNotNil(addResult.successValue)
+                addExp.fulfill()
+            }
         }
 
         let logins = self.viewModel.profile.logins.listLogins().value
         XCTAssertTrue(logins.isSuccess)
         XCTAssertNotNil(logins.successValue)
+
+        waitForExpectations(timeout: 10, handler: nil)
     }
 
     func testQueryLogins() {

@@ -47,8 +47,8 @@ class TabCellTests: XCTestCase {
                        state.isSelected)
     }
 
-    private func createDefaultState() -> TabCellState {
-        return TabCellState(isSelected: false,
+    private func createDefaultState() -> TabCellModel {
+        return TabCellModel(isSelected: false,
                             isPrivate: false,
                             isFxHomeTab: false,
                             tabTitle: "Firefox Browser",

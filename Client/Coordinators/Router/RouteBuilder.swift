@@ -20,7 +20,7 @@ final class RouteBuilder {
         guard let urlScanner = URLScanner(url: url) else { return nil }
 
         if urlScanner.isOurScheme, let host = DeeplinkInput.Host(rawValue: urlScanner.host.lowercased()) {
-            let urlQuery = urlScanner.value(query: "url")?.asURL
+            let urlQuery = urlScanner.fullURLQueryItem()?.asURL
             // Unless the `open-url` URL specifies a `private` parameter,
             // use the last browsing mode the user was in.
             let isPrivate = Bool(urlScanner.value(query: "private") ?? "") ?? isPrivate
@@ -29,7 +29,7 @@ final class RouteBuilder {
 
             switch host {
             case .deepLink:
-                let deepLinkURL = urlScanner.value(query: "url")?.lowercased()
+                let deepLinkURL = urlScanner.fullURLQueryItem()?.lowercased()
                 let paths = deepLinkURL?.split(separator: "/") ?? []
                 guard let pathRaw = paths[safe: 0].flatMap(String.init),
                       let path = DeeplinkInput.Path(rawValue: pathRaw),

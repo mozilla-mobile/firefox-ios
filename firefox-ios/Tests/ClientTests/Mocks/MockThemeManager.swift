@@ -19,6 +19,8 @@ class MockThemeManager: ThemeManager {
             currentTheme = LightTheme()
         case .dark:
             currentTheme = DarkTheme()
+        case .privateMode:
+            currentTheme = PrivateModeTheme()
         }
     }
 

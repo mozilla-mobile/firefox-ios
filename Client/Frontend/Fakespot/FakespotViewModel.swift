@@ -10,10 +10,10 @@ class FakespotViewModel {
     enum ViewState {
         case loading
         case onboarding
-        case loaded(ProductAnalysisData?, AnalysisStatus?, analysisCount: Int)
+        case loaded(ProductAnalysisResponse?, AnalysisStatus?, analysisCount: Int)
         case error(Error)
 
-        fileprivate var productData: ProductAnalysisData? {
+        fileprivate var productData: ProductAnalysisResponse? {
             switch self {
             case .loading, .error, .onboarding: return nil
             case .loaded(let data, _, _): return data
@@ -61,7 +61,7 @@ class FakespotViewModel {
                 var cards: [ViewElement] = []
 
                 if analysisStatus?.isAnalyzing == true {
-                    cards.append(.progressAnalysisCard)
+                    cards.append(.messageCard(.analysisInProgress))
                 } else {
                     cards.append(.noAnalysisCard)
                 }
@@ -78,7 +78,7 @@ class FakespotViewModel {
                     cards.append(.messageCard(.notEnoughReviews))
                 } else {
                     if analysisStatus?.isAnalyzing == true {
-                        cards.append(.progressAnalysisCard)
+                        cards.append(.messageCard(.analysisInProgress))
                     } else {
                         cards.append(.noAnalysisCard)
                     }
@@ -138,7 +138,6 @@ class FakespotViewModel {
         case qualityDeterminationCard
         case settingsCard
         case noAnalysisCard
-        case progressAnalysisCard
         case productAdCard
         case messageCard(MessageType)
         enum MessageType {
@@ -162,6 +161,7 @@ class FakespotViewModel {
     let shoppingProduct: ShoppingProduct
     var onStateChange: (() -> Void)?
     var isSwiping = false
+    var isViewIntersected = false
 
     private var fetchProductTask: Task<Void, Never>?
     private var observeProductTask: Task<Void, Never>?
@@ -338,6 +338,12 @@ class FakespotViewModel {
             await fetchProductAnalysis()
             return
         }
+
+        if case .loaded(let productAnalysisData, _, _) = state {
+            // update the state to in progress so UI is updated
+            state = .loaded(productAnalysisData, status, analysisCount: analyzeCount)
+        }
+
         do {
             // Listen for analysis status until it's completed, then fetch new information
             for try await status in observeProductAnalysisStatus() where status.isAnalyzing == false {
