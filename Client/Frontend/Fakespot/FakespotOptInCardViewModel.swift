@@ -23,6 +23,7 @@ struct FakespotOptInCardViewModel {
     let headerTitle: String = .Shopping.OptInCardHeaderTitle
     let headerA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.headerTitle
     let bodyFirstParagraph: String = .Shopping.OptInCardFirstParagraph
+    let bodyFirstParagraphSupportedWebsites: String = .Shopping.OptInCardSupportedWebsites
     let bodySecondParagraph = String.localizedStringWithFormat(.Shopping.OptInCardSecondParagraph,
                                                                FakespotName.shortName.rawValue,
                                                                MozillaName.shortName.rawValue)
@@ -119,9 +120,7 @@ struct FakespotOptInCardViewModel {
         let boldFont = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body,
                                                                   size: UX.bodyLabelFontSize)
 
-        let processedBodyFirstParagraph = processStringBasedOnLocale(bodyFirstParagraph)
-
-        let combinedString = String(format: "%@\n\n%@", processedBodyFirstParagraph, bodySecondParagraph)
+        let combinedString = processStringBasedOnLocale()
 
         let plainText = String.localizedStringWithFormat(combinedString,
                                                          websites[0],
@@ -135,18 +134,22 @@ struct FakespotOptInCardViewModel {
         return finalString
     }
 
-    private func processStringBasedOnLocale(_ inputString: String) -> String {
-        let localizedDot = String(inputString.last!)
+    private func processStringBasedOnLocale() -> String {
+        var firstParagraph = String()
         switch Locale.current.languageCode {
         case "de", "fr":
-            return inputString.components(separatedBy: localizedDot)
-                              .filter({ !$0.isEmpty })
-                              .dropLast()
-                              .joined(separator: localizedDot)
-                              .appending(localizedDot)
-
-        default: return inputString
+            firstParagraph = bodyFirstParagraph
+        default:
+            firstParagraph = bodyFirstParagraph.appending(
+                " " + bodyFirstParagraphSupportedWebsites
+            )
         }
+
+        return String(
+            format: "%@\n\n%@",
+            firstParagraph,
+            bodySecondParagraph
+        )
     }
 
     var disclaimerText: NSAttributedString {
