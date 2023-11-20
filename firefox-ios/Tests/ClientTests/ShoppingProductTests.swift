@@ -116,20 +116,20 @@ final class ShoppingProductTests: XCTestCase {
         XCTAssertEqual(client.website, "amazon.com")
     }
 
-    func testFetchingProductAdData_WithInvalidURL_ReturnsEmptyArray() async throws {
+    func testFetchingProductAdData_WithInvalidURL_ReturnsEmptyArray() async {
         let url = URL(string: "https://www.example.com")!
 
         let sut = ShoppingProduct(url: url, client: client)
-        let productAdData = try await sut.fetchProductAdsData()
+        let productAdData = await sut.fetchProductAdsData()
 
         XCTAssertTrue(productAdData.isEmpty)
     }
 
-    func testFetchingProductAdData_WithValidURL_CallsClientAPI() async throws {
+    func testFetchingProductAdData_WithValidURL_CallsClientAPI() async {
         let url = URL(string: "https://www.amazon.com/Under-Armour-Charged-Assert-Running/dp/B087T8Q2C4")!
 
         let sut = ShoppingProduct(url: url, client: client)
-        let productAdData = try await sut.fetchProductAdsData()
+        let productAdData = await sut.fetchProductAdsData()
 
         XCTAssertNotNil(productAdData)
         XCTAssertTrue(client.fetchProductAdsDataCalled)
