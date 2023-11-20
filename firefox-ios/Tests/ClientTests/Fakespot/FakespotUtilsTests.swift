@@ -34,24 +34,60 @@ final class FakespotUtilsTests: XCTestCase {
     func testShouldDisplayInSidebar_withIphone() {
         let device = UIUserInterfaceIdiom.phone
         let keyWindow = UIWindow.attachedKeyWindow!
+        let orientation = UIDeviceOrientation.portrait
         let subject = FakespotUtils()
-        XCTAssertFalse(subject.shouldDisplayInSidebar(device: device, window: keyWindow, viewSize: keyWindow.frame.size),
+        XCTAssertFalse(subject.shouldDisplayInSidebar(device: device,
+                                                      window: keyWindow,
+                                                      viewSize: keyWindow.frame.size,
+                                                      orientation: orientation),
                        "Should return false for an iPhone")
     }
 
-    func testShouldDisplayInSidebar_withIpad_fullScreen() {
+    func testShouldDisplayInSidebar_withIpad_landscape_fullScreen() {
         let device = UIUserInterfaceIdiom.pad
         let keyWindow = UIWindow.attachedKeyWindow!
+        let orientation = UIDeviceOrientation.landscapeLeft
         let subject = FakespotUtils()
-        XCTAssertTrue(subject.shouldDisplayInSidebar(device: device, window: keyWindow, viewSize: keyWindow.frame.size),
-                      "Should return true on iPad in full screen")
+        XCTAssertTrue(subject.shouldDisplayInSidebar(device: device,
+                                                     window: keyWindow,
+                                                     viewSize: keyWindow.frame.size,
+                                                     orientation: orientation),
+                      "Should return true on iPad in landscape in full screen")
     }
 
-    func testShouldDisplayInSidebar_withIpad_splitScreen() {
+    func testShouldDisplayInSidebar_withIpad_landscape_splitScreen() {
         let device = UIUserInterfaceIdiom.pad
         let keyWindow = UIWindow.attachedKeyWindow!
+        let orientation = UIDeviceOrientation.landscapeRight
         let subject = FakespotUtils()
-        XCTAssertFalse(subject.shouldDisplayInSidebar(device: device, window: keyWindow, viewSize: CGSize.zero),
-                       "Should return false on iPad in split screen")
+        XCTAssertFalse(subject.shouldDisplayInSidebar(device: device,
+                                                      window: keyWindow,
+                                                      viewSize: CGSize.zero,
+                                                      orientation: orientation),
+                       "Should return false on iPad in landscape in split screen")
+    }
+
+    func testShouldDisplayInSidebar_withIpad_portrait_fullScreen() {
+        let device = UIUserInterfaceIdiom.pad
+        let keyWindow = UIWindow.attachedKeyWindow!
+        let orientation = UIDeviceOrientation.portrait
+        let subject = FakespotUtils()
+        XCTAssertFalse(subject.shouldDisplayInSidebar(device: device,
+                                                      window: keyWindow,
+                                                      viewSize: keyWindow.frame.size,
+                                                      orientation: orientation),
+                       "Should return false on iPad in portrait in full screen")
+    }
+
+    func testShouldDisplayInSidebar_withIpad_portrait_splitScreen() {
+        let device = UIUserInterfaceIdiom.pad
+        let keyWindow = UIWindow.attachedKeyWindow!
+        let orientation = UIDeviceOrientation.portrait
+        let subject = FakespotUtils()
+        XCTAssertFalse(subject.shouldDisplayInSidebar(device: device,
+                                                      window: keyWindow,
+                                                      viewSize: CGSize.zero,
+                                                      orientation: orientation),
+                       "Should return false on iPad in portrait in split screen")
     }
 }

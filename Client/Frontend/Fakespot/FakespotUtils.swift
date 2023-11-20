@@ -87,7 +87,9 @@ public struct FakespotUtils: FeatureFlaggable {
 
     func shouldDisplayInSidebar(device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
                                 window: UIWindow? = UIWindow.attachedKeyWindow,
-                                viewSize: CGSize? = nil) -> Bool {
-        return device == .pad && !isPadInMultitasking(device: device, window: window, viewSize: viewSize)
+                                viewSize: CGSize? = nil,
+                                orientation: UIDeviceOrientation = UIDevice.current.orientation) -> Bool {
+        let isPadInMultitasking = isPadInMultitasking(device: device, window: window, viewSize: viewSize)
+        return device == .pad && !isPadInMultitasking && !orientation.isPortrait
     }
 }
