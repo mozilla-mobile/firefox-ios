@@ -7,14 +7,10 @@ import Redux
 
 struct FakespotState: ScreenState, Equatable {
     var isOpenOnProductPage: Bool
-    private var logger: Logger
 
     init(_ appState: AppState) {
         guard let fakespotState = store.state.screenState(FakespotState.self, for: .fakespot) else {
             self.init()
-            logger.log("Error retrieving screen state",
-                       level: .debug,
-                       category: .redux)
             return
         }
 
@@ -25,10 +21,8 @@ struct FakespotState: ScreenState, Equatable {
         self.init(isOpenOnProductPage: false)
     }
 
-    init(isOpenOnProductPage: Bool,
-         logger: Logger = DefaultLogger.shared) {
+    init(isOpenOnProductPage: Bool) {
         self.isOpenOnProductPage = isOpenOnProductPage
-        self.logger = logger
     }
 
     static let reducer: Reducer<Self> = { state, action in
