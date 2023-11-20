@@ -17,6 +17,7 @@ protocol SettingsFlowDelegate: AnyObject,
     func showCreditCardSettings()
     func showExperiments()
     func showFirefoxSuggest()
+    func openDebugTestTabs(count: Int)
     func showPasswordManager(shouldShowOnboarding: Bool)
     func didFinishShowingSettings()
 }
@@ -323,7 +324,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             ResetWallpaperOnboardingPage(settings: self, settingsDelegate: self),
             SentryIDSetting(settings: self, settingsDelegate: self),
             FasterInactiveTabs(settings: self, settingsDelegate: self),
-            OpenFiftyTabsDebugOption(settings: self),
+            OpenFiftyTabsDebugOption(settings: self, settingsDelegate: self),
         ]
 
         if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildOnly) {
@@ -359,6 +360,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
     func pressedFirefoxSuggest() {
         parentCoordinator?.showFirefoxSuggest()
+    }
+
+    func pressedOpenFiftyTabs() {
+        parentCoordinator?.openDebugTestTabs(count: 50)
     }
 
     // MARK: SharedSettingsDelegate

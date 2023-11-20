@@ -9,6 +9,7 @@ import Redux
 
 protocol SettingsCoordinatorDelegate: AnyObject {
     func openURLinNewTab(_ url: URL)
+    func openDebugTestTabs(count: Int)
     func didFinishSettings(from coordinator: SettingsCoordinator)
 }
 
@@ -185,6 +186,10 @@ class SettingsCoordinator: BaseCoordinator,
     func showFirefoxSuggest() {
         let firefoxSuggestViewController = FirefoxSuggestSettingsViewController(profile: profile)
         router.push(firefoxSuggestViewController)
+    }
+
+    func openDebugTestTabs(count: Int) {
+        parentCoordinator?.openDebugTestTabs(count: count)
     }
 
     func showPasswordManager(shouldShowOnboarding: Bool) {

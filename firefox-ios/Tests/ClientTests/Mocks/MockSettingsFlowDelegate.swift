@@ -38,6 +38,8 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate,
 
     func showFirefoxSuggest() {}
 
+    func openDebugTestTabs(count: Int) {}
+
     func showPasswordManager(shouldShowOnboarding: Bool) {
         savedShouldShowOnboarding = shouldShowOnboarding
         showPasswordManagerCalled += 1
