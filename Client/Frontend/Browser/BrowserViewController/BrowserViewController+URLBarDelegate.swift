@@ -121,10 +121,10 @@ extension BrowserViewController: URLBarDelegate {
         if !dismissedFakespot {
             // open flow
             handleFakespotFlow(productURL: productURL)
-            if isReduxIntegrationEnabled { 
+            if isReduxIntegrationEnabled {
                 store.dispatch(FakespotAction.toggleAppearance(true))
             }
-        } else if isReduxIntegrationEnabled{
+        } else if isReduxIntegrationEnabled {
             // Fakespot was closed/dismissed
             store.dispatch(FakespotAction.toggleAppearance(false))
         }
