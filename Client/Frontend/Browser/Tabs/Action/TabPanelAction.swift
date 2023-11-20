@@ -20,5 +20,5 @@ enum TabPanelAction: Action {
     case didLoadTabPanel(TabDisplayModel)
     // Response to all user actions involving tabs ex: add, close and close all tabs
     case refreshTab([TabCellModel])
-    case inactiveTabsChanged
+    case refreshInactiveTabs([InactiveTabsModel])
 }

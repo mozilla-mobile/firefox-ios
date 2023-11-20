@@ -5,9 +5,9 @@
 import Foundation
 import Redux
 
-class TabsPanelMiddleware {
+class TabManagerMiddleware {
     var tabs = [TabCellModel]()
-    var inactiveTabs = [String]()
+    var inactiveTabs = [InactiveTabsModel]()
     var selectedPanel: TabTrayPanelType = .tabs
 
     init() {}
@@ -43,6 +43,10 @@ class TabsPanelMiddleware {
             self.closeAllTabs()
             store.dispatch(TabPanelAction.refreshTab(self.tabs))
 
+        case TabPanelAction.closeAllInactiveTabs:
+            self.closeAllInactiveTabs()
+            store.dispatch(TabPanelAction.refreshInactiveTabs(self.inactiveTabs))
+
         default:
             break
         }
@@ -63,7 +67,15 @@ class TabsPanelMiddleware {
             let cellState = TabCellModel.emptyTabState(title: "Tab \(index)")
             tabs.append(cellState)
         }
-        inactiveTabs =  !isPrivate ? ["Tab1", "Tab2", "Tab3"] : [String]()
+
+        if !isPrivate {
+            inactiveTabs = [InactiveTabsModel(url: "Tab1"),
+                            InactiveTabsModel(url: "Tab2"),
+                            InactiveTabsModel(url: "Tab3")]
+        } else {
+            inactiveTabs = [InactiveTabsModel]()
+        }
+
         let isInactiveTabsExpanded = !isPrivate && !inactiveTabs.isEmpty
 
         return TabDisplayModel(isPrivateMode: isPrivate,
@@ -87,6 +99,10 @@ class TabsPanelMiddleware {
 
     private func closeAllTabs() {
         tabs.removeAll()
+    }
+
+    private func closeAllInactiveTabs() {
+        inactiveTabs.removeAll()
     }
 
     private func resetMock() {

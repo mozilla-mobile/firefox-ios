@@ -14,7 +14,7 @@ struct TabsState: ScreenState, Equatable {
     }
 
     // MARK: Inactive tabs
-    var inactiveTabs: [String]
+    var inactiveTabs: [InactiveTabsModel]
     var isInactiveTabsExpanded: Bool
 
     init(_ appState: AppState) {
@@ -32,13 +32,13 @@ struct TabsState: ScreenState, Equatable {
     init(isPrivateMode: Bool = false) {
         self.init(isPrivateMode: isPrivateMode,
                   tabs: [TabCellModel](),
-                  inactiveTabs: [String](),
+                  inactiveTabs: [InactiveTabsModel](),
                   isInactiveTabsExpanded: false)
     }
 
     init(isPrivateMode: Bool,
          tabs: [TabCellModel],
-         inactiveTabs: [String],
+         inactiveTabs: [InactiveTabsModel],
          isInactiveTabsExpanded: Bool) {
         self.isPrivateMode = isPrivateMode
         self.tabs = tabs
@@ -63,6 +63,11 @@ struct TabsState: ScreenState, Equatable {
                              tabs: state.tabs,
                              inactiveTabs: state.inactiveTabs,
                              isInactiveTabsExpanded: !state.isInactiveTabsExpanded)
+        case TabPanelAction.refreshInactiveTabs(let inactiveTabs):
+            return TabsState(isPrivateMode: state.isPrivateMode,
+                             tabs: state.tabs,
+                             inactiveTabs: inactiveTabs,
+                             isInactiveTabsExpanded: false)
         default: return state
         }
     }

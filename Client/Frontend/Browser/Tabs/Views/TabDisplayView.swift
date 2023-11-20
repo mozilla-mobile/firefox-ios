@@ -183,7 +183,9 @@ class TabDisplayView: UIView,
                 if let theme = theme {
                     footerView.applyTheme(theme: theme)
                 }
-                footerView.buttonClosure = {}
+                footerView.buttonClosure = {
+                    store.dispatch(TabPanelAction.closeAllInactiveTabs)
+                }
                 return footerView
             }
 
@@ -200,7 +202,7 @@ class TabDisplayView: UIView,
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabsCell.cellIdentifier, for: indexPath) as? InactiveTabsCell
             else { return UICollectionViewCell() }
 
-            cell.configure(text: tabsState.inactiveTabs[indexPath.row])
+            cell.configure(text: tabsState.inactiveTabs[indexPath.row].url)
             if let theme = theme {
                 cell.applyTheme(theme: theme)
             }

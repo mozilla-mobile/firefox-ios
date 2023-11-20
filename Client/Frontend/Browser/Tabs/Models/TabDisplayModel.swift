@@ -13,6 +13,6 @@ struct TabDisplayModel: Equatable {
     }
 
     // MARK: Inactive tabs
-    var inactiveTabs: [String]
+    var inactiveTabs: [InactiveTabsModel]
     var isInactiveTabsExpanded: Bool
 }
