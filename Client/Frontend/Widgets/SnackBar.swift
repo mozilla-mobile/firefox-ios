@@ -6,21 +6,27 @@ import Common
 import Foundation
 import Shared
 
-class SnackBar: UIView {
-    let snackbarClassIdentifier: String
-
+class SnackBar: UIView, ThemeApplicable {
     private struct UX {
         static let borderWidth: CGFloat = 0.5
         static let fontSize: CGFloat = 17
     }
 
+    let snackbarClassIdentifier: String
+
     private var scrollViewHeightConstraint = NSLayoutConstraint()
     private var buttonsViewConstraints = [NSLayoutConstraint]()
 
     private lazy var scrollView: UIScrollView = .build()
-    private lazy var buttonsView: UIStackView = .build { $0.distribution = .fillEqually }
-    private lazy var backgroundView: UIVisualEffectView = .build { $0.effect = UIBlurEffect(style: .extraLight) }
-    private lazy var separator: UIView = .build { $0.backgroundColor = UIColor.legacyTheme.snackbar.border }
+    private lazy var separator: UIView = .build()
+
+    private lazy var buttonsView: UIStackView = .build { stackView in
+        stackView.distribution = .fillEqually
+    }
+
+    private lazy var backgroundView: UIVisualEffectView = .build { visualEffectView in
+        visualEffectView.effect = UIBlurEffect(style: .extraLight)
+    }
 
     private lazy var imageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
@@ -35,7 +41,6 @@ class SnackBar: UIView {
         label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.fontSize)
         label.lineBreakMode = .byWordWrapping
         label.numberOfLines = 0
-        label.textColor = UIColor.Photon.Grey90 // If making themeable, change to UIColor.legacyTheme.tableView.rowText
         label.backgroundColor = UIColor.clear
     }
 
@@ -65,22 +70,17 @@ class SnackBar: UIView {
         backgroundColor = UIColor.clear
         clipsToBounds = true // overridden by masksToBounds = false
         layer.borderWidth = UX.borderWidth
-        layer.borderColor = UIColor.legacyTheme.snackbar.border.cgColor
         layer.cornerRadius = 8
         layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
     }
 
     private func setupLayout() {
-        addSubview(backgroundView)
-        addSubview(scrollView)
+        addSubviews(backgroundView, scrollView, separator, buttonsView)
 
         scrollView.addSubview(titleView)
 
         titleView.addArrangedSubview(imageView)
         titleView.addArrangedSubview(textLabel)
-
-        addSubview(separator)
-        addSubview(buttonsView)
 
         let titleViewHeightConstraint = titleView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
         titleViewHeightConstraint.priority = .defaultLow
@@ -176,5 +176,13 @@ class SnackBar: UIView {
         if buttonsView.arrangedSubviews.count != 1 {
             snackButton.drawSeparator()
         }
+    }
+
+    // MARK: - Theme Applicable
+    func applyTheme(theme: Theme) {
+        let colors = theme.colors
+        separator.backgroundColor = colors.borderPrimary
+        layer.borderColor = colors.borderPrimary.cgColor
+        textLabel.textColor = colors.textOnLight
     }
 }

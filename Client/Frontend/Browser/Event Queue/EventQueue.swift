@@ -136,9 +136,9 @@ public final class EventQueue<QueueEventType: Hashable> {
         mainQueue.ensureMainThread { [weak self] in
             guard let self else { return }
             let currentState = self.signalledEvents[event]
-            guard currentState == .inProgress else {
-                logger.log("Completing \(event) which is not in progress.", level: .warning, category: .library)
-                return
+            if currentState != .inProgress {
+                logger.log("Completing activity \(event) that is not in progress.", level: .warning, category: .library)
+                // Warn for this, but no early return; allow event to be updated to .completed as requested.
             }
 
             self.signalledEvents[event] = .completed

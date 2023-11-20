@@ -36,6 +36,7 @@
         "ExperimentIntegrationTests",
         "FakespotTests",
         "FindInPageTests",
+        "FirefoxSuggestTest",
         "FxScreenGraphTests",
         "HistoryTests",
         "HomeButtonTests",

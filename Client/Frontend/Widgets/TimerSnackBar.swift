@@ -23,7 +23,7 @@ class TimerSnackBar: SnackBar {
         fatalError("init(coder:) has not been implemented")
     }
 
-    static func showAppStoreConfirmationBar(forTab tab: Tab, appStoreURL: URL, completion: @escaping (Bool) -> Void) {
+    static func showAppStoreConfirmationBar(forTab tab: Tab, appStoreURL: URL, theme: Theme, completion: @escaping (Bool) -> Void) {
         let bar = TimerSnackBar(
             text: .ExternalLinkAppStoreConfirmationTitle,
             img: UIImage(named: StandardImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysOriginal))
@@ -36,6 +36,10 @@ class TimerSnackBar: SnackBar {
             tab.removeSnackbar(bar)
             completion(false)
         }
+        bar.applyTheme(theme: theme)
+        cancelButton.applyTheme(theme: theme)
+        openAppStore.applyTheme(theme: theme)
+
         bar.addButton(cancelButton)
         bar.addButton(openAppStore)
         tab.addSnackbar(bar)

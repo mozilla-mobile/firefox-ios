@@ -13,7 +13,7 @@ class FakespotViewModel {
         case loaded(ProductState)
         case error(Error)
 
-        fileprivate var productData: ProductAnalysisData? {
+        fileprivate var productData: ProductAnalysisResponse? {
             switch self {
             case .loading, .error, .onboarding: return nil
             case .loaded(let productState): return productState.product
@@ -68,7 +68,7 @@ class FakespotViewModel {
                 var cards: [ViewElement] = []
 
                 if productState.analysisStatus?.isAnalyzing == true {
-                    cards.append(.progressAnalysisCard)
+                    cards.append(.messageCard(.analysisInProgress))
                 } else {
                     cards.append(.noAnalysisCard)
                 }
@@ -85,7 +85,7 @@ class FakespotViewModel {
                     cards.append(.messageCard(.notEnoughReviews))
                 } else {
                     if productState.analysisStatus?.isAnalyzing == true {
-                        cards.append(.progressAnalysisCard)
+                        cards.append(.messageCard(.analysisInProgress))
                     } else {
                         cards.append(.noAnalysisCard)
                     }
@@ -147,8 +147,7 @@ class FakespotViewModel {
         case qualityDeterminationCard
         case settingsCard
         case noAnalysisCard
-        case progressAnalysisCard
-        case productAdCard(ProductAdsData)
+        case productAdCard(ProductAdsResponse)
         case messageCard(MessageType)
         enum MessageType {
             case genericError
@@ -171,6 +170,7 @@ class FakespotViewModel {
     let shoppingProduct: ShoppingProduct
     var onStateChange: (() -> Void)?
     var isSwiping = false
+    var isViewIntersected = false
 
     private var fetchProductTask: Task<Void, Never>?
     private var observeProductTask: Task<Void, Never>?
@@ -329,8 +329,8 @@ class FakespotViewModel {
     }
 
     struct ProductState {
-        let product: ProductAnalysisData?
-        let productAds: [ProductAdsData]
+        let product: ProductAnalysisResponse?
+        let productAds: [ProductAdsResponse]
         let analysisStatus: AnalysisStatus?
         let analyzeCount: Int
     }
@@ -339,7 +339,7 @@ class FakespotViewModel {
         if showLoading { state = .loading }
         do {
             let product = try await shoppingProduct.fetchProductAnalysisData()
-            let productAds: [ProductAdsData] = if shoppingProduct.isProductAdsFeatureEnabled {
+            let productAds: [ProductAdsResponse] = if shoppingProduct.isProductAdsFeatureEnabled {
                 await shoppingProduct.fetchProductAdsData()
             } else {
                 []
@@ -366,6 +366,19 @@ class FakespotViewModel {
             await fetchProductAnalysis()
             return
         }
+
+        if case .loaded(let productState) = state {
+            // update the state to in progress so UI is updated
+            state = .loaded(
+                ProductState(
+                    product: productState.product,
+                    productAds: productState.productAds,
+                    analysisStatus: status,
+                    analyzeCount: analyzeCount
+                )
+            )
+        }
+
         do {
             // Listen for analysis status until it's completed, then fetch new information
             for try await status in observeProductAnalysisStatus() where status.isAnalyzing == false {

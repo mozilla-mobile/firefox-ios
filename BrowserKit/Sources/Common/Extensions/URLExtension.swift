@@ -209,6 +209,16 @@ extension URL {
             return urlString
         }
     }
+
+    public func removeBlobFromUrl() -> URL {
+        let urlString = absoluteString
+        guard scheme == "blob" else {
+            return self
+        }
+
+        let stringURL = String(urlString[urlString.index(urlString.startIndex, offsetBy: 5)...])
+        return URL(string: stringURL) ?? self
+    }
 }
 
 private struct ETLDEntry: CustomStringConvertible {

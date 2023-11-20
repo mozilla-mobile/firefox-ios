@@ -30,5 +30,6 @@ public class ThemedSwitch: UISwitch, ThemeApplicable {
         enabledOffColor = theme.colors.formSurfaceOff
         disabledOffColor = theme.colors.formSurfaceOff.withAlphaComponent(0.4)
         thumbTintColor = theme.colors.formKnob
+        onTintColor = isEnabled ? enabledOnColor : disabledOnColor
     }
 }

@@ -23,7 +23,7 @@ struct Product: Equatable {
 /// Class for working with the products shopping API,
 /// with helpers for parsing the product from a URL
 /// and querying the shopping API for information on it.
-class ShoppingProduct: FeatureFlaggable {
+class ShoppingProduct: FeatureFlaggable, Equatable {
     private let url: URL
     private let nimbusFakespotFeatureLayer: NimbusFakespotFeatureLayerProtocol
     private let client: FakespotClientType
@@ -92,7 +92,7 @@ class ShoppingProduct: FeatureFlaggable {
     /// - Throws: An error of type `Error` if there's an issue during the data fetching process, even after the specified number of retries.
     /// - Note: This function is an asynchronous operation and should be called within an asynchronous context using `await`.
     ///
-    func fetchProductAnalysisData(maxRetries: Int = 3, retryTimeout: Int = 100) async throws -> ProductAnalysisData? {
+    func fetchProductAnalysisData(maxRetries: Int = 3, retryTimeout: Int = 100) async throws -> ProductAnalysisResponse? {
         guard let product else { return nil }
 
         // Perform 'retryCount' attempts, and retry on 500 failure:
@@ -133,7 +133,7 @@ class ShoppingProduct: FeatureFlaggable {
     /// - Throws: An error of type `Error` if there's an issue during the data fetching process.
     /// - Note: This function is an asynchronous operation and should be called within an asynchronous context using `await`.
     ///
-    func fetchProductAdsData() async -> [ProductAdsData] {
+    func fetchProductAdsData() async -> [ProductAdsResponse] {
         guard let product else { return [] }
         return (try? await client.fetchProductAdData(productId: product.id, website: product.host)) ?? []
     }
@@ -180,5 +180,9 @@ class ShoppingProduct: FeatureFlaggable {
 
         // Report the product as back in stock using the product ID and website
         return try await client.reportProductBackInStock(productId: product.id, website: product.host)
+    }
+
+    static func == (lhs: ShoppingProduct, rhs: ShoppingProduct) -> Bool {
+        return lhs.product == rhs.product
     }
 }

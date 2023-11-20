@@ -273,12 +273,12 @@ final class ThrowingFakeSpotClient: FakespotClientType {
         self.error = error
     }
 
-    func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisData {
+    func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisResponse {
         fetchProductAnalysisDataCallCount += 1
         throw error
     }
 
-    func fetchProductAdData(productId: String, website: String) async throws -> [ProductAdsData] {
+    func fetchProductAdData(productId: String, website: String) async throws -> [ProductAdsResponse] {
         fetchProductAdDataCallCount += 1
         return []
     }
@@ -309,7 +309,7 @@ final class TestFakespotClient: FakespotClientType {
     var getProductAnalysisStatusCallCalled = false
     var reportProductBackInStockCalled = false
 
-    func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisData {
+    func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisResponse {
         self.fetchProductAnalysisDataCallCount += 1
         self.productId = productId
         self.website = website
@@ -317,7 +317,7 @@ final class TestFakespotClient: FakespotClientType {
         return .empty
     }
 
-    func fetchProductAdData(productId: String, website: String) async throws -> [ProductAdsData] {
+    func fetchProductAdData(productId: String, website: String) async throws -> [ProductAdsResponse] {
         self.productId = productId
         self.website = website
         self.fetchProductAdsDataCalled = true
@@ -350,8 +350,8 @@ extension ProductAnalyzeResponse {
     static let inProgress = ProductAnalyzeResponse(status: .inProgress)
 }
 
-extension ProductAnalysisData {
-    static let empty = ProductAnalysisData(
+extension ProductAnalysisResponse {
+    static let empty = Self(
         productId: "",
         grade: .a,
         adjustedRating: 0,
@@ -360,6 +360,8 @@ extension ProductAnalysisData {
         highlights: Highlights(price: [], quality: [], competitiveness: [], shipping: [], packaging: []),
         pageNotSupported: true,
         isProductDeletedReported: false,
-        isProductDeleted: false
+        isProductDeleted: false,
+        notEnoughReviews: false,
+        lastAnalysisTime: nil
     )
 }

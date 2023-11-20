@@ -105,19 +105,11 @@ extension BrowserViewController: URLBarDelegate {
                                      extras: nil)
 
         if let selectedtab = tabManager.selectedTab, let tabUrl = selectedtab.canonicalURL?.displayURL {
-            if CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
-                navigationHandler?.showShareExtension(
-                    url: tabUrl,
-                    sourceView: shareView,
-                    toastContainer: contentContainer,
-                    popoverArrowDirection: isBottomSearchBar ? .down : .up)
-            } else {
-                presentShareSheet(tabUrl,
-                                  tab: selectedtab,
-                                  sourceView: shareView,
-                                  sourceRect: CGRect.null,
-                                  arrowDirection: isBottomSearchBar ? .down : .up)
-            }
+            navigationHandler?.showShareExtension(
+                url: tabUrl,
+                sourceView: shareView,
+                toastContainer: contentContainer,
+                popoverArrowDirection: isBottomSearchBar ? .down : .up)
         }
     }
 
@@ -155,12 +147,6 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarPresentCFR(at sourceView: UIView) {
-        // Checks if the app started with the Homepage tab
-        // If true, don't show the CFR to avoid showing it on the Homepage
-        guard !didStartAtHome else {
-            didStartAtHome = false
-            return
-        }
         configureShoppingContextVC(at: sourceView)
     }
 

@@ -6,6 +6,7 @@ import XCTest
 
 let firstWebsite = (url: path(forTestPage: "test-mozilla-org.html"), tabName: "Internet for people, not profit — Mozilla")
 let secondWebsite = (url: path(forTestPage: "test-mozilla-book.html"), tabName: "The Book of Mozilla. Currently selected tab.")
+let secondWebsiteUnselected = (url: path(forTestPage: "test-mozilla-book.html"), tabName: "The Book of Mozilla")
 let exampleWebsite = (url: path(forTestPage: "test-example.html"), tabName: "Example Domain")
 let homeTabName = "Homepage"
 let websiteWithSearchField = "https://developer.mozilla.org/en-US/"
@@ -153,6 +154,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         super.tearDown()
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307024
     func test4RearrangeTabs() {
         if skipPlatform { return }
 
@@ -165,6 +167,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         XCTAssert(secondWebsite.url.contains(app.textFields["url"].value! as! String), "The tab has not been dropped correctly")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2361191
     func testRearrangeTabsLandscape() {
         if skipPlatform { return }
 
@@ -181,6 +184,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         XCTAssert(secondWebsite.url.contains(app.textFields["url"].value! as! String), "The tab has not been dropped correctly")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2361192
     func testDragAndDropHomeTab() {
         if skipPlatform { return }
         navigator.nowAt(NewTabScreen)
@@ -200,6 +204,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         XCTAssert(secondWebsite.url.contains(app.textFields["url"].value! as! String), "The tab has not been dropped correctly")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2361193
     func test2RearrangeTabsPrivateMode() {
         if skipPlatform { return }
 
@@ -214,21 +219,21 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         XCTAssert(secondWebsite.url.contains(app.textFields["url"].value! as! String), "The tab has not been dropped correctly")
     }
 
-    // Disabled due to https://github.com/mozilla-mobile/firefox-ios/issues/8358
-    /* func testRearrangeTabsTabTrayIsKeptinTopTabs() {
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2361413
+    func testRearrangeTabsTabTrayIsKeptinTopTabs() {
         if skipPlatform { return }
         openTwoWebsites()
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
         navigator.goto(TabTray)
 
         // Drag first tab on the second one
-        dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite.tabName], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
+        dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite.tabName].firstMatch, dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch)
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
 
         // Leave Tab Tray and check order in Top Tabs
-        app.collectionViews.cells[firstWebsite.tabName].tap()
+        app.cells.staticTexts[secondWebsiteUnselected.tabName].firstMatch.tap()
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
-    }*/
+    }
 
     // This test drags the address bar and since it is not possible to drop it on another app, lets do it in a search box
     /* Disable since the drag and drop is not working fine in this scenario on simulator
@@ -296,36 +301,5 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         XCTAssertTrue(firstEntryOnList.exists, "first entry after is not correct")
         XCTAssertTrue(secondEntryOnList.exists, "second entry after is not correct")
         */
-    }
-
-    // Test disabled due to new way bookmark panel is shown, url is not available. Library implementation bug 1506989
-    // Will be removed if this is going the final implementation
-    func testTryDragAndDropHistoryToURLBar() {
-        if skipPlatform { return }
-
-        typealias historyPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
-
-        navigator.goto(LibraryPanel_History)
-        mozWaitForElementToExist(app.tables[historyPanelA11y.tableView].cells.staticTexts[twitterTitle])
-
-        app.tables[historyPanelA11y.tableView].cells.staticTexts[twitterTitle].press(forDuration: 1, thenDragTo: app.textFields["url"])
-
-        // It is not allowed to drop the entry on the url field
-        let urlBarValue = app.textFields["url"].value as? String
-        XCTAssertEqual(urlBarValue, "Search or enter address")
-    }
-
-    // Test disabled due to new way bookmark panel is shown, url is not available. Library implementation bug 1506989
-    // Will be removed if this is going the final implementation
-    func testTryDragAndDropBookmarkToURLBar() {
-        if skipPlatform { return }
-
-        navigator.goto(MobileBookmarks)
-        mozWaitForElementToExist(app.tables["Bookmarks List"])
-        app.tables["Bookmarks List"].cells.staticTexts[twitterTitle].press(forDuration: 1, thenDragTo: app.textFields["url"])
-
-        // It is not allowed to drop the entry on the url field
-        let urlBarValue = app.textFields["url"].value as? String
-        XCTAssertEqual(urlBarValue, "Search or enter address")
     }
 }

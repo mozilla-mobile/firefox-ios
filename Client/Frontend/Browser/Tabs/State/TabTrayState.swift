@@ -12,15 +12,13 @@ enum TabTrayLayoutType: Equatable {
 
 struct TabTrayState: ScreenState, Equatable {
     var isPrivateMode: Bool
-    var selectedPanel: TabTrayPanelType?
-    var tabViewState: TabViewState
-    var remoteTabsState: RemoteTabsPanelState?
+    var selectedPanel: TabTrayPanelType
 
     var layout: TabTrayLayoutType = .compact
     // TODO: FXIOS-7359 Move logic to show "\u{221E}" over 100 tabs to reducer
     var normalTabsCount: String
-    var navigationTitle: String? {
-        return selectedPanel?.navTitle
+    var navigationTitle: String {
+        return selectedPanel.navTitle
     }
 
     var isSyncTabsPanel: Bool {
@@ -28,44 +26,53 @@ struct TabTrayState: ScreenState, Equatable {
     }
 
     init(_ appState: AppState) {
-        guard let panelState = store.state.screenState(TabTrayState.self, for: .tabsPanel) else {
+        guard let panelState = store.state.screenState(TabTrayState.self, for: .tabsTray) else {
             self.init()
             return
         }
 
         self.init(isPrivateMode: panelState.isPrivateMode,
-                  tabViewState: panelState.tabViewState,
-                  remoteTabsState: panelState.remoteTabsState,
+                  selectedPanel: panelState.selectedPanel,
                   normalTabsCount: panelState.normalTabsCount)
     }
 
     init() {
-        let tabViewState = TabViewState.getMockState(isPrivateMode: false)
         self.init(isPrivateMode: false,
-                  tabViewState: tabViewState,
-                  remoteTabsState: nil,
-                  normalTabsCount: "2")
+                  selectedPanel: .tabs,
+                  normalTabsCount: "0")
     }
 
     init(isPrivateMode: Bool,
-         tabViewState: TabViewState,
-         remoteTabsState: RemoteTabsPanelState?,
+         selectedPanel: TabTrayPanelType,
          normalTabsCount: String) {
         self.isPrivateMode = isPrivateMode
-        self.tabViewState = tabViewState
-        self.remoteTabsState = remoteTabsState
+        self.selectedPanel = selectedPanel
         self.normalTabsCount = normalTabsCount
     }
 
     static let reducer: Reducer<Self> = { state, action in
-        // TODO: Complete in FXIOS-7359
-        return state
+        switch action {
+        case TabTrayAction.didLoadTabTray(let tabTrayModel):
+            return TabTrayState(isPrivateMode: tabTrayModel.isPrivateMode,
+                                selectedPanel: tabTrayModel.selectedPanel,
+                                normalTabsCount: tabTrayModel.normalTabsCount)
+        case TabTrayAction.changePanel(let panelType):
+            return TabTrayState(isPrivateMode: panelType == .privateTabs,
+                                selectedPanel: panelType,
+                                normalTabsCount: state.normalTabsCount)
+        case TabPanelAction.didLoadTabPanel(let tabState):
+            let panelType = tabState.isPrivateMode ? TabTrayPanelType.privateTabs : TabTrayPanelType.tabs
+            return TabTrayState(isPrivateMode: tabState.isPrivateMode,
+                                selectedPanel: panelType,
+                                normalTabsCount: "\(tabState.tabs.count)")
+        default:
+            return state
+        }
     }
 
     static func == (lhs: TabTrayState, rhs: TabTrayState) -> Bool {
         return lhs.isPrivateMode == rhs.isPrivateMode
         && lhs.selectedPanel == rhs.selectedPanel
         && lhs.layout == rhs.layout
-        && lhs.tabViewState == rhs.tabViewState
     }
 }

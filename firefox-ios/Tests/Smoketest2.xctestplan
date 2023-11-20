@@ -38,6 +38,7 @@
         "ExperimentIntegrationTests",
         "FakespotTests",
         "FindInPageTests",
+        "FirefoxSuggestTest\/testFirefoxSuggestExists()",
         "FxScreenGraphTests",
         "HistoryTests",
         "HomeButtonTests",

@@ -3,11 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Common
 
-class DevicePickerTableViewHeaderCell: UITableViewCell, ReusableCell {
+class DevicePickerTableViewHeaderCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
         static let tableHeaderTextFont = UIFont.systemFont(ofSize: 16)
-        static let tableHeaderTextColor = UIColor.Photon.Grey50
         static let tableHeaderTextPaddingLeft: CGFloat = 20
     }
 
@@ -18,7 +18,6 @@ class DevicePickerTableViewHeaderCell: UITableViewCell, ReusableCell {
         contentView.addSubview(nameLabel)
         nameLabel.font = UX.tableHeaderTextFont
         nameLabel.text = .SendToDevicesListTitle
-        nameLabel.textColor = UX.tableHeaderTextColor
 
         nameLabel.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(contentView).offset(UX.tableHeaderTextPaddingLeft)
@@ -33,5 +32,11 @@ class DevicePickerTableViewHeaderCell: UITableViewCell, ReusableCell {
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - ThemeApplicable
+
+    func applyTheme(theme: Theme) {
+        nameLabel.textColor = theme.colors.textSecondary
     }
 }

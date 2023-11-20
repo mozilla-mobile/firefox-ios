@@ -5,6 +5,7 @@
 import Common
 import Foundation
 import Storage
+import Redux
 
 protocol TabTrayController: UIViewController,
                             UIAdaptivePresentationControllerDelegate,
@@ -21,7 +22,9 @@ protocol TabTrayViewControllerDelegate: AnyObject {
 
 class TabTrayViewController: UIViewController,
                              TabTrayController,
-                             UIToolbarDelegate {
+                             UIToolbarDelegate,
+                             StoreSubscriber {
+    typealias SubscriberStateType = TabTrayState
     struct UX {
         struct NavigationMenu {
             static let width: CGFloat = 343
@@ -37,14 +40,14 @@ class TabTrayViewController: UIViewController,
 
     // MARK: Child panel and navigation
     var childPanelControllers = [UINavigationController]()
-    weak var  delegate: TabTrayViewControllerDelegate?
+    weak var delegate: TabTrayViewControllerDelegate?
     weak var navigationHandler: TabTrayNavigationHandler?
 
     var openInNewTab: ((URL, Bool) -> Void)?
     var didSelectUrl: ((URL, Storage.VisitType) -> Void)?
 
     // MARK: - Redux state
-    var state: TabTrayState
+    var tabTrayState: TabTrayState
     lazy var layout: TabTrayLayoutType = {
         return shouldUseiPadSetup() ? .regular : .compact
     }()
@@ -62,8 +65,8 @@ class TabTrayViewController: UIViewController,
     }
 
     var currentPanel: UINavigationController? {
-        guard let index = state.selectedPanel?.rawValue else { return nil }
-
+        guard !childPanelControllers.isEmpty else { return nil }
+        let index = tabTrayState.selectedPanel.rawValue
         return childPanelControllers[index]
     }
 
@@ -86,7 +89,7 @@ class TabTrayViewController: UIViewController,
         label.font = TabsButton.UX.titleFont
         label.layer.cornerRadius = TabsButton.UX.cornerRadius
         label.textAlignment = .center
-        label.text = self.state.normalTabsCount
+        label.text = self.tabTrayState.normalTabsCount
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -180,7 +183,7 @@ class TabTrayViewController: UIViewController,
     init(delegate: TabTrayViewControllerDelegate,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          and notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.state = TabTrayState()
+        self.tabTrayState = TabTrayState()
         self.delegate = delegate
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
@@ -195,8 +198,8 @@ class TabTrayViewController: UIViewController,
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setupView()
+        subscribeRedux()
         listenForThemeChange(view)
         updateToolbarItems()
     }
@@ -225,6 +228,21 @@ class TabTrayViewController: UIViewController,
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         delegate?.didFinish()
+
+        store.dispatch(ActiveScreensStateAction.closeScreen(.tabsTray))
+        store.unsubscribe(self)
+    }
+
+    private func subscribeRedux() {
+        store.dispatch(ActiveScreensStateAction.showScreen(.tabsTray))
+        store.dispatch(TabTrayAction.tabTrayDidLoad(tabTrayState.selectedPanel))
+        store.subscribe(self, transform: {
+            return $0.select(TabTrayState.init)
+        })
+    }
+
+    func newState(state: TabTrayState) {
+        tabTrayState = state
     }
 
     private func updateLayout() {
@@ -283,9 +301,7 @@ class TabTrayViewController: UIViewController,
     }
 
     private func updateTitle() {
-        guard let navigationTitle = state.navigationTitle else { return }
-
-        navigationItem.title = navigationTitle
+        navigationItem.title = tabTrayState.navigationTitle
     }
 
     private func setupForiPad() {
@@ -312,12 +328,12 @@ class TabTrayViewController: UIViewController,
             return
         }
 
-        let toolbarItems = state.isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
+        let toolbarItems = tabTrayState.isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
         setToolbarItems(toolbarItems, animated: true)
     }
 
     private func setupToolbarForIpad() {
-        if state.isSyncTabsPanel {
+        if tabTrayState.isSyncTabsPanel {
             navigationItem.leftBarButtonItem = nil
             navigationItem.rightBarButtonItems = rightBarButtonItemsForSync
         } else {
@@ -326,7 +342,7 @@ class TabTrayViewController: UIViewController,
         }
 
         navigationController?.isToolbarHidden = true
-        let toolbarItems = state.isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
+        let toolbarItems = tabTrayState.isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
         setToolbarItems(toolbarItems, animated: true)
     }
 
@@ -359,8 +375,7 @@ class TabTrayViewController: UIViewController,
 
     // MARK: Child panels
     func setupOpenPanel(panelType: TabTrayPanelType) {
-        // TODO: Move to Reducer
-        state.selectedPanel = panelType
+        tabTrayState.selectedPanel = panelType
 
         guard let currentPanel = currentPanel else { return }
 
@@ -403,16 +418,21 @@ class TabTrayViewController: UIViewController,
     @objc
     private func segmentChanged() {
         guard let panelType = TabTrayPanelType(rawValue: segmentedControl.selectedSegmentIndex),
-              state.selectedPanel != panelType else { return }
+              tabTrayState.selectedPanel != panelType else { return }
 
         setupOpenPanel(panelType: panelType)
+        store.dispatch(TabTrayAction.changePanel(panelType))
     }
 
     @objc
-    private func deleteTabsButtonTapped() {}
+    private func deleteTabsButtonTapped() {
+        store.dispatch(TabPanelAction.closeAllTabs)
+    }
 
     @objc
-    private func newTabButtonTapped() {}
+    private func newTabButtonTapped() {
+        store.dispatch(TabPanelAction.addNewTab(tabTrayState.isPrivateMode))
+    }
 
     @objc
     private func doneButtonTapped() {

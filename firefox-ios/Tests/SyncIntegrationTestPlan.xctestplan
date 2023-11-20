@@ -56,6 +56,7 @@
         "EngagementNotificationTests",
         "FakespotTests",
         "FindInPageTests",
+        "FirefoxSuggestTest",
         "FirstRunTourTests",
         "FxScreenGraphTests",
         "HistoryTests",

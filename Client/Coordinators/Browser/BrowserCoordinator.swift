@@ -151,9 +151,8 @@ class BrowserCoordinator: BaseCoordinator,
             homepageViewController.libraryPanelDelegate = libraryPanelDelegate
             homepageViewController.sendToDeviceDelegate = sendToDeviceDelegate
             homepageViewController.statusBarScrollDelegate = statusBarScrollDelegate
-            if CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
-                homepageViewController.browserNavigationHandler = self
-            }
+            homepageViewController.browserNavigationHandler = self
+
             return homepageViewController
         }
     }
@@ -430,6 +429,17 @@ class BrowserCoordinator: BaseCoordinator,
         }
         fakespotCoordinator.fakespotControllerCloseSidebar(sidebarContainer: sidebarContainer,
                                                            parentViewController: parentViewController)
+    }
+
+    func updateFakespotSidebar(productURL: URL,
+                               sidebarContainer: SidebarEnabledViewProtocol,
+                               parentViewController: UIViewController) {
+        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator}) as? FakespotCoordinator else {
+            return // there is no sidebar
+        }
+        fakespotCoordinator.updateSidebar(productURL: productURL,
+                                          sidebarContainer: sidebarContainer,
+                                          parentViewController: parentViewController)
     }
 
     private func makeFakespotCoordinator() -> FakespotCoordinator? {
