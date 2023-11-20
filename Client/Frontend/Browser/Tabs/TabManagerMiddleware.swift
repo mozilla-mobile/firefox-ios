@@ -2,15 +2,23 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
+import Common
 import Redux
 
 class TabManagerMiddleware {
+    var tabManager: TabManager
+    var profile: Profile
+
+    // MARK: TODO - Remove mocks after middleware is integrated
     var tabs = [TabCellModel]()
     var inactiveTabs = [InactiveTabsModel]()
     var selectedPanel: TabTrayPanelType = .tabs
 
-    init() {}
+    init(tabManager: TabManager = AppContainer.shared.resolve(),
+         profile: Profile = AppContainer.shared.resolve()) {
+        self.tabManager = tabManager
+        self.profile = profile
+    }
 
     lazy var tabsPanelProvider: Middleware<AppState> = { state, action in
         switch action {
@@ -28,8 +36,12 @@ class TabManagerMiddleware {
             store.dispatch(TabPanelAction.didLoadTabPanel(tabState))
 
         case TabPanelAction.addNewTab(let isPrivate):
-            self.addNewTab()
+            self.addNewTab(isPrivate)
             store.dispatch(TabPanelAction.refreshTab(self.tabs))
+            // Delay dismiss action to wait for tab to be added
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                store.dispatch(TabTrayAction.dismissTabTray)
+            }
 
         case TabPanelAction.moveTab(let originIndex, let destinationIndex):
             self.moveTab(from: originIndex, to: destinationIndex)
@@ -51,6 +63,13 @@ class TabManagerMiddleware {
             self.closeInactiveTab(for: index)
             store.dispatch(TabPanelAction.refreshInactiveTabs(self.inactiveTabs))
 
+        case TabPanelAction.learnMorePrivateMode:
+            self.didTapLearnMoreAboutPrivate()
+            store.dispatch(TabPanelAction.refreshTab(self.tabs))
+            // Delay dismiss action to wait for tab to be added
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                store.dispatch(TabTrayAction.dismissTabTray)
+            }
         default:
             break
         }
@@ -68,7 +87,8 @@ class TabManagerMiddleware {
     func getTabsDisplayModel(for isPrivate: Bool) -> TabDisplayModel {
         resetMock()
         for index in 0...2 {
-            let cellState = TabCellModel.emptyTabState(title: "Tab \(index)")
+            let emptyTab = tabManager.addTab(nil, afterTab: nil, isPrivate: isPrivate)
+            let cellState = TabCellModel.emptyTabState(title: "Tab \(index)", tab: emptyTab)
             tabs.append(cellState)
         }
 
@@ -88,8 +108,9 @@ class TabManagerMiddleware {
                                isInactiveTabsExpanded: isInactiveTabsExpanded)
     }
 
-    private func addNewTab() {
-        let cellState = TabCellModel.emptyTabState(title: "New tab")
+    private func addNewTab(_ isPrivate: Bool) {
+        let emptyTab = tabManager.addTab(nil, afterTab: nil, isPrivate: isPrivate)
+        let cellState = TabCellModel.emptyTabState(title: "New tab", tab: emptyTab)
         tabs.append(cellState)
     }
 
@@ -113,9 +134,17 @@ class TabManagerMiddleware {
         inactiveTabs.remove(at: index)
     }
 
+    private func didTapLearnMoreAboutPrivate() {
+        addNewTab(true)
+    }
+
     private func resetMock() {
         // Clean up array before getting the new panel
         tabs.removeAll()
         inactiveTabs.removeAll()
+
+        tabs.forEach { tabModel in
+            tabManager.removeTab(tabModel.tab)
+        }
     }
 }

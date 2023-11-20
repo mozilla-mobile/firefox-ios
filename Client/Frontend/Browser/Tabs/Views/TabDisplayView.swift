@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Storage
 import UIKit
 
 class TabDisplayView: UIView,
@@ -223,6 +224,20 @@ class TabDisplayView: UIView,
         }
     }
 
+    func collectionView(_ collectionView: UICollectionView,
+                        contextMenuConfigurationForItemAt indexPath: IndexPath,
+                        point: CGPoint) -> UIContextMenuConfiguration? {
+        guard getTabDisplay(for: indexPath.section) == .tabs
+        else { return nil }
+
+        // TODO: Add browserProfile and clientPickerDelegate
+        let tab = tabsState.tabs[indexPath.row].tab
+        let tabVC = TabPeekViewController(tab: tab, delegate: self)
+        return UIContextMenuConfiguration(identifier: nil,
+                                          previewProvider: { return tabVC },
+                                          actionProvider: tabVC.contextActions(defaultActions:))
+    }
+
     @objc
     func toggleInactiveTab() {
         store.dispatch(TabPanelAction.toggleInactiveTabs)
@@ -272,4 +287,12 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
 
         collectionView.moveItem(at: start, to: end)
     }
+}
+
+extension TabDisplayView: TabPeekDelegate {
+    func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListItem? { return nil }
+    func tabPeekDidAddBookmark(_ tab: Tab) {}
+    func tabPeekRequestsPresentationOf(_ viewController: UIViewController) {}
+    func tabPeekDidCloseTab(_ tab: Tab) {}
+    func tabPeekDidCopyUrl() {}
 }

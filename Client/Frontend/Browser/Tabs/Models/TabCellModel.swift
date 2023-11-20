@@ -5,6 +5,7 @@
 import Foundation
 
 struct TabCellModel: Equatable {
+    let tab: Tab
     let isSelected: Bool
     let isPrivate: Bool
     let isFxHomeTab: Bool
@@ -17,8 +18,9 @@ struct TabCellModel: Equatable {
 
     let margin: CGFloat // (Changes depending on fullscreen)
 
-    static func emptyTabState(title: String) -> TabCellModel {
-        return TabCellModel(isSelected: false,
+    static func emptyTabState(title: String, tab: Tab) -> TabCellModel {
+        return TabCellModel(tab: tab,
+                            isSelected: false,
                             isPrivate: false,
                             isFxHomeTab: false,
                             tabTitle: title,

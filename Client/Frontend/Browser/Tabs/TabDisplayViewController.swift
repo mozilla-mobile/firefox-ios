@@ -96,6 +96,7 @@ class TabDisplayViewController: UIViewController,
             return
         }
 
+        emptyPrivateTabsView.delegate = self
         view.insertSubview(emptyPrivateTabsView, aboveSubview: tabDisplayView)
         NSLayoutConstraint.activate([
             emptyPrivateTabsView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -114,8 +115,11 @@ class TabDisplayViewController: UIViewController,
     func applyTheme() {
         backgroundPrivacyOverlay.backgroundColor = themeManager.currentTheme.colors.layerScrim
         tabDisplayView.applyTheme(theme: themeManager.currentTheme)
+        emptyPrivateTabsView.applyTheme(themeManager.currentTheme)
     }
 
     // MARK: EmptyPrivateTabsViewDelegate
-    func didTapLearnMore(urlRequest: URLRequest) {}
+    func didTapLearnMore(urlRequest: URLRequest) {
+        store.dispatch(TabPanelAction.learnMorePrivateMode)
+    }
 }
