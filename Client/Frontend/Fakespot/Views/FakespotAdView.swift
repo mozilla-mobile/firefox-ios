@@ -21,11 +21,11 @@ struct FakespotAdViewModel {
 
     private let tabManager: TabManager
     var dismissViewController: (() -> Void)?
-    let productAdsData: ProductAdsData
+    let productAdsData: ProductAdsResponse
 
     // MARK: Init
     init(tabManager: TabManager = AppContainer.shared.resolve(),
-         productAdsData: ProductAdsData) {
+         productAdsData: ProductAdsResponse) {
         self.tabManager = tabManager
         self.productAdsData = productAdsData
     }

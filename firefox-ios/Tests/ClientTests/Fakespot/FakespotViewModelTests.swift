@@ -26,7 +26,7 @@ final class FakespotViewModelTests: XCTestCase {
     class MockShoppingProduct: ShoppingProduct {
         var shouldThrowError = false
 
-        override func fetchProductAnalysisData(maxRetries: Int = 3, retryTimeout: Int = 100) async throws -> ProductAnalysisData? {
+        override func fetchProductAnalysisData(maxRetries: Int = 3, retryTimeout: Int = 100) async throws -> ProductAnalysisResponse? {
             if shouldThrowError {
                 throw NSError(domain: "MockErrorDomain", code: 123, userInfo: nil)
             }

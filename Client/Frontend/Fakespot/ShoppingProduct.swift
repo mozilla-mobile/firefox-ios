@@ -88,7 +88,7 @@ class ShoppingProduct: FeatureFlaggable, Equatable {
     /// - Throws: An error of type `Error` if there's an issue during the data fetching process, even after the specified number of retries.
     /// - Note: This function is an asynchronous operation and should be called within an asynchronous context using `await`.
     ///
-    func fetchProductAnalysisData(maxRetries: Int = 3, retryTimeout: Int = 100) async throws -> ProductAnalysisData? {
+    func fetchProductAnalysisData(maxRetries: Int = 3, retryTimeout: Int = 100) async throws -> ProductAnalysisResponse? {
         guard let product else { return nil }
 
         // Perform 'retryCount' attempts, and retry on 500 failure:
@@ -129,7 +129,7 @@ class ShoppingProduct: FeatureFlaggable, Equatable {
     /// - Throws: An error of type `Error` if there's an issue during the data fetching process.
     /// - Note: This function is an asynchronous operation and should be called within an asynchronous context using `await`.
     ///
-    func fetchProductAdsData() async throws -> [ProductAdsData] {
+    func fetchProductAdsData() async throws -> [ProductAdsResponse] {
         guard let product else { return [] }
         return try await client.fetchProductAdData(productId: product.id, website: product.host)
     }

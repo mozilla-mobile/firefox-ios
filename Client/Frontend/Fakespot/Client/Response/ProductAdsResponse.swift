@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct ProductAdsData: Codable {
+struct ProductAdsResponse: Codable {
     let name: String
     let url: URL
     let imageUrl: URL
@@ -16,16 +16,16 @@ struct ProductAdsData: Codable {
     let sponsored: Bool
     let aid: String
 
-     private enum CodingKeys: String, CodingKey {
-         case name
-         case url
-         case imageUrl = "image_url"
-         case price
-         case currency
-         case grade
-         case adjustedRating = "adjusted_rating"
-         case analysisUrl = "analysis_url"
-         case sponsored
-         case aid
-     }
+    private enum CodingKeys: String, CodingKey {
+        case name
+        case url
+        case imageUrl = "image_url"
+        case price
+        case currency
+        case grade
+        case adjustedRating = "adjusted_rating"
+        case analysisUrl = "analysis_url"
+        case sponsored
+        case aid
+    }
 }
