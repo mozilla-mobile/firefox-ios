@@ -197,6 +197,15 @@ final class SettingsCoordinatorTests: XCTestCase {
         XCTAssertEqual(delegate.didFinishSettingsCalled, 1)
     }
 
+    func testParentCoordinatorDelegate_calledOpen50Tabs() {
+        let subject = createSubject()
+        subject.parentCoordinator = delegate
+
+        subject.openDebugTestTabs(count: 50)
+
+        XCTAssertEqual(delegate.openDebugTestTabsCalled, 1)
+    }
+
     // MARK: - Settings VC
     func testDelegatesAreSet() {
         let subject = createSubject()
@@ -533,6 +542,7 @@ class MockSettingsCoordinatorDelegate: SettingsCoordinatorDelegate {
     var savedURL: URL?
     var openURLinNewTabCalled = 0
     var didFinishSettingsCalled = 0
+    var openDebugTestTabsCalled = 0
 
     func openURLinNewTab(_ url: URL) {
         savedURL = url
@@ -541,6 +551,10 @@ class MockSettingsCoordinatorDelegate: SettingsCoordinatorDelegate {
 
     func didFinishSettings(from coordinator: SettingsCoordinator) {
         didFinishSettingsCalled += 1
+    }
+
+    func openDebugTestTabs(count: Int) {
+        openDebugTestTabsCalled += 1
     }
 }
 

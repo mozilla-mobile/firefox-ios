@@ -28,6 +28,8 @@ class MockDebugSettingsDelegate: DebugSettingsDelegate {
 
     func pressedFirefoxSuggest() {}
 
+    func pressedOpenFiftyTabs() {}
+
     func askedToShow(alert: AlertController) {
         askedToShowAlertCalled += 1
     }
