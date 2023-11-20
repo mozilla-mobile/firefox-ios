@@ -125,6 +125,7 @@ class HomepageViewController:
     }
 
     func newState(state: AppState) {
+        // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-7190
     }
 
     // MARK: - View lifecycle
