@@ -1538,10 +1538,10 @@ app:
     BITRISE_NIGHTLY_VERSION: '9000'
   - opts:
       is_expand: false
-    BITRISE_RELEASE_VERSION: '121.0'
+    BITRISE_RELEASE_VERSION: '122.0'
   - opts:
       is_expand: false
-    BITRISE_BETA_VERSION: '121.0'
+    BITRISE_BETA_VERSION: '122.0'
 
 meta:
   bitrise.io:
@@ -1553,7 +1553,7 @@ trigger_map:
   pipeline: pipeline_multiple_shards
 - push_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
-- push_branch: release/v119
+- push_branch: release/v122
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: main
   pipeline: pipeline_multiple_shards
