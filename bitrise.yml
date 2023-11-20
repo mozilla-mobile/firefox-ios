@@ -237,7 +237,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-15.0.x
-        machine_type_id: g2-m1.8core
+        machine_type_id: g2-m1-max.10core
   build_and_test_3_SmokeTest3:
     before_run:
     - 1_git_clone_and_post_clone
@@ -248,7 +248,7 @@ workflows:
         title: Pull artifacts
         inputs:
         - verbose: true
-        - artifact_sources: stage_1.configure_build_fennec
+        - artifay ct_sources: stage_1.configure_build_fennec
     - script@1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Unzip
