@@ -53,7 +53,7 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
 
     var parent: UIStackView?
 
-    var contextStrokeColor: UIColor!
+    var contextStrokeColor: UIColor?
 
     var readStatusButton: UIButton!
     var settingsButton: UIButton!
@@ -105,7 +105,8 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
     override func draw(_ rect: CGRect) {
         super.draw(rect)
 
-        guard let context = UIGraphicsGetCurrentContext() else { return }
+        guard let context = UIGraphicsGetCurrentContext(),
+              let contextStrokeColor = contextStrokeColor else { return }
 
         context.setLineWidth(0.5)
         context.setStrokeColor(contextStrokeColor.cgColor)
