@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct ProductAdsResponse: Codable {
+struct ProductAdsResponse: Codable, Equatable {
     let name: String
     let url: URL
     let imageUrl: URL

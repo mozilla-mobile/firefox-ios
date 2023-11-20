@@ -35,6 +35,9 @@ final class NimbusFeatureFlagLayer {
         case .fakespotFeature:
             return checkFakespotFeature(from: nimbus)
 
+        case .fakespotProductAds:
+            return checkFakespotProductAds(from: nimbus)
+
         case .firefoxSuggestFeature:
             return checkFirefoxSuggestFeature(from: nimbus)
 
@@ -228,6 +231,12 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.shopping2023.value()
 
         return config.status
+    }
+
+    private func checkFakespotProductAds(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.shopping2023.value()
+
+        return config.productAds
     }
 
     private func checkProductBackInStockFakespotFeature(from nimbus: FxNimbus) -> Bool {

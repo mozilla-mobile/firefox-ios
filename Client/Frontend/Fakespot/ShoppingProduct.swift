@@ -61,6 +61,10 @@ class ShoppingProduct: FeatureFlaggable, Equatable {
         featureFlags.isFeatureEnabled(.fakespotBackInStock, checking: .buildOnly)
     }
 
+    var isProductAdsFeatureEnabled: Bool {
+        featureFlags.isFeatureEnabled(.fakespotProductAds, checking: .buildOnly)
+    }
+
     var isShoppingButtonVisible: Bool {
         return product != nil && isFakespotFeatureEnabled
     }
@@ -129,9 +133,9 @@ class ShoppingProduct: FeatureFlaggable, Equatable {
     /// - Throws: An error of type `Error` if there's an issue during the data fetching process.
     /// - Note: This function is an asynchronous operation and should be called within an asynchronous context using `await`.
     ///
-    func fetchProductAdsData() async throws -> [ProductAdsResponse] {
+    func fetchProductAdsData() async -> [ProductAdsResponse] {
         guard let product else { return [] }
-        return try await client.fetchProductAdData(productId: product.id, website: product.host)
+        return (try? await client.fetchProductAdData(productId: product.id, website: product.host)) ?? []
     }
 
     /// Triggers the analysis of the current product.

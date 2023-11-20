@@ -10,13 +10,13 @@ class FakespotViewModel {
     enum ViewState {
         case loading
         case onboarding
-        case loaded(ProductAnalysisResponse?, AnalysisStatus?, analysisCount: Int)
+        case loaded(ProductState)
         case error(Error)
 
         fileprivate var productData: ProductAnalysisResponse? {
             switch self {
             case .loading, .error, .onboarding: return nil
-            case .loaded(let data, _, _): return data
+            case .loaded(let productState): return productState.product
             }
         }
     }
@@ -25,14 +25,21 @@ class FakespotViewModel {
         switch viewState {
         case .loading:
             return [.loadingView]
-        case let .loaded(product, analysisStatus, analysisCount):
-            guard let product else {
+        case .loaded(let productState):
+            guard let product = productState.product else {
                 return [
                     .messageCard(.genericError),
                     .qualityDeterminationCard,
                     .settingsCard
                 ]
             }
+
+            let minRating = product.adjustedRating ?? 0
+            let productAdCard = productState
+                .productAds
+                .sorted(by: { $0.adjustedRating > $1.adjustedRating })
+                .first(where: { $0.adjustedRating >= minRating }) // Choosing the product with the same or better rating to display
+                .map(ViewElement.productAdCard)
 
             if product.grade == nil {
                 Self.recordNoReviewReliabilityAvailableTelemetry()
@@ -60,7 +67,7 @@ class FakespotViewModel {
                 // Don't show not analyzed message card if analysis is in progress
                 var cards: [ViewElement] = []
 
-                if analysisStatus?.isAnalyzing == true {
+                if productState.analysisStatus?.isAnalyzing == true {
                     cards.append(.messageCard(.analysisInProgress))
                 } else {
                     cards.append(.noAnalysisCard)
@@ -74,10 +81,10 @@ class FakespotViewModel {
             } else if product.notEnoughReviewsCardVisible {
                 var cards: [ViewElement] = []
 
-                if analysisCount > 0 {
+                if productState.analyzeCount > 0 {
                     cards.append(.messageCard(.notEnoughReviews))
                 } else {
-                    if analysisStatus?.isAnalyzing == true {
+                    if productState.analysisStatus?.isAnalyzing == true {
                         cards.append(.messageCard(.analysisInProgress))
                     } else {
                         cards.append(.noAnalysisCard)
@@ -93,7 +100,7 @@ class FakespotViewModel {
                 // Don't show needs analysis message card if analysis is in progress
                 var cards: [ViewElement] = []
 
-                if analysisStatus?.isAnalyzing == true {
+                if productState.analysisStatus?.isAnalyzing == true {
                     cards.append(.messageCard(.analysisInProgress))
                 } else {
                     cards.append(.messageCard(.needsAnalysis))
@@ -104,8 +111,9 @@ class FakespotViewModel {
                     .adjustRatingCard,
                     .highlightsCard,
                     .qualityDeterminationCard,
+                    productAdCard,
                     .settingsCard
-                ]
+                ].compactMap { $0 }
 
                 return cards
             } else {
@@ -114,8 +122,9 @@ class FakespotViewModel {
                     .adjustRatingCard,
                     .highlightsCard,
                     .qualityDeterminationCard,
+                    productAdCard,
                     .settingsCard
-                ]
+                ].compactMap { $0 }
             }
         case let .error(error):
             let baseElements = [ViewElement.qualityDeterminationCard, .settingsCard]
@@ -138,7 +147,7 @@ class FakespotViewModel {
         case qualityDeterminationCard
         case settingsCard
         case noAnalysisCard
-        case productAdCard
+        case productAdCard(ProductAdsResponse)
         case messageCard(MessageType)
         enum MessageType {
             case genericError
@@ -319,13 +328,32 @@ class FakespotViewModel {
         }
     }
 
+    struct ProductState {
+        let product: ProductAnalysisResponse?
+        let productAds: [ProductAdsResponse]
+        let analysisStatus: AnalysisStatus?
+        let analyzeCount: Int
+    }
+
     func fetchProductAnalysis(showLoading: Bool = true) async {
         if showLoading { state = .loading }
         do {
             let product = try await shoppingProduct.fetchProductAnalysisData()
+            let productAds: [ProductAdsResponse] = if shoppingProduct.isProductAdsFeatureEnabled {
+                await shoppingProduct.fetchProductAdsData()
+            } else {
+                []
+            }
             let needsAnalysis = product?.needsAnalysis ?? false
             let analysis: AnalysisStatus? = needsAnalysis ? try? await shoppingProduct.getProductAnalysisStatus()?.status : nil
-            state = .loaded(product, analysis, analysisCount: analyzeCount)
+            state = .loaded(
+                ProductState(
+                    product: product,
+                    productAds: productAds,
+                    analysisStatus: analysis,
+                    analyzeCount: analyzeCount
+                )
+            )
         } catch {
             state = .error(error)
         }
@@ -339,9 +367,16 @@ class FakespotViewModel {
             return
         }
 
-        if case .loaded(let productAnalysisData, _, _) = state {
+        if case .loaded(let productState) = state {
             // update the state to in progress so UI is updated
-            state = .loaded(productAnalysisData, status, analysisCount: analyzeCount)
+            state = .loaded(
+                ProductState(
+                    product: productState.product,
+                    productAds: productState.productAds,
+                    analysisStatus: status,
+                    analyzeCount: analyzeCount
+                )
+            )
         }
 
         do {

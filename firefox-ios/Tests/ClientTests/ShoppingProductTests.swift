@@ -116,20 +116,20 @@ final class ShoppingProductTests: XCTestCase {
         XCTAssertEqual(client.website, "amazon.com")
     }
 
-    func testFetchingProductAdData_WithInvalidURL_ReturnsEmptyArray() async throws {
+    func testFetchingProductAdData_WithInvalidURL_ReturnsEmptyArray() async {
         let url = URL(string: "https://www.example.com")!
 
         let sut = ShoppingProduct(url: url, client: client)
-        let productAdData = try await sut.fetchProductAdsData()
+        let productAdData = await sut.fetchProductAdsData()
 
         XCTAssertTrue(productAdData.isEmpty)
     }
 
-    func testFetchingProductAdData_WithValidURL_CallsClientAPI() async throws {
+    func testFetchingProductAdData_WithValidURL_CallsClientAPI() async {
         let url = URL(string: "https://www.amazon.com/Under-Armour-Charged-Assert-Running/dp/B087T8Q2C4")!
 
         let sut = ShoppingProduct(url: url, client: client)
-        let productAdData = try await sut.fetchProductAdsData()
+        let productAdData = await sut.fetchProductAdsData()
 
         XCTAssertNotNil(productAdData)
         XCTAssertTrue(client.fetchProductAdsDataCalled)
@@ -195,6 +195,68 @@ final class ShoppingProductTests: XCTestCase {
         XCTAssertTrue(client.reportProductBackInStockCalled)
         XCTAssertEqual(client.productId, "B087T8Q2C4")
         XCTAssertEqual(client.website, "amazon.com")
+    }
+
+    func testAdsWithRatingsHigherThanMinRating() {
+        let minRating = 4.0
+        let productAds = [
+            ProductAdsResponse(adjustedRating: 4.5),
+            ProductAdsResponse(adjustedRating: 4.7),
+            ProductAdsResponse(adjustedRating: 4.2)
+        ]
+
+        let selectedAdCard = productAds
+            .sorted(by: { $0.adjustedRating > $1.adjustedRating })
+            .first(where: { $0.adjustedRating >= minRating })
+
+        XCTAssertEqual(selectedAdCard, ProductAdsResponse(adjustedRating: 4.7), "The ad with the highest rating should be selected.")
+    }
+
+    func testAdsWithRatingsLowerThanMinRating() {
+        let minRating = 4.0
+        let productAds = [
+            ProductAdsResponse(adjustedRating: 3.5),
+            ProductAdsResponse(adjustedRating: 3.7),
+            ProductAdsResponse(adjustedRating: 3.2)
+        ]
+
+        let selectedAdCard = productAds
+            .sorted(by: { $0.adjustedRating > $1.adjustedRating })
+            .first(where: { $0.adjustedRating >= minRating })
+
+        XCTAssertNil(selectedAdCard)
+    }
+
+    func testAdsWithSomeRatingsEqualToMinRating() {
+        let minRating = 4.0
+        let productAds = [
+            ProductAdsResponse(adjustedRating: 4.0),
+            ProductAdsResponse(adjustedRating: 3.9),
+            ProductAdsResponse(adjustedRating: 4.2)
+        ]
+
+        let selectedAdCard = productAds
+            .sorted(by: { $0.adjustedRating > $1.adjustedRating })
+            .first(where: { $0.adjustedRating >= minRating })
+
+        XCTAssertEqual(selectedAdCard, ProductAdsResponse(adjustedRating: 4.2))
+    }
+}
+
+fileprivate extension ProductAdsResponse {
+    init(adjustedRating: Double) {
+        self.init(
+            name: "",
+            url: URL(string: "www.example.com")!,
+            imageUrl: URL(string: "www.example.com")!,
+            price: "",
+            currency: "",
+            grade: .a,
+            adjustedRating: adjustedRating,
+            analysisUrl: URL(string: "www.example.com")!,
+            sponsored: false,
+            aid: ""
+        )
     }
 }
 
