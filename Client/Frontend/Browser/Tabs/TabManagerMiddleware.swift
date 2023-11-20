@@ -47,6 +47,10 @@ class TabManagerMiddleware {
             self.closeAllInactiveTabs()
             store.dispatch(TabPanelAction.refreshInactiveTabs(self.inactiveTabs))
 
+        case TabPanelAction.closeInactiveTabs(let index):
+            self.closeInactiveTab(for: index)
+            store.dispatch(TabPanelAction.refreshInactiveTabs(self.inactiveTabs))
+
         default:
             break
         }
@@ -103,6 +107,10 @@ class TabManagerMiddleware {
 
     private func closeAllInactiveTabs() {
         inactiveTabs.removeAll()
+    }
+
+    private func closeInactiveTab(for index: Int) {
+        inactiveTabs.remove(at: index)
     }
 
     private func resetMock() {

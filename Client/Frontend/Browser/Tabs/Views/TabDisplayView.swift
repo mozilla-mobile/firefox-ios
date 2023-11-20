@@ -10,7 +10,8 @@ class TabDisplayView: UIView,
                       UICollectionViewDataSource,
                       UICollectionViewDelegate,
                       UICollectionViewDelegateFlowLayout,
-                      TabCellDelegate {
+                      TabCellDelegate,
+                      InactiveTabsSectionManagerDelegate {
     struct UX {
         static let cornerRadius: CGFloat = 6.0
     }
@@ -62,6 +63,7 @@ class TabDisplayView: UIView,
         self.inactiveTabsSectionManager = InactiveTabsSectionManager()
         self.tabsSectionManager = TabsSectionManager()
         super.init(frame: .zero)
+        self.inactiveTabsSectionManager.delegate = self
         setupLayout()
     }
 
@@ -125,6 +127,10 @@ class TabDisplayView: UIView,
         guard !shouldHideInactiveTabs else { return .tabs }
 
         return TabDisplaySection(rawValue: section) ?? .tabs
+    }
+
+    func deleteInactiveTab(for index: Int) {
+        store.dispatch(TabPanelAction.closeInactiveTabs(index))
     }
 
     // MARK: UICollectionViewDataSource
@@ -235,9 +241,7 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
     func collectionView(_ collectionView: UICollectionView,
                         itemsForBeginning session: UIDragSession,
                         at indexPath: IndexPath) -> [UIDragItem] {
-        guard let section = TabDisplayView.TabDisplaySection(rawValue: indexPath.section),
-              section == .tabs
-        else { return [] }
+        guard getTabDisplay(for: indexPath.section) == .tabs else { return [] }
 
         // TODO: Add telemetry
         let itemProvider = NSItemProvider()
