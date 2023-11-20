@@ -5,16 +5,30 @@
 import Foundation
 import MozillaAppServices
 
+public protocol RustFirefoxSuggestActor: Actor {
+    /// Downloads and stores new Firefox Suggest suggestions.
+    func ingest() async throws
+
+    /// Searches the store for matching suggestions.
+    func query(
+        _ keyword: String,
+        includeSponsored: Bool,
+        includeNonSponsored: Bool
+    ) async throws -> [RustFirefoxSuggestion]
+
+    /// Interrupts any ongoing queries for suggestions.
+    nonisolated func interruptReader()
+}
+
 /// An actor that wraps the synchronous Rust `SuggestStore` binding to execute
 /// blocking operations on the default global concurrent executor.
-public actor RustFirefoxSuggest {
+public actor RustFirefoxSuggest: RustFirefoxSuggestActor {
     private let store: SuggestStore
 
     public init(databasePath: String, remoteSettingsConfig: RemoteSettingsConfig? = nil) throws {
         store = try SuggestStore(path: databasePath, settingsConfig: remoteSettingsConfig)
     }
 
-    /// Downloads and stores new Firefox Suggest suggestions.
     public func ingest() async throws {
         // Ensure that the Rust networking stack has been initialized before
         // downloading new suggestions. This is safe to call multiple times.
@@ -23,7 +37,6 @@ public actor RustFirefoxSuggest {
         try store.ingest(constraints: SuggestIngestionConstraints())
     }
 
-    /// Searches the store for matching suggestions.
     public func query(
         _ keyword: String,
         includeSponsored: Bool,
@@ -42,7 +55,6 @@ public actor RustFirefoxSuggest {
         )).compactMap(RustFirefoxSuggestion.init)
     }
 
-    /// Interrupts any ongoing queries for suggestions.
     public nonisolated func interruptReader() {
         store.interrupt()
     }
