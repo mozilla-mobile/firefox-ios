@@ -9,6 +9,7 @@ class FakeReduxViewController: UIViewController, StoreSubscriber {
     typealias SubscriberStateType = FakeReduxState
 
     var label = UILabel(frame: .zero)
+    var isInPrivateMode = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,6 +20,7 @@ class FakeReduxViewController: UIViewController, StoreSubscriber {
 
     func newState(state: FakeReduxState) {
         label.text = "\(state.counter)"
+        isInPrivateMode = state.isInPrivateMode
     }
 
     func increaseCounter() {
@@ -27,5 +29,9 @@ class FakeReduxViewController: UIViewController, StoreSubscriber {
 
     func decreaseCounter() {
         store.dispatch(FakeReduxAction.decreaseCounter)
+    }
+
+    func setPrivateMode(to value: Bool) {
+        store.dispatch(FakeReduxAction.setPrivateModeTo(value))
     }
 }
