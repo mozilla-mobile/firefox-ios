@@ -6,5 +6,5 @@ import Foundation
 import Redux
 
 enum AppStateAction: Action {
-    case togglePrivateSettingTo(Bool)
+    case setPrivateModeTo(Bool)
 }

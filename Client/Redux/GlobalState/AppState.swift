@@ -11,7 +11,7 @@ struct AppState: StateType {
 
     static let reducer: Reducer<Self> = { state, action in
         switch action {
-        case AppStateAction.togglePrivateSettingTo(let privateState):
+        case AppStateAction.setPrivateModeTo(let privateState):
             AppState(
                 activeScreens: ActiveScreensState.reducer(state.activeScreens, action),
                 isInPrivateMode: privateState

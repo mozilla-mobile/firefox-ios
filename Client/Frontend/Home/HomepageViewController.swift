@@ -125,8 +125,6 @@ class HomepageViewController:
     }
 
     func newState(state: AppState) {
-        // TODO: Multiple tickets for Felt Privacy
-        print("RGB - \(state.isInPrivateMode)")
     }
 
     // MARK: - View lifecycle

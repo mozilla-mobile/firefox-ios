@@ -71,7 +71,7 @@ extension TabManager {
     func selectTab(_ tab: Tab?) {
         // ROUX
         guard let privateState = tab?.isPrivate else { return }
-        store.dispatch(AppStateAction.togglePrivateSettingTo(privateState))
+        store.dispatch(AppStateAction.setPrivateModeTo(privateState))
         selectTab(tab, previous: nil)
     }
 
