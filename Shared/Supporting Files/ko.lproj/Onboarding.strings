@@ -26,25 +26,16 @@
 "Onboarding.Notification.Continue.Action.v114" = "계속";
 
 /* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Description.v114" = "기기 간에 탭을 보내고 %@를 최대한 활용하는 방법에 대한 팁을 얻으세요.";
-
-/* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Notification.Description.v120" = "기기 간에 안전하게 탭을 보내고 %@의 다른 개인 정보 보호 기능을 찾아보세요.";
 
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Skip.Action.v115" = "건너뛰기";
 
 /* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Title.v114" = "알림은 %@로 더 많은 일을 할 수 있도록 도와줍니다.";
-
-/* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Notification.Title.v120" = "알림으로 %@를 더욱 안전하게 사용할 수 있습니다.";
 
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "알림 켜기";
-
-/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
-"Onboarding.Sync.Description.v114" = "다른 기기에서 탭과 비밀번호를 가져와 중단한 부분부터 다시 시작하세요.";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Sync.Description.v120" = "로그인하고 동기화하면 더 안전해집니다. %@는 비밀번호, 북마크 등을 암호화합니다.";
@@ -54,9 +45,6 @@
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.Skip.Action.v114" = "건너뛰기";
-
-/* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
-"Onboarding.Sync.Title.v114" = "휴대전화에서 노트북으로 왔다가 다시 돌아가기";
 
 /* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
 "Onboarding.Sync.Title.v120" = "기기 간 이동 시 암호화 상태를 유지하세요";
@@ -85,17 +73,11 @@
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Welcome.ActionTreatementA.v114" = "기본 브라우저로 설정";
 
-/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Description.TreatementA.v114" = "%@는 이익보다 사람을 우선시하고 브라우징할 때 개인 정보를 보호합니다.";
-
 /* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Link.Action.v114" = "개인정보 보호정책에서 자세히 알아보기";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
 "Onboarding.Welcome.Skip.v114" = "건너뛰기";
-
-/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Title.TreatementA.v114" = "%@를 기본 브라우저로 설정해 보세요";
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Title.TreatementA.v120" = "우리는 사용자를 안전하게 지키는 것을 좋아합니다";

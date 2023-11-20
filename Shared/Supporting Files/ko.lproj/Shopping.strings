@@ -61,3 +61,9 @@
 /* Title for info card when the product needs analysis */
 "Shopping.InfoCard.NeedsAnalysis.Title.v120" = "확인할 새로운 정보";
 
+/* This description appears beneath the confirmation title on the information card to inform the user that their report regarding the product stock status has been received and is being processed. It serves to set the expectation that the review information will be updated within 24 hours and invites the user to revisit the product page for updates. */
+"Shopping.InfoCard.ReportSubmittedByCurrentUser.Description.v121" = "24시간 이내에 이 제품의 리뷰에 대한 정보를 받아야 합니다. 다시 확인해 주세요.";
+
+/* This title is displayed on the information card as a confirmation message after a user reports that a previously out-of-stock product is now available. It's meant to acknowledge the user's contribution and encourage community engagement by letting them know their report has been successfully submitted. */
+"Shopping.InfoCard.ReportSubmittedByCurrentUser.Title.v121" = "보고해 주셔서 감사합니다!";
+

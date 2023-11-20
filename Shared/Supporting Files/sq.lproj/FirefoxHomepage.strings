@@ -1,0 +1,9 @@
+/* The body of the message for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. Placeholder refers to app name. */
+"FeltPrivacyUI.Body.v121" = "%@ fshin cookie-t, historikun dhe të dhëna sajtesh, kur mbyllni krejt dritaret tuaja private.";
+
+/* The link for the card that educates users about how private mode works. The link redirects to an external site for more information. The card shows up on the homepage when in the new privacy mode. */
+"FeltPrivacyUI.Link.v121" = "Cilët mund të jenë në gjendje të shohin veprimtarinë time?";
+
+/* The title for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. */
+"FeltPrivacyUI.Title.v121" = "Mos lini gjurmë në këtë pajisje";
+

@@ -26,25 +26,16 @@
 "Onboarding.Notification.Continue.Action.v114" = "Folytatás";
 
 /* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Description.v114" = "Lapokat küldhet eszközei között, és tippeket kaphat arról, hogyan hozhatja ki a legtöbbet a %@ból.";
-
-/* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Notification.Description.v120" = "Küldjön biztonságosan lapokat eszközei között, és fedezzen fel más adatvédelmi funkciókat a %@ban.";
 
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Skip.Action.v115" = "Kihagyás";
 
 /* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Title.v114" = "Az értesítések segítségével még többet tehet a %@szal";
-
-/* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Notification.Title.v120" = "Az értesítések segítségével nagyobb biztonságban lehet %@szal";
 
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "Értesítések bekapcsolása";
-
-/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
-"Onboarding.Sync.Description.v114" = "Vegye át a lapokat és a jelszavakat a többi eszközéről, hogy ott folytassa, ahol abbahagyta.";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Sync.Description.v120" = "Ha be van jelentkezve és szinkronizálva van, akkor nagyobb biztonságban van. A %@ titkosítja a jelszavait, könyvjelzőit és egyebeit.";
@@ -54,9 +45,6 @@
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.Skip.Action.v114" = "Kihagyás";
-
-/* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
-"Onboarding.Sync.Title.v114" = "Váltson át a telefonról a laptopra és vissza";
 
 /* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
 "Onboarding.Sync.Title.v120" = "Maradjon titkosítva, amikor az eszközök között vált";
@@ -85,9 +73,6 @@
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Welcome.ActionTreatementA.v114" = "Beállítás alapértelmezett böngészőként";
 
-/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Description.TreatementA.v114" = "A %@ az embereket helyezi a profit elé, és alapértelmezés szerint védi az Ön magánszféráját.";
-
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Description.TreatementA.v120" = "A nonprofit szervezet által támogatott böngészőnk segít megakadályozni, hogy a cégek titokban kövessék Önt a weben.";
 
@@ -99,9 +84,6 @@
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
 "Onboarding.Welcome.Skip.v114" = "Kihagyás";
-
-/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Title.TreatementA.v114" = "Legyen a %@ a szokásos böngészője";
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Title.TreatementA.v120" = "Szeretjük biztonságban tartani Önt";

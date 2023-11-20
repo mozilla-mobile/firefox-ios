@@ -26,25 +26,16 @@
 "Onboarding.Notification.Continue.Action.v114" = "Continuer";
 
 /* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Description.v114" = "Envoyez des onglets entre vos appareils et obtenez des conseils pour tirer le meilleur parti de %@.";
-
-/* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Notification.Description.v120" = "Envoyez des onglets d’un appareil à un autre en toute sécurité et découvrez d’autres fonctionnalités de protection de la vie privée de %@.";
 
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Skip.Action.v115" = "Ignorer";
 
 /* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Title.v114" = "Les notifications vous aident à en faire plus avec %@";
-
-/* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Notification.Title.v120" = "Les notifications vous aident à rester en sécurité avec %@";
 
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "Activer les notifications";
-
-/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
-"Onboarding.Sync.Description.v114" = "Récupérez les onglets et mots de passe depuis vos autres appareils pour reprendre là où vous en étiez.";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Sync.Description.v120" = "Lorsque vous vous connectez et activez la synchronisation, votre sécurité est renforcée. %@ chiffre vos mots de passe, vos marque-pages et bien d’autres choses.";
@@ -54,9 +45,6 @@
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.Skip.Action.v114" = "Ignorer";
-
-/* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
-"Onboarding.Sync.Title.v114" = "Passez du téléphone à l’ordinateur portable et vice-versa";
 
 /* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
 "Onboarding.Sync.Title.v120" = "Protégez-vous grâce au chiffrement lorsque vous passez d’un appareil à un autre";
@@ -85,9 +73,6 @@
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Welcome.ActionTreatementA.v114" = "Définir comme navigateur par défaut";
 
-/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Description.TreatementA.v114" = "%@ fait passer les gens avant l’argent et protège votre vie privée lorsque vous naviguez.";
-
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Description.TreatementA.v120" = "Notre navigateur soutenu par une organisation à but non lucratif empêche les entreprises de vous suivre secrètement sur le Web.";
 
@@ -99,9 +84,6 @@
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
 "Onboarding.Welcome.Skip.v114" = "Ignorer";
-
-/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Title.TreatementA.v114" = "Faites de %@ votre navigateur par défaut";
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Title.TreatementA.v120" = "Votre protection compte pour nous";

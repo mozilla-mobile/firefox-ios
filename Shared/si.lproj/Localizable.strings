@@ -1073,7 +1073,7 @@
 "SearchSettings.Title.Search.v106" = "සොයන්න";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "ගැටළුව විසඳා ගැනීමට මොසිල්ලා වෙත බිඳ වැටීමේ වාර්තාවක් යවන්නද?";
+"Send a crash report so Mozilla can fix the problem?" = "ගැටලුව විසඳීමට මොසිල්ලා වෙත බිඳ වැටීමේ වාර්තාවක් යවන්නද?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "ප්‍රතිපෝෂණය යවන්න";
@@ -1703,7 +1703,7 @@
 "The page could not be displayed in Reader View." = "පිටුව කියවන දැක්මෙහි දර්ශනය කළ නොහැකිය.";
 
 /* Error message in the remote tabs panel */
-"There was a problem accessing tabs from your other devices. Try again in a few moments." = "ඔබගේ අනෙකුත් උපාංගවල පටිති වෙත ප්‍රවේශ වීමේ ගැටළුවක් මතු විය. සුළු මොහොතකින් නැවත උත්සාහ කරන්න.";
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "ඔබගේ අනෙකුත් උපාංගවල පටිති වෙත ප්‍රවේශ වීමේ ගැටලුවක් මතු විය. සුළු මොහොතකින් නැවත උත්සාහ කරන්න.";
 
 /* Error displayed when reader mode cannot be enabled */
 "There was an error converting the page" = "පිටුව හැරවීමේදී දෝෂයක් ඇති විය";

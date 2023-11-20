@@ -1,3 +1,6 @@
+/* Accessibility label for the add button in autofill settings screen. Pressing this button presents a modal that allows users to add a card by entering the credit card information. */
+"CreditCard.Settings.AddCard.AccessibilityLabel.v121" = "Aggiungi carta";
+
 /* Description label for when there are no credit cards shown in credit card list in autofill settings screen. */
 "CreditCard.Settings.EmptyListDescription.v112" = "Salva i dati della tua carta in modo sicuro per completare i tuoi acquisti più velocemente in futuro.";
 
@@ -60,4 +63,25 @@
 
 /* This is the title informing the user needs to turn on notifications in iOS Settings. */
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "Attiva notifiche";
+
+/* Accessibility label for default search engine setting. */
+"Settings.Search.Accessibility.DefaultSearchEngine.v121" = "Motore di ricerca predefinito";
+
+/* Title for the `default search engine` settings section in the Search page in the Settings menu. */
+"Settings.Search.DefaultSearchEngine.Title.v121" = "Motore di ricerca predefinito";
+
+/* Navigation title for search page in the Settings menu. */
+"Settings.Search.PageTitle.v121" = "Ricerca";
+
+/* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in the Private Session section in the Search page in the Settings menu. */
+"Settings.Search.PrivateSession.Setting.v121" = "Disattiva i suggerimenti in navigazione anonima";
+
+/* Title for the `Private Session` settings section in the Search page in the Settings menu. */
+"Settings.Search.PrivateSession.Title.v121" = "Sessione anonima";
+
+/* Title for quick-search engines settings section in the Search page in the Settings menu. */
+"Settings.Search.QuickEnginesTitle.v121" = "Motori di ricerca rapidi";
+
+/* Label for the `show search suggestions` setting, in the Search Settings page. */
+"Settings.Search.ShowSuggestions.v121" = "Visualizza suggerimenti";
 

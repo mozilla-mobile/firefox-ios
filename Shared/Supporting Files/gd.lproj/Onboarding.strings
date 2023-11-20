@@ -25,29 +25,17 @@
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "Lean air adhart";
 
-/* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Description.v114" = "Cuir tabaichean eadar na h-uidheaman agad is faigh gliocasan airson %@ a chur gu làn-fheum.";
-
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Skip.Action.v115" = "Leum seachad";
 
-/* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Title.v114" = "’S urrainn dhut barrachd a dhèanamh le %@ ma bhios na brathan an comas agad";
-
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "Cuir na brathan air";
-
-/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
-"Onboarding.Sync.Description.v114" = "Faigh greim air na tabaichean is faclan-faire a th’ agad air uidheaman eile is lean ort far an do stad thu.";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.SignIn.Action.v114" = "Clàraich a-steach";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.Skip.Action.v114" = "Leum seachad";
-
-/* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
-"Onboarding.Sync.Title.v114" = "Leum eadar am fòn is an laptop agad";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.Classic.v114" = "Am pàipear-balla clasaigeach";
@@ -73,17 +61,11 @@
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Welcome.ActionTreatementA.v114" = "Suidhich mar am brabhsair bunaiteach";
 
-/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Description.TreatementA.v114" = "Tha daoine nas cudromaiche dha %@ na prothaid agus dìonaidh e do phrìobhaideachd fhad ’s a nì thusa brabhsadh.";
-
 /* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Link.Action.v114" = "Faigh barrachd fiosrachaidh ann an aithris na prìobhaideachd againn";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
 "Onboarding.Welcome.Skip.v114" = "Leum seachad";
-
-/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Title.TreatementA.v114" = "Cleachd %@ mar am brabhsair bunaiteach agad";
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Title.v114" = "Fàilte gu eadar-lìon neo-eisimeileach";
