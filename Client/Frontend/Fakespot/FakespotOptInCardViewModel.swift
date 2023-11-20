@@ -118,7 +118,10 @@ struct FakespotOptInCardViewModel {
                                                           size: UX.bodyLabelFontSize)
         let boldFont = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body,
                                                                   size: UX.bodyLabelFontSize)
-        let combinedString = String(format: "%@\n\n%@", bodyFirstParagraph, bodySecondParagraph)
+
+        let processedBodyFirstParagraph = processStringBasedOnLocale(bodyFirstParagraph)
+
+        let combinedString = String(format: "%@\n\n%@", processedBodyFirstParagraph, bodySecondParagraph)
 
         let plainText = String.localizedStringWithFormat(combinedString,
                                                          websites[0],
@@ -130,6 +133,20 @@ struct FakespotOptInCardViewModel {
                                                    boldFont: boldFont)
 
         return finalString
+    }
+
+    private func processStringBasedOnLocale(_ inputString: String) -> String {
+        let localizedDot = String(inputString.last!)
+        switch Locale.current.languageCode {
+        case "de", "fr":
+            return inputString.components(separatedBy: localizedDot)
+                              .filter({ !$0.isEmpty })
+                              .dropLast()
+                              .joined(separator: localizedDot)
+                              .appending(localizedDot)
+
+        default: return inputString
+        }
     }
 
     var disclaimerText: NSAttributedString {
