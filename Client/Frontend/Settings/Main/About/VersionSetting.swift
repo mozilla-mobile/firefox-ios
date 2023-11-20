@@ -36,5 +36,4 @@ class VersionSetting: Setting {
         let alert = AlertController(title: alertTitle, message: nil, preferredStyle: .alert)
         settingsDelegate?.askedToShow(alert: alert)
     }
-
 }
