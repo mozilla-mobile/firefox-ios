@@ -10,8 +10,17 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one appears after the user has opted in and informs him if he wants use the review checker by tapping the Shopping button. */
 "ContextualHints.Shopping.OptedInBody.v120" = "这些评价可信吗？立即检查即可查看调整后的评分。";
 
+/* Footer label from the Fakespot Ad card displayed for the related product we advertise. This is displayed below the ad card, suggested as an alternative to the product reviewed. The first parameter will be replaced by the Fakespot app name */
+"Shopping.AdCard.Footer.v121" = "由 %@ 提供的广告";
+
+/* Title label for the Fakespot Ad card. This is displayed above a product image, suggested as an alternative to the product reviewed. */
+"Shopping.AdCard.Title.v121" = "可参考其他商品";
+
 /* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
-"Shopping.AdjustedRating.Description.v120" = "已移除不可信的评价";
+"Shopping.AdjustedRating.Description.v120" = "已排除不可信的评价";
+
+/* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
+"Shopping.AdjustedRating.Description.v121" = "基于可信评分调整";
 
 /* Accessibility label, associated to adjusted rating stars. %@ is a decimal value from 0 to 5 that will only use a tenth (example: 3.5). */
 "Shopping.AdjustedRating.StarsAccessibilityLabel.v120" = "%@ 颗星（满分 5 星）";
@@ -55,6 +64,12 @@
 /* Title for info card when Fakespot cannot analyze reviews for a certain product type */
 "Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Title.v120" = "无法核查这些评价";
 
+/* Description text for an information card used in the review checker section. This message is displayed when the reviews for a product are not yet available but are expected to be provided within the next 24 hours. It serves to inform users of the short wait for reviews and encourages them to return soon for the updated information. */
+"Shopping.InfoCard.InfoComingSoon.Description.v121" = "我们会在 24 小时内提供此商品的评价分析信息，请记得回来查看。";
+
+/* Title for an information card that is displayed in the review checker section when certain details about a product or feature are not currently available but are expected to be provided soon. The message should imply that the user can look forward to receiving more information shortly. */
+"Shopping.InfoCard.InfoComingSoon.Title.v121" = "分析信息即将就绪";
+
 /* Primary action title for info card when the product needs analysis */
 "Shopping.InfoCard.NeedsAnalysis.PrimaryAction.v120" = "立即核查";
 
@@ -73,11 +88,26 @@
 /* Title for info card when there are not enough reviews for a product */
 "Shopping.InfoCard.NotEnoughReviews.Title.v120" = "还没有足够数量的评价";
 
+/* Description for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This description is used for info card where the user can report if it's back in stock. */
+"Shopping.InfoCard.ProductNotInStock.Description.v121" = "若您发现此商品已有货，请向我们反馈，以便我们核查评价。";
+
+/* Primary action label for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This primary action label is used for info card button where the user can report if it's back in stock. */
+"Shopping.InfoCard.ProductNotInStock.PrimaryAction.v121" = "反馈商品已有货";
+
+/* Title for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This title is used for info card where the user can report if it's back in stock. */
+"Shopping.InfoCard.ProductNotInStock.Title.v121" = "商品无货";
+
 /* Description for info card when the product is in analysis mode */
 "Shopping.InfoCard.ProgressAnalysis.Description.v120" = "这可能需要大约 60 秒。";
 
 /* Title for info card when the product is in analysis mode */
 "Shopping.InfoCard.ProgressAnalysis.Title.v120" = "正在核查评价质量";
+
+/* This description appears beneath the confirmation title on the information card to inform the user that their report regarding the product stock status has been received and is being processed. It serves to set the expectation that the review information will be updated within 24 hours and invites the user to revisit the product page for updates. */
+"Shopping.InfoCard.ReportSubmittedByCurrentUser.Description.v121" = "我们会在 24 小时内提供此商品的评价分析信息，请记得回来查看。";
+
+/* This title is displayed on the information card as a confirmation message after a user reports that a previously out-of-stock product is now available. It's meant to acknowledge the user's contribution and encourage community engagement by letting them know their report has been successfully submitted. */
+"Shopping.InfoCard.ReportSubmittedByCurrentUser.Title.v121" = "感谢反馈！";
 
 /* Text for the analyzer button displayed when an analysis can be updated for a product. */
 "Shopping.NoAnalysisCard.AnalyzerButton.Title.v120" = "核查评价质量";
@@ -93,6 +123,9 @@
 
 /* Title for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
 "Shopping.NoAnalysisCard.InProgress.Headline.Title.v120" = "正在核查评价质量";
+
+/* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replaced by the Fakespot app name. After the colon, what appears are two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
+"Shopping.OptInCard.Disclaimer.Text.v120" = "选择“试试看”，即代表您同意 %@ 的：";
 
 /* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. The third and fourth parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. */
 "Shopping.OptInCard.FirstParagraph.Description.v120" = "购买前看看 %1$@ 上产品评论的可靠性。核查评价是来自 %2$@ 的实验性功能，它直接内置在浏览器中，同样也适用于 %3$@ 和 %4$@。";
@@ -110,10 +143,10 @@
 "Shopping.OptInCard.PrivacyPolicy.Button.Title.v120" = "隐私政策";
 
 /* Text for the secondary button of the Shopping Experience Opt In onboarding Card (Fakespot) */
-"Shopping.OptInCard.SecondaryButton.Title.v120" = "暂不操作";
+"Shopping.OptInCard.SecondaryButton.Title.v120" = "暂时不要";
 
 /* Label for the second paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be replaced by the Fakespot app name. The second parameter will be replaced the company name of Mozilla. */
-"Shopping.OptInCard.SecondParagraph.Description.v120" = "借助 %2$@ 的 %1$@ 的强大功能我们帮助您避免有偏见和不真实的评论。在您购物时我们的 AI 模型会不断改进为您提供保护。";
+"Shopping.OptInCard.SecondParagraph.Description.v120" = "由 %2$@ 支持的 %1$@ 可帮助您规避不真实、不公允的评价。在您购物时，我们的人工智能模型也会不断改进，以更好地保护您的权益。";
 
 /* Show Firefox Browser Terms of Use page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
 "Shopping.OptInCard.TermsOfUse.Button.Title.v120" = "使用条款";
@@ -143,7 +176,7 @@
 "Shopping.ReviewQualityCard.Expand.AccessibilityLabel.v120" = "展开我们如何判定评价质量卡片";
 
 /* Label of the headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
-"Shopping.ReviewQualityCard.Headline.Label.v120" = "我们使用由 %1$@ 支持的 %2$@ 的人工智能技术来分析商品评价的可信度。分析结果只能辅助您评估评价的质量，不能反映商品质量。";
+"Shopping.ReviewQualityCard.Headline.Label.v120" = "我们使用由 %2$@ 支持的 %1$@ 的人工智能技术来分析商品评价的可信度。分析结果只能辅助您评估评价的质量，不能反映商品质量。";
 
 /* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "Shopping.ReviewQualityCard.Highlights.Label.v120" = "*最有帮助的评价*选自我们认为可信的最近 80 天内 %1@ 网站上的评价。";
@@ -186,6 +219,9 @@
 
 /* Beta label for the header of the Shopping Experience (Fakespot) sheet */
 "Shopping.Sheet.Beta.Title.v120" = "测试版";
+
+/* Accessibility label for close button that dismisses the Shopping Experience (Fakespot) sheet. */
+"Shopping.Sheet.Close.AccessibilityLabel.v121" = "关闭核查评价";
 
 /* Label for the header of the Shopping Experience (Fakespot) sheet */
 "Shopping.Sheet.Title.v120" = "核查评价";

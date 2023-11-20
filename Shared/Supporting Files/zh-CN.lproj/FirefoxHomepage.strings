@@ -1,0 +1,9 @@
+/* The body of the message for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. Placeholder refers to app name. */
+"FeltPrivacyUI.Body.v121" = "%@ 会在您关闭所有隐私窗口后删除 Cookie、历史记录、站点数据。";
+
+/* The link for the card that educates users about how private mode works. The link redirects to an external site for more information. The card shows up on the homepage when in the new privacy mode. */
+"FeltPrivacyUI.Link.v121" = "谁可以看到我的活动？";
+
+/* The title for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. */
+"FeltPrivacyUI.Title.v121" = "不在设备上留痕迹";
+

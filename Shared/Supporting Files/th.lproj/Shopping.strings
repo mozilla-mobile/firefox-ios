@@ -67,6 +67,9 @@
 /* Title for info card when the product is in analysis mode */
 "Shopping.InfoCard.ProgressAnalysis.Title.v120" = "กำลังตรวจสอบคุณภาพบทวิจารณ์";
 
+/* This title is displayed on the information card as a confirmation message after a user reports that a previously out-of-stock product is now available. It's meant to acknowledge the user's contribution and encourage community engagement by letting them know their report has been successfully submitted. */
+"Shopping.InfoCard.ReportSubmittedByCurrentUser.Title.v121" = "ขอบคุณสำหรับการรายงาน!";
+
 /* Text for the analyzer button displayed when an analysis can be updated for a product. */
 "Shopping.NoAnalysisCard.AnalyzerButton.Title.v120" = "ตรวจสอบคุณภาพบทวิจารณ์";
 

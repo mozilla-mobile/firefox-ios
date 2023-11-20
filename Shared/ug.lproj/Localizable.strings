@@ -1,0 +1,333 @@
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "ئىشلەتكۈچى ئىسمى ۋە پارولنى %@ ئىلتىماس قىلدى.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "ئىشلەتكۈچى ئىسمى ۋە پارولنى %1$@ ئىلتىماس قىلدى. تور بېكەتنىڭ قايتۇرغىنى: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "ئاا";
+
+/* About settings section title */
+"About" = "ھەققىدە";
+
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "تېزلەتمىگە قوش";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite2" = "مىخلا";
+
+/* The title for the unpinning a topsite action */
+"ActivityStream.ContextMenu.UnpinTopsite" = "مىخلىما";
+
+/* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
+"ActivityStream.JumpBackIn.SectionTitle" = "كەينىگە قايت";
+
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
+"ActivityStream.JumpBackIn.TabGroup.SiteCount" = "بەتكۈچ: %d";
+
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"ActivityStream.Library.Title" = "يېقىندا ساقلانغان";
+
+/* Section title label for recently visited websites */
+"ActivityStream.RecentHistory.Title" = "يېقىندا زىيارەت قىلغان";
+
+/* Section title label for Shortcuts */
+"ActivityStream.Shortcuts.SectionTitle" = "تېزلەتمە";
+
+/* The title for the setting page which lets you select the number of top site rows */
+"ActivityStream.TopSites.RowSettingFooter" = "قۇر تەڭشىكى";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "بەتكۈچ قوش";
+
+/* Name for button adding current article to reading list in reader mode */
+"Add to Reading List" = "ئوقۇش تىزىمىغا قوش";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "ئوقۇش تىزىمىغا بەت قوشۇلدى";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "جەزملە";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "ھەميانغا ئىم قوشقاندا خاتالىق كۆرۈلدى. كېيىن قايتا سىناڭ.";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "ئىم قوشالمىدى";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "ئادرېس ۋە ئىزدەش";
+
+/* Accessibility label for action adding current page to reading list. */
+"Address.Bar.ReadingList.v106" = "ئوقۇش تىزىمىغا قوش";
+
+/* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
+"Address.Bar.v99" = "ئادرېسس بالداق";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "ھەمىشە يوللا";
+
+/* Tile title for Amazon */
+"Amazon" = "ئامازون";
+
+/* Authentication prompt title */
+"Authentication required" = "دەلىللەش زۆرۈر";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "قايت";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "قاڭقىش كۆزنىكىنى توس";
+
+/* The label for the Title field when editing a bookmark */
+"Bookmark.DetailFieldTitle.Label" = "ماۋزۇ";
+
+/* The label for the URL field when editing a bookmark */
+"Bookmark.DetailFieldURL.Label" = "تور ئادرېسى";
+
+/* Toggle bookmarks syncing setting */
+"Bookmarks" = "خەتكۈچ";
+
+/* The button on the snackbar to edit a bookmark after adding it. */
+"Bookmarks.Edit.Button" = "تەھرىر";
+
+/* The button to edit a bookmark */
+"Bookmarks.EditBookmark.Label" = "خەتكۈچ تەھرىر";
+
+/* The button to edit a folder */
+"Bookmarks.EditFolder.Label" = "قىسقۇچ تەھرىر";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "قىسقۇچ";
+
+/* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
+"Bookmarks.Menu.DesktopBookmarks" = "ئۈستەل ئۈستى خەتكۈچى";
+
+/* The button to create a new bookmark */
+"Bookmarks.NewBookmark.Label" = "يېڭى خەتكۈچ";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "يېڭى قىسقۇچ";
+
+/* The button to create a new separator */
+"Bookmarks.NewSeparator.Label" = "يېڭى ئايرىغۇچ";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "ماۋزۇ";
+
+/* Describes the date on which the breach occurred */
+"BreachAlerts.BreachDate" = "بۇ سىزما يۈز بەرگەن ۋاقىت";
+
+/* Description of what a breach is */
+"BreachAlerts.Description" = "سىز ئىمنى ئاخىرقى قېتىم ئۆزگەرتكەندىن بۇيان ئىم ئاشكارىلاندى ياكى ئوغرىلاندى. بۇ ھېساباتنى قوغداش ئۈچۈن تور بېكەتكە تىزىمغا كىرىپ ئىمنى ئۆزگەرتىڭ.";
+
+/* Link to monitor.firefox.com to learn more about breached passwords */
+"BreachAlerts.LearnMoreButton" = "تەپسىلاتى";
+
+/* Leads to a link to the breached website */
+"BreachAlerts.Link" = "يۆتكەل";
+
+/* Title for the Breached Login Detail View. */
+"BreachAlerts.Title" = "تور بېكەت سىزمىسى";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "يورۇقلۇقى";
+
+/* Label for Cancel button */
+"Cancel" = "ۋاز كەچ";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "رەڭ ئۆرنىكىنى ئۆزگەرتىدۇ.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "خەت شەكلىنى ئۆزگەرتىدۇ.";
+
+/* The button to open a new tab with the copied link */
+"ClipboardToast.GoToCopiedLink.Button" = "يۆتكەل";
+
+/* Message displayed when the user has a copied link on the clipboard */
+"ClipboardToast.GoToCopiedLink.Title" = "كۆچۈرۈلگەن ئۇلانمىغا يۆتكىلەمدۇ؟";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "تاقا";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "تاقالغان بەتكۈچ";
+
+/* Context menu item for bookmarking a link URL */
+"ContextMenu.BookmarkLinkButtonTitle" = "خەتكۈچ ئۇلانمىسى";
+
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "يېڭى شەخسىي بەتكۈچ ئېچىلدى";
+
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText.v113" = "يېڭى شەخسىي بەتكۈچ ئېچىلدى";
+
+/* The button text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "ئالماشتۇر";
+
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "يېڭى بەتكۈچ ئېچىلدى";
+
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText.v114" = "يېڭى بەتكۈچ ئېچىلدى";
+
+/* Context menu item for copying an image to the clipboard */
+"ContextMenu.CopyImageButtonTitle" = "سۈرەت كۆچۈر";
+
+/* Context menu item for copying an image URL to the clipboard */
+"ContextMenu.CopyImageLinkButtonTitle" = "سۈرەت ئۇلانمىسىنى كۆچۈر";
+
+/* Context menu item for copying a link URL to the clipboard */
+"ContextMenu.CopyLinkButtonTitle" = "ئۇلانما كۆچۈر";
+
+/* Context menu item for downloading a link URL */
+"ContextMenu.DownloadLinkButtonTitle" = "ئۇلانمىنى چۈشۈر";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenInNewTabButtonTitle" = "يېڭى بەتكۈچتە ئاچ";
+
+/* Context menu item for saving an image */
+"ContextMenu.SaveImageButtonTitle" = "سۈرەتنى ساقلا";
+
+/* Context menu item for sharing a link URL */
+"ContextMenu.ShareLinkButtonTitle" = "ئۇلانما ھەمبەھىر";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
+"ContextualHints.SearchBarPlacement.CallToAction" = "قورال بالداق تەڭشىكى";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
+"ContextualHints.TabTray.InactiveTabs" = "ئىككى ھەپتە كۆرمىگەن بەتكۈچلەر بۇ جايغا يۆتكىلىدۇ.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
+"ContextualHints.TabTray.InactiveTabs.CallToAction" = "تەڭشەكلەردىن تاقايدۇ";
+
+/* Accessibility label for action denoting closing contextual hint. */
+"ContextualHintsCloseButtonAccessibility.v105" = "تاقا";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "ئوقۇش تىزىمىغا بەت قوشالمىدى";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it’s already there?" = "ئوقۇش تىزىمىغا بەت قوشالمىدى. بەلكىم ئۇ مەۋجۇتمۇ؟";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "بەتنى يۈكلىيەلمىدى.";
+
+/* Text for the new ETP settings button */
+"CoverSheet.v24.ETP.Settings.Button" = "تەڭشەككە يۆتكەل";
+
+/* Title for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Title" = "ئېلان ئىز قوغلاشتىن قوغداش";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "ھېسابات قۇر";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "قاراڭغۇ";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "تېكىست چوڭلۇقىنى كىچىكلەت";
+
+/* Title for default search engine picker. */
+"Default Search Engine" = "كۆڭۈلدىكى ئىزدەش موتورى";
+
+/* Accessibility label for action denoting closing default browser home tab banner. */
+"DefaultBrowserCloseButtonAccessibility.v102" = "تاقا";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "تەڭشەكلەرنى كۆرسەت";
+
+/* Used as a button label for crash dialog prompt */
+"Don’t Send" = "يوللىما";
+
+/* Done button on left side of the Settings view controller title bar */
+"Done" = "تامام";
+
+/* Panel accessibility label */
+"Downloads" = "چۈشۈرۈلمىلەر";
+
+/* The label of the button the user will press to start downloading a file */
+"Downloads.Alert.DownloadNow" = "ھازىر چۈشۈر";
+
+/* Button confirming the cancellation of the download. */
+"Downloads.CancelDialog.Cancel" = "ۋاز كەچ";
+
+/* Alert dialog body when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Message" = "بۇ چۈشۈرۈشتىن راستىنلا ۋاز كېچەمسىز؟";
+
+/* Button declining the cancellation of the download. */
+"Downloads.CancelDialog.Resume" = "داۋاملاشتۇر";
+
+/* Alert dialog title when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Title" = "چۈشۈرۈشتىن ۋاز كەچ";
+
+/* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
+"Downloads.Toast.Cancelled.LabelText" = "چۈشۈرۈش ئەمەلدىن قالدۇرۇلدى";
+
+/* The label text in the Download Failed toast for showing confirmation that the download has failed. */
+"Downloads.Toast.Failed.LabelText" = "چۈشۈرۈش مەغلۇپ بولدى";
+
+/* The button to open a new tab with the Downloads home panel */
+"Downloads.Toast.GoToDownloads.Button" = "چۈشۈرۈلمىلەر";
+
+/* Action button for deleting downloaded files in the Downloads panel. */
+"DownloadsPanel.Delete.Title" = "ئۆچۈرۈش";
+
+/* Title for the Downloads Panel empty state. */
+"DownloadsPanel.EmptyState.Title" = "چۈشۈرگەن ھۆججەتلەر بۇ يەردە كۆرۈنىدۇ.";
+
+/* Action button for sharing downloaded files in the Downloads panel. */
+"DownloadsPanel.Share.Title" = "ھەمبەھىرلەش";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "ئالىي";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "قايتىش";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "ئالدىغا";
+
+/* Settings section title for Firefox Account */
+"FxA.FirefoxAccount" = "Firefox ھېساباتى";
+
+/* Label when no internet is present */
+"FxA.NoInternetConnection" = "تورغا ئۇلانمىغان";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "ياردەم";
+
+/* Toggle history syncing setting */
+"History" = "تارىخ";
+
+/* Option title to clear all browsing history. */
+"HistoryPanel.ClearHistoryMenuOptionEverything" = "ھەممىسى";
+
+/* Button to perform action to clear history for today only */
+"HistoryPanel.ClearHistoryMenuOptionToday" = "بۈگۈن";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "تارىخ";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "يېقىندا تاقالغان";
+
+/* Accessibility label for the tab toolbar indicating the Home button. */
+"Home" = "باشبەت";
+
+/* The title for the Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Bookmark" = "خەتكۈچ";
+
+/* Accessibility label for the New Tab button in the tab toolbar. */
+"New Tab" = "يېڭى بەتكۈچ";
+
+/* OK button */
+"OK" = "جەزملە";
+

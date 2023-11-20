@@ -1,3 +1,6 @@
+/* Accessibility label for the add button in autofill settings screen. Pressing this button presents a modal that allows users to add a card by entering the credit card information. */
+"CreditCard.Settings.AddCard.AccessibilityLabel.v121" = "Dodaj kartico";
+
 /* Description label for when there are no credit cards shown in credit card list in autofill settings screen. */
 "CreditCard.Settings.EmptyListDescription.v112" = "Varno shranite podatke o kartici in naslednjič hitreje zaključite nakup.";
 
@@ -60,4 +63,10 @@
 
 /* This is the title informing the user needs to turn on notifications in iOS Settings. */
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "Vklopi obvestila";
+
+/* Accessibility label for default search engine setting. */
+"Settings.Search.Accessibility.DefaultSearchEngine.v121" = "Privzeti iskalnik";
+
+/* Title for the `default search engine` settings section in the Search page in the Settings menu. */
+"Settings.Search.DefaultSearchEngine.Title.v121" = "Privzeti iskalnik";
 

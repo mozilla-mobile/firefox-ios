@@ -26,25 +26,16 @@
 "Onboarding.Notification.Continue.Action.v114" = "Pokračovať";
 
 /* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Description.v114" = "Posielajte karty medzi zariadeniami a získajte tipy, ako z prehliadača %@ vyťažiť maximum.";
-
-/* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Notification.Description.v120" = "Bezpečne posielajte karty medzi vašimi zariadeniami a objavte ďalšie funkcie ochrany osobných údajov vo %@.";
 
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Skip.Action.v115" = "Preskočiť";
 
 /* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Title.v114" = "Upozornenia vám pomôžu vyťažiť z prehliadača %@ ešte viac";
-
-/* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Notification.Title.v120" = "Upozornenia vám pomôžu zostať s prehliadačom %@ v bezpečí";
 
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "Zapnúť zobrazovanie upozornení";
-
-/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
-"Onboarding.Sync.Description.v114" = "Vezmite karty a heslá z ostatných zariadení a pokračujte tam, kde ste prestali.";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Sync.Description.v120" = "Keď ste prihlásení a synchronizovaní, ste bezpečnejší. %@ šifruje vaše heslá, záložky a ďalšie položky.";
@@ -54,9 +45,6 @@
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.Skip.Action.v114" = "Preskočiť";
-
-/* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
-"Onboarding.Sync.Title.v114" = "Preskočte z telefónu na laptop a späť";
 
 /* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
 "Onboarding.Sync.Title.v120" = "Pri preskakovaní medzi zariadeniami zostaňte šifrovaní";
@@ -85,9 +73,6 @@
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Welcome.ActionTreatementA.v114" = "Nastaviť ako predvolený prehliadač";
 
-/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Description.TreatementA.v114" = "%@ uprednostňuje ľudí pred ziskom a chráni vaše súkromie pri prehliadaní.";
-
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Description.TreatementA.v120" = "Náš neziskový prehliadač pomáha zabrániť spoločnostiam, aby vás tajne sledovali na webe.";
 
@@ -99,9 +84,6 @@
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
 "Onboarding.Welcome.Skip.v114" = "Preskočiť";
-
-/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Title.TreatementA.v114" = "Nastavte si %@ ako svoj obľúbený prehliadač";
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Title.TreatementA.v120" = "Radi vás udržiavame v bezpečí";
