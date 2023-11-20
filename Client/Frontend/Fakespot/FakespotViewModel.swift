@@ -317,7 +317,19 @@ class FakespotViewModel {
                     for try await status in self.observeProductAnalysisStatus() where status.isAnalyzing == false {
                         await self.fetchProductAnalysis(showLoading: false)
                     }
-                } catch {}
+                } catch {
+                    if case .loaded(let productState) = state {
+                        // Restore the previous state in case of a failure
+                        state = .loaded(
+                            ProductState(
+                                product: productState.product,
+                                productAds: productState.productAds,
+                                analysisStatus: nil,
+                                analyzeCount: analyzeCount
+                            )
+                        )
+                    }
+                }
             }
         }
     }
