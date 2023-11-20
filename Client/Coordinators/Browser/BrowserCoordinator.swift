@@ -338,7 +338,7 @@ class BrowserCoordinator: BaseCoordinator,
         remove(child: coordinator)
     }
 
-    func openMultipleDebugTestTabs(count: Int) {
+    func openDebugTestTabs(count: Int) {
         guard let url = URL(string: "https://www.mozilla.org") else { return }
         browserViewController.debugOpen(numberOfNewTabs: count, at: url)
     }

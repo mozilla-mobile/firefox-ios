@@ -17,7 +17,7 @@ protocol SettingsFlowDelegate: AnyObject,
     func showCreditCardSettings()
     func showExperiments()
     func showFirefoxSuggest()
-    func openMultipleDebugTestTabs(count: Int)
+    func openDebugTestTabs(count: Int)
     func showPasswordManager(shouldShowOnboarding: Bool)
     func didFinishShowingSettings()
 }
@@ -363,7 +363,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     }
 
     func pressedOpenFiftyTabs() {
-        parentCoordinator?.openMultipleDebugTestTabs(count: 50)
+        parentCoordinator?.openDebugTestTabs(count: 50)
     }
 
     // MARK: SharedSettingsDelegate
