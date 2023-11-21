@@ -36,11 +36,7 @@ class DownloadsCoordinator: BaseCoordinator, ParentCoordinatorDelegate, Download
     func handleFile(_ file: DownloadedFile, sourceView: UIView) {
         guard file.canShowInWebView
         else {
-            if CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
-                startShare(file: file, sourceView: sourceView)
-            } else {
-                shareFile(file, sourceView: sourceView)
-            }
+            startShare(file: file, sourceView: sourceView)
             return
         }
         parentCoordinator?.libraryPanel(didSelectURL: file.path, visitType: .typed)
@@ -61,19 +57,6 @@ class DownloadsCoordinator: BaseCoordinator, ParentCoordinatorDelegate, Download
         )
         add(child: coordinator)
         return coordinator
-    }
-
-    private func shareFile(_ file: DownloadedFile, sourceView: UIView) {
-        let helper = ShareExtensionHelper(url: file.path, tab: nil)
-        let controller = helper.createActivityViewController { _, _ in }
-
-        if let popoverPresentationController = controller.popoverPresentationController {
-            popoverPresentationController.sourceView = sourceView
-            popoverPresentationController.sourceRect = sourceView.bounds
-            popoverPresentationController.permittedArrowDirections = .any
-        }
-
-        router.present(controller)
     }
 
     func showDocument(file: DownloadedFile) {

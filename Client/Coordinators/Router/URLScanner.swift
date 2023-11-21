@@ -56,6 +56,38 @@ struct URLScanner {
         return self.queries.first { $0.name == query }?.value
     }
 
+    /// Returns the value of the 'url' query item, if it is present, and also adds any
+    /// other trailing query parameters following the 'url' query onto the url value.
+    ///
+    /// For example, in this URL:
+    ///     `firefox://open-url?url=https://test.com/page?arg1=a&arg2=b`
+    /// this function returns:
+    ///     `https://test.com/page?arg1=a&arg2=b`
+    ///
+    /// @Discussion
+    /// The queryItems of the URLComponents will be listed in order, so we can scan up
+    /// to the point at which we find the `url` parameter, and include that as well as
+    /// any other arguments which are part of the URL.
+    ///
+    /// Important: this assumes that the `url` query item is the last query item within
+    /// any deeplinks opened by the client. If any other query items are included after
+    /// `url` then they will be incorrectly included in this query.
+    ///
+    /// Example:
+    /// `firefox://example?url=https://mozilla.com/page?arg1=a&url2=https://mozilla.social`
+    ///
+    /// In the above URL, it may have intended `url2` to be part of the parent firefox://
+    /// URL but using this function, it will add `url2` to the link of `url`.
+    func fullURLQueryItem() -> String? {
+        guard !queries.isEmpty else { return nil }
+
+        guard let url = value(query: "url")?.asURL else { return nil }
+        guard var components = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return nil }
+        guard let urlQueryIndex = queries.firstIndex(where: { $0.name == "url" }) else { return nil }
+        components.queryItems?.append(contentsOf: queries[((urlQueryIndex + 1)..<queries.count)])
+        return components.string
+    }
+
     /// Returns a Boolean value indicating whether the URL uses either the "http" or "https" scheme.
     var isHTTPScheme: Bool {
         return ["http", "https"].contains(scheme)

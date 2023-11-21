@@ -3,20 +3,22 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Redux
 import UIKit
 
 class TabDisplayViewController: UIViewController,
                                 Themeable,
                                 EmptyPrivateTabsViewDelegate,
-                                TabTrayChildPanels {
+                                StoreSubscriber {
+    typealias SubscriberStateType = TabsState
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     weak var navigationHandler: TabsNavigationHandler?
 
     // MARK: UI elements
-    private lazy var tabDisplayView: TabDisplayView = {
-        let view = TabDisplayView(state: self.tabTrayState)
+    lazy var tabDisplayView: TabDisplayView = {
+        let view = TabDisplayView(state: self.tabsState)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -24,13 +26,13 @@ class TabDisplayViewController: UIViewController,
     private lazy var emptyPrivateTabsView: EmptyPrivateTabsView = .build()
 
     // MARK: Redux state
-    var tabTrayState: TabTrayState
+    var tabsState: TabsState
 
     init(isPrivateMode: Bool,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
         // TODO: FXIOS-6936 Integrate Redux state
-        self.tabTrayState = TabTrayState()
+        self.tabsState = TabsState(isPrivateMode: isPrivateMode)
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
@@ -40,12 +42,31 @@ class TabDisplayViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        store.dispatch(ActiveScreensStateAction.closeScreen(.tabsPanel))
+        store.unsubscribe(self)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setupView()
         listenForThemeChange(view)
         applyTheme()
+        subscribeRedux()
+    }
+
+    private func subscribeRedux() {
+        store.dispatch(ActiveScreensStateAction.showScreen(.tabsPanel))
+        store.dispatch(TabPanelAction.tabPanelDidLoad(tabsState.isPrivateMode))
+        store.subscribe(self, transform: {
+            return $0.select(TabsState.init)
+        })
+    }
+
+    func newState(state: TabsState) {
+        tabsState = state
+        tabDisplayView.newState(state: tabsState)
+        shouldShowEmptyView(tabsState.isPrivateTabsEmpty)
     }
 
     func setupView() {
@@ -70,8 +91,8 @@ class TabDisplayViewController: UIViewController,
     }
 
     func setupEmptyView() {
-        guard tabTrayState.isPrivateMode, tabTrayState.isPrivateTabsEmpty else {
-            showEmptyView(shouldShowEmptyView: false)
+        guard tabsState.isPrivateMode, tabsState.isPrivateTabsEmpty else {
+            shouldShowEmptyView(false)
             return
         }
 
@@ -82,10 +103,10 @@ class TabDisplayViewController: UIViewController,
             emptyPrivateTabsView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             emptyPrivateTabsView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
-        showEmptyView(shouldShowEmptyView: true)
+        shouldShowEmptyView(true)
     }
 
-    private func showEmptyView(shouldShowEmptyView: Bool) {
+    private func shouldShowEmptyView(_ shouldShowEmptyView: Bool) {
         emptyPrivateTabsView.isHidden = !shouldShowEmptyView
         tabDisplayView.isHidden = shouldShowEmptyView
     }
@@ -93,11 +114,6 @@ class TabDisplayViewController: UIViewController,
     func applyTheme() {
         backgroundPrivacyOverlay.backgroundColor = themeManager.currentTheme.colors.layerScrim
         tabDisplayView.applyTheme(theme: themeManager.currentTheme)
-    }
-
-    func updateState(state: TabTrayState) {
-        tabTrayState = state
-        tabDisplayView.newState(state: tabTrayState)
     }
 
     // MARK: EmptyPrivateTabsViewDelegate

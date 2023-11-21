@@ -26,25 +26,16 @@
 "Onboarding.Notification.Continue.Action.v114" = "ඉදිරියට";
 
 /* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Description.v114" = "ඔබගේ උපාංග අතර පටිති යැවීමට මෙන්ම බොහෝ %@ ප්‍රතිලාභ අත්විඳීම සඳහා ඉඟි ලබා ගන්න.";
-
-/* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Notification.Description.v120" = "ඔබගේ උපාංග අතර ආරක්‍ෂිතව පටිති යවන්න සහ වෙනත් %@ රහස්‍යතා විශේෂාංග සොයා ගන්න.";
 
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Skip.Action.v115" = "මඟහරින්න";
 
 /* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Title.v114" = "%@ සමඟ බොහෝ දෑ කිරීමට දැනුම්දීම් උපකාරී වේ";
-
-/* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Notification.Title.v120" = "%@ සමඟ ආරක්‍ෂිතව සිටීමට දැනුම්දීම් උපකාරී වේ";
 
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "දැනුම්දීම් සක්‍රිය කරන්න";
-
-/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
-"Onboarding.Sync.Description.v114" = "ඔබ නතර කළ තැනින් අතට ගැනීමට ඔබගේ අනෙකුත් උපාංගවල පටිති සහ මුරපද අරගන්න.";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Sync.Description.v120" = "ඔබ ඇතුළු වී සමමුහූර්ත කළ විට, ඔබ ආරක්‍ෂිතයි. %@ ඔබගේ මුරපද, පොත්යොමු සහ වෙනත් දෑ සංකේතනය කරයි.";
@@ -54,9 +45,6 @@
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.Skip.Action.v114" = "මඟහරින්න";
-
-/* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
-"Onboarding.Sync.Title.v114" = "දුරකථනයෙන් පරිගණකයට සහ ආපසු";
 
 /* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
 "Onboarding.Sync.Title.v120" = "ඔබ උපාංග අතර පනින විට සංකේතිතව සිටින්න";
@@ -85,9 +73,6 @@
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Welcome.ActionTreatementA.v114" = "පෙරනිමි අතිරික්සුව කරන්න";
 
-/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Description.TreatementA.v114" = "%@ ලාභයට වඩා මිනිසුන් ඉහළින් තබා ඔබ පිරික්සන අන්දමට ඔබගේ පෞද්ගලිකත්‍වය රැක දෙයි.";
-
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Description.TreatementA.v120" = "අපගේ ලාභ නොලබන පිටුබලයක් සහිත අතිරික්සුව අන්තර්ජාලය පුරා ඔබව රහසින් ලුහුබඳින සමාගම් ස්වයංක්‍රීයව නවත්වයි.";
 
@@ -99,9 +84,6 @@
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
 "Onboarding.Welcome.Skip.v114" = "මඟහරින්න";
-
-/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Title.TreatementA.v114" = "%@ ප්‍රධාන අතිරික්සුව කරන්න";
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Title.TreatementA.v120" = "ඔබට ආරක්‍ෂාව සලසන්නෙමු";

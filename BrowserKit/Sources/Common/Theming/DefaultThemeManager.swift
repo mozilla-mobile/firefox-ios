@@ -130,6 +130,8 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
             return LightTheme()
         case .dark:
             return DarkTheme()
+        case .privateMode:
+            return PrivateModeTheme()
         }
     }
 

@@ -396,22 +396,20 @@ class FakespotViewController:
 
         case .noAnalysisCard:
              let view: FakespotNoAnalysisCardView = .build()
-             viewModel.noAnalysisCardViewModel.onTapStartAnalysis = { [weak view, weak self] in
-                 view?.updateLayoutForInProgress()
+             viewModel.noAnalysisCardViewModel.onTapStartAnalysis = { [weak self] in
                  self?.onNeedsAnalysisTap()
              }
              view.configure(viewModel.noAnalysisCardViewModel)
              return view
 
-        case .progressAnalysisCard:
-             let view: FakespotNoAnalysisCardView = .build()
-             view.configure(viewModel.noAnalysisCardViewModel)
-             view.updateLayoutForInProgress()
-             return view
-
-        case .productAdCard:
+        case .productAdCard(let adData):
             let view: FakespotAdView = .build()
-
+            var viewModel = FakespotAdViewModel(productAdsData: adData)
+            viewModel.dismissViewController = { [weak self] in
+                guard let self = self else { return }
+                self.delegate?.fakespotControllerDidDismiss(animated: true)
+            }
+            view.configure(viewModel)
             return view
 
         case .messageCard(let messageType):

@@ -1,0 +1,6 @@
+/* This description appears beneath the confirmation title on the information card to inform the user that their report regarding the product stock status has been received and is being processed. It serves to set the expectation that the review information will be updated within 24 hours and invites the user to revisit the product page for updates. */
+"Shopping.InfoCard.ReportSubmittedByCurrentUser.Description.v121" = "We should have info about this product’s reviews within 24 hours. Please check back.";
+
+/* This title is displayed on the information card as a confirmation message after a user reports that a previously out-of-stock product is now available. It's meant to acknowledge the user's contribution and encourage community engagement by letting them know their report has been successfully submitted. */
+"Shopping.InfoCard.ReportSubmittedByCurrentUser.Title.v121" = "Thanks for Reporting!";
+

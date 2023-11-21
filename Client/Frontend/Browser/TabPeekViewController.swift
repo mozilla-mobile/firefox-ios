@@ -20,16 +20,16 @@ protocol TabPeekDelegate: AnyObject {
 class TabPeekViewController: UIViewController, WKNavigationDelegate {
     weak var tab: Tab?
 
-    fileprivate weak var delegate: TabPeekDelegate?
-    fileprivate var fxaDevicePicker: UINavigationController?
-    fileprivate var isBookmarked = false
-    fileprivate var isInReadingList = false
-    fileprivate var hasRemoteClients = false
-    fileprivate var ignoreURL = false
+    private weak var delegate: TabPeekDelegate?
+    private var fxaDevicePicker: UINavigationController?
+    private var isBookmarked = false
+    private var isInReadingList = false
+    private var hasRemoteClients = false
+    private var ignoreURL = false
 
-    fileprivate var screenShot: UIImageView?
-    fileprivate var previewAccessibilityLabel: String!
-    fileprivate var webView: WKWebView?
+    private var screenShot: UIImageView?
+    private var previewAccessibilityLabel: String!
+    private var webView: WKWebView?
 
     // Preview action items.
     override var previewActionItems: [UIPreviewActionItem] { return previewActions }
@@ -141,12 +141,17 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
     }
 
     private func setupWithScreenshot(_ screenshot: UIImage) {
-        let imageView = UIImageView(image: screenshot)
-        self.view.addSubview(imageView)
-
-        imageView.snp.makeConstraints { make in
-            make.edges.equalTo(self.view)
+        let imageView: UIImageView = .build { imageView in
+            imageView.image = screenshot
         }
+        view.addSubview(imageView)
+
+        NSLayoutConstraint.activate([
+            imageView.topAnchor.constraint(equalTo: view.topAnchor),
+            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
 
         screenShot = imageView
         screenShot?.accessibilityLabel = previewAccessibilityLabel
@@ -159,13 +164,17 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         else { return }
 
         let clonedWebView = WKWebView(frame: webView.frame, configuration: webView.configuration)
+        clonedWebView.translatesAutoresizingMaskIntoConstraints = false
         clonedWebView.allowsLinkPreview = false
         clonedWebView.accessibilityLabel = previewAccessibilityLabel
-        self.view.addSubview(clonedWebView)
+        view.addSubview(clonedWebView)
 
-        clonedWebView.snp.makeConstraints { make in
-            make.edges.equalTo(self.view)
-        }
+        NSLayoutConstraint.activate([
+            clonedWebView.topAnchor.constraint(equalTo: view.topAnchor),
+            clonedWebView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            clonedWebView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            clonedWebView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
 
         clonedWebView.navigationDelegate = self
         self.webView = clonedWebView

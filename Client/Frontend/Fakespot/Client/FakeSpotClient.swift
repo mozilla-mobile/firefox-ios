@@ -11,15 +11,15 @@ protocol FakespotClientType {
     /// - Parameters:
     ///   - productId: The ID of the product to analyze.
     ///   - website: The website associated with the product.
-    func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisData
+    func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisResponse
 
     /// Fetches product ad data for a given product ID and website.
     /// - Parameters:
     ///   - productId: The ID of the product to fetch ad data for.
     ///   - website: The website associated with the product.
     /// - Throws: An error if the operation fails.
-    /// - Returns: An array of `ProductAdsData` objects containing ad data.
-    func fetchProductAdData(productId: String, website: String) async throws -> [ProductAdsData]
+    /// - Returns: An array of `ProductAdsResponse` objects containing ad data.
+    func fetchProductAdData(productId: String, website: String) async throws -> [ProductAdsResponse]
 
     /// Triggers the analysis of a product for a given product ID and website.
     /// - Parameters:
@@ -168,25 +168,25 @@ struct FakespotClient: FakespotClientType {
     }
 
     /// Fetches product analysis data for a given product ID and website.
-    func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisData {
+    func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisResponse {
         // Define the API endpoint URL
         guard let endpointURL = environment.analysisEndpoint else {
             throw FakeSpotClientError.invalidURL
         }
 
         // Perform the async API request and get the data
-        return try await fetch(ProductAnalysisData.self, url: endpointURL, productId: productId, website: website)
+        return try await fetch(ProductAnalysisResponse.self, url: endpointURL, productId: productId, website: website)
     }
 
     /// Fetches product ad data for a given product ID and website.
-    func fetchProductAdData(productId: String, website: String) async throws -> [ProductAdsData] {
+    func fetchProductAdData(productId: String, website: String) async throws -> [ProductAdsResponse] {
         // Define the API endpoint URL
         guard let endpointURL = environment.adEndpoint else {
             throw FakeSpotClientError.invalidURL
         }
 
         // Perform the async API request and get the data
-        return try await fetch([ProductAdsData].self, url: endpointURL, productId: productId, website: website)
+        return try await fetch([ProductAdsResponse].self, url: endpointURL, productId: productId, website: website)
     }
 
     /// Reports product back in stock for a given product ID and website.

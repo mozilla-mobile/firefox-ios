@@ -21,6 +21,12 @@ features:
           products back in stock.
         type: Boolean
         default: false
+      product_ads:
+        description: >
+          If true, enables the product advertisement feature, allowing
+          users to see and interact with ads for various products.
+        type: Boolean
+        default: false
       config:
         type: Map<String, WebsiteConfig>
         description: >
@@ -46,11 +52,13 @@ features:
           status: true
           product-recommendations: false
           back_in_stock_reporting: false
+          product_ads: false
       - channel: developer
         value:
           status: true
           product-recommendations: true
           back_in_stock_reporting: true
+          product_ads: true
 
 objects:
   WebsiteConfig:

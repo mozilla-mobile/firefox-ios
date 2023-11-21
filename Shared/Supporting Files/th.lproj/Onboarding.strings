@@ -26,16 +26,10 @@
 "Onboarding.Notification.Continue.Action.v114" = "ดำเนินการต่อ";
 
 /* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Description.v114" = "ส่งแท็บไปมาระหว่างอุปกรณ์ของคุณและรับเคล็ดลับเกี่ยวกับวิธีใช้ประโยชน์สูงสุดจาก %@";
-
-/* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Notification.Description.v120" = "ส่งแท็บระหว่างอุปกรณ์ของคุณอย่างปลอดภัยและค้นพบคุณสมบัติความเป็นส่วนตัวอื่นๆ ใน %@";
 
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Skip.Action.v115" = "ข้าม";
-
-/* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Title.v114" = "การแจ้งเตือนช่วยให้คุณทำสิ่งต่างๆ ได้มากขึ้นด้วย %@";
 
 /* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Notification.Title.v120" = "การแจ้งเตือนช่วยให้คุณปลอดภัยยิ่งขึ้นด้วย %@";
@@ -43,17 +37,11 @@
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "เปิดการแจ้งเตือน";
 
-/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
-"Onboarding.Sync.Description.v114" = "นำแท็บและรหัสผ่านจากอุปกรณ์อื่น ๆ ของคุณเข้ามาเพื่อเรียกดูต่อจากที่คุณค้างไว้";
-
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.SignIn.Action.v114" = "ลงชื่อเข้า";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.Skip.Action.v114" = "ข้าม";
-
-/* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
-"Onboarding.Sync.Title.v114" = "สับเปลี่ยนไปมาระหว่างโทรศัพท์กับแล็ปท็อป";
 
 /* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
 "Onboarding.Sync.Title.v120" = "คงการเข้ารหัสเมื่อคุณเปลี่ยนจากอุปกรณ์เครื่องหนึ่งไปยังอีกเครื่องหนึ่ง";
@@ -82,17 +70,11 @@
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Welcome.ActionTreatementA.v114" = "ตั้งเป็นเบราว์เซอร์เริ่มต้น";
 
-/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Description.TreatementA.v114" = "%@ ให้ความสำคัญกับผู้คนมากกว่าผลกำไร และปกป้องความเป็นส่วนตัวของคุณขณะที่เรียกดู";
-
 /* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Link.Action.v114" = "เรียนรู้เพิ่มเติมในประกาศความเป็นส่วนตัวของเรา";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
 "Onboarding.Welcome.Skip.v114" = "ข้าม";
-
-/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Title.TreatementA.v114" = "ทำให้ %@ เป็นเบราว์เซอร์เริ่มต้นของคุณ";
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Title.TreatementA.v120" = "เรารักที่จะดูแลคุณให้ปลอดภัย";

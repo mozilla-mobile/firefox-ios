@@ -7,8 +7,10 @@ import Redux
 
 enum AppScreen {
     case themeSettings
+    case tabsTray
     case tabsPanel
     case remoteTabsPanel
+    case fakespot
 }
 
 enum ActiveScreensStateAction: Action {

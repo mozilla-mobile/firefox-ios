@@ -11,14 +11,10 @@ struct ThemeSettingsState: ScreenState, Equatable {
     var manualThemeSelected: ThemeType
     var userBrightnessThreshold: Float
     var systemBrightness: Float
-    private var logger: Logger
 
     init(_ appState: AppState) {
         guard let themeState = store.state.screenState(ThemeSettingsState.self, for: .themeSettings) else {
             self.init()
-            logger.log("Error retrieving screen state",
-                       level: .debug,
-                       category: .redux)
             return
         }
 
@@ -41,14 +37,12 @@ struct ThemeSettingsState: ScreenState, Equatable {
          isAutomaticBrightnessEnable: Bool,
          manualThemeSelected: ThemeType,
          userBrightnessThreshold: Float,
-         systemBrightness: Float,
-         logger: Logger = DefaultLogger.shared) {
+         systemBrightness: Float) {
         self.useSystemAppearance = useSystemAppearance
         self.isAutomaticBrightnessEnable = isAutomaticBrightnessEnable
         self.manualThemeSelected = manualThemeSelected
         self.userBrightnessThreshold = userBrightnessThreshold
         self.systemBrightness = systemBrightness
-        self.logger = logger
     }
 
     static let reducer: Reducer<Self> = { state, action in

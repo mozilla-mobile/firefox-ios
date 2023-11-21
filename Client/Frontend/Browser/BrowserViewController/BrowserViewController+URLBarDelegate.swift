@@ -105,19 +105,11 @@ extension BrowserViewController: URLBarDelegate {
                                      extras: nil)
 
         if let selectedtab = tabManager.selectedTab, let tabUrl = selectedtab.canonicalURL?.displayURL {
-            if CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
-                navigationHandler?.showShareExtension(
-                    url: tabUrl,
-                    sourceView: shareView,
-                    toastContainer: contentContainer,
-                    popoverArrowDirection: isBottomSearchBar ? .down : .up)
-            } else {
-                presentShareSheet(tabUrl,
-                                  tab: selectedtab,
-                                  sourceView: shareView,
-                                  sourceRect: CGRect.null,
-                                  arrowDirection: isBottomSearchBar ? .down : .up)
-            }
+            navigationHandler?.showShareExtension(
+                url: tabUrl,
+                sourceView: shareView,
+                toastContainer: contentContainer,
+                popoverArrowDirection: isBottomSearchBar ? .down : .up)
         }
     }
 
@@ -127,7 +119,14 @@ extension BrowserViewController: URLBarDelegate {
 
         let dismissedFakespot = dismissFakespotIfNeeded()
         if !dismissedFakespot {
+            // open flow
             handleFakespotFlow(productURL: productURL)
+            if isReduxIntegrationEnabled {
+                store.dispatch(FakespotAction.toggleAppearance(true))
+            }
+        } else if isReduxIntegrationEnabled {
+            // Fakespot was closed/dismissed
+            store.dispatch(FakespotAction.toggleAppearance(false))
         }
     }
 
