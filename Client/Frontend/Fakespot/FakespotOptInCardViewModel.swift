@@ -23,7 +23,7 @@ struct FakespotOptInCardViewModel {
     let headerTitle: String = .Shopping.OptInCardHeaderTitle
     let headerA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.headerTitle
     let bodyFirstParagraph: String = .Shopping.OptInCardFirstParagraph
-    let bodyFirstParagraphSupportedWebsites: String = .Shopping.OptInCardSupportedWebsites
+    let bodyFirstParagraphAmazonOnly: String = .Shopping.OptInCardFirstParagraphAmazonOnly
     let bodySecondParagraph = String.localizedStringWithFormat(.Shopping.OptInCardSecondParagraph,
                                                                FakespotName.shortName.rawValue,
                                                                MozillaName.shortName.rawValue)
@@ -135,14 +135,12 @@ struct FakespotOptInCardViewModel {
     }
 
     private func processStringBasedOnLocale() -> String {
-        var firstParagraph = String()
+        var firstParagraph: String
         switch Locale.current.languageCode {
         case "de", "fr":
-            firstParagraph = bodyFirstParagraph
+            firstParagraph = bodyFirstParagraphAmazonOnly
         default:
-            firstParagraph = bodyFirstParagraph.appending(
-                " " + bodyFirstParagraphSupportedWebsites
-            )
+            firstParagraph = bodyFirstParagraph
         }
 
         return String(

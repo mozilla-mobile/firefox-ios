@@ -3930,15 +3930,15 @@ extension String {
             value: "Try our trusted guide to product reviews",
             comment: "Label for the header of the Shopping Experience Opt In onboarding Card (Fakespot)")
         public static let OptInCardFirstParagraph = MZLocalizedString(
-            key: "Shopping.OptInCard.FirstParagraph.Description.v122",
+            key: "Shopping.OptInCard.FirstParagraph.Description.v120",
+            tableName: "Shopping",
+            value: "See how reliable product reviews are on %1$@ before you buy. Review Checker, an experimental feature from %2$@, is built right into the browser. It works on %3$@ and %4$@, too.",
+            comment: "Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. The third and fourth parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter.")
+        public static let OptInCardFirstParagraphAmazonOnly = MZLocalizedString(
+            key: "Shopping.OptInCard.FirstParagraph.AmazonOnly.Description.v122",
             tableName: "Shopping",
             value: "See how reliable product reviews are on %1$@ before you buy. Review Checker, an experimental feature from %2$@, is built right into the browser.",
-            comment: "Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name.")
-        public static let OptInCardSupportedWebsites = MZLocalizedString(
-            key: "Shopping.OptInCard.SupportedWebsites.Description.v122",
-            tableName: "Shopping",
-            value: "It works on %3$@ and %4$@, too.",
-            comment: "The first and second parameters will be the other two websites that are currently supported (Best Buy and Walmart).")
+            comment: "Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. This string is almost identical with 'Shopping.OptInCard.FirstParagraph.Description', but without Best Buy and Walmart websites, which are not available in many locales.")
         public static let OptInCardSecondParagraph = MZLocalizedString(
             key: "Shopping.OptInCard.SecondParagraph.Description.v120",
             tableName: "Shopping",
