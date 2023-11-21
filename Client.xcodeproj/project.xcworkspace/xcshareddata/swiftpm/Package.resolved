@@ -1,0 +1,131 @@
+{
+  "pins" : [
+    {
+      "identity" : "a-star",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Dev1an/A-Star",
+      "state" : {
+        "revision" : "036256f9a8d1dda44085a2b92fa58199446a8339",
+        "version" : "3.0.0-beta-1"
+      }
+    },
+    {
+      "identity" : "dip",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AliSoftware/Dip.git",
+      "state" : {
+        "revision" : "c3b601df0ff22b06b6d5ff4943faf05c0bd3f9bb",
+        "version" : "7.1.1"
+      }
+    },
+    {
+      "identity" : "fuzi",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nbhasin2/Fuzi.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "04170682baf5c013a41270963c689c87ba0d1374"
+      }
+    },
+    {
+      "identity" : "gcdwebserver",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nbhasin2/GCDWebServer.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "7674c93e79ee5aac17681acace324761325e7346"
+      }
+    },
+    {
+      "identity" : "glean-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mozilla/glean-swift",
+      "state" : {
+        "revision" : "24ed58dcc11c35460edf98975b19cce55e39790a",
+        "version" : "55.0.0"
+      }
+    },
+    {
+      "identity" : "ios_sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/adjust/ios_sdk.git",
+      "state" : {
+        "revision" : "20c2666082c372f9f2c0adf871d8cef195d011f7",
+        "version" : "4.35.2"
+      }
+    },
+    {
+      "identity" : "kif",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kif-framework/KIF.git",
+      "state" : {
+        "revision" : "6c3ff27d9449eab614dae63e571596e4982a5205",
+        "version" : "3.8.9"
+      }
+    },
+    {
+      "identity" : "kingfisher",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/onevcat/Kingfisher.git",
+      "state" : {
+        "revision" : "b6f62758f21a8c03cd64f4009c037cfa580a256e",
+        "version" : "7.9.1"
+      }
+    },
+    {
+      "identity" : "mappamundi",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mozilla-mobile/MappaMundi.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "f56a6e483163a761adc8cd25c337db0ed1eac524"
+      }
+    },
+    {
+      "identity" : "rust-components-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mozilla/rust-components-swift.git",
+      "state" : {
+        "revision" : "ba5a72cf17c7ff0854171f11599a7407bc2723f4",
+        "version" : "122.0.20231123050305"
+      }
+    },
+    {
+      "identity" : "sentry-cocoa",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/getsentry/sentry-cocoa.git",
+      "state" : {
+        "revision" : "7b0d185631a6d4b7756468efa464a68725c061d2",
+        "version" : "8.13.1"
+      }
+    },
+    {
+      "identity" : "snapkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SnapKit/SnapKit.git",
+      "state" : {
+        "revision" : "f222cbdf325885926566172f6f5f06af95473158",
+        "version" : "5.6.0"
+      }
+    },
+    {
+      "identity" : "swiftybeaver",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwiftyBeaver/SwiftyBeaver.git",
+      "state" : {
+        "revision" : "1080914828ef1c9ca9cd2bad50667b3d847dabff",
+        "version" : "2.0.0"
+      }
+    },
+    {
+      "identity" : "telemetry-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mozilla-mobile/telemetry-ios",
+      "state" : {
+        "revision" : "68f2d813320c9fda2fb4aee4548c64293500200a",
+        "version" : "2.0.0"
+      }
+    }
+  ],
+  "version" : 2
+}
