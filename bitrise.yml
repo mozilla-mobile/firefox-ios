@@ -248,7 +248,7 @@ workflows:
         title: Pull artifacts
         inputs:
         - verbose: true
-        - artifay ct_sources: stage_1.configure_build_fennec
+        - artifact_sources: stage_1.configure_build_fennec
     - script@1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Unzip
