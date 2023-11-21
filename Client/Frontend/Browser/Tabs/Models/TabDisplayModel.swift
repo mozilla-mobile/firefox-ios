@@ -6,7 +6,7 @@ import Foundation
 
 struct TabDisplayModel: Equatable {
     var isPrivateMode: Bool
-    var tabs: [TabCellModel]
+    var tabs: [TabModel]
     var isPrivateTabsEmpty: Bool {
         guard isPrivateMode else { return false }
         return tabs.isEmpty

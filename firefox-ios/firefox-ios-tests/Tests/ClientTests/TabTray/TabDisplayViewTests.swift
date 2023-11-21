@@ -3,18 +3,23 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import WebKit
 import XCTest
 
 @testable import Client
 final class TabDisplayViewTests: XCTestCase {
+    var profile: MockProfile!
+
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
+        profile = MockProfile()
     }
 
     override func tearDown() {
         super.tearDown()
         DependencyHelperMock().reset()
+        profile = nil
     }
 
     func testNumberOfSections_ForRegularTabsWithInactiveTabs() {
@@ -77,17 +82,26 @@ final class TabDisplayViewTests: XCTestCase {
         XCTAssertEqual(subject.collectionView.numberOfSections, 1)
     }
 
+    func testNumberOfItemsSection_ForRegularTabsWithInactiveTabs() {
+        let subject = createSubject(isPrivateMode: false,
+                                    emptyTabs: false,
+                                    emptyInactiveTabs: false)
+
+        XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 0), 2)
+        XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 1), 3)
+    }
+
     // MARK: - Private
     private func createSubject(isPrivateMode: Bool,
                                emptyTabs: Bool,
                                emptyInactiveTabs: Bool,
                                file: StaticString = #file,
                                line: UInt = #line) -> TabDisplayView {
-        let tabs: [TabCellModel] = emptyTabs ? [TabCellModel]() : [TabCellModel.emptyTabState(title: "Tab1"),
-                                                                   TabCellModel.emptyTabState(title: "Tab2")]
-        let inactiveTabs: [String] = emptyInactiveTabs ? [String]() : ["Inactive1", "Inactive2"]
+        let tabs = createTabs(emptyTabs)
+        let inactiveTabsModel = [InactiveTabsModel(url: "Inactive1"), InactiveTabsModel(url: "Inactive2")]
+        let inactiveTabs: [InactiveTabsModel] = emptyInactiveTabs ? [InactiveTabsModel]() : inactiveTabsModel
         let isInactiveTabsExpanded = !isPrivateMode && !inactiveTabs.isEmpty
-        let tabState = TabsState(isPrivateMode: isPrivateMode,
+        let tabState = TabsPanelState(isPrivateMode: isPrivateMode,
                                  tabs: tabs,
                                  inactiveTabs: inactiveTabs,
                                  isInactiveTabsExpanded: isInactiveTabsExpanded)
@@ -96,5 +110,17 @@ final class TabDisplayViewTests: XCTestCase {
 
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
+    }
+
+    private func createTabs(_ emptyTabs: Bool) -> [TabCellModel] {
+        guard !emptyTabs else { return [TabCellModel]() }
+
+        var tabs = [TabCellModel]()
+        for index in 0...2 {
+            let tab = Tab(profile: profile, configuration: WKWebViewConfiguration())
+            let tabModel = TabCellModel.emptyTabState(title: "Tab \(index)", tab: tab)
+            tabs.append(tabModel)
+        }
+        return tabs
     }
 }

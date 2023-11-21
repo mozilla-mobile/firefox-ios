@@ -5,9 +5,9 @@
 import Foundation
 import Redux
 
-struct TabsState: ScreenState, Equatable {
+struct TabsPanelState: ScreenState, Equatable {
     var isPrivateMode: Bool
-    var tabs: [TabCellModel]
+    var tabs: [TabModel]
     var isPrivateTabsEmpty: Bool {
         guard isPrivateMode else { return false }
         return tabs.isEmpty
@@ -18,7 +18,7 @@ struct TabsState: ScreenState, Equatable {
     var isInactiveTabsExpanded: Bool
 
     init(_ appState: AppState) {
-        guard let panelState = store.state.screenState(TabsState.self, for: .tabsPanel) else {
+        guard let panelState = store.state.screenState(TabsPanelState.self, for: .tabsPanel) else {
             self.init()
             return
         }
@@ -31,13 +31,13 @@ struct TabsState: ScreenState, Equatable {
 
     init(isPrivateMode: Bool = false) {
         self.init(isPrivateMode: isPrivateMode,
-                  tabs: [TabCellModel](),
+                  tabs: [TabModel](),
                   inactiveTabs: [InactiveTabsModel](),
                   isInactiveTabsExpanded: false)
     }
 
     init(isPrivateMode: Bool,
-         tabs: [TabCellModel],
+         tabs: [TabModel],
          inactiveTabs: [InactiveTabsModel],
          isInactiveTabsExpanded: Bool) {
         self.isPrivateMode = isPrivateMode
@@ -49,25 +49,25 @@ struct TabsState: ScreenState, Equatable {
     static let reducer: Reducer<Self> = { state, action in
         switch action {
         case TabPanelAction.didLoadTabPanel(let tabsModel):
-            return TabsState(isPrivateMode: tabsModel.isPrivateMode,
-                             tabs: tabsModel.tabs,
-                             inactiveTabs: tabsModel.inactiveTabs,
-                             isInactiveTabsExpanded: tabsModel.isInactiveTabsExpanded)
+            return TabsPanelState(isPrivateMode: tabsModel.isPrivateMode,
+                                  tabs: tabsModel.tabs,
+                                  inactiveTabs: tabsModel.inactiveTabs,
+                                  isInactiveTabsExpanded: tabsModel.isInactiveTabsExpanded)
         case TabPanelAction.refreshTab(let tabs):
-            return TabsState(isPrivateMode: state.isPrivateMode,
-                             tabs: tabs,
-                             inactiveTabs: state.inactiveTabs,
-                             isInactiveTabsExpanded: state.isInactiveTabsExpanded)
+            return TabsPanelState(isPrivateMode: state.isPrivateMode,
+                                  tabs: tabs,
+                                  inactiveTabs: state.inactiveTabs,
+                                  isInactiveTabsExpanded: state.isInactiveTabsExpanded)
         case TabPanelAction.toggleInactiveTabs:
-            return TabsState(isPrivateMode: state.isPrivateMode,
-                             tabs: state.tabs,
-                             inactiveTabs: state.inactiveTabs,
-                             isInactiveTabsExpanded: !state.isInactiveTabsExpanded)
+            return TabsPanelState(isPrivateMode: state.isPrivateMode,
+                                  tabs: state.tabs,
+                                  inactiveTabs: state.inactiveTabs,
+                                  isInactiveTabsExpanded: !state.isInactiveTabsExpanded)
         case TabPanelAction.refreshInactiveTabs(let inactiveTabs):
-            return TabsState(isPrivateMode: state.isPrivateMode,
-                             tabs: state.tabs,
-                             inactiveTabs: inactiveTabs,
-                             isInactiveTabsExpanded: !inactiveTabs.isEmpty)
+            return TabsPanelState(isPrivateMode: state.isPrivateMode,
+                                  tabs: state.tabs,
+                                  inactiveTabs: inactiveTabs,
+                                  isInactiveTabsExpanded: !inactiveTabs.isEmpty)
         default: return state
         }
     }

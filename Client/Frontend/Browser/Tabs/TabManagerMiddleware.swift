@@ -8,7 +8,7 @@ import Redux
 class TabManagerMiddleware {
     var tabManager: TabManager
     // MARK: TODO - Remove mocks after middleware is integrated
-    var tabs = [TabCellModel]()
+    var tabs = [TabModel]()
     var inactiveTabs = [InactiveTabsModel]()
     var selectedPanel: TabTrayPanelType = .tabs
 
@@ -84,7 +84,7 @@ class TabManagerMiddleware {
         resetMock()
         for index in 0...2 {
             let emptyTab = tabManager.addTab(nil, afterTab: nil, isPrivate: isPrivate)
-            let cellState = TabCellModel.emptyTabState(title: "Tab \(index)", tab: emptyTab)
+            let cellState = TabModel.emptyTabState(tabUUID: emptyTab.tabUUID, title: "Tab \(index)")
             tabs.append(cellState)
         }
 
@@ -106,7 +106,7 @@ class TabManagerMiddleware {
 
     private func addNewTab(_ isPrivate: Bool) {
         let emptyTab = tabManager.addTab(nil, afterTab: nil, isPrivate: isPrivate)
-        let cellState = TabCellModel.emptyTabState(title: "New tab", tab: emptyTab)
+        let cellState = TabModel.emptyTabState(tabUUID: emptyTab.tabUUID, title: "New tab")
         tabs.append(cellState)
     }
 
@@ -138,9 +138,5 @@ class TabManagerMiddleware {
         // Clean up array before getting the new panel
         tabs.removeAll()
         inactiveTabs.removeAll()
-
-        tabs.forEach { tabModel in
-            tabManager.removeTab(tabModel.tab)
-        }
     }
 }

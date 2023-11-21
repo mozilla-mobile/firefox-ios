@@ -2,21 +2,24 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-@testable import Client
-
 import XCTest
+import WebKit
 
+@testable import Client
 class TabCellTests: XCTestCase {
     var cellDelegate: MockTabCellDelegate!
+    var profile: MockProfile!
 
     override func setUp() {
         super.setUp()
         cellDelegate = MockTabCellDelegate()
+        profile = MockProfile()
     }
 
     override func tearDown() {
         super.tearDown()
         cellDelegate = nil
+        profile = nil
     }
 
     func testTabCellDeinit() {
@@ -48,7 +51,9 @@ class TabCellTests: XCTestCase {
     }
 
     private func createDefaultState() -> TabCellModel {
-        return TabCellModel(isSelected: false,
+        let tab = Tab(profile: profile, configuration: WKWebViewConfiguration())
+        return TabCellModel(tab: tab,
+                            isSelected: false,
                             isPrivate: false,
                             isFxHomeTab: false,
                             tabTitle: "Firefox Browser",

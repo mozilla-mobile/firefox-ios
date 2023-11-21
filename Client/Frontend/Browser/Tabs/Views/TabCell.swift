@@ -23,7 +23,7 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     }
     // MARK: - Properties
 
-    private(set) var tabModel: TabCellModel?
+    private(set) var tabModel: TabModel?
 
     var isSelectedTab: Bool { return tabModel?.isSelected ?? false }
     var animator: SwipeAnimator?
@@ -98,7 +98,7 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) not yet supported") }
 
     // MARK: - Configuration
-    func configure(with tabModel: TabCellModel, theme: Theme?, delegate: TabCellDelegate) {
+    func configure(with tabModel: TabModel, theme: Theme?, delegate: TabCellDelegate) {
         self.tabModel = tabModel
         self.delegate = delegate
 
@@ -144,7 +144,7 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         smallFaviconView.tintColor = theme.colors.textPrimary
     }
 
-    private func configureScreenshot(tabModel: TabCellModel) {
+    private func configureScreenshot(tabModel: TabModel) {
         if let url = tabModel.url,
            let tabScreenshot = tabModel.screenshot,
            url.absoluteString.starts(with: "internal"),
@@ -287,7 +287,7 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         return true
     }
 
-    func getA11yTitleLabel(tabModel: TabCellModel) -> String? {
+    func getA11yTitleLabel(tabModel: TabModel) -> String? {
         let baseName = tabModel.tabTitle
 
         if isSelectedTab, !baseName.isEmpty {

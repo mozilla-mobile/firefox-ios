@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import Storage
 import UIKit
 
 class TabDisplayView: UIView,
@@ -22,9 +21,10 @@ class TabDisplayView: UIView,
         case tabs
     }
 
-    private(set) var tabsState: TabsState
+    private(set) var tabsState: TabsPanelState
     private var inactiveTabsSectionManager: InactiveTabsSectionManager
     private var tabsSectionManager: TabsSectionManager
+    private weak var tabPeekDelegate: TabPeekDelegate?
     var theme: Theme?
 
     private var shouldHideInactiveTabs: Bool {
@@ -59,8 +59,9 @@ class TabDisplayView: UIView,
         return collectionView
     }()
 
-    public init(state: TabsState) {
+    public init(state: TabsPanelState, tabPeekDelegate: TabPeekDelegate) {
         self.tabsState = state
+        self.tabPeekDelegate = tabPeekDelegate
         self.inactiveTabsSectionManager = InactiveTabsSectionManager()
         self.tabsSectionManager = TabsSectionManager()
         super.init(frame: .zero)
@@ -72,7 +73,7 @@ class TabDisplayView: UIView,
         fatalError("init(coder:) has not been implemented")
     }
 
-    func newState(state: TabsState) {
+    func newState(state: TabsPanelState) {
         tabsState = state
         collectionView.reloadData()
     }
@@ -231,8 +232,7 @@ class TabDisplayView: UIView,
         else { return nil }
 
         // TODO: Add browserProfile and clientPickerDelegate
-        let tab = tabsState.tabs[indexPath.row].tab
-        let tabVC = TabPeekViewController(tab: tab, delegate: self)
+        let tabVC = TabPeekViewController(tab: nil, delegate: tabPeekDelegate)
         return UIContextMenuConfiguration(identifier: nil,
                                           previewProvider: { return tabVC },
                                           actionProvider: tabVC.contextActions(defaultActions:))
@@ -276,7 +276,7 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
         guard collectionView.hasActiveDrag,
               let destinationIndexPath = coordinator.destinationIndexPath,
               let dragItem = coordinator.items.first?.dragItem,
-              let tab = dragItem.localObject as? TabCellModel,
+              let tab = dragItem.localObject as? TabModel,
               let sourceIndex = tabsState.tabs.firstIndex(of: tab) else { return }
 
         let section = destinationIndexPath.section
@@ -287,12 +287,4 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
 
         collectionView.moveItem(at: start, to: end)
     }
-}
-
-extension TabDisplayView: TabPeekDelegate {
-    func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListItem? { return nil }
-    func tabPeekDidAddBookmark(_ tab: Tab) {}
-    func tabPeekRequestsPresentationOf(_ viewController: UIViewController) {}
-    func tabPeekDidCloseTab(_ tab: Tab) {}
-    func tabPeekDidCopyUrl() {}
 }

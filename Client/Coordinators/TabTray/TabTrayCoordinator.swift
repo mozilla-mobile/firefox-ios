@@ -33,8 +33,8 @@ class TabTrayCoordinator: BaseCoordinator, TabTrayViewControllerDelegate, TabTra
     }
 
     private func makeChildPanels() -> [UINavigationController] {
-        let regularTabsPanel = TabDisplayViewController(isPrivateMode: false)
-        let privateTabsPanel = TabDisplayViewController(isPrivateMode: true)
+        let regularTabsPanel = TabDisplayPanel(isPrivateMode: false)
+        let privateTabsPanel = TabDisplayPanel(isPrivateMode: true)
         let syncTabs = RemoteTabsPanel()
         return [
             ThemedNavigationController(rootViewController: regularTabsPanel),
@@ -59,7 +59,7 @@ class TabTrayCoordinator: BaseCoordinator, TabTrayViewControllerDelegate, TabTra
         let tabCoordinator = TabsCoordinator(parentCoordinator: parentCoordinator,
                                              router: router)
         add(child: tabCoordinator)
-        (navigationController.topViewController as? TabDisplayViewController)?.navigationHandler = tabCoordinator
+        (navigationController.topViewController as? TabDisplayPanel)?.navigationHandler = tabCoordinator
     }
 
     private func makeSyncedTabsCoordinator(navigationController: UINavigationController) {
