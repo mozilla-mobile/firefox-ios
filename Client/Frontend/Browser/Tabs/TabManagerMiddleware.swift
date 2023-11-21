@@ -7,17 +7,13 @@ import Redux
 
 class TabManagerMiddleware {
     var tabManager: TabManager
-    var profile: Profile
-
     // MARK: TODO - Remove mocks after middleware is integrated
     var tabs = [TabCellModel]()
     var inactiveTabs = [InactiveTabsModel]()
     var selectedPanel: TabTrayPanelType = .tabs
 
-    init(tabManager: TabManager = AppContainer.shared.resolve(),
-         profile: Profile = AppContainer.shared.resolve()) {
+    init(tabManager: TabManager = AppContainer.shared.resolve()) {
         self.tabManager = tabManager
-        self.profile = profile
     }
 
     lazy var tabsPanelProvider: Middleware<AppState> = { state, action in
