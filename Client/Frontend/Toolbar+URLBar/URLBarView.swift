@@ -101,9 +101,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     var locationTextField: ToolbarTextField?
 
     /// Overlay mode is the state where the lock/reader icons are hidden, the home panels are shown,
-    /// and the Cancel button is visible (allowing the user to leave overlay mode). Overlay mode
-    /// is *not* tied to the location text field's editing state; for instance, when selecting
-    /// a panel, the first responder will be resigned, yet the overlay mode UI is still active.
+    /// and the Cancel button is visible (allowing the user to leave overlay mode).
     var inOverlayMode = false
 
     lazy var locationView: TabLocationView = {
