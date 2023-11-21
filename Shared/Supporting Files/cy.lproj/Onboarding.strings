@@ -26,25 +26,16 @@
 "Onboarding.Notification.Continue.Action.v114" = "Parhau";
 
 /* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Description.v114" = "Anfonwch dabiau rhwng eich dyfeisiau a chael awgrymiadau ar sut i gael y gorau o %@.";
-
-/* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Notification.Description.v120" = "Anfonwch dabiau’n ddiogel rhwng eich dyfeisiau a darganfyddwch nodweddion preifatrwydd eraill yn %@.";
 
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Skip.Action.v115" = "Hepgor";
 
 /* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Title.v114" = "Mae hysbysiadau yn eich helpu i wneud mwy gyda %@";
-
-/* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Notification.Title.v120" = "Mae hysbysiadau’n eich helpu i gadw’n fwy diogel gyda %@";
 
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "Troi Hysbysiadau Ymlaen";
-
-/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
-"Onboarding.Sync.Description.v114" = "Cipiwch dabiau a chyfrineiriau o'ch dyfeisiau eraill i barhau lle roeddech chi gynt.";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Sync.Description.v120" = "Pan fyddwch chi wedi mewngofnodi a chydweddu, rydych chi’n fwy diogel. Mae %@ yn amgryptio’ch cyfrineiriau, nodau tudalen a rhagor.";
@@ -54,9 +45,6 @@
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.Skip.Action.v114" = "Hepgor";
-
-/* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
-"Onboarding.Sync.Title.v114" = "Mynd o’r ffôn i’r gliniadur ac yn ôl";
 
 /* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
 "Onboarding.Sync.Title.v120" = "Cadwch wedi’ch amgryptio pan fyddwch chi’n symud rhwng dyfeisiau";
@@ -85,9 +73,6 @@
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Welcome.ActionTreatementA.v114" = "Gosod fel y Porwr Ragosodedig";
 
-/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Description.TreatementA.v114" = "Mae %@ yn rhoi pobl o flaen elw ac yn diogelu eich preifatrwydd wrth i chi bori.";
-
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Description.TreatementA.v120" = "Mae ein porwr gan gorff dim-er-elw'n atal cwmnïau rhag eich dilyn yn gyfrinachol o amgylch y we.";
 
@@ -99,9 +84,6 @@
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
 "Onboarding.Welcome.Skip.v114" = "Hepgor";
-
-/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Title.TreatementA.v114" = "Gwnewch %@ eich hoff borwr";
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Title.TreatementA.v120" = "Rydyn ni wrth ein bodd yn eich cadw chi’n ddiogel";

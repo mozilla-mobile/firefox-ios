@@ -35,6 +35,9 @@ final class NimbusFeatureFlagLayer {
         case .fakespotFeature:
             return checkFakespotFeature(from: nimbus)
 
+        case .fakespotProductAds:
+            return checkFakespotProductAds(from: nimbus)
+
         case .firefoxSuggestFeature:
             return checkFirefoxSuggestFeature(from: nimbus)
 
@@ -55,9 +58,6 @@ final class NimbusFeatureFlagLayer {
 
         case .reportSiteIssue:
             return checkGeneralFeature(for: featureID, from: nimbus)
-
-        case .shareExtensionCoordinatorRefactor:
-            return checkShareExtensionCoordinatorRefactorFeature(from: nimbus)
 
         case .shareSheetChanges,
                 .shareToolbarChanges:
@@ -134,11 +134,6 @@ final class NimbusFeatureFlagLayer {
 
         guard let status = config.featuresEnabled[nimbusID] else { return false }
         return status
-    }
-
-    private func checkShareExtensionCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.shareExtensionCoordinatorRefactor.value()
-        return config.enabled
     }
 
     private func checkNimbusForWallpapersFeature(using nimbus: FxNimbus) -> Bool {
@@ -236,6 +231,12 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.shopping2023.value()
 
         return config.status
+    }
+
+    private func checkFakespotProductAds(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.shopping2023.value()
+
+        return config.productAds
     }
 
     private func checkProductBackInStockFakespotFeature(from nimbus: FxNimbus) -> Bool {

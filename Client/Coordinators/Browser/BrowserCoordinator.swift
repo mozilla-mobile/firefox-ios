@@ -151,9 +151,8 @@ class BrowserCoordinator: BaseCoordinator,
             homepageViewController.libraryPanelDelegate = libraryPanelDelegate
             homepageViewController.sendToDeviceDelegate = sendToDeviceDelegate
             homepageViewController.statusBarScrollDelegate = statusBarScrollDelegate
-            if CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
-                homepageViewController.browserNavigationHandler = self
-            }
+            homepageViewController.browserNavigationHandler = self
+
             return homepageViewController
         }
     }
@@ -337,6 +336,11 @@ class BrowserCoordinator: BaseCoordinator,
     func didFinishSettings(from coordinator: SettingsCoordinator) {
         router.dismiss(animated: true, completion: nil)
         remove(child: coordinator)
+    }
+
+    func openDebugTestTabs(count: Int) {
+        guard let url = URL(string: "https://www.mozilla.org") else { return }
+        browserViewController.debugOpen(numberOfNewTabs: count, at: url)
     }
 
     // MARK: - LibraryCoordinatorDelegate

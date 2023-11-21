@@ -1,0 +1,27 @@
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "قانداق ئىشلىتىشنى ئۆگىنىش";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox شەخسىيەتنى قوغدايدۇ";
+
+/* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "كۆڭۈلدىكى توركۆرگۈڭىزنى ئالماشتۇرۇڭ";
+
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserOnboarding.Button" = "تەڭشەككە يۆتكەل";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description1" = "1. تەڭشەككە يۆتكىلىڭ";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description2" = "2. كۆڭۈلدىكى توركۆرگۈ ئەپنى چېكىڭ";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description3" = "3. Firefox نى تاللاڭ";
+
+/* Text for the screenshot of the iOS system settings page for Firefox. */
+"DefaultBrowserOnboarding.Screenshot" = "كۆڭۈلدىكى توركۆرگۈ ئەپى";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "كۆڭۈلدىكى توركۆرگۈ قىلىپ تەڭشە";
+

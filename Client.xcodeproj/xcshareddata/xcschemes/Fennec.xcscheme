@@ -241,32 +241,32 @@
       </CodeCoverageTargets>
       <TestPlans>
          <TestPlanReference
-            reference = "container:firefox-ios/Tests/UnitTest.xctestplan"
+            reference = "container:firefox-ios/firefox-ios-tests/Tests/UnitTest.xctestplan"
             default = "YES">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:firefox-ios/Tests/SmokeXCUITests.xctestplan">
+            reference = "container:firefox-ios/firefox-ios-tests/Tests/SmokeXCUITests.xctestplan">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:firefox-ios/Tests/Smoketest4.xctestplan">
+            reference = "container:firefox-ios/firefox-ios-tests/Tests/Smoketest4.xctestplan">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:firefox-ios/Tests/Smoketest2.xctestplan">
+            reference = "container:firefox-ios/firefox-ios-tests/Tests/Smoketest2.xctestplan">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:firefox-ios/Tests/Smoketest3.xctestplan">
+            reference = "container:firefox-ios/firefox-ios-tests/Tests/Smoketest3.xctestplan">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:firefox-ios/Tests/FullFunctionalTestPlan.xctestplan">
+            reference = "container:firefox-ios/firefox-ios-tests/Tests/FullFunctionalTestPlan.xctestplan">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:firefox-ios/Tests/PerformanceTestPlan.xctestplan">
+            reference = "container:firefox-ios/firefox-ios-tests/Tests/PerformanceTestPlan.xctestplan">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:firefox-ios/Tests/SyncIntegrationTestPlan.xctestplan">
+            reference = "container:firefox-ios/firefox-ios-tests/Tests/SyncIntegrationTestPlan.xctestplan">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:firefox-ios/Tests/ExperimentIntegrationTests.xctestplan">
+            reference = "container:firefox-ios/firefox-ios-tests/Tests/ExperimentIntegrationTests.xctestplan">
          </TestPlanReference>
       </TestPlans>
       <Testables>

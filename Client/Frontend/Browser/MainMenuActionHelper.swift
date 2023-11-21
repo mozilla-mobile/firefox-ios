@@ -21,7 +21,6 @@ protocol ToolBarActionMenuDelegate: AnyObject {
     func showLibrary(panel: LibraryPanelType)
     func showViewController(viewController: UIViewController)
     func showToast(message: String, toastAction: MenuButtonToastAction)
-    func showMenuPresenter(url: URL, tab: Tab, view: UIView)
     func showFindInPage()
     func showCustomizeHomePage()
     func showZoomPage(tab: Tab)
@@ -577,15 +576,11 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
 
             guard let temporaryDocument = tab.temporaryDocument else {
-                if CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
-                    self.navigationHandler?.showShareExtension(
-                        url: url,
-                        sourceView: self.buttonView,
-                        toastContainer: self.toastContainer,
-                        popoverArrowDirection: .any)
-                } else {
-                    self.delegate?.showMenuPresenter(url: url, tab: tab, view: self.buttonView)
-                }
+                self.navigationHandler?.showShareExtension(
+                    url: url,
+                    sourceView: self.buttonView,
+                    toastContainer: self.toastContainer,
+                    popoverArrowDirection: .any)
                 return
             }
 
@@ -597,15 +592,11 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                        tempDocURL.isFileURL {
                         self.share(fileURL: tempDocURL, buttonView: self.buttonView)
                     } else {
-                        if CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
-                            self.navigationHandler?.showShareExtension(
-                                url: url,
-                                sourceView: self.buttonView,
-                                toastContainer: self.toastContainer,
-                                popoverArrowDirection: .any)
-                        } else {
-                            self.delegate?.showMenuPresenter(url: url, tab: tab, view: self.buttonView)
-                        }
+                        self.navigationHandler?.showShareExtension(
+                            url: url,
+                            sourceView: self.buttonView,
+                            toastContainer: self.toastContainer,
+                            popoverArrowDirection: .any)
                     }
                 }
             }
@@ -614,24 +605,12 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     // Main menu option Share page with when opening a file
     private func share(fileURL: URL, buttonView: UIView) {
-        if CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
-            navigationHandler?.showShareExtension(
-                url: fileURL,
-                sourceView: buttonView,
-                toastContainer: toastContainer,
-                popoverArrowDirection: .any)
-        } else {
-            let helper = ShareExtensionHelper(url: fileURL, tab: selectedTab)
-            let controller = helper.createActivityViewController { _, _ in }
-
-            if let popoverPresentationController = controller.popoverPresentationController {
-                popoverPresentationController.sourceView = buttonView
-                popoverPresentationController.sourceRect = buttonView.bounds
-                popoverPresentationController.permittedArrowDirections = .up
-            }
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
-            delegate?.showViewController(viewController: controller)
-        }
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
+        navigationHandler?.showShareExtension(
+            url: fileURL,
+            sourceView: buttonView,
+            toastContainer: toastContainer,
+            popoverArrowDirection: .any)
     }
 
     // MARK: Reading list

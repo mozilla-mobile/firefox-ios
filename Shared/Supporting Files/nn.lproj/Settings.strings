@@ -61,3 +61,9 @@
 /* This is the title informing the user needs to turn on notifications in iOS Settings. */
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "Slå på varsel";
 
+/* Navigation title for search page in the Settings menu. */
+"Settings.Search.PageTitle.v121" = "Søk";
+
+/* Title for the `Private Session` settings section in the Search page in the Settings menu. */
+"Settings.Search.PrivateSession.Title.v121" = "Privat økt";
+

@@ -473,7 +473,7 @@
 "HomePanel.ContextMenu.DeleteFromHistory" = "Xóa khỏi lịch sử";
 
 /* The title for the Open in New Private Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "Mở trong một thẻ riêng tư";
+"HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "Mở trong thẻ riêng tư";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "Mở trong thẻ mới";
@@ -1163,7 +1163,7 @@
 "Settings.AddCustomEngine.TitleLabel" = "Tiêu đề";
 
 /* The placeholder for Title Field when saving a custom search engine. */
-"Settings.AddCustomEngine.TitlePlaceholder" = "Máy tìm kiếm";
+"Settings.AddCustomEngine.TitlePlaceholder" = "Công cụ tìm kiếm";
 
 /* The title for URL Field */
 "Settings.AddCustomEngine.URLLabel" = "URL";

@@ -17,7 +17,7 @@ final class FakespotReliabilityScoreView: UIView, Notifiable, ThemeApplicable {
 
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
-    private let grade: ReliabilityGrade
+    private var grade: ReliabilityGrade
 
     private lazy var reliabilityLetterView: UIView = .build()
 
@@ -47,6 +47,7 @@ final class FakespotReliabilityScoreView: UIView, Notifiable, ThemeApplicable {
     }
 
     public func configure(grade: ReliabilityGrade) {
+        self.grade = grade
         reliabilityLetterLabel.text = grade.rawValue
         reliabilityLetterLabel.accessibilityLabel = String(format: .Shopping.ReliabilityScoreGradeA11yLabel,
                                                            grade.rawValue)

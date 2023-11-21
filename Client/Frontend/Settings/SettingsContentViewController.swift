@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
-import SnapKit
 import UIKit
 import WebKit
 import Common
@@ -15,6 +14,11 @@ let DefaultTimeoutTimeInterval = 10.0 // Seconds.  We'll want some telemetry on 
  * the user to navigate back to Settings.
  */
 class SettingsContentViewController: UIViewController, WKNavigationDelegate, Themeable {
+    private struct UX {
+        static let errorLeadingTrailingPadding: CGFloat = 20
+        static let errorHeightPadding: CGFloat = 44
+    }
+
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
@@ -40,7 +44,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
         }
     }
 
-    fileprivate var isError = false {
+    private var isError = false {
         didSet {
             if isError {
                 interstitialErrorView.isHidden = false
@@ -59,14 +63,14 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
     }
 
     // The view shown while the content is loading in the background web view.
-    fileprivate var interstitialView: UIView!
-    fileprivate var interstitialSpinnerView: UIActivityIndicatorView!
-    fileprivate var interstitialErrorView: UILabel!
+    private lazy var interstitialView: UIView = .build()
+    private lazy var interstitialSpinnerView: UIActivityIndicatorView = .build()
+    private lazy var interstitialErrorView: UILabel = .build()
 
     // The web view that displays content.
-    var settingsWebView: WKWebView!
+    private lazy var settingsWebView: WKWebView = .build()
 
-    fileprivate func startLoading(_ timeout: Double = DefaultTimeoutTimeInterval) {
+    private func startLoading(_ timeout: Double = DefaultTimeoutTimeInterval) {
         if self.isLoaded {
             return
         }
@@ -75,8 +79,8 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
         } else {
             self.timer = nil
         }
-        self.settingsWebView.load(PrivilegedRequest(url: url) as URLRequest)
-        self.interstitialSpinnerView.startAnimating()
+        settingsWebView.load(PrivilegedRequest(url: url) as URLRequest)
+        interstitialSpinnerView.startAnimating()
     }
 
     init(title: NSAttributedString? = nil,
@@ -95,21 +99,26 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.settingsWebView = makeWebView()
-        view.addSubview(settingsWebView)
-        self.settingsWebView.snp.remakeConstraints { make in
-            make.edges.equalTo(self.view)
-        }
+        settingsWebView = makeWebView()
 
         // Destructuring let causes problems.
         let ret = makeInterstitialViews()
         self.interstitialView = ret.view
         self.interstitialSpinnerView = ret.activityView
         self.interstitialErrorView = ret.label
-        view.addSubview(interstitialView)
-        self.interstitialView.snp.remakeConstraints { make in
-            make.edges.equalTo(self.view)
-        }
+        view.addSubviews(settingsWebView, interstitialView)
+
+        NSLayoutConstraint.activate([
+            settingsWebView.topAnchor.constraint(equalTo: view.topAnchor),
+            settingsWebView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            settingsWebView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            settingsWebView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            interstitialView.topAnchor.constraint(equalTo: view.topAnchor),
+            interstitialView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            interstitialView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            interstitialView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
 
         startLoading()
 
@@ -121,10 +130,8 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
         let config = LegacyTabManager.makeWebViewConfig(isPrivate: true, prefs: nil)
         config.preferences.javaScriptCanOpenWindowsAutomatically = false
 
-        let webView = WKWebView(
-            frame: CGRect(width: 1, height: 1),
-            configuration: config
-        )
+        let webView = WKWebView(frame: .zero, configuration: config)
+        webView.translatesAutoresizingMaskIntoConstraints = false
         webView.allowsLinkPreview = false
         webView.navigationDelegate = self
 
@@ -140,33 +147,35 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
         let label: UILabel
     }
 
-    fileprivate func makeInterstitialViews() -> InterstitialViews {
-        let view = UIView()
-        let spinner = UIActivityIndicatorView(style: .medium)
-        spinner.color = themeManager.currentTheme.colors.iconSpinner
-        view.addSubview(spinner)
+    private func makeInterstitialViews() -> InterstitialViews {
+        let view: UIView = .build()
 
-        let error = UILabel()
-        if settingsTitle != nil {
-            error.text = .SettingsContentPageLoadError
-            error.textColor = themeManager.currentTheme.colors.textWarning
-            error.textAlignment = .center
-        }
-        error.isHidden = true
-        view.addSubview(error)
-
-        spinner.snp.makeConstraints { make in
-            make.center.equalTo(view)
-            return
+        let spinner: UIActivityIndicatorView = .build { indicatorView in
+            indicatorView.style = .medium
+            indicatorView.color = self.themeManager.currentTheme.colors.iconSpinner
         }
 
-        error.snp.makeConstraints { make in
-            make.center.equalTo(view)
-            make.left.equalTo(view.snp.left).offset(20)
-            make.right.equalTo(view.snp.right).offset(-20)
-            make.height.equalTo(44)
-            return
+        let error: UILabel = .build { label in
+            if self.settingsTitle != nil {
+                label.text = .SettingsContentPageLoadError
+                label.textColor = self.themeManager.currentTheme.colors.textWarning
+                label.textAlignment = .center
+            }
+            label.isHidden = true
         }
+
+        view.addSubviews(spinner, error)
+
+        NSLayoutConstraint.activate([
+            spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+
+            error.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            error.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            error.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.errorLeadingTrailingPadding),
+            error.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.errorLeadingTrailingPadding),
+            error.heightAnchor.constraint(equalToConstant: UX.errorHeightPadding)
+        ])
 
         return InterstitialViews(view: view, activityView: spinner, label: error)
     }

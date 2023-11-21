@@ -1,0 +1,83 @@
+{
+  "configurations" : [
+    {
+      "id" : "7507FB87-8AE7-4A01-A172-706A9E6B1C1D",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "skippedTests" : [
+        "ActivityStreamTest",
+        "AuthenticationTest",
+        "BaseTestCase",
+        "BookmarksTests",
+        "BrowsingPDFTests",
+        "ClipBoardTests",
+        "DataManagementTests",
+        "DatabaseFixtureTest",
+        "DesktopModeTestsIpad",
+        "DesktopModeTestsIphone",
+        "DisplaySettingTests",
+        "DomainAutocompleteTests",
+        "DownloadsTests",
+        "DragAndDropTestIpad",
+        "DragAndDropTests",
+        "EngagementNotificationTests",
+        "FakespotTests",
+        "FindInPageTests",
+        "FirefoxSuggestTest\/testFirefoxSuggestExists()",
+        "FxScreenGraphTests",
+        "HistoryTests",
+        "HomeButtonTests",
+        "HomePageSettingsUITests",
+        "IntegrationTests",
+        "IpadOnlyTestCase",
+        "IphoneOnlyTestCase",
+        "JumpBackInTests",
+        "LibraryTestsIpad",
+        "LoginTest",
+        "NavigationTest",
+        "NewTabSettingsTest",
+        "NightModeTests",
+        "OnboardingTests",
+        "OpeningScreenTests",
+        "PerformanceTests",
+        "PhotonActionSheetTests",
+        "PocketTest",
+        "PocketTests",
+        "PrivateBrowsingTest",
+        "PrivateBrowsingTestIpad",
+        "ReadingListTests",
+        "ScreenGraphTest",
+        "SearchSettingsUITests",
+        "SearchTests",
+        "SettingsTests",
+        "SiteLoadTest",
+        "SyncUITests",
+        "TabCounterTests",
+        "ThirdPartySearchTest",
+        "ToolbarMenuTests",
+        "ToolbarTests",
+        "TopTabsTest",
+        "TopTabsTestIpad",
+        "TopTabsTestIphone",
+        "TrackingProtectionTests",
+        "UrlBarTests",
+        "WhatsNewTest"
+      ],
+      "target" : {
+        "containerPath" : "container:Client.xcodeproj",
+        "identifier" : "3BFE4B061D342FB800DDF53F",
+        "name" : "XCUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

@@ -11,4 +11,5 @@ protocol DebugSettingsDelegate: AnyObject, SharedSettingsDelegate {
     func pressedShowTour()
     func pressedExperiments()
     func pressedFirefoxSuggest()
+    func pressedOpenFiftyTabs()
 }
