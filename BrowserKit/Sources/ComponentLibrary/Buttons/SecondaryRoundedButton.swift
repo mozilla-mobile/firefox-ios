@@ -52,7 +52,7 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         highlightedTintColor = theme.colors.actionSecondaryHover
         normalTintColor = theme.colors.actionSecondary
 
-        setTitleColor(theme.colors.textSecondaryAction, for: .normal)
+        setTitleColor(theme.colors.textOnLight, for: .normal)
         backgroundColor = theme.colors.actionSecondary
     }
 }

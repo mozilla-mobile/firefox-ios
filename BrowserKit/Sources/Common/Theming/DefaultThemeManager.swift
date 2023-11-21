@@ -56,10 +56,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     // MARK: - ThemeManager
 
-    public func getInterfaceStyle() -> UIUserInterfaceStyle {
-        return currentTheme.type.getInterfaceStyle()
-    }
-
     public func changeCurrentTheme(_ newTheme: ThemeType) {
         guard currentTheme.type != newTheme else { return }
         currentTheme = newThemeForType(newTheme)
