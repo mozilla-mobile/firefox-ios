@@ -20,8 +20,7 @@ protocol ToolBarActionMenuDelegate: AnyObject {
 
     func showLibrary(panel: LibraryPanelType)
     func showViewController(viewController: UIViewController)
-    func showToast(message: String, toastAction: MenuButtonToastAction, url: String?)
-    func showMenuPresenter(url: URL, tab: Tab, view: UIView)
+    func showToast(message: String, toastAction: MenuButtonToastAction)
     func showFindInPage()
     func showCustomizeHomePage()
     func showZoomPage(tab: Tab)
@@ -378,7 +377,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .copyAddress)
             if let url = self.selectedTab?.canonicalURL?.displayURL {
                 UIPasteboard.general.url = url
-                self.delegate?.showToast(message: .AppMenu.AppMenuCopyURLConfirmMessage, toastAction: .copyUrl, url: nil)
+                self.delegate?.showToast(message: .AppMenu.AppMenuCopyURLConfirmMessage, toastAction: .copyUrl)
             }
         }.items
     }
@@ -577,15 +576,11 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
 
             guard let temporaryDocument = tab.temporaryDocument else {
-                if CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
-                    self.navigationHandler?.showShareExtension(
-                        url: url,
-                        sourceView: self.buttonView,
-                        toastContainer: self.toastContainer,
-                        popoverArrowDirection: .any)
-                } else {
-                    self.delegate?.showMenuPresenter(url: url, tab: tab, view: self.buttonView)
-                }
+                self.navigationHandler?.showShareExtension(
+                    url: url,
+                    sourceView: self.buttonView,
+                    toastContainer: self.toastContainer,
+                    popoverArrowDirection: .any)
                 return
             }
 
@@ -597,15 +592,11 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                        tempDocURL.isFileURL {
                         self.share(fileURL: tempDocURL, buttonView: self.buttonView)
                     } else {
-                        if CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
-                            self.navigationHandler?.showShareExtension(
-                                url: url,
-                                sourceView: self.buttonView,
-                                toastContainer: self.toastContainer,
-                                popoverArrowDirection: .any)
-                        } else {
-                            self.delegate?.showMenuPresenter(url: url, tab: tab, view: self.buttonView)
-                        }
+                        self.navigationHandler?.showShareExtension(
+                            url: url,
+                            sourceView: self.buttonView,
+                            toastContainer: self.toastContainer,
+                            popoverArrowDirection: .any)
                     }
                 }
             }
@@ -614,24 +605,12 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     // Main menu option Share page with when opening a file
     private func share(fileURL: URL, buttonView: UIView) {
-        if CoordinatorFlagManager.isShareExtensionCoordinatorEnabled {
-            navigationHandler?.showShareExtension(
-                url: fileURL,
-                sourceView: buttonView,
-                toastContainer: toastContainer,
-                popoverArrowDirection: .any)
-        } else {
-            let helper = ShareExtensionHelper(url: fileURL, tab: selectedTab)
-            let controller = helper.createActivityViewController { _, _ in }
-
-            if let popoverPresentationController = controller.popoverPresentationController {
-                popoverPresentationController.sourceView = buttonView
-                popoverPresentationController.sourceRect = buttonView.bounds
-                popoverPresentationController.permittedArrowDirections = .up
-            }
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
-            delegate?.showViewController(viewController: controller)
-        }
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
+        navigationHandler?.showShareExtension(
+            url: fileURL,
+            sourceView: buttonView,
+            toastContainer: toastContainer,
+            popoverArrowDirection: .any)
     }
 
     // MARK: Reading list
@@ -670,7 +649,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
             self.profile.readingList.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.current.name)
             TelemetryWrapper.recordEvent(category: .action, method: .add, object: .readingListItem, value: .pageActionMenu)
-            self.delegate?.showToast(message: .AppMenu.AddToReadingListConfirmMessage, toastAction: .addToReadingList, url: nil)
+            self.delegate?.showToast(message: .AppMenu.AddToReadingListConfirmMessage, toastAction: .addToReadingList)
         }
     }
 
@@ -683,8 +662,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
             self.profile.readingList.deleteRecord(record, completion: nil)
             self.delegate?.showToast(message: .AppMenu.RemoveFromReadingListConfirmMessage,
-                                     toastAction: .removeFromReadingList,
-                                     url: nil)
+                                     toastAction: .removeFromReadingList)
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .delete,
                                          object: .readingListItem,
@@ -737,7 +715,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
             self.profile.places.deleteBookmarksWithURL(url: url.absoluteString).uponQueue(.main) { result in
                 guard result.isSuccess else { return }
-                self.delegate?.showToast(message: .AppMenu.RemoveBookmarkConfirmMessage, toastAction: .removeBookmark, url: url.absoluteString)
+                self.delegate?.showToast(message: .AppMenu.RemoveBookmarkConfirmMessage, toastAction: .removeBookmark)
                 self.removeBookmarkShortcut()
             }
 
@@ -759,7 +737,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             let site = Site(url: url.absoluteString, title: title)
             self.profile.pinnedSites.addPinnedTopSite(site).uponQueue(.main) { result in
                 guard result.isSuccess else { return }
-                self.delegate?.showToast(message: .AppMenu.AddPinToShortcutsConfirmMessage, toastAction: .pinPage, url: nil)
+                self.delegate?.showToast(message: .AppMenu.AddPinToShortcutsConfirmMessage, toastAction: .pinPage)
             }
 
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .pinToTopSites)
@@ -774,7 +752,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             let site = Site(url: url.absoluteString, title: title)
             self.profile.pinnedSites.removeFromPinnedTopSites(site).uponQueue(.main) { result in
                 if result.isSuccess {
-                    self.delegate?.showToast(message: .AppMenu.RemovePinFromShortcutsConfirmMessage, toastAction: .removePinPage, url: nil)
+                    self.delegate?.showToast(message: .AppMenu.RemovePinFromShortcutsConfirmMessage, toastAction: .removePinPage)
                 }
             }
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .removePinnedSite)

@@ -26,7 +26,7 @@ final class FakespotViewModelTests: XCTestCase {
     class MockShoppingProduct: ShoppingProduct {
         var shouldThrowError = false
 
-        override func fetchProductAnalysisData(maxRetries: Int = 3, retryTimeout: Int = 100) async throws -> ProductAnalysisData? {
+        override func fetchProductAnalysisData(maxRetries: Int = 3, retryTimeout: Int = 100) async throws -> ProductAnalysisResponse? {
             if shouldThrowError {
                 throw NSError(domain: "MockErrorDomain", code: 123, userInfo: nil)
             }
@@ -40,8 +40,8 @@ final class FakespotViewModelTests: XCTestCase {
 
         await viewModel.fetchProductAnalysis()
         switch viewModel.state {
-        case .loaded(let data, _, _):
-            XCTAssertNotNil(data)
+        case .loaded(let data):
+            XCTAssertNotNil(data.product)
         default:
             XCTFail("Unexpected state")
         }

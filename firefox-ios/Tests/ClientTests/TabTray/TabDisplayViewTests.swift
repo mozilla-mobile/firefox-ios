@@ -77,55 +77,22 @@ final class TabDisplayViewTests: XCTestCase {
         XCTAssertEqual(subject.collectionView.numberOfSections, 1)
     }
 
-    func testExpandedInactiveTabs_InitialState() {
-        let subject = createSubject(isPrivateMode: false,
-                                    emptyTabs: false,
-                                    emptyInactiveTabs: false)
-        XCTAssertTrue(subject.tabTrayState.isInactiveTabsExpanded)
-    }
-
-    func testCollapsedInactiveTabs() {
-        let subject = createSubject(isPrivateMode: false,
-                                    emptyTabs: false,
-                                    emptyInactiveTabs: false)
-        subject.toggleInactiveTab()
-        XCTAssertFalse(subject.tabTrayState.isInactiveTabsExpanded)
-    }
-
-    func testIsPrivateTabsEmpty() {
-        let subject = createSubject(isPrivateMode: true,
-                                    emptyTabs: true,
-                                    emptyInactiveTabs: true)
-
-        XCTAssertTrue(subject.tabTrayState.isPrivateTabsEmpty)
-    }
-
-    func testIsPrivateTabsNotEmpty() {
-        let subject = createSubject(isPrivateMode: true,
-                                    emptyTabs: false,
-                                    emptyInactiveTabs: true)
-
-        XCTAssertFalse(subject.tabTrayState.isPrivateTabsEmpty)
-    }
-
     // MARK: - Private
     private func createSubject(isPrivateMode: Bool,
                                emptyTabs: Bool,
                                emptyInactiveTabs: Bool,
                                file: StaticString = #file,
                                line: UInt = #line) -> TabDisplayView {
-        let selectedPanel = isPrivateMode ? TabTrayPanelType.privateTabs : TabTrayPanelType.tabs
-        let tabs: [TabCellState] = emptyTabs ? [TabCellState]() : [TabCellState.emptyTabState(title: "Tab1"),
-                                                                   TabCellState.emptyTabState(title: "Tab2")]
+        let tabs: [TabCellModel] = emptyTabs ? [TabCellModel]() : [TabCellModel.emptyTabState(title: "Tab1"),
+                                                                   TabCellModel.emptyTabState(title: "Tab2")]
         let inactiveTabs: [String] = emptyInactiveTabs ? [String]() : ["Inactive1", "Inactive2"]
-        let tabTrayState = TabTrayState(isPrivateMode: isPrivateMode,
-                                        selectedPanel: selectedPanel,
-                                        tabs: tabs,
-                                        remoteTabsState: nil,
-                                        normalTabsCount: "\(tabs.count)",
-                                        inactiveTabs: inactiveTabs)
+        let isInactiveTabsExpanded = !isPrivateMode && !inactiveTabs.isEmpty
+        let tabState = TabsState(isPrivateMode: isPrivateMode,
+                                 tabs: tabs,
+                                 inactiveTabs: inactiveTabs,
+                                 isInactiveTabsExpanded: isInactiveTabsExpanded)
 
-        let subject = TabDisplayView(state: tabTrayState)
+        let subject = TabDisplayView(state: tabState)
 
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

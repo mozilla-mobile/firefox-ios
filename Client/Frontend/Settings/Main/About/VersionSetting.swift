@@ -10,6 +10,8 @@ import Shared
 class VersionSetting: Setting {
     private weak var settingsDelegate: DebugSettingsDelegate?
 
+    private var versionString = "\(AppName.shortName) \(AppInfo.appVersion) (\(AppInfo.buildNumber))"
+
     override var accessibilityIdentifier: String? {
         return AccessibilityIdentifiers.Settings.Version.title
     }
@@ -20,7 +22,7 @@ class VersionSetting: Setting {
     }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: "\(AppName.shortName) \(AppInfo.appVersion) (\(AppInfo.buildNumber))",
+        return NSAttributedString(string: versionString,
                                   attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
     }
 
@@ -29,6 +31,7 @@ class VersionSetting: Setting {
     }
 
     override func onLongPress(_ navigationController: UINavigationController?) {
+        UIPasteboard.general.string = versionString
         let alertTitle: String = .SettingsCopyAppVersionAlertTitle
         let alert = AlertController(title: alertTitle, message: nil, preferredStyle: .alert)
         settingsDelegate?.askedToShow(alert: alert)

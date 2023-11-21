@@ -116,20 +116,20 @@ final class ShoppingProductTests: XCTestCase {
         XCTAssertEqual(client.website, "amazon.com")
     }
 
-    func testFetchingProductAdData_WithInvalidURL_ReturnsEmptyArray() async throws {
+    func testFetchingProductAdData_WithInvalidURL_ReturnsEmptyArray() async {
         let url = URL(string: "https://www.example.com")!
 
         let sut = ShoppingProduct(url: url, client: client)
-        let productAdData = try await sut.fetchProductAdsData()
+        let productAdData = await sut.fetchProductAdsData()
 
         XCTAssertTrue(productAdData.isEmpty)
     }
 
-    func testFetchingProductAdData_WithValidURL_CallsClientAPI() async throws {
+    func testFetchingProductAdData_WithValidURL_CallsClientAPI() async {
         let url = URL(string: "https://www.amazon.com/Under-Armour-Charged-Assert-Running/dp/B087T8Q2C4")!
 
         let sut = ShoppingProduct(url: url, client: client)
-        let productAdData = try await sut.fetchProductAdsData()
+        let productAdData = await sut.fetchProductAdsData()
 
         XCTAssertNotNil(productAdData)
         XCTAssertTrue(client.fetchProductAdsDataCalled)
@@ -196,6 +196,68 @@ final class ShoppingProductTests: XCTestCase {
         XCTAssertEqual(client.productId, "B087T8Q2C4")
         XCTAssertEqual(client.website, "amazon.com")
     }
+
+    func testAdsWithRatingsHigherThanMinRating() {
+        let minRating = 4.0
+        let productAds = [
+            ProductAdsResponse(adjustedRating: 4.5),
+            ProductAdsResponse(adjustedRating: 4.7),
+            ProductAdsResponse(adjustedRating: 4.2)
+        ]
+
+        let selectedAdCard = productAds
+            .sorted(by: { $0.adjustedRating > $1.adjustedRating })
+            .first(where: { $0.adjustedRating >= minRating })
+
+        XCTAssertEqual(selectedAdCard, ProductAdsResponse(adjustedRating: 4.7), "The ad with the highest rating should be selected.")
+    }
+
+    func testAdsWithRatingsLowerThanMinRating() {
+        let minRating = 4.0
+        let productAds = [
+            ProductAdsResponse(adjustedRating: 3.5),
+            ProductAdsResponse(adjustedRating: 3.7),
+            ProductAdsResponse(adjustedRating: 3.2)
+        ]
+
+        let selectedAdCard = productAds
+            .sorted(by: { $0.adjustedRating > $1.adjustedRating })
+            .first(where: { $0.adjustedRating >= minRating })
+
+        XCTAssertNil(selectedAdCard)
+    }
+
+    func testAdsWithSomeRatingsEqualToMinRating() {
+        let minRating = 4.0
+        let productAds = [
+            ProductAdsResponse(adjustedRating: 4.0),
+            ProductAdsResponse(adjustedRating: 3.9),
+            ProductAdsResponse(adjustedRating: 4.2)
+        ]
+
+        let selectedAdCard = productAds
+            .sorted(by: { $0.adjustedRating > $1.adjustedRating })
+            .first(where: { $0.adjustedRating >= minRating })
+
+        XCTAssertEqual(selectedAdCard, ProductAdsResponse(adjustedRating: 4.2))
+    }
+}
+
+fileprivate extension ProductAdsResponse {
+    init(adjustedRating: Double) {
+        self.init(
+            name: "",
+            url: URL(string: "www.example.com")!,
+            imageUrl: URL(string: "www.example.com")!,
+            price: "",
+            currency: "",
+            grade: .a,
+            adjustedRating: adjustedRating,
+            analysisUrl: URL(string: "www.example.com")!,
+            sponsored: false,
+            aid: ""
+        )
+    }
 }
 
 final class ThrowingFakeSpotClient: FakespotClientType {
@@ -211,12 +273,12 @@ final class ThrowingFakeSpotClient: FakespotClientType {
         self.error = error
     }
 
-    func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisData {
+    func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisResponse {
         fetchProductAnalysisDataCallCount += 1
         throw error
     }
 
-    func fetchProductAdData(productId: String, website: String) async throws -> [ProductAdsData] {
+    func fetchProductAdData(productId: String, website: String) async throws -> [ProductAdsResponse] {
         fetchProductAdDataCallCount += 1
         return []
     }
@@ -247,7 +309,7 @@ final class TestFakespotClient: FakespotClientType {
     var getProductAnalysisStatusCallCalled = false
     var reportProductBackInStockCalled = false
 
-    func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisData {
+    func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisResponse {
         self.fetchProductAnalysisDataCallCount += 1
         self.productId = productId
         self.website = website
@@ -255,7 +317,7 @@ final class TestFakespotClient: FakespotClientType {
         return .empty
     }
 
-    func fetchProductAdData(productId: String, website: String) async throws -> [ProductAdsData] {
+    func fetchProductAdData(productId: String, website: String) async throws -> [ProductAdsResponse] {
         self.productId = productId
         self.website = website
         self.fetchProductAdsDataCalled = true
@@ -288,8 +350,8 @@ extension ProductAnalyzeResponse {
     static let inProgress = ProductAnalyzeResponse(status: .inProgress)
 }
 
-extension ProductAnalysisData {
-    static let empty = ProductAnalysisData(
+extension ProductAnalysisResponse {
+    static let empty = Self(
         productId: "",
         grade: .a,
         adjustedRating: 0,
@@ -298,6 +360,8 @@ extension ProductAnalysisData {
         highlights: Highlights(price: [], quality: [], competitiveness: [], shipping: [], packaging: []),
         pageNotSupported: true,
         isProductDeletedReported: false,
-        isProductDeleted: false
+        isProductDeleted: false,
+        notEnoughReviews: false,
+        lastAnalysisTime: nil
     )
 }

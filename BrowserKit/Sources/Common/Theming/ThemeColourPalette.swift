@@ -24,10 +24,15 @@ public protocol ThemeColourPalette {
     var layerAccentPrivateNonOpaque: UIColor { get }
     var layerLightGrey30: UIColor { get }
     var layerSepia: UIColor { get }
+    var layerHomepage: Gradient { get }
     var layerInfo: UIColor { get }
     var layerConfirmation: UIColor { get }
     var layerWarning: UIColor { get }
     var layerError: UIColor { get }
+    var layerSearch: UIColor { get }
+    var layerGradientURL: Gradient { get }
+
+    // MARK: - Ratings
     var layerRatingA: UIColor { get }
     var layerRatingASubdued: UIColor { get }
     var layerRatingB: UIColor { get }
@@ -51,6 +56,8 @@ public protocol ThemeColourPalette {
     var actionConfirmation: UIColor { get }
     var actionWarning: UIColor { get }
     var actionError: UIColor { get }
+    var actionTabActive: UIColor { get }
+    var actionTabInactive: UIColor { get }
 
     // MARK: - Text
     var textPrimary: UIColor { get }
@@ -83,6 +90,7 @@ public protocol ThemeColourPalette {
     var borderAccentNonOpaque: UIColor { get }
     var borderAccentPrivate: UIColor { get }
     var borderInverted: UIColor { get }
+    var borderToolbarDivider: UIColor { get }
 
     // MARK: - Shadow
     var shadowDefault: UIColor { get }

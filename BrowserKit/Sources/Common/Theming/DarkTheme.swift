@@ -29,10 +29,22 @@ private struct DarkColourPalette: ThemeColourPalette {
     var layerAccentPrivateNonOpaque: UIColor = FXColors.Purple60.withAlphaComponent(0.3)
     var layerLightGrey30: UIColor = FXColors.LightGrey30
     var layerSepia: UIColor = FXColors.Orange05
+    var layerHomepage = Gradient(colors: [
+        FXColors.DarkGrey60.withAlphaComponent(1),
+        FXColors.DarkGrey60.withAlphaComponent(1),
+        FXColors.DarkGrey60.withAlphaComponent(1)
+    ])
     var layerInfo: UIColor = FXColors.Blue60.withAlphaComponent(0.8)
     var layerConfirmation: UIColor = FXColors.Green80
     var layerWarning: UIColor = FXColors.Yellow70.withAlphaComponent(0.77)
     var layerError: UIColor = FXColors.Pink80
+    var layerSearch: UIColor = FXColors.DarkGrey80
+    var layerGradientURL = Gradient(colors: [
+        FXColors.DarkGrey80.withAlphaComponent(0),
+        FXColors.DarkGrey80.withAlphaComponent(1)
+    ])
+
+    // MARK: - Ratings
     var layerRatingA: UIColor = FXColors.Green20
     var layerRatingASubdued: UIColor = FXColors.Green05.withAlphaComponent(0.7)
     var layerRatingB: UIColor = FXColors.Blue10
@@ -56,6 +68,8 @@ private struct DarkColourPalette: ThemeColourPalette {
     var actionConfirmation: UIColor = FXColors.Green70
     var actionWarning: UIColor = FXColors.Yellow40.withAlphaComponent(0.41)
     var actionError: UIColor = FXColors.Pink70.withAlphaComponent(0.69)
+    var actionTabActive: UIColor = FXColors.Purple60
+    var actionTabInactive: UIColor = FXColors.Ink50
 
     // MARK: - Text
     var textPrimary: UIColor = FXColors.LightGrey05
@@ -88,6 +102,7 @@ private struct DarkColourPalette: ThemeColourPalette {
     var borderAccentNonOpaque: UIColor = FXColors.Blue20.withAlphaComponent(0.2)
     var borderAccentPrivate: UIColor = FXColors.Purple60
     var borderInverted: UIColor = FXColors.DarkGrey90
+    var borderToolbarDivider: UIColor = FXColors.DarkGrey60
 
     // MARK: - Shadow
     var shadowDefault: UIColor = FXColors.DarkGrey90.withAlphaComponent(0.16)

@@ -8,12 +8,15 @@ import UIKit
 public enum ThemeType: String {
     case light = "normal" // This needs to match the string used in the legacy system
     case dark
+    case privateMode
 
     public func getInterfaceStyle() -> UIUserInterfaceStyle {
         switch self {
         case .light:
             return .light
         case .dark:
+            return .dark
+        case .privateMode:
             return .dark
         }
     }
@@ -24,15 +27,8 @@ public enum ThemeType: String {
             return .default
         case .dark:
             return .black
-        }
-    }
-
-    public func getThemedImageName(name: String) -> String {
-        switch self {
-        case .light:
-            return name
-        case .dark:
-            return "\(name)_dark"
+        case .privateMode:
+            return .black
         }
     }
 
@@ -45,6 +41,8 @@ public enum ThemeType: String {
             .dark
         case .light:
             .light
+        case .privateMode:
+            .dark
         }
     }
 }

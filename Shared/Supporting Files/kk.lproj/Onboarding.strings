@@ -26,25 +26,16 @@
 "Onboarding.Notification.Continue.Action.v114" = "Жалғастыру";
 
 /* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Description.v114" = "Құрылғылар арасында беттерді жіберіп, %@ мүмкіндіктерін барынша пайдалану туралы кеңестер алыңыз.";
-
-/* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Notification.Description.v120" = "Құрылғылар арасында беттерді қауіпсіз жіберіңіз және %@ қолданбасының басқа жекелік мүмкіндіктерін өзіңіз үшін ашыңыз.";
 
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Skip.Action.v115" = "Аттап кету";
 
 /* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Title.v114" = "Хабарландырулар %@ көмегімен көбірек жұмыс бітіруге көмектеседі";
-
-/* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Notification.Title.v120" = "Хабарландырулар %@ көмегімен қауіпсіз болып қалуға көмектеседі";
 
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "Хабарламаларды іске қосу";
-
-/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
-"Onboarding.Sync.Description.v114" = "Тоқтаған жерден жалғастыру үшін басқа құрылғыларыңыздан беттер мен парольдерді алыңыз.";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Sync.Description.v120" = "Жүйеге кіріп, синхрондалған кезде қауіпсіз боласыз. %@ сіздің парольдерді, бетбелгілерді және т.б. шифрлейді.";
@@ -54,9 +45,6 @@
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.Skip.Action.v114" = "Аттап кету";
-
-/* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
-"Onboarding.Sync.Title.v114" = "Телефоннан ноутбукке және кері өтіңіз";
 
 /* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
 "Onboarding.Sync.Title.v120" = "Құрылғылар арасында өткенде шифрленген күйде қала беріңіз";
@@ -85,8 +73,8 @@
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Welcome.ActionTreatementA.v114" = "Негізгі браузер қылу";
 
-/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Description.TreatementA.v114" = "%@ адамдарды пайдадан жоғары қояды және шолу кезінде жекелігіңізді қорғайды.";
+/* Accessibility label for close button that dismisses the welcome onboarding screen. Placeholder is for the app name. */
+"Onboarding.Welcome.Close.AccessibilityLabel.v121" = "Жабу және %@ таныстыру экранынан шығу";
 
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Description.TreatementA.v120" = "Коммерциялық емес ұйымы қолдауымен жасалатын біздің браузер компанияларды интернетте сізді жасырын түрде бақылауын автоматты түрде тоқтатуға көмектеседі.";
@@ -99,9 +87,6 @@
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
 "Onboarding.Welcome.Skip.v114" = "Аттап кету";
-
-/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Title.TreatementA.v114" = "%@ негізгі браузер етіп орнатыңыз";
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Title.TreatementA.v120" = "Біз сіздің қауіпсіздігіңізді қамтамасыз етуді жақсы көреміз";

@@ -4,8 +4,7 @@
 
 import Foundation
 
-/// WIP. Defines tab-specific state that is reflected in the new TabCell.
-struct TabCellState: Equatable {
+struct TabCellModel: Equatable {
     let isSelected: Bool
     let isPrivate: Bool
     let isFxHomeTab: Bool
@@ -18,8 +17,8 @@ struct TabCellState: Equatable {
 
     let margin: CGFloat // (Changes depending on fullscreen)
 
-    static func emptyTabState(title: String) -> TabCellState {
-        return TabCellState(isSelected: false,
+    static func emptyTabState(title: String) -> TabCellModel {
+        return TabCellModel(isSelected: false,
                             isPrivate: false,
                             isFxHomeTab: false,
                             tabTitle: title,

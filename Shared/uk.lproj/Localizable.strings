@@ -107,7 +107,7 @@
 "Bookmarks.Folder.Label" = "Тека";
 
 /* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
-"Bookmarks.Menu.DesktopBookmarks" = "Закладки комп’ютера";
+"Bookmarks.Menu.DesktopBookmarks" = "Закладки комп'ютера";
 
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "Нова закладка";
@@ -314,7 +314,7 @@
 "ErrorPages.CertWarning.Description" = "Власник %@ налаштував свій вебсайт неналежним чином. Для захисту вашої інформації від викрадання, Firefox не з'єднався з цим вебсайтом.";
 
 /* Title on the certificate error page */
-"ErrorPages.CertWarning.Title" = "Це недовірене з’єднання";
+"ErrorPages.CertWarning.Title" = "Це недовірене з'єднання";
 
 /* Label for button to go back from the error page */
 "ErrorPages.GoBack.Button" = "Назад";
@@ -383,7 +383,7 @@
 "FxA.ManageAccount" = "Керувати обліковим записом і пристроями";
 
 /* Label when no internet is present */
-"FxA.NoInternetConnection" = "Немає з’єднання з Інтернетом";
+"FxA.NoInternetConnection" = "Немає з'єднання з Інтернетом";
 
 /* FxA sign in view subtitle */
 "fxa.signin.camera-signin" = "Увійдіть за допомогою камери";
@@ -449,7 +449,7 @@
 "HistoryPanel.EmptyState.Title" = "Тут з'являтимуться ваші останні відвідані сторінки.";
 
 /* Description for the empty synced tabs null state in the History Panel */
-"HistoryPanel.EmptySyncedTabsNullState.Description" = "Ваші вкладки з інших пристроїв з’являються тут.";
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "Тут з'являтимуться ваші вкладки з інших пристроїв.";
 
 /* Description for the empty synced tabs 'not signed in' state in the History Panel */
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Увійдіть, щоб переглядати список вкладок з інших ваших пристроїв.";
@@ -944,10 +944,10 @@
 "Privacy Policy" = "Політика приватності";
 
 /* This is the value for a label that indicates if a user is on an unencrypted website. */
-"ProtectionStatus.NotSecure" = "Незахищене з’єднання";
+"ProtectionStatus.NotSecure" = "Незахищене з'єднання";
 
 /* This is the value for a label that indicates if a user is on a secure https connection. */
-"ProtectionStatus.Secure" = "Захищене з’єднання";
+"ProtectionStatus.Secure" = "Захищене з'єднання";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Швидкі засоби пошуку";

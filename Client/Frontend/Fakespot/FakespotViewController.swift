@@ -8,79 +8,13 @@ import UIKit
 import Shared
 import Redux
 
-struct FakespotState: ScreenState, Equatable {
-    var isSettingsExpanded: Bool
-    var isReviewQualityExpanded: Bool
-    let logger: Logger = DefaultLogger.shared
-
-    enum Action: Redux.Action {
-        case settingsStateDidChange
-        case reviewQualityDidChange
-        case urlDidChange
-    }
-
-    init() {
-        self.isSettingsExpanded = false
-        self.isReviewQualityExpanded = false
-    }
-
-    init(isSettingsExpanded: Bool, isReviewQualityExpanded: Bool) {
-        self.isSettingsExpanded = isSettingsExpanded
-        self.isReviewQualityExpanded = isReviewQualityExpanded
-    }
-
-    init(_ appState: AppState) {
-        guard let state = store.state.screenState(FakespotState.self, for: .fakespot) else {
-            self.init(isSettingsExpanded: false, isReviewQualityExpanded: false)
-            logger.log("Error retrieving screen state",
-                       level: .debug,
-                       category: .redux)
-            return
-        }
-
-        self.init(
-            isSettingsExpanded: state.isSettingsExpanded,
-            isReviewQualityExpanded: state.isReviewQualityExpanded
-        )
-    }
-
-    static let reducer: Reducer<Self> = { state, action in
-        switch action {
-        case Action.settingsStateDidChange:
-            var state = state
-            state.isSettingsExpanded.toggle()
-            return state
-        case Action.reviewQualityDidChange:
-            var state = state
-            state.isReviewQualityExpanded.toggle()
-            return state
-        case Action.urlDidChange:
-            return FakespotState(isSettingsExpanded: false, isReviewQualityExpanded: false)
-        default:
-            return state
-        }
-    }
-
-    static func == (lhs: FakespotState, rhs: FakespotState) -> Bool {
-        return lhs.isSettingsExpanded == rhs.isSettingsExpanded
-        && lhs.isReviewQualityExpanded == rhs.isReviewQualityExpanded
-    }
-}
-
 class FakespotViewController:
     UIViewController,
     Themeable,
     Notifiable,
     UIAdaptivePresentationControllerDelegate,
     UISheetPresentationControllerDelegate,
-    StoreSubscriber {
-    typealias SubscriberStateType = FakespotState
-    func newState(state: FakespotState) {
-        self.state = state
-    }
-
-    private var state: FakespotState
-
+    UIScrollViewDelegate {
     private struct UX {
         static let headerTopSpacing: CGFloat = 22
         static let headerHorizontalSpacing: CGFloat = 18
@@ -99,6 +33,10 @@ class FakespotViewController:
         static let scrollContentBottomPadding: CGFloat = 40
         static let scrollContentHorizontalPadding: CGFloat = 16
         static let scrollContentStackSpacing: CGFloat = 16
+        static let shadowRadius: CGFloat = 14
+        static let shadowOpacity: Float = 1
+        static let shadowOffset = CGSize(width: 0, height: 2)
+        static let animationDuration: TimeInterval = 0.2
     }
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
@@ -111,6 +49,11 @@ class FakespotViewController:
     private lazy var contentStackView: UIStackView = .build { stackView in
         stackView.axis = .vertical
         stackView.spacing = UX.scrollContentStackSpacing
+    }
+
+    private lazy var shadowView: UIView = .build { view in
+        view.layer.shadowOffset = UX.shadowOffset
+        view.layer.shadowRadius = UX.shadowRadius
     }
 
     private lazy var headerView: UIView = .build()
@@ -151,7 +94,7 @@ class FakespotViewController:
     private lazy var closeButton: UIButton = .build { button in
         button.setImage(UIImage(named: StandardImageIdentifiers.ExtraLarge.crossCircleFill), for: .normal)
         button.addTarget(self, action: #selector(self.closeTapped), for: .touchUpInside)
-        button.accessibilityLabel = .CloseButtonTitle
+        button.accessibilityLabel = .Shopping.CloseButtonAccessibilityLabel
         button.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.sheetCloseButton
     }
 
@@ -164,7 +107,6 @@ class FakespotViewController:
         self.viewModel = viewModel
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
-        self.state = FakespotState()
         super.init(nibName: nil, bundle: nil)
 
         listenToStateChange()
@@ -177,13 +119,9 @@ class FakespotViewController:
     // MARK: - View setup & lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        store.dispatch(ActiveScreensStateAction.showScreen(.fakespot))
-        store.subscribe(self, transform: {
-            print("transform")
-            return $0.select(FakespotState.init)
-        })
         presentationController?.delegate = self
         sheetPresentationController?.delegate = self
+        scrollView.delegate = self
 
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
@@ -207,6 +145,7 @@ class FakespotViewController:
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         viewModel.isSwiping = false
+        shadowView.layer.shadowPath = UIBezierPath(rect: shadowView.bounds).cgPath
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -229,7 +168,7 @@ class FakespotViewController:
     func update(viewModel: FakespotViewModel, triggerFetch: Bool = true) {
         // Only update the model if the shopping product changed to avoid unnecessary API calls
         guard self.viewModel.shoppingProduct != viewModel.shoppingProduct else { return }
-        store.dispatch(FakespotState.Action.urlDidChange)
+        store.dispatch(FakespotAction.urlDidChange)
         self.viewModel = viewModel
         listenToStateChange()
 
@@ -247,7 +186,8 @@ class FakespotViewController:
 
     func applyTheme() {
         let theme = themeManager.currentTheme
-
+        shadowView.layer.shadowColor = theme.colors.shadowDefault.cgColor
+        shadowView.backgroundColor = theme.colors.layer1
         view.backgroundColor = theme.colors.layer1
         titleLabel.textColor = theme.colors.textPrimary
         betaLabel.textColor = theme.colors.textSecondary
@@ -272,7 +212,7 @@ class FakespotViewController:
         titleStackView.addArrangedSubview(titleLabel)
         titleStackView.addArrangedSubview(betaView)
         headerView.addSubviews(titleStackView, closeButton)
-        view.addSubviews(headerView, scrollView)
+        view.addSubviews(scrollView, shadowView, headerView)
 
         scrollView.addSubview(contentStackView)
         updateContent()
@@ -299,6 +239,11 @@ class FakespotViewController:
                                                 constant: UX.headerHorizontalSpacing),
             headerView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,
                                                  constant: -UX.headerHorizontalSpacing),
+
+            shadowView.topAnchor.constraint(equalTo: view.topAnchor),
+            shadowView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            shadowView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            shadowView.bottomAnchor.constraint(equalTo: scrollView.topAnchor),
 
             titleStackView.topAnchor.constraint(equalTo: headerView.topAnchor),
             titleStackView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor),
@@ -367,6 +312,31 @@ class FakespotViewController:
         applyTheme()
     }
 
+    private func adjustShadowBasedOnIntersection() {
+        let shadowViewFrameInSuperview = shadowView.convert(
+            shadowView.bounds,
+            to: view
+        )
+        let contentStackViewFrameInSuperview = contentStackView.convert(
+            contentStackView.bounds,
+            to: view
+        )
+
+        if shadowViewFrameInSuperview.intersects(contentStackViewFrameInSuperview) {
+            guard !viewModel.isViewIntersected else { return }
+            viewModel.isViewIntersected.toggle()
+            UIView.animate(withDuration: UX.animationDuration) {
+                self.shadowView.layer.shadowOpacity = UX.shadowOpacity
+            }
+        } else {
+            guard viewModel.isViewIntersected else { return }
+            viewModel.isViewIntersected.toggle()
+            UIView.animate(withDuration: UX.animationDuration) {
+                self.shadowView.layer.shadowOpacity = 0
+            }
+        }
+    }
+
     private func createContentView(viewElement: FakespotViewModel.ViewElement) -> UIView? {
         switch viewElement {
         case .loadingView:
@@ -407,20 +377,20 @@ class FakespotViewController:
 
         case .qualityDeterminationCard:
             let reviewQualityCardView: FakespotReviewQualityCardView = .build()
-            viewModel.reviewQualityCardViewModel.expandState = state.isReviewQualityExpanded ? .expanded : .collapsed
+//            viewModel.reviewQualityCardViewModel.expandState = state.isReviewQualityExpanded ? .expanded : .collapsed
             viewModel.reviewQualityCardViewModel.dismissViewController = { [weak self] in
                 guard let self = self else { return }
                 self.delegate?.fakespotControllerDidDismiss(animated: true)
             }
             viewModel.reviewQualityCardViewModel.onExpandStateChanged = { state in
-                store.dispatch(FakespotState.Action.reviewQualityDidChange)
+                store.dispatch(FakespotAction.reviewQualityDidChange)
             }
             reviewQualityCardView.configure(viewModel.reviewQualityCardViewModel)
             return reviewQualityCardView
 
         case .settingsCard:
             let view: FakespotSettingsCardView = .build()
-            viewModel.settingsCardViewModel.expandState = state.isSettingsExpanded ? .expanded : .collapsed
+//            viewModel.settingsCardViewModel.expandState = state.isSettingsExpanded ? .expanded : .collapsed
             viewModel.settingsCardViewModel.dismissViewController = { [weak self] action in
                 guard let self = self else { return }
                 self.delegate?.fakespotControllerDidDismiss(animated: true)
@@ -428,29 +398,27 @@ class FakespotViewController:
                 viewModel.recordDismissTelemetry(by: action)
             }
             viewModel.settingsCardViewModel.onExpandStateChanged = { state in
-                store.dispatch(FakespotState.Action.settingsStateDidChange)
+                store.dispatch(FakespotAction.settingsStateDidChange)
             }
             view.configure(viewModel.settingsCardViewModel)
             return view
 
         case .noAnalysisCard:
              let view: FakespotNoAnalysisCardView = .build()
-             viewModel.noAnalysisCardViewModel.onTapStartAnalysis = { [weak view, weak self] in
-                 view?.updateLayoutForInProgress()
+             viewModel.noAnalysisCardViewModel.onTapStartAnalysis = { [weak self] in
                  self?.onNeedsAnalysisTap()
              }
              view.configure(viewModel.noAnalysisCardViewModel)
              return view
 
-        case .progressAnalysisCard:
-             let view: FakespotNoAnalysisCardView = .build()
-             view.configure(viewModel.noAnalysisCardViewModel)
-             view.updateLayoutForInProgress()
-             return view
-
-        case .productAdCard:
+        case .productAdCard(let adData):
             let view: FakespotAdView = .build()
-
+            var viewModel = FakespotAdViewModel(productAdsData: adData)
+            viewModel.dismissViewController = { [weak self] in
+                guard let self = self else { return }
+                self.delegate?.fakespotControllerDidDismiss(animated: true)
+            }
+            view.configure(viewModel)
             return view
 
         case .messageCard(let messageType):
@@ -571,5 +539,10 @@ class FakespotViewController:
     // MARK: - UISheetPresentationControllerDelegate
     func sheetPresentationControllerDidChangeSelectedDetentIdentifier(_ sheetPresentationController: UISheetPresentationController) {
         updateModalA11y()
+    }
+
+    // MARK: - UIScrollViewDelegate
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        adjustShadowBasedOnIntersection()
     }
 }
