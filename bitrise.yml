@@ -45,8 +45,7 @@ workflows:
         timeout: 600
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0.1
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"
-            "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_UnitTest_iphonesimulator17.0-arm64.xctestrun"
         - maximum_test_repetitions: 2
     - save-spm-cache@1:
@@ -108,7 +107,7 @@ workflows:
 
             echo "bitrise_xcode"
             COUNT_XCUI=$(./test-fixtures/generate-metrics.sh /Users/vagrant/git/xcodebuild_fennec.log all)
-            
+
             envman add --key SHOW_WARNING_IN_SLACK --value Show_Warnings
             envman add --key SHOW_WARNING_COUNT_XCUI --value "$COUNT_XCUI"
 
@@ -181,9 +180,7 @@ workflows:
         title: UI Smoketest2
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0.1
-        - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"
-            "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
-            "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData" "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest2_iphonesimulator17.0-arm64.xctestrun"
     - deploy-to-bitrise-io@2.1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
@@ -226,9 +223,7 @@ workflows:
         title: UI Smoketest
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0.1
-        - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"
-            "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
-            "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData" "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_SmokeXCUITests_iphonesimulator17.0-arm64.xctestrun"
     - deploy-to-bitrise-io@2.1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
@@ -271,9 +266,7 @@ workflows:
         title: UI Smoketest3
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0.1
-        - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"
-            "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
-            "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData" "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest3_iphonesimulator17.0-arm64.xctestrun"
     - deploy-to-bitrise-io@2.1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
@@ -316,9 +309,7 @@ workflows:
         title: UI Smoketest4
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0.1
-        - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"
-            "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
-            "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData" "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest4_iphonesimulator17.0-arm64.xctestrun"
     - deploy-to-bitrise-io@2.1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
@@ -389,12 +380,12 @@ workflows:
     - script@1:
         inputs:
         - content: |-
-             #!/usr/bin/env bash
-             set -e
-             set -x
-             cd Client.xcodeproj
-             sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Developer"/' project.pbxproj
-             cd -
+            #!/usr/bin/env bash
+            set -e
+            set -x
+            cd Client.xcodeproj
+            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Developer"/' project.pbxproj
+            cd -
         title: Set xcodeproj code_sign_identity to iPhone Developer
     - script@1:
         inputs:
@@ -529,7 +520,7 @@ workflows:
                 envman add --key RUN_UI_TESTS --value Run_UI_Tests
                 exit 0
             fi
-            
+
             # Match on file names in all directories and subdirectories
             #
             # Project Configs
@@ -685,7 +676,7 @@ workflows:
     description: This Workflow is to build the app using latest xcode available in Bitrise
     meta:
       bitrise.io:
-        stack: osx-xcode-15.0.x
+        stack: osx-xcode-osx-xcode-14.3.x
         machine_type_id: g2-m1.8core
 
   L10nBuild:
@@ -1178,7 +1169,7 @@ workflows:
         inputs:
         - scheme: Fennec
         - destination: platform=iOS Simulator,name=iPhone 15,OS=17.0.1
-        - test_plan: PerformanceTestPlan   
+        - test_plan: PerformanceTestPlan
     - script@1.1:
         is_always_run: true
         title: Create perfherder data object
@@ -1191,7 +1182,7 @@ workflows:
             set -x
             # get dependency
             cd ./test-fixtures && git clone https://github.com/isabelrios/xcresult_extract.git
-            
+
             echo $BITRISE_XCRESULT_PATH
             ls
             ls $BITRISE_XCRESULT_PATH
@@ -1283,7 +1274,7 @@ workflows:
                 --client-details=matrixLabel="Bitrise" \
                 --quiet \
                 2>&1 | tee /dev/stdout)
-            
+
             GCLOUD_EXITCODE=${PIPESTATUS[0]}
 
             envman add --key GCLOUD_EXIT_CODE --value "$GCLOUD_EXITCODE"
