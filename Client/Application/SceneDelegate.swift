@@ -135,15 +135,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             sceneCoordinator?.findAndHandle(route: route)
         }
 
-        // Check if our connection options include a user response to a push notification
-        // that is for Sent Tabs. If so, route the related tab URLs.
+        // Check if our connection options include a user response to a push
+        // notification that is for Sent Tabs. If so, route the related tab URLs.
         if let notification = connectionOptions.notificationResponse?.notification,
            let userInfo = notification.request.content.userInfo["sentTabs"] as? [[String: Any]] {
-            handleAPNSentTabs(userInfo)
+            handleConnectionOptionsSentTabs(userInfo)
         }
     }
 
-    private func handleAPNSentTabs(_ userInfo: [[String: Any]]) {
+    private func handleConnectionOptionsSentTabs(_ userInfo: [[String: Any]]) {
+        // For Sent Tab data structure, see also:
+        // NotificationService.displayNewSentTabNotification()
         for tab in userInfo {
             guard let urlString = tab["url"] as? String,
                   let url = URL(string: urlString),
