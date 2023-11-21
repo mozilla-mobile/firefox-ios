@@ -134,5 +134,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                                               tabSetting: NewTabAccessors.getNewTabPage(profile.prefs)) {
             sceneCoordinator?.findAndHandle(route: route)
         }
+
+        // Check if our connection options include a user response to a push notification
+        // that is for Sent Tabs. If so, route the related tab URLs.
+        if let notification = connectionOptions.notificationResponse?.notification,
+           let userInfo = notification.request.content.userInfo["sentTabs"] as? [[String: Any]] {
+            handleAPNSentTabs(userInfo)
+        }
+    }
+
+    private func handleAPNSentTabs(_ userInfo: [[String: Any]]) {
+        for tab in userInfo {
+            guard let urlString = tab["url"] as? String,
+                  let url = URL(string: urlString),
+                  let route = routeBuilder.makeRoute(url: url) else { continue }
+            sceneCoordinator?.findAndHandle(route: route)
+        }
     }
 }
