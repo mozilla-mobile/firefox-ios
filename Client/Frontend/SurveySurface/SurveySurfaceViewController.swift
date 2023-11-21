@@ -247,7 +247,7 @@ class SurveySurfaceViewController: UIViewController, Themeable {
         takeSurveyButton.setTitleColor(theme.colors.textInverted, for: .normal)
         takeSurveyButton.backgroundColor = theme.colors.actionPrimary
 
-        dismissSurveyButton.setTitleColor(theme.colors.textSecondaryAction, for: .normal)
+        dismissSurveyButton.setTitleColor(theme.colors.textOnLight, for: .normal)
         dismissSurveyButton.backgroundColor = theme.colors.actionSecondary
     }
 }

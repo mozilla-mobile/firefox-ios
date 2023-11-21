@@ -1,18 +1,24 @@
 # The configuration for the feltPrivacyFeature feature
 features:
-  private-browsing:
-    description: Private Browsing Mode
+  felt-privacy-feature:
+    description: The feature that enhances private browsing mode
     variables:
-      felt-privacy-enabled:
-        description: If true, enable felt privacy related UI
+      simplified-ui-enabled:
+        description: If true, enable simplified UI part of Felt Privacy
+        type: Boolean
+        default: false
+      felt-deletion-enabled:
+        description: If true, enable Felt Deletion part of Felt Privacy
         type: Boolean
         default: false
 
     defaults:
       - channel: beta
         value:
-          felt-privacy-enabled: false
+          simplified-ui-enabled: false
+          felt-deletion-enabled: false
       - channel: developer
         value:
-          felt-privacy-enabled: false
+          simplified-ui-enabled: false
+          felt-deletion-enabled: false
 

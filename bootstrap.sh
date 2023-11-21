@@ -33,7 +33,7 @@ if [ "$1" == "--importLocales" ]; then
       getLocale
   fi
 
-  ./import-strings.sh
+  ./firefox-ios/import-strings.sh
   exit 0
 fi
 

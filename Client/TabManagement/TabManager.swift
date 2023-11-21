@@ -69,6 +69,8 @@ extension TabManager {
     }
 
     func selectTab(_ tab: Tab?) {
+        guard let privateState = tab?.isPrivate else { return }
+        store.dispatch(AppStateAction.setPrivateModeTo(privateState))
         selectTab(tab, previous: nil)
     }
 

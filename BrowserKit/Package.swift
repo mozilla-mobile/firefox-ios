@@ -22,7 +22,10 @@ let package = Package(
             targets: ["Redux"]),
         .library(
             name: "ComponentLibrary",
-            targets: ["ComponentLibrary"])
+            targets: ["ComponentLibrary"]),
+        .library(
+            name: "WebEngine",
+            targets: ["WebEngine"])
     ],
     dependencies: [
         .package(
@@ -77,6 +80,12 @@ let package = Package(
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "ReduxTests",
-            dependencies: ["Redux"])
+            dependencies: ["Redux"]),
+        .target(
+            name: "WebEngine",
+            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+        .testTarget(
+            name: "WebEngineTests",
+            dependencies: ["WebEngine"])
     ]
 )

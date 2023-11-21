@@ -15,4 +15,5 @@ enum FakeReduxAction: Action {
     case initialValueLoaded(Int)
     case counterIncreased(Int)
     case counterDecreased(Int)
+    case setPrivateModeTo(Bool)
 }

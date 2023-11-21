@@ -253,19 +253,6 @@ class BrowserViewController: UIViewController,
     }
 
     @objc
-    func openTabNotification(notification: Notification) {
-        // Remove this notification only used for debug settings with FXIOS-7550
-        guard let openTabObject = notification.object as? OpenTabNotificationObject else {
-            return
-        }
-
-        switch openTabObject.type {
-        case .debugOption(let numberOfTabs, let url):
-            debugOpen(numberOfNewTabs: numberOfTabs, at: url)
-        }
-    }
-
-    @objc
     func didFinishAnnouncement(notification: Notification) {
         if let userInfo = notification.userInfo,
             let announcementText =  userInfo[UIAccessibility.announcementStringValueUserInfoKey] as? String {
@@ -605,11 +592,6 @@ class BrowserViewController: UIViewController,
             self,
             selector: #selector(didTapUndoCloseAllTabToast),
             name: .DidTapUndoCloseAllTabToast,
-            object: nil)
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(openTabNotification),
-            name: .OpenTabNotification,
             object: nil)
         notificationCenter.addObserver(
             self,

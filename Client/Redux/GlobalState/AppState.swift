@@ -7,9 +7,21 @@ import Redux
 
 struct AppState: StateType {
     let activeScreens: ActiveScreensState
+    let isInPrivateMode: Bool
 
     static let reducer: Reducer<Self> = { state, action in
-        AppState(activeScreens: ActiveScreensState.reducer(state.activeScreens, action))
+        switch action {
+        case AppStateAction.setPrivateModeTo(let privateState):
+            AppState(
+                activeScreens: ActiveScreensState.reducer(state.activeScreens, action),
+                isInPrivateMode: privateState
+            )
+        default:
+            AppState(
+                activeScreens: ActiveScreensState.reducer(state.activeScreens, action),
+                isInPrivateMode: state.isInPrivateMode
+            )
+        }
     }
 
     func screenState<S: ScreenState>(_ s: S.Type, for screen: AppScreen) -> S? {
@@ -31,6 +43,7 @@ struct AppState: StateType {
 extension AppState {
     init() {
         activeScreens = ActiveScreensState()
+        isInPrivateMode = false
     }
 }
 
