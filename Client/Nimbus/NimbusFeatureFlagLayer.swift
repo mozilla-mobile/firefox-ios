@@ -44,8 +44,8 @@ final class NimbusFeatureFlagLayer {
         case .historyGroups:
             return checkGroupingFeature(for: featureID, from: nimbus)
 
-        case .feltPrivacyUI:
-            return checkFeltPrivacyUIFeature(from: nimbus)
+        case .feltPrivacySimplifiedUI:
+            return checkFeltPrivacyFeature(for: featureID, from: nimbus)
 
         case .fakespotBackInStock:
             return checkProductBackInStockFakespotFeature(from: nimbus)
@@ -166,9 +166,16 @@ final class NimbusFeatureFlagLayer {
         return config.enabled
     }
 
-    private func checkFeltPrivacyUIFeature(from nimbus: FxNimbus ) -> Bool {
-        let config = nimbus.features.privateBrowsing.value()
-        return config.feltPrivacyEnabled
+    private func checkFeltPrivacyFeature(
+        for featureID: NimbusFeatureFlagID,
+        from nimbus: FxNimbus
+    ) -> Bool {
+        let config = nimbus.features.feltPrivacyFeature.value()
+
+        switch featureID {
+        case .feltPrivacySimplifiedUI: return config.simplifiedUiEnabled
+        default: return false
+        }
     }
 
     public func checkNimbusForCreditCardAutofill(

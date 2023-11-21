@@ -536,6 +536,7 @@
 		7BEB64441C7345600092C02E /* L10nSuite2SnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B3632D31C2983F000D12AF9 /* L10nSuite2SnapshotTests.swift */; };
 		7BEB64451C7345600092C02E /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B60B0071BDE3AE10090C984 /* SnapshotHelper.swift */; };
 		7BEFC6801BFF68C30059C952 /* QuickActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEFC67F1BFF68C30059C952 /* QuickActions.swift */; };
+		81A8CA752AF97B2E0015BF04 /* AppStateAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A8CA742AF97B2E0015BF04 /* AppStateAction.swift */; };
 		884CA7492344A301002E4711 /* TextContentDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884CA7482344A301002E4711 /* TextContentDetector.swift */; };
 		8A0017C128A3FF6100FEFC8B /* MessageCardDataAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0017C028A3FF6100FEFC8B /* MessageCardDataAdaptor.swift */; };
 		8A01891C275E9C2A00923EFE /* ClearHistorySheetProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A01891B275E9C2A00923EFE /* ClearHistorySheetProvider.swift */; };
@@ -4968,6 +4969,7 @@
 		816D458CBEAE2A6721134028 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		81754147A06566E64C025F70 /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = "nn.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		81A244F4A7C6FC8976DC21F0 /* br */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = br; path = br.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		81A8CA742AF97B2E0015BF04 /* AppStateAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStateAction.swift; sourceTree = "<group>"; };
 		81C14765AA7C25DF1817AC04 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Today.strings; sourceTree = "<group>"; };
 		81DF4C79AE53A2FCA08EEE9C /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = "da.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		81E446CF88B278374B416BF5 /* or */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = or; path = or.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
@@ -7476,6 +7478,7 @@
 				21618A912A4499FC00A5189E /* AppState.swift */,
 				21618A8B2A438A0900A5189E /* ActiveScreenAction.swift */,
 				21618A892A4389F700A5189E /* ActiveScreenState.swift */,
+				81A8CA742AF97B2E0015BF04 /* AppStateAction.swift */,
 			);
 			path = GlobalState;
 			sourceTree = "<group>";
@@ -12887,6 +12890,7 @@
 				8A3EF8092A2FD02B00796E3A /* ExperimentsSettings.swift in Sources */,
 				C87DF9DB267247190097E707 /* UIConstants+BottomInset.swift in Sources */,
 				8AD08D1527E9198E00B8E907 /* TabsQuantityTelemetry.swift in Sources */,
+				81A8CA752AF97B2E0015BF04 /* AppStateAction.swift in Sources */,
 				1DA3CE6324EEE83200422BB2 /* LegacySavedTab+ConfigureExtension.swift in Sources */,
 				74B420C92A1D0D7A00370E53 /* OnboardingInstructionsPopupInfoModel.swift in Sources */,
 				E13E9AB32AAB0FB5001A0E9D /* FakespotViewController.swift in Sources */,
