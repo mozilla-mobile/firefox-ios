@@ -58,6 +58,7 @@
         "DownloadsTests\/testToastButtonToGoToDownloads()",
         "DragAndDropTestIpad\/testTryDragAndDropBookmarkToURLBar()",
         "DragAndDropTestIpad\/testTryDragAndDropHistoryToURLBar()",
+        "DragAndDropTests\/testRearrangeTabsTabTray()",
         "ExperimentIntegrationTests",
         "FindInPageTests\/testFindFromMenu()",
         "HistoryTests\/testClearPrivateData()",
