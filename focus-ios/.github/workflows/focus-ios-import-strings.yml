@@ -31,11 +31,11 @@ jobs:
     - name: Get the current date for PR title
       run: echo "current_date=$(date +"%m-%d-%Y")" >> $GITHUB_ENV
     - name: Run script to import strings
-      run: sh ./focus-ios/tools/import-strings.sh
+      run: sh ./focus-ios/focus-ios-tests/tools/import-strings.sh
     - name: Update new strings
       run: |-
-        git diff || (git add Blockzilla/*/*.lproj/* Blockzilla/*.lproj/* Blockzilla.xcodeproj/project.pbxproj)
-        git restore Blockzilla.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+        git diff || (git add focus-ios/Blockzilla/*/*.lproj/* focus-ios/Blockzilla/*.lproj/* focus-ios/Blockzilla.xcodeproj/project.pbxproj)
+        git restore focus-ios/Blockzilla.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v3
       with:

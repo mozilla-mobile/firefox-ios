@@ -24,6 +24,7 @@
 #
 
 set -e
+cd focus-ios
 
 if [ ! -d Blockzilla.xcodeproj ]; then
   echo "[E] Run this script from the project root as tools/export-strings.sh"
@@ -35,24 +36,24 @@ echo "[*] Cloning mozilla-l10n/focusios-l10n"
 git clone https://github.com/mozilla-l10n/focusios-l10n.git focusios-l10n
 
 echo "[*] Cloning mozilla-mobile/LocalizationTools"
-[ -d focus-ios/tools/Localizations ] && rm -rf focus-ios/tools/Localizations
-git clone https://github.com/mozilla-mobile/LocalizationTools.git focus-ios/tools/Localizations
+[ -d focus-ios-tests/tools/Localizations ] && rm -rf focus-ios-tests/tools/Localizations
+git clone https://github.com/mozilla-mobile/LocalizationTools.git focus-ios-tests/tools/Localizations
 
 echo "[*] Building tools/Localizations"
-(cd focus-ios/tools/Localizations && swift build)
+(cd focus-ios-tests/tools/Localizations && swift build)
 
 echo "[*] Replacing firefox with focus in swift task files"
-sed -i '' 's/firefox-ios.xliff/focus-ios.xliff/g' focus-ios/tools/Localizations/Sources/LocalizationTools/tasks/*.swift
+sed -i '' 's/firefox-ios.xliff/focus-ios.xliff/g' focus-ios-tests/tools/Localizations/Sources/LocalizationTools/tasks/*.swift
 
 echo "[*] Removing es-ES locale mapping from swift import task"
-sed -i '' '/es-ES/d' focus-ios/tools/Localizations/Sources/LocalizationTools/tasks/ImportTask.swift
+sed -i '' '/es-ES/d' focus-ios-tests/tools/Localizations/Sources/LocalizationTools/tasks/ImportTask.swift
 
 echo "[*] Removing WidgetKit/en-US.lproj/WidgetIntents.strings from swift import task"
 # Match all text between a line containing 'ShortcutItemTitleQRCode' to ']' and delete them
-sed -ri '' '/ShortcutItemTitleQRCode/,/\]/{/ShortcutItemTitleQRCode/!{/\]/!d;};}' focus-ios/tools/Localizations/Sources/LocalizationTools/tasks/ImportTask.swift
+sed -ri '' '/ShortcutItemTitleQRCode/,/\]/{/ShortcutItemTitleQRCode/!{/\]/!d;};}' focus-ios-tests/tools/Localizations/Sources/LocalizationTools/tasks/ImportTask.swift
 
 echo "[*] Importing Strings - takes a minute. (output in import-strings.log)"
-(cd focus-ios/tools/Localizations && swift run LocalizationTools \
+(cd focus-ios-tests/tools/Localizations && swift run LocalizationTools \
   --import \
   --project-path "$PWD/../../../Blockzilla.xcodeproj" \
   --l10n-project-path "$PWD/../../../focusios-l10n") > import-strings.log 2>&1

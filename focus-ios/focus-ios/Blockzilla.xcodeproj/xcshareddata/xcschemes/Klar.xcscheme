@@ -52,14 +52,14 @@
       </MacroExpansion>
       <TestPlans>
          <TestPlanReference
-            reference = "container:focus-ios/FullFunctionalTests.xctestplan"
+            reference = "container:focus-ios-tests/FullFunctionalTests.xctestplan"
             default = "YES">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:focus-ios/SmokeTest.xctestplan">
+            reference = "container:focus-ios-tests/SmokeTest.xctestplan">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:focus-ios/UnitTests.xctestplan">
+            reference = "container:focus-ios-tests/UnitTests.xctestplan">
          </TestPlanReference>
       </TestPlans>
       <Testables>

@@ -207,14 +207,15 @@ included: # paths to include during linting. `--path` is ignored if present.
 excluded: # paths to ignore during linting. Takes precedence over `included`.
   - Carthage
   - Pods
-  - focus-ios/ClientTests/
-  - focus-ios/ScreenshotTests/
-  - Search/
-  - Client/Assets/Search/get_supported_locales.swift
-  - tools/
+  - focus-ios-tests/ClientTests/
+  - focus-ios-tests/ScreenshotTests/
+  - focus-ios/Search/
+  - focus-ios/Client/Assets/Search/get_supported_locales.swift
+  - focus-ios/focus-ios-tests/tools/
   - rust-components-swift/
-  - Blockzilla/Generated/Metrics.swift
+  - focus-ios/Blockzilla/Generated/Metrics.swift
   - l10n-screenshots-dd/
   - DerivedData/
+  - focus-ios/
 
 reporter: "xcode" # reporter type (xcode, json, csv, checkstyle)
