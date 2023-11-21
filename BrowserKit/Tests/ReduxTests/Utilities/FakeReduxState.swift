@@ -17,7 +17,7 @@ struct FakeReduxState: StateType, Equatable {
             return FakeReduxState(counter: value,
                                   isInPrivateMode: state.isInPrivateMode)
         case FakeReduxAction.setPrivateModeTo(let value):
-            return FakeReduxState(counter: state.counter, 
+            return FakeReduxState(counter: state.counter,
                                   isInPrivateMode: value)
         default:
             return state

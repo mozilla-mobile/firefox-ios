@@ -10,14 +10,13 @@ import Storage
 import Redux
 import UIKit
 
-class HomepageViewController: 
+class HomepageViewController:
     UIViewController,
     FeatureFlaggable,
     Themeable,
     ContentContainable,
     SearchBarLocationProvider,
     StoreSubscriber {
-
     // MARK: - Typealiases
 
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
