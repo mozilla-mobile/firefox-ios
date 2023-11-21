@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
-import WebKit
 
 @testable import Client
 class TabCellTests: XCTestCase {
@@ -50,17 +49,16 @@ class TabCellTests: XCTestCase {
                        state.isSelected)
     }
 
-    private func createDefaultState() -> TabCellModel {
-        let tab = Tab(profile: profile, configuration: WKWebViewConfiguration())
-        return TabCellModel(tab: tab,
-                            isSelected: false,
-                            isPrivate: false,
-                            isFxHomeTab: false,
-                            tabTitle: "Firefox Browser",
-                            url: URL(string: "https://www.mozilla.org/en-US/firefox/")!,
-                            screenshot: nil,
-                            hasHomeScreenshot: false,
-                            margin: 0.0)
+    private func createDefaultState() -> TabModel {
+        return TabModel(tabUUID: "0022-22D3",
+                        isSelected: false,
+                        isPrivate: false,
+                        isFxHomeTab: false,
+                        tabTitle: "Firefox Browser",
+                        url: URL(string: "https://www.mozilla.org/en-US/firefox/")!,
+                        screenshot: nil,
+                        hasHomeScreenshot: false,
+                        margin: 0.0)
     }
 }
 

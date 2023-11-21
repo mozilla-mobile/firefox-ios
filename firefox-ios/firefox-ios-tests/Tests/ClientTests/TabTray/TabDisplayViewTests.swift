@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import WebKit
 import XCTest
 
 @testable import Client
@@ -102,23 +101,22 @@ final class TabDisplayViewTests: XCTestCase {
         let inactiveTabs: [InactiveTabsModel] = emptyInactiveTabs ? [InactiveTabsModel]() : inactiveTabsModel
         let isInactiveTabsExpanded = !isPrivateMode && !inactiveTabs.isEmpty
         let tabState = TabsPanelState(isPrivateMode: isPrivateMode,
-                                 tabs: tabs,
-                                 inactiveTabs: inactiveTabs,
-                                 isInactiveTabsExpanded: isInactiveTabsExpanded)
+                                      tabs: tabs,
+                                      inactiveTabs: inactiveTabs,
+                                      isInactiveTabsExpanded: isInactiveTabsExpanded)
 
-        let subject = TabDisplayView(state: tabState)
+        let subject = TabDisplayView(state: tabState, tabPeekDelegate: nil)
 
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
 
-    private func createTabs(_ emptyTabs: Bool) -> [TabCellModel] {
-        guard !emptyTabs else { return [TabCellModel]() }
+    private func createTabs(_ emptyTabs: Bool) -> [TabModel] {
+        guard !emptyTabs else { return [TabModel]() }
 
-        var tabs = [TabCellModel]()
+        var tabs = [TabModel]()
         for index in 0...2 {
-            let tab = Tab(profile: profile, configuration: WKWebViewConfiguration())
-            let tabModel = TabCellModel.emptyTabState(title: "Tab \(index)", tab: tab)
+            let tabModel = TabModel.emptyTabState(tabUUID: "", title: "Tab \(index)")
             tabs.append(tabModel)
         }
         return tabs

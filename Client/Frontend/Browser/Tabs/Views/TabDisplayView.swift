@@ -59,7 +59,7 @@ class TabDisplayView: UIView,
         return collectionView
     }()
 
-    public init(state: TabsPanelState, tabPeekDelegate: TabPeekDelegate) {
+    public init(state: TabsPanelState, tabPeekDelegate: TabPeekDelegate?) {
         self.tabsState = state
         self.tabPeekDelegate = tabPeekDelegate
         self.inactiveTabsSectionManager = InactiveTabsSectionManager()

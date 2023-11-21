@@ -21,34 +21,14 @@ final class TabPanelStateTests: XCTestCase {
         DependencyHelperMock().reset()
     }
 
-    func testTabsState_InitialState {
+    func testTabsState_RefreshTabs() {
         let initialState = TabsPanelState()
-        XCTAssertEqual(initialState.refreshState,
-                       RemoteTabsPanelRefreshState.idle)
-
-        let reducer = remoteTabsPanelReducer()
-
-        let newState = reducer(initialState, RemoteTabsPanelAction.refreshTabs)
-
-        // Refresh should fail since Profile.hasSyncableAccount
-        // is false for unit test, expected state is .idle
-        XCTAssertEqual(newState.refreshState,
-                       RemoteTabsPanelRefreshState.idle)
+        XCTAssertTrue(initialState.tabs.isEmpty)
+        let reducer = tabsPanelReducer()
+        let testTabs = createTabs()
+        let newState = reducer(initialState, TabPanelAction.refreshTab(testTabs))
+        XCTAssertFalse(newState.tabs.isEmpty)
     }
-
-    func testTabsRefreshSuccessStateChange() {
-        let initialState = createSubject()
-        let reducer = remoteTabsPanelReducer()
-        let testTabs = generateOneClientTwoTabs()
-
-        XCTAssertEqual(initialState.clientAndTabs.count, 0)
-
-        let newState = reducer(initialState, RemoteTabsPanelAction.refreshDidSucceed(testTabs))
-
-        XCTAssertEqual(newState.clientAndTabs.count, 1)
-        XCTAssertEqual(newState.clientAndTabs.first!.tabs.count, 2)
-    }
-
 
     // MARK: - Private
 
@@ -63,7 +43,7 @@ final class TabPanelStateTests: XCTestCase {
     private func createTabs() -> [TabModel] {
         var tabs = [TabModel]()
         for index in 0...2 {
-            let tab = TabModel.emptyTabState(tabUUID: "", title: "Tab1")
+            let tab = TabModel.emptyTabState(tabUUID: "", title: "Tab\(index)")
             tabs.append(tab)
         }
         return tabs

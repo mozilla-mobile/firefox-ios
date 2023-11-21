@@ -70,18 +70,17 @@ final class TabDisplayPanelTests: XCTestCase {
         let inactiveTabs: [InactiveTabsModel] = emptyInactiveTabs ? [InactiveTabsModel]() : inactiveTabsModel
         let isInactiveTabsExpanded = !isPrivateMode && !inactiveTabs.isEmpty
         return TabsPanelState(isPrivateMode: isPrivateMode,
-                         tabs: tabs,
-                         inactiveTabs: inactiveTabs,
-                         isInactiveTabsExpanded: isInactiveTabsExpanded)
+                              tabs: tabs,
+                              inactiveTabs: inactiveTabs,
+                              isInactiveTabsExpanded: isInactiveTabsExpanded)
     }
 
-    private func createTabs(_ emptyTabs: Bool) -> [TabCellModel] {
-        guard !emptyTabs else { return [TabCellModel]() }
+    private func createTabs(_ emptyTabs: Bool) -> [TabModel] {
+        guard !emptyTabs else { return [TabModel]() }
 
-        var tabs = [TabCellModel]()
+        var tabs = [TabModel]()
         for index in 0...2 {
-            let tab = Tab(profile: profile, configuration: WKWebViewConfiguration())
-            let tabModel = TabCellModel.emptyTabState(title: "Tab \(index)", tab: tab)
+            let tabModel = TabModel.emptyTabState(tabUUID: "UUID", title: "Tab \(index)")
             tabs.append(tabModel)
         }
         return tabs
