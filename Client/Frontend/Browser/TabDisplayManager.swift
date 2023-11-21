@@ -758,9 +758,7 @@ extension LegacyTabDisplayManager: UICollectionViewDropDelegate {
 
         filteredTabs.insert(tab, at: destinationIndexPath.item)
 
-        if tabDisplayType == .TabGrid {
-            saveRegularOrderedTabs(from: filteredTabs)
-        }
+        saveRegularOrderedTabs(from: filteredTabs)
 
         /// According to Apple's documentation the best place to make the changes to the collectionView and dataStore is
         /// during the completion call of performBatchUpdates
