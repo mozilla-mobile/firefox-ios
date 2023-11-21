@@ -164,6 +164,20 @@ class RustAutofillTests: XCTestCase {
         waitForExpectations(timeout: 3, handler: nil)
     }
 
+    func testListAllAddressesEmpty() {
+        let expectationListAddresses = expectation(description: "Completes the list all addresses operation for an empty list")
+
+        autofill.listAllAddresses { addresses, error in
+            XCTAssertNil(error, "Error should be nil")
+            XCTAssertNotNil(addresses, "Addresses should not be nil")
+            XCTAssertEqual(addresses?.count, 0, "Addresses count should be 0 for an empty list")
+
+            expectationListAddresses.fulfill()
+        }
+
+        waitForExpectations(timeout: 3, handler: nil)
+    }
+
     func testUpdateCreditCard() {
         let expectationAddCard = expectation(description: "completed add card")
         let expectationGetCard = expectation(description: "completed getting card")
