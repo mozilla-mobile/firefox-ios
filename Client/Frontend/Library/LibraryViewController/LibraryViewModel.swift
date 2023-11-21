@@ -7,7 +7,6 @@ import Foundation
 
 class LibraryViewModel {
     let profile: Profile
-    let tabManager: TabManager
     let panelDescriptors: [LibraryPanelDescriptor]
     var selectedPanel: LibraryPanelType?
 
@@ -18,17 +17,8 @@ class LibraryViewModel {
          UIImage(named: ImageIdentifiers.libraryReadingList) ?? UIImage()]
     }
 
-    init(withProfile profile: Profile, tabManager: TabManager) {
+    init(withProfile profile: Profile) {
         self.profile = profile
-        self.tabManager = tabManager
-        self.panelDescriptors = LibraryPanelHelper(profile: profile, tabManager: tabManager).enabledPanels
-    }
-
-    func resetHistoryPanelPagination() {
-        // Reset history panel pagination to get latest history visit
-        if let historyPanel = panelDescriptors.first(where: { $0.panelType == .history }),
-           let vcPanel = historyPanel.viewController as? HistoryPanel {
-            vcPanel.viewModel.shouldResetHistory = true
-        }
+        self.panelDescriptors = LibraryPanelHelper(profile: profile).enabledPanels
     }
 }

@@ -9,7 +9,6 @@ import Common
 class LibraryViewModelTests: XCTestCase {
     private var subject: LibraryViewModel!
     private var profile: MockProfile!
-    private var tabManager: TabManager!
 
     override func setUp() {
         super.setUp()
@@ -17,7 +16,6 @@ class LibraryViewModelTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile(databasePrefix: "historyHighlights_tests")
         profile.reopen()
-        tabManager = TabManagerImplementation(profile: profile, imageStore: nil)
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
@@ -26,18 +24,17 @@ class LibraryViewModelTests: XCTestCase {
         AppContainer.shared.reset()
         profile.shutdown()
         profile = nil
-        tabManager = nil
     }
 
     func testInitialState_Init() {
-        subject = LibraryViewModel(withProfile: profile, tabManager: tabManager)
+        subject = LibraryViewModel(withProfile: profile)
         subject.selectedPanel = .bookmarks
 
         XCTAssertEqual(subject.panelDescriptors.count, 4)
     }
 
     func testLibraryPanelTitle() {
-        subject = LibraryViewModel(withProfile: profile, tabManager: tabManager)
+        subject = LibraryViewModel(withProfile: profile)
         subject.selectedPanel = .bookmarks
 
         for panel in subject.panelDescriptors {
