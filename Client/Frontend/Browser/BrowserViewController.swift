@@ -734,6 +734,10 @@ class BrowserViewController: UIViewController,
         var fakespotNeedsUpdate = false
         if urlBar.currentURL != nil {
             fakespotNeedsUpdate = contentStackView.isSidebarVisible != FakespotUtils().shouldDisplayInSidebar(viewSize: size)
+            if isReduxIntegrationEnabled,
+                let fakespotState = store.state.screenState(FakespotState.self, for: .fakespot) {
+                fakespotNeedsUpdate = fakespotNeedsUpdate && fakespotState.isOpenOnProductPage
+            }
 
             if fakespotNeedsUpdate {
                 _ = dismissFakespotIfNeeded(animated: false)
