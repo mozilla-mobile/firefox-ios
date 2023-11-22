@@ -1077,13 +1077,14 @@ class BrowserViewController: UIViewController,
 
         addChild(searchController)
         view.addSubview(searchController.view)
-        searchController.view.snp.makeConstraints { make in
-            make.top.equalTo(header.snp.bottom)
-            make.left.right.equalTo(view)
 
-            let constraintTarget = isBottomSearchBar ? overKeyboardContainer.snp.top : view.snp.bottom
-            make.bottom.equalTo(constraintTarget)
-        }
+        NSLayoutConstraint.activate([
+            searchController.view.topAnchor.constraint(equalTo: header.bottomAnchor),
+            searchController.view.leftAnchor.constraint(equalTo: view.leftAnchor),
+            searchController.view.rightAnchor.constraint(equalTo: view.rightAnchor)
+        ])
+        searchController.view.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor).isActive = isBottomSearchBar
+        searchController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = !isBottomSearchBar
 
         searchController.didMove(toParent: self)
     }
