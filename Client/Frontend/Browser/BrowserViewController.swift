@@ -464,6 +464,7 @@ class BrowserViewController: UIViewController,
         ensureMainThread { [weak self] in
             guard let self else { return }
 
+            // opens or close sidebar/bottom sheet to match the saved state
             if state.isOpenOnProductPage {
                 guard let productURL = urlBar.currentURL else { return }
                 handleFakespotFlow(productURL: productURL)
