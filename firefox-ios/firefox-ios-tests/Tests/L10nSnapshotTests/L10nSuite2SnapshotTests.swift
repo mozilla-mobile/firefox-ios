@@ -130,10 +130,12 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         passcodeInput.tap()
         passcodeInput.typeText("foo\n")
 
-        mozWaitForElementToExist(app.tables["Login List"], timeout: 10)
-        app.buttons[AccessibilityIdentifiers.Settings.Passwords.addCredentialButton].tap()
-        mozWaitForElementToExist(app.tables["Add Credential"], timeout: 10)
+        mozWaitForElementToExist(app.tables["Login List"], timeout: 25)
+        mozWaitForElementToExist(app.buttons["addCredentialButton"], timeout: 20)
         snapshot("CreateLogin")
+        app.buttons["addCredentialButton"].tap()
+
+        mozWaitForElementToExist(app.tables["Add Credential"].cells.element(boundBy: 0), timeout: 15)
         app.tables["Add Credential"].cells.element(boundBy: 0).tap()
         tapKeyboardKey(key)
         mozWaitForElementToExist(app.tables["Add Credential"].cells.element(boundBy: 1), timeout: 15)
@@ -153,5 +155,40 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
 
         app.tables["Login Detail List"].cells.element(boundBy: 4).tap()
         snapshot("RemoveLoginDetailedView")
+    }
+
+    func testFakespotAvailable() throws {
+        navigator.openURL("https://www.amazon.com")
+        waitUntilPageLoad()
+
+        // Search for and open a shoe listing
+        let website = app.webViews["contentView"].firstMatch
+        mozWaitForElementToExist(website.textFields.firstMatch)
+        website.textFields.firstMatch.tap()
+        website.textFields.firstMatch.typeText("Shoe")
+        website.buttons.element(boundBy: 5).tap()
+        waitUntilPageLoad()
+        website.images.firstMatch.tap()
+
+        // Tap the shopping cart icon
+        waitUntilPageLoad()
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton])
+        app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton].tap()
+        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
+        snapshot("ReviewChecker")
+
+        // Open Menu
+        app.buttons["Shopping.OptInCard.MainButton"].tap()
+        snapshot("YesTryIt")
+
+        // Tap on each option in that menu
+        mozWaitForElementToExist(app.buttons["Shopping.ReviewQualityCard.ExpandButton"])
+        app.buttons["Shopping.ReviewQualityCard.ExpandButton"].tap()
+        snapshot("ReviewQualityCard")
+        app.buttons["Shopping.ReviewQualityCard.ExpandButton"].tap()
+
+        mozWaitForElementToExist(app.buttons["Shopping.SettingsCard.ExpandButton"])
+        app.buttons["Shopping.SettingsCard.ExpandButton"].tap()
+        snapshot("SettingsCard")
     }
 }
