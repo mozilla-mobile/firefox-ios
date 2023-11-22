@@ -21,17 +21,27 @@ final class TabPanelStateTests: XCTestCase {
         DependencyHelperMock().reset()
     }
 
-    func testTabsState_RefreshTabs() {
-        let initialState = TabsPanelState()
+    func testTabsState_DidLoadTabPanel() {
+        let initialState = createInitialState()
         XCTAssertTrue(initialState.tabs.isEmpty)
         let reducer = tabsPanelReducer()
-        let testTabs = createTabs()
-        let newState = reducer(initialState, TabPanelAction.refreshTab(testTabs))
+        let tabDisplayModel = TabDisplayModel(isPrivateMode: false,
+                                              tabs: createTabs(),
+                                              inactiveTabs: [InactiveTabsModel](),
+                                              isInactiveTabsExpanded: false)
+        let newState = reducer(initialState, TabPanelAction.didLoadTabPanel(tabDisplayModel))
         XCTAssertFalse(newState.tabs.isEmpty)
     }
 
-    // MARK: - Private
+    func testTabsState_IsInactiveTabsExpanded() {
+        let initialState = createInitialState()
+        XCTAssertFalse(initialState.isInactiveTabsExpanded)
+        let reducer = tabsPanelReducer()
+        let newState = reducer(initialState, TabPanelAction.toggleInactiveTabs)
+        XCTAssertTrue(newState.isInactiveTabsExpanded)
+    }
 
+    // MARK: - Private
     private func tabsPanelReducer() -> Reducer<TabsPanelState> {
         return TabsPanelState.reducer
     }
@@ -49,8 +59,12 @@ final class TabPanelStateTests: XCTestCase {
         return tabs
     }
 
-    private func createSubject() -> RemoteTabsPanelState {
-        let subject = RemoteTabsPanelState()
-        return subject
+    private func createInactiveTabs() -> [InactiveTabsModel] {
+        var inactiveTabs = [InactiveTabsModel]()
+        for index in 0...2 {
+            let inactiveTab = InactiveTabsModel(url: "InactiveTab\(index)")
+            inactiveTabs.append(inactiveTab)
+        }
+        return inactiveTabs
     }
 }

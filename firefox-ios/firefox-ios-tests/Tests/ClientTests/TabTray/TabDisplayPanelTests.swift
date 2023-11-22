@@ -3,23 +3,18 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import WebKit
 import XCTest
 
 @testable import Client
 final class TabDisplayPanelTests: XCTestCase {
-    var profile: MockProfile!
-
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        profile = MockProfile()
     }
 
     override func tearDown() {
         super.tearDown()
         DependencyHelperMock().reset()
-        profile = nil
     }
 
     func testExpandedInactiveTabs_InitialState() {
