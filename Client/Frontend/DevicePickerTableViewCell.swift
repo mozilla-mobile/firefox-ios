@@ -13,7 +13,12 @@ class DevicePickerTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable 
         static let deviceRowTextPaddingRight: CGFloat = 50
     }
 
-    var nameLabel: UILabel
+    var nameLabel: UILabel = .build { label in
+        label.font = UX.deviceRowTextFont
+        label.numberOfLines = 2
+        label.lineBreakMode = .byWordWrapping
+    }
+
     var checked = false {
         didSet {
             self.accessoryType = checked ? .checkmark : .none
@@ -27,12 +32,8 @@ class DevicePickerTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable 
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        nameLabel = UILabel()
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(nameLabel)
-        nameLabel.font = UX.deviceRowTextFont
-        nameLabel.numberOfLines = 2
-        nameLabel.lineBreakMode = .byWordWrapping
         self.tintColor = UIColor.label
         self.preservesSuperviewLayoutMargins = false
         self.selectionStyle = .none
@@ -41,11 +42,11 @@ class DevicePickerTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        nameLabel.snp.makeConstraints { (make) -> Void in
-            make.left.equalTo(UX.deviceRowTextPaddingLeft)
-            make.centerY.equalTo(self.snp.centerY)
-            make.right.equalTo(self.snp.right).offset(-UX.deviceRowTextPaddingRight)
-        }
+        NSLayoutConstraint.activate([
+            nameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.deviceRowTextPaddingLeft),
+            nameLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+            nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.deviceRowTextPaddingRight)
+        ])
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -53,8 +54,9 @@ class DevicePickerTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable 
     }
 
     func applyTheme(theme: Theme) {
-        nameLabel.textColor = theme.colors.textPrimary
+        let colors = theme.colors
+        nameLabel.textColor = colors.textPrimary
         imageView?.image = imageView?.image?.withRenderingMode(.alwaysTemplate)
-        imageView?.tintColor = theme.colors.textPrimary
+        imageView?.tintColor = colors.textPrimary
     }
 }
