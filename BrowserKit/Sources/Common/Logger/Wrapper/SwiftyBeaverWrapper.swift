@@ -54,7 +54,7 @@ struct DefaultSwiftyBeaverBuilder: SwiftyBeaverBuilder {
     func setup(with destination: URL?) -> SwiftyBeaverWrapper.Type {
         let console = ConsoleDestination()
         console.format = defaultFormat
-        console.minLevel = .info
+        console.minLevel = .debug
         console.levelString.error = "FATAL"
 
         let file = FileDestination(logFileURL: destination)
