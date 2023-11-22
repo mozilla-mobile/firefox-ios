@@ -186,6 +186,10 @@ class Tab: NSObject, ThemeApplicable {
     /// This property returns, ideally, the web page's title. Otherwise, based on the page being internal or not, it will
     /// resort to other displayable titles.
     var displayTitle: String {
+        if let lastTitle = lastTitle, !lastTitle.isEmpty {
+            return lastTitle
+        }
+
         // First, check if the webView can give us a title.
         if let title = webView?.title, !title.isEmpty {
             return title
@@ -229,7 +233,7 @@ class Tab: NSObject, ThemeApplicable {
             backUpName = about
         }
 
-        return self.displayTitle.isEmpty ? backUpName : self.displayTitle
+        return displayTitle.isEmpty ? backUpName : displayTitle
     }
 
     var canGoBack: Bool {
