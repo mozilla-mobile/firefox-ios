@@ -80,6 +80,7 @@ class BrowserViewController: UIViewController,
     let tabManager: TabManager
     let ratingPromptManager: RatingPromptManager
     lazy var isTabTrayRefactorEnabled: Bool = TabTrayFlagManager.isRefactorEnabled
+    private var fakespotState: FakespotState?
 
     // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
     var header: BaseAlphaStackView = .build { _ in }
@@ -464,6 +465,9 @@ class BrowserViewController: UIViewController,
         ensureMainThread { [weak self] in
             guard let self else { return }
 
+            fakespotState = state
+
+            // opens or close sidebar/bottom sheet to match the saved state
             if state.isOpenOnProductPage {
                 guard let productURL = urlBar.currentURL else { return }
                 handleFakespotFlow(productURL: productURL)
@@ -733,6 +737,9 @@ class BrowserViewController: UIViewController,
         var fakespotNeedsUpdate = false
         if urlBar.currentURL != nil {
             fakespotNeedsUpdate = contentStackView.isSidebarVisible != FakespotUtils().shouldDisplayInSidebar(viewSize: size)
+            if isReduxIntegrationEnabled, let fakespotState = fakespotState {
+                fakespotNeedsUpdate = fakespotNeedsUpdate && fakespotState.isOpenOnProductPage
+            }
 
             if fakespotNeedsUpdate {
                 _ = dismissFakespotIfNeeded(animated: false)
@@ -1676,7 +1683,7 @@ class BrowserViewController: UIViewController,
                   !tab.isPrivate,
                   FakespotUtils().shouldDisplayInSidebar(),
                   isReduxIntegrationEnabled,
-                  let fakespotState = store.state.screenState(FakespotState.self, for: .fakespot),
+                  let fakespotState = fakespotState,
                   fakespotState.isOpenOnProductPage {
             handleFakespotFlow(productURL: url)
         } else if contentStackView.isSidebarVisible {
