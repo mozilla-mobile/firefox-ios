@@ -790,6 +790,8 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         delegates.forEach { $0.get()?.tabManagerDidRemoveAllTabs(self, toast: toast) }
     }
 
+    func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {}
+
     // MARK: - Private
     @objc
     private func blockPopUpDidChange() {

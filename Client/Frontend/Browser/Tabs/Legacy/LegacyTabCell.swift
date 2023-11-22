@@ -155,7 +155,6 @@ class LegacyTabCell: UICollectionViewCell,
         isSelectedTab = selected
 
         titleText.text = tab.getTabTrayTitle()
-        print("YRD titleTex \(titleText.text)")
         accessibilityLabel = getA11yTitleLabel(tab: tab)
         isAccessibilityElement = true
         accessibilityHint = .TabTraySwipeToCloseAccessibilityHint

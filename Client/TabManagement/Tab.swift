@@ -233,7 +233,6 @@ class Tab: NSObject, ThemeApplicable {
             backUpName = about
         }
 
-        print("YRD isDisplayTitle empty \(displayTitle.isEmpty)")
         return displayTitle.isEmpty ? backUpName : displayTitle
     }
 
