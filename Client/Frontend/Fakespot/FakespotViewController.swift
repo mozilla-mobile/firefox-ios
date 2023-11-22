@@ -43,6 +43,8 @@ class FakespotViewController:
     private var viewModel: FakespotViewModel
     weak var delegate: FakespotViewControllerDelegate?
 
+    lazy var isReduxIntegrationEnabled: Bool = ReduxFlagManager.isReduxEnabled
+
     private lazy var scrollView: UIScrollView = .build()
 
     private lazy var contentStackView: UIStackView = .build { stackView in
@@ -475,8 +477,16 @@ class FakespotViewController:
 
     @objc
     private func closeTapped() {
-        delegate?.fakespotControllerDidDismiss(animated: true)
+        triggerDismiss()
         viewModel.recordDismissTelemetry(by: .closeButton)
+    }
+
+    private func triggerDismiss() {
+        delegate?.fakespotControllerDidDismiss(animated: true)
+
+        if isReduxIntegrationEnabled {
+            store.dispatch(FakespotAction.toggleAppearance(false))
+        }
     }
 
     deinit {
@@ -504,7 +514,8 @@ class FakespotViewController:
     // MARK: - UIAdaptivePresentationControllerDelegate
 
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        delegate?.fakespotControllerDidDismiss(animated: true)
+        triggerDismiss()
+
         let currentDetent = viewModel.getCurrentDetent(for: presentationController)
 
         if viewModel.isSwiping || currentDetent == .large {
