@@ -6,8 +6,8 @@ from github import Github
 
 
 GITHUB_REPO = "mozilla/rust-components-swift"
-SPM_PACKAGE = "Blockzilla.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved"
-BLOCKZILLA_PROJECT = "Blockzilla.xcodeproj/project.pbxproj"
+SPM_PACKAGE = "focus-ios/Blockzilla.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved"
+BLOCKZILLA_PROJECT = "focus-ios/Blockzilla.xcodeproj/project.pbxproj"
 github_access_token = os.getenv("GITHUB_TOKEN")
 
 def get_latest_rust_components_version():
@@ -113,7 +113,7 @@ def main():
         update_proj_file(current_min_version, rust_component_repo_tag, BLOCKZILLA_PROJECT)
 
         # Save the newer version to be used in the PR info
-        f= open("focus-ios/github-actions-scripts/newest_tag.txt","w+")
+        f= open("focus-ios/focus-ios-tests/github-actions-scripts/newest_tag.txt","w+")
         f.write(rust_component_repo_tag+"\n")
 
 if __name__ == '__main__':
