@@ -86,13 +86,13 @@ public actor DefaultDiskImageStore: DiskImageStore {
     }
 
     public func clearAllScreenshotsExcluding(_ keys: Set<String>) async throws {
-        let keysToDelete = keys.subtracting(keys)
+        let keysToDelete = self.keys.subtracting(keys)
 
         for key in keysToDelete {
             let url = URL(fileURLWithPath: filesDir).appendingPathComponent(key)
             try FileManager.default.removeItem(at: url)
         }
-        self.keys = keys.intersection(keys)
+        self.keys = keys
     }
 
     public func deleteImageForKey(_ key: String) async {
