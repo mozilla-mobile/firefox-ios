@@ -196,6 +196,78 @@ final class ShoppingProductTests: XCTestCase {
         XCTAssertEqual(client.productId, "B087T8Q2C4")
         XCTAssertEqual(client.website, "amazon.com")
     }
+
+    func testSupportedTLDWebsites_TopLevelDomainFound() {
+        let product = Product(
+            id: "123",
+            host: "example.com",
+            topLevelDomain: "com",
+            sitename: "example"
+        )
+
+        let fakeConfig: [String: WebsiteConfig] = [
+            "website1": WebsiteConfig(validTlDs: ["com", "net"]),
+            "website2": WebsiteConfig(validTlDs: ["org", "gov"]),
+            "website3": WebsiteConfig(validTlDs: ["edu", "io"])
+        ]
+
+        let fakeFeatureLayer = NimbusFakespotFeatureLayerMock(config: fakeConfig)
+
+        let sut = ShoppingProduct(
+            url: URL(string: "https://example.com")!,
+            nimbusFakespotFeatureLayer: fakeFeatureLayer,
+            client: client
+        )
+        sut.product = product
+
+        let result = sut.supportedTLDWebsites
+        XCTAssertEqual(result, ["website1"])
+    }
+
+    func testSupportedTLDWebsites_TopLevelDomainNotFound() {
+        let product = Product(
+            id: "123",
+            host: "example.com",
+            topLevelDomain: "xyz",
+            sitename: "example"
+        )
+
+        let fakeConfig: [String: WebsiteConfig] = [
+            "website1": WebsiteConfig(validTlDs: ["com", "net"]),
+            "website2": WebsiteConfig(validTlDs: ["org", "gov"]),
+            "website3": WebsiteConfig(validTlDs: ["edu", "io"])
+        ]
+
+        let fakeFeatureLayer = NimbusFakespotFeatureLayerMock(config: fakeConfig)
+        let sut = ShoppingProduct(
+            url: URL(string: "https://example.com")!,
+            nimbusFakespotFeatureLayer: fakeFeatureLayer,
+            client: client
+        )
+        sut.product = product
+
+        let result = sut.supportedTLDWebsites
+        XCTAssertEqual(result, [])
+    }
+
+    func testSupportedTLDWebsites_ProductIsNil() {
+        let fakeConfig: [String: WebsiteConfig] = [
+            "website1": WebsiteConfig(validTlDs: ["com", "net"]),
+            "website2": WebsiteConfig(validTlDs: ["org", "gov"]),
+            "website3": WebsiteConfig(validTlDs: ["edu", "io"])
+        ]
+
+        let fakeFeatureLayer = NimbusFakespotFeatureLayerMock(config: fakeConfig)
+        let sut = ShoppingProduct(
+            url: URL(string: "https://example.com")!,
+            nimbusFakespotFeatureLayer: fakeFeatureLayer,
+            client: client
+        )
+        sut.product = nil
+
+        let result = sut.supportedTLDWebsites
+        XCTAssertNil(result)
+    }
 }
 
 final class ThrowingFakeSpotClient: FakespotClientType {
@@ -234,6 +306,19 @@ final class ThrowingFakeSpotClient: FakespotClientType {
     func reportProductBackInStock(productId: String, website: String) async throws -> ReportResponse {
         reportProductBackInStockCallCount += 1
         throw error
+    }
+}
+
+final class NimbusFakespotFeatureLayerMock: NimbusFakespotFeatureLayerProtocol {
+    var relayURL: URL?
+    let config: [String: WebsiteConfig]
+
+    init(config: [String: WebsiteConfig]) {
+        self.config = config
+    }
+
+    func getSiteConfig(siteName: String) -> WebsiteConfig? {
+        config[siteName]
     }
 }
 

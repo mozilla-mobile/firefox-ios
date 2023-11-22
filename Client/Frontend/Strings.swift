@@ -3934,7 +3934,7 @@ extension String {
             tableName: "Shopping",
             value: "See how reliable product reviews are on %1$@ before you buy. Review Checker, an experimental feature from %2$@, is built right into the browser. It works on %3$@ and %4$@, too.",
             comment: "Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. The third and fourth parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter.")
-        public static let OptInCardFirstParagraphAmazonOnly = MZLocalizedString(
+        public static let OptInCardFirstParagraphOneVendor = MZLocalizedString(
             key: "Shopping.OptInCard.FirstParagraph.AmazonOnly.Description.v122",
             tableName: "Shopping",
             value: "See how reliable product reviews are on %1$@ before you buy. Review Checker, an experimental feature from %2$@, is built right into the browser.",
