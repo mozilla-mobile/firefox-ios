@@ -5,7 +5,11 @@
 import UIKit
 
 // Holds toolbar, search bar, search and browser VCs
-class RootViewController: UIViewController {
+class RootViewController: UIViewController,
+                          BrowserToolbarDelegate,
+                          BrowserReloadStopDelegate,
+                          BrowserSearchBarDelegate,
+                          BrowserMenuDelegate {
     private lazy var toolbar: BrowserToolbar = .build { _ in }
     private lazy var searchBar: BrowserSearchBar =  .build { _ in }
     private lazy var statusBarFiller: UIView =  .build { view in
@@ -96,10 +100,9 @@ class RootViewController: UIViewController {
         searchBar.resignFirstResponder()
         browserVC.loadUrlOrSearch(term)
     }
-}
 
-// MARK: - BrowserToolbarDelegate
-extension RootViewController: BrowserToolbarDelegate {
+    // MARK: - BrowserToolbarDelegate
+
     func backButtonClicked() {
         // TODO: FXIOS-7823 Integrate WebEngine in SampleBrowser
 //        browserVC.currentBrowser.goBack()
@@ -119,10 +122,9 @@ extension RootViewController: BrowserToolbarDelegate {
         // TODO: FXIOS-7823 Integrate WebEngine in SampleBrowser
 //        browserVC.currentBrowser.stop()
     }
-}
 
-// MARK: - BrowserReloadStopDelegate
-extension RootViewController: BrowserReloadStopDelegate {
+    // MARK: - BrowserReloadStopDelegate
+
     func browserIsLoading(isLoading: Bool) {
         toolbar.updateReloadStopButton(isLoading: isLoading)
 
@@ -133,10 +135,9 @@ extension RootViewController: BrowserReloadStopDelegate {
 //                                             canGoForward: browserVC.currentBrowser.canGoForward)
         }
     }
-}
 
 // MARK: - BrowserSearchBarDelegate
-extension RootViewController: BrowserSearchBarDelegate {
+
     func searchSuggestions(searchTerm: String) {
         guard !searchTerm.isEmpty else {
             return
@@ -150,10 +151,9 @@ extension RootViewController: BrowserSearchBarDelegate {
         guard let searchText = searchBar.getSearchBarText(), !searchText.isEmpty else { return }
         browse(to: searchText)
     }
-}
 
-// MARK: - BrowserMenuDelegate
-extension RootViewController: BrowserMenuDelegate {
+    // MARK: - BrowserMenuDelegate
+
     func didClickMenu() {
         // Not implementing Settings for now, will see later on if this is needed or not
     }

@@ -9,7 +9,7 @@ protocol BrowserReloadStopDelegate: AnyObject {
 }
 
 // Holds different type of browser views, communicating through protocols with them
-class BrowserViewController: UIViewController {
+class BrowserViewController: UIViewController, BrowserDelegate {
     weak var reloadStopDelegate: BrowserReloadStopDelegate?
     private lazy var progressView: UIProgressView = .build { _ in }
     // TODO: FXIOS-7823 Integrate WebEngine in SampleBrowser
@@ -68,10 +68,9 @@ class BrowserViewController: UIViewController {
         // TODO: FXIOS-7823 Integrate WebEngine in SampleBrowser
 //        currentBrowser.loadUrlOrSearch(searchTerm)
     }
-}
 
-// MARK: - BrowserDelegate
-extension BrowserViewController: BrowserDelegate {
+    // MARK: - BrowserDelegate
+
     func setProgressBarStatus(status: ProgressBarStatus) {
         progressView.progress = Float(status.progress)
         progressView.isHidden = status.isHidden

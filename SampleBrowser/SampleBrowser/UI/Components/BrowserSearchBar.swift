@@ -4,10 +4,6 @@
 
 import UIKit
 
-struct BrowserSearchBarViewModel {
-    let placeholder: String
-}
-
 protocol BrowserSearchBarDelegate: AnyObject {
     func searchSuggestions(searchTerm: String)
     func openBrowser(searchTerm: String)
@@ -18,7 +14,7 @@ protocol BrowserMenuDelegate: AnyObject {
     func didClickMenu()
 }
 
-class BrowserSearchBar: UIView {
+class BrowserSearchBar: UIView, UISearchBarDelegate {
     private weak var browserDelegate: BrowserSearchBarDelegate?
     private weak var browserMenuDelegate: BrowserMenuDelegate?
 
@@ -99,10 +95,9 @@ class BrowserSearchBar: UIView {
             menuButton.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
-}
 
-// MARK: - UISearchBarDelegate
-extension BrowserSearchBar: UISearchBarDelegate {
+    // MARK: - UISearchBarDelegate
+
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchText = searchBar.lowercased, !searchText.isEmpty else { return }
 
