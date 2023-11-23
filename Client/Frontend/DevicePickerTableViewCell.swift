@@ -19,11 +19,6 @@ class DevicePickerTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable 
         label.lineBreakMode = .byWordWrapping
     }
 
-    func configureCell(_ text: String, _ clientType: ClientType) {
-        nameLabel.text = text
-        self.clientType = clientType
-    }
-
     var checked = false {
         didSet {
             self.accessoryType = checked ? .checkmark : .none
@@ -51,6 +46,11 @@ class DevicePickerTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable 
             nameLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.deviceRowTextPaddingRight)
         ])
+    }
+
+    func configureCell(_ text: String, _ clientType: ClientType) {
+        nameLabel.text = text
+        self.clientType = clientType
     }
 
     required init(coder aDecoder: NSCoder) {
