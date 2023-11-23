@@ -13,10 +13,15 @@ class DevicePickerTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable 
         static let deviceRowTextPaddingRight: CGFloat = 50
     }
 
-    var nameLabel: UILabel = .build { label in
+    private lazy var nameLabel: UILabel = .build { label in
         label.font = UX.deviceRowTextFont
         label.numberOfLines = 2
         label.lineBreakMode = .byWordWrapping
+    }
+
+    func configureCell(_ text: String, _ clientType: ClientType) {
+        nameLabel.text = text
+        self.clientType = clientType
     }
 
     var checked = false {
@@ -34,18 +39,17 @@ class DevicePickerTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(nameLabel)
+        setupLayout()
         self.tintColor = UIColor.label
         self.preservesSuperviewLayoutMargins = false
         self.selectionStyle = .none
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
+    private func setupLayout() {
         NSLayoutConstraint.activate([
-            nameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.deviceRowTextPaddingLeft),
+            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.deviceRowTextPaddingLeft),
             nameLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-            nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.deviceRowTextPaddingRight)
+            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.deviceRowTextPaddingRight)
         ])
     }
 
