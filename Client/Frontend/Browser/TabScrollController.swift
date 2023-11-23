@@ -7,6 +7,10 @@ import SnapKit
 
 private let ToolbarBaseAnimationDuration: CGFloat = 0.2
 class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvider {
+    private struct UX {
+        static let abruptScrollEventOffset: CGFloat = 200
+    }
+
     enum ScrollDirection {
         case up
         case down
@@ -396,7 +400,7 @@ extension TabScrollingController: UIScrollViewDelegate {
     // before the WKWebView's contentOffset is reset as a result of the contentView's frame becoming smaller
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard isAnimatingToolbar else { return }
-        if contentOffsetBeforeAnimation.y - scrollView.contentOffset.y > 200 {
+        if contentOffsetBeforeAnimation.y - scrollView.contentOffset.y > UX.abruptScrollEventOffset {
             scrollView.contentOffset = CGPoint(x: contentOffsetBeforeAnimation.x, y: contentOffsetBeforeAnimation.y + self.topScrollHeight)
             contentOffsetBeforeAnimation.y = 0
         }
