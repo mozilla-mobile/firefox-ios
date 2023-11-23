@@ -15,6 +15,7 @@ struct MIMEType {
     static let JavaScript = "text/javascript"
     static let JPEG = "image/jpeg"
     static let HTML = "text/html"
+    static let MP4 = "video/mp4"
     static let OctetStream = "application/octet-stream"
     static let Passbook = "application/vnd.apple.pkpass"
     static let PDF = "application/pdf"
@@ -35,8 +36,18 @@ struct MIMEType {
         MIMEType.PNG,
         MIMEType.WebP]
 
+    private static let downloadableMIMETypes: [String] = [
+        MIMEType.JPEG,
+        MIMEType.MP4,
+        MIMEType.OctetStream
+    ]
+
     static func canShowInWebView(_ mimeType: String) -> Bool {
         return webViewViewableTypes.contains(mimeType.lowercased())
+    }
+
+    static func canBeDownloaded(_ mimeType: String) -> Bool {
+        return downloadableMIMETypes.contains(mimeType.lowercased())
     }
 
     static func mimeTypeFromFileExtension(_ fileExtension: String) -> String {
@@ -78,7 +89,7 @@ class DownloadHelper: NSObject {
         guard let request = request else { return nil }
 
         let mimeType = response.mimeType ?? MIMEType.OctetStream
-        let isAttachment = mimeType == MIMEType.OctetStream
+        let isAttachment = MIMEType.canBeDownloaded(mimeType)
 
         // Bug 1474339 - Don't auto-download files served with 'Content-Disposition: attachment'
         // Leaving this here for now, but commented out. Checking this HTTP header is
