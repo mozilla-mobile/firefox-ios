@@ -10,7 +10,8 @@ class TabDisplayView: UIView,
                       UICollectionViewDataSource,
                       UICollectionViewDelegate,
                       UICollectionViewDelegateFlowLayout,
-                      TabCellDelegate {
+                      TabCellDelegate,
+                      InactiveTabsSectionManagerDelegate {
     struct UX {
         static let cornerRadius: CGFloat = 6.0
     }
@@ -20,9 +21,10 @@ class TabDisplayView: UIView,
         case tabs
     }
 
-    private(set) var tabsState: TabsState
+    private(set) var tabsState: TabsPanelState
     private var inactiveTabsSectionManager: InactiveTabsSectionManager
     private var tabsSectionManager: TabsSectionManager
+    private weak var tabPeekDelegate: TabPeekDelegate?
     var theme: Theme?
 
     private var shouldHideInactiveTabs: Bool {
@@ -57,11 +59,13 @@ class TabDisplayView: UIView,
         return collectionView
     }()
 
-    public init(state: TabsState) {
+    public init(state: TabsPanelState, tabPeekDelegate: TabPeekDelegate?) {
         self.tabsState = state
+        self.tabPeekDelegate = tabPeekDelegate
         self.inactiveTabsSectionManager = InactiveTabsSectionManager()
         self.tabsSectionManager = TabsSectionManager()
         super.init(frame: .zero)
+        self.inactiveTabsSectionManager.delegate = self
         setupLayout()
     }
 
@@ -69,7 +73,7 @@ class TabDisplayView: UIView,
         fatalError("init(coder:) has not been implemented")
     }
 
-    func newState(state: TabsState) {
+    func newState(state: TabsPanelState) {
         tabsState = state
         collectionView.reloadData()
     }
@@ -125,6 +129,10 @@ class TabDisplayView: UIView,
         guard !shouldHideInactiveTabs else { return .tabs }
 
         return TabDisplaySection(rawValue: section) ?? .tabs
+    }
+
+    func deleteInactiveTab(for index: Int) {
+        store.dispatch(TabPanelAction.closeInactiveTabs(index))
     }
 
     // MARK: UICollectionViewDataSource
@@ -183,7 +191,9 @@ class TabDisplayView: UIView,
                 if let theme = theme {
                     footerView.applyTheme(theme: theme)
                 }
-                footerView.buttonClosure = {}
+                footerView.buttonClosure = {
+                    store.dispatch(TabPanelAction.closeAllInactiveTabs)
+                }
                 return footerView
             }
 
@@ -200,7 +210,7 @@ class TabDisplayView: UIView,
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabsCell.cellIdentifier, for: indexPath) as? InactiveTabsCell
             else { return UICollectionViewCell() }
 
-            cell.configure(text: tabsState.inactiveTabs[indexPath.row])
+            cell.configure(text: tabsState.inactiveTabs[indexPath.row].url)
             if let theme = theme {
                 cell.applyTheme(theme: theme)
             }
@@ -213,6 +223,19 @@ class TabDisplayView: UIView,
             cell.configure(with: tabState, theme: theme, delegate: self)
             return cell
         }
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        contextMenuConfigurationForItemAt indexPath: IndexPath,
+                        point: CGPoint) -> UIContextMenuConfiguration? {
+        guard getTabDisplay(for: indexPath.section) == .tabs
+        else { return nil }
+
+        // TODO: Add browserProfile and clientPickerDelegate
+        let tabVC = TabPeekViewController(tab: nil, delegate: tabPeekDelegate)
+        return UIContextMenuConfiguration(identifier: nil,
+                                          previewProvider: { return tabVC },
+                                          actionProvider: tabVC.contextActions(defaultActions:))
     }
 
     @objc
@@ -233,9 +256,7 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
     func collectionView(_ collectionView: UICollectionView,
                         itemsForBeginning session: UIDragSession,
                         at indexPath: IndexPath) -> [UIDragItem] {
-        guard let section = TabDisplayView.TabDisplaySection(rawValue: indexPath.section),
-              section == .tabs
-        else { return [] }
+        guard getTabDisplay(for: indexPath.section) == .tabs else { return [] }
 
         // TODO: Add telemetry
         let itemProvider = NSItemProvider()
@@ -255,7 +276,7 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
         guard collectionView.hasActiveDrag,
               let destinationIndexPath = coordinator.destinationIndexPath,
               let dragItem = coordinator.items.first?.dragItem,
-              let tab = dragItem.localObject as? TabCellModel,
+              let tab = dragItem.localObject as? TabModel,
               let sourceIndex = tabsState.tabs.firstIndex(of: tab) else { return }
 
         let section = destinationIndexPath.section

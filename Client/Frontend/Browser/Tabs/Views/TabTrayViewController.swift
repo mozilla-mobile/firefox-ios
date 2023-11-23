@@ -243,6 +243,10 @@ class TabTrayViewController: UIViewController,
 
     func newState(state: TabTrayState) {
         tabTrayState = state
+
+        if tabTrayState.shouldDismiss {
+            dismissVC()
+        }
     }
 
     private func updateLayout() {

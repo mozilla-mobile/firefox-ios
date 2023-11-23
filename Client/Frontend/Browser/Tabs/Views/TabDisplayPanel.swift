@@ -4,21 +4,22 @@
 
 import Common
 import Redux
+import Storage
 import UIKit
 
-class TabDisplayViewController: UIViewController,
+class TabDisplayPanel: UIViewController,
                                 Themeable,
                                 EmptyPrivateTabsViewDelegate,
                                 StoreSubscriber {
-    typealias SubscriberStateType = TabsState
+    typealias SubscriberStateType = TabsPanelState
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     weak var navigationHandler: TabsNavigationHandler?
 
     // MARK: UI elements
-    lazy var tabDisplayView: TabDisplayView = {
-        let view = TabDisplayView(state: self.tabsState)
+    private lazy var tabDisplayView: TabDisplayView = {
+        let view = TabDisplayView(state: self.tabsState, tabPeekDelegate: self)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -26,13 +27,12 @@ class TabDisplayViewController: UIViewController,
     private lazy var emptyPrivateTabsView: EmptyPrivateTabsView = .build()
 
     // MARK: Redux state
-    var tabsState: TabsState
+    var tabsState: TabsPanelState
 
     init(isPrivateMode: Bool,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
-        // TODO: FXIOS-6936 Integrate Redux state
-        self.tabsState = TabsState(isPrivateMode: isPrivateMode)
+        self.tabsState = TabsPanelState(isPrivateMode: isPrivateMode)
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
@@ -59,17 +59,17 @@ class TabDisplayViewController: UIViewController,
         store.dispatch(ActiveScreensStateAction.showScreen(.tabsPanel))
         store.dispatch(TabPanelAction.tabPanelDidLoad(tabsState.isPrivateMode))
         store.subscribe(self, transform: {
-            return $0.select(TabsState.init)
+            return $0.select(TabsPanelState.init)
         })
     }
 
-    func newState(state: TabsState) {
+    func newState(state: TabsPanelState) {
         tabsState = state
         tabDisplayView.newState(state: tabsState)
         shouldShowEmptyView(tabsState.isPrivateTabsEmpty)
     }
 
-    func setupView() {
+    private func setupView() {
         navigationController?.setNavigationBarHidden(true, animated: false)
         view.addSubview(tabDisplayView)
         view.addSubview(backgroundPrivacyOverlay)
@@ -90,12 +90,13 @@ class TabDisplayViewController: UIViewController,
         setupEmptyView()
     }
 
-    func setupEmptyView() {
+    private func setupEmptyView() {
         guard tabsState.isPrivateMode, tabsState.isPrivateTabsEmpty else {
             shouldShowEmptyView(false)
             return
         }
 
+        emptyPrivateTabsView.delegate = self
         view.insertSubview(emptyPrivateTabsView, aboveSubview: tabDisplayView)
         NSLayoutConstraint.activate([
             emptyPrivateTabsView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -114,8 +115,19 @@ class TabDisplayViewController: UIViewController,
     func applyTheme() {
         backgroundPrivacyOverlay.backgroundColor = themeManager.currentTheme.colors.layerScrim
         tabDisplayView.applyTheme(theme: themeManager.currentTheme)
+        emptyPrivateTabsView.applyTheme(themeManager.currentTheme)
     }
 
     // MARK: EmptyPrivateTabsViewDelegate
-    func didTapLearnMore(urlRequest: URLRequest) {}
+    func didTapLearnMore(urlRequest: URLRequest) {
+        store.dispatch(TabPanelAction.learnMorePrivateMode)
+    }
+}
+
+extension TabDisplayPanel: TabPeekDelegate {
+    func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListItem? { return nil }
+    func tabPeekDidAddBookmark(_ tab: Tab) {}
+    func tabPeekRequestsPresentationOf(_ viewController: UIViewController) {}
+    func tabPeekDidCloseTab(_ tab: Tab) {}
+    func tabPeekDidCopyUrl() {}
 }

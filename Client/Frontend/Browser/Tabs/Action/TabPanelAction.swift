@@ -19,6 +19,6 @@ enum TabPanelAction: Action {
     // Middleware actions
     case didLoadTabPanel(TabDisplayModel)
     // Response to all user actions involving tabs ex: add, close and close all tabs
-    case refreshTab([TabCellModel])
-    case inactiveTabsChanged
+    case refreshTab([TabModel])
+    case refreshInactiveTabs([InactiveTabsModel])
 }
