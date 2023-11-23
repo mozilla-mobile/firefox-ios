@@ -299,6 +299,8 @@ extension BrowserViewController: URLBarDelegate {
         if text.isEmpty {
             hideSearchController()
         } else {
+            configureDimmingView()
+            // TODO: Show / Hide Search Controller based on Setting - https://mozilla-hub.atlassian.net/browse/FXIOS-7182
             showSearchController()
         }
 
@@ -310,6 +312,8 @@ extension BrowserViewController: URLBarDelegate {
         if text.isEmpty {
             hideSearchController()
         } else {
+            configureDimmingView()
+            // TODO: Show / Hide Search Controller based on Setting - https://mozilla-hub.atlassian.net/browse/FXIOS-7182
             showSearchController()
         }
         urlBar.locationTextField?.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false, theme: self.themeManager.currentTheme)

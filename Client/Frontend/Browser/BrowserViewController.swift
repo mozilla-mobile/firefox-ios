@@ -89,6 +89,11 @@ class BrowserViewController: UIViewController,
     // the bottom reader mode, the bottom url bar and the ZoomPageBar
     var overKeyboardContainer: BaseAlphaStackView = .build { _ in }
 
+    // Overlay dimming view for private mode
+    lazy var privateModeDimmingView: UIView = .build { view in
+        view.backgroundColor = self.themeManager.currentTheme.colors.layerScrim
+    }
+
     // BottomContainer stack view contains toolbar
     var bottomContainer: BaseAlphaStackView = .build { _ in }
 
@@ -646,6 +651,23 @@ class BrowserViewController: UIViewController,
         view.addSubview(bottomContainer)
     }
 
+    // Configure dimming view to show for private mode
+    func configureDimmingView() {
+        guard featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) else { return }
+
+        if let selectedTab = tabManager.selectedTab, selectedTab.isPrivate {
+            view.addSubview(privateModeDimmingView)
+            view.bringSubviewToFront(privateModeDimmingView)
+
+            NSLayoutConstraint.activate([
+                privateModeDimmingView.topAnchor.constraint(equalTo: contentStackView.topAnchor),
+                privateModeDimmingView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
+                privateModeDimmingView.bottomAnchor.constraint(equalTo: contentStackView.bottomAnchor),
+                privateModeDimmingView.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor)
+            ])
+        }
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
@@ -1098,6 +1120,7 @@ class BrowserViewController: UIViewController,
     }
 
     func hideSearchController() {
+        privateModeDimmingView.removeFromSuperview()
         guard let searchController = self.searchController else { return }
         searchController.willMove(toParent: nil)
         searchController.view.removeFromSuperview()
