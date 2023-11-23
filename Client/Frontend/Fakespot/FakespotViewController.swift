@@ -347,7 +347,13 @@ class FakespotViewController:
             let view: FakespotOptInCardView = .build()
             viewModel.optInCardViewModel.dismissViewController = { [weak self] action in
                 guard let self = self else { return }
-                self.delegate?.fakespotControllerDidDismiss(animated: true)
+
+                if isReduxIntegrationEnabled {
+                    store.dispatch(FakespotAction.toggleAppearance(false))
+                } else {
+                    self.delegate?.fakespotControllerDidDismiss(animated: true)
+                }
+
                 guard let action else { return }
                 viewModel.recordDismissTelemetry(by: action)
             }
