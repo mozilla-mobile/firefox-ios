@@ -2012,7 +2012,6 @@ extension BrowserViewController: LegacyTabDelegate {
         creditCardAutofillSetup(tab, didCreateWebView: webView)
 
         let contextMenuHelper = ContextMenuHelper(tab: tab)
-        contextMenuHelper.delegate = self
         tab.addContentScript(contextMenuHelper, name: ContextMenuHelper.name())
 
         let errorHelper = ErrorPageHelper(certStore: profile.certStore)
@@ -2374,177 +2373,18 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
     }
 }
 
-extension BrowserViewController: ContextMenuHelperDelegate {
-    func contextMenuHelper(_ contextMenuHelper: ContextMenuHelper, didLongPressElements elements: ContextMenuHelper.Elements, gestureRecognizer: UIGestureRecognizer) {
-        // locationInView can return (0, 0) when the long press is triggered in an invalid page
-        // state (e.g., long pressing a link before the document changes, then releasing after a
-        // different page loads).
-        let touchPoint = gestureRecognizer.location(in: view)
-        guard touchPoint != CGPoint.zero else { return }
-
-        let touchSize = CGSize(width: 0, height: 16)
-
-        let actionSheetController = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        var dialogTitle: String?
-
-        if let url = elements.link, let currentTab = tabManager.selectedTab {
-            dialogTitle = url.absoluteString
-            let isPrivate = currentTab.isPrivate
-            screenshotHelper.takeDelayedScreenshot(currentTab)
-
-            let addTab = { (rURL: URL, isPrivate: Bool) in
-                let tab = self.tabManager.addTab(URLRequest(url: rURL as URL), afterTab: currentTab, isPrivate: isPrivate)
-                guard !self.topTabsVisible else { return }
-                // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
-                let viewModel = ButtonToastViewModel(labelText: .ContextMenuButtonToastNewTabOpenedLabelText,
-                                                     buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
-                let toast = ButtonToast(viewModel: viewModel,
-                                        theme: self.themeManager.currentTheme,
-                                        completion: { buttonPressed in
-                    if buttonPressed {
-                        self.tabManager.selectTab(tab)
-                    }
-                })
-                self.show(toast: toast)
-            }
-
-            if !isPrivate {
-                let openNewTabAction = UIAlertAction(title: .ContextMenuOpenInNewTab, style: .default) { _ in
-                    addTab(url, false)
-                }
-                actionSheetController.addAction(openNewTabAction, accessibilityIdentifier: "linkContextMenu.openInNewTab")
-            }
-
-            let openNewPrivateTabAction = UIAlertAction(title: .ContextMenuOpenInNewPrivateTab, style: .default) { _ in
-                addTab(url, true)
-            }
-            actionSheetController.addAction(openNewPrivateTabAction, accessibilityIdentifier: "linkContextMenu.openInNewPrivateTab")
-
-            let bookmarkAction = UIAlertAction(title: .ContextMenuBookmarkLink, style: .default) { _ in
-                self.addBookmark(url: url.absoluteString, title: elements.title)
-                TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .contextMenu)
-            }
-            actionSheetController.addAction(bookmarkAction, accessibilityIdentifier: "linkContextMenu.bookmarkLink")
-
-            let downloadAction = UIAlertAction(title: .ContextMenuDownloadLink, style: .default) { _ in
-                // This checks if download is a blob, if yes, begin blob download process
-                if !DownloadContentScript.requestBlobDownload(url: url, tab: currentTab) {
-                    // if not a blob, set pendingDownloadWebView and load the request in
-                    // the webview, which will trigger the WKWebView navigationResponse
-                    // delegate function and eventually downloadHelper.open()
-                    self.pendingDownloadWebView = currentTab.webView
-                    let request = URLRequest(url: url)
-                    currentTab.webView?.load(request)
-                }
-            }
-            actionSheetController.addAction(downloadAction, accessibilityIdentifier: "linkContextMenu.download")
-
-            let copyAction = UIAlertAction(title: .ContextMenuCopyLink, style: .default) { _ in
-                UIPasteboard.general.url = url as URL
-            }
-            actionSheetController.addAction(copyAction, accessibilityIdentifier: "linkContextMenu.copyLink")
-
-            let shareAction = UIAlertAction(title: .ContextMenuShareLink, style: .default) { _ in
-                self.presentActivityViewController(url as URL,
-                                                   sourceView: self.view,
-                                                   sourceRect: CGRect(origin: touchPoint,
-                                                                      size: touchSize),
-                                                   arrowDirection: .any)
-            }
-            actionSheetController.addAction(shareAction, accessibilityIdentifier: "linkContextMenu.share")
-        }
-
-        if let url = elements.image {
-            if dialogTitle == nil {
-                dialogTitle = elements.title ?? url.absoluteString
-            }
-
-            let saveImageAction = UIAlertAction(title: .ContextMenuSaveImage, style: .default) { _ in
-                self.getImageData(url) { data in
-                    guard let image = UIImage(data: data) else { return }
-                    self.writeToPhotoAlbum(image: image)
-                }
-            }
-            actionSheetController.addAction(saveImageAction, accessibilityIdentifier: "linkContextMenu.saveImage")
-
-            let copyAction = UIAlertAction(title: .ContextMenuCopyImage, style: .default) { _ in
-                // put the actual image on the clipboard
-                // do this asynchronously just in case we're in a low bandwidth situation
-                let pasteboard = UIPasteboard.general
-                pasteboard.url = url as URL
-                let changeCount = pasteboard.changeCount
-                let application = UIApplication.shared
-                var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
-                taskId = application.beginBackgroundTask(expirationHandler: {
-                    application.endBackgroundTask(taskId)
-                })
-
-                makeURLSession(userAgent: UserAgent.fxaUserAgent, configuration: URLSessionConfiguration.default).dataTask(with: url) { (data, response, error) in
-                    guard validatedHTTPResponse(response, statusCode: 200..<300) != nil else {
-                        application.endBackgroundTask(taskId)
-                        return
-                    }
-
-                    // Only set the image onto the pasteboard if the pasteboard hasn't changed since
-                    // fetching the image; otherwise, in low-bandwidth situations,
-                    // we might be overwriting something that the user has subsequently added.
-                    if changeCount == pasteboard.changeCount, let imageData = data, error == nil {
-                        pasteboard.addImageWithData(imageData, forURL: url)
-                    }
-
-                    application.endBackgroundTask(taskId)
-                }.resume()
-            }
-            actionSheetController.addAction(copyAction, accessibilityIdentifier: "linkContextMenu.copyImage")
-
-            let copyImageLinkAction = UIAlertAction(title: .ContextMenuCopyImageLink, style: .default) { _ in
-                UIPasteboard.general.url = url as URL
-            }
-            actionSheetController.addAction(copyImageLinkAction, accessibilityIdentifier: "linkContextMenu.copyImageLink")
-        }
-
-        let setupPopover = { [unowned self] in
-            // If we're showing an arrow popup, set the anchor to the long press location.
-            if let popoverPresentationController = actionSheetController.popoverPresentationController {
-                popoverPresentationController.sourceView = self.view
-                popoverPresentationController.sourceRect = CGRect(origin: touchPoint, size: touchSize)
-                popoverPresentationController.permittedArrowDirections = .any
-                popoverPresentationController.delegate = self
-            }
-        }
-        setupPopover()
-
-        if actionSheetController.popoverPresentationController != nil {
-            displayedPopoverController = actionSheetController
-            updateDisplayedPopoverProperties = setupPopover
-        }
-
-        if let dialogTitle = dialogTitle {
-            if dialogTitle.asURL != nil {
-                actionSheetController.title = dialogTitle.ellipsize(maxLength: UX.ActionSheetTitleMaxLength)
-            } else {
-                actionSheetController.title = dialogTitle
-            }
-        }
-
-        let cancelAction = UIAlertAction(title: .CancelString, style: UIAlertAction.Style.cancel, handler: nil)
-        actionSheetController.addAction(cancelAction)
-        self.present(actionSheetController, animated: true, completion: nil)
-    }
-
+extension BrowserViewController {
+    /// Used to get the context menu save image in the context menu, shown from long press on webview links
     fileprivate func getImageData(_ url: URL, success: @escaping (Data) -> Void) {
-        makeURLSession(userAgent: UserAgent.fxaUserAgent, configuration: URLSessionConfiguration.default).dataTask(with: url) { (data, response, error) in
+        makeURLSession(
+            userAgent: UserAgent.fxaUserAgent,
+            configuration: URLSessionConfiguration.default).dataTask(with: url
+            ) { (data, response, error) in
             if validatedHTTPResponse(response, statusCode: 200..<300) != nil,
                let data = data {
                 success(data)
             }
         }.resume()
-    }
-
-    func contextMenuHelper(_ contextMenuHelper: ContextMenuHelper, didCancelGestureRecognizer: UIGestureRecognizer) {
-        displayedPopoverController?.dismiss(animated: true) {
-            self.displayedPopoverController = nil
-        }
     }
 
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
@@ -2559,7 +2399,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 }
 
 extension BrowserViewController {
-    // no-op
+    // no-op - relates to UIImageWriteToSavedPhotosAlbum
     @objc
     func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) { }
 }
