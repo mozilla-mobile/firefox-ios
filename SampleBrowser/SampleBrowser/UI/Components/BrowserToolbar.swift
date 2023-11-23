@@ -19,7 +19,7 @@ class BrowserToolbar: UIToolbar {
 
     // By default the state is set to reload. We save the state to avoid setting the toolbar
     // button multiple times when a page load is in progress
-    private var isReloading: Bool = true
+    private var isReloading = true
 
     // MARK: - Init
 
@@ -72,19 +72,23 @@ class BrowserToolbar: UIToolbar {
 
     // MARK: - Actions
 
-    @objc func backButtonClicked() {
+    @objc
+    func backButtonClicked() {
         toolbarDelegate?.backButtonClicked()
     }
 
-    @objc func forwardButtonClicked() {
+    @objc
+    func forwardButtonClicked() {
         toolbarDelegate?.forwardButtonClicked()
     }
 
-    @objc func reloadButtonClicked() {
+    @objc
+    func reloadButtonClicked() {
         toolbarDelegate?.reloadButtonClicked()
     }
 
-    @objc func stopButtonClicked() {
+    @objc
+    func stopButtonClicked() {
         toolbarDelegate?.stopButtonClicked()
     }
 }

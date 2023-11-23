@@ -74,7 +74,8 @@ class BrowserSearchBar: UIView {
 
     // MARK: - Private
 
-    @objc private func didClickMenu() {
+    @objc
+    private func didClickMenu() {
         browserMenuDelegate?.didClickMenu()
     }
 
