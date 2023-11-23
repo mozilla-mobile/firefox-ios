@@ -18817,7 +18817,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/SyncTests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/SyncTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/firefox-ios-tests/Tests/SyncTests/SyncTests-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18874,7 +18874,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/AccountTests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/AccountTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18895,7 +18895,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/StorageTests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/StorageTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -18976,7 +18976,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/StoragePerfTests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/StoragePerfTests/Info.plist";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Fennec;
@@ -18985,7 +18985,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/StoragePerfTests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/StoragePerfTests/Info.plist";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Firefox;
@@ -18994,7 +18994,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/StoragePerfTests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/StoragePerfTests/Info.plist";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = FirefoxBeta;
@@ -19006,10 +19006,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/XCUITests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/XCUITests/Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PROVISIONING_PROFILE_SPECIFIER = "org.mozilla.ios.XCUITests 2021-08-12";
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/firefox-ios/firefox-ios-tests/Tests/XCUITests/XCUITests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/firefox-ios-tests/Tests/XCUITests/XCUITests-Bridging-Header.h";
 				TEST_TARGET_NAME = Client;
 			};
 			name = Fennec;
@@ -19021,7 +19021,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/XCUITests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/XCUITests/Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.XCUITests";
 				TEST_TARGET_NAME = Client;
@@ -19035,7 +19035,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/XCUITests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/XCUITests/Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.XCUITests";
 				TEST_TARGET_NAME = Client;
@@ -19216,7 +19216,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/UITests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/UITests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/firefox-ios/firefox-ios-tests/Tests/UITests/UITests-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 				VALIDATE_WORKSPACE = YES;
@@ -19226,7 +19226,7 @@
 		D39FA1691A83E0EC00EE869C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/UITests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/UITests/Info.plist";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 				VALIDATE_WORKSPACE = YES;
 			};
@@ -19278,7 +19278,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/ClientTests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/ClientTests/Info.plist";
 				PRODUCT_NAME = ClientTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -19346,7 +19346,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/StorageTests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/StorageTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -19380,7 +19380,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/AccountTests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/AccountTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -19403,7 +19403,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/SyncTests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/SyncTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/firefox-ios-tests/Tests/SyncTests/SyncTests-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -19446,7 +19446,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/SyncTelemetryTests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/SyncTelemetryTests/Info.plist";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Fennec;
@@ -19455,7 +19455,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/SyncTelemetryTests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/SyncTelemetryTests/Info.plist";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Fennec_Enterprise;
@@ -19464,7 +19464,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/SyncTelemetryTests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/SyncTelemetryTests/Info.plist";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Firefox;
@@ -19473,7 +19473,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/SyncTelemetryTests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/SyncTelemetryTests/Info.plist";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = FirefoxBeta;
@@ -19617,7 +19617,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/ClientTests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/ClientTests/Info.plist";
 				PRODUCT_NAME = ClientTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -19627,7 +19627,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/UITests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/UITests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/firefox-ios/firefox-ios-tests/Tests/UITests/UITests-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 				VALIDATE_WORKSPACE = YES;
@@ -19638,7 +19638,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/StorageTests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/StorageTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -19648,7 +19648,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/AccountTests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/AccountTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -19658,7 +19658,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/SyncTests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/SyncTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/firefox-ios-tests/Tests/SyncTests/SyncTests-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -19668,7 +19668,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/SharedTests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/SharedTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -19695,11 +19695,11 @@
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 9G8J6YA743;
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/XCUITests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/XCUITests/Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.XCUITests;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Fennec Enterprise XCUITests";
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/firefox-ios/firefox-ios-tests/Tests/XCUITests/XCUITests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/firefox-ios-tests/Tests/XCUITests/XCUITests-Bridging-Header.h";
 				TEST_TARGET_NAME = Client;
 			};
 			name = Fennec_Enterprise;
@@ -19708,7 +19708,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/StoragePerfTests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/StoragePerfTests/Info.plist";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Fennec_Enterprise;
@@ -19717,7 +19717,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/SharedTests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/SharedTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -19727,7 +19727,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/SharedTests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/SharedTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -19779,7 +19779,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/ClientTests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/ClientTests/Info.plist";
 				PRODUCT_NAME = ClientTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -19845,7 +19845,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/StorageTests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/StorageTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -19880,7 +19880,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/AccountTests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/AccountTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -19909,7 +19909,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/SyncTests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/SyncTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/firefox-ios-tests/Tests/SyncTests/SyncTests-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -19919,7 +19919,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/SharedTests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/SharedTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -20268,7 +20268,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = "firefox-ios/firefox-ios-tests/Tests/ClientTests/Info.plist";
+				INFOPLIST_FILE = "firefox-ios-tests/Tests/ClientTests/Info.plist";
 				PRODUCT_NAME = ClientTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};

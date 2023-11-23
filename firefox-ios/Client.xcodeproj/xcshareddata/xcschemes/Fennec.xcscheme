@@ -152,7 +152,7 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "sh &quot;${SRCROOT}/test-fixtures/scheme-postbuild.sh&quot; || exit 1&#10;">
+               scriptText = "sh &quot;/Users/isabelrios/git/firefox-ios/test-fixtures/scheme-postbuild.sh&quot; || exit 1&#10;">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"
@@ -500,7 +500,7 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "sh &quot;${SRCROOT}/test-fixtures/scheme-postbuild.sh&quot; || exit 1">
+               scriptText = "sh &quot;/Users/isabelrios/firefox-ios/git/test-fixtures/scheme-postbuild.sh&quot; || exit 1&#10;">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"
