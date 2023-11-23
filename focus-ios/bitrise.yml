@@ -415,7 +415,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -x
-            focus-ios/tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+            focus-ios/focus-ios-tests/tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
               --org mozilla --project klar-ios "$BITRISE_DSYM_DIR_PATH"
     meta:
       bitrise.io:
