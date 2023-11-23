@@ -2012,7 +2012,6 @@ extension BrowserViewController: LegacyTabDelegate {
         creditCardAutofillSetup(tab, didCreateWebView: webView)
 
         let contextMenuHelper = ContextMenuHelper(tab: tab)
-        contextMenuHelper.delegate = self
         tab.addContentScript(contextMenuHelper, name: ContextMenuHelper.name())
 
         let errorHelper = ErrorPageHelper(certStore: profile.certStore)
