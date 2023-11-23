@@ -39,7 +39,8 @@ struct MIMEType {
     private static let downloadableMIMETypes: [String] = [
         MIMEType.JPEG,
         MIMEType.MP4,
-        MIMEType.OctetStream
+        MIMEType.OctetStream,
+        MIMEType.PNG
     ]
 
     static func canShowInWebView(_ mimeType: String) -> Bool {
