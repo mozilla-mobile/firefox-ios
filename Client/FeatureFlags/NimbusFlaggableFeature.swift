@@ -16,7 +16,8 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case creditCardAutofillStatus
     case fakespotBackInStock
     case fakespotFeature
-    case feltPrivacyUI
+    case fakespotProductAds
+    case feltPrivacySimplifiedUI
     case firefoxSuggestFeature
     case historyHighlights
     case historyGroups
@@ -73,11 +74,12 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .creditCardAutofillStatus,
                 .fakespotBackInStock,
                 .fakespotFeature,
+                .fakespotProductAds,
                 .isToolbarCFREnabled,
                 .qrCodeCoordinatorRefactor,
                 .reduxIntegration,
                 .reportSiteIssue,
-                .feltPrivacyUI,
+                .feltPrivacySimplifiedUI,
                 .searchHighlights,
                 .shareSheetChanges,
                 .shareToolbarChanges,

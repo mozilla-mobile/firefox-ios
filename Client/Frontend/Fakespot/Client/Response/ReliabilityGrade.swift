@@ -5,7 +5,7 @@
 import Common
 import Foundation
 
-enum ReliabilityGrade: String, Codable {
+enum ReliabilityGrade: String, Codable, Equatable {
     case a = "A"
     case b = "B"
     case c = "C"

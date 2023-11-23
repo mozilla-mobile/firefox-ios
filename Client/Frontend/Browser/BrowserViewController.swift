@@ -14,13 +14,15 @@ import MobileCoreServices
 import Telemetry
 import Common
 import ComponentLibrary
+import Redux
 
 class BrowserViewController: UIViewController,
                              SearchBarLocationProvider,
                              Themeable,
                              LibraryPanelDelegate,
                              RecentlyClosedPanelDelegate,
-                             QRCodeViewControllerDelegate {
+                             QRCodeViewControllerDelegate,
+                             StoreSubscriber {
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
         static let ActionSheetTitleMaxLength = 120
@@ -78,6 +80,7 @@ class BrowserViewController: UIViewController,
     let tabManager: TabManager
     let ratingPromptManager: RatingPromptManager
     lazy var isTabTrayRefactorEnabled: Bool = TabTrayFlagManager.isRefactorEnabled
+    private var fakespotState: FakespotState?
 
     // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
     var header: BaseAlphaStackView = .build { _ in }
@@ -158,6 +161,8 @@ class BrowserViewController: UIViewController,
         return NewTabAccessors.getNewTabPage(profile.prefs)
     }
 
+    lazy var isReduxIntegrationEnabled: Bool = ReduxFlagManager.isReduxEnabled
+
     @available(iOS 13.4, *)
     func keyboardPressesHandler() -> KeyboardPressesHandler {
         guard let keyboardPressesHandlerValue = keyboardPressesHandlerValue as? KeyboardPressesHandler else {
@@ -202,6 +207,12 @@ class BrowserViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        if isReduxIntegrationEnabled {
+            store.unsubscribe(self)
+        }
+    }
+
     override var prefersStatusBarHidden: Bool {
         return false
     }
@@ -240,19 +251,6 @@ class BrowserViewController: UIViewController,
     @objc
     func didTapUndoCloseAllTabToast(notification: Notification) {
         overlayManager.switchTab(shouldCancelLoading: true)
-    }
-
-    @objc
-    func openTabNotification(notification: Notification) {
-        // Remove this notification only used for debug settings with FXIOS-7550
-        guard let openTabObject = notification.object as? OpenTabNotificationObject else {
-            return
-        }
-
-        switch openTabObject.type {
-        case .debugOption(let numberOfTabs, let url):
-            debugOpen(numberOfNewTabs: numberOfTabs, at: url)
-        }
     }
 
     @objc
@@ -436,6 +434,8 @@ class BrowserViewController: UIViewController,
         if let tab = tabManager.selectedTab {
             urlBar.locationView.tabDidChangeContentBlocking(tab)
         }
+
+        updateWallpaperMetadata()
         dismissModalsIfStartAtHome()
 
         // When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
@@ -449,6 +449,33 @@ class BrowserViewController: UIViewController,
         if tabManager.startAtHomeCheck() {
             guard !dismissFakespotIfNeeded(), presentedViewController != nil else { return }
             dismissVC()
+        }
+    }
+
+    // MARK: - Redux
+
+    private func subscribeRedux() {
+        guard isReduxIntegrationEnabled else { return }
+        store.dispatch(ActiveScreensStateAction.showScreen(.fakespot))
+
+        store.subscribe(self, transform: {
+            $0.select(FakespotState.init)
+        })
+    }
+
+    func newState(state: FakespotState) {
+        ensureMainThread { [weak self] in
+            guard let self else { return }
+
+            fakespotState = state
+
+            // opens or close sidebar/bottom sheet to match the saved state
+            if state.isOpenOnProductPage {
+                guard let productURL = urlBar.currentURL else { return }
+                handleFakespotFlow(productURL: productURL)
+            } else {
+                _ = dismissFakespotIfNeeded()
+            }
         }
     }
 
@@ -509,6 +536,8 @@ class BrowserViewController: UIViewController,
 
         // Send settings telemetry for Fakespot
         FakespotUtils().addSettingTelemetry()
+
+        subscribeRedux()
     }
 
     private func setupAccessibleActions() {
@@ -569,11 +598,6 @@ class BrowserViewController: UIViewController,
             self,
             selector: #selector(didTapUndoCloseAllTabToast),
             name: .DidTapUndoCloseAllTabToast,
-            object: nil)
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(openTabNotification),
-            name: .OpenTabNotification,
             object: nil)
         notificationCenter.addObserver(
             self,
@@ -715,6 +739,9 @@ class BrowserViewController: UIViewController,
         var fakespotNeedsUpdate = false
         if urlBar.currentURL != nil {
             fakespotNeedsUpdate = contentStackView.isSidebarVisible != FakespotUtils().shouldDisplayInSidebar(viewSize: size)
+            if isReduxIntegrationEnabled, let fakespotState = fakespotState {
+                fakespotNeedsUpdate = fakespotNeedsUpdate && fakespotState.isOpenOnProductPage
+            }
 
             if fakespotNeedsUpdate {
                 _ = dismissFakespotIfNeeded(animated: false)
@@ -1650,10 +1677,17 @@ class BrowserViewController: UIViewController,
 
         let environment = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI) ? FakespotEnvironment.staging : .prod
         let product = ShoppingProduct(url: url, client: FakespotClient(environment: environment))
-        if product.product != nil && !tab.isPrivate, contentStackView.isSidebarVisible {
+        if product.product != nil, !tab.isPrivate, contentStackView.isSidebarVisible {
             navigationHandler?.updateFakespotSidebar(productURL: url,
                                                      sidebarContainer: contentStackView,
                                                      parentViewController: self)
+        } else if product.product != nil,
+                  !tab.isPrivate,
+                  FakespotUtils().shouldDisplayInSidebar(),
+                  isReduxIntegrationEnabled,
+                  let fakespotState = fakespotState,
+                  fakespotState.isOpenOnProductPage {
+            handleFakespotFlow(productURL: url)
         } else if contentStackView.isSidebarVisible {
             _ = dismissFakespotIfNeeded(animated: true)
         }

@@ -6,15 +6,19 @@ import Foundation
 
 class OpenFiftyTabsDebugOption: HiddenSetting {
     override var accessibilityIdentifier: String? { return "OpenFiftyTabsOption.Setting" }
+    private weak var settingsDelegate: DebugSettingsDelegate?
+
+    init(settings: SettingsTableViewController,
+         settingsDelegate: DebugSettingsDelegate) {
+        self.settingsDelegate = settingsDelegate
+        super.init(settings: settings)
+    }
 
     override var title: NSAttributedString? {
         return NSAttributedString(string: "Open 50 `mozilla.org` tabs ⚠️", attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        guard let url = URL(string: "https://www.mozilla.org") else { return }
-
-        let object = OpenTabNotificationObject(type: .debugOption(50, url))
-        NotificationCenter.default.post(name: .OpenTabNotification, object: object)
+        settingsDelegate?.pressedOpenFiftyTabs()
     }
 }

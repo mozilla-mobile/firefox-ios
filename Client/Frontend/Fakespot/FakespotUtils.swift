@@ -32,7 +32,7 @@ public struct FakespotUtils: FeatureFlaggable {
 
     public static var fakespotUrl: URL? {
         // Returns the predefined URL associated to Fakespot button action.
-        return URL(string: "https://www.fakespot.com/our-mission?utm_source=review-checker&utm_campaign=fakespot-by-mozilla&utm_medium=inproduct&utm_term=core-sheet")
+        return URL(string: "https://www.fakespot.com/review-checker?utm_source=review-checker&utm_campaign=fakespot-by-mozilla&utm_medium=inproduct&utm_term=core-sheet")
     }
 
     static func widthOfString(_ string: String, usingFont font: UIFont) -> CGFloat {
@@ -87,7 +87,9 @@ public struct FakespotUtils: FeatureFlaggable {
 
     func shouldDisplayInSidebar(device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
                                 window: UIWindow? = UIWindow.attachedKeyWindow,
-                                viewSize: CGSize? = nil) -> Bool {
-        return device == .pad && !isPadInMultitasking(device: device, window: window, viewSize: viewSize)
+                                viewSize: CGSize? = nil,
+                                orientation: UIDeviceOrientation = UIDevice.current.orientation) -> Bool {
+        let isPadInMultitasking = isPadInMultitasking(device: device, window: window, viewSize: viewSize)
+        return device == .pad && !isPadInMultitasking && !orientation.isPortrait
     }
 }

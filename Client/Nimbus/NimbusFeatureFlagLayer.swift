@@ -35,14 +35,17 @@ final class NimbusFeatureFlagLayer {
         case .fakespotFeature:
             return checkFakespotFeature(from: nimbus)
 
+        case .fakespotProductAds:
+            return checkFakespotProductAds(from: nimbus)
+
         case .firefoxSuggestFeature:
             return checkFirefoxSuggestFeature(from: nimbus)
 
         case .historyGroups:
             return checkGroupingFeature(for: featureID, from: nimbus)
 
-        case .feltPrivacyUI:
-            return checkFeltPrivacyUIFeature(from: nimbus)
+        case .feltPrivacySimplifiedUI:
+            return checkFeltPrivacyFeature(for: featureID, from: nimbus)
 
         case .fakespotBackInStock:
             return checkProductBackInStockFakespotFeature(from: nimbus)
@@ -163,9 +166,16 @@ final class NimbusFeatureFlagLayer {
         return config.enabled
     }
 
-    private func checkFeltPrivacyUIFeature(from nimbus: FxNimbus ) -> Bool {
-        let config = nimbus.features.privateBrowsing.value()
-        return config.feltPrivacyEnabled
+    private func checkFeltPrivacyFeature(
+        for featureID: NimbusFeatureFlagID,
+        from nimbus: FxNimbus
+    ) -> Bool {
+        let config = nimbus.features.feltPrivacyFeature.value()
+
+        switch featureID {
+        case .feltPrivacySimplifiedUI: return config.simplifiedUiEnabled
+        default: return false
+        }
     }
 
     public func checkNimbusForCreditCardAutofill(
@@ -228,6 +238,12 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.shopping2023.value()
 
         return config.status
+    }
+
+    private func checkFakespotProductAds(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.shopping2023.value()
+
+        return config.productAds
     }
 
     private func checkProductBackInStockFakespotFeature(from nimbus: FxNimbus) -> Bool {

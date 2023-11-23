@@ -26,25 +26,16 @@
 "Onboarding.Notification.Continue.Action.v114" = "გაგრძელება";
 
 /* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Description.v114" = "გაგზავნეთ ჩანართები მოწყობილობებს შორის და მიიღეთ რჩევები, როგორ გამოიყენოთ შედეგიანად %@.";
-
-/* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Notification.Description.v120" = "დაცულად გაგზავნეთ ჩანართები თქვენს მოწყობილობებს შორის და აღმოაჩინეთ %@-ის სხვა საშუალებები პირადულობისთვის.";
 
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Skip.Action.v115" = "გამოტოვება";
 
 /* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Title.v114" = "შეტყობინებები დაგეხმარებათ, სრულყოფილად გამოიყენოთ %@";
-
-/* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Notification.Title.v120" = "შეტყობინებები დაგეხმარებათ, მეტად უსაფრთხოდ გამოიყენოთ %@";
 
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "შეტყობინებების ჩართვა";
-
-/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
-"Onboarding.Sync.Description.v114" = "წამოიღეთ ჩანართები და პაროლები სხვა მოწყობილობებიდან, რომ განაგრძოთ იქიდან, სადაც შეჩერდით.";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Sync.Description.v120" = "ანგარიშზე შესვლისას და სინქრონიზაციისას კვლავ დაცული რჩებით. %@ შიფრავს თქვენს პაროლებს, სანიშნებსა და ყველა მონაცემს.";
@@ -54,9 +45,6 @@
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.Skip.Action.v114" = "გამოტოვება";
-
-/* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
-"Onboarding.Sync.Title.v114" = "მოქნილად გადაერთეთ ტელეფონიდან ნოუთბუქზე და უკან";
 
 /* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
 "Onboarding.Sync.Title.v120" = "დაშიფრეთ ყველაფერი მოწყობილობებს შორის გადართვისას";
@@ -85,9 +73,6 @@
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Welcome.ActionTreatementA.v114" = "ნაგულისხმევ ბრაუზერად დაყენება";
 
-/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Description.TreatementA.v114" = "%@ ხალხს აყენებს მოგებაზე წინ და იცავს თქვენს პირადულობას გვერდების მონახულებისას.";
-
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Description.TreatementA.v120" = "ჩვენი ბრაუზერი არამომგებიანი დაწესებულებისგან გეხმარებათ აირიდოთ კომპანიებისგან ფარული თვალთვალი ვებსივრცით სარგებლობისას.";
 
@@ -99,9 +84,6 @@
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
 "Onboarding.Welcome.Skip.v114" = "გამოტოვება";
-
-/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Title.TreatementA.v114" = "აქციეთ %@ თქვენს ყოველდღიურ ბრაუზერად";
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Title.TreatementA.v120" = "ჩვენ ვზრუნავთ თქვენს უსაფრთხოებაზე";

@@ -45,9 +45,15 @@ protocol ReaderModeBarViewDelegate: AnyObject {
 }
 
 class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, SearchBarLocationProvider {
+    private struct UX {
+        static let buttonWidth: CGFloat = 80
+    }
+
     weak var delegate: ReaderModeBarViewDelegate?
 
     var parent: UIStackView?
+
+    var contextStrokeColor: UIColor?
 
     var readStatusButton: UIButton!
     var settingsButton: UIButton!
@@ -70,7 +76,7 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
             readStatusButton.leadingAnchor.constraint(equalTo: leadingAnchor),
             readStatusButton.heightAnchor.constraint(equalTo: heightAnchor),
             readStatusButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-            readStatusButton.widthAnchor.constraint(equalToConstant: 80)
+            readStatusButton.widthAnchor.constraint(equalToConstant: UX.buttonWidth)
         ])
 
         settingsButton = createButton(.settings, action: #selector(tappedSettingsButton))
@@ -79,7 +85,7 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
             settingsButton.heightAnchor.constraint(equalTo: heightAnchor),
             settingsButton.centerXAnchor.constraint(equalTo: centerXAnchor),
             settingsButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-            settingsButton.widthAnchor.constraint(equalToConstant: 80)
+            settingsButton.widthAnchor.constraint(equalToConstant: UX.buttonWidth)
         ])
 
         listStatusButton = createButton(.addToReadingList, action: #selector(tappedListStatusButton))
@@ -88,7 +94,7 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
             listStatusButton.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
             listStatusButton.heightAnchor.constraint(equalTo: heightAnchor),
             listStatusButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-            listStatusButton.widthAnchor.constraint(equalToConstant: 80)
+            listStatusButton.widthAnchor.constraint(equalToConstant: UX.buttonWidth)
         ])
     }
 
@@ -99,10 +105,11 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
     override func draw(_ rect: CGRect) {
         super.draw(rect)
 
-        guard let context = UIGraphicsGetCurrentContext() else { return }
+        guard let context = UIGraphicsGetCurrentContext(),
+              let contextStrokeColor = contextStrokeColor else { return }
 
         context.setLineWidth(0.5)
-        context.setStrokeColor(UIColor.Photon.Grey50.cgColor)
+        context.setStrokeColor(contextStrokeColor.cgColor)
         context.beginPath()
         let yPosition = isBottomSearchBar ? 0 : frame.height
         context.move(to: CGPoint(x: 0, y: yPosition))
@@ -158,7 +165,9 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
 
 extension ReaderModeBarView: ThemeApplicable {
     func applyTheme(theme: Theme) {
-        backgroundColor = theme.colors.layer1
-        buttonTintColor = theme.colors.textPrimary
+        let colors = theme.colors
+        backgroundColor = colors.layer1
+        buttonTintColor = colors.textPrimary
+        contextStrokeColor = colors.textSecondary
     }
 }
