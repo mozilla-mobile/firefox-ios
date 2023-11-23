@@ -34,10 +34,7 @@ class TabManagerMiddleware {
         case TabPanelAction.addNewTab(let isPrivate):
             self.addNewTab(isPrivate)
             store.dispatch(TabPanelAction.refreshTab(self.tabs))
-            // Delay dismiss action to wait for tab to be added
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                store.dispatch(TabTrayAction.dismissTabTray)
-            }
+            store.dispatch(TabTrayAction.dismissTabTray)
 
         case TabPanelAction.moveTab(let originIndex, let destinationIndex):
             self.moveTab(from: originIndex, to: destinationIndex)
@@ -62,10 +59,7 @@ class TabManagerMiddleware {
         case TabPanelAction.learnMorePrivateMode:
             self.didTapLearnMoreAboutPrivate()
             store.dispatch(TabPanelAction.refreshTab(self.tabs))
-            // Delay dismiss action to wait for tab to be added
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                store.dispatch(TabTrayAction.dismissTabTray)
-            }
+            store.dispatch(TabTrayAction.dismissTabTray)
         default:
             break
         }
