@@ -12,6 +12,7 @@ npm install
 npm run build
 
 # Clone shavar prod list
+cd firefox-ios
 rm -rf shavar-prod-lists && git clone https://github.com/mozilla-services/shavar-prod-lists.git && git -C shavar-prod-lists checkout $SHAVAR_COMMIT_HASH
 
 (cd Client/ContentBlocker/ContentBlockerGenerator && swift run)
