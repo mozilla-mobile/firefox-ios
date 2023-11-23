@@ -364,7 +364,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
     // MARK: - Screenshots
 
-    func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
+    override func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
         guard tab.screenshot != nil else {
             // Remove screenshot from image store so we can use favicon
             // when a screenshot isn't available for the associated tab url
