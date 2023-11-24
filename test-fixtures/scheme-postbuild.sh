@@ -8,8 +8,7 @@
 #
 
 echo "••• Populate test-fixtures dir in Client.app bundle •••"
-#fixtures="${SRCROOT}/test-fixtures"
-fixtures="/Users/isabelrios/git/firefox-ios/test-fixtures"
+fixtures="${PROJECT_DIR}/../test-fixtures"
 [[ -e $fixtures ]] || exit 1
 outpath="${TARGET_BUILD_DIR}/Client.app"
 rsync -zvrt --update "$fixtures" "$outpath" 
