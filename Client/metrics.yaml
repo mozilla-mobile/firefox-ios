@@ -2062,7 +2062,7 @@ history:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/17296
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17462
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
