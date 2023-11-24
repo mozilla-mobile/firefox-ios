@@ -819,6 +819,74 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.CreditCard.autofillSettingsTapped)
     }
 
+    func test_creditCardAutofillPromptShown_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .creditCardAutofillPromptShown)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.CreditCard.autofillPromptShown)
+    }
+
+    func test_creditCardAutofillPromptExpanded_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardAutofillPromptExpanded)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.CreditCard.autofillPromptExpanded)
+    }
+
+    func test_creditCardAutofillPromptDismissed_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .close, object: .creditCardAutofillPromptDismissed)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.CreditCard.autofillPromptDismissed)
+    }
+
+    func test_creditCardSavePromptShown_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .creditCardSavePromptShown)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.CreditCard.savePromptShown)
+    }
+
+    func test_creditCardSavePromptUpdate_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardSavePromptUpdate)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.CreditCard.savePromptUpdate)
+    }
+
+    func test_creditCardManagementAddTapped_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardManagementAddTapped)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.CreditCard.managementAddTapped)
+    }
+
+    func test_creditCardManagementCardTapped_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardManagementCardTapped)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.CreditCard.managementCardTapped)
+    }
+
+    func test_creditCardModified_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .change,
+                                     object: .creditCardModified)
+
+        testCounterMetricRecordingSuccess(metric: GleanMetrics.CreditCard.modified)
+    }
+
+    func test_creditCardDeleted_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .delete,
+                                     object: .creditCardDeleted)
+
+        testCounterMetricRecordingSuccess(metric: GleanMetrics.CreditCard.deleted)
+    }
+
+    func test_creditCardSaved_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .add,
+                                     object: .creditCardSaved)
+
+        testCounterMetricRecordingSuccess(metric: GleanMetrics.CreditCard.saved)
+    }
+
+    func test_creditCardSavedAll_GleanIsCalled() {
+        let expectedCreditCardsCount: Int64 = 5
+        let extra = [TelemetryWrapper.EventExtraKey.creditCardsQuantity.rawValue: expectedCreditCardsCount]
+        TelemetryWrapper.recordEvent(category: .information, method: .foreground, object: .creditCardSavedAll, value: nil, extras: extra)
+
+        testQuantityMetricSuccess(metric: GleanMetrics.CreditCard.savedAll,
+                                  expectedValue: expectedCreditCardsCount,
+                                  failureMessage: "Should have \(expectedCreditCardsCount) credit cards")
+    }
     // MARK: - App
 
     func test_appNotificationPermission_GleanIsCalled() {
