@@ -185,16 +185,13 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         // Tap on each option in that menu
         mozWaitForElementToExist(app.buttons["Shopping.ReviewQualityCard.ExpandButton"])
         app.buttons["Shopping.ReviewQualityCard.ExpandButton"].tap()
+        snapshot("ReviewQualityCard-1")
         app.swipeUp(velocity: 15)
-        snapshot("ReviewQualityCard")
+        snapshot("ReviewQualityCard-2")
         app.buttons["Shopping.ReviewQualityCard.ExpandButton"].tap()
 
         mozWaitForElementToExist(app.buttons["Shopping.SettingsCard.ExpandButton"])
         app.buttons["Shopping.SettingsCard.ExpandButton"].tap()
         snapshot("SettingsCard")
-
-        app.buttons["Shopping.Sheet.CloseButton"].tap()
-        app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton].tap()
-        snapshot("HalfReviewChecker")
     }
 }
