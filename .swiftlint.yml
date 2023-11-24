@@ -123,6 +123,7 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - firefox-ios/Package.swift
   - firefox-ios/BrowserKit/Package.swift
   - firefox-ios/Client/ContentBlocker/ContentBlockerGenerator/Package.swift
+  - Package.swift
   
 
 included:
