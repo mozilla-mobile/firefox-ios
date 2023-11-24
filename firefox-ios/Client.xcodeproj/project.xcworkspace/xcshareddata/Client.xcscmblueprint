@@ -1,0 +1,53 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "31F61D37FA0E05F17C9C09F96F652B8EC64779B9",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+    "4c0a9323-5329-0410-9bdc-e9ce6186880e++505" : {
+
+    }
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "E084C86B03F81D63323C9E7510697EA528A758C7" : 0,
+    "354D53EE5E69D01F999C861E774456A91B9CA07C" : 9223372036854775807,
+    "4c0a9323-5329-0410-9bdc-e9ce6186880e++505" : 0,
+    "31F61D37FA0E05F17C9C09F96F652B8EC64779B9" : 0,
+    "55011AEBD444630C0E9DF47BD2E18FDBBDCC285D" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "735ABF42-7DDF-42DC-959C-850D55951B2D",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "E084C86B03F81D63323C9E7510697EA528A758C7" : "firefox-ios\/Carthage\/Checkouts\/Base32\/Carthage\/Checkouts\/xcconfigs\/",
+    "354D53EE5E69D01F999C861E774456A91B9CA07C" : "onyx_ios\/",
+    "4c0a9323-5329-0410-9bdc-e9ce6186880e++505" : "s2fxios\/ThirdParty\/google-breakpad\/",
+    "31F61D37FA0E05F17C9C09F96F652B8EC64779B9" : "firefox-ios\/",
+    "55011AEBD444630C0E9DF47BD2E18FDBBDCC285D" : "s2fxios\/Carthage\/Checkouts\/SQLite.swift\/Vendor\/sqlcipher\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Client",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Client.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:mozilla\/firefox-ios.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "31F61D37FA0E05F17C9C09F96F652B8EC64779B9"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/mozilla-mobile\/onyx_ios.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "354D53EE5E69D01F999C861E774456A91B9CA07C"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "http:\/\/google-breakpad.googlecode.com\/svn",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "4c0a9323-5329-0410-9bdc-e9ce6186880e++505"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/sqlcipher\/sqlcipher.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "55011AEBD444630C0E9DF47BD2E18FDBBDCC285D"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/jspahrsummers\/xcconfigs.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "E084C86B03F81D63323C9E7510697EA528A758C7"
+    }
+  ]
+}

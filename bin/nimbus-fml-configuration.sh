@@ -4,18 +4,22 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-set -euo pipefail
-
 # Local modifications/additions can be made in `nimbus-fml-configuration.local.sh`
 
 ## Set the channel that is used to generate the Swift code.
 ## The `CONFIGURATION` to derive the channel used in the feature manifest.
 CHANNEL=
 case "${CONFIGURATION}" in
-    Debug)
+    Fennec)
         CHANNEL="developer"
         ;;
-    Release)
+    Fennec_Enterprise)
+        CHANNEL="developer"
+        ;;
+    FirefoxBeta)
+        CHANNEL="beta"
+        ;;
+    Firefox)
         CHANNEL="release"
         ;;
     *) # The channel must match up with the channels listed in APP_FML_FILE.
@@ -31,11 +35,7 @@ fml_file=nimbus.fml.yaml
 
 ## Set the list of directories to scan for *.fml.yaml files.
 ## This can have individual files, but are relative to SOURCE_ROOT
-## If an entry is a directory, fml will look for files ending in `.fml.yaml`
-## If you move the default file into a module directly, then this can
-## be simplified to the default value.
 ## Default: $PROJECT
-# export MODULES=$PROJECT
 export MODULES="$PROJECT $fml_file"
 
 ## Set the directory where the generated files are placed.
@@ -43,8 +43,8 @@ export MODULES="$PROJECT $fml_file"
 ## By default this is $MODULE/Generated
 # export GENERATED_SRC_DIR=
 
-## Set the root level nimbus.fml.yaml file. This is the manifest that ties together all the others.
-## This should be included in the MODULES list or one of the directories of the MODULES
+## Set the root level nimbus.fml.yaml file. This is used to generate the experimenter file for the whole app.
+## This is relative to SOURCE_ROOT.
 ## Default: $PROJECT/nimbus.fml.yaml
 export APP_FML_FILE=$fml_file
 
@@ -57,6 +57,11 @@ export APP_FML_FILE=$fml_file
 ## Set the directory where FMLs from other repos will be downloaded.
 ## Default: build/nimbus/fml-cache
 # export CACHE_DIR=
+
+## Set the path for where the experimenter manifest is generated. This can be json or yaml.
+## This is relative to SOURCE_ROOT.
+## Default: .experimenter.yaml
+# export EXPERIMENTER_MANIFEST=
 
 ## Set the version of the Application Services' Nimbus FML is downloaded from. This version does includes the 'v'
 ## By default, this is derived from the Swift Package Manager.
