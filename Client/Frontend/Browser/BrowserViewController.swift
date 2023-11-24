@@ -1555,45 +1555,6 @@ class BrowserViewController: UIViewController,
         return navigationController?.topViewController?.presentedViewController as? JSPromptAlertController != nil
     }
 
-    func presentActivityViewController(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
-        presentShareSheet(url, tab: tab, sourceView: sourceView, sourceRect: sourceRect, arrowDirection: arrowDirection)
-    }
-
-    func presentShareSheet(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
-        let helper = ShareExtensionHelper(url: url, tab: tab)
-        let selectedTabWebview = tabManager.selectedTab?.webView
-        let controller = helper.createActivityViewController(selectedTabWebview) {
-            [unowned self] completed, activityType in
-            switch activityType {
-            case CustomActivityAction.sendToDevice.actionType:
-                self.showSendToDevice()
-            case CustomActivityAction.copyLink.actionType:
-                SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage,
-                                                bottomContainer: contentContainer,
-                                                theme: themeManager.currentTheme)
-            default: break
-            }
-
-            // After dismissing, check to see if there were any prompts we queued up
-            self.showQueuedAlertIfAvailable()
-
-            // Usually the popover delegate would handle nil'ing out the references we have to it
-            // on the BVC when displaying as a popover but the delegate method doesn't seem to be
-            // invoked on iOS 10. See Bug 1297768 for additional details.
-            self.displayedPopoverController = nil
-            self.updateDisplayedPopoverProperties = nil
-        }
-
-        if let popoverPresentationController = controller.popoverPresentationController {
-            popoverPresentationController.sourceView = sourceView
-            popoverPresentationController.sourceRect = sourceRect
-            popoverPresentationController.permittedArrowDirections = arrowDirection
-            popoverPresentationController.delegate = self
-        }
-
-        presentWithModalDismissIfNeeded(controller, animated: true)
-    }
-
     private func showSendToDevice() {
         guard let selectedTab = tabManager.selectedTab,
               let url = selectedTab.canonicalURL?.displayURL
