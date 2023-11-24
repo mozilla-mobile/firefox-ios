@@ -1552,17 +1552,13 @@ meta:
 
 trigger_map:
 - push_branch: main
-  workflow: L10nBuild
-#  - push_branch: main
-#   pipeline: pipeline_multiple_shards
+  pipeline: pipeline_multiple_shards
 - push_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
 - push_branch: release/v122
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: main
-  workflow: L10nBuild
-# - pull_request_target_branch: main
-#  pipeline: pipeline_multiple_shards
+  pipeline: pipeline_multiple_shards
 - pull_request_target_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: release/v*
