@@ -66,20 +66,17 @@ struct BackupCloseTab {
 class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler {
     // MARK: - Variables
     private let tabEventHandlers: [TabEventHandler]
-    let store: LegacyTabManagerStore
     let profile: Profile
     var isRestoringTabs = false
+    var tabRestoreHasFinished = false
     var tabs = [Tab]()
-    private var _selectedIndex = -1
+    var _selectedIndex = -1
     var selectedIndex: Int { return _selectedIndex }
     let logger: Logger
     var backupCloseTab: BackupCloseTab?
 
     var tabDisplayType: TabDisplayType = .TabGrid
     let delaySelectingNewPopupTab: TimeInterval = 0.1
-
-    // Enables undo of recently closed tabs
-    var recentlyClosedForUndo = [LegacySavedTab]()
 
     var normalTabs: [Tab] {
         return tabs.filter { !$0.isPrivate }
@@ -165,7 +162,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         self.tabEventHandlers = TabEventHandlers.create(with: profile)
         self.logger = logger
 
-        self.store = LegacyTabManagerStoreImplementation(prefs: profile.prefs)
         super.init()
 
         register(self, forTabEvents: .didSetScreenshot)
@@ -209,7 +205,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     }()
 
     // A WKWebViewConfiguration used for private mode tabs
-    private lazy var privateConfiguration: WKWebViewConfiguration = {
+    lazy var privateConfiguration: WKWebViewConfiguration = {
         return LegacyTabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
     }()
 
@@ -261,58 +257,13 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         return filterdTabs.first
     }
 
+    // TODO: FXIOS-7596 Remove when moving the TabManager protocol to TabManagerImplementation
+    func restoreTabs(_ forced: Bool = false) { fatalError("should never be called") }
+
     // MARK: - Select tab
 
-    func selectTab(_ tab: Tab?, previous: Tab? = nil) {
-        selectTab(tab, previous: previous, sessionData: nil)
-    }
-
-    // This function updates the _selectedIndex.
-    // Note: it is safe to call this with `tab` and `previous` as the same tab, for use in the case where the index of the tab has changed (such as after deletion).
-    func selectTab(_ tab: Tab?, previous: Tab? = nil, sessionData: Data?) {
-        let previous = previous ?? selectedTab
-
-        previous?.metadataManager?.updateTimerAndObserving(state: .tabSwitched, isPrivate: previous?.isPrivate ?? false)
-        tab?.metadataManager?.updateTimerAndObserving(state: .tabSelected, isPrivate: tab?.isPrivate ?? false)
-
-        // Make sure to wipe the private tabs if the user has the pref turned on
-        if shouldClearPrivateTabs(), !(tab?.isPrivate ?? false) {
-            removeAllPrivateTabs()
-        }
-
-        if let tab = tab {
-            _selectedIndex = tabs.firstIndex(of: tab) ?? -1
-        } else {
-            _selectedIndex = -1
-        }
-
-        preserveTabs()
-
-        assert(tab === selectedTab, "Expected tab is selected")
-        if tab !== selectedTab {
-            logger.log("The expected tab wasn't selected!",
-                       level: .warning,
-                       category: .tabs)
-        }
-
-        selectedTab?.createWebview(with: sessionData)
-        selectedTab?.lastExecutedTime = Date.now()
-
-        delegates.forEach { $0.get()?.tabManager(self, didSelectedTabChange: tab, previous: previous, isRestoring: store.isRestoringTabs) }
-        if let tab = previous {
-            TabEvent.post(.didLoseFocus, for: tab)
-        }
-        if let tab = selectedTab {
-            TabEvent.post(.didGainFocus, for: tab)
-        }
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .tab)
-
-        // Note: we setup last session private case as the session is tied to user's selected
-        // tab but there are times when tab manager isn't available and we need to know
-        // users's last state (Private vs Regular)
-        UserDefaults.standard.set(selectedTab?.isPrivate ?? false,
-                                  forKey: PrefsKeys.LastSessionWasPrivate)
-    }
+    // TODO: FXIOS-7596 Remove when moving the TabManager protocol to TabManagerImplementation
+    func selectTab(_ tab: Tab?, previous: Tab? = nil) { fatalError("should never be called") }
 
     func getMostRecentHomepageTab() -> Tab? {
         let tabsToFilter = selectedTab?.isPrivate ?? false ? privateTabs : normalTabs
@@ -363,37 +314,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
     // TODO: FXIOS-7596 Remove when moving the TabManager protocol to TabManagerImplementation
     func storeChanges() { fatalError("should never be called") }
-
-    func restoreTabs(_ forced: Bool = false) {
-        defer { checkForSingleTab() }
-        guard forced || tabs.isEmpty,
-              !AppConstants.isRunningUITests,
-              !DebugSettingsBundleOptions.skipSessionRestore
-        else { return }
-
-        isRestoringTabs = true
-
-        var tabToSelect = store.restoreStartupTabs(clearPrivateTabs: shouldClearPrivateTabs(),
-                                                   addTabClosure: addTabForRestoration(isPrivate:))
-
-        // If tabToSelect is nil after restoration, force selection of first tab normal tab
-        if tabToSelect == nil {
-            tabToSelect = tabs.first(where: { !$0.isPrivate })
-
-            // If tabToSelect is still nil, create a new tab
-            if tabToSelect == nil {
-                tabToSelect = addTab()
-            }
-        }
-
-        selectTab(tabToSelect)
-
-        for delegate in self.delegates {
-            delegate.get()?.tabManagerDidRestoreTabs(self)
-        }
-
-        isRestoringTabs = false
-    }
 
     private func addTabForRestoration(isPrivate: Bool) -> Tab {
         return addTab(flushToDisk: false, zombie: true, isPrivate: isPrivate)
@@ -538,7 +458,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
             $0.get()?.tabManager(self,
                                  didAddTab: tab,
                                  placeNextToParentTab: placeNextToParentTab,
-                                 isRestoring: store.isRestoringTabs)
+                                 isRestoring: !tabRestoreHasFinished)
         }
 
         if !zombie {
@@ -623,8 +543,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     // This is called by TabTrayVC when the private mode button is pressed and BEFORE we've switched to the new mode
     // we only want to remove all private tabs when leaving PBM and not when entering.
     func willSwitchTabMode(leavingPBM: Bool) {
-        recentlyClosedForUndo.removeAll()
-
         // Clear every time entering/exiting this mode.
         Tab.ChangeUserAgent.privateModeHostList = Set<String>()
     }
@@ -679,7 +597,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
         // Notify of tab removal
         ensureMainThread { [unowned self] in
-            delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: store.isRestoringTabs) }
+            delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: !tabRestoreHasFinished) }
             TabEvent.post(.didClose, for: tab)
         }
 
@@ -898,22 +816,11 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         return false
     }
 
-    private func removeAllPrivateTabs() {
-        // reset the selectedTabIndex if we are on a private tab because we will be removing it.
-        if selectedTab?.isPrivate ?? false {
-            _selectedIndex = -1
-        }
-        privateTabs.forEach { $0.close() }
-        tabs = normalTabs
-
-        privateConfiguration = LegacyTabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
-    }
-
     // MARK: - Start at Home
 
     /// Public interface for checking whether the StartAtHome Feature should run.
     func startAtHomeCheck() -> Bool {
-        let startAtHomeManager = StartAtHomeHelper(prefs: profile.prefs, isRestoringTabs: isRestoringTabs)
+        let startAtHomeManager = StartAtHomeHelper(prefs: profile.prefs, isRestoringTabs: !tabRestoreHasFinished)
 
         guard !startAtHomeManager.shouldSkipStartHome else { return false }
 
