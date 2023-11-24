@@ -146,7 +146,14 @@ class FakespotViewController:
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         viewModel.isSwiping = false
-        shadowView.layer.shadowPath = UIBezierPath(rect: shadowView.bounds).cgPath
+        // Calculate the rect for the shadowPath, ensuring it is at the bottom of the view
+        let shadowPathRect = CGRect(
+            x: 0,
+            y: shadowView.bounds.maxY - shadowView.layer.shadowRadius,
+            width: shadowView.bounds.width,
+            height: shadowView.layer.shadowRadius
+        )
+        shadowView.layer.shadowPath = UIBezierPath(rect: shadowPathRect).cgPath
     }
 
     override func viewDidAppear(_ animated: Bool) {
