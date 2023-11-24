@@ -192,7 +192,7 @@ struct CreditCardInputField: View {
         .onChange(of: text) { [oldValue = text] newValue in
             handleTextInputWith(oldValue, and: newValue)
             viewModel.updateRightButtonState()
-        }
+        }.accessibilityLabel("\(fieldHeadline) field")
     }
 
     // MARK: Helper
