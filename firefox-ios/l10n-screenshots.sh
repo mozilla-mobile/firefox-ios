@@ -33,7 +33,7 @@ fi
 for lang in $LOCALES; do
     echo "$(date) Snapshotting $lang"
     mkdir "l10n-screenshots/$lang"
-    fastlane snapshot --project Client.xcodeproj --scheme L10nSnapshotTests \
+    fastlane snapshot --project firefox-ios/Client.xcodeproj --scheme L10nSnapshotTests \
         --number_of_retries 0 \
         --skip_open_summary \
         --xcargs "-maximum-parallel-testing-workers 2" \
