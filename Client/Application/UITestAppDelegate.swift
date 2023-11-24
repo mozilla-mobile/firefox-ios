@@ -73,7 +73,7 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
             if arg.starts(with: LaunchArguments.LoadTabsStateArchive) {
                 let tabDirectory = "\(self.appRootDir())/profile.profile"
                 if launchArguments.contains(LaunchArguments.ClearProfile) {
-                    fatalError("Clearing profile and loading a \(LegacyTabManagerStoreImplementation.storePath) is not a supported combination.")
+                    fatalError("Clearing profile and loading tabs, not a supported combination.")
                 }
 
                 // Grab the name of file in the bundle's test-fixtures dir, and copy it to the runtime app dir.
