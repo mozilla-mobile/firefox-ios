@@ -592,8 +592,7 @@ class HistoryPanel: UIViewController,
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .selectedHistoryItem,
-                                     value: .historyPanelNonGroupItem,
-                                     extras: nil)
+                                     value: .historyPanelNonGroupItem)
     }
 }
 
