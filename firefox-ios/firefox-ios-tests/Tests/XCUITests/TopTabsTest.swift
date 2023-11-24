@@ -60,7 +60,7 @@ class TopTabsTest: BaseTestCase {
 
         // Open tab tray to check that both tabs are there
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-        mozWaitForElementToExist(app.cells.staticTexts["Example Domain"])
+        mozWaitForElementToExist(app.cells.staticTexts["Example Domains"])
         if !app.cells.staticTexts["Example Domains"].exists {
             navigator.goto(TabTray)
             app.cells.staticTexts["Examples Domain"].firstMatch.tap()
