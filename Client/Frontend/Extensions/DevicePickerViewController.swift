@@ -196,8 +196,7 @@ class DevicePickerViewController: UITableViewController {
                 withIdentifier: DevicePickerTableViewCell.cellIdentifier,
                 for: indexPath) as? DevicePickerTableViewCell {
                 let item = devices[indexPath.row]
-                clientCell.nameLabel.text = item.name
-                clientCell.clientType = ClientType.fromFxAType(item.type)
+                clientCell.configureCell(item.name, ClientType.fromFxAType(item.type))
 
                 if let id = item.id {
                     clientCell.checked = selectedIdentifiers.contains(id)

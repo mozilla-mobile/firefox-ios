@@ -2,21 +2,23 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-@testable import Client
-
 import XCTest
 
+@testable import Client
 class TabCellTests: XCTestCase {
     var cellDelegate: MockTabCellDelegate!
+    var profile: MockProfile!
 
     override func setUp() {
         super.setUp()
         cellDelegate = MockTabCellDelegate()
+        profile = MockProfile()
     }
 
     override func tearDown() {
         super.tearDown()
         cellDelegate = nil
+        profile = nil
     }
 
     func testTabCellDeinit() {
@@ -47,15 +49,16 @@ class TabCellTests: XCTestCase {
                        state.isSelected)
     }
 
-    private func createDefaultState() -> TabCellModel {
-        return TabCellModel(isSelected: false,
-                            isPrivate: false,
-                            isFxHomeTab: false,
-                            tabTitle: "Firefox Browser",
-                            url: URL(string: "https://www.mozilla.org/en-US/firefox/")!,
-                            screenshot: nil,
-                            hasHomeScreenshot: false,
-                            margin: 0.0)
+    private func createDefaultState() -> TabModel {
+        return TabModel(tabUUID: "0022-22D3",
+                        isSelected: false,
+                        isPrivate: false,
+                        isFxHomeTab: false,
+                        tabTitle: "Firefox Browser",
+                        url: URL(string: "https://www.mozilla.org/en-US/firefox/")!,
+                        screenshot: nil,
+                        hasHomeScreenshot: false,
+                        margin: 0.0)
     }
 }
 

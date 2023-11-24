@@ -303,6 +303,7 @@ class FakespotViewModel {
          profile: Profile = AppContainer.shared.resolve()) {
         self.shoppingProduct = shoppingProduct
         optInCardViewModel.productSitename = shoppingProduct.product?.sitename
+        optInCardViewModel.supportedTLDWebsites = shoppingProduct.supportedTLDWebsites
         reviewQualityCardViewModel.productSitename = shoppingProduct.product?.sitename
         self.prefs = profile.prefs
     }

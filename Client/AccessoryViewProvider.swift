@@ -138,6 +138,7 @@ class AccessoryViewProvider: UIView, Themeable {
             showCreditCard = false
         case .creditCard:
             showCreditCard = true
+            sendCreditCardAutofillPromptShownTelemetry()
         }
 
         setNeedsLayout()
@@ -207,5 +208,12 @@ class AccessoryViewProvider: UIView, Themeable {
     @objc
     private func tappedCardButton() {
         savedCardsClosure?()
+    }
+
+    // MARK: Telemetry
+    fileprivate func sendCreditCardAutofillPromptShownTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .view,
+                                     object: .creditCardAutofillPromptShown)
     }
 }

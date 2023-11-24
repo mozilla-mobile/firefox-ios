@@ -10,4 +10,5 @@ enum TabTrayAction: Action {
 
     // Middleware actions
     case didLoadTabTray(TabTrayModel)
+    case dismissTabTray
 }

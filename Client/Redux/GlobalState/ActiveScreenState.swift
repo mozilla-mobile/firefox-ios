@@ -8,7 +8,7 @@ import Redux
 enum AppScreenState: Equatable {
     case themeSettings(ThemeSettingsState)
     case tabsTray(TabTrayState)
-    case tabsPanel(TabsState)
+    case tabsPanel(TabsPanelState)
     case remoteTabsPanel(RemoteTabsPanelState)
     case fakespot(FakespotState)
 
@@ -16,7 +16,7 @@ enum AppScreenState: Equatable {
         switch state {
         case .themeSettings(let state): return .themeSettings(ThemeSettingsState.reducer(state, action))
         case .tabsTray(let state): return .tabsTray(TabTrayState.reducer(state, action))
-        case .tabsPanel(let state): return .tabsPanel(TabsState.reducer(state, action))
+        case .tabsPanel(let state): return .tabsPanel(TabsPanelState.reducer(state, action))
         case .remoteTabsPanel(let state): return .remoteTabsPanel(RemoteTabsPanelState.reducer(state, action))
         case .fakespot(let state): return .fakespot(FakespotState.reducer(state, action))
         }
@@ -57,7 +57,7 @@ struct ActiveScreensState: Equatable {
             case .showScreen(.tabsTray):
                 screens += [.tabsTray(TabTrayState())]
             case .showScreen(.tabsPanel):
-                screens += [.tabsPanel(TabsState())]
+                screens += [.tabsPanel(TabsPanelState())]
             case .showScreen(.remoteTabsPanel):
                 screens += [.remoteTabsPanel(RemoteTabsPanelState())]
             case .showScreen(.fakespot):

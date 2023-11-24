@@ -13,6 +13,7 @@ enum TabTrayLayoutType: Equatable {
 struct TabTrayState: ScreenState, Equatable {
     var isPrivateMode: Bool
     var selectedPanel: TabTrayPanelType
+    var shouldDismiss: Bool
 
     var layout: TabTrayLayoutType = .compact
     // TODO: FXIOS-7359 Move logic to show "\u{221E}" over 100 tabs to reducer
@@ -33,7 +34,8 @@ struct TabTrayState: ScreenState, Equatable {
 
         self.init(isPrivateMode: panelState.isPrivateMode,
                   selectedPanel: panelState.selectedPanel,
-                  normalTabsCount: panelState.normalTabsCount)
+                  normalTabsCount: panelState.normalTabsCount,
+                  shouldDismiss: panelState.shouldDismiss)
     }
 
     init() {
@@ -44,10 +46,12 @@ struct TabTrayState: ScreenState, Equatable {
 
     init(isPrivateMode: Bool,
          selectedPanel: TabTrayPanelType,
-         normalTabsCount: String) {
+         normalTabsCount: String,
+         shouldDismiss: Bool = false) {
         self.isPrivateMode = isPrivateMode
         self.selectedPanel = selectedPanel
         self.normalTabsCount = normalTabsCount
+        self.shouldDismiss = shouldDismiss
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -65,6 +69,11 @@ struct TabTrayState: ScreenState, Equatable {
             return TabTrayState(isPrivateMode: tabState.isPrivateMode,
                                 selectedPanel: panelType,
                                 normalTabsCount: "\(tabState.tabs.count)")
+        case TabTrayAction.dismissTabTray:
+            return TabTrayState(isPrivateMode: state.isPrivateMode,
+                                selectedPanel: state.selectedPanel,
+                                normalTabsCount: state.normalTabsCount,
+                                shouldDismiss: true)
         default:
             return state
         }

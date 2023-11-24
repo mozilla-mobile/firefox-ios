@@ -6,7 +6,7 @@ import Common
 import XCTest
 
 @testable import Client
-final class TabDisplayViewControllerTests: XCTestCase {
+final class TabDisplayPanelTests: XCTestCase {
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
@@ -46,11 +46,11 @@ final class TabDisplayViewControllerTests: XCTestCase {
                                emptyTabs: Bool,
                                emptyInactiveTabs: Bool,
                                file: StaticString = #file,
-                               line: UInt = #line) -> TabDisplayViewController {
+                               line: UInt = #line) -> TabDisplayPanel {
         let subjectState = createSubjectState(isPrivateMode: isPrivateMode,
                                               emptyTabs: emptyTabs,
                                               emptyInactiveTabs: emptyInactiveTabs)
-        let subject = TabDisplayViewController(isPrivateMode: isPrivateMode)
+        let subject = TabDisplayPanel(isPrivateMode: isPrivateMode)
         subject.newState(state: subjectState)
 
         trackForMemoryLeaks(subject, file: file, line: line)
@@ -59,14 +59,25 @@ final class TabDisplayViewControllerTests: XCTestCase {
 
     private func createSubjectState(isPrivateMode: Bool,
                                     emptyTabs: Bool,
-                                    emptyInactiveTabs: Bool) -> TabsState {
-        let tabs: [TabCellModel] = emptyTabs ? [TabCellModel]() : [TabCellModel.emptyTabState(title: "Tab1"),
-                                                                   TabCellModel.emptyTabState(title: "Tab2")]
-        let inactiveTabs: [String] = emptyInactiveTabs ? [String]() : ["Inactive1", "Inactive2"]
+                                    emptyInactiveTabs: Bool) -> TabsPanelState {
+        let tabs = createTabs(emptyTabs)
+        let inactiveTabsModel: [InactiveTabsModel] = [InactiveTabsModel(url: "Inactive1"), InactiveTabsModel(url: "Inactive2")]
+        let inactiveTabs: [InactiveTabsModel] = emptyInactiveTabs ? [InactiveTabsModel]() : inactiveTabsModel
         let isInactiveTabsExpanded = !isPrivateMode && !inactiveTabs.isEmpty
-        return TabsState(isPrivateMode: isPrivateMode,
-                         tabs: tabs,
-                         inactiveTabs: inactiveTabs,
-                         isInactiveTabsExpanded: isInactiveTabsExpanded)
+        return TabsPanelState(isPrivateMode: isPrivateMode,
+                              tabs: tabs,
+                              inactiveTabs: inactiveTabs,
+                              isInactiveTabsExpanded: isInactiveTabsExpanded)
+    }
+
+    private func createTabs(_ emptyTabs: Bool) -> [TabModel] {
+        guard !emptyTabs else { return [TabModel]() }
+
+        var tabs = [TabModel]()
+        for index in 0...2 {
+            let tabModel = TabModel.emptyTabState(tabUUID: "UUID", title: "Tab \(index)")
+            tabs.append(tabModel)
+        }
+        return tabs
     }
 }

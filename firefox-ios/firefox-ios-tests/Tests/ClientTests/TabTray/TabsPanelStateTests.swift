@@ -1,0 +1,70 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+import Common
+import Redux
+import Storage
+import Shared
+import XCTest
+
+@testable import Client
+
+final class TabPanelStateTests: XCTestCase {
+    override func setUp() {
+        super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        DependencyHelperMock().reset()
+    }
+
+    func testTabsState_DidLoadTabPanel() {
+        let initialState = createInitialState()
+        XCTAssertTrue(initialState.tabs.isEmpty)
+        let reducer = tabsPanelReducer()
+        let tabDisplayModel = TabDisplayModel(isPrivateMode: false,
+                                              tabs: createTabs(),
+                                              inactiveTabs: [InactiveTabsModel](),
+                                              isInactiveTabsExpanded: false)
+        let newState = reducer(initialState, TabPanelAction.didLoadTabPanel(tabDisplayModel))
+        XCTAssertFalse(newState.tabs.isEmpty)
+    }
+
+    func testTabsState_IsInactiveTabsExpanded() {
+        let initialState = createInitialState()
+        XCTAssertFalse(initialState.isInactiveTabsExpanded)
+        let reducer = tabsPanelReducer()
+        let newState = reducer(initialState, TabPanelAction.toggleInactiveTabs)
+        XCTAssertTrue(newState.isInactiveTabsExpanded)
+    }
+
+    // MARK: - Private
+    private func tabsPanelReducer() -> Reducer<TabsPanelState> {
+        return TabsPanelState.reducer
+    }
+
+    private func createInitialState() -> TabsPanelState {
+        return TabsPanelState()
+    }
+
+    private func createTabs() -> [TabModel] {
+        var tabs = [TabModel]()
+        for index in 0...2 {
+            let tab = TabModel.emptyTabState(tabUUID: "", title: "Tab\(index)")
+            tabs.append(tab)
+        }
+        return tabs
+    }
+
+    private func createInactiveTabs() -> [InactiveTabsModel] {
+        var inactiveTabs = [InactiveTabsModel]()
+        for index in 0...2 {
+            let inactiveTab = InactiveTabsModel(url: "InactiveTab\(index)")
+            inactiveTabs.append(inactiveTab)
+        }
+        return inactiveTabs
+    }
+}

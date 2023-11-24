@@ -53,6 +53,7 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
         self.creditCardTableViewController.didSelectCardAtIndex = {
             [weak self] creditCard in
             self?.viewCreditCard(card: creditCard)
+            self?.sendCreditCardsManagementCardTappedTelemetry()
         }
     }
 
@@ -104,6 +105,7 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
             DispatchQueue.main.async { [weak self] in
                 let newState = creditCards?.isEmpty ?? true ? CreditCardSettingsState.empty : CreditCardSettingsState.list
                 self?.updateState(type: newState)
+                self?.sendCreditCardsSavedAllTelemetry(numberOfSavedCreditCards: creditCards?.count ?? 0)
             }
         }
     }
@@ -158,6 +160,7 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
 
                 if successVal {
                     self?.updateCreditCardList()
+                    self?.sendTelemetry(forStatus: status)
                 }
 
                 self?.creditCardAddEditView?.dismiss(animated: true)
@@ -183,9 +186,62 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
     @objc
     private func addCreditCard() {
         updateState(type: .add)
+        sendCreditCardsManagementAddTappedTelemetry()
     }
 
     private func viewCreditCard(card: CreditCard) {
         updateState(type: .view, creditCard: card)
+    }
+
+    // MARK: Telemetry
+    fileprivate func sendTelemetry(forStatus status: CreditCardModifiedStatus) {
+        switch status {
+        case .savedCard:
+            self.sendCreditCardsSavedTelemetry()
+        case .updatedCard:
+            self.sendCreditCardsModifiedTelemetry()
+        case .removedCard:
+            self.sendCreditCardsDeletedTelemetry()
+        case .none:
+            break
+        }
+    }
+
+    private func sendCreditCardsManagementAddTappedTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .creditCardManagementAddTapped)
+    }
+
+    private func sendCreditCardsManagementCardTappedTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .creditCardManagementCardTapped)
+    }
+
+    private func sendCreditCardsSavedAllTelemetry(numberOfSavedCreditCards: Int) {
+        let savedCardsExtra = [TelemetryWrapper.EventExtraKey.creditCardsQuantity.rawValue: Int64(numberOfSavedCreditCards)]
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .foreground,
+                                     object: .creditCardSavedAll,
+                                     extras: savedCardsExtra)
+    }
+
+    private func sendCreditCardsSavedTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .add,
+                                     object: .creditCardSaved)
+    }
+
+    private func sendCreditCardsDeletedTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .delete,
+                                     object: .creditCardDeleted)
+    }
+
+    private func sendCreditCardsModifiedTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .change,
+                                     object: .creditCardModified)
     }
 }
