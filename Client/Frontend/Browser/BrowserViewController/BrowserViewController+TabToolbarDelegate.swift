@@ -75,6 +75,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         tabManager.selectTab(tabManager.addTab(nil, isPrivate: isPrivate))
         focusLocationTextField(forTab: tabManager.selectedTab)
+        overlayManager.openNewTab(url: nil,
+                                  newTabSettings: NewTabAccessors.getNewTabPage(profile.prefs))
     }
 
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
