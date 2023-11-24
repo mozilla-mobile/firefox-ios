@@ -131,6 +131,12 @@ extension TabToolbar: TabToolbarProtocol {
     func updateTabCount(_ count: Int, animated: Bool) {
         tabsButton.updateTabCount(count, animated: animated)
     }
+
+    func addUILargeContentViewInteraction(
+        interaction: UILargeContentViewerInteraction
+    ) {
+        addInteraction(interaction)
+    }
 }
 
 // MARK: - Theme protocols

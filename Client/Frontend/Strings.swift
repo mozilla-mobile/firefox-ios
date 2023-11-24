@@ -1816,6 +1816,11 @@ extension String {
         tableName: nil,
         value: "Remove page — %@",
         comment: "Button shown in editing mode to remove this site from the top sites panel.")
+    public static let TopSitesRemoveButtonLargeContentTitle = MZLocalizedString(
+        key: "TopSites.RemoveButton.LargeContentTitle.v122",
+        tableName: "TabLocation",
+        value: "Remove page",
+        comment: "Large content title for the button shown in editing mode to remove this site from the top sites panel.")
 }
 
 // MARK: - Activity Stream
@@ -4701,6 +4706,26 @@ extension String {
         tableName: "TabLocation",
         value: "Secure connection. Enhanced Tracking Protection is off.",
         comment: "Accessibility label for the security icon in url bar")
+    public static let TabLocationLockButtonLargeContentTitle = MZLocalizedString(
+        key: "TabLocation.LockButton.LargeContentTitle.v122",
+        tableName: "TabLocation",
+        value: "Tracking Protection",
+        comment: "Large content title for the lock button. This title is displayed when using accessible font sizes is enabled")
+    public static let TabLocationLockButtonAccessibilityLabel = MZLocalizedString(
+        key: "TabLocation.LockButton.AccessibilityLabel.v122",
+        tableName: "TabLocation",
+        value: "Tracking Protection",
+        comment: "Accessibility label for the lock / tracking protection button on the URL bar")
+    public static let TabLocationShareButtonLargeContentTitle = MZLocalizedString(
+        key: "TabLocation.ShareButton.AccessibilityLabel.v122",
+        tableName: "TabLocation",
+        value: "Share",
+        comment: "Large content title for the share button. This title is displayed when using accessible font sizes is enabled")
+    public static let TabsButtonShowTabsLargeContentTitle = MZLocalizedString(
+        key: "TabsButton.Accessibility.LargeContentTitle.v122",
+        tableName: "TabLocation",
+        value: "Show Tabs, %@",
+        comment: "Large content title for the tabs button. The argument is the number of open tabs or an infinity symbol. This title is displayed when using accessible font sizes is enabled.")
 }
 
 // MARK: - TabPeekViewController
