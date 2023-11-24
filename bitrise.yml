@@ -16,8 +16,6 @@ stages:
     - build_and_test_2_SmokeTest: {}
     - build_and_test_3_SmokeTest3: {}
     - build_and_test_4_SmokeTest4: {}
-    - L10nScreenshotsTests: {}
-    - L10nBuild: {}
 workflows:
   configure_build_fennec:
     before_run:
