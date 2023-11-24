@@ -161,8 +161,6 @@ class BrowserViewController: UIViewController,
         return NewTabAccessors.getNewTabPage(profile.prefs)
     }
 
-    lazy var isReduxIntegrationEnabled: Bool = ReduxFlagManager.isReduxEnabled
-
     @available(iOS 13.4, *)
     func keyboardPressesHandler() -> KeyboardPressesHandler {
         guard let keyboardPressesHandlerValue = keyboardPressesHandlerValue as? KeyboardPressesHandler else {
@@ -208,9 +206,7 @@ class BrowserViewController: UIViewController,
     }
 
     deinit {
-        if isReduxIntegrationEnabled {
-            store.unsubscribe(self)
-        }
+        store.unsubscribe(self)
     }
 
     override var prefersStatusBarHidden: Bool {
@@ -455,7 +451,6 @@ class BrowserViewController: UIViewController,
     // MARK: - Redux
 
     private func subscribeRedux() {
-        guard isReduxIntegrationEnabled else { return }
         store.dispatch(ActiveScreensStateAction.showScreen(.fakespot))
 
         store.subscribe(self, transform: {
@@ -470,7 +465,7 @@ class BrowserViewController: UIViewController,
             fakespotState = state
 
             // opens or close sidebar/bottom sheet to match the saved state
-            if state.isOpenOnProductPage {
+            if state.isOpen {
                 guard let productURL = urlBar.currentURL else { return }
                 handleFakespotFlow(productURL: productURL)
             } else {
@@ -739,8 +734,8 @@ class BrowserViewController: UIViewController,
         var fakespotNeedsUpdate = false
         if urlBar.currentURL != nil {
             fakespotNeedsUpdate = contentStackView.isSidebarVisible != FakespotUtils().shouldDisplayInSidebar(viewSize: size)
-            if isReduxIntegrationEnabled, let fakespotState = fakespotState {
-                fakespotNeedsUpdate = fakespotNeedsUpdate && fakespotState.isOpenOnProductPage
+            if let fakespotState = fakespotState {
+                fakespotNeedsUpdate = fakespotNeedsUpdate && fakespotState.isOpen
             }
 
             if fakespotNeedsUpdate {
@@ -1684,9 +1679,8 @@ class BrowserViewController: UIViewController,
         } else if product.product != nil,
                   !tab.isPrivate,
                   FakespotUtils().shouldDisplayInSidebar(),
-                  isReduxIntegrationEnabled,
                   let fakespotState = fakespotState,
-                  fakespotState.isOpenOnProductPage {
+                  fakespotState.isOpen {
             handleFakespotFlow(productURL: url)
         } else if contentStackView.isSidebarVisible {
             _ = dismissFakespotIfNeeded(animated: true)

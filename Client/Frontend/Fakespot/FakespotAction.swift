@@ -7,5 +7,7 @@ import Redux
 
 enum FakespotAction: Action {
     // UI trigger actions
-    case toggleAppearance(Bool)
+    case toggleAppearance
+    case setAppearanceTo(Bool)
+    case setSidebarOpenForiPadLandscapeTo(Bool)
 }

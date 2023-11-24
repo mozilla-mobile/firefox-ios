@@ -6,7 +6,8 @@ import Common
 import Redux
 
 struct FakespotState: ScreenState, Equatable {
-    var isOpenOnProductPage: Bool
+    var isOpen: Bool
+    var sidebarOpenForiPadLandscape: Bool
 
     init(_ appState: AppState) {
         guard let fakespotState = store.state.screenState(FakespotState.self, for: .fakespot) else {
@@ -14,27 +15,31 @@ struct FakespotState: ScreenState, Equatable {
             return
         }
 
-        self.init(isOpenOnProductPage: fakespotState.isOpenOnProductPage)
+        self.init(isOpen: fakespotState.isOpen,
+                  sidebarOpenForiPadLandscape: fakespotState.sidebarOpenForiPadLandscape)
     }
 
     init() {
-        self.init(isOpenOnProductPage: false)
+        self.init(isOpen: false, sidebarOpenForiPadLandscape: false)
     }
 
-    init(isOpenOnProductPage: Bool) {
-        self.isOpenOnProductPage = isOpenOnProductPage
+    init(isOpen: Bool, sidebarOpenForiPadLandscape: Bool) {
+        self.isOpen = isOpen
+        self.sidebarOpenForiPadLandscape = sidebarOpenForiPadLandscape
     }
 
     static let reducer: Reducer<Self> = { state, action in
         switch action {
-        case FakespotAction.toggleAppearance(let isEnabled):
-            return FakespotState(isOpenOnProductPage: isEnabled)
+        case FakespotAction.toggleAppearance:
+            return FakespotState(isOpen: !state.isOpen,
+                                 sidebarOpenForiPadLandscape: state.sidebarOpenForiPadLandscape)
+        case FakespotAction.setAppearanceTo(let isEnabled):
+            return FakespotState(isOpen: isEnabled,
+                                 sidebarOpenForiPadLandscape: state.sidebarOpenForiPadLandscape)
+        case FakespotAction.setSidebarOpenForiPadLandscapeTo(let isEnabled):
+            return FakespotState(isOpen: state.isOpen, sidebarOpenForiPadLandscape: isEnabled)
         default:
             return state
         }
-    }
-
-    static func == (lhs: FakespotState, rhs: FakespotState) -> Bool {
-        return lhs.isOpenOnProductPage == rhs.isOpenOnProductPage
     }
 }

@@ -113,34 +113,18 @@ extension BrowserViewController: URLBarDelegate {
         }
     }
 
-    func urlBarDidPressShopping(_ urlBar: URLBarView, shoppingButton: UIButton) {
-        guard let productURL = urlBar.currentURL else { return }
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingButton)
-
-        let dismissedFakespot = dismissFakespotIfNeeded()
-        if !dismissedFakespot {
-            // open flow
-            handleFakespotFlow(productURL: productURL)
-            if isReduxIntegrationEnabled {
-                store.dispatch(FakespotAction.toggleAppearance(true))
-            }
-        } else if isReduxIntegrationEnabled {
-            // Fakespot was closed/dismissed
-            store.dispatch(FakespotAction.toggleAppearance(false))
-        }
-    }
-
     internal func dismissFakespotIfNeeded(animated: Bool = true) -> Bool {
-        if contentStackView.isSidebarVisible {
+        guard !contentStackView.isSidebarVisible else {
             // hide sidebar as user tapped on shopping icon for a second time
             navigationHandler?.dismissFakespotSidebar(sidebarContainer: contentStackView, parentViewController: self)
             return true
-        } else if presentedViewController as? FakespotViewController != nil {
-            // dismiss modal as user tapped on shopping icon for a second time
-            navigationHandler?.dismissFakespotModal(animated: animated)
-            return true
         }
-        return false
+
+        let wasDismissed = presentedViewController as? FakespotViewController != nil
+
+        // dismiss modal as user tapped on shopping icon for a second time
+        navigationHandler?.dismissFakespotModal(animated: animated)
+        return wasDismissed
     }
 
     internal func handleFakespotFlow(productURL: URL, viewSize: CGSize? = nil) {
