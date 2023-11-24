@@ -1552,6 +1552,8 @@ meta:
 
 trigger_map:
 - push_branch: main
+  workflow: L10nBuild
+- push_branch: main
   pipeline: pipeline_multiple_shards
 - push_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
