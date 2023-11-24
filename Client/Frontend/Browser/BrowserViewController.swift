@@ -443,7 +443,8 @@ class BrowserViewController: UIViewController,
 
     private func dismissModalsIfStartAtHome() {
         if tabManager.startAtHomeCheck() {
-            guard !dismissFakespotIfNeeded(), presentedViewController != nil else { return }
+            store.dispatch(FakespotAction.setAppearanceTo(false))
+            guard presentedViewController != nil else { return }
             dismissVC()
         }
     }
@@ -469,7 +470,7 @@ class BrowserViewController: UIViewController,
                 guard let productURL = urlBar.currentURL else { return }
                 handleFakespotFlow(productURL: productURL)
             } else {
-                _ = dismissFakespotIfNeeded()
+                dismissFakespotIfNeeded()
             }
         }
     }
@@ -739,7 +740,7 @@ class BrowserViewController: UIViewController,
             }
 
             if fakespotNeedsUpdate {
-                _ = dismissFakespotIfNeeded(animated: false)
+                dismissFakespotIfNeeded(animated: false)
             }
         }
 
@@ -1683,7 +1684,7 @@ class BrowserViewController: UIViewController,
                   fakespotState.isOpen {
             handleFakespotFlow(productURL: url)
         } else if contentStackView.isSidebarVisible {
-            _ = dismissFakespotIfNeeded(animated: true)
+            dismissFakespotIfNeeded(animated: true)
         }
     }
 
