@@ -579,6 +579,22 @@ class HistoryPanel: UIViewController,
 
         tableView.reloadData()
     }
+
+    // MARK: Telemetry
+
+    func sendOpenedHistoryItemTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .openedHistoryItem)
+    }
+
+    func sendSelectedHistoryItemCount() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .selectedHistoryItem,
+                                     value: .historyPanelNonGroupItem,
+                                     extras: nil)
+    }
 }
 
 // MARK: - UITableViewDelegate related helpers
@@ -618,11 +634,8 @@ extension HistoryPanel: UITableViewDelegate {
 
         libraryPanelDelegate?.libraryPanel(didSelectURL: url, visitType: .typed)
 
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .selectedHistoryItem,
-                                     value: .historyPanelNonGroupItem,
-                                     extras: nil)
+        sendSelectedHistoryItemCount()
+        sendOpenedHistoryItemTelemetry()
     }
 
     private func handleHistoryActionableTapped(historyActionable: HistoryActionablesModel) {

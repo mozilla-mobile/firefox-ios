@@ -575,6 +575,14 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.History.opened)
     }
 
+    func test_openedHistoryItem_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .openedHistoryItem)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.History.openedItem)
+    }
+
     func test_singleHistoryItemRemoved_GleanIsCalled() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .swipe,
