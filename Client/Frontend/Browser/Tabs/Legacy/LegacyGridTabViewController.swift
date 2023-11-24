@@ -375,8 +375,10 @@ class LegacyGridTabViewController: UIViewController,
     }
 
     func dismissTabTray() {
-        self.navigationController?.dismiss(animated: true, completion: nil)
-        TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
+        DispatchQueue.main.async {
+            self.navigationController?.dismiss(animated: true, completion: nil)
+            TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
+        }
     }
 
     /// Handles close tab by clicking on close button or swipe gesture
@@ -652,6 +654,7 @@ extension LegacyGridTabViewController {
         case .addTab:
             didTapToolbarAddTab()
         case .deleteTab:
+            print("")
             didTapToolbarDelete(sender)
         }
         notificationCenter.post(name: .TabDataUpdated)
