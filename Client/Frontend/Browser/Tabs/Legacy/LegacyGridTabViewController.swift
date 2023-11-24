@@ -654,7 +654,6 @@ extension LegacyGridTabViewController {
         case .addTab:
             didTapToolbarAddTab()
         case .deleteTab:
-            print("")
             didTapToolbarDelete(sender)
         }
         notificationCenter.post(name: .TabDataUpdated)
