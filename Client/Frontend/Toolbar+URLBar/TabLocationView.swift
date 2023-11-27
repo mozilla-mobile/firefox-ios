@@ -205,7 +205,7 @@ class TabLocationView: UIView, FeatureFlaggable {
 
     // MARK: - Accessibility
 
-    private lazy var _accessibilityElements = [urlTextField, shoppingButton, readerModeButton, reloadButton, trackingProtectionButton, shareButton]
+    private lazy var _accessibilityElements = [trackingProtectionButton, urlTextField, shoppingButton, readerModeButton, shareButton, reloadButton]
 
     override var accessibilityElements: [Any]? {
         get {
