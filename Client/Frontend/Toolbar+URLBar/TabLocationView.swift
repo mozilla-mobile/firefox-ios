@@ -346,8 +346,7 @@ class TabLocationView: UIView, FeatureFlaggable {
 
     // Fixes: https://github.com/mozilla-mobile/firefox-ios/issues/17403
     private func hideButtons() {
-        [shoppingButton, shareButton, readerModeButton]
-            .forEach { $0.isHidden = true }
+        [shoppingButton, shareButton].forEach { $0.isHidden = true }
     }
 }
 
