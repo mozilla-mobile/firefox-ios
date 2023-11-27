@@ -27,7 +27,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case qrCodeCoordinatorRefactor
     case reduxIntegration
     case reportSiteIssue
-    case searchHighlights
     case shareSheetChanges
     case shareToolbarChanges
     case tabTrayRefactor
@@ -80,7 +79,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .reduxIntegration,
                 .reportSiteIssue,
                 .feltPrivacySimplifiedUI,
-                .searchHighlights,
                 .shareSheetChanges,
                 .shareToolbarChanges,
                 .tabTrayRefactor,

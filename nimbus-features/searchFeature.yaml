@@ -12,7 +12,6 @@ features:
       - value:
           awesome-bar:
             use-page-content: false
-            search-highlights: false
             position:
               is-position-feature-enabled: true
               is-bottom: true
@@ -20,7 +19,6 @@ features:
       - channel: developer
         value:
           awesome-bar:
-            search-highlights: false
             position:
               is-position-feature-enabled: true
               is-bottom: false
@@ -28,7 +26,6 @@ features:
       - channel: beta
         value:
           awesome-bar:
-            search-highlights: false
             position:
               is-position-feature-enabled: true
               is-bottom: false
@@ -44,10 +41,6 @@ objects:
           default: 3
         use-page-content:
           description: Search in the open tab's text content when typing.
-          type: Boolean
-          default: false
-        search-highlights:
-          description: "Whether or not search highlights are enabled"
           type: Boolean
           default: false
         position:

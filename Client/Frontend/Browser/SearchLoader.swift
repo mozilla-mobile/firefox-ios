@@ -49,27 +49,6 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
         }
     }
 
-    private func getHistoryAsSites(matchingSearchQuery query: String, limit: Int, completionHandler: @escaping (([Site]) -> Void)) {
-        profile.places.interruptReader()
-        profile.places.queryAutocomplete(matchingSearchQuery: query, limit: limit).upon { result in
-            guard let historyItems = result.successValue else {
-                self.logger.log("Error searching history",
-                                level: .warning,
-                                category: .sync,
-                                description: result.failureValue?.localizedDescription ?? "Unknown error searching history")
-                completionHandler([])
-                return
-            }
-            let sites = historyItems.sorted {
-                // Sort decending by frecency score
-                $0.frecency > $1.frecency
-            }.map({
-                return Site(url: $0.url, title: $0.title )
-            }).uniqued()
-            completionHandler(sites)
-        }
-    }
-
     var query: String = "" {
         didSet {
             let timerid = GleanMetrics.Awesomebar.queryTime.start()
@@ -87,35 +66,16 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
 
             getBookmarksAsSites(matchingSearchQuery: query, limit: 5) { [weak self] bookmarks in
                 guard let self = self else { return }
-
-                var queries = [bookmarks]
-                let historyHighlightsEnabled = self.featureFlags.isFeatureEnabled(.searchHighlights, checking: .buildOnly)
-                if !historyHighlightsEnabled {
-                    let group = DispatchGroup()
-                    group.enter()
-                    // Lets only add the history query if history highlights are not enabled
-                    self.getHistoryAsSites(matchingSearchQuery: self.query, limit: 100) { history in
-                        queries.append(history)
-                        group.leave()
-                    }
-                    _ = group.wait(timeout: .distantFuture)
-                }
-
                 DispatchQueue.main.async {
-                    let results = queries
+                    let results = [bookmarks]
                     defer {
                         GleanMetrics.Awesomebar.queryTime.stopAndAccumulate(timerid)
                     }
 
                     let bookmarksSites = results[safe: 0] ?? []
-                    var combinedSites = bookmarksSites
-                    if !historyHighlightsEnabled {
-                        let historySites = results[safe: 1] ?? []
-                        combinedSites += historySites
-                    }
 
                     // Load the data in the table view.
-                    self.load(ArrayCursor(data: combinedSites))
+                    self.load(ArrayCursor(data: bookmarksSites))
 
                     // If the new search string is not longer than the previous
                     // we don't need to find an autocomplete suggestion.
@@ -129,7 +89,7 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
                     }
 
                     // First, see if the query matches any URLs from the user's search history.
-                    for site in combinedSites {
+                    for site in bookmarksSites {
                         if let completion = self.completionForURL(site.url) {
                             self.urlBar.setAutocompleteSuggestion(completion)
                             return

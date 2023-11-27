@@ -152,8 +152,6 @@ class SearchViewController: SiteTableViewController,
     }
 
     private func loadSearchHighlights() {
-        guard featureFlags.isFeatureEnabled(.searchHighlights, checking: .buildOnly) else { return }
-
         highlightManager.searchHighlightsData(
             searchQuery: searchQuery,
             profile: profile,
