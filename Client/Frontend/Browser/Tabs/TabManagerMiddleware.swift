@@ -7,7 +7,6 @@ import Redux
 
 class TabManagerMiddleware {
     var tabManager: TabManager
-    // MARK: TODO - Remove mocks after middleware is integrated
     var tabs = [TabModel]()
     var inactiveTabs = [InactiveTabsModel]()
     var selectedPanel: TabTrayPanelType = .tabs
@@ -60,6 +59,9 @@ class TabManagerMiddleware {
             self.didTapLearnMoreAboutPrivate()
             store.dispatch(TabPanelAction.refreshTab(self.tabs))
             store.dispatch(TabTrayAction.dismissTabTray)
+
+        case ActiveScreensStateAction.closeScreen(.tabsTray):
+            self.tabs.removeAll()
         default:
             break
         }
@@ -75,7 +77,71 @@ class TabManagerMiddleware {
     }
 
     func getTabsDisplayModel(for isPrivate: Bool) -> TabDisplayModel {
-        resetMock()
+        let tabManagerTabs = tabManager.tabs
+        tabManagerTabs.forEach { tab in
+            let tabModel = TabModel(tabUUID: tab.tabUUID,
+                                    isSelected: false,
+                                    isPrivate: tab.isPrivate,
+                                    isFxHomeTab: tab.isFxHomeTab,
+                                    tabTitle: tab.displayTitle,
+                                    url: tab.url,
+                                    screenshot: tab.screenshot,
+                                    hasHomeScreenshot: tab.hasHomeScreenshot,
+                                    margin: 0)
+            tabs.append(tabModel)
+        }
+        let isInactiveTabsExpanded = !isPrivate && !inactiveTabs.isEmpty
+        let tabDisplayModel = TabDisplayModel(isPrivateMode: isPrivate,
+                                              tabs: tabs,
+                                              inactiveTabs: inactiveTabs,
+                                              isInactiveTabsExpanded: isInactiveTabsExpanded)
+        return tabDisplayModel
+    }
+
+    private func addNewTab(_ isPrivate: Bool) {
+        // TODO: Add a guard to check if is dragging
+        // TODO: Add request
+        let tab = tabManager.addTab(nil, isPrivate: isPrivate)
+        tabManager.selectTab(tab)
+        let tabModel = TabModel.emptyTabState(tabUUID: tab.tabUUID, title: "New tab")
+        tabs.append(tabModel)
+    }
+
+    private func moveTab(from originIndex: Int, to destinationIndex: Int) {
+        tabManager.moveTab(isPrivate: false, fromIndex: originIndex, toIndex: destinationIndex)
+        tabs.move(fromOffsets: IndexSet(integer: originIndex), toOffset: destinationIndex)
+    }
+
+    private func closeTab(for index: Int) {
+        guard let tab = tabManager.getTabForUUID(uuid: tabs[index].tabUUID) else { return }
+        tabManager.removeTab(tab)
+        self.tabs.remove(at: index)
+    }
+
+    private func closeAllTabs() {
+        tabs.forEach { tabModel in
+            if let tab = tabManager.getTabForUUID(uuid: tabModel.tabUUID) {
+                tabManager.removeTab(tab)
+            }
+        }
+        tabs.removeAll()
+        inactiveTabs.removeAll()
+    }
+
+    private func closeAllInactiveTabs() {
+        inactiveTabs.removeAll()
+    }
+
+    private func closeInactiveTab(for index: Int) {
+        inactiveTabs.remove(at: index)
+    }
+
+    private func didTapLearnMoreAboutPrivate() {
+        addNewTab(true)
+    }
+
+    // MARK: Mock helpers remove after middleware is working
+    func getMockTabsDisplayModel(for isPrivate: Bool) -> TabDisplayModel {
         for index in 0...2 {
             let emptyTab = tabManager.addTab(nil, afterTab: nil, isPrivate: isPrivate)
             let cellState = TabModel.emptyTabState(tabUUID: emptyTab.tabUUID, title: "Tab \(index)")
@@ -98,39 +164,7 @@ class TabManagerMiddleware {
                                isInactiveTabsExpanded: isInactiveTabsExpanded)
     }
 
-    private func addNewTab(_ isPrivate: Bool) {
-        let emptyTab = tabManager.addTab(nil, afterTab: nil, isPrivate: isPrivate)
-        let cellState = TabModel.emptyTabState(tabUUID: emptyTab.tabUUID, title: "New tab")
-        tabs.append(cellState)
-    }
-
-    private func moveTab(from originIndex: Int, to destinationIndex: Int) {
-        tabs.move(fromOffsets: IndexSet(integer: originIndex), toOffset: destinationIndex)
-    }
-
-    private func closeTab(for index: Int) {
-        tabs.remove(at: index)
-    }
-
-    private func closeAllTabs() {
-        tabs.removeAll()
-    }
-
-    private func closeAllInactiveTabs() {
-        inactiveTabs.removeAll()
-    }
-
-    private func closeInactiveTab(for index: Int) {
-        inactiveTabs.remove(at: index)
-    }
-
-    private func didTapLearnMoreAboutPrivate() {
-        addNewTab(true)
-    }
-
     private func resetMock() {
-        // Clean up array before getting the new panel
-        tabs.removeAll()
-        inactiveTabs.removeAll()
+        closeAllTabs()
     }
 }
