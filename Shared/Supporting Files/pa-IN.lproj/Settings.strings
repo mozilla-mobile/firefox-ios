@@ -1,3 +1,6 @@
+/* Accessibility label for the add button in autofill settings screen. Pressing this button presents a modal that allows users to add a card by entering the credit card information. */
+"CreditCard.Settings.AddCard.AccessibilityLabel.v121" = "ਕਾਰਡ ਜੋੜੋ";
+
 /* Description label for when there are no credit cards shown in credit card list in autofill settings screen. */
 "CreditCard.Settings.EmptyListDescription.v112" = "ਅਗਲੀ ਵਾਰ ਫ਼ੌਰਨ ਚੈਕ ਆਉਟ ਕਰਨ ਲਈ ਆਪਣੇ ਕਾਰਡ ਦੀ ਜਾਣਕਾਰੀ ਨੂੰ ਸੁਰੱਖਿਅਤ ਰੂਪ ਵਿੱਚ ਸੰਭਾਲੋ।";
 
@@ -60,4 +63,25 @@
 
 /* This is the title informing the user needs to turn on notifications in iOS Settings. */
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "ਸੂਚਨਾਵਾਂ ਚਾਲੂ ਕਰੋ";
+
+/* Accessibility label for default search engine setting. */
+"Settings.Search.Accessibility.DefaultSearchEngine.v121" = "ਮੂਲ ਖੋਜ ਇੰਜਣ";
+
+/* Title for the `default search engine` settings section in the Search page in the Settings menu. */
+"Settings.Search.DefaultSearchEngine.Title.v121" = "ਮੂਲ ਖੋਜ ਇੰਜਣ";
+
+/* Navigation title for search page in the Settings menu. */
+"Settings.Search.PageTitle.v121" = "ਖੋਜ";
+
+/* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in the Private Session section in the Search page in the Settings menu. */
+"Settings.Search.PrivateSession.Setting.v121" = "ਪ੍ਰਾਈਵੇਟ ਬਰਾਊਜ਼ਿੰਗ ਵਿੱਚ ਸੁਝਾਆਵਾਂ ਨੂੰ ਬੰਦ ਕਰੋ";
+
+/* Title for the `Private Session` settings section in the Search page in the Settings menu. */
+"Settings.Search.PrivateSession.Title.v121" = "ਪ੍ਰਾਈਵੇਟ ਸ਼ੈਸ਼ਨ";
+
+/* Title for quick-search engines settings section in the Search page in the Settings menu. */
+"Settings.Search.QuickEnginesTitle.v121" = "ਫ਼ੌਰੀ-ਖੋਜ ਇੰਜਣ";
+
+/* Label for the `show search suggestions` setting, in the Search Settings page. */
+"Settings.Search.ShowSuggestions.v121" = "ਖੋਜ ਲਈ ਸੁਝਾਆਵਾਂ ਨੂੰ ਵੇਖੋ";
 

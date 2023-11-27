@@ -14,10 +14,10 @@
 "NSLocationWhenInUseUsageDescription" = "Von Ihnen besuchte Websites können Ihren Standort abfragen.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Firefox verwendet Ihr Mikrofon, um Audio aufzunehmen und hochzuladen.";
+"NSMicrophoneUsageDescription" = "Firefox verwendet Ihr Mikrofon, um Sprachaufnahmen aufzunehmen und hochzuladen.";
 
 /* Privacy - Photo Library Additions Usage Description */
-"NSPhotoLibraryAddUsageDescription" = "Damit können Sie Fotos speichern.";
+"NSPhotoLibraryAddUsageDescription" = "Damit können Sie Ihre Fotos speichern.";
 
 /* (No Comment) */
 "Scan QR Code" = "QR-Code scannen";
