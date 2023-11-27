@@ -165,7 +165,7 @@ final class PrivateHomepageViewController: UIViewController, ContentContainable,
     }
 
     func applyTheme() {
-        // TODO: Felt Privay - Theming System should be handled by Redux 
+        // TODO: Felt Privay - Theming System should be handled by Redux
         // https://mozilla-hub.atlassian.net/browse/FXIOS-7879
         themeManager.changeCurrentTheme(.privateMode)
         let theme = themeManager.currentTheme

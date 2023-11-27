@@ -105,7 +105,7 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - .build/
   - firefox-ios/Client/Assets/Search/get_supported_locales.swift
   - firefox-ios/Client/Generated
-  - fastlane/
+  - firefox-ios/fastlane/
   - firefox-ios/FxA
   - firefox-ios/FxAClient
   - firefox-ios/Source/ExcludedFolder
@@ -121,7 +121,7 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   # Package.swift files need a custom header for swift-tools-version
   # so must be excluded due to file_header rule
   - firefox-ios/Package.swift
-  - firefox-ios/BrowserKit/Package.swift
+  - BrowserKit/Package.swift
   - firefox-ios/Client/ContentBlocker/ContentBlockerGenerator/Package.swift
   - Package.swift
   

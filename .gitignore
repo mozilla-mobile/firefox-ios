@@ -120,3 +120,4 @@ bin/nimbus-fml-configuration.local.sh
 bin/nimbus-fml.sh
 firefox-ios/nimbus-fml-configuration.local.sh
 firefox-ios/bin/nimbus-fml.sh
+firefox-ios/bin/nimbus-fml-configuration.local.sh

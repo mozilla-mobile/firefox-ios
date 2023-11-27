@@ -10,8 +10,7 @@ import Redux
 protocol TabTrayController: UIViewController,
                             UIAdaptivePresentationControllerDelegate,
                             UIPopoverPresentationControllerDelegate,
-                            Themeable,
-                            RemotePanelDelegate {
+                            Themeable {
     var openInNewTab: ((_ url: URL, _ isPrivate: Bool) -> Void)? { get set }
     var didSelectUrl: ((_ url: URL, _ visitType: VisitType) -> Void)? { get set }
 }
@@ -180,11 +179,10 @@ class TabTrayViewController: UIViewController,
         }
     }
 
-    init(delegate: TabTrayViewControllerDelegate,
+    init(selectedTab: TabTrayPanelType,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          and notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.tabTrayState = TabTrayState()
-        self.delegate = delegate
+        self.tabTrayState = TabTrayState(panelType: selectedTab)
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
 
@@ -199,7 +197,7 @@ class TabTrayViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        subscribeRedux()
+        subscribeToRedux()
         listenForThemeChange(view)
         updateToolbarItems()
     }
@@ -227,26 +225,8 @@ class TabTrayViewController: UIViewController,
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        delegate?.didFinish()
 
-        store.dispatch(ActiveScreensStateAction.closeScreen(.tabsTray))
-        store.unsubscribe(self)
-    }
-
-    private func subscribeRedux() {
-        store.dispatch(ActiveScreensStateAction.showScreen(.tabsTray))
-        store.dispatch(TabTrayAction.tabTrayDidLoad(tabTrayState.selectedPanel))
-        store.subscribe(self, transform: {
-            return $0.select(TabTrayState.init)
-        })
-    }
-
-    func newState(state: TabTrayState) {
-        tabTrayState = state
-
-        if tabTrayState.shouldDismiss {
-            dismissVC()
-        }
+        unsubscribeFromRedux()
     }
 
     private func updateLayout() {
@@ -262,6 +242,29 @@ class TabTrayViewController: UIViewController,
             navigationItem.titleView = segmentedControl
         }
         updateToolbarItems()
+    }
+
+    // MARK: - Redux
+
+    func subscribeToRedux() {
+        store.dispatch(ActiveScreensStateAction.showScreen(.tabsTray))
+        store.dispatch(TabTrayAction.tabTrayDidLoad(tabTrayState.selectedPanel))
+        store.subscribe(self, transform: {
+            return $0.select(TabTrayState.init)
+        })
+    }
+
+    func unsubscribeFromRedux() {
+        store.dispatch(ActiveScreensStateAction.closeScreen(.tabsTray))
+        store.unsubscribe(self)
+    }
+
+    func newState(state: TabTrayState) {
+        tabTrayState = state
+
+        if tabTrayState.shouldDismiss {
+            dismissVC()
+        }
     }
 
     // MARK: Themeable
@@ -295,7 +298,6 @@ class TabTrayViewController: UIViewController,
             navigationToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             navigationToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             navigationToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            // TODO: FXIOS-6926 Remove priority once collection view layout is configured
             navigationToolbar.bottomAnchor.constraint(equalTo: containerView.topAnchor).priority(.defaultLow),
 
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -383,6 +385,7 @@ class TabTrayViewController: UIViewController,
 
         guard let currentPanel = currentPanel else { return }
 
+        segmentedControl.selectedSegmentIndex = panelType.rawValue
         updateTitle()
         updateLayout()
         hideCurrentPanel()
@@ -435,40 +438,18 @@ class TabTrayViewController: UIViewController,
 
     @objc
     private func newTabButtonTapped() {
-        store.dispatch(TabPanelAction.addNewTab(tabTrayState.isPrivateMode))
+        store.dispatch(TabPanelAction.addNewTab(nil, tabTrayState.isPrivateMode))
     }
 
     @objc
     private func doneButtonTapped() {
         notificationCenter.post(name: .TabsTrayDidClose)
         // TODO: FXIOS-6928 Update mode when closing tabTray
-        self.dismiss(animated: true, completion: nil)
+        delegate?.didFinish()
     }
 
     @objc
-    private func syncTabsTapped() {}
-
-    // MARK: - RemotePanelDelegate
-
-    func remotePanelDidRequestToSignIn() {
-        fxaSignInOrCreateAccountHelper()
-    }
-
-    func remotePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
-        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .syncTab)
-        self.openInNewTab?(url, isPrivate)
-        self.dismissVC()
-    }
-
-    func remotePanel(didSelectURL url: URL, visitType: VisitType) {
-        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .syncTab)
-        // TODO: [FXIOS-6928] Provide handler for didSelectURL.
-        self.didSelectUrl?(url, visitType)
-        self.dismissVC()
-    }
-
-    // Sign In and Create Account Helper
-    func fxaSignInOrCreateAccountHelper() {
-        // TODO: Present Firefox account sign-in. Forthcoming.
+    private func syncTabsTapped() {
+        store.dispatch(RemoteTabsPanelAction.refreshTabs)
     }
 }

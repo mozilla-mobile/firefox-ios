@@ -10,7 +10,7 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "# Configure local web server for Fennec&#10;sh &quot;${PROJECT_DIR}/../test-fixtures/scheme-postbuild.sh&quot; || exit 1&#10;">
+               scriptText = "# Configure local web server for Fennec&#10;sh &quot;${SRCROOT}/../test-fixtures/scheme-postbuild.sh&quot; || exit 1&#10;">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"
@@ -152,7 +152,7 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "sh &quot;${PROJECT_DIR}/../test-fixtures/scheme-postbuild.sh&quot; || exit 1&#10;">
+               scriptText = "sh &quot;${SRCROOT}/../test-fixtures/scheme-postbuild.sh&quot; || exit 1&#10;">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"

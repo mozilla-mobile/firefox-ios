@@ -9,7 +9,7 @@ function get_abs_path {
 }
 
 CURRENT_DIR="$(get_abs_path $0)"
-PROJECT_DIR="$(get_abs_path $CURRENT_DIR/../../../..)"
+PROJECT_DIR="$(get_abs_path $CURRENT_DIR/../../../../)"
 
 
 if [ -d l10n-screenshots ]; then

@@ -17,7 +17,7 @@ jobs:
         python-version: [3.9]
         xcode: ["14.3.1"]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         persist-credentials: false
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -25,7 +25,7 @@ jobs:
     - name: Select Xcode ${{ matrix.xcode }}
       run: sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode }}.app
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
     - name: Get PR info
@@ -49,10 +49,10 @@ jobs:
       run: sh ./bootstrap.sh --importLocales
     - name: Update new strings
       run: |-
-        git diff || (git add Shared/*/*.lproj/* Shared/*.lproj/* WidgetKit/*.lproj/* Client/*/*.lproj/* Client/*.lproj/*)
-        git restore Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+        git diff || (git add firefox-ios/Shared/*/*.lproj/* firefox-ios/Shared/*.lproj/* firefox-ios/WidgetKit/*.lproj/* firefox-ios/Client/*/*.lproj/* firefox-ios/Client/*.lproj/*)
+        git restore firefox-ios/Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
     - name: Create Pull Request
-      uses: peter-evans/create-pull-request@v4
+      uses: peter-evans/create-pull-request@v5
       with:
         author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
         committer: GitHub <noreply@github.com>
