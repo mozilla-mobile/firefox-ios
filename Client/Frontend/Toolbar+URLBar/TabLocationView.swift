@@ -50,6 +50,7 @@ class TabLocationView: UIView, FeatureFlaggable {
 
     var url: URL? {
         didSet {
+            hideButtons()
             updateTextWithURL()
             trackingProtectionButton.isHidden = !isValidHttpUrlProtocol
             shareButton.isHidden = !(shouldEnableShareButtonFeature && isValidHttpUrlProtocol)
@@ -341,6 +342,11 @@ class TabLocationView: UIView, FeatureFlaggable {
                     .TabLocationETPOffSecureAccessibilityLabel : .TabLocationETPOffNotSecureAccessibilityLabel
             }
         }
+    }
+
+    // Fixes: https://github.com/mozilla-mobile/firefox-ios/issues/17403
+    private func hideButtons() {
+        [shoppingButton, shareButton].forEach { $0.isHidden = true }
     }
 }
 
