@@ -19,6 +19,9 @@
 /* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
 "Shopping.AdjustedRating.Description.v120" = "Οι αναξιόπιστες κριτικές αφαιρέθηκαν";
 
+/* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
+"Shopping.AdjustedRating.Description.v121" = "Με βάση αξιόπιστες κριτικές";
+
 /* Accessibility label, associated to adjusted rating stars. %@ is a decimal value from 0 to 5 that will only use a tenth (example: 3.5). */
 "Shopping.AdjustedRating.StarsAccessibilityLabel.v120" = "%@ από 5 αστέρια";
 
@@ -61,6 +64,12 @@
 /* Title for info card when Fakespot cannot analyze reviews for a certain product type */
 "Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Title.v120" = "Δεν μπορούμε να ελέγξουμε αυτές τις κριτικές";
 
+/* Description text for an information card used in the review checker section. This message is displayed when the reviews for a product are not yet available but are expected to be provided within the next 24 hours. It serves to inform users of the short wait for reviews and encourages them to return soon for the updated information. */
+"Shopping.InfoCard.InfoComingSoon.Description.v121" = "Θα έχουμε πληροφορίες για τις κριτικές αυτού του προϊόντος εντός 24 ωρών. Παρακαλούμε ελέγξτε ξανά.";
+
+/* Title for an information card that is displayed in the review checker section when certain details about a product or feature are not currently available but are expected to be provided soon. The message should imply that the user can look forward to receiving more information shortly. */
+"Shopping.InfoCard.InfoComingSoon.Title.v121" = "Περισσότερες πληροφορίες σύντομα";
+
 /* Primary action title for info card when the product needs analysis */
 "Shopping.InfoCard.NeedsAnalysis.PrimaryAction.v120" = "Έλεγχος τώρα";
 
@@ -78,6 +87,12 @@
 
 /* Title for info card when there are not enough reviews for a product */
 "Shopping.InfoCard.NotEnoughReviews.Title.v120" = "Δεν υπάρχουν ακόμα αρκετές κριτικές";
+
+/* Description for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This description is used for info card where the user can report if it's back in stock. */
+"Shopping.InfoCard.ProductNotInStock.Description.v121" = "Εάν παρατηρήσετε ότι αυτό το προϊόν είναι ξανά σε απόθεμα, αναφέρετέ το σε μας και θα αρχίσουμε τον έλεγχο των κριτικών.";
+
+/* Primary action label for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This primary action label is used for info card button where the user can report if it's back in stock. */
+"Shopping.InfoCard.ProductNotInStock.PrimaryAction.v121" = "Αναφέρετε ότι το προϊόν είναι σε απόθεμα";
 
 /* Title for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This title is used for info card where the user can report if it's back in stock. */
 "Shopping.InfoCard.ProductNotInStock.Title.v121" = "Το προϊόν δεν είναι διαθέσιμο";
