@@ -558,7 +558,9 @@ extension LegacyTabTrayViewController {
     func didTapAddTab(_ sender: UIBarButtonItem) {
         notificationCenter.post(name: .TabsTrayDidClose)
         viewModel.didTapAddTab(sender)
-        self.dismiss(animated: true, completion: nil)
+        self.dismiss(animated: true) {
+            self.viewModel.didDismiss()
+        }
     }
 
     @objc
