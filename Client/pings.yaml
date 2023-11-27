@@ -50,3 +50,19 @@ temp-baseline:
       The ping was submitted when the application starts.
     foreground: |
       The ping was submitted when the application became foregrounded.
+
+fx-suggest:
+  description: |
+    A ping representing a single event occurring with or to a Firefox Suggestion.
+    Distinguishable by its `ping_type`.
+    Does not contain a `client_id`, preferring a `context_id` instead.
+  include_client_id: false
+  bugs:
+    - TODO
+  data_reviews:
+    - TODO
+  notification_emails:
+    - fx-ios-data-stewards@mozilla.com
+    - lina@mozilla.com
+    - ttran@mozilla.com
+    - najiang@mozilla.com
