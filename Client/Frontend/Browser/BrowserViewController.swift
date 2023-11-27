@@ -2470,7 +2470,7 @@ extension BrowserViewController: TopTabsDelegate {
     }
 
     func topTabsDidPressNewTab(_ isPrivate: Bool) {
-        openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
+        openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
         overlayManager.openNewTab(url: nil,
                                   newTabSettings: newTabSettings)
     }
