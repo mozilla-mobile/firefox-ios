@@ -4,7 +4,7 @@
 
 import Foundation
 
-protocol EngineSessionDelegate {
+public protocol EngineSessionDelegate {
     func onScrollChange(scrollX: Int, scrollY: Int)
     func onLongPress(touchPoint: CGPoint)
     func onTitleChange(title: String)

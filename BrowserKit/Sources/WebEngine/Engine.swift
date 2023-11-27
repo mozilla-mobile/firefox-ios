@@ -4,7 +4,7 @@
 
 import Foundation
 
-protocol Engine {
+public protocol Engine {
     func createView() -> EngineView
     func createSession() -> EngineSession
 }

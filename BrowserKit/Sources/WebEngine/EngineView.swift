@@ -4,6 +4,6 @@
 
 import Foundation
 
-protocol EngineView {
+public protocol EngineView {
     func render(session: EngineSession)
 }
