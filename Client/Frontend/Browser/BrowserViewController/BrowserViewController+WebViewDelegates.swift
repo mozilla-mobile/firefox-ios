@@ -280,7 +280,11 @@ extension BrowserViewController: WKUIDelegate {
 
                     // This is only used on ipad for positioning the popover. On iPhone it is an action sheet.
                     let point = webView.convert(helper.touchPoint, to: self.view)
-                    self.presentActivityViewController(url as URL, sourceView: self.view, sourceRect: CGRect(origin: point, size: CGSize(width: 10, height: 10)), arrowDirection: .unknown)
+                    self.navigationHandler?.showShareExtension(url: url,
+                                                               sourceView: self.view,
+                                                               sourceRect: CGRect(origin: point, size: CGSize(width: 10.0, height: 10.0)),
+                                                               toastContainer: self.contentContainer,
+                                                               popoverArrowDirection: .unknown)
                 })
 
                 if let url = elements.image {
