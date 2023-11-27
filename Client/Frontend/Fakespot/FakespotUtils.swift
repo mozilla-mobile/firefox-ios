@@ -90,6 +90,7 @@ public struct FakespotUtils: FeatureFlaggable {
                                 viewSize: CGSize? = nil,
                                 orientation: UIDeviceOrientation = UIDevice.current.orientation) -> Bool {
         let isPadInMultitasking = isPadInMultitasking(device: device, window: window, viewSize: viewSize)
-        return device == .pad && !isPadInMultitasking && !orientation.isPortrait
+        let isPortrait = orientation.isPortrait || UIWindow.isPortrait
+        return device == .pad && !isPadInMultitasking && !isPortrait
     }
 }

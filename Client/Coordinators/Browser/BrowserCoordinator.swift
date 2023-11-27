@@ -433,7 +433,7 @@ class BrowserCoordinator: BaseCoordinator,
             return // there is no sidebar to close
         }
         fakespotCoordinator.closeSidebar(sidebarContainer: sidebarContainer,
-                                                           parentViewController: parentViewController)
+                                         parentViewController: parentViewController)
     }
 
     func updateFakespotSidebar(productURL: URL,

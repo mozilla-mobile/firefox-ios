@@ -468,13 +468,18 @@ class BrowserViewController: UIViewController,
         ensureMainThread { [weak self] in
             guard let self else { return }
 
+            guard fakespotState != state else {
+                fakespotState = state
+                return
+            }
+
             fakespotState = state
 
             // opens or close sidebar/bottom sheet to match the saved state
             if state.isOpen {
                 guard let productURL = urlBar.currentURL else { return }
                 handleFakespotFlow(productURL: productURL)
-            } else {
+            } else if !state.isOpen {
                 dismissFakespotIfNeeded()
             }
         }
@@ -1691,23 +1696,31 @@ class BrowserViewController: UIViewController,
 
     private func updateFakespot(tab: Tab) {
         guard let webView = tab.webView, let url = webView.url else {
+            // We're on homepage or a blank tab
+            store.dispatch(FakespotAction.setAppearanceTo(false))
             return
         }
 
         let environment = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI) ? FakespotEnvironment.staging : .prod
         let product = ShoppingProduct(url: url, client: FakespotClient(environment: environment))
-        if product.product != nil, !tab.isPrivate, contentStackView.isSidebarVisible {
+
+        guard product.product != nil, !tab.isPrivate else {
+            store.dispatch(FakespotAction.setAppearanceTo(false))
+            return
+        }
+
+        if contentStackView.isSidebarVisible {
             navigationHandler?.updateFakespotSidebar(productURL: url,
                                                      sidebarContainer: contentStackView,
                                                      parentViewController: self)
-        } else if product.product != nil,
-                  !tab.isPrivate,
-                  FakespotUtils().shouldDisplayInSidebar(),
+        } else if FakespotUtils().shouldDisplayInSidebar(),
                   let fakespotState = fakespotState,
                   fakespotState.isOpen {
             handleFakespotFlow(productURL: url)
-        } else if contentStackView.isSidebarVisible {
-            dismissFakespotIfNeeded(animated: true)
+        } else if FakespotUtils().shouldDisplayInSidebar(),
+                  let fakespotState = fakespotState,
+                  fakespotState.sidebarOpenForiPadLandscape {
+            store.dispatch(FakespotAction.setAppearanceTo(true))
         }
     }
 

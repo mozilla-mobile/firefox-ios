@@ -9,5 +9,6 @@ enum FakespotAction: Action {
     // UI trigger actions
     case toggleAppearance
     case setAppearanceTo(Bool)
+    case toggleSidebarOpenForiPadLandscape
     case setSidebarOpenForiPadLandscapeTo(Bool)
 }

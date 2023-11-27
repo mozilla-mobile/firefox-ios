@@ -480,6 +480,7 @@ class FakespotViewController:
 
     private func triggerDismiss() {
         store.dispatch(FakespotAction.setAppearanceTo(false))
+        store.dispatch(FakespotAction.toggleSidebarOpenForiPadLandscape)
     }
 
     deinit {

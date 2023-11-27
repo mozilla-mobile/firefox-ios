@@ -38,6 +38,9 @@ struct FakespotState: ScreenState, Equatable {
                                  sidebarOpenForiPadLandscape: state.sidebarOpenForiPadLandscape)
         case FakespotAction.setSidebarOpenForiPadLandscapeTo(let isEnabled):
             return FakespotState(isOpen: state.isOpen, sidebarOpenForiPadLandscape: isEnabled)
+        case FakespotAction.toggleSidebarOpenForiPadLandscape:
+            return FakespotState(isOpen: state.isOpen,
+                                 sidebarOpenForiPadLandscape: !state.sidebarOpenForiPadLandscape)
         default:
             return state
         }
