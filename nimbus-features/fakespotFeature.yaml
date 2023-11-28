@@ -44,7 +44,7 @@ features:
       - channel: beta
         value:
           status: true
-          back_in_stock_reporting: false
+          back_in_stock_reporting: true
           product_ads: true
       - channel: developer
         value:
