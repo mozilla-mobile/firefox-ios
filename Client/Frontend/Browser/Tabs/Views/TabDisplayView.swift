@@ -245,9 +245,8 @@ class TabDisplayView: UIView,
     }
 
     // MARK: - TabCellDelegate
-    func tabCellDidClose(_ cell: TabCell) {
-        guard let indexPath = collectionView.indexPath(for: cell) else { return }
-        store.dispatch(TabPanelAction.closeTab(indexPath.row))
+    func tabCellDidClose(for tabUUID: String) {
+        store.dispatch(TabPanelAction.closeTab(tabUUID))
     }
 }
 

@@ -8,7 +8,7 @@ enum TabPanelAction: Action {
     case tabPanelDidLoad(Bool)
     case tabPanelDidAppear(Bool)
     case addNewTab(Bool)
-    case closeTab(Int)
+    case closeTab(String)
     case closeAllTabs
     case moveTab(Int, Int)
     case toggleInactiveTabs
@@ -18,7 +18,6 @@ enum TabPanelAction: Action {
 
     // Middleware actions
     case didLoadTabPanel(TabDisplayModel)
-//    case newTabWasAdded(TabModel, Int)
     // Response to all user actions involving tabs ex: add, close and close all tabs
     case refreshTab([TabModel])
     case refreshInactiveTabs([InactiveTabsModel])

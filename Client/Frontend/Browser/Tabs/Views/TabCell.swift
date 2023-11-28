@@ -9,7 +9,7 @@ import Shared
 import SiteImageView
 
 protocol TabCellDelegate: AnyObject {
-    func tabCellDidClose(_ cell: TabCell)
+    func tabCellDidClose(for tabUUID: String)
 }
 
 /// WIP. Brings over much of the existing functionality from LegacyTabCell but has been
@@ -130,7 +130,8 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
 
     @objc
     func close() {
-        delegate?.tabCellDidClose(self)
+        guard let tabModel = tabModel else { return }
+        delegate?.tabCellDidClose(for: tabModel.tabUUID)
     }
 
     // MARK: - Configuration
