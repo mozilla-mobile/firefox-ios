@@ -129,10 +129,10 @@ extension PasswordDetailViewController: UITableViewDataSource {
             breachDetailView.setup(breach)
             breachDetailView.applyTheme(theme: themeManager.currentTheme)
 
-            breachDetailView.learnMoreButton.addTarget(self, action: #selector(PasswordDetailViewController.didTapBreachLearnMore), for: .touchUpInside)
+            breachDetailView.viewBreachDetailsButton.addTarget(self, action: #selector(PasswordDetailViewController.didTapBreachLearnMore), for: .touchUpInside)
             let breachLinkGesture = UITapGestureRecognizer(target: self, action: #selector(PasswordDetailViewController
                 .didTapBreachLink(_:)))
-            breachDetailView.goToButton.addGestureRecognizer(breachLinkGesture)
+            breachDetailView.visitBreachSource.addGestureRecognizer(breachLinkGesture)
             breachCell.isAccessibilityElement = false
             breachCell.contentView.accessibilityElementsHidden = true
             breachCell.accessibilityElements = [breachDetailView]
