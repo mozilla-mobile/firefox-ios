@@ -575,6 +575,14 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.History.opened)
     }
 
+    func test_openedHistoryItem_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .openedHistoryItem)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.History.openedItem)
+    }
+
     func test_singleHistoryItemRemoved_GleanIsCalled() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .swipe,
@@ -708,21 +716,6 @@ class TelemetryWrapperTests: XCTestCase {
     }
 
     // MARK: Logins and Passwords
-    func test_loginsPasswordDetected_GleanIsCalled() {
-        TelemetryWrapper.recordEvent(category: .information, method: .emailLogin, object: .loginsPasswordDetected)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Logins.passwordDetected)
-    }
-
-    func test_loginsAutofillPromptShown_GleanIsCalled() {
-        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .loginsAutofillPromptShown)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Logins.autofillPromptShown)
-    }
-
-    func test_loginsAutofillPromptDismissed_GleanIsCalled() {
-        TelemetryWrapper.recordEvent(category: .action, method: .close, object: .loginsAutofillPromptDismissed)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Logins.autofillPromptDismissed)
-    }
-
     func test_loginsAutofilled_GleanIsCalled() {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .loginsAutofilled)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Logins.autofilled)
