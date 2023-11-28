@@ -535,6 +535,7 @@ extension TelemetryWrapper {
         case libraryPanel = "library-panel"
         case navigateToGroupHistory = "navigate-to-group-history"
         case selectedHistoryItem = "selected-history-item"
+        case openedHistoryItem = "opened-item"
         case searchHistory = "search-history"
         case deleteHistory = "delete-history"
         case historySingleItemRemoved = "history-single-item-removed"
@@ -1390,6 +1391,8 @@ extension TelemetryWrapper {
             GleanMetrics.History.groupList.add()
         case (.action, .tap, .selectedHistoryItem, let type?, _):
             GleanMetrics.History.selectedItem[type.rawValue].add()
+        case (.action, .tap, .openedHistoryItem, _, _):
+            GleanMetrics.History.openedItem.record()
         case (.action, .tap, .searchHistory, _, _):
             GleanMetrics.History.searchTap.record()
         case (.action, .tap, .deleteHistory, _, _):

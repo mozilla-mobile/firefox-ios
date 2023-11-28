@@ -2055,6 +2055,17 @@ history:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
+  opened_item:
+    type: event
+    description: |
+      Recorded when a user opened a history item
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17296
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17462
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
   search_tap:
     type: event
     description: |
