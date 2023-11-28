@@ -2621,39 +2621,6 @@ preferences:
 
 # Password Manager metrics
 logins:
-  password_detected:
-    type: event
-    description: |
-      Records when a username and password pair was detected
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/14902
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16685
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2024-06-01"
-  autofill_prompt_shown:
-    type: event
-    description: |
-      Records when the Password autofill prompt was shown
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/14902
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16685
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2024-06-01"
-  autofill_prompt_dismissed:
-    type: event
-    description: |
-      Records when the Password autofill prompt was dismissed.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/14902
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16685
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2024-06-01"
   autofilled:
     type: event
     description: |
