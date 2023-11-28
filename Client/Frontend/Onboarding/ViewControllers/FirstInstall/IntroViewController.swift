@@ -79,6 +79,11 @@ class IntroViewController: UIViewController,
         listenForThemeChange(view)
         populatePageController()
     }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        view.sortAccessibilityByOrderIndex()
+    }
 
     deinit {
         notificationCenter.removeObserver(self)
@@ -116,7 +121,8 @@ class IntroViewController: UIViewController,
         guard viewModel.isDismissable else { return }
         view.addSubview(closeButton)
         view.bringSubviewToFront(closeButton)
-
+        closeButton.accessibilityOrderIndex = 1
+        
         NSLayoutConstraint.activate([
             closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
                                              constant: UX.closeVerticalMargin),
