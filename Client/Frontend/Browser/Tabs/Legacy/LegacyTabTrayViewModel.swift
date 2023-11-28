@@ -63,12 +63,15 @@ extension LegacyTabTrayViewModel {
     @objc
     func didTapAddTab(_ sender: UIBarButtonItem) {
         tabTrayView.performToolbarAction(.addTab, sender: sender)
-        overlayManager.openNewTab(url: nil,
-                                  newTabSettings: NewTabAccessors.getNewTabPage(profile.prefs))
     }
 
     @objc
     func didTapSyncTabs(_ sender: UIBarButtonItem) {
         reloadRemoteTabs()
+    }
+
+    func didDismiss() {
+        overlayManager.openNewTab(url: nil,
+                                  newTabSettings: NewTabAccessors.getNewTabPage(profile.prefs))
     }
 }
