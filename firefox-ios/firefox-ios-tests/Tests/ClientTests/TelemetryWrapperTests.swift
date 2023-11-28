@@ -437,6 +437,18 @@ class TelemetryWrapperTests: XCTestCase {
                               failureMessage: "Should be true")
     }
 
+    func test_shoppingAdsExposure_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .view,
+            object: .shoppingBottomSheet,
+            value: .shoppingAdsExposure
+        )
+        testEventMetricRecordingSuccess(
+            metric: GleanMetrics.Shopping.adsExposure
+        )
+    }
+
     // MARK: - Onboarding
     func test_onboardingSelectWallpaperWithExtras_GleanIsCalled() {
         let wallpaperNameKey = TelemetryWrapper.EventExtraKey.wallpaperName.rawValue
