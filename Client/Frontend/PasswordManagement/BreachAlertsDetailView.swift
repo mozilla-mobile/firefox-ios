@@ -8,6 +8,7 @@ import Shared
 
 class BreachAlertsDetailView: UIView, ThemeApplicable {
     private struct UX {
+        static let verticalSpacing: CGFloat = -8
         static let horizontalMargin: CGFloat = 14
         static let shadowRadius: CGFloat = 8
         static let shadowOpacity: Float = 0.6
@@ -45,6 +46,7 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
         button.isAccessibilityElement = true
         button.accessibilityTraits = .button
         button.accessibilityLabel = .BreachAlertsLearnMore
+        button.addTarget(self, action: #selector(self.didTapBreachLearnMore), for: .touchUpInside)
     }
 
     private lazy var breachDateLabel: UILabel = .build { label in
@@ -64,13 +66,13 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
         label.accessibilityTraits = .staticText
     }
 
-    private lazy var goToButton: UILabel = .build { button in
-        button.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.fontSize, weight: .semibold)
-        button.numberOfLines = 0
-        button.isUserInteractionEnabled = true
-        button.isAccessibilityElement = true
-        button.accessibilityTraits = .button
-        button.accessibilityLabel = .BreachAlertsLink
+    private lazy var goToLabel: UILabel = .build { label in
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.fontSize, weight: .semibold)
+        label.numberOfLines = 0
+        label.isUserInteractionEnabled = true
+        label.isAccessibilityElement = true
+        label.accessibilityTraits = .button
+        label.accessibilityLabel = .BreachAlertsLink
     }
 
     private lazy var titleStack: UIStackView = .build()
@@ -85,16 +87,19 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
         stack.axis = .vertical
     }
 
+    var onTapLearnMore: (() -> Void)?
+    var onTapBreachLink: (() -> Void)?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureLayerAppearance()
         setupUI()
         setupLayout()
 
-        self.isAccessibilityElement = false
-        self.accessibilityElements = [titleLabel, learnMoreButton, breachDateLabel, descriptionLabel, goToButton]
+        isAccessibilityElement = false
+        accessibilityElements = [titleLabel, learnMoreButton, breachDateLabel, descriptionLabel, goToLabel]
 
-        self.configureView(for: self.traitCollection)
+        configureView(for: traitCollection)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -102,16 +107,13 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
     }
 
     private func setupUI() {
-        // Title Stack
         titleIconContainer.addSubview(titleIcon)
         [titleIconContainer, titleLabel, learnMoreButton].forEach(titleStack.addArrangedSubview)
 
-        // Info Stack
-        [breachDateLabel, descriptionLabel, goToButton].forEach(infoStack.addArrangedSubview)
+        [breachDateLabel, descriptionLabel, goToLabel].forEach(infoStack.addArrangedSubview)
 
-        // Content Stack
         [titleStack, infoStack].forEach(contentStack.addArrangedSubview)
-        self.addSubview(contentStack)
+        addSubview(contentStack)
     }
 
     private func setupLayout() {
@@ -130,12 +132,19 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
             infoStack.leadingAnchor.constraint(equalTo: contentStack.leadingAnchor, constant: titleIconContainerSize),
             infoStack.trailingAnchor.constraint(equalTo: contentStack.trailingAnchor),
 
+            descriptionLabel.bottomAnchor.constraint(equalTo: goToLabel.topAnchor, constant: UX.verticalSpacing),
+
             contentStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.horizontalMargin),
             contentStack.leadingAnchor.constraint(equalTo: leadingAnchor),
             contentStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalMargin),
             contentStack.topAnchor.constraint(equalTo: topAnchor)
         ])
         setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
+    }
+
+    @objc
+    private func didTapBreachLearnMore() {
+        onTapLearnMore?()
     }
 
     private func configureLayerAppearance() {
@@ -161,13 +170,13 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
         dateFormatter.dateFormat = "yyyy-MM-dd"
         guard let date = dateFormatter.date(from: breach.breachDate) else { return }
         dateFormatter.dateStyle = .medium
-        self.breachDateLabel.text! += " \(dateFormatter.string(from: date))."
+        breachDateLabel.text! += " \(dateFormatter.string(from: date))."
         breachLink = .BreachAlertsLink + " \(breach.domain)"
-        self.goToButton.sizeToFit()
-        self.layoutIfNeeded()
+        goToLabel.sizeToFit()
+        layoutIfNeeded()
 
-        self.goToButton.accessibilityValue = breach.domain
-        self.breachDateLabel.accessibilityValue = "\(dateFormatter.string(from: date))."
+        goToLabel.accessibilityValue = breach.domain
+        breachDateLabel.accessibilityValue = "\(dateFormatter.string(from: date))."
     }
 
     // MARK: - Dynamic Type Support
@@ -210,7 +219,7 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
         titleLabel.textColor = colors.textWarning
         breachDateLabel.textColor = colors.textWarning
         descriptionLabel.textColor = colors.textWarning
-        goToButton.attributedText = getAttributedText(
+        goToLabel.attributedText = getAttributedText(
             for: breachLink,
             with: colors.textWarning
         )
@@ -221,20 +230,5 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
             ),
             for: .normal
         )
-    }
-}
-
-// MARK: - Exposed Properties
-// This extension provides controlled external access to specific private properties of BreachAlertsDetailView.
-
-extension BreachAlertsDetailView {
-    /// Exposes the private `learnMoreButton` property for controlled access from outside the class.
-    public var viewBreachDetailsButton: UIButton {
-        return learnMoreButton
-    }
-
-    /// Exposes the private `goToButton` property for controlled access from outside the class.
-    public var visitBreachSource: UILabel {
-        return goToButton
     }
 }
