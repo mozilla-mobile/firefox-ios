@@ -9,6 +9,7 @@ private let ToolbarBaseAnimationDuration: CGFloat = 0.2
 class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvider {
     private struct UX {
         static let abruptScrollEventOffset: CGFloat = 200
+        static let yOffsetResetValue = 77.66666666666667
     }
 
     enum ScrollDirection {
@@ -96,6 +97,7 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
     private var topScrollHeight: CGFloat { header?.frame.height ?? 0 }
     private var contentSize: CGSize { return scrollView?.contentSize ?? .zero }
     private var contentOffsetBeforeAnimation = CGPoint.zero
+    public var contentOffsetBeforeLoadingWebsite = CGPoint.zero
     private var isAnimatingToolbar = false
 
     // Over keyboard content and bottom content
@@ -308,7 +310,9 @@ private extension TabScrollingController {
                                     alpha: CGFloat,
                                     completion: ((_ finished: Bool) -> Void)?) {
         guard let scrollView = scrollView else { return }
+
         contentOffsetBeforeAnimation = scrollView.contentOffset
+
         isAnimatingToolbar = true
         // If this function is used to fully animate the toolbar from hidden to shown, keep the page from scrolling by adjusting contentOffset,
         // Otherwise when the toolbar is hidden and a link navigated, showing the toolbar will scroll the page and
@@ -339,6 +343,7 @@ private extension TabScrollingController {
         } else {
             animation()
             completion?(true)
+            self.isAnimatingToolbar = false
         }
     }
 
@@ -399,10 +404,16 @@ extension TabScrollingController: UIScrollViewDelegate {
     // checking if an abrupt scroll event was triggered and adjusting the offset to the one
     // before the WKWebView's contentOffset is reset as a result of the contentView's frame becoming smaller
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard isAnimatingToolbar else { return }
-        if contentOffsetBeforeAnimation.y - scrollView.contentOffset.y > UX.abruptScrollEventOffset {
-            scrollView.contentOffset = CGPoint(x: contentOffsetBeforeAnimation.x, y: contentOffsetBeforeAnimation.y + self.topScrollHeight)
-            contentOffsetBeforeAnimation.y = 0
+        if isAnimatingToolbar {
+            if contentOffsetBeforeAnimation.y - scrollView.contentOffset.y > UX.abruptScrollEventOffset {
+                scrollView.contentOffset = CGPoint(x: contentOffsetBeforeAnimation.x, y: contentOffsetBeforeAnimation.y + self.topScrollHeight)
+                contentOffsetBeforeAnimation.y = 0
+            }
+        } else if scrollView.contentOffset.y == UX.yOffsetResetValue {
+            if contentOffsetBeforeLoadingWebsite.y - scrollView.contentOffset.y > UX.abruptScrollEventOffset {
+                scrollView.contentOffset = CGPoint(x: contentOffsetBeforeLoadingWebsite.x, y: contentOffsetBeforeLoadingWebsite.y + self.topScrollHeight)
+                contentOffsetBeforeLoadingWebsite = CGPoint.zero
+            }
         }
     }
 

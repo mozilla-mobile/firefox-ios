@@ -1292,7 +1292,9 @@ class BrowserViewController: UIViewController,
             guard let loading = change?[.newKey] as? Bool else { break }
             setupMiddleButtonStatus(isLoading: loading)
             setupLoadingSpinnerFor(webView, isLoading: loading)
-
+            if self.scrollController.contentOffsetBeforeLoadingWebsite == CGPoint.zero {
+                self.scrollController.contentOffsetBeforeLoadingWebsite = self.tabManager.selectedTab?.webView?.scrollView.contentOffset ?? CGPoint.zero
+            }
         case .URL:
             // Special case for "about:blank" popups, if the webView.url is nil, keep the tab url as "about:blank"
             if tab.url?.absoluteString == "about:blank" && webView.url == nil {
