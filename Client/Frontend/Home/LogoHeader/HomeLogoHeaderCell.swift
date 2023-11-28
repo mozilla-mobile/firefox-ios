@@ -9,16 +9,20 @@ import UIKit
 
 class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
     private struct UX {
+        static let iPadAdjustment: CGFloat = -40
         struct Logo {
-            static let imageSize: CGFloat = 40
-            static let topConstant: CGFloat = 32
+            static let iPhoneImageSize: CGFloat = 40
+            static let iPadImageSize: CGFloat = 75
+            static let iPhoneTopConstant: CGFloat = 32
+            static let iPadTopConstant: CGFloat = 70
             static let bottomConstant: CGFloat = -10
         }
 
         struct TextImage {
-            static let imageWidth: CGFloat = 70
-            static let imageHeight: CGFloat = 40
-            static let leadingConstant: CGFloat = 9
+            static let iPhoneWidth: CGFloat = 70
+            static let iPadWidth: CGFloat = 133
+            static let iPhoneLeadingConstant: CGFloat = 9
+            static let iPadLeadingConstant: CGFloat = 17
             static let trailingConstant: CGFloat = -15
         }
     }
