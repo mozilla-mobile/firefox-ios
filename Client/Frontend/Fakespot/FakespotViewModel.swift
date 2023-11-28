@@ -186,6 +186,10 @@ class FakespotViewModel {
         return prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false
     }
 
+    var areAdsEnabled: Bool {
+        return prefs.boolForKey(PrefsKeys.Shopping2023EnableAds) ?? true
+    }
+
     var reliabilityCardViewModel: FakespotReliabilityCardViewModel? {
         guard let grade = state.productData?.grade else { return nil }
 
