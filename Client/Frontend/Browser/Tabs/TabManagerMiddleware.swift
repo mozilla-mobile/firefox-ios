@@ -7,7 +7,6 @@ import Redux
 
 class TabManagerMiddleware {
     var tabManager: TabManager
-    var tabs = [TabModel]()
     var inactiveTabs = [InactiveTabsModel]()
     var selectedPanel: TabTrayPanelType = .tabs
 
@@ -32,20 +31,24 @@ class TabManagerMiddleware {
 
         case TabPanelAction.addNewTab(let isPrivate):
             self.addNewTab(isPrivate)
-            store.dispatch(TabPanelAction.refreshTab(self.tabs))
+            let tabs = self.refreshTabs()
+            store.dispatch(TabPanelAction.refreshTab(tabs))
             store.dispatch(TabTrayAction.dismissTabTray)
 
         case TabPanelAction.moveTab(let originIndex, let destinationIndex):
             self.moveTab(from: originIndex, to: destinationIndex)
-            store.dispatch(TabPanelAction.refreshTab(self.tabs))
+            let tabs = self.refreshTabs()
+            store.dispatch(TabPanelAction.refreshTab(tabs))
 
         case TabPanelAction.closeTab(let index):
             self.closeTab(for: index)
-            store.dispatch(TabPanelAction.refreshTab(self.tabs))
+            let tabs = self.refreshTabs()
+            store.dispatch(TabPanelAction.refreshTab(tabs))
 
         case TabPanelAction.closeAllTabs:
             self.closeAllTabs()
-            store.dispatch(TabPanelAction.refreshTab(self.tabs))
+            let tabs = self.refreshTabs()
+            store.dispatch(TabPanelAction.refreshTab(tabs))
 
         case TabPanelAction.closeAllInactiveTabs:
             self.closeAllInactiveTabs()
@@ -57,11 +60,12 @@ class TabManagerMiddleware {
 
         case TabPanelAction.learnMorePrivateMode:
             self.didTapLearnMoreAboutPrivate()
-            store.dispatch(TabPanelAction.refreshTab(self.tabs))
+            let tabs = self.refreshTabs()
+            store.dispatch(TabPanelAction.refreshTab(tabs))
             store.dispatch(TabTrayAction.dismissTabTray)
 
-        case ActiveScreensStateAction.closeScreen(.tabsTray):
-            self.tabs.removeAll()
+//        case ActiveScreensStateAction.closeScreen(.tabsTray):
+//            self.tabs.removeAll()
         default:
             break
         }
@@ -71,14 +75,27 @@ class TabManagerMiddleware {
         selectedPanel = panelType
 
         let isPrivate = panelType == .privateTabs
+        let tabsCount = refreshTabs().count
         return TabTrayModel(isPrivateMode: isPrivate,
                             selectedPanel: panelType,
-                            normalTabsCount: "\(tabs.count)")
+                            normalTabsCount: "\(tabsCount)")
     }
 
     func getTabsDisplayModel(for isPrivate: Bool) -> TabDisplayModel {
+        let tabs = refreshTabs()
+        let isInactiveTabsExpanded = !isPrivate && !inactiveTabs.isEmpty
+        let tabDisplayModel = TabDisplayModel(isPrivateMode: isPrivate,
+                                              tabs: tabs,
+                                              inactiveTabs: inactiveTabs,
+                                              isInactiveTabsExpanded: isInactiveTabsExpanded)
+        return tabDisplayModel
+    }
+
+    private func refreshTabs() -> [TabModel] {
+        var tabs = [TabModel]()
         let tabManagerTabs = tabManager.tabs
         tabManagerTabs.forEach { tab in
+            print("YRD tab displayTitle \(tab.displayTitle)")
             let tabModel = TabModel(tabUUID: tab.tabUUID,
                                     isSelected: false,
                                     isPrivate: tab.isPrivate,
@@ -90,12 +107,8 @@ class TabManagerMiddleware {
                                     margin: 0)
             tabs.append(tabModel)
         }
-        let isInactiveTabsExpanded = !isPrivate && !inactiveTabs.isEmpty
-        let tabDisplayModel = TabDisplayModel(isPrivateMode: isPrivate,
-                                              tabs: tabs,
-                                              inactiveTabs: inactiveTabs,
-                                              isInactiveTabsExpanded: isInactiveTabsExpanded)
-        return tabDisplayModel
+
+        return tabs
     }
 
     private func addNewTab(_ isPrivate: Bool) {
@@ -103,28 +116,25 @@ class TabManagerMiddleware {
         // TODO: Add request
         let tab = tabManager.addTab(nil, isPrivate: isPrivate)
         tabManager.selectTab(tab)
-        let tabModel = TabModel.emptyTabState(tabUUID: tab.tabUUID, title: "New tab")
-        tabs.append(tabModel)
     }
 
     private func moveTab(from originIndex: Int, to destinationIndex: Int) {
         tabManager.moveTab(isPrivate: false, fromIndex: originIndex, toIndex: destinationIndex)
-        tabs.move(fromOffsets: IndexSet(integer: originIndex), toOffset: destinationIndex)
     }
 
     private func closeTab(for index: Int) {
+        let tabs = refreshTabs()
         guard let tab = tabManager.getTabForUUID(uuid: tabs[index].tabUUID) else { return }
         tabManager.removeTab(tab)
-        self.tabs.remove(at: index)
     }
 
     private func closeAllTabs() {
+        let tabs = refreshTabs()
         tabs.forEach { tabModel in
             if let tab = tabManager.getTabForUUID(uuid: tabModel.tabUUID) {
                 tabManager.removeTab(tab)
             }
         }
-        tabs.removeAll()
         inactiveTabs.removeAll()
     }
 
@@ -141,28 +151,28 @@ class TabManagerMiddleware {
     }
 
     // MARK: Mock helpers remove after middleware is working
-    func getMockTabsDisplayModel(for isPrivate: Bool) -> TabDisplayModel {
-        for index in 0...2 {
-            let emptyTab = tabManager.addTab(nil, afterTab: nil, isPrivate: isPrivate)
-            let cellState = TabModel.emptyTabState(tabUUID: emptyTab.tabUUID, title: "Tab \(index)")
-            tabs.append(cellState)
-        }
-
-        if !isPrivate {
-            inactiveTabs = [InactiveTabsModel(url: "Tab1"),
-                            InactiveTabsModel(url: "Tab2"),
-                            InactiveTabsModel(url: "Tab3")]
-        } else {
-            inactiveTabs = [InactiveTabsModel]()
-        }
-
-        let isInactiveTabsExpanded = !isPrivate && !inactiveTabs.isEmpty
-
-        return TabDisplayModel(isPrivateMode: isPrivate,
-                               tabs: tabs,
-                               inactiveTabs: inactiveTabs,
-                               isInactiveTabsExpanded: isInactiveTabsExpanded)
-    }
+//    func getMockTabsDisplayModel(for isPrivate: Bool) -> TabDisplayModel {
+//        for index in 0...2 {
+//            let emptyTab = tabManager.addTab(nil, afterTab: nil, isPrivate: isPrivate)
+//            let cellState = TabModel.emptyTabState(tabUUID: emptyTab.tabUUID, title: "Tab \(index)")
+//            tabs.append(cellState)
+//        }
+//
+//        if !isPrivate {
+//            inactiveTabs = [InactiveTabsModel(url: "Tab1"),
+//                            InactiveTabsModel(url: "Tab2"),
+//                            InactiveTabsModel(url: "Tab3")]
+//        } else {
+//            inactiveTabs = [InactiveTabsModel]()
+//        }
+//
+//        let isInactiveTabsExpanded = !isPrivate && !inactiveTabs.isEmpty
+//        
+//        return TabDisplayModel(isPrivateMode: isPrivate,
+//                               tabs: tabs,
+//                               inactiveTabs: inactiveTabs,
+//                               isInactiveTabsExpanded: isInactiveTabsExpanded)
+//    }
 
     private func resetMock() {
         closeAllTabs()
