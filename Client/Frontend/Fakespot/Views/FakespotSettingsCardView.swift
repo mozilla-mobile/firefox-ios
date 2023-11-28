@@ -27,6 +27,7 @@ class FakespotSettingsCardViewModel {
     let footerA11yActionIdentifier: String = a11yIds.footerAction
     let footerActionUrl = FakespotUtils.fakespotUrl
     var dismissViewController: ((TelemetryWrapper.EventExtraKey.Shopping?) -> Void)?
+    var toggleAdsEnabled: (() -> Void)?
 
     var isReviewQualityCheckOn: Bool {
         get { return prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false }
@@ -40,8 +41,7 @@ class FakespotSettingsCardViewModel {
     }
 
     var areAdsEnabled: Bool {
-        get { return prefs.boolForKey(PrefsKeys.Shopping2023EnableAds) ?? true }
-        set { prefs.setBool(newValue, forKey: PrefsKeys.Shopping2023EnableAds) }
+        return prefs.boolForKey(PrefsKeys.Shopping2023EnableAds) ?? true
     }
 
     var footerModel: ActionFooterViewModel {
@@ -193,7 +193,7 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
 
     @objc
     private func didToggleSwitch(_ sender: UISwitch) {
-        viewModel?.areAdsEnabled = sender.isOn
+        viewModel?.toggleAdsEnabled?()
     }
 
     @objc

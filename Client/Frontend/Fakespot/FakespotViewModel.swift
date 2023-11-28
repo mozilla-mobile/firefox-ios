@@ -345,6 +345,18 @@ class FakespotViewModel {
         }
     }
 
+    func toggleAdsEnabled() {
+        prefs.setBool(!areAdsEnabled, forKey: PrefsKeys.Shopping2023EnableAds)
+
+        if case .loaded(let productState) = state,
+           shoppingProduct.isProductAdsFeatureEnabled,
+           !productState.productAds.isEmpty {
+            // Make sure the view updates with the new ads setting
+            // We only update if the feature is enabled and the product has ads
+            onStateChange?()
+        }
+    }
+
     struct ProductState {
         let product: ProductAnalysisResponse?
         let productAds: [ProductAdsResponse]

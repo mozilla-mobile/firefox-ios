@@ -401,6 +401,9 @@ class FakespotViewController:
                 guard let action else { return }
                 viewModel.recordDismissTelemetry(by: action)
             }
+            viewModel.settingsCardViewModel.toggleAdsEnabled = { [weak self] in
+                self?.viewModel.toggleAdsEnabled()
+            }
             return view
 
         case .noAnalysisCard:
@@ -412,6 +415,7 @@ class FakespotViewController:
              return view
 
         case .productAdCard(let adData):
+            guard viewModel.areAdsEnabled else { return nil }
             let view: FakespotAdView = .build()
             var viewModel = FakespotAdViewModel(productAdsData: adData)
             viewModel.dismissViewController = { [weak self] in
