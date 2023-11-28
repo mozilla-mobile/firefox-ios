@@ -11,6 +11,10 @@ class URIFixup {
             return nil
         }
 
+        guard !trimmed.lowercased().hasPrefix("javascript:") else {
+            return nil
+        }
+
         // Check if the URL includes a scheme. This will handle
         // all valid requests starting with "http://", "about:", etc.
         // Also check with a regular expression if there is a port in the url

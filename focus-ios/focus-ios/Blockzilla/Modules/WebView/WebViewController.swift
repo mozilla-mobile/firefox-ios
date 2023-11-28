@@ -119,10 +119,21 @@ class WebViewController: UIViewController, WebController {
     }
 
     // Browser proxy methods
-    func load(_ request: URLRequest) { browserView.load(request) }
-    func goBack() { browserView.goBack() }
-    func goForward() { browserView.goForward() }
-    func reload() { browserView.reload() }
+    func load(_ request: URLRequest) {
+        browserView.load(request)
+    }
+
+    func goBack() {
+        browserView.goBack()
+    }
+
+    func goForward() {
+        browserView.goForward()
+    }
+
+    func reload() {
+        browserView.reload()
+    }
 
     func requestUserAgentChange() {
         if let hostName = browserView.url?.host {
