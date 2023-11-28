@@ -681,7 +681,7 @@ shopping:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/17306
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/17306
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17493
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-11-27"
