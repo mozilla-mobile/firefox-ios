@@ -30,15 +30,19 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
 
     // MARK: - UI Elements
-    lazy var logoImage: UIImageView = .build { imageView in
+    private lazy var logoImage: UIImageView = .build { imageView in
         imageView.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoBall)
         imageView.contentMode = .scaleAspectFit
         imageView.accessibilityIdentifier = a11y.logoImage
     }
 
-    lazy var logoTextImage: UIImageView = .build { imageView in
+    private lazy var logoTextImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.accessibilityIdentifier = a11y.logoText
+    }
+
+    private lazy var containerView: UIView = .build { view in
+        view.backgroundColor = .clear
     }
 
     // MARK: - Initializers
@@ -54,26 +58,53 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
     // MARK: - UI Setup
     func setupView() {
         contentView.backgroundColor = .clear
-        contentView.addSubview(logoImage)
-        contentView.addSubview(logoTextImage)
+        containerView.addSubview(logoImage)
+        containerView.addSubview(logoTextImage)
+        contentView.addSubview(containerView)
+
+        // TODO: Felt Privacy - Private mode in Redux to follow
+        let isiPadAndPrivate = UIDevice.current.userInterfaceIdiom == .pad && true
+        let logoSizeConstant = isiPadAndPrivate ? UX.Logo.iPadImageSize : UX.Logo.iPhoneImageSize
 
         NSLayoutConstraint.activate([
-            logoImage.topAnchor.constraint(equalTo: contentView.topAnchor,
-                                           constant: UX.Logo.topConstant),
-            logoImage.widthAnchor.constraint(equalToConstant: UX.Logo.imageSize),
-            logoImage.heightAnchor.constraint(equalToConstant: UX.Logo.imageSize),
-            logoImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            containerView.topAnchor.constraint(
+                equalTo: contentView.topAnchor,
+                constant: isiPadAndPrivate ? UX.Logo.iPadTopConstant : UX.Logo.iPhoneTopConstant),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
+                                                  constant: UX.Logo.bottomConstant),
+
+            logoImage.topAnchor.constraint(equalTo: containerView.topAnchor),
+            logoImage.widthAnchor.constraint(equalToConstant: logoSizeConstant),
+            logoImage.heightAnchor.constraint(equalToConstant: logoSizeConstant),
+            logoImage.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             logoImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
                                               constant: UX.Logo.bottomConstant),
 
-            logoTextImage.widthAnchor.constraint(equalToConstant: UX.TextImage.imageWidth),
-            logoTextImage.heightAnchor.constraint(equalToConstant: UX.TextImage.imageHeight),
-            logoTextImage.leadingAnchor.constraint(equalTo: logoImage.trailingAnchor,
-                                                   constant: UX.TextImage.leadingConstant),
-            logoTextImage.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor,
-                                                    constant: UX.TextImage.trailingConstant),
+            logoTextImage.widthAnchor.constraint(
+                equalToConstant: isiPadAndPrivate ? UX.TextImage.iPadWidth : UX.TextImage.iPhoneWidth),
+            logoTextImage.heightAnchor.constraint(equalTo: logoImage.heightAnchor),
+            logoTextImage.leadingAnchor.constraint(
+                equalTo: logoImage.trailingAnchor,
+                constant: isiPadAndPrivate ? UX.TextImage.iPadLeadingConstant : UX.TextImage.iPhoneLeadingConstant),
+            logoTextImage.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             logoTextImage.centerYAnchor.constraint(equalTo: logoImage.centerYAnchor)
         ])
+
+        if isiPadAndPrivate {
+            NSLayoutConstraint.activate([
+                containerView.centerXAnchor.constraint(
+                    equalTo: contentView.centerXAnchor,
+                    constant: UX.iPadAdjustment
+                ),
+            ])
+        } else {
+            NSLayoutConstraint.activate([
+                containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+                containerView.trailingAnchor.constraint(
+                    lessThanOrEqualTo: contentView.trailingAnchor,
+                    constant: UX.TextImage.trailingConstant),
+            ])
+        }
     }
 }
 
