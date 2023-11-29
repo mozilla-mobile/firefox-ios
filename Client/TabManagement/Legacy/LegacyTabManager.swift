@@ -631,8 +631,9 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     }
 
     @MainActor
-    func removeAllTabs() async {
-        for tab in tabs {
+    func removeAllTabs(isPrivateMode: Bool) async {
+        let currentModeTabs = tabs.filter {$0.isPrivate == isPrivateMode}
+        for tab in currentModeTabs {
             await self.removeTab(tab.tabUUID)
         }
         storeChanges()

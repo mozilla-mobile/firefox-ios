@@ -37,7 +37,6 @@ class TabManagerMiddleware {
 
         case TabPanelAction.moveTab(let originIndex, let destinationIndex):
             guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel) else { return }
-            state.activeScreens
             self.moveTab(from: originIndex, to: destinationIndex)
             let tabs = self.refreshTabs(for: tabsState.isPrivateMode)
             store.dispatch(TabPanelAction.refreshTab(tabs))
@@ -58,7 +57,7 @@ class TabManagerMiddleware {
         case TabPanelAction.closeAllTabs:
             guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel) else { return }
             Task {
-                await self.closeAllTabs()
+                await self.closeAllTabs(isPrivateMode: tabsState.isPrivateMode)
                 ensureMainThread { [self] in
                     let tabs = self.refreshTabs(for: tabsState.isPrivateMode)
                     store.dispatch(TabPanelAction.refreshTab(tabs))
@@ -107,7 +106,7 @@ class TabManagerMiddleware {
 
     private func refreshTabs(for isPrivate: Bool) -> [TabModel] {
         var tabs = [TabModel]()
-        let tabManagerTabs = tabManager.tabs.filter { $0.isPrivate }
+        let tabManagerTabs = tabManager.tabs.filter { $0.isPrivate == isPrivate }
         tabManagerTabs.forEach { tab in
             let tabModel = TabModel(tabUUID: tab.tabUUID,
                                     isSelected: false,
@@ -141,8 +140,8 @@ class TabManagerMiddleware {
         return isLastTab
     }
 
-    private func closeAllTabs() async {
-        await tabManager.removeAllTabs()
+    private func closeAllTabs(isPrivateMode: Bool) async {
+        await tabManager.removeAllTabs(isPrivateMode: isPrivateMode)
         inactiveTabs.removeAll()
     }
 
