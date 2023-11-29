@@ -42,7 +42,7 @@ let package = Package(
             exact: "2.0.0"),
         .package(
             url: "https://github.com/getsentry/sentry-cocoa.git",
-            exact: "8.13.1"),
+            exact: "8.17.0"),
     ],
     targets: [
         .target(

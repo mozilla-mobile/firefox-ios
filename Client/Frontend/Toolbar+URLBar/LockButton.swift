@@ -39,7 +39,7 @@ class LockButton: UIButton {
         clipsToBounds = false
         setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.lock), for: .normal)
         imageView?.contentMode = .scaleAspectFill
-        adjustsImageWhenHighlighted = false
+        configuration = .plain()
     }
 
     required init?(coder aDecoder: NSCoder) {

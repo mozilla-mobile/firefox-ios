@@ -166,7 +166,8 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         mozWaitForElementToExist(website.textFields.firstMatch)
         website.textFields.firstMatch.tap()
         website.textFields.firstMatch.typeText("Shoe")
-        website.buttons.element(boundBy: 5).tap()
+        mozWaitForElementToExist(website.otherElements.buttons.firstMatch)
+        website.otherElements.buttons.element(boundBy: 1).tap()
         waitUntilPageLoad()
         website.images.firstMatch.tap()
 
@@ -184,7 +185,9 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         // Tap on each option in that menu
         mozWaitForElementToExist(app.buttons["Shopping.ReviewQualityCard.ExpandButton"])
         app.buttons["Shopping.ReviewQualityCard.ExpandButton"].tap()
-        snapshot("ReviewQualityCard")
+        snapshot("ReviewQualityCard-1")
+        app.swipeUp(velocity: 15)
+        snapshot("ReviewQualityCard-2")
         app.buttons["Shopping.ReviewQualityCard.ExpandButton"].tap()
 
         mozWaitForElementToExist(app.buttons["Shopping.SettingsCard.ExpandButton"])

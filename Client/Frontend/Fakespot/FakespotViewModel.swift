@@ -186,8 +186,8 @@ class FakespotViewModel {
         return prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false
     }
 
-    private var areAdsEnabled: Bool {
-        settingsCardViewModel.areAdsEnabled
+    var areAdsEnabled: Bool {
+        return prefs.boolForKey(PrefsKeys.Shopping2023EnableAds) ?? true
     }
 
     var reliabilityCardViewModel: FakespotReliabilityCardViewModel? {
@@ -343,6 +343,13 @@ class FakespotViewModel {
         observeProductTask = Task { @MainActor [weak self] in
             await self?.triggerProductAnalyze()
         }
+    }
+
+    func toggleAdsEnabled() {
+        prefs.setBool(!areAdsEnabled, forKey: PrefsKeys.Shopping2023EnableAds)
+
+        // Make sure the view updates with the new ads setting
+        onStateChange?()
     }
 
     struct ProductState {
