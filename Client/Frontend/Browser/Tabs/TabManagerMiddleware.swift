@@ -31,20 +31,23 @@ class TabManagerMiddleware {
 
         case TabPanelAction.addNewTab(let isPrivate):
             self.addNewTab(isPrivate)
-            let tabs = self.refreshTabs()
+            let tabs = self.refreshTabs(for: isPrivate)
             store.dispatch(TabPanelAction.refreshTab(tabs))
             store.dispatch(TabTrayAction.dismissTabTray)
 
         case TabPanelAction.moveTab(let originIndex, let destinationIndex):
+            guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel) else { return }
+            state.activeScreens
             self.moveTab(from: originIndex, to: destinationIndex)
-            let tabs = self.refreshTabs()
+            let tabs = self.refreshTabs(for: tabsState.isPrivateMode)
             store.dispatch(TabPanelAction.refreshTab(tabs))
 
         case TabPanelAction.closeTab(let tabUUID):
+            guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel) else { return }
             Task {
                 let shouldDismiss = await self.closeTab(with: tabUUID)
                 ensureMainThread { [self] in
-                    let tabs = self.refreshTabs()
+                    let tabs = self.refreshTabs(for: tabsState.isPrivateMode)
                     store.dispatch(TabPanelAction.refreshTab(tabs))
                     if shouldDismiss {
                         store.dispatch(TabTrayAction.dismissTabTray)
@@ -53,10 +56,11 @@ class TabManagerMiddleware {
             }
 
         case TabPanelAction.closeAllTabs:
+            guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel) else { return }
             Task {
                 await self.closeAllTabs()
                 ensureMainThread { [self] in
-                    let tabs = self.refreshTabs()
+                    let tabs = self.refreshTabs(for: tabsState.isPrivateMode)
                     store.dispatch(TabPanelAction.refreshTab(tabs))
                     store.dispatch(TabTrayAction.dismissTabTray)
                 }
@@ -72,7 +76,7 @@ class TabManagerMiddleware {
 
         case TabPanelAction.learnMorePrivateMode:
             self.didTapLearnMoreAboutPrivate()
-            let tabs = self.refreshTabs()
+            let tabs = self.refreshTabs(for: true)
             store.dispatch(TabPanelAction.refreshTab(tabs))
             store.dispatch(TabTrayAction.dismissTabTray)
 
@@ -85,14 +89,14 @@ class TabManagerMiddleware {
         selectedPanel = panelType
 
         let isPrivate = panelType == .privateTabs
-        let tabsCount = refreshTabs().count
+        let tabsCount = refreshTabs(for: isPrivate).count
         return TabTrayModel(isPrivateMode: isPrivate,
                             selectedPanel: panelType,
                             normalTabsCount: "\(tabsCount)")
     }
 
     func getTabsDisplayModel(for isPrivate: Bool) -> TabDisplayModel {
-        let tabs = refreshTabs()
+        let tabs = refreshTabs(for: isPrivate)
         let isInactiveTabsExpanded = !isPrivate && !inactiveTabs.isEmpty
         let tabDisplayModel = TabDisplayModel(isPrivateMode: isPrivate,
                                               tabs: tabs,
@@ -101,9 +105,9 @@ class TabManagerMiddleware {
         return tabDisplayModel
     }
 
-    private func refreshTabs() -> [TabModel] {
+    private func refreshTabs(for isPrivate: Bool) -> [TabModel] {
         var tabs = [TabModel]()
-        let tabManagerTabs = tabManager.tabs
+        let tabManagerTabs = tabManager.tabs.filter { $0.isPrivate }
         tabManagerTabs.forEach { tab in
             let tabModel = TabModel(tabUUID: tab.tabUUID,
                                     isSelected: false,

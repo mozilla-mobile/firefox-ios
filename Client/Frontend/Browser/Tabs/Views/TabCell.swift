@@ -154,8 +154,7 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     }
 
     private func configureScreenshot(tabModel: TabModel) {
-        // Regular screenshot for home or internal url when
-        // tab has home screenshot
+        // Regular screenshot for home or internal url when tab has home screenshot
         guard !hasHomeScreenshot(tabModel: tabModel) else {
             let defaultImage = UIImage(named: StandardImageIdentifiers.Large.globe)?
                 .withRenderingMode(.alwaysTemplate)
@@ -164,8 +163,7 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
             return
         }
 
-        // Favicon or letter image when home screenshot is present for
-        // a regular (non-internal) url
+        // Favicon or letter image when home screenshot is present for a regular (non-internal) url
         if let url = tabModel.url,
            !url.absoluteString.starts(with: "internal"),
            tabModel.hasHomeScreenshot {

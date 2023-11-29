@@ -514,7 +514,8 @@ class BrowserCoordinator: BaseCoordinator,
         navigationController.modalPresentationStyle = modalPresentationStyle
 
         let tabTrayCoordinator = TabTrayCoordinator(
-            router: DefaultRouter(navigationController: navigationController)
+            router: DefaultRouter(navigationController: navigationController),
+            tabTraySection: selectedPanel
         )
         tabTrayCoordinator.parentCoordinator = self
         add(child: tabTrayCoordinator)

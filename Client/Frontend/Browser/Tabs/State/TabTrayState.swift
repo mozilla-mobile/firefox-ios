@@ -44,6 +44,12 @@ struct TabTrayState: ScreenState, Equatable {
                   normalTabsCount: "0")
     }
 
+    init(panelType: TabTrayPanelType) {
+        self.init(isPrivateMode: panelType == .privateTabs,
+                  selectedPanel: panelType,
+                  normalTabsCount: "0")
+    }
+
     init(isPrivateMode: Bool,
          selectedPanel: TabTrayPanelType,
          normalTabsCount: String,
