@@ -365,7 +365,7 @@ class FakespotViewModel {
         if showLoading { state = .loading }
         do {
             let product = try await shoppingProduct.fetchProductAnalysisData()
-            let productAds: [ProductAdsResponse] = if shoppingProduct.isProductAdsFeatureEnabled {
+            let productAds: [ProductAdsResponse] = if shoppingProduct.isProductAdsFeatureEnabled, areAdsEnabled {
                 await shoppingProduct.fetchProductAdsData()
             } else {
                 []
@@ -380,6 +380,9 @@ class FakespotViewModel {
                     analyzeCount: analyzeCount
                 )
             )
+            if !productAds.isEmpty, product != nil {
+                recordAdsExposureTelementry()
+            }
         } catch {
             state = .error(error)
         }
@@ -520,6 +523,15 @@ class FakespotViewModel {
 
     private func recordSurfaceAdsImpressionTelemetry() {
 
+    }
+
+    private func recordAdsExposureTelementry() {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .view,
+            object: .shoppingBottomSheet,
+            value: .shoppingAdsExposure
+        )
     }
 
     func recordDismissTelemetry(by action: TelemetryWrapper.EventExtraKey.Shopping) {
