@@ -21,6 +21,7 @@ class HomepageViewController:
 
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
     typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
+    typealias SubscriberStateType = FeltPrivacyState
 
     // MARK: - Operational Variables
 
@@ -122,6 +123,11 @@ class HomepageViewController:
         syncTabContextualHintViewController.stopTimer()
         notificationCenter.removeObserver(self)
         unsubscribeFromRedux()
+    }
+
+    func newState(state: FeltPrivacyState) {
+        // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-7190
+        print("RGB - \(state.shouldHideSearchSuggestionView)")
     }
 
     // MARK: - View lifecycle
