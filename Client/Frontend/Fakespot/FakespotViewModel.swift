@@ -522,7 +522,12 @@ class FakespotViewModel {
     }
 
     private func recordSurfaceAdsImpressionTelemetry() {
-
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .view,
+            object: .shoppingBottomSheet,
+            value: .shoppingAdsImpression
+        )
     }
 
     private func recordAdsExposureTelementry() {
