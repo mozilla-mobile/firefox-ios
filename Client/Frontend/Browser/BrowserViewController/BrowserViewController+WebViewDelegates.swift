@@ -764,6 +764,7 @@ extension BrowserViewController: WKNavigationDelegate {
         if tabManager.selectedTab === tab {
             self.scrollController.showToolbars(animated: false)
             updateUIForReaderHomeStateForTab(tab, focusUrlBar: true)
+            updateFakespot(tab: tab)
         }
     }
 
