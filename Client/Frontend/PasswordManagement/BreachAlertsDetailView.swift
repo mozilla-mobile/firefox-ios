@@ -8,6 +8,7 @@ import Shared
 
 class BreachAlertsDetailView: UIView, ThemeApplicable {
     private struct UX {
+        static let verticalSpacing: CGFloat = 8.0
         static let horizontalMargin: CGFloat = 14
         static let shadowRadius: CGFloat = 8
         static let shadowOpacity: Float = 0.6
@@ -111,7 +112,7 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
         [titleIconContainer, titleLabel, learnMoreButton].forEach(titleStack.addArrangedSubview)
 
         [breachDateLabel, descriptionLabel, goToLabel].forEach(infoStack.addArrangedSubview)
-        infoStack.setCustomSpacing(8.0, after: self.descriptionLabel)
+        infoStack.setCustomSpacing(UX.verticalSpacing, after: self.descriptionLabel)
 
         [titleStack, infoStack].forEach(contentStack.addArrangedSubview)
         addSubview(contentStack)

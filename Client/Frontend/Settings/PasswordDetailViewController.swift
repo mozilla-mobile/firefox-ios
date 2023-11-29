@@ -94,12 +94,6 @@ class PasswordDetailViewController: SensitiveViewController, Themeable {
         KeyboardHelper.defaultHelper.addDelegate(self)
     }
 
-    func applyTheme() {
-        let theme = themeManager.currentTheme
-        tableView.separatorColor = theme.colors.borderPrimary
-        tableView.backgroundColor = theme.colors.layer1
-    }
-
     private func didTapBreachLearnMore() {
         guard let url = BreachAlertsManager.monitorAboutUrl else { return }
         coordinator?.openURL(url: url)
@@ -112,6 +106,12 @@ class PasswordDetailViewController: SensitiveViewController, Themeable {
         urlComponents.scheme = "https"
         guard let url = urlComponents.url else { return }
         coordinator?.openURL(url: url)
+    }
+
+    func applyTheme() {
+        let theme = themeManager.currentTheme
+        tableView.separatorColor = theme.colors.borderPrimary
+        tableView.backgroundColor = theme.colors.layer1
     }
 }
 
