@@ -44,12 +44,6 @@ final class FakespotSettingsCardViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.isReviewQualityCheckOn, false)
     }
 
-    func testSwitchValueChangedUpdatesPrefs() {
-        viewModel.areAdsEnabled = false
-
-        XCTAssertEqual(mockProfile.prefs.boolForKey(PrefsKeys.Shopping2023EnableAds), false)
-    }
-
     func testTurnOffButtonTappedUpdatesPrefs() {
         viewModel.isReviewQualityCheckOn = false
 
