@@ -1655,7 +1655,7 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func updateFakespot(tab: Tab) {
+    internal func updateFakespot(tab: Tab) {
         guard let webView = tab.webView, let url = webView.url else {
             // We're on homepage or a blank tab
             store.dispatch(FakespotAction.setAppearanceTo(false))
