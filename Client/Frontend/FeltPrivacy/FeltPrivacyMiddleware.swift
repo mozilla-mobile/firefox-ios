@@ -15,15 +15,15 @@ class FeltPrivacyMiddleware {
     lazy var privacyManagerProvider: Middleware<AppState> = { state, action in
         switch action {
         case FeltPrivacyAction.setPrivateModeTo(let privateState):
-            self.updateManagerWith(state: privateState)
-            store.dispatch(FeltPrivacyAction.privateModeUpdated(self.privacyManager.isInPrivateMode))
+            self.updateManagerWith(newState: privateState)
+            store.dispatch(FeltPrivacyAction.privateModeUpdated(self.privacyManager.getPrivateModeState()))
         default:
             break
         }
     }
 
     // MARK: - Helper Functions
-    private func updateManagerWith(state: Bool) {
-        privacyManager.isInPrivateMode = state
+    private func updateManagerWith(newState: Bool) {
+        privacyManager.setPrivateModeState(to: newState)
     }
 }

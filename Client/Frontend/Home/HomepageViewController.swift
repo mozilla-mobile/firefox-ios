@@ -127,7 +127,6 @@ class HomepageViewController:
 
     func newState(state: FeltPrivacyState) {
         // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-7190
-        print("RGB - \(state.shouldHideSearchSuggestionView)")
     }
 
     // MARK: - View lifecycle

@@ -4,10 +4,23 @@
 
 import Foundation
 
+protocol FeltPrivacyProtocol {
+    func getPrivateModeState() -> Bool
+    func setPrivateModeState(to state: Bool)
+}
+
 class FeltPrivacyManager {
-    var isInPrivateMode: Bool
+    private var isInPrivateMode: Bool
 
     init(isInPrivateMode: Bool) {
         self.isInPrivateMode = isInPrivateMode
+    }
+
+    func getPrivateModeState() -> Bool {
+        return isInPrivateMode
+    }
+
+    func setPrivateModeState(to newState: Bool) {
+        isInPrivateMode = newState
     }
 }
