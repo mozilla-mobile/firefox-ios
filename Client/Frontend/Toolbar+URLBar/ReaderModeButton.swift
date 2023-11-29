@@ -11,10 +11,11 @@ class ReaderModeButton: UIButton {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        adjustsImageWhenHighlighted = false
         setImage(UIImage.templateImageNamed("reader"), for: .normal)
         imageView?.contentMode = .scaleAspectFit
         contentHorizontalAlignment = .center
+        configuration = .plain()
+        configuration?.background.backgroundColor = .clear
     }
 
     required init?(coder aDecoder: NSCoder) {
