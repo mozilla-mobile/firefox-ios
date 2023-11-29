@@ -11,7 +11,7 @@ extension UIView {
     
     /// Specifies the item’s focus order of the accessibility.
     ///
-    /// This property is ONLY used in **sortAccessibilityByOrderIndex()** . Items with higher index values appear in front of items with lower values. Items with the same value have an undetermined order. The default value of this property is 0.
+    /// This property is ONLY used in **sortAccessibilityByOrderIndex()** . Items with higher index values appear in front of items with lower values. Items with the same value preserve the relative order. The default value of this property is 0.
     var accessibilityOrderIndex: Int {
         get {
             objc_getAssociatedObject(self, &Self.OrderIndexKey) as? Int ?? 0
