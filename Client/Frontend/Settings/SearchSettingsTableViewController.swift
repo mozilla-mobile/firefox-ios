@@ -11,16 +11,25 @@ protocol SearchEnginePickerDelegate: AnyObject {
 }
 
 class SearchSettingsTableViewController: ThemedTableViewController {
+    private enum Section: Int, CaseIterable {
+        case defaultEngine
+        case quickEngines
+
+        var title: String {
+            switch self {
+            case .defaultEngine:
+                return .Settings.Search.DefaultSearchEngineTitle
+            case .quickEngines:
+                return .Settings.Search.QuickSearchEnginesTitle
+            }
+        }
+    }
+
     private let profile: Profile
     private let model: SearchEngines
 
-    fileprivate let SectionDefault = 0
     fileprivate let ItemDefaultEngine = 0
     fileprivate let ItemDefaultSuggestions = 1
-    fileprivate let ItemAddCustomSearch = 2
-    fileprivate let NumberOfItemsInSectionDefault = 2
-    fileprivate let SectionOrder = 1
-    fileprivate let NumberOfSections = 2
     fileprivate let IconSize = CGSize(width: OpenSearchEngine.UX.preferredIconSize,
                                       height: OpenSearchEngine.UX.preferredIconSize)
 
@@ -91,7 +100,9 @@ class SearchSettingsTableViewController: ThemedTableViewController {
         cell.applyTheme(theme: themeManager.currentTheme)
         var engine: OpenSearchEngine!
 
-        if indexPath.section == SectionDefault {
+        let section = Section(rawValue: indexPath.section) ?? .defaultEngine
+        switch section {
+        case .defaultEngine:
             switch indexPath.item {
             case ItemDefaultEngine:
                 engine = model.defaultEngine
@@ -115,7 +126,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
                 // Should not happen.
                 break
             }
-        } else {
+        case .quickEngines:
             // The default engine is not a quick search engine.
             let index = indexPath.item + 1
             if index < model.orderedEngines.count {
@@ -153,13 +164,15 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return NumberOfSections
+        return Section.allCases.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == SectionDefault {
-            return NumberOfItemsInSectionDefault
-        } else {
+        let section = Section(rawValue: section) ?? .defaultEngine
+        switch section {
+        case .defaultEngine:
+            return 2
+        case .quickEngines:
             // The first engine -- the default engine -- is not shown in the quick search engine list.
             // But the option to add Custom Engine is.
             return model.orderedEngines.count
@@ -167,7 +180,10 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        if indexPath.section == SectionDefault && indexPath.item == ItemDefaultEngine {
+        let section = Section(rawValue: indexPath.section) ?? .defaultEngine
+        switch section {
+        case .defaultEngine:
+            guard indexPath.item == ItemDefaultEngine else { return nil }
             let searchEnginePicker = SearchEnginePicker()
             // Order alphabetically, so that picker is always consistently ordered.
             // Every engine is a valid choice for the default engine, even the current default engine.
@@ -175,7 +191,9 @@ class SearchSettingsTableViewController: ThemedTableViewController {
             searchEnginePicker.delegate = self
             searchEnginePicker.selectedSearchEngineName = model.defaultEngine?.shortName
             navigationController?.pushViewController(searchEnginePicker, animated: true)
-        } else if indexPath.item + 1 == model.orderedEngines.count {
+        case .quickEngines:
+            let isLastItem = indexPath.item + 1 == model.orderedEngines.count
+            guard isLastItem else { return nil }
             let customSearchEngineForm = CustomSearchViewController()
             customSearchEngineForm.profile = self.profile
             customSearchEngineForm.successCallback = {
@@ -191,13 +209,19 @@ class SearchSettingsTableViewController: ThemedTableViewController {
 
     // Don't show delete button on the left.
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        if indexPath.section == SectionDefault || indexPath.item + 1 == model.orderedEngines.count {
+        let section = Section(rawValue: indexPath.section) ?? .defaultEngine
+        switch section {
+        case .defaultEngine:
             return UITableViewCell.EditingStyle.none
+        case .quickEngines:
+            let isLastItem = indexPath.item + 1 == model.orderedEngines.count
+            guard !isLastItem else {
+                return UITableViewCell.EditingStyle.none
+            }
+            let index = indexPath.item + 1
+            let engine = model.orderedEngines[index]
+            return (self.showDeletion && engine.isCustomEngine) ? .delete : .none
         }
-
-        let index = indexPath.item + 1
-        let engine = model.orderedEngines[index]
-        return (self.showDeletion && engine.isCustomEngine) ? .delete : .none
     }
 
     // Don't reserve space for the delete button on the left.
@@ -233,13 +257,8 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let headerView = super.tableView(tableView, viewForHeaderInSection: section) as? ThemedTableSectionHeaderFooterView else { return nil }
 
-        var sectionTitle: String
-        if section == SectionDefault {
-            sectionTitle = .Settings.Search.DefaultSearchEngineTitle
-        } else {
-            sectionTitle = .Settings.Search.QuickSearchEnginesTitle
-        }
-        headerView.titleLabel.text = sectionTitle
+        let section = Section(rawValue: section) ?? .defaultEngine
+        headerView.titleLabel.text = section.title
 
         return headerView
     }
@@ -252,10 +271,13 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        if indexPath.section == SectionDefault || indexPath.item + 1 == model.orderedEngines.count {
+        let section = Section(rawValue: indexPath.section) ?? .defaultEngine
+        switch section {
+        case .defaultEngine:
             return false
-        } else {
-            return true
+        case .quickEngines:
+            let isLastItem = indexPath.item + 1 == model.orderedEngines.count
+            return isLastItem ? false : true
         }
     }
 
@@ -271,7 +293,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     // Snap to first or last row of the list of engines.
     override func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
         // You can't drag or drop on the default engine.
-        if sourceIndexPath.section == SectionDefault || proposedDestinationIndexPath.section == SectionDefault {
+        if sourceIndexPath.section == Section.defaultEngine.rawValue || proposedDestinationIndexPath.section == Section.defaultEngine.rawValue {
             return sourceIndexPath
         }
 
