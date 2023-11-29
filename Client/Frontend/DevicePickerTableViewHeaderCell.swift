@@ -11,19 +11,20 @@ class DevicePickerTableViewHeaderCell: UITableViewCell, ReusableCell, ThemeAppli
         static let tableHeaderTextPaddingLeft: CGFloat = 20
     }
 
-    let nameLabel = UILabel()
+    private lazy var nameLabel: UILabel = .build { label in
+        label.font = UX.tableHeaderTextFont
+        label.text = .SendToDevicesListTitle
+    }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(nameLabel)
-        nameLabel.font = UX.tableHeaderTextFont
-        nameLabel.text = .SendToDevicesListTitle
 
-        nameLabel.snp.makeConstraints { (make) -> Void in
-            make.left.equalTo(contentView).offset(UX.tableHeaderTextPaddingLeft)
-            make.centerY.equalTo(contentView)
-            make.right.equalTo(contentView)
-        }
+        NSLayoutConstraint.activate([
+            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.tableHeaderTextPaddingLeft),
+            nameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+        ])
 
         preservesSuperviewLayoutMargins = false
         layoutMargins = .zero
@@ -37,6 +38,7 @@ class DevicePickerTableViewHeaderCell: UITableViewCell, ReusableCell, ThemeAppli
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
-        nameLabel.textColor = theme.colors.textSecondary
+        let colors = theme.colors
+        nameLabel.textColor = colors.textSecondary
     }
 }

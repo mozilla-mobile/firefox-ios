@@ -556,7 +556,11 @@ extension LegacyTabTrayViewController: UIAdaptivePresentationControllerDelegate,
 extension LegacyTabTrayViewController {
     @objc
     func didTapAddTab(_ sender: UIBarButtonItem) {
+        notificationCenter.post(name: .TabsTrayDidClose)
         viewModel.didTapAddTab(sender)
+        self.dismiss(animated: true) {
+            self.viewModel.didDismiss()
+        }
     }
 
     @objc

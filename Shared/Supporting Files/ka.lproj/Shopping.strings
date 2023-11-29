@@ -26,7 +26,7 @@
 "Shopping.ConfirmationCard.Title.v120" = "დამუშავებული მონაცემები განახლებულია";
 
 /* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
-"Shopping.HighlightsCard.Competitiveness.Title.v120" = "მეტოქეებთან შედარებით";
+"Shopping.HighlightsCard.Competitiveness.Title.v120" = "მეტოქეებთან შედარება";
 
 /* Title of the button that shows less reviews in the review highlights displayed in the shopping review quality bottom sheet. */
 "Shopping.HighlightsCard.LessButton.Title.v120" = "შემოკლებულად";

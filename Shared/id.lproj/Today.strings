@@ -32,7 +32,7 @@
 "TodayWidget.QuickActionGalleryDescription" = "Tambahkan pintasan Firefox ke layar Beranda Anda. Setelah menambahkan widget, sentuh dan tahan untuk mengeditnya lalu pilih pintasan yang berbeda.";
 
 /* Quick Actions title when widget enters edit mode */
-"TodayWidget.QuickActionsGalleryTitle" = "Tindakan Cepat";
+"TodayWidget.QuickActionsGalleryTitle" = "Aksi Cepat";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
 "TodayWidget.QuickActionsGalleryTitleV2" = "Pintasan Firefox";
