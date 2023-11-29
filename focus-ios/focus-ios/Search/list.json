@@ -35,31 +35,31 @@
       "default": {
         "searchDefault": "Google",
         "visibleDefaultEngines": [
-          "google", "be.wikipedia.org", "bing", "tut.by"
+          "google", "be.wikipedia.org", "bing"
         ]
       },
       "BY": {
         "searchDefault": "Google",
         "visibleDefaultEngines": [
-           "google-com-nocodes", "be.wikipedia.org", "bing", "tut.by"
+           "google-com-nocodes", "be.wikipedia.org", "bing"
         ]
       },
       "KZ": {
         "searchDefault": "Google",
         "visibleDefaultEngines": [
-           "google-com-nocodes", "be.wikipedia.org", "bing", "tut.by"
+           "google-com-nocodes", "be.wikipedia.org", "bing"
         ]
       },
       "RU": {
         "searchDefault": "Google",
         "visibleDefaultEngines": [
-           "google-com-nocodes", "be.wikipedia.org", "bing", "tut.by"
+           "google-com-nocodes", "be.wikipedia.org", "bing"
         ]
       },
       "TR": {
         "searchDefault": "Google",
         "visibleDefaultEngines": [
-           "google-com-nocodes", "be.wikipedia.org", "bing", "tut.by"
+           "google-com-nocodes", "be.wikipedia.org", "bing"
         ]
       }
     },
@@ -67,7 +67,7 @@
       "default": {
         "searchDefault": "Google",
         "visibleDefaultEngines": [
-          "google", "bing", "amazondotcom", "rediff", "wikipedia-bn"
+          "google", "bing", "amazondotcom", "wikipedia-bn"
         ]
       }
     },
@@ -83,7 +83,7 @@
       "default": {
         "searchDefault": "Google",
         "visibleDefaultEngines": [
-          "google", "twitter", "wikipedia-ca", "diec2"
+          "google", "twitter", "wikipedia-ca"
         ]
       }
     },
@@ -91,7 +91,7 @@
       "default": {
         "searchDefault": "Google",
         "visibleDefaultEngines": [
-          "google", "duckduckgo", "heureka-cz", "mapy-cz", "seznam-cz", "twitter", "wikipedia-cz"
+          "google", "duckduckgo", "mapy-cz", "seznam-cz", "twitter", "wikipedia-cz"
         ]
       }
     },
@@ -131,7 +131,7 @@
       "default": {
         "searchDefault": "Google",
         "visibleDefaultEngines": [
-          "google", "skroutz", "twitter", "wikipedia-el"
+          "google", "twitter", "wikipedia-el"
         ]
       }
     },
@@ -250,7 +250,7 @@
       "default": {
         "searchDefault": "Google",
         "visibleDefaultEngines": [
-          "google", "bing", "duckduckgo", "reta-vortaro", "twitter", "wikipedia-eo"
+          "google", "bing", "duckduckgo", "twitter", "wikipedia-eo"
         ]
       }
     },
@@ -266,7 +266,7 @@
       "default": {
         "searchDefault": "Google",
         "visibleDefaultEngines": [
-          "google", "bing", "drae", "mercadolibre-cl", "twitter", "wikipedia-es"
+          "google", "bing", "mercadolibre-cl", "twitter", "wikipedia-es"
         ]
       }
     },
@@ -298,7 +298,7 @@
       "default": {
         "searchDefault": "Google",
         "visibleDefaultEngines": [
-          "google", "bing", "elebila", "wikipedia-eu"
+          "google", "bing", "wikipedia-eu"
         ]
       }
     },
@@ -338,7 +338,7 @@
       "default": {
         "searchDefault": "Google",
         "visibleDefaultEngines": [
-          "google", "wikipedia-fy-NL", "bolcom-fy-NL"
+          "google", "wikipedia-fy-NL"
         ]
       }
     },
@@ -346,7 +346,7 @@
       "default": {
         "searchDefault": "Google",
         "visibleDefaultEngines": [
-          "google", "amazon-en-GB", "tearma", "twitter", "wikipedia-ga-IE"
+          "google", "amazon-en-GB", "twitter", "wikipedia-ga-IE"
         ]
       }
     },
@@ -410,7 +410,7 @@
       "default": {
         "searchDefault": "Google",
         "visibleDefaultEngines": [
-          "google", "sztaki-en-hu", "vatera", "twitter", "wikipedia-hu"
+          "google", "vatera", "twitter", "wikipedia-hu"
         ]
       }
     },
@@ -418,7 +418,7 @@
       "default": {
         "searchDefault": "Google",
         "visibleDefaultEngines": [
-          "google", "bing", "amazondotcom", "list-am", "wikipedia-hy-AM"
+          "google", "bing", "amazondotcom", "wikipedia-hy-AM"
         ]
       }
     },
@@ -434,7 +434,7 @@
       "default": {
         "searchDefault": "Google",
         "visibleDefaultEngines": [
-          "google", "bing", "amazondotcom", "leit-is", "wikipedia-is"
+          "google", "bing", "amazondotcom", "wikipedia-is"
         ]
       }
     },
@@ -506,7 +506,7 @@
       "default": {
         "searchDefault": "Google",
         "visibleDefaultEngines": [
-          "google", "danawa-kr", "twitter", "daum-kr", "naver-kr"
+          "google", "twitter", "daum-kr", "naver-kr"
         ]
       }
     },
@@ -530,7 +530,7 @@
       "default": {
         "searchDefault": "Google",
         "visibleDefaultEngines": [
-          "google", "salidzinilv", "sslv", "twitter", "wikipedia-lv"
+          "google", "salidzinilv", "twitter", "wikipedia-lv"
         ]
       }
     },
@@ -546,7 +546,7 @@
       "default": {
         "searchDefault": "Google",
         "visibleDefaultEngines": [
-          "google", "bing", "amazon-in", "rediff", "wikipedia-mr"
+          "google", "bing", "amazon-in", "wikipedia-mr"
         ]
       }
     },
@@ -578,7 +578,7 @@
       "default": {
         "searchDefault": "Google",
         "visibleDefaultEngines": [
-          "google", "wikipedia-nl", "bolcom-nl"
+          "google", "wikipedia-nl"
         ]
       }
     },
@@ -626,7 +626,7 @@
       "default": {
         "searchDefault": "Google",
         "visibleDefaultEngines": [
-          "google", "bing", "duckduckgo", "leo_ende_de", "pledarigrond", "wikipedia-rm"
+          "google", "bing", "duckduckgo", "leo_ende_de", "wikipedia-rm"
         ]
       }
     },
@@ -674,7 +674,7 @@
       "default": {
         "searchDefault": "Google",
         "visibleDefaultEngines": [
-          "google", "azet-sk", "slovnik-sk", "twitter", "wikipedia-sk"
+          "google", "twitter", "wikipedia-sk"
         ]
       }
     },
@@ -818,7 +818,7 @@
       "default": {
         "searchDefault": "Google",
         "visibleDefaultEngines": [
-          "google", "baidu", "bing", "taobao", "wikipedia-zh-CN"
+          "google", "baidu", "bing", "wikipedia-zh-CN"
         ]
       },
       "CN": {
