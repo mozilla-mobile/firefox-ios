@@ -8,7 +8,6 @@ import Shared
 
 class BreachAlertsDetailView: UIView, ThemeApplicable {
     private struct UX {
-        static let verticalSpacing: CGFloat = -8
         static let horizontalMargin: CGFloat = 14
         static let shadowRadius: CGFloat = 8
         static let shadowOpacity: Float = 0.6
@@ -67,6 +66,8 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
     }
 
     private lazy var goToLabel: UILabel = .build { label in
+        let breachLinkGesture = UITapGestureRecognizer(target: self, action: #selector(self.didTapBreachLink))
+        label.addGestureRecognizer(breachLinkGesture)
         label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.fontSize, weight: .semibold)
         label.numberOfLines = 0
         label.isUserInteractionEnabled = true
@@ -80,7 +81,6 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
     private lazy var infoStack: UIStackView = .build { stack in
         stack.distribution = .fill
         stack.axis = .vertical
-        stack.setCustomSpacing(8.0, after: self.descriptionLabel)
     }
 
     private lazy var contentStack: UIStackView = .build { stack in
@@ -111,6 +111,7 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
         [titleIconContainer, titleLabel, learnMoreButton].forEach(titleStack.addArrangedSubview)
 
         [breachDateLabel, descriptionLabel, goToLabel].forEach(infoStack.addArrangedSubview)
+        infoStack.setCustomSpacing(8.0, after: self.descriptionLabel)
 
         [titleStack, infoStack].forEach(contentStack.addArrangedSubview)
         addSubview(contentStack)
@@ -132,8 +133,6 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
             infoStack.leadingAnchor.constraint(equalTo: contentStack.leadingAnchor, constant: titleIconContainerSize),
             infoStack.trailingAnchor.constraint(equalTo: contentStack.trailingAnchor),
 
-            descriptionLabel.bottomAnchor.constraint(equalTo: goToLabel.topAnchor, constant: UX.verticalSpacing),
-
             contentStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.horizontalMargin),
             contentStack.leadingAnchor.constraint(equalTo: leadingAnchor),
             contentStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalMargin),
@@ -145,6 +144,11 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
     @objc
     private func didTapBreachLearnMore() {
         onTapLearnMore?()
+    }
+
+    @objc
+    private func didTapBreachLink() {
+        onTapBreachLink?()
     }
 
     private func configureLayerAppearance() {
