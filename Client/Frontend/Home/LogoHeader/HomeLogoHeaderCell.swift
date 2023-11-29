@@ -39,6 +39,8 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
     private lazy var logoTextImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.accessibilityIdentifier = a11y.logoText
+        imageView.accessibilityLabel = AppName.shortName.rawValue
+        imageView.isAccessibilityElement = true
     }
 
     private lazy var containerView: UIView = .build { view in
