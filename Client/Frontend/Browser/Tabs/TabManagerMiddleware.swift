@@ -42,15 +42,25 @@ class TabManagerMiddleware {
 
         case TabPanelAction.closeTab(let tabUUID):
             Task {
-                await self.closeTab(with: tabUUID)
-                let tabs = self.refreshTabs()
-                store.dispatch(TabPanelAction.refreshTab(tabs))
+                let shouldDismiss = await self.closeTab(with: tabUUID)
+                ensureMainThread { [self] in
+                    let tabs = self.refreshTabs()
+                    store.dispatch(TabPanelAction.refreshTab(tabs))
+                    if shouldDismiss {
+                        store.dispatch(TabTrayAction.dismissTabTray)
+                    }
+                }
             }
 
         case TabPanelAction.closeAllTabs:
-            self.closeAllTabs()
-            let tabs = self.refreshTabs()
-            store.dispatch(TabPanelAction.refreshTab(tabs))
+            Task {
+                await self.closeAllTabs()
+                ensureMainThread { [self] in
+                    let tabs = self.refreshTabs()
+                    store.dispatch(TabPanelAction.refreshTab(tabs))
+                    store.dispatch(TabTrayAction.dismissTabTray)
+                }
+            }
 
         case TabPanelAction.closeAllInactiveTabs:
             self.closeAllInactiveTabs()
@@ -95,7 +105,6 @@ class TabManagerMiddleware {
         var tabs = [TabModel]()
         let tabManagerTabs = tabManager.tabs
         tabManagerTabs.forEach { tab in
-            print("YRD tab displayTitle \(tab.displayTitle)")
             let tabModel = TabModel(tabUUID: tab.tabUUID,
                                     isSelected: false,
                                     isPrivate: tab.isPrivate,
@@ -122,18 +131,14 @@ class TabManagerMiddleware {
         tabManager.moveTab(isPrivate: false, fromIndex: originIndex, toIndex: destinationIndex)
     }
 
-    private func closeTab(with tabUUID: String) async {
+    private func closeTab(with tabUUID: String) async -> Bool {
+        let isLastTab = tabManager.tabs.count == 1
         await tabManager.removeTab(tabUUID)
+        return isLastTab
     }
 
-    private func closeAllTabs() {
-        // Create a func to close all tabs directly from TabManager
-        let tabs = refreshTabs()
-        tabs.forEach { tabModel in
-            if let tab = tabManager.getTabForUUID(uuid: tabModel.tabUUID) {
-                tabManager.removeTab(tab)
-            }
-        }
+    private func closeAllTabs() async {
+        await tabManager.removeAllTabs()
         inactiveTabs.removeAll()
     }
 
@@ -147,9 +152,5 @@ class TabManagerMiddleware {
 
     private func didTapLearnMoreAboutPrivate() {
         addNewTab(true)
-    }
-
-    private func resetMock() {
-        closeAllTabs()
     }
 }

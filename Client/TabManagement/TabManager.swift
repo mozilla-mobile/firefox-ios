@@ -34,6 +34,7 @@ protocol TabManager: AnyObject {
     func removeTab(_ tab: Tab, completion: (() -> Void)?)
     func removeTab(_ tabUUID: String) async
     func removeTabs(_ tabs: [Tab])
+    func removeAllTabs() async
     func undoCloseTab(tab: Tab, position: Int?)
     func getMostRecentHomepageTab() -> Tab?
     func getTabFor(_ url: URL) -> Tab?
