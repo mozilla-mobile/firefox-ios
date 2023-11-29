@@ -684,7 +684,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/pull/17493
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-11-27"
+    expires: "2024-06-01"
     send_in_pings:
       - events
 
