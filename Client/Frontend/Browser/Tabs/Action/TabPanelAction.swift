@@ -15,6 +15,7 @@ enum TabPanelAction: Action {
     case closeInactiveTabs(Int)
     case closeAllInactiveTabs
     case learnMorePrivateMode
+    case selectTab(String)
 
     // Middleware actions
     case didLoadTabPanel(TabDisplayModel)

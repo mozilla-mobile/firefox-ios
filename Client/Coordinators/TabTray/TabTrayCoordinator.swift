@@ -15,7 +15,6 @@ protocol TabTrayNavigationHandler: AnyObject {
 class TabTrayCoordinator: BaseCoordinator, TabTrayViewControllerDelegate, TabTrayNavigationHandler {
     private var tabTrayViewController: TabTrayViewController!
     weak var parentCoordinator: TabTrayCoordinatorDelegate?
-//    private var selectedTab: TabTrayPanelType
 
     init(router: Router,
          tabTraySection: TabTrayPanelType) {

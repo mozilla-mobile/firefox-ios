@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Redux
 import UIKit
 
 class TabDisplayView: UIView,
@@ -223,6 +224,12 @@ class TabDisplayView: UIView,
             cell.configure(with: tabState, theme: theme, delegate: self)
             return cell
         }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // TODO: Add guard to handle inactive tabs
+        let tabUUID = tabsState.tabs[indexPath.row].tabUUID
+        store.dispatch(TabPanelAction.selectTab(tabUUID))
     }
 
     func collectionView(_ collectionView: UICollectionView,

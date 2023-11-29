@@ -65,6 +65,10 @@ class TabManagerMiddleware {
                 }
             }
 
+        case TabPanelAction.selectTab(let tabUUID):
+            self.selectTab(for: tabUUID)
+            store.dispatch(TabTrayAction.dismissTabTray)
+
         case TabPanelAction.closeAllInactiveTabs:
             self.closeAllInactiveTabs()
             store.dispatch(TabPanelAction.refreshInactiveTabs(self.inactiveTabs))
@@ -155,5 +159,11 @@ class TabManagerMiddleware {
 
     private func didTapLearnMoreAboutPrivate() {
         addNewTab(true)
+    }
+
+    private func selectTab(for tabUUID: String) {
+        guard let tab = tabManager.getTabForUUID(uuid: tabUUID) else { return }
+
+        tabManager.selectTab(tab)
     }
 }
