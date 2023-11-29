@@ -45,6 +45,7 @@
         "BrowsingPDFTests\/testOpenLinkFromPDF()",
         "BrowsingPDFTests\/testPinPDFtoTopSites()",
         "ClipBoardTests\/testClipboardPasteAndGo()",
+        "CreditCardsTests",
         "CronTabsPerformanceTest",
         "DataManagementTests\/testWebSiteDataEnterFirstTime()",
         "DatabaseFixtureTest\/testPerBookmarks1000openMenu()",
