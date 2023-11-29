@@ -487,13 +487,11 @@ class FakespotViewModel {
     private func stopTimer() {
         timer?.invalidate()
         timer = nil
-        print("-> Timer Stopped!")
     }
 
     @objc
     private func timerFired() {
         recordSurfaceAdsImpressionTelemetry()
-        print("-> Timer fired!")
     }
 
     func handleVisibilityChanges(for view: UIView, in superview: UIView) {

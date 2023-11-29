@@ -695,7 +695,7 @@ shopping:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/17302
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/17302
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17524
     data_sensitivity:
       - interaction
     expires: "2024-06-01"
