@@ -100,12 +100,12 @@ class PasswordDetailViewController: SensitiveViewController, Themeable {
         tableView.backgroundColor = theme.colors.layer1
     }
 
-    func didTapBreachLearnMore() {
+    private func didTapBreachLearnMore() {
         guard let url = BreachAlertsManager.monitorAboutUrl else { return }
         coordinator?.openURL(url: url)
     }
 
-    func didTapBreachLink(_ sender: UITapGestureRecognizer? = nil) {
+    private func didTapBreachLink(_ sender: UITapGestureRecognizer? = nil) {
         guard let domain = viewModel.breachRecord?.domain else { return }
         var urlComponents = URLComponents()
         urlComponents.host = domain
