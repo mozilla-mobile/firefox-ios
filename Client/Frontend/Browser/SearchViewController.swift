@@ -293,6 +293,7 @@ class SearchViewController: SiteTableViewController,
 
     func reloadSearchEngines() {
         searchEngineScrollViewContent.subviews.forEach { $0.removeFromSuperview() }
+        var leftEdge = searchEngineScrollViewContent.leadingAnchor
 
         // search settings icon
         let searchButton: UIButton = .build()
@@ -307,7 +308,6 @@ class SearchViewController: SiteTableViewController,
                 imageView.widthAnchor.constraint(equalToConstant: 20),
                 imageView.heightAnchor.constraint(equalToConstant: 20)
             ])
-            return
         }
 
         searchEngineScrollViewContent.addSubview(searchButton)
@@ -316,10 +316,12 @@ class SearchViewController: SiteTableViewController,
             searchButton.widthAnchor.constraint(equalToConstant: SearchViewControllerUX.FaviconSize),
             searchButton.heightAnchor.constraint(equalToConstant: SearchViewControllerUX.FaviconSize),
             // offset the left edge to align with search results
-            searchButton.leadingAnchor.constraint(equalTo: searchEngineScrollViewContent.leadingAnchor, constant: 16),
+            searchButton.leadingAnchor.constraint(equalTo: leftEdge, constant: 16),
             searchButton.topAnchor.constraint(equalTo: searchEngineScrollViewContent.topAnchor, constant: SearchViewControllerUX.SuggestionMargin),
             searchButton.bottomAnchor.constraint(equalTo: searchEngineScrollViewContent.bottomAnchor, constant: -SearchViewControllerUX.SuggestionMargin)
         ])
+
+        leftEdge = searchButton.trailingAnchor
 
         for engine in quickSearchEngines {
             let engineButton: UIButton = .build()
@@ -335,19 +337,22 @@ class SearchViewController: SiteTableViewController,
                     imageView.widthAnchor.constraint(equalToConstant: SearchViewControllerUX.FaviconSize),
                     imageView.heightAnchor.constraint(equalToConstant: SearchViewControllerUX.FaviconSize)
                 ])
-                return
             }
 
             searchEngineScrollViewContent.addSubview(engineButton)
             NSLayoutConstraint.activate([
                 engineButton.widthAnchor.constraint(equalToConstant: CGFloat(SearchViewControllerUX.EngineButtonWidth)),
                 engineButton.heightAnchor.constraint(equalToConstant: CGFloat(SearchViewControllerUX.EngineButtonHeight)),
-                engineButton.leadingAnchor.constraint(equalTo: searchButton.trailingAnchor),
+                engineButton.leadingAnchor.constraint(equalTo: leftEdge),
                 engineButton.topAnchor.constraint(equalTo: searchEngineScrollViewContent.topAnchor),
                 engineButton.bottomAnchor.constraint(equalTo: searchEngineScrollViewContent.bottomAnchor)
             ])
 
-            engineButton.trailingAnchor.constraint(equalTo: searchEngineScrollViewContent.trailingAnchor).isActive = engine === searchEngines?.quickSearchEngines.last
+            if engine === self.searchEngines?.quickSearchEngines.last {
+                engineButton.trailingAnchor.constraint(equalTo: searchEngineScrollViewContent.trailingAnchor).isActive = true
+            }
+
+            leftEdge = engineButton.trailingAnchor
         }
     }
 
