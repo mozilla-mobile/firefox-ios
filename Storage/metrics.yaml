@@ -15,7 +15,7 @@ history:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/SYNC-3260
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11634
     notification_emails:
       - sync-core@mozilla.com
       - teshaq@mozilla.com
