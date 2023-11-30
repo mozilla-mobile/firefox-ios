@@ -6,8 +6,6 @@ import Foundation
 import Redux
 
 struct FeltPrivacyState: ScreenState, Equatable {
-//    var shouldShowJumpBackIn: Bool
-
     var shouldHideSearchSuggestionView: Bool
 
     init(_ appState: AppState) {
