@@ -25,8 +25,12 @@ class TabDisplayViewController: UIViewController,
     private var backgroundPrivacyOverlay: UIView = .build()
     private lazy var emptyPrivateTabsView: EmptyPrivateTabsView = .build()
 
+<<<<<<< HEAD:Client/Frontend/Browser/Tabs/TabDisplayViewController.swift
     // MARK: Redux state
     var tabsState: TabsState
+=======
+    var tabsState: TabsPanelState
+>>>>>>> b7db64ae9 (Refactor FXIOS-7853 [v122] Redux pattern protocol improvements (#17542)):Client/Frontend/Browser/Tabs/Views/TabDisplayPanel.swift
 
     init(isPrivateMode: Bool,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
@@ -43,8 +47,7 @@ class TabDisplayViewController: UIViewController,
     }
 
     deinit {
-        store.dispatch(ActiveScreensStateAction.closeScreen(.tabsPanel))
-        store.unsubscribe(self)
+        unsubscribeFromRedux()
     }
 
     override func viewDidLoad() {
@@ -52,6 +55,7 @@ class TabDisplayViewController: UIViewController,
         setupView()
         listenForThemeChange(view)
         applyTheme()
+<<<<<<< HEAD:Client/Frontend/Browser/Tabs/TabDisplayViewController.swift
         subscribeRedux()
     }
 
@@ -67,6 +71,9 @@ class TabDisplayViewController: UIViewController,
         tabsState = state
         tabDisplayView.newState(state: tabsState)
         shouldShowEmptyView(tabsState.isPrivateTabsEmpty)
+=======
+        subscribeToRedux()
+>>>>>>> b7db64ae9 (Refactor FXIOS-7853 [v122] Redux pattern protocol improvements (#17542)):Client/Frontend/Browser/Tabs/Views/TabDisplayPanel.swift
     }
 
     func setupView() {
@@ -116,6 +123,42 @@ class TabDisplayViewController: UIViewController,
         tabDisplayView.applyTheme(theme: themeManager.currentTheme)
     }
 
+    // MARK: - Redux
+
+    func subscribeToRedux() {
+        store.dispatch(ActiveScreensStateAction.showScreen(.tabsPanel))
+        store.dispatch(TabPanelAction.tabPanelDidLoad(tabsState.isPrivateMode))
+        store.subscribe(self, transform: {
+            return $0.select(TabsPanelState.init)
+        })
+    }
+
+    func unsubscribeFromRedux() {
+        store.dispatch(ActiveScreensStateAction.closeScreen(.tabsPanel))
+        store.unsubscribe(self)
+    }
+
+    func newState(state: TabsPanelState) {
+        tabsState = state
+        tabDisplayView.newState(state: tabsState)
+        shouldShowEmptyView(tabsState.isPrivateTabsEmpty)
+    }
+
     // MARK: EmptyPrivateTabsViewDelegate
+<<<<<<< HEAD:Client/Frontend/Browser/Tabs/TabDisplayViewController.swift
     func didTapLearnMore(urlRequest: URLRequest) {}
+=======
+
+    func didTapLearnMore(urlRequest: URLRequest) {
+        store.dispatch(TabPanelAction.learnMorePrivateMode(urlRequest))
+    }
+}
+
+extension TabDisplayPanel: TabPeekDelegate {
+    func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListItem? { return nil }
+    func tabPeekDidAddBookmark(_ tab: Tab) {}
+    func tabPeekRequestsPresentationOf(_ viewController: UIViewController) {}
+    func tabPeekDidCloseTab(_ tab: Tab) {}
+    func tabPeekDidCopyUrl() {}
+>>>>>>> b7db64ae9 (Refactor FXIOS-7853 [v122] Redux pattern protocol improvements (#17542)):Client/Frontend/Browser/Tabs/Views/TabDisplayPanel.swift
 }
