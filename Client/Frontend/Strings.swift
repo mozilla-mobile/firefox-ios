@@ -82,6 +82,30 @@ extension String {
                 value: "Restore tabs",
                 comment: "The title for the affirmative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will restore existing tabs.")
         }
+
+        public struct FeltDeletion {
+            public static let Title = MZLocalizedString(
+                key: "Alerts.FeltDeletion.Title.v122",
+                tableName: "Alerts",
+                value: "End your private session?",
+                comment: "When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the title for the alert.")
+            public static let Body = MZLocalizedString(
+                key: "Alerts.FeltDeletion.Body.v122",
+                tableName: "Alerts",
+                value: "Close all private tabs and delete history, cookies, and all other site data.",
+                comment: "When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the body text for the alert.")
+            public static let ConfirmButton = MZLocalizedString(
+                key: "Alerts.FeltDeletion.Button.Confirm.v122",
+                tableName: "Alerts",
+                value: "Delete session data",
+                comment: "When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the affirmative action for the alert, confirming that you do want to do that.")
+            public static let CancelButton = MZLocalizedString(
+                key: "Alerts.FeltDeletion.Button.Cancel.v122",
+                tableName: "Alerts",
+                value: "Cancel",
+                comment: "When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the cancel action for the alert, cancelling ending your session.")
+
+        }
     }
 }
 
