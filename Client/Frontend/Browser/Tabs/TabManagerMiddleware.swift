@@ -29,9 +29,9 @@ class TabManagerMiddleware {
             let tabState = self.getTabsDisplayModel(for: isPrivate)
             store.dispatch(TabPanelAction.didLoadTabPanel(tabState))
 
-        case TabPanelAction.addNewTab(let isPrivate):
-            self.addNewTab(isPrivate)
-            let tabs = self.refreshTabs(for: isPrivate)
+        case TabPanelAction.addNewTab(let urlRequest, let isPrivateMode):
+            self.addNewTab(with: urlRequest, isPrivate: isPrivateMode)
+            let tabs = self.refreshTabs(for: isPrivateMode)
             store.dispatch(TabPanelAction.refreshTab(tabs))
             store.dispatch(TabTrayAction.dismissTabTray)
 
@@ -77,8 +77,8 @@ class TabManagerMiddleware {
             self.closeInactiveTab(for: index)
             store.dispatch(TabPanelAction.refreshInactiveTabs(self.inactiveTabs))
 
-        case TabPanelAction.learnMorePrivateMode:
-            self.didTapLearnMoreAboutPrivate()
+        case TabPanelAction.learnMorePrivateMode(let urlRequest):
+            self.didTapLearnMoreAboutPrivate(with: urlRequest)
             let tabs = self.refreshTabs(for: true)
             store.dispatch(TabPanelAction.refreshTab(tabs))
             store.dispatch(TabTrayAction.dismissTabTray)
@@ -127,10 +127,9 @@ class TabManagerMiddleware {
         return tabs
     }
 
-    private func addNewTab(_ isPrivate: Bool) {
-        // TODO: Add a guard to check if is dragging as per Legacy
-        // TODO: Add request
-        let tab = tabManager.addTab(nil, isPrivate: isPrivate)
+    private func addNewTab(with urlRequest: URLRequest?, isPrivate: Bool) {
+        // TODO: Add a guard to check if is dragging as per Legacy code
+        let tab = tabManager.addTab(urlRequest, isPrivate: isPrivate)
         tabManager.selectTab(tab)
     }
 
@@ -157,8 +156,8 @@ class TabManagerMiddleware {
         inactiveTabs.remove(at: index)
     }
 
-    private func didTapLearnMoreAboutPrivate() {
-        addNewTab(true)
+    private func didTapLearnMoreAboutPrivate(with urlRequest: URLRequest) {
+        addNewTab(with: urlRequest, isPrivate: true)
     }
 
     private func selectTab(for tabUUID: String) {

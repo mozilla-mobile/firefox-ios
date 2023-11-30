@@ -436,7 +436,7 @@ class TabTrayViewController: UIViewController,
 
     @objc
     private func newTabButtonTapped() {
-        store.dispatch(TabPanelAction.addNewTab(tabTrayState.isPrivateMode))
+        store.dispatch(TabPanelAction.addNewTab(nil, tabTrayState.isPrivateMode))
     }
 
     @objc

@@ -120,7 +120,7 @@ class TabDisplayPanel: UIViewController,
 
     // MARK: EmptyPrivateTabsViewDelegate
     func didTapLearnMore(urlRequest: URLRequest) {
-        store.dispatch(TabPanelAction.learnMorePrivateMode)
+        store.dispatch(TabPanelAction.learnMorePrivateMode(urlRequest))
     }
 }
 
