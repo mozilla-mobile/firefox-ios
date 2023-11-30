@@ -199,7 +199,7 @@ class TabTrayViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        subscribeRedux()
+        subscribeToRedux()
         listenForThemeChange(view)
         updateToolbarItems()
     }
@@ -229,24 +229,7 @@ class TabTrayViewController: UIViewController,
         super.viewDidDisappear(animated)
         delegate?.didFinish()
 
-        store.dispatch(ActiveScreensStateAction.closeScreen(.tabsTray))
-        store.unsubscribe(self)
-    }
-
-    private func subscribeRedux() {
-        store.dispatch(ActiveScreensStateAction.showScreen(.tabsTray))
-        store.dispatch(TabTrayAction.tabTrayDidLoad(tabTrayState.selectedPanel))
-        store.subscribe(self, transform: {
-            return $0.select(TabTrayState.init)
-        })
-    }
-
-    func newState(state: TabTrayState) {
-        tabTrayState = state
-
-        if tabTrayState.shouldDismiss {
-            dismissVC()
-        }
+        unsubscribeFromRedux()
     }
 
     private func updateLayout() {
@@ -262,6 +245,29 @@ class TabTrayViewController: UIViewController,
             navigationItem.titleView = segmentedControl
         }
         updateToolbarItems()
+    }
+
+    // MARK: - Redux
+
+    func subscribeToRedux() {
+        store.dispatch(ActiveScreensStateAction.showScreen(.tabsTray))
+        store.dispatch(TabTrayAction.tabTrayDidLoad(tabTrayState.selectedPanel))
+        store.subscribe(self, transform: {
+            return $0.select(TabTrayState.init)
+        })
+    }
+
+    func unsubscribeFromRedux() {
+        store.dispatch(ActiveScreensStateAction.closeScreen(.tabsTray))
+        store.unsubscribe(self)
+    }
+
+    func newState(state: TabTrayState) {
+        tabTrayState = state
+
+        if tabTrayState.shouldDismiss {
+            dismissVC()
+        }
     }
 
     // MARK: Themeable
