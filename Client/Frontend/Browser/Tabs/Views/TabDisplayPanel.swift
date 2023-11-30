@@ -26,7 +26,6 @@ class TabDisplayPanel: UIViewController,
     private var backgroundPrivacyOverlay: UIView = .build()
     private lazy var emptyPrivateTabsView: EmptyPrivateTabsView = .build()
 
-    // MARK: Redux state
     var tabsState: TabsPanelState
 
     init(isPrivateMode: Bool,
@@ -43,8 +42,7 @@ class TabDisplayPanel: UIViewController,
     }
 
     deinit {
-        store.dispatch(ActiveScreensStateAction.closeScreen(.tabsPanel))
-        store.unsubscribe(self)
+        unsubscribeFromRedux()
     }
 
     override func viewDidLoad() {
@@ -52,21 +50,7 @@ class TabDisplayPanel: UIViewController,
         setupView()
         listenForThemeChange(view)
         applyTheme()
-        subscribeRedux()
-    }
-
-    private func subscribeRedux() {
-        store.dispatch(ActiveScreensStateAction.showScreen(.tabsPanel))
-        store.dispatch(TabPanelAction.tabPanelDidLoad(tabsState.isPrivateMode))
-        store.subscribe(self, transform: {
-            return $0.select(TabsPanelState.init)
-        })
-    }
-
-    func newState(state: TabsPanelState) {
-        tabsState = state
-        tabDisplayView.newState(state: tabsState)
-        shouldShowEmptyView(tabsState.isPrivateTabsEmpty)
+        subscribeToRedux()
     }
 
     private func setupView() {
@@ -118,7 +102,29 @@ class TabDisplayPanel: UIViewController,
         emptyPrivateTabsView.applyTheme(themeManager.currentTheme)
     }
 
+    // MARK: - Redux
+
+    func subscribeToRedux() {
+        store.dispatch(ActiveScreensStateAction.showScreen(.tabsPanel))
+        store.dispatch(TabPanelAction.tabPanelDidLoad(tabsState.isPrivateMode))
+        store.subscribe(self, transform: {
+            return $0.select(TabsPanelState.init)
+        })
+    }
+
+    func unsubscribeFromRedux() {
+        store.dispatch(ActiveScreensStateAction.closeScreen(.tabsPanel))
+        store.unsubscribe(self)
+    }
+
+    func newState(state: TabsPanelState) {
+        tabsState = state
+        tabDisplayView.newState(state: tabsState)
+        shouldShowEmptyView(tabsState.isPrivateTabsEmpty)
+    }
+
     // MARK: EmptyPrivateTabsViewDelegate
+
     func didTapLearnMore(urlRequest: URLRequest) {
         store.dispatch(TabPanelAction.learnMorePrivateMode(urlRequest))
     }
