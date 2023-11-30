@@ -219,6 +219,14 @@ extension String {
                 value: "Open Review Checker",
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears after the user has opted in for the Shopping feature. It indicates that a user can directly open the review checker by tapping the text of the action.")
         }
+        
+        public struct FeltDeletion {
+            public static let Body = MZLocalizedString(
+                key: "ContextualHints.FeltDeletion.Body.v122",
+                tableName: "ContextualHints",
+                value: "Tap here to start a fresh private session. Delete your history, cookies  — everything.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears to educate users about what the fire button in the toolbar does, when in private mode.")
+        }
     }
 }
 
@@ -699,22 +707,28 @@ extension String {
 
         public struct FeltPrivacyUI {
             public static let Title = MZLocalizedString(
-                key: "FeltPrivacyUI.Title.v121",
+                key: "FirefoxHomepage.FeltPrivacyUI.Title.v122",
                 tableName: "FirefoxHomepage",
                 value: "Leave no traces on this device",
                 comment: "The title for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode.")
 
             public static let Body = MZLocalizedString(
-                key: "FeltPrivacyUI.Body.v121",
+                key: "FirefoxHomepage.FeltPrivacyUI.Body.v122",
                 tableName: "FirefoxHomepage",
                 value: "%@ deletes your cookies, history, and site data when you close all your private windows.",
                 comment: "The body of the message for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. Placeholder refers to app name.")
 
             public static let Link = MZLocalizedString(
-                key: "FeltPrivacyUI.Link.v121",
+                key: "FirefoxHomepage.FeltPrivacyUI.Link.v122",
                 tableName: "FirefoxHomepage",
                 value: "Who might be able to see my activity?",
                 comment: "The link for the card that educates users about how private mode works. The link redirects to an external site for more information. The card shows up on the homepage when in the new privacy mode.")
+
+            public static let ToastTitle = MZLocalizedString(
+                key: "FirefoxHomepage.FeltPrivacyUI.Link.v122",
+                tableName: "FirefoxHomepage",
+                value: "Private Browsing Data Erased",
+                comment: "When the user ends their private session, their are returned to the private mode homepage, and a toastbar popus confirming that their data has been erased. This is the label for that toast.")
         }
     }
 }
@@ -1678,12 +1692,12 @@ extension String {
             public static let PrivateSessionTitle = MZLocalizedString(
                 key: "Settings.Search.PrivateSession.Title.v121",
                 tableName: "Settings",
-                value: "Private Session",
+                value: "Private Browsing",
                 comment: "Title for the `Private Session` settings section in the Search page in the Settings menu.")
             public static let PrivateSessionSetting = MZLocalizedString(
                 key: "Settings.Search.PrivateSession.Setting.v121",
                 tableName: "Settings",
-                value: "Turn off suggestions in private browsing",
+                value: "Show Suggestions in Private Browsing",
                 comment: "Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in the Private Session section in the Search page in the Settings menu.")
 
             public struct AccessibilityLabels {
