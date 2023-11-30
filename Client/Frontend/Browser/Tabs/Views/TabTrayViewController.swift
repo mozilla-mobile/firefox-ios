@@ -181,9 +181,10 @@ class TabTrayViewController: UIViewController,
     }
 
     init(delegate: TabTrayViewControllerDelegate,
+         selectedTab: TabTrayPanelType,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          and notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.tabTrayState = TabTrayState()
+        self.tabTrayState = TabTrayState(panelType: selectedTab)
         self.delegate = delegate
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
@@ -295,7 +296,6 @@ class TabTrayViewController: UIViewController,
             navigationToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             navigationToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             navigationToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            // TODO: FXIOS-6926 Remove priority once collection view layout is configured
             navigationToolbar.bottomAnchor.constraint(equalTo: containerView.topAnchor).priority(.defaultLow),
 
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -383,6 +383,7 @@ class TabTrayViewController: UIViewController,
 
         guard let currentPanel = currentPanel else { return }
 
+        segmentedControl.selectedSegmentIndex = panelType.rawValue
         updateTitle()
         updateLayout()
         hideCurrentPanel()
@@ -435,7 +436,7 @@ class TabTrayViewController: UIViewController,
 
     @objc
     private func newTabButtonTapped() {
-        store.dispatch(TabPanelAction.addNewTab(tabTrayState.isPrivateMode))
+        store.dispatch(TabPanelAction.addNewTab(nil, tabTrayState.isPrivateMode))
     }
 
     @objc

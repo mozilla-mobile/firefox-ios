@@ -7,8 +7,6 @@ import Redux
 
 class TabManagerMiddleware {
     var tabManager: TabManager
-    // MARK: TODO - Remove mocks after middleware is integrated
-    var tabs = [TabModel]()
     var inactiveTabs = [InactiveTabsModel]()
     var selectedPanel: TabTrayPanelType = .tabs
 
@@ -31,22 +29,45 @@ class TabManagerMiddleware {
             let tabState = self.getTabsDisplayModel(for: isPrivate)
             store.dispatch(TabPanelAction.didLoadTabPanel(tabState))
 
-        case TabPanelAction.addNewTab(let isPrivate):
-            self.addNewTab(isPrivate)
-            store.dispatch(TabPanelAction.refreshTab(self.tabs))
+        case TabPanelAction.addNewTab(let urlRequest, let isPrivateMode):
+            self.addNewTab(with: urlRequest, isPrivate: isPrivateMode)
+            let tabs = self.refreshTabs(for: isPrivateMode)
+            store.dispatch(TabPanelAction.refreshTab(tabs))
             store.dispatch(TabTrayAction.dismissTabTray)
 
         case TabPanelAction.moveTab(let originIndex, let destinationIndex):
+            guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel) else { return }
             self.moveTab(from: originIndex, to: destinationIndex)
-            store.dispatch(TabPanelAction.refreshTab(self.tabs))
+            let tabs = self.refreshTabs(for: tabsState.isPrivateMode)
+            store.dispatch(TabPanelAction.refreshTab(tabs))
 
-        case TabPanelAction.closeTab(let index):
-            self.closeTab(for: index)
-            store.dispatch(TabPanelAction.refreshTab(self.tabs))
+        case TabPanelAction.closeTab(let tabUUID):
+            guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel) else { return }
+            Task {
+                let shouldDismiss = await self.closeTab(with: tabUUID)
+                ensureMainThread { [self] in
+                    let tabs = self.refreshTabs(for: tabsState.isPrivateMode)
+                    store.dispatch(TabPanelAction.refreshTab(tabs))
+                    if shouldDismiss {
+                        store.dispatch(TabTrayAction.dismissTabTray)
+                    }
+                }
+            }
 
         case TabPanelAction.closeAllTabs:
-            self.closeAllTabs()
-            store.dispatch(TabPanelAction.refreshTab(self.tabs))
+            guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel) else { return }
+            Task {
+                await self.closeAllTabs(isPrivateMode: tabsState.isPrivateMode)
+                ensureMainThread { [self] in
+                    let tabs = self.refreshTabs(for: tabsState.isPrivateMode)
+                    store.dispatch(TabPanelAction.refreshTab(tabs))
+                    store.dispatch(TabTrayAction.dismissTabTray)
+                }
+            }
+
+        case TabPanelAction.selectTab(let tabUUID):
+            self.selectTab(for: tabUUID)
+            store.dispatch(TabTrayAction.dismissTabTray)
 
         case TabPanelAction.closeAllInactiveTabs:
             self.closeAllInactiveTabs()
@@ -56,10 +77,12 @@ class TabManagerMiddleware {
             self.closeInactiveTab(for: index)
             store.dispatch(TabPanelAction.refreshInactiveTabs(self.inactiveTabs))
 
-        case TabPanelAction.learnMorePrivateMode:
-            self.didTapLearnMoreAboutPrivate()
-            store.dispatch(TabPanelAction.refreshTab(self.tabs))
+        case TabPanelAction.learnMorePrivateMode(let urlRequest):
+            self.didTapLearnMoreAboutPrivate(with: urlRequest)
+            let tabs = self.refreshTabs(for: true)
+            store.dispatch(TabPanelAction.refreshTab(tabs))
             store.dispatch(TabTrayAction.dismissTabTray)
+
         default:
             break
         }
@@ -69,51 +92,60 @@ class TabManagerMiddleware {
         selectedPanel = panelType
 
         let isPrivate = panelType == .privateTabs
+        let tabsCount = refreshTabs(for: isPrivate).count
         return TabTrayModel(isPrivateMode: isPrivate,
                             selectedPanel: panelType,
-                            normalTabsCount: "\(tabs.count)")
+                            normalTabsCount: "\(tabsCount)")
     }
 
     func getTabsDisplayModel(for isPrivate: Bool) -> TabDisplayModel {
-        resetMock()
-        for index in 0...2 {
-            let emptyTab = tabManager.addTab(nil, afterTab: nil, isPrivate: isPrivate)
-            let cellState = TabModel.emptyTabState(tabUUID: emptyTab.tabUUID, title: "Tab \(index)")
-            tabs.append(cellState)
-        }
-
-        if !isPrivate {
-            inactiveTabs = [InactiveTabsModel(url: "Tab1"),
-                            InactiveTabsModel(url: "Tab2"),
-                            InactiveTabsModel(url: "Tab3")]
-        } else {
-            inactiveTabs = [InactiveTabsModel]()
-        }
-
+        let tabs = refreshTabs(for: isPrivate)
         let isInactiveTabsExpanded = !isPrivate && !inactiveTabs.isEmpty
-
-        return TabDisplayModel(isPrivateMode: isPrivate,
-                               tabs: tabs,
-                               inactiveTabs: inactiveTabs,
-                               isInactiveTabsExpanded: isInactiveTabsExpanded)
+        let tabDisplayModel = TabDisplayModel(isPrivateMode: isPrivate,
+                                              tabs: tabs,
+                                              inactiveTabs: inactiveTabs,
+                                              isInactiveTabsExpanded: isInactiveTabsExpanded)
+        return tabDisplayModel
     }
 
-    private func addNewTab(_ isPrivate: Bool) {
-        let emptyTab = tabManager.addTab(nil, afterTab: nil, isPrivate: isPrivate)
-        let cellState = TabModel.emptyTabState(tabUUID: emptyTab.tabUUID, title: "New tab")
-        tabs.append(cellState)
+    private func refreshTabs(for isPrivate: Bool) -> [TabModel] {
+        var tabs = [TabModel]()
+        let tabManagerTabs = tabManager.tabs.filter { $0.isPrivate == isPrivate }
+        tabManagerTabs.forEach { tab in
+            let tabModel = TabModel(tabUUID: tab.tabUUID,
+                                    isSelected: false,
+                                    isPrivate: tab.isPrivate,
+                                    isFxHomeTab: tab.isFxHomeTab,
+                                    tabTitle: tab.displayTitle,
+                                    url: tab.url,
+                                    screenshot: tab.screenshot,
+                                    hasHomeScreenshot: tab.hasHomeScreenshot,
+                                    margin: 0)
+            tabs.append(tabModel)
+        }
+
+        return tabs
+    }
+
+    private func addNewTab(with urlRequest: URLRequest?, isPrivate: Bool) {
+        // TODO: Add a guard to check if is dragging as per Legacy code
+        let tab = tabManager.addTab(urlRequest, isPrivate: isPrivate)
+        tabManager.selectTab(tab)
     }
 
     private func moveTab(from originIndex: Int, to destinationIndex: Int) {
-        tabs.move(fromOffsets: IndexSet(integer: originIndex), toOffset: destinationIndex)
+        tabManager.moveTab(isPrivate: false, fromIndex: originIndex, toIndex: destinationIndex)
     }
 
-    private func closeTab(for index: Int) {
-        tabs.remove(at: index)
+    private func closeTab(with tabUUID: String) async -> Bool {
+        let isLastTab = tabManager.tabs.count == 1
+        await tabManager.removeTab(tabUUID)
+        return isLastTab
     }
 
-    private func closeAllTabs() {
-        tabs.removeAll()
+    private func closeAllTabs(isPrivateMode: Bool) async {
+        await tabManager.removeAllTabs(isPrivateMode: isPrivateMode)
+        inactiveTabs.removeAll()
     }
 
     private func closeAllInactiveTabs() {
@@ -124,13 +156,13 @@ class TabManagerMiddleware {
         inactiveTabs.remove(at: index)
     }
 
-    private func didTapLearnMoreAboutPrivate() {
-        addNewTab(true)
+    private func didTapLearnMoreAboutPrivate(with urlRequest: URLRequest) {
+        addNewTab(with: urlRequest, isPrivate: true)
     }
 
-    private func resetMock() {
-        // Clean up array before getting the new panel
-        tabs.removeAll()
-        inactiveTabs.removeAll()
+    private func selectTab(for tabUUID: String) {
+        guard let tab = tabManager.getTabForUUID(uuid: tabUUID) else { return }
+
+        tabManager.selectTab(tab)
     }
 }

@@ -567,6 +567,23 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         )
     }
 
+    @MainActor
+    func removeTab(_ tabUUID: String) async {
+        guard let index = tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
+
+        let tab = tabs[index]
+        let viableTabsIndex = deletedIndexForViableTabs(tab)
+        self.removeTab(tab, flushToDisk: true)
+        self.updateIndexAfterRemovalOf(tab, deletedIndex: index, viableTabsIndex: viableTabsIndex)
+
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .close,
+            object: .tab,
+            value: tab.isPrivate ? .privateTab : .normalTab
+        )
+    }
+
     /// Remove a tab, will notify delegate of the tab removal
     /// - Parameters:
     ///   - tab: the tab to remove
@@ -609,6 +626,15 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     func removeTabs(_ tabs: [Tab]) {
         for tab in tabs {
             self.removeTab(tab, flushToDisk: false)
+        }
+        storeChanges()
+    }
+
+    @MainActor
+    func removeAllTabs(isPrivateMode: Bool) async {
+        let currentModeTabs = tabs.filter {$0.isPrivate == isPrivateMode}
+        for tab in currentModeTabs {
+            await self.removeTab(tab.tabUUID)
         }
         storeChanges()
     }

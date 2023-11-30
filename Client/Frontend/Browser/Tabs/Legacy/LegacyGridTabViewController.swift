@@ -288,9 +288,7 @@ class LegacyGridTabViewController: UIViewController,
     }
 
     func openNewTab(_ request: URLRequest? = nil, isPrivate: Bool) {
-        if tabDisplayManager.isDragging {
-            return
-        }
+        guard !tabDisplayManager.isDragging else { return }
 
         // Ensure Firefox home page is refreshed if privacy mode was changed
         if tabManager.selectedTab?.isPrivate != isPrivate {
