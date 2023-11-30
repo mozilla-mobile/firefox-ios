@@ -6,9 +6,8 @@ import UIKit
 import ObjectiveC
 
 extension UIView {
-    
     private static var OrderIndexKey: Void?
-    
+
     /// Specifies the item’s focus order of the accessibility.
     ///
     /// This property is ONLY used in **sortAccessibilityByOrderIndex()** . Items with higher index values appear in front of items with lower values. Items with the same value preserve the relative order. The default value of this property is 0.
@@ -20,18 +19,17 @@ extension UIView {
             objc_setAssociatedObject(self, &Self.OrderIndexKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
-    
+
     /// Sort the focus order of the accessibilities by accessibilityCustomIndex.
     func sortAccessibilityByOrderIndex(postNotification: Bool = true) {
-        guard self.subviews.count > 0 else { return }
-        
+        guard !self.subviews.isEmpty else { return }
+
         self.accessibilityElements = self.subviews.sorted {
             $0.accessibilityOrderIndex > $1.accessibilityOrderIndex
         }
-        
-        if (postNotification) {
+
+        if postNotification {
             UIAccessibility.post(notification: .layoutChanged, argument: self)
         }
     }
 }
-
