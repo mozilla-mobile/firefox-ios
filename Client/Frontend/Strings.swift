@@ -1690,7 +1690,7 @@ extension String {
                 value: "Quick-Search Engines",
                 comment: "Title for quick-search engines settings section in the Search page in the Settings menu.")
             public static let PrivateSessionTitle = MZLocalizedString(
-                key: "Settings.Search.PrivateSession.Title.v121",
+                key: "Settings.Search.PrivateSession.Title.v122",
                 tableName: "Settings",
                 value: "Private Browsing",
                 comment: "Title for the `Private Session` settings section in the Search page in the Settings menu.")
