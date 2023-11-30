@@ -213,9 +213,7 @@ class BrowserViewController: UIViewController,
     }
 
     deinit {
-        if isReduxIntegrationEnabled {
-            store.unsubscribe(self)
-        }
+        unsubscribeFromRedux()
     }
 
     override var prefersStatusBarHidden: Bool {
@@ -459,13 +457,19 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Redux
 
-    private func subscribeRedux() {
+    func subscribeToRedux() {
         guard isReduxIntegrationEnabled else { return }
         store.dispatch(ActiveScreensStateAction.showScreen(.fakespot))
 
         store.subscribe(self, transform: {
             $0.select(FakespotState.init)
         })
+    }
+
+    func unsubscribeFromRedux() {
+        if isReduxIntegrationEnabled {
+            store.unsubscribe(self)
+        }
     }
 
     func newState(state: FakespotState) {
@@ -542,7 +546,7 @@ class BrowserViewController: UIViewController,
         // Send settings telemetry for Fakespot
         FakespotUtils().addSettingTelemetry()
 
-        subscribeRedux()
+        subscribeToRedux()
     }
 
     private func setupAccessibleActions() {
