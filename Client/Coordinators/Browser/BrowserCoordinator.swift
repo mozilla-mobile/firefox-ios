@@ -52,7 +52,7 @@ class BrowserCoordinator: BaseCoordinator,
         self.wallpaperManager = wallpaperManager
         super.init(router: router)
 
-        connectTabManagerToScene()
+        tabManagerDidConnectToScene()
         browserViewController.browserDelegate = self
         browserViewController.navigationHandler = self
         tabManager.addDelegate(self)
@@ -68,7 +68,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - Helper methods
 
-    private func connectTabManagerToScene() {
+    private func tabManagerDidConnectToScene() {
         // [7863] [WIP] Redux: connect this Browser's TabManager to associated window scene
         guard ReduxFlagManager.isReduxEnabled else { return }
         let sceneUUID = WindowData.DefaultSingleWindowUUID
