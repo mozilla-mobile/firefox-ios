@@ -42,6 +42,10 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             return BrowserViewControllerState(
                 feltPrivacyState: FeltPrivacyState.reducer(state.feltPrivacyState, action),
                 fakespotState: state.fakespotState)
+        case FakespotAction.toggleAppearance(let isEnabled):
+            return BrowserViewControllerState(
+                feltPrivacyState: state.feltPrivacyState,
+                fakespotState: FakespotState.reducer(state.fakespotState, action))
         default:
             return state
         }
