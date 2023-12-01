@@ -64,11 +64,17 @@
 /* This is the title informing the user needs to turn on notifications in iOS Settings. */
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "Rmed ilɣa";
 
+/* Accessibility label for default search engine setting. */
+"Settings.Search.Accessibility.DefaultSearchEngine.v121" = "Amsedday n unadi amezwer";
+
 /* Title for the `default search engine` settings section in the Search page in the Settings menu. */
 "Settings.Search.DefaultSearchEngine.Title.v121" = "Amsedday n unadi amezwer";
 
 /* Navigation title for search page in the Settings menu. */
 "Settings.Search.PageTitle.v121" = "Nadi";
+
+/* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in the Private Session section in the Search page in the Settings menu. */
+"Settings.Search.PrivateSession.Setting.v121" = "Sens isumar deg tunigin tusligt";
 
 /* Title for the `Private Session` settings section in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Title.v121" = "Tiɣimit tusligt";

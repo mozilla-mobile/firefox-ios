@@ -10,6 +10,9 @@
 /* Copy password text selection menu item */
 "Copy" = "Kopiraj";
 
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "Kreirao %@";
+
 /* Label for the button used to delete the current login. */
 "Delete" = "Izbriši";
 
@@ -27,6 +30,9 @@
 
 /* Prompt message warning the user that deleted logins will remove logins from all connected devices */
 "Logins will be removed from all connected devices." = "Prijave će biti uklonjene sa svih povezanih uređaja.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "Izmijenio %@";
 
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "Nema pronađenih prijava";
@@ -46,9 +52,15 @@
 /* Accessibility label for the search input field in the Logins list */
 "Search Input Field" = "Polje za pretragu";
 
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "Traži";
+
 /* Label for the button used to select all logins. */
 "Select All" = "Označi sve";
 
 /* Label displayed above the username row in Login Detail View. */
 "Username" = "Korisničko ime";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Web stranica";
 

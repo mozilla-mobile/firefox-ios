@@ -220,6 +220,9 @@
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "بەتنى يۈكلىيەلمىدى.";
 
+/* Description for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Description" = "ئىچكى كۈچەيتىلگەن ئىزلاشتىن قوغداش ئېلانلارنىڭ سىزگە ئەگىشىشىنى توختىتىدۇ. تېخىمۇ قاتتىق ئىزلاش، ئېلان ۋە قاڭقىش كۆزنەكلىرىنى چەكلەش ئۈچۈن قاتتىق ھالەتنى ئېچىڭ.";
+
 /* Text for the new ETP settings button */
 "CoverSheet.v24.ETP.Settings.Button" = "تەڭشەككە يۆتكەل";
 
@@ -277,6 +280,15 @@
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "چۈشۈرۈلمىلەر";
 
+/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
+"Downloads.Toast.MultipleFiles.DescriptionText" = "1/%dھۆججەت";
+
+/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+"Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
+
+/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+"Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
+
 /* Action button for deleting downloaded files in the Downloads panel. */
 "DownloadsPanel.Delete.Title" = "ئۆچۈرۈش";
 
@@ -286,11 +298,80 @@
 /* Action button for sharing downloaded files in the Downloads panel. */
 "DownloadsPanel.Share.Title" = "ھەمبەھىرلەش";
 
+/* Text message in the settings table view */
+"Enter your password to connect" = "ئۇلاش ئۈچۈن پارولىڭىزنى كىرگۈزۈڭ";
+
 /* Label for button to perform advanced actions on the error page */
 "ErrorPages.Advanced.Button" = "ئالىي";
 
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "ئاگاھلاندۇرۇش: بۇ توربېكەتكە ئۇلىنىشىڭىزنىڭ بىخەتەر ئىكەنلىكىنى جەزملەشتۈرەلمەيمىز.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "بۇ بەلكىم خاتا تەڭشەك ياكى ھۇجۇمچىنىڭ ھەرىكىتى سەۋەبىدىن بولۇشى مۇمكىن. ئەگەر يوشۇرۇن خەتەرنى قوبۇل قىلسىڭىز داۋاملاشتۇرۇڭ.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "%@ نىڭ باشقۇرۇغۇچىسى تور بېكەتنى توغرا سەپلىمىگەن. ئۇچۇرلىرىڭىزنىڭ ئوغرىلىنىپ كېتىشىدىن ساقلىنىش ئۈچۈن، Firefox بۇ تور بېكەتكە باغلانمىدى.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "بۇ باغلىنىش ئىشەنچسىز";
+
 /* Label for button to go back from the error page */
 "ErrorPages.GoBack.Button" = "قايتىش";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "تور بېكەتنى داۋاملىق زىيارەت قىلىش";
+
+/* Question shown to user when tapping a link that opens the App Store app */
+"ExternalLink.AppStore.ConfirmationTitle" = "بۇ ئۇلانمىنى App Store دا ئاچامدۇ؟";
+
+/* Question shown to user when tapping an SMS or MailTo link that opens the external app for those. */
+"ExternalLink.AppStore.GenericConfirmationTitle" = "بۇ ئۇلىنىشنى سىرتقى ئەپتە ئاچامدۇ؟";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Title for firefox about:home page in tab history list */
+"Firefox.HomePage.Title" = "Firefox باش بېتى";
+
+/* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
+"FirefoxHome.CustomizeHomeButton.Title" = "باش بەتنى خاسلاشتۇر";
+
+/* At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories. */
+"FirefoxHome.Pocket.DiscoverMore" = "تېخىمۇ كۆپ بايقاش";
+
+/* On each Pocket Stories on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes */
+"FirefoxHome.Pocket.Minutes.v99" = "%d مىنۇت";
+
+/* This is the title of the Pocket section on Firefox Homepage. */
+"FirefoxHome.Pocket.SectionTitle" = "نادىر ھېكايە";
+
+/* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
+"FirefoxHome.RecentHistory.Remove" = "چىقىرىۋەت";
+
+/* Label showing how many pages there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.PagesCount.v112" = "بەت: %d";
+
+/* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
+"FirefoxHomepage.ContextualMenu.Settings.v101" = "تەڭشەكلەر";
+
+/* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
+"FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "قوللىغۇچىلىرىمىز ۋە شەخسىيىتىڭىز";
+
+/* Accessibility action title to open the synced tab for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.OpenTab.A11y.v106" = "قەدەمداش بەتكۈچنى ئاچ";
+
+/* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "قەدەمداشلانغان ھەممە بەتكۈچلەرنى كۆرسەت";
+
+/* If a user is signed in, and a sync has been performed to collect their recent tabs from other signed in devices, their most recent tab from another device can now appear in the Jump Back In section. This label specifically points out which cell inside the Jump Back In section shows that synced tab. */
+"FirefoxHomepage.JumpBackIn.TabPickup.v104" = "بەتكۈچ قوبۇللايدۇ";
+
+/* This string will show under the description on pocket story, indicating that the story is sponsored. */
+"FirefoxHomepage.Pocket.Sponsored.v103" = "قوللىغان";
+
+/* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
+"FirefoxHomepage.Shortcuts.Sponsored.v100" = "قوللىغان";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "ئالدىغا";
@@ -298,8 +379,38 @@
 /* Settings section title for Firefox Account */
 "FxA.FirefoxAccount" = "Firefox ھېساباتى";
 
+/* Button label to go to Firefox Account settings */
+"FxA.ManageAccount" = "ھېسابات ۋە ئۈسكۈنىلەرنى باشقۇرۇش";
+
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "تورغا ئۇلانمىغان";
+
+/* Button label to Sync your Firefox Account */
+"FxA.SyncNow" = "ھازىر قەدەمداشلا";
+
+/* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
+"FxAPush_DeviceConnected_body" = "Firefox قەدەمداش %@ غا باغلاندى";
+
+/* Title of a notification displayed when another device has connected to FxA. */
+"FxAPush_DeviceConnected_title" = "قەدەمداش باغلاندى";
+
+/* Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device. */
+"FxAPush_DeviceDisconnected_body" = "%@ مۇۋەپپەقىيەتلىك ئۈزۈلدى.";
+
+/* Body of a notification displayed when this device has been disconnected from FxA by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "بۇ ئۈسكۈنە Firefox قەدەمداشتىن مۇۋەپپەقىيەتلىك ئۈزۈلدى.";
+
+/* Title of a notification displayed when this device has been disconnected by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_title" = "قەدەمداش ئۈزۈلدى";
+
+/* Title of a notification displayed when named device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_title" = "قەدەمداش ئۈزۈلدى";
+
+/* Body of a notification displayed when unnamed device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "بىر ئۈسكۈنە Firefox Sync قەدەمداشتىن ئۈزۈلدى";
+
+/* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox تۇغى، تام قەغىزىنى ئۆزگەرتىدۇ.";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "ياردەم";
@@ -307,11 +418,32 @@
 /* Toggle history syncing setting */
 "History" = "تارىخ";
 
+/* Title for button in the history panel to clear recent history */
+"HistoryPanel.ClearHistoryButtonTitle" = "يېقىنقى تارىخنى تازىلا…";
+
 /* Option title to clear all browsing history. */
 "HistoryPanel.ClearHistoryMenuOptionEverything" = "ھەممىسى";
 
+/* Button to perform action to clear history for the last hour */
+"HistoryPanel.ClearHistoryMenuOptionTheLastHour" = "ئاخىرقى سائەت";
+
 /* Button to perform action to clear history for today only */
 "HistoryPanel.ClearHistoryMenuOptionToday" = "بۈگۈن";
+
+/* Button to perform action to clear history for yesterday and today */
+"HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "بۈگۈن ۋە تۈنۈگۈن";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "سىز يېقىندا زىيارەت قىلغان تور بېكەتلەر بۇ يەردە كۆرۈنىدۇ.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "باشقا ئۈسكۈنىلەردىن كەلگەن بەتكۈچلىرىڭىز بۇ يەردە كۆرۈنىدۇ.";
+
+/* Description for the empty synced tabs 'not signed in' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "باشقا ئۈسكۈنىلىرىڭىزدىكى بەتكۈچ تىزىمىنى كۆرۈش ئۈچۈن تىزىمغا كىرىڭ.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox قەدەمداش";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "تارىخ";
@@ -325,9 +457,438 @@
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "خەتكۈچ";
 
+/* The title for the Delete from History context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.DeleteFromHistory" = "تارىختىن ئۆچۈر";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "شەخسىي بەتكۈچتە ئاچ";
+
+/* The title for the Open in New Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewTab" = "يېڭى بەتكۈچتە ئاچ";
+
+/* The title for the Remove context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Remove" = "چىقىرىۋەت";
+
+/* The title for the Remove Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.RemoveBookmark" = "خەتكۈچنى چىقىرىۋەت";
+
+/* The title for the Share context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Share" = "ھەمبەھىر";
+
+/* A label indicating the keyboard shortcut to navigate backwards, through session history, inside the current tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.Back.DiscoveryTitle" = "قايت";
+
+/* A label indicating the keyboard shortcut of closing the current tab a user is in. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.CloseTab.DiscoveryTitle" = "بەتكۈچنى ياپ";
+
+/* A label indicating the keyboard shortcut of finding text a user desires within a page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.Find.DiscoveryTitle" = "ئىزدە";
+
+/* A label indicating the keyboard shortcut of switching to a subsequent tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.Forward.DiscoveryTitle" = "ئالدىغا";
+
+/* A label indicating the keyboard shortcut of creating a new private tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "يېڭى شەخسىي بەتكۈچ";
+
+/* A label indicating the keyboard shortcut of creating a new tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.NewTab.DiscoveryTitle" = "يېڭى بەتكۈچ";
+
+/* A label indicating the keyboard shortcut of switching from Private Browsing to Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.NormalMode.DiscoveryTitle" = "ئادەتتىكى زىيارەت ھالىتى";
+
+/* A label indicating the keyboard shortcut of switching from Normal Browsing mode to Private Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.PrivateMode.DiscoveryTitle" = "شەخسىي زىيارەت ھالىتى";
+
+/* A label indicating the keyboard shortcut of reloading the current page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.Reload.DiscoveryTitle" = "بەتنى قايتا يۈكلە";
+
+/* A label indicating the keyboard shortcut of directly accessing the URL, location, bar. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "ئورۇن بالدىقى تاللىنىدۇ";
+
+/* A label indicating the keyboard shortcut of switching to a subsequent tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "كېيىنكى بەتكۈچنى كۆرسەت";
+
+/* A label indicating the keyboard shortcut of switching to a tab immediately preceding to the currently selected tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "ئالدىنقى بەتكۈچنى كۆرسەت";
+
+/* In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs. */
+"InactiveTabs.TabTray.CloseButtonTitle" = "بارلىق ئاكتىپسىز بەتكۈچلەرنى تاقا";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "تېكىستنى چوڭايت";
+
+/* A label indicating the keyboard shortcut of resetting a web page's view to the standard viewing size. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ActualSize" = "ئەمەلىي چوڭلۇقى";
+
+/* A label indicating the keyboard shortcut of adding the currently viewing web page as a bookmark. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.AddBookmark" = "خەتكۈچكە قوش";
+
+/* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ClearRecentHistory" = "يېقىنقى تارىخنى تازىلايدۇ";
+
+/* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.FindAgain" = "قايتا ئىزدە";
+
+/* A label indicating the keyboard shortcut to reload a tab without it's cache. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. */
+"Keyboard.Shortcuts.RefreshWithoutCache.v108" = "غەملەككە پەرۋا قىلماي قايتا يۈكلە";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Bookmark" = "خەتكۈچ";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with History. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.History" = "تارىخ";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with locally saved items. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Tools" = "قوراللار";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their availale set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Window" = "كۆزنەك";
+
+/* A label indicating the keyboard shortcut of opening the application's settings menu. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Settings" = "تەڭشەكلەر";
+
+/* A label indicating the keyboard shortcut of showing all bookmarks. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowBookmarks" = "خەتكۈچلەرنى كۆرسەت";
+
+/* A label indcating the keyboard shortcut of showing all downloads. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowDownloads" = "چۈشۈرۈلمىلەرنى كۆرسەت";
+
+/* A label indicating the keyboard shortcut to switch from the current tab to the first tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowFirstTab" = "بىرىنچى بەتكۈچنى كۆرسەت";
+
+/* A label indicating the keyboard shortcut of showing all history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowHistory" = "تارىخنى كۆرسەت";
+
+/* A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowLastTab" = "ئاخىرقى بەتكۈچنى كۆرسەت";
+
+/* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomIn" = "يېقىنلات";
+
+/* A label indicating the keyboard shortcut of shrinking the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomOut" = "يىراقلات";
+
+/* This label is meant to signify the section containing a group of items from the past thirty days. */
+"Last month" = "ئۆتكەن ئاي";
+
+/* This label is meant to signify the section containing a group of items from the past seven days. */
+"Last week" = "ئۆتكەن ھەپتە";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.Bookmarks.v106" = "خەتكۈچلەر";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.History.v106" = "تارىخ";
+
+/* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
+"LibraryPanel.History.ClearGroupedTabsCancel.v100" = "ۋاز كەچ";
+
+/* Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button. */
+"LibraryPanel.History.ClearGroupedTabsDelete.v100" = "ئۆچۈر";
+
+/* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
+"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "%@ دىكى بارلىق تور بېكەتلەرنى ئۆچۈرەمدۇ؟";
+
+/* Within the History Panel, users can open an action menu to clear recent history. */
+"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "تارىخ خاتىرىسى (باشقا ئۈسكۈنىلەردىن قەدەمداشلانغان تارىخ خاتىرىسىنى ئۆز ئىچىگە ئالىدۇ)، cookies ۋە باشقا توركۆرگۈ زىيارەت سانلىق مەلۇماتلىرىنى ئۆچۈرۈۋېتىدۇ.";
+
+/* Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item. */
+"LibraryPanel.History.DeleteGroupedItem.v104" = "ئۆچۈر";
+
+/* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
+"LibraryPanel.History.NoHistoryFound.v99" = "ھېچقانداق تارىخ خاتىرىسى تېپىلمىدى";
+
+/* In the history panel, this is the title on the button that navigates the user to a screen showing their recently closed tabs. */
+"LibraryPanel.History.RecentlyClosedTabs.v99" = "يېقىندا تاقالغان بەتكۈچ";
+
+/* In the history panel, users will be able to search terms in their browsing history. This placeholder text inside the search component will indicate that a user can search through their browsing history. */
+"LibraryPanel.History.SearchHistoryPlaceholder.v99" = "ئىزدەيدىغان ئاتالغۇ كىرگۈزۈلىدۇ";
+
+/* Within the History Panel, users can see the option of viewing their history from synced tabs. */
+"LibraryPanel.History.SyncedHistory.v100" = "قەدەمداش تارىخ";
+
+/* This label is meant to signify the section containing a group of items that are older than thirty days. */
+"LibraryPanel.Section.Older" = "بۇرۇنراق";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "ئىجازەتنامە";
+
+/* Light theme setting in Reading View settings */
+"Light" = "يورۇق";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "ئەسلى بەتنى يۈكلە";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "مەزمۇننى يۈكلەۋاتىدۇ…";
+
+/* Authentication prompt log in button */
+"Log in" = "كىرىش";
+
+/* Toggle logins syncing setting */
+"Logins" = "كىرىش";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "تەپسىلاتى";
+
+/* Message shown when you enter Logins & Passwords without having a device passcode set. */
+"Logins.DevicePasscodeRequired.Message" = "ئۆزلۈكىدىن تولدۇرۇش ۋە ئىم ساقلاش ئۈچۈن چىراي كىملىكى، تېگىش كىملىكى ياكى ئۈسكۈنى ئىم كودىنى قوزغىتىڭ.";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "داۋاملاشتۇر";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "تەپسىلاتى";
+
+/* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
+"Logins.PasscodeRequirement.Warning" = "Firefox نىڭ ئۆزلۈكىدىن تولدۇرۇش ئىقتىدارىنى ئىشلىتىش ئۈچۈن، چوقۇم ئۈسكۈنىنىڭ ئىم كودىنى قوزغىتىشىڭىز كېرەك.";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "ئېلىپ يۈرۈشكە ئەپلىك ئىم";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "Firefox ئىمنى ئۆزلۈكىدىن تولدۇر";
+
+/* Title of the big blue button to enable AutoFill */
+"Logins.WelcomeView.TurnOnAutoFill" = "ئۆزلۈكىدىن تولدۇرنى ئاچ";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "ساقلىما";
+
+/* Button to not update the user's password */
+"LoginsHelper.DontUpdate.Button" = "يېڭىلىما";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "%1$@ نىڭ %2$@ دىكى تىزىمغا كىرىش ئۇچۇرىنى ساقلامدۇ؟";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "%@ ئۈچۈن ئىم ساقلامدۇ؟";
+
+/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "%@ نىڭ تىزىمغا كىرىش ئۇچۇرىنى يېڭىلامدۇ؟";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "%1$@ نىڭ %2$@ دىكى تىزىمغا كىرىش ئۇچۇرىنى يېڭىلامدۇ؟";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "تىزىمغا كىرىشنى ساقلا";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "يېڭىلا";
+
+/* Placeholder test for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder" = "سۈزگۈچ";
+
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "ساقلانغان تىزىمغا كىرىش خاتىرىلىرى بۇ يەردە كۆرۈنىدۇ. ئەگەر پەرقلىق ئۈسكۈنىڭىزدە تىزىمغا كىرىش خاتىرىلىرىنى Firefox غا ساقلىۋالغان بولسىڭىز، Firefox ھېساباتىڭىزغا كىرىڭ.";
+
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "ساقلانغان تىزىمغا كىرىش خاتىرىلىرى بۇ يەردە كۆرۈنىدۇ. ئەگەر پەرقلىق ئۈسكۈنىڭىزدە تىزىمغا كىرىش خاتىرىلىرىنى %@ غا ساقلىۋالغان بولسىڭىز، ھېساباتىڭىزغا كىرىڭ.";
+
+/* Label shown when there are no logins saved */
+"LoginsList.NoLoginsFound.Title" = "تىزىمغا كىرىش خاتىرىسى تېپىلمىدى";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "ئىزدىشىڭىزگە ماس كېلىدىغان ھېچقانداق نەتىجە يوق.";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "ماس كېلىدىغان كىرىش يوق";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "ۋاز كەچ";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "كىرىش خاتىرىسىنى ئىزدە";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "تولدۇرىدىغان پارول تاللىنىدۇ";
+
+/* Title for the list of logins */
+"LoginsList.Title" = "ساقلانغان تىزىمغا كىرىش";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "قارىغاندا Firefox ئالدىنقى قېتىم يىمىرىلگەن ئوخشايدۇ. بەتكۈچلىرىڭىزنى ئەسلىگە كەلتۈرەمسىز؟";
+
+/* Title for the button that marks a reading list item as read */
+"Mark as Read" = "ئوقۇلغان دەپ بەلگىلەش";
+
+/* Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "ئوقۇلمىغان بەلگىسى قوي";
+
+/* Toast displayed to the user after a bookmark has been added. */
+"Menu.AddBookmark.Confirm" = "خەتكۈچ ساقلاندى";
+
+/* Label for the add bookmark button in the menu. Pressing this button bookmarks the current page. Please keep the text as short as possible for this label. */
+"Menu.AddBookmark.Label.v99" = "قوش";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"Menu.AddPin.Confirm2" = "تېزلەتمىگە قوشۇلدى";
+
+/* Label for the add to reading list button in the menu. Pressing this button adds the current page to the reading list. Please keep the text as short as possible for this label. */
+"Menu.AddReadingList.Label.v99" = "قوش";
+
+/* Toast displayed to the user after adding the item to their reading list. */
+"Menu.AddToReadingList.Confirm" = "ئوقۇش تىزىمىغا قوشۇلدى";
+
+/* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
+"Menu.AddToShortcuts.v99" = "تېزلەتمىگە قوش";
+
+/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+"Menu.Bookmarks.Label" = "خەتكۈچ";
+
+/* The title for the button that lets you copy the url from the location bar. */
+"Menu.Copy.Title" = "ئادرېسنى كۆچۈر";
+
+/* Toast displayed to user after copy url pressed. */
+"Menu.CopyURL.Confirm" = "تور ئادرېسى چاپلاش تاختىسىغا كۆچۈرۈلدى";
+
+/* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
+"Menu.CustomizeHomePage.v99" = "باش بەتنى خاسلاشتۇر";
+
+/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+"Menu.Downloads.Label" = "چۈشۈرۈلمىلەر";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "قوغداش بۇ بېكەتكە تاقاق";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "قوغداش بۇ بېكەتكە ئوچۇق";
+
+/* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
+"Menu.Help.v99" = "ياردەم";
+
+/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+"Menu.History.Label" = "تارىخ";
+
+/* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
+"Menu.NewTab.v99" = "يېڭى بەتكۈچ";
+
+/* Label for the button, displayed in the menu, turns off night mode. */
+"Menu.NightModeTurnOff.Label2" = "كېچىلىك ھالەتنى تاقا";
+
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label2" = "كېچىلىك ھالەتنى ئاچ";
+
+/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+"Menu.Passwords.Label" = "پاروللار";
+
+/* The title for the button that lets you paste into the location bar */
+"Menu.Paste.Title" = "چاپلا";
+
+/* The title for the button that lets you paste and go to a URL */
+"Menu.PasteAndGo.Title" = "چاپلاپ يۆتكەل";
+
+/* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
+"Menu.ReadingList.Label" = "ئوقۇش تىزىمى";
+
+/* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
+"Menu.ReloadWithoutTrackingProtection.Title" = "كۈچەيتىلگەن ئىزلاشتىن قوغداشسىز قايتا يۈكلە";
+
+/* Label for the button, displayed in the menu, used to reload the current website with Tracking Protection enabled */
+"Menu.ReloadWithTrackingProtection.Title" = "كۈچەيتىلگەن ئىزلاشتىن قوغداشنى قايتا يۈكلە";
+
+/* Toast displayed to the user after a bookmark has been removed. */
+"Menu.RemoveBookmark.Confirm" = "خەتكۈچ چىقىرىۋېتىلدى";
+
+/* Label for the remove bookmark button in the menu. Pressing this button remove the current page from the bookmarks. Please keep the text as short as possible for this label. */
+"Menu.RemoveBookmark.Label.v99" = "چىقىرىۋەت";
+
+/* Label for the remove from shortcuts button in the menu. Pressing this button removes the current website from the shortcut pins on the home page. */
+"Menu.RemovedFromShortcuts.v99" = "تېزلەتمىدىن چىقىرىۋەت";
+
+/* Toast displayed to the user after removing the item to the Shortcuts. */
+"Menu.RemovePin.Confirm2.v99" = "تېزلەتمىدىن چىقىرىۋېتىلدى";
+
+/* Toast displayed to confirm to the user that his reading list item was correctly removed. */
+"Menu.RemoveReadingList.Confirm.v99" = "ئوقۇش تىزىمىدىن چىقىرىۋېتىلدى";
+
+/* Label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. Please keep the text as short as possible for this label. */
+"Menu.RemoveReadingList.Label.v99" = "چىقىرىۋەت";
+
+/* Label for the share button in the menu page. Pressing this button open the share menu to share the current website. */
+"Menu.Share.v99" = "ھەمبەھىر";
+
+/* Label for the Firefox Sync button in the menu page. Pressing this button open the sign in to Firefox page service to sync and save data. */
+"Menu.SyncAndSaveData.v103" = "قەدەمداشلاپ سانلىق مەلۇماتنى ساقلا";
+
+/* Toast displayed to the user after a tab has been sent successfully. */
+"Menu.TabSent.Confirm" = "بەتكۈچ يوللاندى";
+
+/* Accessibility label for the Bookmark button on the toolbar. Pressing this button opens the bookmarks menu */
+"Menu.Toolbar.Bookmarks.AccessibilityLabel.v99" = "خەتكۈچ";
+
+/* Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page. */
+"Menu.Toolbar.Home.AccessibilityLabel.v99" = "باش بەت";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"Menu.TrackingProtection.Details.Verifier" = "دەلىللىگۈچى %@";
+
+/* The title for tracking protection settings */
+"Menu.TrackingProtection.ProtectionSettings.Title" = "قوغداش تەڭشەكلىرى";
+
+/* The title that shows the number of content cookies blocked */
+"Menu.TrackingProtectionBlockedContent.Title" = "ئىز قوغلاش مەزمۇنى";
+
+/* The title that shows the number of social URLs blocked */
+"Menu.TrackingProtectionBlockedSocial.Title" = "ئىجتىمائىي تاراتقۇ ئىزلىغۇچى";
+
+/* The title that shows the number of cross-site URLs blocked */
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "بېكەت ھالقىغان ئىزلىغۇچى";
+
+/* The title that shows the number of cryptomining scripts blocked */
+"Menu.TrackingProtectionCryptominersBlocked.Title" = "شىفىرلىق پۇل قازغۇچ";
+
+/* The title that shows the number of fingerprinting scripts blocked */
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "بارماق ئىزى ئىزلىغۇچ";
+
+/* The title for the option to view the What's new page. */
+"Menu.WhatsNew.Title" = "نېمە يېڭىلىق بار";
+
+/* Label for the zoom page button in the menu, used to show the Zoom Page bar. The placeholder shows the current zoom level in percent. */
+"Menu.ZoomPage.Title.v113" = "يېقىنلاشتۇر(%@)";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "يولباشچى قورال بالداق";
+
 /* Accessibility label for the New Tab button in the tab toolbar. */
 "New Tab" = "يېڭى بەتكۈچ";
 
+/* Restore Tabs Negative Action */
+"No" = "ياق";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "بەتكۈچ يوق";
+
 /* OK button */
 "OK" = "جەزملە";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "ماقۇل";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
+"Onboarding.WhatsNew.Button.Title" = "زىيارەتنى باشلاڭ";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "ئاپلا! Firefox يىمىرىلدى";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "تەڭشەكنى ئاچ";
+
+/* Password textbox in Authentication prompt */
+"Password" = "پارول";
+
+/* Button for closing the menu action sheet */
+"PhotonMenu.close" = "تاقا";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "ئوقۇرمەن كۆرۈنۈشى";
+
+/* Name for Mark as read button in reader mode */
+"ReaderModeBar.MarkAsRead.v106" = "ئوقۇلغان بەلگىسى قوي";
+
+/* Cancel button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Cancel" = "ۋاز كەچ";
+
+/* Reopen button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Reopen" = "قايتا ئاچ";
 

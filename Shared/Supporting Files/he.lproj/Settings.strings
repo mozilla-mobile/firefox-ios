@@ -79,6 +79,9 @@
 /* Title for the `Private Session` settings section in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Title.v121" = "הפעלה פרטית";
 
+/* Title for quick-search engines settings section in the Search page in the Settings menu. */
+"Settings.Search.QuickEnginesTitle.v121" = "מנועי חיפוש מהיר";
+
 /* Label for the `show search suggestions` setting, in the Search Settings page. */
 "Settings.Search.ShowSuggestions.v121" = "הצגת הצעות חיפוש";
 
