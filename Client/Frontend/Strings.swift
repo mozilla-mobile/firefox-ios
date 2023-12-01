@@ -1695,7 +1695,7 @@ extension String {
                 value: "Private Browsing",
                 comment: "Title for the `Private Session` settings section in the Search page in the Settings menu.")
             public static let PrivateSessionSetting = MZLocalizedString(
-                key: "Settings.Search.PrivateSession.Setting.v121",
+                key: "Settings.Search.PrivateSession.Setting.v122",
                 tableName: "Settings",
                 value: "Show Suggestions in Private Browsing",
                 comment: "Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in the Private Session section in the Search page in the Settings menu.")
