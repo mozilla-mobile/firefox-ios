@@ -5,8 +5,6 @@
 import Common
 import UIKit
 import Shared
-import Redux
-import TabDataStore
 
 typealias SceneUUID = UUID
 
@@ -109,10 +107,6 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
 
         let browserCoordinator = BrowserCoordinator(router: router,
                                                     screenshotService: screenshotService)
-        if ReduxFlagManager.isReduxEnabled {
-            let sceneUUID = WindowData.DefaultSingleWindowUUID
-            store.dispatch(TabManagerAction.tabManagerDidConnectToScene(browserCoordinator.tabManager, sceneUUID))
-        }
         add(child: browserCoordinator)
         browserCoordinator.start(with: launchType)
 
