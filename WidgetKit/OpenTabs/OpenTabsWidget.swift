@@ -17,6 +17,7 @@ struct OpenTabsWidget: Widget {
         .supportedFamilies([.systemMedium, .systemLarge])
         .configurationDisplayName(String.QuickViewGalleryTitle)
         .description(String.QuickViewGalleryDescriptionV2)
+        .contentMarginsDisabled()
     }
 }
 
