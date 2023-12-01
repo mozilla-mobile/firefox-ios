@@ -132,7 +132,8 @@ class TabDisplayView: UIView,
     }
 
     func deleteInactiveTab(for index: Int) {
-        store.dispatch(TabPanelAction.closeInactiveTabs(index))
+        let inactiveTabs = tabsState.inactiveTabs[index]
+        store.dispatch(TabPanelAction.closeInactiveTabs(inactiveTabs.tabUUID))
     }
 
     // MARK: UICollectionViewDataSource
@@ -210,7 +211,7 @@ class TabDisplayView: UIView,
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabsCell.cellIdentifier, for: indexPath) as? InactiveTabsCell
             else { return UICollectionViewCell() }
 
-            cell.configure(text: tabsState.inactiveTabs[indexPath.row].url)
+            cell.configure(text: tabsState.inactiveTabs[indexPath.row].title)
             if let theme = theme {
                 cell.applyTheme(theme: theme)
             }
@@ -226,9 +227,14 @@ class TabDisplayView: UIView,
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // TODO: Add guard to handle inactive tabs
-        let tabUUID = tabsState.tabs[indexPath.row].tabUUID
-        store.dispatch(TabPanelAction.selectTab(tabUUID))
+        switch getTabDisplay(for: indexPath.section) {
+        case .inactiveTabs:
+            let tabUUID = tabsState.inactiveTabs[indexPath.row].tabUUID
+            store.dispatch(TabPanelAction.selectTab(tabUUID))
+        case .tabs:
+            let tabUUID = tabsState.tabs[indexPath.row].tabUUID
+            store.dispatch(TabPanelAction.selectTab(tabUUID))
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView,

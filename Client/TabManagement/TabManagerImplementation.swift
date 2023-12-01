@@ -17,6 +17,12 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     private let tabMigration: TabMigrationUtility
     var notificationCenter: NotificationProtocol
 
+    override var normalActiveTabs: [Tab] {
+        let inactiveTabs = getInactiveTabs()
+        let activeTabs = tabs.filter { $0.isPrivate == false && !inactiveTabs.contains($0)}
+        return activeTabs
+    }
+
     init(profile: Profile,
          imageStore: DiskImageStore?,
          logger: Logger = DefaultLogger.shared,
@@ -429,6 +435,42 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         Task {
             try? await imageStore?.clearAllScreenshotsExcluding(savedUUIDsCopy)
         }
+    }
+
+    // MARK: - Inactive tabs
+    override func getInactiveTabs() -> [Tab] {
+        var inactiveTabs = [Tab]()
+        let currentDate = Date()
+        let defaultOldDay: Date
+
+        // Debug for inactive tabs to easily test in code
+        if UserDefaults.standard.bool(forKey: PrefsKeys.FasterInactiveTabsOverride) {
+            defaultOldDay = Calendar.current.date(byAdding: .second, value: -10, to: currentDate) ?? Date()
+        } else {
+            let noon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: currentDate) ?? Date()
+            let day14Old = Calendar.current.date(byAdding: .day, value: -14, to: noon) ?? Date()
+            defaultOldDay = day14Old
+        }
+
+        let regularTabs = tabs.filter({ $0.isPrivate == false })
+        for tab in regularTabs {
+            let tabTimeStamp = tab.lastExecutedTime ?? tab.sessionData?.lastUsedTime ?? tab.firstCreatedTime ?? 0
+            let tabDate = Date.fromTimestamp(tabTimeStamp)
+
+            if tabDate <= defaultOldDay {
+                inactiveTabs.append(tab)
+            }
+        }
+        return inactiveTabs
+    }
+
+    @MainActor
+    override func removeAllInactiveTabs() async {
+        let currentModeTabs = getInactiveTabs()
+        for tab in currentModeTabs {
+            await self.removeTab(tab.tabUUID)
+        }
+        storeChanges()
     }
 
     // MARK: - Notifiable
