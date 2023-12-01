@@ -25,21 +25,24 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
+        configuration?.setFont(DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .callout,
-            size: UX.buttonFontSize)
+            size: UX.buttonFontSize
+        ))
         layer.cornerRadius = UX.buttonCornerRadius
         titleLabel?.textAlignment = .center
         titleLabel?.adjustsFontForContentSizeCategory = true
-        contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
-                                         left: UX.buttonHorizontalInset,
-                                         bottom: UX.buttonVerticalInset,
-                                         right: UX.buttonHorizontalInset)
+        configuration?.contentInsets = NSDirectionalEdgeInsets(
+            top: UX.buttonVerticalInset,
+            leading: UX.buttonHorizontalInset,
+            bottom: UX.buttonVerticalInset,
+            trailing: UX.buttonHorizontalInset
+        )
     }
 
     public func configure(viewModel: SecondaryRoundedButtonViewModel) {
         accessibilityIdentifier = viewModel.a11yIdentifier
-        setTitle(viewModel.title, for: .normal)
+        configuration?.title = viewModel.title
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -52,7 +55,7 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         highlightedTintColor = theme.colors.actionSecondaryHover
         normalTintColor = theme.colors.actionSecondary
 
-        setTitleColor(theme.colors.textOnLight, for: .normal)
-        backgroundColor = theme.colors.actionSecondary
+        configuration?.baseForegroundColor = theme.colors.textOnLight
+        backgroundColor = normalTintColor
     }
 }

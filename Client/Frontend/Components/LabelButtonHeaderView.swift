@@ -52,8 +52,10 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
 
     private lazy var moreButton: ActionButton = .build { button in
         button.isHidden = true
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
-                                                                         size: UX.moreButtonTextSize)
+        button.configuration?.setFont(DefaultDynamicFontHelper.preferredFont(
+            withTextStyle: .subheadline,
+            size: UX.moreButtonTextSize
+        ))
     }
 
     // MARK: - Variables
@@ -113,7 +115,7 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         moreButton.isHidden = true
-        moreButton.setTitle(nil, for: .normal)
+        moreButton.configuration?.title = nil
         moreButton.accessibilityIdentifier = nil
         titleLabel.text = nil
         moreButton.removeTarget(nil, action: nil, for: .allEvents)
@@ -127,7 +129,7 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
 
         moreButton.isHidden = viewModel.isButtonHidden
         if !viewModel.isButtonHidden {
-            moreButton.setTitle(.RecentlySavedShowAllText, for: .normal)
+            moreButton.configuration?.title = .RecentlySavedShowAllText
             moreButton.touchUpAction = viewModel.buttonAction
             moreButton.accessibilityIdentifier = viewModel.buttonA11yIdentifier
         }
@@ -169,7 +171,7 @@ extension LabelButtonHeaderView: ThemeApplicable {
         let moreButtonColor = viewModel?.textColor ?? theme.colors.textAccent
 
         titleLabel.textColor = titleColor
-        moreButton.setTitleColor(moreButtonColor, for: .normal)
+        moreButton.configuration?.baseForegroundColor = moreButtonColor
     }
 }
 

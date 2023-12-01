@@ -139,7 +139,7 @@ extension WallpaperSettingsHeaderView: ThemeApplicable {
 
     private func setButtonStyle(theme: Theme) {
         let color = theme.colors.textPrimary
-        learnMoreButton.setTitleColor(color, for: .normal)
+        learnMoreButton.configuration?.baseForegroundColor = color
 
         // in iOS 13 the title color set is not used for the attributed text color so we have to set it via attributes
         guard let buttonTitle = viewModel?.buttonTitle else { return }

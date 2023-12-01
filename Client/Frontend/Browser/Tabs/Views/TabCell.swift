@@ -65,7 +65,10 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross), for: [])
         button.imageView?.contentMode = .scaleAspectFit
         button.contentMode = .center
-        button.imageEdgeInsets = UIEdgeInsets(equalInset: LegacyGridTabViewController.UX.closeButtonEdgeInset)
+        button.configuration = UIButton.Configuration.plain()
+        button.configuration?.contentInsets = NSDirectionalEdgeInsets(
+            equalInset: LegacyGridTabViewController.UX.closeButtonEdgeInset
+        )
     }
 
     // MARK: - Initializer

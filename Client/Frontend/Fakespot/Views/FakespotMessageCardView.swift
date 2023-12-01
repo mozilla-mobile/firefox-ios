@@ -154,9 +154,10 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
     }
 
     private lazy var linkButton: ResizableButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
+        button.configuration?.setFont(DefaultDynamicFontHelper.preferredFont(
             withTextStyle: .caption1,
-            size: UX.linkFontSize)
+            size: UX.linkFontSize
+        ))
         button.buttonEdgeSpacing = 0
         button.contentHorizontalAlignment = .leading
         button.addTarget(self, action: #selector(self.linkAction), for: .touchUpInside)
@@ -164,17 +165,20 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
     }
 
     private lazy var primaryButton: ResizableButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
+        button.configuration?.setFont(DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .callout,
-            size: UX.buttonFontSize)
+            size: UX.buttonFontSize
+        ))
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.titleLabel?.textAlignment = .center
         button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
-                                                left: UX.buttonHorizontalInset,
-                                                bottom: UX.buttonVerticalInset,
-                                                right: UX.buttonHorizontalInset)
+        button.configuration?.contentInsets = NSDirectionalEdgeInsets(
+            top: UX.buttonVerticalInset,
+            leading: UX.buttonHorizontalInset,
+            bottom: UX.buttonVerticalInset,
+            trailing: UX.buttonHorizontalInset
+        )
     }
 
     private var iconContainerHeightConstraint: NSLayoutConstraint?
@@ -225,7 +229,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         ])
 
         if let primaryActionText = viewModel.primaryActionText {
-            primaryButton.setTitle(primaryActionText, for: .normal)
+            primaryButton.configuration?.title = primaryActionText
             primaryButton.accessibilityIdentifier = viewModel.a11yPrimaryActionIdentifier
             if primaryButton.superview == nil {
                 containerStackView.addArrangedSubview(primaryButton)
@@ -245,7 +249,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         }
 
         if let linkText = viewModel.linkText {
-            linkButton.setTitle(linkText, for: .normal)
+            linkButton.configuration?.title = linkText
             linkButton.accessibilityIdentifier = viewModel.a11yLinkActionIdentifier
             if linkButton.superview == nil {
                 labelContainerStackView.addArrangedSubview(linkButton)
@@ -322,8 +326,8 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         descriptionLabel.textColor  = theme.colors.textPrimary
         iconContainerView.tintColor = theme.colors.textPrimary
 
-        linkButton.setTitleColor(theme.colors.textPrimary, for: .normal)
-        primaryButton.setTitleColor(type.primaryButtonTextColor(theme: theme), for: .normal)
+        linkButton.configuration?.baseForegroundColor = theme.colors.textPrimary
+        primaryButton.configuration?.baseForegroundColor = type.primaryButtonTextColor(theme: theme)
         primaryButton.backgroundColor = type.primaryButtonBackground(theme: theme)
         cardView.applyTheme(theme: theme)
     }

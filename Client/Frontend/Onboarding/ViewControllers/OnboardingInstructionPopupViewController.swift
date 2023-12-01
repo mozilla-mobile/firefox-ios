@@ -65,18 +65,21 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
     }
 
     private lazy var primaryButton: ResizableButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
+        button.configuration?.setFont(DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .callout,
-            size: UX.buttonFontSize)
+            size: UX.buttonFontSize
+        ))
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.titleLabel?.textAlignment = .center
         button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.PrimaryButton"
-        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
-                                                left: UX.buttonHorizontalInset,
-                                                bottom: UX.buttonVerticalInset,
-                                                right: UX.buttonHorizontalInset)
+        button.configuration?.contentInsets = NSDirectionalEdgeInsets(
+            top: UX.buttonVerticalInset,
+            leading: UX.buttonHorizontalInset,
+            bottom: UX.buttonVerticalInset,
+            trailing: UX.buttonHorizontalInset
+        )
     }
 
     var viewModel: OnboardingDefaultBrowserModelProtocol
@@ -182,7 +185,7 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
 
     private func updateLayout() {
         titleLabel.text = viewModel.title
-        primaryButton.setTitle(viewModel.buttonTitle, for: .normal)
+        primaryButton.configuration?.title = viewModel.buttonTitle
     }
 
     private func addViewsToView() {
@@ -250,7 +253,7 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
         titleLabel.textColor = theme.colors.textPrimary
         numeratedLabels.forEach { $0.textColor = theme.colors.textPrimary }
 
-        primaryButton.setTitleColor(theme.colors.textInverted, for: .normal)
+        primaryButton.configuration?.baseForegroundColor = theme.colors.textInverted
         primaryButton.backgroundColor = theme.colors.actionPrimary
 
         view.backgroundColor = theme.colors.layer1

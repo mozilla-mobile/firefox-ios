@@ -19,15 +19,19 @@ class CustomizeHomepageSectionCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - UI Elements
     private let goToSettingsButton: ActionButton = .build { button in
-        button.setTitle(.FirefoxHomepage.CustomizeHomepage.ButtonTitle, for: .normal)
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .subheadline,
-                                                                             size: UX.buttonFontSize)
+        button.configuration?.title = .FirefoxHomepage.CustomizeHomepage.ButtonTitle
+        button.configuration?.setFont(DefaultDynamicFontHelper.preferredBoldFont(
+            withTextStyle: .subheadline,
+            size: UX.buttonFontSize
+        ))
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.accessibilityIdentifier = a11y.customizeHome
-        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
-                                                left: ResizableButton.UX.buttonEdgeSpacing,
-                                                bottom: UX.buttonVerticalInset,
-                                                right: ResizableButton.UX.buttonEdgeSpacing)
+        button.configuration?.contentInsets = NSDirectionalEdgeInsets(
+            top: UX.buttonVerticalInset,
+            leading: ResizableButton.UX.buttonEdgeSpacing,
+            bottom: UX.buttonVerticalInset,
+            trailing: ResizableButton.UX.buttonEdgeSpacing
+        )
     }
 
     // MARK: - Initializers
@@ -81,7 +85,7 @@ extension CustomizeHomepageSectionCell: Blurrable {
 extension CustomizeHomepageSectionCell: ThemeApplicable {
     func applyTheme(theme: Theme) {
         goToSettingsButton.backgroundColor = theme.colors.layer4
-        goToSettingsButton.setTitleColor(theme.colors.textPrimary, for: .normal)
+        goToSettingsButton.configuration?.baseForegroundColor = theme.colors.textPrimary
 
         adjustBlur(theme: theme)
     }

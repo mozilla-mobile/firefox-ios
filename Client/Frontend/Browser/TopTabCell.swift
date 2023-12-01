@@ -44,10 +44,13 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, LegacyTabTrayCell, Reus
 
     let closeButton: UIButton = .build { button in
         button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross), for: [])
-        button.imageEdgeInsets = UIEdgeInsets(top: 15,
-                                              left: UX.tabTitlePadding,
-                                              bottom: 15,
-                                              right: UX.tabTitlePadding)
+        button.configuration = UIButton.Configuration.plain()
+        button.configuration?.contentInsets = NSDirectionalEdgeInsets(
+            top: 15,
+            leading: UX.tabTitlePadding,
+            bottom: 15,
+            trailing: UX.tabTitlePadding
+        )
         button.layer.masksToBounds = false
         button.semanticContentAttribute = .forceLeftToRight
     }

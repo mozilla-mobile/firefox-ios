@@ -57,11 +57,13 @@ class LegacyInactiveTabButton: UITableViewCell, ThemeApplicable, ReusableCell {
 
         contentView.addSubview(roundedButton)
 
-        roundedButton.setInsets(forContentPadding: UIEdgeInsets(top: UX.ButtonInset,
-                                                                left: UX.ButtonInset,
-                                                                bottom: UX.ButtonInset,
-                                                                right: UX.ButtonInset),
-                                imageTitlePadding: UX.ButtonImagePadding)
+        roundedButton.configuration?.contentInsets = NSDirectionalEdgeInsets(
+            top: UX.ButtonInset,
+            leading: UX.ButtonInset,
+            bottom: UX.ButtonInset,
+            trailing: UX.ButtonInset
+        )
+        roundedButton.configuration?.imagePadding = UX.ButtonImagePadding
 
         let trailingOffSet: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 100 : 23
         let leadingOffSet: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 100 : 23

@@ -20,12 +20,10 @@ public class LinkButton: UIButton, ThemeApplicable {
         accessibilityIdentifier = viewModel.a11yIdentifier
 
         configuration?.title = viewModel.title
-        configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
-            var outgoing = incoming
-            outgoing.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                                   size: viewModel.fontSize)
-            return outgoing
-        }
+        configuration?.setFont(DefaultDynamicFontHelper.preferredFont(
+            withTextStyle: .body,
+            size: viewModel.fontSize
+        ))
         configuration?.contentInsets = viewModel.contentInsets
         contentHorizontalAlignment = viewModel.contentHorizontalAlignment
         layoutIfNeeded()
@@ -38,7 +36,12 @@ public class LinkButton: UIButton, ThemeApplicable {
     // MARK: ThemeApplicable
 
     public func applyTheme(theme: Theme) {
-        setTitleColor(theme.colors.textAccent, for: .normal)
-        setTitleColor(theme.colors.actionPrimaryHover, for: .highlighted)
+        configurationUpdateHandler = { button in
+            button.configuration?.baseForegroundColor = if button.isHighlighted {
+                theme.colors.textAccent
+            } else {
+                theme.colors.actionPrimaryHover
+            }
+        }
     }
 }

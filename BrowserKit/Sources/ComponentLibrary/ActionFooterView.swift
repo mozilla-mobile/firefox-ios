@@ -45,9 +45,10 @@ public final class ActionFooterView: UIView, ThemeApplicable {
     }
 
     private lazy var linkButton: ResizableButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
+        button.configuration?.setFont(DefaultDynamicFontHelper.preferredFont(
             withTextStyle: .footnote,
-            size: UX.buttonSize)
+            size: UX.buttonSize
+        ))
         button.buttonEdgeSpacing = 0
         button.contentHorizontalAlignment = .leading
         button.addTarget(self, action: #selector(self.didTapButton), for: .touchUpInside)
@@ -66,7 +67,7 @@ public final class ActionFooterView: UIView, ThemeApplicable {
     public func configure(viewModel: ActionFooterViewModel) {
         self.viewModel = viewModel
         titleLabel.text = viewModel.title
-        linkButton.setTitle(viewModel.actionTitle, for: .normal)
+        linkButton.configuration?.title = viewModel.actionTitle
 
         titleLabel.accessibilityIdentifier = viewModel.a11yTitleIdentifier
         linkButton.accessibilityIdentifier = viewModel.a11yActionIdentifier
@@ -95,8 +96,13 @@ public final class ActionFooterView: UIView, ThemeApplicable {
 
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Common.Theme) {
-        linkButton.setTitleColor(theme.colors.actionPrimary, for: .normal)
-        linkButton.setTitleColor(theme.colors.actionPrimaryHover, for: .highlighted)
+        linkButton.configurationUpdateHandler = { button in
+            button.configuration?.baseForegroundColor = if button.isHighlighted {
+                theme.colors.actionPrimaryHover
+            } else {
+                theme.colors.actionPrimary
+            }
+        }
         titleLabel.textColor = theme.colors.textSecondary
     }
 }

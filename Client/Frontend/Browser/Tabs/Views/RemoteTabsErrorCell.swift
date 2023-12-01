@@ -53,14 +53,13 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
     }
 
     private let signInButton: ResizableButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .callout,
-                                                                         size: UX.buttonSizeFont)
-        button.setTitle(.Settings.Sync.ButtonTitle, for: [])
+        button.configuration?.setFont(DefaultDynamicFontHelper.preferredFont(
+            withTextStyle: .callout,
+            size: UX.buttonSizeFont
+        ))
+        button.configuration?.title = .Settings.Sync.ButtonTitle
         button.layer.cornerRadius = UX.buttonCornerRadius
-        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
-                                                left: UX.buttonVerticalInset,
-                                                bottom: UX.buttonVerticalInset,
-                                                right: UX.buttonVerticalInset)
+        button.configuration?.contentInsets = NSDirectionalEdgeInsets(equalInset: UX.buttonVerticalInset)
         button.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.syncDataButton
     }
 
@@ -120,7 +119,7 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         emptyStateImageView.tintColor = theme.colors.textPrimary
         titleLabel.textColor = theme.colors.textPrimary
         instructionsLabel.textColor = theme.colors.textPrimary
-        signInButton.setTitleColor(theme.colors.textInverted, for: .normal)
+        signInButton.configuration?.baseForegroundColor = theme.colors.textInverted
         signInButton.backgroundColor = theme.colors.actionPrimary
         backgroundColor = theme.colors.layer3
     }

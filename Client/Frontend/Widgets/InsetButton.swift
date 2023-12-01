@@ -8,7 +8,13 @@
 class InsetButton: UIButton {
     override var intrinsicContentSize: CGSize {
         let size = super.intrinsicContentSize
-        return CGSize(width: size.width + titleEdgeInsets.left + titleEdgeInsets.right,
-                      height: size.height + titleEdgeInsets.top + titleEdgeInsets.bottom)
+
+        guard let configuration else {
+            return size
+        }
+        return CGSize(
+            width: size.width + configuration.contentInsets.leading + configuration.contentInsets.trailing,
+            height: size.height + configuration.contentInsets.top + configuration.contentInsets.bottom
+        )
     }
 }

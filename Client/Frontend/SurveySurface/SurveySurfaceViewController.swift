@@ -75,34 +75,40 @@ class SurveySurfaceViewController: UIViewController, Themeable {
     }
 
     private lazy var takeSurveyButton: ResizableButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
+        button.configuration?.setFont(DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .callout,
-            size: UX.buttonFontSize)
+            size: UX.buttonFontSize
+        ))
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.titleLabel?.textAlignment = .center
         button.addTarget(self, action: #selector(self.takeSurveyAction), for: .touchUpInside)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.accessibilityIdentifier = AccessibilityIdentifiers.SurveySurface.takeSurveyButton
-        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
-                                                left: UX.buttonHorizontalInset,
-                                                bottom: UX.buttonVerticalInset,
-                                                right: UX.buttonHorizontalInset)
+        button.configuration?.contentInsets = NSDirectionalEdgeInsets(
+            top: UX.buttonVerticalInset,
+            leading: UX.buttonHorizontalInset,
+            bottom: UX.buttonVerticalInset,
+            trailing: UX.buttonHorizontalInset
+        )
         button.alpha = 0.0
     }
 
     private lazy var dismissSurveyButton: ResizableButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
+        button.configuration?.setFont(DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .callout,
-            size: UX.buttonFontSize)
+            size: UX.buttonFontSize
+        ))
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.titleLabel?.textAlignment = .center
         button.addTarget(self, action: #selector(self.dismissAction), for: .touchUpInside)
         button.accessibilityIdentifier = AccessibilityIdentifiers.SurveySurface.dismissButton
         button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
-                                                left: UX.buttonHorizontalInset,
-                                                bottom: UX.buttonVerticalInset,
-                                                right: UX.buttonHorizontalInset)
+        button.configuration?.contentInsets = NSDirectionalEdgeInsets(
+            top: UX.buttonVerticalInset,
+            leading: UX.buttonHorizontalInset,
+            bottom: UX.buttonVerticalInset,
+            trailing: UX.buttonHorizontalInset
+        )
         button.alpha = 0.0
     }
 
@@ -191,8 +197,8 @@ class SurveySurfaceViewController: UIViewController, Themeable {
         let titleString = String(format: viewModel.info.text, AppName.shortName.rawValue)
         titleLabel.text = titleString
         imageView.image = viewModel.info.image
-        takeSurveyButton.setTitle(viewModel.info.takeSurveyButtonLabel, for: .normal)
-        dismissSurveyButton.setTitle(viewModel.info.dismissActionLabel, for: .normal)
+        takeSurveyButton.configuration?.title = viewModel.info.takeSurveyButtonLabel
+        dismissSurveyButton.configuration?.title = viewModel.info.dismissActionLabel
     }
 
     /// Animates the elements of the view from their initial position and alpha settings,
@@ -244,10 +250,10 @@ class SurveySurfaceViewController: UIViewController, Themeable {
 
         titleLabel.textColor = theme.colors.textPrimary
 
-        takeSurveyButton.setTitleColor(theme.colors.textInverted, for: .normal)
+        takeSurveyButton.configuration?.baseForegroundColor = theme.colors.textInverted
         takeSurveyButton.backgroundColor = theme.colors.actionPrimary
 
-        dismissSurveyButton.setTitleColor(theme.colors.textOnLight, for: .normal)
+        dismissSurveyButton.configuration?.baseForegroundColor = theme.colors.textOnLight
         dismissSurveyButton.backgroundColor = theme.colors.actionSecondary
     }
 }

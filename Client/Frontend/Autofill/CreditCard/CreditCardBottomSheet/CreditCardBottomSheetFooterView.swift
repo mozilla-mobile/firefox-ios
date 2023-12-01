@@ -18,10 +18,11 @@ class CreditCardBottomSheetFooterView: UITableViewHeaderFooterView, ReusableCell
     }
 
     public lazy var manageCardsButton: ResizableButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
+        button.configuration?.setFont(DefaultDynamicFontHelper.preferredFont(
             withTextStyle: .callout,
-            size: UX.manageCardsButtonFontSize)
-        button.setTitle(.CreditCard.UpdateCreditCard.ManageCardsButtonTitle, for: .normal)
+            size: UX.manageCardsButtonFontSize
+        ))
+        button.configuration?.title = .CreditCard.UpdateCreditCard.ManageCardsButtonTitle
         button.titleLabel?.textAlignment = .left
         button.contentHorizontalAlignment = .left
         button.titleLabel?.adjustsFontForContentSizeCategory = true
@@ -40,7 +41,7 @@ class CreditCardBottomSheetFooterView: UITableViewHeaderFooterView, ReusableCell
 
     func applyTheme(theme: Theme) {
         contentView.backgroundColor = theme.colors.layer1
-        manageCardsButton.setTitleColor(theme.colors.textAccent, for: .normal)
+        manageCardsButton.configuration?.baseForegroundColor = theme.colors.textAccent
     }
 
     private func setupView() {

@@ -19,7 +19,12 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
     private struct UX {
         static let padding: CGFloat = 20
         static let buttonPadding: CGFloat = 12
-        static let buttonInsets = UIEdgeInsets(top: 6, left: buttonPadding, bottom: 6, right: buttonPadding)
+        static let buttonInsets = NSDirectionalEdgeInsets(
+            top: 6,
+            leading: buttonPadding,
+            bottom: 6,
+            trailing: buttonPadding
+        )
         static let topBottomPadding: CGFloat = 18
         static let stepperWidth: CGFloat = 222
         static let stepperHeight: CGFloat = 36
@@ -69,7 +74,9 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
                              accessibilityLabel: .AppMenu.ZoomPageDecreaseZoomAccessibilityLabel,
                              accessibilityIdentifier: AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomOutButton)
         button.setContentHuggingPriority(.required, for: .horizontal)
-        button.setInsets(forContentPadding: UX.buttonInsets, imageTitlePadding: 0)
+        button.configuration = UIButton.Configuration.plain()
+        button.configuration?.contentInsets = UX.buttonInsets
+        button.configuration?.imagePadding = 0
     }
 
     private lazy var zoomLevel: UILabel = .build { label in
@@ -88,7 +95,9 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
                              accessibilityLabel: .AppMenu.ZoomPageIncreaseZoomAccessibilityLabel,
                              accessibilityIdentifier: AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomInButton)
         button.setContentHuggingPriority(.required, for: .horizontal)
-        button.setInsets(forContentPadding: UX.buttonInsets, imageTitlePadding: 0)
+        button.configuration = UIButton.Configuration.plain()
+        button.configuration?.contentInsets = UX.buttonInsets
+        button.configuration?.imagePadding = 0
     }
 
     private lazy var closeButton: UIButton = .build { button in

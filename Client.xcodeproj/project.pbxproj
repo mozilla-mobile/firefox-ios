@@ -1520,6 +1520,8 @@
 		EBE7635920ADCB7600E27F2D /* SendTo.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EBE7634F20ADCB7500E27F2D /* SendTo.xcassets */; };
 		EBF47E701F7979DF00899189 /* TelemetryWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF47E6F1F7979DF00899189 /* TelemetryWrapper.swift */; };
 		EBFDB790211C83A5005CCA2F /* BrowserViewController+FindInPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFDB787211C83A5005CCA2F /* BrowserViewController+FindInPage.swift */; };
+		EECD87902B19D9FC0043BBF2 /* NSDirectionalEdgeInsets+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECD878F2B19D9FC0043BBF2 /* NSDirectionalEdgeInsets+Extension.swift */; };
+		EECD87942B19EF940043BBF2 /* UIButton.Configuration+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECD87932B19EF940043BBF2 /* UIButton.Configuration+Extension.swift */; };
 		F018F84C2719AE8300B9A52D /* ThemedDefaultNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F018F84B2719AE8300B9A52D /* ThemedDefaultNavigationController.swift */; };
 		F18859502A3E454E0004AA7B /* EnhancedTrackingProtectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F188594F2A3E454E0004AA7B /* EnhancedTrackingProtectionCoordinator.swift */; };
 		F1BC457E2A40F6D2005541D5 /* EnhancedTrackingProtectionCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18859512A3E46020004AA7B /* EnhancedTrackingProtectionCoordinatorTests.swift */; };
@@ -7006,6 +7008,8 @@
 		EE994F2590D706FC0ADD4B42 /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		EEA34C528147F2E7C3AB52C8 /* mr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = mr; path = mr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EEAB4DF28099E1BEA98A0B00 /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = an; path = an.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
+		EECD878F2B19D9FC0043BBF2 /* NSDirectionalEdgeInsets+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDirectionalEdgeInsets+Extension.swift"; sourceTree = "<group>"; };
+		EECD87932B19EF940043BBF2 /* UIButton.Configuration+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton.Configuration+Extension.swift"; sourceTree = "<group>"; };
 		EEE8476797612D908D23E6BC /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EEF342E5A045117853806115 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EF0444EEBEA6A45A3E0F654C /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
@@ -7781,6 +7785,8 @@
 				E1442FC7294782D7003680B0 /* UIViewController+Extension.swift */,
 				C81A8F2426D3ED1900EBA539 /* UIWindow+Extension.swift */,
 				E1442FC9294782D8003680B0 /* URL+Mail.swift */,
+				EECD878F2B19D9FC0043BBF2 /* NSDirectionalEdgeInsets+Extension.swift */,
+				EECD87932B19EF940043BBF2 /* UIButton.Configuration+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -13123,6 +13129,7 @@
 				8C92DE932A7128DE0090BD28 /* ProductAdsResponse.swift in Sources */,
 				E1A6AB4828CA833000EBEBDD /* WallpaperBaseViewController.swift in Sources */,
 				4331A9BB27193DF0005E8080 /* ContextualHintViewController.swift in Sources */,
+				EECD87942B19EF940043BBF2 /* UIButton.Configuration+Extension.swift in Sources */,
 				39EF434E260A73950011E22E /* Experiments.swift in Sources */,
 				E15DE7C0293A670700B32667 /* PhotonActionSheetSeparator.swift in Sources */,
 				DFEA639E279F468A00D489C3 /* DynamicHeightCollectionView.swift in Sources */,
@@ -13191,6 +13198,7 @@
 				1DDE3DB32AC34E1E0039363B /* TabCell.swift in Sources */,
 				3BF56D271CDBBE1F00AC4D75 /* SimpleToast.swift in Sources */,
 				C8B0F5F6283B7CCE007AE65D /* PocketStory.swift in Sources */,
+				EECD87902B19D9FC0043BBF2 /* NSDirectionalEdgeInsets+Extension.swift in Sources */,
 				C81AC6B626160091007800C5 /* LegacyTabTrayViewModel.swift in Sources */,
 				8ADAE4222A33A113007BF926 /* SendAnonymousUsageDataSetting.swift in Sources */,
 				C8EDDBF229DF1159003A4C07 /* URLScanner.swift in Sources */,

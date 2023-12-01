@@ -49,17 +49,13 @@ class InactiveTabsFooterView: UICollectionReusableView, ReusableCell, ThemeAppli
     func setupView() {
         addSubview(roundedButton)
 
-        roundedButton.contentEdgeInsets = UIEdgeInsets(
+        roundedButton.configuration?.contentInsets = NSDirectionalEdgeInsets(
             top: UX.buttonInset,
-            left: UX.buttonInset,
+            leading: UX.buttonInset,
             bottom: UX.buttonInset,
-            right: UX.buttonInset)
-        roundedButton.titleEdgeInsets = UIEdgeInsets(
-            top: 0,
-            left: UX.buttonImagePadding,
-            bottom: 0,
-            right: UX.buttonImagePadding
+            trailing: UX.buttonInset
         )
+        roundedButton.configuration?.imagePadding = UX.buttonImagePadding
 
         let horizontalOffSet: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? UX.iPadOffset : UX.iPhoneOffset
         accessibilityIdentifier = AccessibilityIdentifiers.TabTray.InactiveTabs.footerView
