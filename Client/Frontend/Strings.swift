@@ -715,7 +715,7 @@ extension String {
             public static let Body = MZLocalizedString(
                 key: "FirefoxHomepage.FeltPrivacyUI.Body.v122",
                 tableName: "FirefoxHomepage",
-                value: "%@ deletes your cookies, history, and site data when you close all your private windows.",
+                value: "%@ deletes your cookies, history, and site data when you close all your private tabs.",
                 comment: "The body of the message for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. Placeholder refers to app name.")
 
             public static let Link = MZLocalizedString(
