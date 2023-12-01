@@ -103,6 +103,10 @@ class TabLocationView: UIView, FeatureFlaggable {
         trackingProtectionButton.addTarget(self, action: #selector(self.didPressTPShieldButton(_:)), for: .touchUpInside)
         trackingProtectionButton.clipsToBounds = false
         trackingProtectionButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.trackingProtection
+        trackingProtectionButton.showsLargeContentViewer = true
+        trackingProtectionButton.largeContentImage = .templateImageNamed(StandardImageIdentifiers.Large.lock)
+        trackingProtectionButton.largeContentTitle = .TabLocationLockButtonLargeContentTitle
+        trackingProtectionButton.accessibilityLabel = .TabLocationLockButtonAccessibilityLabel
     }
 
     lazy var shareButton: ShareButton = .build { shareButton in
@@ -111,15 +115,23 @@ class TabLocationView: UIView, FeatureFlaggable {
         shareButton.contentHorizontalAlignment = .center
         shareButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.shareButton
         shareButton.accessibilityLabel = .TabLocationShareAccessibilityLabel
+        shareButton.showsLargeContentViewer = true
+        shareButton.largeContentImage = .templateImageNamed(ImageIdentifiers.share)
+        shareButton.largeContentTitle = .TabLocationShareButtonLargeContentTitle
     }
 
     private lazy var shoppingButton: UIButton = .build { button in
+        let image = UIImage(named: StandardImageIdentifiers.Large.shopping)
+
         button.addTarget(self, action: #selector(self.didPressShoppingButton(_:)), for: .touchUpInside)
         button.isHidden = true
-        button.setImage(UIImage(named: StandardImageIdentifiers.Large.shopping)?.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(image?.withRenderingMode(.alwaysTemplate), for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
         button.accessibilityLabel = .TabLocationShoppingAccessibilityLabel
         button.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.shoppingButton
+        button.showsLargeContentViewer = true
+        button.largeContentTitle = .TabLocationShoppingAccessibilityLabel
+        button.largeContentImage = image
     }
 
     private lazy var readerModeButton: ReaderModeButton = .build { readerModeButton in
@@ -136,6 +148,9 @@ class TabLocationView: UIView, FeatureFlaggable {
                 name: .TabLocationReaderModeAddToReadingListAccessibilityLabel,
                 target: self,
                 selector: #selector(self.readerModeCustomAction))]
+        readerModeButton.showsLargeContentViewer = true
+        readerModeButton.largeContentTitle = .TabLocationReaderModeAccessibilityLabel
+        readerModeButton.largeContentImage = .templateImageNamed("reader")
     }
 
     lazy var reloadButton: StatefulButton = {
@@ -149,6 +164,8 @@ class TabLocationView: UIView, FeatureFlaggable {
         reloadButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.reloadButton
         reloadButton.isAccessibilityElement = true
         reloadButton.translatesAutoresizingMaskIntoConstraints = false
+        reloadButton.showsLargeContentViewer = true
+        reloadButton.largeContentTitle = .TabLocationReloadAccessibilityLabel
         return reloadButton
     }()
 
