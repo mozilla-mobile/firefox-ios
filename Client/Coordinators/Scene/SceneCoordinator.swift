@@ -5,6 +5,10 @@
 import Common
 import UIKit
 import Shared
+import Redux
+import TabDataStore
+
+typealias SceneUUID = UUID
 
 /// Each scene has it's own scene coordinator, which is the root coordinator for a scene.
 class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinishedLoadingDelegate {
@@ -105,6 +109,8 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
 
         let browserCoordinator = BrowserCoordinator(router: router,
                                                     screenshotService: screenshotService)
+        let sceneUUID = WindowData.DefaultSingleWindowUUID
+        store.dispatch(TabManagerAction.tabManagerDidConnectToScene(browserCoordinator.tabManager, sceneUUID))
         add(child: browserCoordinator)
         browserCoordinator.start(with: launchType)
 

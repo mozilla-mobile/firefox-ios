@@ -24,7 +24,7 @@ class BrowserCoordinator: BaseCoordinator,
     var homepageViewController: HomepageViewController?
 
     private var profile: Profile
-    private let tabManager: TabManager
+    let tabManager: TabManager
     private let themeManager: ThemeManager
     private let screenshotService: ScreenshotService
     private let glean: GleanWrapper
