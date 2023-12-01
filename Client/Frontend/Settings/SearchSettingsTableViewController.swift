@@ -10,10 +10,11 @@ protocol SearchEnginePickerDelegate: AnyObject {
     func searchEnginePicker(_ searchEnginePicker: SearchEnginePicker?, didSelectSearchEngine engine: OpenSearchEngine?)
 }
 
-class SearchSettingsTableViewController: ThemedTableViewController {
+class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlaggable {
     private enum Section: Int, CaseIterable {
         case defaultEngine
         case quickEngines
+        case privateSession
 
         var title: String {
             switch self {
@@ -21,6 +22,8 @@ class SearchSettingsTableViewController: ThemedTableViewController {
                 return .Settings.Search.DefaultSearchEngineTitle
             case .quickEngines:
                 return .Settings.Search.QuickSearchEnginesTitle
+            case .privateSession:
+                return .Settings.Search.PrivateSessionTitle
             }
         }
     }
@@ -155,6 +158,16 @@ class SearchSettingsTableViewController: ThemedTableViewController {
                 cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Search.customEngineViewButton
                 cell.textLabel?.text = .SettingsAddCustomEngine
             }
+        case .privateSession:
+            cell.textLabel?.text = .Settings.Search.PrivateSessionSetting
+            cell.textLabel?.numberOfLines = 0
+            let toggle = ThemedSwitch()
+            toggle.applyTheme(theme: themeManager.currentTheme)
+            toggle.addTarget(self, action: #selector(didToggleDisableSearchSuggestionsInPrivateMode), for: .valueChanged)
+            toggle.isOn = model.shouldDisablePrivateModeSearchSuggestions
+            cell.editingAccessoryView = toggle
+            cell.selectionStyle = .none
+            cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Search.disableSearchSuggestsInPrivateMode
         }
 
         // So that the separator line goes all the way to the left edge.
@@ -164,6 +177,9 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
+        guard featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) else {
+            return Section.allCases.count - 1
+        }
         return Section.allCases.count
     }
 
@@ -176,6 +192,8 @@ class SearchSettingsTableViewController: ThemedTableViewController {
             // The first engine -- the default engine -- is not shown in the quick search engine list.
             // But the option to add Custom Engine is.
             return model.orderedEngines.count
+        case .privateSession:
+            return 1
         }
     }
 
@@ -203,6 +221,8 @@ class SearchSettingsTableViewController: ThemedTableViewController {
                                                 theme: self.themeManager.currentTheme)
             }
             navigationController?.pushViewController(customSearchEngineForm, animated: true)
+        case .privateSession:
+            return nil
         }
         return nil
     }
@@ -211,7 +231,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         let section = Section(rawValue: indexPath.section) ?? .defaultEngine
         switch section {
-        case .defaultEngine:
+        case .defaultEngine, .privateSession:
             return UITableViewCell.EditingStyle.none
         case .quickEngines:
             let isLastItem = indexPath.item + 1 == model.orderedEngines.count
@@ -273,7 +293,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         let section = Section(rawValue: indexPath.section) ?? .defaultEngine
         switch section {
-        case .defaultEngine:
+        case .defaultEngine, .privateSession:
             return false
         case .quickEngines:
             let isLastItem = indexPath.item + 1 == model.orderedEngines.count
@@ -365,6 +385,11 @@ extension SearchSettingsTableViewController {
     func didToggleSearchSuggestions(_ toggle: ThemedSwitch) {
         // Setting the value in settings dismisses any opt-in.
         model.shouldShowSearchSuggestions = toggle.isOn
+    }
+
+    @objc
+    func didToggleDisableSearchSuggestionsInPrivateMode(_ toggle: ThemedSwitch) {
+        model.shouldDisablePrivateModeSearchSuggestions = toggle.isOn
     }
 
     func cancel() {

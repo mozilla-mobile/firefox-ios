@@ -92,6 +92,7 @@ class BrowserViewController: UIViewController,
     // Overlay dimming view for private mode
     lazy var privateModeDimmingView: UIView = .build { view in
         view.backgroundColor = self.themeManager.currentTheme.colors.layerScrim
+        view.accessibilityIdentifier = AccessibilityIdentifiers.PrivateMode.dimmingView
     }
 
     // BottomContainer stack view contains toolbar
@@ -657,8 +658,6 @@ class BrowserViewController: UIViewController,
 
     // Configure dimming view to show for private mode
     func configureDimmingView() {
-        guard featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) else { return }
-
         if let selectedTab = tabManager.selectedTab, selectedTab.isPrivate {
             view.addSubview(privateModeDimmingView)
             view.bringSubviewToFront(privateModeDimmingView)

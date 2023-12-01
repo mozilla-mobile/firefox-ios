@@ -118,6 +118,10 @@ public struct AccessibilityIdentifiers {
         public static let back = "Back"
     }
 
+    struct PrivateMode {
+        static let dimmingView = "PrivateMode.DimmingView"
+    }
+
     struct Shopping {
         static let sheetHeaderTitle = "Shopping.Sheet.HeaderTitle"
         static let sheetHeaderBetaLabel = "Shopping.Sheet.HeaderBetaLabel"
@@ -408,6 +412,7 @@ public struct AccessibilityIdentifiers {
             static let searchNavigationBar = "Search"
             static let deleteMozillaEngine = "Remove Mozilla Engine"
             static let deleteButton = "Delete"
+            static let disableSearchSuggestsInPrivateMode = "PrivateMode.DisableSearchSuggests"
         }
 
         struct AdvancedAccountSettings {
