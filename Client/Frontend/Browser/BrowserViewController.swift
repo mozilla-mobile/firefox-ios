@@ -1723,9 +1723,9 @@ class BrowserViewController: UIViewController,
 
         let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
             .creditCardAutofillStatus, checking: .buildOnly)
-        let creditCardHelper = CreditCardHelper(tab: tab)
-        tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
-        creditCardHelper.foundFieldValues = { [weak self] fieldValues, type, frame in
+        let formAutofillHelper = FormAutofillHelper(tab: tab)
+        tab.addContentScript(formAutofillHelper, name: FormAutofillHelper.name())
+        formAutofillHelper.foundFieldValues = { [weak self] fieldValues, type, frame in
             guard let tabWebView = tab.webView,
                   let type = type,
                   userDefaults.object(forKey: keyCreditCardAutofill) as? Bool ?? true
@@ -1752,6 +1752,12 @@ class BrowserViewController: UIViewController,
             case .formSubmit:
                 self?.showCreditCardAutofillSheet(fieldValues: fieldValues)
                 break
+            case .fillAddressForm:
+                // TODO: FXIOS-7670
+                return
+            case .captureAddressForm:
+                // TODO: FXIOS-7670
+                return
             }
 
             tabWebView.accessoryView.savedCardsClosure = {

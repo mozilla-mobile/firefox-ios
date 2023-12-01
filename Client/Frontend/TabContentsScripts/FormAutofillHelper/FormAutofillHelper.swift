@@ -8,87 +8,65 @@ import WebKit
 import Common
 import Storage
 
-struct CreditCardPayload: Codable {
-    let ccNumber: String
-    let ccExpMonth: String
-    let ccExpYear: String
-    let ccName: String
+class FormAutofillHelper: TabContentScript {
+    // MARK: - Properties
 
-    enum CodingKeys: String, CodingKey, CaseIterable {
-        case ccNumber = "cc-number"
-        case ccExpMonth = "cc-exp-month"
-        case ccExpYear = "cc-exp-year"
-        case ccName = "cc-name"
-    }
-}
-
-struct FillCreditCardForm: Codable {
-    let creditCardPayload: CreditCardPayload
-    let type: String
-
-    enum CodingKeys: String, CodingKey, CaseIterable {
-        case creditCardPayload = "payload"
-        case type = "type"
-    }
-}
-
-enum CreditCardHelperError: Error {
-    case injectionIssue
-    case injectionInvalidFields
-    case injectionInvalidJSON
-}
-
-enum CreditCardPayloadType: String {
-    case formSubmit = "capture-credit-card-form"
-    case formInput = "fill-credit-card-form"
-}
-
-class CreditCardHelper: TabContentScript {
     private weak var tab: Tab?
     private var logger: Logger = DefaultLogger.shared
     private var frame: WKFrameInfo?
 
     // Closure to send the field values
     var foundFieldValues: ((UnencryptedCreditCardFields,
-                            CreditCardPayloadType?,
+                            FormAutofillPayloadType?,
                             WKFrameInfo?) -> Void)?
 
+    // MARK: - Class Methods
+
     class func name() -> String {
-        return "CreditCardHelper"
+        return "FormAutofillHelper"
     }
+
+    // MARK: - Initialization
 
     required init(tab: Tab) {
         self.tab = tab
     }
 
+    // MARK: - Script Message Handler
+
     func scriptMessageHandlerName() -> String? {
         return "creditCardMessageHandler"
     }
+
+    // MARK: - Deinitialization
 
     func prepareForDeinit() {
         foundFieldValues = nil
     }
 
-    // MARK: Retrieval
+    // MARK: - Retrieval
 
     func userContentController(_ userContentController: WKUserContentController,
                                didReceiveScriptMessage message: WKScriptMessage) {
         // Note: We require frame so that we can submit information
-        // to embedded iframe on a webpage for injecting card info
+        // to an embedded iframe on a webpage for injecting card info
         frame = message.frameInfo
 
         guard let data = getValidPayloadData(from: message),
               let fieldValues = parseFieldType(messageBody: data),
-              let payloadType = CreditCardPayloadType(rawValue: fieldValues.type)
+              let payloadType = FormAutofillPayloadType(rawValue: fieldValues.type)
         else {
-            logger.log("Unable to find the payloadType for credit card js input",
+            logger.log("Unable to find the payloadType for the credit card JS input",
                        level: .warning,
                        category: .webview)
             return
         }
+
         let payloadData = fieldValues.creditCardPayload
         foundFieldValues?(getFieldTypeValues(payload: payloadData), payloadType, frame)
     }
+
+    // MARK: - Payload Data Handling
 
     func getValidPayloadData(from message: WKScriptMessage) -> [String: Any]? {
         return message.body as? [String: Any]
@@ -98,13 +76,11 @@ class CreditCardHelper: TabContentScript {
         let decoder = JSONDecoder()
 
         do {
-            let jsonData = try JSONSerialization.data(
-                withJSONObject: messageBody, options: .prettyPrinted)
-            let fillCreditCardForm = try decoder.decode(FillCreditCardForm.self,
-                                                        from: jsonData)
+            let jsonData = try JSONSerialization.data(withJSONObject: messageBody, options: .prettyPrinted)
+            let fillCreditCardForm = try decoder.decode(FillCreditCardForm.self, from: jsonData)
             return fillCreditCardForm
         } catch let error {
-            logger.log("Unable to parse field type for CC, \(error)",
+            logger.log("Unable to parse field type for the credit card, \(error)",
                        level: .warning,
                        category: .webview)
         }
@@ -125,7 +101,7 @@ class CreditCardHelper: TabContentScript {
         return ccPlainText
     }
 
-    // MARK: Injection
+    // MARK: - Injection
 
     static func injectCardInfo(logger: Logger,
                                card: UnencryptedCreditCardFields,
@@ -136,44 +112,36 @@ class CreditCardHelper: TabContentScript {
               card.ccExpYear > 0,
               !card.ccName.isEmpty
         else {
-            completion(CreditCardHelperError.injectionInvalidFields)
+            completion(FormAutofillHelperError.injectionInvalidFields)
             return
         }
 
         do {
-            let jsonBuilder = CreditCardHelper.injectionJSONBuilder(card: card)
+            let jsonBuilder = FormAutofillHelper.injectionJSONBuilder(card: card)
             let jsonData = try JSONSerialization.data(withJSONObject: jsonBuilder)
             guard let jsonDataVal = String(data: jsonData, encoding: .utf8) else {
-                completion(CreditCardHelperError.injectionInvalidJSON)
+                completion(FormAutofillHelperError.injectionInvalidJSON)
                 return
             }
 
             guard let webView = tab.webView else {
-                completion(CreditCardHelperError.injectionIssue)
+                completion(FormAutofillHelperError.injectionIssue)
                 return
             }
 
             let fillCreditCardInfoCallback = "__firefox__.FormAutofillHelper.fillFormFields(\(jsonDataVal))"
             webView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback, frame) { _, error in
-                guard let error = error else {
-                    TelemetryWrapper.recordEvent(category: .action,
-                                                 method: .tap,
-                                                 object: .creditCardAutofilled)
+                if let error = error {
+                    TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardAutofillFailed)
+                    completion(error)
+                    logger.log("Credit card script error \(error)", level: .debug, category: .webview)
+                } else {
+                    TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardAutofilled)
                     completion(nil)
-                    return
                 }
-                TelemetryWrapper.recordEvent(category: .action,
-                                             method: .tap,
-                                             object: .creditCardAutofillFailed)
-                completion(error)
-                logger.log("Credit card script error \(error)",
-                           level: .debug,
-                           category: .webview)
             }
         } catch let error as NSError {
-            logger.log("Credit card script error \(error)",
-                       level: .debug,
-                       category: .webview)
+            logger.log("Credit card script error \(error)", level: .debug, category: .webview)
         }
     }
 
@@ -190,46 +158,40 @@ class CreditCardHelper: TabContentScript {
         return injectionJSON
     }
 
-    // MARK: Next & Previous focus fields
+    // MARK: - Focus Management
 
-    static func focusNextInputField(tabWebView: WKWebView,
-                                    logger: Logger) {
+    static func focusNextInputField(tabWebView: WKWebView, logger: Logger) {
         let fxWindowValExtras = "window.__firefox__.FormAutofillExtras"
         let fillCreditCardInfoCallback = "\(fxWindowValExtras).focusNextInputField()"
 
         tabWebView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback) { _, error in
-            guard let error = error else { return }
-            logger.log("Unable to go next field: \(error)",
-                       level: .debug,
-                       category: .webview)
+            if let error = error {
+                logger.log("Unable to go to the next field: \(error)", level: .debug, category: .webview)
+            }
         }
     }
 
-    static func focusPreviousInputField(tabWebView: WKWebView,
-                                        logger: Logger) {
+    static func focusPreviousInputField(tabWebView: WKWebView, logger: Logger) {
         let fxWindowValExtras = "window.__firefox__.FormAutofillExtras"
         let fillCreditCardInfoCallback = "\(fxWindowValExtras).focusPreviousInputField()"
 
         tabWebView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback) { _, error in
-            guard let error = error else { return }
-            logger.log("Unable to go previous field: \(error)",
-                       level: .debug,
-                       category: .webview)
+            if let error = error {
+                logger.log("Unable to go to the previous field: \(error)", level: .debug, category: .webview)
+            }
         }
     }
 
     // Note: document.activeElement.blur() is used to remove the focus from the
     // currently focused element on a web page. When an element is focused,
     // it typically has a visual indication such as a highlighted border or change in appearance.
-    // The reason we do it is because after pressing done the focus still remains in WKWebview
-    static func blurActiveElement(tabWebView: WKWebView,
-                                  logger: Logger) {
+    // The reason we do it is because after pressing done the focus still remains in WKWebView
+    static func blurActiveElement(tabWebView: WKWebView, logger: Logger) {
         let fillCreditCardInfoCallback = "document.activeElement.blur()"
         tabWebView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback) { _, error in
-            guard let error = error else { return }
-            logger.log("Unable to go previous field: \(error)",
-                       level: .debug,
-                       category: .webview)
+            if let error = error {
+                logger.log("Unable to remove focus from the current field: \(error)", level: .debug, category: .webview)
+            }
         }
     }
 }
