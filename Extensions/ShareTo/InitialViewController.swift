@@ -27,57 +27,6 @@ func isLandscapeSmallScreen(_ traitCollection: UITraitCollection) -> Bool {
  and standard iOS navigation behaviour.
  */
 
-class EmbeddedNavController {
-    weak var parent: UIViewController?
-    var controllers = [UIViewController]()
-    var navigationController: UINavigationController
-    var heightConstraint: Constraint!
-    let isSearchMode: Bool
-
-    init(isSearchMode: Bool, parent: UIViewController, rootViewController: UIViewController) {
-        self.parent = parent
-        self.isSearchMode = isSearchMode
-        navigationController = UINavigationController(rootViewController: rootViewController)
-
-        parent.addChild(navigationController)
-        parent.view.addSubview(navigationController.view)
-
-        let width = min(DeviceInfo.screenSizeOrientationIndependent().width * 0.90, CGFloat(UX.topViewWidth))
-
-        let initialHeight = isSearchMode ? UX.topViewHeightForSearchMode : UX.topViewHeight
-        navigationController.view.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-            make.width.equalTo(width)
-            heightConstraint = make.height.equalTo(initialHeight).constraint
-            layout(forTraitCollection: navigationController.traitCollection)
-        }
-
-        navigationController.view.layer.cornerRadius = UX.dialogCornerRadius
-        navigationController.view.layer.masksToBounds = true
-    }
-
-    func layout(forTraitCollection: UITraitCollection) {
-        if isSearchMode {
-            // Dialog size doesn't change
-            return
-        }
-
-        let updatedHeight: Int
-        if UX.enableResizeRowsForSmallScreens {
-            let shrinkage = UX.navBarLandscapeShrinkage + (UX.numberOfActionRows + 1 /*one info row*/) * UX.perRowShrinkageForLandscape
-            updatedHeight = isLandscapeSmallScreen(forTraitCollection) ? UX.topViewHeight - shrinkage : UX.topViewHeight
-        } else {
-            updatedHeight = forTraitCollection.verticalSizeClass == .compact ? UX.topViewHeight - UX.navBarLandscapeShrinkage : UX.topViewHeight
-        }
-        heightConstraint.update(offset: updatedHeight)
-    }
-
-    deinit {
-        navigationController.view.removeFromSuperview()
-        navigationController.removeFromParent()
-    }
-}
-
 @objc(InitialViewController)
 class InitialViewController: UIViewController {
     var embedController: EmbeddedNavController?
