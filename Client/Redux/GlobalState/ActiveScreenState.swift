@@ -6,8 +6,7 @@ import Foundation
 import Redux
 
 enum AppScreenState: Equatable {
-    case fakespot(FakespotState)
-    case feltPrivacy(FeltPrivacyState)
+    case browserViewController(BrowserViewControllerState)
     case remoteTabsPanel(RemoteTabsPanelState)
     case tabsPanel(TabsPanelState)
     case tabsTray(TabTrayState)
@@ -19,19 +18,17 @@ enum AppScreenState: Equatable {
         case .tabsTray(let state): return .tabsTray(TabTrayState.reducer(state, action))
         case .tabsPanel(let state): return .tabsPanel(TabsPanelState.reducer(state, action))
         case .remoteTabsPanel(let state): return .remoteTabsPanel(RemoteTabsPanelState.reducer(state, action))
-        case .fakespot(let state): return .fakespot(FakespotState.reducer(state, action))
-        case .feltPrivacy(let state): return .feltPrivacy(FeltPrivacyState.reducer(state, action))
+        case .browserViewController(let state): return .browserViewController(BrowserViewControllerState.reducer(state, action))
         }
     }
 
     /// Returns the matching AppScreen enum for a given AppScreenState
     var associatedAppScreen: AppScreen {
         switch self {
+        case .browserViewController: return .browserViewController
         case .themeSettings: return .themeSettings
         case .tabsTray: return .tabsTray
         case .tabsPanel: return .tabsPanel
-        case .fakespot: return .fakespot
-        case .feltPrivacy: return .feltPrivacy
         case .remoteTabsPanel: return .remoteTabsPanel
         }
     }
@@ -55,10 +52,12 @@ struct ActiveScreensState: Equatable {
             switch action {
             case .closeScreen(let screenType):
                 screens = screens.filter({ return $0.associatedAppScreen != screenType })
-            case .showScreen(.fakespot):
-                screens += [.fakespot(FakespotState())]
-            case .showScreen(.feltPrivacy):
-                screens += [.feltPrivacy(FeltPrivacyState())]
+//            case .showScreen(.fakespot):
+//                screens += [.fakespot(FakespotState())]
+//            case .showScreen(.feltPrivacy):
+//                screens += [.feltPrivacy(FeltPrivacyState())]
+            case .showScreen(.browserViewController):
+                screens += [.browserViewController(BrowserViewControllerState())]
             case .showScreen(.remoteTabsPanel):
                 screens += [.remoteTabsPanel(RemoteTabsPanelState())]
             case .showScreen(.tabsTray):

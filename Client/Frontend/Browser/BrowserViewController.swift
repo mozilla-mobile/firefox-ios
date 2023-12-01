@@ -28,6 +28,8 @@ class BrowserViewController: UIViewController,
         static let ActionSheetTitleMaxLength = 120
     }
 
+    typealias SubscriberStateType = BrowserViewControllerState
+
     private let KVOs: [KVOConstants] = [
         .estimatedProgress,
         .loading,
@@ -80,7 +82,7 @@ class BrowserViewController: UIViewController,
     let tabManager: TabManager
     let ratingPromptManager: RatingPromptManager
     lazy var isTabTrayRefactorEnabled: Bool = TabTrayFlagManager.isRefactorEnabled
-    private var fakespotState: FakespotState?
+    private var browserViewControllerState: BrowserViewControllerState?
 
     // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
     var header: BaseAlphaStackView = .build { _ in }
@@ -460,10 +462,10 @@ class BrowserViewController: UIViewController,
 
     func subscribeToRedux() {
         guard isReduxIntegrationEnabled else { return }
-        store.dispatch(ActiveScreensStateAction.showScreen(.fakespot))
+        store.dispatch(ActiveScreensStateAction.showScreen(.browserViewController))
 
         store.subscribe(self, transform: {
-            $0.select(FakespotState.init)
+            $0.select(BrowserViewControllerState.init)
         })
     }
 
@@ -473,17 +475,17 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    func newState(state: FakespotState) {
+    func newState(state: BrowserViewControllerState) {
         ensureMainThread { [weak self] in
             guard let self else { return }
 
-            fakespotState = state
+            browserViewControllerState = state
 
             // opens or close sidebar/bottom sheet to match the saved state
-            if state.isOpenOnProductPage {
+            if state.fakespotState.isOpenOnProductPage {
                 guard let productURL = urlBar.currentURL else { return }
                 handleFakespotFlow(productURL: productURL)
-            } else {
+            } else if !state.fakespotState.isOpenOnProductPage {
                 _ = dismissFakespotIfNeeded()
             }
         }
@@ -764,7 +766,7 @@ class BrowserViewController: UIViewController,
         var fakespotNeedsUpdate = false
         if urlBar.currentURL != nil {
             fakespotNeedsUpdate = contentStackView.isSidebarVisible != FakespotUtils().shouldDisplayInSidebar(viewSize: size)
-            if isReduxIntegrationEnabled, let fakespotState = fakespotState {
+            if isReduxIntegrationEnabled, let fakespotState = browserViewControllerState?.fakespotState {
                 fakespotNeedsUpdate = fakespotNeedsUpdate && fakespotState.isOpenOnProductPage
             }
 
@@ -1672,7 +1674,7 @@ class BrowserViewController: UIViewController,
                   !tab.isPrivate,
                   FakespotUtils().shouldDisplayInSidebar(),
                   isReduxIntegrationEnabled,
-                  let fakespotState = fakespotState,
+                  let fakespotState = browserViewControllerState?.fakespotState,
                   fakespotState.isOpenOnProductPage {
             handleFakespotFlow(productURL: url)
         } else if contentStackView.isSidebarVisible {

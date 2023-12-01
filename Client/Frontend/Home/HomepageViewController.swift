@@ -122,11 +122,25 @@ class HomepageViewController:
         jumpBackInContextualHintViewController.stopTimer()
         syncTabContextualHintViewController.stopTimer()
         notificationCenter.removeObserver(self)
-        unsubscribeFromRedux()
+        unsubscribeToRedux()
+    }
+
+    // MARK: - Redux
+
+    // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-7190
+    func subscribeToRedux() {
+//        store.dispatch(ActiveScreensStateAction.showScreen(.feltPrivacy))
+//        store.subscribe(self, transform: {
+//            return $0.select(FeltPrivacyState.init)
+//        })
+    }
+
+    func unsubscribeToRedux() {
+//        store.unsubscribe(self)
+//        store.dispatch(ActiveScreensStateAction.closeScreen(.feltPrivacy))
     }
 
     func newState(state: FeltPrivacyState) {
-        // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-7190
     }
 
     // MARK: - View lifecycle
@@ -143,6 +157,8 @@ class HomepageViewController:
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
+
+        subscribeToRedux()
 
         setupSectionsAction()
         reloadView()

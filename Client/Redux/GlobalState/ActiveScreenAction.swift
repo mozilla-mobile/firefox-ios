@@ -6,12 +6,11 @@ import Foundation
 import Redux
 
 enum AppScreen {
+    case browserViewController
     case themeSettings
     case tabsTray
     case tabsPanel
     case remoteTabsPanel
-    case fakespot
-    case feltPrivacy
 }
 
 enum ActiveScreensStateAction: Action {
