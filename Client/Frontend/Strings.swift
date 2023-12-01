@@ -723,9 +723,11 @@ extension String {
                 tableName: "FirefoxHomepage",
                 value: "Who might be able to see my activity?",
                 comment: "The link for the card that educates users about how private mode works. The link redirects to an external site for more information. The card shows up on the homepage when in the new privacy mode.")
+        }
 
+        public struct FeltDeletion {
             public static let ToastTitle = MZLocalizedString(
-                key: "FirefoxHomepage.FeltPrivacyUI.Link.v122",
+                key: "FirefoxHomepage.FeltDeletion.Link.v122",
                 tableName: "FirefoxHomepage",
                 value: "Private Browsing Data Erased",
                 comment: "When the user ends their private session, their are returned to the private mode homepage, and a toastbar popus confirming that their data has been erased. This is the label for that toast.")
