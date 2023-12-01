@@ -153,10 +153,8 @@ extension BrowserViewController: URLBarDelegate {
                     value: .shoppingCFRsDisplayed
                 )
             },
-            andActionForButton: { [weak self] in
-                guard let self else { return }
-                guard let productURL = self.urlBar.currentURL else { return }
-                self.handleFakespotFlow(productURL: productURL)
+            andActionForButton: {
+                store.dispatch(FakespotAction.show)
             },
             overlayState: overlayManager)
     }

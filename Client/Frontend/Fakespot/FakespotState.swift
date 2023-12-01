@@ -30,17 +30,15 @@ struct FakespotState: ScreenState, Equatable {
 
     static let reducer: Reducer<Self> = { state, action in
         switch action {
-        case FakespotAction.toggleAppearance:
-            return FakespotState(isOpen: !state.isOpen,
-                                 sidebarOpenForiPadLandscape: state.sidebarOpenForiPadLandscape)
+        case FakespotAction.show:
+            return FakespotState(isOpen: true,
+                                 sidebarOpenForiPadLandscape: true)
+        case FakespotAction.dismiss:
+            return FakespotState(isOpen: false,
+                                 sidebarOpenForiPadLandscape: false)
         case FakespotAction.setAppearanceTo(let isEnabled):
             return FakespotState(isOpen: isEnabled,
                                  sidebarOpenForiPadLandscape: state.sidebarOpenForiPadLandscape)
-        case FakespotAction.setSidebarOpenForiPadLandscapeTo(let isEnabled):
-            return FakespotState(isOpen: state.isOpen, sidebarOpenForiPadLandscape: isEnabled)
-        case FakespotAction.toggleSidebarOpenForiPadLandscape:
-            return FakespotState(isOpen: state.isOpen,
-                                 sidebarOpenForiPadLandscape: !state.sidebarOpenForiPadLandscape)
         default:
             return state
         }

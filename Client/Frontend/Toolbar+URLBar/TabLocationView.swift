@@ -273,8 +273,7 @@ class TabLocationView: UIView, FeatureFlaggable {
     func didPressShoppingButton(_ button: UIButton) {
         button.isSelected = true
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingButton)
-        store.dispatch(FakespotAction.toggleAppearance)
-        store.dispatch(FakespotAction.toggleSidebarOpenForiPadLandscape)
+        store.dispatch(FakespotAction.show)
     }
 
     @objc
