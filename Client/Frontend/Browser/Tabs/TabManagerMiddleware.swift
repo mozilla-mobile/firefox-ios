@@ -8,7 +8,7 @@ import TabDataStore
 
 class TabManagerMiddleware {
     // TODO: [7863] Part of ongoing WIP for Redux + iPad Multi-window.
-    private var tabManagers: [SceneUUID: TabManager] = [:]
+    var tabManagers: [SceneUUID: TabManager] = [:]
     var inactiveTabs = [InactiveTabsModel]()
     var selectedPanel: TabTrayPanelType = .tabs
 
