@@ -244,7 +244,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     @objc
     func scanbuttonTapped(_ sender: UIButton) {
         if CoordinatorFlagManager.isQRCodeCoordinatorEnabled {
-            qrCodeNavigationHandler?.showQRCode(delegate: self)
+            qrCodeNavigationHandler?.showQRCode(delegate: self, rootNavigationController: navigationController)
         } else {
             let qrCodeVC = QRCodeViewController()
             qrCodeVC.qrCodeDelegate = self
