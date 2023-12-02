@@ -361,14 +361,7 @@ public enum LoginEncryptionKeyError: Error {
 }
 
 public class RustLoginEncryptionKeys {
-    public let loginsSaltKeychainKey = "sqlcipher.key.logins.salt"
-    public let loginsUnlockKeychainKey = "sqlcipher.key.logins.db"
     public let loginPerFieldKeychainKey = "appservices.key.logins.perfield"
-
-    // The old database salt and key will be stored in the two keychain keys below to allow
-    // for potential data restore
-    public let loginsPostMigrationSalt = "sqlcipher.key.logins.salt.post.migration"
-    public let loginsPostMigrationKey = "sqlcipher.key.logins.db.post.migration"
 
     let keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
     let canaryPhraseKey = "canaryPhrase"
@@ -503,19 +496,15 @@ public class RustLogins {
 
     private let logger: Logger
 
-    public init(sqlCipherDatabasePath: String,
-                databasePath: String,
+    public init(databasePath: String,
                 logger: Logger = DefaultLogger.shared) {
         self.perFieldDatabasePath = databasePath
         self.logger = logger
 
         queue = DispatchQueue(label: "RustLogins queue: \(databasePath)", attributes: [])
-
-        // We aren't migrating SQLCipher databases anymore, if one exists, we should delete it
-        deleteSQLCipherDBIfExists(sqlCipherDatabasePath: sqlCipherDatabasePath)
     }
 
-    // Open the db after attempting to migrate the database from sqlcipher, and if it fails, it moves the db and creates a new db file and opens it.
+    // Open the db.
     private func open() -> NSError? {
         do {
             storage = try LoginsStorage(databasePath: self.perFieldDatabasePath)
@@ -874,23 +863,6 @@ public class RustLogins {
         queue.async { [unowned self] in
             self.storage?.registerWithSyncManager()
         }
-    }
-
-    private func deleteSQLCipherDBIfExists(sqlCipherDatabasePath: String) {
-        // If the sqlCipherDatabasePath is valid, we should delete it
-        do {
-            if FileManager.default.fileExists(atPath: sqlCipherDatabasePath) {
-                try FileManager.default.removeItem(at: URL(fileURLWithPath: sqlCipherDatabasePath))
-                logger.log("Successfully deleted SQLCipherDB", level: .debug, category: .storage)
-            }
-        } catch {
-            logger.log("SQLCipher DB exists but could not be deleted", level: .debug, category: .storage)
-        }
-
-        let keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
-        let rustKeys = RustLoginEncryptionKeys()
-        keychain.removeObject(forKey: rustKeys.loginsUnlockKeychainKey, withAccessibility: .afterFirstUnlock)
-        keychain.removeObject(forKey: rustKeys.loginsSaltKeychainKey, withAccessibility: .afterFirstUnlock)
     }
 
     private func resetLoginsAndKey(rustKeys: RustLoginEncryptionKeys,
