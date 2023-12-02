@@ -39,7 +39,7 @@ final class QRCodeCoordinatorTests: XCTestCase {
 
         guard let qrCodeViewController = (router.presentedViewController as? QRCodeNavigationController)?.topViewController as? QRCodeViewController
         else {
-            XCTFail("The QRCodeViewController has to exists")
+            XCTFail("The QRCodeViewController has to exist")
             return
         }
         XCTAssertTrue(qrCodeViewController.qrCodeDelegate is MockQRCodeViewControllerDelegate)
@@ -53,7 +53,7 @@ final class QRCodeCoordinatorTests: XCTestCase {
 
         guard let qrCodeViewController = (router.presentedViewController as? QRCodeNavigationController)?.topViewController as? QRCodeViewController
         else {
-            XCTFail("The QRCodeViewController has to exists")
+            XCTFail("The QRCodeViewController has to exist")
             return
         }
         XCTAssertTrue(qrCodeViewController.dismissHandler is QRCodeCoordinator)
@@ -67,7 +67,7 @@ final class QRCodeCoordinatorTests: XCTestCase {
 
         guard let qrCodeViewController = (router.presentedViewController as? QRCodeNavigationController)?.topViewController as? QRCodeViewController
         else {
-            XCTFail("The QRCodeViewController has to exists")
+            XCTFail("The QRCodeViewController has to exist")
             return
         }
         // Since there is no capture capture device set, the controller should call dismiss on viewDidLoad()
