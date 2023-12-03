@@ -116,7 +116,7 @@ class IntroViewController: UIViewController,
         guard viewModel.isDismissable else { return }
         view.addSubview(closeButton)
         view.bringSubviewToFront(closeButton)
-        view.accessibilityElements = [closeButton, pageController.view!, pageControl]
+        view.accessibilityElements = [closeButton, pageController.view as Any, pageControl]
 
         NSLayoutConstraint.activate([
             closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
