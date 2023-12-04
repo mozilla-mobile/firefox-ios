@@ -16,7 +16,6 @@ final class BrowserCoordinatorTests: XCTestCase {
     private var tabManager: MockTabManager!
     private var applicationHelper: MockApplicationHelper!
     private var glean: MockGleanWrapper!
-    private var wallpaperManager: WallpaperManagerMock!
     private var scrollDelegate: MockStatusBarScrollDelegate!
 
     override func setUp() {
@@ -30,7 +29,6 @@ final class BrowserCoordinatorTests: XCTestCase {
         self.tabManager = MockTabManager()
         self.applicationHelper = MockApplicationHelper()
         self.glean = MockGleanWrapper()
-        self.wallpaperManager = WallpaperManagerMock()
         self.scrollDelegate = MockStatusBarScrollDelegate()
     }
 
@@ -43,7 +41,6 @@ final class BrowserCoordinatorTests: XCTestCase {
         self.tabManager = nil
         self.applicationHelper = nil
         self.glean = nil
-        self.wallpaperManager = nil
         self.scrollDelegate = nil
         AppContainer.shared.reset()
     }
@@ -929,8 +926,7 @@ final class BrowserCoordinatorTests: XCTestCase {
                                          profile: profile,
                                          tabManager: tabManager,
                                          glean: glean,
-                                         applicationHelper: applicationHelper,
-                                         wallpaperManager: wallpaperManager)
+                                         applicationHelper: applicationHelper)
 
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

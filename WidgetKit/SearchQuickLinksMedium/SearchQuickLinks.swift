@@ -53,6 +53,7 @@ struct SearchQuickLinksWidget: Widget {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
             SearchQuickLinksEntryView()
         }
+        .contentMarginsDisabled()
         .supportedFamilies([.systemMedium])
         .configurationDisplayName(String.QuickActionsGalleryTitlev2)
         .description(String.FirefoxShortcutGalleryDescription)

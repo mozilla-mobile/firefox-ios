@@ -65,10 +65,16 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, LegacyTabTrayCell, Reus
 
         titleText.text = tab.getTabTrayTitle()
         accessibilityLabel = getA11yTitleLabel(tab: tab)
+        showsLargeContentViewer = true
+        largeContentTitle = tab.getTabTrayTitle()
         isAccessibilityElement = true
 
         closeButton.accessibilityLabel = String(format: .TopSitesRemoveButtonAccessibilityLabel,
                                                 self.titleText.text ?? "")
+        closeButton.showsLargeContentViewer = true
+        closeButton.largeContentTitle = .TopSitesRemoveButtonLargeContentTitle
+        closeButton.largeContentImage = UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross)
+        closeButton.scalesLargeContentImage = true
 
         let hideCloseButton = frame.width < 148 && !selected
         closeButton.isHidden = hideCloseButton

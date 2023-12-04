@@ -51,6 +51,7 @@ struct SmallQuickLinkWidget: Widget {
         .supportedFamilies([.systemSmall])
         .configurationDisplayName(String.QuickActionsGalleryTitle)
         .description(String.QuickActionGalleryDescription)
+        .contentMarginsDisabled()
     }
 }
 

@@ -9,7 +9,7 @@ import Shared
 import SiteImageView
 
 protocol TabCellDelegate: AnyObject {
-    func tabCellDidClose(_ cell: TabCell)
+    func tabCellDidClose(for tabUUID: String)
 }
 
 /// WIP. Brings over much of the existing functionality from LegacyTabCell but has been
@@ -130,7 +130,8 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
 
     @objc
     func close() {
-        delegate?.tabCellDidClose(self)
+        guard let tabModel = tabModel else { return }
+        delegate?.tabCellDidClose(for: tabModel.tabUUID)
     }
 
     // MARK: - Configuration
@@ -144,29 +145,36 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         smallFaviconView.tintColor = theme.colors.textPrimary
     }
 
+    private func hasHomeScreenshot(tabModel: TabModel) -> Bool {
+        guard let url = tabModel.url,
+              url.absoluteString.starts(with: "internal"),
+            tabModel.screenshot != nil, tabModel.hasHomeScreenshot else { return false }
+
+        return true
+    }
+
     private func configureScreenshot(tabModel: TabModel) {
-        if let url = tabModel.url,
-           let tabScreenshot = tabModel.screenshot,
-           url.absoluteString.starts(with: "internal"),
-           tabModel.hasHomeScreenshot {
-            // Regular screenshot for home or internal url when
-            // tab has home screenshot
+        // Regular screenshot for home or internal url when tab has home screenshot
+        guard !hasHomeScreenshot(tabModel: tabModel) else {
             let defaultImage = UIImage(named: StandardImageIdentifiers.Large.globe)?
                 .withRenderingMode(.alwaysTemplate)
             smallFaviconView.manuallySetImage(defaultImage ?? UIImage())
-            screenshotView.image = tabScreenshot
-        } else if let url = tabModel.url,
-                  !url.absoluteString.starts(with: "internal"),
-                  tabModel.hasHomeScreenshot {
-            // Favicon or letter image when home screenshot is present for
-            // a regular (non-internal) url
+            screenshotView.image = tabModel.screenshot
+            return
+        }
 
+        // Favicon or letter image when home screenshot is present for a regular (non-internal) url
+        if let url = tabModel.url,
+           !url.absoluteString.starts(with: "internal"),
+           tabModel.hasHomeScreenshot {
             let defaultImage = UIImage(named: StandardImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysTemplate)
             smallFaviconView.manuallySetImage(defaultImage ?? UIImage())
             faviconBG.isHidden = false
             screenshotView.image = nil
-        } else if let tabScreenshot = tabModel.screenshot {
-            // Tab screenshot when available
+        }
+
+        // Use Tab screenshot when available
+        if let tabScreenshot = tabModel.screenshot {
             screenshotView.image = tabScreenshot
         } else {
             // Favicon or letter image when tab screenshot isn't available

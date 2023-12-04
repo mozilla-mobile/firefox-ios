@@ -280,4 +280,86 @@ class SearchTests: BaseTestCase {
         waitForTabsButton()
         validateSearchSuggestionText(typeText: "localhost")
     }
+// TODO: Add UI Tests back when felt privay simplified UI feature flag is enabled or when we support feature flags for tests
+//    func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOn() {
+//        navigator.nowAt(NewTabScreen)
+//        navigator.goto(SearchSettings)
+//        navigator.nowAt(SearchSettings)
+//
+//        // By default, disable search suggest in private mode
+//        let privateModeSearchSuggestSwitch = app.otherElements.tables.cells[AccessibilityIdentifiers.Settings.Search.disableSearchSuggestsInPrivateMode]
+//        mozWaitForElementToExist(privateModeSearchSuggestSwitch)
+//
+//        app.navigationBars["Search"].buttons["Settings"].tap()
+//        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
+//
+//        navigator.nowAt(NewTabScreen)
+//        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+//        navigator.goto(URLBarOpen)
+//        app.textFields["address"].typeText("ex")
+//
+//        let dimmingView = app.otherElements[AccessibilityIdentifiers.PrivateMode.dimmingView]
+//        mozWaitForElementToExist(dimmingView)
+//
+//        // Enable search suggest in private mode
+//        navigator.goto(SearchSettings)
+//        navigator.nowAt(SearchSettings)
+//
+//        mozWaitForElementToNotExist(app.tables["SiteTable"])
+//        mozWaitForElementToExist(privateModeSearchSuggestSwitch)
+//        privateModeSearchSuggestSwitch.tap()
+//
+//        app.navigationBars["Search"].buttons["Settings"].tap()
+//        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
+//
+//        navigator.nowAt(NewTabScreen)
+//        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+//        navigator.goto(URLBarOpen)
+//        app.textFields["address"].typeText("ex")
+//
+//        mozWaitForElementToNotExist(dimmingView)
+//        mozWaitForElementToExist(app.tables["SiteTable"])
+//    }
+//
+//    func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOff() {
+//        // Disable general search suggests
+//        suggestionsOnOff()
+//        navigator.nowAt(NewTabScreen)
+//        navigator.goto(SearchSettings)
+//        navigator.nowAt(SearchSettings)
+//
+//        // By default, disable search suggest in private mode
+//        let privateModeSearchSuggestSwitch = app.otherElements.tables.cells[AccessibilityIdentifiers.Settings.Search.disableSearchSuggestsInPrivateMode]
+//        mozWaitForElementToExist(privateModeSearchSuggestSwitch)
+//
+//        app.navigationBars["Search"].buttons["Settings"].tap()
+//        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
+//
+//        navigator.nowAt(NewTabScreen)
+//        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+//        navigator.goto(URLBarOpen)
+//        app.textFields["address"].typeText("ex")
+//
+//        let dimmingView = app.otherElements[AccessibilityIdentifiers.PrivateMode.dimmingView]
+//        mozWaitForElementToExist(dimmingView)
+//
+//        // Enable search suggest in private mode
+//        navigator.goto(SearchSettings)
+//        navigator.nowAt(SearchSettings)
+//
+//        mozWaitForElementToNotExist(app.tables["SiteTable"])
+//        mozWaitForElementToExist(privateModeSearchSuggestSwitch)
+//        privateModeSearchSuggestSwitch.tap()
+//
+//        app.navigationBars["Search"].buttons["Settings"].tap()
+//        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
+//
+//        navigator.nowAt(NewTabScreen)
+//        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+//        navigator.goto(URLBarOpen)
+//        app.textFields["address"].typeText("ex")
+//
+//        mozWaitForElementToNotExist(dimmingView)
+//        mozWaitForElementToExist(app.tables["SiteTable"])
+//    }
 }

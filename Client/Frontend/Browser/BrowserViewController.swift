@@ -92,6 +92,7 @@ class BrowserViewController: UIViewController,
     // Overlay dimming view for private mode
     lazy var privateModeDimmingView: UIView = .build { view in
         view.backgroundColor = self.themeManager.currentTheme.colors.layerScrim
+        view.accessibilityIdentifier = AccessibilityIdentifiers.PrivateMode.dimmingView
     }
 
     // BottomContainer stack view contains toolbar
@@ -211,7 +212,7 @@ class BrowserViewController: UIViewController,
     }
 
     deinit {
-        store.unsubscribe(self)
+        unsubscribeFromRedux()
     }
 
     override var prefersStatusBarHidden: Bool {
@@ -456,12 +457,16 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Redux
 
-    private func subscribeRedux() {
+    func subscribeToRedux() {
         store.dispatch(ActiveScreensStateAction.showScreen(.fakespot))
 
         store.subscribe(self, transform: {
             $0.select(FakespotState.init)
         })
+    }
+
+    func unsubscribeFromRedux() {
+        store.unsubscribe(self)
     }
 
     func newState(state: FakespotState) {
@@ -543,7 +548,7 @@ class BrowserViewController: UIViewController,
         // Send settings telemetry for Fakespot
         FakespotUtils().addSettingTelemetry()
 
-        subscribeRedux()
+        subscribeToRedux()
     }
 
     private func setupAccessibleActions() {
@@ -654,8 +659,6 @@ class BrowserViewController: UIViewController,
 
     // Configure dimming view to show for private mode
     func configureDimmingView() {
-        guard featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) else { return }
-
         if let selectedTab = tabManager.selectedTab, selectedTab.isPrivate {
             view.addSubview(privateModeDimmingView)
             view.bringSubviewToFront(privateModeDimmingView)

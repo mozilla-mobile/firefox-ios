@@ -186,14 +186,14 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
         label.clipsToBounds = true
     }
 
-    private lazy var learnMoreButton: ResizableButton = .build { button in
+    private lazy var learnMoreButton: LinkButton = .build { button in
         button.contentHorizontalAlignment = .leading
         let title = String.localizedStringWithFormat(.Shopping.ReviewQualityCardLearnMoreButtonTitle,
                                                      FakespotName.shortName.rawValue)
         button.setTitle(title, for: .normal)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.ReviewQualityCard.learnMoreButtonTitle
         button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.buttonEdgeSpacing = 0
+        button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         button.titleLabel?.numberOfLines = 0
         button.addTarget(self, action: #selector(self.didTapLearnMore), for: .touchUpInside)
         button.titleLabel?.font = UX.baseFont

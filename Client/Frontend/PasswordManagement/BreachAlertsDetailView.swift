@@ -8,140 +8,148 @@ import Shared
 
 class BreachAlertsDetailView: UIView, ThemeApplicable {
     private struct UX {
+        static let verticalSpacing: CGFloat = 8.0
         static let horizontalMargin: CGFloat = 14
         static let shadowRadius: CGFloat = 8
         static let shadowOpacity: Float = 0.6
         static let shadowOffset = CGSize(width: 0, height: 2)
+        static let titleIconSize: CGFloat = 24
+        static let titleFontSize: CGFloat = 19
+        static let fontSize: CGFloat = 16
     }
 
     private var breachLink = String()
-    private let titleIconSize: CGFloat = 24
+
     private lazy var titleIconContainerSize: CGFloat = {
-        return titleIconSize + UX.horizontalMargin * 2
+        return UX.titleIconSize + UX.horizontalMargin * 2
     }()
 
-    lazy var titleIcon: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: ImageIdentifiers.breachedWebsite)?
-            .withRenderingMode(.alwaysTemplate))
+    private lazy var titleIcon: UIImageView = .build { imageView in
         imageView.accessibilityTraits = .image
         imageView.accessibilityLabel = "Breach Alert Icon"
-        return imageView
-    }()
+        imageView.image = UIImage(named: ImageIdentifiers.breachedWebsite)?.withRenderingMode(.alwaysTemplate)
+    }
 
-    lazy var titleIconContainer: UIView = {
-        let container = UIView()
-        container.addSubview(titleIcon)
-        titleIcon.snp.makeConstraints { make in
-            make.width.height.equalTo(titleIconSize)
-            make.center.equalToSuperview()
-        }
-        container.snp.makeConstraints { make in
-            make.width.height.equalTo(titleIconContainerSize)
-        }
-        return container
-    }()
+    private lazy var titleIconContainer: UIView = .build()
 
-    lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .headline,
-                                                                size: 19)
+    private lazy var titleLabel: UILabel = .build { label in
+        label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .headline, size: UX.titleFontSize)
         label.text = .BreachAlertsTitle
         label.sizeToFit()
         label.isAccessibilityElement = true
         label.accessibilityTraits = .staticText
         label.accessibilityLabel = .BreachAlertsTitle
-        return label
-    }()
+    }
 
-    lazy var learnMoreButton: UIButton = {
-        let button = UIButton()
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 16, weight: .semibold)
+    private lazy var learnMoreButton: UIButton = .build { button in
+        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.fontSize, weight: .semibold)
         button.isAccessibilityElement = true
         button.accessibilityTraits = .button
         button.accessibilityLabel = .BreachAlertsLearnMore
-        return button
-    }()
+        button.addTarget(self, action: #selector(self.didTapBreachLearnMore), for: .touchUpInside)
+    }
 
-    lazy var titleStack: UIStackView = {
-        let container = UIStackView(arrangedSubviews: [titleIconContainer, titleLabel, learnMoreButton])
-        container.axis = .horizontal
-        return container
-    }()
-
-    lazy var breachDateLabel: UILabel = {
-        let label = UILabel()
+    private lazy var breachDateLabel: UILabel = .build { label in
         label.text = .BreachAlertsBreachDate
         label.numberOfLines = 0
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 16, weight: .semibold)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.fontSize, weight: .semibold)
         label.isAccessibilityElement = true
         label.accessibilityTraits = .staticText
         label.accessibilityLabel = .BreachAlertsBreachDate
-        return label
-    }()
+    }
 
-    lazy var descriptionLabel: UILabel = {
-        let label = UILabel()
+    private lazy var descriptionLabel: UILabel = .build { label in
         label.text = .BreachAlertsDescription
         label.numberOfLines = 0
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 16, weight: .medium)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.fontSize, weight: .medium)
         label.isAccessibilityElement = true
         label.accessibilityTraits = .staticText
-        return label
-    }()
+    }
 
-    lazy var goToButton: UILabel = {
-        let button = UILabel()
-        button.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 16, weight: .semibold)
-        button.numberOfLines = 0
-        button.isUserInteractionEnabled = true
-        button.isAccessibilityElement = true
-        button.accessibilityTraits = .button
-        button.accessibilityLabel = .BreachAlertsLink
-        return button
-    }()
+    private lazy var goToLabel: UILabel = .build { label in
+        let breachLinkGesture = UITapGestureRecognizer(target: self, action: #selector(self.didTapBreachLink))
+        label.addGestureRecognizer(breachLinkGesture)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.fontSize, weight: .semibold)
+        label.numberOfLines = 0
+        label.isUserInteractionEnabled = true
+        label.isAccessibilityElement = true
+        label.accessibilityTraits = .button
+        label.accessibilityLabel = .BreachAlertsLink
+    }
 
-    private lazy var infoStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [breachDateLabel, descriptionLabel, goToButton])
+    private lazy var titleStack: UIStackView = .build()
+
+    private lazy var infoStack: UIStackView = .build { stack in
         stack.distribution = .fill
         stack.axis = .vertical
-        stack.setCustomSpacing(8.0, after: descriptionLabel)
-        return stack
-    }()
+    }
 
-    private lazy var contentStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [titleStack, infoStack])
+    private lazy var contentStack: UIStackView = .build { stack in
         stack.axis = .vertical
-        return stack
-    }()
+    }
+
+    var onTapLearnMore: (() -> Void)?
+    var onTapBreachLink: (() -> Void)?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureLayerAppearance()
+        setupUI()
+        setupLayout()
 
-        self.isAccessibilityElement = false
-        self.accessibilityElements = [titleLabel, learnMoreButton, breachDateLabel, descriptionLabel, goToButton]
+        isAccessibilityElement = false
+        accessibilityElements = [titleLabel, learnMoreButton, breachDateLabel, descriptionLabel, goToLabel]
 
-        self.addSubview(contentStack)
-        self.configureView(for: self.traitCollection)
+        configureView(for: traitCollection)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func layoutSubviews() {
-        titleStack.snp.remakeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-        }
-        infoStack.snp.remakeConstraints { make in
-            make.leading.equalToSuperview().inset(titleIconContainerSize)
-            make.trailing.equalToSuperview()
-        }
-        contentStack.snp.remakeConstraints { make in
-            make.bottom.trailing.equalToSuperview().inset(UX.horizontalMargin)
-            make.leading.top.equalToSuperview()
-        }
-        self.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
+    private func setupUI() {
+        titleIconContainer.addSubview(titleIcon)
+        [titleIconContainer, titleLabel, learnMoreButton].forEach(titleStack.addArrangedSubview)
+
+        [breachDateLabel, descriptionLabel, goToLabel].forEach(infoStack.addArrangedSubview)
+        infoStack.setCustomSpacing(UX.verticalSpacing, after: self.descriptionLabel)
+
+        [titleStack, infoStack].forEach(contentStack.addArrangedSubview)
+        addSubview(contentStack)
+    }
+
+    private func setupLayout() {
+        NSLayoutConstraint.activate([
+            titleIcon.widthAnchor.constraint(equalToConstant: UX.titleIconSize),
+            titleIcon.heightAnchor.constraint(equalToConstant: UX.titleIconSize),
+            titleIcon.centerXAnchor.constraint(equalTo: titleIconContainer.centerXAnchor),
+            titleIcon.centerYAnchor.constraint(equalTo: titleIconContainer.centerYAnchor),
+
+            titleIconContainer.widthAnchor.constraint(equalToConstant: titleIconContainerSize),
+            titleIconContainer.heightAnchor.constraint(equalToConstant: titleIconContainerSize),
+
+            titleStack.leadingAnchor.constraint(equalTo: contentStack.leadingAnchor),
+            titleStack.trailingAnchor.constraint(equalTo: contentStack.trailingAnchor),
+
+            infoStack.leadingAnchor.constraint(equalTo: contentStack.leadingAnchor, constant: titleIconContainerSize),
+            infoStack.trailingAnchor.constraint(equalTo: contentStack.trailingAnchor),
+
+            contentStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.horizontalMargin),
+            contentStack.leadingAnchor.constraint(equalTo: leadingAnchor),
+            contentStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalMargin),
+            contentStack.topAnchor.constraint(equalTo: topAnchor)
+        ])
+        setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
+    }
+
+    @objc
+    private func didTapBreachLearnMore() {
+        onTapLearnMore?()
+    }
+
+    @objc
+    private func didTapBreachLink() {
+        onTapBreachLink?()
     }
 
     private func configureLayerAppearance() {
@@ -167,13 +175,13 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
         dateFormatter.dateFormat = "yyyy-MM-dd"
         guard let date = dateFormatter.date(from: breach.breachDate) else { return }
         dateFormatter.dateStyle = .medium
-        self.breachDateLabel.text! += " \(dateFormatter.string(from: date))."
+        breachDateLabel.text! += " \(dateFormatter.string(from: date))."
         breachLink = .BreachAlertsLink + " \(breach.domain)"
-        self.goToButton.sizeToFit()
-        self.layoutIfNeeded()
+        goToLabel.sizeToFit()
+        layoutIfNeeded()
 
-        self.goToButton.accessibilityValue = breach.domain
-        self.breachDateLabel.accessibilityValue = "\(dateFormatter.string(from: date))."
+        goToLabel.accessibilityValue = breach.domain
+        breachDateLabel.accessibilityValue = "\(dateFormatter.string(from: date))."
     }
 
     // MARK: - Dynamic Type Support
@@ -191,36 +199,41 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
         if contentSize.isAccessibilityCategory {
             self.titleStack.axis = .vertical
             self.titleStack.alignment = .leading
-            self.titleLabel.snp.makeConstraints { make in
-                make.leading.equalToSuperview().offset(self.titleIconSize)
-            }
-            self.learnMoreButton.snp.makeConstraints { make in
-                make.leading.equalToSuperview().offset(self.titleIconSize)
-            }
+
+            NSLayoutConstraint.activate([
+                titleLabel.leadingAnchor.constraint(equalTo: titleStack.leadingAnchor, constant: UX.titleIconSize),
+                learnMoreButton.leadingAnchor.constraint(equalTo: titleStack.leadingAnchor, constant: UX.titleIconSize)
+            ])
         } else {
             self.titleStack.axis = .horizontal
             self.titleStack.alignment = .leading
-            self.titleLabel.snp.makeConstraints { make in
-                make.centerY.equalToSuperview()
-            }
-            self.learnMoreButton.snp.makeConstraints { make in
-                make.centerY.equalToSuperview()
-            }
+
+            NSLayoutConstraint.activate([
+                titleLabel.centerYAnchor.constraint(equalTo: titleStack.centerYAnchor),
+                learnMoreButton.centerYAnchor.constraint(equalTo: titleStack.centerYAnchor)
+            ])
         }
     }
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
-        layer.shadowColor = theme.colors.shadowDefault.cgColor
-        backgroundColor = theme.colors.layer2
-        titleIcon.tintColor = theme.colors.iconWarning
-        titleLabel.textColor = theme.colors.textWarning
-        breachDateLabel.textColor = theme.colors.textWarning
-        descriptionLabel.textColor = theme.colors.textWarning
-        goToButton.attributedText = getAttributedText(for: breachLink,
-                                                      with: theme.colors.textWarning)
-        learnMoreButton.setAttributedTitle(getAttributedText(for: .BreachAlertsLearnMore,
-                                                             with: theme.colors.textWarning),
-                                           for: .normal)
+        let colors = theme.colors
+        layer.shadowColor = colors.shadowDefault.cgColor
+        backgroundColor = colors.layer2
+        titleIcon.tintColor = colors.iconWarning
+        titleLabel.textColor = colors.textWarning
+        breachDateLabel.textColor = colors.textWarning
+        descriptionLabel.textColor = colors.textWarning
+        goToLabel.attributedText = getAttributedText(
+            for: breachLink,
+            with: colors.textWarning
+        )
+        learnMoreButton.setAttributedTitle(
+            getAttributedText(
+                for: .BreachAlertsLearnMore,
+                with: colors.textWarning
+            ),
+            for: .normal
+        )
     }
 }
