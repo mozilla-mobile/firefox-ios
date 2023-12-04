@@ -50,8 +50,7 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
         self.creditCardEmptyView.view.backgroundColor = .clear
 
         super.init(nibName: nil, bundle: nil)
-        self.creditCardTableViewController.didSelectCardAtIndex = {
-            [weak self] creditCard in
+        self.creditCardTableViewController.didSelectCardAtIndex = { [weak self] creditCard in
             self?.viewCreditCard(card: creditCard)
             self?.sendCreditCardsManagementCardTappedTelemetry()
         }
@@ -153,8 +152,7 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
         }
         viewModel.cardInputViewModel.updateState(state: editState)
         creditCardEditView = CreditCardInputView(viewModel: viewModel.cardInputViewModel)
-        viewModel.cardInputViewModel.dismiss = {
-            [weak self] status, successVal in
+        viewModel.cardInputViewModel.dismiss = { [weak self] status, successVal in
             DispatchQueue.main.async {
                 self?.showToast(status: status)
 

@@ -31,8 +31,7 @@ extension FxAPushMessageHandler {
         // service will crash.
         DispatchQueue.main.async {
             RustFirefoxAccounts.reconfig(prefs: self.profile.prefs) { accountManager in
-                accountManager.deviceConstellation()?.handlePushMessage(pushPayload: message) {
-                    result in
+                accountManager.deviceConstellation()?.handlePushMessage(pushPayload: message) { result in
                     guard case .success(let event) = result else {
                         let err: PushMessageError
                         if case .failure(let error) = result {
