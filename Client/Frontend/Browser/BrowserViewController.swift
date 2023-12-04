@@ -1670,20 +1670,26 @@ class BrowserViewController: UIViewController,
 
         guard product.product != nil, !tab.isPrivate else {
             store.dispatch(FakespotAction.setAppearanceTo(false))
+
+            // Quick fix: make sure to sidebar is hidden when opened from deep-link
+            // Relates to FXIOS-7844
+            contentStackView.hideSidebar(self)
             return
         }
 
         if contentStackView.isSidebarVisible {
+            // Sidebar is visible, update content
             navigationHandler?.updateFakespotSidebar(productURL: url,
                                                      sidebarContainer: contentStackView,
                                                      parentViewController: self)
         } else if FakespotUtils().shouldDisplayInSidebar(),
                   let fakespotState = fakespotState,
                   fakespotState.isOpen {
+            // Sidebar should be displayed and Fakespot is open, display Fakespot
             handleFakespotFlow(productURL: url)
-        } else if FakespotUtils().shouldDisplayInSidebar(),
-                  let fakespotState = fakespotState,
+        } else if let fakespotState = fakespotState,
                   fakespotState.sidebarOpenForiPadLandscape {
+            // Sidebar should be displayed, display Fakespot
             store.dispatch(FakespotAction.setAppearanceTo(true))
         }
     }

@@ -113,7 +113,6 @@ extension BrowserViewController: URLBarDelegate {
         }
     }
 
-
     internal func dismissFakespotIfNeeded(animated: Bool = true) {
         guard !contentStackView.isSidebarVisible else {
             // hide sidebar as user tapped on shopping icon for a second time
@@ -126,7 +125,14 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     internal func handleFakespotFlow(productURL: URL, viewSize: CGSize? = nil) {
-        if FakespotUtils().shouldDisplayInSidebar(viewSize: viewSize) {
+        let shouldDisplayInSidebar = FakespotUtils().shouldDisplayInSidebar(viewSize: viewSize)
+        if !shouldDisplayInSidebar, contentStackView.isSidebarVisible {
+            // Quick fix: make sure to sidebar is hidden
+            // Relates to FXIOS-7844
+            contentStackView.hideSidebar(self)
+        }
+
+        if shouldDisplayInSidebar {
             navigationHandler?.showFakespotFlowAsSidebar(productURL: productURL,
                                                          sidebarContainer: contentStackView,
                                                          parentViewController: self)
