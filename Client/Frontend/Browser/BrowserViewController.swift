@@ -2216,7 +2216,7 @@ extension BrowserViewController: TabManagerDelegate {
         bottomContentStackView.removeAllArrangedViews()
         if let bars = selected?.bars {
             bars.forEach { bar in
-                bottomContentStackView.addArrangedViewToBottom(bar, completion: { self.view.layoutIfNeeded()})
+                bottomContentStackView.addArrangedViewToBottom(bar, completion: { self.view.layoutIfNeeded() })
             }
         }
 
@@ -2512,7 +2512,7 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
 
         guard shareItem.isShareable else {
             let alert = UIAlertController(title: .SendToErrorTitle, message: .SendToErrorMessage, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: .SendToErrorOKButton, style: .default) { _ in self.popToBVC()})
+            alert.addAction(UIAlertAction(title: .SendToErrorOKButton, style: .default) { _ in self.popToBVC() })
             present(alert, animated: true, completion: nil)
             return
         }

@@ -122,7 +122,12 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         // and makes the switch behaviour feel slow and non-standard).
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
             guard let self else { return }
-            UIView.transition(with: self.tableView, duration: 0.2, options: .transitionCrossDissolve, animations: { self.tableView.reloadData()  })
+            UIView.transition(with: self.tableView,
+                              duration: 0.2,
+                              options: .transitionCrossDissolve,
+                              animations: {
+                self.tableView.reloadData()
+            })
         }
     }
 

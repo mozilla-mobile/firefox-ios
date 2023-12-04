@@ -197,7 +197,7 @@ class NSURLExtensionsTests: XCTestCase {
         ]
 
         goodurls.forEach { XCTAssertEqual(URL(string: $0.0)!.decodeReaderModeURL, $0.1) }
-        badurls.forEach { XCTAssertNil(URL(string: $0)!.decodeReaderModeURL, $0) }    }
+        badurls.forEach { XCTAssertNil(URL(string: $0)!.decodeReaderModeURL, $0) } }
 
     func testencodeReaderModeURL() {
         let ReaderURL = "http://localhost:\(AppInfo.webserverPort)/reader-mode/page"
