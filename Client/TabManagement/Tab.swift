@@ -984,13 +984,13 @@ class TabWebView: WKWebView, MenuHelperInterface, ThemeApplicable {
         accessoryView.previousClosure = { [weak self] in
             guard let self else { return }
             FormAutofillHelper.focusPreviousInputField(tabWebView: self,
-                                                     logger: self.logger)
+                                                       logger: self.logger)
         }
 
         accessoryView.nextClosure = { [weak self] in
             guard let self else { return }
             FormAutofillHelper.focusNextInputField(tabWebView: self,
-                                                 logger: self.logger)
+                                                   logger: self.logger)
         }
 
         accessoryView.doneClosure = { [weak self] in
