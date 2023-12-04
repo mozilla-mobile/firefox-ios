@@ -185,7 +185,7 @@ class FormAutofillHelperTests: XCTestCase {
 
     // MARK: Leaks
 
-    func test_formAutofillHelper_basicCreation_doesntLeak() {
+    func testFormAutofillHelperBasicCreationDoesntLeak() {
         let subject = FormAutofillHelper(tab: tab)
         trackForMemoryLeaks(subject)
     }

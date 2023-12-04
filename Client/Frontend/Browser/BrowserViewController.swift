@@ -1753,10 +1753,10 @@ class BrowserViewController: UIViewController,
                 self?.showCreditCardAutofillSheet(fieldValues: fieldValues)
                 break
             case .fillAddressForm:
-                // TODO: FXIOS-7670
+                // TODO: FXIOS-7670 Address Autofill UX
                 return
             case .captureAddressForm:
-                // TODO: FXIOS-7670
+                // TODO: FXIOS-7670 Address Autofill UX
                 return
             }
 
