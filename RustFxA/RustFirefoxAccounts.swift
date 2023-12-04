@@ -129,7 +129,7 @@ open class RustFirefoxAccounts {
         }
 
         let type = UIDevice.current.userInterfaceIdiom == .pad ? DeviceType.tablet : DeviceType.mobile
-        let deviceConfig = DeviceConfig(name: DeviceInfo.defaultClientName(), type: type, capabilities: [.sendTab])
+        let deviceConfig = DeviceConfig(name: DeviceInfo.defaultClientName(), deviceType: type, capabilities: [.sendTab])
         let accessGroupPrefix = Bundle.main.object(forInfoDictionaryKey: "MozDevelopmentTeam") as! String
         let accessGroupIdentifier = AppInfo.keychainAccessGroupWithPrefix(accessGroupPrefix)
 
