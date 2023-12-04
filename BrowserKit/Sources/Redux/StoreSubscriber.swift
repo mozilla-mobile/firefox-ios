@@ -5,6 +5,8 @@
 import Foundation
 
 public protocol AnyStoreSubscriber: AnyObject {
+    func subscribeToRedux()
+    func unsubscribeFromRedux()
     func newState(state: Any)
 }
 

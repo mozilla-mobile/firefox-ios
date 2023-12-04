@@ -57,7 +57,6 @@ class BookmarksPanelTests: XCTestCase {
 
     func testBottomLeftAction_InFolderEditModeState_BookmarkChangesState() {
         let panel = createPanel()
-        let mockNavigationController = SpyNavigationController(rootViewController: panel)
         panel.updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
         panel.bottomLeftButtonAction()
 
@@ -78,7 +77,6 @@ class BookmarksPanelTests: XCTestCase {
 
     func testBottomLeftAction_InFolderEditModeState_FolderChangesState() {
         let panel = createPanel()
-        let mockNavigationController = SpyNavigationController(rootViewController: panel)
         panel.updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
         panel.bottomLeftButtonAction()
 

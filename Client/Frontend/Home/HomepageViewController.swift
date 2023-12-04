@@ -121,10 +121,7 @@ class HomepageViewController:
         jumpBackInContextualHintViewController.stopTimer()
         syncTabContextualHintViewController.stopTimer()
         notificationCenter.removeObserver(self)
-    }
-
-    func newState(state: AppState) {
-        // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-7190
+        unsubscribeFromRedux()
     }
 
     // MARK: - View lifecycle
@@ -141,7 +138,6 @@ class HomepageViewController:
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
-        store.subscribe(self)
 
         setupSectionsAction()
         reloadView()
@@ -266,6 +262,20 @@ class HomepageViewController:
             return viewModel.section(for: layoutEnvironment.traitCollection, size: self.view.frame.size)
         }
         return layout
+    }
+
+    // MARK: - Redux
+
+    func subscribeToRedux() {
+        store.subscribe(self)
+    }
+
+    func unsubscribeFromRedux() {
+        store.unsubscribe(self)
+    }
+
+    func newState(state: AppState) {
+        // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-7190
     }
 
     // MARK: Long press

@@ -97,5 +97,8 @@ extension Notification.Name {
     public static let ReadingListUpdated = Notification.Name("ReadingListUpdated")
     public static let TopSitesUpdated = Notification.Name("TopSitesUpdated")
     public static let HistoryUpdated = Notification.Name("HistoryUpdated")
+
+    // Search
     public static let DefaultSearchEngineUpdated = Notification.Name("DefaultSearchEngineUpdated")
+    public static let DisablePrivateModeSearchSuggests = Notification.Name("DisablePrivateModeSearchSuggests")
 }

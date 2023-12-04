@@ -13,6 +13,9 @@ class PrivateModeButton: ToggleButton, PrivateModeUI {
         accessibilityHint = .TabTrayToggleAccessibilityHint
         let maskImage = UIImage(named: ImageIdentifiers.privateMaskSmall)?.withRenderingMode(.alwaysTemplate)
         setImage(maskImage, for: [])
+        showsLargeContentViewer = true
+        largeContentTitle = .TabTrayToggleAccessibilityLabel
+        largeContentImage = maskImage
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -7,14 +7,15 @@ import Redux
 enum TabPanelAction: Action {
     case tabPanelDidLoad(Bool)
     case tabPanelDidAppear(Bool)
-    case addNewTab(Bool)
-    case closeTab(Int)
+    case addNewTab(URLRequest?, Bool)
+    case closeTab(String)
     case closeAllTabs
     case moveTab(Int, Int)
     case toggleInactiveTabs
     case closeInactiveTabs(Int)
     case closeAllInactiveTabs
-    case learnMorePrivateMode
+    case learnMorePrivateMode(URLRequest)
+    case selectTab(String)
 
     // Middleware actions
     case didLoadTabPanel(TabDisplayModel)

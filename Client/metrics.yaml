@@ -669,7 +669,6 @@ shopping:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
-    unit: counter of product pages
 
   ads_exposure:
     type: event
@@ -2721,7 +2720,6 @@ logins:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
-    unit: counter of logins.saved
   saved_all:
     type: quantity
     description: |
@@ -2745,7 +2743,6 @@ logins:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
-    unit: counter of logins.deleted
   modified:
     type: counter
     description: |
@@ -2757,7 +2754,6 @@ logins:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
-    unit: counter of logins.modified
   sync_enabled:
     type: event
     description: |
@@ -4750,7 +4746,6 @@ credit_card:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
-    unit: counter of credit_card.saved
   saved_all:
     type: quantity
     description: |
@@ -4774,7 +4769,6 @@ credit_card:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
-    unit: counter of credit_card.deleted
   modified:
     type: counter
     description: |
@@ -4786,7 +4780,6 @@ credit_card:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
-    unit: counter of credit_card.modified
 
 baseline.validation:
   startup_duration:
