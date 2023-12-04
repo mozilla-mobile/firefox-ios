@@ -641,7 +641,10 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
     @MainActor
     func removeAllInactiveTabs() async { fatalError("should never be called") }
-    func getInactiveTabs() -> [Tab] { fatalError("should never be called") }
+    
+    func getInactiveTabs() -> [Tab] {
+        return inactiveTabs
+    }
 
     func backgroundRemoveAllTabs(isPrivate: Bool = false,
                                  didClearTabs: @escaping (_ tabsToRemove: [Tab],
