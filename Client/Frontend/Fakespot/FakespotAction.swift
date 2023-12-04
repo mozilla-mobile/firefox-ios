@@ -7,6 +7,7 @@ import Redux
 
 enum FakespotAction: Action {
     // UI trigger actions
+    case pressedShoppingButton
     case show
     case dismiss
     case setAppearanceTo(Bool)

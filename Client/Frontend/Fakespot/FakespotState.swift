@@ -30,6 +30,9 @@ struct FakespotState: ScreenState, Equatable {
 
     static let reducer: Reducer<Self> = { state, action in
         switch action {
+        case FakespotAction.pressedShoppingButton:
+            return FakespotState(isOpen: !state.isOpen,
+                                 sidebarOpenForiPadLandscape: !state.isOpen)
         case FakespotAction.show:
             return FakespotState(isOpen: true,
                                  sidebarOpenForiPadLandscape: true)
