@@ -7,6 +7,8 @@ import Foundation
 import WebKit
 import Shared
 import Storage
+import Redux
+import TabDataStore
 
 class BrowserCoordinator: BaseCoordinator,
                           LaunchCoordinatorDelegate,
@@ -47,6 +49,7 @@ class BrowserCoordinator: BaseCoordinator,
         self.glean = glean
         super.init(router: router)
 
+        tabManagerDidConnectToScene()
         browserViewController.browserDelegate = self
         browserViewController.navigationHandler = self
         tabManager.addDelegate(self)
@@ -61,6 +64,13 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - Helper methods
+
+    private func tabManagerDidConnectToScene() {
+        // [7863] [WIP] Redux: connect this Browser's TabManager to associated window scene
+        guard ReduxFlagManager.isReduxEnabled else { return }
+        let sceneUUID = WindowData.DefaultSingleWindowUUID
+        store.dispatch(TabManagerAction.tabManagerDidConnectToScene(tabManager, sceneUUID))
+    }
 
     private func startLaunch(with launchType: LaunchType) {
         let launchCoordinator = LaunchCoordinator(router: router)
