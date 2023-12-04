@@ -4,7 +4,7 @@
 
 import UIKit
 
-public class ActionButton: ResizableButton {
+public class ActionButton: LegacyResizableButton {
     public var touchUpAction: ((UIButton) -> Void)? {
         didSet {
             setupButton()

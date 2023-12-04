@@ -64,7 +64,7 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
         stack.spacing = UX.textStackViewSpacing
     }
 
-    private lazy var primaryButton: ResizableButton = .build { button in
+    private lazy var primaryButton: LegacyResizableButton = .build { button in
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .callout,
             size: UX.buttonFontSize)
