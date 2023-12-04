@@ -52,7 +52,7 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         label.textAlignment = .center
     }
 
-    private let signInButton: ResizableButton = .build { button in
+    private let signInButton: LegacyResizableButton = .build { button in
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .callout,
                                                                          size: UX.buttonSizeFont)
         button.setTitle(.Settings.Sync.ButtonTitle, for: [])

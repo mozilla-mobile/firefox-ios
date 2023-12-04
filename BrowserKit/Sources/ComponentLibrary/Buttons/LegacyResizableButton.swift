@@ -4,7 +4,11 @@
 
 import UIKit
 
-open class ResizableButton: UIButton {
+/// Deprecated base button class that use content, image and title edge insets.
+/// Should be replaced gradually with ``ResizableButton``, using UIButton.Configuration instead.
+@available(*, deprecated, renamed: "ResizableButton",
+            message: "Should be replaced with ResizableButton, using UIButton.Configuration")
+open class LegacyResizableButton: UIButton {
     public struct UX {
         public static let buttonEdgeSpacing: CGFloat = 8
     }
