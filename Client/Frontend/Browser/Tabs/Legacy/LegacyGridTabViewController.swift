@@ -329,7 +329,6 @@ class LegacyGridTabViewController: UIViewController,
         tabDisplayManager.removeAllTabsFromView()
 
         tabManager.backgroundRemoveAllTabs(isPrivate: tabDisplayManager.isPrivate) { recentlyClosedTabs, isPrivateState, previousTabUUID in
-
             DispatchQueue.main.async { [unowned self] in
                 if isPrivateState {
                     let previousTab = self.tabManager.tabs.first(where: { $0.tabUUID == previousTabUUID })
