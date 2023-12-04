@@ -1,5 +1,5 @@
 /* The body of the message for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. Placeholder refers to app name. */
-"FeltPrivacyUI.Body.v121" = "%@ itekkes inagan n tuqqna, azray, akked yisefka n yismal web mi ara tmedleḍ akk isfuyla usligen. %2$s";
+"FeltPrivacyUI.Body.v121" = "%@ itekkes inagan n tuqqna, azray, akked yisefka n yismal web mi ara tmedleḍ akk isfuyla usligen.";
 
 /* The link for the card that educates users about how private mode works. The link redirects to an external site for more information. The card shows up on the homepage when in the new privacy mode. */
 "FeltPrivacyUI.Link.v121" = "Anwa i izemren ad iwali armud-iw?";

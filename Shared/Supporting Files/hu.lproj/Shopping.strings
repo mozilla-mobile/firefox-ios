@@ -10,8 +10,17 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one appears after the user has opted in and informs him if he wants use the review checker by tapping the Shopping button. */
 "ContextualHints.Shopping.OptedInBody.v120" = "Megbízhatók ezek az értékelések? Nézze meg a módosított értékelés megtekintéséhez.";
 
+/* Footer label from the Fakespot Ad card displayed for the related product we advertise. This is displayed below the ad card, suggested as an alternative to the product reviewed. The first parameter will be replaced by the Fakespot app name */
+"Shopping.AdCard.Footer.v121" = "Reklám a következőtől: %@";
+
+/* Title label for the Fakespot Ad card. This is displayed above a product image, suggested as an alternative to the product reviewed. */
+"Shopping.AdCard.Title.v121" = "További megfontolandó információk";
+
 /* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
 "Shopping.AdjustedRating.Description.v120" = "A nem megbízható értékelések eltávolítva";
+
+/* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
+"Shopping.AdjustedRating.Description.v121" = "Megbízható értékelések alapján";
 
 /* Accessibility label, associated to adjusted rating stars. %@ is a decimal value from 0 to 5 that will only use a tenth (example: 3.5). */
 "Shopping.AdjustedRating.StarsAccessibilityLabel.v120" = "%@ csillag az 5-ből";
@@ -55,6 +64,12 @@
 /* Title for info card when Fakespot cannot analyze reviews for a certain product type */
 "Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Title.v120" = "Nem lehet ellenőrizni ezeket az értékeléseket";
 
+/* Description text for an information card used in the review checker section. This message is displayed when the reviews for a product are not yet available but are expected to be provided within the next 24 hours. It serves to inform users of the short wait for reviews and encourages them to return soon for the updated information. */
+"Shopping.InfoCard.InfoComingSoon.Description.v121" = "24 órán belül lesznek információink a termék értékeléseiről. Nézzen vissza később.";
+
+/* Title for an information card that is displayed in the review checker section when certain details about a product or feature are not currently available but are expected to be provided soon. The message should imply that the user can look forward to receiving more information shortly. */
+"Shopping.InfoCard.InfoComingSoon.Title.v121" = "Az információk hamarosan érkeznek";
+
 /* Primary action title for info card when the product needs analysis */
 "Shopping.InfoCard.NeedsAnalysis.PrimaryAction.v120" = "Ellenőrzés most";
 
@@ -72,6 +87,15 @@
 
 /* Title for info card when there are not enough reviews for a product */
 "Shopping.InfoCard.NotEnoughReviews.Title.v120" = "Még nincs elég értékelés";
+
+/* Description for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This description is used for info card where the user can report if it's back in stock. */
+"Shopping.InfoCard.ProductNotInStock.Description.v121" = "Ha úgy látja, hogy a termék újra raktáron van, akkor jelentse, és akkor dolgozni fogunk az értékelések ellenőrzésén.";
+
+/* Primary action label for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This primary action label is used for info card button where the user can report if it's back in stock. */
+"Shopping.InfoCard.ProductNotInStock.PrimaryAction.v121" = "Jelentés, hogy a termék újra raktáron van";
+
+/* Title for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This title is used for info card where the user can report if it's back in stock. */
+"Shopping.InfoCard.ProductNotInStock.Title.v121" = "A termék nem érhető el";
 
 /* Description for info card when the product is in analysis mode */
 "Shopping.InfoCard.ProgressAnalysis.Description.v120" = "Ez körülbelül 60 másodpercig tarthat.";
@@ -99,6 +123,12 @@
 
 /* Title for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
 "Shopping.NoAnalysisCard.InProgress.Headline.Title.v120" = "Értékelési minőség ellenőrzése";
+
+/* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replaced by the Fakespot app name. After the colon, what appears are two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
+"Shopping.OptInCard.Disclaimer.Text.v120" = "Az „Igen, kipróbálás” kiválasztásával elfogadja a %@ dokumentumait:";
+
+/* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. This string is almost identical with 'Shopping.OptInCard.FirstParagraph.Description', but without Best Buy and Walmart websites, which are not available in many locales. */
+"Shopping.OptInCard.FirstParagraph.AmazonOnly.Description.v122" = "Vásárlás előtt nézze meg, hogy mennyire megbízhatók a %1$@ termékértékelései. Az értékelés-ellenőrző, a %2$@ egy kísérleti funkciója, közvetlenül a böngészőbe van építve.";
 
 /* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. The third and fourth parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. */
 "Shopping.OptInCard.FirstParagraph.Description.v120" = "Vásárlás előtt nézze meg, hogy mennyire megbízhatók a %1$@ termékértékelései. Az értékelés-ellenőrző, a %2$@ egy kísérleti funkciója, közvetlenül a böngészőbe van építve. A következőkön is működik: %3$@ és %4$@.";
@@ -192,6 +222,9 @@
 
 /* Beta label for the header of the Shopping Experience (Fakespot) sheet */
 "Shopping.Sheet.Beta.Title.v120" = "BÉTA";
+
+/* Accessibility label for close button that dismisses the Shopping Experience (Fakespot) sheet. */
+"Shopping.Sheet.Close.AccessibilityLabel.v121" = "Értékelés-ellenőrző bezárása";
 
 /* Label for the header of the Shopping Experience (Fakespot) sheet */
 "Shopping.Sheet.Title.v120" = "Értékelés-ellenőrző";

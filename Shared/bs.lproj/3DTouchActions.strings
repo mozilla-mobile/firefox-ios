@@ -7,6 +7,9 @@
 /* Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard */
 "Copy URL" = "Kopiraj URL";
 
+/* Label for preview action on Tab Tray Tab to send the current link to another device */
+"Menu.SendLinkToDevice" = "Pošalji link na uređaj";
+
 /* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
 "Open Last Bookmark" = "Otvori zadnju bilješku";
 

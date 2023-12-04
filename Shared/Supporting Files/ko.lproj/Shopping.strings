@@ -10,8 +10,17 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one appears after the user has opted in and informs him if he wants use the review checker by tapping the Shopping button. */
 "ContextualHints.Shopping.OptedInBody.v120" = "이 리뷰는 신뢰할 수 있나요? 조정된 평점을 보려면 지금 확인하세요.";
 
+/* Footer label from the Fakespot Ad card displayed for the related product we advertise. This is displayed below the ad card, suggested as an alternative to the product reviewed. The first parameter will be replaced by the Fakespot app name */
+"Shopping.AdCard.Footer.v121" = "%s의 광고";
+
+/* Title label for the Fakespot Ad card. This is displayed above a product image, suggested as an alternative to the product reviewed. */
+"Shopping.AdCard.Title.v121" = "더 보기";
+
 /* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
 "Shopping.AdjustedRating.Description.v120" = "신뢰할 수 없는 리뷰는 삭제됨";
+
+/* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
+"Shopping.AdjustedRating.Description.v121" = "믿을 수 있는 리뷰를 바탕으로";
 
 /* Accessibility label, associated to adjusted rating stars. %@ is a decimal value from 0 to 5 that will only use a tenth (example: 3.5). */
 "Shopping.AdjustedRating.StarsAccessibilityLabel.v120" = "별 5개 중 %@개";
@@ -55,15 +64,174 @@
 /* Title for info card when Fakespot cannot analyze reviews for a certain product type */
 "Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Title.v120" = "이 리뷰를 확인할 수 없음";
 
+/* Description text for an information card used in the review checker section. This message is displayed when the reviews for a product are not yet available but are expected to be provided within the next 24 hours. It serves to inform users of the short wait for reviews and encourages them to return soon for the updated information. */
+"Shopping.InfoCard.InfoComingSoon.Description.v121" = "24시간 이내에 이 제품의 리뷰에 대한 정보를 받아야 합니다. 다시 확인해 주세요.";
+
+/* Title for an information card that is displayed in the review checker section when certain details about a product or feature are not currently available but are expected to be provided soon. The message should imply that the user can look forward to receiving more information shortly. */
+"Shopping.InfoCard.InfoComingSoon.Title.v121" = "곧 정보 제공 예정";
+
 /* Primary action title for info card when the product needs analysis */
 "Shopping.InfoCard.NeedsAnalysis.PrimaryAction.v120" = "지금 확인";
 
 /* Title for info card when the product needs analysis */
 "Shopping.InfoCard.NeedsAnalysis.Title.v120" = "확인할 새로운 정보";
 
+/* Description for info card when no information is available at the moment */
+"Shopping.InfoCard.NoInfoAvailableRightNow.Description.v120" = "문제를 해결하기 위해 노력하고 있습니다. 곧 다시 확인하시기 바랍니다.";
+
+/* Title for info card when no information is available at the moment */
+"Shopping.InfoCard.NoInfoAvailableRightNow.Title.v120" = "현재 사용 가능한 정보가 없음";
+
+/* Description for info card when there are not enough reviews for a product */
+"Shopping.InfoCard.NotEnoughReviews.Description.v120" = "이 제품에 대한 리뷰가 더 많아지면 품질을 확인할 수 있을 것입니다.";
+
+/* Title for info card when there are not enough reviews for a product */
+"Shopping.InfoCard.NotEnoughReviews.Title.v120" = "아직 리뷰가 충분하지 않음";
+
+/* Description for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This description is used for info card where the user can report if it's back in stock. */
+"Shopping.InfoCard.ProductNotInStock.Description.v121" = "이 제품이 재입고된 것을 확인하시면, 보고해 주시면 리뷰를 확인하도록 하겠습니다.";
+
+/* Primary action label for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This primary action label is used for info card button where the user can report if it's back in stock. */
+"Shopping.InfoCard.ProductNotInStock.PrimaryAction.v121" = "제품 재입고 신고";
+
+/* Title for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This title is used for info card where the user can report if it's back in stock. */
+"Shopping.InfoCard.ProductNotInStock.Title.v121" = "제품을 사용할 수 없음";
+
+/* Description for info card when the product is in analysis mode */
+"Shopping.InfoCard.ProgressAnalysis.Description.v120" = "이 작업은 약 60초 정도 걸릴 수 있습니다.";
+
+/* Title for info card when the product is in analysis mode */
+"Shopping.InfoCard.ProgressAnalysis.Title.v120" = "리뷰 품질 확인 중";
+
 /* This description appears beneath the confirmation title on the information card to inform the user that their report regarding the product stock status has been received and is being processed. It serves to set the expectation that the review information will be updated within 24 hours and invites the user to revisit the product page for updates. */
 "Shopping.InfoCard.ReportSubmittedByCurrentUser.Description.v121" = "24시간 이내에 이 제품의 리뷰에 대한 정보를 받아야 합니다. 다시 확인해 주세요.";
 
 /* This title is displayed on the information card as a confirmation message after a user reports that a previously out-of-stock product is now available. It's meant to acknowledge the user's contribution and encourage community engagement by letting them know their report has been successfully submitted. */
 "Shopping.InfoCard.ReportSubmittedByCurrentUser.Title.v121" = "보고해 주셔서 감사합니다!";
+
+/* Text for the analyzer button displayed when an analysis can be updated for a product. */
+"Shopping.NoAnalysisCard.AnalyzerButton.Title.v120" = "리뷰 품질 확인";
+
+/* Text for the body label, to check the reliability of a product. */
+"Shopping.NoAnalysisCard.BodyLabel.Title.v120" = "이 제품의 리뷰가 신뢰할 수 있는지 확인하려면 리뷰 품질을 확인하세요. 약 60초밖에 걸리지 않습니다.";
+
+/* Title for card displayed when a shopping product has not been analysed yet. */
+"Shopping.NoAnalysisCard.HeadlineLabel.Title.v120" = "이 리뷰에 대한 정보가 아직 없음";
+
+/* Description for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
+"Shopping.NoAnalysisCard.InProgress.Body.Label.v120" = "이 작업은 약 60초 정도 걸릴 수 있습니다.";
+
+/* Title for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
+"Shopping.NoAnalysisCard.InProgress.Headline.Title.v120" = "리뷰 품질 확인 중";
+
+/* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replaced by the Fakespot app name. After the colon, what appears are two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
+"Shopping.OptInCard.Disclaimer.Text.v120" = "“사용해보기”를 선택하면 %@의 다음 사항에 동의하게 됩니다:";
+
+/* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. This string is almost identical with 'Shopping.OptInCard.FirstParagraph.Description', but without Best Buy and Walmart websites, which are not available in many locales. */
+"Shopping.OptInCard.FirstParagraph.AmazonOnly.Description.v122" = "구매하기 전에 %1$@에 대한 제품 리뷰가 얼마나 신뢰할 수 있는지 확인하세요. %2$@의 실험 기능인 리뷰 검사기가 브라우저에 바로 내장되어 있습니다.";
+
+/* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. The third and fourth parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. */
+"Shopping.OptInCard.FirstParagraph.Description.v120" = "구매하기 전에 %1$@에 대한 제품 리뷰가 얼마나 신뢰할 수 있는지 확인하세요. %2$@의 실험 기능인 리뷰 검사기가 브라우저에 바로 내장되어 있습니다. %3$@ 및 %4$@에서도 작동합니다.";
+
+/* Label for the header of the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.HeaderLabel.Title.v120" = "제품 리뷰에 대한 신뢰할 수 있는 가이드를 사용해 보세요";
+
+/* Label for the Learn more button in the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.LearnMoreButtonTitle.Title.v120" = "더 알아보기";
+
+/* Text for the main button of the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.MainButton.Title.v120" = "사용해보기";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
+"Shopping.OptInCard.PrivacyPolicy.Button.Title.v120" = "개인정보 보호정책";
+
+/* Text for the secondary button of the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.SecondaryButton.Title.v120" = "나중에";
+
+/* Label for the second paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be replaced by the Fakespot app name. The second parameter will be replaced the company name of Mozilla. */
+"Shopping.OptInCard.SecondParagraph.Description.v120" = "%2$@의 %1$@ 기능을 사용하여 편향된 허위 리뷰를 피할 수 있도록 돕습니다. AI 모델은 쇼핑하는 동안 사용자를 보호하기 위해 항상 개선되고 있습니다.";
+
+/* Show Firefox Browser Terms of Use page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
+"Shopping.OptInCard.TermsOfUse.Button.Title.v120" = "이용약관";
+
+/* Accessibility label for the Grade labels used in 'How we determine review quality' card and 'How reliable are these reviews' card displayed in the shopping review quality bottom sheet. The placeholder will be replaced by a grade letter (e.g. A). The grading system contains letters from A-F. */
+"Shopping.ReliabilityScore.Grade.A11y.Label.v120" = "%@ 등급";
+
+/* Title of the reliability card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQuality.ReliabilityCardTitle.v120" = "이 리뷰는 얼마나 신뢰할 수 있나요?";
+
+/* Description of the reliability ratings for rating 'A' and 'B' displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQuality.ReliabilityRating.AB.Description.v120" = "신뢰할 수 있는 리뷰";
+
+/* Description of the reliability rating 'C' displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQuality.ReliabilityRating.C.Description.v120" = "신뢰할 수 있는 리뷰와 신뢰할 수 없는 리뷰가 혼합됨";
+
+/* Description of the reliability ratings for rating 'D' and 'F' displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQuality.ReliabilityRating.DF.Description.v120" = "신뢰할 수 없는 리뷰";
+
+/* Adjusted rating label from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.AdjustedRating.Label.v120" = "*조정된 평점*은 신뢰할 수 있다고 믿는 리뷰만을 기반으로 합니다.";
+
+/* Accessibility label for the up chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.Collapse.AccessibilityLabel.v120" = "리뷰 품질을 결정하는 방법 카드 접기";
+
+/* Accessibility label for the down chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.Expand.AccessibilityLabel.v120" = "리뷰 품질 카드를 결정하는 방법 열기";
+
+/* Label of the headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
+"Shopping.ReviewQualityCard.Headline.Label.v120" = "%2$@의 %1$@ AI 기술을 사용하여 제품 리뷰의 신뢰성을 확인합니다. 이는 제품 품질이 아닌 리뷰 품질을 평가하는 데에만 도움이 됩니다.";
+
+/* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.Highlights.Label.v120" = "*하이라이트*는 지난 80일 동안 신뢰할 수 있는 %1@의 리뷰에서 나온 것입니다.";
+
+/* Title of the 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.Label.Title.v120" = "리뷰 품질을 결정하는 방법";
+
+/* The title of the learn more button from How we determine review quality card displayed in the shopping review quality bottom sheet. The placeholder will be replaced with the Fakespot app name. */
+"Shopping.ReviewQualityCard.LearnMoreButton.Title.v120" = "%@가 리뷰 품질을 결정하는 방법에 대해 자세히 알아보세요.";
+
+/* Mixed reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.MixedReviews.Label.v120" = "신뢰할 수 있는 리뷰와 신뢰할 수 없는 리뷰가 혼합되어 있다고 생각합니다.";
+
+/* Reliable reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.ReliableReviews.Label.v120" = "신뢰할 수 있는 리뷰. 솔직하고 공정한 리뷰를 남긴 실제 고객의 리뷰일 가능성이 높다고 생각합니다.";
+
+/* Label of the sub headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.SubHeadline.Label.v120" = "각 제품의 리뷰에는 A부터 F까지 *문자 등급*이 부여됩니다.";
+
+/* Unreliable reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.UnreliableReviews.Label.v120" = "신뢰할 수 없는 리뷰. 리뷰가 가짜이거나 편향된 리뷰어의 리뷰일 가능성이 있다고 생각합니다.";
+
+/* Accessibility label for the up chevron icon used to collapse or minimize the Settings Card within the shopping product review bottom sheet. */
+"Shopping.SettingsCard.Collapse.AccessibilityLabel.v120" = "설정 카드 접기";
+
+/* Accessibility label for the down chevron icon used to expand or show the details of the Settings Card within the shopping product review bottom sheet. */
+"Shopping.SettingsCard.Expand.AccessibilityLabel.v120" = "설정 카드 펼치기";
+
+/* Action title of the footer underneath the Settings Card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
+"Shopping.SettingsCard.Footer.Action.v120" = "리뷰 검사기는 %2$@의 %1$@에 의해 제공됩니다.";
+
+/* Title of the settings card displayed in the shopping review quality bottom sheet. */
+"Shopping.SettingsCard.Label.Title.v120" = "설정";
+
+/* Label of the switch from settings card displayed in the shopping review quality bottom sheet. The placeholder will be replaced with the app name. */
+"Shopping.SettingsCard.RecommendedProducts.Label.v120" = "%@가 추천하는 제품 보기";
+
+/* Label of the button from settings card displayed in the shopping review quality bottom sheet. */
+"Shopping.SettingsCard.TurnOffButton.Title.v120" = "리뷰 검사기 끄기";
+
+/* Beta label for the header of the Shopping Experience (Fakespot) sheet */
+"Shopping.Sheet.Beta.Title.v120" = "베타";
+
+/* Accessibility label for close button that dismisses the Shopping Experience (Fakespot) sheet. */
+"Shopping.Sheet.Close.AccessibilityLabel.v121" = "리뷰 검사기 닫기";
+
+/* Label for the header of the Shopping Experience (Fakespot) sheet */
+"Shopping.Sheet.Title.v120" = "리뷰 검사기";
+
+/* Text for body of error card displayed to the user when the device is disconnected from the network. */
+"Shopping.WarningCard.CheckNoConnection.Description.v120" = "네트워크 연결을 확인한 후 페이지를 새로 고침해 보세요.";
+
+/* Title for error card displayed to the user when the device is disconnected from the network. */
+"Shopping.WarningCard.CheckNoConnection.Title.v120" = "네트워크 연결 없음";
 

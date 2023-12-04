@@ -1,0 +1,237 @@
+/* Contextual hints are little popups that appear for the users informing them of new features. This one indicates that a user can tap on the shopping button to start using the Shopping feature. */
+"ContextualHints.Shopping.NotOptedIn.v120" = "Saznajte možete li vjerovati recenzijama ovog proizvoda — prije nego što kupite.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing the Shopping feature. It indicates that a user can go directly to the Shopping feature by tapping the text of the action. */
+"ContextualHints.Shopping.NotOptedInAction.v120" = "Pokušaj provjeriti recenziju";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears after the user has opted in for the Shopping feature. It indicates that a user can directly open the review checker by tapping the text of the action. */
+"ContextualHints.Shopping.OptedInAction.v120" = "Otvori provjeru recenzije";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one appears after the user has opted in and informs him if he wants use the review checker by tapping the Shopping button. */
+"ContextualHints.Shopping.OptedInBody.v120" = "Jesu li ove recenzije pouzdane? Provjerite sada da vidite prilagođenu ocjenu.";
+
+/* Footer label from the Fakespot Ad card displayed for the related product we advertise. This is displayed below the ad card, suggested as an alternative to the product reviewed. The first parameter will be replaced by the Fakespot app name */
+"Shopping.AdCard.Footer.v121" = "Oglas od %@";
+
+/* Title label for the Fakespot Ad card. This is displayed above a product image, suggested as an alternative to the product reviewed. */
+"Shopping.AdCard.Title.v121" = "Više za razmatranje";
+
+/* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
+"Shopping.AdjustedRating.Description.v120" = "Nepouzdane recenzije su uklonjene";
+
+/* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
+"Shopping.AdjustedRating.Description.v121" = "Na osnovu pouzdanih recenzija";
+
+/* Accessibility label, associated to adjusted rating stars. %@ is a decimal value from 0 to 5 that will only use a tenth (example: 3.5). */
+"Shopping.AdjustedRating.StarsAccessibilityLabel.v120" = "%@ od 5 zvjezdica";
+
+/* Title of the adjusted rating card displayed in the shopping review quality bottom sheet. */
+"Shopping.AdjustedRating.Title.v120" = "Prilagođena ocjena";
+
+/* Button text of the confirmation displayed in the shopping review quality bottom sheet. */
+"Shopping.ConfirmationCard.Button.Text.v120" = "Razumijem";
+
+/* Title of the confirmation displayed in the shopping review quality bottom sheet. */
+"Shopping.ConfirmationCard.Title.v120" = "Analiza je ažurna";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Competitiveness.Title.v120" = "Konkurentnost";
+
+/* Title of the button that shows less reviews in the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.LessButton.Title.v120" = "Prikaži manje";
+
+/* Title of the button that shows more reviews in the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.MoreButton.Title.v120" = "Prikaži više";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet, specifically focusing on the quality, design, and condition of the product's packaging. This may include details about the box, protective materials, presentation, and overall packaging experience. */
+"Shopping.HighlightsCard.Packaging.Title.v120" = "Pakovanje";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Price.Title.v120" = "Cijena";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Quality.Title.v120" = "Kvalitet";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Shipping.Title.v120" = "Dostava";
+
+/* Title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Title.v120" = "Izdvajamo iz nedavnih recenzija";
+
+/* Title for info card when Fakespot cannot analyze reviews for a certain product type */
+"Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Description.v120" = "Nažalost, ne možemo provjeriti kvalitetu recenzija za određene vrste proizvoda. Na primjer, poklon kartice i streaming videa, muzike i igrica.";
+
+/* Title for info card when Fakespot cannot analyze reviews for a certain product type */
+"Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Title.v120" = "Ne možemo provjeriti ove recenzije";
+
+/* Description text for an information card used in the review checker section. This message is displayed when the reviews for a product are not yet available but are expected to be provided within the next 24 hours. It serves to inform users of the short wait for reviews and encourages them to return soon for the updated information. */
+"Shopping.InfoCard.InfoComingSoon.Description.v121" = "Trebali bismo imati informacije o recenzijama ovog proizvoda u roku od 24 sata. Provjerite ponovo.";
+
+/* Title for an information card that is displayed in the review checker section when certain details about a product or feature are not currently available but are expected to be provided soon. The message should imply that the user can look forward to receiving more information shortly. */
+"Shopping.InfoCard.InfoComingSoon.Title.v121" = "Informacije stižu uskoro";
+
+/* Primary action title for info card when the product needs analysis */
+"Shopping.InfoCard.NeedsAnalysis.PrimaryAction.v120" = "Provjeri sada";
+
+/* Title for info card when the product needs analysis */
+"Shopping.InfoCard.NeedsAnalysis.Title.v120" = "Nove informacije za provjeru";
+
+/* Description for info card when no information is available at the moment */
+"Shopping.InfoCard.NoInfoAvailableRightNow.Description.v120" = "Radimo na rješavanju problema. Provjerite ponovo uskoro.";
+
+/* Title for info card when no information is available at the moment */
+"Shopping.InfoCard.NoInfoAvailableRightNow.Title.v120" = "Trenutno nema dostupnih informacija";
+
+/* Description for info card when there are not enough reviews for a product */
+"Shopping.InfoCard.NotEnoughReviews.Description.v120" = "Kada ovaj proizvod bude imao više recenzija, moći ćemo provjeriti njihov kvalitet.";
+
+/* Title for info card when there are not enough reviews for a product */
+"Shopping.InfoCard.NotEnoughReviews.Title.v120" = "Još nema dovoljno recenzija";
+
+/* Description for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This description is used for info card where the user can report if it's back in stock. */
+"Shopping.InfoCard.ProductNotInStock.Description.v121" = "Ako vidite da je ovaj proizvod ponovo na zalihama, prijavite ga i mi ćemo raditi na provjeri recenzija.";
+
+/* Primary action label for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This primary action label is used for info card button where the user can report if it's back in stock. */
+"Shopping.InfoCard.ProductNotInStock.PrimaryAction.v121" = "Prijavite proizvod je ponovo na zalihama";
+
+/* Title for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This title is used for info card where the user can report if it's back in stock. */
+"Shopping.InfoCard.ProductNotInStock.Title.v121" = "Proizvod nije dostupan";
+
+/* Description for info card when the product is in analysis mode */
+"Shopping.InfoCard.ProgressAnalysis.Description.v120" = "Ovo bi moglo potrajati oko 60 sekundi.";
+
+/* Title for info card when the product is in analysis mode */
+"Shopping.InfoCard.ProgressAnalysis.Title.v120" = "Provjera kvaliteta recenzije";
+
+/* This description appears beneath the confirmation title on the information card to inform the user that their report regarding the product stock status has been received and is being processed. It serves to set the expectation that the review information will be updated within 24 hours and invites the user to revisit the product page for updates. */
+"Shopping.InfoCard.ReportSubmittedByCurrentUser.Description.v121" = "Trebali bismo imati informacije o recenzijama ovog proizvoda u roku od 24 sata. Provjerite ponovo.";
+
+/* This title is displayed on the information card as a confirmation message after a user reports that a previously out-of-stock product is now available. It's meant to acknowledge the user's contribution and encourage community engagement by letting them know their report has been successfully submitted. */
+"Shopping.InfoCard.ReportSubmittedByCurrentUser.Title.v121" = "Hvala na prijavi!";
+
+/* Text for the analyzer button displayed when an analysis can be updated for a product. */
+"Shopping.NoAnalysisCard.AnalyzerButton.Title.v120" = "Provjeri kvalitet recenzije";
+
+/* Text for the body label, to check the reliability of a product. */
+"Shopping.NoAnalysisCard.BodyLabel.Title.v120" = "Da biste saznali jesu li recenzije ovog proizvoda pouzdane, provjerite kvalitetu recenzija. Potrebno je samo oko 60 sekundi.";
+
+/* Title for card displayed when a shopping product has not been analysed yet. */
+"Shopping.NoAnalysisCard.HeadlineLabel.Title.v120" = "Još uvijek nema informacija o ovim recenzijama";
+
+/* Description for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
+"Shopping.NoAnalysisCard.InProgress.Body.Label.v120" = "Ovo bi moglo potrajati oko 60 sekundi.";
+
+/* Title for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
+"Shopping.NoAnalysisCard.InProgress.Headline.Title.v120" = "Provjera kvaliteta recenzije";
+
+/* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replaced by the Fakespot app name. After the colon, what appears are two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
+"Shopping.OptInCard.Disclaimer.Text.v120" = "Odabirom “Da, probaj” prihvatate sljedeće od %@a:";
+
+/* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. This string is almost identical with 'Shopping.OptInCard.FirstParagraph.Description', but without Best Buy and Walmart websites, which are not available in many locales. */
+"Shopping.OptInCard.FirstParagraph.AmazonOnly.Description.v122" = "Prije kupovine pogledajte koliko su pouzdane recenzije proizvoda na %1$@. Provjera recenzija, eksperimentalna funkcija od %2$@a, ugrađena je direktno u pretraživač.";
+
+/* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. The third and fourth parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. */
+"Shopping.OptInCard.FirstParagraph.Description.v120" = "Prije kupovine pogledajte koliko su pouzdane recenzije proizvoda na %1$@. Provjera recenzija, eksperimentalna funkcija od %2$@a, ugrađena je direktno u pretraživač. Radi i na %3$@ i %4$@.";
+
+/* Label for the header of the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.HeaderLabel.Title.v120" = "Isprobajte naš pouzdani vodič za recenzije proizvoda";
+
+/* Label for the Learn more button in the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.LearnMoreButtonTitle.Title.v120" = "Saznajte više";
+
+/* Text for the main button of the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.MainButton.Title.v120" = "Da, probaj";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
+"Shopping.OptInCard.PrivacyPolicy.Button.Title.v120" = "Politika privatnosti";
+
+/* Text for the secondary button of the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.SecondaryButton.Title.v120" = "Ne sada";
+
+/* Label for the second paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be replaced by the Fakespot app name. The second parameter will be replaced the company name of Mozilla. */
+"Shopping.OptInCard.SecondParagraph.Description.v120" = "Koristeći moć %1$@ od strane %2$@e, pomažemo vam da izbjegnete pristrasne i neautentične recenzije. Naš AI model se uvijek poboljšava kako bi vas zaštitio dok kupujete.";
+
+/* Show Firefox Browser Terms of Use page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
+"Shopping.OptInCard.TermsOfUse.Button.Title.v120" = "Uslovi korištenja";
+
+/* Accessibility label for the Grade labels used in 'How we determine review quality' card and 'How reliable are these reviews' card displayed in the shopping review quality bottom sheet. The placeholder will be replaced by a grade letter (e.g. A). The grading system contains letters from A-F. */
+"Shopping.ReliabilityScore.Grade.A11y.Label.v120" = "Ocjena %@";
+
+/* Title of the reliability card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQuality.ReliabilityCardTitle.v120" = "Koliko su ove recenzije pouzdane?";
+
+/* Description of the reliability ratings for rating 'A' and 'B' displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQuality.ReliabilityRating.AB.Description.v120" = "Pouzdane recenzije";
+
+/* Description of the reliability rating 'C' displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQuality.ReliabilityRating.C.Description.v120" = "Kombinacija pouzdanih i nepouzdanih recenzija";
+
+/* Description of the reliability ratings for rating 'D' and 'F' displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQuality.ReliabilityRating.DF.Description.v120" = "Nepouzdane recenzije";
+
+/* Adjusted rating label from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.AdjustedRating.Label.v120" = "*Prilagođena ocjena* zasniva se samo na recenzijama za koje vjerujemo da su pouzdane.";
+
+/* Accessibility label for the up chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.Collapse.AccessibilityLabel.v120" = "Sažmi Kako utvrđujemo karticu kvaliteta recenzija";
+
+/* Accessibility label for the down chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.Expand.AccessibilityLabel.v120" = "Proširi Kako utvrđujemo karticu kvaliteta recenzija";
+
+/* Label of the headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
+"Shopping.ReviewQualityCard.Headline.Label.v120" = "Koristimo AI tehnologiju od %1$@a do %2$@e da provjerimo pouzdanost recenzija proizvoda. Ovo će vam samo pomoći da ocijenite kvalitetu recenzija, a ne kvalitet proizvoda.";
+
+/* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.Highlights.Label.v120" = "*Istaknuto* je iz %1@ recenzija u posljednjih 80 dana za koje vjerujemo da su pouzdane.";
+
+/* Title of the 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.Label.Title.v120" = "Kako utvrđujemo kvalitet recenzija";
+
+/* The title of the learn more button from How we determine review quality card displayed in the shopping review quality bottom sheet. The placeholder will be replaced with the Fakespot app name. */
+"Shopping.ReviewQualityCard.LearnMoreButton.Title.v120" = "Saznajte više o tome kako %@ određuje kvalitet recenzije";
+
+/* Mixed reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.MixedReviews.Label.v120" = "Vjerujemo da postoji mješavina pouzdanih i nepouzdanih recenzija";
+
+/* Reliable reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.ReliableReviews.Label.v120" = "Pouzdane recenzije. Vjerujemo da su recenzije vjerovatno od stvarnih kupaca koji su ostavili iskrene, nepristrasne recenzije.";
+
+/* Label of the sub headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.SubHeadline.Label.v120" = "Svakoj recenziji proizvoda dodjeljujemo *slovnu ocjenu* od A do F.";
+
+/* Unreliable reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.UnreliableReviews.Label.v120" = "Nepouzdane recenzije. Vjerujemo da su recenzije vjerovatno lažne ili od pristrasnih recenzenata.";
+
+/* Accessibility label for the up chevron icon used to collapse or minimize the Settings Card within the shopping product review bottom sheet. */
+"Shopping.SettingsCard.Collapse.AccessibilityLabel.v120" = "Sažmi karticu postavki";
+
+/* Accessibility label for the down chevron icon used to expand or show the details of the Settings Card within the shopping product review bottom sheet. */
+"Shopping.SettingsCard.Expand.AccessibilityLabel.v120" = "Proširi karticu postavki";
+
+/* Action title of the footer underneath the Settings Card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
+"Shopping.SettingsCard.Footer.Action.v120" = "Provjeru recenzije pokreće %1$@ od %2$@e";
+
+/* Title of the settings card displayed in the shopping review quality bottom sheet. */
+"Shopping.SettingsCard.Label.Title.v120" = "Postavke";
+
+/* Label of the switch from settings card displayed in the shopping review quality bottom sheet. The placeholder will be replaced with the app name. */
+"Shopping.SettingsCard.RecommendedProducts.Label.v120" = "Prikaži proizvode koje preporučuje %@";
+
+/* Label of the button from settings card displayed in the shopping review quality bottom sheet. */
+"Shopping.SettingsCard.TurnOffButton.Title.v120" = "Isključite provjeru recenzije";
+
+/* Beta label for the header of the Shopping Experience (Fakespot) sheet */
+"Shopping.Sheet.Beta.Title.v120" = "BETA";
+
+/* Accessibility label for close button that dismisses the Shopping Experience (Fakespot) sheet. */
+"Shopping.Sheet.Close.AccessibilityLabel.v121" = "Zatvori provjeru recenzije";
+
+/* Label for the header of the Shopping Experience (Fakespot) sheet */
+"Shopping.Sheet.Title.v120" = "Provjera recenzije";
+
+/* Text for body of error card displayed to the user when the device is disconnected from the network. */
+"Shopping.WarningCard.CheckNoConnection.Description.v120" = "Provjerite svoju mrežnu konekciju, a zatim pokušajte ponovo učitati stranicu.";
+
+/* Title for error card displayed to the user when the device is disconnected from the network. */
+"Shopping.WarningCard.CheckNoConnection.Title.v120" = "Nema mrežne konekcije";
+

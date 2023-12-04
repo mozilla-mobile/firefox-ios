@@ -28,6 +28,9 @@
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Skip.Action.v115" = "Omet";
 
+/* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Notification.Title.v120" = "Les notificacions us ajuden a estar més segur amb el %@";
+
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "Activa les notificacions";
 
@@ -66,6 +69,9 @@
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
 "Onboarding.Welcome.Skip.v114" = "Omet";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Welcome.Title.TreatementA.v120" = "Ens encanta mantenir-vos segur";
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Title.v114" = "Us donem la benvinguda a una Internet independent";
