@@ -282,14 +282,14 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     private func canHandleSettings(with section: Route.SettingsSection) -> Bool {
-        guard !childCoordinators.contains(where: { $0 is SettingsCoordinator}) else {
+        guard !childCoordinators.contains(where: { $0 is SettingsCoordinator }) else {
             return false // route is handled with existing child coordinator
         }
         return true
     }
 
     private func handleSettings(with section: Route.SettingsSection) {
-        guard !childCoordinators.contains(where: { $0 is SettingsCoordinator}) else {
+        guard !childCoordinators.contains(where: { $0 is SettingsCoordinator }) else {
             return // route is handled with existing child coordinator
         }
         let navigationController = ThemedNavigationController()
@@ -429,14 +429,14 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func dismissFakespotModal(animated: Bool = true) {
-        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator}) as? FakespotCoordinator else {
+        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator }) as? FakespotCoordinator else {
             return // there is no modal to close
         }
         fakespotCoordinator.fakespotControllerDidDismiss(animated: animated)
     }
 
     func dismissFakespotSidebar(sidebarContainer: SidebarEnabledViewProtocol, parentViewController: UIViewController) {
-        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator}) as? FakespotCoordinator else {
+        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator }) as? FakespotCoordinator else {
             return // there is no sidebar to close
         }
         fakespotCoordinator.fakespotControllerCloseSidebar(sidebarContainer: sidebarContainer,
@@ -446,7 +446,7 @@ class BrowserCoordinator: BaseCoordinator,
     func updateFakespotSidebar(productURL: URL,
                                sidebarContainer: SidebarEnabledViewProtocol,
                                parentViewController: UIViewController) {
-        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator}) as? FakespotCoordinator else {
+        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator }) as? FakespotCoordinator else {
             return // there is no sidebar
         }
         fakespotCoordinator.updateSidebar(productURL: productURL,
@@ -455,7 +455,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     private func makeFakespotCoordinator() -> FakespotCoordinator? {
-        guard !childCoordinators.contains(where: { $0 is FakespotCoordinator}) else {
+        guard !childCoordinators.contains(where: { $0 is FakespotCoordinator }) else {
             return nil // flow is already handled
         }
 
@@ -511,7 +511,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showTabTray(selectedPanel: TabTrayPanelType) {
-        guard !childCoordinators.contains(where: { $0 is TabTrayCoordinator}) else {
+        guard !childCoordinators.contains(where: { $0 is TabTrayCoordinator }) else {
             return // flow is already handled
         }
 

@@ -193,7 +193,7 @@ public class RustSyncManager: NSObject, SyncManager {
         }
 
         if canSendUsageData() {
-            self.syncManagerAPI.reportSyncTelemetry(syncResult: result) {_ in }
+            self.syncManagerAPI.reportSyncTelemetry(syncResult: result) { _ in }
         } else {
             logger.log("Profile isn't sending usage data. Not sending sync status event.",
                        level: .debug,
@@ -282,7 +282,7 @@ public class RustSyncManager: NSObject, SyncManager {
             // last sync.
             let engines = self.creditCardAutofillEnabled ?
                 syncManagerAPI.rustTogglableEngines :
-                syncManagerAPI.rustTogglableEngines.filter({$0 != RustSyncManagerAPI.TogglableEngine.creditcards })
+                syncManagerAPI.rustTogglableEngines.filter({ $0 != RustSyncManagerAPI.TogglableEngine.creditcards })
 
             engines.forEach { engine in
                 let stateChangedPref = "engine.\(engine).enabledStateChanged"

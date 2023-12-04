@@ -189,7 +189,7 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
         createLabels(from: viewModel.instructionSteps)
 
         contentStackView.addArrangedSubview(titleLabel)
-        numeratedLabels.forEach { textStackView.addArrangedSubview($0)}
+        numeratedLabels.forEach { textStackView.addArrangedSubview($0) }
         contentStackView.addArrangedSubview(textStackView)
         contentStackView.addArrangedSubview(primaryButton)
 
