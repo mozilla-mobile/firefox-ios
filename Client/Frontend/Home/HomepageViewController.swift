@@ -15,8 +15,7 @@ class HomepageViewController:
     FeatureFlaggable,
     Themeable,
     ContentContainable,
-    SearchBarLocationProvider,
-    StoreSubscriber {
+    SearchBarLocationProvider {
     // MARK: - Typealiases
 
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
@@ -121,7 +120,6 @@ class HomepageViewController:
         jumpBackInContextualHintViewController.stopTimer()
         syncTabContextualHintViewController.stopTimer()
         notificationCenter.removeObserver(self)
-        unsubscribeFromRedux()
     }
 
     // MARK: - View lifecycle
@@ -262,20 +260,6 @@ class HomepageViewController:
             return viewModel.section(for: layoutEnvironment.traitCollection, size: self.view.frame.size)
         }
         return layout
-    }
-
-    // MARK: - Redux
-
-    func subscribeToRedux() {
-        store.subscribe(self)
-    }
-
-    func unsubscribeFromRedux() {
-        store.unsubscribe(self)
-    }
-
-    func newState(state: AppState) {
-        // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-7190
     }
 
     // MARK: Long press

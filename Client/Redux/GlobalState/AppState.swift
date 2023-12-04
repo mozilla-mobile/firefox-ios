@@ -7,21 +7,9 @@ import Redux
 
 struct AppState: StateType {
     let activeScreens: ActiveScreensState
-    let isInPrivateMode: Bool
 
     static let reducer: Reducer<Self> = { state, action in
-        switch action {
-        case AppStateAction.setPrivateModeTo(let privateState):
-            AppState(
-                activeScreens: ActiveScreensState.reducer(state.activeScreens, action),
-                isInPrivateMode: privateState
-            )
-        default:
-            AppState(
-                activeScreens: ActiveScreensState.reducer(state.activeScreens, action),
-                isInPrivateMode: state.isInPrivateMode
-            )
-        }
+        AppState(activeScreens: ActiveScreensState.reducer(state.activeScreens, action))
     }
 
     func screenState<S: ScreenState>(_ s: S.Type, for screen: AppScreen) -> S? {
@@ -32,7 +20,7 @@ struct AppState: StateType {
                 case (.tabsTray(let state), .tabsTray): return state as? S
                 case (.tabsPanel(let state), .tabsPanel): return state as? S
                 case (.remoteTabsPanel(let state), .remoteTabsPanel): return state as? S
-                case (.fakespot(let state), .fakespot): return state as? S
+                case (.browserViewController(let state), .browserViewController): return state as? S
                 default: return nil
                 }
             }
@@ -43,12 +31,14 @@ struct AppState: StateType {
 extension AppState {
     init() {
         activeScreens = ActiveScreensState()
-        isInPrivateMode = false
     }
 }
 
 let store = Store(state: AppState(),
                   reducer: AppState.reducer,
-                  middlewares: [ThemeManagerMiddleware().themeManagerProvider,
-                                TabManagerMiddleware().tabsPanelProvider,
-                                RemoteTabsPanelMiddleware().remoteTabsPanelProvider])
+                  middlewares: [
+                    FeltPrivacyMiddleware().privacyManagerProvider,
+                    ThemeManagerMiddleware().themeManagerProvider,
+                    TabManagerMiddleware().tabsPanelProvider,
+                    RemoteTabsPanelMiddleware().remoteTabsPanelProvider
+                  ])

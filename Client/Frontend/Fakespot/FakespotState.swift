@@ -8,13 +8,8 @@ import Redux
 struct FakespotState: ScreenState, Equatable {
     var isOpenOnProductPage: Bool
 
-    init(_ appState: AppState) {
-        guard let fakespotState = store.state.screenState(FakespotState.self, for: .fakespot) else {
-            self.init()
-            return
-        }
-
-        self.init(isOpenOnProductPage: fakespotState.isOpenOnProductPage)
+    init(_ appState: BrowserViewControllerState) {
+        self.init(isOpenOnProductPage: appState.fakespotState.isOpenOnProductPage)
     }
 
     init() {

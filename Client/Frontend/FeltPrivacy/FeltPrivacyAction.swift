@@ -5,6 +5,10 @@
 import Foundation
 import Redux
 
-enum AppStateAction: Action {
+enum FeltPrivacyAction: Action {
+    // middleware actions
+    case privateModeUpdated(Bool)
+
+    // user actions
     case setPrivateModeTo(Bool)
 }
