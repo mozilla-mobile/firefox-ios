@@ -89,7 +89,7 @@
 "Shopping.NoAnalysisCard.AnalyzerButton.Title.v120" = "Kontrollerer kvaliteten på vurderingen";
 
 /* Text for the body label, to check the reliability of a product. */
-"Shopping.NoAnalysisCard.BodyLabel.Title.v120" = "For å vite om dette produktets anmeldelser er pålitelige, sjekk kvaliteten på anmeldelsen. Det tar bare cirka 60 sekunder.";
+"Shopping.NoAnalysisCard.BodyLabel.Title.v120" = "For å vite om dette produktets vurderinger er pålitelige, sjekk kvaliteten på vurderingen. Det tar bare omtrent 60 sekunder.";
 
 /* Title for card displayed when a shopping product has not been analysed yet. */
 "Shopping.NoAnalysisCard.HeadlineLabel.Title.v120" = "Ingen informasjon om disse vurderingene ennå";
@@ -164,13 +164,13 @@
 "Shopping.ReviewQualityCard.MixedReviews.Label.v120" = "Vi tror det er en blanding av pålitelige og upålitelige vurderinger";
 
 /* Reliable reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
-"Shopping.ReviewQualityCard.ReliableReviews.Label.v120" = "Pålitelige vurderinger. Vi tror at vurderingene sannsynligvis kommer fra ekte kunder som har gitt ærlige, objektive anmeldelser.";
+"Shopping.ReviewQualityCard.ReliableReviews.Label.v120" = "Pålitelige vurderinger. Vi tror at vurderingene sannsynligvis kommer fra ekte kunder som har gitt ærlige, objektive vurderinger.";
 
 /* Label of the sub headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "Shopping.ReviewQualityCard.SubHeadline.Label.v120" = "Vi tildeler hvert produkts vurderinger en *bokstavkarakter* fra A til F.";
 
 /* Unreliable reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
-"Shopping.ReviewQualityCard.UnreliableReviews.Label.v120" = "Upålitelige vurderinger. Vi mener vurderingene sannsynligvis er falske eller fra partiske anmeldere.";
+"Shopping.ReviewQualityCard.UnreliableReviews.Label.v120" = "Upålitelige vurderinger. Vi mener vurderingene sannsynligvis er falske eller fra partiske vurderere.";
 
 /* Accessibility label for the up chevron icon used to collapse or minimize the Settings Card within the shopping product review bottom sheet. */
 "Shopping.SettingsCard.Collapse.AccessibilityLabel.v120" = "Skjul «Innstillinger»-kortet";

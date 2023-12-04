@@ -160,6 +160,22 @@ class SearchEnginesTests: XCTestCase {
         XCTAssertFalse(engines.shouldShowSearchSuggestions)
     }
 
+    func testDisableSearchSuggestionSettingsInPrivateMode() {
+        // Disable search suggestions by default
+        XCTAssertTrue(engines.shouldDisablePrivateModeSearchSuggestions)
+        XCTAssertNil(profile.prefs.boolForKey(PrefsKeys.SearchSettings.disablePrivateModeSearchSuggestions))
+
+        // Turn off setting
+        engines.shouldDisablePrivateModeSearchSuggestions = false
+        XCTAssertFalse(engines.shouldDisablePrivateModeSearchSuggestions)
+        XCTAssertEqual(profile.prefs.boolForKey(PrefsKeys.SearchSettings.disablePrivateModeSearchSuggestions), false)
+
+        // Turn on setting
+        engines.shouldDisablePrivateModeSearchSuggestions = true
+        XCTAssertTrue(engines.shouldDisablePrivateModeSearchSuggestions)
+        XCTAssertEqual(profile.prefs.boolForKey(PrefsKeys.SearchSettings.disablePrivateModeSearchSuggestions), true)
+    }
+
     func testGetOrderedEngines() {
         // Verify that the set of shipped engines includes the expected subset.
         let expectation = expectation(description: "Completed parse engines")

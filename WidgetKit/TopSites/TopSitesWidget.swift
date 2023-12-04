@@ -16,6 +16,7 @@ struct TopSitesWidget: Widget {
         .supportedFamilies([.systemMedium])
         .configurationDisplayName(String.TopSitesGalleryTitleV2)
         .description(String.TopSitesGalleryDescription)
+        .contentMarginsDisabled()
     }
 }
 
