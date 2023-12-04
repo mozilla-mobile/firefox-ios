@@ -19,16 +19,8 @@ protocol TopSitesDataAdaptor {
     /// In other words, the number of rows shown depends on the actual data and the user preference.
     var numberOfRows: Int { get }
 
-    /// Get top sites data, already calculated and ready to be shown to the user
+    /// Get top sites data
     func getTopSitesData() -> [TopSite]
-
-    /// Calculate top site data
-    /// This calculation is dependent on the number of tiles per row that is shown in the user interface.
-    /// Top sites are composed of pinned sites, history, Contiles and Google top site.
-    /// Google top site is always first, then comes the contiles, pinned sites and history top sites.
-    /// We only add Google top site or Contiles if number of pins doesn't exceeds the available number shown of tiles.
-    /// - Parameter numberOfTilesPerRow: The number of tiles per row shown to the user
-    func recalculateTopSiteData(for numberOfTilesPerRow: Int)
 }
 
 class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
@@ -40,6 +32,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
     private var historySites: [Site] = []
     private var contiles: [Contile] = []
 
+    private let maxTopSites = 4 * 14 // Max rows * max tiles on the largest screen plus some padding
     var notificationCenter: NotificationProtocol
     weak var delegate: TopSitesManagerDelegate?
     private let topSiteHistoryManager: TopSiteHistoryManager
@@ -82,12 +75,18 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
     }
 
     func getTopSitesData() -> [TopSite] {
+        recalculateTopSiteData()
         return topSites
     }
 
-    func recalculateTopSiteData(for numberOfTilesPerRow: Int) {
+    /// Calculate top site data
+    /// This calculation is dependent on the number of tiles per row that is shown in the user interface.
+    /// Top sites are composed of pinned sites, history, Contiles and Google top site.
+    /// Google top site is always first, then comes the contiles, pinned sites and history top sites.
+    /// We only add Google top site or Contiles if number of pins doesn't exceeds the available number shown of tiles.
+    private func recalculateTopSiteData() {
         var sites = historySites
-        let availableSpaceCount = getAvailableSpaceCount(numberOfTilesPerRow: numberOfTilesPerRow)
+        let availableSpaceCount = getAvailableSpaceCount(maxTopSites: maxTopSites)
         let shouldAddGoogle = shouldAddGoogle(availableSpaceCount: availableSpaceCount)
 
         // Add Sponsored tile
@@ -115,7 +114,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
         loadTopSites()
 
         dispatchGroup.notify(queue: dataQueue) { [weak self] in
-            self?.recalculateTopSiteData(for: TopSitesDataAdaptorImplementation.defaultTopSitesRowCount)
+            self?.recalculateTopSiteData()
             self?.delegate?.didLoadNewData()
             dataLoadingCompletion?()
         }
@@ -151,10 +150,9 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
     /// Get available space count for the sponsored tiles and Google tiles
     /// - Parameter numberOfTilesPerRow: Comes from top sites view model and accounts for different layout (landscape, portrait, iPhone, iPad, etc).
     /// - Returns: The available space count for the rest of the calculation
-    private func getAvailableSpaceCount(numberOfTilesPerRow: Int) -> Int {
+    private func getAvailableSpaceCount(maxTopSites: Int) -> Int {
         let pinnedSiteCount = countPinnedSites(sites: historySites)
-        let totalNumberOfShownTiles = numberOfTilesPerRow * numberOfRows
-        return totalNumberOfShownTiles - pinnedSiteCount
+        return maxTopSites - pinnedSiteCount
     }
 
     // The number of rows the user wants.

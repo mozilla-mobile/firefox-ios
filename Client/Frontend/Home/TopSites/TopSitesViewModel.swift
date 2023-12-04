@@ -22,9 +22,11 @@ class TopSitesViewModel {
 
     private let profile: Profile
     private var sentImpressionTelemetry = [String: Bool]()
+    private var unfilteredTopSites: [TopSite] = []
     private var topSites: [TopSite] = []
     private let dimensionManager: TopSitesDimension
     private var numberOfItems: Int = 0
+    private var numberOfRows: Int = 0
 
     private let topSitesDataAdaptor: TopSitesDataAdaptor
     private let topSiteHistoryManager: TopSiteHistoryManager
@@ -165,7 +167,7 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 
         let interface = TopSitesUIInterface(trait: traitCollection, availableWidth: size.width)
         let sectionDimension = dimensionManager.getSectionDimension(for: topSites,
-                                                                    numberOfRows: topSitesDataAdaptor.numberOfRows,
+                                                                    numberOfRows: numberOfRows,
                                                                     interface: interface)
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                        subitem: item,
@@ -194,11 +196,14 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         let interface = TopSitesUIInterface(trait: traitCollection,
                                             availableWidth: size.width)
         let sectionDimension = dimensionManager.getSectionDimension(for: topSites,
-                                                                    numberOfRows: topSitesDataAdaptor.numberOfRows,
+                                                                    numberOfRows: numberOfRows,
                                                                     interface: interface)
-        topSitesDataAdaptor.recalculateTopSiteData(for: sectionDimension.numberOfTilesPerRow)
-        topSites = topSitesDataAdaptor.getTopSitesData()
         numberOfItems = sectionDimension.numberOfRows * sectionDimension.numberOfTilesPerRow
+        topSites = unfilteredTopSites
+        if numberOfItems < unfilteredTopSites.count {
+            let range = numberOfItems..<unfilteredTopSites.count
+            topSites.removeSubrange(range)
+        }
     }
 
     func screenWasShown() {
@@ -214,7 +219,9 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 extension TopSitesViewModel: TopSitesManagerDelegate {
     func didLoadNewData() {
         ensureMainThread {
-            self.topSites = self.topSitesDataAdaptor.getTopSitesData()
+            self.unfilteredTopSites = self.topSitesDataAdaptor.getTopSitesData()
+            self.topSites = self.unfilteredTopSites
+            self.numberOfRows = self.topSitesDataAdaptor.numberOfRows
             guard self.isEnabled else { return }
             self.delegate?.reloadView()
         }
