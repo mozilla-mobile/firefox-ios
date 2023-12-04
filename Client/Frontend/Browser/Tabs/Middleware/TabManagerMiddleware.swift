@@ -116,7 +116,7 @@ class TabManagerMiddleware {
 
     private func refreshTabs(for isPrivateMode: Bool) -> [TabModel] {
         var tabs = [TabModel]()
-        let tabManagerTabs = isPrivateMode ? tabManager.privateTabs : tabManager.normalActiveTabs
+        let tabManagerTabs = isPrivateMode ? defaultTabManager.privateTabs : defaultTabManager.normalActiveTabs
         tabManagerTabs.forEach { tab in
             let tabModel = TabModel(tabUUID: tab.tabUUID,
                                     isSelected: false,
@@ -137,7 +137,7 @@ class TabManagerMiddleware {
         guard !isPrivateMode else { return [InactiveTabsModel]() }
 
         var inactiveTabs = [InactiveTabsModel]()
-        for tab in tabManager.getInactiveTabs() {
+        for tab in defaultTabManager.getInactiveTabs() {
             let inactiveTab = InactiveTabsModel(tabUUID: tab.tabUUID,
                                                 title: tab.displayTitle,
                                                 url: tab.url)
@@ -167,11 +167,11 @@ class TabManagerMiddleware {
     }
 
     private func closeAllInactiveTabs() async {
-        await tabManager.removeAllInactiveTabs()
+        await defaultTabManager.removeAllInactiveTabs()
     }
 
     private func closeInactiveTab(for tabUUID: String) async {
-        await tabManager.removeTab(tabUUID)
+        await defaultTabManager.removeTab(tabUUID)
     }
 
     private func didTapLearnMoreAboutPrivate(with urlRequest: URLRequest) {

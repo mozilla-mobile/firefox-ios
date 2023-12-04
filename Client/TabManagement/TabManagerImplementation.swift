@@ -20,7 +20,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
     override var normalActiveTabs: [Tab] {
         let inactiveTabs = getInactiveTabs()
-        let activeTabs = tabs.filter { $0.isPrivate == false && !inactiveTabs.contains($0)}
+        let activeTabs = tabs.filter { $0.isPrivate == false && !inactiveTabs.contains($0) }
         return activeTabs
     }
 
