@@ -33,16 +33,21 @@ const creditCardSendMessage = sendMessage(
 );
 
 // TODO: FXCM-703: Define this method for address autofill
-const addressSendMessage = sendMessage();
+const addressSendMessage = sendMessage(
+  window.webkit.messageHandlers.addressMessageHandler
+);
 
 // Note: We expect all values to be string based
 const sendCaptureCreditCardFormMessage = creditCardSendMessage(
   messageTypes.CAPTURE_CREDIT_CARD_FORM,
   (payload) => {
-    const modifiedPayload = Object.entries(payload?.[0]).reduce((acc, [key, val]) => ({
-      ...acc,
-      [key]: String(val)
-    }), {});
+    const modifiedPayload = Object.entries(payload?.[0]).reduce(
+      (acc, [key, val]) => ({
+        ...acc,
+        [key]: String(val),
+      }),
+      {}
+    );
     return modifiedPayload;
   }
 );

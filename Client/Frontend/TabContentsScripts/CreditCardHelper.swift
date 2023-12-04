@@ -61,12 +61,52 @@ class CreditCardHelper: TabContentScript {
         self.tab = tab
     }
 
-    func scriptMessageHandlerName() -> String? {
-        return "creditCardMessageHandler"
+    func scriptMessageHandlerNames() -> [String] {
+        return ["creditCardMessageHandler", "addressMessageHandler"]
     }
 
     func prepareForDeinit() {
         foundFieldValues = nil
+    }
+    
+    static func injectAddress(logger: Logger,
+                              card: UnencryptedCreditCardFields,
+                              tab: Tab,
+                              frame: WKFrameInfo? = nil){
+        let dataStr = """
+        "{
+          "given-name": "Timothy",
+          "additional-name": "John",
+          "family-name": "Berners-Lee",
+          "organization": "World Wide Web Consortium",
+          "street-address": "32 Vassar Street\nMIT Room 32-G524",
+          "address-level2": "Cambridge",
+          "address-level1": "MA",
+          "postal-code": "02139",
+          "country": "US",
+          "tel": "+16172535702",
+          "email": "timbl@w3.org",
+            }"
+        """
+        let webView = tab.webView
+        
+        let fillCreditCardInfoCallback = "__firefox__.FormAutofillHelper.fillFormFields(\(dataStr))"
+        webView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback, frame) { _, error in
+            guard let error = error else {
+                TelemetryWrapper.recordEvent(category: .action,
+                                             method: .tap,
+                                             object: .creditCardAutofilled)
+                completion(nil)
+                return
+            }
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .creditCardAutofillFailed)
+            completion(error)
+            logger.log("Credit card script error \(error)",
+                       level: .debug,
+                       category: .webview)
+        }
     }
 
     // MARK: Retrieval
@@ -76,7 +116,11 @@ class CreditCardHelper: TabContentScript {
         // Note: We require frame so that we can submit information
         // to embedded iframe on a webpage for injecting card info
         frame = message.frameInfo
-
+        
+        if message.name == "addressMessageHandler" {
+            injectAddress(frame);
+        }
+        
         guard let data = getValidPayloadData(from: message),
               let fieldValues = parseFieldType(messageBody: data),
               let payloadType = CreditCardPayloadType(rawValue: fieldValues.type)
@@ -88,7 +132,8 @@ class CreditCardHelper: TabContentScript {
         }
         let payloadData = fieldValues.creditCardPayload
         foundFieldValues?(getFieldTypeValues(payload: payloadData), payloadType, frame)
-    }
+    
+        
 
     func getValidPayloadData(from message: WKScriptMessage) -> [String: Any]? {
         return message.body as? [String: Any]
