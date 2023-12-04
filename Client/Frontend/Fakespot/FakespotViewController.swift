@@ -182,7 +182,7 @@ class FakespotViewController:
 
     private func handleVisibilityChanges() {
         guard let adView else { return }
-        viewModel.handleVisibilityChanges(for: adView, in: view)
+        viewModel.handleVisibilityChanges(for: adView, in: scrollView)
     }
 
     private func setShadowPath() {
