@@ -149,7 +149,7 @@ class FakespotViewController:
         super.viewDidLayoutSubviews()
         viewModel.isSwiping = false
         setShadowPath()
-        handleVisibilityChanges()
+        handleAdVisibilityChanges()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -180,7 +180,7 @@ class FakespotViewController:
         viewModel.fetchProductIfOptedIn()
     }
 
-    private func handleVisibilityChanges() {
+    private func handleAdVisibilityChanges() {
         guard let adView else { return }
         viewModel.handleVisibilityChanges(for: adView, in: scrollView)
     }
@@ -570,6 +570,6 @@ class FakespotViewController:
     // MARK: - UIScrollViewDelegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         adjustShadowBasedOnIntersection()
-        handleVisibilityChanges()
+        handleAdVisibilityChanges()
     }
 }

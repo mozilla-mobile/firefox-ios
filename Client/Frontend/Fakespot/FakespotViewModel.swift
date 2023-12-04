@@ -173,7 +173,7 @@ class FakespotViewModel {
     var isViewIntersected = false
     // Timer-related properties for handling view visibility
     private var isViewVisible = false
-    private var isTimerFired = false
+    private var hasTimerFired = false
     private var timer: Timer?
 
     private var fetchProductTask: Task<Void, Never>?
@@ -493,13 +493,13 @@ class FakespotViewModel {
 
     @objc
     private func timerFired() {
-        isTimerFired = true
+        hasTimerFired = true
         recordSurfaceAdsImpressionTelemetry()
         stopTimer()
     }
 
     func handleVisibilityChanges(for view: UIView, in superview: UIView) {
-        guard !isTimerFired else { return }
+        guard !hasTimerFired else { return }
         let halfViewHeight = view.frame.height / 2
         let intersection = superview.bounds.intersection(view.frame)
         let areViewsIntersected = intersection.height >= halfViewHeight && halfViewHeight > 0
