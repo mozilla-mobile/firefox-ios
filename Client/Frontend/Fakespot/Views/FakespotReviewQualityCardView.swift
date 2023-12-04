@@ -318,8 +318,7 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
     // MARK: - Theming System
     func applyTheme(theme: Theme) {
         collapsibleContainer.applyTheme(theme: theme)
-        let colors = theme.colors
-        learnMoreButton.setTitleColor(colors.textAccent, for: .normal)
+        learnMoreButton.applyTheme(theme: theme)
         [aReliabilityScoreView, bReliabilityScoreView, cReliabilityScoreView, dReliabilityScoreView, fReliabilityScoreView]
             .forEach { $0.applyTheme(theme: theme) }
     }
