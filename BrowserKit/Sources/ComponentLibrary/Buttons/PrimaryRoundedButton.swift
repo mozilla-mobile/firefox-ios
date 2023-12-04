@@ -5,18 +5,18 @@
 import Common
 import UIKit
 
-public class PrimaryRoundedButton: LegacyResizableButton, ThemeApplicable {
+public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
     private struct UX {
         static let buttonCornerRadius: CGFloat = 12
         static let buttonVerticalInset: CGFloat = 12
         static let buttonHorizontalInset: CGFloat = 16
         static let buttonFontSize: CGFloat = 16
 
-        static let contentEdgeInsets = UIEdgeInsets(
+        static let contentInsets = NSDirectionalEdgeInsets(
             top: buttonVerticalInset,
-            left: buttonHorizontalInset,
+            leading: buttonHorizontalInset,
             bottom: buttonVerticalInset,
-            right: buttonHorizontalInset
+            trailing: buttonHorizontalInset
         )
     }
 
@@ -32,21 +32,22 @@ public class PrimaryRoundedButton: LegacyResizableButton, ThemeApplicable {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
+        configuration?.setFont(DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .callout,
-            size: UX.buttonFontSize)
+            size: UX.buttonFontSize
+        ))
         layer.cornerRadius = UX.buttonCornerRadius
         titleLabel?.textAlignment = .center
         titleLabel?.adjustsFontForContentSizeCategory = true
-        contentEdgeInsets = UX.contentEdgeInsets
+        configuration?.contentInsets = UX.contentInsets
     }
 
     public func configure(viewModel: PrimaryRoundedButtonViewModel) {
         accessibilityIdentifier = viewModel.a11yIdentifier
-        setTitle(viewModel.title, for: .normal)
+        configuration?.title = viewModel.title
 
         guard let imageTitlePadding = viewModel.imageTitlePadding else { return }
-        setInsets(forContentPadding: UX.contentEdgeInsets, imageTitlePadding: imageTitlePadding)
+        configuration?.imagePadding = imageTitlePadding
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -59,7 +60,7 @@ public class PrimaryRoundedButton: LegacyResizableButton, ThemeApplicable {
         highlightedTintColor = theme.colors.actionPrimaryHover
         normalTintColor = theme.colors.actionPrimary
 
-        setTitleColor(theme.colors.textInverted, for: .normal)
-        backgroundColor = theme.colors.actionPrimary
+        configuration?.baseForegroundColor = theme.colors.textInverted
+        backgroundColor = normalTintColor
     }
 }
