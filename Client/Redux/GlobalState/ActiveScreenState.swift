@@ -52,10 +52,6 @@ struct ActiveScreensState: Equatable {
             switch action {
             case .closeScreen(let screenType):
                 screens = screens.filter({ return $0.associatedAppScreen != screenType })
-//            case .showScreen(.fakespot):
-//                screens += [.fakespot(FakespotState())]
-//            case .showScreen(.feltPrivacy):
-//                screens += [.feltPrivacy(FeltPrivacyState())]
             case .showScreen(.browserViewController):
                 screens += [.browserViewController(BrowserViewControllerState())]
             case .showScreen(.remoteTabsPanel):
