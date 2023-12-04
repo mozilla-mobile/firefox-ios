@@ -69,7 +69,7 @@ class HomepageViewController:
     init(profile: Profile,
          isZeroSearch: Bool = false,
          toastContainer: UIView,
-         tabManager: TabManager = AppContainer.shared.resolve(),
+         tabManager: TabManager,
          overlayManager: OverlayModeManager,
          userDefaults: UserDefaultsInterface = UserDefaults.standard,
          themeManager: ThemeManager = AppContainer.shared.resolve(),

@@ -16,9 +16,6 @@ class DependencyHelper {
         let profile: Profile = appDelegate.profile
         AppContainer.shared.register(service: profile)
 
-        let tabManager: TabManager = appDelegate.tabManager
-        AppContainer.shared.register(service: tabManager)
-
         let appSessionProvider: AppSessionProvider = appDelegate.appSessionManager
         AppContainer.shared.register(service: appSessionProvider)
 

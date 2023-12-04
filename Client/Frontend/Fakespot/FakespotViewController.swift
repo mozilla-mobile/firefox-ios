@@ -100,15 +100,19 @@ class FakespotViewController:
         button.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.sheetCloseButton
     }
 
+    private let tabManager: TabManager
+
     // MARK: - Initializers
     init(
         viewModel: FakespotViewModel,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
-        themeManager: ThemeManager = AppContainer.shared.resolve()
+        themeManager: ThemeManager = AppContainer.shared.resolve(),
+        tabManager: TabManager
     ) {
         self.viewModel = viewModel
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
+        self.tabManager = tabManager
         super.init(nibName: nil, bundle: nil)
 
         listenToStateChange()
@@ -427,7 +431,7 @@ class FakespotViewController:
         case .productAdCard(let adData):
             guard viewModel.areAdsEnabled else { return nil }
             let view: FakespotAdView = .build()
-            var viewModel = FakespotAdViewModel(productAdsData: adData)
+            var viewModel = FakespotAdViewModel(tabManager: tabManager, productAdsData: adData)
             viewModel.dismissViewController = {
                 store.dispatch(FakespotAction.setAppearanceTo(false))
             }

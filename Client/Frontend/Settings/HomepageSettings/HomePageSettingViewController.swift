@@ -152,6 +152,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
                                                    titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.RecentlyVisited))
         let wallpaperSetting = WallpaperSettings(settings: self,
                                                  settingsDelegate: settingsDelegate,
+                                                 tabManager: tabManager,
                                                  wallpaperManager: wallpaperManager)
 
         // Section ordering
@@ -275,7 +276,7 @@ extension HomePageSettingViewController {
 
         init(settings: SettingsTableViewController,
              settingsDelegate: SettingsDelegate?,
-             and tabManager: TabManager = AppContainer.shared.resolve(),
+             tabManager: TabManager,
              wallpaperManager: WallpaperManagerInterface = WallpaperManager()
         ) {
             self.settings = settings

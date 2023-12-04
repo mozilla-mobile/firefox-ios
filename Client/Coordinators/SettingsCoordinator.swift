@@ -33,7 +33,7 @@ class SettingsCoordinator: BaseCoordinator,
     init(router: Router,
          wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
          profile: Profile = AppContainer.shared.resolve(),
-         tabManager: TabManager = AppContainer.shared.resolve(),
+         tabManager: TabManager,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.wallpaperManager = wallpaperManager
         self.profile = profile

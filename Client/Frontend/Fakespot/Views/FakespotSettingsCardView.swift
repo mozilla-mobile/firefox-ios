@@ -53,7 +53,7 @@ class FakespotSettingsCardViewModel {
     }
 
     init(profile: Profile = AppContainer.shared.resolve(),
-         tabManager: TabManager = AppContainer.shared.resolve()) {
+         tabManager: TabManager) {
         prefs = profile.prefs
         self.tabManager = tabManager
     }
