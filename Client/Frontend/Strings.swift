@@ -104,7 +104,6 @@ extension String {
                 tableName: "Alerts",
                 value: "Cancel",
                 comment: "When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the cancel action for the alert, cancelling ending your session.")
-
         }
     }
 }
@@ -219,7 +218,7 @@ extension String {
                 value: "Open Review Checker",
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears after the user has opted in for the Shopping feature. It indicates that a user can directly open the review checker by tapping the text of the action.")
         }
-        
+
         public struct FeltDeletion {
             public static let Body = MZLocalizedString(
                 key: "ContextualHints.FeltDeletion.Body.v122",
