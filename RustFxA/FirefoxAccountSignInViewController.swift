@@ -103,7 +103,6 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
             imageTitlePadding: UX.buttonHorizontalInset
         )
         button.configure(viewModel: viewModel)
-        button.setImage(self.signinSyncQRImage?.tinted(withColor: .white), for: .highlighted)
         button.addTarget(self, action: #selector(self.scanbuttonTapped), for: .touchUpInside)
     }
 
@@ -234,8 +233,8 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         let theme = themeManager.currentTheme
         scanButton.applyTheme(theme: theme)
         emailButton.applyTheme(theme: theme)
-        scanButton.setImage(signinSyncQRImage?
-            .tinted(withColor: colors.textInverted), for: .normal)
+
+        scanButton.configuration?.image = signinSyncQRImage?.withRenderingMode(.alwaysTemplate)
     }
 
     // MARK: Button Tap Functions
