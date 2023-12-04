@@ -6,24 +6,24 @@ import Foundation
 import Redux
 
 struct FeltPrivacyState: ScreenState, Equatable {
-    var shouldHideSearchSuggestionView: Bool
+    var isInPrivateMode: Bool
 
     init(_ appState: BrowserViewControllerState) {
-        self.init(shouldHideSearchSuggestionView: appState.feltPrivacyState.shouldHideSearchSuggestionView)
+        self.init(isInPrivateMode: appState.feltPrivacyState.isInPrivateMode)
     }
 
     init() {
-        self.init(shouldHideSearchSuggestionView: false)
+        self.init(isInPrivateMode: false)
     }
 
-    init(shouldHideSearchSuggestionView: Bool) {
-        self.shouldHideSearchSuggestionView = shouldHideSearchSuggestionView
+    init(isInPrivateMode: Bool) {
+        self.isInPrivateMode = isInPrivateMode
     }
 
     static let reducer: Reducer<Self> = { state, action in
         switch action {
         case FeltPrivacyAction.privateModeUpdated(let privacyState):
-            return FeltPrivacyState(shouldHideSearchSuggestionView: privacyState)
+            return FeltPrivacyState(isInPrivateMode: privacyState)
         default:
             return state
         }
