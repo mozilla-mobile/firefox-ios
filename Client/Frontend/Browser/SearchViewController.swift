@@ -76,6 +76,8 @@ class SearchViewController: SiteTableViewController,
     private let searchEngineContainerView: UIView = .build()
     private let searchEngineScrollView: ButtonScrollView = .build()
     private let searchEngineScrollViewContent: UIView = .build()
+    private var bottomConstraintWithKeyboard: NSLayoutConstraint?
+    private var bottomConstraintWithoutKeyboard: NSLayoutConstraint?
 
     private lazy var bookmarkedBadge: UIImage = {
         return UIImage(named: StandardImageIdentifiers.Medium.bookmarkBadgeFillBlue50)!
@@ -213,9 +215,18 @@ class SearchViewController: SiteTableViewController,
             searchEngineScrollView.topAnchor.constraint(equalTo: searchEngineContainerView.topAnchor)
         ])
 
-        searchEngineScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = keyboardHeight == 0
-        let offset = viewModel.isBottomSearchBar ? 0 : keyboardHeight
-        searchEngineScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -offset).isActive = keyboardHeight != 0
+        // Remove existing keyboard-related bottom constraints (if any)
+        bottomConstraintWithKeyboard?.isActive = false
+        bottomConstraintWithoutKeyboard?.isActive = false
+
+        if keyboardHeight == 0 {
+            bottomConstraintWithoutKeyboard = searchEngineScrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            bottomConstraintWithoutKeyboard?.isActive = true
+        } else {
+            let offset = viewModel.isBottomSearchBar ? 0 : keyboardHeight
+            bottomConstraintWithKeyboard = searchEngineScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -offset)
+            bottomConstraintWithKeyboard?.isActive = true
+        }
     }
 
     private func layoutSearchEngineScrollViewContent() {
