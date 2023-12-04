@@ -5,16 +5,16 @@
 "New Tab" = "Nueva pestaña";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox usa tu cámara para escanear códigos QR y tomar fotos y videos.";
+"NSCameraUsageDescription" = "Firefox usa tu cámara para escanear códigos QR y realizar fotos y videos.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox requiere Face ID para acceder a tus inicios de sesión guardados y tarjetas cifradas.";
 
 /* Privacy - Location When In Use Usage Description */
-"NSLocationWhenInUseUsageDescription" = "Los sitios web que visites pueden solicitar conocer tu ubicación.";
+"NSLocationWhenInUseUsageDescription" = "Los sitios web que visitas pueden pedir tu ubicación.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Esto te permite realizar y subir vídeos.";
+"NSMicrophoneUsageDescription" = "Firefox usa tu micrófono para grabar y subir audio.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Esto te permite guardar fotos.";

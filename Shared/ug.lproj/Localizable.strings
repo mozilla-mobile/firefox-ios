@@ -874,21 +874,168 @@
 /* See http://mzl.la/1G7uHo7 */
 "Open Settings" = "تەڭشەكنى ئاچ";
 
+/* Toggle tabs syncing setting */
+"Open Tabs" = "بەتكۈچ ئاچ";
+
+/* Title of the message shown when the user attempts to navigate to an invalid link. */
+"OpenURL.Error.Title" = "بەتنى ئاچقىلى بولمايدۇ";
+
 /* Password textbox in Authentication prompt */
 "Password" = "پارول";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "بۇ ئارقىلىق سۈرەتنى كامېرا لىنتىسىغا ساقلىشىڭىزغا يول قويىدۇ.";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox سىزنىڭ سۈرەتلىرىڭىزنى زىيارەت قىلماقچى";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "تاقا";
 
+/* Privacy section title */
+"Privacy" = "شەخسىيەت";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "شەخسىيەت تۈزۈمى";
+
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "باغلىنىش بىخەتەر ئەمەس";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "باغلىنىش بىخەتەر";
+
+/* Title for quick-search engines settings section. */
+"Quick-Search Engines" = "تېز ئىزدەش موتورى";
+
+/* A label indicating the action that a user can rate the Firefox app in the App store. */
+"Ratings.Settings.RateOnAppStore" = "App Store دىكى باھا";
+
 /* Accessibility label for the Reader View button */
 "Reader View" = "ئوقۇرمەن كۆرۈنۈشى";
 
+/* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
+"ReaderMode.Available.VoiceOverAnnouncement" = "ئوقۇش ھالىتى تەييار";
+
 /* Name for Mark as read button in reader mode */
 "ReaderModeBar.MarkAsRead.v106" = "ئوقۇلغان بەلگىسى قوي";
+
+/* Name for Mark as unread button in reader mode */
+"ReaderModeBar.MarkAsUnread.v106" = "ئوقۇلمىغان بەلگىسى قوي";
+
+/* Panel accessibility label */
+"Reading list" = "ئوقۇش تىزىمى";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "يېقىندا تاقالغان";
+
+/* More button text for Recently Saved items at the home page. */
+"RecentlySaved.Actions.More" = "ھەممىنى كۆرسەت";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "قايتا يۈكلە";
+
+/* Accessibility label for the reload button */
+"Reload page" = "بەتنى قايتا يۈكلە";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "چىقىرىۋەت";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "ئوقۇش تىزىمىدىن چىقىرىۋەت";
 
 /* Cancel button text shown in reopen-alert at home page. */
 "ReopenAlert.Actions.Cancel" = "ۋاز كەچ";
 
 /* Reopen button text shown in reopen-alert at home page. */
 "ReopenAlert.Actions.Reopen" = "قايتا ئاچ";
+
+/* Reopen alert title shown at home page. */
+"ReopenAlert.Title" = "تاقالغان ئاخىرقى بەتكۈچنى قايتا ئاچ";
+
+/* Accessibility label for button resetting font size in display settings of reader mode */
+"Reset text size" = "خەت چوڭلۇقىنى ئەسلىگە قايتۇر";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* OK button to dismiss the error prompt. */
+"ScanQRCode.Error.OK.Button" = "جەزملە";
+
+/* Text for the instructions label, displayed in the QR scanner view */
+"ScanQRCode.Instructions.Label" = "تاراش ئۈچۈن QR كودى رامكا ئىچىدە توغرىلىنىدۇ";
+
+/* Text of the prompt that is shown to the user when the data is invalid */
+"ScanQRCode.InvalidDataError.Message" = "سانلىق مەلۇمات ئىناۋەتسىز";
+
+/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
+"ScanQRCode.PermissionError.Message.v100" = "ئۈسكۈنىنىڭ «تەڭشەكلەر»›«Firefox» قا يۆتكىلىڭ. Firefox نىڭ كامېرانى زىيارەت قىلىشىغا يول قويۇڭ.";
+
+/* Title for the QR code scanner view. */
+"ScanQRCode.View.Title" = "QR كودىنى تارا";
+
+/* Open search section of settings */
+"Search" = "ئىزدە";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "ئىزدەيدۇ ياكى ئادرېس كىرگۈزۈلىدۇ";
+
+/* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
+"Search.Awesomebar.SwitchToTab" = "بەتكۈچكە ئالماشتۇرۇش";
+
+/* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
+"Search.SuggestSectionTitle.v102" = "Firefox تەكلىپى";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "يېڭى ئىزدەش موتورى تېز ئىزدەش بالداقتا كۆرۈنىدۇ.";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "ئىزدەش موتورى قوشۇلدى!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "ئىزدەش تەمىنلىگۈچىنى قوشامدۇ؟";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "ۋاز كەچ";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "بۇ ماۋزۇ ياكى تور ئادرېسى بار ئىزدەش موتورى ئاللىقاچان قوشۇلدى.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.DuplicateErrorTitle" = "مەغلۇب بولدى";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "ئىزدەش تەمىنلىگۈچىنى قوشقىلى بولمايدۇ.";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "مەغلۇب بولدى";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.FormErrorMessage" = "بارلىق بۆلەكلەرنى توغرا تولدۇرۇڭ.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.FormErrorTitle" = "مەغلۇب بولدى";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "جەزملە";
+
+/* Accessibility label for default search engine setting. */
+"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "كۆڭۈلدىكى ئىزدەش موتورى";
+
+/* Title for default search engine settings section. */
+"SearchSettings.Title.DefaultSearchEngine.v106" = "كۆڭۈلدىكى ئىزدەش موتورى";
+
+/* Navigation title for search settings. */
+"SearchSettings.Title.Search.v106" = "ئىزدە";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "مەسىلىنى ئوڭشاش ئۈچۈن Mozilla غا يىمىرىلىش دوكلاتى يوللامدۇ؟";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "قايتۇرما ئىنكاس يوللا";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "دوكلات يوللا";
+
+/* The text on the Save button when saving a custom search engine */
+"Settings.AddCustomEngine.SaveButtonText" = "ساقلاش";
 
