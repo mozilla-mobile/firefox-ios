@@ -25,7 +25,10 @@ class QRCodeCoordinator: BaseCoordinator, QRCodeDismissHandler {
         qrCodeViewController.qrCodeDelegate = delegate
         qrCodeViewController.dismissHandler = self
         let navigationController = QRCodeNavigationController(rootViewController: qrCodeViewController)
-        router.present(navigationController, animated: true)
+        router.present(navigationController, animated: true) { [weak self] in
+            guard let self = self else { return }
+            self.parentCoordinator?.didFinish(from: self)
+        }
     }
 
     // MARK: - QRCodeDismissHandler

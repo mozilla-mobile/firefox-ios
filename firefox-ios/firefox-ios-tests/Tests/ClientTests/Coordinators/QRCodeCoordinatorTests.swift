@@ -70,8 +70,19 @@ final class QRCodeCoordinatorTests: XCTestCase {
             XCTFail("The QRCodeViewController has to exist")
             return
         }
-        // Since there is no capture capture device set, the controller should call dismiss on viewDidLoad()
+        // Since there is no capture device set, the controller should call dismiss on viewDidLoad()
         qrCodeViewController.loadViewIfNeeded()
+        XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
+    }
+
+    func testShowQRCode_callsDidFinishOnParentCoordinator_whenRouterCompletionIsCalled() {
+        let subject = createSubject()
+        let delegate = MockQRCodeViewControllerDelegate()
+
+        subject.showQRCode(delegate: delegate)
+
+        router.savedCompletion?()
+
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
     }
 
