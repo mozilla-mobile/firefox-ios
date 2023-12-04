@@ -713,10 +713,6 @@ extension HomepageViewController: HomepageContextMenuHelperDelegate {
     func homePanelDidRequestToOpenSettings(at settingsPage: Route.SettingsSection) {
         homePanelDelegate?.homePanelDidRequestToOpenSettings(at: settingsPage)
     }
-
-    func showToast(message: String) {
-        SimpleToast().showAlertWithText(message, bottomContainer: view, theme: themeManager.currentTheme)
-    }
 }
 
 // MARK: - Status Bar Background
