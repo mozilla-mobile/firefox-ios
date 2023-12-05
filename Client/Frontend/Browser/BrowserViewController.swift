@@ -161,8 +161,6 @@ class BrowserViewController: UIViewController,
         return NewTabAccessors.getNewTabPage(profile.prefs)
     }
 
-    lazy var isReduxIntegrationEnabled: Bool = ReduxFlagManager.isReduxEnabled
-
     @available(iOS 13.4, *)
     func keyboardPressesHandler() -> KeyboardPressesHandler {
         guard let keyboardPressesHandlerValue = keyboardPressesHandlerValue as? KeyboardPressesHandler else {
@@ -460,34 +458,56 @@ class BrowserViewController: UIViewController,
 
     private func dismissModalsIfStartAtHome() {
         if tabManager.startAtHomeCheck() {
-            guard !dismissFakespotIfNeeded(), presentedViewController != nil else { return }
+            store.dispatch(FakespotAction.setAppearanceTo(false))
+            guard presentedViewController != nil else { return }
             dismissVC()
         }
     }
 
     // MARK: - Redux
 
+<<<<<<< HEAD
     private func subscribeRedux() {
         guard isReduxIntegrationEnabled else { return }
         store.dispatch(ActiveScreensStateAction.showScreen(.fakespot))
+=======
+    func subscribeToRedux() {
+        store.dispatch(ActiveScreensStateAction.showScreen(.browserViewController))
+>>>>>>> f8565a9a1 (Refactor FXIOS-7812 [v121] Fakespot - iPad - sidebar open/close state resets itself when user changes from landscape to portrait mode (#17587))
 
         store.subscribe(self, transform: {
             $0.select(FakespotState.init)
         })
     }
 
+<<<<<<< HEAD
     func newState(state: FakespotState) {
+=======
+    func unsubscribeFromRedux() {
+        store.unsubscribe(self)
+    }
+
+    func newState(state: BrowserViewControllerState) {
+>>>>>>> f8565a9a1 (Refactor FXIOS-7812 [v121] Fakespot - iPad - sidebar open/close state resets itself when user changes from landscape to portrait mode (#17587))
         ensureMainThread { [weak self] in
             guard let self else { return }
 
             fakespotState = state
 
             // opens or close sidebar/bottom sheet to match the saved state
+<<<<<<< HEAD
             if state.isOpenOnProductPage {
                 guard let productURL = urlBar.currentURL else { return }
                 handleFakespotFlow(productURL: productURL)
             } else {
                 _ = dismissFakespotIfNeeded()
+=======
+            if state.fakespotState.isOpen {
+                guard let productURL = urlBar.currentURL else { return }
+                handleFakespotFlow(productURL: productURL)
+            } else if !state.fakespotState.isOpen {
+                dismissFakespotIfNeeded()
+>>>>>>> f8565a9a1 (Refactor FXIOS-7812 [v121] Fakespot - iPad - sidebar open/close state resets itself when user changes from landscape to portrait mode (#17587))
             }
         }
     }
@@ -757,12 +777,17 @@ class BrowserViewController: UIViewController,
         var fakespotNeedsUpdate = false
         if urlBar.currentURL != nil {
             fakespotNeedsUpdate = contentStackView.isSidebarVisible != FakespotUtils().shouldDisplayInSidebar(viewSize: size)
+<<<<<<< HEAD
             if isReduxIntegrationEnabled, let fakespotState = fakespotState {
                 fakespotNeedsUpdate = fakespotNeedsUpdate && fakespotState.isOpenOnProductPage
+=======
+            if let fakespotState = browserViewControllerState?.fakespotState {
+                fakespotNeedsUpdate = fakespotNeedsUpdate && fakespotState.isOpen
+>>>>>>> f8565a9a1 (Refactor FXIOS-7812 [v121] Fakespot - iPad - sidebar open/close state resets itself when user changes from landscape to portrait mode (#17587))
             }
 
             if fakespotNeedsUpdate {
-                _ = dismissFakespotIfNeeded(animated: false)
+                dismissFakespotIfNeeded(animated: false)
             }
         }
 
@@ -1688,26 +1713,48 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func updateFakespot(tab: Tab) {
+    internal func updateFakespot(tab: Tab) {
         guard let webView = tab.webView, let url = webView.url else {
+            // We're on homepage or a blank tab
+            store.dispatch(FakespotAction.setAppearanceTo(false))
             return
         }
 
         let environment = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI) ? FakespotEnvironment.staging : .prod
         let product = ShoppingProduct(url: url, client: FakespotClient(environment: environment))
-        if product.product != nil, !tab.isPrivate, contentStackView.isSidebarVisible {
+
+        guard product.product != nil, !tab.isPrivate else {
+            store.dispatch(FakespotAction.setAppearanceTo(false))
+
+            // Quick fix: make sure to sidebar is hidden when opened from deep-link
+            // Relates to FXIOS-7844
+            contentStackView.hideSidebar(self)
+            return
+        }
+
+        if contentStackView.isSidebarVisible {
+            // Sidebar is visible, update content
             navigationHandler?.updateFakespotSidebar(productURL: url,
                                                      sidebarContainer: contentStackView,
                                                      parentViewController: self)
+<<<<<<< HEAD
         } else if product.product != nil,
                   !tab.isPrivate,
                   FakespotUtils().shouldDisplayInSidebar(),
                   isReduxIntegrationEnabled,
                   let fakespotState = fakespotState,
                   fakespotState.isOpenOnProductPage {
+=======
+        } else if FakespotUtils().shouldDisplayInSidebar(),
+                  let fakespotState = browserViewControllerState?.fakespotState,
+                  fakespotState.isOpen {
+            // Sidebar should be displayed and Fakespot is open, display Fakespot
+>>>>>>> f8565a9a1 (Refactor FXIOS-7812 [v121] Fakespot - iPad - sidebar open/close state resets itself when user changes from landscape to portrait mode (#17587))
             handleFakespotFlow(productURL: url)
-        } else if contentStackView.isSidebarVisible {
-            _ = dismissFakespotIfNeeded(animated: true)
+        } else if let fakespotState = browserViewControllerState?.fakespotState,
+                  fakespotState.sidebarOpenForiPadLandscape {
+            // Sidebar should be displayed, display Fakespot
+            store.dispatch(FakespotAction.setAppearanceTo(true))
         }
     }
 
