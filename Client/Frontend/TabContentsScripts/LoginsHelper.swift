@@ -271,7 +271,7 @@ class LoginsHelper: TabContentScript, Themeable {
         }
     }
 
-    // MARK: Theamable
+    // MARK: Themeable
     private func applyTheme(views: UIView...) {
         views.forEach { view in
             if let view = view as? ThemeApplicable {
