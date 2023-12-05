@@ -10,8 +10,7 @@ import Redux
 protocol TabTrayController: UIViewController,
                             UIAdaptivePresentationControllerDelegate,
                             UIPopoverPresentationControllerDelegate,
-                            Themeable,
-                            RemotePanelDelegate {
+                            Themeable {
     var openInNewTab: ((_ url: URL, _ isPrivate: Bool) -> Void)? { get set }
     var didSelectUrl: ((_ url: URL, _ visitType: VisitType) -> Void)? { get set }
 }
@@ -453,29 +452,7 @@ class TabTrayViewController: UIViewController,
     }
 
     @objc
-    private func syncTabsTapped() {}
-
-    // MARK: - RemotePanelDelegate
-
-    func remotePanelDidRequestToSignIn() {
-        fxaSignInOrCreateAccountHelper()
-    }
-
-    func remotePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
-        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .syncTab)
-        self.openInNewTab?(url, isPrivate)
-        self.dismissVC()
-    }
-
-    func remotePanel(didSelectURL url: URL, visitType: VisitType) {
-        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .syncTab)
-        // TODO: [FXIOS-6928] Provide handler for didSelectURL.
-        self.didSelectUrl?(url, visitType)
-        self.dismissVC()
-    }
-
-    // Sign In and Create Account Helper
-    func fxaSignInOrCreateAccountHelper() {
-        // TODO: Present Firefox account sign-in. Forthcoming.
+    private func syncTabsTapped() {
+        store.dispatch(RemoteTabsPanelAction.refreshTabs)
     }
 }

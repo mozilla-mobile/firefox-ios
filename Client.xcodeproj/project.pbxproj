@@ -152,7 +152,7 @@
 		21A7C44E283539170071D996 /* IntroViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7C44D283539170071D996 /* IntroViewModel.swift */; };
 		21A7C45028353D0E0071D996 /* OnboardingCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7C44F28353D0E0071D996 /* OnboardingCardViewController.swift */; };
 		21AFCFEE2AE80B700027E9CE /* TabsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AFCFED2AE80B700027E9CE /* TabsCoordinator.swift */; };
-		21AFCFF02AE80D370027E9CE /* SyncedTabsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AFCFEF2AE80D370027E9CE /* SyncedTabsCoordinator.swift */; };
+		21AFCFF02AE80D370027E9CE /* RemoteTabsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AFCFEF2AE80D370027E9CE /* RemoteTabsCoordinator.swift */; };
 		21B337BB29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B337BA29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift */; };
 		21B359C62AEAC20300FF09E3 /* TabsSectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B359C52AEAC20300FF09E3 /* TabsSectionManager.swift */; };
 		21B41A1D298B187A008BC0A2 /* MockOverlayModeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B41A1B298B1876008BC0A2 /* MockOverlayModeManager.swift */; };
@@ -2258,7 +2258,7 @@
 		21A7C44D283539170071D996 /* IntroViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewModel.swift; sourceTree = "<group>"; };
 		21A7C44F28353D0E0071D996 /* OnboardingCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardViewController.swift; sourceTree = "<group>"; };
 		21AFCFED2AE80B700027E9CE /* TabsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsCoordinator.swift; sourceTree = "<group>"; };
-		21AFCFEF2AE80D370027E9CE /* SyncedTabsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncedTabsCoordinator.swift; sourceTree = "<group>"; };
+		21AFCFEF2AE80D370027E9CE /* RemoteTabsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsCoordinator.swift; sourceTree = "<group>"; };
 		21B337BA29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerWebViewDelegateTests.swift; sourceTree = "<group>"; };
 		21B359C52AEAC20300FF09E3 /* TabsSectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsSectionManager.swift; sourceTree = "<group>"; };
 		21B41A1B298B1876008BC0A2 /* MockOverlayModeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockOverlayModeManager.swift; sourceTree = "<group>"; };
@@ -7747,7 +7747,7 @@
 			children = (
 				21420EF62ABA338D00B28550 /* TabTrayCoordinator.swift */,
 				21AFCFED2AE80B700027E9CE /* TabsCoordinator.swift */,
-				21AFCFEF2AE80D370027E9CE /* SyncedTabsCoordinator.swift */,
+				21AFCFEF2AE80D370027E9CE /* RemoteTabsCoordinator.swift */,
 			);
 			path = TabTray;
 			sourceTree = "<group>";
@@ -13451,7 +13451,7 @@
 				8A5D1CB62A30DBB0005AD35C /* DefaultBrowserSetting.swift in Sources */,
 				4393932029AC6CE900DC5A85 /* EnvironmentValues+Extension.swift in Sources */,
 				ABEF80D12A24D2BE003F52C4 /* CreditCardBottomSheetViewModel.swift in Sources */,
-				21AFCFF02AE80D370027E9CE /* SyncedTabsCoordinator.swift in Sources */,
+				21AFCFF02AE80D370027E9CE /* RemoteTabsCoordinator.swift in Sources */,
 				43162A2F2492DB7800F91658 /* EmptyPrivateTabsView.swift in Sources */,
 				E1380B8D2AEA897C00630AFA /* SidebarEnabledView.swift in Sources */,
 				D0625C98208E87F10081F3B2 /* DownloadQueue.swift in Sources */,

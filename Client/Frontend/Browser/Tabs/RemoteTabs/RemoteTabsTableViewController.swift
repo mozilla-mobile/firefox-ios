@@ -133,7 +133,7 @@ class RemoteTabsTableViewController: UITableViewController,
 
     private func configureEmptyView() {
         guard let emptyState = state.showingEmptyState else { return }
-        emptyView.configure(state: emptyState, delegate: remoteTabsPanel?.remotePanelDelegate)
+        emptyView.configure(state: emptyState, delegate: remoteTabsPanel)
         emptyView.applyTheme(theme: themeManager.currentTheme)
     }
 
@@ -206,7 +206,7 @@ class RemoteTabsTableViewController: UITableViewController,
     }
 
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]? {
-        return getRemoteTabContextMenuActions(for: site, remotePanelDelegate: remoteTabsPanel?.remotePanelDelegate)
+        return getRemoteTabContextMenuActions(for: site, remotePanelDelegate: remoteTabsPanel)
     }
 
     // MARK: - UITableView

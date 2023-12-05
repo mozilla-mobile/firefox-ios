@@ -525,7 +525,8 @@ class BrowserCoordinator: BaseCoordinator,
 
         let tabTrayCoordinator = TabTrayCoordinator(
             router: DefaultRouter(navigationController: navigationController),
-            tabTraySection: selectedPanel
+            tabTraySection: selectedPanel,
+            profile: profile
         )
         tabTrayCoordinator.parentCoordinator = self
         add(child: tabTrayCoordinator)

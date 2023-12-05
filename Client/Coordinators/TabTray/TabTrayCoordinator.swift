@@ -14,10 +14,13 @@ protocol TabTrayNavigationHandler: AnyObject {
 
 class TabTrayCoordinator: BaseCoordinator, TabTrayViewControllerDelegate, TabTrayNavigationHandler {
     private var tabTrayViewController: TabTrayViewController!
+    private var profile: Profile
     weak var parentCoordinator: TabTrayCoordinatorDelegate?
 
     init(router: Router,
-         tabTraySection: TabTrayPanelType) {
+         tabTraySection: TabTrayPanelType,
+         profile: Profile) {
+        self.profile = profile
         super.init(router: router)
         initializeTabTrayViewController(selectedTab: tabTraySection)
     }
@@ -51,7 +54,7 @@ class TabTrayCoordinator: BaseCoordinator, TabTrayViewControllerDelegate, TabTra
         case .privateTabs:
             makeTabsCoordinator(navigationController: navigationController)
         case .syncedTabs:
-            makeSyncedTabsCoordinator(navigationController: navigationController)
+            makeRemoteTabsCoordinator(navigationController: navigationController)
         }
     }
 
@@ -63,13 +66,14 @@ class TabTrayCoordinator: BaseCoordinator, TabTrayViewControllerDelegate, TabTra
         (navigationController.topViewController as? TabDisplayPanel)?.navigationHandler = tabCoordinator
     }
 
-    private func makeSyncedTabsCoordinator(navigationController: UINavigationController) {
-        guard !childCoordinators.contains(where: { $0 is SyncedTabsCoordinator }) else { return }
+    private func makeRemoteTabsCoordinator(navigationController: UINavigationController) {
+        guard !childCoordinators.contains(where: { $0 is RemoteTabsCoordinator }) else { return }
         let router = DefaultRouter(navigationController: navigationController)
-        let syncedCoordinator = SyncedTabsCoordinator(parentCoordinator: parentCoordinator,
-                                                      router: router)
-        add(child: syncedCoordinator)
-        (navigationController.topViewController as? RemoteTabsPanel)?.navigationHandler = syncedCoordinator
+        let remoteTabsCoordinator = RemoteTabsCoordinator(profile: profile,
+                                                          parentCoordinator: parentCoordinator,
+                                                          router: router)
+        add(child: remoteTabsCoordinator)
+        (navigationController.topViewController as? RemoteTabsPanel)?.remoteTabsCoordinatorDelegate = remoteTabsCoordinator
     }
 
     // MARK: - TabTrayViewControllerDelegate
