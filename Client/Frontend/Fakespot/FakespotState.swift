@@ -6,30 +6,39 @@ import Common
 import Redux
 
 struct FakespotState: ScreenState, Equatable {
-    var isOpenOnProductPage: Bool
+    var isOpen: Bool
+    var sidebarOpenForiPadLandscape: Bool
 
     init(_ appState: BrowserViewControllerState) {
-        self.init(isOpenOnProductPage: appState.fakespotState.isOpenOnProductPage)
+        self.init(isOpen: appState.fakespotState.isOpen,
+                  sidebarOpenForiPadLandscape: appState.fakespotState.sidebarOpenForiPadLandscape)
     }
 
     init() {
-        self.init(isOpenOnProductPage: false)
+        self.init(isOpen: false, sidebarOpenForiPadLandscape: false)
     }
 
-    init(isOpenOnProductPage: Bool) {
-        self.isOpenOnProductPage = isOpenOnProductPage
+    init(isOpen: Bool, sidebarOpenForiPadLandscape: Bool) {
+        self.isOpen = isOpen
+        self.sidebarOpenForiPadLandscape = sidebarOpenForiPadLandscape
     }
 
     static let reducer: Reducer<Self> = { state, action in
         switch action {
-        case FakespotAction.toggleAppearance(let isEnabled):
-            return FakespotState(isOpenOnProductPage: isEnabled)
+        case FakespotAction.pressedShoppingButton:
+            return FakespotState(isOpen: !state.isOpen,
+                                 sidebarOpenForiPadLandscape: !state.isOpen)
+        case FakespotAction.show:
+            return FakespotState(isOpen: true,
+                                 sidebarOpenForiPadLandscape: true)
+        case FakespotAction.dismiss:
+            return FakespotState(isOpen: false,
+                                 sidebarOpenForiPadLandscape: false)
+        case FakespotAction.setAppearanceTo(let isEnabled):
+            return FakespotState(isOpen: isEnabled,
+                                 sidebarOpenForiPadLandscape: state.sidebarOpenForiPadLandscape)
         default:
             return state
         }
-    }
-
-    static func == (lhs: FakespotState, rhs: FakespotState) -> Bool {
-        return lhs.isOpenOnProductPage == rhs.isOpenOnProductPage
     }
 }

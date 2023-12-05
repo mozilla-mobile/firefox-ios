@@ -41,7 +41,6 @@ class FakespotViewController:
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     private var viewModel: FakespotViewModel
-    weak var delegate: FakespotViewControllerDelegate?
 
     lazy var isReduxIntegrationEnabled: Bool = ReduxFlagManager.isReduxEnabled
 
@@ -365,9 +364,9 @@ class FakespotViewController:
         case .onboarding:
             let view: FakespotOptInCardView = .build()
             viewModel.optInCardViewModel.dismissViewController = { [weak self] action in
-                guard let self = self else { return }
-                self.delegate?.fakespotControllerDidDismiss(animated: true)
-                guard let action else { return }
+                store.dispatch(FakespotAction.setAppearanceTo(false))
+
+                guard let self = self, let action else { return }
                 viewModel.recordDismissTelemetry(by: action)
             }
             viewModel.optInCardViewModel.onOptIn = { [weak self] in
@@ -397,9 +396,8 @@ class FakespotViewController:
 
         case .qualityDeterminationCard:
             let reviewQualityCardView: FakespotReviewQualityCardView = .build()
-            viewModel.reviewQualityCardViewModel.dismissViewController = { [weak self] in
-                guard let self = self else { return }
-                self.delegate?.fakespotControllerDidDismiss(animated: true)
+            viewModel.reviewQualityCardViewModel.dismissViewController = {
+                store.dispatch(FakespotAction.setAppearanceTo(false))
             }
             reviewQualityCardView.configure(viewModel.reviewQualityCardViewModel)
             return reviewQualityCardView
@@ -408,9 +406,9 @@ class FakespotViewController:
             let view: FakespotSettingsCardView = .build()
             view.configure(viewModel.settingsCardViewModel)
             viewModel.settingsCardViewModel.dismissViewController = { [weak self] action in
-                guard let self = self else { return }
-                self.delegate?.fakespotControllerDidDismiss(animated: true)
-                guard let action else { return }
+                guard let self = self, let action else { return }
+
+                store.dispatch(FakespotAction.setAppearanceTo(false))
                 viewModel.recordDismissTelemetry(by: action)
             }
             viewModel.settingsCardViewModel.toggleAdsEnabled = { [weak self] in
@@ -430,9 +428,8 @@ class FakespotViewController:
             guard viewModel.areAdsEnabled else { return nil }
             let view: FakespotAdView = .build()
             var viewModel = FakespotAdViewModel(productAdsData: adData)
-            viewModel.dismissViewController = { [weak self] in
-                guard let self = self else { return }
-                self.delegate?.fakespotControllerDidDismiss(animated: true)
+            viewModel.dismissViewController = {
+                store.dispatch(FakespotAction.setAppearanceTo(false))
             }
             view.configure(viewModel)
             adView = view
@@ -506,11 +503,7 @@ class FakespotViewController:
     }
 
     private func triggerDismiss() {
-        delegate?.fakespotControllerDidDismiss(animated: true)
-
-        if isReduxIntegrationEnabled {
-            store.dispatch(FakespotAction.toggleAppearance(false))
-        }
+        store.dispatch(FakespotAction.dismiss)
     }
 
     deinit {

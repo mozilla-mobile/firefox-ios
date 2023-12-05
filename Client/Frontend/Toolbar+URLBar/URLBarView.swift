@@ -46,7 +46,6 @@ protocol URLBarDelegate: AnyObject {
     func urlBarDisplayTextForURL(_ url: URL?) -> (String?, Bool)
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView)
     func urlBarDidPressShare(_ urlBar: URLBarView, shareView: UIView)
-    func urlBarDidPressShopping(_ urlBar: URLBarView, shoppingButton: UIButton)
     func urlBarPresentCFR(at sourceView: UIView)
 }
 
@@ -776,10 +775,6 @@ extension URLBarView: TabLocationViewDelegate {
 
     func tabLocationViewDidTapShare(_ tabLocationView: TabLocationView, button: UIButton) {
         delegate?.urlBarDidPressShare(self, shareView: button)
-    }
-
-    func tabLocationViewDidTapShopping(_ tabLocationView: TabLocationView, button: UIButton) {
-        delegate?.urlBarDidPressShopping(self, shoppingButton: button)
     }
 
     func tabLocationViewPresentCFR(at sourceView: UIView) {

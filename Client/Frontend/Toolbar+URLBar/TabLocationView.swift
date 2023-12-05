@@ -14,7 +14,6 @@ protocol TabLocationViewDelegate: AnyObject {
     func tabLocationViewDidTapShield(_ tabLocationView: TabLocationView)
     func tabLocationViewDidBeginDragInteraction(_ tabLocationView: TabLocationView)
     func tabLocationViewDidTapShare(_ tabLocationView: TabLocationView, button: UIButton)
-    func tabLocationViewDidTapShopping(_ tabLocationView: TabLocationView, button: UIButton)
     func tabLocationViewPresentCFR(at sourceView: UIView)
 
     /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied
@@ -290,7 +289,8 @@ class TabLocationView: UIView, FeatureFlaggable {
     @objc
     func didPressShoppingButton(_ button: UIButton) {
         button.isSelected = true
-        delegate?.tabLocationViewDidTapShopping(self, button: button)
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingButton)
+        store.dispatch(FakespotAction.pressedShoppingButton)
     }
 
     @objc

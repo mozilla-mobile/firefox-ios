@@ -113,38 +113,26 @@ extension BrowserViewController: URLBarDelegate {
         }
     }
 
-    func urlBarDidPressShopping(_ urlBar: URLBarView, shoppingButton: UIButton) {
-        guard let productURL = urlBar.currentURL else { return }
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingButton)
-
-        let dismissedFakespot = dismissFakespotIfNeeded()
-        if !dismissedFakespot {
-            // open flow
-            handleFakespotFlow(productURL: productURL)
-            if isReduxIntegrationEnabled {
-                store.dispatch(FakespotAction.toggleAppearance(true))
-            }
-        } else if isReduxIntegrationEnabled {
-            // Fakespot was closed/dismissed
-            store.dispatch(FakespotAction.toggleAppearance(false))
-        }
-    }
-
-    internal func dismissFakespotIfNeeded(animated: Bool = true) -> Bool {
-        if contentStackView.isSidebarVisible {
+    internal func dismissFakespotIfNeeded(animated: Bool = true) {
+        guard !contentStackView.isSidebarVisible else {
             // hide sidebar as user tapped on shopping icon for a second time
             navigationHandler?.dismissFakespotSidebar(sidebarContainer: contentStackView, parentViewController: self)
-            return true
-        } else if presentedViewController as? FakespotViewController != nil {
-            // dismiss modal as user tapped on shopping icon for a second time
-            navigationHandler?.dismissFakespotModal(animated: animated)
-            return true
+            return
         }
-        return false
+
+        // dismiss modal as user tapped on shopping icon for a second time
+        navigationHandler?.dismissFakespotModal(animated: animated)
     }
 
     internal func handleFakespotFlow(productURL: URL, viewSize: CGSize? = nil) {
-        if FakespotUtils().shouldDisplayInSidebar(viewSize: viewSize) {
+        let shouldDisplayInSidebar = FakespotUtils().shouldDisplayInSidebar(viewSize: viewSize)
+        if !shouldDisplayInSidebar, contentStackView.isSidebarVisible {
+            // Quick fix: make sure to sidebar is hidden
+            // Relates to FXIOS-7844
+            contentStackView.hideSidebar(self)
+        }
+
+        if shouldDisplayInSidebar {
             navigationHandler?.showFakespotFlowAsSidebar(productURL: productURL,
                                                          sidebarContainer: contentStackView,
                                                          parentViewController: self)
@@ -171,10 +159,8 @@ extension BrowserViewController: URLBarDelegate {
                     value: .shoppingCFRsDisplayed
                 )
             },
-            andActionForButton: { [weak self] in
-                guard let self else { return }
-                guard let productURL = self.urlBar.currentURL else { return }
-                self.handleFakespotFlow(productURL: productURL)
+            andActionForButton: {
+                store.dispatch(FakespotAction.show)
             },
             overlayState: overlayManager)
     }
