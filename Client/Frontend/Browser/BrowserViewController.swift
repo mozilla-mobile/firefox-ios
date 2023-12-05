@@ -1026,7 +1026,6 @@ class BrowserViewController: UIViewController,
                                       toastContainer: contentContainer,
                                       homepanelDelegate: self,
                                       libraryPanelDelegate: self,
-                                      sendToDeviceDelegate: self,
                                       statusBarScrollDelegate: statusBarOverlay,
                                       overlayManager: overlayManager)
     }

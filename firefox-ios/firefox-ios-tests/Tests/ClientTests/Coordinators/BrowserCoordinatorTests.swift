@@ -91,7 +91,6 @@ final class BrowserCoordinatorTests: XCTestCase {
                              toastContainer: UIView(),
                              homepanelDelegate: subject.browserViewController,
                              libraryPanelDelegate: subject.browserViewController,
-                             sendToDeviceDelegate: subject.browserViewController,
                              statusBarScrollDelegate: scrollDelegate,
                              overlayManager: overlayModeManager)
 
@@ -107,7 +106,6 @@ final class BrowserCoordinatorTests: XCTestCase {
                              toastContainer: UIView(),
                              homepanelDelegate: subject.browserViewController,
                              libraryPanelDelegate: subject.browserViewController,
-                             sendToDeviceDelegate: subject.browserViewController,
                              statusBarScrollDelegate: scrollDelegate,
                              overlayManager: overlayModeManager)
         let firstHomepage = subject.homepageViewController
@@ -117,7 +115,6 @@ final class BrowserCoordinatorTests: XCTestCase {
                              toastContainer: UIView(),
                              homepanelDelegate: subject.browserViewController,
                              libraryPanelDelegate: subject.browserViewController,
-                             sendToDeviceDelegate: subject.browserViewController,
                              statusBarScrollDelegate: scrollDelegate,
                              overlayManager: overlayModeManager)
         let secondHomepage = subject.homepageViewController

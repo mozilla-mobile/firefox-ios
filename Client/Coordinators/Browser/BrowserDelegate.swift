@@ -12,14 +12,12 @@ protocol BrowserDelegate: AnyObject {
     ///   - toastContainer: The container view for alert shown from share extension in the home page context menu
     ///   - homepanelDelegate: The homepanel delegate for the homepage
     ///   - libraryPanelDelegate:  The library panel delegate for the homepage
-    ///   - sendToDeviceDelegate: The send to device delegate for the homepage
     ///   - statusBarScrollDelegate: The delegate that takes care of the status bar overlay scroll
     ///   - overlayManager: The overlay manager for the homepage
     func showHomepage(inline: Bool,
                       toastContainer: UIView,
                       homepanelDelegate: HomePanelDelegate,
                       libraryPanelDelegate: LibraryPanelDelegate,
-                      sendToDeviceDelegate: HomepageViewController.SendToDeviceDelegate,
                       statusBarScrollDelegate: StatusBarScrollDelegate,
                       overlayManager: OverlayModeManager)
 
