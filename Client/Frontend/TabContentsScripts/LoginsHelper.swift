@@ -8,10 +8,14 @@ import Shared
 import Storage
 import WebKit
 
-class LoginsHelper: TabContentScript {
-    fileprivate weak var tab: Tab?
-    fileprivate let profile: Profile
-    fileprivate var snackBar: SnackBar?
+class LoginsHelper: TabContentScript, Themeable {
+    var themeManager: Common.ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: Common.NotificationProtocol
+
+    private weak var tab: Tab?
+    private let profile: Profile
+    private var snackBar: SnackBar?
 
     // Exposed for mocking purposes
     var logins: RustLogins {
@@ -22,7 +26,14 @@ class LoginsHelper: TabContentScript {
         return "LoginsHelper"
     }
 
-    required init(tab: Tab, profile: Profile) {
+    required init(
+        tab: Tab,
+        profile: Profile,
+        notificationCenter: NotificationProtocol = NotificationCenter.default,
+        themeManager: ThemeManager = AppContainer.shared.resolve()
+    ) {
+        self.notificationCenter = notificationCenter
+        self.themeManager = themeManager
         self.tab = tab
         self.profile = profile
     }
@@ -31,7 +42,7 @@ class LoginsHelper: TabContentScript {
         return "loginsManagerMessageHandler"
     }
 
-    fileprivate func getOrigin(_ uriString: String, allowJS: Bool = false) -> String? {
+    private func getOrigin(_ uriString: String, allowJS: Bool = false) -> String? {
         guard let uri = URL(string: uriString, invalidCharacters: false),
               let scheme = uri.scheme, !scheme.isEmpty,
               let host = uri.host
@@ -156,7 +167,7 @@ class LoginsHelper: TabContentScript {
         }
     }
 
-    fileprivate func promptSave(_ login: LoginEntry) {
+    private func promptSave(_ login: LoginEntry) {
         guard login.isValid.isSuccess else { return }
 
         let promptMessage: String
@@ -185,12 +196,14 @@ class LoginsHelper: TabContentScript {
             self.sendLoginsSavedTelemetry()
             _ = self.profile.logins.addLogin(login: login)
         }
+
+        applyTheme(views: dontSave, save, snackBar!)
         snackBar?.addButton(dontSave)
         snackBar?.addButton(save)
         tab?.addSnackbar(snackBar!)
     }
 
-    fileprivate func promptUpdateFromLogin(login old: LoginRecord, toLogin new: LoginEntry) {
+    private func promptUpdateFromLogin(login old: LoginRecord, toLogin new: LoginEntry) {
         guard new.isValid.isSuccess else { return }
 
         let formatted: String
@@ -216,12 +229,14 @@ class LoginsHelper: TabContentScript {
             self.sendLoginsModifiedTelemetry()
             _ = self.profile.logins.updateLogin(id: old.id, login: new)
         }
+
+        applyTheme(views: dontSave, update, snackBar!)
         snackBar?.addButton(dontSave)
         snackBar?.addButton(update)
         tab?.addSnackbar(snackBar!)
     }
 
-    fileprivate func requestLogins(_ request: [String: Any], url: URL) {
+    private func requestLogins(_ request: [String: Any], url: URL) {
         guard let requestId = request["requestId"] as? String,
             // Even though we don't currently use these two fields,
             // verify that they were received as additional confirmation
@@ -256,6 +271,18 @@ class LoginsHelper: TabContentScript {
         }
     }
 
+    // MARK: Theamable
+    private func applyTheme(views: UIView...) {
+        views.forEach { view in
+            if let view = view as? ThemeApplicable {
+                view.applyTheme(theme: themeManager.currentTheme)
+            }
+        }
+    }
+
+    func applyTheme() {}
+
+    // MARK: - Telemetry
     private func sendLoginsModifiedTelemetry() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .change,
