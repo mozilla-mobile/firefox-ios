@@ -4,14 +4,10 @@
 
 import Foundation
 
-struct InactiveTabsModel: Equatable {
-    var tabUUID: String
-    var title: String
-    var url: URL?
-
-    var displayURL: String {
-        guard let url = url else { return title }
-
-        return url.absoluteString
+@testable import Client
+class MockInactiveTabsManager: InactiveTabsManagerProtocol {
+    var activeTabs = [Tab]()
+    func getInactiveTabs(tabs: [Tab]) -> [Tab] {
+        return tabs.filter { !activeTabs.contains($0) }
     }
 }

@@ -110,6 +110,7 @@
 		214EF4152AC5D5D0005BCCDA /* TabDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214EF4142AC5D5D0005BCCDA /* TabDisplayView.swift */; };
 		21534904288201E300FADB4D /* GleanPlumbMessageManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215349022881FA3C00FADB4D /* GleanPlumbMessageManagerTests.swift */; };
 		215349062886007900FADB4D /* GleanPlumbMessageStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215349052886007900FADB4D /* GleanPlumbMessageStoreTests.swift */; };
+		21583E422B1A3703009D084D /* LegacyInactiveTabModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21583E412B1A3703009D084D /* LegacyInactiveTabModel.swift */; };
 		215B457F27D7FD4B00E5E800 /* LegacyTabGroupData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B457E27D7FD4B00E5E800 /* LegacyTabGroupData.swift */; };
 		215B458027D7FD7D00E5E800 /* LegacyTabGroupData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B457E27D7FD4B00E5E800 /* LegacyTabGroupData.swift */; };
 		215B458227DA420400E5E800 /* LegacyTabMetadataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B458127DA420400E5E800 /* LegacyTabMetadataManager.swift */; };
@@ -155,6 +156,9 @@
 		21B337BB29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B337BA29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift */; };
 		21B359C62AEAC20300FF09E3 /* TabsSectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B359C52AEAC20300FF09E3 /* TabsSectionManager.swift */; };
 		21B41A1D298B187A008BC0A2 /* MockOverlayModeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B41A1B298B1876008BC0A2 /* MockOverlayModeManager.swift */; };
+		21B548952B1E5F1400DC1DF8 /* InactiveTabsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B548942B1E5F1400DC1DF8 /* InactiveTabsManager.swift */; };
+		21B548972B1E6AC300DC1DF8 /* MockInactiveTabsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B548962B1E6AC300DC1DF8 /* MockInactiveTabsManager.swift */; };
+		21B548992B1E7FDF00DC1DF8 /* InactiveTabsManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B548982B1E7FDF00DC1DF8 /* InactiveTabsManagerTests.swift */; };
 		21BFEEF52A040EF40033048D /* TabMigrationUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BFEEF42A040EF40033048D /* TabMigrationUtility.swift */; };
 		21BFEEF82A05A0370033048D /* TabMigrationUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BFEEF62A05A0310033048D /* TabMigrationUtilityTests.swift */; };
 		21D0F62129B91BF500022292 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D0F62029B91BF500022292 /* ToastView.swift */; };
@@ -2204,6 +2208,7 @@
 		214EF4142AC5D5D0005BCCDA /* TabDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabDisplayView.swift; sourceTree = "<group>"; };
 		215349022881FA3C00FADB4D /* GleanPlumbMessageManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanPlumbMessageManagerTests.swift; sourceTree = "<group>"; };
 		215349052886007900FADB4D /* GleanPlumbMessageStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanPlumbMessageStoreTests.swift; sourceTree = "<group>"; };
+		21583E412B1A3703009D084D /* LegacyInactiveTabModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyInactiveTabModel.swift; sourceTree = "<group>"; };
 		215B457E27D7FD4B00E5E800 /* LegacyTabGroupData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyTabGroupData.swift; sourceTree = "<group>"; };
 		215B458127DA420400E5E800 /* LegacyTabMetadataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyTabMetadataManager.swift; sourceTree = "<group>"; };
 		215B458327DA87FC00E5E800 /* TabMetadataManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabMetadataManagerTests.swift; sourceTree = "<group>"; };
@@ -2249,6 +2254,9 @@
 		21B337BA29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerWebViewDelegateTests.swift; sourceTree = "<group>"; };
 		21B359C52AEAC20300FF09E3 /* TabsSectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsSectionManager.swift; sourceTree = "<group>"; };
 		21B41A1B298B1876008BC0A2 /* MockOverlayModeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockOverlayModeManager.swift; sourceTree = "<group>"; };
+		21B548942B1E5F1400DC1DF8 /* InactiveTabsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InactiveTabsManager.swift; sourceTree = "<group>"; };
+		21B548962B1E6AC300DC1DF8 /* MockInactiveTabsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockInactiveTabsManager.swift; sourceTree = "<group>"; };
+		21B548982B1E7FDF00DC1DF8 /* InactiveTabsManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InactiveTabsManagerTests.swift; sourceTree = "<group>"; };
 		21BFEEF42A040EF40033048D /* TabMigrationUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabMigrationUtility.swift; sourceTree = "<group>"; };
 		21BFEEF62A05A0310033048D /* TabMigrationUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabMigrationUtilityTests.swift; sourceTree = "<group>"; };
 		21D0F62029B91BF500022292 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
@@ -7576,6 +7584,7 @@
 			children = (
 				433396C727ACE92500491049 /* LegacyInactiveTabButton.swift */,
 				437A9B672681256800FB41C1 /* LegacyInactiveTabCell.swift */,
+				21583E412B1A3703009D084D /* LegacyInactiveTabModel.swift */,
 				437A9B692681257F00FB41C1 /* LegacyInactiveTabViewModel.swift */,
 				E118B9282862674E00C84831 /* LegacyInactiveTabItemCellModel.swift */,
 				C889569927E8D1AC00E3779E /* LegacyInactiveTabHeader.swift */,
@@ -7650,6 +7659,14 @@
 			path = InactiveTabs;
 			sourceTree = "<group>";
 		};
+		21B548932B1E5EC000DC1DF8 /* Middleware */ = {
+			isa = PBXGroup;
+			children = (
+				21D151252AFC28960062D891 /* TabManagerMiddleware.swift */,
+			);
+			path = Middleware;
+			sourceTree = "<group>";
+		};
 		21C5B3572AF2A6D80093F366 /* LayoutManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -7695,6 +7712,7 @@
 				219935F02B07DFA200E5966F /* TabDisplayPanelTests.swift */,
 				21F2A2D32B0D194A00626AEC /* TabsPanelStateTests.swift */,
 				21D8EA922ABE04F7003FF16E /* TabTrayViewControllerTests.swift */,
+				21B548982B1E7FDF00DC1DF8 /* InactiveTabsManagerTests.swift */,
 			);
 			path = TabTray;
 			sourceTree = "<group>";
@@ -7731,15 +7749,16 @@
 		23F2C365244E44FA00FA4496 /* Tabs */ = {
 			isa = PBXGroup;
 			children = (
-				212429F22AA27204002D57A8 /* Legacy */,
-				21357F2B293FDB07004BF9FD /* RemoteTabs */,
-				21C5B3572AF2A6D80093F366 /* LayoutManager */,
 				219914032AF963E000153598 /* Action */,
-				21C5B3592AF2A73F0093F366 /* State */,
+				21C5B3572AF2A6D80093F366 /* LayoutManager */,
+				212429F22AA27204002D57A8 /* Legacy */,
+				21B548932B1E5EC000DC1DF8 /* Middleware */,
 				219935EA2B0710E900E5966F /* Models */,
+				21357F2B293FDB07004BF9FD /* RemoteTabs */,
+				21C5B3592AF2A73F0093F366 /* State */,
 				21C5B3582AF2A7130093F366 /* Views */,
 				21E77E512AA8BE5C00FABA10 /* TabTrayFlagManager.swift */,
-				21D151252AFC28960062D891 /* TabManagerMiddleware.swift */,
+				21B548942B1E5F1400DC1DF8 /* InactiveTabsManager.swift */,
 			);
 			path = Tabs;
 			sourceTree = "<group>";
@@ -9663,6 +9682,7 @@
 				8A9E46BC2A6599E5003327D4 /* MockStatusBarScrollDelegate.swift */,
 				21D884402A79628E00AF144C /* MockSettingsDelegate.swift */,
 				8AF6D4DE2A856A9000B0474B /* MockContileNetworking.swift */,
+				21B548962B1E6AC300DC1DF8 /* MockInactiveTabsManager.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -13107,6 +13127,7 @@
 				8A01891C275E9C2A00923EFE /* ClearHistorySheetProvider.swift in Sources */,
 				8C44A9D22A6A99FE009A1AA7 /* ShoppingProduct.swift in Sources */,
 				C88E7A572A0553360072E638 /* OnboardingButtonInfoModel.swift in Sources */,
+				21B548952B1E5F1400DC1DF8 /* InactiveTabsManager.swift in Sources */,
 				C8F457A81F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift in Sources */,
 				964FA97728A2A55C0024BB3B /* ContextualHintPrefsKeysProvider.swift in Sources */,
 				8A1E3BDF28CBA81E003388C4 /* SponsoredContentFilterUtility.swift in Sources */,
@@ -13118,6 +13139,7 @@
 				E653422D1C5944F90039DD9E /* BrowserPrompts.swift in Sources */,
 				E127313C28B6AD99006F39D2 /* WallpaperSettingsViewController.swift in Sources */,
 				43D4BCBA2972082400775FB5 /* CreditCardSettingsViewModel.swift in Sources */,
+				21583E422B1A3703009D084D /* LegacyInactiveTabModel.swift in Sources */,
 				DF529EA12AB1B421003C5373 /* FakespotReliabilityScoreView.swift in Sources */,
 				9636D92A27F767EC00771F5E /* NimbusMessagingEvaluationUtility.swift in Sources */,
 				E127313F28B6C194006F39D2 /* WallpaperSettingsHeaderView.swift in Sources */,
@@ -13707,6 +13729,7 @@
 				4331D3EF2A059C1C00542BDD /* SyncContentSettingsViewControllerTests.swift in Sources */,
 				39D0DA7629D767DE000760B8 /* NimbusMessagingTriggerTests.swift in Sources */,
 				21B41A1D298B187A008BC0A2 /* MockOverlayModeManager.swift in Sources */,
+				21B548992B1E7FDF00DC1DF8 /* InactiveTabsManagerTests.swift in Sources */,
 				8AF6D4DF2A856A9000B0474B /* MockContileNetworking.swift in Sources */,
 				2FDB10931A9FBEC5006CF312 /* PrefsTests.swift in Sources */,
 				C89C91AD2A1FE9E900BE57B1 /* OnboardingTelemetryDelegationTests.swift in Sources */,
@@ -13728,6 +13751,7 @@
 				8A1E3BE328CBACDD003388C4 /* SponsoredContentFilterUtilityTests.swift in Sources */,
 				2173326829CCDA8E007F20C7 /* TabScrollControllerTests.swift in Sources */,
 				9614BF4228A53FDF00D3F7EA /* ContextualHintEligibilityUtilityTests.swift in Sources */,
+				21B548972B1E6AC300DC1DF8 /* MockInactiveTabsManager.swift in Sources */,
 				21B337BB29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift in Sources */,
 				6ADB651B285C03B100947EA4 /* DownloadHelperTests.swift in Sources */,
 				8A6B77CC2811C468001110D2 /* URLProtocolStub.swift in Sources */,

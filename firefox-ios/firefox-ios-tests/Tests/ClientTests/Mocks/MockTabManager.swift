@@ -137,4 +137,11 @@ class MockTabManager: TabManager {
                                  didClearTabs: @escaping (_ tabsToRemove: [Tab],
                                                           _ isPrivate: Bool,
                                                           _ previousTabUUID: String) -> Void) {}
+
+    // MARK: - Inactive tabs
+    func getInactiveTabs() -> [Tab] {
+        return [Tab]()
+    }
+
+    func removeAllInactiveTabs() async {}
 }

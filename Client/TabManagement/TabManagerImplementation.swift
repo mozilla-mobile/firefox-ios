@@ -16,6 +16,13 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     private let imageStore: DiskImageStore?
     private let tabMigration: TabMigrationUtility
     var notificationCenter: NotificationProtocol
+    var inactiveTabsManager: InactiveTabsManagerProtocol
+
+    override var normalActiveTabs: [Tab] {
+        let inactiveTabs = getInactiveTabs()
+        let activeTabs = tabs.filter { $0.isPrivate == false && !inactiveTabs.contains($0) }
+        return activeTabs
+    }
 
     init(profile: Profile,
          imageStore: DiskImageStore?,
@@ -23,12 +30,14 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
          tabDataStore: TabDataStore = DefaultTabDataStore(),
          tabSessionStore: TabSessionStore = DefaultTabSessionStore(),
          tabMigration: TabMigrationUtility = DefaultTabMigrationUtility(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         inactiveTabsManager: InactiveTabsManagerProtocol = InactiveTabsManager()) {
             self.tabDataStore = tabDataStore
             self.tabSessionStore = tabSessionStore
             self.imageStore = imageStore
             self.tabMigration = tabMigration
             self.notificationCenter = notificationCenter
+            self.inactiveTabsManager = inactiveTabsManager
             super.init(profile: profile)
 
             setupNotifications(forObserver: self,
@@ -312,7 +321,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             return
         }
 
-        // Before moving to a new tab save the current tab session data in order to preseve things like scroll position
+        // Before moving to a new tab save the current tab session data in order to preserve things like scroll position
         saveCurrentTabSessionData()
 
         willSelectTab(url)
@@ -429,6 +438,20 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         Task {
             try? await imageStore?.clearAllScreenshotsExcluding(savedUUIDsCopy)
         }
+    }
+
+    // MARK: - Inactive tabs
+    override func getInactiveTabs() -> [Tab] {
+        return inactiveTabsManager.getInactiveTabs(tabs: tabs)
+    }
+
+    @MainActor
+    override func removeAllInactiveTabs() async {
+        let currentModeTabs = getInactiveTabs()
+        for tab in currentModeTabs {
+            await self.removeTab(tab.tabUUID)
+        }
+        storeChanges()
     }
 
     // MARK: - Notifiable

@@ -97,8 +97,15 @@ final class TabDisplayViewTests: XCTestCase {
                                file: StaticString = #file,
                                line: UInt = #line) -> TabDisplayView {
         let tabs = createTabs(emptyTabs)
-        let inactiveTabsModel = [InactiveTabsModel(url: "Inactive1"), InactiveTabsModel(url: "Inactive2")]
-        let inactiveTabs: [InactiveTabsModel] = emptyInactiveTabs ? [InactiveTabsModel]() : inactiveTabsModel
+        var inactiveTabs = [InactiveTabsModel]()
+        if !emptyInactiveTabs {
+            for index in 0..<2 {
+                let inactiveTabModel = InactiveTabsModel(tabUUID: "UUID",
+                                                         title: "InactiveTab\(index)",
+                                                         url: nil)
+                inactiveTabs.append(inactiveTabModel)
+            }
+        }
         let isInactiveTabsExpanded = !isPrivateMode && !inactiveTabs.isEmpty
         let tabState = TabsPanelState(isPrivateMode: isPrivateMode,
                                       tabs: tabs,
