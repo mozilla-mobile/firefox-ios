@@ -5,6 +5,7 @@
 import Common
 import UIKit
 import Shared
+import Storage
 
 typealias SceneUUID = UUID
 
@@ -105,8 +106,17 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
                    level: .info,
                    category: .coordinator)
 
+        // Create the TabManager instance that will be associated with this browser
+        let profile: Profile = AppContainer.shared.resolve()
+        // TODO: [7885] Once iPad multi-window enabled each TabManager will likely share same default image store.
+        let imageStore = DefaultDiskImageStore(
+            files: profile.files,
+            namespace: "TabManagerScreenshots",
+            quality: UIConstants.ScreenshotQuality)
+        let tabManager = TabManagerImplementation(profile: profile, imageStore: imageStore)
         let browserCoordinator = BrowserCoordinator(router: router,
-                                                    screenshotService: screenshotService)
+                                                    screenshotService: screenshotService,
+                                                    tabManager: tabManager)
         add(child: browserCoordinator)
         browserCoordinator.start(with: launchType)
 

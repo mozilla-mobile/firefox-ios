@@ -48,7 +48,8 @@ final class DownloadsCoordinatorTests: XCTestCase {
         let subject = DownloadsCoordinator(
             router: router,
             profile: profile,
-            parentCoordinator: parentCoordinator
+            parentCoordinator: parentCoordinator,
+            tabManager: MockTabManager()
         )
         trackForMemoryLeaks(subject)
         return subject

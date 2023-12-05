@@ -36,7 +36,7 @@ final class FakespotViewModelTests: XCTestCase {
 
     func testFetchDataSuccess() async throws {
         client.shouldThrowError = false
-        let viewModel = FakespotViewModel(shoppingProduct: client)
+        let viewModel = FakespotViewModel(shoppingProduct: client, tabManager: MockTabManager())
 
         await viewModel.fetchProductAnalysis()
         switch viewModel.state {
@@ -49,7 +49,7 @@ final class FakespotViewModelTests: XCTestCase {
 
     func testFetchDataFailure() async throws {
         client.shouldThrowError = true
-        let viewModel = FakespotViewModel(shoppingProduct: client)
+        let viewModel = FakespotViewModel(shoppingProduct: client, tabManager: MockTabManager())
 
         await viewModel.fetchProductAnalysis()
         switch viewModel.state {

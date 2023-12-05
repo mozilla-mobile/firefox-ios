@@ -103,7 +103,7 @@ final class FakespotCoordinatorTests: XCTestCase {
     // MARK: - Helpers
     private func createSubject(file: StaticString = #file,
                                line: UInt = #line) -> FakespotCoordinator {
-        let subject = FakespotCoordinator(router: mockRouter)
+        let subject = FakespotCoordinator(router: mockRouter, tabManager: MockTabManager())
 
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

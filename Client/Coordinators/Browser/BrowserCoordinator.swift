@@ -35,18 +35,13 @@ class BrowserCoordinator: BaseCoordinator,
 
     init(router: Router,
          screenshotService: ScreenshotService,
+         tabManager: TabManager,
          profile: Profile = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          glean: GleanWrapper = DefaultGleanWrapper.shared,
          applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
         self.screenshotService = screenshotService
         self.profile = profile
-        // TODO: [7885] Once iPad multi-window enabled each TabManager will likely share same default image store.
-        let imageStore = DefaultDiskImageStore(
-            files: profile.files,
-            namespace: "TabManagerScreenshots",
-            quality: UIConstants.ScreenshotQuality)
-        let tabManager = TabManagerImplementation(profile: profile, imageStore: imageStore)
         self.tabManager = tabManager
         self.themeManager = themeManager
         self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
