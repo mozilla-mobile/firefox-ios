@@ -82,8 +82,7 @@ final class DefaultSearchPrefs {
             .compactMap {
                 locales?[$0] as? [String: Any]
             }
-            .reduce(globalDefaultEngine) {
-                (defaultEngine, localeJSON) -> String in
+            .reduce(globalDefaultEngine) { (defaultEngine, localeJSON) -> String in
                 let inner = localeJSON[region] as? [String: Any]
                 return inner?["searchDefault"] as? String ?? defaultEngine
             }

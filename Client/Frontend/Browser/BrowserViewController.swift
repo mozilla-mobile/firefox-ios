@@ -1798,8 +1798,7 @@ class BrowserViewController: UIViewController,
     }
 
     func showCreditCardAutofillSheet(fieldValues: UnencryptedCreditCardFields) {
-        self.profile.autofill.checkForCreditCardExistance(cardNumber: fieldValues.ccNumberLast4) {
-            existingCard, error in
+        self.profile.autofill.checkForCreditCardExistance(cardNumber: fieldValues.ccNumberLast4) { existingCard, error in
             guard let existingCard = existingCard else {
                 DispatchQueue.main.async {
                     self.navigationHandler?.showCreditCardAutofill(creditCard: nil,
