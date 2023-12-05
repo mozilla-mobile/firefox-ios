@@ -460,7 +460,6 @@ class BrowserViewController: UIViewController,
     // MARK: - Redux
 
     func subscribeToRedux() {
-        guard isReduxIntegrationEnabled else { return }
         store.dispatch(ActiveScreensStateAction.showScreen(.browserViewController))
 
         store.subscribe(self, transform: {
@@ -482,7 +481,7 @@ class BrowserViewController: UIViewController,
             if state.fakespotState.isOpen {
                 guard let productURL = urlBar.currentURL else { return }
                 handleFakespotFlow(productURL: productURL)
-            } else if !state.fakespotState.isOpenOnProductPage {
+            } else if !state.fakespotState.isOpen {
                 dismissFakespotIfNeeded()
             }
         }
@@ -1689,7 +1688,7 @@ class BrowserViewController: UIViewController,
                   fakespotState.isOpen {
             // Sidebar should be displayed and Fakespot is open, display Fakespot
             handleFakespotFlow(productURL: url)
-        } else if let fakespotState = fakespotState,
+        } else if let fakespotState = browserViewControllerState?.fakespotState,
                   fakespotState.sidebarOpenForiPadLandscape {
             // Sidebar should be displayed, display Fakespot
             store.dispatch(FakespotAction.setAppearanceTo(true))
