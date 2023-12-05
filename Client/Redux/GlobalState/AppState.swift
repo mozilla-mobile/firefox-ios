@@ -20,7 +20,7 @@ struct AppState: StateType {
                 case (.tabsTray(let state), .tabsTray): return state as? S
                 case (.tabsPanel(let state), .tabsPanel): return state as? S
                 case (.remoteTabsPanel(let state), .remoteTabsPanel): return state as? S
-                case (.fakespot(let state), .fakespot): return state as? S
+                case (.browserViewController(let state), .browserViewController): return state as? S
                 default: return nil
                 }
             }
@@ -36,6 +36,9 @@ extension AppState {
 
 let store = Store(state: AppState(),
                   reducer: AppState.reducer,
-                  middlewares: [ThemeManagerMiddleware().themeManagerProvider,
-                                TabsPanelMiddleware().tabsPanelProvider,
-                                RemoteTabsPanelMiddleware().remoteTabsPanelProvider])
+                  middlewares: [
+                    FeltPrivacyMiddleware().privacyManagerProvider,
+                    ThemeManagerMiddleware().themeManagerProvider,
+                    TabsPanelMiddleware().tabsPanelProvider,
+                    RemoteTabsPanelMiddleware().remoteTabsPanelProvider
+                  ])
