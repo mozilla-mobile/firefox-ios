@@ -7,33 +7,9 @@ import Glean
 
 // Telemetry for the Sponsored tiles located in the Top sites on the Firefox home page
 // Using Pings to send the telemetry events
-class SponsoredTileTelemetry {
+struct SponsoredTileTelemetry {
     // Source is only new tab at the moment, more source could be added later
     static let source = "newtab"
-
-    enum UserDefaultsKey: String {
-        case keyContextId = "com.moz.contextId.key"
-    }
-
-    static var contextId: String? {
-        get { UserDefaults.standard.object(forKey: UserDefaultsKey.keyContextId.rawValue) as? String }
-        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.keyContextId.rawValue) }
-    }
-
-    static func clearUserDefaults() {
-        SponsoredTileTelemetry.contextId = nil
-    }
-
-    static func setupContextId() {
-        // Use existing client UUID, if doesn't exists create a new one
-        if let stringContextId = contextId, let clientUUID = UUID(uuidString: stringContextId) {
-            GleanMetrics.TopSites.contextId.set(clientUUID)
-        } else {
-            let newUUID = UUID()
-            GleanMetrics.TopSites.contextId.set(newUUID)
-            contextId = newUUID.uuidString
-        }
-    }
 
     static func sendImpressionTelemetry(tile: SponsoredTile, position: Int) {
         let extra = GleanMetrics.TopSites.ContileImpressionExtra(position: Int32(position), source: SponsoredTileTelemetry.source)
