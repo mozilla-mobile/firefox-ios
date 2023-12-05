@@ -16,13 +16,14 @@ class TabTrayCoordinator: BaseCoordinator, TabTrayViewControllerDelegate, TabTra
     private var tabTrayViewController: TabTrayViewController!
     weak var parentCoordinator: TabTrayCoordinatorDelegate?
 
-    init(router: Router) {
+    init(router: Router,
+         tabTraySection: TabTrayPanelType) {
         super.init(router: router)
-        initializeTabTrayViewController()
+        initializeTabTrayViewController(selectedTab: tabTraySection)
     }
 
-    private func initializeTabTrayViewController() {
-        tabTrayViewController = TabTrayViewController(delegate: self)
+    private func initializeTabTrayViewController(selectedTab: TabTrayPanelType) {
+        tabTrayViewController = TabTrayViewController(delegate: self, selectedTab: selectedTab)
         router.setRootViewController(tabTrayViewController)
         tabTrayViewController.childPanelControllers = makeChildPanels()
         tabTrayViewController.navigationHandler = self
@@ -33,8 +34,8 @@ class TabTrayCoordinator: BaseCoordinator, TabTrayViewControllerDelegate, TabTra
     }
 
     private func makeChildPanels() -> [UINavigationController] {
-        let regularTabsPanel = TabDisplayViewController(isPrivateMode: false)
-        let privateTabsPanel = TabDisplayViewController(isPrivateMode: true)
+        let regularTabsPanel = TabDisplayPanel(isPrivateMode: false)
+        let privateTabsPanel = TabDisplayPanel(isPrivateMode: true)
         let syncTabs = RemoteTabsPanel()
         return [
             ThemedNavigationController(rootViewController: regularTabsPanel),
@@ -59,7 +60,7 @@ class TabTrayCoordinator: BaseCoordinator, TabTrayViewControllerDelegate, TabTra
         let tabCoordinator = TabsCoordinator(parentCoordinator: parentCoordinator,
                                              router: router)
         add(child: tabCoordinator)
-        (navigationController.topViewController as? TabDisplayViewController)?.navigationHandler = tabCoordinator
+        (navigationController.topViewController as? TabDisplayPanel)?.navigationHandler = tabCoordinator
     }
 
     private func makeSyncedTabsCoordinator(navigationController: UINavigationController) {

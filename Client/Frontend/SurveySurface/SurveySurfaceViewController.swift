@@ -74,7 +74,7 @@ class SurveySurfaceViewController: UIViewController, Themeable {
         label.alpha = 0.0
     }
 
-    private lazy var takeSurveyButton: ResizableButton = .build { button in
+    private lazy var takeSurveyButton: LegacyResizableButton = .build { button in
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .callout,
             size: UX.buttonFontSize)
@@ -90,7 +90,7 @@ class SurveySurfaceViewController: UIViewController, Themeable {
         button.alpha = 0.0
     }
 
-    private lazy var dismissSurveyButton: ResizableButton = .build { button in
+    private lazy var dismissSurveyButton: LegacyResizableButton = .build { button in
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .callout,
             size: UX.buttonFontSize)
@@ -247,7 +247,7 @@ class SurveySurfaceViewController: UIViewController, Themeable {
         takeSurveyButton.setTitleColor(theme.colors.textInverted, for: .normal)
         takeSurveyButton.backgroundColor = theme.colors.actionPrimary
 
-        dismissSurveyButton.setTitleColor(theme.colors.textSecondaryAction, for: .normal)
+        dismissSurveyButton.setTitleColor(theme.colors.textOnLight, for: .normal)
         dismissSurveyButton.backgroundColor = theme.colors.actionSecondary
     }
 }

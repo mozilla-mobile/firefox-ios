@@ -17,7 +17,7 @@ class CreditCardBottomSheetFooterView: UITableViewHeaderFooterView, ReusableCell
         static let titleVerticalLongPadding: CGFloat = 20
     }
 
-    public lazy var manageCardsButton: ResizableButton = .build { button in
+    public lazy var manageCardsButton: LegacyResizableButton = .build { button in
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
             withTextStyle: .callout,
             size: UX.manageCardsButtonFontSize)

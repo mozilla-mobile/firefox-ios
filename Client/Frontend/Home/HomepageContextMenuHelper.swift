@@ -12,7 +12,6 @@ protocol HomepageContextMenuHelperDelegate: UIViewController {
     func presentWithModalDismissIfNeeded(_ viewController: UIViewController, animated: Bool)
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool)
     func homePanelDidRequestToOpenSettings(at settingsPage: Route.SettingsSection)
-    func showToast(message: String)
 }
 // swiftlint:enable class_delegate_protocol
 

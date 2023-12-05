@@ -32,7 +32,9 @@ protocol TabManager: AnyObject {
     func addTab(_ request: URLRequest?, afterTab: Tab?, isPrivate: Bool) -> Tab
     func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool)
     func removeTab(_ tab: Tab, completion: (() -> Void)?)
+    func removeTab(_ tabUUID: String) async
     func removeTabs(_ tabs: [Tab])
+    func removeAllTabs(isPrivateMode: Bool) async
     func undoCloseTab(tab: Tab, position: Int?)
     func getMostRecentHomepageTab() -> Tab?
     func getTabFor(_ url: URL) -> Tab?
@@ -69,6 +71,8 @@ extension TabManager {
     }
 
     func selectTab(_ tab: Tab?) {
+        guard let privateState = tab?.isPrivate else { return }
+        store.dispatch(FeltPrivacyAction.setPrivateModeTo(privateState))
         selectTab(tab, previous: nil)
     }
 

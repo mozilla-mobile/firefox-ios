@@ -284,13 +284,17 @@ class LegacyGridTabViewController: UIViewController,
 
         tabDisplayManager.togglePrivateMode(isOn: !tabDisplayManager.isPrivate, createTabOnEmptyPrivateMode: false)
 
+        emptyPrivateTabsView.alpha = 0.0
         emptyPrivateTabsView.isHidden = !privateTabsAreEmpty
+        if privateTabsAreEmpty {
+            UIView.animate(withDuration: 0.2) { [weak self] in
+                self?.emptyPrivateTabsView.alpha = 1.0
+            }
+        }
     }
 
     func openNewTab(_ request: URLRequest? = nil, isPrivate: Bool) {
-        if tabDisplayManager.isDragging {
-            return
-        }
+        guard !tabDisplayManager.isDragging else { return }
 
         // Ensure Firefox home page is refreshed if privacy mode was changed
         if tabManager.selectedTab?.isPrivate != isPrivate {
@@ -375,8 +379,10 @@ class LegacyGridTabViewController: UIViewController,
     }
 
     func dismissTabTray() {
-        self.navigationController?.dismiss(animated: true, completion: nil)
-        TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
+        DispatchQueue.main.async {
+            self.navigationController?.dismiss(animated: true, completion: nil)
+            TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
+        }
     }
 
     /// Handles close tab by clicking on close button or swipe gesture

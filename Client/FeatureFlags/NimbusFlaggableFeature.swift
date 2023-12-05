@@ -17,7 +17,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case fakespotBackInStock
     case fakespotFeature
     case fakespotProductAds
-    case feltPrivacyUI
+    case feltPrivacySimplifiedUI
     case firefoxSuggestFeature
     case historyHighlights
     case historyGroups
@@ -79,7 +79,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .qrCodeCoordinatorRefactor,
                 .reduxIntegration,
                 .reportSiteIssue,
-                .feltPrivacyUI,
+                .feltPrivacySimplifiedUI,
                 .searchHighlights,
                 .shareSheetChanges,
                 .shareToolbarChanges,

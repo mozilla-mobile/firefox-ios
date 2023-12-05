@@ -47,10 +47,7 @@ class RemoteTabsPanel: UIViewController,
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
     deinit {
-        if isReduxIntegrationEnabled {
-            store.dispatch(ActiveScreensStateAction.closeScreen(.remoteTabsPanel))
-            store.unsubscribe(self)
-        }
+        unsubscribeFromRedux()
     }
 
     // MARK: - Actions
@@ -96,7 +93,7 @@ class RemoteTabsPanel: UIViewController,
 
         listenForThemeChange(view)
         setupLayout()
-        subscribeRedux()
+        subscribeToRedux()
         applyTheme()
     }
 
@@ -128,13 +125,20 @@ class RemoteTabsPanel: UIViewController,
 
     // MARK: - Redux
 
-    private func subscribeRedux() {
+    func subscribeToRedux() {
         guard isReduxIntegrationEnabled else { return }
         store.dispatch(ActiveScreensStateAction.showScreen(.remoteTabsPanel))
         store.dispatch(RemoteTabsPanelAction.panelDidAppear)
         store.subscribe(self, transform: {
             return $0.select(RemoteTabsPanelState.init)
         })
+    }
+
+    func unsubscribeFromRedux() {
+        if isReduxIntegrationEnabled {
+            store.dispatch(ActiveScreensStateAction.closeScreen(.remoteTabsPanel))
+            store.unsubscribe(self)
+        }
     }
 
     func newState(state: RemoteTabsPanelState) {

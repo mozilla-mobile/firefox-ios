@@ -43,7 +43,6 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
 
     func start(with homepanelSection: Route.HomepanelSection) {
         libraryViewController.setupOpenPanel(panelType: homepanelSection.libraryPanel)
-        libraryViewController.resetHistoryPanelPagination()
     }
 
     private func makeChildPanels() -> [UINavigationController] {

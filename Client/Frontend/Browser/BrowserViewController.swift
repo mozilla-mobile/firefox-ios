@@ -28,6 +28,8 @@ class BrowserViewController: UIViewController,
         static let ActionSheetTitleMaxLength = 120
     }
 
+    typealias SubscriberStateType = BrowserViewControllerState
+
     private let KVOs: [KVOConstants] = [
         .estimatedProgress,
         .loading,
@@ -80,6 +82,7 @@ class BrowserViewController: UIViewController,
     let tabManager: TabManager
     let ratingPromptManager: RatingPromptManager
     lazy var isTabTrayRefactorEnabled: Bool = TabTrayFlagManager.isRefactorEnabled
+    private var browserViewControllerState: BrowserViewControllerState?
 
     // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
     var header: BaseAlphaStackView = .build { _ in }
@@ -87,6 +90,12 @@ class BrowserViewController: UIViewController,
     // OverKeyboardContainer stack view contains
     // the bottom reader mode, the bottom url bar and the ZoomPageBar
     var overKeyboardContainer: BaseAlphaStackView = .build { _ in }
+
+    // Overlay dimming view for private mode
+    lazy var privateModeDimmingView: UIView = .build { view in
+        view.backgroundColor = self.themeManager.currentTheme.colors.layerScrim
+        view.accessibilityIdentifier = AccessibilityIdentifiers.PrivateMode.dimmingView
+    }
 
     // BottomContainer stack view contains toolbar
     var bottomContainer: BaseAlphaStackView = .build { _ in }
@@ -207,9 +216,7 @@ class BrowserViewController: UIViewController,
     }
 
     deinit {
-        if isReduxIntegrationEnabled {
-            store.unsubscribe(self)
-        }
+        unsubscribeFromRedux()
     }
 
     override var prefersStatusBarHidden: Bool {
@@ -433,6 +440,8 @@ class BrowserViewController: UIViewController,
         if let tab = tabManager.selectedTab {
             urlBar.locationView.tabDidChangeContentBlocking(tab)
         }
+
+        updateWallpaperMetadata()
         dismissModalsIfStartAtHome()
 
         // When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
@@ -451,23 +460,32 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Redux
 
-    private func subscribeRedux() {
+    func subscribeToRedux() {
         guard isReduxIntegrationEnabled else { return }
-        store.dispatch(ActiveScreensStateAction.showScreen(.fakespot))
+        store.dispatch(ActiveScreensStateAction.showScreen(.browserViewController))
 
         store.subscribe(self, transform: {
-            $0.select(FakespotState.init)
+            $0.select(BrowserViewControllerState.init)
         })
     }
 
-    func newState(state: FakespotState) {
+    func unsubscribeFromRedux() {
+        if isReduxIntegrationEnabled {
+            store.unsubscribe(self)
+        }
+    }
+
+    func newState(state: BrowserViewControllerState) {
         ensureMainThread { [weak self] in
             guard let self else { return }
 
-            if state.isOpenOnProductPage {
+            browserViewControllerState = state
+
+            // opens or close sidebar/bottom sheet to match the saved state
+            if state.fakespotState.isOpenOnProductPage {
                 guard let productURL = urlBar.currentURL else { return }
                 handleFakespotFlow(productURL: productURL)
-            } else {
+            } else if !state.fakespotState.isOpenOnProductPage {
                 _ = dismissFakespotIfNeeded()
             }
         }
@@ -531,7 +549,7 @@ class BrowserViewController: UIViewController,
         // Send settings telemetry for Fakespot
         FakespotUtils().addSettingTelemetry()
 
-        subscribeRedux()
+        subscribeToRedux()
     }
 
     private func setupAccessibleActions() {
@@ -640,6 +658,21 @@ class BrowserViewController: UIViewController,
         view.addSubview(bottomContainer)
     }
 
+    // Configure dimming view to show for private mode
+    func configureDimmingView() {
+        if let selectedTab = tabManager.selectedTab, selectedTab.isPrivate {
+            view.addSubview(privateModeDimmingView)
+            view.bringSubviewToFront(privateModeDimmingView)
+
+            NSLayoutConstraint.activate([
+                privateModeDimmingView.topAnchor.constraint(equalTo: contentStackView.topAnchor),
+                privateModeDimmingView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
+                privateModeDimmingView.bottomAnchor.constraint(equalTo: contentStackView.bottomAnchor),
+                privateModeDimmingView.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor)
+            ])
+        }
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
@@ -733,6 +766,9 @@ class BrowserViewController: UIViewController,
         var fakespotNeedsUpdate = false
         if urlBar.currentURL != nil {
             fakespotNeedsUpdate = contentStackView.isSidebarVisible != FakespotUtils().shouldDisplayInSidebar(viewSize: size)
+            if isReduxIntegrationEnabled, let fakespotState = browserViewControllerState?.fakespotState {
+                fakespotNeedsUpdate = fakespotNeedsUpdate && fakespotState.isOpenOnProductPage
+            }
 
             if fakespotNeedsUpdate {
                 _ = dismissFakespotIfNeeded(animated: false)
@@ -1089,6 +1125,7 @@ class BrowserViewController: UIViewController,
     }
 
     func hideSearchController() {
+        privateModeDimmingView.removeFromSuperview()
         guard let searchController = self.searchController else { return }
         searchController.willMove(toParent: nil)
         searchController.view.removeFromSuperview()
@@ -1392,10 +1429,14 @@ class BrowserViewController: UIViewController,
     }
 
     func handleQRCode() {
-        let qrCodeViewController = QRCodeViewController()
-        qrCodeViewController.qrCodeDelegate = self
-        presentedViewController?.dismiss(animated: true)
-        present(UINavigationController(rootViewController: qrCodeViewController), animated: true, completion: nil)
+        if CoordinatorFlagManager.isQRCodeCoordinatorEnabled {
+            navigationHandler?.showQRCode()
+        } else {
+            let qrCodeViewController = QRCodeViewController()
+            qrCodeViewController.qrCodeDelegate = self
+            presentedViewController?.dismiss(animated: true)
+            present(UINavigationController(rootViewController: qrCodeViewController), animated: true, completion: nil)
+        }
     }
 
     func handleClosePrivateTabs() {
@@ -1523,45 +1564,6 @@ class BrowserViewController: UIViewController,
         return navigationController?.topViewController?.presentedViewController as? JSPromptAlertController != nil
     }
 
-    func presentActivityViewController(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
-        presentShareSheet(url, tab: tab, sourceView: sourceView, sourceRect: sourceRect, arrowDirection: arrowDirection)
-    }
-
-    func presentShareSheet(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
-        let helper = ShareExtensionHelper(url: url, tab: tab)
-        let selectedTabWebview = tabManager.selectedTab?.webView
-        let controller = helper.createActivityViewController(selectedTabWebview) {
-            [unowned self] completed, activityType in
-            switch activityType {
-            case CustomActivityAction.sendToDevice.actionType:
-                self.showSendToDevice()
-            case CustomActivityAction.copyLink.actionType:
-                SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage,
-                                                bottomContainer: contentContainer,
-                                                theme: themeManager.currentTheme)
-            default: break
-            }
-
-            // After dismissing, check to see if there were any prompts we queued up
-            self.showQueuedAlertIfAvailable()
-
-            // Usually the popover delegate would handle nil'ing out the references we have to it
-            // on the BVC when displaying as a popover but the delegate method doesn't seem to be
-            // invoked on iOS 10. See Bug 1297768 for additional details.
-            self.displayedPopoverController = nil
-            self.updateDisplayedPopoverProperties = nil
-        }
-
-        if let popoverPresentationController = controller.popoverPresentationController {
-            popoverPresentationController.sourceView = sourceView
-            popoverPresentationController.sourceRect = sourceRect
-            popoverPresentationController.permittedArrowDirections = arrowDirection
-            popoverPresentationController.delegate = self
-        }
-
-        presentWithModalDismissIfNeeded(controller, animated: true)
-    }
-
     private func showSendToDevice() {
         guard let selectedTab = tabManager.selectedTab,
               let url = selectedTab.canonicalURL?.displayURL
@@ -1676,7 +1678,7 @@ class BrowserViewController: UIViewController,
                   !tab.isPrivate,
                   FakespotUtils().shouldDisplayInSidebar(),
                   isReduxIntegrationEnabled,
-                  let fakespotState = store.state.screenState(FakespotState.self, for: .fakespot),
+                  let fakespotState = browserViewControllerState?.fakespotState,
                   fakespotState.isOpenOnProductPage {
             handleFakespotFlow(productURL: url)
         } else if contentStackView.isSidebarVisible {
@@ -1726,9 +1728,9 @@ class BrowserViewController: UIViewController,
 
         let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
             .creditCardAutofillStatus, checking: .buildOnly)
-        let creditCardHelper = CreditCardHelper(tab: tab)
-        tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
-        creditCardHelper.foundFieldValues = { [weak self] fieldValues, type, frame in
+        let formAutofillHelper = FormAutofillHelper(tab: tab)
+        tab.addContentScript(formAutofillHelper, name: FormAutofillHelper.name())
+        formAutofillHelper.foundFieldValues = { [weak self] fieldValues, type, frame in
             guard let tabWebView = tab.webView,
                   let type = type,
                   userDefaults.object(forKey: keyCreditCardAutofill) as? Bool ?? true
@@ -1755,6 +1757,12 @@ class BrowserViewController: UIViewController,
             case .formSubmit:
                 self?.showCreditCardAutofillSheet(fieldValues: fieldValues)
                 break
+            case .fillAddressForm:
+                // TODO: FXIOS-7670 Address Autofill UX
+                return
+            case .captureAddressForm:
+                // TODO: FXIOS-7670 Address Autofill UX
+                return
             }
 
             tabWebView.accessoryView.savedCardsClosure = {
@@ -1980,7 +1988,6 @@ extension BrowserViewController: LegacyTabDelegate {
         creditCardAutofillSetup(tab, didCreateWebView: webView)
 
         let contextMenuHelper = ContextMenuHelper(tab: tab)
-        contextMenuHelper.delegate = self
         tab.addContentScript(contextMenuHelper, name: ContextMenuHelper.name())
 
         let errorHelper = ErrorPageHelper(certStore: profile.certStore)
@@ -2213,7 +2220,7 @@ extension BrowserViewController: TabManagerDelegate {
         bottomContentStackView.removeAllArrangedViews()
         if let bars = selected?.bars {
             bars.forEach { bar in
-                bottomContentStackView.addArrangedViewToBottom(bar, completion: { self.view.layoutIfNeeded()})
+                bottomContentStackView.addArrangedViewToBottom(bar, completion: { self.view.layoutIfNeeded() })
             }
         }
 
@@ -2342,177 +2349,18 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
     }
 }
 
-extension BrowserViewController: ContextMenuHelperDelegate {
-    func contextMenuHelper(_ contextMenuHelper: ContextMenuHelper, didLongPressElements elements: ContextMenuHelper.Elements, gestureRecognizer: UIGestureRecognizer) {
-        // locationInView can return (0, 0) when the long press is triggered in an invalid page
-        // state (e.g., long pressing a link before the document changes, then releasing after a
-        // different page loads).
-        let touchPoint = gestureRecognizer.location(in: view)
-        guard touchPoint != CGPoint.zero else { return }
-
-        let touchSize = CGSize(width: 0, height: 16)
-
-        let actionSheetController = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        var dialogTitle: String?
-
-        if let url = elements.link, let currentTab = tabManager.selectedTab {
-            dialogTitle = url.absoluteString
-            let isPrivate = currentTab.isPrivate
-            screenshotHelper.takeDelayedScreenshot(currentTab)
-
-            let addTab = { (rURL: URL, isPrivate: Bool) in
-                let tab = self.tabManager.addTab(URLRequest(url: rURL as URL), afterTab: currentTab, isPrivate: isPrivate)
-                guard !self.topTabsVisible else { return }
-                // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
-                let viewModel = ButtonToastViewModel(labelText: .ContextMenuButtonToastNewTabOpenedLabelText,
-                                                     buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
-                let toast = ButtonToast(viewModel: viewModel,
-                                        theme: self.themeManager.currentTheme,
-                                        completion: { buttonPressed in
-                    if buttonPressed {
-                        self.tabManager.selectTab(tab)
-                    }
-                })
-                self.show(toast: toast)
-            }
-
-            if !isPrivate {
-                let openNewTabAction = UIAlertAction(title: .ContextMenuOpenInNewTab, style: .default) { _ in
-                    addTab(url, false)
-                }
-                actionSheetController.addAction(openNewTabAction, accessibilityIdentifier: "linkContextMenu.openInNewTab")
-            }
-
-            let openNewPrivateTabAction = UIAlertAction(title: .ContextMenuOpenInNewPrivateTab, style: .default) { _ in
-                addTab(url, true)
-            }
-            actionSheetController.addAction(openNewPrivateTabAction, accessibilityIdentifier: "linkContextMenu.openInNewPrivateTab")
-
-            let bookmarkAction = UIAlertAction(title: .ContextMenuBookmarkLink, style: .default) { _ in
-                self.addBookmark(url: url.absoluteString, title: elements.title)
-                TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .contextMenu)
-            }
-            actionSheetController.addAction(bookmarkAction, accessibilityIdentifier: "linkContextMenu.bookmarkLink")
-
-            let downloadAction = UIAlertAction(title: .ContextMenuDownloadLink, style: .default) { _ in
-                // This checks if download is a blob, if yes, begin blob download process
-                if !DownloadContentScript.requestBlobDownload(url: url, tab: currentTab) {
-                    // if not a blob, set pendingDownloadWebView and load the request in
-                    // the webview, which will trigger the WKWebView navigationResponse
-                    // delegate function and eventually downloadHelper.open()
-                    self.pendingDownloadWebView = currentTab.webView
-                    let request = URLRequest(url: url)
-                    currentTab.webView?.load(request)
-                }
-            }
-            actionSheetController.addAction(downloadAction, accessibilityIdentifier: "linkContextMenu.download")
-
-            let copyAction = UIAlertAction(title: .ContextMenuCopyLink, style: .default) { _ in
-                UIPasteboard.general.url = url as URL
-            }
-            actionSheetController.addAction(copyAction, accessibilityIdentifier: "linkContextMenu.copyLink")
-
-            let shareAction = UIAlertAction(title: .ContextMenuShareLink, style: .default) { _ in
-                self.presentActivityViewController(url as URL,
-                                                   sourceView: self.view,
-                                                   sourceRect: CGRect(origin: touchPoint,
-                                                                      size: touchSize),
-                                                   arrowDirection: .any)
-            }
-            actionSheetController.addAction(shareAction, accessibilityIdentifier: "linkContextMenu.share")
-        }
-
-        if let url = elements.image {
-            if dialogTitle == nil {
-                dialogTitle = elements.title ?? url.absoluteString
-            }
-
-            let saveImageAction = UIAlertAction(title: .ContextMenuSaveImage, style: .default) { _ in
-                self.getImageData(url) { data in
-                    guard let image = UIImage(data: data) else { return }
-                    self.writeToPhotoAlbum(image: image)
-                }
-            }
-            actionSheetController.addAction(saveImageAction, accessibilityIdentifier: "linkContextMenu.saveImage")
-
-            let copyAction = UIAlertAction(title: .ContextMenuCopyImage, style: .default) { _ in
-                // put the actual image on the clipboard
-                // do this asynchronously just in case we're in a low bandwidth situation
-                let pasteboard = UIPasteboard.general
-                pasteboard.url = url as URL
-                let changeCount = pasteboard.changeCount
-                let application = UIApplication.shared
-                var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
-                taskId = application.beginBackgroundTask(expirationHandler: {
-                    application.endBackgroundTask(taskId)
-                })
-
-                makeURLSession(userAgent: UserAgent.fxaUserAgent, configuration: URLSessionConfiguration.default).dataTask(with: url) { (data, response, error) in
-                    guard validatedHTTPResponse(response, statusCode: 200..<300) != nil else {
-                        application.endBackgroundTask(taskId)
-                        return
-                    }
-
-                    // Only set the image onto the pasteboard if the pasteboard hasn't changed since
-                    // fetching the image; otherwise, in low-bandwidth situations,
-                    // we might be overwriting something that the user has subsequently added.
-                    if changeCount == pasteboard.changeCount, let imageData = data, error == nil {
-                        pasteboard.addImageWithData(imageData, forURL: url)
-                    }
-
-                    application.endBackgroundTask(taskId)
-                }.resume()
-            }
-            actionSheetController.addAction(copyAction, accessibilityIdentifier: "linkContextMenu.copyImage")
-
-            let copyImageLinkAction = UIAlertAction(title: .ContextMenuCopyImageLink, style: .default) { _ in
-                UIPasteboard.general.url = url as URL
-            }
-            actionSheetController.addAction(copyImageLinkAction, accessibilityIdentifier: "linkContextMenu.copyImageLink")
-        }
-
-        let setupPopover = { [unowned self] in
-            // If we're showing an arrow popup, set the anchor to the long press location.
-            if let popoverPresentationController = actionSheetController.popoverPresentationController {
-                popoverPresentationController.sourceView = self.view
-                popoverPresentationController.sourceRect = CGRect(origin: touchPoint, size: touchSize)
-                popoverPresentationController.permittedArrowDirections = .any
-                popoverPresentationController.delegate = self
-            }
-        }
-        setupPopover()
-
-        if actionSheetController.popoverPresentationController != nil {
-            displayedPopoverController = actionSheetController
-            updateDisplayedPopoverProperties = setupPopover
-        }
-
-        if let dialogTitle = dialogTitle {
-            if dialogTitle.asURL != nil {
-                actionSheetController.title = dialogTitle.ellipsize(maxLength: UX.ActionSheetTitleMaxLength)
-            } else {
-                actionSheetController.title = dialogTitle
-            }
-        }
-
-        let cancelAction = UIAlertAction(title: .CancelString, style: UIAlertAction.Style.cancel, handler: nil)
-        actionSheetController.addAction(cancelAction)
-        self.present(actionSheetController, animated: true, completion: nil)
-    }
-
+extension BrowserViewController {
+    /// Used to get the context menu save image in the context menu, shown from long press on webview links
     fileprivate func getImageData(_ url: URL, success: @escaping (Data) -> Void) {
-        makeURLSession(userAgent: UserAgent.fxaUserAgent, configuration: URLSessionConfiguration.default).dataTask(with: url) { (data, response, error) in
+        makeURLSession(
+            userAgent: UserAgent.fxaUserAgent,
+            configuration: URLSessionConfiguration.default).dataTask(with: url
+            ) { (data, response, error) in
             if validatedHTTPResponse(response, statusCode: 200..<300) != nil,
                let data = data {
                 success(data)
             }
         }.resume()
-    }
-
-    func contextMenuHelper(_ contextMenuHelper: ContextMenuHelper, didCancelGestureRecognizer: UIGestureRecognizer) {
-        displayedPopoverController?.dismiss(animated: true) {
-            self.displayedPopoverController = nil
-        }
     }
 
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
@@ -2527,7 +2375,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 }
 
 extension BrowserViewController {
-    // no-op
+    // no-op - relates to UIImageWriteToSavedPhotosAlbum
     @objc
     func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) { }
 }
@@ -2637,7 +2485,7 @@ extension BrowserViewController: TopTabsDelegate {
     }
 
     func topTabsDidPressNewTab(_ isPrivate: Bool) {
-        openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
+        openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
         overlayManager.openNewTab(url: nil,
                                   newTabSettings: newTabSettings)
     }
@@ -2668,7 +2516,7 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
 
         guard shareItem.isShareable else {
             let alert = UIAlertController(title: .SendToErrorTitle, message: .SendToErrorMessage, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: .SendToErrorOKButton, style: .default) { _ in self.popToBVC()})
+            alert.addAction(UIAlertAction(title: .SendToErrorOKButton, style: .default) { _ in self.popToBVC() })
             present(alert, animated: true, completion: nil)
             return
         }

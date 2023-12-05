@@ -2,20 +2,27 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Shared
-import UIKit
-import Storage
-import MozillaAppServices
 import Common
 import ComponentLibrary
+import MozillaAppServices
+import Shared
+import Storage
+import Redux
+import UIKit
 
-class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, ContentContainable,
-                                SearchBarLocationProvider {
+class HomepageViewController:
+    UIViewController,
+    FeatureFlaggable,
+    Themeable,
+    ContentContainable,
+    SearchBarLocationProvider {
     // MARK: - Typealiases
+
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
     typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
 
     // MARK: - Operational Variables
+
     weak var homePanelDelegate: HomePanelDelegate?
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     weak var sendToDeviceDelegate: SendToDeviceDelegate? {
@@ -705,10 +712,6 @@ extension HomepageViewController: HomepageContextMenuHelperDelegate {
 
     func homePanelDidRequestToOpenSettings(at settingsPage: Route.SettingsSection) {
         homePanelDelegate?.homePanelDidRequestToOpenSettings(at: settingsPage)
-    }
-
-    func showToast(message: String) {
-        SimpleToast().showAlertWithText(message, bottomContainer: view, theme: themeManager.currentTheme)
     }
 }
 

@@ -54,7 +54,7 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
         referringPage: ReferringPage = .onboarding
     ) {
         guard let infoModel = viewModel.availableCards
-            .first(where: { $0.viewModel.name == cardName})?
+            .first(where: { $0.viewModel.name == cardName })?
             .viewModel,
               let url = infoModel.link?.url
         else { return }

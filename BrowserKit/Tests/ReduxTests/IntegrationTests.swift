@@ -11,7 +11,7 @@ let store = Store(state: FakeReduxState(),
 
 final class IntegrationTests: XCTestCase {
     var fakeViewController: FakeReduxViewController!
-    var expectedValue: Int!
+    var expectedIntValue: Int!
 
     override func setUp() {
         super.setUp()
@@ -33,7 +33,7 @@ final class IntegrationTests: XCTestCase {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             expectation.fulfill()
             let intValue = Int(self.fakeViewController.label.text ?? "0")
-            XCTAssertEqual(intValue, self.expectedValue)
+            XCTAssertEqual(intValue, self.expectedIntValue)
         }
         waitForExpectations(timeout: 1)
     }
@@ -47,21 +47,64 @@ final class IntegrationTests: XCTestCase {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             expectation.fulfill()
             let intValue = Int(self.fakeViewController.label.text ?? "0")
-            XCTAssertEqual(intValue, self.expectedValue)
+            XCTAssertEqual(intValue, self.expectedIntValue)
         }
         waitForExpectations(timeout: 1)
     }
 
+    func testDispatchStore_InitialPrivateValue() {
+        let expectedResult = false
+
+        // Needed to wait for Redux action handled async in main thread
+        let expectation = self.expectation(description: "Redux integration test")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            expectation.fulfill()
+            let result = self.fakeViewController.isInPrivateMode
+            XCTAssertEqual(result, expectedResult)
+        }
+        waitForExpectations(timeout: 1)
+    }
+
+    func testDispatchStore_SetPrivateToTrue() {
+        let expectedResult = true
+        fakeViewController.setPrivateMode(to: expectedResult)
+
+        // Needed to wait for Redux action handled async in main thread
+        let expectation = self.expectation(description: "Redux integration test")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            expectation.fulfill()
+            let result = self.fakeViewController.isInPrivateMode
+            XCTAssertEqual(result, expectedResult)
+        }
+        waitForExpectations(timeout: 1)
+    }
+
+    func testDispatchStore_SetPrivateToFalse() {
+        let expectedResult = false
+        fakeViewController.setPrivateMode(to: true)
+        fakeViewController.setPrivateMode(to: expectedResult)
+
+        // Needed to wait for Redux action handled async in main thread
+        let expectation = self.expectation(description: "Redux integration test")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            expectation.fulfill()
+            let result = self.fakeViewController.isInPrivateMode
+            XCTAssertEqual(result, expectedResult)
+        }
+        waitForExpectations(timeout: 1)
+    }
+
+    // MARK: - Helper functions
     private func getExpectedValue(shouldIncrease: Bool) {
         // Needed to wait for Redux action handled async in main thread
         let expectation = self.expectation(description: "Redux integration test")
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             expectation.fulfill()
-            self.expectedValue = store.state.counter
+            self.expectedIntValue = store.state.counter
             if shouldIncrease {
-                self.expectedValue += 1
+                self.expectedIntValue += 1
             } else {
-                self.expectedValue -= 1
+                self.expectedIntValue -= 1
             }
         }
         waitForExpectations(timeout: 1)

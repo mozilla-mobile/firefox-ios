@@ -68,7 +68,8 @@ internal class ForwardOnLog: AppServicesLogger {
         case .warn:
             return LoggerLevel.warning
         case .error:
-            return LoggerLevel.fatal
+            // TODO: FXIOS-7819 need to rethink if this should go to Sentry, setting as warning to bypass for now
+            return LoggerLevel.warning
         }
     }
 }

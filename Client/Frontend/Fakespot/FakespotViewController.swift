@@ -6,7 +6,6 @@ import Common
 import ComponentLibrary
 import UIKit
 import Shared
-import Redux
 
 class FakespotViewController:
     UIViewController,
@@ -43,6 +42,8 @@ class FakespotViewController:
     var themeObserver: NSObjectProtocol?
     private var viewModel: FakespotViewModel
     weak var delegate: FakespotViewControllerDelegate?
+
+    lazy var isReduxIntegrationEnabled: Bool = ReduxFlagManager.isReduxEnabled
 
     private lazy var scrollView: UIScrollView = .build()
 
@@ -145,7 +146,14 @@ class FakespotViewController:
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         viewModel.isSwiping = false
-        shadowView.layer.shadowPath = UIBezierPath(rect: shadowView.bounds).cgPath
+        // Calculate the rect for the shadowPath, ensuring it is at the bottom of the view
+        let shadowPathRect = CGRect(
+            x: 0,
+            y: shadowView.bounds.maxY - shadowView.layer.shadowRadius,
+            width: shadowView.bounds.width,
+            height: shadowView.layer.shadowRadius
+        )
+        shadowView.layer.shadowPath = UIBezierPath(rect: shadowPathRect).cgPath
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -168,7 +176,7 @@ class FakespotViewController:
     func update(viewModel: FakespotViewModel, triggerFetch: Bool = true) {
         // Only update the model if the shopping product changed to avoid unnecessary API calls
         guard self.viewModel.shoppingProduct != viewModel.shoppingProduct else { return }
-        store.dispatch(FakespotAction.urlDidChange)
+
         self.viewModel = viewModel
         listenToStateChange()
 
@@ -377,30 +385,25 @@ class FakespotViewController:
 
         case .qualityDeterminationCard:
             let reviewQualityCardView: FakespotReviewQualityCardView = .build()
-//            viewModel.reviewQualityCardViewModel.expandState = state.isReviewQualityExpanded ? .expanded : .collapsed
             viewModel.reviewQualityCardViewModel.dismissViewController = { [weak self] in
                 guard let self = self else { return }
                 self.delegate?.fakespotControllerDidDismiss(animated: true)
-            }
-            viewModel.reviewQualityCardViewModel.onExpandStateChanged = { state in
-                store.dispatch(FakespotAction.reviewQualityDidChange)
             }
             reviewQualityCardView.configure(viewModel.reviewQualityCardViewModel)
             return reviewQualityCardView
 
         case .settingsCard:
             let view: FakespotSettingsCardView = .build()
-//            viewModel.settingsCardViewModel.expandState = state.isSettingsExpanded ? .expanded : .collapsed
+            view.configure(viewModel.settingsCardViewModel)
             viewModel.settingsCardViewModel.dismissViewController = { [weak self] action in
                 guard let self = self else { return }
                 self.delegate?.fakespotControllerDidDismiss(animated: true)
                 guard let action else { return }
                 viewModel.recordDismissTelemetry(by: action)
             }
-            viewModel.settingsCardViewModel.onExpandStateChanged = { state in
-                store.dispatch(FakespotAction.settingsStateDidChange)
+            viewModel.settingsCardViewModel.toggleAdsEnabled = { [weak self] in
+                self?.viewModel.toggleAdsEnabled()
             }
-            view.configure(viewModel.settingsCardViewModel)
             return view
 
         case .noAnalysisCard:
@@ -412,6 +415,7 @@ class FakespotViewController:
              return view
 
         case .productAdCard(let adData):
+            guard viewModel.areAdsEnabled else { return nil }
             let view: FakespotAdView = .build()
             var viewModel = FakespotAdViewModel(productAdsData: adData)
             viewModel.dismissViewController = { [weak self] in
@@ -484,8 +488,16 @@ class FakespotViewController:
 
     @objc
     private func closeTapped() {
-        delegate?.fakespotControllerDidDismiss(animated: true)
+        triggerDismiss()
         viewModel.recordDismissTelemetry(by: .closeButton)
+    }
+
+    private func triggerDismiss() {
+        delegate?.fakespotControllerDidDismiss(animated: true)
+
+        if isReduxIntegrationEnabled {
+            store.dispatch(FakespotAction.toggleAppearance(false))
+        }
     }
 
     deinit {
@@ -513,7 +525,8 @@ class FakespotViewController:
     // MARK: - UIAdaptivePresentationControllerDelegate
 
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        delegate?.fakespotControllerDidDismiss(animated: true)
+        triggerDismiss()
+
         let currentDetent = viewModel.getCurrentDetent(for: presentationController)
 
         if viewModel.isSwiping || currentDetent == .large {

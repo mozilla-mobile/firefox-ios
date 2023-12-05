@@ -127,6 +127,9 @@
 /* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replaced by the Fakespot app name. After the colon, what appears are two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
 "Shopping.OptInCard.Disclaimer.Text.v120" = "Gaž „Jo, wopytaś“ wuběraśo, zwólijośo do slědujucego wót %@:";
 
+/* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. This string is almost identical with 'Shopping.OptInCard.FirstParagraph.Description', but without Best Buy and Walmart websites, which are not available in many locales. */
+"Shopping.OptInCard.FirstParagraph.AmazonOnly.Description.v122" = "Glědajśo, kak spušćobne pógódnośenja produktow na %1$@ su, nježli až produkty kupujośo. Kontrola pógódnośenjow, eksperimentalna funkcija z %2$@, jo direktnje do wobglědowaka zatwarjona.";
+
 /* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. The third and fourth parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. */
 "Shopping.OptInCard.FirstParagraph.Description.v120" = "Glědajśo, kak spušćobne pógódnośenja produktow na %1$@ su, nježli až produkty kupujośo. Kontrola pógódnośenjow, eksperimentalna funkcija z %2$@, jo direktnje do wobglědowaka zatwarjona. Funkcioněrujo teke na %3$@ a %4$@.";
 

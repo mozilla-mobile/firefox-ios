@@ -7,6 +7,8 @@ import Foundation
 import WebKit
 import Shared
 import Storage
+import Redux
+import TabDataStore
 
 class BrowserCoordinator: BaseCoordinator,
                           LaunchCoordinatorDelegate,
@@ -29,7 +31,6 @@ class BrowserCoordinator: BaseCoordinator,
     private let screenshotService: ScreenshotService
     private let glean: GleanWrapper
     private let applicationHelper: ApplicationHelper
-    private let wallpaperManager: WallpaperManagerInterface
     private var browserIsReady = false
 
     init(router: Router,
@@ -38,8 +39,7 @@ class BrowserCoordinator: BaseCoordinator,
          tabManager: TabManager = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          glean: GleanWrapper = DefaultGleanWrapper.shared,
-         applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
-         wallpaperManager: WallpaperManagerInterface = WallpaperManager()) {
+         applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
         self.screenshotService = screenshotService
         self.profile = profile
         self.tabManager = tabManager
@@ -47,9 +47,9 @@ class BrowserCoordinator: BaseCoordinator,
         self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         self.applicationHelper = applicationHelper
         self.glean = glean
-        self.wallpaperManager = wallpaperManager
         super.init(router: router)
 
+        tabManagerDidConnectToScene()
         browserViewController.browserDelegate = self
         browserViewController.navigationHandler = self
         tabManager.addDelegate(self)
@@ -64,6 +64,13 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - Helper methods
+
+    private func tabManagerDidConnectToScene() {
+        // [7863] [WIP] Redux: connect this Browser's TabManager to associated window scene
+        guard ReduxFlagManager.isReduxEnabled else { return }
+        let sceneUUID = WindowData.DefaultSingleWindowUUID
+        store.dispatch(TabManagerAction.tabManagerDidConnectToScene(tabManager, sceneUUID))
+    }
 
     private func startLaunch(with launchType: LaunchType) {
         let launchCoordinator = LaunchCoordinator(router: router)
@@ -275,14 +282,14 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     private func canHandleSettings(with section: Route.SettingsSection) -> Bool {
-        guard !childCoordinators.contains(where: { $0 is SettingsCoordinator}) else {
+        guard !childCoordinators.contains(where: { $0 is SettingsCoordinator }) else {
             return false // route is handled with existing child coordinator
         }
         return true
     }
 
     private func handleSettings(with section: Route.SettingsSection) {
-        guard !childCoordinators.contains(where: { $0 is SettingsCoordinator}) else {
+        guard !childCoordinators.contains(where: { $0 is SettingsCoordinator }) else {
             return // route is handled with existing child coordinator
         }
         let navigationController = ThemedNavigationController()
@@ -422,14 +429,14 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func dismissFakespotModal(animated: Bool = true) {
-        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator}) as? FakespotCoordinator else {
+        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator }) as? FakespotCoordinator else {
             return // there is no modal to close
         }
         fakespotCoordinator.fakespotControllerDidDismiss(animated: animated)
     }
 
     func dismissFakespotSidebar(sidebarContainer: SidebarEnabledViewProtocol, parentViewController: UIViewController) {
-        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator}) as? FakespotCoordinator else {
+        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator }) as? FakespotCoordinator else {
             return // there is no sidebar to close
         }
         fakespotCoordinator.fakespotControllerCloseSidebar(sidebarContainer: sidebarContainer,
@@ -439,7 +446,7 @@ class BrowserCoordinator: BaseCoordinator,
     func updateFakespotSidebar(productURL: URL,
                                sidebarContainer: SidebarEnabledViewProtocol,
                                parentViewController: UIViewController) {
-        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator}) as? FakespotCoordinator else {
+        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator }) as? FakespotCoordinator else {
             return // there is no sidebar
         }
         fakespotCoordinator.updateSidebar(productURL: productURL,
@@ -448,7 +455,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     private func makeFakespotCoordinator() -> FakespotCoordinator? {
-        guard !childCoordinators.contains(where: { $0 is FakespotCoordinator}) else {
+        guard !childCoordinators.contains(where: { $0 is FakespotCoordinator }) else {
             return nil // flow is already handled
         }
 
@@ -458,7 +465,7 @@ class BrowserCoordinator: BaseCoordinator,
         return coordinator
     }
 
-    func showShareExtension(url: URL, sourceView: UIView, toastContainer: UIView, popoverArrowDirection: UIPopoverArrowDirection) {
+    func showShareExtension(url: URL, sourceView: UIView, sourceRect: CGRect?, toastContainer: UIView, popoverArrowDirection: UIPopoverArrowDirection) {
         guard childCoordinators.first(where: { $0 is ShareExtensionCoordinator }) as? ShareExtensionCoordinator == nil
         else {
             // If this case is hitted it means the share extension coordinator wasn't removed correctly in the previous session.
@@ -466,7 +473,7 @@ class BrowserCoordinator: BaseCoordinator,
         }
         let shareExtensionCoordinator = ShareExtensionCoordinator(alertContainer: toastContainer, router: router, profile: profile, parentCoordinator: self)
         add(child: shareExtensionCoordinator)
-        shareExtensionCoordinator.start(url: url, sourceView: sourceView, popoverArrowDirection: popoverArrowDirection)
+        shareExtensionCoordinator.start(url: url, sourceView: sourceView, sourceRect: sourceRect, popoverArrowDirection: popoverArrowDirection)
     }
 
     func showCreditCardAutofill(creditCard: CreditCard?,
@@ -504,7 +511,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showTabTray(selectedPanel: TabTrayPanelType) {
-        guard !childCoordinators.contains(where: { $0 is TabTrayCoordinator}) else {
+        guard !childCoordinators.contains(where: { $0 is TabTrayCoordinator }) else {
             return // flow is already handled
         }
 
@@ -514,7 +521,8 @@ class BrowserCoordinator: BaseCoordinator,
         navigationController.modalPresentationStyle = modalPresentationStyle
 
         let tabTrayCoordinator = TabTrayCoordinator(
-            router: DefaultRouter(navigationController: navigationController)
+            router: DefaultRouter(navigationController: navigationController),
+            tabTraySection: selectedPanel
         )
         tabTrayCoordinator.parentCoordinator = self
         add(child: tabTrayCoordinator)

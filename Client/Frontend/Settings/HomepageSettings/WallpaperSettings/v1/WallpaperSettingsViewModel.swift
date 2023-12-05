@@ -169,7 +169,7 @@ class WallpaperSettingsViewModel {
 private extension WallpaperSettingsViewModel {
     var initialSelectedIndexPath: IndexPath? {
         for (sectionIndex, collection) in wallpaperCollections.enumerated() {
-            if let rowIndex = collection.wallpapers.firstIndex(where: {$0 == wallpaperManager.currentWallpaper}) {
+            if let rowIndex = collection.wallpapers.firstIndex(where: { $0 == wallpaperManager.currentWallpaper }) {
                 return IndexPath(row: rowIndex, section: sectionIndex)
             }
         }

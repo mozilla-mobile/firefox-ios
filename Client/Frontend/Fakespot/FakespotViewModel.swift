@@ -186,6 +186,10 @@ class FakespotViewModel {
         return prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false
     }
 
+    var areAdsEnabled: Bool {
+        return prefs.boolForKey(PrefsKeys.Shopping2023EnableAds) ?? true
+    }
+
     var reliabilityCardViewModel: FakespotReliabilityCardViewModel? {
         guard let grade = state.productData?.grade else { return nil }
 
@@ -303,6 +307,7 @@ class FakespotViewModel {
          profile: Profile = AppContainer.shared.resolve()) {
         self.shoppingProduct = shoppingProduct
         optInCardViewModel.productSitename = shoppingProduct.product?.sitename
+        optInCardViewModel.supportedTLDWebsites = shoppingProduct.supportedTLDWebsites
         reviewQualityCardViewModel.productSitename = shoppingProduct.product?.sitename
         self.prefs = profile.prefs
     }
@@ -340,6 +345,13 @@ class FakespotViewModel {
         }
     }
 
+    func toggleAdsEnabled() {
+        prefs.setBool(!areAdsEnabled, forKey: PrefsKeys.Shopping2023EnableAds)
+
+        // Make sure the view updates with the new ads setting
+        onStateChange?()
+    }
+
     struct ProductState {
         let product: ProductAnalysisResponse?
         let productAds: [ProductAdsResponse]
@@ -351,7 +363,7 @@ class FakespotViewModel {
         if showLoading { state = .loading }
         do {
             let product = try await shoppingProduct.fetchProductAnalysisData()
-            let productAds: [ProductAdsResponse] = if shoppingProduct.isProductAdsFeatureEnabled {
+            let productAds: [ProductAdsResponse] = if shoppingProduct.isProductAdsFeatureEnabled, areAdsEnabled {
                 await shoppingProduct.fetchProductAdsData()
             } else {
                 []
@@ -366,6 +378,9 @@ class FakespotViewModel {
                     analyzeCount: analyzeCount
                 )
             )
+            if !productAds.isEmpty, product != nil {
+                recordAdsExposureTelementry()
+            }
         } catch {
             state = .error(error)
         }
@@ -458,6 +473,15 @@ class FakespotViewModel {
             category: .action,
             method: .navigate,
             object: .shoppingBottomSheet
+        )
+    }
+
+    private func recordAdsExposureTelementry() {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .view,
+            object: .shoppingBottomSheet,
+            value: .shoppingAdsExposure
         )
     }
 

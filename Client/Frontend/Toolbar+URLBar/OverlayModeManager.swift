@@ -8,6 +8,7 @@ protocol OverlayStateProtocol {
     var inOverlayMode: Bool { get }
 }
 
+/// Overlay mode (aka attentive mode) refers to when the URL bar is focused and in the editing state
 protocol OverlayModeManager: OverlayStateProtocol {
     /// Set URLBar which is not available when the manager is created
     /// - Parameter urlBarView: URLBar that contains textfield which open and dismiss the keyboard

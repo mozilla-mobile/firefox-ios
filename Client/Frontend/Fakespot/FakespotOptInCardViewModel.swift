@@ -18,11 +18,13 @@ struct FakespotOptInCardViewModel {
     private let prefs: Prefs
     let cardA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.card
     var productSitename: String?
+    var supportedTLDWebsites: [String]?
 
     // MARK: Labels
     let headerTitle: String = .Shopping.OptInCardHeaderTitle
     let headerA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.headerTitle
     let bodyFirstParagraph: String = .Shopping.OptInCardFirstParagraph
+    let bodyFirstParagraphOneVendor: String = .Shopping.OptInCardFirstParagraphOneVendor
     let bodySecondParagraph = String.localizedStringWithFormat(.Shopping.OptInCardSecondParagraph,
                                                                FakespotName.shortName.rawValue,
                                                                MozillaName.shortName.rawValue)
@@ -118,7 +120,13 @@ struct FakespotOptInCardViewModel {
                                                           size: UX.bodyLabelFontSize)
         let boldFont = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body,
                                                                   size: UX.bodyLabelFontSize)
-        let combinedString = String(format: "%@\n\n%@", bodyFirstParagraph, bodySecondParagraph)
+
+        let firstParagraph = if supportedTLDWebsites?.count == websites.count {
+            bodyFirstParagraph
+        } else {
+            bodyFirstParagraphOneVendor
+        }
+        let combinedString = String(format: "%@\n\n%@", firstParagraph, bodySecondParagraph)
 
         let plainText = String.localizedStringWithFormat(combinedString,
                                                          websites[0],

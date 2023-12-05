@@ -22,7 +22,10 @@ let package = Package(
             targets: ["Redux"]),
         .library(
             name: "ComponentLibrary",
-            targets: ["ComponentLibrary"])
+            targets: ["ComponentLibrary"]),
+        .library(
+            name: "WebEngine",
+            targets: ["WebEngine"])
     ],
     dependencies: [
         .package(
@@ -39,7 +42,7 @@ let package = Package(
             exact: "2.0.0"),
         .package(
             url: "https://github.com/getsentry/sentry-cocoa.git",
-            exact: "8.13.1"),
+            exact: "8.17.1"),
     ],
     targets: [
         .target(
@@ -77,6 +80,12 @@ let package = Package(
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "ReduxTests",
-            dependencies: ["Redux"])
+            dependencies: ["Redux"]),
+        .target(
+            name: "WebEngine",
+            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+        .testTarget(
+            name: "WebEngineTests",
+            dependencies: ["WebEngine"])
     ]
 )

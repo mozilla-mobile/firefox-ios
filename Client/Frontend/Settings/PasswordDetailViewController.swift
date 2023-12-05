@@ -94,6 +94,20 @@ class PasswordDetailViewController: SensitiveViewController, Themeable {
         KeyboardHelper.defaultHelper.addDelegate(self)
     }
 
+    private func didTapBreachLearnMore() {
+        guard let url = BreachAlertsManager.monitorAboutUrl else { return }
+        coordinator?.openURL(url: url)
+    }
+
+    private func didTapBreachLink(_ sender: UITapGestureRecognizer? = nil) {
+        guard let domain = viewModel.breachRecord?.domain else { return }
+        var urlComponents = URLComponents()
+        urlComponents.host = domain
+        urlComponents.scheme = "https"
+        guard let url = urlComponents.url else { return }
+        coordinator?.openURL(url: url)
+    }
+
     func applyTheme() {
         let theme = themeManager.currentTheme
         tableView.separatorColor = theme.colors.borderPrimary
@@ -129,10 +143,14 @@ extension PasswordDetailViewController: UITableViewDataSource {
             breachDetailView.setup(breach)
             breachDetailView.applyTheme(theme: themeManager.currentTheme)
 
-            breachDetailView.learnMoreButton.addTarget(self, action: #selector(PasswordDetailViewController.didTapBreachLearnMore), for: .touchUpInside)
-            let breachLinkGesture = UITapGestureRecognizer(target: self, action: #selector(PasswordDetailViewController
-                .didTapBreachLink(_:)))
-            breachDetailView.goToButton.addGestureRecognizer(breachLinkGesture)
+            breachDetailView.onTapLearnMore = { [weak self] in
+                self?.didTapBreachLearnMore()
+            }
+
+            breachDetailView.onTapBreachLink = { [weak self] in
+                self?.didTapBreachLink()
+            }
+
             breachCell.isAccessibilityElement = false
             breachCell.contentView.accessibilityElementsHidden = true
             breachCell.accessibilityElements = [breachDetailView]
@@ -301,22 +319,6 @@ extension PasswordDetailViewController {
         deleteAlert?.dismiss(animated: false, completion: nil)
     }
 
-    @objc
-    func didTapBreachLearnMore() {
-        guard let url = BreachAlertsManager.monitorAboutUrl else { return }
-        coordinator?.openURL(url: url)
-    }
-
-    @objc
-    func didTapBreachLink(_ sender: UITapGestureRecognizer? = nil) {
-        guard let domain = viewModel.breachRecord?.domain else { return }
-        var urlComponents = URLComponents()
-        urlComponents.host = domain
-        urlComponents.scheme = "https"
-        guard let url = urlComponents.url else { return }
-        coordinator?.openURL(url: url)
-    }
-
     func deleteLogin() {
         viewModel.profile.hasSyncedLogins().uponQueue(.main) { yes in
             self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
@@ -421,6 +423,7 @@ extension PasswordDetailViewController: LoginDetailTableViewCellDelegate {
         guard let url = (viewModel.login.formSubmitUrl?.asURL ?? viewModel.login.hostname.asURL) else { return }
 
         coordinator?.openURL(url: url)
+        sendLoginsAutofilledTelemetry()
     }
 
     func shouldReturnAfterEditingDescription(_ cell: LoginDetailTableViewCell) -> Bool {
@@ -453,5 +456,11 @@ extension PasswordDetailViewController: LoginDetailTableViewCellDelegate {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .change,
                                      object: .loginsModified)
+    }
+
+    private func sendLoginsAutofilledTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .loginsAutofilled)
     }
 }

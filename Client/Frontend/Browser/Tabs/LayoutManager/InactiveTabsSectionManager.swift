@@ -4,6 +4,10 @@
 
 import Foundation
 
+protocol InactiveTabsSectionManagerDelegate: AnyObject {
+    func deleteInactiveTab(for index: Int)
+}
+
 class InactiveTabsSectionManager {
     struct UX {
         static let margin: CGFloat = 15.0
@@ -11,16 +15,7 @@ class InactiveTabsSectionManager {
         static let footerEstimatedHeight: CGFloat = 88
     }
 
-    private var trailingSwipeClosure: UICollectionLayoutListConfiguration.SwipeActionsConfigurationProvider? = { indexPath in
-        let deleteAction = UIContextualAction(
-            style: .destructive,
-            title: .TabsTray.InactiveTabs.CloseInactiveTabSwipeActionTitle) { _, _, completion in
-            // TODO: FXIOS-6936 Handle action
-            completion(true)
-        }
-        deleteAction.backgroundColor = .systemGreen
-        return UISwipeActionsConfiguration(actions: [deleteAction])
-    }
+    weak var delegate: InactiveTabsSectionManagerDelegate?
 
     func layoutSection(_ layoutEnvironment: NSCollectionLayoutEnvironment,
                        isExpanded: Bool) -> NSCollectionLayoutSection {
@@ -28,7 +23,16 @@ class InactiveTabsSectionManager {
         config.headerMode = .firstItemInSection
         config.footerMode = .supplementary
         config.showsSeparators = false
-        config.trailingSwipeActionsConfigurationProvider = trailingSwipeClosure
+        config.trailingSwipeActionsConfigurationProvider = { indexPath in
+            let deleteAction = UIContextualAction(
+                style: .destructive,
+                title: .TabsTray.InactiveTabs.CloseInactiveTabSwipeActionTitle) { [weak self] _, _, completion in
+                    self?.delegate?.deleteInactiveTab(for: indexPath.row)
+                completion(true)
+            }
+            return UISwipeActionsConfiguration(actions: [deleteAction])
+        }
+
         let section = NSCollectionLayoutSection.list(using: config, layoutEnvironment: layoutEnvironment)
 
         // Supplementary Item

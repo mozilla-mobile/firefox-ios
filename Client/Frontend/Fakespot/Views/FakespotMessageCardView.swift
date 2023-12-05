@@ -153,7 +153,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         label.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
-    private lazy var linkButton: ResizableButton = .build { button in
+    private lazy var linkButton: LegacyResizableButton = .build { button in
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
             withTextStyle: .caption1,
             size: UX.linkFontSize)
@@ -163,7 +163,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         button.titleLabel?.adjustsFontForContentSizeCategory = true
     }
 
-    private lazy var primaryButton: ResizableButton = .build { button in
+    private lazy var primaryButton: LegacyResizableButton = .build { button in
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .callout,
             size: UX.buttonFontSize)

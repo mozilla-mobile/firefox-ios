@@ -180,10 +180,14 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressQRButton(_ urlBar: URLBarView) {
-        let qrCodeViewController = QRCodeViewController()
-        qrCodeViewController.qrCodeDelegate = self
-        let controller = QRCodeNavigationController(rootViewController: qrCodeViewController)
-        self.present(controller, animated: true, completion: nil)
+        if CoordinatorFlagManager.isQRCodeCoordinatorEnabled {
+            navigationHandler?.showQRCode()
+        } else {
+            let qrCodeViewController = QRCodeViewController()
+            qrCodeViewController.qrCodeDelegate = self
+            let controller = QRCodeNavigationController(rootViewController: qrCodeViewController)
+            self.present(controller, animated: true, completion: nil)
+        }
     }
 
     func urlBarDidTapShield(_ urlBar: URLBarView) {
@@ -299,7 +303,7 @@ extension BrowserViewController: URLBarDelegate {
         if text.isEmpty {
             hideSearchController()
         } else {
-            showSearchController()
+            configureOverlayView()
         }
 
         searchController?.searchQuery = text
@@ -310,7 +314,7 @@ extension BrowserViewController: URLBarDelegate {
         if text.isEmpty {
             hideSearchController()
         } else {
-            showSearchController()
+            configureOverlayView()
         }
         urlBar.locationTextField?.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false, theme: self.themeManager.currentTheme)
         searchController?.searchQuery = text
@@ -400,5 +404,23 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView) {
         dismissVisibleMenus()
+    }
+
+    private var shouldDisableSearchSuggestsForPrivateMode: Bool {
+        let featureFlagEnabled = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
+        let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
+        let isSettingEnabled = profile.prefs.boolForKey(PrefsKeys.SearchSettings.disablePrivateModeSearchSuggestions) ?? true
+        return featureFlagEnabled && isPrivateTab && isSettingEnabled
+    }
+
+    // Determines the view user should see when editing the url bar
+    // Dimming view appears if private mode search suggest is disabled
+    // Otherwise shows search suggests screen
+    private func configureOverlayView() {
+        if shouldDisableSearchSuggestsForPrivateMode {
+            configureDimmingView()
+        } else {
+            showSearchController()
+        }
     }
 }

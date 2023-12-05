@@ -37,7 +37,7 @@ class ShareExtensionCoordinator: BaseCoordinator, DevicePickerViewControllerDele
     // MARK: - Methods
 
     /// Presents the Share extension from the source view
-    func start(url: URL, sourceView: UIView, popoverArrowDirection: UIPopoverArrowDirection = .up) {
+    func start(url: URL, sourceView: UIView, sourceRect: CGRect? = nil, popoverArrowDirection: UIPopoverArrowDirection = .up) {
         let shareExtension = ShareExtensionHelper(url: url, tab: tabManager.selectedTab)
         let controller = shareExtension.createActivityViewController { [weak self] completed, activityType in
             guard let self = self else { return }
@@ -45,7 +45,7 @@ class ShareExtensionCoordinator: BaseCoordinator, DevicePickerViewControllerDele
         }
         if let popoverPresentationController = controller.popoverPresentationController {
             popoverPresentationController.sourceView = sourceView
-            popoverPresentationController.sourceRect = sourceView.bounds
+            popoverPresentationController.sourceRect = sourceRect ?? sourceView.bounds
             popoverPresentationController.permittedArrowDirections = popoverArrowDirection
         }
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)

@@ -110,7 +110,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         return UIMenu(title: "", children: actions)
     }
 
-    init(tab: Tab, delegate: TabPeekDelegate?) {
+    init(tab: Tab?, delegate: TabPeekDelegate?) {
         self.tab = tab
         self.delegate = delegate
         super.init(nibName: nil, bundle: nil)

@@ -81,7 +81,7 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
         stack.spacing = UX.buttonsSpacing
     }
 
-    private lazy var yesButton: ResizableButton = .build { button in
+    private lazy var yesButton: LegacyResizableButton = .build { button in
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
             withTextStyle: .headline,
             size: UX.yesButtonFontSize)
@@ -230,6 +230,9 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
 
     // MARK: BottomSheet Delegate
     func willDismiss() {
+        if viewModel.state == .selectSavedCard {
+            sendCreditCardAutofillPromptDismissedTelemetry()
+        }
     }
 
     // MARK: UITableViewDelegate
@@ -330,5 +333,13 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
         yesButton.backgroundColor = currentTheme.colors.actionPrimary
         yesButton.setTitleColor(currentTheme.colors.textInverted, for: .normal)
         cardTableView.reloadData()
+    }
+
+    // MARK: Telemetry
+
+    fileprivate func sendCreditCardAutofillPromptDismissedTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .close,
+                                     object: .creditCardAutofillPromptDismissed)
     }
 }

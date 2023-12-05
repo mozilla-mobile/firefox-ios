@@ -62,8 +62,7 @@ public struct AccessibilityIdentifiers {
         }
 
         struct OtherButtons {
-            static let logoImage = "FxHomeLogoImage"
-            static let logoText = "FxHomeLogoText"
+            static let logoID = "FxHomeLogoID"
             static let customizeHome = "FxHomeCustomizeHomeSettingButton"
         }
 
@@ -117,6 +116,10 @@ public struct AccessibilityIdentifiers {
 
     struct GeneralizedIdentifiers {
         public static let back = "Back"
+    }
+
+    struct PrivateMode {
+        static let dimmingView = "PrivateMode.DimmingView"
     }
 
     struct Shopping {
@@ -409,6 +412,7 @@ public struct AccessibilityIdentifiers {
             static let searchNavigationBar = "Search"
             static let deleteMozillaEngine = "Remove Mozilla Engine"
             static let deleteButton = "Delete"
+            static let disableSearchSuggestsInPrivateMode = "PrivateMode.DisableSearchSuggests"
         }
 
         struct AdvancedAccountSettings {

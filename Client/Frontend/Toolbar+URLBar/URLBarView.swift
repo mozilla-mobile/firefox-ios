@@ -101,9 +101,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     var locationTextField: ToolbarTextField?
 
     /// Overlay mode is the state where the lock/reader icons are hidden, the home panels are shown,
-    /// and the Cancel button is visible (allowing the user to leave overlay mode). Overlay mode
-    /// is *not* tied to the location text field's editing state; for instance, when selecting
-    /// a panel, the first responder will be resigned, yet the overlay mode UI is still active.
+    /// and the Cancel button is visible (allowing the user to leave overlay mode).
     var inOverlayMode = false
 
     lazy var locationView: TabLocationView = {
@@ -138,21 +136,29 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
 
     fileprivate lazy var cancelButton: UIButton = {
         let cancelButton = InsetButton()
-        cancelButton.setImage(
-            UIImage.templateImageNamed(StandardImageIdentifiers.Large.chevronLeft)?.imageFlippedForRightToLeftLayoutDirection(),
-            for: .normal)
+        let flippedChevron = UIImage.templateImageNamed(StandardImageIdentifiers.Large.chevronLeft)?
+            .imageFlippedForRightToLeftLayoutDirection()
+
+        cancelButton.setImage(flippedChevron, for: .normal)
         cancelButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.UrlBar.cancelButton
         cancelButton.accessibilityLabel = AccessibilityIdentifiers.GeneralizedIdentifiers.back
         cancelButton.addTarget(self, action: #selector(didClickCancel), for: .touchUpInside)
         cancelButton.alpha = 0
+        cancelButton.showsLargeContentViewer = true
+        cancelButton.largeContentTitle = AccessibilityIdentifiers.GeneralizedIdentifiers.back
+        cancelButton.largeContentImage = flippedChevron
         return cancelButton
     }()
 
     fileprivate lazy var showQRScannerButton: InsetButton = {
         let button = InsetButton()
-        button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.qrCode), for: .normal)
+        let qrCodeImage = UIImage.templateImageNamed(StandardImageIdentifiers.Large.qrCode)
+        button.setImage(qrCodeImage, for: .normal)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Browser.UrlBar.scanQRCodeButton
         button.accessibilityLabel = .ScanQRCodeViewTitle
+        button.showsLargeContentViewer = true
+        button.largeContentTitle = .ScanQRCodeViewTitle
+        button.largeContentImage = qrCodeImage
         button.clipsToBounds = false
         button.addTarget(self, action: #selector(showQRScanner), for: .touchUpInside)
         button.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
@@ -175,6 +181,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         searchIconImageView.contentMode = .scaleAspectFit
         searchIconImageView.layer.cornerRadius = 5
         searchIconImageView.clipsToBounds = true
+        searchIconImageView.showsLargeContentViewer = true
         return searchIconImageView
     }()
 
@@ -232,6 +239,8 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
 
     func searchEnginesDidUpdate() {
         self.searchIconImageView.image = profile.searchEngines.defaultEngine?.image
+        self.searchIconImageView.largeContentTitle = profile.searchEngines.defaultEngine?.shortName
+        self.searchIconImageView.largeContentImage = nil
     }
 
     fileprivate func commonInit() {
@@ -706,6 +715,12 @@ extension URLBarView: TabToolbarProtocol {
         set {
             super.accessibilityElements = newValue
         }
+    }
+
+    func addUILargeContentViewInteraction(
+        interaction: UILargeContentViewerInteraction
+    ) {
+        addInteraction(interaction)
     }
 }
 
