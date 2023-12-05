@@ -35,11 +35,13 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     // MARK: - Initializers
     init(prefs: Prefs,
          wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
-         settingsDelegate: SettingsDelegate? = nil) {
+         settingsDelegate: SettingsDelegate? = nil,
+         tabManager: TabManager) {
         self.prefs = prefs
         self.wallpaperManager = wallpaperManager
         super.init(style: .grouped)
         super.settingsDelegate = settingsDelegate
+        self.tabManager = tabManager
 
         title = .SettingsHomePageSectionName
         navigationController?.navigationBar.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar
