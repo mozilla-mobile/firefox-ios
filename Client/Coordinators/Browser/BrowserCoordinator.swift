@@ -340,7 +340,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     private func showETPMenu(sourceView: UIView) {
         let enhancedTrackingProtectionCoordinator = EnhancedTrackingProtectionCoordinator(router: router,
-        tabManager: tabManager)
+                                                                                          tabManager: tabManager)
         enhancedTrackingProtectionCoordinator.parentCoordinator = self
         add(child: enhancedTrackingProtectionCoordinator)
         enhancedTrackingProtectionCoordinator.start(sourceView: sourceView)
