@@ -46,6 +46,18 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             return BrowserViewControllerState(
                 feltPrivacyState: state.feltPrivacyState,
                 fakespotState: FakespotState.reducer(state.fakespotState, action))
+        case FakespotAction.settingsStateDidChange:
+            return BrowserViewControllerState(
+                feltPrivacyState: state.feltPrivacyState,
+                fakespotState: FakespotState.reducer(state.fakespotState, action))
+        case FakespotAction.reviewQualityDidChange:
+            return BrowserViewControllerState(
+                feltPrivacyState: state.feltPrivacyState,
+                fakespotState: FakespotState.reducer(state.fakespotState, action))
+        case FakespotAction.urlDidChange:
+            return BrowserViewControllerState(
+                feltPrivacyState: state.feltPrivacyState,
+                fakespotState: FakespotState.reducer(state.fakespotState, action))
         default:
             return state
         }

@@ -7,29 +7,47 @@ import Redux
 
 struct FakespotState: ScreenState, Equatable {
     var isOpenOnProductPage: Bool
+    var isSettingsExpanded: Bool
+    var isReviewQualityExpanded: Bool
 
     init(_ appState: BrowserViewControllerState) {
-        self.init(isOpenOnProductPage: appState.fakespotState.isOpenOnProductPage)
+        self.init(
+            isOpenOnProductPage: appState.fakespotState.isOpenOnProductPage,
+            isSettingsExpanded: appState.fakespotState.isSettingsExpanded,
+            isReviewQualityExpanded: appState.fakespotState.isReviewQualityExpanded
+        )
     }
 
     init() {
-        self.init(isOpenOnProductPage: false)
+        self.init(isOpenOnProductPage: false, isSettingsExpanded: false, isReviewQualityExpanded: false)
     }
 
-    init(isOpenOnProductPage: Bool) {
+    init(isOpenOnProductPage: Bool, isSettingsExpanded: Bool, isReviewQualityExpanded: Bool) {
         self.isOpenOnProductPage = isOpenOnProductPage
+        self.isSettingsExpanded = isSettingsExpanded
+        self.isReviewQualityExpanded = isReviewQualityExpanded
     }
 
     static let reducer: Reducer<Self> = { state, action in
         switch action {
         case FakespotAction.toggleAppearance(let isEnabled):
-            return FakespotState(isOpenOnProductPage: isEnabled)
+            return FakespotState(isOpenOnProductPage: isEnabled, isSettingsExpanded: state.isSettingsExpanded, isReviewQualityExpanded: state.isReviewQualityExpanded)
+        case FakespotAction.settingsStateDidChange:
+            var state = state
+            state.isSettingsExpanded.toggle()
+            return state
+        case FakespotAction.reviewQualityDidChange:
+            var state = state
+            state.isReviewQualityExpanded.toggle()
+            return state
+        case FakespotAction.urlDidChange:
+            return FakespotState(isOpenOnProductPage: state.isOpenOnProductPage, isSettingsExpanded: false, isReviewQualityExpanded: false)
         default:
             return state
         }
     }
 
     static func == (lhs: FakespotState, rhs: FakespotState) -> Bool {
-        return lhs.isOpenOnProductPage == rhs.isOpenOnProductPage
+        return lhs.isOpenOnProductPage == rhs.isOpenOnProductPage && lhs.isSettingsExpanded == rhs.isSettingsExpanded && lhs.isReviewQualityExpanded == rhs.isReviewQualityExpanded
     }
 }

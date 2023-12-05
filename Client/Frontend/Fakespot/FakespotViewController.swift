@@ -6,6 +6,7 @@ import Common
 import ComponentLibrary
 import UIKit
 import Shared
+import Redux
 
 class FakespotViewController:
     UIViewController,
@@ -13,7 +14,8 @@ class FakespotViewController:
     Notifiable,
     UIAdaptivePresentationControllerDelegate,
     UISheetPresentationControllerDelegate,
-    UIScrollViewDelegate {
+    UIScrollViewDelegate,
+    StoreSubscriber {
     private struct UX {
         static let headerTopSpacing: CGFloat = 22
         static let headerHorizontalSpacing: CGFloat = 18
@@ -130,6 +132,30 @@ class FakespotViewController:
         setupView()
         listenForThemeChange(view)
         viewModel.fetchProductIfOptedIn()
+
+        subscribeToRedux()
+    }
+
+    // MARK: - Redux
+
+    func subscribeToRedux() {
+        guard isReduxIntegrationEnabled else { return }
+
+        store.subscribe(self, transform: {
+            $0.select(BrowserViewControllerState.init)
+        })
+    }
+
+    func unsubscribeFromRedux() {
+        if isReduxIntegrationEnabled {
+            store.unsubscribe(self)
+        }
+    }
+
+    var fakespotState: FakespotState?
+
+    func newState(state: BrowserViewControllerState) {
+        fakespotState = state.fakespotState
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -385,16 +411,20 @@ class FakespotViewController:
 
         case .qualityDeterminationCard:
             let reviewQualityCardView: FakespotReviewQualityCardView = .build()
+            viewModel.reviewQualityCardViewModel.expandState = (fakespotState?.isReviewQualityExpanded ?? false)  ? .expanded : .collapsed
             viewModel.reviewQualityCardViewModel.dismissViewController = { [weak self] in
                 guard let self = self else { return }
                 self.delegate?.fakespotControllerDidDismiss(animated: true)
+            }
+            viewModel.reviewQualityCardViewModel.onExpandStateChanged = { state in
+                store.dispatch(FakespotAction.reviewQualityDidChange)
             }
             reviewQualityCardView.configure(viewModel.reviewQualityCardViewModel)
             return reviewQualityCardView
 
         case .settingsCard:
             let view: FakespotSettingsCardView = .build()
-            view.configure(viewModel.settingsCardViewModel)
+            viewModel.settingsCardViewModel.expandState = (fakespotState?.isSettingsExpanded ?? false) ? .expanded : .collapsed
             viewModel.settingsCardViewModel.dismissViewController = { [weak self] action in
                 guard let self = self else { return }
                 self.delegate?.fakespotControllerDidDismiss(animated: true)
@@ -404,6 +434,10 @@ class FakespotViewController:
             viewModel.settingsCardViewModel.toggleAdsEnabled = { [weak self] in
                 self?.viewModel.toggleAdsEnabled()
             }
+            viewModel.settingsCardViewModel.onExpandStateChanged = { state in
+                store.dispatch(FakespotAction.settingsStateDidChange)
+            }
+            view.configure(viewModel.settingsCardViewModel)
             return view
 
         case .noAnalysisCard:
@@ -501,6 +535,7 @@ class FakespotViewController:
     }
 
     deinit {
+        unsubscribeFromRedux()
         viewModel.onViewControllerDeinit()
     }
 
