@@ -37,7 +37,8 @@ class ContextualHintViewViewController: UIViewController, Themeable {
             actionButtonTitle: "This button has an action",
             description: "This contextual hint gives you some context about a random feature",
             arrowDirection: .up,
-            closeButtonA11yLabel: "a11yButton"
+            closeButtonA11yLabel: "a11yButton",
+            actionButtonA11yId: "a11yButtonId"
         )
         viewModel.closeButtonAction = { [weak self] _ in
             self?.dismiss(animated: true, completion: nil)
