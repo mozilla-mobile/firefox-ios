@@ -65,7 +65,7 @@ final class FakespotCoordinatorTests: XCTestCase {
                              sidebarContainer: sidebarContainer,
                              parentViewController: viewController)
         subject.closeSidebar(sidebarContainer: sidebarContainer,
-                                               parentViewController: viewController)
+                             parentViewController: viewController)
 
         XCTAssertEqual(sidebarContainer.hideSidebarCalled, 1)
         XCTAssertEqual(mockRouter.dismissCalled, 1)
