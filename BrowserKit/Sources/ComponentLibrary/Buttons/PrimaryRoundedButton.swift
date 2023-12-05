@@ -5,7 +5,7 @@
 import Common
 import UIKit
 
-public class PrimaryRoundedButton: LegacyResizableButton, ThemeApplicable {
+public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
     private struct UX {
         static let buttonCornerRadius: CGFloat = 12
         static let buttonVerticalInset: CGFloat = 12
@@ -22,6 +22,7 @@ public class PrimaryRoundedButton: LegacyResizableButton, ThemeApplicable {
 
     private var highlightedTintColor: UIColor!
     private var normalTintColor: UIColor!
+    private var foregroundColorForState: ((UIControl.State) -> UIColor)?
 
     override open var isHighlighted: Bool {
         didSet {
@@ -32,35 +33,67 @@ public class PrimaryRoundedButton: LegacyResizableButton, ThemeApplicable {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        configuration?.setFont(DefaultDynamicFontHelper.preferredBoldFont(
-            withTextStyle: .callout,
-            size: UX.buttonFontSize
-        ))
         layer.cornerRadius = UX.buttonCornerRadius
         titleLabel?.textAlignment = .center
         titleLabel?.adjustsFontForContentSizeCategory = true
-        configuration?.contentInsets = UX.contentInsets
-    }
-
-    public func configure(viewModel: PrimaryRoundedButtonViewModel) {
-        accessibilityIdentifier = viewModel.a11yIdentifier
-        configuration?.title = viewModel.title
-
-        guard let imageTitlePadding = viewModel.imageTitlePadding else { return }
-        configuration?.imagePadding = imageTitlePadding
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override public func updateConfiguration() {
+        guard var updatedConfiguration = configuration else {
+            return
+        }
+        let foregroundColor = foregroundColorForState?(state)
+
+        updatedConfiguration.baseForegroundColor = foregroundColor
+        configuration = updatedConfiguration
+    }
+
+    public func configure(viewModel: PrimaryRoundedButtonViewModel) {
+        guard var updatedConfiguration = configuration else {
+            return
+        }
+
+        updatedConfiguration.setFont(DefaultDynamicFontHelper.preferredBoldFont(
+            withTextStyle: .callout,
+            size: UX.buttonFontSize
+        ))
+        updatedConfiguration.contentInsets = UX.contentInsets
+        updatedConfiguration.title = viewModel.title
+        configuration = updatedConfiguration
+
+        accessibilityIdentifier = viewModel.a11yIdentifier
+
+        guard let imageTitlePadding = viewModel.imageTitlePadding else {
+            return
+        }
+        updatedConfiguration.imagePadding = imageTitlePadding
+        configuration = updatedConfiguration
+    }
+
     // MARK: ThemeApplicable
 
     public func applyTheme(theme: Theme) {
+        guard var updatedConfiguration = configuration else {
+            return
+        }
+
         highlightedTintColor = theme.colors.actionPrimaryHover
         normalTintColor = theme.colors.actionPrimary
-
-        configuration?.baseForegroundColor = theme.colors.textInverted
         backgroundColor = normalTintColor
+
+        foregroundColorForState = { state in
+            switch state {
+            case [.highlighted]:
+                return theme.colors.actionPrimaryHover
+            default:
+                return theme.colors.textInverted
+            }
+        }
+        updatedConfiguration.baseForegroundColor = foregroundColorForState?(state)
+        configuration = updatedConfiguration
     }
 }
