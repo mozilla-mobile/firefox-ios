@@ -65,7 +65,7 @@ class TabCellTests: XCTestCase {
 class MockTabCellDelegate: TabCellDelegate {
     var tabCellClosedCounter = 0
 
-    func tabCellDidClose(_ cell: TabCell) {
+    func tabCellDidClose(for tabUUID: String) {
         tabCellClosedCounter += 1
     }
 }

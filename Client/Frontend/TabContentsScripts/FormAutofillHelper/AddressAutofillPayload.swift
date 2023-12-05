@@ -3,8 +3,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Redux
 
-enum AppStateAction: Action {
-    case setPrivateModeTo(Bool)
-}
+// TO DO: FXIOS-7872 Implement Address Autofill Payloads
+// struct AddressAutofillPayload: Codable {
+//     enum CodingKeys: String, CodingKey, CaseIterable {
+//     }
+// }

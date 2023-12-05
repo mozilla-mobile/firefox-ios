@@ -2,7 +2,7 @@
 "DefaultBrowserCard.BetterInternet.Description.v108" = "Hacer de Firefox tu navegador predeterminado es votar por una Internet abierta y accesible.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Title.v108" = "Una mejor Internet de forma predeterminada";
+"DefaultBrowserCard.BetterInternet.Title.v108" = "Un mejor Internet de forma predeterminada";
 
 /* Button string to learn how to set your default browser. */
 "DefaultBrowserCard.Button.v2" = "Aprender cómo";
@@ -14,7 +14,7 @@
 "DefaultBrowserCard.NextLevel.Description.v108" = "Elige Firefox como tu navegador predeterminado para que la velocidad, seguridad y privacidad sean automáticas.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Title.v108" = "La navegación diaria, aún mejor";
+"DefaultBrowserCard.NextLevel.Title.v108" = "Mejora la navegación cotidiana";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox bloquea de promedio más de 3.000 rastreadores por usuario al mes. Haznos tu navegador predeterminado para tu privacidad y tranquilidad.";

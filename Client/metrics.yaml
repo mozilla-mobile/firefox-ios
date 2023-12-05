@@ -669,7 +669,6 @@ shopping:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
-    unit: counter of product pages
 
   ads_exposure:
     type: event
@@ -685,6 +684,22 @@ shopping:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
+    send_in_pings:
+      - events
+
+  surface_ads_impression:
+    type: event
+    description: |
+      An ad was shown and visible in the bottom sheet for 1.5 seconds.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17302
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17524
+    data_sensitivity:
+      - interaction
+    expires: "2024-06-01"
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
     send_in_pings:
       - events
 
@@ -2705,7 +2720,6 @@ logins:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
-    unit: counter of logins.saved
   saved_all:
     type: quantity
     description: |
@@ -2729,7 +2743,6 @@ logins:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
-    unit: counter of logins.deleted
   modified:
     type: counter
     description: |
@@ -2741,7 +2754,6 @@ logins:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
-    unit: counter of logins.modified
   sync_enabled:
     type: event
     description: |
@@ -4734,7 +4746,6 @@ credit_card:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
-    unit: counter of credit_card.saved
   saved_all:
     type: quantity
     description: |
@@ -4758,7 +4769,6 @@ credit_card:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
-    unit: counter of credit_card.deleted
   modified:
     type: counter
     description: |
@@ -4770,7 +4780,6 @@ credit_card:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
-    unit: counter of credit_card.modified
 
 baseline.validation:
   startup_duration:

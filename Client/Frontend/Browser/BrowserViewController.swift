@@ -28,6 +28,8 @@ class BrowserViewController: UIViewController,
         static let ActionSheetTitleMaxLength = 120
     }
 
+    typealias SubscriberStateType = BrowserViewControllerState
+
     private let KVOs: [KVOConstants] = [
         .estimatedProgress,
         .loading,
@@ -80,7 +82,7 @@ class BrowserViewController: UIViewController,
     let tabManager: TabManager
     let ratingPromptManager: RatingPromptManager
     lazy var isTabTrayRefactorEnabled: Bool = TabTrayFlagManager.isRefactorEnabled
-    private var fakespotState: FakespotState?
+    private var browserViewControllerState: BrowserViewControllerState?
 
     // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
     var header: BaseAlphaStackView = .build { _ in }
@@ -92,6 +94,7 @@ class BrowserViewController: UIViewController,
     // Overlay dimming view for private mode
     lazy var privateModeDimmingView: UIView = .build { view in
         view.backgroundColor = self.themeManager.currentTheme.colors.layerScrim
+        view.accessibilityIdentifier = AccessibilityIdentifiers.PrivateMode.dimmingView
     }
 
     // BottomContainer stack view contains toolbar
@@ -213,9 +216,7 @@ class BrowserViewController: UIViewController,
     }
 
     deinit {
-        if isReduxIntegrationEnabled {
-            store.unsubscribe(self)
-        }
+        unsubscribeFromRedux()
     }
 
     override var prefersStatusBarHidden: Bool {
@@ -459,26 +460,32 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Redux
 
-    private func subscribeRedux() {
+    func subscribeToRedux() {
         guard isReduxIntegrationEnabled else { return }
-        store.dispatch(ActiveScreensStateAction.showScreen(.fakespot))
+        store.dispatch(ActiveScreensStateAction.showScreen(.browserViewController))
 
         store.subscribe(self, transform: {
-            $0.select(FakespotState.init)
+            $0.select(BrowserViewControllerState.init)
         })
     }
 
-    func newState(state: FakespotState) {
+    func unsubscribeFromRedux() {
+        if isReduxIntegrationEnabled {
+            store.unsubscribe(self)
+        }
+    }
+
+    func newState(state: BrowserViewControllerState) {
         ensureMainThread { [weak self] in
             guard let self else { return }
 
-            fakespotState = state
+            browserViewControllerState = state
 
             // opens or close sidebar/bottom sheet to match the saved state
-            if state.isOpenOnProductPage {
+            if state.fakespotState.isOpenOnProductPage {
                 guard let productURL = urlBar.currentURL else { return }
                 handleFakespotFlow(productURL: productURL)
-            } else {
+            } else if !state.fakespotState.isOpenOnProductPage {
                 _ = dismissFakespotIfNeeded()
             }
         }
@@ -542,7 +549,7 @@ class BrowserViewController: UIViewController,
         // Send settings telemetry for Fakespot
         FakespotUtils().addSettingTelemetry()
 
-        subscribeRedux()
+        subscribeToRedux()
     }
 
     private func setupAccessibleActions() {
@@ -653,8 +660,6 @@ class BrowserViewController: UIViewController,
 
     // Configure dimming view to show for private mode
     func configureDimmingView() {
-        guard featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) else { return }
-
         if let selectedTab = tabManager.selectedTab, selectedTab.isPrivate {
             view.addSubview(privateModeDimmingView)
             view.bringSubviewToFront(privateModeDimmingView)
@@ -761,7 +766,7 @@ class BrowserViewController: UIViewController,
         var fakespotNeedsUpdate = false
         if urlBar.currentURL != nil {
             fakespotNeedsUpdate = contentStackView.isSidebarVisible != FakespotUtils().shouldDisplayInSidebar(viewSize: size)
-            if isReduxIntegrationEnabled, let fakespotState = fakespotState {
+            if isReduxIntegrationEnabled, let fakespotState = browserViewControllerState?.fakespotState {
                 fakespotNeedsUpdate = fakespotNeedsUpdate && fakespotState.isOpenOnProductPage
             }
 
@@ -1424,10 +1429,14 @@ class BrowserViewController: UIViewController,
     }
 
     func handleQRCode() {
-        let qrCodeViewController = QRCodeViewController()
-        qrCodeViewController.qrCodeDelegate = self
-        presentedViewController?.dismiss(animated: true)
-        present(UINavigationController(rootViewController: qrCodeViewController), animated: true, completion: nil)
+        if CoordinatorFlagManager.isQRCodeCoordinatorEnabled {
+            navigationHandler?.showQRCode()
+        } else {
+            let qrCodeViewController = QRCodeViewController()
+            qrCodeViewController.qrCodeDelegate = self
+            presentedViewController?.dismiss(animated: true)
+            present(UINavigationController(rootViewController: qrCodeViewController), animated: true, completion: nil)
+        }
     }
 
     func handleClosePrivateTabs() {
@@ -1669,7 +1678,7 @@ class BrowserViewController: UIViewController,
                   !tab.isPrivate,
                   FakespotUtils().shouldDisplayInSidebar(),
                   isReduxIntegrationEnabled,
-                  let fakespotState = fakespotState,
+                  let fakespotState = browserViewControllerState?.fakespotState,
                   fakespotState.isOpenOnProductPage {
             handleFakespotFlow(productURL: url)
         } else if contentStackView.isSidebarVisible {
@@ -1719,9 +1728,9 @@ class BrowserViewController: UIViewController,
 
         let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
             .creditCardAutofillStatus, checking: .buildOnly)
-        let creditCardHelper = CreditCardHelper(tab: tab)
-        tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
-        creditCardHelper.foundFieldValues = { [weak self] fieldValues, type, frame in
+        let formAutofillHelper = FormAutofillHelper(tab: tab)
+        tab.addContentScript(formAutofillHelper, name: FormAutofillHelper.name())
+        formAutofillHelper.foundFieldValues = { [weak self] fieldValues, type, frame in
             guard let tabWebView = tab.webView,
                   let type = type,
                   userDefaults.object(forKey: keyCreditCardAutofill) as? Bool ?? true
@@ -1748,6 +1757,12 @@ class BrowserViewController: UIViewController,
             case .formSubmit:
                 self?.showCreditCardAutofillSheet(fieldValues: fieldValues)
                 break
+            case .fillAddressForm:
+                // TODO: FXIOS-7670 Address Autofill UX
+                return
+            case .captureAddressForm:
+                // TODO: FXIOS-7670 Address Autofill UX
+                return
             }
 
             tabWebView.accessoryView.savedCardsClosure = {
@@ -2205,7 +2220,7 @@ extension BrowserViewController: TabManagerDelegate {
         bottomContentStackView.removeAllArrangedViews()
         if let bars = selected?.bars {
             bars.forEach { bar in
-                bottomContentStackView.addArrangedViewToBottom(bar, completion: { self.view.layoutIfNeeded()})
+                bottomContentStackView.addArrangedViewToBottom(bar, completion: { self.view.layoutIfNeeded() })
             }
         }
 
@@ -2501,7 +2516,7 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
 
         guard shareItem.isShareable else {
             let alert = UIAlertController(title: .SendToErrorTitle, message: .SendToErrorMessage, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: .SendToErrorOKButton, style: .default) { _ in self.popToBVC()})
+            alert.addAction(UIAlertAction(title: .SendToErrorOKButton, style: .default) { _ in self.popToBVC() })
             present(alert, animated: true, completion: nil)
             return
         }

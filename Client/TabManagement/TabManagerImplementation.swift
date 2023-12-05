@@ -218,8 +218,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         Task {
             // This value should never be nil but we need to still treat it as if it can be nil until the old code is removed
             let activeTabID = UUID(uuidString: self.selectedTab?.tabUUID ?? "") ?? UUID()
-            // Hard coding the window ID until we later add multi-window support
-            let windowData = WindowData(id: UUID(uuidString: "44BA0B7D-097A-484D-8358-91A6E374451D")!,
+            // TODO: [7798] Hard coding the window ID until we later add multi-window support
+            let windowData = WindowData(id: WindowData.DefaultSingleWindowUUID,
                                         activeTabId: activeTabID,
                                         tabData: self.generateTabDataForSaving())
             await tabDataStore.saveWindowData(window: windowData, forced: forced)

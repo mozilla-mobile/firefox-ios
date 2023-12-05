@@ -16,13 +16,14 @@ class TabTrayCoordinator: BaseCoordinator, TabTrayViewControllerDelegate, TabTra
     private var tabTrayViewController: TabTrayViewController!
     weak var parentCoordinator: TabTrayCoordinatorDelegate?
 
-    init(router: Router) {
+    init(router: Router,
+         tabTraySection: TabTrayPanelType) {
         super.init(router: router)
-        initializeTabTrayViewController()
+        initializeTabTrayViewController(selectedTab: tabTraySection)
     }
 
-    private func initializeTabTrayViewController() {
-        tabTrayViewController = TabTrayViewController(delegate: self)
+    private func initializeTabTrayViewController(selectedTab: TabTrayPanelType) {
+        tabTrayViewController = TabTrayViewController(delegate: self, selectedTab: selectedTab)
         router.setRootViewController(tabTrayViewController)
         tabTrayViewController.childPanelControllers = makeChildPanels()
         tabTrayViewController.navigationHandler = self

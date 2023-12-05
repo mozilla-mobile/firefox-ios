@@ -137,6 +137,7 @@ class TabsButton: UIButton, ThemeApplicable {
             if let clone = self.clonedTabsButton {
                 clone.countLabel.text = countToBe
                 clone.accessibilityValue = countToBe
+                clone.largeContentTitle = String(format: .TabsButtonShowTabsLargeContentTitle, countToBe)
             }
             return
         }
@@ -154,6 +155,7 @@ class TabsButton: UIButton, ThemeApplicable {
         newTabsButton.addTarget(self, action: #selector(cloneDidClickTabs), for: .touchUpInside)
         newTabsButton.countLabel.text = countToBe
         newTabsButton.accessibilityValue = countToBe
+        newTabsButton.largeContentTitle = String(format: .TabsButtonShowTabsLargeContentTitle, countToBe)
         newTabsButton.insideButton.frame = self.insideButton.frame
         newTabsButton.snp.removeConstraints()
         self.addSubview(newTabsButton)
@@ -194,6 +196,7 @@ class TabsButton: UIButton, ThemeApplicable {
                 self.insideButton.layer.transform = CATransform3DIdentity
             }
             self.accessibilityLabel = .TabsButtonShowTabsAccessibilityLabel
+            self.largeContentTitle = String(format: .TabsButtonShowTabsLargeContentTitle, self.countToBe)
             self.countLabel.text = self.countToBe
             self.accessibilityValue = self.countToBe
             self.isUpdatingTabCount = false

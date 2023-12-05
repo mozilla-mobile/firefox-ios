@@ -1,6 +1,7 @@
 only_rules: # Only enforce these rules, ignore all others
   - blanket_disable_command
   - class_delegate_protocol
+  - closure_spacing
   - colon
   - comma
   - comment_spacing

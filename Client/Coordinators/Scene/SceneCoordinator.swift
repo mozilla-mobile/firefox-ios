@@ -6,6 +6,8 @@ import Common
 import UIKit
 import Shared
 
+typealias SceneUUID = UUID
+
 /// Each scene has it's own scene coordinator, which is the root coordinator for a scene.
 class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinishedLoadingDelegate {
     var window: UIWindow?
@@ -97,7 +99,7 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
     }
 
     private func startBrowser(with launchType: LaunchType?) {
-        guard !childCoordinators.contains(where: { $0 is BrowserCoordinator}) else { return }
+        guard !childCoordinators.contains(where: { $0 is BrowserCoordinator }) else { return }
 
         logger.log("Starting browser with launchtype \(String(describing: launchType))",
                    level: .info,

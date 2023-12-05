@@ -15,8 +15,7 @@ class HomepageViewController:
     FeatureFlaggable,
     Themeable,
     ContentContainable,
-    SearchBarLocationProvider,
-    StoreSubscriber {
+    SearchBarLocationProvider {
     // MARK: - Typealiases
 
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
@@ -123,10 +122,6 @@ class HomepageViewController:
         notificationCenter.removeObserver(self)
     }
 
-    func newState(state: AppState) {
-        // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-7190
-    }
-
     // MARK: - View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -141,7 +136,6 @@ class HomepageViewController:
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
-        store.subscribe(self)
 
         setupSectionsAction()
         reloadView()
@@ -718,10 +712,6 @@ extension HomepageViewController: HomepageContextMenuHelperDelegate {
 
     func homePanelDidRequestToOpenSettings(at settingsPage: Route.SettingsSection) {
         homePanelDelegate?.homePanelDidRequestToOpenSettings(at: settingsPage)
-    }
-
-    func showToast(message: String) {
-        SimpleToast().showAlertWithText(message, bottomContainer: view, theme: themeManager.currentTheme)
     }
 }
 

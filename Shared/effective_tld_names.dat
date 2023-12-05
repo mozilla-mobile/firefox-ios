@@ -6710,7 +6710,7 @@ org.zw
 
 // newGTLDs
 
-// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2023-11-03T15:13:18Z
+// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2023-11-21T15:13:47Z
 // This list is auto-generated, don't edit it manually.
 // aaa : American Automobile Association, Inc.
 // https://www.iana.org/domains/root/db/aaa.html
@@ -7752,6 +7752,10 @@ dental
 // https://www.iana.org/domains/root/db/dentist.html
 dentist
 
+// desi
+// https://www.iana.org/domains/root/db/desi.html
+desi
+
 // design : Registry Services, LLC
 // https://www.iana.org/domains/root/db/design.html
 design
@@ -7927,10 +7931,6 @@ esq
 // estate : Binky Moon, LLC
 // https://www.iana.org/domains/root/db/estate.html
 estate
-
-// etisalat : Emirates Telecommunications Corporation (trading as Etisalat)
-// https://www.iana.org/domains/root/db/etisalat.html
-etisalat
 
 // eurovision : European Broadcasting Union (EBU)
 // https://www.iana.org/domains/root/db/eurovision.html
@@ -10608,10 +10608,6 @@ vlaanderen
 // https://www.iana.org/domains/root/db/vodka.html
 vodka
 
-// volkswagen : Volkswagen Group of America Inc.
-// https://www.iana.org/domains/root/db/volkswagen.html
-volkswagen
-
 // volvo : Volvo Holding Sverige Aktiebolag
 // https://www.iana.org/domains/root/db/volvo.html
 volvo
@@ -10679,6 +10675,10 @@ weber
 // website : Radix FZC DMCC
 // https://www.iana.org/domains/root/db/website.html
 website
+
+// wed
+// https://www.iana.org/domains/root/db/wed.html
+wed
 
 // wedding : Registry Services, LLC
 // https://www.iana.org/domains/root/db/wedding.html
@@ -11011,10 +11011,6 @@ xin
 // xn--mgba7c0bbn0a : Competrol (Luxembourg) Sarl
 // https://www.iana.org/domains/root/db/xn--mgba7c0bbn0a.html
 العليان
-
-// xn--mgbaakc7dvf : Emirates Telecommunications Corporation (trading as Etisalat)
-// https://www.iana.org/domains/root/db/xn--mgbaakc7dvf.html
-اتصالات
 
 // xn--mgbab2bd : CORE Association
 // https://www.iana.org/domains/root/db/xn--mgbab2bd.html
@@ -13193,7 +13189,7 @@ shw.io
 // Submitted by Jonathan Rudenberg <jonathan@flynn.io>
 flynnhosting.net
 
-// Forgerock : https://www.forgerock.com
+// Forgerock : https://www.forgerock.com
 // Submitted by Roderick Parr <roderick.parr@forgerock.com>
 forgeblocks.com
 id.forgerock.io
@@ -14887,7 +14883,7 @@ alpha.bounty-full.com
 beta.bounty-full.com
 
 // Smallregistry by Promopixel SARL: https://www.smallregistry.net
-// Former AFNIC's SLDs 
+// Former AFNIC's SLDs
 // Submitted by Jérôme Lipowicz <support@promopixel.com>
 aeroport.fr
 avocat.fr

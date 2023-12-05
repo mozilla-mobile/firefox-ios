@@ -65,11 +65,11 @@ final class RouteBuilder {
 
             case .widgetSmallQuickLinkOpenUrl:
                 // Widget Quick links - small - open url private or regular
-                return .search(url: urlQuery, isPrivate: isPrivate)
+                return .search(url: urlQuery, isPrivate: isPrivate, options: [.focusLocationField])
 
             case .widgetMediumQuickLinkOpenUrl:
                 // Widget Quick Actions - medium - open url private or regular
-                return .search(url: urlQuery, isPrivate: isPrivate)
+                return .search(url: urlQuery, isPrivate: isPrivate, options: [.focusLocationField])
 
             case .widgetSmallQuickLinkOpenCopied, .widgetMediumQuickLinkOpenCopied:
                 // Widget Quick links - medium - open copied url
