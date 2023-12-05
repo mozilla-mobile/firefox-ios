@@ -81,7 +81,7 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
         stack.spacing = UX.buttonsSpacing
     }
 
-    private lazy var yesButton: ResizableButton = .build { button in
+    private lazy var yesButton: LegacyResizableButton = .build { button in
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
             withTextStyle: .headline,
             size: UX.yesButtonFontSize)

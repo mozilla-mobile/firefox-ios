@@ -4,7 +4,12 @@
 
 import Foundation
 
-class QRCodeCoordinator: BaseCoordinator {
+protocol QRCodeDismissHandler: AnyObject {
+    /// Dismisses the current presented QRCodeViewController
+    func dismiss(_ completion: (() -> Void)?)
+}
+
+class QRCodeCoordinator: BaseCoordinator, QRCodeDismissHandler {
     private weak var parentCoordinator: ParentCoordinatorDelegate?
 
     init(
@@ -18,10 +23,18 @@ class QRCodeCoordinator: BaseCoordinator {
     func showQRCode(delegate: QRCodeViewControllerDelegate) {
         let qrCodeViewController = QRCodeViewController()
         qrCodeViewController.qrCodeDelegate = delegate
+        qrCodeViewController.dismissHandler = self
         let navigationController = QRCodeNavigationController(rootViewController: qrCodeViewController)
         router.present(navigationController, animated: true) { [weak self] in
             guard let self = self else { return }
             self.parentCoordinator?.didFinish(from: self)
         }
+    }
+
+    // MARK: - QRCodeDismissHandler
+
+    func dismiss(_ completion: (() -> Void)?) {
+        router.dismiss(animated: true, completion: completion)
+        parentCoordinator?.didFinish(from: self)
     }
 }

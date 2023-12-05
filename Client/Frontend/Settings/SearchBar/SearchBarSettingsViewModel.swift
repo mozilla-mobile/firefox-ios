@@ -82,7 +82,7 @@ final class SearchBarSettingsViewModel: FeatureFlaggable {
                                 subtitle: nil,
                                 accessibilityIdentifier: AccessibilityIdentifiers.Settings.SearchBar.topSetting,
                                 isChecked: { return self.searchBarPosition == .top },
-                                onChecked: { self.saveSearchBarPosition(SearchBarPosition.top)}
+                                onChecked: { self.saveSearchBarPosition(SearchBarPosition.top) }
         )
     }
 

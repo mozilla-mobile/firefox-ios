@@ -25,7 +25,7 @@
 		0B75AEA91AC20FB20015E5DC /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B8E0FF31A932BD500161DC3 /* ImageIO.framework */; };
 		0B7C1E951F6097AD006A8869 /* TrackingProtectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C1E941F6097AD006A8869 /* TrackingProtectionTests.swift */; };
 		0B8E0FF41A932BD500161DC3 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B8E0FF31A932BD500161DC3 /* ImageIO.framework */; };
-		0BA02DB22942605600C92603 /* CreditCardHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA02DB12942605600C92603 /* CreditCardHelper.swift */; };
+		0BA02DB22942605600C92603 /* FormAutofillHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA02DB12942605600C92603 /* FormAutofillHelper.swift */; };
 		0BA1E00E1B03FB0B007675AF /* NetError.html in Resources */ = {isa = PBXBuildFile; fileRef = 0BA1E00D1B03FB0B007675AF /* NetError.html */; };
 		0BA1E0301B051A07007675AF /* NetError.css in Resources */ = {isa = PBXBuildFile; fileRef = 0BA1E02F1B051A07007675AF /* NetError.css */; };
 		0BA8964B1A250E6500C1010C /* ProfileTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA896491A250E6500C1010C /* ProfileTest.swift */; };
@@ -56,6 +56,7 @@
 		1D3C90882ACE1AF400304C87 /* RemoteTabPanelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3C90872ACE1AF400304C87 /* RemoteTabPanelTests.swift */; };
 		1D5CBF492B17E3CB0001D033 /* NotificationPayloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D5CBF482B17E3CB0001D033 /* NotificationPayloads.swift */; };
 		1D5CBF4A2B17E3CB0001D033 /* NotificationPayloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D5CBF482B17E3CB0001D033 /* NotificationPayloads.swift */; };
+		1D5CBF4C2B1A76B20001D033 /* TabManagerAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D5CBF4B2B1A76B20001D033 /* TabManagerAction.swift */; };
 		1D69FF8D27B17286001F660E /* HomeLogoHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D69FF8C27B17285001F660E /* HomeLogoHeaderCell.swift */; };
 		1D7B78972ADF32590011E9F2 /* EventQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78962ADF32590011E9F2 /* EventQueue.swift */; };
 		1D7B78992ADF328E0011E9F2 /* AppEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78982ADF328E0011E9F2 /* AppEvent.swift */; };
@@ -538,7 +539,11 @@
 		7BEB64441C7345600092C02E /* L10nSuite2SnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B3632D31C2983F000D12AF9 /* L10nSuite2SnapshotTests.swift */; };
 		7BEB64451C7345600092C02E /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B60B0071BDE3AE10090C984 /* SnapshotHelper.swift */; };
 		7BEFC6801BFF68C30059C952 /* QuickActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEFC67F1BFF68C30059C952 /* QuickActions.swift */; };
-		81A8CA752AF97B2E0015BF04 /* AppStateAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A8CA742AF97B2E0015BF04 /* AppStateAction.swift */; };
+		810FF3542B178343009F062C /* FeltPrivacyMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810FF3532B178343009F062C /* FeltPrivacyMiddleware.swift */; };
+		810FF3562B1783B0009F062C /* FeltPrivacyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810FF3552B1783B0009F062C /* FeltPrivacyManager.swift */; };
+		810FF3582B1784E7009F062C /* FeltPrivacyAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810FF3572B1784E7009F062C /* FeltPrivacyAction.swift */; };
+		810FF35A2B178556009F062C /* FeltPrivacyState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810FF3592B178556009F062C /* FeltPrivacyState.swift */; };
+		81CAE4DB2B1A2C220040C78A /* BrowserViewControllerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CAE4DA2B1A2C220040C78A /* BrowserViewControllerState.swift */; };
 		884CA7492344A301002E4711 /* TextContentDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884CA7482344A301002E4711 /* TextContentDetector.swift */; };
 		8A0017C128A3FF6100FEFC8B /* MessageCardDataAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0017C028A3FF6100FEFC8B /* MessageCardDataAdaptor.swift */; };
 		8A01891C275E9C2A00923EFE /* ClearHistorySheetProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A01891B275E9C2A00923EFE /* ClearHistorySheetProvider.swift */; };
@@ -887,6 +892,11 @@
 		B15058812AA0A878008B7382 /* OpeningScreenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15058802AA0A878008B7382 /* OpeningScreenTests.swift */; };
 		B2999FED2B044A5900F0FEC1 /* UnencryptedCreditCardFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2999FEC2B044A5900F0FEC1 /* UnencryptedCreditCardFields.swift */; };
 		B2999FEF2B044B4E00F0FEC1 /* RustAutofillEncryptionKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2999FEE2B044B4E00F0FEC1 /* RustAutofillEncryptionKeys.swift */; };
+		B2999FF12B194A5800F0FEC1 /* CreditCardPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2999FF02B194A5800F0FEC1 /* CreditCardPayload.swift */; };
+		B2999FF32B194A8300F0FEC1 /* FillCreditCardForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2999FF22B194A8300F0FEC1 /* FillCreditCardForm.swift */; };
+		B2999FF52B194AB200F0FEC1 /* FormAutofillHelperError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2999FF42B194AB200F0FEC1 /* FormAutofillHelperError.swift */; };
+		B2999FF72B194ADE00F0FEC1 /* FormAutofillPayloadType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2999FF62B194ADE00F0FEC1 /* FormAutofillPayloadType.swift */; };
+		B2999FFA2B1A3E0700F0FEC1 /* AddressAutofillPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2999FF92B1A3E0700F0FEC1 /* AddressAutofillPayload.swift */; };
 		B640467E29B9B58200C5C7B6 /* TabLocationViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B640467D29B9B58200C5C7B6 /* TabLocationViewTests.swift */; };
 		BCFF93EE2AAA9F6E005B5B71 /* RustFirefoxSuggest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93ED2AAA9C47005B5B71 /* RustFirefoxSuggest.swift */; };
 		BCFF93F02AABA55A005B5B71 /* BackgroundFirefoxSuggestIngestUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93EF2AAB97A8005B5B71 /* BackgroundFirefoxSuggestIngestUtility.swift */; };
@@ -1964,7 +1974,7 @@
 		0B8E0FF31A932BD500161DC3 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		0B98487A9E51F379857B3592 /* hi-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hi-IN"; path = "hi-IN.lproj/ErrorPages.strings"; sourceTree = "<group>"; };
 		0B9D40781E8D5AC80059E664 /* XCUITests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCUITests-Bridging-Header.h"; sourceTree = "<group>"; };
-		0BA02DB12942605600C92603 /* CreditCardHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardHelper.swift; sourceTree = "<group>"; };
+		0BA02DB12942605600C92603 /* FormAutofillHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormAutofillHelper.swift; sourceTree = "<group>"; };
 		0BA049CE9929DAA536A2CB2F /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/3DTouchActions.strings"; sourceTree = "<group>"; };
 		0BA1E00D1B03FB0B007675AF /* NetError.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = NetError.html; sourceTree = "<group>"; };
 		0BA1E02F1B051A07007675AF /* NetError.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = NetError.css; sourceTree = "<group>"; };
@@ -2123,6 +2133,7 @@
 		1D2F68B02ACCA22000524B92 /* RemoteTabsEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsEmptyView.swift; sourceTree = "<group>"; };
 		1D3C90872ACE1AF400304C87 /* RemoteTabPanelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabPanelTests.swift; sourceTree = "<group>"; };
 		1D5CBF482B17E3CB0001D033 /* NotificationPayloads.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPayloads.swift; sourceTree = "<group>"; };
+		1D5CBF4B2B1A76B20001D033 /* TabManagerAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManagerAction.swift; sourceTree = "<group>"; };
 		1D69FF8C27B17285001F660E /* HomeLogoHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeLogoHeaderCell.swift; sourceTree = "<group>"; };
 		1D774B3D9C6E21B77FB7B38F /* kab */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kab; path = kab.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		1D7B78962ADF32590011E9F2 /* EventQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventQueue.swift; sourceTree = "<group>"; };
@@ -5018,13 +5029,17 @@
 		80B54D93BC553D6E6CDFAA0A /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cy; path = cy.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		80B8473B933671C9605DC837 /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gl; path = gl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		80E24B20A5655593E1D9E85B /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/Search.strings"; sourceTree = "<group>"; };
+		810FF3532B178343009F062C /* FeltPrivacyMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeltPrivacyMiddleware.swift; sourceTree = "<group>"; };
+		810FF3552B1783B0009F062C /* FeltPrivacyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeltPrivacyManager.swift; sourceTree = "<group>"; };
+		810FF3572B1784E7009F062C /* FeltPrivacyAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeltPrivacyAction.swift; sourceTree = "<group>"; };
+		810FF3592B178556009F062C /* FeltPrivacyState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeltPrivacyState.swift; sourceTree = "<group>"; };
 		81504EA4876ED3D974FDA0F6 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		81584D62B22049E40FC78F93 /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		816D458CBEAE2A6721134028 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		81754147A06566E64C025F70 /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = "nn.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		81A244F4A7C6FC8976DC21F0 /* br */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = br; path = br.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		81A8CA742AF97B2E0015BF04 /* AppStateAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStateAction.swift; sourceTree = "<group>"; };
 		81C14765AA7C25DF1817AC04 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Today.strings; sourceTree = "<group>"; };
+		81CAE4DA2B1A2C220040C78A /* BrowserViewControllerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerState.swift; sourceTree = "<group>"; };
 		81DF4C79AE53A2FCA08EEE9C /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = "da.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		81E446CF88B278374B416BF5 /* or */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = or; path = or.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		81F647D98E79EC6406CDFCB4 /* lt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lt; path = lt.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
@@ -5758,6 +5773,11 @@
 		B2944B3EAFB1DA22E7F28520 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Shared.strings; sourceTree = "<group>"; };
 		B2999FEC2B044A5900F0FEC1 /* UnencryptedCreditCardFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnencryptedCreditCardFields.swift; sourceTree = "<group>"; };
 		B2999FEE2B044B4E00F0FEC1 /* RustAutofillEncryptionKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustAutofillEncryptionKeys.swift; sourceTree = "<group>"; };
+		B2999FF02B194A5800F0FEC1 /* CreditCardPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardPayload.swift; sourceTree = "<group>"; };
+		B2999FF22B194A8300F0FEC1 /* FillCreditCardForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillCreditCardForm.swift; sourceTree = "<group>"; };
+		B2999FF42B194AB200F0FEC1 /* FormAutofillHelperError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormAutofillHelperError.swift; sourceTree = "<group>"; };
+		B2999FF62B194ADE00F0FEC1 /* FormAutofillPayloadType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormAutofillPayloadType.swift; sourceTree = "<group>"; };
+		B2999FF92B1A3E0700F0FEC1 /* AddressAutofillPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressAutofillPayload.swift; sourceTree = "<group>"; };
 		B2BA445A91E19959BA9FDED7 /* mr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = mr; path = mr.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		B2C74A199A0619104A7635EC /* bs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bs; path = bs.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		B2CD44128F18BC81432BBB4C /* gu-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "gu-IN"; path = "gu-IN.lproj/Search.strings"; sourceTree = "<group>"; };
@@ -7532,7 +7552,6 @@
 				21618A912A4499FC00A5189E /* AppState.swift */,
 				21618A8B2A438A0900A5189E /* ActiveScreenAction.swift */,
 				21618A892A4389F700A5189E /* ActiveScreenState.swift */,
-				81A8CA742AF97B2E0015BF04 /* AppStateAction.swift */,
 			);
 			path = GlobalState;
 			sourceTree = "<group>";
@@ -7592,6 +7611,7 @@
 			children = (
 				219914042AF963F900153598 /* TabTrayAction.swift */,
 				219935E82B070F9000E5966F /* TabPanelAction.swift */,
+				1D5CBF4B2B1A76B20001D033 /* TabManagerAction.swift */,
 			);
 			path = Action;
 			sourceTree = "<group>";
@@ -8477,6 +8497,18 @@
 			path = Menu;
 			sourceTree = "<group>";
 		};
+		810FF3522B1782FE009F062C /* FeltPrivacy */ = {
+			isa = PBXGroup;
+			children = (
+				81CAE4DA2B1A2C220040C78A /* BrowserViewControllerState.swift */,
+				810FF3532B178343009F062C /* FeltPrivacyMiddleware.swift */,
+				810FF3592B178556009F062C /* FeltPrivacyState.swift */,
+				810FF3572B1784E7009F062C /* FeltPrivacyAction.swift */,
+				810FF3552B1783B0009F062C /* FeltPrivacyManager.swift */,
+			);
+			path = FeltPrivacy;
+			sourceTree = "<group>";
+		};
 		8A0017BF28A3FED300FEFC8B /* MessageCard */ = {
 			isa = PBXGroup;
 			children = (
@@ -8910,6 +8942,7 @@
 		8AD40FB827BAD1DD00672675 /* TabContentsScripts */ = {
 			isa = PBXGroup;
 			children = (
+				B2999FF82B194B3D00F0FEC1 /* FormAutofillHelper */,
 				D0FCF7F41FE45842004A7995 /* UserScriptManager.swift */,
 				D3B6923E1B9F9A58004B87A4 /* FindInPageHelper.swift */,
 				D01017F4219CB6BD009CBB5A /* DownloadContentScript.swift */,
@@ -8922,7 +8955,6 @@
 				F35B8D2C1D6383E9008E3D61 /* SessionRestoreHelper.swift */,
 				D0E55C4E1FB4FD23006DC274 /* FormPostHelper.swift */,
 				39F4C1092045DB2E00746155 /* FocusHelper.swift */,
-				0BA02DB12942605600C92603 /* CreditCardHelper.swift */,
 			);
 			path = TabContentsScripts;
 			sourceTree = "<group>";
@@ -9248,6 +9280,19 @@
 				ABEF80D42A254185003F52C4 /* CreditCardBottomSheetFooterView.swift */,
 			);
 			path = CreditCardBottomSheet;
+			sourceTree = "<group>";
+		};
+		B2999FF82B194B3D00F0FEC1 /* FormAutofillHelper */ = {
+			isa = PBXGroup;
+			children = (
+				0BA02DB12942605600C92603 /* FormAutofillHelper.swift */,
+				B2999FF02B194A5800F0FEC1 /* CreditCardPayload.swift */,
+				B2999FF92B1A3E0700F0FEC1 /* AddressAutofillPayload.swift */,
+				B2999FF22B194A8300F0FEC1 /* FillCreditCardForm.swift */,
+				B2999FF42B194AB200F0FEC1 /* FormAutofillHelperError.swift */,
+				B2999FF62B194ADE00F0FEC1 /* FormAutofillPayloadType.swift */,
+			);
+			path = FormAutofillHelper;
 			sourceTree = "<group>";
 		};
 		C22753422A3CA25100B9C0D1 /* WebsiteDataManagement */ = {
@@ -10984,6 +11029,7 @@
 		F84B21F11A0910F600AAB793 /* Frontend */ = {
 			isa = PBXGroup;
 			children = (
+				810FF3522B1782FE009F062C /* FeltPrivacy */,
 				E1D3FFAF2A66A9BD002D31EF /* Fakespot */,
 				43D00490296FC44B00CB0F31 /* Autofill */,
 				C855728029AE7EF900AF32B0 /* SurveySurface */,
@@ -12730,6 +12776,7 @@
 				CAA3B7E62497DCB60094E3C1 /* LoginDataSource.swift in Sources */,
 				8ADC2A1B2A33998100543DAA /* AppStoreReviewSetting.swift in Sources */,
 				8A5D1CA82A30D6D3005AD35C /* HomeSetting.swift in Sources */,
+				B2999FFA2B1A3E0700F0FEC1 /* AddressAutofillPayload.swift in Sources */,
 				1DFE57FF27BAE3150025DE58 /* HomepageSectionType.swift in Sources */,
 				C2D1A10D2A66C70000205DCC /* BookmarksCoordinator.swift in Sources */,
 				396E38F11EE0C8EC00CC180F /* FxAPushMessageHandler.swift in Sources */,
@@ -12771,8 +12818,10 @@
 				E18259DF29B25E4F00E6BE76 /* UserNotificationCenterProtocol.swift in Sources */,
 				DFFC9AD12A681FA0002A6AAD /* NimbusFakespotFeatureLayer.swift in Sources */,
 				1DEBC55E2AC4ED70006E4801 /* RemoteTabsPanel.swift in Sources */,
+				1D5CBF4C2B1A76B20001D033 /* TabManagerAction.swift in Sources */,
 				435D660523D794B90046EFA2 /* UpdateViewModel.swift in Sources */,
 				9658143C29FAB610007339BD /* CreditCardInputFieldHelper.swift in Sources */,
+				810FF3542B178343009F062C /* FeltPrivacyMiddleware.swift in Sources */,
 				215B457F27D7FD4B00E5E800 /* LegacyTabGroupData.swift in Sources */,
 				E12BD0B028AC3A7E0029AAF0 /* UIEdgeInsets+Extension.swift in Sources */,
 				C2D80BE72AADE38100CDF7A9 /* CredentialAutofillCoordinator.swift in Sources */,
@@ -12861,6 +12910,7 @@
 				8A07910F278F62F2005529CB /* AdjustHelper.swift in Sources */,
 				E1442FC2294782C3003680B0 /* NSAttributedString+Extension.swift in Sources */,
 				967A028E28FA026F003C35E3 /* SceneDelegate.swift in Sources */,
+				810FF3562B1783B0009F062C /* FeltPrivacyManager.swift in Sources */,
 				C8B07A4128199500000AFCE7 /* NimbusFlaggableFeature.swift in Sources */,
 				0B62EFD21AD63CD100ACB9CD /* Clearables.swift in Sources */,
 				431C0CA925C890E500395CE4 /* DefaultBrowserOnboardingViewModel.swift in Sources */,
@@ -12892,6 +12942,7 @@
 				C8BD87622A0C257C00CD803A /* OnboardingCardInfoModelProtocol.swift in Sources */,
 				DA27EEDB28BADF4700DD6F5D /* MenuBuilderHelper.swift in Sources */,
 				E16AD22C2A8A7AE800F0AA58 /* FakespotHighlightsCardView.swift in Sources */,
+				B2999FF12B194A5800F0FEC1 /* CreditCardPayload.swift in Sources */,
 				E1877A81286E0EFD00F5BDF2 /* WebViewNavigationHandler.swift in Sources */,
 				274A36CC239EB99400A21587 /* LibraryPanelContextMenu.swift in Sources */,
 				D314E7F71A37B98700426A76 /* TabToolbar.swift in Sources */,
@@ -12913,6 +12964,7 @@
 				2178A6A0291454B5002EC290 /* ReaderModeThemeButton.swift in Sources */,
 				39F4C10A2045DB2E00746155 /* FocusHelper.swift in Sources */,
 				E4CD9F2D1A6DC91200318571 /* TabLocationView.swift in Sources */,
+				81CAE4DB2B1A2C220040C78A /* BrowserViewControllerState.swift in Sources */,
 				C8BD87602A0C248000CD803A /* OnboardingButtonsModel.swift in Sources */,
 				0BB5B2881AC0A2B90052877D /* SnackBar.swift in Sources */,
 				E1442FCF294782D9003680B0 /* UIView+Screenshot.swift in Sources */,
@@ -12946,7 +12998,6 @@
 				8A3EF8092A2FD02B00796E3A /* ExperimentsSettings.swift in Sources */,
 				C87DF9DB267247190097E707 /* UIConstants+BottomInset.swift in Sources */,
 				8AD08D1527E9198E00B8E907 /* TabsQuantityTelemetry.swift in Sources */,
-				81A8CA752AF97B2E0015BF04 /* AppStateAction.swift in Sources */,
 				74B420C92A1D0D7A00370E53 /* OnboardingInstructionsPopupInfoModel.swift in Sources */,
 				E13E9AB32AAB0FB5001A0E9D /* FakespotViewController.swift in Sources */,
 				E15DE7C4293A7B0F00B32667 /* PhotonActionSheetTitleHeaderView.swift in Sources */,
@@ -12981,6 +13032,7 @@
 				AB65F8B12AFA38E90088D6FC /* FakespotImageLoadingView.swift in Sources */,
 				5A70EF21295E3E0B00790249 /* UnitTestSceneDelegate.swift in Sources */,
 				2C49854E206173C800893DAE /* photon-colors.swift in Sources */,
+				B2999FF72B194ADE00F0FEC1 /* FormAutofillPayloadType.swift in Sources */,
 				8A285B08294A5D4C00149B0F /* HomepageHeroImageViewModel.swift in Sources */,
 				8C92DE8B2A711ED60090BD28 /* FakespotClient.swift in Sources */,
 				8AC1065F28D0CD700013263A /* OpenQLPreviewHelper.swift in Sources */,
@@ -13005,6 +13057,7 @@
 				C22753402A3C9E1300B9C0D1 /* WebsiteDataManagementViewModel.swift in Sources */,
 				2F44FCC71A9E8CF500FD20CC /* SearchSettingsTableViewController.swift in Sources */,
 				8AD3271527E3B45D00EAF033 /* SponsoredTile.swift in Sources */,
+				B2999FF32B194A8300F0FEC1 /* FillCreditCardForm.swift in Sources */,
 				5A64225129CB506500EEC3E5 /* LegacyTabManager.swift in Sources */,
 				8A93F86029D36EBD004159D9 /* Router.swift in Sources */,
 				C8417D222657F0600010B877 /* LibraryViewModel.swift in Sources */,
@@ -13023,6 +13076,7 @@
 				E1442FD4294782D9003680B0 /* URL+Mail.swift in Sources */,
 				9636D92827F5D72D00771F5E /* GleanPlumbMessageManager.swift in Sources */,
 				C80685D126A0C93900DCD895 /* UserResearch.swift in Sources */,
+				B2999FF52B194AB200F0FEC1 /* FormAutofillHelperError.swift in Sources */,
 				8AED23C527AC1F9500DE7E97 /* BaseContentStackView.swift in Sources */,
 				C8699131289176A5007ACC5C /* WallpaperNetworking.swift in Sources */,
 				5A271ABD2860B0D700471CE4 /* WebServerUtil.swift in Sources */,
@@ -13235,7 +13289,7 @@
 				EBE26B57220C959D00D1D99A /* BrowserViewController+TabToolbarDelegate.swift in Sources */,
 				8A3EF7F02A2FCF3100796E3A /* HiddenSettings.swift in Sources */,
 				AB03032B2AB47AF300DCD8EF /* FakespotOptInCardView.swift in Sources */,
-				0BA02DB22942605600C92603 /* CreditCardHelper.swift in Sources */,
+				0BA02DB22942605600C92603 /* FormAutofillHelper.swift in Sources */,
 				8A19ACB82A329128001C2147 /* PrivacyPolicySetting.swift in Sources */,
 				E68AEDB01B18F81A00133D99 /* SwipeAnimator.swift in Sources */,
 				1DDE3DB32AC34E1E0039363B /* TabCell.swift in Sources */,
@@ -13260,6 +13314,7 @@
 				E1ADE23C2B0649F200FD17AA /* FakespotState.swift in Sources */,
 				2816F0001B33E05400522243 /* UIConstants.swift in Sources */,
 				21E78A7228F9A93100F8D687 /* UIDeviceInterface.swift in Sources */,
+				810FF35A2B178556009F062C /* FeltPrivacyState.swift in Sources */,
 				EBB89508219398E500EB91A0 /* ContentBlocker+Safelist.swift in Sources */,
 				437A9B6A2681257F00FB41C1 /* LegacyInactiveTabViewModel.swift in Sources */,
 				C838FD5E289981240068F60B /* WallpaperURLProvider.swift in Sources */,
@@ -13372,6 +13427,7 @@
 				DA4F826729AD221600189590 /* ZoomPageBar.swift in Sources */,
 				59A68E0B4ABBF55E14819668 /* BookmarksPanel.swift in Sources */,
 				BD4B2DE429BB4D9A005FAA50 /* TimerSnackBar.swift in Sources */,
+				810FF3582B1784E7009F062C /* FeltPrivacyAction.swift in Sources */,
 				21EA466A2B04130500AAAB2D /* TabsPanelState.swift in Sources */,
 				D04D1B862097859B0074B35F /* DownloadToast.swift in Sources */,
 				C29B64EE2AD937D500F3244B /* QRCodeNavigationHandler.swift in Sources */,
@@ -19929,7 +19985,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
 				kind = exactVersion;
-				version = 122.0.20231201050257;
+				version = 122.0.20231202050335;
 			};
 		};
 		435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */ = {

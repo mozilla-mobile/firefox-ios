@@ -44,7 +44,7 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
 
         // If the default engine is a custom one, make sure we have more than one since we can't edit the default.
         // Otherwise, enable editing if we have at least one custom engine.
-        let customEngineCount = model.orderedEngines.filter({$0.isCustomEngine}).count
+        let customEngineCount = model.orderedEngines.filter({ $0.isCustomEngine }).count
         return defaultEngine.isCustomEngine ? customEngineCount > 1 : customEngineCount > 0
     }
 

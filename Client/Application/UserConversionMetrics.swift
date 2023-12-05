@@ -66,7 +66,7 @@ class UserConversionMetrics {
             let distinctDaysOpened = Set(appOpensInWeek.map { Calendar.current.startOfDay(for: $0) }).count
 
             // last three days of the first week of usage
-            let searchInLastThreeDays = searchesTimestamps.filter { $0 > lastThreeDaysOfFirstWeek && $0 < oneWeekSinceFirstUse}
+            let searchInLastThreeDays = searchesTimestamps.filter { $0 > lastThreeDaysOfFirstWeek && $0 < oneWeekSinceFirstUse }
             let shouldActivateProfile = distinctDaysOpened >= 3 && !searchInLastThreeDays.isEmpty
             return shouldActivateProfile
         } else {

@@ -83,10 +83,10 @@ class CredentialAutofillCoordinator: BaseCoordinator {
                 self.parentCoordinator?.didFinish(from: self)
                 return
             }
-            CreditCardHelper.injectCardInfo(logger: self.logger,
-                                            card: plainTextCard,
-                                            tab: currentTab,
-                                            frame: frame) { error in
+            FormAutofillHelper.injectCardInfo(logger: self.logger,
+                                              card: plainTextCard,
+                                              tab: currentTab,
+                                              frame: frame) { error in
                 guard let error = error else {
                     return
                 }
