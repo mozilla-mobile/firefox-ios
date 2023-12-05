@@ -31,14 +31,58 @@ final class QRCodeCoordinatorTests: XCTestCase {
         XCTAssertTrue(router.presentedViewController is QRCodeNavigationController)
     }
 
+    func testShowQRCode_setsDelegate() {
+        let subject = createSubject()
+        let delegate = MockQRCodeViewControllerDelegate()
+
+        subject.showQRCode(delegate: delegate)
+
+        guard let qrCodeViewController = (router.presentedViewController as? QRCodeNavigationController)?.topViewController as? QRCodeViewController
+        else {
+            XCTFail("The QRCodeViewController has to exist")
+            return
+        }
+        XCTAssertTrue(qrCodeViewController.qrCodeDelegate is MockQRCodeViewControllerDelegate)
+    }
+
+    func testShowQRCode_setsDismissHandler() {
+        let subject = createSubject()
+        let delegate = MockQRCodeViewControllerDelegate()
+
+        subject.showQRCode(delegate: delegate)
+
+        guard let qrCodeViewController = (router.presentedViewController as? QRCodeNavigationController)?.topViewController as? QRCodeViewController
+        else {
+            XCTFail("The QRCodeViewController has to exist")
+            return
+        }
+        XCTAssertTrue(qrCodeViewController.dismissHandler is QRCodeCoordinator)
+    }
+
     func testShowQRCode_callsDidFinishOnParentCoordinator() {
         let subject = createSubject()
         let delegate = MockQRCodeViewControllerDelegate()
 
         subject.showQRCode(delegate: delegate)
+
+        guard let qrCodeViewController = (router.presentedViewController as? QRCodeNavigationController)?.topViewController as? QRCodeViewController
+        else {
+            XCTFail("The QRCodeViewController has to exist")
+            return
+        }
+        // Since there is no capture device set, the controller should call dismiss on viewDidLoad()
+        qrCodeViewController.loadViewIfNeeded()
+        XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
+    }
+
+    func testShowQRCode_callsDidFinishOnParentCoordinator_whenRouterCompletionIsCalled() {
+        let subject = createSubject()
+        let delegate = MockQRCodeViewControllerDelegate()
+
+        subject.showQRCode(delegate: delegate)
+
         router.savedCompletion?()
 
-        XCTAssertNotNil(router.savedCompletion)
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
     }
 

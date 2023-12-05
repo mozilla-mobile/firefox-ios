@@ -46,7 +46,7 @@ class WallpaperSettingsHeaderView: UICollectionReusableView, ReusableCell {
         label.numberOfLines = 0
     }
 
-    private lazy var learnMoreButton: ResizableButton = .build { button in
+    private lazy var learnMoreButton: LegacyResizableButton = .build { button in
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 12.0)
         button.contentHorizontalAlignment = .leading
         button.buttonEdgeSpacing = 0

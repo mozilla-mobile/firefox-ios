@@ -23,7 +23,7 @@ class OpenWithSetting: Setting {
         }
         if let path = Bundle.main.path(forResource: "MailSchemes", ofType: "plist"),
             let dictRoot = NSArray(contentsOfFile: path) {
-            let mailProvider = dictRoot.compactMap({$0 as? NSDictionary }).first { (dict) -> Bool in
+            let mailProvider = dictRoot.compactMap({ $0 as? NSDictionary }).first { (dict) -> Bool in
                 return (dict["scheme"] as? String) == provider
             }
             return NSAttributedString(string: (mailProvider?["name"] as? String) ?? "")

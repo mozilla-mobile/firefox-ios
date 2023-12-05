@@ -4,15 +4,13 @@
 
 import Common
 import Redux
+import TabDataStore
 
 class TabManagerMiddleware {
-    var tabManager: TabManager
+    // TODO: [7863] Part of ongoing WIP for Redux + iPad Multi-window.
+    var tabManagers: [SceneUUID: TabManager] = [:]
     var inactiveTabs = [InactiveTabsModel]()
     var selectedPanel: TabTrayPanelType = .tabs
-
-    init(tabManager: TabManager = AppContainer.shared.resolve()) {
-        self.tabManager = tabManager
-    }
 
     lazy var tabsPanelProvider: Middleware<AppState> = { state, action in
         switch action {
@@ -83,6 +81,8 @@ class TabManagerMiddleware {
             store.dispatch(TabPanelAction.refreshTab(tabs))
             store.dispatch(TabTrayAction.dismissTabTray)
 
+        case TabManagerAction.tabManagerDidConnectToScene(let manager, let sceneUUID):
+            self.setTabManager(manager, for: sceneUUID)
         default:
             break
         }
@@ -110,7 +110,7 @@ class TabManagerMiddleware {
 
     private func refreshTabs(for isPrivate: Bool) -> [TabModel] {
         var tabs = [TabModel]()
-        let tabManagerTabs = tabManager.tabs.filter { $0.isPrivate == isPrivate }
+        let tabManagerTabs = defaultTabManager.tabs.filter { $0.isPrivate == isPrivate }
         tabManagerTabs.forEach { tab in
             let tabModel = TabModel(tabUUID: tab.tabUUID,
                                     isSelected: false,
@@ -129,22 +129,22 @@ class TabManagerMiddleware {
 
     private func addNewTab(with urlRequest: URLRequest?, isPrivate: Bool) {
         // TODO: Add a guard to check if is dragging as per Legacy code
-        let tab = tabManager.addTab(urlRequest, isPrivate: isPrivate)
-        tabManager.selectTab(tab)
+        let tab = defaultTabManager.addTab(urlRequest, isPrivate: isPrivate)
+        defaultTabManager.selectTab(tab)
     }
 
     private func moveTab(from originIndex: Int, to destinationIndex: Int) {
-        tabManager.moveTab(isPrivate: false, fromIndex: originIndex, toIndex: destinationIndex)
+        defaultTabManager.moveTab(isPrivate: false, fromIndex: originIndex, toIndex: destinationIndex)
     }
 
     private func closeTab(with tabUUID: String) async -> Bool {
-        let isLastTab = tabManager.tabs.count == 1
-        await tabManager.removeTab(tabUUID)
+        let isLastTab = defaultTabManager.tabs.count == 1
+        await defaultTabManager.removeTab(tabUUID)
         return isLastTab
     }
 
     private func closeAllTabs(isPrivateMode: Bool) async {
-        await tabManager.removeAllTabs(isPrivateMode: isPrivateMode)
+        await defaultTabManager.removeAllTabs(isPrivateMode: isPrivateMode)
         inactiveTabs.removeAll()
     }
 
@@ -161,8 +161,21 @@ class TabManagerMiddleware {
     }
 
     private func selectTab(for tabUUID: String) {
-        guard let tab = tabManager.getTabForUUID(uuid: tabUUID) else { return }
+        guard let tab = defaultTabManager.getTabForUUID(uuid: tabUUID) else { return }
 
-        tabManager.selectTab(tab)
+        defaultTabManager.selectTab(tab)
+    }
+
+    private func setTabManager(_ tabManager: TabManager, for sceneUUID: SceneUUID) {
+        tabManagers[sceneUUID] = tabManager
+    }
+
+    private func removeTabManager(_ tabManager: TabManager, for sceneUUID: SceneUUID) {
+        tabManagers.removeValue(forKey: sceneUUID)
+    }
+
+    private var defaultTabManager: TabManager {
+        // TODO: [7863] Temporary. WIP for Redux + iPad Multi-window.
+        return tabManagers[WindowData.DefaultSingleWindowUUID]!
     }
 }

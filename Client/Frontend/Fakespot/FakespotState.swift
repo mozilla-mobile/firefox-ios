@@ -9,14 +9,9 @@ struct FakespotState: ScreenState, Equatable {
     var isOpen: Bool
     var sidebarOpenForiPadLandscape: Bool
 
-    init(_ appState: AppState) {
-        guard let fakespotState = store.state.screenState(FakespotState.self, for: .fakespot) else {
-            self.init()
-            return
-        }
-
-        self.init(isOpen: fakespotState.isOpen,
-                  sidebarOpenForiPadLandscape: fakespotState.sidebarOpenForiPadLandscape)
+    init(_ appState: BrowserViewControllerState) {
+        self.init(isOpen: appState.fakespotState.isOpen,
+                  sidebarOpenForiPadLandscape: appState.fakespotState.sidebarOpenForiPadLandscape)
     }
 
     init() {

@@ -983,19 +983,19 @@ class TabWebView: WKWebView, MenuHelperInterface, ThemeApplicable {
 
         accessoryView.previousClosure = { [weak self] in
             guard let self else { return }
-            CreditCardHelper.focusPreviousInputField(tabWebView: self,
-                                                     logger: self.logger)
+            FormAutofillHelper.focusPreviousInputField(tabWebView: self,
+                                                       logger: self.logger)
         }
 
         accessoryView.nextClosure = { [weak self] in
             guard let self else { return }
-            CreditCardHelper.focusNextInputField(tabWebView: self,
-                                                 logger: self.logger)
+            FormAutofillHelper.focusNextInputField(tabWebView: self,
+                                                   logger: self.logger)
         }
 
         accessoryView.doneClosure = { [weak self] in
             guard let self else { return }
-            CreditCardHelper.blurActiveElement(tabWebView: self, logger: self.logger)
+            FormAutofillHelper.blurActiveElement(tabWebView: self, logger: self.logger)
             self.endEditing(true)
         }
     }

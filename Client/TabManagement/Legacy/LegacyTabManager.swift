@@ -632,7 +632,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
     @MainActor
     func removeAllTabs(isPrivateMode: Bool) async {
-        let currentModeTabs = tabs.filter {$0.isPrivate == isPrivateMode}
+        let currentModeTabs = tabs.filter { $0.isPrivate == isPrivateMode }
         for tab in currentModeTabs {
             await self.removeTab(tab.tabUUID)
         }

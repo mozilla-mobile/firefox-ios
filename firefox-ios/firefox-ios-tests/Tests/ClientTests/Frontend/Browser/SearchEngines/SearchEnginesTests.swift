@@ -67,7 +67,7 @@ class SearchEnginesTests: XCTestCase {
 
         var deleted: [OpenSearchEngine] = []
         engines.deleteCustomEngine(testEngine) { [self] in
-            deleted = engines.orderedEngines.filter {$0 == testEngine}
+            deleted = engines.orderedEngines.filter { $0 == testEngine }
         }
 
         XCTAssertEqual(deleted, [])

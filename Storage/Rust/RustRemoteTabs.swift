@@ -175,12 +175,12 @@ public extension RemoteTabRecord {
 
 public extension ClientRemoteTabs {
     func toClientAndTabs(client: RemoteClient) -> ClientAndTabs {
-        return ClientAndTabs(client: client, tabs: self.remoteTabs.map { $0.toRemoteTab(client: client)}.compactMap { $0 })
+        return ClientAndTabs(client: client, tabs: self.remoteTabs.map { $0.toRemoteTab(client: client) }.compactMap { $0 })
     }
 
     func toClientAndTabs() -> ClientAndTabs {
         let client = self.toRemoteClient()
-        let tabs = self.remoteTabs.map { $0.toRemoteTab(client: client)}.compactMap { $0 }
+        let tabs = self.remoteTabs.map { $0.toRemoteTab(client: client) }.compactMap { $0 }
 
         let clientAndTabs = ClientAndTabs(client: client, tabs: tabs)
         return clientAndTabs

@@ -284,7 +284,13 @@ class LegacyGridTabViewController: UIViewController,
 
         tabDisplayManager.togglePrivateMode(isOn: !tabDisplayManager.isPrivate, createTabOnEmptyPrivateMode: false)
 
+        emptyPrivateTabsView.alpha = 0.0
         emptyPrivateTabsView.isHidden = !privateTabsAreEmpty
+        if privateTabsAreEmpty {
+            UIView.animate(withDuration: 0.2) { [weak self] in
+                self?.emptyPrivateTabsView.alpha = 1.0
+            }
+        }
     }
 
     func openNewTab(_ request: URLRequest? = nil, isPrivate: Bool) {
