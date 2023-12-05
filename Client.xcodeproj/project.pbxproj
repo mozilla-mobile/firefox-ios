@@ -534,14 +534,11 @@
 		7BEB64441C7345600092C02E /* L10nSuite2SnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B3632D31C2983F000D12AF9 /* L10nSuite2SnapshotTests.swift */; };
 		7BEB64451C7345600092C02E /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B60B0071BDE3AE10090C984 /* SnapshotHelper.swift */; };
 		7BEFC6801BFF68C30059C952 /* QuickActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEFC67F1BFF68C30059C952 /* QuickActions.swift */; };
-<<<<<<< HEAD
-=======
 		810FF3542B178343009F062C /* FeltPrivacyMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810FF3532B178343009F062C /* FeltPrivacyMiddleware.swift */; };
 		810FF3562B1783B0009F062C /* FeltPrivacyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810FF3552B1783B0009F062C /* FeltPrivacyManager.swift */; };
 		810FF3582B1784E7009F062C /* FeltPrivacyAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810FF3572B1784E7009F062C /* FeltPrivacyAction.swift */; };
 		810FF35A2B178556009F062C /* FeltPrivacyState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810FF3592B178556009F062C /* FeltPrivacyState.swift */; };
 		81CAE4DB2B1A2C220040C78A /* BrowserViewControllerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CAE4DA2B1A2C220040C78A /* BrowserViewControllerState.swift */; };
->>>>>>> 723d77f29 (Refactor FXIOS-7817 [v122] Add BrowserViewControllerState (#17565))
 		884CA7492344A301002E4711 /* TextContentDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884CA7482344A301002E4711 /* TextContentDetector.swift */; };
 		8A0017C128A3FF6100FEFC8B /* MessageCardDataAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0017C028A3FF6100FEFC8B /* MessageCardDataAdaptor.swift */; };
 		8A01891C275E9C2A00923EFE /* ClearHistorySheetProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A01891B275E9C2A00923EFE /* ClearHistorySheetProvider.swift */; };
@@ -13386,12 +13383,8 @@
 				DA4F826729AD221600189590 /* ZoomPageBar.swift in Sources */,
 				59A68E0B4ABBF55E14819668 /* BookmarksPanel.swift in Sources */,
 				BD4B2DE429BB4D9A005FAA50 /* TimerSnackBar.swift in Sources */,
-<<<<<<< HEAD
 				21EA466A2B04130500AAAB2D /* TabsState.swift in Sources */,
-=======
 				810FF3582B1784E7009F062C /* FeltPrivacyAction.swift in Sources */,
-				21EA466A2B04130500AAAB2D /* TabsPanelState.swift in Sources */,
->>>>>>> 723d77f29 (Refactor FXIOS-7817 [v122] Add BrowserViewControllerState (#17565))
 				D04D1B862097859B0074B35F /* DownloadToast.swift in Sources */,
 				C29B64EE2AD937D500F3244B /* QRCodeNavigationHandler.swift in Sources */,
 				8A19ACB42A3290D9001C2147 /* ContentBlockerSetting.swift in Sources */,

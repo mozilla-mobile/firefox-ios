@@ -6,15 +6,9 @@ import Foundation
 import Redux
 
 enum AppScreenState: Equatable {
-<<<<<<< HEAD
-    case themeSettings(ThemeSettingsState)
-    case tabsTray(TabTrayState)
-    case tabsPanel(TabsState)
-=======
     case browserViewController(BrowserViewControllerState)
->>>>>>> 723d77f29 (Refactor FXIOS-7817 [v122] Add BrowserViewControllerState (#17565))
     case remoteTabsPanel(RemoteTabsPanelState)
-    case tabsPanel(TabsPanelState)
+    case tabsPanel(TabsState)
     case tabsTray(TabTrayState)
     case themeSettings(ThemeSettingsState)
 
@@ -65,17 +59,9 @@ struct ActiveScreensState: Equatable {
             case .showScreen(.tabsTray):
                 screens += [.tabsTray(TabTrayState())]
             case .showScreen(.tabsPanel):
-<<<<<<< HEAD
                 screens += [.tabsPanel(TabsState())]
-            case .showScreen(.remoteTabsPanel):
-                screens += [.remoteTabsPanel(RemoteTabsPanelState())]
-            case .showScreen(.fakespot):
-                screens += [.fakespot(FakespotState())]
-=======
-                screens += [.tabsPanel(TabsPanelState())]
             case .showScreen(.themeSettings):
                 screens += [.themeSettings(ThemeSettingsState())]
->>>>>>> 723d77f29 (Refactor FXIOS-7817 [v122] Add BrowserViewControllerState (#17565))
             }
         }
 

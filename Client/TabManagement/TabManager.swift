@@ -69,11 +69,8 @@ extension TabManager {
     }
 
     func selectTab(_ tab: Tab?) {
-<<<<<<< HEAD
-=======
         guard let privateState = tab?.isPrivate else { return }
         store.dispatch(FeltPrivacyAction.setPrivateModeTo(privateState))
->>>>>>> 723d77f29 (Refactor FXIOS-7817 [v122] Add BrowserViewControllerState (#17565))
         selectTab(tab, previous: nil)
     }
 

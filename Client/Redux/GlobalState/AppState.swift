@@ -36,15 +36,9 @@ extension AppState {
 
 let store = Store(state: AppState(),
                   reducer: AppState.reducer,
-<<<<<<< HEAD
-                  middlewares: [ThemeManagerMiddleware().themeManagerProvider,
-                                TabsPanelMiddleware().tabsPanelProvider,
-                                RemoteTabsPanelMiddleware().remoteTabsPanelProvider])
-=======
                   middlewares: [
                     FeltPrivacyMiddleware().privacyManagerProvider,
                     ThemeManagerMiddleware().themeManagerProvider,
-                    TabManagerMiddleware().tabsPanelProvider,
+                    TabsPanelMiddleware().tabsPanelProvider,
                     RemoteTabsPanelMiddleware().remoteTabsPanelProvider
                   ])
->>>>>>> 723d77f29 (Refactor FXIOS-7817 [v122] Add BrowserViewControllerState (#17565))

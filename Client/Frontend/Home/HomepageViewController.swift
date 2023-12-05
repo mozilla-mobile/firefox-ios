@@ -9,17 +9,12 @@ import MozillaAppServices
 import Common
 import ComponentLibrary
 
-<<<<<<< HEAD
-class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, ContentContainable,
-                                SearchBarLocationProvider {
-=======
 class HomepageViewController:
     UIViewController,
     FeatureFlaggable,
     Themeable,
     ContentContainable,
     SearchBarLocationProvider {
->>>>>>> 723d77f29 (Refactor FXIOS-7817 [v122] Add BrowserViewControllerState (#17565))
     // MARK: - Typealiases
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
     typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
