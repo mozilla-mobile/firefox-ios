@@ -4,17 +4,18 @@
 
 import UIKit
 import MobileCoreServices
+import UniformTypeIdentifiers
 
 extension NSItemProvider {
-    var isText: Bool { return hasItemConformingToTypeIdentifier(String(kUTTypeText)) }
-    var isUrl: Bool { return hasItemConformingToTypeIdentifier(String(kUTTypeURL)) }
+    var isText: Bool { return hasItemConformingToTypeIdentifier(String(UTType.text.identifier)) }
+    var isUrl: Bool { return hasItemConformingToTypeIdentifier(String(UTType.url.identifier)) }
 
     func processText(completion: CompletionHandler?) {
-        loadItem(forTypeIdentifier: String(kUTTypeText), options: nil, completionHandler: completion)
+        loadItem(forTypeIdentifier: String(UTType.text.identifier), options: nil, completionHandler: completion)
     }
 
     func processUrl(completion: CompletionHandler?) {
-        loadItem(forTypeIdentifier: String(kUTTypeURL), options: nil, completionHandler: completion)
+        loadItem(forTypeIdentifier: String(UTType.url.identifier), options: nil, completionHandler: completion)
     }
 }
 
