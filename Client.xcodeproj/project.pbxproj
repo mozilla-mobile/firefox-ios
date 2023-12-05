@@ -694,6 +694,8 @@
 		8A93F87029D3A597004159D9 /* SceneCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A93F86F29D3A597004159D9 /* SceneCoordinator.swift */; };
 		8A93F87229D3A5AD004159D9 /* BrowserCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A93F87129D3A5AD004159D9 /* BrowserCoordinator.swift */; };
 		8A93F87429D3A5C1004159D9 /* LaunchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A93F87329D3A5C1004159D9 /* LaunchCoordinator.swift */; };
+		8A95FF642B1E969E00AC303D /* TelemetryContextualIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A95FF632B1E969E00AC303D /* TelemetryContextualIdentifier.swift */; };
+		8A95FF672B1E97A800AC303D /* TelemetryContextualIdentifierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A95FF652B1E977E00AC303D /* TelemetryContextualIdentifierTests.swift */; };
 		8A96C4BB28F9E7B300B75884 /* XCTestCaseRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A96C4BA28F9E7B300B75884 /* XCTestCaseRootViewController.swift */; };
 		8A9AC465276CEC4E0047F5B0 /* JumpBackInCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9AC464276CEC4E0047F5B0 /* JumpBackInCell.swift */; };
 		8A9AC46B276D11280047F5B0 /* PocketViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9AC46A276D11280047F5B0 /* PocketViewModel.swift */; };
@@ -5265,6 +5267,8 @@
 		8A93F86F29D3A597004159D9 /* SceneCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneCoordinator.swift; sourceTree = "<group>"; };
 		8A93F87129D3A5AD004159D9 /* BrowserCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserCoordinator.swift; sourceTree = "<group>"; };
 		8A93F87329D3A5C1004159D9 /* LaunchCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchCoordinator.swift; sourceTree = "<group>"; };
+		8A95FF632B1E969E00AC303D /* TelemetryContextualIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryContextualIdentifier.swift; sourceTree = "<group>"; };
+		8A95FF652B1E977E00AC303D /* TelemetryContextualIdentifierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryContextualIdentifierTests.swift; sourceTree = "<group>"; };
 		8A96C4B828F9DD8700B75884 /* ThemableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemableTests.swift; sourceTree = "<group>"; };
 		8A96C4BA28F9E7B300B75884 /* XCTestCaseRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestCaseRootViewController.swift; sourceTree = "<group>"; };
 		8A99DB9727C6DD3E007EA6BD /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = "is.lproj/Default Browser.strings"; sourceTree = "<group>"; };
@@ -10694,6 +10698,7 @@
 				8AD08D1427E9198E00B8E907 /* TabsQuantityTelemetry.swift */,
 				EBF47E6F1F7979DF00899189 /* TelemetryWrapper.swift */,
 				8ADC2A132A33762900543DAA /* ReferringPage.swift */,
+				8A95FF632B1E969E00AC303D /* TelemetryContextualIdentifier.swift */,
 			);
 			path = Telemetry;
 			sourceTree = "<group>";
@@ -10942,6 +10947,7 @@
 				8AA6ADB42742B567004EEE23 /* TelemetryWrapperTests.swift */,
 				0BA8964A1A250E6500C1010C /* TestBookmarks.swift */,
 				4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */,
+				8A95FF652B1E977E00AC303D /* TelemetryContextualIdentifierTests.swift */,
 				8A33222027DFE64C008F809E /* TestingHelperClasses */,
 				E1D8BC7921FF7A0000B100BD /* TPStatsBlocklistsTests.swift */,
 				8A1E3BE028CBAC1F003388C4 /* Utils */,
@@ -13268,6 +13274,7 @@
 				E1442FD1294782D9003680B0 /* UIModalPresentationStyle+Photon.swift in Sources */,
 				E1ADE23E2B06559500FD17AA /* FakespotAction.swift in Sources */,
 				5A32C2B62AD8517200A9B5A4 /* MetricKitWrapper.swift in Sources */,
+				8A95FF642B1E969E00AC303D /* TelemetryContextualIdentifier.swift in Sources */,
 				D3FEC38D1AC4B42F00494F45 /* AutocompleteTextField.swift in Sources */,
 				8A19ACAE2A329058001C2147 /* PasswordManagerSetting.swift in Sources */,
 				AB03032C2AB47AF300DCD8EF /* FakespotOptInCardViewModel.swift in Sources */,
@@ -13691,6 +13698,7 @@
 				8A7A26E129D4785900EA76F1 /* MockRouter.swift in Sources */,
 				965C3C96293431FC006499ED /* MockLaunchSessionProvider.swift in Sources */,
 				C869915628917803007ACC5C /* WallpaperJSONTestProvider.swift in Sources */,
+				8A95FF672B1E97A800AC303D /* TelemetryContextualIdentifierTests.swift in Sources */,
 				965C3C9829343445006499ED /* MockAppSessionManager.swift in Sources */,
 				8AFCE50929DE136300B1B253 /* MockLaunchFinishedLoadingDelegate.swift in Sources */,
 				8AE1E1DB27B1C1320024C45E /* SearchBarSettingsViewModelTests.swift in Sources */,

@@ -177,7 +177,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         // Save the profile so we can record settings from it when the notification below fires.
         self.profile = profile
 
-        SponsoredTileTelemetry.setupContextId()
+        TelemetryContextualIdentifier.setupContextId()
 
         // Register an observer to record settings and other metrics that are more appropriate to
         // record on going to background rather than during initialization.
