@@ -113,10 +113,6 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
         jumpBackInContextualHintViewController.stopTimer()
         syncTabContextualHintViewController.stopTimer()
         notificationCenter.removeObserver(self)
-<<<<<<< HEAD
-=======
-        unsubscribeFromRedux()
->>>>>>> b7db64ae9 (Refactor FXIOS-7853 [v122] Redux pattern protocol improvements (#17542))
     }
 
     // MARK: - View lifecycle
@@ -257,20 +253,6 @@ class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, Con
             return viewModel.section(for: layoutEnvironment.traitCollection, size: self.view.frame.size)
         }
         return layout
-    }
-
-    // MARK: - Redux
-
-    func subscribeToRedux() {
-        store.subscribe(self)
-    }
-
-    func unsubscribeFromRedux() {
-        store.unsubscribe(self)
-    }
-
-    func newState(state: AppState) {
-        // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-7190
     }
 
     // MARK: Long press

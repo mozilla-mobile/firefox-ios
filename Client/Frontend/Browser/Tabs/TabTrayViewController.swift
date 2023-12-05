@@ -229,24 +229,7 @@ class TabTrayViewController: UIViewController,
         super.viewDidDisappear(animated)
         delegate?.didFinish()
 
-<<<<<<< HEAD:Client/Frontend/Browser/Tabs/TabTrayViewController.swift
-        store.dispatch(ActiveScreensStateAction.closeScreen(.tabsTray))
-        store.unsubscribe(self)
-    }
-
-    private func subscribeRedux() {
-        store.dispatch(ActiveScreensStateAction.showScreen(.tabsTray))
-        store.dispatch(TabTrayAction.tabTrayDidLoad(tabTrayState.selectedPanel))
-        store.subscribe(self, transform: {
-            return $0.select(TabTrayState.init)
-        })
-    }
-
-    func newState(state: TabTrayState) {
-        tabTrayState = state
-=======
         unsubscribeFromRedux()
->>>>>>> b7db64ae9 (Refactor FXIOS-7853 [v122] Redux pattern protocol improvements (#17542)):Client/Frontend/Browser/Tabs/Views/TabTrayViewController.swift
     }
 
     private func updateLayout() {
@@ -280,11 +263,6 @@ class TabTrayViewController: UIViewController,
     }
 
     func newState(state: TabTrayState) {
-        tabTrayState = state
-
-        if tabTrayState.shouldDismiss {
-            dismissVC()
-        }
     }
 
     // MARK: Themeable
