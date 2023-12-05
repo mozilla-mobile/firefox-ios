@@ -624,7 +624,6 @@ class BrowserViewController: UIViewController,
 
     func addSubviews() {
         webViewContainerBackdrop = UIView()
-        webViewContainerBackdrop.backgroundColor = UIColor.Photon.Ink90
         webViewContainerBackdrop.alpha = 0
         view.addSubview(webViewContainerBackdrop)
         view.addSubview(contentStackView)
@@ -1829,6 +1828,7 @@ class BrowserViewController: UIViewController,
         let currentTheme = themeManager.currentTheme
         statusBarOverlay.hasTopTabs = shouldShowTopTabsForTraitCollection(traitCollection)
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
+        webViewContainerBackdrop.backgroundColor = currentTheme.colors.layer3
         setNeedsStatusBarAppearanceUpdate()
 
         // Update the `background-color` of any blank webviews.
