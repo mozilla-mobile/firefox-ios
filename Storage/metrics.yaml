@@ -69,3 +69,18 @@ logins_store_key_regeneration:
       - synced-client-integrations@mozilla.com
       - lougenia@mozilla.com
     expires: never
+
+  keychain_data_lost:
+    type: event
+    description: >
+      The encryption key was regenerated because it and the canary phrase are missing from the keychain
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17380
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17381
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - synced-client-integrations@mozilla.com
+      - lougenia@mozilla.com
+    expires: never
