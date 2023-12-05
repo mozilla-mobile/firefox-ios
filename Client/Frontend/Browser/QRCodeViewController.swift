@@ -23,6 +23,7 @@ class QRCodeViewController: UIViewController {
     }
 
     weak var qrCodeDelegate: QRCodeViewControllerDelegate?
+    weak var dismissHandler: QRCodeDismissHandler?
 
     private lazy var captureSession: AVCaptureSession = {
         let session = AVCaptureSession()
@@ -86,7 +87,7 @@ class QRCodeViewController: UIViewController {
         super.viewDidLoad()
 
         guard let captureDevice = captureDevice else {
-            dismiss(animated: false)
+            dismissController()
             return
         }
 
@@ -150,7 +151,7 @@ class QRCodeViewController: UIViewController {
         alert.addAction(UIAlertAction(title: .ScanQRCodeErrorOKButton,
                                       style: .default,
                                       handler: { _ in
-            self.dismiss(animated: true)
+            self.dismissController()
         }))
         present(alert, animated: true)
     }
@@ -242,7 +243,7 @@ class QRCodeViewController: UIViewController {
 
     @objc
     func goBack() {
-        dismiss(animated: true, completion: nil)
+        dismissController()
     }
 
     @objc
@@ -271,7 +272,7 @@ class QRCodeViewController: UIViewController {
 
     func setupCamera() {
         guard let captureDevice = captureDevice else {
-            dismiss(animated: false)
+            dismissController()
             return
         }
 
@@ -302,6 +303,14 @@ class QRCodeViewController: UIViewController {
             self.setupVideoPreviewLayer()
         }, completion: nil)
     }
+
+    private func dismissController(_ completion: (() -> Void)? = nil) {
+        if CoordinatorFlagManager.isQRCodeCoordinatorEnabled {
+            dismissHandler?.dismiss(completion)
+        } else {
+            dismiss(animated: true, completion: completion)
+        }
+    }
 }
 
 extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
@@ -322,7 +331,7 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
         } else {
             captureSession.stopRunning()
             stopScanLineAnimation()
-            dismiss(animated: true, completion: {
+            dismissController {
                 guard let metaData = metadataObjects.first as? AVMetadataMachineReadableCodeObject,
                       let qrCodeDelegate = self.qrCodeDelegate,
                       let text = metaData.stringValue
@@ -338,7 +347,7 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
                 } else {
                     qrCodeDelegate.didScanQRCodeWithText(text)
                 }
-            })
+            }
         }
     }
 }
