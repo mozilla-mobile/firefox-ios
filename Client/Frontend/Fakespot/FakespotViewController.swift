@@ -45,6 +45,8 @@ class FakespotViewController:
 
     lazy var isReduxIntegrationEnabled: Bool = ReduxFlagManager.isReduxEnabled
 
+    private var adView: FakespotAdView?
+
     private lazy var scrollView: UIScrollView = .build()
 
     private lazy var contentStackView: UIStackView = .build { stackView in
@@ -146,14 +148,8 @@ class FakespotViewController:
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         viewModel.isSwiping = false
-        // Calculate the rect for the shadowPath, ensuring it is at the bottom of the view
-        let shadowPathRect = CGRect(
-            x: 0,
-            y: shadowView.bounds.maxY - shadowView.layer.shadowRadius,
-            width: shadowView.bounds.width,
-            height: shadowView.layer.shadowRadius
-        )
-        shadowView.layer.shadowPath = UIBezierPath(rect: shadowPathRect).cgPath
+        setShadowPath()
+        handleAdVisibilityChanges()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -182,6 +178,22 @@ class FakespotViewController:
 
         guard triggerFetch else { return }
         viewModel.fetchProductIfOptedIn()
+    }
+
+    private func handleAdVisibilityChanges() {
+        guard let adView else { return }
+        viewModel.handleVisibilityChanges(for: adView, in: scrollView)
+    }
+
+    private func setShadowPath() {
+        // Calculate the rect for the shadowPath, ensuring it is at the bottom of the view
+        let shadowPathRect = CGRect(
+            x: 0,
+            y: shadowView.bounds.maxY - shadowView.layer.shadowRadius,
+            width: shadowView.bounds.width,
+            height: shadowView.layer.shadowRadius
+        )
+        shadowView.layer.shadowPath = UIBezierPath(rect: shadowPathRect).cgPath
     }
 
     private func listenToStateChange() {
@@ -423,6 +435,7 @@ class FakespotViewController:
                 self.delegate?.fakespotControllerDidDismiss(animated: true)
             }
             view.configure(viewModel)
+            adView = view
             return view
 
         case .messageCard(let messageType):
@@ -557,5 +570,6 @@ class FakespotViewController:
     // MARK: - UIScrollViewDelegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         adjustShadowBasedOnIntersection()
+        handleAdVisibilityChanges()
     }
 }

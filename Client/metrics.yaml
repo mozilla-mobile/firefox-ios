@@ -687,6 +687,22 @@ shopping:
     send_in_pings:
       - events
 
+  surface_ads_impression:
+    type: event
+    description: |
+      An ad was shown and visible in the bottom sheet for 1.5 seconds.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17302
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17524
+    data_sensitivity:
+      - interaction
+    expires: "2024-06-01"
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    send_in_pings:
+      - events
+
   address_bar_icon_clicked:
     type: event
     description: |
