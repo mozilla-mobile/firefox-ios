@@ -28,6 +28,9 @@ final class FakespotReviewQualityCardViewModel {
 
         return result
     }
+    var learnMoreButtonTitle = String.localizedStringWithFormat(.Shopping.ReviewQualityCardLearnMoreButtonTitle,
+                                                                FakespotName.shortName.rawValue)
+    var learnMoreButtonA11yId = AccessibilityIdentifiers.Shopping.ReviewQualityCard.learnMoreButtonTitle
 
     // MARK: Init
     init(tabManager: TabManager = AppContainer.shared.resolve()) {
@@ -56,6 +59,11 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
         static let contentStackViewInsets = UIEdgeInsets(top: 8, left: 8, bottom: 0, right: 8)
         static let baseFont = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
                                                                      size: UX.labelFontSize)
+        static let footerStackBottomSpace: CGFloat = 0
+        static let learnMoreInset = NSDirectionalEdgeInsets(top: 16,
+                                                            leading: 0,
+                                                            bottom: 0,
+                                                            trailing: 0)
     }
 
     private var viewModel: FakespotReviewQualityCardViewModel?
@@ -187,16 +195,7 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
     }
 
     private lazy var learnMoreButton: LinkButton = .build { button in
-        button.contentHorizontalAlignment = .leading
-        let title = String.localizedStringWithFormat(.Shopping.ReviewQualityCardLearnMoreButtonTitle,
-                                                     FakespotName.shortName.rawValue)
-        button.setTitle(title, for: .normal)
-        button.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.ReviewQualityCard.learnMoreButtonTitle
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-        button.titleLabel?.numberOfLines = 0
         button.addTarget(self, action: #selector(self.didTapLearnMore), for: .touchUpInside)
-        button.titleLabel?.font = UX.baseFont
     }
 
     override init(frame: CGRect) {
@@ -215,15 +214,18 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
     private func setupLayout() {
         addSubview(collapsibleContainer)
 
-        contentStackView.addArrangedSubview(headlineStackView)
-        contentStackView.addArrangedSubview(ratingsStackView)
+        headlineStackView.addArrangedSubview(headlineLabel)
+        headlineStackView.addArrangedSubview(subHeadlineLabel)
+
         ratingsStackView.addArrangedSubview(abRatingsReliableLabelStackView)
         ratingsStackView.addArrangedSubview(cRatingReliableLabelStackView)
         ratingsStackView.addArrangedSubview(dfRatingsReliableLabelStackView)
+
+        contentStackView.addArrangedSubview(headlineStackView)
+        contentStackView.addArrangedSubview(ratingsStackView)
         contentStackView.addArrangedSubview(footerStackView)
+        contentStackView.setCustomSpacing(UX.footerStackBottomSpace, after: footerStackView)
         contentStackView.addArrangedSubview(learnMoreButton)
-        headlineStackView.addArrangedSubview(headlineLabel)
-        headlineStackView.addArrangedSubview(subHeadlineLabel)
 
         [aReliabilityScoreView, bReliabilityScoreView].forEach(abRatingsStackView.addArrangedSubview)
         [abRatingsStackView, reliableReviewsLabel].forEach(abRatingsReliableLabelStackView.addArrangedSubview)
@@ -286,6 +288,14 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
         subHeadlineLabel.attributedText = viewModel.markupUtility.addAttributesTo(text: String.Shopping.ReviewQualityCardSubHeadlineLabel)
         adjustedRatingLabel.attributedText = viewModel.markupUtility.addAttributesTo(text: String.Shopping.ReviewQualityCardAdjustedRatingLabel)
 
+        let learnMoreButtonViewModel = LinkButtonViewModel(
+            title: viewModel.learnMoreButtonTitle,
+            a11yIdentifier: viewModel.learnMoreButtonA11yId,
+            fontSize: UX.labelFontSize,
+            contentInsets: UX.learnMoreInset
+        )
+        learnMoreButton.configure(viewModel: learnMoreButtonViewModel)
+
         let viewModel = CollapsibleCardViewModel(
             contentView: contentStackView,
             cardViewA11yId: AccessibilityIdentifiers.Shopping.ReviewQualityCard.card,
@@ -308,8 +318,7 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
     // MARK: - Theming System
     func applyTheme(theme: Theme) {
         collapsibleContainer.applyTheme(theme: theme)
-        let colors = theme.colors
-        learnMoreButton.setTitleColor(colors.textAccent, for: .normal)
+        learnMoreButton.applyTheme(theme: theme)
         [aReliabilityScoreView, bReliabilityScoreView, cReliabilityScoreView, dReliabilityScoreView, fReliabilityScoreView]
             .forEach { $0.applyTheme(theme: theme) }
     }
