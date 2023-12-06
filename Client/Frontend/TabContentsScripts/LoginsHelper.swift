@@ -9,9 +9,10 @@ import Storage
 import WebKit
 
 class LoginsHelper: TabContentScript {
-    fileprivate weak var tab: Tab?
-    fileprivate let profile: Profile
-    fileprivate var snackBar: SnackBar?
+    private weak var tab: Tab?
+    private let profile: Profile
+    private let theme: Theme
+    private var snackBar: SnackBar?
 
     // Exposed for mocking purposes
     var logins: RustLogins {
@@ -19,19 +20,20 @@ class LoginsHelper: TabContentScript {
     }
 
     class func name() -> String {
-        return "LoginsHelper"
+        String(describing: self)
     }
 
-    required init(tab: Tab, profile: Profile) {
+    required init(tab: Tab, profile: Profile, theme: Theme) {
         self.tab = tab
         self.profile = profile
+        self.theme = theme
     }
 
     func scriptMessageHandlerName() -> String? {
         return "loginsManagerMessageHandler"
     }
 
-    fileprivate func getOrigin(_ uriString: String, allowJS: Bool = false) -> String? {
+    private func getOrigin(_ uriString: String, allowJS: Bool = false) -> String? {
         guard let uri = URL(string: uriString, invalidCharacters: false),
               let scheme = uri.scheme, !scheme.isEmpty,
               let host = uri.host
@@ -156,7 +158,7 @@ class LoginsHelper: TabContentScript {
         }
     }
 
-    fileprivate func promptSave(_ login: LoginEntry) {
+    private func promptSave(_ login: LoginEntry) {
         guard login.isValid.isSuccess else { return }
 
         let promptMessage: String
@@ -185,12 +187,14 @@ class LoginsHelper: TabContentScript {
             self.sendLoginsSavedTelemetry()
             _ = self.profile.logins.addLogin(login: login)
         }
+
+        applyTheme(for: dontSave, save)
         snackBar?.addButton(dontSave)
         snackBar?.addButton(save)
         tab?.addSnackbar(snackBar!)
     }
 
-    fileprivate func promptUpdateFromLogin(login old: LoginRecord, toLogin new: LoginEntry) {
+    private func promptUpdateFromLogin(login old: LoginRecord, toLogin new: LoginEntry) {
         guard new.isValid.isSuccess else { return }
 
         let formatted: String
@@ -216,12 +220,14 @@ class LoginsHelper: TabContentScript {
             self.sendLoginsModifiedTelemetry()
             _ = self.profile.logins.updateLogin(id: old.id, login: new)
         }
+
+        applyTheme(for: dontSave, update)
         snackBar?.addButton(dontSave)
         snackBar?.addButton(update)
         tab?.addSnackbar(snackBar!)
     }
 
-    fileprivate func requestLogins(_ request: [String: Any], url: URL) {
+    private func requestLogins(_ request: [String: Any], url: URL) {
         guard let requestId = request["requestId"] as? String,
             // Even though we don't currently use these two fields,
             // verify that they were received as additional confirmation
@@ -256,6 +262,16 @@ class LoginsHelper: TabContentScript {
         }
     }
 
+    // MARK: Theming System
+    private func applyTheme(for views: UIView...) {
+        views.forEach { view in
+            if let view = view as? ThemeApplicable {
+                view.applyTheme(theme: theme)
+            }
+        }
+    }
+
+    // MARK: - Telemetry
     private func sendLoginsModifiedTelemetry() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .change,
