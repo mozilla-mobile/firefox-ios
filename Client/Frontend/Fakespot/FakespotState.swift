@@ -6,32 +6,33 @@ import Common
 import Redux
 
 struct FakespotState: ScreenState, Equatable {
-    var isOpenOnProductPage: Bool
+    var isOpen: Bool
+    var sidebarOpenForiPadLandscape: Bool
     var isSettingsExpanded: Bool
     var isReviewQualityExpanded: Bool
 
     init(_ appState: BrowserViewControllerState) {
         self.init(
-            isOpenOnProductPage: appState.fakespotState.isOpenOnProductPage,
+            isOpen: appState.fakespotState.isOpen,
+            sidebarOpenForiPadLandscape: appState.fakespotState.sidebarOpenForiPadLandscape,
             isSettingsExpanded: appState.fakespotState.isSettingsExpanded,
             isReviewQualityExpanded: appState.fakespotState.isReviewQualityExpanded
         )
     }
 
     init() {
-        self.init(isOpenOnProductPage: false, isSettingsExpanded: false, isReviewQualityExpanded: false)
+        self.init(isOpen: false, sidebarOpenForiPadLandscape: false, isSettingsExpanded: false, isReviewQualityExpanded: false)
     }
 
-    init(isOpenOnProductPage: Bool, isSettingsExpanded: Bool, isReviewQualityExpanded: Bool) {
-        self.isOpenOnProductPage = isOpenOnProductPage
+    init(isOpen: Bool, sidebarOpenForiPadLandscape: Bool, isSettingsExpanded: Bool, isReviewQualityExpanded: Bool) {
+        self.isOpen = isOpen
+        self.sidebarOpenForiPadLandscape = sidebarOpenForiPadLandscape
         self.isSettingsExpanded = isSettingsExpanded
         self.isReviewQualityExpanded = isReviewQualityExpanded
     }
 
     static let reducer: Reducer<Self> = { state, action in
         switch action {
-        case FakespotAction.toggleAppearance(let isEnabled):
-            return FakespotState(isOpenOnProductPage: isEnabled, isSettingsExpanded: state.isSettingsExpanded, isReviewQualityExpanded: state.isReviewQualityExpanded)
         case FakespotAction.settingsStateDidChange:
             var state = state
             state.isSettingsExpanded.toggle()
@@ -41,13 +42,46 @@ struct FakespotState: ScreenState, Equatable {
             state.isReviewQualityExpanded.toggle()
             return state
         case FakespotAction.urlDidChange:
-            return FakespotState(isOpenOnProductPage: state.isOpenOnProductPage, isSettingsExpanded: false, isReviewQualityExpanded: false)
+            return FakespotState(
+                isOpen: state.isOpen,
+                sidebarOpenForiPadLandscape: state.sidebarOpenForiPadLandscape,
+                isSettingsExpanded: false,
+                isReviewQualityExpanded: false
+            )
+        case FakespotAction.pressedShoppingButton:
+            return FakespotState(
+                isOpen: !state.isOpen,
+                sidebarOpenForiPadLandscape: !state.isOpen,
+                isSettingsExpanded: state.isSettingsExpanded,
+                isReviewQualityExpanded: state.isReviewQualityExpanded
+            )
+        case FakespotAction.show:
+            return FakespotState(
+                isOpen: true,
+                sidebarOpenForiPadLandscape: true,
+                isSettingsExpanded: state.isSettingsExpanded,
+                isReviewQualityExpanded: state.isReviewQualityExpanded
+            )
+        case FakespotAction.dismiss:
+            return FakespotState(
+                isOpen: false,
+                sidebarOpenForiPadLandscape: false,
+                isSettingsExpanded: state.isSettingsExpanded,
+                isReviewQualityExpanded: state.isReviewQualityExpanded
+            )
+        case FakespotAction.setAppearanceTo(let isEnabled):
+            return FakespotState(
+                isOpen: isEnabled,
+                sidebarOpenForiPadLandscape: state.sidebarOpenForiPadLandscape,
+                isSettingsExpanded: state.isSettingsExpanded,
+                isReviewQualityExpanded: state.isReviewQualityExpanded
+            )
         default:
             return state
         }
     }
 
     static func == (lhs: FakespotState, rhs: FakespotState) -> Bool {
-        return lhs.isOpenOnProductPage == rhs.isOpenOnProductPage && lhs.isSettingsExpanded == rhs.isSettingsExpanded && lhs.isReviewQualityExpanded == rhs.isReviewQualityExpanded
+        return lhs.isOpen == rhs.isOpen && lhs.isSettingsExpanded == rhs.isSettingsExpanded && lhs.isReviewQualityExpanded == rhs.isReviewQualityExpanded
     }
 }

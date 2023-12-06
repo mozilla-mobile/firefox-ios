@@ -978,6 +978,7 @@ public class RustLogins {
                 if hasLogins {
                     // Since the key data isn't present and we have login records in
                     // the database, we both clear the databbase and the reset the key.
+                    GleanMetrics.LoginsStoreKeyRegeneration.keychainDataLost.record()
                     self.resetLoginsAndKey(rustKeys: rustKeys, completion: completion)
                 } else {
                     // There are no records in the database so we don't need to wipe any

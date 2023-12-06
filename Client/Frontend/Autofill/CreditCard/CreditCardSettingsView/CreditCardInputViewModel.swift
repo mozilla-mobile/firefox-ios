@@ -153,8 +153,7 @@ class CreditCardInputViewModel: ObservableObject {
         return RemoveCardButton.AlertDetails(
             alertTitle: Text(CreditCardText.RemoveCardTitle),
             alertBody: Text(CreditCardText.RemoveCardSublabel),
-            primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)) {
-                [unowned self] in
+            primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)) { [unowned self] in
                 self.removeCreditCard(creditCard: creditCard) { status, successVal in
                     self.dismiss?(status, successVal)
                 }
@@ -168,8 +167,7 @@ class CreditCardInputViewModel: ObservableObject {
         return RemoveCardButton.AlertDetails(
             alertTitle: Text(CreditCardText.RemoveCardTitle),
             alertBody: nil,
-            primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)) {
-                [unowned self] in
+            primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)) { [unowned self] in
                 self.removeCreditCard(creditCard: creditCard) { status, successVal in
                     self.dismiss?(status, successVal)
                 }
@@ -259,8 +257,7 @@ class CreditCardInputViewModel: ObservableObject {
             return
         }
 
-        autofill.deleteCreditCard(id: currentCreditCard.guid) {
-            status, error in
+        autofill.deleteCreditCard(id: currentCreditCard.guid) { status, error in
             guard let error = error, status else {
                 completion(.removedCard, true)
                 return

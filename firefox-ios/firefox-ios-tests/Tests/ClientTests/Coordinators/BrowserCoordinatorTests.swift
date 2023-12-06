@@ -833,7 +833,7 @@ final class BrowserCoordinatorTests: XCTestCase {
 
         subject.showFakespotFlowAsModal(productURL: URL(string: "www.example.com")!)
         let fakespotCoordinator = subject.childCoordinators[0] as! FakespotCoordinator
-        fakespotCoordinator.fakespotControllerDidDismiss(animated: false)
+        fakespotCoordinator.dismissModal(animated: false)
 
         XCTAssertEqual(mockRouter.dismissCalled, 1)
         XCTAssertTrue(subject.childCoordinators.isEmpty)

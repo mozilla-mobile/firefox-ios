@@ -43,9 +43,10 @@ class FakespotViewController:
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     private var viewModel: FakespotViewModel
-    weak var delegate: FakespotViewControllerDelegate?
 
     lazy var isReduxIntegrationEnabled: Bool = ReduxFlagManager.isReduxEnabled
+
+    private var adView: FakespotAdView?
 
     private lazy var scrollView: UIScrollView = .build()
 
@@ -172,14 +173,8 @@ class FakespotViewController:
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         viewModel.isSwiping = false
-        // Calculate the rect for the shadowPath, ensuring it is at the bottom of the view
-        let shadowPathRect = CGRect(
-            x: 0,
-            y: shadowView.bounds.maxY - shadowView.layer.shadowRadius,
-            width: shadowView.bounds.width,
-            height: shadowView.layer.shadowRadius
-        )
-        shadowView.layer.shadowPath = UIBezierPath(rect: shadowPathRect).cgPath
+        setShadowPath()
+        handleAdVisibilityChanges()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -208,6 +203,22 @@ class FakespotViewController:
 
         guard triggerFetch else { return }
         viewModel.fetchProductIfOptedIn()
+    }
+
+    private func handleAdVisibilityChanges() {
+        guard let adView else { return }
+        viewModel.handleVisibilityChanges(for: adView, in: scrollView)
+    }
+
+    private func setShadowPath() {
+        // Calculate the rect for the shadowPath, ensuring it is at the bottom of the view
+        let shadowPathRect = CGRect(
+            x: 0,
+            y: shadowView.bounds.maxY - shadowView.layer.shadowRadius,
+            width: shadowView.bounds.width,
+            height: shadowView.layer.shadowRadius
+        )
+        shadowView.layer.shadowPath = UIBezierPath(rect: shadowPathRect).cgPath
     }
 
     private func listenToStateChange() {
@@ -379,9 +390,9 @@ class FakespotViewController:
         case .onboarding:
             let view: FakespotOptInCardView = .build()
             viewModel.optInCardViewModel.dismissViewController = { [weak self] action in
-                guard let self = self else { return }
-                self.delegate?.fakespotControllerDidDismiss(animated: true)
-                guard let action else { return }
+                store.dispatch(FakespotAction.setAppearanceTo(false))
+
+                guard let self = self, let action else { return }
                 viewModel.recordDismissTelemetry(by: action)
             }
             viewModel.optInCardViewModel.onOptIn = { [weak self] in
@@ -412,9 +423,8 @@ class FakespotViewController:
         case .qualityDeterminationCard:
             let reviewQualityCardView: FakespotReviewQualityCardView = .build()
             viewModel.reviewQualityCardViewModel.expandState = (fakespotState?.isReviewQualityExpanded ?? false)  ? .expanded : .collapsed
-            viewModel.reviewQualityCardViewModel.dismissViewController = { [weak self] in
-                guard let self = self else { return }
-                self.delegate?.fakespotControllerDidDismiss(animated: true)
+            viewModel.reviewQualityCardViewModel.dismissViewController = {
+                store.dispatch(FakespotAction.setAppearanceTo(false))
             }
             viewModel.reviewQualityCardViewModel.onExpandStateChanged = { state in
                 store.dispatch(FakespotAction.reviewQualityDidChange)
@@ -426,9 +436,9 @@ class FakespotViewController:
             let view: FakespotSettingsCardView = .build()
             viewModel.settingsCardViewModel.expandState = (fakespotState?.isSettingsExpanded ?? false) ? .expanded : .collapsed
             viewModel.settingsCardViewModel.dismissViewController = { [weak self] action in
-                guard let self = self else { return }
-                self.delegate?.fakespotControllerDidDismiss(animated: true)
-                guard let action else { return }
+                guard let self = self, let action else { return }
+
+                store.dispatch(FakespotAction.setAppearanceTo(false))
                 viewModel.recordDismissTelemetry(by: action)
             }
             viewModel.settingsCardViewModel.toggleAdsEnabled = { [weak self] in
@@ -452,11 +462,11 @@ class FakespotViewController:
             guard viewModel.areAdsEnabled else { return nil }
             let view: FakespotAdView = .build()
             var viewModel = FakespotAdViewModel(productAdsData: adData)
-            viewModel.dismissViewController = { [weak self] in
-                guard let self = self else { return }
-                self.delegate?.fakespotControllerDidDismiss(animated: true)
+            viewModel.dismissViewController = {
+                store.dispatch(FakespotAction.setAppearanceTo(false))
             }
             view.configure(viewModel)
+            adView = view
             return view
 
         case .messageCard(let messageType):
@@ -527,11 +537,7 @@ class FakespotViewController:
     }
 
     private func triggerDismiss() {
-        delegate?.fakespotControllerDidDismiss(animated: true)
-
-        if isReduxIntegrationEnabled {
-            store.dispatch(FakespotAction.toggleAppearance(false))
-        }
+        store.dispatch(FakespotAction.dismiss)
     }
 
     deinit {
@@ -592,5 +598,6 @@ class FakespotViewController:
     // MARK: - UIScrollViewDelegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         adjustShadowBasedOnIntersection()
+        handleAdVisibilityChanges()
     }
 }

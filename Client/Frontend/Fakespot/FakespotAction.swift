@@ -6,9 +6,11 @@ import Common
 import Redux
 
 enum FakespotAction: Action {
-    // UI trigger actions
-    case toggleAppearance(Bool)
     case settingsStateDidChange
     case reviewQualityDidChange
     case urlDidChange
+    case pressedShoppingButton
+    case show
+    case dismiss
+    case setAppearanceTo(Bool)
 }

@@ -177,7 +177,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         // Save the profile so we can record settings from it when the notification below fires.
         self.profile = profile
 
-        SponsoredTileTelemetry.setupContextId()
+        TelemetryContextualIdentifier.setupContextId()
 
         // Register an observer to record settings and other metrics that are more appropriate to
         // record on going to background rather than during initialization.
@@ -668,6 +668,7 @@ extension TelemetryWrapper {
         case searchHighlights = "search-highlights"
         case shoppingCFRsDisplayed = "shopping-cfrs-displayed"
         case shoppingAdsExposure = "shopping-ads-exposure"
+        case shoppingAdsImpression = "shopping-ads-impression"
         case awesomebarShareTap = "awesomebar-share-tap"
         case largeFileWrite = "large-file-write"
     }
@@ -1161,6 +1162,8 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.addressBarIconClicked.record()
         case (.action, .view, .shoppingBottomSheet, .shoppingAdsExposure, _):
             GleanMetrics.Shopping.adsExposure.record()
+        case (.action, .view, .shoppingBottomSheet, .shoppingAdsImpression, _):
+            GleanMetrics.Shopping.surfaceAdsImpression.record()
         case (.action, .view, .shoppingButton, _, _):
             GleanMetrics.Shopping.addressBarIconDisplayed.record()
         case (.action, .close, .shoppingBottomSheet, _, let extras):

@@ -4,14 +4,6 @@
 
 import Foundation
 
-struct InactiveTabsModel: Equatable {
-    var tabUUID: String
-    var title: String
-    var url: URL?
-
-    var displayURL: String {
-        guard let url = url else { return title }
-
-        return url.absoluteString
-    }
+struct AdEventsResponse: Codable {
+    var additionalProperties: [String: String]
 }

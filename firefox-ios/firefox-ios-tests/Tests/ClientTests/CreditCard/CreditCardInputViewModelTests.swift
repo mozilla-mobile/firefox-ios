@@ -213,15 +213,13 @@ class CreditCardInputViewModelTests: XCTestCase {
     func testSuccessRemoveCreditCard() {
         let expectation = expectation(description: "wait for credit card to be removed")
 
-        viewModel.autofill.addCreditCard(creditCard: samplePlainTextCard) {
-            ccCard, error in
+        viewModel.autofill.addCreditCard(creditCard: samplePlainTextCard) { ccCard, error in
             guard let ccCard = ccCard else {
                 XCTFail("no credit card saved to be tested")
                 return
             }
             guard let error = error else {
-                self.viewModel.removeCreditCard(creditCard: ccCard) {
-                    status, success in
+                self.viewModel.removeCreditCard(creditCard: ccCard) { status, success in
                     XCTAssertEqual(status, .removedCard)
                     XCTAssertTrue(success)
                     expectation.fulfill()
@@ -236,8 +234,7 @@ class CreditCardInputViewModelTests: XCTestCase {
     func testFailureToRemoveCreditCard() {
         let expectation = expectation(description: "wait for credit card to be removed")
 
-        self.viewModel.removeCreditCard(creditCard: nil) {
-            status, success in
+        self.viewModel.removeCreditCard(creditCard: nil) { status, success in
             XCTAssertEqual(status, .none)
             XCTAssertFalse(success)
             expectation.fulfill()
@@ -249,8 +246,7 @@ class CreditCardInputViewModelTests: XCTestCase {
     func testUpdateCreditCard() {
         let expectation = expectation(description: "wait for credit card to be updated")
         // Add sample card
-        viewModel.autofill.addCreditCard(creditCard: samplePlainTextCard) {
-            ccCard, error in
+        viewModel.autofill.addCreditCard(creditCard: samplePlainTextCard) { ccCard, error in
             guard let ccCard = ccCard else {
                 XCTFail("no credit card saved to be tested")
                 return
@@ -267,8 +263,7 @@ class CreditCardInputViewModelTests: XCTestCase {
                     XCTAssertNil(error)
                     XCTAssertTrue(success)
                     // Check updated values
-                    self.viewModel.autofill.getCreditCard(id: ccCard.guid) {
-                        ccUpdatedCard, error in
+                    self.viewModel.autofill.getCreditCard(id: ccCard.guid) { ccUpdatedCard, error in
                         XCTAssertNil(error)
                         XCTAssertNotNil(ccUpdatedCard)
                         XCTAssertEqual(ccUpdatedCard?.ccName, "Mickey Mouse")

@@ -846,8 +846,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], to: TrackingProtectionContextMenuDetails)
 
-        screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton], forAction: Action.GoToHomePage) {
-            userState in
+        screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton], forAction: Action.GoToHomePage) { userState in
         }
 
         screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton], forAction: Action.ClickSearchButton) { userState in
@@ -959,8 +958,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.tables.otherElements[StandardImageIdentifiers.Large.deviceDesktopSend], forAction: Action.SentToDevice) { userState in
         }
 
-        screenState.tap(app.tables.otherElements[ImageIdentifiers.share], forAction: Action.ShareBrowserTabMenuOption) {
-            userState in
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.share], forAction: Action.ShareBrowserTabMenuOption) { userState in
         }
 
         screenState.tap(app.tables.otherElements[StandardImageIdentifiers.Large.deviceDesktop], to: RequestDesktopSite)

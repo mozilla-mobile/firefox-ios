@@ -18,8 +18,7 @@ private func migrate(urls: [URL]) -> [URL] {
         let port = AppInfo.webserverPort
         [("http://localhost:\(port)/errors/error.html?url=", "\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)?url=")
             // TODO: handle reader pages ("http://localhost:6571/reader-mode/page?url=", "\(InternalScheme.url)/\(ReaderModeHandler.path)?url=")
-            ].forEach {
-            oldItem, newItem in
+            ].forEach { oldItem, newItem in
             if url.absoluteString.hasPrefix(oldItem) {
                 var urlStr = url.absoluteString.replacingOccurrences(of: oldItem, with: newItem)
                 let comp = urlStr.components(separatedBy: newItem)
