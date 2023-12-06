@@ -64,8 +64,8 @@ final class FakespotCoordinatorTests: XCTestCase {
         subject.startSidebar(productURL: exampleProduct,
                              sidebarContainer: sidebarContainer,
                              parentViewController: viewController)
-        subject.fakespotControllerCloseSidebar(sidebarContainer: sidebarContainer,
-                                               parentViewController: viewController)
+        subject.closeSidebar(sidebarContainer: sidebarContainer,
+                             parentViewController: viewController)
 
         XCTAssertEqual(sidebarContainer.hideSidebarCalled, 1)
         XCTAssertEqual(mockRouter.dismissCalled, 1)
@@ -76,7 +76,7 @@ final class FakespotCoordinatorTests: XCTestCase {
         let subject = createSubject()
 
         subject.startModal(productURL: exampleProduct)
-        subject.fakespotControllerDidDismiss(animated: false)
+        subject.dismissModal(animated: false)
 
         XCTAssertEqual(mockRouter.dismissCalled, 1)
         XCTAssertTrue(subject.childCoordinators.isEmpty)
