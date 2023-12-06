@@ -13,6 +13,7 @@ class RemoteTabsCoordinator: BaseCoordinator, RemoteTabsCoordinatorDelegate, QRC
     // MARK: - Properties
     private weak var parentCoordinator: TabTrayCoordinatorDelegate?
     private let profile: Profile
+    private var fxAccountViewController: FirefoxAccountSignInViewController?
 
     // MARK: - Initializers
 
@@ -33,8 +34,12 @@ class RemoteTabsCoordinator: BaseCoordinator, RemoteTabsCoordinatorDelegate, QRC
         let viewController = FirefoxAccountSignInViewController(profile: profile,
                                                                 parentType: .tabTray,
                                                                 deepLinkParams: fxaParams)
-        viewController.qrCodeNavigationHandler = self
-        router.present(viewController)
+        fxAccountViewController = viewController
+        fxAccountViewController?.qrCodeNavigationHandler = self
+        let buttonItem = UIBarButtonItem(title: .CloseButtonTitle, style: .plain, target: self, action: #selector(dismissVC))
+        fxAccountViewController?.navigationItem.leftBarButtonItem = buttonItem
+        let navController = ThemedNavigationController(rootViewController: viewController)
+        router.present(navController)
     }
 
     // MARK: - RemoteTabsNavigationHandler
@@ -48,6 +53,11 @@ class RemoteTabsCoordinator: BaseCoordinator, RemoteTabsCoordinatorDelegate, QRC
             add(child: coordinator)
         }
         coordinator.showQRCode(delegate: delegate)
+    }
+
+    @objc
+    func dismissVC() {
+        fxAccountViewController?.dismissVC()
     }
 
     func didFinish(from childCoordinator: Coordinator) {
