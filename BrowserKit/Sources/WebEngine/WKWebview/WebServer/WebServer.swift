@@ -65,7 +65,7 @@ class WebServer: WebServerProtocol {
 
             return handler(request)
         }
-        server.addHandler(forMethod: method, 
+        server.addHandler(forMethod: method,
                           path: "/\(module)/\(resource)",
                           request: GCDWebServerRequest.self,
                           processBlock: wrappedHandler)
@@ -74,7 +74,7 @@ class WebServer: WebServerProtocol {
     /// Convenience method to register a resource in the main bundle. Will be mounted at $base/$module/$resource
     func registerMainBundleResource(_ resource: String, module: String) {
         if let path = Bundle.main.path(forResource: resource, ofType: nil) {
-            server.addGETHandler(forPath: "/\(module)/\(resource)", 
+            server.addGETHandler(forPath: "/\(module)/\(resource)",
                                  filePath: path,
                                  isAttachment: false,
                                  cacheAge: UInt.max,
@@ -86,7 +86,7 @@ class WebServer: WebServerProtocol {
     func registerMainBundleResourcesOfType(_ type: String, module: String) {
         for path: String in Bundle.paths(forResourcesOfType: type, inDirectory: Bundle.main.bundlePath) {
             if let resource = NSURL(string: path)?.lastPathComponent {
-                server.addGETHandler(forPath: "/\(module)/\(resource)", 
+                server.addGETHandler(forPath: "/\(module)/\(resource)",
                                      filePath: path as String,
                                      isAttachment: false,
                                      cacheAge: UInt.max,

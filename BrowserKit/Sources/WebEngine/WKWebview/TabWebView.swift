@@ -7,7 +7,7 @@ import Foundation
 import WebKit
 
 protocol TabWebViewDelegate: AnyObject {
-    func tabWebView(_ tabWebView: TabWebView, 
+    func tabWebView(_ tabWebView: TabWebView,
                     didSelectFindInPageForSelection selection: String)
     func tabWebViewSearchWithFirefox(_ tabWebViewSearchWithFirefox: TabWebView,
                                      didSelectSearchWithFirefoxForSelection selection: String)

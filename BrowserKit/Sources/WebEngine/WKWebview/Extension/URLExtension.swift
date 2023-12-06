@@ -5,14 +5,14 @@
 import Common
 import Foundation
 
-// laurie - tests for this move
-// explanation, who should use those
+/// Those extensions are kept public at the moment to avoid breaking any existing code, but ideally in the future we should keep the usage of those extensions
+/// internal to the WebEngine only
 public extension URL {
     var isReaderModeURL: Bool {
         let scheme = self.scheme, host = self.host, path = self.path
         return scheme == "http" && host == "localhost" && path == "/reader-mode/page"
     }
-    
+
     var isSyncedReaderModeURL: Bool {
         return absoluteString.hasPrefix("about:reader?url=")
     }
