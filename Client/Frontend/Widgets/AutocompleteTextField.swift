@@ -100,11 +100,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             UIKeyCommand(input: UIKeyCommand.inputRightArrow, modifierFlags: [], action: #selector(self.handleKeyCommand(sender:))),
             UIKeyCommand(input: UIKeyCommand.inputEscape, modifierFlags: [], action: #selector(self.handleKeyCommand(sender:))),
         ]
-
-        // In iOS 15+, certain keys events are delivered to the text input or focus systems first, unless specified otherwise
-        if #available(iOS 15, *) {
-            arrowKeysCommands.forEach { $0.wantsPriorityOverSystemBehavior = true }
-        }
+        arrowKeysCommands.forEach { $0.wantsPriorityOverSystemBehavior = true }
 
         return arrowKeysCommands + commands
     }

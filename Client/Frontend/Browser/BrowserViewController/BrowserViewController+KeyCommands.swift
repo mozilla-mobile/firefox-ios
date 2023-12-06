@@ -362,12 +362,9 @@ extension BrowserViewController {
             UIKeyCommand(action: #selector(showTabTrayKeyCommand), input: "\\", modifierFlags: [.command, .shift]),
         ]
 
-        // In iOS 15+, certain keys events are delivered to the text input or focus systems first, unless specified otherwise
-        if #available(iOS 15, *) {
-            searchLocationCommands.forEach { $0.wantsPriorityOverSystemBehavior = true }
-            overridesTextEditing.forEach { $0.wantsPriorityOverSystemBehavior = true }
-            windowShortcuts.forEach { $0.wantsPriorityOverSystemBehavior = true }
-        }
+        searchLocationCommands.forEach { $0.wantsPriorityOverSystemBehavior = true }
+        overridesTextEditing.forEach { $0.wantsPriorityOverSystemBehavior = true }
+        windowShortcuts.forEach { $0.wantsPriorityOverSystemBehavior = true }
 
         let commands = [
             UIKeyCommand(action: #selector(undoLastTabClosedKeyCommand), input: "t", modifierFlags: [.command, .shift]),

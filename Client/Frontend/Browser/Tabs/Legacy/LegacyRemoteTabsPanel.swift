@@ -172,9 +172,7 @@ class LegacyRemoteTabsTableViewController: UITableViewController, Themeable {
         tableView.separatorInset = .zero
         tableView.alwaysBounceVertical = false
 
-        if #available(iOS 15.0, *) {
-            tableView.sectionHeaderTopPadding = 0.0
-        }
+        tableView.sectionHeaderTopPadding = 0.0
 
         tableView.delegate = nil
         tableView.dataSource = nil
