@@ -1563,28 +1563,6 @@ class BrowserViewController: UIViewController,
         return navigationController?.topViewController?.presentedViewController as? JSPromptAlertController != nil
     }
 
-    private func showSendToDevice() {
-        guard let selectedTab = tabManager.selectedTab,
-              let url = selectedTab.canonicalURL?.displayURL
-        else { return }
-
-        let themeColors = themeManager.currentTheme.colors
-        let colors = SendToDeviceHelper.Colors(defaultBackground: themeColors.layer1,
-                                               textColor: themeColors.textPrimary,
-                                               iconColor: themeColors.iconPrimary)
-        let shareItem = ShareItem(url: url.absoluteString,
-                                  title: selectedTab.title)
-
-        let helper = SendToDeviceHelper(shareItem: shareItem,
-                                        profile: profile,
-                                        colors: colors,
-                                        delegate: self)
-        let viewController = helper.initialViewController()
-
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sendToDevice)
-        showViewController(viewController: viewController)
-    }
-
     fileprivate func postLocationChangeNotificationForTab(_ tab: Tab, navigation: WKNavigation?) {
         let notificationCenter = NotificationCenter.default
         var info = [AnyHashable: Any]()
