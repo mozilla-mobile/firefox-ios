@@ -63,11 +63,11 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
         ))
         updatedConfiguration.contentInsets = UX.contentInsets
         updatedConfiguration.title = viewModel.title
-        configuration = updatedConfiguration
 
         accessibilityIdentifier = viewModel.a11yIdentifier
 
         guard let imageTitlePadding = viewModel.imageTitlePadding else {
+            configuration = updatedConfiguration
             return
         }
         updatedConfiguration.imagePadding = imageTitlePadding
