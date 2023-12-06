@@ -19,17 +19,11 @@ class HomepageViewController:
     // MARK: - Typealiases
 
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
-    typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
 
     // MARK: - Operational Variables
 
     weak var homePanelDelegate: HomePanelDelegate?
     weak var libraryPanelDelegate: LibraryPanelDelegate?
-    weak var sendToDeviceDelegate: SendToDeviceDelegate? {
-        didSet {
-            contextMenuHelper.sendToDeviceDelegate = sendToDeviceDelegate
-        }
-    }
 
     weak var browserNavigationHandler: BrowserNavigationHandler? {
         didSet {

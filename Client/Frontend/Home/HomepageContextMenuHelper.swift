@@ -9,7 +9,6 @@ import Storage
 
 // swiftlint:disable class_delegate_protocol
 protocol HomepageContextMenuHelperDelegate: UIViewController {
-    func presentWithModalDismissIfNeeded(_ viewController: UIViewController, animated: Bool)
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool)
     func homePanelDidRequestToOpenSettings(at settingsPage: Route.SettingsSection)
 }
@@ -23,10 +22,8 @@ extension HomepageContextMenuHelperDelegate {
 
 class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     typealias ContextHelperDelegate = HomepageContextMenuHelperDelegate & UIPopoverPresentationControllerDelegate
-    typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
     private var viewModel: HomepageViewModel
     private let toastContainer: UIView
-    weak var sendToDeviceDelegate: SendToDeviceDelegate?
     weak var browserNavigationHandler: BrowserNavigationHandler?
     weak var delegate: ContextHelperDelegate?
     var getPopoverSourceRect: ((UIView?) -> CGRect)?
@@ -189,25 +186,6 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                 toastContainer: self.toastContainer,
                 popoverArrowDirection: [.up, .down, .left])
         }).items
-    }
-
-    private func showSendToDevice(site: Site) {
-        guard let delegate = sendToDeviceDelegate else { return }
-
-        let themeColors = viewModel.theme.colors
-
-        let colors = SendToDeviceHelper.Colors(defaultBackground: themeColors.layer1,
-                                               textColor: themeColors.textPrimary,
-                                               iconColor: themeColors.iconPrimary)
-        let shareItem = ShareItem(url: site.url, title: site.title)
-        let helper = SendToDeviceHelper(shareItem: shareItem,
-                                        profile: viewModel.profile,
-                                        colors: colors,
-                                        delegate: delegate)
-        let viewController = helper.initialViewController()
-
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sendToDevice)
-        self.delegate?.presentWithModalDismissIfNeeded(viewController, animated: true)
     }
 
     // MARK: - Top sites

@@ -97,14 +97,12 @@ class BrowserCoordinator: BaseCoordinator,
                       toastContainer: UIView,
                       homepanelDelegate: HomePanelDelegate,
                       libraryPanelDelegate: LibraryPanelDelegate,
-                      sendToDeviceDelegate: HomepageViewController.SendToDeviceDelegate,
                       statusBarScrollDelegate: StatusBarScrollDelegate,
                       overlayManager: OverlayModeManager) {
         let homepageController = getHomepage(inline: inline,
                                              toastContainer: toastContainer,
                                              homepanelDelegate: homepanelDelegate,
                                              libraryPanelDelegate: libraryPanelDelegate,
-                                             sendToDeviceDelegate: sendToDeviceDelegate,
                                              statusBarScrollDelegate: statusBarScrollDelegate,
                                              overlayManager: overlayManager)
 
@@ -142,7 +140,6 @@ class BrowserCoordinator: BaseCoordinator,
                              toastContainer: UIView,
                              homepanelDelegate: HomePanelDelegate,
                              libraryPanelDelegate: LibraryPanelDelegate,
-                             sendToDeviceDelegate: HomepageViewController.SendToDeviceDelegate,
                              statusBarScrollDelegate: StatusBarScrollDelegate,
                              overlayManager: OverlayModeManager) -> HomepageViewController {
         if let homepageViewController = homepageViewController {
@@ -156,7 +153,6 @@ class BrowserCoordinator: BaseCoordinator,
                 overlayManager: overlayManager)
             homepageViewController.homePanelDelegate = homepanelDelegate
             homepageViewController.libraryPanelDelegate = libraryPanelDelegate
-            homepageViewController.sendToDeviceDelegate = sendToDeviceDelegate
             homepageViewController.statusBarScrollDelegate = statusBarScrollDelegate
             homepageViewController.browserNavigationHandler = self
 
