@@ -68,8 +68,7 @@ class BrowserCoordinator: BaseCoordinator,
     private func tabManagerDidConnectToScene() {
         // [7863] [WIP] Redux: connect this Browser's TabManager to associated window scene
         guard ReduxFlagManager.isReduxEnabled else { return }
-        let sceneUUID = WindowData.DefaultSingleWindowUUID
-        store.dispatch(TabManagerAction.tabManagerDidConnectToScene(tabManager, sceneUUID))
+        store.dispatch(TabManagerAction.tabManagerDidConnectToScene(tabManager))
 
         // TODO [7856]: Additional telemetry updates forthcoming once iPad multi-window enabled.
         // For now, we only have a single BVC and TabManager. Plug it into our TelemetryWrapper:
@@ -359,8 +358,10 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.openRecentlyClosedSiteInSameTab(url)
     }
 
-    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
+    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) -> WindowUUID {
         browserViewController.openRecentlyClosedSiteInNewTab(url, isPrivate: isPrivate)
+        // TODO: [7349] Updates to Recently Closed for iPad multi-window forthcoming.
+        return tabManager.windowUUID
     }
 
     func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {

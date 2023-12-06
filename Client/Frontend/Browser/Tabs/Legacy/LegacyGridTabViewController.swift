@@ -619,7 +619,7 @@ extension LegacyGridTabViewController: TabDisplayCompletionDelegate, RecentlyClo
         dismissTabTray()
     }
 
-    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
+    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) -> WindowUUID {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .inactiveTabTray,
@@ -627,6 +627,8 @@ extension LegacyGridTabViewController: TabDisplayCompletionDelegate, RecentlyClo
                                      extras: nil)
         openNewTab(URLRequest(url: url), isPrivate: isPrivate)
         dismissTabTray()
+        // TODO: [7349] Updates to Recently Closed for iPad multi-window forthcoming.
+        return tabManager.windowUUID
     }
 
     // TabDisplayCompletionDelegate

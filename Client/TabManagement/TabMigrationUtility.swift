@@ -94,7 +94,7 @@ class DefaultTabMigrationUtility: TabMigrationUtility {
             tabsToMigrate.append(tabData)
         }
 
-        let windowData = WindowData(id: WindowData.DefaultSingleWindowUUID,
+        let windowData = WindowData(id: .defaultSingleWindowUUID,
                                     isPrimary: true,
                                     activeTabId: selectTabUUID ?? UUID(),
                                     tabData: tabsToMigrate)

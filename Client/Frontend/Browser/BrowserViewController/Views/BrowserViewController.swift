@@ -234,9 +234,10 @@ class BrowserViewController: UIViewController,
         tabManager.addDelegate(self)
         tabManager.addNavigationDelegate(self)
         downloadQueue.delegate = self
-        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration]) { [weak self] in
+        let tabWindowUUID = tabManager.windowUUID
+        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(tabWindowUUID)]) { [weak self] in
             // Ensure we call into didBecomeActive at least once during startup flow (if needed)
-            guard !AppEventQueue.activityIsCompleted(.browserDidBecomeActive) else { return }
+            guard !AppEventQueue.activityIsCompleted(.browserDidBecomeActive(tabWindowUUID)) else { return }
             self?.browserDidBecomeActive()
         }
     }
@@ -436,8 +437,9 @@ class BrowserViewController: UIViewController,
     }
 
     func browserDidBecomeActive() {
-        AppEventQueue.started(.browserDidBecomeActive)
-        defer { AppEventQueue.completed(.browserDidBecomeActive) }
+        let uuid = tabManager.windowUUID
+        AppEventQueue.started(.browserDidBecomeActive(uuid))
+        defer { AppEventQueue.completed(.browserDidBecomeActive(uuid)) }
 
         // Update lock icon without redrawing the whole locationView
         if let tab = tabManager.selectedTab {
@@ -449,7 +451,7 @@ class BrowserViewController: UIViewController,
 
         // When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
         // Make sure that our startup flow is completed and other tabs have been restored before we load.
-        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration]) { [weak self] in
+        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(tabManager.windowUUID)]) { [weak self] in
             self?.backgroundTabLoader.loadBackgroundTabs()
         }
     }
@@ -958,7 +960,7 @@ class BrowserViewController: UIViewController,
                 self.isCrashAlertShowing = false
                 self.tabManager.selectTab(self.tabManager.addTab())
                 self.openUrlAfterRestore()
-                AppEventQueue.signal(event: .tabRestoration)
+                AppEventQueue.signal(event: .tabRestoration(self.tabManager.windowUUID))
             }
         )
         self.present(alert, animated: true, completion: nil)
@@ -1871,8 +1873,9 @@ class BrowserViewController: UIViewController,
         tabTrayOpenRecentlyClosedTab(url)
     }
 
-    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
+    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) -> WindowUUID {
         tabManager.selectTab(tabManager.addTab(URLRequest(url: url)))
+        return tabManager.windowUUID
     }
 
     // MARK: - QRCodeViewControllerDelegate
