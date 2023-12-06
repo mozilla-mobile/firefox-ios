@@ -15,7 +15,7 @@ enum RemoteTabsPanelRefreshState {
     case refreshing
 }
 
-/// Replaces RemoteTabsErrorDataSource.ErrorType
+/// Replaces LegacyRemoteTabsErrorDataSource.ErrorType
 enum RemoteTabsPanelEmptyStateReason {
     case notLoggedIn
     case noClients

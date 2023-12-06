@@ -65,8 +65,8 @@ class LegacyRemoteTabsTableViewController: UITableViewController, Themeable {
                            forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.cellIdentifier)
         tableView.register(TwoLineImageOverlayCell.self,
                            forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier)
-        tableView.register(RemoteTabsErrorCell.self,
-                           forCellReuseIdentifier: RemoteTabsErrorCell.cellIdentifier)
+        tableView.register(LegacyRemoteTabsErrorCell.self,
+                           forCellReuseIdentifier: LegacyRemoteTabsErrorCell.cellIdentifier)
 
         tableView.rowHeight = UX.rowHeight
         tableView.separatorInset = .zero
@@ -106,7 +106,7 @@ class LegacyRemoteTabsTableViewController: UITableViewController, Themeable {
 
     func applyTheme() {
         tableView.separatorColor = themeManager.currentTheme.colors.layerLightGrey30
-        if let delegate = tableViewDelegate as? RemoteTabsErrorDataSource {
+        if let delegate = tableViewDelegate as? LegacyRemoteTabsErrorDataSource {
             delegate.applyTheme(theme: themeManager.currentTheme)
         }
     }
@@ -203,13 +203,13 @@ class LegacyRemoteTabsTableViewController: UITableViewController, Themeable {
         }
     }
 
-    private func showEmptyTabsViewWith(_ error: RemoteTabsErrorDataSource.ErrorType) {
+    private func showEmptyTabsViewWith(_ error: LegacyRemoteTabsErrorDataSource.ErrorType) {
         guard let remoteTabsPanel = remoteTabsPanel else { return }
         var errorMessage = error
 
         if !isTabSyncEnabled { errorMessage = .syncDisabledByUser }
 
-        let remoteTabsErrorView = RemoteTabsErrorDataSource(remoteTabsDelegateProvider: remoteTabsPanel,
+        let remoteTabsErrorView = LegacyRemoteTabsErrorDataSource(remoteTabsDelegateProvider: remoteTabsPanel,
                                                             error: errorMessage,
                                                             theme: themeManager.currentTheme)
         tableViewDelegate = remoteTabsErrorView
