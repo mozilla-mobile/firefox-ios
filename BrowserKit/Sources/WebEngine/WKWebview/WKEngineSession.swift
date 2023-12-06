@@ -18,6 +18,7 @@ class WKEngineSession: EngineSession {
                                  configuration: configuration)
 
         // TODO: FXIOS-7898 #17643 Handle WebView a11y label
+//        webView.accessibilityLabel = .WebViewAccessibilityLabel
         webView.allowsBackForwardNavigationGestures = true
         webView.allowsLinkPreview = true
 
@@ -52,7 +53,7 @@ class WKEngineSession: EngineSession {
         // Convert about:reader?url=http://example.com URLs to local ReaderMode URLs
         if let url = URL(string: url),
            let syncedReaderModeURL = url.decodeReaderModeURL,
-           syncedReaderModeURL.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) != nil {
+           syncedReaderModeURL.encodeReaderModeURL(WKEngineWebServer.shared.baseReaderModeURL()) != nil {
             // TODO: FXIOS-7902 #17647 Handle webview request
 //            let readerModeRequest = PrivilegedRequest(url: localReaderModeURL) as URLRequest
 //            lastRequest = readerModeRequest

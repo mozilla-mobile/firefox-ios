@@ -6,19 +6,18 @@ import Common
 import Foundation
 import GCDWebServers
 
-protocol WebServerProtocol {
+protocol WKEngineWebServerProtocol {
     var server: GCDWebServer { get }
     @discardableResult
     func start() throws -> Bool
+
+    func baseReaderModeURL() -> String
 }
 
-class WebServer: WebServerProtocol {
+class WKEngineWebServer: WKEngineWebServerProtocol {
     private var logger: Logger
-    static let WebServerSharedInstance = WebServer()
 
-    class var sharedInstance: WebServer {
-        return WebServerSharedInstance
-    }
+    static let shared: WKEngineWebServerProtocol = WKEngineWebServer()
 
     let server = GCDWebServer()
 
@@ -32,7 +31,7 @@ class WebServer: WebServerProtocol {
     /// A random, transient token used for authenticating requests.
     /// Other apps are able to make requests to our local Web server,
     /// so this prevents them from accessing any resources.
-    fileprivate let sessionToken = UUID().uuidString
+    private let sessionToken = UUID().uuidString
 
     init(logger: Logger = DefaultLogger.shared) {
         credentials = URLCredential(user: sessionToken, password: "", persistence: .forSession)
@@ -99,12 +98,12 @@ class WebServer: WebServerProtocol {
         }
     }
 
-    /// Return a full url, as a string, for a resource in a module. No check is done to find out if the resource actually exist.
-    func URLForResource(_ resource: String, module: String) -> String {
-        return "\(base)/\(module)/\(resource)"
+    func baseReaderModeURL() -> String {
+        return URLForResource("page", module: "reader-mode")
     }
 
-    func baseReaderModeURL() -> String {
-        return WebServer.sharedInstance.URLForResource("page", module: "reader-mode")
+    /// Return a full url, as a string, for a resource in a module. No check is done to find out if the resource actually exist.
+    private func URLForResource(_ resource: String, module: String) -> String {
+        return "\(base)/\(module)/\(resource)"
     }
 }
