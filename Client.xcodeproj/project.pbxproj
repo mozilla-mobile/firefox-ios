@@ -6335,7 +6335,6 @@
 		D486426E953609DD218A8798 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		D4A2419292C555D02004A495 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Storage.strings"; sourceTree = "<group>"; };
 		D4AFA84D2AFA5482000BFEAA /* ExperimentIntegrationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExperimentIntegrationTests.swift; sourceTree = "<group>"; };
-		D4AFA84F2AFA55DB000BFEAA /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		D4AFAB0D2AFA8F99000BFEAA /* SyncIntegrationTests */ = {isa = PBXFileReference; lastKnownFileType = folder; path = SyncIntegrationTests; sourceTree = "<group>"; };
 		D4B5444899A0721B899F9E46 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D4BF6AA72893DDA6001B5130 /* en-US */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-US"; path = "en-US.lproj/WidgetIntents.strings"; sourceTree = "<group>"; };
@@ -10170,7 +10169,6 @@
 		D4AFA84B2AFA4FC6000BFEAA /* firefox-ios-tests */ = {
 			isa = PBXGroup;
 			children = (
-				D4AFA84F2AFA55DB000BFEAA /* README.md */,
 				E15A8B2B286CFD48004BB2B8 /* Tests */,
 			);
 			name = "firefox-ios-tests";
