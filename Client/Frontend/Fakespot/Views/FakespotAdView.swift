@@ -32,11 +32,12 @@ struct FakespotAdViewModel {
 
         let fallBackPrice = productAdsData.currency + productAdsData.price
 
-        guard let price = Double(productAdsData.price) else {
-            return fallBackPrice
+        guard let price = Double(productAdsData.price),
+              let formattedPrice = formatter.string(from: NSNumber(value: price)) else {
+           return fallBackPrice
         }
 
-        return formatter.string(from: NSNumber(value: price)) ?? fallBackPrice
+         return formattedPrice
     }
 
     // MARK: Init
