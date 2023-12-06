@@ -423,6 +423,26 @@ public struct AccessibilityIdentifiers {
             static let title = "Logins"
         }
 
+        struct CreditCards {
+            static let title = "AutofillCreditCard"
+
+            struct AutoFillCreditCard {
+                static let autoFillCreditCards = "Autofill Credit Cards"
+                static let addCard = "Add Card"
+                static let saveAutofillCards = "Save and Autofill Cards"
+                static let savedCards = "SAVED CARDS"
+            }
+
+            struct AddCreditCard {
+                static let addCreditCard = "Add Credit Card"
+                static let nameOnCard = "Name on Card"
+                static let cardNumber = "Card Number"
+                static let expiration = "Expiration MM / YY"
+                static let close = "Close"
+                static let save = "Save"
+            }
+        }
+
         struct ClearData {
             static let title = "ClearPrivateData"
             static let websiteDataSection = "WebsiteData"
