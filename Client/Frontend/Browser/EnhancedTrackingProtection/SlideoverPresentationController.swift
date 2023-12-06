@@ -5,8 +5,6 @@
 import UIKit
 
 struct SlideOverUXConstants {
-    static let ETPMenuHeightForGlobalOn: CGFloat = 385
-    static let ETPMenuHeightForGlobalOff: CGFloat = 285
     static let ETPMenuCornerRadius: CGFloat = 8
 }
 
@@ -29,12 +27,7 @@ class SlideOverPresentationController: UIPresentationController {
     }
 
     override var frameOfPresentedViewInContainerView: CGRect {
-        var menuHeight: CGFloat
-        if globalETPStatus {
-            menuHeight = SlideOverUXConstants.ETPMenuHeightForGlobalOn
-        } else {
-            menuHeight = SlideOverUXConstants.ETPMenuHeightForGlobalOff
-        }
+        let menuHeight: CGFloat = presentedView!.systemLayoutSizeFitting(CGSize(width: presentedView!.bounds.width, height: 0.0), withHorizontalFittingPriority: .required, verticalFittingPriority: .defaultLow).height
 
         let yPosition = self.containerView!.frame.height - menuHeight
         var xPosition: CGFloat = 0
