@@ -71,6 +71,7 @@ class WKEngineSession: EngineSession {
     }
 
     func reload() {
+        // TODO: FXIOS-7906 #17650 Handle reload in WKEngineSession
     }
 
     func goBack() {
@@ -82,9 +83,11 @@ class WKEngineSession: EngineSession {
     }
 
     func goToHistoryIndex(index: Int) {
+        // TODO: FXIOS-7907 #17651 Handle goToHistoryIndex in WKEngineSession (equivalent to goToBackForwardListItem)
     }
 
     func restoreState(state: Data) {
+        // TODO: FXIOS-7908 #17652 Handle restoreState in WKEngineSession
     }
 
     func close() {

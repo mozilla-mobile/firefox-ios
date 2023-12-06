@@ -690,6 +690,7 @@
 		8A88815C2B2103AD009635AE /* WebEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 8A88815B2B2103AD009635AE /* WebEngine */; };
 		8A88815E2B21071E009635AE /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 8A88815D2B21071E009635AE /* GCDWebServers */; };
 		8A8BAE122B2107E400D774EB /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 8A8BAE112B2107E400D774EB /* GCDWebServers */; };
+		8A8BAE142B21110000D774EB /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 8A8BAE132B21110000D774EB /* GCDWebServers */; };
 		8A8DDEBF276259A900E7B97A /* RatingPromptManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8DDEBE276259A900E7B97A /* RatingPromptManager.swift */; };
 		8A93080927BFE88F0052167D /* PhotonActionSheetContainerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A93080827BFE88F0052167D /* PhotonActionSheetContainerCell.swift */; };
 		8A93080B27C01AD60052167D /* SingleActionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A93080A27C01AD60052167D /* SingleActionViewModel.swift */; };
@@ -7445,6 +7446,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				43F93C2827A8683E009833D9 /* RustMozillaAppServices.framework in Frameworks */,
+				8A8BAE142B21110000D774EB /* GCDWebServers in Frameworks */,
 				E6231C081B90A71E005ABB0D /* libz.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -11619,6 +11621,7 @@
 			);
 			name = ClientTests;
 			packageProductDependencies = (
+				8A8BAE132B21110000D774EB /* GCDWebServers */,
 			);
 			productName = ClientTests;
 			productReference = F84B21D31A090F8100AAB793 /* ClientTests.xctest */;
@@ -20254,6 +20257,11 @@
 			productName = GCDWebServers;
 		};
 		8A8BAE112B2107E400D774EB /* GCDWebServers */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer" */;
+			productName = GCDWebServers;
+		};
+		8A8BAE132B21110000D774EB /* GCDWebServers */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer" */;
 			productName = GCDWebServers;

@@ -27,7 +27,7 @@ final class URLExtensionTests: XCTestCase {
 
     func testIsReaderModeURLGivenReaderModeURLThenTrue() {
         let url = URL(string: "http://localhost:\(webserverPort)/reader-mode/page")!
-        XCTAssertFalse(url.isReaderModeURL)
+        XCTAssertTrue(url.isReaderModeURL)
     }
 
     // MARK: isSyncedReaderModeURL tests
@@ -120,18 +120,9 @@ final class URLExtensionTests: XCTestCase {
         XCTAssertEqual(URL(string: stringURL)!.encodeReaderModeURL(readerURL), expectedReaderModeURL)
     }
 
-    func testEncodeReaderModeURL2() {
-        let ReaderURL = "http://localhost:\(webserverPort)/reader-mode/page"
-        let goodurls = [
-            ("https://en.m.wikipedia.org/wiki/Main_Page",
-             URL(string: "http://localhost:\(webserverPort)/reader-mode/page?url=https%3A%2F%2Fen%2Em%2Ewikipedia%2Eorg%2Fwiki%2FMain%5FPage"))
-        ]
-        goodurls.forEach { XCTAssertEqual(URL(string: $0.0)!.encodeReaderModeURL(ReaderURL), $0.1) }
-    }
-
     // MARK: safeEncodedUrl tests
 
-    func testJavaScriptSanitization() {
+    func testSafeEncodedUrlGivenJavaScriptSanitization() {
         // reader mode generic url sanitized JS to prevent XSS alert
         let url = URL(string: "http://localhost:1234/reader-mode/page?url=javascript:alert('ALERT')")!
         let genericUrl = url.safeEncodedUrl
@@ -139,7 +130,7 @@ final class URLExtensionTests: XCTestCase {
         XCTAssertTrue(genericUrl!.absoluteString.contains("javascript:alert(%26%2339;ALERT%26%2339;)"))
     }
 
-    func testScriptInnerHtmlTextSanitization() {
+    func testSafeEncodedUrlGivenScriptInnerHtmlTextSanitization() {
         // reader mode generic url script tags are sanitized to prevent body change
         let url = URL(string: "http://localhost:1234/reader-mode/page?url=javascript:document.body.innerText='Hello';")!
         let genericUrl = url.safeEncodedUrl
@@ -147,7 +138,7 @@ final class URLExtensionTests: XCTestCase {
         XCTAssertTrue(genericUrl!.absoluteString.contains("javascript:document.body.innerText%3D%26%2339;Hello%26%2339;;"))
     }
 
-    func testHTMLFontSanitization() {
+    func testSafeEncodedUrlGivenHTMLFontSanitization() {
         // reader mode generic url with HTML is sanitized
         let url = URL(string: "http://localhost:1234/reader-mode/page?url=javascript:document.body.style.fontSize='50px';")!
         let genericUrl = url.safeEncodedUrl
@@ -155,7 +146,7 @@ final class URLExtensionTests: XCTestCase {
         XCTAssertTrue(genericUrl!.absoluteString.contains("javascript:document.body.style.fontSize%3D%26%2339;50px%26%2339;;"))
     }
 
-    func testJavaScriptSanitizationNonLocalhost() {
+    func testSafeEncodedUrlGivenJavaScriptSanitizationNonLocalhost() {
         // Check if JavaScript code in a non-localhost URL is sanitized
         let url = URL(string: "http://example.com/reader-mode/page?url=javascript:alert('XSS')")!
         let genericUrl = url.safeEncodedUrl
@@ -163,25 +154,25 @@ final class URLExtensionTests: XCTestCase {
         XCTAssertTrue(genericUrl!.absoluteString.contains("javascript:alert(%26%2339;XSS%26%2339;)"))
     }
 
-    func testSafeEncodedUrlEmptyPath() {
+    func testSafeEncodedUrlGivenEmptyPath() {
         let url = URL(string: "http://localhost:1234")!
         let safeUrl = url.safeEncodedUrl
         XCTAssertNotNil(safeUrl)
     }
 
-    func testSafeEncodedUrlEmptyScheme() {
+    func testSafeEncodedUrlGivenEmptyScheme() {
         let url = URL(string: "//localhost:1234/page")!
         let safeUrl = url.safeEncodedUrl
         XCTAssertNil(safeUrl)
     }
 
-    func testSafeEncodedUrlMissingComponentsJS() {
+    func testSafeEncodedUrlGivenMissingComponentsJS() {
         let url = URL(string: "javascript:blob")!
         let safeUrl = url.safeEncodedUrl
         XCTAssertNil(safeUrl)
     }
 
-    func testSafeEncodedUrlMissingComponents() {
+    func testSafeEncodedUrlGivenMissingComponents() {
         let url = URL(string: "/page?url=javascript")!
         let safeUrl = url.safeEncodedUrl
         XCTAssertNil(safeUrl)
