@@ -23,6 +23,22 @@ struct FakespotAdViewModel {
     var dismissViewController: (() -> Void)?
     let productAdsData: ProductAdsResponse
 
+    var formattedPrice: String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        formatter.currencyCode = productAdsData.currency
+
+        let fallBackPrice = productAdsData.currency + productAdsData.price
+
+        guard let price = Double(productAdsData.price) else {
+            return fallBackPrice
+        }
+
+        return formatter.string(from: NSNumber(value: price)) ?? fallBackPrice
+    }
+
     // MARK: Init
     init(tabManager: TabManager = AppContainer.shared.resolve(),
          productAdsData: ProductAdsResponse) {
