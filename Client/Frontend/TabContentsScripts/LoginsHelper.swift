@@ -8,13 +8,10 @@ import Shared
 import Storage
 import WebKit
 
-class LoginsHelper: TabContentScript, Themeable {
-    var themeManager: Common.ThemeManager
-    var themeObserver: NSObjectProtocol?
-    var notificationCenter: Common.NotificationProtocol
-
+class LoginsHelper: TabContentScript {
     private weak var tab: Tab?
     private let profile: Profile
+    private let theme: Theme
     private var snackBar: SnackBar?
 
     // Exposed for mocking purposes
@@ -23,19 +20,13 @@ class LoginsHelper: TabContentScript, Themeable {
     }
 
     class func name() -> String {
-        return "LoginsHelper"
+        String(describing: self)
     }
 
-    required init(
-        tab: Tab,
-        profile: Profile,
-        notificationCenter: NotificationProtocol = NotificationCenter.default,
-        themeManager: ThemeManager = AppContainer.shared.resolve()
-    ) {
-        self.notificationCenter = notificationCenter
-        self.themeManager = themeManager
+    required init(tab: Tab, profile: Profile, theme: Theme) {
         self.tab = tab
         self.profile = profile
+        self.theme = theme
     }
 
     func scriptMessageHandlerName() -> String? {
@@ -197,7 +188,7 @@ class LoginsHelper: TabContentScript, Themeable {
             _ = self.profile.logins.addLogin(login: login)
         }
 
-        applyTheme(views: dontSave, save, snackBar!)
+        applyTheme(for: dontSave, save)
         snackBar?.addButton(dontSave)
         snackBar?.addButton(save)
         tab?.addSnackbar(snackBar!)
@@ -230,7 +221,7 @@ class LoginsHelper: TabContentScript, Themeable {
             _ = self.profile.logins.updateLogin(id: old.id, login: new)
         }
 
-        applyTheme(views: dontSave, update, snackBar!)
+        applyTheme(for: dontSave, update)
         snackBar?.addButton(dontSave)
         snackBar?.addButton(update)
         tab?.addSnackbar(snackBar!)
@@ -271,16 +262,14 @@ class LoginsHelper: TabContentScript, Themeable {
         }
     }
 
-    // MARK: Themeable
-    private func applyTheme(views: UIView...) {
+    // MARK: Theming System
+    private func applyTheme(for views: UIView...) {
         views.forEach { view in
             if let view = view as? ThemeApplicable {
-                view.applyTheme(theme: themeManager.currentTheme)
+                view.applyTheme(theme: theme)
             }
         }
     }
-
-    func applyTheme() {}
 
     // MARK: - Telemetry
     private func sendLoginsModifiedTelemetry() {

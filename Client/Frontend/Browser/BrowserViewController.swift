@@ -1980,7 +1980,11 @@ extension BrowserViewController: LegacyTabDelegate {
 
         // only add the logins helper if the tab is not a private browsing tab
         if !tab.isPrivate {
-            let logins = LoginsHelper(tab: tab, profile: profile)
+            let logins = LoginsHelper(
+                tab: tab,
+                profile: profile,
+                theme: themeManager.currentTheme
+            )
             tab.addContentScript(logins, name: LoginsHelper.name())
         }
 
@@ -2055,7 +2059,7 @@ extension BrowserViewController: LegacyTabDelegate {
         // the selected Tab, do nothing right now. If/when the Tab gets
         // selected later, we will show the SnackBar at that time.
         guard tab == tabManager.selectedTab else { return }
-
+        bar.applyTheme(theme: themeManager.currentTheme)
         bottomContentStackView.addArrangedViewToBottom(bar, completion: {
             self.view.layoutIfNeeded()
         })
