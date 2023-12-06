@@ -85,16 +85,19 @@ extension ContentBlocker {
     }
 
     func readSafelistFile() -> [String]? {
-        if  let fileURL = safelistFileURL(),
-            FileManager.default.fileExists(atPath: fileURL.path) {
+        guard let fileURL = safelistFileURL() else { return nil }
+
+        if FileManager.default.fileExists(atPath: fileURL.path) {
             return readSafelistFile(fileURL: fileURL)
 
             // read file data, then move to new location
         } else if let oldFileURL = oldSafelistFileURL(),
                   FileManager.default.fileExists(atPath: oldFileURL.path) {
             let data = readSafelistFile(fileURL: oldFileURL)
-            if let newFileURL = safelistFileURL() {
-                try? FileManager.default.moveItem(at: oldFileURL, to: newFileURL)
+            do {
+                try FileManager.default.moveItem(at: oldFileURL, to: fileURL)
+            } catch {
+                logger.log("Failed to move file from \(oldFileURL) to \(fileURL) for safe list file with error: \(error)", level: .warning, category: .webview)
             }
             return data
         }
