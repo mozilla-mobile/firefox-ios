@@ -85,13 +85,9 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
         normalTintColor = theme.colors.actionPrimary
         backgroundColor = normalTintColor
 
-        foregroundColorForState = { state in
-            switch state {
-            case [.highlighted]:
-                return theme.colors.actionPrimaryHover
-            default:
-                return theme.colors.textInverted
-            }
+        foregroundColorForState = { _ in
+            // For this button, all states should use colors.textInverted
+            theme.colors.textInverted
         }
         updatedConfiguration.baseForegroundColor = foregroundColorForState?(state)
         configuration = updatedConfiguration
