@@ -256,7 +256,7 @@ struct FakespotClient: FakespotClientType {
         }
 
         // Prepare the request body
-        let requestBody: [String : Any] = [
+        let requestBody: [String: Any] = [
             "event_name": eventName,
             "event_source": eventSource,
             "aidvs": aidvs
@@ -268,7 +268,6 @@ struct FakespotClient: FakespotClientType {
 
     /// Asynchronous method to perform the API request and decode the response data.
     private func fetch<T: Decodable>(_ type: T.Type, url: URL, requestBody: [String: Any]) async throws -> T {
-
         // Serialize the request body to JSON data
         let jsonData = try JSONSerialization.data(withJSONObject: requestBody)
 
