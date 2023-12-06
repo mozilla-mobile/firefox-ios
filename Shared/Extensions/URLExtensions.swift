@@ -5,34 +5,6 @@
 import UIKit
 import Common
 
-// MARK: - Local Resource URL Extensions
-extension URL {
-    public func allocatedFileSize() -> Int64 {
-        // First try to get the total allocated size and in failing that, get the file allocated size
-        return getResourceLongLongForKey(URLResourceKey.totalFileAllocatedSizeKey.rawValue)
-            ?? getResourceLongLongForKey(URLResourceKey.fileAllocatedSizeKey.rawValue)
-            ?? 0
-    }
-
-    public func getResourceValueForKey(_ key: String) -> Any? {
-        let resourceKey = URLResourceKey(key)
-        let keySet = Set<URLResourceKey>([resourceKey])
-
-        var val: Any?
-        do {
-            let values = try resourceValues(forKeys: keySet)
-            val = values.allValues[resourceKey]
-        } catch _ {
-            return nil
-        }
-        return val
-    }
-
-    public func getResourceLongLongForKey(_ key: String) -> Int64? {
-        return (getResourceValueForKey(key) as? NSNumber)?.int64Value
-    }
-}
-
 // The list of permanent URI schemes has been taken from http://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml
 private let permanentURISchemes = ["aaa",
                                    "aaas",
@@ -217,23 +189,6 @@ extension URL {
         return nil
     }
 
-    /**
-     Returns a URL without a mobile prefix (`"m."` or `"mobile."`)
-     */
-    public func withoutMobilePrefix() -> URL {
-        let subDomainsToRemove: Set<String> = ["m", "mobile"]
-
-        guard var components = URLComponents(url: self, resolvingAgainstBaseURL: true) else { return self }
-        guard let parts = components.host?.split(separator: ".").filter({ !subDomainsToRemove.contains(String($0)) }) else { return self }
-
-        let host = parts.joined(separator: ".")
-
-        guard host != publicSuffix else { return self }
-        components.host = host
-
-        return components.url ?? self
-    }
-
     public func isWebPage(includeDataURIs: Bool = true) -> Bool {
         let schemes = includeDataURIs ? ["http", "https", "data"] : ["http", "https"]
         return scheme.map { schemes.contains($0) } ?? false
@@ -290,10 +245,6 @@ extension URL {
     public var isReaderModeURL: Bool {
         let scheme = self.scheme, host = self.host, path = self.path
         return scheme == "http" && host == "localhost" && path == "/reader-mode/page"
-    }
-
-    public var isSessionRestoreURL: Bool {
-        return absoluteString.hasPrefix("internal://local/sessionrestore?url=https")
     }
 
     public var isSyncedReaderModeURL: Bool {
@@ -379,123 +330,5 @@ extension URL {
         }
 
         return components?.url
-    }
-}
-
-// Helpers to deal with ErrorPage URLs
-
-public struct InternalURL {
-    public static let uuid = UUID().uuidString
-    public static let scheme = "internal"
-    public static let baseUrl = "\(scheme)://local"
-    public enum Path: String {
-        case errorpage
-        case sessionrestore
-        func matches(_ string: String) -> Bool {
-            return string.range(of: "/?\(self.rawValue)", options: .regularExpression, range: nil, locale: nil) != nil
-        }
-    }
-
-    public enum Param: String {
-        case uuidkey
-        case url
-        func matches(_ string: String) -> Bool { return string == self.rawValue }
-    }
-
-    public let url: URL
-
-    private let sessionRestoreHistoryItemBaseUrl = "\(InternalURL.baseUrl)/\(InternalURL.Path.sessionrestore.rawValue)?url="
-
-    public static func isValid(url: URL) -> Bool {
-        let isWebServerUrl = url.absoluteString.hasPrefix("http://localhost:\(AppInfo.webserverPort)/")
-        if isWebServerUrl, url.path.hasPrefix("/test-fixture/") {
-            // internal test pages need to be treated as external pages
-            return false
-        }
-
-        // TODO: (reader-mode-custom-scheme) remove isWebServerUrl when updating code.
-        return isWebServerUrl || InternalURL.scheme == url.scheme
-    }
-
-    public init?(_ url: URL) {
-        guard InternalURL.isValid(url: url) else { return nil }
-
-        self.url = url
-    }
-
-    public var isAuthorized: Bool {
-        return (url.getQuery()[InternalURL.Param.uuidkey.rawValue] ?? "") == InternalURL.uuid
-    }
-
-    public var stripAuthorization: String {
-        guard var components = URLComponents(string: url.absoluteString), let items = components.queryItems else { return url.absoluteString }
-        components.queryItems = items.filter { !Param.uuidkey.matches($0.name) }
-        if let items = components.queryItems, items.isEmpty {
-            components.queryItems = nil // This cleans up the url to not end with a '?'
-        }
-        return components.url?.absoluteString ?? ""
-    }
-
-    public static func authorize(url: URL) -> URL? {
-        guard var components = URLComponents(string: url.absoluteString) else { return nil }
-        if components.queryItems == nil {
-            components.queryItems = []
-        }
-
-        if var item = components.queryItems?.find({ Param.uuidkey.matches($0.name) }) {
-            item.value = InternalURL.uuid
-        } else {
-            components.queryItems?.append(URLQueryItem(name: Param.uuidkey.rawValue, value: InternalURL.uuid))
-        }
-        return components.url
-    }
-
-    public var isSessionRestore: Bool {
-        return url.absoluteString.hasPrefix(sessionRestoreHistoryItemBaseUrl)
-    }
-
-    public var isErrorPage: Bool {
-        // Error pages can be nested in session restore URLs, and session restore handler will forward them to the error page handler
-        let path = url.absoluteString.hasPrefix(sessionRestoreHistoryItemBaseUrl) ? extractedUrlParam?.path : url.path
-        return InternalURL.Path.errorpage.matches(path ?? "")
-    }
-
-    public var originalURLFromErrorPage: URL? {
-        if !url.absoluteString.hasPrefix(sessionRestoreHistoryItemBaseUrl) {
-            return isErrorPage ? extractedUrlParam : nil
-        }
-        if let urlParam = extractedUrlParam, let nested = InternalURL(urlParam), nested.isErrorPage {
-            return nested.extractedUrlParam
-        }
-        return nil
-    }
-
-    public var extractedUrlParam: URL? {
-        if let nestedUrl = url.getQuery()[InternalURL.Param.url.rawValue]?.unescape() {
-            return URL(string: nestedUrl, invalidCharacters: false)
-        }
-        return nil
-    }
-
-    public var isAboutHomeURL: Bool {
-        if let urlParam = extractedUrlParam, let internalUrlParam = InternalURL(urlParam) {
-            return internalUrlParam.aboutComponent?.hasPrefix("home") ?? false
-        }
-        return aboutComponent?.hasPrefix("home") ?? false
-    }
-
-    public var isAboutURL: Bool {
-        return aboutComponent != nil
-    }
-
-    /// Return the path after "about/" in the URI.
-    public var aboutComponent: String? {
-        let aboutPath = "/about/"
-        guard let url = URL(string: stripAuthorization, invalidCharacters: false) else { return nil }
-
-        if url.path.hasPrefix(aboutPath) {
-            return String(url.path.dropFirst(aboutPath.count))
-        }
-        return nil
     }
 }

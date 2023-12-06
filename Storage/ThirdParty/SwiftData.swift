@@ -1599,3 +1599,32 @@ private class LiveSQLiteCursor<T>: Cursor<T> {
         super.close()
     }
 }
+
+// Moved those extensions here as internal since they are only used in SwiftData.
+// Quickest way of ensuring those are only used here and will be removed when we're not using SwiftData anymore.
+extension URL {
+    func allocatedFileSize() -> Int64 {
+        // First try to get the total allocated size and in failing that, get the file allocated size
+        return getResourceLongLongForKey(URLResourceKey.totalFileAllocatedSizeKey.rawValue)
+        ?? getResourceLongLongForKey(URLResourceKey.fileAllocatedSizeKey.rawValue)
+        ?? 0
+    }
+
+    private func getResourceValueForKey(_ key: String) -> Any? {
+        let resourceKey = URLResourceKey(key)
+        let keySet = Set<URLResourceKey>([resourceKey])
+
+        var val: Any?
+        do {
+            let values = try resourceValues(forKeys: keySet)
+            val = values.allValues[resourceKey]
+        } catch _ {
+            return nil
+        }
+        return val
+    }
+
+    private func getResourceLongLongForKey(_ key: String) -> Int64? {
+        return (getResourceValueForKey(key) as? NSNumber)?.int64Value
+    }
+}
