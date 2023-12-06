@@ -30,7 +30,8 @@ features:
           A growable collection of messages, where the
           Key is the message identifier and the value
           is its associated MessageData.
-        type: Map<String, MessageData>
+        type: Map<MessageKey, MessageData>
+        string-alias: MessageKey
         default: {}
 
       triggers:
@@ -38,19 +39,22 @@ features:
           A collection of out the box trigger
           expressions. Each entry maps to a
           valid JEXL expression.
-        type: Map<String, String>
+        type: Map<TriggerName, String>
+        string-alias: TriggerName
         default: {}
 
       styles:
         description: >
           A map of styles to configure message
           appearance.
-        type: Map<String, StyleData>
+        type: Map<StyleName, StyleData>
+        string-alias: StyleName
         default: {}
 
       actions:
-        type: Map<String, String>
+        type: Map<ActionName, String>
         description: A growable map of action URLs.
+        string-alias: ActionName
         default: {}
 
       on-control:
@@ -58,8 +62,14 @@ features:
         description: What should be displayed when a control message is selected.
         default: show-next-message
 
+      $$experiment::
+        type: ExperimentSlug
+        string-alias: ExperimentSlug
+        description: Not to be set by experiment.
+        default: "{experiment}"
+
       message-under-experiment:
-        type: Option<String>
+        type: Option<MessageKey>
         description: 'Deprecated. Please use "experiment": "{experiment}" instead.'
         default: null
 
@@ -164,6 +174,8 @@ objects:
       and call to action.
     fields:
       action:
+        # We would like this to be of ActionName type, but it accepts https:// URLs
+        # so changing this would be a breaking change.
         type: String
         description: >
           A URL of a page or a deeplink.
@@ -190,13 +202,13 @@ objects:
           is present, the whole message is clickable.
         default: null
       style:
-        type: String
+        type: StyleName
         description: >
           The style as described in a
           `StyleData` from the styles table.
         default: DEFAULT
       trigger:
-        type: List<String>
+        type: List<TriggerName>
         description: >
           A list of strings corresponding to
           targeting expressions. The message will be
@@ -207,7 +219,7 @@ objects:
         description: Each message will tell us the surface it is targeting with this.
         default: Unknown
       experiment:
-        type: Option<String>
+        type: Option<ExperimentSlug>
         description: The experiment slug that this message is involved in.
         default: null
 
