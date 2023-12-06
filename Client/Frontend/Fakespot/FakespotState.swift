@@ -9,19 +9,9 @@ struct FakespotState: ScreenState, Equatable {
     var isOpen: Bool
     var sidebarOpenForiPadLandscape: Bool
 
-<<<<<<< HEAD
-    init(_ appState: AppState) {
-        guard let fakespotState = store.state.screenState(FakespotState.self, for: .fakespot) else {
-            self.init()
-            return
-        }
-
-        self.init(isOpenOnProductPage: fakespotState.isOpenOnProductPage)
-=======
     init(_ appState: BrowserViewControllerState) {
         self.init(isOpen: appState.fakespotState.isOpen,
                   sidebarOpenForiPadLandscape: appState.fakespotState.sidebarOpenForiPadLandscape)
->>>>>>> f8565a9a1 (Refactor FXIOS-7812 [v121] Fakespot - iPad - sidebar open/close state resets itself when user changes from landscape to portrait mode (#17587))
     }
 
     init() {

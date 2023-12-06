@@ -9,8 +9,12 @@ import MozillaAppServices
 import Common
 import ComponentLibrary
 
-class HomepageViewController: UIViewController, FeatureFlaggable, Themeable, ContentContainable,
-                                SearchBarLocationProvider {
+class HomepageViewController:
+    UIViewController,
+    FeatureFlaggable,
+    Themeable,
+    ContentContainable,
+    SearchBarLocationProvider {
     // MARK: - Typealiases
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
     typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate

@@ -55,12 +55,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        if isReduxIntegrationEnabled {
-            store.dispatch(ThemeSettingsAction.themeSettingsDidAppear)
-            store.subscribe(self, transform: {
-                $0.select(ThemeSettingsState.init)
-            })
-        }
+        subscribeToRedux()
 
         title = .SettingsDisplayThemeTitle
         tableView.accessibilityIdentifier = "DisplayTheme.Setting.Options"
@@ -76,6 +71,21 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        unsubscribeFromRedux()
+    }
+
+    // MARK: - Redux
+
+    func subscribeToRedux() {
+        if isReduxIntegrationEnabled {
+            store.dispatch(ThemeSettingsAction.themeSettingsDidAppear)
+            store.subscribe(self, transform: {
+                $0.select(ThemeSettingsState.init)
+            })
+        }
+    }
+
+    func unsubscribeFromRedux() {
         if isReduxIntegrationEnabled {
             store.dispatch(ActiveScreensStateAction.closeScreen(.themeSettings))
             store.unsubscribe(self)

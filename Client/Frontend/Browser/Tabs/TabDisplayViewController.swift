@@ -25,7 +25,6 @@ class TabDisplayViewController: UIViewController,
     private var backgroundPrivacyOverlay: UIView = .build()
     private lazy var emptyPrivateTabsView: EmptyPrivateTabsView = .build()
 
-    // MARK: Redux state
     var tabsState: TabsState
 
     init(isPrivateMode: Bool,
@@ -43,8 +42,7 @@ class TabDisplayViewController: UIViewController,
     }
 
     deinit {
-        store.dispatch(ActiveScreensStateAction.closeScreen(.tabsPanel))
-        store.unsubscribe(self)
+        unsubscribeFromRedux()
     }
 
     override func viewDidLoad() {
@@ -52,21 +50,7 @@ class TabDisplayViewController: UIViewController,
         setupView()
         listenForThemeChange(view)
         applyTheme()
-        subscribeRedux()
-    }
-
-    private func subscribeRedux() {
-        store.dispatch(ActiveScreensStateAction.showScreen(.tabsPanel))
-        store.dispatch(TabPanelAction.tabPanelDidLoad(tabsState.isPrivateMode))
-        store.subscribe(self, transform: {
-            return $0.select(TabsState.init)
-        })
-    }
-
-    func newState(state: TabsState) {
-        tabsState = state
-        tabDisplayView.newState(state: tabsState)
-        shouldShowEmptyView(tabsState.isPrivateTabsEmpty)
+        subscribeToRedux()
     }
 
     func setupView() {
@@ -114,6 +98,27 @@ class TabDisplayViewController: UIViewController,
     func applyTheme() {
         backgroundPrivacyOverlay.backgroundColor = themeManager.currentTheme.colors.layerScrim
         tabDisplayView.applyTheme(theme: themeManager.currentTheme)
+    }
+
+    // MARK: - Redux
+
+    func subscribeToRedux() {
+        store.dispatch(ActiveScreensStateAction.showScreen(.tabsPanel))
+        store.dispatch(TabPanelAction.tabPanelDidLoad(tabsState.isPrivateMode))
+        store.subscribe(self, transform: {
+            return $0.select(TabsState.init)
+        })
+    }
+
+    func unsubscribeFromRedux() {
+        store.dispatch(ActiveScreensStateAction.closeScreen(.tabsPanel))
+        store.unsubscribe(self)
+    }
+
+    func newState(state: TabsState) {
+        tabsState = state
+        tabDisplayView.newState(state: tabsState)
+        shouldShowEmptyView(tabsState.isPrivateTabsEmpty)
     }
 
     // MARK: EmptyPrivateTabsViewDelegate
