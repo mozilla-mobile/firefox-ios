@@ -817,6 +817,7 @@
 		8AFCE50729DE0CD500B1B253 /* LaunchCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFCE50629DE0CD500B1B253 /* LaunchCoordinatorTests.swift */; };
 		8AFCE50929DE136300B1B253 /* MockLaunchFinishedLoadingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFCE50829DE136300B1B253 /* MockLaunchFinishedLoadingDelegate.swift */; };
 		8AFE4C2127480D0C00B97C65 /* LegacyTabTrayViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFE4C2027480D0B00B97C65 /* LegacyTabTrayViewControllerTests.swift */; };
+		8C29627C2B1F473800571655 /* AdEventsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C29627B2B1F473800571655 /* AdEventsResponse.swift */; };
 		8C44A9D22A6A99FE009A1AA7 /* ShoppingProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C44A9D12A6A99FE009A1AA7 /* ShoppingProduct.swift */; };
 		8C6F94652A972EB300415FF6 /* FakespotAdjustRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6F94632A972EB300415FF6 /* FakespotAdjustRatingView.swift */; };
 		8C6F94662A972EB300415FF6 /* FakespotStarRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6F94642A972EB300415FF6 /* FakespotStarRatingView.swift */; };
@@ -5407,6 +5408,7 @@
 		8BFA4413BB71963DB0E69F82 /* ses */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ses; path = ses.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		8BFD47109E07F897D604AEBE /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		8C264BF5A1C7B2B6378D4DFF /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/Today.strings; sourceTree = "<group>"; };
+		8C29627B2B1F473800571655 /* AdEventsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdEventsResponse.swift; sourceTree = "<group>"; };
 		8C44A9D12A6A99FE009A1AA7 /* ShoppingProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingProduct.swift; sourceTree = "<group>"; };
 		8C514AFEABEF8DE46CE7B8D4 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		8C6DA7D02A6FE78F00DE264F /* ShoppingProductTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingProductTests.swift; sourceTree = "<group>"; };
@@ -9191,6 +9193,7 @@
 				8C92DE922A7128DE0090BD28 /* ProductAdsResponse.swift */,
 				8CCCB08A2AE26B5C0073ADB9 /* ReportResponse.swift */,
 				8C92DE902A7128CB0090BD28 /* ProductAnalysisResponse.swift */,
+				8C29627B2B1F473800571655 /* AdEventsResponse.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -13165,6 +13168,7 @@
 				D0E55C4F1FB4FD23006DC274 /* FormPostHelper.swift in Sources */,
 				E118B9292862674E00C84831 /* LegacyInactiveTabItemCellModel.swift in Sources */,
 				C88E7A552A0553180072E638 /* OnboardingViewModel.swift in Sources */,
+				8C29627C2B1F473800571655 /* AdEventsResponse.swift in Sources */,
 				962021E128B8078400BDF3D9 /* ContextualHintCopyProvider.swift in Sources */,
 				8AE1E1D227B1ADC40024C45E /* TopBottomInterchangeable.swift in Sources */,
 				8A7653BD28A2C61D00924ABF /* PocketDataAdaptor.swift in Sources */,
