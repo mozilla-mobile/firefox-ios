@@ -36,7 +36,7 @@ class RemoteTabsCoordinator: BaseCoordinator, RemoteTabsCoordinatorDelegate, QRC
                                                                 deepLinkParams: fxaParams)
         fxAccountViewController = viewController
         fxAccountViewController?.qrCodeNavigationHandler = self
-        let buttonItem = UIBarButtonItem(title: .CloseButtonTitle, style: .plain, target: self, action: #selector(dismissVC))
+        let buttonItem = UIBarButtonItem(title: .CloseButtonTitle, style: .plain, target: self, action: #selector(dismissFxAViewController))
         fxAccountViewController?.navigationItem.leftBarButtonItem = buttonItem
         let navController = ThemedNavigationController(rootViewController: viewController)
         router.present(navController)
@@ -56,7 +56,7 @@ class RemoteTabsCoordinator: BaseCoordinator, RemoteTabsCoordinatorDelegate, QRC
     }
 
     @objc
-    func dismissVC() {
+    func dismissFxAViewController() {
         fxAccountViewController?.dismissVC()
     }
 

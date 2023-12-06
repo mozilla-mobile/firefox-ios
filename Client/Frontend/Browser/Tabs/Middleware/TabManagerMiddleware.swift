@@ -88,6 +88,11 @@ class TabManagerMiddleware {
             store.dispatch(TabPanelAction.refreshTab(tabs))
             store.dispatch(TabTrayAction.dismissTabTray)
 
+        case RemoteTabsPanelAction.openSelectedURL(let url):
+            let urlRequest = URLRequest(url: url)
+            self.addNewTab(with: urlRequest, isPrivate: false)
+            store.dispatch(TabTrayAction.dismissTabTray)
+
         case TabManagerAction.tabManagerDidConnectToScene(let manager, let sceneUUID):
             self.setTabManager(manager, for: sceneUUID)
         default:

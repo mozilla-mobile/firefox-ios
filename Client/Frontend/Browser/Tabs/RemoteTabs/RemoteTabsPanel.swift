@@ -146,8 +146,7 @@ class RemoteTabsPanel: UIViewController,
 
     // MARK: - RemoteTabsClientAndTabsDataSourceDelegate
     func remoteTabsClientAndTabsDataSourceDidSelectURL(_ url: URL, visitType: VisitType) {
-        // Pass event along to our delegate
-//        remotePanelDelegate?.remotePanel(didSelectURL: url, visitType: VisitType.typed)
+        handleOpenSelectedURL(url)
     }
 
     // MARK: - RemotePanelDelegate
@@ -156,15 +155,15 @@ class RemoteTabsPanel: UIViewController,
     }
 
     func remotePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
-        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .syncTab)
-//        self.openInNewTab?(url, isPrivate)
-        self.dismissVC()
+        handleOpenSelectedURL(url)
     }
 
     func remotePanel(didSelectURL url: URL, visitType: VisitType) {
+        handleOpenSelectedURL(url)
+    }
+
+    private func handleOpenSelectedURL(_ url: URL) {
         TelemetryWrapper.recordEvent(category: .action, method: .open, object: .syncTab)
-        // TODO: [FXIOS-6928] Provide handler for didSelectURL.
-//        self.didSelectUrl?(url, visitType)
-        self.dismissVC()
+        store.dispatch(RemoteTabsPanelAction.openSelectedURL(url))
     }
 }
