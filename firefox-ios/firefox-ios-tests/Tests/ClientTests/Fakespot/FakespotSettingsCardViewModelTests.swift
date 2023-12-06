@@ -14,7 +14,7 @@ final class FakespotSettingsCardViewModelTests: XCTestCase {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         mockProfile = MockProfile()
-        viewModel = FakespotSettingsCardViewModel(profile: mockProfile)
+        viewModel = FakespotSettingsCardViewModel(profile: mockProfile, tabManager: MockTabManager())
     }
 
     override func tearDown() {

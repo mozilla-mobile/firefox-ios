@@ -35,8 +35,8 @@ class BrowserCoordinator: BaseCoordinator,
 
     init(router: Router,
          screenshotService: ScreenshotService,
+         tabManager: TabManager,
          profile: Profile = AppContainer.shared.resolve(),
-         tabManager: TabManager = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          glean: GleanWrapper = DefaultGleanWrapper.shared,
          applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
@@ -70,6 +70,10 @@ class BrowserCoordinator: BaseCoordinator,
         guard ReduxFlagManager.isReduxEnabled else { return }
         let sceneUUID = WindowData.DefaultSingleWindowUUID
         store.dispatch(TabManagerAction.tabManagerDidConnectToScene(tabManager, sceneUUID))
+
+        // TODO [7856]: Additional telemetry updates forthcoming once iPad multi-window enabled.
+        // For now, we only have a single BVC and TabManager. Plug it into our TelemetryWrapper:
+        TelemetryWrapper.shared.defaultTabManager = tabManager
     }
 
     private func startLaunch(with launchType: LaunchType) {
@@ -150,6 +154,7 @@ class BrowserCoordinator: BaseCoordinator,
                 profile: profile,
                 isZeroSearch: inline,
                 toastContainer: toastContainer,
+                tabManager: tabManager,
                 overlayManager: overlayManager)
             homepageViewController.homePanelDelegate = homepanelDelegate
             homepageViewController.libraryPanelDelegate = libraryPanelDelegate
@@ -294,7 +299,7 @@ class BrowserCoordinator: BaseCoordinator,
         navigationController.modalPresentationStyle = modalPresentationStyle
         let settingsRouter = DefaultRouter(navigationController: navigationController)
 
-        let settingsCoordinator = SettingsCoordinator(router: settingsRouter)
+        let settingsCoordinator = SettingsCoordinator(router: settingsRouter, tabManager: tabManager)
         settingsCoordinator.parentCoordinator = self
         add(child: settingsCoordinator)
         settingsCoordinator.start(with: section)
@@ -313,7 +318,8 @@ class BrowserCoordinator: BaseCoordinator,
             navigationController.modalPresentationStyle = .formSheet
 
             let libraryCoordinator = LibraryCoordinator(
-                router: DefaultRouter(navigationController: navigationController)
+                router: DefaultRouter(navigationController: navigationController),
+                tabManager: browserViewController.tabManager
             )
             libraryCoordinator.parentCoordinator = self
             add(child: libraryCoordinator)
@@ -324,7 +330,8 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     private func showETPMenu(sourceView: UIView) {
-        let enhancedTrackingProtectionCoordinator = EnhancedTrackingProtectionCoordinator(router: router)
+        let enhancedTrackingProtectionCoordinator = EnhancedTrackingProtectionCoordinator(router: router,
+                                                                                          tabManager: tabManager)
         enhancedTrackingProtectionCoordinator.parentCoordinator = self
         add(child: enhancedTrackingProtectionCoordinator)
         enhancedTrackingProtectionCoordinator.start(sourceView: sourceView)
@@ -455,7 +462,7 @@ class BrowserCoordinator: BaseCoordinator,
             return nil // flow is already handled
         }
 
-        let coordinator = FakespotCoordinator(router: router)
+        let coordinator = FakespotCoordinator(router: router, tabManager: tabManager)
         coordinator.parentCoordinator = self
         add(child: coordinator)
         return coordinator
@@ -467,7 +474,7 @@ class BrowserCoordinator: BaseCoordinator,
             // If this case is hitted it means the share extension coordinator wasn't removed correctly in the previous session.
             return
         }
-        let shareExtensionCoordinator = ShareExtensionCoordinator(alertContainer: toastContainer, router: router, profile: profile, parentCoordinator: self)
+        let shareExtensionCoordinator = ShareExtensionCoordinator(alertContainer: toastContainer, router: router, profile: profile, parentCoordinator: self, tabManager: tabManager)
         add(child: shareExtensionCoordinator)
         shareExtensionCoordinator.start(url: url, sourceView: sourceView, sourceRect: sourceRect, popoverArrowDirection: popoverArrowDirection)
     }
@@ -490,7 +497,7 @@ class BrowserCoordinator: BaseCoordinator,
         if let bottomSheetCoordinator = childCoordinators.first(where: { $0 is CredentialAutofillCoordinator }) as? CredentialAutofillCoordinator {
             return bottomSheetCoordinator
         }
-        let bottomSheetCoordinator = CredentialAutofillCoordinator(profile: profile, router: router, parentCoordinator: self)
+        let bottomSheetCoordinator = CredentialAutofillCoordinator(profile: profile, router: router, parentCoordinator: self, tabManager: tabManager)
         add(child: bottomSheetCoordinator)
         return bottomSheetCoordinator
     }

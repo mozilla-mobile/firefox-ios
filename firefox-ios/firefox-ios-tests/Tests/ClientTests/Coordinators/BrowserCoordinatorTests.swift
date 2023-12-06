@@ -94,7 +94,10 @@ final class BrowserCoordinatorTests: XCTestCase {
                              statusBarScrollDelegate: scrollDelegate,
                              overlayManager: overlayModeManager)
 
-        let secondHomepage = HomepageViewController(profile: profile, toastContainer: UIView(), overlayManager: overlayModeManager)
+        let secondHomepage = HomepageViewController(profile: profile,
+                                                    toastContainer: UIView(),
+                                                    tabManager: tabManager,
+                                                    overlayManager: overlayModeManager)
         XCTAssertFalse(subject.browserViewController.contentContainer.canAdd(content: secondHomepage))
         XCTAssertNotNil(subject.homepageViewController)
         XCTAssertNil(subject.webviewController)
@@ -279,7 +282,8 @@ final class BrowserCoordinatorTests: XCTestCase {
         let childCoordinator = ShareExtensionCoordinator(
             alertContainer: UIView(),
             router: mockRouter,
-            profile: profile)
+            profile: profile,
+            tabManager: tabManager)
 
         subject.add(child: childCoordinator)
         subject.didFinish(from: childCoordinator)
@@ -920,8 +924,8 @@ final class BrowserCoordinatorTests: XCTestCase {
                                line: UInt = #line) -> BrowserCoordinator {
         let subject = BrowserCoordinator(router: mockRouter,
                                          screenshotService: screenshotService,
-                                         profile: profile,
                                          tabManager: tabManager,
+                                         profile: profile,
                                          glean: glean,
                                          applicationHelper: applicationHelper)
 

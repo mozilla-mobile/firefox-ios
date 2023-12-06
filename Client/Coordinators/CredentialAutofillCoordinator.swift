@@ -25,7 +25,7 @@ class CredentialAutofillCoordinator: BaseCoordinator {
         router: Router,
         parentCoordinator: BottomSheetCardParentCoordinator?,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
-        tabManager: TabManager = AppContainer.shared.resolve()
+        tabManager: TabManager
     ) {
         self.profile = profile
         self.themeManager = themeManager

@@ -24,7 +24,7 @@ struct FakespotAdViewModel {
     let productAdsData: ProductAdsResponse
 
     // MARK: Init
-    init(tabManager: TabManager = AppContainer.shared.resolve(),
+    init(tabManager: TabManager,
          productAdsData: ProductAdsResponse) {
         self.tabManager = tabManager
         self.productAdsData = productAdsData
