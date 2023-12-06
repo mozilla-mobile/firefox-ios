@@ -178,7 +178,7 @@
 		21F2A2D22B0BC85200626AEC /* InactiveTabsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F2A2D12B0BC85200626AEC /* InactiveTabsModel.swift */; };
 		21F2A2D42B0D194A00626AEC /* TabsPanelStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F2A2D32B0D194A00626AEC /* TabsPanelStateTests.swift */; };
 		21FA8FAE2AE856460013B815 /* TabsCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FA8FAD2AE856460013B815 /* TabsCoordinatorTests.swift */; };
-		21FA8FB02AE856590013B815 /* SyncedTabsCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FA8FAF2AE856590013B815 /* SyncedTabsCoordinatorTests.swift */; };
+		21FA8FB02AE856590013B815 /* RemoteTabsCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FA8FAF2AE856590013B815 /* RemoteTabsCoordinatorTests.swift */; };
 		21FA8FB22AE856EB0013B815 /* MockTabTrayCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FA8FB12AE856EB0013B815 /* MockTabTrayCoordinatorDelegate.swift */; };
 		2386E4E624F8358E0072EF17 /* HomepageMessageCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2386E4E524F8358E0072EF17 /* HomepageMessageCard.swift */; };
 		23BEA767251A99ED00A014BF /* NewYorkMedium-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 23BEA766251A99E300A014BF /* NewYorkMedium-Bold.otf */; };
@@ -2286,7 +2286,7 @@
 		21F2A2D12B0BC85200626AEC /* InactiveTabsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InactiveTabsModel.swift; sourceTree = "<group>"; };
 		21F2A2D32B0D194A00626AEC /* TabsPanelStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsPanelStateTests.swift; sourceTree = "<group>"; };
 		21FA8FAD2AE856460013B815 /* TabsCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsCoordinatorTests.swift; sourceTree = "<group>"; };
-		21FA8FAF2AE856590013B815 /* SyncedTabsCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncedTabsCoordinatorTests.swift; sourceTree = "<group>"; };
+		21FA8FAF2AE856590013B815 /* RemoteTabsCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsCoordinatorTests.swift; sourceTree = "<group>"; };
 		21FA8FB12AE856EB0013B815 /* MockTabTrayCoordinatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTabTrayCoordinatorDelegate.swift; sourceTree = "<group>"; };
 		220A4CC8B2685EEA3146A967 /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		222F456780B38CE88601C7E1 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/Shared.strings; sourceTree = "<group>"; };
@@ -7748,7 +7748,7 @@
 			children = (
 				21420EF82ABC75A400B28550 /* TabTrayCoordinatorTests.swift */,
 				21FA8FAD2AE856460013B815 /* TabsCoordinatorTests.swift */,
-				21FA8FAF2AE856590013B815 /* SyncedTabsCoordinatorTests.swift */,
+				21FA8FAF2AE856590013B815 /* RemoteTabsCoordinatorTests.swift */,
 			);
 			path = TabTray;
 			sourceTree = "<group>";
@@ -13602,7 +13602,7 @@
 				DF940A0C2A96352B00C1497D /* FakespotSettingsCardViewModelTests.swift in Sources */,
 				281B2BEA1ADF4D90002917DC /* MockProfile.swift in Sources */,
 				96AF8C1C29FC14F700EC2219 /* CreditCardInputFieldHelperTests.swift in Sources */,
-				21FA8FB02AE856590013B815 /* SyncedTabsCoordinatorTests.swift in Sources */,
+				21FA8FB02AE856590013B815 /* RemoteTabsCoordinatorTests.swift in Sources */,
 				C80C11F428B3CD580062922A /* MockUserDefaultsTests.swift in Sources */,
 				2F697F7E1A9FD22D009E03AE /* SearchEnginesTests.swift in Sources */,
 				2197DF8A287624BF00215624 /* LibraryViewModelTests.swift in Sources */,

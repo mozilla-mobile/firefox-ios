@@ -5,7 +5,6 @@
 import Foundation
 
 protocol RemoteTabsCoordinatorDelegate: AnyObject {
-    func openInNewTab(_ url: URL, isPrivate: Bool)
     func presentFirefoxAccountSignIn()
 }
 
@@ -27,8 +26,6 @@ class RemoteTabsCoordinator: BaseCoordinator, RemoteTabsCoordinatorDelegate, QRC
     }
 
     // MARK: - RemoteTabsNavigationHandler
-    func openInNewTab(_ url: URL, isPrivate: Bool) {}
-
     func presentFirefoxAccountSignIn() {
         let fxaParams = FxALaunchParams(entrypoint: .homepanel, query: [:])
         let viewController = FirefoxAccountSignInViewController(profile: profile,

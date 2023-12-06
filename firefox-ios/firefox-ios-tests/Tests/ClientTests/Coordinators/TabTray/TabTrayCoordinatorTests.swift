@@ -7,17 +7,20 @@ import XCTest
 
 final class TabTrayCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
+    private var profile: MockProfile!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        self.mockRouter = MockRouter(navigationController: MockNavigationController())
+        mockRouter = MockRouter(navigationController: MockNavigationController())
+        profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 
     override func tearDown() {
         super.tearDown()
-        self.mockRouter = nil
+        mockRouter = nil
+        profile = nil
         DependencyHelperMock().reset()
     }
 
@@ -65,7 +68,8 @@ final class TabTrayCoordinatorTests: XCTestCase {
                                file: StaticString = #file,
                                line: UInt = #line) -> TabTrayCoordinator {
         let subject = TabTrayCoordinator(router: mockRouter,
-                                         tabTraySection: panelType)
+                                         tabTraySection: panelType,
+                                         profile: profile)
 
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
