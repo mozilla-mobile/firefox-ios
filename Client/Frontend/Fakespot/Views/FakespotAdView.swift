@@ -147,7 +147,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         footerLabel.text = viewModel.footerText
         footerLabel.accessibilityIdentifier = viewModel.footerA11yId
 
-        priceLabel.text = productAdsData.currency + productAdsData.price
+        priceLabel.text = viewModel.formattedPrice
         priceLabel.accessibilityIdentifier = viewModel.priceA11yId
 
         starRatingView.rating = productAdsData.adjustedRating
