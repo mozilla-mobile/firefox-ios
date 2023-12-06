@@ -210,8 +210,8 @@ class LegacyRemoteTabsTableViewController: UITableViewController, Themeable {
         if !isTabSyncEnabled { errorMessage = .syncDisabledByUser }
 
         let remoteTabsErrorView = LegacyRemoteTabsErrorDataSource(remoteTabsDelegateProvider: remoteTabsPanel,
-                                                            error: errorMessage,
-                                                            theme: themeManager.currentTheme)
+                                                                  error: errorMessage,
+                                                                  theme: themeManager.currentTheme)
         tableViewDelegate = remoteTabsErrorView
 
         tableView.reloadData()
