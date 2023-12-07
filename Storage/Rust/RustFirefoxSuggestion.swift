@@ -6,9 +6,10 @@ import Foundation
 import MozillaAppServices
 import UIKit
 
-/// Information used to record .... TODO TIF
+/// Additional inforamtion about a Firefox Suggestion to record
+/// in telemetry when the user interacts with the suggestion
 public enum RustFirefoxSuggestionInteractionInfo {
-    case amp(blockId: Int64, advertiser: String, iabCategory: String, reportingURL: URL)
+    case amp(blockId: Int64, advertiser: String, iabCategory: String, reportingURL: URL?)
     case wikipedia
     
 }
@@ -39,7 +40,7 @@ public struct RustFirefoxSuggestion {
             self.isSponsored = true
             self.iconImage = iconBytes.flatMap { UIImage(data: Data($0)) }
             self.fullKeyword = fullKeyword
-            self.clickInfo = RustFirefoxSuggestionInteractionInfo.amp(blockId: blockId, advertiser: advertiser, iabCategory: iabCategory, reportingURL: URL(string: clickUrlString))
+            self.clickInfo = .amp(blockId: blockId, advertiser: advertiser, iabCategory: iabCategory, reportingURL: URL(string: clickUrlString) ?? nil )
             
         } else if case let .wikipedia(title, urlString, iconBytes, fullKeyword) = suggestion {
             // This use of `URL(string:)` is OK.
@@ -49,7 +50,7 @@ public struct RustFirefoxSuggestion {
             self.isSponsored = false
             self.iconImage = iconBytes.flatMap { UIImage(data: Data($0)) }
             self.fullKeyword = fullKeyword
-            self.clickInfo = RustFirefoxSuggestionInteractionInfo.wikipedia
+            self.clickInfo = .wikipedia
 
         } else {
             return nil

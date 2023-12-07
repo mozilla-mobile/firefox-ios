@@ -594,10 +594,10 @@ class SearchViewController: SiteTableViewController,
         case .firefoxSuggestions:
             let firefoxSuggestion = firefoxSuggestions[indexPath.row]
             if let clickInfo = firefoxSuggestion.clickInfo {
-                let position = SearchListSection.allCases.prefix { $0.rawValue < indexPath.section }
+                let position = SearchListSection.allCases.filter { $0.rawValue < indexPath.section }
                     .reduce(0) { $0 + self.tableView(tableView, numberOfRowsInSection: $1.rawValue) }
-                + indexPath.row
-                recordFirefoxSuggestSelectionTelemetry(suggestion: clickInfo, position: position)
+                + indexPath.row + 1
+                recordFirefoxSuggestSelectionTelemetry(clickInfo: clickInfo, position: position)
             }
 
             searchDelegate?.searchViewController(self, didSelectURL: firefoxSuggestion.url, searchTerm: nil)
@@ -874,11 +874,11 @@ private extension SearchViewController {
                                      extras: [key: extra])
     }
 
-    func recordFirefoxSuggestSelectionTelemetry(suggestion: RustFirefoxSuggestionInteractionInfo, position: Int64){
+    func recordFirefoxSuggestSelectionTelemetry(clickInfo: RustFirefoxSuggestionInteractionInfo, position: Int){
         TelemetryWrapper.gleanRecordEvent(category: .action, 
                                           method: .tap,
                                           object: TelemetryWrapper.EventObject.fxSuggest,
-                                          extras: [TelemetryWrapper.EventValue.fxSuggestionClickInfo.rawValue : suggestion, TelemetryWrapper.EventValue.fxSuggestionPosition.rawValue : position ])
+                                          extras: [TelemetryWrapper.EventValue.fxSuggestionClickInfo.rawValue : clickInfo, TelemetryWrapper.EventValue.fxSuggestionPosition.rawValue : position ])
     }
 }
 

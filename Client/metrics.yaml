@@ -4877,9 +4877,9 @@ fx_suggest:
     description: >
       The ping's type. Either "fxsuggest-click" or "fxsuggest-impression".
     bugs:
-      - TODO
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-7473
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17556
     data_sensitivity:
       - interaction
     notification_emails:
@@ -4897,9 +4897,9 @@ fx_suggest:
       The position (1-based) of this suggestion in the full list of suggestions, relative to the
       top of the awesomebar.
     bugs:
-      - TODO
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-7473
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17556
     data_sensitivity:
       - interaction
     notification_emails:
@@ -4915,9 +4915,9 @@ fx_suggest:
     description: |
       A unique identifier for a sponsored suggestion. Not set for non-sponsored suggestions.
     bugs:
-      - TODO
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-7473
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17556
     data_sensitivity:
       - interaction
     notification_emails:
@@ -4934,9 +4934,9 @@ fx_suggest:
     description: |
       The name of the advertiser providing the sponsored suggestion
     bugs:
-      - TODO
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-7473
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17556
     data_sensitivity:
       - interaction
     notification_emails:
@@ -4953,9 +4953,9 @@ fx_suggest:
       If this ping is for a sponsored suggestion, the partner URL for reporting this interaction.
       Not set for non-sponsored suggestions.
     bugs:
-      - TODO
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-7473
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17556
     data_sensitivity:
       - interaction
     notification_emails:
@@ -4971,9 +4971,9 @@ fx_suggest:
     description: |
       An identifier to identify users for Contextual Services user interaction pings.
     bugs:
-      - TODO
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-7473
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17556
     data_sensitivity:
       - interaction
     notification_emails:
@@ -4990,9 +4990,9 @@ fx_suggest:
       The suggestion's advertising category. "22 - Shopping" for sponsored suggestions.
       Not set for non-sponsored suggestions.
     bugs:
-      - TODO
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-7473
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17556
     data_sensitivity:
       - interaction
     notification_emails:

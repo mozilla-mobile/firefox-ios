@@ -678,7 +678,7 @@ extension TelemetryWrapper {
         case shoppingNoAdsAvailable = "shopping-no-ads-available"
         case awesomebarShareTap = "awesomebar-share-tap"
         case largeFileWrite = "large-file-write"
-        case fxSuggestionClickInfo = "fx-suggestionClickInfo"
+        case fxSuggestionClickInfo = "fx-suggestion-click-info"
         case fxSuggestionPosition = "fx-suggestion-position"
     }
 
@@ -1866,27 +1866,31 @@ extension TelemetryWrapper {
                 GleanMetrics.AppErrors.largeFileWrite.record(properties)
             }
         case(.action, .tap, .fxSuggest, _, let extras ):
-            guard let contextId = UUID(uuidString: TelemetryContextualIdentifier.contextId ?? "") else { return }
-            if let interactionInfo = extras?[EventValue.fxSuggestionClickInfo.rawValue] as? RustFirefoxSuggestionInteractionInfo {
-                switch interactionInfo {
-                    case .amp(blockId: let blockId, advertiser: let advertiser, iabCategory: let iabCategory, reportingURL: let reportingURL):
-                        GleanMetrics.FxSuggest.contextId.set(contextId)
-                        GleanMetrics.FxSuggest.pingType.set("fxsuggest-click")
-                        GleanMetrics.FxSuggest.blockId.set(blockId)
-                        GleanMetrics.FxSuggest.advertiser.set(advertiser)
-                        GleanMetrics.FxSuggest.reportingUrl.set(url: reportingURL)
-                        GleanMetrics.FxSuggest.iabCategory.set(iabCategory)
-                        if let position = extras?[EventValue.fxSuggestionPosition.rawValue] as? Int64 {
-                            GleanMetrics.FxSuggest.position.set(position)
+            guard let contextIdString = TelemetryContextualIdentifier.contextId,
+                  let contextId = UUID(uuidString: contextIdString),
+                  let interactionInfo = extras?[EventValue.fxSuggestionClickInfo.rawValue] as? RustFirefoxSuggestionInteractionInfo else { return }
+            switch interactionInfo {
+                case .amp(blockId: let blockId, advertiser: let advertiser, iabCategory: let iabCategory, reportingURL: let reportingURL):
+                    GleanMetrics.FxSuggest.contextId.set(contextId)
+                    GleanMetrics.FxSuggest.pingType.set("fxsuggest-click")
+                    GleanMetrics.FxSuggest.blockId.set(blockId)
+                    GleanMetrics.FxSuggest.advertiser.set(advertiser)
+                    GleanMetrics.FxSuggest.iabCategory.set(iabCategory)
+                    if let reportingURLValue = reportingURL {
+                            GleanMetrics.FxSuggest.reportingUrl.set(url: reportingURLValue)
                         }
-                    case .wikipedia:
-                        GleanMetrics.FxSuggest.pingType.set("fxsuggest-click")
-                        GleanMetrics.FxSuggest.contextId.set(contextId)
-                    if let position = extras?[EventValue.fxSuggestionPosition.rawValue] as? Int64 {
-                        GleanMetrics.FxSuggest.position.set(position)
+                    if let position = extras?[EventValue.fxSuggestionPosition.rawValue] as? Int {
+                        GleanMetrics.FxSuggest.position.set(Int64(position))
                     }
+                case .wikipedia:
+                    GleanMetrics.FxSuggest.pingType.set("fxsuggest-click")
+                    GleanMetrics.FxSuggest.contextId.set(contextId)
+                if let position = extras?[EventValue.fxSuggestionPosition.rawValue] as? Int {
+                    GleanMetrics.FxSuggest.position.set(Int64(position))
+                    GleanMetrics.FxSuggest.advertiser.set("wikipedia")
                 }
             }
+            GleanMetrics.Pings.shared.fxSuggest.submit()
             
         default:
             recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
