@@ -80,8 +80,4 @@ struct FakespotState: ScreenState, Equatable {
             return state
         }
     }
-
-    static func == (lhs: FakespotState, rhs: FakespotState) -> Bool {
-        return lhs.isOpen == rhs.isOpen && lhs.isSettingsExpanded == rhs.isSettingsExpanded && lhs.isReviewQualityExpanded == rhs.isReviewQualityExpanded
-    }
 }
