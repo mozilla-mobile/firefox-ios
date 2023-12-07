@@ -697,7 +697,7 @@ shopping:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/17301
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/17301 #To be changed
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17663
     data_sensitivity:
       - interaction
     notification_emails:
