@@ -229,7 +229,7 @@ extension FxAWebViewModel {
         case .emailLoginFlow, .qrCode:
             data = """
                     { capabilities:
-                        { choose_what_to_sync: true, engines: ["bookmarks", "history", "tabs", "passwords"] },
+                        { choose_what_to_sync: true, engines: ["bookmarks", "history", "tabs", "passwords", "creditcards"] },
                     }
                 """
         }
