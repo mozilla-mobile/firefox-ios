@@ -74,6 +74,16 @@ public struct FakespotUtils: FeatureFlaggable {
                 TelemetryWrapper.ExtraKey.Shopping.isUserOnboarded.rawValue: isUserOnboarded
             ]
         )
+
+        let areAdsOptedOut = profile.prefs.boolForKey(PrefsKeys.Shopping2023EnableAds) ?? true
+        TelemetryWrapper.recordEvent(
+            category: .information,
+            method: .settings,
+            object: .shoppingAdsOptedOut,
+            extras: [
+                TelemetryWrapper.ExtraKey.Shopping.areAdsDisabled.rawValue: !areAdsOptedOut
+            ]
+        )
     }
 
     func isPadInMultitasking(device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,

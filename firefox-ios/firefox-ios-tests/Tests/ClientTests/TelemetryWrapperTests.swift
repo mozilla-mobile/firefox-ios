@@ -437,6 +437,19 @@ class TelemetryWrapperTests: XCTestCase {
                               failureMessage: "Should be true")
     }
 
+    func test_shoppingAdsDisabledStatus_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(
+            category: .information,
+            method: .settings,
+            object: .shoppingAdsOptedOut,
+            extras: [
+                TelemetryWrapper.ExtraKey.Shopping.areAdsDisabled.rawValue: true
+            ])
+        testBoolMetricSuccess(metric: GleanMetrics.ShoppingSettings.disabledAds,
+                              expectedValue: true,
+                              failureMessage: "Should be true")
+    }
+
     func test_shoppingAdsExposure_GleanIsCalled() {
         TelemetryWrapper.recordEvent(
             category: .action,
