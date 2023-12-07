@@ -122,15 +122,16 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
 
     private func createWindowTabManager(for windowUUID: WindowUUID) -> TabManager {
         let profile: Profile = AppContainer.shared.resolve()
+        let imageStore = defaultDiskImageStoreForSceneTabManager()
+        return TabManagerImplementation(profile: profile, imageStore: imageStore, uuid: windowUUID)
+    }
+
+    private func defaultDiskImageStoreForSceneTabManager() -> DefaultDiskImageStore {
+        let profile: Profile = AppContainer.shared.resolve()
         // TODO: [7885] Once iPad multi-window enabled each TabManager will likely share same default image store.
-        let imageStore = DefaultDiskImageStore(
-            files: profile.files,
-            namespace: "TabManagerScreenshots",
-            quality: UIConstants.ScreenshotQuality)
-        let tabManager = TabManagerImplementation(profile: profile,
-                                                  imageStore: imageStore,
-                                                  uuid: windowUUID)
-        return tabManager
+        return DefaultDiskImageStore(files: profile.files,
+                                     namespace: "TabManagerScreenshots",
+                                     quality: UIConstants.ScreenshotQuality)
     }
 
     // MARK: - LaunchCoordinatorDelegate
