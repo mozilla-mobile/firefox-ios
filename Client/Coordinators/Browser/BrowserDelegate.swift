@@ -21,6 +21,9 @@ protocol BrowserDelegate: AnyObject {
                       statusBarScrollDelegate: StatusBarScrollDelegate,
                       overlayManager: OverlayModeManager)
 
+    /// Show the private homepage to the user as part of felt privacy
+    func showPrivateHomepage()
+
     /// Show the webview to navigate
     /// - Parameter webView: When nil, will show the already existing webview
     func show(webView: WKWebView)
