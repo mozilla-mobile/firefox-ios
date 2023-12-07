@@ -21,7 +21,8 @@ class DependencyHelperMock {
             imageStore: DefaultDiskImageStore(
                 files: profile.files,
                 namespace: "TabManagerScreenshots",
-                quality: UIConstants.ScreenshotQuality)
+                quality: UIConstants.ScreenshotQuality),
+            uuid: .defaultSingleWindowUUID
         )
 
         let appSessionProvider: AppSessionProvider = AppSessionManager()

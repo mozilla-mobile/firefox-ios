@@ -36,7 +36,8 @@ class MockLibraryCoordinatorDelegate: LibraryCoordinatorDelegate, LibraryPanelDe
         didOpenRecentlyClosedSiteInSameTab += 1
     }
 
-    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
+    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) -> WindowUUID {
         didOpenRecentlyClosedSiteInNewTab += 1
+        return .defaultSingleWindowUUID
     }
 }
