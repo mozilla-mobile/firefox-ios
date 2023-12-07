@@ -5,8 +5,24 @@
 import Foundation
 import Redux
 
+struct BVCPrivacyState: Equatable {
+    private let isInPrivateMode: Bool
+
+    var shouldHideSearchSuggestionsview: Bool {
+        return isInPrivateMode
+    }
+
+    var shouldShowPrivateHomepage: Bool {
+        return isInPrivateMode
+    }
+
+    init(inPrivatemode: Bool = false) {
+        self.isInPrivateMode = inPrivatemode
+    }
+}
+
 struct BrowserViewControllerState: ScreenState, Equatable {
-    var feltPrivacyState: FeltPrivacyState
+    var privateMode: BVCPrivacyState
     var fakespotState: FakespotState
 
     init(_ appState: AppState) {
@@ -18,39 +34,39 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             return
         }
 
-        self.init(feltPrivacyState: bvcState.feltPrivacyState,
+        self.init(privateMode: bvcState.privateMode,
                   fakespotState: bvcState.fakespotState)
     }
 
     init() {
         self.init(
-            feltPrivacyState: FeltPrivacyState(),
+            privateMode: BVCPrivacyState(),
             fakespotState: FakespotState())
     }
 
     init(
-        feltPrivacyState: FeltPrivacyState,
+        privateMode: BVCPrivacyState,
         fakespotState: FakespotState
     ) {
-        self.feltPrivacyState = feltPrivacyState
+        self.privateMode = privateMode
         self.fakespotState = fakespotState
     }
 
     static let reducer: Reducer<Self> = { state, action in
         switch action {
-        case FeltPrivacyAction.privateModeUpdated(let privacyState):
+        case PrivateModeMiddlewareAction.privateModeUpdated(let privacyState):
             return BrowserViewControllerState(
-                feltPrivacyState: FeltPrivacyState.reducer(state.feltPrivacyState, action),
+                privateMode: BVCPrivacyState(inPrivatemode: privacyState),
                 fakespotState: state.fakespotState)
         case FakespotAction.pressedShoppingButton,
             FakespotAction.show,
             FakespotAction.dismiss:
             return BrowserViewControllerState(
-                feltPrivacyState: state.feltPrivacyState,
+                privateMode: state.privateMode,
                 fakespotState: FakespotState.reducer(state.fakespotState, action))
         case FakespotAction.setAppearanceTo(let isEnabled):
             return BrowserViewControllerState(
-                feltPrivacyState: state.feltPrivacyState,
+                privateMode: state.privateMode,
                 fakespotState: FakespotState.reducer(state.fakespotState, action))
         default:
             return state
