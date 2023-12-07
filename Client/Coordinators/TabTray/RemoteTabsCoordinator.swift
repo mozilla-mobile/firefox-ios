@@ -4,24 +4,22 @@
 
 import Foundation
 
-protocol RemoteTabsCoordinatorDelegate: AnyObject {
-    func presentFirefoxAccountSignIn()
-}
-
-class RemoteTabsCoordinator: BaseCoordinator, RemoteTabsCoordinatorDelegate, QRCodeNavigationHandler, ParentCoordinatorDelegate {
+class RemoteTabsCoordinator: BaseCoordinator, RemoteTabsPanelDelegate {
     // MARK: - Properties
-    private weak var parentCoordinator: TabTrayCoordinatorDelegate?
+    weak var parentCoordinator: ParentCoordinatorDelegate?
     private let profile: Profile
     private var fxAccountViewController: FirefoxAccountSignInViewController?
+    private var applicationHelper: ApplicationHelper
+    weak var qrCodeNavigationHandler: QRCodeNavigationHandler?
 
     // MARK: - Initializers
 
     init(profile: Profile,
-         parentCoordinator: TabTrayCoordinatorDelegate?,
-         router: Router
+         router: Router,
+         applicationHelper: ApplicationHelper = DefaultApplicationHelper()
     ) {
         self.profile = profile
-        self.parentCoordinator = parentCoordinator
+        self.applicationHelper = applicationHelper
         super.init(router: router)
     }
 
@@ -32,24 +30,18 @@ class RemoteTabsCoordinator: BaseCoordinator, RemoteTabsCoordinatorDelegate, QRC
                                                                 parentType: .tabTray,
                                                                 deepLinkParams: fxaParams)
         fxAccountViewController = viewController
-        fxAccountViewController?.qrCodeNavigationHandler = self
+        fxAccountViewController?.qrCodeNavigationHandler = qrCodeNavigationHandler
         let buttonItem = UIBarButtonItem(title: .CloseButtonTitle, style: .plain, target: self, action: #selector(dismissFxAViewController))
         fxAccountViewController?.navigationItem.leftBarButtonItem = buttonItem
         let navController = ThemedNavigationController(rootViewController: viewController)
         router.present(navController)
     }
 
-    // MARK: - RemoteTabsNavigationHandler
-    func showQRCode(delegate: QRCodeViewControllerDelegate, rootNavigationController: UINavigationController?) {
-        var coordinator: QRCodeCoordinator
-        if let qrCodeCoordinator = childCoordinators.first(where: { $0 is QRCodeCoordinator }) as? QRCodeCoordinator {
-            coordinator = qrCodeCoordinator
-        } else {
-            let router = rootNavigationController != nil ? DefaultRouter(navigationController: rootNavigationController!) : router
-            coordinator = QRCodeCoordinator(parentCoordinator: self, router: router)
-            add(child: coordinator)
-        }
-        coordinator.showQRCode(delegate: delegate)
+    func presentFxAccountSettings() {
+        parentCoordinator?.didFinish(from: self)
+        let urlString = URL.mozInternalScheme + "://deep-link?url=/settings/fxa"
+        guard let url = URL(string: urlString) else { return }
+        applicationHelper.open(url)
     }
 
     @objc

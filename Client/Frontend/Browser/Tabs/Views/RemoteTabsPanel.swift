@@ -8,10 +8,15 @@ import Common
 import Shared
 import Redux
 
+protocol RemoteTabsPanelDelegate: AnyObject {
+    func presentFirefoxAccountSignIn()
+    func presentFxAccountSettings()
+}
+
 class RemoteTabsPanel: UIViewController,
                        Themeable,
                        RemoteTabsClientAndTabsDataSourceDelegate,
-                       RemotePanelDelegate,
+                       RemoteTabsEmptyViewDelegate,
                        StoreSubscriber {
     typealias SubscriberStateType = RemoteTabsPanelState
 
@@ -19,7 +24,7 @@ class RemoteTabsPanel: UIViewController,
 
     private(set) var state: RemoteTabsPanelState
     var tableViewController: RemoteTabsTableViewController
-    weak var remoteTabsCoordinatorDelegate: RemoteTabsCoordinatorDelegate?
+    weak var remoteTabsDelegate: RemoteTabsPanelDelegate?
 
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
@@ -151,7 +156,11 @@ class RemoteTabsPanel: UIViewController,
 
     // MARK: - RemotePanelDelegate
     func remotePanelDidRequestToSignIn() {
-        remoteTabsCoordinatorDelegate?.presentFirefoxAccountSignIn()
+        remoteTabsDelegate?.presentFirefoxAccountSignIn()
+    }
+
+    func presentFxAccountSettings() {
+        remoteTabsDelegate?.presentFxAccountSettings()
     }
 
     func remotePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {

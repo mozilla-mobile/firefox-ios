@@ -7,6 +7,12 @@ import ComponentLibrary
 import UIKit
 import Shared
 
+protocol RemoteTabsEmptyViewDelegate: AnyObject {
+    func remotePanelDidRequestToSignIn()
+    func presentFxAccountSettings()
+    func remotePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
+}
+
 class RemoteTabsEmptyView: UIView, ThemeApplicable {
     struct UX {
         static let verticalPadding: CGFloat = 40
@@ -20,7 +26,7 @@ class RemoteTabsEmptyView: UIView, ThemeApplicable {
         static let buttonVerticalInset: CGFloat = 12
     }
 
-    weak var delegate: RemotePanelDelegate?
+    weak var delegate: RemoteTabsEmptyViewDelegate?
 
     // MARK: - UI
 
@@ -74,18 +80,24 @@ class RemoteTabsEmptyView: UIView, ThemeApplicable {
     }
 
     func configure(state: RemoteTabsPanelEmptyStateReason,
-                   delegate: RemotePanelDelegate?) {
+                   delegate: RemoteTabsEmptyViewDelegate?) {
         self.delegate = delegate
 
         emptyStateImageView.image = UIImage.templateImageNamed(ImageIdentifiers.emptySyncImageName)
         titleLabel.text =  .EmptySyncedTabsPanelStateTitle
         instructionsLabel.text = state.localizedString()
 
-        // Show signIn button only for notLoggedIn case
-        if state == .notLoggedIn || state == .syncDisabledByUser {
-            signInButton.isHidden = false
+        if state == .notLoggedIn || state == .failedToSync {
             signInButton.addTarget(self, action: #selector(presentSignIn), for: .touchUpInside)
+        } else if state == .syncDisabledByUser {
+            signInButton.addTarget(self, action: #selector(openAccountSettings), for: .touchUpInside)
         }
+
+        signInButton.isHidden = shouldHideButton(state)
+    }
+
+    private func shouldHideButton(_ state: RemoteTabsPanelEmptyStateReason) -> Bool {
+        return state == .noClients && state == .noTabs
     }
 
     private func setupLayout() {
@@ -127,5 +139,10 @@ class RemoteTabsEmptyView: UIView, ThemeApplicable {
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .syncSignIn)
             delegate.remotePanelDidRequestToSignIn()
         }
+    }
+
+    @objc
+    private func openAccountSettings() {
+        delegate?.presentFxAccountSettings()
     }
 }

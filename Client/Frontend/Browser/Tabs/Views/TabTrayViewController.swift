@@ -179,12 +179,10 @@ class TabTrayViewController: UIViewController,
         }
     }
 
-    init(delegate: TabTrayViewControllerDelegate,
-         selectedTab: TabTrayPanelType,
+    init(selectedTab: TabTrayPanelType,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          and notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.tabTrayState = TabTrayState(panelType: selectedTab)
-        self.delegate = delegate
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
 
@@ -227,7 +225,6 @@ class TabTrayViewController: UIViewController,
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        delegate?.didFinish()
 
         unsubscribeFromRedux()
     }
@@ -448,7 +445,7 @@ class TabTrayViewController: UIViewController,
     private func doneButtonTapped() {
         notificationCenter.post(name: .TabsTrayDidClose)
         // TODO: FXIOS-6928 Update mode when closing tabTray
-        self.dismiss(animated: true, completion: nil)
+        delegate?.didFinish()
     }
 
     @objc
