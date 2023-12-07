@@ -27,7 +27,10 @@ class SlideOverPresentationController: UIPresentationController {
     }
 
     override var frameOfPresentedViewInContainerView: CGRect {
-        let menuHeight: CGFloat = presentedView!.systemLayoutSizeFitting(CGSize(width: presentedView!.bounds.width, height: 0.0), withHorizontalFittingPriority: .required, verticalFittingPriority: .defaultLow).height
+        var menuHeight: CGFloat = 0
+        if let presentedView = presentedView {
+            menuHeight = presentedView.systemLayoutSizeFitting(CGSize(width: presentedView.bounds.width, height: 0.0), withHorizontalFittingPriority: .required, verticalFittingPriority: .defaultLow).height
+        }
 
         let yPosition = self.containerView!.frame.height - menuHeight
         var xPosition: CGFloat = 0
