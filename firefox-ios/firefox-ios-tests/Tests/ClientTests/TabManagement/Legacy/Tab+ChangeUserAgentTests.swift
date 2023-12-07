@@ -80,4 +80,42 @@ class ChangeUserAgentTests: XCTestCase {
         Tab.ChangeUserAgent.clear()
         XCTAssertFalse(Tab.ChangeUserAgent.contains(url: url))
     }
+
+    // MARK: removeMobilePrefixFrom tests
+
+    func testWithoutMobilePrefixRemovesMobilePrefixes() {
+        let subject = Tab.ChangeUserAgent()
+        let url = URL(string: "https://m.wikipedia.org/wiki/Firefox")!
+
+        let newUrl = subject.removeMobilePrefixFrom(url: url)
+
+        XCTAssertEqual(newUrl.host, "wikipedia.org")
+    }
+
+    func testWithoutMobilePrefixRemovesMobile() {
+        let subject = Tab.ChangeUserAgent()
+        let url = URL(string: "https://en.mobile.wikipedia.org/wiki/Firefox")!
+
+        let newUrl = subject.removeMobilePrefixFrom(url: url)
+
+        XCTAssertEqual(newUrl.host, "en.wikipedia.org")
+    }
+
+    func testWithoutMobilePrefixOnlyRemovesMobileSubdomains() {
+        let subject = Tab.ChangeUserAgent()
+        let url = URL(string: "https://plum.com")!
+
+        let newUrl = subject.removeMobilePrefixFrom(url: url)
+
+        XCTAssertEqual(newUrl.host, "plum.com")
+    }
+
+    func testWithMobilePrefixOnlyRemovesMobileSubdomainsIfNotStartingWithit() {
+        let subject = Tab.ChangeUserAgent()
+        let url = URL(string: "https://mobile.co.uk")!
+
+        let newUrl = subject.removeMobilePrefixFrom(url: url)
+
+        XCTAssertEqual(newUrl.host, "mobile.co.uk")
+    }
 }

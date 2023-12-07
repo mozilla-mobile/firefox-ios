@@ -783,7 +783,8 @@ class Tab: NSObject, ThemeApplicable {
     func toggleChangeUserAgent() {
         changedUserAgent = !changedUserAgent
 
-        if changedUserAgent, let url = url?.withoutMobilePrefix() {
+        if changedUserAgent, let url = url {
+            let url = ChangeUserAgent().removeMobilePrefixFrom(url: url)
             let request = URLRequest(url: url)
             webView?.load(request)
         } else {
