@@ -356,6 +356,7 @@ class FakespotViewModel {
     func toggleAdsEnabled() {
         prefs.setBool(!areAdsEnabled, forKey: PrefsKeys.Shopping2023EnableAds)
 
+        recordAdsToggleTelemetry()
         // Make sure the view updates with the new ads setting
         onStateChange?()
     }
@@ -581,6 +582,17 @@ class FakespotViewModel {
             method: .view,
             object: .shoppingBottomSheet,
             extras: [TelemetryWrapper.ExtraKey.size.rawValue: state.rawValue]
+        )
+    }
+
+    func recordAdsToggleTelemetry() {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .shoppingAdsSettingToggle,
+            extras: [
+                TelemetryWrapper.ExtraKey.Shopping.adsSettingToggle.rawValue: areAdsEnabled
+            ]
         )
     }
 }
