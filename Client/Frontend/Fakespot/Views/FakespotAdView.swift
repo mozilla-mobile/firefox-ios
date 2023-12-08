@@ -52,11 +52,16 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         static let productImageMinHeight: CGFloat = 60
         static let productImageMaxWidth: CGFloat = 206
         static let productImageMaxHeight: CGFloat = 173
+        static let defaultImageSize = CGSize(width: 17.5, height: 17.5)
     }
 
     // MARK: Views
     private lazy var cardContainer: ShadowCardView = .build()
-    private lazy var productImageView: FakespotImageLoadingView = .build { imageView in
+    private lazy var imageContainerView: UIView = .build()
+    private var defaultImageView: UIImageView = .build { view in
+        view.image = UIImage(named: StandardImageIdentifiers.Large.image)?.withRenderingMode(.alwaysTemplate)
+    }
+    private lazy var productImageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
     }
 
@@ -167,6 +172,10 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
     private func setupLayout() {
         addSubview(cardContainer)
         insertSubview(footerLabel, belowSubview: cardContainer)
+
+        imageContainerView.addSubview(defaultImageView)
+        imageContainerView.addSubview(productImageView)
+
         // normal setup
         let starsHeight = min(UIFontMetrics.default.scaledValue(for: UX.starSize), UX.starMaxSize)
         let imageWidth = min(UIFontMetrics.default.scaledValue(for: UX.productImageMinWidth), UX.productImageMaxWidth)
@@ -174,10 +183,10 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         starRatingHeightConstraint = starRatingView.heightAnchor.constraint(equalToConstant: starsHeight)
         starRatingHeightConstraint?.isActive = true
 
-        productImageHeightConstraint = productImageView.heightAnchor.constraint(equalToConstant: imageHeight)
+        productImageHeightConstraint = imageContainerView.heightAnchor.constraint(equalToConstant: imageHeight)
         productImageHeightConstraint?.isActive = true
 
-        productImageWidthConstraint = productImageView.widthAnchor.constraint(equalToConstant: imageWidth)
+        productImageWidthConstraint = imageContainerView.widthAnchor.constraint(equalToConstant: imageWidth)
         productImageWidthConstraint?.isActive = true
 
         NSLayoutConstraint.activate([
@@ -189,6 +198,16 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
             footerLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
             footerLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             footerLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+            defaultImageView.widthAnchor.constraint(equalToConstant: UX.defaultImageSize.width),
+            defaultImageView.heightAnchor.constraint(equalToConstant: UX.defaultImageSize.height),
+            defaultImageView.centerXAnchor.constraint(equalTo: imageContainerView.centerXAnchor),
+            defaultImageView.centerYAnchor.constraint(equalTo: imageContainerView.centerYAnchor),
+
+            productImageView.leadingAnchor.constraint(equalTo: imageContainerView.leadingAnchor),
+            productImageView.trailingAnchor.constraint(equalTo: imageContainerView.trailingAnchor),
+            productImageView.topAnchor.constraint(equalTo: imageContainerView.topAnchor),
+            productImageView.bottomAnchor.constraint(equalTo: imageContainerView.bottomAnchor),
         ])
 
         adjustLayout()
@@ -227,7 +246,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         productLinkButton.setContentHuggingPriority(.required, for: .horizontal)
         productLinkButton.setContentCompressionResistancePriority(.required, for: .horizontal)
 
-        secondRowStackView.addArrangedSubview(productImageView)
+        secondRowStackView.addArrangedSubview(imageContainerView)
         secondRowStackView.addArrangedSubview(productLinkButton)
         secondRowStackView.addArrangedSubview(gradeReliabilityScoreView)
         secondRowStackView.distribution = .fill
@@ -254,7 +273,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
 
         // second line
         let spacerTrailing = UIView()
-        let secondLineStackView = UIStackView(arrangedSubviews: [productImageView, spacerTrailing])
+        let secondLineStackView = UIStackView(arrangedSubviews: [imageContainerView, spacerTrailing])
         secondLineStackView.axis = .horizontal
         secondLineStackView.distribution = .fill
         contentStackView.addArrangedSubview(secondLineStackView)
@@ -298,6 +317,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         footerLabel.textColor = theme.colors.textSecondary
         productLinkButton.setTitleColor(theme.colors.textAccent, for: .normal)
         gradeReliabilityScoreView.applyTheme(theme: theme)
-        productImageView.theme = theme
+        defaultImageView.tintColor = theme.colors.iconSecondary
+        imageContainerView.backgroundColor = theme.colors.layer3
     }
 }
