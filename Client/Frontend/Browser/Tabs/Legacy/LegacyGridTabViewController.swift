@@ -627,7 +627,7 @@ extension LegacyGridTabViewController: TabDisplayCompletionDelegate, RecentlyClo
                                      extras: nil)
         openNewTab(URLRequest(url: url), isPrivate: isPrivate)
         dismissTabTray()
-        // TODO: [7349] Updates to Recently Closed for iPad multi-window forthcoming.
+        // TODO: [FXIOS-7349] Updates to Recently Closed for iPad multi-window forthcoming.
         return tabManager.windowUUID
     }
 

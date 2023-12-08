@@ -381,7 +381,7 @@ class BrowserViewController: UIViewController,
         // Formerly these calls were run during AppDelegate.didEnterBackground(), but we have
         // individual TabManager instances for each BVC, so we perform these here instead.
         tabManager.preserveTabs()
-        // TODO: [7856] Some additional updates for telemetry forthcoming, once iPad multi-window is enabled.
+        // TODO: [FXIOS-7856] Some additional updates for telemetry forthcoming, once iPad multi-window is enabled.
         TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
     }
 

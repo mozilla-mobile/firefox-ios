@@ -360,7 +360,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) -> WindowUUID {
         browserViewController.openRecentlyClosedSiteInNewTab(url, isPrivate: isPrivate)
-        // TODO: [7349] Updates to Recently Closed for iPad multi-window forthcoming.
+        // TODO: [FXIOS-7349] Updates to Recently Closed for iPad multi-window forthcoming.
         return tabManager.windowUUID
     }
 

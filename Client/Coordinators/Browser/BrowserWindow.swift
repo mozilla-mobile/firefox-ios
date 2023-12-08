@@ -11,6 +11,6 @@ import Foundation
 public typealias WindowUUID = UUID
 
 extension WindowUUID {
-    // [7798] Temporary. Part of WIP iPad multi-window epic.
+    // TODO: [FXIOS-7798] Temporary. Part of WIP iPad multi-window epic.
     public static let defaultSingleWindowUUID = UUID(uuidString: "44BA0B7D-097A-484D-8358-91A6E374451D")!
 }

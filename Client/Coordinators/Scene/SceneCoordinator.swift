@@ -22,7 +22,7 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
         self.screenshotService = screenshotService
         self.sceneContainer = sceneContainer
 
-        // TODO: [7798] Update for iPad multi-window. Default to single-window UUID for now.
+        // TODO: [FXIOS-7798] Update for iPad multi-window. Default to single-window UUID for now.
         self.windowUUID = .defaultSingleWindowUUID
 
         let navigationController = sceneSetupHelper.createNavigationController()
@@ -128,7 +128,7 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
 
     private func defaultDiskImageStoreForSceneTabManager() -> DefaultDiskImageStore {
         let profile: Profile = AppContainer.shared.resolve()
-        // TODO: [7885] Once iPad multi-window enabled each TabManager will likely share same default image store.
+        // TODO: [FXIOS-7885] Once iPad multi-window enabled each TabManager will likely share same default image store.
         return DefaultDiskImageStore(files: profile.files,
                                      namespace: "TabManagerScreenshots",
                                      quality: UIConstants.ScreenshotQuality)

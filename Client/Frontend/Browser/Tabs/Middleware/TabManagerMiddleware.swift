@@ -7,7 +7,7 @@ import Redux
 import TabDataStore
 
 class TabManagerMiddleware {
-    // TODO: [7863] Part of ongoing WIP for Redux + iPad Multi-window.
+    // TODO: [FXIOS-7863] Part of ongoing WIP for Redux + iPad Multi-window.
     var tabManagers: [WindowUUID: TabManager] = [:]
     var selectedPanel: TabTrayPanelType = .tabs
 
@@ -201,7 +201,7 @@ class TabManagerMiddleware {
     }
 
     private var defaultTabManager: TabManager {
-        // TODO: [7863] Temporary. WIP for Redux + iPad Multi-window.
+        // TODO: [FXIOS-7863] Temporary. WIP for Redux + iPad Multi-window.
         return tabManagers[.defaultSingleWindowUUID]!
     }
 }
