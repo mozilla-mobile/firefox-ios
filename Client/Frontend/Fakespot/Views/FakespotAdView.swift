@@ -19,6 +19,8 @@ struct FakespotAdViewModel {
     let productTitleA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.productTitle
     let descriptionA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.description
     let footerA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.footer
+    let defaultImageA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.defaultImage
+    let productImageA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.productImage
 
     private let tabManager: TabManager
     var dismissViewController: (() -> Void)?
@@ -157,6 +159,8 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate, F
         )
         productLinkButton.configure(viewModel: productLinkButtonViewModel)
         gradeReliabilityScoreView.configure(grade: productAdsData.grade)
+        defaultImageView.accessibilityIdentifier = viewModel.defaultImageA11yId
+        productImageView.accessibilityIdentifier = viewModel.productImageA11yId
         productImageView.isHidden = true
 
         Task {
