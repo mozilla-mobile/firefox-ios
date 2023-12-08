@@ -1873,6 +1873,7 @@ class BrowserViewController: UIViewController,
         tabTrayOpenRecentlyClosedTab(url)
     }
 
+    @discardableResult
     func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) -> WindowUUID {
         tabManager.selectTab(tabManager.addTab(URLRequest(url: url)))
         return tabManager.windowUUID
