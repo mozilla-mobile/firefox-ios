@@ -1310,7 +1310,7 @@ class BrowserViewController: UIViewController,
             if tab.url?.origin == webView.url?.origin {
                 tab.url = webView.url
 
-                if tab === tabManager.selectedTab && !tab.isRestoring {
+                if tab === tabManager.selectedTab {
                     updateUIForReaderHomeStateForTab(tab)
                 }
                 // Catch history pushState navigation, but ONLY for same origin navigation,
@@ -2419,8 +2419,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
 extension BrowserViewController: SessionRestoreHelperDelegate {
     func sessionRestoreHelper(_ helper: SessionRestoreHelper, didRestoreSessionForTab tab: Tab) {
-        tab.isRestoring = false
-
         if let tab = tabManager.selectedTab, tab.webView === tab.webView {
             updateUIForReaderHomeStateForTab(tab)
         }
