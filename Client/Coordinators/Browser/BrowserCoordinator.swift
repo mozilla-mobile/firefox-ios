@@ -318,7 +318,7 @@ class BrowserCoordinator: BaseCoordinator,
 
             let libraryCoordinator = LibraryCoordinator(
                 router: DefaultRouter(navigationController: navigationController),
-                tabManager: browserViewController.tabManager
+                tabManager: tabManager
             )
             libraryCoordinator.parentCoordinator = self
             add(child: libraryCoordinator)
