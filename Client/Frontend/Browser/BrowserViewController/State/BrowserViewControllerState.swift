@@ -5,24 +5,9 @@
 import Foundation
 import Redux
 
-struct BVCPrivacyState: Equatable {
-    private let isInPrivateMode: Bool
-
-    var shouldHideSearchSuggestionsview: Bool {
-        return isInPrivateMode
-    }
-
-    var shouldShowPrivateHomepage: Bool {
-        return isInPrivateMode
-    }
-
-    init(inPrivatemode: Bool = false) {
-        self.isInPrivateMode = inPrivatemode
-    }
-}
-
 struct BrowserViewControllerState: ScreenState, Equatable {
-    var privateMode: BVCPrivacyState
+    var searchScreenState: SearchScreenState
+    var usePrivateHomepage: Bool
     var fakespotState: FakespotState
 
     init(_ appState: AppState) {
@@ -34,21 +19,25 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             return
         }
 
-        self.init(privateMode: bvcState.privateMode,
+        self.init(searchScreenState: bvcState.searchScreenState,
+                  usePrivateHomepage: bvcState.usePrivateHomepage,
                   fakespotState: bvcState.fakespotState)
     }
 
     init() {
         self.init(
-            privateMode: BVCPrivacyState(),
+            searchScreenState: SearchScreenState(),
+            usePrivateHomepage: false,
             fakespotState: FakespotState())
     }
 
     init(
-        privateMode: BVCPrivacyState,
+        searchScreenState: SearchScreenState,
+        usePrivateHomepage: Bool,
         fakespotState: FakespotState
     ) {
-        self.privateMode = privateMode
+        self.searchScreenState = searchScreenState
+        self.usePrivateHomepage = usePrivateHomepage
         self.fakespotState = fakespotState
     }
 
@@ -56,17 +45,20 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         switch action {
         case PrivateModeMiddlewareAction.privateModeUpdated(let privacyState):
             return BrowserViewControllerState(
-                privateMode: BVCPrivacyState(inPrivatemode: privacyState),
+                searchScreenState: SearchScreenState(inPrivateMode: privacyState),
+                usePrivateHomepage: privacyState,
                 fakespotState: state.fakespotState)
         case FakespotAction.pressedShoppingButton,
             FakespotAction.show,
             FakespotAction.dismiss:
             return BrowserViewControllerState(
-                privateMode: state.privateMode,
+                searchScreenState: state.searchScreenState,
+                usePrivateHomepage: state.usePrivateHomepage,
                 fakespotState: FakespotState.reducer(state.fakespotState, action))
         case FakespotAction.setAppearanceTo(let isEnabled):
             return BrowserViewControllerState(
-                privateMode: state.privateMode,
+                searchScreenState: state.searchScreenState,
+                usePrivateHomepage: state.usePrivateHomepage,
                 fakespotState: FakespotState.reducer(state.fakespotState, action))
         default:
             return state
