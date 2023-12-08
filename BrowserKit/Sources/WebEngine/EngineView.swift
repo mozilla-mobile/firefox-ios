@@ -3,8 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Redux
 
-enum AppStateAction: Action {
-    case setPrivateModeTo(Bool)
+public protocol EngineView {
+    func render(session: EngineSession)
 }

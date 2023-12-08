@@ -57,10 +57,9 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     func testCalculateTopSitesData_hasGoogleTopSite_googlePrefsNil() {
         let subject = createSubject()
 
-        subject.recalculateTopSiteData(for: 6)
+        let data = subject.getTopSitesData()
 
         // We test that without a pref, google is added
-        let data = subject.getTopSitesData()
         XCTAssertTrue(data[0].isGoogleURL)
         XCTAssertTrue(data[0].isGoogleGUID)
     }
@@ -68,10 +67,9 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     func testCalculateTopSitesData_hasGoogleTopSiteWithPinnedCount_googlePrefsNil() {
         let subject = createSubject(addPinnedSiteCount: 3)
 
-        subject.recalculateTopSiteData(for: 1)
+        let data = subject.getTopSitesData()
 
         // We test that without a pref, google is added even with pinned tiles
-        let data = subject.getTopSitesData()
         XCTAssertTrue(data[0].isGoogleURL)
         XCTAssertTrue(data[0].isGoogleGUID)
     }
@@ -81,10 +79,9 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         profile.prefs.setBool(true, forKey: PrefsKeys.GoogleTopSiteAddedKey)
         profile.prefs.setBool(true, forKey: PrefsKeys.GoogleTopSiteHideKey)
 
-        subject.recalculateTopSiteData(for: 1)
+        let data = subject.getTopSitesData()
 
         // We test that having more pinned than available tiles, google tile isn't put in
-        let data = subject.getTopSitesData()
         XCTAssertFalse(data[0].isGoogleURL)
         XCTAssertFalse(data[0].isGoogleGUID)
     }
@@ -94,9 +91,8 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     func testCalculateTopSitesData_pinnedSites() {
         let subject = createSubject(addPinnedSiteCount: 3)
 
-        subject.recalculateTopSiteData(for: 6)
-
         let data = subject.getTopSitesData()
+
         XCTAssertEqual(data.count, 14)
         XCTAssertTrue(data[0].isPinned)
     }
@@ -118,9 +114,8 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         let expectedContileResult = ContileProviderMock.getContiles(contilesCount: 1)
         let subject = createSubject(expectedContileResult: ContileResult.success(expectedContileResult))
 
-        subject.recalculateTopSiteData(for: 6)
-
         let data = subject.getTopSitesData()
+
         XCTAssertEqual(data.count, 12, "Expects 1 google site, 1 contile, 10 history sites")
     }
 
@@ -128,9 +123,8 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         let expectedContileResult = ContileProviderMock.getContiles(contilesCount: 1)
         let subject = createSubject(expectedContileResult: ContileResult.success(expectedContileResult))
 
-        subject.recalculateTopSiteData(for: 6)
-
         let data = subject.getTopSitesData()
+
         XCTAssertTrue(data[0].isGoogleURL)
         XCTAssertTrue(data[1].isSponsoredTile)
         XCTAssertFalse(data[2].isSponsoredTile)
@@ -140,9 +134,8 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         let expectedContileResult = ContileResult.failure(ContileProvider.Error.noDataAvailable)
         let subject = createSubject(expectedContileResult: expectedContileResult)
 
-        subject.recalculateTopSiteData(for: 6)
-
         let data = subject.getTopSitesData()
+
         XCTAssertTrue(data[0].isGoogleURL)
         XCTAssertFalse(data[1].isSponsoredTile)
         XCTAssertFalse(data[2].isSponsoredTile)
@@ -152,9 +145,8 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         let expectedContileResult = ContileResult.success([])
         let subject = createSubject(expectedContileResult: expectedContileResult)
 
-        subject.recalculateTopSiteData(for: 6)
-
         let data = subject.getTopSitesData()
+
         XCTAssertTrue(data[0].isGoogleURL)
         XCTAssertFalse(data[1].isSponsoredTile)
         XCTAssertFalse(data[2].isSponsoredTile)
@@ -165,8 +157,8 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         let expectedContileResult = ContileProviderMock.getContiles(contilesCount: 3)
         let subject = createSubject(expectedContileResult: ContileResult.success(expectedContileResult))
 
-        subject.recalculateTopSiteData(for: 6)
         let data = subject.getTopSitesData()
+
         XCTAssertTrue(data[0].isGoogleURL)
         XCTAssertTrue(data[1].isSponsoredTile)
         XCTAssertTrue(data[2].isSponsoredTile)
@@ -178,9 +170,8 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
                                                                     duplicateFirstTile: true,
                                                                     pinnedDuplicateTile: true)
         let subject = createSubject(addPinnedSiteCount: 1, expectedContileResult: ContileResult.success(expectedContileResult))
-        subject.recalculateTopSiteData(for: 6)
-
         let data = subject.getTopSitesData()
+
         XCTAssertTrue(data[0].isGoogleURL)
         XCTAssertFalse(data[1].isSponsoredTile)
         XCTAssertFalse(data[2].isSponsoredTile)
@@ -190,10 +181,8 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         let expectedContileResult = ContileProviderMock.getContiles(contilesCount: 1,
                                                                     duplicateFirstTile: true)
         let subject = createSubject(addPinnedSiteCount: 1, expectedContileResult: ContileResult.success(expectedContileResult))
-
-        subject.recalculateTopSiteData(for: 6)
-
         let data = subject.getTopSitesData()
+
         XCTAssertTrue(data[0].isGoogleURL)
         XCTAssertTrue(data[1].isSponsoredTile)
         XCTAssertFalse(data[2].isSponsoredTile)
@@ -204,10 +193,8 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
                                                                     duplicateFirstTile: true,
                                                                     pinnedDuplicateTile: true)
         let subject = createSubject(addPinnedSiteCount: 1, expectedContileResult: ContileResult.success(expectedContileResult))
-
-        subject.recalculateTopSiteData(for: 6)
-
         let data = subject.getTopSitesData()
+
         XCTAssertTrue(data[0].isGoogleURL)
         XCTAssertTrue(data[1].isSponsoredTile)
         XCTAssertEqual(data[1].title, ContileProviderMock.defaultSuccessData[0].name)
@@ -221,9 +208,8 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         profile.prefs.setBool(true, forKey: PrefsKeys.GoogleTopSiteAddedKey)
         profile.prefs.setBool(true, forKey: PrefsKeys.GoogleTopSiteHideKey)
 
-        subject.recalculateTopSiteData(for: 6)
-
         let data = subject.getTopSitesData()
+
         XCTAssertFalse(data[0].isGoogleURL)
         XCTAssertFalse(data[1].isSponsoredTile)
         XCTAssertFalse(data[2].isSponsoredTile)
@@ -232,10 +218,8 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     func testCalculateTopSitesData_doesNotAddTileIfAllSpacesArePinnedAndGoogleIsThere() {
         let expectedContileResult = ContileResult.success([])
         let subject = createSubject(addPinnedSiteCount: 11, expectedContileResult: expectedContileResult)
-
-        subject.recalculateTopSiteData(for: 6)
-
         let data = subject.getTopSitesData()
+
         XCTAssertTrue(data[0].isGoogleURL)
         XCTAssertFalse(data[1].isSponsoredTile)
         XCTAssertFalse(data[2].isSponsoredTile)
@@ -305,10 +289,8 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     // Sponsored > Frequency
     func testDuplicates_SponsoredTileHasPrecedenceOnFrequencyTiles() {
         let subject = createSubject(expectedContileResult: ContileResult.success([ContileProviderMock.duplicateTile]))
-
-        subject.recalculateTopSiteData(for: 6)
-
         let data = subject.getTopSitesData()
+
         XCTAssertTrue(data[0].isGoogleURL)
         XCTAssertEqual(data[1].title, ContileProviderMock.duplicateTile.name)
         XCTAssertTrue(data[1].isSponsoredTile)
@@ -320,9 +302,8 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         let subject = createSubject(addPinnedSiteCount: 1,
                                     expectedContileResult: ContileResult.success([ContileProviderMock.pinnedDuplicateTile]))
 
-        subject.recalculateTopSiteData(for: 6)
-
         let data = subject.getTopSitesData()
+
         XCTAssertTrue(data[0].isGoogleURL)
         XCTAssertFalse(data[1].isSponsoredTile)
         XCTAssertTrue(data[1].isPinned)
@@ -334,10 +315,8 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     func testDuplicates_PinnedTilesHasPrecedenceOnFrequencyTiles() {
         let expectedPinnedURL = String(format: ContileProviderMock.url, "0")
         let subject = createSubject(addPinnedSiteCount: 1, siteCount: 3, duplicatePinnedSiteURL: true)
-
-        subject.recalculateTopSiteData(for: 6)
-
         let data = subject.getTopSitesData()
+
         XCTAssertEqual(data.count, 4, "Should have 3 sites and 1 pinned")
         XCTAssertTrue(data[0].isGoogleURL)
 
@@ -361,9 +340,8 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     func testDuplicates_PinnedTilesOfSameDomainIsntDeduped() {
         let subject = createSubject(addPinnedSiteCount: 2, siteCount: 0)
 
-        subject.recalculateTopSiteData(for: 6)
-
         let data = subject.getTopSitesData()
+
         XCTAssertEqual(data.count, 3, "Should have google site and 2 pinned sites")
         XCTAssertTrue(data[0].isGoogleURL)
 
@@ -388,8 +366,6 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
                                                   isCustomEngine: false)
         add(searchEngine: googleSearchEngine)
         let subject = createSubject()
-        subject.recalculateTopSiteData(for: 6)
-
         let data = subject.getTopSitesData()
 
         XCTAssertTrue(data[0].isGoogleURL)
@@ -405,9 +381,8 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
                                                       isCustomEngine: false)
         add(searchEngine: pinnedTileSearchEngine)
         let subject = createSubject(addPinnedSiteCount: 3)
-        subject.recalculateTopSiteData(for: 6)
-
         let data = subject.getTopSitesData()
+
         XCTAssertEqual(data.count, 14)
         XCTAssertTrue(data[0].isPinned)
     }
@@ -421,8 +396,6 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
                                                        isCustomEngine: false)
         add(searchEngine: historyTileSearchEngine)
         let subject = createSubject()
-        subject.recalculateTopSiteData(for: 6)
-
         let data = subject.getTopSitesData()
 
         XCTAssertEqual(data[1].title, "A title 0")
@@ -438,10 +411,8 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         add(searchEngine: sponsoredTileSearchEngine)
         let expectedContileResult = ContileProviderMock.getContiles(contilesCount: 1)
         let subject = createSubject(expectedContileResult: ContileResult.success(expectedContileResult))
-
-        subject.recalculateTopSiteData(for: 6)
-
         let data = subject.getTopSitesData()
+
         XCTAssertTrue(data[0].isGoogleURL)
         XCTAssertFalse(data[1].isSponsoredTile)
     }

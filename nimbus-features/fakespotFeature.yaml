@@ -9,12 +9,6 @@ features:
           Whether the Fakespot feature is enabled or disabled
         type: Boolean
         default: false
-      product-recommendations:
-        description: >
-          If true, recommended products feature is enabled
-           to be shown to the user based on their preference.
-        type: Boolean
-        default: false
       back_in_stock_reporting:
         description: >
           If true, enables for users the reporting feature for
@@ -50,13 +44,11 @@ features:
       - channel: beta
         value:
           status: true
-          product-recommendations: false
-          back_in_stock_reporting: false
-          product_ads: false
+          back_in_stock_reporting: true
+          product_ads: true
       - channel: developer
         value:
           status: true
-          product-recommendations: true
           back_in_stock_reporting: true
           product_ads: true
 

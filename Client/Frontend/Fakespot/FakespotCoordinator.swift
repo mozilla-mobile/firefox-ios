@@ -10,19 +10,19 @@ protocol FakespotCoordinatorDelegate: AnyObject {
     // Define any coordinator delegate methods
 }
 
-protocol FakespotViewControllerDelegate: AnyObject {
-    func fakespotControllerDidDismiss(animated: Bool)
-}
-
-class FakespotCoordinator: BaseCoordinator, FakespotViewControllerDelegate, FeatureFlaggable {
+class FakespotCoordinator: BaseCoordinator, FeatureFlaggable {
     weak var parentCoordinator: ParentCoordinatorDelegate?
     private var profile: Profile
+    private let tabManager: TabManager
 
     private var isOptedIn: Bool {
         return profile.prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false
     }
 
-    init(router: Router, profile: Profile = AppContainer.shared.resolve()) {
+    init(router: Router,
+         profile: Profile = AppContainer.shared.resolve(),
+         tabManager: TabManager) {
+        self.tabManager = tabManager
         self.profile = profile
         super.init(router: router)
     }
@@ -48,13 +48,13 @@ class FakespotCoordinator: BaseCoordinator, FakespotViewControllerDelegate, Feat
         sidebarContainer.showSidebar(viewController, parentViewController: parentViewController)
     }
 
-    func fakespotControllerCloseSidebar(sidebarContainer: SidebarEnabledViewProtocol,
-                                        parentViewController: UIViewController) {
+    func closeSidebar(sidebarContainer: SidebarEnabledViewProtocol,
+                      parentViewController: UIViewController) {
         sidebarContainer.hideSidebar(parentViewController)
-        fakespotControllerDidDismiss(animated: true)
+        dismissModal(animated: true)
     }
 
-    func fakespotControllerDidDismiss(animated: Bool) {
+    func dismissModal(animated: Bool) {
         router.dismiss(animated: animated, completion: nil)
         parentCoordinator?.didFinish(from: self)
     }
@@ -68,8 +68,7 @@ class FakespotCoordinator: BaseCoordinator, FakespotViewControllerDelegate, Feat
 
     private func createFakespotViewController(productURL: URL) -> FakespotViewController {
         let viewModel = createFakespotViewModel(productURL: productURL)
-        let fakespotViewController = FakespotViewController(viewModel: viewModel)
-        fakespotViewController.delegate = self
+        let fakespotViewController = FakespotViewController(viewModel: viewModel, tabManager: tabManager)
         return fakespotViewController
     }
 
@@ -77,7 +76,7 @@ class FakespotCoordinator: BaseCoordinator, FakespotViewControllerDelegate, Feat
         let environment = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI) ? FakespotEnvironment.staging : .prod
         let viewModel = FakespotViewModel(shoppingProduct: ShoppingProduct(
             url: productURL,
-            client: FakespotClient(environment: environment)))
+            client: FakespotClient(environment: environment)), tabManager: tabManager)
         return viewModel
     }
 }

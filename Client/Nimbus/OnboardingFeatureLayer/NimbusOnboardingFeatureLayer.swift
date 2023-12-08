@@ -204,7 +204,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         return OnboardingInstructionsPopupInfoModel(
             title: data.title,
             instructionSteps: data.instructions
-                .map { String(format: $0, AppName.shortName.rawValue)},
+                .map { String(format: $0, AppName.shortName.rawValue) },
             buttonTitle: data.buttonTitle,
             buttonAction: data.buttonAction,
             a11yIdRoot: a11yID)

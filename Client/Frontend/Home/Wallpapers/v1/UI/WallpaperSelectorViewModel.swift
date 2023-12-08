@@ -134,7 +134,7 @@ class WallpaperSelectorViewModel {
 
 private extension WallpaperSelectorViewModel {
     var initialSelectedIndexPath: IndexPath? {
-        if let index = wallpaperItems.firstIndex(where: {$0.wallpaper == wallpaperManager.currentWallpaper}) {
+        if let index = wallpaperItems.firstIndex(where: { $0.wallpaper == wallpaperManager.currentWallpaper }) {
             return IndexPath(row: index, section: 0)
         }
         return nil

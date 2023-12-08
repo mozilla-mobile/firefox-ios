@@ -49,7 +49,7 @@ class FaviconManager: TabContentScript {
                 }
             }
         }
-        return all(deferreds.map({$0()}))
+        return all(deferreds.map({ $0() }))
     }
 
     func getFavicon(_ tab: Tab, iconUrl: URL, currentURL: URL, icon: Favicon, profile: Profile) -> Deferred<Maybe<Favicon>> {

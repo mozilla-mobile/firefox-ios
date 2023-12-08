@@ -24,7 +24,7 @@ struct FakespotAdViewModel {
     let productAdsData: ProductAdsResponse
 
     // MARK: Init
-    init(tabManager: TabManager = AppContainer.shared.resolve(),
+    init(tabManager: TabManager,
          productAdsData: ProductAdsResponse) {
         self.tabManager = tabManager
         self.productAdsData = productAdsData
@@ -148,7 +148,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         productLinkButton.configure(viewModel: productLinkButtonViewModel)
         gradeReliabilityScoreView.configure(grade: productAdsData.grade)
         Task {
-            await productImageView.loadImage(from: productAdsData.imageUrl)
+            try? await productImageView.loadImage(from: productAdsData.imageUrl)
         }
 
         let cardModel = ShadowCardViewModel(view: contentStackView, a11yId: viewModel.cardA11yId)

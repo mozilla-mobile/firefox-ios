@@ -174,18 +174,18 @@ class SyncDataDisplay {
     }
 
     func displayNewSentTabNotification(tab: [String: String]) {
-        if let urlString = tab["url"],
+        if let urlString = tab[NotificationSentTabs.Payload.urlKey],
             let url = URL(string: urlString, invalidCharacters: false),
             url.isWebPage(),
-            let title = tab["title"] {
+            let title = tab[NotificationSentTabs.Payload.titleKey] {
             let tab = [
-                "title": title,
-                "url": url.absoluteString,
-                "displayURL": url.absoluteDisplayExternalString,
-                "deviceName": nil
+                NotificationSentTabs.Payload.titleKey: title,
+                NotificationSentTabs.Payload.urlKey: url.absoluteString,
+                NotificationSentTabs.Payload.displayURLKey: url.absoluteDisplayExternalString,
+                NotificationSentTabs.Payload.deviceNameKey: nil
             ] as NSDictionary
 
-            notificationContent.userInfo["sentTabs"] = [tab] as NSArray
+            notificationContent.userInfo[NotificationSentTabs.sentTabsKey] = [tab] as NSArray
 
             presentNotification(title: .SentTab_TabArrivingNotification_NoDevice_title, body: url.absoluteDisplayExternalString)
         }

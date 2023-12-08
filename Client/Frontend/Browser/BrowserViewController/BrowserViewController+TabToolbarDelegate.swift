@@ -75,6 +75,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         tabManager.selectTab(tabManager.addTab(nil, isPrivate: isPrivate))
         focusLocationTextField(forTab: tabManager.selectedTab)
+        overlayManager.openNewTab(url: nil,
+                                  newTabSettings: NewTabAccessors.getNewTabPage(profile.prefs))
     }
 
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -103,7 +105,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         updateZoomPageBarVisibility(visible: false)
-        showTabTray()
+        let segmentToFocus = tabManager.selectedTab?.isPrivate ?? false ? TabTrayPanelType.privateTabs : TabTrayPanelType.tabs
+        showTabTray(focusedSegment: segmentToFocus)
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .tabToolbar, value: .tabView)
     }
 

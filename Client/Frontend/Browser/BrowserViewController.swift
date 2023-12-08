@@ -28,6 +28,8 @@ class BrowserViewController: UIViewController,
         static let ActionSheetTitleMaxLength = 120
     }
 
+    typealias SubscriberStateType = BrowserViewControllerState
+
     private let KVOs: [KVOConstants] = [
         .estimatedProgress,
         .loading,
@@ -80,7 +82,7 @@ class BrowserViewController: UIViewController,
     let tabManager: TabManager
     let ratingPromptManager: RatingPromptManager
     lazy var isTabTrayRefactorEnabled: Bool = TabTrayFlagManager.isRefactorEnabled
-    private var fakespotState: FakespotState?
+    private var browserViewControllerState: BrowserViewControllerState?
 
     // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
     var header: BaseAlphaStackView = .build { _ in }
@@ -92,6 +94,7 @@ class BrowserViewController: UIViewController,
     // Overlay dimming view for private mode
     lazy var privateModeDimmingView: UIView = .build { view in
         view.backgroundColor = self.themeManager.currentTheme.colors.layerScrim
+        view.accessibilityIdentifier = AccessibilityIdentifiers.PrivateMode.dimmingView
     }
 
     // BottomContainer stack view contains toolbar
@@ -166,8 +169,6 @@ class BrowserViewController: UIViewController,
         return NewTabAccessors.getNewTabPage(profile.prefs)
     }
 
-    lazy var isReduxIntegrationEnabled: Bool = ReduxFlagManager.isReduxEnabled
-
     @available(iOS 13.4, *)
     func keyboardPressesHandler() -> KeyboardPressesHandler {
         guard let keyboardPressesHandlerValue = keyboardPressesHandlerValue as? KeyboardPressesHandler else {
@@ -213,9 +214,7 @@ class BrowserViewController: UIViewController,
     }
 
     deinit {
-        if isReduxIntegrationEnabled {
-            store.unsubscribe(self)
-        }
+        unsubscribeFromRedux()
     }
 
     override var prefersStatusBarHidden: Bool {
@@ -378,6 +377,11 @@ class BrowserViewController: UIViewController,
         if self.presentedViewController as? PhotonActionSheet != nil {
             self.presentedViewController?.dismiss(animated: true, completion: nil)
         }
+        // Formerly these calls were run during AppDelegate.didEnterBackground(), but we have
+        // individual TabManager instances for each BVC, so we perform these here instead.
+        tabManager.preserveTabs()
+        // TODO: [7856] Some additional updates for telemetry forthcoming, once iPad multi-window is enabled.
+        TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
     }
 
     @objc
@@ -452,34 +456,38 @@ class BrowserViewController: UIViewController,
 
     private func dismissModalsIfStartAtHome() {
         if tabManager.startAtHomeCheck() {
-            guard !dismissFakespotIfNeeded(), presentedViewController != nil else { return }
+            store.dispatch(FakespotAction.setAppearanceTo(false))
+            guard presentedViewController != nil else { return }
             dismissVC()
         }
     }
 
     // MARK: - Redux
 
-    private func subscribeRedux() {
-        guard isReduxIntegrationEnabled else { return }
-        store.dispatch(ActiveScreensStateAction.showScreen(.fakespot))
+    func subscribeToRedux() {
+        store.dispatch(ActiveScreensStateAction.showScreen(.browserViewController))
 
         store.subscribe(self, transform: {
-            $0.select(FakespotState.init)
+            $0.select(BrowserViewControllerState.init)
         })
     }
 
-    func newState(state: FakespotState) {
+    func unsubscribeFromRedux() {
+        store.unsubscribe(self)
+    }
+
+    func newState(state: BrowserViewControllerState) {
         ensureMainThread { [weak self] in
             guard let self else { return }
 
-            fakespotState = state
+            browserViewControllerState = state
 
             // opens or close sidebar/bottom sheet to match the saved state
-            if state.isOpenOnProductPage {
+            if state.fakespotState.isOpen {
                 guard let productURL = urlBar.currentURL else { return }
                 handleFakespotFlow(productURL: productURL)
-            } else {
-                _ = dismissFakespotIfNeeded()
+            } else if !state.fakespotState.isOpen {
+                dismissFakespotIfNeeded()
             }
         }
     }
@@ -542,7 +550,7 @@ class BrowserViewController: UIViewController,
         // Send settings telemetry for Fakespot
         FakespotUtils().addSettingTelemetry()
 
-        subscribeRedux()
+        subscribeToRedux()
     }
 
     private func setupAccessibleActions() {
@@ -653,8 +661,6 @@ class BrowserViewController: UIViewController,
 
     // Configure dimming view to show for private mode
     func configureDimmingView() {
-        guard featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) else { return }
-
         if let selectedTab = tabManager.selectedTab, selectedTab.isPrivate {
             view.addSubview(privateModeDimmingView)
             view.bringSubviewToFront(privateModeDimmingView)
@@ -761,12 +767,12 @@ class BrowserViewController: UIViewController,
         var fakespotNeedsUpdate = false
         if urlBar.currentURL != nil {
             fakespotNeedsUpdate = contentStackView.isSidebarVisible != FakespotUtils().shouldDisplayInSidebar(viewSize: size)
-            if isReduxIntegrationEnabled, let fakespotState = fakespotState {
-                fakespotNeedsUpdate = fakespotNeedsUpdate && fakespotState.isOpenOnProductPage
+            if let fakespotState = browserViewControllerState?.fakespotState {
+                fakespotNeedsUpdate = fakespotNeedsUpdate && fakespotState.isOpen
             }
 
             if fakespotNeedsUpdate {
-                _ = dismissFakespotIfNeeded(animated: false)
+                dismissFakespotIfNeeded(animated: false)
             }
         }
 
@@ -1021,7 +1027,6 @@ class BrowserViewController: UIViewController,
                                       toastContainer: contentContainer,
                                       homepanelDelegate: self,
                                       libraryPanelDelegate: self,
-                                      sendToDeviceDelegate: self,
                                       statusBarScrollDelegate: statusBarOverlay,
                                       overlayManager: overlayManager)
     }
@@ -1424,10 +1429,14 @@ class BrowserViewController: UIViewController,
     }
 
     func handleQRCode() {
-        let qrCodeViewController = QRCodeViewController()
-        qrCodeViewController.qrCodeDelegate = self
-        presentedViewController?.dismiss(animated: true)
-        present(UINavigationController(rootViewController: qrCodeViewController), animated: true, completion: nil)
+        if CoordinatorFlagManager.isQRCodeCoordinatorEnabled {
+            navigationHandler?.showQRCode()
+        } else {
+            let qrCodeViewController = QRCodeViewController()
+            qrCodeViewController.qrCodeDelegate = self
+            presentedViewController?.dismiss(animated: true)
+            present(UINavigationController(rootViewController: qrCodeViewController), animated: true, completion: nil)
+        }
     }
 
     func handleClosePrivateTabs() {
@@ -1555,67 +1564,6 @@ class BrowserViewController: UIViewController,
         return navigationController?.topViewController?.presentedViewController as? JSPromptAlertController != nil
     }
 
-    func presentActivityViewController(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
-        presentShareSheet(url, tab: tab, sourceView: sourceView, sourceRect: sourceRect, arrowDirection: arrowDirection)
-    }
-
-    func presentShareSheet(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
-        let helper = ShareExtensionHelper(url: url, tab: tab)
-        let selectedTabWebview = tabManager.selectedTab?.webView
-        let controller = helper.createActivityViewController(selectedTabWebview) {
-            [unowned self] completed, activityType in
-            switch activityType {
-            case CustomActivityAction.sendToDevice.actionType:
-                self.showSendToDevice()
-            case CustomActivityAction.copyLink.actionType:
-                SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage,
-                                                bottomContainer: contentContainer,
-                                                theme: themeManager.currentTheme)
-            default: break
-            }
-
-            // After dismissing, check to see if there were any prompts we queued up
-            self.showQueuedAlertIfAvailable()
-
-            // Usually the popover delegate would handle nil'ing out the references we have to it
-            // on the BVC when displaying as a popover but the delegate method doesn't seem to be
-            // invoked on iOS 10. See Bug 1297768 for additional details.
-            self.displayedPopoverController = nil
-            self.updateDisplayedPopoverProperties = nil
-        }
-
-        if let popoverPresentationController = controller.popoverPresentationController {
-            popoverPresentationController.sourceView = sourceView
-            popoverPresentationController.sourceRect = sourceRect
-            popoverPresentationController.permittedArrowDirections = arrowDirection
-            popoverPresentationController.delegate = self
-        }
-
-        presentWithModalDismissIfNeeded(controller, animated: true)
-    }
-
-    private func showSendToDevice() {
-        guard let selectedTab = tabManager.selectedTab,
-              let url = selectedTab.canonicalURL?.displayURL
-        else { return }
-
-        let themeColors = themeManager.currentTheme.colors
-        let colors = SendToDeviceHelper.Colors(defaultBackground: themeColors.layer1,
-                                               textColor: themeColors.textPrimary,
-                                               iconColor: themeColors.iconPrimary)
-        let shareItem = ShareItem(url: url.absoluteString,
-                                  title: selectedTab.title)
-
-        let helper = SendToDeviceHelper(shareItem: shareItem,
-                                        profile: profile,
-                                        colors: colors,
-                                        delegate: self)
-        let viewController = helper.initialViewController()
-
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sendToDevice)
-        showViewController(viewController: viewController)
-    }
-
     fileprivate func postLocationChangeNotificationForTab(_ tab: Tab, navigation: WKNavigation?) {
         let notificationCenter = NotificationCenter.default
         var info = [AnyHashable: Any]()
@@ -1693,26 +1641,39 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func updateFakespot(tab: Tab) {
+    internal func updateFakespot(tab: Tab) {
         guard let webView = tab.webView, let url = webView.url else {
+            // We're on homepage or a blank tab
+            store.dispatch(FakespotAction.setAppearanceTo(false))
             return
         }
 
         let environment = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI) ? FakespotEnvironment.staging : .prod
         let product = ShoppingProduct(url: url, client: FakespotClient(environment: environment))
-        if product.product != nil, !tab.isPrivate, contentStackView.isSidebarVisible {
+
+        guard product.product != nil, !tab.isPrivate else {
+            store.dispatch(FakespotAction.setAppearanceTo(false))
+
+            // Quick fix: make sure to sidebar is hidden when opened from deep-link
+            // Relates to FXIOS-7844
+            contentStackView.hideSidebar(self)
+            return
+        }
+
+        if contentStackView.isSidebarVisible {
+            // Sidebar is visible, update content
             navigationHandler?.updateFakespotSidebar(productURL: url,
                                                      sidebarContainer: contentStackView,
                                                      parentViewController: self)
-        } else if product.product != nil,
-                  !tab.isPrivate,
-                  FakespotUtils().shouldDisplayInSidebar(),
-                  isReduxIntegrationEnabled,
-                  let fakespotState = fakespotState,
-                  fakespotState.isOpenOnProductPage {
+        } else if FakespotUtils().shouldDisplayInSidebar(),
+                  let fakespotState = browserViewControllerState?.fakespotState,
+                  fakespotState.isOpen {
+            // Sidebar should be displayed and Fakespot is open, display Fakespot
             handleFakespotFlow(productURL: url)
-        } else if contentStackView.isSidebarVisible {
-            _ = dismissFakespotIfNeeded(animated: true)
+        } else if let fakespotState = browserViewControllerState?.fakespotState,
+                  fakespotState.sidebarOpenForiPadLandscape {
+            // Sidebar should be displayed, display Fakespot
+            store.dispatch(FakespotAction.setAppearanceTo(true))
         }
     }
 
@@ -1758,9 +1719,9 @@ class BrowserViewController: UIViewController,
 
         let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
             .creditCardAutofillStatus, checking: .buildOnly)
-        let creditCardHelper = CreditCardHelper(tab: tab)
-        tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
-        creditCardHelper.foundFieldValues = { [weak self] fieldValues, type, frame in
+        let formAutofillHelper = FormAutofillHelper(tab: tab)
+        tab.addContentScript(formAutofillHelper, name: FormAutofillHelper.name())
+        formAutofillHelper.foundFieldValues = { [weak self] fieldValues, type, frame in
             guard let tabWebView = tab.webView,
                   let type = type,
                   userDefaults.object(forKey: keyCreditCardAutofill) as? Bool ?? true
@@ -1787,6 +1748,12 @@ class BrowserViewController: UIViewController,
             case .formSubmit:
                 self?.showCreditCardAutofillSheet(fieldValues: fieldValues)
                 break
+            case .fillAddressForm:
+                // TODO: FXIOS-7670 Address Autofill UX
+                return
+            case .captureAddressForm:
+                // TODO: FXIOS-7670 Address Autofill UX
+                return
             }
 
             tabWebView.accessoryView.savedCardsClosure = {
@@ -1822,8 +1789,7 @@ class BrowserViewController: UIViewController,
     }
 
     func showCreditCardAutofillSheet(fieldValues: UnencryptedCreditCardFields) {
-        self.profile.autofill.checkForCreditCardExistance(cardNumber: fieldValues.ccNumberLast4) {
-            existingCard, error in
+        self.profile.autofill.checkForCreditCardExistance(cardNumber: fieldValues.ccNumberLast4) { existingCard, error in
             guard let existingCard = existingCard else {
                 DispatchQueue.main.async {
                     self.navigationHandler?.showCreditCardAutofill(creditCard: nil,
@@ -2004,7 +1970,11 @@ extension BrowserViewController: LegacyTabDelegate {
 
         // only add the logins helper if the tab is not a private browsing tab
         if !tab.isPrivate {
-            let logins = LoginsHelper(tab: tab, profile: profile)
+            let logins = LoginsHelper(
+                tab: tab,
+                profile: profile,
+                theme: themeManager.currentTheme
+            )
             tab.addContentScript(logins, name: LoginsHelper.name())
         }
 
@@ -2079,7 +2049,7 @@ extension BrowserViewController: LegacyTabDelegate {
         // the selected Tab, do nothing right now. If/when the Tab gets
         // selected later, we will show the SnackBar at that time.
         guard tab == tabManager.selectedTab else { return }
-
+        bar.applyTheme(theme: themeManager.currentTheme)
         bottomContentStackView.addArrangedViewToBottom(bar, completion: {
             self.view.layoutIfNeeded()
         })
@@ -2244,7 +2214,7 @@ extension BrowserViewController: TabManagerDelegate {
         bottomContentStackView.removeAllArrangedViews()
         if let bars = selected?.bars {
             bars.forEach { bar in
-                bottomContentStackView.addArrangedViewToBottom(bar, completion: { self.view.layoutIfNeeded()})
+                bottomContentStackView.addArrangedViewToBottom(bar, completion: { self.view.layoutIfNeeded() })
             }
         }
 
@@ -2509,7 +2479,7 @@ extension BrowserViewController: TopTabsDelegate {
     }
 
     func topTabsDidPressNewTab(_ isPrivate: Bool) {
-        openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
+        openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
         overlayManager.openNewTab(url: nil,
                                   newTabSettings: newTabSettings)
     }
@@ -2540,7 +2510,7 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
 
         guard shareItem.isShareable else {
             let alert = UIAlertController(title: .SendToErrorTitle, message: .SendToErrorMessage, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: .SendToErrorOKButton, style: .default) { _ in self.popToBVC()})
+            alert.addAction(UIAlertAction(title: .SendToErrorOKButton, style: .default) { _ in self.popToBVC() })
             present(alert, animated: true, completion: nil)
             return
         }

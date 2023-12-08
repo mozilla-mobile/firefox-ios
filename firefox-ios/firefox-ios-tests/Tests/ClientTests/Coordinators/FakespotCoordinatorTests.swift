@@ -64,8 +64,8 @@ final class FakespotCoordinatorTests: XCTestCase {
         subject.startSidebar(productURL: exampleProduct,
                              sidebarContainer: sidebarContainer,
                              parentViewController: viewController)
-        subject.fakespotControllerCloseSidebar(sidebarContainer: sidebarContainer,
-                                               parentViewController: viewController)
+        subject.closeSidebar(sidebarContainer: sidebarContainer,
+                             parentViewController: viewController)
 
         XCTAssertEqual(sidebarContainer.hideSidebarCalled, 1)
         XCTAssertEqual(mockRouter.dismissCalled, 1)
@@ -76,7 +76,7 @@ final class FakespotCoordinatorTests: XCTestCase {
         let subject = createSubject()
 
         subject.startModal(productURL: exampleProduct)
-        subject.fakespotControllerDidDismiss(animated: false)
+        subject.dismissModal(animated: false)
 
         XCTAssertEqual(mockRouter.dismissCalled, 1)
         XCTAssertTrue(subject.childCoordinators.isEmpty)
@@ -103,7 +103,7 @@ final class FakespotCoordinatorTests: XCTestCase {
     // MARK: - Helpers
     private func createSubject(file: StaticString = #file,
                                line: UInt = #line) -> FakespotCoordinator {
-        let subject = FakespotCoordinator(router: mockRouter)
+        let subject = FakespotCoordinator(router: mockRouter, tabManager: MockTabManager())
 
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

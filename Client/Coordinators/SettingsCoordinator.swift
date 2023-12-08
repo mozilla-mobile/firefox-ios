@@ -33,7 +33,7 @@ class SettingsCoordinator: BaseCoordinator,
     init(router: Router,
          wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
          profile: Profile = AppContainer.shared.resolve(),
-         tabManager: TabManager = AppContainer.shared.resolve(),
+         tabManager: TabManager,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.wallpaperManager = wallpaperManager
         self.profile = profile
@@ -84,7 +84,9 @@ class SettingsCoordinator: BaseCoordinator,
             return viewController
 
         case .homePage:
-            let viewController = HomePageSettingViewController(prefs: profile.prefs, settingsDelegate: self)
+            let viewController = HomePageSettingViewController(prefs: profile.prefs,
+                                                               settingsDelegate: self,
+                                                               tabManager: tabManager)
             viewController.profile = profile
             return viewController
 
@@ -202,11 +204,12 @@ class SettingsCoordinator: BaseCoordinator,
         passwordCoordinator.start(with: shouldShowOnboarding)
     }
 
-    func showQRCode(delegate: QRCodeViewControllerDelegate) {
+    func showQRCode(delegate: QRCodeViewControllerDelegate, rootNavigationController: UINavigationController?) {
         var coordinator: QRCodeCoordinator
         if let qrCodeCoordinator = childCoordinators.first(where: { $0 is QRCodeCoordinator }) as? QRCodeCoordinator {
             coordinator = qrCodeCoordinator
         } else {
+            let router = rootNavigationController != nil ? DefaultRouter(navigationController: rootNavigationController!) : router
             coordinator = QRCodeCoordinator(parentCoordinator: self, router: router)
             add(child: coordinator)
         }
@@ -258,7 +261,8 @@ class SettingsCoordinator: BaseCoordinator,
 
     func pressedHome() {
         let viewController = HomePageSettingViewController(prefs: profile.prefs,
-                                                           settingsDelegate: self)
+                                                           settingsDelegate: self,
+                                                           tabManager: tabManager)
         viewController.profile = profile
         router.push(viewController)
     }

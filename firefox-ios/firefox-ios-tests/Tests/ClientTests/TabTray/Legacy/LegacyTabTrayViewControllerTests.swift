@@ -79,13 +79,4 @@ final class LegacyTabTrayViewControllerTests: XCTestCase {
         let privateState = UserDefaults.standard.bool(forKey: PrefsKeys.LastSessionWasPrivate)
         XCTAssertFalse(privateState)
     }
-
-    func testInOverlayMode_ForHomepageNewTabSettings() {
-        tabTray.viewModel.segmentToFocus = TabTrayPanelType.privateTabs
-        tabTray.viewDidLoad()
-        profile.prefs.setString(NewTabPage.topSites.rawValue, forKey: NewTabAccessors.NewTabPrefKey)
-        tabTray.viewModel.didTapAddTab(UIBarButtonItem())
-
-        XCTAssertTrue(tabTray.viewModel.overlayManager.inOverlayMode)
-    }
 }

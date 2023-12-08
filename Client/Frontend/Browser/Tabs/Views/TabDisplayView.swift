@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Redux
 import UIKit
 
 class TabDisplayView: UIView,
@@ -90,8 +91,7 @@ class TabDisplayView: UIView,
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
-        let layout = UICollectionViewCompositionalLayout { [weak self]
-            (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
             guard let self else { return nil }
 
             // If on private mode or regular mode but without inactive
@@ -132,7 +132,8 @@ class TabDisplayView: UIView,
     }
 
     func deleteInactiveTab(for index: Int) {
-        store.dispatch(TabPanelAction.closeInactiveTabs(index))
+        let inactiveTabs = tabsState.inactiveTabs[index]
+        store.dispatch(TabPanelAction.closeInactiveTabs(inactiveTabs.tabUUID))
     }
 
     // MARK: UICollectionViewDataSource
@@ -210,7 +211,7 @@ class TabDisplayView: UIView,
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabsCell.cellIdentifier, for: indexPath) as? InactiveTabsCell
             else { return UICollectionViewCell() }
 
-            cell.configure(text: tabsState.inactiveTabs[indexPath.row].url)
+            cell.configure(text: tabsState.inactiveTabs[indexPath.row].title)
             if let theme = theme {
                 cell.applyTheme(theme: theme)
             }
@@ -222,6 +223,17 @@ class TabDisplayView: UIView,
             let tabState = tabsState.tabs[indexPath.row]
             cell.configure(with: tabState, theme: theme, delegate: self)
             return cell
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        switch getTabDisplay(for: indexPath.section) {
+        case .inactiveTabs:
+            let tabUUID = tabsState.inactiveTabs[indexPath.row].tabUUID
+            store.dispatch(TabPanelAction.selectTab(tabUUID))
+        case .tabs:
+            let tabUUID = tabsState.tabs[indexPath.row].tabUUID
+            store.dispatch(TabPanelAction.selectTab(tabUUID))
         }
     }
 
@@ -245,9 +257,8 @@ class TabDisplayView: UIView,
     }
 
     // MARK: - TabCellDelegate
-    func tabCellDidClose(_ cell: TabCell) {
-        guard let indexPath = collectionView.indexPath(for: cell) else { return }
-        store.dispatch(TabPanelAction.closeTab(indexPath.row))
+    func tabCellDidClose(for tabUUID: String) {
+        store.dispatch(TabPanelAction.closeTab(tabUUID))
     }
 }
 

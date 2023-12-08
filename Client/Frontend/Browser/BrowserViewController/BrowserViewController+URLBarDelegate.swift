@@ -113,38 +113,26 @@ extension BrowserViewController: URLBarDelegate {
         }
     }
 
-    func urlBarDidPressShopping(_ urlBar: URLBarView, shoppingButton: UIButton) {
-        guard let productURL = urlBar.currentURL else { return }
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingButton)
-
-        let dismissedFakespot = dismissFakespotIfNeeded()
-        if !dismissedFakespot {
-            // open flow
-            handleFakespotFlow(productURL: productURL)
-            if isReduxIntegrationEnabled {
-                store.dispatch(FakespotAction.toggleAppearance(true))
-            }
-        } else if isReduxIntegrationEnabled {
-            // Fakespot was closed/dismissed
-            store.dispatch(FakespotAction.toggleAppearance(false))
-        }
-    }
-
-    internal func dismissFakespotIfNeeded(animated: Bool = true) -> Bool {
-        if contentStackView.isSidebarVisible {
+    internal func dismissFakespotIfNeeded(animated: Bool = true) {
+        guard !contentStackView.isSidebarVisible else {
             // hide sidebar as user tapped on shopping icon for a second time
             navigationHandler?.dismissFakespotSidebar(sidebarContainer: contentStackView, parentViewController: self)
-            return true
-        } else if presentedViewController as? FakespotViewController != nil {
-            // dismiss modal as user tapped on shopping icon for a second time
-            navigationHandler?.dismissFakespotModal(animated: animated)
-            return true
+            return
         }
-        return false
+
+        // dismiss modal as user tapped on shopping icon for a second time
+        navigationHandler?.dismissFakespotModal(animated: animated)
     }
 
     internal func handleFakespotFlow(productURL: URL, viewSize: CGSize? = nil) {
-        if FakespotUtils().shouldDisplayInSidebar(viewSize: viewSize) {
+        let shouldDisplayInSidebar = FakespotUtils().shouldDisplayInSidebar(viewSize: viewSize)
+        if !shouldDisplayInSidebar, contentStackView.isSidebarVisible {
+            // Quick fix: make sure to sidebar is hidden
+            // Relates to FXIOS-7844
+            contentStackView.hideSidebar(self)
+        }
+
+        if shouldDisplayInSidebar {
             navigationHandler?.showFakespotFlowAsSidebar(productURL: productURL,
                                                          sidebarContainer: contentStackView,
                                                          parentViewController: self)
@@ -171,19 +159,21 @@ extension BrowserViewController: URLBarDelegate {
                     value: .shoppingCFRsDisplayed
                 )
             },
-            andActionForButton: { [weak self] in
-                guard let self else { return }
-                guard let productURL = self.urlBar.currentURL else { return }
-                self.handleFakespotFlow(productURL: productURL)
+            andActionForButton: {
+                store.dispatch(FakespotAction.show)
             },
             overlayState: overlayManager)
     }
 
     func urlBarDidPressQRButton(_ urlBar: URLBarView) {
-        let qrCodeViewController = QRCodeViewController()
-        qrCodeViewController.qrCodeDelegate = self
-        let controller = QRCodeNavigationController(rootViewController: qrCodeViewController)
-        self.present(controller, animated: true, completion: nil)
+        if CoordinatorFlagManager.isQRCodeCoordinatorEnabled {
+            navigationHandler?.showQRCode()
+        } else {
+            let qrCodeViewController = QRCodeViewController()
+            qrCodeViewController.qrCodeDelegate = self
+            let controller = QRCodeNavigationController(rootViewController: qrCodeViewController)
+            self.present(controller, animated: true, completion: nil)
+        }
     }
 
     func urlBarDidTapShield(_ urlBar: URLBarView) {
@@ -299,9 +289,7 @@ extension BrowserViewController: URLBarDelegate {
         if text.isEmpty {
             hideSearchController()
         } else {
-            configureDimmingView()
-            // TODO: Show / Hide Search Controller based on Setting - https://mozilla-hub.atlassian.net/browse/FXIOS-7182
-            showSearchController()
+            configureOverlayView()
         }
 
         searchController?.searchQuery = text
@@ -312,9 +300,7 @@ extension BrowserViewController: URLBarDelegate {
         if text.isEmpty {
             hideSearchController()
         } else {
-            configureDimmingView()
-            // TODO: Show / Hide Search Controller based on Setting - https://mozilla-hub.atlassian.net/browse/FXIOS-7182
-            showSearchController()
+            configureOverlayView()
         }
         urlBar.locationTextField?.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false, theme: self.themeManager.currentTheme)
         searchController?.searchQuery = text
@@ -404,5 +390,23 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView) {
         dismissVisibleMenus()
+    }
+
+    private var shouldDisableSearchSuggestsForPrivateMode: Bool {
+        let featureFlagEnabled = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
+        let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
+        let isSettingEnabled = profile.prefs.boolForKey(PrefsKeys.SearchSettings.disablePrivateModeSearchSuggestions) ?? true
+        return featureFlagEnabled && isPrivateTab && isSettingEnabled
+    }
+
+    // Determines the view user should see when editing the url bar
+    // Dimming view appears if private mode search suggest is disabled
+    // Otherwise shows search suggests screen
+    private func configureOverlayView() {
+        if shouldDisableSearchSuggestsForPrivateMode {
+            configureDimmingView()
+        } else {
+            showSearchController()
+        }
     }
 }

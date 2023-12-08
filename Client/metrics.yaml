@@ -669,7 +669,40 @@ shopping:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
-    unit: counter of product pages
+
+  ads_exposure:
+    type: event
+    description: |
+      On a supported product page, the review checker showed analysis, and
+      the ads exposure pref was enabled, or review checker ads were enabled,
+      and when we tried to fetch an ad from the ad server, an ad was available.
+      Does not indicate whether the ad was actually shown.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17306
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17493
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
+    send_in_pings:
+      - events
+
+  surface_ads_impression:
+    type: event
+    description: |
+      An ad was shown and visible in the bottom sheet for 1.5 seconds.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17302
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17524
+    data_sensitivity:
+      - interaction
+    expires: "2024-06-01"
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    send_in_pings:
+      - events
+
   address_bar_icon_clicked:
     type: event
     description: |
@@ -2055,6 +2088,17 @@ history:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
+  opened_item:
+    type: event
+    description: |
+      Recorded when a user opened a history item
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17296
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17462
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
   search_tap:
     type: event
     description: |
@@ -2621,39 +2665,6 @@ preferences:
 
 # Password Manager metrics
 logins:
-  password_detected:
-    type: event
-    description: |
-      Records when a username and password pair was detected
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/14902
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16685
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2024-06-01"
-  autofill_prompt_shown:
-    type: event
-    description: |
-      Records when the Password autofill prompt was shown
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/14902
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16685
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2024-06-01"
-  autofill_prompt_dismissed:
-    type: event
-    description: |
-      Records when the Password autofill prompt was dismissed.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/14902
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16685
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2024-06-01"
   autofilled:
     type: event
     description: |
@@ -2709,7 +2720,6 @@ logins:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
-    unit: counter of logins.saved
   saved_all:
     type: quantity
     description: |
@@ -2733,7 +2743,6 @@ logins:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
-    unit: counter of logins.deleted
   modified:
     type: counter
     description: |
@@ -2745,7 +2754,6 @@ logins:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
-    unit: counter of logins.modified
   sync_enabled:
     type: event
     description: |
@@ -4738,7 +4746,6 @@ credit_card:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
-    unit: counter of credit_card.saved
   saved_all:
     type: quantity
     description: |
@@ -4762,7 +4769,6 @@ credit_card:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
-    unit: counter of credit_card.deleted
   modified:
     type: counter
     description: |
@@ -4774,7 +4780,6 @@ credit_card:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
-    unit: counter of credit_card.modified
 
 baseline.validation:
   startup_duration:

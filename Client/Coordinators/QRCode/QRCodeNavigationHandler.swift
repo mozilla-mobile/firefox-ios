@@ -6,5 +6,12 @@ import Foundation
 
 protocol QRCodeNavigationHandler: AnyObject {
     /// Shows the QRCodeViewController
-    func showQRCode(delegate: QRCodeViewControllerDelegate)
+    /// The root navigation controller is used when available to present the QRCodeViewController.
+    func showQRCode(delegate: QRCodeViewControllerDelegate, rootNavigationController: UINavigationController?)
+}
+
+extension QRCodeNavigationHandler {
+    func showQRCode(delegate: QRCodeViewControllerDelegate, rootNavigationController: UINavigationController? = nil) {
+        showQRCode(delegate: delegate, rootNavigationController: rootNavigationController)
+    }
 }

@@ -5,5 +5,13 @@
 import Foundation
 
 struct InactiveTabsModel: Equatable {
-    var url: String
+    var tabUUID: String
+    var title: String
+    var url: URL?
+
+    var displayURL: String {
+        guard let url = url else { return title }
+
+        return url.absoluteString
+    }
 }

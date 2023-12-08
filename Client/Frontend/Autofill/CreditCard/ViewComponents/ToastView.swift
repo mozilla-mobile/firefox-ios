@@ -23,11 +23,12 @@ struct ToastView: View {
     }
 
     var body: some View {
-        VStack {
+        withAnimation(.default) {
+            VStack {
+            }
+            .toast(toastView: toast, isShowing: $isShowing)
+            .transition(AnyTransition.move(edge: .bottom))
         }
-        .toast(toastView: toast, isShowing: $isShowing)
-        .animation(.default)
-        .transition(AnyTransition.move(edge: .bottom))
     }
 }
 

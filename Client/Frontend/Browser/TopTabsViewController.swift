@@ -57,6 +57,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
         button.semanticContentAttribute = .forceLeftToRight
         button.addTarget(self, action: #selector(TopTabsViewController.tabsTrayTapped), for: .touchUpInside)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.tabsButton
+        button.showsLargeContentViewer = true
     }
 
     private lazy var newTab: UIButton = .build { button in
@@ -64,6 +65,9 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
         button.semanticContentAttribute = .forceLeftToRight
         button.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), for: .touchUpInside)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.addNewTabButton
+        button.accessibilityLabel = .AddTabAccessibilityLabel
+        button.showsLargeContentViewer = true
+        button.largeContentTitle = .AddTabAccessibilityLabel
     }
 
     lazy var privateModeButton: PrivateModeButton = {
@@ -72,6 +76,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
         privateModeButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.TopTabs.privateModeButton
         privateModeButton.addTarget(self, action: #selector(TopTabsViewController.togglePrivateModeTapped), for: .touchUpInside)
         privateModeButton.translatesAutoresizingMaskIntoConstraints = false
+        privateModeButton.showsLargeContentViewer = true
         return privateModeButton
     }()
 
@@ -153,6 +158,9 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
         // links onto the "New Tab" button.
         let dropInteraction = UIDropInteraction(delegate: topTabDisplayManager)
         newTab.addInteraction(dropInteraction)
+
+        let uiLargeContentViewInteraction = UILargeContentViewerInteraction()
+        view.addInteraction(uiLargeContentViewInteraction)
 
         tabsButton.applyTheme(theme: themeManager.currentTheme)
         applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false, theme: themeManager.currentTheme)

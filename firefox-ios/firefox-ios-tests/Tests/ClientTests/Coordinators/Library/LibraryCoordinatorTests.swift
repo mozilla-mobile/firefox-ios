@@ -98,7 +98,7 @@ final class LibraryCoordinatorTests: XCTestCase {
 
     // MARK: - Helper
     func createSubject() -> LibraryCoordinator {
-        let subject = LibraryCoordinator(router: mockRouter)
+        let subject = LibraryCoordinator(router: mockRouter, tabManager: MockTabManager())
         trackForMemoryLeaks(subject)
         return subject
     }

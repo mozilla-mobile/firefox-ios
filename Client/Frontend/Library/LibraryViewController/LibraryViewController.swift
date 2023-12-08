@@ -237,7 +237,7 @@ class LibraryViewController: UIViewController, Themeable {
     }
 
     private func topLeftButtonSetup() {
-        var panelState = getCurrentPanelState()
+        let panelState = getCurrentPanelState()
         switch panelState {
         case .bookmarks(state: .inFolder),
              .history(state: .inFolder):
@@ -252,7 +252,7 @@ class LibraryViewController: UIViewController, Themeable {
     }
 
     private func topRightButtonSetup() {
-        var panelState = getCurrentPanelState()
+        let panelState = getCurrentPanelState()
         switch panelState {
         case .bookmarks(state: .inFolderEditMode):
             navigationItem.rightBarButtonItem = nil

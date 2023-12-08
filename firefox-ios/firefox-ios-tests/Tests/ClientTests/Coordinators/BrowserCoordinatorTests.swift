@@ -16,7 +16,6 @@ final class BrowserCoordinatorTests: XCTestCase {
     private var tabManager: MockTabManager!
     private var applicationHelper: MockApplicationHelper!
     private var glean: MockGleanWrapper!
-    private var wallpaperManager: WallpaperManagerMock!
     private var scrollDelegate: MockStatusBarScrollDelegate!
 
     override func setUp() {
@@ -30,7 +29,6 @@ final class BrowserCoordinatorTests: XCTestCase {
         self.tabManager = MockTabManager()
         self.applicationHelper = MockApplicationHelper()
         self.glean = MockGleanWrapper()
-        self.wallpaperManager = WallpaperManagerMock()
         self.scrollDelegate = MockStatusBarScrollDelegate()
     }
 
@@ -43,7 +41,6 @@ final class BrowserCoordinatorTests: XCTestCase {
         self.tabManager = nil
         self.applicationHelper = nil
         self.glean = nil
-        self.wallpaperManager = nil
         self.scrollDelegate = nil
         AppContainer.shared.reset()
     }
@@ -94,11 +91,13 @@ final class BrowserCoordinatorTests: XCTestCase {
                              toastContainer: UIView(),
                              homepanelDelegate: subject.browserViewController,
                              libraryPanelDelegate: subject.browserViewController,
-                             sendToDeviceDelegate: subject.browserViewController,
                              statusBarScrollDelegate: scrollDelegate,
                              overlayManager: overlayModeManager)
 
-        let secondHomepage = HomepageViewController(profile: profile, toastContainer: UIView(), overlayManager: overlayModeManager)
+        let secondHomepage = HomepageViewController(profile: profile,
+                                                    toastContainer: UIView(),
+                                                    tabManager: tabManager,
+                                                    overlayManager: overlayModeManager)
         XCTAssertFalse(subject.browserViewController.contentContainer.canAdd(content: secondHomepage))
         XCTAssertNotNil(subject.homepageViewController)
         XCTAssertNil(subject.webviewController)
@@ -110,7 +109,6 @@ final class BrowserCoordinatorTests: XCTestCase {
                              toastContainer: UIView(),
                              homepanelDelegate: subject.browserViewController,
                              libraryPanelDelegate: subject.browserViewController,
-                             sendToDeviceDelegate: subject.browserViewController,
                              statusBarScrollDelegate: scrollDelegate,
                              overlayManager: overlayModeManager)
         let firstHomepage = subject.homepageViewController
@@ -120,7 +118,6 @@ final class BrowserCoordinatorTests: XCTestCase {
                              toastContainer: UIView(),
                              homepanelDelegate: subject.browserViewController,
                              libraryPanelDelegate: subject.browserViewController,
-                             sendToDeviceDelegate: subject.browserViewController,
                              statusBarScrollDelegate: scrollDelegate,
                              overlayManager: overlayModeManager)
         let secondHomepage = subject.homepageViewController
@@ -285,7 +282,8 @@ final class BrowserCoordinatorTests: XCTestCase {
         let childCoordinator = ShareExtensionCoordinator(
             alertContainer: UIView(),
             router: mockRouter,
-            profile: profile)
+            profile: profile,
+            tabManager: tabManager)
 
         subject.add(child: childCoordinator)
         subject.didFinish(from: childCoordinator)
@@ -836,7 +834,7 @@ final class BrowserCoordinatorTests: XCTestCase {
 
         subject.showFakespotFlowAsModal(productURL: URL(string: "www.example.com")!)
         let fakespotCoordinator = subject.childCoordinators[0] as! FakespotCoordinator
-        fakespotCoordinator.fakespotControllerDidDismiss(animated: false)
+        fakespotCoordinator.dismissModal(animated: false)
 
         XCTAssertEqual(mockRouter.dismissCalled, 1)
         XCTAssertTrue(subject.childCoordinators.isEmpty)
@@ -926,11 +924,10 @@ final class BrowserCoordinatorTests: XCTestCase {
                                line: UInt = #line) -> BrowserCoordinator {
         let subject = BrowserCoordinator(router: mockRouter,
                                          screenshotService: screenshotService,
-                                         profile: profile,
                                          tabManager: tabManager,
+                                         profile: profile,
                                          glean: glean,
-                                         applicationHelper: applicationHelper,
-                                         wallpaperManager: wallpaperManager)
+                                         applicationHelper: applicationHelper)
 
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

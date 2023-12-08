@@ -171,6 +171,10 @@ class FakespotViewModel {
     var onStateChange: (() -> Void)?
     var isSwiping = false
     var isViewIntersected = false
+    // Timer-related properties for handling view visibility
+    private var isViewVisible = false
+    private var hasTimerFired = false
+    private var timer: Timer?
 
     private var fetchProductTask: Task<Void, Never>?
     private var observeProductTask: Task<Void, Never>?
@@ -184,6 +188,10 @@ class FakespotViewModel {
     private let prefs: Prefs
     private var isOptedIn: Bool {
         return prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false
+    }
+
+    var areAdsEnabled: Bool {
+        return prefs.boolForKey(PrefsKeys.Shopping2023EnableAds) ?? true
     }
 
     var reliabilityCardViewModel: FakespotReliabilityCardViewModel? {
@@ -292,16 +300,20 @@ class FakespotViewModel {
         a11yDescriptionIdentifier: AccessibilityIdentifiers.Shopping.InfoComingSoonCard.description
     )
 
-    let settingsCardViewModel = FakespotSettingsCardViewModel()
+    let settingsCardViewModel: FakespotSettingsCardViewModel
     var noAnalysisCardViewModel = FakespotNoAnalysisCardViewModel()
-    let reviewQualityCardViewModel = FakespotReviewQualityCardViewModel()
-    var optInCardViewModel = FakespotOptInCardViewModel()
+    let reviewQualityCardViewModel: FakespotReviewQualityCardViewModel
+    var optInCardViewModel: FakespotOptInCardViewModel
 
     private var analyzeCount = 0
 
     init(shoppingProduct: ShoppingProduct,
-         profile: Profile = AppContainer.shared.resolve()) {
+         profile: Profile = AppContainer.shared.resolve(),
+         tabManager: TabManager) {
         self.shoppingProduct = shoppingProduct
+        self.settingsCardViewModel = FakespotSettingsCardViewModel(tabManager: tabManager)
+        self.reviewQualityCardViewModel = FakespotReviewQualityCardViewModel(tabManager: tabManager)
+        optInCardViewModel = FakespotOptInCardViewModel(tabManager: tabManager)
         optInCardViewModel.productSitename = shoppingProduct.product?.sitename
         optInCardViewModel.supportedTLDWebsites = shoppingProduct.supportedTLDWebsites
         reviewQualityCardViewModel.productSitename = shoppingProduct.product?.sitename
@@ -341,6 +353,13 @@ class FakespotViewModel {
         }
     }
 
+    func toggleAdsEnabled() {
+        prefs.setBool(!areAdsEnabled, forKey: PrefsKeys.Shopping2023EnableAds)
+
+        // Make sure the view updates with the new ads setting
+        onStateChange?()
+    }
+
     struct ProductState {
         let product: ProductAnalysisResponse?
         let productAds: [ProductAdsResponse]
@@ -352,7 +371,7 @@ class FakespotViewModel {
         if showLoading { state = .loading }
         do {
             let product = try await shoppingProduct.fetchProductAnalysisData()
-            let productAds: [ProductAdsResponse] = if shoppingProduct.isProductAdsFeatureEnabled {
+            let productAds: [ProductAdsResponse] = if shoppingProduct.isProductAdsFeatureEnabled, areAdsEnabled {
                 await shoppingProduct.fetchProductAdsData()
             } else {
                 []
@@ -367,6 +386,9 @@ class FakespotViewModel {
                     analyzeCount: analyzeCount
                 )
             )
+            if !productAds.isEmpty, product != nil {
+                recordAdsExposureTelementry()
+            }
         } catch {
             state = .error(error)
         }
@@ -453,12 +475,74 @@ class FakespotViewModel {
         return sheetController.selectedDetentIdentifier
     }
 
+    // MARK: - Timer Handling
+    private func startTimer() {
+        timer = Timer.scheduledTimer(
+            timeInterval: 1.5,
+            target: self,
+            selector: #selector(timerFired),
+            userInfo: nil,
+            repeats: false
+        )
+        // Add the timer to the common run loop mode
+        // to ensure that the selector method fires even during user interactions such as scrolling,
+        // without requiring the user to lift their finger from the screen.
+        RunLoop.current.add(timer!, forMode: .common)
+    }
+
+    private func stopTimer() {
+        timer?.invalidate()
+        timer = nil
+    }
+
+    @objc
+    private func timerFired() {
+        hasTimerFired = true
+        recordSurfaceAdsImpressionTelemetry()
+        stopTimer()
+    }
+
+    func handleVisibilityChanges(for view: UIView, in superview: UIView) {
+        guard !hasTimerFired else { return }
+        let halfViewHeight = view.frame.height / 2
+        let intersection = superview.bounds.intersection(view.frame)
+        let areViewsIntersected = intersection.height >= halfViewHeight && halfViewHeight > 0
+
+        if areViewsIntersected {
+            guard !isViewVisible else { return }
+            isViewVisible.toggle()
+            startTimer()
+        } else {
+            guard isViewVisible else { return }
+            isViewVisible.toggle()
+            stopTimer()
+        }
+    }
+
     // MARK: - Telemetry
     private static func recordNoReviewReliabilityAvailableTelemetry() {
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .navigate,
             object: .shoppingBottomSheet
+        )
+    }
+
+    private func recordSurfaceAdsImpressionTelemetry() {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .view,
+            object: .shoppingBottomSheet,
+            value: .shoppingAdsImpression
+        )
+    }
+
+    private func recordAdsExposureTelementry() {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .view,
+            object: .shoppingBottomSheet,
+            value: .shoppingAdsExposure
         )
     }
 

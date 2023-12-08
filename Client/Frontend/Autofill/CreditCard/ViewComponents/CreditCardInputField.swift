@@ -26,6 +26,7 @@ struct CreditCardInputField: View {
     }
     @ObservedObject var viewModel: CreditCardInputViewModel
     let inputFieldHelper: CreditCardInputFieldHelper
+    @FocusState private var isFocused: Bool
     @State var text: String = ""
     @State var shouldReveal = true {
         willSet(val) {
@@ -183,12 +184,16 @@ struct CreditCardInputField: View {
         })
         .preferredBodyFont(size: 17)
         .disabled(editMode)
-        .padding(.top, 7.5)
+        .padding(.vertical, 7.5)
         .foregroundColor(textFieldColor)
         .multilineTextAlignment(.leading)
         .keyboardType(keyboardType)
         .lineLimit(1)
         .frame(maxWidth: .infinity, alignment: .leading)
+        .focused($isFocused)
+        .onTapGesture {
+            isFocused = true
+        }
         .onChange(of: text) { [oldValue = text] newValue in
             handleTextInputWith(oldValue, and: newValue)
             viewModel.updateRightButtonState()

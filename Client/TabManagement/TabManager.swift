@@ -61,6 +61,11 @@ protocol TabManager: AnyObject {
                                  didClearTabs: @escaping (_ tabsToRemove: [Tab],
                                                           _ isPrivate: Bool,
                                                           _ previousTabUUID: String) -> Void)
+    // MARK: TabTray refactor interfaces
+    func removeTab(_ tabUUID: String) async
+    func removeAllTabs(isPrivateMode: Bool) async
+    func getInactiveTabs() -> [Tab]
+    func removeAllInactiveTabs() async
 }
 
 extension TabManager {
@@ -70,7 +75,7 @@ extension TabManager {
 
     func selectTab(_ tab: Tab?) {
         guard let privateState = tab?.isPrivate else { return }
-        store.dispatch(AppStateAction.setPrivateModeTo(privateState))
+        store.dispatch(FeltPrivacyAction.setPrivateModeTo(privateState))
         selectTab(tab, previous: nil)
     }
 

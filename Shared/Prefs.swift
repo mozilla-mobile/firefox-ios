@@ -78,6 +78,10 @@ public struct PrefsKeys {
         public static let SearchBarPosition = "SearchBarPositionUsersPrefsKey"
     }
 
+    public struct SearchSettings {
+        public static let disablePrivateModeSearchSuggestions = "DisablePrivateModeSearchSuggestionsKey"
+    }
+
     public struct UserFeatureFlagPrefs {
         public static let ASPocketStories = "ASPocketStoriesUserPrefsKey"
         public static let RecentlySavedSection = "RecentlySavedSectionUserPrefsKey"

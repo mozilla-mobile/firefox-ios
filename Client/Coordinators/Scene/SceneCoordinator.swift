@@ -5,6 +5,9 @@
 import Common
 import UIKit
 import Shared
+import Storage
+
+typealias SceneUUID = UUID
 
 /// Each scene has it's own scene coordinator, which is the root coordinator for a scene.
 class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinishedLoadingDelegate {
@@ -97,14 +100,23 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
     }
 
     private func startBrowser(with launchType: LaunchType?) {
-        guard !childCoordinators.contains(where: { $0 is BrowserCoordinator}) else { return }
+        guard !childCoordinators.contains(where: { $0 is BrowserCoordinator }) else { return }
 
         logger.log("Starting browser with launchtype \(String(describing: launchType))",
                    level: .info,
                    category: .coordinator)
 
+        // Create the TabManager instance that will be associated with this browser
+        let profile: Profile = AppContainer.shared.resolve()
+        // TODO: [7885] Once iPad multi-window enabled each TabManager will likely share same default image store.
+        let imageStore = DefaultDiskImageStore(
+            files: profile.files,
+            namespace: "TabManagerScreenshots",
+            quality: UIConstants.ScreenshotQuality)
+        let tabManager = TabManagerImplementation(profile: profile, imageStore: imageStore)
         let browserCoordinator = BrowserCoordinator(router: router,
-                                                    screenshotService: screenshotService)
+                                                    screenshotService: screenshotService,
+                                                    tabManager: tabManager)
         add(child: browserCoordinator)
         browserCoordinator.start(with: launchType)
 

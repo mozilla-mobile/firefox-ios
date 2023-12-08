@@ -16,7 +16,7 @@ final class FakespotOptInCardViewModelTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
         mockProfile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
-        viewModel = FakespotOptInCardViewModel()
+        viewModel = FakespotOptInCardViewModel(tabManager: MockTabManager())
     }
 
     override func tearDown() {

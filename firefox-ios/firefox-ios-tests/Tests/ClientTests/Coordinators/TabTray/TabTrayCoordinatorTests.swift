@@ -61,9 +61,11 @@ final class TabTrayCoordinatorTests: XCTestCase {
     }
 
     // MARK: - Helpers
-    private func createSubject(file: StaticString = #file,
+    private func createSubject(panelType: TabTrayPanelType = .tabs,
+                               file: StaticString = #file,
                                line: UInt = #line) -> TabTrayCoordinator {
-        let subject = TabTrayCoordinator(router: mockRouter)
+        let subject = TabTrayCoordinator(router: mockRouter,
+                                         tabTraySection: panelType)
 
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

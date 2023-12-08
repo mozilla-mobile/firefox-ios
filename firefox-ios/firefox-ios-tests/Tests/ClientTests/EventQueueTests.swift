@@ -267,7 +267,7 @@ final class EventQueueTests: XCTestCase {
 
     func testNestedDependencies() {
         // Enqueue action
-        queue.wait(for: [.parentEvent, .activityEvent], then: {  })
+        queue.wait(for: [.parentEvent, .activityEvent], then: { })
         XCTAssertFalse(queue.hasSignalled(.parentEvent))
 
         // Create a parent event that depends on 3 sub-events

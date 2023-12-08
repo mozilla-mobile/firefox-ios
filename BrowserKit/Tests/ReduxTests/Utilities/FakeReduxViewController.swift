@@ -13,15 +13,32 @@ class FakeReduxViewController: UIViewController, StoreSubscriber {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        subscribeToRedux()
+        view.addSubview(label)
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        unsubscribeFromRedux()
+    }
+
+    // MARK: - Redux
+
+    func subscribeToRedux() {
         store.subscribe(self)
         store.dispatch(FakeReduxAction.requestInitialValue)
-        view.addSubview(label)
+    }
+
+    func unsubscribeFromRedux() {
+        store.unsubscribe(self)
     }
 
     func newState(state: FakeReduxState) {
         label.text = "\(state.counter)"
         isInPrivateMode = state.isInPrivateMode
     }
+
+    // MARK: - Helper functions
 
     func increaseCounter() {
         store.dispatch(FakeReduxAction.increaseCounter)

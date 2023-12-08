@@ -6,8 +6,9 @@ import Foundation
 import UIKit
 import Common
 import ComponentLibrary
+import MozillaAppServices
 
-class FakespotImageLoadingView: UIImageView, ThemeApplicable {
+class FakespotImageLoadingView: UIImageView, ThemeApplicable, FeatureFlaggable {
     private enum UX {
         static let minimumAlpha: CGFloat = 0.25
     }
@@ -17,7 +18,7 @@ class FakespotImageLoadingView: UIImageView, ThemeApplicable {
 
     // MARK: Image Loading
     @MainActor
-    func loadImage(from url: URL) async {
+    func loadImage(from url: URL) async throws {
         if let cachedData = imageCache.cachedResponse(for: URLRequest(url: url))?.data,
            let image = UIImage(data: cachedData) {
             self.image = image
@@ -28,7 +29,18 @@ class FakespotImageLoadingView: UIImageView, ThemeApplicable {
             startLoadingAnimation()
             self.image = nil
 
-            let (data, response) = try await URLSession.shared.data(from: url)
+            let environment = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI) ? FakespotEnvironment.staging : .prod
+            guard
+                let config = environment.config,
+                let relay = environment.relay
+            else {
+                throw FakespotClient.FakeSpotClientError.invalidURL
+            }
+
+            // Create an instance of OhttpManager with the staging configuration
+            let manager = OhttpManager(configUrl: config, relayUrl: relay)
+
+            let (data, response) = try await manager.data(for: URLRequest(url: url))
             let cacheData = CachedURLResponse(response: response, data: data)
             imageCache.storeCachedResponse(cacheData, for: URLRequest(url: url))
 

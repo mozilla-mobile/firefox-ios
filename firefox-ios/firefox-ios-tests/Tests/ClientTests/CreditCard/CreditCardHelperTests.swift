@@ -10,8 +10,8 @@ import Shared
 import Common
 import Storage
 
-class CreditCardHelperTests: XCTestCase {
-    var creditCardHelper: CreditCardHelper!
+class FormAutofillHelperTests: XCTestCase {
+    var formAutofillHelper: FormAutofillHelper!
     var tab: Tab!
     var profile: MockProfile!
     var validMockWKMessage: MockWKScriptMessage!
@@ -49,7 +49,7 @@ class CreditCardHelperTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         tab = Tab(profile: profile, configuration: WKWebViewConfiguration())
-        creditCardHelper = CreditCardHelper(tab: tab)
+        formAutofillHelper = FormAutofillHelper(tab: tab)
         guard let jsonData = validMockPayloadJson.data(using: .utf8),
               let dictionary = try? JSONSerialization.jsonObject(
                 with: jsonData,
@@ -75,7 +75,7 @@ class CreditCardHelperTests: XCTestCase {
         profile = nil
         DependencyHelperMock().reset()
         tab = nil
-        creditCardHelper = nil
+        formAutofillHelper = nil
         validMockWKMessage = nil
         validPayloadCaptureMockWKMessage = nil
     }
@@ -89,7 +89,7 @@ class CreditCardHelperTests: XCTestCase {
                                                ccExpMonth: 12,
                                                ccExpYear: 2023,
                                                ccType: "VISA")
-        let json = CreditCardHelper.injectionJSONBuilder(card: card)
+        let json = FormAutofillHelper.injectionJSONBuilder(card: card)
         XCTAssertEqual(json["cc-name"] as? String, "John Doe")
         XCTAssertEqual(json["cc-number"] as? String, "1234567812345678")
         XCTAssertEqual(json["cc-exp-month"] as? String, "12")
@@ -104,7 +104,7 @@ class CreditCardHelperTests: XCTestCase {
                                                ccExpMonth: 12,
                                                ccExpYear: 2023,
                                                ccType: "VISA")
-        let json = CreditCardHelper.injectionJSONBuilder(card: card)
+        let json = FormAutofillHelper.injectionJSONBuilder(card: card)
         XCTAssertEqual(json["cc-name"] as? String, "&lt;John Doe&gt;")
         XCTAssertEqual(json["cc-number"] as? String, "1234567812345678")
         XCTAssertEqual(json["cc-exp-month"] as? String, "12")
@@ -119,7 +119,7 @@ class CreditCardHelperTests: XCTestCase {
                                                ccExpMonth: 12,
                                                ccExpYear: 2023,
                                                ccType: "VISA")
-        let json = CreditCardHelper.injectionJSONBuilder(card: card)
+        let json = FormAutofillHelper.injectionJSONBuilder(card: card)
         XCTAssertEqual(json["cc-name"] as? String, "&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;")
         XCTAssertEqual(json["cc-number"] as? String, "1234567812345678")
         XCTAssertEqual(json["cc-exp-month"] as? String, "12")
@@ -134,7 +134,7 @@ class CreditCardHelperTests: XCTestCase {
                                                ccExpMonth: 12,
                                                ccExpYear: 2023,
                                                ccType: "VISA")
-        let json = CreditCardHelper.injectionJSONBuilder(card: card)
+        let json = FormAutofillHelper.injectionJSONBuilder(card: card)
         XCTAssertEqual(json["cc-name"] as? String, "&amp;quot;John Doe&amp;quot;")
         XCTAssertEqual(json["cc-number"] as? String, "1234567812345678")
         XCTAssertEqual(json["cc-exp-month"] as? String, "12")
@@ -143,15 +143,15 @@ class CreditCardHelperTests: XCTestCase {
     }
 
     func test_getValidPayloadData() {
-        XCTAssertNotNil(creditCardHelper.getValidPayloadData(from: validMockWKMessage))
-        XCTAssertNotNil(creditCardHelper.getValidPayloadData(from: validPayloadCaptureMockWKMessage))
+        XCTAssertNotNil(formAutofillHelper.getValidPayloadData(from: validMockWKMessage))
+        XCTAssertNotNil(formAutofillHelper.getValidPayloadData(from: validPayloadCaptureMockWKMessage))
     }
 
     func test_parseFieldType_valid() {
-        let messageBodyDict = creditCardHelper.getValidPayloadData(from: validMockWKMessage)
-        let messageFields = creditCardHelper.parseFieldType(messageBody: messageBodyDict!)
+        let messageBodyDict = formAutofillHelper.getValidPayloadData(from: validMockWKMessage)
+        let messageFields = formAutofillHelper.parseFieldType(messageBody: messageBodyDict!)
         XCTAssertNotNil(messageFields)
-        XCTAssertEqual(messageFields!.type, CreditCardPayloadType.formInput.rawValue)
+        XCTAssertEqual(messageFields!.type, FormAutofillPayloadType.formInput.rawValue)
         XCTAssertEqual(messageFields!.creditCardPayload.ccExpMonth, "03")
         XCTAssertEqual(messageFields!.creditCardPayload.ccExpYear, "2999")
         XCTAssertEqual(messageFields!.creditCardPayload.ccName, "Josh Moustache")
@@ -159,10 +159,10 @@ class CreditCardHelperTests: XCTestCase {
     }
 
     func test_parseFieldCaptureJsonType_valid() {
-        let messageBodyDict = creditCardHelper.getValidPayloadData(from: validPayloadCaptureMockWKMessage)
-        let messageFields = creditCardHelper.parseFieldType(messageBody: messageBodyDict!)
+        let messageBodyDict = formAutofillHelper.getValidPayloadData(from: validPayloadCaptureMockWKMessage)
+        let messageFields = formAutofillHelper.parseFieldType(messageBody: messageBodyDict!)
         XCTAssertNotNil(messageFields)
-        XCTAssertEqual(messageFields!.type, CreditCardPayloadType.formSubmit.rawValue)
+        XCTAssertEqual(messageFields!.type, FormAutofillPayloadType.formSubmit.rawValue)
         XCTAssertEqual(messageFields!.creditCardPayload.ccExpMonth, "03")
         XCTAssertEqual(messageFields!.creditCardPayload.ccExpYear, "2999")
         XCTAssertEqual(messageFields!.creditCardPayload.ccName, "Josh Moustache")
@@ -172,10 +172,10 @@ class CreditCardHelperTests: XCTestCase {
     // MARK: Retrieval
 
     func test_getFieldTypeValues() {
-        let messageBodyDict = creditCardHelper.getValidPayloadData(from: validMockWKMessage)
-        let messageFields = creditCardHelper.parseFieldType(messageBody: messageBodyDict!)
+        let messageBodyDict = formAutofillHelper.getValidPayloadData(from: validMockWKMessage)
+        let messageFields = formAutofillHelper.parseFieldType(messageBody: messageBodyDict!)
         XCTAssertNotNil(messageFields)
-        let fieldValues = creditCardHelper.getFieldTypeValues(payload: messageFields!.creditCardPayload)
+        let fieldValues = formAutofillHelper.getFieldTypeValues(payload: messageFields!.creditCardPayload)
         XCTAssertEqual(fieldValues.ccExpMonth, 3)
         XCTAssertEqual(fieldValues.ccExpYear, 2999)
         XCTAssertEqual(fieldValues.ccName, "Josh Moustache")
@@ -185,17 +185,17 @@ class CreditCardHelperTests: XCTestCase {
 
     // MARK: Leaks
 
-    func test_creditCardHelper_basicCreation_doesntLeak() {
-        let subject = CreditCardHelper(tab: tab)
+    func testFormAutofillHelperBasicCreationDoesntLeak() {
+        let subject = FormAutofillHelper(tab: tab)
         trackForMemoryLeaks(subject)
     }
 
-    func test_creditCardHelper_foundFieldValuesClosure_doesntLeak() {
+    func test_formAutofillHelper_foundFieldValuesClosure_doesntLeak() {
         let tab = Tab(profile: profile, configuration: WKWebViewConfiguration())
-        let subject = CreditCardHelper(tab: tab)
+        let subject = FormAutofillHelper(tab: tab)
         trackForMemoryLeaks(subject)
         tab.createWebview()
-        tab.addContentScript(subject, name: CreditCardHelper.name())
+        tab.addContentScript(subject, name: FormAutofillHelper.name())
 
         subject.foundFieldValues = { fieldValues, type, frame in
             guard let tabWebView = tab.webView else { return }

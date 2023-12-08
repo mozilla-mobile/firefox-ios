@@ -7,6 +7,8 @@ import Foundation
 import WebKit
 import Shared
 import Storage
+import Redux
+import TabDataStore
 
 class BrowserCoordinator: BaseCoordinator,
                           LaunchCoordinatorDelegate,
@@ -29,17 +31,15 @@ class BrowserCoordinator: BaseCoordinator,
     private let screenshotService: ScreenshotService
     private let glean: GleanWrapper
     private let applicationHelper: ApplicationHelper
-    private let wallpaperManager: WallpaperManagerInterface
     private var browserIsReady = false
 
     init(router: Router,
          screenshotService: ScreenshotService,
+         tabManager: TabManager,
          profile: Profile = AppContainer.shared.resolve(),
-         tabManager: TabManager = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          glean: GleanWrapper = DefaultGleanWrapper.shared,
-         applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
-         wallpaperManager: WallpaperManagerInterface = WallpaperManager()) {
+         applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
         self.screenshotService = screenshotService
         self.profile = profile
         self.tabManager = tabManager
@@ -47,9 +47,9 @@ class BrowserCoordinator: BaseCoordinator,
         self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         self.applicationHelper = applicationHelper
         self.glean = glean
-        self.wallpaperManager = wallpaperManager
         super.init(router: router)
 
+        tabManagerDidConnectToScene()
         browserViewController.browserDelegate = self
         browserViewController.navigationHandler = self
         tabManager.addDelegate(self)
@@ -64,6 +64,17 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - Helper methods
+
+    private func tabManagerDidConnectToScene() {
+        // [7863] [WIP] Redux: connect this Browser's TabManager to associated window scene
+        guard ReduxFlagManager.isReduxEnabled else { return }
+        let sceneUUID = WindowData.DefaultSingleWindowUUID
+        store.dispatch(TabManagerAction.tabManagerDidConnectToScene(tabManager, sceneUUID))
+
+        // TODO [7856]: Additional telemetry updates forthcoming once iPad multi-window enabled.
+        // For now, we only have a single BVC and TabManager. Plug it into our TelemetryWrapper:
+        TelemetryWrapper.shared.defaultTabManager = tabManager
+    }
 
     private func startLaunch(with launchType: LaunchType) {
         let launchCoordinator = LaunchCoordinator(router: router)
@@ -90,14 +101,12 @@ class BrowserCoordinator: BaseCoordinator,
                       toastContainer: UIView,
                       homepanelDelegate: HomePanelDelegate,
                       libraryPanelDelegate: LibraryPanelDelegate,
-                      sendToDeviceDelegate: HomepageViewController.SendToDeviceDelegate,
                       statusBarScrollDelegate: StatusBarScrollDelegate,
                       overlayManager: OverlayModeManager) {
         let homepageController = getHomepage(inline: inline,
                                              toastContainer: toastContainer,
                                              homepanelDelegate: homepanelDelegate,
                                              libraryPanelDelegate: libraryPanelDelegate,
-                                             sendToDeviceDelegate: sendToDeviceDelegate,
                                              statusBarScrollDelegate: statusBarScrollDelegate,
                                              overlayManager: overlayManager)
 
@@ -135,7 +144,6 @@ class BrowserCoordinator: BaseCoordinator,
                              toastContainer: UIView,
                              homepanelDelegate: HomePanelDelegate,
                              libraryPanelDelegate: LibraryPanelDelegate,
-                             sendToDeviceDelegate: HomepageViewController.SendToDeviceDelegate,
                              statusBarScrollDelegate: StatusBarScrollDelegate,
                              overlayManager: OverlayModeManager) -> HomepageViewController {
         if let homepageViewController = homepageViewController {
@@ -146,10 +154,10 @@ class BrowserCoordinator: BaseCoordinator,
                 profile: profile,
                 isZeroSearch: inline,
                 toastContainer: toastContainer,
+                tabManager: tabManager,
                 overlayManager: overlayManager)
             homepageViewController.homePanelDelegate = homepanelDelegate
             homepageViewController.libraryPanelDelegate = libraryPanelDelegate
-            homepageViewController.sendToDeviceDelegate = sendToDeviceDelegate
             homepageViewController.statusBarScrollDelegate = statusBarScrollDelegate
             homepageViewController.browserNavigationHandler = self
 
@@ -275,14 +283,14 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     private func canHandleSettings(with section: Route.SettingsSection) -> Bool {
-        guard !childCoordinators.contains(where: { $0 is SettingsCoordinator}) else {
+        guard !childCoordinators.contains(where: { $0 is SettingsCoordinator }) else {
             return false // route is handled with existing child coordinator
         }
         return true
     }
 
     private func handleSettings(with section: Route.SettingsSection) {
-        guard !childCoordinators.contains(where: { $0 is SettingsCoordinator}) else {
+        guard !childCoordinators.contains(where: { $0 is SettingsCoordinator }) else {
             return // route is handled with existing child coordinator
         }
         let navigationController = ThemedNavigationController()
@@ -291,7 +299,7 @@ class BrowserCoordinator: BaseCoordinator,
         navigationController.modalPresentationStyle = modalPresentationStyle
         let settingsRouter = DefaultRouter(navigationController: navigationController)
 
-        let settingsCoordinator = SettingsCoordinator(router: settingsRouter)
+        let settingsCoordinator = SettingsCoordinator(router: settingsRouter, tabManager: tabManager)
         settingsCoordinator.parentCoordinator = self
         add(child: settingsCoordinator)
         settingsCoordinator.start(with: section)
@@ -310,7 +318,8 @@ class BrowserCoordinator: BaseCoordinator,
             navigationController.modalPresentationStyle = .formSheet
 
             let libraryCoordinator = LibraryCoordinator(
-                router: DefaultRouter(navigationController: navigationController)
+                router: DefaultRouter(navigationController: navigationController),
+                tabManager: browserViewController.tabManager
             )
             libraryCoordinator.parentCoordinator = self
             add(child: libraryCoordinator)
@@ -321,7 +330,8 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     private func showETPMenu(sourceView: UIView) {
-        let enhancedTrackingProtectionCoordinator = EnhancedTrackingProtectionCoordinator(router: router)
+        let enhancedTrackingProtectionCoordinator = EnhancedTrackingProtectionCoordinator(router: router,
+                                                                                          tabManager: tabManager)
         enhancedTrackingProtectionCoordinator.parentCoordinator = self
         add(child: enhancedTrackingProtectionCoordinator)
         enhancedTrackingProtectionCoordinator.start(sourceView: sourceView)
@@ -422,24 +432,24 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func dismissFakespotModal(animated: Bool = true) {
-        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator}) as? FakespotCoordinator else {
+        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator }) as? FakespotCoordinator else {
             return // there is no modal to close
         }
-        fakespotCoordinator.fakespotControllerDidDismiss(animated: animated)
+        fakespotCoordinator.dismissModal(animated: animated)
     }
 
     func dismissFakespotSidebar(sidebarContainer: SidebarEnabledViewProtocol, parentViewController: UIViewController) {
-        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator}) as? FakespotCoordinator else {
+        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator }) as? FakespotCoordinator else {
             return // there is no sidebar to close
         }
-        fakespotCoordinator.fakespotControllerCloseSidebar(sidebarContainer: sidebarContainer,
-                                                           parentViewController: parentViewController)
+        fakespotCoordinator.closeSidebar(sidebarContainer: sidebarContainer,
+                                         parentViewController: parentViewController)
     }
 
     func updateFakespotSidebar(productURL: URL,
                                sidebarContainer: SidebarEnabledViewProtocol,
                                parentViewController: UIViewController) {
-        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator}) as? FakespotCoordinator else {
+        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator }) as? FakespotCoordinator else {
             return // there is no sidebar
         }
         fakespotCoordinator.updateSidebar(productURL: productURL,
@@ -448,25 +458,25 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     private func makeFakespotCoordinator() -> FakespotCoordinator? {
-        guard !childCoordinators.contains(where: { $0 is FakespotCoordinator}) else {
+        guard !childCoordinators.contains(where: { $0 is FakespotCoordinator }) else {
             return nil // flow is already handled
         }
 
-        let coordinator = FakespotCoordinator(router: router)
+        let coordinator = FakespotCoordinator(router: router, tabManager: tabManager)
         coordinator.parentCoordinator = self
         add(child: coordinator)
         return coordinator
     }
 
-    func showShareExtension(url: URL, sourceView: UIView, toastContainer: UIView, popoverArrowDirection: UIPopoverArrowDirection) {
+    func showShareExtension(url: URL, sourceView: UIView, sourceRect: CGRect?, toastContainer: UIView, popoverArrowDirection: UIPopoverArrowDirection) {
         guard childCoordinators.first(where: { $0 is ShareExtensionCoordinator }) as? ShareExtensionCoordinator == nil
         else {
             // If this case is hitted it means the share extension coordinator wasn't removed correctly in the previous session.
             return
         }
-        let shareExtensionCoordinator = ShareExtensionCoordinator(alertContainer: toastContainer, router: router, profile: profile, parentCoordinator: self)
+        let shareExtensionCoordinator = ShareExtensionCoordinator(alertContainer: toastContainer, router: router, profile: profile, parentCoordinator: self, tabManager: tabManager)
         add(child: shareExtensionCoordinator)
-        shareExtensionCoordinator.start(url: url, sourceView: sourceView, popoverArrowDirection: popoverArrowDirection)
+        shareExtensionCoordinator.start(url: url, sourceView: sourceView, sourceRect: sourceRect, popoverArrowDirection: popoverArrowDirection)
     }
 
     func showCreditCardAutofill(creditCard: CreditCard?,
@@ -487,7 +497,7 @@ class BrowserCoordinator: BaseCoordinator,
         if let bottomSheetCoordinator = childCoordinators.first(where: { $0 is CredentialAutofillCoordinator }) as? CredentialAutofillCoordinator {
             return bottomSheetCoordinator
         }
-        let bottomSheetCoordinator = CredentialAutofillCoordinator(profile: profile, router: router, parentCoordinator: self)
+        let bottomSheetCoordinator = CredentialAutofillCoordinator(profile: profile, router: router, parentCoordinator: self, tabManager: tabManager)
         add(child: bottomSheetCoordinator)
         return bottomSheetCoordinator
     }
@@ -504,7 +514,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showTabTray(selectedPanel: TabTrayPanelType) {
-        guard !childCoordinators.contains(where: { $0 is TabTrayCoordinator}) else {
+        guard !childCoordinators.contains(where: { $0 is TabTrayCoordinator }) else {
             return // flow is already handled
         }
 
@@ -514,7 +524,8 @@ class BrowserCoordinator: BaseCoordinator,
         navigationController.modalPresentationStyle = modalPresentationStyle
 
         let tabTrayCoordinator = TabTrayCoordinator(
-            router: DefaultRouter(navigationController: navigationController)
+            router: DefaultRouter(navigationController: navigationController),
+            tabTraySection: selectedPanel
         )
         tabTrayCoordinator.parentCoordinator = self
         add(child: tabTrayCoordinator)
