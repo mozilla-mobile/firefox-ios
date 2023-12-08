@@ -4,6 +4,7 @@
 
 import UIKit
 import Common
+import WebEngine
 
 // The list of permanent URI schemes has been taken from http://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml
 private let permanentURISchemes = ["aaa",
@@ -241,37 +242,6 @@ extension URL {
     public var isFile: Bool {
         return self.scheme == "file"
     }
-
-    public var isReaderModeURL: Bool {
-        let scheme = self.scheme, host = self.host, path = self.path
-        return scheme == "http" && host == "localhost" && path == "/reader-mode/page"
-    }
-
-    public var isSyncedReaderModeURL: Bool {
-        return self.absoluteString.hasPrefix("about:reader?url=")
-    }
-
-    public var decodeReaderModeURL: URL? {
-        if self.isReaderModeURL || self.isSyncedReaderModeURL {
-            if let components = URLComponents(url: self, resolvingAgainstBaseURL: false),
-                let queryItems = components.queryItems {
-                if let queryItem = queryItems.find({ $0.name == "url" }),
-                    let value = queryItem.value {
-                    return URL(string: value, invalidCharacters: false)?.safeEncodedUrl
-                }
-            }
-        }
-        return nil
-    }
-
-    public func encodeReaderModeURL(_ baseReaderModeURL: String) -> URL? {
-        if let encodedURL = absoluteString.addingPercentEncoding(withAllowedCharacters: .alphanumerics) {
-            if let aboutReaderURL = URL(string: "\(baseReaderModeURL)?url=\(encodedURL)", invalidCharacters: false) {
-                return aboutReaderURL
-            }
-        }
-        return nil
-    }
 }
 
 // MARK: - Exported URL Schemes
@@ -292,43 +262,4 @@ extension URL {
         }
         return string
     }()
-
-    public var safeEncodedUrl: URL? {
-        var components = URLComponents(url: self, resolvingAgainstBaseURL: false)
-
-        // HTML-encode scheme, host, and path
-        guard let host = components?.host?.htmlEntityEncodedString,
-            let scheme = components?.scheme?.htmlEntityEncodedString,
-            let path = components?.path.htmlEntityEncodedString else {
-            return nil
-        }
-
-        components?.path = path
-        components?.scheme = scheme
-        components?.host = host
-
-        // sanitize query items
-        if let queryItems = components?.queryItems {
-            var safeQueryItems: [URLQueryItem] = []
-
-            for item in queryItems {
-                // percent-encoded characters
-                guard let decodedValue = item.value?.removingPercentEncoding else {
-                    return nil
-                }
-
-                // HTML special characters
-                let htmlEncodedValue = decodedValue.htmlEntityEncodedString
-
-                // New query item with the HTML-encoded value
-                let safeItem = URLQueryItem(name: item.name, value: htmlEncodedValue)
-                safeQueryItems.append(safeItem)
-            }
-
-            // Replace the original query items with the "safe" ones
-            components?.queryItems = safeQueryItems
-        }
-
-        return components?.url
-    }
 }

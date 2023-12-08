@@ -686,6 +686,11 @@
 		8A8629E72880B7330096DDB1 /* BookmarksPanelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8629E52880B69C0096DDB1 /* BookmarksPanelTests.swift */; };
 		8A86DAD8277298DE00D7BFFF /* ClosedTabsStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A86DAD7277298DE00D7BFFF /* ClosedTabsStoreTests.swift */; };
 		8A8BAE162B2119E600D774EB /* InternalURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8BAE152B2119E600D774EB /* InternalURL.swift */; };
+		8A88815A2B20FFE0009635AE /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 8A8881592B20FFE0009635AE /* GCDWebServers */; };
+		8A88815C2B2103AD009635AE /* WebEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 8A88815B2B2103AD009635AE /* WebEngine */; };
+		8A88815E2B21071E009635AE /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 8A88815D2B21071E009635AE /* GCDWebServers */; };
+		8A8BAE122B2107E400D774EB /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 8A8BAE112B2107E400D774EB /* GCDWebServers */; };
+		8A8BAE142B21110000D774EB /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 8A8BAE132B21110000D774EB /* GCDWebServers */; };
 		8A8DDEBF276259A900E7B97A /* RatingPromptManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8DDEBE276259A900E7B97A /* RatingPromptManager.swift */; };
 		8A93080927BFE88F0052167D /* PhotonActionSheetContainerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A93080827BFE88F0052167D /* PhotonActionSheetContainerCell.swift */; };
 		8A93080B27C01AD60052167D /* SingleActionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A93080A27C01AD60052167D /* SingleActionViewModel.swift */; };
@@ -7284,6 +7289,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				43A878FD27AB4A110071C372 /* RustMozillaAppServices.framework in Frameworks */,
+				8A88815C2B2103AD009635AE /* WebEngine in Frameworks */,
+				8A88815A2B20FFE0009635AE /* GCDWebServers in Frameworks */,
 				5A9FF8492942454600DF9FBB /* Common in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -7325,6 +7332,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				43BE5820278BE68100491291 /* RustMozillaAppServices.framework in Frameworks */,
+				8A8BAE122B2107E400D774EB /* GCDWebServers in Frameworks */,
 				F8DEACC52A3D43DA00C3B19D /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -7342,6 +7350,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				43BE5809278BA9D700491291 /* RustMozillaAppServices.framework in Frameworks */,
+				8A88815E2B21071E009635AE /* GCDWebServers in Frameworks */,
 				5A37861429A2BFB9006B3A34 /* Common in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -7437,6 +7446,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				43F93C2827A8683E009833D9 /* RustMozillaAppServices.framework in Frameworks */,
+				8A8BAE142B21110000D774EB /* GCDWebServers in Frameworks */,
 				E6231C081B90A71E005ABB0D /* libz.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -11272,6 +11282,8 @@
 			name = Shared;
 			packageProductDependencies = (
 				5A9FF8482942454600DF9FBB /* Common */,
+				8A8881592B20FFE0009635AE /* GCDWebServers */,
+				8A88815B2B2103AD009635AE /* WebEngine */,
 			);
 			productName = Shared;
 			productReference = 288A2D861AB8B3260023ABC3 /* Shared.framework */;
@@ -11293,6 +11305,7 @@
 			name = Account;
 			packageProductDependencies = (
 				F8DEACC42A3D43DA00C3B19D /* Sentry */,
+				8A8BAE112B2107E400D774EB /* GCDWebServers */,
 			);
 			productName = Account;
 			productReference = 2FA435FB1ABB83B4008031D1 /* libAccount.a */;
@@ -11332,6 +11345,7 @@
 			name = Storage;
 			packageProductDependencies = (
 				5A37861329A2BFB9006B3A34 /* Common */,
+				8A88815D2B21071E009635AE /* GCDWebServers */,
 			);
 			productName = Storage;
 			productReference = 2FCAE21A1ABB51F800877008 /* libStorage.a */;
@@ -11607,6 +11621,7 @@
 			);
 			name = ClientTests;
 			packageProductDependencies = (
+				8A8BAE132B21110000D774EB /* GCDWebServers */,
 			);
 			productName = ClientTests;
 			productReference = F84B21D31A090F8100AAB793 /* ClientTests.xctest */;
@@ -20226,6 +20241,30 @@
 		8A05B0062A69A25C0011B622 /* Common */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Common;
+		};
+		8A8881592B20FFE0009635AE /* GCDWebServers */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer" */;
+			productName = GCDWebServers;
+		};
+		8A88815B2B2103AD009635AE /* WebEngine */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WebEngine;
+		};
+		8A88815D2B21071E009635AE /* GCDWebServers */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer" */;
+			productName = GCDWebServers;
+		};
+		8A8BAE112B2107E400D774EB /* GCDWebServers */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer" */;
+			productName = GCDWebServers;
+		};
+		8A8BAE132B21110000D774EB /* GCDWebServers */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer" */;
+			productName = GCDWebServers;
 		};
 		8AF2D0FB2A5F272A00C7DD69 /* ComponentLibrary */ = {
 			isa = XCSwiftPackageProductDependency;
