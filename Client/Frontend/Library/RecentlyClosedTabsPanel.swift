@@ -14,13 +14,7 @@ private struct RecentlyClosedPanelUX {
 }
 
 protocol RecentlyClosedPanelDelegate: AnyObject {
-    /// Opens the provided URL in a new tab.
-    /// - Parameters:
-    ///   - url: the URL to open.
-    ///   - isPrivate: private mode.
-    /// - Returns: the identifier of the iPad window (if applicable) that the tab will be opened in.
-    @discardableResult
-    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) -> WindowUUID
+    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool)
     func openRecentlyClosedSiteInSameTab(_ url: URL)
 }
 
@@ -125,8 +119,7 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let url = recentlyClosedTabs[indexPath.row].url
-        guard let tabWindowUUID = recentlyClosedTabsDelegate?
-            .openRecentlyClosedSiteInNewTab(url, isPrivate: false) else { return }
+        recentlyClosedTabsDelegate?.openRecentlyClosedSiteInNewTab(url, isPrivate: false)
 
         // The code above creates new tab and selects it, but TabManagerImplementation.selectTab()
         // currently performs the actual selection update asynchronously via Swift Async + Task/Await.
@@ -136,6 +129,7 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         // is avoided by making sure we wait for our expected tab above to be selected before
         // notifying our library panel delegate. [FXIOS-7741]
 
+        let tabWindowUUID = windowManager.activeWindow
         AppEventQueue.wait(for: .selectTab(url, tabWindowUUID)) {
             let visitType = VisitType.typed    // Means History, too.
             self.libraryPanelDelegate?.libraryPanel(didSelectURL: url, visitType: visitType)

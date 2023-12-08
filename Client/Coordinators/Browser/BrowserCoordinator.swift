@@ -355,11 +355,8 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.openRecentlyClosedSiteInSameTab(url)
     }
 
-    @discardableResult
-    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) -> WindowUUID {
+    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
         browserViewController.openRecentlyClosedSiteInNewTab(url, isPrivate: isPrivate)
-        // TODO: [FXIOS-7349] Updates to Recently Closed for iPad multi-window forthcoming.
-        return tabManager.windowUUID
     }
 
     func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
