@@ -332,6 +332,11 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             await selectTabWithSession(tab: tab,
                                        previous: previous,
                                        sessionData: sessionData)
+
+            if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
+                store.dispatch(PrivateModeUserAction.setPrivateModeTo(tab.isPrivate))
+            }
+
             didSelectTab(url)
         }
     }

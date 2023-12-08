@@ -5,10 +5,10 @@
 import Foundation
 import Redux
 
-enum FeltPrivacyAction: Action {
-    // middleware actions
+enum PrivateModeMiddlewareAction: Action {
     case privateModeUpdated(Bool)
+}
 
-    // user actions
+enum PrivateModeUserAction: Action {
     case setPrivateModeTo(Bool)
 }

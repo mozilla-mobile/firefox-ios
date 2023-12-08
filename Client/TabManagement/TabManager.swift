@@ -74,8 +74,6 @@ extension TabManager {
     }
 
     func selectTab(_ tab: Tab?) {
-        guard let privateState = tab?.isPrivate else { return }
-        store.dispatch(FeltPrivacyAction.setPrivateModeTo(privateState))
         selectTab(tab, previous: nil)
     }
 
