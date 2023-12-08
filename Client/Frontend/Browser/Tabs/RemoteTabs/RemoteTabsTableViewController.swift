@@ -64,9 +64,7 @@ class RemoteTabsTableViewController: UITableViewController,
         tableView.separatorInset = .zero
         tableView.alwaysBounceVertical = false
 
-        if #available(iOS 15.0, *) {
-            tableView.sectionHeaderTopPadding = 0.0
-        }
+        tableView.sectionHeaderTopPadding = 0.0
 
         tableView.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.syncedTabs
 

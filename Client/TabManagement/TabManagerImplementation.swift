@@ -287,8 +287,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     }
 
     private func saveCurrentTabSessionData() {
-        guard #available(iOS 15.0, *),
-              let selectedTab = self.selectedTab,
+        guard let selectedTab = self.selectedTab,
               let tabSession = selectedTab.webView?.interactionState as? Data,
               let tabID = UUID(uuidString: selectedTab.tabUUID)
         else { return }
@@ -394,13 +393,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         // users's last state (Private vs Regular)
         UserDefaults.standard.set(selectedTab?.isPrivate ?? false,
                                   forKey: PrefsKeys.LastSessionWasPrivate)
-    }
-
-    private func shouldUseNewTabStore() -> Bool {
-        if #available(iOS 15, *) {
-            return true
-        }
-        return false
     }
 
     // MARK: - Screenshots

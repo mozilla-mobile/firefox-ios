@@ -495,46 +495,12 @@ class Tab: NSObject, ThemeApplicable {
     }
 
     func restore(_ webView: WKWebView, interactionState: Data? = nil) {
-        // If the interactionState field is populated it means the new session store is in use and the session data
-        // now comes from a different source than save tab and parsing is managed by the web view itself
-        if #available(iOS 15, *) {
-            if let url = url {
-                webView.load(PrivilegedRequest(url: url) as URLRequest)
-            }
-            if let interactionState = interactionState {
-                webView.interactionState = interactionState
-            }
-            return
+        if let url = url {
+            webView.load(PrivilegedRequest(url: url) as URLRequest)
         }
 
-        // Pulls restored session data from a previous LegacySavedTab to load into the Tab. If it's nil, a session restore
-        // has already been triggered via custom URL, so we use the last request to trigger it again; otherwise,
-        // we extract the information needed to restore the tabs and create a NSURLRequest with the custom session restore URL
-        // to trigger the session restore via custom handlers
-        if let sessionData = self.sessionData {
-            isRestoring = true
-
-            var urls = [String]()
-            for url in sessionData.urls {
-                urls.append(url.absoluteString)
-            }
-
-            let currentPage = sessionData.currentPage
-            self.sessionData = nil
-            var jsonDict = [String: AnyObject]()
-            jsonDict["history"] = urls as AnyObject?
-            jsonDict["currentPage"] = currentPage as AnyObject?
-
-            guard let json = jsonDict.asString?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return }
-
-            if let restoreURL = URL(string: "\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)?history=\(json)", invalidCharacters: false) {
-                let request = PrivilegedRequest(url: restoreURL) as URLRequest
-                webView.load(request)
-                lastRequest = request
-                isRestoring = false
-            }
-        } else if let request = lastRequest {
-            webView.load(request)
+        if let interactionState = interactionState {
+            webView.interactionState = interactionState
         }
     }
 
