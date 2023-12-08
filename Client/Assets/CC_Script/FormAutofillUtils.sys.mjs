@@ -56,6 +56,11 @@ const FIELD_STATES = {
   AUTO_FILLED: "AUTO_FILLED",
   PREVIEW: "PREVIEW",
 };
+const FORM_SUBMISSION_REASON = {
+  FORM_SUBMIT_EVENT: "form-submit-event",
+  FORM_REMOVAL_AFTER_FETCH: "form-removal-after-fetch",
+  IFRAME_PAGEHIDE: "iframe-pagehide",
+};
 
 const ELIGIBLE_INPUT_TYPES = ["text", "email", "tel", "number", "month"];
 
@@ -219,6 +224,7 @@ FormAutofillUtils = {
   EDIT_CREDITCARD_L10N_IDS,
   MAX_FIELD_VALUE_LENGTH,
   FIELD_STATES,
+  FORM_SUBMISSION_REASON,
 
   _fieldNameInfo: {
     name: "name",
