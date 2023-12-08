@@ -7,8 +7,8 @@ import Redux
 import TabDataStore
 
 class TabManagerMiddleware {
-    // TODO: [7863] Part of ongoing WIP for Redux + iPad Multi-window.
-    var tabManagers: [SceneUUID: TabManager] = [:]
+    // TODO: [FXIOS-7863] Part of ongoing WIP for Redux + iPad Multi-window.
+    var tabManagers: [WindowUUID: TabManager] = [:]
     var selectedPanel: TabTrayPanelType = .tabs
 
     lazy var tabsPanelProvider: Middleware<AppState> = { state, action in
@@ -93,8 +93,9 @@ class TabManagerMiddleware {
             self.addNewTab(with: urlRequest, isPrivate: false)
             store.dispatch(TabTrayAction.dismissTabTray)
 
-        case TabManagerAction.tabManagerDidConnectToScene(let manager, let sceneUUID):
-            self.setTabManager(manager, for: sceneUUID)
+        case TabManagerAction.tabManagerDidConnectToScene(let manager):
+            self.setTabManager(manager, for: manager.windowUUID)
+
         default:
             break
         }
@@ -191,16 +192,16 @@ class TabManagerMiddleware {
         defaultTabManager.selectTab(tab)
     }
 
-    private func setTabManager(_ tabManager: TabManager, for sceneUUID: SceneUUID) {
-        tabManagers[sceneUUID] = tabManager
+    private func setTabManager(_ tabManager: TabManager, for windowUUID: WindowUUID) {
+        tabManagers[windowUUID] = tabManager
     }
 
-    private func removeTabManager(_ tabManager: TabManager, for sceneUUID: SceneUUID) {
-        tabManagers.removeValue(forKey: sceneUUID)
+    private func removeTabManager(_ tabManager: TabManager, for windowUUID: WindowUUID) {
+        tabManagers.removeValue(forKey: windowUUID)
     }
 
     private var defaultTabManager: TabManager {
-        // TODO: [7863] Temporary. WIP for Redux + iPad Multi-window.
-        return tabManagers[WindowData.DefaultSingleWindowUUID]!
+        // TODO: [FXIOS-7863] Temporary. WIP for Redux + iPad Multi-window.
+        return tabManagers[.defaultSingleWindowUUID]!
     }
 }
