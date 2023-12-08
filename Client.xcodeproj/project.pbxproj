@@ -77,7 +77,7 @@
 		1DFE57FB27B2CB870025DE58 /* HighlightItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DFE57FA27B2CB870025DE58 /* HighlightItem.swift */; };
 		1DFE57FD27BADD7D0025DE58 /* HomepageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DFE57FC27BADD7C0025DE58 /* HomepageViewModel.swift */; };
 		1DFE57FF27BAE3150025DE58 /* HomepageSectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DFE57FE27BAE3150025DE58 /* HomepageSectionType.swift */; };
-		210887CC293E8800000AB4EE /* RemoteTabsErrorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210887CB293E8800000AB4EE /* RemoteTabsErrorCell.swift */; };
+		210887CC293E8800000AB4EE /* LegacyRemoteTabsErrorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210887CB293E8800000AB4EE /* LegacyRemoteTabsErrorCell.swift */; };
 		2109478928AFD24C00B73D44 /* OnboardingViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2109478828AFD24C00B73D44 /* OnboardingViewControllerProtocol.swift */; };
 		210E0EB8298D9D4500BB4F33 /* DefaultSearchEngineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A5F72F298D8BEE00234E5F /* DefaultSearchEngineProvider.swift */; };
 		210E0EB9298D9D4B00BB4F33 /* DefaultSearchEngineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A5F72F298D8BEE00234E5F /* DefaultSearchEngineProvider.swift */; };
@@ -93,7 +93,7 @@
 		2128E2802934FBB400FB91BE /* CopyLinkActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2128E27F2934FBB400FB91BE /* CopyLinkActivity.swift */; };
 		212985E42A6F078800546684 /* ScreenState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212985E32A6F078800546684 /* ScreenState.swift */; };
 		212985E72A72B39D00546684 /* ThemeSettingsControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212985E52A72B22800546684 /* ThemeSettingsControllerTests.swift */; };
-		21357F2D293FDB60004BF9FD /* RemoteTabsErrorDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21357F2C293FDB60004BF9FD /* RemoteTabsErrorDataSource.swift */; };
+		21357F2D293FDB60004BF9FD /* LegacyRemoteTabsErrorDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21357F2C293FDB60004BF9FD /* LegacyRemoteTabsErrorDataSource.swift */; };
 		21357F2F294237D8004BF9FD /* RemoteTabsClientAndTabsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21357F2E294237D8004BF9FD /* RemoteTabsClientAndTabsDataSource.swift */; };
 		21371FA228A6C4A200BC3F37 /* OnboardingTelemetryUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21371FA128A6C4A200BC3F37 /* OnboardingTelemetryUtilityTests.swift */; };
 		21371FA428AA7A8D00BC3F37 /* OnboardingViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21371FA328AA7A8D00BC3F37 /* OnboardingViewModelProtocol.swift */; };
@@ -152,7 +152,7 @@
 		21A7C44E283539170071D996 /* IntroViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7C44D283539170071D996 /* IntroViewModel.swift */; };
 		21A7C45028353D0E0071D996 /* OnboardingCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7C44F28353D0E0071D996 /* OnboardingCardViewController.swift */; };
 		21AFCFEE2AE80B700027E9CE /* TabsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AFCFED2AE80B700027E9CE /* TabsCoordinator.swift */; };
-		21AFCFF02AE80D370027E9CE /* SyncedTabsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AFCFEF2AE80D370027E9CE /* SyncedTabsCoordinator.swift */; };
+		21AFCFF02AE80D370027E9CE /* RemoteTabsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AFCFEF2AE80D370027E9CE /* RemoteTabsCoordinator.swift */; };
 		21B337BB29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B337BA29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift */; };
 		21B359C62AEAC20300FF09E3 /* TabsSectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B359C52AEAC20300FF09E3 /* TabsSectionManager.swift */; };
 		21B41A1D298B187A008BC0A2 /* MockOverlayModeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B41A1B298B1876008BC0A2 /* MockOverlayModeManager.swift */; };
@@ -167,6 +167,7 @@
 		21D8843F2A7959D000AF144C /* HomePageSettingViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D8843E2A7959D000AF144C /* HomePageSettingViewControllerTests.swift */; };
 		21D884412A79628E00AF144C /* MockSettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D884402A79628E00AF144C /* MockSettingsDelegate.swift */; };
 		21D8EA932ABE04F7003FF16E /* TabTrayViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D8EA922ABE04F7003FF16E /* TabTrayViewControllerTests.swift */; };
+		21DB34342B20FE35008CCB8E /* LegacyRemoteTabsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DB34332B20FE35008CCB8E /* LegacyRemoteTabsTableViewController.swift */; };
 		21E77E4E2AA8BA5200FABA10 /* TabTrayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E77E4D2AA8BA5200FABA10 /* TabTrayViewController.swift */; };
 		21E77E502AA8BAEC00FABA10 /* TabTrayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E77E4F2AA8BAEC00FABA10 /* TabTrayState.swift */; };
 		21E77E522AA8BE5C00FABA10 /* TabTrayFlagManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E77E512AA8BE5C00FABA10 /* TabTrayFlagManager.swift */; };
@@ -177,7 +178,7 @@
 		21F2A2D22B0BC85200626AEC /* InactiveTabsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F2A2D12B0BC85200626AEC /* InactiveTabsModel.swift */; };
 		21F2A2D42B0D194A00626AEC /* TabsPanelStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F2A2D32B0D194A00626AEC /* TabsPanelStateTests.swift */; };
 		21FA8FAE2AE856460013B815 /* TabsCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FA8FAD2AE856460013B815 /* TabsCoordinatorTests.swift */; };
-		21FA8FB02AE856590013B815 /* SyncedTabsCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FA8FAF2AE856590013B815 /* SyncedTabsCoordinatorTests.swift */; };
+		21FA8FB02AE856590013B815 /* RemoteTabsCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FA8FAF2AE856590013B815 /* RemoteTabsCoordinatorTests.swift */; };
 		21FA8FB22AE856EB0013B815 /* MockTabTrayCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FA8FB12AE856EB0013B815 /* MockTabTrayCoordinatorDelegate.swift */; };
 		2386E4E624F8358E0072EF17 /* HomepageMessageCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2386E4E524F8358E0072EF17 /* HomepageMessageCard.swift */; };
 		23BEA767251A99ED00A014BF /* NewYorkMedium-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 23BEA766251A99E300A014BF /* NewYorkMedium-Bold.otf */; };
@@ -2188,7 +2189,7 @@
 		20C24CE7AEFE559B0B06390C /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		20C6401CAC4ACAA189D446BC /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/Today.strings; sourceTree = "<group>"; };
 		20F2414BA51A5BFAF5098D35 /* bs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bs; path = bs.lproj/Menu.strings; sourceTree = "<group>"; };
-		210887CB293E8800000AB4EE /* RemoteTabsErrorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsErrorCell.swift; sourceTree = "<group>"; };
+		210887CB293E8800000AB4EE /* LegacyRemoteTabsErrorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyRemoteTabsErrorCell.swift; sourceTree = "<group>"; };
 		2109478828AFD24C00B73D44 /* OnboardingViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewControllerProtocol.swift; sourceTree = "<group>"; };
 		211046C82A7ADE9000A7309F /* BlockPopupSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockPopupSetting.swift; sourceTree = "<group>"; };
 		211046CC2A7D842A00A7309F /* TPAccessoryInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPAccessoryInfo.swift; sourceTree = "<group>"; };
@@ -2199,7 +2200,7 @@
 		2128E27F2934FBB400FB91BE /* CopyLinkActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyLinkActivity.swift; sourceTree = "<group>"; };
 		212985E32A6F078800546684 /* ScreenState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenState.swift; sourceTree = "<group>"; };
 		212985E52A72B22800546684 /* ThemeSettingsControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSettingsControllerTests.swift; sourceTree = "<group>"; };
-		21357F2C293FDB60004BF9FD /* RemoteTabsErrorDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsErrorDataSource.swift; sourceTree = "<group>"; };
+		21357F2C293FDB60004BF9FD /* LegacyRemoteTabsErrorDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyRemoteTabsErrorDataSource.swift; sourceTree = "<group>"; };
 		21357F2E294237D8004BF9FD /* RemoteTabsClientAndTabsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsClientAndTabsDataSource.swift; sourceTree = "<group>"; };
 		21371FA128A6C4A200BC3F37 /* OnboardingTelemetryUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTelemetryUtilityTests.swift; sourceTree = "<group>"; };
 		21371FA328AA7A8D00BC3F37 /* OnboardingViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModelProtocol.swift; sourceTree = "<group>"; };
@@ -2258,7 +2259,7 @@
 		21A7C44D283539170071D996 /* IntroViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewModel.swift; sourceTree = "<group>"; };
 		21A7C44F28353D0E0071D996 /* OnboardingCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardViewController.swift; sourceTree = "<group>"; };
 		21AFCFED2AE80B700027E9CE /* TabsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsCoordinator.swift; sourceTree = "<group>"; };
-		21AFCFEF2AE80D370027E9CE /* SyncedTabsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncedTabsCoordinator.swift; sourceTree = "<group>"; };
+		21AFCFEF2AE80D370027E9CE /* RemoteTabsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsCoordinator.swift; sourceTree = "<group>"; };
 		21B337BA29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerWebViewDelegateTests.swift; sourceTree = "<group>"; };
 		21B359C52AEAC20300FF09E3 /* TabsSectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsSectionManager.swift; sourceTree = "<group>"; };
 		21B41A1B298B1876008BC0A2 /* MockOverlayModeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockOverlayModeManager.swift; sourceTree = "<group>"; };
@@ -2273,6 +2274,7 @@
 		21D8843E2A7959D000AF144C /* HomePageSettingViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageSettingViewControllerTests.swift; sourceTree = "<group>"; };
 		21D884402A79628E00AF144C /* MockSettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSettingsDelegate.swift; sourceTree = "<group>"; };
 		21D8EA922ABE04F7003FF16E /* TabTrayViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayViewControllerTests.swift; sourceTree = "<group>"; };
+		21DB34332B20FE35008CCB8E /* LegacyRemoteTabsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyRemoteTabsTableViewController.swift; sourceTree = "<group>"; };
 		21DD4778B3C11A24D552AB34 /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/Localizable.strings; sourceTree = "<group>"; };
 		21E77E4D2AA8BA5200FABA10 /* TabTrayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayViewController.swift; sourceTree = "<group>"; };
 		21E77E4F2AA8BAEC00FABA10 /* TabTrayState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayState.swift; sourceTree = "<group>"; };
@@ -2284,7 +2286,7 @@
 		21F2A2D12B0BC85200626AEC /* InactiveTabsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InactiveTabsModel.swift; sourceTree = "<group>"; };
 		21F2A2D32B0D194A00626AEC /* TabsPanelStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsPanelStateTests.swift; sourceTree = "<group>"; };
 		21FA8FAD2AE856460013B815 /* TabsCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsCoordinatorTests.swift; sourceTree = "<group>"; };
-		21FA8FAF2AE856590013B815 /* SyncedTabsCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncedTabsCoordinatorTests.swift; sourceTree = "<group>"; };
+		21FA8FAF2AE856590013B815 /* RemoteTabsCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsCoordinatorTests.swift; sourceTree = "<group>"; };
 		21FA8FB12AE856EB0013B815 /* MockTabTrayCoordinatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTabTrayCoordinatorDelegate.swift; sourceTree = "<group>"; };
 		220A4CC8B2685EEA3146A967 /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		222F456780B38CE88601C7E1 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/Shared.strings; sourceTree = "<group>"; };
@@ -7527,7 +7529,7 @@
 		212429F22AA27204002D57A8 /* Legacy */ = {
 			isa = PBXGroup;
 			children = (
-				2FDE87FD1ABB3817005317B1 /* LegacyRemoteTabsPanel.swift */,
+				21DB34352B2103F0008CCB8E /* RemoteTabs */,
 				216E9A3829D2119300ABE69B /* LegacyInactiveTabs */,
 				D301AAED1A3A55B70078DD1D /* LegacyGridTabViewController.swift */,
 				43BDBBFD2752FA8600254DE4 /* LegacyTabCell.swift */,
@@ -7542,11 +7544,6 @@
 		21357F2B293FDB07004BF9FD /* RemoteTabs */ = {
 			isa = PBXGroup;
 			children = (
-				1DEBC55D2AC4ED70006E4801 /* RemoteTabsPanel.swift */,
-				1D2F68AE2ACB272500524B92 /* RemoteTabsTableViewController.swift */,
-				1D2F68AA2ACB262900524B92 /* RemoteTabsPanelAction.swift */,
-				1D8487B32AD0C6C100F7527C /* RemoteTabsPanelMiddleware.swift */,
-				21357F2C293FDB60004BF9FD /* RemoteTabsErrorDataSource.swift */,
 				21357F2E294237D8004BF9FD /* RemoteTabsClientAndTabsDataSource.swift */,
 			);
 			path = RemoteTabs;
@@ -7637,6 +7634,7 @@
 		219914032AF963E000153598 /* Action */ = {
 			isa = PBXGroup;
 			children = (
+				1D2F68AA2ACB262900524B92 /* RemoteTabsPanelAction.swift */,
 				219914042AF963F900153598 /* TabTrayAction.swift */,
 				219935E82B070F9000E5966F /* TabPanelAction.swift */,
 				1D5CBF4B2B1A76B20001D033 /* TabManagerAction.swift */,
@@ -7677,6 +7675,7 @@
 		21B548932B1E5EC000DC1DF8 /* Middleware */ = {
 			isa = PBXGroup;
 			children = (
+				1D8487B32AD0C6C100F7527C /* RemoteTabsPanelMiddleware.swift */,
 				21D151252AFC28960062D891 /* TabManagerMiddleware.swift */,
 			);
 			path = Middleware;
@@ -7695,7 +7694,8 @@
 			isa = PBXGroup;
 			children = (
 				43162A2E2492DB7800F91658 /* EmptyPrivateTabsView.swift */,
-				210887CB293E8800000AB4EE /* RemoteTabsErrorCell.swift */,
+				1DEBC55D2AC4ED70006E4801 /* RemoteTabsPanel.swift */,
+				1D2F68AE2ACB272500524B92 /* RemoteTabsTableViewController.swift */,
 				1D2F68B02ACCA22000524B92 /* RemoteTabsEmptyView.swift */,
 				213BF7522AC21D1B00C53A64 /* TabDisplayPanel.swift */,
 				214EF4142AC5D5D0005BCCDA /* TabDisplayView.swift */,
@@ -7732,12 +7732,23 @@
 			path = TabTray;
 			sourceTree = "<group>";
 		};
+		21DB34352B2103F0008CCB8E /* RemoteTabs */ = {
+			isa = PBXGroup;
+			children = (
+				2FDE87FD1ABB3817005317B1 /* LegacyRemoteTabsPanel.swift */,
+				21DB34332B20FE35008CCB8E /* LegacyRemoteTabsTableViewController.swift */,
+				210887CB293E8800000AB4EE /* LegacyRemoteTabsErrorCell.swift */,
+				21357F2C293FDB60004BF9FD /* LegacyRemoteTabsErrorDataSource.swift */,
+			);
+			path = RemoteTabs;
+			sourceTree = "<group>";
+		};
 		21FA8FAC2AE8561C0013B815 /* TabTray */ = {
 			isa = PBXGroup;
 			children = (
 				21420EF82ABC75A400B28550 /* TabTrayCoordinatorTests.swift */,
 				21FA8FAD2AE856460013B815 /* TabsCoordinatorTests.swift */,
-				21FA8FAF2AE856590013B815 /* SyncedTabsCoordinatorTests.swift */,
+				21FA8FAF2AE856590013B815 /* RemoteTabsCoordinatorTests.swift */,
 			);
 			path = TabTray;
 			sourceTree = "<group>";
@@ -7747,7 +7758,7 @@
 			children = (
 				21420EF62ABA338D00B28550 /* TabTrayCoordinator.swift */,
 				21AFCFED2AE80B700027E9CE /* TabsCoordinator.swift */,
-				21AFCFEF2AE80D370027E9CE /* SyncedTabsCoordinator.swift */,
+				21AFCFEF2AE80D370027E9CE /* RemoteTabsCoordinator.swift */,
 			);
 			path = TabTray;
 			sourceTree = "<group>";
@@ -12809,7 +12820,7 @@
 				E68E39BE1C46F42000B85F42 /* AppSettingsTableViewController.swift in Sources */,
 				E1A6AB4628CA6A4C00EBEBDD /* String+Extension.swift in Sources */,
 				1D2F68AF2ACB272500524B92 /* RemoteTabsTableViewController.swift in Sources */,
-				210887CC293E8800000AB4EE /* RemoteTabsErrorCell.swift in Sources */,
+				210887CC293E8800000AB4EE /* LegacyRemoteTabsErrorCell.swift in Sources */,
 				8AABBCFC2A0010900089941E /* GleanWrapper.swift in Sources */,
 				8C92DE912A7128CB0090BD28 /* ProductAnalysisResponse.swift in Sources */,
 				F85C7F0F271DD154004BDBA4 /* AppAuthenticator.swift in Sources */,
@@ -13300,7 +13311,7 @@
 				210E0EB8298D9D4500BB4F33 /* DefaultSearchEngineProvider.swift in Sources */,
 				8AE80BBA2891C0C300BC12EA /* JumpBackInSectionLayout.swift in Sources */,
 				21618A612A4201E500A5189E /* ThemeSettingsController.swift in Sources */,
-				21357F2D293FDB60004BF9FD /* RemoteTabsErrorDataSource.swift in Sources */,
+				21357F2D293FDB60004BF9FD /* LegacyRemoteTabsErrorDataSource.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
 				DFACDFAA274D489B00A94EEC /* HistoryHighlightsViewModel.swift in Sources */,
 				C84655FF2887A06B00861B4A /* WallpaperFilePathProvider.swift in Sources */,
@@ -13437,6 +13448,7 @@
 				E4A961181AC041C40069AD6F /* ReadabilityService.swift in Sources */,
 				AB42CC752A1F5240003C9594 /* CreditCardBottomSheetHeaderView.swift in Sources */,
 				21371FA428AA7A8D00BC3F37 /* OnboardingViewModelProtocol.swift in Sources */,
+				21DB34342B20FE35008CCB8E /* LegacyRemoteTabsTableViewController.swift in Sources */,
 				8ADC2A1F2A3399BD00543DAA /* LicenseAndAcknowledgementsSetting.swift in Sources */,
 				8CCCB08B2AE26B5C0073ADB9 /* ReportResponse.swift in Sources */,
 				21A43CDD291461C700B1206D /* ReaderModeFontTypeButton.swift in Sources */,
@@ -13451,7 +13463,7 @@
 				8A5D1CB62A30DBB0005AD35C /* DefaultBrowserSetting.swift in Sources */,
 				4393932029AC6CE900DC5A85 /* EnvironmentValues+Extension.swift in Sources */,
 				ABEF80D12A24D2BE003F52C4 /* CreditCardBottomSheetViewModel.swift in Sources */,
-				21AFCFF02AE80D370027E9CE /* SyncedTabsCoordinator.swift in Sources */,
+				21AFCFF02AE80D370027E9CE /* RemoteTabsCoordinator.swift in Sources */,
 				43162A2F2492DB7800F91658 /* EmptyPrivateTabsView.swift in Sources */,
 				E1380B8D2AEA897C00630AFA /* SidebarEnabledView.swift in Sources */,
 				D0625C98208E87F10081F3B2 /* DownloadQueue.swift in Sources */,
@@ -13590,7 +13602,7 @@
 				DF940A0C2A96352B00C1497D /* FakespotSettingsCardViewModelTests.swift in Sources */,
 				281B2BEA1ADF4D90002917DC /* MockProfile.swift in Sources */,
 				96AF8C1C29FC14F700EC2219 /* CreditCardInputFieldHelperTests.swift in Sources */,
-				21FA8FB02AE856590013B815 /* SyncedTabsCoordinatorTests.swift in Sources */,
+				21FA8FB02AE856590013B815 /* RemoteTabsCoordinatorTests.swift in Sources */,
 				C80C11F428B3CD580062922A /* MockUserDefaultsTests.swift in Sources */,
 				2F697F7E1A9FD22D009E03AE /* SearchEnginesTests.swift in Sources */,
 				2197DF8A287624BF00215624 /* LibraryViewModelTests.swift in Sources */,

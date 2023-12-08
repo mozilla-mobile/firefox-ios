@@ -7,106 +7,6 @@ import Storage
 import Common
 import Shared
 
-protocol RemotePanelDelegateProvider: AnyObject {
-    var remotePanelDelegate: RemotePanelDelegate? { get }
-}
-
-protocol RemotePanelDelegate: AnyObject {
-    func remotePanelDidRequestToSignIn()
-    func remotePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
-    func remotePanel(didSelectURL url: URL, visitType: VisitType)
-}
-
-// MARK: - RemoteTabsPanel
-class LegacyRemoteTabsPanel: UIViewController,
-                             Themeable,
-                             RemoteTabsClientAndTabsDataSourceDelegate,
-                             RemotePanelDelegateProvider {
-    var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
-    var notificationCenter: NotificationProtocol
-    var remotePanelDelegate: RemotePanelDelegate?
-    var profile: Profile
-    var tableViewController: LegacyRemoteTabsTableViewController
-
-    init(profile: Profile,
-         themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.profile = profile
-        self.themeManager = themeManager
-        self.notificationCenter = notificationCenter
-        self.tableViewController = LegacyRemoteTabsTableViewController(profile: profile)
-
-        super.init(nibName: nil, bundle: nil)
-        notificationCenter.addObserver(self,
-                                       selector: #selector(notificationReceived),
-                                       name: .FirefoxAccountChanged,
-                                       object: nil)
-        notificationCenter.addObserver(self,
-                                       selector: #selector(notificationReceived),
-                                       name: .ProfileDidFinishSyncing,
-                                       object: nil)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        tableViewController.remoteTabsPanel = self
-
-        listenForThemeChange(view)
-        setupLayout()
-        applyTheme()
-    }
-
-    private func setupLayout() {
-        tableViewController.view.translatesAutoresizingMaskIntoConstraints = false
-        addChild(tableViewController)
-        view.addSubview(tableViewController.view)
-        tableViewController.didMove(toParent: self)
-
-        NSLayoutConstraint.activate([
-            tableViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
-            tableViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-        ])
-    }
-
-    func applyTheme() {
-        view.backgroundColor = themeManager.currentTheme.colors.layer4
-        tableViewController.tableView.backgroundColor =  themeManager.currentTheme.colors.layer3
-        tableViewController.tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
-        tableViewController.tableView.reloadData()
-        tableViewController.refreshTabs()
-    }
-
-    func forceRefreshTabs() {
-        tableViewController.refreshTabs(updateCache: true)
-    }
-
-    @objc
-    func notificationReceived(_ notification: Notification) {
-        switch notification.name {
-        case .FirefoxAccountChanged, .ProfileDidFinishSyncing:
-            DispatchQueue.main.async {
-                self.tableViewController.refreshTabs()
-            }
-            break
-        default:
-            // no need to do anything at all
-            break
-        }
-    }
-
-    func remoteTabsClientAndTabsDataSourceDidSelectURL(_ url: URL, visitType: VisitType) {
-        // Pass event along to our delegate
-        remotePanelDelegate?.remotePanel(didSelectURL: url, visitType: VisitType.typed)
-    }
-}
-
 protocol RemoteTabsPanelDataSource: UITableViewDataSource, UITableViewDelegate {
 }
 
@@ -165,14 +65,16 @@ class LegacyRemoteTabsTableViewController: UITableViewController, Themeable {
                            forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.cellIdentifier)
         tableView.register(TwoLineImageOverlayCell.self,
                            forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier)
-        tableView.register(RemoteTabsErrorCell.self,
-                           forCellReuseIdentifier: RemoteTabsErrorCell.cellIdentifier)
+        tableView.register(LegacyRemoteTabsErrorCell.self,
+                           forCellReuseIdentifier: LegacyRemoteTabsErrorCell.cellIdentifier)
 
         tableView.rowHeight = UX.rowHeight
         tableView.separatorInset = .zero
         tableView.alwaysBounceVertical = false
 
-        tableView.sectionHeaderTopPadding = 0.0
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0.0
+        }
 
         tableView.delegate = nil
         tableView.dataSource = nil
@@ -204,7 +106,7 @@ class LegacyRemoteTabsTableViewController: UITableViewController, Themeable {
 
     func applyTheme() {
         tableView.separatorColor = themeManager.currentTheme.colors.layerLightGrey30
-        if let delegate = tableViewDelegate as? RemoteTabsErrorDataSource {
+        if let delegate = tableViewDelegate as? LegacyRemoteTabsErrorDataSource {
             delegate.applyTheme(theme: themeManager.currentTheme)
         }
     }
@@ -301,15 +203,15 @@ class LegacyRemoteTabsTableViewController: UITableViewController, Themeable {
         }
     }
 
-    private func showEmptyTabsViewWith(_ error: RemoteTabsErrorDataSource.ErrorType) {
+    private func showEmptyTabsViewWith(_ error: LegacyRemoteTabsErrorDataSource.ErrorType) {
         guard let remoteTabsPanel = remoteTabsPanel else { return }
         var errorMessage = error
 
         if !isTabSyncEnabled { errorMessage = .syncDisabledByUser }
 
-        let remoteTabsErrorView = RemoteTabsErrorDataSource(remoteTabsDelegateProvider: remoteTabsPanel,
-                                                            error: errorMessage,
-                                                            theme: themeManager.currentTheme)
+        let remoteTabsErrorView = LegacyRemoteTabsErrorDataSource(remoteTabsDelegateProvider: remoteTabsPanel,
+                                                                  error: errorMessage,
+                                                                  theme: themeManager.currentTheme)
         tableViewDelegate = remoteTabsErrorView
 
         tableView.reloadData()

@@ -24,7 +24,9 @@ class TabManagerMiddleware {
         case TabTrayAction.changePanel(let panelType):
             let isPrivate = panelType == TabTrayPanelType.privateTabs
             let tabState = self.getTabsDisplayModel(for: isPrivate)
-            store.dispatch(TabPanelAction.didLoadTabPanel(tabState))
+            if panelType != .syncedTabs {
+                store.dispatch(TabPanelAction.didLoadTabPanel(tabState))
+            }
 
         case TabPanelAction.addNewTab(let urlRequest, let isPrivateMode):
             self.addNewTab(with: urlRequest, isPrivate: isPrivateMode)
@@ -84,6 +86,11 @@ class TabManagerMiddleware {
             self.didTapLearnMoreAboutPrivate(with: urlRequest)
             let tabs = self.refreshTabs(for: true)
             store.dispatch(TabPanelAction.refreshTab(tabs))
+            store.dispatch(TabTrayAction.dismissTabTray)
+
+        case RemoteTabsPanelAction.openSelectedURL(let url):
+            let urlRequest = URLRequest(url: url)
+            self.addNewTab(with: urlRequest, isPrivate: false)
             store.dispatch(TabTrayAction.dismissTabTray)
 
         case TabManagerAction.tabManagerDidConnectToScene(let manager, let sceneUUID):

@@ -7,7 +7,7 @@ import ComponentLibrary
 import UIKit
 import Shared
 
-class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
+class LegacyRemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
     struct UX {
         static let verticalPadding: CGFloat = 40
         static let horizontalPadding: CGFloat = 24
@@ -75,7 +75,7 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(error: RemoteTabsErrorDataSource.ErrorType,
+    func configure(error: LegacyRemoteTabsErrorDataSource.ErrorType,
                    theme: Theme,
                    delegate: RemotePanelDelegate?) {
         self.delegate = delegate
