@@ -32,11 +32,14 @@ const AUTOFILL_CREDITCARDS_AUTOCOMPLETE_OFF_PREF =
   "extensions.formautofill.creditCards.ignoreAutocompleteOff";
 const AUTOFILL_ADDRESSES_AUTOCOMPLETE_OFF_PREF =
   "extensions.formautofill.addresses.ignoreAutocompleteOff";
+const ENABLED_AUTOFILL_CAPTURE_ON_FORM_REMOVAL =
+  "extensions.formautofill.heuristics.captureOnFormRemoval";
 
 export const FormAutofill = {
   ENABLED_AUTOFILL_ADDRESSES_PREF,
   ENABLED_AUTOFILL_ADDRESSES_CAPTURE_PREF,
   ENABLED_AUTOFILL_ADDRESSES_CAPTURE_V2_PREF,
+  ENABLED_AUTOFILL_CAPTURE_ON_FORM_REMOVAL,
   ENABLED_AUTOFILL_CREDITCARDS_PREF,
   ENABLED_AUTOFILL_CREDITCARDS_REAUTH_PREF,
   AUTOFILL_CREDITCARDS_AUTOCOMPLETE_OFF_PREF,
@@ -251,6 +254,11 @@ XPCOMUtils.defineLazyPreferenceGetter(
   FormAutofill,
   "addressesAutocompleteOff",
   AUTOFILL_ADDRESSES_AUTOCOMPLETE_OFF_PREF
+);
+XPCOMUtils.defineLazyPreferenceGetter(
+  FormAutofill,
+  "captureOnFormRemoval",
+  ENABLED_AUTOFILL_CAPTURE_ON_FORM_REMOVAL
 );
 
 // XXX: This should be invalidated on intl:app-locales-changed.
