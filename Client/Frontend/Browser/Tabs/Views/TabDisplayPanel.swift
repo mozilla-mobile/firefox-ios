@@ -129,7 +129,7 @@ class TabDisplayPanel: UIViewController,
     }
 }
 
-extension TabDisplayPanel: TabPeekDelegate {
+extension TabDisplayPanel: LegacyTabPeekDelegate {
     func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListItem? { return nil }
     func tabPeekDidAddBookmark(_ tab: Tab) {}
     func tabPeekRequestsPresentationOf(_ viewController: UIViewController) {}
