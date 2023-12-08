@@ -1868,30 +1868,31 @@ extension TelemetryWrapper {
         case(.action, .tap, .fxSuggest, _, let extras ):
             guard let contextIdString = TelemetryContextualIdentifier.contextId,
                   let contextId = UUID(uuidString: contextIdString),
-                  let interactionInfo = extras?[EventValue.fxSuggestionClickInfo.rawValue] as? RustFirefoxSuggestionInteractionInfo else { return }
+                  let interactionInfo = extras?[EventValue.fxSuggestionClickInfo.rawValue] as? RustFirefoxSuggestionInteractionInfo else {
+                return recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
             switch interactionInfo {
-                case .amp(blockId: let blockId, advertiser: let advertiser, iabCategory: let iabCategory, reportingURL: let reportingURL):
-                    GleanMetrics.FxSuggest.contextId.set(contextId)
-                    GleanMetrics.FxSuggest.pingType.set("fxsuggest-click")
-                    GleanMetrics.FxSuggest.blockId.set(blockId)
-                    GleanMetrics.FxSuggest.advertiser.set(advertiser)
-                    GleanMetrics.FxSuggest.iabCategory.set(iabCategory)
-                    if let reportingURLValue = reportingURL {
-                            GleanMetrics.FxSuggest.reportingUrl.set(url: reportingURLValue)
-                        }
-                    if let position = extras?[EventValue.fxSuggestionPosition.rawValue] as? Int {
-                        GleanMetrics.FxSuggest.position.set(Int64(position))
-                    }
-                case .wikipedia:
-                    GleanMetrics.FxSuggest.pingType.set("fxsuggest-click")
-                    GleanMetrics.FxSuggest.contextId.set(contextId)
+            case let .amp(blockId, advertiser, iabCategory, reportingURL):
+                GleanMetrics.FxSuggest.contextId.set(contextId)
+                GleanMetrics.FxSuggest.pingType.set("fxsuggest-click")
+                GleanMetrics.FxSuggest.blockId.set(blockId)
+                GleanMetrics.FxSuggest.advertiser.set(advertiser)
+                GleanMetrics.FxSuggest.iabCategory.set(iabCategory)
+                if let reportingURL {
+                    GleanMetrics.FxSuggest.reportingUrl.set(url: reportingURL)
+                }
                 if let position = extras?[EventValue.fxSuggestionPosition.rawValue] as? Int {
                     GleanMetrics.FxSuggest.position.set(Int64(position))
-                    GleanMetrics.FxSuggest.advertiser.set("wikipedia")
+                }
+            case .wikipedia:
+                GleanMetrics.FxSuggest.pingType.set("fxsuggest-click")
+                GleanMetrics.FxSuggest.contextId.set(contextId)
+                GleanMetrics.FxSuggest.advertiser.set("wikipedia")
+                if let position = extras?[EventValue.fxSuggestionPosition.rawValue] as? Int {
+                    GleanMetrics.FxSuggest.position.set(Int64(position))
                 }
             }
             GleanMetrics.Pings.shared.fxSuggest.submit()
-            
         default:
             recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
         }

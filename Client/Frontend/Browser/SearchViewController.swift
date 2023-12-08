@@ -594,6 +594,7 @@ class SearchViewController: SiteTableViewController,
         case .firefoxSuggestions:
             let firefoxSuggestion = firefoxSuggestions[indexPath.row]
             if let clickInfo = firefoxSuggestion.clickInfo {
+                // The 1-based position of this suggestion, relative to the top of the table.
                 let position = SearchListSection.allCases.filter { $0.rawValue < indexPath.section }
                     .reduce(0) { $0 + self.tableView(tableView, numberOfRowsInSection: $1.rawValue) }
                 + indexPath.row + 1
@@ -874,11 +875,14 @@ private extension SearchViewController {
                                      extras: [key: extra])
     }
 
-    func recordFirefoxSuggestSelectionTelemetry(clickInfo: RustFirefoxSuggestionInteractionInfo, position: Int){
-        TelemetryWrapper.gleanRecordEvent(category: .action, 
+    func recordFirefoxSuggestSelectionTelemetry(clickInfo: RustFirefoxSuggestionInteractionInfo, position: Int) {
+        TelemetryWrapper.gleanRecordEvent(category: .action,
                                           method: .tap,
                                           object: TelemetryWrapper.EventObject.fxSuggest,
-                                          extras: [TelemetryWrapper.EventValue.fxSuggestionClickInfo.rawValue : clickInfo, TelemetryWrapper.EventValue.fxSuggestionPosition.rawValue : position ])
+                                          extras: [
+                                            TelemetryWrapper.EventValue.fxSuggestionClickInfo.rawValue: clickInfo,
+                                            TelemetryWrapper.EventValue.fxSuggestionPosition.rawValue: position
+                                          ])
     }
 }
 

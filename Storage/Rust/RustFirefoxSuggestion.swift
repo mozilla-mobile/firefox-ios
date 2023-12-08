@@ -6,12 +6,11 @@ import Foundation
 import MozillaAppServices
 import UIKit
 
-/// Additional inforamtion about a Firefox Suggestion to record
+/// Additional information about a Firefox Suggestion to record
 /// in telemetry when the user interacts with the suggestion
 public enum RustFirefoxSuggestionInteractionInfo {
     case amp(blockId: Int64, advertiser: String, iabCategory: String, reportingURL: URL?)
     case wikipedia
-    
 }
 /// A Firefox Suggest search suggestion. This struct is a Swiftier
 /// representation of the Rust `Suggestion` enum.
@@ -40,8 +39,7 @@ public struct RustFirefoxSuggestion {
             self.isSponsored = true
             self.iconImage = iconBytes.flatMap { UIImage(data: Data($0)) }
             self.fullKeyword = fullKeyword
-            self.clickInfo = .amp(blockId: blockId, advertiser: advertiser, iabCategory: iabCategory, reportingURL: URL(string: clickUrlString) ?? nil )
-            
+            self.clickInfo = .amp(blockId: blockId, advertiser: advertiser, iabCategory: iabCategory, reportingURL: URL(string: clickUrlString) )
         } else if case let .wikipedia(title, urlString, iconBytes, fullKeyword) = suggestion {
             // This use of `URL(string:)` is OK.
             guard let url = URL(string: urlString) else { return nil }
@@ -51,7 +49,6 @@ public struct RustFirefoxSuggestion {
             self.iconImage = iconBytes.flatMap { UIImage(data: Data($0)) }
             self.fullKeyword = fullKeyword
             self.clickInfo = .wikipedia
-
         } else {
             return nil
         }
