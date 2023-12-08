@@ -698,8 +698,6 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/issues/17301
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/17663
-    data_sensitivity:
-      - interaction
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"

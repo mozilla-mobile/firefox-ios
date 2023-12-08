@@ -388,7 +388,11 @@ class FakespotViewModel {
             )
 
             guard let product else { return }
-            if productAds.isEmpty { recordSurfaceNoAdsAvailableTelemetry() } else { recordAdsExposureTelementry() }
+            if productAds.isEmpty {
+                recordSurfaceNoAdsAvailableTelemetry()
+            } else {
+                recordAdsExposureTelementry()
+            }
         } catch {
             state = .error(error)
         }
