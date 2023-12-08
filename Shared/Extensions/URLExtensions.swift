@@ -233,7 +233,7 @@ extension URL {
 
     public var isFxHomeUrl: Bool {
         return absoluteString.hasPrefix("internal://local/about/home")
-    }   
+    }
 }
 
 // Extensions to deal with ReaderMode URLs
