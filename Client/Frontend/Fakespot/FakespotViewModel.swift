@@ -355,7 +355,7 @@ class FakespotViewModel {
 
     func toggleAdsEnabled() {
         prefs.setBool(!areAdsEnabled, forKey: PrefsKeys.Shopping2023EnableAds)
-
+        FakespotUtils().addSettingTelemetry()
         // Make sure the view updates with the new ads setting
         onStateChange?()
     }

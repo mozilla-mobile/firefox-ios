@@ -75,13 +75,13 @@ public struct FakespotUtils: FeatureFlaggable {
             ]
         )
 
-        let areAdsOptedOut = profile.prefs.boolForKey(PrefsKeys.Shopping2023EnableAds) ?? true
+        let adsEnabled = profile.prefs.boolForKey(PrefsKeys.Shopping2023EnableAds) ?? true
         TelemetryWrapper.recordEvent(
             category: .information,
             method: .settings,
             object: .shoppingAdsOptedOut,
             extras: [
-                TelemetryWrapper.ExtraKey.Shopping.areAdsDisabled.rawValue: !areAdsOptedOut
+                TelemetryWrapper.ExtraKey.Shopping.areAdsDisabled.rawValue: !adsEnabled
             ]
         )
     }
