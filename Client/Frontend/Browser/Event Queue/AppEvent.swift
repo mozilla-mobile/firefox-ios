@@ -25,7 +25,7 @@ public enum AppEvent: AppEventType {
     // MARK: - Browser Events
 
     // Activities: Browser
-    case browserDidBecomeActive(WindowUUID)
+    case browserUpdatedForAppActivation(WindowUUID)
 
     // Activites: Tabs
     case tabRestoration(WindowUUID)

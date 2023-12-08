@@ -237,7 +237,7 @@ class BrowserViewController: UIViewController,
         let tabWindowUUID = tabManager.windowUUID
         AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(tabWindowUUID)]) { [weak self] in
             // Ensure we call into didBecomeActive at least once during startup flow (if needed)
-            guard !AppEventQueue.activityIsCompleted(.browserDidBecomeActive(tabWindowUUID)) else { return }
+            guard !AppEventQueue.activityIsCompleted(.browserUpdatedForAppActivation(tabWindowUUID)) else { return }
             self?.browserDidBecomeActive()
         }
     }
@@ -438,8 +438,8 @@ class BrowserViewController: UIViewController,
 
     func browserDidBecomeActive() {
         let uuid = tabManager.windowUUID
-        AppEventQueue.started(.browserDidBecomeActive(uuid))
-        defer { AppEventQueue.completed(.browserDidBecomeActive(uuid)) }
+        AppEventQueue.started(.browserUpdatedForAppActivation(uuid))
+        defer { AppEventQueue.completed(.browserUpdatedForAppActivation(uuid)) }
 
         // Update lock icon without redrawing the whole locationView
         if let tab = tabManager.selectedTab {
