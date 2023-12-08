@@ -962,8 +962,6 @@ shopping:
     type: event
     description: |
       Whether the user has opted in for ads
-    send_in_pings:
-      - events
     extra_keys:
       is_enabled:
         type: boolean
@@ -973,6 +971,7 @@ shopping:
       - https://github.com/mozilla-mobile/firefox-ios/issues/17303
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/17681
+    notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
 
