@@ -386,7 +386,11 @@ class FakespotViewModel {
                     analyzeCount: analyzeCount
                 )
             )
-            if !productAds.isEmpty, product != nil {
+
+            guard let product else { return }
+            if productAds.isEmpty {
+                recordSurfaceNoAdsAvailableTelemetry()
+            } else {
                 recordAdsExposureTelementry()
             }
         } catch {
@@ -534,6 +538,15 @@ class FakespotViewModel {
             method: .view,
             object: .shoppingBottomSheet,
             value: .shoppingAdsImpression
+        )
+    }
+
+    private func recordSurfaceNoAdsAvailableTelemetry() {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .view,
+            object: .shoppingBottomSheet,
+            value: .shoppingNoAdsAvailable
         )
     }
 
