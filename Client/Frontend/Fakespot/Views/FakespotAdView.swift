@@ -6,6 +6,7 @@ import UIKit
 import Common
 import Shared
 import ComponentLibrary
+import MozillaAppServices
 
 // MARK: View Model
 struct FakespotAdViewModel {
@@ -22,12 +23,15 @@ struct FakespotAdViewModel {
     private let tabManager: TabManager
     var dismissViewController: (() -> Void)?
     let productAdsData: ProductAdsResponse
+    let urlCache: URLCache
 
     // MARK: Init
     init(tabManager: TabManager = AppContainer.shared.resolve(),
-         productAdsData: ProductAdsResponse) {
+         productAdsData: ProductAdsResponse,
+         urlCache: URLCache = URLCache.shared) {
         self.tabManager = tabManager
         self.productAdsData = productAdsData
+        self.urlCache = urlCache
     }
 
     // MARK: Tap Product
@@ -37,7 +41,7 @@ struct FakespotAdViewModel {
     }
 }
 
-class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
+class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate, FeatureFlaggable {
     private enum UX {
         static let labelFontSize: CGFloat = 15
         static let descriptionFontSize: CGFloat = 13
@@ -62,7 +66,8 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         view.image = UIImage(named: StandardImageIdentifiers.Large.image)?.withRenderingMode(.alwaysTemplate)
     }
     private lazy var productImageView: UIImageView = .build { imageView in
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
     }
 
     var notificationCenter: NotificationProtocol = NotificationCenter.default
@@ -152,8 +157,10 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         )
         productLinkButton.configure(viewModel: productLinkButtonViewModel)
         gradeReliabilityScoreView.configure(grade: productAdsData.grade)
+        productImageView.isHidden = true
+
         Task {
-            try? await productImageView.loadImage(from: productAdsData.imageUrl)
+            try? await loadImage(from: productAdsData.imageUrl)
         }
 
         let cardModel = ShadowCardViewModel(view: contentStackView, a11yId: viewModel.cardA11yId)
@@ -319,5 +326,47 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         gradeReliabilityScoreView.applyTheme(theme: theme)
         defaultImageView.tintColor = theme.colors.iconSecondary
         imageContainerView.backgroundColor = theme.colors.layer3
+    }
+
+    // MARK: Image Loading
+    @MainActor
+    private func loadImage(from url: URL) async throws {
+        if let cachedData = viewModel?.urlCache.cachedResponse(for: URLRequest(url: url))?.data,
+           let image = UIImage(data: cachedData) {
+            self.productImageView.image = image
+            self.displayProductImage()
+            return
+        }
+
+        do {
+            self.productImageView.image = nil
+
+            let environment = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI) ? FakespotEnvironment.staging : .prod
+            guard
+                let config = environment.config,
+                let relay = environment.relay
+            else {
+                throw FakespotClient.FakeSpotClientError.invalidURL
+            }
+
+            // Create an instance of OhttpManager with the staging configuration
+            let manager = OhttpManager(configUrl: config, relayUrl: relay)
+
+            let (data, response) = try await manager.data(for: URLRequest(url: url))
+            let cacheData = CachedURLResponse(response: response, data: data)
+            self.viewModel?.urlCache.storeCachedResponse(cacheData, for: URLRequest(url: url))
+
+            if let image = UIImage(data: data) {
+                self.productImageView.image = image
+                displayProductImage()
+            }
+        } catch { }
+    }
+
+    private func displayProductImage() {
+        guard productImageView.image != nil else { return }
+
+        defaultImageView.isHidden = true
+        productImageView.isHidden = false
     }
 }
