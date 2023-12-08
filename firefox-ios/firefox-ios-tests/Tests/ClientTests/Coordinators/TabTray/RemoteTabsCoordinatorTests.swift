@@ -6,23 +6,23 @@ import XCTest
 @testable import Client
 
 final class RemoteTabsCoordinatorTests: XCTestCase {
-    private var profile: MockProfile!
+    private var mockProfile: MockProfile!
     private var mockRouter: MockRouter!
-    private var parentCoordinator: MockTabTrayCoordinatorDelegate!
+    private var mockApplicationHelper: MockApplicationHelper!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        profile = MockProfile()
+        mockProfile = MockProfile()
         mockRouter = MockRouter(navigationController: MockNavigationController())
-        parentCoordinator = MockTabTrayCoordinatorDelegate()
+        mockApplicationHelper = MockApplicationHelper()
     }
 
     override func tearDown() {
         super.tearDown()
-        profile = nil
+        mockProfile = nil
         mockRouter = nil
-        parentCoordinator = nil
+        mockApplicationHelper = nil
         DependencyHelperMock().reset()
     }
 
@@ -32,12 +32,26 @@ final class RemoteTabsCoordinatorTests: XCTestCase {
         XCTAssertTrue(subject.childCoordinators.isEmpty)
     }
 
+    func testPresentFxASignIn() {
+        let subject = createSubject()
+        subject.presentFirefoxAccountSignIn()
+
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+    }
+
+    func testPresentFxASettings() {
+        let subject = createSubject()
+        subject.presentFxAccountSettings()
+
+        XCTAssertEqual(mockApplicationHelper.openURLCalled, 1)
+    }
+
     // MARK: - Helpers
     private func createSubject(file: StaticString = #file,
                                line: UInt = #line) -> RemoteTabsCoordinator {
-        let subject = RemoteTabsCoordinator(profile: profile,
-                                            parentCoordinator: parentCoordinator,
-                                            router: mockRouter)
+        let subject = RemoteTabsCoordinator(profile: mockProfile,
+                                            router: mockRouter,
+                                            applicationHelper: mockApplicationHelper)
 
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

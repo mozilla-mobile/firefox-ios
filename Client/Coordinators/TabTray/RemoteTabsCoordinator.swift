@@ -6,10 +6,11 @@ import Foundation
 
 class RemoteTabsCoordinator: BaseCoordinator, RemoteTabsPanelDelegate {
     // MARK: - Properties
-    weak var parentCoordinator: ParentCoordinatorDelegate?
     private let profile: Profile
     private var fxAccountViewController: FirefoxAccountSignInViewController?
     private var applicationHelper: ApplicationHelper
+
+    weak var parentCoordinator: ParentCoordinatorDelegate?
     weak var qrCodeNavigationHandler: QRCodeNavigationHandler?
 
     // MARK: - Initializers
