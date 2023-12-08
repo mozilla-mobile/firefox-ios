@@ -530,9 +530,9 @@ class FakespotViewModel {
     func reportAdEvent(eventName: FakespotAdsEvent, ad: ProductAdsResponse) {
         Task {
             _ = try? await shoppingProduct.reportAdEvent(
-                eventName: eventName.rawValue,
+                eventName: eventName,
                 eventSource: FakespotAdsEvent.eventSource,
-                aidvs: [ad.aid]
+                aid: ad.aid
             )
         }
     }
