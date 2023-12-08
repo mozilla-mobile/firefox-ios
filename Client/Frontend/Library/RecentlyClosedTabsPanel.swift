@@ -19,6 +19,7 @@ protocol RecentlyClosedPanelDelegate: AnyObject {
     ///   - url: the URL to open.
     ///   - isPrivate: private mode.
     /// - Returns: the identifier of the iPad window (if applicable) that the tab will be opened in.
+    @discardableResult
     func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) -> WindowUUID
     func openRecentlyClosedSiteInSameTab(_ url: URL)
 }

@@ -619,6 +619,7 @@ extension LegacyGridTabViewController: TabDisplayCompletionDelegate, RecentlyClo
         dismissTabTray()
     }
 
+    @discardableResult
     func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) -> WindowUUID {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
