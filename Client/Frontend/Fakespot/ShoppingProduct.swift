@@ -69,6 +69,19 @@ class ShoppingProduct: FeatureFlaggable, Equatable {
         return product != nil && isFakespotFeatureEnabled
     }
 
+    /// Gets a list of supported top-level domain (TLD) websites.
+    /// - Returns: An array of supported TLD websites or `nil` if no valid product is available.
+    var supportedTLDWebsites: [String]? {
+        guard let product = product else { return nil }
+        let config = nimbusFakespotFeatureLayer.config
+
+        let validWebsites = config.compactMap { (key, value) in
+            value.validTlDs.contains(product.topLevelDomain) ? key : nil
+        }
+
+        return validWebsites
+    }
+
     /// Gets a Product from a URL.
     /// - Returns: Product information parsed from the URL.
     lazy var product: Product? = {
@@ -180,6 +193,10 @@ class ShoppingProduct: FeatureFlaggable, Equatable {
 
         // Report the product as back in stock using the product ID and website
         return try await client.reportProductBackInStock(productId: product.id, website: product.host)
+    }
+
+    func reportAdEvent(eventName: String, eventSource: String, aidvs: [String]) async throws -> AdEventsResponse {
+        return try await client.reportAdEvent(eventName: eventName, eventSource: eventSource, aidvs: aidvs)
     }
 
     static func == (lhs: ShoppingProduct, rhs: ShoppingProduct) -> Bool {

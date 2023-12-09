@@ -25,7 +25,7 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
     init(
         router: Router,
         profile: Profile = AppContainer.shared.resolve(),
-        tabManager: TabManager = AppContainer.shared.resolve()
+        tabManager: TabManager
     ) {
         self.profile = profile
         self.tabManager = tabManager
@@ -103,7 +103,8 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
         let downloadsCoordinator = DownloadsCoordinator(
             router: router,
             profile: profile,
-            parentCoordinator: parentCoordinator
+            parentCoordinator: parentCoordinator,
+            tabManager: tabManager
         )
         add(child: downloadsCoordinator)
         (navigationController.topViewController as? DownloadsPanel)?.navigationHandler = downloadsCoordinator

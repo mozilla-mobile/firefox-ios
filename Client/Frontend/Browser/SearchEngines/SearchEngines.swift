@@ -20,8 +20,7 @@ protocol SearchEngineDelegate: AnyObject {
 /// The first search engine is distinguished and labeled the "default" search engine; it can never be
 /// disabled.  Search suggestions should always be sourced from the default search engine.
 /// 
-/// Two additional bits of information are maintained: whether the user should be shown "opt-in to
-/// search suggestions" UI, and whether search suggestions are enabled.
+/// Two additional bits of information are maintained: whether search suggestions are enabled and whether search suggestions in private mode is disabled
 ///
 /// Consumers will almost always use `defaultEngine` if they want a single search engine, and
 /// `quickSearchEngines()` if they want a list of enabled quick search engines (possibly empty,
@@ -35,7 +34,6 @@ class SearchEngines {
     private let fileAccessor: FileAccessor
     private let orderedEngineNames = "search.orderedEngineNames"
     private let disabledEngineNames = "search.disabledEngineNames"
-    private let showSearchSuggestionsOptIn = "search.suggestions.showOptIn"
     private let showSearchSuggestions = "search.suggestions.show"
     private let customSearchEnginesFileName = "customEngines.plist"
     private var engineProvider: SearchEngineProvider
@@ -47,6 +45,7 @@ class SearchEngines {
         self.prefs = prefs
         // By default, show search suggestions
         self.shouldShowSearchSuggestions = prefs.boolForKey(showSearchSuggestions) ?? true
+        self.shouldDisablePrivateModeSearchSuggestions = prefs.boolForKey(PrefsKeys.SearchSettings.disablePrivateModeSearchSuggestions) ?? true
         self.fileAccessor = files
         self.engineProvider = engineProvider
         self.orderedEngines = []
@@ -99,6 +98,12 @@ class SearchEngines {
     var shouldShowSearchSuggestions: Bool {
         didSet {
             self.prefs.setObject(shouldShowSearchSuggestions, forKey: showSearchSuggestions)
+        }
+    }
+
+    var shouldDisablePrivateModeSearchSuggestions: Bool {
+        didSet {
+            self.prefs.setObject(shouldDisablePrivateModeSearchSuggestions, forKey: PrefsKeys.SearchSettings.disablePrivateModeSearchSuggestions)
         }
     }
 

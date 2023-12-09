@@ -241,6 +241,90 @@ final class ShoppingProductTests: XCTestCase {
 
         XCTAssertEqual(selectedAdCard, ProductAdsResponse(adjustedRating: 4.2))
     }
+
+    func testSupportedTLDWebsites_TopLevelDomainFound() {
+        let product = Product(
+            id: "123",
+            host: "example.com",
+            topLevelDomain: "com",
+            sitename: "example"
+        )
+
+        let fakeConfig: [String: WebsiteConfig] = [
+            "website1": WebsiteConfig(validTlDs: ["com", "net"]),
+            "website2": WebsiteConfig(validTlDs: ["org", "gov"]),
+            "website3": WebsiteConfig(validTlDs: ["edu", "io"])
+        ]
+
+        let fakeFeatureLayer = NimbusFakespotFeatureLayerMock(config: fakeConfig)
+
+        let sut = ShoppingProduct(
+            url: URL(string: "https://example.com")!,
+            nimbusFakespotFeatureLayer: fakeFeatureLayer,
+            client: client
+        )
+        sut.product = product
+
+        let result = sut.supportedTLDWebsites
+        XCTAssertEqual(result, ["website1"])
+    }
+
+    func testSupportedTLDWebsites_TopLevelDomainNotFound() {
+        let product = Product(
+            id: "123",
+            host: "example.com",
+            topLevelDomain: "xyz",
+            sitename: "example"
+        )
+
+        let fakeConfig: [String: WebsiteConfig] = [
+            "website1": WebsiteConfig(validTlDs: ["com", "net"]),
+            "website2": WebsiteConfig(validTlDs: ["org", "gov"]),
+            "website3": WebsiteConfig(validTlDs: ["edu", "io"])
+        ]
+
+        let fakeFeatureLayer = NimbusFakespotFeatureLayerMock(config: fakeConfig)
+        let sut = ShoppingProduct(
+            url: URL(string: "https://example.com")!,
+            nimbusFakespotFeatureLayer: fakeFeatureLayer,
+            client: client
+        )
+        sut.product = product
+
+        let result = sut.supportedTLDWebsites
+        XCTAssertEqual(result, [])
+    }
+
+    func testSupportedTLDWebsites_ProductIsNil() {
+        let fakeConfig: [String: WebsiteConfig] = [
+            "website1": WebsiteConfig(validTlDs: ["com", "net"]),
+            "website2": WebsiteConfig(validTlDs: ["org", "gov"]),
+            "website3": WebsiteConfig(validTlDs: ["edu", "io"])
+        ]
+
+        let fakeFeatureLayer = NimbusFakespotFeatureLayerMock(config: fakeConfig)
+        let sut = ShoppingProduct(
+            url: URL(string: "https://example.com")!,
+            nimbusFakespotFeatureLayer: fakeFeatureLayer,
+            client: client
+        )
+        sut.product = nil
+
+        let result = sut.supportedTLDWebsites
+        XCTAssertNil(result)
+    }
+
+    func testReportAdEvent_WithValidURL_CallsClientAPI() async throws {
+        let url = URL(string: "https://www.amazon.com/Under-Armour-Charged-Assert-Running/dp/B087T8Q2C4")!
+        let sut = ShoppingProduct(url: url, client: client)
+
+        _ = try await sut.reportAdEvent(eventName: "click", eventSource: "web", aidvs: ["aidv1", "aidv2"])
+
+        XCTAssertTrue(client.reportAdEventCalled)
+        XCTAssertEqual(client.lastEventName, "click")
+        XCTAssertEqual(client.lastEventSource, "web")
+        XCTAssertEqual(client.lastAidvs, ["aidv1", "aidv2"])
+    }
 }
 
 fileprivate extension ProductAdsResponse {
@@ -266,11 +350,17 @@ final class ThrowingFakeSpotClient: FakespotClientType {
     var triggerProductAnalyzeCallCount = 0
     var getProductAnalysisStatusCount = 0
     var reportProductBackInStockCallCount = 0
+    var reportAdEventCallCount = 0
 
     let error: Error
 
     init(error: Error) {
         self.error = error
+    }
+
+    func reportAdEvent(eventName: String, eventSource: String, aidvs: [String]) async throws -> AdEventsResponse {
+        reportAdEventCallCount += 1
+        throw error
     }
 
     func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisResponse {
@@ -299,6 +389,19 @@ final class ThrowingFakeSpotClient: FakespotClientType {
     }
 }
 
+final class NimbusFakespotFeatureLayerMock: NimbusFakespotFeatureLayerProtocol {
+    var relayURL: URL?
+    let config: [String: WebsiteConfig]
+
+    init(config: [String: WebsiteConfig]) {
+        self.config = config
+    }
+
+    func getSiteConfig(siteName: String) -> WebsiteConfig? {
+        config[siteName]
+    }
+}
+
 final class TestFakespotClient: FakespotClientType {
     var productId: String = ""
     var website: String = ""
@@ -308,6 +411,20 @@ final class TestFakespotClient: FakespotClientType {
     var triggerProductAnalyzeCallCalled = false
     var getProductAnalysisStatusCallCalled = false
     var reportProductBackInStockCalled = false
+    var reportAdEventCalled = false
+    var reportAdEventCallCount = 0
+    var lastEventName: String?
+    var lastEventSource: String?
+    var lastAidvs: [String]?
+
+    func reportAdEvent(eventName: String, eventSource: String, aidvs: [String]) async throws -> Client.AdEventsResponse {
+        self.reportAdEventCalled = true
+        self.reportAdEventCallCount += 1
+        self.lastEventName = eventName
+        self.lastEventSource = eventSource
+        self.lastAidvs = aidvs
+        return AdEventsResponse(additionalProperties: [:])
+    }
 
     func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisResponse {
         self.fetchProductAnalysisDataCallCount += 1

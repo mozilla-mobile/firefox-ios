@@ -6,6 +6,8 @@ import Common
 import UIKit
 
 public class LinkButton: UIButton, ThemeApplicable {
+    var foregroundColorForState: ((UIControl.State) -> UIColor)?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -17,16 +19,23 @@ public class LinkButton: UIButton, ThemeApplicable {
     }
 
     public func configure(viewModel: LinkButtonViewModel) {
+        guard let config = configuration else {
+            return
+        }
+        var updatedConfiguration = config
+
         accessibilityIdentifier = viewModel.a11yIdentifier
 
-        configuration?.title = viewModel.title
-        configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+        updatedConfiguration.title = viewModel.title
+        updatedConfiguration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
             outgoing.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
                                                                    size: viewModel.fontSize)
             return outgoing
         }
-        configuration?.contentInsets = viewModel.contentInsets
+        updatedConfiguration.contentInsets = viewModel.contentInsets
+        configuration = updatedConfiguration
+
         contentHorizontalAlignment = viewModel.contentHorizontalAlignment
         layoutIfNeeded()
     }
@@ -35,10 +44,32 @@ public class LinkButton: UIButton, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override public func updateConfiguration() {
+        guard let config = configuration else {
+            return
+        }
+        var updatedConfiguration = config
+        let foregroundColor = foregroundColorForState?(state)
+
+        updatedConfiguration.baseForegroundColor = foregroundColor
+        configuration = updatedConfiguration
+    }
+
     // MARK: ThemeApplicable
 
     public func applyTheme(theme: Theme) {
-        setTitleColor(theme.colors.textAccent, for: .normal)
-        setTitleColor(theme.colors.actionPrimaryHover, for: .highlighted)
+        var updatedConfiguration = configuration
+
+        foregroundColorForState = { state in
+            switch state {
+            case [.highlighted]:
+                return theme.colors.actionPrimaryHover
+            default:
+                return theme.colors.textAccent
+            }
+        }
+
+        updatedConfiguration?.baseForegroundColor = foregroundColorForState?(state)
+        configuration = updatedConfiguration
     }
 }

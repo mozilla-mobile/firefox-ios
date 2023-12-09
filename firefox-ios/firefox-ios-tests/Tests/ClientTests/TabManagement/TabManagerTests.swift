@@ -151,11 +151,28 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(mockDiskImageStore.deleteImageForKeyCallCount, 1)
     }
 
+    func testGetInactiveTabs() {
+        let subject = createSubject()
+        addTabs(to: subject, count: 3)
+        guard let tab = subject.tabs.first else {
+            XCTFail("First tab was expected to be found")
+            return
+        }
+        // Override session data to make tab active
+        tab.sessionData = LegacySessionData(currentPage: 0, urls: [], lastUsedTime: Date.now.toTimestamp())
+
+        let inactiveTabs = subject.getInactiveTabs()
+        let expectedInactiveTabs = 2
+
+        XCTAssertEqual(inactiveTabs.count, expectedInactiveTabs)
+    }
+
     // MARK: - Helper methods
 
     private func createSubject() -> TabManagerImplementation {
         let subject = TabManagerImplementation(profile: mockProfile,
                                                imageStore: mockDiskImageStore,
+                                               uuid: .defaultSingleWindowUUID,
                                                tabDataStore: mockTabStore,
                                                tabSessionStore: mockSessionStore)
         trackForMemoryLeaks(subject)

@@ -32,6 +32,7 @@ export class FieldDetail {
   section = "";
   addressType = "";
   contactType = "";
+  credentialType = "";
 
   // When a field is split into N fields, we use part to record which field it is
   // For example, a credit card number field is split into 4 fields, the value of
@@ -56,6 +57,7 @@ export class FieldDetail {
       this.section = autocompleteInfo.section;
       this.addressType = autocompleteInfo.addressType;
       this.contactType = autocompleteInfo.contactType;
+      this.credentialType = autocompleteInfo.credentialType;
     } else if (confidence) {
       this.reason = "fathom";
       this.confidence = confidence;

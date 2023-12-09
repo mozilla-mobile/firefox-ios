@@ -23,8 +23,25 @@ struct FakespotAdViewModel {
     var dismissViewController: (() -> Void)?
     let productAdsData: ProductAdsResponse
 
+    var formattedPrice: String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        formatter.currencyCode = productAdsData.currency
+
+        let fallBackPrice = productAdsData.currency + productAdsData.price
+
+        guard let price = Double(productAdsData.price),
+              let formattedPrice = formatter.string(from: NSNumber(value: price)) else {
+           return fallBackPrice
+        }
+
+         return formattedPrice
+    }
+
     // MARK: Init
-    init(tabManager: TabManager = AppContainer.shared.resolve(),
+    init(tabManager: TabManager,
          productAdsData: ProductAdsResponse) {
         self.tabManager = tabManager
         self.productAdsData = productAdsData
@@ -131,7 +148,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         footerLabel.text = viewModel.footerText
         footerLabel.accessibilityIdentifier = viewModel.footerA11yId
 
-        priceLabel.text = productAdsData.currency + productAdsData.price
+        priceLabel.text = viewModel.formattedPrice
         priceLabel.accessibilityIdentifier = viewModel.priceA11yId
 
         starRatingView.rating = productAdsData.adjustedRating
@@ -148,7 +165,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         productLinkButton.configure(viewModel: productLinkButtonViewModel)
         gradeReliabilityScoreView.configure(grade: productAdsData.grade)
         Task {
-            await productImageView.loadImage(from: productAdsData.imageUrl)
+            try? await productImageView.loadImage(from: productAdsData.imageUrl)
         }
 
         let cardModel = ShadowCardViewModel(view: contentStackView, a11yId: viewModel.cardA11yId)

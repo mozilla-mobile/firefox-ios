@@ -25,13 +25,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         sendTabDelegate: UIApplication.shared.sendTabDelegate,
         creditCardAutofillEnabled: creditCardAutofillStatus
     )
-    lazy var tabManager: TabManager = TabManagerImplementation(
-        profile: profile,
-        imageStore: DefaultDiskImageStore(
-            files: profile.files,
-            namespace: "TabManagerScreenshots",
-            quality: UIConstants.ScreenshotQuality)
-    )
 
     lazy var themeManager: ThemeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
     lazy var ratingPromptManager = RatingPromptManager(profile: profile)
@@ -232,7 +225,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         handleBackgroundEvent()
         TelemetryWrapper.recordEvent(category: .action, method: .background, object: .app)
-        TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
 
         profile.syncManager.applicationDidEnterBackground()
 
@@ -246,7 +238,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         singleShotTimer.resume()
         shutdownWebServer = singleShotTimer
         backgroundWorkUtility?.scheduleOnAppBackground()
-        tabManager.preserveTabs()
 
         logger.log("applicationDidEnterBackground end",
                    level: .info,

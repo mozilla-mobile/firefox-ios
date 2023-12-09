@@ -35,6 +35,10 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
     typealias ExtraKey = TelemetryWrapper.EventExtraKey
 
     static let shared = TelemetryWrapper()
+
+    // TODO [7856]: Temporary. Additional telemetry updates forthcoming once iPad multi-window enabled.
+    var defaultTabManager: TabManager?
+
     let legacyTelemetry = Telemetry.default
     let glean = Glean.shared
     // Boolean flag to temporarily remember if we crashed during the
@@ -115,9 +119,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
 
             outputDict["settings"] = settings
 
-            let delegate = UIApplication.shared.delegate as? AppDelegate
-
-            outputDict["openTabCount"] = delegate?.tabManager.count ?? 0
+            // TODO [7856]: Additional telemetry updates forthcoming once iPad multi-window enabled.
+            outputDict["openTabCount"] = self.defaultTabManager?.count ?? 0
 
             outputDict["systemTheme"] = UITraitCollection.current.userInterfaceStyle == .dark ? "dark" : "light"
 
@@ -177,7 +180,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         // Save the profile so we can record settings from it when the notification below fires.
         self.profile = profile
 
-        SponsoredTileTelemetry.setupContextId()
+        TelemetryContextualIdentifier.setupContextId()
 
         // Register an observer to record settings and other metrics that are more appropriate to
         // record on going to background rather than during initialization.
@@ -220,8 +223,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         GleanMetrics.Search.defaultEngine.set(defaultEngine?.engineID ?? "custom")
 
         // Record the open tab count
-        let delegate = UIApplication.shared.delegate as? AppDelegate
-        if let count = delegate?.tabManager.count {
+        // TODO [7856]: Additional telemetry updates forthcoming once iPad multi-window enabled.
+        if let count = defaultTabManager?.count {
             GleanMetrics.Tabs.cumulativeCount.add(Int32(count))
         }
 
@@ -449,9 +452,6 @@ extension TelemetryWrapper {
         case settingsMenuShowTour = "show-tour"
         case settingsMenuPasswords = "passwords"
         // MARK: Logins and Passwords
-        case loginsPasswordDetected = "logins-password-detected"
-        case loginsAutofillPromptShown = "logins-autofill-prompt-shown"
-        case loginsAutofillPromptDismissed = "logins-autofill-prompt-dismissed"
         case loginsAutofilled = "logins-autofilled"
         case loginsAutofillFailed = "logins-autofill-failed"
         case loginsManagementAddTapped = "logins-management-add-tapped"
@@ -471,6 +471,17 @@ extension TelemetryWrapper {
         case creditCardSyncEnabled = "creditCardSyncEnabled"
         case creditCardAutofillToggle = "creditCardAutofillToggle"
         case creditCardSyncToggle = "creditCardSyncToggle"
+        case creditCardAutofillPromptShown = "creditCard-autofill-prompt-shown"
+        case creditCardAutofillPromptExpanded = "creditCard-autofill-prompt-expanded"
+        case creditCardAutofillPromptDismissed = "creditCard-autofill-prompt-dismissed"
+        case creditCardSavePromptShown = "creditCard-save-prompt-shown"
+        case creditCardSavePromptUpdate = "creditCard-save-prompt-update"
+        case creditCardManagementAddTapped = "creditCard-management-add-tapped"
+        case creditCardManagementCardTapped = "creditCard-management-card-tapped"
+        case creditCardSaved = "creditCard-saved"
+        case creditCardSavedAll = "creditCard-saved-all"
+        case creditCardDeleted = "creditCard-deleted"
+        case creditCardModified = "creditCard-modified"
         case notificationPermission = "notificationPermission"
         case engagementNotification = "engagementNotification"
         // MARK: New Onboarding
@@ -527,6 +538,7 @@ extension TelemetryWrapper {
         case libraryPanel = "library-panel"
         case navigateToGroupHistory = "navigate-to-group-history"
         case selectedHistoryItem = "selected-history-item"
+        case openedHistoryItem = "opened-item"
         case searchHistory = "search-history"
         case deleteHistory = "delete-history"
         case historySingleItemRemoved = "history-single-item-removed"
@@ -658,6 +670,9 @@ extension TelemetryWrapper {
         case searchSuggestion = "search-suggestion"
         case searchHighlights = "search-highlights"
         case shoppingCFRsDisplayed = "shopping-cfrs-displayed"
+        case shoppingAdsExposure = "shopping-ads-exposure"
+        case shoppingAdsImpression = "shopping-ads-impression"
+        case shoppingNoAdsAvailable = "shopping-no-ads-available"
         case awesomebarShareTap = "awesomebar-share-tap"
         case largeFileWrite = "large-file-write"
     }
@@ -739,6 +754,7 @@ extension TelemetryWrapper {
         case isCreditCardSyncToggleEnabled = "is-credit-card-sync-toggle-enabled"
         case isCreditCardAutofillEnabled = "is-credit-card-autofill-enabled"
         case isCreditCardSyncEnabled = "is-credit-card-sync-enabled"
+        case creditCardsQuantity = "credit-cards-quantity"
 
         // Password Manager
         case loginsQuantity = "loginsQuantity"
@@ -1002,6 +1018,32 @@ extension TelemetryWrapper {
                     value: value,
                     extras: extras)
             }
+        case(.action, .view, .creditCardAutofillPromptShown, _, _):
+            GleanMetrics.CreditCard.autofillPromptShown.record()
+        case(.action, .tap, .creditCardAutofillPromptExpanded, _, _):
+            GleanMetrics.CreditCard.autofillPromptExpanded.record()
+        case(.action, .close, .creditCardAutofillPromptDismissed, _, _):
+            GleanMetrics.CreditCard.autofillPromptDismissed.record()
+        case(.action, .view, .creditCardSavePromptShown, _, _):
+            GleanMetrics.CreditCard.savePromptShown.record()
+        case(.action, .tap, .creditCardSavePromptUpdate, _, _):
+            GleanMetrics.CreditCard.savePromptUpdate.record()
+        case(.action, .tap, .creditCardManagementAddTapped, _, _):
+            GleanMetrics.CreditCard.managementAddTapped.record()
+        case(.action, .tap, .creditCardManagementCardTapped, _, _):
+            GleanMetrics.CreditCard.managementCardTapped.record()
+        case(.action, .add, .creditCardSaved, _, _):
+            GleanMetrics.CreditCard.saved.add()
+        case(.information, .foreground, .creditCardSavedAll, _, let extras):
+            if let quantity = extras?[EventExtraKey.creditCardsQuantity.rawValue] as? Int64 {
+                GleanMetrics.CreditCard.savedAll.set(quantity)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+        case(.action, .delete, .creditCardDeleted, _, _):
+            GleanMetrics.CreditCard.deleted.add()
+        case(.action, .change, .creditCardModified, _, _):
+            GleanMetrics.CreditCard.modified.add()
         // MARK: Settings Menu
         case (.action, .open, .settingsMenuSetAsDefaultBrowser, _, _):
             GleanMetrics.SettingsMenu.setAsDefaultBrowserPressed.add()
@@ -1011,12 +1053,6 @@ extension TelemetryWrapper {
             GleanMetrics.SettingsMenu.showTourPressed.record()
 
         // MARK: Logins and Passwords
-        case(.information, .emailLogin, .loginsPasswordDetected, _, _):
-            GleanMetrics.Logins.passwordDetected.record()
-        case(.action, .view, .loginsAutofillPromptShown, _, _):
-            GleanMetrics.Logins.autofillPromptShown.record()
-        case(.action, .close, .loginsAutofillPromptDismissed, _, _):
-            GleanMetrics.Logins.autofillPromptDismissed.record()
         case(.action, .tap, .loginsAutofilled, _, _):
             GleanMetrics.Logins.autofilled.record()
         case(.action, .tap, .loginsAutofillFailed, _, _):
@@ -1128,6 +1164,12 @@ extension TelemetryWrapper {
         // MARK: Shopping Experience (Fakespot)
         case (.action, .tap, .shoppingButton, _, _):
             GleanMetrics.Shopping.addressBarIconClicked.record()
+        case (.action, .view, .shoppingBottomSheet, .shoppingAdsExposure, _):
+            GleanMetrics.Shopping.adsExposure.record()
+        case (.action, .view, .shoppingBottomSheet, .shoppingAdsImpression, _):
+            GleanMetrics.Shopping.surfaceAdsImpression.record()
+        case (.action, .view, .shoppingBottomSheet, .shoppingNoAdsAvailable, _):
+            GleanMetrics.Shopping.surfaceNoAdsAvailable.record()
         case (.action, .view, .shoppingButton, _, _):
             GleanMetrics.Shopping.addressBarIconDisplayed.record()
         case (.action, .close, .shoppingBottomSheet, _, let extras):
@@ -1361,6 +1403,8 @@ extension TelemetryWrapper {
             GleanMetrics.History.groupList.add()
         case (.action, .tap, .selectedHistoryItem, let type?, _):
             GleanMetrics.History.selectedItem[type.rawValue].add()
+        case (.action, .tap, .openedHistoryItem, _, _):
+            GleanMetrics.History.openedItem.record()
         case (.action, .tap, .searchHistory, _, _):
             GleanMetrics.History.searchTap.record()
         case (.action, .tap, .deleteHistory, _, _):

@@ -4,9 +4,12 @@
 
 import Foundation
 
+/// Base event type protocol. Conforming types must be hashable.
 public protocol AppEventType: Hashable { }
 
 public enum AppEvent: AppEventType {
+    // MARK: - Global App Events
+
     // Events: Startup flow
     case startupFlowComplete
 
@@ -19,10 +22,12 @@ public enum AppEvent: AppEventType {
     // Activities: Profile Syncing
     case profileSyncing
 
+    // MARK: - Browser Events
+
     // Activities: Browser
-    case browserDidBecomeActive
+    case browserUpdatedForAppActivation(WindowUUID)
 
     // Activites: Tabs
-    case tabRestoration
-    case selectTab(URL)
+    case tabRestoration(WindowUUID)
+    case selectTab(URL, WindowUUID)
 }

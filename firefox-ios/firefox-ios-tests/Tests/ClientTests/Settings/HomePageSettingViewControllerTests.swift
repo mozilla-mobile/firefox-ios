@@ -35,7 +35,8 @@ final class HomePageSettingViewControllerTests: XCTestCase {
     private func createSubject() -> HomePageSettingViewController {
         let subject = HomePageSettingViewController(prefs: profile.prefs,
                                                     wallpaperManager: wallpaperManager,
-                                                    settingsDelegate: delegate)
+                                                    settingsDelegate: delegate,
+                                                    tabManager: MockTabManager())
         trackForMemoryLeaks(subject)
         return subject
     }

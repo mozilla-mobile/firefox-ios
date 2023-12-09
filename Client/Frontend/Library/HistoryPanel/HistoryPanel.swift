@@ -122,9 +122,7 @@ class HistoryPanel: UIViewController,
         tableView.register(SiteTableViewHeader.self,
                            forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.cellIdentifier)
 
-        if #available(iOS 15.0, *) {
-            tableView.sectionHeaderTopPadding = 0
-        }
+        tableView.sectionHeaderTopPadding = 0
     }
 
     lazy var longPressRecognizer: UILongPressGestureRecognizer = {
@@ -579,6 +577,21 @@ class HistoryPanel: UIViewController,
 
         tableView.reloadData()
     }
+
+    // MARK: Telemetry
+
+    func sendOpenedHistoryItemTelemetry() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .openedHistoryItem)
+    }
+
+    func sendSelectedHistoryItemCount() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .selectedHistoryItem,
+                                     value: .historyPanelNonGroupItem)
+    }
 }
 
 // MARK: - UITableViewDelegate related helpers
@@ -618,11 +631,8 @@ extension HistoryPanel: UITableViewDelegate {
 
         libraryPanelDelegate?.libraryPanel(didSelectURL: url, visitType: .typed)
 
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .selectedHistoryItem,
-                                     value: .historyPanelNonGroupItem,
-                                     extras: nil)
+        sendSelectedHistoryItemCount()
+        sendOpenedHistoryItemTelemetry()
     }
 
     private func handleHistoryActionableTapped(historyActionable: HistoryActionablesModel) {

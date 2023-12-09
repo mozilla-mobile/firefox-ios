@@ -237,7 +237,7 @@ class LibraryViewController: UIViewController, Themeable {
     }
 
     private func topLeftButtonSetup() {
-        var panelState = getCurrentPanelState()
+        let panelState = getCurrentPanelState()
         switch panelState {
         case .bookmarks(state: .inFolder),
              .history(state: .inFolder):
@@ -252,7 +252,7 @@ class LibraryViewController: UIViewController, Themeable {
     }
 
     private func topRightButtonSetup() {
-        var panelState = getCurrentPanelState()
+        let panelState = getCurrentPanelState()
         switch panelState {
         case .bookmarks(state: .inFolderEditMode):
             navigationItem.rightBarButtonItem = nil
@@ -301,10 +301,8 @@ class LibraryViewController: UIViewController, Themeable {
         standardAppearance.backgroundColor = themeManager.currentTheme.colors.layer1
         navigationController?.toolbar.standardAppearance = standardAppearance
         navigationController?.toolbar.compactAppearance = standardAppearance
-        if #available(iOS 15.0, *) {
-            navigationController?.toolbar.scrollEdgeAppearance = standardAppearance
-            navigationController?.toolbar.compactScrollEdgeAppearance = standardAppearance
-        }
+        navigationController?.toolbar.scrollEdgeAppearance = standardAppearance
+        navigationController?.toolbar.compactScrollEdgeAppearance = standardAppearance
         navigationController?.toolbar.tintColor = themeManager.currentTheme.colors.actionPrimary
     }
 

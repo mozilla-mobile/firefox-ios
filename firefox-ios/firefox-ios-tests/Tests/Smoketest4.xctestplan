@@ -21,6 +21,7 @@
         "BookmarksTests",
         "BrowsingPDFTests",
         "ClipBoardTests",
+        "CreditCardsTests",
         "DataManagementTests",
         "DatabaseFixtureTest",
         "DesktopModeTestsIpad",

@@ -14,7 +14,7 @@ final class FakespotSettingsCardViewModelTests: XCTestCase {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         mockProfile = MockProfile()
-        viewModel = FakespotSettingsCardViewModel(profile: mockProfile)
+        viewModel = FakespotSettingsCardViewModel(profile: mockProfile, tabManager: MockTabManager())
     }
 
     override func tearDown() {
@@ -42,12 +42,6 @@ final class FakespotSettingsCardViewModelTests: XCTestCase {
 
         XCTAssertEqual(viewModel.areAdsEnabled, true)
         XCTAssertEqual(viewModel.isReviewQualityCheckOn, false)
-    }
-
-    func testSwitchValueChangedUpdatesPrefs() {
-        viewModel.areAdsEnabled = false
-
-        XCTAssertEqual(mockProfile.prefs.boolForKey(PrefsKeys.Shopping2023EnableAds), false)
     }
 
     func testTurnOffButtonTappedUpdatesPrefs() {

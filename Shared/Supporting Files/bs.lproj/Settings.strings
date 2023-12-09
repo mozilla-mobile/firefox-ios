@@ -1,0 +1,87 @@
+/* Accessibility label for the add button in autofill settings screen. Pressing this button presents a modal that allows users to add a card by entering the credit card information. */
+"CreditCard.Settings.AddCard.AccessibilityLabel.v121" = "Dodaj karticu";
+
+/* Description label for when there are no credit cards shown in credit card list in autofill settings screen. */
+"CreditCard.Settings.EmptyListDescription.v112" = "Sačuvajte podatke o vašoj kartici sigurno da sljedeći put izvršite odjavu brže.";
+
+/* Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered. */
+"CreditCard.Settings.EmptyListTitle.v112" = "Sačuvaj kreditne kartice u %@";
+
+/* Accessibility label for a credit card list item in autofill settings screen. The first parameter is the credit card issuer (e.g. Visa). The second parameter is is the name of the credit card holder. The third parameter is the last 4 digits of the credit card. The fourth parameter is the card's expiration date. */
+"CreditCard.Settings.ListItemA11y.v118" = "%1$@, izdato za %2$@, završava sa %3$@, ističe %4$@";
+
+/* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string indicates to users that they can deny Firefox from remembering the card that is being used. */
+"CreditCard.Settings.NotNow.v112" = "Ne sada";
+
+/* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string is a title string of the overall message that asks the user if they would like Firefox to remember the card that is being used. */
+"CreditCard.Settings.RememberThisCard.v112" = "Zapamtiti ovu karticu?";
+
+/* When a user is in the process or has finished making a purchase with a remembered card, and if the credit card information doesn't match the contents of the stored information of that card, we show this string. We ask this user if they would like Firefox update the staled information of that credit card. */
+"CreditCard.Settings.UpdateThisCard.v112" = "Ažurirati ovu karticu?";
+
+/* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string asks users to confirm if they would like Firefox to remember the card that is being used. */
+"CreditCard.Settings.Yes.v112" = "Da";
+
+/* When a user is in the process of making a purchase and has at least one saved credit card, a view above the keyboard shows actions a user can take. When tapping this label, the keyboard will dismiss from view. */
+"CreditCards.Settings.Done.v114" = "Gotovo";
+
+/* When a user is in the process or has finished making a purchase, and has at least one card saved, we show this tappable string. This indicates to users that they can navigate to their list of stored credit cards in the app's credit card list screen. */
+"CreditCards.Settings.ManageCards.v112" = "Upravljajte karticama";
+
+/* When a user is in the process of making a purchase, and has at least one saved card, we show this label used as a title. This indicates to the user that there are stored cards available for use on this pending purchase. */
+"CreditCards.Settings.UseASavedCard.v112" = "Koristiti sačuvanu karticu?";
+
+/* When a user is in the process of making a purchase, and has at least one saved card, we show this label inside the keyboard hint. This indicates to the user that there are stored cards available for use on this pending purchase. */
+"CreditCards.Settings.UseSavedCardFromKeyboard.v112" = "Koristi sačuvanu karticu";
+
+/* Settings section title for the old Firefox account */
+"FxA.FirefoxAccount.v119" = "Račun";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title.v119" = "Račun";
+
+/* This is the description for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
+"Settings.Notifications.SyncNotificationsStatus.v112" = "Ovo mora biti uključeno da primate kartice i primate obavještenja kada se prijavite na drugom uređaju.";
+
+/* This is the title for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
+"Settings.Notifications.SyncNotificationsTitle.v112" = "Sinhronizacija";
+
+/* This is the footer title informing the user needs to turn on notifications in iOS Settings. Both placeholders will be replaced with the app name. */
+"Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "Isključili ste sva %1$@ obavještenja. Uključite ih tako što ćete otići na Postavke uređaja > Obavještenja > %2$@";
+
+/* This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. The placeholder will be replaced with the app name. */
+"Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "Saznajte više o korisnim funkcijama i kako da na najbolji način iskoristite %@.";
+
+/* This is the title for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. */
+"Settings.Notifications.TipsAndFeaturesNotificationsTitle.v112" = "Savjeti i funkcije";
+
+/* In the settings menu, in the Privacy section, this is the title for Notifications customization section. */
+"Settings.Notifications.Title.v112" = "Obavještenja";
+
+/* This is the title informing the user needs to turn on notifications in iOS Settings. The placeholder will be replaced with the app name. */
+"Settings.Notifications.TurnOnNotificationsMessage.v112" = "Idite na Postavke uređaja da uključite obavještenja u %@";
+
+/* This is the title informing the user needs to turn on notifications in iOS Settings. */
+"Settings.Notifications.TurnOnNotificationsTitle.v112" = "Uključi obavještenja";
+
+/* Accessibility label for default search engine setting. */
+"Settings.Search.Accessibility.DefaultSearchEngine.v121" = "Glavni pretraživač";
+
+/* Title for the `default search engine` settings section in the Search page in the Settings menu. */
+"Settings.Search.DefaultSearchEngine.Title.v121" = "Glavni pretraživač";
+
+/* Navigation title for search page in the Settings menu. */
+"Settings.Search.PageTitle.v121" = "Traži";
+
+/* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in the Private Session section in the Search page in the Settings menu. */
+"Settings.Search.PrivateSession.Setting.v121" = "Isključite prijedloge u privatnom pretraživanju";
+
+/* Title for the `Private Session` settings section in the Search page in the Settings menu. */
+"Settings.Search.PrivateSession.Title.v121" = "Privatna sesija";
+
+/* Title for quick-search engines settings section in the Search page in the Settings menu. */
+"Settings.Search.QuickEnginesTitle.v121" = "Brzi pretraživači";
+
+/* Label for the `show search suggestions` setting, in the Search Settings page. */
+"Settings.Search.ShowSuggestions.v121" = "Prikaži prijedloge pretraživanja";
+

@@ -15,7 +15,7 @@ history:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/SYNC-3260
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11634
     notification_emails:
       - sync-core@mozilla.com
       - teshaq@mozilla.com
@@ -63,6 +63,21 @@ logins_store_key_regeneration:
       - https://github.com/mozilla/application-services/issues/5221
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/12306
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - synced-client-integrations@mozilla.com
+      - lougenia@mozilla.com
+    expires: never
+
+  keychain_data_lost:
+    type: event
+    description: >
+      The encryption key was regenerated because it and the canary phrase are missing from the keychain
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17380
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17381
     data_sensitivity:
       - technical
     notification_emails:

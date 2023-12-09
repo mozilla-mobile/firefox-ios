@@ -43,10 +43,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         routeBuilder.configure(isPrivate: UserDefaults.standard.bool(forKey: PrefsKeys.LastSessionWasPrivate),
                                prefs: profile.prefs)
 
-        sceneCoordinator = SceneCoordinator(scene: scene)
-        sceneCoordinator?.start()
+        let sceneCoordinator = SceneCoordinator(scene: scene)
+        self.sceneCoordinator = sceneCoordinator
+        sceneCoordinator.start()
 
-        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration]) { [weak self] in
+        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(sceneCoordinator.windowUUID)]) { [weak self] in
             self?.handle(connectionOptions: connectionOptions)
         }
     }
@@ -132,6 +133,25 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let shortcut = connectionOptions.shortcutItem,
            let route = routeBuilder.makeRoute(shortcutItem: shortcut,
                                               tabSetting: NewTabAccessors.getNewTabPage(profile.prefs)) {
+            sceneCoordinator?.findAndHandle(route: route)
+        }
+
+        // Check if our connection options include a user response to a push
+        // notification that is for Sent Tabs. If so, route the related tab URLs.
+        let sentTabsKey = NotificationSentTabs.sentTabsKey
+        if let notification = connectionOptions.notificationResponse?.notification,
+           let userInfo = notification.request.content.userInfo[sentTabsKey] as? [[String: Any]] {
+            handleConnectionOptionsSentTabs(userInfo)
+        }
+    }
+
+    private func handleConnectionOptionsSentTabs(_ userInfo: [[String: Any]]) {
+        // For Sent Tab data structure, see also:
+        // NotificationService.displayNewSentTabNotification()
+        for tab in userInfo {
+            guard let urlString = tab["url"] as? String,
+                  let url = URL(string: urlString),
+                  let route = routeBuilder.makeRoute(url: url) else { continue }
             sceneCoordinator?.findAndHandle(route: route)
         }
     }

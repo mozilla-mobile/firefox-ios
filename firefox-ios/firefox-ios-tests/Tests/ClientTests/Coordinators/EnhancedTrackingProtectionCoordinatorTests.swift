@@ -61,7 +61,7 @@ final class EnhancedTrackingProtectionCoordinatorTests: XCTestCase {
     }
 
     func createSubject() -> EnhancedTrackingProtectionCoordinator {
-        let subject = EnhancedTrackingProtectionCoordinator(router: mockRouter)
+        let subject = EnhancedTrackingProtectionCoordinator(router: mockRouter, tabManager: MockTabManager())
         trackForMemoryLeaks(subject)
         return subject
     }

@@ -44,6 +44,79 @@ class RustAutofillTests: XCTestCase {
         return autofill.addCreditCard(creditCard: creditCard, completion: completion)
     }
 
+    func addAddress(completion: @escaping (Address?, Error?) -> Void) {
+        let address = UpdatableAddressFields(
+            givenName: "Jane",
+            additionalName: "",
+            familyName: "Doe",
+            organization: "",
+            streetAddress: "123 Second Avenue",
+            addressLevel3: "",
+            addressLevel2: "Chicago, IL",
+            addressLevel1: "",
+            postalCode: "",
+            country: "United States",
+            tel: "",
+            email: "")
+        return autofill.addAddress(address: address, completion: completion)
+    }
+
+    func testAddAndGetAddress() {
+        let expectationAddAddress = expectation(description: "Completes the add address operation")
+        let expectationGetAddress = expectation(description: "Completes the get address operation")
+
+        addAddress { address, error in
+            guard let address = address, error == nil else {
+                XCTFail("Failed to add address. Address: \(String(describing: address)), Error: \(String(describing: error))")
+                expectationAddAddress.fulfill()
+                return
+            }
+
+            XCTAssertEqual(address.givenName, "Jane")
+            XCTAssertEqual(address.familyName, "Doe")
+            XCTAssertEqual(address.streetAddress, "123 Second Avenue")
+            XCTAssertEqual(address.addressLevel2, "Chicago, IL")
+            XCTAssertEqual(address.country, "United States")
+
+            expectationAddAddress.fulfill()
+
+            self.autofill.getAddress(id: address.guid) { retrievedAddress, getAddressError in
+                guard let retrievedAddress = retrievedAddress, getAddressError == nil else {
+                    XCTFail("Failed to get address. Retrieved Address: \(String(describing: retrievedAddress)), Error: \(String(describing: getAddressError))")
+                    expectationGetAddress.fulfill()
+                    return
+                }
+
+                XCTAssertEqual(address.guid, retrievedAddress.guid)
+                expectationGetAddress.fulfill()
+            }
+        }
+
+        waitForExpectations(timeout: 3, handler: nil)
+    }
+
+    func testListAllAddressesSuccess() {
+        let expectationListAddresses = expectation(description: "Completes the list all addresses operation")
+
+        autofill.listAllAddresses { addresses, error in
+            XCTAssertNil(error, "Error should be nil")
+            XCTAssertNotNil(addresses, "Addresses should not be nil")
+
+            // Assert on individual addresses in the list
+            for address in addresses ?? [] {
+                XCTAssertEqual(address.givenName, "Jane")
+                XCTAssertEqual(address.familyName, "Doe")
+                XCTAssertEqual(address.streetAddress, "123 Second Avenue")
+                XCTAssertEqual(address.addressLevel2, "Chicago, IL")
+                XCTAssertEqual(address.country, "United States")
+            }
+
+            expectationListAddresses.fulfill()
+        }
+
+        waitForExpectations(timeout: 3, handler: nil)
+    }
+
     func testAddCreditCard() {
         let expectationAddCard = expectation(description: "completed add card")
         let expectationGetCard = expectation(description: "completed getting card")
@@ -86,6 +159,20 @@ class RustAutofillTests: XCTestCase {
                     expectationGetCards.fulfill()
                 }
             }
+        }
+
+        waitForExpectations(timeout: 3, handler: nil)
+    }
+
+    func testListAllAddressesEmpty() {
+        let expectationListAddresses = expectation(description: "Completes the list all addresses operation for an empty list")
+
+        autofill.listAllAddresses { addresses, error in
+            XCTAssertNil(error, "Error should be nil")
+            XCTAssertNotNil(addresses, "Addresses should not be nil")
+            XCTAssertEqual(addresses?.count, 0, "Addresses count should be 0 for an empty list")
+
+            expectationListAddresses.fulfill()
         }
 
         waitForExpectations(timeout: 3, handler: nil)

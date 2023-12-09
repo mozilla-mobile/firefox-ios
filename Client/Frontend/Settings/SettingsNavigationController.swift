@@ -51,9 +51,7 @@ class ThemedNavigationController: DismissableNavigationViewController, Themeable
         navigationBar.standardAppearance = standardAppearance
         navigationBar.compactAppearance = standardAppearance
         navigationBar.scrollEdgeAppearance = standardAppearance
-        if #available(iOS 15.0, *) {
-            navigationBar.compactScrollEdgeAppearance = standardAppearance
-        }
+        navigationBar.compactScrollEdgeAppearance = standardAppearance
         navigationBar.tintColor = theme.colors.actionPrimary
     }
 

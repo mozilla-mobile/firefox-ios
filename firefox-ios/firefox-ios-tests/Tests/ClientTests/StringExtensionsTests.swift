@@ -8,23 +8,6 @@ import XCTest
 @testable import Client
 
 class StringExtensionsTests: XCTestCase {
-    func testEllipsize() {
-        // Odd maxLength. Note that we ellipsize with a Unicode join character to avoid wrapping.
-        XCTAssertEqual("abcd…\u{2060}fgh", "abcdefgh".ellipsize(maxLength: 7))
-
-        // Even maxLength.
-        XCTAssertEqual("abcd…\u{2060}ijkl", "abcdefghijkl".ellipsize(maxLength: 8))
-
-        // String shorter than maxLength.
-        XCTAssertEqual("abcd", "abcd".ellipsize(maxLength: 7))
-
-        // Empty String.
-        XCTAssertEqual("", "".ellipsize(maxLength: 8))
-
-        // maxLength < 2.
-        XCTAssertEqual("abcdefgh", "abcdefgh".ellipsize(maxLength: 0))
-    }
-
     func testStringByTrimmingLeadingCharactersInSet() {
         XCTAssertEqual("foo   ", "   foo   ".stringByTrimmingLeadingCharactersInSet(.whitespaces))
         XCTAssertEqual("foo456", "123foo456".stringByTrimmingLeadingCharactersInSet(.decimalDigits))
@@ -96,47 +79,6 @@ class StringExtensionsTests: XCTestCase {
             DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body, size: font.pointSize)
         )
         XCTAssertEqual(effectiveRange, NSRange(location: 6, length: 4))
-    }
-
-    // MARK: Tests for HtmlEntityEncoding string
-    func testHtmlEntityEncoding_noSpecialCharacters() {
-        let input = "John Doe"
-        XCTAssertEqual(input.htmlEntityEncodedString, "John Doe")
-    }
-
-    func testHtmlEntityEncoding_withSpecialCharacters() {
-        let input = "<John Doe>"
-        XCTAssertEqual(input.htmlEntityEncodedString, "&lt;John Doe&gt;")
-    }
-
-    func testHtmlEntityEncoding_withXssPayload() {
-        let input = "<script>alert('XSS')</script>"
-        XCTAssertEqual(input.htmlEntityEncodedString, "&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;")
-    }
-
-    func testHtmlEntityEncoding_withHtmlEntities() {
-        let input = "&quot;John Doe&quot;"
-        XCTAssertEqual(input.htmlEntityEncodedString, "&amp;quot;John Doe&amp;quot;")
-    }
-
-    func testHtmlEntityEncoding_withMultipleSpecialCharacters() {
-        let input = "<John & 'Doe'>"
-        XCTAssertEqual(input.htmlEntityEncodedString, "&lt;John &amp; &#39;Doe&#39;&gt;")
-    }
-
-    func testHtmlEntityEncoding_withUnicodeCharacters() {
-        let input = "Mëtàl Hëàd"
-        XCTAssertEqual(input.htmlEntityEncodedString, "Mëtàl Hëàd")
-    }
-
-    func testHtmlEntityEncoding_withNumbers() {
-        let input = "12345"
-        XCTAssertEqual(input.htmlEntityEncodedString, "12345")
-    }
-
-    func testHtmlEntityEncoding_withEmptyString() {
-        let input = ""
-        XCTAssertEqual(input.htmlEntityEncodedString, "")
     }
 
     // MARK: - Tests for match method

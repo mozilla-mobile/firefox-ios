@@ -12,19 +12,28 @@ protocol TabTrayNavigationHandler: AnyObject {
     func start(panelType: TabTrayPanelType, navigationController: UINavigationController)
 }
 
-class TabTrayCoordinator: BaseCoordinator, TabTrayViewControllerDelegate, TabTrayNavigationHandler {
+class TabTrayCoordinator: BaseCoordinator,
+                          ParentCoordinatorDelegate,
+                          TabTrayViewControllerDelegate,
+                          TabTrayNavigationHandler,
+                          QRCodeNavigationHandler {
     private var tabTrayViewController: TabTrayViewController!
+    private var profile: Profile
     weak var parentCoordinator: TabTrayCoordinatorDelegate?
 
-    init(router: Router) {
+    init(router: Router,
+         tabTraySection: TabTrayPanelType,
+         profile: Profile) {
+        self.profile = profile
         super.init(router: router)
-        initializeTabTrayViewController()
+        initializeTabTrayViewController(selectedTab: tabTraySection)
     }
 
-    private func initializeTabTrayViewController() {
-        tabTrayViewController = TabTrayViewController(delegate: self)
+    private func initializeTabTrayViewController(selectedTab: TabTrayPanelType) {
+        tabTrayViewController = TabTrayViewController(selectedTab: selectedTab)
         router.setRootViewController(tabTrayViewController)
         tabTrayViewController.childPanelControllers = makeChildPanels()
+        tabTrayViewController.delegate = self
         tabTrayViewController.navigationHandler = self
     }
 
@@ -33,8 +42,8 @@ class TabTrayCoordinator: BaseCoordinator, TabTrayViewControllerDelegate, TabTra
     }
 
     private func makeChildPanels() -> [UINavigationController] {
-        let regularTabsPanel = TabDisplayViewController(isPrivateMode: false)
-        let privateTabsPanel = TabDisplayViewController(isPrivateMode: true)
+        let regularTabsPanel = TabDisplayPanel(isPrivateMode: false)
+        let privateTabsPanel = TabDisplayPanel(isPrivateMode: true)
         let syncTabs = RemoteTabsPanel()
         return [
             ThemedNavigationController(rootViewController: regularTabsPanel),
@@ -50,30 +59,49 @@ class TabTrayCoordinator: BaseCoordinator, TabTrayViewControllerDelegate, TabTra
         case .privateTabs:
             makeTabsCoordinator(navigationController: navigationController)
         case .syncedTabs:
-            makeSyncedTabsCoordinator(navigationController: navigationController)
+            makeRemoteTabsCoordinator(navigationController: navigationController)
         }
     }
 
     private func makeTabsCoordinator(navigationController: UINavigationController) {
         let router = DefaultRouter(navigationController: navigationController)
-        let tabCoordinator = TabsCoordinator(parentCoordinator: parentCoordinator,
-                                             router: router)
+        let tabCoordinator = TabsCoordinator(router: router)
         add(child: tabCoordinator)
-        (navigationController.topViewController as? TabDisplayViewController)?.navigationHandler = tabCoordinator
+        tabCoordinator.parentCoordinator = self
     }
 
-    private func makeSyncedTabsCoordinator(navigationController: UINavigationController) {
-        guard !childCoordinators.contains(where: { $0 is SyncedTabsCoordinator }) else { return }
+    private func makeRemoteTabsCoordinator(navigationController: UINavigationController) {
+        guard !childCoordinators.contains(where: { $0 is RemoteTabsCoordinator }) else { return }
         let router = DefaultRouter(navigationController: navigationController)
-        let syncedCoordinator = SyncedTabsCoordinator(parentCoordinator: parentCoordinator,
-                                                      router: router)
-        add(child: syncedCoordinator)
-        (navigationController.topViewController as? RemoteTabsPanel)?.navigationHandler = syncedCoordinator
+        let remoteTabsCoordinator = RemoteTabsCoordinator(profile: profile,
+                                                          router: router)
+        add(child: remoteTabsCoordinator)
+        remoteTabsCoordinator.parentCoordinator = self
+        remoteTabsCoordinator.qrCodeNavigationHandler = self
+        (navigationController.topViewController as? RemoteTabsPanel)?.remoteTabsDelegate = remoteTabsCoordinator
+    }
+
+    // MARK: - ParentCoordinatorDelegate
+    func didFinish(from childCoordinator: Coordinator) {
+        remove(child: childCoordinator)
+        parentCoordinator?.didDismissTabTray(from: self)
     }
 
     // MARK: - TabTrayViewControllerDelegate
     func didFinish() {
-        router.dismiss(animated: true, completion: nil)
         parentCoordinator?.didDismissTabTray(from: self)
+    }
+
+    // MARK: - QRCodeNavigationHandler
+    func showQRCode(delegate: QRCodeViewControllerDelegate, rootNavigationController: UINavigationController?) {
+        var coordinator: QRCodeCoordinator
+        if let qrCodeCoordinator = childCoordinators.first(where: { $0 is QRCodeCoordinator }) as? QRCodeCoordinator {
+            coordinator = qrCodeCoordinator
+        } else {
+            let router = rootNavigationController != nil ? DefaultRouter(navigationController: rootNavigationController!) : router
+            coordinator = QRCodeCoordinator(parentCoordinator: self, router: router)
+            add(child: coordinator)
+        }
+        coordinator.showQRCode(delegate: delegate)
     }
 }

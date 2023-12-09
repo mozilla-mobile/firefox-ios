@@ -12,7 +12,6 @@ open class BaseCoordinator: NSObject, Coordinator {
     var router: Router
     var logger: Logger
     var isDismissable: Bool { true }
-    var newlyAdded = false
     private var mainQueue: DispatchQueueInterface
 
     init(router: Router,

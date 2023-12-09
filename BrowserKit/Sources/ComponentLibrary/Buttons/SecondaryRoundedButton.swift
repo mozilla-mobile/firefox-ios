@@ -5,7 +5,7 @@
 import Common
 import UIKit
 
-public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
+public class SecondaryRoundedButton: LegacyResizableButton, ThemeApplicable {
     private struct UX {
         static let buttonCornerRadius: CGFloat = 12
         static let buttonVerticalInset: CGFloat = 12
