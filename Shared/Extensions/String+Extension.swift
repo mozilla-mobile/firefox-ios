@@ -111,20 +111,6 @@ public extension String {
         return nsString.substring(with: match.range(at: 1))
     }
 
-    /// Encode HTMLStrings
-    /// Also used for Strings which are not sanitized for displaying
-    /// - Returns: Encoded String
-    var htmlEntityEncodedString: String {
-      return
-        self
-        .replacingOccurrences(of: "&", with: "&amp;", options: .literal)
-        .replacingOccurrences(of: "\"", with: "&quot;", options: .literal)
-        .replacingOccurrences(of: "'", with: "&#39;", options: .literal)
-        .replacingOccurrences(of: "<", with: "&lt;", options: .literal)
-        .replacingOccurrences(of: ">", with: "&gt;", options: .literal)
-        .replacingOccurrences(of: "`", with: "&lsquo;", options: .literal)
-    }
-
     // MARK: - Private
     private var stringWithAdditionalEscaping: String {
         return self.replacingOccurrences(of: "|", with: "%7C")

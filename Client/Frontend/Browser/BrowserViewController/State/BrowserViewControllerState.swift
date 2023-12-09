@@ -6,7 +6,8 @@ import Foundation
 import Redux
 
 struct BrowserViewControllerState: ScreenState, Equatable {
-    var feltPrivacyState: FeltPrivacyState
+    var searchScreenState: SearchScreenState
+    var usePrivateHomepage: Bool
     var fakespotState: FakespotState
 
     init(_ appState: AppState) {
@@ -18,39 +19,46 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             return
         }
 
-        self.init(feltPrivacyState: bvcState.feltPrivacyState,
+        self.init(searchScreenState: bvcState.searchScreenState,
+                  usePrivateHomepage: bvcState.usePrivateHomepage,
                   fakespotState: bvcState.fakespotState)
     }
 
     init() {
         self.init(
-            feltPrivacyState: FeltPrivacyState(),
+            searchScreenState: SearchScreenState(),
+            usePrivateHomepage: false,
             fakespotState: FakespotState())
     }
 
     init(
-        feltPrivacyState: FeltPrivacyState,
+        searchScreenState: SearchScreenState,
+        usePrivateHomepage: Bool,
         fakespotState: FakespotState
     ) {
-        self.feltPrivacyState = feltPrivacyState
+        self.searchScreenState = searchScreenState
+        self.usePrivateHomepage = usePrivateHomepage
         self.fakespotState = fakespotState
     }
 
     static let reducer: Reducer<Self> = { state, action in
         switch action {
-        case FeltPrivacyAction.privateModeUpdated(let privacyState):
+        case PrivateModeMiddlewareAction.privateModeUpdated(let privacyState):
             return BrowserViewControllerState(
-                feltPrivacyState: FeltPrivacyState.reducer(state.feltPrivacyState, action),
+                searchScreenState: SearchScreenState(inPrivateMode: privacyState),
+                usePrivateHomepage: privacyState,
                 fakespotState: state.fakespotState)
         case FakespotAction.pressedShoppingButton,
             FakespotAction.show,
             FakespotAction.dismiss:
             return BrowserViewControllerState(
-                feltPrivacyState: state.feltPrivacyState,
+                searchScreenState: state.searchScreenState,
+                usePrivateHomepage: state.usePrivateHomepage,
                 fakespotState: FakespotState.reducer(state.fakespotState, action))
         case FakespotAction.setAppearanceTo(let isEnabled):
             return BrowserViewControllerState(
-                feltPrivacyState: state.feltPrivacyState,
+                searchScreenState: state.searchScreenState,
+                usePrivateHomepage: state.usePrivateHomepage,
                 fakespotState: FakespotState.reducer(state.fakespotState, action))
         default:
             return state

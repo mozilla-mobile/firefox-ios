@@ -4,7 +4,11 @@
 
 import Foundation
 
-// Temporary so package isn't empty
-struct DummyCode {
-    var foo = 1
+public extension Array {
+    func find(_ f: (Iterator.Element) -> Bool) -> Iterator.Element? {
+        for x in self where f(x) {
+            return x
+        }
+        return nil
+    }
 }

@@ -8,7 +8,7 @@ import Shared
 import Storage
 import WebKit
 
-protocol TabPeekDelegate: AnyObject {
+protocol LegacyTabPeekDelegate: AnyObject {
     @discardableResult
     func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListItem?
     func tabPeekDidAddBookmark(_ tab: Tab)
@@ -17,10 +17,10 @@ protocol TabPeekDelegate: AnyObject {
     func tabPeekDidCopyUrl()
 }
 
-class TabPeekViewController: UIViewController, WKNavigationDelegate {
+class LegacyTabPeekViewController: UIViewController, WKNavigationDelegate {
     weak var tab: Tab?
 
-    private weak var delegate: TabPeekDelegate?
+    private weak var delegate: LegacyTabPeekDelegate?
     private var fxaDevicePicker: UINavigationController?
     private var isBookmarked = false
     private var isInReadingList = false
@@ -110,7 +110,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         return UIMenu(title: "", children: actions)
     }
 
-    init(tab: Tab?, delegate: TabPeekDelegate?) {
+    init(tab: Tab?, delegate: LegacyTabPeekDelegate?) {
         self.tab = tab
         self.delegate = delegate
         super.init(nibName: nil, bundle: nil)

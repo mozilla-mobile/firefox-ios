@@ -687,6 +687,23 @@ shopping:
     send_in_pings:
       - events
 
+  surface_no_ads_available:
+    type: event
+    description: |
+      On a supported product page, the review checker
+      showed analysis, and review checker ads were enabled,
+      but when we tried to fetch an ad from the ad server,
+      no ad was available.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17301
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17663
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
+    send_in_pings:
+      - events
+
   surface_ads_impression:
     type: event
     description: |

@@ -20,19 +20,14 @@ export class CreditCardRecord {
   }
 
   static #normalizeCCNameFields(creditCard) {
-    if (
-      creditCard["cc-given-name"] ||
-      creditCard["cc-additional-name"] ||
-      creditCard["cc-family-name"]
-    ) {
-      if (!creditCard["cc-name"]) {
-        creditCard["cc-name"] = FormAutofillNameUtils.joinNameParts({
-          given: creditCard["cc-given-name"],
-          middle: creditCard["cc-additional-name"],
-          family: creditCard["cc-family-name"],
-        });
-      }
+    if (!creditCard["cc-name"]) {
+      creditCard["cc-name"] = FormAutofillNameUtils.joinNameParts({
+        given: creditCard["cc-given-name"] ?? "",
+        middle: creditCard["cc-additional-name"] ?? "",
+        family: creditCard["cc-family-name"] ?? "",
+      });
     }
+
     delete creditCard["cc-given-name"];
     delete creditCard["cc-additional-name"];
     delete creditCard["cc-family-name"];

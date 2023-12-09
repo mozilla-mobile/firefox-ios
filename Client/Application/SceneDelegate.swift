@@ -43,10 +43,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         routeBuilder.configure(isPrivate: UserDefaults.standard.bool(forKey: PrefsKeys.LastSessionWasPrivate),
                                prefs: profile.prefs)
 
-        sceneCoordinator = SceneCoordinator(scene: scene)
-        sceneCoordinator?.start()
+        let sceneCoordinator = SceneCoordinator(scene: scene)
+        self.sceneCoordinator = sceneCoordinator
+        sceneCoordinator.start()
 
-        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration]) { [weak self] in
+        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(sceneCoordinator.windowUUID)]) { [weak self] in
             self?.handle(connectionOptions: connectionOptions)
         }
     }

@@ -5,5 +5,5 @@
 import Redux
 
 enum TabManagerAction: Action {
-    case tabManagerDidConnectToScene(TabManager, SceneUUID)
+    case tabManagerDidConnectToScene(TabManager)
 }
