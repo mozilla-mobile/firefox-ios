@@ -29,7 +29,7 @@
 "About.safariBullet1" = "Bluccate i perseguitatori per amendà a vita privata";
 
 /* Label on About screen */
-"About.safariBullet2" = "Bluccà e grafie web per reduce a dimensione di e pagine";
+"About.safariBullet2" = "Bluccà e grafie web per riduce a dimensione di e pagine";
 
 /* Label on About screen */
 "About.safariBulletHeader" = "Impiegatelu cum’è un’estensione Safari :";
@@ -257,10 +257,10 @@
 "SearchSuggestions.promptEnable" = "Sì";
 
 /* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
-"SearchSuggestions.promptMessage" = "Per ottene sugestioni di ricerca, %@ hà bisognu di mandà à u mutore di ricerca ciò chì vo stampittate in a barra d’indirizzu.";
+"SearchSuggestions.promptMessage" = "Per ottene suggestioni di ricerca, %@ hà bisognu di mandà à u mutore di ricerca ciò chì vo stampittate in a barra d’indirizzu.";
 
 /* Title for search suggestions prompt */
-"SearchSuggestions.promptTitle" = "Affissà e sugestioni di ricerca ?";
+"SearchSuggestions.promptTitle" = "Affissà e suggestioni di ricerca ?";
 
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Scrittura mezu-autumatica di l’indirizzi";
@@ -341,7 +341,7 @@
 "Settings.searchLabel" = "Mutore di ricerca";
 
 /* Label for the Search Suggestions toggle row */
-"Settings.searchSuggestions" = "Ottene sugestioni di ricerca";
+"Settings.searchSuggestions" = "Ottene suggestioni di ricerca";
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "RICERCA";
