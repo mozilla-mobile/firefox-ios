@@ -25,8 +25,10 @@ final class TabPanelStateTests: XCTestCase {
         let initialState = createInitialState()
         XCTAssertTrue(initialState.tabs.isEmpty)
         let reducer = tabsPanelReducer()
+        let tabs = createTabs()
         let tabDisplayModel = TabDisplayModel(isPrivateMode: false,
-                                              tabs: createTabs(),
+                                              tabs: tabs,
+                                              normalTabsCount: "\(tabs.count)",
                                               inactiveTabs: [InactiveTabsModel](),
                                               isInactiveTabsExpanded: false)
         let newState = reducer(initialState, TabPanelAction.didLoadTabPanel(tabDisplayModel))
