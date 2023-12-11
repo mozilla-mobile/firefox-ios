@@ -155,7 +155,8 @@ extension TabEvent {
 private let center = NotificationCenter()
 
 private struct AssociatedKeys {
-    static var key = "observers"
+    // This property's address will be used as a unique address for the associated object's handle
+    static var observers: UInt8 = 0
 }
 
 private class ObserverWrapper: NSObject {
@@ -185,6 +186,6 @@ extension TabEventHandler {
             }
         }
 
-        objc_setAssociatedObject(observer, &AssociatedKeys.key, wrapper, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        objc_setAssociatedObject(observer, &AssociatedKeys.observers, wrapper, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
     }
 }

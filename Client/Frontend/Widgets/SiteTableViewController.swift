@@ -45,10 +45,7 @@ class SiteTableViewController: UIViewController,
 
         // Set an empty footer to prevent empty cells from appearing in the list.
         table.tableFooterView = UIView()
-
-        if #available(iOS 15.0, *) {
-            table.sectionHeaderTopPadding = 0
-        }
+        table.sectionHeaderTopPadding = 0
     }
 
     override private init(nibName: String?, bundle: Bundle?) {

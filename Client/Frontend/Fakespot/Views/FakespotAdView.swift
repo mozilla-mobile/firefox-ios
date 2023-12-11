@@ -27,8 +27,25 @@ struct FakespotAdViewModel {
     let productAdsData: ProductAdsResponse
     let urlCache: URLCache
 
+    var formattedPrice: String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        formatter.currencyCode = productAdsData.currency
+
+        let fallBackPrice = productAdsData.currency + productAdsData.price
+
+        guard let price = Double(productAdsData.price),
+              let formattedPrice = formatter.string(from: NSNumber(value: price)) else {
+           return fallBackPrice
+        }
+
+         return formattedPrice
+    }
+
     // MARK: Init
-    init(tabManager: TabManager = AppContainer.shared.resolve(),
+    init(tabManager: TabManager,
          productAdsData: ProductAdsResponse,
          urlCache: URLCache = URLCache.shared) {
         self.tabManager = tabManager
@@ -143,7 +160,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate, F
         footerLabel.text = viewModel.footerText
         footerLabel.accessibilityIdentifier = viewModel.footerA11yId
 
-        priceLabel.text = productAdsData.currency + productAdsData.price
+        priceLabel.text = viewModel.formattedPrice
         priceLabel.accessibilityIdentifier = viewModel.priceA11yId
 
         starRatingView.rating = productAdsData.adjustedRating

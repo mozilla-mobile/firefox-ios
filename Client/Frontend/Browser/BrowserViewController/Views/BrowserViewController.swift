@@ -234,9 +234,10 @@ class BrowserViewController: UIViewController,
         tabManager.addDelegate(self)
         tabManager.addNavigationDelegate(self)
         downloadQueue.delegate = self
-        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration]) { [weak self] in
+        let tabWindowUUID = tabManager.windowUUID
+        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(tabWindowUUID)]) { [weak self] in
             // Ensure we call into didBecomeActive at least once during startup flow (if needed)
-            guard !AppEventQueue.activityIsCompleted(.browserDidBecomeActive) else { return }
+            guard !AppEventQueue.activityIsCompleted(.browserUpdatedForAppActivation(tabWindowUUID)) else { return }
             self?.browserDidBecomeActive()
         }
     }
@@ -377,6 +378,11 @@ class BrowserViewController: UIViewController,
         if self.presentedViewController as? PhotonActionSheet != nil {
             self.presentedViewController?.dismiss(animated: true, completion: nil)
         }
+        // Formerly these calls were run during AppDelegate.didEnterBackground(), but we have
+        // individual TabManager instances for each BVC, so we perform these here instead.
+        tabManager.preserveTabs()
+        // TODO: [FXIOS-7856] Some additional updates for telemetry forthcoming, once iPad multi-window is enabled.
+        TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
     }
 
     @objc
@@ -431,8 +437,9 @@ class BrowserViewController: UIViewController,
     }
 
     func browserDidBecomeActive() {
-        AppEventQueue.started(.browserDidBecomeActive)
-        defer { AppEventQueue.completed(.browserDidBecomeActive) }
+        let uuid = tabManager.windowUUID
+        AppEventQueue.started(.browserUpdatedForAppActivation(uuid))
+        defer { AppEventQueue.completed(.browserUpdatedForAppActivation(uuid)) }
 
         // Update lock icon without redrawing the whole locationView
         if let tab = tabManager.selectedTab {
@@ -444,7 +451,7 @@ class BrowserViewController: UIViewController,
 
         // When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
         // Make sure that our startup flow is completed and other tabs have been restored before we load.
-        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration]) { [weak self] in
+        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(tabManager.windowUUID)]) { [weak self] in
             self?.backgroundTabLoader.loadBackgroundTabs()
         }
     }
@@ -953,7 +960,7 @@ class BrowserViewController: UIViewController,
                 self.isCrashAlertShowing = false
                 self.tabManager.selectTab(self.tabManager.addTab())
                 self.openUrlAfterRestore()
-                AppEventQueue.signal(event: .tabRestoration)
+                AppEventQueue.signal(event: .tabRestoration(self.tabManager.windowUUID))
             }
         )
         self.present(alert, animated: true, completion: nil)
@@ -1022,7 +1029,6 @@ class BrowserViewController: UIViewController,
                                       toastContainer: contentContainer,
                                       homepanelDelegate: self,
                                       libraryPanelDelegate: self,
-                                      sendToDeviceDelegate: self,
                                       statusBarScrollDelegate: statusBarOverlay,
                                       overlayManager: overlayManager)
     }
@@ -1306,7 +1312,7 @@ class BrowserViewController: UIViewController,
             if tab.url?.origin == webView.url?.origin {
                 tab.url = webView.url
 
-                if tab === tabManager.selectedTab && !tab.isRestoring {
+                if tab === tabManager.selectedTab {
                     updateUIForReaderHomeStateForTab(tab)
                 }
                 // Catch history pushState navigation, but ONLY for same origin navigation,
@@ -1558,28 +1564,6 @@ class BrowserViewController: UIViewController,
 
     private func isShowingJSPromptAlert() -> Bool {
         return navigationController?.topViewController?.presentedViewController as? JSPromptAlertController != nil
-    }
-
-    private func showSendToDevice() {
-        guard let selectedTab = tabManager.selectedTab,
-              let url = selectedTab.canonicalURL?.displayURL
-        else { return }
-
-        let themeColors = themeManager.currentTheme.colors
-        let colors = SendToDeviceHelper.Colors(defaultBackground: themeColors.layer1,
-                                               textColor: themeColors.textPrimary,
-                                               iconColor: themeColors.iconPrimary)
-        let shareItem = ShareItem(url: url.absoluteString,
-                                  title: selectedTab.title)
-
-        let helper = SendToDeviceHelper(shareItem: shareItem,
-                                        profile: profile,
-                                        colors: colors,
-                                        delegate: self)
-        let viewController = helper.initialViewController()
-
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sendToDevice)
-        showViewController(viewController: viewController)
     }
 
     fileprivate func postLocationChangeNotificationForTab(_ tab: Tab, navigation: WKNavigation?) {
@@ -1889,8 +1873,10 @@ class BrowserViewController: UIViewController,
         tabTrayOpenRecentlyClosedTab(url)
     }
 
-    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
+    @discardableResult
+    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) -> WindowUUID {
         tabManager.selectTab(tabManager.addTab(URLRequest(url: url)))
+        return tabManager.windowUUID
     }
 
     // MARK: - QRCodeViewControllerDelegate
@@ -1988,7 +1974,11 @@ extension BrowserViewController: LegacyTabDelegate {
 
         // only add the logins helper if the tab is not a private browsing tab
         if !tab.isPrivate {
-            let logins = LoginsHelper(tab: tab, profile: profile)
+            let logins = LoginsHelper(
+                tab: tab,
+                profile: profile,
+                theme: themeManager.currentTheme
+            )
             tab.addContentScript(logins, name: LoginsHelper.name())
         }
 
@@ -2063,7 +2053,7 @@ extension BrowserViewController: LegacyTabDelegate {
         // the selected Tab, do nothing right now. If/when the Tab gets
         // selected later, we will show the SnackBar at that time.
         guard tab == tabManager.selectedTab else { return }
-
+        bar.applyTheme(theme: themeManager.currentTheme)
         bottomContentStackView.addArrangedViewToBottom(bar, completion: {
             self.view.layoutIfNeeded()
         })
@@ -2433,8 +2423,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
 extension BrowserViewController: SessionRestoreHelperDelegate {
     func sessionRestoreHelper(_ helper: SessionRestoreHelper, didRestoreSessionForTab tab: Tab) {
-        tab.isRestoring = false
-
         if let tab = tabManager.selectedTab, tab.webView === tab.webView {
             updateUIForReaderHomeStateForTab(tab)
         }

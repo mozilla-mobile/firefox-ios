@@ -300,16 +300,20 @@ class FakespotViewModel {
         a11yDescriptionIdentifier: AccessibilityIdentifiers.Shopping.InfoComingSoonCard.description
     )
 
-    let settingsCardViewModel = FakespotSettingsCardViewModel()
+    let settingsCardViewModel: FakespotSettingsCardViewModel
     var noAnalysisCardViewModel = FakespotNoAnalysisCardViewModel()
-    let reviewQualityCardViewModel = FakespotReviewQualityCardViewModel()
-    var optInCardViewModel = FakespotOptInCardViewModel()
+    let reviewQualityCardViewModel: FakespotReviewQualityCardViewModel
+    var optInCardViewModel: FakespotOptInCardViewModel
 
     private var analyzeCount = 0
 
     init(shoppingProduct: ShoppingProduct,
-         profile: Profile = AppContainer.shared.resolve()) {
+         profile: Profile = AppContainer.shared.resolve(),
+         tabManager: TabManager) {
         self.shoppingProduct = shoppingProduct
+        self.settingsCardViewModel = FakespotSettingsCardViewModel(tabManager: tabManager)
+        self.reviewQualityCardViewModel = FakespotReviewQualityCardViewModel(tabManager: tabManager)
+        optInCardViewModel = FakespotOptInCardViewModel(tabManager: tabManager)
         optInCardViewModel.productSitename = shoppingProduct.product?.sitename
         optInCardViewModel.supportedTLDWebsites = shoppingProduct.supportedTLDWebsites
         reviewQualityCardViewModel.productSitename = shoppingProduct.product?.sitename
@@ -382,7 +386,11 @@ class FakespotViewModel {
                     analyzeCount: analyzeCount
                 )
             )
-            if !productAds.isEmpty, product != nil {
+
+            guard let product else { return }
+            if productAds.isEmpty {
+                recordSurfaceNoAdsAvailableTelemetry()
+            } else {
                 recordAdsExposureTelementry()
             }
         } catch {
@@ -530,6 +538,15 @@ class FakespotViewModel {
             method: .view,
             object: .shoppingBottomSheet,
             value: .shoppingAdsImpression
+        )
+    }
+
+    private func recordSurfaceNoAdsAvailableTelemetry() {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .view,
+            object: .shoppingBottomSheet,
+            value: .shoppingNoAdsAvailable
         )
     }
 

@@ -35,11 +35,13 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     // MARK: - Initializers
     init(prefs: Prefs,
          wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
-         settingsDelegate: SettingsDelegate? = nil) {
+         settingsDelegate: SettingsDelegate? = nil,
+         tabManager: TabManager) {
         self.prefs = prefs
         self.wallpaperManager = wallpaperManager
         super.init(style: .grouped)
         super.settingsDelegate = settingsDelegate
+        self.tabManager = tabManager
 
         title = .SettingsHomePageSectionName
         navigationController?.navigationBar.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar
@@ -152,6 +154,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
                                                    titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.RecentlyVisited))
         let wallpaperSetting = WallpaperSettings(settings: self,
                                                  settingsDelegate: settingsDelegate,
+                                                 tabManager: tabManager,
                                                  wallpaperManager: wallpaperManager)
 
         // Section ordering
@@ -275,7 +278,7 @@ extension HomePageSettingViewController {
 
         init(settings: SettingsTableViewController,
              settingsDelegate: SettingsDelegate?,
-             and tabManager: TabManager = AppContainer.shared.resolve(),
+             tabManager: TabManager,
              wallpaperManager: WallpaperManagerInterface = WallpaperManager()
         ) {
             self.settings = settings

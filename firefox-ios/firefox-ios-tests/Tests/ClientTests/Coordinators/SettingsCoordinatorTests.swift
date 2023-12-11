@@ -525,7 +525,9 @@ final class SettingsCoordinatorTests: XCTestCase {
     // MARK: - Helper
     func createSubject() -> SettingsCoordinator {
         let subject = SettingsCoordinator(router: mockRouter,
-                                          wallpaperManager: wallpaperManager)
+                                          wallpaperManager: wallpaperManager,
+                                          tabManager: MockTabManager()
+        )
         trackForMemoryLeaks(subject)
         return subject
     }

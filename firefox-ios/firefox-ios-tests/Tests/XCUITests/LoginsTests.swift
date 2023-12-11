@@ -52,19 +52,6 @@ class LoginTest: BaseTestCase {
         navigator.nowAt(LoginsSettings)
     }
 
-    private func unlockLoginsView() {
-        // Press continue button on the password onboarding if it's shown
-        if app.buttons[AccessibilityIdentifiers.Settings.Passwords.onboardingContinue].exists {
-            app.buttons[AccessibilityIdentifiers.Settings.Passwords.onboardingContinue].tap()
-        }
-
-        let passcodeInput = springboard.otherElements.secureTextFields.firstMatch
-        mozWaitForElementToExist(passcodeInput, timeout: 20)
-        passcodeInput.tap()
-        passcodeInput.typeText("foo\n")
-        mozWaitForElementToNotExist(passcodeInput)
-    }
-
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306961
     func testLoginsListFromBrowserTabMenu() {
         closeURLBar()

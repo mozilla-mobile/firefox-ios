@@ -33,7 +33,7 @@ final class FakespotReviewQualityCardViewModel {
     var learnMoreButtonA11yId = AccessibilityIdentifiers.Shopping.ReviewQualityCard.learnMoreButtonTitle
 
     // MARK: Init
-    init(tabManager: TabManager = AppContainer.shared.resolve()) {
+    init(tabManager: TabManager) {
         self.tabManager = tabManager
     }
 

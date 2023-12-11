@@ -8,10 +8,15 @@ import Common
 import Shared
 import Redux
 
+protocol RemoteTabsPanelDelegate: AnyObject {
+    func presentFirefoxAccountSignIn()
+    func presentFxAccountSettings()
+}
+
 class RemoteTabsPanel: UIViewController,
                        Themeable,
                        RemoteTabsClientAndTabsDataSourceDelegate,
-                       RemotePanelDelegateProvider,
+                       RemoteTabsEmptyViewDelegate,
                        StoreSubscriber {
     typealias SubscriberStateType = RemoteTabsPanelState
 
@@ -19,14 +24,11 @@ class RemoteTabsPanel: UIViewController,
 
     private(set) var state: RemoteTabsPanelState
     var tableViewController: RemoteTabsTableViewController
-    weak var remotePanelDelegate: RemotePanelDelegate?
-    weak var navigationHandler: SyncedTabsNavigationHandler?
+    weak var remoteTabsDelegate: RemoteTabsPanelDelegate?
 
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
-
-    lazy var isReduxIntegrationEnabled: Bool = ReduxFlagManager.isReduxEnabled
 
     // MARK: - Initializer
 
@@ -126,7 +128,6 @@ class RemoteTabsPanel: UIViewController,
     // MARK: - Redux
 
     func subscribeToRedux() {
-        guard isReduxIntegrationEnabled else { return }
         store.dispatch(ActiveScreensStateAction.showScreen(.remoteTabsPanel))
         store.dispatch(RemoteTabsPanelAction.panelDidAppear)
         store.subscribe(self, transform: {
@@ -135,10 +136,8 @@ class RemoteTabsPanel: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        if isReduxIntegrationEnabled {
-            store.dispatch(ActiveScreensStateAction.closeScreen(.remoteTabsPanel))
-            store.unsubscribe(self)
-        }
+        store.dispatch(ActiveScreensStateAction.closeScreen(.remoteTabsPanel))
+        store.unsubscribe(self)
     }
 
     func newState(state: RemoteTabsPanelState) {
@@ -151,9 +150,29 @@ class RemoteTabsPanel: UIViewController,
     }
 
     // MARK: - RemoteTabsClientAndTabsDataSourceDelegate
-
     func remoteTabsClientAndTabsDataSourceDidSelectURL(_ url: URL, visitType: VisitType) {
-        // Pass event along to our delegate
-        remotePanelDelegate?.remotePanel(didSelectURL: url, visitType: VisitType.typed)
+        handleOpenSelectedURL(url)
+    }
+
+    // MARK: - RemotePanelDelegate
+    func remotePanelDidRequestToSignIn() {
+        remoteTabsDelegate?.presentFirefoxAccountSignIn()
+    }
+
+    func presentFxAccountSettings() {
+        remoteTabsDelegate?.presentFxAccountSettings()
+    }
+
+    func remotePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
+        handleOpenSelectedURL(url)
+    }
+
+    func remotePanel(didSelectURL url: URL, visitType: VisitType) {
+        handleOpenSelectedURL(url)
+    }
+
+    private func handleOpenSelectedURL(_ url: URL) {
+        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .syncTab)
+        store.dispatch(RemoteTabsPanelAction.openSelectedURL(url))
     }
 }

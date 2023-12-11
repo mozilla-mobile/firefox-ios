@@ -6,7 +6,7 @@ import UIKit
 
 class LegacyTabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate {
     weak var tabSelectionDelegate: TabSelectionDelegate?
-    weak var tabPeekDelegate: TabPeekDelegate?
+    weak var tabPeekDelegate: LegacyTabPeekDelegate?
     var lastYOffset: CGFloat = 0
     var tabDisplayManager: LegacyTabDisplayManager
 
@@ -149,7 +149,7 @@ class LegacyTabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIG
               let tab = tabDisplayManager.dataStore.at(indexPath.row)
         else { return nil }
 
-        let tabVC = TabPeekViewController(tab: tab, delegate: tabPeekDelegate)
+        let tabVC = LegacyTabPeekViewController(tab: tab, delegate: tabPeekDelegate)
         if let browserProfile = tabDisplayManager.profile as? BrowserProfile,
            let pickerDelegate = tabPeekDelegate as? DevicePickerViewControllerDelegate {
             tabVC.setState(withProfile: browserProfile, clientPickerDelegate: pickerDelegate)

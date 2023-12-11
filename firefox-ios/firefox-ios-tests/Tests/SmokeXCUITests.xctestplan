@@ -52,6 +52,7 @@
         "BookmarksTests\/testRecentlyBookmarked()",
         "BrowsingPDFTests",
         "ClipBoardTests\/testClipboard()",
+        "CreditCardsTests",
         "CronTabsPerformanceTest",
         "DataManagementTests\/testWebSiteDataOptions()",
         "DatabaseFixtureTest",
