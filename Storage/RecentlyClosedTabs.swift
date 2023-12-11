@@ -58,7 +58,8 @@ open class ClosedTabsStore {
     }
 }
 
-open class ClosedTab: NSObject, NSCoding {
+open class ClosedTab: NSObject, NSSecureCoding {
+    public static var supportsSecureCoding: Bool { return true }
     enum CodingKeys: String {
         case url, title, lastExecutedTime
     }
