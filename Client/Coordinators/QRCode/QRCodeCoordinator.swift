@@ -35,6 +35,5 @@ class QRCodeCoordinator: BaseCoordinator, QRCodeDismissHandler {
 
     func dismiss(_ completion: (() -> Void)?) {
         router.dismiss(animated: true, completion: completion)
-        parentCoordinator?.didFinish(from: self)
     }
 }
