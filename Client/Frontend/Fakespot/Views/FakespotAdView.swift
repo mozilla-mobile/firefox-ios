@@ -61,11 +61,10 @@ struct FakespotAdViewModel: FeatureFlaggable {
 
     // MARK: Image Loading
     @MainActor
-    func loadImage(from url: URL, completion: (UIImage?) -> Void) async throws {
+    func loadImage(from url: URL) async throws -> UIImage? {
         if let cachedData = urlCache.cachedResponse(for: URLRequest(url: url))?.data,
            let image = UIImage(data: cachedData) {
-            completion(image)
-            return
+            return image
         }
 
         do {
@@ -83,10 +82,9 @@ struct FakespotAdViewModel: FeatureFlaggable {
             let (data, response) = try await manager.data(for: URLRequest(url: url))
             let cacheData = CachedURLResponse(response: response, data: data)
             self.urlCache.storeCachedResponse(cacheData, for: URLRequest(url: url))
-
-            completion(UIImage(data: data))
+            return UIImage(data: data)
         } catch {
-            completion(nil)
+            return nil
         }
     }
 }
@@ -211,10 +209,9 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         productImageView.isHidden = true
 
         Task {
-            try? await viewModel.loadImage(from: productAdsData.imageUrl) { [weak self] image in
-                 self?.productImageView.image = image
-                 self?.displayProductImage()
-            }
+            let image = try? await viewModel.loadImage(from: productAdsData.imageUrl)
+            productImageView.image = image
+            displayProductImage()
         }
 
         let cardModel = ShadowCardViewModel(view: contentStackView, a11yId: viewModel.cardA11yId)
