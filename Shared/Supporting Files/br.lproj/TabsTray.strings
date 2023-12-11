@@ -16,3 +16,6 @@
 /* Button label to sync tabs in your Firefox Account */
 "TabsTray.SyncTabs.SyncTabsButton.Title.v109" = "Goubredañ an ivinelloù";
 
+/* Button label to sync tabs in your account */
+"TabsTray.SyncTabs.SyncTabsButton.Title.v119" = "Goubredañ an ivinelloù";
+
