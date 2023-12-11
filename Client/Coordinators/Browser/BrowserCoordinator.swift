@@ -28,6 +28,7 @@ class BrowserCoordinator: BaseCoordinator,
     private var profile: Profile
     private let tabManager: TabManager
     private let themeManager: ThemeManager
+    private let windowManager: WindowManager
     private let screenshotService: ScreenshotService
     private let glean: GleanWrapper
     private let applicationHelper: ApplicationHelper
@@ -38,18 +39,24 @@ class BrowserCoordinator: BaseCoordinator,
          tabManager: TabManager,
          profile: Profile = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
+         windowManager: WindowManager = AppContainer.shared.resolve(),
          glean: GleanWrapper = DefaultGleanWrapper.shared,
          applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
         self.screenshotService = screenshotService
         self.profile = profile
         self.tabManager = tabManager
         self.themeManager = themeManager
+        self.windowManager = windowManager
         self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         self.applicationHelper = applicationHelper
         self.glean = glean
         super.init(router: router)
 
-        tabManagerDidConnectToScene()
+        windowManager.tabManagerDidConnectToBrowserWindow(tabManager)
+        // TODO [7856]: Additional telemetry updates forthcoming once iPad multi-window enabled.
+        // For now, we only have a single BVC and TabManager. Plug it into our TelemetryWrapper:
+        TelemetryWrapper.shared.defaultTabManager = tabManager
+
         browserViewController.browserDelegate = self
         browserViewController.navigationHandler = self
         tabManager.addDelegate(self)
@@ -64,16 +71,6 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - Helper methods
-
-    private func tabManagerDidConnectToScene() {
-        // [7863] [WIP] Redux: connect this Browser's TabManager to associated window scene
-        guard ReduxFlagManager.isReduxEnabled else { return }
-        store.dispatch(TabManagerAction.tabManagerDidConnectToScene(tabManager))
-
-        // TODO [7856]: Additional telemetry updates forthcoming once iPad multi-window enabled.
-        // For now, we only have a single BVC and TabManager. Plug it into our TelemetryWrapper:
-        TelemetryWrapper.shared.defaultTabManager = tabManager
-    }
 
     private func startLaunch(with launchType: LaunchType) {
         let launchCoordinator = LaunchCoordinator(router: router)
@@ -358,11 +355,8 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.openRecentlyClosedSiteInSameTab(url)
     }
 
-    @discardableResult
-    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) -> WindowUUID {
+    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
         browserViewController.openRecentlyClosedSiteInNewTab(url, isPrivate: isPrivate)
-        // TODO: [FXIOS-7349] Updates to Recently Closed for iPad multi-window forthcoming.
-        return tabManager.windowUUID
     }
 
     func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {

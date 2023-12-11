@@ -37,13 +37,13 @@ class DependencyHelperMock {
         let downloadQueue = DownloadQueue()
         AppContainer.shared.register(service: downloadQueue)
 
+        let windowManager: WindowManager = WindowManagerImplementation()
+        AppContainer.shared.register(service: windowManager)
+        // Register TabManager with Redux for primary app window
+        windowManager.tabManagerDidConnectToBrowserWindow(tabManager)
+
         // Tell the container we are done registering
         AppContainer.shared.bootstrap()
-
-        // Register TabManager with Redux for the current app scene
-        // Hardcoded UUID here is temporary; will be removed once PR #17661 is merged
-        let defaultSceneUUID = UUID(uuidString: "44BA0B7D-097A-484D-8358-91A6E374451D")!
-        store.dispatch(TabManagerAction.tabManagerDidConnectToScene(tabManager))
     }
 
     func reset() {

@@ -1873,10 +1873,8 @@ class BrowserViewController: UIViewController,
         tabTrayOpenRecentlyClosedTab(url)
     }
 
-    @discardableResult
-    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) -> WindowUUID {
+    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
         tabManager.selectTab(tabManager.addTab(URLRequest(url: url)))
-        return tabManager.windowUUID
     }
 
     // MARK: - QRCodeViewControllerDelegate

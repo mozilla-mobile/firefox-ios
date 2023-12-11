@@ -7,9 +7,12 @@ import Redux
 import TabDataStore
 
 class TabManagerMiddleware {
-    // TODO: [FXIOS-7863] Part of ongoing WIP for Redux + iPad Multi-window.
-    var tabManagers: [WindowUUID: TabManager] = [:]
     var selectedPanel: TabTrayPanelType = .tabs
+    private let windowManager: WindowManager
+
+    init(windowManager: WindowManager = AppContainer.shared.resolve()) {
+        self.windowManager = windowManager
+    }
 
     lazy var tabsPanelProvider: Middleware<AppState> = { state, action in
         switch action {
@@ -92,9 +95,6 @@ class TabManagerMiddleware {
             let urlRequest = URLRequest(url: url)
             self.addNewTab(with: urlRequest, isPrivate: false)
             store.dispatch(TabTrayAction.dismissTabTray)
-
-        case TabManagerAction.tabManagerDidConnectToScene(let manager):
-            self.setTabManager(manager, for: manager.windowUUID)
 
         default:
             break
@@ -192,16 +192,8 @@ class TabManagerMiddleware {
         defaultTabManager.selectTab(tab)
     }
 
-    private func setTabManager(_ tabManager: TabManager, for windowUUID: WindowUUID) {
-        tabManagers[windowUUID] = tabManager
-    }
-
-    private func removeTabManager(_ tabManager: TabManager, for windowUUID: WindowUUID) {
-        tabManagers.removeValue(forKey: windowUUID)
-    }
-
     private var defaultTabManager: TabManager {
         // TODO: [FXIOS-7863] Temporary. WIP for Redux + iPad Multi-window.
-        return tabManagers[.defaultSingleWindowUUID]!
+        return windowManager.tabManager(for: windowManager.activeWindow)
     }
 }
