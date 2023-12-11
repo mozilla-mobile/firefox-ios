@@ -29,7 +29,7 @@ final class FakespotViewModelTests: XCTestCase {
     // Mock ShoppingProduct for testing
     class MockShoppingProduct: ShoppingProduct {
         var shouldThrowError = false
-        var shouldFetchAds = true
+        var isEmptyAdsResponse = false
         // Mocked ads data for testing
         let ads = [
             ProductAdsResponse(
@@ -54,7 +54,7 @@ final class FakespotViewModelTests: XCTestCase {
         }
 
         override func fetchProductAdsData() async -> [ProductAdsResponse] {
-            shouldFetchAds ? ads : []
+            isEmptyAdsResponse ? [] : ads
         }
     }
 
@@ -85,7 +85,7 @@ final class FakespotViewModelTests: XCTestCase {
     }
 
     func testLoadProductsAds_EmptyProductAdsResponse() async {
-        client.shouldFetchAds = false
+        client.isEmptyAdsResponse = true
         let viewModel = FakespotViewModel(shoppingProduct: client, tabManager: MockTabManager())
         let newAds = await viewModel.loadProductAds(for: "testProductId")
         XCTAssertEqual(newAds, [], "Should load new ads from server")
