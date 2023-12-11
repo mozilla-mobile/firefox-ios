@@ -42,6 +42,12 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, ReusableC
         }
     }
 
+    lazy var stackView: UIStackView = .build { stackView in
+        stackView.axis = .vertical
+        stackView.spacing = 0
+        stackView.alignment = .leading
+    }
+
     lazy var titleLabel: UILabel = .build { label in
         label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline, size: 12.0)
         label.numberOfLines = 0
@@ -53,7 +59,8 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, ReusableC
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        contentView.addSubview(titleLabel)
+        contentView.addSubview(stackView)
+        stackView.addArrangedSubview(titleLabel)
         bordersHelper.initBorders(view: self.contentView)
         setDefaultBordersValues()
         setupInitialConstraints()
@@ -73,7 +80,7 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, ReusableC
         bordersHelper.showBorder(for: location, show)
     }
 
-    func setDefaultBordersValues() {
+    private func setDefaultBordersValues() {
         bordersHelper.showBorder(for: .top, false)
         bordersHelper.showBorder(for: .bottom, false)
     }
@@ -81,23 +88,25 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, ReusableC
     override func prepareForReuse() {
         super.prepareForReuse()
         setDefaultBordersValues()
+        stackView.removeAllArrangedViews()
         titleLabel.text = nil
+        stackView.addArrangedSubview(titleLabel)
         titleAlignment = .bottom
     }
 
     private func setupInitialConstraints() {
-        titleTopConstraint = titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor,
-                                                             constant: UX.titleVerticalLongPadding)
-        titleBottomConstraint = titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
-                                                                   constant: -UX.titleVerticalPadding)
+        titleTopConstraint = stackView.topAnchor.constraint(equalTo: contentView.topAnchor,
+                                                            constant: UX.titleVerticalLongPadding)
+        titleBottomConstraint = stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
+                                                                  constant: -UX.titleVerticalPadding)
 
         NSLayoutConstraint.activate([
             titleTopConstraint,
             titleBottomConstraint,
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
-                                                constant: UX.titleHorizontalPadding),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
-                                                 constant: -UX.titleHorizontalPadding),
+            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                               constant: UX.titleHorizontalPadding),
+            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                constant: -UX.titleHorizontalPadding),
         ])
     }
 
