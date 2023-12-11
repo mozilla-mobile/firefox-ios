@@ -35,9 +35,7 @@ class SearchGroupedItemsViewController: UIViewController, UITableViewDelegate, T
         tableView.register(OneLineTableViewCell.self, forCellReuseIdentifier: OneLineTableViewCell.cellIdentifier)
         tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier)
 
-        if #available(iOS 15.0, *) {
-            tableView.sectionHeaderTopPadding = 0
-        }
+        tableView.sectionHeaderTopPadding = 0
     }
 
     private lazy var doneButton: UIBarButtonItem =  {

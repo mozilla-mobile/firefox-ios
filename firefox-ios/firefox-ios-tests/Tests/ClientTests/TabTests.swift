@@ -22,28 +22,6 @@ class TabTests: XCTestCase {
         urlDidChangeDelegate = nil
     }
 
-    func testWithoutMobilePrefixRemovesMobilePrefixes() {
-        let url = URL(string: "https://m.wikipedia.org/wiki/Firefox")!
-        let newUrl = url.withoutMobilePrefix()
-        XCTAssertEqual(newUrl.host, "wikipedia.org")
-    }
-
-    func testWithoutMobilePrefixRemovesMobile() {
-        let url = URL(string: "https://en.mobile.wikipedia.org/wiki/Firefox")!
-        let newUrl = url.withoutMobilePrefix()
-        XCTAssertEqual(newUrl.host, "en.wikipedia.org")
-    }
-
-    func testWithoutMobilePrefixOnlyRemovesMobileSubdomains() {
-        var url = URL(string: "https://plum.com")!
-        var newUrl = url.withoutMobilePrefix()
-        XCTAssertEqual(newUrl.host, "plum.com")
-
-        url = URL(string: "https://mobile.co.uk")!
-        newUrl = url.withoutMobilePrefix()
-        XCTAssertEqual(newUrl.host, "mobile.co.uk")
-    }
-
     func testShareURL_RemovingReaderModeComponents() {
         let url = URL(string: "http://localhost:123/reader-mode/page?url=https://mozilla.org")!
 

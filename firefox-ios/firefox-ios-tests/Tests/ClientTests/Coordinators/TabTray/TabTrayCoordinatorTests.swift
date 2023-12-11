@@ -7,17 +7,26 @@ import XCTest
 
 final class TabTrayCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
+    private var profile: MockProfile!
+    private var parentCoordinator: MockTabTrayCoordinatorDelegate!
+    private var qrDelegate: MockQRCodeViewControllerDelegate!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        self.mockRouter = MockRouter(navigationController: MockNavigationController())
+        mockRouter = MockRouter(navigationController: MockNavigationController())
+        profile = MockProfile()
+        parentCoordinator = MockTabTrayCoordinatorDelegate()
+        qrDelegate = MockQRCodeViewControllerDelegate()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 
     override func tearDown() {
         super.tearDown()
-        self.mockRouter = nil
+        mockRouter = nil
+        profile = nil
+        parentCoordinator = nil
+        qrDelegate = nil
         DependencyHelperMock().reset()
     }
 
@@ -44,7 +53,7 @@ final class TabTrayCoordinatorTests: XCTestCase {
         XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
     }
 
-    func testStart_SyncedTabsPanel() {
+    func testStart_RemoteTabsPanel() {
         let subject = createSubject()
         subject.start(panelType: .syncedTabs, navigationController: UINavigationController())
 
@@ -57,7 +66,15 @@ final class TabTrayCoordinatorTests: XCTestCase {
         subject.start(panelType: .tabs, navigationController: UINavigationController())
         subject.didFinish()
 
-        XCTAssertEqual(mockRouter.dismissCalled, 1)
+        XCTAssertEqual(parentCoordinator.didDismissWasCalled, 1)
+    }
+
+    func testPresentQRCode() {
+        let subject = createSubject()
+        subject.start(panelType: .syncedTabs, navigationController: UINavigationController())
+        subject.showQRCode(delegate: qrDelegate)
+
+        XCTAssertEqual(mockRouter.presentCalled, 1)
     }
 
     // MARK: - Helpers
@@ -65,7 +82,9 @@ final class TabTrayCoordinatorTests: XCTestCase {
                                file: StaticString = #file,
                                line: UInt = #line) -> TabTrayCoordinator {
         let subject = TabTrayCoordinator(router: mockRouter,
-                                         tabTraySection: panelType)
+                                         tabTraySection: panelType,
+                                         profile: profile)
+        subject.parentCoordinator = parentCoordinator
 
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

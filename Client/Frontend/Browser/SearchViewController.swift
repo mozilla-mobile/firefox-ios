@@ -112,9 +112,7 @@ class SearchViewController: SiteTableViewController,
         self.highlightManager = highlightManager
         super.init(profile: profile)
 
-        if #available(iOS 15.0, *) {
-            tableView.sectionHeaderTopPadding = 0
-        }
+        tableView.sectionHeaderTopPadding = 0
     }
 
     required init?(coder aDecoder: NSCoder) {

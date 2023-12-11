@@ -21,9 +21,9 @@ class DependencyHelperMock {
             imageStore: DefaultDiskImageStore(
                 files: profile.files,
                 namespace: "TabManagerScreenshots",
-                quality: UIConstants.ScreenshotQuality)
+                quality: UIConstants.ScreenshotQuality),
+            uuid: .defaultSingleWindowUUID
         )
-        AppContainer.shared.register(service: tabManager)
 
         let appSessionProvider: AppSessionProvider = AppSessionManager()
         AppContainer.shared.register(service: appSessionProvider)
@@ -39,6 +39,11 @@ class DependencyHelperMock {
 
         // Tell the container we are done registering
         AppContainer.shared.bootstrap()
+
+        // Register TabManager with Redux for the current app scene
+        // Hardcoded UUID here is temporary; will be removed once PR #17661 is merged
+        let defaultSceneUUID = UUID(uuidString: "44BA0B7D-097A-484D-8358-91A6E374451D")!
+        store.dispatch(TabManagerAction.tabManagerDidConnectToScene(tabManager))
     }
 
     func reset() {

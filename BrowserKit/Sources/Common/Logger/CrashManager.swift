@@ -104,9 +104,7 @@ public class DefaultCrashManager: CrashManager {
             options.enableFileIOTracing = false
             options.enableNetworkTracking = false
             options.enableAppHangTracking = self.shouldEnableAppHangTracking
-            if #available(iOS 15.0, *) {
-                options.enableMetricKit = self.shouldEnableMetricKit
-            }
+            options.enableMetricKit = self.shouldEnableMetricKit
             options.enableCaptureFailedRequests = false
             options.enableSwizzling = false
             options.beforeBreadcrumb = { crumb in

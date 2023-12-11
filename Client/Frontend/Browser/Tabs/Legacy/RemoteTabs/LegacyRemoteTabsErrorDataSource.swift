@@ -6,7 +6,7 @@ import Common
 import Foundation
 import Shared
 
-class RemoteTabsErrorDataSource: NSObject, RemoteTabsPanelDataSource, ThemeApplicable {
+class LegacyRemoteTabsErrorDataSource: NSObject, RemoteTabsPanelDataSource, ThemeApplicable {
     enum ErrorType {
         case notLoggedIn
         case noClients
@@ -50,8 +50,8 @@ class RemoteTabsErrorDataSource: NSObject, RemoteTabsPanelDataSource, ThemeAppli
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: RemoteTabsErrorCell.cellIdentifier,
-                                                       for: indexPath) as? RemoteTabsErrorCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: LegacyRemoteTabsErrorCell.cellIdentifier,
+                                                       for: indexPath) as? LegacyRemoteTabsErrorCell
         else {
             return UITableViewCell()
         }

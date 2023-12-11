@@ -15,7 +15,6 @@ class TabDisplayPanel: UIViewController,
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
-    weak var navigationHandler: TabsNavigationHandler?
 
     // MARK: UI elements
     private lazy var tabDisplayView: TabDisplayView = {
@@ -130,7 +129,7 @@ class TabDisplayPanel: UIViewController,
     }
 }
 
-extension TabDisplayPanel: TabPeekDelegate {
+extension TabDisplayPanel: LegacyTabPeekDelegate {
     func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListItem? { return nil }
     func tabPeekDidAddBookmark(_ tab: Tab) {}
     func tabPeekRequestsPresentationOf(_ viewController: UIViewController) {}

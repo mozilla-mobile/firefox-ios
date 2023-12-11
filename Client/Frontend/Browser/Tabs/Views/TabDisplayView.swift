@@ -25,7 +25,7 @@ class TabDisplayView: UIView,
     private(set) var tabsState: TabsPanelState
     private var inactiveTabsSectionManager: InactiveTabsSectionManager
     private var tabsSectionManager: TabsSectionManager
-    private weak var tabPeekDelegate: TabPeekDelegate?
+    private weak var tabPeekDelegate: LegacyTabPeekDelegate?
     var theme: Theme?
 
     private var shouldHideInactiveTabs: Bool {
@@ -60,7 +60,7 @@ class TabDisplayView: UIView,
         return collectionView
     }()
 
-    public init(state: TabsPanelState, tabPeekDelegate: TabPeekDelegate?) {
+    public init(state: TabsPanelState, tabPeekDelegate: LegacyTabPeekDelegate?) {
         self.tabsState = state
         self.tabPeekDelegate = tabPeekDelegate
         self.inactiveTabsSectionManager = InactiveTabsSectionManager()
@@ -244,7 +244,7 @@ class TabDisplayView: UIView,
         else { return nil }
 
         // TODO: Add browserProfile and clientPickerDelegate
-        let tabVC = TabPeekViewController(tab: nil, delegate: tabPeekDelegate)
+        let tabVC = LegacyTabPeekViewController(tab: nil, delegate: tabPeekDelegate)
         return UIContextMenuConfiguration(identifier: nil,
                                           previewProvider: { return tabVC },
                                           actionProvider: tabVC.contextActions(defaultActions:))
