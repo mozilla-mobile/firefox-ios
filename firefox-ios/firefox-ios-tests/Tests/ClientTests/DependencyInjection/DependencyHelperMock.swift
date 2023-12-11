@@ -37,14 +37,13 @@ class DependencyHelperMock {
         let downloadQueue = DownloadQueue()
         AppContainer.shared.register(service: downloadQueue)
 
-        let windowManager = WindowManagerImplementation()
+        let windowManager: WindowManager = WindowManagerImplementation()
         AppContainer.shared.register(service: windowManager)
+        // Register TabManager with Redux for primary app window
+        windowManager.tabManagerDidConnectToBrowserWindow(tabManager)
 
         // Tell the container we are done registering
         AppContainer.shared.bootstrap()
-
-        // Register TabManager with Redux for the current app scene
-        windowManager.tabManagerDidConnectToWindow(tabManager)
     }
 
     func reset() {
