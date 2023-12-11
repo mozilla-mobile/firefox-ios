@@ -58,7 +58,7 @@ fx-suggest:
     Does not contain a `client_id`, preferring a `context_id` instead.
   include_client_id: false
   bugs:
-    - https://mozilla-hub.atlassian.net/browse/FXIOS-7473
+    - https://github.com/mozilla-mobile/firefox-ios/issues/16589
   data_reviews:
     - https://github.com/mozilla-mobile/firefox-ios/pull/17556
   notification_emails:
