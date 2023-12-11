@@ -76,6 +76,9 @@
 /* Title for info card when there are not enough reviews for a product */
 "Shopping.InfoCard.NotEnoughReviews.Title.v120" = "บทวิจารณ์ยังไม่เพียงพอ";
 
+/* Primary action label for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This primary action label is used for info card button where the user can report if it's back in stock. */
+"Shopping.InfoCard.ProductNotInStock.PrimaryAction.v121" = "รายงานสินค้ากลับมาในสต็อก";
+
 /* Title for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This title is used for info card where the user can report if it's back in stock. */
 "Shopping.InfoCard.ProductNotInStock.Title.v121" = "สินค้าไม่พร้อมจำหน่าย";
 
@@ -153,6 +156,9 @@
 
 /* Title of the settings card displayed in the shopping review quality bottom sheet. */
 "Shopping.SettingsCard.Label.Title.v120" = "การตั้งค่า";
+
+/* Label of the switch from settings card displayed in the shopping review quality bottom sheet. The placeholder will be replaced with the app name. */
+"Shopping.SettingsCard.RecommendedProducts.Label.v120" = "แสดงผลิตภัณฑ์ที่แนะนำโดย %@";
 
 /* Label of the button from settings card displayed in the shopping review quality bottom sheet. */
 "Shopping.SettingsCard.TurnOffButton.Title.v120" = "ปิดตัวตรวจสอบบทวิจารณ์";

@@ -58,3 +58,12 @@
 /* This is the title informing the user needs to turn on notifications in iOS Settings. */
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "ເປີດການແຈ້ງເຕືອນ";
 
+/* Navigation title for search page in the Settings menu. */
+"Settings.Search.PageTitle.v121" = "ຄົ້ນຫາ";
+
+/* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in the Private Session section in the Search page in the Settings menu. */
+"Settings.Search.PrivateSession.Setting.v121" = "ປິດຄຳແນະນຳໃນໂຫມດການທ່ອງເວັບແບບສ່ວນຕົວ";
+
+/* Title for the `Private Session` settings section in the Search page in the Settings menu. */
+"Settings.Search.PrivateSession.Title.v121" = "ເຊດຊັນສ່ວນຕົວ";
+
