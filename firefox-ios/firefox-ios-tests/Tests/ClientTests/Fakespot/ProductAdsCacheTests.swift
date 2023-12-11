@@ -67,17 +67,17 @@ final class ProductAdsCacheTests: XCTestCase {
     }
 
     func testGetCachedAds() {
-            let key = "testKey"
-            cache.cacheAds(ads1, forKey: key)
+        let key = "testKey"
+        cache.cacheAds(ads1, forKey: key)
 
-            let cachedAds = cache.getCachedAds(forKey: key)
-            XCTAssertNotNil(cachedAds, "Cached ads should not be nil")
-            XCTAssertEqual(cachedAds, ads1, "Cached ads should match the original ads")
+        let cachedAds = cache.getCachedAds(forKey: key)
+        XCTAssertNotNil(cachedAds, "Cached ads should not be nil")
+        XCTAssertEqual(cachedAds, ads1, "Cached ads should match the original ads")
 
-            // Test getting ads for a non-existent key
-            let nonExistentAds = cache.getCachedAds(forKey: "nonExistentKey")
-            XCTAssertNil(nonExistentAds, "Cached ads for a non-existent key should be nil")
-        }
+        // Test getting ads for a non-existent key
+        let nonExistentAds = cache.getCachedAds(forKey: "nonExistentKey")
+        XCTAssertNil(nonExistentAds, "Cached ads for a non-existent key should be nil")
+    }
 
     func testCacheMultipleKeys() {
         let key1 = "testKey1"
