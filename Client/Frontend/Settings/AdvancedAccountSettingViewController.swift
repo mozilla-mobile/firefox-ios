@@ -4,7 +4,6 @@
 
 import UIKit
 import Shared
-import SnapKit
 
 import Account
 
