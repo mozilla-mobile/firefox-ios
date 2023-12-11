@@ -15,7 +15,7 @@ class PhotonActionSheetContainerCell: UITableViewCell, ReusableCell, ThemeApplic
     weak var delegate: PhotonActionSheetContainerCellDelegate?
     private lazy var containerStackView: UIStackView = .build { stackView in
         stackView.alignment = .fill
-        stackView.distribution = .fill
+        stackView.distribution = .fillEqually
         stackView.axis = .horizontal
     }
 
