@@ -47,7 +47,7 @@
 "Onboarding.Sync.Skip.Action.v114" = "Überspringen";
 
 /* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
-"Onboarding.Sync.Title.v120" = "Verschlüsseln Sie ihre Daten, wenn Sie geräteübergreifend arbeiten";
+"Onboarding.Sync.Title.v120" = "Verschlüsseln Sie Ihre Daten, wenn Sie geräteübergreifend arbeiten";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.Classic.v114" = "Hintergrund „Klassisch“";

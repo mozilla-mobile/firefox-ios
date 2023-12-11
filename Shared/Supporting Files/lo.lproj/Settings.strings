@@ -58,3 +58,6 @@
 /* This is the title informing the user needs to turn on notifications in iOS Settings. */
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "ເປີດການແຈ້ງເຕືອນ";
 
+/* Navigation title for search page in the Settings menu. */
+"Settings.Search.PageTitle.v121" = "ຄົ້ນຫາ";
+
