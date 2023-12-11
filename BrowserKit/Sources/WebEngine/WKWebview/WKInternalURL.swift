@@ -5,14 +5,21 @@
 import Foundation
 import Common
 
+protocol InternalURL {
+    var isAuthorized: Bool { get }
+
+    func authorize()
+    func stripAuthorization()
+}
+
 /// Internal URLs helps with error pages, session restore and about pages
-struct WKInternalURL {
+final class WKInternalURL: InternalURL {
     static let uuid = UUID().uuidString
     static let scheme = "internal"
     static let baseUrl = "\(scheme)://local"
+
     enum Path: String {
         case errorpage
-        case sessionrestore
         func matches(_ string: String) -> Bool {
             return string.range(of: "/?\(self.rawValue)", options: .regularExpression, range: nil, locale: nil) != nil
         }
@@ -24,7 +31,13 @@ struct WKInternalURL {
         func matches(_ string: String) -> Bool { return string == self.rawValue }
     }
 
-    let url: URL
+    var url: URL
+
+    init?(_ url: URL) {
+        guard WKInternalURL.isValid(url: url) else { return nil }
+
+        self.url = url
+    }
 
     static func isValid(url: URL) -> Bool {
         let isWebServerUrl = url.absoluteString.hasPrefix("http://localhost:\(AppInfo.webserverPort)/")
@@ -36,9 +49,31 @@ struct WKInternalURL {
         return isWebServerUrl || WKInternalURL.scheme == url.scheme
     }
 
-    init?(_ url: URL) {
-        guard WKInternalURL.isValid(url: url) else { return nil }
+    func authorize() {
+        guard var components = URLComponents(string: url.absoluteString) else { return }
+        if components.queryItems == nil {
+            components.queryItems = []
+        }
 
+        if components.queryItems?.find({ Param.uuidkey.matches($0.name) }) == nil {
+            components.queryItems?.append(URLQueryItem(name: Param.uuidkey.rawValue, value: WKInternalURL.uuid))
+        }
+
+        guard let url = components.url, 
+                WKInternalURL.isValid(url: url) else { return }
+        self.url = url
+    }
+
+    func stripAuthorization() {
+        guard var components = URLComponents(string: url.absoluteString),
+                let items = components.queryItems else { return }
+        components.queryItems = items.filter { !Param.uuidkey.matches($0.name) }
+        if let items = components.queryItems, items.isEmpty {
+            components.queryItems = nil // This cleans up the url to not end with a '?'
+        }
+
+        guard let url = components.url,
+                WKInternalURL.isValid(url: url) else { return }
         self.url = url
     }
 

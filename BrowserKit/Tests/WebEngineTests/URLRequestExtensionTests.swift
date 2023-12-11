@@ -8,21 +8,21 @@ import XCTest
 final class URLRequestExtensionTests: XCTestCase {
     func testIsPrivilegedWhenNormalURLRequestThenNotPrivileged() {
         let url = URLRequest(url: URL(string: "https://example.com")!)
-        XCTAssertFalse(url.isPrivileged)
-    }
-
-    func testIsPrivilegedWhenLocalHostThenPrivileged() {
-        let url = URLRequest(url: URL(string: "http://localhost:6571/reader-mode-page?url=https:example.com")!)
-        XCTAssertTrue(url.isPrivileged)
-    }
-
-    func testIsPrivilegedWhenUseInternalSchemeThenPrivileged() {
-        let url = URLRequest(url: URL(string: "internal://local/about/home")!)
-        XCTAssertTrue(url.isPrivileged)
+        XCTAssertFalse(url.isPrivileged, "Should never be privileged")
     }
 
     func testIsPrivilegedWhenTestFixtureThenNotPrivileged() {
         let url = URLRequest(url: URL(string: "http://localhost:6571/test-fixture/find-in-page.html")!)
-        XCTAssertFalse(url.isPrivileged)
+        XCTAssertFalse(url.isPrivileged, "Should never be privileged")
+    }
+
+    func testIsPrivilegedWhenLocalHostThenNotPrivileged() {
+        let url = URLRequest(url: URL(string: "http://localhost:6571/reader-mode-page?url=https:example.com")!)
+        XCTAssertFalse(url.isPrivileged, "Not privileged since was not WKInternalURL.authorized")
+    }
+
+    func testIsPrivilegedWhenUseInternalSchemeThenNotPrivileged() {
+        let url = URLRequest(url: URL(string: "internal://local/about/home")!)
+        XCTAssertFalse(url.isPrivileged, "Not privileged since was not WKInternalURL.authorized")
     }
 }
