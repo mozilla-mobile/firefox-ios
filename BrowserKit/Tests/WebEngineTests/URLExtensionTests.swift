@@ -177,4 +177,25 @@ final class URLExtensionTests: XCTestCase {
         let safeUrl = url.safeEncodedUrl
         XCTAssertNil(safeUrl)
     }
+
+    // MARK: getQuery tests
+
+    func testGetQueryWhenTheresParametersThenGetQueryReturnsTheRightParameters() {
+        let url = URL(string: "http://example.com/path?a=1&b=2&c=3")!
+
+        let urlParams = url.getQuery()
+
+        let expectedParams = ["a": "1", "b": "2", "c": "3"]
+        XCTAssertEqual(urlParams["a"], expectedParams["a"])
+        XCTAssertEqual(urlParams["b"], expectedParams["b"])
+        XCTAssertEqual(urlParams["c"], expectedParams["c"])
+    }
+
+    func testGetQueryWhenPercentEncodedParamsThenGetQueryReturnsTheRightParameters() {
+        let url = URL(string: "http://example.com/path?a=%20")!
+
+        let urlParams = url.getQuery()
+
+        XCTAssertEqual(urlParams["a"], "%20")
+    }
 }
