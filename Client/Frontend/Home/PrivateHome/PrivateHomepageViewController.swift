@@ -127,6 +127,5 @@ final class PrivateHomepageViewController: UIViewController, ContentContainable,
         let theme = themeManager.currentTheme
         gradient.colors = theme.colors.layerHomepage.cgColors
         logoHeaderCell.applyTheme(theme: theme)
-        privateMessageCardCell.applyTheme(theme: theme)
     }
 }

@@ -12,6 +12,11 @@ final class PrivateHomepageViewControllerTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
     }
 
+    override func tearDown() {
+        super.tearDown()
+        DependencyHelperMock().reset()
+    }
+
     func testPrivateHomepageViewController_simpleCreation_hasNoLeaks() {
         let privateHomeViewController = PrivateHomepageViewController()
 
