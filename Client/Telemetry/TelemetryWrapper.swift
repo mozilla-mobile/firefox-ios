@@ -672,6 +672,7 @@ extension TelemetryWrapper {
         case shoppingCFRsDisplayed = "shopping-cfrs-displayed"
         case shoppingAdsExposure = "shopping-ads-exposure"
         case shoppingAdsImpression = "shopping-ads-impression"
+        case surfaceAdsClicked = "surface_ads_clicked"
         case awesomebarShareTap = "awesomebar-share-tap"
         case largeFileWrite = "large-file-write"
     }
@@ -1163,6 +1164,8 @@ extension TelemetryWrapper {
         // MARK: Shopping Experience (Fakespot)
         case (.action, .tap, .shoppingButton, _, _):
             GleanMetrics.Shopping.addressBarIconClicked.record()
+        case (.action, .view, .shoppingBottomSheet, .surfaceAdsClicked, _):
+            GleanMetrics.Shopping.surfaceAdsClicked.record()
         case (.action, .view, .shoppingBottomSheet, .shoppingAdsExposure, _):
             GleanMetrics.Shopping.adsExposure.record()
         case (.action, .view, .shoppingBottomSheet, .shoppingAdsImpression, _):
