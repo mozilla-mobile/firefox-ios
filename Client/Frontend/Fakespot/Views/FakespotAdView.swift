@@ -9,7 +9,7 @@ import ComponentLibrary
 import MozillaAppServices
 
 // MARK: View Model
-struct FakespotAdViewModel {
+struct FakespotAdViewModel: FeatureFlaggable {
     let title: String = .Shopping.AdCardTitleLabel
     let footerText: String = .localizedStringWithFormat(.Shopping.AdCardFooterLabel,
                                                         FakespotName.shortName.rawValue)
@@ -58,9 +58,40 @@ struct FakespotAdViewModel {
         tabManager.addTabsForURLs([productAdsData.url], zombie: false, shouldSelectTab: true)
         dismissViewController?()
     }
+
+    // MARK: Image Loading
+    @MainActor
+    func loadImage(from url: URL, completion: (UIImage?) -> Void) async throws {
+        if let cachedData = urlCache.cachedResponse(for: URLRequest(url: url))?.data,
+           let image = UIImage(data: cachedData) {
+            completion(image)
+            return
+        }
+
+        do {
+            let environment = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI) ? FakespotEnvironment.staging : .prod
+            guard
+                let config = environment.config,
+                let relay = environment.relay
+            else {
+                throw FakespotClient.FakeSpotClientError.invalidURL
+            }
+
+            // Create an instance of OhttpManager with the staging configuration
+            let manager = OhttpManager(configUrl: config, relayUrl: relay)
+
+            let (data, response) = try await manager.data(for: URLRequest(url: url))
+            let cacheData = CachedURLResponse(response: response, data: data)
+            self.urlCache.storeCachedResponse(cacheData, for: URLRequest(url: url))
+
+            completion(UIImage(data: data))
+        } catch {
+            completion(nil)
+        }
+    }
 }
 
-class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate, FeatureFlaggable {
+class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
     private enum UX {
         static let labelFontSize: CGFloat = 15
         static let descriptionFontSize: CGFloat = 13
@@ -181,7 +212,10 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate, F
         productImageView.isHidden = true
 
         Task {
-            try? await loadImage(from: productAdsData.imageUrl)
+            try? await viewModel.loadImage(from: productAdsData.imageUrl) { [weak self] image in
+                 self?.productImageView.image = image
+                 self?.displayProductImage()
+            }
         }
 
         let cardModel = ShadowCardViewModel(view: contentStackView, a11yId: viewModel.cardA11yId)
@@ -347,41 +381,6 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate, F
         gradeReliabilityScoreView.applyTheme(theme: theme)
         defaultImageView.tintColor = theme.colors.iconSecondary
         imageContainerView.backgroundColor = theme.colors.layer3
-    }
-
-    // MARK: Image Loading
-    @MainActor
-    private func loadImage(from url: URL) async throws {
-        if let cachedData = viewModel?.urlCache.cachedResponse(for: URLRequest(url: url))?.data,
-           let image = UIImage(data: cachedData) {
-            self.productImageView.image = image
-            self.displayProductImage()
-            return
-        }
-
-        do {
-            self.productImageView.image = nil
-
-            let environment = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI) ? FakespotEnvironment.staging : .prod
-            guard
-                let config = environment.config,
-                let relay = environment.relay
-            else {
-                throw FakespotClient.FakeSpotClientError.invalidURL
-            }
-
-            // Create an instance of OhttpManager with the staging configuration
-            let manager = OhttpManager(configUrl: config, relayUrl: relay)
-
-            let (data, response) = try await manager.data(for: URLRequest(url: url))
-            let cacheData = CachedURLResponse(response: response, data: data)
-            self.viewModel?.urlCache.storeCachedResponse(cacheData, for: URLRequest(url: url))
-
-            if let image = UIImage(data: data) {
-                self.productImageView.image = image
-                displayProductImage()
-            }
-        } catch { }
     }
 
     private func displayProductImage() {
