@@ -7,8 +7,8 @@ import WebKit
 import Shared
 
 class LocalRequestHelper: TabContentScript {
-    func scriptMessageHandlerName() -> String? {
-        return "localRequestHelper"
+    func scriptMessageHandlerNames() -> [String]? {
+        return ["localRequestHelper"]
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {

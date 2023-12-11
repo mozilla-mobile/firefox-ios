@@ -291,8 +291,8 @@ class ReaderMode: TabContentScript {
         self.logger = logger
     }
 
-    func scriptMessageHandlerName() -> String? {
-        return "readerModeMessageHandler"
+    func scriptMessageHandlerNames() -> [String]? {
+        return ["readerModeMessageHandler"]
     }
 
     fileprivate func handleReaderPageEvent(_ readerPageEvent: ReaderPageEvent) {

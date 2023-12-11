@@ -32,8 +32,8 @@ class FaviconManager: TabContentScript {
         return "FaviconsManager"
     }
 
-    func scriptMessageHandlerName() -> String? {
-        return "faviconsMessageHandler"
+    func scriptMessageHandlerNames() -> [String]? {
+        return ["faviconsMessageHandler"]
     }
 
     fileprivate func loadFavicons(_ tab: Tab, profile: Profile, favicons: [Favicon]) -> Deferred<[Maybe<Favicon>]> {
