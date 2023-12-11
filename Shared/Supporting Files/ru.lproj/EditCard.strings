@@ -17,7 +17,7 @@
 "CreditCard.EditCard.ConcealLabel.v114" = "Скрыть";
 
 /* Label for copying contents of the form */
-"CreditCard.EditCard.CopyLabel.v113" = "Скопировать";
+"CreditCard.EditCard.CopyLabel.v113" = "Копировать";
 
 /* Button label for editing the credit card details shown in the form */
 "CreditCard.EditCard.EditNavBarButtonLabel.v113" = "Изменить";

@@ -76,3 +76,9 @@
 /* Title for the `Private Session` settings section in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Title.v121" = "Sessão Privada";
 
+/* Title for quick-search engines settings section in the Search page in the Settings menu. */
+"Settings.Search.QuickEnginesTitle.v121" = "Motores de pesquisa rápida";
+
+/* Label for the `show search suggestions` setting, in the Search Settings page. */
+"Settings.Search.ShowSuggestions.v121" = "Mostrar sugestões de pesquisa";
+

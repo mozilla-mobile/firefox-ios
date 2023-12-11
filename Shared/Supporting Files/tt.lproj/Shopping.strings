@@ -1,17 +1,38 @@
+/* Contextual hints are little popups that appear for the users informing them of new features. This one indicates that a user can tap on the shopping button to start using the Shopping feature. */
+"ContextualHints.Shopping.NotOptedIn.v120" = "Сатып алыр алдыннан бу продукт бәяләмәләренә ышана аласызмы, юкмы икәнен ачыклагыз.";
+
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing the Shopping feature. It indicates that a user can go directly to the Shopping feature by tapping the text of the action. */
 "ContextualHints.Shopping.NotOptedInAction.v120" = "Бәяләмәләрне тикшерүчене кулланып карау";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears after the user has opted in for the Shopping feature. It indicates that a user can directly open the review checker by tapping the text of the action. */
 "ContextualHints.Shopping.OptedInAction.v120" = "Бәяләмәләрне тикшерүчене ачу";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one appears after the user has opted in and informs him if he wants use the review checker by tapping the Shopping button. */
+"ContextualHints.Shopping.OptedInBody.v120" = "Бу бәяләмәлер ышанычлымы? Төзәтелгән рейтингны карау өчен хәзер тикшерегез.";
+
+/* Footer label from the Fakespot Ad card displayed for the related product we advertise. This is displayed below the ad card, suggested as an alternative to the product reviewed. The first parameter will be replaced by the Fakespot app name */
+"Shopping.AdCard.Footer.v121" = "%@ тарафыннан реклама";
+
+/* Title label for the Fakespot Ad card. This is displayed above a product image, suggested as an alternative to the product reviewed. */
+"Shopping.AdCard.Title.v121" = "Тагын нәрсәгә игътибар итү";
+
 /* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
 "Shopping.AdjustedRating.Description.v120" = "Ышанычсыз бәяләмәлер бетерелде";
+
+/* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
+"Shopping.AdjustedRating.Description.v121" = "Ышанычлы бәяләмәлергә нигезләнгән";
+
+/* Accessibility label, associated to adjusted rating stars. %@ is a decimal value from 0 to 5 that will only use a tenth (example: 3.5). */
+"Shopping.AdjustedRating.StarsAccessibilityLabel.v120" = "5 эченнән %@ йолдыз";
 
 /* Title of the adjusted rating card displayed in the shopping review quality bottom sheet. */
 "Shopping.AdjustedRating.Title.v120" = "Төзәтелгән рейтинг";
 
 /* Button text of the confirmation displayed in the shopping review quality bottom sheet. */
 "Shopping.ConfirmationCard.Button.Text.v120" = "Аңладым";
+
+/* Title of the confirmation displayed in the shopping review quality bottom sheet. */
+"Shopping.ConfirmationCard.Title.v120" = "Көнүзәк анализ";
 
 /* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
 "Shopping.HighlightsCard.Competitiveness.Title.v120" = "Көндәшлеккә сәләтлелек";
@@ -42,6 +63,9 @@
 
 /* Title for info card when the product needs analysis */
 "Shopping.InfoCard.NeedsAnalysis.Title.v120" = "Тикшерү өчен яңа мәгълүмат";
+
+/* Title for info card when no information is available at the moment */
+"Shopping.InfoCard.NoInfoAvailableRightNow.Title.v120" = "Хәзерге моментта мәгълүмат юк";
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
 "Shopping.OptInCard.PrivacyPolicy.Button.Title.v120" = "Хосусыйлык сәясәте";
