@@ -102,11 +102,10 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         static let starSize: CGFloat = 24
         static let starMaxSize: CGFloat = 42
 
-        static let productImageMinWidth: CGFloat = 70
-        static let productImageMinHeight: CGFloat = 60
-        static let productImageMaxWidth: CGFloat = 206
-        static let productImageMaxHeight: CGFloat = 173
-        static let defaultImageSize = CGSize(width: 17.5, height: 17.5)
+        static let productImageMinSize = CGSize(width: 70, height: 60)
+        static let productImageMaxSize = CGSize(width: 206, height: 173)
+        static let defaultImageSize = CGSize(width: 24, height: 24)
+        static let defaultImageMaxSize = CGSize(width: 70, height: 70)
     }
 
     // MARK: Views
@@ -229,6 +228,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
     private var starRatingHeightConstraint: NSLayoutConstraint?
     private var productImageHeightConstraint: NSLayoutConstraint?
     private var productImageWidthConstraint: NSLayoutConstraint?
+    private var defaultProductImageWidthConstraint: NSLayoutConstraint?
 
     // MARK: Layout Setup
     private func setupLayout() {
@@ -239,9 +239,14 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         imageContainerView.addSubview(productImageView)
 
         // normal setup
-        let starsHeight = min(UIFontMetrics.default.scaledValue(for: UX.starSize), UX.starMaxSize)
-        let imageWidth = min(UIFontMetrics.default.scaledValue(for: UX.productImageMinWidth), UX.productImageMaxWidth)
-        let imageHeight = min(UIFontMetrics.default.scaledValue(for: UX.productImageMinHeight), UX.productImageMaxHeight)
+        let starsHeight = minSize(minValue: UX.starSize, maxValue: UX.starMaxSize)
+        let imageWidth = minSize(minValue: UX.productImageMinSize.width,
+                                 maxValue: UX.productImageMaxSize.width)
+        let imageHeight = minSize(minValue: UX.productImageMinSize.height,
+                                  maxValue: UX.productImageMaxSize.height)
+        let defaultImageWidth = minSize(minValue: UX.defaultImageSize.width,
+                                        maxValue: UX.defaultImageMaxSize.width)
+
         starRatingHeightConstraint = starRatingView.heightAnchor.constraint(equalToConstant: starsHeight)
         starRatingHeightConstraint?.isActive = true
 
@@ -250,6 +255,9 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
 
         productImageWidthConstraint = imageContainerView.widthAnchor.constraint(equalToConstant: imageWidth)
         productImageWidthConstraint?.isActive = true
+
+        defaultProductImageWidthConstraint = defaultImageView.widthAnchor.constraint(equalToConstant: defaultImageWidth)
+        defaultProductImageWidthConstraint?.isActive = true
 
         NSLayoutConstraint.activate([
             cardContainer.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -261,8 +269,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
             footerLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             footerLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-            defaultImageView.widthAnchor.constraint(equalToConstant: UX.defaultImageSize.width),
-            defaultImageView.heightAnchor.constraint(equalToConstant: UX.defaultImageSize.height),
+            defaultImageView.heightAnchor.constraint(equalTo: defaultImageView.widthAnchor),
             defaultImageView.centerXAnchor.constraint(equalTo: imageContainerView.centerXAnchor),
             defaultImageView.centerYAnchor.constraint(equalTo: imageContainerView.centerYAnchor),
 
@@ -270,6 +277,8 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
             productImageView.trailingAnchor.constraint(equalTo: imageContainerView.trailingAnchor),
             productImageView.topAnchor.constraint(equalTo: imageContainerView.topAnchor),
             productImageView.bottomAnchor.constraint(equalTo: imageContainerView.bottomAnchor),
+
+            defaultImageView.heightAnchor.constraint(equalTo: defaultImageView.heightAnchor)
         ])
 
         adjustLayout()
@@ -281,9 +290,13 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         contentStackView.removeAllArrangedViews()
 
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
-        starRatingHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: UX.starSize), UX.starMaxSize)
-        productImageHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: UX.productImageMinHeight), UX.productImageMaxHeight)
-        productImageWidthConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: UX.productImageMinWidth), UX.productImageMaxWidth)
+        starRatingHeightConstraint?.constant = minSize(minValue: UX.starSize, maxValue: UX.starMaxSize)
+        productImageHeightConstraint?.constant = minSize(minValue: UX.productImageMinSize.height,
+                                                         maxValue: UX.productImageMaxSize.height)
+        productImageWidthConstraint?.constant = minSize(minValue: UX.productImageMinSize.width,
+                                                        maxValue: UX.productImageMaxSize.width)
+        defaultProductImageWidthConstraint?.constant = minSize(minValue: UX.defaultImageSize.width,
+                                                               maxValue: UX.defaultImageMaxSize.width)
 
         if contentSizeCategory.isAccessibilityCategory {
             secondRowStackView.axis = .vertical
@@ -388,5 +401,9 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
 
         defaultImageView.isHidden = true
         productImageView.isHidden = false
+    }
+
+    private func minSize(minValue: CGFloat, maxValue: CGFloat) -> CGFloat {
+        return min(UIFontMetrics.default.scaledValue(for: minValue), maxValue)
     }
 }
