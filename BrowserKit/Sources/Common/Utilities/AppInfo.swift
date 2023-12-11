@@ -19,6 +19,9 @@ open class AppInfo {
         }
     }
 
+    /// The port for the internal webserver, tests can change this
+    public static var webserverPort = 6571
+
     public static var bundleIdentifier: String {
         return applicationBundle.object(forInfoDictionaryKey: "CFBundleIdentifier") as! String
     }

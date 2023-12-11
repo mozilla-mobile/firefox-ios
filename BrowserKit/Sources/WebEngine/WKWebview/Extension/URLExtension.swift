@@ -77,4 +77,22 @@ public extension URL {
 
         return components?.url
     }
+
+    func getQuery() -> [String: String] {
+        var results = [String: String]()
+
+        guard let components = URLComponents(url: self, resolvingAgainstBaseURL: false),
+              let queryItems = components.percentEncodedQueryItems
+        else {
+            return results
+        }
+
+        for item in queryItems {
+            if let value = item.value {
+                results[item.name] = value
+            }
+        }
+
+        return results
+    }
 }

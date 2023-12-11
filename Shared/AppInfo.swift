@@ -37,9 +37,6 @@ extension AppInfo {
         return topic
     }
 
-    // The port for the internal webserver, tests can change this
-    public static var webserverPort = 6571
-
     public static let debugPrefIsChinaEdition = "debugPrefIsChinaEdition"
 
     public static var isChinaEdition: Bool = {
