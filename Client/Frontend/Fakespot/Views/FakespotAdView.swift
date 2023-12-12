@@ -19,8 +19,7 @@ struct FakespotAdViewModel {
     let descriptionA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.description
     let footerA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.footer
 
-    private let tabManager: TabManager
-    var dismissViewController: (() -> Void)?
+    var onTapProductLink: (() -> Void)?
     let productAdsData: ProductAdsResponse
 
     var formattedPrice: String {
@@ -41,16 +40,8 @@ struct FakespotAdViewModel {
     }
 
     // MARK: Init
-    init(tabManager: TabManager,
-         productAdsData: ProductAdsResponse) {
-        self.tabManager = tabManager
+    init(productAdsData: ProductAdsResponse) {
         self.productAdsData = productAdsData
-    }
-
-    // MARK: Tap Product
-    func onTapProductLink() {
-        tabManager.addTabsForURLs([productAdsData.url], zombie: false, shouldSelectTab: true)
-        dismissViewController?()
     }
 }
 
@@ -304,7 +295,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
     // MARK: Button Actions
     @objc
     private func didTapProductLink() {
-        viewModel?.onTapProductLink()
+        viewModel?.onTapProductLink?()
     }
 
     // MARK: Theming
