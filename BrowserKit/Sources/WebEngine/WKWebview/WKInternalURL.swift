@@ -59,7 +59,7 @@ final class WKInternalURL: InternalURL {
             components.queryItems?.append(URLQueryItem(name: Param.uuidkey.rawValue, value: WKInternalURL.uuid))
         }
 
-        guard let url = components.url, 
+        guard let url = components.url,
                 WKInternalURL.isValid(url: url) else { return }
         self.url = url
     }
