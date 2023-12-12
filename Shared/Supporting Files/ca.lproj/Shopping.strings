@@ -1,6 +1,9 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears after the user has opted in for the Shopping feature. It indicates that a user can directly open the review checker by tapping the text of the action. */
 "ContextualHints.Shopping.OptedInAction.v120" = "Obre el verificador de ressenyes";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one appears after the user has opted in and informs him if he wants use the review checker by tapping the Shopping button. */
+"ContextualHints.Shopping.OptedInBody.v120" = "Són fiables aquestes ressenyes? Comproveu-ho ara per a veure una puntuació ajustada.";
+
 /* Title label for the Fakespot Ad card. This is displayed above a product image, suggested as an alternative to the product reviewed. */
 "Shopping.AdCard.Title.v121" = "Més productes a tenir en compte";
 
@@ -102,6 +105,9 @@
 
 /* Show Firefox Browser Terms of Use page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
 "Shopping.OptInCard.TermsOfUse.Button.Title.v120" = "Condicions d'ús";
+
+/* Accessibility label for the Grade labels used in 'How we determine review quality' card and 'How reliable are these reviews' card displayed in the shopping review quality bottom sheet. The placeholder will be replaced by a grade letter (e.g. A). The grading system contains letters from A-F. */
+"Shopping.ReliabilityScore.Grade.A11y.Label.v120" = "Qualificació %@";
 
 /* Title of the reliability card displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQuality.ReliabilityCardTitle.v120" = "Són fiables aquestes ressenyes?";

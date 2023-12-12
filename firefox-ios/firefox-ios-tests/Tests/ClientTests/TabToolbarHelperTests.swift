@@ -124,7 +124,7 @@ class MockTabToolbar: TabToolbarProtocol {
 
     init() {
         profile = MockProfile()
-        tabManager = TabManagerImplementation(profile: profile, imageStore: nil)
+        tabManager = TabManagerImplementation(profile: profile, imageStore: nil, uuid: .defaultSingleWindowUUID)
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         _tabToolBarDelegate = BrowserViewController(profile: profile, tabManager: tabManager)
     }

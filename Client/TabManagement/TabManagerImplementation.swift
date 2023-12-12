@@ -27,6 +27,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     init(profile: Profile,
          imageStore: DiskImageStore?,
          logger: Logger = DefaultLogger.shared,
+         uuid: WindowUUID,
          tabDataStore: TabDataStore = DefaultTabDataStore(),
          tabSessionStore: TabSessionStore = DefaultTabSessionStore(),
          tabMigration: TabMigrationUtility = DefaultTabMigrationUtility(),
@@ -38,7 +39,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             self.tabMigration = tabMigration
             self.notificationCenter = notificationCenter
             self.inactiveTabsManager = inactiveTabsManager
-            super.init(profile: profile)
+            super.init(profile: profile, uuid: uuid)
 
             setupNotifications(forObserver: self,
                                observing: [UIApplication.willResignActiveNotification])
@@ -71,7 +72,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         }
 
         isRestoringTabs = true
-        AppEventQueue.started(.tabRestoration)
+        AppEventQueue.started(.tabRestoration(windowUUID))
 
         guard tabMigration.shouldRunMigration else {
             logger.log("Not running the migration",
@@ -108,7 +109,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         defer {
             isRestoringTabs = false
             tabRestoreHasFinished = true
-            AppEventQueue.completed(.tabRestoration)
+            AppEventQueue.completed(.tabRestoration(windowUUID))
         }
 
         let nonPrivateTabs = window?.tabData.filter { !$0.isPrivate }
@@ -227,8 +228,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         Task {
             // This value should never be nil but we need to still treat it as if it can be nil until the old code is removed
             let activeTabID = UUID(uuidString: self.selectedTab?.tabUUID ?? "") ?? UUID()
-            // TODO: [7798] Hard coding the window ID until we later add multi-window support
-            let windowData = WindowData(id: WindowData.DefaultSingleWindowUUID,
+            // TODO: [FXIOS-7798] Hard coding the window ID until we later add multi-window support
+            let windowData = WindowData(id: .defaultSingleWindowUUID,
                                         activeTabId: activeTabID,
                                         tabData: self.generateTabDataForSaving())
             await tabDataStore.saveWindowData(window: windowData, forced: forced)
@@ -287,8 +288,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     }
 
     private func saveCurrentTabSessionData() {
-        guard #available(iOS 15.0, *),
-              let selectedTab = self.selectedTab,
+        guard let selectedTab = self.selectedTab,
               let tabSession = selectedTab.webView?.interactionState as? Data,
               let tabID = UUID(uuidString: selectedTab.tabUUID)
         else { return }
@@ -333,6 +333,11 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             await selectTabWithSession(tab: tab,
                                        previous: previous,
                                        sessionData: sessionData)
+
+            if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
+                store.dispatch(PrivateModeUserAction.setPrivateModeTo(tab.isPrivate))
+            }
+
             didSelectTab(url)
         }
     }
@@ -350,12 +355,12 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
     private func willSelectTab(_ url: URL?) {
         guard let url else { return }
-        AppEventQueue.started(.selectTab(url))
+        AppEventQueue.started(.selectTab(url, windowUUID))
     }
 
     private func didSelectTab(_ url: URL?) {
         guard let url else { return }
-        AppEventQueue.completed(.selectTab(url))
+        AppEventQueue.completed(.selectTab(url, windowUUID))
     }
 
     @MainActor
@@ -394,13 +399,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         // users's last state (Private vs Regular)
         UserDefaults.standard.set(selectedTab?.isPrivate ?? false,
                                   forKey: PrefsKeys.LastSessionWasPrivate)
-    }
-
-    private func shouldUseNewTabStore() -> Bool {
-        if #available(iOS 15, *) {
-            return true
-        }
-        return false
     }
 
     // MARK: - Screenshots
