@@ -175,6 +175,7 @@ class FakespotViewModel {
     private var isViewVisible = false
     private var hasTimerFired = false
     private var timer: Timer?
+    private let tabManager: TabManager
 
     private var fetchProductTask: Task<Void, Never>?
     private var observeProductTask: Task<Void, Never>?
@@ -318,6 +319,7 @@ class FakespotViewModel {
         optInCardViewModel.supportedTLDWebsites = shoppingProduct.supportedTLDWebsites
         reviewQualityCardViewModel.productSitename = shoppingProduct.product?.sitename
         self.prefs = profile.prefs
+        self.tabManager = tabManager
     }
 
     func fetchProductIfOptedIn() {
@@ -523,7 +525,22 @@ class FakespotViewModel {
         }
     }
 
+    func addTab(url: URL) {
+        tabManager.addTabsForURLs([url], zombie: false, shouldSelectTab: true)
+    }
+
     // MARK: - Telemetry
+
+    func reportAdEvent(eventName: FakespotAdsEvent, ad: ProductAdsResponse) {
+        Task {
+            _ = try? await shoppingProduct.reportAdEvent(
+                eventName: eventName,
+                eventSource: FakespotAdsEvent.eventSource,
+                aid: ad.aid
+            )
+        }
+    }
+
     private static func recordNoReviewReliabilityAvailableTelemetry() {
         TelemetryWrapper.recordEvent(
             category: .action,

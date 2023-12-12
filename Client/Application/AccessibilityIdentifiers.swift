@@ -120,6 +120,12 @@ public struct AccessibilityIdentifiers {
 
     struct PrivateMode {
         static let dimmingView = "PrivateMode.DimmingView"
+        struct Homepage {
+            static let title = "PrivateMode.Homepage.Title"
+            static let body = "PrivateMode.Homepage.Body"
+            static let link = "PrivateMode.Homepage.Link"
+            static let card = "PrivateMode.Homepage.MessageCard"
+        }
     }
 
     struct Shopping {
@@ -442,6 +448,19 @@ public struct AccessibilityIdentifiers {
                 static let expiration = "Expiration MM / YY"
                 static let close = "Close"
                 static let save = "Save"
+            }
+
+            struct ViewCreditCard {
+                static let viewCard = "View Card"
+                static let edit = "Edit"
+            }
+
+            struct EditCreditCard {
+                static let editCreditCard = "Edit Credit Card"
+                static let removeCard = "Remove Card"
+                static let removeThisCard = "Remove This Card?"
+                static let cancel = "Cancel"
+                static let remove = "Remove"
             }
         }
 

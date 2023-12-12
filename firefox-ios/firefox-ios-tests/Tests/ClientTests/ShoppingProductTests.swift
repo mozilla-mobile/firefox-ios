@@ -318,12 +318,12 @@ final class ShoppingProductTests: XCTestCase {
         let url = URL(string: "https://www.amazon.com/Under-Armour-Charged-Assert-Running/dp/B087T8Q2C4")!
         let sut = ShoppingProduct(url: url, client: client)
 
-        _ = try await sut.reportAdEvent(eventName: "click", eventSource: "web", aidvs: ["aidv1", "aidv2"])
+        _ = try await sut.reportAdEvent(eventName: .trustedDealsLinkClicked, eventSource: "web", aid: "aidv1")
 
         XCTAssertTrue(client.reportAdEventCalled)
-        XCTAssertEqual(client.lastEventName, "click")
+        XCTAssertEqual(client.lastEventName, .trustedDealsLinkClicked)
         XCTAssertEqual(client.lastEventSource, "web")
-        XCTAssertEqual(client.lastAidvs, ["aidv1", "aidv2"])
+        XCTAssertEqual(client.lastAid, "aidv1")
     }
 }
 
@@ -358,7 +358,7 @@ final class ThrowingFakeSpotClient: FakespotClientType {
         self.error = error
     }
 
-    func reportAdEvent(eventName: String, eventSource: String, aidvs: [String]) async throws -> AdEventsResponse {
+    func reportAdEvent(eventName: Client.FakespotAdsEvent, eventSource: String, aid: String) async throws -> Client.AdEventsResponse {
         reportAdEventCallCount += 1
         throw error
     }
@@ -413,17 +413,17 @@ final class TestFakespotClient: FakespotClientType {
     var reportProductBackInStockCalled = false
     var reportAdEventCalled = false
     var reportAdEventCallCount = 0
-    var lastEventName: String?
+    var lastEventName: FakespotAdsEvent?
     var lastEventSource: String?
-    var lastAidvs: [String]?
+    var lastAid: String?
 
-    func reportAdEvent(eventName: String, eventSource: String, aidvs: [String]) async throws -> Client.AdEventsResponse {
+    func reportAdEvent(eventName: Client.FakespotAdsEvent, eventSource: String, aid: String) async throws -> Client.AdEventsResponse {
         self.reportAdEventCalled = true
         self.reportAdEventCallCount += 1
         self.lastEventName = eventName
         self.lastEventSource = eventSource
-        self.lastAidvs = aidvs
-        return AdEventsResponse(additionalProperties: [:])
+        self.lastAid = aid
+        return [:]
     }
 
     func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisResponse {

@@ -37,6 +37,53 @@ class CreditCardsTests: BaseTestCase {
         }
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306978
+    // SmokeTest
+    func testDeleteButtonFromEditCard() {
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(CreditCardsSettings)
+        unlockLoginsView()
+        mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
+        app.buttons[creditCardsStaticTexts.AutoFillCreditCard.addCard].tap()
+        addCreditCard(name: "Test", cardNumber: "2720994326581252", expirationDate: "0540")
+        // Tap on a saved card
+        mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
+        app.tables.cells.element(boundBy: 1).tap()
+        // The "View card" page is displayed with all the details of the card
+        mozWaitForElementToExist(app.navigationBars[creditCardsStaticTexts.ViewCreditCard.viewCard])
+        XCTAssertTrue(app.tables.cells.element(boundBy: 1).staticTexts.elementContainingText("1252").exists)
+        let cardDetails = ["Test", "05 / 40"]
+        for i in cardDetails {
+            XCTAssertTrue(app.textFields[i].exists, "\(i) does not exists")
+        }
+        // Tap on the "Remove card" button
+        app.buttons[creditCardsStaticTexts.ViewCreditCard.edit].tap()
+        mozWaitForElementToExist(app.navigationBars[creditCardsStaticTexts.EditCreditCard.editCreditCard])
+        app.buttons[creditCardsStaticTexts.EditCreditCard.removeCard].tap()
+        // Validate the pop up displayed
+        let removeThisCardAlert = app.alerts[creditCardsStaticTexts.EditCreditCard.removeThisCard]
+        let cancelButton = removeThisCardAlert.scrollViews.otherElements.buttons[creditCardsStaticTexts.EditCreditCard.cancel]
+        let removeButton = removeThisCardAlert.scrollViews.otherElements.buttons[creditCardsStaticTexts.EditCreditCard.remove]
+        mozWaitForElementToExist(removeThisCardAlert)
+        XCTAssertTrue(cancelButton.exists)
+        XCTAssertTrue(removeButton.exists)
+        // Tap on "CANCEL"
+        cancelButton.tap()
+        // The prompt is dismissed, the "Edit card" page is displayed
+        mozWaitForElementToNotExist(removeThisCardAlert)
+        mozWaitForElementToExist(app.navigationBars[creditCardsStaticTexts.EditCreditCard.editCreditCard])
+        // Tap again on the "Remove card" button
+        app.buttons[creditCardsStaticTexts.EditCreditCard.removeCard].tap()
+        // The prompt is displayed again
+        mozWaitForElementToExist(removeThisCardAlert)
+        // Tap "Remove" on the prompt
+        removeButton.tap()
+        // The credit card is deleted. The user is redirected to the "Saved cards" page
+        mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
+        mozWaitForElementToNotExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.savedCards])
+        XCTAssertFalse(app.tables.cells.element(boundBy: 1).exists)
+    }
+
     private func addCreditCard(name: String, cardNumber: String, expirationDate: String) {
         let nameOnCard: XCUIElement
         let cardNr: XCUIElement

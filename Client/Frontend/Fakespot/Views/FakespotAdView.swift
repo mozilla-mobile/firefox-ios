@@ -22,8 +22,7 @@ struct FakespotAdViewModel: FeatureFlaggable {
     let defaultImageA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.defaultImage
     let productImageA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.productImage
 
-    private let tabManager: TabManager
-    var dismissViewController: (() -> Void)?
+    var onTapProductLink: (() -> Void)?
     let productAdsData: ProductAdsResponse
     let urlCache: URLCache
 
@@ -45,18 +44,10 @@ struct FakespotAdViewModel: FeatureFlaggable {
     }
 
     // MARK: Init
-    init(tabManager: TabManager,
-         productAdsData: ProductAdsResponse,
+    init(productAdsData: ProductAdsResponse,
          urlCache: URLCache = URLCache.shared) {
-        self.tabManager = tabManager
         self.productAdsData = productAdsData
         self.urlCache = urlCache
-    }
-
-    // MARK: Tap Product
-    func onTapProductLink() {
-        tabManager.addTabsForURLs([productAdsData.url], zombie: false, shouldSelectTab: true)
-        dismissViewController?()
     }
 
     // MARK: Image Loading
@@ -378,7 +369,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
     // MARK: Button Actions
     @objc
     private func didTapProductLink() {
-        viewModel?.onTapProductLink()
+        viewModel?.onTapProductLink?()
     }
 
     // MARK: Theming
