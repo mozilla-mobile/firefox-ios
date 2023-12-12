@@ -120,7 +120,6 @@ class SearchProviderTest: BaseTestCase {
     }
 
 	private func changeSearchProvider(provider: String) {
-        dismissURLBarFocused()
         waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
         // Set search engine to Google
         app.buttons["HomeView.settingsButton"].tap()
