@@ -13,11 +13,11 @@ open class ClosedTabsStore {
     }
 
     open lazy var tabs: [ClosedTab] = {
-        guard let tabsArray: Data = self.prefs.objectForKey(KeyedArchiverKeys.recentlyClosedTabs.rawValue) as Any? as? Data,
-              let unarchiver = try? NSKeyedUnarchiver(forReadingFrom: tabsArray),
-              let unarchivedArray = unarchiver.decodeObject(of: [NSArray.self, ClosedTab.self], forKey: KeyedArchiverKeys.recentlyClosedTabs.rawValue) as? [ClosedTab]
+        guard let tabsData: Data = self.prefs.objectForKey(KeyedArchiverKeys.recentlyClosedTabs.rawValue) as Any? as? Data,
+              let unarchivedTabs = try? NSKeyedUnarchiver
+            .unarchivedObject(ofClasses: [NSArray.self, ClosedTab.self], from: tabsData) as? [ClosedTab]
         else { return [] }
-        return unarchivedArray
+        return unarchivedTabs
     }()
 
     public init(prefs: Prefs) {
@@ -58,7 +58,8 @@ open class ClosedTabsStore {
     }
 }
 
-open class ClosedTab: NSObject, NSCoding {
+open class ClosedTab: NSObject, NSSecureCoding {
+    public static var supportsSecureCoding: Bool { return true }
     enum CodingKeys: String {
         case url, title, lastExecutedTime
     }
@@ -74,17 +75,16 @@ open class ClosedTab: NSObject, NSCoding {
         super.init()
     }
 
-    public required convenience init?(coder: NSCoder) {
-        guard let url = coder.decodeObject(forKey: CodingKeys.url.rawValue) as? URL,
-              let title = coder.decodeObject(forKey: CodingKeys.title.rawValue) as? String,
+    public required init?(coder: NSCoder) {
+        guard let url = coder.decodeObject(of: [NSURL.self], forKey: CodingKeys.url.rawValue) as? URL,
+              let title = coder.decodeObject(of: [NSString.self], forKey: CodingKeys.title.rawValue) as? String,
               let date = coder.decodeObject(forKey: CodingKeys.lastExecutedTime.rawValue) as? Timestamp
         else { return nil }
 
-        self.init(
-            url: url,
-            title: title,
-            lastExecutedTime: date
-        )
+        self.title = title
+        self.url = url
+        self.lastExecutedTime = date
+        super.init()
     }
 
     open func encode(with coder: NSCoder) {
