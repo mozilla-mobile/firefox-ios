@@ -2344,12 +2344,6 @@ extension String {
 // MARK: - Firefox Account
 extension String {
     // Settings strings
-    public static let FxAFirefoxAccountNotUsed = MZLocalizedString(
-        key: "FxA.FirefoxAccount",
-        tableName: nil,
-        value: "Firefox Account",
-        comment: "Settings section title for Firefox Accoun",
-        lastUsedInVersion: 119)
     public static let FxAFirefoxAccount = MZLocalizedString(
         key: "FxA.FirefoxAccount.v119",
         tableName: "Settings",
@@ -2370,12 +2364,6 @@ extension String {
         tableName: nil,
         value: "No Internet Connection",
         comment: "Label when no internet is present")
-    public static let FxASettingsTitleNotUsed = MZLocalizedString(
-        key: "Settings.FxA.Title",
-        tableName: nil,
-        value: "Firefox Account",
-        comment: "Title displayed in header of the FxA settings panel.",
-        lastUsedInVersion: 119)
     public static let FxASettingsTitle = MZLocalizedString(
         key: "Settings.FxA.Title.v119",
         tableName: "Settings",
@@ -3646,12 +3634,6 @@ extension String {
         tableName: nil,
         value: "Close",
         comment: "Close button in top navigation bar")
-    public static let SendToNotSignedInTextNotUsed = MZLocalizedString(
-        key: "SendTo.NotSignedIn.Title",
-        tableName: nil,
-        value: "You are not signed in to your Firefox Account.",
-        comment: "See http://mzl.la/1ISlXnU",
-        lastUsedInVersion: 119)
     public static let SendToNotSignedInText = MZLocalizedString(
         key: "SendTo.NotSignedIn.Title.v119",
         tableName: "Share",
@@ -3662,12 +3644,6 @@ extension String {
         tableName: nil,
         value: "Please open Firefox, go to Settings and sign in to continue.",
         comment: "See http://mzl.la/1ISlXnU")
-    public static let SendToNoDevicesFoundNotUsed = MZLocalizedString(
-        key: "SendTo.NoDevicesFound.Message",
-        tableName: nil,
-        value: "You don’t have any other devices connected to this Firefox Account available to sync.",
-        comment: "Error message shown in the remote tabs panel",
-        lastUsedInVersion: 119)
     public static let SendToNoDevicesFound = MZLocalizedString(
         key: "SendTo.NoDevicesFound.Message.v119",
         tableName: "Share",
@@ -3803,12 +3779,6 @@ extension String {
             tableName: "Shopping",
             value: "Adjusted rating",
             comment: "Title of the adjusted rating card displayed in the shopping review quality bottom sheet.")
-        public static let AdjustedRatingDescriptionNotUsed = MZLocalizedString(
-            key: "Shopping.AdjustedRating.Description.v120",
-            tableName: "Shopping",
-            value: "Unreliable reviews removed",
-            comment: "Description adjusted of the rating card displayed in the shopping review quality bottom sheet.",
-            lastUsedInVersion: 120)
         public static let AdjustedRatingDescription = MZLocalizedString(
             key: "Shopping.AdjustedRating.Description.v121",
             tableName: "Shopping",
@@ -3889,18 +3859,6 @@ extension String {
             tableName: "Shopping",
             value: "Check Review Quality",
             comment: "Text for the analyzer button displayed when an analysis can be updated for a product.")
-        public static let NoAnalysisCardInProgressTitleNotUsed = MZLocalizedString(
-            key: "Shopping.NoAnalysisCard.InProgress.Headline.Title.v120",
-            tableName: "Shopping",
-            value: "Checking review quality",
-            comment: "Title for the card displayed when a shopping product has not been analysed yet but the analysis is in progress.",
-            lastUsedInVersion: 120)
-        public static let NoAnalysisCardInProgressBodyLabelNotUsed = MZLocalizedString(
-            key: "Shopping.NoAnalysisCard.InProgress.Body.Label.v120",
-            tableName: "Shopping",
-            value: "This could take about 60 seconds.",
-            comment: "Description for the card displayed when a shopping product has not been analysed yet but the analysis is in progress.",
-            lastUsedInVersion: 120)
         public static let ReviewQualityCardLabelTitle = MZLocalizedString(
             key: "Shopping.ReviewQualityCard.Label.Title.v120",
             tableName: "Shopping",
@@ -5339,40 +5297,6 @@ extension String {
         comment: "Label for Cancel button")
 }
 
-// MARK: - SearchSettings
-extension String {
-    public static let SearchSettingsTitle = MZLocalizedString(
-        key: "SearchSettings.Title.Search.v106",
-        tableName: nil,
-        value: "Search",
-        comment: "Navigation title for search settings.",
-        lastUsedInVersion: 120)
-    public static let SearchSettingsDefaultSearchEngineAccessibilityLabel = MZLocalizedString(
-        key: "SearchSettings.Accessibility.DefaultSearchEngine.v106",
-        tableName: nil,
-        value: "Default Search Engine",
-        comment: "Accessibility label for default search engine setting.",
-        lastUsedInVersion: 120)
-    public static let SearchSettingsShowSearchSuggestions = MZLocalizedString(
-        key: "Show Search Suggestions",
-        tableName: nil,
-        value: nil,
-        comment: "Label for show search suggestions setting.",
-        lastUsedInVersion: 120)
-    public static let SearchSettingsDefaultSearchEngineTitle = MZLocalizedString(
-        key: "SearchSettings.Title.DefaultSearchEngine.v106",
-        tableName: nil,
-        value: "Default Search Engine",
-        comment: "Title for default search engine settings section.",
-        lastUsedInVersion: 120)
- public static let SearchSettingsQuickSearchEnginesTitle = MZLocalizedString(
-        key: "Quick-Search Engines",
-        tableName: nil,
-        value: nil,
-        comment: "Title for quick-search engines settings section.",
-        lastUsedInVersion: 120)
-}
-
 // MARK: - SettingsContent
 extension String {
     public static let SettingsContentPageLoadError = MZLocalizedString(
@@ -5587,12 +5511,6 @@ extension String {
         tableName: nil,
         value: "No logins found",
         comment: "Label shown when there are no logins saved")
-    public static let LoginsListNoLoginsFoundDescriptionNotUsed = MZLocalizedString(
-        key: "LoginsList.NoLoginsFound.Description",
-        tableName: nil,
-        value: "Saved logins will show up here. If you saved your logins to Firefox on a different device, sign in to your Firefox Account.",
-        comment: "Label shown when there are no logins to list",
-        lastUsedInVersion: 119)
     public static let LoginsListNoLoginsFoundDescription = MZLocalizedString(
         key: "LoginsList.NoLoginsFound.Description.v119",
         tableName: nil,
@@ -5637,16 +5555,97 @@ extension String {
 extension String {
     struct OldStrings {
         struct v119 {
-            public static let SyncTabsNotUsed = MZLocalizedString(
+            public static let SyncTabs = MZLocalizedString(
                 key: "TabsTray.SyncTabs.SyncTabsButton.Title.v109",
                 tableName: "TabsTray",
                 value: "Sync Tabs",
                 comment: "Button label to sync tabs in your Firefox Account",
                 lastUsedInVersion: 119)
+            public static let FxAFirefoxAccount = MZLocalizedString(
+                key: "FxA.FirefoxAccount",
+                tableName: nil,
+                value: "Firefox Account",
+                comment: "Settings section title for Firefox Accoun",
+                lastUsedInVersion: 119)
+            public static let FxASettingsTitle = MZLocalizedString(
+                key: "Settings.FxA.Title",
+                tableName: nil,
+                value: "Firefox Account",
+                comment: "Title displayed in header of the FxA settings panel.",
+                lastUsedInVersion: 119)
+            public static let SendToNotSignedInText = MZLocalizedString(
+                key: "SendTo.NotSignedIn.Title",
+                tableName: nil,
+                value: "You are not signed in to your Firefox Account.",
+                comment: "See http://mzl.la/1ISlXnU",
+                lastUsedInVersion: 119)
+            public static let SendToNoDevicesFound = MZLocalizedString(
+                key: "SendTo.NoDevicesFound.Message",
+                tableName: nil,
+                value: "You don’t have any other devices connected to this Firefox Account available to sync.",
+                comment: "Error message shown in the remote tabs panel",
+                lastUsedInVersion: 119)
+            public static let LoginsListNoLoginsFoundDescription = MZLocalizedString(
+                key: "LoginsList.NoLoginsFound.Description",
+                tableName: nil,
+                value: "Saved logins will show up here. If you saved your logins to Firefox on a different device, sign in to your Firefox Account.",
+                comment: "Label shown when there are no logins to list",
+                lastUsedInVersion: 119)
+        }
+
+        struct v120 {
+            public static let AdjustedRatingDescription = MZLocalizedString(
+                key: "Shopping.AdjustedRating.Description.v120",
+                tableName: "Shopping",
+                value: "Unreliable reviews removed",
+                comment: "Description adjusted of the rating card displayed in the shopping review quality bottom sheet.",
+                lastUsedInVersion: 120)
+            public static let NoAnalysisCardInProgressTitle = MZLocalizedString(
+                key: "Shopping.NoAnalysisCard.InProgress.Headline.Title.v120",
+                tableName: "Shopping",
+                value: "Checking review quality",
+                comment: "Title for the card displayed when a shopping product has not been analysed yet but the analysis is in progress.",
+                lastUsedInVersion: 120)
+            public static let NoAnalysisCardInProgressBodyLabel = MZLocalizedString(
+                key: "Shopping.NoAnalysisCard.InProgress.Body.Label.v120",
+                tableName: "Shopping",
+                value: "This could take about 60 seconds.",
+                comment: "Description for the card displayed when a shopping product has not been analysed yet but the analysis is in progress.",
+                lastUsedInVersion: 120)
+            public static let SearchSettingsTitle = MZLocalizedString(
+                key: "SearchSettings.Title.Search.v106",
+                tableName: nil,
+                value: "Search",
+                comment: "Navigation title for search settings.",
+                lastUsedInVersion: 120)
+            public static let SearchSettingsDefaultSearchEngineAccessibilityLabel = MZLocalizedString(
+                key: "SearchSettings.Accessibility.DefaultSearchEngine.v106",
+                tableName: nil,
+                value: "Default Search Engine",
+                comment: "Accessibility label for default search engine setting.",
+                lastUsedInVersion: 120)
+            public static let SearchSettingsShowSearchSuggestions = MZLocalizedString(
+                key: "Show Search Suggestions",
+                tableName: nil,
+                value: nil,
+                comment: "Label for show search suggestions setting.",
+                lastUsedInVersion: 120)
+            public static let SearchSettingsDefaultSearchEngineTitle = MZLocalizedString(
+                key: "SearchSettings.Title.DefaultSearchEngine.v106",
+                tableName: nil,
+                value: "Default Search Engine",
+                comment: "Title for default search engine settings section.",
+                lastUsedInVersion: 120)
+            public static let SearchSettingsQuickSearchEnginesTitle = MZLocalizedString(
+                key: "Quick-Search Engines",
+                tableName: nil,
+                value: nil,
+                comment: "Title for quick-search engines settings section.",
+                lastUsedInVersion: 120)
         }
 
         struct v121 {
-            public static let FirefoxSyncLoginsEngineOld = MZLocalizedString(
+            public static let FirefoxSyncLoginsEngine = MZLocalizedString(
                 key: "Logins",
                 tableName: nil,
                 value: nil,
@@ -5658,9 +5657,8 @@ extension String {
                 value: "To save and autofill logins and passwords, enable Face ID, Touch ID or a device passcode.",
                 comment: "Message shown when you enter Logins & Passwords without having a device passcode set.",
                 lastUsedInVersion: 121)
-       }
+        }
     }
 }
 
 // swiftlint:enable line_length
-
