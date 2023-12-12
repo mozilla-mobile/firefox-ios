@@ -72,14 +72,14 @@ workflows:
             echo "-- build-for-testing --"
             mkdir DerivedData
             #xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
-            xcodebuild "-project" "/Users/vagrant/git/focus-ios/Blockzilla.xcodeproj" "-scheme" "Focus" -configuration "FocusDebug" "CODE_SIGNING_ALLOWED=NO" "-destination" "platform=iOS Simulator,name=iPhone 15,OS=17.0.1" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_test.log
+            xcodebuild "-project" "/Users/vagrant/git/focus-ios/Blockzilla.xcodeproj" "-scheme" "Focus" -configuration "FocusDebug" "CODE_SIGNING_ALLOWED=NO" "-destination" "platform=iOS Simulator,name=iPhone 15,OS=17.2" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_test.log
     - script@1.1:
         title: Build for Testing Klar
         inputs:
         - content: |
             set -euxo pipefail
             echo "-- build-for-testing --"
-            xcodebuild "-project" "/Users/vagrant/git/focus-ios/Blockzilla.xcodeproj" "-scheme" "Klar" -configuration "KlarDebug" "CODE_SIGNING_ALLOWED=NO" "-destination" "platform=iOS Simulator,name=iPhone 15,OS=17.0.1" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_test.log
+            xcodebuild "-project" "/Users/vagrant/git/focus-ios/Blockzilla.xcodeproj" "-scheme" "Klar" -configuration "KlarDebug" "CODE_SIGNING_ALLOWED=NO" "-destination" "platform=iOS Simulator,name=iPhone 15,OS=17.2" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_test.log
     - script@1.1:
         title: Compress Derived Data
         is_always_run: true
@@ -91,9 +91,9 @@ workflows:
             "${BITRISE_SOURCE_DIR}/focus-ios/Blockzilla.xcodeproj" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/FocusDebug-iphonesimulator/Firefox\ Focus.app" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/FocusDebug-iphonesimulator/XCUITest-Runner.app" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Focus_FullFunctionalTests_iphonesimulator17.0-arm64.xctestrun" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Focus_SmokeTest_iphonesimulator17.0-arm64.xctestrun" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Focus_UnitTests_iphonesimulator17.0-arm64.xctestrun" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Focus_FullFunctionalTests_iphonesimulator17.2-arm64.xctestrun" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Focus_SmokeTest_iphonesimulator17.2-arm64.xctestrun" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Focus_UnitTests_iphonesimulator17.2-arm64.xctestrun" \
             "$BITRISE_SOURCE_DIR/focus-ios/focus-ios-tests/SmokeTest.xctestplan" \
             "$BITRISE_SOURCE_DIR/focus-ios/focus-ios-tests/FullFunctionalTests.xctestplan" \
             "$BITRISE_SOURCE_DIR/focus-ios/xcodebuild.log" \
@@ -104,9 +104,9 @@ workflows:
             "$BITRISE_SOURCE_DIR/focus-ios/focus-ios-tests/ClientTests" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/KlarDebug-iphonesimulator/Firefox\ Klar.app" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/KlarDebug-iphonesimulator/XCUITest-Runner.app" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Klar_FullFunctionalTests_iphonesimulator17.0-arm64.xctestrun" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Klar_SmokeTest_iphonesimulator17.0-arm64.xctestrun" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Klar_UnitTests_iphonesimulator17.0-arm64.xctestrun" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Klar_FullFunctionalTests_iphonesimulator17.2-arm64.xctestrun" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Klar_SmokeTest_iphonesimulator17.2-arm64.xctestrun" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Klar_UnitTests_iphonesimulator17.2-arm64.xctestrun" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/KlarDebug-iphonesimulator/" \
     - deploy-to-bitrise-io@2:
         inputs:
@@ -119,7 +119,7 @@ workflows:
         - webhook_url: "$SLACK_WEBHOOK"
     meta:
       bitrise.io:
-        stack: osx-xcode-15.0.x
+        stack: osx-xcode-15.1.x
         machine_type_id: g2-m1.8core
   
   ui_test_focus:
@@ -171,7 +171,7 @@ workflows:
             mv ./Users/vagrant/git/* .
             ls -la
             echo "-- test-without-building --"
-            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 15,OS=17.0.1" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Focus_SmokeTest_iphonesimulator17.0-arm64.xctestrun"
+            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 15,OS=17.2" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Focus_SmokeTest_iphonesimulator17.2-arm64.xctestrun"
     - custom-test-results-export@0:
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
@@ -189,7 +189,7 @@ workflows:
 
     meta:
       bitrise.io:
-        stack: osx-xcode-15.0.x
+        stack: osx-xcode-15.1.x
         machine_type_id: g2-m1.8core
 
   unit_test_klar:
@@ -220,7 +220,7 @@ workflows:
             mv ./Users/vagrant/git/* .
             ls -la
             echo "-- test-without-building --"
-            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 15,OS=17.0.1" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Klar_UnitTests_iphonesimulator17.0-arm64.xctestrun"
+            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 15,OS=17.2" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Klar_UnitTests_iphonesimulator17.2-arm64.xctestrun"
     - custom-test-results-export@0:
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
@@ -234,7 +234,7 @@ workflows:
         - webhook_url: "$SLACK_WEBHOOK"
     meta:
       bitrise.io:
-        stack: osx-xcode-15.0.x
+        stack: osx-xcode-15.1.x
         machine_type_id: g2-m1.8core
 
   unit_test_focus:
@@ -265,7 +265,7 @@ workflows:
             mv ./Users/vagrant/git/* .
             ls -la
             echo "-- test-without-building --"
-            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 15,OS=17.0.1" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Focus_UnitTests_iphonesimulator17.0-arm64.xctestrun"
+            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 15,OS=17.2" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Focus_UnitTests_iphonesimulator17.2-arm64.xctestrun"
     - custom-test-results-export@0:
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
@@ -280,7 +280,7 @@ workflows:
 
     meta:
       bitrise.io:
-        stack: osx-xcode-15.0.x
+        stack: osx-xcode-15.1.x
         machine_type_id: g2-m1.8core
 
 
@@ -299,7 +299,7 @@ workflows:
         title: ContentBlockerGen
     meta:
       bitrise.io:
-        stack: osx-xcode-15.0.x
+        stack: osx-xcode-15.1.x
 
 
   set-project-version:
@@ -326,7 +326,7 @@ workflows:
         title: Set OpenInFocus version numbers
     meta:
       bitrise.io:
-        stack: osx-xcode-15.0.x
+        stack: osx-xcode-15.1.x
 
 
   configure-nimbus:
@@ -343,7 +343,7 @@ workflows:
             /usr/libexec/PlistBuddy -c "Set :NimbusAppChannel ${NIMBUS_APP_CHANNEL}" focus-ios/Blockzilla/Info.plist
     meta:
       bitrise.io:
-        stack: osx-xcode-15.0.x
+        stack: osx-xcode-15.1.x
 
 
   configure-sentry:
@@ -357,7 +357,7 @@ workflows:
             /usr/libexec/PlistBuddy -c "Add :SentryDSN string ${SENTRY_DSN}" focus-ios/Blockzilla/Info.plist
     meta:
       bitrise.io:
-        stack: osx-xcode-15.0.x
+        stack: osx-xcode-15.1.x
 
 
   set-default-browser-entitlement:
@@ -372,7 +372,7 @@ workflows:
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" focus-ios/Klar.entitlements
     meta:
       bitrise.io:
-        stack: osx-xcode-15.0.x
+        stack: osx-xcode-15.1.x
 
 
   release:
@@ -419,7 +419,7 @@ workflows:
               --org mozilla --project klar-ios "$BITRISE_DSYM_DIR_PATH"
     meta:
       bitrise.io:
-        stack: osx-xcode-15.0.x
+        stack: osx-xcode-15.1.x
         machine_type_id: g2-m1.8core
     before_run:
       - clone-and-build-dependencies
@@ -490,7 +490,7 @@ workflows:
         - deploy_path: artifacts/
     meta:
       bitrise.io:
-        stack: osx-xcode-15.0.x
+        stack: osx-xcode-15.1.x
         machine_type_id: g2-m1.8core
   L10nBuild:
     steps:
@@ -532,7 +532,7 @@ workflows:
         - is_compress: 'true'
     meta:
       bitrise.io:
-        stack: osx-xcode-15.0.x
+        stack: osx-xcode-15.1.x
         machine_type_id: g2-m1.8core
 
 app:
@@ -546,5 +546,5 @@ app:
 
 meta:
   bitrise.io:
-    stack: osx-xcode-15.0.x
+    stack: osx-xcode-15.1.x
     machine_type_id: g2-m1.8core
