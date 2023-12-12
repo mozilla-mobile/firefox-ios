@@ -1405,6 +1405,7 @@ class BrowserViewController: UIViewController,
                                                                                       flowType: flowType,
                                                                                       referringPage: referringPage,
                                                                                       profile: profile)
+        (vcToPresent as? FirefoxAccountSignInViewController)?.qrCodeNavigationHandler = navigationHandler
         presentThemedViewController(navItemLocation: .Left,
                                     navItemText: .Close,
                                     vcBeingPresented: vcToPresent,
@@ -1437,7 +1438,7 @@ class BrowserViewController: UIViewController,
 
     func handleQRCode() {
         if CoordinatorFlagManager.isQRCodeCoordinatorEnabled {
-            navigationHandler?.showQRCode()
+            navigationHandler?.showQRCode(delegate: self)
         } else {
             let qrCodeViewController = QRCodeViewController()
             qrCodeViewController.qrCodeDelegate = self
