@@ -29,11 +29,11 @@ const sendMessage =
     });
 
 const creditCardSendMessage = sendMessage(
-  window.webkit.messageHandlers.creditCardMessageHandler
+  window.webkit.messageHandlers.creditCardFormMessageHandler
 );
 
 const addressSendMessage = sendMessage(
-  window.webkit.messageHandlers.addressMessageHandler
+  window.webkit.messageHandlers.addressFormMessageHandler
 );
 
 // Note: We expect all values to be string based

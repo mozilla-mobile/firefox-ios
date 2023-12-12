@@ -35,7 +35,7 @@ class FormAutofillHelper: TabContentScript {
     // MARK: - Script Message Handler
 
     func scriptMessageHandlerNames() -> [String]? {
-        return ["addressMessageHandler", "creditCardMessageHandler"]
+        return ["addressFormMessageHandler", "creditCardFormMessageHandler"]
     }
 
     // MARK: - Deinitialization
