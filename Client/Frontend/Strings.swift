@@ -1773,13 +1773,6 @@ extension String {
         }
 
         public struct Sync {
-            public static let SyncTabsNotUsed = MZLocalizedString(
-                key: "TabsTray.SyncTabs.SyncTabsButton.Title.v109",
-                tableName: "TabsTray",
-                value: "Sync Tabs",
-                comment: "Button label to sync tabs in your Firefox Account",
-                lastUsedInVersion: 119)
-
             public static let SyncTabs = MZLocalizedString(
                 key: "TabsTray.SyncTabs.SyncTabsButton.Title.v119",
                 tableName: "TabsTray",
@@ -2242,10 +2235,10 @@ extension String {
         value: nil,
         comment: "Toggle tabs syncing setting")
     public static let FirefoxSyncLoginsEngine = MZLocalizedString(
-        key: "Logins",
-        tableName: nil,
-        value: nil,
-        comment: "Toggle logins syncing setting")
+        key: "Sync.LoginsEngine.Title.v122",
+        tableName: "FirefoxSync",
+        value: "Passwords",
+        comment: "Toggle passwords syncing setting, in the Settings > Sync Data menu of the app.")
     public static let FirefoxSyncCreditCardsEngine = MZLocalizedString(
         key: "FirefoxSync.CreditCardsEngine.v115",
         tableName: "FirefoxSync",
@@ -2325,9 +2318,9 @@ extension String {
 
     // For the DevicePasscodeRequiredViewController
     public static let LoginsDevicePasscodeRequiredMessage = MZLocalizedString(
-        key: "Logins.DevicePasscodeRequired.Message",
-        tableName: nil,
-        value: "To save and autofill logins and passwords, enable Face ID, Touch ID or a device passcode.",
+        key: "Logins.DevicePasscodeRequired.Message.v122",
+        tableName: "Credentials",
+        value: "To save and automatically fill passwords, enable Face ID, Touch ID, or a device passcode.",
         comment: "Message shown when you enter Logins & Passwords without having a device passcode set.")
     public static let LoginsDevicePasscodeRequiredLearnMoreButtonTitle = MZLocalizedString(
         key: "Logins.DevicePasscodeRequired.LearnMoreButtonTitle",
@@ -5639,4 +5632,35 @@ extension String {
         value: "Connection is not secure",
         comment: "This is the value for a label that indicates if a user is on an unencrypted website.")
 }
+
+// MARK: - Strings to be removed
+extension String {
+    struct OldStrings {
+        struct v119 {
+            public static let SyncTabsNotUsed = MZLocalizedString(
+                key: "TabsTray.SyncTabs.SyncTabsButton.Title.v109",
+                tableName: "TabsTray",
+                value: "Sync Tabs",
+                comment: "Button label to sync tabs in your Firefox Account",
+                lastUsedInVersion: 119)
+        }
+
+        struct v121 {
+            public static let FirefoxSyncLoginsEngineOld = MZLocalizedString(
+                key: "Logins",
+                tableName: nil,
+                value: nil,
+                comment: "Toggle logins syncing setting",
+                lastUsedInVersion: 121)
+            public static let LoginsDevicePasscodeRequiredMessage = MZLocalizedString(
+                key: "Logins.DevicePasscodeRequired.Message",
+                tableName: nil,
+                value: "To save and autofill logins and passwords, enable Face ID, Touch ID or a device passcode.",
+                comment: "Message shown when you enter Logins & Passwords without having a device passcode set.",
+                lastUsedInVersion: 121)
+       }
+    }
+}
+
 // swiftlint:enable line_length
+
