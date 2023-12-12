@@ -2092,25 +2092,25 @@ extension String {
 // MARK: - Logins Helper
 extension String {
     public static let LoginsHelperSaveLoginButtonTitle = MZLocalizedString(
-        key: "LoginsHelper.SaveLogin.Button",
-        tableName: nil,
-        value: "Save Login",
+        key: "LoginsHelper.SaveLogin.Button.v122",
+        tableName: "LoginsHelper",
+        value: "Save",
         comment: "Button to save the user's password")
     public static let LoginsHelperDontSaveButtonTitle = MZLocalizedString(
-        key: "LoginsHelper.DontSave.Button",
-        tableName: nil,
-        value: "Don’t Save",
-        comment: "Button to not save the user's password")
+        key: "LoginsHelper.DontSave.Button.v122",
+        tableName: "LoginsHelper",
+        value: "Now Now",
+        comment: "Button to not save the user's password in the logins helper")
     public static let LoginsHelperUpdateButtonTitle = MZLocalizedString(
         key: "LoginsHelper.Update.Button",
         tableName: nil,
         value: "Update",
         comment: "Button to update the user's password")
     public static let LoginsHelperDontUpdateButtonTitle = MZLocalizedString(
-        key: "LoginsHelper.DontUpdate.Button",
-        tableName: nil,
-        value: "Don’t Update",
-        comment: "Button to not update the user's password")
+        key: "LoginsHelper.DontUpdate.Button.v122",
+        tableName: "LoginsHelper",
+        value: "Now Now",
+        comment: "Button to not update the user's password in the logins helper")
 }
 
 // MARK: - Downloads Panel
@@ -2261,7 +2261,7 @@ extension String {
         comment: "Prompt for saving a password in the Save Logins prompt.")
     public static let UpdateLoginUsernamePrompt = MZLocalizedString(
         key: "LoginsHelper.PromptUpdateLogin.Title.TwoArg.v122",
-        tableName: nil,
+        tableName: "FirefoxLogins",
         value: "Update password?",
         comment: "Prompt for updating a password in the Update Password prompt.")
     public static let UpdateLoginPrompt = MZLocalizedString(
@@ -5669,17 +5669,35 @@ extension String {
                 value: "Save password for %@?",
                 comment: "Prompt for saving a password with no username. The parameter is the hostname of the site.",
                 lastUsedInVersion: 121)
-                public static let UpdateLoginPrompt = MZLocalizedString(
-        key: "LoginsHelper.PromptUpdateLogin.Title.OneArg",
-        tableName: nil,
-        value: "Update login for %@?",
-        comment: "Prompt for updating a login. The first parameter is the hostname for which the password will be updated for.",
+            public static let UpdateLoginPrompt = MZLocalizedString(
+                key: "LoginsHelper.PromptUpdateLogin.Title.OneArg",
+                tableName: nil,
+                value: "Update login for %@?",
+                comment: "Prompt for updating a login. The first parameter is the hostname for which the password will be updated for.",
                 lastUsedInVersion: 121)
-                public static let UpdateLoginUsernamePrompt = MZLocalizedString(
-        key: "LoginsHelper.PromptUpdateLogin.Title.TwoArg",
+            public static let UpdateLoginUsernamePrompt = MZLocalizedString(
+                key: "LoginsHelper.PromptUpdateLogin.Title.TwoArg",
+                tableName: nil,
+                value: "Update login %@ for %@?",
+                comment: "Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site.",
+                lastUsedInVersion: 121)
+            public static let LoginsHelperSaveLoginButtonTitle = MZLocalizedString(
+                key: "LoginsHelper.SaveLogin.Button",
+                tableName: nil,
+                value: "Save Login",
+                comment: "Button to save the user's password",
+                lastUsedInVersion: 121)
+                public static let LoginsHelperDontSaveButtonTitle = MZLocalizedString(
+        key: "LoginsHelper.DontSave.Button",
         tableName: nil,
-        value: "Update login %@ for %@?",
-        comment: "Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site.",
+        value: "Don’t Save",
+        comment: "Button to not save the user's password",
+                lastUsedInVersion: 121)
+    public static let LoginsHelperDontUpdateButtonTitle = MZLocalizedString(
+        key: "LoginsHelper.DontUpdate.Button",
+        tableName: nil,
+        value: "Don’t Update",
+        comment: "Button to not update the user's password",
                 lastUsedInVersion: 121)
         }
     }
