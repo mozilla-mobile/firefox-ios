@@ -508,15 +508,16 @@ class BrowserCoordinator: BaseCoordinator,
         return bottomSheetCoordinator
     }
 
-    func showQRCode() {
+    func showQRCode(delegate: QRCodeViewControllerDelegate, rootNavigationController: UINavigationController?) {
         var coordinator: QRCodeCoordinator
         if let qrCodeCoordinator = childCoordinators.first(where: { $0 is QRCodeCoordinator }) as? QRCodeCoordinator {
             coordinator = qrCodeCoordinator
         } else {
+            let router = rootNavigationController != nil ? DefaultRouter(navigationController: rootNavigationController!) : router
             coordinator = QRCodeCoordinator(parentCoordinator: self, router: router)
             add(child: coordinator)
         }
-        coordinator.showQRCode(delegate: browserViewController)
+        coordinator.showQRCode(delegate: delegate)
     }
 
     func showTabTray(selectedPanel: TabTrayPanelType) {
