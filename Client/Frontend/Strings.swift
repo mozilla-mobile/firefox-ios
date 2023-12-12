@@ -4488,24 +4488,24 @@ extension String {
         value: "Remove Password?",
         comment: "Title for the prompt that appears when the user deletes a login.")
     public static let DeleteLoginAlertSyncedMessage = MZLocalizedString(
-        key: "Logins will be removed from all connected devices.",
+        key: "DeleteLoginAlert.Message.Synced.v122",
         tableName: "LoginManager",
-        value: nil,
+        value: "This will remove the password from all of your synced devices.",
         comment: "Prompt message warning the user that deleted logins will remove logins from all connected devices")
     public static let DeleteLoginAlertLocalMessage = MZLocalizedString(
-        key: "Logins will be permanently removed.",
+        key: "DeleteLoginAlert.Message.Local.v122",
         tableName: "LoginManager",
-        value: nil,
-        comment: "Prompt message warning the user that deleting non-synced logins will permanently remove them")
+        value: "You cannot undo this action.",
+        comment: "Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so")
     public static let DeleteLoginAlertCancel = MZLocalizedString(
-        key: "Cancel",
+        key: "DeleteLoginAlert.DeleteButton.Cancel.v122",
         tableName: "LoginManager",
-        value: nil,
+        value: "Cancel",
         comment: "Prompt option for cancelling out of deletion")
     public static let DeleteLoginAlertDelete = MZLocalizedString(
-        key: "Delete",
+        key: "DeleteLoginAlert.DeleteButton.Title.v122",
         tableName: "LoginManager",
-        value: nil,
+        value: "Remove",
         comment: "Label for the button used to delete the current login.")
 }
 
@@ -5748,6 +5748,29 @@ extension String {
         tableName: "LoginManager",
         value: nil,
         comment: "Prompt title when deleting logins")
+    public static let DeleteLoginAlertLocalMessage = MZLocalizedString(
+        key: "Logins will be permanently removed.",
+        tableName: "LoginManager",
+        value: nil,
+        comment: "Prompt message warning the user that deleting non-synced logins will permanently remove them")
+    public static let DeleteLoginAlertSyncedMessage = MZLocalizedString(
+        key: "Logins will be removed from all connected devices.",
+        tableName: "LoginManager",
+        value: nil,
+        comment: "Prompt message warning the user that deleted logins will remove logins from all connected devices")
+    public static let DeleteLoginAlertDelete = MZLocalizedString(
+        key: "Delete",
+        tableName: "LoginManager",
+        value: nil,
+        comment: "Label for the button used to delete the current login.")
+    public static let DeleteLoginAlertCancel = MZLocalizedString(
+        key: "Cancel",
+        tableName: "LoginManager",
+        value: nil,
+        comment: "Prompt option for cancelling out of deletion")
+
+
+
 
 
 
