@@ -42,7 +42,7 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public override func updateConfiguration() {
+    override public func updateConfiguration() {
         guard var updatedConfiguration = configuration else {
             return
         }
