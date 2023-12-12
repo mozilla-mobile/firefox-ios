@@ -441,6 +441,19 @@ public struct AccessibilityIdentifiers {
                 static let close = "Close"
                 static let save = "Save"
             }
+
+            struct ViewCreditCard {
+                static let viewCard = "View Card"
+                static let edit = "Edit"
+            }
+
+            struct EditCreditCard {
+                static let editCreditCard = "Edit Credit Card"
+                static let removeCard = "Remove Card"
+                static let removeThisCard = "Remove This Card?"
+                static let cancel = "Cancel"
+                static let remove = "Remove"
+            }
         }
 
         struct ClearData {
