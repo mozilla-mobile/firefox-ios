@@ -43,7 +43,7 @@ class WKEngineWebServer: WKEngineWebServerProtocol {
         // TODO: FXIOS-7894 #17639 Move dependencies for WebServer
 //        if !server.isRunning {
 //            try server.start(options: [
-//                GCDWebServerOption_Port: AppInfo.webserverPort,
+//                GCDWebServerOption_Port: WKEngineInfo.webserverPort,
 //                GCDWebServerOption_BindToLocalhost: true,
 //                GCDWebServerOption_AutomaticallySuspendInBackground: false, // done by the app in AppDelegate
 //                GCDWebServerOption_AuthenticationMethod: GCDWebServerAuthenticationMethod_Basic,
