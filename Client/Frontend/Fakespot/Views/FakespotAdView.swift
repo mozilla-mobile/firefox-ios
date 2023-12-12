@@ -6,9 +6,10 @@ import UIKit
 import Common
 import Shared
 import ComponentLibrary
+import MozillaAppServices
 
 // MARK: View Model
-struct FakespotAdViewModel {
+struct FakespotAdViewModel: FeatureFlaggable {
     let title: String = .Shopping.AdCardTitleLabel
     let footerText: String = .localizedStringWithFormat(.Shopping.AdCardFooterLabel,
                                                         FakespotName.shortName.rawValue)
@@ -18,9 +19,12 @@ struct FakespotAdViewModel {
     let productTitleA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.productTitle
     let descriptionA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.description
     let footerA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.footer
+    let defaultImageA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.defaultImage
+    let productImageA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.productImage
 
     var onTapProductLink: (() -> Void)?
     let productAdsData: ProductAdsResponse
+    let urlCache: URLCache
 
     var formattedPrice: String {
         let formatter = NumberFormatter()
@@ -40,8 +44,39 @@ struct FakespotAdViewModel {
     }
 
     // MARK: Init
-    init(productAdsData: ProductAdsResponse) {
+    init(productAdsData: ProductAdsResponse,
+         urlCache: URLCache = URLCache.shared) {
         self.productAdsData = productAdsData
+        self.urlCache = urlCache
+    }
+
+    // MARK: Image Loading
+    @MainActor
+    func loadImage(from url: URL) async throws -> UIImage? {
+        if let cachedData = urlCache.cachedResponse(for: URLRequest(url: url))?.data,
+           let image = UIImage(data: cachedData) {
+            return image
+        }
+
+        do {
+            let environment = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI) ? FakespotEnvironment.staging : .prod
+            guard
+                let config = environment.config,
+                let relay = environment.relay
+            else {
+                throw FakespotClient.FakeSpotClientError.invalidURL
+            }
+
+            // Create an instance of OhttpManager with the staging configuration
+            let manager = OhttpManager(configUrl: config, relayUrl: relay)
+
+            let (data, response) = try await manager.data(for: URLRequest(url: url))
+            let cacheData = CachedURLResponse(response: response, data: data)
+            self.urlCache.storeCachedResponse(cacheData, for: URLRequest(url: url))
+            return UIImage(data: data)
+        } catch {
+            return nil
+        }
     }
 }
 
@@ -56,16 +91,21 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         static let starSize: CGFloat = 24
         static let starMaxSize: CGFloat = 42
 
-        static let productImageMinWidth: CGFloat = 70
-        static let productImageMinHeight: CGFloat = 60
-        static let productImageMaxWidth: CGFloat = 206
-        static let productImageMaxHeight: CGFloat = 173
+        static let productImageMinSize = CGSize(width: 70, height: 60)
+        static let productImageMaxSize = CGSize(width: 206, height: 173)
+        static let defaultImageSize = CGSize(width: 24, height: 24)
+        static let defaultImageMaxSize = CGSize(width: 70, height: 70)
     }
 
     // MARK: Views
     private lazy var cardContainer: ShadowCardView = .build()
-    private lazy var productImageView: FakespotImageLoadingView = .build { imageView in
-        imageView.contentMode = .scaleAspectFit
+    private lazy var imageContainerView: UIView = .build()
+    private var defaultImageView: UIImageView = .build { view in
+        view.image = UIImage(named: StandardImageIdentifiers.Large.image)?.withRenderingMode(.alwaysTemplate)
+    }
+    private lazy var productImageView: UIImageView = .build { imageView in
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
     }
 
     var notificationCenter: NotificationProtocol = NotificationCenter.default
@@ -155,8 +195,14 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         )
         productLinkButton.configure(viewModel: productLinkButtonViewModel)
         gradeReliabilityScoreView.configure(grade: productAdsData.grade)
+        defaultImageView.accessibilityIdentifier = viewModel.defaultImageA11yId
+        productImageView.accessibilityIdentifier = viewModel.productImageA11yId
+        productImageView.isHidden = true
+
         Task {
-            try? await productImageView.loadImage(from: productAdsData.imageUrl)
+            let image = try? await viewModel.loadImage(from: productAdsData.imageUrl)
+            productImageView.image = image
+            displayProductImage()
         }
 
         let cardModel = ShadowCardViewModel(view: contentStackView, a11yId: viewModel.cardA11yId)
@@ -170,23 +216,36 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
     private var starRatingHeightConstraint: NSLayoutConstraint?
     private var productImageHeightConstraint: NSLayoutConstraint?
     private var productImageWidthConstraint: NSLayoutConstraint?
+    private var defaultProductImageWidthConstraint: NSLayoutConstraint?
 
     // MARK: Layout Setup
     private func setupLayout() {
         addSubview(cardContainer)
         insertSubview(footerLabel, belowSubview: cardContainer)
+
+        imageContainerView.addSubview(defaultImageView)
+        imageContainerView.addSubview(productImageView)
+
         // normal setup
-        let starsHeight = min(UIFontMetrics.default.scaledValue(for: UX.starSize), UX.starMaxSize)
-        let imageWidth = min(UIFontMetrics.default.scaledValue(for: UX.productImageMinWidth), UX.productImageMaxWidth)
-        let imageHeight = min(UIFontMetrics.default.scaledValue(for: UX.productImageMinHeight), UX.productImageMaxHeight)
+        let starsHeight = minSize(minValue: UX.starSize, maxValue: UX.starMaxSize)
+        let imageWidth = minSize(minValue: UX.productImageMinSize.width,
+                                 maxValue: UX.productImageMaxSize.width)
+        let imageHeight = minSize(minValue: UX.productImageMinSize.height,
+                                  maxValue: UX.productImageMaxSize.height)
+        let defaultImageWidth = minSize(minValue: UX.defaultImageSize.width,
+                                        maxValue: UX.defaultImageMaxSize.width)
+
         starRatingHeightConstraint = starRatingView.heightAnchor.constraint(equalToConstant: starsHeight)
         starRatingHeightConstraint?.isActive = true
 
-        productImageHeightConstraint = productImageView.heightAnchor.constraint(equalToConstant: imageHeight)
+        productImageHeightConstraint = imageContainerView.heightAnchor.constraint(equalToConstant: imageHeight)
         productImageHeightConstraint?.isActive = true
 
-        productImageWidthConstraint = productImageView.widthAnchor.constraint(equalToConstant: imageWidth)
+        productImageWidthConstraint = imageContainerView.widthAnchor.constraint(equalToConstant: imageWidth)
         productImageWidthConstraint?.isActive = true
+
+        defaultProductImageWidthConstraint = defaultImageView.widthAnchor.constraint(equalToConstant: defaultImageWidth)
+        defaultProductImageWidthConstraint?.isActive = true
 
         NSLayoutConstraint.activate([
             cardContainer.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -197,6 +256,17 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
             footerLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
             footerLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             footerLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+            defaultImageView.heightAnchor.constraint(equalTo: defaultImageView.widthAnchor),
+            defaultImageView.centerXAnchor.constraint(equalTo: imageContainerView.centerXAnchor),
+            defaultImageView.centerYAnchor.constraint(equalTo: imageContainerView.centerYAnchor),
+
+            productImageView.leadingAnchor.constraint(equalTo: imageContainerView.leadingAnchor),
+            productImageView.trailingAnchor.constraint(equalTo: imageContainerView.trailingAnchor),
+            productImageView.topAnchor.constraint(equalTo: imageContainerView.topAnchor),
+            productImageView.bottomAnchor.constraint(equalTo: imageContainerView.bottomAnchor),
+
+            defaultImageView.heightAnchor.constraint(equalTo: defaultImageView.heightAnchor)
         ])
 
         adjustLayout()
@@ -208,9 +278,13 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         contentStackView.removeAllArrangedViews()
 
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
-        starRatingHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: UX.starSize), UX.starMaxSize)
-        productImageHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: UX.productImageMinHeight), UX.productImageMaxHeight)
-        productImageWidthConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: UX.productImageMinWidth), UX.productImageMaxWidth)
+        starRatingHeightConstraint?.constant = minSize(minValue: UX.starSize, maxValue: UX.starMaxSize)
+        productImageHeightConstraint?.constant = minSize(minValue: UX.productImageMinSize.height,
+                                                         maxValue: UX.productImageMaxSize.height)
+        productImageWidthConstraint?.constant = minSize(minValue: UX.productImageMinSize.width,
+                                                        maxValue: UX.productImageMaxSize.width)
+        defaultProductImageWidthConstraint?.constant = minSize(minValue: UX.defaultImageSize.width,
+                                                               maxValue: UX.defaultImageMaxSize.width)
 
         if contentSizeCategory.isAccessibilityCategory {
             secondRowStackView.axis = .vertical
@@ -235,7 +309,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         productLinkButton.setContentHuggingPriority(.required, for: .horizontal)
         productLinkButton.setContentCompressionResistancePriority(.required, for: .horizontal)
 
-        secondRowStackView.addArrangedSubview(productImageView)
+        secondRowStackView.addArrangedSubview(imageContainerView)
         secondRowStackView.addArrangedSubview(productLinkButton)
         secondRowStackView.addArrangedSubview(gradeReliabilityScoreView)
         secondRowStackView.distribution = .fill
@@ -262,7 +336,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
 
         // second line
         let spacerTrailing = UIView()
-        let secondLineStackView = UIStackView(arrangedSubviews: [productImageView, spacerTrailing])
+        let secondLineStackView = UIStackView(arrangedSubviews: [imageContainerView, spacerTrailing])
         secondLineStackView.axis = .horizontal
         secondLineStackView.distribution = .fill
         contentStackView.addArrangedSubview(secondLineStackView)
@@ -306,6 +380,18 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         footerLabel.textColor = theme.colors.textSecondary
         productLinkButton.setTitleColor(theme.colors.textAccent, for: .normal)
         gradeReliabilityScoreView.applyTheme(theme: theme)
-        productImageView.theme = theme
+        defaultImageView.tintColor = theme.colors.iconSecondary
+        imageContainerView.backgroundColor = theme.colors.layer3
+    }
+
+    private func displayProductImage() {
+        guard productImageView.image != nil else { return }
+
+        defaultImageView.isHidden = true
+        productImageView.isHidden = false
+    }
+
+    private func minSize(minValue: CGFloat, maxValue: CGFloat) -> CGFloat {
+        return min(UIFontMetrics.default.scaledValue(for: minValue), maxValue)
     }
 }
