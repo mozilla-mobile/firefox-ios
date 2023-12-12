@@ -15,7 +15,7 @@ extension AppInfo {
     }
 
     /// The port for the internal webserver, tests can change this
-    /// Please be aware that we needed to duplicate this webserverPort in the Common package due to Shared target issues in #17721
+    /// Please be aware that we needed to migrate this webserverPort in WebEngine.WKEngineInfo due to Shared target issues in #17721
     /// This webserverPort needs to be deleted with FXIOS-7960 once the WebEngine package is integrated in Firefox iOS
     public static var webserverPort = 6571
 
