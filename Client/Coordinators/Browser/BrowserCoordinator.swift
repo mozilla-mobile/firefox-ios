@@ -24,6 +24,7 @@ class BrowserCoordinator: BaseCoordinator,
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
+    var privateViewController: PrivateHomepageViewController?
 
     private var profile: Profile
     private let tabManager: TabManager
@@ -111,6 +112,15 @@ class BrowserCoordinator: BaseCoordinator,
         homepageController.scrollToTop()
         // We currently don't support full page screenshot of the homepage
         screenshotService.screenshotableView = nil
+    }
+
+    func showPrivateHomepage() {
+        let privateHomepageController = PrivateHomepageViewController()
+        guard browserViewController.embedContent(privateHomepageController) else {
+            logger.log("Unable to embed private homepage", level: .debug, category: .coordinator)
+            return
+        }
+        self.privateViewController = privateHomepageController
     }
 
     func show(webView: WKWebView) {

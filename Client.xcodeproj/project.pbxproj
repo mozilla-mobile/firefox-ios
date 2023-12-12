@@ -570,6 +570,8 @@
 		8A093D7F2A4B3E7D0099ABA5 /* GeneralSettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A093D7E2A4B3E7D0099ABA5 /* GeneralSettingsDelegate.swift */; };
 		8A093D812A4B58330099ABA5 /* MockSettingsFlowDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A093D802A4B58330099ABA5 /* MockSettingsFlowDelegate.swift */; };
 		8A093D832A4B68940099ABA5 /* PrivacySettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A093D822A4B68940099ABA5 /* PrivacySettingsDelegate.swift */; };
+		8A0A1BA02B2200FD00E8706F /* PrivateHomepageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0A1B9F2B2200FD00E8706F /* PrivateHomepageViewController.swift */; };
+		8A0A1BA32B22030100E8706F /* PrivateMessageCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0A1BA22B22030100E8706F /* PrivateMessageCardCell.swift */; };
 		8A0D32842A61E1CC007D976D /* StatusBarOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0D32832A61E1CC007D976D /* StatusBarOverlay.swift */; };
 		8A11C80F2731916E00AC7318 /* defaultOnlyTestList.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A11C80D2731916E00AC7318 /* defaultOnlyTestList.json */; };
 		8A11C8112731CFD700AC7318 /* ReaderModeStyleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A11C8102731CFD700AC7318 /* ReaderModeStyleTests.swift */; };
@@ -662,6 +664,7 @@
 		8A6E13982A71BA4E00A88FA8 /* TabWebViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6E13972A71BA4E00A88FA8 /* TabWebViewTests.swift */; };
 		8A6E139C2A71BB5700A88FA8 /* LegacyTabCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6E139B2A71BB5700A88FA8 /* LegacyTabCellTests.swift */; };
 		8A6E139E2A71C78A00A88FA8 /* GridTabViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6E139D2A71C78A00A88FA8 /* GridTabViewControllerTests.swift */; };
+		8A6E8DEB2B275BA9000C4301 /* PrivateHomepageViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6E8DE92B275B49000C4301 /* PrivateHomepageViewControllerTests.swift */; };
 		8A720C5E2A4C85DA0003018A /* AccountSettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A720C5D2A4C85DA0003018A /* AccountSettingsDelegate.swift */; };
 		8A720C602A4C8B700003018A /* SharedSettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A720C5F2A4C8B700003018A /* SharedSettingsDelegate.swift */; };
 		8A720C622A4CBB370003018A /* SupportSettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A720C612A4CBB370003018A /* SupportSettingsDelegate.swift */; };
@@ -5185,6 +5188,8 @@
 		8A093D7E2A4B3E7D0099ABA5 /* GeneralSettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsDelegate.swift; sourceTree = "<group>"; };
 		8A093D802A4B58330099ABA5 /* MockSettingsFlowDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSettingsFlowDelegate.swift; sourceTree = "<group>"; };
 		8A093D822A4B68940099ABA5 /* PrivacySettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacySettingsDelegate.swift; sourceTree = "<group>"; };
+		8A0A1B9F2B2200FD00E8706F /* PrivateHomepageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateHomepageViewController.swift; sourceTree = "<group>"; };
+		8A0A1BA22B22030100E8706F /* PrivateMessageCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateMessageCardCell.swift; sourceTree = "<group>"; };
 		8A0D32832A61E1CC007D976D /* StatusBarOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarOverlay.swift; sourceTree = "<group>"; };
 		8A0F46E89E106C66C6C29F07 /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		8A11C80D2731916E00AC7318 /* defaultOnlyTestList.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = defaultOnlyTestList.json; sourceTree = "<group>"; };
@@ -5280,6 +5285,7 @@
 		8A6E13972A71BA4E00A88FA8 /* TabWebViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabWebViewTests.swift; sourceTree = "<group>"; };
 		8A6E139B2A71BB5700A88FA8 /* LegacyTabCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyTabCellTests.swift; sourceTree = "<group>"; };
 		8A6E139D2A71C78A00A88FA8 /* GridTabViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridTabViewControllerTests.swift; sourceTree = "<group>"; };
+		8A6E8DE92B275B49000C4301 /* PrivateHomepageViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateHomepageViewControllerTests.swift; sourceTree = "<group>"; };
 		8A720C5D2A4C85DA0003018A /* AccountSettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSettingsDelegate.swift; sourceTree = "<group>"; };
 		8A720C5F2A4C8B700003018A /* SharedSettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedSettingsDelegate.swift; sourceTree = "<group>"; };
 		8A720C612A4CBB370003018A /* SupportSettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportSettingsDelegate.swift; sourceTree = "<group>"; };
@@ -8655,6 +8661,15 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
+		8A0A1BA12B22010200E8706F /* PrivateHome */ = {
+			isa = PBXGroup;
+			children = (
+				8A0A1B9F2B2200FD00E8706F /* PrivateHomepageViewController.swift */,
+				8A0A1BA22B22030100E8706F /* PrivateMessageCardCell.swift */,
+			);
+			path = PrivateHome;
+			sourceTree = "<group>";
+		};
 		8A171A6029F82AD90085770E /* Application */ = {
 			isa = PBXGroup;
 			children = (
@@ -10475,6 +10490,7 @@
 				E1AEC171286E0CF500062E29 /* HomepageViewControllerTests.swift */,
 				E1AEC172286E0CF500062E29 /* FirefoxHomeViewModelTests.swift */,
 				5A9A09D128AFD51900B6F51E /* MockHomepageDataModelDelegate.swift */,
+				8A6E8DE92B275B49000C4301 /* PrivateHomepageViewControllerTests.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -11206,6 +11222,7 @@
 		F84B22211A09122500AAB793 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				8A0A1BA12B22010200E8706F /* PrivateHome */,
 				C834ACD028D3ACA900203AD1 /* Blurrable.swift */,
 				8AB5958628412B620090F4AE /* CustomizeHome */,
 				DF036E41274FD3FC002E834E /* HistoryHighlights */,
@@ -12934,6 +12951,7 @@
 				E1877A832875DEDE00F5BDF2 /* SyncedTabCell.swift in Sources */,
 				21E77E522AA8BE5C00FABA10 /* TabTrayFlagManager.swift in Sources */,
 				CA8226F324C11DB7008A6F38 /* PasswordManagerTableViewCell.swift in Sources */,
+				8A0A1BA02B2200FD00E8706F /* PrivateHomepageViewController.swift in Sources */,
 				E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */,
 				8AD40FCB27BADC4B00672675 /* StatefulButton.swift in Sources */,
 				C84655E62887398700861B4A /* WallpaperCollection.swift in Sources */,
@@ -13424,6 +13442,7 @@
 				214EF4152AC5D5D0005BCCDA /* TabDisplayView.swift in Sources */,
 				2165B2C22860C2F4004C0786 /* AdjustTelemetryHelper.swift in Sources */,
 				8A2D593E27DC0AA100713EC9 /* TopSite.swift in Sources */,
+				8A0A1BA32B22030100E8706F /* PrivateMessageCardCell.swift in Sources */,
 				213BF7532AC21D1B00C53A64 /* TabDisplayPanel.swift in Sources */,
 				434E733725EED32E006D3BDE /* BrowserViewController+URLBarDelegate.swift in Sources */,
 				C88E7A5B2A0553510072E638 /* OnboardingLinkInfoModel.swift in Sources */,
@@ -13826,6 +13845,7 @@
 				C2D80BED2AAF3C6B00CDF7A9 /* MockBrowserCoordinator.swift in Sources */,
 				45D5EDC0292D619000311934 /* MockablePinnedSites.swift in Sources */,
 				5AE371852A4DD6FE0092A760 /* PasswordManagerCoordinatorDelegateMock.swift in Sources */,
+				8A6E8DEB2B275BA9000C4301 /* PrivateHomepageViewControllerTests.swift in Sources */,
 				8A93F86529D37331004159D9 /* DefaultRouterTests.swift in Sources */,
 				8AF10D8A29D713F50086351D /* LaunchScreenViewModelTests.swift in Sources */,
 				2F13E79B1AC0C02700D75081 /* StringExtensionsTests.swift in Sources */,
