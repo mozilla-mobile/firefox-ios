@@ -6,7 +6,7 @@ import Common
 import Foundation
 
 /// Those extensions are kept public at the moment to avoid breaking any existing code, but ideally in the future we should keep the usage of those extensions
-/// internal to the WebEngine only
+/// internal to the WebEngine only. If they cannot be internal then we should move the ones that needs to be public to the Common package.
 public extension URL {
     var isReaderModeURL: Bool {
         let scheme = self.scheme, host = self.host, path = self.path

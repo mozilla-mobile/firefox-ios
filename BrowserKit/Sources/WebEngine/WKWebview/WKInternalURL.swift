@@ -5,6 +5,7 @@
 import Foundation
 import Common
 
+/// Internal URLs helps with error pages, session restore and about pages
 protocol InternalURL {
     var isAuthorized: Bool { get }
 
@@ -12,7 +13,6 @@ protocol InternalURL {
     func stripAuthorization()
 }
 
-/// Internal URLs helps with error pages, session restore and about pages
 final class WKInternalURL: InternalURL {
     static let uuid = UUID().uuidString
     static let scheme = "internal"
