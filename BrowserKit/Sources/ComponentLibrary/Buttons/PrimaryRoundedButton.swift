@@ -20,21 +20,12 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
         )
     }
 
-    private var highlightedTintColor: UIColor!
-    private var normalTintColor: UIColor!
-    private var foregroundColorForState: ((UIControl.State) -> UIColor)?
-
-    override open var isHighlighted: Bool {
-        didSet {
-            backgroundColor = isHighlighted ? highlightedTintColor : normalTintColor
-        }
-    }
+    private var backgroundColorForState: ((UIControl.State) -> UIColor)?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        layer.cornerRadius = UX.buttonCornerRadius
-        titleLabel?.textAlignment = .center
+        configuration = UIButton.Configuration.filled()
         titleLabel?.adjustsFontForContentSizeCategory = true
     }
 
@@ -46,9 +37,13 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
         guard var updatedConfiguration = configuration else {
             return
         }
-        let foregroundColor = foregroundColorForState?(state)
 
-        updatedConfiguration.baseForegroundColor = foregroundColor
+        var updatedBackground = updatedConfiguration.background
+        let backgroundColor = backgroundColorForState?(self.state) ?? UIColor.clear
+        updatedBackground.backgroundColorTransformer = UIConfigurationColorTransformer { color in
+            return backgroundColor
+        }
+        updatedConfiguration.background = updatedBackground
         configuration = updatedConfiguration
     }
 
@@ -63,6 +58,12 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
         ))
         updatedConfiguration.contentInsets = UX.contentInsets
         updatedConfiguration.title = viewModel.title
+        updatedConfiguration.titleAlignment = .center
+
+        var updatedBackground = updatedConfiguration.background
+        updatedBackground.cornerRadius = UX.buttonCornerRadius
+        updatedConfiguration.background = updatedBackground
+        updatedConfiguration.cornerStyle = .fixed
 
         accessibilityIdentifier = viewModel.a11yIdentifier
 
@@ -81,15 +82,33 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
             return
         }
 
-        highlightedTintColor = theme.colors.actionPrimaryHover
-        normalTintColor = theme.colors.actionPrimary
-        backgroundColor = normalTintColor
+        var updatedBackground = updatedConfiguration.background
 
-        foregroundColorForState = { _ in
-            // For this button, all states should use colors.textInverted
-            theme.colors.textInverted
+        backgroundColorForState = { state in
+            switch state {
+            case [.highlighted]:
+                return theme.colors.actionPrimaryHover
+            default:
+                return theme.colors.actionPrimary
+            }
         }
-        updatedConfiguration.baseForegroundColor = foregroundColorForState?(state)
+
+        let backgroundColor = backgroundColorForState?(self.state) ?? UIColor.clear
+        updatedBackground.backgroundColorTransformer = UIConfigurationColorTransformer { color in
+            return backgroundColor
+        }
+        updatedConfiguration.background = updatedBackground
+
+        let foregroundColor = theme.colors.textInverted
+        updatedConfiguration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var container = incoming
+            container.foregroundColor = foregroundColor
+            container.font = DefaultDynamicFontHelper.preferredBoldFont(
+                withTextStyle: .callout,
+                size: UX.buttonFontSize
+            )
+            return container
+        }
         configuration = updatedConfiguration
     }
 }
