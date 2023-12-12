@@ -6,7 +6,8 @@ import Common
 import Foundation
 
 /// Those extensions are kept public at the moment to avoid breaking any existing code, but ideally in the future we should keep the usage of those extensions
-/// internal to the WebEngine only. If they cannot be internal then we should move the ones that needs to be public to the Common package.
+/// internal to the WebEngine only, as the goal is that we only have URL extensions that relates to webview in this file.
+/// If they cannot be internal then we should move the ones that needs to be public to the Common package.
 public extension URL {
     var isReaderModeURL: Bool {
         let scheme = self.scheme, host = self.host, path = self.path
@@ -76,23 +77,5 @@ public extension URL {
         }
 
         return components?.url
-    }
-
-    func getQuery() -> [String: String] {
-        var results = [String: String]()
-
-        guard let components = URLComponents(url: self, resolvingAgainstBaseURL: false),
-              let queryItems = components.percentEncodedQueryItems
-        else {
-            return results
-        }
-
-        for item in queryItems {
-            if let value = item.value {
-                results[item.name] = value
-            }
-        }
-
-        return results
     }
 }
