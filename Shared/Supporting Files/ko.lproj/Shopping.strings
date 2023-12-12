@@ -11,7 +11,7 @@
 "ContextualHints.Shopping.OptedInBody.v120" = "이 리뷰는 신뢰할 수 있나요? 조정된 평점을 보려면 지금 확인하세요.";
 
 /* Footer label from the Fakespot Ad card displayed for the related product we advertise. This is displayed below the ad card, suggested as an alternative to the product reviewed. The first parameter will be replaced by the Fakespot app name */
-"Shopping.AdCard.Footer.v121" = "%s의 광고";
+"Shopping.AdCard.Footer.v121" = "%@의 광고";
 
 /* Title label for the Fakespot Ad card. This is displayed above a product image, suggested as an alternative to the product reviewed. */
 "Shopping.AdCard.Title.v121" = "더 보기";

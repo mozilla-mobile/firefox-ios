@@ -20,6 +20,7 @@ class SiteTableViewController: UIViewController,
                                UITableViewDataSource,
                                Themeable {
     var themeManager: ThemeManager
+    let windowManager: WindowManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
     let profile: Profile
@@ -54,10 +55,12 @@ class SiteTableViewController: UIViewController,
 
     init(profile: Profile,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
+         windowManager: WindowManager = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.profile = profile
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
+        self.windowManager = windowManager
         super.init(nibName: nil, bundle: nil)
         listenForThemeChange(view)
         applyTheme()

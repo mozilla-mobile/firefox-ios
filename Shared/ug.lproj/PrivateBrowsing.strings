@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "شەخسىي بەتكۈچنى ياپ";
+
+/* Context menu option for opening a link in a new private tab */
+"ContextMenu.OpenInNewPrivateTabButtonTitle" = "يېڭى شەخسىي بەتكۈچ ئاچ";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox سىزنىڭ زىيارەت تارىخىڭىز ياكى ساقلانمىڭىزنى ئەستە تۇتمايدۇ، ئەمما خەتكۈچلىرىڭىزنى ساقلايدۇ.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "تەپسىلاتى";
+
+/* Toggled OFF accessibility value */
+"Off" = "تاقاق";
+
+/* Toggled ON accessibility value */
+"On" = "ئوچۇق";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "شەخسىي زىيارەت";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "شەخسىي ھالەت";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "شەخسىي ھالەتنى ئاچىدۇ ياكى تاقايدۇ";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "شەخسىي زىيارەت ھالىتىدىن ئايرىلغاندا";
+

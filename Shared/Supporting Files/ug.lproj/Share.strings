@@ -1,0 +1,6 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "بۇ ھېساباتقا باغلانغان قەدەمداشلىنىدىغان باشقا ئۈسكۈنە يوق.";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "سىز تېخى ھېساباتىڭىزغا كىرمىدىڭىز.";
+

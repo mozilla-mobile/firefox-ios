@@ -28,6 +28,9 @@ class DependencyHelper {
         let downloadQueue: DownloadQueue = appDelegate.appSessionManager.downloadQueue
         AppContainer.shared.register(service: downloadQueue)
 
+        let windowManager: WindowManager = appDelegate.windowManager
+        AppContainer.shared.register(service: windowManager)
+
         // Tell the container we are done registering
         AppContainer.shared.bootstrap()
     }
