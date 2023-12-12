@@ -18,6 +18,11 @@ class WindowManagerTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: tabManager)
     }
 
+    override func tearDown() {
+        super.tearDown()
+        AppContainer.shared.reset()
+    }
+
     func testConfiguringAndConnectingSingleAppWindow() {
         let subject = createSubject()
 
