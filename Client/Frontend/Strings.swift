@@ -2044,9 +2044,9 @@ extension String {
         value: "Copied to clipboard",
         comment: "Copy app version alert shown in settings.")
     public static let SettingsAutofillCreditCard = MZLocalizedString(
-        key: "Settings.AutofillCreditCard.Title.v112",
-        tableName: nil,
-        value: "Autofill Credit Cards",
+        key: "Settings.AutofillCreditCard.Title.v122",
+        tableName: "Settings",
+        value: "Payment Methods",
         comment: "Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage.")
 }
 
@@ -2279,15 +2279,15 @@ extension String {
 
     // List view
     public static let LoginsListTitle = MZLocalizedString(
-        key: "LoginsList.Title",
-        tableName: nil,
-        value: "SAVED LOGINS",
-        comment: "Title for the list of logins")
+        key: "LoginsList.Title.v122",
+        tableName: "FirefoxLogins",
+        value: "SAVED PASSWORDS",
+        comment: "Title for the list of logins saved by the app")
     public static let LoginsListSearchPlaceholder = MZLocalizedString(
-        key: "LoginsList.LoginsListSearchPlaceholder",
-        tableName: nil,
-        value: "Filter",
-        comment: "Placeholder test for search box in logins list view.")
+        key: "LoginsList.LoginsListSearchPlaceholder.v122",
+        tableName: "FirefoxLogins",
+        value: "Search passwords",
+        comment: "Placeholder text for search box in logins list view.")
 
     // Breach Alerts
     public static let BreachAlertsTitle = MZLocalizedString(
@@ -4483,10 +4483,10 @@ extension String {
 // MARK: - DeleteLoginAlert
 extension String {
     public static let DeleteLoginAlertTitle = MZLocalizedString(
-        key: "Are you sure?",
+        key: "DeleteLoginsAlert.Title.v122",
         tableName: "LoginManager",
-        value: nil,
-        comment: "Prompt title when deleting logins")
+        value: "Remove Password?",
+        comment: "Title for the prompt that appears when the user deletes a login.")
     public static let DeleteLoginAlertSyncedMessage = MZLocalizedString(
         key: "Logins will be removed from all connected devices.",
         tableName: "LoginManager",
@@ -5041,9 +5041,9 @@ extension String {
 // MARK: - No Logins View
 extension String {
     public static let NoLoginsFound = MZLocalizedString(
-        key: "No logins found",
+        key: "NoLoginsFound.Title.v122",
         tableName: "LoginManager",
-        value: nil,
+        value: "No passwords found",
         comment: "Label displayed when no logins are found after searching.")
 }
 
@@ -5487,34 +5487,34 @@ extension String {
         value: "Cancel",
         comment: "Title for cancel button for user to stop searching for a particular login")
     public static let LoginsListSearchPlaceholderCredential = MZLocalizedString(
-        key: "LoginsList.Search.Placeholder",
-        tableName: nil,
-        value: "Search logins",
-        comment: "Placeholder text for search field")
+        key: "LoginsList.Search.Placeholder.v122",
+        tableName: "CredentialProvider",
+        value: "Search passwords",
+        comment: "Placeholder text for search field in the credential provider list")
     public static let LoginsListSelectPasswordTitle = MZLocalizedString(
         key: "LoginsList.SelectPassword.Title",
         tableName: nil,
         value: "Select a password to fill",
         comment: "Label displaying select a password to fill instruction")
     public static let LoginsListNoMatchingResultTitle = MZLocalizedString(
-        key: "LoginsList.NoMatchingResult.Title",
-        tableName: nil,
-        value: "No matching logins",
-        comment: "Label displayed when a user searches and no matches can be found against the search query")
+        key: "LoginsList.NoMatchingResult.Title.v122",
+        tableName: "CredentialProvider",
+        value: "No passwords found",
+        comment: "Label displayed when a user searches for an item, and no matches can be found against the search query")
     public static let LoginsListNoMatchingResultSubtitle = MZLocalizedString(
         key: "LoginsList.NoMatchingResult.Subtitle",
         tableName: nil,
         value: "There are no results matching your search.",
         comment: "Label that appears after the search if there are no logins matching the search")
     public static let LoginsListNoLoginsFoundTitle = MZLocalizedString(
-        key: "LoginsList.NoLoginsFound.Title",
-        tableName: nil,
-        value: "No logins found",
-        comment: "Label shown when there are no logins saved")
+        key: "LoginsList.NoLoginsFound.Title.v122",
+        tableName: "CredentialProvider",
+        value: "No passwords saved",
+        comment: "Label shown when there are no logins saved in the passwords list")
     public static let LoginsListNoLoginsFoundDescription = MZLocalizedString(
-        key: "LoginsList.NoLoginsFound.Description.v119",
-        tableName: nil,
-        value: "Saved logins will show up here. If you saved your logins to %@ on a different device, sign in to your account.",
+        key: "LoginsList.NoLoginsFound.Description.v122",
+        tableName: "CredentialProvider",
+        value: "The passwords you save or sync to %@ will be listed here. All passwords you save are encrypted.",
         comment: "Label shown when there are no logins to list. The placeholder will be replaced with the app name.")
     public static let LoginsPasscodeRequirementWarning = MZLocalizedString(
         key: "Logins.PasscodeRequirement.Warning",
@@ -5699,6 +5699,58 @@ extension String {
         value: "Don’t Update",
         comment: "Button to not update the user's password",
                 lastUsedInVersion: 121)
+                public static let LoginsListSearchPlaceholder = MZLocalizedString(
+        key: "LoginsList.LoginsListSearchPlaceholder",
+        tableName: nil,
+        value: "Filter",
+        comment: "Placeholder test for search box in logins list view.",
+                lastUsedInVersion: 121)
+                public static let LoginsListSearchPlaceholderCredential = MZLocalizedString(
+        key: "LoginsList.Search.Placeholder",
+        tableName: nil,
+        value: "Search logins",
+        comment: "Placeholder text for search field",
+                lastUsedInVersion: 121)
+                public static let LoginsListNoLoginsFoundDescription = MZLocalizedString(
+        key: "LoginsList.NoLoginsFound.Description.v119",
+        tableName: nil,
+        value: "Saved logins will show up here. If you saved your logins to %@ on a different device, sign in to your account.",
+        comment: "Label shown when there are no logins to list. The placeholder will be replaced with the app name.",
+                lastUsedInVersion: 121)
+    public static let LoginsListNoLoginsFoundTitle = MZLocalizedString(
+        key: "LoginsList.NoLoginsFound.Title",
+        tableName: nil,
+        value: "No logins found",
+        comment: "Label shown when there are no logins saved")
+    public static let LoginsListNoMatchingResultTitle = MZLocalizedString(
+        key: "LoginsList.NoMatchingResult.Title",
+        tableName: nil,
+        value: "No matching logins",
+        comment: "Label displayed when a user searches and no matches can be found against the search query")
+
+    public static let NoLoginsFound = MZLocalizedString(
+        key: "No logins found",
+        tableName: "LoginManager",
+        value: nil,
+        comment: "Label displayed when no logins are found after searching.")
+    public static let LoginsListTitle = MZLocalizedString(
+        key: "LoginsList.Title",
+        tableName: nil,
+        value: "SAVED LOGINS",
+        comment: "Title for the list of logins")
+    public static let SettingsAutofillCreditCard = MZLocalizedString(
+        key: "Settings.AutofillCreditCard.Title.v112",
+        tableName: nil,
+        value: "Autofill Credit Cards",
+        comment: "Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage.")
+    public static let DeleteLoginAlertTitle = MZLocalizedString(
+        key: "Are you sure?",
+        tableName: "LoginManager",
+        value: nil,
+        comment: "Prompt title when deleting logins")
+
+
+
         }
     }
 }
