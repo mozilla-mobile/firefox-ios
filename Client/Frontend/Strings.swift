@@ -2250,25 +2250,25 @@ extension String {
 extension String {
     // Prompts
     public static let SaveLoginUsernamePrompt = MZLocalizedString(
-        key: "LoginsHelper.PromptSaveLogin.Title",
-        tableName: nil,
-        value: "Save login %@ for %@?",
-        comment: "Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site.")
+        key: "LoginsHelper.PromptSaveLogin.Title.v122",
+        tableName: "FirefoxLogins",
+        value: "Save username?",
+        comment: "Prompt for saving the username in the Save Logins prompt.")
     public static let SaveLoginPrompt = MZLocalizedString(
-        key: "LoginsHelper.PromptSavePassword.Title",
-        tableName: nil,
-        value: "Save password for %@?",
-        comment: "Prompt for saving a password with no username. The parameter is the hostname of the site.")
+        key: "LoginsHelper.PromptSavePassword.Title.v122",
+        tableName: "FirefoxLogins",
+        value: "Save password?",
+        comment: "Prompt for saving a password in the Save Logins prompt.")
     public static let UpdateLoginUsernamePrompt = MZLocalizedString(
-        key: "LoginsHelper.PromptUpdateLogin.Title.TwoArg",
+        key: "LoginsHelper.PromptUpdateLogin.Title.TwoArg.v122",
         tableName: nil,
-        value: "Update login %@ for %@?",
-        comment: "Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site.")
+        value: "Update password?",
+        comment: "Prompt for updating a password in the Update Password prompt.")
     public static let UpdateLoginPrompt = MZLocalizedString(
-        key: "LoginsHelper.PromptUpdateLogin.Title.OneArg",
-        tableName: nil,
-        value: "Update login for %@?",
-        comment: "Prompt for updating a login. The first parameter is the hostname for which the password will be updated for.")
+        key: "LoginsHelper.PromptUpdateLogin.Title.OneArg.v122",
+        tableName: "FirefoxLogins",
+        value: "Update password?",
+        comment: "Prompt for updating the password in the Update Password prompt.")
 
     // Setting
     public static let SettingToShowLoginsInAppMenu = MZLocalizedString(
@@ -5656,6 +5656,30 @@ extension String {
                 tableName: nil,
                 value: "To save and autofill logins and passwords, enable Face ID, Touch ID or a device passcode.",
                 comment: "Message shown when you enter Logins & Passwords without having a device passcode set.",
+                lastUsedInVersion: 121)
+            public static let SaveLoginUsernamePrompt = MZLocalizedString(
+                key: "LoginsHelper.PromptSaveLogin.Title",
+                tableName: nil,
+                value: "Save login %@ for %@?",
+                comment: "Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site.",
+                lastUsedInVersion: 121)
+            public static let SaveLoginPrompt = MZLocalizedString(
+                key: "LoginsHelper.PromptSavePassword.Title",
+                tableName: nil,
+                value: "Save password for %@?",
+                comment: "Prompt for saving a password with no username. The parameter is the hostname of the site.",
+                lastUsedInVersion: 121)
+                public static let UpdateLoginPrompt = MZLocalizedString(
+        key: "LoginsHelper.PromptUpdateLogin.Title.OneArg",
+        tableName: nil,
+        value: "Update login for %@?",
+        comment: "Prompt for updating a login. The first parameter is the hostname for which the password will be updated for.",
+                lastUsedInVersion: 121)
+                public static let UpdateLoginUsernamePrompt = MZLocalizedString(
+        key: "LoginsHelper.PromptUpdateLogin.Title.TwoArg",
+        tableName: nil,
+        value: "Update login %@ for %@?",
+        comment: "Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site.",
                 lastUsedInVersion: 121)
         }
     }
