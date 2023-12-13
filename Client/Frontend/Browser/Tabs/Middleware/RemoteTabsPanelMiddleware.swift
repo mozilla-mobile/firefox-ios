@@ -10,26 +10,31 @@ import Redux
 
 class RemoteTabsPanelMiddleware {
     private let profile: Profile
+    var notificationCenter: NotificationProtocol
 
-    init(profile: Profile = AppContainer.shared.resolve()) {
+    init(profile: Profile = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.profile = profile
+        self.notificationCenter = notificationCenter
+        observeNotifications()
     }
 
     lazy var remoteTabsPanelProvider: Middleware<AppState> = { state, action in
         switch action {
+        case RemoteTabsPanelAction.panelDidAppear:
+            self.getSyncState()
         case RemoteTabsPanelAction.refreshTabs:
-            self.refreshTabs(updateCache: true)
+            self.getSyncState()
         default:
             break
         }
     }
 
     // MARK: - Internal Utilities
-
-    private func refreshTabs(updateCache: Bool = false) {
+    private func getSyncState() {
+        print("YRD getSyncState")
         ensureMainThread { [self] in
-            let hasSyncableAccount = profile.hasSyncableAccount()
-            guard hasSyncableAccount else {
+            guard profile.hasSyncableAccount() else {
                 store.dispatch(RemoteTabsPanelAction.refreshDidFail(.notLoggedIn))
                 return
             }
@@ -45,26 +50,56 @@ class RemoteTabsPanelMiddleware {
             // in the middle of a refresh (pull-to-refresh shouldn't trigger a new update etc.)
             store.dispatch(RemoteTabsPanelAction.refreshDidBegin)
 
-            self.profile.getCachedClientsAndTabs { [weak self] result in
-                guard let clientAndTabs = result else {
-                    store.dispatch(RemoteTabsPanelAction.refreshDidFail(.failedToSync))
-                    return
-                }
+            getRemoteTabs()
+        }
+    }
 
-                let results = RemoteTabsPanelCachedResults(clientAndTabs: clientAndTabs,
-                                                           isUpdating: updateCache)
-                store.dispatch(RemoteTabsPanelAction.cachedTabsAvailable(results))
-
-                if updateCache {
-                    self?.profile.getClientsAndTabs { result in
-                        guard let clientAndTabs = result else {
-                            store.dispatch(RemoteTabsPanelAction.refreshDidFail(.failedToSync))
-                            return
-                        }
-                        store.dispatch(RemoteTabsPanelAction.refreshDidSucceed(clientAndTabs))
-                    }
-                }
+    private func getRemoteTabs() {
+        print("YRD getRemoteTabs")
+        profile.getCachedClientsAndTabs { result in
+            guard let clientAndTabs = result else {
+                store.dispatch(RemoteTabsPanelAction.refreshDidFail(.failedToSync))
+                return
             }
+
+            let results = RemoteTabsPanelCachedResults(clientAndTabs: clientAndTabs,
+                                                       isUpdating: false)
+            store.dispatch(RemoteTabsPanelAction.cachedTabsAvailable(results))
+        }
+    }
+
+    private func getCacheResults() {
+        profile.getClientsAndTabs { result in
+            guard let clientAndTabs = result else {
+                store.dispatch(RemoteTabsPanelAction.refreshDidFail(.failedToSync))
+                return
+            }
+            store.dispatch(RemoteTabsPanelAction.refreshDidSucceed(clientAndTabs))
+        }
+    }
+
+    // MARK: - Notifications
+    private func observeNotifications() {
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self,
+                                       selector: #selector(notificationReceived),
+                                       name: .FirefoxAccountChanged,
+                                       object: nil)
+        notificationCenter.addObserver(self,
+                                       selector: #selector(notificationReceived),
+                                       name: .ProfileDidFinishSyncing,
+                                       object: nil)
+    }
+
+    @objc
+    func notificationReceived(_ notification: Notification) {
+        print("YRD firefoxAccountChanged \(notification.name)")
+        switch notification.name {
+        case .FirefoxAccountChanged:
+            getRemoteTabs()
+//        case .ProfileDidFinishSyncing:
+//            getCacheResults()
+        default: break
         }
     }
 }

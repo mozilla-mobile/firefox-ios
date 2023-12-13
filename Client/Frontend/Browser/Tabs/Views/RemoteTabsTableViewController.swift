@@ -108,17 +108,12 @@ class RemoteTabsTableViewController: UITableViewController,
             configureEmptyView()
         }
 
-        if state.refreshState != .refreshing {
+        if state.refreshState == .refreshing {
+            print("YRD start refreshing")
+            beginRefreshing()
+        } else {
+            print("YRD stop refreshing")
             endRefreshing()
-        }
-
-        // Add a refresh control if the user is logged in and the control
-        // was not added before. If the user is not logged in, remove any
-        // existing control.
-        if state.allowsRefresh && refreshControl == nil {
-            addRefreshControl()
-        } else if !state.allowsRefresh {
-            removeRefreshControl()
         }
 
         tableView.reloadData()
@@ -162,6 +157,13 @@ class RemoteTabsTableViewController: UITableViewController,
         }
         refreshControl?.beginRefreshing()
         remoteTabsPanel?.tableViewControllerDidPullToRefresh()
+    }
+
+    private func beginRefreshing() {
+        if state.allowsRefresh && refreshControl == nil {
+            addRefreshControl()
+            refreshControl?.beginRefreshing()
+        }
     }
 
     private func endRefreshing() {
