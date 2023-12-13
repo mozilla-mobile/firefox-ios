@@ -223,7 +223,7 @@ extension String {
             public static let Body = MZLocalizedString(
                 key: "ContextualHints.FeltDeletion.Body.v122",
                 tableName: "ContextualHints",
-                value: "Tap here to start a fresh private session. Delete your history, cookies  — everything.",
+                value: "Tap here to start a fresh private session. Delete your history, cookies — everything.",
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears to educate users about what the fire button in the toolbar does, when in private mode.")
         }
     }
@@ -4714,7 +4714,7 @@ extension String {
     public static let TabsButtonShowTabsLargeContentTitle = MZLocalizedString(
         key: "TabsButton.Accessibility.LargeContentTitle.v122",
         tableName: "TabLocation",
-        value: "Show Tabs, %@",
+        value: "Show Tabs: %@",
         comment: "Large content title for the tabs button. The argument is the number of open tabs or an infinity symbol. This title is displayed when using accessible font sizes is enabled.")
 }
 
