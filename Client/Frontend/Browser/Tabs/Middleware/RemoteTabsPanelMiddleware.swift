@@ -54,11 +54,11 @@ class RemoteTabsPanelMiddleware {
             // in the middle of a refresh (pull-to-refresh shouldn't trigger a new update etc.)
             store.dispatch(RemoteTabsPanelAction.refreshDidBegin)
 
-            getRemoteTabs()
+            getCachedRemoteTabs()
         }
     }
 
-    private func getRemoteTabs() {
+    private func geCachedtRemoteTabs() {
         profile.getCachedClientsAndTabs { result in
             guard let clientAndTabs = result else {
                 store.dispatch(RemoteTabsPanelAction.refreshDidFail(.failedToSync))
