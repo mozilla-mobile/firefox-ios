@@ -22,7 +22,7 @@ protocol BrowserDelegate: AnyObject {
                       overlayManager: OverlayModeManager)
 
     /// Show the private homepage to the user as part of felt privacy
-    func showPrivateHomepage()
+    func showPrivateHomepage(overlayManager: OverlayModeManager)
 
     /// Show the webview to navigate
     /// - Parameter webView: When nil, will show the already existing webview
