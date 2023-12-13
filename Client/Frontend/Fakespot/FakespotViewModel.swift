@@ -389,7 +389,7 @@ class FakespotViewModel {
                 )
             )
 
-            guard let product else { return }
+            guard product != nil else { return }
             if productAds.isEmpty {
                 recordSurfaceNoAdsAvailableTelemetry()
             } else {
