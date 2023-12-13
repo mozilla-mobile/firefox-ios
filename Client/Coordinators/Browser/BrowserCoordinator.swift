@@ -22,7 +22,6 @@ class BrowserCoordinator: BaseCoordinator,
                           TabManagerDelegate,
                           TabTrayCoordinatorDelegate,
                           PrivateHomepageDelegate {
-
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
