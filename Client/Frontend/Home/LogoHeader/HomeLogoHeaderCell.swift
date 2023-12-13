@@ -9,7 +9,6 @@ import UIKit
 
 class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
     private struct UX {
-        static let iPadAdjustment: CGFloat = -40
         struct Logo {
             static let iPhoneImageSize: CGFloat = 40
             static let iPadImageSize: CGFloat = 75
@@ -65,7 +64,7 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
         contentView.addSubview(containerView)
 
         // TODO: Felt Privacy - Private mode in Redux to follow
-        let isiPadAndPrivate = UIDevice.current.userInterfaceIdiom == .pad && false
+        let isiPadAndPrivate = UIDevice.current.userInterfaceIdiom == .pad && true
         let logoSizeConstant = isiPadAndPrivate ? UX.Logo.iPadImageSize : UX.Logo.iPhoneImageSize
         let topAnchorConstant = isiPadAndPrivate ? UX.Logo.iPadTopConstant : UX.Logo.iPhoneTopConstant
         let textImageWidthConstant = isiPadAndPrivate ? UX.TextImage.iPadWidth : UX.TextImage.iPhoneWidth
@@ -95,8 +94,7 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
         if isiPadAndPrivate {
             NSLayoutConstraint.activate([
                 containerView.centerXAnchor.constraint(
-                    equalTo: contentView.centerXAnchor,
-                    constant: UX.iPadAdjustment
+                    equalTo: contentView.centerXAnchor
                 ),
             ])
         } else {
