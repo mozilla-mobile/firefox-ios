@@ -255,9 +255,9 @@ extension String {
                 value: "Securely save this card?",
                 comment: "When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string is a title string of the overall message that asks the user if they would like Firefox to remember the card that is being used.")
             public static let Yes = MZLocalizedString(
-                key: "CreditCard.Settings.Yes.v112",
+                key: "CreditCard.Settings.Yes.v122",
                 tableName: "Settings",
-                value: "Yes",
+                value: "Update",
                 comment: "When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string asks users to confirm if they would like Firefox to remember the card that is being used.")
             public static let NotNow = MZLocalizedString(
                 key: "CreditCard.Settings.NotNow.v122",
@@ -265,9 +265,9 @@ extension String {
                 value: "Not Now",
                 comment: "When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string indicates to users that they can deny Firefox from remembering the card that is being used.")
             public static let UpdateThisCard = MZLocalizedString(
-                key: "CreditCard.Settings.UpdateThisCard.v112",
+                key: "CreditCard.Settings.UpdateThisCard.v122",
                 tableName: "Settings",
-                value: "Update this card?",
+                value: "Update card?",
                 comment: "When a user is in the process or has finished making a purchase with a remembered card, and if the credit card information doesn't match the contents of the stored information of that card, we show this string. We ask this user if they would like Firefox update the staled information of that credit card.")
             public static let ManageCards = MZLocalizedString(
                 key: "CreditCards.Settings.ManageCards.v112",
@@ -275,9 +275,9 @@ extension String {
                 value: "Manage cards",
                 comment: "When a user is in the process or has finished making a purchase, and has at least one card saved, we show this tappable string. This indicates to users that they can navigate to their list of stored credit cards in the app's credit card list screen.")
             public static let UseASavedCard = MZLocalizedString(
-                key: "CreditCards.Settings.UseASavedCard.v112",
+                key: "CreditCards.Settings.UseASavedCard.v122",
                 tableName: "Settings",
-                value: "Use a saved card?",
+                value: "Use saved card",
                 comment: "When a user is in the process of making a purchase, and has at least one saved card, we show this label used as a title. This indicates to the user that there are stored cards available for use on this pending purchase.")
             public static let UseSavedCardFromKeyboard = MZLocalizedString(
                 key: "CreditCards.Settings.UseSavedCardFromKeyboard.v112",
@@ -431,9 +431,9 @@ extension String {
         // Update Card
         public struct UpdateCreditCard {
             public static let MainTitle = MZLocalizedString(
-                key: "CreditCard.UpdateCard.MainTitle.v115",
+                key: "CreditCard.UpdateCard.MainTitle.v122",
                 tableName: "UpdateCard",
-                value: "Update this card?",
+                value: "Update card?",
                 comment: "This value is used as the title for the update card page")
             public static let ManageCardsButtonTitle = MZLocalizedString(
                 key: "CreditCard.UpdateCard.ManageCardsButtonTitle.v115",
@@ -441,9 +441,9 @@ extension String {
                 value: "Manage cards",
                 comment: "This value is used as the title for the Manage Cards button from the update credit card page")
             public static let MainButtonTitle = MZLocalizedString(
-                key: "CreditCard.UpdateCard.YesButtonTitle.v115",
+                key: "CreditCard.UpdateCard.YesButtonTitle.v122",
                 tableName: "UpdateCard",
-                value: "Yes",
+                value: "Update",
                 comment: "This value is used as the title for the button in the update credit card page")
             public static let SecondaryButtonTitle = MZLocalizedString(
                 key: "CreditCard.UpdateCard.NotNowButtonTitle.v115",
@@ -460,9 +460,9 @@ extension String {
         // Select Credit Card
         public struct SelectCreditCard {
             public static let MainTitle = MZLocalizedString(
-                key: "CreditCard.SelectCreditCard.MainTitle.v116",
+                key: "CreditCard.SelectCreditCard.MainTitle.v122",
                 tableName: "SelectCreditCard",
-                value: "Use a saved card?",
+                value: "Use saved card",
                 comment: "This value is used as the title for the select a credit card from list of available cards.")
         }
 
@@ -493,9 +493,9 @@ extension String {
                 value: "New Card Saved",
                 comment: "Label text that gets presented as a confirmation at the bottom of screen when credit card information gets saved successfully")
             public static let UpdatedCardLabel = MZLocalizedString(
-                key: "CreditCard.SnackBar.UpdatedCardLabel.v112",
+                key: "CreditCard.SnackBar.UpdatedCardLabel.v122",
                 tableName: "SnackBar",
-                value: "Card Information updated",
+                value: "Card Information Updated",
                 comment: "Label text that gets presented as a confirmation at the bottom of screen when credit card information gets updated successfully")
             public static let RemovedCardLabel = MZLocalizedString(
                 key: "CreditCard.SnackBar.RemovedCardLabel.v112",
@@ -5829,14 +5829,41 @@ extension String {
                 tableName: "Settings",
                 value: "Save Credit Cards to %@",
                 comment: "Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered.")
-
-
-
-
-
-
-
-
+            public static let UpdateThisCard = MZLocalizedString(
+                key: "CreditCard.Settings.UpdateThisCard.v112",
+                tableName: "Settings",
+                value: "Update this card?",
+                comment: "When a user is in the process or has finished making a purchase with a remembered card, and if the credit card information doesn't match the contents of the stored information of that card, we show this string. We ask this user if they would like Firefox update the staled information of that credit card.")
+            public static let MainTitleUpdate = MZLocalizedString(
+                key: "CreditCard.UpdateCard.MainTitle.v115",
+                tableName: "UpdateCard",
+                value: "Update this card?",
+                comment: "This value is used as the title for the update card page")
+            public static let Yes = MZLocalizedString(
+                key: "CreditCard.Settings.Yes.v112",
+                tableName: "Settings",
+                value: "Yes",
+                comment: "When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string asks users to confirm if they would like Firefox to remember the card that is being used.")
+            public static let MainButtonTitleUpdate = MZLocalizedString(
+                key: "CreditCard.UpdateCard.YesButtonTitle.v115",
+                tableName: "UpdateCard",
+                value: "Yes",
+                comment: "This value is used as the title for the button in the update credit card page")
+            public static let MainTitleSelect = MZLocalizedString(
+                key: "CreditCard.SelectCreditCard.MainTitle.v116",
+                tableName: "SelectCreditCard",
+                value: "Use a saved card?",
+                comment: "This value is used as the title for the select a credit card from list of available cards.")
+            public static let UseASavedCard = MZLocalizedString(
+                key: "CreditCards.Settings.UseASavedCard.v112",
+                tableName: "Settings",
+                value: "Use a saved card?",
+                comment: "When a user is in the process of making a purchase, and has at least one saved card, we show this label used as a title. This indicates to the user that there are stored cards available for use on this pending purchase.")
+            public static let UpdatedCardLabel = MZLocalizedString(
+                key: "CreditCard.SnackBar.UpdatedCardLabel.v112",
+                tableName: "SnackBar",
+                value: "Card Information updated",
+                comment: "Label text that gets presented as a confirmation at the bottom of screen when credit card information gets updated successfully")
         }
     }
 }
