@@ -20,7 +20,8 @@ class BrowserCoordinator: BaseCoordinator,
                           FakespotCoordinatorDelegate,
                           ParentCoordinatorDelegate,
                           TabManagerDelegate,
-                          TabTrayCoordinatorDelegate {
+                          TabTrayCoordinatorDelegate,
+                          PrivateHomepageDelegate {
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
@@ -114,13 +115,20 @@ class BrowserCoordinator: BaseCoordinator,
         screenshotService.screenshotableView = nil
     }
 
-    func showPrivateHomepage() {
-        let privateHomepageController = PrivateHomepageViewController()
+    func showPrivateHomepage(overlayManager: OverlayModeManager) {
+        let privateHomepageController = PrivateHomepageViewController(overlayManager: overlayManager)
+        privateHomepageController.parentCoordinator = self
         guard browserViewController.embedContent(privateHomepageController) else {
             logger.log("Unable to embed private homepage", level: .debug, category: .coordinator)
             return
         }
         self.privateViewController = privateHomepageController
+    }
+
+    // MARK: - PrivateHomepageDelegate
+
+    func homePanelDidRequestToOpenInNewTab(with url: URL, isPrivate: Bool, selectNewTab: Bool) {
+        browserViewController.homePanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate, selectNewTab: selectNewTab)
     }
 
     func show(webView: WKWebView) {

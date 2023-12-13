@@ -1021,7 +1021,7 @@ class BrowserViewController: UIViewController,
     /// it's the zero search page, aka when the home page is shown by clicking the url bar from a loaded web page.
     func showEmbeddedHomepage(inline: Bool) {
         guard let isPrivate = browserViewControllerState?.usePrivateHomepage, !isPrivate else {
-            browserDelegate?.showPrivateHomepage()
+            browserDelegate?.showPrivateHomepage(overlayManager: overlayManager)
             return
         }
 
