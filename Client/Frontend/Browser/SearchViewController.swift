@@ -73,9 +73,11 @@ class SearchViewController: SiteTableViewController,
 
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
     // scrollable container; searchEngineScrollViewContent contains the actual set of search engine buttons.
-    private let searchEngineContainerView = UIView()
-    private let searchEngineScrollView = ButtonScrollView()
-    private let searchEngineScrollViewContent = UIView()
+    private let searchEngineContainerView: UIView = .build()
+    private let searchEngineScrollView: ButtonScrollView = .build()
+    private let searchEngineScrollViewContent: UIView = .build()
+    private var bottomConstraintWithKeyboard: NSLayoutConstraint?
+    private var bottomConstraintWithoutKeyboard: NSLayoutConstraint?
 
     private lazy var bookmarkedBadge: UIImage = {
         return UIImage(named: StandardImageIdentifiers.Medium.bookmarkBadgeFillBlue50)!
@@ -141,9 +143,11 @@ class SearchViewController: SiteTableViewController,
         layoutSearchEngineScrollView()
         layoutSearchEngineScrollViewContent()
 
-        searchEngineContainerView.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalToSuperview()
-        }
+        NSLayoutConstraint.activate([
+            searchEngineContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            searchEngineContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            searchEngineContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
 
         setupNotifications(forObserver: self, observing: [.DynamicFontChanged,
                                                           .SearchSettingsChanged])
@@ -202,30 +206,40 @@ class SearchViewController: SiteTableViewController,
 
     private func layoutSearchEngineScrollView() {
         let keyboardHeight = KeyboardHelper.defaultHelper.currentState?.intersectionHeightForView(self.view) ?? 0
-        searchEngineScrollView.snp.remakeConstraints { make in
-            make.leading.trailing.top.equalToSuperview()
-            if keyboardHeight == 0 {
-                make.bottom.equalTo(view.safeArea.bottom)
-            } else {
-                let offset = viewModel.isBottomSearchBar ? 0 : keyboardHeight
-                make.bottom.equalTo(view).offset(-offset)
-            }
+
+        NSLayoutConstraint.activate([
+            searchEngineScrollView.leadingAnchor.constraint(equalTo: searchEngineContainerView.leadingAnchor),
+            searchEngineScrollView.trailingAnchor.constraint(equalTo: searchEngineContainerView.trailingAnchor),
+            searchEngineScrollView.topAnchor.constraint(equalTo: searchEngineContainerView.topAnchor)
+        ])
+
+        // Remove existing keyboard-related bottom constraints (if any)
+        bottomConstraintWithKeyboard?.isActive = false
+        bottomConstraintWithoutKeyboard?.isActive = false
+
+        if keyboardHeight == 0 {
+            bottomConstraintWithoutKeyboard = searchEngineScrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            bottomConstraintWithoutKeyboard?.isActive = true
+        } else {
+            let offset = viewModel.isBottomSearchBar ? 0 : keyboardHeight
+            bottomConstraintWithKeyboard = searchEngineScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -offset)
+            bottomConstraintWithKeyboard?.isActive = true
         }
     }
 
     private func layoutSearchEngineScrollViewContent() {
-        searchEngineScrollViewContent.snp.remakeConstraints { make in
-            make.center.equalTo(self.searchEngineScrollView).priority(10)
-            // left-align the engines on iphones, center on ipad
-            if UIScreen.main.traitCollection.horizontalSizeClass == .compact {
-                make.leading.equalTo(self.searchEngineScrollView).priority(1000)
-            } else {
-                make.leading.greaterThanOrEqualTo(self.searchEngineScrollView).priority(1000)
-            }
-            make.trailing.lessThanOrEqualTo(self.searchEngineScrollView).priority(1000)
-            make.top.equalTo(self.searchEngineScrollView)
-            make.bottom.equalTo(self.searchEngineScrollView)
-        }
+        NSLayoutConstraint.activate([
+            searchEngineScrollViewContent.centerXAnchor.constraint(equalTo: searchEngineScrollView.centerXAnchor).priority(.defaultLow),
+            searchEngineScrollViewContent.centerYAnchor.constraint(equalTo: searchEngineScrollView.centerYAnchor).priority(.defaultLow),
+            searchEngineScrollViewContent.trailingAnchor.constraint(lessThanOrEqualTo: searchEngineScrollView.trailingAnchor).priority(.defaultHigh),
+            searchEngineScrollViewContent.topAnchor.constraint(equalTo: searchEngineScrollView.topAnchor),
+            searchEngineScrollViewContent.bottomAnchor.constraint(equalTo: searchEngineScrollView.bottomAnchor)
+        ])
+
+        // left-align the engines on iphones, center on ipad
+        let isCompact = UIScreen.main.traitCollection.horizontalSizeClass == .compact
+        searchEngineScrollViewContent.leadingAnchor.constraint(equalTo: searchEngineScrollView.leadingAnchor).priority(.defaultHigh).isActive = isCompact
+        searchEngineScrollViewContent.leadingAnchor.constraint(greaterThanOrEqualTo: searchEngineScrollView.leadingAnchor).priority(.defaultHigh).isActive = !isCompact
     }
 
     var searchEngines: SearchEngines? {
@@ -288,35 +302,38 @@ class SearchViewController: SiteTableViewController,
 
     func reloadSearchEngines() {
         searchEngineScrollViewContent.subviews.forEach { $0.removeFromSuperview() }
-        var leftEdge = searchEngineScrollViewContent.snp.leading
+        var leftEdge = searchEngineScrollViewContent.leadingAnchor
 
         // search settings icon
-        let searchButton = UIButton()
+        let searchButton: UIButton = .build()
         searchButton.setImage(UIImage(named: "quickSearch"), for: [])
         searchButton.imageView?.contentMode = .scaleAspectFit
         searchButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
         searchButton.addTarget(self, action: #selector(didClickSearchButton), for: .touchUpInside)
         searchButton.accessibilityLabel = String(format: .SearchSettingsAccessibilityLabel)
 
-        searchButton.imageView?.snp.makeConstraints { make in
-            make.width.height.equalTo(20)
-            return
+        if let imageView = searchButton.imageView {
+            NSLayoutConstraint.activate([
+                imageView.widthAnchor.constraint(equalToConstant: 20),
+                imageView.heightAnchor.constraint(equalToConstant: 20)
+            ])
         }
 
         searchEngineScrollViewContent.addSubview(searchButton)
-        searchButton.snp.makeConstraints { make in
-            make.width.height.equalTo(SearchViewControllerUX.FaviconSize)
-            // offset the left edge to align with search results
-            make.leading.equalTo(leftEdge).offset(16)
-            make.top.equalTo(searchEngineScrollViewContent).offset(SearchViewControllerUX.SuggestionMargin)
-            make.bottom.equalTo(searchEngineScrollViewContent).offset(-SearchViewControllerUX.SuggestionMargin)
-        }
 
-        // search engines
-        leftEdge = searchButton.snp.trailing
+        NSLayoutConstraint.activate([
+            searchButton.widthAnchor.constraint(equalToConstant: SearchViewControllerUX.FaviconSize),
+            searchButton.heightAnchor.constraint(equalToConstant: SearchViewControllerUX.FaviconSize),
+            // offset the left edge to align with search results
+            searchButton.leadingAnchor.constraint(equalTo: leftEdge, constant: 16),
+            searchButton.topAnchor.constraint(equalTo: searchEngineScrollViewContent.topAnchor, constant: SearchViewControllerUX.SuggestionMargin),
+            searchButton.bottomAnchor.constraint(equalTo: searchEngineScrollViewContent.bottomAnchor, constant: -SearchViewControllerUX.SuggestionMargin)
+        ])
+
+        leftEdge = searchButton.trailingAnchor
 
         for engine in quickSearchEngines {
-            let engineButton = UIButton()
+            let engineButton: UIButton = .build()
             engineButton.setImage(engine.image, for: [])
             engineButton.imageView?.contentMode = .scaleAspectFit
             engineButton.imageView?.layer.cornerRadius = 4
@@ -324,23 +341,27 @@ class SearchViewController: SiteTableViewController,
             engineButton.addTarget(self, action: #selector(didSelectEngine), for: .touchUpInside)
             engineButton.accessibilityLabel = String(format: .SearchSearchEngineAccessibilityLabel, engine.shortName)
 
-            engineButton.imageView?.snp.makeConstraints { make in
-                make.width.height.equalTo(SearchViewControllerUX.FaviconSize)
-                return
+            if let imageView = engineButton.imageView {
+                NSLayoutConstraint.activate([
+                    imageView.widthAnchor.constraint(equalToConstant: SearchViewControllerUX.FaviconSize),
+                    imageView.heightAnchor.constraint(equalToConstant: SearchViewControllerUX.FaviconSize)
+                ])
             }
 
             searchEngineScrollViewContent.addSubview(engineButton)
-            engineButton.snp.makeConstraints { make in
-                make.width.equalTo(SearchViewControllerUX.EngineButtonWidth)
-                make.height.equalTo(SearchViewControllerUX.EngineButtonHeight)
-                make.leading.equalTo(leftEdge)
-                make.top.equalTo(self.searchEngineScrollViewContent)
-                make.bottom.equalTo(self.searchEngineScrollViewContent)
-                if engine === self.searchEngines?.quickSearchEngines.last {
-                    make.trailing.equalTo(self.searchEngineScrollViewContent)
-                }
+            NSLayoutConstraint.activate([
+                engineButton.widthAnchor.constraint(equalToConstant: CGFloat(SearchViewControllerUX.EngineButtonWidth)),
+                engineButton.heightAnchor.constraint(equalToConstant: CGFloat(SearchViewControllerUX.EngineButtonHeight)),
+                engineButton.leadingAnchor.constraint(equalTo: leftEdge),
+                engineButton.topAnchor.constraint(equalTo: searchEngineScrollViewContent.topAnchor),
+                engineButton.bottomAnchor.constraint(equalTo: searchEngineScrollViewContent.bottomAnchor)
+            ])
+
+            if engine === self.searchEngines?.quickSearchEngines.last {
+                engineButton.trailingAnchor.constraint(equalTo: searchEngineScrollViewContent.trailingAnchor).isActive = true
             }
-            leftEdge = engineButton.snp.trailing
+
+            leftEdge = engineButton.trailingAnchor
         }
     }
 

@@ -132,14 +132,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
             button.addTarget(self, action: #selector(moreInfoTapped), for: .touchUpInside)
             button.isHidden = false
 
-            defaultFooter.addSubview(button)
-
-            button.translatesAutoresizingMaskIntoConstraints = false
-
-            NSLayoutConstraint.activate([
-                button.topAnchor.constraint(equalTo: defaultFooter.titleLabel.bottomAnchor),
-                button.leadingAnchor.constraint(equalTo: defaultFooter.titleLabel.leadingAnchor)
-            ])
+            defaultFooter.stackView.addArrangedSubview(button)
 
             return defaultFooter
         }

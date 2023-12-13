@@ -53,10 +53,10 @@ protocol FakespotClientType {
     /// - Parameters:
     ///   - eventName: The name of the advertising event.
     ///   - eventSource: The source of the advertising event.
-    ///   - aidvs: An array of strings representing additional identifiers for the event.
+    ///   - aid: A string representing identifier for the event.
     /// - Returns: An `AdEventsResponse` object containing the response data.
     /// - Throws: `FakeSpotClientError.invalidURL` if the ad recording endpoint URL is invalid or not set.
-    func reportAdEvent(eventName: String, eventSource: String, aidvs: [String]) async throws -> AdEventsResponse
+    func reportAdEvent(eventName: FakespotAdsEvent, eventSource: String, aid: String) async throws -> AdEventsResponse
 }
 
 /// An enumeration representing different environments for the Fakespot client.
@@ -249,18 +249,28 @@ struct FakespotClient: FakespotClientType {
     }
 
     /// Reports an advertising event with specified details to the API
-    func reportAdEvent(eventName: String, eventSource: String, aidvs: [String]) async throws -> AdEventsResponse {
+    func reportAdEvent(eventName: FakespotAdsEvent, eventSource: String, aid: String) async throws -> AdEventsResponse {
         // Define the API endpoint URL
         guard let endpointURL = environment.adRecordingEndpoint else {
             throw FakeSpotClientError.invalidURL
         }
 
-        // Prepare the request body
-        let requestBody: [String: Any] = [
-            "event_name": eventName,
-            "event_source": eventSource,
-            "aidvs": aidvs
-        ]
+        let requestBody: [String: Any]
+
+        switch eventName {
+        case .trustedDealsLinkClicked:
+            requestBody = [
+                "event_name": eventName.rawValue,
+                "event_source": eventSource,
+                "aid": aid
+            ]
+        case .trustedDealsImpression, .trustedDealsPlacement:
+            requestBody = [
+                "event_name": eventName.rawValue,
+                "event_source": eventSource,
+                "aidvs": [aid]
+            ]
+        }
 
         // Perform the async API request and get the data
         return try await fetch(AdEventsResponse.self, url: endpointURL, requestBody: requestBody)
