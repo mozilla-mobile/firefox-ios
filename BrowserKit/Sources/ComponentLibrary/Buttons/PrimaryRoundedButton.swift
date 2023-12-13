@@ -20,7 +20,8 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
         )
     }
 
-    private var backgroundColorForState: ((UIControl.State) -> UIColor)?
+    private var backgroundColorNormal: UIColor = .clear
+    private var backgroundColorHighlighted: UIColor = .clear
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,17 +35,7 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
     }
 
     override public func updateConfiguration() {
-        guard var updatedConfiguration = configuration else {
-            return
-        }
-
-        var updatedBackground = updatedConfiguration.background
-        let backgroundColor = backgroundColorForState?(self.state) ?? UIColor.clear
-        updatedBackground.backgroundColorTransformer = UIConfigurationColorTransformer { color in
-            return backgroundColor
-        }
-        updatedConfiguration.background = updatedBackground
-        configuration = updatedConfiguration
+        updateBackgroundColor()
     }
 
     public func configure(viewModel: PrimaryRoundedButtonViewModel) {
@@ -82,23 +73,6 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
             return
         }
 
-        var updatedBackground = updatedConfiguration.background
-
-        backgroundColorForState = { state in
-            switch state {
-            case [.highlighted]:
-                return theme.colors.actionPrimaryHover
-            default:
-                return theme.colors.actionPrimary
-            }
-        }
-
-        let backgroundColor = backgroundColorForState?(self.state) ?? UIColor.clear
-        updatedBackground.backgroundColorTransformer = UIConfigurationColorTransformer { color in
-            return backgroundColor
-        }
-        updatedConfiguration.background = updatedBackground
-
         let foregroundColor = theme.colors.textInverted
         updatedConfiguration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var container = incoming
@@ -109,6 +83,32 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
             )
             return container
         }
+        configuration = updatedConfiguration
+
+        backgroundColorNormal = theme.colors.actionPrimary
+        backgroundColorHighlighted = theme.colors.actionPrimaryHover
+        updateBackgroundColor()
+    }
+
+    private func updateBackgroundColor() {
+        guard var updatedConfiguration = configuration else {
+            return
+        }
+
+        var updatedBackground = updatedConfiguration.background
+        var updatedBackgroundColor: UIColor
+
+        switch state {
+        case [.highlighted]:
+            updatedBackgroundColor = backgroundColorHighlighted
+        default:
+            updatedBackgroundColor = backgroundColorNormal
+        }
+
+        updatedBackground.backgroundColorTransformer = UIConfigurationColorTransformer { color in
+            return updatedBackgroundColor
+        }
+        updatedConfiguration.background = updatedBackground
         configuration = updatedConfiguration
     }
 }
