@@ -8,7 +8,7 @@ import Storage
 @testable import Client
 
 class DependencyHelperMock {
-    func bootstrapDependencies() {
+    func bootstrapDependencies(injectedTabManager: TabManager? = nil) {
         AppContainer.shared.reset()
 
         let profile: Client.Profile = BrowserProfile(
@@ -16,7 +16,7 @@ class DependencyHelperMock {
         )
         AppContainer.shared.register(service: profile)
 
-        let tabManager: TabManager = TabManagerImplementation(
+        let tabManager: TabManager = injectedTabManager ?? TabManagerImplementation(
             profile: profile,
             imageStore: DefaultDiskImageStore(
                 files: profile.files,

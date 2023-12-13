@@ -262,8 +262,9 @@ class TabTrayViewController: UIViewController,
     func newState(state: TabTrayState) {
         tabTrayState = state
 
+        updateNormalTabsCounter()
         if tabTrayState.shouldDismiss {
-            dismissVC()
+            delegate?.didFinish()
         }
     }
 
@@ -308,6 +309,13 @@ class TabTrayViewController: UIViewController,
 
     private func updateTitle() {
         navigationItem.title = tabTrayState.navigationTitle
+    }
+
+    private func updateNormalTabsCounter() {
+        countLabel.text = tabTrayState.normalTabsCount
+        guard !isRegularLayout,
+              let image = UIImage(named: ImageIdentifiers.navTabCounter) else { return }
+        segmentedControl.setImage(image.overlayWith(image: countLabel), forSegmentAt: 0)
     }
 
     private func setupForiPad() {

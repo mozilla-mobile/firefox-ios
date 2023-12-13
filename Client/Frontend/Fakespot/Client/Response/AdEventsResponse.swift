@@ -4,6 +4,4 @@
 
 import Foundation
 
-struct AdEventsResponse: Codable {
-    var additionalProperties: [String: String]
-}
+typealias AdEventsResponse = [String: String]

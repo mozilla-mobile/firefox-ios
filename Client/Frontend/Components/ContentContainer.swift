@@ -7,6 +7,7 @@ import UIKit
 enum ContentType {
     case webview
     case homepage
+    case privateHomepage
 }
 
 protocol ContentContainable: UIViewController {
@@ -26,6 +27,10 @@ class ContentContainer: UIView {
         return type == .homepage
     }
 
+    var hasPrivateHomepage: Bool {
+        return type == .privateHomepage
+    }
+
     /// Determine if the content can be added, making sure we only add once
     /// - Parameters:
     ///   - viewController: The view controller to add to the container
@@ -34,6 +39,8 @@ class ContentContainer: UIView {
         switch type {
         case .homepage:
             return !(content is HomepageViewController)
+        case .privateHomepage:
+            return !(content is PrivateHomepageViewController)
         case .webview:
             return !(content is WebviewViewController)
         case .none:
@@ -61,7 +68,7 @@ class ContentContainer: UIView {
     private func removePreviousContent() {
         // Only remove previous content when it's the homepage. We're not remving the webview controller for now
         // since if it's not loaded, the webview doesn't layout it's WKCompositingView which result in black screen
-        guard type == .homepage else { return }
+        guard hasHomepage || hasPrivateHomepage else { return }
         contentController?.willMove(toParent: nil)
         contentController?.view.removeFromSuperview()
         contentController?.removeFromParent()
