@@ -8,11 +8,10 @@ import Common
 /// General window management class that provides some basic coordination and
 /// state management for multiple windows shared across a single running app.
 protocol WindowManager {
-
     /// The UUID of the active window (there is always at least 1, except in
     /// the earliest stages of app startup lifecycle)
     var activeWindow: WindowUUID { get set }
-    
+
     /// A collection of all open windows and their related metadata.
     var windows: [WindowUUID: AppWindowInfo] { get }
 
@@ -20,10 +19,10 @@ protocol WindowManager {
     /// - Parameter windowInfo: the information for the window.
     /// - Parameter uuid: the window's unique ID.
     func newBrowserWindowConfigured(_ windowInfo: AppWindowInfo, uuid: WindowUUID)
-    
+
     /// Convenience. Returns the TabManager for a specific window.
     func tabManager(for windowUUID: WindowUUID) -> TabManager
-    
+
     /// Signals the WindowManager that a window was closed.
     /// - Parameter uuid: the ID of the window.
     func windowDidClose(uuid: WindowUUID)
