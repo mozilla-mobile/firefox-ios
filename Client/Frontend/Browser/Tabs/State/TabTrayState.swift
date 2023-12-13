@@ -88,7 +88,7 @@ struct TabTrayState: ScreenState, Equatable {
                                 normalTabsCount: state.normalTabsCount,
                                 hasSyncableAccount: state.hasSyncableAccount,
                                 shouldDismiss: true)
-        case TabTrayAction.syncStateChanged(let isSyncAccountEnabled):
+        case TabTrayAction.firefoxAccountChanged(let isSyncAccountEnabled):
                 return TabTrayState(isPrivateMode: state.isPrivateMode,
                                     selectedPanel: state.selectedPanel,
                                     normalTabsCount: state.normalTabsCount,

@@ -97,17 +97,9 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
                                                 showingEmptyState: reason)
             return newState
         case RemoteTabsPanelAction.refreshDidSucceed(let newClientAndTabs):
-            print("YRD refreshDidSucceed \(newClientAndTabs.count)")
             let newState = RemoteTabsPanelState(refreshState: .idle,
                                                 allowsRefresh: true,
                                                 clientAndTabs: newClientAndTabs,
-                                                showingEmptyState: nil)
-            return newState
-        case RemoteTabsPanelAction.cachedTabsAvailable(let cachedResults):
-            print("YRD cachedTabsAvailable \(cachedResults.clientAndTabs.count)")
-            let newState = RemoteTabsPanelState(refreshState: .idle,
-                                                allowsRefresh: true,
-                                                clientAndTabs: cachedResults.clientAndTabs,
                                                 showingEmptyState: nil)
             return newState
         default:

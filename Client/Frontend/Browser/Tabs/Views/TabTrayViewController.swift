@@ -159,9 +159,6 @@ class TabTrayViewController: UIViewController,
     }()
 
     private lazy var bottomToolbarItemsForSync: [UIBarButtonItem] = {
-        print("YRD bottomToolbarItemsForSync \(tabTrayState.hasSyncableAccount)")
-        guard tabTrayState.hasSyncableAccount else { return [] }
-
         return [flexibleSpace, syncTabButton]
     }()
 
@@ -257,7 +254,6 @@ class TabTrayViewController: UIViewController,
     func newState(state: TabTrayState) {
         tabTrayState = state
 
-        print("YRD hasSync \(state.hasSyncableAccount)")
         reloadView()
         if tabTrayState.shouldDismiss {
             delegate?.didFinish()
@@ -344,8 +340,13 @@ class TabTrayViewController: UIViewController,
             return
         }
 
-        let toolbarItems = tabTrayState.isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
+        let toolbarItems = tabTrayState.isSyncTabsPanel ? bottomToolBarForSync() : bottomToolbarItems
         setToolbarItems(toolbarItems, animated: true)
+    }
+
+    private func bottomToolBarForSync() -> [UIBarButtonItem] {
+        guard tabTrayState.hasSyncableAccount else { return [] }
+        return bottomToolbarItemsForSync
     }
 
     private func setupToolbarForIpad() {

@@ -51,6 +51,26 @@ class RemoteTabsTableViewController: UITableViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        setupLayout()
+        listenForThemeChange(view)
+        applyTheme()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        (navigationController as? ThemedNavigationController)?.applyTheme()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if refreshControl != nil {
+            removeRefreshControl()
+        }
+    }
+
+    // MARK: - UI
+
+    private func setupLayout() {
         tableView.addGestureRecognizer(longPressRecognizer)
         tableView.register(SiteTableViewHeader.self,
                            forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.cellIdentifier)
@@ -76,47 +96,33 @@ class RemoteTabsTableViewController: UITableViewController,
             emptyView.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
         ])
 
-        listenForThemeChange(view)
-        applyTheme()
-
         reloadUI()
+        addRefreshControl()
     }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        (navigationController as? ThemedNavigationController)?.applyTheme()
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        if refreshControl != nil {
-            removeRefreshControl()
-        }
-    }
-
-    // MARK: - UI
 
     func newState(state: RemoteTabsPanelState) {
         self.state = state
         reloadUI()
     }
 
-    func reloadUI() {
+    private func reloadUI() {
         emptyView.isHidden = !isShowingEmptyView
 
-        if isShowingEmptyView {
+        guard !isShowingEmptyView else {
             configureEmptyView()
+            return
         }
 
-        if state.refreshState == .refreshing {
-            print("YRD start refreshing")
-            beginRefreshing()
-        } else {
-            print("YRD stop refreshing")
-            endRefreshing()
-        }
-
+        updateRefreshControl()
         tableView.reloadData()
+    }
+
+    private func updateRefreshControl() {
+        if state.refreshState == .refreshing {
+            refreshControl?.beginRefreshing()
+        } else {
+            refreshControl?.endRefreshing()
+        }
     }
 
     func applyTheme() {
