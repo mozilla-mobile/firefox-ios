@@ -118,9 +118,9 @@ extension String {
                 value: "Authenticate to access passwords.",
                 comment: "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks the user to enter their device passcode to access the protected screen.")
             public static let UniversalAuthenticationReasonV2 = MZLocalizedString(
-                key: "Biometry.Screen.UniversalAuthenticationReasonV2.v116",
+                key: "Biometry.Screen.UniversalAuthenticationReason.v122",
                 tableName: "BiometricAuthentication",
-                value: "Authenticate to access your saved logins and encrypted cards.",
+                value: "Authenticate to access your saved passwords and payment methods.",
                 comment: "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks the user to enter their device passcode to access the protected screen for logins and encrypted cards.")
         }
     }
@@ -348,14 +348,14 @@ extension String {
                 value: "View Card",
                 comment: "Title label for the view where user can view their credit card info")
             public static let AddCreditCardTitle = MZLocalizedString(
-                key: "CreditCard.EditCard.AddCreditCardTitle.v113",
+                key: "CreditCard.EditCard.AddCreditCardTitle.v122",
                 tableName: "EditCard",
-                value: "Add Credit Card",
+                value: "Add Card",
                 comment: "Title label for the view where user can add their credit card info")
             public static let EditCreditCardTitle = MZLocalizedString(
-                key: "CreditCard.EditCard.EditCreditCardTitle.v113",
+                key: "CreditCard.EditCard.EditCreditCardTitle.v122",
                 tableName: "Edit Card",
-                value: "Edit Credit Card",
+                value: "Edit Card",
                 comment: "Title label for the view where user can edit their credit card info")
             public static let NameOnCardTitle = MZLocalizedString(
                 key: "CreditCard.EditCard.NameOnCardTitle.v112",
@@ -378,9 +378,9 @@ extension String {
                 value: "Remove Card",
                 comment: "Title label for button that allows user to remove their saved credit card.")
             public static let ToggleToAllowAutofillTitle = MZLocalizedString(
-                key: "CreditCard.EditCard.ToggleToAllowAutofillTitle.v112",
+                key: "CreditCard.EditCard.ToggleToAllowAutofillTitle.v122",
                 tableName: "EditCard",
-                value: "Save and Autofill Cards",
+                value: "Save and Fill Payment Methods",
                 comment: "Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages.")
             public static let SavedCardListTitle = MZLocalizedString(
                 key: "CreditCard.EditCard.SavedCardListTitle.v112",
@@ -507,9 +507,9 @@ extension String {
         // System alert actions and descriptions
         public struct Alert {
             public static let RemoveCardTitle = MZLocalizedString(
-                key: "CreditCard.SnackBar.RemoveCardTitle.v112",
+                key: "CreditCard.SnackBar.RemoveCardTitle.v122",
                 tableName: "Alert",
-                value: "Remove This Card?",
+                value: "Remove Card?",
                 comment: "Title label for the dialog box that gets presented as a confirmation to ask user if they would like to remove the saved credit card")
 
             public static let RemoveCardSublabel = MZLocalizedString(
@@ -2240,9 +2240,9 @@ extension String {
         value: "Passwords",
         comment: "Toggle passwords syncing setting, in the Settings > Sync Data menu of the app.")
     public static let FirefoxSyncCreditCardsEngine = MZLocalizedString(
-        key: "FirefoxSync.CreditCardsEngine.v115",
+        key: "FirefoxSync.CreditCardsEngine.v122",
         tableName: "FirefoxSync",
-        value: "Credit Cards",
+        value: "Payment Methods",
         comment: "Toggle for credit cards syncing setting")
 }
 
@@ -5768,7 +5768,36 @@ extension String {
         tableName: "LoginManager",
         value: nil,
         comment: "Prompt option for cancelling out of deletion")
-
+            public static let RemoveCardTitle = MZLocalizedString(
+                key: "CreditCard.SnackBar.RemoveCardTitle.v112",
+                tableName: "Alert",
+                value: "Remove This Card?",
+                comment: "Title label for the dialog box that gets presented as a confirmation to ask user if they would like to remove the saved credit card")
+            public static let UniversalAuthenticationReasonV2 = MZLocalizedString(
+                key: "Biometry.Screen.UniversalAuthenticationReasonV2.v116",
+                tableName: "BiometricAuthentication",
+                value: "Authenticate to access your saved logins and encrypted cards.",
+                comment: "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks the user to enter their device passcode to access the protected screen for logins and encrypted cards.")
+            public static let EditCreditCardTitle = MZLocalizedString(
+                key: "CreditCard.EditCard.EditCreditCardTitle.v113",
+                tableName: "Edit Card",
+                value: "Edit Credit Card",
+                comment: "Title label for the view where user can edit their credit card info")
+            public static let AddCreditCardTitle = MZLocalizedString(
+                key: "CreditCard.EditCard.AddCreditCardTitle.v113",
+                tableName: "EditCard",
+                value: "Add Credit Card",
+                comment: "Title label for the view where user can add their credit card info")
+            public static let ToggleToAllowAutofillTitle = MZLocalizedString(
+                key: "CreditCard.EditCard.ToggleToAllowAutofillTitle.v112",
+                tableName: "EditCard",
+                value: "Save and Autofill Cards",
+                comment: "Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages.")
+    public static let FirefoxSyncCreditCardsEngine = MZLocalizedString(
+        key: "FirefoxSync.CreditCardsEngine.v115",
+        tableName: "FirefoxSync",
+        value: "Credit Cards",
+        comment: "Toggle for credit cards syncing setting")
 
 
 
