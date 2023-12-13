@@ -19,14 +19,14 @@ We also tag recommended bugs for contributions with [help wanted](https://github
 Main Branch
 ----------------
 
-This branch works with Xcode 15.0.1 and supports iOS 13.0 and newer.
+This branch works with Xcode 15.1 and supports iOS 13.0 and newer.
 
 Pull requests should be submitted with `main` as the base branch.
 
 Build Instructions
 ------------------
 
-1. Install Xcode 15.0.1 [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
+1. Install Xcode 15.1 [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
 2. Clone the repository:
 
   ```shell
