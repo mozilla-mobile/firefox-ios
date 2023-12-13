@@ -67,10 +67,7 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.delegate = self
         tableView.tableFooterView = UIView()
-
-        if #available(iOS 15.0, *) {
-            tableView.sectionHeaderTopPadding = 0
-        }
+        tableView.sectionHeaderTopPadding = 0
 
         // Setup the Search Controller
         searchController.searchBar.autocapitalizationType = .none

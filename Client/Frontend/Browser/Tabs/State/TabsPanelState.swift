@@ -67,7 +67,7 @@ struct TabsPanelState: ScreenState, Equatable {
             return TabsPanelState(isPrivateMode: state.isPrivateMode,
                                   tabs: state.tabs,
                                   inactiveTabs: inactiveTabs,
-                                  isInactiveTabsExpanded: !inactiveTabs.isEmpty)
+                                  isInactiveTabsExpanded: state.isInactiveTabsExpanded)
         default: return state
         }
     }

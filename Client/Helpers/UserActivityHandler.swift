@@ -89,7 +89,7 @@ extension UserActivityHandler {
         let spotlightConfig = FxNimbus.shared.features.spotlightSearch.value()
         if !spotlightConfig.enabled { return }
 
-        let attributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeText as String)
+        let attributeSet = CSSearchableItemAttributeSet(itemContentType: UTType.text.identifier)
         attributeSet.title = page.title
 
         switch spotlightConfig.searchableContent {

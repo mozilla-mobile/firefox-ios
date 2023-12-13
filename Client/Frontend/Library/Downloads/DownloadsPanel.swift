@@ -42,9 +42,8 @@ class DownloadsPanel: UIViewController,
         tableView.keyboardDismissMode = .onDrag
         tableView.accessibilityIdentifier = "DownloadsTable"
         tableView.cellLayoutMarginsFollowReadableWidth = false
-        if #available(iOS 15.0, *) {
-            tableView.sectionHeaderTopPadding = 0.0
-        }
+        tableView.sectionHeaderTopPadding = 0.0
+
         // Set an empty footer to prevent empty cells from appearing in the list.
         tableView.tableFooterView = UIView()
     }

@@ -14,8 +14,8 @@ private struct RecentlyClosedPanelUX {
 }
 
 protocol RecentlyClosedPanelDelegate: AnyObject {
-    func openRecentlyClosedSiteInSameTab(_ url: URL)
     func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool)
+    func openRecentlyClosedSiteInSameTab(_ url: URL)
 }
 
 class RecentlyClosedTabsPanel: UIViewController, LibraryPanel, Themeable {
@@ -129,7 +129,8 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         // is avoided by making sure we wait for our expected tab above to be selected before
         // notifying our library panel delegate. [FXIOS-7741]
 
-        AppEventQueue.wait(for: .selectTab(url)) {
+        let tabWindowUUID = windowManager.activeWindow
+        AppEventQueue.wait(for: .selectTab(url, tabWindowUUID)) {
             let visitType = VisitType.typed    // Means History, too.
             self.libraryPanelDelegate?.libraryPanel(didSelectURL: url, visitType: visitType)
         }

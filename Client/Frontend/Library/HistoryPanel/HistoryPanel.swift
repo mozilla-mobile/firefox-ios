@@ -122,9 +122,7 @@ class HistoryPanel: UIViewController,
         tableView.register(SiteTableViewHeader.self,
                            forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.cellIdentifier)
 
-        if #available(iOS 15.0, *) {
-            tableView.sectionHeaderTopPadding = 0
-        }
+        tableView.sectionHeaderTopPadding = 0
     }
 
     lazy var longPressRecognizer: UILongPressGestureRecognizer = {

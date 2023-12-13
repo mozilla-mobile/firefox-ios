@@ -410,10 +410,6 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         return pragma("user_version", factory: IntFactory) ?? 0
     }
 
-    open var cipherVersion: String? {
-        return pragma("cipher_version", factory: StringFactory)
-    }
-
     fileprivate var sqliteDB: OpaquePointer?
     fileprivate let filename: String
     fileprivate let flags: SwiftData.Flags
@@ -580,10 +576,6 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         // we can set the page size right now and save a vacuum.
         //
         // For where these values come from, see Bug 1213623.
-        //
-        // Note that sqlcipher uses cipher_page_size instead, but we don't set that
-        // because it needs to be set from day one.
-
         let desiredPageSize = 32 * 1024
         let _ = pragma("page_size=\(desiredPageSize)", factory: IntFactory)
 
@@ -958,19 +950,6 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         if status != SQLITE_OK {
             return createErr("During: Opening Database with Flags", status: Int(status))
         }
-        guard let _ = self.cipherVersion else {
-            // XXX: Temporarily remove this assertion until we find a way to
-            // reuse the copy of sqlcipher that comes with the Rust components.
-            // return createErr("Expected SQLCipher, got SQLite", status: Int(-1))
-            logger.log("Database \(self.filename) was not opened with SQLCipher",
-                       level: .warning,
-                       category: .storage)
-            return nil
-        }
-
-        // Since we're using SQLCipher, ensure that `cipher_memory_security` is
-        // turned off. Otherwise, there is a HUGE performance penalty.
-        _ = pragma("cipher_memory_security=OFF", factory: StringFactory)
         return nil
     }
 
@@ -1597,5 +1576,34 @@ private class LiveSQLiteCursor<T>: Cursor<T> {
     override func close() {
         statement = nil
         super.close()
+    }
+}
+
+// Moved those extensions here as internal since they are only used in SwiftData.
+// Quickest way of ensuring those are only used here and will be removed when we're not using SwiftData anymore.
+extension URL {
+    func allocatedFileSize() -> Int64 {
+        // First try to get the total allocated size and in failing that, get the file allocated size
+        return getResourceLongLongForKey(URLResourceKey.totalFileAllocatedSizeKey.rawValue)
+        ?? getResourceLongLongForKey(URLResourceKey.fileAllocatedSizeKey.rawValue)
+        ?? 0
+    }
+
+    private func getResourceValueForKey(_ key: String) -> Any? {
+        let resourceKey = URLResourceKey(key)
+        let keySet = Set<URLResourceKey>([resourceKey])
+
+        var val: Any?
+        do {
+            let values = try resourceValues(forKeys: keySet)
+            val = values.allValues[resourceKey]
+        } catch _ {
+            return nil
+        }
+        return val
+    }
+
+    private func getResourceLongLongForKey(_ key: String) -> Int64? {
+        return (getResourceValueForKey(key) as? NSNumber)?.int64Value
     }
 }

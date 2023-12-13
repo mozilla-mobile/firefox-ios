@@ -175,6 +175,7 @@ class FakespotViewModel {
     private var isViewVisible = false
     private var hasTimerFired = false
     private var timer: Timer?
+    private let tabManager: TabManager
 
     private var fetchProductTask: Task<Void, Never>?
     private var observeProductTask: Task<Void, Never>?
@@ -318,6 +319,7 @@ class FakespotViewModel {
         optInCardViewModel.supportedTLDWebsites = shoppingProduct.supportedTLDWebsites
         reviewQualityCardViewModel.productSitename = shoppingProduct.product?.sitename
         self.prefs = profile.prefs
+        self.tabManager = tabManager
     }
 
     func fetchProductIfOptedIn() {
@@ -386,7 +388,11 @@ class FakespotViewModel {
                     analyzeCount: analyzeCount
                 )
             )
-            if !productAds.isEmpty, product != nil {
+
+            guard product != nil else { return }
+            if productAds.isEmpty {
+                recordSurfaceNoAdsAvailableTelemetry()
+            } else {
                 recordAdsExposureTelementry()
             }
         } catch {
@@ -476,13 +482,13 @@ class FakespotViewModel {
     }
 
     // MARK: - Timer Handling
-    private func startTimer() {
+    private func startTimer(aid: String) {
         timer = Timer.scheduledTimer(
-            timeInterval: 1.5,
-            target: self,
-            selector: #selector(timerFired),
-            userInfo: nil,
-            repeats: false
+            withTimeInterval: 1.5,
+            repeats: false,
+            block: { [weak self] _ in
+                self?.timerFired(aid: aid)
+            }
         )
         // Add the timer to the common run loop mode
         // to ensure that the selector method fires even during user interactions such as scrolling,
@@ -495,14 +501,14 @@ class FakespotViewModel {
         timer = nil
     }
 
-    @objc
-    private func timerFired() {
+    private func timerFired(aid: String) {
         hasTimerFired = true
         recordSurfaceAdsImpressionTelemetry()
+        reportAdEvent(eventName: .trustedDealsImpression, aid: aid)
         stopTimer()
     }
 
-    func handleVisibilityChanges(for view: UIView, in superview: UIView) {
+    func handleVisibilityChanges(for view: FakespotAdView, in superview: UIView) {
         guard !hasTimerFired else { return }
         let halfViewHeight = view.frame.height / 2
         let intersection = superview.bounds.intersection(view.frame)
@@ -511,7 +517,7 @@ class FakespotViewModel {
         if areViewsIntersected {
             guard !isViewVisible else { return }
             isViewVisible.toggle()
-            startTimer()
+            if let ad = view.ad { startTimer(aid: ad.aid) }
         } else {
             guard isViewVisible else { return }
             isViewVisible.toggle()
@@ -519,7 +525,22 @@ class FakespotViewModel {
         }
     }
 
+    func addTab(url: URL) {
+        tabManager.addTabsForURLs([url], zombie: false, shouldSelectTab: true)
+    }
+
     // MARK: - Telemetry
+
+    func reportAdEvent(eventName: FakespotAdsEvent, aid: String) {
+        Task {
+            _ = try? await shoppingProduct.reportAdEvent(
+                eventName: eventName,
+                eventSource: FakespotAdsEvent.eventSource,
+                aid: aid
+            )
+        }
+    }
+
     private static func recordNoReviewReliabilityAvailableTelemetry() {
         TelemetryWrapper.recordEvent(
             category: .action,
@@ -534,6 +555,15 @@ class FakespotViewModel {
             method: .view,
             object: .shoppingBottomSheet,
             value: .shoppingAdsImpression
+        )
+    }
+
+    private func recordSurfaceNoAdsAvailableTelemetry() {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .view,
+            object: .shoppingBottomSheet,
+            value: .shoppingNoAdsAvailable
         )
     }
 

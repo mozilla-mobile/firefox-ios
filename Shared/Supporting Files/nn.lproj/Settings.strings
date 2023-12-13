@@ -1,3 +1,6 @@
+/* Accessibility label for the add button in autofill settings screen. Pressing this button presents a modal that allows users to add a card by entering the credit card information. */
+"CreditCard.Settings.AddCard.AccessibilityLabel.v121" = "Legg til kort";
+
 /* Description label for when there are no credit cards shown in credit card list in autofill settings screen. */
 "CreditCard.Settings.EmptyListDescription.v112" = "Lagre kortinformasjonen din sikkert for å sjekke ut raskare neste gong.";
 
@@ -61,9 +64,18 @@
 /* This is the title informing the user needs to turn on notifications in iOS Settings. */
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "Slå på varsel";
 
+/* Accessibility label for default search engine setting. */
+"Settings.Search.Accessibility.DefaultSearchEngine.v121" = "Standard søkjemotor";
+
+/* Title for the `default search engine` settings section in the Search page in the Settings menu. */
+"Settings.Search.DefaultSearchEngine.Title.v121" = "Standard søkjemotor";
+
 /* Navigation title for search page in the Settings menu. */
 "Settings.Search.PageTitle.v121" = "Søk";
 
-/* Title for the `Private Session` settings section in the Search page in the Settings menu. */
-"Settings.Search.PrivateSession.Title.v121" = "Privat økt";
+/* Title for quick-search engines settings section in the Search page in the Settings menu. */
+"Settings.Search.QuickEnginesTitle.v121" = "Hurtigsøkjemotorar";
+
+/* Label for the `show search suggestions` setting, in the Search Settings page. */
+"Settings.Search.ShowSuggestions.v121" = "Vis søkjeforslag";
 

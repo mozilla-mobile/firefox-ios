@@ -5,7 +5,7 @@
 import Foundation
 
 protocol DownloadsNavigationHandler: AnyObject {
-    /// Handles the possibile navigations for a file.
+    /// Handles the possible navigations for a file.
     /// The source view is the view used to display a popover for the share controller.
     func handleFile(_ file: DownloadedFile, sourceView: UIView)
 

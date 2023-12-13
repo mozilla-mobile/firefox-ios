@@ -41,9 +41,7 @@ class ThemedDefaultNavigationController: DismissableNavigationViewController, Th
         navigationBar.standardAppearance = standardAppearance
         navigationBar.compactAppearance = standardAppearance
         navigationBar.scrollEdgeAppearance = standardAppearance
-        if #available(iOS 15.0, *) {
-            navigationBar.compactScrollEdgeAppearance = standardAppearance
-        }
+        navigationBar.compactScrollEdgeAppearance = standardAppearance
         navigationBar.tintColor = themeManager.currentTheme.colors.textPrimary
     }
 
@@ -56,10 +54,8 @@ class ThemedDefaultNavigationController: DismissableNavigationViewController, Th
 
         toolbar.standardAppearance = standardAppearance
         toolbar.compactAppearance = standardAppearance
-        if #available(iOS 15.0, *) {
-            toolbar.scrollEdgeAppearance = standardAppearance
-            toolbar.compactScrollEdgeAppearance = standardAppearance
-        }
+        toolbar.scrollEdgeAppearance = standardAppearance
+        toolbar.compactScrollEdgeAppearance = standardAppearance
         toolbar.tintColor = themeManager.currentTheme.colors.textPrimary
     }
 

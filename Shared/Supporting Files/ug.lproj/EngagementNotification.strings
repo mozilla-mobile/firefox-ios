@@ -1,0 +1,18 @@
+/* Body of notification send to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Body.v112" = "ئەتراپتىكى نەرسىلەرنى ئىزدەڭ. ياكى قىزىقارلىق ئىشلارنى بايقاڭ.";
+
+/* Title of notification send to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Title.v112" = "تۇنجى ئىزدەشنى باشلاڭ";
+
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is app name. */
+"Engagement.Notification.Treatment.A.Body.v114" = "شەخسىي زىيارەتتە %@ ئۇچۇرلىرىڭىزنى ساقلىمايدۇ ھەمدە يوشۇرۇن ئىزلىغۇچىلارنى توسىدۇ.";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.A.Title.v114" = "ئىزسىز زىيارەت";
+
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is the app name. */
+"Engagement.Notification.Treatment.B.Body.v114" = "%@ زىيارەت داۋامىدا cookies ۋە تارىخ خاتىرىسىنى ساقلىمايدۇ.";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.B.Title.v114" = "شەخسىي زىيارەتنى سىناڭ";
+
