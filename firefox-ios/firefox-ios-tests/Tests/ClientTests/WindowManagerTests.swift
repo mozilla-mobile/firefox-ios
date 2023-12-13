@@ -28,7 +28,7 @@ class WindowManagerTests: XCTestCase {
 
         // Connect TabManager and browser to app window
         let uuid = tabManager.windowUUID
-        subject.tabManagerDidConnectToBrowserWindow(tabManager)
+        subject.newBrowserWindowConfigured(AppWindowInfo(tabManager: tabManager), uuid: uuid)
 
         // Expect 1 app window is now configured
         XCTAssertEqual(1, subject.windows.count)
@@ -44,13 +44,13 @@ class WindowManagerTests: XCTestCase {
 
         // Connect first TabManager and browser to app window
         let firstWindowUUID = tabManager.windowUUID
-        subject.tabManagerDidConnectToBrowserWindow(tabManager)
+        subject.newBrowserWindowConfigured(AppWindowInfo(tabManager: tabManager), uuid: firstWindowUUID)
         // Expect 1 app window is now configured
         XCTAssertEqual(1, subject.windows.count)
 
         // Connect second TabManager and browser to another window
         let secondWindowUUID = secondTabManager.windowUUID
-        subject.tabManagerDidConnectToBrowserWindow(secondTabManager)
+        subject.newBrowserWindowConfigured(AppWindowInfo(tabManager: secondTabManager), uuid: secondWindowUUID)
 
         // Expect 2 app windows are now configured
         XCTAssertEqual(2, subject.windows.count)
@@ -70,8 +70,8 @@ class WindowManagerTests: XCTestCase {
         // Configure two app windows
         let firstWindowUUID = tabManager.windowUUID
         let secondWindowUUID = secondTabManager.windowUUID
-        subject.tabManagerDidConnectToBrowserWindow(tabManager)
-        subject.tabManagerDidConnectToBrowserWindow(secondTabManager)
+        subject.newBrowserWindowConfigured(AppWindowInfo(tabManager: tabManager), uuid: firstWindowUUID)
+        subject.newBrowserWindowConfigured(AppWindowInfo(tabManager: secondTabManager), uuid: secondWindowUUID)
 
         XCTAssertEqual(subject.activeWindow, firstWindowUUID)
         subject.activeWindow = secondWindowUUID
@@ -84,8 +84,8 @@ class WindowManagerTests: XCTestCase {
         // Configure two app windows
         let firstWindowUUID = tabManager.windowUUID
         let secondWindowUUID = secondTabManager.windowUUID
-        subject.tabManagerDidConnectToBrowserWindow(tabManager)
-        subject.tabManagerDidConnectToBrowserWindow(secondTabManager)
+        subject.newBrowserWindowConfigured(AppWindowInfo(tabManager: tabManager), uuid: firstWindowUUID)
+        subject.newBrowserWindowConfigured(AppWindowInfo(tabManager: secondTabManager), uuid: secondWindowUUID)
 
         // Check that first window is the active window
         XCTAssertEqual(2, subject.windows.count)
