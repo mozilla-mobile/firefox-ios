@@ -54,7 +54,7 @@ protocol EnhancedTrackingProtectionMenuDelegate: AnyObject {
     func didFinish()
 }
 
-class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable, Notifiable {
+class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
@@ -178,8 +178,6 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable, Notifiable 
             addGestureRecognizer()
         }
         setupView()
-        setupNotifications(forObserver: self,
-                           observing: [.DynamicFontChanged])
         listenForThemeChange(view)
     }
 
@@ -446,20 +444,5 @@ extension EnhancedTrackingProtectionMenuVC {
         protectionButton.setTitleColor(theme.colors.textAccent, for: .normal)
         horizontalLine.backgroundColor = theme.colors.borderPrimary
         setNeedsStatusBarAppearanceUpdate()
-    }
-}
-
-// MARK: - Themable
-extension EnhancedTrackingProtectionMenuVC {
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DynamicFontChanged:
-            adjustLayout()
-        default: break
-        }
-    }
-
-    private func adjustLayout() {
-        view.layoutIfNeeded()
     }
 }
