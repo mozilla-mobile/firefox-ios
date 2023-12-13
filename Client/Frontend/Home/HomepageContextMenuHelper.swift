@@ -109,8 +109,8 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     private func getJumpBackInActions(site: Site, with sourceView: UIView?) -> [PhotonRowActions]? {
         guard let siteURL = site.url.asURL else { return nil }
 
-        let openInNewTabAction = getOpenInNewTabAction(siteURL: siteURL, sectionType: .recentlySaved)
-        let openInNewPrivateTabAction = getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .recentlySaved)
+        let openInNewTabAction = getOpenInNewTabAction(siteURL: siteURL, sectionType: .jumpBackIn)
+        let openInNewPrivateTabAction = getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .jumpBackIn)
         let shareAction = getShareAction(site: site, sourceView: sourceView)
         let bookmarkAction = getBookmarkAction(site: site)
 
