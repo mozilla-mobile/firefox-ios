@@ -29,7 +29,7 @@ class CreditCardsTests: BaseTestCase {
         // Add, and save a valid credit card
         addCreditCard(name: "Test", cardNumber: "2720994326581252", expirationDate: "0540")
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.savedCards])
-        XCTAssertTrue(app.staticTexts["New Card Saved"].exists)
+        XCTAssertTrue(app.staticTexts["New card saved"].exists)
         XCTAssertTrue(app.tables.cells.element(boundBy: 1).staticTexts.elementContainingText("1252").exists)
         let cardDetails = ["Test", "Expires", "5/40"]
         for i in cardDetails {
