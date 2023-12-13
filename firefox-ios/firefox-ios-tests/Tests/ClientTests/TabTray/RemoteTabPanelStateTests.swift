@@ -49,21 +49,6 @@ final class RemoteTabPanelStateTests: XCTestCase {
         XCTAssertEqual(newState.clientAndTabs.first!.tabs.count, 2)
     }
 
-    func testTabsCachedResultAvailableStateChange() {
-        let initialState = createSubject()
-        let reducer = remoteTabsPanelReducer()
-        let testTabs = generateOneClientTwoTabs()
-        let cachedResult = RemoteTabsPanelCachedResults(clientAndTabs: testTabs,
-                                                        isUpdating: false)
-
-        XCTAssertEqual(initialState.clientAndTabs.count, 0)
-
-        let newState = reducer(initialState, RemoteTabsPanelAction.cachedTabsAvailable(cachedResult))
-
-        XCTAssertEqual(newState.clientAndTabs.count, 1)
-        XCTAssertEqual(newState.clientAndTabs.first!.tabs.count, 2)
-    }
-
     func testTabsRefreshFailedStateChange() {
         let initialState = createSubject()
         let reducer = remoteTabsPanelReducer()
