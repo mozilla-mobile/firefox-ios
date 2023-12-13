@@ -5687,153 +5687,174 @@ extension String {
                 value: "Save Login",
                 comment: "Button to save the user's password",
                 lastUsedInVersion: 121)
-                public static let LoginsHelperDontSaveButtonTitle = MZLocalizedString(
-        key: "LoginsHelper.DontSave.Button",
-        tableName: nil,
-        value: "Don’t Save",
-        comment: "Button to not save the user's password",
+            public static let LoginsHelperDontSaveButtonTitle = MZLocalizedString(
+                key: "LoginsHelper.DontSave.Button",
+                tableName: nil,
+                value: "Don’t Save",
+                comment: "Button to not save the user's password",
                 lastUsedInVersion: 121)
-    public static let LoginsHelperDontUpdateButtonTitle = MZLocalizedString(
-        key: "LoginsHelper.DontUpdate.Button",
-        tableName: nil,
-        value: "Don’t Update",
-        comment: "Button to not update the user's password",
+            public static let LoginsHelperDontUpdateButtonTitle = MZLocalizedString(
+                key: "LoginsHelper.DontUpdate.Button",
+                tableName: nil,
+                value: "Don’t Update",
+                comment: "Button to not update the user's password",
                 lastUsedInVersion: 121)
-                public static let LoginsListSearchPlaceholder = MZLocalizedString(
-        key: "LoginsList.LoginsListSearchPlaceholder",
-        tableName: nil,
-        value: "Filter",
-        comment: "Placeholder test for search box in logins list view.",
+            public static let LoginsListSearchPlaceholder = MZLocalizedString(
+                key: "LoginsList.LoginsListSearchPlaceholder",
+                tableName: nil,
+                value: "Filter",
+                comment: "Placeholder test for search box in logins list view.",
                 lastUsedInVersion: 121)
-                public static let LoginsListSearchPlaceholderCredential = MZLocalizedString(
-        key: "LoginsList.Search.Placeholder",
-        tableName: nil,
-        value: "Search logins",
-        comment: "Placeholder text for search field",
+            public static let LoginsListSearchPlaceholderCredential = MZLocalizedString(
+                key: "LoginsList.Search.Placeholder",
+                tableName: nil,
+                value: "Search logins",
+                comment: "Placeholder text for search field",
                 lastUsedInVersion: 121)
-                public static let LoginsListNoLoginsFoundDescription = MZLocalizedString(
-        key: "LoginsList.NoLoginsFound.Description.v119",
-        tableName: nil,
-        value: "Saved logins will show up here. If you saved your logins to %@ on a different device, sign in to your account.",
-        comment: "Label shown when there are no logins to list. The placeholder will be replaced with the app name.",
+            public static let LoginsListNoLoginsFoundDescription = MZLocalizedString(
+                key: "LoginsList.NoLoginsFound.Description.v119",
+                tableName: nil,
+                value: "Saved logins will show up here. If you saved your logins to %@ on a different device, sign in to your account.",
+                comment: "Label shown when there are no logins to list. The placeholder will be replaced with the app name.",
                 lastUsedInVersion: 121)
-    public static let LoginsListNoLoginsFoundTitle = MZLocalizedString(
-        key: "LoginsList.NoLoginsFound.Title",
-        tableName: nil,
-        value: "No logins found",
-        comment: "Label shown when there are no logins saved")
-    public static let LoginsListNoMatchingResultTitle = MZLocalizedString(
-        key: "LoginsList.NoMatchingResult.Title",
-        tableName: nil,
-        value: "No matching logins",
-        comment: "Label displayed when a user searches and no matches can be found against the search query")
-
-    public static let NoLoginsFound = MZLocalizedString(
-        key: "No logins found",
-        tableName: "LoginManager",
-        value: nil,
-        comment: "Label displayed when no logins are found after searching.")
-    public static let LoginsListTitle = MZLocalizedString(
-        key: "LoginsList.Title",
-        tableName: nil,
-        value: "SAVED LOGINS",
-        comment: "Title for the list of logins")
-    public static let SettingsAutofillCreditCard = MZLocalizedString(
-        key: "Settings.AutofillCreditCard.Title.v112",
-        tableName: nil,
-        value: "Autofill Credit Cards",
-        comment: "Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage.")
-    public static let DeleteLoginAlertTitle = MZLocalizedString(
-        key: "Are you sure?",
-        tableName: "LoginManager",
-        value: nil,
-        comment: "Prompt title when deleting logins")
-    public static let DeleteLoginAlertLocalMessage = MZLocalizedString(
-        key: "Logins will be permanently removed.",
-        tableName: "LoginManager",
-        value: nil,
-        comment: "Prompt message warning the user that deleting non-synced logins will permanently remove them")
-    public static let DeleteLoginAlertSyncedMessage = MZLocalizedString(
-        key: "Logins will be removed from all connected devices.",
-        tableName: "LoginManager",
-        value: nil,
-        comment: "Prompt message warning the user that deleted logins will remove logins from all connected devices")
-    public static let DeleteLoginAlertDelete = MZLocalizedString(
-        key: "Delete",
-        tableName: "LoginManager",
-        value: nil,
-        comment: "Label for the button used to delete the current login.")
-    public static let DeleteLoginAlertCancel = MZLocalizedString(
-        key: "Cancel",
-        tableName: "LoginManager",
-        value: nil,
-        comment: "Prompt option for cancelling out of deletion")
+            public static let LoginsListNoLoginsFoundTitle = MZLocalizedString(
+                key: "LoginsList.NoLoginsFound.Title",
+                tableName: nil,
+                value: "No logins found",
+                comment: "Label shown when there are no logins saved",
+                lastUsedInVersion: 121)
+            public static let LoginsListNoMatchingResultTitle = MZLocalizedString(
+                key: "LoginsList.NoMatchingResult.Title",
+                tableName: nil,
+                value: "No matching logins",
+                comment: "Label displayed when a user searches and no matches can be found against the search query",
+                lastUsedInVersion: 121)
+            public static let NoLoginsFound = MZLocalizedString(
+                key: "No logins found",
+                tableName: "LoginManager",
+                value: nil,
+                comment: "Label displayed when no logins are found after searching.",
+                lastUsedInVersion: 121)
+            public static let LoginsListTitle = MZLocalizedString(
+                key: "LoginsList.Title",
+                tableName: nil,
+                value: "SAVED LOGINS",
+                comment: "Title for the list of logins",
+                lastUsedInVersion: 121)
+            public static let SettingsAutofillCreditCard = MZLocalizedString(
+                key: "Settings.AutofillCreditCard.Title.v112",
+                tableName: nil,
+                value: "Autofill Credit Cards",
+                comment: "Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow autofill in a webpage.",
+                lastUsedInVersion: 121)
+            public static let DeleteLoginAlertTitle = MZLocalizedString(
+                key: "Are you sure?",
+                tableName: "LoginManager",
+                value: nil,
+                comment: "Prompt title when deleting logins",
+                lastUsedInVersion: 121)
+            public static let DeleteLoginAlertLocalMessage = MZLocalizedString(
+                key: "Logins will be permanently removed.",
+                tableName: "LoginManager",
+                value: nil,
+                comment: "Prompt message warning the user that deleting non-synced logins will permanently remove them",
+                lastUsedInVersion: 121)
+            public static let DeleteLoginAlertSyncedMessage = MZLocalizedString(
+                key: "Logins will be removed from all connected devices.",
+                tableName: "LoginManager",
+                value: nil,
+                comment: "Prompt message warning the user that deleted logins will remove logins from all connected devices",
+                lastUsedInVersion: 121)
+            public static let DeleteLoginAlertDelete = MZLocalizedString(
+                key: "Delete",
+                tableName: "LoginManager",
+                value: nil,
+                comment: "Label for the button used to delete the current login.",
+                lastUsedInVersion: 121)
+            public static let DeleteLoginAlertCancel = MZLocalizedString(
+                key: "Cancel",
+                tableName: "LoginManager",
+                value: nil,
+                comment: "Prompt option for cancelling out of deletion",
+                lastUsedInVersion: 121)
             public static let RemoveCardTitle = MZLocalizedString(
                 key: "CreditCard.SnackBar.RemoveCardTitle.v112",
                 tableName: "Alert",
                 value: "Remove This Card?",
-                comment: "Title label for the dialog box that gets presented as a confirmation to ask user if they would like to remove the saved credit card")
+                comment: "Title label for the dialog box that gets presented as a confirmation to ask user if they would like to remove the saved credit card",
+                lastUsedInVersion: 121)
             public static let UniversalAuthenticationReasonV2 = MZLocalizedString(
                 key: "Biometry.Screen.UniversalAuthenticationReasonV2.v116",
                 tableName: "BiometricAuthentication",
                 value: "Authenticate to access your saved logins and encrypted cards.",
-                comment: "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks the user to enter their device passcode to access the protected screen for logins and encrypted cards.")
+                comment: "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks the user to enter their device passcode to access the protected screen for logins and encrypted cards.",
+                lastUsedInVersion: 121)
             public static let EditCreditCardTitle = MZLocalizedString(
                 key: "CreditCard.EditCard.EditCreditCardTitle.v113",
                 tableName: "Edit Card",
                 value: "Edit Credit Card",
-                comment: "Title label for the view where user can edit their credit card info")
+                comment: "Title label for the view where user can edit their credit card info",
+                lastUsedInVersion: 121)
             public static let AddCreditCardTitle = MZLocalizedString(
                 key: "CreditCard.EditCard.AddCreditCardTitle.v113",
                 tableName: "EditCard",
                 value: "Add Credit Card",
-                comment: "Title label for the view where user can add their credit card info")
+                comment: "Title label for the view where user can add their credit card info",
+                lastUsedInVersion: 121)
             public static let ToggleToAllowAutofillTitle = MZLocalizedString(
                 key: "CreditCard.EditCard.ToggleToAllowAutofillTitle.v112",
                 tableName: "EditCard",
                 value: "Save and Autofill Cards",
-                comment: "Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages.")
-    public static let FirefoxSyncCreditCardsEngine = MZLocalizedString(
-        key: "FirefoxSync.CreditCardsEngine.v115",
-        tableName: "FirefoxSync",
-        value: "Credit Cards",
-        comment: "Toggle for credit cards syncing setting")
-
+                comment: "Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages.",
+                lastUsedInVersion: 121)
+            public static let FirefoxSyncCreditCardsEngine = MZLocalizedString(
+                key: "FirefoxSync.CreditCardsEngine.v115",
+                tableName: "FirefoxSync",
+                value: "Credit Cards",
+                comment: "Toggle for credit cards syncing setting",
+                lastUsedInVersion: 121)
             public static let MainTitle = MZLocalizedString(
                 key: "CreditCard.RememberCard.MainTitle.v115",
                 tableName: "RememberCard",
                 value: "Remember this card?",
-                comment: "This value is used as the title for the remember credit card page")
+                comment: "This value is used as the title for the remember credit card page",
+                lastUsedInVersion: 121)
             public static let RememberThisCard = MZLocalizedString(
                 key: "CreditCard.Settings.RememberThisCard.v112",
                 tableName: "Settings",
                 value: "Remember this card?",
-                comment: "When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string is a title string of the overall message that asks the user if they would like Firefox to remember the card that is being used.")
+                comment: "When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string is a title string of the overall message that asks the user if they would like Firefox to remember the card that is being used.",
+                lastUsedInVersion: 121)
             public static let Header = MZLocalizedString(
                 key: "CreditCard.RememberCard.Header.v115",
                 tableName: "RememberCard",
                 value: "Save your card information securely with %@ to check out faster next time.",
-                comment: "This value is used as the header for the remember card page. The placeholder is for the app name.")
+                comment: "This value is used as the header for the remember card page. The placeholder is for the app name.",
+                lastUsedInVersion: 121)
             public static let MainButtonTitle = MZLocalizedString(
                 key: "CreditCard.RememberCard.MainButtonTitle.v115",
                 tableName: "RememberCard",
                 value: "Yes",
-                comment: "This value is used as the title for the Yes button in the remember credit card page")
+                comment: "This value is used as the title for the Yes button in the remember credit card page",
+                lastUsedInVersion: 121)
             public static let NotNow = MZLocalizedString(
                 key: "CreditCard.Settings.NotNow.v112",
                 tableName: "Settings",
                 value: "Not now",
-                comment: "When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string indicates to users that they can deny Firefox from remembering the card that is being used.")
+                comment: "When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string indicates to users that they can deny Firefox from remembering the card that is being used.",
+                lastUsedInVersion: 121)
             public static let EmptyListTitle = MZLocalizedString(
                 key: "CreditCard.Settings.EmptyListTitle.v112",
                 tableName: "Settings",
                 value: "Save Credit Cards to %@",
-                comment: "Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered.")
+                comment: "Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered.",
+                lastUsedInVersion: 121)
             public static let UpdateThisCard = MZLocalizedString(
                 key: "CreditCard.Settings.UpdateThisCard.v112",
                 tableName: "Settings",
                 value: "Update this card?",
-                comment: "When a user is in the process or has finished making a purchase with a remembered card, and if the credit card information doesn't match the contents of the stored information of that card, we show this string. We ask this user if they would like Firefox update the staled information of that credit card.")
+                comment: "When a user is in the process or has finished making a purchase with a remembered card, and if the credit card information doesn't match the contents of the stored information of that card, we show this string. We ask this user if they would like Firefox update the staled information of that credit card.",
+                lastUsedInVersion: 121)
             public static let MainTitleUpdate = MZLocalizedString(
                 key: "CreditCard.UpdateCard.MainTitle.v115",
                 tableName: "UpdateCard",
@@ -5843,27 +5864,32 @@ extension String {
                 key: "CreditCard.Settings.Yes.v112",
                 tableName: "Settings",
                 value: "Yes",
-                comment: "When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string asks users to confirm if they would like Firefox to remember the card that is being used.")
+                comment: "When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string asks users to confirm if they would like Firefox to remember the card that is being used.",
+                lastUsedInVersion: 121)
             public static let MainButtonTitleUpdate = MZLocalizedString(
                 key: "CreditCard.UpdateCard.YesButtonTitle.v115",
                 tableName: "UpdateCard",
                 value: "Yes",
-                comment: "This value is used as the title for the button in the update credit card page")
+                comment: "This value is used as the title for the button in the update credit card page",
+                lastUsedInVersion: 121)
             public static let MainTitleSelect = MZLocalizedString(
                 key: "CreditCard.SelectCreditCard.MainTitle.v116",
                 tableName: "SelectCreditCard",
                 value: "Use a saved card?",
-                comment: "This value is used as the title for the select a credit card from list of available cards.")
+                comment: "This value is used as the title for the select a credit card from list of available cards.",
+                lastUsedInVersion: 121)
             public static let UseASavedCard = MZLocalizedString(
                 key: "CreditCards.Settings.UseASavedCard.v112",
                 tableName: "Settings",
                 value: "Use a saved card?",
-                comment: "When a user is in the process of making a purchase, and has at least one saved card, we show this label used as a title. This indicates to the user that there are stored cards available for use on this pending purchase.")
+                comment: "When a user is in the process of making a purchase, and has at least one saved card, we show this label used as a title. This indicates to the user that there are stored cards available for use on this pending purchase.",
+                lastUsedInVersion: 121)
             public static let UpdatedCardLabel = MZLocalizedString(
                 key: "CreditCard.SnackBar.UpdatedCardLabel.v112",
                 tableName: "SnackBar",
                 value: "Card Information updated",
-                comment: "Label text that gets presented as a confirmation at the bottom of screen when credit card information gets updated successfully")
+                comment: "Label text that gets presented as a confirmation at the bottom of screen when credit card information gets updated successfully",
+                lastUsedInVersion: 121)
         }
     }
 }
