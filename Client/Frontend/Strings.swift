@@ -240,9 +240,9 @@ extension String {
                 value: "Add Card",
                 comment: "Accessibility label for the add button in autofill settings screen. Pressing this button presents a modal that allows users to add a card by entering the credit card information.")
             public static let EmptyListTitle = MZLocalizedString(
-                key: "CreditCard.Settings.EmptyListTitle.v112",
+                key: "CreditCard.Settings.EmptyListTitle.v122",
                 tableName: "Settings",
-                value: "Save Credit Cards to %@",
+                value: "Save Cards to %@",
                 comment: "Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered.")
             public static let EmptyListDescription = MZLocalizedString(
                 key: "CreditCard.Settings.EmptyListDescription.v112",
@@ -252,7 +252,7 @@ extension String {
             public static let RememberThisCard = MZLocalizedString(
                 key: "CreditCard.Settings.RememberThisCard.v112",
                 tableName: "Settings",
-                value: "Remember this card?",
+                value: "Securely save this card?",
                 comment: "When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string is a title string of the overall message that asks the user if they would like Firefox to remember the card that is being used.")
             public static let Yes = MZLocalizedString(
                 key: "CreditCard.Settings.Yes.v112",
@@ -260,9 +260,9 @@ extension String {
                 value: "Yes",
                 comment: "When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string asks users to confirm if they would like Firefox to remember the card that is being used.")
             public static let NotNow = MZLocalizedString(
-                key: "CreditCard.Settings.NotNow.v112",
+                key: "CreditCard.Settings.NotNow.v122",
                 tableName: "Settings",
-                value: "Not now",
+                value: "Not Now",
                 comment: "When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string indicates to users that they can deny Firefox from remembering the card that is being used.")
             public static let UpdateThisCard = MZLocalizedString(
                 key: "CreditCard.Settings.UpdateThisCard.v112",
@@ -402,19 +402,19 @@ extension String {
         // Remember Card
         public struct RememberCreditCard {
             public static let MainTitle = MZLocalizedString(
-                key: "CreditCard.RememberCard.MainTitle.v115",
+                key: "CreditCard.RememberCard.MainTitle.v122",
                 tableName: "RememberCard",
-                value: "Remember this card?",
+                value: "Securely save this card?",
                 comment: "This value is used as the title for the remember credit card page")
             public static let Header = MZLocalizedString(
-                key: "CreditCard.RememberCard.Header.v115",
+                key: "CreditCard.RememberCard.Header.v122",
                 tableName: "RememberCard",
-                value: "Save your card information securely with %@ to check out faster next time.",
+                value: "%@ encrypts your card number. Your security code won’t be saved.",
                 comment: "This value is used as the header for the remember card page. The placeholder is for the app name.")
             public static let MainButtonTitle = MZLocalizedString(
-                key: "CreditCard.RememberCard.MainButtonTitle.v115",
+                key: "CreditCard.RememberCard.MainButtonTitle.v122",
                 tableName: "RememberCard",
-                value: "Yes",
+                value: "Save",
                 comment: "This value is used as the title for the Yes button in the remember credit card page")
             public static let SecondaryButtonTitle = MZLocalizedString(
                 key: "CreditCard.RememberCard.SecondaryButtonTitle.v115",
@@ -5798,6 +5798,40 @@ extension String {
         tableName: "FirefoxSync",
         value: "Credit Cards",
         comment: "Toggle for credit cards syncing setting")
+
+            public static let MainTitle = MZLocalizedString(
+                key: "CreditCard.RememberCard.MainTitle.v115",
+                tableName: "RememberCard",
+                value: "Remember this card?",
+                comment: "This value is used as the title for the remember credit card page")
+            public static let RememberThisCard = MZLocalizedString(
+                key: "CreditCard.Settings.RememberThisCard.v112",
+                tableName: "Settings",
+                value: "Remember this card?",
+                comment: "When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string is a title string of the overall message that asks the user if they would like Firefox to remember the card that is being used.")
+            public static let Header = MZLocalizedString(
+                key: "CreditCard.RememberCard.Header.v115",
+                tableName: "RememberCard",
+                value: "Save your card information securely with %@ to check out faster next time.",
+                comment: "This value is used as the header for the remember card page. The placeholder is for the app name.")
+            public static let MainButtonTitle = MZLocalizedString(
+                key: "CreditCard.RememberCard.MainButtonTitle.v115",
+                tableName: "RememberCard",
+                value: "Yes",
+                comment: "This value is used as the title for the Yes button in the remember credit card page")
+            public static let NotNow = MZLocalizedString(
+                key: "CreditCard.Settings.NotNow.v112",
+                tableName: "Settings",
+                value: "Not now",
+                comment: "When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string indicates to users that they can deny Firefox from remembering the card that is being used.")
+            public static let EmptyListTitle = MZLocalizedString(
+                key: "CreditCard.Settings.EmptyListTitle.v112",
+                tableName: "Settings",
+                value: "Save Credit Cards to %@",
+                comment: "Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered.")
+
+
+
 
 
 
