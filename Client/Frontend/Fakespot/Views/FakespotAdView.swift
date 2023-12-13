@@ -110,6 +110,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
 
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     private var viewModel: FakespotAdViewModel?
+    public var ad: ProductAdsResponse? { viewModel?.productAdsData }
 
     private lazy var titleLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
