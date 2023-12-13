@@ -384,7 +384,7 @@ class FakespotViewModel {
                 )
             )
 
-            guard let product else { return }
+            guard product != nil else { return }
             if productAds.isEmpty {
                 recordSurfaceNoAdsAvailableTelemetry()
             } else {
@@ -397,7 +397,7 @@ class FakespotViewModel {
 
     func loadProductAds(for productId: String?) async -> [ProductAdsResponse] {
         if let productId,
-           let cachedAds = ProductAdsCache.shared.getCachedAds(forKey: productId) {
+           let cachedAds = await ProductAdsCache.shared.getCachedAds(forKey: productId) {
             return cachedAds
         } else {
             let newAds: [ProductAdsResponse]
@@ -407,7 +407,7 @@ class FakespotViewModel {
                 newAds = []
             }
             if let productId, !newAds.isEmpty {
-                ProductAdsCache.shared.cacheAds(newAds, forKey: productId)
+                await ProductAdsCache.shared.cacheAds(newAds, forKey: productId)
             }
 
             return newAds

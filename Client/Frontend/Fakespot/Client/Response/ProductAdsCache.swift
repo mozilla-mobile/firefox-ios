@@ -4,7 +4,7 @@
 
 import Foundation
 
-class ProductAdsCache {
+actor ProductAdsCache {
     static let shared = ProductAdsCache()
     private let cache = NSCache<NSString, CachedAds>()
 

@@ -330,7 +330,9 @@ class TabLocationView: UIView, FeatureFlaggable {
     private func handleShoppingAdsCacheURLChange(newURL: URL?) {
         if url?.displayURL != newURL,
             !shoppingButton.isHidden {
-            ProductAdsCache.shared.clearCache()
+            Task {
+                await ProductAdsCache.shared.clearCache()
+            }
         }
     }
 
