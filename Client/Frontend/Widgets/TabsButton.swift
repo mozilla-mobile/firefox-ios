@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import SnapKit
 import Shared
 import Common
 
@@ -11,7 +10,19 @@ class TabsButton: UIButton, ThemeApplicable {
     struct UX {
         static let cornerRadius: CGFloat = 2
         static let titleFont: UIFont = UIConstants.DefaultChromeSmallFontBold
-        static let insideButtonSize = 24
+        static let insideButtonSize: CGFloat = 24
+
+        // Animation constants
+        static let flipAnimationDuration: TimeInterval = 1.5
+        static let flipAnimationDelay: TimeInterval = 0
+        static let flipAnimationDamping: CGFloat = 0.5
+        static let flipAnimationVelocity: CGFloat = 0.0
+
+        // Tab count related constants
+        static let defaultCountLabelText: String = "0"
+        static let defaultCountToBe: String = "1"
+        static let maxTabCountToShowInfinity: Int = 100
+        static let infinitySymbol: String = "\u{221E}"
     }
 
     private var selectedTintColor: UIColor!
@@ -20,7 +31,7 @@ class TabsButton: UIButton, ThemeApplicable {
 
     // When all animations are completed, this is the most-recently assigned tab count that is shown.
     // updateTabCount() can be called in rapid succession, this ensures only final tab count is displayed.
-    private var countToBe = "1"
+    private var countToBe = UX.defaultCountToBe
 
     // Re-entrancy guard to ensure the function is complete before starting another animation.
     private var isUpdatingTabCount = false
@@ -37,44 +48,35 @@ class TabsButton: UIButton, ThemeApplicable {
         }
     }
 
-    private lazy var countLabel: UILabel = {
-        let label = UILabel()
-        label.text = "0"
+    private lazy var countLabel: UILabel = .build { label in
+        label.text = UX.defaultCountLabelText
         label.font = UX.titleFont
         label.layer.cornerRadius = UX.cornerRadius
         label.textAlignment = .center
         label.isUserInteractionEnabled = false
-        return label
-    }()
+    }
 
-    private lazy var insideButton: UIView = {
-        let view = UIView()
+    private lazy var insideButton: UIView = .build { view in
         view.clipsToBounds = false
         view.isUserInteractionEnabled = false
-        return view
-    }()
+    }
 
-    private lazy var labelBackground: UIView = {
-        let background = UIView()
-        background.layer.cornerRadius = UX.cornerRadius
-        background.isUserInteractionEnabled = false
-        background.backgroundColor = .clear
-        return background
-    }()
+    private lazy var labelBackground: UIView = .build { view in
+        view.layer.cornerRadius = UX.cornerRadius
+        view.isUserInteractionEnabled = false
+        view.backgroundColor = .clear
+    }
 
-    private lazy var borderView: UIImageView = {
-        let border = UIImageView(image: UIImage(named: ImageIdentifiers.navTabCounter)?.withRenderingMode(.alwaysTemplate))
-        return border
-    }()
+    private lazy var borderView: UIImageView = .build { imageView in
+        imageView.image = UIImage(named: ImageIdentifiers.navTabCounter)?.withRenderingMode(.alwaysTemplate)
+    }
 
     // Used to temporarily store the cloned button so we can respond to layout changes during animation
     private weak var clonedTabsButton: TabsButton?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        insideButton.addSubview(labelBackground)
-        insideButton.addSubview(borderView)
-        insideButton.addSubview(countLabel)
+        insideButton.addSubviews(labelBackground, borderView, countLabel)
         addSubview(insideButton)
         isAccessibilityElement = true
         accessibilityTraits.insert(.button)
@@ -85,19 +87,27 @@ class TabsButton: UIButton, ThemeApplicable {
 
     override func updateConstraints() {
         super.updateConstraints()
-        labelBackground.snp.remakeConstraints { (make) -> Void in
-            make.edges.equalTo(insideButton)
-        }
-        borderView.snp.remakeConstraints { (make) -> Void in
-            make.edges.equalTo(insideButton)
-        }
-        countLabel.snp.remakeConstraints { (make) -> Void in
-            make.edges.equalTo(insideButton)
-        }
-        insideButton.snp.remakeConstraints { (make) -> Void in
-            make.size.equalTo(UX.insideButtonSize)
-            make.center.equalTo(self)
-        }
+        NSLayoutConstraint.activate([
+            labelBackground.topAnchor.constraint(equalTo: insideButton.topAnchor),
+            labelBackground.leadingAnchor.constraint(equalTo: insideButton.leadingAnchor),
+            labelBackground.trailingAnchor.constraint(equalTo: insideButton.trailingAnchor),
+            labelBackground.bottomAnchor.constraint(equalTo: insideButton.bottomAnchor),
+
+            borderView.topAnchor.constraint(equalTo: insideButton.topAnchor),
+            borderView.leadingAnchor.constraint(equalTo: insideButton.leadingAnchor),
+            borderView.trailingAnchor.constraint(equalTo: insideButton.trailingAnchor),
+            borderView.bottomAnchor.constraint(equalTo: insideButton.bottomAnchor),
+
+            countLabel.topAnchor.constraint(equalTo: insideButton.topAnchor),
+            countLabel.leadingAnchor.constraint(equalTo: insideButton.leadingAnchor),
+            countLabel.trailingAnchor.constraint(equalTo: insideButton.trailingAnchor),
+            countLabel.bottomAnchor.constraint(equalTo: insideButton.bottomAnchor),
+
+            insideButton.heightAnchor.constraint(equalToConstant: UX.insideButtonSize),
+            insideButton.widthAnchor.constraint(equalToConstant: UX.insideButtonSize),
+            insideButton.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            insideButton.centerYAnchor.constraint(equalTo: self.centerYAnchor)
+        ])
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -124,9 +134,9 @@ class TabsButton: UIButton, ThemeApplicable {
     func updateTabCount(_ count: Int,
                         animated: Bool = true) {
         let count = max(count, 1)
-        let currentCount = self.countLabel.text
-        let infinity = "\u{221E}"
-        countToBe = (count < 100) ? count.description : infinity
+        let currentCount = countLabel.text
+        let infinity = UX.infinitySymbol
+        countToBe = (count < UX.maxTabCountToShowInfinity) ? count.description : infinity
 
         // Only animate a tab count change if the tab count has actually changed
         let hasDescriptionChanged = (clonedTabsButton?.countLabel.text ?? count.description) != count.description
@@ -134,7 +144,7 @@ class TabsButton: UIButton, ThemeApplicable {
 
         // Re-entrancy guard: if this code is running just update the tab count value without starting another animation.
         if isUpdatingTabCount {
-            if let clone = self.clonedTabsButton {
+            if let clone = clonedTabsButton {
                 clone.countLabel.text = countToBe
                 clone.accessibilityValue = countToBe
                 clone.largeContentTitle = String(format: .TabsButtonShowTabsLargeContentTitle, countToBe)
@@ -143,9 +153,9 @@ class TabsButton: UIButton, ThemeApplicable {
         }
         isUpdatingTabCount = true
 
-        if self.clonedTabsButton != nil {
-            self.clonedTabsButton?.layer.removeAllAnimations()
-            self.clonedTabsButton?.removeFromSuperview()
+        if clonedTabsButton != nil {
+            clonedTabsButton?.layer.removeAllAnimations()
+            clonedTabsButton?.removeFromSuperview()
             insideButton.layer.removeAllAnimations()
         }
 
@@ -156,12 +166,12 @@ class TabsButton: UIButton, ThemeApplicable {
         newTabsButton.countLabel.text = countToBe
         newTabsButton.accessibilityValue = countToBe
         newTabsButton.largeContentTitle = String(format: .TabsButtonShowTabsLargeContentTitle, countToBe)
-        newTabsButton.insideButton.frame = self.insideButton.frame
-        newTabsButton.snp.removeConstraints()
+        newTabsButton.insideButton.frame = insideButton.frame
         self.addSubview(newTabsButton)
-        newTabsButton.snp.makeConstraints { make  in
-            make.center.equalTo(self)
-        }
+        NSLayoutConstraint.activate([
+            newTabsButton.centerXAnchor.constraint(equalTo: newTabsButton.centerXAnchor),
+            newTabsButton.centerYAnchor.constraint(equalTo: newTabsButton.centerYAnchor)
+        ])
 
         animateButton(newTabsButton: newTabsButton, animated: animated)
     }
@@ -169,7 +179,7 @@ class TabsButton: UIButton, ThemeApplicable {
     private func animateButton(newTabsButton: TabsButton, animated: Bool) {
         // Instead of changing the anchorPoint of the CALayer, lets alter the rotation matrix math to be
         // a rotation around a non-origin point
-        let frame = self.insideButton.frame
+        let frame = insideButton.frame
         let halfTitleHeight = frame.height / 2
         var newFlipTransform = CATransform3DIdentity
         newFlipTransform = CATransform3DTranslate(newFlipTransform, 0, halfTitleHeight, 0)
@@ -203,10 +213,10 @@ class TabsButton: UIButton, ThemeApplicable {
         }
 
         if animated {
-            UIView.animate(withDuration: 1.5,
-                           delay: 0,
-                           usingSpringWithDamping: 0.5,
-                           initialSpringVelocity: 0.0,
+            UIView.animate(withDuration: UX.flipAnimationDuration,
+                           delay: UX.flipAnimationDelay,
+                           usingSpringWithDamping: UX.flipAnimationDamping,
+                           initialSpringVelocity: UX.flipAnimationVelocity,
                            options: [],
                            animations: animate,
                            completion: completion)
@@ -222,12 +232,12 @@ class TabsButton: UIButton, ThemeApplicable {
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
-        self.theme = theme
-        borderView.tintColor = theme.colors.iconPrimary
-        countLabel.textColor = theme.colors.iconPrimary
+        let colors = theme.colors
+        borderView.tintColor = colors.iconPrimary
+        countLabel.textColor = colors.iconPrimary
 
-        selectedTintColor = theme.colors.actionPrimary
-        unselectedTintColor = theme.colors.iconPrimary
+        selectedTintColor = colors.actionPrimary
+        unselectedTintColor = colors.iconPrimary
     }
 
     private func updateHighlightColors(isHighlighted: Bool) {
