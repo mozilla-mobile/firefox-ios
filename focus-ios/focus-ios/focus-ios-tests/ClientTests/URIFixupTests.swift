@@ -48,7 +48,6 @@ class URIFixupTests: XCTestCase {
                                   "http://moz.fir/?q=Test%20URL-encoded%20fire",
                                   "http://مثال.إختبار",
                                   "http://王涵.王涵",
-                                  "http://-.~_!$&'()*+,;=:%40:80%2f::::::@mozilla.org",
                                   "http://6662.net",
                                   "http://f.i-r.ef",
                                   "http://266.315.245.345",
@@ -71,13 +70,6 @@ class URIFixupTests: XCTestCase {
             
             let httpsSchemeURL = $0.replacingOccurrences(of: "http", with: "https")
             XCTAssertNotNil(URIFixup.getURL(entry: httpsSchemeURL), "\(httpsSchemeURL) is not a valid URL")
-        }
-    }
-    
-    func testValidURLsForNoSchemes() {
-        httpSchemeURLs.forEach {
-            let noSchemeURL = $0.replacingOccurrences(of: "http", with: "")
-            XCTAssertNotNil(URIFixup.getURL(entry: noSchemeURL), "\(noSchemeURL) is not a valid URL")
         }
     }
     

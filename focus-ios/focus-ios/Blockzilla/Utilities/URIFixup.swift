@@ -7,7 +7,7 @@ import Foundation
 class URIFixup {
     static func getURL(entry: String) -> URL? {
         let trimmed = entry.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-        guard let escaped = trimmed.addingPercentEncoding(withAllowedCharacters: CharacterSet.alphanumerics) else {
+        guard let escaped = trimmed.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlAllowed) else {
             return nil
         }
 
