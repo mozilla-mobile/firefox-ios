@@ -48,45 +48,45 @@ final class ProductAdsCacheTests: XCTestCase {
         ads2 = nil
     }
 
-    func testCacheAds() {
+    func testCacheAds() async {
         let key = "testKey"
-        cache.cacheAds(ads1, forKey: key)
+        await cache.cacheAds(ads1, forKey: key)
 
-        let cachedAds = cache.getCachedAds(forKey: key)
+        let cachedAds = await cache.getCachedAds(forKey: key)
         XCTAssertNotNil(cachedAds, "Cached ads should not be nil")
         XCTAssertEqual(cachedAds, ads1, "Cached ads should match the original ads")
     }
 
-    func testClearCache() {
+    func testClearCache() async {
         let key = "testKey"
-        cache.cacheAds(ads1, forKey: key)
-        cache.clearCache()
+        await cache.cacheAds(ads1, forKey: key)
+        await cache.clearCache()
 
-        let cachedAds = cache.getCachedAds(forKey: key)
+        let cachedAds = await cache.getCachedAds(forKey: key)
         XCTAssertNil(cachedAds, "Cached ads should be nil after clearing the cache")
     }
 
-    func testGetCachedAds() {
+    func testGetCachedAds() async {
         let key = "testKey"
-        cache.cacheAds(ads1, forKey: key)
+        await cache.cacheAds(ads1, forKey: key)
 
-        let cachedAds = cache.getCachedAds(forKey: key)
+        let cachedAds = await cache.getCachedAds(forKey: key)
         XCTAssertNotNil(cachedAds, "Cached ads should not be nil")
         XCTAssertEqual(cachedAds, ads1, "Cached ads should match the original ads")
 
         // Test getting ads for a non-existent key
-        let nonExistentAds = cache.getCachedAds(forKey: "nonExistentKey")
+        let nonExistentAds = await cache.getCachedAds(forKey: "nonExistentKey")
         XCTAssertNil(nonExistentAds, "Cached ads for a non-existent key should be nil")
     }
 
-    func testCacheMultipleKeys() {
+    func testCacheMultipleKeys() async {
         let key1 = "testKey1"
         let key2 = "testKey2"
-        cache.cacheAds(ads1, forKey: key1)
-        cache.cacheAds(ads2, forKey: key2)
+        await cache.cacheAds(ads1, forKey: key1)
+        await cache.cacheAds(ads2, forKey: key2)
 
-        let cachedAds1 = cache.getCachedAds(forKey: key1)
-        let cachedAds2 = cache.getCachedAds(forKey: key2)
+        let cachedAds1 = await cache.getCachedAds(forKey: key1)
+        let cachedAds2 = await cache.getCachedAds(forKey: key2)
 
         XCTAssertNotNil(cachedAds1, "Cached ads for key1 should not be nil")
         XCTAssertEqual(cachedAds1, ads1, "Cached ads for key1 should match the original ads1")

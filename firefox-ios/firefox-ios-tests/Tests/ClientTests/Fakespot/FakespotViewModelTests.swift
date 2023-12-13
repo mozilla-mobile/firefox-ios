@@ -22,7 +22,6 @@ final class FakespotViewModelTests: XCTestCase {
         super.tearDown()
         client = nil
         apiClient = nil
-        productAdsCache.clearCache()
         productAdsCache = nil
     }
 
@@ -73,7 +72,7 @@ final class FakespotViewModelTests: XCTestCase {
             aid: "cached456")
         ]
 
-        productAdsCache.cacheAds(ads, forKey: "testProductId")
+        await productAdsCache.cacheAds(ads, forKey: "testProductId")
         let cachedAds = await viewModel.loadProductAds(for: "testProductId")
         XCTAssertEqual(cachedAds, ads, "Should load cached ads")
     }
@@ -89,7 +88,8 @@ final class FakespotViewModelTests: XCTestCase {
         let viewModel = FakespotViewModel(shoppingProduct: client, tabManager: MockTabManager())
         let newAds = await viewModel.loadProductAds(for: "testProductId")
         XCTAssertEqual(newAds, [], "Should load new ads from server")
-        XCTAssertNil(productAdsCache.getCachedAds(forKey: "testProductId"))
+        let cachedAds = await productAdsCache.getCachedAds(forKey: "testProductId")
+        XCTAssertNil(cachedAds)
     }
 
     func testLoadProductsAds_LoadingAndCaching() async {
@@ -107,10 +107,10 @@ final class FakespotViewModelTests: XCTestCase {
             aid: "cached456")
         ]
 
-        productAdsCache.cacheAds(ads, forKey: "testProductId")
+        await productAdsCache.cacheAds(ads, forKey: "testProductId")
         let cachedAds = await viewModel.loadProductAds(for: "testProductId")
         XCTAssertEqual(cachedAds, ads, "Should load cached ads")
-        productAdsCache.clearCache()
+        await productAdsCache.clearCache()
         let newAds = await viewModel.loadProductAds(for: "testProductId2")
         let newCachedAds = await viewModel.loadProductAds(for: "testProductId2")
         XCTAssertEqual(newAds, client.ads, "Should load new ads")
