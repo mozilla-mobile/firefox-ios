@@ -673,6 +673,7 @@ extension TelemetryWrapper {
         case shoppingAdsExposure = "shopping-ads-exposure"
         case shoppingAdsImpression = "shopping-ads-impression"
         case surfaceAdsClicked = "surface_ads_clicked"
+        case shoppingNoAdsAvailable = "shopping-no-ads-available"
         case awesomebarShareTap = "awesomebar-share-tap"
         case largeFileWrite = "large-file-write"
     }
@@ -1170,6 +1171,8 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.adsExposure.record()
         case (.action, .view, .shoppingBottomSheet, .shoppingAdsImpression, _):
             GleanMetrics.Shopping.surfaceAdsImpression.record()
+        case (.action, .view, .shoppingBottomSheet, .shoppingNoAdsAvailable, _):
+            GleanMetrics.Shopping.surfaceNoAdsAvailable.record()
         case (.action, .view, .shoppingButton, _, _):
             GleanMetrics.Shopping.addressBarIconDisplayed.record()
         case (.action, .close, .shoppingBottomSheet, _, let extras):

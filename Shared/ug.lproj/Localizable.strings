@@ -385,6 +385,18 @@
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "تورغا ئۇلانمىغان";
 
+/* FxA sign in view subtitle */
+"fxa.signin.camera-signin" = "كامېرايىڭىز بىلەن تىزىمغا كىرىڭ";
+
+/* FxA sign in view qr code instructions */
+"fxa.signin.qr-link-instruction" = "كومپيۇتېرىڭىزدىكى Firefox دا firefox.com/pair نى ئاچىدۇ";
+
+/* FxA sign in view qr code scan button */
+"fxa.signin.ready-to-scan" = "تاراشقا تەييار";
+
+/* FxA sign in view email login button */
+"fxa.signin.use-email-instead" = "ئورنىغا ئېلخەت ئىشلىتىڭ";
+
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "ھازىر قەدەمداشلا";
 
@@ -516,6 +528,9 @@
 
 /* Accessibility label for button increasing font size in display settings of reader mode */
 "Increase text size" = "تېكىستنى چوڭايت";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "ھازىر";
 
 /* A label indicating the keyboard shortcut of resetting a web page's view to the standard viewing size. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ActualSize" = "ئەمەلىي چوڭلۇقى";
@@ -847,6 +862,15 @@
 /* Label for the zoom page button in the menu, used to show the Zoom Page bar. The placeholder shows the current zoom level in percent. */
 "Menu.ZoomPage.Title.v113" = "يېقىنلاشتۇر(%@)";
 
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "كۆچمە ئۈسكۈنە";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "بىر ئايدىنمۇ ئىلگىرى";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "بىر ھەپتىدىنمۇ ئىلگىرى";
+
 /* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
 "Navigation Toolbar" = "يولباشچى قورال بالداق";
 
@@ -876,6 +900,9 @@
 
 /* Toggle tabs syncing setting */
 "Open Tabs" = "بەتكۈچ ئاچ";
+
+/* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
+"OpenURL.Error.Message" = "Firefox بۇ بەتنى ئاچالمايدۇ، چۈنكى ئادرېس ئىناۋەتسىز.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "بەتنى ئاچقىلى بولمايدۇ";
@@ -909,6 +936,9 @@
 
 /* A label indicating the action that a user can rate the Firefox app in the App store. */
 "Ratings.Settings.RateOnAppStore" = "App Store دىكى باھا";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "ئوقۇلدى";
 
 /* Accessibility label for the Reader View button */
 "Reader View" = "ئوقۇرمەن كۆرۈنۈشى";
@@ -957,6 +987,9 @@
 
 /* Font type setting in the reading view settings */
 "Sans-serif" = "Sans-serif";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "ئوقۇش كۆرۈنۈشىدە كىتاب قوشۇش سىنبەلگىنى چېكىپ، بەتنى ئوقۇش تىزىمىڭىزغا قوشقىلى بولىدۇ.";
 
 /* OK button to dismiss the error prompt. */
 "ScanQRCode.Error.OK.Button" = "جەزملە";
@@ -1036,6 +1069,714 @@
 /* Used as a button label for crash dialog prompt */
 "Send Report" = "دوكلات يوللا";
 
+/* Button title for cancelling share screen */
+"SendTo.Cancel.Button" = "ۋاز كەچ";
+
+/* Close button in top navigation bar */
+"SendTo.Close.Button" = "تاقا";
+
+/* Header for the list of devices table */
+"SendTo.DeviceList.Text" = "ئىشلىتىشچان ئۈسكۈنىلەر:";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "پەقەت HTTP ۋە HTTPS ئۇلانمىلىرىنىلا ھەمبەھىرلىگىلى بولىدۇ.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "جەزملە";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "سىز ئورتاقلاشماقچى بولغان ئۇلانمىنى ھەمبەھىرلەشكە بولمايدۇ.";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"SendTo.NavBar.Title" = "بەتكۈچ يوللا";
+
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message" = "بۇ Firefox ھېساباتىغا باغلانغان قەدەمداشلىنىدىغان باشقا ئۈسكۈنە يوق.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Message" = "Firefox نى ئېچىپ، تەڭشەككە يۆتكىلىپ ئاندىن داۋاملاشتۇرۇش ئۈچۈن تىزىمغا كىرىڭ.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Title" = "سىز تىخى Firefox ھېساباتىڭىزغا كىرمىدىڭىز.";
+
+/* Navigation bar button to Send the current page to a device */
+"SendTo.SendAction.Text" = "يوللا";
+
+/* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_body" = "باشقا ئۈسكۈنىدىن يېڭى بەتكۈچ كەلدى.";
+
+/* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_title" = "بەتكۈچ تاپشۇرۇۋالدى";
+
+/* Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name. */
+"SentTab_TabArrivingNotification_WithDevice_body" = "يېڭى بەتكۈچنى %@ دىن تاپشۇرۇۋالدى";
+
+/* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
+"SentTab_TabArrivingNotification_WithDevice_title" = "بەتكۈچ %@ دىن تاپشۇرۇۋېلىندى";
+
+/* Body of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.body" = "بۇ يەرنى چېكىپ باشلاڭ";
+
+/* Title of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.title" = "Firefox قەدەمداش";
+
+/* Label for an action used to view one or more tabs from a notification. */
+"SentTab.ViewAction.title" = "كۆرۈنۈش";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "قېنىق قوڭۇر رەڭ";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Title in the settings view controller title bar */
+"Settings" = "تەڭشەكلەر";
+
+/* The button text in Search Settings that opens the Custom Search Engine view. */
+"Settings.AddCustomEngine" = "ئىزدەش موتورى قوش";
+
 /* The text on the Save button when saving a custom search engine */
 "Settings.AddCustomEngine.SaveButtonText" = "ساقلاش";
+
+/* The title of the  Custom Search Engine view. */
+"Settings.AddCustomEngine.Title" = "ئىزدەش موتورى قوش";
+
+/* The title for the field which sets the title for a custom search engine. */
+"Settings.AddCustomEngine.TitleLabel" = "ماۋزۇ";
+
+/* The placeholder for Title Field when saving a custom search engine. */
+"Settings.AddCustomEngine.TitlePlaceholder" = "ئىزدەش موتورى";
+
+/* The title for URL Field */
+"Settings.AddCustomEngine.URLLabel" = "تور ئادرېسى";
+
+/* The placeholder for URL Field when saving a custom search engine */
+"Settings.AddCustomEngine.URLPlaceholder" = "تور ئادرېسى (سۈرۈشتۈرۈش %s غا ئالماشتۇرۇلىدۇ)";
+
+/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
+"Settings.AutofillCreditCard.Title.v112" = "ئىناۋەتلىك كارتىنى ئۆزلۈكىدىن تولدۇر";
+
+/* Button in Data Management that clears all items. */
+"Settings.ClearAllWebsiteData.Clear.Button" = "بارلىق تور بېكەت سانلىق مەلۇماتلىرىنى تازىلا";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "شەخسىي سانلىق مەلۇماتنى تازىلا";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "شەخسىي سانلىق مەلۇماتنى تازىلا";
+
+/* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
+"Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "تۈرنى تازىلاش: %1$@";
+
+/* Copy app version alert shown in settings. */
+"Settings.CopyAppVersion.Title" = "چاپلاش تاختىسىغا كۆچۈرۈلدى";
+
+/* Default text in search bar for Data Management */
+"Settings.DataManagement.SearchLabel" = "بېكەت سۈزگۈچ";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.DataManagement.SectionName" = "سانلىق مەلۇمات باشقۇرۇش";
+
+/* Title displayed in header of the setting panel. */
+"Settings.DataManagement.Title" = "سانلىق مەلۇمات باشقۇرۇش";
+
+/* Body of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Body" = "Firefox ھېساباتىڭىز بىلەن قەدەمداشلاشنى توختىتىدۇ، ئەمما بۇ ئۈسكۈنىدىكى توركۆرگۈ سانلىق مەلۇماتلىرىڭىزنى ئۆچۈرمەيدۇ.";
+
+/* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
+"Settings.Disconnect.Button" = "قەدەمداشنى ئۈز";
+
+/* Cancel action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.CancelButton" = "ۋاز كەچ";
+
+/* Destructive action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.DestructiveButton" = "ئۇلانمىنى ئۈز";
+
+/* Title of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Title" = "قەدەمداشنى ئۈزەمدۇ؟";
+
+/* Section header for brightness slider. */
+"Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "بوسۇغا";
+
+/* Display (theme) settings label to show if manually switch theme is enabled. */
+"Settings.DisplayTheme.Manual.StatusLabel" = "قولدا";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Manually'. */
+"Settings.DisplayTheme.Manual.SwitchSubtitle" = "ئېھتىياجلىق ئۆرنەكنى تاللاڭ";
+
+/* Display (theme) setting to choose the theme manually. */
+"Settings.DisplayTheme.Manual.SwitchTitle" = "قولدا";
+
+/* Option choice in display theme settings for dark theme */
+"Settings.DisplayTheme.OptionDark" = "قاراڭغۇ";
+
+/* Option choice in display theme settings for light theme */
+"Settings.DisplayTheme.OptionLight" = "يورۇق";
+
+/* Display (theme) settings footer describing how the brightness slider works. */
+"Settings.DisplayTheme.SectionFooter" = "ئۆرنەك ئېكران يورۇقلۇقىغا ئاساسەن ئۆزلۈكىدىن ئۆزگەرتىدۇ. سىز ئۆرنەكنى ئۆزگەرتىپ بوسۇغا قىممەتنى تەڭشىيەلەيسىز. چەمبەر ئېكرانىڭىزنىڭ ھازىرقى يورۇقلۇق دەرىجىسىنى ئىپادىلەيدۇ.";
+
+/* Display (theme) settings label to show if automatically switch theme is enabled. */
+"Settings.DisplayTheme.StatusTitle" = "ئاپتوماتىك";
+
+/* Switch mode settings section title */
+"Settings.DisplayTheme.SwitchMode.SectionHeader" = "ھالەت ئالماشتۇرۇش";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
+"Settings.DisplayTheme.SwitchSubtitle" = "ئېكراننىڭ يورۇقلۇقىغا ئاساسەن ئاپتوماتىك ئالماشتۇرىدۇ";
+
+/* Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
+"Settings.DisplayTheme.SwitchTitle" = "ئاپتوماتىك";
+
+/* System theme settings section title */
+"Settings.DisplayTheme.SystemTheme.SectionHeader" = "سىستېما ئۆرنىكى";
+
+/* System theme settings switch to choose whether to use the same theme as the system */
+"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "سىستېما يورۇق/قاراڭغۇ ھالەتنى ئىشلىتىدۇ";
+
+/* Theme picker settings section title */
+"Settings.DisplayTheme.ThemePicker.SectionHeader" = "ئۆرنەك تاللىغۇچ";
+
+/* Title in main app settings for Theme settings */
+"Settings.DisplayTheme.Title.v2" = "ئۆرنەك";
+
+/* Label used for the device name settings section. */
+"Settings.FxA.DeviceName" = "ئۈسكۈنە ئىسمى";
+
+/* Label used as a section title in the Firefox Accounts Settings screen. */
+"Settings.FxA.Sync.SectionName" = "قەدەمداش تەڭشەكلەر";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title" = "Firefox ھېساباتى";
+
+/* General settings section title */
+"Settings.General.SectionName" = "ئادەتتىكى";
+
+/* This is the description below the settings section located in the menu under customize current homepage. It describes what the options in the section are for. */
+"Settings.Home.Current.Description.v101" = "باش بەتتە نېمە كۆرسىتىدىغانلىقى تاللىنىدۇ.";
+
+/* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
+"Settings.Home.Option.Description.v101" = "Firefox نىڭ باش بېتى نېمىنى ئۆز ئىچىگە ئالىدىغانلىقى تاللىنىدۇ.";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
+"Settings.Home.Option.JumpBackIn" = "ئالدىنقى بەتكە قايت";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off */
+"Settings.Home.Option.Pocket" = "Pocket تەۋسىيەسى";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Saved section on the Firefox homepage on or off */
+"Settings.Home.Option.RecentlySaved" = "يېقىندا ساقلانغان";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off */
+"Settings.Home.Option.RecentlyVisited" = "يېقىندا زىيارەت قىلغان";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
+"Settings.Home.Option.Shortcuts" = "تېزلەتمە";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
+"Settings.Home.Option.StartAtHome.AfterFourHours" = "تۆت سائەت ئىشلەتمىسە باش بەتكە قايتىدۇ";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage every time they open up Firefox */
+"Settings.Home.Option.StartAtHome.Always" = "باش بەت";
+
+/* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
+"Settings.Home.Option.StartAtHome.Description" = "Firefox قا قايتقاندا كۆرۈنىدىغان مەزمۇن تاللىنىدۇ.";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
+"Settings.Home.Option.StartAtHome.Never" = "ئاخىرقى بەتكۈچ";
+
+/* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
+"Settings.Home.Option.StartAtHome.Title" = "ئېچىلىش ئېكرانى";
+
+/* In the settings menu, this is the title of the Firefox Homepage customization settings section */
+"Settings.Home.Option.Title.v101" = "باش بەتتە كۆرۈنىدۇ";
+
+/* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper" = "تام قەغىزى";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Firefox تام قەغىزى ، ئامېتىست ئەندىزىسى.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Firefox تام قەغىزى ، ساھىل تاغ ئەندىزىسى.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Firefox تام قەغىزى، ھاۋا رەڭ ئەندىزە.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "كۆڭۈلدىكى يورۇق تام قەغەز.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Firefox تام قەغىزى، كۈن چىقىش ئەندىزە.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
+"Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "باش بەت تام قەغىزىنى ئالماشتۇرۇش ئۈزچاتى";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Firefox تام قەغىزى ، شەپەقتىكى تاغ ئەندىزىسى.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
+"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "ئەنئەنىۋى %@";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.CollectionTitle" = "ئېچىلىش ئېكرانى";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the button title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LearnMore.v106" = "تەپسىلاتى";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the default description of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Default.Description.v106" = "يېڭى يىغقۇچنى سىناش.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the description of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.IndependentVoices.Description.v106" = "يېڭى مۇستەقىل ئاۋاز توپلىمى.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "چەكلىك نەشرى";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Firefox نىڭ باش بەت تۇغىنى چېكىپ تام قەغىزىنى ئۆزگەرتكىلى بولىدۇ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.Title" = "تام قەغىزى";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of toast that comes up when the user changes wallpaper, which lets them know that the wallpaper has been updated. */
+"Settings.Home.Option.Wallpaper.UpdatedToast" = "تام قەغىزى يېڭىلاندى!";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper. */
+"Settings.Home.Option.Wallpaper.UpdatedToastButton" = "كۆرۈنۈش";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "باش بەت";
+
+/* This string is the title of the setting button which can be clicked to open a page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.Rows.v100" = "قۇر";
+
+/* This string is the title of the page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.RowsPageTitle.v100" = "قۇر";
+
+/* Users can disable or enable shortcuts related settings. This string is the title of the page to change your shortcuts settings. */
+"Settings.Homepage.Shortcuts.ShortcutsPageTitle.v100" = "تېزلەتمە";
+
+/* This string is the title of the toggle to disable the shortcuts section in the settings page. */
+"Settings.Homepage.Shortcuts.ShortcutsToggle.v100" = "تېزلەتمە";
+
+/* This string is the title of the toggle to disable the sponsored shortcuts functionnality which can be enabled in the shortcut sections. This toggle is in the settings page. */
+"Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "قوللايدىغانلار تېزلەتمىسى";
+
+/* Toggled OFF to hide the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOff.v100" = "تاقاق";
+
+/* Toggled ON to show the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOn.v100" = "ئوچۇق";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "نۆۋەتتىكى باش بەت";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "نۆۋەتتىكى بەتنى ئىشلەت";
+
+/* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
+"Settings.LoginsAndPasswordsTitle" = "كىرىش ۋە ئىم";
+
+/* Label used to set a custom url as the new tab option (homepage). */
+"Settings.NewTab.CustomURL" = "ئىختىيارى تور ئادرېسى";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "بوش بەت";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.Custom" = "ئىختىيارىچە";
+
+/* Option in settings to show Firefox Home when you open a new tab */
+"Settings.NewTab.Option.FirefoxHome" = "Firefox باش بەت";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "باش بەت";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
+"Settings.NewTab.SectionName" = "يېڭى بەتكۈچ";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "يېڭى بەتكۈچ";
+
+/* Label at the top of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionName" = "كۆرسەت";
+
+/* Footer at the bottom of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionNameFooter" = "يېڭى بەتكۈچ ئاچقاندا نېمىلەرنى يۈكلەش تاللىنىدۇ";
+
+/* Label for the block images toggle displayed in the settings menu. Enabling this toggle will hide images on any webpage the user visits. */
+"Settings.NoImageModeBlockImages.Label.v99" = "سۈرەتنى توس";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Status" = "Firefox نى ئاچقاندا";
+
+/* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Title" = "كۆچۈرۈلگەن ئۇلانمىنى ئېچىشقا تەمىنلەيدۇ";
+
+/* Title for Open With Settings */
+"Settings.OpenWith.PageTitle" = "خەت ئۇلانمىسىنى ئاچىدىغىنى";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
+"Settings.OpenWith.SectionName" = "خەت ئەپى";
+
+/* Touch ID prompt subtitle when accessing logins and passwords */
+"Settings.Passwords.FingerPrintReason.v103" = "بارماق ئىزىڭىزنى ئىشلىتىپ ئىم ئۇچۇرىنى زىيارەت قىلىڭ.";
+
+/* Message shown when you enter Passwords screen for the first time. It explains how password are protected in the Firefox for iOS application. */
+"Settings.Passwords.OnboardingMessage.v103" = "پارولىڭىز ھازىر چىراي كىملىكى بىلەن قوغدالغان، كىملىكنى چېكىڭ ياكى ئۈسكۈنە ئىم كودىنى كىرگۈزۈڭ.";
+
+/* Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords. */
+"Settings.Passwords.SavePasswords.v103" = "ئىم ساقلا";
+
+/* Title for the passwords screen. */
+"Settings.Passwords.Title.v103" = "ئىم";
+
+/* Setting to enable the built-in password manager */
+"Settings.SaveLogins.Title" = "تىزىمغا كىرىشنى ساقلا";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "تامام";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "تەھرىر";
+
+/* title for a link that explains how mozilla collects telemetry */
+"Settings.SendUsage.Link" = "تەپسىلاتى.";
+
+/* A short description that explains why mozilla collects usage data. */
+"Settings.SendUsage.Message" = "Mozilla پەقەت كۆپچىلىككە تەمىنلەيدىغان ۋە Firefox نى ياخشىلاش ئۈچۈن زۆرۈر بولغان ئۇچۇرلارنىلا توپلايدۇ.";
+
+/* The title for the setting to send usage data. */
+"Settings.SendUsage.Title" = "ئىشلىتىش سانلىق مەلۇماتلىرىنى يوللايدۇ";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.Status" = "ئۇلانمىنى ئۇزۇن باسقاندا";
+
+/* Title of setting to enable link previews when long-pressing links. */
+"Settings.ShowLinkPreviews.Title" = "ئۇلانما ئالدىن كۆزىتىشنى كۆرسىتىدۇ";
+
+/* Setting to show Logins & Passwords quick access in the application menu */
+"Settings.ShowLoginsInAppMenu.Title" = "ئەپ تىزىملىكىدە كۆرسىتىدۇ";
+
+/* The description of the open new tab siri shortcut */
+"Settings.Siri.OpenTabShortcut" = "يېڭى بەتكۈچ ئاچ";
+
+/* The description that describes what siri shortcuts are */
+"Settings.Siri.SectionDescription" = "Siri تېزلەتمىسىنى ئىشلىتىپ Siri ئارقىلىق Firefox نى تېز ئاچىدۇ";
+
+/* The option that takes you to the siri shortcuts settings page */
+"Settings.Siri.SectionName" = "Siri تېزلەتمىسى";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Toggle.Link" = "تەپسىلاتى.";
+
+/* A short description that explains that Mozilla is running studies */
+"Settings.Studies.Toggle.Message" = "Firefox پات-پات تەتقىقاتلارنى ئورنىتىپ ئىجرا قىلالايدۇ.";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Toggle.Title" = "تەتقىقات";
+
+/* Ddescription that appears in the settings screen to explain what Firefox Sync is useful for. */
+"Settings.Sync.ButtonDescription.v103" = "تىزىمغا كىرسە بەتكۈچ، خەتكۈچ، ئىم ۋە باشقا سانلىق مەلۇماتلار قەدەمداشلىنىدۇ.";
+
+/* Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data. */
+"Settings.Sync.ButtonTitle.v103" = "قەدەمداشلاپ سانلىق مەلۇماتنى ساقلا";
+
+/* Title for the page where the user sign in to their Firefox Sync account. */
+"Settings.Sync.SignInView.Title.v103" = "قەدەمداشلاپ سانلىق مەلۇماتنى ساقلا";
+
+/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "ئاكتىپسىز بەتكۈچ";
+
+/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101" = "سىز ئىككى ھەپتە كۆرمىگەن بەتكۈچلەر ئاكتىپسىز بۆلەككە يۆتكىلىدۇ.";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
+"Settings.Tabs.CustomizeTabsSection.TabGroups" = "بەتكۈچ گۇرۇپپىسى";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the Tabs Tray customization section. The tabs tray is accessed from firefox hompage */
+"Settings.Tabs.CustomizeTabsSection.Title" = "ئىختىيارى بەتكۈچ تەخسە";
+
+/* In the settings menu, this is the title for the Tabs customization section option */
+"Settings.Tabs.Title" = "بەتكۈچ";
+
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the bottom of the screen. */
+"Settings.Toolbar.Bottom" = "ئاستى";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Toolbar appearance. */
+"Settings.Toolbar.SettingsTitle" = "قورال بالداق";
+
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the top of the screen. */
+"Settings.Toolbar.Top" = "چوققا";
+
+/* Dismiss button for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Button" = "ماقۇل، چۈشىنىشلىك";
+
+/* Title for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Title" = "دىققەت!";
+
+/* The Title on info view which shows a list of all blocked websites */
+"Settings.TrackingProtection.Info.BlocksTitle" = "توسقانلىرى";
+
+/* 'Learn more' info link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.LearnMore" = "تەپسىلاتى";
+
+/* Title for tracking protection options section where level can be selected. */
+"Settings.TrackingProtection.ProtectionLevelTitle" = "قوغداش دەرىجىسى";
+
+/* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
+"Settings.TrackingProtection.SectionName" = "ئىزلاشتىن قوغداش";
+
+/* Tracking protection settings option for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BasicBlockList" = "ئۆلچەملىك (كۆڭۈلدىكى)";
+
+/* Tracking protection settings status showing the current option selected. */
+"Settings.TrackingProtectionOption.BasicBlockList.Status" = "ئۆلچەملىك";
+
+/* Tracking protection settings option for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrict" = "قاتتىق";
+
+/* Settings option to specify that Tracking Protection is on */
+"Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "كۈچەيتىلگەن ئىزلاشتىن قوغداش";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "كاشىلا ئوڭشاش";
+
+/* Button shows all websites on website data tableview */
+"Settings.WebsiteData.ButtonShowMore" = "تەپسىلىي كۆرسەت";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"Settings.WebsiteData.ConfirmPrompt" = "بۇ مەشغۇلات تور بېكەت ئۇچۇرلىرىنىڭ ھەممىسىنى تازىلايدۇ. ئۇنى ئەمەلدىن قالدۇرغىلى بولمايدۇ.";
+
+/* Description of the confirmation dialog shown when a user tries to clear some of their private data. */
+"Settings.WebsiteData.SelectedConfirmPrompt" = "بۇ مەشغۇلات تاللىغان تۈرنى تازىلايدۇ. ئۇنى ئەمەلدىن قالدۇرغىلى بولمايدۇ.";
+
+/* Title displayed in header of the Data Management panel. */
+"Settings.WebsiteData.Title" = "تور بېكەت سانلىق مەلۇماتى";
+
+/* Action label on share extension to add page to the Firefox reading list. */
+"ShareExtension.AddToReadingListAction.Title" = "ئوقۇش تىزىمىغا قوش";
+
+/* Share extension label shown after user has performed 'Add to Reading List' action. */
+"ShareExtension.AddToReadingListActionDone.Title" = "ئوقۇش تىزىمىغا قوشۇلدى";
+
+/* Action label on share extension to bookmark the page in Firefox. */
+"ShareExtension.BookmarkThisPageAction.Title" = "بۇ بەتنى خەتكۈچكە قوش";
+
+/* Share extension label shown after user has performed 'Bookmark this Page' action. */
+"ShareExtension.BookmarkThisPageActionDone.Title" = "خەتكۈچكە قوشۇلدى";
+
+/* Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground. */
+"ShareExtension.LoadInBackgroundAction.Title" = "ئارقا سۇپىدا يۈكلە";
+
+/* Share extension label shown after user has performed 'Load in Background' action. */
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Firefox تا يۈكلەۋاتىدۇ";
+
+/* Action label on share extension to immediately open page in Firefox. */
+"ShareExtension.OpenInFirefoxAction.Title" = "Firefox تا ئاچ";
+
+/* Action label on share extension to search for the selected text in Firefox. */
+"ShareExtension.SeachInFirefoxAction.Title" = "Firefox تا ئىزدە";
+
+/* Button in share sheet to copy the url of the current tab. */
+"ShareSheet.Copy.Title.v108" = "كۆچۈر";
+
+/* Button in the share sheet to send the current link to another device. */
+"ShareSheet.SendToDevice.Title.v108" = "ئۈسكۈنىگە ئۇلانما يوللا";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "ئىزدەش تەكلىپلىرىنى كۆرسىتىدۇ";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar */
+"Show Tabs" = "بەتكۈچ كۆرسەت";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "يېتەكچى كۆرسەت";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "توختا";
+
+/* Support section title */
+"Support" = "قوللاش";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "ئۈچ بارماق بىلەن ئوڭ ياكى سولغا سىيرىلسا بەتكۈچنى تاقايدۇ.";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "قەدەمداشلاۋاتىدۇ…";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "قەدەمداش تورسىز";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "%1$@ / %2$@ بەتكۈچ";
+
+/* A label indicating the keyboard shortcut of showing the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Tab.ShowTabTray.KeyCodeTitle" = "بارلىق بەتكۈچلەرنى كۆرسەت";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "%1$@ - %2$@ / %3$@ بەتكۈچ";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "بەتكۈچ تەخسە";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "يېنىۋال";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "%d بەتكۈچ تاقالدى";
+
+/* Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103" = "ئاكتىپسىز بەتكۈچنى كۆرسىتىدۇ";
+
+/* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "ئاكتىپسىز بەتكۈچنى يوشۇرىدۇ";
+
+/* Accessibility Label for the tab toolbar Search button */
+"TabToolbar.Accessibility.Search.v106" = "ئىزدە";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"TabTray.AddTab.Button" = "بەتكۈچ قوش";
+
+/* A label indicating the keyboard shortcut of closing all tabs from the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"TabTray.CloseAllTabs.KeyCodeTitle" = "ھەممە بەتكۈچنى ياپ";
+
+/* Accessibility label for the currently selected tab. */
+"TabTray.CurrentSelectedTab.A11Y" = "نۆۋەتتە تاللانغان بەتكۈچ.";
+
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
+"TabTray.Header.FilteredTabs.SectionHeader" = "باشقا";
+
+/* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
+"TabTray.InactiveTabs.SectionTitle" = "ئاكتىپسىز بەتكۈچ";
+
+/* A label indicating the keyboard shortcut of opening a new tab in the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"TabTray.OpenNewTab.KeyCodeTitle" = "يېڭى بەتكۈچ ئاچ";
+
+/* The title on the button to look at private tabs. */
+"TabTray.SegmentedControlTitles.PrivateTabs" = "شەخسىيەت";
+
+/* The title on the button to look at synced tabs. */
+"TabTray.SegmentedControlTitles.SyncedTabs" = "قەدەمداشلاندى";
+
+/* The title on the button to look at regular tabs. */
+"TabTray.SegmentedControlTitles.Tabs" = "بەتكۈچ";
+
+/* The title for the tab tray */
+"TabTray.Title" = "ئوچۇق بەتكۈچ";
+
+/* Accessibility Label for the tabs button in the tab toolbar */
+"TabTrayButtons.Accessibility.ShowTabs.v106" = "بەتكۈچنى كۆرسەت";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "بۇ بەتنى ئوقۇرمەن كۆرۈنۈشىدە كۆرسىتەلمىدى.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "باشقا ئۈسكۈنىلىرىڭىزدىكى بەتكۈچلەرنى زىيارەت قىلىشتا مەسىلە كۆرۈلدى. سەل تۇرۇپ قايتا سىناڭ.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "بەتنى ئايلاندۇرۇۋاتقاندا خاتالىق كۆرۈلدى";
+
+/* Relative date for date in past week. */
+"this week" = "بۇ ھەپتە";
+
+/* Relative date for yesterday. */
+"TimeConstants.Yesterday.v106" = "تۈنۈگۈن";
+
+/* label for Not Now button */
+"Toasts.NotNow" = "ھازىر ئەمەس";
+
+/* Open App Store button */
+"Toasts.OpenAppStore" = "App Store نى ئاچ";
+
+/* Label for button to undo the action just performed */
+"Toasts.Undo" = "يېنىۋال";
+
+/* This label is meant to signify the section containing a group of items from the current day. */
+"Today" = "بۈگۈن";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "بۈگۈن %@";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "تىزىملىك";
+
+/* Accessibility label for the Close All Tabs menu button. */
+"Toolbar.Menu.CloseAllTabs" = "ھەممە بەتكۈچنى ياپ";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "بەتنى چىقىرىۋەت-%@";
+
+/* Button to disallow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.Cancel" = "ياق";
+
+/* Button to allow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.OK" = "ھەئە";
+
+/* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
+"TranslationToastHandler.PromptTranslate.Title" = "بۇ بەت %1$@ سۈپىتىدە كۆرۈنىدۇ. %3$@ دا %2$@ غا تەرجىمە قىلامدۇ؟";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
+"UIMenuItem.PasteGo" = "چاپلاپ يۆتكەل";
+
+/* Search in New Tab Text selection menu item */
+"UIMenuItem.SearchWithFirefox" = "Firefox تا ئىزدە";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "ئوقۇلمىغان";
+
+/* Debug option */
+"Use stage servers" = "ئالدىن تارقىتىش مۇلازىمىتىنى ئىشلەت";
+
+/* Username textbox in Authentication prompt */
+"Username" = "ئىشلەتكۈچى ئىسمى";
+
+/* The message of the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Change.Error.Body.v106" = "بۇ تام قەغىزىدە خاتالىق كۆرۈلدى.";
+
+/* The title of the error displayed when changing wallpaper fails. */
+"Wallpaper.Change.Error.Title.v106" = "تام قەغىزىنى ئالماشتۇرالمىدى";
+
+/* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
+"Wallpaper.Download.Error.Body.v106" = "چۈشۈرۈشتە خاتالىق كۆرۈلدى.";
+
+/* The title of the error displayed if download fails when changing a wallpaper. */
+"Wallpaper.Download.Error.Title.v106" = "تام قەغىزىنى چۈشۈرەلمىدى";
+
+/* An action for the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Error.Dismiss.v106" = "ۋاز كەچ";
+
+/* Action displayed when changing wallpaper fails. */
+"Wallpaper.Error.TryAgain.v106" = "قايتا سىنا";
+
+/* Accessibility label for the main web content view */
+"Web content" = "تور مەزمۇنى";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "ئوقۇش تىزىمىڭىزگە خۇش كەپسىز";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "ئاپلا، ئادەمنى خىجىل قىلىپ.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "ۋىكىپېدىيا";
+
+/* Relative date for yesterday. */
+"yesterday" = "تۈنۈگۈن";
+
+/* This label is meant to signify the section containing a group of items from the past 24 hours. */
+"Yesterday" = "تۈنۈگۈن";
+
+/* Error message in the remote tabs panel */
+"You don’t have any tabs open in Firefox on your other devices." = "باشقا ئۈسكۈنىڭىزدە Firefox دا ھېچقانداق بەتكۈچ ئاچمىغان.";
+
+/* Your Rights settings section title */
+"Your Rights" = "ھوقۇقىڭىز";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
 

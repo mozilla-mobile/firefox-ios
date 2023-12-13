@@ -58,5 +58,20 @@ extension Tab {
                 try data.write(to: ChangeUserAgent.file)
             } catch {}
         }
+
+        // Returns a URL without a mobile prefix (`"m."` or `"mobile."`)
+        func removeMobilePrefixFrom(url: URL) -> URL {
+            let subDomainsToRemove: Set<String> = ["m", "mobile"]
+
+            guard var components = URLComponents(url: url, resolvingAgainstBaseURL: true) else { return url }
+            guard let parts = components.host?.split(separator: ".").filter({ !subDomainsToRemove.contains(String($0)) }) else { return url }
+
+            let host = parts.joined(separator: ".")
+
+            guard host != url.publicSuffix else { return url }
+            components.host = host
+
+            return components.url ?? url
+        }
     }
 }

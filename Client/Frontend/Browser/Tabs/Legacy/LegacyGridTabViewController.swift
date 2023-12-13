@@ -576,8 +576,8 @@ extension LegacyGridTabViewController: LegacyTabCellDelegate {
     }
 }
 
-// MARK: - TabPeekDelegate
-extension LegacyGridTabViewController: TabPeekDelegate {
+// MARK: - LegacyTabPeekDelegate
+extension LegacyGridTabViewController: LegacyTabPeekDelegate {
     func tabPeekDidAddBookmark(_ tab: Tab) {
         delegate?.tabTrayDidAddBookmark(tab)
     }
@@ -619,6 +619,7 @@ extension LegacyGridTabViewController: TabDisplayCompletionDelegate, RecentlyClo
         dismissTabTray()
     }
 
+    @discardableResult
     func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,

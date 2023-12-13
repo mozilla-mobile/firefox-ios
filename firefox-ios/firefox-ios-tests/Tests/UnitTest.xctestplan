@@ -178,6 +178,13 @@
         "identifier" : "ReduxTests",
         "name" : "ReduxTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:BrowserKit",
+        "identifier" : "WebEngineTests",
+        "name" : "WebEngineTests"
+      }
     }
   ],
   "version" : 1

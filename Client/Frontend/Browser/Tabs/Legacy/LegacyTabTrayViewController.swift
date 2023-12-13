@@ -36,6 +36,7 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
     var nimbus: FxNimbus
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
+    weak var qrCodeNavigationHandler: QRCodeNavigationHandler?
 
     // MARK: - UI Elements
     private var titleWidthConstraint: NSLayoutConstraint?
@@ -615,6 +616,7 @@ extension LegacyTabTrayViewController: RemotePanelDelegate {
                                                                                      flowType: .emailLoginFlow,
                                                                                      referringPage: .tabTray,
                                                                                      profile: viewModel.profile)
+        (controller as? FirefoxAccountSignInViewController)?.qrCodeNavigationHandler = qrCodeNavigationHandler
         (controller as? FirefoxAccountSignInViewController)?.shouldReload = { [weak self] in
             self?.viewModel.reloadRemoteTabs()
         }

@@ -224,7 +224,12 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
                                                            constant: -UX.ctaButtonBottomSpaceSmall),
                 goToSettingsButton.widthAnchor.constraint(equalToConstant: UX.ctaButtonWidth)
             ])
-            goToSettingsButton.contentEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+            goToSettingsButton.configuration?.contentInsets = NSDirectionalEdgeInsets(
+                top: 20.0,
+                leading: 20.0,
+                bottom: 20.0,
+                trailing: 20.0
+            )
         } else {
             NSLayoutConstraint.activate([
                 goToSettingsButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,

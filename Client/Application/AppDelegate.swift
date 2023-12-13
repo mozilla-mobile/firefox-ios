@@ -30,6 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var ratingPromptManager = RatingPromptManager(profile: profile)
     lazy var appSessionManager: AppSessionProvider = AppSessionManager()
     lazy var notificationSurfaceManager = NotificationSurfaceManager()
+    lazy var windowManager = WindowManagerImplementation()
 
     private var shutdownWebServer: DispatchSourceTimer?
     private var webServerUtil: WebServerUtil?

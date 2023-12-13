@@ -80,6 +80,7 @@ features:
           # Nimbus team.
           triggers:
             NOT_INSTALLED_TODAY:      days_since_install > 0
+            DAY_3_AFTER_INSTALL:      days_since_install >= 3
             NOT_LAUNCHED_YESTERDAY:   "'app_cycle.foreground'|eventLastSeen('Days', 1) > 1"
             AFTER_THREE_LAUNCHES_THIS_WEEK: "'app_cycle.foreground'|eventSum('Weeks', 1, 0) >= 3"
             ON_FOURTH_LAUNCH_THIS_YEAR: "'app_cycle.foreground'|eventSum('Years', 1, 0) > 3"

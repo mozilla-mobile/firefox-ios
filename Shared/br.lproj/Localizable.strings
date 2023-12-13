@@ -697,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "An anaouderien enrollet a vo diskouezet amañ. M'ho peus enrollet oc'h anaouderien evit Firefox en un drevnad all, kennaskit ouzh ho kont Firefox.";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "An anaouderien enrollet a vo diskouezet amañ. M’ho peus enrollet oc’h anaouderien war %@ en un drevnad all, kennaskit ouzh ho kont.";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Anaouder ebet kavet";
 
