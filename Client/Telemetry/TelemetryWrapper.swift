@@ -672,7 +672,7 @@ extension TelemetryWrapper {
         case shoppingCFRsDisplayed = "shopping-cfrs-displayed"
         case shoppingAdsExposure = "shopping-ads-exposure"
         case shoppingAdsImpression = "shopping-ads-impression"
-        case surfaceAdsClicked = "surface_ads_clicked"
+        case surfaceAdsClicked = "surface-ads-clicked"
         case shoppingNoAdsAvailable = "shopping-no-ads-available"
         case awesomebarShareTap = "awesomebar-share-tap"
         case largeFileWrite = "large-file-write"
