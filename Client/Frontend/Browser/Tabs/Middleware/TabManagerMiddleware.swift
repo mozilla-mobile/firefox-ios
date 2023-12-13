@@ -109,10 +109,9 @@ class TabManagerMiddleware {
         selectedPanel = panelType
 
         let isPrivate = panelType == .privateTabs
-        let tabsCount = refreshTabs(for: isPrivate).count
         return TabTrayModel(isPrivateMode: isPrivate,
                             selectedPanel: panelType,
-                            normalTabsCount: normalTabsCount)
+                            normalTabsCount: normalTabsCountText)
     }
 
     func getTabsDisplayModel(for isPrivateMode: Bool) -> TabDisplayModel {
@@ -120,7 +119,7 @@ class TabManagerMiddleware {
         let inactiveTabs = refreshInactiveTabs(for: isPrivateMode)
         let tabDisplayModel = TabDisplayModel(isPrivateMode: isPrivateMode,
                                               tabs: tabs,
-                                              normalTabsCount: normalTabsCount,
+                                              normalTabsCount: normalTabsCountText,
                                               inactiveTabs: inactiveTabs,
                                               isInactiveTabsExpanded: false)
         return tabDisplayModel
