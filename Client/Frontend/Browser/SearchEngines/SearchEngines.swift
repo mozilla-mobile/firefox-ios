@@ -45,7 +45,7 @@ class SearchEngines {
         self.prefs = prefs
         // By default, show search suggestions
         self.shouldShowSearchSuggestions = prefs.boolForKey(showSearchSuggestions) ?? true
-        self.shouldDisablePrivateModeSearchSuggestions = prefs.boolForKey(PrefsKeys.SearchSettings.disablePrivateModeSearchSuggestions) ?? true
+        self.shouldShowPrivateModeSearchSuggestions = prefs.boolForKey(PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions) ?? false
         self.fileAccessor = files
         self.engineProvider = engineProvider
         self.orderedEngines = []
@@ -101,9 +101,9 @@ class SearchEngines {
         }
     }
 
-    var shouldDisablePrivateModeSearchSuggestions: Bool {
+    var shouldShowPrivateModeSearchSuggestions: Bool {
         didSet {
-            self.prefs.setObject(shouldDisablePrivateModeSearchSuggestions, forKey: PrefsKeys.SearchSettings.disablePrivateModeSearchSuggestions)
+            self.prefs.setObject(shouldShowPrivateModeSearchSuggestions, forKey: PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions)
         }
     }
 
