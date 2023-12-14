@@ -141,8 +141,6 @@ class TabManagerMiddleware {
                                     isFxHomeTab: tab.isFxHomeTab,
                                     tabTitle: tab.displayTitle,
                                     url: tab.url,
-                                    canBeBookmarked: true, // TODO: Orla
-                                    canBeSaved: true, // TODO: Orla
                                     screenshot: tab.screenshot,
                                     hasHomeScreenshot: tab.hasHomeScreenshot,
                                     margin: 0)

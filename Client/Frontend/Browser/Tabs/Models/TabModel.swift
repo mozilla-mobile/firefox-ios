@@ -11,8 +11,6 @@ struct TabModel: Equatable {
     let isFxHomeTab: Bool
     let tabTitle: String
     let url: URL?
-    let canBeBookmarked: Bool
-    let canBeSaved: Bool
 
     let screenshot: UIImage? // TBD.
     let hasHomeScreenshot: Bool // TBD.
@@ -27,8 +25,6 @@ struct TabModel: Equatable {
             isFxHomeTab: false,
             tabTitle: title,
             url: nil,
-            canBeBookmarked: true,
-            canBeSaved: true,
             screenshot: nil,
             hasHomeScreenshot: false,
             margin: 0.0
