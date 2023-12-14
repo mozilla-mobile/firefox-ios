@@ -7,6 +7,7 @@ import XCTest
 import Shared
 import Common
 import Storage
+import TabDataStore
 @testable import Client
 
 class WindowManagerTests: XCTestCase {
@@ -99,6 +100,68 @@ class WindowManagerTests: XCTestCase {
         XCTAssertEqual(secondWindowUUID, subject.windows.keys.first!)
         // Check that the second window is now automatically our "active" window
         XCTAssertEqual(secondWindowUUID, subject.activeWindow)
+    }
+
+    func testNextAvailableUUIDWhenNoTabDataIsSaved() {
+        let subject = createSubject()
+        let tabDataStore: TabDataStore = AppContainer.shared.resolve()
+        let mockTabDataStore = tabDataStore as! MockTabDataStore
+        mockTabDataStore.resetMockTabWindowUUIDs()
+
+        // Check that asking for two UUIDs results in two unique/random UUIDs
+        // Note: there is a possibility of collision between any two randomly-
+        // generated UUIDs but it is astronomically small (1 out of 2^122).
+        let uuid1 = subject.nextAvailableWindowUUID()
+        let uuid2 = subject.nextAvailableWindowUUID()
+        XCTAssertNotEqual(uuid1, uuid2)
+    }
+
+    func testNextAvailableUUIDWhenOnlyOneWindowSaved() {
+        let subject = createSubject()
+        let tabDataStore: TabDataStore = AppContainer.shared.resolve()
+        let mockTabDataStore = tabDataStore as! MockTabDataStore
+        mockTabDataStore.resetMockTabWindowUUIDs()
+
+        let savedUUID = UUID()
+        mockTabDataStore.injectMockTabWindowUUID(savedUUID)
+
+        // Check that asking for first UUID returns the expected UUID
+        XCTAssertEqual(savedUUID, subject.nextAvailableWindowUUID())
+        // Open a window using this UUID
+        subject.newBrowserWindowConfigured(AppWindowInfo(), uuid: savedUUID)
+        // Check that asking for another UUID returns a new, random UUID
+        XCTAssertNotEqual(savedUUID, subject.nextAvailableWindowUUID())
+    }
+
+    func testNextAvailableUUIDWhenMultipleWindowsSaved() {
+        let subject = createSubject()
+        let tabDataStore: TabDataStore = AppContainer.shared.resolve()
+        let mockTabDataStore = tabDataStore as! MockTabDataStore
+        mockTabDataStore.resetMockTabWindowUUIDs()
+
+        let uuid1 = UUID()
+        let uuid2 = UUID()
+        let expectedUUIDs = Set<UUID>([uuid1, uuid2])
+        mockTabDataStore.injectMockTabWindowUUID(uuid1)
+        mockTabDataStore.injectMockTabWindowUUID(uuid2)
+
+        // Ask for UUIDs for two windows, which we open and configure
+        let result1 = subject.nextAvailableWindowUUID()
+        subject.newBrowserWindowConfigured(AppWindowInfo(), uuid: result1)
+        let result2 = subject.nextAvailableWindowUUID()
+        subject.newBrowserWindowConfigured(AppWindowInfo(), uuid: result2)
+
+        // Check that our UUIDs are the ones we expected
+        // (Note: currently the order is undefined, this may be changing soon)
+        XCTAssert(expectedUUIDs.contains(result1))
+        XCTAssert(expectedUUIDs.contains(result2))
+        XCTAssertEqual(expectedUUIDs.count, 2)
+
+        // Check that asking for a 3rd UUID returns a new, random UUID
+        let result3 = subject.nextAvailableWindowUUID()
+        XCTAssertFalse(expectedUUIDs.contains(result3))
+        XCTAssertNotEqual(result1, result3)
+        XCTAssertNotEqual(result2, result3)
     }
 
     // MARK: - Test Subject

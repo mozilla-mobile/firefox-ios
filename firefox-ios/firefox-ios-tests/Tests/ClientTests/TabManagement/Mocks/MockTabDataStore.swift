@@ -10,9 +10,10 @@ class MockTabDataStore: TabDataStore {
     var saveWindowDataCalledCount = 0
     var fetchTabWindowData: WindowData?
     var saveWindowData: WindowData?
+    private var persistedTabWindowUUIDs: [UUID] = []
 
     func fetchWindowDataUUIDs() -> [UUID] {
-        return []
+        return persistedTabWindowUUIDs
     }
 
     func fetchWindowData() async -> WindowData? {
@@ -26,4 +27,15 @@ class MockTabDataStore: TabDataStore {
     }
 
     func clearAllWindowsData() async {}
+}
+
+// Utilities for mocking available tab window UUIDs in unit tests.
+extension MockTabDataStore {
+    func resetMockTabWindowUUIDs() {
+        persistedTabWindowUUIDs.removeAll()
+    }
+
+    func injectMockTabWindowUUID(_ uuid: UUID) {
+        persistedTabWindowUUIDs.append(uuid)
+    }
 }
