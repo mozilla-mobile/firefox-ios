@@ -21,7 +21,7 @@ class WindowManagerTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
-        AppContainer.shared.reset()
+        DependencyHelperMock().reset()
     }
 
     func testConfiguringAndConnectingSingleAppWindow() {
