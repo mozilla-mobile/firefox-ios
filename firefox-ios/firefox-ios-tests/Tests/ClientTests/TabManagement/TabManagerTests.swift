@@ -23,9 +23,12 @@ class TabManagerTests: XCTestCase {
         super.setUp()
 
         DependencyHelperMock().bootstrapDependencies()
-        let uuid = (AppContainer.shared.resolve() as TabManager).windowUUID
+
         // For this test suite, use a consistent window UUID for all test cases
+        let windowManager: WindowManager = AppContainer.shared.resolve()
+        let uuid = windowManager.activeWindow
         tabWindowUUID = uuid
+
         mockProfile = MockProfile()
         mockDiskImageStore = MockDiskImageStore()
         mockTabStore = MockTabDataStore()
