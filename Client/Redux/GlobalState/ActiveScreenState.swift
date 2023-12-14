@@ -11,9 +11,11 @@ enum AppScreenState: Equatable {
     case tabsPanel(TabsPanelState)
     case tabsTray(TabTrayState)
     case themeSettings(ThemeSettingsState)
+    case tabPeek(TabPeekState)
 
     static let reducer: Reducer<Self> = { state, action in
         switch state {
+        case .tabPeek(let state): return .tabPeek(TabPeekState.reducer(state, action))
         case .themeSettings(let state): return .themeSettings(ThemeSettingsState.reducer(state, action))
         case .tabsTray(let state): return .tabsTray(TabTrayState.reducer(state, action))
         case .tabsPanel(let state): return .tabsPanel(TabsPanelState.reducer(state, action))
@@ -30,6 +32,7 @@ enum AppScreenState: Equatable {
         case .tabsTray: return .tabsTray
         case .tabsPanel: return .tabsPanel
         case .remoteTabsPanel: return .remoteTabsPanel
+        case .tabPeek: return .tabPeek
         }
     }
 }
@@ -62,6 +65,8 @@ struct ActiveScreensState: Equatable {
                 screens += [.tabsPanel(TabsPanelState())]
             case .showScreen(.themeSettings):
                 screens += [.themeSettings(ThemeSettingsState())]
+            case .showScreen(.tabPeek):
+                screens += [.tabPeek(TabPeekState())]
             }
         }
 

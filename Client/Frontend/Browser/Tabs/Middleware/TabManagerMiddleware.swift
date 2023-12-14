@@ -9,13 +9,16 @@ import TabDataStore
 class TabManagerMiddleware {
     var selectedPanel: TabTrayPanelType = .tabs
     private let windowManager: WindowManager
+    private let profile: Profile
 
     var normalTabsCountText: String {
         (defaultTabManager.normalTabs.count < 100) ? defaultTabManager.normalTabs.count.description : "\u{221E}"
     }
 
-    init(windowManager: WindowManager = AppContainer.shared.resolve()) {
+    init(windowManager: WindowManager = AppContainer.shared.resolve(),
+         profile: Profile = AppContainer.shared.resolve()) {
         self.windowManager = windowManager
+        self.profile = profile
     }
 
     lazy var tabsPanelProvider: Middleware<AppState> = { state, action in
@@ -135,6 +138,8 @@ class TabManagerMiddleware {
                                     isFxHomeTab: tab.isFxHomeTab,
                                     tabTitle: tab.displayTitle,
                                     url: tab.url,
+                                    canBeBookmarked: true, // TODO: Orla
+                                    canBeSaved: true, // TODO: Orla
                                     screenshot: tab.screenshot,
                                     hasHomeScreenshot: tab.hasHomeScreenshot,
                                     margin: 0)
