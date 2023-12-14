@@ -42,11 +42,12 @@ extension HomeLogoHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 
         let section = NSCollectionLayoutSection(group: group)
 
+        let leadingInset = HomepageViewModel.UX.leadingInset(traitCollection: traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(
             top: 0,
-            leading: HomepageViewModel.UX.standardInset,
+            leading: leadingInset,
             bottom: UX.bottomSpacing,
-            trailing: HomepageViewModel.UX.standardInset)
+            trailing: leadingInset)
 
         return section
     }
