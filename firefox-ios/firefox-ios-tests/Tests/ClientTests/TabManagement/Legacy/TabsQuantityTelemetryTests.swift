@@ -32,7 +32,6 @@ class TabsQuantityTelemetryTests: XCTestCase {
     func testTrackTabsQuantity_withNormalTab_gleanIsCalled() {
         let tabManager = TabManagerImplementation(profile: profile,
                                                   imageStore: nil,
-                                                  uuid: .defaultSingleWindowUUID,
                                                   inactiveTabsManager: inactiveTabsManager)
 
         let tab = tabManager.addTab()
@@ -51,7 +50,7 @@ class TabsQuantityTelemetryTests: XCTestCase {
     }
 
     func testTrackTabsQuantity_withPrivateTab_gleanIsCalled() {
-        let tabManager = TabManagerImplementation(profile: profile, imageStore: nil, uuid: .defaultSingleWindowUUID)
+        let tabManager = TabManagerImplementation(profile: profile, imageStore: nil)
         tabManager.addTab(isPrivate: true)
 
         TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
@@ -68,7 +67,6 @@ class TabsQuantityTelemetryTests: XCTestCase {
     func testTrackTabsQuantity_ensureNoInactiveTabs_gleanIsCalled() {
         let tabManager = TabManagerImplementation(profile: profile,
                                                   imageStore: nil,
-                                                  uuid: .defaultSingleWindowUUID,
                                                   inactiveTabsManager: inactiveTabsManager)
         let tab = tabManager.addTab()
         inactiveTabsManager.activeTabs = [tab]

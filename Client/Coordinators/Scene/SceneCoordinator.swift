@@ -13,17 +13,18 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
     let windowUUID: WindowUUID
     private let screenshotService: ScreenshotService
     private let sceneContainer: SceneContainer
+    private let windowManager: WindowManager
 
     init(scene: UIScene,
          sceneSetupHelper: SceneSetupHelper = SceneSetupHelper(),
          screenshotService: ScreenshotService = ScreenshotService(),
-         sceneContainer: SceneContainer = SceneContainer()) {
+         sceneContainer: SceneContainer = SceneContainer(),
+         windowManager: WindowManager = AppContainer.shared.resolve()) {
         self.window = sceneSetupHelper.configureWindowFor(scene, screenshotServiceDelegate: screenshotService)
         self.screenshotService = screenshotService
         self.sceneContainer = sceneContainer
-
-        // TODO: [FXIOS-7798] Update for iPad multi-window. Default to single-window UUID for now.
-        self.windowUUID = .defaultSingleWindowUUID
+        self.windowManager = windowManager
+        self.windowUUID = windowManager.nextAvailableWindowUUID()
 
         let navigationController = sceneSetupHelper.createNavigationController()
         let router = DefaultRouter(navigationController: navigationController)
