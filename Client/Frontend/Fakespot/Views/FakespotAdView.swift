@@ -91,6 +91,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         static let starSize: CGFloat = 24
         static let starMaxSize: CGFloat = 42
 
+        static let productImageCornerRadius: CGFloat = 2
         static let productImageMinSize = CGSize(width: 70, height: 60)
         static let productImageMaxSize = CGSize(width: 206, height: 173)
         static let defaultImageSize = CGSize(width: 24, height: 24)
@@ -99,13 +100,16 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
 
     // MARK: Views
     private lazy var cardContainer: ShadowCardView = .build()
-    private lazy var imageContainerView: UIView = .build()
+    private lazy var imageContainerView: UIView = .build { view in
+        view.layer.cornerRadius = UX.productImageCornerRadius
+    }
     private var defaultImageView: UIImageView = .build { view in
         view.image = UIImage(named: StandardImageIdentifiers.Large.image)?.withRenderingMode(.alwaysTemplate)
     }
     private lazy var productImageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = UX.productImageCornerRadius
     }
 
     var notificationCenter: NotificationProtocol = NotificationCenter.default
