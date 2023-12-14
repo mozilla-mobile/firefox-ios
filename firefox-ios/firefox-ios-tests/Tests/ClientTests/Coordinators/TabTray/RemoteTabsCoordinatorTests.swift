@@ -9,6 +9,7 @@ final class RemoteTabsCoordinatorTests: XCTestCase {
     private var mockProfile: MockProfile!
     private var mockRouter: MockRouter!
     private var mockApplicationHelper: MockApplicationHelper!
+    private var qrDelegate: MockQRCodeViewControllerDelegate!
 
     override func setUp() {
         super.setUp()
@@ -16,6 +17,7 @@ final class RemoteTabsCoordinatorTests: XCTestCase {
         mockProfile = MockProfile()
         mockRouter = MockRouter(navigationController: MockNavigationController())
         mockApplicationHelper = MockApplicationHelper()
+        qrDelegate = MockQRCodeViewControllerDelegate()
     }
 
     override func tearDown() {
@@ -23,6 +25,7 @@ final class RemoteTabsCoordinatorTests: XCTestCase {
         mockProfile = nil
         mockRouter = nil
         mockApplicationHelper = nil
+        qrDelegate = nil
         DependencyHelperMock().reset()
     }
 
@@ -44,6 +47,26 @@ final class RemoteTabsCoordinatorTests: XCTestCase {
         subject.presentFxAccountSettings()
 
         XCTAssertEqual(mockApplicationHelper.openURLCalled, 1)
+    }
+
+    func testPresentQRCode() {
+        let subject = createSubject()
+        subject.showQRCode(delegate: qrDelegate)
+
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+    }
+
+    func testDidFinishCalled() {
+        let subject = createSubject()
+        subject.showQRCode(delegate: qrDelegate)
+
+        guard let qrCodeCoordinator = subject.childCoordinators.first(where: { $0 is QRCodeCoordinator }) as? QRCodeCoordinator else {
+            XCTFail("QRCodeCoordinator expected to be found")
+            return
+        }
+
+        subject.didFinish(from: qrCodeCoordinator)
+        XCTAssertEqual(subject.childCoordinators.count, 0)
     }
 
     // MARK: - Helpers

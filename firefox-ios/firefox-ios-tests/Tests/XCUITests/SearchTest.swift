@@ -267,6 +267,7 @@ class SearchTests: BaseTestCase {
         }
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306989
     // Smoketest
     func testOpenTabsInSearchSuggestions() {
         // Go to localhost website and check the page displays correctly
@@ -276,6 +277,7 @@ class SearchTests: BaseTestCase {
         validateSearchSuggestionText(typeText: "localhost")
         restartInBackground()
         // Open new tab
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton], timeout: TIMEOUT)
         navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         validateSearchSuggestionText(typeText: "localhost")

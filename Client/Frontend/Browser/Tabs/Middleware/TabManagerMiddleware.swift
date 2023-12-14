@@ -10,12 +10,12 @@ class TabManagerMiddleware {
     var selectedPanel: TabTrayPanelType = .tabs
     private let windowManager: WindowManager
 
-    init(windowManager: WindowManager = AppContainer.shared.resolve()) {
-        self.windowManager = windowManager
+    var normalTabsCountText: String {
+        (defaultTabManager.normalTabs.count < 100) ? defaultTabManager.normalTabs.count.description : "\u{221E}"
     }
 
-    var normalTabsCount: String {
-        (defaultTabManager.normalTabs.count < 100) ? defaultTabManager.normalTabs.count.description : "\u{221E}"
+    init(windowManager: WindowManager = AppContainer.shared.resolve()) {
+        self.windowManager = windowManager
     }
 
     lazy var tabsPanelProvider: Middleware<AppState> = { state, action in
@@ -109,10 +109,9 @@ class TabManagerMiddleware {
         selectedPanel = panelType
 
         let isPrivate = panelType == .privateTabs
-        let tabsCount = refreshTabs(for: isPrivate).count
         return TabTrayModel(isPrivateMode: isPrivate,
                             selectedPanel: panelType,
-                            normalTabsCount: normalTabsCount)
+                            normalTabsCount: normalTabsCountText)
     }
 
     func getTabsDisplayModel(for isPrivateMode: Bool) -> TabDisplayModel {
@@ -120,7 +119,7 @@ class TabManagerMiddleware {
         let inactiveTabs = refreshInactiveTabs(for: isPrivateMode)
         let tabDisplayModel = TabDisplayModel(isPrivateMode: isPrivateMode,
                                               tabs: tabs,
-                                              normalTabsCount: normalTabsCount,
+                                              normalTabsCount: normalTabsCountText,
                                               inactiveTabs: inactiveTabs,
                                               isInactiveTabsExpanded: false)
         return tabDisplayModel
