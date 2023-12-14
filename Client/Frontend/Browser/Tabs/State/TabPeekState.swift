@@ -12,7 +12,7 @@ struct TabPeekState: ScreenState, Equatable {
     let screenshot: UIImage
 
     init(_ appState: AppState) {
-        guard let tabPeekState = store.state.screenState(TabPeekState.self, for: .tabPeek) else {
+        guard let tabPeekState = store.state.screenState(TabPeekState.self, for: AppScreen.tabPeek) else {
             self.init()
             return
         }
@@ -40,6 +40,11 @@ struct TabPeekState: ScreenState, Equatable {
         switch action {
         case TabPeekAction.didLoadTabPeek(let tabID):
             return state
+        case TabPeekAction.loadTabPeek(let tabPeekModel):
+            return TabPeekState(showAddToBookmarks: tabPeekModel.canTabBeSaved,
+                                showSendToDevice: tabPeekModel.isSyncEnabled && tabPeekModel.canTabBeSaved,
+                                showCopyURL: tabPeekModel.canTabBeSaved,
+                                screenshot: tabPeekModel.screenshot)
         default:
             return state
         }

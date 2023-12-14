@@ -2,12 +2,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Redux
+import Foundation
 
-enum TabPeekAction: Action {
-    // MARK: - View Actions
-    case didLoadTabPeek(tab: String)
-
-    // MARK: - Middleware Actions
-    case loadTabPeek(tabPeekModel: TabPeekModel)
+struct TabPeekModel {
+    let canTabBeSaved: Bool
+    let isSyncEnabled: Bool
+    let screenshot: UIImage
 }

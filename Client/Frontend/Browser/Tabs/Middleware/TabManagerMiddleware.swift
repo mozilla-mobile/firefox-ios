@@ -5,6 +5,7 @@
 import Common
 import Redux
 import TabDataStore
+import Shared
 
 class TabManagerMiddleware {
     var selectedPanel: TabTrayPanelType = .tabs
@@ -103,6 +104,8 @@ class TabManagerMiddleware {
             self.addNewTab(with: urlRequest, isPrivate: false)
             store.dispatch(TabTrayAction.dismissTabTray)
 
+        case TabPeekAction.didLoadTabPeek(let tabID):
+            self.didLoadTabPeek(tabID: tabID)
         default:
             break
         }
@@ -203,5 +206,22 @@ class TabManagerMiddleware {
     private var defaultTabManager: TabManager {
         // TODO: [FXIOS-7863] Temporary. WIP for Redux + iPad Multi-window.
         return windowManager.tabManager(for: windowManager.activeWindow)
+    }
+
+    private func didLoadTabPeek(tabID: String) {
+        let tab = defaultTabManager.getTabForUUID(uuid: tabID)
+        profile.places.isBookmarked(url: tab?.url?.absoluteString ?? "") >>== { isBookmarked in
+            var canBeSaved = true
+            if isBookmarked || (tab?.urlIsTooLong ?? false) || (tab?.isFxHomeTab ?? false) {
+                canBeSaved = false
+            }
+            let browserProfile = self.profile as? BrowserProfile
+            browserProfile?.tabs.getClientGUIDs { (result, error) in
+                let model = TabPeekModel(canTabBeSaved: canBeSaved,
+                                         isSyncEnabled: !(result?.isEmpty ?? true),
+                                         screenshot: tab?.screenshot ?? UIImage())
+                store.dispatch(TabPeekAction.loadTabPeek(tabPeekModel: model))
+            }
+        }
     }
 }

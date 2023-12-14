@@ -12,13 +12,12 @@ class TabPeekViewController: UIViewController,
     typealias SubscriberStateType = TabPeekState
     var tabPeekState: TabPeekState
 
+    private var tab: TabModel
     private var previewAccessibilityLabel: String!
     private var ignoreURL = false
     private var isBookmarked = false
     private var isInReadingList = false
     private var hasRemoteClients = false
-
-    private var tab: TabModel
 
     var contextActions: UIContextMenuActionProvider = { _ in return nil }
 
@@ -52,11 +51,12 @@ class TabPeekViewController: UIViewController,
 //            previewAccessibilityLabel = String(format: .TabPeekPreviewAccessibilityLabel, webViewAccessibilityLabel)
 //        }
 //
-//        setupWithScreenshot(tab?.screenshot ?? UIImage())
+
     }
 
     func newState(state: TabPeekState) {
-        
+        tabPeekState = state
+        setupWithScreenshot()
     }
 
     // MARK: - Private helper methods
@@ -73,9 +73,9 @@ class TabPeekViewController: UIViewController,
         store.unsubscribe(self)
     }
 
-    private func setupWithScreenshot(_ screenshot: UIImage) {
+    private func setupWithScreenshot() {
         let imageView: UIImageView = .build { imageView in
-            imageView.image = screenshot
+            imageView.image = self.tabPeekState.screenshot
         }
         view.addSubview(imageView)
 
@@ -86,38 +86,40 @@ class TabPeekViewController: UIViewController,
             imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
 
-        screenshot.accessibilityLabel = previewAccessibilityLabel
+        imageView.accessibilityLabel = previewAccessibilityLabel
     }
 
     private func makeMenuActions() -> UIMenu {
         var actions = [UIAction]()
 
-//        let urlIsTooLongToSave = self.tab?.urlIsTooLong ?? false
-//        let isHomeTab = self.tab?.isFxHomeTab ?? false
-//        if !self.ignoreURL && !urlIsTooLongToSave {
-//            if !self.isBookmarked && !isHomeTab {
-//                actions.append(UIAction(title: .TabPeekAddToBookmarks,
-//                                        image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.bookmark),
-//                                        identifier: nil) { _ in
-//                    return
-//                })
-//            }
-//            if self.hasRemoteClients {
-//                actions.append(UIAction(title: .AppMenu.TouchActions.SendToDeviceTitle, image: UIImage.templateImageNamed("menu-Send"), identifier: nil) { _ in
-//                    return
-//                })
-//            }
-//            actions.append(UIAction(title: .TabPeekCopyUrl,
-//                                    image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.link),
-//                                    identifier: nil) { _ in
-//                return
-//            })
-//        }
-        actions.append(UIAction(title: .TabPeekCloseTab,
-                                image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
-                                identifier: nil) { _ in
-            return
-        })
+        if tabPeekState.showAddToBookmarks {
+            actions.append(UIAction(title: .TabPeekAddToBookmarks,
+                                    image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.bookmark),
+                                    identifier: nil) { _ in
+                return
+            })
+        }
+        if tabPeekState.showSendToDevice {
+            actions.append(UIAction(title: .AppMenu.TouchActions.SendToDeviceTitle,
+                                    image: UIImage.templateImageNamed("menu-Send"),
+                                    identifier: nil) { _ in
+                return
+            })
+        }
+        if tabPeekState.showCopyURL {
+            actions.append(UIAction(title: .TabPeekCopyUrl,
+                                    image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.link),
+                                    identifier: nil) { _ in
+                return
+            })
+        }
+        if tabPeekState.showCloseTab {
+            actions.append(UIAction(title: .TabPeekCloseTab,
+                                    image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
+                                    identifier: nil) { _ in
+                return
+            })
+        }
 
         return UIMenu(title: "", children: actions)
     }
