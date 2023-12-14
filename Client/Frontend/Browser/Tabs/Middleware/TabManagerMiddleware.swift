@@ -94,11 +94,19 @@ class TabManagerMiddleware {
             }
 
         case TabPanelAction.closeInactiveTabs(let tabUUID):
+            guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel) else { return }
             Task {
-                await self.closeInactiveTab(for: tabUUID)
+                await self.closeInactiveTab(for: tabUUID, inactiveTabs: tabsState.inactiveTabs)
                 let inactiveTabs = self.refreshInactiveTabs()
                 store.dispatch(TabPanelAction.refreshInactiveTabs(inactiveTabs))
+                store.dispatch(TabPanelAction.showUndoToast(.singleInactiveTabs))
             }
+
+        case TabPanelAction.undoCloseInactiveTab:
+            guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel) else { return }
+            self.undoCloseInactiveTab()
+            let inactiveTabs = self.refreshInactiveTabs()
+            store.dispatch(TabPanelAction.refreshInactiveTabs(inactiveTabs))
 
         case TabPanelAction.learnMorePrivateMode(let urlRequest):
             self.didTapLearnMoreAboutPrivate(with: urlRequest)
@@ -139,10 +147,11 @@ class TabManagerMiddleware {
 
     private func refreshTabs(for isPrivateMode: Bool) -> [TabModel] {
         var tabs = [TabModel]()
+        let selectedTab = defaultTabManager.selectedTab
         let tabManagerTabs = isPrivateMode ? defaultTabManager.privateTabs : defaultTabManager.normalActiveTabs
         tabManagerTabs.forEach { tab in
             let tabModel = TabModel(tabUUID: tab.tabUUID,
-                                    isSelected: false,
+                                    isSelected: tab == selectedTab,
                                     isPrivate: tab.isPrivate,
                                     isFxHomeTab: tab.isFxHomeTab,
                                     tabTitle: tab.displayTitle,
@@ -192,6 +201,13 @@ class TabManagerMiddleware {
         return isLastTab
     }
 
+    private func undoCloseTab() {
+        guard let backupTab = backupCloseTab else { return }
+
+        defaultTabManager.undoCloseTab(tab: backupTab.tab, position: backupTab.restorePosition)
+        backupCloseTab = nil
+    }
+
     private func closeAllTabs(isPrivateMode: Bool) async {
         await defaultTabManager.removeAllTabs(isPrivateMode: isPrivateMode)
     }
@@ -200,8 +216,20 @@ class TabManagerMiddleware {
         await defaultTabManager.removeAllInactiveTabs()
     }
 
-    private func closeInactiveTab(for tabUUID: String) async {
+    private func closeInactiveTab(for tabUUID: String, inactiveTabs: [InactiveTabsModel]) async {
+        // Create backup in case undo option is selected
+        if let tabToClose = defaultTabManager.getTabForUUID(uuid: tabUUID) {
+            let index = inactiveTabs.firstIndex { $0.tabUUID == tabUUID }
+            backupCloseTab = BackupCloseTab(tab: tabToClose, restorePosition: index)
+        }
         await defaultTabManager.removeTab(tabUUID)
+    }
+
+    private func undoCloseInactiveTab() {
+        guard let backupTab = backupCloseTab else { return }
+
+        defaultTabManager.undoCloseTab(tab: backupTab.tab, position: backupTab.restorePosition)
+        backupCloseTab = nil
     }
 
     private func didTapLearnMoreAboutPrivate(with urlRequest: URLRequest) {
@@ -212,12 +240,6 @@ class TabManagerMiddleware {
         guard let tab = defaultTabManager.getTabForUUID(uuid: tabUUID) else { return }
 
         defaultTabManager.selectTab(tab)
-    }
-
-    private func undoCloseTab() {
-        guard let backupCloseTab else { return }
-
-        defaultTabManager.undoCloseTab(tab: backupCloseTab.tab, position: backupCloseTab.restorePosition)
     }
 
     private var defaultTabManager: TabManager {

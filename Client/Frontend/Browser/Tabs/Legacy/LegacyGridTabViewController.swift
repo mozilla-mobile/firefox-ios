@@ -17,6 +17,29 @@ protocol TabTrayDelegate: AnyObject {
     func tabTrayDidCloseLastTab(toast: ButtonToast)
 }
 
+enum UndoToastType: Equatable {
+    case singleTab
+    case allTabs(count: Int)
+    case singleInactiveTabs
+    case inactiveTabs(count: Int)
+
+    var title: String {
+        switch self {
+        case .singleTab, .singleInactiveTabs:
+            return .TabsTray.CloseTabsToast.SingleTabTitle
+        case let .inactiveTabs(tabsCount),
+            let .allTabs(count: tabsCount):
+            return String.localizedStringWithFormat(
+                .TabsTray.CloseTabsToast.Title,
+                tabsCount)
+        }
+    }
+
+    var buttonText: String {
+        return .TabsTray.CloseTabsToast.Action
+    }
+}
+
 class LegacyGridTabViewController: UIViewController,
                                    TabTrayViewDelegate,
                                    Themeable,
@@ -36,29 +59,6 @@ class LegacyGridTabViewController: UIViewController,
         static let menuFixedWidth: CGFloat = 320
         static let undoToastDelay = DispatchTimeInterval.seconds(0)
         static let undoToastDuration = DispatchTimeInterval.seconds(3)
-    }
-
-    enum UndoToastType {
-        case singleTab
-        case inactiveTabs(count: Int)
-
-        var title: String {
-            switch self {
-            case .singleTab:
-                return .TabsTray.CloseTabsToast.SingleTabTitle
-            case let .inactiveTabs(tabsCount):
-                return String.localizedStringWithFormat(
-                    .TabsTray.CloseTabsToast.Title,
-                    tabsCount)
-            }
-        }
-
-        var buttonText: String {
-            switch self {
-            case .singleTab, .inactiveTabs:
-                return .TabsTray.CloseTabsToast.Action
-            }
-        }
     }
 
     let tabManager: TabManager

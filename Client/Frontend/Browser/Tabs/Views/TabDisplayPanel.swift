@@ -159,15 +159,24 @@ class TabDisplayPanel: UIViewController,
         shouldShowEmptyView(tabsState.isPrivateTabsEmpty)
 
         // Avoid showing toast multiple times
-        if let undoType = tabsState.undoToastType, 
+        if let undoType = tabsState.undoToastType,
             shownToast == nil {
-            print("YRD presentUndoToast")
             store.dispatch(TabPanelAction.hideUndoToast)
             presentUndoToast(toastType: undoType) { undoClose in
                 if undoClose {
-                    store.dispatch(TabPanelAction.undoClose)
+                    let undoAction = self.getUndoAction(undoType)
+                    store.dispatch(undoAction)
                 }
+                self.shownToast = nil
             }
+        }
+    }
+
+    private func getUndoAction(_ undoType: UndoToastType) -> TabPanelAction {
+        switch undoType {
+        case .singleTab: return .undoClose
+        case .singleInactiveTabs: return .undoCloseInactiveTab
+        default: return .undoClose
         }
     }
 

@@ -14,6 +14,7 @@ enum TabPanelAction: Action {
     case moveTab(Int, Int)
     case toggleInactiveTabs
     case closeInactiveTabs(String)
+    case undoCloseInactiveTab
     case closeAllInactiveTabs
     case learnMorePrivateMode(URLRequest)
     case selectTab(String)
