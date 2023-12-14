@@ -392,7 +392,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         titleLabel.textColor = theme.colors.textPrimary
         priceLabel.textColor = theme.colors.textPrimary
         footerLabel.textColor = theme.colors.textSecondary
-        productLinkButton.setTitleColor(theme.colors.textAccent, for: .normal)
+        productLinkButton.applyTheme(theme: theme)
         gradeReliabilityScoreView.applyTheme(theme: theme)
         defaultImageView.tintColor = theme.colors.iconSecondary
         imageContainerView.backgroundColor = theme.colors.layer3
