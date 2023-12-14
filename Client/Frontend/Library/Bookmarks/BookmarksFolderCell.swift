@@ -87,20 +87,10 @@ extension BookmarkItemData: BookmarksFolderCell {
 // MARK: FxBookmarkNode viewModel helper
 extension FxBookmarkNode {
     var leftImageView: UIImage? {
-        return LegacyThemeManager.instance.currentName == .dark ? bookmarkFolderIconDark : bookmarkFolderIconNormal
+        return UIImage(named: StandardImageIdentifiers.Large.folder)?.withRenderingMode(.alwaysTemplate)
     }
 
     var chevronImage: UIImage? {
         return UIImage(named: StandardImageIdentifiers.Large.chevronRight)?.withRenderingMode(.alwaysTemplate)
-    }
-
-    private var bookmarkFolderIconNormal: UIImage? {
-        return UIImage(named: StandardImageIdentifiers.Large.folder)?
-            .tinted(withColor: UIColor.Photon.Grey90)
-    }
-
-    private var bookmarkFolderIconDark: UIImage? {
-        return UIImage(named: StandardImageIdentifiers.Large.folder)?
-            .tinted(withColor: UIColor.Photon.Grey10)
     }
 }

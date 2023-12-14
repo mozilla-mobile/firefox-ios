@@ -91,16 +91,13 @@ class RustLoginsTests: XCTestCase {
         files = MockFiles()
 
         if let rootDirectory = try? files.getAndEnsureDirectory() {
-            let sqlCipherDatabasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true).appendingPathComponent("testlogins.db").path
-            try? files.remove("testlogins.db")
-
             let databasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true).appendingPathComponent("testLoginsPerField.db").path
             try? files.remove("testLoginsPerField.db")
 
-            logins = RustLogins(sqlCipherDatabasePath: sqlCipherDatabasePath, databasePath: databasePath)
+            logins = RustLogins(databasePath: databasePath)
             _ = logins.reopenIfClosed()
 
-            mockLogins = MockRustLogins(sqlCipherDatabasePath: sqlCipherDatabasePath, databasePath: databasePath)
+            mockLogins = MockRustLogins(databasePath: databasePath)
 
             self.keychain.removeObject(forKey: self.canaryPhraseKey, withAccessibility: .afterFirstUnlock)
             self.keychain.removeObject(forKey: self.loginKeychainKey, withAccessibility: .afterFirstUnlock)
@@ -119,14 +116,10 @@ class RustLoginsTests: XCTestCase {
         files = MockFiles()
 
         if let rootDirectory = try? files.getAndEnsureDirectory() {
-            let sqlCipherDatabasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true).appendingPathComponent("testlogins.db").path
-            try? files.remove("testlogins.db")
-
             let databasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true).appendingPathComponent("testLoginsPerField.db").path
             try? files.remove("testLoginsPerField.db")
 
-            mockListLoginsFailure = MockListLoginsFailure(sqlCipherDatabasePath: sqlCipherDatabasePath,
-                                                          databasePath: databasePath)
+            mockListLoginsFailure = MockListLoginsFailure(databasePath: databasePath)
             _ = mockListLoginsFailure.reopenIfClosed()
         } else {
             XCTFail("Could not retrieve root directory")
@@ -137,14 +130,10 @@ class RustLoginsTests: XCTestCase {
         files = MockFiles()
 
         if let rootDirectory = try? files.getAndEnsureDirectory() {
-            let sqlCipherDatabasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true).appendingPathComponent("testlogins.db").path
-            try? files.remove("testlogins.db")
-
             let databasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true).appendingPathComponent("testLoginsPerField.db").path
             try? files.remove("testLoginsPerField.db")
 
-            mockListLoginsEmpty = MockListLoginsEmpty(sqlCipherDatabasePath: sqlCipherDatabasePath,
-                                                      databasePath: databasePath)
+            mockListLoginsEmpty = MockListLoginsEmpty(databasePath: databasePath)
             _ = mockListLoginsEmpty.reopenIfClosed()
         } else {
             XCTFail("Could not retrieve root directory")

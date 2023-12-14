@@ -890,8 +890,6 @@ extension LegacyTabDisplayManager: TabManagerDelegate {
     }
 
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {
-        guard !isRestoring else { return }
-
         if cancelDragAndGestures() {
             refreshStore()
             return

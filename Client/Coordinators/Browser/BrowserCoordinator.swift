@@ -20,14 +20,17 @@ class BrowserCoordinator: BaseCoordinator,
                           FakespotCoordinatorDelegate,
                           ParentCoordinatorDelegate,
                           TabManagerDelegate,
-                          TabTrayCoordinatorDelegate {
+                          TabTrayCoordinatorDelegate,
+                          PrivateHomepageDelegate {
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
+    var privateViewController: PrivateHomepageViewController?
 
     private var profile: Profile
     private let tabManager: TabManager
     private let themeManager: ThemeManager
+    private let windowManager: WindowManager
     private let screenshotService: ScreenshotService
     private let glean: GleanWrapper
     private let applicationHelper: ApplicationHelper
@@ -35,21 +38,27 @@ class BrowserCoordinator: BaseCoordinator,
 
     init(router: Router,
          screenshotService: ScreenshotService,
+         tabManager: TabManager,
          profile: Profile = AppContainer.shared.resolve(),
-         tabManager: TabManager = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
+         windowManager: WindowManager = AppContainer.shared.resolve(),
          glean: GleanWrapper = DefaultGleanWrapper.shared,
          applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
         self.screenshotService = screenshotService
         self.profile = profile
         self.tabManager = tabManager
         self.themeManager = themeManager
+        self.windowManager = windowManager
         self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         self.applicationHelper = applicationHelper
         self.glean = glean
         super.init(router: router)
 
-        tabManagerDidConnectToScene()
+        windowManager.tabManagerDidConnectToBrowserWindow(tabManager)
+        // TODO [7856]: Additional telemetry updates forthcoming once iPad multi-window enabled.
+        // For now, we only have a single BVC and TabManager. Plug it into our TelemetryWrapper:
+        TelemetryWrapper.shared.defaultTabManager = tabManager
+
         browserViewController.browserDelegate = self
         browserViewController.navigationHandler = self
         tabManager.addDelegate(self)
@@ -64,13 +73,6 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - Helper methods
-
-    private func tabManagerDidConnectToScene() {
-        // [7863] [WIP] Redux: connect this Browser's TabManager to associated window scene
-        guard ReduxFlagManager.isReduxEnabled else { return }
-        let sceneUUID = WindowData.DefaultSingleWindowUUID
-        store.dispatch(TabManagerAction.tabManagerDidConnectToScene(tabManager, sceneUUID))
-    }
 
     private func startLaunch(with launchType: LaunchType) {
         let launchCoordinator = LaunchCoordinator(router: router)
@@ -97,14 +99,12 @@ class BrowserCoordinator: BaseCoordinator,
                       toastContainer: UIView,
                       homepanelDelegate: HomePanelDelegate,
                       libraryPanelDelegate: LibraryPanelDelegate,
-                      sendToDeviceDelegate: HomepageViewController.SendToDeviceDelegate,
                       statusBarScrollDelegate: StatusBarScrollDelegate,
                       overlayManager: OverlayModeManager) {
         let homepageController = getHomepage(inline: inline,
                                              toastContainer: toastContainer,
                                              homepanelDelegate: homepanelDelegate,
                                              libraryPanelDelegate: libraryPanelDelegate,
-                                             sendToDeviceDelegate: sendToDeviceDelegate,
                                              statusBarScrollDelegate: statusBarScrollDelegate,
                                              overlayManager: overlayManager)
 
@@ -113,6 +113,22 @@ class BrowserCoordinator: BaseCoordinator,
         homepageController.scrollToTop()
         // We currently don't support full page screenshot of the homepage
         screenshotService.screenshotableView = nil
+    }
+
+    func showPrivateHomepage(overlayManager: OverlayModeManager) {
+        let privateHomepageController = PrivateHomepageViewController(overlayManager: overlayManager)
+        privateHomepageController.parentCoordinator = self
+        guard browserViewController.embedContent(privateHomepageController) else {
+            logger.log("Unable to embed private homepage", level: .debug, category: .coordinator)
+            return
+        }
+        self.privateViewController = privateHomepageController
+    }
+
+    // MARK: - PrivateHomepageDelegate
+
+    func homePanelDidRequestToOpenInNewTab(with url: URL, isPrivate: Bool, selectNewTab: Bool) {
+        browserViewController.homePanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate, selectNewTab: selectNewTab)
     }
 
     func show(webView: WKWebView) {
@@ -142,7 +158,6 @@ class BrowserCoordinator: BaseCoordinator,
                              toastContainer: UIView,
                              homepanelDelegate: HomePanelDelegate,
                              libraryPanelDelegate: LibraryPanelDelegate,
-                             sendToDeviceDelegate: HomepageViewController.SendToDeviceDelegate,
                              statusBarScrollDelegate: StatusBarScrollDelegate,
                              overlayManager: OverlayModeManager) -> HomepageViewController {
         if let homepageViewController = homepageViewController {
@@ -153,10 +168,10 @@ class BrowserCoordinator: BaseCoordinator,
                 profile: profile,
                 isZeroSearch: inline,
                 toastContainer: toastContainer,
+                tabManager: tabManager,
                 overlayManager: overlayManager)
             homepageViewController.homePanelDelegate = homepanelDelegate
             homepageViewController.libraryPanelDelegate = libraryPanelDelegate
-            homepageViewController.sendToDeviceDelegate = sendToDeviceDelegate
             homepageViewController.statusBarScrollDelegate = statusBarScrollDelegate
             homepageViewController.browserNavigationHandler = self
 
@@ -298,7 +313,7 @@ class BrowserCoordinator: BaseCoordinator,
         navigationController.modalPresentationStyle = modalPresentationStyle
         let settingsRouter = DefaultRouter(navigationController: navigationController)
 
-        let settingsCoordinator = SettingsCoordinator(router: settingsRouter)
+        let settingsCoordinator = SettingsCoordinator(router: settingsRouter, tabManager: tabManager)
         settingsCoordinator.parentCoordinator = self
         add(child: settingsCoordinator)
         settingsCoordinator.start(with: section)
@@ -317,7 +332,8 @@ class BrowserCoordinator: BaseCoordinator,
             navigationController.modalPresentationStyle = .formSheet
 
             let libraryCoordinator = LibraryCoordinator(
-                router: DefaultRouter(navigationController: navigationController)
+                router: DefaultRouter(navigationController: navigationController),
+                tabManager: tabManager
             )
             libraryCoordinator.parentCoordinator = self
             add(child: libraryCoordinator)
@@ -328,7 +344,8 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     private func showETPMenu(sourceView: UIView) {
-        let enhancedTrackingProtectionCoordinator = EnhancedTrackingProtectionCoordinator(router: router)
+        let enhancedTrackingProtectionCoordinator = EnhancedTrackingProtectionCoordinator(router: router,
+                                                                                          tabManager: tabManager)
         enhancedTrackingProtectionCoordinator.parentCoordinator = self
         add(child: enhancedTrackingProtectionCoordinator)
         enhancedTrackingProtectionCoordinator.start(sourceView: sourceView)
@@ -459,7 +476,7 @@ class BrowserCoordinator: BaseCoordinator,
             return nil // flow is already handled
         }
 
-        let coordinator = FakespotCoordinator(router: router)
+        let coordinator = FakespotCoordinator(router: router, tabManager: tabManager)
         coordinator.parentCoordinator = self
         add(child: coordinator)
         return coordinator
@@ -471,7 +488,7 @@ class BrowserCoordinator: BaseCoordinator,
             // If this case is hitted it means the share extension coordinator wasn't removed correctly in the previous session.
             return
         }
-        let shareExtensionCoordinator = ShareExtensionCoordinator(alertContainer: toastContainer, router: router, profile: profile, parentCoordinator: self)
+        let shareExtensionCoordinator = ShareExtensionCoordinator(alertContainer: toastContainer, router: router, profile: profile, parentCoordinator: self, tabManager: tabManager)
         add(child: shareExtensionCoordinator)
         shareExtensionCoordinator.start(url: url, sourceView: sourceView, sourceRect: sourceRect, popoverArrowDirection: popoverArrowDirection)
     }
@@ -494,20 +511,21 @@ class BrowserCoordinator: BaseCoordinator,
         if let bottomSheetCoordinator = childCoordinators.first(where: { $0 is CredentialAutofillCoordinator }) as? CredentialAutofillCoordinator {
             return bottomSheetCoordinator
         }
-        let bottomSheetCoordinator = CredentialAutofillCoordinator(profile: profile, router: router, parentCoordinator: self)
+        let bottomSheetCoordinator = CredentialAutofillCoordinator(profile: profile, router: router, parentCoordinator: self, tabManager: tabManager)
         add(child: bottomSheetCoordinator)
         return bottomSheetCoordinator
     }
 
-    func showQRCode() {
+    func showQRCode(delegate: QRCodeViewControllerDelegate, rootNavigationController: UINavigationController?) {
         var coordinator: QRCodeCoordinator
         if let qrCodeCoordinator = childCoordinators.first(where: { $0 is QRCodeCoordinator }) as? QRCodeCoordinator {
             coordinator = qrCodeCoordinator
         } else {
+            let router = rootNavigationController != nil ? DefaultRouter(navigationController: rootNavigationController!) : router
             coordinator = QRCodeCoordinator(parentCoordinator: self, router: router)
             add(child: coordinator)
         }
-        coordinator.showQRCode(delegate: browserViewController)
+        coordinator.showQRCode(delegate: delegate)
     }
 
     func showTabTray(selectedPanel: TabTrayPanelType) {
@@ -522,7 +540,8 @@ class BrowserCoordinator: BaseCoordinator,
 
         let tabTrayCoordinator = TabTrayCoordinator(
             router: DefaultRouter(navigationController: navigationController),
-            tabTraySection: selectedPanel
+            tabTraySection: selectedPanel,
+            profile: profile
         )
         tabTrayCoordinator.parentCoordinator = self
         add(child: tabTrayCoordinator)

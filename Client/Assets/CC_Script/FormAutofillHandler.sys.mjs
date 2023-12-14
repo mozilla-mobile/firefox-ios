@@ -65,9 +65,10 @@ export class FormAutofillHandler {
    * @param {FormLike} form Form that need to be auto filled
    * @param {Function} onFormSubmitted Function that can be invoked
    *                   to simulate form submission. Function is passed
-   *                   three arguments: (1) a FormLike for the form being
-   *                   submitted, (2) the corresponding Window, and (3) the
-   *                   responsible FormAutofillHandler.
+   *                   four arguments: (1) a FormLike for the form being
+   *                   submitted, (2) the reason for infering the form
+   *                   submission (3) the corresponding Window, and (4)
+   *                   the responsible FormAutofillHandler.
    * @param {Function} onAutofillCallback Function that can be invoked
    *                   when we want to suggest autofill on a form.
    */
@@ -91,8 +92,8 @@ export class FormAutofillHandler {
      * This function is used if the form handler (or one of its sections)
      * determines that it needs to act as if the form had been submitted.
      */
-    this.onFormSubmitted = () => {
-      onFormSubmitted(this.form, this.window, this);
+    this.onFormSubmitted = formSubmissionReason => {
+      onFormSubmitted(this.form, formSubmissionReason, this.window, this);
     };
 
     this.onAutofillCallback = onAutofillCallback;

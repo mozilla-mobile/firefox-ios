@@ -24,7 +24,7 @@ class ShareExtensionCoordinator: BaseCoordinator, DevicePickerViewControllerDele
         profile: Profile,
         parentCoordinator: ParentCoordinatorDelegate? = nil,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
-        tabManager: TabManager = AppContainer.shared.resolve()
+        tabManager: TabManager
     ) {
         self.alertContainer = alertContainer
         self.profile = profile

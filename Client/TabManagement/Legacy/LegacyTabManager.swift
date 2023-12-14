@@ -67,6 +67,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     // MARK: - Variables
     private let tabEventHandlers: [TabEventHandler]
     let profile: Profile
+    let windowUUID: WindowUUID
     var isRestoringTabs = false
     var tabRestoreHasFinished = false
     var tabs = [Tab]()
@@ -155,8 +156,10 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     // MARK: - Initializer
 
     init(profile: Profile,
+         uuid: WindowUUID,
          logger: Logger = DefaultLogger.shared
     ) {
+        self.windowUUID = uuid
         self.profile = profile
         self.navDelegate = TabManagerNavDelegate()
         self.tabEventHandlers = TabEventHandlers.create(with: profile)

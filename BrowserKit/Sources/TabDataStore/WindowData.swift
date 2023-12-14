@@ -5,9 +5,6 @@
 import Foundation
 
 public struct WindowData: Codable {
-    // TODO: [7798] Part of WIP iPad multi-window epic.
-    public static let DefaultSingleWindowUUID = UUID(uuidString: "44BA0B7D-097A-484D-8358-91A6E374451D")!
-
     public let id: UUID
     public let isPrimary: Bool
     public let activeTabId: UUID

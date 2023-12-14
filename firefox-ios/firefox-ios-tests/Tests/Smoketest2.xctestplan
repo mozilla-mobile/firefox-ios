@@ -23,6 +23,7 @@
         "BrowsingPDFTests\/testLongPressOnPDFLinkToAddToReadingList()",
         "BrowsingPDFTests\/testOpenPDFViewer()",
         "ClipBoardTests",
+        "CreditCardsTests",
         "CronTabsPerformanceTest",
         "DataManagementTests",
         "DatabaseFixtureTest",

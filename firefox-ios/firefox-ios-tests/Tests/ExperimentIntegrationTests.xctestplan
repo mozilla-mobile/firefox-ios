@@ -20,6 +20,8 @@
         "BookmarksTests",
         "BrowsingPDFTests",
         "ClipBoardTests",
+        "CreditCardsTests",
+        "CreditCardsTests\/testAccessingTheCreditCardsSection()",
         "DataManagementTests",
         "DatabaseFixtureTest",
         "DesktopModeTestsIpad",

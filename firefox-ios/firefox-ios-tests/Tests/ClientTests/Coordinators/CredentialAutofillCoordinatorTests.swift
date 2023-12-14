@@ -107,7 +107,8 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
         let subject = CredentialAutofillCoordinator(
             profile: profile,
             router: router,
-            parentCoordinator: parentCoordinator
+            parentCoordinator: parentCoordinator,
+            tabManager: MockTabManager()
         )
         trackForMemoryLeaks(subject)
         return subject

@@ -15,7 +15,7 @@ enum RemoteTabsPanelRefreshState {
     case refreshing
 }
 
-/// Replaces RemoteTabsErrorDataSource.ErrorType
+/// Replaces LegacyRemoteTabsErrorDataSource.ErrorType
 enum RemoteTabsPanelEmptyStateReason {
     case notLoggedIn
     case noClients
@@ -98,7 +98,7 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
             let newState = RemoteTabsPanelState(refreshState: .idle,
                                                 allowsRefresh: allowsRefresh,
                                                 clientAndTabs: state.clientAndTabs,
-                                                showingEmptyState: .failedToSync)
+                                                showingEmptyState: reason)
             return newState
         case RemoteTabsPanelAction.refreshDidSucceed(let newClientAndTabs):
             // Send client and tabs state, ensure empty state is nil and refresh is idle

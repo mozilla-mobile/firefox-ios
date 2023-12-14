@@ -35,6 +35,10 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
     typealias ExtraKey = TelemetryWrapper.EventExtraKey
 
     static let shared = TelemetryWrapper()
+
+    // TODO [7856]: Temporary. Additional telemetry updates forthcoming once iPad multi-window enabled.
+    var defaultTabManager: TabManager?
+
     let legacyTelemetry = Telemetry.default
     let glean = Glean.shared
     // Boolean flag to temporarily remember if we crashed during the
@@ -115,9 +119,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
 
             outputDict["settings"] = settings
 
-            let delegate = UIApplication.shared.delegate as? AppDelegate
-
-            outputDict["openTabCount"] = delegate?.tabManager.count ?? 0
+            // TODO [7856]: Additional telemetry updates forthcoming once iPad multi-window enabled.
+            outputDict["openTabCount"] = self.defaultTabManager?.count ?? 0
 
             outputDict["systemTheme"] = UITraitCollection.current.userInterfaceStyle == .dark ? "dark" : "light"
 
@@ -220,8 +223,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         GleanMetrics.Search.defaultEngine.set(defaultEngine?.engineID ?? "custom")
 
         // Record the open tab count
-        let delegate = UIApplication.shared.delegate as? AppDelegate
-        if let count = delegate?.tabManager.count {
+        // TODO [7856]: Additional telemetry updates forthcoming once iPad multi-window enabled.
+        if let count = defaultTabManager?.count {
             GleanMetrics.Tabs.cumulativeCount.add(Int32(count))
         }
 
@@ -669,6 +672,7 @@ extension TelemetryWrapper {
         case shoppingCFRsDisplayed = "shopping-cfrs-displayed"
         case shoppingAdsExposure = "shopping-ads-exposure"
         case shoppingAdsImpression = "shopping-ads-impression"
+        case shoppingNoAdsAvailable = "shopping-no-ads-available"
         case awesomebarShareTap = "awesomebar-share-tap"
         case largeFileWrite = "large-file-write"
     }
@@ -1164,6 +1168,8 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.adsExposure.record()
         case (.action, .view, .shoppingBottomSheet, .shoppingAdsImpression, _):
             GleanMetrics.Shopping.surfaceAdsImpression.record()
+        case (.action, .view, .shoppingBottomSheet, .shoppingNoAdsAvailable, _):
+            GleanMetrics.Shopping.surfaceNoAdsAvailable.record()
         case (.action, .view, .shoppingButton, _, _):
             GleanMetrics.Shopping.addressBarIconDisplayed.record()
         case (.action, .close, .shoppingBottomSheet, _, let extras):

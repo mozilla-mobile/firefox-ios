@@ -5,7 +5,7 @@
 import Foundation
 
 protocol DownloadsNavigationHandler: AnyObject {
-    /// Handles the possibile navigations for a file.
+    /// Handles the possible navigations for a file.
     /// The source view is the view used to display a popover for the share controller.
     func handleFile(_ file: DownloadedFile, sourceView: UIView)
 
@@ -18,16 +18,19 @@ class DownloadsCoordinator: BaseCoordinator, ParentCoordinatorDelegate, Download
 
     private weak var parentCoordinator: LibraryCoordinatorDelegate?
     private let profile: Profile
+    private let tabManager: TabManager
 
     // MARK: - Initializers
 
     init(
         router: Router,
         profile: Profile,
-        parentCoordinator: LibraryCoordinatorDelegate?
+        parentCoordinator: LibraryCoordinatorDelegate?,
+        tabManager: TabManager
     ) {
         self.parentCoordinator = parentCoordinator
         self.profile = profile
+        self.tabManager = tabManager
         super.init(router: router)
     }
 
@@ -53,7 +56,8 @@ class DownloadsCoordinator: BaseCoordinator, ParentCoordinatorDelegate, Download
             alertContainer: UIView(),
             router: router,
             profile: profile,
-            parentCoordinator: self
+            parentCoordinator: self,
+            tabManager: tabManager
         )
         add(child: coordinator)
         return coordinator

@@ -25,22 +25,16 @@ class MenuBuilderHelper {
             UIKeyCommand(title: .KeyboardShortcuts.SelectLocationBar, action: #selector(BrowserViewController.selectLocationBarKeyCommand), input: "l", modifierFlags: .command, discoverabilityTitle: .KeyboardShortcuts.SelectLocationBar),
             UIKeyCommand(title: .KeyboardShortcuts.CloseCurrentTab, action: #selector(BrowserViewController.closeTabKeyCommand), input: "w", modifierFlags: .command, discoverabilityTitle: .KeyboardShortcuts.CloseCurrentTab),
         ])
-
-        if #available(iOS 15, *) {
-            fileMenu.children.forEach {
-                ($0 as! UIKeyCommand).wantsPriorityOverSystemBehavior = true
-            }
+        fileMenu.children.forEach {
+            ($0 as! UIKeyCommand).wantsPriorityOverSystemBehavior = true
         }
 
         let findMenu = UIMenu(options: .displayInline, children: [
             UIKeyCommand(title: .KeyboardShortcuts.Find, action: #selector(BrowserViewController.findInPageKeyCommand), input: "f", modifierFlags: .command, discoverabilityTitle: .KeyboardShortcuts.Find),
             UIKeyCommand(title: .KeyboardShortcuts.FindAgain, action: #selector(BrowserViewController.findInPageAgainKeyCommand), input: "g", modifierFlags: .command, discoverabilityTitle: .KeyboardShortcuts.FindAgain),
         ])
-
-        if #available(iOS 15, *) {
-            findMenu.children.forEach {
-                ($0 as! UIKeyCommand).wantsPriorityOverSystemBehavior = true
-            }
+        findMenu.children.forEach {
+            ($0 as! UIKeyCommand).wantsPriorityOverSystemBehavior = true
         }
 
         var viewMenuChildren: [UIMenuElement] = [
@@ -56,11 +50,8 @@ class MenuBuilderHelper {
         )
 
         let viewMenu = UIMenu(options: .displayInline, children: viewMenuChildren)
-
-        if #available(iOS 15, *) {
-            viewMenu.children.forEach {
-                ($0 as! UIKeyCommand).wantsPriorityOverSystemBehavior = true
-            }
+        viewMenu.children.forEach {
+            ($0 as! UIKeyCommand).wantsPriorityOverSystemBehavior = true
         }
 
         let historyMenu = UIMenu(title: .KeyboardShortcuts.Sections.History, identifier: MenuIdentifiers.history, options: .displayInline, children: [

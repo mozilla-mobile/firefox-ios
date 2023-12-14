@@ -12,12 +12,7 @@ extension WKWebView {
     /// - Parameters:
     ///     - javascript: String representing javascript to be evaluated
     public func evaluateJavascriptInDefaultContentWorld(_ javascript: String) {
-        // iOS 14.3 is required here because of a webkit bug in lower iOS versions with this API
-        if #available(iOS 14.3, *) {
-            self.evaluateJavaScript(javascript, in: nil, in: .defaultClient, completionHandler: { _ in })
-        } else {
-            self.evaluateJavaScript(javascript)
-        }
+        self.evaluateJavaScript(javascript, in: nil, in: .defaultClient, completionHandler: { _ in })
     }
 
     /// This calls different WebKit evaluateJavaScript functions depending on iOS version with a completion that passes a tuple with optional data or an optional error
@@ -27,19 +22,12 @@ extension WKWebView {
     ///     - javascript: String representing javascript to be evaluated
     ///     - completion: Tuple containing optional data and an optional error
     public func evaluateJavascriptInDefaultContentWorld(_ javascript: String, _ frame: WKFrameInfo? = nil, _ completion: @escaping (Any?, Error?) -> Void) {
-        // iOS 14.3 is required here because of a webkit bug in lower iOS versions with this API
-        if #available(iOS 14.3, *) {
-            self.evaluateJavaScript(javascript, in: frame, in: .defaultClient) { result in
-                switch result {
-                case .success(let value):
-                    completion(value, nil)
-                case .failure(let error):
-                    completion(nil, error)
-                }
-            }
-        } else {
-            self.evaluateJavaScript(javascript) { data, error  in
-                completion(data, error)
+        self.evaluateJavaScript(javascript, in: frame, in: .defaultClient) { result in
+            switch result {
+            case .success(let value):
+                completion(value, nil)
+            case .failure(let error):
+                completion(nil, error)
             }
         }
     }
@@ -47,40 +35,20 @@ extension WKWebView {
 
 extension WKUserContentController {
     public func addInDefaultContentWorld(scriptMessageHandler: WKScriptMessageHandler, name: String) {
-        // iOS 14.3 is required here because of a webkit bug in lower iOS versions with this API
-        if #available(iOS 14.3, *) {
-            add(scriptMessageHandler, contentWorld: .defaultClient, name: name)
-        } else {
-            add(scriptMessageHandler, name: name)
-        }
+        add(scriptMessageHandler, contentWorld: .defaultClient, name: name)
     }
 
     public func addInPageContentWorld(scriptMessageHandler: WKScriptMessageHandler, name: String) {
-        // iOS 14.3 is required here because of a webkit bug in lower iOS versions with this API
-        if #available(iOS 14.3, *) {
-            add(scriptMessageHandler, contentWorld: .page, name: name)
-        } else {
-            add(scriptMessageHandler, name: name)
-        }
+        add(scriptMessageHandler, contentWorld: .page, name: name)
     }
 }
 
 extension WKUserScript {
     public class func createInDefaultContentWorld(source: String, injectionTime: WKUserScriptInjectionTime, forMainFrameOnly: Bool) -> WKUserScript {
-        // iOS 14.3 is required here because of a webkit bug in lower iOS versions with this API
-        if #available(iOS 14.3, *) {
-            return WKUserScript(source: source, injectionTime: injectionTime, forMainFrameOnly: forMainFrameOnly, in: .defaultClient)
-        } else {
-            return WKUserScript(source: source, injectionTime: injectionTime, forMainFrameOnly: forMainFrameOnly)
-        }
+        return WKUserScript(source: source, injectionTime: injectionTime, forMainFrameOnly: forMainFrameOnly, in: .defaultClient)
     }
 
     public class func createInPageContentWorld(source: String, injectionTime: WKUserScriptInjectionTime, forMainFrameOnly: Bool) -> WKUserScript {
-        // iOS 14.3 is required here because of a webkit bug in lower iOS versions with this API
-        if #available(iOS 14.3, *) {
-            return WKUserScript(source: source, injectionTime: injectionTime, forMainFrameOnly: forMainFrameOnly, in: .page)
-        } else {
-            return WKUserScript(source: source, injectionTime: injectionTime, forMainFrameOnly: forMainFrameOnly)
-        }
+        return WKUserScript(source: source, injectionTime: injectionTime, forMainFrameOnly: forMainFrameOnly, in: .page)
     }
 }

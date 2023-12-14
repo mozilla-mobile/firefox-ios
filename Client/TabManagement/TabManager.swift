@@ -10,6 +10,7 @@ import Shared
 
 // MARK: - TabManager protocol
 protocol TabManager: AnyObject {
+    var windowUUID: WindowUUID { get }
     var isRestoringTabs: Bool { get }
     var delaySelectingNewPopupTab: TimeInterval { get }
     var recentlyAccessedNormalTabs: [Tab] { get }
@@ -74,8 +75,6 @@ extension TabManager {
     }
 
     func selectTab(_ tab: Tab?) {
-        guard let privateState = tab?.isPrivate else { return }
-        store.dispatch(FeltPrivacyAction.setPrivateModeTo(privateState))
         selectTab(tab, previous: nil)
     }
 

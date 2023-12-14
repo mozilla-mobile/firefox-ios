@@ -148,15 +148,12 @@ open class BrowserSchema: Schema {
     public var version: Int { return BrowserSchema.DefaultVersion }
 
     let sqliteVersion: Int32
-    let supportsPartialIndices: Bool
 
     public init(logger: Logger = DefaultLogger.shared) {
-        let v = sqlite3_libversion_number()
-        self.sqliteVersion = v
-        self.supportsPartialIndices = v >= 3008000          // 3.8.0.
+        self.sqliteVersion = sqlite3_libversion_number()
         let ver = String(cString: sqlite3_libversion())
         self.logger = logger
-        logger.log("Init SQLite version: \(ver) (\(v)).",
+        logger.log("Init SQLite version: \(ver) (\(self.sqliteVersion)).",
                    level: .debug,
                    category: .setup)
     }
@@ -781,19 +778,11 @@ open class BrowserSchema: Schema {
             )
             """
 
-        let indexShouldUpload: String
-        if self.supportsPartialIndices {
-            // There's no point tracking rows that are not flagged for upload.
-            indexShouldUpload = """
-                CREATE INDEX IF NOT EXISTS idx_history_should_upload
-                ON history (should_upload) WHERE should_upload = 1
-                """
-        } else {
-            indexShouldUpload = """
-                CREATE INDEX IF NOT EXISTS idx_history_should_upload
-                ON history (should_upload)
-                """
-        }
+        // There's no point tracking rows that are not flagged for upload.
+        let indexShouldUpload = """
+            CREATE INDEX IF NOT EXISTS idx_history_should_upload
+            ON history (should_upload) WHERE should_upload = 1
+            """
 
         let indexSiteIDDate = """
             CREATE INDEX IF NOT EXISTS idx_visits_siteID_is_local_date

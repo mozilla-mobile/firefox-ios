@@ -55,3 +55,6 @@
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "Төп сайтлар";
 
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "Вебсайтлар ярлыклары";
+

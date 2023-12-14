@@ -52,19 +52,6 @@ class LoginTest: BaseTestCase {
         navigator.nowAt(LoginsSettings)
     }
 
-    private func unlockLoginsView() {
-        // Press continue button on the password onboarding if it's shown
-        if app.buttons[AccessibilityIdentifiers.Settings.Passwords.onboardingContinue].exists {
-            app.buttons[AccessibilityIdentifiers.Settings.Passwords.onboardingContinue].tap()
-        }
-
-        let passcodeInput = springboard.otherElements.secureTextFields.firstMatch
-        mozWaitForElementToExist(passcodeInput, timeout: 20)
-        passcodeInput.tap()
-        passcodeInput.typeText("foo\n")
-        mozWaitForElementToNotExist(passcodeInput)
-    }
-
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306961
     func testLoginsListFromBrowserTabMenu() {
         closeURLBar()
@@ -259,7 +246,7 @@ class LoginTest: BaseTestCase {
         unlockLoginsView()
         mozWaitForElementToExist(app.tables["Login List"], timeout: 15)
         mozWaitForElementToExist(app.navigationBars["Passwords"])
-        mozWaitForElementToExist(app.staticTexts["No logins found"])
+        mozWaitForElementToExist(app.staticTexts["No passwords found"])
         mozWaitForElementToExist(app.buttons["Add"])
         mozWaitForElementToExist(app.buttons["Edit"])
         XCTAssertFalse(app.buttons["Edit"].isEnabled)
@@ -280,7 +267,7 @@ class LoginTest: BaseTestCase {
         enterTextInField(typedText: "bar")
 
         app.buttons["Save"].tap()
-        mozWaitForElementToExist(app.tables["Login List"].otherElements["SAVED LOGINS"])
+        mozWaitForElementToExist(app.tables["Login List"].otherElements["SAVED PASSWORDS"])
         // XCTAssertTrue(app.cells.staticTexts["foo"].exists)
     }
 

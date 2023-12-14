@@ -14,9 +14,6 @@ struct TabTrayState: ScreenState, Equatable {
     var isPrivateMode: Bool
     var selectedPanel: TabTrayPanelType
     var shouldDismiss: Bool
-
-    var layout: TabTrayLayoutType = .compact
-    // TODO: FXIOS-7359 Move logic to show "\u{221E}" over 100 tabs to reducer
     var normalTabsCount: String
     var navigationTitle: String {
         return selectedPanel.navTitle
@@ -74,7 +71,7 @@ struct TabTrayState: ScreenState, Equatable {
             let panelType = tabState.isPrivateMode ? TabTrayPanelType.privateTabs : TabTrayPanelType.tabs
             return TabTrayState(isPrivateMode: tabState.isPrivateMode,
                                 selectedPanel: panelType,
-                                normalTabsCount: "\(tabState.tabs.count)")
+                                normalTabsCount: tabState.normalTabsCount)
         case TabTrayAction.dismissTabTray:
             return TabTrayState(isPrivateMode: state.isPrivateMode,
                                 selectedPanel: state.selectedPanel,
@@ -83,11 +80,5 @@ struct TabTrayState: ScreenState, Equatable {
         default:
             return state
         }
-    }
-
-    static func == (lhs: TabTrayState, rhs: TabTrayState) -> Bool {
-        return lhs.isPrivateMode == rhs.isPrivateMode
-        && lhs.selectedPanel == rhs.selectedPanel
-        && lhs.layout == rhs.layout
     }
 }

@@ -15,7 +15,12 @@ struct SafelistedDomains {
 }
 
 extension ContentBlocker {
-    func safelistFileURL() -> URL? {
+    private func safelistFileURL() -> URL? {
+        guard let dir = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else { return nil }
+        return dir.appendingPathComponent("safelist")
+    }
+
+    private func oldSafelistFileURL() -> URL? {
         guard let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return nil }
         return dir.appendingPathComponent("safelist")
     }
@@ -81,11 +86,29 @@ extension ContentBlocker {
 
     func readSafelistFile() -> [String]? {
         guard let fileURL = safelistFileURL() else { return nil }
+
+        if FileManager.default.fileExists(atPath: fileURL.path) {
+            return readSafelistFile(fileURL: fileURL)
+
+            // read file data, then move to new location
+        } else if let oldFileURL = oldSafelistFileURL(),
+                  FileManager.default.fileExists(atPath: oldFileURL.path) {
+            let data = readSafelistFile(fileURL: oldFileURL)
+            do {
+                try FileManager.default.moveItem(at: oldFileURL, to: fileURL)
+            } catch {
+                logger.log("Failed to move file from \(oldFileURL) to \(fileURL) for safe list file with error: \(error)", level: .warning, category: .webview)
+            }
+            return data
+        }
+        return nil
+    }
+
+    private func readSafelistFile(fileURL: URL) -> [String]? {
         let text = try? String(contentsOf: fileURL, encoding: .utf8)
         if let text = text, !text.isEmpty {
             return text.components(separatedBy: .newlines)
         }
-
         return nil
     }
 }

@@ -576,8 +576,8 @@ extension LegacyGridTabViewController: LegacyTabCellDelegate {
     }
 }
 
-// MARK: - TabPeekDelegate
-extension LegacyGridTabViewController: TabPeekDelegate {
+// MARK: - LegacyTabPeekDelegate
+extension LegacyGridTabViewController: LegacyTabPeekDelegate {
     func tabPeekDidAddBookmark(_ tab: Tab) {
         delegate?.tabTrayDidAddBookmark(tab)
     }

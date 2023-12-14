@@ -43,6 +43,8 @@ let package = Package(
         .package(
             url: "https://github.com/getsentry/sentry-cocoa.git",
             exact: "8.17.1"),
+        .package(url: "https://github.com/nbhasin2/GCDWebServer.git",
+                 branch: "master")
     ],
     targets: [
         .target(
@@ -83,6 +85,8 @@ let package = Package(
             dependencies: ["Redux"]),
         .target(
             name: "WebEngine",
+            dependencies: ["Common",
+                           .product(name: "GCDWebServers", package: "GCDWebServer")],
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "WebEngineTests",

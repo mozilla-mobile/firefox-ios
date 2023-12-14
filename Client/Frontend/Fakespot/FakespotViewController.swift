@@ -462,7 +462,9 @@ class FakespotViewController:
             guard viewModel.areAdsEnabled else { return nil }
             let view: FakespotAdView = .build()
             var viewModel = FakespotAdViewModel(productAdsData: adData)
-            viewModel.dismissViewController = {
+            viewModel.onTapProductLink = { [weak self] in
+                self?.viewModel.addTab(url: adData.url)
+                self?.viewModel.reportAdEvent(eventName: .trustedDealsLinkClicked, aid: adData.aid)
                 store.dispatch(FakespotAction.setAppearanceTo(false))
             }
             view.configure(viewModel)

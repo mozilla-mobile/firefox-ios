@@ -56,7 +56,7 @@ struct FakespotOptInCardViewModel {
 
     // MARK: Init
     init(profile: Profile = AppContainer.shared.resolve(),
-         tabManager: TabManager = AppContainer.shared.resolve()) {
+         tabManager: TabManager) {
         self.tabManager = tabManager
         prefs = profile.prefs
 
