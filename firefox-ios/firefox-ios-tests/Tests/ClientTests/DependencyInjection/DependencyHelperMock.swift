@@ -5,6 +5,7 @@
 import Common
 import Shared
 import Storage
+import TabDataStore
 @testable import Client
 
 class DependencyHelperMock {
@@ -15,6 +16,9 @@ class DependencyHelperMock {
             localName: "profile"
         )
         AppContainer.shared.register(service: profile)
+
+        let tabDataStore: TabDataStore = MockTabDataStore()
+        AppContainer.shared.register(service: tabDataStore)
 
         let windowUUID = WindowUUID()
         let tabManager: TabManager = injectedTabManager ?? TabManagerImplementation(
