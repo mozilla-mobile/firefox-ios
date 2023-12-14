@@ -1312,6 +1312,8 @@
 		DFACBF85277B9B5B003D5F41 /* TopSitesRowCountSettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACBF84277B9B5B003D5F41 /* TopSitesRowCountSettingsController.swift */; };
 		DFACDFAA274D489B00A94EEC /* HistoryHighlightsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACDFA9274D489B00A94EEC /* HistoryHighlightsViewModel.swift */; };
 		DFACDFAF274D4D6D00A94EEC /* ReusableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACDFAE274D4D6D00A94EEC /* ReusableCell.swift */; };
+		DFD104682B2341F900938418 /* ProductAdsCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD104632B231F8900938418 /* ProductAdsCache.swift */; };
+		DFD1046D2B23539600938418 /* ProductAdsCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD1046C2B23539600938418 /* ProductAdsCacheTests.swift */; };
 		DFEA639E279F468A00D489C3 /* DynamicHeightCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFEA639D279F468A00D489C3 /* DynamicHeightCollectionView.swift */; };
 		DFFC9AD12A681FA0002A6AAD /* NimbusFakespotFeatureLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFFC9AD02A681FA0002A6AAD /* NimbusFakespotFeatureLayer.swift */; };
 		E10A1F752863BC51001EEA80 /* LegacyInactiveTabItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10A1F742863BC51001EEA80 /* LegacyInactiveTabItemCell.swift */; };
@@ -6805,6 +6807,8 @@
 		DFACBF84277B9B5B003D5F41 /* TopSitesRowCountSettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesRowCountSettingsController.swift; sourceTree = "<group>"; };
 		DFACDFA9274D489B00A94EEC /* HistoryHighlightsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryHighlightsViewModel.swift; sourceTree = "<group>"; };
 		DFACDFAE274D4D6D00A94EEC /* ReusableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableCell.swift; sourceTree = "<group>"; };
+		DFD104632B231F8900938418 /* ProductAdsCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductAdsCache.swift; sourceTree = "<group>"; };
+		DFD1046C2B23539600938418 /* ProductAdsCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductAdsCacheTests.swift; sourceTree = "<group>"; };
 		DFD6456AA6B9F19B62C14026 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		DFE8447DBAB67C2A5B61E4D0 /* bo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bo; path = bo.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DFEA639D279F468A00D489C3 /* DynamicHeightCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicHeightCollectionView.swift; sourceTree = "<group>"; };
@@ -9309,6 +9313,7 @@
 				E1516A3D2A7BC07E007819A4 /* ReliabilityGrade.swift */,
 				8CBDE8E22AB09804001985BF /* ProductAnalyzeResponse.swift */,
 				8C92DE922A7128DE0090BD28 /* ProductAdsResponse.swift */,
+				DFD104632B231F8900938418 /* ProductAdsCache.swift */,
 				8CCCB08A2AE26B5C0073ADB9 /* ReportResponse.swift */,
 				8C92DE902A7128CB0090BD28 /* ProductAnalysisResponse.swift */,
 				8C29627B2B1F473800571655 /* AdEventsResponse.swift */,
@@ -10330,6 +10335,7 @@
 				DF940A0A2A96316D00C1497D /* FakespotSettingsCardViewModelTests.swift */,
 				8C8D8C812AA2229200490D32 /* FakespotViewModelTests.swift */,
 				E19443F52AF9413300964EA5 /* FakespotUtilsTests.swift */,
+				DFD1046C2B23539600938418 /* ProductAdsCacheTests.swift */,
 			);
 			path = Fakespot;
 			sourceTree = "<group>";
@@ -13548,6 +13554,7 @@
 				8CCCB08B2AE26B5C0073ADB9 /* ReportResponse.swift in Sources */,
 				21A43CDD291461C700B1206D /* ReaderModeFontTypeButton.swift in Sources */,
 				D3BE7B261B054D4400641031 /* main.swift in Sources */,
+				DFD104682B2341F900938418 /* ProductAdsCache.swift in Sources */,
 				C2D71B992A384F6A003DEC7A /* ThemedLeftAlignedTableViewCell.swift in Sources */,
 				21A7C44E283539170071D996 /* IntroViewModel.swift in Sources */,
 				E1FF93E228A2E55700E6360E /* WallpaperSelectorViewController.swift in Sources */,
@@ -13731,6 +13738,7 @@
 				21534904288201E300FADB4D /* GleanPlumbMessageManagerTests.swift in Sources */,
 				AB03032F2AB8561700DCD8EF /* FakespotOptInViewModelTests.swift in Sources */,
 				21BFEEF82A05A0370033048D /* TabMigrationUtilityTests.swift in Sources */,
+				DFD1046D2B23539600938418 /* ProductAdsCacheTests.swift in Sources */,
 				E1390FB628B040E900C9EF3E /* WallpaperSelectorViewModelTests.swift in Sources */,
 				39AF317429DAE37E00F8E6F7 /* NimbusMessagingMessageTests.swift in Sources */,
 				C889D7D52858CD8800121E1D /* HistoryHighlightsTestEntryProvider.swift in Sources */,
