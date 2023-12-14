@@ -10,6 +10,9 @@ class TabManagerMiddleware {
     var selectedPanel: TabTrayPanelType = .tabs
     private let windowManager: WindowManager
 
+    // undo actions
+    var backupCloseTab: BackupCloseTab?
+
     var normalTabsCountText: String {
         (defaultTabManager.normalTabs.count < 100) ? defaultTabManager.normalTabs.count.description : "\u{221E}"
     }
@@ -50,15 +53,23 @@ class TabManagerMiddleware {
         case TabPanelAction.closeTab(let tabUUID):
             guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel) else { return }
             Task {
-                let shouldDismiss = await self.closeTab(with: tabUUID)
+                let shouldDismiss = await self.closeTab(with: tabUUID, tabs: tabsState.tabs)
                 ensureMainThread { [self] in
                     let tabs = self.refreshTabs(for: tabsState.isPrivateMode)
                     store.dispatch(TabPanelAction.refreshTab(tabs))
                     if shouldDismiss {
                         store.dispatch(TabTrayAction.dismissTabTray)
+                    } else {
+                        store.dispatch(TabPanelAction.showUndoToast(.singleTab))
                     }
                 }
             }
+
+        case TabPanelAction.undoClose:
+            guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel) else { return }
+            self.undoCloseTab()
+            let tabs = self.refreshTabs(for: tabsState.isPrivateMode)
+            store.dispatch(TabPanelAction.refreshTab(tabs))
 
         case TabPanelAction.closeAllTabs:
             guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel) else { return }
@@ -168,8 +179,15 @@ class TabManagerMiddleware {
         defaultTabManager.moveTab(isPrivate: false, fromIndex: originIndex, toIndex: destinationIndex)
     }
 
-    private func closeTab(with tabUUID: String) async -> Bool {
+    private func closeTab(with tabUUID: String, tabs: [TabModel]) async -> Bool {
         let isLastTab = defaultTabManager.normalTabs.count == 1
+
+        // Create backup in case undo option is selected
+        if let tabToClose = defaultTabManager.getTabForUUID(uuid: tabUUID) {
+            let index = tabs.firstIndex { $0.tabUUID == tabUUID }
+            backupCloseTab = BackupCloseTab(tab: tabToClose, restorePosition: index)
+        }
+
         await defaultTabManager.removeTab(tabUUID)
         return isLastTab
     }
@@ -194,6 +212,12 @@ class TabManagerMiddleware {
         guard let tab = defaultTabManager.getTabForUUID(uuid: tabUUID) else { return }
 
         defaultTabManager.selectTab(tab)
+    }
+
+    private func undoCloseTab() {
+        guard let backupCloseTab else { return }
+
+        defaultTabManager.undoCloseTab(tab: backupCloseTab.tab, position: backupCloseTab.restorePosition)
     }
 
     private var defaultTabManager: TabManager {

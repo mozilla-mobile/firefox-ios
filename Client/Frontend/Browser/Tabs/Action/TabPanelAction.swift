@@ -9,6 +9,7 @@ enum TabPanelAction: Action {
     case tabPanelDidAppear(Bool)
     case addNewTab(URLRequest?, Bool)
     case closeTab(String)
+    case undoClose
     case closeAllTabs
     case moveTab(Int, Int)
     case toggleInactiveTabs
@@ -16,10 +17,11 @@ enum TabPanelAction: Action {
     case closeAllInactiveTabs
     case learnMorePrivateMode(URLRequest)
     case selectTab(String)
+    case showUndoToast(UndoToastType)
+    case hideUndoToast
 
     // Middleware actions
     case didLoadTabPanel(TabDisplayModel)
-    // Response to all user actions involving tabs ex: add, close and close all tabs
-    case refreshTab([TabModel])
+    case refreshTab([TabModel]) // Response to all user actions involving tabs ex: add, close and close all tabs
     case refreshInactiveTabs([InactiveTabsModel])
 }
