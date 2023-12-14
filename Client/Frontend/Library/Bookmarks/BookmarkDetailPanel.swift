@@ -426,7 +426,12 @@ class BookmarkDetailPanel: SiteTableViewController {
             return cell
         case BookmarkDetailFieldsRow.url.rawValue:
             if let bookmarkURL = bookmarkItemURL {
-                cell.configureCell(title: .BookmarkDetailFieldURL, textFieldText: bookmarkURL, autocapitalizationType: .none, keyboardType: .URL)
+                cell.configureCell(
+                    title: .BookmarkDetailFieldURL,
+                    textFieldText: bookmarkURL,
+                    autocapitalizationType: .none,
+                    keyboardType: .URL
+                )
             }
             return cell
         default:
