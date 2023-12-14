@@ -58,7 +58,7 @@ class RemoteTabsPanelMiddleware {
         }
     }
 
-    private func geCachedtRemoteTabs() {
+    private func getCachedRemoteTabs() {
         profile.getCachedClientsAndTabs { result in
             guard let clientAndTabs = result else {
                 store.dispatch(RemoteTabsPanelAction.refreshDidFail(.failedToSync))
@@ -87,7 +87,7 @@ class RemoteTabsPanelMiddleware {
         switch notification.name {
         case .FirefoxAccountChanged,
                 .ProfileDidFinishSyncing:
-            getRemoteTabs()
+            getCachedRemoteTabs()
             store.dispatch(TabTrayAction.firefoxAccountChanged(hasSyncableAccount))
         default: break
         }
