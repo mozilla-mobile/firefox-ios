@@ -395,8 +395,8 @@ extension BrowserViewController: URLBarDelegate {
     private var shouldDisableSearchSuggestsForPrivateMode: Bool {
         let featureFlagEnabled = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
         let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
-        let isSettingEnabled = profile.prefs.boolForKey(PrefsKeys.SearchSettings.disablePrivateModeSearchSuggestions) ?? true
-        return featureFlagEnabled && isPrivateTab && isSettingEnabled
+        let isSettingEnabled = profile.prefs.boolForKey(PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions) ?? false
+        return featureFlagEnabled && isPrivateTab && !isSettingEnabled
     }
 
     // Determines the view user should see when editing the url bar
