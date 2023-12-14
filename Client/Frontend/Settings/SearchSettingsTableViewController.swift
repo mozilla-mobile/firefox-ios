@@ -163,8 +163,8 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
             cell.textLabel?.numberOfLines = 0
             let toggle = ThemedSwitch()
             toggle.applyTheme(theme: themeManager.currentTheme)
-            toggle.addTarget(self, action: #selector(didToggleDisableSearchSuggestionsInPrivateMode), for: .valueChanged)
-            toggle.isOn = model.shouldDisablePrivateModeSearchSuggestions
+            toggle.addTarget(self, action: #selector(didToggleShowSearchSuggestionsInPrivateMode), for: .valueChanged)
+            toggle.isOn = model.shouldShowPrivateModeSearchSuggestions
             cell.editingAccessoryView = toggle
             cell.selectionStyle = .none
             cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Search.disableSearchSuggestsInPrivateMode
@@ -388,8 +388,8 @@ extension SearchSettingsTableViewController {
     }
 
     @objc
-    func didToggleDisableSearchSuggestionsInPrivateMode(_ toggle: ThemedSwitch) {
-        model.shouldDisablePrivateModeSearchSuggestions = toggle.isOn
+    func didToggleShowSearchSuggestionsInPrivateMode(_ toggle: ThemedSwitch) {
+        model.shouldShowPrivateModeSearchSuggestions = toggle.isOn
     }
 
     func cancel() {

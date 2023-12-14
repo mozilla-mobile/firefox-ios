@@ -10,6 +10,10 @@ class TabManagerMiddleware {
     var selectedPanel: TabTrayPanelType = .tabs
     private let windowManager: WindowManager
 
+    var normalTabsCountText: String {
+        (defaultTabManager.normalTabs.count < 100) ? defaultTabManager.normalTabs.count.description : "\u{221E}"
+    }
+
     init(windowManager: WindowManager = AppContainer.shared.resolve()) {
         self.windowManager = windowManager
     }
@@ -105,20 +109,19 @@ class TabManagerMiddleware {
         selectedPanel = panelType
 
         let isPrivate = panelType == .privateTabs
-        let tabsCount = refreshTabs(for: isPrivate).count
         return TabTrayModel(isPrivateMode: isPrivate,
                             selectedPanel: panelType,
-                            normalTabsCount: "\(tabsCount)")
+                            normalTabsCount: normalTabsCountText)
     }
 
     func getTabsDisplayModel(for isPrivateMode: Bool) -> TabDisplayModel {
         let tabs = refreshTabs(for: isPrivateMode)
         let inactiveTabs = refreshInactiveTabs(for: isPrivateMode)
-        let isInactiveTabsExpanded = !isPrivateMode && !inactiveTabs.isEmpty
         let tabDisplayModel = TabDisplayModel(isPrivateMode: isPrivateMode,
                                               tabs: tabs,
+                                              normalTabsCount: normalTabsCountText,
                                               inactiveTabs: inactiveTabs,
-                                              isInactiveTabsExpanded: isInactiveTabsExpanded)
+                                              isInactiveTabsExpanded: false)
         return tabDisplayModel
     }
 
@@ -165,7 +168,7 @@ class TabManagerMiddleware {
     }
 
     private func closeTab(with tabUUID: String) async -> Bool {
-        let isLastTab = defaultTabManager.tabs.count == 1
+        let isLastTab = defaultTabManager.normalTabs.count == 1
         await defaultTabManager.removeTab(tabUUID)
         return isLastTab
     }

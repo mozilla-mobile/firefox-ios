@@ -15,8 +15,7 @@ protocol TabTrayNavigationHandler: AnyObject {
 class TabTrayCoordinator: BaseCoordinator,
                           ParentCoordinatorDelegate,
                           TabTrayViewControllerDelegate,
-                          TabTrayNavigationHandler,
-                          QRCodeNavigationHandler {
+                          TabTrayNavigationHandler {
     private var tabTrayViewController: TabTrayViewController!
     private var profile: Profile
     weak var parentCoordinator: TabTrayCoordinatorDelegate?
@@ -77,7 +76,6 @@ class TabTrayCoordinator: BaseCoordinator,
                                                           router: router)
         add(child: remoteTabsCoordinator)
         remoteTabsCoordinator.parentCoordinator = self
-        remoteTabsCoordinator.qrCodeNavigationHandler = self
         (navigationController.topViewController as? RemoteTabsPanel)?.remoteTabsDelegate = remoteTabsCoordinator
     }
 
@@ -90,18 +88,5 @@ class TabTrayCoordinator: BaseCoordinator,
     // MARK: - TabTrayViewControllerDelegate
     func didFinish() {
         parentCoordinator?.didDismissTabTray(from: self)
-    }
-
-    // MARK: - QRCodeNavigationHandler
-    func showQRCode(delegate: QRCodeViewControllerDelegate, rootNavigationController: UINavigationController?) {
-        var coordinator: QRCodeCoordinator
-        if let qrCodeCoordinator = childCoordinators.first(where: { $0 is QRCodeCoordinator }) as? QRCodeCoordinator {
-            coordinator = qrCodeCoordinator
-        } else {
-            let router = rootNavigationController != nil ? DefaultRouter(navigationController: rootNavigationController!) : router
-            coordinator = QRCodeCoordinator(parentCoordinator: self, router: router)
-            add(child: coordinator)
-        }
-        coordinator.showQRCode(delegate: delegate)
     }
 }

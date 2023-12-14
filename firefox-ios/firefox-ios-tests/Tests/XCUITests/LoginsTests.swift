@@ -246,7 +246,7 @@ class LoginTest: BaseTestCase {
         unlockLoginsView()
         mozWaitForElementToExist(app.tables["Login List"], timeout: 15)
         mozWaitForElementToExist(app.navigationBars["Passwords"])
-        mozWaitForElementToExist(app.staticTexts["No logins found"])
+        mozWaitForElementToExist(app.staticTexts["No passwords found"])
         mozWaitForElementToExist(app.buttons["Add"])
         mozWaitForElementToExist(app.buttons["Edit"])
         XCTAssertFalse(app.buttons["Edit"].isEnabled)
@@ -267,7 +267,7 @@ class LoginTest: BaseTestCase {
         enterTextInField(typedText: "bar")
 
         app.buttons["Save"].tap()
-        mozWaitForElementToExist(app.tables["Login List"].otherElements["SAVED LOGINS"])
+        mozWaitForElementToExist(app.tables["Login List"].otherElements["SAVED PASSWORDS"])
         // XCTAssertTrue(app.cells.staticTexts["foo"].exists)
     }
 

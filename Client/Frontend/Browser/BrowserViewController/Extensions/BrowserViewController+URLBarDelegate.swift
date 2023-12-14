@@ -46,14 +46,14 @@ extension BrowserViewController: URLBarDelegate {
 
     private func showLegacyTabTrayViewController(withFocusOnUnselectedTab tabToFocus: Tab? = nil,
                                                  focusedSegment: TabTrayPanelType? = nil) {
-        self.tabTrayViewController = LegacyTabTrayViewController(
+        tabTrayViewController = LegacyTabTrayViewController(
             tabTrayDelegate: self,
             profile: profile,
             tabToFocus: tabToFocus,
             tabManager: tabManager,
             overlayManager: overlayManager,
             focusedSegment: focusedSegment)
-
+        (tabTrayViewController as? LegacyTabTrayViewController)?.qrCodeNavigationHandler = navigationHandler
         tabTrayViewController?.openInNewTab = { url, isPrivate in
             let tab = self.tabManager.addTab(URLRequest(url: url), afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
             // If we are showing toptabs a user can just use the top tab bar
@@ -167,7 +167,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidPressQRButton(_ urlBar: URLBarView) {
         if CoordinatorFlagManager.isQRCodeCoordinatorEnabled {
-            navigationHandler?.showQRCode()
+            navigationHandler?.showQRCode(delegate: self)
         } else {
             let qrCodeViewController = QRCodeViewController()
             qrCodeViewController.qrCodeDelegate = self
@@ -395,8 +395,8 @@ extension BrowserViewController: URLBarDelegate {
     private var shouldDisableSearchSuggestsForPrivateMode: Bool {
         let featureFlagEnabled = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
         let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
-        let isSettingEnabled = profile.prefs.boolForKey(PrefsKeys.SearchSettings.disablePrivateModeSearchSuggestions) ?? true
-        return featureFlagEnabled && isPrivateTab && isSettingEnabled
+        let isSettingEnabled = profile.prefs.boolForKey(PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions) ?? false
+        return featureFlagEnabled && isPrivateTab && !isSettingEnabled
     }
 
     // Determines the view user should see when editing the url bar

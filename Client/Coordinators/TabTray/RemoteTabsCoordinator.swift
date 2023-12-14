@@ -4,14 +4,16 @@
 
 import Foundation
 
-class RemoteTabsCoordinator: BaseCoordinator, RemoteTabsPanelDelegate {
+class RemoteTabsCoordinator: BaseCoordinator,
+                             RemoteTabsPanelDelegate,
+                             ParentCoordinatorDelegate,
+                             QRCodeNavigationHandler {
     // MARK: - Properties
     private let profile: Profile
     private var fxAccountViewController: FirefoxAccountSignInViewController?
     private var applicationHelper: ApplicationHelper
 
     weak var parentCoordinator: ParentCoordinatorDelegate?
-    weak var qrCodeNavigationHandler: QRCodeNavigationHandler?
 
     // MARK: - Initializers
 
@@ -31,7 +33,7 @@ class RemoteTabsCoordinator: BaseCoordinator, RemoteTabsPanelDelegate {
                                                                 parentType: .tabTray,
                                                                 deepLinkParams: fxaParams)
         fxAccountViewController = viewController
-        fxAccountViewController?.qrCodeNavigationHandler = qrCodeNavigationHandler
+        fxAccountViewController?.qrCodeNavigationHandler = self
         let buttonItem = UIBarButtonItem(title: .CloseButtonTitle, style: .plain, target: self, action: #selector(dismissFxAViewController))
         fxAccountViewController?.navigationItem.leftBarButtonItem = buttonItem
         let navController = ThemedNavigationController(rootViewController: viewController)
@@ -52,5 +54,18 @@ class RemoteTabsCoordinator: BaseCoordinator, RemoteTabsPanelDelegate {
 
     func didFinish(from childCoordinator: Coordinator) {
         remove(child: childCoordinator)
+    }
+
+    // MARK: - QRCodeNavigationHandler
+    func showQRCode(delegate: QRCodeViewControllerDelegate, rootNavigationController: UINavigationController?) {
+        var coordinator: QRCodeCoordinator
+        if let qrCodeCoordinator = childCoordinators.first(where: { $0 is QRCodeCoordinator }) as? QRCodeCoordinator {
+            coordinator = qrCodeCoordinator
+        } else {
+            let router = rootNavigationController != nil ? DefaultRouter(navigationController: rootNavigationController!) : router
+            coordinator = QRCodeCoordinator(parentCoordinator: self, router: router)
+            add(child: coordinator)
+        }
+        coordinator.showQRCode(delegate: delegate)
     }
 }

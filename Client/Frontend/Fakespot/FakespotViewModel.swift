@@ -373,11 +373,8 @@ class FakespotViewModel {
         if showLoading { state = .loading }
         do {
             let product = try await shoppingProduct.fetchProductAnalysisData()
-            let productAds: [ProductAdsResponse] = if shoppingProduct.isProductAdsFeatureEnabled, areAdsEnabled {
-                await shoppingProduct.fetchProductAdsData()
-            } else {
-                []
-            }
+            let productAds = await loadProductAds(for: product?.productId)
+
             let needsAnalysis = product?.needsAnalysis ?? false
             let analysis: AnalysisStatus? = needsAnalysis ? try? await shoppingProduct.getProductAnalysisStatus()?.status : nil
             state = .loaded(
@@ -389,7 +386,7 @@ class FakespotViewModel {
                 )
             )
 
-            guard let product else { return }
+            guard product != nil else { return }
             if productAds.isEmpty {
                 recordSurfaceNoAdsAvailableTelemetry()
             } else {
@@ -397,6 +394,25 @@ class FakespotViewModel {
             }
         } catch {
             state = .error(error)
+        }
+    }
+
+    func loadProductAds(for productId: String?) async -> [ProductAdsResponse] {
+        if let productId,
+           let cachedAds = await ProductAdsCache.shared.getCachedAds(forKey: productId) {
+            return cachedAds
+        } else {
+            let newAds: [ProductAdsResponse]
+            if shoppingProduct.isProductAdsFeatureEnabled, areAdsEnabled {
+                newAds = await shoppingProduct.fetchProductAdsData()
+            } else {
+                newAds = []
+            }
+            if let productId, !newAds.isEmpty {
+                await ProductAdsCache.shared.cacheAds(newAds, forKey: productId)
+            }
+
+            return newAds
         }
     }
 
@@ -482,13 +498,13 @@ class FakespotViewModel {
     }
 
     // MARK: - Timer Handling
-    private func startTimer() {
+    private func startTimer(aid: String) {
         timer = Timer.scheduledTimer(
-            timeInterval: 1.5,
-            target: self,
-            selector: #selector(timerFired),
-            userInfo: nil,
-            repeats: false
+            withTimeInterval: 1.5,
+            repeats: false,
+            block: { [weak self] _ in
+                self?.timerFired(aid: aid)
+            }
         )
         // Add the timer to the common run loop mode
         // to ensure that the selector method fires even during user interactions such as scrolling,
@@ -501,14 +517,14 @@ class FakespotViewModel {
         timer = nil
     }
 
-    @objc
-    private func timerFired() {
+    private func timerFired(aid: String) {
         hasTimerFired = true
         recordSurfaceAdsImpressionTelemetry()
+        reportAdEvent(eventName: .trustedDealsImpression, aid: aid)
         stopTimer()
     }
 
-    func handleVisibilityChanges(for view: UIView, in superview: UIView) {
+    func handleVisibilityChanges(for view: FakespotAdView, in superview: UIView) {
         guard !hasTimerFired else { return }
         let halfViewHeight = view.frame.height / 2
         let intersection = superview.bounds.intersection(view.frame)
@@ -517,7 +533,7 @@ class FakespotViewModel {
         if areViewsIntersected {
             guard !isViewVisible else { return }
             isViewVisible.toggle()
-            startTimer()
+            if let ad = view.ad { startTimer(aid: ad.aid) }
         } else {
             guard isViewVisible else { return }
             isViewVisible.toggle()
@@ -531,12 +547,12 @@ class FakespotViewModel {
 
     // MARK: - Telemetry
 
-    func reportAdEvent(eventName: FakespotAdsEvent, ad: ProductAdsResponse) {
+    func reportAdEvent(eventName: FakespotAdsEvent, aid: String) {
         Task {
             _ = try? await shoppingProduct.reportAdEvent(
                 eventName: eventName,
                 eventSource: FakespotAdsEvent.eventSource,
-                aid: ad.aid
+                aid: aid
             )
         }
     }
