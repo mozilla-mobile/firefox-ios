@@ -168,6 +168,7 @@ class WindowManagerTests: XCTestCase {
 
     private func createSubject() -> WindowManager {
         let manager: WindowManager = AppContainer.shared.resolve()
+        manager.reset()
         return manager
     }
 }
