@@ -373,11 +373,8 @@ class FakespotViewModel {
         if showLoading { state = .loading }
         do {
             let product = try await shoppingProduct.fetchProductAnalysisData()
-            let productAds: [ProductAdsResponse] = if shoppingProduct.isProductAdsFeatureEnabled, areAdsEnabled {
-                await shoppingProduct.fetchProductAdsData()
-            } else {
-                []
-            }
+            let productAds = await loadProductAds(for: product?.productId)
+
             let needsAnalysis = product?.needsAnalysis ?? false
             let analysis: AnalysisStatus? = needsAnalysis ? try? await shoppingProduct.getProductAnalysisStatus()?.status : nil
             state = .loaded(
@@ -397,6 +394,25 @@ class FakespotViewModel {
             }
         } catch {
             state = .error(error)
+        }
+    }
+
+    func loadProductAds(for productId: String?) async -> [ProductAdsResponse] {
+        if let productId,
+           let cachedAds = await ProductAdsCache.shared.getCachedAds(forKey: productId) {
+            return cachedAds
+        } else {
+            let newAds: [ProductAdsResponse]
+            if shoppingProduct.isProductAdsFeatureEnabled, areAdsEnabled {
+                newAds = await shoppingProduct.fetchProductAdsData()
+            } else {
+                newAds = []
+            }
+            if let productId, !newAds.isEmpty {
+                await ProductAdsCache.shared.cacheAds(newAds, forKey: productId)
+            }
+
+            return newAds
         }
     }
 
