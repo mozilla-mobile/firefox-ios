@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import Common
 
 struct SlideOverUXConstants {
     static let ETPMenuCornerRadius: CGFloat = 8
@@ -15,8 +14,8 @@ class SlideOverPresentationController: UIPresentationController {
     var globalETPStatus: Bool
     weak var enhancedTrackingProtectionMenuDelegate: EnhancedTrackingProtectionMenuDelegate?
 
-    init(presentedViewController: UIViewController, presenting presentingViewController: UIViewController?, withGlobalETPStatus status: Bool, notificationCenter: NotificationProtocol = NotificationCenter.default
-    ) {
+    init(presentedViewController: UIViewController, presenting presentingViewController: UIViewController?, withGlobalETPStatus status: Bool) {
+
         globalETPStatus = status
         let blurEffect = UIBlurEffect(style: .dark)
         blurEffectView = UIVisualEffectView(effect: blurEffect)
@@ -30,6 +29,7 @@ class SlideOverPresentationController: UIPresentationController {
 
     override var frameOfPresentedViewInContainerView: CGRect {
         guard let presentedView = presentedView, let containerView = self.containerView else { return .zero }
+
         let menuHeight = presentedView.systemLayoutSizeFitting(CGSize(width: presentedView.bounds.width, height: UIView.layoutFittingCompressedSize.height), withHorizontalFittingPriority: .required, verticalFittingPriority: .defaultLow).height
 
         let yPosition = containerView.frame.height - menuHeight
