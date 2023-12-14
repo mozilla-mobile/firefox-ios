@@ -82,10 +82,13 @@ struct FakespotAdViewModel: FeatureFlaggable {
 
 class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
     private enum UX {
-        static let labelFontSize: CGFloat = 15
-        static let descriptionFontSize: CGFloat = 13
+        static let titleFontSize: CGFloat = 15
+        static let linkFontSize: CGFloat = 13
+        static let priceFontSize: CGFloat = 13
+        static let footerFontSize: CGFloat = 13
         static let margins = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         static let linkInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        static let titleSpacing: CGFloat = 14
         static let hStackSpacing: CGFloat = 12
         static let vStackSpacing: CGFloat = 8
         static let starSize: CGFloat = 24
@@ -119,7 +122,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
     private lazy var titleLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
-                                                            size: UX.labelFontSize,
+                                                            size: UX.titleFontSize,
                                                             weight: .semibold)
         label.numberOfLines = 0
         label.accessibilityTraits.insert(.header)
@@ -128,7 +131,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
     private lazy var footerLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .footnote,
-                                                            size: UX.descriptionFontSize,
+                                                            size: UX.footerFontSize,
                                                             weight: .regular)
         label.numberOfLines = 0
         label.accessibilityTraits.insert(.staticText)
@@ -136,8 +139,9 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
 
     private lazy var priceLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .footnote,
-                                                                size: UX.descriptionFontSize)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .footnote,
+                                                            size: UX.priceFontSize,
+                                                            weight: .semibold)
         label.numberOfLines = 0
     }
     private lazy var productLinkButton: LinkButton = .build { button in
@@ -195,7 +199,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         let productLinkButtonViewModel = LinkButtonViewModel(
             title: productAdsData.name,
             a11yIdentifier: viewModel.productTitleA11yId,
-            fontSize: UX.labelFontSize,
+            fontSize: UX.linkFontSize,
             contentInsets: UX.linkInsets
         )
         productLinkButton.configure(viewModel: productLinkButtonViewModel)
@@ -332,10 +336,13 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         contentStackView.addArrangedSubview(secondRowStackView)
         contentStackView.addArrangedSubview(thirdRowStackView)
         contentStackView.distribution = .fill
+
+        contentStackView.setCustomSpacing(UX.titleSpacing, after: titleLabel)
     }
 
     private func setupLayoutForAccessibilityView() {
         contentStackView.distribution = .fill
+
         // first line
         contentStackView.addArrangedSubview(titleLabel)
 
@@ -360,6 +367,8 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
 
         // fifth line
         contentStackView.addArrangedSubview(priceLabel)
+
+        contentStackView.setCustomSpacing(UX.titleSpacing, after: titleLabel)
     }
 
     // MARK: Notifications
