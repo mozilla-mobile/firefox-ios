@@ -167,8 +167,9 @@ class WindowManagerTests: XCTestCase {
     // MARK: - Test Subject
 
     private func createSubject() -> WindowManager {
-        let manager: WindowManager = AppContainer.shared.resolve()
-        manager.reset()
-        return manager
+        // For this test case, we create a new WindowManager that we can
+        // modify and reset between each test case as needed, without
+        // impacting other tests that may use the shared AppContainer.
+        return WindowManagerImplementation()
     }
 }

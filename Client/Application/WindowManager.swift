@@ -34,9 +34,6 @@ protocol WindowManager {
     /// available it provides a new UUID for the window.
     /// - Returns: a UUID for the next window to be opened.
     func nextAvailableWindowUUID() -> WindowUUID
-
-    /// Resets all windows. Typically this should not be needed in the Client.
-    func reset()
 }
 
 /// Captures state and coordinator references specific to one particular app window.
@@ -76,10 +73,6 @@ final class WindowManagerImplementation: WindowManager {
 
     func windowDidClose(uuid: WindowUUID) {
         updateWindow(nil, for: uuid)
-    }
-
-    func reset() {
-        windows.removeAll()
     }
 
     func nextAvailableWindowUUID() -> WindowUUID {
