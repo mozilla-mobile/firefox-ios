@@ -12,6 +12,7 @@ protocol WKEngineWebViewDelegate: AnyObject {
     func tabWebView(_ webView: WKEngineWebView, searchSelection: String)
 }
 
+/// Abstraction on top of the `WKWebView`
 protocol WKEngineWebView {
     var navigationDelegate: WKNavigationDelegate? { get set }
     var allowsBackForwardNavigationGestures: Bool { get set }

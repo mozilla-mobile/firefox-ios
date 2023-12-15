@@ -5,6 +5,7 @@
 import Foundation
 import WebKit
 
+/// Provider to get a configured `WKEngineConfiguration`
 protocol WKEngineConfigurationProvider {
     func createConfiguration() -> WKEngineConfiguration
 }

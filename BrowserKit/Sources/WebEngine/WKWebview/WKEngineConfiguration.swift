@@ -5,6 +5,7 @@
 import Foundation
 import WebKit
 
+/// Abstraction on top of `WKWebViewConfiguration`
 protocol WKEngineConfiguration {
     var userContentController: WKUserContentController { get set }
     var allowsInlineMediaPlayback: Bool { get set }

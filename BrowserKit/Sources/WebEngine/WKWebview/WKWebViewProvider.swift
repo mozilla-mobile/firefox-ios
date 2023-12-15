@@ -6,6 +6,7 @@ import Common
 import Foundation
 import WebKit
 
+/// Abstraction that allow us to create a `WKWebView` object through the usage of a configuration provider and an webview abstraction.
 protocol WKWebViewProvider {
     func createWebview(configurationProvider: WKEngineConfigurationProvider) -> WKEngineWebView?
 }
