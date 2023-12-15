@@ -42,11 +42,11 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
             return
         }
 
-        switch state {
+        updatedConfiguration.background.backgroundColor = switch state {
         case [.highlighted]:
-            updatedConfiguration.background.backgroundColor = highlightedBackgroundColor
+            highlightedBackgroundColor
         default:
-            updatedConfiguration.background.backgroundColor = normalBackgroundColor
+            normalBackgroundColor
         }
         updatedConfiguration.baseForegroundColor = foregroundColor
 
