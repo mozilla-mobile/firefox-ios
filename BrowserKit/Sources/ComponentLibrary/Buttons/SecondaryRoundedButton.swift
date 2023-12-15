@@ -58,10 +58,17 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
             return
         }
 
-        updatedConfiguration.setFont(DefaultDynamicFontHelper.preferredBoldFont(
-            withTextStyle: .callout,
-            size: UX.buttonFontSize
-        ))
+        updatedConfiguration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var container = incoming
+
+            container.foregroundColor = updatedConfiguration.baseForegroundColor
+            container.font = DefaultDynamicFontHelper.preferredBoldFont(
+                withTextStyle: .callout,
+                size: UX.buttonFontSize
+            )
+            return container
+        }
+
         updatedConfiguration.contentInsets = UX.contentInsets
         updatedConfiguration.title = viewModel.title
         updatedConfiguration.titleAlignment = .center
