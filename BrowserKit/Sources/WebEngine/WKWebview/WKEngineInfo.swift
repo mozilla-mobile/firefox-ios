@@ -4,9 +4,7 @@
 
 import Foundation
 
-struct TabTrayModel: Equatable {
-    var isPrivateMode: Bool
-    var selectedPanel: TabTrayPanelType
-    var normalTabsCount: String
-    var hasSyncableAccount: Bool
+/// The specific information related to the WK session and view
+struct WKEngineInfo {
+    static var webserverPort = 6571
 }

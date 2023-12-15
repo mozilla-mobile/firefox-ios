@@ -48,6 +48,7 @@ class TabLocationView: UIView, FeatureFlaggable {
     private let menuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuBadge, backdropCircleSize: 32)
 
     var url: URL? {
+        willSet { handleShoppingAdsCacheURLChange(newURL: newValue) }
         didSet {
             hideButtons()
             updateTextWithURL()
@@ -324,6 +325,14 @@ class TabLocationView: UIView, FeatureFlaggable {
         TelemetryWrapper.recordEvent(category: .information,
                                      method: .view,
                                      object: .shoppingProductPageVisits)
+    }
+
+    private func handleShoppingAdsCacheURLChange(newURL: URL?) {
+        guard  url?.displayURL != newURL,
+               !shoppingButton.isHidden else { return }
+        Task {
+            await ProductAdsCache.shared.clearCache()
+        }
     }
 
     private func updateTextWithURL() {

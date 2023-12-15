@@ -53,6 +53,10 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
             actions = topSitesActions
         } else if sectionType == .pocket, let pocketActions = getPocketActions(site: site, with: sourceView) {
             actions = pocketActions
+        } else if sectionType == .recentlySaved, let recentlySavedActions = getRecentlySavedActions(site: site, with: sourceView) {
+            actions = recentlySavedActions
+        } else if sectionType == .jumpBackIn, let jumpBackInActions = getJumpBackInActions(site: site, with: sourceView) {
+            actions = jumpBackInActions
         }
 
         return actions
@@ -72,7 +76,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                                sectionType: HomepageSectionType
     ) -> [PhotonRowActions]? {
         guard sectionType == .historyHighlights,
-              let highlightsActions = getHistoryHighlightsActions(for: highlightItem)
+              let highlightsActions = getHistoryHighlightsActions(for: highlightItem, with: sourceView)
         else { return nil }
 
         return highlightsActions
@@ -88,17 +92,45 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
     // MARK: - History Highlights
 
-    private func getHistoryHighlightsActions(for highlightItem: HighlightItem) -> [PhotonRowActions]? {
-        return [SingleActionViewModel(title: .RemoveContextMenuTitle,
-                                      iconString: StandardImageIdentifiers.Large.cross,
-                                      tapHandler: { _ in
-            self.viewModel.historyHighlightsViewModel.delete(highlightItem)
-            self.sendHistoryHighlightContextualTelemetry(type: .remove)
-        }).items]
+    private func getHistoryHighlightsActions(for highlightItem: HighlightItem, with sourceView: UIView?) -> [PhotonRowActions]? {
+        guard let siteURL = highlightItem.siteUrl else { return nil }
+
+        let site = Site(url: siteURL.absoluteString, title: highlightItem.displayTitle)
+        let openInNewTabAction = getOpenInNewTabAction(siteURL: siteURL, sectionType: .historyHighlights)
+        let openInNewPrivateTabAction = getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .historyHighlights)
+        let shareAction = getShareAction(site: site, sourceView: sourceView)
+        let bookmarkAction = getBookmarkAction(site: site)
+
+        return [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, shareAction]
+    }
+
+    // MARK: Jump Back In
+
+    private func getJumpBackInActions(site: Site, with sourceView: UIView?) -> [PhotonRowActions]? {
+        guard let siteURL = site.url.asURL else { return nil }
+
+        let openInNewTabAction = getOpenInNewTabAction(siteURL: siteURL, sectionType: .jumpBackIn)
+        let openInNewPrivateTabAction = getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .jumpBackIn)
+        let shareAction = getShareAction(site: site, sourceView: sourceView)
+        let bookmarkAction = getBookmarkAction(site: site)
+
+        return [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, shareAction]
+    }
+
+    // MARK: Recently Saved
+
+    private func getRecentlySavedActions(site: Site, with sourceView: UIView?) -> [PhotonRowActions]? {
+        guard let siteURL = site.url.asURL else { return nil }
+
+        let openInNewTabAction = getOpenInNewTabAction(siteURL: siteURL, sectionType: .recentlySaved)
+        let openInNewPrivateTabAction = getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .recentlySaved)
+        let shareAction = getShareAction(site: site, sourceView: sourceView)
+        let bookmarkAction = getBookmarkAction(site: site)
+
+        return [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, shareAction]
     }
 
     // MARK: - Pocket
-
     private func getPocketActions(site: Site, with sourceView: UIView?) -> [PhotonRowActions]? {
         guard let siteURL = site.url.asURL else { return nil }
 

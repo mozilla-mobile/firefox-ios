@@ -4,9 +4,11 @@
 
 import Foundation
 
-struct TabTrayModel: Equatable {
-    var isPrivateMode: Bool
-    var selectedPanel: TabTrayPanelType
-    var normalTabsCount: String
-    var hasSyncableAccount: Bool
+extension URLRequest {
+    var isPrivileged: Bool {
+        if let url = url, let internalUrl = WKInternalURL(url) {
+            return internalUrl.isAuthorized
+        }
+        return false
+    }
 }

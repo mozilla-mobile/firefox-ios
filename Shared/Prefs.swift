@@ -79,7 +79,7 @@ public struct PrefsKeys {
     }
 
     public struct SearchSettings {
-        public static let disablePrivateModeSearchSuggestions = "DisablePrivateModeSearchSuggestionsKey"
+        public static let showPrivateModeSearchSuggestions = "ShowPrivateModeSearchSuggestionsKey"
     }
 
     public struct UserFeatureFlagPrefs {

@@ -6710,7 +6710,7 @@ org.zw
 
 // newGTLDs
 
-// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2023-11-21T15:13:47Z
+// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2023-12-12T15:13:54Z
 // This list is auto-generated, don't edit it manually.
 // aaa : American Automobile Association, Inc.
 // https://www.iana.org/domains/root/db/aaa.html
@@ -7800,7 +7800,7 @@ discover
 // https://www.iana.org/domains/root/db/dish.html
 dish
 
-// diy : Lifestyle Domain Holdings, Inc.
+// diy : Internet Naming Company LLC
 // https://www.iana.org/domains/root/db/diy.html
 diy
 
@@ -8104,7 +8104,7 @@ fly
 // https://www.iana.org/domains/root/db/foo.html
 foo
 
-// food : Lifestyle Domain Holdings, Inc.
+// food : Internet Naming Company LLC
 // https://www.iana.org/domains/root/db/food.html
 food
 
@@ -8312,7 +8312,7 @@ goldpoint
 // https://www.iana.org/domains/root/db/golf.html
 golf
 
-// goo : NTT Resonant Inc.
+// goo : NTT DOCOMO, INC.
 // https://www.iana.org/domains/root/db/goo.html
 goo
 
@@ -8908,7 +8908,7 @@ life
 // https://www.iana.org/domains/root/db/lifeinsurance.html
 lifeinsurance
 
-// lifestyle : Lifestyle Domain Holdings, Inc.
+// lifestyle : Internet Naming Company LLC
 // https://www.iana.org/domains/root/db/lifestyle.html
 lifestyle
 
@@ -8948,7 +8948,7 @@ lipsy
 // https://www.iana.org/domains/root/db/live.html
 live
 
-// living : Lifestyle Domain Holdings, Inc.
+// living : Internet Naming Company LLC
 // https://www.iana.org/domains/root/db/living.html
 living
 
@@ -9928,10 +9928,6 @@ sbi
 // https://www.iana.org/domains/root/db/sbs.html
 sbs
 
-// sca : SVENSKA CELLULOSA AKTIEBOLAGET SCA (publ)
-// https://www.iana.org/domains/root/db/sca.html
-sca
-
 // scb : The Siam Commercial Bank Public Company Limited ("SCB")
 // https://www.iana.org/domains/root/db/scb.html
 scb
@@ -10524,7 +10520,7 @@ ups
 // https://www.iana.org/domains/root/db/vacations.html
 vacations
 
-// vana : Lifestyle Domain Holdings, Inc.
+// vana : Internet Naming Company LLC
 // https://www.iana.org/domains/root/db/vana.html
 vana
 

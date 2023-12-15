@@ -21,7 +21,7 @@ class ButtonsViewController: UIViewController, Themeable {
     private lazy var disabledOffSwitch: PaddedSwitch = .build { _ in }
 
     private lazy var buttonStackView: UIStackView = .build { stackView in
-        stackView.distribution = .fillEqually
+        stackView.distribution = .fill
         stackView.alignment = .fill
         stackView.axis = .vertical
         stackView.spacing = 16
