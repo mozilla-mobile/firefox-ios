@@ -37,16 +37,21 @@ class WKEngineSession: EngineSession {
 
     // TODO: FXIOS-7903 #17648 no return from this load(url:), we need a way to recordNavigationInTab
     func load(url: String) {
+        // TODO: FXIOS-7981 Check scheme before loading
+
         // Convert about:reader?url=http://example.com URLs to local ReaderMode URLs
         if let url = URL(string: url),
            let syncedReaderModeURL = url.decodeReaderModeURL,
            let localReaderModeURL = syncedReaderModeURL.encodeReaderModeURL(WKEngineWebServer.shared.baseReaderModeURL()) {
             let readerModeRequest = URLRequest(url: localReaderModeURL)
             webView.load(readerModeRequest)
+            return
         }
 
         guard let url = URL(string: url) else { return }
         let request = URLRequest(url: url)
+
+        // TODO: FXIOS-7980 Review loadFileURL usage with isPrivileged
         if let url = request.url, url.isFileURL, request.isPrivileged {
             webView.loadFileURL(url, allowingReadAccessTo: url)
         }

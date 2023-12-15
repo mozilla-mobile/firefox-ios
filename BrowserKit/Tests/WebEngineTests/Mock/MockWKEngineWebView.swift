@@ -8,10 +8,10 @@ import WebKit
 
 class MockWKEngineWebView: WKEngineWebView {
     var navigationDelegate: WKNavigationDelegate?
-    var allowsBackForwardNavigationGestures: Bool = true
-    var allowsLinkPreview: Bool = true
+    var allowsBackForwardNavigationGestures = true
+    var allowsLinkPreview = true
     var backgroundColor: UIColor? = .black
-    var isInspectable: Bool = true
+    var isInspectable = true
 
     // MARK: Test properties
     var loadCalled = 0
@@ -22,7 +22,7 @@ class MockWKEngineWebView: WKEngineWebView {
     var removeAllUserScriptsCalled = 0
     var removeFromSuperviewCalled = 0
 
-    required init?(frame: CGRect, 
+    required init?(frame: CGRect,
                    configurationProvider: WKEngineConfigurationProvider) {}
 
     func load(_ request: URLRequest) -> WKNavigation? {

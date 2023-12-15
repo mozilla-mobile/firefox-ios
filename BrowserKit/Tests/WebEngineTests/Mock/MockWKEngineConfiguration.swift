@@ -7,6 +7,6 @@ import WebKit
 @testable import WebEngine
 
 struct MockWKEngineConfiguration: WKEngineConfiguration {
-    var userContentController: WKUserContentController = WKUserContentController()
-    var allowsInlineMediaPlayback: Bool = true
+    var userContentController = WKUserContentController()
+    var allowsInlineMediaPlayback = true
 }

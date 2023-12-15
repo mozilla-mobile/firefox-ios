@@ -48,13 +48,13 @@ protocol WKEngineWebView {
 }
 
 extension WKEngineWebView {
-    @MainActor public func evaluateJavaScript(
+    func evaluateJavaScript(
         _ javaScript: String,
         in frame: WKFrameInfo? = nil,
         in contentWorld: WKContentWorld,
         completionHandler: ((Result<Any, Error>) -> Void)? = nil
     ) {
-        evaluateJavaScript(javaScript, 
+        evaluateJavaScript(javaScript,
                            in: frame,
                            in: contentWorld,
                            completionHandler: completionHandler)
@@ -63,7 +63,7 @@ extension WKEngineWebView {
     /// Evaluates Javascript in a .defaultClient sandboxed content world
     /// - Parameter javascript: String representing javascript to be evaluated
     func evaluateJavascriptInDefaultContentWorld(_ javascript: String) {
-        evaluateJavaScript(javascript, 
+        evaluateJavaScript(javascript,
                            in: nil,
                            in: .defaultClient,
                            completionHandler: { _ in })

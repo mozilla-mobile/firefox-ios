@@ -21,16 +21,28 @@ final class WKEngineSessionTests: XCTestCase {
         webViewProvider = nil
     }
 
-    func testLoadURLGivenNotAURLThenDoesNothing() {
+    // MARK: Load URL
+
+    func testLoadURLGivenEmptyThenDoesntLoad() {
         let subject = createSubject()
-        let url = "NotAURL"
+        let url = ""
 
         subject?.load(url: url)
 
         XCTAssertEqual(webViewProvider.webView.loadCalled, 0)
     }
 
-    func testLoadURLGivenNormalURLThenLoadsRequest() {
+    func testLoadURLGivenNotAURLThenDoesntLoad() {
+        let subject = createSubject()
+        let url = "blablablablabla"
+
+        subject?.load(url: url)
+
+        // TODO: FXIOS-7981 Check scheme before loading
+        XCTAssertEqual(webViewProvider.webView.loadCalled, 1)
+    }
+
+    func testLoadURLGivenNormalURLThenLoad() {
         let subject = createSubject()
         let url = "https://example.com"
 
@@ -39,13 +51,53 @@ final class WKEngineSessionTests: XCTestCase {
         XCTAssertEqual(webViewProvider.webView.loadCalled, 1)
     }
 
-    func testLoadURLGivenReaderModeURLThenLoadsReques() {
+    func testLoadURLGivenReaderModeURLThenLoad() {
         let subject = createSubject()
-        let url = "file://location"
+        let url = "about:reader?url=http://example.com"
 
         subject?.load(url: url)
 
         XCTAssertEqual(webViewProvider.webView.loadCalled, 1)
+    }
+
+    func testLoadURLGivenFileURLThenLoadFileURL() {
+        let subject = createSubject()
+        let url = "file:location"
+
+        subject?.load(url: url)
+
+        // TODO: FXIOS-7980 Review loadFileURL usage with isPrivileged
+        XCTAssertEqual(webViewProvider.webView.loadCalled, 1)
+    }
+
+    // MARK: Stop URL
+
+    func testStopLoading() {
+        let subject = createSubject()
+
+        subject?.stopLoading()
+
+        XCTAssertEqual(webViewProvider.webView.stopLoadingCalled, 1)
+    }
+
+    // MARK: Go back
+
+    func testGoBack() {
+        let subject = createSubject()
+
+        subject?.goBack()
+
+        XCTAssertEqual(webViewProvider.webView.goBackCalled, 1)
+    }
+
+    // MARK: Go forward
+
+    func testGoForward() {
+        let subject = createSubject()
+
+        subject?.goForward()
+
+        XCTAssertEqual(webViewProvider.webView.goForwardCalled, 1)
     }
 
     // MARK: Helper
