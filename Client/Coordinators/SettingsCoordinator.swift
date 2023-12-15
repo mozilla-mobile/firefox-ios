@@ -301,9 +301,7 @@ class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedTheme() {
-        if ReduxFlagManager.isReduxEnabled {
-            store.dispatch(ActiveScreensStateAction.showScreen(.themeSettings))
-        }
+        store.dispatch(ActiveScreensStateAction.showScreen(.themeSettings))
         router.push(ThemeSettingsController())
     }
 
