@@ -20,15 +20,9 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         )
     }
 
-    private var highlightedTintColor: UIColor!
-    private var normalTintColor: UIColor!
-    private var foregroundColorForState: ((UIControl.State) -> UIColor)?
-
-    override open var isHighlighted: Bool {
-        didSet {
-            backgroundColor = isHighlighted ? highlightedTintColor : normalTintColor
-        }
-    }
+    private var highlightedBackgroundColor: UIColor!
+    private var normalBackgroundColor: UIColor!
+    private var foregroundColor: UIColor!
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -46,9 +40,11 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         guard var updatedConfiguration = configuration else {
             return
         }
-        let foregroundColor = foregroundColorForState?(state)
+        let newBackgroundColor = state == .highlighted ? highlightedBackgroundColor : normalBackgroundColor
 
         updatedConfiguration.baseForegroundColor = foregroundColor
+        backgroundColor = newBackgroundColor
+
         configuration = updatedConfiguration
     }
 
@@ -72,19 +68,10 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
     // MARK: ThemeApplicable
 
     public func applyTheme(theme: Theme) {
-        guard var updatedConfiguration = configuration else {
-            return
-        }
+        highlightedBackgroundColor = theme.colors.actionSecondaryHover
+        normalBackgroundColor = theme.colors.actionSecondary
+        foregroundColor = theme.colors.textInverted
 
-        highlightedTintColor = theme.colors.actionSecondaryHover
-        normalTintColor = theme.colors.actionSecondary
-        backgroundColor = normalTintColor
-
-        foregroundColorForState = { _ in
-            // For this button, all states should use colors.textOnLight
-            theme.colors.textOnLight
-        }
-        updatedConfiguration.baseForegroundColor = foregroundColorForState?(state)
-        configuration = updatedConfiguration
+        setNeedsUpdateConfiguration()
     }
 }
