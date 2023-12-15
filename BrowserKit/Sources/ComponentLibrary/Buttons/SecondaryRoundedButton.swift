@@ -27,6 +27,7 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        configuration = UIButton.Configuration.filled()
         layer.cornerRadius = UX.buttonCornerRadius
         titleLabel?.textAlignment = .center
         titleLabel?.adjustsFontForContentSizeCategory = true
@@ -40,10 +41,14 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         guard var updatedConfiguration = configuration else {
             return
         }
-        let newBackgroundColor = state == .highlighted ? highlightedBackgroundColor : normalBackgroundColor
 
+        switch state {
+        case [.highlighted]:
+            updatedConfiguration.background.backgroundColor = highlightedBackgroundColor
+        default:
+            updatedConfiguration.background.backgroundColor = normalBackgroundColor
+        }
         updatedConfiguration.baseForegroundColor = foregroundColor
-        backgroundColor = newBackgroundColor
 
         configuration = updatedConfiguration
     }
@@ -59,6 +64,13 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         ))
         updatedConfiguration.contentInsets = UX.contentInsets
         updatedConfiguration.title = viewModel.title
+        updatedConfiguration.titleAlignment = .center
+
+        // Using a nil backgroundColorTransformer will just make the background view
+        // use configuration.background.backgroundColor without any transformation
+        updatedConfiguration.background.backgroundColorTransformer = nil
+        updatedConfiguration.background.cornerRadius = UX.buttonCornerRadius
+        updatedConfiguration.cornerStyle = .fixed
 
         accessibilityIdentifier = viewModel.a11yIdentifier
 
@@ -70,7 +82,7 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
     public func applyTheme(theme: Theme) {
         highlightedBackgroundColor = theme.colors.actionSecondaryHover
         normalBackgroundColor = theme.colors.actionSecondary
-        foregroundColor = theme.colors.textInverted
+        foregroundColor = theme.colors.textOnLight
 
         setNeedsUpdateConfiguration()
     }
