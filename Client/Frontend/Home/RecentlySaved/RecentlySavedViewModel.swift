@@ -31,6 +31,7 @@ class RecentlySavedViewModel {
     private var recentItems = [RecentlySavedItem]()
     private var wallpaperManager: WallpaperManager
     var headerButtonAction: ((UIButton) -> Void)?
+    var onLongPressTileAction: ((Site, UIView?) -> Void)?
 
     weak var delegate: HomepageDataModelDelegate?
 
@@ -162,6 +163,15 @@ extension RecentlySavedViewModel: HomepageSectionHandler {
                                          value: .recentlySavedReadingListAction,
                                          extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
         }
+    }
+
+    func handleLongPress(with collectionView: UICollectionView, indexPath: IndexPath) {
+        guard let onLongPressTileAction = onLongPressTileAction else { return }
+
+        let site = Site(url: recentItems[indexPath.row].url,
+                        title: recentItems[indexPath.row].title)
+        let sourceView = collectionView.cellForItem(at: indexPath)
+        onLongPressTileAction(site, sourceView)
     }
 }
 
