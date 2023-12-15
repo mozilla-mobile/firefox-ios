@@ -3,38 +3,16 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import GCDWebServers
 import WebKit
 
 class WKEngineSession: EngineSession {
     weak var delegate: EngineSessionDelegate?
-    private var webView: TabWebView
+    private var webView: WKEngineWebView
     private let configuration: WKWebViewConfiguration
 
-    init(configuration: WKWebViewConfiguration) {
-        configuration.userContentController = WKUserContentController()
-        configuration.allowsInlineMediaPlayback = true
-        let webView = TabWebView(frame: .zero,
-                                 configuration: configuration)
-
-        // TODO: FXIOS-7898 #17643 Handle WebView a11y label
-//        webView.accessibilityLabel = .WebViewAccessibilityLabel
-        webView.allowsBackForwardNavigationGestures = true
-        webView.allowsLinkPreview = true
-
-        // Allow Safari Web Inspector (requires toggle in Settings > Safari > Advanced).
-        if #available(iOS 16.4, *) {
-            webView.isInspectable = true
-        }
-
-        // Night mode enables this by toggling WKWebView.isOpaque, otherwise this has no effect.
-        webView.backgroundColor = .black
-
-        // Turning off masking allows the web content to flow outside of the scrollView's frame
-        // which allows the content appear beneath the toolbars in the BrowserViewController
-        webView.scrollView.layer.masksToBounds = false
-
-        self.webView = webView
+    init(configuration: WKWebViewConfiguration,
+         webViewProvider: WKWebViewProvider = DefaultWKWebViewProvider()) {
+        self.webView = webViewProvider.createWebview(configuration: configuration)
         self.configuration = configuration
 
         // TODO: FXIOS-7899 #17644 Handle WKEngineSession observers
@@ -93,8 +71,7 @@ class WKEngineSession: EngineSession {
     func close() {
         // TODO: FXIOS-7900 #17645 Handle WKEngineSession scripts
 //        contentScriptManager.uninstall(tab: self)
-        webView.configuration.userContentController.removeAllUserScripts()
-        webView.configuration.userContentController.removeAllScriptMessageHandlers()
+        webView.removeAllUserScripts()
 
         // TODO: FXIOS-7899 #17644 Handle WKEngineSession observers
 //        webView.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
