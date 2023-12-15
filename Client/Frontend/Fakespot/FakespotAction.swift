@@ -8,7 +8,7 @@ import Redux
 enum FakespotAction: Action {
     case settingsStateDidChange
     case reviewQualityDidChange
-    case urlDidChange
+    case tabDidChange(tabUIDD: String)
     case pressedShoppingButton
     case show
     case dismiss

@@ -8,74 +8,82 @@ import Redux
 struct FakespotState: ScreenState, Equatable {
     var isOpen: Bool
     var sidebarOpenForiPadLandscape: Bool
-    var isSettingsExpanded: Bool
-    var isReviewQualityExpanded: Bool
+    var currentTabUUID: String
+    var expandState: [String: ExpandState]
+
+    struct ExpandState: Equatable {
+        var isSettingsExpanded = false
+        var isReviewQualityExpanded = false
+    }
+
+    var isReviewQualityExpanded: Bool { expandState[currentTabUUID]?.isReviewQualityExpanded ?? false }
+    var isSettingsExpanded: Bool { expandState[currentTabUUID]?.isSettingsExpanded ?? false }
 
     init(_ appState: BrowserViewControllerState) {
         self.init(
             isOpen: appState.fakespotState.isOpen,
             sidebarOpenForiPadLandscape: appState.fakespotState.sidebarOpenForiPadLandscape,
-            isSettingsExpanded: appState.fakespotState.isSettingsExpanded,
-            isReviewQualityExpanded: appState.fakespotState.isReviewQualityExpanded
+            currentTabUUID: appState.fakespotState.currentTabUUID,
+            expandState: appState.fakespotState.expandState
         )
     }
 
     init() {
-        self.init(isOpen: false, sidebarOpenForiPadLandscape: false, isSettingsExpanded: false, isReviewQualityExpanded: false)
+        self.init(isOpen: false, sidebarOpenForiPadLandscape: false, currentTabUUID: "", expandState: [:])
     }
 
-    init(isOpen: Bool, sidebarOpenForiPadLandscape: Bool, isSettingsExpanded: Bool, isReviewQualityExpanded: Bool) {
+    init(
+        isOpen: Bool,
+        sidebarOpenForiPadLandscape: Bool,
+        currentTabUUID: String,
+        expandState: [String: FakespotState.ExpandState] = [:]
+    ) {
         self.isOpen = isOpen
         self.sidebarOpenForiPadLandscape = sidebarOpenForiPadLandscape
-        self.isSettingsExpanded = isSettingsExpanded
-        self.isReviewQualityExpanded = isReviewQualityExpanded
+        self.currentTabUUID = currentTabUUID
+        self.expandState = expandState
     }
 
     static let reducer: Reducer<Self> = { state, action in
         switch action {
         case FakespotAction.settingsStateDidChange:
             var state = state
-            state.isSettingsExpanded.toggle()
+            state.expandState[state.currentTabUUID, default: ExpandState()].isSettingsExpanded.toggle()
             return state
+
         case FakespotAction.reviewQualityDidChange:
             var state = state
-            state.isReviewQualityExpanded.toggle()
+            state.expandState[state.currentTabUUID, default: ExpandState()].isReviewQualityExpanded.toggle()
             return state
-        case FakespotAction.urlDidChange:
-            return FakespotState(
-                isOpen: state.isOpen,
-                sidebarOpenForiPadLandscape: state.sidebarOpenForiPadLandscape,
-                isSettingsExpanded: false,
-                isReviewQualityExpanded: false
-            )
+
+        case FakespotAction.tabDidChange(let tabUUID):
+            var state = state
+            state.currentTabUUID = tabUUID
+            return state
+
         case FakespotAction.pressedShoppingButton:
-            return FakespotState(
-                isOpen: !state.isOpen,
-                sidebarOpenForiPadLandscape: !state.isOpen,
-                isSettingsExpanded: state.isSettingsExpanded,
-                isReviewQualityExpanded: state.isReviewQualityExpanded
-            )
+            var state = state
+            state.isOpen = !state.isOpen
+            state.sidebarOpenForiPadLandscape = !state.isOpen
+            return state
+
         case FakespotAction.show:
-            return FakespotState(
-                isOpen: true,
-                sidebarOpenForiPadLandscape: true,
-                isSettingsExpanded: state.isSettingsExpanded,
-                isReviewQualityExpanded: state.isReviewQualityExpanded
-            )
+            var state = state
+            state.isOpen = true
+            state.sidebarOpenForiPadLandscape = true
+            return state
+
         case FakespotAction.dismiss:
-            return FakespotState(
-                isOpen: false,
-                sidebarOpenForiPadLandscape: false,
-                isSettingsExpanded: state.isSettingsExpanded,
-                isReviewQualityExpanded: state.isReviewQualityExpanded
-            )
+            var state = state
+            state.isOpen = false
+            state.sidebarOpenForiPadLandscape = false
+            return state
+
         case FakespotAction.setAppearanceTo(let isEnabled):
-            return FakespotState(
-                isOpen: isEnabled,
-                sidebarOpenForiPadLandscape: state.sidebarOpenForiPadLandscape,
-                isSettingsExpanded: state.isSettingsExpanded,
-                isReviewQualityExpanded: state.isReviewQualityExpanded
-            )
+            var state = state
+            state.isOpen = isEnabled
+            return state
+
         default:
             return state
         }

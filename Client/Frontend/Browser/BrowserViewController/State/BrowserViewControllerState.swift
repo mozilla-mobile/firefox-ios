@@ -70,7 +70,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 searchScreenState: state.searchScreenState,
                 usePrivateHomepage: state.usePrivateHomepage,
                 fakespotState: FakespotState.reducer(state.fakespotState, action))
-        case FakespotAction.urlDidChange:
+        case FakespotAction.tabDidChange:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 usePrivateHomepage: state.usePrivateHomepage,
