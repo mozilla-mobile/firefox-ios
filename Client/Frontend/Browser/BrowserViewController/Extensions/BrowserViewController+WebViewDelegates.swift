@@ -120,9 +120,13 @@ extension BrowserViewController: WKUIDelegate {
                 let clonedWebView = WKWebView(frame: webView.frame, configuration: webView.configuration)
 
                 previewViewController.view.addSubview(clonedWebView)
-                clonedWebView.snp.makeConstraints { make in
-                    make.edges.equalTo(previewViewController.view)
-                }
+                NSLayoutConstraint.activate([
+                    clonedWebView.topAnchor.constraint(equalTo: previewViewController.view.topAnchor),
+                    clonedWebView.leadingAnchor.constraint(equalTo: previewViewController.view.leadingAnchor),
+                    clonedWebView.trailingAnchor.constraint(equalTo: previewViewController.view.trailingAnchor),
+                    clonedWebView.bottomAnchor.constraint(equalTo: previewViewController.view.bottomAnchor)
+                ])
+                clonedWebView.translatesAutoresizingMaskIntoConstraints = false
 
                 clonedWebView.load(URLRequest(url: url))
 

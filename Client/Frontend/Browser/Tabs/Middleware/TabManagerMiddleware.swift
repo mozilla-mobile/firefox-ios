@@ -111,7 +111,8 @@ class TabManagerMiddleware {
         let isPrivate = panelType == .privateTabs
         return TabTrayModel(isPrivateMode: isPrivate,
                             selectedPanel: panelType,
-                            normalTabsCount: normalTabsCountText)
+                            normalTabsCount: normalTabsCountText,
+                            hasSyncableAccount: false)
     }
 
     func getTabsDisplayModel(for isPrivateMode: Bool) -> TabDisplayModel {

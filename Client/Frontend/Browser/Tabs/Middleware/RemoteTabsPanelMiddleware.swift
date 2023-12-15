@@ -10,26 +10,35 @@ import Redux
 
 class RemoteTabsPanelMiddleware {
     private let profile: Profile
+    var notificationCenter: NotificationProtocol
 
-    init(profile: Profile = AppContainer.shared.resolve()) {
-        self.profile = profile
+    var hasSyncableAccount: Bool {
+        return profile.hasSyncableAccount()
     }
 
-    lazy var remoteTabsPanelProvider: Middleware<AppState> = { state, action in
+    init(profile: Profile = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.profile = profile
+        self.notificationCenter = notificationCenter
+        observeNotifications()
+    }
+
+    lazy var remoteTabsPanelProvider: Middleware<AppState> = { [self] state, action in
         switch action {
+        case RemoteTabsPanelAction.panelDidAppear:
+            self.getSyncState()
+            store.dispatch(TabTrayAction.firefoxAccountChanged(self.hasSyncableAccount))
         case RemoteTabsPanelAction.refreshTabs:
-            self.refreshTabs(updateCache: true)
+            self.getSyncState()
         default:
             break
         }
     }
 
     // MARK: - Internal Utilities
-
-    private func refreshTabs(updateCache: Bool = false) {
+    private func getSyncState() {
         ensureMainThread { [self] in
-            let hasSyncableAccount = profile.hasSyncableAccount()
-            guard hasSyncableAccount else {
+            guard self.hasSyncableAccount else {
                 store.dispatch(RemoteTabsPanelAction.refreshDidFail(.notLoggedIn))
                 return
             }
@@ -45,26 +54,42 @@ class RemoteTabsPanelMiddleware {
             // in the middle of a refresh (pull-to-refresh shouldn't trigger a new update etc.)
             store.dispatch(RemoteTabsPanelAction.refreshDidBegin)
 
-            self.profile.getCachedClientsAndTabs { [weak self] result in
-                guard let clientAndTabs = result else {
-                    store.dispatch(RemoteTabsPanelAction.refreshDidFail(.failedToSync))
-                    return
-                }
+            getCachedRemoteTabs()
+        }
+    }
 
-                let results = RemoteTabsPanelCachedResults(clientAndTabs: clientAndTabs,
-                                                           isUpdating: updateCache)
-                store.dispatch(RemoteTabsPanelAction.cachedTabsAvailable(results))
-
-                if updateCache {
-                    self?.profile.getClientsAndTabs { result in
-                        guard let clientAndTabs = result else {
-                            store.dispatch(RemoteTabsPanelAction.refreshDidFail(.failedToSync))
-                            return
-                        }
-                        store.dispatch(RemoteTabsPanelAction.refreshDidSucceed(clientAndTabs))
-                    }
-                }
+    private func getCachedRemoteTabs() {
+        profile.getCachedClientsAndTabs { result in
+            guard let clientAndTabs = result else {
+                store.dispatch(RemoteTabsPanelAction.refreshDidFail(.failedToSync))
+                return
             }
+
+            store.dispatch(RemoteTabsPanelAction.refreshDidSucceed(clientAndTabs))
+        }
+    }
+
+    // MARK: - Notifications
+    private func observeNotifications() {
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self,
+                                       selector: #selector(notificationReceived),
+                                       name: .FirefoxAccountChanged,
+                                       object: nil)
+        notificationCenter.addObserver(self,
+                                       selector: #selector(notificationReceived),
+                                       name: .ProfileDidFinishSyncing,
+                                       object: nil)
+    }
+
+    @objc
+    func notificationReceived(_ notification: Notification) {
+        switch notification.name {
+        case .FirefoxAccountChanged,
+                .ProfileDidFinishSyncing:
+            getCachedRemoteTabs()
+            store.dispatch(TabTrayAction.firefoxAccountChanged(hasSyncableAccount))
+        default: break
         }
     }
 }
