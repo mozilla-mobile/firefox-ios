@@ -16,7 +16,7 @@ class MockTabDataStore: TabDataStore {
         return persistedTabWindowUUIDs
     }
 
-    func fetchWindowData() async -> WindowData? {
+    func fetchWindowData(uuid: UUID) async -> WindowData? {
         fetchWindowDataCalledCount += 1
         return fetchTabWindowData
     }

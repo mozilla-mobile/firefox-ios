@@ -52,6 +52,7 @@ public actor DefaultTabDataStore: TabDataStore {
         logger.log("Attempting to fetch window/tab data", level: .debug, category: .tabs)
         do {
             guard let fileURL = windowURLPath(for: uuid, isBackup: false),
+                  fileManager.fileExists(atPath: fileURL),
                   let windowData = parseWindowDataFile(fromURL: fileURL) else {
                 logger.log("Failed to open window/tab data for UUID: \(uuid)", level: .fatal, category: .tabs)
                 throw TabDataError.failedToFetchData
@@ -60,6 +61,7 @@ public actor DefaultTabDataStore: TabDataStore {
         } catch {
             logger.log("Error fetching window data: UUID = \(uuid) Error = \(error)", level: .warning, category: .tabs)
             guard let backupURL = windowURLPath(for: uuid, isBackup: false),
+                  fileManager.fileExists(atPath: backupURL),
                   let backupWindowData = parseWindowDataFile(fromURL: backupURL) else {
                 return nil
             }
