@@ -68,7 +68,7 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
         updatedConfiguration.contentInsets = UX.contentInsets
         updatedConfiguration.title = viewModel.title
         updatedConfiguration.titleAlignment = .center
-      
+
         // Using a nil backgroundColorTransformer will just make the background view
         // use configuration.background.backgroundColor without any transformation
         updatedConfiguration.background.backgroundColorTransformer = nil
