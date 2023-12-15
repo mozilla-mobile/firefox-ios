@@ -9,6 +9,7 @@ import ComponentLibrary
 // UI element used to describe details about private browsing on the private firefox homepage
 class PrivateMessageCardCell: UIView, ThemeApplicable {
     typealias a11y = AccessibilityIdentifiers.PrivateMode.Homepage
+    var privateBrowsingLinkTapped: (() -> Void)?
 
     struct PrivateMessageCard: Hashable {
         let title: String
@@ -62,6 +63,12 @@ class PrivateMessageCardCell: UIView, ThemeApplicable {
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = a11y.link
         label.accessibilityTraits.insert(.link)
+        label.isUserInteractionEnabled = true
+    }
+
+    @objc
+    func linkTapped(_ sender: UITapGestureRecognizer) {
+        privateBrowsingLinkTapped?()
     }
 
     override init(frame: CGRect) {
@@ -77,6 +84,9 @@ class PrivateMessageCardCell: UIView, ThemeApplicable {
         headerLabel.text = item.title
         bodyLabel.text = item.body
         linkLabel.attributedText = getUnderlineText(for: item.link)
+
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.linkTapped(_:)))
+        linkLabel.addGestureRecognizer(tapGesture)
 
         let cardModel = ShadowCardViewModel(view: mainView, a11yId: a11y.card)
         cardContainer.configure(cardModel)

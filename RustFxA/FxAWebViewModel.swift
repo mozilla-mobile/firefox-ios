@@ -28,7 +28,7 @@ private enum RemoteCommand: String {
     case profileChanged = "profile:change"
 }
 
-class FxAWebViewModel {
+class FxAWebViewModel: FeatureFlaggable {
     fileprivate let pageType: FxAPageType
     fileprivate let profile: Profile
     fileprivate var deepLinkParams: FxALaunchParams
@@ -205,6 +205,8 @@ extension FxAWebViewModel {
     /// user info (for settings), or by passing CWTS setup info (in case the user is
     /// signing up for an account). This latter case is also used for the sign-in state.
     private func onSessionStatus(id: Int, webView: WKWebView) {
+        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(.creditCardAutofillStatus, checking: .buildOnly)
+        let creditCardCapability =  autofillCreditCardStatus ? ", \"creditcards\"" : ""
         guard let fxa = profile.rustFxA.accountManager else { return }
         let cmd = "fxaccounts:fxa_status"
         let typeId = "account_updates"
@@ -229,7 +231,7 @@ extension FxAWebViewModel {
         case .emailLoginFlow, .qrCode:
             data = """
                     { capabilities:
-                        { choose_what_to_sync: true, engines: ["bookmarks", "history", "tabs", "passwords"] },
+                        { choose_what_to_sync: true, engines: ["bookmarks", "history", "tabs", "passwords"\(creditCardCapability)] },
                     }
                 """
         }

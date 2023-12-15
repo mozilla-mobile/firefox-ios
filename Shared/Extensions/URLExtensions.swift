@@ -119,24 +119,6 @@ extension URL {
         return components.url!
     }
 
-    public func getQuery() -> [String: String] {
-        var results = [String: String]()
-
-        guard let components = URLComponents(url: self, resolvingAgainstBaseURL: false),
-              let queryItems = components.percentEncodedQueryItems
-        else {
-            return results
-        }
-
-        for item in queryItems {
-            if let value = item.value {
-                results[item.name] = value
-            }
-        }
-
-        return results
-    }
-
     public var hostPort: String? {
         if let host = self.host {
             if let port = (self as NSURL).port?.int32Value {

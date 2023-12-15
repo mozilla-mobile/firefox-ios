@@ -254,20 +254,6 @@ class NSURLExtensionsTests: XCTestCase {
         badurls.forEach { XCTAssertNil(URL(string: $0)!.hostPort) }
     }
 
-    func testgetQuery() {
-        let url = URL(string: "http://example.com/path?a=1&b=2&c=3")!
-        let params = ["a": "1", "b": "2", "c": "3"]
-
-        let urlParams = url.getQuery()
-        params.forEach { XCTAssertEqual(urlParams[$0], $1, "The values in params should be the same in urlParams") }
-    }
-
-    func testGetQueryWithPercentEncodedParams() {
-        let url = URL(string: "http://example.com/path?a=%20")!
-        let urlParams = url.getQuery()
-        XCTAssertEqual(urlParams["a"], "%20")
-    }
-
     func testwithQueryParams() {
         let url = URL(string: "http://example.com/path")!
         let params = ["a": "1", "b": "2", "c": "3"]

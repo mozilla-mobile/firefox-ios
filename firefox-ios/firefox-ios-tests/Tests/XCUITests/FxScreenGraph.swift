@@ -1031,6 +1031,7 @@ extension MMNavigator where T == FxUserState {
     func createNewTab() {
         let app = XCUIApplication()
         self.goto(TabTray)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
         app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].tap()
         self.nowAt(NewTabScreen)
     }

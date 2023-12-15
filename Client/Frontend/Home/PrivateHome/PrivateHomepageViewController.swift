@@ -7,6 +7,11 @@ import Common
 import UIKit
 import Shared
 
+// Delegate for coordinator to be able to handle navigation
+protocol PrivateHomepageDelegate: AnyObject {
+    func homePanelDidRequestToOpenInNewTab(with url: URL, isPrivate: Bool, selectNewTab: Bool)
+}
+
 // Displays the view for the private homepage when users create a new tab in private browsing
 final class PrivateHomepageViewController: UIViewController, ContentContainable, Themeable {
     enum UX {
@@ -27,6 +32,11 @@ final class PrivateHomepageViewController: UIViewController, ContentContainable,
     var themeManager: Common.ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: Common.NotificationProtocol
+
+    var parentCoordinator: PrivateHomepageDelegate?
+
+    private let overlayManager: OverlayModeManager
+    private let logger: Logger
 
     // MARK: UI Elements
     private lazy var gradient: CAGradientLayer = {
@@ -53,6 +63,7 @@ final class PrivateHomepageViewController: UIViewController, ContentContainable,
             link: .FirefoxHomepage.FeltPrivacyUI.Link
         )
         messageCard.configure(with: messageCardModel, and: themeManager.currentTheme)
+        messageCard.privateBrowsingLinkTapped = learnMore
         return messageCard
     }()
 
@@ -63,10 +74,14 @@ final class PrivateHomepageViewController: UIViewController, ContentContainable,
     }()
 
     init(themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         logger: Logger = DefaultLogger.shared,
+         overlayManager: OverlayModeManager
     ) {
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.logger = logger
+        self.overlayManager = overlayManager
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -78,6 +93,7 @@ final class PrivateHomepageViewController: UIViewController, ContentContainable,
         super.viewDidLoad()
 
         setupLayout()
+        setupDismissKeyboard()
 
         listenForThemeChange(view)
         applyTheme()
@@ -127,5 +143,30 @@ final class PrivateHomepageViewController: UIViewController, ContentContainable,
         let theme = themeManager.currentTheme
         gradient.colors = theme.colors.layerHomepage.cgColors
         logoHeaderCell.applyTheme(theme: theme)
+    }
+
+    private func learnMore() {
+        guard let privateBrowsingURL = SupportUtils.URLForPrivateBrowsingLearnMore else {
+            self.logger.log("Failed to retrieve URL from SupportUtils.URLForPrivateBrowsingLearnMore",
+                            level: .debug,
+                            category: .homepage)
+            return
+        }
+        parentCoordinator?.homePanelDidRequestToOpenInNewTab(
+            with: privateBrowsingURL,
+            isPrivate: true,
+            selectNewTab: true
+        )
+    }
+
+    private func setupDismissKeyboard() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+
+    @objc
+    private func dismissKeyboard() {
+        overlayManager.finishEditing(shouldCancelLoading: false)
     }
 }

@@ -1021,7 +1021,7 @@ class BrowserViewController: UIViewController,
     /// it's the zero search page, aka when the home page is shown by clicking the url bar from a loaded web page.
     func showEmbeddedHomepage(inline: Bool) {
         guard let isPrivate = browserViewControllerState?.usePrivateHomepage, !isPrivate else {
-            browserDelegate?.showPrivateHomepage()
+            browserDelegate?.showPrivateHomepage(overlayManager: overlayManager)
             return
         }
 
@@ -1681,7 +1681,8 @@ class BrowserViewController: UIViewController,
             // Sidebar should be displayed and Fakespot is open, display Fakespot
             handleFakespotFlow(productURL: url)
         } else if let fakespotState = browserViewControllerState?.fakespotState,
-                  fakespotState.sidebarOpenForiPadLandscape {
+                  fakespotState.sidebarOpenForiPadLandscape,
+                  UIDevice.current.userInterfaceIdiom == .pad {
             // Sidebar should be displayed, display Fakespot
             store.dispatch(FakespotAction.setAppearanceTo(true))
         }

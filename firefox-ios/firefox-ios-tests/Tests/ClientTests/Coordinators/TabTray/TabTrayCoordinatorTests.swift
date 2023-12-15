@@ -9,7 +9,6 @@ final class TabTrayCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
     private var profile: MockProfile!
     private var parentCoordinator: MockTabTrayCoordinatorDelegate!
-    private var qrDelegate: MockQRCodeViewControllerDelegate!
 
     override func setUp() {
         super.setUp()
@@ -17,7 +16,6 @@ final class TabTrayCoordinatorTests: XCTestCase {
         mockRouter = MockRouter(navigationController: MockNavigationController())
         profile = MockProfile()
         parentCoordinator = MockTabTrayCoordinatorDelegate()
-        qrDelegate = MockQRCodeViewControllerDelegate()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 
@@ -26,7 +24,6 @@ final class TabTrayCoordinatorTests: XCTestCase {
         mockRouter = nil
         profile = nil
         parentCoordinator = nil
-        qrDelegate = nil
         DependencyHelperMock().reset()
     }
 
@@ -61,20 +58,12 @@ final class TabTrayCoordinatorTests: XCTestCase {
         XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
     }
 
-    func testDismissCalled() {
+    func testDidFinishCalled() {
         let subject = createSubject()
         subject.start(panelType: .tabs, navigationController: UINavigationController())
         subject.didFinish()
 
         XCTAssertEqual(parentCoordinator.didDismissWasCalled, 1)
-    }
-
-    func testPresentQRCode() {
-        let subject = createSubject()
-        subject.start(panelType: .syncedTabs, navigationController: UINavigationController())
-        subject.showQRCode(delegate: qrDelegate)
-
-        XCTAssertEqual(mockRouter.presentCalled, 1)
     }
 
     // MARK: - Helpers
