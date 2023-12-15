@@ -13,8 +13,10 @@ enum TabTrayLayoutType: Equatable {
 struct TabTrayState: ScreenState, Equatable {
     var isPrivateMode: Bool
     var selectedPanel: TabTrayPanelType
-    var shouldDismiss: Bool
     var normalTabsCount: String
+    var hasSyncableAccount: Bool
+    var shouldDismiss: Bool
+
     var navigationTitle: String {
         return selectedPanel.navTitle
     }
@@ -32,28 +34,33 @@ struct TabTrayState: ScreenState, Equatable {
         self.init(isPrivateMode: panelState.isPrivateMode,
                   selectedPanel: panelState.selectedPanel,
                   normalTabsCount: panelState.normalTabsCount,
+                  hasSyncableAccount: panelState.hasSyncableAccount,
                   shouldDismiss: panelState.shouldDismiss)
     }
 
     init() {
         self.init(isPrivateMode: false,
                   selectedPanel: .tabs,
-                  normalTabsCount: "0")
+                  normalTabsCount: "0",
+                  hasSyncableAccount: false)
     }
 
     init(panelType: TabTrayPanelType) {
         self.init(isPrivateMode: panelType == .privateTabs,
                   selectedPanel: panelType,
-                  normalTabsCount: "0")
+                  normalTabsCount: "0",
+                  hasSyncableAccount: false)
     }
 
     init(isPrivateMode: Bool,
          selectedPanel: TabTrayPanelType,
          normalTabsCount: String,
+         hasSyncableAccount: Bool,
          shouldDismiss: Bool = false) {
         self.isPrivateMode = isPrivateMode
         self.selectedPanel = selectedPanel
         self.normalTabsCount = normalTabsCount
+        self.hasSyncableAccount = hasSyncableAccount
         self.shouldDismiss = shouldDismiss
     }
 
@@ -62,21 +69,30 @@ struct TabTrayState: ScreenState, Equatable {
         case TabTrayAction.didLoadTabTray(let tabTrayModel):
             return TabTrayState(isPrivateMode: tabTrayModel.isPrivateMode,
                                 selectedPanel: tabTrayModel.selectedPanel,
-                                normalTabsCount: tabTrayModel.normalTabsCount)
+                                normalTabsCount: tabTrayModel.normalTabsCount,
+                                hasSyncableAccount: tabTrayModel.hasSyncableAccount)
         case TabTrayAction.changePanel(let panelType):
             return TabTrayState(isPrivateMode: panelType == .privateTabs,
                                 selectedPanel: panelType,
-                                normalTabsCount: state.normalTabsCount)
+                                normalTabsCount: state.normalTabsCount,
+                                hasSyncableAccount: state.hasSyncableAccount)
         case TabPanelAction.didLoadTabPanel(let tabState):
             let panelType = tabState.isPrivateMode ? TabTrayPanelType.privateTabs : TabTrayPanelType.tabs
             return TabTrayState(isPrivateMode: tabState.isPrivateMode,
                                 selectedPanel: panelType,
-                                normalTabsCount: tabState.normalTabsCount)
+                                normalTabsCount: tabState.normalTabsCount,
+                                hasSyncableAccount: state.hasSyncableAccount)
         case TabTrayAction.dismissTabTray:
             return TabTrayState(isPrivateMode: state.isPrivateMode,
                                 selectedPanel: state.selectedPanel,
                                 normalTabsCount: state.normalTabsCount,
+                                hasSyncableAccount: state.hasSyncableAccount,
                                 shouldDismiss: true)
+        case TabTrayAction.firefoxAccountChanged(let isSyncAccountEnabled):
+                return TabTrayState(isPrivateMode: state.isPrivateMode,
+                                    selectedPanel: state.selectedPanel,
+                                    normalTabsCount: state.normalTabsCount,
+                                    hasSyncableAccount: isSyncAccountEnabled)
         default:
             return state
         }
