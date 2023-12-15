@@ -49,28 +49,12 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 usePrivateHomepage: privacyState,
                 fakespotState: state.fakespotState)
         case FakespotAction.pressedShoppingButton,
-            FakespotAction.show,
-            FakespotAction.dismiss:
-            return BrowserViewControllerState(
-                searchScreenState: state.searchScreenState,
-                usePrivateHomepage: state.usePrivateHomepage,
-                fakespotState: FakespotState.reducer(state.fakespotState, action))
-        case FakespotAction.setAppearanceTo(let isEnabled):
-            return BrowserViewControllerState(
-                searchScreenState: state.searchScreenState,
-                usePrivateHomepage: state.usePrivateHomepage,
-                fakespotState: FakespotState.reducer(state.fakespotState, action))
-        case FakespotAction.settingsStateDidChange:
-            return BrowserViewControllerState(
-                searchScreenState: state.searchScreenState,
-                usePrivateHomepage: state.usePrivateHomepage,
-                fakespotState: FakespotState.reducer(state.fakespotState, action))
-        case FakespotAction.reviewQualityDidChange:
-            return BrowserViewControllerState(
-                searchScreenState: state.searchScreenState,
-                usePrivateHomepage: state.usePrivateHomepage,
-                fakespotState: FakespotState.reducer(state.fakespotState, action))
-        case FakespotAction.tabDidChange:
+                .show,
+                .dismiss,
+                .setAppearanceTo,
+                .settingsStateDidChange,
+                .reviewQualityDidChange,
+                .tabDidChange:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 usePrivateHomepage: state.usePrivateHomepage,
