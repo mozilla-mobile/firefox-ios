@@ -444,7 +444,7 @@ extension String {
                 key: "CreditCard.UpdateCard.YesButtonTitle.v122",
                 tableName: "UpdateCard",
                 value: "Update",
-                comment: "This value is used as the title for the button in the update credit card page")
+                comment: "This value is used as the title for the button in the update credit card page. It indicates the action to update the details f9 the card.")
             public static let SecondaryButtonTitle = MZLocalizedString(
                 key: "CreditCard.UpdateCard.NotNowButtonTitle.v115",
                 tableName: "UpdateCard",
