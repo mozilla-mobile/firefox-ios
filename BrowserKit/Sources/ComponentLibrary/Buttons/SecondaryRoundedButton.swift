@@ -28,8 +28,6 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         super.init(frame: frame)
 
         configuration = UIButton.Configuration.filled()
-        layer.cornerRadius = UX.buttonCornerRadius
-        titleLabel?.textAlignment = .center
         titleLabel?.adjustsFontForContentSizeCategory = true
     }
 
