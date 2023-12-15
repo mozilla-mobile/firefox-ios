@@ -40,19 +40,16 @@ class TextFieldTableViewCell: UITableViewCell, ThemeApplicable {
 
     private func setupLayout() {
         titleLabel.font = UX.TitleLabelFont
-        guard let titleLabelSuperview = titleLabel.superview else { return }
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: titleLabelSuperview.topAnchor, constant: UX.VerticalMargin),
-            titleLabel.leadingAnchor.constraint(equalTo: titleLabelSuperview.leadingAnchor, constant: UX.HorizontalMargin),
-            titleLabel.trailingAnchor.constraint(equalTo: titleLabelSuperview.trailingAnchor, constant: -UX.HorizontalMargin)
-        ])
-
         textField.font = UX.TextFieldFont
-        guard let textFieldSuperview = textField.superview else { return }
+
         NSLayoutConstraint.activate([
-            textField.leadingAnchor.constraint(equalTo: textFieldSuperview.leadingAnchor, constant: UX.HorizontalMargin),
-            textField.trailingAnchor.constraint(equalTo: textFieldSuperview.trailingAnchor, constant: -UX.HorizontalMargin),
-            textField.bottomAnchor.constraint(equalTo: textFieldSuperview.bottomAnchor, constant: -UX.VerticalMargin)
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: UX.VerticalMargin),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.HorizontalMargin),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.HorizontalMargin),
+
+            textField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.HorizontalMargin),
+            textField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.HorizontalMargin),
+            textField.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -UX.VerticalMargin)
         ])
     }
 
