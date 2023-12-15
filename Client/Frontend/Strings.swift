@@ -444,7 +444,7 @@ extension String {
                 key: "CreditCard.UpdateCard.YesButtonTitle.v122",
                 tableName: "UpdateCard",
                 value: "Update",
-                comment: "This value is used as the title for the button in the update credit card page")
+                comment: "This value is used as the title for the button in the update credit card page. It indicates the action to update the details f9 the card.")
             public static let SecondaryButtonTitle = MZLocalizedString(
                 key: "CreditCard.UpdateCard.NotNowButtonTitle.v115",
                 tableName: "UpdateCard",
@@ -729,7 +729,7 @@ extension String {
                 key: "FirefoxHomepage.FeltDeletion.Link.v122",
                 tableName: "FirefoxHomepage",
                 value: "Private Browsing Data Erased",
-                comment: "When the user ends their private session, their are returned to the private mode homepage, and a toastbar popus confirming that their data has been erased. This is the label for that toast.")
+                comment: "When the user ends their private session, they are returned to the private mode homepage, and a toastbar popups confirming that their data has been erased. This is the label for that toast.")
         }
     }
 }
@@ -1694,7 +1694,7 @@ extension String {
                 key: "Settings.Search.PrivateSession.Title.v122",
                 tableName: "Settings",
                 value: "Private Browsing",
-                comment: "Title for the `Private Session` settings section in the Search page in the Settings menu.")
+                comment: "Title for the `Private Browsing` settings section in the Search page in the Settings menu.")
             public static let PrivateSessionSetting = MZLocalizedString(
                 key: "Settings.Search.PrivateSession.Setting.v122",
                 tableName: "Settings",
@@ -4700,7 +4700,7 @@ extension String {
         key: "TabLocation.LockButton.LargeContentTitle.v122",
         tableName: "TabLocation",
         value: "Tracking Protection",
-        comment: "Large content title for the lock button. This title is displayed when using accessible font sizes is enabled")
+        comment: "Large content title for the lock button. This title is displayed when accessible font sizes are enabled")
     public static let TabLocationLockButtonAccessibilityLabel = MZLocalizedString(
         key: "TabLocation.LockButton.AccessibilityLabel.v122",
         tableName: "TabLocation",
