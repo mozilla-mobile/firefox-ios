@@ -24,6 +24,10 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
         self.screenshotService = screenshotService
         self.sceneContainer = sceneContainer
         self.windowManager = windowManager
+        // Note: this is where we singularly decide the UUID for this specific iOS browser window (UIScene).
+        // The logic is handled by `nextAvailableWindowUUID`, but this is the point at which a window's UUID
+        // is set; this same UUID will be injected throughout several of the window's related components
+        // such as its TabManager instance, which also has the window UUID property as a convenience.
         self.windowUUID = windowManager.nextAvailableWindowUUID()
 
         let navigationController = sceneSetupHelper.createNavigationController()
