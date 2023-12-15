@@ -634,7 +634,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         storeChanges()
     }
 
-    // TODO: FXIOS-XXXX Remove when cleaning Legacy Tab Tray
     @MainActor
     func removeAllTabs(isPrivateMode: Bool) async {
         let currentModeTabs = tabs.filter { $0.isPrivate == isPrivateMode }
