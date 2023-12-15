@@ -5,7 +5,7 @@
 import Foundation
 
 public protocol EngineSession {
-    func loadUrl(url: String)
+    func load(url: String)
     func stopLoading()
     func reload()
     func goBack()

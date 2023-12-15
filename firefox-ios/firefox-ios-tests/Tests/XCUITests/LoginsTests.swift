@@ -20,6 +20,7 @@ let loginsListUsernameLabel = "Username, test@example.com"
 let loginsListPasswordLabel = "Password"
 let defaultNumRowsLoginsList = 2
 let defaultNumRowsEmptyFilterList = 0
+let searchPasswords = "Search passwords"
 
 class LoginTest: BaseTestCase {
     private func saveLogin(givenUrl: String) {
@@ -59,7 +60,7 @@ class LoginTest: BaseTestCase {
         navigator.goto(LoginsSettings)
         unlockLoginsView()
         mozWaitForElementToExist(app.tables["Login List"])
-        XCTAssertTrue(app.searchFields["Filter"].exists)
+        XCTAssertTrue(app.searchFields[searchPasswords].exists)
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
         app.buttons["Settings"].tap()
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -68,7 +69,7 @@ class LoginTest: BaseTestCase {
         navigator.goto(LoginsSettings)
         unlockLoginsView()
         mozWaitForElementToExist(app.tables["Login List"])
-        XCTAssertTrue(app.searchFields["Filter"].exists)
+        XCTAssertTrue(app.searchFields[searchPasswords].exists)
         XCTAssertTrue(app.staticTexts[domain].exists)
         XCTAssertTrue(app.staticTexts[domainLogin].exists)
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
@@ -156,8 +157,8 @@ class LoginTest: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts[domainLogin])
         app.staticTexts[domain].tap()
         app.cells.staticTexts["Delete"].tap()
-        mozWaitForElementToExist(app.alerts["Are you sure?"])
-        app.alerts.buttons["Delete"].tap()
+        mozWaitForElementToExist(app.alerts["Remove Password?"])
+        app.alerts.buttons["Remove"].tap()
         mozWaitForElementToExist(app.tables["Login List"])
         XCTAssertFalse(app.staticTexts[domain].exists)
         XCTAssertFalse(app.staticTexts[domainLogin].exists)
@@ -186,11 +187,11 @@ class LoginTest: BaseTestCase {
         saveLogin(givenUrl: testLoginPage)
         openLoginsSettings()
         // Enter on Search mode
-        mozWaitForElementToExist(app.searchFields["Filter"])
-        XCTAssert(app.searchFields["Filter"].isEnabled)
-        app.searchFields["Filter"].tap()
+        mozWaitForElementToExist(app.searchFields[searchPasswords])
+        XCTAssert(app.searchFields[searchPasswords].isEnabled)
+        app.searchFields[searchPasswords].tap()
         // Type Text that matches user, website
-        app.searchFields["Filter"].typeText("test")
+        app.searchFields[searchPasswords].typeText("test")
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
 
         // Type Text that does not match

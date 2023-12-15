@@ -1681,7 +1681,8 @@ class BrowserViewController: UIViewController,
             // Sidebar should be displayed and Fakespot is open, display Fakespot
             handleFakespotFlow(productURL: url)
         } else if let fakespotState = browserViewControllerState?.fakespotState,
-                  fakespotState.sidebarOpenForiPadLandscape {
+                  fakespotState.sidebarOpenForiPadLandscape,
+                  UIDevice.current.userInterfaceIdiom == .pad {
             // Sidebar should be displayed, display Fakespot
             store.dispatch(FakespotAction.setAppearanceTo(true))
         }

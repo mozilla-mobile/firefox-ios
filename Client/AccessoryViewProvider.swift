@@ -15,6 +15,7 @@ class AccessoryViewProvider: UIView, Themeable {
         static let toolbarHeight: CGFloat = 50
         static let cornerRadius: CGFloat = 4
         static let cardImageViewSize: CGFloat = 24
+        static let fixedSpacerWidth: CGFloat = 10
         static let fixedSpacerHeight: CGFloat = 30
         static let fixedLeadingSpacerWidth: CGFloat = 2
         static let fixedTrailingSpacerWidth: CGFloat = 3
@@ -63,6 +64,13 @@ class AccessoryViewProvider: UIView, Themeable {
         return button
     }()
 
+    private lazy var fixedSpacer: UIBarButtonItem = {
+        let fixedSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace,
+                                          target: nil,
+                                          action: nil)
+        fixedSpacer.width = CGFloat(UX.fixedSpacerWidth)
+        return fixedSpacer
+    }()
     private let flexibleSpacer = UIBarButtonItem(systemItem: .flexibleSpace)
 
     private let leadingFixedSpacer: UIView = .build()
@@ -163,7 +171,7 @@ class AccessoryViewProvider: UIView, Themeable {
             let cardStackViewForBarButton = UIBarButtonItem(customView: cardButtonStackView)
             cardStackViewForBarButton.accessibilityTraits = .button
             cardStackViewForBarButton.accessibilityLabel = .CreditCard.Settings.UseSavedCardFromKeyboard
-            toolbar.items = [previousButton, nextButton, cardStackViewForBarButton, flexibleSpacer, doneButton]
+            toolbar.items = [previousButton, nextButton, fixedSpacer, cardStackViewForBarButton, flexibleSpacer, doneButton]
             toolbar.accessibilityElements = [previousButton, nextButton, cardStackViewForBarButton, doneButton]
         } else {
             toolbar.items = [previousButton, nextButton, flexibleSpacer, doneButton]
