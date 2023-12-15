@@ -4,20 +4,36 @@
 
 import Foundation
 import Common
+import Shared
+import TabDataStore
 
 /// General window management class that provides some basic coordination and
 /// state management for multiple windows shared across a single running app.
 protocol WindowManager {
-    // Managing and checking the active iPad window
+    /// The UUID of the active window (there is always at least 1, except in
+    /// the earliest stages of app startup lifecycle)
     var activeWindow: WindowUUID { get set }
+
+    /// A collection of all open windows and their related metadata.
     var windows: [WindowUUID: AppWindowInfo] { get }
 
-    // Managing TabManagers associated with windows
-    func tabManager(for windowUUID: WindowUUID) -> TabManager
-    func tabManagerDidConnectToBrowserWindow(_ tabManager: TabManager)
+    /// Signals the WindowManager that a new browser window has been configured.
+    /// - Parameter windowInfo: the information for the window.
+    /// - Parameter uuid: the window's unique ID.
+    func newBrowserWindowConfigured(_ windowInfo: AppWindowInfo, uuid: WindowUUID)
 
-    // Closing windows
+    /// Convenience. Returns the TabManager for a specific window.
+    func tabManager(for windowUUID: WindowUUID) -> TabManager
+
+    /// Signals the WindowManager that a window was closed.
+    /// - Parameter uuid: the ID of the window.
     func windowDidClose(uuid: WindowUUID)
+
+    /// Supplies the UUID for the next window the iOS app should open. This
+    /// corresponds with the window tab data saved to disk, or, if no data is
+    /// available it provides a new UUID for the window.
+    /// - Returns: a UUID for the next window to be opened.
+    func nextAvailableWindowUUID() -> WindowUUID
 }
 
 /// Captures state and coordinator references specific to one particular app window.
@@ -32,21 +48,22 @@ final class WindowManagerImplementation: WindowManager {
         set { _activeWindowUUID = newValue }
     }
     private let logger: Logger
+    private let tabDataStore: TabDataStore
     private var _activeWindowUUID: WindowUUID?
+    private let defaultUITestingUUID = WindowUUID(uuidString: "44BA0B7D-097A-484D-8358-91A6E374451D")!
 
     // MARK: - Initializer
 
-    init(logger: Logger = DefaultLogger.shared) {
+    init(logger: Logger = DefaultLogger.shared,
+         tabDataStore: TabDataStore = AppContainer.shared.resolve()) {
         self.logger = logger
+        self.tabDataStore = tabDataStore
     }
 
     // MARK: - Public API
 
-    func tabManagerDidConnectToBrowserWindow(_ tabManager: TabManager) {
-        let uuid = tabManager.windowUUID
-        guard var info = window(for: uuid, createIfNeeded: true) else { fatalError() }
-        info.tabManager = tabManager
-        updateWindow(info, for: uuid)
+    func newBrowserWindowConfigured(_ windowInfo: AppWindowInfo, uuid: WindowUUID) {
+        updateWindow(windowInfo, for: uuid)
     }
 
     func tabManager(for windowUUID: WindowUUID) -> TabManager {
@@ -56,6 +73,21 @@ final class WindowManagerImplementation: WindowManager {
 
     func windowDidClose(uuid: WindowUUID) {
         updateWindow(nil, for: uuid)
+    }
+
+    func nextAvailableWindowUUID() -> WindowUUID {
+        // Continue to provide the expected hardcoded UUID for UI tests.
+        guard !AppConstants.isRunningUITests else { return defaultUITestingUUID }
+
+        // • If no saved windows (tab data), we generate a new UUID.
+        // • If user has saved windows (tab data), we return the first available UUID
+        //   not already associated with an open window.
+        // • If multiple window UUIDs are available, which is returned first is undefined.
+        //   TODO: [FXIOS-7929] ^ Temporary, part of ongoing multi-window work, eventually
+        //   we'll be updating this (to use `isPrimary` on WindowData etc). Forthcoming.
+        let openWindowUUIDs = windows.keys
+        let uuids = tabDataStore.fetchWindowDataUUIDs().filter { !openWindowUUIDs.contains($0) }
+        return uuids.first ?? WindowUUID()
     }
 
     // MARK: - Internal Utilities

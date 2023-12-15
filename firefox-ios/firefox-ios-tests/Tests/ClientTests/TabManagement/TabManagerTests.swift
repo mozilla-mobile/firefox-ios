@@ -7,9 +7,11 @@ import XCTest
 import TabDataStore
 import WebKit
 import Shared
+import Common
 @testable import Client
 
 class TabManagerTests: XCTestCase {
+    var tabWindowUUID: WindowUUID!
     var mockTabStore: MockTabDataStore!
     var mockSessionStore: MockTabSessionStore!
     var mockProfile: MockProfile!
@@ -19,7 +21,14 @@ class TabManagerTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+
         DependencyHelperMock().bootstrapDependencies()
+
+        // For this test suite, use a consistent window UUID for all test cases
+        let windowManager: WindowManager = AppContainer.shared.resolve()
+        let uuid = windowManager.activeWindow
+        tabWindowUUID = uuid
+
         mockProfile = MockProfile()
         mockDiskImageStore = MockDiskImageStore()
         mockTabStore = MockTabDataStore()
@@ -172,7 +181,7 @@ class TabManagerTests: XCTestCase {
     private func createSubject() -> TabManagerImplementation {
         let subject = TabManagerImplementation(profile: mockProfile,
                                                imageStore: mockDiskImageStore,
-                                               uuid: .defaultSingleWindowUUID,
+                                               uuid: tabWindowUUID,
                                                tabDataStore: mockTabStore,
                                                tabSessionStore: mockSessionStore)
         trackForMemoryLeaks(subject)

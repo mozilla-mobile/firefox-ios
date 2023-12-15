@@ -8,6 +8,7 @@ import CoreSpotlight
 import UIKit
 import Common
 import Glean
+import TabDataStore
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
     let logger = DefaultLogger.shared
@@ -30,6 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var ratingPromptManager = RatingPromptManager(profile: profile)
     lazy var appSessionManager: AppSessionProvider = AppSessionManager()
     lazy var notificationSurfaceManager = NotificationSurfaceManager()
+    lazy var tabDataStore = DefaultTabDataStore()
     lazy var windowManager = WindowManagerImplementation()
 
     private var shutdownWebServer: DispatchSourceTimer?
