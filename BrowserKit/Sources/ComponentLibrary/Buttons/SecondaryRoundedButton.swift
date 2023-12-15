@@ -5,54 +5,90 @@
 import Common
 import UIKit
 
-public class SecondaryRoundedButton: LegacyResizableButton, ThemeApplicable {
+public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
     private struct UX {
         static let buttonCornerRadius: CGFloat = 12
         static let buttonVerticalInset: CGFloat = 12
         static let buttonHorizontalInset: CGFloat = 16
         static let buttonFontSize: CGFloat = 16
+
+        static let contentInsets = NSDirectionalEdgeInsets(
+            top: buttonVerticalInset,
+            leading: buttonHorizontalInset,
+            bottom: buttonVerticalInset,
+            trailing: buttonHorizontalInset
+        )
     }
 
-    private var highlightedTintColor: UIColor!
-    private var normalTintColor: UIColor!
-
-    override open var isHighlighted: Bool {
-        didSet {
-            backgroundColor = isHighlighted ? highlightedTintColor : normalTintColor
-        }
-    }
+    private var highlightedBackgroundColor: UIColor!
+    private var normalBackgroundColor: UIColor!
+    private var foregroundColor: UIColor!
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
-            withTextStyle: .callout,
-            size: UX.buttonFontSize)
-        layer.cornerRadius = UX.buttonCornerRadius
-        titleLabel?.textAlignment = .center
+        configuration = UIButton.Configuration.filled()
         titleLabel?.adjustsFontForContentSizeCategory = true
-        contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
-                                         left: UX.buttonHorizontalInset,
-                                         bottom: UX.buttonVerticalInset,
-                                         right: UX.buttonHorizontalInset)
-    }
-
-    public func configure(viewModel: SecondaryRoundedButtonViewModel) {
-        accessibilityIdentifier = viewModel.a11yIdentifier
-        setTitle(viewModel.title, for: .normal)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override public func updateConfiguration() {
+        guard var updatedConfiguration = configuration else {
+            return
+        }
+
+        updatedConfiguration.background.backgroundColor = switch state {
+        case [.highlighted]:
+            highlightedBackgroundColor
+        default:
+            normalBackgroundColor
+        }
+        updatedConfiguration.baseForegroundColor = foregroundColor
+
+        updatedConfiguration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var container = incoming
+
+            container.foregroundColor = updatedConfiguration.baseForegroundColor
+            container.font = DefaultDynamicFontHelper.preferredBoldFont(
+                withTextStyle: .callout,
+                size: UX.buttonFontSize
+            )
+            return container
+        }
+
+        configuration = updatedConfiguration
+    }
+
+    public func configure(viewModel: SecondaryRoundedButtonViewModel) {
+        guard var updatedConfiguration = configuration else {
+            return
+        }
+
+        updatedConfiguration.contentInsets = UX.contentInsets
+        updatedConfiguration.title = viewModel.title
+        updatedConfiguration.titleAlignment = .center
+
+        // Using a nil backgroundColorTransformer will just make the background view
+        // use configuration.background.backgroundColor without any transformation
+        updatedConfiguration.background.backgroundColorTransformer = nil
+        updatedConfiguration.background.cornerRadius = UX.buttonCornerRadius
+        updatedConfiguration.cornerStyle = .fixed
+
+        accessibilityIdentifier = viewModel.a11yIdentifier
+
+        configuration = updatedConfiguration
+    }
+
     // MARK: ThemeApplicable
 
     public func applyTheme(theme: Theme) {
-        highlightedTintColor = theme.colors.actionSecondaryHover
-        normalTintColor = theme.colors.actionSecondary
+        highlightedBackgroundColor = theme.colors.actionSecondaryHover
+        normalBackgroundColor = theme.colors.actionSecondary
+        foregroundColor = theme.colors.textOnLight
 
-        setTitleColor(theme.colors.textOnLight, for: .normal)
-        backgroundColor = theme.colors.actionSecondary
+        setNeedsUpdateConfiguration()
     }
 }
