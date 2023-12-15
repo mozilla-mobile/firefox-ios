@@ -22,6 +22,7 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
 
     private var backgroundColorNormal: UIColor = .clear
     private var backgroundColorHighlighted: UIColor = .clear
+    private var foregroundColor: UIColor! = .black
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -35,7 +36,28 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
     }
 
     override public func updateConfiguration() {
-        updateBackgroundColor()
+        guard var updatedConfiguration = configuration else {
+            return
+        }
+
+        switch state {
+        case [.highlighted]:
+            updatedConfiguration.background.backgroundColor = backgroundColorHighlighted
+        default:
+            updatedConfiguration.background.backgroundColor = backgroundColorNormal
+        }
+
+        updatedConfiguration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { [weak self] incoming in
+            var container = incoming
+            container.foregroundColor = self?.foregroundColor
+            container.font = DefaultDynamicFontHelper.preferredBoldFont(
+                withTextStyle: .callout,
+                size: UX.buttonFontSize
+            )
+            return container
+        }
+
+        configuration = updatedConfiguration
     }
 
     public func configure(viewModel: PrimaryRoundedButtonViewModel) {
@@ -43,17 +65,14 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
             return
         }
 
-        updatedConfiguration.setFont(DefaultDynamicFontHelper.preferredBoldFont(
-            withTextStyle: .callout,
-            size: UX.buttonFontSize
-        ))
         updatedConfiguration.contentInsets = UX.contentInsets
         updatedConfiguration.title = viewModel.title
         updatedConfiguration.titleAlignment = .center
-
-        var updatedBackground = updatedConfiguration.background
-        updatedBackground.cornerRadius = UX.buttonCornerRadius
-        updatedConfiguration.background = updatedBackground
+      
+        // Using a nil backgroundColorTransformer will just make the background view
+        // use configuration.background.backgroundColor without any transformation
+        updatedConfiguration.background.backgroundColorTransformer = nil
+        updatedConfiguration.background.cornerRadius = UX.buttonCornerRadius
         updatedConfiguration.cornerStyle = .fixed
 
         accessibilityIdentifier = viewModel.a11yIdentifier
@@ -69,46 +88,9 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
     // MARK: ThemeApplicable
 
     public func applyTheme(theme: Theme) {
-        guard var updatedConfiguration = configuration else {
-            return
-        }
-
-        let foregroundColor = theme.colors.textInverted
-        updatedConfiguration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
-            var container = incoming
-            container.foregroundColor = foregroundColor
-            container.font = DefaultDynamicFontHelper.preferredBoldFont(
-                withTextStyle: .callout,
-                size: UX.buttonFontSize
-            )
-            return container
-        }
-        configuration = updatedConfiguration
-
         backgroundColorNormal = theme.colors.actionPrimary
         backgroundColorHighlighted = theme.colors.actionPrimaryHover
-        updateBackgroundColor()
-    }
-
-    private func updateBackgroundColor() {
-        guard var updatedConfiguration = configuration else {
-            return
-        }
-
-        var updatedBackground = updatedConfiguration.background
-        var updatedBackgroundColor: UIColor
-
-        switch state {
-        case [.highlighted]:
-            updatedBackgroundColor = backgroundColorHighlighted
-        default:
-            updatedBackgroundColor = backgroundColorNormal
-        }
-
-        updatedBackground.backgroundColorTransformer = UIConfigurationColorTransformer { color in
-            return updatedBackgroundColor
-        }
-        updatedConfiguration.background = updatedBackground
-        configuration = updatedConfiguration
+        foregroundColor = theme.colors.textInverted
+        setNeedsUpdateConfiguration()
     }
 }
