@@ -2,18 +2,27 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import WebKit
 
 class WKEngineSession: EngineSession {
     weak var delegate: EngineSessionDelegate?
     private var webView: WKEngineWebView
-    private let configuration: WKWebViewConfiguration
+    private var logger: Logger
 
-    init(configuration: WKWebViewConfiguration,
-         webViewProvider: WKWebViewProvider = DefaultWKWebViewProvider()) {
-        self.webView = webViewProvider.createWebview(configuration: configuration)
-        self.configuration = configuration
+    init?(configurationProvider: WKEngineConfigurationProvider = DefaultWKEngineConfigurationProvider(),
+          webViewProvider: WKWebViewProvider = DefaultWKWebViewProvider(),
+          logger: Logger = DefaultLogger.shared) {
+        guard let webView = webViewProvider.createWebview(configurationProvider: configurationProvider) else {
+            logger.log("WKEngineWebView creation failed on configuration",
+                       level: .fatal,
+                       category: .webview)
+            return nil
+        }
+
+        self.webView = webView
+        self.logger = logger
 
         // TODO: FXIOS-7899 #17644 Handle WKEngineSession observers
 //        self.webView.addObserver(self, forKeyPath: KVOConstants.URL.rawValue, options: .new, context: nil)

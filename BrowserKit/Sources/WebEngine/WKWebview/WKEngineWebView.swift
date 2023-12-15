@@ -6,14 +6,22 @@ import Common
 import Foundation
 import WebKit
 
+// TODO: FXIOS-7895 #17640 Handle WKEngineWebView MenuHelperInterface
 protocol WKEngineWebViewDelegate: AnyObject {
-    // TODO: Laurie documentation
     func tabWebView(_ webView: WKEngineWebView, findInPageSelection: String)
     func tabWebView(_ webView: WKEngineWebView, searchSelection: String)
 }
 
 protocol WKEngineWebView {
     var navigationDelegate: WKNavigationDelegate? { get set }
+    var allowsBackForwardNavigationGestures: Bool { get set }
+    var allowsLinkPreview: Bool { get set }
+    var backgroundColor: UIColor? { get set }
+
+    @available(iOS 16.4, *)
+    var isInspectable: Bool { get set }
+
+    init?(frame: CGRect, configurationProvider: WKEngineConfigurationProvider)
 
     @discardableResult
     func load(_ request: URLRequest) -> WKNavigation?
@@ -81,21 +89,20 @@ extension WKEngineWebView {
     }
 }
 
-// TODO: FXIOS-7895 #17640 Handle WKEngineWebView MenuHelperInterface
 // TODO: FXIOS-7896 #17641 Handle WKEngineWebView ThemeApplicable
 // TODO: FXIOS-7897 #17642 Handle WKEngineWebView AccessoryViewProvider
 class DefaultWKEngineWebView: WKWebView, WKEngineWebView {
-    private var logger: Logger = DefaultLogger.shared
     weak var delegate: WKEngineWebViewDelegate?
-
     func configure(delegate: WKEngineWebViewDelegate,
                    navigationDelegate: WKNavigationDelegate?) {
         self.delegate = delegate
         self.navigationDelegate = navigationDelegate
     }
 
-    override init(frame: CGRect, configuration: WKWebViewConfiguration) {
-        super.init(frame: frame, configuration: configuration)
+    required init?(frame: CGRect, configurationProvider: WKEngineConfigurationProvider) {
+        let configuration = configurationProvider.createConfiguration()
+        guard let webViewConfiguration = configuration as? WKWebViewConfiguration else { return nil }
+        super.init(frame: frame, configuration: webViewConfiguration)
     }
 
     required init?(coder: NSCoder) {

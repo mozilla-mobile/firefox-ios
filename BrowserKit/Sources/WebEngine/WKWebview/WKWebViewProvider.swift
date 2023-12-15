@@ -2,19 +2,29 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import WebKit
 
 protocol WKWebViewProvider {
-    func createWebview(configuration: WKWebViewConfiguration) -> WKEngineWebView
+    func createWebview(configurationProvider: WKEngineConfigurationProvider) -> WKEngineWebView?
 }
 
 struct DefaultWKWebViewProvider: WKWebViewProvider {
-    func createWebview(configuration: WKWebViewConfiguration) -> WKEngineWebView {
-        configuration.userContentController = WKUserContentController()
-        configuration.allowsInlineMediaPlayback = true
-        let webView = DefaultWKEngineWebView(frame: .zero,
-                                             configuration: configuration)
+    private var logger: Logger
+
+    init(logger: Logger = DefaultLogger.shared) {
+        self.logger = logger
+    }
+
+    func createWebview(configurationProvider: WKEngineConfigurationProvider) -> WKEngineWebView? {
+        guard let webView = DefaultWKEngineWebView(frame: .zero,
+                                                   configurationProvider: configurationProvider) else {
+            logger.log("WKEngineWebView creation failed on configuration",
+                       level: .fatal,
+                       category: .webview)
+            return nil
+        }
 
         // TODO: FXIOS-7898 #17643 Handle WebView a11y label
         //        webView.accessibilityLabel = .WebViewAccessibilityLabel
