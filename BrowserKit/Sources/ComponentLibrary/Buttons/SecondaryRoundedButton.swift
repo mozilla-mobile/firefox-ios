@@ -48,14 +48,6 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         }
         updatedConfiguration.baseForegroundColor = foregroundColor
 
-        configuration = updatedConfiguration
-    }
-
-    public func configure(viewModel: SecondaryRoundedButtonViewModel) {
-        guard var updatedConfiguration = configuration else {
-            return
-        }
-
         updatedConfiguration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var container = incoming
 
@@ -65,6 +57,14 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
                 size: UX.buttonFontSize
             )
             return container
+        }
+
+        configuration = updatedConfiguration
+    }
+
+    public func configure(viewModel: SecondaryRoundedButtonViewModel) {
+        guard var updatedConfiguration = configuration else {
+            return
         }
 
         updatedConfiguration.contentInsets = UX.contentInsets
