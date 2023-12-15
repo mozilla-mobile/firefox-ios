@@ -58,7 +58,6 @@ struct TabsPanelState: ScreenState, Equatable {
                                   inactiveTabs: tabsModel.inactiveTabs,
                                   isInactiveTabsExpanded: tabsModel.isInactiveTabsExpanded)
         case TabPanelAction.refreshTab(let tabs):
-            print("YRD refreshTabs")
             return TabsPanelState(isPrivateMode: state.isPrivateMode,
                                   tabs: tabs,
                                   inactiveTabs: state.inactiveTabs,

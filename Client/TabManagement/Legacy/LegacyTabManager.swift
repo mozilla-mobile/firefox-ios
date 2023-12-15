@@ -75,6 +75,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     var selectedIndex: Int { return _selectedIndex }
     let logger: Logger
     var backupCloseTab: BackupCloseTab?
+    var backupCloseTabs = [Tab]()
 
     var tabDisplayType: TabDisplayType = .TabGrid
     let delaySelectingNewPopupTab: TimeInterval = 0.1
@@ -633,6 +634,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         storeChanges()
     }
 
+    // TODO: FXIOS-XXXX Remove when cleaning Legacy Tab Tray
     @MainActor
     func removeAllTabs(isPrivateMode: Bool) async {
         let currentModeTabs = tabs.filter { $0.isPrivate == isPrivateMode }
@@ -648,6 +650,9 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     func getInactiveTabs() -> [Tab] {
         return inactiveTabs
     }
+
+    @MainActor
+    func undoCloseInactiveTabs() { fatalError("should never be called") }
 
     func backgroundRemoveAllTabs(isPrivate: Bool = false,
                                  didClearTabs: @escaping (_ tabsToRemove: [Tab],

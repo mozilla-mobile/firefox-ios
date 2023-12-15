@@ -164,19 +164,10 @@ class TabDisplayPanel: UIViewController,
             store.dispatch(TabPanelAction.hideUndoToast)
             presentUndoToast(toastType: undoType) { undoClose in
                 if undoClose {
-                    let undoAction = self.getUndoAction(undoType)
-                    store.dispatch(undoAction)
+                    store.dispatch(undoType.reduxAction)
                 }
                 self.shownToast = nil
             }
-        }
-    }
-
-    private func getUndoAction(_ undoType: UndoToastType) -> TabPanelAction {
-        switch undoType {
-        case .singleTab: return .undoClose
-        case .singleInactiveTabs: return .undoCloseInactiveTab
-        default: return .undoClose
         }
     }
 
