@@ -152,7 +152,7 @@ class SettingSection: Setting {
 }
 
 private class PaddedSwitch: UIView {
-    fileprivate static let Padding: CGFloat = 8
+    private static let Padding: CGFloat = 8
 
     init(switchView: UISwitch) {
         super.init(frame: .zero)
@@ -381,7 +381,7 @@ class BoolNotificationSetting: BoolSetting {
 }
 
 class PrefPersister: SettingValuePersister {
-    fileprivate let prefs: Prefs
+    private let prefs: Prefs
     let prefKey: String
 
     init(prefs: Prefs, prefKey: String) {
@@ -565,7 +565,7 @@ class StringSetting: Setting, UITextFieldDelegate {
         textField.becomeFirstResponder()
     }
 
-    fileprivate func isValid(_ value: String?) -> Bool {
+    private func isValid(_ value: String?) -> Bool {
         guard let test = settingIsValid else {
             return true
         }
@@ -864,14 +864,14 @@ class SettingsTableViewController: ThemedTableViewController {
     }
 
     @objc
-    fileprivate func syncDidChangeState() {
+    private func syncDidChangeState() {
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
     }
 
     @objc
-    fileprivate func refresh() {
+    private func refresh() {
         // Through-out, be aware that modifying the control while a refresh is in progress is /not/ supported and will likely crash the app.
         // self.profile.rustAccount.refreshProfile()
         // TODO [rustfxa] listen to notification and refresh profile
