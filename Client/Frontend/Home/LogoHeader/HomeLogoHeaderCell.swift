@@ -9,7 +9,6 @@ import UIKit
 
 class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
     private struct UX {
-        static let iPadAdjustment: CGFloat = -40
         struct Logo {
             static let iPhoneImageSize: CGFloat = 40
             static let iPadImageSize: CGFloat = 75
@@ -95,8 +94,7 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
         if isiPadAndPrivate {
             NSLayoutConstraint.activate([
                 containerView.centerXAnchor.constraint(
-                    equalTo: contentView.centerXAnchor,
-                    constant: UX.iPadAdjustment
+                    equalTo: contentView.centerXAnchor
                 ),
             ])
         } else {
