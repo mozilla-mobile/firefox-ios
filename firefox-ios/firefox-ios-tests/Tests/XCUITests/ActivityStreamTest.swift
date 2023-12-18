@@ -38,6 +38,7 @@ class ActivityStreamTest: BaseTestCase {
         super.tearDown()
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2273342
     // Smoketest
     func testDefaultSites() throws {
         XCTExpectFailure("The app was not launched", strict: false) {
@@ -54,6 +55,7 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssertTrue(app.collectionViews.cells.staticTexts["Facebook"].exists)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2272218
     func testTopSites2Add() {
         if iPad() {
             checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 12)
@@ -70,6 +72,7 @@ class ActivityStreamTest: BaseTestCase {
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 4)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2272219
     func testTopSitesRemoveAllExceptDefaultClearPrivateData() {
         waitForExistence(app.cells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: 15)
         XCTAssertTrue(app.cells.staticTexts[newTopSite["bookmarkLabel"]!].exists)
@@ -92,6 +95,7 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssertFalse(app.cells.staticTexts[newTopSite["bookmarkLabel"]!].exists)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2272220
     func testTopSitesRemoveAllExceptPinnedClearPrivateData() {
         waitForExistence(TopSiteCellgroup, timeout: TIMEOUT)
         if iPad() {
@@ -128,6 +132,7 @@ class ActivityStreamTest: BaseTestCase {
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2272514
     func testTopSitesShiftAfterRemovingOne() {
         // Check top site in first and second cell
         let allTopSites = app.collectionViews.cells.matching(identifier: "TopSitesCell")
@@ -150,6 +155,7 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssertTrue(topSiteFirstCellAfter == topSiteCells[allDefaultTopSites[1]].label, "First top site does not match")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2273338
     // Smoketest
     func testTopSitesOpenInNewPrivateTab() throws {
         XCTExpectFailure("The app was not launched", strict: false) {
@@ -214,6 +220,7 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssertEqual(numberOfTopSites, numberOfExpectedTopSites, "The number of Top Sites is not correct")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2273339
     func testContextMenuInLandscape() {
         // For iPhone test is failing to find top sites in landscape
         // can't scroll only to that area. Needs investigation
@@ -230,5 +237,19 @@ class ActivityStreamTest: BaseTestCase {
             // Go back to portrait mode
             XCUIDevice.shared.orientation = .portrait
         }
+    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2436086
+    func testLongTapOnTopSiteOptions() {
+        waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        app.collectionViews.cells.element(boundBy: 3).press(forDuration: 1)
+        // Verify options given
+        let ContextMenuTable = app.tables["Context Menu"]
+        print(app.debugDescription)
+        mozWaitForElementToExist(ContextMenuTable)
+        mozWaitForElementToExist(ContextMenuTable.cells.otherElements["pinLarge"])
+        mozWaitForElementToExist(ContextMenuTable.cells.otherElements["plusLarge"])
+        mozWaitForElementToExist(ContextMenuTable.cells.otherElements["quick_action_new_private_tab"])
+        mozWaitForElementToExist(ContextMenuTable.cells.otherElements["crossLarge"])
     }
 }
