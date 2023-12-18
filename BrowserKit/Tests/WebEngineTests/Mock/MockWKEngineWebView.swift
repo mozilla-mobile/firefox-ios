@@ -21,16 +21,23 @@ class MockWKEngineWebView: WKEngineWebView {
     var goForwardCalled = 0
     var removeAllUserScriptsCalled = 0
     var removeFromSuperviewCalled = 0
+    
+    var loadRequest: URLRequest?
+    var loadFileURL: URL?
+    var loadFileReadAccessURL: URL?
 
     required init?(frame: CGRect,
                    configurationProvider: WKEngineConfigurationProvider) {}
 
     func load(_ request: URLRequest) -> WKNavigation? {
+        loadRequest = request
         loadCalled += 1
         return nil
     }
 
     func loadFileURL(_ URL: URL, allowingReadAccessTo readAccessURL: URL) -> WKNavigation? {
+        loadFileURL = URL
+        loadFileReadAccessURL = readAccessURL
         loadFileURLCalled += 1
         return nil
     }

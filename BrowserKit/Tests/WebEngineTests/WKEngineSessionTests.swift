@@ -49,6 +49,7 @@ final class WKEngineSessionTests: XCTestCase {
         subject?.load(url: url)
 
         XCTAssertEqual(webViewProvider.webView.loadCalled, 1)
+        XCTAssertEqual(webViewProvider.webView.loadRequest?.url?.absoluteString, "https://example.com")
     }
 
     func testLoadURLGivenReaderModeURLThenLoad() {
@@ -58,16 +59,20 @@ final class WKEngineSessionTests: XCTestCase {
         subject?.load(url: url)
 
         XCTAssertEqual(webViewProvider.webView.loadCalled, 1)
+        XCTAssertEqual(webViewProvider.webView.loadRequest?.url?.absoluteString,
+                       "http://localhost:0/reader-mode/page?url=http%3A%2F%2Fexample%2Ecom")
     }
 
     func testLoadURLGivenFileURLThenLoadFileURL() {
         let subject = createSubject()
-        let url = "file:location"
+        let url = "file://path/to/abc/dirA/A.html"
 
         subject?.load(url: url)
 
-        // TODO: FXIOS-7980 Review loadFileURL usage with isPrivileged
-        XCTAssertEqual(webViewProvider.webView.loadCalled, 1)
+        XCTAssertEqual(webViewProvider.webView.loadCalled, 0)
+        XCTAssertEqual(webViewProvider.webView.loadFileURLCalled, 1)
+        XCTAssertEqual(webViewProvider.webView.loadFileURL?.absoluteString, "file://path/to/abc/dirA/A.html")
+        XCTAssertEqual(webViewProvider.webView.loadFileReadAccessURL?.absoluteString, "file://path/to/abc/dirA/")
     }
 
     // MARK: Stop URL
