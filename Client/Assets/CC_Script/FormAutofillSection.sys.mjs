@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import { AppConstants } from "resource://gre/modules/AppConstants.sys.mjs";
 import { FormAutofillUtils } from "resource://gre/modules/shared/FormAutofillUtils.sys.mjs";
 import { FormAutofill } from "resource://autofill/FormAutofill.sys.mjs";
 
@@ -32,17 +31,6 @@ export class FormAutofillSection {
 
     this.handler = handler;
     this.filledRecordGUID = null;
-
-    ChromeUtils.defineLazyGetter(this, "reauthPasswordPromptMessage", () => {
-      const brandShortName =
-        FormAutofillUtils.brandBundle.GetStringFromName("brandShortName");
-      // The string name for Mac is changed because the value needed updating.
-      const platform = AppConstants.platform.replace("macosx", "macos");
-      return FormAutofillUtils.stringBundle.formatStringFromName(
-        `useCreditCardPasswordPrompt.${platform}`,
-        [brandShortName]
-      );
-    });
 
     ChromeUtils.defineLazyGetter(this, "log", () =>
       FormAutofill.defineLogGetter(this, "FormAutofillHandler")
@@ -1276,12 +1264,16 @@ export class FormAutofillCreditCardSection extends FormAutofillSection {
    * @override
    */
   async prepareFillingProfile(profile) {
-    // Prompt the OS login dialog to get the decrypted credit
-    // card number.
+    // Prompt the OS login dialog to get the decrypted credit card number.
     if (profile["cc-number-encrypted"]) {
+      const promptMessage = FormAutofillUtils.reauthOSPromptMessage(
+        "autofill-use-payment-method-os-prompt-macos",
+        "autofill-use-payment-method-os-prompt-windows",
+        "autofill-use-payment-method-os-prompt-other"
+      );
       let decrypted = await this._decrypt(
         profile["cc-number-encrypted"],
-        this.reauthPasswordPromptMessage
+        promptMessage
       );
 
       if (!decrypted) {
