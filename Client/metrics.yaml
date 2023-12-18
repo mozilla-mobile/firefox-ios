@@ -4870,3 +4870,136 @@ app_errors:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
+
+fx_suggest:
+  ping_type:
+    type: string
+    description: >
+      The ping's type. Either "fxsuggest-click" or "fxsuggest-impression".
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16589
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17556
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - lina@mozilla.com
+      - ttran@mozilla.com
+      - najiang@mozilla.com
+    expires: never
+    send_in_pings:
+      - fx-suggest
+  position:
+    type: quantity
+    unit: non-negative integer
+    description: >
+      The position (1-based) of this suggestion in the full list of suggestions, relative to the
+      top of the awesomebar.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16589
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17556
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - lina@mozilla.com
+      - ttran@mozilla.com
+      - najiang@mozilla.com
+    expires: never
+    send_in_pings:
+      - fx-suggest
+  block_id:
+    type: quantity
+    description: |
+      A unique identifier for a sponsored suggestion. Not set for non-sponsored suggestions.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16589
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17556
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - lina@mozilla.com
+      - ttran@mozilla.com
+      - najiang@mozilla.com
+    expires: never
+    unit: integer
+    send_in_pings:
+      - fx-suggest
+  advertiser:
+    type: string
+    description: |
+      The name of the advertiser providing the sponsored suggestion
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16589
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17556
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - lina@mozilla.com
+      - ttran@mozilla.com
+      - najiang@mozilla.com
+    expires: never
+    send_in_pings:
+      - fx-suggest
+  reporting_url:
+    type: url
+    description: |
+      If this ping is for a sponsored suggestion, the partner URL for reporting this interaction.
+      Not set for non-sponsored suggestions.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16589
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17556
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - lina@mozilla.com
+      - ttran@mozilla.com
+      - najiang@mozilla.com
+    expires: never
+    send_in_pings:
+      - fx-suggest
+  context_id:
+    type: uuid
+    description: |
+      An identifier to identify users for Contextual Services user interaction pings.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16589
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17556
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - lina@mozilla.com
+      - ttran@mozilla.com
+      - najiang@mozilla.com
+    expires: never
+    send_in_pings:
+      - fx-suggest
+  iab_category:
+    type: string
+    description: |
+      The suggestion's advertising category. "22 - Shopping" for sponsored suggestions.
+      Not set for non-sponsored suggestions.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16589
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17556
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - lina@mozilla.com
+      - ttran@mozilla.com
+      - najiang@mozilla.com
+    expires: never
+    send_in_pings:
+      - fx-suggest
