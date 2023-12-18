@@ -9,7 +9,7 @@ let defaultSearchEngine2 = "Amazon.com"
 let customSearchEngine = ["name": "youtube", "url": "https://youtube.com/search?q=%s"]
 
 class SearchSettingsUITests: BaseTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2353246
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2435664
     func testDefaultSearchEngine() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SearchSettings)

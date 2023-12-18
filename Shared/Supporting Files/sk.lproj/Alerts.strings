@@ -1,3 +1,15 @@
+/* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the body text for the alert. */
+"Alerts.FeltDeletion.Body.v122" = "Týmto sa zatvoria všetky súkromné karty a odstráni sa história, súbory cookie a všetky ostatné údaje stránok.";
+
+/* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the cancel action for the alert, cancelling ending your session. */
+"Alerts.FeltDeletion.Button.Cancel.v122" = "Zrušiť";
+
+/* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the affirmative action for the alert, confirming that you do want to do that. */
+"Alerts.FeltDeletion.Button.Confirm.v122" = "Odstrániť údaje relácie";
+
+/* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the title for the alert. */
+"Alerts.FeltDeletion.Title.v122" = "Ukončiť súkromnú reláciu?";
+
 /* The title for the negative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will reject the action of restoring tabs. */
 "Alerts.RestoreTabs.Button.No.v109" = "Nie";
 

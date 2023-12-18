@@ -7,9 +7,6 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "QR කේත සුපිරික්සීමට, ඡායාරූප සහ දෘශ්‍යක ගැනීමට ෆයර්ෆොක්ස් රූගතය භාවිතා කරයි.";
 
-/* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "ෆයර්ෆොක්ස් සඳහා ඔබගේ සුරැකි පිවිසුම් හා සංකේතිත පත් වෙත ප්‍රවේශයට මුහුණේ හැඳු. වුවමනාය.";
-
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "ගොඩවදින අඩවි වෙතින් ඔබගේ ස්ථානය ඉල්ලා සිටීමට හැකිය.";
 

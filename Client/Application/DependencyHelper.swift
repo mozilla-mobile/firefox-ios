@@ -5,6 +5,7 @@
 import Storage
 import Shared
 import Common
+import TabDataStore
 
 class DependencyHelper {
     func bootstrapDependencies() {
@@ -27,6 +28,9 @@ class DependencyHelper {
 
         let downloadQueue: DownloadQueue = appDelegate.appSessionManager.downloadQueue
         AppContainer.shared.register(service: downloadQueue)
+
+        let tabDataStore: TabDataStore = appDelegate.tabDataStore
+        AppContainer.shared.register(service: tabDataStore)
 
         let windowManager: WindowManager = appDelegate.windowManager
         AppContainer.shared.register(service: windowManager)

@@ -47,7 +47,7 @@ private class CustomFxAContentServerEnableSetting: BoolSetting {
                      placeholder: placeholder,
                      accessibilityIdentifier: accessibilityIdentifier,
                      settingDidChange: settingDidChange)
-          textField.clearButtonMode = .always
+          enableClearButtonForTextField()
       }
   }
 

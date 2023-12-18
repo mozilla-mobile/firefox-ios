@@ -48,23 +48,22 @@ class WKEngineSession: EngineSession {
 //        tabDelegate?.tab(self, didCreateWebView: webView)
     }
 
-    // TODO: FXIOS-7903 #17648 no return from this loadURL, we need a way to recordNavigationInTab
-    func loadUrl(url: String) {
+    // TODO: FXIOS-7903 #17648 no return from this load(url:), we need a way to recordNavigationInTab
+    func load(url: String) {
         // Convert about:reader?url=http://example.com URLs to local ReaderMode URLs
         if let url = URL(string: url),
            let syncedReaderModeURL = url.decodeReaderModeURL,
-           syncedReaderModeURL.encodeReaderModeURL(WKEngineWebServer.shared.baseReaderModeURL()) != nil {
-            // TODO: FXIOS-7902 #17647 Handle webview request
-//            let readerModeRequest = PrivilegedRequest(url: localReaderModeURL) as URLRequest
-//            lastRequest = readerModeRequest
-//            webView.load(readerModeRequest)
+           let localReaderModeURL = syncedReaderModeURL.encodeReaderModeURL(WKEngineWebServer.shared.baseReaderModeURL()) {
+            let readerModeRequest = URLRequest(url: localReaderModeURL)
+            webView.load(readerModeRequest)
         }
-        // TODO: FXIOS-7902 #17647 Handle webview request
-//        lastRequest = request
-//        if let url = request.url, url.isFileURL, request.isPrivileged {
-//            webView.loadFileURL(url, allowingReadAccessTo: url)
-//        }
-//        webView.load(request)
+
+        guard let url = URL(string: url) else { return }
+        let request = URLRequest(url: url)
+        if let url = request.url, url.isFileURL, request.isPrivileged {
+            webView.loadFileURL(url, allowingReadAccessTo: url)
+        }
+        webView.load(request)
     }
 
     func stopLoading() {

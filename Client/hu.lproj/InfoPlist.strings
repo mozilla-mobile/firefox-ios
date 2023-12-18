@@ -8,7 +8,7 @@
 "NSCameraUsageDescription" = "Ez lehetővé teszi, hogy fényképeket készítsen és töltsön fel.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "A Firefox a Face ID-t igényli a mentett bejelentkezések és a titkosított kártyák eléréséhez.";
+"NSFaceIDUsageDescription" = "A Firefox a Face ID-t igényli a mentett jelszavak és a fizetési módok eléréséhez.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "A meglátogatott webhelyek kérhetik az Ön helyét.";

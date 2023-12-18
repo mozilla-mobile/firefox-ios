@@ -8,7 +8,7 @@ struct TabDisplayModel: Equatable {
     var isPrivateMode: Bool
     var tabs: [TabModel]
     var normalTabsCount: String
-    // MARK: Inactive tabs
     var inactiveTabs: [InactiveTabsModel]
     var isInactiveTabsExpanded: Bool
+    var undoCloseType: UndoToastType?
 }

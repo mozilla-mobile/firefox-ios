@@ -244,10 +244,10 @@ class TabDisplayView: UIView,
         else { return nil }
 
         // TODO: Add browserProfile and clientPickerDelegate
-        let tabVC = LegacyTabPeekViewController(tab: nil, delegate: tabPeekDelegate)
+        let tabVC = TabPeekViewController(tab: tabsState.tabs[indexPath.row])
         return UIContextMenuConfiguration(identifier: nil,
                                           previewProvider: { return tabVC },
-                                          actionProvider: tabVC.contextActions(defaultActions:))
+                                          actionProvider: tabVC.contextActions)
     }
 
     @objc

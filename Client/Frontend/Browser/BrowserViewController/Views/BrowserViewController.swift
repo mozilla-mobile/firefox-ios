@@ -1670,6 +1670,9 @@ class BrowserViewController: UIViewController,
             return
         }
 
+        // Do not update Fakespot when we are not on a selected tab
+        guard tabManager.selectedTab == tab else { return }
+
         if contentStackView.isSidebarVisible {
             // Sidebar is visible, update content
             navigationHandler?.updateFakespotSidebar(productURL: url,

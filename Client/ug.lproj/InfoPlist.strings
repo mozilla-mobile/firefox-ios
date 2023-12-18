@@ -7,9 +7,6 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox كامېرا ئارقىلىق QR كودىنى تارايدۇ ھەمدە سۈرەت تارتىپ ۋە سىنغا ئالىدۇ.";
 
-/* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "ساقلىغان كىرىش ۋە شىفىرلانغان كارتا ئۇچۇرىنى زىيارەت قىلىش ئۈچۈن Firefox چىراي كىملىكى تەلەپ قىلىدۇ.";
-
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "سىز زىيارەت قىلغان تور بېكەتلەر ئورنىڭىزنى تەلەپ قىلىشى مۇمكىن.";
 

@@ -1,6 +1,9 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one indicates that a user can tap on the shopping button to start using the Shopping feature. */
 "ContextualHints.Shopping.NotOptedIn.v120" = "මිලදී ගැනීමට පෙර — ඔබට මෙම නිෂ්පාදනයේ සමාලෝචන විශ්වාස කළ හැකිදැයි බලන්න.";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing the Shopping feature. It indicates that a user can go directly to the Shopping feature by tapping the text of the action. */
+"ContextualHints.Shopping.NotOptedInAction.v120" = "සමාලෝචන සෝදිසිකරු බලන්න";
+
 /* Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears after the user has opted in for the Shopping feature. It indicates that a user can directly open the review checker by tapping the text of the action. */
 "ContextualHints.Shopping.OptedInAction.v120" = "සමාලෝචන සෝදිසිකරු අරින්න";
 
@@ -120,6 +123,9 @@
 
 /* Beta label for the header of the Shopping Experience (Fakespot) sheet */
 "Shopping.Sheet.Beta.Title.v120" = "බීටා";
+
+/* Accessibility label for close button that dismisses the Shopping Experience (Fakespot) sheet. */
+"Shopping.Sheet.Close.AccessibilityLabel.v121" = "සමාලෝචන සෝදිසිකරු වසන්න";
 
 /* Label for the header of the Shopping Experience (Fakespot) sheet */
 "Shopping.Sheet.Title.v120" = "සමාලෝචන සෝදිසිකරු";

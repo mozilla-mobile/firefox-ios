@@ -42,8 +42,6 @@ class FakespotViewController:
     var themeObserver: NSObjectProtocol?
     private var viewModel: FakespotViewModel
 
-    lazy var isReduxIntegrationEnabled: Bool = ReduxFlagManager.isReduxEnabled
-
     private var adView: FakespotAdView?
 
     private lazy var scrollView: UIScrollView = .build()

@@ -8,7 +8,7 @@
 "NSCameraUsageDescription" = "‏Firefox משתמש במצלמה שלך כדי לסרוק קודי QR, לצלם תמונות ולהקליט סרטונים.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox‏ דורש שימוש ב־Face ID כדי לגשת לכניסות השמורות ולכרטיסים המוצפנים שלך.";
+"NSFaceIDUsageDescription" = "Firefox‏ דורש שימוש ב־Face ID כדי לגשת לססמאות ולאמצעי התשלום השמורים שלך.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "אתרים אליהם נכנסים עשויים לבקש את המיקום של המשתמש.";

@@ -9,7 +9,7 @@ import TabDataStore
 protocol TabMigrationUtility {
     var shouldRunMigration: Bool { get }
     var legacyTabs: [LegacySavedTab] { get set }
-    func runMigration() async -> WindowData
+    func runMigration(for windowUUID: WindowUUID) async -> WindowData
 }
 
 class DefaultTabMigrationUtility: TabMigrationUtility {
@@ -22,7 +22,7 @@ class DefaultTabMigrationUtility: TabMigrationUtility {
     var legacyTabs = [LegacySavedTab]()
 
     init(profile: Profile = AppContainer.shared.resolve(),
-         tabDataStore: TabDataStore = DefaultTabDataStore(),
+         tabDataStore: TabDataStore = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
          legacyTabDataRetriever: LegacyTabDataRetriever = LegacyTabDataRetrieverImplementation()) {
         self.prefs = profile.prefs
@@ -62,7 +62,7 @@ class DefaultTabMigrationUtility: TabMigrationUtility {
         }
     }
 
-    func runMigration() async -> WindowData {
+    func runMigration(for windowUUID: WindowUUID) async -> WindowData {
         logger.log("Begin tab migration with legacy tab count \(legacyTabs.count)",
                    level: .debug,
                    category: .tabs)
@@ -94,7 +94,7 @@ class DefaultTabMigrationUtility: TabMigrationUtility {
             tabsToMigrate.append(tabData)
         }
 
-        let windowData = WindowData(id: .defaultSingleWindowUUID,
+        let windowData = WindowData(id: windowUUID,
                                     isPrimary: true,
                                     activeTabId: selectTabUUID ?? UUID(),
                                     tabData: tabsToMigrate)

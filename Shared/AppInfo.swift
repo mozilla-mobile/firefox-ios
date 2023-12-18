@@ -14,6 +14,11 @@ extension AppInfo {
         return appVersion.components(separatedBy: ".").first!
     }
 
+    /// The port for the internal webserver, tests can change this
+    /// Please be aware that we needed to migrate this webserverPort in WebEngine.WKEngineInfo due to Shared target issues in #17721
+    /// This webserverPort needs to be deleted with FXIOS-7960 once the WebEngine package is integrated in Firefox iOS
+    public static var webserverPort = 6571
+
     /// Return the keychain access group.
     public static func keychainAccessGroupWithPrefix(_ prefix: String) -> String {
         var bundleIdentifier = baseBundleIdentifier
@@ -36,9 +41,6 @@ extension AppInfo {
         let topic = "whats-new-ios-\(majorAppVersion)\(shouldAddDotVersion ? dotVersion : "")"
         return topic
     }
-
-    // The port for the internal webserver, tests can change this
-    public static var webserverPort = 6571
 
     public static let debugPrefIsChinaEdition = "debugPrefIsChinaEdition"
 
