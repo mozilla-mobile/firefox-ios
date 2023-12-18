@@ -47,7 +47,7 @@ extension HomeLogoHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
             top: 0,
             leading: leadingInset,
             bottom: UX.bottomSpacing,
-            trailing: 0)
+            trailing: leadingInset)
 
         return section
     }

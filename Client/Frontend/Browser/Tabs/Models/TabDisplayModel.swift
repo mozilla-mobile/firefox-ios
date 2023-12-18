@@ -7,12 +7,8 @@ import Foundation
 struct TabDisplayModel: Equatable {
     var isPrivateMode: Bool
     var tabs: [TabModel]
-    var isPrivateTabsEmpty: Bool {
-        guard isPrivateMode else { return false }
-        return tabs.isEmpty
-    }
-
-    // MARK: Inactive tabs
+    var normalTabsCount: String
     var inactiveTabs: [InactiveTabsModel]
     var isInactiveTabsExpanded: Bool
+    var undoCloseType: UndoToastType?
 }

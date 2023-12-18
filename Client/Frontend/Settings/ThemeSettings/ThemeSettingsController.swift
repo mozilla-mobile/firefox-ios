@@ -29,19 +29,16 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     // A non-interactable slider is underlaid to show the current screen brightness indicator
     private var slider: (control: UISlider, deviceBrightnessIndicator: UISlider)?
 
-    lazy var isReduxIntegrationEnabled: Bool = ReduxFlagManager.isReduxEnabled
-
     var isAutoBrightnessOn: Bool {
-        return isReduxIntegrationEnabled ? themeState.isAutomaticBrightnessEnable
-         : LegacyThemeManager.instance.automaticBrightnessIsOn
+        return themeState.isAutomaticBrightnessEnable
     }
 
     var isSystemThemeOn: Bool {
-        return isReduxIntegrationEnabled ? themeState.useSystemAppearance : LegacyThemeManager.instance.systemThemeIsOn
+        return themeState.useSystemAppearance
     }
 
     var manualThemeType: ThemeType {
-        return isReduxIntegrationEnabled ? themeState.manualThemeSelected : themeManager.currentTheme.type
+        return themeState.manualThemeSelected
     }
 
     init() {
@@ -77,19 +74,15 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     // MARK: - Redux
 
     func subscribeToRedux() {
-        if isReduxIntegrationEnabled {
-            store.dispatch(ThemeSettingsAction.themeSettingsDidAppear)
-            store.subscribe(self, transform: {
-                $0.select(ThemeSettingsState.init)
-            })
-        }
+        store.dispatch(ThemeSettingsAction.themeSettingsDidAppear)
+        store.subscribe(self, transform: {
+            $0.select(ThemeSettingsState.init)
+        })
     }
 
     func unsubscribeFromRedux() {
-        if isReduxIntegrationEnabled {
-            store.dispatch(ActiveScreensStateAction.closeScreen(.themeSettings))
-            store.unsubscribe(self)
-        }
+        store.dispatch(ActiveScreensStateAction.closeScreen(.themeSettings))
+        store.unsubscribe(self)
     }
 
     func newState(state: ThemeSettingsState) {
@@ -101,12 +94,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     // MARK: - UI actions
     @objc
     func systemThemeSwitchValueChanged(control: UISwitch) {
-        if isReduxIntegrationEnabled {
-            store.dispatch(ThemeSettingsAction.toggleUseSystemAppearance(control.isOn))
-        } else {
-            LegacyThemeManager.instance.systemThemeIsOn = control.isOn
-            themeManager.setSystemTheme(isOn: control.isOn)
-        }
+        store.dispatch(ThemeSettingsAction.toggleUseSystemAppearance(control.isOn))
 
         if control.isOn {
             // Reset the user interface style to the default before choosing our theme
@@ -135,9 +123,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     func systemBrightnessChanged() {
         guard LegacyThemeManager.instance.automaticBrightnessIsOn else { return }
 
-        if isReduxIntegrationEnabled {
-            store.dispatch(ThemeSettingsAction.receivedSystemBrightnessChange)
-        }
+        store.dispatch(ThemeSettingsAction.receivedSystemBrightnessChange)
         brightnessChanged()
     }
 
@@ -145,9 +131,6 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     func brightnessChanged() {
         guard LegacyThemeManager.instance.automaticBrightnessIsOn else { return }
 
-        if !isReduxIntegrationEnabled {
-            LegacyThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
-        }
         applyTheme()
     }
 
@@ -155,13 +138,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     func sliderValueChanged(control: UISlider, event: UIEvent) {
         guard let touch = event.allTouches?.first, touch.phase == .ended else { return }
 
-        if isReduxIntegrationEnabled {
-            store.dispatch(ThemeSettingsAction.updateUserBrightness(control.value))
-        } else {
-            themeManager.setAutomaticBrightnessValue(control.value)
-            LegacyThemeManager.instance.automaticBrightnessValue = control.value
-            brightnessChanged()
-        }
+        store.dispatch(ThemeSettingsAction.updateUserBrightness(control.value))
     }
 
     private func makeSlider(parent: UIView) -> UISlider {
@@ -252,7 +229,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
             control.accessibilityIdentifier = "SystemThemeSwitchValue"
             control.onTintColor = themeManager.currentTheme.colors.actionPrimary
             control.addTarget(self, action: #selector(systemThemeSwitchValueChanged), for: .valueChanged)
-            control.isOn = isReduxIntegrationEnabled ? themeState.useSystemAppearance : LegacyThemeManager.instance.systemThemeIsOn
+            control.isOn = themeState.useSystemAppearance
 
             cell.accessoryView = control
         case .automaticBrightness:
@@ -304,12 +281,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
 
     // MARK: - Helper functions
     private func toggleAutomaticBrightness(isOn: Bool) {
-        if isReduxIntegrationEnabled {
-            store.dispatch(ThemeSettingsAction.enableAutomaticBrightness(isOn))
-        } else {
-            LegacyThemeManager.instance.automaticBrightnessIsOn = isOn
-            themeManager.setAutomaticBrightness(isOn: isOn)
-        }
+        store.dispatch(ThemeSettingsAction.enableAutomaticBrightness(isOn))
 
         tableView.reloadSections(IndexSet(integer: Section.lightDarkPicker.rawValue), with: .automatic)
         tableView.reloadSections(IndexSet(integer: Section.automaticBrightness.rawValue), with: .none)
@@ -320,13 +292,9 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     }
 
     private func changeManualTheme(isLightTheme: Bool) {
-        if isReduxIntegrationEnabled {
-            let themeName: ThemeType = isLightTheme ? .light : .dark
-            store.dispatch(ThemeSettingsAction.switchManualTheme(themeName))
-        } else {
-            LegacyThemeManager.instance.current = isLightTheme ? LegacyNormalTheme() : LegacyDarkTheme()
-            themeManager.changeCurrentTheme(isLightTheme ? .light : .dark)
-        }
+        let themeName: ThemeType = isLightTheme ? .light : .dark
+        store.dispatch(ThemeSettingsAction.switchManualTheme(themeName))
+
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .press,
                                      object: .setting,
@@ -379,13 +347,8 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         let deviceBrightnessIndicator = makeSlider(parent: cell.contentView)
         let slider = makeSlider(parent: cell.contentView)
         slider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
-        if isReduxIntegrationEnabled {
-            slider.value = themeState.userBrightnessThreshold
-            deviceBrightnessIndicator.value = themeState.systemBrightness
-        } else {
-            slider.value = Float(LegacyThemeManager.instance.automaticBrightnessValue)
-            deviceBrightnessIndicator.value = Float(UIScreen.main.brightness)
-        }
+        slider.value = themeState.userBrightnessThreshold
+        deviceBrightnessIndicator.value = themeState.systemBrightness
         deviceBrightnessIndicator.isUserInteractionEnabled = false
         deviceBrightnessIndicator.minimumTrackTintColor = .clear
         deviceBrightnessIndicator.maximumTrackTintColor = .clear

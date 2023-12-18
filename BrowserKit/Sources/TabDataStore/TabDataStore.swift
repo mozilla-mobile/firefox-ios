@@ -16,6 +16,13 @@ public protocol TabDataStore {
 
     /// Erases all window data on disk
     func clearAllWindowsData() async
+
+    /// Synchronous function that lists UUIDs for all WindowData currently saved
+    /// to disk. Because this requires no decoding (we can just check the list of
+    /// saved files in the directory) it is faster than fetchWindowData() and is
+    /// preferable when only the UUIDs are needed.
+    /// - Returns: a list of UUIDs for any saved WindowData.
+    func fetchWindowDataUUIDs() -> [UUID]
 }
 
 public actor DefaultTabDataStore: TabDataStore {
@@ -28,6 +35,7 @@ public actor DefaultTabDataStore: TabDataStore {
     private let throttleTime: UInt64
     private var windowDataToSave: WindowData?
     private var nextSaveIsScheduled = false
+    private let filePrefix = "window-"
 
     public init(logger: Logger = DefaultLogger.shared,
                 fileManager: TabFileManager = DefaultTabFileManager(),
@@ -45,6 +53,22 @@ public actor DefaultTabDataStore: TabDataStore {
                    category: .tabs)
         let allWindows = await fetchAllWindowsData()
         return allWindows.first
+    }
+
+    nonisolated public func fetchWindowDataUUIDs() -> [UUID] {
+        guard let directoryURL = fileManager.windowDataDirectory(isBackup: false) else {
+            logger.log("Could not resolve window data directory", level: .warning, category: .tabs)
+            return []
+        }
+
+        let fileURLs = fileManager.contentsOfDirectory(at: directoryURL)
+
+        return fileURLs.compactMap {
+            let file = $0.lastPathComponent
+            guard file.hasPrefix(filePrefix) else { return nil }
+            let uuidString = String(file.dropFirst(filePrefix.count))
+            return UUID(uuidString: uuidString)
+        }
     }
 
     private func fetchAllWindowsData() async -> [WindowData] {
@@ -186,7 +210,7 @@ public actor DefaultTabDataStore: TabDataStore {
 
     private func windowURLPath(for windowID: UUID, isBackup: Bool) -> URL? {
         guard let baseURL = fileManager.windowDataDirectory(isBackup: isBackup) else { return nil }
-        let baseFilePath = "window-" + windowID.uuidString
+        let baseFilePath = filePrefix + windowID.uuidString
         return baseURL.appendingPathComponent(baseFilePath)
     }
 }

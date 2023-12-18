@@ -38,29 +38,6 @@ class LegacyGridTabViewController: UIViewController,
         static let undoToastDuration = DispatchTimeInterval.seconds(3)
     }
 
-    enum UndoToastType {
-        case singleTab
-        case inactiveTabs(count: Int)
-
-        var title: String {
-            switch self {
-            case .singleTab:
-                return .TabsTray.CloseTabsToast.SingleTabTitle
-            case let .inactiveTabs(tabsCount):
-                return String.localizedStringWithFormat(
-                    .TabsTray.CloseTabsToast.Title,
-                    tabsCount)
-            }
-        }
-
-        var buttonText: String {
-            switch self {
-            case .singleTab, .inactiveTabs:
-                return .TabsTray.CloseTabsToast.Action
-            }
-        }
-    }
-
     let tabManager: TabManager
     let profile: Profile
     weak var delegate: TabTrayDelegate?
@@ -619,7 +596,6 @@ extension LegacyGridTabViewController: TabDisplayCompletionDelegate, RecentlyClo
         dismissTabTray()
     }
 
-    @discardableResult
     func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
@@ -739,7 +715,7 @@ extension LegacyGridTabViewController: InactiveTabsCFRProtocol {
     }
 
     func presentUndoToast(tabsCount: Int, completion: @escaping (Bool) -> Void) {
-        presentUndoToast(toastType: .inactiveTabs(count: tabsCount),
+        presentUndoToast(toastType: .allInactiveTabs(count: tabsCount),
                          completion: completion)
     }
 

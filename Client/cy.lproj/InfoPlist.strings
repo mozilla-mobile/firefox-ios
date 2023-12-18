@@ -7,9 +7,6 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Mae hwn yn caniatáu i chi gymryd lluniau a'u llwytho i fyny.";
 
-/* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Mae Firefox angen Face ID i gael mynediad i'ch mewngofnodion sydd wedi'u cadw a'ch cardiau wedi'u hamgryptio.";
-
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Efallai y bydd gwefannau rydych yn ymweld â nhw'n gofyn am eich lleoliad.";
 

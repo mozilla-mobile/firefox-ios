@@ -120,6 +120,12 @@ public struct AccessibilityIdentifiers {
 
     struct PrivateMode {
         static let dimmingView = "PrivateMode.DimmingView"
+        struct Homepage {
+            static let title = "PrivateMode.Homepage.Title"
+            static let body = "PrivateMode.Homepage.Body"
+            static let link = "PrivateMode.Homepage.Link"
+            static let card = "PrivateMode.Homepage.MessageCard"
+        }
     }
 
     struct Shopping {
@@ -279,6 +285,8 @@ public struct AccessibilityIdentifiers {
             static let productTitle = "Shopping.AdCard.ProductTitle"
             static let description = "Shopping.AdCard.Description"
             static let footer = "Shopping.AdCard.Footer"
+            static let defaultImage = "Shopping.AdCard.DefaultImage"
+            static let productImage = "Shopping.AdCard.ProductImage"
         }
     }
 
@@ -427,19 +435,32 @@ public struct AccessibilityIdentifiers {
             static let title = "AutofillCreditCard"
 
             struct AutoFillCreditCard {
-                static let autoFillCreditCards = "Autofill Credit Cards"
+                static let autoFillCreditCards = "Payment Methods"
                 static let addCard = "Add Card"
-                static let saveAutofillCards = "Save and Autofill Cards"
+                static let saveAutofillCards = "Save and Fill Payment Methods"
                 static let savedCards = "SAVED CARDS"
             }
 
             struct AddCreditCard {
-                static let addCreditCard = "Add Credit Card"
+                static let addCreditCard = "Add Card"
                 static let nameOnCard = "Name on Card"
                 static let cardNumber = "Card Number"
                 static let expiration = "Expiration MM / YY"
                 static let close = "Close"
                 static let save = "Save"
+            }
+
+            struct ViewCreditCard {
+                static let viewCard = "View Card"
+                static let edit = "Edit"
+            }
+
+            struct EditCreditCard {
+                static let editCreditCard = "Edit Card"
+                static let removeCard = "Remove Card"
+                static let removeThisCard = "Remove Card?"
+                static let cancel = "Cancel"
+                static let remove = "Remove"
             }
         }
 

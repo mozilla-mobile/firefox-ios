@@ -5,61 +5,92 @@
 import Common
 import UIKit
 
-public class PrimaryRoundedButton: LegacyResizableButton, ThemeApplicable {
+public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
     private struct UX {
         static let buttonCornerRadius: CGFloat = 12
         static let buttonVerticalInset: CGFloat = 12
         static let buttonHorizontalInset: CGFloat = 16
         static let buttonFontSize: CGFloat = 16
 
-        static let contentEdgeInsets = UIEdgeInsets(
+        static let contentInsets = NSDirectionalEdgeInsets(
             top: buttonVerticalInset,
-            left: buttonHorizontalInset,
+            leading: buttonHorizontalInset,
             bottom: buttonVerticalInset,
-            right: buttonHorizontalInset
+            trailing: buttonHorizontalInset
         )
     }
 
-    private var highlightedTintColor: UIColor!
-    private var normalTintColor: UIColor!
-
-    override open var isHighlighted: Bool {
-        didSet {
-            backgroundColor = isHighlighted ? highlightedTintColor : normalTintColor
-        }
-    }
+    private var backgroundColorNormal: UIColor = .clear
+    private var backgroundColorHighlighted: UIColor = .clear
+    private var foregroundColor: UIColor = .black
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
-            withTextStyle: .callout,
-            size: UX.buttonFontSize)
-        layer.cornerRadius = UX.buttonCornerRadius
-        titleLabel?.textAlignment = .center
+        configuration = UIButton.Configuration.filled()
         titleLabel?.adjustsFontForContentSizeCategory = true
-        contentEdgeInsets = UX.contentEdgeInsets
-    }
-
-    public func configure(viewModel: PrimaryRoundedButtonViewModel) {
-        accessibilityIdentifier = viewModel.a11yIdentifier
-        setTitle(viewModel.title, for: .normal)
-
-        guard let imageTitlePadding = viewModel.imageTitlePadding else { return }
-        setInsets(forContentPadding: UX.contentEdgeInsets, imageTitlePadding: imageTitlePadding)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override public func updateConfiguration() {
+        guard var updatedConfiguration = configuration else {
+            return
+        }
+
+        switch state {
+        case [.highlighted]:
+            updatedConfiguration.background.backgroundColor = backgroundColorHighlighted
+        default:
+            updatedConfiguration.background.backgroundColor = backgroundColorNormal
+        }
+
+        updatedConfiguration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { [weak self] incoming in
+            var container = incoming
+            container.foregroundColor = self?.foregroundColor
+            container.font = DefaultDynamicFontHelper.preferredBoldFont(
+                withTextStyle: .callout,
+                size: UX.buttonFontSize
+            )
+            return container
+        }
+
+        configuration = updatedConfiguration
+    }
+
+    public func configure(viewModel: PrimaryRoundedButtonViewModel) {
+        guard var updatedConfiguration = configuration else {
+            return
+        }
+
+        updatedConfiguration.contentInsets = UX.contentInsets
+        updatedConfiguration.title = viewModel.title
+        updatedConfiguration.titleAlignment = .center
+
+        // Using a nil backgroundColorTransformer will just make the background view
+        // use configuration.background.backgroundColor without any transformation
+        updatedConfiguration.background.backgroundColorTransformer = nil
+        updatedConfiguration.background.cornerRadius = UX.buttonCornerRadius
+        updatedConfiguration.cornerStyle = .fixed
+
+        accessibilityIdentifier = viewModel.a11yIdentifier
+
+        guard let imageTitlePadding = viewModel.imageTitlePadding else {
+            configuration = updatedConfiguration
+            return
+        }
+        updatedConfiguration.imagePadding = imageTitlePadding
+        configuration = updatedConfiguration
+    }
+
     // MARK: ThemeApplicable
 
     public func applyTheme(theme: Theme) {
-        highlightedTintColor = theme.colors.actionPrimaryHover
-        normalTintColor = theme.colors.actionPrimary
-
-        setTitleColor(theme.colors.textInverted, for: .normal)
-        backgroundColor = theme.colors.actionPrimary
+        backgroundColorNormal = theme.colors.actionPrimary
+        backgroundColorHighlighted = theme.colors.actionPrimaryHover
+        foregroundColor = theme.colors.textInverted
+        setNeedsUpdateConfiguration()
     }
 }

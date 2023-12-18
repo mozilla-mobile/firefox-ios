@@ -68,7 +68,7 @@ class FakespotCoordinator: BaseCoordinator, FeatureFlaggable {
 
     private func createFakespotViewController(productURL: URL) -> FakespotViewController {
         let viewModel = createFakespotViewModel(productURL: productURL)
-        let fakespotViewController = FakespotViewController(viewModel: viewModel, tabManager: tabManager)
+        let fakespotViewController = FakespotViewController(viewModel: viewModel)
         return fakespotViewController
     }
 

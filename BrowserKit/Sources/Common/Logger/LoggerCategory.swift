@@ -57,4 +57,7 @@ public enum LoggerCategory: String {
 
     /// Webview scripts, webview delegate, webserver like GCDWebserver, showing webview alerts, webview navigation
     case webview
+
+    /// Multi-window management on iPad devices
+    case window
 }

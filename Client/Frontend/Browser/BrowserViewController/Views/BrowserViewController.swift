@@ -1020,6 +1020,11 @@ class BrowserViewController: UIViewController,
     /// on the tab bar to open a new tab or by pressing the home page button on the tab bar. Inline is false when
     /// it's the zero search page, aka when the home page is shown by clicking the url bar from a loaded web page.
     func showEmbeddedHomepage(inline: Bool) {
+        guard let isPrivate = browserViewControllerState?.usePrivateHomepage, !isPrivate else {
+            browserDelegate?.showPrivateHomepage(overlayManager: overlayManager)
+            return
+        }
+
         hideReaderModeBar(animated: false)
 
         // Make sure reload button is hidden on homepage
@@ -1115,13 +1120,15 @@ class BrowserViewController: UIViewController,
 
         addChild(searchController)
         view.addSubview(searchController.view)
-        searchController.view.snp.makeConstraints { make in
-            make.top.equalTo(header.snp.bottom)
-            make.left.right.equalTo(view)
+        searchController.view.translatesAutoresizingMaskIntoConstraints = false
 
-            let constraintTarget = isBottomSearchBar ? overKeyboardContainer.snp.top : view.snp.bottom
-            make.bottom.equalTo(constraintTarget)
-        }
+        let constraintTarget = isBottomSearchBar ? overKeyboardContainer.topAnchor : view.bottomAnchor
+        NSLayoutConstraint.activate([
+            searchController.view.topAnchor.constraint(equalTo: header.bottomAnchor),
+            searchController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            searchController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            searchController.view.bottomAnchor.constraint(equalTo: constraintTarget)
+        ])
 
         searchController.didMove(toParent: self)
     }
@@ -1400,6 +1407,7 @@ class BrowserViewController: UIViewController,
                                                                                       flowType: flowType,
                                                                                       referringPage: referringPage,
                                                                                       profile: profile)
+        (vcToPresent as? FirefoxAccountSignInViewController)?.qrCodeNavigationHandler = navigationHandler
         presentThemedViewController(navItemLocation: .Left,
                                     navItemText: .Close,
                                     vcBeingPresented: vcToPresent,
@@ -1432,7 +1440,7 @@ class BrowserViewController: UIViewController,
 
     func handleQRCode() {
         if CoordinatorFlagManager.isQRCodeCoordinatorEnabled {
-            navigationHandler?.showQRCode()
+            navigationHandler?.showQRCode(delegate: self)
         } else {
             let qrCodeViewController = QRCodeViewController()
             qrCodeViewController.qrCodeDelegate = self
@@ -1662,6 +1670,9 @@ class BrowserViewController: UIViewController,
             return
         }
 
+        // Do not update Fakespot when we are not on a selected tab
+        guard tabManager.selectedTab == tab else { return }
+
         if contentStackView.isSidebarVisible {
             // Sidebar is visible, update content
             navigationHandler?.updateFakespotSidebar(productURL: url,
@@ -1673,7 +1684,8 @@ class BrowserViewController: UIViewController,
             // Sidebar should be displayed and Fakespot is open, display Fakespot
             handleFakespotFlow(productURL: url)
         } else if let fakespotState = browserViewControllerState?.fakespotState,
-                  fakespotState.sidebarOpenForiPadLandscape {
+                  fakespotState.sidebarOpenForiPadLandscape,
+                  UIDevice.current.userInterfaceIdiom == .pad {
             // Sidebar should be displayed, display Fakespot
             store.dispatch(FakespotAction.setAppearanceTo(true))
         }

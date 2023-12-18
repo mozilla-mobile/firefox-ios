@@ -42,8 +42,6 @@ class FakespotViewController:
     var themeObserver: NSObjectProtocol?
     private var viewModel: FakespotViewModel
 
-    lazy var isReduxIntegrationEnabled: Bool = ReduxFlagManager.isReduxEnabled
-
     private var adView: FakespotAdView?
 
     private lazy var scrollView: UIScrollView = .build()
@@ -100,19 +98,15 @@ class FakespotViewController:
         button.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.sheetCloseButton
     }
 
-    private let tabManager: TabManager
-
     // MARK: - Initializers
     init(
         viewModel: FakespotViewModel,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
-        themeManager: ThemeManager = AppContainer.shared.resolve(),
-        tabManager: TabManager
+        themeManager: ThemeManager = AppContainer.shared.resolve()
     ) {
         self.viewModel = viewModel
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
-        self.tabManager = tabManager
         super.init(nibName: nil, bundle: nil)
 
         listenToStateChange()
@@ -431,8 +425,10 @@ class FakespotViewController:
         case .productAdCard(let adData):
             guard viewModel.areAdsEnabled else { return nil }
             let view: FakespotAdView = .build()
-            var viewModel = FakespotAdViewModel(tabManager: tabManager, productAdsData: adData)
-            viewModel.dismissViewController = {
+            var viewModel = FakespotAdViewModel(productAdsData: adData)
+            viewModel.onTapProductLink = { [weak self] in
+                self?.viewModel.addTab(url: adData.url)
+                self?.viewModel.reportAdEvent(eventName: .trustedDealsLinkClicked, aid: adData.aid)
                 store.dispatch(FakespotAction.setAppearanceTo(false))
             }
             view.configure(viewModel)

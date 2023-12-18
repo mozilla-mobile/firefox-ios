@@ -7,9 +7,6 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Ovo vam omogućava slikanje i prijenos fotografija.";
 
-/* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox zahtijeva potvrdu pomoću Face ID-a za pristup spremljenim prijavama i šifriranim karticama.";
-
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Web stranice koje posjećuješ mogu zatražiti tvoju lokaciju.";
 

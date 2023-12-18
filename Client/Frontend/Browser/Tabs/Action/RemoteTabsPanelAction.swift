@@ -12,7 +12,6 @@ enum RemoteTabsPanelAction: Action {
     case refreshTabs
     case refreshDidBegin
     case refreshDidFail(RemoteTabsPanelEmptyStateReason)
-    case cachedTabsAvailable(RemoteTabsPanelCachedResults)
     case refreshDidSucceed([ClientAndTabs])
     case openSelectedURL(URL)
 }
