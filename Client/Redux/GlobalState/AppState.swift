@@ -16,6 +16,7 @@ struct AppState: StateType {
         return activeScreens.screens
             .compactMap {
                 switch ($0, screen) {
+                case (.tabPeek(let state), .tabPeek): return state as? S
                 case (.themeSettings(let state), .themeSettings): return state as? S
                 case (.tabsTray(let state), .tabsTray): return state as? S
                 case (.tabsPanel(let state), .tabsPanel): return state as? S

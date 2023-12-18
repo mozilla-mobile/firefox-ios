@@ -485,6 +485,9 @@
 		5A9A09D428B01D8700B6F51E /* MockTelemetryWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9A09D328B01D8700B6F51E /* MockTelemetryWrapper.swift */; };
 		5A9A09D628B01FD500B6F51E /* MockURLBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9A09D528B01FD500B6F51E /* MockURLBarView.swift */; };
 		5A9A09D828B2E8F000B6F51E /* MockHistoryDeletionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9A09D728B2E8F000B6F51E /* MockHistoryDeletionProtocol.swift */; };
+		5A9F83402B2B4AE800272819 /* TabPeekAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9F833F2B2B4AE800272819 /* TabPeekAction.swift */; };
+		5A9F83422B2B796800272819 /* TabPeekState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9F83412B2B796800272819 /* TabPeekState.swift */; };
+		5A9F83442B2B8CE900272819 /* TabPeekModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9F83432B2B8CE900272819 /* TabPeekModel.swift */; };
 		5A9FF8492942454600DF9FBB /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 5A9FF8482942454600DF9FBB /* Common */; };
 		5AA0CC662A4B8F6100014E2A /* PasswordManagerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA0CC652A4B8F6100014E2A /* PasswordManagerCoordinator.swift */; };
 		5AA75A652A46274A00533F8D /* MockThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA75A622A46272000533F8D /* MockThemeManager.swift */; };
@@ -4940,6 +4943,9 @@
 		5A9A09D328B01D8700B6F51E /* MockTelemetryWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTelemetryWrapper.swift; sourceTree = "<group>"; };
 		5A9A09D528B01FD500B6F51E /* MockURLBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLBarView.swift; sourceTree = "<group>"; };
 		5A9A09D728B2E8F000B6F51E /* MockHistoryDeletionProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockHistoryDeletionProtocol.swift; sourceTree = "<group>"; };
+		5A9F833F2B2B4AE800272819 /* TabPeekAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabPeekAction.swift; sourceTree = "<group>"; };
+		5A9F83412B2B796800272819 /* TabPeekState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabPeekState.swift; sourceTree = "<group>"; };
+		5A9F83432B2B8CE900272819 /* TabPeekModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabPeekModel.swift; sourceTree = "<group>"; };
 		5AA0CC652A4B8F6100014E2A /* PasswordManagerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordManagerCoordinator.swift; sourceTree = "<group>"; };
 		5AA75A622A46272000533F8D /* MockThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockThemeManager.swift; sourceTree = "<group>"; };
 		5AB4237B28A1947A003BC40C /* MockNotificationCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockNotificationCenter.swift; sourceTree = "<group>"; };
@@ -7746,6 +7752,7 @@
 				216E9A3829D2119300ABE69B /* LegacyInactiveTabs */,
 				D301AAED1A3A55B70078DD1D /* LegacyGridTabViewController.swift */,
 				43BDBBFD2752FA8600254DE4 /* LegacyTabCell.swift */,
+				7BA0601A1C0F4DE200DFADB6 /* LegacyTabPeekViewController.swift */,
 				DA52E1D925F5961F0092204C /* LegacyTabTrayViewController.swift */,
 				C81AC6B526160091007800C5 /* LegacyTabTrayViewModel.swift */,
 				968BD7EA27DFF0F8003148B3 /* ASGroup.swift */,
@@ -7850,6 +7857,7 @@
 				1D2F68AA2ACB262900524B92 /* RemoteTabsPanelAction.swift */,
 				219914042AF963F900153598 /* TabTrayAction.swift */,
 				219935E82B070F9000E5966F /* TabPanelAction.swift */,
+				5A9F833F2B2B4AE800272819 /* TabPeekAction.swift */,
 			);
 			path = Action;
 			sourceTree = "<group>";
@@ -7861,6 +7869,7 @@
 				219935E62B05447C00E5966F /* TabDisplayModel.swift */,
 				219935EB2B07110900E5966F /* TabTrayModel.swift */,
 				21F2A2D12B0BC85200626AEC /* InactiveTabsModel.swift */,
+				5A9F83432B2B8CE900272819 /* TabPeekModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -7905,6 +7914,7 @@
 		21C5B3582AF2A7130093F366 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				5A679E4A2B239FAE004F2B0D /* TabPeekViewController.swift */,
 				43162A2E2492DB7800F91658 /* EmptyPrivateTabsView.swift */,
 				1DEBC55D2AC4ED70006E4801 /* RemoteTabsPanel.swift */,
 				1D2F68AE2ACB272500524B92 /* RemoteTabsTableViewController.swift */,
@@ -7925,6 +7935,7 @@
 				21EA46692B04130500AAAB2D /* TabsPanelState.swift */,
 				21E77E4F2AA8BAEC00FABA10 /* TabTrayState.swift */,
 				21996BAA2AE95AFC00E0D55F /* TabTrayPanelType.swift */,
+				5A9F83412B2B796800272819 /* TabPeekState.swift */,
 			);
 			path = State;
 			sourceTree = "<group>";
@@ -10411,8 +10422,6 @@
 				3BF56D261CDBBE1F00AC4D75 /* SimpleToast.swift */,
 				E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */,
 				213B67A527CE682B000542F5 /* StartAtHomeHelper.swift */,
-				7BA0601A1C0F4DE200DFADB6 /* LegacyTabPeekViewController.swift */,
-				5A679E4A2B239FAE004F2B0D /* TabPeekViewController.swift */,
 				DD31E0FA1B382B520077078A /* TabPrintPageRenderer.swift */,
 				E698FFD91B4AADF40001F623 /* TabScrollController.swift */,
 				396CDB54203C5B870034A3A3 /* TabTrayController+KeyCommands.swift */,
@@ -13121,6 +13130,7 @@
 				2109478928AFD24C00B73D44 /* OnboardingViewControllerProtocol.swift in Sources */,
 				D0FCF7F51FE45842004A7995 /* UserScriptManager.swift in Sources */,
 				8AB8573027D94CAD0075C173 /* HomepageViewModelProtocol.swift in Sources */,
+				5A9F83422B2B796800272819 /* TabPeekState.swift in Sources */,
 				E1877A832875DEDE00F5BDF2 /* SyncedTabCell.swift in Sources */,
 				21E77E522AA8BE5C00FABA10 /* TabTrayFlagManager.swift in Sources */,
 				CA8226F324C11DB7008A6F38 /* PasswordManagerTableViewCell.swift in Sources */,
@@ -13148,6 +13158,7 @@
 				1DEBC55E2AC4ED70006E4801 /* RemoteTabsPanel.swift in Sources */,
 				435D660523D794B90046EFA2 /* UpdateViewModel.swift in Sources */,
 				9658143C29FAB610007339BD /* CreditCardInputFieldHelper.swift in Sources */,
+				5A9F83442B2B8CE900272819 /* TabPeekModel.swift in Sources */,
 				810FF3542B178343009F062C /* FeltPrivacyMiddleware.swift in Sources */,
 				215B457F27D7FD4B00E5E800 /* LegacyTabGroupData.swift in Sources */,
 				E12BD0B028AC3A7E0029AAF0 /* UIEdgeInsets+Extension.swift in Sources */,
@@ -13462,6 +13473,7 @@
 				C834ACD128D3ACA900203AD1 /* Blurrable.swift in Sources */,
 				C84655E22887388F00861B4A /* Wallpaper.swift in Sources */,
 				C849E46326B9C3AF00260F0B /* EnhancedTrackingProtectionVM.swift in Sources */,
+				5A9F83402B2B4AE800272819 /* TabPeekAction.swift in Sources */,
 				C8EDDBF429DF119F003A4C07 /* DeeplinkInput.swift in Sources */,
 				D0E55C4F1FB4FD23006DC274 /* FormPostHelper.swift in Sources */,
 				E118B9292862674E00C84831 /* LegacyInactiveTabItemCellModel.swift in Sources */,
