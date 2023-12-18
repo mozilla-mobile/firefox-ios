@@ -65,7 +65,7 @@ final class TabDisplayPanelTests: XCTestCase {
         if !emptyInactiveTabs {
             for index in 0...2 {
                 let inactiveTabModel = InactiveTabsModel(tabUUID: "UUID",
-                                                         title: "Inactive tab",
+                                                         title: "InactiveTab\(index)",
                                                          url: nil)
                 inactiveTabs.append(inactiveTabModel)
             }
