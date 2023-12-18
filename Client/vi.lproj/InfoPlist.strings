@@ -8,7 +8,7 @@
 "NSCameraUsageDescription" = "Firefox sử dụng máy ảnh của bạn để quét mã QR,chụp ảnh và quay video.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox yêu cầu Face ID để truy cập thông tin đăng nhập đã lưu và thẻ được mã hóa của bạn.";
+"NSFaceIDUsageDescription" = "Firefox yêu cầu Face ID để truy cập vào mật khẩu và phương thức thanh toán đã lưu của bạn.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Trang web bạn truy cập có thể yêu cầu vị trí của bạn.";

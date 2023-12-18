@@ -7,9 +7,6 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox utilisescha tia camera per scannar codes QR e far fotos e videos.";
 
-/* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox dovra Face ID per acceder a tias infurmaziuns d'annunzia memorisadas ed a tias cartas criptadas.";
-
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Paginas d'internet che ti visitas dumondan eventualmain tia posiziun geografica.";
 
