@@ -577,6 +577,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
         let tab = tabs[index]
         let viableTabsIndex = deletedIndexForViableTabs(tab)
+        backupCloseTab = BackupCloseTab(tab: tab, restorePosition: viableTabsIndex)
         self.removeTab(tab, flushToDisk: true)
         self.updateIndexAfterRemovalOf(tab, deletedIndex: index, viableTabsIndex: viableTabsIndex)
 
