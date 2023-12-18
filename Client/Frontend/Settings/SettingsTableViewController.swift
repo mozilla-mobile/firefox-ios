@@ -152,15 +152,17 @@ class SettingSection: Setting {
 }
 
 private class PaddedSwitch: UIView {
-    private static let Padding: CGFloat = 8
+    private struct UX {
+        static let padding: CGFloat = 8
+    }
 
     init(switchView: UISwitch) {
         super.init(frame: .zero)
 
         addSubview(switchView)
 
-        frame.size = CGSize(width: switchView.frame.width + PaddedSwitch.Padding, height: switchView.frame.height)
-        switchView.frame.origin = CGPoint(x: PaddedSwitch.Padding, y: 0)
+        frame.size = CGSize(width: switchView.frame.width + UX.padding, height: switchView.frame.height)
+        switchView.frame.origin = CGPoint(x: UX.padding, y: 0)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -441,7 +443,7 @@ class WebPageSetting: StringPrefSetting {
                    accessibilityIdentifier: accessibilityIdentifier,
                    settingIsValid: WebPageSetting.isURLOrEmpty,
                    settingDidChange: settingDidChange)
-        textFieldConfiguration(
+        configureTextField(
             keyboardType: .URL,
             autocapitalizationType: .none,
             autocorrectionType: .no
@@ -477,7 +479,7 @@ protocol SettingValuePersister {
 /// If settingIsValid returns false, the Setting will not change and the text remains red.
 class StringSetting: Setting, UITextFieldDelegate {
     private struct UX {
-        static let Padding: CGFloat = 15
+        static let padding: CGFloat = 15
         static let textFieldHeight: CGFloat = 44
         static let fontSize: CGFloat = 17
         static let textFieldIdentifierSuffix = "TextField"
@@ -509,7 +511,7 @@ class StringSetting: Setting, UITextFieldDelegate {
         self.accessibilityIdentifier = accessibilityIdentifier
     }
 
-    func textFieldConfiguration(
+    func configureTextField(
         keyboardType: UIKeyboardType,
         autocapitalizationType: UITextAutocapitalizationType,
         autocorrectionType: UITextAutocorrectionType
@@ -551,8 +553,8 @@ class StringSetting: Setting, UITextFieldDelegate {
 
         NSLayoutConstraint.activate([
             textField.heightAnchor.constraint(equalToConstant: UX.textFieldHeight),
-            textField.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -UX.Padding),
-            textField.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: UX.Padding)
+            textField.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -UX.padding),
+            textField.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: UX.padding)
         ])
 
         if let value = persister.readPersistedValue() {
@@ -705,7 +707,7 @@ class CheckmarkSetting: Setting {
 /// false then the 'button' appears disabled.
 class ButtonSetting: Setting {
     private struct UX {
-        static let Padding: CGFloat = 8
+        static let padding: CGFloat = 8
         static let textLabelHeight: CGFloat = 44
     }
 
@@ -736,8 +738,8 @@ class ButtonSetting: Setting {
         if let textLabel = cell.textLabel {
             NSLayoutConstraint.activate([
                 textLabel.heightAnchor.constraint(equalToConstant: UX.textLabelHeight),
-                textLabel.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -UX.Padding),
-                textLabel.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: UX.Padding)
+                textLabel.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -UX.padding),
+                textLabel.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: UX.padding)
             ])
             textLabel.translatesAutoresizingMaskIntoConstraints = false
         }
