@@ -84,7 +84,7 @@ class TabManagerMiddleware {
             Task {
                 await self.closeAllInactiveTabs()
                 store.dispatch(TabPanelAction.refreshInactiveTabs([InactiveTabsModel]()))
-                store.dispatch(TabPanelAction.showUndoToast(.allInactiveTabs(count: tabsState.inactiveTabs.count)))
+                store.dispatch(TabPanelAction.showToast(.allInactiveTabs(count: tabsState.inactiveTabs.count)))
             }
 
         case TabPanelAction.undoCloseAllInactiveTabs:
@@ -98,7 +98,7 @@ class TabManagerMiddleware {
                 await self.closeInactiveTab(for: tabUUID, inactiveTabs: tabsState.inactiveTabs)
                 let inactiveTabs = self.refreshInactiveTabs()
                 store.dispatch(TabPanelAction.refreshInactiveTabs(inactiveTabs))
-                store.dispatch(TabPanelAction.showUndoToast(.singleInactiveTabs))
+                store.dispatch(TabPanelAction.showToast(.singleInactiveTabs))
             }
 
         case TabPanelAction.undoCloseInactiveTab:
@@ -232,7 +232,7 @@ class TabManagerMiddleware {
                 // TODO: FXIOS-7978 Handle Undo close last regular tab
                 store.dispatch(TabTrayAction.dismissTabTray)
             } else {
-                store.dispatch(TabPanelAction.showUndoToast(.singleTab))
+                store.dispatch(TabPanelAction.showToast(.singleTab))
             }
         }
     }
@@ -306,7 +306,8 @@ class TabManagerMiddleware {
     }
 
     private func copyURL(tabID: String) {
-
+        UIPasteboard.general.url = defaultTabManager.selectedTab?.canonicalURL
+        store.dispatch(TabPanelAction.showToast(.copyURL))
     }
 
     private func tabPeekCloseTab(with tabID: String) {

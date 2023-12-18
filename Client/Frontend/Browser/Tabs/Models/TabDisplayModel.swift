@@ -10,5 +10,5 @@ struct TabDisplayModel: Equatable {
     var normalTabsCount: String
     var inactiveTabs: [InactiveTabsModel]
     var isInactiveTabsExpanded: Bool
-    var undoCloseType: UndoToastType?
+    var undoCloseType: ToastType?
 }

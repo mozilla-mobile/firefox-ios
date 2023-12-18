@@ -110,32 +110,39 @@ class TabDisplayPanel: UIViewController,
         emptyPrivateTabsView.applyTheme(themeManager.currentTheme)
     }
 
-    private func presentUndoToast(toastType: UndoToastType,
-                                  completion: @escaping (Bool) -> Void) {
+    private func presentToast(toastType: ToastType,
+                              completion: @escaping (Bool) -> Void) {
         if let currentToast = shownToast {
             currentToast.dismiss(false)
         }
 
-        let viewModel = ButtonToastViewModel(
-            labelText: toastType.title,
-            buttonText: toastType.buttonText)
-        let toast = ButtonToast(viewModel: viewModel,
-                                theme: themeManager.currentTheme,
-                                completion: { buttonPressed in
-            completion(buttonPressed)
-        })
-
-        toast.showToast(viewController: self,
-                        delay: UX.undoToastDelay,
-                        duration: UX.undoToastDuration) { toast in
-            [
-                toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-                toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-                toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor,
-                                              constant: -self.toolbarHeight)
-            ]
+        if toastType.reduxAction != nil {
+            let viewModel = ButtonToastViewModel(
+                labelText: toastType.title,
+                buttonText: toastType.buttonText)
+            let toast = ButtonToast(viewModel: viewModel,
+                                    theme: themeManager.currentTheme,
+                                    completion: { buttonPressed in
+                completion(buttonPressed)
+            })
+            toast.showToast(viewController: self,
+                            delay: UX.undoToastDelay,
+                            duration: UX.undoToastDuration) { toast in
+                [
+                    toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+                    toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+                    toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor,
+                                                  constant: -self.toolbarHeight)
+                ]
+            }
+            shownToast = toast
+        } else {
+            let toast = SimpleToast()
+            toast.showAlertWithText(toastType.title,
+                                    bottomContainer: view,
+                                    theme: themeManager.currentTheme,
+                                    bottomConstraintPadding: -toolbarHeight)
         }
-        shownToast = toast
     }
 
     // MARK: - Redux
@@ -159,12 +166,12 @@ class TabDisplayPanel: UIViewController,
         shouldShowEmptyView(tabsState.isPrivateTabsEmpty)
 
         // Avoid showing toast multiple times
-        if let undoType = tabsState.undoToastType,
+        if let toastType = tabsState.toastType,
             shownToast == nil {
             store.dispatch(TabPanelAction.hideUndoToast)
-            presentUndoToast(toastType: undoType) { undoClose in
-                if undoClose {
-                    store.dispatch(undoType.reduxAction)
+            presentToast(toastType: toastType) { undoClose in
+                if let action = toastType.reduxAction, undoClose {
+                    store.dispatch(action)
                 }
                 self.shownToast = nil
             }

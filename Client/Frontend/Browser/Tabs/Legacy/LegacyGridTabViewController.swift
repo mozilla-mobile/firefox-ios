@@ -402,7 +402,7 @@ class LegacyGridTabViewController: UIViewController,
         delegate?.tabTrayDidCloseLastTab(toast: toast)
     }
 
-    private func presentUndoToast(toastType: UndoToastType,
+    private func presentUndoToast(toastType: ToastType,
                                   completion: @escaping (Bool) -> Void) {
         if let currentToast = shownToast {
             currentToast.dismiss(false)

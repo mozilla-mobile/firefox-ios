@@ -4,11 +4,12 @@
 
 import Redux
 
-enum UndoToastType: Equatable {
+enum ToastType: Equatable {
     case singleTab
     case allTabs(count: Int)
     case singleInactiveTabs
     case allInactiveTabs(count: Int)
+    case copyURL
 
     var title: String {
         switch self {
@@ -19,6 +20,8 @@ enum UndoToastType: Equatable {
             return String.localizedStringWithFormat(
                 .TabsTray.CloseTabsToast.Title,
                 tabsCount)
+        case .copyURL:
+            return .AppMenu.AppMenuCopyURLConfirmMessage
         }
     }
 
@@ -26,12 +29,13 @@ enum UndoToastType: Equatable {
         return .TabsTray.CloseTabsToast.Action
     }
 
-    var reduxAction: TabPanelAction {
+    var reduxAction: TabPanelAction? {
         switch self {
         case .singleTab: return .undoClose
         case .singleInactiveTabs: return .undoCloseInactiveTab
         case .allTabs: return .undoCloseAllTabs
         case .allInactiveTabs: return .undoCloseAllInactiveTabs
+        case .copyURL: return nil
         }
     }
 }
@@ -52,7 +56,7 @@ enum TabPanelAction: Action {
     case undoCloseAllInactiveTabs
     case learnMorePrivateMode(URLRequest)
     case selectTab(String)
-    case showUndoToast(UndoToastType)
+    case showToast(ToastType)
     case hideUndoToast
 
     // Middleware actions
