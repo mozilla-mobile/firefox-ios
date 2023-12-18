@@ -19,8 +19,8 @@ final class PrivateHomepageViewController: UIViewController, ContentContainable,
         static let defaultScrollContainerPadding: CGFloat = 16
         private static let iPadScrollContainerPadding: CGFloat = 164
 
-        static var scrollContainerPadding: CGFloat {
-            let isiPad = UIDevice.current.userInterfaceIdiom == .pad
+        static func scrollContainerPadding(with traitCollection: UITraitCollection) -> CGFloat {
+            let isiPad = UIDevice.current.userInterfaceIdiom == .pad && traitCollection.horizontalSizeClass == .regular
             return isiPad ? UX.iPadScrollContainerPadding : UX.defaultScrollContainerPadding
         }
     }
@@ -37,6 +37,11 @@ final class PrivateHomepageViewController: UIViewController, ContentContainable,
 
     private let overlayManager: OverlayModeManager
     private let logger: Logger
+
+    // MARK: Constraints Variables
+    private var containerLeadingConstraint: NSLayoutConstraint?
+    private var containerTrailingConstraint: NSLayoutConstraint?
+    private var containerWidthConstraint: NSLayoutConstraint?
 
     // MARK: UI Elements
     private lazy var gradient: CAGradientLayer = {
@@ -99,6 +104,11 @@ final class PrivateHomepageViewController: UIViewController, ContentContainable,
         applyTheme()
     }
 
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        updateConstraintsForMultitasking()
+    }
+
     private func setupLayout() {
         scrollContainer.addArrangedSubview(logoHeaderCell.contentView)
         scrollContainer.addArrangedSubview(privateMessageCardCell)
@@ -108,27 +118,45 @@ final class PrivateHomepageViewController: UIViewController, ContentContainable,
         view.addSubview(scrollView)
         scrollView.addSubview(scrollContainer)
 
-        let contentLayoutGuide = scrollView.contentLayoutGuide
-        let frameLayoutGuide = scrollView.frameLayoutGuide
-
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
 
-            scrollContainer.topAnchor.constraint(equalTo: contentLayoutGuide.topAnchor,
+            scrollContainer.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor,
                                                  constant: UX.defaultScrollContainerPadding),
-            scrollContainer.bottomAnchor.constraint(equalTo: contentLayoutGuide.bottomAnchor,
+            scrollContainer.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor,
                                                     constant: -UX.defaultScrollContainerPadding),
-            scrollContainer.leadingAnchor.constraint(equalTo: contentLayoutGuide.leadingAnchor,
-                                                     constant: UX.scrollContainerPadding),
-            scrollContainer.trailingAnchor.constraint(equalTo: contentLayoutGuide.trailingAnchor,
-                                                      constant: -UX.scrollContainerPadding),
-
-            scrollContainer.widthAnchor.constraint(equalTo: frameLayoutGuide.widthAnchor,
-                                                   constant: -UX.scrollContainerPadding * 2),
         ])
+
+        setupConstraintsForMultitasking()
+    }
+
+    // Constraints for trailing and leading padding on iPad (regular) should be larger than that of compact layout
+    private func setupConstraintsForMultitasking() {
+        let contentLayoutGuide = scrollView.contentLayoutGuide
+        let frameLayoutGuide = scrollView.frameLayoutGuide
+
+        containerLeadingConstraint = scrollContainer.leadingAnchor.constraint(equalTo: contentLayoutGuide.leadingAnchor, constant: UX.scrollContainerPadding(with: traitCollection))
+        containerTrailingConstraint = scrollContainer.trailingAnchor.constraint(equalTo: contentLayoutGuide.trailingAnchor, constant: -UX.scrollContainerPadding(with: traitCollection))
+        containerWidthConstraint = scrollContainer.widthAnchor.constraint(equalTo: frameLayoutGuide.widthAnchor, constant: -UX.scrollContainerPadding(with: traitCollection) * 2)
+
+        containerLeadingConstraint?.isActive = true
+        containerTrailingConstraint?.isActive = true
+        containerWidthConstraint?.isActive = true
+    }
+
+    private func updateConstraintsForMultitasking() {
+        updateConstraint(for: containerLeadingConstraint, with: UX.scrollContainerPadding(with: traitCollection))
+        updateConstraint(for: containerTrailingConstraint, with: -UX.scrollContainerPadding(with: traitCollection))
+        updateConstraint(for: containerWidthConstraint, with: -UX.scrollContainerPadding(with: traitCollection) * 2)
+    }
+
+    private func updateConstraint(for constraint: NSLayoutConstraint?, with updatedConstant: CGFloat) {
+        constraint?.isActive = false
+        constraint?.constant = updatedConstant
+        constraint?.isActive = true
     }
 
     override func viewDidLayoutSubviews() {
