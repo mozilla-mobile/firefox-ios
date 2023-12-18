@@ -5,6 +5,7 @@
 import Common
 import Shared
 import Storage
+import TabDataStore
 @testable import Client
 
 class DependencyHelperMock {
@@ -16,13 +17,17 @@ class DependencyHelperMock {
         )
         AppContainer.shared.register(service: profile)
 
+        let tabDataStore: TabDataStore = MockTabDataStore()
+        AppContainer.shared.register(service: tabDataStore)
+
+        let windowUUID = WindowUUID()
         let tabManager: TabManager = injectedTabManager ?? TabManagerImplementation(
             profile: profile,
             imageStore: DefaultDiskImageStore(
                 files: profile.files,
                 namespace: "TabManagerScreenshots",
                 quality: UIConstants.ScreenshotQuality),
-            uuid: .defaultSingleWindowUUID
+            uuid: windowUUID
         )
 
         let appSessionProvider: AppSessionProvider = AppSessionManager()
@@ -39,8 +44,7 @@ class DependencyHelperMock {
 
         let windowManager: WindowManager = WindowManagerImplementation()
         AppContainer.shared.register(service: windowManager)
-        // Register TabManager with Redux for primary app window
-        windowManager.tabManagerDidConnectToBrowserWindow(tabManager)
+        windowManager.newBrowserWindowConfigured(AppWindowInfo(tabManager: tabManager), uuid: windowUUID)
 
         // Tell the container we are done registering
         AppContainer.shared.bootstrap()

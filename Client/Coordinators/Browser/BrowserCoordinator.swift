@@ -54,7 +54,8 @@ class BrowserCoordinator: BaseCoordinator,
         self.glean = glean
         super.init(router: router)
 
-        windowManager.tabManagerDidConnectToBrowserWindow(tabManager)
+        windowManager.newBrowserWindowConfigured(AppWindowInfo(tabManager: tabManager), uuid: tabManager.windowUUID)
+
         // TODO [7856]: Additional telemetry updates forthcoming once iPad multi-window enabled.
         // For now, we only have a single BVC and TabManager. Plug it into our TelemetryWrapper:
         TelemetryWrapper.shared.defaultTabManager = tabManager

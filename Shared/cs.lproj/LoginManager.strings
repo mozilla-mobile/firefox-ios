@@ -16,6 +16,18 @@
 /* Label for the button used to delete the current login. */
 "Delete" = "Smazat";
 
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Zrušit";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Odebrat";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "Tuto akci nelze vrátit zpět.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Odstranit heslo?";
+
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "Zrušit výběr";
 
@@ -36,6 +48,9 @@
 
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "Nenalezeny žádné přihlašovací údaje";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Nebyla nalezena žádná hesla";
 
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "Otevřít a vyplnit";

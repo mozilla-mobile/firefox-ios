@@ -7,9 +7,6 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox 需要使用您的相机扫码、拍摄照片或视频。";
 
-/* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox 需进行面容 ID 验证才能访问您保存的登录信息和加密的信用卡。";
-
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "您访问的网站可能会请求您的地理位置。";
 

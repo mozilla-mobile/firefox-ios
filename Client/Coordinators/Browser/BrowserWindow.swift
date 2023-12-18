@@ -9,8 +9,3 @@ import Foundation
 /// manages its own unique set of tabs. Multiple Firefox windows
 /// can be run side-by-side on iPad (once multi-window is enabled). [FXIOS-7349]
 public typealias WindowUUID = UUID
-
-extension WindowUUID {
-    // TODO: [FXIOS-7798] Temporary. Part of WIP iPad multi-window epic.
-    public static let defaultSingleWindowUUID = UUID(uuidString: "44BA0B7D-097A-484D-8358-91A6E374451D")!
-}

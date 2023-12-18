@@ -42,8 +42,6 @@ class RemoteTabsPanel: UIViewController,
         super.init(nibName: nil, bundle: nil)
 
         self.tableViewController.remoteTabsPanel = self
-
-        observeNotifications()
     }
 
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -66,28 +64,6 @@ class RemoteTabsPanel: UIViewController,
         store.dispatch(RemoteTabsPanelAction.refreshTabs)
     }
 
-    private func observeNotifications() {
-        // TODO: State to be provided by forthcoming Redux updates. TBD.
-        // For now, continue to observe notifications.
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self,
-                                       selector: #selector(notificationReceived),
-                                       name: .FirefoxAccountChanged,
-                                       object: nil)
-        notificationCenter.addObserver(self,
-                                       selector: #selector(notificationReceived),
-                                       name: .ProfileDidFinishSyncing,
-                                       object: nil)
-    }
-
-    @objc
-    func notificationReceived(_ notification: Notification) {
-        let name = notification.name
-        if name == .FirefoxAccountChanged || name == .ProfileDidFinishSyncing {
-            refreshTabs()
-        }
-    }
-
     // MARK: - View & Layout
 
     override func viewDidLoad() {
@@ -97,11 +73,6 @@ class RemoteTabsPanel: UIViewController,
         setupLayout()
         subscribeToRedux()
         applyTheme()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        refreshTabs()
     }
 
     private func setupLayout() {
