@@ -8,14 +8,14 @@ import Redux
 struct TabsPanelState: ScreenState, Equatable {
     var isPrivateMode: Bool
     var tabs: [TabModel]
+    var inactiveTabs: [InactiveTabsModel]
+    var isInactiveTabsExpanded: Bool
+    var undoToastType: UndoToastType?
+
     var isPrivateTabsEmpty: Bool {
         guard isPrivateMode else { return false }
         return tabs.isEmpty
     }
-
-    // MARK: Inactive tabs
-    var inactiveTabs: [InactiveTabsModel]
-    var isInactiveTabsExpanded: Bool
 
     init(_ appState: AppState) {
         guard let panelState = store.state.screenState(TabsPanelState.self, for: .tabsPanel) else {
@@ -26,24 +26,28 @@ struct TabsPanelState: ScreenState, Equatable {
         self.init(isPrivateMode: panelState.isPrivateMode,
                   tabs: panelState.tabs,
                   inactiveTabs: panelState.inactiveTabs,
-                  isInactiveTabsExpanded: panelState.isInactiveTabsExpanded)
+                  isInactiveTabsExpanded: panelState.isInactiveTabsExpanded,
+                  undoToastType: panelState.undoToastType)
     }
 
     init(isPrivateMode: Bool = false) {
         self.init(isPrivateMode: isPrivateMode,
                   tabs: [TabModel](),
                   inactiveTabs: [InactiveTabsModel](),
-                  isInactiveTabsExpanded: false)
+                  isInactiveTabsExpanded: false,
+                  undoToastType: nil)
     }
 
     init(isPrivateMode: Bool,
          tabs: [TabModel],
          inactiveTabs: [InactiveTabsModel],
-         isInactiveTabsExpanded: Bool) {
+         isInactiveTabsExpanded: Bool,
+         undoToastType: UndoToastType? = nil) {
         self.isPrivateMode = isPrivateMode
         self.tabs = tabs
         self.inactiveTabs = inactiveTabs
         self.isInactiveTabsExpanded = isInactiveTabsExpanded
+        self.undoToastType = undoToastType
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -68,6 +72,18 @@ struct TabsPanelState: ScreenState, Equatable {
                                   tabs: state.tabs,
                                   inactiveTabs: inactiveTabs,
                                   isInactiveTabsExpanded: state.isInactiveTabsExpanded)
+        case TabPanelAction.showUndoToast(let type):
+            return TabsPanelState(isPrivateMode: state.isPrivateMode,
+                                  tabs: state.tabs,
+                                  inactiveTabs: state.inactiveTabs,
+                                  isInactiveTabsExpanded: state.isInactiveTabsExpanded,
+                                  undoToastType: type)
+        case TabPanelAction.hideUndoToast:
+            return TabsPanelState(isPrivateMode: state.isPrivateMode,
+                                  tabs: state.tabs,
+                                  inactiveTabs: state.inactiveTabs,
+                                  isInactiveTabsExpanded: state.isInactiveTabsExpanded,
+                                  undoToastType: nil)
         default: return state
         }
     }

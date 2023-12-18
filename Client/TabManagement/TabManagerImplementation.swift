@@ -444,11 +444,19 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
     @MainActor
     override func removeAllInactiveTabs() async {
-        let currentModeTabs = getInactiveTabs()
+        backupCloseTabs = getInactiveTabs()
+        let currentModeTabs = backupCloseTabs
         for tab in currentModeTabs {
             await self.removeTab(tab.tabUUID)
         }
         storeChanges()
+    }
+
+    @MainActor
+    override func undoCloseInactiveTabs() {
+        tabs.append(contentsOf: backupCloseTabs)
+        storeChanges()
+        backupCloseTabs = [Tab]()
     }
 
     // MARK: - Notifiable
