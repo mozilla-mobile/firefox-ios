@@ -173,8 +173,8 @@ class FakespotViewModel {
     var isViewIntersected = false
     // Timer-related properties for handling view visibility
     private var isViewVisible = false
-    private var hasTimerFired = false
     private var timer: Timer?
+
     private let tabManager: TabManager
 
     private var fetchProductTask: Task<Void, Never>?
@@ -186,7 +186,7 @@ class FakespotViewModel {
         return viewElements(for: state)
     }
 
-    private let prefs: Prefs
+    let prefs: Prefs
     private var isOptedIn: Bool {
         return prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false
     }
@@ -518,14 +518,15 @@ class FakespotViewModel {
     }
 
     private func timerFired(aid: String) {
-        hasTimerFired = true
         recordSurfaceAdsImpressionTelemetry()
+        prefs.setBool(true, forKey: PrefsKeys.Shopping2023AdsSeen)
         reportAdEvent(eventName: .trustedDealsImpression, aid: aid)
         stopTimer()
     }
 
     func handleVisibilityChanges(for view: FakespotAdView, in superview: UIView) {
-        guard !hasTimerFired else { return }
+        let areAdsSeen = prefs.boolForKey(PrefsKeys.Shopping2023AdsSeen) ?? false
+        guard !areAdsSeen else { return }
         let halfViewHeight = view.frame.height / 2
         let intersection = superview.bounds.intersection(view.frame)
         let areViewsIntersected = intersection.height >= halfViewHeight && halfViewHeight > 0
@@ -566,6 +567,9 @@ class FakespotViewModel {
     }
 
     private func recordSurfaceAdsImpressionTelemetry() {
+        let areAdsCached = prefs.boolForKey(PrefsKeys.Shopping2023AdsCached) ?? false
+        let areAdsSeen = prefs.boolForKey(PrefsKeys.Shopping2023AdsSeen) ?? false
+        guard !areAdsCached || !areAdsSeen else { return }
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .view,

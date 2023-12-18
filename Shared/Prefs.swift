@@ -134,6 +134,8 @@ public struct PrefsKeys {
     public static let Shopping2023OptIn = "Shopping2023OptInKey"
     public static let Shopping2023OptInSeen = "Shopping2023OptInSeenKey"
     public static let Shopping2023ExplicitOptOut = "Shopping2023ExplicitOptOutKey"
+    public static let Shopping2023AdsCached = "Shopping2023AdsCachedKey"
+    public static let Shopping2023AdsSeen = "Shopping2023AdsSeenKey"
 
     // WallpaperManager Keys - Legacy
     public static let WallpaperManagerCurrentWallpaperObject = "WallpaperManagerCurrentWallpaperObject"

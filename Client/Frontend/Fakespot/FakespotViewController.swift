@@ -169,9 +169,6 @@ class FakespotViewController:
     }
 
     func update(viewModel: FakespotViewModel, triggerFetch: Bool = true) {
-        // Only update the model if the shopping product changed to avoid unnecessary API calls
-        guard self.viewModel.shoppingProduct != viewModel.shoppingProduct else { return }
-
         self.viewModel = viewModel
         listenToStateChange()
 

@@ -48,7 +48,6 @@ class TabLocationView: UIView, FeatureFlaggable {
     private let menuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuBadge, backdropCircleSize: 32)
 
     var url: URL? {
-        willSet { handleShoppingAdsCacheURLChange(newURL: newValue) }
         didSet {
             hideButtons()
             updateTextWithURL()
@@ -327,11 +326,11 @@ class TabLocationView: UIView, FeatureFlaggable {
                                      object: .shoppingProductPageVisits)
     }
 
-    private func handleShoppingAdsCacheURLChange(newURL: URL?) {
-        guard  url?.displayURL != newURL,
-               !shoppingButton.isHidden else { return }
-        Task {
-            await ProductAdsCache.shared.clearCache()
+    private func clearShoppingAdsCacheIfNeeded() {
+        if !shoppingButton.isHidden {
+            Task {
+                await ProductAdsCache.shared.clearCache()
+            }
         }
     }
 
@@ -494,5 +493,6 @@ extension TabLocationView: TabEventHandler {
 
     func tabDidGainFocus(_ tab: Tab) {
         updateBlockerStatus(forTab: tab)
+        clearShoppingAdsCacheIfNeeded()
     }
 }
