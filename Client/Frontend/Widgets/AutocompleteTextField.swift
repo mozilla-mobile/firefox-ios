@@ -87,7 +87,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         autocapitalizationType = .none
         returnKeyType = .go
         clearButtonMode = .whileEditing
-        textAlignment = .left
+        textAlignment = effectiveUserInterfaceLayoutDirection == .leftToRight ? .natural : .right
     }
 
     override var keyCommands: [UIKeyCommand]? {
@@ -264,7 +264,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         label.accessibilityIdentifier = "autocomplete"
         label.backgroundColor = self.backgroundColor
         label.textColor = self.textColor
-        label.textAlignment = .left
+        label.textAlignment = .natural
 
         let enteredTextSize = self.attributedText?.boundingRect(with: self.frame.size, options: NSStringDrawingOptions.usesLineFragmentOrigin, context: nil)
         frame.origin.x = (enteredTextSize?.width.rounded() ?? 0) + textRect(forBounds: bounds).origin.x
