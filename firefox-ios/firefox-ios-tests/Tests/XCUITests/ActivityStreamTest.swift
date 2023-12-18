@@ -233,10 +233,17 @@ class ActivityStreamTest: BaseTestCase {
         }
     }
 
-
-    func testLongTapOnShourtCut() {
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2436086
+    func testLongTapOnTopSiteOptions() {
         waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
-        app.collectionViews.cells.staticTexts["Wikipedia"].press(forDuration: 1)
-
+        app.collectionViews.cells.element(boundBy: 3).press(forDuration: 1)
+        // Verify options given
+        let ContextMenuTable = app.tables["Context Menu"]
+        print(app.debugDescription)
+        mozWaitForElementToExist(ContextMenuTable)
+        mozWaitForElementToExist(ContextMenuTable.cells.otherElements["pinLarge"])
+        mozWaitForElementToExist(ContextMenuTable.cells.otherElements["plusLarge"])
+        mozWaitForElementToExist(ContextMenuTable.cells.otherElements["quick_action_new_private_tab"])
+        mozWaitForElementToExist(ContextMenuTable.cells.otherElements["crossLarge"])
     }
 }
