@@ -25,3 +25,6 @@
 /* Accessibility label for the shopping button in url bar */
 "TabLocation.Shopping.A11y.Label.v120" = "Vérificateur d’avis";
 
+/* Large content title for the button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemoveButton.LargeContentTitle.v122" = "Retirer la page";
+
