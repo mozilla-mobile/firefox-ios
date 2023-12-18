@@ -10,6 +10,7 @@ enum ToastType: Equatable {
     case singleInactiveTabs
     case allInactiveTabs(count: Int)
     case copyURL
+    case addBookmark
 
     var title: String {
         switch self {
@@ -22,6 +23,8 @@ enum ToastType: Equatable {
                 tabsCount)
         case .copyURL:
             return .AppMenu.AppMenuCopyURLConfirmMessage
+        case .addBookmark:
+            return .AppMenu.AddBookmarkConfirmMessage
         }
     }
 
@@ -35,7 +38,7 @@ enum ToastType: Equatable {
         case .singleInactiveTabs: return .undoCloseInactiveTab
         case .allTabs: return .undoCloseAllTabs
         case .allInactiveTabs: return .undoCloseAllInactiveTabs
-        case .copyURL: return nil
+        case .copyURL, .addBookmark: return nil
         }
     }
 }

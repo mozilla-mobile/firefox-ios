@@ -6,6 +6,7 @@ import Common
 import Redux
 import TabDataStore
 import Shared
+import Storage
 
 class TabManagerMiddleware {
     var selectedPanel: TabTrayPanelType = .tabs
@@ -121,7 +122,7 @@ class TabManagerMiddleware {
             self.didLoadTabPeek(tabID: tabID)
 
         case TabPeekAction.addToBookmarks(let tabID):
-            self.addToBookmarks(tabID: tabID)
+            self.addToBookmarks(with: tabID)
 
         case TabPeekAction.sendToDevice(let tabID):
             self.sendToDevice(tabID: tabID)
@@ -297,13 +298,39 @@ class TabManagerMiddleware {
         }
     }
 
-    private func addToBookmarks(tabID: String) {
+    private func addToBookmarks(with tabID: String) {
+        guard let tab = defaultTabManager.getTabForUUID(uuid: tabID),
+              let url = tab.url?.absoluteString, !url.isEmpty
+        else { return }
 
+        var title = (tab.tabState.title ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        if title.isEmpty {
+            title = url
+        }
+        let shareItem = ShareItem(url: url, title: title)
+        // Add new mobile bookmark at the top of the list
+        profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID,
+                                      url: shareItem.url,
+                                      title: shareItem.title,
+                                      position: 0)
+
+        var userData = [QuickActionInfos.tabURLKey: shareItem.url]
+        if let title = shareItem.title {
+            userData[QuickActionInfos.tabTitleKey] = title
+        }
+        QuickActionsImplementation().addDynamicApplicationShortcutItemOfType(.openLastBookmark,
+                                                                             withUserData: userData,
+                                                                             toApplication: .shared)
+
+        store.dispatch(TabPanelAction.showToast(.addBookmark))
+
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .add,
+                                     object: .bookmark,
+                                     value: .tabTray)
     }
 
-    private func sendToDevice(tabID: String) {
-
-    }
+    private func sendToDevice(tabID: String) {}
 
     private func copyURL(tabID: String) {
         UIPasteboard.general.url = defaultTabManager.selectedTab?.canonicalURL
