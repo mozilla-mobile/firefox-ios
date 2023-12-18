@@ -2099,7 +2099,7 @@ extension String {
     public static let LoginsHelperDontSaveButtonTitle = MZLocalizedString(
         key: "LoginsHelper.DontSave.Button.v122",
         tableName: "LoginsHelper",
-        value: "Now Now",
+        value: "Not Now",
         comment: "Button to not save the user's password in the logins helper")
     public static let LoginsHelperUpdateButtonTitle = MZLocalizedString(
         key: "LoginsHelper.Update.Button",
@@ -2109,7 +2109,7 @@ extension String {
     public static let LoginsHelperDontUpdateButtonTitle = MZLocalizedString(
         key: "LoginsHelper.DontUpdate.Button.v122",
         tableName: "LoginsHelper",
-        value: "Now Now",
+        value: "Not Now",
         comment: "Button to not update the user's password in the logins helper")
 }
 
