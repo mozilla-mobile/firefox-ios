@@ -47,6 +47,9 @@ final class NimbusFeatureFlagLayer {
         case .feltPrivacySimplifiedUI:
             return checkFeltPrivacyFeature(for: featureID, from: nimbus)
 
+        case .feltPrivacyFeltDeletion:
+            return checkFeltPrivacyFeature(for: featureID, from: nimbus)
+
         case .fakespotBackInStock:
             return checkProductBackInStockFakespotFeature(from: nimbus)
 
@@ -166,6 +169,7 @@ final class NimbusFeatureFlagLayer {
 
         switch featureID {
         case .feltPrivacySimplifiedUI: return config.simplifiedUiEnabled
+        case .feltPrivacyFeltDeletion: return config.feltDeletionEnabled
         default: return false
         }
     }
