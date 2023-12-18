@@ -12,7 +12,7 @@ private struct BackForwardViewUX {
     static let RowHeight: CGFloat = 50
 }
 
-/// Provides information about the size of various BrowserViewController subviews.
+/// Provides information about the size of various BrowserViewController's subviews.
 protocol BrowserViewControllerFrameInfoProvider: AnyObject {
     func getBottomContainerSize() -> CGSize
 

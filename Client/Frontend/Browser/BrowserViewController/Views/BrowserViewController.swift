@@ -1916,7 +1916,7 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    // MARK: - BrowserViewControllerUpdateDelegate
+    // MARK: - BrowserViewControllerFrameInfoProvider
 
     func getHeaderSize() -> CGSize {
         return header.frame.size
