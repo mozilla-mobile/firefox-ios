@@ -129,7 +129,6 @@
 		2165B2C22860C2F4004C0786 /* AdjustTelemetryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2165B2C12860C2F4004C0786 /* AdjustTelemetryHelper.swift */; };
 		2165B2C42860CB34004C0786 /* MockAdjustTelemetryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2165B2C32860CB34004C0786 /* MockAdjustTelemetryData.swift */; };
 		2165B2CC28748CD7004C0786 /* LibraryPanelDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2165B2CB28748CD7004C0786 /* LibraryPanelDescriptor.swift */; };
-		216A0D712A40D0FB008077BA /* ReduxFlagManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A0D702A40D0FB008077BA /* ReduxFlagManager.swift */; };
 		216A0D762A40E7AB008077BA /* Redux in Frameworks */ = {isa = PBXBuildFile; productRef = 216A0D752A40E7AB008077BA /* Redux */; };
 		216A0D792A40E85A008077BA /* ThemeSettingsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A0D782A40E85A008077BA /* ThemeSettingsState.swift */; };
 		216A0D7B2A40F08B008077BA /* ThemeSettingsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A0D7A2A40F08B008077BA /* ThemeSettingsAction.swift */; };
@@ -2251,7 +2250,6 @@
 		2165B2C12860C2F4004C0786 /* AdjustTelemetryHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustTelemetryHelper.swift; sourceTree = "<group>"; };
 		2165B2C32860CB34004C0786 /* MockAdjustTelemetryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAdjustTelemetryData.swift; sourceTree = "<group>"; };
 		2165B2CB28748CD7004C0786 /* LibraryPanelDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPanelDescriptor.swift; sourceTree = "<group>"; };
-		216A0D702A40D0FB008077BA /* ReduxFlagManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReduxFlagManager.swift; sourceTree = "<group>"; };
 		216A0D782A40E85A008077BA /* ThemeSettingsState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSettingsState.swift; sourceTree = "<group>"; };
 		216A0D7A2A40F08B008077BA /* ThemeSettingsAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSettingsAction.swift; sourceTree = "<group>"; };
 		216C133D29DCA8FF0097533B /* LegacyTabLayoutDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyTabLayoutDelegate.swift; sourceTree = "<group>"; };
@@ -7784,7 +7782,6 @@
 			isa = PBXGroup;
 			children = (
 				216A0D722A40DD34008077BA /* GlobalState */,
-				216A0D702A40D0FB008077BA /* ReduxFlagManager.swift */,
 			);
 			path = Redux;
 			sourceTree = "<group>";
@@ -13618,7 +13615,6 @@
 				AB03032C2AB47AF300DCD8EF /* FakespotOptInCardViewModel.swift in Sources */,
 				1D2F68AB2ACB262900524B92 /* RemoteTabsPanelAction.swift in Sources */,
 				8A5D1CB92A30DBDB005AD35C /* ChinaSyncServiceSetting.swift in Sources */,
-				216A0D712A40D0FB008077BA /* ReduxFlagManager.swift in Sources */,
 				1D8487B42AD0C6C100F7527C /* RemoteTabsPanelMiddleware.swift in Sources */,
 				C849E46526B9C3DD00260F0B /* SlideoverPresentationController.swift in Sources */,
 				E18F44072A951C330056160F /* FakespotHighlightGroup.swift in Sources */,
