@@ -185,7 +185,8 @@ class TabManagerMiddleware {
         for tab in defaultTabManager.getInactiveTabs() {
             let inactiveTab = InactiveTabsModel(tabUUID: tab.tabUUID,
                                                 title: tab.displayTitle,
-                                                url: tab.url)
+                                                url: tab.url,
+                                                favIconURL: tab.faviconURL)
             inactiveTabs.append(inactiveTab)
         }
         return inactiveTabs

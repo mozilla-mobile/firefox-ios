@@ -33,6 +33,14 @@ class TabTests: XCTestCase {
         XCTAssertEqual(newUrl.host, "mozilla.org")
     }
 
+    func testDisplayTitle_ForHomepageURL() {
+        let url = URL(string: "internal://local/about/home")!
+        let tab = Tab(profile: MockProfile(), configuration: WKWebViewConfiguration())
+        tab.url = url
+        let expectedDisplayTitle = String.AppMenu.AppMenuOpenHomePageTitleString
+        XCTAssertEqual(tab.displayTitle, expectedDisplayTitle)
+    }
+
     func testTabDoesntLeak() {
         let tab = Tab(profile: MockProfile(), configuration: WKWebViewConfiguration())
         tab.tabDelegate = tabDelegate
@@ -43,20 +51,20 @@ class TabTests: XCTestCase {
 
 // MARK: - MockLegacyTabDelegate
 class MockLegacyTabDelegate: LegacyTabDelegate {
-    func tab(_ tab: Client.Tab, didAddSnackbar bar: Client.SnackBar) {}
+    func tab(_ tab: Tab, didAddSnackbar bar: SnackBar) {}
 
-    func tab(_ tab: Client.Tab, didRemoveSnackbar bar: Client.SnackBar) {}
+    func tab(_ tab: Tab, didRemoveSnackbar bar: SnackBar) {}
 
-    func tab(_ tab: Client.Tab, didSelectFindInPageForSelection selection: String) {}
+    func tab(_ tab: Tab, didSelectFindInPageForSelection selection: String) {}
 
-    func tab(_ tab: Client.Tab, didSelectSearchWithFirefoxForSelection selection: String) {}
+    func tab(_ tab: Tab, didSelectSearchWithFirefoxForSelection selection: String) {}
 
-    func tab(_ tab: Client.Tab, didCreateWebView webView: WKWebView) {}
+    func tab(_ tab: Tab, didCreateWebView webView: WKWebView) {}
 
-    func tab(_ tab: Client.Tab, willDeleteWebView webView: WKWebView) {}
+    func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {}
 }
 
 // MARK: - MockUrlDidChangeDelegate
 class MockUrlDidChangeDelegate: URLChangeDelegate {
-    func tab(_ tab: Client.Tab, urlDidChangeTo url: URL) {}
+    func tab(_ tab: Tab, urlDidChangeTo url: URL) {}
 }

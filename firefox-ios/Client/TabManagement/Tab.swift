@@ -198,7 +198,7 @@ class Tab: NSObject, ThemeApplicable {
         // If the webView doesn't give a title. check the URL to see if it's our Home URL, with no sessionData on this tab.
         // When picking a display title. Tabs with sessionData are pending a restore so show their old title.
         // To prevent flickering of the display title. If a tab is restoring make sure to use its lastTitle.
-        if let url = self.url, InternalURL(url)?.isAboutHomeURL ?? false, sessionData == nil {
+        if let url = self.url, InternalURL(url)?.isAboutHomeURL ?? false {
             return .AppMenu.AppMenuOpenHomePageTitleString
         }
 
@@ -223,7 +223,7 @@ class Tab: NSObject, ThemeApplicable {
     }
 
     /// Use the display title unless it's an empty string, then use the base domain from the url
-    func getTabTrayTitle() -> String? {
+    func getTabTrayTitle() -> String {
         let baseDomain = sessionData?.urls.last?.baseDomain ?? url?.baseDomain
         var backUpName: String = "" // In case display title is empty
 

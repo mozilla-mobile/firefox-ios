@@ -12,14 +12,15 @@ protocol TabCellDelegate: AnyObject {
     func tabCellDidClose(for tabUUID: String)
 }
 
-/// WIP. Brings over much of the existing functionality from LegacyTabCell but has been
-/// updated to avoid capturing state within the cell itself, instead consuming and returning
-/// read-only state from our Redux app state (and more specifically `TabCellModel`).
 class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     struct UX {
         static let borderWidth: CGFloat = 3.0
+        static let cornerRadius: CGFloat = 6
         static let subviewDefaultPadding: CGFloat = 6.0
         static let faviconYOffset: CGFloat = 10.0
+        static let faviconSize: CGFloat = 20
+        static let closeButtonSize: CGFloat = 32
+        static let textBoxHeight: CGFloat = 32
     }
     // MARK: - Properties
 
@@ -37,8 +38,7 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     // MARK: - UI
 
     private lazy var backgroundHolder: UIView = .build { view in
-        view.layer.cornerRadius =
-        LegacyGridTabViewController.UX.cornerRadius + TabCell.UX.borderWidth
+        view.layer.cornerRadius = UX.cornerRadius + UX.borderWidth
         view.clipsToBounds = true
     }
 
@@ -118,7 +118,6 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
                                  isPrivate: tabModel.isPrivate,
                                  theme: theme)
 
-        faviconBG.isHidden = true
         configureScreenshot(tabModel: tabModel)
 
         if let theme = theme {
@@ -154,6 +153,7 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     }
 
     private func configureScreenshot(tabModel: TabModel) {
+        faviconBG.isHidden = true
         // Regular screenshot for home or internal url when tab has home screenshot
         guard !hasHomeScreenshot(tabModel: tabModel) else {
             let defaultImage = UIImage(named: StandardImageIdentifiers.Large.globe)?
@@ -192,20 +192,18 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
                                           theme: Theme?) {
         guard let theme = theme else { return }
         if selected {
-            layoutMargins = UIEdgeInsets(top: TabCell.UX.borderWidth,
-                                         left: TabCell.UX.borderWidth,
-                                         bottom: TabCell.UX.borderWidth,
-                                         right: TabCell.UX.borderWidth)
+            layoutMargins = UIEdgeInsets(top: UX.borderWidth,
+                                         left: UX.borderWidth,
+                                         bottom: UX.borderWidth,
+                                         right: UX.borderWidth)
             layer.borderColor = (isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent).cgColor
-            layer.borderWidth = TabCell.UX.borderWidth
-            layer.cornerRadius =
-            LegacyGridTabViewController.UX.cornerRadius + TabCell.UX.borderWidth
+            layer.borderWidth = UX.borderWidth
+            layer.cornerRadius = UX.cornerRadius + UX.borderWidth
         } else {
             layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             layer.borderColor = UIColor.clear.cgColor
             layer.borderWidth = 0
-            layer.cornerRadius =
-            LegacyGridTabViewController.UX.cornerRadius + TabCell.UX.borderWidth
+            layer.cornerRadius = UX.cornerRadius + UX.borderWidth
         }
     }
 
@@ -217,7 +215,6 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         screenshotView.image = nil
         backgroundHolder.transform = .identity
         backgroundHolder.alpha = 1
-        self.titleText.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 12, weight: .semibold)
         layer.shadowOffset = .zero
         layer.shadowPath = nil
         layer.shadowOpacity = 0
@@ -227,11 +224,11 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     // MARK: - Auto Layout
 
     private func setupConstraints() {
-        let defaultPadding = TabCell.UX.subviewDefaultPadding
-        let faviconYOffset = TabCell.UX.faviconYOffset
-        let faviconSize = LegacyGridTabViewController.UX.faviconSize
-        let closeButtonSize = LegacyGridTabViewController.UX.closeButtonSize
-        let textBoxHeight = LegacyGridTabViewController.UX.textBoxHeight
+        let defaultPadding = UX.subviewDefaultPadding
+        let faviconYOffset = UX.faviconYOffset
+        let faviconSize = UX.faviconSize
+        let closeButtonSize = UX.closeButtonSize
+        let textBoxHeight = UX.textBoxHeight
         let imageBackgroundSize = TopSiteItemCell.UX.imageBackgroundSize
         let topSiteIconSize = TopSiteItemCell.UX.iconSize
 
