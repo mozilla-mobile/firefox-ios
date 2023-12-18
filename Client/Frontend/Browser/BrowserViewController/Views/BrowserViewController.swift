@@ -22,7 +22,8 @@ class BrowserViewController: UIViewController,
                              LibraryPanelDelegate,
                              RecentlyClosedPanelDelegate,
                              QRCodeViewControllerDelegate,
-                             StoreSubscriber {
+                             StoreSubscriber,
+                             BrowserViewControllerFrameInfoProvider {
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
         static let ActionSheetTitleMaxLength = 120
@@ -1913,6 +1914,20 @@ class BrowserViewController: UIViewController,
         default:
             defaultAction()
         }
+    }
+
+    // MARK: - BrowserViewControllerUpdateDelegate
+
+    func getHeaderSize() -> CGSize {
+        return header.frame.size
+    }
+
+    func getBottomContainerSize() -> CGSize {
+        return bottomContainer.frame.size
+    }
+
+    func getOverKeyoboardContainerSize() -> CGSize {
+        return overKeyboardContainer.frame.size
     }
 }
 
