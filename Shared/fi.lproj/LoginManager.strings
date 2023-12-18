@@ -16,6 +16,12 @@
 /* Label for the button used to delete the current login. */
 "Delete" = "Poista";
 
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Poista";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Poistetaanko salasana?";
+
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "Poista kaikkien valinta";
 
@@ -36,6 +42,9 @@
 
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "Tunnuksia ei löydy";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Salasanoja ei löytynyt";
 
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "Avaa ja täytä";

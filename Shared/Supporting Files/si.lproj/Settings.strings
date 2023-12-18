@@ -1,3 +1,6 @@
+/* Accessibility label for the add button in autofill settings screen. Pressing this button presents a modal that allows users to add a card by entering the credit card information. */
+"CreditCard.Settings.AddCard.AccessibilityLabel.v121" = "පතක් එක් කරන්න";
+
 /* Description label for when there are no credit cards shown in credit card list in autofill settings screen. */
 "CreditCard.Settings.EmptyListDescription.v112" = "ඊළඟ වතාවේ ඉක්මනින් ගෙවීමට ඔබගේ පතෙහි තොරතුරු ආරක්‍ෂිතව සුරකින්න.";
 
@@ -60,4 +63,19 @@
 
 /* This is the title informing the user needs to turn on notifications in iOS Settings. */
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "දැනුම්දීම් සක්‍රිය කරන්න";
+
+/* Accessibility label for default search engine setting. */
+"Settings.Search.Accessibility.DefaultSearchEngine.v121" = "පෙරනිමි සෙවුම් යන්ත්‍රය";
+
+/* Title for the `default search engine` settings section in the Search page in the Settings menu. */
+"Settings.Search.DefaultSearchEngine.Title.v121" = "පෙරනිමි සෙවුම් එළවුම";
+
+/* Navigation title for search page in the Settings menu. */
+"Settings.Search.PageTitle.v121" = "සොයන්න";
+
+/* Title for quick-search engines settings section in the Search page in the Settings menu. */
+"Settings.Search.QuickEnginesTitle.v121" = "ඉක්මන් සෙවුම් යන්ත්‍ර";
+
+/* Label for the `show search suggestions` setting, in the Search Settings page. */
+"Settings.Search.ShowSuggestions.v121" = "සෙවුම් යෝජනා පෙන්වන්න";
 

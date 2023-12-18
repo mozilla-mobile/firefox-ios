@@ -88,6 +88,9 @@
 /* Description for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This description is used for info card where the user can report if it's back in stock. */
 "Shopping.InfoCard.ProductNotInStock.Description.v121" = "Om du ser at dette produktet er tilbake på lager, rapporter det, så jobbar vi med å kontrollere vurderingane.";
 
+/* Title for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This title is used for info card where the user can report if it's back in stock. */
+"Shopping.InfoCard.ProductNotInStock.Title.v121" = "Produktet er ikkje tilgjengeleg";
+
 /* Description for info card when the product is in analysis mode */
 "Shopping.InfoCard.ProgressAnalysis.Description.v120" = "Dette vil ta omlag 60 sekund.";
 

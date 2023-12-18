@@ -1,6 +1,9 @@
 /* Title label for the view where user can add their credit card info */
 "CreditCard.EditCard.AddCreditCardTitle.v113" = "Thêm thẻ tín dụng";
 
+/* Title label for the view where user can add their credit card info */
+"CreditCard.EditCard.AddCreditCardTitle.v122" = "Thêm thẻ";
+
 /* Button label for cancelling editing of the credit card details shown in the form */
 "CreditCard.EditCard.CancelNavBarButtonLabel.v113" = "Hủy bỏ";
 
@@ -45,6 +48,9 @@
 
 /* Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages. */
 "CreditCard.EditCard.ToggleToAllowAutofillTitle.v112" = "Lưu và tự động điền thẻ tín dụng";
+
+/* Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages. */
+"CreditCard.EditCard.ToggleToAllowAutofillTitle.v122" = "Lưu và điền phương thức thanh toán";
 
 /* Title label for the view where user can view their credit card info */
 "CreditCard.EditCard.ViewCreditCardTitle.v116" = "Xem thẻ";

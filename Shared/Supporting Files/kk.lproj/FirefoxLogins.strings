@@ -1,0 +1,18 @@
+/* Prompt for saving the username in the Save Logins prompt. */
+"LoginsHelper.PromptSaveLogin.Title.v122" = "Пайдаланушы атын сақтау керек пе?";
+
+/* Prompt for saving a password in the Save Logins prompt. */
+"LoginsHelper.PromptSavePassword.Title.v122" = "Парольді сақтау керек пе?";
+
+/* Prompt for updating the password in the Update Password prompt. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg.v122" = "Парольді жаңарту керек пе?";
+
+/* Prompt for updating a password in the Update Password prompt. */
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg.v122" = "Парольді жаңарту керек пе?";
+
+/* Placeholder text for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder.v122" = "Парольдерді іздеу";
+
+/* Title for the list of logins saved by the app */
+"LoginsList.Title.v122" = "САҚТАЛҒАН ПАРОЛЬДЕР";
+

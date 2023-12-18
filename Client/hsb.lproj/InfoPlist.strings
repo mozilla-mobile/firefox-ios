@@ -8,7 +8,7 @@
 "NSCameraUsageDescription" = "Firefox wašu kameru wužiwa, zo by QR-kody skenował a fota činił a wideja natočił.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox Face ID trjeba, zo by přistup k wašim składowanym přizjewjenjam a zaklučowanym kartam měł.";
+"NSFaceIDUsageDescription" = "Firefox Face ID trjeba, zo by přistup k wašim składowanym hesłam a płaćenskim metodam měł.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Websydła, kotrež wopytujeće, snano waše stejnišćo žadaja.";
