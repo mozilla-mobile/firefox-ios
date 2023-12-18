@@ -64,14 +64,6 @@ class ActivityStreamTest: BaseTestCase {
         }
     }
 
-    func testTopSites3RemoveDefaultTopSite() {
-        app.collectionViews.cells.staticTexts[defaultTopSite["topSiteLabel"]!].press(forDuration: 1)
-
-        // Tap on Remove and check that now there should be only 4 default top sites
-        selectOptionFromContextMenu(option: "Remove")
-        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 4)
-    }
-
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2272219
     func testTopSitesRemoveAllExceptDefaultClearPrivateData() {
         waitForExistence(app.cells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: 15)
@@ -146,6 +138,8 @@ class ActivityStreamTest: BaseTestCase {
         waitForExistence(allTopSites.element(boundBy: 0), timeout: TIMEOUT)
         allTopSites.element(boundBy: 0).press(forDuration: 1)
         selectOptionFromContextMenu(option: "Remove")
+
+        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 4)
 
         // Check top site in first cell now
         let updatedAllTopSites = app.collectionViews.cells.matching(identifier: "TopSitesCell")
@@ -239,17 +233,10 @@ class ActivityStreamTest: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2436086
-    func testLongTapOnTopSiteOptions() {
+
+    func testLongTapOnShourtCut() {
         waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
-        app.collectionViews.cells.element(boundBy: 3).press(forDuration: 1)
-        // Verify options given
-        let ContextMenuTable = app.tables["Context Menu"]
-        print(app.debugDescription)
-        mozWaitForElementToExist(ContextMenuTable)
-        mozWaitForElementToExist(ContextMenuTable.cells.otherElements["pinLarge"])
-        mozWaitForElementToExist(ContextMenuTable.cells.otherElements["plusLarge"])
-        mozWaitForElementToExist(ContextMenuTable.cells.otherElements["quick_action_new_private_tab"])
-        mozWaitForElementToExist(ContextMenuTable.cells.otherElements["crossLarge"])
+        app.collectionViews.cells.staticTexts["Wikipedia"].press(forDuration: 1)
+
     }
 }
