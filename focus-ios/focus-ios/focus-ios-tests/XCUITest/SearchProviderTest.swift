@@ -23,8 +23,17 @@ class SearchProviderTest: BaseTestCase {
 
     func testSearchQuery() {
         searchQuery("test", provider: "Google")
+        dismissKeyboardFocusMenuSettings()
         searchQuery("test", provider: "Amazon.com")
+        dismissKeyboardFocusMenuSettings()
         searchQuery("test", provider: "DuckDuckGo")
+    }
+
+    private func dismissKeyboardFocusMenuSettings() {
+        if !app.buttons["HomeView.settingsButton"].isHittable
+        {
+            dismissURLBarFocused()
+        }
     }
 
     func searchProviderTestHelper(provider:String) {
