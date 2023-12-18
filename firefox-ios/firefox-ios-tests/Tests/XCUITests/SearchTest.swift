@@ -9,9 +9,9 @@ private let SuggestedSite: String = "foobar meaning"
 private let SuggestedSite2: String = "foobar google"
 private let SuggestedSite3: String = "foobar2000"
 
-private let SuggestedSite4: String = "foo bar baz"
-private let SuggestedSite5: String = "foo bar baz qux"
-private let SuggestedSite6: String = "foobar bit perfect"
+private let SuggestedSite4: String = "foobar buffer length"
+private let SuggestedSite5: String = "foobar burn cd"
+private let SuggestedSite6: String = "foobar bomb baby"
 
 class SearchTests: BaseTestCase {
     private func typeOnSearchBar(text: String) {
@@ -40,6 +40,7 @@ class SearchTests: BaseTestCase {
         XCTAssertTrue(elementQuery.element.exists)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2436093
     func testPromptPresence() {
         // Suggestion is on by default (starting on Oct 24th 2017), so the prompt should not appear
         navigator.goto(URLBarOpen)
@@ -91,6 +92,7 @@ class SearchTests: BaseTestCase {
         XCTAssertTrue(app.tables["SiteTable"].cells.firstMatch.exists)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2436094
     func testDoNotShowSuggestionsWhenEnteringURL() {
         // According to bug 1192155 if a string contains /, do not show suggestions, if there a space an a string,
         // the suggestions are shown again
@@ -120,6 +122,7 @@ class SearchTests: BaseTestCase {
         }
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2436095
     func testCopyPasteComplete() throws {
         // Copy, Paste and Go to url
         navigator.goto(URLBarOpen)
@@ -170,11 +173,11 @@ class SearchTests: BaseTestCase {
         tablesQuery2.staticTexts[searchEngine].tap()
 
         navigator.openURL("foo bar")
-        // Workaroud needed after xcode 11.3 update Issue 5937
-        // mozWaitForElementToExist(app.webViews.firstMatch, timeout: 3)
+        mozWaitForElementToExist(app.webViews.firstMatch, timeout: 3)
         mozWaitForValueContains(app.textFields["url"], value: searchEngine.lowercased())
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306940
     // Smoketest
     func testSearchEngine() {
         navigator.nowAt(NewTabScreen)
@@ -184,16 +187,17 @@ class SearchTests: BaseTestCase {
         changeSearchEngine(searchEngine: "Google")
         changeSearchEngine(searchEngine: "eBay")
         changeSearchEngine(searchEngine: "Wikipedia")
-        // Last check failing intermittently, temporary disabled
-        // changeSearchEngine(searchEngine: "Amazon.com")
+        changeSearchEngine(searchEngine: "Amazon.com")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2353246
     func testDefaultSearchEngine() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SearchSettings)
         XCTAssert(app.tables.staticTexts["Google"].exists)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2436091
     func testSearchWithFirefoxOption() {
         navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
@@ -216,7 +220,9 @@ class SearchTests: BaseTestCase {
         let numTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual("2", numTab)
     }
-    // Bug https://bugzilla.mozilla.org/show_bug.cgi?id=1541832 scenario 4
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2436092
+    // Smoketest
     func testSearchStartAfterTypingTwoWords() {
         navigator.goto(URLBarOpen)
         mozWaitForElementToExist(app.textFields["url"], timeout: 10)
@@ -226,6 +232,7 @@ class SearchTests: BaseTestCase {
         mozWaitForValueContains(app.textFields["url"], value: "google")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306943
     func testSearchIconOnAboutHome() throws {
         if iPad() {
             throw XCTSkip("iPad does not have search icon")
@@ -282,12 +289,12 @@ class SearchTests: BaseTestCase {
         waitForTabsButton()
         validateSearchSuggestionText(typeText: "localhost")
     }
-// TODO: Add UI Tests back when felt privay simplified UI feature flag is enabled or when we support feature flags for tests
+//  TODO: Add UI Tests back when felt privay simplified UI feature flag is enabled or when we support feature flags for tests
 //    func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOn() {
 //        navigator.nowAt(NewTabScreen)
 //        navigator.goto(SearchSettings)
 //        navigator.nowAt(SearchSettings)
-//
+//        
 //        // By default, disable search suggest in private mode
 //        let privateModeSearchSuggestSwitch = app.otherElements.tables.cells[AccessibilityIdentifiers.Settings.Search.disableSearchSuggestsInPrivateMode]
 //        mozWaitForElementToExist(privateModeSearchSuggestSwitch)
