@@ -415,24 +415,20 @@ class BookmarkDetailPanel: SiteTableViewController {
 
         switch indexPath.row {
         case BookmarkDetailFieldsRow.title.rawValue:
-            if let bookmarkTitle = bookmarkItemOrFolderTitle {
                 cell.configureCell(
                     title: .BookmarkDetailFieldTitle,
-                    textFieldText: bookmarkTitle,
+                    textFieldText: bookmarkItemOrFolderTitle ?? "",
                     autocapitalizationType: .sentences,
                     keyboardType: .default
                 )
-            }
             return cell
         case BookmarkDetailFieldsRow.url.rawValue:
-            if let bookmarkURL = bookmarkItemURL {
                 cell.configureCell(
                     title: .BookmarkDetailFieldURL,
-                    textFieldText: bookmarkURL,
+                    textFieldText: bookmarkItemURL ?? "",
                     autocapitalizationType: .none,
                     keyboardType: .URL
                 )
-            }
             return cell
         default:
             return super.tableView(tableView, cellForRowAt: indexPath) // Should not happen.
