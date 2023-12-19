@@ -6,69 +6,71 @@ import Common
 import UIKit
 import Shared
 
-struct TextFieldTableViewCellUX {
-    static let HorizontalMargin: CGFloat = 16
-    static let VerticalMargin: CGFloat = 10
-    static let TitleLabelFont = UIFont.systemFont(ofSize: 12)
-    static let TextFieldFont = UIFont.systemFont(ofSize: 16)
-}
-
 protocol TextFieldTableViewCellDelegate: AnyObject {
     func textFieldTableViewCell(_ textFieldTableViewCell: TextFieldTableViewCell, didChangeText text: String)
 }
 
 class TextFieldTableViewCell: UITableViewCell, ThemeApplicable {
-    let titleLabel: UILabel
-    let textField: UITextField
+    private struct UX {
+        static let HorizontalMargin: CGFloat = 16
+        static let VerticalMargin: CGFloat = 10
+        static let TitleLabelFont = UIFont.systemFont(ofSize: 12)
+        static let TextFieldFont = UIFont.systemFont(ofSize: 16)
+    }
+
+    private lazy var titleLabel: UILabel = .build()
+    private lazy var textField: UITextField = .build()
 
     weak var delegate: TextFieldTableViewCellDelegate?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        self.titleLabel = UILabel(frame: .zero)
-        self.textField = UITextField(frame: .zero)
-
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        self.contentView.addSubview(self.titleLabel)
-        self.contentView.addSubview(self.textField)
-        self.textField.addTarget(self, action: #selector(onTextFieldDidChangeText), for: .editingChanged)
+        contentView.addSubviews(titleLabel, textField)
+        textField.addTarget(self, action: #selector(onTextFieldDidChangeText), for: .editingChanged)
         self.selectionStyle = .none
         self.separatorInset = .zero
+
+        setupLayout()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    private func setupLayout() {
+        titleLabel.font = UX.TitleLabelFont
+        textField.font = UX.TextFieldFont
 
-        titleLabel.font = TextFieldTableViewCellUX.TitleLabelFont
-        titleLabel.snp.remakeConstraints { make in
-            guard titleLabel.superview != nil else { return }
+        NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: UX.VerticalMargin),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.HorizontalMargin),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.HorizontalMargin),
 
-            make.leading.equalTo(TextFieldTableViewCellUX.HorizontalMargin)
-            make.trailing.equalTo(-TextFieldTableViewCellUX.HorizontalMargin)
-            make.top.equalTo(TextFieldTableViewCellUX.VerticalMargin)
-        }
-
-        textField.font = TextFieldTableViewCellUX.TextFieldFont
-        textField.snp.remakeConstraints { make in
-            guard textField.superview != nil else { return }
-
-            make.leading.equalTo(TextFieldTableViewCellUX.HorizontalMargin)
-            make.trailing.equalTo(-TextFieldTableViewCellUX.HorizontalMargin)
-            make.bottom.equalTo(-TextFieldTableViewCellUX.VerticalMargin)
-        }
+            textField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.HorizontalMargin),
+            textField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.HorizontalMargin),
+            textField.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -UX.VerticalMargin)
+        ])
     }
 
-    // MARK: ThemeApplicable
+    func configureCell(title: String, textFieldText: String, autocapitalizationType: UITextAutocapitalizationType, keyboardType: UIKeyboardType) {
+        titleLabel.text = title
+        textField.text = textFieldText
+        textField.autocapitalizationType = autocapitalizationType
+        textField.keyboardType = keyboardType
+    }
 
+    func focusTextField() {
+        textField.becomeFirstResponder()
+    }
+
+    // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
-        backgroundColor = theme.colors.layer5
-        titleLabel.textColor = theme.colors.textAccent
-        textField.textColor = theme.colors.textPrimary
-        textField.tintColor = theme.colors.actionPrimary
+        let colors = theme.colors
+        backgroundColor = colors.layer5
+        titleLabel.textColor = colors.textAccent
+        textField.textColor = colors.textPrimary
+        textField.tintColor = colors.actionPrimary
     }
 
     @objc

@@ -144,7 +144,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
                                                             weight: .semibold)
         label.numberOfLines = 0
     }
-    private lazy var productLinkButton: LinkButton = .build { button in
+    private lazy var productLinkButton: FakespotAdLinkButton = .build { button in
         button.addTarget(self, action: #selector(self.didTapProductLink), for: .touchUpInside)
     }
 

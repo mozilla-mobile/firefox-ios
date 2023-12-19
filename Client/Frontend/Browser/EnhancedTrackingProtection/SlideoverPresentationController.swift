@@ -5,8 +5,6 @@
 import UIKit
 
 struct SlideOverUXConstants {
-    static let ETPMenuHeightForGlobalOn: CGFloat = 385
-    static let ETPMenuHeightForGlobalOff: CGFloat = 285
     static let ETPMenuCornerRadius: CGFloat = 8
 }
 
@@ -29,21 +27,18 @@ class SlideOverPresentationController: UIPresentationController {
     }
 
     override var frameOfPresentedViewInContainerView: CGRect {
-        var menuHeight: CGFloat
-        if globalETPStatus {
-            menuHeight = SlideOverUXConstants.ETPMenuHeightForGlobalOn
-        } else {
-            menuHeight = SlideOverUXConstants.ETPMenuHeightForGlobalOff
-        }
+        guard let presentedView = presentedView, let containerView = self.containerView else { return .zero }
 
-        let yPosition = self.containerView!.frame.height - menuHeight
+        let menuHeight = presentedView.systemLayoutSizeFitting(CGSize(width: presentedView.bounds.width, height: UIView.layoutFittingCompressedSize.height), withHorizontalFittingPriority: .required, verticalFittingPriority: .defaultLow).height
+
+        let yPosition = containerView.frame.height - menuHeight
         var xPosition: CGFloat = 0
         var width: CGFloat = 0
         if UIWindow.isLandscape {
             width = 600
-            xPosition = self.containerView!.frame.width/2 - (width/2)
+            xPosition = containerView.frame.width/2 - (width/2)
         } else {
-            width = self.containerView!.frame.width
+            width = containerView.frame.width
         }
         return CGRect(origin: CGPoint(x: xPosition, y: yPosition),
                       size: CGSize(width: width, height: menuHeight))
@@ -79,5 +74,10 @@ class SlideOverPresentationController: UIPresentationController {
     @objc
     func dismissController() {
         enhancedTrackingProtectionMenuDelegate?.didFinish()
+    }
+
+    override func preferredContentSizeDidChange(forChildContentContainer container: UIContentContainer) {
+        super.preferredContentSizeDidChange(forChildContentContainer: container)
+        presentedView?.frame = frameOfPresentedViewInContainerView
     }
 }

@@ -22,7 +22,8 @@ class BrowserViewController: UIViewController,
                              LibraryPanelDelegate,
                              RecentlyClosedPanelDelegate,
                              QRCodeViewControllerDelegate,
-                             StoreSubscriber {
+                             StoreSubscriber,
+                             BrowserFrameInfoProvider {
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
         static let ActionSheetTitleMaxLength = 120
@@ -627,7 +628,6 @@ class BrowserViewController: UIViewController,
 
     func addSubviews() {
         webViewContainerBackdrop = UIView()
-        webViewContainerBackdrop.backgroundColor = UIColor.Photon.Ink90
         webViewContainerBackdrop.alpha = 0
         view.addSubview(webViewContainerBackdrop)
         view.addSubview(contentStackView)
@@ -1657,7 +1657,7 @@ class BrowserViewController: UIViewController,
             store.dispatch(FakespotAction.setAppearanceTo(false))
             return
         }
-
+        store.dispatch(FakespotAction.tabDidChange(tabUIDD: tab.tabUUID))
         let environment = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI) ? FakespotEnvironment.staging : .prod
         let product = ShoppingProduct(url: url, client: FakespotClient(environment: environment))
 
@@ -1833,6 +1833,7 @@ class BrowserViewController: UIViewController,
         let currentTheme = themeManager.currentTheme
         statusBarOverlay.hasTopTabs = shouldShowTopTabsForTraitCollection(traitCollection)
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
+        webViewContainerBackdrop.backgroundColor = currentTheme.colors.layer3
         setNeedsStatusBarAppearanceUpdate()
 
         // Update the `background-color` of any blank webviews.
@@ -1916,6 +1917,20 @@ class BrowserViewController: UIViewController,
         default:
             defaultAction()
         }
+    }
+
+    // MARK: - BrowserFrameInfoProvider
+
+    func getHeaderSize() -> CGSize {
+        return header.frame.size
+    }
+
+    func getBottomContainerSize() -> CGSize {
+        return bottomContainer.frame.size
+    }
+
+    func getOverKeyboardContainerSize() -> CGSize {
+        return overKeyboardContainer.frame.size
     }
 }
 

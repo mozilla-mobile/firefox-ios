@@ -831,12 +831,13 @@ export const FormAutofillHeuristics = {
       }
 
       // At least two options match the country name, otherwise some state name might
-      // also match a country name, ex, Georgia
+      // also match a country name, ex, Georgia. We check the last two
+      // options rather than the first, as selects often start with a non-country display option.
       const countryDisplayNames = Array.from(FormAutofill.countries.values());
       if (
         options.length >= 2 &&
         options
-          .slice(0, 2)
+          .slice(-2)
           .every(
             option =>
               countryDisplayNames.includes(option.value) ||
