@@ -13,12 +13,12 @@ private struct BackForwardViewUX {
 }
 
 /// Provides information about the size of various BrowserViewController's subviews.
-protocol BrowserViewControllerFrameInfoProvider: AnyObject {
+protocol BrowserFrameInfoProvider: AnyObject {
     func getBottomContainerSize() -> CGSize
 
     func getHeaderSize() -> CGSize
 
-    func getOverKeyoboardContainerSize() -> CGSize
+    func getOverKeyboardContainerSize() -> CGSize
 }
 
 class BackForwardListViewController: UIViewController,
@@ -54,7 +54,7 @@ class BackForwardListViewController: UIViewController,
     lazy var shadow: UIView = .build { _ in }
 
     var tabManager: TabManager!
-    weak var browserViewControllerFrameInfoProvider: BrowserViewControllerFrameInfoProvider?
+    weak var browserFrameInfoProvider: BrowserFrameInfoProvider?
     var currentItem: WKBackForwardListItem?
     var listData = [WKBackForwardListItem]()
 
@@ -172,7 +172,6 @@ class BackForwardListViewController: UIViewController,
 
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransition(to: newCollection, with: coordinator)
-        guard let _ = browserViewControllerFrameInfoProvider else { return }
         if shouldShowToolbarForTraitCollection(newCollection) != snappedToBottom, !isBottomSearchBar {
             if snappedToBottom {
                 tableViewBottomAnchor.constant = 0
@@ -196,14 +195,14 @@ class BackForwardListViewController: UIViewController,
     }
 
     func remakeVerticalConstraints() {
-        guard let browserFrameInfo = browserViewControllerFrameInfoProvider else { return }
+        guard let browserFrameInfo = browserFrameInfoProvider else { return }
         for constraint in self.verticalConstraints {
             constraint.isActive = false
         }
         self.verticalConstraints = []
         if snappedToBottom {
-            let keyboardContainerHeight = browserFrameInfo.getOverKeyoboardContainerSize().height // bvc.overKeyboardContainer.frame.height
-            let toolbarContainerheight = browserFrameInfo.getBottomContainerSize().height // bvc.bottomContainer.frame.height
+            let keyboardContainerHeight = browserFrameInfo.getOverKeyboardContainerSize().height
+            let toolbarContainerheight = browserFrameInfo.getBottomContainerSize().height
             let offset = keyboardContainerHeight + toolbarContainerheight
             tableViewBottomAnchor = tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -offset)
             let constraints: [NSLayoutConstraint] = [
@@ -215,7 +214,7 @@ class BackForwardListViewController: UIViewController,
             verticalConstraints += constraints
         } else {
             let statusBarHeight = UIWindow.keyWindow?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
-            tableViewTopAnchor = tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: browserFrameInfo.getHeaderSize().height + statusBarHeight) // bvc.header.frame.height + statusBarHeight)
+            tableViewTopAnchor = tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: browserFrameInfo.getHeaderSize().height + statusBarHeight)
             let constraints: [NSLayoutConstraint] = [
                 tableViewTopAnchor,
                 shadow.topAnchor.constraint(equalTo: tableView.bottomAnchor),
