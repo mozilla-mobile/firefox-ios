@@ -5,23 +5,10 @@
 import Common
 import UIKit
 
-public class LinkButton: UIButton, ThemeApplicable {
-    private var numberOfLines = 0
-    private var previousFrame: CGRect = .zero
+open class LinkButton: UIButton, ThemeApplicable {
     private var foregroundColorNormal: UIColor = .clear
     private var foregroundColorHighlighted: UIColor = .clear
     private var backgroundColorNormal: UIColor = .clear
-
-    override public var frame: CGRect {
-        didSet {
-            // invalidate intrinsic content size so that we calculate it correctly
-            // when not the full button text should be shown
-            guard previousFrame != frame, numberOfLines > 0 else { return }
-
-            previousFrame = frame
-            invalidateIntrinsicContentSize()
-        }
-    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -29,7 +16,7 @@ public class LinkButton: UIButton, ThemeApplicable {
         configuration = UIButton.Configuration.plain()
     }
 
-    public func configure(viewModel: LinkButtonViewModel) {
+    open func configure(viewModel: LinkButtonViewModel) {
         guard let config = configuration else {
             return
         }
@@ -47,16 +34,11 @@ public class LinkButton: UIButton, ThemeApplicable {
         accessibilityIdentifier = viewModel.a11yIdentifier
         contentHorizontalAlignment = viewModel.contentHorizontalAlignment
 
-        if viewModel.numberOfLines > 0 {
-            updatedConfiguration.titleLineBreakMode = .byTruncatingTail
-            self.numberOfLines = viewModel.numberOfLines
-        }
-
         configuration = updatedConfiguration
         layoutIfNeeded()
     }
 
-    required init?(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -74,36 +56,6 @@ public class LinkButton: UIButton, ThemeApplicable {
 
         updatedConfiguration.background.backgroundColor = backgroundColorNormal
         configuration = updatedConfiguration
-    }
-
-    override public func layoutSubviews() {
-        super.layoutSubviews()
-
-        guard let titleLabel, numberOfLines > 0 else { return }
-
-        // hack to be able to restrict the number of lines displayed
-        titleLabel.numberOfLines = numberOfLines
-        sizeToFit()
-    }
-
-    override public var intrinsicContentSize: CGSize {
-        // will only be calculated when the number of lines displayed is restricted
-        // without autolayout is not working correctly
-        guard let title = titleLabel,
-              let configuration,
-              numberOfLines > 0
-        else {
-            return super.intrinsicContentSize
-        }
-
-        let widthContentInset = configuration.contentInsets.leading + configuration.contentInsets.trailing
-        let heightContentInset = configuration.contentInsets.top + configuration.contentInsets.bottom
-
-        let availableWidth = frame.width - widthContentInset
-        let size = title.sizeThatFits(CGSize(width: availableWidth, height: .greatestFiniteMagnitude))
-
-        return CGSize(width: size.width + widthContentInset,
-                      height: size.height + heightContentInset)
     }
 
     // MARK: ThemeApplicable
