@@ -7,4 +7,6 @@ import Foundation
 /// The specific information related to the WK session and view
 struct WKEngineInfo {
     static var webserverPort = 6571
+
+    static let apostropheEncoded = "%27"
 }

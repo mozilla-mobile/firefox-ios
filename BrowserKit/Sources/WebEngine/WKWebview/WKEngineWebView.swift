@@ -18,6 +18,7 @@ protocol WKEngineWebView {
     var allowsBackForwardNavigationGestures: Bool { get set }
     var allowsLinkPreview: Bool { get set }
     var backgroundColor: UIColor? { get set }
+    var url: URL? { get }
 
     @available(iOS 16.4, *)
     var isInspectable: Bool { get set }
@@ -30,6 +31,12 @@ protocol WKEngineWebView {
     @discardableResult
     func loadFileURL(_ URL: URL,
                      allowingReadAccessTo readAccessURL: URL) -> WKNavigation?
+
+    @discardableResult
+    func reload() -> WKNavigation?
+
+    @discardableResult
+    func reloadFromOrigin() -> WKNavigation?
 
     func stopLoading()
 
@@ -87,6 +94,12 @@ extension WKEngineWebView {
                 completion(nil, error)
             }
         }
+    }
+
+    /// Use JS to redirect the page without adding a history entry
+    func replaceLocation(with url: URL) {
+        let safeUrl = url.absoluteString.replacingOccurrences(of: "'", with: WKEngineInfo.apostropheEncoded)
+        evaluateJavascriptInDefaultContentWorld("location.replace('\(safeUrl)')")
     }
 }
 

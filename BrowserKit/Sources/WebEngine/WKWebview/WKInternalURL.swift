@@ -81,4 +81,23 @@ final class WKInternalURL: InternalURL {
         let query = url.getQuery()
         return query[WKInternalURL.Param.uuidkey.rawValue] == WKInternalURL.uuid
     }
+
+    var originalURLFromErrorPage: URL? {
+        if let urlParam = extractedUrlParam, let nested = WKInternalURL(urlParam), nested.isErrorPage {
+            return nested.extractedUrlParam
+        }
+        return nil
+    }
+
+    private var extractedUrlParam: URL? {
+        if let nestedUrl = url.getQuery()[WKInternalURL.Param.url.rawValue]?.removingPercentEncoding {
+            return URL(string: nestedUrl, invalidCharacters: false)
+        }
+        return nil
+    }
+
+    private var isErrorPage: Bool {
+        let path = extractedUrlParam?.path
+        return WKInternalURL.Path.errorpage.matches(path ?? "")
+    }
 }
