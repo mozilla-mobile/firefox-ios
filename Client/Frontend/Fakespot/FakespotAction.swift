@@ -6,7 +6,9 @@ import Common
 import Redux
 
 enum FakespotAction: Action {
-    // UI trigger actions
+    case settingsStateDidChange
+    case reviewQualityDidChange
+    case tabDidChange(tabUIDD: String)
     case pressedShoppingButton
     case show
     case dismiss

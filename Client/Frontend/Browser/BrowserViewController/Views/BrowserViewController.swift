@@ -1657,7 +1657,7 @@ class BrowserViewController: UIViewController,
             store.dispatch(FakespotAction.setAppearanceTo(false))
             return
         }
-
+        store.dispatch(FakespotAction.tabDidChange(tabUIDD: tab.tabUUID))
         let environment = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI) ? FakespotEnvironment.staging : .prod
         let product = ShoppingProduct(url: url, client: FakespotClient(environment: environment))
 

@@ -325,11 +325,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
             SentryIDSetting(settings: self, settingsDelegate: self),
             FasterInactiveTabs(settings: self, settingsDelegate: self),
             OpenFiftyTabsDebugOption(settings: self, settingsDelegate: self),
+            FirefoxSuggestSettings(settings: self, settingsDelegate: self),
         ]
-
-        if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildOnly) {
-            hiddenDebugOptions.append(FirefoxSuggestSettings(settings: self, settingsDelegate: self))
-        }
 
         return [SettingSection(title: NSAttributedString(string: "Debug"), children: hiddenDebugOptions)]
     }

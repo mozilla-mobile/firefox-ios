@@ -51,9 +51,9 @@ class WKEngineSession: EngineSession {
         guard let url = URL(string: url) else { return }
         let request = URLRequest(url: url)
 
-        // TODO: FXIOS-7980 Review loadFileURL usage with isPrivileged
-        if let url = request.url, url.isFileURL, request.isPrivileged {
-            webView.loadFileURL(url, allowingReadAccessTo: url)
+        if let url = request.url, url.isFileURL {
+            webView.loadFileURL(url, allowingReadAccessTo: url.deletingLastPathComponent())
+            return
         }
         webView.load(request)
     }
