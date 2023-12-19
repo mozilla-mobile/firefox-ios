@@ -136,8 +136,10 @@ enum Experiments {
 
         let isPhone = UIDevice.current.userInterfaceIdiom == .phone
 
-        let prefs = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
-        let isReviewCheckerEnabled = prefs.bool(forKey: "profile." + PrefsKeys.Shopping2023OptIn)
+        var isReviewCheckerEnabled = false
+        if let prefs = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier) {
+            isReviewCheckerEnabled = prefs.bool(forKey: "profile." + PrefsKeys.Shopping2023OptIn)
+        }
 
         let customTargetingAttributes: [String: Any] =  [
             "isFirstRun": "\(isFirstRun)",
