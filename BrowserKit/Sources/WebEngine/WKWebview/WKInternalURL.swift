@@ -21,7 +21,11 @@ final class WKInternalURL: InternalURL {
     enum Path: String {
         case errorpage
         func matches(_ string: String) -> Bool {
-            return string.range(of: "/?\(self.rawValue)", options: .regularExpression, range: nil, locale: nil) != nil
+            print("Laurie - \(self.rawValue)")
+            return string.range(of: "/?\(self.rawValue)",
+                                options: .regularExpression,
+                                range: nil,
+                                locale: nil) != nil
         }
     }
 
@@ -83,7 +87,9 @@ final class WKInternalURL: InternalURL {
     }
 
     var originalURLFromErrorPage: URL? {
-        if let urlParam = extractedUrlParam, let nested = WKInternalURL(urlParam), nested.isErrorPage {
+        if let urlParam = extractedUrlParam,
+           let nested = WKInternalURL(urlParam),
+           nested.isErrorPage {
             return nested.extractedUrlParam
         }
         return nil
@@ -97,7 +103,6 @@ final class WKInternalURL: InternalURL {
     }
 
     private var isErrorPage: Bool {
-        let path = extractedUrlParam?.path
-        return WKInternalURL.Path.errorpage.matches(path ?? "")
+        return WKInternalURL.Path.errorpage.matches(url.path)
     }
 }

@@ -33,9 +33,6 @@ protocol WKEngineWebView {
                      allowingReadAccessTo readAccessURL: URL) -> WKNavigation?
 
     @discardableResult
-    func reload() -> WKNavigation?
-
-    @discardableResult
     func reloadFromOrigin() -> WKNavigation?
 
     func stopLoading()
@@ -53,6 +50,12 @@ protocol WKEngineWebView {
 
     func removeAllUserScripts()
     func removeFromSuperview()
+
+    // MARK: Custom WKEngineView functions
+
+    /// Use JS to redirect the page without adding a history entry
+    /// - Parameter url: The URL to replace the location with
+    func replaceLocation(with url: URL)
 }
 
 extension WKEngineWebView {
@@ -96,7 +99,6 @@ extension WKEngineWebView {
         }
     }
 
-    /// Use JS to redirect the page without adding a history entry
     func replaceLocation(with url: URL) {
         let safeUrl = url.absoluteString.replacingOccurrences(of: "'", with: WKEngineInfo.apostropheEncoded)
         evaluateJavascriptInDefaultContentWorld("location.replace('\(safeUrl)')")

@@ -49,7 +49,7 @@ final class WKEngineSessionTests: XCTestCase {
         subject?.load(url: url)
 
         XCTAssertEqual(webViewProvider.webView.loadCalled, 1)
-        XCTAssertEqual(webViewProvider.webView.loadRequest?.url?.absoluteString, "https://example.com")
+        XCTAssertEqual(webViewProvider.webView.url?.absoluteString, url)
     }
 
     func testLoadURLGivenReaderModeURLThenLoad() {
@@ -103,6 +103,29 @@ final class WKEngineSessionTests: XCTestCase {
         subject?.goForward()
 
         XCTAssertEqual(webViewProvider.webView.goForwardCalled, 1)
+    }
+
+    // MARK: Reload
+
+    func testReloadThenCallsReloadFromOrigin() {
+        let subject = createSubject()
+
+        subject?.reload()
+
+        XCTAssertEqual(webViewProvider.webView.reloadFromOriginCalled, 1)
+    }
+
+    func testReloadWhenErrorPageThenReplaceLocation() {
+        let subject = createSubject()
+        let errorPageURL = "errorpage"
+        let internalURL = "internal://local/errorpage?url=\(errorPageURL)"
+        subject?.load(url: internalURL)
+
+        subject?.reload()
+
+        XCTAssertEqual(webViewProvider.webView.reloadFromOriginCalled, 0)
+        XCTAssertEqual(webViewProvider.webView.replaceLocationCalled, 1)
+        XCTAssertEqual(webViewProvider.webView.url?.absoluteString, errorPageURL)
     }
 
     // MARK: Helper

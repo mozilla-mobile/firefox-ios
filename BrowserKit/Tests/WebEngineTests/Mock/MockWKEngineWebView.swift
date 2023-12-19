@@ -7,6 +7,7 @@ import WebKit
 @testable import WebEngine
 
 class MockWKEngineWebView: WKEngineWebView {
+    var url: URL?
     var navigationDelegate: WKNavigationDelegate?
     var allowsBackForwardNavigationGestures = true
     var allowsLinkPreview = true
@@ -16,6 +17,8 @@ class MockWKEngineWebView: WKEngineWebView {
     // MARK: Test properties
     var loadCalled = 0
     var loadFileURLCalled = 0
+    var reloadFromOriginCalled = 0
+    var replaceLocationCalled = 0
     var stopLoadingCalled = 0
     var goBackCalled = 0
     var goForwardCalled = 0
@@ -30,16 +33,26 @@ class MockWKEngineWebView: WKEngineWebView {
                    configurationProvider: WKEngineConfigurationProvider) {}
 
     func load(_ request: URLRequest) -> WKNavigation? {
-        loadRequest = request
+        url = request.url
         loadCalled += 1
         return nil
     }
 
     func loadFileURL(_ URL: URL, allowingReadAccessTo readAccessURL: URL) -> WKNavigation? {
-        loadFileURL = URL
+        url = URL
         loadFileReadAccessURL = readAccessURL
         loadFileURLCalled += 1
         return nil
+    }
+
+    func reloadFromOrigin() -> WKNavigation? {
+        reloadFromOriginCalled += 1
+        return nil
+    }
+
+    func replaceLocation(with url: URL) {
+        self.url = url
+        replaceLocationCalled += 1
     }
 
     func stopLoading() {
