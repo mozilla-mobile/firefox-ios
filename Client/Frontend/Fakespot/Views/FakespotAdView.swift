@@ -200,7 +200,8 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
             title: productAdsData.name,
             a11yIdentifier: viewModel.productTitleA11yId,
             fontSize: UX.linkFontSize,
-            contentInsets: UX.linkInsets
+            contentInsets: UX.linkInsets,
+            numberOfLines: 3
         )
         productLinkButton.configure(viewModel: productLinkButtonViewModel)
         gradeReliabilityScoreView.configure(grade: productAdsData.grade)
