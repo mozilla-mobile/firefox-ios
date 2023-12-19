@@ -6,9 +6,11 @@ import Common
 import UIKit
 
 public class LinkButton: UIButton, ThemeApplicable {
-    var foregroundColorForState: ((UIControl.State) -> UIColor)?
-    var numberOfLines = 0
+    private var numberOfLines = 0
     private var previousFrame: CGRect = .zero
+    private var foregroundColorNormal: UIColor = .clear
+    private var foregroundColorHighlighted: UIColor = .clear
+    private var backgroundColorNormal: UIColor = .clear
 
     public override var frame: CGRect {
         didSet {
@@ -57,13 +59,18 @@ public class LinkButton: UIButton, ThemeApplicable {
     }
 
     override public func updateConfiguration() {
-        guard let config = configuration else {
+        guard var updatedConfiguration = configuration else {
             return
         }
-        var updatedConfiguration = config
-        let foregroundColor = foregroundColorForState?(state)
 
-        updatedConfiguration.baseForegroundColor = foregroundColor
+        switch state {
+        case [.highlighted]:
+            updatedConfiguration.baseForegroundColor = foregroundColorHighlighted
+        default:
+            updatedConfiguration.baseForegroundColor = foregroundColorNormal
+        }
+
+        updatedConfiguration.background.backgroundColor = backgroundColorNormal
         configuration = updatedConfiguration
     }
 
@@ -97,19 +104,9 @@ public class LinkButton: UIButton, ThemeApplicable {
     // MARK: ThemeApplicable
 
     public func applyTheme(theme: Theme) {
-        var updatedConfiguration = configuration
-
-        foregroundColorForState = { state in
-            switch state {
-            case [.highlighted]:
-                return theme.colors.actionPrimaryHover
-            default:
-                return theme.colors.textAccent
-            }
-        }
-
-        updatedConfiguration?.baseForegroundColor = foregroundColorForState?(state)
-        updatedConfiguration?.baseBackgroundColor = .clear
-        configuration = updatedConfiguration
+        foregroundColorNormal = theme.colors.textAccent
+        foregroundColorHighlighted = theme.colors.actionPrimaryHover
+        backgroundColorNormal = .clear
+        setNeedsUpdateConfiguration()
     }
 }
