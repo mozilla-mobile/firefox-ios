@@ -577,7 +577,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
         let tab = tabs[index]
         let viableTabsIndex = deletedIndexForViableTabs(tab)
-        TabTrayFlagManager.isRefactorEnabled {
+        if TabTrayFlagManager.isRefactorEnabled {
             backupCloseTab = BackupCloseTab(tab: tab, restorePosition: viableTabsIndex)
         }
         self.removeTab(tab, flushToDisk: true)
