@@ -71,7 +71,7 @@ class PhotonActionSheetTests: BaseTestCase {
         mozWaitForElementToExist(app.otherElements["ActivityListView"].otherElements["example.com"])
         mozWaitForElementToExist(app.collectionViews.cells["Copy"], timeout: TIMEOUT)
 
-        var  fennecElement = app.collectionViews.scrollViews.cells.elementContainingText("Fennec")
+        let fennecElement = app.collectionViews.scrollViews.cells.elementContainingText("Fennec")
         mozWaitForElementToExist(fennecElement, timeout: 5)
         fennecElement.tap()
         mozWaitForElementToExist(app.navigationBars["ShareTo.ShareView"])
