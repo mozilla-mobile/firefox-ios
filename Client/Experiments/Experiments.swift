@@ -136,10 +136,14 @@ enum Experiments {
 
         let isPhone = UIDevice.current.userInterfaceIdiom == .phone
 
+        let prefs = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
+        let isReviewCheckerEnabled = prefs.bool(forKey: "profile." + PrefsKeys.Shopping2023OptIn)
+
         let customTargetingAttributes: [String: Any] =  [
             "isFirstRun": "\(isFirstRun)",
             "is_first_run": isFirstRun,
             "is_phone": isPhone,
+            "is_review_checker_enabled": isReviewCheckerEnabled
         ]
 
         // App settings, to allow experiments to target the app name and the
