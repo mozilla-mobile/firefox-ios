@@ -12,8 +12,10 @@ public class LinkButton: UIButton, ThemeApplicable {
     private var foregroundColorHighlighted: UIColor = .clear
     private var backgroundColorNormal: UIColor = .clear
 
-    public override var frame: CGRect {
+    override public var frame: CGRect {
         didSet {
+            // invalidate intrinsic content size so that we calculate it correctly
+            // when not the full button text should be shown
             guard previousFrame != frame, numberOfLines > 0 else { return }
 
             previousFrame = frame
@@ -79,11 +81,14 @@ public class LinkButton: UIButton, ThemeApplicable {
 
         guard let titleLabel, numberOfLines > 0 else { return }
 
+        // hack to be able to restrict the number of lines displayed
         titleLabel.numberOfLines = numberOfLines
         sizeToFit()
     }
 
     override public var intrinsicContentSize: CGSize {
+        // will only be calculated when the number of lines displayed is restricted
+        // without autolayout is not working correctly
         guard let title = titleLabel,
               let configuration,
               numberOfLines > 0
