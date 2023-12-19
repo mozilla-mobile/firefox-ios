@@ -225,7 +225,6 @@ class TabManagerMiddleware {
     /// Async close single tab. If is the last tab the Tab Tray is dismissed and undo option is presented in Homepage
     /// - Parameters:
     ///   - tabUUID: UUID of the tab to be closed/removed
-    ///   - tabs: List of tabs to create a backup on `TabManager` in case undo option is selected
     /// - Returns: If is the last tab to be closed used to trigger dismissTabTray action
     private func closeTab(with tabUUID: String) async -> Bool {
         let isLastTab = defaultTabManager.normalTabs.count == 1
@@ -233,18 +232,8 @@ class TabManagerMiddleware {
         return isLastTab
     }
 
-    /// Handles undoing the close tab action, gets the backup tab from `TabManager`
-    private func undoCloseTab() {
-        guard let backupTab = defaultTabManager.backupCloseTab else { return }
-        defaultTabManager.undoCloseTab(tab: backupTab.tab, position: backupTab.restorePosition)
-    }
-
-    /// Close all tabs calling removeAllTabs from `TabManager` internally makes a backup of the array in case the undo option is pressed.
-    /// - Parameter isPrivateMode: <#isPrivateMode description#>
-    private func closeAllTabs(isPrivateMode: Bool) async {
-        await defaultTabManager.removeAllTabs(isPrivateMode: isPrivateMode)
-    }
-
+    /// Close tab and trigger refresh
+    /// - Parameter tabUUID: UUID of the tab to be closed/removed
     private func closeTabFromTabPanel(with tabUUID: String) {
         Task {
             let shouldDismiss = await self.closeTab(with: tabUUID)
@@ -252,6 +241,8 @@ class TabManagerMiddleware {
         }
     }
 
+    /// Trigger refreshTabs action after a change in `TabManager`
+    /// - Parameter shouldDismiss: If Tab Tray should dismiss while refresh is done
     private func triggerRefresh(with shouldDismiss: Bool) {
         let isPrivate = defaultTabManager.selectedTab?.isPrivate ?? false
         let tabs = self.refreshTabs(for: isPrivate)
@@ -265,6 +256,18 @@ class TabManagerMiddleware {
                 store.dispatch(TabPanelAction.showToast(.singleTab))
             }
         }
+    }
+
+    /// Handles undoing the close tab action, gets the backup tab from `TabManager`
+    private func undoCloseTab() {
+        guard let backupTab = defaultTabManager.backupCloseTab else { return }
+        defaultTabManager.undoCloseTab(tab: backupTab.tab, position: backupTab.restorePosition)
+    }
+
+    /// Close all tabs calling removeAllTabs from `TabManager` internally makes a backup of the array in case the undo option is pressed.
+    /// - Parameter isPrivateMode: If is private mode
+    private func closeAllTabs(isPrivateMode: Bool) async {
+        await defaultTabManager.removeAllTabs(isPrivateMode: isPrivateMode)
     }
 
     /// Handles undo close all tabs. Adds back all tabs depending on mode
