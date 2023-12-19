@@ -342,7 +342,8 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
                     return
                 }
 
-                if let url = URIFixup.getURL(text) {
+                // Open QR codes only when they are recognized as webpages, otherwise open as text
+                if let url = URIFixup.getURL(text), url.isWebPage() {
                     qrCodeDelegate.didScanQRCodeWithURL(url)
                 } else {
                     qrCodeDelegate.didScanQRCodeWithText(text)
