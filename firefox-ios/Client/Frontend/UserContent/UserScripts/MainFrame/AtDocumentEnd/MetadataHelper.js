@@ -19,7 +19,7 @@ function MetadataWrapper() {
     // produces better results than the URL extracted by the page
     // metadata parser.
     if (location.pathname.startsWith("/amp/")) {
-      let canonicalLink = document.querySelector("link[rel=\"canonical\"]");
+      const canonicalLink = document.querySelector("link[rel='canonical']");
       let canonicalHref = canonicalLink && canonicalLink.href;
 
       try {
