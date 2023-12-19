@@ -6,7 +6,7 @@ if [ $# -eq 0 ]; then
 fi
 
 
-for plist in Blockzilla/Info.plist ContentBlocker/Info.plist FocusIntentExtension/Info.plist OpenInFocus/Info.plist Widgets/Info.plist; do
+for plist in focus-ios/Blockzilla/Info.plist focus-ios/ContentBlocker/Info.plist focus-ios/FocusIntentExtension/Info.plist focus-ios/OpenInFocus/Info.plist focus-ios/Widgets/Info.plist; do
   current=`/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$plist"`
   echo "Changing CFBundleShortVersionString in $plist from $current to $1"
   /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $1" "$plist"
