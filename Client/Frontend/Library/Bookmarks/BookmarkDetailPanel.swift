@@ -164,7 +164,7 @@ class BookmarkDetailPanel: SiteTableViewController {
 
         // Focus the keyboard on the first text field.
         if let firstTextFieldCell = tableView.visibleCells.first(where: { $0 is TextFieldTableViewCell }) as? TextFieldTableViewCell {
-            firstTextFieldCell.textField.becomeFirstResponder()
+            firstTextFieldCell.focusTextField()
         }
     }
 
@@ -415,16 +415,20 @@ class BookmarkDetailPanel: SiteTableViewController {
 
         switch indexPath.row {
         case BookmarkDetailFieldsRow.title.rawValue:
-            cell.titleLabel.text = .BookmarkDetailFieldTitle
-            cell.textField.text = bookmarkItemOrFolderTitle
-            cell.textField.autocapitalizationType = .sentences
-            cell.textField.keyboardType = .default
+            cell.configureCell(
+                title: .BookmarkDetailFieldTitle,
+                textFieldText: bookmarkItemOrFolderTitle ?? "",
+                autocapitalizationType: .sentences,
+                keyboardType: .default
+            )
             return cell
         case BookmarkDetailFieldsRow.url.rawValue:
-            cell.titleLabel.text = .BookmarkDetailFieldURL
-            cell.textField.text = bookmarkItemURL
-            cell.textField.autocapitalizationType = .none
-            cell.textField.keyboardType = .URL
+            cell.configureCell(
+                title: .BookmarkDetailFieldURL,
+                textFieldText: bookmarkItemURL ?? "",
+                autocapitalizationType: .none,
+                keyboardType: .URL
+            )
             return cell
         default:
             return super.tableView(tableView, cellForRowAt: indexPath) // Should not happen.
