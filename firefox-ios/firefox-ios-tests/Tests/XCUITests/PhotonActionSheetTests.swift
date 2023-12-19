@@ -71,7 +71,11 @@ class PhotonActionSheetTests: BaseTestCase {
         mozWaitForElementToExist(app.otherElements["ActivityListView"].otherElements["example.com"])
         mozWaitForElementToExist(app.collectionViews.cells["Copy"], timeout: TIMEOUT)
 
+<<<<<<< HEAD
         var  fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 3)
+=======
+        var  fennecElement = app.collectionViews.scrollViews.cells.elementContainingText("Fennec")
+>>>>>>> cda058c35 (Disabled MTE-2024 flaky tests (#17817))
         if iPad() {
             fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 2)
         }
