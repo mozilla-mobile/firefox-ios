@@ -67,6 +67,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     // MARK: - Variables
     private let tabEventHandlers: [TabEventHandler]
     let profile: Profile
+    let windowUUID: WindowUUID
     var isRestoringTabs = false
     var tabRestoreHasFinished = false
     var tabs = [Tab]()
@@ -74,6 +75,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     var selectedIndex: Int { return _selectedIndex }
     let logger: Logger
     var backupCloseTab: BackupCloseTab?
+    var backupCloseTabs = [Tab]()
 
     var tabDisplayType: TabDisplayType = .TabGrid
     let delaySelectingNewPopupTab: TimeInterval = 0.1
@@ -155,8 +157,10 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     // MARK: - Initializer
 
     init(profile: Profile,
+         uuid: WindowUUID,
          logger: Logger = DefaultLogger.shared
     ) {
+        self.windowUUID = uuid
         self.profile = profile
         self.navDelegate = TabManagerNavDelegate()
         self.tabEventHandlers = TabEventHandlers.create(with: profile)
@@ -638,6 +642,16 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         }
         storeChanges()
     }
+
+    @MainActor
+    func removeAllInactiveTabs() async { fatalError("should never be called") }
+
+    func getInactiveTabs() -> [Tab] {
+        return inactiveTabs
+    }
+
+    @MainActor
+    func undoCloseInactiveTabs() { fatalError("should never be called") }
 
     func backgroundRemoveAllTabs(isPrivate: Bool = false,
                                  didClearTabs: @escaping (_ tabsToRemove: [Tab],

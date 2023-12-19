@@ -6,6 +6,12 @@ import Foundation
 import MozillaAppServices
 import UIKit
 
+/// Additional information about a Firefox Suggestion to record
+/// in telemetry when the user interacts with the suggestion
+public enum RustFirefoxSuggestionInteractionInfo {
+    case amp(blockId: Int64, advertiser: String, iabCategory: String, reportingURL: URL?)
+    case wikipedia
+}
 /// A Firefox Suggest search suggestion. This struct is a Swiftier
 /// representation of the Rust `Suggestion` enum.
 public struct RustFirefoxSuggestion {
@@ -14,6 +20,7 @@ public struct RustFirefoxSuggestion {
     public let isSponsored: Bool
     public let iconImage: UIImage?
     public let fullKeyword: String
+    public let clickInfo: RustFirefoxSuggestionInteractionInfo?
 
     internal init?(_ suggestion: Suggestion) {
         // This code is intentionally written as a chain of `if-case-let`s
@@ -23,7 +30,7 @@ public struct RustFirefoxSuggestion {
         // will never be executed" warning, because Swift treats `Suggestion`
         // as frozen, since we can't build Application Services with library
         // evolution support.
-        if case let .amp(title, urlString, _, iconBytes, fullKeyword, _, _, _, _, _, _) = suggestion {
+        if case let .amp(title, urlString, _, iconBytes, fullKeyword, blockId, advertiser, iabCategory, _, clickUrlString, _) = suggestion {
             // This use of `URL(string:)` is OK; we don't need to use
             // `URL(string:encodingInvalidCharacters:)` here.
             guard let url = URL(string: urlString) else { return nil }
@@ -32,6 +39,7 @@ public struct RustFirefoxSuggestion {
             self.isSponsored = true
             self.iconImage = iconBytes.flatMap { UIImage(data: Data($0)) }
             self.fullKeyword = fullKeyword
+            self.clickInfo = .amp(blockId: blockId, advertiser: advertiser, iabCategory: iabCategory, reportingURL: URL(string: clickUrlString) )
         } else if case let .wikipedia(title, urlString, iconBytes, fullKeyword) = suggestion {
             // This use of `URL(string:)` is OK.
             guard let url = URL(string: urlString) else { return nil }
@@ -40,6 +48,7 @@ public struct RustFirefoxSuggestion {
             self.isSponsored = false
             self.iconImage = iconBytes.flatMap { UIImage(data: Data($0)) }
             self.fullKeyword = fullKeyword
+            self.clickInfo = .wikipedia
         } else {
             return nil
         }

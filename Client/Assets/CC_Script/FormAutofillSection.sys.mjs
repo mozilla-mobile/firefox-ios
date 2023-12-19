@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import { AppConstants } from "resource://gre/modules/AppConstants.sys.mjs";
 import { FormAutofillUtils } from "resource://gre/modules/shared/FormAutofillUtils.sys.mjs";
 import { FormAutofill } from "resource://autofill/FormAutofill.sys.mjs";
 
@@ -32,17 +31,6 @@ export class FormAutofillSection {
 
     this.handler = handler;
     this.filledRecordGUID = null;
-
-    ChromeUtils.defineLazyGetter(this, "reauthPasswordPromptMessage", () => {
-      const brandShortName =
-        FormAutofillUtils.brandBundle.GetStringFromName("brandShortName");
-      // The string name for Mac is changed because the value needed updating.
-      const platform = AppConstants.platform.replace("macosx", "macos");
-      return FormAutofillUtils.stringBundle.formatStringFromName(
-        `useCreditCardPasswordPrompt.${platform}`,
-        [brandShortName]
-      );
-    });
 
     ChromeUtils.defineLazyGetter(this, "log", () =>
       FormAutofill.defineLogGetter(this, "FormAutofillHandler")
@@ -250,15 +238,16 @@ export class FormAutofillSection {
             // If this is an expiration field and our previous
             // adaptations haven't resulted in a string that is
             // short enough to satisfy the field length, and the
-            // field is constrained to a length of 5, then we
+            // field is constrained to a length of 4 or 5, then we
             // assume it is intended to hold an expiration of the
-            // form "MM/YY".
-            if (key == "cc-exp" && maxLength == 5) {
+            // form "MMYY" or "MM/YY".
+            if (key == "cc-exp" && (maxLength == 4 || maxLength == 5)) {
               const month2Digits = (
                 "0" + profile["cc-exp-month"].toString()
               ).slice(-2);
               const year2Digits = profile["cc-exp-year"].toString().slice(-2);
-              profile[key] = `${month2Digits}/${year2Digits}`;
+              const separator = maxLength == 5 ? "/" : "";
+              profile[key] = `${month2Digits}${separator}${year2Digits}`;
             } else if (key == "cc-number") {
               // We want to show the last four digits of credit card so that
               // the masked credit card previews correctly and appears correctly
@@ -897,7 +886,10 @@ export class FormAutofillCreditCardSection extends FormAutofillSection {
       this._handlePageHide.bind(this)
     );
     this.log.debug("Credit card subframe is pagehideing", this.handler.form);
-    this.handler.onFormSubmitted();
+
+    const formSubmissionReason =
+      FormAutofillUtils.FORM_SUBMISSION_REASON.IFRAME_PAGEHIDE;
+    this.handler.onFormSubmitted(formSubmissionReason);
   }
 
   /**
@@ -1272,12 +1264,16 @@ export class FormAutofillCreditCardSection extends FormAutofillSection {
    * @override
    */
   async prepareFillingProfile(profile) {
-    // Prompt the OS login dialog to get the decrypted credit
-    // card number.
+    // Prompt the OS login dialog to get the decrypted credit card number.
     if (profile["cc-number-encrypted"]) {
+      const promptMessage = FormAutofillUtils.reauthOSPromptMessage(
+        "autofill-use-payment-method-os-prompt-macos",
+        "autofill-use-payment-method-os-prompt-windows",
+        "autofill-use-payment-method-os-prompt-other"
+      );
       let decrypted = await this._decrypt(
         profile["cc-number-encrypted"],
-        this.reauthPasswordPromptMessage
+        promptMessage
       );
 
       if (!decrypted) {

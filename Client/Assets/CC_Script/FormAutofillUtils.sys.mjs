@@ -4,6 +4,7 @@
 
 import { FormAutofill } from "resource://autofill/FormAutofill.sys.mjs";
 import { XPCOMUtils } from "resource://gre/modules/XPCOMUtils.sys.mjs";
+import { AppConstants } from "resource://gre/modules/AppConstants.sys.mjs";
 
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
@@ -12,6 +13,15 @@ ChromeUtils.defineESModuleGetters(lazy, {
     "resource://gre/modules/shared/FormAutofillNameUtils.sys.mjs",
   OSKeyStore: "resource://gre/modules/OSKeyStore.sys.mjs",
 });
+ChromeUtils.defineLazyGetter(
+  lazy,
+  "l10n",
+  () =>
+    new Localization(
+      ["toolkit/formautofill/formAutofill.ftl", "branding/brand.ftl"],
+      true
+    )
+);
 
 export let FormAutofillUtils;
 
@@ -22,7 +32,7 @@ const ADDRESS_REFERENCES_EXT = "addressReferencesExt.js";
 const ADDRESSES_COLLECTION_NAME = "addresses";
 const CREDITCARDS_COLLECTION_NAME = "creditCards";
 const MANAGE_ADDRESSES_L10N_IDS = [
-  "autofill-add-new-address-title",
+  "autofill-add-address-title",
   "autofill-manage-addresses-title",
 ];
 const EDIT_ADDRESS_L10N_IDS = [
@@ -41,8 +51,8 @@ const EDIT_ADDRESS_L10N_IDS = [
   "autofill-address-tel",
 ];
 const MANAGE_CREDITCARDS_L10N_IDS = [
-  "autofill-add-new-card-title",
-  "autofill-manage-credit-cards-title",
+  "autofill-add-card-title",
+  "autofill-manage-payment-methods-title",
 ];
 const EDIT_CREDITCARD_L10N_IDS = [
   "autofill-card-number",
@@ -55,6 +65,11 @@ const FIELD_STATES = {
   NORMAL: "NORMAL",
   AUTO_FILLED: "AUTO_FILLED",
   PREVIEW: "PREVIEW",
+};
+const FORM_SUBMISSION_REASON = {
+  FORM_SUBMIT_EVENT: "form-submit-event",
+  FORM_REMOVAL_AFTER_FETCH: "form-removal-after-fetch",
+  IFRAME_PAGEHIDE: "iframe-pagehide",
 };
 
 const ELIGIBLE_INPUT_TYPES = ["text", "email", "tel", "number", "month"];
@@ -219,6 +234,7 @@ FormAutofillUtils = {
   EDIT_CREDITCARD_L10N_IDS,
   MAX_FIELD_VALUE_LENGTH,
   FIELD_STATES,
+  FORM_SUBMISSION_REASON,
 
   _fieldNameInfo: {
     name: "name",
@@ -1180,6 +1196,35 @@ FormAutofillUtils = {
       ccExpYear: "cc-exp-year",
     };
     return MAP[key];
+  },
+  /**
+   * Generates the localized os dialog message that
+   * prompts the user to reauthenticate
+   *
+   * @param {string} msgMac fluent message id for macos clients
+   * @param {string} msgWin fluent message id for windows clients
+   * @param {string} msgOther fluent message id for other clients
+   * @param {string} msgLin (optional) fluent message id for linux clients
+   * @returns {string} localized os prompt message
+   */
+  reauthOSPromptMessage(msgMac, msgWin, msgOther, msgLin = null) {
+    const platform = AppConstants.platform;
+    let messageID;
+
+    switch (platform) {
+      case "win":
+        messageID = msgWin;
+        break;
+      case "macosx":
+        messageID = msgMac;
+        break;
+      case "linux":
+        messageID = msgLin ?? msgOther;
+        break;
+      default:
+        messageID = msgOther;
+    }
+    return lazy.l10n.formatValueSync(messageID);
   },
 };
 

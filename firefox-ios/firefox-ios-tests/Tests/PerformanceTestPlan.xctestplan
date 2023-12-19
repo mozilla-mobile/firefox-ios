@@ -19,6 +19,7 @@
         "BookmarksTests",
         "BrowsingPDFTests",
         "ClipBoardTests",
+        "CreditCardsTests",
         "DataManagementTests",
         "DatabaseFixtureTest",
         "DatabaseFixtureTest\/testPerfBookmarks1000openMenu()",

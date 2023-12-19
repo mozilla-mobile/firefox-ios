@@ -25,7 +25,7 @@ class TabDisplayView: UIView,
     private(set) var tabsState: TabsPanelState
     private var inactiveTabsSectionManager: InactiveTabsSectionManager
     private var tabsSectionManager: TabsSectionManager
-    private weak var tabPeekDelegate: TabPeekDelegate?
+    private weak var tabPeekDelegate: LegacyTabPeekDelegate?
     var theme: Theme?
 
     private var shouldHideInactiveTabs: Bool {
@@ -60,7 +60,7 @@ class TabDisplayView: UIView,
         return collectionView
     }()
 
-    public init(state: TabsPanelState, tabPeekDelegate: TabPeekDelegate?) {
+    public init(state: TabsPanelState, tabPeekDelegate: LegacyTabPeekDelegate?) {
         self.tabsState = state
         self.tabPeekDelegate = tabPeekDelegate
         self.inactiveTabsSectionManager = InactiveTabsSectionManager()
@@ -91,8 +91,7 @@ class TabDisplayView: UIView,
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
-        let layout = UICollectionViewCompositionalLayout { [weak self]
-            (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
             guard let self else { return nil }
 
             // If on private mode or regular mode but without inactive
@@ -133,7 +132,8 @@ class TabDisplayView: UIView,
     }
 
     func deleteInactiveTab(for index: Int) {
-        store.dispatch(TabPanelAction.closeInactiveTabs(index))
+        let inactiveTabs = tabsState.inactiveTabs[index]
+        store.dispatch(TabPanelAction.closeInactiveTabs(inactiveTabs.tabUUID))
     }
 
     // MARK: UICollectionViewDataSource
@@ -211,7 +211,7 @@ class TabDisplayView: UIView,
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabsCell.cellIdentifier, for: indexPath) as? InactiveTabsCell
             else { return UICollectionViewCell() }
 
-            cell.configure(text: tabsState.inactiveTabs[indexPath.row].url)
+            cell.configure(text: tabsState.inactiveTabs[indexPath.row].title)
             if let theme = theme {
                 cell.applyTheme(theme: theme)
             }
@@ -227,9 +227,14 @@ class TabDisplayView: UIView,
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // TODO: Add guard to handle inactive tabs
-        let tabUUID = tabsState.tabs[indexPath.row].tabUUID
-        store.dispatch(TabPanelAction.selectTab(tabUUID))
+        switch getTabDisplay(for: indexPath.section) {
+        case .inactiveTabs:
+            let tabUUID = tabsState.inactiveTabs[indexPath.row].tabUUID
+            store.dispatch(TabPanelAction.selectTab(tabUUID))
+        case .tabs:
+            let tabUUID = tabsState.tabs[indexPath.row].tabUUID
+            store.dispatch(TabPanelAction.selectTab(tabUUID))
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView,
@@ -239,10 +244,10 @@ class TabDisplayView: UIView,
         else { return nil }
 
         // TODO: Add browserProfile and clientPickerDelegate
-        let tabVC = TabPeekViewController(tab: nil, delegate: tabPeekDelegate)
+        let tabVC = TabPeekViewController(tab: tabsState.tabs[indexPath.row])
         return UIContextMenuConfiguration(identifier: nil,
                                           previewProvider: { return tabVC },
-                                          actionProvider: tabVC.contextActions(defaultActions:))
+                                          actionProvider: tabVC.contextActions)
     }
 
     @objc

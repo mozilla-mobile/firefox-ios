@@ -10,8 +10,7 @@ import Redux
 protocol TabTrayController: UIViewController,
                             UIAdaptivePresentationControllerDelegate,
                             UIPopoverPresentationControllerDelegate,
-                            Themeable,
-                            RemotePanelDelegate {
+                            Themeable {
     var openInNewTab: ((_ url: URL, _ isPrivate: Bool) -> Void)? { get set }
     var didSelectUrl: ((_ url: URL, _ visitType: VisitType) -> Void)? { get set }
 }
@@ -55,13 +54,6 @@ class TabTrayViewController: UIViewController,
     // iPad Layout
     var isRegularLayout: Bool {
         return layout == .regular
-    }
-
-    var hasSyncableAccount: Bool {
-        // Temporary. Added for early testing.
-        // Eventually we will update this to use Redux state. -mr
-        guard let profile = (UIApplication.shared.delegate as? AppDelegate)?.profile else { return false }
-        return profile.hasSyncableAccount()
     }
 
     var currentPanel: UINavigationController? {
@@ -167,25 +159,21 @@ class TabTrayViewController: UIViewController,
     }()
 
     private lazy var bottomToolbarItemsForSync: [UIBarButtonItem] = {
-        guard hasSyncableAccount else { return [] }
-
         return [flexibleSpace, syncTabButton]
     }()
 
     private var rightBarButtonItemsForSync: [UIBarButtonItem] {
-        if hasSyncableAccount {
+        if tabTrayState.hasSyncableAccount {
             return [doneButton, fixedSpace, syncTabButton]
         } else {
             return [doneButton]
         }
     }
 
-    init(delegate: TabTrayViewControllerDelegate,
-         selectedTab: TabTrayPanelType,
+    init(selectedTab: TabTrayPanelType,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          and notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.tabTrayState = TabTrayState(panelType: selectedTab)
-        self.delegate = delegate
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
 
@@ -228,9 +216,9 @@ class TabTrayViewController: UIViewController,
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        delegate?.didFinish()
 
         unsubscribeFromRedux()
+        delegate?.didFinish()
     }
 
     private func updateLayout() {
@@ -266,8 +254,9 @@ class TabTrayViewController: UIViewController,
     func newState(state: TabTrayState) {
         tabTrayState = state
 
+        reloadView()
         if tabTrayState.shouldDismiss {
-            dismissVC()
+            delegate?.didFinish()
         }
     }
 
@@ -291,6 +280,12 @@ class TabTrayViewController: UIViewController,
         setupForiPad()
     }
 
+    private func reloadView() {
+        updateTitle()
+        updateToolbarItems()
+        updateNormalTabsCounter()
+    }
+
     private func setupForiPhone() {
         navigationItem.titleView = nil
         updateTitle()
@@ -312,6 +307,13 @@ class TabTrayViewController: UIViewController,
 
     private func updateTitle() {
         navigationItem.title = tabTrayState.navigationTitle
+    }
+
+    private func updateNormalTabsCounter() {
+        countLabel.text = tabTrayState.normalTabsCount
+        guard !isRegularLayout,
+              let image = UIImage(named: ImageIdentifiers.navTabCounter) else { return }
+        segmentedControl.setImage(image.overlayWith(image: countLabel), forSegmentAt: 0)
     }
 
     private func setupForiPad() {
@@ -338,8 +340,13 @@ class TabTrayViewController: UIViewController,
             return
         }
 
-        let toolbarItems = tabTrayState.isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
+        let toolbarItems = tabTrayState.isSyncTabsPanel ? bottomToolBarForSync() : bottomToolbarItems
         setToolbarItems(toolbarItems, animated: true)
+    }
+
+    private func bottomToolBarForSync() -> [UIBarButtonItem] {
+        guard tabTrayState.hasSyncableAccount else { return [] }
+        return bottomToolbarItemsForSync
     }
 
     private func setupToolbarForIpad() {
@@ -449,33 +456,11 @@ class TabTrayViewController: UIViewController,
     private func doneButtonTapped() {
         notificationCenter.post(name: .TabsTrayDidClose)
         // TODO: FXIOS-6928 Update mode when closing tabTray
-        self.dismiss(animated: true, completion: nil)
+        delegate?.didFinish()
     }
 
     @objc
-    private func syncTabsTapped() {}
-
-    // MARK: - RemotePanelDelegate
-
-    func remotePanelDidRequestToSignIn() {
-        fxaSignInOrCreateAccountHelper()
-    }
-
-    func remotePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
-        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .syncTab)
-        self.openInNewTab?(url, isPrivate)
-        self.dismissVC()
-    }
-
-    func remotePanel(didSelectURL url: URL, visitType: VisitType) {
-        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .syncTab)
-        // TODO: [FXIOS-6928] Provide handler for didSelectURL.
-        self.didSelectUrl?(url, visitType)
-        self.dismissVC()
-    }
-
-    // Sign In and Create Account Helper
-    func fxaSignInOrCreateAccountHelper() {
-        // TODO: Present Firefox account sign-in. Forthcoming.
+    private func syncTabsTapped() {
+        store.dispatch(RemoteTabsPanelAction.refreshTabs)
     }
 }

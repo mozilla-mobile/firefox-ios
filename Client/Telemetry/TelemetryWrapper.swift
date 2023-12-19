@@ -8,6 +8,7 @@ import Shared
 import Telemetry
 import Account
 import Sync
+import Storage
 
 protocol TelemetryWrapperProtocol {
     func recordEvent(category: TelemetryWrapper.EventCategory,
@@ -35,6 +36,10 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
     typealias ExtraKey = TelemetryWrapper.EventExtraKey
 
     static let shared = TelemetryWrapper()
+
+    // TODO [7856]: Temporary. Additional telemetry updates forthcoming once iPad multi-window enabled.
+    var defaultTabManager: TabManager?
+
     let legacyTelemetry = Telemetry.default
     let glean = Glean.shared
     // Boolean flag to temporarily remember if we crashed during the
@@ -115,9 +120,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
 
             outputDict["settings"] = settings
 
-            let delegate = UIApplication.shared.delegate as? AppDelegate
-
-            outputDict["openTabCount"] = delegate?.tabManager.count ?? 0
+            // TODO [7856]: Additional telemetry updates forthcoming once iPad multi-window enabled.
+            outputDict["openTabCount"] = self.defaultTabManager?.count ?? 0
 
             outputDict["systemTheme"] = UITraitCollection.current.userInterfaceStyle == .dark ? "dark" : "light"
 
@@ -177,7 +181,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         // Save the profile so we can record settings from it when the notification below fires.
         self.profile = profile
 
-        SponsoredTileTelemetry.setupContextId()
+        TelemetryContextualIdentifier.setupContextId()
 
         // Register an observer to record settings and other metrics that are more appropriate to
         // record on going to background rather than during initialization.
@@ -220,8 +224,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         GleanMetrics.Search.defaultEngine.set(defaultEngine?.engineID ?? "custom")
 
         // Record the open tab count
-        let delegate = UIApplication.shared.delegate as? AppDelegate
-        if let count = delegate?.tabManager.count {
+        // TODO [7856]: Additional telemetry updates forthcoming once iPad multi-window enabled.
+        if let count = defaultTabManager?.count {
             GleanMetrics.Tabs.cumulativeCount.add(Int32(count))
         }
 
@@ -336,6 +340,7 @@ extension TelemetryWrapper {
         case enrollment = "enrollment"
         case firefoxAccount = "firefox_account"
         case information = "information"
+        case firefoxSuggest = "fx-suggest"
     }
 
     public enum EventMethod: String {
@@ -577,6 +582,7 @@ extension TelemetryWrapper {
         case viewHistoryPanel = "view-history-panel"
         case createNewTab = "create-new-tab"
         case sponsoredShortcuts = "sponsored-shortcuts"
+        case fxSuggest = "fx-suggest"
     }
 
     public enum EventValue: String {
@@ -669,8 +675,11 @@ extension TelemetryWrapper {
         case shoppingCFRsDisplayed = "shopping-cfrs-displayed"
         case shoppingAdsExposure = "shopping-ads-exposure"
         case shoppingAdsImpression = "shopping-ads-impression"
+        case shoppingNoAdsAvailable = "shopping-no-ads-available"
         case awesomebarShareTap = "awesomebar-share-tap"
         case largeFileWrite = "large-file-write"
+        case fxSuggestionClickInfo = "fx-suggestion-click-info"
+        case fxSuggestionPosition = "fx-suggestion-position"
     }
 
     public enum EventExtraKey: String, CustomStringConvertible {
@@ -1164,6 +1173,8 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.adsExposure.record()
         case (.action, .view, .shoppingBottomSheet, .shoppingAdsImpression, _):
             GleanMetrics.Shopping.surfaceAdsImpression.record()
+        case (.action, .view, .shoppingBottomSheet, .shoppingNoAdsAvailable, _):
+            GleanMetrics.Shopping.surfaceNoAdsAvailable.record()
         case (.action, .view, .shoppingButton, _, _):
             GleanMetrics.Shopping.addressBarIconDisplayed.record()
         case (.action, .close, .shoppingBottomSheet, _, let extras):
@@ -1854,6 +1865,34 @@ extension TelemetryWrapper {
                 let properties = GleanMetrics.AppErrors.LargeFileWriteExtra(size: quantity)
                 GleanMetrics.AppErrors.largeFileWrite.record(properties)
             }
+        case(.action, .tap, .fxSuggest, _, let extras ):
+            guard let contextIdString = TelemetryContextualIdentifier.contextId,
+                  let contextId = UUID(uuidString: contextIdString),
+                  let interactionInfo = extras?[EventValue.fxSuggestionClickInfo.rawValue] as? RustFirefoxSuggestionInteractionInfo else {
+                return recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+            switch interactionInfo {
+            case let .amp(blockId, advertiser, iabCategory, reportingURL):
+                GleanMetrics.FxSuggest.contextId.set(contextId)
+                GleanMetrics.FxSuggest.pingType.set("fxsuggest-click")
+                GleanMetrics.FxSuggest.blockId.set(blockId)
+                GleanMetrics.FxSuggest.advertiser.set(advertiser)
+                GleanMetrics.FxSuggest.iabCategory.set(iabCategory)
+                if let reportingURL {
+                    GleanMetrics.FxSuggest.reportingUrl.set(url: reportingURL)
+                }
+                if let position = extras?[EventValue.fxSuggestionPosition.rawValue] as? Int {
+                    GleanMetrics.FxSuggest.position.set(Int64(position))
+                }
+            case .wikipedia:
+                GleanMetrics.FxSuggest.pingType.set("fxsuggest-click")
+                GleanMetrics.FxSuggest.contextId.set(contextId)
+                GleanMetrics.FxSuggest.advertiser.set("wikipedia")
+                if let position = extras?[EventValue.fxSuggestionPosition.rawValue] as? Int {
+                    GleanMetrics.FxSuggest.position.set(Int64(position))
+                }
+            }
+            GleanMetrics.Pings.shared.fxSuggest.submit()
         default:
             recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
         }

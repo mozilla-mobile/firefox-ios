@@ -66,7 +66,7 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
             }
         )
 
-        showWebPage.textField.textAlignment = .natural
+        showWebPage.alignTextFieldToNatural()
 
         let section = SettingSection(
             title: NSAttributedString(string: .NewTabSectionName),

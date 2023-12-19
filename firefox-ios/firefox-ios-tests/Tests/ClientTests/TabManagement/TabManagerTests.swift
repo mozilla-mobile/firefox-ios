@@ -7,9 +7,11 @@ import XCTest
 import TabDataStore
 import WebKit
 import Shared
+import Common
 @testable import Client
 
 class TabManagerTests: XCTestCase {
+    var tabWindowUUID: WindowUUID!
     var mockTabStore: MockTabDataStore!
     var mockSessionStore: MockTabSessionStore!
     var mockProfile: MockProfile!
@@ -19,7 +21,14 @@ class TabManagerTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+
         DependencyHelperMock().bootstrapDependencies()
+
+        // For this test suite, use a consistent window UUID for all test cases
+        let windowManager: WindowManager = AppContainer.shared.resolve()
+        let uuid = windowManager.activeWindow
+        tabWindowUUID = uuid
+
         mockProfile = MockProfile()
         mockDiskImageStore = MockDiskImageStore()
         mockTabStore = MockTabDataStore()
@@ -151,11 +160,28 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(mockDiskImageStore.deleteImageForKeyCallCount, 1)
     }
 
+    func testGetInactiveTabs() {
+        let subject = createSubject()
+        addTabs(to: subject, count: 3)
+        guard let tab = subject.tabs.first else {
+            XCTFail("First tab was expected to be found")
+            return
+        }
+        // Override session data to make tab active
+        tab.sessionData = LegacySessionData(currentPage: 0, urls: [], lastUsedTime: Date.now.toTimestamp())
+
+        let inactiveTabs = subject.getInactiveTabs()
+        let expectedInactiveTabs = 2
+
+        XCTAssertEqual(inactiveTabs.count, expectedInactiveTabs)
+    }
+
     // MARK: - Helper methods
 
     private func createSubject() -> TabManagerImplementation {
         let subject = TabManagerImplementation(profile: mockProfile,
                                                imageStore: mockDiskImageStore,
+                                               uuid: tabWindowUUID,
                                                tabDataStore: mockTabStore,
                                                tabSessionStore: mockSessionStore)
         trackForMemoryLeaks(subject)

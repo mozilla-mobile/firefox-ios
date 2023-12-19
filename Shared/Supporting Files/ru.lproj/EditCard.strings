@@ -1,6 +1,9 @@
 /* Title label for the view where user can add their credit card info */
 "CreditCard.EditCard.AddCreditCardTitle.v113" = "Добавить банковскую карту";
 
+/* Title label for the view where user can add their credit card info */
+"CreditCard.EditCard.AddCreditCardTitle.v122" = "Добавить карту";
+
 /* Button label for cancelling editing of the credit card details shown in the form */
 "CreditCard.EditCard.CancelNavBarButtonLabel.v113" = "Отмена";
 
@@ -17,7 +20,7 @@
 "CreditCard.EditCard.ConcealLabel.v114" = "Скрыть";
 
 /* Label for copying contents of the form */
-"CreditCard.EditCard.CopyLabel.v113" = "Скопировать";
+"CreditCard.EditCard.CopyLabel.v113" = "Копировать";
 
 /* Button label for editing the credit card details shown in the form */
 "CreditCard.EditCard.EditNavBarButtonLabel.v113" = "Изменить";
@@ -45,6 +48,9 @@
 
 /* Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages. */
 "CreditCard.EditCard.ToggleToAllowAutofillTitle.v112" = "Сохранять и автозаполнять данные карт";
+
+/* Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages. */
+"CreditCard.EditCard.ToggleToAllowAutofillTitle.v122" = "Сохранить и заполнять способы оплаты";
 
 /* Title label for the view where user can view their credit card info */
 "CreditCard.EditCard.ViewCreditCardTitle.v116" = "Посмотреть карту";

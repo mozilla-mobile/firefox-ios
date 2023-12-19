@@ -21,6 +21,7 @@ class JumpBackInViewModel: FeatureFlaggable {
     var headerButtonAction: ((UIButton) -> Void)?
     var syncedTabsShowAllAction: (() -> Void)?
     var openSyncedTabAction: ((URL) -> Void)?
+    var onLongPressTileAction: ((Site, UIView?) -> Void)?
     var prepareContextualHint: ((SyncedTabCell) -> Void)?
 
     weak var delegate: HomepageDataModelDelegate?
@@ -426,6 +427,22 @@ extension JumpBackInViewModel: HomepageSectionHandler {
             // SyncedTab cell
             // do nothing, will be handled in cell depending on area tapped
         }
+    }
+
+    func handleLongPress(with collectionView: UICollectionView, indexPath: IndexPath) {
+        guard let tileLongPressedHandler = onLongPressTileAction else { return }
+
+        var site = Site(url: "", title: "")
+        if let jumpBackInItemRow = sectionLayout.indexOfJumpBackInItem(for: indexPath) {
+            if let item = jumpBackInList.tabs[safe: jumpBackInItemRow] {
+                site = Site(url: item.url?.absoluteString ?? "", title: item.title ?? "")
+            }
+        } else if hasSyncedTab {
+            site = Site(url: mostRecentSyncedTab?.tab.URL.absoluteString ?? "", title: mostRecentSyncedTab?.tab.title ?? "")
+        }
+
+        let sourceView = collectionView.cellForItem(at: indexPath)
+        tileLongPressedHandler(site, sourceView)
     }
 }
 

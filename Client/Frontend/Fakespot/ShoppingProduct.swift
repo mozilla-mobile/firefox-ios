@@ -195,6 +195,10 @@ class ShoppingProduct: FeatureFlaggable, Equatable {
         return try await client.reportProductBackInStock(productId: product.id, website: product.host)
     }
 
+    func reportAdEvent(eventName: FakespotAdsEvent, eventSource: String, aid: String) async throws -> AdEventsResponse {
+        return try await client.reportAdEvent(eventName: eventName, eventSource: eventSource, aid: aid)
+    }
+
     static func == (lhs: ShoppingProduct, rhs: ShoppingProduct) -> Bool {
         return lhs.product == rhs.product
     }

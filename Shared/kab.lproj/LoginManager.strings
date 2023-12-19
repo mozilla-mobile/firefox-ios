@@ -16,6 +16,18 @@
 /* Label for the button used to delete the current login. */
 "Delete" = "Kkes";
 
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Sefsex";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Kkes";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "Ur tezmireḍ ara ad tesfesxeḍ tigawt-a.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Kkes awal uffir?";
+
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "Kkes akk afran";
 

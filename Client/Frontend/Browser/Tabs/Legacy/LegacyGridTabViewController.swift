@@ -38,29 +38,6 @@ class LegacyGridTabViewController: UIViewController,
         static let undoToastDuration = DispatchTimeInterval.seconds(3)
     }
 
-    enum UndoToastType {
-        case singleTab
-        case inactiveTabs(count: Int)
-
-        var title: String {
-            switch self {
-            case .singleTab:
-                return .TabsTray.CloseTabsToast.SingleTabTitle
-            case let .inactiveTabs(tabsCount):
-                return String.localizedStringWithFormat(
-                    .TabsTray.CloseTabsToast.Title,
-                    tabsCount)
-            }
-        }
-
-        var buttonText: String {
-            switch self {
-            case .singleTab, .inactiveTabs:
-                return .TabsTray.CloseTabsToast.Action
-            }
-        }
-    }
-
     let tabManager: TabManager
     let profile: Profile
     weak var delegate: TabTrayDelegate?
@@ -328,9 +305,7 @@ class LegacyGridTabViewController: UIViewController,
     func closeTabsTrayBackground() {
         tabDisplayManager.removeAllTabsFromView()
 
-        tabManager.backgroundRemoveAllTabs(isPrivate: tabDisplayManager.isPrivate) {
-            recentlyClosedTabs, isPrivateState, previousTabUUID in
-
+        tabManager.backgroundRemoveAllTabs(isPrivate: tabDisplayManager.isPrivate) { recentlyClosedTabs, isPrivateState, previousTabUUID in
             DispatchQueue.main.async { [unowned self] in
                 if isPrivateState {
                     let previousTab = self.tabManager.tabs.first(where: { $0.tabUUID == previousTabUUID })
@@ -578,8 +553,8 @@ extension LegacyGridTabViewController: LegacyTabCellDelegate {
     }
 }
 
-// MARK: - TabPeekDelegate
-extension LegacyGridTabViewController: TabPeekDelegate {
+// MARK: - LegacyTabPeekDelegate
+extension LegacyGridTabViewController: LegacyTabPeekDelegate {
     func tabPeekDidAddBookmark(_ tab: Tab) {
         delegate?.tabTrayDidAddBookmark(tab)
     }
@@ -740,7 +715,7 @@ extension LegacyGridTabViewController: InactiveTabsCFRProtocol {
     }
 
     func presentUndoToast(tabsCount: Int, completion: @escaping (Bool) -> Void) {
-        presentUndoToast(toastType: .inactiveTabs(count: tabsCount),
+        presentUndoToast(toastType: .allInactiveTabs(count: tabsCount),
                          completion: completion)
     }
 

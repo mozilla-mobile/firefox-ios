@@ -10,6 +10,7 @@ import Shared
 
 // MARK: - TabManager protocol
 protocol TabManager: AnyObject {
+    var windowUUID: WindowUUID { get }
     var isRestoringTabs: Bool { get }
     var delaySelectingNewPopupTab: TimeInterval { get }
     var recentlyAccessedNormalTabs: [Tab] { get }
@@ -17,6 +18,7 @@ protocol TabManager: AnyObject {
     var count: Int { get }
     var selectedTab: Tab? { get }
     var backupCloseTab: BackupCloseTab? { get set }
+    var backupCloseTabs: [Tab] { get set }
     var normalTabs: [Tab] { get }
     var normalActiveTabs: [Tab] { get }
     var inactiveTabs: [Tab] { get }
@@ -32,9 +34,7 @@ protocol TabManager: AnyObject {
     func addTab(_ request: URLRequest?, afterTab: Tab?, isPrivate: Bool) -> Tab
     func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool)
     func removeTab(_ tab: Tab, completion: (() -> Void)?)
-    func removeTab(_ tabUUID: String) async
     func removeTabs(_ tabs: [Tab])
-    func removeAllTabs(isPrivateMode: Bool) async
     func undoCloseTab(tab: Tab, position: Int?)
     func getMostRecentHomepageTab() -> Tab?
     func getTabFor(_ url: URL) -> Tab?
@@ -63,6 +63,12 @@ protocol TabManager: AnyObject {
                                  didClearTabs: @escaping (_ tabsToRemove: [Tab],
                                                           _ isPrivate: Bool,
                                                           _ previousTabUUID: String) -> Void)
+    // MARK: TabTray refactor interfaces
+    func removeTab(_ tabUUID: String) async
+    func removeAllTabs(isPrivateMode: Bool) async
+    func getInactiveTabs() -> [Tab]
+    func removeAllInactiveTabs() async
+    func undoCloseInactiveTabs()
 }
 
 extension TabManager {
@@ -71,8 +77,6 @@ extension TabManager {
     }
 
     func selectTab(_ tab: Tab?) {
-        guard let privateState = tab?.isPrivate else { return }
-        store.dispatch(FeltPrivacyAction.setPrivateModeTo(privateState))
         selectTab(tab, previous: nil)
     }
 

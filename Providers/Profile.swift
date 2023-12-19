@@ -606,13 +606,8 @@ open class BrowserProfile: Profile {
     }
 
     lazy var logins: RustLogins = {
-        // TODO: #16076 - We should avoid force unwraps
         let databasePath = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("loginsPerField.db").path
-        // Though we don't migrate SQLCipher DBs anymore, we keep this call to
-        // delete any existing DBs if they still exist
-        let sqlCipherDatabasePath = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("logins.db").path
-
-        return RustLogins(sqlCipherDatabasePath: sqlCipherDatabasePath, databasePath: databasePath)
+        return RustLogins(databasePath: databasePath)
     }()
 
     lazy var firefoxSuggest: RustFirefoxSuggest? = {
@@ -668,20 +663,8 @@ open class BrowserProfile: Profile {
         let creditCardKey = keychain.string(forKey: rustAutofillKey.ccKeychainKey)
         let rustLoginsKeys = RustLoginEncryptionKeys()
         let perFieldKey = keychain.string(forKey: rustLoginsKeys.loginPerFieldKeychainKey)
-        let sqlCipherKey = keychain.string(forKey: rustLoginsKeys.loginsUnlockKeychainKey)
-        let sqlCipherSalt = keychain.string(forKey: rustLoginsKeys.loginPerFieldKeychainKey)
-
         // Remove all items, removal is not key-by-key specific (due to the risk of failing to delete something), simply restore what is needed.
         keychain.removeAllKeys()
-
-        // Restore the keys that are still needed
-        if let sqlCipherKey = sqlCipherKey {
-            keychain.set(sqlCipherKey, forKey: rustLoginsKeys.loginsUnlockKeychainKey, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
-        }
-
-        if let sqlCipherSalt = sqlCipherSalt {
-            keychain.set(sqlCipherSalt, forKey: rustLoginsKeys.loginsSaltKeychainKey, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
-        }
 
         if let perFieldKey = perFieldKey {
             keychain.set(perFieldKey, forKey: rustLoginsKeys.loginPerFieldKeychainKey, withAccessibility: .afterFirstUnlock)

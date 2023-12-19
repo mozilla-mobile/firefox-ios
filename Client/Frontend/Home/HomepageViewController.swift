@@ -19,17 +19,11 @@ class HomepageViewController:
     // MARK: - Typealiases
 
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
-    typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
 
     // MARK: - Operational Variables
 
     weak var homePanelDelegate: HomePanelDelegate?
     weak var libraryPanelDelegate: LibraryPanelDelegate?
-    weak var sendToDeviceDelegate: SendToDeviceDelegate? {
-        didSet {
-            contextMenuHelper.sendToDeviceDelegate = sendToDeviceDelegate
-        }
-    }
 
     weak var browserNavigationHandler: BrowserNavigationHandler? {
         didSet {
@@ -69,7 +63,7 @@ class HomepageViewController:
     init(profile: Profile,
          isZeroSearch: Bool = false,
          toastContainer: UIView,
-         tabManager: TabManager = AppContainer.shared.resolve(),
+         tabManager: TabManager,
          overlayManager: OverlayModeManager,
          userDefaults: UserDefaultsInterface = UserDefaults.standard,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -250,8 +244,7 @@ class HomepageViewController:
     }
 
     func createLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { [weak self]
-            (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
             guard let self = self,
                   let viewModel = self.viewModel.getSectionViewModel(shownSection: sectionIndex),
                   viewModel.shouldShow
@@ -542,9 +535,17 @@ private extension HomepageViewController {
             self?.openBookmarks(button)
         }
 
+        viewModel.recentlySavedViewModel.onLongPressTileAction = { [weak self] (site, sourceView) in
+            self?.contextMenuHelper.presentContextMenu(for: site, with: sourceView, sectionType: .recentlySaved)
+        }
+
         // Jumpback in
         viewModel.jumpBackInViewModel.headerButtonAction = { [weak self] button in
             self?.openTabTray(button)
+        }
+
+        viewModel.jumpBackInViewModel.onLongPressTileAction = { [weak self] (site, sourceView) in
+            self?.contextMenuHelper.presentContextMenu(for: site, with: sourceView, sectionType: .recentlySaved)
         }
 
         viewModel.jumpBackInViewModel.syncedTabsShowAllAction = { [weak self] in

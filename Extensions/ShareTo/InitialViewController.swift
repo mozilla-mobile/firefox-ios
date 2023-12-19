@@ -4,7 +4,6 @@
 
 import Common
 import UIKit
-import SnapKit
 import Shared
 import Storage
 

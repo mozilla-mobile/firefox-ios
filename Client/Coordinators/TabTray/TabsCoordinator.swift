@@ -4,28 +4,13 @@
 
 import Foundation
 
-protocol TabsNavigationHandler: AnyObject {
-    func addToBookmarks(_ url: URL)
-    func sendToDevice(_ url: URL)
-}
-
-class TabsCoordinator: BaseCoordinator, TabsNavigationHandler {
+class TabsCoordinator: BaseCoordinator {
     // MARK: - Properties
-
-    private weak var parentCoordinator: TabTrayCoordinatorDelegate?
+    weak var parentCoordinator: ParentCoordinatorDelegate?
 
     // MARK: - Initializers
 
-    init(
-        parentCoordinator: TabTrayCoordinatorDelegate?,
-        router: Router
-    ) {
-        self.parentCoordinator = parentCoordinator
+    init(router: Router) {
         super.init(router: router)
     }
-
-    // MARK: - RegularTabsNavigationHandler
-
-    func addToBookmarks(_ url: URL) {}
-    func sendToDevice(_ url: URL) {}
 }

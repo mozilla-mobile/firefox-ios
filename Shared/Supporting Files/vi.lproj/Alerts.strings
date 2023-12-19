@@ -1,3 +1,15 @@
+/* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the body text for the alert. */
+"Alerts.FeltDeletion.Body.v122" = "Đóng tất cả các thẻ riêng tư và xóa lịch sử, cookie cũng như tất cả dữ liệu trang web khác.";
+
+/* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the cancel action for the alert, cancelling ending your session. */
+"Alerts.FeltDeletion.Button.Cancel.v122" = "Hủy bỏ";
+
+/* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the affirmative action for the alert, confirming that you do want to do that. */
+"Alerts.FeltDeletion.Button.Confirm.v122" = "Xoá dữ liệu phiên";
+
+/* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the title for the alert. */
+"Alerts.FeltDeletion.Title.v122" = "Kết thúc phiên riêng tư của bạn?";
+
 /* The title for the negative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will reject the action of restoring tabs. */
 "Alerts.RestoreTabs.Button.No.v109" = "Không";
 

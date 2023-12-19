@@ -301,10 +301,8 @@ class LibraryViewController: UIViewController, Themeable {
         standardAppearance.backgroundColor = themeManager.currentTheme.colors.layer1
         navigationController?.toolbar.standardAppearance = standardAppearance
         navigationController?.toolbar.compactAppearance = standardAppearance
-        if #available(iOS 15.0, *) {
-            navigationController?.toolbar.scrollEdgeAppearance = standardAppearance
-            navigationController?.toolbar.compactScrollEdgeAppearance = standardAppearance
-        }
+        navigationController?.toolbar.scrollEdgeAppearance = standardAppearance
+        navigationController?.toolbar.compactScrollEdgeAppearance = standardAppearance
         navigationController?.toolbar.tintColor = themeManager.currentTheme.colors.actionPrimary
     }
 

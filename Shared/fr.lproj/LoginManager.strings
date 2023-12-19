@@ -16,6 +16,21 @@
 /* Label for the button used to delete the current login. */
 "Delete" = "Supprimer";
 
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Annuler";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Supprimer";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "Cette action ne peut être annulée.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Le mot de passe sera supprimé de tous vos appareils synchronisés.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Supprimer le mot de passe ?";
+
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "Tout désélectionner";
 
@@ -36,6 +51,9 @@
 
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "Aucun identifiant trouvé";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Aucun mot de passe trouvé";
 
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "Ouvrir et renseigner";

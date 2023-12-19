@@ -27,35 +27,23 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
         switch action {
         case ThemeSettingsAction.themeSettingsDidAppear:
             let currentThemeState = self.getCurrentThemeManagerState()
-            DispatchQueue.main.async {
-                store.dispatch(ThemeSettingsAction.receivedThemeManagerValues(currentThemeState))
-            }
+            store.dispatch(ThemeSettingsAction.receivedThemeManagerValues(currentThemeState))
         case ThemeSettingsAction.toggleUseSystemAppearance(let enabled):
-            DispatchQueue.main.async {
-                self.toggleUseSystemAppearance(enabled)
-                store.dispatch(ThemeSettingsAction.systemThemeChanged(self.legacyThemeManager.systemThemeIsOn))
-            }
+            self.toggleUseSystemAppearance(enabled)
+            store.dispatch(ThemeSettingsAction.systemThemeChanged(self.legacyThemeManager.systemThemeIsOn))
         case ThemeSettingsAction.enableAutomaticBrightness(let enabled):
-            DispatchQueue.main.async {
-                self.toggleAutomaticBrightness(enabled)
-                store.dispatch(ThemeSettingsAction.automaticBrightnessChanged(self.legacyThemeManager.automaticBrightnessIsOn))
-            }
+            self.toggleAutomaticBrightness(enabled)
+            store.dispatch(ThemeSettingsAction.automaticBrightnessChanged(self.legacyThemeManager.automaticBrightnessIsOn))
         case ThemeSettingsAction.switchManualTheme(let theme):
-            DispatchQueue.main.async {
-                self.updateManualTheme(theme)
-                store.dispatch(ThemeSettingsAction.manualThemeChanged(theme))
-            }
+            self.updateManualTheme(theme)
+            store.dispatch(ThemeSettingsAction.manualThemeChanged(theme))
         case ThemeSettingsAction.updateUserBrightness(let value):
-            DispatchQueue.main.async {
-                self.updateUserBrightness(value)
-                store.dispatch(ThemeSettingsAction.userBrightnessChanged(value))
-            }
+            self.updateUserBrightness(value)
+            store.dispatch(ThemeSettingsAction.userBrightnessChanged(value))
         case ThemeSettingsAction.receivedSystemBrightnessChange:
-            DispatchQueue.main.async {
-                self.updateThemeBasedOnSystemBrightness()
-                let systemBrightness = self.getScreenBrightness()
-                store.dispatch(ThemeSettingsAction.systemBrightnessChanged(systemBrightness))
-            }
+            self.updateThemeBasedOnSystemBrightness()
+            let systemBrightness = self.getScreenBrightness()
+            store.dispatch(ThemeSettingsAction.systemBrightnessChanged(systemBrightness))
         default:
             break
         }

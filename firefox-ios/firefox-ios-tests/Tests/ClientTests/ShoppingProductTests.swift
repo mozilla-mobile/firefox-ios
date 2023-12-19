@@ -313,6 +313,18 @@ final class ShoppingProductTests: XCTestCase {
         let result = sut.supportedTLDWebsites
         XCTAssertNil(result)
     }
+
+    func testReportAdEvent_WithValidURL_CallsClientAPI() async throws {
+        let url = URL(string: "https://www.amazon.com/Under-Armour-Charged-Assert-Running/dp/B087T8Q2C4")!
+        let sut = ShoppingProduct(url: url, client: client)
+
+        _ = try await sut.reportAdEvent(eventName: .trustedDealsLinkClicked, eventSource: "web", aid: "aidv1")
+
+        XCTAssertTrue(client.reportAdEventCalled)
+        XCTAssertEqual(client.lastEventName, .trustedDealsLinkClicked)
+        XCTAssertEqual(client.lastEventSource, "web")
+        XCTAssertEqual(client.lastAid, "aidv1")
+    }
 }
 
 fileprivate extension ProductAdsResponse {
@@ -338,11 +350,17 @@ final class ThrowingFakeSpotClient: FakespotClientType {
     var triggerProductAnalyzeCallCount = 0
     var getProductAnalysisStatusCount = 0
     var reportProductBackInStockCallCount = 0
+    var reportAdEventCallCount = 0
 
     let error: Error
 
     init(error: Error) {
         self.error = error
+    }
+
+    func reportAdEvent(eventName: Client.FakespotAdsEvent, eventSource: String, aid: String) async throws -> Client.AdEventsResponse {
+        reportAdEventCallCount += 1
+        throw error
     }
 
     func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisResponse {
@@ -393,6 +411,20 @@ final class TestFakespotClient: FakespotClientType {
     var triggerProductAnalyzeCallCalled = false
     var getProductAnalysisStatusCallCalled = false
     var reportProductBackInStockCalled = false
+    var reportAdEventCalled = false
+    var reportAdEventCallCount = 0
+    var lastEventName: FakespotAdsEvent?
+    var lastEventSource: String?
+    var lastAid: String?
+
+    func reportAdEvent(eventName: Client.FakespotAdsEvent, eventSource: String, aid: String) async throws -> Client.AdEventsResponse {
+        self.reportAdEventCalled = true
+        self.reportAdEventCallCount += 1
+        self.lastEventName = eventName
+        self.lastEventSource = eventSource
+        self.lastAid = aid
+        return [:]
+    }
 
     func fetchProductAnalysisData(productId: String, website: String) async throws -> ProductAnalysisResponse {
         self.fetchProductAnalysisDataCallCount += 1

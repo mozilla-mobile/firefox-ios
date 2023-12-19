@@ -16,20 +16,30 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     private let imageStore: DiskImageStore?
     private let tabMigration: TabMigrationUtility
     var notificationCenter: NotificationProtocol
+    var inactiveTabsManager: InactiveTabsManagerProtocol
+
+    override var normalActiveTabs: [Tab] {
+        let inactiveTabs = getInactiveTabs()
+        let activeTabs = tabs.filter { $0.isPrivate == false && !inactiveTabs.contains($0) }
+        return activeTabs
+    }
 
     init(profile: Profile,
          imageStore: DiskImageStore?,
          logger: Logger = DefaultLogger.shared,
-         tabDataStore: TabDataStore = DefaultTabDataStore(),
+         uuid: WindowUUID = WindowUUID(),
+         tabDataStore: TabDataStore = AppContainer.shared.resolve(),
          tabSessionStore: TabSessionStore = DefaultTabSessionStore(),
          tabMigration: TabMigrationUtility = DefaultTabMigrationUtility(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         inactiveTabsManager: InactiveTabsManagerProtocol = InactiveTabsManager()) {
             self.tabDataStore = tabDataStore
             self.tabSessionStore = tabSessionStore
             self.imageStore = imageStore
             self.tabMigration = tabMigration
             self.notificationCenter = notificationCenter
-            super.init(profile: profile)
+            self.inactiveTabsManager = inactiveTabsManager
+            super.init(profile: profile, uuid: uuid)
 
             setupNotifications(forObserver: self,
                                observing: [UIApplication.willResignActiveNotification])
@@ -62,7 +72,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         }
 
         isRestoringTabs = true
-        AppEventQueue.started(.tabRestoration)
+        AppEventQueue.started(.tabRestoration(windowUUID))
 
         guard tabMigration.shouldRunMigration else {
             logger.log("Not running the migration",
@@ -80,7 +90,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
     private func migrateAndRestore() {
         Task {
-            await buildTabRestore(window: await tabMigration.runMigration())
+            await buildTabRestore(window: await tabMigration.runMigration(for: windowUUID))
             logger.log("Tabs restore ended after migration", level: .debug, category: .tabs)
             logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
         }
@@ -99,7 +109,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         defer {
             isRestoringTabs = false
             tabRestoreHasFinished = true
-            AppEventQueue.completed(.tabRestoration)
+            AppEventQueue.completed(.tabRestoration(windowUUID))
         }
 
         let nonPrivateTabs = window?.tabData.filter { !$0.isPrivate }
@@ -218,8 +228,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         Task {
             // This value should never be nil but we need to still treat it as if it can be nil until the old code is removed
             let activeTabID = UUID(uuidString: self.selectedTab?.tabUUID ?? "") ?? UUID()
-            // TODO: [7798] Hard coding the window ID until we later add multi-window support
-            let windowData = WindowData(id: WindowData.DefaultSingleWindowUUID,
+            let windowData = WindowData(id: windowUUID,
                                         activeTabId: activeTabID,
                                         tabData: self.generateTabDataForSaving())
             await tabDataStore.saveWindowData(window: windowData, forced: forced)
@@ -278,8 +287,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     }
 
     private func saveCurrentTabSessionData() {
-        guard #available(iOS 15.0, *),
-              let selectedTab = self.selectedTab,
+        guard let selectedTab = self.selectedTab,
               let tabSession = selectedTab.webView?.interactionState as? Data,
               let tabID = UUID(uuidString: selectedTab.tabUUID)
         else { return }
@@ -312,7 +320,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             return
         }
 
-        // Before moving to a new tab save the current tab session data in order to preseve things like scroll position
+        // Before moving to a new tab save the current tab session data in order to preserve things like scroll position
         saveCurrentTabSessionData()
 
         willSelectTab(url)
@@ -324,6 +332,11 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             await selectTabWithSession(tab: tab,
                                        previous: previous,
                                        sessionData: sessionData)
+
+            if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
+                store.dispatch(PrivateModeUserAction.setPrivateModeTo(tab.isPrivate))
+            }
+
             didSelectTab(url)
         }
     }
@@ -341,12 +354,12 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
     private func willSelectTab(_ url: URL?) {
         guard let url else { return }
-        AppEventQueue.started(.selectTab(url))
+        AppEventQueue.started(.selectTab(url, windowUUID))
     }
 
     private func didSelectTab(_ url: URL?) {
         guard let url else { return }
-        AppEventQueue.completed(.selectTab(url))
+        AppEventQueue.completed(.selectTab(url, windowUUID))
     }
 
     @MainActor
@@ -387,13 +400,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                                   forKey: PrefsKeys.LastSessionWasPrivate)
     }
 
-    private func shouldUseNewTabStore() -> Bool {
-        if #available(iOS 15, *) {
-            return true
-        }
-        return false
-    }
-
     // MARK: - Screenshots
 
     override func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
@@ -429,6 +435,28 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         Task {
             try? await imageStore?.clearAllScreenshotsExcluding(savedUUIDsCopy)
         }
+    }
+
+    // MARK: - Inactive tabs
+    override func getInactiveTabs() -> [Tab] {
+        return inactiveTabsManager.getInactiveTabs(tabs: tabs)
+    }
+
+    @MainActor
+    override func removeAllInactiveTabs() async {
+        backupCloseTabs = getInactiveTabs()
+        let currentModeTabs = backupCloseTabs
+        for tab in currentModeTabs {
+            await self.removeTab(tab.tabUUID)
+        }
+        storeChanges()
+    }
+
+    @MainActor
+    override func undoCloseInactiveTabs() {
+        tabs.append(contentsOf: backupCloseTabs)
+        storeChanges()
+        backupCloseTabs = [Tab]()
     }
 
     // MARK: - Notifiable

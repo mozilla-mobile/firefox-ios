@@ -8,7 +8,7 @@
 "NSCameraUsageDescription" = "Firefox gebruikt uw camera om QR-codes te scannen en foto’s en video te maken.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox vereist Face ID om uw opgeslagen aanmeldingen en versleutelde kaarten te benaderen.";
+"NSFaceIDUsageDescription" = "Firefox vereist Face ID om uw opgeslagen aanmeldingen en betalingsmethoden te benaderen.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Websites die u bezoekt kunnen om uw locatie vragen.";

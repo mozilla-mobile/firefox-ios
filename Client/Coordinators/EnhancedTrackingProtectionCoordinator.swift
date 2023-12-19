@@ -21,7 +21,7 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
 
     init(router: Router,
          profile: Profile = AppContainer.shared.resolve(),
-         tabManager: TabManager = AppContainer.shared.resolve()
+         tabManager: TabManager
     ) {
         let tab = tabManager.selectedTab
         let url = tab?.url ?? URL(fileURLWithPath: "")

@@ -16,6 +16,7 @@
     {
       "skippedTests" : [
         "ActivityStreamTest\/testContextMenuInLandscape()",
+        "ActivityStreamTest\/testLongTapOnTopSiteOptions()",
         "ActivityStreamTest\/testTopSites1ShareDefaultTopSite()",
         "ActivityStreamTest\/testTopSites2Add()",
         "ActivityStreamTest\/testTopSites3RemoveDefaultTopSite()",
@@ -52,6 +53,7 @@
         "BookmarksTests\/testRecentlyBookmarked()",
         "BrowsingPDFTests",
         "ClipBoardTests\/testClipboard()",
+        "CreditCardsTests",
         "CronTabsPerformanceTest",
         "DataManagementTests\/testWebSiteDataOptions()",
         "DatabaseFixtureTest",

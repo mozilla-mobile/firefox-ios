@@ -25,8 +25,10 @@ final class TabPanelStateTests: XCTestCase {
         let initialState = createInitialState()
         XCTAssertTrue(initialState.tabs.isEmpty)
         let reducer = tabsPanelReducer()
+        let tabs = createTabs()
         let tabDisplayModel = TabDisplayModel(isPrivateMode: false,
-                                              tabs: createTabs(),
+                                              tabs: tabs,
+                                              normalTabsCount: "\(tabs.count)",
                                               inactiveTabs: [InactiveTabsModel](),
                                               isInactiveTabsExpanded: false)
         let newState = reducer(initialState, TabPanelAction.didLoadTabPanel(tabDisplayModel))
@@ -62,7 +64,9 @@ final class TabPanelStateTests: XCTestCase {
     private func createInactiveTabs() -> [InactiveTabsModel] {
         var inactiveTabs = [InactiveTabsModel]()
         for index in 0...2 {
-            let inactiveTab = InactiveTabsModel(url: "InactiveTab\(index)")
+            let inactiveTab = InactiveTabsModel(tabUUID: "4233-2323-3578",
+                                                title: "InactiveTab\(index)",
+                                                url: URL(string: "https://www.test\(index).com"))
             inactiveTabs.append(inactiveTab)
         }
         return inactiveTabs

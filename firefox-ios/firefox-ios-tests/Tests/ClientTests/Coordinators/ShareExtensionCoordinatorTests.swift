@@ -73,7 +73,8 @@ final class ShareExtensionCoordinatorTests: XCTestCase {
             alertContainer: UIView(),
             router: mockRouter,
             profile: MockProfile(),
-            parentCoordinator: parentCoordinator)
+            parentCoordinator: parentCoordinator,
+            tabManager: MockTabManager())
         trackForMemoryLeaks(subject)
         return subject
     }

@@ -19,107 +19,8 @@ class ThemeSettingsControllerTests: XCTestCase {
         DependencyHelperMock().reset()
     }
 
-    func testThemeSettingsUseSystemAppearance_WithoutRedux() {
-        let subject = createSubject(usingRedux: false)
-        let themeSwitch = createUseSystemThemeSwitch(isOn: true)
-        subject.systemThemeSwitchValueChanged(control: themeSwitch)
-
-        XCTAssertTrue(subject.isSystemThemeOn)
-        XCTAssertEqual(subject.tableView.numberOfSections, 1)
-    }
-
-    func testThemeSettingsUseCustomAppearance_WithoutRedux() {
-        let subject = createSubject(usingRedux: false)
-        let themeSwitch = createUseSystemThemeSwitch(isOn: false)
-        subject.systemThemeSwitchValueChanged(control: themeSwitch)
-
-        XCTAssertFalse(subject.isSystemThemeOn)
-        XCTAssertEqual(subject.tableView.numberOfSections, 3)
-    }
-
-    func testUseManualTheme_WithoutRedux() {
-        let subject = createSubject(usingRedux: false)
-        let themeSwitch = createUseSystemThemeSwitch(isOn: false)
-        subject.systemThemeSwitchValueChanged(control: themeSwitch)
-        let tableView = UITableView()
-        // Select Manual theme row
-        subject.tableView(tableView, didSelectRowAt: IndexPath(row: 0, section: 1))
-
-        XCTAssertFalse(subject.isAutoBrightnessOn)
-    }
-
-    func testUpdateToLightManualTheme_WithoutRedux() {
-        let subject = createSubject(usingRedux: false)
-        let themeSwitch = createUseSystemThemeSwitch(isOn: false)
-        subject.systemThemeSwitchValueChanged(control: themeSwitch)
-        let tableView = UITableView()
-        // Select to Manual theme row
-        subject.tableView(tableView, didSelectRowAt: IndexPath(row: 0, section: 1))
-        // Select Light theme
-        subject.tableView(tableView, didSelectRowAt: IndexPath(row: 0, section: 2))
-
-        XCTAssertEqual(subject.manualThemeType, ThemeType.light)
-    }
-
-    func testUpdateToDarkManualTheme_WithoutRedux() {
-        let subject = createSubject(usingRedux: false)
-        let themeSwitch = createUseSystemThemeSwitch(isOn: false)
-        subject.systemThemeSwitchValueChanged(control: themeSwitch)
-        let tableView = UITableView()
-        // Select to Manual theme row
-        subject.tableView(tableView, didSelectRowAt: IndexPath(row: 0, section: 1))
-        // Select Dark theme
-        subject.tableView(tableView, didSelectRowAt: IndexPath(row: 1, section: 2))
-
-        XCTAssertEqual(subject.manualThemeType, ThemeType.dark)
-    }
-
-    func testIsAutoBrightnessOn_WithoutRedux() {
-        let subject = createSubject(usingRedux: false)
-        let themeSwitch = createUseSystemThemeSwitch(isOn: false)
-        subject.systemThemeSwitchValueChanged(control: themeSwitch)
-        let tableView = UITableView()
-        // Select to Manual theme row
-        subject.tableView(tableView, didSelectRowAt: IndexPath(row: 1, section: 1))
-
-        XCTAssertTrue(subject.isAutoBrightnessOn)
-    }
-
-    func testSystemBrightness_ForLightTheme_WithoutRedux() {
-        let subject = createSubject(usingRedux: false)
-        let themeSwitch = createUseSystemThemeSwitch(isOn: false)
-        subject.systemThemeSwitchValueChanged(control: themeSwitch)
-        let tableView = UITableView()
-        // Select to Manual theme row
-        subject.tableView(tableView, didSelectRowAt: IndexPath(row: 1, section: 1))
-
-        // Set user threshold lower than systemBrightness
-        let userBrightness = Float(UIScreen.main.brightness) - 0.2
-        subject.themeManager.setAutomaticBrightnessValue(userBrightness)
-
-        subject.systemBrightnessChanged()
-        XCTAssertEqual(subject.themeManager.currentTheme.type, .light)
-    }
-
-    func testSystemBrightnessChanged_ForDarkTheme_WithoutRedux() {
-        let subject = createSubject(usingRedux: false)
-        let themeSwitch = createUseSystemThemeSwitch(isOn: false)
-        subject.systemThemeSwitchValueChanged(control: themeSwitch)
-        let tableView = UITableView()
-        // Select to Manual theme row
-        subject.tableView(tableView, didSelectRowAt: IndexPath(row: 1, section: 1))
-
-        // Set user threshold higher than systemBrightness
-        let userBrightness = Float(UIScreen.main.brightness) + 0.2
-        subject.themeManager.setAutomaticBrightnessValue(userBrightness)
-
-        subject.systemBrightnessChanged()
-        XCTAssertEqual(subject.themeManager.currentTheme.type, .dark)
-    }
-
-    // MARK: - Test with Redux
     func testUseSystemAppearance_WithRedux() {
-        let subject = createSubject(usingRedux: true)
+        let subject = createSubject()
         let themeSwitch = createUseSystemThemeSwitch(isOn: true)
         subject.systemThemeSwitchValueChanged(control: themeSwitch)
 
@@ -134,7 +35,7 @@ class ThemeSettingsControllerTests: XCTestCase {
     }
 
     func testUseCustomAppearance_WithRedux() {
-        let subject = createSubject(usingRedux: true)
+        let subject = createSubject()
         let themeSwitch = createUseSystemThemeSwitch(isOn: false)
         subject.systemThemeSwitchValueChanged(control: themeSwitch)
 
@@ -143,7 +44,7 @@ class ThemeSettingsControllerTests: XCTestCase {
     }
 
     func testUseManualTheme_WithRedux() {
-        let subject = createSubject(usingRedux: true)
+        let subject = createSubject()
         let themeSwitch = createUseSystemThemeSwitch(isOn: false)
         subject.systemThemeSwitchValueChanged(control: themeSwitch)
         let tableView = UITableView()
@@ -154,7 +55,7 @@ class ThemeSettingsControllerTests: XCTestCase {
     }
 
     func testUpdateToLightManualTheme_WithRedux() {
-        let subject = createSubject(usingRedux: true)
+        let subject = createSubject()
         let themeSwitch = createUseSystemThemeSwitch(isOn: false)
         subject.systemThemeSwitchValueChanged(control: themeSwitch)
         let tableView = UITableView()
@@ -167,7 +68,7 @@ class ThemeSettingsControllerTests: XCTestCase {
     }
 
     func testUpdateToDarkManualTheme_WithRedux() {
-        let subject = createSubject(usingRedux: true)
+        let subject = createSubject()
         let themeSwitch = createUseSystemThemeSwitch(isOn: false)
         subject.systemThemeSwitchValueChanged(control: themeSwitch)
         let tableView = UITableView()
@@ -180,7 +81,7 @@ class ThemeSettingsControllerTests: XCTestCase {
     }
 
     func testSystemBrightness_ForLightTheme_WithRedux() {
-        let subject = createSubject(usingRedux: true)
+        let subject = createSubject()
         let themeSwitch = createUseSystemThemeSwitch(isOn: false)
         subject.systemThemeSwitchValueChanged(control: themeSwitch)
         let tableView = UITableView()
@@ -196,7 +97,7 @@ class ThemeSettingsControllerTests: XCTestCase {
     }
 
     func testSystemBrightnessChanged_ForDarkTheme_WithRedux() {
-        let subject = createSubject(usingRedux: true)
+        let subject = createSubject()
         let themeSwitch = createUseSystemThemeSwitch(isOn: false)
         subject.systemThemeSwitchValueChanged(control: themeSwitch)
         let tableView = UITableView()
@@ -212,14 +113,10 @@ class ThemeSettingsControllerTests: XCTestCase {
     }
 
     // MARK: - Private
-    private func createSubject(usingRedux: Bool,
-                               file: StaticString = #file,
+    private func createSubject(file: StaticString = #file,
                                line: UInt = #line) -> ThemeSettingsController {
         let subject = ThemeSettingsController()
-        if usingRedux {
-            store.dispatch(ActiveScreensStateAction.showScreen(.themeSettings))
-        }
-        subject.isReduxIntegrationEnabled = usingRedux
+        store.dispatch(ActiveScreensStateAction.showScreen(.themeSettings))
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }

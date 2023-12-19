@@ -166,5 +166,6 @@ class OneLineTableViewCell: UITableViewCell,
         titleLabel.textColor = theme.colors.textPrimary
         bottomSeparatorView.backgroundColor = theme.colors.borderPrimary
         accessoryView?.tintColor = theme.colors.actionSecondary
+        leftImageView.tintColor = theme.colors.textPrimary
     }
 }

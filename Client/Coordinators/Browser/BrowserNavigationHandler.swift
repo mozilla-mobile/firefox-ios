@@ -6,7 +6,7 @@ import Foundation
 import Storage
 import WebKit
 
-protocol BrowserNavigationHandler: AnyObject {
+protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     /// Asks to show a settings page, can be a general settings page or a child page
     /// - Parameter settings: The settings route we're trying to get to
     func show(settings: Route.SettingsSection)
@@ -73,9 +73,6 @@ protocol BrowserNavigationHandler: AnyObject {
 
     /// Shows the Tab Tray View Controller.
     func showTabTray(selectedPanel: TabTrayPanelType)
-
-    /// Shows the QRCode View Controller.
-    func showQRCode()
 }
 
 extension BrowserNavigationHandler {

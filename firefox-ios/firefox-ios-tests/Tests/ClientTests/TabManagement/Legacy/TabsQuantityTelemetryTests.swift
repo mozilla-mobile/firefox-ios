@@ -10,11 +10,13 @@ import Common
 
 class TabsQuantityTelemetryTests: XCTestCase {
     var profile: Profile!
+    var inactiveTabsManager: MockInactiveTabsManager!
 
     override func setUp() {
         super.setUp()
 
         profile = MockProfile()
+        inactiveTabsManager = MockInactiveTabsManager()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         Glean.shared.resetGlean(clearStores: true)
         Glean.shared.enableTestingMode()
@@ -28,8 +30,13 @@ class TabsQuantityTelemetryTests: XCTestCase {
     }
 
     func testTrackTabsQuantity_withNormalTab_gleanIsCalled() {
-        let tabManager = TabManagerImplementation(profile: profile, imageStore: nil)
-        tabManager.addTab()
+        let tabManager = TabManagerImplementation(profile: profile,
+                                                  imageStore: nil,
+                                                  inactiveTabsManager: inactiveTabsManager)
+
+        let tab = tabManager.addTab()
+        inactiveTabsManager.activeTabs = [tab]
+        _ = inactiveTabsManager.getInactiveTabs(tabs: [tab])
 
         TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
 
@@ -58,8 +65,12 @@ class TabsQuantityTelemetryTests: XCTestCase {
     }
 
     func testTrackTabsQuantity_ensureNoInactiveTabs_gleanIsCalled() {
-        let tabManager = TabManagerImplementation(profile: profile, imageStore: nil)
-        tabManager.addTab()
+        let tabManager = TabManagerImplementation(profile: profile,
+                                                  imageStore: nil,
+                                                  inactiveTabsManager: inactiveTabsManager)
+        let tab = tabManager.addTab()
+        inactiveTabsManager.activeTabs = [tab]
+        _ = inactiveTabsManager.getInactiveTabs(tabs: [tab])
 
         TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
 

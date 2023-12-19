@@ -43,6 +43,7 @@
         "BookmarksTests",
         "BrowsingPDFTests",
         "ClipBoardTests",
+        "CreditCardsTests",
         "CronTabsPerformanceTest",
         "DataManagementTests",
         "DatabaseFixtureTest",

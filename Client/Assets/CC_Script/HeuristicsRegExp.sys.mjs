@@ -497,7 +497,7 @@ export const HeuristicsRegExp = {
       // ==== Name Fields ====
       "cc-name":
         "card.?(?:holder|owner)|name.*(\\b)?on(\\b)?.*card" +
-        "|(?:card|cc).?name|cc.?full.?name" +
+        "|^(credit[-\\s]?card|card).*name|cc.?full.?name" +
         "|karteninhaber" + // de-DE
         "|nombre.*tarjeta" + // es
         "|nom.*carte" + // fr-FR

@@ -9,7 +9,6 @@ import Storage
 
 // swiftlint:disable class_delegate_protocol
 protocol HomepageContextMenuHelperDelegate: UIViewController {
-    func presentWithModalDismissIfNeeded(_ viewController: UIViewController, animated: Bool)
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool)
     func homePanelDidRequestToOpenSettings(at settingsPage: Route.SettingsSection)
 }
@@ -23,10 +22,8 @@ extension HomepageContextMenuHelperDelegate {
 
 class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     typealias ContextHelperDelegate = HomepageContextMenuHelperDelegate & UIPopoverPresentationControllerDelegate
-    typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
     private var viewModel: HomepageViewModel
     private let toastContainer: UIView
-    weak var sendToDeviceDelegate: SendToDeviceDelegate?
     weak var browserNavigationHandler: BrowserNavigationHandler?
     weak var delegate: ContextHelperDelegate?
     var getPopoverSourceRect: ((UIView?) -> CGRect)?
@@ -56,6 +53,10 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
             actions = topSitesActions
         } else if sectionType == .pocket, let pocketActions = getPocketActions(site: site, with: sourceView) {
             actions = pocketActions
+        } else if sectionType == .recentlySaved, let recentlySavedActions = getRecentlySavedActions(site: site, with: sourceView) {
+            actions = recentlySavedActions
+        } else if sectionType == .jumpBackIn, let jumpBackInActions = getJumpBackInActions(site: site, with: sourceView) {
+            actions = jumpBackInActions
         }
 
         return actions
@@ -75,7 +76,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                                sectionType: HomepageSectionType
     ) -> [PhotonRowActions]? {
         guard sectionType == .historyHighlights,
-              let highlightsActions = getHistoryHighlightsActions(for: highlightItem)
+              let highlightsActions = getHistoryHighlightsActions(for: highlightItem, with: sourceView)
         else { return nil }
 
         return highlightsActions
@@ -91,17 +92,45 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
     // MARK: - History Highlights
 
-    private func getHistoryHighlightsActions(for highlightItem: HighlightItem) -> [PhotonRowActions]? {
-        return [SingleActionViewModel(title: .RemoveContextMenuTitle,
-                                      iconString: StandardImageIdentifiers.Large.cross,
-                                      tapHandler: { _ in
-            self.viewModel.historyHighlightsViewModel.delete(highlightItem)
-            self.sendHistoryHighlightContextualTelemetry(type: .remove)
-        }).items]
+    private func getHistoryHighlightsActions(for highlightItem: HighlightItem, with sourceView: UIView?) -> [PhotonRowActions]? {
+        guard let siteURL = highlightItem.siteUrl else { return nil }
+
+        let site = Site(url: siteURL.absoluteString, title: highlightItem.displayTitle)
+        let openInNewTabAction = getOpenInNewTabAction(siteURL: siteURL, sectionType: .historyHighlights)
+        let openInNewPrivateTabAction = getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .historyHighlights)
+        let shareAction = getShareAction(site: site, sourceView: sourceView)
+        let bookmarkAction = getBookmarkAction(site: site)
+
+        return [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, shareAction]
+    }
+
+    // MARK: Jump Back In
+
+    private func getJumpBackInActions(site: Site, with sourceView: UIView?) -> [PhotonRowActions]? {
+        guard let siteURL = site.url.asURL else { return nil }
+
+        let openInNewTabAction = getOpenInNewTabAction(siteURL: siteURL, sectionType: .jumpBackIn)
+        let openInNewPrivateTabAction = getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .jumpBackIn)
+        let shareAction = getShareAction(site: site, sourceView: sourceView)
+        let bookmarkAction = getBookmarkAction(site: site)
+
+        return [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, shareAction]
+    }
+
+    // MARK: Recently Saved
+
+    private func getRecentlySavedActions(site: Site, with sourceView: UIView?) -> [PhotonRowActions]? {
+        guard let siteURL = site.url.asURL else { return nil }
+
+        let openInNewTabAction = getOpenInNewTabAction(siteURL: siteURL, sectionType: .recentlySaved)
+        let openInNewPrivateTabAction = getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .recentlySaved)
+        let shareAction = getShareAction(site: site, sourceView: sourceView)
+        let bookmarkAction = getBookmarkAction(site: site)
+
+        return [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, shareAction]
     }
 
     // MARK: - Pocket
-
     private func getPocketActions(site: Site, with sourceView: UIView?) -> [PhotonRowActions]? {
         guard let siteURL = site.url.asURL else { return nil }
 
@@ -189,25 +218,6 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                 toastContainer: self.toastContainer,
                 popoverArrowDirection: [.up, .down, .left])
         }).items
-    }
-
-    private func showSendToDevice(site: Site) {
-        guard let delegate = sendToDeviceDelegate else { return }
-
-        let themeColors = viewModel.theme.colors
-
-        let colors = SendToDeviceHelper.Colors(defaultBackground: themeColors.layer1,
-                                               textColor: themeColors.textPrimary,
-                                               iconColor: themeColors.iconPrimary)
-        let shareItem = ShareItem(url: site.url, title: site.title)
-        let helper = SendToDeviceHelper(shareItem: shareItem,
-                                        profile: viewModel.profile,
-                                        colors: colors,
-                                        delegate: delegate)
-        let viewController = helper.initialViewController()
-
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sendToDevice)
-        self.delegate?.presentWithModalDismissIfNeeded(viewController, animated: true)
     }
 
     // MARK: - Top sites
