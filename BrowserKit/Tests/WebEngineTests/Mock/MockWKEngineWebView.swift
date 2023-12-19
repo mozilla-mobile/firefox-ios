@@ -21,7 +21,7 @@ class MockWKEngineWebView: WKEngineWebView {
     var goForwardCalled = 0
     var removeAllUserScriptsCalled = 0
     var removeFromSuperviewCalled = 0
-    
+
     var loadRequest: URLRequest?
     var loadFileURL: URL?
     var loadFileReadAccessURL: URL?
