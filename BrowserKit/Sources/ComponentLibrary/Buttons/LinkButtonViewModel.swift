@@ -17,7 +17,6 @@ public struct LinkButtonViewModel {
     public let fontSize: CGFloat
     public let contentInsets: NSDirectionalEdgeInsets
     public let contentHorizontalAlignment: UIControl.ContentHorizontalAlignment
-    public let numberOfLines: Int
 
     public init(title: String,
                 a11yIdentifier: String,
@@ -26,13 +25,11 @@ public struct LinkButtonViewModel {
                                                                                  leading: UX.horizontalInset,
                                                                                  bottom: UX.verticalInset,
                                                                                  trailing: UX.horizontalInset),
-                contentHorizontalAlignment: UIControl.ContentHorizontalAlignment = .leading,
-                numberOfLines: Int = 0) {
+                contentHorizontalAlignment: UIControl.ContentHorizontalAlignment = .leading) {
         self.title = title
         self.a11yIdentifier = a11yIdentifier
         self.fontSize = fontSize
         self.contentInsets = contentInsets
         self.contentHorizontalAlignment = contentHorizontalAlignment
-        self.numberOfLines = numberOfLines
     }
 }

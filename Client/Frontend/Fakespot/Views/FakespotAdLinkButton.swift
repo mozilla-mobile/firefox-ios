@@ -6,14 +6,15 @@ import UIKit
 import ComponentLibrary
 
 class FakespotAdLinkButton: LinkButton {
-    private var numberOfLines = 0
+    private struct UX {
+        static let numberOfLines: Int = 3
+    }
+
     private var previousFrame: CGRect = .zero
 
     override public var frame: CGRect {
         didSet {
-            // invalidate intrinsic content size so that we calculate it correctly
-            // when not the full button text should be shown
-            guard previousFrame != frame, numberOfLines > 0 else { return }
+            guard previousFrame != frame else { return }
 
             previousFrame = frame
             invalidateIntrinsicContentSize()
@@ -26,12 +27,9 @@ class FakespotAdLinkButton: LinkButton {
         guard let config = configuration else {
             return
         }
-        var updatedConfiguration = config
 
-        if viewModel.numberOfLines > 0 {
-            updatedConfiguration.titleLineBreakMode = .byTruncatingTail
-            self.numberOfLines = viewModel.numberOfLines
-        }
+        var updatedConfiguration = config
+        updatedConfiguration.titleLineBreakMode = .byTruncatingTail
 
         configuration = updatedConfiguration
         layoutIfNeeded()
@@ -40,19 +38,16 @@ class FakespotAdLinkButton: LinkButton {
     override public func layoutSubviews() {
         super.layoutSubviews()
 
-        guard let titleLabel, numberOfLines > 0 else { return }
+        guard let titleLabel else { return }
 
         // hack to be able to restrict the number of lines displayed
-        titleLabel.numberOfLines = numberOfLines
+        titleLabel.numberOfLines = UX.numberOfLines
         sizeToFit()
     }
 
     override public var intrinsicContentSize: CGSize {
-        // will only be calculated when the number of lines displayed is restricted
-        // without autolayout is not working correctly
         guard let title = titleLabel,
-              let configuration,
-              numberOfLines > 0
+              let configuration
         else {
             return super.intrinsicContentSize
         }
