@@ -1333,6 +1333,7 @@
 		E12BD0AE28AC38480029AAF0 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12BD0AD28AC38480029AAF0 /* UIImage+Extension.swift */; };
 		E12BD0B028AC3A7E0029AAF0 /* UIEdgeInsets+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12BD0AF28AC3A7E0029AAF0 /* UIEdgeInsets+Extension.swift */; };
 		E1312FD129D237EE008DDA85 /* NotificationSurfaceManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1312FD029D237EE008DDA85 /* NotificationSurfaceManagerTests.swift */; };
+		E134D5802B31FF3100C6B17B /* FakespotAdLinkButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E134D57F2B31FF3000C6B17B /* FakespotAdLinkButton.swift */; };
 		E136D41A2B19D35D003D0302 /* EmbeddedNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E136D4192B19D35D003D0302 /* EmbeddedNavController.swift */; };
 		E1380B8D2AEA897C00630AFA /* SidebarEnabledView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1380B8C2AEA897C00630AFA /* SidebarEnabledView.swift */; };
 		E1390FB628B040E900C9EF3E /* WallpaperSelectorViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1390FB528B040E900C9EF3E /* WallpaperSelectorViewModelTests.swift */; };
@@ -6991,6 +6992,7 @@
 		E12BD0AD28AC38480029AAF0 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		E12BD0AF28AC3A7E0029AAF0 /* UIEdgeInsets+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIEdgeInsets+Extension.swift"; sourceTree = "<group>"; };
 		E1312FD029D237EE008DDA85 /* NotificationSurfaceManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSurfaceManagerTests.swift; sourceTree = "<group>"; };
+		E134D57F2B31FF3000C6B17B /* FakespotAdLinkButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotAdLinkButton.swift; sourceTree = "<group>"; };
 		E136D4192B19D35D003D0302 /* EmbeddedNavController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmbeddedNavController.swift; sourceTree = "<group>"; };
 		E1380B8C2AEA897C00630AFA /* SidebarEnabledView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarEnabledView.swift; sourceTree = "<group>"; };
 		E1390FB528B040E900C9EF3E /* WallpaperSelectorViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperSelectorViewModelTests.swift; sourceTree = "<group>"; };
@@ -10611,6 +10613,7 @@
 				AB0303292AB47AF300DCD8EF /* FakespotOptInCardView.swift */,
 				DF529EA02AB1B421003C5373 /* FakespotReliabilityScoreView.swift */,
 				AB6FEA1F2AEA5CA200E7B2F2 /* FakespotAdView.swift */,
+				E134D57F2B31FF3000C6B17B /* FakespotAdLinkButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -13700,6 +13703,7 @@
 				D863C8F21F68BFC20058D95F /* GradientProgressBar.swift in Sources */,
 				C8445A14264428DC00B83F53 /* LibraryPanelViewState.swift in Sources */,
 				D5D052D92645ABF400759F85 /* ExperimentsSettingsView.swift in Sources */,
+				E134D5802B31FF3100C6B17B /* FakespotAdLinkButton.swift in Sources */,
 				8AE0BF4F2819B10E00F33EC4 /* TopSitesSettingsViewController.swift in Sources */,
 				8A8DDEBF276259A900E7B97A /* RatingPromptManager.swift in Sources */,
 				1D969C702B21322B004255B1 /* BrowserWindow.swift in Sources */,
