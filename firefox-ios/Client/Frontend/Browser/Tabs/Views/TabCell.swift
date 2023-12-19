@@ -52,11 +52,9 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     private lazy var screenshotView: UIImageView = .build { view in
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
-        view.isUserInteractionEnabled = false
     }
 
     private lazy var titleText: UILabel = .build { label in
-        label.isUserInteractionEnabled = false
         label.numberOfLines = 1
         label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 12, weight: .semibold)
     }
