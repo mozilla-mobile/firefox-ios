@@ -8,7 +8,7 @@
 "NSCameraUsageDescription" = "Бұл арқылы фотоларды түсіріп, жүктеуге болады.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Сақталған логиндер мен шифрленген карталарға қатынау үшін Firefox Face ID қажет етеді.";
+"NSFaceIDUsageDescription" = "Сақталған парольдер мен төлем әдістеріне қол жеткізу үшін Firefox Face ID қажет етеді.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Сіз ашатын веб-сайттар сізден орналасуыңызды сұрауы мүмкін.";

@@ -82,10 +82,6 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
 
     static let reducer: Reducer<Self> = { state, action in
         switch action {
-        case RemoteTabsPanelAction.refreshTabs:
-            // No change to state until middleware performs necessary logic to
-            // determine whether we can sync account
-            return state
         case RemoteTabsPanelAction.refreshDidBegin:
             let newState = RemoteTabsPanelState(refreshState: .refreshing,
                                                 allowsRefresh: state.allowsRefresh,
@@ -101,16 +97,9 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
                                                 showingEmptyState: reason)
             return newState
         case RemoteTabsPanelAction.refreshDidSucceed(let newClientAndTabs):
-            // Send client and tabs state, ensure empty state is nil and refresh is idle
             let newState = RemoteTabsPanelState(refreshState: .idle,
                                                 allowsRefresh: true,
                                                 clientAndTabs: newClientAndTabs,
-                                                showingEmptyState: nil)
-            return newState
-        case RemoteTabsPanelAction.cachedTabsAvailable(let cachedResults):
-            let newState = RemoteTabsPanelState(refreshState: cachedResults.isUpdating ? .refreshing : .idle,
-                                                allowsRefresh: true,
-                                                clientAndTabs: cachedResults.clientAndTabs,
                                                 showingEmptyState: nil)
             return newState
         default:

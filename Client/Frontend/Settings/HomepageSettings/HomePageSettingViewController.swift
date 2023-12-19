@@ -115,7 +115,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
                 self.tableView.reloadData()
             })
 
-        showWebPage.textField.textAlignment = .natural
+        showWebPage.alignTextFieldToNatural()
 
         return SettingSection(title: NSAttributedString(string: .SettingsHomePageURLSectionTitle),
                               footerTitle: NSAttributedString(string: .Settings.Homepage.Current.Description),

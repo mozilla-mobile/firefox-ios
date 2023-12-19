@@ -117,7 +117,7 @@ class DeviceNameSetting: StringSetting {
 
     override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
         super.onConfigureCell(cell, theme: theme)
-        textField.textAlignment = .natural
+        alignTextFieldToNatural()
     }
 
     deinit {

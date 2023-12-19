@@ -53,9 +53,6 @@ final class NimbusFeatureFlagLayer {
         case .qrCodeCoordinatorRefactor:
             return checkQRCodeCoordinatorRefactorFeature(from: nimbus)
 
-        case .reduxIntegration:
-            return checkReduxIntegrationFeature(from: nimbus)
-
         case .reportSiteIssue:
             return checkGeneralFeature(for: featureID, from: nimbus)
 
@@ -150,11 +147,6 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.wallpaperFeature.value()
 
         return config.configuration.version.rawValue
-    }
-
-    private func checkReduxIntegrationFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.reduxIntegrationFeature.value()
-        return config.enabled
     }
 
     private func checkQRCodeCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {

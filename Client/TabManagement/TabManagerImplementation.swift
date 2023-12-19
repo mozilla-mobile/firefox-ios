@@ -27,8 +27,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     init(profile: Profile,
          imageStore: DiskImageStore?,
          logger: Logger = DefaultLogger.shared,
-         uuid: WindowUUID,
-         tabDataStore: TabDataStore = DefaultTabDataStore(),
+         uuid: WindowUUID = WindowUUID(),
+         tabDataStore: TabDataStore = AppContainer.shared.resolve(),
          tabSessionStore: TabSessionStore = DefaultTabSessionStore(),
          tabMigration: TabMigrationUtility = DefaultTabMigrationUtility(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
@@ -90,7 +90,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
     private func migrateAndRestore() {
         Task {
-            await buildTabRestore(window: await tabMigration.runMigration())
+            await buildTabRestore(window: await tabMigration.runMigration(for: windowUUID))
             logger.log("Tabs restore ended after migration", level: .debug, category: .tabs)
             logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
         }
@@ -228,8 +228,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         Task {
             // This value should never be nil but we need to still treat it as if it can be nil until the old code is removed
             let activeTabID = UUID(uuidString: self.selectedTab?.tabUUID ?? "") ?? UUID()
-            // TODO: [FXIOS-7798] Hard coding the window ID until we later add multi-window support
-            let windowData = WindowData(id: .defaultSingleWindowUUID,
+            let windowData = WindowData(id: windowUUID,
                                         activeTabId: activeTabID,
                                         tabData: self.generateTabDataForSaving())
             await tabDataStore.saveWindowData(window: windowData, forced: forced)
@@ -445,11 +444,19 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
     @MainActor
     override func removeAllInactiveTabs() async {
-        let currentModeTabs = getInactiveTabs()
+        backupCloseTabs = getInactiveTabs()
+        let currentModeTabs = backupCloseTabs
         for tab in currentModeTabs {
             await self.removeTab(tab.tabUUID)
         }
         storeChanges()
+    }
+
+    @MainActor
+    override func undoCloseInactiveTabs() {
+        tabs.append(contentsOf: backupCloseTabs)
+        storeChanges()
+        backupCloseTabs = [Tab]()
     }
 
     // MARK: - Notifiable

@@ -647,7 +647,7 @@
 "Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "Saiba mais";
 
 /* Message shown when you enter Logins & Passwords without having a device passcode set. */
-"Logins.DevicePasscodeRequired.Message" = "Para salvar e preencher automaticamente contas e senhas, ative o Face ID, Touch ID ou uma senha de dispositivo.";
+"Logins.DevicePasscodeRequired.Message" = "Para salvar e preencher automaticamente contas e senhas, ative o Face ID, Touch ID ou um código de acesso do dispositivo.";
 
 /* Title of the Continue button. */
 "Logins.Onboarding.ContinueButtonTitle" = "Continuar";
@@ -656,7 +656,7 @@
 "Logins.Onboarding.LearnMoreButtonTitle" = "Saiba mais";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "Para usar o recurso de preenchimento automático do Firefox, você deve ter ativada uma senha de dispositivo.";
+"Logins.PasscodeRequirement.Warning" = "Para usar o recurso de preenchimento automático do Firefox, você deve ter ativado um código de acesso do dispositivo.";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "Tenha suas senhas em qualquer lugar";
@@ -1171,7 +1171,7 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (substituir a consulta por %s)";
 
-/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
+/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow autofill in a webpage. */
 "Settings.AutofillCreditCard.Title.v112" = "Preenchimento automático de cartões de crédito";
 
 /* Button in Data Management that clears all items. */
@@ -1442,7 +1442,7 @@
 "Settings.Passwords.FingerPrintReason.v103" = "Use agora sua digital para acessar senhas.";
 
 /* Message shown when you enter Passwords screen for the first time. It explains how password are protected in the Firefox for iOS application. */
-"Settings.Passwords.OnboardingMessage.v103" = "Suas senhas agora estão protegidas por Face ID, Touch ID ou uma senha de dispositivo.";
+"Settings.Passwords.OnboardingMessage.v103" = "Suas senhas agora estão protegidas por Face ID, Touch ID ou um código de acesso do dispositivo.";
 
 /* Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords. */
 "Settings.Passwords.SavePasswords.v103" = "Salvar senhas";

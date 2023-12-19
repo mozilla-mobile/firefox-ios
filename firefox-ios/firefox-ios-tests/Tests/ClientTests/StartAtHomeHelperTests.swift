@@ -18,7 +18,7 @@ class StartAtHomeHelperTests: XCTestCase {
 
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
-        tabManager = TabManagerImplementation(profile: profile, imageStore: nil, uuid: .defaultSingleWindowUUID)
+        tabManager = TabManagerImplementation(profile: profile, imageStore: nil)
 
         DependencyHelperMock().bootstrapDependencies()
     }

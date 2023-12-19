@@ -2,40 +2,27 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
-import GCDWebServers
 import WebKit
 
 class WKEngineSession: EngineSession {
     weak var delegate: EngineSessionDelegate?
-    private var webView: TabWebView
-    private let configuration: WKWebViewConfiguration
+    private var webView: WKEngineWebView
+    private var logger: Logger
 
-    init(configuration: WKWebViewConfiguration) {
-        configuration.userContentController = WKUserContentController()
-        configuration.allowsInlineMediaPlayback = true
-        let webView = TabWebView(frame: .zero,
-                                 configuration: configuration)
-
-        // TODO: FXIOS-7898 #17643 Handle WebView a11y label
-//        webView.accessibilityLabel = .WebViewAccessibilityLabel
-        webView.allowsBackForwardNavigationGestures = true
-        webView.allowsLinkPreview = true
-
-        // Allow Safari Web Inspector (requires toggle in Settings > Safari > Advanced).
-        if #available(iOS 16.4, *) {
-            webView.isInspectable = true
+    init?(configurationProvider: WKEngineConfigurationProvider = DefaultWKEngineConfigurationProvider(),
+          webViewProvider: WKWebViewProvider = DefaultWKWebViewProvider(),
+          logger: Logger = DefaultLogger.shared) {
+        guard let webView = webViewProvider.createWebview(configurationProvider: configurationProvider) else {
+            logger.log("WKEngineWebView creation failed on configuration",
+                       level: .fatal,
+                       category: .webview)
+            return nil
         }
 
-        // Night mode enables this by toggling WKWebView.isOpaque, otherwise this has no effect.
-        webView.backgroundColor = .black
-
-        // Turning off masking allows the web content to flow outside of the scrollView's frame
-        // which allows the content appear beneath the toolbars in the BrowserViewController
-        webView.scrollView.layer.masksToBounds = false
-
         self.webView = webView
-        self.configuration = configuration
+        self.logger = logger
 
         // TODO: FXIOS-7899 #17644 Handle WKEngineSession observers
 //        self.webView.addObserver(self, forKeyPath: KVOConstants.URL.rawValue, options: .new, context: nil)
@@ -50,16 +37,21 @@ class WKEngineSession: EngineSession {
 
     // TODO: FXIOS-7903 #17648 no return from this load(url:), we need a way to recordNavigationInTab
     func load(url: String) {
+        // TODO: FXIOS-7981 Check scheme before loading
+
         // Convert about:reader?url=http://example.com URLs to local ReaderMode URLs
         if let url = URL(string: url),
            let syncedReaderModeURL = url.decodeReaderModeURL,
            let localReaderModeURL = syncedReaderModeURL.encodeReaderModeURL(WKEngineWebServer.shared.baseReaderModeURL()) {
             let readerModeRequest = URLRequest(url: localReaderModeURL)
             webView.load(readerModeRequest)
+            return
         }
 
         guard let url = URL(string: url) else { return }
         let request = URLRequest(url: url)
+
+        // TODO: FXIOS-7980 Review loadFileURL usage with isPrivileged
         if let url = request.url, url.isFileURL, request.isPrivileged {
             webView.loadFileURL(url, allowingReadAccessTo: url)
         }
@@ -93,8 +85,7 @@ class WKEngineSession: EngineSession {
     func close() {
         // TODO: FXIOS-7900 #17645 Handle WKEngineSession scripts
 //        contentScriptManager.uninstall(tab: self)
-        webView.configuration.userContentController.removeAllUserScripts()
-        webView.configuration.userContentController.removeAllScriptMessageHandlers()
+        webView.removeAllUserScripts()
 
         // TODO: FXIOS-7899 #17644 Handle WKEngineSession observers
 //        webView.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)

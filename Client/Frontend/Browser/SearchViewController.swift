@@ -593,6 +593,14 @@ class SearchViewController: SiteTableViewController,
             }
         case .firefoxSuggestions:
             let firefoxSuggestion = firefoxSuggestions[indexPath.row]
+            if let clickInfo = firefoxSuggestion.clickInfo {
+                // The 1-based position of this suggestion, relative to the top of the table.
+                let position = SearchListSection.allCases.filter { $0.rawValue < indexPath.section }
+                    .reduce(0) { $0 + self.tableView(tableView, numberOfRowsInSection: $1.rawValue) }
+                + indexPath.row + 1
+                recordFirefoxSuggestSelectionTelemetry(clickInfo: clickInfo, position: position)
+            }
+
             searchDelegate?.searchViewController(self, didSelectURL: firefoxSuggestion.url, searchTerm: nil)
         }
     }
@@ -858,7 +866,6 @@ private extension SearchViewController {
         case .searchHighlights:
             extra = TelemetryWrapper.EventValue.searchHighlights.rawValue
         case .firefoxSuggestions:
-            // TODO (FXIOS-7393): Add telemetry for Firefox Suggest suggestions.
             return
         }
 
@@ -866,6 +873,16 @@ private extension SearchViewController {
                                      method: .tap,
                                      object: .awesomebarResults,
                                      extras: [key: extra])
+    }
+
+    func recordFirefoxSuggestSelectionTelemetry(clickInfo: RustFirefoxSuggestionInteractionInfo, position: Int) {
+        TelemetryWrapper.gleanRecordEvent(category: .action,
+                                          method: .tap,
+                                          object: TelemetryWrapper.EventObject.fxSuggest,
+                                          extras: [
+                                            TelemetryWrapper.EventValue.fxSuggestionClickInfo.rawValue: clickInfo,
+                                            TelemetryWrapper.EventValue.fxSuggestionPosition.rawValue: position
+                                          ])
     }
 }
 

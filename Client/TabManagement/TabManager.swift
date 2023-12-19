@@ -18,6 +18,7 @@ protocol TabManager: AnyObject {
     var count: Int { get }
     var selectedTab: Tab? { get }
     var backupCloseTab: BackupCloseTab? { get set }
+    var backupCloseTabs: [Tab] { get set }
     var normalTabs: [Tab] { get }
     var normalActiveTabs: [Tab] { get }
     var inactiveTabs: [Tab] { get }
@@ -67,6 +68,7 @@ protocol TabManager: AnyObject {
     func removeAllTabs(isPrivateMode: Bool) async
     func getInactiveTabs() -> [Tab]
     func removeAllInactiveTabs() async
+    func undoCloseInactiveTabs()
 }
 
 extension TabManager {

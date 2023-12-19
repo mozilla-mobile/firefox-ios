@@ -535,9 +535,17 @@ private extension HomepageViewController {
             self?.openBookmarks(button)
         }
 
+        viewModel.recentlySavedViewModel.onLongPressTileAction = { [weak self] (site, sourceView) in
+            self?.contextMenuHelper.presentContextMenu(for: site, with: sourceView, sectionType: .recentlySaved)
+        }
+
         // Jumpback in
         viewModel.jumpBackInViewModel.headerButtonAction = { [weak self] button in
             self?.openTabTray(button)
+        }
+
+        viewModel.jumpBackInViewModel.onLongPressTileAction = { [weak self] (site, sourceView) in
+            self?.contextMenuHelper.presentContextMenu(for: site, with: sourceView, sectionType: .recentlySaved)
         }
 
         viewModel.jumpBackInViewModel.syncedTabsShowAllAction = { [weak self] in
