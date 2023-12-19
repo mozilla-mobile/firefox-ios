@@ -82,12 +82,14 @@ final class WindowManagerImplementation: WindowManager {
         // • If no saved windows (tab data), we generate a new UUID.
         // • If user has saved windows (tab data), we return the first available UUID
         //   not already associated with an open window.
-        // • If multiple window UUIDs are available, which is returned first is undefined.
-        //   TODO: [FXIOS-7929] ^ Temporary, part of ongoing multi-window work, eventually
+        // • If multiple window UUIDs are available, we currently return the first one
+        //   after sorting based on the uuid value.
+        //   TODO: [FXIOS-7929] This ^ is temporary, part of ongoing multi-window work, eventually
         //   we'll be updating this (to use `isPrimary` on WindowData etc). Forthcoming.
         let openWindowUUIDs = windows.keys
         let uuids = tabDataStore.fetchWindowDataUUIDs().filter { !openWindowUUIDs.contains($0) }
-        return uuids.first ?? WindowUUID()
+        let sortedUUIDs = uuids.sorted(by: { return $0.uuidString > $1.uuidString })
+        return sortedUUIDs.first ?? WindowUUID()
     }
 
     // MARK: - Internal Utilities

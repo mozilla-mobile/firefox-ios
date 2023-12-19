@@ -8,6 +8,7 @@ import XCTest
 import Common
 
 final class TabFileManagerTests: XCTestCase {
+    private let defaultTestTabWindowUUID = UUID(uuidString: "E3FF60DA-D1E7-407B-AA3B-130D48B3909D")!
     override func setUp() {
         super.setUp()
         BrowserKitInformation.shared.configure(buildChannel: .developer,
@@ -62,7 +63,7 @@ final class TabFileManagerTests: XCTestCase {
 
     func createMockWindow() -> WindowData {
         let tabs = createMockTabs()
-        return WindowData(id: UUID(uuidString: "E3FF60DA-D1E7-407B-AA3B-130D48B3909D")!,
+        return WindowData(id: defaultTestTabWindowUUID,
                           isPrimary: true,
                           activeTabId: tabs[0].id,
                           tabData: tabs)

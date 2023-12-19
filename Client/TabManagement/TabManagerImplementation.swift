@@ -99,7 +99,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     private func restoreOnly() {
         tabs = [Tab]()
         Task {
-            await buildTabRestore(window: await self.tabDataStore.fetchWindowData())
+            await buildTabRestore(window: await self.tabDataStore.fetchWindowData(uuid: windowUUID))
             logger.log("Tabs restore ended after fetching window data", level: .debug, category: .tabs)
             logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
         }
