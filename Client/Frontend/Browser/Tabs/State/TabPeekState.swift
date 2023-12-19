@@ -9,6 +9,7 @@ struct TabPeekState: ScreenState, Equatable {
     let showSendToDevice: Bool
     let showCopyURL: Bool
     let showCloseTab: Bool
+    let previewAccessibilityLabel: String
     let screenshot: UIImage
 
     init(_ appState: AppState) {
@@ -21,29 +22,30 @@ struct TabPeekState: ScreenState, Equatable {
                   showSendToDevice: tabPeekState.showSendToDevice,
                   showCopyURL: tabPeekState.showCopyURL,
                   showCloseTab: tabPeekState.showCloseTab,
+                  previewAccessibilityLabel: tabPeekState.previewAccessibilityLabel,
                   screenshot: tabPeekState.screenshot)
     }
 
     init(showAddToBookmarks: Bool = false,
          showSendToDevice: Bool = false,
-         showCopyURL: Bool = false,
+         showCopyURL: Bool = true,
          showCloseTab: Bool = true,
+         previewAccessibilityLabel: String = "",
          screenshot: UIImage = UIImage()) {
         self.showAddToBookmarks = showAddToBookmarks
         self.showSendToDevice = showSendToDevice
         self.showCopyURL = showCopyURL
         self.showCloseTab = showCloseTab
+        self.previewAccessibilityLabel = previewAccessibilityLabel
         self.screenshot = screenshot
     }
 
     static let reducer: Reducer<Self> = { state, action in
         switch action {
-        case TabPeekAction.didLoadTabPeek(let tabID):
-            return state
         case TabPeekAction.loadTabPeek(let tabPeekModel):
             return TabPeekState(showAddToBookmarks: tabPeekModel.canTabBeSaved,
                                 showSendToDevice: tabPeekModel.isSyncEnabled && tabPeekModel.canTabBeSaved,
-                                showCopyURL: tabPeekModel.canTabBeSaved,
+                                previewAccessibilityLabel: tabPeekModel.accessiblityLabel,
                                 screenshot: tabPeekModel.screenshot)
         default:
             return state

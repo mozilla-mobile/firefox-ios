@@ -8,4 +8,5 @@ struct TabPeekModel {
     let canTabBeSaved: Bool
     let isSyncEnabled: Bool
     let screenshot: UIImage
+    let accessiblityLabel: String
 }

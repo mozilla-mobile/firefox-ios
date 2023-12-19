@@ -6,6 +6,7 @@ import Common
 import Redux
 import TabDataStore
 import Shared
+import Storage
 
 class TabManagerMiddleware {
     var selectedPanel: TabTrayPanelType = .tabs
@@ -52,20 +53,7 @@ class TabManagerMiddleware {
             store.dispatch(TabPanelAction.refreshTab(tabs))
 
         case TabPanelAction.closeTab(let tabUUID):
-            guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel) else { return }
-            Task {
-                let shouldDismiss = await self.closeTab(with: tabUUID, tabs: tabsState.tabs)
-                ensureMainThread { [self] in
-                    let tabs = self.refreshTabs(for: tabsState.isPrivateMode)
-                    store.dispatch(TabPanelAction.refreshTab(tabs))
-                    if shouldDismiss {
-                        // TODO: FXIOS-7978 Handle Undo close last regular tab
-                        store.dispatch(TabTrayAction.dismissTabTray)
-                    } else {
-                        store.dispatch(TabPanelAction.showUndoToast(.singleTab))
-                    }
-                }
-            }
+            self.closeTabFromTabPanel(with: tabUUID)
 
         case TabPanelAction.undoClose:
             guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel) else { return }
@@ -97,7 +85,7 @@ class TabManagerMiddleware {
             Task {
                 await self.closeAllInactiveTabs()
                 store.dispatch(TabPanelAction.refreshInactiveTabs([InactiveTabsModel]()))
-                store.dispatch(TabPanelAction.showUndoToast(.allInactiveTabs(count: tabsState.inactiveTabs.count)))
+                store.dispatch(TabPanelAction.showToast(.allInactiveTabs(count: tabsState.inactiveTabs.count)))
             }
 
         case TabPanelAction.undoCloseAllInactiveTabs:
@@ -111,7 +99,7 @@ class TabManagerMiddleware {
                 await self.closeInactiveTab(for: tabUUID, inactiveTabs: tabsState.inactiveTabs)
                 let inactiveTabs = self.refreshInactiveTabs()
                 store.dispatch(TabPanelAction.refreshInactiveTabs(inactiveTabs))
-                store.dispatch(TabPanelAction.showUndoToast(.singleInactiveTabs))
+                store.dispatch(TabPanelAction.showToast(.singleInactiveTabs))
             }
 
         case TabPanelAction.undoCloseInactiveTab:
@@ -132,6 +120,18 @@ class TabManagerMiddleware {
 
         case TabPeekAction.didLoadTabPeek(let tabID):
             self.didLoadTabPeek(tabID: tabID)
+
+        case TabPeekAction.addToBookmarks(let tabID):
+            self.addToBookmarks(with: tabID)
+
+        case TabPeekAction.sendToDevice(let tabID):
+            self.sendToDevice(tabID: tabID)
+
+        case TabPeekAction.copyURL(let tabID):
+            self.copyURL(tabID: tabID)
+
+        case TabPeekAction.closeTab(let tabID):
+            self.tabPeekCloseTab(with: tabID)
         default:
             break
         }
@@ -201,15 +201,8 @@ class TabManagerMiddleware {
         defaultTabManager.moveTab(isPrivate: false, fromIndex: originIndex, toIndex: destinationIndex)
     }
 
-    private func closeTab(with tabUUID: String, tabs: [TabModel]) async -> Bool {
+    private func closeTab(with tabUUID: String) async -> Bool {
         let isLastTab = defaultTabManager.normalTabs.count == 1
-
-        // Create backup in case undo option is selected
-        if let tabToClose = defaultTabManager.getTabForUUID(uuid: tabUUID) {
-            let index = tabs.firstIndex { $0.tabUUID == tabUUID }
-            defaultTabManager.backupCloseTab = BackupCloseTab(tab: tabToClose, restorePosition: index)
-        }
-
         await defaultTabManager.removeTab(tabUUID)
         return isLastTab
     }
@@ -221,6 +214,28 @@ class TabManagerMiddleware {
 
     private func closeAllTabs(isPrivateMode: Bool) async {
         await defaultTabManager.removeAllTabs(isPrivateMode: isPrivateMode)
+    }
+
+    private func closeTabFromTabPanel(with tabUUID: String) {
+        Task {
+            let shouldDismiss = await self.closeTab(with: tabUUID)
+            self.triggerRefresh(with: shouldDismiss)
+        }
+    }
+
+    private func triggerRefresh(with shouldDismiss: Bool) {
+        let isPrivate = defaultTabManager.selectedTab?.isPrivate ?? false
+        let tabs = self.refreshTabs(for: isPrivate)
+
+        ensureMainThread {
+            store.dispatch(TabPanelAction.refreshTab(tabs))
+            if shouldDismiss {
+                // TODO: FXIOS-7978 Handle Undo close last regular tab
+                store.dispatch(TabTrayAction.dismissTabTray)
+            } else {
+                store.dispatch(TabPanelAction.showToast(.singleTab))
+            }
+        }
     }
 
     // MARK: - Inactive tabs helper
@@ -263,6 +278,8 @@ class TabManagerMiddleware {
         return windowManager.tabManager(for: windowManager.activeWindow)
     }
 
+    // MARK: - Tab Peek
+
     private func didLoadTabPeek(tabID: String) {
         let tab = defaultTabManager.getTabForUUID(uuid: tabID)
         profile.places.isBookmarked(url: tab?.url?.absoluteString ?? "") >>== { isBookmarked in
@@ -274,9 +291,56 @@ class TabManagerMiddleware {
             browserProfile?.tabs.getClientGUIDs { (result, error) in
                 let model = TabPeekModel(canTabBeSaved: canBeSaved,
                                          isSyncEnabled: !(result?.isEmpty ?? true),
-                                         screenshot: tab?.screenshot ?? UIImage())
+                                         screenshot: tab?.screenshot ?? UIImage(),
+                                         accessiblityLabel: tab?.webView?.accessibilityLabel ?? "")
                 store.dispatch(TabPeekAction.loadTabPeek(tabPeekModel: model))
             }
+        }
+    }
+
+    private func addToBookmarks(with tabID: String) {
+        guard let tab = defaultTabManager.getTabForUUID(uuid: tabID),
+              let url = tab.url?.absoluteString, !url.isEmpty
+        else { return }
+
+        var title = (tab.tabState.title ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        if title.isEmpty {
+            title = url
+        }
+        let shareItem = ShareItem(url: url, title: title)
+        // Add new mobile bookmark at the top of the list
+        profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID,
+                                      url: shareItem.url,
+                                      title: shareItem.title,
+                                      position: 0)
+
+        var userData = [QuickActionInfos.tabURLKey: shareItem.url]
+        if let title = shareItem.title {
+            userData[QuickActionInfos.tabTitleKey] = title
+        }
+        QuickActionsImplementation().addDynamicApplicationShortcutItemOfType(.openLastBookmark,
+                                                                             withUserData: userData,
+                                                                             toApplication: .shared)
+
+        store.dispatch(TabPanelAction.showToast(.addBookmark))
+
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .add,
+                                     object: .bookmark,
+                                     value: .tabTray)
+    }
+
+    private func sendToDevice(tabID: String) {}
+
+    private func copyURL(tabID: String) {
+        UIPasteboard.general.url = defaultTabManager.selectedTab?.canonicalURL
+        store.dispatch(TabPanelAction.showToast(.copyURL))
+    }
+
+    private func tabPeekCloseTab(with tabID: String) {
+        Task {
+            let shouldDismiss = await self.closeTab(with: tabID)
+            self.triggerRefresh(with: shouldDismiss)
         }
     }
 }

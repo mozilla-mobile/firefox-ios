@@ -10,16 +10,11 @@ import Redux
 class TabPeekViewController: UIViewController,
                              StoreSubscriber {
     typealias SubscriberStateType = TabPeekState
+
     var tabPeekState: TabPeekState
+    var contextActions: UIContextMenuActionProvider = { _ in return nil }
 
     private var tab: TabModel
-    private var previewAccessibilityLabel: String!
-    private var ignoreURL = false
-    private var isBookmarked = false
-    private var isInReadingList = false
-    private var hasRemoteClients = false
-
-    var contextActions: UIContextMenuActionProvider = { _ in return nil }
 
     func contextActions(defaultActions: [UIMenuElement]) -> UIMenu {
         return makeMenuActions()
@@ -28,12 +23,12 @@ class TabPeekViewController: UIViewController,
     // MARK: - Lifecycle methods
 
     init(tab: TabModel) {
-        self.tabPeekState = TabPeekState()
+        tabPeekState = TabPeekState()
         self.tab = tab
         super.init(nibName: nil, bundle: nil)
 
         subscribeToRedux()
-        store.dispatch(TabPeekAction.didLoadTabPeek(tab: tab.tabUUID))
+        store.dispatch(TabPeekAction.didLoadTabPeek(tabID: tab.tabUUID))
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -47,11 +42,6 @@ class TabPeekViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         self.contextActions = contextActions(defaultActions:)
-//        if let webViewAccessibilityLabel = tab?.webView?.accessibilityLabel {
-//            previewAccessibilityLabel = String(format: .TabPeekPreviewAccessibilityLabel, webViewAccessibilityLabel)
-//        }
-//
-
     }
 
     func newState(state: TabPeekState) {
@@ -86,7 +76,7 @@ class TabPeekViewController: UIViewController,
             imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
 
-        imageView.accessibilityLabel = previewAccessibilityLabel
+        imageView.accessibilityLabel = tabPeekState.previewAccessibilityLabel
     }
 
     private func makeMenuActions() -> UIMenu {
@@ -96,6 +86,7 @@ class TabPeekViewController: UIViewController,
             actions.append(UIAction(title: .TabPeekAddToBookmarks,
                                     image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.bookmark),
                                     identifier: nil) { _ in
+                store.dispatch(TabPeekAction.addToBookmarks(tabID: self.tab.tabUUID))
                 return
             })
         }
@@ -103,6 +94,7 @@ class TabPeekViewController: UIViewController,
             actions.append(UIAction(title: .AppMenu.TouchActions.SendToDeviceTitle,
                                     image: UIImage.templateImageNamed("menu-Send"),
                                     identifier: nil) { _ in
+                store.dispatch(TabPeekAction.sendToDevice(tabID: self.tab.tabUUID))
                 return
             })
         }
@@ -110,6 +102,7 @@ class TabPeekViewController: UIViewController,
             actions.append(UIAction(title: .TabPeekCopyUrl,
                                     image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.link),
                                     identifier: nil) { _ in
+                store.dispatch(TabPeekAction.copyURL(tabID: self.tab.tabUUID))
                 return
             })
         }
@@ -117,6 +110,7 @@ class TabPeekViewController: UIViewController,
             actions.append(UIAction(title: .TabPeekCloseTab,
                                     image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
                                     identifier: nil) { _ in
+                store.dispatch(TabPeekAction.closeTab(tabID: self.tab.tabUUID))
                 return
             })
         }

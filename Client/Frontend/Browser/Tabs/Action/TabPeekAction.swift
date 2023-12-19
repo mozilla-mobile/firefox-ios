@@ -6,7 +6,11 @@ import Redux
 
 enum TabPeekAction: Action {
     // MARK: - View Actions
-    case didLoadTabPeek(tab: String)
+    case didLoadTabPeek(tabID: String)
+    case addToBookmarks(tabID: String)
+    case sendToDevice(tabID: String)
+    case copyURL(tabID: String)
+    case closeTab(tabID: String)
 
     // MARK: - Middleware Actions
     case loadTabPeek(tabPeekModel: TabPeekModel)
