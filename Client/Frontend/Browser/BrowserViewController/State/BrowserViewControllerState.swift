@@ -50,12 +50,11 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 fakespotState: state.fakespotState)
         case FakespotAction.pressedShoppingButton,
             FakespotAction.show,
-            FakespotAction.dismiss:
-            return BrowserViewControllerState(
-                searchScreenState: state.searchScreenState,
-                usePrivateHomepage: state.usePrivateHomepage,
-                fakespotState: FakespotState.reducer(state.fakespotState, action))
-        case FakespotAction.setAppearanceTo(let isEnabled):
+            FakespotAction.dismiss,
+            FakespotAction.setAppearanceTo,
+            FakespotAction.settingsStateDidChange,
+            FakespotAction.reviewQualityDidChange,
+            FakespotAction.tabDidChange:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 usePrivateHomepage: state.usePrivateHomepage,
