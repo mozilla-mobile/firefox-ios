@@ -13,19 +13,21 @@ struct ETPMenuUX {
         static let viewTitleLabels: UIFont = .systemFont(ofSize: 17, weight: .regular)
         static let detailsLabel: UIFont = .systemFont(ofSize: 12, weight: .regular)
         static let minorInfoLabel: UIFont = .systemFont(ofSize: 15, weight: .regular)
+        static let websiteTitleFontSize: CGFloat = 15
+        static let viewTitleLabelsFontSize: CGFloat = 15
+        static let detailsLabelFontSize: CGFloat = 10
     }
 
     struct UX {
         static let gutterDistance: CGFloat = 16
         static let viewCornerRadius: CGFloat = 8
         static let viewHeight: CGFloat = 44
-        static let websiteLabelToHeroImageSpacing: CGFloat = 8
         static let faviconImageSize: CGFloat = 40
         static let closeButtonSize: CGFloat = 30
         static let faviconCornerRadius: CGFloat = 5
-
+        static let siteDomainLabelSpacing: CGFloat = 26
+        static let protectionViewBottomSpacing: CGFloat = 70
         struct Line {
-            static let distanceFromFavicon: CGFloat = 17
             static let height: CGFloat = 1
         }
     }
@@ -70,8 +72,9 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     }
 
     private let siteDomainLabel: UILabel = .build { label in
-        label.font = ETPMenuUX.Fonts.websiteTitle
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .largeTitle, size: ETPMenuUX.Fonts.websiteTitleFontSize, weight: .semibold)
         label.numberOfLines = 0
+        label.adjustsFontForContentSizeCategory = true
     }
 
     private var closeButton: UIButton = .build { button in
@@ -93,8 +96,9 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     }
 
     private let connectionLabel: UILabel = .build { label in
-        label.font = ETPMenuUX.Fonts.viewTitleLabels
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .largeTitle, size: ETPMenuUX.Fonts.viewTitleLabelsFontSize, weight: .regular)
         label.numberOfLines = 0
+        label.adjustsFontForContentSizeCategory = true
     }
 
     private let connectionDetailArrow: UIImageView = .build { image in
@@ -112,8 +116,9 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     private let toggleView: UIView = ETPSectionView(frame: .zero)
 
     private let toggleLabel: UILabel = .build { label in
-        label.font = ETPMenuUX.Fonts.viewTitleLabels
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .largeTitle, size: ETPMenuUX.Fonts.viewTitleLabelsFontSize, weight: .regular)
         label.numberOfLines = 0
+        label.adjustsFontForContentSizeCategory = true
     }
 
     private let toggleSwitch: UISwitch = .build { toggleSwitch in
@@ -121,8 +126,9 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     }
 
     private let toggleStatusLabel: UILabel = .build { label in
-        label.font = ETPMenuUX.Fonts.detailsLabel
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .largeTitle, size: ETPMenuUX.Fonts.detailsLabelFontSize, weight: .regular)
         label.numberOfLines = 0
+        label.adjustsFontForContentSizeCategory = true
     }
 
     // Protection setting view
@@ -130,8 +136,9 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
 
     private var protectionButton: UIButton = .build { button in
         button.setTitle(.TPProtectionSettings, for: .normal)
-        button.titleLabel?.font = ETPMenuUX.Fonts.viewTitleLabels
+        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .largeTitle, size: ETPMenuUX.Fonts.viewTitleLabelsFontSize, weight: .regular)
         button.contentHorizontalAlignment = .left
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
     }
 
     private var constraints = [NSLayoutConstraint]()
@@ -167,13 +174,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        if asPopover {
-            var height: CGFloat = 385
-            if toggleContainerShouldBeHidden {
-                height = 285
-            }
-            self.preferredContentSize = CGSize(width: 400, height: height)
-        } else {
+        if !asPopover {
             addGestureRecognizer()
         }
         setupView()
@@ -185,6 +186,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
             hasSetPointOrigin = true
             pointOrigin = self.view.frame.origin
         }
+        preferredContentSize = CGSize(width: view.bounds.width, height: view.systemLayoutSizeFitting(CGSize(width: view.bounds.width, height: UIView.layoutFittingCompressedSize.height), withHorizontalFittingPriority: .required, verticalFittingPriority: .defaultLow).height)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -214,11 +216,12 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
             headerContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
             favicon.leadingAnchor.constraint(equalTo: headerContainer.leadingAnchor, constant: ETPMenuUX.UX.gutterDistance),
-            favicon.topAnchor.constraint(equalTo: headerContainer.topAnchor, constant: ETPMenuUX.UX.gutterDistance),
+            favicon.centerYAnchor.constraint(equalTo: headerContainer.centerYAnchor),
             favicon.widthAnchor.constraint(equalToConstant: ETPMenuUX.UX.faviconImageSize),
             favicon.heightAnchor.constraint(equalToConstant: ETPMenuUX.UX.faviconImageSize),
 
-            siteDomainLabel.centerYAnchor.constraint(equalTo: favicon.centerYAnchor),
+            siteDomainLabel.topAnchor.constraint(equalTo: headerContainer.topAnchor, constant: ETPMenuUX.UX.siteDomainLabelSpacing),
+            siteDomainLabel.bottomAnchor.constraint(equalTo: headerContainer.bottomAnchor, constant: -ETPMenuUX.UX.siteDomainLabelSpacing),
             siteDomainLabel.leadingAnchor.constraint(equalTo: favicon.trailingAnchor, constant: 8),
             siteDomainLabel.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: -15),
 
@@ -229,9 +232,8 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
 
             horizontalLine.leadingAnchor.constraint(equalTo: headerContainer.leadingAnchor),
             horizontalLine.trailingAnchor.constraint(equalTo: headerContainer.trailingAnchor),
-            horizontalLine.topAnchor.constraint(equalTo: favicon.bottomAnchor, constant: ETPMenuUX.UX.Line.distanceFromFavicon),
             horizontalLine.heightAnchor.constraint(equalToConstant: ETPMenuUX.UX.Line.height),
-            headerContainer.bottomAnchor.constraint(equalTo: horizontalLine.bottomAnchor)
+            headerContainer.bottomAnchor.constraint(equalTo: horizontalLine.bottomAnchor),
         ]
 
         if asPopover {
@@ -251,7 +253,6 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
             connectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: ETPMenuUX.UX.gutterDistance),
             connectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -ETPMenuUX.UX.gutterDistance),
             connectionView.topAnchor.constraint(equalTo: headerContainer.bottomAnchor, constant: 28),
-            connectionView.heightAnchor.constraint(greaterThanOrEqualToConstant: ETPMenuUX.UX.viewHeight),
 
             connectionImage.leadingAnchor.constraint(equalTo: connectionView.leadingAnchor, constant: ETPMenuUX.UX.gutterDistance),
             connectionImage.centerYAnchor.constraint(equalTo: connectionView.centerYAnchor),
@@ -259,7 +260,6 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
             connectionImage.widthAnchor.constraint(equalToConstant: 20),
 
             connectionLabel.leadingAnchor.constraint(equalTo: connectionImage.trailingAnchor, constant: ETPMenuUX.UX.gutterDistance),
-            connectionLabel.centerYAnchor.constraint(equalTo: connectionView.centerYAnchor),
             connectionLabel.topAnchor.constraint(equalTo: connectionView.topAnchor, constant: 11),
             connectionLabel.bottomAnchor.constraint(equalTo: connectionView.bottomAnchor, constant: -11),
             connectionLabel.trailingAnchor.constraint(equalTo: connectionDetailArrow.leadingAnchor, constant: ETPMenuUX.UX.gutterDistance),
@@ -287,13 +287,10 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
             toggleContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             toggleContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             toggleContainer.topAnchor.constraint(equalTo: connectionView.bottomAnchor, constant: 32),
-            toggleContainer.heightAnchor.constraint(greaterThanOrEqualToConstant: 92),
-            toggleContainer.heightAnchor.constraint(lessThanOrEqualToConstant: 106),
 
             toggleView.leadingAnchor.constraint(equalTo: toggleContainer.leadingAnchor, constant: ETPMenuUX.UX.gutterDistance),
             toggleView.trailingAnchor.constraint(equalTo: toggleContainer.trailingAnchor, constant: -ETPMenuUX.UX.gutterDistance),
             toggleView.topAnchor.constraint(equalTo: toggleContainer.topAnchor),
-            toggleView.heightAnchor.constraint(greaterThanOrEqualToConstant: ETPMenuUX.UX.viewHeight),
 
             toggleLabel.leadingAnchor.constraint(equalTo: toggleView.leadingAnchor, constant: ETPMenuUX.UX.gutterDistance),
             toggleLabel.trailingAnchor.constraint(equalTo: toggleSwitch.leadingAnchor, constant: -ETPMenuUX.UX.gutterDistance),
@@ -308,14 +305,14 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
             toggleStatusLabel.leadingAnchor.constraint(equalTo: toggleLabel.leadingAnchor),
             toggleStatusLabel.trailingAnchor.constraint(equalTo: toggleSwitch.trailingAnchor),
             toggleStatusLabel.topAnchor.constraint(equalTo: toggleView.bottomAnchor, constant: 6),
-            toggleStatusLabel.bottomAnchor.constraint(lessThanOrEqualTo: toggleContainer.bottomAnchor, constant: -6)
+            toggleStatusLabel.bottomAnchor.constraint(equalTo: toggleContainer.bottomAnchor, constant: -6)
         ]
 
         if toggleContainerShouldBeHidden {
             toggleConstraints.append(protectionView.topAnchor.constraint(equalTo: connectionView.bottomAnchor, constant: 32))
             toggleContainer.isHidden = true
         } else {
-            toggleConstraints.append(protectionView.topAnchor.constraint(equalTo: toggleContainer.bottomAnchor))
+            toggleConstraints.append(protectionView.topAnchor.constraint(equalTo: toggleContainer.bottomAnchor, constant: 25))
             toggleContainer.isHidden = false
         }
 
@@ -330,7 +327,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
             protectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: ETPMenuUX.UX.gutterDistance),
             protectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -ETPMenuUX.UX.gutterDistance),
             protectionView.heightAnchor.constraint(equalToConstant: ETPMenuUX.UX.viewHeight),
-            protectionView.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor, constant: 15),
+            protectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -ETPMenuUX.UX.protectionViewBottomSpacing),
 
             protectionButton.leadingAnchor.constraint(equalTo: protectionView.leadingAnchor, constant: ETPMenuUX.UX.gutterDistance),
             protectionButton.trailingAnchor.constraint(equalTo: protectionView.trailingAnchor, constant: -ETPMenuUX.UX.gutterDistance),

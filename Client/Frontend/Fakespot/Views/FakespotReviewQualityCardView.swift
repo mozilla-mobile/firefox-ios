@@ -19,6 +19,8 @@ final class FakespotReviewQualityCardViewModel {
     private let tabManager: TabManager
     let fakespotLearnMoreLink = FakespotUtils.learnMoreUrl
     var dismissViewController: (() -> Void)?
+    var onExpandStateChanged: ((CollapsibleCardView.ExpandButtonState) -> Void)?
+    var expandState: CollapsibleCardView.ExpandButtonState = .collapsed
     var productSitename: String?
     var highlightsText: NSAttributedString {
         let currentPartner = PartnerWebsite(for: productSitename?.lowercased()) ?? .amazon
@@ -303,7 +305,11 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
             titleA11yId: AccessibilityIdentifiers.Shopping.ReviewQualityCard.title,
             expandButtonA11yId: AccessibilityIdentifiers.Shopping.ReviewQualityCard.expandButton,
             expandButtonA11yLabelExpand: .Shopping.ReviewQualityCardExpandAccessibilityLabel,
-            expandButtonA11yLabelCollapse: .Shopping.ReviewQualityCardCollapseAccessibilityLabel)
+            expandButtonA11yLabelCollapse: .Shopping.ReviewQualityCardCollapseAccessibilityLabel,
+            expandState: viewModel.expandState
+        ) { state in
+            viewModel.onExpandStateChanged?(state)
+        }
         collapsibleContainer.configure(viewModel)
     }
 

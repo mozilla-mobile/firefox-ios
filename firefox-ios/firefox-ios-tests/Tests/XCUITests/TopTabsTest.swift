@@ -148,26 +148,27 @@ class TopTabsTest: BaseTestCase {
         }
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
 
+        // Disabling next steps due to https://github.com/mozilla-mobile/firefox-ios/issues/16810 crash
         // Close all tabs, undo it and check that the number of tabs is correct
-        navigator.performAction(Action.AcceptRemovingAllTabs)
-
-        mozWaitForElementToExist(app.otherElements.buttons.staticTexts["Undo"])
-        app.otherElements.buttons.staticTexts["Undo"].tap()
-
-        mozWaitForElementToExist(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell], timeout: 5)
-        navigator.nowAt(BrowserTab)
-        if !iPad() {
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 5)
-        }
-
-        if iPad() {
-            navigator.goto(TabTray)
-        } else {
-            navigator.performAction(Action.CloseURLBarOpen)
-        }
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-
-        mozWaitForElementToExist(app.cells.staticTexts[urlLabel])
+//        navigator.performAction(Action.AcceptRemovingAllTabs)
+//
+//        mozWaitForElementToExist(app.otherElements.buttons.staticTexts["Undo"])
+//        app.otherElements.buttons.staticTexts["Undo"].tap()
+//
+//        mozWaitForElementToExist(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell], timeout: 5)
+//        navigator.nowAt(BrowserTab)
+//        if !iPad() {
+//            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 5)
+//        }
+//
+//        if iPad() {
+//            navigator.goto(TabTray)
+//        } else {
+//            navigator.performAction(Action.CloseURLBarOpen)
+//        }
+//        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+//
+//        mozWaitForElementToExist(app.cells.staticTexts[urlLabel])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2354473
@@ -222,14 +223,15 @@ class TopTabsTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
 
+        // Disabling next steps due to https://github.com/mozilla-mobile/firefox-ios/issues/16810 crash
         // Close all tabs and check that the number of tabs is correct
-        navigator.performAction(Action.AcceptRemovingAllTabs)
-        if !iPad() {
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
-        }
-        navigator.nowAt(NewTabScreen)
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
-        mozWaitForElementToExist(app.cells.staticTexts["Homepage"])
+//        navigator.performAction(Action.AcceptRemovingAllTabs)
+//        if !iPad() {
+//            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
+//        }
+//        navigator.nowAt(NewTabScreen)
+//        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+//        mozWaitForElementToExist(app.cells.staticTexts["Homepage"])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2354580

@@ -71,9 +71,9 @@ class PhotonActionSheetTests: BaseTestCase {
         mozWaitForElementToExist(app.otherElements["ActivityListView"].otherElements["example.com"])
         mozWaitForElementToExist(app.collectionViews.cells["Copy"], timeout: TIMEOUT)
 
-        var  fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 2)
+        var  fennecElement = app.collectionViews.scrollViews.cells.elementContainingText("Fennec")
         if iPad() {
-            fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 1)
+            fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 2)
         }
         mozWaitForElementToExist(fennecElement, timeout: 5)
         fennecElement.tap()
