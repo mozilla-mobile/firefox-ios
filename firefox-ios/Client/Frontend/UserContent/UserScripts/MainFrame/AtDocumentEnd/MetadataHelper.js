@@ -21,8 +21,13 @@ function MetadataWrapper() {
     if (location.pathname.startsWith("/amp/")) {
       let canonicalLink = document.querySelector("link[rel=\"canonical\"]");
       let canonicalHref = canonicalLink && canonicalLink.href;
-      if (canonicalHref) {
-        metadata.url = canonicalHref;
+
+      try {
+        const canonicalUrl = new URL(canonicalHref, location);
+        if (canonicalUrl.protocol.match(/^https?:$/)) {
+          metadata.url = canonicalHref;
+        }
+      } catch(error) {
       }
     }
 
