@@ -16,6 +16,9 @@ class FakespotViewController:
     UISheetPresentationControllerDelegate,
     UIScrollViewDelegate,
     StoreSubscriber {
+
+    typealias SubscriberStateType = BrowserViewControllerState
+
     private struct UX {
         static let headerTopSpacing: CGFloat = 22
         static let headerHorizontalSpacing: CGFloat = 18
@@ -138,17 +141,13 @@ class FakespotViewController:
     // MARK: - Redux
 
     func subscribeToRedux() {
-        guard isReduxIntegrationEnabled else { return }
-
         store.subscribe(self, transform: {
             $0.select(BrowserViewControllerState.init)
         })
     }
 
     func unsubscribeFromRedux() {
-        if isReduxIntegrationEnabled {
-            store.unsubscribe(self)
-        }
+        store.unsubscribe(self)
     }
 
     var fakespotState: FakespotState?
