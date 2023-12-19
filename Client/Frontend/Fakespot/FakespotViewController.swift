@@ -16,7 +16,6 @@ class FakespotViewController:
     UISheetPresentationControllerDelegate,
     UIScrollViewDelegate,
     StoreSubscriber {
-
     typealias SubscriberStateType = BrowserViewControllerState
 
     private struct UX {
