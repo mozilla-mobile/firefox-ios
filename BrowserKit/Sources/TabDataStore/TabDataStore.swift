@@ -60,7 +60,7 @@ public actor DefaultTabDataStore: TabDataStore {
             return windowData
         } catch {
             logger.log("Error fetching window data: UUID = \(uuid) Error = \(error)", level: .warning, category: .tabs)
-            guard let backupURL = windowURLPath(for: uuid, isBackup: false),
+            guard let backupURL = windowURLPath(for: uuid, isBackup: true),
                   fileManager.fileExists(atPath: backupURL),
                   let backupWindowData = parseWindowDataFile(fromURL: backupURL) else {
                 return nil
