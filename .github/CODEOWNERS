@@ -7,8 +7,8 @@
 # When someone opens a pull request that only modifies those folders / files, 
 # only @mozilla-mobile/fxios-automation and not the global
 # owners will be requested for a review.
-/Tests/UITests @mozilla-mobile/fxios-automation-1
-/Tests/XCUITests @mozilla-mobile/fxios-automation-1
+/firefox-ios/firefox-ios-tests/Tests/UITests @mozilla-mobile/fxios-automation-1
+/firefox-ios/firefox-ios-tests/Tests/XCUITests @mozilla-mobile/fxios-automation-1
 bitrise.yml @mozilla-mobile/fxios-automation-1
 .taskcluster.yml @mozilla-mobile/fxios-automation-1
 /taskcluster @mozilla-mobile/fxios-automation-1
