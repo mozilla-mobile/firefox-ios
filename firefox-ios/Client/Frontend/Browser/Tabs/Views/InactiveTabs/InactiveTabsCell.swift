@@ -13,6 +13,7 @@ class InactiveTabsCell: UICollectionViewListCell, ReusableCell, ThemeApplicable 
         static let titleFontSize: CGFloat = 14
         static let imageViewLeadingConstant: CGFloat = 16
         static let separatorHeight: CGFloat = 0.5
+        static let faviconCornerRadius: CGFloat = 5
     }
 
     private lazy var selectedView: UIView = .build { _ in }
@@ -29,11 +30,13 @@ class InactiveTabsCell: UICollectionViewListCell, ReusableCell, ThemeApplicable 
         label.contentMode = .center
     }
 
-    func configure(text: String) {
+    func configure(with inactiveTabsModel: InactiveTabsModel) {
         setupView()
 
-        titleLabel.text = text
-        leftImageView.image = UIImage(systemName: "globe")
+        titleLabel.text = inactiveTabsModel.title
+        leftImageView.setFavicon(FaviconImageViewModel(siteURLString: inactiveTabsModel.url?.absoluteString,
+                                                       faviconURL: URL(string: inactiveTabsModel.favIconURL ?? ""),
+                                                       faviconCornerRadius: InactiveTabsCell.UX.faviconCornerRadius))
     }
 
     func applyTheme(theme: Theme) {

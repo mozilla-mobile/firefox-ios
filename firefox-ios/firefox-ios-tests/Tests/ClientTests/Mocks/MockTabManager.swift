@@ -81,6 +81,8 @@ class MockTabManager: TabManager {
 
     func removeAllTabs(isPrivateMode: Bool) async {}
 
+    func undoCloseAllTabs() {}
+
     func undoCloseTab(tab: Client.Tab, position: Int?) {}
 
     func getTabFor(_ url: URL) -> Tab? {
