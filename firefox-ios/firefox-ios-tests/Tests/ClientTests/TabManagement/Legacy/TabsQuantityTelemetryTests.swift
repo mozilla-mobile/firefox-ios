@@ -65,7 +65,6 @@ class TabsQuantityTelemetryTests: XCTestCase {
 
     func testTrackTabsQuantity_ensureNoInactiveTabs_gleanIsCalled() {
         let tabManager = TabManagerImplementation(profile: profile,
-                                                  imageStore: nil,
                                                   inactiveTabsManager: inactiveTabsManager)
         let tab = tabManager.addTab()
         inactiveTabsManager.activeTabs = [tab]
