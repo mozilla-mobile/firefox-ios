@@ -21,7 +21,6 @@ final class WKInternalURL: InternalURL {
     enum Path: String {
         case errorpage
         func matches(_ string: String) -> Bool {
-            print("Laurie - \(self.rawValue)")
             return string.range(of: "/?\(self.rawValue)",
                                 options: .regularExpression,
                                 range: nil,
