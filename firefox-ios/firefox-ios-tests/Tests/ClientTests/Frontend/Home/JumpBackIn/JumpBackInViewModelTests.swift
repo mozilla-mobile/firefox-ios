@@ -36,11 +36,11 @@ class JumpBackInViewModelTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
-        AppContainer.shared.reset()
         adaptor = nil
         stubBrowserViewController = nil
         mockTabManager = nil
         mockProfile = nil
+        AppContainer.shared.reset()
     }
 
     // MARK: - Switch to tab
