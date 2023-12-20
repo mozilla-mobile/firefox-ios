@@ -4897,6 +4897,22 @@ app_errors:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
+  hang_exception:
+    type: event
+    description: |
+      Recorded when the main thread hangs
+    extra_keys:
+      size:
+        description: |
+          Total time the main thread was blocked
+        type: quantity
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-7558
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
 
 fx_suggest:
   ping_type:

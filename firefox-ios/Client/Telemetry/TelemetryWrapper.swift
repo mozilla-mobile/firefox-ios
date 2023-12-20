@@ -680,6 +680,7 @@ extension TelemetryWrapper {
         case largeFileWrite = "large-file-write"
         case crashedLastLaunch = "crashed_last_launch"
         case cpuException = "cpu_exception"
+        case hangException = "hang-exception"
         case fxSuggestionClickInfo = "fx-suggestion-click-info"
         case fxSuggestionPosition = "fx-suggestion-position"
     }
@@ -1873,6 +1874,11 @@ extension TelemetryWrapper {
             if let quantity = extras?[EventExtraKey.size.rawValue] as? Int32 {
                 let properties = GleanMetrics.AppErrors.CpuExceptionExtra(size: quantity)
                 GleanMetrics.AppErrors.cpuException.record(properties)
+            }
+        case(.information, .error, .app, .hangException, let extras):
+            if let quantity = extras?[EventExtraKey.size.rawValue] as? Int32 {
+                let properties = GleanMetrics.AppErrors.HangExceptionExtra(size: quantity)
+                GleanMetrics.AppErrors.hangException.record(properties)
             }
 
         // MARK: - FX Suggest

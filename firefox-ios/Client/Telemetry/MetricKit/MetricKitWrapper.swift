@@ -53,4 +53,14 @@ class MetricKitWrapper: NSObject, MXMetricManagerSubscriber {
                                      value: .cpuException,
                                      extras: eventExtra)
     }
+
+    private func handleHangException(_ exception: MXHangDiagnostic) {
+        let size = Int32(measurementFormatter.string(from: exception.hangDuration)) ?? -1
+        let eventExtra = [TelemetryWrapper.EventExtraKey.size.rawValue: size]
+        telemetryWrapper.recordEvent(category: .information,
+                                     method: .error,
+                                     object: .app,
+                                     value: .hangException,
+                                     extras: eventExtra)
+    }
 }

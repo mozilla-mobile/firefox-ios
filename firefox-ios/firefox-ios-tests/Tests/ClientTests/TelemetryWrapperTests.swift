@@ -977,6 +977,17 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.AppErrors.cpuException)
     }
 
+    func test_error_hangExceptionIsCalled() {
+        let eventExtra = [TelemetryWrapper.EventExtraKey.size.rawValue: Int32(1000)]
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .error,
+                                     object: .app,
+                                     value: .hangException,
+                                     extras: eventExtra)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.AppErrors.hangException)
+    }
+
     // MARK: - RecordSearch
     func test_RecordSearch_GleanIsCalledSearchSuggestion() {
         let extras = [TelemetryWrapper.EventExtraKey.recordSearchLocation.rawValue: "suggestion",
