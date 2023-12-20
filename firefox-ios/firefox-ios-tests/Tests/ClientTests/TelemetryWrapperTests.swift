@@ -956,6 +956,16 @@ class TelemetryWrapperTests: XCTestCase {
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.AppErrors.largeFileWrite)
     }
+
+    func test_error_crashedLastLaunchIsCalled() {
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .error,
+                                     object: .app,
+                                     value: .crashedLastLaunch)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.AppErrors.crashedLastLaunch)
+    }
+
     // MARK: - RecordSearch
     func test_RecordSearch_GleanIsCalledSearchSuggestion() {
         let extras = [TelemetryWrapper.EventExtraKey.recordSearchLocation.rawValue: "suggestion",

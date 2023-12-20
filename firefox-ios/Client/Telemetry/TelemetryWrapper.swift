@@ -678,6 +678,7 @@ extension TelemetryWrapper {
         case shoppingNoAdsAvailable = "shopping-no-ads-available"
         case awesomebarShareTap = "awesomebar-share-tap"
         case largeFileWrite = "large-file-write"
+        case crashedLastLaunch = "crashed_last_launch"
         case fxSuggestionClickInfo = "fx-suggestion-click-info"
         case fxSuggestionPosition = "fx-suggestion-position"
     }
@@ -1865,6 +1866,10 @@ extension TelemetryWrapper {
                 let properties = GleanMetrics.AppErrors.LargeFileWriteExtra(size: quantity)
                 GleanMetrics.AppErrors.largeFileWrite.record(properties)
             }
+        case(.information, .error, .app, .crashedLastLaunch, _):
+            GleanMetrics.AppErrors.crashedLastLaunch.record()
+
+        // MARK: - FX Suggest
         case(.action, .tap, .fxSuggest, _, let extras ):
             guard let contextIdString = TelemetryContextualIdentifier.contextId,
                   let contextId = UUID(uuidString: contextIdString),

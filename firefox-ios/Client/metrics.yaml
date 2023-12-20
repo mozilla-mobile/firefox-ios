@@ -4870,6 +4870,17 @@ app_errors:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
+  crashed_last_launch:
+    type: event
+    description: |
+      Recorded when the previous session ended as a result of a crash
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-7558
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
 
 fx_suggest:
   ping_type:
