@@ -1753,7 +1753,7 @@ extension String {
                 value: "Close",
                 comment: "This is the swipe action title for closing an inactive tab by swiping, located in the Inactive Tabs section of the Tabs Tray")
         }
-
+        
         public struct CloseTabsToast {
             public static let Title = MZLocalizedString(
                 key: "CloseTabsToast.Title.v113",
@@ -1771,19 +1771,37 @@ extension String {
                 value: "Undo",
                 comment: "When the user closes tabs in the tab tray, a popup will appear. This is the title for the button to undo the deletion of those tabs")
         }
-
+        
         public struct Sync {
             public static let SyncTabs = MZLocalizedString(
                 key: "TabsTray.SyncTabs.SyncTabsButton.Title.v119",
                 tableName: "TabsTray",
                 value: "Sync Tabs",
                 comment: "Button label to sync tabs in your account")
-
+            
             public static let SyncTabsDisabled = MZLocalizedString(
                 key: "TabsTray.Sync.SyncTabsDisabled.v116",
                 tableName: "TabsTray",
                 value: "Turn on tab syncing to view a list of tabs from your other devices.",
                 comment: "Users can disable syncing tabs from other devices. In the Sync Tabs panel of the Tab Tray, we inform the user tab syncing can be switched back on to view those tabs.")
+        }
+        
+        public struct DownloadsPanel {
+            public static let EmptyStateTitle = MZLocalizedString(
+                key: "DownloadsPanel.EmptyState.Title",
+                tableName: nil,
+                value: "Downloaded files will show up here.",
+                comment: "Title for the Downloads Panel empty state.")
+            public static let DeleteTitle = MZLocalizedString(
+                key: "DownloadsPanel.Delete.Title",
+                tableName: nil,
+                value: "Delete",
+                comment: "Action button for deleting downloaded files in the Downloads panel.")
+            public static let ShareTitle = MZLocalizedString(
+                key: "DownloadsPanel.Share.Title",
+                tableName: nil,
+                value: "Share",
+                comment: "Action button for sharing downloaded files in the Downloads panel.")
         }
     }
 }
@@ -2111,25 +2129,6 @@ extension String {
         tableName: "LoginsHelper",
         value: "Not Now",
         comment: "Button to not update the user's password in the logins helper")
-}
-
-// MARK: - Downloads Panel
-extension String {
-    public static let DownloadsPanelEmptyStateTitle = MZLocalizedString(
-        key: "DownloadsPanel.EmptyState.Title",
-        tableName: nil,
-        value: "Downloaded files will show up here.",
-        comment: "Title for the Downloads Panel empty state.")
-    public static let DownloadsPanelDeleteTitle = MZLocalizedString(
-        key: "DownloadsPanel.Delete.Title",
-        tableName: nil,
-        value: "Delete",
-        comment: "Action button for deleting downloaded files in the Downloads panel.")
-    public static let DownloadsPanelShareTitle = MZLocalizedString(
-        key: "DownloadsPanel.Share.Title",
-        tableName: nil,
-        value: "Share",
-        comment: "Action button for sharing downloaded files in the Downloads panel.")
 }
 
 // MARK: - History Panel
