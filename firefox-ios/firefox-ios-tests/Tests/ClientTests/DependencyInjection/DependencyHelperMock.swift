@@ -5,10 +5,11 @@
 import Common
 import Shared
 import Storage
+import TabDataStore
 @testable import Client
 
 class DependencyHelperMock {
-    func bootstrapDependencies() {
+    func bootstrapDependencies(injectedTabManager: TabManager? = nil) {
         AppContainer.shared.reset()
 
         let profile: Client.Profile = BrowserProfile(
@@ -16,14 +17,18 @@ class DependencyHelperMock {
         )
         AppContainer.shared.register(service: profile)
 
-        let tabManager: TabManager = TabManagerImplementation(
+        let tabDataStore: TabDataStore = MockTabDataStore()
+        AppContainer.shared.register(service: tabDataStore)
+
+        let windowUUID = WindowUUID()
+        let tabManager: TabManager = injectedTabManager ?? TabManagerImplementation(
             profile: profile,
             imageStore: DefaultDiskImageStore(
                 files: profile.files,
                 namespace: "TabManagerScreenshots",
-                quality: UIConstants.ScreenshotQuality)
+                quality: UIConstants.ScreenshotQuality),
+            uuid: windowUUID
         )
-        AppContainer.shared.register(service: tabManager)
 
         let appSessionProvider: AppSessionProvider = AppSessionManager()
         AppContainer.shared.register(service: appSessionProvider)
@@ -36,6 +41,10 @@ class DependencyHelperMock {
 
         let downloadQueue = DownloadQueue()
         AppContainer.shared.register(service: downloadQueue)
+
+        let windowManager: WindowManager = WindowManagerImplementation()
+        AppContainer.shared.register(service: windowManager)
+        windowManager.newBrowserWindowConfigured(AppWindowInfo(tabManager: tabManager), uuid: windowUUID)
 
         // Tell the container we are done registering
         AppContainer.shared.bootstrap()

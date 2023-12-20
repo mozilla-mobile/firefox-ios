@@ -1,0 +1,84 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Ste si istý?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Zrušiť";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Vymazať hľadanie";
+
+/* Copy password text selection menu item */
+"Copy" = "Kopírovať";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "Vytvorené %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Odstrániť";
+
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Zrušiť";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Odstrániť";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "Túto akciu nie je možné vrátiť späť.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Týmto sa heslo odstráni zo všetkých vašich synchronizovaných zariadení.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Odstrániť heslo?";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Zrušiť výber všetkého";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Prejsť na režim vyhľadávania";
+
+/* Hide password text selection menu item */
+"Hide" = "Skryť";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Prihlasovacie údaje sa natrvalo odstránia.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Prihlasovacie údaje sa odstránia zo všetkých pripojených zariadení.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "Upravené %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Nenašli sa žiadne prihlasovacie údaje";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Neboli nájdené žiadne heslá";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Otvoriť a vyplniť";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Heslo";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Ukázať";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Hľadať";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Vstupné pole vyhľadávania";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "Hľadať";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Vybrať všetko";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Používateľské meno";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Webová stránka";
+

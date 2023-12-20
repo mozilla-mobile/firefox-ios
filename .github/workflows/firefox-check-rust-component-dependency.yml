@@ -49,7 +49,7 @@ jobs:
       if: env.BRANCH_CREATED == 'false'
       run: |-
         git diff
-         git diff --quiet || (git add Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved Client.xcodeproj/project.pbxproj)
+         git diff --quiet || (git add firefox-ios/Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved firefox-ios/Client.xcodeproj/project.pbxproj)
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v3
       if: env.BRANCH_CREATED == 'false'

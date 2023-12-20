@@ -462,6 +462,18 @@ class TelemetryWrapperTests: XCTestCase {
         )
     }
 
+    func test_shoppingNoAdsAvailable_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .view,
+            object: .shoppingBottomSheet,
+            value: .shoppingNoAdsAvailable
+        )
+        testEventMetricRecordingSuccess(
+            metric: GleanMetrics.Shopping.surfaceNoAdsAvailable
+        )
+    }
+
     func test_surfaceAdsImpression_GleanIsCalled() {
         TelemetryWrapper.recordEvent(
             category: .action,

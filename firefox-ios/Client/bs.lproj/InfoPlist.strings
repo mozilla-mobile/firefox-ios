@@ -1,0 +1,24 @@
+/* (No Comment) */
+"New Private Tab" = "Novi privatni tab";
+
+/* (No Comment) */
+"New Tab" = "Novi tab";
+
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Ovo vam omogućava slikanje i otpremanje fotografija.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox zahtijeva Face ID za pristup vašim sačuvanim lozinkama i načinima plaćanja.";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "Web stranice koje posjećujete mogu zahtjevati vašu lokaciju.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Ovo vam omogućava snimanje i otpremanje videa.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Ovo vam omogućava da sačuvate fotografije.";
+
+/* (No Comment) */
+"Scan QR Code" = "Skenirajte QR kod";
+

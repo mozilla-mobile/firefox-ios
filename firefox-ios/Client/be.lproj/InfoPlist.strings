@@ -1,0 +1,21 @@
+/* (No Comment) */
+"New Private Tab" = "Прыватная картка";
+
+/* (No Comment) */
+"New Tab" = "Новая картка";
+
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Firefox выкарыстоўвае камеру, каб сканаваць QR-коды, здымаць фота і відэа.";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "Вэб-сайты, якія вы наведваеце, могуць запытваць ваша месцазнаходжанне.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Firefox выкарыстоўвае мікрафон для запісу і зацягвання аўдыя.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Гэта дазваляе захоўваць фота.";
+
+/* (No Comment) */
+"Scan QR Code" = "Сканаваць QR-код";
+

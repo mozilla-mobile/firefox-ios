@@ -205,13 +205,10 @@ open class MockProfile: Client.Profile {
     }()
 
     public lazy var logins: RustLogins = {
-        let oldLoginsDatabasePath = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("\(databasePrefix)_logins.db").path
-        try? files.remove("\(databasePrefix)_logins.db")
-
         let newLoginsDatabasePath = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("\(databasePrefix)_loginsPerField.db").path
         try? files.remove("\(databasePrefix)_loginsPerField.db")
 
-        let logins = RustLogins(sqlCipherDatabasePath: oldLoginsDatabasePath, databasePath: newLoginsDatabasePath)
+        let logins = RustLogins(databasePath: newLoginsDatabasePath)
         _ = logins.reopenIfClosed()
 
         return logins

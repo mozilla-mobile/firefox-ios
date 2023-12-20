@@ -1,0 +1,84 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Είστε σίγουροι;";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Ακύρωση";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Εκκαθάριση αναζήτησης";
+
+/* Copy password text selection menu item */
+"Copy" = "Αντιγραφή";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "Δημιουργία %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Διαγραφή";
+
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Ακύρωση";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Αφαίρεση";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "Δεν μπορείτε να αναιρέσετε αυτήν την ενέργεια.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Αυτή η ενέργεια θα αφαιρέσει τον κωδικό πρόσβασης από όλες τις συγχρονισμένες συσκευές σας.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Αφαίρεση κωδικού πρόσβασης;";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Από-επιλογή όλων";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Έναρξη λειτουργίας αναζήτησης";
+
+/* Hide password text selection menu item */
+"Hide" = "Απόκρυψη";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Οι συνδέσεις θα αφαιρεθούν οριστικά.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Οι συνδέσεις θα αφαιρεθούν από όλες τις συνδεδεμένες συσκευές.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "Τροποποίηση %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Δεν βρέθηκαν συνδέσεις";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Δεν βρέθηκαν κωδικοί πρόσβασης";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Άνοιγμα και συμπλήρωση";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Κωδικός πρόσβασης";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Αποκάλυψη";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Αναζήτηση";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Πεδίο εισαγωγής αναζήτησης";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "Αναζήτηση";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Επιλογή όλων";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Όνομα χρήστη";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Ιστότοπος";
+

@@ -24,14 +24,14 @@ class LegacyRemoteTabsPanelTests: XCTestCase {
     func testHasNoSyncAccount() throws {
         let panel = createPanel(hasAccount: false)
 
-        let dataSource = try XCTUnwrap(panel.tableViewController.tableViewDelegate as? RemoteTabsErrorDataSource)
+        let dataSource = try XCTUnwrap(panel.tableViewController.tableViewDelegate as? LegacyRemoteTabsErrorDataSource)
         XCTAssertEqual(dataSource.error, .notLoggedIn)
     }
 
     func testHasNoSync() throws {
         let panel = createPanel(hasAccount: false, hasSyncEnabled: false)
 
-        let dataSource = try XCTUnwrap(panel.tableViewController.tableViewDelegate as? RemoteTabsErrorDataSource)
+        let dataSource = try XCTUnwrap(panel.tableViewController.tableViewDelegate as? LegacyRemoteTabsErrorDataSource)
         XCTAssertEqual(dataSource.error, .syncDisabledByUser)
     }
 
@@ -39,7 +39,7 @@ class LegacyRemoteTabsPanelTests: XCTestCase {
         let panel = createPanel()
 
         panelRefreshWithExpectation(panel: panel) {
-            guard let dataSource = panel.tableViewController.tableViewDelegate as? RemoteTabsErrorDataSource else {
+            guard let dataSource = panel.tableViewController.tableViewDelegate as? LegacyRemoteTabsErrorDataSource else {
                 XCTFail("Should have error data source")
                 return
             }
@@ -54,7 +54,7 @@ class LegacyRemoteTabsPanelTests: XCTestCase {
         let panel = createPanel(clientAndTabs: [clientAndTabs])
 
         panelRefreshWithExpectation(panel: panel) {
-            guard let dataSource = panel.tableViewController.tableViewDelegate as? RemoteTabsErrorDataSource else {
+            guard let dataSource = panel.tableViewController.tableViewDelegate as? LegacyRemoteTabsErrorDataSource else {
                 XCTFail("Should have error data source")
                 return
             }

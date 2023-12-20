@@ -282,7 +282,7 @@ class BaseTestCase: XCTestCase {
     }
 
     func waitForTabsButton() {
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 15)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: TIMEOUT)
     }
 
     func unlockLoginsView() {

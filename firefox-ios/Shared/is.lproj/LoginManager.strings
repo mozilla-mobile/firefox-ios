@@ -1,0 +1,84 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Ertu viss?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Hætta við";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Hreinsa leit";
+
+/* Copy password text selection menu item */
+"Copy" = "Afrita";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "Stofnað %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Eyða";
+
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Hætta við";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Fjarlægja";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "Þú getur ekki afturkallað þessa aðgerð.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Þetta mun fjarlægja lykilorðið úr öllum samstilltu tækjunum þínum.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Fjarlægja lykilorð?";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Afvelja allt";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Fara í leitarham";
+
+/* Hide password text selection menu item */
+"Hide" = "Fela";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Innskráningum mun verða varanlega eytt.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Innskráningar munu verða fjarlægðar af öllum tengdum tækjum.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "Breytt %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Engar innskráningar fundust";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Engin lykilorð fundust";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Opna & fylla út";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Lykilorð";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Sýna";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Leita";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Innsláttar svæði fyrir leit";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "Leita";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Velja allt";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Notendanafn";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Vefsvæði";
+
