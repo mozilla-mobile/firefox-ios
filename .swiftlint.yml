@@ -103,26 +103,27 @@ analyzer_rules: # Rules run by `swiftlint analyze`
 excluded: # paths to ignore during linting. Takes precedence over `included`.
   - build/
   - .build/
-  - Client/Assets/Search/get_supported_locales.swift
-  - Client/Generated
-  - fastlane/
-  - FxA
-  - FxAClient
-  - Source/ExcludedFolder
-  - Source/ExcludedFile.swift
-  - Storage/ThirdParty/SwiftData.swift
-  - Sync/Generated/Metrics.swift
-  - Storage/Generated/Metrics.swift
-  - ThirdParty
+  - firefox-ios/Client/Assets/Search/get_supported_locales.swift
+  - firefox-ios/Client/Generated
+  - firefox-ios/fastlane/
+  - firefox-ios/FxA
+  - firefox-ios/FxAClient
+  - firefox-ios/Source/ExcludedFolder
+  - firefox-ios/Source/ExcludedFile.swift
+  - firefox-ios/Storage/ThirdParty/SwiftData.swift
+  - firefox-ios/Sync/Generated/Metrics.swift
+  - firefox-ios/Storage/Generated/Metrics.swift
+  - firefox-ios/ThirdParty
   - test-fixtures/tmp
   - firefox-ios/firefox-ios-tests/Tests/UITests/
   - l10n-screenshots-dd/
   - DerivedData/
   # Package.swift files need a custom header for swift-tools-version
   # so must be excluded due to file_header rule
-  - Package.swift
+  - firefox-ios/Package.swift
   - BrowserKit/Package.swift
-  - Client/ContentBlocker/ContentBlockerGenerator/Package.swift
+  - firefox-ios/Client/ContentBlocker/ContentBlockerGenerator/Package.swift
+  - Package.swift
   
 
 included:

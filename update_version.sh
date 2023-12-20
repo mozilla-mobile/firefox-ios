@@ -7,8 +7,8 @@ fi
 
 # If needed, modify the starting version number locally
 # This script is mainly a reference as to what needs to be updated
-perl -pi -e "s/$1/$2/g" Client/Info.plist
-perl -pi -e "s/$1/$2/g" CredentialProvider/Info.plist
-perl -pi -e "s/$1/$2/g" Extensions/*/*Info.plist
-perl -pi -e "s/$1/$2/g" WidgetKit/Info.plist
+perl -pi -e "s/$1/$2/g" firefox-ios/Client/Info.plist
+perl -pi -e "s/$1/$2/g" firefox-ios/CredentialProvider/Info.plist
+perl -pi -e "s/$1/$2/g" firefox-ios/Extensions/*/*Info.plist
+perl -pi -e "s/$1/$2/g" firefox-ios/WidgetKit/Info.plist
 perl -pi -e "s/$1/$2/g" bitrise.yml
