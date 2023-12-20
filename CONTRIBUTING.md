@@ -36,7 +36,7 @@ If you find a bug in the source code or a mistake in the documentation, you can 
 
 Since the bundle identifier we use for Firefox is tied to our developer account, you'll need to generate your own identifier and update the existing configuration.
 
-1. Open Client/Configuration/Fennec.xcconfig
+1. Open `firefox-ios/Client/Configuration/Fennec.xcconfig`
 2. Change MOZ_BUNDLE_ID to your own bundle identifier. Just think of something unique: e.g., com.your_github_id.Fennec
 3. Open the project editor in Xcode.
 4. For the 'Client' target, in the 'Capabilities' section, turn off the capabilities 'Push Notifications' and 'Wallet'.
