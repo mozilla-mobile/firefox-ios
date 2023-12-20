@@ -213,11 +213,9 @@ class PhotonActionSheet: UIViewController, Themeable {
         ]
 
         // Can't set this on iPad (not in multitasking) since it causes the menu to take all the width of the screen.
-        if PhotonActionSheetViewModel.isSmallSizeForTraitCollection(trait: view.traitCollection) {
-            tableViewConstraints.append(
-                tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-            )
-        }
+        tableViewConstraints.append(
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        )
 
         constraints.append(contentsOf: tableViewConstraints)
     }
