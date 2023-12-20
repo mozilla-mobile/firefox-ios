@@ -4875,7 +4875,7 @@ app_errors:
     description: |
       Recorded when the previous session ended as a result of a crash
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-7558
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16827
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/17844
     notification_emails:
@@ -4891,7 +4891,7 @@ app_errors:
           Total CPU time consumed in the scope of the exception
         type: quantity
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-7558
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16828
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/17844
     notification_emails:
@@ -4907,7 +4907,7 @@ app_errors:
           Total time the main thread was blocked
         type: quantity
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-7558
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16829
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/17844
     notification_emails:
