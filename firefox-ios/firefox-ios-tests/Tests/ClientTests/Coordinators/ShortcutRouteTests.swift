@@ -42,6 +42,20 @@ final class ShortcutRouteTests: XCTestCase {
                                       options: [.switchToNormalMode]))
     }
 
+    func testOpenLastBookmarkShortcutWithInvalidUrl() {
+        let subject = createSubject()
+        let userInfo = [QuickActionInfos.tabURLKey: "not a url" as NSSecureCoding]
+        let shortcutItem = UIApplicationShortcutItem(type: "com.example.app.OpenLastBookmark",
+                                                     localizedTitle: "Open Last Bookmark",
+                                                     localizedSubtitle: nil,
+                                                     icon: nil,
+                                                     userInfo: userInfo)
+
+        let route = subject.makeRoute(shortcutItem: shortcutItem, tabSetting: .blankPage)
+
+        XCTAssertNil(route)
+    }
+
     func testQRCodeShortcut() {
         let subject = createSubject()
         let shortcutItem = UIApplicationShortcutItem(type: "com.example.app.QRCode",
