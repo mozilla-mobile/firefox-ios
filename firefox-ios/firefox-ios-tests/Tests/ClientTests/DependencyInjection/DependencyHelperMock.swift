@@ -25,7 +25,7 @@ class DependencyHelperMock {
             profile: profile,
             imageStore: DefaultDiskImageStore(
                 files: profile.files,
-                namespace: "TabManagerScreenshots",
+                namespace: TabManagerConstants.tabScreenshotNamespace,
                 quality: UIConstants.ScreenshotQuality),
             uuid: windowUUID
         )

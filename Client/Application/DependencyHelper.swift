@@ -17,6 +17,12 @@ class DependencyHelper {
         let profile: Profile = appDelegate.profile
         AppContainer.shared.register(service: profile)
 
+        let diskImageStore: DiskImageStore =
+        DefaultDiskImageStore(files: profile.files,
+                              namespace: TabManagerConstants.tabScreenshotNamespace,
+                              quality: UIConstants.ScreenshotQuality)
+        AppContainer.shared.register(service: diskImageStore)
+
         let appSessionProvider: AppSessionProvider = appDelegate.appSessionManager
         AppContainer.shared.register(service: appSessionProvider)
 

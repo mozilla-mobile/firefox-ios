@@ -8,6 +8,10 @@ import WebKit
 import Storage
 import Shared
 
+struct TabManagerConstants {
+    static let tabScreenshotNamespace = "TabManagerScreenshots"
+}
+
 // MARK: - TabManager protocol
 protocol TabManager: AnyObject {
     var windowUUID: WindowUUID { get }
