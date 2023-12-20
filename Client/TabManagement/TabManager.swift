@@ -8,7 +8,7 @@ import WebKit
 import Storage
 import Shared
 
-struct TabManagerConstants {
+enum TabManagerConstants {
     static let tabScreenshotNamespace = "TabManagerScreenshots"
 }
 
