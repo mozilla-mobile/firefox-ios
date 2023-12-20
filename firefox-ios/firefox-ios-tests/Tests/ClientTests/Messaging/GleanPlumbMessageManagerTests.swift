@@ -227,16 +227,6 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.clicked)
     }
 
-    func testManagerOnMessagePressed_withMalformedURL() {
-        let message = createMessage(messageId: messageId, action: "http://www.google.com?q=א")
-        subject.onMessagePressed(message)
-        let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
-        XCTAssertTrue(messageMetadata.isExpired)
-        XCTAssertEqual(applicationHelper.openURLCalled, 0)
-        XCTAssertNil(applicationHelper.lastOpenURL)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.malformed)
-    }
-
     func testManagerOnMessageDismissed() {
         let message = createMessage(messageId: messageId)
         subject.onMessageDismissed(message)

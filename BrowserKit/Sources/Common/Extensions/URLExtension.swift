@@ -8,7 +8,7 @@ extension URL {
     /// Temporary init that will be removed with the update to XCode 15 where this URL API is available
     public init?(string: String, invalidCharacters: Bool) {
         if #available(iOS 17, *) {
-            self.init(string: string, encodingInvalidCharacters: invalidCharacters)
+            self.init(string: string)
         } else {
             self.init(string: string)
         }
