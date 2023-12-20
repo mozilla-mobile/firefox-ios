@@ -68,15 +68,27 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
 
         NSLayoutConstraint.activate(
             [
-                onboardingMessageLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: UX.standardSpacing),
-                onboardingMessageLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -UX.standardSpacing),
+                onboardingMessageLabel.leadingAnchor.constraint(
+                    equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
+                    constant: UX.standardSpacing
+                ),
+                onboardingMessageLabel.trailingAnchor.constraint(
+                    equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
+                    constant: -UX.standardSpacing
+                ),
                 onboardingMessageLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
                 onboardingMessageLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
 
                 learnMoreButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-                learnMoreButton.topAnchor.constraint(equalTo: onboardingMessageLabel.safeAreaLayoutGuide.bottomAnchor, constant: UX.standardSpacing),
+                learnMoreButton.topAnchor.constraint(
+                    equalTo: onboardingMessageLabel.safeAreaLayoutGuide.bottomAnchor,
+                    constant: UX.standardSpacing
+                ),
 
-                continueButton.bottomAnchor.constraint(equalTo: self.view.layoutMarginsGuide.bottomAnchor, constant: -UX.standardSpacing),
+                continueButton.bottomAnchor.constraint(
+                    equalTo: self.view.layoutMarginsGuide.bottomAnchor,
+                    constant: -UX.standardSpacing
+                ),
                 continueButton.heightAnchor.constraint(equalToConstant: UX.continueButtonHeight),
                 continueButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
                 continueButton.leadingAnchor.constraint(
