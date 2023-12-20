@@ -4877,7 +4877,7 @@ app_errors:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-7558
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17844
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -4893,7 +4893,7 @@ app_errors:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-7558
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17844
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -4909,7 +4909,7 @@ app_errors:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-7558
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17844
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
