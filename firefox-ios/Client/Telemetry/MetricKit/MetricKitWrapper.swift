@@ -29,7 +29,7 @@ class MetricKitWrapper: NSObject, MXMetricManagerSubscriber {
                 self.handleCPUException(exception)
             })
             payload.hangDiagnostics?.forEach({ exception in
-
+                self.handleHangException(exception)
             })
         }
     }
