@@ -80,7 +80,7 @@ final class WKInternalURLTests: XCTestCase {
     // MARK: Original URL from Error page
 
     func testOriginalURLFromErrorPageWhenInternalErrorPageThenErrorPageURL() {
-        let expectedURL = "/errorpage"
+        let expectedURL = "www.example.com"
         let url = URL(string: "internal://local/errorpage?url=\(expectedURL)")!
 
         let subject = WKInternalURL(url)

@@ -87,12 +87,7 @@ final class WKInternalURL: InternalURL {
     }
 
     var originalURLFromErrorPage: URL? {
-        if let urlParam = extractedUrlParam,
-           let nested = WKInternalURL(urlParam),
-           nested.isErrorPage {
-            return nested.extractedUrlParam
-        }
-        return nil
+        return isErrorPage ? extractedUrlParam : nil
     }
 
     private var extractedUrlParam: URL? {
