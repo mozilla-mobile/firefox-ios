@@ -103,10 +103,7 @@ class DevicePickerViewController: UITableViewController {
             self?.refreshControl?.endRefreshing()
         }
 
-        RustFirefoxAccounts.startup(prefs: profile.prefs) { accountManager in
-            accountManager.deviceConstellation()?.refreshState()
-        }
-
+        RustFirefoxAccounts.shared.accountManager?.deviceConstellation()?.refreshState()
         loadList()
     }
 
@@ -122,45 +119,42 @@ class DevicePickerViewController: UITableViewController {
     }
 
     private func loadList() {
-        RustFirefoxAccounts.startup(prefs: profile.prefs) { [weak self] accountManager in
-            guard let state = accountManager.deviceConstellation()?.state() else {
-                self?.loadingState = .loaded
-                return
-            }
-            guard let self = self else { return }
-
-            let currentIds = self.devices.map { $0.id ?? "" }.sorted()
-            let newIds = state.remoteDevices.map { $0.id }.sorted()
-            if !currentIds.isEmpty, currentIds == newIds {
-                return
-            }
-
-            self.devices = state.remoteDevices.compactMap { device in
-                guard device.capabilities.contains(.sendTab) else { return nil }
-
-                let typeString = "\(device.deviceType)"
-                let lastAccessTime = device.lastAccessTime == nil ? nil : UInt64(clamping: device.lastAccessTime!)
-                return RemoteDevice(id: device.id,
-                                    name: device.displayName,
-                                    type: typeString,
-                                    isCurrentDevice: device.isCurrentDevice,
-                                    lastAccessTime: lastAccessTime,
-                                    availableCommands: nil)
-            }
-
-            if self.devices.isEmpty {
-                self.navigationItem.rightBarButtonItem = nil
-            } else {
-                self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: .SendToSendButtonTitle,
-                                                                         style: .done,
-                                                                         target: self,
-                                                                         action: #selector(self.send))
-                self.navigationItem.rightBarButtonItem?.isEnabled = false
-            }
-
+        guard let state = RustFirefoxAccounts.shared.accountManager?.deviceConstellation()?.state() else {
             self.loadingState = .loaded
-            self.tableView.reloadData()
+            return
         }
+
+        let currentIds = self.devices.map { $0.id ?? "" }.sorted()
+        let newIds = state.remoteDevices.map { $0.id }.sorted()
+        if !currentIds.isEmpty, currentIds == newIds {
+            return
+        }
+
+        self.devices = state.remoteDevices.compactMap { device in
+            guard device.capabilities.contains(.sendTab) else { return nil }
+
+            let typeString = "\(device.deviceType)"
+            let lastAccessTime = device.lastAccessTime == nil ? nil : UInt64(clamping: device.lastAccessTime!)
+            return RemoteDevice(id: device.id,
+                                name: device.displayName,
+                                type: typeString,
+                                isCurrentDevice: device.isCurrentDevice,
+                                lastAccessTime: lastAccessTime,
+                                availableCommands: nil)
+        }
+
+        if self.devices.isEmpty {
+            self.navigationItem.rightBarButtonItem = nil
+        } else {
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: .SendToSendButtonTitle,
+                                                                     style: .done,
+                                                                     target: self,
+                                                                     action: #selector(self.send))
+            self.navigationItem.rightBarButtonItem?.isEnabled = false
+        }
+
+        self.loadingState = .loaded
+        self.tableView.reloadData()
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
