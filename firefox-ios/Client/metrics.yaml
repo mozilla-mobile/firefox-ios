@@ -4881,6 +4881,22 @@ app_errors:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
+  cpu_exception:
+    type: event
+    description: |
+      Recorded when a cpu exception is triggered
+    extra_keys:
+      size:
+        description: |
+          Total CPU time consumed in the scope of the exception
+        type: quantity
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-7558
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
 
 fx_suggest:
   ping_type:

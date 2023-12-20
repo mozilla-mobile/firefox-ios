@@ -679,6 +679,7 @@ extension TelemetryWrapper {
         case awesomebarShareTap = "awesomebar-share-tap"
         case largeFileWrite = "large-file-write"
         case crashedLastLaunch = "crashed_last_launch"
+        case cpuException = "cpu_exception"
         case fxSuggestionClickInfo = "fx-suggestion-click-info"
         case fxSuggestionPosition = "fx-suggestion-position"
     }
@@ -1868,6 +1869,11 @@ extension TelemetryWrapper {
             }
         case(.information, .error, .app, .crashedLastLaunch, _):
             GleanMetrics.AppErrors.crashedLastLaunch.record()
+        case(.information, .error, .app, .cpuException, let extras):
+            if let quantity = extras?[EventExtraKey.size.rawValue] as? Int32 {
+                let properties = GleanMetrics.AppErrors.CpuExceptionExtra(size: quantity)
+                GleanMetrics.AppErrors.cpuException.record(properties)
+            }
 
         // MARK: - FX Suggest
         case(.action, .tap, .fxSuggest, _, let extras ):
