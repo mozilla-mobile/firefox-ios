@@ -19,7 +19,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
-        tabManager = TabManagerImplementation(profile: profile, imageStore: nil)
+        tabManager = TabManagerImplementation(profile: profile)
         subject = BrowserViewController(profile: profile, tabManager: tabManager)
         tabManagerDelegate = TabManagerNavDelegate()
     }
