@@ -1,25 +1,25 @@
 const glob = require("glob");
 const path = require("path");
 const webpack = require("webpack");
-const Overrides = require("./Client/Assets/CC_Script/Overrides.ios.js");
+const Overrides = require("./firefox-ios/Client/Assets/CC_Script/Overrides.ios.js");
 
 const AllFramesAtDocumentStart = glob.sync(
-  "./Client/Frontend/UserContent/UserScripts/AllFrames/AtDocumentStart/*.{js,mjs}"
+  "./firefox-ios/Client/Frontend/UserContent/UserScripts/AllFrames/AtDocumentStart/*.{js,mjs}"
 );
 const AllFramesAtDocumentEnd = glob.sync(
-  "./Client/Frontend/UserContent/UserScripts/AllFrames/AtDocumentEnd/*.{js,mjs}"
+  "./firefox-ios/Client/Frontend/UserContent/UserScripts/AllFrames/AtDocumentEnd/*.{js,mjs}"
 );
 const MainFrameAtDocumentStart = glob.sync(
-  "./Client/Frontend/UserContent/UserScripts/MainFrame/AtDocumentStart/*.{js,mjs}"
+  "./firefox-ios/Client/Frontend/UserContent/UserScripts/MainFrame/AtDocumentStart/*.{js,mjs}"
 );
 const MainFrameAtDocumentEnd = glob.sync(
-  "./Client/Frontend/UserContent/UserScripts/MainFrame/AtDocumentEnd/*.{js,mjs}"
+  "./firefox-ios/Client/Frontend/UserContent/UserScripts/MainFrame/AtDocumentEnd/*.{js,mjs}"
 );
 const WebcompatAllFramesAtDocumentStart = glob.sync(
-  "./Client/Frontend/UserContent/UserScripts/AllFrames/WebcompatAtDocumentStart/*.{js,mjs}"
+  "./firefox-ios/Client/Frontend/UserContent/UserScripts/AllFrames/WebcompatAtDocumentStart/*.{js,mjs}"
 );
 const AutofillAllFramesAtDocumentStart = glob.sync(
-  "./Client/Frontend/UserContent/UserScripts/AllFrames/AutofillAtDocumentStart/*.{js,mjs}"
+  "./firefox-ios/Client/Frontend/UserContent/UserScripts/AllFrames/AutofillAtDocumentStart/*.{js,mjs}"
 );
 
 // Ensure the first script loaded at document start is __firefox__.js
@@ -70,13 +70,13 @@ module.exports = {
   // optimization: { minimize: false }, // use for debugging
   output: {
     filename: "[name].js",
-    path: path.resolve(__dirname, "Client/Assets"),
+    path: path.resolve(__dirname, "firefox-ios/Client/Assets"),
   },
   module: {
     rules: [
       {
         test: /\.mjs$/,
-        include: [path.resolve(__dirname, "Client/Assets/CC_Script/")],
+        include: [path.resolve(__dirname, "firefox-ios/Client/Assets/CC_Script/")],
         type: "javascript/auto",
       },
     ],
@@ -87,7 +87,7 @@ module.exports = {
       url: require.resolve("page-metadata-parser"),
     },
     alias: {
-      Assets: path.resolve(__dirname, "Client/Assets"),
+      Assets: path.resolve(__dirname, "firefox-ios/Client/Assets"),
     },
   },
 };

@@ -48,7 +48,7 @@ helptext() {
 
 
 THIS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-PROJECT_FILE="$THIS_DIR/Client.xcodeproj/project.pbxproj"
+PROJECT_FILE="$THIS_DIR/firefox-ios/Client.xcodeproj/project.pbxproj"
 RUST_COMPONENTS_REMOTE="https://github.com/mozilla/rust-components-swift"
 RUST_COMPONENTS_REMOTE_ESCAPED=$(echo $RUST_COMPONENTS_REMOTE | sed 's/\//\\\//g')
 REPO_PATH=

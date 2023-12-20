@@ -35,8 +35,9 @@ workflows:
             set -euxo pipefail
             echo "-- build-for-testing --"
             mkdir DerivedData
+
             xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
-            xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 15,OS=17.2" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
+            xcodebuild "-project" "/Users/vagrant/git/firefox-ios/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 15,OS=17.2" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
 
             ls /Users/vagrant/git/DerivedData/Build/Products
             ls /Users/vagrant/git/DerivedData
@@ -66,7 +67,7 @@ workflows:
             exec zip -0 -qr "${BITRISE_SOURCE_DIR}/DerivedData.zip" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/Client.app" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/XCUITests-Runner.app" \
-            "$BITRISE_SOURCE_DIR/Client.xcodeproj" \
+            "$BITRISE_SOURCE_DIR/firefox-ios/Client.xcodeproj" \
             "$BITRISE_SOURCE_DIR/firefox-ios/firefox-ios-tests/Tests/SmokeXCUITests.xctestplan" \
             "$BITRISE_SOURCE_DIR/firefox-ios/firefox-ios-tests/Tests/Smoketest2.xctestplan" \
             "$BITRISE_SOURCE_DIR/firefox-ios/firefox-ios-tests/Tests/Smoketest3.xctestplan" \
@@ -78,7 +79,7 @@ workflows:
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Smoketest4_iphonesimulator17.2-arm64.xctestrun" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/" \
             "$BITRISE_SOURCE_DIR/firefox-ios/firefox-ios-tests/Tests/UnitTest.xctestplan" \
-            "$BITRISE_SOURCE_DIR/Client/" \
+            "$BITRISE_SOURCE_DIR/firefox-ios/Client/" \
             "$BITRISE_SOURCE_DIR/firefox-ios/firefox-ios-tests/Tests/XCUITests"
     - deploy-to-bitrise-io@2:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
@@ -381,7 +382,7 @@ workflows:
 
             echo "Adding com.apple.developer.web-browser to entitlements"
 
-            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Client/Entitlements/FennecApplication.entitlements
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" firefox-ios/Client/Entitlements/FennecApplication.entitlements
     - cache-pull@2.1: {}
   2_certificate_and_profile:
     steps:
@@ -392,7 +393,7 @@ workflows:
              #!/usr/bin/env bash
              set -e
              set -x
-             cd Client.xcodeproj
+             cd firefox-ios/Client.xcodeproj
              sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Developer"/' project.pbxproj
              cd -
         title: Set xcodeproj code_sign_identity to iPhone Developer
@@ -640,7 +641,7 @@ workflows:
             set -e
             set -x
 
-            cd Client.xcodeproj
+            cd firefox-ios/Client.xcodeproj
             sed -i '' 's/"Fennec Development"/"Bitrise Firefox iOS Dev"/' project.pbxproj
             sed -i '' 's/Fennec ShareTo Development/Bitrise Firefox iOS Dev - Share To/' project.pbxproj
             sed -i '' 's/Fennec WidgetKit Development/Bitrise Firefox iOS Dev - WidgetKit/' project.pbxproj
@@ -864,7 +865,7 @@ workflows:
             set -e
             set -x
 
-            cd Client.xcodeproj
+            cd firefox-ios/Client.xcodeproj
             sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/' project.pbxproj
             cd -
         title: Set xcodeproj code_sign_identity
@@ -882,23 +883,23 @@ workflows:
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
-        - plist_path: Client/Info.plist
+        - plist_path: firefox-ios/Client/Info.plist
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
-        - plist_path: Extensions/NotificationService/Info.plist
+        - plist_path: firefox-ios/Extensions/NotificationService/Info.plist
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
-        - plist_path: Extensions/ShareTo/Info.plist
+        - plist_path: firefox-ios/Extensions/ShareTo/Info.plist
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
-        - plist_path: WidgetKit/Info.plist
+        - plist_path: firefox-ios/WidgetKit/Info.plist
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
-        - plist_path: CredentialProvider/Info.plist
+        - plist_path: firefox-ios/CredentialProvider/Info.plist
     - script@1:
         inputs:
         - content: |-
@@ -911,10 +912,11 @@ workflows:
             # write your script here
 
             echo "Setting Nimbus variables"
-            /usr/libexec/PlistBuddy -c "Set NimbusURL $NIMBUS_URL" "Client/Info.plist"
+            /usr/libexec/PlistBuddy -c "Set NimbusURL $NIMBUS_URL" "firefox-ios/Client/Info.plist"
         title: Nimbus Variable Setup
     - xcode-archive@4.0:
         inputs:
+        - project_path: firefox-ios/Client.xcodeproj
         - compile_bitcode: 'no'
         - upload_bitcode: 'no'
         - team_id: 43AQ936H96
@@ -936,7 +938,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -x
-            ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+            firefox-ios/ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
               --org mozilla --project firefox-ios "$BITRISE_DSYM_DIR_PATH"
     - script@1:
         inputs:
@@ -952,6 +954,7 @@ workflows:
         - webhook_url: "$WEBHOOK_SLACK_TOKEN"
     - xcode-archive@4.0:
         inputs:
+        - project_path: firefox-ios/Client.xcodeproj
         - compile_bitcode: 'no'
         - upload_bitcode: 'no'
         - team_id: 43AQ936H96
@@ -990,7 +993,7 @@ workflows:
             set -e
             set -x
 
-            cd Client.xcodeproj
+            cd firefox-ios/Client.xcodeproj
             sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/' project.pbxproj
             cd -
         title: Set xcodeproj code_sign_identity
@@ -1008,23 +1011,23 @@ workflows:
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_BETA_VERSION"
-        - plist_path: Client/Info.plist
+        - plist_path: firefox-ios/Client/Info.plist
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_BETA_VERSION"
-        - plist_path: Extensions/NotificationService/Info.plist
+        - plist_path: firefox-ios/Extensions/NotificationService/Info.plist
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_BETA_VERSION"
-        - plist_path: Extensions/ShareTo/Info.plist
+        - plist_path: firefox-ios/Extensions/ShareTo/Info.plist
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_BETA_VERSION"
-        - plist_path: WidgetKit/Info.plist
+        - plist_path: firefox-ios/WidgetKit/Info.plist
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_BETA_VERSION"
-        - plist_path: CredentialProvider/Info.plist
+        - plist_path: firefox-ios/CredentialProvider/Info.plist
     - script@1:
         inputs:
         - content: |-
@@ -1037,10 +1040,11 @@ workflows:
             # write your script here
 
             echo "Setting Nimbus variables"
-            /usr/libexec/PlistBuddy -c "Set NimbusURL $NIMBUS_URL" "Client/Info.plist"
+            /usr/libexec/PlistBuddy -c "Set NimbusURL $NIMBUS_URL" "firefox-ios/Client/Info.plist"
         title: Nimbus Variable Setup
     - xcode-archive@4.0:
         inputs:
+        - project_path: firefox-ios/Client.xcodeproj
         - compile_bitcode: 'no'
         - upload_bitcode: 'no'
         - team_id: 43AQ936H96
@@ -1063,7 +1067,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -x
-            ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+            firefox-ios/ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
               --org mozilla --project firefox-ios "$BITRISE_DSYM_DIR_PATH"
     envs:
     - opts:
@@ -1087,7 +1091,7 @@ workflows:
             set -e
             set -x
 
-            cd Client.xcodeproj
+            cd firefox-ios/Client.xcodeproj
             sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/' project.pbxproj
             cd -
         title: Set xcodeproj code_sign_identity
@@ -1105,23 +1109,23 @@ workflows:
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
-        - plist_path: Client/Info.plist
+        - plist_path: firefox-ios/Client/Info.plist
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
-        - plist_path: Extensions/NotificationService/Info.plist
+        - plist_path: firefox-ios/Extensions/NotificationService/Info.plist
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
-        - plist_path: Extensions/ShareTo/Info.plist
+        - plist_path: firefox-ios/Extensions/ShareTo/Info.plist
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
-        - plist_path: WidgetKit/Info.plist
+        - plist_path: firefox-ios/WidgetKit/Info.plist
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
-        - plist_path: CredentialProvider/Info.plist
+        - plist_path: firefox-ios/CredentialProvider/Info.plist
     - script@1:
         inputs:
         - content: |-
@@ -1134,10 +1138,11 @@ workflows:
             # write your script here
 
             echo "Setting Nimbus variables"
-            /usr/libexec/PlistBuddy -c "Set NimbusURL $NIMBUS_URL" "Client/Info.plist"
+            /usr/libexec/PlistBuddy -c "Set NimbusURL $NIMBUS_URL" "firefox-ios/Client/Info.plist"
         title: Nimbus Variable Setup
     - xcode-archive@4.0:
         inputs:
+        - project_path: firefox-ios/Client.xcodeproj
         - compile_bitcode: 'no'
         - upload_bitcode: 'no'
         - team_id: 43AQ936H96
@@ -1161,7 +1166,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -x
-            ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+            firefox-ios/ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
               --org mozilla --project firefox-ios "$BITRISE_DSYM_DIR_PATH"
     envs:
     - opts:
@@ -1192,7 +1197,7 @@ workflows:
             # debug log
             set -x
             # get dependency
-            cd ./test-fixtures && git clone https://github.com/isabelrios/xcresult_extract.git
+            cd .firefox-ios/test-fixtures && git clone https://github.com/isabelrios/xcresult_extract.git
             
             echo $BITRISE_XCRESULT_PATH
             ls
@@ -1230,6 +1235,7 @@ workflows:
     steps:
     - xcode-archive@4.7.2:
         inputs:
+        - project_path: firefox-ios/Client.xcodeproj
         - compile_bitcode: 'no'
         - upload_bitcode: 'no'
         - team_id: 9G8J6YA743
@@ -1331,6 +1337,7 @@ workflows:
     steps:
     - xcode-archive@4.7.2:
         inputs:
+        - project_path: firefox-ios/Client.xcodeproj
         - compile_bitcode: 'no'
         - upload_bitcode: 'no'
         - team_id: 9G8J6YA743
@@ -1350,7 +1357,7 @@ workflows:
             set -euxo pipefail
 
             DERIVED_DATA_DIR="/Users/vagrant/git/DerivedData"
-            PROJECT="/Users/vagrant/git/Client.xcodeproj"
+            PROJECT="/Users/vagrant/git/firefox-ios/Client.xcodeproj"
             SCHEME="Fennec_Enterprise"
             SDK="iphoneos"
             DESTINATION="generic/platform=iOS"
@@ -1359,7 +1366,7 @@ workflows:
 
             echo "-- build-for-testing --"
             mkdir DerivedData
-            xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
+            xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile -project firefox-ios/Client.xcodeproj
             xcodebuild build-for-testing -project "$PROJECT" \
                 -scheme "$SCHEME" \
                 -sdk "$SDK" \
