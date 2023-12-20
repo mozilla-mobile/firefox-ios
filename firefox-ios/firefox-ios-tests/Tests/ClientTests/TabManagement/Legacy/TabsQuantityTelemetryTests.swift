@@ -31,7 +31,6 @@ class TabsQuantityTelemetryTests: XCTestCase {
 
     func testTrackTabsQuantity_withNormalTab_gleanIsCalled() {
         let tabManager = TabManagerImplementation(profile: profile,
-                                                  imageStore: nil,
                                                   inactiveTabsManager: inactiveTabsManager)
 
         let tab = tabManager.addTab()
