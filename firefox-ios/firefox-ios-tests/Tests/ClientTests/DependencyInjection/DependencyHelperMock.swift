@@ -20,15 +20,15 @@ class DependencyHelperMock {
         let tabDataStore: TabDataStore = MockTabDataStore()
         AppContainer.shared.register(service: tabDataStore)
 
+        let diskImageStore: DiskImageStore = DefaultDiskImageStore(
+            files: profile.files,
+            namespace: TabManagerConstants.tabScreenshotNamespace,
+            quality: UIConstants.ScreenshotQuality)
+        AppContainer.shared.register(service: diskImageStore)
+
         let windowUUID = WindowUUID()
-        let tabManager: TabManager = injectedTabManager ?? TabManagerImplementation(
-            profile: profile,
-            imageStore: DefaultDiskImageStore(
-                files: profile.files,
-                namespace: "TabManagerScreenshots",
-                quality: UIConstants.ScreenshotQuality),
-            uuid: windowUUID
-        )
+        let tabManager: TabManager =
+        injectedTabManager ?? TabManagerImplementation(profile: profile, uuid: windowUUID)
 
         let appSessionProvider: AppSessionProvider = AppSessionManager()
         AppContainer.shared.register(service: appSessionProvider)

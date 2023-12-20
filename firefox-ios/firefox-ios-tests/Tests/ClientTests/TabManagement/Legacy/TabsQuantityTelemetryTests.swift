@@ -50,7 +50,7 @@ class TabsQuantityTelemetryTests: XCTestCase {
     }
 
     func testTrackTabsQuantity_withPrivateTab_gleanIsCalled() {
-        let tabManager = TabManagerImplementation(profile: profile, imageStore: nil)
+        let tabManager = TabManagerImplementation(profile: profile)
         tabManager.addTab(isPrivate: true)
 
         TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
