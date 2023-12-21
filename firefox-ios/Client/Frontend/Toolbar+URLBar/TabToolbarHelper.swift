@@ -72,9 +72,8 @@ open class TabToolbarHelper: NSObject {
         case (.fire, _):
             middleButtonState = .fire
             toolbar.multiStateButton.setImage(ImageFire, for: .normal)
-            // TODO: Waiting for confirmation on Accessibility Label, using empty string for now
-            toolbar.multiStateButton.accessibilityLabel = ""
-            toolbar.multiStateButton.largeContentTitle = ""
+            toolbar.multiStateButton.accessibilityLabel = .TabToolbarDataClearanceAccessibilityLabel
+            toolbar.multiStateButton.largeContentTitle = .TabToolbarDataClearanceAccessibilityLabel
             toolbar.multiStateButton.largeContentImage = ImageFire
             toolbar.multiStateButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.fireButton
         case (.search, _):
