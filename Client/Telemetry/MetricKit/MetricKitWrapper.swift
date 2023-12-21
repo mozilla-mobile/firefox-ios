@@ -25,6 +25,12 @@ class MetricKitWrapper: NSObject, MXMetricManagerSubscriber {
             payload.diskWriteExceptionDiagnostics?.forEach({ exception in
                 self.handleDiskWriteException(exception)
             })
+            payload.cpuExceptionDiagnostics?.forEach({ exception in
+                self.handleCPUException(exception)
+            })
+            payload.hangDiagnostics?.forEach({ exception in
+                self.handleHangException(exception)
+            })
         }
     }
 
@@ -35,6 +41,26 @@ class MetricKitWrapper: NSObject, MXMetricManagerSubscriber {
                                      method: .error,
                                      object: .app,
                                      value: .largeFileWrite,
+                                     extras: eventExtra)
+    }
+
+    private func handleCPUException(_ exception: MXCPUExceptionDiagnostic) {
+        let size = Int32(measurementFormatter.string(from: exception.totalCPUTime)) ?? -1
+        let eventExtra = [TelemetryWrapper.EventExtraKey.size.rawValue: size]
+        telemetryWrapper.recordEvent(category: .information,
+                                     method: .error,
+                                     object: .app,
+                                     value: .cpuException,
+                                     extras: eventExtra)
+    }
+
+    private func handleHangException(_ exception: MXHangDiagnostic) {
+        let size = Int32(measurementFormatter.string(from: exception.hangDuration)) ?? -1
+        let eventExtra = [TelemetryWrapper.EventExtraKey.size.rawValue: size]
+        telemetryWrapper.recordEvent(category: .information,
+                                     method: .error,
+                                     object: .app,
+                                     value: .hangException,
                                      extras: eventExtra)
     }
 }
