@@ -492,6 +492,8 @@ class BrowserViewController: UIViewController,
             } else if !state.fakespotState.isOpen {
                 dismissFakespotIfNeeded()
             }
+
+            updateInContentHomePanel(tabManager.selectedTab?.url)
         }
     }
 
