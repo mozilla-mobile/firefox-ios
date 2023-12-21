@@ -4744,6 +4744,11 @@ extension String {
 
 // MARK: - Tab Toolbar
 extension String {
+    public static let TabToolbarDataClearanceAccessibilityLabel = MZLocalizedString(
+        key: "TabToolbar.Accessibility.DataClearance.v122",
+        tableName: "TabToolbar",
+        value: "Data Clearance",
+        comment: "Accessibility label for the tab toolbar fire button in private mode, used to provide users a way to end and delete their private session data.")
     public static let TabToolbarReloadAccessibilityLabel = MZLocalizedString(
         key: "Reload",
         tableName: nil,
