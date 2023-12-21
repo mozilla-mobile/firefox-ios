@@ -675,14 +675,9 @@ extension TelemetryWrapper {
         case shoppingNoAdsAvailable = "shopping-no-ads-available"
         case awesomebarShareTap = "awesomebar-share-tap"
         case largeFileWrite = "large-file-write"
-<<<<<<< HEAD:Client/Telemetry/TelemetryWrapper.swift
-=======
         case crashedLastLaunch = "crashed_last_launch"
         case cpuException = "cpu_exception"
         case hangException = "hang-exception"
-        case fxSuggestionClickInfo = "fx-suggestion-click-info"
-        case fxSuggestionPosition = "fx-suggestion-position"
->>>>>>> 0898ac8e9 (Added FXIOS-7559 [v121] health metrics telemetry (#17844)):firefox-ios/Client/Telemetry/TelemetryWrapper.swift
     }
 
     public enum EventExtraKey: String, CustomStringConvertible {
@@ -1868,8 +1863,6 @@ extension TelemetryWrapper {
                 let properties = GleanMetrics.AppErrors.LargeFileWriteExtra(size: quantity)
                 GleanMetrics.AppErrors.largeFileWrite.record(properties)
             }
-<<<<<<< HEAD:Client/Telemetry/TelemetryWrapper.swift
-=======
         case(.information, .error, .app, .crashedLastLaunch, _):
             GleanMetrics.AppErrors.crashedLastLaunch.record()
         case(.information, .error, .app, .cpuException, let extras):
@@ -1882,37 +1875,6 @@ extension TelemetryWrapper {
                 let properties = GleanMetrics.AppErrors.HangExceptionExtra(size: quantity)
                 GleanMetrics.AppErrors.hangException.record(properties)
             }
-
-        // MARK: - FX Suggest
-        case(.action, .tap, .fxSuggest, _, let extras ):
-            guard let contextIdString = TelemetryContextualIdentifier.contextId,
-                  let contextId = UUID(uuidString: contextIdString),
-                  let interactionInfo = extras?[EventValue.fxSuggestionClickInfo.rawValue] as? RustFirefoxSuggestionInteractionInfo else {
-                return recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
-            }
-            switch interactionInfo {
-            case let .amp(blockId, advertiser, iabCategory, reportingURL):
-                GleanMetrics.FxSuggest.contextId.set(contextId)
-                GleanMetrics.FxSuggest.pingType.set("fxsuggest-click")
-                GleanMetrics.FxSuggest.blockId.set(blockId)
-                GleanMetrics.FxSuggest.advertiser.set(advertiser)
-                GleanMetrics.FxSuggest.iabCategory.set(iabCategory)
-                if let reportingURL {
-                    GleanMetrics.FxSuggest.reportingUrl.set(url: reportingURL)
-                }
-                if let position = extras?[EventValue.fxSuggestionPosition.rawValue] as? Int {
-                    GleanMetrics.FxSuggest.position.set(Int64(position))
-                }
-            case .wikipedia:
-                GleanMetrics.FxSuggest.pingType.set("fxsuggest-click")
-                GleanMetrics.FxSuggest.contextId.set(contextId)
-                GleanMetrics.FxSuggest.advertiser.set("wikipedia")
-                if let position = extras?[EventValue.fxSuggestionPosition.rawValue] as? Int {
-                    GleanMetrics.FxSuggest.position.set(Int64(position))
-                }
-            }
-            GleanMetrics.Pings.shared.fxSuggest.submit()
->>>>>>> 0898ac8e9 (Added FXIOS-7559 [v121] health metrics telemetry (#17844)):firefox-ios/Client/Telemetry/TelemetryWrapper.swift
         default:
             recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
         }
