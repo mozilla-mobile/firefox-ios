@@ -4870,6 +4870,49 @@ app_errors:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
+  crashed_last_launch:
+    type: event
+    description: |
+      Recorded when the previous session ended as a result of a crash
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16827
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17844
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  cpu_exception:
+    type: event
+    description: |
+      Recorded when a cpu exception is triggered
+    extra_keys:
+      size:
+        description: |
+          Total CPU time consumed in the scope of the exception
+        type: quantity
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16828
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17844
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  hang_exception:
+    type: event
+    description: |
+      Recorded when the main thread hangs
+    extra_keys:
+      size:
+        description: |
+          Total time the main thread was blocked
+        type: quantity
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/16829
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17844
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
 
 fx_suggest:
   ping_type:

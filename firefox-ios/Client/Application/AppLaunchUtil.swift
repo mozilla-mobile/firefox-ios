@@ -31,7 +31,7 @@ class AppLaunchUtil {
         }
 
         TelemetryWrapper.shared.setup(profile: profile)
-        recordUserPrefsTelemetry()
+        recordStartUpTelemetry()
 
         // Need to get "settings.sendUsageData" this way so that Sentry can be initialized before getting the Profile.
         let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.prefSendUsageData) ?? true
@@ -191,12 +191,19 @@ class AppLaunchUtil {
         }
     }
 
-    private func recordUserPrefsTelemetry() {
+    private func recordStartUpTelemetry() {
         let isEnabled: Bool = (profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.SponsoredShortcuts) ?? true) &&
                                (profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.TopSiteSection) ?? true)
         TelemetryWrapper.recordEvent(category: .information,
                                      method: .view,
                                      object: .sponsoredShortcuts,
                                      extras: [TelemetryWrapper.EventExtraKey.preference.rawValue: isEnabled])
+
+        if logger.crashedLastLaunch {
+            TelemetryWrapper.recordEvent(category: .information,
+                                         method: .error,
+                                         object: .app,
+                                         value: .crashedLastLaunch)
+        }
     }
 }
