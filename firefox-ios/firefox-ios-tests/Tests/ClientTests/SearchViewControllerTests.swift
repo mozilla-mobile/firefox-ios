@@ -55,7 +55,7 @@ class SearchViewControllerTest: XCTestCase {
     func testFirefoxSuggestionReturnsSponsoredAndNonSponsored() async throws {
         profile.prefs.setBool(true, forKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions)
         profile.prefs.setBool(true, forKey: PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions)
-        try await searchViewController.loadFirefoxSuggestions()?.value
+        await searchViewController.loadFirefoxSuggestions()?.value
 
         XCTAssertEqual(searchViewController.firefoxSuggestions.count, 1)
     }
@@ -63,7 +63,7 @@ class SearchViewControllerTest: XCTestCase {
     func testFirefoxSuggestionReturnsNoSuggestions() async throws {
         profile.prefs.setBool(false, forKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions )
         profile.prefs.setBool(false, forKey: PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions)
-        try await searchViewController.loadFirefoxSuggestions()?.value
+        await searchViewController.loadFirefoxSuggestions()?.value
 
         XCTAssertEqual(searchViewController.firefoxSuggestions.count, 0)
     }
