@@ -100,7 +100,8 @@ extension WKEngineWebView {
     }
 
     func replaceLocation(with url: URL) {
-        let safeUrl = url.absoluteString.replacingOccurrences(of: "'", with: WKEngineInfo.apostropheEncoded)
+        let charactersToReplace = CharacterSet(charactersIn: "'")
+        let safeUrl = url.absoluteString.addingPercentEncoding(withAllowedCharacters: charactersToReplace.inverted)
         evaluateJavascriptInDefaultContentWorld("location.replace('\(safeUrl)')")
     }
 }
