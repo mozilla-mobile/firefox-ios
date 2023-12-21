@@ -5,7 +5,6 @@
 import Common
 import UIKit
 import Shared
-import ComponentLibrary
 
 class PasswordManagerOnboardingViewController: SettingsViewController {
     private struct UX {
