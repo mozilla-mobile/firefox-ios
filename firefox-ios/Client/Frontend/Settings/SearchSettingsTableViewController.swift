@@ -271,7 +271,7 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
     }
 
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 0
+        return UITableView.automaticDimension
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -285,7 +285,10 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
 
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         guard let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
-
+        if case .defaultEngine = Section(rawValue: section) {
+            footerView.titleLabel.text = .Settings.Search.DefaultSearchEngineFooter
+            footerView.titleAlignment = .top
+        }
         footerView.applyTheme(theme: themeManager.currentTheme)
         return footerView
     }
