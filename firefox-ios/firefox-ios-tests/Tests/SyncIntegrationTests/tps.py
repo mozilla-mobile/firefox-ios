@@ -22,6 +22,8 @@ class TPS(object):
         self.firefox_log.write(line.decode() + '\n')
 
     def run(self, test, phase='phase1', ignore_unused_engines=True):
+        if "SyncIntegrationTests" not in os.getcwd():
+            os.chdir("firefox-ios-tests/Tests/SyncIntegrationTests")
         self.profile.set_preferences({
             'testing.tps.testFile': os.path.abspath(test),
             'testing.tps.testPhase': phase,
