@@ -76,4 +76,28 @@ final class WKInternalURLTests: XCTestCase {
 
         XCTAssertFalse(subject.isAuthorized)
     }
+
+    // MARK: Original URL from Error page
+
+    func testOriginalURLFromErrorPageWhenInternalErrorPageThenErrorPageURL() {
+        let expectedURL = "www.example.com"
+        let url = URL(string: "internal://local/errorpage?url=\(expectedURL)")!
+
+        let subject = WKInternalURL(url)
+        XCTAssertEqual(subject?.originalURLFromErrorPage, URL(string: expectedURL)!)
+    }
+
+    func testOriginalURLFromErrorPageWhenNoParamThenNil() {
+        let url = URL(string: "internal://local/errorpage")!
+
+        let subject = WKInternalURL(url)
+        XCTAssertNil(subject?.originalURLFromErrorPage)
+    }
+
+    func testOriginalURLFromErrorPageWhenEmptyParamURLHasNoParamThenNil() {
+        let url = URL(string: "internal://local/errorpage?url=")!
+
+        let subject = WKInternalURL(url)
+        XCTAssertNil(subject?.originalURLFromErrorPage)
+    }
 }
