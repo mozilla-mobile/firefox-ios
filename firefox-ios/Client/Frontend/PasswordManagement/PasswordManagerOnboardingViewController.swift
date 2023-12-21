@@ -33,7 +33,7 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.fontSize)
     }
 
-    private lazy var continueButton: PrimaryRoundedButton = .build { button in
+    private lazy var continueButton: UIButton = .build { button in
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.setTitle(.LoginsOnboardingContinueButtonTitle, for: .normal)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Passwords.onboardingContinue
@@ -133,6 +133,8 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
 
     override func applyTheme() {
         super.applyTheme()
-        continueButton.backgroundColor = themeManager.currentTheme.colors.actionPrimary
+        let currentTheme = themeManager.currentTheme.colors
+        learnMoreButton.setTitleColor(currentTheme.actionPrimary, for: .normal)
+        continueButton.backgroundColor = currentTheme.actionPrimary
     }
 }
