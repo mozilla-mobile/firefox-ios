@@ -19,6 +19,10 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .home)
     }
 
+    func tabToolbarDidPressFire(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        // TODO: Felt Deletion - https://mozilla-hub.atlassian.net/browse/FXIOS-7869
+    }
+
     func tabToolbarDidPressLibrary(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
     }
 
