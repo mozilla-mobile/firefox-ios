@@ -1685,6 +1685,11 @@ extension String {
                 tableName: "Settings",
                 value: "Default Search Engine",
                 comment: "Title for the `default search engine` settings section in the Search page in the Settings menu.")
+            public static let DefaultSearchEngineFooter = MZLocalizedString(
+                key: "Settings.Search.DefaultSearchEngine.Footer.v122",
+                tableName: "Settings",
+                value: "Results from searches, history, bookmarks, and more",
+                comment: "Footer for for the `default search engine` settings section in the Search Settings page, which explains in more details what the `Show Search Suggestions` setting includes.")
             public static let QuickSearchEnginesTitle = MZLocalizedString(
                 key: "Settings.Search.QuickEnginesTitle.v121",
                 tableName: "Settings",
