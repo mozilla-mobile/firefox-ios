@@ -516,10 +516,20 @@ extension WebViewController: BrowserState {
 
 extension WebViewController: WKUIDelegate {
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
-        if navigationAction.targetFrame == nil {
-            browserView.load(navigationAction.request)
+        // check if this is a new frame / window
+        guard navigationAction.targetFrame == nil else { return nil }
+
+        // validate the URL using URIFixup
+        guard let urlString = navigationAction.request.url?.absoluteString,
+              URIFixup.getURL(entry: urlString) != nil else {
+            // URL failed validation, prevent loading
+            return nil
         }
 
+        // load validated URLs
+        browserView.load(navigationAction.request)
+
+        // we return nil to not open new window
         return nil
     }
 }
