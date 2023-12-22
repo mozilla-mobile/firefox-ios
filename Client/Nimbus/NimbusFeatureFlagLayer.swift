@@ -166,7 +166,7 @@ final class NimbusFeatureFlagLayer {
 
         switch featureID {
         case .feltPrivacySimplifiedUI: return config.simplifiedUiEnabled
-        case .feltPrivacyFeltDeletion: return config.feltDeletionEnabled
+        case .feltPrivacyFeltDeletion: return config.feltDeletionEnabled && config.simplifiedUiEnabled
         default: return false
         }
     }
