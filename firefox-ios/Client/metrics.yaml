@@ -4918,7 +4918,7 @@ webview:
   did_fail_provisional:
     type: event
     description: |
-      Recorded when an error occurs while starting to load data for the main frame, so early navigation.
+      Recorded when an error occurs on early webview navigation.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/17716
     data_reviews:
