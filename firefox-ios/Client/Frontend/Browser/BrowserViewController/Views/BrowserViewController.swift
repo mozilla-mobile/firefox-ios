@@ -127,7 +127,9 @@ class BrowserViewController: UIViewController,
         return topTabsViewController != nil
     }
     // Backdrop used for displaying greyed background for private tabs
-    var webViewContainerBackdrop: UIView!
+    private lazy var webViewContainerBackdrop: UIView = .build { containerBackdrop in
+        containerBackdrop.alpha = 0
+    }
     var keyboardBackdrop: UIView?
 
     var scrollController = TabScrollingController()
@@ -632,10 +634,7 @@ class BrowserViewController: UIViewController,
     }
 
     func addSubviews() {
-        webViewContainerBackdrop = UIView()
-        webViewContainerBackdrop.alpha = 0
-        view.addSubview(webViewContainerBackdrop)
-        view.addSubview(contentStackView)
+        view.addSubviews(webViewContainerBackdrop, contentStackView)
 
         contentStackView.addArrangedSubview(contentContainer)
 
@@ -819,9 +818,12 @@ class BrowserViewController: UIViewController,
             urlBarHeightConstraint = make.height.equalTo(UIConstants.TopToolbarHeightMax).constraint
         }
 
-        webViewContainerBackdrop.snp.makeConstraints { make in
-            make.edges.equalTo(view)
-        }
+        NSLayoutConstraint.activate([
+            webViewContainerBackdrop.topAnchor.constraint(equalTo: view.topAnchor),
+            webViewContainerBackdrop.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            webViewContainerBackdrop.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            webViewContainerBackdrop.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
 
         NSLayoutConstraint.activate([
             contentStackView.topAnchor.constraint(equalTo: header.bottomAnchor),
