@@ -522,7 +522,7 @@ class StringSetting: Setting, UITextFieldDelegate {
     }
 
     func alignTextFieldToNatural() {
-        textField.textAlignment = .natural
+        textField.textAlignment = textField.effectiveUserInterfaceLayoutDirection == .leftToRight ? .natural : .right
     }
 
     func enableClearButtonForTextField() {
