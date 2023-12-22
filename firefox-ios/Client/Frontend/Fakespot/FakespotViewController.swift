@@ -45,6 +45,12 @@ class FakespotViewController:
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     private var viewModel: FakespotViewModel
+    private lazy var telemetryAdsExposure: ((Bool) -> Bool) = { [weak self] areAdsEmpty in
+        if areAdsEmpty {
+            return (self?.fakespotState?.notExposedToAdsEvent ?? false)
+        }
+        return (self?.fakespotState?.exposedToAdsEvent ?? false)
+    }
 
     private var adView: FakespotAdView?
 
@@ -132,8 +138,7 @@ class FakespotViewController:
 
         setupView()
         listenForThemeChange(view)
-        viewModel.fetchProductIfOptedIn()
-
+        viewModel.fetchProductIfOptedIn(telemetryAdsExposure)
         subscribeToRedux()
     }
 
@@ -176,8 +181,10 @@ class FakespotViewController:
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         notificationCenter.post(name: .FakespotViewControllerDidAppear)
-        viewModel.recordBottomSheetDisplayed(presentationController)
         updateModalA11y()
+        guard !(fakespotState?.isBottomSheetDisplayed ?? false) else { return }
+        viewModel.recordBottomSheetDisplayed(presentationController)
+        store.dispatch(FakespotAction.bottomSheetDisplayed(true))
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -192,17 +199,23 @@ class FakespotViewController:
 
     func update(viewModel: FakespotViewModel, triggerFetch: Bool = true) {
         // Only update the model if the shopping product changed to avoid unnecessary API calls
-        guard self.viewModel.shoppingProduct != viewModel.shoppingProduct else { return }
+        guard self.viewModel.shoppingProduct != viewModel.shoppingProduct else {
+            handleAdVisibilityChanges()
+            return
+        }
 
         self.viewModel = viewModel
+        // Sets adView to nil when switching tabs on iPad to prevent retaining references from a previous tab,
+        // ensuring accurate ad impression tracking.
+        adView = nil
         listenToStateChange()
 
         guard triggerFetch else { return }
-        viewModel.fetchProductIfOptedIn()
+        viewModel.fetchProductIfOptedIn(telemetryAdsExposure)
     }
 
     private func handleAdVisibilityChanges() {
-        guard let adView else { return }
+        guard let adView, !(fakespotState?.areAdsSeen ?? false) else { return }
         viewModel.handleVisibilityChanges(for: adView, in: scrollView)
     }
 
@@ -393,7 +406,7 @@ class FakespotViewController:
             }
             viewModel.optInCardViewModel.onOptIn = { [weak self] in
                 guard let self = self else { return }
-                self.viewModel.fetchProductIfOptedIn()
+                self.viewModel.fetchProductIfOptedIn(telemetryAdsExposure)
             }
             view.configure(viewModel.optInCardViewModel)
             return view

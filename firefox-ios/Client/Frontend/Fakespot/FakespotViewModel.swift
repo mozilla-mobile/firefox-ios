@@ -173,7 +173,6 @@ class FakespotViewModel {
     var isViewIntersected = false
     // Timer-related properties for handling view visibility
     private var isViewVisible = false
-    private var hasTimerFired = false
     private var timer: Timer?
     private let tabManager: TabManager
 
@@ -322,15 +321,15 @@ class FakespotViewModel {
         self.tabManager = tabManager
     }
 
-    func fetchProductIfOptedIn() {
+    func fetchProductIfOptedIn(_ telemetryAdsClosure: ((Bool) -> Bool)? = nil) {
         if isOptedIn {
             fetchProductTask = Task { @MainActor [weak self] in
                 guard let self else { return }
-                await self.fetchProductAnalysis()
+                await self.fetchProductAnalysis(telemetryAdsClosure)
                 do {
                     // A product might be already in analysis status so we listen for progress until it's completed, then fetch new information
                     for try await status in self.observeProductAnalysisStatus() where status.isAnalyzing == false {
-                        await self.fetchProductAnalysis(showLoading: false)
+                        await self.fetchProductAnalysis(showLoading: false, telemetryAdsClosure)
                     }
                 } catch {
                     if case .loaded(let productState) = state {
@@ -369,7 +368,7 @@ class FakespotViewModel {
         let analyzeCount: Int
     }
 
-    func fetchProductAnalysis(showLoading: Bool = true) async {
+    func fetchProductAnalysis(showLoading: Bool = true, _ telemetryAdsClosure: ((Bool) -> Bool)? = nil) async {
         if showLoading { state = .loading }
         do {
             let product = try await shoppingProduct.fetchProductAnalysisData()
@@ -388,9 +387,13 @@ class FakespotViewModel {
 
             guard product != nil else { return }
             if productAds.isEmpty {
+                guard telemetryAdsClosure?(true) == false else { return }
                 recordSurfaceNoAdsAvailableTelemetry()
+                store.dispatch(FakespotAction.setAdsExposureTo(false))
             } else {
+                guard telemetryAdsClosure?(false) == false else { return }
                 recordAdsExposureTelementry()
+                store.dispatch(FakespotAction.setAdsExposureTo(true))
             }
         } catch {
             state = .error(error)
@@ -507,7 +510,7 @@ class FakespotViewModel {
             }
         )
         // Add the timer to the common run loop mode
-        // to ensure that the selector method fires even during user interactions such as scrolling,
+        // to ensure that the timerFired(aid:) method fires even during user interactions such as scrolling,
         // without requiring the user to lift their finger from the screen.
         RunLoop.current.add(timer!, forMode: .common)
     }
@@ -518,14 +521,14 @@ class FakespotViewModel {
     }
 
     private func timerFired(aid: String) {
-        hasTimerFired = true
         recordSurfaceAdsImpressionTelemetry()
         reportAdEvent(eventName: .trustedDealsImpression, aid: aid)
         stopTimer()
+        store.dispatch(FakespotAction.setAdsImpressionTo(true))
+        isViewVisible = false
     }
 
     func handleVisibilityChanges(for view: FakespotAdView, in superview: UIView) {
-        guard !hasTimerFired else { return }
         let halfViewHeight = view.frame.height / 2
         let intersection = superview.bounds.intersection(view.frame)
         let areViewsIntersected = intersection.height >= halfViewHeight && halfViewHeight > 0

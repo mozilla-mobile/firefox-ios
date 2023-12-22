@@ -10,6 +10,10 @@ struct FakespotState: ScreenState, Equatable {
     var sidebarOpenForiPadLandscape: Bool
     var currentTabUUID: String
     var expandState: [String: ExpandState]
+    var isBottomSheetDisplayed: Bool
+    var exposedToAdsEvent: Bool
+    var notExposedToAdsEvent: Bool
+    var areAdsSeen: Bool
 
     struct ExpandState: Equatable {
         var isSettingsExpanded = false
@@ -24,24 +28,45 @@ struct FakespotState: ScreenState, Equatable {
             isOpen: appState.fakespotState.isOpen,
             sidebarOpenForiPadLandscape: appState.fakespotState.sidebarOpenForiPadLandscape,
             currentTabUUID: appState.fakespotState.currentTabUUID,
-            expandState: appState.fakespotState.expandState
+            expandState: appState.fakespotState.expandState,
+            isBottomSheetDisplayed: appState.fakespotState.isBottomSheetDisplayed,
+            areAdsSeen: appState.fakespotState.areAdsSeen,
+            exposedToAdsEvent: appState.fakespotState.exposedToAdsEvent,
+            notExposedToAdsEvent: appState.fakespotState.notExposedToAdsEvent
         )
     }
 
     init() {
-        self.init(isOpen: false, sidebarOpenForiPadLandscape: false, currentTabUUID: "", expandState: [:])
+        self.init(
+            isOpen: false,
+            sidebarOpenForiPadLandscape: false,
+            currentTabUUID: "",
+            expandState: [:],
+            isBottomSheetDisplayed: false,
+            areAdsSeen: false,
+            exposedToAdsEvent: false,
+            notExposedToAdsEvent: false
+        )
     }
 
     init(
         isOpen: Bool,
         sidebarOpenForiPadLandscape: Bool,
         currentTabUUID: String,
-        expandState: [String: FakespotState.ExpandState] = [:]
+        expandState: [String: FakespotState.ExpandState] = [:],
+        isBottomSheetDisplayed: Bool,
+        areAdsSeen: Bool,
+        exposedToAdsEvent: Bool,
+        notExposedToAdsEvent: Bool
     ) {
         self.isOpen = isOpen
         self.sidebarOpenForiPadLandscape = sidebarOpenForiPadLandscape
         self.currentTabUUID = currentTabUUID
         self.expandState = expandState
+        self.isBottomSheetDisplayed = isBottomSheetDisplayed
+        self.areAdsSeen = areAdsSeen
+        self.exposedToAdsEvent = exposedToAdsEvent
+        self.notExposedToAdsEvent = notExposedToAdsEvent
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -59,12 +84,18 @@ struct FakespotState: ScreenState, Equatable {
         case FakespotAction.tabDidChange(let tabUUID):
             var state = state
             state.currentTabUUID = tabUUID
+            state.areAdsSeen = false
+            state.exposedToAdsEvent = false
+            state.notExposedToAdsEvent = false
             return state
 
         case FakespotAction.pressedShoppingButton:
             var state = state
             state.isOpen = !state.isOpen
             state.sidebarOpenForiPadLandscape = !state.isOpen
+            if !state.isOpen {
+                state.isBottomSheetDisplayed = false
+            }
             return state
 
         case FakespotAction.show:
@@ -77,11 +108,32 @@ struct FakespotState: ScreenState, Equatable {
             var state = state
             state.isOpen = false
             state.sidebarOpenForiPadLandscape = false
+            state.isBottomSheetDisplayed = false
             return state
 
         case FakespotAction.setAppearanceTo(let isEnabled):
             var state = state
             state.isOpen = isEnabled
+            state.isBottomSheetDisplayed = isEnabled
+            return state
+
+        case FakespotAction.bottomSheetDisplayed(let isDisplayed):
+            var state = state
+            state.isBottomSheetDisplayed = isDisplayed
+            return state
+
+        case FakespotAction.setAdsImpressionTo(let areAdsSeen):
+            var state = state
+            state.areAdsSeen = areAdsSeen
+            return state
+
+        case FakespotAction.setAdsExposureTo(let isExposedToAds):
+            var state = state
+            if isExposedToAds {
+                state.exposedToAdsEvent = true
+            } else {
+                state.notExposedToAdsEvent = true
+            }
             return state
 
         default:
