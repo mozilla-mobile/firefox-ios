@@ -269,6 +269,16 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
         let padding = UX.Padding
         let topBottomPadding = UX.topBottomPadding
 
+        let statusIconWidth: CGFloat
+        let statusIconHeight: CGFloat
+        if item?.allowIconScaling ?? false {
+            statusIconWidth = min(UIFontMetrics.default.scaledValue(for: UX.StatusIconSize.width), UX.StatusIconMaxSize.width)
+            statusIconHeight = min(UIFontMetrics.default.scaledValue(for: UX.StatusIconSize.height), UX.StatusIconMaxSize.height)
+        } else {
+            statusIconWidth = UX.StatusIconSize.width
+            statusIconHeight = UX.StatusIconSize.height
+        }
+
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: topAnchor, constant: topBottomPadding),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -topBottomPadding),
@@ -280,8 +290,8 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
             selectedOverlay.trailingAnchor.constraint(equalTo: trailingAnchor),
             selectedOverlay.leadingAnchor.constraint(equalTo: leadingAnchor),
 
-            statusIcon.widthAnchor.constraint(equalToConstant: min(UIFontMetrics.default.scaledValue(for: UX.StatusIconSize.width), UX.StatusIconMaxSize.width)),
-            statusIcon.heightAnchor.constraint(equalToConstant: min(UIFontMetrics.default.scaledValue(for: UX.StatusIconSize.height), UX.StatusIconMaxSize.height)),
+            statusIcon.widthAnchor.constraint(equalToConstant: statusIconWidth),
+            statusIcon.heightAnchor.constraint(equalToConstant: statusIconHeight),
         ])
     }
 
