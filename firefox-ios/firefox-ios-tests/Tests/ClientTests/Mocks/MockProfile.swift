@@ -108,32 +108,18 @@ open class MockProfile: Client.Profile {
 
     public var files: FileAccessor
     public var syncManager: ClientSyncManager!
-    public var firefoxSuggest: RustFirefoxSuggest?
+    public var firefoxSuggest: RustFirefoxSuggestActor?
 
     fileprivate let name: String = "mockaccount"
 
     private let directory: String
     private let databasePrefix: String
 
-    init(databasePrefix: String = "mock") {
+    init(databasePrefix: String = "mock", firefoxSuggest: RustFirefoxSuggestActor? = nil) {
         files = MockFiles()
         syncManager = ClientSyncManagerSpy()
         self.databasePrefix = databasePrefix
-
-        do {
-            let firefoxSuggestDatabaseName = "\(databasePrefix)_suggest.db"
-            let firefoxSuggestDatabaseURL = try FileManager.default.url(
-                for: .cachesDirectory,
-                in: .userDomainMask,
-                appropriateFor: nil,
-                create: true
-            ).appendingPathComponent(firefoxSuggestDatabaseName, isDirectory: false)
-            try? FileManager.default.removeItem(at: firefoxSuggestDatabaseURL)
-
-            firefoxSuggest = try RustFirefoxSuggest(databasePath: firefoxSuggestDatabaseURL.path)
-        } catch {
-            fatalError("Failed to open Firefox Suggest database: \(error.localizedDescription)")
-        }
+        self.firefoxSuggest = firefoxSuggest
 
         do {
             directory = try files.getAndEnsureDirectory()

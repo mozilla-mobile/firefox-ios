@@ -83,7 +83,7 @@ protocol Profile: AnyObject {
     var files: FileAccessor { get }
     var pinnedSites: PinnedSites { get }
     var logins: RustLogins { get }
-    var firefoxSuggest: RustFirefoxSuggest? { get }
+    var firefoxSuggest: RustFirefoxSuggestActor? { get }
     var certStore: CertStore { get }
     var recentlyClosedTabs: ClosedTabsStore { get }
 
@@ -610,7 +610,7 @@ open class BrowserProfile: Profile {
         return RustLogins(databasePath: databasePath)
     }()
 
-    lazy var firefoxSuggest: RustFirefoxSuggest? = {
+    lazy var firefoxSuggest: RustFirefoxSuggestActor? = {
         do {
             let databaseFileURL = try FileManager.default.url(
                 for: .cachesDirectory,

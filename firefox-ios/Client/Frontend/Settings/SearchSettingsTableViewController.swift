@@ -15,6 +15,7 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
         case defaultEngine
         case quickEngines
         case privateSession
+        case firefoxSuggestSettings
 
         var title: String {
             switch self {
@@ -24,6 +25,8 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
                 return .Settings.Search.QuickSearchEnginesTitle
             case .privateSession:
                 return .Settings.Search.PrivateSessionTitle
+            case .firefoxSuggestSettings:
+                return String.localizedStringWithFormat(.Settings.Search.Suggest.AddressBarSettingsTitle, AppName.shortName.rawValue)
             }
         }
     }
@@ -31,15 +34,19 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
     private let profile: Profile
     private let model: SearchEngines
 
-    fileprivate let ItemDefaultEngine = 0
-    fileprivate let ItemDefaultSuggestions = 1
-    fileprivate let IconSize = CGSize(width: OpenSearchEngine.UX.preferredIconSize,
-                                      height: OpenSearchEngine.UX.preferredIconSize)
+    private let ItemDefaultEngine = 0
+    private let ItemDefaultSuggestions = 1
+    private let ItemSuggestionNonSponsored = 0
+    private let ItemSuggestionSponsored = 1
+    private let ItemSuggestionLearn = 2
+    private let IconSize = CGSize(width: OpenSearchEngine.UX.preferredIconSize,
+                                  height: OpenSearchEngine.UX.preferredIconSize)
 
-    fileprivate var showDeletion = false
+    private var showDeletion = false
+    private var sectionsToDisplay: [SearchSettingsTableViewController.Section] = []
 
     var updateSearchIcon: (() -> Void)?
-    fileprivate var isEditable: Bool {
+    private var isEditable: Bool {
         guard let defaultEngine = model.defaultEngine else { return false }
 
         // If the default engine is a custom one, make sure we have more than one since we can't edit the default.
@@ -102,8 +109,7 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
         let cell = dequeueCellFor(indexPath: indexPath)
         cell.applyTheme(theme: themeManager.currentTheme)
         var engine: OpenSearchEngine!
-
-        let section = Section(rawValue: indexPath.section) ?? .defaultEngine
+        let section = Section(rawValue: sectionsToDisplay[indexPath.section].rawValue) ?? .defaultEngine
         switch section {
         case .defaultEngine:
             switch indexPath.item {
@@ -168,6 +174,49 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
             cell.editingAccessoryView = toggle
             cell.selectionStyle = .none
             cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Search.disableSearchSuggestsInPrivateMode
+        case .firefoxSuggestSettings:
+            switch indexPath.item {
+            case ItemSuggestionNonSponsored:
+                let setting = BoolSetting(
+                    prefs: profile.prefs,
+                    theme: themeManager.currentTheme,
+                    prefKey: PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions,
+                    defaultValue: profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions) ?? true,
+                    titleText: String.localizedStringWithFormat(.Settings.Search.Suggest.ShowNonSponsoredSuggestionsTitle,
+                                                                AppName.shortName.rawValue),
+                    statusText: String.localizedStringWithFormat(.Settings.Search.Suggest.ShowNonSponsoredSuggestionsDescription,
+                                                                 AppName.shortName.rawValue)
+                )
+                setting.onConfigureCell(cell, theme: themeManager.currentTheme)
+                setting.control.addTarget(self, action: #selector(didToggleEnableNonSponsoredSuggestions), for: .valueChanged)
+                cell.editingAccessoryView = setting.control
+                cell.selectionStyle = .none
+            case ItemSuggestionSponsored:
+                let setting = BoolSetting(
+                    prefs: profile.prefs,
+                    theme: themeManager.currentTheme,
+                    prefKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions,
+                    defaultValue: profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowSponsoredSuggestions) ?? true,
+                    titleText: .Settings.Search.Suggest.ShowSponsoredSuggestionsTitle,
+                    statusText: String.localizedStringWithFormat(.Settings.Search.Suggest.ShowSponsoredSuggestionsDescription,
+                                                                 AppName.shortName.rawValue)
+                )
+                setting.onConfigureCell(cell, theme: themeManager.currentTheme)
+                setting.control.addTarget(self, action: #selector(didToggleEnableSponsoredSuggestions), for: .valueChanged)
+                cell.editingAccessoryView = setting.control
+                cell.selectionStyle = .none
+            case ItemSuggestionLearn:
+                cell.accessibilityLabel = String.localizedStringWithFormat(.Settings.Search.AccessibilityLabels.LearnAboutSuggestions,
+                                                                           AppName.shortName.rawValue)
+                cell.textLabel?.text = String.localizedStringWithFormat(.Settings.Search.Suggest.LearnAboutSuggestions,
+                                                                        AppName.shortName.rawValue)
+                cell.imageView?.layer.cornerRadius = 4
+                cell.imageView?.layer.masksToBounds = true
+                cell.selectionStyle = .none
+
+            default:
+                break
+            }
         }
 
         // So that the separator line goes all the way to the left edge.
@@ -177,14 +226,18 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        guard featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) else {
-            return Section.allCases.count - 1
+        sectionsToDisplay = [Section.defaultEngine, Section.quickEngines]
+        if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+            sectionsToDisplay.append(.firefoxSuggestSettings)
         }
-        return Section.allCases.count
+        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
+            sectionsToDisplay.append(.privateSession)
+        }
+        return sectionsToDisplay.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let section = Section(rawValue: section) ?? .defaultEngine
+        let section = Section(rawValue: sectionsToDisplay[section].rawValue) ?? .defaultEngine
         switch section {
         case .defaultEngine:
             return 2
@@ -194,11 +247,13 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
             return model.orderedEngines.count
         case .privateSession:
             return 1
+        case .firefoxSuggestSettings:
+            return 3
         }
     }
 
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        let section = Section(rawValue: indexPath.section) ?? .defaultEngine
+        let section = Section(rawValue: sectionsToDisplay[indexPath.section].rawValue) ?? .defaultEngine
         switch section {
         case .defaultEngine:
             guard indexPath.item == ItemDefaultEngine else { return nil }
@@ -223,15 +278,20 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
             navigationController?.pushViewController(customSearchEngineForm, animated: true)
         case .privateSession:
             return nil
+        case .firefoxSuggestSettings:
+            guard indexPath.item == ItemSuggestionLearn else { return nil }
+            let viewController = SettingsContentViewController()
+            viewController.url = SupportUtils.URLForTopic("search-suggestions-firefox")
+            navigationController?.pushViewController(viewController, animated: true)
         }
         return nil
     }
 
     // Don't show delete button on the left.
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        let section = Section(rawValue: indexPath.section) ?? .defaultEngine
+        let section = Section(rawValue: sectionsToDisplay[indexPath.section].rawValue) ?? .defaultEngine
         switch section {
-        case .defaultEngine, .privateSession:
+        case .defaultEngine, .privateSession, .firefoxSuggestSettings:
             return UITableViewCell.EditingStyle.none
         case .quickEngines:
             let isLastItem = indexPath.item + 1 == model.orderedEngines.count
@@ -276,8 +336,7 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let headerView = super.tableView(tableView, viewForHeaderInSection: section) as? ThemedTableSectionHeaderFooterView else { return nil }
-
-        let section = Section(rawValue: section) ?? .defaultEngine
+        let section = Section(rawValue: sectionsToDisplay[section].rawValue) ?? .defaultEngine
         headerView.titleLabel.text = section.title
 
         return headerView
@@ -294,9 +353,9 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
     }
 
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        let section = Section(rawValue: indexPath.section) ?? .defaultEngine
+        let section = Section(rawValue: sectionsToDisplay[indexPath.section].rawValue) ?? .defaultEngine
         switch section {
-        case .defaultEngine, .privateSession:
+        case .defaultEngine, .privateSession, .firefoxSuggestSettings:
             return false
         case .quickEngines:
             let isLastItem = indexPath.item + 1 == model.orderedEngines.count
@@ -393,6 +452,16 @@ extension SearchSettingsTableViewController {
     @objc
     func didToggleShowSearchSuggestionsInPrivateMode(_ toggle: ThemedSwitch) {
         model.shouldShowPrivateModeSearchSuggestions = toggle.isOn
+    }
+
+    @objc
+    func didToggleEnableNonSponsoredSuggestions(_ toggle: ThemedSwitch) {
+        profile.prefs.setBool(toggle.isOn, forKey: PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions)
+    }
+
+    @objc
+    func didToggleEnableSponsoredSuggestions(_ toggle: ThemedSwitch) {
+        profile.prefs.setBool(toggle.isOn, forKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions)
     }
 
     func cancel() {

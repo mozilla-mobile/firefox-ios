@@ -22,6 +22,15 @@ public struct RustFirefoxSuggestion {
     public let fullKeyword: String
     public let clickInfo: RustFirefoxSuggestionInteractionInfo?
 
+    public init(title: String, url: URL, isSponsored: Bool, iconImage: UIImage?, fullKeyword: String) {
+        self.title = title
+        self.url = url
+        self.isSponsored = isSponsored
+        self.iconImage = iconImage
+        self.fullKeyword = fullKeyword
+        self.clickInfo = nil
+    }
+
     internal init?(_ suggestion: Suggestion) {
         // This code is intentionally written as a chain of `if-case-let`s
         // instead of a `switch`, because we don't want new `Suggestion` cases

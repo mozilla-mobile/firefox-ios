@@ -68,7 +68,7 @@ class SearchViewController: SiteTableViewController,
     private var filteredOpenedTabs = [Tab]()
     private var tabManager: TabManager
     private var searchHighlights = [HighlightItem]()
-    private var firefoxSuggestions = [RustFirefoxSuggestion]()
+    var firefoxSuggestions = [RustFirefoxSuggestion]()
     private var highlightManager: HistoryHighlightsManagerProtocol
 
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
@@ -167,17 +167,19 @@ class SearchViewController: SiteTableViewController,
         }
     }
 
-    private func loadFirefoxSuggestions() {
-        guard featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) else { return }
+    func loadFirefoxSuggestions() -> Task<(), Never>? {
+        let includeNonSponsored = profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions) ?? false
+        let includeSponsored = profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowSponsoredSuggestions) ?? false
+        guard featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) && (includeNonSponsored || includeSponsored) else { return nil }
 
         profile.firefoxSuggest?.interruptReader()
 
         let tempSearchQuery = searchQuery
-        Task { [weak self] in
+        return Task { [weak self] in
             guard let suggestions = try? await self?.profile.firefoxSuggest?.query(
                 tempSearchQuery,
-                includeSponsored: true,
-                includeNonSponsored: true
+                includeSponsored: includeSponsored,
+                includeNonSponsored: includeNonSponsored
             ) else { return }
             await MainActor.run {
                 guard let self, self.searchQuery == tempSearchQuery else { return }
@@ -518,7 +520,7 @@ class SearchViewController: SiteTableViewController,
         }
 
         loadSearchHighlights()
-        loadFirefoxSuggestions()
+        _ = loadFirefoxSuggestions()
 
         let tempSearchQuery = searchQuery
         suggestClient?.query(searchQuery, callback: { suggestions, error in
