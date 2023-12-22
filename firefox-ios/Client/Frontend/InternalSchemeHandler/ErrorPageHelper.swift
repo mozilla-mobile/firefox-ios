@@ -277,7 +277,7 @@ class ErrorPageHelper {
                                                 method: .error,
                                                 object: .webview,
                                                 value: .webviewShowErrorPage,
-                                                extras: [TelemetryWrapper.EventExtraKey.errorCode.rawValue :"\(error.code)"])
+                                                extras: [TelemetryWrapper.EventExtraKey.errorCode.rawValue: "\(error.code)"])
 
             if let internalUrl = InternalURL(webViewUrl), internalUrl.isSessionRestore, let page = InternalURL.authorize(url: urlWithQuery) {
                 // A session restore page is already on the history stack, so don't load another page on the history stack.
