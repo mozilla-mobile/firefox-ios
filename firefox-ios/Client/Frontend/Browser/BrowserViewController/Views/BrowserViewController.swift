@@ -118,7 +118,10 @@ class BrowserViewController: UIViewController,
         return searchBarPosition == .bottom
     }()
 
-    private var topTouchArea: UIButton!
+    private lazy var topTouchArea: UIButton = .build { topTouchArea in
+        topTouchArea.isAccessibilityElement = false
+        topTouchArea.addTarget(self, action: #selector(self.tappedTopArea), for: .touchUpInside)
+    }
 
     var topTabsVisible: Bool {
         return topTabsViewController != nil
@@ -636,9 +639,6 @@ class BrowserViewController: UIViewController,
 
         contentStackView.addArrangedSubview(contentContainer)
 
-        topTouchArea = UIButton()
-        topTouchArea.isAccessibilityElement = false
-        topTouchArea.addTarget(self, action: #selector(tappedTopArea), for: .touchUpInside)
         view.addSubview(topTouchArea)
 
         // Work around for covering the non-clipped web view content
@@ -851,10 +851,12 @@ class BrowserViewController: UIViewController,
     override func updateViewConstraints() {
         super.updateViewConstraints()
 
-        topTouchArea.snp.remakeConstraints { make in
-            make.top.left.right.equalTo(view)
-            make.height.equalTo(UX.ShowHeaderTapAreaHeight)
-        }
+        NSLayoutConstraint.activate([
+            topTouchArea.topAnchor.constraint(equalTo: view.topAnchor),
+            topTouchArea.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            topTouchArea.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            topTouchArea.heightAnchor.constraint(equalToConstant: UX.ShowHeaderTapAreaHeight)
+        ])
 
         readerModeBar?.snp.remakeConstraints { make in
             make.height.equalTo(UIConstants.ToolbarHeight)
