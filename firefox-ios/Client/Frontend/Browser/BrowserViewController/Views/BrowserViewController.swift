@@ -739,10 +739,19 @@ class BrowserViewController: UIViewController,
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        statusBarOverlay.snp.remakeConstraints { make in
-            make.top.left.right.equalTo(self.view)
-            make.height.equalTo(self.view.safeAreaInsets.top)
-        }
+        // Remove existing constraints
+        statusBarOverlay.removeConstraints(statusBarOverlay.constraints)
+
+        // Set new constraints for the statusBarOverlay
+        NSLayoutConstraint.activate([
+            statusBarOverlay.topAnchor.constraint(equalTo: view.topAnchor),
+            statusBarOverlay.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            statusBarOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            statusBarOverlay.heightAnchor.constraint(equalToConstant: view.safeAreaInsets.top)
+        ])
+
+        // Ensure the layout is updated immediately
+        view.layoutIfNeeded()
 
         showQueuedAlertIfAvailable()
     }
