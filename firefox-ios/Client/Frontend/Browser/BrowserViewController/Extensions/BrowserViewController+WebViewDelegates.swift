@@ -388,8 +388,7 @@ extension BrowserViewController: WKUIDelegate {
 }
 
 // MARK: - WKNavigationDelegate
-extension BrowserViewController: WKNavigationDelegate
-{
+extension BrowserViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
         guard let tab = tabManager[webView] else { return }
 
@@ -692,7 +691,7 @@ extension BrowserViewController: WKNavigationDelegate
                    level: .warning,
                    category: .webview)
 
-        TelemetryWrapper.shared.recordEvent(category: .information, 
+        TelemetryWrapper.shared.recordEvent(category: .information,
                                             method: .error,
                                             object: .webview,
                                             value: .webviewFail)
