@@ -1280,9 +1280,8 @@ class BrowserViewController: UIViewController,
     }
 
     private func handleMiddleButtonState(_ state: MiddleButtonState) {
-        // TODO: Use REDUX to show felt deletion https://mozilla-hub.atlassian.net/browse/FXIOS-7994
-        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        let showFireIcon = featureFlags.isFeatureEnabled(.feltPrivacyFeltDeletion, checking: .buildOnly) && isPrivate
+        let showDataClearanceFlow = browserViewControllerState?.showDataClearanceFlow ?? false
+        let showFireIcon = featureFlags.isFeatureEnabled(.feltPrivacyFeltDeletion, checking: .buildOnly) && showDataClearanceFlow
         guard !showFireIcon else {
             navigationToolbar.updateMiddleButtonState(.fire)
             return
