@@ -11,7 +11,7 @@
 "About.privateBullet2" = "Φραγή ιχνηλατών (ή αποδοχή, ενημερώνοντας τις ρυθμίσεις)";
 
 /* Label on About screen */
-"About.privateBullet3" = "Διαγραφή των cookies και του ιστορικού αναζητήσεων και περιήγησης";
+"About.privateBullet3" = "Διαγραφή των cookie και του ιστορικού αναζητήσεων και περιήγησης";
 
 /* Label on About screen */
 "About.privateBulletHeader" = "Χρησιμοποιήστε το για:";
@@ -203,7 +203,7 @@
 "Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Ορισμός ως προεπιλογή";
 
 /* Text for a label that indicates the description of history section from onboarding screen. */
-"Onboarding.History.Description" = "Διαγράψτε το ιστορικό περιήγησης, τους κωδικούς πρόσβασης, τα cookies σας και αποτρέψτε την καταγραφή από ανεπιθύμητες διαφημίσεις με ένα μόνο πάτημα!";
+"Onboarding.History.Description" = "Διαγράψτε το ιστορικό περιήγησης, τους κωδικούς πρόσβασης, τα cookie σας και αποτρέψτε την καταγραφή από ανεπιθύμητες διαφημίσεις με ένα μόνο πάτημα!";
 
 /* Text for a label that indicates the title of history section from onboarding screen. */
 "Onboarding.History.Title" = "Το ιστορικό σας δεν σας ακολουθεί";
@@ -581,7 +581,7 @@
 "TooltipBodyText.TrashIcon" = "Πατήστε τον κάδο απορριμμάτων ανά πάσα στιγμή για να αφαιρέσετε όλα τα ίχνη της τρέχουσας συνεδρίας σας.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
-"TooltipBodyText.TrashIcon.V2" = "Πατήστε εδώ για να τα διαγράψετε όλα — ιστορικό, cookies, τα πάντα — και ξεκινήστε από την αρχή σε μια νέα καρτέλα.";
+"TooltipBodyText.TrashIcon.V2" = "Πατήστε εδώ για να τα διαγράψετε όλα — ιστορικό, cookie, τα πάντα — και ξεκινήστε από την αρχή σε μια νέα καρτέλα.";
 
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "Προστατεύεστε!";
