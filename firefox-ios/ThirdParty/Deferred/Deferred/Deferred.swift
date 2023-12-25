@@ -133,10 +133,10 @@ public func all<T>(_ deferreds: [Deferred<T>]) -> Deferred<[T]> {
     results.reserveCapacity(deferreds.count)
 
     var block: ((T) -> ())!
-    block = { t in
+    block = { [weak combined] t in
         results.append(t)
         if results.count == deferreds.count {
-            combined.fill(results)
+            combined?.fill(results)
         } else {
             deferreds[results.count].upon(block)
         }
