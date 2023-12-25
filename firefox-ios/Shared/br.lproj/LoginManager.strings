@@ -16,6 +16,18 @@
 /* Label for the button used to delete the current login. */
 "Delete" = "Dilemel";
 
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Nullañ";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Lemel";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "Ne c’hallit ket dizober kement-se.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Dilemel ar ger-tremen?";
+
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "Diziuzañ pep tra";
 
@@ -36,6 +48,9 @@
 
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "N’eo bet kavet titour kennaskañ ebet";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Ger-tremen ebet kavet";
 
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "Digeriñ & Leuniañ";

@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "Άνοιγμα σε νέα ιδιωτική καρτέλα";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Το Firefox δεν θα διατηρεί το ιστορικό ή τα cookies σας, αλλά θα αποθηκεύει τους νέους σελιδοδείκτες.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Το Firefox δεν θα διατηρεί το ιστορικό ή τα cookie σας, αλλά θα αποθηκεύει τους νέους σελιδοδείκτες.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "Μάθετε περισσότερα";

@@ -25,6 +25,9 @@
 /* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
 "DeleteLoginAlert.Message.Local.v122" = "Ur tezmireḍ ara ad tesfesxeḍ tigawt-a.";
 
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Ayagi ad yekkes awal uffir seg meṛṛa ibenkan-ik·im yemtawan.";
+
 /* Title for the prompt that appears when the user deletes a login. */
 "DeleteLoginsAlert.Title.v122" = "Kkes awal uffir?";
 
@@ -48,6 +51,9 @@
 
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "Ulac inekcam yettwafen";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Ulac awalen uffiren i yettwafen";
 
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "Ldi & ččaṛ";

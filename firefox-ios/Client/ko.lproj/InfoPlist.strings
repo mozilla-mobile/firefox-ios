@@ -7,6 +7,9 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox가 QR code 를 스캔하거나 사진, 영상을 찍기 위해 카메라를 사용합니다.";
 
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox가 저장된 비밀번호와 결제 방법에 접근하려면 Face ID가 필요합니다.";
+
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "방문한 웹사이트에서 위치 정보를 요청할 수 있습니다.";
 
