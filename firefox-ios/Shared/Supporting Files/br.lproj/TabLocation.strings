@@ -7,6 +7,12 @@
 /* Accessibility label for the share button in url bar */
 "TabLocation.Share.A11y.Label.v119" = "Rannañ ar bajenn-mañ";
 
+/* Large content title for the share button. This title is displayed when using accessible font sizes is enabled */
+"TabLocation.ShareButton.AccessibilityLabel.v122" = "Rannañ";
+
 /* Accessibility label for the shopping button in url bar */
 "TabLocation.Shopping.A11y.Label.v120" = "Gwirier alioù";
+
+/* Large content title for the button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemoveButton.LargeContentTitle.v122" = "Dilemel ar bajenn";
 

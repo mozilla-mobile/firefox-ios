@@ -1,6 +1,9 @@
 /* This value is used as the header for the remember card page. The placeholder is for the app name. */
 "CreditCard.RememberCard.Header.v115" = "Varno shranite podatke o kartici v %@ in naslednjič hitreje zaključite nakup.";
 
+/* This value is used as the header for the remember card page. The placeholder is for the app name. */
+"CreditCard.RememberCard.Header.v122" = "%@ šifrira številko vaše kartice. Varnostna koda se ne bo shranila.";
+
 /* This value is used as the title for the Yes button in the remember credit card page */
 "CreditCard.RememberCard.MainButtonTitle.v115" = "Da";
 

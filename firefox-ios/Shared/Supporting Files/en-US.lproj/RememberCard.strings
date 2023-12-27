@@ -1,11 +1,20 @@
 /* This value is used as the header for the remember card page. The placeholder is for the app name. */
 "CreditCard.RememberCard.Header.v115" = "Save your card information securely with %@ to check out faster next time.";
 
+/* This value is used as the header for the remember card page. The placeholder is for the app name. */
+"CreditCard.RememberCard.Header.v122" = "%@ encrypts your card number. Your security code won’t be saved.";
+
 /* This value is used as the title for the Yes button in the remember credit card page */
 "CreditCard.RememberCard.MainButtonTitle.v115" = "Yes";
 
+/* This value is used as the title for the Yes button in the remember credit card page */
+"CreditCard.RememberCard.MainButtonTitle.v122" = "Save";
+
 /* This value is used as the title for the remember credit card page */
 "CreditCard.RememberCard.MainTitle.v115" = "Remember this card?";
+
+/* This value is used as the title for the remember credit card page */
+"CreditCard.RememberCard.MainTitle.v122" = "Securely save this card?";
 
 /* This value is used as the title for the Not Now button in the remember credit card page */
 "CreditCard.RememberCard.SecondaryButtonTitle.v115" = "Not Now";
