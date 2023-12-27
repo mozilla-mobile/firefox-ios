@@ -16,6 +16,7 @@
     {
       "skippedTests" : [
         "ActivityStreamTest\/testContextMenuInLandscape()",
+        "ActivityStreamTest\/testLongTapOnTopSiteOptions()",
         "ActivityStreamTest\/testTopSites1ShareDefaultTopSite()",
         "ActivityStreamTest\/testTopSites2Add()",
         "ActivityStreamTest\/testTopSites3RemoveDefaultTopSite()",

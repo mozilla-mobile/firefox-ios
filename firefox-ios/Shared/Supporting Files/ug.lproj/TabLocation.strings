@@ -1,0 +1,21 @@
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "باغلىنىش بىخەتەر ئەمەس. كۈچەيتىلگەن ئىز قوغلاشتىن قوغداش تاقاق.";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.Secure.A11y.Label.v119" = "بىخەتەر باغلىنىش. كۈچەيتىلگەن ئىزلاشتىن قوغداش تاقاق.";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.NotSecure.A11y.Label.v119" = "باغلىنىش بىخەتەر ئەمەس";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.Secure.A11y.Label.v119" = "بىخەتەر باغلىنىش";
+
+/* Accessibility label for the share button in url bar */
+"TabLocation.Share.A11y.Label.v119" = "بۇ بەتنى ھەمبەھىرلە";
+
+/* Large content title for the share button. This title is displayed when using accessible font sizes is enabled */
+"TabLocation.ShareButton.AccessibilityLabel.v122" = "ھەمبەھىر";
+
+/* Accessibility label for the shopping button in url bar */
+"TabLocation.Shopping.A11y.Label.v120" = "باھالاش تەكشۈرگۈچ";
+

@@ -8,9 +8,11 @@ import WebKit
 @testable import Client
 
 class MockTabManager: TabManager {
+    let windowUUID = WindowUUID()
     var isRestoringTabs = false
     var selectedTab: Tab?
-    var backupCloseTab: Client.BackupCloseTab?
+    var backupCloseTab: BackupCloseTab?
+    var backupCloseTabs = [Tab]()
 
     var nextRecentlyAccessedNormalTabs = [Tab]()
 
@@ -79,6 +81,8 @@ class MockTabManager: TabManager {
 
     func removeAllTabs(isPrivateMode: Bool) async {}
 
+    func undoCloseAllTabs() {}
+
     func undoCloseTab(tab: Client.Tab, position: Int?) {}
 
     func getTabFor(_ url: URL) -> Tab? {
@@ -140,8 +144,10 @@ class MockTabManager: TabManager {
 
     // MARK: - Inactive tabs
     func getInactiveTabs() -> [Tab] {
-        return [Tab]()
+        return inactiveTabs
     }
 
     func removeAllInactiveTabs() async {}
+
+    func undoCloseInactiveTabs() {}
 }

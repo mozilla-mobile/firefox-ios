@@ -179,6 +179,33 @@ class RouteTests: XCTestCase {
         XCTAssertNil(route)
     }
 
+    func testWhenJSSchemeWithSearchThenDoesntOpenRoute() {
+        let subject = createSubject()
+        let url = URL(string: "firefox://open-url?url=javascript://https://google.com%2Fsearch?q=foo")!
+
+        let route = subject.makeRoute(url: url)
+
+        XCTAssertNil(route)
+    }
+
+    func testMakeRouteWhenJSSchemeWithAlertThenDoesntOpenRoute() {
+        let subject = createSubject()
+        let url = URL(string: "firefox://open-url?url=javascript:alert(1)")!
+
+        let route = subject.makeRoute(url: url)
+
+        XCTAssertNil(route)
+    }
+
+    func testMakeRouteWhenJSSchemeWithWindowCloseThenDoesntOpenRoute() {
+        let subject = createSubject()
+        let url = URL(string: "firefox://open-url?url=javascript:window.close();alert(1337)")!
+
+        let route = subject.makeRoute(url: url)
+
+        XCTAssertNil(route)
+    }
+
     func testInvalidDeepLink() {
         let subject = createSubject()
         let url = URL(string: "firefox://deep-links-are-fun?url=/settings/newTab/")!

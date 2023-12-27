@@ -126,10 +126,21 @@ private extension BaseTestCase {
     }
 
     func dragAndDrop(dragElement: XCUIElement, dropOnElement: XCUIElement) {
+        var nrOfAttempts = 0
+        mozWaitForElementToExist(dropOnElement)
         dragElement.press(forDuration: 1.5, thenDragTo: dropOnElement)
+        mozWaitForElementToExist(dragElement)
+        // Repeat the action in case the first drag and drop attempt was not successfull
+        while dragElement.isLeftOf(rightElement: dropOnElement) && nrOfAttempts < 4 {
+            dragElement.press(forDuration: 1.5, thenDragTo: dropOnElement)
+            nrOfAttempts = nrOfAttempts + 1
+            mozWaitForElementToExist(dragElement)
+        }
     }
 
     func checkTabsOrder(dragAndDropTab: Bool, firstTab: String, secondTab: String) {
+        mozWaitForElementToExist(app.collectionViews.cells.element(boundBy: 0))
+        mozWaitForElementToExist(app.collectionViews.cells.element(boundBy: 1))
         let firstTabCell = app.collectionViews.cells.element(boundBy: 0).label
         let secondTabCell = app.collectionViews.cells.element(boundBy: 1).label
 

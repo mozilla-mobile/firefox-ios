@@ -13,7 +13,7 @@ final class LegacyGridTabViewControllerTests: XCTestCase {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
-        manager = TabManagerImplementation(profile: profile, imageStore: nil)
+        manager = TabManagerImplementation(profile: profile)
     }
 
     override func tearDown() {

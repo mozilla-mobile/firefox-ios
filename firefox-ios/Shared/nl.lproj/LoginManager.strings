@@ -1,0 +1,84 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Weet u het zeker?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Annuleren";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Zoekveld wissen";
+
+/* Copy password text selection menu item */
+"Copy" = "Kopiëren";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "Gemaakt: %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Verwijderen";
+
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Annuleren";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Verwijderen";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "U kunt deze actie niet ongedaan maken.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Hierdoor wordt het wachtwoord van al uw gesynchroniseerde apparaten verwijderd.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Wachtwoord verwijderen?";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Alle deselecteren";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Zoekmodus openen";
+
+/* Hide password text selection menu item */
+"Hide" = "Verbergen";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Aanmeldingen zullen definitief worden verwijderd.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Aanmeldingen zullen van alle gekoppelde apparaten worden verwijderd.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "Gewijzigd: %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Geen aanmeldingen gevonden";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Geen wachtwoorden gevonden";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Openen & invullen";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Wachtwoord";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Weergeven";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Zoeken";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Zoekinvoerveld";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "Zoeken";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Alle selecteren";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Gebruikersnaam";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Website";
+

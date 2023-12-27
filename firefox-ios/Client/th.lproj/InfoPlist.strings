@@ -1,0 +1,21 @@
+/* (No Comment) */
+"New Private Tab" = "แท็บส่วนตัวใหม่";
+
+/* (No Comment) */
+"New Tab" = "แท็บใหม่";
+
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "สิ่งนี้ช่วยให้คุณถ่ายและอัปโหลดรูปถ่าย";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "เว็บไซต์ที่คุณเยี่ยมชมอาจขอตำแหน่งที่ตั้งของคุณ";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "สิ่งนี้ช่วยให้คุณถ่ายและอัปโหลดวิดีโอ";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "สิ่งนี้ช่วยให้คุณบันทึกรูปถ่าย";
+
+/* (No Comment) */
+"Scan QR Code" = "สแกนรหัส QR";
+

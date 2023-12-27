@@ -11,9 +11,11 @@ class TabMigrationUtilityTests: XCTestCase {
     var tabDataStore: MockTabDataStore!
     let sleepTime: UInt64 = 1 * NSEC_PER_SEC
     let selectedTabUUID = UUID(uuidString: "1CEBD34D-44E5-41F8-A686-4EA8C284A5CE")
+    private var tabDataWindowUUID: WindowUUID!
 
     override func setUp() {
         super.setUp()
+        tabDataWindowUUID = WindowUUID()
         profile = MockProfile()
         tabDataStore = MockTabDataStore()
     }
@@ -27,40 +29,40 @@ class TabMigrationUtilityTests: XCTestCase {
     func testShouldRunMigration_OnlyOnce() async {
         let subject = createSubject()
         XCTAssertTrue(subject.shouldRunMigration)
-        _ = await subject.runMigration()
+        _ = await subject.runMigration(for: tabDataWindowUUID)
         XCTAssertFalse(subject.shouldRunMigration)
     }
 
     func testRunMigration_SaveDataCalled() async {
         let subject = createSubject()
-        _ = await subject.runMigration()
+        _ = await subject.runMigration(for: tabDataWindowUUID)
         XCTAssertEqual(tabDataStore.saveWindowDataCalledCount, 1)
     }
 
     func testRunMigration_SameAmountOfTabs() async {
         var subject = createSubject()
         subject.legacyTabs = buildSavedTab(amountOfTabs: 3)
-        let windowData = await subject.runMigration()
+        let windowData = await subject.runMigration(for: tabDataWindowUUID)
         XCTAssertEqual(windowData.tabData.count, subject.legacyTabs.count)
     }
 
     func testRunMigration_EmptyTabs() async {
         let subject = createSubject()
-        let windowData = await subject.runMigration()
+        let windowData = await subject.runMigration(for: tabDataWindowUUID)
         XCTAssertEqual(windowData.tabData.count, 0)
     }
 
     func testRunMigration_FirstTabAsSelected() async {
         var subject = createSubject()
         subject.legacyTabs = buildSavedTab(amountOfTabs: 3)
-        let windowData = await subject.runMigration()
+        let windowData = await subject.runMigration(for: tabDataWindowUUID)
         XCTAssertEqual(windowData.activeTabId, selectedTabUUID)
     }
 
     func testRunMigration_AllTabDataIsMigrated() async {
         var subject = createSubject()
         subject.legacyTabs = buildSavedTab(amountOfTabs: 1)
-        let windowData = await subject.runMigration()
+        let windowData = await subject.runMigration(for: tabDataWindowUUID)
 
         let migratedTab = windowData.tabData[0]
         XCTAssertEqual(migratedTab.id, selectedTabUUID)

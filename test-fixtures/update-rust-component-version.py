@@ -7,8 +7,8 @@ from pbxproj import XcodeProject
 
 # Constants
 GITHUB_REPO = "mozilla/rust-components-swift"
-SPM_PACKAGE = "Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved"
-FIREFOX_PROJECT = "Client.xcodeproj/project.pbxproj"
+SPM_PACKAGE = "firefox-ios/Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved"
+FIREFOX_PROJECT = "firefox-ios/Client.xcodeproj/project.pbxproj"
 RUST_COMPONENTS_ID = "433F87D62788F34500693368"
 
 

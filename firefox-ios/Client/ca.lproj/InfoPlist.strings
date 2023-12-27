@@ -1,0 +1,21 @@
+/* (No Comment) */
+"New Private Tab" = "Pestanya privada nova";
+
+/* (No Comment) */
+"New Tab" = "Pestanya nova";
+
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "El Firefox usa la càmera per a escanejar codis QR i fer fotos i vídeos.";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "Els llocs web que visiteu poden sol·licitar la vostra ubicació.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Això permet fer vídeos i pujar-los.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Això permet desar fotos.";
+
+/* (No Comment) */
+"Scan QR Code" = "Escaneja un codi QR";
+

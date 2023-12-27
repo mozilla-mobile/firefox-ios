@@ -6,9 +6,10 @@ import Foundation
 import Common
 
 public protocol TabDataStore {
-    /// Fetches the previously saved window data (this contains the list of tabs) from disk, if it exists
+    /// Fetches the previously saved window data matching the provided UUID,
+    /// if it exists. This data contains the list of tabs.
     /// - Returns: The window data object if one was previously saved
-    func fetchWindowData() async -> WindowData?
+    func fetchWindowData(uuid: UUID) async -> WindowData?
 
     /// Saves the window data (contains the list of tabs) to disk
     /// - Parameter window: the window data object to be saved
@@ -16,6 +17,13 @@ public protocol TabDataStore {
 
     /// Erases all window data on disk
     func clearAllWindowsData() async
+
+    /// Synchronous function that lists UUIDs for all WindowData currently saved
+    /// to disk. Because this requires no decoding (we can just check the list of
+    /// saved files in the directory) it is faster than fetchWindowData() and is
+    /// preferable when only the UUIDs are needed.
+    /// - Returns: a list of UUIDs for any saved WindowData.
+    func fetchWindowDataUUIDs() -> [UUID]
 }
 
 public actor DefaultTabDataStore: TabDataStore {
@@ -28,6 +36,7 @@ public actor DefaultTabDataStore: TabDataStore {
     private let throttleTime: UInt64
     private var windowDataToSave: WindowData?
     private var nextSaveIsScheduled = false
+    private let filePrefix = "window-"
 
     public init(logger: Logger = DefaultLogger.shared,
                 fileManager: TabFileManager = DefaultTabFileManager(),
@@ -39,46 +48,45 @@ public actor DefaultTabDataStore: TabDataStore {
 
     // MARK: Fetching Window Data
 
-    public func fetchWindowData() async -> WindowData? {
-        logger.log("Attempting to fetch window/tab data",
-                   level: .debug,
-                   category: .tabs)
-        let allWindows = await fetchAllWindowsData()
-        return allWindows.first
-    }
-
-    private func fetchAllWindowsData() async -> [WindowData] {
-        guard let directoryURL = fileManager.windowDataDirectory(isBackup: false) else {
-            logger.log("Could not resolve window data directory",
-                       level: .warning,
-                       category: .tabs)
-            return [WindowData]()
-        }
-
+    public func fetchWindowData(uuid: UUID) async -> WindowData? {
+        logger.log("Attempting to fetch window/tab data", level: .debug, category: .tabs)
         do {
-            let fileURLs = fileManager.contentsOfDirectory(at: directoryURL)
-            let windowsData = parseWindowDataFiles(fromURLs: fileURLs)
-            if windowsData.isEmpty {
-                if !fileURLs.isEmpty {
-                    // There was a file present but it failed to restore for some reason
-                    logger.log("Failed to open window/tab data",
-                               level: .fatal,
-                               category: .tabs)
-                }
+            guard let fileURL = windowURLPath(for: uuid, isBackup: false),
+                  fileManager.fileExists(atPath: fileURL),
+                  let windowData = parseWindowDataFile(fromURL: fileURL) else {
+                logger.log("Failed to open window/tab data for UUID: \(uuid)", level: .fatal, category: .tabs)
                 throw TabDataError.failedToFetchData
             }
-            return windowsData
+            return windowData
         } catch {
-            logger.log("Error fetching all window data: \(error)",
-                       level: .warning,
-                       category: .tabs)
-            guard let backupURL = fileManager.windowDataDirectory(isBackup: true) else {
-                return [WindowData]()
+            logger.log("Error fetching window data: UUID = \(uuid) Error = \(error)", level: .warning, category: .tabs)
+            guard let backupURL = windowURLPath(for: uuid, isBackup: true),
+                  fileManager.fileExists(atPath: backupURL),
+                  let backupWindowData = parseWindowDataFile(fromURL: backupURL) else {
+                return nil
             }
-            let fileURLs = fileManager.contentsOfDirectory(at: backupURL)
-            let windowsData = parseWindowDataFiles(fromURLs: fileURLs)
-            return windowsData
+            return backupWindowData
         }
+    }
+
+    nonisolated public func fetchWindowDataUUIDs() -> [UUID] {
+        guard let directoryURL = fileManager.windowDataDirectory(isBackup: false) else {
+            logger.log("Could not resolve window data directory", level: .warning, category: .tabs)
+            return []
+        }
+
+        let fileURLs = fileManager.contentsOfDirectory(at: directoryURL)
+
+        return fileURLs.compactMap {
+            let file = $0.lastPathComponent
+            guard file.hasPrefix(filePrefix) else { return nil }
+            let uuidString = String(file.dropFirst(filePrefix.count))
+            return UUID(uuidString: uuidString)
+        }
+    }
+
+    private func parseWindowDataFile(fromURL url: URL) -> WindowData? {
+        return parseWindowDataFiles(fromURLs: [url]).first
     }
 
     private func parseWindowDataFiles(fromURLs urlList: [URL]) -> [WindowData] {
@@ -186,7 +194,7 @@ public actor DefaultTabDataStore: TabDataStore {
 
     private func windowURLPath(for windowID: UUID, isBackup: Bool) -> URL? {
         guard let baseURL = fileManager.windowDataDirectory(isBackup: isBackup) else { return nil }
-        let baseFilePath = "window-" + windowID.uuidString
+        let baseFilePath = filePrefix + windowID.uuidString
         return baseURL.appendingPathComponent(baseFilePath)
     }
 }

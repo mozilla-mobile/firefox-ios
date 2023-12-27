@@ -219,6 +219,24 @@ extension URL {
         let stringURL = String(urlString[urlString.index(urlString.startIndex, offsetBy: 5)...])
         return URL(string: stringURL) ?? self
     }
+
+    public func getQuery() -> [String: String] {
+        var results = [String: String]()
+
+        guard let components = URLComponents(url: self, resolvingAgainstBaseURL: false),
+              let queryItems = components.percentEncodedQueryItems
+        else {
+            return results
+        }
+
+        for item in queryItems {
+            if let value = item.value {
+                results[item.name] = value
+            }
+        }
+
+        return results
+    }
 }
 
 private struct ETLDEntry: CustomStringConvertible {

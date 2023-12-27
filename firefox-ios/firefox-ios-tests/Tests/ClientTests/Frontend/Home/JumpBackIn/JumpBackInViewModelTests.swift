@@ -28,7 +28,7 @@ class JumpBackInViewModelTests: XCTestCase {
         mockTabManager = MockTabManager()
         stubBrowserViewController = BrowserViewController(
             profile: mockProfile,
-            tabManager: TabManagerImplementation(profile: mockProfile, imageStore: nil)
+            tabManager: TabManagerImplementation(profile: mockProfile)
         )
 
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
@@ -36,11 +36,11 @@ class JumpBackInViewModelTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
-        AppContainer.shared.reset()
         adaptor = nil
         stubBrowserViewController = nil
         mockTabManager = nil
         mockProfile = nil
+        AppContainer.shared.reset()
     }
 
     // MARK: - Switch to tab
