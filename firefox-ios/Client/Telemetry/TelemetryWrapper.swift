@@ -410,6 +410,7 @@ extension TelemetryWrapper {
         case shoppingNimbusDisabled = "shopping-nimbus-disabled"
         case shoppingComponentOptedOut = "shopping-component-opted-out"
         case shoppingUserHasOnboarded = "shopping-user-has-onboarded"
+        case shoppingAdsOptedOut = "shopping-ads-opted-out"
         case keyCommand = "key-command"
         case locationBar = "location-bar"
         case messaging = "messaging"
@@ -778,6 +779,7 @@ extension TelemetryWrapper {
             case isNimbusDisabled = "is-nimbus-disabled"
             case isComponentOptedOut = "is-component-opted-out"
             case isUserOnboarded = "is-user-onboarded"
+            case areAdsDisabled = "are-ads-disabled"
             // Extra Keys for `surface_displayed` event
             case halfView = "half-view"
             case fullView = "full-view"
@@ -1274,7 +1276,18 @@ extension TelemetryWrapper {
                     value: value,
                     extras: extras)
             }
-
+        case(.information, .settings, .shoppingAdsOptedOut, _, let extras):
+            if let fakespotAdsEnabled = extras?[EventExtraKey.Shopping.areAdsDisabled.rawValue]
+                as? Bool {
+                GleanMetrics.ShoppingSettings.disabledAds.set(fakespotAdsEnabled)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
         // MARK: Onboarding
         case (.action, .view, .onboardingCardView, _, let extras):
             if let type = extras?[ExtraKey.cardType.rawValue] as? String,
