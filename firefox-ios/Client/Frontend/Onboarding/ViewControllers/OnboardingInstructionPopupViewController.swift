@@ -167,8 +167,8 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
             contentStackView.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor, constant: -trailingPadding),
             contentStackView.bottomAnchor.constraint(equalTo: contentContainerView.bottomAnchor, constant: -bottomPadding),
             textStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
-            primaryButton.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
-            primaryButton.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
+            PrimaryRoundedButton.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
+            PrimaryRoundedButton.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
         ])
     }
 
@@ -182,7 +182,7 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
 
     private func updateLayout() {
         titleLabel.text = viewModel.title
-        primaryButton.setTitle(viewModel.buttonTitle, for: .normal)
+        PrimaryRoundedButton.setTitle(viewModel.buttonTitle, for: .normal)
     }
 
     private func addViewsToView() {
@@ -191,7 +191,7 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
         contentStackView.addArrangedSubview(titleLabel)
         numeratedLabels.forEach { textStackView.addArrangedSubview($0) }
         contentStackView.addArrangedSubview(textStackView)
-        contentStackView.addArrangedSubview(primaryButton)
+        contentStackView.addArrangedSubview(PrimaryRoundedButton)
 
         contentContainerView.addSubview(contentStackView)
         view.addSubview(contentContainerView)
@@ -250,8 +250,8 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
         titleLabel.textColor = theme.colors.textPrimary
         numeratedLabels.forEach { $0.textColor = theme.colors.textPrimary }
 
-        primaryButton.setTitleColor(theme.colors.textInverted, for: .normal)
-        primaryButton.backgroundColor = theme.colors.actionPrimary
+        PrimaryRoundedButton.setTitleColor(theme.colors.textInverted, for: .normal)
+        PrimaryRoundedButton.backgroundColor = theme.colors.actionPrimary
 
         view.backgroundColor = theme.colors.layer1
     }
