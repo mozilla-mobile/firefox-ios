@@ -55,7 +55,11 @@ enum NavigationPath {
         else if host == "open-url" {
             let urlString = unescape(string: query["url"]) ?? ""
             guard let url = URL(string: urlString, invalidCharacters: false) else { return nil }
-            self = .url(url)
+            if let validUrl = URIFixup.getURL(entry: url.absoluteString) {
+                self = .url(validUrl)
+            } else {
+                self = .text(urlString)
+            }
         } else if host == "open-text" || isHttpScheme {
             let text = unescape(string: query["text"]) ?? ""
             self = .text(text)
