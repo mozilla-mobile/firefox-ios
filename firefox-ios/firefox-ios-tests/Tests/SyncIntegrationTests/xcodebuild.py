@@ -10,7 +10,7 @@ logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 class XCodeBuild(object):
     binary = 'xcodebuild'
-    destination = 'platform=iOS Simulator,name=iPhone 15,OS=17.0.1'
+    destination = 'platform=iOS Simulator,name=iPhone 15,OS=17.2'
     logger = logging.getLogger()
     scheme = 'Fennec'
     testPlan = 'SyncIntegrationTestPlan'
@@ -54,14 +54,14 @@ class XCodeBuild(object):
         try:
             out = subprocess.check_output(
                 args,
-                cwd=os.chdir("../../../.."),
+                cwd=os.chdir("../../.."),
                 stderr=subprocess.STDOUT,
                 universal_newlines=True)
-            os.chdir("firefox-ios/firefox-ios-tests/Tests/SyncIntegrationTests")
         except subprocess.CalledProcessError as e:
             out = e.output
             raise
         finally:
             with open(self.log, 'w') as f:
                 f.write(out)
+            os.chdir("firefox-ios-tests/Tests/SyncIntegrationTests")
 

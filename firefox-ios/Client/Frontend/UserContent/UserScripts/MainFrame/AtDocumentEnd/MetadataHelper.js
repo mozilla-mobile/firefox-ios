@@ -11,19 +11,27 @@ function MetadataWrapper() {
   this.getMetadata = function() {
     let metadata = metadataParser.getMetadata(document, document.URL);
 
-    // Default to using `document.URL` as the "official" URL.
+    // Set metadata.url to document URL by default
     metadata.url = document.URL;
 
-    // However, if this is an AMP page and a `link[rel="canonical"]`
-    // URL is available, use that instead. This is more reliable and
-    // produces better results than the URL extracted by the page
-    // metadata parser.
-    if (location.pathname.startsWith("/amp/")) {
-      let canonicalLink = document.querySelector("link[rel=\"canonical\"]");
-      let canonicalHref = canonicalLink && canonicalLink.href;
-      if (canonicalHref) {
-        metadata.url = canonicalHref;
+    // No need to do anything if not an amp page
+    if (!location.pathname.startsWith("/amp/")) {
+      return metadata;
+    }
+
+    // Return metadata as is if no canonical link or href were found
+    const canonicalLink = document.querySelector("link[rel='canonical']");
+    if (!canonicalLink?.href) {
+      return metadata;
+    }
+
+    // At this stage we are sure the canonical href exists
+    try {
+      const canonicalUrl = new URL(canonicalLink.href, location);
+      if (canonicalUrl.protocol.match(/^https?:$/)) {
+        metadata.url = canonicalLink.href;
       }
+    } catch (error) {
     }
 
     return metadata;

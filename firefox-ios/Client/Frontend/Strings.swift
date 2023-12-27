@@ -1685,6 +1685,11 @@ extension String {
                 tableName: "Settings",
                 value: "Default Search Engine",
                 comment: "Title for the `default search engine` settings section in the Search page in the Settings menu.")
+            public static let DefaultSearchEngineFooter = MZLocalizedString(
+                key: "Settings.Search.DefaultSearchEngine.Footer.v122",
+                tableName: "Settings",
+                value: "Results from searches, history, bookmarks, and more",
+                comment: "Footer for for the `default search engine` settings section in the Search Settings page, which explains in more details what the `Show Search Suggestions` setting includes.")
             public static let QuickSearchEnginesTitle = MZLocalizedString(
                 key: "Settings.Search.QuickEnginesTitle.v121",
                 tableName: "Settings",
@@ -1707,6 +1712,45 @@ extension String {
                     tableName: "Settings",
                     value: "Default Search Engine",
                     comment: "Accessibility label for default search engine setting.")
+                public static let LearnAboutSuggestions = MZLocalizedString(
+                    key: "Settings.Search.Accessibility.LearnAboutSuggestions.v124",
+                    tableName: "Settings",
+                    value: "Learn more about %@ Suggest",
+                    comment: "Accessibility label for Learn more about Firefox Suggest. Placeholder is for the app name - Firefox.")
+            }
+
+            public struct Suggest {
+                public static let AddressBarSettingsTitle = MZLocalizedString(
+                    key: "Settings.Search.Suggest.AddressBarSetting.Title.v124",
+                    tableName: "Settings",
+                    value: "Address bar - %@ Suggest",
+                    comment: "In the Search page of the Settings menu, the title for the Firefox Suggest settings section. Placeholder is for the app name - Firefox.")
+                public static let ShowNonSponsoredSuggestionsTitle = MZLocalizedString(
+                    key: "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124",
+                    tableName: "Settings",
+                    value: "Suggestions from %@",
+                    comment: "In the Search page of the Settings menu, the title for setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox.")
+                public static let ShowNonSponsoredSuggestionsDescription = MZLocalizedString(
+                    key: "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124",
+                    tableName: "Settings",
+                    value: "Get suggestions from the web related to your search",
+                    comment: "In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox.")
+                public static let ShowSponsoredSuggestionsTitle = MZLocalizedString(
+                    key: "Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124",
+                    tableName: "Settings",
+                    value: "Suggestions from sponsors",
+                    comment: "In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors.")
+                public static let ShowSponsoredSuggestionsDescription = MZLocalizedString(
+                    key: "Settings.Search.Suggest.ShowSponsoredSuggestions.Description.v124",
+                    tableName: "Settings",
+                    value: "Support %@ with occasional sponsored suggestions",
+                    comment: "In the Search page of the Settings menu, the description for the setting to enable Suggestions from sponsors. Placeholder is for the app name - Firefox.")
+                public static let LearnAboutSuggestions = MZLocalizedString(
+                    key: "Settings.Search.Suggest.LearnAboutSuggestions.v124",
+                    tableName: "Settings",
+                    value: "Learn more about %@ Suggest",
+                    comment: "In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. Placeholder is for the app name - Firefox."
+                )
             }
         }
     }
@@ -1778,12 +1822,29 @@ extension String {
                 tableName: "TabsTray",
                 value: "Sync Tabs",
                 comment: "Button label to sync tabs in your account")
-
             public static let SyncTabsDisabled = MZLocalizedString(
                 key: "TabsTray.Sync.SyncTabsDisabled.v116",
                 tableName: "TabsTray",
                 value: "Turn on tab syncing to view a list of tabs from your other devices.",
                 comment: "Users can disable syncing tabs from other devices. In the Sync Tabs panel of the Tab Tray, we inform the user tab syncing can be switched back on to view those tabs.")
+        }
+
+        public struct DownloadsPanel {
+            public static let EmptyStateTitle = MZLocalizedString(
+                key: "DownloadsPanel.EmptyState.Title",
+                tableName: nil,
+                value: "Downloaded files will show up here.",
+                comment: "Title for the Downloads Panel empty state.")
+            public static let DeleteTitle = MZLocalizedString(
+                key: "DownloadsPanel.Delete.Title",
+                tableName: nil,
+                value: "Delete",
+                comment: "Action button for deleting downloaded files in the Downloads panel.")
+            public static let ShareTitle = MZLocalizedString(
+                key: "DownloadsPanel.Share.Title",
+                tableName: nil,
+                value: "Share",
+                comment: "Action button for sharing downloaded files in the Downloads panel.")
         }
     }
 }
@@ -2111,25 +2172,6 @@ extension String {
         tableName: "LoginsHelper",
         value: "Not Now",
         comment: "Button to not update the user's password in the logins helper")
-}
-
-// MARK: - Downloads Panel
-extension String {
-    public static let DownloadsPanelEmptyStateTitle = MZLocalizedString(
-        key: "DownloadsPanel.EmptyState.Title",
-        tableName: nil,
-        value: "Downloaded files will show up here.",
-        comment: "Title for the Downloads Panel empty state.")
-    public static let DownloadsPanelDeleteTitle = MZLocalizedString(
-        key: "DownloadsPanel.Delete.Title",
-        tableName: nil,
-        value: "Delete",
-        comment: "Action button for deleting downloaded files in the Downloads panel.")
-    public static let DownloadsPanelShareTitle = MZLocalizedString(
-        key: "DownloadsPanel.Share.Title",
-        tableName: nil,
-        value: "Share",
-        comment: "Action button for sharing downloaded files in the Downloads panel.")
 }
 
 // MARK: - History Panel
@@ -4744,6 +4786,11 @@ extension String {
 
 // MARK: - Tab Toolbar
 extension String {
+    public static let TabToolbarDataClearanceAccessibilityLabel = MZLocalizedString(
+        key: "TabToolbar.Accessibility.DataClearance.v122",
+        tableName: "TabToolbar",
+        value: "Data Clearance",
+        comment: "Accessibility label for the tab toolbar fire button in private mode, used to provide users a way to end and delete their private session data.")
     public static let TabToolbarReloadAccessibilityLabel = MZLocalizedString(
         key: "Reload",
         tableName: nil,

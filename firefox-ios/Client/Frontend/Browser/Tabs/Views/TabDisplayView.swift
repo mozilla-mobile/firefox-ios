@@ -211,7 +211,7 @@ class TabDisplayView: UIView,
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabsCell.cellIdentifier, for: indexPath) as? InactiveTabsCell
             else { return UICollectionViewCell() }
 
-            cell.configure(text: tabsState.inactiveTabs[indexPath.row].title)
+            cell.configure(with: tabsState.inactiveTabs[indexPath.row])
             if let theme = theme {
                 cell.applyTheme(theme: theme)
             }

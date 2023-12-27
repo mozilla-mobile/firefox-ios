@@ -25,7 +25,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     }
 
     init(profile: Profile,
-         imageStore: DiskImageStore?,
+         imageStore: DiskImageStore = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
          uuid: WindowUUID = WindowUUID(),
          tabDataStore: TabDataStore = AppContainer.shared.resolve(),
@@ -382,7 +382,12 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         selectedTab?.lastExecutedTime = Date.now()
 
         delegates.forEach {
-            $0.get()?.tabManager(self, didSelectedTabChange: tab, previous: previous, isRestoring: !tabRestoreHasFinished)
+            $0.get()?.tabManager(
+                self,
+                didSelectedTabChange: tab,
+                previous: previous,
+                isRestoring: !tabRestoreHasFinished
+            )
         }
 
         if let tab = previous {

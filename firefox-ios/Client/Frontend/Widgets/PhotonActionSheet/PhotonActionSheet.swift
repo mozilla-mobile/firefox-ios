@@ -74,6 +74,7 @@ class PhotonActionSheet: UIViewController, Themeable {
         modalPresentationStyle = viewModel.modalStyle
         closeButton.setTitle(viewModel.closeButtonTitle, for: .normal)
         tableView.estimatedRowHeight = UX.rowHeight
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 0.0, height: .leastNonzeroMagnitude))
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -311,13 +312,7 @@ class PhotonActionSheet: UIViewController, Themeable {
                                change: [NSKeyValueChangeKey: Any]?,
                                context: UnsafeMutableRawPointer?) {
         if viewModel.presentationStyle == .popover && !wasHeightOverridden {
-            if #available(iOS 15.4, *) {
-                var size = tableView.contentSize
-                size.height = tableView.contentSize.height - UX.spacing - UX.tablePadding
-                preferredContentSize = size
-            } else {
-                preferredContentSize = tableView.contentSize
-            }
+            preferredContentSize = tableView.contentSize
         }
     }
 

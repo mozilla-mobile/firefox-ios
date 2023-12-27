@@ -8,6 +8,7 @@ struct InactiveTabsModel: Equatable {
     var tabUUID: String
     var title: String
     var url: URL?
+    var favIconURL: String?
 
     var displayURL: String {
         guard let url = url else { return title }

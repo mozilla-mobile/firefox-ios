@@ -51,7 +51,12 @@ final class RouteBuilder {
                 return .fxaSignIn(params: FxALaunchParams(entrypoint: .fxaDeepLinkNavigation, query: url.getQuery()))
 
             case .openUrl:
-                return .search(url: urlQuery, isPrivate: isPrivate)
+                // If we have a URL query, then make sure to check its a webpage
+                if urlQuery == nil || urlQuery?.isWebPage() ?? false {
+                    return .search(url: urlQuery, isPrivate: isPrivate)
+                } else {
+                    return nil
+                }
 
             case .openText:
                 return .searchQuery(query: urlScanner.value(query: "text") ?? "")

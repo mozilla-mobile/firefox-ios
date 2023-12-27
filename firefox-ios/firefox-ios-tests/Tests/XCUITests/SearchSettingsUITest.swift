@@ -36,7 +36,11 @@ class SearchSettingsUITests: BaseTestCase {
         // Check that it can be edited
         XCTAssertTrue(app.buttons["Edit"].isEnabled)
         app.buttons["Edit"].tap()
-
+        XCTAssertTrue(app.buttons["Done"].isEnabled)
+        app.buttons["Done"].tap()
+        mozWaitForElementToExist(app.buttons["Edit"])
+        XCTAssertTrue(app.buttons["Edit"].isEnabled)
+        app.buttons["Edit"].tap()
         mozWaitForElementToExist(app.tables.buttons["Remove \(customSearchEngine["name"]!)"])
     }
 
@@ -98,7 +102,7 @@ class SearchSettingsUITests: BaseTestCase {
         mozWaitForElementToNotExist(app.buttons["Done"])
 
         // Make sure switches are there
-        XCTAssertEqual(app.tables.cells.switches.count, app.tables.cells.count - 2)
+        XCTAssertEqual(app.tables.cells.switches.count, app.tables.cells.count - 3)
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2353250
@@ -113,6 +117,10 @@ class SearchSettingsUITests: BaseTestCase {
 
         app.buttons["Edit"].tap()
         XCTAssertTrue(app.buttons["Done"].isEnabled)
+        app.buttons["Done"].tap()
+        mozWaitForElementToExist(app.buttons["Edit"])
+        XCTAssertTrue(app.buttons["Edit"].isEnabled)
+        app.buttons["Edit"].tap()
         // Remove the custom search engine and check that edit is disabled
         let tablesQuery = app.tables
         tablesQuery.buttons["Remove \(customSearchEngine["name"]!)"].tap()

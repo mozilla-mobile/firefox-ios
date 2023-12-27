@@ -164,6 +164,10 @@ public struct PrefsKeys {
 
     // Only used to force showing the App Store review dialog for debugging purposes
     public static let ForceShowAppReviewPromptOverride = "ForceShowAppReviewPromptOverride"
+
+    // Firefox Suggest
+    public static let FirefoxSuggestShowNonSponsoredSuggestions = "FirefoxSuggestShowNonSponsoredSuggestions"
+    public static let FirefoxSuggestShowSponsoredSuggestions = "FirefoxSuggestShowSponsoredSuggestions"
 }
 
 public struct PrefsDefaults {

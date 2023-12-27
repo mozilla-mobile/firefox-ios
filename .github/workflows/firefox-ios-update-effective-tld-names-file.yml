@@ -31,7 +31,7 @@ jobs:
 
         curl -o tmp.dat  "https://raw.githubusercontent.com/publicsuffix/list/master/public_suffix_list.dat"
 
-        file_in_repo=firefox-io/Shared/effective_tld_names.dat
+        file_in_repo=firefox-ios/Shared/effective_tld_names.dat
 
         files_diff=$(cmp --silent tmp.dat $file_in_repo && echo '### SUCCESS: Files Are Identical! ###' || echo '### WARNING: Files Are Different! ###')
 

@@ -39,7 +39,7 @@ class ShareExtensionCoordinator: BaseCoordinator, DevicePickerViewControllerDele
     /// Presents the Share extension from the source view
     func start(url: URL, sourceView: UIView, sourceRect: CGRect? = nil, popoverArrowDirection: UIPopoverArrowDirection = .up) {
         let shareExtension = ShareExtensionHelper(url: url, tab: tabManager.selectedTab)
-        let controller = shareExtension.createActivityViewController { [weak self] completed, activityType in
+        let controller = shareExtension.createActivityViewController(tabManager.selectedTab?.webView) { [weak self] completed, activityType in
             guard let self = self else { return }
             self.handleShareExtensionCompletion(activityType: activityType, url: url)
         }

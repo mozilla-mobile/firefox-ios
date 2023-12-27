@@ -640,10 +640,17 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     @MainActor
     func removeAllTabs(isPrivateMode: Bool) async {
         let currentModeTabs = tabs.filter { $0.isPrivate == isPrivateMode }
+        backupCloseTabs = currentModeTabs
         for tab in currentModeTabs {
             await self.removeTab(tab.tabUUID)
         }
         storeChanges()
+    }
+
+    func undoCloseAllTabs() {
+        tabs.append(contentsOf: backupCloseTabs)
+        storeChanges()
+        backupCloseTabs = [Tab]()
     }
 
     @MainActor

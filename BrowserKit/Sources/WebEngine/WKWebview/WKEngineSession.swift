@@ -45,6 +45,7 @@ class WKEngineSession: EngineSession {
            let localReaderModeURL = syncedReaderModeURL.encodeReaderModeURL(WKEngineWebServer.shared.baseReaderModeURL()) {
             let readerModeRequest = URLRequest(url: localReaderModeURL)
             webView.load(readerModeRequest)
+            logger.log("Loaded reader mode request", level: .debug, category: .webview)
             return
         }
 
@@ -55,23 +56,40 @@ class WKEngineSession: EngineSession {
             webView.loadFileURL(url, allowingReadAccessTo: url.deletingLastPathComponent())
             return
         }
+
         webView.load(request)
+        logger.log("Loaded request", level: .debug, category: .webview)
     }
 
     func stopLoading() {
         webView.stopLoading()
+        logger.log("Stop loading", level: .debug, category: .webview)
     }
 
     func reload() {
-        // TODO: FXIOS-7906 #17650 Handle reload in WKEngineSession
+        // If the current page is an error page load the original URL
+        if let url = webView.url,
+           let internalUrl = WKInternalURL(url),
+           let page = internalUrl.originalURLFromErrorPage {
+            webView.replaceLocation(with: page)
+            logger.log("Reloaded webview as error page", level: .debug, category: .webview)
+            return
+        }
+
+        // Reloads the current webpage, and performs end-to-end revalidation of the content 
+        // using cache-validating conditionals, if possible.
+        webView.reloadFromOrigin()
+        logger.log("Reloaded webview from origin", level: .debug, category: .webview)
     }
 
     func goBack() {
         _ = webView.goBack()
+        logger.log("Go back", level: .debug, category: .webview)
     }
 
     func goForward() {
         _ = webView.goForward()
+        logger.log("Go forward", level: .debug, category: .webview)
     }
 
     func goToHistoryIndex(index: Int) {

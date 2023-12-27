@@ -49,7 +49,7 @@ final class WKEngineSessionTests: XCTestCase {
         subject?.load(url: url)
 
         XCTAssertEqual(webViewProvider.webView.loadCalled, 1)
-        XCTAssertEqual(webViewProvider.webView.loadRequest?.url?.absoluteString, "https://example.com")
+        XCTAssertEqual(webViewProvider.webView.url?.absoluteString, url)
     }
 
     func testLoadURLGivenReaderModeURLThenLoad() {
@@ -59,7 +59,7 @@ final class WKEngineSessionTests: XCTestCase {
         subject?.load(url: url)
 
         XCTAssertEqual(webViewProvider.webView.loadCalled, 1)
-        XCTAssertEqual(webViewProvider.webView.loadRequest?.url?.absoluteString,
+        XCTAssertEqual(webViewProvider.webView.url?.absoluteString,
                        "http://localhost:0/reader-mode/page?url=http%3A%2F%2Fexample%2Ecom")
     }
 
@@ -71,7 +71,7 @@ final class WKEngineSessionTests: XCTestCase {
 
         XCTAssertEqual(webViewProvider.webView.loadCalled, 0)
         XCTAssertEqual(webViewProvider.webView.loadFileURLCalled, 1)
-        XCTAssertEqual(webViewProvider.webView.loadFileURL?.absoluteString, "file://path/to/abc/dirA/A.html")
+        XCTAssertEqual(webViewProvider.webView.url?.absoluteString, "file://path/to/abc/dirA/A.html")
         XCTAssertEqual(webViewProvider.webView.loadFileReadAccessURL?.absoluteString, "file://path/to/abc/dirA/")
     }
 
@@ -103,6 +103,29 @@ final class WKEngineSessionTests: XCTestCase {
         subject?.goForward()
 
         XCTAssertEqual(webViewProvider.webView.goForwardCalled, 1)
+    }
+
+    // MARK: Reload
+
+    func testReloadThenCallsReloadFromOrigin() {
+        let subject = createSubject()
+
+        subject?.reload()
+
+        XCTAssertEqual(webViewProvider.webView.reloadFromOriginCalled, 1)
+    }
+
+    func testReloadWhenErrorPageThenReplaceLocation() {
+        let subject = createSubject()
+        let errorPageURL = "errorpage"
+        let internalURL = "internal://local/errorpage?url=\(errorPageURL)"
+        subject?.load(url: internalURL)
+
+        subject?.reload()
+
+        XCTAssertEqual(webViewProvider.webView.reloadFromOriginCalled, 0)
+        XCTAssertEqual(webViewProvider.webView.replaceLocationCalled, 1)
+        XCTAssertEqual(webViewProvider.webView.url?.absoluteString, errorPageURL)
     }
 
     // MARK: Helper

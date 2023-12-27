@@ -12,8 +12,8 @@ struct TabModel: Equatable {
     let tabTitle: String
     let url: URL?
 
-    let screenshot: UIImage? // TBD.
-    let hasHomeScreenshot: Bool // TBD.
+    let screenshot: UIImage?
+    let hasHomeScreenshot: Bool
 
     let margin: CGFloat // (Changes depending on fullscreen)
 

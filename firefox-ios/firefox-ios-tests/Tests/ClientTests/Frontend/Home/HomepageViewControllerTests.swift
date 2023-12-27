@@ -24,7 +24,7 @@ class HomepageViewControllerTests: XCTestCase {
     }
 
     func testHomepageViewController_simpleCreation_hasNoLeaks() {
-        let tabManager = TabManagerImplementation(profile: profile, imageStore: nil)
+        let tabManager = TabManagerImplementation(profile: profile)
         let urlBar = URLBarView(profile: profile)
         let overlayManager = MockOverlayModeManager()
         overlayManager.setURLBar(urlBarView: urlBar)

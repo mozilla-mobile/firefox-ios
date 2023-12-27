@@ -228,7 +228,7 @@ class DownloadsPanel: UIViewController,
             imageView.tintColor = self.themeManager.currentTheme.colors.iconSecondary
         }
         let welcomeLabel: UILabel = .build { label in
-            label.text = .DownloadsPanelEmptyStateTitle
+            label.text = .TabsTray.DownloadsPanel.EmptyStateTitle
             label.textAlignment = .center
             label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
                                                                 size: 17,
@@ -329,7 +329,7 @@ class DownloadsPanel: UIViewController,
     }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let deleteAction = UIContextualAction(style: .destructive, title: .DownloadsPanelDeleteTitle) { [weak self] (_, _, completion) in
+        let deleteAction = UIContextualAction(style: .destructive, title: .TabsTray.DownloadsPanel.DeleteTitle) { [weak self] (_, _, completion) in
             guard let strongSelf = self else { completion(false); return }
 
             if let downloadedFile = strongSelf.viewModel.downloadedFileForIndexPath(indexPath),
@@ -346,7 +346,7 @@ class DownloadsPanel: UIViewController,
             }
         }
 
-        let shareAction = UIContextualAction(style: .normal, title: .DownloadsPanelShareTitle) { [weak self] (_, view, completion) in
+        let shareAction = UIContextualAction(style: .normal, title: .TabsTray.DownloadsPanel.ShareTitle) { [weak self] (_, view, completion) in
             guard let strongSelf = self else { completion(false); return }
 
             view.backgroundColor = strongSelf.view.tintColor

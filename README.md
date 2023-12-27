@@ -9,8 +9,6 @@ This branch (main)
 
 This branch works with [Xcode 15.1](https://developer.apple.com/download/all/?q=xcode), Swift 5.8 and supports iOS 17.2 and above.
 
-*Please note:* Both Intel and M1 macs are supported 🎉 and we use swift package manager.
-
 Please make sure you aim your pull requests in the right direction.
 
 For bug fixes and features for a specific release, use the version branch.
@@ -47,7 +45,7 @@ Building the code
     cd firefox-ios
     sh ./bootstrap.sh
     ```
-1. Open `Client.xcodeproj` in Xcode.
+1. Open the `Client.xcodeproj` under the `firefox-ios` folder in Xcode.
 1. Make sure to select the `Fennec` [scheme](https://developer.apple.com/documentation/xcode/build-system?changes=_2) in Xcode.
 1. Select the destination device you want to build on.
 1. Run the app with `Cmd + R` or by pressing the `build and run` button.
