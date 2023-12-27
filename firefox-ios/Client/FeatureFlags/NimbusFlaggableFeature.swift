@@ -12,6 +12,7 @@ import UIKit
 enum NimbusFeatureFlagID: String, CaseIterable {
     case addressAutofill
     case bottomSearchBar
+    case backForwardListCoordinatorRefactor
     case contextualHintForToolbar
     case creditCardAutofillStatus
     case fakespotBackInStock
@@ -71,6 +72,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         // Cases where users do not have the option to manipulate a setting.
         case .contextualHintForToolbar,
                 .addressAutofill,
+                .backForwardListCoordinatorRefactor,
                 .creditCardAutofillStatus,
                 .fakespotBackInStock,
                 .fakespotFeature,
