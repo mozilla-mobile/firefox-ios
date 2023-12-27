@@ -13,7 +13,7 @@ final class NimbusFeatureFlagLayer {
         switch featureID {
         case .addressAutofill:
             return checkAddressAutofill(from: nimbus)
-            
+
         case .backForwardListCoordinatorRefactor:
             return checkBackForwardListCoordinatorRefactorFeature(from: nimbus)
 
@@ -89,7 +89,7 @@ final class NimbusFeatureFlagLayer {
         default: return false
         }
     }
-    
+
     private func checkBackForwardListCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.backForwardListCoordinatorRefactorFeature.value()
         return config.enabled
