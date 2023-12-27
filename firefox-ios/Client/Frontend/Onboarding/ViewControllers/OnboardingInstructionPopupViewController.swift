@@ -64,7 +64,7 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
         stack.spacing = UX.textStackViewSpacing
     }
 
-    private lazy var primaryButton: LegacyResizableButton = .build { button in
+    private lazy var PrimaryRoundedButton: LegacyResizableButton = .build { button in
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .callout,
             size: UX.buttonFontSize)
@@ -72,7 +72,7 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
         button.titleLabel?.textAlignment = .center
         button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.PrimaryButton"
+        button.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.PrimaryRoundedButton"
         button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
                                                 left: UX.buttonHorizontalInset,
                                                 bottom: UX.buttonVerticalInset,
