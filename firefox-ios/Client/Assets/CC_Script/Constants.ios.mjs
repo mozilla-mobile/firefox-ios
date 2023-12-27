@@ -31,6 +31,7 @@ const IOS_DEFAULT_PREFERENCES = {
   "extensions.formautofill.heuristics.visibilityCheckThreshold": 0,
   "extensions.formautofill.heuristics.interactivityCheckMode": "focusability",
   "extensions.formautofill.heuristics.captureOnFormRemoval": false,
+  "extensions.formautofill.heuristics.captureOnPageNavigation": false,
   "extensions.formautofill.focusOnAutofill": false,
 };
 
