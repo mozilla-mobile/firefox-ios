@@ -49,8 +49,8 @@ class InitialViewController: UIViewController {
 
         self.view.alpha = 0
 
-        DispatchQueue.main.async {
-            self.getShareItem { shareItem in
+        self.getShareItem { shareItem in
+            DispatchQueue.main.async {
                 guard let shareItem = shareItem else {
                     let alert = UIAlertController(title: .SendToErrorTitle, message: .SendToErrorMessage, preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: .SendToErrorOKButton, style: .default) { _ in self.finish(afterDelay: 0) })
