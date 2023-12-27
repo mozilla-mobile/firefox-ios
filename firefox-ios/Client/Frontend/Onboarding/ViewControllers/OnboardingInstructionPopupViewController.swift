@@ -64,7 +64,7 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
         stack.spacing = UX.textStackViewSpacing
     }
 
-    private lazy var PrimaryRoundedButton: LegacyResizableButton = .build { button in
+    private lazy var PrimaryButton: PrimaryRoundedButton = .build { button in
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .callout,
             size: UX.buttonFontSize)
@@ -167,8 +167,8 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
             contentStackView.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor, constant: -trailingPadding),
             contentStackView.bottomAnchor.constraint(equalTo: contentContainerView.bottomAnchor, constant: -bottomPadding),
             textStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
-            PrimaryRoundedButton.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
-            PrimaryRoundedButton.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
+            PrimaryButton.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
+            PrimaryButton.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
         ])
     }
 
@@ -182,7 +182,7 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
 
     private func updateLayout() {
         titleLabel.text = viewModel.title
-        PrimaryRoundedButton.setTitle(viewModel.buttonTitle, for: .normal)
+        PrimaryButton.setTitle(viewModel.buttonTitle, for: .normal)
     }
 
     private func addViewsToView() {
@@ -191,7 +191,7 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
         contentStackView.addArrangedSubview(titleLabel)
         numeratedLabels.forEach { textStackView.addArrangedSubview($0) }
         contentStackView.addArrangedSubview(textStackView)
-        contentStackView.addArrangedSubview(PrimaryRoundedButton)
+        contentStackView.addArrangedSubview(PrimaryButton)
 
         contentContainerView.addSubview(contentStackView)
         view.addSubview(contentContainerView)
@@ -250,8 +250,9 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
         titleLabel.textColor = theme.colors.textPrimary
         numeratedLabels.forEach { $0.textColor = theme.colors.textPrimary }
 
-        PrimaryRoundedButton.setTitleColor(theme.colors.textInverted, for: .normal)
-        PrimaryRoundedButton.backgroundColor = theme.colors.actionPrimary
+        PrimaryButton.setTitleColor(theme.colors.textInverted, for: .normal)
+        PrimaryButton.backgroundColor = theme.colors.actionPrimary
+        PrimaryButton.applyTheme(theme: themeManager.currentTheme)
 
         view.backgroundColor = theme.colors.layer1
     }
