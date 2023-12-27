@@ -4,6 +4,9 @@
 /* This value is used as the title for the update card page */
 "CreditCard.UpdateCard.MainTitle.v115" = "بۇ كارتىنى يېڭىلامدۇ؟";
 
+/* This value is used as the title for the update card page */
+"CreditCard.UpdateCard.MainTitle.v122" = "كارتا يېڭىلامدۇ؟";
+
 /* This value is used as the title for the Manage Cards button from the update credit card page */
 "CreditCard.UpdateCard.ManageCardsButtonTitle.v115" = "كارتا باشقۇرۇش";
 
