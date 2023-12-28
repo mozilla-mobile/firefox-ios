@@ -5,8 +5,19 @@
 import Common
 import XCTest
 
-let website_1 = ["url": "www.mozilla.org", "label": "Internet for people, not profit — Mozilla", "value": "mozilla.org"]
-let website_2 = ["url": "www.example.com", "label": "Example", "value": "example", "link": "More information...", "moreLinkLongPressUrl": "http://www.iana.org/domains/example", "moreLinkLongPressInfo": "iana"]
+let website_1 = [
+    "url": "www.mozilla.org",
+    "label": "Internet for people, not profit — Mozilla",
+    "value": "mozilla.org"
+]
+let website_2 = [
+    "url": "www.example.com",
+    "label": "Example",
+    "value": "example",
+    "link": "More information...",
+    "moreLinkLongPressUrl": "http://www.iana.org/domains/example",
+    "moreLinkLongPressInfo": "iana"
+]
 let urlAddons = "addons.mozilla.org"
 let urlGoogle = "www.google.com"
 let popUpTestUrl = path(forTestPage: "test-popup-blocker.html")
