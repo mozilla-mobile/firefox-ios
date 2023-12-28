@@ -8,7 +8,7 @@ import Shared
 class TopSitesRowCountSettingsController: SettingsTableViewController {
     let prefs: Prefs
     var numberOfRows: Int32
-    static let defaultNumberOfRows: Int32 = 2
+    static let defaultNumberOfRows: Int32 = 4
 
     init(prefs: Prefs) {
         self.prefs = prefs

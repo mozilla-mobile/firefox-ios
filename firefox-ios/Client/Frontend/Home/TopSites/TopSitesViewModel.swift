@@ -22,7 +22,7 @@ class TopSitesViewModel {
             return CGSize(width: width, height: 94)
         }
         static let cardSpacing: CGFloat = 16
-        static let minCards: Int = 4
+        static let minCards: Int = 2
     }
 
     weak var delegate: HomepageDataModelDelegate?
