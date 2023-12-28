@@ -310,7 +310,8 @@ class PhotonActionSheet: UIViewController, Themeable {
                                change: [NSKeyValueChangeKey: Any]?,
                                context: UnsafeMutableRawPointer?) {
         if viewModel.presentationStyle == .popover && !wasHeightOverridden {
-            preferredContentSize = tableView.contentSize
+            let size = view.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+            preferredContentSize = CGSize(width: size.width, height: tableView.contentSize.height)
         }
     }
 
