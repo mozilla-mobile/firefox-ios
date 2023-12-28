@@ -19,8 +19,47 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .home)
     }
 
+    // Presents alert to clear users private session data
     func tabToolbarDidPressFire(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        // TODO: Felt Deletion - https://mozilla-hub.atlassian.net/browse/FXIOS-7869
+        let alert = UIAlertController(
+            title: .Alerts.FeltDeletion.Title,
+            message: .Alerts.FeltDeletion.Body,
+            preferredStyle: .alert
+        )
+
+        let cancelAction = UIAlertAction(
+            title: .Alerts.FeltDeletion.CancelButton,
+            style: .cancel,
+            handler: nil
+        )
+
+        let deleteDataAction = UIAlertAction(
+            title: .Alerts.FeltDeletion.ConfirmButton,
+            style: .destructive,
+            handler: { [weak self] _ in
+                self?.closePrivateTabsAndOpenNewPrivateHomepage()
+                self?.showDataClearanceConfirmationToast()
+            }
+        )
+
+        alert.addAction(deleteDataAction)
+        alert.addAction(cancelAction)
+        present(alert, animated: true)
+    }
+
+    private func closePrivateTabsAndOpenNewPrivateHomepage() {
+        tabManager.removeTabs(tabManager.privateTabs)
+        tabManager.selectTab(tabManager.addTab(isPrivate: true))
+    }
+
+    private func showDataClearanceConfirmationToast() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            SimpleToast().showAlertWithText(
+                .FirefoxHomepage.FeltDeletion.ToastTitle,
+                bottomContainer: self.contentContainer,
+                theme: self.themeManager.currentTheme
+            )
+        }
     }
 
     func tabToolbarDidPressLibrary(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
