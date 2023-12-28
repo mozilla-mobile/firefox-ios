@@ -4930,6 +4930,46 @@ app_errors:
       - fx-ios-data-stewards@mozilla.com
     expires: never
 
+webview:
+  did_fail_provisional:
+    type: event
+    description: |
+      Recorded when an error occurs on early webview navigation.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17716
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17910
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  did_fail:
+    type: event
+    description: |
+      Recorded when an error occurred during navigation.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17716
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17910
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  show_error_page:
+    type: event
+    extra_keys:
+      error_code:
+        type: string
+        description: |
+          The error code number
+    description: |
+      Recorded when an error page is shown on the webview.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17716
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17910
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+
 fx_suggest:
   ping_type:
     type: string
