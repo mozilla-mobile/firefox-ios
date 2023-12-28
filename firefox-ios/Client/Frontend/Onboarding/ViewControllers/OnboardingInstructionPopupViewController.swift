@@ -73,10 +73,11 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
         button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.PrimaryRoundedButton"
-        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
-                                                left: UX.buttonHorizontalInset,
-                                                bottom: UX.buttonVerticalInset,
-                                                right: UX.buttonHorizontalInset)
+        button.configuration?.contentInsets = NSDirectionalEdgeInsets(
+                                                                  top: UX.buttonVerticalInset,
+                                                                  leading: UX.buttonHorizontalInset,
+                                                                   bottom: UX.buttonVerticalInset,
+                                                                   trailing: UX.buttonHorizontalInset)
     }
 
     var viewModel: OnboardingDefaultBrowserModelProtocol
