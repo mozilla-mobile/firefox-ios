@@ -49,10 +49,15 @@ extension BrowserViewController: WKUIDelegate {
     ) {
         let messageAlert = MessageAlert(message: message, frame: frame)
         if shouldDisplayJSAlertForWebView(webView) {
+            logger.log("Javascript message alert will be presented.", level: .info, category: .webview)
+
             present(messageAlert.alertController(), animated: true) {
                 completionHandler()
+                self.logger.log("Javascript message alert was completed.", level: .info, category: .webview)
             }
         } else if let promptingTab = tabManager[webView] {
+            logger.log("Javascript message alert is queued.", level: .info, category: .webview)
+
             promptingTab.queueJavascriptAlertPrompt(messageAlert)
             completionHandler()
         }
@@ -66,11 +71,16 @@ extension BrowserViewController: WKUIDelegate {
     ) {
         let confirmAlert = ConfirmPanelAlert(message: message,
                                              frame: frame) { confirm in
+            self.logger.log("Javascript confirm panel was completed.", level: .info, category: .webview)
             completionHandler(confirm)
         }
         if shouldDisplayJSAlertForWebView(webView) {
+            logger.log("Javascript confirm panel alert will be presented.", level: .info, category: .webview)
+
             present(confirmAlert.alertController(), animated: true)
         } else if let promptingTab = tabManager[webView] {
+            logger.log("Javascript confirm panel alert is queued.", level: .info, category: .webview)
+
             promptingTab.queueJavascriptAlertPrompt(confirmAlert)
         }
     }
@@ -85,11 +95,16 @@ extension BrowserViewController: WKUIDelegate {
         let textInputAlert = TextInputAlert(message: prompt,
                                             frame: frame,
                                             defaultText: defaultText) { confirm in
+            self.logger.log("Javascript text input alert was completed.", level: .info, category: .webview)
             completionHandler(confirm)
         }
         if shouldDisplayJSAlertForWebView(webView) {
+            logger.log("Javascript text input alert will be presented.", level: .info, category: .webview)
+
             present(textInputAlert.alertController(), animated: true)
         } else if let promptingTab = tabManager[webView] {
+            logger.log("Javascript text input alert is queued.", level: .info, category: .webview)
+
             promptingTab.queueJavascriptAlertPrompt(textInputAlert)
         }
     }
@@ -666,12 +681,37 @@ extension BrowserViewController: WKNavigationDelegate {
         decisionHandler(.allow)
     }
 
+    /// Tells the delegate that an error occurred during navigation.
+    func webView(
+        _ webView: WKWebView,
+        didFail navigation: WKNavigation!,
+        withError error: Error
+    ) {
+        logger.log("Error occurred during navigation.",
+                   level: .warning,
+                   category: .webview)
+
+        TelemetryWrapper.shared.recordEvent(category: .information,
+                                            method: .error,
+                                            object: .webview,
+                                            value: .webviewFail)
+    }
+
     /// Invoked when an error occurs while starting to load data for the main frame.
     func webView(
         _ webView: WKWebView,
         didFailProvisionalNavigation navigation: WKNavigation!,
         withError error: Error
     ) {
+        logger.log("Error occurred during the early navigation process.",
+                   level: .warning,
+                   category: .webview)
+
+        TelemetryWrapper.shared.recordEvent(category: .information,
+                                            method: .error,
+                                            object: .webview,
+                                            value: .webviewFailProvisional)
+
         // Ignore the "Frame load interrupted" error that is triggered when we cancel a request
         // to open an external application and hand it over to UIApplication.openURL(). The result
         // will be that we switch to the external app, for example the app store, while keeping the

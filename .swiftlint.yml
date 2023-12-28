@@ -122,8 +122,14 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   # so must be excluded due to file_header rule
   - Package.swift
   - BrowserKit/Package.swift
+<<<<<<< HEAD
   - Client/ContentBlocker/ContentBlockerGenerator/Package.swift
   
+=======
+  - BrowserKit/.build/
+  - firefox-ios/Client/ContentBlocker/ContentBlockerGenerator/Package.swift
+  - Package.swift 
+>>>>>>> 2d33ee8e4 (Add FXIOS-7944 [v122] Add Webview telemetry for failures (#17910))
 
 included:
   - /Users/vagrant/git
