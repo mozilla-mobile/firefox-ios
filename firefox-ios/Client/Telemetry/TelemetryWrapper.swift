@@ -584,6 +584,7 @@ extension TelemetryWrapper {
         case createNewTab = "create-new-tab"
         case sponsoredShortcuts = "sponsored-shortcuts"
         case fxSuggest = "fx-suggest"
+        case webview = "webview"
     }
 
     public enum EventValue: String {
@@ -684,6 +685,9 @@ extension TelemetryWrapper {
         case hangException = "hang-exception"
         case fxSuggestionClickInfo = "fx-suggestion-click-info"
         case fxSuggestionPosition = "fx-suggestion-position"
+        case webviewFail = "webview-fail"
+        case webviewFailProvisional = "webview-fail-provisional"
+        case webviewShowErrorPage = "webview-show-error-page"
     }
 
     public enum EventExtraKey: String, CustomStringConvertible {
@@ -703,6 +707,7 @@ extension TelemetryWrapper {
         case isPrivate = "is-private"
         case action = "action"
         case size = "size"
+        case errorCode = "errorCode"
 
         case wallpaperName = "wallpaperName"
         case wallpaperType = "wallpaperType"
@@ -1880,6 +1885,8 @@ extension TelemetryWrapper {
             if let quantity = extras?[EventExtraKey.size.rawValue] as? Int32 {
                 let properties = GleanMetrics.AppErrors.LargeFileWriteExtra(size: quantity)
                 GleanMetrics.AppErrors.largeFileWrite.record(properties)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
         case(.information, .error, .app, .crashedLastLaunch, _):
             GleanMetrics.AppErrors.crashedLastLaunch.record()
@@ -1887,11 +1894,28 @@ extension TelemetryWrapper {
             if let quantity = extras?[EventExtraKey.size.rawValue] as? Int32 {
                 let properties = GleanMetrics.AppErrors.CpuExceptionExtra(size: quantity)
                 GleanMetrics.AppErrors.cpuException.record(properties)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
         case(.information, .error, .app, .hangException, let extras):
             if let quantity = extras?[EventExtraKey.size.rawValue] as? Int32 {
                 let properties = GleanMetrics.AppErrors.HangExceptionExtra(size: quantity)
                 GleanMetrics.AppErrors.hangException.record(properties)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+
+        // MARK: Webview
+        case(.information, .error, .webview, .webviewFail, _):
+            GleanMetrics.Webview.didFail.record()
+        case(.information, .error, .webview, .webviewFailProvisional, _):
+            GleanMetrics.Webview.didFailProvisional.record()
+        case(.information, .error, .webview, .webviewShowErrorPage, let extras):
+            if let errorCode = extras?[EventExtraKey.errorCode.rawValue] as? String {
+                let errorCodeExtra = GleanMetrics.Webview.ShowErrorPageExtra(errorCode: errorCode)
+                GleanMetrics.Webview.showErrorPage.record(errorCodeExtra)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
 
         // MARK: - FX Suggest
