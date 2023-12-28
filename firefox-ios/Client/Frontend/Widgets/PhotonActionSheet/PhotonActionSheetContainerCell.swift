@@ -42,9 +42,7 @@ class PhotonActionSheetContainerCell: UITableViewCell, ReusableCell, ThemeApplic
     // MARK: Table view
 
     func configure(actions: PhotonRowActions, viewModel: PhotonActionSheetViewModel, theme: Theme) {
-        for item in actions.items {
-            configure(with: item, theme: theme)
-        }
+        addViews(for: actions, theme: theme)
         applyTheme(theme: theme)
     }
 
@@ -59,12 +57,17 @@ class PhotonActionSheetContainerCell: UITableViewCell, ReusableCell, ThemeApplic
         ])
     }
 
-    func configure(with item: SingleActionViewModel, theme: Theme) {
-        let childView = PhotonActionSheetView()
-        childView.configure(with: item, theme: theme)
-        childView.addVerticalBorder(ifShouldBeShown: !containerStackView.arrangedSubviews.isEmpty)
-        childView.delegate = self
-        containerStackView.addArrangedSubview(childView)
+    private func addViews(for actions: PhotonRowActions, theme: Theme) {
+        for item in actions.items {
+            let childView = PhotonActionSheetView()
+            childView.configure(with: item, theme: theme)
+            childView.addVerticalBorder(ifShouldBeShown: !containerStackView.arrangedSubviews.isEmpty)
+            let widthConstraint = childView.widthAnchor.constraint(lessThanOrEqualToConstant: contentView.bounds.size.width / CGFloat(actions.items.count))
+            widthConstraint.priority = UILayoutPriority(999)
+            widthConstraint.isActive = true
+            childView.delegate = self
+            containerStackView.addArrangedSubview(childView)
+        }
     }
 
     func hideBottomBorder(isHidden: Bool) {
