@@ -8,7 +8,13 @@ import XCTest
 class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
 
     override func setUp() {
-        args = [LaunchArguments.ClearProfile, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.SkipIntro, LaunchArguments.ChronTabs]
+        args = [
+            LaunchArguments.ClearProfile,
+            LaunchArguments.SkipWhatsNew,
+            LaunchArguments.SkipETPCoverSheet,
+            LaunchArguments.SkipIntro,
+            LaunchArguments.ChronTabs
+        ]
 
         super.setUp()
     }
@@ -104,7 +110,11 @@ class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
         // This line is needed the first time widgets view is open
         springboard.alerts.firstMatch.scrollViews.otherElements.buttons.element(boundBy: 0).tap()
         
-        let element = springboard/*@START_MENU_TOKEN@*/.scrollViews["left-of-home-scroll-view"]/*[[".otherElements[\"Home screen icons\"].scrollViews[\"left-of-home-scroll-view\"]",".scrollViews[\"left-of-home-scroll-view\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.children(matching: .other).element.children(matching: .other).element(boundBy: 0)
+        let element = springboard.scrollViews["left-of-home-scroll-view"]
+            .children(matching: .other)
+            .element
+            .children(matching: .other)
+            .element(boundBy: 0)
             element.swipeUp()
             element.swipeUp()
             element.swipeUp()
@@ -114,7 +124,15 @@ class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
         springboard.otherElements["Home screen icons"].buttons.firstMatch.tap()
 
         // Select Fennec (username)
-        springboard.collectionViews.cells["Fennec (synctesting)"].children(matching: .other).element.children(matching: .other).element(boundBy: 0).children(matching: .other).element.tap()
+        springboard.collectionViews
+            .cells["Fennec (synctesting)"]
+            .children(matching: .other)
+            .element
+            .children(matching: .other)
+            .element(boundBy: 0)
+            .children(matching: .other)
+            .element
+            .tap()
         // Tap on Add widget button
         springboard.buttons.staticTexts.firstMatch.tap()
 
@@ -129,7 +147,15 @@ class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
         
         springboard.otherElements["Home screen icons"].buttons.firstMatch.tap()
 
-        springboard.collectionViews.cells["Fennec (synctesting)"].children(matching: .other).element.children(matching: .other).element(boundBy: 0).children(matching: .other).element.swipeLeft()
+        springboard.collectionViews
+            .cells["Fennec (synctesting)"]
+            .children(matching: .other)
+            .element
+            .children(matching: .other)
+            .element(boundBy: 0)
+            .children(matching: .other)
+            .element
+            .swipeLeft()
 
         // Scroll to she second screen to select the other widget
         sleep(1)
@@ -149,7 +175,14 @@ class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
         
         springboard.otherElements["Home screen icons"].buttons.firstMatch.tap()
 
-        springboard.collectionViews.cells["Fennec (synctesting)"].children(matching: .other).element.children(matching: .other).element(boundBy: 0).children(matching: .other).element.swipeLeft()
+        springboard.collectionViews
+            .cells["Fennec (synctesting)"]
+            .children(matching: .other)
+            .element.children(matching: .other)
+            .element(boundBy: 0)
+            .children(matching: .other)
+            .element
+            .swipeLeft()
 
         // Scroll to she second screen to select the other widget
         springboard.scrollViews.staticTexts.firstMatch.swipeLeft()
@@ -176,4 +209,5 @@ class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
         snapshot("TabTray-with-tabs")
     }
 }
+
 */
