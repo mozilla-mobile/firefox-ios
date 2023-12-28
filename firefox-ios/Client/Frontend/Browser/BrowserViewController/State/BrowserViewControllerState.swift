@@ -8,6 +8,7 @@ import Redux
 struct BrowserViewControllerState: ScreenState, Equatable {
     var searchScreenState: SearchScreenState
     var usePrivateHomepage: Bool
+    var showDataClearanceFlow: Bool
     var fakespotState: FakespotState
 
     init(_ appState: AppState) {
@@ -21,6 +22,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
 
         self.init(searchScreenState: bvcState.searchScreenState,
                   usePrivateHomepage: bvcState.usePrivateHomepage,
+                  showDataClearanceFlow: bvcState.showDataClearanceFlow,
                   fakespotState: bvcState.fakespotState)
     }
 
@@ -28,16 +30,19 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         self.init(
             searchScreenState: SearchScreenState(),
             usePrivateHomepage: false,
+            showDataClearanceFlow: false,
             fakespotState: FakespotState())
     }
 
     init(
         searchScreenState: SearchScreenState,
         usePrivateHomepage: Bool,
+        showDataClearanceFlow: Bool,
         fakespotState: FakespotState
     ) {
         self.searchScreenState = searchScreenState
         self.usePrivateHomepage = usePrivateHomepage
+        self.showDataClearanceFlow = showDataClearanceFlow
         self.fakespotState = fakespotState
     }
 
@@ -47,6 +52,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             return BrowserViewControllerState(
                 searchScreenState: SearchScreenState(inPrivateMode: privacyState),
                 usePrivateHomepage: privacyState,
+                showDataClearanceFlow: privacyState,
                 fakespotState: state.fakespotState)
         case FakespotAction.pressedShoppingButton,
             FakespotAction.show,
@@ -58,6 +64,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 usePrivateHomepage: state.usePrivateHomepage,
+                showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: FakespotState.reducer(state.fakespotState, action))
         default:
             return state

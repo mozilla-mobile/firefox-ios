@@ -106,6 +106,7 @@ class ShareViewController: UIViewController {
         }
 
         let profile = BrowserProfile(localName: "profile")
+        Viaduct.shared.useReqwestBackend()
         RustFirefoxAccounts.startup(prefs: profile.prefs) { _ in }
     }
 

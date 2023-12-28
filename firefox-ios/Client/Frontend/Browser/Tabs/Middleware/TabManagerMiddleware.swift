@@ -137,7 +137,10 @@ class TabManagerMiddleware {
         }
     }
 
-    func getTabTrayModel(for panelType: TabTrayPanelType) -> TabTrayModel {
+    /// Gets initial state for TabTrayModel includes panelType, if is on Private mode, normalTabsCountText and if syncAccount is enabled
+    /// - Parameter panelType: The selected panelType
+    /// - Returns: Initial state of TabTrayModel
+    private func getTabTrayModel(for panelType: TabTrayPanelType) -> TabTrayModel {
         selectedPanel = panelType
 
         let isPrivate = panelType == .privateTabs
@@ -147,7 +150,10 @@ class TabManagerMiddleware {
                             hasSyncableAccount: false)
     }
 
-    func getTabsDisplayModel(for isPrivateMode: Bool) -> TabDisplayModel {
+    /// Gets initial model for TabDisplay from `TabManager`, including list of tabs and inactive tabs.
+    /// - Parameter isPrivateMode: if Private mode is enabled or not
+    /// - Returns:  initial model for `TabDisplayPanel`
+    private func getTabsDisplayModel(for isPrivateMode: Bool) -> TabDisplayModel {
         let tabs = refreshTabs(for: isPrivateMode)
         let inactiveTabs = refreshInactiveTabs(for: isPrivateMode)
         let tabDisplayModel = TabDisplayModel(isPrivateMode: isPrivateMode,
@@ -158,6 +164,9 @@ class TabManagerMiddleware {
         return tabDisplayModel
     }
 
+    /// Gets the list of tabs from `TabManager` and builds the array of TabModel to use in TabDisplayView
+    /// - Parameter isPrivateMode: is on Private mode or not
+    /// - Returns: Array of TabModel used to configure collection view
     private func refreshTabs(for isPrivateMode: Bool) -> [TabModel] {
         var tabs = [TabModel]()
         let selectedTab = defaultTabManager.selectedTab
@@ -178,6 +187,9 @@ class TabManagerMiddleware {
         return tabs
     }
 
+    /// Gets the list of inactive tabs from `TabManager` and builds the array of InactiveTabsModel to use in TabDisplayView
+    /// - Parameter isPrivateMode: is on Private mode or not
+    /// - Returns: Array of InactiveTabsModel used to configure collection view
     private func refreshInactiveTabs(for isPrivateMode: Bool = false) -> [InactiveTabsModel] {
         guard !isPrivateMode else { return [InactiveTabsModel]() }
 
@@ -185,37 +197,43 @@ class TabManagerMiddleware {
         for tab in defaultTabManager.getInactiveTabs() {
             let inactiveTab = InactiveTabsModel(tabUUID: tab.tabUUID,
                                                 title: tab.displayTitle,
-                                                url: tab.url)
+                                                url: tab.url,
+                                                favIconURL: tab.faviconURL)
             inactiveTabs.append(inactiveTab)
         }
         return inactiveTabs
     }
 
+    /// Creates a new tab in `TabManager` using optional `URLRequest`
+    /// - Parameters:
+    ///   - urlRequest: URL request to load
+    ///   - isPrivate: if the tab should be created in private mode or not
     private func addNewTab(with urlRequest: URLRequest?, isPrivate: Bool) {
-        // TODO: Add a guard to check if is dragging as per Legacy code
+        // TODO: Legacy class has a guard to cancel adding new tab if dragging was enabled, check if change is still needed
         let tab = defaultTabManager.addTab(urlRequest, isPrivate: isPrivate)
         defaultTabManager.selectTab(tab)
     }
 
+    /// Move tab on `TabManager` array to support drag and drop
+    /// - Parameters:
+    ///   - originIndex: from original position
+    ///   - destinationIndex: to destination position
     private func moveTab(from originIndex: Int, to destinationIndex: Int) {
         defaultTabManager.moveTab(isPrivate: false, fromIndex: originIndex, toIndex: destinationIndex)
     }
 
+    /// Async close single tab. If is the last tab the Tab Tray is dismissed and undo option is presented in Homepage
+    /// - Parameters:
+    ///   - tabUUID: UUID of the tab to be closed/removed
+    /// - Returns: If is the last tab to be closed used to trigger dismissTabTray action
     private func closeTab(with tabUUID: String) async -> Bool {
         let isLastTab = defaultTabManager.normalTabs.count == 1
         await defaultTabManager.removeTab(tabUUID)
         return isLastTab
     }
 
-    private func undoCloseTab() {
-        guard let backupTab = defaultTabManager.backupCloseTab else { return }
-        defaultTabManager.undoCloseTab(tab: backupTab.tab, position: backupTab.restorePosition)
-    }
-
-    private func closeAllTabs(isPrivateMode: Bool) async {
-        await defaultTabManager.removeAllTabs(isPrivateMode: isPrivateMode)
-    }
-
+    /// Close tab and trigger refresh
+    /// - Parameter tabUUID: UUID of the tab to be closed/removed
     private func closeTabFromTabPanel(with tabUUID: String) {
         Task {
             let shouldDismiss = await self.closeTab(with: tabUUID)
@@ -223,6 +241,8 @@ class TabManagerMiddleware {
         }
     }
 
+    /// Trigger refreshTabs action after a change in `TabManager`
+    /// - Parameter shouldDismiss: If Tab Tray should dismiss while refresh is done
     private func triggerRefresh(with shouldDismiss: Bool) {
         let isPrivate = defaultTabManager.selectedTab?.isPrivate ?? false
         let tabs = self.refreshTabs(for: isPrivate)
@@ -238,11 +258,33 @@ class TabManagerMiddleware {
         }
     }
 
+    /// Handles undoing the close tab action, gets the backup tab from `TabManager`
+    private func undoCloseTab() {
+        guard let backupTab = defaultTabManager.backupCloseTab else { return }
+        defaultTabManager.undoCloseTab(tab: backupTab.tab, position: backupTab.restorePosition)
+    }
+
+    /// Close all tabs calling removeAllTabs from `TabManager` internally makes a backup of the array in case the undo option is pressed.
+    /// - Parameter isPrivateMode: If is private mode
+    private func closeAllTabs(isPrivateMode: Bool) async {
+        await defaultTabManager.removeAllTabs(isPrivateMode: isPrivateMode)
+    }
+
+    /// Handles undo close all tabs. Adds back all tabs depending on mode
+    /// - Parameter isPrivateMode: if private mode is active or not
+    private func undoCloseAllTabs(isPrivateMode: Bool) {
+        // TODO: FXIOS-7978 Handle Undo close all tabs
+        defaultTabManager.undoCloseAllTabs()
+    }
+
     // MARK: - Inactive tabs helper
+
+    /// Close all inactive tabs removing them from the tabs array on `TabManager`. Makes a backup of tabs to be deleted in case undo option is selected
     private func closeAllInactiveTabs() async {
         await defaultTabManager.removeAllInactiveTabs()
     }
 
+    /// Handles undo close all inactive tabs. Adding back the backup tabs saved previously
     private func undoCloseAllInactiveTabs() {
         ensureMainThread {
             self.defaultTabManager.undoCloseInactiveTabs()

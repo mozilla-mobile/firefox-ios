@@ -8,6 +8,10 @@ import WebKit
 import Storage
 import Shared
 
+enum TabManagerConstants {
+    static let tabScreenshotNamespace = "TabManagerScreenshots"
+}
+
 // MARK: - TabManager protocol
 protocol TabManager: AnyObject {
     var windowUUID: WindowUUID { get }
@@ -64,10 +68,26 @@ protocol TabManager: AnyObject {
                                                           _ isPrivate: Bool,
                                                           _ previousTabUUID: String) -> Void)
     // MARK: TabTray refactor interfaces
+
+    /// Async Remove tab option using tabUUID. Replaces direct usage of removeTab where the whole Tab is needed
+    /// - Parameter tabUUID: UUID from the tab
     func removeTab(_ tabUUID: String) async
+
+    /// Async Remove all tabs indicating if is on private mode or not
+    /// - Parameter isPrivateMode: Is private mode enabled or not
     func removeAllTabs(isPrivateMode: Bool) async
+
+    /// Undo close all tabs, it will restore the tabs that were backed up when the close action was called.
+    func undoCloseAllTabs()
+
+    /// Get inactive tabs from the list of tabs based on the time condition to be considered inactive. Replaces LegacyInactiveTabModel and related classes
+    /// - Returns: Return list of tabs considered inactive
     func getInactiveTabs() -> [Tab]
+
+    /// Async Remove all inactive tabs, used when user closes all inactive tabs and TabTrayFlagManager is enabled
     func removeAllInactiveTabs() async
+
+    /// Undo all inactive tabs closure. All inactive tabs are added back to the list of tabs
     func undoCloseInactiveTabs()
 }
 

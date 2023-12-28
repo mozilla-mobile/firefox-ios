@@ -14,6 +14,9 @@ final class NimbusFeatureFlagLayer {
         case .addressAutofill:
             return checkAddressAutofill(from: nimbus)
 
+        case .backForwardListCoordinatorRefactor:
+            return checkBackForwardListCoordinatorRefactorFeature(from: nimbus)
+
         case .bottomSearchBar,
                 .searchHighlights,
                 .isToolbarCFREnabled:
@@ -44,7 +47,7 @@ final class NimbusFeatureFlagLayer {
         case .historyGroups:
             return checkGroupingFeature(for: featureID, from: nimbus)
 
-        case .feltPrivacySimplifiedUI:
+        case .feltPrivacySimplifiedUI, .feltPrivacyFeltDeletion:
             return checkFeltPrivacyFeature(for: featureID, from: nimbus)
 
         case .fakespotBackInStock:
@@ -85,6 +88,11 @@ final class NimbusFeatureFlagLayer {
         case .reportSiteIssue: return config.reportSiteIssue.status
         default: return false
         }
+    }
+
+    private func checkBackForwardListCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.backForwardListCoordinatorRefactorFeature.value()
+        return config.enabled
     }
 
     private func checkAwesomeBarFeature(for featureID: NimbusFeatureFlagID,
@@ -166,6 +174,7 @@ final class NimbusFeatureFlagLayer {
 
         switch featureID {
         case .feltPrivacySimplifiedUI: return config.simplifiedUiEnabled
+        case .feltPrivacyFeltDeletion: return config.feltDeletionEnabled && config.simplifiedUiEnabled
         default: return false
         }
     }

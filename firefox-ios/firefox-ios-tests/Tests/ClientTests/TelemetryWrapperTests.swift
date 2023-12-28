@@ -437,6 +437,19 @@ class TelemetryWrapperTests: XCTestCase {
                               failureMessage: "Should be true")
     }
 
+    func test_shoppingAdsDisabledStatus_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(
+            category: .information,
+            method: .settings,
+            object: .shoppingAdsOptedOut,
+            extras: [
+                TelemetryWrapper.ExtraKey.Shopping.areAdsDisabled.rawValue: true
+            ])
+        testBoolMetricSuccess(metric: GleanMetrics.ShoppingSettings.disabledAds,
+                              expectedValue: true,
+                              failureMessage: "Should be true")
+    }
+
     func test_shoppingAdsExposure_GleanIsCalled() {
         TelemetryWrapper.recordEvent(
             category: .action,
@@ -956,6 +969,38 @@ class TelemetryWrapperTests: XCTestCase {
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.AppErrors.largeFileWrite)
     }
+
+    func test_error_crashedLastLaunchIsCalled() {
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .error,
+                                     object: .app,
+                                     value: .crashedLastLaunch)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.AppErrors.crashedLastLaunch)
+    }
+
+    func test_error_cpuExceptionIsCalled() {
+        let eventExtra = [TelemetryWrapper.EventExtraKey.size.rawValue: Int32(1000)]
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .error,
+                                     object: .app,
+                                     value: .cpuException,
+                                     extras: eventExtra)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.AppErrors.cpuException)
+    }
+
+    func test_error_hangExceptionIsCalled() {
+        let eventExtra = [TelemetryWrapper.EventExtraKey.size.rawValue: Int32(1000)]
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .error,
+                                     object: .app,
+                                     value: .hangException,
+                                     extras: eventExtra)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.AppErrors.hangException)
+    }
+
     // MARK: - RecordSearch
     func test_RecordSearch_GleanIsCalledSearchSuggestion() {
         let extras = [TelemetryWrapper.EventExtraKey.recordSearchLocation.rawValue: "suggestion",

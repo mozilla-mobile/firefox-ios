@@ -41,5 +41,5 @@
 "DefaultBrowserOnboarding.Screenshot" = "Προεπιλεγμένο πρόγραμμα περιήγησης εφαρμογών";
 
 /* Menu option for setting Firefox as default browser. */
-"Settings.DefaultBrowserMenuItem" = "Ορισμός ως κύριος φυλλομετρητής";
+"Settings.DefaultBrowserMenuItem" = "Ορισμός ως προεπιλογή";
 

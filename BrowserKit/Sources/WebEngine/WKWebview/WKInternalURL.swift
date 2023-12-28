@@ -21,7 +21,10 @@ final class WKInternalURL: InternalURL {
     enum Path: String {
         case errorpage
         func matches(_ string: String) -> Bool {
-            return string.range(of: "/?\(self.rawValue)", options: .regularExpression, range: nil, locale: nil) != nil
+            return string.range(of: "/?\(self.rawValue)",
+                                options: .regularExpression,
+                                range: nil,
+                                locale: nil) != nil
         }
     }
 
@@ -80,5 +83,20 @@ final class WKInternalURL: InternalURL {
     var isAuthorized: Bool {
         let query = url.getQuery()
         return query[WKInternalURL.Param.uuidkey.rawValue] == WKInternalURL.uuid
+    }
+
+    var originalURLFromErrorPage: URL? {
+        return isErrorPage ? extractedUrlParam : nil
+    }
+
+    private var extractedUrlParam: URL? {
+        if let nestedUrl = url.getQuery()[WKInternalURL.Param.url.rawValue]?.removingPercentEncoding {
+            return URL(string: nestedUrl, invalidCharacters: false)
+        }
+        return nil
+    }
+
+    private var isErrorPage: Bool {
+        return WKInternalURL.Path.errorpage.matches(url.path)
     }
 }

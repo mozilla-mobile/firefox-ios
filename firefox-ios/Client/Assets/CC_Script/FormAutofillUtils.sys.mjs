@@ -70,6 +70,7 @@ const FORM_SUBMISSION_REASON = {
   FORM_SUBMIT_EVENT: "form-submit-event",
   FORM_REMOVAL_AFTER_FETCH: "form-removal-after-fetch",
   IFRAME_PAGEHIDE: "iframe-pagehide",
+  PAGE_NAVIGATION: "page-navigation",
 };
 
 const ELIGIBLE_INPUT_TYPES = ["text", "email", "tel", "number", "month"];

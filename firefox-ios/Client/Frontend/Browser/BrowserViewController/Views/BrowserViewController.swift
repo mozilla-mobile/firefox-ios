@@ -118,13 +118,18 @@ class BrowserViewController: UIViewController,
         return searchBarPosition == .bottom
     }()
 
-    private var topTouchArea: UIButton!
+    private lazy var topTouchArea: UIButton = .build { topTouchArea in
+        topTouchArea.isAccessibilityElement = false
+        topTouchArea.addTarget(self, action: #selector(self.tappedTopArea), for: .touchUpInside)
+    }
 
     var topTabsVisible: Bool {
         return topTabsViewController != nil
     }
     // Backdrop used for displaying greyed background for private tabs
-    var webViewContainerBackdrop: UIView!
+    private lazy var webViewContainerBackdrop: UIView = .build { containerBackdrop in
+        containerBackdrop.alpha = 0
+    }
     var keyboardBackdrop: UIView?
 
     var scrollController = TabScrollingController()
@@ -326,7 +331,7 @@ class BrowserViewController: UIViewController,
             toolbar.tabToolbarDelegate = self
             toolbar.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false, theme: themeManager.currentTheme)
             toolbar.applyTheme(theme: themeManager.currentTheme)
-            toolbar.updateMiddleButtonState(currentMiddleButtonState ?? .search)
+            handleMiddleButtonState(currentMiddleButtonState ?? .search)
             updateTabCountUsingTabManager(self.tabManager)
         } else {
             toolbar.tabToolbarDelegate = nil
@@ -492,6 +497,8 @@ class BrowserViewController: UIViewController,
             } else if !state.fakespotState.isOpen {
                 dismissFakespotIfNeeded()
             }
+
+            updateInContentHomePanel(tabManager.selectedTab?.url)
         }
     }
 
@@ -627,16 +634,10 @@ class BrowserViewController: UIViewController,
     }
 
     func addSubviews() {
-        webViewContainerBackdrop = UIView()
-        webViewContainerBackdrop.alpha = 0
-        view.addSubview(webViewContainerBackdrop)
-        view.addSubview(contentStackView)
+        view.addSubviews(webViewContainerBackdrop, contentStackView)
 
         contentStackView.addArrangedSubview(contentContainer)
 
-        topTouchArea = UIButton()
-        topTouchArea.isAccessibilityElement = false
-        topTouchArea.addTarget(self, action: #selector(tappedTopArea), for: .touchUpInside)
         view.addSubview(topTouchArea)
 
         // Work around for covering the non-clipped web view content
@@ -738,10 +739,19 @@ class BrowserViewController: UIViewController,
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        statusBarOverlay.snp.remakeConstraints { make in
-            make.top.left.right.equalTo(self.view)
-            make.height.equalTo(self.view.safeAreaInsets.top)
-        }
+        // Remove existing constraints
+        statusBarOverlay.removeConstraints(statusBarOverlay.constraints)
+
+        // Set new constraints for the statusBarOverlay
+        NSLayoutConstraint.activate([
+            statusBarOverlay.topAnchor.constraint(equalTo: view.topAnchor),
+            statusBarOverlay.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            statusBarOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            statusBarOverlay.heightAnchor.constraint(equalToConstant: view.safeAreaInsets.top)
+        ])
+
+        // Ensure the layout is updated immediately
+        view.layoutIfNeeded()
 
         showQueuedAlertIfAvailable()
     }
@@ -817,9 +827,12 @@ class BrowserViewController: UIViewController,
             urlBarHeightConstraint = make.height.equalTo(UIConstants.TopToolbarHeightMax).constraint
         }
 
-        webViewContainerBackdrop.snp.makeConstraints { make in
-            make.edges.equalTo(view)
-        }
+        NSLayoutConstraint.activate([
+            webViewContainerBackdrop.topAnchor.constraint(equalTo: view.topAnchor),
+            webViewContainerBackdrop.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            webViewContainerBackdrop.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            webViewContainerBackdrop.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
 
         NSLayoutConstraint.activate([
             contentStackView.topAnchor.constraint(equalTo: header.bottomAnchor),
@@ -849,10 +862,12 @@ class BrowserViewController: UIViewController,
     override func updateViewConstraints() {
         super.updateViewConstraints()
 
-        topTouchArea.snp.remakeConstraints { make in
-            make.top.left.right.equalTo(view)
-            make.height.equalTo(UX.ShowHeaderTapAreaHeight)
-        }
+        NSLayoutConstraint.activate([
+            topTouchArea.topAnchor.constraint(equalTo: view.topAnchor),
+            topTouchArea.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            topTouchArea.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            topTouchArea.heightAnchor.constraint(equalToConstant: UX.ShowHeaderTapAreaHeight)
+        ])
 
         readerModeBar?.snp.remakeConstraints { make in
             make.height.equalTo(UIConstants.ToolbarHeight)
@@ -1251,7 +1266,7 @@ class BrowserViewController: UIViewController,
         // No tab
         guard let tab = tabManager.selectedTab else {
             urlBar.locationView.reloadButton.reloadButtonState = .disabled
-            navigationToolbar.updateMiddleButtonState(state)
+            handleMiddleButtonState(state)
             currentMiddleButtonState = state
             return
         }
@@ -1259,7 +1274,7 @@ class BrowserViewController: UIViewController,
         // Tab with starting page
         if tab.isURLStartingPage {
             urlBar.locationView.reloadButton.reloadButtonState = .disabled
-            navigationToolbar.updateMiddleButtonState(state)
+            handleMiddleButtonState(state)
             currentMiddleButtonState = state
             return
         }
@@ -1270,11 +1285,21 @@ class BrowserViewController: UIViewController,
             state = isLoading ? .stop : .reload
         }
 
-        navigationToolbar.updateMiddleButtonState(state)
+        handleMiddleButtonState(state)
         if !toolbar.isHidden {
             urlBar.locationView.reloadButton.reloadButtonState = isLoading ? .stop : .reload
         }
         currentMiddleButtonState = state
+    }
+
+    private func handleMiddleButtonState(_ state: MiddleButtonState) {
+        let showDataClearanceFlow = browserViewControllerState?.showDataClearanceFlow ?? false
+        let showFireIcon = featureFlags.isFeatureEnabled(.feltPrivacyFeltDeletion, checking: .buildOnly) && showDataClearanceFlow
+        guard !showFireIcon else {
+            navigationToolbar.updateMiddleButtonState(.fire)
+            return
+        }
+        navigationToolbar.updateMiddleButtonState(state)
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {

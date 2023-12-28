@@ -38,6 +38,7 @@ protocol TabToolbarDelegate: AnyObject {
     func tabToolbarDidLongPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressStop(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+    func tabToolbarDidPressFire(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressBookmarks(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
@@ -51,6 +52,7 @@ enum MiddleButtonState {
     case stop
     case search
     case home
+    case fire
 }
 
 @objcMembers
@@ -62,10 +64,18 @@ open class TabToolbarHelper: NSObject {
     let ImageNewTab = UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus)
     let ImageHome = UIImage.templateImageNamed(StandardImageIdentifiers.Large.home)
     let ImageBookmark = UIImage.templateImageNamed(StandardImageIdentifiers.Large.bookmarkTrayFill)
+    let ImageFire = UIImage.templateImageNamed(StandardImageIdentifiers.Large.fire)
 
     func setMiddleButtonState(_ state: MiddleButtonState) {
         let device = UIDevice.current.userInterfaceIdiom
         switch (state, device) {
+        case (.fire, _):
+            middleButtonState = .fire
+            toolbar.multiStateButton.setImage(ImageFire, for: .normal)
+            toolbar.multiStateButton.accessibilityLabel = .TabToolbarDataClearanceAccessibilityLabel
+            toolbar.multiStateButton.largeContentTitle = .TabToolbarDataClearanceAccessibilityLabel
+            toolbar.multiStateButton.largeContentImage = ImageFire
+            toolbar.multiStateButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.fireButton
         case (.search, _):
             middleButtonState = .search
             toolbar.multiStateButton.setImage(ImageSearch, for: .normal)
@@ -273,6 +283,8 @@ open class TabToolbarHelper: NSObject {
             toolbar.tabToolbarDelegate?.tabToolbarDidPressStop(toolbar, button: toolbar.multiStateButton)
         case .reload:
             toolbar.tabToolbarDelegate?.tabToolbarDidPressReload(toolbar, button: toolbar.multiStateButton)
+        case .fire:
+            toolbar.tabToolbarDelegate?.tabToolbarDidPressFire(toolbar, button: toolbar.multiStateButton)
         }
     }
 

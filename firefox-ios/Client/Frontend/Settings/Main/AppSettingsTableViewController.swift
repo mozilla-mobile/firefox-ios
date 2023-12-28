@@ -308,7 +308,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     }
 
     private func getDebugSettings() -> [SettingSection] {
-        var hiddenDebugOptions = [
+        let hiddenDebugOptions = [
             ExperimentsSettings(settings: self, settingsDelegate: self),
             ExportLogDataSetting(settings: self),
             ExportBrowserDataSetting(settings: self),

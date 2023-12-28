@@ -27,7 +27,7 @@ class TabEventHandlerTests: XCTestCase {
     func testBlankPopupURL() throws {
         throw XCTSkip("Test doesn't complete anymore, was probably relying on behavior from setup in App delegate")
 //        let profile = MockProfile()
-//        let manager = TabManager(profile: profile, imageStore: nil)
+//        let manager = TabManager(profile: profile)
 //
 //        // Hide intro so it is easier to see the test running and debug it
 //        IntroScreenManager(prefs: profile.prefs).didSeeIntroScreen()

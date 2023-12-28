@@ -35,6 +35,7 @@ class SingleActionViewModel {
     private(set) var iconString: String?
     private(set) var iconURL: URL?
     private(set) var iconType: PhotonActionSheetIconType
+    private(set) var allowIconScaling: Bool
     private(set) var iconAlignment: IconAlignment
     private(set) var needsIconActionableTint: Bool
 
@@ -64,6 +65,7 @@ class SingleActionViewModel {
          iconString: String? = nil,
          iconURL: URL? = nil,
          iconType: PhotonActionSheetIconType = .Image,
+         allowIconScaling: Bool = false,
          iconAlignment: IconAlignment = .left,
          needsIconActionableTint: Bool = false,
          isEnabled: Bool = false,
@@ -76,6 +78,7 @@ class SingleActionViewModel {
         self.iconURL = iconURL
         self.iconType = iconType
         self.iconAlignment = iconAlignment
+        self.allowIconScaling = allowIconScaling
         self.needsIconActionableTint = needsIconActionableTint
         self.isEnabled = isEnabled
         self.tapHandler = tapHandler
