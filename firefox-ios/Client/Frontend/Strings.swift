@@ -4703,6 +4703,11 @@ extension String {
         tableName: nil,
         value: "Add to Reading List",
         comment: "Accessibility label for action adding current page to reading list.")
+    public static let TabLocationReloadButtonMoreOptionsAccessibilityLabel = MZLocalizedString(
+        key: "Address.Bar.MoreOptions",
+        tableName: nil,
+        value: "More Options",
+        comment: "Accessibility label for action showing more options")
     public static let TabLocationReloadAccessibilityLabel = MZLocalizedString(
         key: "Reload page",
         tableName: nil,

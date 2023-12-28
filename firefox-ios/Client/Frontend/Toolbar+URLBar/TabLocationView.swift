@@ -162,6 +162,11 @@ class TabLocationView: UIView, FeatureFlaggable {
         reloadButton.contentHorizontalAlignment = .center
         reloadButton.accessibilityLabel = .TabLocationReloadAccessibilityLabel
         reloadButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.reloadButton
+        reloadButton.accessibilityCustomActions = [
+            UIAccessibilityCustomAction(
+                name: .TabLocationReloadButtonMoreOptionsAccessibilityLabel,
+                target: self,
+                selector: #selector(self.reloadCustomAction))]
         reloadButton.isAccessibilityElement = true
         reloadButton.translatesAutoresizingMaskIntoConstraints = false
         reloadButton.showsLargeContentViewer = true
@@ -297,6 +302,11 @@ class TabLocationView: UIView, FeatureFlaggable {
     @objc
     func readerModeCustomAction() -> Bool {
         return delegate?.tabLocationViewDidLongPressReaderMode(self) ?? false
+    }
+
+    @objc
+    func reloadCustomAction() {
+        delegate?.tabLocationViewDidLongPressReload(self)
     }
 
     func updateShoppingButtonVisibility(for tab: Tab) {
