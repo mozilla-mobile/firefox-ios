@@ -103,7 +103,8 @@ class HomepageViewController:
         setupNotifications(forObserver: self,
                            observing: [.HomePanelPrefsChanged,
                                        .TabsPrivacyModeChanged,
-                                       .WallpaperDidChange])
+                                       .WallpaperDidChange,
+                                       .DynamicFontChanged])
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -187,6 +188,7 @@ class HomepageViewController:
 
         if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
             || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
+            view.layoutIfNeeded()
             reloadOnRotation(newSize: view.frame.size)
         }
     }
@@ -784,7 +786,8 @@ extension HomepageViewController: Notifiable {
                 self.adjustPrivacySensitiveSections(notification: notification)
 
             case .HomePanelPrefsChanged,
-                    .WallpaperDidChange:
+                    .WallpaperDidChange,
+                    .DynamicFontChanged:
                 self.reloadView()
 
             default: break
