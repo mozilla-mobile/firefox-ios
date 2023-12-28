@@ -123,7 +123,7 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - Package.swift
   - BrowserKit/Package.swift
   - Client/ContentBlocker/ContentBlockerGenerator/Package.swift
-  
+  - BrowserKit/.build/
 
 included:
   - /Users/vagrant/git
