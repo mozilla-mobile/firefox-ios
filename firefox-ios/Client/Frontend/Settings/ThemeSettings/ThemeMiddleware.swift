@@ -46,6 +46,8 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
             self.updateThemeBasedOnSystemBrightness()
             let systemBrightness = self.getScreenBrightness()
             store.dispatch(ThemeSettingsAction.systemBrightnessChanged(systemBrightness))
+        case PrivateModeMiddlewareAction.privateModeUpdated(let newState):
+            self.toggleUsePrivateTheme(to: newState)
         default:
             break
         }
@@ -65,6 +67,9 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
         themeManager.setSystemTheme(isOn: enabled)
     }
 
+    func toggleUsePrivateTheme(to state: Bool) {
+        themeManager.setSystemTheme(isOn: state)
+    }
     func toggleAutomaticBrightness(_ enabled: Bool) {
         legacyThemeManager.automaticBrightnessIsOn = enabled
         themeManager.setAutomaticBrightness(isOn: enabled)
