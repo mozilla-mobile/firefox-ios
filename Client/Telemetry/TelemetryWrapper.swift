@@ -580,11 +580,8 @@ extension TelemetryWrapper {
         case viewHistoryPanel = "view-history-panel"
         case createNewTab = "create-new-tab"
         case sponsoredShortcuts = "sponsored-shortcuts"
-<<<<<<< HEAD:Client/Telemetry/TelemetryWrapper.swift
-=======
         case fxSuggest = "fx-suggest"
         case webview = "webview"
->>>>>>> 2d33ee8e4 (Add FXIOS-7944 [v122] Add Webview telemetry for failures (#17910)):firefox-ios/Client/Telemetry/TelemetryWrapper.swift
     }
 
     public enum EventValue: String {
@@ -683,14 +680,11 @@ extension TelemetryWrapper {
         case crashedLastLaunch = "crashed_last_launch"
         case cpuException = "cpu_exception"
         case hangException = "hang-exception"
-<<<<<<< HEAD:Client/Telemetry/TelemetryWrapper.swift
-=======
         case fxSuggestionClickInfo = "fx-suggestion-click-info"
         case fxSuggestionPosition = "fx-suggestion-position"
         case webviewFail = "webview-fail"
         case webviewFailProvisional = "webview-fail-provisional"
         case webviewShowErrorPage = "webview-show-error-page"
->>>>>>> 2d33ee8e4 (Add FXIOS-7944 [v122] Add Webview telemetry for failures (#17910)):firefox-ios/Client/Telemetry/TelemetryWrapper.swift
     }
 
     public enum EventExtraKey: String, CustomStringConvertible {

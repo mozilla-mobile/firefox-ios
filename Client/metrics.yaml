@@ -4913,8 +4913,6 @@ app_errors:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
-<<<<<<< HEAD:Client/metrics.yaml
-=======
 
 webview:
   did_fail_provisional:
@@ -5088,4 +5086,3 @@ fx_suggest:
     expires: never
     send_in_pings:
       - fx-suggest
->>>>>>> 2d33ee8e4 (Add FXIOS-7944 [v122] Add Webview telemetry for failures (#17910)):firefox-ios/Client/metrics.yaml
