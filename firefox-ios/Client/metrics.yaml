@@ -1023,6 +1023,22 @@ shopping.settings:
     send_in_pings:
       - metrics
 
+  disabled_ads:
+    type: boolean
+    lifetime: application
+    description: |
+      Indicates if the user has opted out of being shown ads in the Fakespot screen
+      experience. Set in BrowserViewController and updated when changed by user.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17304
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17930
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
+    send_in_pings:
+      - metrics
+
 # Key Commands
 key_commands:
   press_key_command_action:
@@ -4910,6 +4926,46 @@ app_errors:
       - https://github.com/mozilla-mobile/firefox-ios/issues/16829
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/17844
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+
+webview:
+  did_fail_provisional:
+    type: event
+    description: |
+      Recorded when an error occurs on early webview navigation.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17716
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17910
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  did_fail:
+    type: event
+    description: |
+      Recorded when an error occurred during navigation.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17716
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17910
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  show_error_page:
+    type: event
+    extra_keys:
+      error_code:
+        type: string
+        description: |
+          The error code number
+    description: |
+      Recorded when an error page is shown on the webview.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17716
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17910
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never

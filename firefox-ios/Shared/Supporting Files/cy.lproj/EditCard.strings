@@ -1,6 +1,9 @@
 /* Title label for the view where user can add their credit card info */
 "CreditCard.EditCard.AddCreditCardTitle.v113" = "Ychwanegu Cerdyn Credyd";
 
+/* Title label for the view where user can add their credit card info */
+"CreditCard.EditCard.AddCreditCardTitle.v122" = "Ychwanegu Cerdyn";
+
 /* Button label for cancelling editing of the credit card details shown in the form */
 "CreditCard.EditCard.CancelNavBarButtonLabel.v113" = "Diddymu";
 
@@ -45,6 +48,9 @@
 
 /* Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages. */
 "CreditCard.EditCard.ToggleToAllowAutofillTitle.v112" = "Cadw ac awtolanw cardiau";
+
+/* Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages. */
+"CreditCard.EditCard.ToggleToAllowAutofillTitle.v122" = "Cadw a Llanw Dulliau Talu";
 
 /* Title label for the view where user can view their credit card info */
 "CreditCard.EditCard.ViewCreditCardTitle.v116" = "Gweld Cerdyn";

@@ -18,6 +18,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
     // MARK: - PhotonActionSheetViewUX
     struct UX {
         static let StatusIconSize = CGSize(width: 24, height: 24)
+        static let StatusIconMaxSize = CGSize(width: 58, height: 58)
         static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
         static let CornerRadius: CGFloat = 3
         static let Padding: CGFloat = 16
@@ -72,6 +73,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
         icon.layer.cornerRadius = UX.CornerRadius
         icon.setContentHuggingPriority(.required, for: .horizontal)
         icon.setContentCompressionResistancePriority(.required, for: .horizontal)
+        icon.adjustsImageSizeForAccessibilityContentSizeCategory = true
     }
 
     private lazy var disclosureLabel: UILabel = {
@@ -267,6 +269,16 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
         let padding = UX.Padding
         let topBottomPadding = UX.topBottomPadding
 
+        let statusIconWidth: CGFloat
+        let statusIconHeight: CGFloat
+        if item?.allowIconScaling ?? false {
+            statusIconWidth = min(UIFontMetrics.default.scaledValue(for: UX.StatusIconSize.width), UX.StatusIconMaxSize.width)
+            statusIconHeight = min(UIFontMetrics.default.scaledValue(for: UX.StatusIconSize.height), UX.StatusIconMaxSize.height)
+        } else {
+            statusIconWidth = UX.StatusIconSize.width
+            statusIconHeight = UX.StatusIconSize.height
+        }
+
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: topAnchor, constant: topBottomPadding),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -topBottomPadding),
@@ -278,8 +290,8 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
             selectedOverlay.trailingAnchor.constraint(equalTo: trailingAnchor),
             selectedOverlay.leadingAnchor.constraint(equalTo: leadingAnchor),
 
-            statusIcon.widthAnchor.constraint(equalToConstant: UX.StatusIconSize.width),
-            statusIcon.heightAnchor.constraint(equalToConstant: UX.StatusIconSize.height),
+            statusIcon.widthAnchor.constraint(equalToConstant: statusIconWidth),
+            statusIcon.heightAnchor.constraint(equalToConstant: statusIconHeight),
         ])
     }
 
