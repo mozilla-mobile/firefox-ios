@@ -4826,11 +4826,11 @@ extension String {
         tableName: nil,
         value: nil,
         comment: "Accessibility label for the navigation toolbar displayed at the bottom of the screen.")
-    public static let TabToolbarOtherOptionsAccessibilityLabel = MZLocalizedString(
-        key: "Toolbar.Accessibility.OtherOptions",
+    public static let TabToolbarMoreOptionsAccessibilityLabel = MZLocalizedString(
+        key: "Toolbar.Accessibility.MoreOptions",
         tableName: nil,
-        value: "Other Options",
-        comment: "Accessibility label for action to see other options.")
+        value: "More Options",
+        comment: "Accessibility label for action to see more options.")
 }
 
 // MARK: - Tab Tray v1

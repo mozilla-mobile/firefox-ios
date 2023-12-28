@@ -76,11 +76,6 @@ open class TabToolbarHelper: NSObject {
             toolbar.multiStateButton.largeContentTitle = .TabToolbarDataClearanceAccessibilityLabel
             toolbar.multiStateButton.largeContentImage = ImageFire
             toolbar.multiStateButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.fireButton
-            toolbar.multiStateButton.accessibilityCustomActions = [
-                UIAccessibilityCustomAction(
-                    name: .TabToolbarOtherOptionsAccessibilityLabel,
-                    target: self,
-                    selector: #selector(self.multiStateCustomAction))]
         case (.search, _):
             middleButtonState = .search
             toolbar.multiStateButton.setImage(ImageSearch, for: .normal)
@@ -95,11 +90,6 @@ open class TabToolbarHelper: NSObject {
             toolbar.multiStateButton.largeContentTitle = .TabToolbarReloadAccessibilityLabel
             toolbar.multiStateButton.largeContentImage = ImageReload
             toolbar.multiStateButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.reloadButton
-            toolbar.multiStateButton.accessibilityCustomActions = [
-                UIAccessibilityCustomAction(
-                    name: .TabToolbarOtherOptionsAccessibilityLabel,
-                    target: self,
-                    selector: #selector(self.multiStateCustomAction))]
         case (.stop, .pad):
             middleButtonState = .stop
             toolbar.multiStateButton.setImage(ImageStop, for: .normal)
@@ -107,11 +97,6 @@ open class TabToolbarHelper: NSObject {
             toolbar.multiStateButton.largeContentTitle = .TabToolbarStopAccessibilityLabel
             toolbar.multiStateButton.largeContentImage = ImageStop
             toolbar.multiStateButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.stopButton
-            toolbar.multiStateButton.accessibilityCustomActions = [
-                UIAccessibilityCustomAction(
-                    name: .TabToolbarOtherOptionsAccessibilityLabel,
-                    target: self,
-                    selector: #selector(self.multiStateCustomAction))]
         default:
             toolbar.multiStateButton.setImage(ImageHome, for: .normal)
             toolbar.multiStateButton.accessibilityLabel = .TabToolbarHomeAccessibilityLabel
@@ -119,6 +104,17 @@ open class TabToolbarHelper: NSObject {
             toolbar.multiStateButton.largeContentTitle = .TabToolbarHomeAccessibilityLabel
             toolbar.multiStateButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.homeButton
             middleButtonState = .home
+        }
+
+        switch state {
+        case .search, .home:
+            break
+        default:
+            toolbar.multiStateButton.accessibilityCustomActions = [
+                UIAccessibilityCustomAction(
+                    name: .TabToolbarMoreOptionsAccessibilityLabel,
+                    target: self,
+                    selector: #selector(self.multiStateCustomAction))]
         }
     }
 
