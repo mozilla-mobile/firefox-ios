@@ -25,14 +25,25 @@ class NavigationPathTests: XCTestCase {
         XCTAssertEqual(sut,
                        NavigationPath.url(URL(string: address)!))
     }
-    
+
     func testHostIsOpenURLAndTheAddressIsNotValid() {
         let appAddress = "\(appScheme)://open-url?url=\(badAddress)"
-        let sut = NavigationPath(url: URL(string: appAddress)!)
-        XCTAssertEqual(sut,
-                       NavigationPath.url(URL(string: badAddress)!))
+        guard let url = URL(string: appAddress) else {
+            XCTFail("Failed to create URL from appAddress")
+            return
+        }
+
+        let sut = NavigationPath(url: url)
+
+        // Since badAddress is not a valid URL, expecting sut to be .text
+        switch sut {
+        case .text(let text):
+            XCTAssertEqual(text, badAddress, "Expected text to be equal to badAddress")
+        default:
+            XCTFail("Unexpected case for NavigationPath")
+        }
     }
-    
+
     func testHostIsOpenTextAndTheAddressIsValid() {
         let appAddress = "\(appScheme)://open-text?text=\(address)"
         let sut = NavigationPath(url: URL(string: appAddress)!)!
