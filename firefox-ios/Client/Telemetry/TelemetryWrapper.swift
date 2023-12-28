@@ -1104,7 +1104,9 @@ extension TelemetryWrapper {
         case (.action, .tap, .startSearchButton, _, _):
             GleanMetrics.Search.startSearchPressed.add()
         case(.action, .tap, .recordSearch, _, let extras):
-            if let searchLocation = extras?[EventExtraKey.recordSearchLocation.rawValue] as? SearchesMeasurement.SearchLocation, let searchEngineID = extras?[EventExtraKey.recordSearchEngineID.rawValue] as? String? {
+            if let searchLocation = extras?[EventExtraKey.recordSearchLocation.rawValue]
+                as? SearchesMeasurement.SearchLocation,
+               let searchEngineID = extras?[EventExtraKey.recordSearchEngineID.rawValue] as? String? {
                 Telemetry.default.recordSearch(location: searchLocation, searchEngine: searchEngineID ?? "other")
                 GleanMetrics.Search.counts["\(searchEngineID ?? "custom").\(searchLocation.rawValue)"].add()
             } else {

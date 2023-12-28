@@ -34,6 +34,7 @@ func checkCodeCoverage() {
 
 // MARK: - PR guidelines
 
+// swiftlint:disable line_length
 // Encourage smaller PRs
 func checkBigPullRequest() {
     let bigPRThreshold = 800
@@ -54,6 +55,7 @@ func checkForPRDescription() {
         warn("Please provide a summary of your changes in the Pull Request description. This helps reviewers to understand your code and technical decisions. Please also include the JIRA issue number and the GitHub ticket number (if available).")
     }
 }
+// swiftlint:enable line_length
 
 enum CodeUsageToDetect: CaseIterable {
     static let commonLoggerSentence = " Please remove this usage from production code or use BrowserKit Logger."

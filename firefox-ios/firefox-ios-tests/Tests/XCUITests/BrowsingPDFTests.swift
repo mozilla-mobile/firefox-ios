@@ -5,7 +5,13 @@
 import XCTest
 import Common
 
-let PDF_website = ["url": "www.orimi.com/pdf-test.pdf", "pdfValue": "www.orimi.com/pdf", "urlValue": "yukon.ca/en/educat", "bookmarkLabel": "https://www.orimi.com/pdf-test.pdf", "longUrlValue": "http://www.education.gov.yk.ca/"]
+let PDF_website = [
+    "url": "www.orimi.com/pdf-test.pdf",
+    "pdfValue": "www.orimi.com/pdf",
+    "urlValue": "yukon.ca/en/educat",
+    "bookmarkLabel": "https://www.orimi.com/pdf-test.pdf",
+    "longUrlValue": "http://www.education.gov.yk.ca/"
+]
 class BrowsingPDFTests: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307116
     func testOpenPDFViewer() {
@@ -82,7 +88,13 @@ class BrowsingPDFTests: BaseTestCase {
         XCTAssertTrue(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!].exists)
 
         // Open pdf from pinned site
-        let pdfTopSite = app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView].cells[PDF_website["bookmarkLabel"]!].children(matching: .other).element.children(matching: .other).element(boundBy: 0)
+        let pdfTopSite = app
+            .collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView]
+            .cells[PDF_website["bookmarkLabel"]!]
+            .children(matching: .other)
+            .element
+            .children(matching: .other)
+            .element(boundBy: 0)
         pdfTopSite.tap()
         waitUntilPageLoad()
         mozWaitForValueContains(app.textFields["url"], value: PDF_website["pdfValue"]!)
