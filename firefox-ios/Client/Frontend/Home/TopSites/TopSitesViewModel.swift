@@ -9,7 +9,18 @@ import Storage
 
 class TopSitesViewModel {
     struct UX {
-        static let cellEstimatedSize = CGSize(width: 85, height: 94)
+        static var cellEstimatedSize: CGSize {
+            let width: CGFloat
+            switch UIApplication.shared.preferredContentSizeCategory {
+            case .unspecified, .extraSmall, .small, .medium, .large, .extraLarge, .extraExtraLarge, .extraExtraExtraLarge:
+                width = 80
+            case .accessibilityMedium, .accessibilityLarge, .accessibilityExtraLarge:
+                width = 115
+            default:
+                width = 140
+            }
+            return CGSize(width: width, height: 94)
+        }
         static let cardSpacing: CGFloat = 16
         static let minCards: Int = 4
     }
