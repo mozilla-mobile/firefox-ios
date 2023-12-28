@@ -5,11 +5,16 @@
 import XCTest
 
 let defaultTopSite = ["topSiteLabel": "Wikipedia", "bookmarkLabel": "Wikipedia"]
-let newTopSite = ["url": "www.mozilla.org", "topSiteLabel": "Mozilla", "bookmarkLabel": "Internet for people, not profit — Mozilla (US)"]
+let newTopSite = [
+    "url": "www.mozilla.org",
+    "topSiteLabel": "Mozilla",
+    "bookmarkLabel": "Internet for people, not profit — Mozilla (US)"
+]
 let allDefaultTopSites = ["Facebook", "YouTube", "Amazon", "Wikipedia", "Twitter"]
 
 class ActivityStreamTest: BaseTestCase {
-    let TopSiteCellgroup = XCUIApplication().cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+    typealias TopSites = AccessibilityIdentifiers.FirefoxHomepage.TopSites
+    let TopSiteCellgroup = XCUIApplication().cells[TopSites.itemCell]
 
     let testWithDB = ["testTopSites2Add", "testTopSitesRemoveAllExceptDefaultClearPrivateData"]
 
@@ -146,7 +151,10 @@ class ActivityStreamTest: BaseTestCase {
         waitForExistence(updatedAllTopSites.element(boundBy: 0))
         let topSiteCells = updatedAllTopSites.staticTexts
         let topSiteFirstCellAfter = updatedAllTopSites.element(boundBy: 0).label
-        XCTAssertTrue(topSiteFirstCellAfter == topSiteCells[allDefaultTopSites[1]].label, "First top site does not match")
+        XCTAssertTrue(
+            topSiteFirstCellAfter == topSiteCells[allDefaultTopSites[1]].label,
+            "First top site does not match"
+        )
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2273338
@@ -202,15 +210,15 @@ class ActivityStreamTest: BaseTestCase {
         var numTabsOpen = app.collectionViews.element(boundBy: 1).cells.count
         if iPad() {
             navigator.goto(TabTray)
-            numTabsOpen = app/*@START_MENU_TOKEN@*/.otherElements["Tabs Tray"].collectionViews/*[[".otherElements[\"Tabs Tray\"].collectionViews",".collectionViews"],[[[-1,1],[-1,0]]],[1]]@END_MENU_TOKEN@*/.cells.count
+            numTabsOpen = app.otherElements["Tabs Tray"].collectionViews.cells.count
         }
         XCTAssertEqual(numTabsOpen, 1, "New tab not open")
     }
 
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {
-        waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
-        XCTAssertTrue(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].exists)
-        let numberOfTopSites = app.collectionViews.cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell).count
+        waitForExistence(app.cells[TopSites.itemCell])
+        XCTAssertTrue(app.cells[TopSites.itemCell].exists)
+        let numberOfTopSites = app.collectionViews.cells.matching(identifier: TopSites.itemCell).count
         XCTAssertEqual(numberOfTopSites, numberOfExpectedTopSites, "The number of Top Sites is not correct")
     }
 
@@ -235,7 +243,7 @@ class ActivityStreamTest: BaseTestCase {
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2436086
     func testLongTapOnTopSiteOptions() {
-        waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        waitForExistence(app.cells[TopSites.itemCell])
         app.collectionViews.cells.element(boundBy: 3).press(forDuration: 1)
         // Verify options given
         let ContextMenuTable = app.tables["Context Menu"]
