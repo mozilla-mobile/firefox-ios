@@ -8,13 +8,9 @@ import UIKit
 
 extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     // MARK: Data Clearance CFR / Contextual Hint
-    func toolBarPresentCFR(at sourceView: UIView) {
-        configureDataClearanceContextVC(at: sourceView)
-    }
-
-    private func configureDataClearanceContextVC(at sourceView: UIView) {
+    func configureDataClearanceContextualHint() {
         dataClearanceContextHintVC.configure(
-            anchor: sourceView,
+            anchor: navigationToolbar.multiStateButton,
             withArrowDirection: topTabsVisible ? .up : .down,
             andDelegate: self,
             presentedUsing: { self.presentDataClearanceContextualHint() },

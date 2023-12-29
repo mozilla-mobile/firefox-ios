@@ -1305,14 +1305,10 @@ class BrowserViewController: UIViewController,
         let showFireButton = featureFlags.isFeatureEnabled(.feltPrivacyFeltDeletion, checking: .buildOnly) && showDataClearanceFlow
         guard !showFireButton else {
             navigationToolbar.updateMiddleButtonState(.fire)
-            prepareDataClearanceContextualHintForFireButton()
+            configureDataClearanceContextualHint()
             return
         }
         navigationToolbar.updateMiddleButtonState(state)
-    }
-
-    private func prepareDataClearanceContextualHintForFireButton() {
-        toolBarPresentCFR(at: navigationToolbar.multiStateButton)
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
