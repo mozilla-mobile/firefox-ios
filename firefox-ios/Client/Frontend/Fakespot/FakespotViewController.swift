@@ -7,6 +7,7 @@ import ComponentLibrary
 import UIKit
 import Shared
 import Redux
+import SwiftUI
 
 class FakespotViewController:
     UIViewController,
@@ -44,7 +45,7 @@ class FakespotViewController:
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
-    private var viewModel: FakespotViewModel
+    @ObservedObject private var viewModel: FakespotViewModel
 
     private var adView: FakespotAdView?
 
@@ -503,7 +504,10 @@ class FakespotViewController:
 
             case .analysisInProgress:
                 let view: FakespotMessageCardView = .build()
-                view.configure(viewModel.analysisProgressViewModel)
+                view.configure(
+                    viewModel.analysisProgressViewModel,
+                    fakespotViewModel: viewModel
+                )
                 return view
 
             case .reportProductInStock:

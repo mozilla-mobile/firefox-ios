@@ -4062,10 +4062,10 @@ extension String {
             value: "Check Now",
             comment: "Primary action title for info card when the product needs analysis")
         public static let InfoCardProgressAnalysisTitle = MZLocalizedString(
-            key: "Shopping.InfoCard.ProgressAnalysis.Title.v120",
+            key: "Shopping.InfoCard.ProgressAnalysis.Title.v123",
             tableName: "Shopping",
-            value: "Checking review quality",
-            comment: "Title for info card when the product is in analysis mode")
+            value: "Checking review quality (%@)",
+            comment: "Title for info card when the product is in analysis mode. The placeholder represents the percentage of the analysis progress, ranging between 1 and 100.")
         public static let InfoCardProgressAnalysisDescription = MZLocalizedString(
             key: "Shopping.InfoCard.ProgressAnalysis.Description.v120",
             tableName: "Shopping",

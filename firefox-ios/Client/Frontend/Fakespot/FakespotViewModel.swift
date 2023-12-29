@@ -5,8 +5,9 @@
 import UIKit
 import Common
 import Shared
+import SwiftUI
 
-class FakespotViewModel {
+class FakespotViewModel: ObservableObject {
     enum ViewState {
         case loading
         case onboarding
@@ -166,6 +167,9 @@ class FakespotViewModel {
             onStateChange?()
         }
     }
+
+    @Published var analysisProgress: Double = 0
+    var analysisProgressChanged: ((Double) -> Void)?
 
     let shoppingProduct: ShoppingProduct
     var onStateChange: (() -> Void)?
@@ -458,7 +462,7 @@ class FakespotViewModel {
         AsyncThrowingStream<AnalysisStatus, Error> { continuation in
             Task {
                 do {
-                    var sleepDuration: UInt64 = NSEC_PER_SEC * 30
+                    let sleepDuration: UInt64 = NSEC_PER_SEC * 3
 
                     while true {
                         let result = try await shoppingProduct.getProductAnalysisStatus()
@@ -466,6 +470,12 @@ class FakespotViewModel {
                             continuation.finish()
                             break
                         }
+
+                        await MainActor.run {
+                            self.analysisProgress = result.progress
+                            self.analysisProgressChanged?(self.analysisProgress)
+                        }
+
                         continuation.yield(result.status)
                         guard result.status.isAnalyzing == true else {
                             continuation.finish()
@@ -474,11 +484,6 @@ class FakespotViewModel {
 
                         // Sleep for the current duration
                         try await Task.sleep(nanoseconds: sleepDuration)
-
-                        // Decrease the sleep duration by 10 seconds (NSEC_PER_SEC * 10) on each iteration.
-                        if sleepDuration > NSEC_PER_SEC * 10 {
-                            sleepDuration -= NSEC_PER_SEC * 10
-                        }
                     }
                 } catch {
                     continuation.finish(throwing: error)
