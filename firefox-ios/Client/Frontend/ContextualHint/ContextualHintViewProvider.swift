@@ -18,6 +18,7 @@ enum ContextualHintType: String {
     case inactiveTabs = "InactiveTabs"
     case toolbarLocation = "ToolbarLocation"
     case shoppingExperience = "ShoppingExperience"
+    case dataClearance = "DataClearance"
 }
 
 class ContextualHintViewProvider: ContextualHintPrefsKeysProvider, SearchBarLocationProvider {
