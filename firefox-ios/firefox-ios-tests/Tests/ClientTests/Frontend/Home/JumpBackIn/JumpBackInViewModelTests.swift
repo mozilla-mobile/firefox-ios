@@ -610,7 +610,8 @@ extension JumpBackInViewModelTests {
                          title: "Mozilla 1",
                          history: [],
                          lastUsed: 1,
-                         icon: nil)
+                         icon: nil,
+                         inactive: false)
     }
 }
 
