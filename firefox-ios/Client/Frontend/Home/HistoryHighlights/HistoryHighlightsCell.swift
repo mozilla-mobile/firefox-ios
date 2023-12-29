@@ -10,7 +10,7 @@ import Shared
 /// A cell used in FxHomeScreen's History Highlights section.
 class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
     struct UX {
-        static let verticalSpacing: CGFloat = 20
+        static let verticalSpacing: CGFloat = 10
         static let horizontalSpacing: CGFloat = 16
         static let heroImageDimension: CGFloat = 24
     }
@@ -122,6 +122,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
             textStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                 constant: -UX.horizontalSpacing),
             textStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            textStack.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: UX.verticalSpacing),
 
             bottomLine.heightAnchor.constraint(equalToConstant: 0.5),
             bottomLine.leadingAnchor.constraint(equalTo: itemTitle.leadingAnchor),
@@ -129,6 +130,19 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
                                                  constant: -UX.horizontalSpacing),
             bottomLine.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
+    }
+
+    override public func layoutSubviews() {
+        super.layoutSubviews()
+        let size: CGFloat = 5
+        let distance: CGFloat = 0
+        let rect = CGRect(
+            x: -size,
+            y: contentView.frame.height - (size * 0.4) + distance,
+            width: contentView.frame.width + size * 2,
+            height: size
+        )
+        contentView.layer.shadowPath = UIBezierPath(ovalIn: rect).cgPath
     }
 
     private func setupShadow(_ shouldAddShadow: Bool,
@@ -145,20 +159,10 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
         }
 
         if needsShadow {
-            let size: CGFloat = 5
-            let distance: CGFloat = 0
-            let rect = CGRect(
-                x: -size,
-                y: contentView.frame.height - (size * 0.4) + distance,
-                width: contentView.frame.width + size * 2,
-                height: size
-            )
-
             contentView.layer.shadowColor = theme.colors.shadowDefault.cgColor
             contentView.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
             contentView.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
             contentView.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
-            contentView.layer.shadowPath = UIBezierPath(ovalIn: rect).cgPath
         }
     }
 }
