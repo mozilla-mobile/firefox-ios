@@ -118,13 +118,18 @@ class BrowserViewController: UIViewController,
         return searchBarPosition == .bottom
     }()
 
-    private var topTouchArea: UIButton!
+    private lazy var topTouchArea: UIButton = .build { topTouchArea in
+        topTouchArea.isAccessibilityElement = false
+        topTouchArea.addTarget(self, action: #selector(self.tappedTopArea), for: .touchUpInside)
+    }
 
     var topTabsVisible: Bool {
         return topTabsViewController != nil
     }
     // Backdrop used for displaying greyed background for private tabs
-    var webViewContainerBackdrop: UIView!
+    private lazy var webViewContainerBackdrop: UIView = .build { containerBackdrop in
+        containerBackdrop.alpha = 0
+    }
     var keyboardBackdrop: UIView?
 
     var scrollController = TabScrollingController()
@@ -629,16 +634,10 @@ class BrowserViewController: UIViewController,
     }
 
     func addSubviews() {
-        webViewContainerBackdrop = UIView()
-        webViewContainerBackdrop.alpha = 0
-        view.addSubview(webViewContainerBackdrop)
-        view.addSubview(contentStackView)
+        view.addSubviews(webViewContainerBackdrop, contentStackView)
 
         contentStackView.addArrangedSubview(contentContainer)
 
-        topTouchArea = UIButton()
-        topTouchArea.isAccessibilityElement = false
-        topTouchArea.addTarget(self, action: #selector(tappedTopArea), for: .touchUpInside)
         view.addSubview(topTouchArea)
 
         // Work around for covering the non-clipped web view content
@@ -740,10 +739,19 @@ class BrowserViewController: UIViewController,
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        statusBarOverlay.snp.remakeConstraints { make in
-            make.top.left.right.equalTo(self.view)
-            make.height.equalTo(self.view.safeAreaInsets.top)
-        }
+        // Remove existing constraints
+        statusBarOverlay.removeConstraints(statusBarOverlay.constraints)
+
+        // Set new constraints for the statusBarOverlay
+        NSLayoutConstraint.activate([
+            statusBarOverlay.topAnchor.constraint(equalTo: view.topAnchor),
+            statusBarOverlay.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            statusBarOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            statusBarOverlay.heightAnchor.constraint(equalToConstant: view.safeAreaInsets.top)
+        ])
+
+        // Ensure the layout is updated immediately
+        view.layoutIfNeeded()
 
         showQueuedAlertIfAvailable()
     }
@@ -819,9 +827,12 @@ class BrowserViewController: UIViewController,
             urlBarHeightConstraint = make.height.equalTo(UIConstants.TopToolbarHeightMax).constraint
         }
 
-        webViewContainerBackdrop.snp.makeConstraints { make in
-            make.edges.equalTo(view)
-        }
+        NSLayoutConstraint.activate([
+            webViewContainerBackdrop.topAnchor.constraint(equalTo: view.topAnchor),
+            webViewContainerBackdrop.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            webViewContainerBackdrop.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            webViewContainerBackdrop.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
 
         NSLayoutConstraint.activate([
             contentStackView.topAnchor.constraint(equalTo: header.bottomAnchor),
@@ -851,10 +862,12 @@ class BrowserViewController: UIViewController,
     override func updateViewConstraints() {
         super.updateViewConstraints()
 
-        topTouchArea.snp.remakeConstraints { make in
-            make.top.left.right.equalTo(view)
-            make.height.equalTo(UX.ShowHeaderTapAreaHeight)
-        }
+        NSLayoutConstraint.activate([
+            topTouchArea.topAnchor.constraint(equalTo: view.topAnchor),
+            topTouchArea.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            topTouchArea.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            topTouchArea.heightAnchor.constraint(equalToConstant: UX.ShowHeaderTapAreaHeight)
+        ])
 
         readerModeBar?.snp.remakeConstraints { make in
             make.height.equalTo(UIConstants.ToolbarHeight)

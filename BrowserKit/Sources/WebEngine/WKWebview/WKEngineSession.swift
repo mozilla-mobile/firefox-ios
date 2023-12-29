@@ -69,8 +69,8 @@ class WKEngineSession: EngineSession {
     func reload() {
         // If the current page is an error page load the original URL
         if let url = webView.url,
-            let internalUrl = WKInternalURL(url),
-            let page = internalUrl.originalURLFromErrorPage {
+           let internalUrl = WKInternalURL(url),
+           let page = internalUrl.originalURLFromErrorPage {
             webView.replaceLocation(with: page)
             logger.log("Reloaded webview as error page", level: .debug, category: .webview)
             return
