@@ -4704,7 +4704,7 @@ extension String {
         value: "Add to Reading List",
         comment: "Accessibility label for action adding current page to reading list.")
     public static let TabLocationReloadButtonMoreOptionsAccessibilityLabel = MZLocalizedString(
-        key: "Address.Bar.MoreOptions",
+        key: "Address.Bar.MoreOptions.v123",
         tableName: nil,
         value: "More Options",
         comment: "Accessibility label for action showing more options")
@@ -4832,7 +4832,7 @@ extension String {
         value: nil,
         comment: "Accessibility label for the navigation toolbar displayed at the bottom of the screen.")
     public static let TabToolbarMoreOptionsAccessibilityLabel = MZLocalizedString(
-        key: "Toolbar.Accessibility.MoreOptions",
+        key: "Toolbar.Accessibility.MoreOptions.v123",
         tableName: nil,
         value: "More Options",
         comment: "Accessibility label for action to see more options.")
