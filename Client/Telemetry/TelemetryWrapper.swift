@@ -657,6 +657,9 @@ extension TelemetryWrapper {
         case shoppingCFRsDisplayed = "shopping-cfrs-displayed"
         case awesomebarShareTap = "awesomebar-share-tap"
         case largeFileWrite = "large-file-write"
+        case crashedLastLaunch = "crashed_last_launch"
+        case cpuException = "cpu_exception"
+        case hangException = "hang-exception"
     }
 
     public enum EventExtraKey: String, CustomStringConvertible {
@@ -1806,6 +1809,18 @@ extension TelemetryWrapper {
             if let quantity = extras?[EventExtraKey.size.rawValue] as? Int32 {
                 let properties = GleanMetrics.AppErrors.LargeFileWriteExtra(size: quantity)
                 GleanMetrics.AppErrors.largeFileWrite.record(properties)
+            }
+        case(.information, .error, .app, .crashedLastLaunch, _):
+            GleanMetrics.AppErrors.crashedLastLaunch.record()
+        case(.information, .error, .app, .cpuException, let extras):
+            if let quantity = extras?[EventExtraKey.size.rawValue] as? Int32 {
+                let properties = GleanMetrics.AppErrors.CpuExceptionExtra(size: quantity)
+                GleanMetrics.AppErrors.cpuException.record(properties)
+            }
+        case(.information, .error, .app, .hangException, let extras):
+            if let quantity = extras?[EventExtraKey.size.rawValue] as? Int32 {
+                let properties = GleanMetrics.AppErrors.HangExceptionExtra(size: quantity)
+                GleanMetrics.AppErrors.hangException.record(properties)
             }
         default:
             recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
