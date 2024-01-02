@@ -328,83 +328,50 @@ public class RustSyncManager: NSObject, SyncManager {
         public let description = "Failed to get sync engine and key data."
     }
 
-    func shouldSyncLogins(completion: @escaping (Bool) -> Void) {
-        if !(self.prefs.boolForKey(PrefsKeys.HasVerifiedRustLogins) ?? false) {
-            // We should only sync logins when the verify logins step hasn't been successfully
-            // completed. Otherwise logins could exist in the database that can't be decrypted
-            // and would prevent logins from syncing if they're not removed.
-
-            self.profile?.logins.verifyLogins { successfullyVerified in
-                self.prefs.setBool(successfullyVerified, forKey: PrefsKeys.HasVerifiedRustLogins)
-                completion(successfullyVerified)
-            }
-        } else {
-            // Successful logins verification already occurred so login syncing can proceed
-            completion(true)
-        }
-    }
-
     func getEnginesAndKeys(engines: [RustSyncManagerAPI.TogglableEngine],
                            completion: @escaping (([String], [String: String])) -> Void) {
-        var localEncryptionKeys: [String: String] = [:]
-        var rustEngines: [String] = []
-        var registeredPlaces = false
+       var localEncryptionKeys: [String: String] = [:]
+       var rustEngines: [String] = []
+       var registeredPlaces = false
 
-        let registerEngines: (String?) -> Void = { loginKey in
-            for engine in engines.filter({ self.syncManagerAPI.rustTogglableEngines.contains($0) }) {
-                switch engine {
-                case .tabs:
-                    self.profile?.tabs.registerWithSyncManager()
-                    rustEngines.append(engine.rawValue)
-                case .passwords:
-                    self.shouldSyncLogins { shouldSync in
-                        if shouldSync, let key = loginKey {
-                            self.profile?.logins.registerWithSyncManager()
-                            localEncryptionKeys[engine.rawValue] = key
-                            rustEngines.append(engine.rawValue)
-                        }
-                    }
-                case .creditcards:
-                    if self.creditCardAutofillEnabled {
-                        self.profile?.autofill.registerWithSyncManager()
-                        if let key = try? self.profile?.autofill.getStoredKey() {
-                            localEncryptionKeys[engine.rawValue] = key
-                            rustEngines.append(engine.rawValue)
-                        } else {
-                            self.logger.log("Credit card encryption key could not be retrieved for syncing",
-                                            level: .warning,
-                                            category: .sync)
-                        }
-                    }
-                case .bookmarks, .history:
-                    if !registeredPlaces {
-                        self.profile?.places.registerWithSyncManager()
-                        registeredPlaces = true
-                    }
-                    rustEngines.append(engine.rawValue)
-                }
-            }
-        }
+       for engine in engines.filter({ syncManagerAPI.rustTogglableEngines.contains($0) }) {
+           switch engine {
+           case .tabs:
+               profile?.tabs.registerWithSyncManager()
+               rustEngines.append(engine.rawValue)
+           case .passwords:
+               profile?.logins.registerWithSyncManager()
+               if let key = try? profile?.logins.getStoredKey() {
+                   localEncryptionKeys[engine.rawValue] = key
+                   rustEngines.append(engine.rawValue)
+               } else {
+                   logger.log("Login encryption key could not be retrieved for syncing",
+                              level: .warning,
+                              category: .sync)
+               }
+           case .creditcards:
+               if self.creditCardAutofillEnabled {
+                   profile?.autofill.registerWithSyncManager()
+                   if let key = try? profile?.autofill.getStoredKey() {
+                       localEncryptionKeys[engine.rawValue] = key
+                       rustEngines.append(engine.rawValue)
+                   } else {
+                       logger.log("Credit card encryption key could not be retrieved for syncing",
+                                  level: .warning,
+                                  category: .sync)
+                   }
+               }
+           case .bookmarks, .history:
+               if !registeredPlaces {
+                   profile?.places.registerWithSyncManager()
+                   registeredPlaces = true
+               }
+               rustEngines.append(engine.rawValue)
+           }
+       }
 
-        let shouldSyncLogins = engines.contains(RustSyncManagerAPI.TogglableEngine.passwords)
-        if shouldSyncLogins {
-            profile?.logins.getStoredKey { result in
-                switch result {
-                case .success(let key):
-                    registerEngines(key)
-                case .failure(let err):
-                    self.logger.log("Login encryption key could not be retrieved for syncing: \(err)",
-                                    level: .warning,
-                                    category: .sync)
-                    registerEngines(nil)
-                }
-                completion((rustEngines, localEncryptionKeys))
-            }
-        } else {
-            registerEngines(nil)
-            completion((rustEngines, localEncryptionKeys))
-        }
-    }
+       completion((rustEngines, localEncryptionKeys))
+   }
 
     private func doSync(params: SyncParams, completion: @escaping (SyncResult) -> Void) {
         beginSyncing()

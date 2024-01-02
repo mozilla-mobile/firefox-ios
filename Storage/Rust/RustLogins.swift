@@ -355,9 +355,8 @@ public extension LoginEntry {
 }
 
 public enum LoginEncryptionKeyError: Error {
-    case noKeyCreated
     case illegalState
-    case dbRecordCountVerificationError(String)
+    case noKeyCreated
 }
 
 public class RustLoginEncryptionKeys {
@@ -547,72 +546,6 @@ public class RustLogins {
         }
     }
 
-    private func deleteInvalidLogins(key: String,
-                                     logins: [EncryptedLogin],
-                                     completion: @escaping (Bool) -> Void) {
-        // Create a list of IDs from saved logins that can't be decrypted
-        let loginsToDelete = logins
-            .filter { (try? decryptLogin(login: $0, encryptionKey: key)) == nil }
-            .map { $0.record.id }
-
-        // Delete all the logins that can't be decrypted
-        self.deleteLogins(ids: loginsToDelete).upon { deleteResults in
-            var verified = true
-            for result in deleteResults {
-                if case let .failure(err) = result {
-                    let errMsg = "Login could not be deleted during verification"
-                    self.logger.log(errMsg,
-                                    level: .warning,
-                                    category: .storage,
-                                    description: err.localizedDescription)
-                    verified = false
-                }
-            }
-            completion(verified)
-        }
-    }
-
-    public func verifyLogins(completion: @escaping (Bool) -> Void) {
-        queue.async {
-            self.listLogins().upon { loginResult in
-                switch loginResult {
-                case let .failure(error):
-                    self.logger.log("Logins could not be retrieved for verification",
-                                    level: .warning,
-                                    category: .storage,
-                                    description: error.localizedDescription)
-                    completion(false)
-                    return
-                case let .success(logins):
-                    guard !logins.isEmpty else {
-                        // If there are no logins we don't need to go through this verification
-                        // process in the future so we return true.
-                        completion(true)
-                        return
-                    }
-
-                    let rustKeys = RustLoginEncryptionKeys()
-                    guard let key = rustKeys.keychain.string(forKey: rustKeys.loginPerFieldKeychainKey) else {
-                        // If the key is missing during the verification process, we wipe the database and
-                        // recreate the key.
-                        self.resetLoginsAndKey(rustKeys: rustKeys) { resetResult in
-                            if case let .failure(error) = resetResult {
-                                self.logger.log("Logins and key could not be reset during verification",
-                                                level: .warning,
-                                                category: .storage,
-                                                description: error.localizedDescription)
-                            }
-                            return
-                        }
-                        completion(false)
-                        return
-                    }
-                    self.deleteInvalidLogins(key: key, logins: logins, completion: completion)
-                }
-            }
-        }
-    }
-
     private func close() -> NSError? {
         storage = nil
         isOpen = false
@@ -758,20 +691,15 @@ public class RustLogins {
                 return
             }
 
-            self.getStoredKey { result in
-                switch result {
-                case .success(let key):
-                    do {
-                        let id = try self.storage?.add(login: login, encryptionKey: key).record.id
-                        deferred.fill(Maybe(success: id!))
-                    } catch let err as NSError {
-                        deferred.fill(Maybe(failure: err))
-                    }
-                case .failure(let err):
-                    deferred.fill(Maybe(failure: err))
-                }
+            do {
+                let key = try self.getStoredKey()
+                let id = try self.storage?.add(login: login, encryptionKey: key).record.id
+                deferred.fill(Maybe(success: id!))
+            } catch let err as NSError {
+                deferred.fill(Maybe(failure: err))
             }
         }
+
         return deferred
     }
 
@@ -806,18 +734,12 @@ public class RustLogins {
                 return
             }
 
-            self.getStoredKey { result in
-                switch result {
-                case .success(let key):
-                    do {
-                        _ = try self.storage?.update(id: id, login: login, encryptionKey: key)
-                        deferred.fill(Maybe(success: ()))
-                    } catch let err as NSError {
-                        deferred.fill(Maybe(failure: err))
-                    }
-                case .failure(let err):
-                    deferred.fill(Maybe(failure: err))
-                }
+            do {
+                let key = try self.getStoredKey()
+                _ = try self.storage?.update(id: id, login: login, encryptionKey: key)
+                deferred.fill(Maybe(success: ()))
+            } catch let err as NSError {
+                deferred.fill(Maybe(failure: err))
             }
         }
 
@@ -876,6 +798,7 @@ public class RustLogins {
         }
     }
 
+<<<<<<< HEAD:Storage/Rust/RustLogins.swift
     private func deleteSQLCipherDBIfExists(sqlCipherDatabasePath: String) {
         // If the sqlCipherDatabasePath is valid, we should delete it
         do {
@@ -915,51 +838,66 @@ public class RustLogins {
     }
 
     public func getStoredKey(completion: @escaping (Result<String, NSError>) -> Void) {
+=======
+    public func getStoredKey() throws -> String {
+>>>>>>> bc7f27a9f (Revert logins key logic updates (#17954)):firefox-ios/Storage/Rust/RustLogins.swift
         let rustKeys = RustLoginEncryptionKeys()
         let key = rustKeys.keychain.string(forKey: rustKeys.loginPerFieldKeychainKey)
         let encryptedCanaryPhrase = rustKeys.keychain.string(forKey: rustKeys.canaryPhraseKey)
 
         switch(key, encryptedCanaryPhrase) {
         case (.some(key), .some(encryptedCanaryPhrase)):
+            // We expected the key to be present, and it is.
             do {
                 let canaryIsValid = try checkCanary(
                     canary: encryptedCanaryPhrase!,
                     text: rustKeys.canaryPhrase,
                     encryptionKey: key!)
-
                 if canaryIsValid {
-                    completion(.success(key!))
+                    return key!
                 } else {
                     logger.log("Logins key was corrupted, new one generated",
                                level: .warning,
                                category: .storage)
                     GleanMetrics.LoginsStoreKeyRegeneration.corrupt.record()
-                    self.resetLoginsAndKey(rustKeys: rustKeys, completion: completion)
+                    _ = self.wipeLocalEngine()
+
+                    return try rustKeys.createAndStoreKey()
                 }
             } catch let error as NSError {
-                logger.log("Error validating logins encryption key",
+                logger.log("Error retrieving logins encryption key",
                            level: .warning,
                            category: .storage,
                            description: error.localizedDescription)
-                completion(.failure(error))
             }
         case (.some(key), .none):
             // The key is present, but we didn't expect it to be there.
+            do {
+                logger.log("Logins key lost due to storage malfunction, new one generated",
+                           level: .warning,
+                           category: .storage)
+                GleanMetrics.LoginsStoreKeyRegeneration.other.record()
+                _ = self.wipeLocalEngine()
 
-            logger.log("Logins key lost due to storage malfunction, new one generated",
-                       level: .warning,
-                       category: .storage)
-            GleanMetrics.LoginsStoreKeyRegeneration.other.record()
-            self.resetLoginsAndKey(rustKeys: rustKeys, completion: completion)
+                return try rustKeys.createAndStoreKey()
+            } catch let error as NSError {
+                throw error
+            }
         case (.none, .some(encryptedCanaryPhrase)):
             // We expected the key to be present, but it's gone missing on us.
+            do {
+                logger.log("Logins key lost, new one generated",
+                           level: .warning,
+                           category: .storage)
+                GleanMetrics.LoginsStoreKeyRegeneration.lost.record()
+                _ = self.wipeLocalEngine()
 
-            logger.log("Logins key lost, new one generated",
-                       level: .warning,
-                       category: .storage)
-            GleanMetrics.LoginsStoreKeyRegeneration.lost.record()
-            self.resetLoginsAndKey(rustKeys: rustKeys, completion: completion)
+                return try rustKeys.createAndStoreKey()
+            } catch let error as NSError {
+                throw error
+            }
         case (.none, .none):
+<<<<<<< HEAD:Storage/Rust/RustLogins.swift
             // We didn't expect the key to be present, which either means this is a first-time
             // call or the key data has been cleared from the keychain.
 
@@ -989,10 +927,20 @@ public class RustLogins {
                         completion(.failure(error))
                     }
                 }
+=======
+            // We didn't expect the key to be present, and it's not (which is the case for first-time calls).
+            do {
+                return try rustKeys.createAndStoreKey()
+            } catch let error as NSError {
+                throw error
+>>>>>>> bc7f27a9f (Revert logins key logic updates (#17954)):firefox-ios/Storage/Rust/RustLogins.swift
             }
         default:
             // If none of the above cases apply, we're in a state that shouldn't be possible but is disallowed nonetheless
-            completion(.failure(LoginEncryptionKeyError.illegalState as NSError))
+            throw LoginEncryptionKeyError.illegalState
         }
+
+        // This must be declared again for Swift's sake even though the above switch statement handles all cases
+        throw LoginEncryptionKeyError.illegalState
     }
 }
