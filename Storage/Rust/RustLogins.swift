@@ -798,7 +798,6 @@ public class RustLogins {
         }
     }
 
-<<<<<<< HEAD:Storage/Rust/RustLogins.swift
     private func deleteSQLCipherDBIfExists(sqlCipherDatabasePath: String) {
         // If the sqlCipherDatabasePath is valid, we should delete it
         do {
@@ -816,31 +815,7 @@ public class RustLogins {
         keychain.removeObject(forKey: rustKeys.loginsSaltKeychainKey, withAccessibility: .afterFirstUnlock)
     }
 
-    private func resetLoginsAndKey(rustKeys: RustLoginEncryptionKeys,
-                                   completion: @escaping (Result<String, NSError>) -> Void) {
-        self.wipeLocalEngine().upon { result in
-            guard result.isSuccess else {
-                completion(.failure(result.failureValue! as NSError))
-                return
-            }
-
-            do {
-                let key = try rustKeys.createAndStoreKey()
-                completion(.success(key))
-            } catch let error as NSError {
-                self.logger.log("Error creating logins encryption key",
-                                level: .warning,
-                                category: .storage,
-                                description: error.localizedDescription)
-                completion(.failure(error))
-            }
-        }
-    }
-
-    public func getStoredKey(completion: @escaping (Result<String, NSError>) -> Void) {
-=======
     public func getStoredKey() throws -> String {
->>>>>>> bc7f27a9f (Revert logins key logic updates (#17954)):firefox-ios/Storage/Rust/RustLogins.swift
         let rustKeys = RustLoginEncryptionKeys()
         let key = rustKeys.keychain.string(forKey: rustKeys.loginPerFieldKeychainKey)
         let encryptedCanaryPhrase = rustKeys.keychain.string(forKey: rustKeys.canaryPhraseKey)
@@ -897,43 +872,11 @@ public class RustLogins {
                 throw error
             }
         case (.none, .none):
-<<<<<<< HEAD:Storage/Rust/RustLogins.swift
-            // We didn't expect the key to be present, which either means this is a first-time
-            // call or the key data has been cleared from the keychain.
-
-            self.hasSyncedLogins().upon { result in
-                guard result.failureValue == nil else {
-                    completion(.failure(result.failureValue! as NSError))
-                    return
-                }
-
-                guard let hasLogins = result.successValue else {
-                    let msg = "Failed to verify logins count before attempting to reset key"
-                    completion(.failure(LoginEncryptionKeyError.dbRecordCountVerificationError(msg) as NSError))
-                    return
-                }
-
-                if hasLogins {
-                    // Since the key data isn't present and we have login records in
-                    // the database, we both clear the databbase and the reset the key.
-                    self.resetLoginsAndKey(rustKeys: rustKeys, completion: completion)
-                } else {
-                    // There are no records in the database so we don't need to wipe any
-                    // existing login records. We just need to create a new key.
-                    do {
-                        let key = try rustKeys.createAndStoreKey()
-                        completion(.success(key))
-                    } catch let error as NSError {
-                        completion(.failure(error))
-                    }
-                }
-=======
             // We didn't expect the key to be present, and it's not (which is the case for first-time calls).
             do {
                 return try rustKeys.createAndStoreKey()
             } catch let error as NSError {
                 throw error
->>>>>>> bc7f27a9f (Revert logins key logic updates (#17954)):firefox-ios/Storage/Rust/RustLogins.swift
             }
         default:
             // If none of the above cases apply, we're in a state that shouldn't be possible but is disallowed nonetheless

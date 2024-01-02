@@ -22,66 +22,14 @@ class RustLoginsTests: XCTestCase {
             let databasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true).appendingPathComponent("testLoginsPerField.db").path
             try? files.remove("testLoginsPerField.db")
 
-<<<<<<< HEAD:firefox-ios/Tests/StorageTests/RustLoginsTests.swift
-            logins = RustLogins(sqlCipherDatabasePath: sqlCipherDatabasePath, databasePath: databasePath)
-            _ = logins.reopenIfClosed()
-
-            mockLogins = MockRustLogins(sqlCipherDatabasePath: sqlCipherDatabasePath, databasePath: databasePath)
-
-            self.keychain.removeObject(forKey: self.canaryPhraseKey, withAccessibility: .afterFirstUnlock)
-            self.keychain.removeObject(forKey: self.loginKeychainKey, withAccessibility: .afterFirstUnlock)
-        } else {
-            XCTFail("Could not retrieve root directory")
-        }
-    }
-
-    override func tearDown() {
-        super.tearDown()
-        self.keychain.removeObject(forKey: self.canaryPhraseKey, withAccessibility: .afterFirstUnlock)
-        self.keychain.removeObject(forKey: self.loginKeychainKey, withAccessibility: .afterFirstUnlock)
-    }
-
-    func setUpMockListLoginsFailure() {
-        files = MockFiles()
-
-        if let rootDirectory = try? files.getAndEnsureDirectory() {
-            let sqlCipherDatabasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true).appendingPathComponent("testlogins.db").path
-            try? files.remove("testlogins.db")
-
-            let databasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true).appendingPathComponent("testLoginsPerField.db").path
-            try? files.remove("testLoginsPerField.db")
-
-            mockListLoginsFailure = MockListLoginsFailure(sqlCipherDatabasePath: sqlCipherDatabasePath,
-                                                          databasePath: databasePath)
-            _ = mockListLoginsFailure.reopenIfClosed()
-        } else {
-            XCTFail("Could not retrieve root directory")
-        }
-    }
-
-    func setUpMockListLoginsEmpty() {
-        files = MockFiles()
-
-        if let rootDirectory = try? files.getAndEnsureDirectory() {
-            let sqlCipherDatabasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true).appendingPathComponent("testlogins.db").path
-            try? files.remove("testlogins.db")
-
-            let databasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true).appendingPathComponent("testLoginsPerField.db").path
-            try? files.remove("testLoginsPerField.db")
-
-            mockListLoginsEmpty = MockListLoginsEmpty(sqlCipherDatabasePath: sqlCipherDatabasePath,
-                                                      databasePath: databasePath)
-            _ = mockListLoginsEmpty.reopenIfClosed()
-=======
             if let key = try? createKey() {
                 encryptionKey = key
             } else {
                 XCTFail("Encryption key wasn't created")
             }
 
-            logins = RustLogins(databasePath: databasePath)
+            logins = RustLogins(sqlCipherDatabasePath: sqlCipherDatabasePath, databasePath: databasePath)
             _ = logins.reopenIfClosed()
->>>>>>> bc7f27a9f (Revert logins key logic updates (#17954)):firefox-ios/firefox-ios-tests/Tests/StorageTests/RustLoginsTests.swift
         } else {
             XCTFail("Could not retrieve root directory")
         }
