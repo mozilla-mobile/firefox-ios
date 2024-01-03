@@ -9,7 +9,8 @@ import Shared
 
 struct AddressAutofillSettingsEmptyView: View {
     // Theming
-    @Environment(\.themeType) var themeVal
+    @Environment(\.themeType)
+    var themeVal
     @State private var titleTextColor: Color = .clear
     @State private var subTextColor: Color = .clear
     @State private var toggleTextColor: Color = .clear
@@ -29,7 +30,7 @@ struct AddressAutofillSettingsEmptyView: View {
 ///                            textColor: toggleTextColor,
 ///                            model: toggleModel)
 ///                        .background(Color.white)
-///                       .padding(.top, 25)                        
+///                       .padding(.top, 25)
                     }
                     .frame(minHeight: proxy.size.height)
                 }
