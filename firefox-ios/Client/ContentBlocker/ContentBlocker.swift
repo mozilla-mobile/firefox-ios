@@ -213,20 +213,17 @@ extension ContentBlocker {
 
     func removeAllRulesInStore(completion: @escaping () -> Void) {
         let dispatchGroup = DispatchGroup()
-        
         ruleStore?.getAvailableContentRuleListIdentifiers { [weak self] available in
             guard let available = available else {
                 completion()
                 return
             }
-            
             for filename in available {
                 dispatchGroup.enter()
                 self?.ruleStore?.removeContentRuleList(forIdentifier: filename) { _ in
                     dispatchGroup.leave()
                 }
             }
-            
             dispatchGroup.notify(queue: DispatchQueue.main) {
                 completion()
             }
