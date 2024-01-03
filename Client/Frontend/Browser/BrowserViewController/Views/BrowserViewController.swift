@@ -63,6 +63,7 @@ class BrowserViewController: UIViewController,
     var overlayManager: OverlayModeManager
     var appAuthenticator: AppAuthenticationProtocol
     var toolbarContextHintVC: ContextualHintViewController
+    var dataClearanceContextHintVC: ContextualHintViewController
     let shoppingContextHintVC: ContextualHintViewController
     private var backgroundTabLoader: DefaultBackgroundTabLoader
 
@@ -204,6 +205,11 @@ class BrowserViewController: UIViewController,
         let shoppingViewProvider = ContextualHintViewProvider(forHintType: .shoppingExperience,
                                                               with: profile)
         shoppingContextHintVC = ContextualHintViewController(with: shoppingViewProvider)
+        let dataClearanceViewProvider = ContextualHintViewProvider(
+            forHintType: .dataClearance,
+            with: profile
+        )
+        self.dataClearanceContextHintVC = ContextualHintViewController(with: dataClearanceViewProvider)
         self.backgroundTabLoader = DefaultBackgroundTabLoader(tabQueue: profile.queue)
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -492,7 +498,9 @@ class BrowserViewController: UIViewController,
                 dismissFakespotIfNeeded()
             }
 
+            // Update states for felt privacy
             updateInContentHomePanel(tabManager.selectedTab?.url)
+            setupMiddleButtonStatus(isLoading: false)
         }
     }
 
@@ -1281,9 +1289,10 @@ class BrowserViewController: UIViewController,
 
     private func handleMiddleButtonState(_ state: MiddleButtonState) {
         let showDataClearanceFlow = browserViewControllerState?.showDataClearanceFlow ?? false
-        let showFireIcon = featureFlags.isFeatureEnabled(.feltPrivacyFeltDeletion, checking: .buildOnly) && showDataClearanceFlow
-        guard !showFireIcon else {
+        let showFireButton = featureFlags.isFeatureEnabled(.feltPrivacyFeltDeletion, checking: .buildOnly) && showDataClearanceFlow
+        guard !showFireButton else {
             navigationToolbar.updateMiddleButtonState(.fire)
+            configureDataClearanceContextualHint()
             return
         }
         navigationToolbar.updateMiddleButtonState(state)
