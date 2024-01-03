@@ -18,14 +18,10 @@ let website_2 = [
     "moreLinkLongPressUrl": "http://www.iana.org/domains/example",
     "moreLinkLongPressInfo": "iana"
 ]
-let urlAddons = "addons.mozilla.org"
-let urlGoogle = "www.google.com"
 let popUpTestUrl = path(forTestPage: "test-popup-blocker.html")
 
-let requestMobileSiteLabel = "Request Mobile Site"
-let requestDesktopSiteLabel = "Request Desktop Site"
-
 class NavigationTest: BaseTestCase {
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441488
     func testNavigation() {
         let urlPlaceholder = "Search or enter address"
         XCTAssert(app.textFields["url"].exists)
@@ -71,15 +67,18 @@ class NavigationTest: BaseTestCase {
         mozWaitForValueContains(app.textFields["url"], value: "test-mozilla-org")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441489
     func testTapSignInShowsFxAFromTour() {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         // Open FxAccount from tour option in settings menu and go throughout all the screens there
         navigator.goto(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
-        checkFirefoxSyncScreenShown()
+        mozWaitForElementToExist(app.webViews.firstMatch, timeout: TIMEOUT_LONG)
+        mozWaitForElementToExist(app.webViews.staticTexts["Continue to your Mozilla account"])
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441493
     func testTapSigninShowsFxAFromSettings() {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
@@ -92,9 +91,11 @@ class NavigationTest: BaseTestCase {
 
         // After that it is possible to go back to Settings
         let closeButton = app.navigationBars["Client.FxAWebView"].buttons.element(boundBy: 0)
+        mozWaitForElementToExist(closeButton)
         closeButton.tap()
 
         let closeButtonFxView = app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar].buttons["Settings"]
+        mozWaitForElementToExist(closeButtonFxView)
         closeButtonFxView.tap()
     }
 
@@ -111,6 +112,7 @@ class NavigationTest: BaseTestCase {
         XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441494
     func testTapSignInShowsFxAFromRemoteTabPanel() {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
@@ -119,35 +121,28 @@ class NavigationTest: BaseTestCase {
         navigator.performAction(Action.ToggleSyncMode)
 
         app.tables.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSettingsButton].tap()
-        checkFirefoxSyncScreenShown()
+        mozWaitForElementToExist(app.navigationBars["Sync and Save Data"])
+        mozWaitForElementToExist(app.buttons["Use Email Instead"])
     }
 
-    private func checkFirefoxSyncScreenShown() {
-        // Disable check, page load issues on iOS13.3 sims, issue #5937
-        mozWaitForElementToExist(app.webViews.firstMatch, timeout: TIMEOUT_LONG)
-    }
-
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441495
     func testScrollsToTopWithMultipleTabs() {
         navigator.goto(TabTray)
         navigator.openURL(website_1["url"]!)
+        waitUntilPageLoad()
         mozWaitForValueContains(app.textFields["url"], value: website_1["value"]!)
-        // Element at the TOP. TBChanged once the web page is correctly shown
-        let topElement = app.links.staticTexts["Mozilla"].firstMatch
-
-        // Element at the BOTTOM
+        let topElement = app.links["Mozilla"].firstMatch
         let bottomElement = app.webViews.links.staticTexts["Legal"]
 
         // Scroll to bottom
-        bottomElement.tap()
-        waitUntilPageLoad()
-        app.buttons[AccessibilityIdentifiers.Toolbar.backButton].tap()
-        waitUntilPageLoad()
-
+        scrollToElement(bottomElement)
+        mozWaitForElementToExist(bottomElement)
         // Scroll to top
-        topElement.tap()
+        scrollToElement(topElement, swipe: "down")
         mozWaitForElementToExist(topElement)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306836
     // Smoketest
     func testLongPressLinkOptions() {
         navigator.openURL(path(forTestPage: "test-example.html"))
@@ -163,7 +158,7 @@ class NavigationTest: BaseTestCase {
         XCTAssertTrue(app.buttons["Bookmark Link"].exists, "The option is not shown")
     }
 
-    // Only testing Share and Copy Link, the other two options are already covered in other tests
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441496
     func testCopyLink() {
         longPressLinkOptions(optionSelected: "Copy Link")
         navigator.goto(NewTabScreen)
@@ -176,6 +171,7 @@ class NavigationTest: BaseTestCase {
         mozWaitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441497
     func testCopyLinkPrivateMode() {
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -191,6 +187,7 @@ class NavigationTest: BaseTestCase {
         mozWaitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441923
     func testLongPressOnAddressBar() throws {
         // Long press on the URL requires copy & paste permission
         throw XCTSkip("Test needs to be updated")
@@ -268,6 +265,7 @@ class NavigationTest: BaseTestCase {
         app.buttons[optionSelected].tap()
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441498
     func testDownloadLink() {
         longPressLinkOptions(optionSelected: "Download Link")
         mozWaitForElementToExist(app.tables["Context Menu"])
@@ -287,20 +285,29 @@ class NavigationTest: BaseTestCase {
         mozWaitForValueContains(app.textFields["url"], value: "example-domains.html")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441499
     func testShareLink() {
         longPressLinkOptions(optionSelected: "Share Link")
         mozWaitForElementToExist(app.cells["Copy"], timeout: TIMEOUT)
-        XCTAssertTrue(app.cells["Copy"].exists, "The share menu is not shown")
+        if !iPad() {
+            mozWaitForElementToExist(app.scrollViews.staticTexts["Messages"], timeout: TIMEOUT)
+        }
+        mozWaitForElementToExist(app.scrollViews.staticTexts["Reminders"], timeout: TIMEOUT)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441500
     func testShareLinkPrivateMode() {
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         longPressLinkOptions(optionSelected: "Share Link")
         mozWaitForElementToExist(app.cells["Copy"], timeout: TIMEOUT)
-        XCTAssertTrue(app.cells["Copy"].exists, "The share menu is not shown")
+        if !iPad() {
+            mozWaitForElementToExist(app.scrollViews.staticTexts["Messages"], timeout: TIMEOUT)
+        }
+        mozWaitForElementToExist(app.scrollViews.staticTexts["Reminders"], timeout: TIMEOUT)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441776
     // Smoketest
     func testPopUpBlocker() throws {
         throw XCTSkip("This test is flakey")
@@ -337,6 +344,7 @@ class NavigationTest: BaseTestCase {
 //        XCTAssertNotEqual("1", numTabsAfter as? String, "Several tabs are open")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306858
     // Smoketest
     func testSSL() {
         navigator.nowAt(NewTabScreen)
@@ -351,6 +359,7 @@ class NavigationTest: BaseTestCase {
         XCTAssertTrue(app.webViews.otherElements["expired.badssl.com"].exists)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307022
     // In this test, the parent window opens a child and in the child it creates a fake link 'link-created-by-parent'
     func testWriteToChildPopupTab() {
         waitForTabsButton()
@@ -369,7 +378,7 @@ class NavigationTest: BaseTestCase {
     }
 
     // Smoketest
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/1613987
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307020
     func testVerifyBrowserTabMenu() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
         navigator.nowAt(NewTabScreen)
@@ -389,6 +398,7 @@ class NavigationTest: BaseTestCase {
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.settings].exists)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441775
     // Smoketest
     func testURLBar() {
         let urlBar = app.textFields["url"]
@@ -403,7 +413,7 @@ class NavigationTest: BaseTestCase {
         XCTAssert(app.keyboards.count > 0, "The keyboard is not shown")
         app.typeText("example.com\n")
 
-//        waitUntilPageLoad()
+        // waitUntilPageLoad()
         mozWaitForValueContains(urlBar, value: "example.com/")
         XCTAssertFalse(app.keyboards.count > 0, "The keyboard is shown")
         // swiftlint:enable empty_count
