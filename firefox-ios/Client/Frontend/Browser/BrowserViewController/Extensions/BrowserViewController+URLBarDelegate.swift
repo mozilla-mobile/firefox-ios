@@ -375,10 +375,13 @@ extension BrowserViewController: URLBarDelegate {
                 toast.removeFromSuperview()
             }
 
-            showEmbeddedHomepage(inline: false)
+            urlBar.applyTheme(theme: themeManager.currentTheme)
+            // TEMP: to see check how embedded homepage behaves
+            // in a background thread
+            DispatchQueue.main.async { [weak self] in
+                self?.showEmbeddedHomepage(inline: false)
+            }
         }
-
-        urlBar.applyTheme(theme: themeManager.currentTheme)
     }
 
     func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView) {

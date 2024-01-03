@@ -102,18 +102,19 @@ class BrowserCoordinator: BaseCoordinator,
                       libraryPanelDelegate: LibraryPanelDelegate,
                       statusBarScrollDelegate: StatusBarScrollDelegate,
                       overlayManager: OverlayModeManager) {
-        let homepageController = getHomepage(inline: inline,
-                                             toastContainer: toastContainer,
-                                             homepanelDelegate: homepanelDelegate,
-                                             libraryPanelDelegate: libraryPanelDelegate,
-                                             statusBarScrollDelegate: statusBarScrollDelegate,
-                                             overlayManager: overlayManager)
-
-        guard browserViewController.embedContent(homepageController) else { return }
-        self.homepageViewController = homepageController
-        homepageController.scrollToTop()
-        // We currently don't support full page screenshot of the homepage
-        screenshotService.screenshotableView = nil
+        DispatchQueue.main.async {
+            let homepageController = self.getHomepage(inline: inline,
+                                                 toastContainer: toastContainer,
+                                                 homepanelDelegate: homepanelDelegate,
+                                                 libraryPanelDelegate: libraryPanelDelegate,
+                                                 statusBarScrollDelegate: statusBarScrollDelegate,
+                                                 overlayManager: overlayManager)
+            guard self.browserViewController.embedContent(homepageController) else { return }
+            self.homepageViewController = homepageController
+            homepageController.scrollToTop()
+            // We currently don't support full page screenshot of the homepage
+            self.screenshotService.screenshotableView = nil
+        }
     }
 
     func showPrivateHomepage(overlayManager: OverlayModeManager) {

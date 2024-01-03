@@ -530,12 +530,10 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
                 self.setLocation(locationText, search: search)
             }
         } else {
-            DispatchQueue.main.async {
                 self.locationTextField?.becomeFirstResponder()
                 // Need to set location again so text could be immediately selected.
                 self.setLocation(locationText, search: search)
                 self.locationTextField?.selectAll(nil)
-            }
         }
     }
 
