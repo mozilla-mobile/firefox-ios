@@ -14,7 +14,11 @@ class SlideOverPresentationController: UIPresentationController {
     var globalETPStatus: Bool
     weak var enhancedTrackingProtectionMenuDelegate: EnhancedTrackingProtectionMenuDelegate?
 
-    init(presentedViewController: UIViewController, presenting presentingViewController: UIViewController?, withGlobalETPStatus status: Bool) {
+    init(
+        presentedViewController: UIViewController,
+        presenting presentingViewController: UIViewController?,
+        withGlobalETPStatus status: Bool
+    ) {
         globalETPStatus = status
         let blurEffect = UIBlurEffect(style: .dark)
         blurEffectView = UIVisualEffectView(effect: blurEffect)
@@ -29,7 +33,14 @@ class SlideOverPresentationController: UIPresentationController {
     override var frameOfPresentedViewInContainerView: CGRect {
         guard let presentedView = presentedView, let containerView = self.containerView else { return .zero }
 
-        let menuHeight = presentedView.systemLayoutSizeFitting(CGSize(width: presentedView.bounds.width, height: UIView.layoutFittingCompressedSize.height), withHorizontalFittingPriority: .required, verticalFittingPriority: .defaultLow).height
+        let menuHeight = presentedView.systemLayoutSizeFitting(
+            CGSize(
+                width: presentedView.bounds.width,
+                height: UIView.layoutFittingCompressedSize.height
+            ),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .defaultLow
+        ).height
 
         let yPosition = containerView.frame.height - menuHeight
         var xPosition: CGFloat = 0
@@ -47,16 +58,20 @@ class SlideOverPresentationController: UIPresentationController {
     override func presentationTransitionWillBegin() {
         blurEffectView.alpha = 0
         containerView?.addSubview(blurEffectView)
-        presentedViewController.transitionCoordinator?.animate(alongsideTransition: { (UIViewControllerTransitionCoordinatorContext) in
-            self.blurEffectView.alpha = 0.1
-        }, completion: { (UIViewControllerTransitionCoordinatorContext) in })
+        presentedViewController.transitionCoordinator?
+            .animate(alongsideTransition: { (UIViewControllerTransitionCoordinatorContext) in
+                self.blurEffectView.alpha = 0.1
+            },
+                     completion: { (UIViewControllerTransitionCoordinatorContext) in })
     }
 
     override func dismissalTransitionWillBegin() {
-        presentedViewController.transitionCoordinator?.animate(alongsideTransition: { (UIViewControllerTransitionCoordinatorContext) in
-            self.blurEffectView.alpha = 0
-        }, completion: { (UIViewControllerTransitionCoordinatorContext) in
-            self.blurEffectView.removeFromSuperview()
+        presentedViewController.transitionCoordinator?
+            .animate(alongsideTransition: { (UIViewControllerTransitionCoordinatorContext) in
+                self.blurEffectView.alpha = 0
+            },
+                     completion: { (UIViewControllerTransitionCoordinatorContext) in
+                self.blurEffectView.removeFromSuperview()
         })
     }
 

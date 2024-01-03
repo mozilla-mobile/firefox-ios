@@ -16,6 +16,21 @@
 /* Label for the button used to delete the current login. */
 "Delete" = "Dileu";
 
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Diddymu";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Tynnu";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "Nid oes modd i chi ddadwneud y weithred hon.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Bydd hyn yn tynnu'r cyfrinair o'ch holl ddyfeisiau wedi'u cydweddu.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Tynnu Cyfrinair?";
+
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "Dad-ddewis y Cyfan";
 
@@ -36,6 +51,9 @@
 
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "Heb ganfod mewngofnodion";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Heb ganfod cyfrineiriau";
 
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "Agor a Llanw";

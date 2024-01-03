@@ -202,7 +202,13 @@ final class BrowserCoordinatorTests: XCTestCase {
     func testShowShareExtension_addsShareExtensionCoordinator() {
         let subject = createSubject()
 
-        subject.showShareExtension(url: URL(string: "https://www.google.com")!, sourceView: UIView(), toastContainer: UIView())
+        subject.showShareExtension(
+            url: URL(
+                string: "https://www.google.com"
+            )!,
+            sourceView: UIView(),
+            toastContainer: UIView()
+        )
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertTrue(subject.childCoordinators.first is ShareExtensionCoordinator)
@@ -213,7 +219,13 @@ final class BrowserCoordinatorTests: XCTestCase {
     func testShowCreditCardAutofill_addsCredentialAutofillCoordinator() {
         let subject = createSubject()
 
-        subject.showCreditCardAutofill(creditCard: nil, decryptedCard: nil, viewType: .save, frame: nil, alertContainer: UIView())
+        subject.showCreditCardAutofill(
+            creditCard: nil,
+            decryptedCard: nil,
+            viewType: .save,
+            frame: nil,
+            alertContainer: UIView()
+        )
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertTrue(subject.childCoordinators.first is CredentialAutofillCoordinator)
@@ -362,7 +374,13 @@ final class BrowserCoordinatorTests: XCTestCase {
         subject.browserViewController = mbvc
         subject.browserHasLoaded()
 
-        let result = testCanHandleAndHandle(subject, route: .searchURL(url: URL(string: "https://example.com")!, tabId: "1234"))
+        let result = testCanHandleAndHandle(
+            subject,
+            route: .searchURL(
+                url: URL(string: "https://example.com")!,
+                tabId: "1234"
+            )
+        )
 
         XCTAssertTrue(result)
         XCTAssertTrue(mbvc.switchToTabForURLOrOpenCalled)
@@ -768,7 +786,9 @@ final class BrowserCoordinatorTests: XCTestCase {
         // Checking to see if there's one library coordinator instance presented
         XCTAssertEqual(subject.childCoordinators.filter { $0 is LibraryCoordinator }.count, 1)
 
-        // We try to show the library again on downloads tab (notice for now the Done button is not connected and will not remove the coordinator). Showing the library again should use the existing instance of the LibraryCoordinator
+        // We try to show the library again on downloads tab (notice for now the Done
+        // button is not connected and will not remove the coordinator). Showing the
+        // library again should use the existing instance of the LibraryCoordinator
         subject.show(homepanelSection: .downloads)
 
         // Checking to see if there's only one library coordinator instance presented
@@ -783,7 +803,8 @@ final class BrowserCoordinatorTests: XCTestCase {
         // We show the library with bookmarks tab
         subject.show(homepanelSection: .bookmarks)
 
-        let coordinator = try XCTUnwrap(subject.childCoordinators.first { $0 is LibraryCoordinator } as? LibraryCoordinator)
+        let coordinator = try XCTUnwrap(
+            subject.childCoordinators.first { $0 is LibraryCoordinator } as? LibraryCoordinator)
         let url = URL(string: "http://google.com")!
         coordinator.libraryPanel(didSelectURL: url, visitType: .bookmark)
 
@@ -800,7 +821,8 @@ final class BrowserCoordinatorTests: XCTestCase {
         // We show the library with bookmarks tab
         subject.show(homepanelSection: .bookmarks)
 
-        let coordinator = try XCTUnwrap(subject.childCoordinators.first { $0 is LibraryCoordinator } as? LibraryCoordinator)
+        let coordinator = try XCTUnwrap(
+            subject.childCoordinators.first { $0 is LibraryCoordinator } as? LibraryCoordinator)
         let url = URL(string: "http://google.com")!
         coordinator.libraryPanelDidRequestToOpenInNewTab(url, isPrivate: true)
 

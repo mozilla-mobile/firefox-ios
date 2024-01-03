@@ -14,6 +14,7 @@ channels:
   - release
 include:
   - nimbus-features/addressAutofillFeature.yaml
+  - nimbus-features/backForwardListCoordinatorRefactorFeature.yaml
   - nimbus-features/contextualHintFeature.yaml
   - nimbus-features/creditCardAutofillFeature.yaml
   - nimbus-features/fakespotFeature.yaml

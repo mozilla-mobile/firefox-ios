@@ -10,18 +10,18 @@ import Shared
 private let BookmarkDetailFieldCellIdentifier = "BookmarkDetailFieldCellIdentifier"
 private let BookmarkDetailFolderCellIdentifier = "BookmarkDetailFolderCellIdentifier"
 
-private struct BookmarkDetailPanelUX {
-    static let FieldRowHeight: CGFloat = 58
-    static let FolderIconSize = CGSize(width: 24, height: 24)
-    static let IndentationWidth: CGFloat = 20
-    static let MinIndentedContentWidth: CGFloat = 100
-}
-
 class BookmarkDetailPanelError: MaybeErrorType {
     public var description = "Unable to save BookmarkNode."
 }
 
 class BookmarkDetailPanel: SiteTableViewController {
+    private struct UX {
+        static let FieldRowHeight: CGFloat = 58
+        static let FolderIconSize = CGSize(width: 24, height: 24)
+        static let IndentationWidth: CGFloat = 20
+        static let MinIndentedContentWidth: CGFloat = 100
+    }
+
     enum BookmarkDetailSection: Int, CaseIterable {
         case fields
         case folder
@@ -68,24 +68,39 @@ class BookmarkDetailPanel: SiteTableViewController {
     var updatePanelState: ((LibraryPanelSubState) -> Void)?
 
     private var maxIndentationLevel: Int {
-        return Int(floor((view.frame.width - BookmarkDetailPanelUX.MinIndentedContentWidth) / BookmarkDetailPanelUX.IndentationWidth))
+        return Int(floor((view.frame.width - UX.MinIndentedContentWidth) / UX.IndentationWidth))
     }
 
     // Additional UI elements only used if `BookmarkDetailPanel` is called from the toast button
     var isPresentedFromToast = false
 
     fileprivate lazy var topRightButton: UIBarButtonItem =  {
-        let button = UIBarButtonItem(title: .SettingsAddCustomEngineSaveButtonText, style: .done, target: self, action: #selector(topRightButtonAction))
+        let button = UIBarButtonItem(
+            title: .SettingsAddCustomEngineSaveButtonText,
+            style: .done,
+            target: self,
+            action: #selector(topRightButtonAction)
+        )
         return button
     }()
 
     fileprivate lazy var topLeftButton: UIBarButtonItem =  {
-        let button = UIBarButtonItem(image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross), style: .done, target: self, action: #selector(topLeftButtonAction))
+        let button = UIBarButtonItem(
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
+            style: .done,
+            target: self,
+            action: #selector(topLeftButtonAction)
+        )
         return button
     }()
 
     // MARK: - Initializers
-    convenience init(profile: Profile, bookmarkNode: FxBookmarkNode, parentBookmarkFolder: FxBookmarkNode, presentedFromToast fromToast: Bool = false) {
+    convenience init(
+        profile: Profile,
+        bookmarkNode: FxBookmarkNode,
+        parentBookmarkFolder: FxBookmarkNode,
+        presentedFromToast fromToast: Bool = false
+    ) {
         let bookmarkItemData = bookmarkNode as? BookmarkItemData
         self.init(profile: profile,
                   bookmarkNodeGUID: bookmarkNode.guid,
@@ -108,8 +123,18 @@ class BookmarkDetailPanel: SiteTableViewController {
         }
     }
 
-    convenience init(profile: Profile, withNewBookmarkNodeType bookmarkNodeType: BookmarkNodeType, parentBookmarkFolder: FxBookmarkNode, updatePanelState: ((LibraryPanelSubState) -> Void)? = nil) {
-        self.init(profile: profile, bookmarkNodeGUID: nil, bookmarkNodeType: bookmarkNodeType, parentBookmarkFolder: parentBookmarkFolder)
+    convenience init(
+        profile: Profile,
+        withNewBookmarkNodeType bookmarkNodeType: BookmarkNodeType,
+        parentBookmarkFolder: FxBookmarkNode,
+        updatePanelState: ((LibraryPanelSubState) -> Void)? = nil
+    ) {
+        self.init(
+            profile: profile,
+            bookmarkNodeGUID: nil,
+            bookmarkNodeType: bookmarkNodeType,
+            parentBookmarkFolder: parentBookmarkFolder
+        )
 
         if bookmarkNodeType == .bookmark {
             self.bookmarkItemOrFolderTitle = ""
@@ -124,7 +149,14 @@ class BookmarkDetailPanel: SiteTableViewController {
         self.updatePanelState = updatePanelState
     }
 
-    private init(profile: Profile, bookmarkNodeGUID: GUID?, bookmarkNodeType: BookmarkNodeType, parentBookmarkFolder: FxBookmarkNode, presentedFromToast fromToast: Bool = false, bookmarkItemURL: String? = nil) {
+    private init(
+        profile: Profile,
+        bookmarkNodeGUID: GUID?,
+        bookmarkNodeType: BookmarkNodeType,
+        parentBookmarkFolder: FxBookmarkNode,
+        presentedFromToast fromToast: Bool = false,
+        bookmarkItemURL: String? = nil
+    ) {
         self.bookmarkNodeGUID = bookmarkNodeGUID
         self.bookmarkNodeType = bookmarkNodeType
         self.parentBookmarkFolder = parentBookmarkFolder
@@ -163,7 +195,9 @@ class BookmarkDetailPanel: SiteTableViewController {
         super.viewDidAppear(animated)
 
         // Focus the keyboard on the first text field.
-        if let firstTextFieldCell = tableView.visibleCells.first(where: { $0 is TextFieldTableViewCell }) as? TextFieldTableViewCell {
+        if let firstTextFieldCell = tableView.visibleCells.first(where: {
+            $0 is TextFieldTableViewCell
+        }) as? TextFieldTableViewCell {
             firstTextFieldCell.focusTextField()
         }
     }
@@ -314,7 +348,9 @@ class BookmarkDetailPanel: SiteTableViewController {
 
         guard indexPath.section == BookmarkDetailSection.folder.rawValue else { return }
 
-        if isFolderListExpanded, let item = bookmarkFolders[safe: indexPath.row], parentBookmarkFolder.guid != item.folder.guid {
+        if isFolderListExpanded,
+           let item = bookmarkFolders[safe: indexPath.row],
+           parentBookmarkFolder.guid != item.folder.guid {
             parentBookmarkFolder = item.folder
             bookmarkItemPosition = nil
         }
@@ -352,7 +388,10 @@ class BookmarkDetailPanel: SiteTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // Handle folder selection cells.
         guard indexPath.section == BookmarkDetailSection.fields.rawValue else {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: BookmarkDetailFolderCellIdentifier, for: indexPath) as? OneLineTableViewCell else {
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: BookmarkDetailFolderCellIdentifier,
+                for: indexPath
+            ) as? OneLineTableViewCell else {
                 return super.tableView(tableView, cellForRowAt: indexPath)
             }
             // Disable folder selection when creating a new bookmark or folder.
@@ -370,7 +409,7 @@ class BookmarkDetailPanel: SiteTableViewController {
 
             cell.leftImageView.manuallySetImage(UIImage(named: StandardImageIdentifiers.Large.folder) ?? UIImage())
             cell.leftImageView.contentMode = .center
-            cell.indentationWidth = BookmarkDetailPanelUX.IndentationWidth
+            cell.indentationWidth = UX.IndentationWidth
 
             if isFolderListExpanded {
                 guard let item = bookmarkFolders[safe: indexPath.row] else {
@@ -384,14 +423,20 @@ class BookmarkDetailPanel: SiteTableViewController {
                 }
 
                 cell.indentationLevel = min(item.indent, maxIndentationLevel)
-                cell.separatorInset = UIEdgeInsets(top: 0, left: CGFloat(cell.indentationLevel) * cell.indentationWidth + 61, bottom: 0, right: 0)
+                cell.separatorInset = UIEdgeInsets(
+                    top: 0,
+                    left: CGFloat(cell.indentationLevel) * cell.indentationWidth + 61,
+                    bottom: 0,
+                    right: 0
+                )
                 if item.folder.guid == parentBookmarkFolder.guid {
                     cell.accessoryType = .checkmark
                 } else {
                     cell.accessoryType = .none
                 }
             } else {
-                if parentBookmarkFolder.isRoot, let localizedString = LocalizedRootBookmarkFolderStrings[parentBookmarkFolder.guid] {
+                if parentBookmarkFolder.isRoot,
+                   let localizedString = LocalizedRootBookmarkFolderStrings[parentBookmarkFolder.guid] {
                     cell.titleLabel.text = localizedString
                 } else {
                     cell.titleLabel.text = parentBookmarkFolder.title
@@ -406,7 +451,10 @@ class BookmarkDetailPanel: SiteTableViewController {
         }
 
         // Handle Title/URL editable field cells.
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: BookmarkDetailFieldCellIdentifier, for: indexPath) as? TextFieldTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: BookmarkDetailFieldCellIdentifier,
+            for: indexPath
+        ) as? TextFieldTableViewCell else {
             return super.tableView(tableView, cellForRowAt: indexPath)
         }
 
@@ -440,7 +488,7 @@ class BookmarkDetailPanel: SiteTableViewController {
             return super.tableView(tableView, heightForRowAt: indexPath)
         }
 
-        return BookmarkDetailPanelUX.FieldRowHeight
+        return UX.FieldRowHeight
     }
 
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
@@ -449,7 +497,8 @@ class BookmarkDetailPanel: SiteTableViewController {
     }
 
     private func toggleSaveButton() {
-        if let title = bookmarkItemOrFolderTitle?.trimmingCharacters(in: .whitespacesAndNewlines), !title.isEmpty && isBookmarkItemURLValid() {
+        if let title = bookmarkItemOrFolderTitle?.trimmingCharacters(in: .whitespacesAndNewlines),
+           !title.isEmpty && isBookmarkItemURLValid() {
             self.updatePanelState?(.itemEditMode)
         } else {
             self.updatePanelState?(.itemEditModeInvalidField)

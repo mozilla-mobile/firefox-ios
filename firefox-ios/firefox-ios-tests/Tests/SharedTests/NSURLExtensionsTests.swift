@@ -205,6 +205,7 @@ class NSURLExtensionsTests: XCTestCase {
     }
 
     func testdisplayURL() {
+    // swiftlint:disable line_length
         let goodurls = [
             ("http://localhost:\(AppInfo.webserverPort)/reader-mode/page?url=https%3A%2F%2Fen%2Em%2Ewikipedia%2Eorg%2Fwiki%2F",
              "https://en.m.wikipedia.org/wiki/"),
@@ -224,6 +225,7 @@ class NSURLExtensionsTests: XCTestCase {
 
         goodurls.forEach { XCTAssertEqual(URL(string: $0.0)!.displayURL?.absoluteString, $0.1) }
         badurls.forEach { XCTAssertNil(URL(string: $0)!.displayURL) }
+    // swiftlint:enable line_length
     }
 
     func testorigin() {

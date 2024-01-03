@@ -5,5 +5,5 @@
 "FirefoxSync.CreditCardsEngine.v122" = "Betalingsmetoder";
 
 /* Toggle passwords syncing setting, in the Settings > Sync Data menu of the app. */
-"Sync.LoginsEngine.Title.v122" = "Passord";
+"Sync.LoginsEngine.Title.v122" = "Adgangskoder";
 

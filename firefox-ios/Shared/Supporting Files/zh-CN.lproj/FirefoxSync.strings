@@ -2,8 +2,8 @@
 "FirefoxSync.CreditCardsEngine.v115" = "信用卡";
 
 /* Toggle for credit cards syncing setting */
-"FirefoxSync.CreditCardsEngine.v122" = "付款方式";
+"FirefoxSync.CreditCardsEngine.v122" = "付款";
 
 /* Toggle passwords syncing setting, in the Settings > Sync Data menu of the app. */
-"Sync.LoginsEngine.Title.v122" = "密碼";
+"Sync.LoginsEngine.Title.v122" = "密码";
 

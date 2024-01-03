@@ -4,7 +4,12 @@
 
 import XCTest
 
-let website1: [String: String] = ["url": path(forTestPage: "test-mozilla-org.html"), "label": "Internet for people, not profit — Mozilla", "value": "localhost", "longValue": "localhost:\(serverPort)/test-fixture/test-mozilla-org.html"]
+let website1: [String: String] = [
+    "url": path(forTestPage: "test-mozilla-org.html"),
+    "label": "Internet for people, not profit — Mozilla",
+    "value": "localhost",
+    "longValue": "localhost:\(serverPort)/test-fixture/test-mozilla-org.html"
+]
 let website2 = path(forTestPage: "test-example.html")
 
 class ToolbarTests: BaseTestCase {
@@ -116,7 +121,12 @@ class ToolbarTests: BaseTestCase {
             statusbarElement.tap(force: true)
             XCTAssertTrue(PageOptionsMenu.isHittable)
             statusbarElement.tap(force: true)
-            let topElement = app.webViews.otherElements["Internet for people, not profit — Mozilla"].children(matching: .other).matching(identifier: "navigation").element(boundBy: 0).staticTexts["Mozilla"]
+            let topElement = app.webViews
+                .otherElements["Internet for people, not profit — Mozilla"]
+                .children(matching: .other)
+                .matching(identifier: "navigation")
+                .element(boundBy: 0)
+                .staticTexts["Mozilla"]
             mozWaitForElementToExist(topElement, timeout: 10)
             XCTAssertTrue(topElement.isHittable)
         }

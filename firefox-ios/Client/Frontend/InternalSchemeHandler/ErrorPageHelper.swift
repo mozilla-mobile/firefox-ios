@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import WebKit
 import GCDWebServers
@@ -224,9 +225,12 @@ class ErrorPageHandler: InternalSchemeResponse {
 
 class ErrorPageHelper {
     fileprivate weak var certStore: CertStore?
+    private var logger: Logger
 
-    init(certStore: CertStore?) {
+    init(certStore: CertStore?,
+         logger: Logger = DefaultLogger.shared) {
         self.certStore = certStore
+        self.logger = logger
     }
 
     func loadPage(_ error: NSError, forUrl url: URL, inWebView webView: WKWebView) {
@@ -264,6 +268,17 @@ class ErrorPageHelper {
 
         components.queryItems = queryItems
         if let urlWithQuery = components.url {
+            logger.log("An error page will show.",
+                       level: .info,
+                       category: .webview,
+                       extra: ["Error code": "\(error.code)"])
+
+            TelemetryWrapper.shared.recordEvent(category: .information,
+                                                method: .error,
+                                                object: .webview,
+                                                value: .webviewShowErrorPage,
+                                                extras: [TelemetryWrapper.EventExtraKey.errorCode.rawValue: "\(error.code)"])
+
             if let internalUrl = InternalURL(webViewUrl), internalUrl.isSessionRestore, let page = InternalURL.authorize(url: urlWithQuery) {
                 // A session restore page is already on the history stack, so don't load another page on the history stack.
                 webView.replaceLocation(with: page)

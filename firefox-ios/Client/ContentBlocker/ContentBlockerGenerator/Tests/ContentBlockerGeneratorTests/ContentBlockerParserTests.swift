@@ -27,6 +27,7 @@ final class ContentBlockerParserTests: XCTestCase {
         let result = subject.parseCategoryList(adsList,
                                                actionType: .blockAll)
 
+// swiftlint:disable line_length
         let expectedFirstLine = """
         {\"action\":{\"type\":\"block\"},\"trigger\":{\"url-filter\":\"^https?://([^/]+\\\\.)?2leep\\\\.com\",\"load-type\":[\"third-party\"],\"unless-domain\":[\"*2leep.com\"]}}
         """
@@ -46,6 +47,7 @@ final class ContentBlockerParserTests: XCTestCase {
         let expectedFifthLine = """
                 {\"action\":{\"type\":\"block\"},\"trigger\":{\"url-filter\":\"^https?://([^/]+\\\\.)?adfox\\\\.yandex\\\\.ru\",\"load-type\":[\"third-party\"],\"unless-domain\":[\"*kinopoisk.ru\",\"*moikrug.ru\",\"*yadi.sk\",\"*yandex.by\",\"*yandex.com\",\"*yandex.com.tr\",\"*yandex.ru\",\"*yandex.st\",\"*yandex.ua\"]}}
                 """
+// swiftlint:enable line_length
         XCTAssertEqual(result.count, 5)
         XCTAssertEqual(result[0], expectedFirstLine)
         XCTAssertEqual(result[1], expectedSecondLine)

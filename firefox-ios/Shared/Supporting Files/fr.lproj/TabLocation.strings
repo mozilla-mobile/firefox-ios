@@ -25,3 +25,9 @@
 /* Accessibility label for the shopping button in url bar */
 "TabLocation.Shopping.A11y.Label.v120" = "Vérificateur d’avis";
 
+/* Large content title for the tabs button. The argument is the number of open tabs or an infinity symbol. This title is displayed when using accessible font sizes is enabled. */
+"TabsButton.Accessibility.LargeContentTitle.v122" = "Afficher les onglets : %@";
+
+/* Large content title for the button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemoveButton.LargeContentTitle.v122" = "Retirer la page";
+
