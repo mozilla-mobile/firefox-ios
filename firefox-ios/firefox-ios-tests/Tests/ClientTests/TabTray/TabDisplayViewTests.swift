@@ -112,7 +112,7 @@ final class TabDisplayViewTests: XCTestCase {
                                       inactiveTabs: inactiveTabs,
                                       isInactiveTabsExpanded: isInactiveTabsExpanded)
 
-        let subject = TabDisplayView(state: tabState, tabPeekDelegate: nil)
+        let subject = TabDisplayView(state: tabState)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
