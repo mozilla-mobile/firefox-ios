@@ -14,6 +14,7 @@ extension ContextualHintPrefsKeysProvider {
 
     func prefsKey(for hintType: ContextualHintType) -> String {
         switch hintType {
+        case .dataClearance: return CFRPrefsKeys.dataClearanceKey.rawValue
         case .inactiveTabs: return CFRPrefsKeys.inactiveTabsKey.rawValue
         case .jumpBackIn: return CFRPrefsKeys.jumpBackinKey.rawValue
         case .jumpBackInSyncedTab: return CFRPrefsKeys.jumpBackInSyncedTabKey.rawValue
