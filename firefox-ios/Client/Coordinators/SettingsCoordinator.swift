@@ -222,6 +222,12 @@ class SettingsCoordinator: BaseCoordinator,
 
     // MARK: PrivacySettingsDelegate
 
+    func pressedAddressAutofill() {
+        let viewModel = AddressAutofillSettingsViewModel()
+        let viewController = AddressAutofillSettingsViewController(addressAutofillViewModel: viewModel)
+        router.push(viewController)
+    }
+
     func pressedCreditCard() {
         findAndHandle(route: .settings(section: .creditCard))
     }
