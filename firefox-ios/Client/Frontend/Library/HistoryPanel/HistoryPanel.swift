@@ -145,11 +145,10 @@ class HistoryPanel: UIViewController,
     // MARK: - Inits
 
     init(profile: Profile,
-         tabManager: TabManager,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared) {
-        self.clearHistoryHelper = ClearHistorySheetProvider(profile: profile, tabManager: tabManager)
+        self.clearHistoryHelper = ClearHistorySheetProvider(profile: profile)
         self.viewModel = HistoryPanelViewModel(profile: profile)
         self.profile = profile
         self.state = .history(state: .mainView)
@@ -308,6 +307,7 @@ class HistoryPanel: UIViewController,
     }
 
     func handleNotifications(_ notification: Notification) {
+        // TODO: [FXIOS-7953, 7791] Needs updates for multi-window support.
         switch notification.name {
         case .FirefoxAccountChanged, .PrivateDataClearedHistory:
             viewModel.removeAllData()

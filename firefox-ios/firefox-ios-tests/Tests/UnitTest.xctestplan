@@ -96,7 +96,6 @@
       "skippedTests" : [
         "ETPCoverSheetTests",
         "IntroViewControllerTests\/testBasicSetupReturnsExpectedItems()",
-        "RustSyncManagerTests\/testGetEnginesAndKeys()",
         "RustSyncManagerTests\/testGetEnginesAndKeysWithNoKey()",
         "RustSyncManagerTests\/testUpdateEnginePrefs_bookmarksEnabled()",
         "TabManagerTests\/testDeleteSelectedTab()",
@@ -120,7 +119,6 @@
     },
     {
       "skippedTests" : [
-        "RustLoginsTests\/testGetStoredKeyWithKeychainReset()",
         "RustLoginsTests\/testUpdateLogin()",
         "TestBrowserDB\/testMovesDB()"
       ],

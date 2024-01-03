@@ -47,7 +47,7 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
 
     private func makeChildPanels() -> [UINavigationController] {
         let bookmarksPanel = BookmarksPanel(viewModel: BookmarksPanelViewModel(profile: profile))
-        let historyPanel = HistoryPanel(profile: profile, tabManager: tabManager)
+        let historyPanel = HistoryPanel(profile: profile)
         let downloadsPanel = DownloadsPanel()
         let readingListPanel = ReadingListPanel(profile: profile)
         return [

@@ -33,6 +33,7 @@ enum DictData: String {
         return stringData.data(using: .utf8)!
     }
 
+    // swiftlint:disable line_length
     static let entitylist = """
     {
     "license": "Copyright 2010-2020 Disconnect, Inc.",
@@ -54,6 +55,7 @@ enum DictData: String {
         }
     }
     """
+    // swiftlint:enable line_length
 }
 
 // MARK: - ListData

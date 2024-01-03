@@ -437,6 +437,19 @@ class TelemetryWrapperTests: XCTestCase {
                               failureMessage: "Should be true")
     }
 
+    func test_shoppingAdsDisabledStatus_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(
+            category: .information,
+            method: .settings,
+            object: .shoppingAdsOptedOut,
+            extras: [
+                TelemetryWrapper.ExtraKey.Shopping.areAdsDisabled.rawValue: true
+            ])
+        testBoolMetricSuccess(metric: GleanMetrics.ShoppingSettings.disabledAds,
+                              expectedValue: true,
+                              failureMessage: "Should be true")
+    }
+
     func test_shoppingAdsExposure_GleanIsCalled() {
         TelemetryWrapper.recordEvent(
             category: .action,
@@ -997,6 +1010,7 @@ class TelemetryWrapperTests: XCTestCase {
                                           object: .recordSearch,
                                           extras: extras)
     }
+
     func test_RecordSearch_GleanIsCalledSearchQuickSearch() {
         let extras = [TelemetryWrapper.EventExtraKey.recordSearchLocation.rawValue: "quickSearch",
                       TelemetryWrapper.EventExtraKey.recordSearchEngineID.rawValue: "default"] as [String: Any]
@@ -1004,6 +1018,34 @@ class TelemetryWrapperTests: XCTestCase {
                                           method: .tap,
                                           object: .recordSearch,
                                           extras: extras)
+    }
+
+    // MARK: - Webview
+
+    func testRecordWebviewWhenDidFailThenGleanIsCalled() {
+        TelemetryWrapper.gleanRecordEvent(category: .information,
+                                          method: .error,
+                                          object: .webview,
+                                          value: .webviewFail)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Webview.didFail)
+    }
+
+    func testRecordWebviewWhenDidFailProvisionalThenGleanIsCalled() {
+        TelemetryWrapper.gleanRecordEvent(category: .information,
+                                          method: .error,
+                                          object: .webview,
+                                          value: .webviewFailProvisional)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Webview.didFailProvisional)
+    }
+
+    func testRecordWebviewWhenDidShowErrorThenGleanIsCalled() {
+        let extra = [TelemetryWrapper.EventExtraKey.errorCode.rawValue: "403"]
+        TelemetryWrapper.gleanRecordEvent(category: .information,
+                                          method: .error,
+                                          object: .webview,
+                                          value: .webviewShowErrorPage,
+                                          extras: extra)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Webview.showErrorPage)
     }
 }
 

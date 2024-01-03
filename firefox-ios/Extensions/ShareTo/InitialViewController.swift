@@ -49,21 +49,23 @@ class InitialViewController: UIViewController {
 
         self.view.alpha = 0
 
-        getShareItem().uponQueue(.main) { shareItem in
-            guard let shareItem = shareItem else {
-                let alert = UIAlertController(title: .SendToErrorTitle, message: .SendToErrorMessage, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: .SendToErrorOKButton, style: .default) { _ in self.finish(afterDelay: 0) })
-                self.present(alert, animated: true, completion: nil)
-                return
+        self.getShareItem { shareItem in
+            DispatchQueue.main.async {
+                guard let shareItem = shareItem else {
+                    let alert = UIAlertController(title: .SendToErrorTitle, message: .SendToErrorMessage, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: .SendToErrorOKButton, style: .default) { _ in self.finish(afterDelay: 0) })
+                    self.present(alert, animated: true, completion: nil)
+                    return
+                }
+
+                // This is the view controller for the popup dialog
+                let shareController = ShareViewController()
+                shareController.delegate = self
+                shareController.shareItem = shareItem
+                self.shareViewController = shareController
+
+                self.embedController = EmbeddedNavController(isSearchMode: !shareItem.isUrlType(), parent: self, rootViewController: shareController)
             }
-
-            // This is the view controller for the popup dialog
-            let shareController = ShareViewController()
-            shareController.delegate = self
-            shareController.shareItem = shareItem
-            self.shareViewController = shareController
-
-            self.embedController = EmbeddedNavController(isSearchMode: !shareItem.isUrlType(), parent: self, rootViewController: shareController)
         }
     }
 
@@ -78,17 +80,15 @@ class InitialViewController: UIViewController {
         }
     }
 
-    func getShareItem() -> Deferred<ExtensionUtils.ExtractedShareItem?> {
-        let deferred = Deferred<ExtensionUtils.ExtractedShareItem?>()
+    func getShareItem(completion: @escaping (ExtensionUtils.ExtractedShareItem?) -> Void) {
         ExtensionUtils.extractSharedItem(fromExtensionContext: extensionContext) { item, error in
             if let item = item, error == nil {
-                deferred.fill(item)
+                completion(item)
             } else {
-                deferred.fill(nil)
+                completion(nil)
                 self.extensionContext?.cancelRequest(withError: CocoaError(.keyValueValidation))
             }
         }
-        return deferred
     }
 
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {

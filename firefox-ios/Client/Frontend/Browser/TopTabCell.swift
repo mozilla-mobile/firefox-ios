@@ -9,11 +9,26 @@ import SiteImageView
 
 class TopTabCell: UICollectionViewCell, ThemeApplicable, LegacyTabTrayCell, ReusableCell {
     struct UX {
+        // MARK: - Favicon and Title Constants
         static let faviconSize: CGFloat = 20
         static let faviconCornerRadius: CGFloat = 2
-        static let tabCornerRadius: CGFloat = 8
-        static let tabNudge: CGFloat = 1 // Nudge the favicon and close button by 1px
         static let tabTitlePadding: CGFloat = 10
+        static let tabNudge: CGFloat = 1 // Nudge the favicon and close button by 1px
+        static let fontSize: CGFloat = 12
+
+        // MARK: - Tab Appearance Constants
+        static let tabCornerRadius: CGFloat = 8
+        static let verticalPadding: CGFloat = 15
+        static let shadowRadius: CGFloat = 2
+        static let shadowOpacity: Float = 0.1
+        static let shadowOffsetWidth: CGFloat = 0
+        static let shadowOffsetHeight: CGFloat = 2
+
+        // MARK: - Close Button Constants
+        static let closeButtonThreshold: CGFloat = 148
+
+        // MARK: - Selected Background Constants
+        static let backgroundHeightMultiplier: CGFloat = 0.82
     }
 
     // MARK: - Properties
@@ -25,9 +40,9 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, LegacyTabTrayCell, Reus
     let selectedBackground: UIView = .build { view in
         view.clipsToBounds = false
         view.layer.cornerRadius = UX.tabCornerRadius
-        view.layer.shadowRadius = 2
-        view.layer.shadowOpacity = 0.1
-        view.layer.shadowOffset = CGSize(width: 0, height: 2)
+        view.layer.shadowRadius = UX.shadowRadius
+        view.layer.shadowOpacity = UX.shadowOpacity
+        view.layer.shadowOffset = CGSize(width: UX.shadowOffsetWidth, height: UX.shadowOffsetHeight)
         view.layer.masksToBounds = false
     }
 
@@ -35,7 +50,7 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, LegacyTabTrayCell, Reus
         label.textAlignment = .natural
         label.isUserInteractionEnabled = false
         label.lineBreakMode = .byCharWrapping
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 12, weight: .regular)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.fontSize, weight: .regular)
         label.semanticContentAttribute = .forceLeftToRight
         label.isAccessibilityElement = false
     }
@@ -44,10 +59,10 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, LegacyTabTrayCell, Reus
 
     let closeButton: UIButton = .build { button in
         button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross), for: [])
-        button.imageEdgeInsets = UIEdgeInsets(top: 15,
-                                              left: UX.tabTitlePadding,
-                                              bottom: 15,
-                                              right: UX.tabTitlePadding)
+        button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: UX.verticalPadding,
+                                                                      leading: UX.tabTitlePadding,
+                                                                      bottom: UX.verticalPadding,
+                                                                      trailing: UX.tabTitlePadding)
         button.layer.masksToBounds = false
         button.semanticContentAttribute = .forceLeftToRight
     }
@@ -76,7 +91,7 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, LegacyTabTrayCell, Reus
         closeButton.largeContentImage = UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross)
         closeButton.scalesLargeContentImage = true
 
-        let hideCloseButton = frame.width < 148 && !selected
+        let hideCloseButton = frame.width < UX.closeButtonThreshold && !selected
         closeButton.isHidden = hideCloseButton
 
         favicon.manuallySetImage(
@@ -103,19 +118,21 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, LegacyTabTrayCell, Reus
     }
 
     func applySelectedStyle(theme: Theme) {
-        favicon.tintColor = theme.colors.textPrimary
-        titleText.textColor = theme.colors.textPrimary
-        closeButton.tintColor = theme.colors.textPrimary
+        let colors = theme.colors
+        favicon.tintColor = colors.textPrimary
+        titleText.textColor = colors.textPrimary
+        closeButton.tintColor = colors.textPrimary
 
-        selectedBackground.backgroundColor = theme.colors.layer2
-        selectedBackground.layer.shadowColor = theme.colors.shadowDefault.cgColor
+        selectedBackground.backgroundColor = colors.layer2
+        selectedBackground.layer.shadowColor = colors.shadowDefault.cgColor
         selectedBackground.isHidden = false
     }
 
     func applyUnselectedStyle(theme: Theme) {
-        favicon.tintColor = theme.colors.textPrimary
-        titleText.textColor = theme.colors.textPrimary
-        closeButton.tintColor = theme.colors.textPrimary
+        let colors = theme.colors
+        favicon.tintColor = colors.textPrimary
+        titleText.textColor = colors.textPrimary
+        closeButton.tintColor = colors.textPrimary
 
         selectedBackground.backgroundColor = .clear
         selectedBackground.layer.shadowColor = UIColor.clear.cgColor
@@ -133,28 +150,38 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, LegacyTabTrayCell, Reus
     private func setupLayout() {
         addSubviews(selectedBackground, titleText, closeButton, favicon)
 
-        NSLayoutConstraint.activate([
-            selectedBackground.widthAnchor.constraint(equalTo: widthAnchor),
-            selectedBackground.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.82),
-            selectedBackground.centerXAnchor.constraint(equalTo: centerXAnchor),
-            selectedBackground.centerYAnchor.constraint(equalTo: centerYAnchor),
+        NSLayoutConstraint.activate(
+            [
+                selectedBackground.widthAnchor.constraint(equalTo: widthAnchor),
+                selectedBackground.heightAnchor.constraint(
+                    equalTo: heightAnchor,
+                    multiplier: UX.backgroundHeightMultiplier
+                ),
+                selectedBackground.centerXAnchor.constraint(equalTo: centerXAnchor),
+                selectedBackground.centerYAnchor.constraint(equalTo: centerYAnchor),
 
-            favicon.centerYAnchor.constraint(equalTo: centerYAnchor, constant: UX.tabNudge),
-            favicon.widthAnchor.constraint(equalToConstant: UX.faviconSize),
-            favicon.heightAnchor.constraint(equalToConstant: UX.faviconSize),
-            favicon.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.tabTitlePadding),
+                favicon.centerYAnchor.constraint(equalTo: centerYAnchor, constant: UX.tabNudge),
+                favicon.widthAnchor.constraint(equalToConstant: UX.faviconSize),
+                favicon.heightAnchor.constraint(equalToConstant: UX.faviconSize),
+                favicon.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.tabTitlePadding),
 
-            titleText.centerYAnchor.constraint(equalTo: centerYAnchor),
-            titleText.heightAnchor.constraint(equalTo: heightAnchor),
-            titleText.leadingAnchor.constraint(equalTo: favicon.trailingAnchor, constant: UX.tabTitlePadding),
-            titleText.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor,
-                                                constant: UX.tabTitlePadding),
+                titleText.centerYAnchor.constraint(equalTo: centerYAnchor),
+                titleText.heightAnchor.constraint(equalTo: heightAnchor),
+                titleText.leadingAnchor.constraint(
+                    equalTo: favicon.trailingAnchor,
+                    constant: UX.tabTitlePadding
+                ),
+                titleText.trailingAnchor.constraint(
+                    equalTo: closeButton.leadingAnchor,
+                    constant: UX.tabTitlePadding
+                ),
 
-            closeButton.centerYAnchor.constraint(equalTo: centerYAnchor, constant: UX.tabNudge),
-            closeButton.widthAnchor.constraint(equalTo: heightAnchor, constant: -UX.tabTitlePadding),
-            closeButton.heightAnchor.constraint(equalTo: heightAnchor),
-            closeButton.trailingAnchor.constraint(equalTo: trailingAnchor),
-        ])
+                closeButton.centerYAnchor.constraint(equalTo: centerYAnchor, constant: UX.tabNudge),
+                closeButton.widthAnchor.constraint(equalTo: heightAnchor, constant: -UX.tabTitlePadding),
+                closeButton.heightAnchor.constraint(equalTo: heightAnchor),
+                closeButton.trailingAnchor.constraint(equalTo: trailingAnchor),
+            ]
+        )
 
         clipsToBounds = false
     }

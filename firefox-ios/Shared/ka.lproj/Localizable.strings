@@ -1328,7 +1328,7 @@
 "Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Firefox-ფონი, რიჟრაჟის მოხატულობა.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
-"Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "საწყისი გვერდის ფონის წრიულად ცვლა";
+"Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "საწყისი გვერდის ფონების წრიულად ცვლა";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Firefox-ფონი, შებინდებული მაღლობების მოხატულობა.";

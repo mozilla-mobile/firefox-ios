@@ -21,7 +21,7 @@ class CopiedLinksTests: BaseTestCase {
         let value2 = app.tables.cells.switches["Offer to Open Copied Links, When Opening Firefox"].value
         XCTAssertEqual(value2 as? String, "1")
 
-        app.navigationBars["Settings"]/*@START_MENU_TOKEN@*/.buttons["Done"]/*[[".buttons[\"Done\"]",".buttons[\"AppSettingsTableViewController.navigationItem.leftBarButtonItem\"]"],[[[-1,1],[-1,0]]],[1]]@END_MENU_TOKEN@*/.tap()
+        app.navigationBars["Settings"].buttons["Done"].tap()
 
         app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
         let settingsmenuitemCell = app.tables.otherElements["Settings"]

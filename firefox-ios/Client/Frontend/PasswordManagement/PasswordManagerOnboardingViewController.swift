@@ -5,6 +5,7 @@
 import Common
 import UIKit
 import Shared
+import ComponentLibrary
 
 class PasswordManagerOnboardingViewController: SettingsViewController {
     private struct UX {
@@ -26,13 +27,13 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
         label.numberOfLines = UX.maxLabelLines
     }
 
-    private lazy var learnMoreButton: UIButton = .build { button in
+    private lazy var learnMoreButton: LinkButton = .build { button in
         button.setTitle(.LoginsOnboardingLearnMoreButtonTitle, for: .normal)
         button.addTarget(self, action: #selector(self.learnMoreButtonTapped), for: .touchUpInside)
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.fontSize)
     }
 
-    private lazy var continueButton: UIButton = .build { button in
+    private lazy var continueButton: PrimaryRoundedButton = .build { button in
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.setTitle(.LoginsOnboardingContinueButtonTitle, for: .normal)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Passwords.onboardingContinue
@@ -135,5 +136,6 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
         let currentTheme = themeManager.currentTheme.colors
         learnMoreButton.setTitleColor(currentTheme.actionPrimary, for: .normal)
         continueButton.backgroundColor = currentTheme.actionPrimary
+        continueButton.applyTheme(theme: themeManager.currentTheme)
     }
 }

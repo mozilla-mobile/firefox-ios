@@ -4,14 +4,15 @@
 
 import Foundation
 import WebKit
+import Common
 
 class ClearHistorySheetProvider {
     private let profile: Profile
-    private let tabManager: TabManager
+    private let windowManager: WindowManager
 
-    init(profile: Profile, tabManager: TabManager) {
+    init(profile: Profile, windowManager: WindowManager = AppContainer.shared.resolve()) {
         self.profile = profile
-        self.tabManager = tabManager
+        self.windowManager = windowManager
     }
 
     /// Present a prompt that will enable the user to choose how he wants to clear his recent history
@@ -90,7 +91,8 @@ class ClearHistorySheetProvider {
             let deletionUtilitiy = HistoryDeletionUtility(with: self.profile)
             deletionUtilitiy.deleteHistoryFrom(.allTime) { dateOption in
                 DispatchQueue.main.async {
-                    self.tabManager.clearAllTabsHistory()
+                    // Clear and reset tab history for all windows / tab managers
+                    self.windowManager.allWindowTabManagers().forEach { $0.clearAllTabsHistory() }
                 }
                 NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
                 didComplete?(dateOption)

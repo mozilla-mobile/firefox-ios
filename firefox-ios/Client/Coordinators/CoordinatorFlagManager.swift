@@ -10,4 +10,8 @@ struct CoordinatorFlagManager {
     static var isQRCodeCoordinatorEnabled: Bool {
         return NimbusManager.shared.featureFlagLayer.checkNimbusConfigFor(.qrCodeCoordinatorRefactor)
     }
+
+    static var isBackForwardListShownFromCoordaintorEnabled: Bool {
+        return NimbusManager.shared.featureFlagLayer.checkNimbusConfigFor(.backForwardListCoordinatorRefactor)
+    }
 }

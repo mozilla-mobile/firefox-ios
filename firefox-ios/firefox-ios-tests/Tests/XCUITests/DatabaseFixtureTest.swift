@@ -5,7 +5,10 @@
 import XCTest
 
 class DatabaseFixtureTest: BaseTestCase {
-    let fixtures = ["testBookmarksDatabaseFixture": "testBookmarksDatabase1000-places.db", "testHistoryDatabaseFixture": "testHistoryDatabase100-places.db"]
+    let fixtures = [
+        "testBookmarksDatabaseFixture": "testBookmarksDatabase1000-places.db",
+        "testHistoryDatabaseFixture": "testHistoryDatabase100-places.db"
+    ]
 
     override func setUp() {
         // Test name looks like: "[Class testFunc]", parse out the function name

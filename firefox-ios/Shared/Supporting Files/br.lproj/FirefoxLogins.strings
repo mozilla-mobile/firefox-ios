@@ -1,0 +1,18 @@
+/* Prompt for saving the username in the Save Logins prompt. */
+"LoginsHelper.PromptSaveLogin.Title.v122" = "Enrollañ an anv-implijer?";
+
+/* Prompt for saving a password in the Save Logins prompt. */
+"LoginsHelper.PromptSavePassword.Title.v122" = "Enrollañ ar ger-tremen?";
+
+/* Prompt for updating the password in the Update Password prompt. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg.v122" = "Hizivaat ar ger-tremen?";
+
+/* Prompt for updating a password in the Update Password prompt. */
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg.v122" = "Hizivaat ar ger-tremen?";
+
+/* Placeholder text for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder.v122" = "Klask er gerioù-tremen";
+
+/* Title for the list of logins saved by the app */
+"LoginsList.Title.v122" = "GERIOÙ-TREMEN ENROLLET";
+

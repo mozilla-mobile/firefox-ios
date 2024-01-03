@@ -186,7 +186,14 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
             hasSetPointOrigin = true
             pointOrigin = self.view.frame.origin
         }
-        preferredContentSize = CGSize(width: view.bounds.width, height: view.systemLayoutSizeFitting(CGSize(width: view.bounds.width, height: UIView.layoutFittingCompressedSize.height), withHorizontalFittingPriority: .required, verticalFittingPriority: .defaultLow).height)
+        preferredContentSize = CGSize(
+            width: view.bounds.width,
+            height: view.systemLayoutSizeFitting(
+                CGSize(width: view.bounds.width, height: UIView.layoutFittingCompressedSize.height),
+                withHorizontalFittingPriority: .required,
+                verticalFittingPriority: .defaultLow
+            ).height
+        )
     }
 
     override func viewWillAppear(_ animated: Bool) {

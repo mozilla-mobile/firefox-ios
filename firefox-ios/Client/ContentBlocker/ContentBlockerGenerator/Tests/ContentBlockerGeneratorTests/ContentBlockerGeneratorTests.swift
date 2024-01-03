@@ -38,7 +38,7 @@ final class ContentBlockerGeneratorTests: XCTestCase {
         fileManager.categoryFile[FileCategory.advertising] = adsList
 
         subject.generateLists()
-
+// swiftlint:disable line_length
         let expectedFirstContent = """
                [\n{\"action\":{\"type\":\"block\"},\"trigger\":{\"url-filter\":\"^https?://([^/]+\\\\.)?2leep\\\\.com\",\"load-type\":[\"third-party\"]}},\n{\"action\":{\"type\":\"block\"},\"trigger\":{\"url-filter\":\"^https?://([^/]+\\\\.)?adnologies\\\\.com\",\"load-type\":[\"third-party\"]}},\n{\"action\":{\"type\":\"block\"},\"trigger\":{\"url-filter\":\"^https?://([^/]+\\\\.)?heias\\\\.com\",\"load-type\":[\"third-party\"]}},\n{\"action\":{\"type\":\"block\"},\"trigger\":{\"url-filter\":\"^https?://([^/]+\\\\.)?365media\\\\.com\",\"load-type\":[\"third-party\"]}},\n{\"action\":{\"type\":\"block\"},\"trigger\":{\"url-filter\":\"^https?://([^/]+\\\\.)?adfox\\\\.yandex\\\\.ru\",\"load-type\":[\"third-party\"]}}\n]
                """
@@ -46,6 +46,7 @@ final class ContentBlockerGeneratorTests: XCTestCase {
         let expectedSecondContent = """
                [\n{\"action\":{\"type\":\"block-cookies\"},\"trigger\":{\"url-filter\":\"^https?://([^/]+\\\\.)?2leep\\\\.com\",\"load-type\":[\"third-party\"]}},\n{\"action\":{\"type\":\"block-cookies\"},\"trigger\":{\"url-filter\":\"^https?://([^/]+\\\\.)?adnologies\\\\.com\",\"load-type\":[\"third-party\"]}},\n{\"action\":{\"type\":\"block-cookies\"},\"trigger\":{\"url-filter\":\"^https?://([^/]+\\\\.)?heias\\\\.com\",\"load-type\":[\"third-party\"]}},\n{\"action\":{\"type\":\"block-cookies\"},\"trigger\":{\"url-filter\":\"^https?://([^/]+\\\\.)?365media\\\\.com\",\"load-type\":[\"third-party\"]}},\n{\"action\":{\"type\":\"block-cookies\"},\"trigger\":{\"url-filter\":\"^https?://([^/]+\\\\.)?adfox\\\\.yandex\\\\.ru\",\"load-type\":[\"third-party\"]}}\n]
                """
+// swiftlint:enable line_length
 
         XCTAssertEqual(fileManager.capturedFileContent.count, 2, "Generated 'block' and 'block cookies' ads list")
         XCTAssertEqual(fileManager.capturedFileContent[0], expectedFirstContent)

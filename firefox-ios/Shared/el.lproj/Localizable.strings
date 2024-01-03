@@ -605,7 +605,7 @@
 "LibraryPanel.History.ClearGroupedTabsTitle.v100" = "Διαγραφή όλων των ιστοτόπων στο «%@»;";
 
 /* Within the History Panel, users can open an action menu to clear recent history. */
-"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Αφαιρεί το ιστορικό (καθώς και το συγχρονισμένο ιστορικό από άλλες συσκευές), τα cookies και άλλα δεδομένα περιήγησης.";
+"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Αφαιρεί το ιστορικό (καθώς και το συγχρονισμένο ιστορικό από άλλες συσκευές), τα cookie και άλλα δεδομένα περιήγησης.";
 
 /* Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item. */
 "LibraryPanel.History.DeleteGroupedItem.v104" = "Διαγραφή";
@@ -857,7 +857,7 @@
 "Menu.TrackingProtectionDescription.ContentTrackers" = "Οι ιστότοποι μπορεί να φορτώνουν εξωτερικές διαφημίσεις, βίντεο και άλλο περιεχόμενο με κρυφούς ιχνηλάτες. Η φραγή τους συμβάλλει στην ταχύτερη φόρτωση ιστοτόπων, αλλά κάποια κουμπιά, φόρμες και πεδία σύνδεσης ενδέχεται να μη λειτουργούν.";
 
 /* Description of cross-site trackers. */
-"Menu.TrackingProtectionDescription.CrossSiteNew" = "Αυτά τα cookies σάς ακολουθούν από ιστότοπο σε ιστότοπο για να συλλέξουν δεδομένα σχετικά με το τι κάνετε στο διαδίκτυο. Δημιουργούνται από τρίτους, όπως διαφημιστές και εταιρείες ανάλυσης.";
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "Αυτά τα cookie σάς ακολουθούν από ιστότοπο σε ιστότοπο για να συλλέξουν δεδομένα σχετικά με το τι κάνετε στο διαδίκτυο. Δημιουργούνται από τρίτους, όπως διαφημιστές και εταιρείες ανάλυσης.";
 
 /* Description of cryptominers. */
 "Menu.TrackingProtectionDescription.CryptominersNew" = "Τα cryptominers χρησιμοποιούν κρυφά την υπολογιστική ισχύ του συστήματός σας για να εξορύξουν κρυπτονομίσματα. Τα σενάρια εξόρυξης κρυπτονομισμάτων εξαντλούν την μπαταρία σας, επιβραδύνουν τον υπολογιστή σας, ενώ ενδέχεται να δείτε αυξημένες χρεώσεις στο λογαριασμό τους ρεύματος.";
@@ -1049,7 +1049,7 @@
 "Search.ThirdPartyEngines.Cancel" = "Ακύρωση";
 
 /* A message explaining fault in custom search engine form. */
-"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Μια μηχανή αναζήτησης με αυτό τον τίτλο ή το URL έχει ήδη προστεθεί.";
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Μια μηχανή αναζήτησης με αυτόν τον τίτλο ή το URL έχει ήδη προστεθεί.";
 
 /* A title stating that we failed to add custom search engine. */
 "Search.ThirdPartyEngines.DuplicateErrorTitle" = "Αποτυχία";
@@ -1199,7 +1199,7 @@
 "Settings.DataManagement.Title" = "Διαχείριση δεδομένων";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Το Firefox θα σταματήσει το συγχρονισμό με το λογαριασμό σας, αλλά δεν θα διαγράψει τα δεδομένα περιήγησής σας από αυτή τη συσκευή.";
+"Settings.Disconnect.Body" = "Το Firefox θα σταματήσει τον συγχρονισμό με τον λογαριασμό σας, αλλά δεν θα διαγράψει τα δεδομένα περιήγησής σας από αυτήν την συσκευή.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Αποσύνδεση Sync";
@@ -1277,7 +1277,7 @@
 "Settings.Home.Option.Description.v101" = "Επιλέξτε τι περιλαμβάνεται στην αρχική σελίδα του Firefox.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
-"Settings.Home.Option.JumpBackIn" = "Επιστροφή";
+"Settings.Home.Option.JumpBackIn" = "Άμεση επιστροφή";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off */
 "Settings.Home.Option.Pocket" = "Προτάσεις του Pocket";
