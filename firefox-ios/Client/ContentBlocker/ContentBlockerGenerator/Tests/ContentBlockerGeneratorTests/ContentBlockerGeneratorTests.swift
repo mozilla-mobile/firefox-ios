@@ -32,9 +32,9 @@ final class ContentBlockerGeneratorTests: XCTestCase {
 
     func testGenerator_whenAdsList_generateProperAdsFile() {
         let subject = ContentBlockerGenerator(fileManager: fileManager)
-        let entityJson = parserData.getDictData(from: .entity)
-        let adsList = parserData.getListData(from: .ads)
-        fileManager.entityList = entityJson
+        let entityJson = try? parserData.getDictData(from: .entity)
+        let adsList = try? parserData.getListData(from: .ads)
+        fileManager.entityList = entityJson ?? [:]
         fileManager.categoryFile[FileCategory.advertising] = adsList
 
         subject.generateLists()
