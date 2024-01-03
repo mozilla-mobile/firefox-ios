@@ -8,9 +8,9 @@ import Storage
 import UIKit
 
 class TabDisplayPanel: UIViewController,
-                                Themeable,
-                                EmptyPrivateTabsViewDelegate,
-                                StoreSubscriber {
+                       Themeable,
+                       EmptyPrivateTabsViewDelegate,
+                       StoreSubscriber {
     typealias SubscriberStateType = TabsPanelState
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
@@ -18,7 +18,7 @@ class TabDisplayPanel: UIViewController,
 
     // MARK: UI elements
     private lazy var tabDisplayView: TabDisplayView = {
-        let view = TabDisplayView(state: self.tabsState, tabPeekDelegate: self)
+        let view = TabDisplayView(state: self.tabsState)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -38,10 +38,6 @@ class TabDisplayPanel: UIViewController,
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        unsubscribeFromRedux()
     }
 
     override func viewDidLoad() {
@@ -127,12 +123,4 @@ class TabDisplayPanel: UIViewController,
     func didTapLearnMore(urlRequest: URLRequest) {
         store.dispatch(TabPanelAction.learnMorePrivateMode(urlRequest))
     }
-}
-
-extension TabDisplayPanel: LegacyTabPeekDelegate {
-    func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListItem? { return nil }
-    func tabPeekDidAddBookmark(_ tab: Tab) {}
-    func tabPeekRequestsPresentationOf(_ viewController: UIViewController) {}
-    func tabPeekDidCloseTab(_ tab: Tab) {}
-    func tabPeekDidCopyUrl() {}
 }

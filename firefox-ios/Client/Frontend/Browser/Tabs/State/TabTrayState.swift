@@ -4,6 +4,7 @@
 
 import Foundation
 import Redux
+import Storage
 
 enum TabTrayLayoutType: Equatable {
     case regular // iPad
@@ -16,6 +17,7 @@ struct TabTrayState: ScreenState, Equatable {
     var normalTabsCount: String
     var hasSyncableAccount: Bool
     var shouldDismiss: Bool
+    var shareURL: URL?
 
     var navigationTitle: String {
         return selectedPanel.navTitle
@@ -35,7 +37,8 @@ struct TabTrayState: ScreenState, Equatable {
                   selectedPanel: panelState.selectedPanel,
                   normalTabsCount: panelState.normalTabsCount,
                   hasSyncableAccount: panelState.hasSyncableAccount,
-                  shouldDismiss: panelState.shouldDismiss)
+                  shouldDismiss: panelState.shouldDismiss,
+                  shareURL: panelState.shareURL)
     }
 
     init() {
@@ -56,12 +59,14 @@ struct TabTrayState: ScreenState, Equatable {
          selectedPanel: TabTrayPanelType,
          normalTabsCount: String,
          hasSyncableAccount: Bool,
-         shouldDismiss: Bool = false) {
+         shouldDismiss: Bool = false,
+         shareURL: URL? = nil) {
         self.isPrivateMode = isPrivateMode
         self.selectedPanel = selectedPanel
         self.normalTabsCount = normalTabsCount
         self.hasSyncableAccount = hasSyncableAccount
         self.shouldDismiss = shouldDismiss
+        self.shareURL = shareURL
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -93,6 +98,12 @@ struct TabTrayState: ScreenState, Equatable {
                                     selectedPanel: state.selectedPanel,
                                     normalTabsCount: state.normalTabsCount,
                                     hasSyncableAccount: isSyncAccountEnabled)
+        case TabPanelAction.showShareSheet(let shareURL):
+            return TabTrayState(isPrivateMode: state.isPrivateMode,
+                                selectedPanel: state.selectedPanel,
+                                normalTabsCount: state.normalTabsCount,
+                                hasSyncableAccount: state.hasSyncableAccount,
+                                shareURL: shareURL)
         default:
             return state
         }
