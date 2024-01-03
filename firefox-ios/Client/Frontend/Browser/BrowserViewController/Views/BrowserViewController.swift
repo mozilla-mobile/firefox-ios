@@ -219,10 +219,6 @@ class BrowserViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        unsubscribeFromRedux()
-    }
-
     override var prefersStatusBarHidden: Bool {
         return false
     }
