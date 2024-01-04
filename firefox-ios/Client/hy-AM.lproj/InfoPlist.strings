@@ -7,6 +7,9 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox-ն օգտագործում է ձեր խցիկը՝ սկանավորելու QR կոդերը և լուսանկարելու ու տեսանյութերի համար:";
 
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox-ը պահանջում է Face ID՝ ձեր պահպանված գաղտնաբառերը և վճարման եղանակները մուտք գործելու համար:";
+
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Ձեր այցելած կայքերը կարող են հարցնել ձեր տեղադրությունը։";
 

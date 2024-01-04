@@ -16,6 +16,21 @@
 /* Label for the button used to delete the current login. */
 "Delete" = "Ջնջել";
 
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Չեղարկել";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Հեռացնել";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "Դուք չեք կարող հետարկել այս գործողությունը:";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Սա կհեռացնի գաղտնաբառը ձեր բոլոր համաժամացված սարքերից:";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Հեռացնե՞լ գաղտնաբառը:";
+
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "Ապանշել բոլորը";
 
@@ -36,6 +51,9 @@
 
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "Մուտքագրումներ չկան";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Գաղտնաբառեր չեն գտնվել";
 
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "Բացել և լցնել";
