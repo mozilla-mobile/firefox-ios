@@ -370,6 +370,7 @@ workflows:
             # ANSI color codes
             RED='\033[0;31m'    # Red color
             CYAN='\033[0;36m'   # Cyan color
+            GREEN='\033[0;32m'  # Green color
             NC='\033[0m'        # No Color (resets color to default)
 
             # Check if $BITRISE_PIPELINE_ID is unset or empty
@@ -377,10 +378,10 @@ workflows:
             if [ -z "$BITRISE_PIPELINE_ID" ]; then
                 printf "\n${RED}Error: BITRISE_PIPELINE_ID is not set.${NC}\n\
                 This means you have triggered a build stage individually, instead of the entire pipeline.\n\n\
-                To trigger a rebuild pipeline in its entirety, please do the following:\n\n\
+                To trigger a pipeline rebuild in its entirety, please do the following:\n\n\
                     ${CYAN}1. Select your last failed build for 'pipeline_multiple_shards'.\n\
-                    2. Click the 'Rebuild' button dropdown icon.\n\
-                    3. From the dropdown menu, select 'Rebuild entire pipeline'.\n\
+                    2. Click the 'Rebuild' button dropdown icon located in the top right of the page.\n\
+                    3. From the dropdown menu, select 'Rebuild entire Pipeline'.\n\
                     4. If no dropdown menu is present, you are looking at a standalone build\n\
                        and need to select the initial Github pipeline triggered by the PR.${NC}\n\n\
                 If you are still having issues, please contact ${GREEN}#mobile-testeng${NC} on Slack.\n"
