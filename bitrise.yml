@@ -370,14 +370,15 @@ workflows:
             # Check if $BITRISE_PIPELINE_ID is unset or empty
             # If so, this is a standalone build and we need to fail it
             if [ -z "$BITRISE_PIPELINE_ID" ]; then
-                echo "Error: BITRISE_PIPELINE_ID is not set."
-                echo "This means you have triggered a build stage individually, instead of the entire pipeline."
-                echo "The build stage you have triggered is ${BITRISE_STAGE}, but you need to rebuild the entire pipeline`."
-                echo "To trigger a rebuild pipeline in its entirety, select your last failed build for `pipeline_multiple_shards`."
-                echo "Then, click the `Rebuild` button."
-                echo "From the dropdown menu, select `Rebuild entire pipeline`."
-                echo "If no dropdown menu is present, you are looking at a standalone build and need to select the initial Github pipeline triggered by the PR."
-                echo "If you are still having issues, please contact #mobile-testeng on Slack."
+                printf "\n\t\tError: BITRISE_PIPELINE_ID is not set.\n\
+                This means you have triggered a build stage individually, instead of the entire pipeline.\n\n\
+                To trigger a rebuild pipeline in its entirety, please do the following:\n\n\
+                    1. Select your last failed build for 'pipeline_multiple_shards'.\n\
+                    2. Click the 'Rebuild' button dropdown icon.\n\
+                    3. From the dropdown menu, select 'Rebuild entire pipeline'.\n\
+                    4. If no dropdown menu is present, you are looking at a standalone build\n\
+                       and need to select the initial Github pipeline triggered by the PR.\n\
+                If you are still having issues, please contact #mobile-testeng on Slack.\n"
                 exit 1  # Exit with a failure status
             else
                 echo "BITRISE_PIPELINE_ID is set to $BITRISE_PIPELINE_ID"
