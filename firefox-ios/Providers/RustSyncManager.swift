@@ -361,6 +361,9 @@ public class RustSyncManager: NSObject, SyncManager {
                                   category: .sync)
                    }
                }
+           case .addresses:
+               profile?.autofill.registerWithSyncManager()
+               rustEngines.append(engine.rawValue)
            case .bookmarks, .history:
                if !registeredPlaces {
                    profile?.places.registerWithSyncManager()

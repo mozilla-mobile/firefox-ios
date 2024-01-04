@@ -46,6 +46,7 @@ class SyncContentSettingsViewControllerTests: XCTestCase {
         // tabs
         // passwords
         // credit cards
-        XCTAssertEqual(engineSectionChildren?.count, 5)
+        // addresses
+        XCTAssertEqual(engineSectionChildren?.count, 6)
     }
 }
