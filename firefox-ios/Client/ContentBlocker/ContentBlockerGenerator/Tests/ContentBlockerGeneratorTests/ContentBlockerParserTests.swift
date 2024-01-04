@@ -19,11 +19,11 @@ final class ContentBlockerParserTests: XCTestCase {
     }
 
     func testParsingAdsFile() throws {
-        let entityJson = parserData.getDictData(from: .entity)
+        let entityJson = try parserData.getDictData(from: .entity)
         let subject = DefaultContentBlockerParser()
         subject.parseEntityList(entityJson)
 
-        let adsList = parserData.getListData(from: .ads)
+        let adsList = try parserData.getListData(from: .ads)
         let result = subject.parseCategoryList(adsList,
                                                actionType: .blockAll)
 
@@ -57,11 +57,11 @@ final class ContentBlockerParserTests: XCTestCase {
     }
 
     func testParsingAdsFile_withoutEntity() throws {
-        let entityJson = parserData.getDictData(from: .emptyEntity)
+        let entityJson = try parserData.getDictData(from: .emptyEntity)
         let subject = DefaultContentBlockerParser()
         subject.parseEntityList(entityJson)
 
-        let adsList = parserData.getListData(from: .ads)
+        let adsList = try parserData.getListData(from: .ads)
         let result = subject.parseCategoryList(adsList,
                                                actionType: .blockAll)
 

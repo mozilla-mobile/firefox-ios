@@ -460,6 +460,7 @@ class FakespotViewController:
             var viewModel = FakespotAdViewModel(productAdsData: adData)
             viewModel.onTapProductLink = { [weak self] in
                 self?.viewModel.addTab(url: adData.url)
+                self?.viewModel.recordSurfaceAdsClickedTelemetry()
                 self?.viewModel.reportAdEvent(eventName: .trustedDealsLinkClicked, aid: adData.aid)
                 store.dispatch(FakespotAction.setAppearanceTo(false))
             }

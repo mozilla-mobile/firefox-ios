@@ -89,8 +89,7 @@ class HistoryPanelTests: XCTestCase {
     private func createSubject() -> HistoryPanel {
         let profile = MockProfile()
         let tabManager = MockTabManager()
-        let subject = HistoryPanel(profile: profile,
-                                   tabManager: tabManager)
+        let subject = HistoryPanel(profile: profile)
         trackForMemoryLeaks(subject)
         return subject
     }

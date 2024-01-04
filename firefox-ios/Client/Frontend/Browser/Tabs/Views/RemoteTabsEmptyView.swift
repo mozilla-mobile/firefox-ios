@@ -18,12 +18,9 @@ class RemoteTabsEmptyView: UIView, ThemeApplicable {
         static let verticalPadding: CGFloat = 40
         static let horizontalPadding: CGFloat = 24
         static let paddingInBetweenItems: CGFloat = 15
-        static let buttonCornerRadius: CGFloat = 13
         static let titleSizeFont: CGFloat = 22
         static let descriptionSizeFont: CGFloat = 17
-        static let buttonSizeFont: CGFloat = 16
         static let imageSize = CGSize(width: 90, height: 60)
-        static let buttonVerticalInset: CGFloat = 12
     }
 
     weak var delegate: RemoteTabsEmptyViewDelegate?
@@ -58,16 +55,12 @@ class RemoteTabsEmptyView: UIView, ThemeApplicable {
         label.textAlignment = .center
     }
 
-    private let signInButton: LegacyResizableButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .callout,
-                                                                         size: UX.buttonSizeFont)
-        button.setTitle(.Settings.Sync.ButtonTitle, for: [])
-        button.layer.cornerRadius = UX.buttonCornerRadius
-        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
-                                                left: UX.buttonVerticalInset,
-                                                bottom: UX.buttonVerticalInset,
-                                                right: UX.buttonVerticalInset)
-        button.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.syncDataButton
+    private let signInButton: PrimaryRoundedButton = .build { button in
+        let viewModel = PrimaryRoundedButtonViewModel(
+            title: .Settings.Sync.ButtonTitle,
+            a11yIdentifier: AccessibilityIdentifiers.TabTray.syncDataButton
+        )
+        button.configure(viewModel: viewModel)
     }
 
     override init(frame: CGRect) {
@@ -128,8 +121,7 @@ class RemoteTabsEmptyView: UIView, ThemeApplicable {
         emptyStateImageView.tintColor = theme.colors.textPrimary
         titleLabel.textColor = theme.colors.textPrimary
         instructionsLabel.textColor = theme.colors.textPrimary
-        signInButton.setTitleColor(theme.colors.textInverted, for: .normal)
-        signInButton.backgroundColor = theme.colors.actionPrimary
+        signInButton.applyTheme(theme: theme)
         backgroundColor = theme.colors.layer3
     }
 

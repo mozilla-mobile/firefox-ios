@@ -53,6 +53,8 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         var descriptionCopy = ""
 
         switch hint {
+        case .dataClearance:
+            descriptionCopy = CFRStrings.FeltDeletion.Body
         case .inactiveTabs:
             descriptionCopy = CFRStrings.TabsTray.InactiveTabs.Body
 
@@ -76,6 +78,8 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         var actionCopy: String
 
         switch hint {
+        case .dataClearance:
+            actionCopy = ""
         case .inactiveTabs:
             actionCopy = CFRStrings.TabsTray.InactiveTabs.Action
         case .toolbarLocation:

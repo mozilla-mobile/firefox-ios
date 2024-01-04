@@ -25,6 +25,9 @@ protocol WindowManager {
     /// Convenience. Returns the TabManager for a specific window.
     func tabManager(for windowUUID: WindowUUID) -> TabManager
 
+    /// Convenience. Returns all TabManagers for all open windows.
+    func allWindowTabManagers() -> [TabManager]
+
     /// Signals the WindowManager that a window was closed.
     /// - Parameter uuid: the ID of the window.
     func windowDidClose(uuid: WindowUUID)
@@ -69,6 +72,10 @@ final class WindowManagerImplementation: WindowManager {
     func tabManager(for windowUUID: WindowUUID) -> TabManager {
         guard let tabManager = window(for: windowUUID)?.tabManager else { fatalError("No tab manager for window UUID.") }
         return tabManager
+    }
+
+    func allWindowTabManagers() -> [TabManager] {
+        return windows.compactMap { uuid, window in window.tabManager }
     }
 
     func windowDidClose(uuid: WindowUUID) {
