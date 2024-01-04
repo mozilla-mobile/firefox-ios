@@ -54,6 +54,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Variables
     private var cellModel: HistoryHighlightsModel?
+    private var needsShadow: Bool = false
 
     // MARK: - Inits
 
@@ -134,15 +135,17 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
 
     override public func layoutSubviews() {
         super.layoutSubviews()
-        let size: CGFloat = 5
-        let distance: CGFloat = 0
-        let rect = CGRect(
-            x: -size,
-            y: contentView.frame.height - (size * 0.4) + distance,
-            width: contentView.frame.width + size * 2,
-            height: size
-        )
-        contentView.layer.shadowPath = UIBezierPath(ovalIn: rect).cgPath
+        if needsShadow {
+            let size: CGFloat = 5
+            let distance: CGFloat = 0
+            let rect = CGRect(
+                x: -size,
+                y: contentView.frame.height - (size * 0.4) + distance,
+                width: contentView.frame.width + size * 2,
+                height: size
+            )
+            contentView.layer.shadowPath = UIBezierPath(ovalIn: rect).cgPath
+        }
     }
 
     private func setupShadow(_ shouldAddShadow: Bool,
@@ -151,7 +154,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
         contentView.layer.maskedCorners = cornersToRound ?? .layerMaxXMinYCorner
         contentView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
 
-        var needsShadow = shouldAddShadow
+        needsShadow = shouldAddShadow
         if let cornersToRound = cornersToRound {
             needsShadow = cornersToRound.contains(.layerMinXMaxYCorner) ||
                 cornersToRound.contains(.layerMaxXMaxYCorner) ||
