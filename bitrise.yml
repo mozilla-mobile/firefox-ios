@@ -373,9 +373,9 @@ workflows:
             GREEN='\033[32;1m'
             NC='\033[0m'        # No Color (resets color to default)
 
-            # Check if $BITRISE_PIPELINE_ID is unset or empty
+            # Check if $BITRISEIO_PIPELINE_ID is unset or empty
             # If so, this is a standalone build and we need to fail it
-            if [ -z "$BITRISE_PIPELINE_ID" ]; then
+            if [ -z "$BITRISEIO_PIPELINE_ID" ]; then
                 printf "\n${RED}Error: BITRISE_PIPELINE_ID is not set.${NC}\n\
                 This means you have triggered a build stage individually, instead of the entire pipeline.\n\n\
                 To trigger a pipeline rebuild in its entirety, please do the following:\n\n\
