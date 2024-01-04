@@ -60,6 +60,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         sceneCoordinator.recurseChildCoordinators {
             ($0 as? WindowEventCoordinator)?.coordinatorWindowWillClose()
         }
+
+        // Notify WindowManager that window is closing
+        let windowManager: WindowManager = AppContainer.shared.resolve()
+        windowManager.windowDidClose(uuid: sceneCoordinator.windowUUID)
     }
 
     // MARK: - Transitioning to Foreground
