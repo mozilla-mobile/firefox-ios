@@ -79,6 +79,8 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate,
 
     func pressedNotifications() {}
 
+    func pressedAddressAutofill() {}
+
     func askedToOpen(url: URL?, withTitle title: NSAttributedString?) {}
 
     // MARK: AccountSettingsDelegate
