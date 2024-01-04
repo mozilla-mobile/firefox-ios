@@ -479,6 +479,10 @@ public struct AccessibilityIdentifiers {
             static let title = "AutofillCreditCard"
         }
 
+        struct Address {
+            static let title = "AutofillAddress"
+        }
+
         struct ConnectSetting {
             static let title = "SignInToSync"
         }

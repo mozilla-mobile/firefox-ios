@@ -448,6 +448,15 @@ final class SettingsCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.pushedViewController is SettingsContentViewController)
     }
 
+    func testPrivacySettingsDelegate_pressedAddressAutofill() {
+        let subject = createSubject()
+
+        subject.pressedAddressAutofill()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is AddressAutofillSettingsViewController)
+    }
+
     // MARK: AccountSettingsDelegate
 
     func testAccountSettingsDelegate_pushedConnectSetting() {
