@@ -49,7 +49,7 @@ focus-ios/focus-ios-tests/tools/Localizations
 
 # Glean
 .venv/
-Blockzilla/Generated
+focus-ios/Blockzilla/Generated
 
 import-strings.log
 export-strings.log
