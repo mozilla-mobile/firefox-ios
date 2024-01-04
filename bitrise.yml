@@ -375,8 +375,8 @@ workflows:
 
             # Check if $BITRISEIO_PIPELINE_ID is unset or empty
             # If so, this is a standalone build and we need to fail it
-            if [ -z "$BITRISEIO_PIPELINE_IDXXX" ]; then
-                printf "\n${RED}Error: BITRISE_PIPELINE_ID is not set.${NC}\n\
+            if [ -z "$BITRISEIO_PIPELINE_ID" ]; then
+                printf "\n${RED}Error: BITRISEIO_PIPELINE_ID is not set.${NC}\n\
                 This means you have triggered a build stage or workflow individually, instead of the entire pipeline.\n\n\
                 The current build workflow is: ${RED}$BITRISE_TRIGGERED_WORKFLOW_TITLE${NC}, but needs to be run in ${RED}pipeline_multiple_shards${NC}.\n\n\
                 To trigger a pipeline rebuild in its entirety, please do the following:\n\n\
