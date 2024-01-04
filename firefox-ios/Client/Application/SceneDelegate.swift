@@ -55,7 +55,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneDidDisconnect(_ scene: UIScene) {
         // Handle clean-up here for closing windows on iPad
         guard let sceneCoordinator = (scene.delegate as? SceneDelegate)?.sceneCoordinator else { return }
-        
+
         // Give all coordinators a chance to respond to scene disconnect (window close).
         sceneCoordinator.recurseChildCoordinators {
             ($0 as? WindowEventCoordinator)?.coordinatorWindowWillClose()
