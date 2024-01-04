@@ -29,8 +29,8 @@ extension ContextMenuHelper: TabContentScript {
         return "ContextMenuHelper"
     }
 
-    func scriptMessageHandlerName() -> String? {
-        return "contextMenuMessageHandler"
+    func scriptMessageHandlerNames() -> [String]? {
+        return ["contextMenuMessageHandler"]
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
