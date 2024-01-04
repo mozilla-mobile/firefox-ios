@@ -39,6 +39,13 @@ protocol WindowManager {
     func nextAvailableWindowUUID() -> WindowUUID
 }
 
+/// Abstract protocol that any Coordinator can conform to in order to respond
+/// to key events for window lifecycle events, such as performing clean-up
+/// actions when a window is closed.
+protocol WindowEventCoordinator {
+    func coordinatorWindowWillClose()
+}
+
 /// Captures state and coordinator references specific to one particular app window.
 struct AppWindowInfo {
     var tabManager: TabManager?
