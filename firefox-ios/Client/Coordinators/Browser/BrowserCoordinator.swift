@@ -21,7 +21,8 @@ class BrowserCoordinator: BaseCoordinator,
                           ParentCoordinatorDelegate,
                           TabManagerDelegate,
                           TabTrayCoordinatorDelegate,
-                          PrivateHomepageDelegate {
+                          PrivateHomepageDelegate,
+                          WindowEventCoordinator {
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
@@ -568,5 +569,13 @@ class BrowserCoordinator: BaseCoordinator,
     func didDismissTabTray(from coordinator: TabTrayCoordinator) {
         router.dismiss(animated: true, completion: nil)
         remove(child: coordinator)
+    }
+
+    // MARK: - WindowEventCoordinator
+
+    func coordinatorWindowWillClose() {
+        // This cleanup is necessary to ensure BVC and other components are properly released.
+        browserViewController.contentContainer.subviews.forEach { $0.removeFromSuperview() }
+        browserViewController.removeFromParent()
     }
 }

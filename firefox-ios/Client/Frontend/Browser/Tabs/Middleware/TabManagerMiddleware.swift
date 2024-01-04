@@ -316,7 +316,7 @@ class TabManagerMiddleware {
     }
 
     private var defaultTabManager: TabManager {
-        // TODO: [FXIOS-7863] Temporary. WIP for Redux + iPad Multi-window.
+        // TODO: [FXIOS-8071] Temporary. WIP for Redux + iPad Multi-window.
         return windowManager.tabManager(for: windowManager.activeWindow)
     }
 

@@ -571,14 +571,16 @@ class BrowserViewController: UIViewController,
         // UIAccessibilityCustomAction subclass holding an AccessibleAction instance does not work,
         // thus unable to generate AccessibleActions and UIAccessibilityCustomActions "on-demand" and need
         // to make them "persistent" e.g. by being stored in BVC
-        pasteGoAction = AccessibleAction(name: .PasteAndGoTitle, handler: { () -> Bool in
+        pasteGoAction = AccessibleAction(name: .PasteAndGoTitle, handler: { [weak self] () -> Bool in
+            guard let self else { return false }
             if let pasteboardContents = UIPasteboard.general.string {
                 self.urlBar(self.urlBar, didSubmitText: pasteboardContents)
                 return true
             }
             return false
         })
-        pasteAction = AccessibleAction(name: .PasteTitle, handler: { () -> Bool in
+        pasteAction = AccessibleAction(name: .PasteTitle, handler: {  [weak self] () -> Bool in
+            guard let self else { return false }
             if let pasteboardContents = UIPasteboard.general.string {
                 // Enter overlay mode and make the search controller appear.
                 self.overlayManager.openSearch(with: pasteboardContents)
@@ -587,7 +589,8 @@ class BrowserViewController: UIViewController,
             }
             return false
         })
-        copyAddressAction = AccessibleAction(name: .CopyAddressTitle, handler: { () -> Bool in
+        copyAddressAction = AccessibleAction(name: .CopyAddressTitle, handler: { [weak self] () -> Bool in
+            guard let self else { return false }
             if let url = self.tabManager.selectedTab?.canonicalURL?.displayURL ?? self.urlBar.currentURL {
                 UIPasteboard.general.url = url
             }
@@ -2083,7 +2086,8 @@ extension BrowserViewController: LegacyTabDelegate {
     }
 
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {
-        DispatchQueue.main.async { [unowned self] in
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
             KVOs.forEach { webView.removeObserver(self, forKeyPath: $0.rawValue) }
             webView.scrollView.removeObserver(self.scrollController, forKeyPath: KVOConstants.contentSize.rawValue)
             webView.uiDelegate = nil
