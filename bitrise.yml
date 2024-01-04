@@ -380,10 +380,10 @@ workflows:
                 This means you have triggered a build stage individually, instead of the entire pipeline.\n\n\
                 To trigger a pipeline rebuild in its entirety, please do the following:\n\n\
                     ${CYAN}1. Select your last failed build for 'pipeline_multiple_shards'.\n\
-                    2. Click the 'Rebuild' button dropdown icon located in the top right of the page.\n\
-                    3. From the dropdown menu, select 'Rebuild entire Pipeline'.\n\
-                    4. If no dropdown menu is present, you are looking at a standalone build\n\
-                       and need to select the initial Github pipeline triggered by the PR.${NC}\n\n\
+                    ${CYAN}2. Click the 'Rebuild' button dropdown icon located in the top right of the page.\n\
+                    ${CYAN}3. From the dropdown menu, select 'Rebuild entire Pipeline'.\n\
+                    ${CYAN}4. If no dropdown menu is present, you are looking at a standalone build\n\
+                       ${CYAN}and need to select the initial Github pipeline triggered by the PR.${NC}\n\n\
                 If you are still having issues, please contact ${GREEN}#mobile-testeng${NC} on Slack.\n"
                 exit 1  # Exit with a failure status
             else
