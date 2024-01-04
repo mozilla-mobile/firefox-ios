@@ -375,9 +375,10 @@ workflows:
 
             # Check if $BITRISEIO_PIPELINE_ID is unset or empty
             # If so, this is a standalone build and we need to fail it
-            if [ -z "$BITRISEIO_PIPELINE_ID" ]; then
+            if [ -z "$BITRISEIO_PIPELINE_IDXXX" ]; then
                 printf "\n${RED}Error: BITRISE_PIPELINE_ID is not set.${NC}\n\
-                This means you have triggered a build stage individually, instead of the entire pipeline.\n\n\
+                This means you have triggered a build stage or workflow individually, instead of the entire pipeline.\n\n\
+                The current build workflow is: ${RED}$BITRISE_TRIGGERED_WORKFLOW_TITLE${NC}, but needs to be run in ${RED}pipeline_multiple_shards${NC}.\n\n\
                 To trigger a pipeline rebuild in its entirety, please do the following:\n\n\
                     ${CYAN}1. Select your last failed build for 'pipeline_multiple_shards'.\n\
                     ${CYAN}2. Click the 'Rebuild' button dropdown icon located in the top right of the page.\n\
@@ -387,7 +388,7 @@ workflows:
                 If you are still having issues, please contact ${GREEN}#mobile-testeng${NC} on Slack.\n"
                 exit 1  # Exit with a failure status
             else
-                echo "BITRISE_PIPELINE_ID is set to $BITRISE_PIPELINE_ID"
+                echo "BITRISEIO_PIPELINE_ID is set to $BITRISEIO_PIPELINE_ID"
             fi
         title: Detect standalone build
   1_git_clone_and_post_clone:
