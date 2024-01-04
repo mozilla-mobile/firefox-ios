@@ -368,9 +368,9 @@ workflows:
             set -e
 
             # ANSI color codes
-            RED='\033[0;31m'    # Red color
-            CYAN='\033[0;36m'   # Cyan color
-            GREEN='\033[0;32m'  # Green color
+            RED='\033[31;1m'
+            CYAN='\033[36;1m'
+            GREEN='\033[32;1m'
             NC='\033[0m'        # No Color (resets color to default)
 
             # Check if $BITRISE_PIPELINE_ID is unset or empty
