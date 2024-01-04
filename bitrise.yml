@@ -365,20 +365,25 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            set -ex
+            set -e
+
+            # ANSI color codes
+            RED='\033[0;31m'    # Red color
+            CYAN='\033[0;36m'   # Cyan color
+            NC='\033[0m'        # No Color (resets color to default)
 
             # Check if $BITRISE_PIPELINE_ID is unset or empty
             # If so, this is a standalone build and we need to fail it
             if [ -z "$BITRISE_PIPELINE_ID" ]; then
-                printf "\n\t\tError: BITRISE_PIPELINE_ID is not set.\n\
+                printf "\n${RED}Error: BITRISE_PIPELINE_ID is not set.${NC}\n\
                 This means you have triggered a build stage individually, instead of the entire pipeline.\n\n\
                 To trigger a rebuild pipeline in its entirety, please do the following:\n\n\
-                    1. Select your last failed build for 'pipeline_multiple_shards'.\n\
+                    ${CYAN}1. Select your last failed build for 'pipeline_multiple_shards'.\n\
                     2. Click the 'Rebuild' button dropdown icon.\n\
                     3. From the dropdown menu, select 'Rebuild entire pipeline'.\n\
                     4. If no dropdown menu is present, you are looking at a standalone build\n\
-                       and need to select the initial Github pipeline triggered by the PR.\n\
-                If you are still having issues, please contact #mobile-testeng on Slack.\n"
+                       and need to select the initial Github pipeline triggered by the PR.${NC}\n\n\
+                If you are still having issues, please contact ${GREEN}#mobile-testeng${NC} on Slack.\n"
                 exit 1  # Exit with a failure status
             else
                 echo "BITRISE_PIPELINE_ID is set to $BITRISE_PIPELINE_ID"
