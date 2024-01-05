@@ -25,7 +25,14 @@ class PerformanceTests: BaseTestCase {
         let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
         let functionName = String(parts[1])
         // defaults
-        launchArguments = [LaunchArguments.PerformanceTest, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.SkipContextualHints, LaunchArguments.DisableAnimations]
+        launchArguments = [
+            LaunchArguments.PerformanceTest,
+            LaunchArguments.SkipIntro,
+            LaunchArguments.SkipWhatsNew,
+            LaunchArguments.SkipETPCoverSheet,
+            LaunchArguments.SkipContextualHints,
+            LaunchArguments.DisableAnimations
+        ]
         // append specific load profiles to LaunchArguments
         if fixtures.keys.contains(functionName) {
             launchArguments.append(LaunchArguments.LoadTabsStateArchive + fixtures[functionName]!)

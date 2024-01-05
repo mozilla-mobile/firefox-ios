@@ -23,7 +23,7 @@ func mostRecentTab(inTabs tabs: [Tab]) -> Tab? {
 
 protocol TabContentScript {
     static func name() -> String
-    func scriptMessageHandlerName() -> String?
+    func scriptMessageHandlerNames() -> [String]?
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage)
     func prepareForDeinit()
 }
@@ -873,17 +873,17 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
     // Without calling this, the TabContentScriptManager will leak.
     func uninstall(tab: Tab) {
         helpers.forEach { helper in
-            if let name = helper.value.scriptMessageHandlerName() {
+            helper.value.scriptMessageHandlerNames()?.forEach { name in
                 tab.webView?.configuration.userContentController.removeScriptMessageHandler(forName: name)
-                helper.value.prepareForDeinit()
             }
+            helper.value.prepareForDeinit()
         }
     }
 
     @objc
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         for helper in helpers.values {
-            if let scriptMessageHandlerName = helper.scriptMessageHandlerName(), scriptMessageHandlerName == message.name {
+            if let scriptMessageHandlerNames = helper.scriptMessageHandlerNames(), scriptMessageHandlerNames.contains(message.name) {
                 helper.userContentController(userContentController, didReceiveScriptMessage: message)
                 return
             }
@@ -896,9 +896,9 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
 
         helpers[name] = helper
 
-        // If this helper handles script messages, then get the handler name and register it. The Browser
+        // If this helper handles script messages, then get the handlers names and register them. The Browser
         // receives all messages and then dispatches them to the right TabHelper.
-        if let scriptMessageHandlerName = helper.scriptMessageHandlerName() {
+        helper.scriptMessageHandlerNames()?.forEach { scriptMessageHandlerName in
             tab.webView?.configuration.userContentController.addInDefaultContentWorld(scriptMessageHandler: self, name: scriptMessageHandlerName)
         }
     }
@@ -909,9 +909,9 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
 
         helpers[name] = helper
 
-        // If this helper handles script messages, then get the handler name and register it. The Browser
+        // If this helper handles script messages, then get the handlers names and register them. The Browser
         // receives all messages and then dispatches them to the right TabHelper.
-        if let scriptMessageHandlerName = helper.scriptMessageHandlerName() {
+        helper.scriptMessageHandlerNames()?.forEach { scriptMessageHandlerName in
             tab.webView?.configuration.userContentController.addInPageContentWorld(scriptMessageHandler: self, name: scriptMessageHandlerName)
         }
     }

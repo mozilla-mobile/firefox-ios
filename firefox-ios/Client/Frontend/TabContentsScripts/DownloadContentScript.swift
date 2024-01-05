@@ -28,8 +28,8 @@ class DownloadContentScript: TabContentScript {
         self.notificationCenter = notificationCenter
     }
 
-    func scriptMessageHandlerName() -> String? {
-        return "downloadManager"
+    func scriptMessageHandlerNames() -> [String]? {
+        return ["downloadManager"]
     }
 
     /// This function handles blob downloads

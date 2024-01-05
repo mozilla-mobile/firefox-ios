@@ -107,8 +107,8 @@ class AdsTelemetryHelper: TabContentScript {
         self.tab = tab
     }
 
-    func scriptMessageHandlerName() -> String? {
-        return "adsMessageHandler"
+    func scriptMessageHandlerNames() -> [String]? {
+        return ["adsMessageHandler"]
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {

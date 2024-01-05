@@ -3,8 +3,29 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-let iPadSearchIcon = XCUIApplication().children(matching: .window).element(boundBy: 0).children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element(boundBy: 1).children(matching: .other).element(boundBy: 1).children(matching: .image).element
-let iPhoneSearchIcon = XCUIApplication().children(matching: .window).element(boundBy: 0).children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element(boundBy: 1).children(matching: .other).element.children(matching: .image).element
+let iPadSearchIcon = XCUIApplication()
+    .children(matching: .window).element(boundBy: 0)
+    .children(matching: .other).element
+    .children(matching: .other).element
+    .children(matching: .other).element
+    .children(matching: .other).element
+    .children(matching: .other).element
+    .children(matching: .other).element
+    .children(matching: .other).element
+    .children(matching: .other).element(boundBy: 1)
+    .children(matching: .other).element(boundBy: 1)
+    .children(matching: .image).element
+let iPhoneSearchIcon = XCUIApplication()
+    .children(matching: .window).element(boundBy: 0)
+    .children(matching: .other).element
+    .children(matching: .other).element
+    .children(matching: .other).element
+    .children(matching: .other).element
+    .children(matching: .other).element
+    .children(matching: .other).element
+    .children(matching: .other).element(boundBy: 1)
+    .children(matching: .other).element
+    .children(matching: .image).element
 
 class UrlBarTests: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306888

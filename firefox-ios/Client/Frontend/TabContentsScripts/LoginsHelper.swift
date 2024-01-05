@@ -29,8 +29,8 @@ class LoginsHelper: TabContentScript {
         self.theme = theme
     }
 
-    func scriptMessageHandlerName() -> String? {
-        return "loginsManagerMessageHandler"
+    func scriptMessageHandlerNames() -> [String]? {
+        return ["loginsManagerMessageHandler"]
     }
 
     private func getOrigin(_ uriString: String, allowJS: Bool = false) -> String? {

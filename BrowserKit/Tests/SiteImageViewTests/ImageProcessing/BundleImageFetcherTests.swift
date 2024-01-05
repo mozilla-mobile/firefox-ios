@@ -148,7 +148,7 @@ private enum MockBundleData {
     static let invalidData = "invalidData"
 
     static let emptyData = "[]"
-
+// swiftlint:disable line_length
     static let validData = """
 [{"title": "mozilla", "url": "https://www.mozilla.com.cn/", "image_url": "mozilla-com.png", "background_color": "#000", "domain": "mozilla.com.cn" },{"title": "google","url": "https://www.google.com/","image_url": "google-com.png","background_color": "#FFF","is_multi_region_domain": "true","domain": "google"}]
 """
@@ -156,6 +156,7 @@ private enum MockBundleData {
     static let partlyValidData = """
 [{"title": "mozilla", "url": "https://www.mozilla.com.cn/", "image_url": "mozilla-com.png", "background_color": "#000", "domain": "mozilla.com.cn" },{"title": "google","url": "https://www.google.com/","image_url": "google-com.png","background_color": "#FFF","is_multi_region_domain": "true"}]
 """
+// swiftlint:enable line_length
 }
 
 private extension BundleImageFetcherTests {

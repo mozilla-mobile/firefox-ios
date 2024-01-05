@@ -2109,6 +2109,11 @@ extension String {
         tableName: "Settings",
         value: "Payment Methods",
         comment: "Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage.")
+    public static let SettingsAddressAutofill = MZLocalizedString(
+        key: "Settings.AddressAutofill.Title.v124",
+        tableName: "Settings",
+        value: "Autofill Addresses",
+        comment: "Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage.")
 }
 
 // MARK: - Error pages

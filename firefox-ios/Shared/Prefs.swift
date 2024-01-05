@@ -12,7 +12,6 @@ public struct PrefsKeys {
 
     // Global sync state for rust sync manager
     public static let RustSyncManagerPersistedState = "rustSyncManagerPersistedStateKey"
-    public static let HasVerifiedRustLogins = "hasVerifiedRustLogins"
 
     public static let KeyLastSyncFinishTime = "lastSyncFinishTime"
     public static let KeyDefaultHomePageURL = "KeyDefaultHomePageURL"
@@ -92,6 +91,7 @@ public struct PrefsKeys {
 
     // Firefox contextual hint
     public enum ContextualHints: String, CaseIterable {
+        case dataClearanceKey = "ContextualHintDataClearance"
         case jumpBackinKey = "ContextualHintJumpBackin"
         case jumpBackInConfiguredKey = "JumpBackInConfigured"
         case jumpBackInSyncedTabKey = "ContextualHintJumpBackInSyncedTab"

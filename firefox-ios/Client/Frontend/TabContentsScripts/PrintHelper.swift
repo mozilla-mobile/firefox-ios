@@ -17,8 +17,8 @@ class PrintHelper: TabContentScript {
         self.tab = tab
     }
 
-    func scriptMessageHandlerName() -> String? {
-        return "printHandler"
+    func scriptMessageHandlerNames() -> [String]? {
+        return ["printHandler"]
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {

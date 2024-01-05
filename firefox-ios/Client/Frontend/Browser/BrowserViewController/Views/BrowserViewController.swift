@@ -64,6 +64,7 @@ class BrowserViewController: UIViewController,
     var overlayManager: OverlayModeManager
     var appAuthenticator: AppAuthenticationProtocol
     var toolbarContextHintVC: ContextualHintViewController
+    var dataClearanceContextHintVC: ContextualHintViewController
     let shoppingContextHintVC: ContextualHintViewController
     private var backgroundTabLoader: DefaultBackgroundTabLoader
 
@@ -210,6 +211,11 @@ class BrowserViewController: UIViewController,
         let shoppingViewProvider = ContextualHintViewProvider(forHintType: .shoppingExperience,
                                                               with: profile)
         shoppingContextHintVC = ContextualHintViewController(with: shoppingViewProvider)
+        let dataClearanceViewProvider = ContextualHintViewProvider(
+            forHintType: .dataClearance,
+            with: profile
+        )
+        self.dataClearanceContextHintVC = ContextualHintViewController(with: dataClearanceViewProvider)
         self.backgroundTabLoader = DefaultBackgroundTabLoader(tabQueue: profile.queue)
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -217,10 +223,6 @@ class BrowserViewController: UIViewController,
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        unsubscribeFromRedux()
     }
 
     override var prefersStatusBarHidden: Bool {
@@ -498,7 +500,9 @@ class BrowserViewController: UIViewController,
                 dismissFakespotIfNeeded()
             }
 
+            // Update states for felt privacy
             updateInContentHomePanel(tabManager.selectedTab?.url)
+            setupMiddleButtonStatus(isLoading: false)
         }
     }
 
@@ -567,14 +571,16 @@ class BrowserViewController: UIViewController,
         // UIAccessibilityCustomAction subclass holding an AccessibleAction instance does not work,
         // thus unable to generate AccessibleActions and UIAccessibilityCustomActions "on-demand" and need
         // to make them "persistent" e.g. by being stored in BVC
-        pasteGoAction = AccessibleAction(name: .PasteAndGoTitle, handler: { () -> Bool in
+        pasteGoAction = AccessibleAction(name: .PasteAndGoTitle, handler: { [weak self] () -> Bool in
+            guard let self else { return false }
             if let pasteboardContents = UIPasteboard.general.string {
                 self.urlBar(self.urlBar, didSubmitText: pasteboardContents)
                 return true
             }
             return false
         })
-        pasteAction = AccessibleAction(name: .PasteTitle, handler: { () -> Bool in
+        pasteAction = AccessibleAction(name: .PasteTitle, handler: {  [weak self] () -> Bool in
+            guard let self else { return false }
             if let pasteboardContents = UIPasteboard.general.string {
                 // Enter overlay mode and make the search controller appear.
                 self.overlayManager.openSearch(with: pasteboardContents)
@@ -583,7 +589,8 @@ class BrowserViewController: UIViewController,
             }
             return false
         })
-        copyAddressAction = AccessibleAction(name: .CopyAddressTitle, handler: { () -> Bool in
+        copyAddressAction = AccessibleAction(name: .CopyAddressTitle, handler: { [weak self] () -> Bool in
+            guard let self else { return false }
             if let url = self.tabManager.selectedTab?.canonicalURL?.displayURL ?? self.urlBar.currentURL {
                 UIPasteboard.general.url = url
             }
@@ -1294,9 +1301,10 @@ class BrowserViewController: UIViewController,
 
     private func handleMiddleButtonState(_ state: MiddleButtonState) {
         let showDataClearanceFlow = browserViewControllerState?.showDataClearanceFlow ?? false
-        let showFireIcon = featureFlags.isFeatureEnabled(.feltPrivacyFeltDeletion, checking: .buildOnly) && showDataClearanceFlow
-        guard !showFireIcon else {
+        let showFireButton = featureFlags.isFeatureEnabled(.feltPrivacyFeltDeletion, checking: .buildOnly) && showDataClearanceFlow
+        guard !showFireButton else {
             navigationToolbar.updateMiddleButtonState(.fire)
+            configureDataClearanceContextualHint()
             return
         }
         navigationToolbar.updateMiddleButtonState(state)
@@ -2078,7 +2086,8 @@ extension BrowserViewController: LegacyTabDelegate {
     }
 
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {
-        DispatchQueue.main.async { [unowned self] in
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
             KVOs.forEach { webView.removeObserver(self, forKeyPath: $0.rawValue) }
             webView.scrollView.removeObserver(self.scrollController, forKeyPath: KVOConstants.contentSize.rawValue)
             webView.uiDelegate = nil

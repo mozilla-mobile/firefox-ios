@@ -675,6 +675,7 @@ extension TelemetryWrapper {
         case searchSuggestion = "search-suggestion"
         case searchHighlights = "search-highlights"
         case shoppingCFRsDisplayed = "shopping-cfrs-displayed"
+        case surfaceAdsClicked = "surface-ads-clicked"
         case shoppingAdsExposure = "shopping-ads-exposure"
         case shoppingAdsImpression = "shopping-ads-impression"
         case shoppingNoAdsAvailable = "shopping-no-ads-available"
@@ -1104,7 +1105,9 @@ extension TelemetryWrapper {
         case (.action, .tap, .startSearchButton, _, _):
             GleanMetrics.Search.startSearchPressed.add()
         case(.action, .tap, .recordSearch, _, let extras):
-            if let searchLocation = extras?[EventExtraKey.recordSearchLocation.rawValue] as? SearchesMeasurement.SearchLocation, let searchEngineID = extras?[EventExtraKey.recordSearchEngineID.rawValue] as? String? {
+            if let searchLocation = extras?[EventExtraKey.recordSearchLocation.rawValue]
+                as? SearchesMeasurement.SearchLocation,
+               let searchEngineID = extras?[EventExtraKey.recordSearchEngineID.rawValue] as? String? {
                 Telemetry.default.recordSearch(location: searchLocation, searchEngine: searchEngineID ?? "other")
                 GleanMetrics.Search.counts["\(searchEngineID ?? "custom").\(searchLocation.rawValue)"].add()
             } else {
@@ -1177,6 +1180,8 @@ extension TelemetryWrapper {
             }
 
         // MARK: Shopping Experience (Fakespot)
+        case (.action, .view, .shoppingBottomSheet, .surfaceAdsClicked, _):
+            GleanMetrics.Shopping.surfaceAdsClicked.record()
         case (.action, .tap, .shoppingButton, _, _):
             GleanMetrics.Shopping.addressBarIconClicked.record()
         case (.action, .view, .shoppingBottomSheet, .shoppingAdsExposure, _):

@@ -25,6 +25,9 @@ protocol WindowManager {
     /// Convenience. Returns the TabManager for a specific window.
     func tabManager(for windowUUID: WindowUUID) -> TabManager
 
+    /// Convenience. Returns all TabManagers for all open windows.
+    func allWindowTabManagers() -> [TabManager]
+
     /// Signals the WindowManager that a window was closed.
     /// - Parameter uuid: the ID of the window.
     func windowDidClose(uuid: WindowUUID)
@@ -34,6 +37,13 @@ protocol WindowManager {
     /// available it provides a new UUID for the window.
     /// - Returns: a UUID for the next window to be opened.
     func nextAvailableWindowUUID() -> WindowUUID
+}
+
+/// Abstract protocol that any Coordinator can conform to in order to respond
+/// to key window lifecycle events, such as cleaning up when a window is closed.
+protocol WindowEventCoordinator {
+    /// Notifies the coordinator that its parent window/scene is being removed.
+    func coordinatorWindowWillClose()
 }
 
 /// Captures state and coordinator references specific to one particular app window.
@@ -71,6 +81,10 @@ final class WindowManagerImplementation: WindowManager {
         return tabManager
     }
 
+    func allWindowTabManagers() -> [TabManager] {
+        return windows.compactMap { uuid, window in window.tabManager }
+    }
+
     func windowDidClose(uuid: WindowUUID) {
         updateWindow(nil, for: uuid)
     }
@@ -98,6 +112,7 @@ final class WindowManagerImplementation: WindowManager {
         guard info != nil || windows.count > 1 else {
             let message = "Cannot remove the only active window in the app. This is a client error."
             logger.log(message, level: .fatal, category: .window)
+            // TODO: [FXIOS-8081] Needs additional investigation for how to handle this with multi-window feature.
             assertionFailure(message)
             return
         }

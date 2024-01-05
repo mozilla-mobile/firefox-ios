@@ -8,7 +8,14 @@ import MozillaAppServices
 
 class PasswordManagerSelectionHelperTests: XCTestCase {
     private var selectionHelper: PasswordManagerSelectionHelper!
-    private let loginRecord = EncryptedLogin(credentials: URLCredential(user: "test", password: "doubletest", persistence: .permanent), protectionSpace: URLProtectionSpace.fromOrigin("https://test.com"))
+    private let loginRecord = EncryptedLogin(
+        credentials: URLCredential(
+            user: "test",
+            password: "doubletest",
+            persistence: .permanent
+        ),
+        protectionSpace: URLProtectionSpace.fromOrigin("https://test.com")
+    )
 
     override func setUp() {
         super.setUp()
@@ -50,7 +57,10 @@ class PasswordManagerSelectionHelperTests: XCTestCase {
     }
 
     func testRemoveAllCell() {
-        let loginRecord2 = EncryptedLogin(credentials: URLCredential(user: "filippo", password: "testtest", persistence: .permanent), protectionSpace: URLProtectionSpace.fromOrigin("https://testtest.com"))
+        let loginRecord2 = EncryptedLogin(
+            credentials: URLCredential(user: "filippo", password: "testtest", persistence: .permanent),
+            protectionSpace: URLProtectionSpace.fromOrigin("https://testtest.com")
+        )
 
         selectionHelper.setCellSelected(with: loginRecord)
         selectionHelper.setCellSelected(with: loginRecord2)

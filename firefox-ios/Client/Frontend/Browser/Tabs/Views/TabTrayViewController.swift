@@ -6,6 +6,7 @@ import Common
 import Foundation
 import Storage
 import Redux
+import Shared
 
 protocol TabTrayController: UIViewController,
                             UIAdaptivePresentationControllerDelegate,
@@ -264,6 +265,12 @@ class TabTrayViewController: UIViewController,
 
         if tabTrayState.shouldDismiss {
             dismissVC()
+        }
+        if let url = tabTrayState.shareURL {
+            navigationHandler?.shareTab(url: url, sourceView: self.view)
+
+            // Reload to clear the share sheet item
+            store.dispatch(TabTrayAction.tabTrayDidLoad(tabTrayState.selectedPanel))
         }
     }
 

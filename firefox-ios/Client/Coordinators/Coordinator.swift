@@ -50,3 +50,12 @@ extension Array where Element == Coordinator {
         self.first(where: { $0 is T }) as? T
     }
 }
+
+extension Coordinator {
+    /// Recursively performs an operation (defined by the supplied `action`)
+    /// on the receiver and its entire sub-tree of child coordinators.
+    func recurseChildCoordinators(_ action: (Coordinator) -> Void) {
+        action(self)
+        childCoordinators.forEach { $0.recurseChildCoordinators(action) }
+    }
+}

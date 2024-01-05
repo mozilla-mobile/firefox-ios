@@ -164,6 +164,31 @@ class WindowManagerTests: XCTestCase {
         XCTAssertNotEqual(result2, result3)
     }
 
+    func testAllWindowTabManagers() {
+        let subject = createSubject()
+
+        let tabManager1 = MockTabManager()
+        let tabManager2 = MockTabManager()
+
+        // Create two separate windows with associated Tab Managers
+        let uuid1 = subject.nextAvailableWindowUUID()
+        subject.newBrowserWindowConfigured(AppWindowInfo(tabManager: tabManager1), uuid: uuid1)
+        let uuid2 = subject.nextAvailableWindowUUID()
+        subject.newBrowserWindowConfigured(AppWindowInfo(tabManager: tabManager2), uuid: uuid2)
+
+        // Check that allWindowTabManagers returns both expected instances
+        var allTabManagers = subject.allWindowTabManagers()
+        XCTAssertEqual(allTabManagers.count, 2)
+        XCTAssert(allTabManagers.contains(where: { $0 === tabManager1 }))
+        XCTAssert(allTabManagers.contains(where: { $0 === tabManager2 }))
+
+        // Close first window and check that only the 2nd tab manager instance is returned
+        subject.windowDidClose(uuid: uuid1)
+        allTabManagers = subject.allWindowTabManagers()
+        XCTAssertEqual(allTabManagers.count, 1)
+        XCTAssert(tabManager2 === allTabManagers.first!)
+    }
+
     // MARK: - Test Subject
 
     private func createSubject() -> WindowManager {
