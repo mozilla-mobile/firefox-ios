@@ -35,16 +35,19 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
     private var networkingModule: WallpaperNetworking
     private var userDefaults: UserDefaultsInterface
     private var logger: Logger
+    private var prefs: Prefs
 
     // MARK: - Initializers
     init(
         with networkingModule: WallpaperNetworking = WallpaperNetworkingModule(),
         userDefaults: UserDefaultsInterface = UserDefaults.standard,
-        logger: Logger = DefaultLogger.shared
+        logger: Logger = DefaultLogger.shared,
+        profile: Profile = AppContainer.shared.resolve()
     ) {
         self.networkingModule = networkingModule
         self.userDefaults = userDefaults
         self.logger = logger
+        self.prefs = profile.prefs
     }
 
     // MARK: Public Interface
@@ -98,14 +101,9 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
         return true
     }
 
-    /// Returns true if the feature is enabled for the build and the version matches the
-    /// current shipped version.
+    /// Returns true if the feature is enabled by the user
     public var featureAvailable: Bool {
-        guard let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
-              wallpaperVersion == .v1
-        else { return false }
-
-        return true
+        return prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.CustomWallpaper) ?? false
     }
 
     /// Sets and saves a selected wallpaper as currently selected wallpaper.

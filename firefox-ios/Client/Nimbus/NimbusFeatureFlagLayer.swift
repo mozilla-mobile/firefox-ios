@@ -66,10 +66,6 @@ final class NimbusFeatureFlagLayer {
         case .tabTrayRefactor:
             return checkTabTrayRefactorFeature(from: nimbus)
 
-        case .wallpapers,
-                .wallpaperVersion:
-            return checkNimbusForWallpapersFeature(using: nimbus)
-
         case .wallpaperOnboardingSheet:
             return checkNimbusForWallpaperOnboarding(using: nimbus)
 

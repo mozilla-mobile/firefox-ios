@@ -132,7 +132,7 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 
     var headerViewModel: LabelButtonHeaderViewModel {
         // Only show a header if the firefox browser logo isn't showing
-        let shouldShow = !featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
+        let shouldShow = !(profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.CustomWallpaper) ?? false)
         var textColor: UIColor?
         if wallpaperManager.featureAvailable {
             textColor = wallpaperManager.currentWallpaper.textColor
