@@ -25,6 +25,9 @@
 /* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
 "DeleteLoginAlert.Message.Local.v122" = "Du kan ikkje angre denne handlinga.";
 
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Dette vil fjerne passordet frå alle dei synkroniserte einingane dine.";
+
 /* Title for the prompt that appears when the user deletes a login. */
 "DeleteLoginsAlert.Title.v122" = "Vil du fjerne passordet?";
 
