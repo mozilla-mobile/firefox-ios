@@ -3,15 +3,13 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import ComponentLibrary
 import UIKit
 
 class InactiveTabsFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable {
     struct UX {
         static let buttonInset: CGFloat = 14
         static let buttonImagePadding: CGFloat = 11
-        static let buttonFontSize: CGFloat = 16
-        static let buttonCornerRadius: CGFloat = 13.5
-        static let buttonBorderWidth: CGFloat = 1
         static let iPadOffset: CGFloat = 100
         static let iPhoneOffset: CGFloat = 23
         static let buttonTopOffset: CGFloat = 16
@@ -21,18 +19,13 @@ class InactiveTabsFooterView: UICollectionReusableView, ReusableCell, ThemeAppli
     var buttonClosure: (() -> Void)?
 
     // MARK: - UI Elements
-    private lazy var roundedButton: UIButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
-            withTextStyle: .body,
-            size: UX.buttonFontSize)
-        button.setImage(UIImage(systemName: StandardImageIdentifiers.Large.delete), for: .normal)
-        button.setTitle(.TabsTray.InactiveTabs.CloseAllInactiveTabsButton, for: .normal)
-        button.titleLabel?.textAlignment = .center
-        button.titleLabel?.lineBreakMode = .byTruncatingTail
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.layer.cornerRadius = UX.buttonCornerRadius
-        button.layer.borderWidth = UX.buttonBorderWidth
-        button.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.InactiveTabs.deleteButton
+    private lazy var roundedButton: PrimaryRoundedButton = .build { button in
+        let viewModel = PrimaryRoundedButtonViewModel(
+            title: .TabsTray.InactiveTabs.CloseAllInactiveTabsButton,
+            a11yIdentifier: AccessibilityIdentifiers.TabTray.InactiveTabs.deleteButton,
+            imageTitlePadding: UX.buttonImagePadding
+        )
+        button.configure(viewModel: viewModel)
         button.addTarget(self, action: #selector(self.buttonPressed), for: .touchUpInside)
     }
 
@@ -80,10 +73,8 @@ class InactiveTabsFooterView: UICollectionReusableView, ReusableCell, ThemeAppli
 
     func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layer2
-        roundedButton.setTitleColor(theme.colors.textPrimary, for: .normal)
-        roundedButton.backgroundColor = theme.colors.layer3
-        roundedButton.tintColor = theme.colors.textPrimary
+        roundedButton.applyTheme(theme: theme)
         let image = UIImage(named: StandardImageIdentifiers.Large.delete)?.tinted(withColor: theme.colors.iconPrimary)
-        roundedButton.setImage(image, for: .normal)
+        roundedButton.configuration?.image = image?.withRenderingMode(.alwaysTemplate)
     }
 }
