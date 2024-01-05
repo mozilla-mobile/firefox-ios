@@ -36,6 +36,7 @@ class BrowserCoordinator: BaseCoordinator,
     private let glean: GleanWrapper
     private let applicationHelper: ApplicationHelper
     private var browserIsReady = false
+    private var windowUUID: WindowUUID { return tabManager.windowUUID }
 
     init(router: Router,
          screenshotService: ScreenshotService,
@@ -54,11 +55,6 @@ class BrowserCoordinator: BaseCoordinator,
         self.applicationHelper = applicationHelper
         self.glean = glean
         super.init(router: router)
-
-        windowManager.newBrowserWindowConfigured(
-            AppWindowInfo(tabManager: tabManager),
-            uuid: tabManager.windowUUID
-        )
 
         // TODO [7856]: Additional telemetry updates forthcoming once iPad multi-window enabled.
         // For now, we only have a single BVC and TabManager. Plug it into our TelemetryWrapper:
@@ -620,9 +616,16 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - WindowEventCoordinator
 
-    func coordinatorWindowWillClose() {
-        // This cleanup is necessary to ensure BVC and other components are properly released.
-        browserViewController.contentContainer.subviews.forEach { $0.removeFromSuperview() }
-        browserViewController.removeFromParent()
+    func coordinatorHandleWindowEvent(event: WindowEvent, uuid: WindowUUID) {
+        switch event {
+        case .windowWillClose:
+            // Was the closed window the window for this browser?
+            guard uuid == windowUUID else { return }
+            // If so, perform add'tl cleanup required so BVC and other components are properly released.
+            browserViewController.contentContainer.subviews.forEach { $0.removeFromSuperview() }
+            browserViewController.removeFromParent()
+        default:
+            break
+        }
     }
 }

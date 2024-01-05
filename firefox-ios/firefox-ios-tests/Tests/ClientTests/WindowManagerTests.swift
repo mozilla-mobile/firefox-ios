@@ -93,7 +93,7 @@ class WindowManagerTests: XCTestCase {
         XCTAssertEqual(firstWindowUUID, subject.activeWindow)
 
         // Close the first window
-        subject.windowDidClose(uuid: firstWindowUUID)
+        subject.windowWillClose(uuid: firstWindowUUID)
 
         // Check that the second window is now the only window
         XCTAssertEqual(1, subject.windows.count)
@@ -183,7 +183,7 @@ class WindowManagerTests: XCTestCase {
         XCTAssert(allTabManagers.contains(where: { $0 === tabManager2 }))
 
         // Close first window and check that only the 2nd tab manager instance is returned
-        subject.windowDidClose(uuid: uuid1)
+        subject.windowWillClose(uuid: uuid1)
         allTabManagers = subject.allWindowTabManagers()
         XCTAssertEqual(allTabManagers.count, 1)
         XCTAssert(tabManager2 === allTabManagers.first!)

@@ -30,25 +30,26 @@ protocol WindowManager {
 
     /// Signals the WindowManager that a window was closed.
     /// - Parameter uuid: the ID of the window.
-    func windowDidClose(uuid: WindowUUID)
+    func windowWillClose(uuid: WindowUUID)
 
     /// Supplies the UUID for the next window the iOS app should open. This
     /// corresponds with the window tab data saved to disk, or, if no data is
     /// available it provides a new UUID for the window.
     /// - Returns: a UUID for the next window to be opened.
     func nextAvailableWindowUUID() -> WindowUUID
-}
 
-/// Abstract protocol that any Coordinator can conform to in order to respond
-/// to key window lifecycle events, such as cleaning up when a window is closed.
-protocol WindowEventCoordinator {
-    /// Notifies the coordinator that its parent window/scene is being removed.
-    func coordinatorWindowWillClose()
+    /// Signals the WindowManager that a window event has occurred. Window events
+    /// are communicated to any interested Coordinators for _all_ windows, but
+    /// any one event is always associated with one window in specific. This window
+    /// can be identified by the `windowUUID` parameter.
+    /// - Parameter event: the event that occurred and any associated metadata.
+    func postWindowEvent(event: WindowEvent, windowUUID: WindowUUID)
 }
 
 /// Captures state and coordinator references specific to one particular app window.
 struct AppWindowInfo {
-    var tabManager: TabManager?
+    weak var tabManager: TabManager?
+    weak var sceneCoordinator: SceneCoordinator?
 }
 
 final class WindowManagerImplementation: WindowManager {
@@ -88,7 +89,8 @@ final class WindowManagerImplementation: WindowManager {
         return windows.compactMap { uuid, window in window.tabManager }
     }
 
-    func windowDidClose(uuid: WindowUUID) {
+    func windowWillClose(uuid: WindowUUID) {
+        postWindowEvent(event: .windowWillClose, windowUUID: uuid)
         updateWindow(nil, for: uuid)
     }
 
@@ -107,6 +109,18 @@ final class WindowManagerImplementation: WindowManager {
         let uuids = tabDataStore.fetchWindowDataUUIDs().filter { !openWindowUUIDs.contains($0) }
         let sortedUUIDs = uuids.sorted(by: { return $0.uuidString > $1.uuidString })
         return sortedUUIDs.first ?? WindowUUID()
+    }
+
+    func postWindowEvent(event: WindowEvent, windowUUID: WindowUUID) {
+        windows.forEach { uuid, windowInfo in
+            // Notify any interested Coordinators, in each window, of the
+            // event. Any Coordinator can receive these by conforming to the
+            // WindowEventCoordinator protocol.
+            windowInfo.sceneCoordinator?.recurseChildCoordinators {
+                guard let coordinator = $0 as? WindowEventCoordinator else { return }
+                coordinator.coordinatorHandleWindowEvent(event: event, uuid: windowUUID)
+            }
+        }
     }
 
     // MARK: - Internal Utilities

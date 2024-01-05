@@ -118,6 +118,10 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
         let browserCoordinator = BrowserCoordinator(router: router,
                                                     screenshotService: screenshotService,
                                                     tabManager: tabManager)
+
+        let windowInfo = AppWindowInfo(tabManager: tabManager, sceneCoordinator: self)
+        windowManager.newBrowserWindowConfigured(windowInfo, uuid: tabManager.windowUUID)
+
         add(child: browserCoordinator)
         browserCoordinator.start(with: launchType)
 
