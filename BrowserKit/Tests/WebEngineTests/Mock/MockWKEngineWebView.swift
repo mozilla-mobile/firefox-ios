@@ -7,6 +7,7 @@ import WebKit
 @testable import WebEngine
 
 class MockWKEngineWebView: WKEngineWebView {
+    var interactionState: Any?
     var url: URL?
     var navigationDelegate: WKNavigationDelegate?
     var allowsBackForwardNavigationGestures = true
