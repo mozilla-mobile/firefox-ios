@@ -1013,7 +1013,7 @@
 "ScanQRCode.Error.OK.Button" = "ตกลง";
 
 /* Text for the instructions label, displayed in the QR scanner view */
-"ScanQRCode.Instructions.Label" = "จัดตำแหน่งรหัส QR ให้อยู่ภายในกรอบเพื่อสแกน";
+"ScanQRCode.Instructions.Label" = "จัดตำแหน่งคิวอาร์โค้ดให้อยู่ภายในกรอบเพื่อสแกน";
 
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "ข้อมูลไม่ถูกต้อง";
@@ -1022,7 +1022,7 @@
 "ScanQRCode.PermissionError.Message.v100" = "ไปที่ ‘การตั้งค่า’ ของอุปกรณ์ > ‘Firefox’ และอนุญาตให้ Firefox เข้าถึงกล้อง";
 
 /* Title for the QR code scanner view. */
-"ScanQRCode.View.Title" = "สแกนรหัส QR";
+"ScanQRCode.View.Title" = "สแกนคิวอาร์โค้ด";
 
 /* Open search section of settings */
 "Search" = "ค้นหา";
