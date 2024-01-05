@@ -67,6 +67,7 @@ class BrowserViewController: UIViewController,
     var dataClearanceContextHintVC: ContextualHintViewController
     let shoppingContextHintVC: ContextualHintViewController
     private var backgroundTabLoader: DefaultBackgroundTabLoader
+    var webviewTelemetry = WebViewLoadMeasurementTelemetry()
 
     // popover rotation handling
     var displayedPopoverController: UIViewController?
@@ -398,7 +399,7 @@ class BrowserViewController: UIViewController,
         // individual TabManager instances for each BVC, so we perform these here instead.
         tabManager.preserveTabs()
         // TODO: [FXIOS-7856] Some additional updates for telemetry forthcoming, once iPad multi-window is enabled.
-        TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
+        TabsTelemetry.trackTabsQuantity(tabManager: tabManager)
     }
 
     @objc
