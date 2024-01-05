@@ -4837,7 +4837,7 @@ extension String {
         value: nil,
         comment: "Accessibility label for the navigation toolbar displayed at the bottom of the screen.")
     public static let TabToolbarMoreOptionsAccessibilityLabel = MZLocalizedString(
-        key: "Toolbar.Accessibility.MoreOptions.v123",
+        key: "Toolbar.Accessibility.MoreOptions.v124",
         tableName: nil,
         value: "More Options",
         comment: "Accessibility label for action to see more options.")
