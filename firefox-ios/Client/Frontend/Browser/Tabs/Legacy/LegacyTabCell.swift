@@ -72,7 +72,6 @@ class LegacyTabCell: UICollectionViewCell,
                                                                        bottom: LegacyGridTabViewController.UX.closeButtonEdgeInset,
                                                                        trailing: LegacyGridTabViewController.UX.closeButtonEdgeInset)
     }
-    }
 
     // TODO: Handle visual effects theming FXIOS-5064
     private var title = UIVisualEffectView(effect: UIBlurEffect(style: UIColor.legacyTheme.tabTray.tabTitleBlur))
