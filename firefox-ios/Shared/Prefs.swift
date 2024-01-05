@@ -82,7 +82,6 @@ public struct PrefsKeys {
 
     public struct UserFeatureFlagPrefs {
         public static let ASPocketStories = "ASPocketStoriesUserPrefsKey"
-        public static let CustomWallpaper = "CustomWallpaperUserPrefsKey"
         public static let RecentlySavedSection = "RecentlySavedSectionUserPrefsKey"
         public static let SponsoredShortcuts = "SponsoredShortcutsUserPrefsKey"
         public static let StartAtHome = "StartAtHomeUserPrefsKey"

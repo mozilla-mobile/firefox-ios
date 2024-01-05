@@ -1918,11 +1918,6 @@ extension String {
 
 // MARK: - Activity Stream
 extension String {
-    public static let ASShortcutsTitle =  MZLocalizedString(
-        key: "ActivityStream.Shortcuts.SectionTitle",
-        tableName: nil,
-        value: "Shortcuts",
-        comment: "Section title label for Shortcuts")
     public static let RecentlySavedSectionTitle = MZLocalizedString(
         key: "ActivityStream.Library.Title",
         tableName: nil,
@@ -5942,6 +5937,15 @@ extension String {
                 value: "Card Information updated",
                 comment: "Label text that gets presented as a confirmation at the bottom of screen when credit card information gets updated successfully",
                 lastUsedInVersion: 121)
+        }
+
+        struct v123 {
+            public static let ASShortcutsTitle =  MZLocalizedString(
+                key: "ActivityStream.Shortcuts.SectionTitle",
+                tableName: nil,
+                value: "Shortcuts",
+                comment: "Section title label for Shortcuts",
+                lastUsedInVersion: 123)
         }
     }
 }

@@ -20,8 +20,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     }
 
     var isWallpaperSectionEnabled: Bool {
-        return wallpaperManager.canSettingsBeShown &&
-            profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.CustomWallpaper) ?? false
+        return wallpaperManager.canSettingsBeShown
     }
 
     var isPocketSectionEnabled: Bool {

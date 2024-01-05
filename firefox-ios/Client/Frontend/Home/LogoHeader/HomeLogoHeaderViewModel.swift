@@ -57,7 +57,7 @@ extension HomeLogoHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     var isEnabled: Bool {
-        return profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.CustomWallpaper) ?? true
+        return true
     }
 
     func setTheme(theme: Theme) {

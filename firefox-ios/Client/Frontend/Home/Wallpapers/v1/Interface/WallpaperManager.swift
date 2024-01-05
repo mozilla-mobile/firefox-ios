@@ -35,19 +35,16 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
     private var networkingModule: WallpaperNetworking
     private var userDefaults: UserDefaultsInterface
     private var logger: Logger
-    private var prefs: Prefs
 
     // MARK: - Initializers
     init(
         with networkingModule: WallpaperNetworking = WallpaperNetworkingModule(),
         userDefaults: UserDefaultsInterface = UserDefaults.standard,
-        logger: Logger = DefaultLogger.shared,
-        profile: Profile = AppContainer.shared.resolve()
+        logger: Logger = DefaultLogger.shared
     ) {
         self.networkingModule = networkingModule
         self.userDefaults = userDefaults
         self.logger = logger
-        self.prefs = profile.prefs
     }
 
     // MARK: Public Interface
@@ -73,7 +70,6 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
         let cfrsHaveBeenShown = toolbarCFRShown && jumpBackInCFRShown
 
         guard cfrsHaveBeenShown,
-              featureAvailable,
               hasEnoughThumbnailsToShow,
               !userDefaults.bool(forKey: PrefsKeys.Wallpapers.OnboardingSeenKey),
               featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet,
@@ -85,8 +81,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
 
     /// Determines whether the wallpaper settings can be shown
     var canSettingsBeShown: Bool {
-        guard featureAvailable,
-              hasEnoughThumbnailsToShow
+        guard hasEnoughThumbnailsToShow
         else { return false }
 
         return true
@@ -96,14 +91,9 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
     private var hasEnoughThumbnailsToShow: Bool {
         let thumbnailUtility = WallpaperThumbnailUtility(with: networkingModule)
 
-        guard featureAvailable, thumbnailUtility.areThumbnailsAvailable else { return false }
+        guard thumbnailUtility.areThumbnailsAvailable else { return false }
 
         return true
-    }
-
-    /// Returns true if the feature is enabled by the user
-    public var featureAvailable: Bool {
-        return prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.CustomWallpaper) ?? false
     }
 
     /// Sets and saves a selected wallpaper as currently selected wallpaper.
