@@ -66,7 +66,12 @@ class LegacyTabCell: UICollectionViewCell,
         button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross), for: [])
         button.imageView?.contentMode = .scaleAspectFit
         button.contentMode = .center
-        button.imageEdgeInsets = UIEdgeInsets(equalInset: LegacyGridTabViewController.UX.closeButtonEdgeInset)
+        button.configuration?.imagePadding = LegacyGridTabViewController.UX.closeButtonEdgeInset
+        button.configuration?.contentInsets =  NSDirectionalEdgeInsets(top: LegacyGridTabViewController.UX.closeButtonEdgeInset,
+                                                                       leading: LegacyGridTabViewController.UX.closeButtonEdgeInset,
+                                                                       bottom: LegacyGridTabViewController.UX.closeButtonEdgeInset,
+                                                                       trailing: LegacyGridTabViewController.UX.closeButtonEdgeInset)
+    }
     }
 
     // TODO: Handle visual effects theming FXIOS-5064
