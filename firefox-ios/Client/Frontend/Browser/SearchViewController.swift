@@ -70,6 +70,7 @@ class SearchViewController: SiteTableViewController,
     private var searchHighlights = [HighlightItem]()
     var firefoxSuggestions = [RustFirefoxSuggestion]()
     private var highlightManager: HistoryHighlightsManagerProtocol
+    private var filteredBookmarksAndHistory = [Site?]()
 
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
     // scrollable container; searchEngineScrollViewContent contains the actual set of search engine buttons.
@@ -93,7 +94,7 @@ class SearchViewController: SiteTableViewController,
     static var userAgent: String?
 
     var hasFirefoxSuggestions: Bool {
-        let dataCount = data.count
+        let dataCount = filteredBookmarksAndHistory.count
         return dataCount != 0
             || !filteredOpenedTabs.isEmpty
             || !filteredRemoteClientTabs.isEmpty
@@ -498,6 +499,12 @@ class SearchViewController: SiteTableViewController,
                 return false
             }
 
+            if let searchParamString = profile.prefs.stringForKey(PrefsKeys.FirefoxSuggestFilterSearchParameter) {
+                if containsQueryParameters(searchParamString: searchParamString, url: tab.URL) {
+                    return false
+                }
+            }
+
             if tab.title.lowercased().contains(searchString.lowercased()) {
                 return true
             }
@@ -547,6 +554,7 @@ class SearchViewController: SiteTableViewController,
 
     func loader(dataLoaded data: Cursor<Site>) {
         self.data = data
+        filteredBookmarksAndHistory = filterData(data: data)
         tableView.reloadData()
     }
 
@@ -580,7 +588,7 @@ class SearchViewController: SiteTableViewController,
             let remoteTab = self.filteredRemoteClientTabs[indexPath.row].tab
             searchDelegate?.searchViewController(self, didSelectURL: remoteTab.URL, searchTerm: nil)
         case .bookmarksAndHistory:
-            if let site = data[indexPath.row] {
+            if let site = filteredBookmarksAndHistory[indexPath.row] {
                 recordSearchListSelectionTelemetry(type: .bookmarksAndHistory,
                                                    isBookmark: site.bookmarked ?? false)
                 if let url = URL(string: site.url, invalidCharacters: false) {
@@ -657,7 +665,7 @@ class SearchViewController: SiteTableViewController,
         case .remoteTabs:
             return filteredRemoteClientTabs.count
         case .bookmarksAndHistory:
-            return data.count
+            return filteredBookmarksAndHistory.count
         case .searchHighlights:
             return searchHighlights.count
         case .firefoxSuggestions:
@@ -673,7 +681,7 @@ class SearchViewController: SiteTableViewController,
         guard let section = SearchListSection(rawValue: indexPath.section) else { return }
 
         if section == .bookmarksAndHistory,
-            let suggestion = data[indexPath.item] {
+            let suggestion = filteredBookmarksAndHistory[indexPath.item] {
             searchDelegate?.searchViewController(self, didHighlightText: suggestion.url, search: false)
         }
     }
@@ -754,7 +762,7 @@ class SearchViewController: SiteTableViewController,
                 cell = twoLineCell
             }
         case .bookmarksAndHistory:
-            if let site = data[indexPath.row] {
+            if let site = filteredBookmarksAndHistory[indexPath.row] {
                 let isBookmark = site.bookmarked ?? false
                 cell = twoLineCell
                 twoLineCell.descriptionLabel.isHidden = false
@@ -848,7 +856,30 @@ class SearchViewController: SiteTableViewController,
             break
         }
     }
-}
+
+    private func filterData(data: Cursor<Site>) -> [Site?] {
+        return data.filter { item in
+            guard profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowSponsoredSuggestions) ?? false  else { return true }
+
+            guard let urlString = item?.url as? String,
+                  let searchParamString = profile.prefs.stringForKey(PrefsKeys.FirefoxSuggestFilterSearchParameter),
+                  let url = URL(string: urlString) else {return true}
+
+            return !containsQueryParameters(searchParamString: searchParamString, url: url)
+        }
+    }
+
+    func containsQueryParameters(searchParamString: String, url: URL) -> Bool {
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+              let searchParams = components.queryItems else { return false }
+        for searchParam in searchParams {
+            let matchString = "\(searchParam.name)=\(searchParam.value ?? "" )"
+            if matchString == searchParamString {
+                return true
+            }
+        }
+        return false
+    }}
 
 // MARK: - Telemetry
 private extension SearchViewController {

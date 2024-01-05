@@ -168,6 +168,7 @@ public struct PrefsKeys {
     // Firefox Suggest
     public static let FirefoxSuggestShowNonSponsoredSuggestions = "FirefoxSuggestShowNonSponsoredSuggestions"
     public static let FirefoxSuggestShowSponsoredSuggestions = "FirefoxSuggestShowSponsoredSuggestions"
+    public static let FirefoxSuggestFilterSearchParameter = "FirefoxSuggestFilterSearchParameter"
 }
 
 public struct PrefsDefaults {

@@ -67,4 +67,10 @@ class SearchViewControllerTest: XCTestCase {
 
         XCTAssertEqual(searchViewController.firefoxSuggestions.count, 0)
     }
+
+    func testFilteredHistoryAndBookmarks() {
+        XCTAssertTrue(searchViewController.containsQueryParameters(searchParamString: "a=b", url: URL(string: "http://example.com?a=b")!))
+        XCTAssertFalse(searchViewController.containsQueryParameters(searchParamString: "c=d", url: URL(string: "http://example.com?a=b")!))
+        XCTAssertFalse(searchViewController.containsQueryParameters(searchParamString: "a=b", url: URL(string: "http://example.com?ba=b")!))
+    }
 }
