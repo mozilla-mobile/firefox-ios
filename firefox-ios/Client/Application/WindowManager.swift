@@ -109,14 +109,6 @@ final class WindowManagerImplementation: WindowManager {
     // MARK: - Internal Utilities
 
     private func updateWindow(_ info: AppWindowInfo?, for uuid: WindowUUID) {
-        guard info != nil || windows.count > 1 else {
-            let message = "Cannot remove the only active window in the app. This is a client error."
-            logger.log(message, level: .fatal, category: .window)
-            // TODO: [FXIOS-8081] Needs additional investigation for how to handle this with multi-window feature.
-            assertionFailure(message)
-            return
-        }
-
         windows[uuid] = info
         didUpdateWindow(uuid)
     }
