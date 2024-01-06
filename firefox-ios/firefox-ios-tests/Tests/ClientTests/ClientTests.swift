@@ -17,7 +17,9 @@ class ClientTests: XCTestCase {
         let systemVersion = UIDevice.current.systemVersion
 
         if AppInfo.buildNumber != "1" {
+            // swiftlint:disable line_length
             let expectedRegex = "^Firefox-iOS-Sync/[0-9\\.]+b[0-9]* \\(\(device); iPhone OS \(systemVersion)\\) \\([-_A-Za-z0-9= \\(\\)]+\\)$"
+            // swiftlint:enable line_length
             let loc = ua.range(of: expectedRegex, options: .regularExpression)
             XCTAssertTrue(loc != nil, "Sync UA is as expected. Was \(ua)")
         } else {
@@ -27,7 +29,10 @@ class ClientTests: XCTestCase {
 
     func testMobileUserAgent() {
         let compare: (String) -> Bool = { ua in
-            let range = ua.range(of: "^Mozilla/5\\.0 \\(.+\\) AppleWebKit/[0-9\\.]+ \\(KHTML, like Gecko\\)", options: .regularExpression)
+            let range = ua.range(
+                of: "^Mozilla/5\\.0 \\(.+\\) AppleWebKit/[0-9\\.]+ \\(KHTML, like Gecko\\)",
+                options: .regularExpression
+            )
             return range != nil
         }
         XCTAssertTrue(compare(UserAgent.mobileUserAgent()), "User agent computes correctly.")
@@ -37,7 +42,10 @@ class ClientTests: XCTestCase {
     // This hard-codes the desktop UA, not much to test as a result of that
 //    func testDesktopUserAgent() {
 //        let compare: (String) -> Bool = { ua in
-//            let range = ua.range(of: "^Mozilla/5\\.0 \\(Macintosh; Intel Mac OS X [0-9\\.]+\\)", options: .regularExpression)
+//            let range = ua.range(
+//                of: "^Mozilla/5\\.0 \\(Macintosh; Intel Mac OS X [0-9\\.]+\\)",
+//                options: .regularExpression
+//            )
 //            return range != nil
 //        }
 //        XCTAssertTrue(compare(UserAgent.desktopUserAgent()), "Desktop user agent computes correctly.")

@@ -32,7 +32,10 @@ extension ContentBlocker {
         }
         // Note that * is added to the front of domains, so foo.com becomes *foo.com
         let list = "'*" + safelistedDomains.domainSet.joined(separator: "','*") + "'"
+
+        // swiftlint:disable line_length
         return ", {'action': { 'type': 'ignore-previous-rules' }, 'trigger': { 'url-filter': '.*', 'if-domain': [\(list)] }}".replacingOccurrences(of: "'", with: "\"")
+        // swiftlint:enable line_length
     }
 
     func safelist(enable: Bool, url: URL, completion: (() -> Void)?) {
@@ -97,7 +100,11 @@ extension ContentBlocker {
             do {
                 try FileManager.default.moveItem(at: oldFileURL, to: fileURL)
             } catch {
-                logger.log("Failed to move file from \(oldFileURL) to \(fileURL) for safe list file with error: \(error)", level: .warning, category: .webview)
+                logger.log(
+                    "Failed to move file from \(oldFileURL) to \(fileURL) for safe list file with error: \(error)",
+                    level: .warning,
+                    category: .webview
+                )
             }
             return data
         }

@@ -31,8 +31,18 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
 
         super.init()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(UIPasteboardChanged), name: UIPasteboard.changedNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForegroundNotification), name: UIApplication.willEnterForegroundNotification, object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(UIPasteboardChanged),
+            name: UIPasteboard.changedNotification,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(appWillEnterForegroundNotification),
+            name: UIApplication.willEnterForegroundNotification,
+            object: nil
+        )
     }
 
     @objc
@@ -43,7 +53,12 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
         UIPasteboard.general.asyncURL { url in
             ensureMainThread {
                 defer {
-                    NotificationCenter.default.addObserver(self, selector: #selector(self.UIPasteboardChanged), name: UIPasteboard.changedNotification, object: nil)
+                    NotificationCenter.default.addObserver(
+                        self,
+                        selector: #selector(self.UIPasteboardChanged),
+                        name: UIPasteboard.changedNotification,
+                        object: nil
+                    )
                 }
 
                 guard let url = url else {

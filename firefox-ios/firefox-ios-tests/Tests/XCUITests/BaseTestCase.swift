@@ -224,7 +224,8 @@ class BaseTestCase: XCTestCase {
 
     func checkRecentlySaved() {
         waitForTabsButton()
-        let numberOfRecentlyVisitedBookmarks = app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell]
+        let numberOfRecentlyVisitedBookmarks = app.scrollViews
+            .cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell]
             .otherElements
             .otherElements
             .otherElements
@@ -236,7 +237,8 @@ class BaseTestCase: XCTestCase {
 
     func checkRecentlySavedUpdated() {
         waitForTabsButton()
-        let numberOfRecentlyVisitedBookmarks = app.scrollViews .cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell]
+        let numberOfRecentlyVisitedBookmarks = app.scrollViews
+            .cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell]
             .otherElements
             .otherElements
             .otherElements

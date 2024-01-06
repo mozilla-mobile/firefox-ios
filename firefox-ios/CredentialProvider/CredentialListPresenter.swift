@@ -23,7 +23,8 @@ class CredentialListPresenter {
 
     func filterCredentials(for searchText: String) {
         filteredCredentials = loginsData.filter { item in
-            item.0.serviceIdentifier.identifier.titleFromHostname.lowercased().contains(searchText.lowercased()) || item.0.user.lowercased().contains(searchText.lowercased())
+            item.0.serviceIdentifier.identifier.titleFromHostname.lowercased().contains(searchText.lowercased())
+            || item.0.user.lowercased().contains(searchText.lowercased())
         }
     }
 
@@ -70,10 +71,15 @@ class CredentialListPresenter {
         } else {
             passwordCredential = loginsData[index].1
         }
-        view.credentialExtensionContext?.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
+        view.credentialExtensionContext?.completeRequest(
+            withSelectedCredential: passwordCredential,
+            completionHandler: nil
+        )
     }
 
     func cancelRequest() {
-        view?.credentialExtensionContext?.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.userCanceled.rawValue))
+        view?.credentialExtensionContext?.cancelRequest(
+            withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.userCanceled.rawValue)
+        )
     }
 }

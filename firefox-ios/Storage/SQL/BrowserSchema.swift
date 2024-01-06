@@ -1663,7 +1663,7 @@ open class BrowserSchema: Schema {
         }
         cursor.close()
 
-        //swiftlint:disable line_length
+        // swiftlint:disable line_length
         let tmpTable = "tmp_hostnames"
         let table = "CREATE TEMP TABLE \(tmpTable) (url TEXT NOT NULL UNIQUE, domain TEXT NOT NULL, domain_id INT)"
         if !self.run(db, sql: table, args: nil) {
@@ -1694,7 +1694,7 @@ open class BrowserSchema: Schema {
 
         // Update the history table from the temporary table.
         let updateHistory = "UPDATE history SET domain_id = (SELECT domain_id FROM \(tmpTable) WHERE \(tmpTable).url = history.url)"
-        //swiftlint:enable line_length
+        // swiftlint:enable line_length
 
         // Clean up.
         let dropTemp = "DROP TABLE \(tmpTable)"

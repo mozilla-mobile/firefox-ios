@@ -576,7 +576,11 @@ extension BrowserViewController: WKNavigationDelegate {
                 if let mailToMetadata = url.mailToMetadata(),
                    let mailScheme = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption),
                    mailScheme != "mailto" {
-                    self.mailtoLinkHandler.launchMailClientForScheme(mailScheme, metadata: mailToMetadata, defaultMailtoURL: url)
+                    self.mailtoLinkHandler.launchMailClientForScheme(
+                        mailScheme,
+                        metadata: mailToMetadata,
+                        defaultMailtoURL: url
+                    )
                 } else {
                     UIApplication.shared.open(url, options: [:])
                 }
@@ -631,7 +635,11 @@ extension BrowserViewController: WKNavigationDelegate {
                     // Do not show error message for JS navigated links or 
                     // redirect as it's not the result of a user action.
                     if !openedURL, navigationAction.navigationType == .linkActivated {
-                        let alert = UIAlertController(title: .UnableToOpenURLErrorTitle, message: .UnableToOpenURLError, preferredStyle: .alert)
+                        let alert = UIAlertController(
+                            title: .UnableToOpenURLErrorTitle,
+                            message: .UnableToOpenURLError,
+                            preferredStyle: .alert
+                        )
                         alert.addAction(UIAlertAction(title: .OKString, style: .default, handler: nil))
                         self.present(alert, animated: true, completion: nil)
                     }
