@@ -77,7 +77,10 @@ final class WindowManagerImplementation: WindowManager {
     }
 
     func tabManager(for windowUUID: WindowUUID) -> TabManager {
-        guard let tabManager = window(for: windowUUID)?.tabManager else { fatalError("No tab manager for window UUID.") }
+        guard let tabManager = window(for: windowUUID)?.tabManager else {
+            fatalError("No tab manager for window UUID.")
+        }
+
         return tabManager
     }
 

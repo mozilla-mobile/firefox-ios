@@ -55,7 +55,10 @@ class BrowserCoordinator: BaseCoordinator,
         self.glean = glean
         super.init(router: router)
 
-        windowManager.newBrowserWindowConfigured(AppWindowInfo(tabManager: tabManager), uuid: tabManager.windowUUID)
+        windowManager.newBrowserWindowConfigured(
+            AppWindowInfo(tabManager: tabManager),
+            uuid: tabManager.windowUUID
+        )
 
         // TODO [7856]: Additional telemetry updates forthcoming once iPad multi-window enabled.
         // For now, we only have a single BVC and TabManager. Plug it into our TelemetryWrapper:
@@ -130,7 +133,11 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - PrivateHomepageDelegate
 
     func homePanelDidRequestToOpenInNewTab(with url: URL, isPrivate: Bool, selectNewTab: Bool) {
-        browserViewController.homePanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate, selectNewTab: selectNewTab)
+        browserViewController.homePanelDidRequestToOpenInNewTab(
+            url,
+            isPrivate: isPrivate,
+            selectNewTab: selectNewTab
+        )
     }
 
     func show(webView: WKWebView) {
@@ -139,7 +146,10 @@ class BrowserCoordinator: BaseCoordinator,
             webviewController.update(webView: webView, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
             browserViewController.frontEmbeddedContent(webviewController)
         } else {
-            let webviewViewController = WebviewViewController(webView: webView, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+            let webviewViewController = WebviewViewController(
+                webView: webView,
+                isPrivate: tabManager.selectedTab?.isPrivate ?? false
+            )
             webviewController = webviewViewController
             _ = browserViewController.embedContent(webviewViewController)
         }
@@ -448,14 +458,18 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func dismissFakespotModal(animated: Bool = true) {
-        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator }) as? FakespotCoordinator else {
+        guard let fakespotCoordinator = childCoordinators.first(where: {
+            $0 is FakespotCoordinator
+        }) as? FakespotCoordinator else {
             return // there is no modal to close
         }
         fakespotCoordinator.dismissModal(animated: animated)
     }
 
     func dismissFakespotSidebar(sidebarContainer: SidebarEnabledViewProtocol, parentViewController: UIViewController) {
-        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator }) as? FakespotCoordinator else {
+        guard let fakespotCoordinator = childCoordinators.first(where: {
+            $0 is FakespotCoordinator
+        }) as? FakespotCoordinator else {
             return // there is no sidebar to close
         }
         fakespotCoordinator.closeSidebar(sidebarContainer: sidebarContainer,
@@ -465,7 +479,9 @@ class BrowserCoordinator: BaseCoordinator,
     func updateFakespotSidebar(productURL: URL,
                                sidebarContainer: SidebarEnabledViewProtocol,
                                parentViewController: UIViewController) {
-        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator }) as? FakespotCoordinator else {
+        guard let fakespotCoordinator = childCoordinators.first(where: {
+            $0 is FakespotCoordinator
+        }) as? FakespotCoordinator else {
             return // there is no sidebar
         }
         fakespotCoordinator.updateSidebar(productURL: productURL,
@@ -484,15 +500,33 @@ class BrowserCoordinator: BaseCoordinator,
         return coordinator
     }
 
-    func showShareExtension(url: URL, sourceView: UIView, sourceRect: CGRect?, toastContainer: UIView, popoverArrowDirection: UIPopoverArrowDirection) {
+    func showShareExtension(
+        url: URL,
+        sourceView: UIView,
+        sourceRect: CGRect?,
+        toastContainer: UIView,
+        popoverArrowDirection: UIPopoverArrowDirection
+    ) {
         guard childCoordinators.first(where: { $0 is ShareExtensionCoordinator }) as? ShareExtensionCoordinator == nil
         else {
-            // If this case is hitted it means the share extension coordinator wasn't removed correctly in the previous session.
+            // If this case is hitted it means the share extension coordinator wasn't removed
+            // correctly in the previous session.
             return
         }
-        let shareExtensionCoordinator = ShareExtensionCoordinator(alertContainer: toastContainer, router: router, profile: profile, parentCoordinator: self, tabManager: tabManager)
+        let shareExtensionCoordinator = ShareExtensionCoordinator(
+            alertContainer: toastContainer,
+            router: router,
+            profile: profile,
+            parentCoordinator: self,
+            tabManager: tabManager
+        )
         add(child: shareExtensionCoordinator)
-        shareExtensionCoordinator.start(url: url, sourceView: sourceView, sourceRect: sourceRect, popoverArrowDirection: popoverArrowDirection)
+        shareExtensionCoordinator.start(
+            url: url,
+            sourceView: sourceView,
+            sourceRect: sourceRect,
+            popoverArrowDirection: popoverArrowDirection
+        )
     }
 
     func showCreditCardAutofill(creditCard: CreditCard?,
@@ -501,7 +535,13 @@ class BrowserCoordinator: BaseCoordinator,
                                 frame: WKFrameInfo?,
                                 alertContainer: UIView) {
         let bottomSheetCoordinator = makeCredentialAutofillCoordinator()
-        bottomSheetCoordinator.showCreditCardAutofill(creditCard: creditCard, decryptedCard: decryptedCard, viewType: state, frame: frame, alertContainer: alertContainer)
+        bottomSheetCoordinator.showCreditCardAutofill(
+            creditCard: creditCard,
+            decryptedCard: decryptedCard,
+            viewType: state,
+            frame: frame,
+            alertContainer: alertContainer
+        )
     }
 
     func showRequiredPassCode() {
@@ -510,10 +550,17 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     private func makeCredentialAutofillCoordinator() -> CredentialAutofillCoordinator {
-        if let bottomSheetCoordinator = childCoordinators.first(where: { $0 is CredentialAutofillCoordinator }) as? CredentialAutofillCoordinator {
+        if let bottomSheetCoordinator = childCoordinators.first(where: {
+            $0 is CredentialAutofillCoordinator
+        }) as? CredentialAutofillCoordinator {
             return bottomSheetCoordinator
         }
-        let bottomSheetCoordinator = CredentialAutofillCoordinator(profile: profile, router: router, parentCoordinator: self, tabManager: tabManager)
+        let bottomSheetCoordinator = CredentialAutofillCoordinator(
+            profile: profile,
+            router: router,
+            parentCoordinator: self,
+            tabManager: tabManager
+        )
         add(child: bottomSheetCoordinator)
         return bottomSheetCoordinator
     }

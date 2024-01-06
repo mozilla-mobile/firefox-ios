@@ -227,7 +227,13 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         let inactiveTabsAreBuildActive = featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly)
         if inactiveTabsAreBuildActive {
-            generalSettings.insert(TabsSetting(theme: themeManager.currentTheme, settingsDelegate: parentCoordinator), at: 3)
+            generalSettings.insert(
+                TabsSetting(
+                    theme: themeManager.currentTheme,
+                    settingsDelegate: parentCoordinator
+                ),
+                at: 3
+            )
         }
 
         let offerToOpenCopiedLinksSettings = BoolSetting(
@@ -405,7 +411,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
     // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = super.tableView(tableView, viewForHeaderInSection: section) as! ThemedTableSectionHeaderFooterView
+        let headerView = super.tableView(
+            tableView,
+            viewForHeaderInSection: section
+        ) as! ThemedTableSectionHeaderFooterView
         return headerView
     }
 }

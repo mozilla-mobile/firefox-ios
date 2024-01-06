@@ -70,7 +70,13 @@ class MockPushManager: PushManagerProtocol {
 
     func subscribe(scope: String, appServerSey: String?) throws -> MozillaAppServices.SubscriptionResponse {
         subscribeCalledWith = scope
-        return SubscriptionResponse(channelId: "fake-channel-id", subscriptionInfo: SubscriptionInfo(endpoint: "https://example.com", keys: KeyInfo(auth: "fake-auth-string", p256dh: "fake-key")))
+        return SubscriptionResponse(
+            channelId: "fake-channel-id",
+            subscriptionInfo: SubscriptionInfo(
+                endpoint: "https://example.com",
+                keys: KeyInfo(auth: "fake-auth-string", p256dh: "fake-key")
+            )
+        )
     }
 
     func getSubscription(scope: String) throws -> MozillaAppServices.SubscriptionResponse? {

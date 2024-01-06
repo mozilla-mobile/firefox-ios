@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+// swiftlint:disable line_length
 import Foundation
 
 /// This struct defines all the accessibility identifiers to be added to
@@ -606,3 +607,4 @@ public struct AccessibilityIdentifiers {
         static let notNowButton = "RememberCreditCard.notNowButton"
     }
 }
+// swiftlint:enable line_length

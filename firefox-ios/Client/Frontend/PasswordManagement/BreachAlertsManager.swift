@@ -120,9 +120,10 @@ public final class BreachAlertsManager {
             for item in potentialUserBreaches {
                 let pwLastChanged = TimeInterval(item.timePasswordChanged/1000)
                 self.dateFormatter.dateFormat = "yyyy-MM-dd"
-                guard let breachDate = self.dateFormatter.date(from: breach.breachDate)?.timeIntervalSince1970, pwLastChanged < breachDate else {
-                    continue
-                }
+                guard let breachDate = self.dateFormatter.date(from: breach.breachDate)?.timeIntervalSince1970,
+                      pwLastChanged < breachDate
+                else { continue }
+
                 result.insert(item)
             }
         }
@@ -157,9 +158,10 @@ public final class BreachAlertsManager {
         for breach in self.breaches where breach.domain == baseDomain {
             let pwLastChanged = TimeInterval(login.timePasswordChanged/1000)
             self.dateFormatter.dateFormat = "yyyy-MM-dd"
-            guard let breachDate = self.dateFormatter.date(from: breach.breachDate)?.timeIntervalSince1970, pwLastChanged < breachDate else {
-                continue
-            }
+            guard let breachDate = self.dateFormatter.date(from: breach.breachDate)?.timeIntervalSince1970,
+                  pwLastChanged < breachDate
+            else { continue }
+
             return breach
         }
         return nil
