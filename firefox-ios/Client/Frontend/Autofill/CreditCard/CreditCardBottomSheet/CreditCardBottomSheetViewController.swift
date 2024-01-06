@@ -143,7 +143,7 @@ class CreditCardBottomSheetViewController: UIViewController,
             buttonsContainerStackView.addArrangedSubview(yesButton)
             let buttonViewModel = PrimaryRoundedButtonViewModel(
                 title: .CreditCard.RememberCreditCard.MainButtonTitle,
-                a11yIdentifier: AccessibilityIdentifiers.RememberCreditCard.saveButton
+                a11yIdentifier: AccessibilityIdentifiers.RememberCreditCard.yesButton
             )
             yesButton.configure(viewModel: buttonViewModel)
             yesButton.applyTheme(theme: themeManager.currentTheme)

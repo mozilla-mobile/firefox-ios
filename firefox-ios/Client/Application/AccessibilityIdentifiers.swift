@@ -602,7 +602,7 @@ public struct AccessibilityIdentifiers {
 
     struct RememberCreditCard {
         static let rememberCreditCardHeader = "RememberCreditCard.Header"
-        static let saveButton = "RememberCreditCard.saveButton"
+        static let yesButton = "RememberCreditCard.yesButton"
         static let manageCardsButton = "RememberCreditCard.manageCardsButton"
         static let notNowButton = "RememberCreditCard.notNowButton"
     }
