@@ -74,7 +74,9 @@ enum CodeUsageToDetect: CaseIterable {
         case .osLog:
             return "os_log() function seems to be used in file %@ at line %d.\(CodeUsageToDetect.commonLoggerSentence)"
         case .deferred:
+            // swiftlint:disable line_length
             return "Deferred class seems to be used in file %@ at line %d. Please consider replacing with completion handler instead."
+            // swiftlint:enable line_length
         }
     }
 

@@ -46,7 +46,8 @@ extension DeviceInfo {
         return identifier
     }
 
-    /// Return the client name, which can be either "Fennec on Stefan's iPod" or simply "Stefan's iPod" if the application display name cannot be obtained.
+    /// Return the client name, which can be either "Fennec on Stefan's iPod" or simply "Stefan's iPod"
+    /// if the application display name cannot be obtained.
     public class func defaultClientName() -> String {
         if ProcessInfo.processInfo.arguments.contains(LaunchArguments.DeviceName) {
             return String(format: .DeviceInfoClientNameDescription, AppInfo.displayName, "iOS")
@@ -69,12 +70,14 @@ extension DeviceInfo {
     }
 
     public class func isBlurSupported() -> Bool {
+        // swiftlint:disable line_length
         // We've tried multiple ways to make this change visible on simulators, but we
         // haven't found a solution that worked:
         // 1. http://stackoverflow.com/questions/21603475/how-can-i-detect-if-the-iphone-my-app-is-on-is-going-to-use-a-simple-transparen
         // 2. https://gist.github.com/conradev/8655650
         // Thus, testing has to take place on actual devices.
         return !lowGraphicsQualityModels.contains(specificModelName)
+        // swiftlint:enable line_length
     }
 
     public class func hasConnectivity() -> Bool {

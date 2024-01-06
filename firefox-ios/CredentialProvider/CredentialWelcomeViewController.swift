@@ -72,10 +72,10 @@ class CredentialWelcomeViewController: UIViewController {
                     equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
                     constant: -20
                 ),
-                
+
                 logoImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
                 logoImageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, multiplier: 0.4),
-                
+
                 titleLabel.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 40),
                 titleLabel.centerXAnchor.constraint(
                     equalTo: self.view.centerXAnchor
@@ -91,7 +91,7 @@ class CredentialWelcomeViewController: UIViewController {
                     priority: .defaultHigh
                 ),
                 titleLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 440),
-                
+
                 taglineLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
                 taglineLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
                 taglineLabel.leadingAnchor.constraint(
@@ -105,7 +105,7 @@ class CredentialWelcomeViewController: UIViewController {
                     priority: .defaultHigh
                 ),
                 taglineLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 440),
-                
+
                 proceedButton.bottomAnchor.constraint(
                     equalTo: self.view.layoutMarginsGuide.bottomAnchor,
                     constant: -20

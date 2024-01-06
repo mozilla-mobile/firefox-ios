@@ -4,7 +4,11 @@
 
 extension Dictionary {
     public var asString: String? {
-        guard let jsonData = try? JSONSerialization.data(withJSONObject: self, options: .prettyPrinted) else { return nil }
+        guard let jsonData = try? JSONSerialization.data(
+            withJSONObject: self,
+            options: .prettyPrinted
+        ) else { return nil }
+
         let jsonString = String(data: jsonData, encoding: .utf8)
         return jsonString
     }
