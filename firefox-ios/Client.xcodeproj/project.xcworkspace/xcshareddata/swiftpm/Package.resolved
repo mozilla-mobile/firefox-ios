@@ -86,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mozilla/rust-components-swift.git",
       "state" : {
-        "revision" : "2225948a896684d5ba9e98529b99d84f7af1c59a",
-        "version" : "123.0.20240105050335"
+        "revision" : "9a6642edf9efe59fa150b7d6ca62b9dac2ea8109",
+        "version" : "123.0.20240106050300"
       }
     },
     {
