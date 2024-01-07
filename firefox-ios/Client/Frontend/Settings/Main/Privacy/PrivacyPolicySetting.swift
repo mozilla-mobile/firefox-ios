@@ -16,8 +16,12 @@ class PrivacyPolicySetting: Setting {
     init(theme: Theme,
          settingsDelegate: PrivacySettingsDelegate?) {
         self.settingsDelegate = settingsDelegate
-        super.init(title: NSAttributedString(string: .AppSettingsPrivacyPolicy,
-                                             attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]))
+        super.init(
+            title: NSAttributedString(
+                string: .AppSettingsPrivacyPolicy,
+                attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
+            )
+        )
     }
 
     override func onClick(_ navigationController: UINavigationController?) {

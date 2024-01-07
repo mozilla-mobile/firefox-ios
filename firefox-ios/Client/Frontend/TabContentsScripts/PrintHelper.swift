@@ -21,7 +21,10 @@ class PrintHelper: TabContentScript {
         return ["printHandler"]
     }
 
-    func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(
+        _ userContentController: WKUserContentController,
+        didReceiveScriptMessage message: WKScriptMessage
+    ) {
         if let tab = tab, let webView = tab.webView {
             let printController = UIPrintInteractionController.shared
             printController.printFormatter = webView.viewPrintFormatter()

@@ -101,9 +101,12 @@ class PhotonActionSheet: UIViewController, Themeable {
 
         setupLayout()
 
-        setupNotifications(forObserver: self, observing: [.ProfileDidFinishSyncing,
-                                                          .ProfileDidStartSyncing,
-                                                          UIAccessibility.reduceTransparencyStatusDidChangeNotification])
+        setupNotifications(
+            forObserver: self,
+            observing: [.ProfileDidFinishSyncing,
+                        .ProfileDidStartSyncing,
+                        UIAccessibility.reduceTransparencyStatusDidChangeNotification]
+        )
     }
 
     override func viewDidDisappear(_ animated: Bool) {
