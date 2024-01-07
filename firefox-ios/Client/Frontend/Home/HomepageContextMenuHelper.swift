@@ -307,8 +307,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         return SingleActionViewModel(title: .FirefoxHomepage.ContextualMenu.Settings,
                                      iconString: ImageIdentifiers.settings,
                                      allowIconScaling: true,
-                                     tapHandler: {
-            _ in
+                                     tapHandler: { _ in
             self.delegate?.homePanelDidRequestToOpenSettings(at: .topSites)
             self.sendTopSiteContextualTelemetry(type: .settings)
         }).items

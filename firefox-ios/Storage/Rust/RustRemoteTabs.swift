@@ -172,8 +172,8 @@ public class RustRemoteTabs {
 public extension RemoteTabRecord {
     func toRemoteTab(client: RemoteClient) -> RemoteTab? {
         guard let url = Foundation.URL(string: self.urlHistory[0], invalidCharacters: false) else { return nil }
-        let history = self.urlHistory[1...].map {
-            url in Foundation.URL(
+        let history = self.urlHistory[1...].map { url in
+            Foundation.URL(
                 string: url,
                 invalidCharacters: false
             )
@@ -193,10 +193,9 @@ public extension RemoteTabRecord {
 
 public extension ClientRemoteTabs {
     func toClientAndTabs(client: RemoteClient) -> ClientAndTabs {
-        return ClientAndTabs(client: client,
-                             tabs: self.remoteTabs.map {
-            $0.toRemoteTab(client: client)
-        }.compactMap { $0 })
+        return ClientAndTabs(
+            client: client,
+            tabs: self.remoteTabs.map { $0.toRemoteTab(client: client) }.compactMap { $0 })
     }
 
     func toClientAndTabs() -> ClientAndTabs {

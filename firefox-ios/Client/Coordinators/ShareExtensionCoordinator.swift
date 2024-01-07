@@ -148,8 +148,8 @@ class ShareExtensionCoordinator: BaseCoordinator,
             alert.addAction(UIAlertAction(
                 title: .SendToErrorOKButton,
                 style: .default
-            ) {
-                [weak self] _ in self?.router.dismiss()
+            ) { [weak self] _ in
+                self?.router.dismiss()
             })
             router.present(alert, animated: true) { [weak self] in
                 guard let self = self else { return }

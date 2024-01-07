@@ -75,8 +75,7 @@ class LegacyTabPeekViewController: UIViewController, WKNavigationDelegate {
         actions.append(UIPreviewAction(
             title: .TabPeekCloseTab,
             style: .destructive
-        ) {
-            [weak self] previewAction, viewController in
+        ) { [weak self] previewAction, viewController in
             guard let wself = self, let tab = wself.tab else { return }
             wself.delegate?.tabPeekDidCloseTab(tab)
         })
@@ -103,8 +102,7 @@ class LegacyTabPeekViewController: UIViewController, WKNavigationDelegate {
                     title: .AppMenu.TouchActions.SendToDeviceTitle,
                     image: UIImage.templateImageNamed("menu-Send"),
                     identifier: nil
-                ) {
-                    [weak self] _ in
+                ) { [weak self] _ in
                     guard let wself = self,
                           let clientPicker = wself.fxaDevicePicker else { return }
                     wself.delegate?.tabPeekRequestsPresentationOf(clientPicker)

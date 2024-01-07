@@ -240,8 +240,7 @@ private extension RatingPromptManagerTests {
 
     func updateData(expectedRatingPromptOpenCount: Int, file: StaticString = #filePath, line: UInt = #line) {
         let expectation = self.expectation(description: "Rating prompt manager data is loaded")
-        promptManager.updateData(dataLoadingCompletion: {
-            [weak self] in
+        promptManager.updateData(dataLoadingCompletion: { [weak self] in
             guard let promptManager = self?.promptManager else {
                 XCTFail("Should have reference to promptManager", file: file, line: line)
                 return

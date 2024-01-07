@@ -23,9 +23,7 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
         self.themeManager = themeManager
     }
 
-    lazy var themeManagerProvider: Middleware<AppState> = {
-        state,
-        action in
+    lazy var themeManagerProvider: Middleware<AppState> = { state, action in
         switch action {
         case ThemeSettingsAction.themeSettingsDidAppear:
             let currentThemeState = self.getCurrentThemeManagerState()

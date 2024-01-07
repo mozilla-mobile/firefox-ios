@@ -45,10 +45,7 @@ class TemporaryDocument: NSObject {
         let request = self.request
         let filename = self.filename
         downloadTask = session?.downloadTask(with: request,
-                                             completionHandler: {
-            [weak self] location,
-            _,
-            error in
+                                             completionHandler: { [weak self] location, _, error in
             guard let location = location,
                   error == nil else {
                 // If we encounter an error downloading the temp file, just return with the
