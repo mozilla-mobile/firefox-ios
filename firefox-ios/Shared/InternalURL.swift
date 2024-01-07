@@ -26,7 +26,9 @@ public struct InternalURL {
 
     public let url: URL
 
+    // swiftlint:disable line_length
     private let sessionRestoreHistoryItemBaseUrl = "\(InternalURL.baseUrl)/\(InternalURL.Path.sessionrestore.rawValue)?url="
+    // swiftlint:enable line_length
 
     public static func isValid(url: URL) -> Bool {
         let isWebServerUrl = url.absoluteString.hasPrefix("http://localhost:\(AppInfo.webserverPort)/")
@@ -49,11 +51,15 @@ public struct InternalURL {
     }
 
     public var stripAuthorization: String {
-        guard var components = URLComponents(string: url.absoluteString), let items = components.queryItems else { return url.absoluteString }
+        guard var components = URLComponents(string: url.absoluteString),
+              let items = components.queryItems
+        else { return url.absoluteString }
+
         components.queryItems = items.filter { !Param.uuidkey.matches($0.name) }
         if let items = components.queryItems, items.isEmpty {
             components.queryItems = nil // This cleans up the url to not end with a '?'
         }
+
         return components.url?.absoluteString ?? ""
     }
 
@@ -76,7 +82,8 @@ public struct InternalURL {
     }
 
     public var isErrorPage: Bool {
-        // Error pages can be nested in session restore URLs, and session restore handler will forward them to the error page handler
+        // Error pages can be nested in session restore URLs, and session restore handler will
+        // forward them to the error page handler
         let path = url.absoluteString.hasPrefix(sessionRestoreHistoryItemBaseUrl) ? extractedUrlParam?.path : url.path
         return InternalURL.Path.errorpage.matches(path ?? "")
     }
