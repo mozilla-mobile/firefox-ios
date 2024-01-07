@@ -113,9 +113,14 @@ extension WallpaperSelectorViewController: UICollectionViewDelegate, UICollectio
         return viewModel.numberOfWallpapers
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WallpaperCollectionViewCell.cellIdentifier,
-                                                            for: indexPath) as? WallpaperCollectionViewCell,
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: WallpaperCollectionViewCell.cellIdentifier,
+            for: indexPath
+        ) as? WallpaperCollectionViewCell,
               let cellViewModel = viewModel.cellViewModel(for: indexPath)
         else { return UICollectionViewCell() }
 
@@ -175,18 +180,22 @@ private extension WallpaperSelectorViewController {
         config.scrollDirection = .vertical
 
         let layout = UICollectionViewCompositionalLayout(sectionProvider: { ix, environment in
-            let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(WallpaperSelectorViewController.UX.cardWidth),
-                                                  heightDimension: .fractionalHeight(1.0))
+            let itemSize = NSCollectionLayoutSize(
+                widthDimension: .absolute(WallpaperSelectorViewController.UX.cardWidth),
+                heightDimension: .fractionalHeight(1.0)
+            )
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                   heightDimension: .absolute(WallpaperSelectorViewController.UX.cardHeight))
+            
+            let groupSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .absolute(WallpaperSelectorViewController.UX.cardHeight)
+            )
             let subitemsCount = self.viewModel.sectionLayout.itemsPerRow
             let subItems: [NSCollectionLayoutItem] = Array(repeating: item, count: Int(subitemsCount))
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                            subitems: subItems)
             group.interItemSpacing = .fixed(WallpaperSelectorViewController.UX.inset)
-
+            
             let section = NSCollectionLayoutSection(group: group)
             let width = environment.container.effectiveContentSize.width
             let inset = (width -
@@ -198,7 +207,8 @@ private extension WallpaperSelectorViewController {
                                                             trailing: inset)
             section.interGroupSpacing = WallpaperSelectorViewController.UX.inset
             return section
-        }, configuration: config)
+        },
+                                                         configuration: config)
 
         return layout
     }
