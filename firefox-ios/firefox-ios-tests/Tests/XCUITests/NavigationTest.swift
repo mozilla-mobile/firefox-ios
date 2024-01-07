@@ -84,7 +84,8 @@ class NavigationTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         // Open FxAccount from settings menu and check the Sign in to Firefox screen
-        let signInToFirefoxStaticText = app.tables[AccessibilityIdentifiers.Settings.tableViewController].staticTexts[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSettingsButton]
+        let signInToFirefoxStaticText = app.tables[AccessibilityIdentifiers.Settings.tableViewController]
+            .staticTexts[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSettingsButton]
         mozWaitForElementToExist(signInToFirefoxStaticText)
         signInToFirefoxStaticText.tap()
         checkFirefoxSyncScreenShownViaSettings()
@@ -94,14 +95,19 @@ class NavigationTest: BaseTestCase {
         mozWaitForElementToExist(closeButton)
         closeButton.tap()
 
-        let closeButtonFxView = app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar].buttons["Settings"]
+        let closeButtonFxView = app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar]
+            .buttons["Settings"]
         mozWaitForElementToExist(closeButtonFxView)
         closeButtonFxView.tap()
     }
 
-    // Because the Settings menu does not stretch tot the top we need a different function to check if the Firefox Sync screen is shown
+    // Because the Settings menu does not stretch tot the top we need a different function to check 
+    // if the Firefox Sync screen is shown
     private func checkFirefoxSyncScreenShownViaSettings() {
-        mozWaitForElementToExist(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: TIMEOUT_LONG)
+        mozWaitForElementToExist(
+            app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar],
+            timeout: TIMEOUT_LONG
+        )
         app.buttons["EmailSignIn.button"].tap()
         mozWaitForElementToExist(app.webViews.textFields.element(boundBy: 0), timeout: TIMEOUT_LONG)
 
