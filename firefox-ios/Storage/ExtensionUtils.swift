@@ -62,13 +62,25 @@ public struct ExtensionUtils {
                             completionHandler(nil, err)
                             return
                         }
-
+                        
                         guard let url = obj as? URL else {
-                            completionHandler(nil, NSError(domain: "org.mozilla.fennec", code: 999, userInfo: ["Problem": "Non-URL result."]))
+                            completionHandler(
+                                nil,
+                                NSError(
+                                    domain: "org.mozilla.fennec",
+                                    code: 999,
+                                    userInfo: ["Problem": "Non-URL result."]
+                                )
+                            )
                             return
                         }
-
-                        let extracted = ExtractedShareItem.shareItem(ShareItem(url: url.absoluteString, title: title))
+                        
+                        let extracted = ExtractedShareItem.shareItem(
+                            ShareItem(
+                                url: url.absoluteString,
+                                title: title
+                            )
+                        )
                         completionHandler(extracted, nil)
                     }
 
