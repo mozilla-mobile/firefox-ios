@@ -109,7 +109,10 @@ class DownloadHelper: NSObject {
                                           request: request)
         else { return nil }
 
-        let expectedSize = download.totalBytesExpected != nil ? ByteCountFormatter.string(fromByteCount: download.totalBytesExpected!, countStyle: .file) : nil
+        let expectedSize = download.totalBytesExpected != nil ? ByteCountFormatter.string(
+            fromByteCount: download.totalBytesExpected!,
+            countStyle: .file
+        ) : nil
 
         var filenameItem: SingleActionViewModel
         var modelText = host

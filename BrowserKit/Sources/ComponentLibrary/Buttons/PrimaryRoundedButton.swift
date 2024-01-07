@@ -47,7 +47,6 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
             updatedConfiguration.background.backgroundColor = backgroundColorNormal
         }
 
-        // swiftlint:disable line_length
         updatedConfiguration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { [weak self] incoming in
             var container = incoming
             container.foregroundColor = self?.foregroundColor
@@ -57,7 +56,6 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
             )
             return container
         }
-        // swiftlint:disable line_length
 
         configuration = updatedConfiguration
     }

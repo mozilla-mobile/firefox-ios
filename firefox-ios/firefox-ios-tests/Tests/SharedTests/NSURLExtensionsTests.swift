@@ -85,7 +85,6 @@ class NSURLExtensionsTests: XCTestCase {
     }
 
     func testisAboutHomeURL() {
-        // swiftlint:disable line_length
         let goodurls = [
             "\(InternalURL.baseUrl)/sessionrestore?url=\(InternalURL.baseUrl)/about/home%23panel%3D1",
             "\(InternalURL.baseUrl)/about/home#panel=0"
@@ -96,7 +95,6 @@ class NSURLExtensionsTests: XCTestCase {
             "http://localhost:\(AppInfo.webserverPort)/errors/error.html?url=http%3A//mozilla.com",
             "http://localhost:\(AppInfo.webserverPort)/errors/error.html?url=http%3A//mozilla.com/about/home/%23panel%3D1",
         ]
-        // swiftlint:enable line_length
 
         checkUrls(goodurls: goodurls, badurls: badurls, checker: { url in
             return url.isAboutHomeURL
@@ -109,14 +107,12 @@ class NSURLExtensionsTests: XCTestCase {
             "\(InternalURL.baseUrl)/about/license"
         ]
 
-        // swiftlint:disable line_length
         let badurls = [
             "http://google.com",
             "http://localhost:\(AppInfo.webserverPort)/sessionrestore.html",
             "http://localhost:\(AppInfo.webserverPort)/errors/error.html?url=http%3A//mozilla.com",
             "http://localhost:\(AppInfo.webserverPort)/errors/error.html?url=http%3A//mozilla.com/about/home/%23panel%3D1",
         ]
-        // swiftlint:enable line_length
 
         checkUrls(goodurls: goodurls, badurls: badurls, checker: { url in
             return url.isAboutURL
@@ -139,13 +135,11 @@ class NSURLExtensionsTests: XCTestCase {
     }
 
     func testoriginalURLFromErrorURL() {
-        // swiftlint:disable line_length
         let goodurls = [
             ("\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage)?url=http%3A//mozilla.com", URL(string: "http://mozilla.com")),
             ("\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage)?url=http%3A//localhost%3A\(AppInfo.webserverPort)/about/home/%23panel%3D1",
              URL(string: "http://localhost:\(AppInfo.webserverPort)/about/home/#panel=1")),
             ]
-        // swiftlint:enable line_length
 
         goodurls.forEach {
             var result = false
@@ -155,7 +149,6 @@ class NSURLExtensionsTests: XCTestCase {
     }
 
     func testisReaderModeURL() {
-        // swiftlint:disable line_length
         let goodurls = [
             "http://localhost:\(AppInfo.webserverPort)/reader-mode/page",
             "http://localhost:\(AppInfo.webserverPort)/reader-mode/page?url=https%3A%2F%2Fen%2Em%2Ewikipedia%2Eorg%2Fwiki%2FMain%5FPage",
@@ -165,7 +158,6 @@ class NSURLExtensionsTests: XCTestCase {
             "http://localhost:\(AppInfo.webserverPort)/sessionrestore.html",
             "http://localhost:1234/about/home/#panel=0"
         ]
-        // swiftlint:enable line_length
 
         checkUrls(goodurls: goodurls, badurls: badurls) { url in
             return url.url.isReaderModeURL
@@ -219,7 +211,6 @@ class NSURLExtensionsTests: XCTestCase {
     }
 
     func testdisplayURL() {
-    // swiftlint:disable line_length
         let goodurls = [
             ("http://localhost:\(AppInfo.webserverPort)/reader-mode/page?url=https%3A%2F%2Fen%2Em%2Ewikipedia%2Eorg%2Fwiki%2F",
              "https://en.m.wikipedia.org/wiki/"),
@@ -239,7 +230,6 @@ class NSURLExtensionsTests: XCTestCase {
 
         goodurls.forEach { XCTAssertEqual(URL(string: $0.0)!.displayURL?.absoluteString, $0.1) }
         badurls.forEach { XCTAssertNil(URL(string: $0)!.displayURL) }
-    // swiftlint:enable line_length
     }
 
     func testorigin() {

@@ -151,7 +151,9 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        mozWaitForElementToNotExist(app.cells.staticTexts["Internet for people, not profit — Mozilla. Currently selected tab."])
+        mozWaitForElementToNotExist(
+            app.cells.staticTexts["Internet for people, not profit — Mozilla. Currently selected tab."]
+        )
         checkOpenTabsAfterClosingPrivateMode()
     }
 

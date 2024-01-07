@@ -90,11 +90,13 @@ class LibraryPanelViewStateTests: XCTestCase {
         let actualState = panelState?.currentState
         let expectedState: LibraryPanelMainState = .bookmarks(state: .inFolderEditMode)
 
+        // swiftlint:disable line_length
         XCTAssertEqual(
             actualState,
             expectedState,
             "The library panel view did not correctly enter the .inFolderEditMode state for bookmarks from the .itemEditMode state"
         )
+        // swiftlint:enable line_length
     }
 
     func testStateOnBookmarkPanelGoesBackToFolderEditModeFromItemEditInvalidFieldState() {
@@ -106,11 +108,13 @@ class LibraryPanelViewStateTests: XCTestCase {
         let actualState = panelState?.currentState
         let expectedState: LibraryPanelMainState = .bookmarks(state: .inFolderEditMode)
 
+        // swiftlint:disable line_length
         XCTAssertEqual(
             actualState,
             expectedState,
             "The library panel view did not correctly enter the .inFolderEditMode state for bookmarks from the .itemEditModeInvalidField state"
         )
+        // swiftlint:enable line_length
     }
 
     func testStateOnBookmarkPanelGoesIntoItemEditInvalidFieldState() {
@@ -137,11 +141,13 @@ class LibraryPanelViewStateTests: XCTestCase {
         let actualState = panelState?.currentState
         let expectedState: LibraryPanelMainState = .bookmarks(state: .inFolderEditMode)
 
+        // swiftlint:disable line_length
         XCTAssertEqual(
             actualState,
             expectedState,
             "The library panel view did not correctly enter the .inFolderEditMode state for bookmarks from the .itemEditMode state"
         )
+        // swiftlint:enable line_length
     }
 
     func testStateOnBookmarkPanelFollowStateProgressionMovingIntoStates() {

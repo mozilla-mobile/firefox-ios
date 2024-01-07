@@ -68,12 +68,9 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
                             let response = GCDWebServerDataResponse(html: html) {
                             // Apply a Content Security Policy that disallows everything except images from
                             // anywhere and fonts and css from our internal server
-                            // swiftlint:disable line_length
-                            response.setValue(
-                                "default-src 'none'; img-src *; style-src http://localhost:* '\(ReaderModeStyleHash)'; font-src http://localhost:*",
-                                forAdditionalHeader: "Content-Security-Policy")
+                            response.setValue("default-src 'none'; img-src *; style-src http://localhost:* '\(ReaderModeStyleHash)'; font-src http://localhost:*",
+                                              forAdditionalHeader: "Content-Security-Policy")
                             return response
-                            // swiftlint:enable line_length
                         }
                     } catch _ {
                         // This page has not been converted to reader mode yet. This happens when you for example add an

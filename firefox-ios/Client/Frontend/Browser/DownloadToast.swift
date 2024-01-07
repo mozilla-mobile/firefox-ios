@@ -78,7 +78,10 @@ class DownloadToast: Toast {
             fromByteCount: combinedBytesDownloaded,
             countStyle: .file
         )
-        let expectedSize = combinedTotalBytesExpected != nil ? ByteCountFormatter.string(fromByteCount: combinedTotalBytesExpected!, countStyle: .file) : nil
+        let expectedSize = combinedTotalBytesExpected != nil ? ByteCountFormatter.string(
+            fromByteCount: combinedTotalBytesExpected!,
+            countStyle: .file
+        ) : nil
         let descriptionText = expectedSize != nil ? String(
             format: .DownloadProgressToastDescriptionText,
             downloadedSize,

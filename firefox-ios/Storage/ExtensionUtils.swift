@@ -33,8 +33,8 @@ public struct ExtensionUtils {
         }
     }
 
-    /// Look through the extensionContext for a url and title. Walks over all inputItems and then over all the attachments.
-    /// Has a completionHandler because ultimately an XPC call to the sharing application is done.
+    /// Look through the extensionContext for a url and title. Walks over all inputItems and then over all
+    /// the attachments. Has a completionHandler because ultimately an XPC call to the sharing application is done.
     /// We can always extract a URL and sometimes a title. The favicon is currently just a placeholder, but
     /// future code can possibly interact with a web page to find a proper icon.
     /// If no URL is found, but a text provider *is*, then use the raw text as a fallback.

@@ -14,9 +14,7 @@ class PocketStandardCellViewModel {
             return sponsor
         } else {
             if let timeToRead = story.timeToRead {
-                // swiftlint:disable line_length
                 return "\(story.domain) • \(String.localizedStringWithFormat(String.FirefoxHomepage.Pocket.NumberOfMinutes, timeToRead))"
-                // swiftlint:enable line_length
             } else {
                return  "\(story.domain)"
             }

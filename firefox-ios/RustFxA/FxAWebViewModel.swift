@@ -242,13 +242,11 @@ extension FxAWebViewModel {
                 }
                 """
         case .emailLoginFlow, .qrCode:
-            // swiftlint:disable line_length
             data = """
                     { capabilities:
                         { choose_what_to_sync: true, engines: ["bookmarks", "history", "tabs", "passwords"\(creditCardCapability)] },
                     }
                 """
-            // swiftlint:enable line_length
         }
 
         runJS(webView: webView, typeId: typeId, messageId: id, command: cmd, data: data)

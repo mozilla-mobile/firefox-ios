@@ -1320,7 +1320,10 @@ class BrowserViewController: UIViewController,
 
     private func handleMiddleButtonState(_ state: MiddleButtonState) {
         let showDataClearanceFlow = browserViewControllerState?.showDataClearanceFlow ?? false
-        let showFireButton = featureFlags.isFeatureEnabled(.feltPrivacyFeltDeletion, checking: .buildOnly) && showDataClearanceFlow
+        let showFireButton = featureFlags.isFeatureEnabled(
+            .feltPrivacyFeltDeletion,
+            checking: .buildOnly
+        ) && showDataClearanceFlow
         guard !showFireButton else {
             navigationToolbar.updateMiddleButtonState(.fire)
             configureDataClearanceContextualHint()

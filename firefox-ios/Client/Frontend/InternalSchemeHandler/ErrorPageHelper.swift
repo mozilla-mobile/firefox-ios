@@ -188,9 +188,7 @@ class ErrorPageHandler: InternalSchemeResponse {
                 let downloadInSafari: String = .ErrorPageOpenInSafari
 
                 // Overwrite the normal try-again action.
-                // swiftlint:disable line_length
                 actions = "<button onclick='webkit.messageHandlers.errorPageHelperMessageManager.postMessage({type: \"\(MessageOpenInSafari)\"})'>\(downloadInSafari)</button>"
-                // swiftlint:enable line_length
             }
             errDomain = ""
         } else if CertErrors.contains(errCode) {
@@ -211,10 +209,8 @@ class ErrorPageHandler: InternalSchemeResponse {
             variables["warning_description"] = .ErrorPagesCertWarningDescription
             variables["warning_advanced1"] = .ErrorPagesAdvancedWarning1
             variables["warning_advanced2"] = .ErrorPagesAdvancedWarning2
-            // swiftlint:disable line_length
             variables["warning_actions"] =
                 "<p><a id='\(UserScriptManager.appIdToken)__firefox__visitOnce' href='#'>\(String.ErrorPagesVisitOnceButton)</button></p>"
-            // swiftlint:enable line_length
         }
 
         variables["actions"] = actions
@@ -297,7 +293,8 @@ class ErrorPageHelper {
             if let internalUrl = InternalURL(webViewUrl),
                internalUrl.isSessionRestore,
                let page = InternalURL.authorize(url: urlWithQuery) {
-                // A session restore page is already on the history stack, so don't load another page on the history stack.
+                // A session restore page is already on the history stack, so don't load another
+                // page on the history stack.
                 webView.replaceLocation(with: page)
             } else {
                 // A new page needs to be added to the history stack (i.e. the simple case

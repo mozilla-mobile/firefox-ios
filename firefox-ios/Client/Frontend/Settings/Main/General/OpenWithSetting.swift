@@ -41,7 +41,9 @@ class OpenWithSetting: Setting {
         super.init(
             title: NSAttributedString(
                 string: .SettingsOpenWithSectionName,
-                attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]
+                attributes: [
+                    NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary
+                ]
             )
         )
     }

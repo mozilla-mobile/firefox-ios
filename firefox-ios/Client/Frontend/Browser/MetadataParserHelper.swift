@@ -21,9 +21,9 @@ class MetadataParserHelper: TabEventHandler {
                 tab.pageMetadata = nil
                 return
         }
-        // swiftlint:disable line_length
-        webView.evaluateJavascriptInDefaultContentWorld("__firefox__.metadata && __firefox__.metadata.getMetadata()") { result, error in
-        // swiftlint:enable line_length
+        webView.evaluateJavascriptInDefaultContentWorld(
+            "__firefox__.metadata && __firefox__.metadata.getMetadata()"
+        ) { result, error in
             guard error == nil else {
                 TabEvent.post(.pageMetadataNotAvailable, for: tab)
                 tab.pageMetadata = nil

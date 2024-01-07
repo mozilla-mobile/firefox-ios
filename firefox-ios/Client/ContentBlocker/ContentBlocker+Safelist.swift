@@ -33,9 +33,7 @@ extension ContentBlocker {
         // Note that * is added to the front of domains, so foo.com becomes *foo.com
         let list = "'*" + safelistedDomains.domainSet.joined(separator: "','*") + "'"
 
-        // swiftlint:disable line_length
         return ", {'action': { 'type': 'ignore-previous-rules' }, 'trigger': { 'url-filter': '.*', 'if-domain': [\(list)] }}".replacingOccurrences(of: "'", with: "\"")
-        // swiftlint:enable line_length
     }
 
     func safelist(enable: Bool, url: URL, completion: (() -> Void)?) {

@@ -123,7 +123,9 @@ class LegacyTabCell: UICollectionViewCell,
                 favicon.leadingAnchor.constraint(equalTo: title.leadingAnchor, constant: 6),
                 favicon.topAnchor.constraint(
                     equalTo: title.topAnchor,
-                    constant: (LegacyGridTabViewController.UX.textBoxHeight - LegacyGridTabViewController.UX.faviconSize) / 2
+                    constant: (
+                        LegacyGridTabViewController.UX.textBoxHeight - LegacyGridTabViewController.UX.faviconSize
+                    ) / 2
                 ),
                 favicon.heightAnchor.constraint(equalToConstant: LegacyGridTabViewController.UX.faviconSize),
                 favicon.widthAnchor.constraint(equalToConstant: LegacyGridTabViewController.UX.faviconSize),

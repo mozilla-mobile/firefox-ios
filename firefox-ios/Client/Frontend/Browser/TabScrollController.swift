@@ -322,7 +322,10 @@ private extension TabScrollingController {
 
         let animation: () -> Void = {
             if isShownFromHidden {
-                scrollView.contentOffset = CGPoint(x: self.contentOffsetBeforeAnimation.x, y: self.contentOffsetBeforeAnimation.y + self.topScrollHeight)
+                scrollView.contentOffset = CGPoint(
+                    x: self.contentOffsetBeforeAnimation.x,
+                    y: self.contentOffsetBeforeAnimation.y + self.topScrollHeight
+                )
             }
             self.headerTopOffset = headerOffset
             self.bottomContainerOffset = bottomContainerOffset

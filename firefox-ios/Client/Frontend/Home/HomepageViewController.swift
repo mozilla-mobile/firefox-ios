@@ -248,17 +248,22 @@ class HomepageViewController:
     }
 
     func createLayout() -> UICollectionViewLayout {
-        // swiftlint:disable line_length
         let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
             guard let self = self,
                   let viewModel = self.viewModel.getSectionViewModel(shownSection: sectionIndex),
                   viewModel.shouldShow
             else { return nil }
-            self.logger.log("Section \(viewModel.sectionType) is going to show", level: .debug, category: .homepage)
-            return viewModel.section(for: layoutEnvironment.traitCollection, size: self.view.frame.size)
+            self.logger.log(
+                "Section \(viewModel.sectionType) is going to show",
+                level: .debug,
+                category: .homepage
+            )
+            return viewModel.section(
+                for: layoutEnvironment.traitCollection,
+                size: self.view.frame.size
+            )
         }
         return layout
-        // swiftlint:enable line_length
     }
 
     // MARK: Long press

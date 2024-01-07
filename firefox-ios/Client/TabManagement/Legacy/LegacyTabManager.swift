@@ -939,9 +939,7 @@ extension LegacyTabManager: WKNavigationDelegate {
         guard let tab = self[webView] else { return }
 
         if let tpHelper = tab.contentBlocker, !tpHelper.isEnabled {
-            // swiftlint:disable line_length
             webView.evaluateJavascriptInDefaultContentWorld("window.__firefox__.TrackingProtectionStats.setEnabled(false, \(UserScriptManager.appIdToken))")
-            // swiftlint:enable line_length
         }
     }
 

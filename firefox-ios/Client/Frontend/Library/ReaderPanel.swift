@@ -403,7 +403,9 @@ class ReadingListPanel: UITableViewController,
                     equalToConstant: ReadingListPanelUX.WelcomeScreenItemImageWidth
                 ),
 
-                readingListLabel.bottomAnchor.constraint(equalTo: emptyStateViewWrapper.bottomAnchor).priority(.defaultLow),
+                readingListLabel.bottomAnchor.constraint(
+                    equalTo: emptyStateViewWrapper.bottomAnchor
+                ).priority(.defaultLow),
 
                 // overall positioning of emptyStateViewWrapper
                 emptyStateViewWrapper.leadingAnchor.constraint(

@@ -135,9 +135,7 @@ class EmptyPrivateTabsView: UIView {
     private func didTapLearnMore() {
         let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
         if let langID = Locale.preferredLanguages.first {
-            // swiftlint:disable line_length
             let learnMoreRequest = URLRequest(url: "https://support.mozilla.org/1/mobile/\(appVersion ?? "0.0")/iOS/\(langID)/private-browsing-ios".asURL!)
-            // swiftlint:enable line_length
             delegate?.didTapLearnMore(urlRequest: learnMoreRequest)
         }
     }

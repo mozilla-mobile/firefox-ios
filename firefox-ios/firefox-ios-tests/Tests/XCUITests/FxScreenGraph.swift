@@ -409,15 +409,20 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(WebPageLoading) { screenState in
         screenState.dismissOnUse = true
 
-        // swiftlint:disable line_length
         // Would like to use app.otherElements.deviceStatusBars.networkLoadingIndicators.element
         // but this means exposing some of SnapshotHelper to another target.
         /*if !(app.progressIndicators.element(boundBy: 0).exists) {
-            screenState.onEnterWaitFor("exists != true", element: app.progressIndicators.element(boundBy: 0), if: "waitForLoading == true")
+            screenState.onEnterWaitFor(
+                "exists != true",
+                element: app.progressIndicators.element(boundBy: 0),
+                if: "waitForLoading == true"
+            )
         } else {
-            screenState.onEnterWaitFor(element: app.progressIndicators.element(boundBy: 0), if: "waitForLoading == false")
+            screenState.onEnterWaitFor(
+                element: app.progressIndicators.element(boundBy: 0),
+                if: "waitForLoading == false"
+            )
         }*/
-        // swiftlint:enable line_length
 
         screenState.noop(to: BrowserTab, if: "waitForLoading == true")
         screenState.noop(to: BasicAuthDialog, if: "waitForLoading == false")

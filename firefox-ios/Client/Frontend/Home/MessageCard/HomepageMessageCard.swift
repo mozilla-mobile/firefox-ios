@@ -131,8 +131,14 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
 
                 textStackView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: UX.standardSpacing),
                 textStackView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: UX.standardSpacing),
-                textStackView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -UX.standardSpacing),
-                textStackView.bottomAnchor.constraint(equalTo: ctaButton.topAnchor, constant: -UX.standardSpacing),
+                textStackView.trailingAnchor.constraint(
+                    equalTo: cardView.trailingAnchor,
+                    constant: -UX.standardSpacing
+                ),
+                textStackView.bottomAnchor.constraint(
+                    equalTo: ctaButton.topAnchor,
+                    constant: -UX.standardSpacing
+                ),
 
                 bannerTitle.topAnchor.constraint(equalTo: titleContainerView.topAnchor),
                 bannerTitle.leadingAnchor.constraint(equalTo: titleContainerView.leadingAnchor),
@@ -143,7 +149,10 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
                 bannerTitle.bottomAnchor.constraint(equalTo: titleContainerView.bottomAnchor),
 
                 dismissButton.topAnchor.constraint(equalTo: textStackView.topAnchor),
-                dismissButton.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -UX.standardSpacing),
+                dismissButton.trailingAnchor.constraint(
+                    equalTo: cardView.trailingAnchor,
+                    constant: -UX.standardSpacing
+                ),
                 dismissButton.heightAnchor.constraint(equalToConstant: UX.dismissButtonSize.height),
                 dismissButton.widthAnchor.constraint(equalToConstant: UX.dismissButtonSize.width),
 

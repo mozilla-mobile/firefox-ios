@@ -55,7 +55,6 @@ func checkForPRDescription() {
         warn("Please provide a summary of your changes in the Pull Request description. This helps reviewers to understand your code and technical decisions. Please also include the JIRA issue number and the GitHub ticket number (if available).")
     }
 }
-// swiftlint:enable line_length
 
 enum CodeUsageToDetect: CaseIterable {
     static let commonLoggerSentence = " Please remove this usage from production code or use BrowserKit Logger."
@@ -74,9 +73,7 @@ enum CodeUsageToDetect: CaseIterable {
         case .osLog:
             return "os_log() function seems to be used in file %@ at line %d.\(CodeUsageToDetect.commonLoggerSentence)"
         case .deferred:
-            // swiftlint:disable line_length
             return "Deferred class seems to be used in file %@ at line %d. Please consider replacing with completion handler instead."
-            // swiftlint:enable line_length
         }
     }
 
@@ -93,6 +90,7 @@ enum CodeUsageToDetect: CaseIterable {
         }
     }
 }
+// swiftlint:enable line_length
 
 // Detects CodeUsageToDetect in PR so certain functions are not used in new code.
 func checkForCodeUsage() {

@@ -312,7 +312,9 @@ class HomePageSettingsUITests: BaseTestCase {
         }
 
         XCTAssertFalse(
-            app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell].staticTexts[urlMozillaLabel].exists
+            app.scrollViews
+                .cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell]
+                .staticTexts[urlMozillaLabel].exists
         )
         if !iPad() {
             mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: 3)
@@ -324,7 +326,9 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.nowAt(HomeSettings)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         XCTAssert(
-            app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell].staticTexts[urlMozillaLabel].exists
+            app.scrollViews
+                .cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell]
+                .staticTexts[urlMozillaLabel].exists
         )
 
         // swiftlint:disable line_length
@@ -358,12 +362,24 @@ class HomePageSettingsUITests: BaseTestCase {
             app.navigationBars[AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar],
             timeout: TIMEOUT_LONG
         )
-        XCTAssertTrue(app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.always].exists)
-        XCTAssertTrue(app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.disabled].exists)
-        XCTAssertTrue(app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.afterFourHours].exists)
+        XCTAssertTrue(
+            app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.always].exists
+        )
+        XCTAssertTrue(
+            app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.disabled].exists
+        )
+        XCTAssertTrue(
+            app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.afterFourHours].exists
+        )
         // Commented due to experimental features
-        // XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.jumpBackIn].value as! String, "1")
-        // XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentlySaved].value as! String, "1")
+//        XCTAssertEqual(
+//            app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.jumpBackIn].value as! String,
+//            "1"
+//        )
+//        XCTAssertEqual(
+//            app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentlySaved].value as! String,
+//            "1"
+//        )
         XCTAssertEqual(
             app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentVisited].value as! String,
             "1"

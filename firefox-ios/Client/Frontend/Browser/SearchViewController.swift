@@ -429,10 +429,8 @@ class SearchViewController: SiteTableViewController,
             assertionFailure()
             return
         }
-        // swiftlint:disable line_length
         let extras = [TelemetryWrapper.EventExtraKey.recordSearchLocation.rawValue: SearchesMeasurement.SearchLocation.quickSearch,
                       TelemetryWrapper.EventExtraKey.recordSearchEngineID.rawValue: engine.engineID as Any] as [String: Any]
-        // swiftlint:enable line_length
         TelemetryWrapper.gleanRecordEvent(category: .action,
                                           method: .tap,
                                           object: .recordSearch,
@@ -628,10 +626,8 @@ class SearchViewController: SiteTableViewController,
                   let url = defaultEngine.searchURLForQuery(suggestion)
             else { return }
 
-            // swiftlint:disable line_length
             let extras = [TelemetryWrapper.EventExtraKey.recordSearchLocation.rawValue: SearchesMeasurement.SearchLocation.suggestion,
                           TelemetryWrapper.EventExtraKey.recordSearchEngineID.rawValue: defaultEngine.engineID as Any] as [String: Any]
-            // swiftlint:enable line_length
             TelemetryWrapper.gleanRecordEvent(category: .action,
                                               method: .tap,
                                               object: .recordSearch,

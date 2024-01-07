@@ -53,7 +53,11 @@ class NimbusIntegrationTests: XCTestCase {
 
     func testNSLocalizedStringAccess() throws {
         XCTAssertEqual(Locale.current.languageCode, "en")
-        let stringWithNoTable = NSLocalizedString("ShareExtension.OpenInFirefoxAction.Title", bundle: Strings.bundle, comment: "")
+        let stringWithNoTable = NSLocalizedString(
+            "ShareExtension.OpenInFirefoxAction.Title",
+            bundle: Strings.bundle,
+            comment: ""
+        )
         XCTAssertEqual(stringWithNoTable, "Open in Firefox")
 
         let stringWithTable = NSLocalizedString(

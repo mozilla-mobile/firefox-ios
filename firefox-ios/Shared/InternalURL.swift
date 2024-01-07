@@ -26,9 +26,7 @@ public struct InternalURL {
 
     public let url: URL
 
-    // swiftlint:disable line_length
     private let sessionRestoreHistoryItemBaseUrl = "\(InternalURL.baseUrl)/\(InternalURL.Path.sessionrestore.rawValue)?url="
-    // swiftlint:enable line_length
 
     public static func isValid(url: URL) -> Bool {
         let isWebServerUrl = url.absoluteString.hasPrefix("http://localhost:\(AppInfo.webserverPort)/")
