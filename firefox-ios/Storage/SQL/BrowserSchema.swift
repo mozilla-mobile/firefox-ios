@@ -1663,13 +1663,14 @@ open class BrowserSchema: Schema {
         }
         cursor.close()
 
-        // swiftlint:disable line_length
         let tmpTable = "tmp_hostnames"
         let table = "CREATE TEMP TABLE \(tmpTable) (url TEXT NOT NULL UNIQUE, domain TEXT NOT NULL, domain_id INT)"
         if !self.run(db, sql: table, args: nil) {
-            logger.log("Can't create temporary table. Unable to migrate domain names. Top Sites is likely to be broken.",
-                       level: .warning,
-                       category: .storage)
+            logger.log(
+                "Can't create temporary table. Unable to migrate domain names. Top Sites is likely to be broken.",
+                level: .warning,
+                category: .storage
+            )
             return false
         }
 
@@ -1678,9 +1679,11 @@ open class BrowserSchema: Schema {
         for chunk in chunks {
             let ins = "INSERT INTO \(tmpTable) (url, domain) VALUES " + [String](repeating: "(?, ?)", count: chunk.count / 2).joined(separator: ", ")
             if !self.run(db, sql: ins, args: Array(chunk)) {
-                logger.log("Couldn't insert domains into temporary table. Aborting migration.",
-                           level: .warning,
-                           category: .storage)
+                logger.log(
+                    "Couldn't insert domains into temporary table. Aborting migration.",
+                    level: .warning,
+                    category: .storage
+                )
                 return false
             }
         }
