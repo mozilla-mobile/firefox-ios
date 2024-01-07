@@ -22,7 +22,7 @@ extension NSItemProvider: ImageProvider {
                     )
                     return
                 }
-                
+
                 guard let image = image as? UIImage else {
                     continuation.resume(
                         throwing: SiteImageError.unableToDownloadImage("NSItemProviderReading not an image")

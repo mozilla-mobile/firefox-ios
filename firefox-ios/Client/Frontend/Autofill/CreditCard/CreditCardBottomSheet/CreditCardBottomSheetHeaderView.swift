@@ -107,7 +107,7 @@ class CreditCardBottomSheetHeaderView: UITableViewHeaderFooterView, ReusableCell
                 firefoxLogoImage.heightAnchor.constraint(equalToConstant: UX.logoSize),
                 firefoxLogoImage.centerYAnchor.constraint(equalTo: firstRowContainerView.centerYAnchor),
                 firefoxLogoImage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
-                
+
                 titleLabel.leadingAnchor.constraint(
                     equalTo: firefoxLogoImage.trailingAnchor,
                     constant: UX.headerElementsSpacing
@@ -115,7 +115,7 @@ class CreditCardBottomSheetHeaderView: UITableViewHeaderFooterView, ReusableCell
                 titleLabelTrailingConstraint,
                 titleLabel.topAnchor.constraint(equalTo: firstRowContainerView.topAnchor, constant: 0),
                 titleLabel.bottomAnchor.constraint(equalTo: firstRowContainerView.bottomAnchor, constant: 0),
-                
+
                 mainContainerStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
                 mainContainerStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0),
                 mainContainerStackView.topAnchor.constraint(equalTo: topAnchor, constant: 0),

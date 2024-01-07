@@ -233,7 +233,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
                 scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: scrollViewVerticalPadding),
                 scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
                 scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -scrollViewVerticalPadding),
-                
+
                 scrollView.frameLayoutGuide.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                 scrollView.frameLayoutGuide.topAnchor.constraint(
                     equalTo: view.topAnchor,
@@ -247,13 +247,13 @@ class OnboardingCardViewController: UIViewController, Themeable {
                 scrollView.frameLayoutGuide.heightAnchor.constraint(
                     equalTo: containerView.heightAnchor
                 ).priority(.defaultLow),
-                
+
                 scrollView.contentLayoutGuide.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
                 scrollView.contentLayoutGuide.topAnchor.constraint(equalTo: containerView.topAnchor),
                 scrollView.contentLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
                 scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
                 scrollView.contentLayoutGuide.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
-                
+
                 // Content view wrapper around text
                 contentContainerView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: topPadding),
                 contentContainerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
@@ -262,7 +262,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
                     constant: bottomStackViewPadding
                 ),
                 contentContainerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-                
+
                 contentStackView.topAnchor.constraint(greaterThanOrEqualTo: contentContainerView.topAnchor),
                 contentStackView.leadingAnchor.constraint(
                     equalTo: contentContainerView.leadingAnchor,
@@ -277,18 +277,18 @@ class OnboardingCardViewController: UIViewController, Themeable {
                     constant: -horizontalTopStackViewPadding
                 ),
                 contentStackView.centerYAnchor.constraint(equalTo: contentContainerView.centerYAnchor),
-                
+
                 topStackView.topAnchor.constraint(equalTo: contentStackView.topAnchor),
                 topStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
                 topStackView.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
-                
+
                 linkButton.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
                 linkButton.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
-                
+
                 buttonStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
                 buttonStackView.bottomAnchor.constraint(equalTo: contentStackView.bottomAnchor),
                 buttonStackView.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
-                
+
                 imageView.heightAnchor.constraint(equalToConstant: imageViewHeight)
             ]
         )

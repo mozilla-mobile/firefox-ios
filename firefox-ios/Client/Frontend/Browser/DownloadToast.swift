@@ -172,7 +172,7 @@ class DownloadToast: Toast {
                 progressView.leadingAnchor.constraint(equalTo: toastView.leadingAnchor),
                 progressView.centerYAnchor.constraint(equalTo: toastView.centerYAnchor),
                 progressView.heightAnchor.constraint(equalTo: toastView.heightAnchor),
-                
+
                 horizontalStackView.leadingAnchor.constraint(
                     equalTo: toastView.leadingAnchor,
                     constant: ButtonToast.UX.padding
@@ -184,7 +184,7 @@ class DownloadToast: Toast {
                 horizontalStackView.bottomAnchor.constraint(equalTo: toastView.safeAreaLayoutGuide.bottomAnchor),
                 horizontalStackView.topAnchor.constraint(equalTo: toastView.topAnchor),
                 horizontalStackView.heightAnchor.constraint(equalToConstant: Toast.UX.toastHeight),
-                
+
                 closeButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
                 closeButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
             ]

@@ -114,12 +114,12 @@ class LegacyTabCell: UICollectionViewCell,
                 backgroundHolder.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
                 backgroundHolder.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
                 backgroundHolder.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-                
+
                 title.topAnchor.constraint(equalTo: backgroundHolder.topAnchor),
                 title.leftAnchor.constraint(equalTo: backgroundHolder.leftAnchor),
                 title.rightAnchor.constraint(equalTo: backgroundHolder.rightAnchor),
                 title.heightAnchor.constraint(equalToConstant: LegacyGridTabViewController.UX.textBoxHeight),
-                
+
                 favicon.leadingAnchor.constraint(equalTo: title.leadingAnchor, constant: 6),
                 favicon.topAnchor.constraint(
                     equalTo: title.topAnchor,
@@ -127,26 +127,26 @@ class LegacyTabCell: UICollectionViewCell,
                 ),
                 favicon.heightAnchor.constraint(equalToConstant: LegacyGridTabViewController.UX.faviconSize),
                 favicon.widthAnchor.constraint(equalToConstant: LegacyGridTabViewController.UX.faviconSize),
-                
+
                 closeButton.heightAnchor.constraint(equalToConstant: LegacyGridTabViewController.UX.closeButtonSize),
                 closeButton.widthAnchor.constraint(equalToConstant: LegacyGridTabViewController.UX.closeButtonSize),
                 closeButton.centerYAnchor.constraint(equalTo: title.contentView.centerYAnchor),
                 closeButton.trailingAnchor.constraint(equalTo: title.trailingAnchor),
-                
+
                 titleText.leadingAnchor.constraint(equalTo: favicon.trailingAnchor, constant: 6),
                 titleText.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: 6),
                 titleText.centerYAnchor.constraint(equalTo: title.contentView.centerYAnchor),
-                
+
                 screenshotView.topAnchor.constraint(equalTo: topAnchor),
                 screenshotView.leftAnchor.constraint(equalTo: backgroundHolder.leftAnchor),
                 screenshotView.rightAnchor.constraint(equalTo: backgroundHolder.rightAnchor),
                 screenshotView.bottomAnchor.constraint(equalTo: backgroundHolder.bottomAnchor),
-                
+
                 faviconBG.centerYAnchor.constraint(equalTo: centerYAnchor, constant: 10),
                 faviconBG.centerXAnchor.constraint(equalTo: centerXAnchor),
                 faviconBG.heightAnchor.constraint(equalToConstant: TopSiteItemCell.UX.imageBackgroundSize.height),
                 faviconBG.widthAnchor.constraint(equalToConstant: TopSiteItemCell.UX.imageBackgroundSize.width),
-                
+
                 smallFaviconView.heightAnchor.constraint(equalToConstant: TopSiteItemCell.UX.iconSize.height),
                 smallFaviconView.widthAnchor.constraint(equalToConstant: TopSiteItemCell.UX.iconSize.width),
                 smallFaviconView.centerYAnchor.constraint(equalTo: faviconBG.centerYAnchor),

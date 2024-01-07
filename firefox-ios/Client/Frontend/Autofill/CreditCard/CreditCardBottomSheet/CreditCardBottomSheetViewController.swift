@@ -178,7 +178,7 @@ class CreditCardBottomSheetViewController: UIViewController,
                 contentView.topAnchor.constraint(equalTo: view.topAnchor),
                 contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
                 contentView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                
+
                 cardTableView.topAnchor.constraint(
                     equalTo: contentView.topAnchor,
                     constant: UX.distanceBetweenHeaderAndTop
@@ -189,7 +189,7 @@ class CreditCardBottomSheetViewController: UIViewController,
                     equalTo: contentView.trailingAnchor,
                     constant: -UX.tableMargin
                 ),
-                
+
                 buttonsContainerStackView.bottomAnchor.constraint(
                     equalTo: contentView.bottomAnchor,
                     constant: -UX.bottomSpacing
@@ -202,7 +202,7 @@ class CreditCardBottomSheetViewController: UIViewController,
                     equalTo: contentView.trailingAnchor,
                     constant: -UX.tableMargin
                 ),
-                
+
                 yesButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.yesButtonHeight),
                 contentWidthConstraint,
                 contentViewHeightConstraint

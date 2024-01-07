@@ -170,7 +170,7 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
                     constant: -UX.scrollViewVerticalPadding
                 ),
                 contentContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                
+
                 contentStackView.topAnchor.constraint(equalTo: contentContainerView.topAnchor, constant: topPadding),
                 contentStackView.leadingAnchor.constraint(
                     equalTo: contentContainerView.leadingAnchor,

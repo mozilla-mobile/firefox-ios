@@ -53,10 +53,10 @@ class TemporaryDocument: NSObject {
                 completionHandler(request.url)
                 return
             }
-            
+
             let tempDirectory = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("TempDocs")
             let url = tempDirectory.appendingPathComponent(filename)
-            
+
             try? FileManager.default.createDirectory(
                 at: tempDirectory,
                 withIntermediateDirectories: true,

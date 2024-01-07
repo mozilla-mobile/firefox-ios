@@ -44,7 +44,7 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
                 ),
                 warningLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
                 warningLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
-                
+
                 learnMoreButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
                 learnMoreButton.topAnchor.constraint(
                     equalTo: warningLabel.safeAreaLayoutGuide.bottomAnchor,

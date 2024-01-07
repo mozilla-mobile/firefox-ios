@@ -118,7 +118,6 @@ class NSURLExtensionsTests: XCTestCase {
         ]
         // swiftlint:enable line_length
 
-
         checkUrls(goodurls: goodurls, badurls: badurls, checker: { url in
             return url.isAboutURL
         })

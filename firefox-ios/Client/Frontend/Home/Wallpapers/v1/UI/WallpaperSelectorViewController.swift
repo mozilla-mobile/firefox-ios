@@ -185,7 +185,7 @@ private extension WallpaperSelectorViewController {
                 heightDimension: .fractionalHeight(1.0)
             )
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
-            
+
             let groupSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .absolute(WallpaperSelectorViewController.UX.cardHeight)
@@ -195,7 +195,7 @@ private extension WallpaperSelectorViewController {
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                            subitems: subItems)
             group.interItemSpacing = .fixed(WallpaperSelectorViewController.UX.inset)
-            
+
             let section = NSCollectionLayoutSection(group: group)
             let width = environment.container.effectiveContentSize.width
             let inset = (width -

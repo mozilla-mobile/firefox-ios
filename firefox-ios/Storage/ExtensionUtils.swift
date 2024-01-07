@@ -62,7 +62,7 @@ public struct ExtensionUtils {
                             completionHandler(nil, err)
                             return
                         }
-                        
+
                         guard let url = obj as? URL else {
                             completionHandler(
                                 nil,
@@ -74,7 +74,7 @@ public struct ExtensionUtils {
                             )
                             return
                         }
-                        
+
                         let extracted = ExtractedShareItem.shareItem(
                             ShareItem(
                                 url: url.absoluteString,

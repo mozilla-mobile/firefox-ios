@@ -110,13 +110,13 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController, Themeable {
                 baseView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
                 siteTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                 siteTitleLabel.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor),
-                
+
                 closeButton.trailingAnchor.constraint(
                     equalTo: view.safeAreaLayoutGuide.trailingAnchor,
                     constant: -ETPMenuUX.UX.gutterDistance
                 ),
                 closeButton.topAnchor.constraint(equalTo: baseView.topAnchor, constant: ETPMenuUX.UX.gutterDistance),
-                
+
                 siteInfoSection.leadingAnchor.constraint(
                     equalTo: view.safeAreaLayoutGuide.leadingAnchor,
                     constant: ETPMenuUX.UX.gutterDistance
@@ -127,20 +127,20 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController, Themeable {
                     constant: -ETPMenuUX.UX.gutterDistance
                 ),
                 siteInfoSection.bottomAnchor.constraint(equalTo: siteInfoURLLabel.bottomAnchor, constant: 12),
-                
+
                 siteInfoImage.leadingAnchor.constraint(equalTo: siteInfoSection.leadingAnchor, constant: 13),
                 siteInfoImage.topAnchor.constraint(equalTo: siteInfoSection.topAnchor, constant: 13),
                 siteInfoImage.heightAnchor.constraint(equalToConstant: ETPMenuUX.UX.faviconImageSize),
                 siteInfoImage.widthAnchor.constraint(equalToConstant: ETPMenuUX.UX.faviconImageSize),
-                
+
                 siteInfoTitleLabel.leadingAnchor.constraint(equalTo: siteInfoImage.trailingAnchor, constant: 11),
                 siteInfoTitleLabel.topAnchor.constraint(equalTo: siteInfoSection.topAnchor, constant: 13),
                 siteInfoTitleLabel.trailingAnchor.constraint(equalTo: siteInfoSection.trailingAnchor, constant: -21),
-                
+
                 siteInfoURLLabel.leadingAnchor.constraint(equalTo: siteInfoTitleLabel.leadingAnchor),
                 siteInfoURLLabel.topAnchor.constraint(equalTo: siteInfoTitleLabel.bottomAnchor, constant: 2),
                 siteInfoURLLabel.trailingAnchor.constraint(equalTo: siteInfoSection.trailingAnchor, constant: -21),
-                
+
                 connectionView.leadingAnchor.constraint(
                     equalTo: view.safeAreaLayoutGuide.leadingAnchor,
                     constant: ETPMenuUX.UX.gutterDistance
@@ -152,12 +152,12 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController, Themeable {
                     constant: -ETPMenuUX.UX.gutterDistance
                 ),
                 connectionView.heightAnchor.constraint(equalToConstant: 60),
-                
+
                 connectionImage.centerYAnchor.constraint(equalTo: connectionView.centerYAnchor),
                 connectionImage.leadingAnchor.constraint(equalTo: connectionView.leadingAnchor, constant: 20),
                 connectionImage.heightAnchor.constraint(equalToConstant: 20),
                 connectionImage.widthAnchor.constraint(equalToConstant: 20),
-                
+
                 connectionStatusLabel.leadingAnchor.constraint(equalTo: connectionImage.trailingAnchor, constant: 28),
                 connectionStatusLabel.trailingAnchor.constraint(equalTo: connectionView.trailingAnchor, constant: -21),
                 connectionStatusLabel.heightAnchor.constraint(equalToConstant: 22),

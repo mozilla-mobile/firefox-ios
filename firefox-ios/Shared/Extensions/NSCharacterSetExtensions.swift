@@ -10,4 +10,3 @@ extension CharacterSet {
     public static let SearchTermsAllowed = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789*-_.")
 }
 // swiftlint:enable line_length
-

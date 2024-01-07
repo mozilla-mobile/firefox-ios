@@ -97,7 +97,7 @@ class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
                 readStatusImageView.heightAnchor.constraint(
                     equalToConstant: ReadingListTableViewCellUX.ReadIndicatorHeight
                 ),
-                
+
                 titleLabel.topAnchor.constraint(
                     equalTo: contentView.topAnchor,
                     constant: ReadingListTableViewCellUX.TitleLabelTopOffset
@@ -111,7 +111,7 @@ class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
                     equalTo: contentView.trailingAnchor,
                     constant: ReadingListTableViewCellUX.TitleLabelRightOffset
                 ),
-                
+
                 hostnameLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
                 hostnameLabel.bottomAnchor.constraint(
                     equalTo: contentView.bottomAnchor,
@@ -368,7 +368,7 @@ class ReadingListPanel: UITableViewController,
                 welcomeLabel.topAnchor.constraint(equalTo: emptyStateViewWrapper.topAnchor),
                 welcomeLabel.leadingAnchor.constraint(equalTo: emptyStateViewWrapper.leadingAnchor),
                 welcomeLabel.trailingAnchor.constraint(equalTo: emptyStateViewWrapper.trailingAnchor),
-                
+
                 // first row
                 readerModeLabel.topAnchor.constraint(
                     equalTo: welcomeLabel.bottomAnchor,
@@ -379,13 +379,13 @@ class ReadingListPanel: UITableViewController,
                     equalTo: readerModeImageView.leadingAnchor,
                     constant: -ReadingListPanelUX.WelcomeScreenPadding
                 ),
-                
+
                 readerModeImageView.centerYAnchor.constraint(equalTo: readerModeLabel.centerYAnchor),
                 readerModeImageView.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor),
                 readerModeImageView.widthAnchor.constraint(
                     equalToConstant: ReadingListPanelUX.WelcomeScreenItemImageWidth
                 ),
-                
+
                 // second row
                 readingListLabel.topAnchor.constraint(
                     equalTo: readerModeLabel.bottomAnchor,
@@ -396,15 +396,15 @@ class ReadingListPanel: UITableViewController,
                     equalTo: readingListImageView.leadingAnchor,
                     constant: -ReadingListPanelUX.WelcomeScreenPadding
                 ),
-                
+
                 readingListImageView.centerYAnchor.constraint(equalTo: readingListLabel.centerYAnchor),
                 readingListImageView.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor),
                 readingListImageView.widthAnchor.constraint(
                     equalToConstant: ReadingListPanelUX.WelcomeScreenItemImageWidth
                 ),
-                
+
                 readingListLabel.bottomAnchor.constraint(equalTo: emptyStateViewWrapper.bottomAnchor).priority(.defaultLow),
-                
+
                 // overall positioning of emptyStateViewWrapper
                 emptyStateViewWrapper.leadingAnchor.constraint(
                     greaterThanOrEqualTo: view.leadingAnchor,
@@ -417,7 +417,7 @@ class ReadingListPanel: UITableViewController,
                 emptyStateViewWrapper.widthAnchor.constraint(
                     lessThanOrEqualToConstant: ReadingListPanelUX.WelcomeScreenMaxWidth
                 ),
-                
+
                 emptyStateViewWrapper.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                 emptyStateViewWrapper.topAnchor.constraint(
                     equalTo: view.topAnchor,

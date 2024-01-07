@@ -159,7 +159,7 @@ class SurveySurfaceViewController: UIViewController, Themeable {
                 imageView.widthAnchor.constraint(equalToConstant: UX.imageViewSize.width),
                 imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                 imageViewYConstraint,
-                
+
                 titleLabel.topAnchor.constraint(
                     equalTo: imageView.bottomAnchor,
                     constant: UX.titleDistanceFromImage
@@ -168,7 +168,7 @@ class SurveySurfaceViewController: UIViewController, Themeable {
                     equalToConstant: calculateElementWidthWith(max: UX.titleWidth)
                 ),
                 titleLabel.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
-                
+
                 takeSurveyButton.widthAnchor.constraint(
                     equalToConstant: calculateElementWidthWith(max: UX.buttonMaxWidth)
                 ),
@@ -176,7 +176,7 @@ class SurveySurfaceViewController: UIViewController, Themeable {
                 takeSurveyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                 takeSurveyButton.bottomAnchor.constraint(equalTo: dismissSurveyButton.topAnchor,
                                                          constant: -UX.buttonSeparation),
-                
+
                 dismissSurveyButton.widthAnchor.constraint(equalTo: takeSurveyButton.widthAnchor),
                 dismissSurveyButton.heightAnchor.constraint(equalToConstant: UX.buttonHeight),
                 dismissSurveyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),

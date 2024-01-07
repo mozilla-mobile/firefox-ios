@@ -65,7 +65,7 @@ class InactiveTabsHeaderView: UICollectionReusableView, ReusableCell, ThemeAppli
                                                     constant: UX.horizontalPadding),
                 titleLabel.trailingAnchor.constraint(equalTo: moreButton.leadingAnchor,
                                                      constant: -UX.horizontalPadding),
-                
+
                 moreButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
                 moreButton.trailingAnchor.constraint(
                     equalTo: safeAreaLayoutGuide.trailingAnchor,

@@ -95,17 +95,17 @@ class SnackBar: UIView, ThemeApplicable {
                 separator.trailingAnchor.constraint(equalTo: trailingAnchor),
                 separator.heightAnchor.constraint(equalToConstant: UX.borderWidth),
                 separator.topAnchor.constraint(equalTo: buttonsView.topAnchor, constant: -1),
-                
+
                 backgroundView.topAnchor.constraint(equalTo: topAnchor),
                 backgroundView.bottomAnchor.constraint(equalTo: bottomAnchor),
                 backgroundView.leadingAnchor.constraint(equalTo: leadingAnchor),
                 backgroundView.trailingAnchor.constraint(equalTo: trailingAnchor),
-                
+
                 scrollView.topAnchor.constraint(equalTo: topAnchor),
                 scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
                 scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
                 scrollView.bottomAnchor.constraint(equalTo: buttonsView.topAnchor),
-                
+
                 titleView.topAnchor.constraint(equalTo: scrollView.topAnchor),
                 titleView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
                 titleView.widthAnchor.constraint(

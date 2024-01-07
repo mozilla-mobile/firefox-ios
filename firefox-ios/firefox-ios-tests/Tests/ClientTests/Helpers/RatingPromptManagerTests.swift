@@ -245,7 +245,7 @@ private extension RatingPromptManagerTests {
                 XCTFail("Should have reference to promptManager", file: file, line: line)
                 return
             }
-            
+
             promptManager.showRatingPromptIfNeeded()
             XCTAssertEqual(
                 self?.ratingPromptOpenCount,
