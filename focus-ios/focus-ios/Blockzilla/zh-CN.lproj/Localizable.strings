@@ -245,7 +245,7 @@
 "Safari.openInstruction" = "打开设备设置";
 
 /* Save button label */
-"Save" = "保存";
+"Save" = "存储";
 
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
 "SearchEngine.addEngineError" = "网址无效。尝试用这个替换搜索关键词：%s。";
@@ -470,7 +470,7 @@
 "ShortcutView.RenameShortcutAlertPlaceholder" = "快捷方式名称";
 
 /* Text for the rename shortcut alert primary action. */
-"ShortcutView.RenameShortcutAlertPrimaryAction" = "保存";
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "存储";
 
 /* Text for the rename shortcut alert secondary action. */
 "ShortcutView.RenameShortcutAlertSecondaryAction" = "取消";

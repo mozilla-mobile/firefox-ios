@@ -11,7 +11,7 @@
 "NSMicrophoneUsageDescription" = "让您可以拍摄和上传视频。";
 
 /* Privacy - Photo Library Additions Usage Description */
-"NSPhotoLibraryAddUsageDescription" = "让您可以保存和上传照片。";
+"NSPhotoLibraryAddUsageDescription" = "让您可以存储和上传照片。";
 
 /* This is the menu item that appears when you long press the Focus icon on the phone home screen. */
 "UIApplicationShortcutItemTitle.EraseAndOpen" = "清除并打开";

@@ -20,7 +20,7 @@
 "About.rowHelp" = "Довідка";
 
 /* Link to Privacy Notice in the About screen */
-"About.rowPrivacy" = "Повідомлення про приватність";
+"About.rowPrivacy" = "Положення про приватність";
 
 /* Label for row in About screen */
 "About.rowRights" = "Ваші права";
