@@ -144,7 +144,9 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     private func makeSlider(parent: UIView) -> UISlider {
         let size = CGSize(width: UX.moonSunIconSize, height: UX.moonSunIconSize)
         let images = [ImageIdentifiers.nightMode, "themeBrightness"].map { name in
-            UIImage(imageLiteralResourceName: name).createScaled(size).tinted(withColor: themeManager.currentTheme.colors.layerLightGrey30)
+            UIImage(imageLiteralResourceName: name)
+                .createScaled(size)
+                .tinted(withColor: themeManager.currentTheme.colors.layerLightGrey30)
         }
 
         let slider: UISlider = .build { slider in
@@ -164,7 +166,10 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
 
     // MARK: - UITableView
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = super.tableView(tableView, viewForHeaderInSection: section) as? ThemedTableSectionHeaderFooterView else { return nil }
+        guard let headerView = super.tableView(
+            tableView,
+            viewForHeaderInSection: section
+        ) as? ThemedTableSectionHeaderFooterView else { return nil }
 
         let section = Section(rawValue: section) ?? .automaticBrightness
         headerView.titleLabel.text = {
@@ -244,7 +249,10 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     }
 
     override func dequeueCellFor(indexPath: IndexPath) -> ThemedTableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: ThemedSubtitleTableViewCell.cellIdentifier, for: indexPath) as? ThemedSubtitleTableViewCell
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: ThemedSubtitleTableViewCell.cellIdentifier,
+            for: indexPath
+        ) as? ThemedSubtitleTableViewCell
         else {
             return ThemedSubtitleTableViewCell()
         }

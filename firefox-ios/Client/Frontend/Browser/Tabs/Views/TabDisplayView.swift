@@ -89,7 +89,10 @@ class TabDisplayView: UIView,
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
-        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+        let layout = UICollectionViewCompositionalLayout { [weak self] (
+            sectionIndex: Int,
+            layoutEnvironment: NSCollectionLayoutEnvironment
+        ) -> NSCollectionLayoutSection? in
             guard let self else { return nil }
 
             // If on private mode or regular mode but without inactive
@@ -206,7 +209,10 @@ class TabDisplayView: UIView,
     -> UICollectionViewCell {
         switch getTabDisplay(for: indexPath.section) {
         case .inactiveTabs:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabsCell.cellIdentifier, for: indexPath) as? InactiveTabsCell
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: InactiveTabsCell.cellIdentifier,
+                for: indexPath
+            ) as? InactiveTabsCell
             else { return UICollectionViewCell() }
 
             cell.configure(with: tabsState.inactiveTabs[indexPath.row])
@@ -215,7 +221,10 @@ class TabDisplayView: UIView,
             }
             return cell
         case .tabs:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TabCell.cellIdentifier, for: indexPath) as? TabCell
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: TabCell.cellIdentifier,
+                for: indexPath
+            ) as? TabCell
             else { return UICollectionViewCell() }
 
             let tabState = tabsState.tabs[indexPath.row]

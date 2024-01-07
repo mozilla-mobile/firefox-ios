@@ -18,7 +18,11 @@ struct TPPageStats {
         domains = [BlocklistCategory: Set<String>]()
     }
 
-    private init(domains: [BlocklistCategory: Set<String>], blocklistName: BlocklistCategory, host: String) {
+    private init(
+        domains: [BlocklistCategory: Set<String>],
+        blocklistName: BlocklistCategory,
+        host: String
+    ) {
         self.domains = domains
         if self.domains[blocklistName] == nil {
             self.domains[blocklistName] = Set<String>()
@@ -26,7 +30,10 @@ struct TPPageStats {
        self.domains[blocklistName]?.insert(host)
     }
 
-    func create(matchingBlocklist blocklistName: BlocklistCategory, host: String) -> TPPageStats {
+    func create(
+        matchingBlocklist blocklistName: BlocklistCategory,
+        host: String
+    ) -> TPPageStats {
         return TPPageStats(domains: domains, blocklistName: blocklistName, host: host)
     }
 }
@@ -37,7 +44,11 @@ class TPStatsBlocklistChecker {
     // Initialized async, is non-nil when ready to be used.
     private var blockLists: TPStatsBlocklists?
 
-    func isBlocked(url: URL, mainDocumentURL: URL, completionHandler: @escaping (BlocklistCategory?) -> Void) {
+    func isBlocked(
+        url: URL,
+        mainDocumentURL: URL,
+        completionHandler: @escaping (BlocklistCategory?) -> Void
+    ) {
         guard let blockLists = blockLists,
               let host = url.host,
               !host.isEmpty
@@ -60,7 +71,13 @@ class TPStatsBlocklistChecker {
 
         DispatchQueue.global().async {
             // Return true in the Deferred if the domain could potentially be blocked
-            completionHandler(blockLists.urlIsInList(url, mainDocumentURL: mainDocumentURL, safelistedDomains: safelistRegex))
+            completionHandler(
+                blockLists.urlIsInList(
+                    url,
+                    mainDocumentURL: mainDocumentURL,
+                    safelistedDomains: safelistRegex
+                )
+            )
         }
     }
 
@@ -102,7 +119,13 @@ class TPStatsBlocklists {
         let domainExceptions: [String]?
         let list: BlocklistCategory
 
-        init(regex: String, loadType: LoadType, resourceType: ResourceType, domainExceptions: [String]?, list: BlocklistCategory) {
+        init(
+            regex: String,
+            loadType: LoadType,
+            resourceType: ResourceType,
+            domainExceptions: [String]?,
+            list: BlocklistCategory
+        ) {
             self.regex = regex
             self.loadType = loadType
             self.resourceType = resourceType
@@ -151,14 +174,25 @@ class TPStatsBlocklists {
                 }
 
                 let json = try Data(contentsOf: URL(fileURLWithPath: path))
-                guard let data = try JSONSerialization.jsonObject(with: json, options: []) as? [[String: AnyObject]] else {
-                    logger.log("Blocklists: bad JSON cast.", level: .warning, category: .webview)
+                guard let data = try JSONSerialization.jsonObject(
+                    with: json,
+                    options: []
+                ) as? [[String: AnyObject]] else {
+                    logger.log(
+                        "Blocklists: bad JSON cast.",
+                        level: .warning,
+                        category: .webview
+                    )
                     assertionFailure("Blocklists: bad JSON cast.")
                     return
                 }
                 list = data
             } catch {
-                logger.log("Blocklists: \(error.localizedDescription)", level: .warning, category: .webview)
+                logger.log(
+                    "Blocklists: \(error.localizedDescription)",
+                    level: .warning,
+                    category: .webview
+                )
                 assertionFailure("Blocklists: \(error.localizedDescription)")
                 return
             }
@@ -167,13 +201,21 @@ class TPStatsBlocklists {
                 guard let trigger = rule["trigger"] as? [String: AnyObject],
                       let filter = trigger["url-filter"] as? String
                 else {
-                    logger.log("Blocklists error: Rule has unexpected format.", level: .warning, category: .webview)
+                    logger.log(
+                        "Blocklists error: Rule has unexpected format.",
+                        level: .warning,
+                        category: .webview
+                    )
                     assertionFailure("Blocklists error: Rule has unexpected format.")
                     continue
                 }
 
                 guard let loc = filter.range(of: standardPrefix) else {
-                    logger.log("url-filter code needs updating for new list format", level: .warning, category: .webview)
+                    logger.log(
+                        "url-filter code needs updating for new list format",
+                        level: .warning,
+                        category: .webview
+                    )
                     assertionFailure("url-filter code needs updating for new list format")
                     return
                 }
@@ -188,7 +230,11 @@ class TPStatsBlocklists {
                 ["*", "?", "+"].forEach { x in
                     // This will only happen on debug
                     if baseDomain.contains(x) {
-                        logger.log("Unexpectedly found a wildcard in baseDomain - wildcard: \(x)", level: .warning, category: .webview)
+                        logger.log(
+                            "Unexpectedly found a wildcard in baseDomain - wildcard: \(x)",
+                            level: .warning,
+                            category: .webview
+                        )
                         assert(!baseDomain.contains(x), "No wildcards allowed in baseDomain")
                     }
                 }
@@ -206,7 +252,13 @@ class TPStatsBlocklists {
                 let resourceType = resourceTypes.contains("font") ? ResourceType.font : .all
 
                 let category = BlocklistCategory.fromFile(blockListFile)
-                let rule = Rule(regex: filter, loadType: loadType, resourceType: resourceType, domainExceptions: domainExceptionsRegex, list: category)
+                let rule = Rule(
+                    regex: filter,
+                    loadType: loadType,
+                    resourceType: resourceType,
+                    domainExceptions: domainExceptionsRegex,
+                    list: category
+                )
                 blockRules[baseDomain] = (blockRules[baseDomain] ?? []) + [rule]
             }
         }

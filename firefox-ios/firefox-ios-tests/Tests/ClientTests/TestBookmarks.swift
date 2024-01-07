@@ -14,12 +14,23 @@ class TestBookmarks: ProfileTest {
     func testBookmarks() {
         withTestProfile { profile -> Void in
             for i in 0...10 {
-                let bookmark = ShareItem(url: "http://www.example.com/\(i)", title: "Example \(i)", favicon: nil)
-                _ = profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID, url: bookmark.url, title: bookmark.title).value
+                let bookmark = ShareItem(
+                    url: "http://www.example.com/\(i)",
+                    title: "Example \(i)",
+                    favicon: nil
+                )
+                _ = profile.places.createBookmark(
+                    parentGUID: BookmarkRoots.MobileFolderGUID,
+                    url: bookmark.url,
+                    title: bookmark.title
+                ).value
             }
 
             let expectation = self.expectation(description: "asynchronous request")
-            profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false) >>== { folder in
+            profile.places.getBookmarksTree(
+                rootGUID: BookmarkRoots.MobileFolderGUID,
+                recursive: false
+            ) >>== { folder in
                 guard let mobileFolder = folder as? BookmarkFolder else {
                     XCTFail("Should not have failed to get mock bookmarks.")
                     expectation.fulfill()
@@ -27,10 +38,15 @@ class TestBookmarks: ProfileTest {
                 }
 
                 // 11 bookmarks plus our two suggested sites.
-                XCTAssertEqual(mobileFolder.children!.count, 11, "We create 11 stub bookmarks in the Mobile Bookmarks folder.")
+                XCTAssertEqual(
+                    mobileFolder.children!.count,
+                    11,
+                    "We create 11 stub bookmarks in the Mobile Bookmarks folder."
+                )
                 let bookmark = mobileFolder.children![0]
                 XCTAssertTrue(bookmark is BookmarkItem)
-                XCTAssertTrue((bookmark as! BookmarkItem).url.hasPrefix("http://www.example.com/"), "Example URL found.")
+                XCTAssertTrue((bookmark as! BookmarkItem)
+                    .url.hasPrefix("http://www.example.com/"), "Example URL found.")
                 expectation.fulfill()
             }
 

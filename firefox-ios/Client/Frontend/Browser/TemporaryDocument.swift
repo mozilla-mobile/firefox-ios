@@ -22,7 +22,11 @@ class TemporaryDocument: NSObject {
 
         super.init()
 
-        self.session = URLSession(configuration: .default, delegate: nil, delegateQueue: temporaryDocumentOperationQueue)
+        self.session = URLSession(
+            configuration: .default,
+            delegate: nil,
+            delegateQueue: temporaryDocumentOperationQueue
+        )
     }
 
     deinit {
@@ -40,7 +44,11 @@ class TemporaryDocument: NSObject {
 
         let request = self.request
         let filename = self.filename
-        downloadTask = session?.downloadTask(with: request, completionHandler: { [weak self] location, _, error in
+        downloadTask = session?.downloadTask(with: request,
+                                             completionHandler: {
+            [weak self] location,
+            _,
+            error in
             guard let location = location,
                   error == nil else {
                 // If we encounter an error downloading the temp file, just return with the
@@ -48,11 +56,15 @@ class TemporaryDocument: NSObject {
                 completionHandler(request.url)
                 return
             }
-
+            
             let tempDirectory = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("TempDocs")
             let url = tempDirectory.appendingPathComponent(filename)
-
-            try? FileManager.default.createDirectory(at: tempDirectory, withIntermediateDirectories: true, attributes: nil)
+            
+            try? FileManager.default.createDirectory(
+                at: tempDirectory,
+                withIntermediateDirectories: true,
+                attributes: nil
+            )
             try? FileManager.default.removeItem(at: url)
 
             do {

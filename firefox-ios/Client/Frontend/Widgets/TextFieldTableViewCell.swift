@@ -53,7 +53,12 @@ class TextFieldTableViewCell: UITableViewCell, ThemeApplicable {
         ])
     }
 
-    func configureCell(title: String, textFieldText: String, autocapitalizationType: UITextAutocapitalizationType, keyboardType: UIKeyboardType) {
+    func configureCell(
+        title: String,
+        textFieldText: String,
+        autocapitalizationType: UITextAutocapitalizationType,
+        keyboardType: UIKeyboardType
+    ) {
         titleLabel.text = title
         textField.text = textFieldText
         textField.autocapitalizationType = autocapitalizationType

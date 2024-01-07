@@ -2,6 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+// Disabling `line_length` for this whole file because it is going to get refactored/replaced soon.
+// swiftlint:disable line_length
 import Common
 import Glean
 import Shared
@@ -1979,3 +1981,5 @@ extension TelemetryWrapper {
         return [TelemetryWrapper.EventExtraKey.fxHomepageOrigin.rawValue: origin.rawValue]
     }
 }
+
+// swiftlint:enable line_length

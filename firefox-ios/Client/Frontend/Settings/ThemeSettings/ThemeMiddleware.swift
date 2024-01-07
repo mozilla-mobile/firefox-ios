@@ -23,7 +23,9 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
         self.themeManager = themeManager
     }
 
-    lazy var themeManagerProvider: Middleware<AppState> = { state, action in
+    lazy var themeManagerProvider: Middleware<AppState> = {
+        state,
+        action in
         switch action {
         case ThemeSettingsAction.themeSettingsDidAppear:
             let currentThemeState = self.getCurrentThemeManagerState()
@@ -33,7 +35,9 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
             store.dispatch(ThemeSettingsAction.systemThemeChanged(self.legacyThemeManager.systemThemeIsOn))
         case ThemeSettingsAction.enableAutomaticBrightness(let enabled):
             self.toggleAutomaticBrightness(enabled)
-            store.dispatch(ThemeSettingsAction.automaticBrightnessChanged(self.legacyThemeManager.automaticBrightnessIsOn))
+            store.dispatch(
+                ThemeSettingsAction.automaticBrightnessChanged(self.legacyThemeManager.automaticBrightnessIsOn)
+            )
         case ThemeSettingsAction.switchManualTheme(let theme):
             self.updateManualTheme(theme)
             store.dispatch(ThemeSettingsAction.manualThemeChanged(theme))

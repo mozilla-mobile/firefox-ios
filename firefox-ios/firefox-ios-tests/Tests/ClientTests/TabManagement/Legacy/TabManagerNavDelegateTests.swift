@@ -215,7 +215,11 @@ private class WKNavigationDelegateSpy: NSObject, WKNavigationDelegate {
         receivedMessages.append(.webViewDidFail)
     }
 
-    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+    func webView(
+        _ webView: WKWebView,
+        didFailProvisionalNavigation navigation: WKNavigation!,
+        withError error: Error
+    ) {
         receivedMessages.append(.webViewDidFailProvisionalNavigation)
     }
 
@@ -227,7 +231,11 @@ private class WKNavigationDelegateSpy: NSObject, WKNavigationDelegate {
         receivedMessages.append(.webViewWebContentProcessDidTerminate)
     }
 
-    func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+    func webView(
+        _ webView: WKWebView,
+        didReceive challenge: URLAuthenticationChallenge,
+        completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+    ) {
         receivedMessages.append(.webViewDidReceiveAuthenticationChallenge)
     }
 
@@ -239,11 +247,19 @@ private class WKNavigationDelegateSpy: NSObject, WKNavigationDelegate {
         receivedMessages.append(.webViewDidStartProvisionalNavigation)
     }
 
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+    func webView(
+        _ webView: WKWebView,
+        decidePolicyFor navigationAction: WKNavigationAction,
+        decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
+    ) {
         receivedMessages.append(.webViewDecidePolicyWithActionPolicy)
     }
 
-    func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
+    func webView(
+        _ webView: WKWebView,
+        decidePolicyFor navigationResponse: WKNavigationResponse,
+        decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void
+    ) {
         receivedMessages.append(.webViewDecidePolicyWithResponsePolicy)
     }
 }
