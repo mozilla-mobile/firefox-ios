@@ -32,7 +32,8 @@ class FxAWebViewController: UIViewController {
 
      - parameter pageType: Specify login flow or settings page if already logged in.
      - parameter profile: a Profile.
-     - parameter dismissalStyle: depending on how this was presented, it uses modal dismissal, or if part of a UINavigationController stack it will pop to the root.
+     - parameter dismissalStyle: depending on how this was presented, it uses modal dismissal, or if part
+                                 of a UINavigationController stack it will pop to the root.
      - parameter deepLinkParams: URL args passed in from deep link that propagate to FxA web view
      */
     init(pageType: FxAPageType,
@@ -141,7 +142,11 @@ class FxAWebViewController: UIViewController {
 
 // MARK: - WKNavigationDelegate
 extension FxAWebViewController: WKNavigationDelegate {
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+    func webView(
+        _ webView: WKWebView,
+        decidePolicyFor navigationAction: WKNavigationAction,
+        decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
+    ) {
         let decision = viewModel.shouldAllowRedirectAfterLogIn(basedOn: navigationAction.request.url)
         decisionHandler(decision)
     }
@@ -152,7 +157,10 @@ extension FxAWebViewController: WKNavigationDelegate {
 
         // The helpBrowser shows the current URL in the navbar, the main fxa webview does not.
         guard webView !== helpBrowser else {
-            navigationItem.title = viewModel.composeTitle(basedOn: webView.url, hasOnlySecureContent: webView.hasOnlySecureContent)
+            navigationItem.title = viewModel.composeTitle(
+                basedOn: webView.url,
+                hasOnlySecureContent: webView.hasOnlySecureContent
+            )
             return
         }
 
@@ -169,8 +177,14 @@ extension FxAWebViewController: WKScriptMessageHandler {
 
 // MARK: - WKUIDelegate
 extension FxAWebViewController: WKUIDelegate {
-    /// Blank target links (support links) will create a 2nd webview (the `helpBrowser`) to browse. This webview will have a close button in the navigation bar to go back to the main fxa webview.
-    func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+    /// Blank target links (support links) will create a 2nd webview (the `helpBrowser`) to browse. This webview
+    /// will have a close button in the navigation bar to go back to the main fxa webview.
+    func webView(
+        _ webView: WKWebView,
+        createWebViewWith configuration: WKWebViewConfiguration,
+        for navigationAction: WKNavigationAction,
+        windowFeatures: WKWindowFeatures
+    ) -> WKWebView? {
         guard helpBrowser == nil else { return nil }
         let f = webView.frame
         let wv = WKWebView(frame: CGRect(width: f.width, height: f.height), configuration: configuration)
@@ -179,7 +193,12 @@ extension FxAWebViewController: WKUIDelegate {
         helpBrowser = wv
         helpBrowser?.navigationDelegate = self
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: AccessibilityIdentifiers.GeneralizedIdentifiers.back, style: .plain, target: self, action: #selector(closeHelpBrowser))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            title: AccessibilityIdentifiers.GeneralizedIdentifiers.back,
+            style: .plain,
+            target: self,
+            action: #selector(closeHelpBrowser)
+        )
 
         return helpBrowser
     }

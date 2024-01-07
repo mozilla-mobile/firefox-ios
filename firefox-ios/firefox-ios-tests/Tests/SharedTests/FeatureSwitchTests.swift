@@ -10,7 +10,11 @@ class FeatureSwitchTests: XCTestCase {
     let buildChannel = AppConstants.buildChannel
 
     func testPersistent() {
-        let featureSwitch = FeatureSwitch(named: "test-persistent-over-restarts", allowPercentage: 50, buildChannel: buildChannel)
+        let featureSwitch = FeatureSwitch(
+            named: "test-persistent-over-restarts",
+            allowPercentage: 50,
+            buildChannel: buildChannel
+        )
         let prefs = MockProfilePrefs()
         var membership = featureSwitch.isMember(prefs)
         var changed = 0
@@ -25,14 +29,22 @@ class FeatureSwitchTests: XCTestCase {
     func testConsistentWhenChangingPercentage() {
         let featureID = "test-persistent-over-releases"
         let prefs = MockProfilePrefs()
-        let guardFeatureSwitch = FeatureSwitch(named: featureID, allowPercentage: 50, buildChannel: buildChannel)
+        let guardFeatureSwitch = FeatureSwitch(
+            named: featureID,
+            allowPercentage: 50,
+            buildChannel: buildChannel
+        )
         while guardFeatureSwitch.alwaysMembership(prefs) {
             guardFeatureSwitch.resetMembership(prefs)
         }
         var membership = false
         var changed = 0
         for percent in 0..<100 {
-            let featureSwitch = FeatureSwitch(named: featureID, allowPercentage: percent, buildChannel: buildChannel)
+            let featureSwitch = FeatureSwitch(
+                named: featureID,
+                allowPercentage: percent,
+                buildChannel: buildChannel
+            )
             if featureSwitch.isMember(prefs) != membership {
                 membership = !membership
                 changed += 1
@@ -50,7 +62,11 @@ class FeatureSwitchTests: XCTestCase {
 
     func testUserEnabled() {
         let prefs = MockProfilePrefs()
-        let featureSwitch = FeatureSwitch(named: "test-user-enabled", allowPercentage: 0, buildChannel: buildChannel)
+        let featureSwitch = FeatureSwitch(
+            named: "test-user-enabled",
+            allowPercentage: 0,
+            buildChannel: buildChannel
+        )
         XCTAssertFalse(featureSwitch.isMember(prefs), "The feature should be disabled")
         featureSwitch.setMembership(true, for: prefs) // enable the feature
         XCTAssertTrue(featureSwitch.isMember(prefs), "The feature should be enabled")
@@ -60,7 +76,11 @@ class FeatureSwitchTests: XCTestCase {
 
     func testForceDisabled() {
         let prefs = MockProfilePrefs()
-        let featureSwitch = FeatureSwitch(named: "test-user-disabled", allowPercentage: 100, buildChannel: buildChannel)
+        let featureSwitch = FeatureSwitch(
+            named: "test-user-disabled",
+            allowPercentage: 100,
+            buildChannel: buildChannel
+        )
         XCTAssertTrue(featureSwitch.isMember(prefs), "The feature should be enabled")
         featureSwitch.setMembership(false, for: prefs) // disable the feature
         XCTAssertFalse(featureSwitch.isMember(prefs), "The feature should be disabled again")
@@ -69,29 +89,49 @@ class FeatureSwitchTests: XCTestCase {
 
 extension FeatureSwitchTests {
     func test0Percent() {
-        let featureSwitch = FeatureSwitch(named: "test-never", allowPercentage: 0, buildChannel: buildChannel)
+        let featureSwitch = FeatureSwitch(
+            named: "test-never",
+            allowPercentage: 0,
+            buildChannel: buildChannel
+        )
         testExactly(featureSwitch, expected: 0)
         testApprox(featureSwitch, expected: 0)
     }
 
     func test100Percent() {
-        let featureSwitch = FeatureSwitch(named: "test-always", allowPercentage: 100, buildChannel: buildChannel)
+        let featureSwitch = FeatureSwitch(
+            named: "test-always",
+            allowPercentage: 100,
+            buildChannel: buildChannel
+        )
         testExactly(featureSwitch, expected: 100)
         testApprox(featureSwitch, expected: 100)
     }
 
     func test50Percent() {
-        let featureSwitch = FeatureSwitch(named: "test-half-the-population", allowPercentage: 50, buildChannel: buildChannel)
+        let featureSwitch = FeatureSwitch(
+            named: "test-half-the-population",
+            allowPercentage: 50,
+            buildChannel: buildChannel
+        )
         testApprox(featureSwitch, expected: 50)
     }
 
     func test30Percent() {
-        let featureSwitch = FeatureSwitch(named: "test-30%-population", allowPercentage: 30, buildChannel: buildChannel)
+        let featureSwitch = FeatureSwitch(
+            named: "test-30%-population",
+            allowPercentage: 30,
+            buildChannel: buildChannel
+        )
         testApprox(featureSwitch, expected: 30)
     }
 
     func testPerformance() {
-        let featureSwitch = FeatureSwitch(named: "test-30%-population", allowPercentage: 30, buildChannel: buildChannel)
+        let featureSwitch = FeatureSwitch(
+            named: "test-30%-population",
+            allowPercentage: 30,
+            buildChannel: buildChannel
+        )
         let prefs = MockProfilePrefs()
         measure {
             for _ in 0..<1000 {
@@ -102,7 +142,12 @@ extension FeatureSwitchTests {
 
     func testAppConstantsWin() {
         // simulate in release channel, but switched off in AppConstants.
-        let featureFlaggedOff = FeatureSwitch(named: "test-release-flagged-off", false, allowPercentage: 100, buildChannel: buildChannel)
+        let featureFlaggedOff = FeatureSwitch(
+            named: "test-release-flagged-off",
+            false,
+            allowPercentage: 100,
+            buildChannel: buildChannel
+        )
         testExactly(featureFlaggedOff, expected: 0)
 
         // simulate in non-release channel, but switched on in AppConstants.

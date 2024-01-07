@@ -32,7 +32,9 @@ public struct FakespotUtils: FeatureFlaggable {
 
     public static var fakespotUrl: URL? {
         // Returns the predefined URL associated to Fakespot button action.
+        // swiftlint:disable line_length
         return URL(string: "https://www.fakespot.com/review-checker?utm_source=review-checker&utm_campaign=fakespot-by-mozilla&utm_medium=inproduct&utm_term=core-sheet")
+        // swiftlint:enable line_length
     }
 
     static func widthOfString(_ string: String, usingFont font: UIFont) -> CGFloat {

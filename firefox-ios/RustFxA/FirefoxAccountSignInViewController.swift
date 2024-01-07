@@ -119,7 +119,8 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
 
     /// - Parameters:
     ///   - profile: User Profile info
-    ///   - parentType: FxASignInParentType is an enum parent page that presented this VC. Parameter used in telemetry button events.
+    ///   - parentType: FxASignInParentType is an enum parent page that presented this VC.
+    ///                 Parameter used in telemetry button events.
     ///   - deepLinkParams: URL args passed in from deep link that propagate to FxA web view
     init(profile: Profile,
          parentType: FxASignInParentType,
@@ -153,7 +154,9 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     }
 
     required init?(coder: NSCoder) {
+        // swiftlint:disable line_length
         fatalError("Must init FirefoxAccountSignInVC with custom initializer including Profile and ParentType parameters")
+        // swiftlint:enable line_length
     }
 
     // MARK: - Lifecycle methods
@@ -247,7 +250,12 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         } else {
             let qrCodeVC = QRCodeViewController()
             qrCodeVC.qrCodeDelegate = self
-            presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: qrCodeVC, topTabsVisible: true)
+            presentThemedViewController(
+                navItemLocation: .Left,
+                navItemText: .Close,
+                vcBeingPresented: qrCodeVC,
+                topTabsVisible: true
+            )
         }
         TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .tap, object: .syncSignInScanQRCode)
     }
@@ -255,7 +263,9 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     /// Use email login button tapped
     @objc
     func emailLoginTapped(_ sender: UIButton) {
-        let shouldAskForPermission = OnboardingNotificationCardHelper().shouldAskForNotificationsPermission(telemetryObj: telemetryObject)
+        let shouldAskForPermission = OnboardingNotificationCardHelper().shouldAskForNotificationsPermission(
+            telemetryObj: telemetryObject
+        )
         let fxaWebVC = FxAWebViewController(pageType: .emailLoginFlow,
                                             profile: profile,
                                             dismissalStyle: fxaDismissStyle,
@@ -273,7 +283,9 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
 // MARK: - QRCodeViewControllerDelegate Functions
 extension FirefoxAccountSignInViewController: QRCodeViewControllerDelegate {
     func didScanQRCodeWithURL(_ url: URL) {
-        let shouldAskForPermission = OnboardingNotificationCardHelper().shouldAskForNotificationsPermission(telemetryObj: telemetryObject)
+        let shouldAskForPermission = OnboardingNotificationCardHelper().shouldAskForNotificationsPermission(
+            telemetryObj: telemetryObject
+        )
 
         let vc = FxAWebViewController(pageType: .qrCode(url: url.absoluteString),
                                       profile: profile,
@@ -295,8 +307,11 @@ extension FirefoxAccountSignInViewController {
     /// This function is called to determine if FxA sign in flow or settings page should be shown
     /// - Parameters:
     ///     - deepLinkParams: FxALaunchParams from deeplink query
-    ///     - flowType: FxAPageType is used to determine if email login, qr code login, or user settings page should be presented
-    ///     - referringPage: ReferringPage enum is used to handle telemetry events correctly for the view event and the FxA sign in tap events, need to know which route we took to get to them
+    ///     - flowType: FxAPageType is used to determine if email login, qr code login,
+    ///                 or user settings page should be presented
+    ///     - referringPage: ReferringPage enum is used to handle telemetry events correctly
+    ///                      for the view event and the FxA sign in tap events, need to know
+    ///                      which route we took to get to them
     ///     - profile:
     static func getSignInOrFxASettingsVC(
         _ deepLinkParams: FxALaunchParams,
@@ -323,7 +338,11 @@ extension FirefoxAccountSignInViewController {
                 object = .tabTray
             }
 
-            let signInVC = FirefoxAccountSignInViewController(profile: profile, parentType: parentType, deepLinkParams: deepLinkParams)
+            let signInVC = FirefoxAccountSignInViewController(
+                profile: profile,
+                parentType: parentType,
+                deepLinkParams: deepLinkParams
+            )
             TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: object)
             return signInVC
         }

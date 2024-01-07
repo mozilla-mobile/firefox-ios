@@ -22,7 +22,11 @@ class FaviconManager: TabContentScript {
 
         if let path = Bundle.main.path(forResource: "Favicons", ofType: "js") {
             if let source = try? String(contentsOfFile: path, encoding: .utf8) {
-                let userScript = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+                let userScript = WKUserScript(
+                    source: source,
+                    injectionTime: .atDocumentEnd,
+                    forMainFrameOnly: true
+                )
                 tab.webView!.configuration.userContentController.addUserScript(userScript)
             }
         }
@@ -36,14 +40,24 @@ class FaviconManager: TabContentScript {
         return ["faviconsMessageHandler"]
     }
 
-    fileprivate func loadFavicons(_ tab: Tab, profile: Profile, favicons: [Favicon]) -> Deferred<[Maybe<Favicon>]> {
+    fileprivate func loadFavicons(
+        _ tab: Tab,
+        profile: Profile,
+        favicons: [Favicon]
+    ) -> Deferred<[Maybe<Favicon>]> {
         var deferreds: [() -> Deferred<Maybe<Favicon>>]
         deferreds = favicons.map { favicon in
             return { [weak tab] () -> Deferred<Maybe<Favicon>> in
                 if  let tab = tab,
                     let url = URL(string: favicon.url),
                     let currentURL = tab.url {
-                    return self.getFavicon(tab, iconUrl: url, currentURL: currentURL, icon: favicon, profile: profile)
+                    return self.getFavicon(
+                        tab,
+                        iconUrl: url,
+                        currentURL: currentURL,
+                        icon: favicon,
+                        profile: profile
+                    )
                 } else {
                     return deferMaybe(FaviconError())
                 }
@@ -52,7 +66,13 @@ class FaviconManager: TabContentScript {
         return all(deferreds.map({ $0() }))
     }
 
-    func getFavicon(_ tab: Tab, iconUrl: URL, currentURL: URL, icon: Favicon, profile: Profile) -> Deferred<Maybe<Favicon>> {
+    func getFavicon(
+        _ tab: Tab,
+        iconUrl: URL,
+        currentURL: URL,
+        icon: Favicon,
+        profile: Profile
+    ) -> Deferred<Maybe<Favicon>> {
         let deferred = Deferred<Maybe<Favicon>>()
         let manager = SDWebImageManager.shared()
         let options: [SDWebImageOptions] = tab.isPrivate ? [.lowPriority, .cacheMemoryOnly] : [.lowPriority]
@@ -90,7 +110,8 @@ class FaviconManager: TabContentScript {
             with: iconUrl,
             options: SDWebImageOptions(options),
             progress: { (receivedSize, expectedSize, _) in
-                if receivedSize > FaviconManager.maximumFaviconSize || expectedSize > FaviconManager.maximumFaviconSize {
+                if receivedSize > FaviconManager.maximumFaviconSize
+                    || expectedSize > FaviconManager.maximumFaviconSize {
                     fetch?.cancel()
                 }
             },
@@ -100,7 +121,10 @@ class FaviconManager: TabContentScript {
         return deferred
     }
 
-    func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(
+        _ userContentController: WKUserContentController,
+        didReceiveScriptMessage message: WKScriptMessage
+    ) {
         self.tab?.favicons.removeAll(keepingCapacity: false)
         if let tab = self.tab, let currentURL = tab.url {
             var favicons = [Favicon]()

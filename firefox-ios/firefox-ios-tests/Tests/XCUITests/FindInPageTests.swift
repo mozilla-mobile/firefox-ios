@@ -183,7 +183,13 @@ class FindInPageTests: BaseTestCase {
         app.menuItems["Find in Page"].tap()
         mozWaitForElementToExist(app.textFields[textToFind])
         XCTAssertTrue(app.textFields[textToFind].exists, "The bar does not appear with the text selected to be found")
-        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.FindInPage.findPreviousButton].exists, "Find previous button exists")
-        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.FindInPage.findNextButton].exists, "Find next button exists")
+        XCTAssertTrue(
+            app.buttons[AccessibilityIdentifiers.FindInPage.findPreviousButton].exists,
+            "Find previous button exists"
+        )
+        XCTAssertTrue(
+            app.buttons[AccessibilityIdentifiers.FindInPage.findNextButton].exists,
+            "Find next button exists"
+        )
     }
 }

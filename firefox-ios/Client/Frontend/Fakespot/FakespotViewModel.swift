@@ -38,7 +38,8 @@ class FakespotViewModel {
             let productAdCard = productState
                 .productAds
                 .sorted(by: { $0.adjustedRating > $1.adjustedRating })
-                .first(where: { $0.adjustedRating >= minRating }) // Choosing the product with the same or better rating to display
+                // Choosing the product with the same or better rating to display
+                .first(where: { $0.adjustedRating >= minRating })
                 .map(ViewElement.productAdCard)
 
             if product.grade == nil {
@@ -328,7 +329,8 @@ class FakespotViewModel {
                 guard let self else { return }
                 await self.fetchProductAnalysis()
                 do {
-                    // A product might be already in analysis status so we listen for progress until it's completed, then fetch new information
+                    // A product might be already in analysis status so we listen for progress
+                    // until it's completed, then fetch new information
                     for try await status in self.observeProductAnalysisStatus() where status.isAnalyzing == false {
                         await self.fetchProductAnalysis(showLoading: false)
                     }
@@ -492,7 +494,9 @@ class FakespotViewModel {
         observeProductTask?.cancel()
     }
 
-    func getCurrentDetent(for presentedController: UIPresentationController?) -> UISheetPresentationController.Detent.Identifier? {
+    func getCurrentDetent(
+        for presentedController: UIPresentationController?
+    ) -> UISheetPresentationController.Detent.Identifier? {
         guard let sheetController = presentedController as? UISheetPresentationController else { return nil }
         return sheetController.selectedDetentIdentifier
     }
