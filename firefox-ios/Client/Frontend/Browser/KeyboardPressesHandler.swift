@@ -5,6 +5,7 @@
 import Foundation
 import UIKit
 
+// swiftlint:disable line_length
 /// Handler to detect keyboard presses for shortcut taps on links
 /// - Cmd + Tap on Link -> Open link in Background
 /// - Cmd + Shift + Tap on Link -> Open link in New Tab
@@ -14,6 +15,7 @@ import UIKit
 /// https://developer.apple.com/documentation/uikit/pointer_interactions/integrating_pointer_interactions_into_your_ipad_app
 @available(iOS 13.4, *)
 class KeyboardPressesHandler {
+// swiftlint:enable line_length
     private lazy var keysPressed: [UIKeyboardHIDUsage] = []
 
     var isOnlyCmdPressed: Bool {

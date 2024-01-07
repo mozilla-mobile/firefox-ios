@@ -31,7 +31,9 @@ class LegacyThemeManager {
         return BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
     }
 
-    var automaticBrightnessValue: Float = UserDefaults.standard.float(forKey: LegacyThemeManagerPrefs.automaticSliderValue.rawValue) {
+    var automaticBrightnessValue: Float = UserDefaults.standard.float(
+        forKey: LegacyThemeManagerPrefs.automaticSliderValue.rawValue
+    ) {
         didSet {
             UserDefaults.standard.set(
                 automaticBrightnessValue,

@@ -19,9 +19,11 @@ class LegacyDynamicFontHelper: NSObject {
     }
 
     override init() {
+        // swiftlint:disable line_length
         defaultStandardFontSize = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).pointSize // 14pt -> 17pt -> 23pt
         deviceFontSize = defaultStandardFontSize * (UIDevice.current.userInterfaceIdiom == .pad ? iPadFactor : iPhoneFactor)
         defaultSmallFontSize = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .caption1).pointSize // 11pt -> 12pt -> 17pt
+        // swiftlint:enable line_length
 
         super.init()
     }
@@ -30,7 +32,12 @@ class LegacyDynamicFontHelper: NSObject {
      * Starts monitoring the ContentSizeCategory changes
      */
     func startObserving() {
-        NotificationCenter.default.addObserver(self, selector: #selector(contentSizeCategoryDidChange), name: UIContentSizeCategory.didChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(contentSizeCategoryDidChange),
+            name: UIContentSizeCategory.didChangeNotification,
+            object: nil
+        )
     }
 
     deinit {
@@ -112,11 +119,16 @@ class LegacyDynamicFontHelper: NSObject {
     /// - Parameters:
     ///   - textStyle: The desired textStyle for the font
     ///   - weight: The weight of the font (optional)
-    ///   - maxSize: The maximum size the font can scale - Refer to the human interface guidelines for more information on sizes for each style (optional)
+    ///   - maxSize: The maximum size the font can scale - Refer to the human interface guidelines
+    ///              for more information on sizes for each style (optional)
     ///              https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/typography/
     /// - Returns: The UIFont with the specified font size, style and weight
     @available(*, deprecated, message: "Use DefaultDynamicFontHelper preferredFont(withTextStyle:size:weight:) instead")
-    func preferredFont(withTextStyle textStyle: UIFont.TextStyle, weight: UIFont.Weight? = nil, maxSize: CGFloat? = nil) -> UIFont {
+    func preferredFont(
+        withTextStyle textStyle: UIFont.TextStyle,
+        weight: UIFont.Weight? = nil,
+        maxSize: CGFloat? = nil
+    ) -> UIFont {
         let fontMetrics = UIFontMetrics(forTextStyle: textStyle)
         let fontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: textStyle)
 

@@ -14,7 +14,8 @@ let testSecondLoginPage = path(forTestPage: "test-password-2.html")
 let savedLoginEntry = "test@example.com, http://localhost:\(serverPort)"
 let urlLogin = path(forTestPage: "empty-login-form.html")
 let mailLogin = "iosmztest@mailinator.com"
-// The following seem to be labels that change a lot and make the tests break; aka volatile. Let's keep them in one place.
+// The following seem to be labels that change a lot and make the tests
+// break; aka volatile. Let's keep them in one place.
 let loginsListURLLabel = "Website, \(domain)"
 let loginsListUsernameLabel = "Username, test@example.com"
 let loginsListPasswordLabel = "Password"

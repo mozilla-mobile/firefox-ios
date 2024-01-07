@@ -69,7 +69,9 @@ class InternalSchemeHandler: NSObject, WKURLSchemeHandler {
         let path = url.path.starts(with: "/") ? String(url.path.dropFirst()) : url.path
 
         // For non-main doc URL, try load it as a resource
-        if !urlSchemeTask.request.isPrivileged, urlSchemeTask.request.mainDocumentURL != urlSchemeTask.request.url, downloadResource(urlSchemeTask: urlSchemeTask) {
+        if !urlSchemeTask.request.isPrivileged,
+           urlSchemeTask.request.mainDocumentURL != urlSchemeTask.request.url,
+           downloadResource(urlSchemeTask: urlSchemeTask) {
             return
         }
 

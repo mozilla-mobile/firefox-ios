@@ -267,7 +267,10 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
     }
 
     func updatePrivateUIState() {
-        UserDefaults.standard.set(viewModel.tabManager.selectedTab?.isPrivate ?? false, forKey: PrefsKeys.LastSessionWasPrivate)
+        UserDefaults.standard.set(
+            viewModel.tabManager.selectedTab?.isPrivate ?? false,
+            forKey: PrefsKeys.LastSessionWasPrivate
+        )
     }
 
     private func updateTitle() {
@@ -536,7 +539,8 @@ extension LegacyTabTrayViewController: UIToolbarDelegate {
 }
 
 // MARK: - Adaptive & Popover Presentation Delegates
-extension LegacyTabTrayViewController: UIAdaptivePresentationControllerDelegate, UIPopoverPresentationControllerDelegate {
+extension LegacyTabTrayViewController: UIAdaptivePresentationControllerDelegate,
+                                       UIPopoverPresentationControllerDelegate {
     // Returning None here, for the iPhone makes sure that the Popover is actually presented as a
     // Popover and not as a full-screen modal, which is the default on compact device classes.
     func adaptivePresentationStyle(for controller: UIPresentationController,
@@ -577,7 +581,8 @@ extension LegacyTabTrayViewController {
     @objc
     func didTapDone() {
         notificationCenter.post(name: .TabsTrayDidClose)
-        // Update Private mode when closing TabTray, if the mode toggle but no tab is pressed with return to previous state
+        // Update Private mode when closing TabTray, if the mode toggle but
+        // no tab is pressed with return to previous state
         updatePrivateUIState()
         viewModel.tabTrayView.didTogglePrivateMode(viewModel.tabManager.selectedTab?.isPrivate ?? false)
         if viewModel.segmentToFocus == .privateTabs {

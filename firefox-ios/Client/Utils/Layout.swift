@@ -5,7 +5,8 @@
 import UIKit
 
 extension NSLayoutConstraint {
-    /// Builder function that return a new NSLayoutConstraints with the priority set. This is useful  to inline constraint creation in a call to `NSLayoutConstraint.active()`.
+    /// Builder function that return a new NSLayoutConstraints with the priority set. This is useful
+    /// to inline constraint creation in a call to `NSLayoutConstraint.active()`.
     /// - Parameter priority: the priority to set
     /// - Returns: the same `NSLayoutConstraint` with the priority set
     func priority(_ priority: UILayoutPriority) -> NSLayoutConstraint {

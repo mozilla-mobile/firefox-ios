@@ -60,8 +60,7 @@ class InitialViewController: UIViewController {
                     alert.addAction(UIAlertAction(
                         title: .SendToErrorOKButton,
                         style: .default
-                    ) {
-                        _ in self.finish(afterDelay: 0)
+                    ) { _ in self.finish(afterDelay: 0)
                     })
                     self.present(alert, animated: true, completion: nil)
                     return
