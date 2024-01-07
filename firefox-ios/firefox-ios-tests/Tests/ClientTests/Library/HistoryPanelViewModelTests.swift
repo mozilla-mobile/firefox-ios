@@ -291,8 +291,16 @@ class HistoryPanelViewModelTests: XCTestCase {
         for index in 0...3 {
             let site = Site(url: "http://site\(index).com", title: "Site \(index)")
             site.latestVisit = Visit(date: timestamp)
-            let visit = VisitObservation(url: site.url, title: site.title, visitType: .link, at: Int64(timestamp) / 1000)
-            XCTAssertTrue(profile.places.applyObservation(visitObservation: visit).value.isSuccess, "Site added: \(site.url).")
+            let visit = VisitObservation(
+                url: site.url,
+                title: site.title,
+                visitType: .link,
+                at: Int64(timestamp) / 1000
+            )
+            XCTAssertTrue(
+                profile.places.applyObservation(visitObservation: visit).value.isSuccess,
+                "Site added: \(site.url)."
+            )
             groupSites.append(site)
         }
 

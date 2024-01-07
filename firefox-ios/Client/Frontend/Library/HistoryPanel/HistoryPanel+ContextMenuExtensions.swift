@@ -7,7 +7,11 @@ import UIKit
 import Storage
 
 extension HistoryPanel: LibraryPanelContextMenu {
-    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
+    func presentContextMenu(
+        for site: Site,
+        with indexPath: IndexPath,
+        completionHandler: @escaping () -> PhotonActionSheet?
+    ) {
         guard let contextMenu = completionHandler() else { return }
 
         present(contextMenu, animated: true, completion: nil)
@@ -18,7 +22,10 @@ extension HistoryPanel: LibraryPanelContextMenu {
     }
 
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]? {
-        guard var actions = getDefaultContextMenuActions(for: site, libraryPanelDelegate: libraryPanelDelegate) else { return nil }
+        guard var actions = getDefaultContextMenuActions(
+            for: site,
+            libraryPanelDelegate: libraryPanelDelegate
+        ) else { return nil }
 
         let removeAction = SingleActionViewModel(title: .DeleteFromHistoryContextMenuTitle,
                                                  iconString: StandardImageIdentifiers.Large.delete,

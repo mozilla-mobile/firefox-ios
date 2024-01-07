@@ -45,10 +45,7 @@ struct GeneralizedImageFetcher: URLCaching {
         request: URLRequest,
         completion: @escaping (UIImage?) -> Void
     ) {
-        urlSession.dataTask(with: request) {
-            data,
-            response,
-            error in
+        urlSession.dataTask(with: request) { data, response, error in
             guard error == nil else {
                 DefaultLogger.shared.log(
                     "Error while attempting to fetch image! Error: \(String(describing: error?.localizedDescription))",

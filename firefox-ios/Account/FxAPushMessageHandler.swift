@@ -15,8 +15,8 @@ let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
 /// [0]: https://github.com/mozilla/fxa-auth-server/blob/master/docs/pushpayloads.schema.json#L26
 /// [1]: https://dxr.mozilla.org/mozilla-central/source/mobile/android/services/src/main/java/org/mozilla/gecko/fxa/FxAccountPushHandler.java
 /// The main entry points are `handle` methods, to accept the raw APNS `userInfo` and then to process the resulting JSON.
-// swiftlint:enable line_length
 class FxAPushMessageHandler {
+// swiftlint:enable line_length
     let profile: Profile
     private let logger: Logger
 
