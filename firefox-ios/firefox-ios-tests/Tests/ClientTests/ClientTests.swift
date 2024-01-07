@@ -17,9 +17,7 @@ class ClientTests: XCTestCase {
         let systemVersion = UIDevice.current.systemVersion
 
         if AppInfo.buildNumber != "1" {
-            // swiftlint:disable line_length
             let expectedRegex = "^Firefox-iOS-Sync/[0-9\\.]+b[0-9]* \\(\(device); iPhone OS \(systemVersion)\\) \\([-_A-Za-z0-9= \\(\\)]+\\)$"
-            // swiftlint:enable line_length
             let loc = ua.range(of: expectedRegex, options: .regularExpression)
             XCTAssertTrue(loc != nil, "Sync UA is as expected. Was \(ua)")
         } else {

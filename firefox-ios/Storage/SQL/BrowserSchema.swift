@@ -1676,8 +1676,7 @@ open class BrowserSchema: Schema {
         // Now insert these into the temporary table. Chunk by an even number, for obvious reasons.
         let chunks = chunk(pairs, by: BrowserDB.MaxVariableNumber - (BrowserDB.MaxVariableNumber % 2))
         for chunk in chunks {
-            let ins =
-                "INSERT INTO \(tmpTable) (url, domain) VALUES " + [String](repeating: "(?, ?)", count: chunk.count / 2).joined(separator: ", ")
+            let ins = "INSERT INTO \(tmpTable) (url, domain) VALUES " + [String](repeating: "(?, ?)", count: chunk.count / 2).joined(separator: ", ")
             if !self.run(db, sql: ins, args: Array(chunk)) {
                 logger.log("Couldn't insert domains into temporary table. Aborting migration.",
                            level: .warning,
@@ -1694,7 +1693,6 @@ open class BrowserSchema: Schema {
 
         // Update the history table from the temporary table.
         let updateHistory = "UPDATE history SET domain_id = (SELECT domain_id FROM \(tmpTable) WHERE \(tmpTable).url = history.url)"
-        // swiftlint:enable line_length
 
         // Clean up.
         let dropTemp = "DROP TABLE \(tmpTable)"
