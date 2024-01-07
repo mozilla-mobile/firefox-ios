@@ -30,9 +30,18 @@ class SiteTableViewController: UIViewController,
         guard let self = self else { return }
         table.delegate = self
         table.dataSource = self
-        table.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier)
-        table.register(OneLineTableViewCell.self, forCellReuseIdentifier: OneLineTableViewCell.cellIdentifier)
-        table.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.cellIdentifier)
+        table.register(
+            TwoLineImageOverlayCell.self,
+            forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier
+        )
+        table.register(
+            OneLineTableViewCell.self,
+            forCellReuseIdentifier: OneLineTableViewCell.cellIdentifier
+        )
+        table.register(
+            SiteTableViewHeader.self,
+            forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.cellIdentifier
+        )
         table.layoutMargins = .zero
         table.keyboardDismissMode = .onDrag
         table.accessibilityIdentifier = "SiteTable"
@@ -89,7 +98,10 @@ class SiteTableViewController: UIViewController,
         reloadData()
     }
 
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+    override func viewWillTransition(
+        to size: CGSize,
+        with coordinator: UIViewControllerTransitionCoordinator
+    ) {
         super.viewWillTransition(to: size, with: coordinator)
         tableView.setEditing(false, animated: false)
         // The AS context menu does not behave correctly. Dismiss it when rotating.
@@ -120,7 +132,10 @@ class SiteTableViewController: UIViewController,
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.cellIdentifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: TwoLineImageOverlayCell.cellIdentifier,
+            for: indexPath
+        )
         if self.tableView(tableView, hasFullWidthSeparatorForRowAtIndexPath: indexPath) {
             cell.separatorInset = .zero
         }
@@ -139,22 +154,33 @@ class SiteTableViewController: UIViewController,
         }
     }
 
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(
+        _ tableView: UITableView,
+        heightForHeaderInSection section: Int
+    ) -> CGFloat {
         return UITableView.automaticDimension
     }
 
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(
+        _ tableView: UITableView,
+        heightForRowAt indexPath: IndexPath
+    ) -> CGFloat {
         return UITableView.automaticDimension
     }
 
-    func tableView(_ tableView: UITableView, hasFullWidthSeparatorForRowAtIndexPath indexPath: IndexPath) -> Bool {
+    func tableView(
+        _ tableView: UITableView,
+        hasFullWidthSeparatorForRowAtIndexPath indexPath: IndexPath
+    ) -> Bool {
         return false
     }
 
     func applyTheme() {
         navigationController?.navigationBar.barTintColor = themeManager.currentTheme.colors.layer1
         navigationController?.navigationBar.tintColor = themeManager.currentTheme.colors.iconAction
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: themeManager.currentTheme.colors.textPrimary]
+        navigationController?.navigationBar.titleTextAttributes = [
+            .foregroundColor: themeManager.currentTheme.colors.textPrimary
+        ]
         setNeedsStatusBarAppearanceUpdate()
 
         tableView.backgroundColor = themeManager.currentTheme.colors.layer1
@@ -164,10 +190,17 @@ class SiteTableViewController: UIViewController,
 }
 
 extension SiteTableViewController: UITableViewDragDelegate {
-    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+    func tableView(
+        _ tableView: UITableView,
+        itemsForBeginning session: UIDragSession,
+        at indexPath: IndexPath
+    ) -> [UIDragItem] {
         guard let panelVC = self as? LibraryPanelContextMenu,
               let site = panelVC.getSiteDetails(for: indexPath),
-              let url = URL(string: site.url, invalidCharacters: false), let itemProvider = NSItemProvider(contentsOf: url)
+              let url = URL(
+                string: site.url,
+                invalidCharacters: false
+              ), let itemProvider = NSItemProvider(contentsOf: url)
         else { return [] }
 
         // Telemetry is being sent to legacy, need to add it to metrics.yml

@@ -70,8 +70,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     /// Invoked when the interface is finished loading for your screen, but before that interface appears on screen.
     ///
-    /// Use this method to refresh the contents of your scene's view (especially if it's a restored scene), or other activities that need
-    /// to begin.
+    /// Use this method to refresh the contents of your scene's view (especially if it's a restored scene),
+    /// or other activities that need to begin.
     func sceneDidBecomeActive(_ scene: UIScene) {
         guard !AppConstants.isRunningUnitTest else { return }
 

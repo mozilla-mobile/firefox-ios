@@ -113,7 +113,13 @@ class Setting: NSObject {
     // Called when the pref is long-pressed.
     func onLongPress(_ navigationController: UINavigationController?) { return }
 
-    init(title: NSAttributedString? = nil, footerTitle: NSAttributedString? = nil, cellHeight: CGFloat? = nil, delegate: SettingsDelegate? = nil, enabled: Bool? = nil) {
+    init(
+        title: NSAttributedString? = nil,
+        footerTitle: NSAttributedString? = nil,
+        cellHeight: CGFloat? = nil,
+        delegate: SettingsDelegate? = nil,
+        enabled: Bool? = nil
+    ) {
         self._title = title
         self._footerTitle = footerTitle
         self._cellHeight = cellHeight
@@ -126,7 +132,12 @@ class Setting: NSObject {
 class SettingSection: Setting {
     let children: [Setting]
 
-    init(title: NSAttributedString? = nil, footerTitle: NSAttributedString? = nil, cellHeight: CGFloat? = nil, children: [Setting]) {
+    init(
+        title: NSAttributedString? = nil,
+        footerTitle: NSAttributedString? = nil,
+        cellHeight: CGFloat? = nil,
+        children: [Setting]
+    ) {
         self.children = children
         super.init(title: title, footerTitle: footerTitle, cellHeight: cellHeight)
     }
@@ -161,7 +172,10 @@ private class PaddedSwitch: UIView {
 
         addSubview(switchView)
 
-        frame.size = CGSize(width: switchView.frame.width + UX.padding, height: switchView.frame.height)
+        frame.size = CGSize(
+            width: switchView.frame.width + UX.padding,
+            height: switchView.frame.height
+        )
         switchView.frame.origin = CGPoint(x: UX.padding, y: 0)
     }
 
@@ -173,7 +187,8 @@ private class PaddedSwitch: UIView {
 // A helper class for settings with a UISwitch.
 // Takes and optional settingsDidChange callback and status text.
 class BoolSetting: Setting, FeatureFlaggable {
-    let prefKey: String? // Sometimes a subclass will manage its own pref setting. In that case the prefkey will be nil
+    // Sometimes a subclass will manage its own pref setting. In that case the prefkey will be nil
+    let prefKey: String?
 
     private let prefs: Prefs?
     private let defaultValue: Bool?
@@ -549,13 +564,25 @@ class StringSetting: Setting, UITextFieldDelegate {
         cell.accessibilityTraits = UIAccessibilityTraits.none
         cell.contentView.addSubview(textField)
 
-        textField.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.fontSize, weight: .regular)
+        textField.font = DefaultDynamicFontHelper.preferredFont(
+            withTextStyle: .body,
+            size: UX.fontSize,
+            weight: .regular
+        )
 
-        NSLayoutConstraint.activate([
-            textField.heightAnchor.constraint(equalToConstant: UX.textFieldHeight),
-            textField.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -UX.padding),
-            textField.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: UX.padding)
-        ])
+        NSLayoutConstraint.activate(
+            [
+                textField.heightAnchor.constraint(equalToConstant: UX.textFieldHeight),
+                textField.trailingAnchor.constraint(
+                    equalTo: cell.contentView.trailingAnchor,
+                    constant: -UX.padding
+                ),
+                textField.leadingAnchor.constraint(
+                    equalTo: cell.contentView.leadingAnchor,
+                    constant: UX.padding
+                )
+            ]
+        )
 
         if let value = persister.readPersistedValue() {
             textField.text = value
@@ -670,19 +697,31 @@ class CheckmarkSetting: Setting {
             let checkColor = isChecked() ? theme.colors.actionPrimary : UIColor.clear
 
             cell.contentView.addSubview(check)
-            NSLayoutConstraint.activate([
-                check.heightAnchor.constraint(equalToConstant: UX.checkmarkHeight),
-                check.widthAnchor.constraint(equalToConstant: UX.checkmarkWidth),
-                check.topAnchor.constraint(equalTo: cell.contentView.topAnchor, constant: UX.checkmarkTopHeight),
-                check.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: UX.checkmarkLeading)
-            ])
+            NSLayoutConstraint.activate(
+                [
+                    check.heightAnchor.constraint(equalToConstant: UX.checkmarkHeight),
+                    check.widthAnchor.constraint(equalToConstant: UX.checkmarkWidth),
+                    check.topAnchor.constraint(
+                        equalTo: cell.contentView.topAnchor,
+                        constant: UX.checkmarkTopHeight
+                    ),
+                    check.leadingAnchor.constraint(
+                        equalTo: cell.contentView.leadingAnchor,
+                        constant: UX.checkmarkLeading
+                    )
+                ]
+            )
 
             check.textColor = checkColor
 
             let result = NSMutableAttributedString()
             if let str = title?.string {
-                result.append(NSAttributedString(string: str,
-                                                 attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]))
+                result.append(
+                    NSAttributedString(
+                        string: str,
+                        attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
+                    )
+                )
             }
             cell.textLabel?.assign(attributed: result, theme: theme)
         }
@@ -736,11 +775,19 @@ class ButtonSetting: Setting {
             cell.textLabel?.textColor = theme.colors.textDisabled
         }
         if let textLabel = cell.textLabel {
-            NSLayoutConstraint.activate([
-                textLabel.heightAnchor.constraint(equalToConstant: UX.textLabelHeight),
-                textLabel.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -UX.padding),
-                textLabel.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: UX.padding)
-            ])
+            NSLayoutConstraint.activate(
+                [
+                    textLabel.heightAnchor.constraint(equalToConstant: UX.textLabelHeight),
+                    textLabel.trailingAnchor.constraint(
+                        equalTo: cell.contentView.trailingAnchor,
+                        constant: -UX.padding
+                    ),
+                    textLabel.leadingAnchor.constraint(
+                        equalTo: cell.contentView.leadingAnchor,
+                        constant: UX.padding
+                    )
+                ]
+            )
             textLabel.translatesAutoresizingMaskIntoConstraints = false
         }
 
@@ -818,14 +865,21 @@ class SettingsTableViewController: ThemedTableViewController {
 
         tableView.register(cellType: ThemedLeftAlignedTableViewCell.self)
         tableView.register(cellType: ThemedSubtitleTableViewCell.self)
-        tableView.register(ThemedTableSectionHeaderFooterView.self,
-                           forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
-        tableView.tableFooterView = UIView(frame: CGRect(width: view.frame.width, height: UX.tableViewFooterHeight))
+        tableView.register(
+            ThemedTableSectionHeaderFooterView.self,
+            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier
+        )
+        tableView.tableFooterView = UIView(
+            frame: CGRect(width: view.frame.width, height: UX.tableViewFooterHeight)
+        )
         tableView.estimatedRowHeight = UX.estimatedRowHeight
         tableView.estimatedSectionHeaderHeight = UX.estimatedSectionHeaderHeight
         tableView.rowHeight = UITableView.automaticDimension
 
-        let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(didLongPress))
+        let longPressGestureRecognizer = UILongPressGestureRecognizer(
+            target: self,
+            action: #selector(didLongPress)
+        )
         tableView.addGestureRecognizer(longPressGestureRecognizer)
     }
 
@@ -833,9 +887,24 @@ class SettingsTableViewController: ThemedTableViewController {
         super.viewWillAppear(animated)
 
         settings = generateSettings()
-        NotificationCenter.default.addObserver(self, selector: #selector(syncDidChangeState), name: .ProfileDidStartSyncing, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(syncDidChangeState), name: .ProfileDidFinishSyncing, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(firefoxAccountDidChange), name: .FirefoxAccountChanged, object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(syncDidChangeState),
+            name: .ProfileDidStartSyncing,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(syncDidChangeState),
+            name: .ProfileDidFinishSyncing,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(firefoxAccountDidChange),
+            name: .FirefoxAccountChanged,
+            object: nil
+        )
 
         applyTheme()
     }
@@ -874,7 +943,8 @@ class SettingsTableViewController: ThemedTableViewController {
 
     @objc
     private func refresh() {
-        // Through-out, be aware that modifying the control while a refresh is in progress is /not/ supported and will likely crash the app.
+        // Through-out, be aware that modifying the control while a refresh is in progress is /not/ supported
+        // and will likely crash the app.
         // self.profile.rustAccount.refreshProfile()
         // TODO [rustfxa] listen to notification and refresh profile
     }
@@ -895,7 +965,10 @@ class SettingsTableViewController: ThemedTableViewController {
         }
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(
+        _ tableView: UITableView,
+        cellForRowAt indexPath: IndexPath
+    ) -> UITableViewCell {
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row] {
             let cell = dequeueCellFor(indexPath: indexPath, setting: setting)
@@ -905,7 +978,11 @@ class SettingsTableViewController: ThemedTableViewController {
         return super.tableView(tableView, cellForRowAt: indexPath)
     }
 
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    override func tableView(
+        _ tableView: UITableView,
+        willDisplay cell: UITableViewCell,
+        forRowAt indexPath: IndexPath
+    ) {
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row], let themedCell = cell as? ThemedTableViewCell {
             setting.onConfigureCell(themedCell, theme: themeManager.currentTheme)
@@ -915,13 +992,19 @@ class SettingsTableViewController: ThemedTableViewController {
 
     private func dequeueCellFor(indexPath: IndexPath, setting: Setting) -> ThemedTableViewCell {
         if setting.style == .subtitle {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: ThemedSubtitleTableViewCell.cellIdentifier, for: indexPath) as? ThemedSubtitleTableViewCell else {
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: ThemedSubtitleTableViewCell.cellIdentifier,
+                for: indexPath
+            ) as? ThemedSubtitleTableViewCell else {
                 return ThemedSubtitleTableViewCell()
             }
             return cell
         }
         if setting.style == .value1 {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: ThemedLeftAlignedTableViewCell.cellIdentifier, for: indexPath) as? ThemedLeftAlignedTableViewCell else {
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: ThemedLeftAlignedTableViewCell.cellIdentifier,
+                for: indexPath
+            ) as? ThemedLeftAlignedTableViewCell else {
                 return ThemedLeftAlignedTableViewCell()
             }
             return cell
@@ -939,7 +1022,9 @@ class SettingsTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier
+        ) as? ThemedTableSectionHeaderFooterView else { return nil }
 
         let sectionSetting = settings[section]
         if let sectionTitle = sectionSetting.title?.string {
@@ -952,7 +1037,9 @@ class SettingsTableViewController: ThemedTableViewController {
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let sectionSetting = settings[section]
 
-        guard let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView,
+        guard let footerView = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier
+        ) as? ThemedTableSectionHeaderFooterView,
                 let sectionFooter = sectionSetting.footerTitle?.string else { return nil }
 
         footerView.titleLabel.text = sectionFooter

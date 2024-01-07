@@ -21,7 +21,9 @@ class SwitchFakespotProduction: HiddenSetting, FeatureFlaggable {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
+        // swiftlint:disable line_length
         let channels = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI) ? [AppBuildChannel.release] : [.developer, .beta]
+        // swiftlint:enable line_length
         featureFlags.set(feature: .useStagingFakespotAPI, toChannels: channels)
 
         settingsDelegate?.askedToReload()

@@ -101,7 +101,8 @@ public extension String {
 
     /// Find the first match within the given range of the string.
     /// If the regex pattern is valid and there is a match found in the input string,
-    /// the method returns the captured substring corresponding to the first capturing group (group index 1) in the regex pattern.
+    /// the method returns the captured substring corresponding to the first capturing
+    /// group (group index 1) in the regex pattern.
     /// If no match is found or the regex pattern is invalid, the method returns nil.
     func match(_ regex: String) -> String? {
         guard let regex = try? NSRegularExpression(pattern: regex) else { return nil }
