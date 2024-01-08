@@ -45,7 +45,7 @@ class FakespotViewController:
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     private var viewModel: FakespotViewModel
-    private lazy var telemetryAdsExposure: ((Bool) -> Bool) = { [weak self] areAdsEmpty in
+    private lazy var adsAvailabilityDecisionClosure: ((Bool) -> Bool) = { [weak self] areAdsEmpty in
         if areAdsEmpty {
             return (self?.fakespotState?.notExposedToAdsEvent ?? false)
         }
@@ -138,7 +138,7 @@ class FakespotViewController:
 
         setupView()
         listenForThemeChange(view)
-        viewModel.fetchProductIfOptedIn(telemetryAdsExposure)
+        viewModel.fetchProductIfOptedIn(adsAvailabilityDecisionClosure)
         subscribeToRedux()
     }
 
@@ -211,7 +211,7 @@ class FakespotViewController:
         listenToStateChange()
 
         guard triggerFetch else { return }
-        viewModel.fetchProductIfOptedIn(telemetryAdsExposure)
+        viewModel.fetchProductIfOptedIn(adsAvailabilityDecisionClosure)
     }
 
     private func handleAdVisibilityChanges() {
@@ -406,7 +406,7 @@ class FakespotViewController:
             }
             viewModel.optInCardViewModel.onOptIn = { [weak self] in
                 guard let self = self else { return }
-                self.viewModel.fetchProductIfOptedIn(telemetryAdsExposure)
+                self.viewModel.fetchProductIfOptedIn(adsAvailabilityDecisionClosure)
             }
             view.configure(viewModel.optInCardViewModel)
             return view

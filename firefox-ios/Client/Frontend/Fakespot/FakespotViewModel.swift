@@ -321,15 +321,15 @@ class FakespotViewModel {
         self.tabManager = tabManager
     }
 
-    func fetchProductIfOptedIn(_ telemetryAdsClosure: ((Bool) -> Bool)? = nil) {
+    func fetchProductIfOptedIn(_ adsAvailabilityDecisionClosure: ((Bool) -> Bool)? = nil) {
         if isOptedIn {
             fetchProductTask = Task { @MainActor [weak self] in
                 guard let self else { return }
-                await self.fetchProductAnalysis(telemetryAdsClosure)
+                await self.fetchProductAnalysis(adsAvailabilityDecisionClosure)
                 do {
                     // A product might be already in analysis status so we listen for progress until it's completed, then fetch new information
                     for try await status in self.observeProductAnalysisStatus() where status.isAnalyzing == false {
-                        await self.fetchProductAnalysis(showLoading: false, telemetryAdsClosure)
+                        await self.fetchProductAnalysis(showLoading: false, adsAvailabilityDecisionClosure)
                     }
                 } catch {
                     if case .loaded(let productState) = state {
@@ -368,7 +368,7 @@ class FakespotViewModel {
         let analyzeCount: Int
     }
 
-    func fetchProductAnalysis(showLoading: Bool = true, _ telemetryAdsClosure: ((Bool) -> Bool)? = nil) async {
+    func fetchProductAnalysis(showLoading: Bool = true, _ adsAvailabilityDecisionClosure: ((Bool) -> Bool)? = nil) async {
         if showLoading { state = .loading }
         do {
             let product = try await shoppingProduct.fetchProductAnalysisData()
@@ -387,11 +387,11 @@ class FakespotViewModel {
 
             guard product != nil else { return }
             if productAds.isEmpty {
-                guard telemetryAdsClosure?(true) == false else { return }
+                guard adsAvailabilityDecisionClosure?(true) == false else { return }
                 recordSurfaceNoAdsAvailableTelemetry()
                 store.dispatch(FakespotAction.setAdsExposureTo(false))
             } else {
-                guard telemetryAdsClosure?(false) == false else { return }
+                guard adsAvailabilityDecisionClosure?(false) == false else { return }
                 recordAdsExposureTelementry()
                 store.dispatch(FakespotAction.setAdsExposureTo(true))
             }
