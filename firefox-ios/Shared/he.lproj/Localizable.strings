@@ -1339,6 +1339,12 @@
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the button title of the group of wallpapers that are seasonally available to the user. */
 "Settings.Home.Option.Wallpaper.LearnMore.v106" = "מידע נוסף";
 
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the default description of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Default.Description.v106" = "התנסות באוסף החדש.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the description of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.IndependentVoices.Description.v106" = "אוסף הקולות העצמאיים החדש.";
+
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are seasonally available to the user. */
 "Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "מהדורה מוגבלת";
 
@@ -1762,8 +1768,17 @@
 /* Username textbox in Authentication prompt */
 "Username" = "שם משתמש";
 
+/* The message of the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Change.Error.Body.v106" = "משהו השתבש עם הטפט הזה.";
+
+/* The title of the error displayed when changing wallpaper fails. */
+"Wallpaper.Change.Error.Title.v106" = "לא ניתן להחליף טפט";
+
 /* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
 "Wallpaper.Download.Error.Body.v106" = "משהו השתבש בהורדה שלך.";
+
+/* The title of the error displayed if download fails when changing a wallpaper. */
+"Wallpaper.Download.Error.Title.v106" = "לא ניתן להוריד טפט";
 
 /* An action for the error displayed to a user when they trying to change a wallpaper failed. */
 "Wallpaper.Error.Dismiss.v106" = "ביטול";
