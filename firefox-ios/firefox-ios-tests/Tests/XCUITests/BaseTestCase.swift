@@ -297,6 +297,21 @@ class BaseTestCase: XCTestCase {
         passcodeInput.typeText("foo\n")
         mozWaitForElementToNotExist(passcodeInput)
     }
+
+    func scrollToElement(_ element: XCUIElement, swipeableElement: XCUIElement? = nil, swipe: String = "up", isHittable: Bool = false, maxNumberOfScreenSwipes: Int = 12) {
+        let app = XCUIApplication()
+        let swipeableElement = swipeableElement ?? app
+        var nrOfSwipes = 0
+        while(!element.isVisible() || isHittable && !element.isHittable) && nrOfSwipes < maxNumberOfScreenSwipes {
+            if swipe == "down" {
+                swipeableElement.swipeDown()
+            } else {
+                swipeableElement.swipeUp()
+            }
+            usleep(1000)
+            nrOfSwipes += 1
+        }
+    }
 }
 
 class IpadOnlyTestCase: BaseTestCase {
@@ -377,6 +392,31 @@ extension XCUIElement {
         let isBelow = self.frame.origin.y > element.frame.origin.y
         let actualDistance = abs(self.frame.origin.y - element.frame.origin.y)
         return isBelow && (actualDistance < maxDistanceBetween)
+    }
+
+    fileprivate func getVisibleScreenFrame(app: XCUIElement = XCUIApplication()) -> CGRect {
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        return springboard.frame
+    }
+
+    func isValidRectangle(_ rectangle: CGRect) -> Bool {
+        if !rectangle.isNull && rectangle != CGRect(x: 0, y: 0, width: 0, height: 0) {
+            // the intersection area should be >= 0
+            return rectangle.width * rectangle.height >= 0
+        }
+        return false
+    }
+
+    /// Returns true if @rectangleToBeIncluded area is partially included in @rectangleArea area.
+    func isPartiallyIncluded(rectangleArea: CGRect, rectangleToBeIncluded: CGRect) -> Bool {
+        let intersection = rectangleArea.intersection(rectangleToBeIncluded)
+        return isValidRectangle(intersection)
+    }
+
+    /// Check if the current UI element is fully or partially visible.
+    func isVisible(app: XCUIApplication = XCUIApplication()) -> Bool {
+        let visibleScreenFrame = getVisibleScreenFrame(app: app)
+        return self.exists && isPartiallyIncluded(rectangleArea: visibleScreenFrame, rectangleToBeIncluded: self.frame)
     }
 }
 

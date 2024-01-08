@@ -25,7 +25,6 @@ class TabDisplayView: UIView,
     private(set) var tabsState: TabsPanelState
     private var inactiveTabsSectionManager: InactiveTabsSectionManager
     private var tabsSectionManager: TabsSectionManager
-    private weak var tabPeekDelegate: LegacyTabPeekDelegate?
     var theme: Theme?
 
     private var shouldHideInactiveTabs: Bool {
@@ -60,9 +59,8 @@ class TabDisplayView: UIView,
         return collectionView
     }()
 
-    public init(state: TabsPanelState, tabPeekDelegate: LegacyTabPeekDelegate?) {
+    public init(state: TabsPanelState) {
         self.tabsState = state
-        self.tabPeekDelegate = tabPeekDelegate
         self.inactiveTabsSectionManager = InactiveTabsSectionManager()
         self.tabsSectionManager = TabsSectionManager()
         super.init(frame: .zero)

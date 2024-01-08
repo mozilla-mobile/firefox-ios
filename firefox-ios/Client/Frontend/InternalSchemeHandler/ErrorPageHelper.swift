@@ -298,8 +298,8 @@ extension ErrorPageHelper: TabContentScript {
         return "ErrorPageHelper"
     }
 
-    func scriptMessageHandlerName() -> String? {
-        return "errorPageHelperMessageManager"
+    func scriptMessageHandlerNames() -> [String]? {
+        return ["errorPageHelperMessageManager"]
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {

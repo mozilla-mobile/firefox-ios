@@ -7,6 +7,22 @@ import Shared
 import UIKit
 
 extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
+    // MARK: Data Clearance CFR / Contextual Hint
+    func configureDataClearanceContextualHint() {
+        dataClearanceContextHintVC.configure(
+            anchor: navigationToolbar.multiStateButton,
+            withArrowDirection: topTabsVisible ? .up : .down,
+            andDelegate: self,
+            presentedUsing: { self.presentDataClearanceContextualHint() },
+            andActionForButton: { },
+            overlayState: overlayManager)
+    }
+
+    private func presentDataClearanceContextualHint() {
+        present(dataClearanceContextHintVC, animated: true)
+        UIAccessibility.post(notification: .layoutChanged, argument: dataClearanceContextHintVC)
+    }
+
     func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         updateZoomPageBarVisibility(visible: false)
         userHasPressedHomeButton = true

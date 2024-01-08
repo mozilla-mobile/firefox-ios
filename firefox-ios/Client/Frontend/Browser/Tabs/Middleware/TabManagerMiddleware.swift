@@ -316,7 +316,7 @@ class TabManagerMiddleware {
     }
 
     private var defaultTabManager: TabManager {
-        // TODO: [FXIOS-7863] Temporary. WIP for Redux + iPad Multi-window.
+        // TODO: [FXIOS-8071] Temporary. WIP for Redux + iPad Multi-window.
         return windowManager.tabManager(for: windowManager.activeWindow)
     }
 
@@ -372,7 +372,13 @@ class TabManagerMiddleware {
                                      value: .tabTray)
     }
 
-    private func sendToDevice(tabID: String) {}
+    private func sendToDevice(tabID: String) {
+        guard let tabToShare = defaultTabManager.getTabForUUID(uuid: tabID),
+              let url = tabToShare.url
+        else { return }
+
+        store.dispatch(TabPanelAction.showShareSheet(url))
+    }
 
     private func copyURL(tabID: String) {
         UIPasteboard.general.url = defaultTabManager.selectedTab?.canonicalURL

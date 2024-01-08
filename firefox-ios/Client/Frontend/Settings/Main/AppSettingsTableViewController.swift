@@ -6,6 +6,8 @@ import Common
 import UIKit
 import Shared
 
+// MARK: - Settings Flow Delegate Protocol
+
 /// Supports decision making from VC to parent coordinator
 protocol SettingsFlowDelegate: AnyObject,
                                GeneralSettingsDelegate,
@@ -22,12 +24,16 @@ protocol SettingsFlowDelegate: AnyObject,
     func didFinishShowingSettings()
 }
 
+// MARK: - App Settings Screen Protocol
+
 protocol AppSettingsScreen: UIViewController {
     var settingsDelegate: SettingsDelegate? { get set }
     var parentCoordinator: SettingsFlowDelegate? { get set }
 
     func handle(route: Route.SettingsSection)
 }
+
+// MARK: - App Settings Table View Controller
 
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
 class AppSettingsTableViewController: SettingsTableViewController,
@@ -41,6 +47,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     private var debugSettingsClickCount: Int = 0
     private var appAuthenticator: AppAuthenticationProtocol
     private var applicationHelper: ApplicationHelper
+
     weak var parentCoordinator: SettingsFlowDelegate?
 
     // MARK: - Initializers
@@ -68,8 +75,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         super.viewDidLoad()
 
         setupNavigationBar()
-        navigationItem.rightBarButtonItem?.accessibilityIdentifier = AccessibilityIdentifiers.Settings.navigationBarItem
-        tableView.accessibilityIdentifier = AccessibilityIdentifiers.Settings.tableViewController
+        configureAccessibilityIdentifiers()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -77,11 +83,14 @@ class AppSettingsTableViewController: SettingsTableViewController,
         askedToReload()
     }
 
+    // MARK: - Actions
+
     @objc
     private func done() {
         settingsDelegate?.didFinish()
     }
 
+    // MARK: - Navigation Bar Setup
     private func setupNavigationBar() {
         navigationItem.title = String.AppSettingsTitle
         navigationItem.rightBarButtonItem = UIBarButtonItem(
@@ -91,7 +100,13 @@ class AppSettingsTableViewController: SettingsTableViewController,
             action: #selector(done))
     }
 
-    // MARK: Handle Route decisions
+    // MARK: - Accessibility Identifiers
+    func configureAccessibilityIdentifiers() {
+        navigationItem.rightBarButtonItem?.accessibilityIdentifier = AccessibilityIdentifiers.Settings.navigationBarItem
+        tableView.accessibilityIdentifier = AccessibilityIdentifiers.Settings.tableViewController
+    }
+
+    // MARK: - Route Handling
 
     func handle(route: Route.SettingsSection) {
         switch route {
@@ -115,6 +130,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
             authenticateUserFor(route: route)
         }
     }
+
+    // MARK: - User Authentication
 
     // Authenticates the user prior to allowing access to sensitive sections
     private func authenticateUserFor(route: Route.SettingsSection) {
@@ -247,6 +264,13 @@ class AppSettingsTableViewController: SettingsTableViewController,
         let autofillCreditCardStatus = featureFlags.isFeatureEnabled(.creditCardAutofillStatus, checking: .buildOnly)
         if autofillCreditCardStatus {
             privacySettings.append(AutofillCreditCardSettings(settings: self, settingsDelegate: parentCoordinator))
+        }
+
+        let autofillAddressStatus = featureFlags.isFeatureEnabled(.addressAutofill, checking: .buildOnly)
+        if autofillAddressStatus {
+            privacySettings.append(AddressAutofillSetting(theme: themeManager.currentTheme,
+                                                          profile: profile,
+                                                          settingsDelegate: parentCoordinator))
         }
 
         privacySettings.append(ClearPrivateDataSetting(settings: self, settingsDelegate: parentCoordinator))

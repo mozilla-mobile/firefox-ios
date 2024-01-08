@@ -486,6 +486,18 @@ class TelemetryWrapperTests: XCTestCase {
         )
     }
 
+    func test_surfaceAdsClicked_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .view,
+            object: .shoppingBottomSheet,
+            value: .surfaceAdsClicked
+        )
+        testEventMetricRecordingSuccess(
+            metric: GleanMetrics.Shopping.surfaceAdsClicked
+        )
+    }
+
     // MARK: - Onboarding
     func test_onboardingSelectWallpaperWithExtras_GleanIsCalled() {
         let wallpaperNameKey = TelemetryWrapper.EventExtraKey.wallpaperName.rawValue

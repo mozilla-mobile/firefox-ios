@@ -39,6 +39,13 @@ protocol WindowManager {
     func nextAvailableWindowUUID() -> WindowUUID
 }
 
+/// Abstract protocol that any Coordinator can conform to in order to respond
+/// to key window lifecycle events, such as cleaning up when a window is closed.
+protocol WindowEventCoordinator {
+    /// Notifies the coordinator that its parent window/scene is being removed.
+    func coordinatorWindowWillClose()
+}
+
 /// Captures state and coordinator references specific to one particular app window.
 struct AppWindowInfo {
     var tabManager: TabManager?
@@ -102,13 +109,6 @@ final class WindowManagerImplementation: WindowManager {
     // MARK: - Internal Utilities
 
     private func updateWindow(_ info: AppWindowInfo?, for uuid: WindowUUID) {
-        guard info != nil || windows.count > 1 else {
-            let message = "Cannot remove the only active window in the app. This is a client error."
-            logger.log(message, level: .fatal, category: .window)
-            assertionFailure(message)
-            return
-        }
-
         windows[uuid] = info
         didUpdateWindow(uuid)
     }

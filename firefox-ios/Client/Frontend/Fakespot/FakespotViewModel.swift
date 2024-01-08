@@ -560,6 +560,15 @@ class FakespotViewModel {
         }
     }
 
+    public func recordSurfaceAdsClickedTelemetry() {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .view,
+            object: .shoppingBottomSheet,
+            value: .surfaceAdsClicked
+        )
+    }
+
     private static func recordNoReviewReliabilityAvailableTelemetry() {
         TelemetryWrapper.recordEvent(
             category: .action,
