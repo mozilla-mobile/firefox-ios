@@ -1749,7 +1749,7 @@ extension String {
                     key: "Settings.Search.Suggest.LearnAboutSuggestions.v124",
                     tableName: "Settings",
                     value: "Learn more about Firefox Suggest",
-                    comment: "In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. Placeholder is for the app name - Firefox."
+                    comment: "In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest."
                 )
             }
         }
