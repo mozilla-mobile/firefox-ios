@@ -72,7 +72,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
     func showQRCode() {
         showQrCodeCalled += 1
     }
-    
+
     func showBackForwardList() {
         showBackForwardListCalled += 1
     }

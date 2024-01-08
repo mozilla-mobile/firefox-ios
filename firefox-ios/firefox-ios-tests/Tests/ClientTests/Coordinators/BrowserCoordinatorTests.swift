@@ -261,7 +261,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is QRCodeNavigationController)
     }
-    
+
     func testShowBackForwardList_presentsBackForwardListViewController() {
         let mockTab = Tab(profile: profile, configuration: .init())
         mockTab.url = URL(string: "https://www.google.com")

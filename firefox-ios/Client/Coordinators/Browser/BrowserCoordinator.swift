@@ -598,7 +598,7 @@ class BrowserCoordinator: BaseCoordinator,
 
         router.present(navigationController)
     }
-    
+
     func showBackForwardList() {
         guard let backForwardList = tabManager.selectedTab?.webView?.backForwardList else { return }
         let backForwardListVC = BackForwardListViewController(profile: profile, backForwardList: backForwardList)
