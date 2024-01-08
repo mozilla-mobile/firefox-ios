@@ -1598,15 +1598,13 @@ meta:
 
 trigger_map:
 - push_branch: main
-  #pipeline: pipeline_multiple_shards
-  workflow: Bitrise_Performance_Test
+  pipeline: pipeline_multiple_shards
 - push_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
 - push_branch: release/v123
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: main
-  #pipeline: pipeline_multiple_shards
-  workflow: Bitrise_Performance_Test
+  pipeline: pipeline_multiple_shards
 - pull_request_target_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: release/v*
