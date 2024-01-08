@@ -79,14 +79,14 @@ class MockWKEngineWebView: WKEngineWebView {
         removeFromSuperviewCalled += 1
     }
 
-    func addObserver(_ observer: NSObject, 
+    func addObserver(_ observer: NSObject,
                      forKeyPath keyPath: String,
                      options: NSKeyValueObservingOptions,
                      context: UnsafeMutableRawPointer?) {
         addObserverCalled += 1
     }
 
-    func removeObserver(_ observer: NSObject, 
+    func removeObserver(_ observer: NSObject,
                         forKeyPath keyPath: String) {
         removeObserverCalled += 1
     }
