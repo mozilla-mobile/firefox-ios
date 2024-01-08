@@ -14,6 +14,7 @@ import Shared
 enum WindowEvent {
     /// A window is being closed.
     case windowWillClose
+
     /// A window opened the library view controller.
     case libraryOpened
 }

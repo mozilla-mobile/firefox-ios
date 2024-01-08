@@ -624,7 +624,12 @@ class BrowserCoordinator: BaseCoordinator,
             // If so, perform add'tl cleanup required so BVC and other components are properly released.
             browserViewController.contentContainer.subviews.forEach { $0.removeFromSuperview() }
             browserViewController.removeFromParent()
-        default:
+        case .libraryOpened:
+            // If the library was opened for this browser's window, we can ignore
+            // Otherwise, auto-close the panel in this window (FXIOS-8095)
+            guard uuid != windowUUID else { return }
+            
+            //TODO: Close the library panel
             break
         }
     }
