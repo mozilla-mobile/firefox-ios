@@ -1235,8 +1235,6 @@ workflows:
             # debug log
             set -x
             # get dependency
-            echo "current directory ${PWD}"
-            find . -mindepth 2 -maxdepth 2 -type d
             cd ./firefox-ios/test-fixtures && git clone https://github.com/isabelrios/xcresult_extract.git
             
             echo $BITRISE_XCRESULT_PATH
