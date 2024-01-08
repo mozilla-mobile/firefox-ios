@@ -162,6 +162,7 @@ class WKEngineSession: NSObject, EngineSession {
             return
         }
 
+        // Will be used as needed when we start using the engine session
         switch path {
         case .canGoBack:
             break
