@@ -83,7 +83,6 @@
         "NavigationTest\/testPopUpBlocker()",
         "NavigationTest\/testReloadPreservesMobileOrDesktopSite()",
         "NavigationTest\/testSSL()",
-        "NavigationTest\/testScrollsToTopWithMultipleTabs()",
         "NavigationTest\/testToggleBetweenMobileAndDesktopSiteFromSite()",
         "NavigationTest\/testURLBar()",
         "NavigationTest\/testVerifyBrowserTabMenu()",
