@@ -257,12 +257,26 @@ class SyncContentSettingsViewController: SettingsTableViewController, FeatureFla
             attributedStatusText: nil,
             settingDidChange: engineSettingChanged(.creditcards))
 
+        let addresses = BoolSetting(
+            prefs: profile.prefs,
+            prefKey: "sync.engine.addresses.enabled",
+            defaultValue: true,
+            attributedTitleText: NSAttributedString(string: .FirefoxSyncAddressesEngine),
+            attributedStatusText: nil,
+            settingDidChange: engineSettingChanged(.addresses))
+
         var engineSectionChildren: [Setting] = [bookmarks, history, tabs, passwords]
 
         if featureFlags.isFeatureEnabled(
             .creditCardAutofillStatus,
             checking: .buildOnly) {
             engineSectionChildren.append(creditCards)
+        }
+
+        if featureFlags.isFeatureEnabled(
+            .addressAutofill,
+            checking: .buildOnly) {
+            engineSectionChildren.append(addresses)
         }
 
         let enginesSection = SettingSection(

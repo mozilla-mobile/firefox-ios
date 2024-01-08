@@ -2286,6 +2286,11 @@ extension String {
         tableName: "FirefoxSync",
         value: "Payment Methods",
         comment: "Toggle for credit cards syncing setting")
+    public static let FirefoxSyncAddressesEngine = MZLocalizedString(
+        key: "FirefoxSync.AddressAutofillEngine.v124",
+        tableName: "FirefoxSync",
+        value: "Addresses",
+        comment: "Toggle for address autofill syncing setting")
 }
 
 // MARK: - Firefox Logins

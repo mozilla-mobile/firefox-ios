@@ -219,7 +219,11 @@ extension FxAWebViewModel {
     /// signing up for an account). This latter case is also used for the sign-in state.
     private func onSessionStatus(id: Int, webView: WKWebView) {
         let autofillCreditCardStatus = featureFlags.isFeatureEnabled(.creditCardAutofillStatus, checking: .buildOnly)
+        let addressAutofillStatus = featureFlags.isFeatureEnabled(.addressAutofill, checking: .buildOnly)
+
         let creditCardCapability =  autofillCreditCardStatus ? ", \"creditcards\"" : ""
+        let addressAutofillCapability =  addressAutofillStatus ? ", \"addresses\"" : ""
+
         guard let fxa = profile.rustFxA.accountManager else { return }
         let cmd = "fxaccounts:fxa_status"
         let typeId = "account_updates"
@@ -244,7 +248,7 @@ extension FxAWebViewModel {
         case .emailLoginFlow, .qrCode:
             data = """
                     { capabilities:
-                        { choose_what_to_sync: true, engines: ["bookmarks", "history", "tabs", "passwords"\(creditCardCapability)] },
+                        { choose_what_to_sync: true, engines: ["bookmarks", "history", "tabs", "passwords"\(creditCardCapability)\(addressAutofillCapability)] },
                     }
                 """
         }
