@@ -54,7 +54,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Variables
     private var cellModel: HistoryHighlightsModel?
-    private var needsShadow: Bool = false
+    private var needsShadow = false
 
     // MARK: - Inits
 
