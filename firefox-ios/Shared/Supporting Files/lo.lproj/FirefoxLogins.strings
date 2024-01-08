@@ -1,0 +1,9 @@
+/* Prompt for saving the username in the Save Logins prompt. */
+"LoginsHelper.PromptSaveLogin.Title.v122" = "ບັນທຶກຊື່ຜູ້ໃຊ້ບໍ?";
+
+/* Prompt for saving a password in the Save Logins prompt. */
+"LoginsHelper.PromptSavePassword.Title.v122" = "ບັນທຶກລະຫັດຜ່ານບໍ?";
+
+/* Prompt for updating the password in the Update Password prompt. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg.v122" = "ອັບເດດລະຫັດຜ່ານບໍ?";
+

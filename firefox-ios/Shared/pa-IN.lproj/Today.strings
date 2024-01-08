@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "ਨਿੱਜੀ ਟੈਬਾਂ\nਨੂੰ ਬੰਦ ਕਰੋ";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "ਫਾਇਰਫਾਕਸ ਸ਼ਾਰਟਕੱਟ ਨੂੰ ਆਪਣੀ ਮੁੱਖ ਸਕਰੀਨ ਉੱਤੇ ਜੋੜੋ";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Firefox ਸ਼ਾਰਟਕੱਟ ਨੂੰ ਆਪਣੀ ਮੁੱਖ ਸਕਰੀਨ ਉੱਤੇ ਜੋੜੋ";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "ਕਾਪੀ ਕੀਤੇ ਲਿੰਕ 'ਤੇ ਜਾਓ";
@@ -23,7 +23,7 @@
 "TodayWidget.NoOpenTabsLabel" = "ਕੋਈ ਖੁੱਲ੍ਹੀ ਟੈਬ ਨਹੀਂ ਹੈ।";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "ਫਾਇਰਫਾਕਸ ਖੋਲ੍ਹੋ";
+"TodayWidget.OpenFirefoxLabel" = "Firefox ਖੋਲ੍ਹੋ";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "ਨਿੱਜੀ ਖੋਜ";
@@ -35,7 +35,7 @@
 "TodayWidget.QuickActionsGalleryTitle" = "ਫ਼ੌਰੀ ਕਾਰਵਾਈਆਂ";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "ਫਾਇਰਫਾਕਸ ਸ਼ਾਰਟਕੱਟ";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox ਸ਼ਾਰਟਕੱਟ";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "ਆਪਣੀਆਂ ਖੁੱਲ੍ਹੀਆਂ ਟੈਬਾਂ ਲਈ ਸ਼ਾਰਟਕਟ ਜੋੜੋ।";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "ਫ਼ੌਰੀ ਝਲਕ";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "ਫਾਇਰਫਾਕਸ ਵਿੱਚ ਖੋਜੋ";
+"TodayWidget.SearchInFirefoxV2" = "Firefox\nਵਿੱਚ ਖੋਜੋ";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "ਨਿੱਜੀ ਟੈਬ\nਵਿੱਚ ਖੋਜੋ";

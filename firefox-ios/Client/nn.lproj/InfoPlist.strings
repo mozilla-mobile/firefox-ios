@@ -7,6 +7,9 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox brukar kameraet ditt til å skanne QR-kodar og ta bilde og video.";
 
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox krev Face ID for å få tilgang til dei lagra passorda dine og betalingsmetodar.";
+
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Nettsider du besøkjer kan be om plasseringa di.";
 
