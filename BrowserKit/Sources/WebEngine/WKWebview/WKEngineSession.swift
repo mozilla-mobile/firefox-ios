@@ -10,10 +10,12 @@ class WKEngineSession: EngineSession {
     weak var delegate: EngineSessionDelegate?
     private var webView: WKEngineWebView
     private var logger: Logger
+    private var sessionData: WKEngineSessionData
 
     init?(configurationProvider: WKEngineConfigurationProvider = DefaultWKEngineConfigurationProvider(),
           webViewProvider: WKWebViewProvider = DefaultWKWebViewProvider(),
-          logger: Logger = DefaultLogger.shared) {
+          logger: Logger = DefaultLogger.shared,
+          sessionData: WKEngineSessionData = WKEngineSessionData()) {
         guard let webView = webViewProvider.createWebview(configurationProvider: configurationProvider) else {
             logger.log("WKEngineWebView creation failed on configuration",
                        level: .fatal,
@@ -23,6 +25,7 @@ class WKEngineSession: EngineSession {
 
         self.webView = webView
         self.logger = logger
+        self.sessionData = sessionData
 
         // TODO: FXIOS-7899 #17644 Handle WKEngineSession observers
 //        self.webView.addObserver(self, forKeyPath: KVOConstants.URL.rawValue, options: .new, context: nil)
@@ -45,6 +48,9 @@ class WKEngineSession: EngineSession {
            let localReaderModeURL = syncedReaderModeURL
             .encodeReaderModeURL(WKEngineWebServer.shared.baseReaderModeURL()) {
             let readerModeRequest = URLRequest(url: localReaderModeURL)
+            sessionData.lastRequest = readerModeRequest
+            sessionData.url = url
+
             webView.load(readerModeRequest)
             logger.log("Loaded reader mode request", level: .debug, category: .webview)
             return
@@ -52,6 +58,9 @@ class WKEngineSession: EngineSession {
 
         guard let url = URL(string: url) else { return }
         let request = URLRequest(url: url)
+
+        sessionData.lastRequest = request
+        sessionData.url = url
 
         if let url = request.url, url.isFileURL {
             webView.loadFileURL(url, allowingReadAccessTo: url.deletingLastPathComponent())
@@ -69,7 +78,7 @@ class WKEngineSession: EngineSession {
 
     func reload() {
         // If the current page is an error page load the original URL
-        if let url = webView.url,
+        if let url = sessionData.url,
            let internalUrl = WKInternalURL(url),
            let page = internalUrl.originalURLFromErrorPage {
             webView.replaceLocation(with: page)
@@ -98,7 +107,11 @@ class WKEngineSession: EngineSession {
     }
 
     func restoreState(state: Data) {
-        // TODO: FXIOS-7908 #17652 Handle restoreState in WKEngineSession
+        if let lastRequest = sessionData.lastRequest {
+            webView.load(lastRequest)
+        }
+
+        webView.interactionState = state
     }
 
     func close() {
