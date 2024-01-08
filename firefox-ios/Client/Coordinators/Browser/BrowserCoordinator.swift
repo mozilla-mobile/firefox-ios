@@ -599,6 +599,16 @@ class BrowserCoordinator: BaseCoordinator,
         router.present(navigationController)
     }
 
+    func showBackForwardList() {
+        guard let backForwardList = tabManager.selectedTab?.webView?.backForwardList else { return }
+        let backForwardListVC = BackForwardListViewController(profile: profile, backForwardList: backForwardList)
+        backForwardListVC.backForwardTransitionDelegate = BackForwardListAnimator()
+        backForwardListVC.browserFrameInfoProvider = browserViewController
+        backForwardListVC.tabManager = tabManager
+        backForwardListVC.modalPresentationStyle = .overCurrentContext
+        router.present(backForwardListVC)
+    }
+
     // MARK: - ParentCoordinatorDelegate
     func didFinish(from childCoordinator: Coordinator) {
         remove(child: childCoordinator)

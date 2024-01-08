@@ -75,6 +75,9 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
 
     /// Shows the Tab Tray View Controller.
     func showTabTray(selectedPanel: TabTrayPanelType)
+
+    /// Shows the Back Forward List View Controller.
+    func showBackForwardList()
 }
 
 extension BrowserNavigationHandler {

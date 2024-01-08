@@ -114,9 +114,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidLongPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        let generator = UIImpactFeedbackGenerator(style: .heavy)
-        generator.impactOccurred()
-        showBackForwardList()
+        handleTabToolBarDidLongPressForwardOrBack()
     }
 
     func tabToolbarDidPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -125,9 +123,17 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidLongPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        handleTabToolBarDidLongPressForwardOrBack()
+    }
+
+    private func handleTabToolBarDidLongPressForwardOrBack() {
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
-        showBackForwardList()
+        if CoordinatorFlagManager.isBackForwardListShownFromCoordaintorEnabled {
+            navigationHandler?.showBackForwardList()
+        } else {
+            showBackForwardList()
+        }
     }
 
     func tabToolbarDidPressBookmarks(_ tabToolbar: TabToolbarProtocol, button: UIButton) {

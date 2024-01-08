@@ -21,6 +21,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
     var didFinishCalled = 0
     var showFakespotFlowAsModalCalled = 0
     var showFakespotFlowAsSidebarCalled = 0
+    var showBackForwardListCalled = 0
     var dismissFakespotModalCalled = 0
     var dismissFakespotSidebarCalled = 0
     var updateFakespotSidebarCalled = 0
@@ -70,6 +71,10 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
 
     func showQRCode() {
         showQrCodeCalled += 1
+    }
+
+    func showBackForwardList() {
+        showBackForwardListCalled += 1
     }
 
     func didFinish(from childCoordinator: Coordinator) {
