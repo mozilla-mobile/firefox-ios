@@ -1612,4 +1612,5 @@ trigger_map:
 - pull_request_target_branch: release/v*
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: main
+  pull_request_source_branch: "*jjSDET*"
   workflow: Bitrise_Performance_Test
