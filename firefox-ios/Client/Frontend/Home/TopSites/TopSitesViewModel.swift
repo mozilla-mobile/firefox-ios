@@ -131,15 +131,10 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {
-        // Only show a header if the firefox browser logo isn't showing
-        let shouldShow = !featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
-        var textColor: UIColor?
-        if wallpaperManager.featureAvailable {
-            textColor = wallpaperManager.currentWallpaper.textColor
-        }
+        var textColor = wallpaperManager.currentWallpaper.textColor
 
         return LabelButtonHeaderViewModel(
-            title: shouldShow ? HomepageSectionType.topSites.title: nil,
+            title: nil,
             titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.topSites,
             isButtonHidden: true,
             textColor: textColor)
@@ -236,10 +231,7 @@ extension TopSitesViewModel: HomepageSectionHandler {
                    at indexPath: IndexPath) -> UICollectionViewCell {
         if let cell = collectionView.dequeueReusableCell(cellType: TopSiteItemCell.self, for: indexPath),
            let contentItem = topSites[safe: indexPath.row] {
-            var textColor: UIColor?
-            if wallpaperManager.featureAvailable {
-                textColor = wallpaperManager.currentWallpaper.textColor
-            }
+            let textColor = wallpaperManager.currentWallpaper.textColor
 
             cell.configure(contentItem,
                            position: indexPath.row,

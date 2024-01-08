@@ -2,14 +2,6 @@ features:
   wallpaper-feature:
     description: This property defines the configuration for the wallpaper feature
     variables:
-      configuration:
-        description: This property defines the configuration for the wallpaper feature
-        type: WallpaperConfiguration
-        default:
-          {
-            "status": true,
-            "version": v1,
-          }
       onboarding-sheet:
         description: This property defines whether the wallpaper onboarding is shown or not
         type: Boolean
@@ -17,39 +9,9 @@ features:
     defaults:
       - channel: beta
         value: {
-          "configuration": {
-            "status": true,
-            "version": v1,
-          },
           "onboarding-sheet": true
         }
       - channel: developer
         value: {
-          "configuration": {
-            "status": true,
-            "version": v1,
-          },
           "onboarding-sheet": true
         }
-
-objects:
-  WallpaperConfiguration:
-    description: "The configuration for the a feature that can be enabled or disabled"
-    fields:
-      status:
-        type: Boolean
-        description: Whether or not the feature is enabled
-        default: false
-      version:
-        type: WallpaperVariantVersion
-        description: Which version of the wallpaper sytem to use
-        default: legacy
-
-enums:
-  WallpaperVariantVersion:
-    description: An enum to identify which version of the wallpaper system to use
-    variants:
-      legacy:
-        description: The legacy wallpaper version
-      v1:
-        description: The 2022 MR version

@@ -165,10 +165,7 @@ extension HistoryHighlightsViewModel: HomepageViewModelProtocol, FeatureFlaggabl
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {
-        var textColor: UIColor?
-        if wallpaperManager.featureAvailable {
-            textColor = wallpaperManager.currentWallpaper.textColor
-        }
+        let textColor = wallpaperManager.currentWallpaper.textColor
 
         return LabelButtonHeaderViewModel(
             title: HomepageSectionType.historyHighlights.title,

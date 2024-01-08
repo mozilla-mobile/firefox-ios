@@ -20,8 +20,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     }
 
     var isWallpaperSectionEnabled: Bool {
-        return wallpaperManager.canSettingsBeShown &&
-            featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
+        return wallpaperManager.canSettingsBeShown
     }
 
     var isPocketSectionEnabled: Bool {
