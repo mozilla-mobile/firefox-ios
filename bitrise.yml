@@ -1220,6 +1220,7 @@ workflows:
         is_always_run: true
     - xcode-test@4.5:
         inputs:
+        - project_path: firefox-ios/Client.xcodeproj
         - scheme: Fennec
         - destination: platform=iOS Simulator,name=iPhone 15,OS=17.2
         - test_plan: PerformanceTestPlan   
@@ -1234,7 +1235,9 @@ workflows:
             # debug log
             set -x
             # get dependency
-            cd .firefox-ios/test-fixtures && git clone https://github.com/isabelrios/xcresult_extract.git
+            echo "current directory ${PWD}"
+            find . -mindepth 2 -maxdepth 2 -type d
+            cd ./firefox-ios/test-fixtures && git clone https://github.com/isabelrios/xcresult_extract.git
             
             echo $BITRISE_XCRESULT_PATH
             ls
@@ -1608,3 +1611,5 @@ trigger_map:
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: release/v*
   pipeline: pipeline_multiple_shards
+- pull_request_target_branch: main
+  workflow: Bitrise_Performance_Test
