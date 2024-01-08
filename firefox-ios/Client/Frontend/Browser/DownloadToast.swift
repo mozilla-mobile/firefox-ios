@@ -74,9 +74,19 @@ class DownloadToast: Toast {
     }
 
     var descriptionText: String {
-        let downloadedSize = ByteCountFormatter.string(fromByteCount: combinedBytesDownloaded, countStyle: .file)
-        let expectedSize = combinedTotalBytesExpected != nil ? ByteCountFormatter.string(fromByteCount: combinedTotalBytesExpected!, countStyle: .file) : nil
-        let descriptionText = expectedSize != nil ? String(format: .DownloadProgressToastDescriptionText, downloadedSize, expectedSize!) : downloadedSize
+        let downloadedSize = ByteCountFormatter.string(
+            fromByteCount: combinedBytesDownloaded,
+            countStyle: .file
+        )
+        let expectedSize = combinedTotalBytesExpected != nil ? ByteCountFormatter.string(
+            fromByteCount: combinedTotalBytesExpected!,
+            countStyle: .file
+        ) : nil
+        let descriptionText = expectedSize != nil ? String(
+            format: .DownloadProgressToastDescriptionText,
+            downloadedSize,
+            expectedSize!
+        ) : downloadedSize
 
         guard downloads.count > 1 else {
             return descriptionText
@@ -84,7 +94,11 @@ class DownloadToast: Toast {
 
         let fileCountDescription = String(format: .DownloadMultipleFilesToastDescriptionText, downloads.count)
 
-        return String(format: .DownloadMultipleFilesAndProgressToastDescriptionText, fileCountDescription, descriptionText)
+        return String(
+            format: .DownloadMultipleFilesAndProgressToastDescriptionText,
+            fileCountDescription,
+            descriptionText
+        )
     }
 
     init(download: Download,
@@ -156,20 +170,28 @@ class DownloadToast: Toast {
         toastView.addSubview(progressView)
         toastView.addSubview(horizontalStackView)
 
-        NSLayoutConstraint.activate([
-            progressView.leadingAnchor.constraint(equalTo: toastView.leadingAnchor),
-            progressView.centerYAnchor.constraint(equalTo: toastView.centerYAnchor),
-            progressView.heightAnchor.constraint(equalTo: toastView.heightAnchor),
+        NSLayoutConstraint.activate(
+            [
+                progressView.leadingAnchor.constraint(equalTo: toastView.leadingAnchor),
+                progressView.centerYAnchor.constraint(equalTo: toastView.centerYAnchor),
+                progressView.heightAnchor.constraint(equalTo: toastView.heightAnchor),
 
-            horizontalStackView.leadingAnchor.constraint(equalTo: toastView.leadingAnchor, constant: ButtonToast.UX.padding),
-            horizontalStackView.trailingAnchor.constraint(equalTo: toastView.trailingAnchor, constant: -ButtonToast.UX.padding),
-            horizontalStackView.bottomAnchor.constraint(equalTo: toastView.safeAreaLayoutGuide.bottomAnchor),
-            horizontalStackView.topAnchor.constraint(equalTo: toastView.topAnchor),
-            horizontalStackView.heightAnchor.constraint(equalToConstant: Toast.UX.toastHeight),
+                horizontalStackView.leadingAnchor.constraint(
+                    equalTo: toastView.leadingAnchor,
+                    constant: ButtonToast.UX.padding
+                ),
+                horizontalStackView.trailingAnchor.constraint(
+                    equalTo: toastView.trailingAnchor,
+                    constant: -ButtonToast.UX.padding
+                ),
+                horizontalStackView.bottomAnchor.constraint(equalTo: toastView.safeAreaLayoutGuide.bottomAnchor),
+                horizontalStackView.topAnchor.constraint(equalTo: toastView.topAnchor),
+                horizontalStackView.heightAnchor.constraint(equalToConstant: Toast.UX.toastHeight),
 
-            closeButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
-            closeButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
-        ])
+                closeButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
+                closeButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
+            ]
+        )
 
         progressWidthConstraint = progressView.widthAnchor.constraint(equalToConstant: 0)
         progressWidthConstraint?.isActive = true

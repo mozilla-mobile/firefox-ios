@@ -64,7 +64,10 @@ class SearchTermGroupsUtility {
             guard let historyMetadata = result.successValue else { return completion(nil, [T]()) }
 
             let searchTermMetaDataGroup = buildMetadataGroups(from: historyMetadata)
-            let (groupDictionary, ungroupedTabs) = createGroupDictionaryAndSoloItems(from: items, and: searchTermMetaDataGroup)
+            let (groupDictionary, ungroupedTabs) = createGroupDictionaryAndSoloItems(
+                from: items,
+                and: searchTermMetaDataGroup
+            )
             let filteredGroups = createGroups(from: groupDictionary)
             let orderedGroups = order(groups: filteredGroups, using: ordering)
 
@@ -97,7 +100,10 @@ class SearchTermGroupsUtility {
     ///   - items: The original list of items containing metadata upon which to sort
     ///   - searchTermMetadata: Application Services provided metadata
     /// - Returns: A tuple with a filtered dictionary of groups and a tracking array
-    private static func createGroupDictionaryAndSoloItems<T: Equatable>(from items: [T], and searchTermMetadata: [String: [HistoryMetadata]]) -> (itemGroupData: [String: [T]], itemsInGroups: [T]) {
+    private static func createGroupDictionaryAndSoloItems<T: Equatable>(
+        from items: [T],
+        and searchTermMetadata: [String: [HistoryMetadata]]
+    ) -> (itemGroupData: [String: [T]], itemsInGroups: [T]) {
         let (groupedItems, itemsInGroups) = buildItemGroups(from: items, and: searchTermMetadata)
         let (filteredGroupData, filtereditems) = filter(items: itemsInGroups, from: groupedItems, and: items)
 
@@ -111,12 +117,16 @@ class SearchTermGroupsUtility {
     ///   - items: The original list of items containing metadata upon which to sort
     ///   - searchTermMetadata: AS search term metadata
     /// - Returns: A tuple with the group dictionary and a tracking array
-    private static func buildItemGroups<T: Equatable>(from items: [T], and searchTermMetadata: [String: [HistoryMetadata]]) -> (itemGroupData: [String: [T]], itemsInGroups: [T]) {
+    private static func buildItemGroups<T: Equatable>(
+        from items: [T],
+        and searchTermMetadata: [String: [HistoryMetadata]]
+    ) -> (itemGroupData: [String: [T]], itemsInGroups: [T]) {
         var itemGroupData: [String: [T]] = [:]
         var itemsInGroups: [T] = [T]()
 
         outeritemLoop: for item in items {
-            innerMetadataLoop: for (searchTerm, historyMetaList) in searchTermMetadata where  historyMetaList.contains(where: { metadata in
+            innerMetadataLoop: for (searchTerm, historyMetaList) in searchTermMetadata where historyMetaList
+                .contains(where: { metadata in
                 var stringURL: String = ""
 
                 if let item = item as? Site {
@@ -151,7 +161,11 @@ class SearchTermGroupsUtility {
     ///   - itemGroups: Dictionary of grouped items according to search terms
     ///   - originalItems: Original array of items provided
     /// - Returns: A tuple containing all filtered groups and item
-    private static func filter<T: Equatable>(items itemsInGroups: [T], from itemGroups: [String: [T]], and originalItems: [T]) -> (filteredGroups: [String: [T]], filteredItems: [T]) {
+    private static func filter<T: Equatable>(
+        items itemsInGroups: [T],
+        from itemGroups: [String: [T]],
+        and originalItems: [T]
+    ) -> (filteredGroups: [String: [T]], filteredItems: [T]) {
         let (filteredGroups, itemsInGroups) = filterSingleItemGroups(from: itemGroups, and: itemsInGroups)
         let ungroupedItems = filterDuplicate(itemsInGroups: itemsInGroups, from: originalItems)
 
@@ -164,7 +178,10 @@ class SearchTermGroupsUtility {
     ///   - itemGroups: Groups dictionary to check for groups containing a single item
     ///   - itemsInGroups: Array to keep track of any items that are currently in groups
     /// - Returns: A tuple containing groups that have two or more items, and a tracking array.
-    private static func filterSingleItemGroups<T: Equatable>(from itemGroups: [String: [T]], and itemsInGroups: [T]) -> (itemGroupData: [String: [T]], itemsInGroups: [T]) {
+    private static func filterSingleItemGroups<T: Equatable>(
+        from itemGroups: [String: [T]],
+        and itemsInGroups: [T]
+    ) -> (itemGroupData: [String: [T]], itemsInGroups: [T]) {
         var itemsInGroups = itemsInGroups
 
         // 3. Tab groups should have at least 2 tabs per search term so we remove smaller groups
@@ -270,7 +287,13 @@ class StopWatchTimer {
     var elapsedTime: Int32 = 0
 
     func startOrResume() {
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(incrementValue), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(
+            timeInterval: 1,
+            target: self,
+            selector: #selector(incrementValue),
+            userInfo: nil,
+            repeats: true
+        )
     }
 
     @objc

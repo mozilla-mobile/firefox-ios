@@ -52,7 +52,8 @@ class LibraryViewController: UIViewController, Themeable {
 
     private lazy var topLeftButton: UIBarButtonItem =  {
         let button = UIBarButtonItem(
-            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.chevronLeft)?.imageFlippedForRightToLeftLayoutDirection(),
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.chevronLeft)?
+                .imageFlippedForRightToLeftLayoutDirection(),
             style: .plain,
             target: self,
             action: #selector(topLeftButtonAction))
@@ -61,7 +62,12 @@ class LibraryViewController: UIViewController, Themeable {
     }()
 
     private lazy var topRightButton: UIBarButtonItem =  {
-        let button = UIBarButtonItem(title: String.AppSettingsDone, style: .done, target: self, action: #selector(topRightButtonAction))
+        let button = UIBarButtonItem(
+            title: String.AppSettingsDone,
+            style: .done,
+            target: self,
+            action: #selector(topRightButtonAction)
+        )
         button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.topRightButton
         return button
     }()
@@ -175,7 +181,12 @@ class LibraryViewController: UIViewController, Themeable {
         }
 
         setupOpenPanel(panelType: selectedPanel)
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .libraryPanel, value: eventValue)
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .libraryPanel,
+            value: eventValue
+        )
     }
 
     func setupOpenPanel(panelType: LibraryPanelType) {
@@ -194,9 +205,16 @@ class LibraryViewController: UIViewController, Themeable {
         let panelDescriptor = viewModel.panelDescriptors[index]
         if let panelVC = childPanelControllers[index].topViewController {
             let panelNavigationController = childPanelControllers[index]
-            setupLibraryPanel(panelVC, accessibilityLabel: panelDescriptor.accessibilityLabel, accessibilityIdentifier: panelDescriptor.accessibilityIdentifier)
+            setupLibraryPanel(
+                panelVC,
+                accessibilityLabel: panelDescriptor.accessibilityLabel,
+                accessibilityIdentifier: panelDescriptor.accessibilityIdentifier
+            )
             showPanel(panelNavigationController)
-            navigationHandler?.start(panelType: viewModel.selectedPanel ?? .bookmarks, navigationController: panelNavigationController)
+            navigationHandler?.start(
+                panelType: viewModel.selectedPanel ?? .bookmarks,
+                navigationController: panelNavigationController
+            )
         }
         librarySegmentControl.selectedSegmentIndex = viewModel.selectedPanel?.rawValue ?? 0
     }
@@ -241,7 +259,8 @@ class LibraryViewController: UIViewController, Themeable {
         switch panelState {
         case .bookmarks(state: .inFolder),
              .history(state: .inFolder):
-            topLeftButton.image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.chevronLeft)?.imageFlippedForRightToLeftLayoutDirection()
+            topLeftButton.image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.chevronLeft)?
+                .imageFlippedForRightToLeftLayoutDirection()
             navigationItem.leftBarButtonItem = topLeftButton
         case .bookmarks(state: .itemEditMode), .bookmarks(state: .itemEditModeInvalidField):
             topLeftButton.image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross)

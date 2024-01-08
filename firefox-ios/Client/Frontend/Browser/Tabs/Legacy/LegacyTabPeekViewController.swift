@@ -41,13 +41,19 @@ class LegacyTabPeekViewController: UIViewController, WKNavigationDelegate {
         let isHomeTab = self.tab?.isFxHomeTab ?? false
         if !self.ignoreURL && !urlIsTooLongToSave {
             if !self.isBookmarked && !isHomeTab {
-                actions.append(UIPreviewAction(title: .TabPeekAddToBookmarks, style: .default) { [weak self] previewAction, viewController in
+                actions.append(UIPreviewAction(
+                    title: .TabPeekAddToBookmarks,
+                    style: .default
+                ) { [weak self] previewAction, viewController in
                     guard let wself = self, let tab = wself.tab else { return }
                     wself.delegate?.tabPeekDidAddBookmark(tab)
                 })
             }
             if self.hasRemoteClients {
-                actions.append(UIPreviewAction(title: .AppMenu.TouchActions.SendToDeviceTitle, style: .default) { [weak self] previewAction, viewController in
+                actions.append(UIPreviewAction(
+                    title: .AppMenu.TouchActions.SendToDeviceTitle,
+                    style: .default
+                ) { [weak self] previewAction, viewController in
                     guard let wself = self, let clientPicker = wself.fxaDevicePicker else { return }
                     wself.delegate?.tabPeekRequestsPresentationOf(clientPicker)
                 })
@@ -55,7 +61,10 @@ class LegacyTabPeekViewController: UIViewController, WKNavigationDelegate {
             // only add the copy URL action if we don't already have 3 items in our list
             // as we are only allowed 4 in total and we always want to display close tab
             if actions.count < 3 {
-                actions.append(UIPreviewAction(title: .TabPeekCopyUrl, style: .default) { [weak self] previewAction, viewController in
+                actions.append(UIPreviewAction(
+                    title: .TabPeekCopyUrl,
+                    style: .default
+                ) { [weak self] previewAction, viewController in
                     guard let wself = self, let url = wself.tab?.canonicalURL else { return }
 
                     UIPasteboard.general.url = url
@@ -63,7 +72,10 @@ class LegacyTabPeekViewController: UIViewController, WKNavigationDelegate {
                 })
             }
         }
-        actions.append(UIPreviewAction(title: .TabPeekCloseTab, style: .destructive) { [weak self] previewAction, viewController in
+        actions.append(UIPreviewAction(
+            title: .TabPeekCloseTab,
+            style: .destructive
+        ) { [weak self] previewAction, viewController in
             guard let wself = self, let tab = wself.tab else { return }
             wself.delegate?.tabPeekDidCloseTab(tab)
         })
@@ -86,8 +98,13 @@ class LegacyTabPeekViewController: UIViewController, WKNavigationDelegate {
                 })
             }
             if self.hasRemoteClients {
-                actions.append(UIAction(title: .AppMenu.TouchActions.SendToDeviceTitle, image: UIImage.templateImageNamed("menu-Send"), identifier: nil) { [weak self] _ in
-                    guard let wself = self, let clientPicker = wself.fxaDevicePicker else { return }
+                actions.append(UIAction(
+                    title: .AppMenu.TouchActions.SendToDeviceTitle,
+                    image: UIImage.templateImageNamed("menu-Send"),
+                    identifier: nil
+                ) { [weak self] _ in
+                    guard let wself = self,
+                          let clientPicker = wself.fxaDevicePicker else { return }
                     wself.delegate?.tabPeekRequestsPresentationOf(clientPicker)
                 })
             }

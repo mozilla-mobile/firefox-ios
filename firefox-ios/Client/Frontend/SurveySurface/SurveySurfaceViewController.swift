@@ -153,29 +153,39 @@ class SurveySurfaceViewController: UIViewController, Themeable {
     private func constrainViews() {
         imageViewYConstraint = imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
 
-        NSLayoutConstraint.activate([
-            imageView.heightAnchor.constraint(equalToConstant: UX.imageViewSize.height),
-            imageView.widthAnchor.constraint(equalToConstant: UX.imageViewSize.width),
-            imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            imageViewYConstraint,
+        NSLayoutConstraint.activate(
+            [
+                imageView.heightAnchor.constraint(equalToConstant: UX.imageViewSize.height),
+                imageView.widthAnchor.constraint(equalToConstant: UX.imageViewSize.width),
+                imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                imageViewYConstraint,
 
-            titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor,
-                                            constant: UX.titleDistanceFromImage),
-            titleLabel.widthAnchor.constraint(equalToConstant: calculateElementWidthWith(max: UX.titleWidth)),
-            titleLabel.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
+                titleLabel.topAnchor.constraint(
+                    equalTo: imageView.bottomAnchor,
+                    constant: UX.titleDistanceFromImage
+                ),
+                titleLabel.widthAnchor.constraint(
+                    equalToConstant: calculateElementWidthWith(max: UX.titleWidth)
+                ),
+                titleLabel.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
 
-            takeSurveyButton.widthAnchor.constraint(equalToConstant: calculateElementWidthWith(max: UX.buttonMaxWidth)),
-            takeSurveyButton.heightAnchor.constraint(equalToConstant: UX.buttonHeight),
-            takeSurveyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            takeSurveyButton.bottomAnchor.constraint(equalTo: dismissSurveyButton.topAnchor,
-                                                     constant: -UX.buttonSeparation),
+                takeSurveyButton.widthAnchor.constraint(
+                    equalToConstant: calculateElementWidthWith(max: UX.buttonMaxWidth)
+                ),
+                takeSurveyButton.heightAnchor.constraint(equalToConstant: UX.buttonHeight),
+                takeSurveyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                takeSurveyButton.bottomAnchor.constraint(equalTo: dismissSurveyButton.topAnchor,
+                                                         constant: -UX.buttonSeparation),
 
-            dismissSurveyButton.widthAnchor.constraint(equalTo: takeSurveyButton.widthAnchor),
-            dismissSurveyButton.heightAnchor.constraint(equalToConstant: UX.buttonHeight),
-            dismissSurveyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            dismissSurveyButton.bottomAnchor.constraint(equalTo: view.bottomAnchor,
-                                                        constant: -(view.frame.height * UX.buttonBottomMarginMultiplier))
-        ])
+                dismissSurveyButton.widthAnchor.constraint(equalTo: takeSurveyButton.widthAnchor),
+                dismissSurveyButton.heightAnchor.constraint(equalToConstant: UX.buttonHeight),
+                dismissSurveyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                dismissSurveyButton.bottomAnchor.constraint(
+                    equalTo: view.bottomAnchor,
+                    constant: -(view.frame.height * UX.buttonBottomMarginMultiplier)
+                )
+            ]
+        )
     }
 
     private func calculateElementWidthWith(max maxWidth: CGFloat) -> CGFloat {
@@ -218,8 +228,10 @@ class SurveySurfaceViewController: UIViewController, Themeable {
     /// if we want to do it in an animation.
     private func changeImageViewConstraint() {
         NSLayoutConstraint.deactivate([imageViewYConstraint])
-        imageViewYConstraint = imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor,
-                                                                  constant: -(view.frame.height * UX.imageViewCenterYOffset))
+        imageViewYConstraint = imageView.centerYAnchor.constraint(
+            equalTo: view.centerYAnchor,
+            constant: -(view.frame.height * UX.imageViewCenterYOffset)
+        )
         NSLayoutConstraint.activate([imageViewYConstraint])
     }
 

@@ -34,7 +34,7 @@ class DownloadContentScript: TabContentScript {
 
     /// This function handles blob downloads
     ///  - Checks if the url has a blob url scheme, returns false early if not.
-    ///  - If it is a blob, this function calls javascript (DownloadHelper.js) to start handling the download of the blob.
+    ///  - If it is a blob, this function calls JS (DownloadHelper.js) to start handling the download of the blob.
     /// - Parameters:
     ///     - url: URL of item to be downloaded
     ///     - tab: Tab item is being downloaded from
@@ -44,12 +44,17 @@ class DownloadContentScript: TabContentScript {
             return false
         }
         blobUrlForDownload = URL(string: safeUrl, invalidCharacters: false)
-        tab.webView?.evaluateJavascriptInDefaultContentWorld("window.__firefox__.download('\(safeUrl)', '\(UserScriptManager.appIdToken)')")
+        tab.webView?.evaluateJavascriptInDefaultContentWorld(
+            "window.__firefox__.download('\(safeUrl)', '\(UserScriptManager.appIdToken)')"
+        )
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .downloadLinkButton)
         return true
     }
 
-    func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(
+        _ userContentController: WKUserContentController,
+        didReceiveScriptMessage message: WKScriptMessage
+    ) {
         guard let dictionary = message.body as? [String: Any?],
               let _url = dictionary["url"] as? String,
               let url = URL(string: _url, invalidCharacters: false),

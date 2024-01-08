@@ -178,7 +178,10 @@ class HistoryHighlightsViewModelTests: XCTestCase {
                                         getItemWithTitle(title: "three"),
                                         getItemWithTitle(title: "four")]
         subject.didLoadNewData()
-        let cell = subject.configure(HistoryHighlightsCell(), at: IndexPath(row: 5, section: 0)) as? HistoryHighlightsCell
+        let cell = subject.configure(
+            HistoryHighlightsCell(),
+            at: IndexPath(row: 5, section: 0)
+        ) as? HistoryHighlightsCell
 
         XCTAssertNotNil(cell)
         XCTAssertTrue(cell!.isFillerCell)
@@ -188,7 +191,10 @@ class HistoryHighlightsViewModelTests: XCTestCase {
         setupSubject()
         dataAdaptor.mockHistoryItems = [getItemWithTitle(title: "one")]
         subject.didLoadNewData()
-        let cell = subject.configure(HistoryHighlightsCell(), at: IndexPath(row: 0, section: 0)) as? HistoryHighlightsCell
+        let cell = subject.configure(
+            HistoryHighlightsCell(),
+            at: IndexPath(row: 0, section: 0)
+        ) as? HistoryHighlightsCell
 
         XCTAssertNotNil(cell)
         XCTAssertFalse(cell!.isFillerCell)
@@ -202,7 +208,10 @@ class HistoryHighlightsViewModelTests: XCTestCase {
 
         dataAdaptor.mockHistoryItems = [item]
         subject.didLoadNewData()
-        let cell = subject.configure(HistoryHighlightsCell(), at: IndexPath(row: 0, section: 0)) as? HistoryHighlightsCell
+        let cell = subject.configure(
+            HistoryHighlightsCell(),
+            at: IndexPath(row: 0, section: 0)
+        ) as? HistoryHighlightsCell
 
         XCTAssertNotNil(cell)
         XCTAssertFalse(cell!.isFillerCell)

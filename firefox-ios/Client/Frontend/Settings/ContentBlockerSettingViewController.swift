@@ -15,7 +15,9 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
          isShownFromSettings: Bool = true) {
         self.prefs = prefs
 
-        currentBlockingStrength = prefs.stringForKey(ContentBlockingConfig.Prefs.StrengthKey).flatMap({ BlockingStrength(rawValue: $0) }) ?? .basic
+        currentBlockingStrength = prefs.stringForKey(ContentBlockingConfig.Prefs.StrengthKey).flatMap({
+            BlockingStrength(rawValue: $0)
+        }) ?? .basic
 
         super.init(style: .grouped)
 
@@ -46,7 +48,9 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
                 style: .leftSide,
                 subtitle: NSAttributedString(string: option.settingSubtitle),
                 accessibilityIdentifier: id,
-                isChecked: { return option == self.currentBlockingStrength },
+                isChecked: {
+                    return option == self.currentBlockingStrength
+                },
                 onChecked: {
                     self.currentBlockingStrength = option
                     self.prefs.setString(self.currentBlockingStrength.rawValue,
@@ -54,24 +58,32 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
                     TabContentBlocker.prefsChanged()
                     self.tableView.reloadData()
 
-                    let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: "ETP-strength",
-                                  TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: option.rawValue]
-                    TelemetryWrapper.recordEvent(category: .action,
-                                                 method: .change,
-                                                 object: .setting,
-                                                 extras: extras)
+                    let extras = [
+                        TelemetryWrapper.EventExtraKey.preference.rawValue: "ETP-strength",
+                        TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: option.rawValue
+                    ]
+                    TelemetryWrapper.recordEvent(
+                        category: .action,
+                        method: .change,
+                        object: .setting,
+                        extras: extras
+                    )
 
                     if option == .strict {
                         self.button.isHidden = true
-                        TelemetryWrapper.recordEvent(category: .action,
-                                                     method: .tap,
-                                                     object: .trackingProtectionMenu,
-                                                     extras: [TelemetryWrapper.EventExtraKey.etpSetting.rawValue: option.rawValue])
+                        TelemetryWrapper.recordEvent(
+                            category: .action,
+                            method: .tap,
+                            object: .trackingProtectionMenu,
+                            extras: [TelemetryWrapper.EventExtraKey.etpSetting.rawValue: option.rawValue]
+                        )
                     } else {
-                        TelemetryWrapper.recordEvent(category: .action,
-                                                     method: .tap,
-                                                     object: .trackingProtectionMenu,
-                                                     extras: [TelemetryWrapper.EventExtraKey.etpSetting.rawValue: "standard"])
+                        TelemetryWrapper.recordEvent(
+                            category: .action,
+                            method: .tap,
+                            object: .trackingProtectionMenu,
+                            extras: [TelemetryWrapper.EventExtraKey.etpSetting.rawValue: "standard"]
+                        )
                     }
                 })
 
@@ -103,20 +115,31 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
                                              extras: [TelemetryWrapper.EventExtraKey.etpEnabled.rawValue: enabled] )
         }
 
-        let firstSection = SettingSection(title: nil, footerTitle: NSAttributedString(string: .TrackingProtectionCellFooter), children: [enabledSetting])
+        let firstSection = SettingSection(
+            title: nil,
+            footerTitle: NSAttributedString(string: .TrackingProtectionCellFooter),
+            children: [enabledSetting]
+        )
 
         let optionalFooterTitle = NSAttributedString(string: .TrackingProtectionLevelFooter)
 
         // The bottom of the block lists section has a More Info button, implemented as a custom footer view,
         // SettingSection needs footerTitle set to create a footer, which we then override the view for.
         let blockListsTitle: String = .TrackingProtectionOptionProtectionLevelTitle
-        let secondSection = SettingSection(title: NSAttributedString(string: blockListsTitle), footerTitle: optionalFooterTitle, children: strengthSetting)
+        let secondSection = SettingSection(
+            title: NSAttributedString(string: blockListsTitle),
+            footerTitle: optionalFooterTitle,
+            children: strengthSetting
+        )
         return [firstSection, secondSection]
     }
 
     // The first section header gets a More Info link
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let _defaultFooter = super.tableView(tableView, viewForFooterInSection: section) as? ThemedTableSectionHeaderFooterView
+        let _defaultFooter = super.tableView(
+            tableView,
+            viewForFooterInSection: section
+        ) as? ThemedTableSectionHeaderFooterView
         guard let defaultFooter = _defaultFooter else { return nil }
 
         if section == 0 {

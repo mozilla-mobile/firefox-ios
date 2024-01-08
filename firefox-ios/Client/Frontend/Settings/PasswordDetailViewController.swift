@@ -89,8 +89,8 @@ class PasswordDetailViewController: SensitiveViewController, Themeable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        // Normally UITableViewControllers handle responding to content inset changes from keyboard events when editing
-        // but since we don't use the tableView's editing flag for editing we handle this ourselves.
+        // Normally UITableViewControllers handle responding to content inset changes from keyboard events when
+        // editing but since we don't use the tableView's editing flag for editing we handle this ourselves.
         KeyboardHelper.defaultHelper.addDelegate(self)
     }
 
@@ -215,8 +215,16 @@ extension PasswordDetailViewController: UITableViewDataSource {
 
             let created: String = .LoginDetailCreatedAt
             let lastModified: String = .LoginDetailModifiedAt
-            let lastModifiedFormatted = String(format: lastModified, Date.fromTimestamp(UInt64(viewModel.login.timePasswordChanged)).toRelativeTimeString(dateStyle: .medium))
-            let createdFormatted = String(format: created, Date.fromTimestamp(UInt64(viewModel.login.timeCreated)).toRelativeTimeString(dateStyle: .medium, timeStyle: .none))
+            let lastModifiedFormatted = String(
+                format: lastModified,
+                Date.fromTimestamp(UInt64(viewModel.login.timePasswordChanged))
+                    .toRelativeTimeString(dateStyle: .medium)
+            )
+            let createdFormatted = String(
+                format: created,
+                Date.fromTimestamp(UInt64(viewModel.login.timeCreated))
+                    .toRelativeTimeString(dateStyle: .medium, timeStyle: .none)
+            )
             let cellModel = LoginDetailCenteredTableViewCellModel(
                 label: createdFormatted + "\n" + lastModifiedFormatted)
             cell.configure(viewModel: cellModel)
@@ -347,13 +355,21 @@ extension PasswordDetailViewController {
         guard let indexPath = viewModel.indexPath(for: LoginDetailCellType.username),
                 let cell = tableView.cellForRow(at: indexPath) as? LoginDetailTableViewCell else { return }
         cell.descriptionLabel.becomeFirstResponder()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneEditing))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .done,
+            target: self,
+            action: #selector(doneEditing)
+        )
     }
 
     @objc
     func doneEditing() {
         isEditingFieldData = false
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(edit))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .edit,
+            target: self,
+            action: #selector(edit)
+        )
 
         // Only update if user made changes
         guard let username = usernameField?.text, let password = passwordField?.text else {

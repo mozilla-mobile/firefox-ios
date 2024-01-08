@@ -155,10 +155,12 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             newTab.sessionData = LegacySessionData(currentPage: 0,
                                                    urls: [],
                                                    lastUsedTime: tabData.lastUsedTime.toTimestamp())
-            let groupData = LegacyTabGroupData(searchTerm: tabData.tabGroupData?.searchTerm ?? "",
-                                               searchUrl: tabData.tabGroupData?.searchUrl ?? "",
-                                               nextReferralUrl: tabData.tabGroupData?.nextUrl ?? "",
-                                               tabHistoryCurrentState: tabData.tabGroupData?.tabHistoryCurrentState?.rawValue ?? "")
+            let groupData = LegacyTabGroupData(
+                searchTerm: tabData.tabGroupData?.searchTerm ?? "",
+                searchUrl: tabData.tabGroupData?.searchUrl ?? "",
+                nextReferralUrl: tabData.tabGroupData?.nextUrl ?? "",
+                tabHistoryCurrentState: tabData.tabGroupData?.tabHistoryCurrentState?.rawValue ?? ""
+            )
             newTab.metadataManager?.tabGroupData = groupData
 
             if newTab.url == nil {
@@ -226,7 +228,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
     private func preserveTabs(forced: Bool) {
         Task {
-            // This value should never be nil but we need to still treat it as if it can be nil until the old code is removed
+            // This value should never be nil but we need to still treat it
+            // as if it can be nil until the old code is removed
             let activeTabID = UUID(uuidString: self.selectedTab?.tabUUID ?? "") ?? UUID()
             let windowData = WindowData(id: windowUUID,
                                         activeTabId: activeTabID,
@@ -308,7 +311,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     // MARK: - Select Tab
 
     /// This function updates the _selectedIndex.
-    /// Note: it is safe to call this with `tab` and `previous` as the same tab, for use in the case where the index of the tab has changed (such as after deletion).
+    /// Note: it is safe to call this with `tab` and `previous` as the same tab, for use in the case
+    /// where the index of the tab has changed (such as after deletion).
     override func selectTab(_ tab: Tab?, previous: Tab? = nil) {
         let url = tab?.url
         guard let tab = tab,

@@ -84,7 +84,9 @@ class DefaultLoggerFileManager: LoggerFileManager {
         }
     }
 
-    /// Get the logs file either from documents or cache folder. If the Logs folder doesn't exist in that folder it will be created.
+    /// Get the logs file either from documents or cache folder. If the Logs folder doesn't
+    /// exist in that folder it will be created.
+    /// 
     /// - Parameter inDocuments: If true then we get the documentlogs path, if not we get the cache logs path
     /// - Returns: The path for logs in the directory we asked for
     private func logFileDirectoryPath(inDocuments: Bool) -> String? {

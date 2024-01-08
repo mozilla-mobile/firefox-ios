@@ -65,7 +65,9 @@ class DownloadHelper: NSObject {
 
     static func requestDownload(url: URL, tab: Tab) {
         let safeUrl = url.absoluteString.replacingOccurrences(of: "'", with: "%27")
-        tab.webView?.evaluateJavascriptInDefaultContentWorld("window.__firefox__.download('\(safeUrl)', '\(UserScriptManager.appIdToken)')")
+        tab.webView?.evaluateJavascriptInDefaultContentWorld(
+            "window.__firefox__.download('\(safeUrl)', '\(UserScriptManager.appIdToken)')"
+        )
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .downloadLinkButton)
     }
 
@@ -107,7 +109,10 @@ class DownloadHelper: NSObject {
                                           request: request)
         else { return nil }
 
-        let expectedSize = download.totalBytesExpected != nil ? ByteCountFormatter.string(fromByteCount: download.totalBytesExpected!, countStyle: .file) : nil
+        let expectedSize = download.totalBytesExpected != nil ? ByteCountFormatter.string(
+            fromByteCount: download.totalBytesExpected!,
+            countStyle: .file
+        ) : nil
 
         var filenameItem: SingleActionViewModel
         var modelText = host

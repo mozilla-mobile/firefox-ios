@@ -12,9 +12,11 @@ public protocol BookmarksHandler {
 }
 
 public protocol HistoryMetadataObserver {
-    func noteHistoryMetadataObservation(key: HistoryMetadataKey,
-                                        observation: HistoryMetadataObservation,
-                                        completion: @escaping () -> Void)
+    func noteHistoryMetadataObservation(
+        key: HistoryMetadataKey,
+        observation: HistoryMetadataObservation,
+        completion: @escaping () -> Void
+    )
 }
 
 public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
@@ -75,7 +77,9 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
         return nil
     }
 
-    private func withWriter<T>(_ callback: @escaping(_ connection: PlacesWriteConnection) throws -> T) -> Deferred<Maybe<T>> {
+    private func withWriter<T>(
+        _ callback: @escaping(_ connection: PlacesWriteConnection) throws -> T
+    ) -> Deferred<Maybe<T>> {
         let deferred = Deferred<Maybe<T>>()
 
         writerQueue.async {
@@ -103,7 +107,9 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
         return deferred
     }
 
-    private func withReader<T>(_ callback: @escaping(_ connection: PlacesReadConnection) throws -> T) -> Deferred<Maybe<T>> {
+    private func withReader<T>(
+        _ callback: @escaping(_ connection: PlacesReadConnection) throws -> T
+    ) -> Deferred<Maybe<T>> {
         let deferred = Deferred<Maybe<T>>()
 
         readerQueue.async {
@@ -135,7 +141,10 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
         return deferred
     }
 
-    public func getBookmarksTree(rootGUID: GUID, recursive: Bool) -> Deferred<Maybe<BookmarkNodeData?>> {
+    public func getBookmarksTree(
+        rootGUID: GUID,
+        recursive: Bool
+    ) -> Deferred<Maybe<BookmarkNodeData?>> {
         return withReader { connection in
             return try connection.getBookmarksTree(rootGUID: rootGUID, recursive: recursive)
         }
@@ -147,7 +156,10 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
         }
     }
 
-    public func getRecentBookmarks(limit: UInt, completion: @escaping ([BookmarkItemData]) -> Void) {
+    public func getRecentBookmarks(
+        limit: UInt,
+        completion: @escaping ([BookmarkItemData]) -> Void
+    ) {
         let deferredResponse = withReader { connection in
             return try connection.getRecentBookmarks(limit: limit)
         }
@@ -185,7 +197,10 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
         }
     }
 
-    public func searchBookmarks(query: String, limit: UInt) -> Deferred<Maybe<[BookmarkItemData]>> {
+    public func searchBookmarks(
+        query: String,
+        limit: UInt
+    ) -> Deferred<Maybe<[BookmarkItemData]>> {
         return withReader { connection in
             return try connection.searchBookmarks(query: query, limit: limit)
         }
@@ -236,14 +251,21 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
     public func createFolder(parentGUID: GUID, title: String,
                              position: UInt32?) -> Deferred<Maybe<GUID>> {
         return withWriter { connection in
-            return try connection.createFolder(parentGUID: parentGUID, title: title, position: position)
+            return try connection.createFolder(
+                parentGUID: parentGUID,
+                title: title,
+                position: position
+            )
         }
     }
 
     public func createSeparator(parentGUID: GUID,
                                 position: UInt32?) -> Deferred<Maybe<GUID>> {
         return withWriter { connection in
-            return try connection.createSeparator(parentGUID: parentGUID, position: position)
+            return try connection.createSeparator(
+                parentGUID: parentGUID,
+                position: position
+            )
         }
     }
 
@@ -253,15 +275,32 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
                                title: String?,
                                position: UInt32?) -> Deferred<Maybe<GUID>> {
         return withWriter { connection in
-            let response = try connection.createBookmark(parentGUID: parentGUID, url: url, title: title, position: position)
+            let response = try connection.createBookmark(
+                parentGUID: parentGUID,
+                url: url,
+                title: title,
+                position: position
+            )
             self.notificationCenter.post(name: .BookmarksUpdated, object: self)
             return response
         }
     }
 
-    public func updateBookmarkNode(guid: GUID, parentGUID: GUID? = nil, position: UInt32? = nil, title: String? = nil, url: String? = nil) -> Success {
+    public func updateBookmarkNode(
+        guid: GUID,
+        parentGUID: GUID? = nil,
+        position: UInt32? = nil,
+        title: String? = nil,
+        url: String? = nil
+    ) -> Success {
         return withWriter { connection in
-            return try connection.updateBookmarkNode(guid: guid, parentGUID: parentGUID, position: position, title: title, url: url)
+            return try connection.updateBookmarkNode(
+                guid: guid,
+                parentGUID: parentGUID,
+                position: position,
+                title: title,
+                url: url
+            )
         }
     }
 
@@ -301,13 +340,19 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
         }
     }
 
-    public func getHighlights(weights: HistoryHighlightWeights, limit: Int32) -> Deferred<Maybe<[HistoryHighlight]>> {
+    public func getHighlights(
+        weights: HistoryHighlightWeights,
+        limit: Int32
+    ) -> Deferred<Maybe<[HistoryHighlight]>> {
         return withReader { connection in
             return try connection.getHighlights(weights: weights, limit: limit)
         }
     }
 
-    public func queryHistoryMetadata(query: String, limit: Int32) -> Deferred<Maybe<[HistoryMetadata]>> {
+    public func queryHistoryMetadata(
+        query: String,
+        limit: Int32
+    ) -> Deferred<Maybe<[HistoryMetadata]>> {
         return withReader { connection in
             return try connection.queryHistoryMetadata(query: query, limit: limit)
         }
@@ -325,23 +370,34 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
         }
     }
 
-    /**
-        Title observations must be made first for any given url. Observe one fact at a time (e.g. just the viewTime, or just the documentType).
-     */
-    public func noteHistoryMetadataObservation(key: HistoryMetadataKey, observation: HistoryMetadataObservation) -> Deferred<Maybe<Void>> {
+    /// Title observations must be made first for any given url. Observe one fact at a time
+    /// (e.g. just the viewTime, or just the documentType).
+    public func noteHistoryMetadataObservation(
+        key: HistoryMetadataKey,
+        observation: HistoryMetadataObservation
+    ) -> Deferred<Maybe<Void>> {
         return withWriter { connection in
             if let title = observation.title {
-                let response: Void = try connection.noteHistoryMetadataObservationTitle(key: key, title: title)
+                let response: Void = try connection.noteHistoryMetadataObservationTitle(
+                    key: key,
+                    title: title
+                )
                 self.notificationCenter.post(name: .HistoryUpdated, object: nil)
                 return response
             }
             if let documentType = observation.documentType {
-                let response: Void = try connection.noteHistoryMetadataObservationDocumentType(key: key, documentType: documentType)
+                let response: Void = try connection.noteHistoryMetadataObservationDocumentType(
+                    key: key,
+                    documentType: documentType
+                )
                 self.notificationCenter.post(name: .HistoryUpdated, object: nil)
                 return response
             }
             if let viewTime = observation.viewTime {
-                let response: Void = try connection.noteHistoryMetadataObservationViewTime(key: key, viewTime: viewTime)
+                let response: Void = try connection.noteHistoryMetadataObservationViewTime(
+                    key: key,
+                    viewTime: viewTime
+                )
                 self.notificationCenter.post(name: .HistoryUpdated, object: nil)
                 return response
             }
@@ -379,7 +435,12 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
         }
     }
 
-    public func migrateHistory(dbPath: String, lastSyncTimestamp: Int64, completion: @escaping (HistoryMigrationResult) -> Void, errCallback: @escaping (Error?) -> Void) {
+    public func migrateHistory(
+        dbPath: String,
+        lastSyncTimestamp: Int64,
+        completion: @escaping (HistoryMigrationResult) -> Void,
+        errCallback: @escaping (Error?) -> Void
+    ) {
         _ = reopenIfClosed()
         let deferredResponse = self.migrateHistory(dbPath: dbPath, lastSyncTimestamp: lastSyncTimestamp)
         deferredResponse.upon { result in
@@ -484,13 +545,20 @@ extension RustPlaces {
         }
     }
 
-    public func queryAutocomplete(matchingSearchQuery filter: String, limit: Int) -> Deferred<Maybe<[SearchResult]>> {
+    public func queryAutocomplete(
+        matchingSearchQuery filter: String,
+        limit: Int
+    ) -> Deferred<Maybe<[SearchResult]>> {
         return withReader { connection in
             return try connection.queryAutocomplete(search: filter, limit: Int32(limit))
         }
     }
 
-    public func getVisitPageWithBound(limit: Int, offset: Int, excludedTypes: VisitTransitionSet) -> Deferred<Maybe<HistoryVisitInfosWithBound>> {
+    public func getVisitPageWithBound(
+        limit: Int,
+        offset: Int,
+        excludedTypes: VisitTransitionSet
+    ) -> Deferred<Maybe<HistoryVisitInfosWithBound>> {
         return withReader { connection in
             return try connection.getVisitPageWithBound(bound: Int64(Date().toMillisecondsSince1970()),
                                                         offset: Int64(offset),
@@ -499,7 +567,10 @@ extension RustPlaces {
         }
     }
 
-    public func getTopFrecentSiteInfos(limit: Int, thresholdOption: FrecencyThresholdOption) -> Deferred<Maybe<[Site]>> {
+    public func getTopFrecentSiteInfos(
+        limit: Int,
+        thresholdOption: FrecencyThresholdOption
+    ) -> Deferred<Maybe<[Site]>> {
         let deferred: Deferred<Maybe<[TopFrecentSiteInfo]>> = withReader { connection in
             return try connection.getTopFrecentSiteInfos(numItems: Int32(limit), thresholdOption: thresholdOption)
         }
@@ -525,7 +596,11 @@ extension RustPlaces {
         return returnValue
     }
 
-    public func getSitesWithBound(limit: Int, offset: Int, excludedTypes: VisitTransitionSet) -> Deferred<Maybe<Cursor<Site>>> {
+    public func getSitesWithBound(
+        limit: Int,
+        offset: Int,
+        excludedTypes: VisitTransitionSet
+    ) -> Deferred<Maybe<Cursor<Site>>> {
         let deferred = getVisitPageWithBound(limit: limit, offset: offset, excludedTypes: excludedTypes)
         let result = Deferred<Maybe<Cursor<Site>>>()
         deferred.upon { visitInfos in

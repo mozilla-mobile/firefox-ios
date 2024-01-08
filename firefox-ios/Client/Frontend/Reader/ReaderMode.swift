@@ -177,7 +177,11 @@ struct ReaderModeStyle {
         self.theme = ReaderModeTheme.preferredTheme(for: self.theme)
     }
 
-    static let `default` = ReaderModeStyle(theme: .light, fontType: .sansSerif, fontSize: ReaderModeFontSize.defaultSize)
+    static let `default` = ReaderModeStyle(
+        theme: .light,
+        fontType: .sansSerif,
+        fontSize: ReaderModeFontSize.defaultSize
+    )
 }
 
 /// This struct captures the response from the Readability.js code.
@@ -223,7 +227,10 @@ struct ReadabilityResult {
     /// Initialize from a JSON encoded string
     init?(string: String) {
         guard let data = string.data(using: .utf8),
-              let object = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String: Any],
+              let object = try? JSONSerialization.jsonObject(
+                with: data,
+                options: .fragmentsAllowed
+              ) as? [String: Any],
               let content = object["content"] as? String,
               let title = object["title"] as? String,
               let credits = object["byline"] as? String
@@ -266,9 +273,20 @@ struct ReadabilityResult {
 
 /// Delegate that contains callbacks that we have added on top of the built-in WKWebViewDelegate
 protocol ReaderModeDelegate: AnyObject {
-    func readerMode(_ readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forTab tab: Tab)
-    func readerMode(_ readerMode: ReaderMode, didDisplayReaderizedContentForTab tab: Tab)
-    func readerMode(_ readerMode: ReaderMode, didParseReadabilityResult readabilityResult: ReadabilityResult, forTab tab: Tab)
+    func readerMode(
+        _ readerMode: ReaderMode,
+        didChangeReaderModeState state: ReaderModeState,
+        forTab tab: Tab
+    )
+    func readerMode(
+        _ readerMode: ReaderMode,
+        didDisplayReaderizedContentForTab tab: Tab
+    )
+    func readerMode(
+        _ readerMode: ReaderMode,
+        didParseReadabilityResult readabilityResult: ReadabilityResult,
+        forTab tab: Tab
+    )
 }
 
 let ReaderModeNamespace = "window.__firefox__.reader"
@@ -319,7 +337,10 @@ class ReaderMode: TabContentScript {
         delegate?.readerMode(self, didParseReadabilityResult: readabilityResult, forTab: tab)
     }
 
-    func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(
+        _ userContentController: WKUserContentController,
+        didReceiveScriptMessage message: WKScriptMessage
+    ) {
         guard let msg = message.body as? [String: Any],
               let type = msg["Type"] as? String,
               let messageType = ReaderModeMessageType(rawValue: type)
@@ -344,7 +365,9 @@ class ReaderMode: TabContentScript {
     var style: ReaderModeStyle = .default {
         didSet {
             if state == ReaderModeState.active {
-                tab?.webView?.evaluateJavascriptInDefaultContentWorld("\(ReaderModeNamespace).setStyle(\(style.encode()))") { object, error in
+                tab?.webView?.evaluateJavascriptInDefaultContentWorld(
+                        "\(ReaderModeNamespace).setStyle(\(style.encode()))"
+                    ) { object, error in
                     return
                 }
             }

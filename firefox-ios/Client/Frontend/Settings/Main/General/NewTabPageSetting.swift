@@ -26,8 +26,14 @@ class NewTabPageSetting: Setting {
          settingsDelegate: GeneralSettingsDelegate?) {
         self.profile = settings.profile
         self.settingsDelegate = settingsDelegate
-        super.init(title: NSAttributedString(string: .SettingsNewTabSectionName,
-                                             attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
+        super.init(
+            title: NSAttributedString(
+                string: .SettingsNewTabSectionName,
+                attributes: [
+                    NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary
+                ]
+            )
+        )
     }
 
     override func onClick(_ navigationController: UINavigationController?) {

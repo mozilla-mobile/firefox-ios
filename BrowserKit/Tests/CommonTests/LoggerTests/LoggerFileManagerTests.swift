@@ -40,7 +40,9 @@ final class LoggerFileManagerTests: XCTestCase {
 
         let sourceURL = try XCTUnwrap(fileManager.sourceURL?.absoluteString.contains("/Caches/Logs/path/file1"))
         XCTAssertTrue(sourceURL)
-        let destinationURL = try XCTUnwrap(fileManager.destinationURL?.absoluteString.contains("/Documents/Logs/path/file1"))
+        let destinationURL = try XCTUnwrap(
+            fileManager.destinationURL?.absoluteString.contains("/Documents/Logs/path/file1")
+        )
         XCTAssertTrue(destinationURL)
     }
 
@@ -77,7 +79,10 @@ private class MockFileManager: FileManagerProtocol {
         return fileExists
     }
 
-    func urls(for directory: FileManager.SearchPathDirectory, in domainMask: FileManager.SearchPathDomainMask) -> [URL] {
+    func urls(
+        for directory: FileManager.SearchPathDirectory,
+        in domainMask: FileManager.SearchPathDomainMask
+    ) -> [URL] {
         return []
     }
 

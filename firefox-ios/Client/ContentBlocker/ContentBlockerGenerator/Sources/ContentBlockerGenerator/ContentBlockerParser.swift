@@ -41,7 +41,8 @@ class DefaultContentBlockerParser: ContentBlockerParser {
 
     // MARK: - Private
 
-    /// Create the line for a propertie's resource if an entity information is present, we can build the line using unless-domain (whitelisting).
+    /// Create the line for a propertie's resource if an entity information is present,
+    /// we can build the line using unless-domain (whitelisting).
     /// - Parameters:
     ///   - property: The resource of an entity, example "2leep.com"
     ///   - actionType: "block" or "block-all"
@@ -97,9 +98,11 @@ class DefaultContentBlockerParser: ContentBlockerParser {
                                  unlessDomain: String,
                                  actionType: ActionType) -> String {
         let unlessDomainSection = unlessDomain.isEmpty ? "" : ",\"unless-domain\":\(unlessDomain)"
+        // swiftlint:disable line_length
         let line = """
                     {"action":{"type":\(actionType.webKitFormat)},"trigger":{"url-filter":"\(urlFilter)","load-type":["third-party"]\(unlessDomainSection)}}
                     """
+        // swiftlint:enable line_length
         return line
     }
 }

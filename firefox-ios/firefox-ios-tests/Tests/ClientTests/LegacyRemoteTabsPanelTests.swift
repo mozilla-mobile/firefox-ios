@@ -39,7 +39,8 @@ class LegacyRemoteTabsPanelTests: XCTestCase {
         let panel = createPanel()
 
         panelRefreshWithExpectation(panel: panel) {
-            guard let dataSource = panel.tableViewController.tableViewDelegate as? LegacyRemoteTabsErrorDataSource else {
+            guard let dataSource = panel.tableViewController.tableViewDelegate as? LegacyRemoteTabsErrorDataSource
+            else {
                 XCTFail("Should have error data source")
                 return
             }
@@ -54,7 +55,8 @@ class LegacyRemoteTabsPanelTests: XCTestCase {
         let panel = createPanel(clientAndTabs: [clientAndTabs])
 
         panelRefreshWithExpectation(panel: panel) {
-            guard let dataSource = panel.tableViewController.tableViewDelegate as? LegacyRemoteTabsErrorDataSource else {
+            guard let dataSource = panel.tableViewController.tableViewDelegate as? LegacyRemoteTabsErrorDataSource
+            else {
                 XCTFail("Should have error data source")
                 return
             }
@@ -69,7 +71,8 @@ class LegacyRemoteTabsPanelTests: XCTestCase {
         let panel = createPanel(clientAndTabs: [clientAndTabs])
 
         panelRefreshWithExpectation(panel: panel) {
-            guard let dataSource = panel.tableViewController.tableViewDelegate as? RemoteTabsClientAndTabsDataSource else {
+            guard let dataSource = panel.tableViewController.tableViewDelegate as? RemoteTabsClientAndTabsDataSource
+            else {
                 XCTFail("Should have panel and tabs data source")
                 return
             }
@@ -88,7 +91,8 @@ class LegacyRemoteTabsPanelTests: XCTestCase {
         let panel = createPanel(clientAndTabs: [clientAndTabs])
 
         panelRefreshWithExpectation(panel: panel) {
-            guard let dataSource = panel.tableViewController.tableViewDelegate as? RemoteTabsClientAndTabsDataSource else {
+            guard let dataSource = panel.tableViewController.tableViewDelegate as? RemoteTabsClientAndTabsDataSource
+            else {
                 XCTFail("Should have panel and tabs data source")
                 return
             }

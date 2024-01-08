@@ -127,7 +127,11 @@ private extension ClosedTabsStoreTests {
 
     func addTabs(number: Int, to store: ClosedTabsStore, lastExecutedTime: Timestamp? = nil) {
         for index in 0...number - 1 {
-            store.addTab(URL(string: "thisisaurl\(index).com")!, title: "a title\(index)", lastExecutedTime: lastExecutedTime)
+            store.addTab(
+                URL(string: "thisisaurl\(index).com")!,
+                title: "a title\(index)",
+                lastExecutedTime: lastExecutedTime
+            )
         }
     }
 }

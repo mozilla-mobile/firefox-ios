@@ -44,7 +44,14 @@ public struct RemoteTab: Equatable {
         return url.host != nil
     }
 
-    public init(clientGUID: String?, URL: Foundation.URL, title: String, history: [Foundation.URL], lastUsed: Timestamp, icon: Foundation.URL?) {
+    public init(
+        clientGUID: String?,
+        URL: Foundation.URL,
+        title: String,
+        history: [Foundation.URL],
+        lastUsed: Timestamp,
+        icon: Foundation.URL?
+    ) {
         self.clientGUID = clientGUID
         self.URL = URL
         self.title = title
@@ -54,7 +61,14 @@ public struct RemoteTab: Equatable {
     }
 
     public func withClientGUID(_ clientGUID: String?) -> RemoteTab {
-        return RemoteTab(clientGUID: clientGUID, URL: URL, title: title, history: history, lastUsed: lastUsed, icon: icon)
+        return RemoteTab(
+            clientGUID: clientGUID,
+            URL: URL,
+            title: title,
+            history: history,
+            lastUsed: lastUsed,
+            icon: icon
+        )
     }
 
     public func toRemoteTabRecord() -> RemoteTabRecord {

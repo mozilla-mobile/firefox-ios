@@ -329,7 +329,10 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
     }
 
     private func adjustLayout() {
-        iconContainerHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: UX.iconSize), UX.iconMaxSize)
+        iconContainerHeightConstraint?.constant = min(
+            UIFontMetrics.default.scaledValue(for: UX.iconSize),
+            UX.iconMaxSize
+        )
         setNeedsLayout()
         layoutIfNeeded()
     }

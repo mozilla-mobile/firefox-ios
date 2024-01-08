@@ -13,7 +13,9 @@ private class CustomFxAContentServerEnableSetting: BoolSetting {
               prefs: prefs,
               prefKey: PrefsKeys.KeyUseCustomFxAContentServer,
               defaultValue: false,
-              attributedTitleText: NSAttributedString(string: .SettingsAdvancedAccountUseCustomFxAContentServerURITitle),
+              attributedTitleText: NSAttributedString(
+                string: .SettingsAdvancedAccountUseCustomFxAContentServerURITitle
+              ),
               settingDidChange: settingDidChange
           )
       }
@@ -116,7 +118,9 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier
+        ) as? ThemedTableSectionHeaderFooterView else { return nil }
 
         let sectionSetting = settings[section]
         headerView.titleLabel.text = sectionSetting.title?.string

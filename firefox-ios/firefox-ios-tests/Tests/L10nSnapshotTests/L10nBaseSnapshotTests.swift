@@ -42,7 +42,12 @@ class L10nBaseSnapshotTests: XCTestCase {
         app.activate()
     }
 
-    func waitForExistence(_ element: XCUIElement, timeout: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
+    func waitForExistence(
+        _ element: XCUIElement,
+        timeout: TimeInterval = 5.0,
+        file: String = #file,
+        line: UInt = #line
+    ) {
             waitFor(element, with: "exists == true", timeout: timeout, file: file, line: line)
     }
 
@@ -59,7 +64,14 @@ class L10nBaseSnapshotTests: XCTestCase {
         }
     }
 
-    private func waitFor(_ element: XCUIElement, with predicateString: String, description: String? = nil, timeout: TimeInterval = 5.0, file: String, line: UInt) {
+    private func waitFor(
+        _ element: XCUIElement,
+        with predicateString: String,
+        description: String? = nil,
+        timeout: TimeInterval = 5.0,
+        file: String,
+        line: UInt
+    ) {
             let predicate = NSPredicate(format: predicateString)
             let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
             let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
@@ -72,7 +84,12 @@ class L10nBaseSnapshotTests: XCTestCase {
             }
         }
 
-    func waitForNoExistence(_ element: XCUIElement, timeoutValue: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
+    func waitForNoExistence(
+        _ element: XCUIElement,
+        timeoutValue: TimeInterval = 5.0,
+        file: String = #file,
+        line: UInt = #line
+    ) {
         waitFor(element, with: "exists != true", timeout: timeoutValue, file: file, line: line)
     }
     // is up to 25x more performant than the above waitForNoExistence method

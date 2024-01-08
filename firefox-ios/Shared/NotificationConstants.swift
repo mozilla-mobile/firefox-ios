@@ -12,7 +12,9 @@ extension Notification.Name {
 
     public static let FirefoxAccountProfileChanged = Notification.Name("FirefoxAccountProfileChanged")
 
+    // swiftlint:disable line_length
     public static let FirefoxAccountDeviceRegistrationUpdated = Notification.Name("FirefoxAccountDeviceRegistrationUpdated")
+    // swiftlint:enable line_length
 
     public static let PrivateDataClearedHistory = Notification.Name("PrivateDataClearedHistory")
     public static let PrivateDataClearedDownloadedFiles = Notification.Name("PrivateDataClearedDownloadedFiles")

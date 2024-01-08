@@ -33,7 +33,10 @@ extension ContextMenuHelper: TabContentScript {
         return ["contextMenuMessageHandler"]
     }
 
-    func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(
+        _ userContentController: WKUserContentController,
+        didReceiveScriptMessage message: WKScriptMessage
+    ) {
         guard let data = message.body as? [String: AnyObject] else { return }
 
         if let x = data["touchX"] as? Double, let y = data["touchY"] as? Double {

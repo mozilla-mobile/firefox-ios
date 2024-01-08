@@ -44,7 +44,12 @@ class AddCredentialViewController: UIViewController, Themeable {
     }()
 
     fileprivate lazy var saveButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: .SettingsAddCustomEngineSaveButtonText, style: .done, target: self, action: #selector(addCredential))
+        let button = UIBarButtonItem(
+            title: .SettingsAddCustomEngineSaveButtonText,
+            style: .done,
+            target: self,
+            action: #selector(addCredential)
+        )
         button.isEnabled = false
         button.tintColor = themeManager.currentTheme.colors.actionPrimary
         return button
@@ -118,7 +123,8 @@ class AddCredentialViewController: UIViewController, Themeable {
         dismiss(animated: true)
     }
 
-    /// Normalize the website entered by adding `https://` URL scheme. This format is necessary in ordered to be saved on local passwords storage.
+    /// Normalize the website entered by adding `https://` URL scheme. This format is necessary
+    /// in ordered to be saved on local passwords storage.
     /// - Parameter website: Website address provided by the user in a String format
     /// - Returns: Normalized website containing `https://` URL scheme if necessary
     private func normalize(website: String) -> String {
@@ -176,7 +182,10 @@ extension AddCredentialViewController: UITableViewDataSource {
     }
 
     fileprivate func cell(forIndexPath indexPath: IndexPath) -> LoginDetailTableViewCell {
-        guard let loginCell = tableView.dequeueReusableCell(withIdentifier: LoginDetailTableViewCell.cellIdentifier, for: indexPath) as? LoginDetailTableViewCell
+        guard let loginCell = tableView.dequeueReusableCell(
+            withIdentifier: LoginDetailTableViewCell.cellIdentifier,
+            for: indexPath
+        ) as? LoginDetailTableViewCell
         else {
             return LoginDetailTableViewCell()
         }

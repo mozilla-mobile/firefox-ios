@@ -27,8 +27,14 @@ class TestSQLiteReadingList: XCTestCase {
         case .failure(let error):
             XCTFail(error.description)
         case .success(let result):
-            XCTAssertEqual(result.url, "http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance")
-            XCTAssertEqual(result.title, "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma")
+            XCTAssertEqual(
+                result.url,
+                "http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance"
+            )
+            XCTAssertEqual(
+                result.title,
+                "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma"
+            )
             XCTAssertEqual(result.addedBy, "Stefan's iPhone")
             XCTAssertEqual(result.unread, true)
             XCTAssertEqual(result.archived, false)
@@ -58,9 +64,21 @@ class TestSQLiteReadingList: XCTestCase {
     }
 
     func testGetAllRecords() {
-        _ = createRecordWithURL("http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
-        let createResult2 = createRecordWithURL("http://localhost/article2", title: "Test 2", addedBy: "Stefan's iPhone")
-        _ = createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
+        _ = createRecordWithURL(
+            "http://localhost/article1",
+            title: "Test 1",
+            addedBy: "Stefan's iPhone"
+        )
+        let createResult2 = createRecordWithURL(
+            "http://localhost/article2",
+            title: "Test 2",
+            addedBy: "Stefan's iPhone"
+        )
+        _ = createRecordWithURL(
+            "http://localhost/article3",
+            title: "Test 3",
+            addedBy: "Stefan's iPhone"
+        )
         if let record = createResult2.successValue {
             _ = updateRecord(record, unread: false)
         }
@@ -79,7 +97,8 @@ class TestSQLiteReadingList: XCTestCase {
         if let records = getAllResult.successValue {
             XCTAssertEqual(3, records.count)
         }
-        // TODO When we are able to create records coming from the server, we can extend this test to see if we query correctly
+        // TODO When we are able to create records coming from the server, we can extend this test
+        // to see if we query correctly
     }
 
     func testDeleteRecord() {
@@ -115,8 +134,14 @@ class TestSQLiteReadingList: XCTestCase {
             title: "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma",
             addedBy: "Stefan's iPhone")
         if let record = result.successValue {
-            XCTAssertEqual(record.url, "http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance")
-            XCTAssertEqual(record.title, "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma")
+            XCTAssertEqual(
+                record.url,
+                "http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance"
+            )
+            XCTAssertEqual(
+                record.title,
+                "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma"
+            )
             XCTAssertEqual(record.addedBy, "Stefan's iPhone")
             XCTAssertEqual(record.unread, true)
             XCTAssertEqual(record.archived, false)
@@ -124,8 +149,14 @@ class TestSQLiteReadingList: XCTestCase {
 
             let result = updateRecord(record, unread: false)
             if let record = result.successValue {
-                XCTAssertEqual(record.url, "http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance")
-                XCTAssertEqual(record.title, "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma")
+                XCTAssertEqual(
+                    record.url,
+                    "http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance"
+                )
+                XCTAssertEqual(
+                    record.title,
+                    "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma"
+                )
                 XCTAssertEqual(record.addedBy, "Stefan's iPhone")
                 XCTAssertEqual(record.unread, false)
                 XCTAssertEqual(record.archived, false)

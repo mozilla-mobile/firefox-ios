@@ -114,7 +114,8 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
         searchController.searchBar.setImage(searchIcon, for: UISearchBar.Icon.search, state: .normal)
         searchController.searchBar.setImage(clearIcon, for: UISearchBar.Icon.clear, state: .normal)
 
-        searchController.searchBar.searchTextPositionAdjustment = UIOffset(horizontal: 5.0, vertical: 0) // calling setSearchFieldBackgroundImage removes the spacing between the search icon and text
+        // calling setSearchFieldBackgroundImage removes the spacing between the search icon and text
+        searchController.searchBar.searchTextPositionAdjustment = UIOffset(horizontal: 5.0, vertical: 0)
         if let searchField = searchController.searchBar.value(forKey: "searchField") as? UITextField {
             if let backgroundview = searchField.subviews.first {
                 backgroundview.layer.cornerRadius = 10
@@ -168,18 +169,30 @@ extension CredentialListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch presenter?.getItemsType(in: indexPath.section, for: indexPath.row) {
         case .emptyCredentialList:
-            let cell = tableView.dequeueReusableCell(withIdentifier: EmptyPlaceholderCell.identifier, for: indexPath) as? EmptyPlaceholderCell
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: EmptyPlaceholderCell.identifier,
+                for: indexPath
+            ) as? EmptyPlaceholderCell
             return cell ?? UITableViewCell()
         case .emptySearchResult:
-            let cell = tableView.dequeueReusableCell(withIdentifier: NoSearchResultCell.identifier, for: indexPath) as? NoSearchResultCell
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: NoSearchResultCell.identifier,
+                for: indexPath
+            ) as? NoSearchResultCell
             return cell ?? UITableViewCell()
         case .selectPassword:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: SelectPasswordCell.identifier, for: indexPath) as? SelectPasswordCell else {
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: SelectPasswordCell.identifier,
+                for: indexPath
+            ) as? SelectPasswordCell else {
                 return UITableViewCell()
             }
             return cell
         case .displayItem(let credentialIdentity):
-            let cell = tableView.dequeueReusableCell(withIdentifier: ItemListCell.identifier, for: indexPath) as? ItemListCell
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: ItemListCell.identifier,
+                for: indexPath
+            ) as? ItemListCell
             cell?.titleLabel.text = credentialIdentity.serviceIdentifier.identifier.titleFromHostname
             cell?.detailLabel.text = credentialIdentity.user
             let backgroundView = UIView()

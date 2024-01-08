@@ -59,7 +59,11 @@ struct ConfirmPanelAlert: JSAlertInfo {
 
     func alertController() -> JSPromptAlertController {
         // Show JavaScript confirm dialogs.
-        let alertController = JSPromptAlertController(title: titleForJavaScriptPanelInitiatedByFrame(frame), message: message, preferredStyle: .alert)
+        let alertController = JSPromptAlertController(
+            title: titleForJavaScriptPanelInitiatedByFrame(frame),
+            message: message,
+            preferredStyle: .alert
+        )
         alertController.addAction(UIAlertAction(title: .OKString, style: .default) { _ in
             self.completionHandler(true)
         })

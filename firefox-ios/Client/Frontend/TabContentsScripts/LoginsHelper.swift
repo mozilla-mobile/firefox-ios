@@ -86,7 +86,10 @@ class LoginsHelper: TabContentScript {
         return LoginEntry(fromJSONDict: dict)
     }
 
-    func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(
+        _ userContentController: WKUserContentController,
+        didReceiveScriptMessage message: WKScriptMessage
+    ) {
         guard let res = message.body as? [String: Any],
               let type = res["type"] as? String
         else { return }
@@ -139,7 +142,10 @@ class LoginsHelper: TabContentScript {
             return
         }
 
-        profile.logins.getLoginsForProtectionSpace(login.protectionSpace, withUsername: login.username).uponQueue(.main) { res in
+        profile.logins.getLoginsForProtectionSpace(
+            login.protectionSpace,
+            withUsername: login.username
+        ).uponQueue(.main) { res in
             if let data = res.successValue {
                 for saved in data {
                     if let saved = saved {
@@ -176,12 +182,20 @@ class LoginsHelper: TabContentScript {
         }
 
         snackBar = TimerSnackBar(text: promptMessage, img: UIImage(named: StandardImageIdentifiers.Large.login))
-        let dontSave = SnackButton(title: .LoginsHelperDontSaveButtonTitle, accessibilityIdentifier: "SaveLoginPrompt.dontSaveButton", bold: false) { bar in
+        let dontSave = SnackButton(
+            title: .LoginsHelperDontSaveButtonTitle,
+            accessibilityIdentifier: "SaveLoginPrompt.dontSaveButton",
+            bold: false
+        ) { bar in
             self.tab?.removeSnackbar(bar)
             self.snackBar = nil
             return
         }
-        let save = SnackButton(title: .LoginsHelperSaveLoginButtonTitle, accessibilityIdentifier: "SaveLoginPrompt.saveLoginButton", bold: true) { bar in
+        let save = SnackButton(
+            title: .LoginsHelperSaveLoginButtonTitle,
+            accessibilityIdentifier: "SaveLoginPrompt.saveLoginButton",
+            bold: true
+        ) { bar in
             self.tab?.removeSnackbar(bar)
             self.snackBar = nil
             self.sendLoginsSavedTelemetry()
@@ -210,11 +224,19 @@ class LoginsHelper: TabContentScript {
         }
 
         snackBar = TimerSnackBar(text: formatted, img: UIImage(named: StandardImageIdentifiers.Large.login))
-        let dontSave = SnackButton(title: .LoginsHelperDontUpdateButtonTitle, accessibilityIdentifier: "UpdateLoginPrompt.donttUpdateButton", bold: false) { bar in
+        let dontSave = SnackButton(
+            title: .LoginsHelperDontUpdateButtonTitle,
+            accessibilityIdentifier: "UpdateLoginPrompt.donttUpdateButton",
+            bold: false
+        ) { bar in
             self.tab?.removeSnackbar(bar)
             self.snackBar = nil
         }
-        let update = SnackButton(title: .LoginsHelperUpdateButtonTitle, accessibilityIdentifier: "UpdateLoginPrompt.updateButton", bold: true) { bar in
+        let update = SnackButton(
+            title: .LoginsHelperUpdateButtonTitle,
+            accessibilityIdentifier: "UpdateLoginPrompt.updateButton",
+            bold: true
+        ) { bar in
             self.tab?.removeSnackbar(bar)
             self.snackBar = nil
             self.sendLoginsModifiedTelemetry()
@@ -246,7 +268,8 @@ class LoginsHelper: TabContentScript {
             guard let cursor = res.successValue else { return }
 
             let logins: [[String: Any]] = cursor.compactMap { login in
-                // `requestLogins` is for webpage forms, not for HTTP Auth, and the latter has httpRealm != nil; filter those out.
+                // `requestLogins` is for webpage forms, not for HTTP Auth,
+                // and the latter has httpRealm != nil; filter those out.
                 return login?.httpRealm == nil ? login?.toJSONDict() : nil
             }
 

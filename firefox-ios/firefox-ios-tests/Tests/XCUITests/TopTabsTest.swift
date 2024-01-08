@@ -112,7 +112,9 @@ class TopTabsTest: BaseTestCase {
         }
 
         // After removing only one tab it automatically goes to HomepanelView
-        mozWaitForElementToExist(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        mozWaitForElementToExist(
+            app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        )
         XCTAssert(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].exists)
     }
 
@@ -155,7 +157,10 @@ class TopTabsTest: BaseTestCase {
 //        mozWaitForElementToExist(app.otherElements.buttons.staticTexts["Undo"])
 //        app.otherElements.buttons.staticTexts["Undo"].tap()
 //
-//        mozWaitForElementToExist(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell], timeout: 5)
+//        mozWaitForElementToExist(
+//            app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell],
+//            timeout: 5
+//        )
 //        navigator.nowAt(BrowserTab)
 //        if !iPad() {
 //            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 5)
@@ -263,7 +268,10 @@ class TopTabsTest: BaseTestCase {
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
             app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].tap()
         } else {
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton], timeout: 15)
+            mozWaitForElementToExist(
+                app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton],
+                timeout: 15
+            )
             app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].tap()
         }
         app.typeText("google.com\n")
@@ -297,7 +305,9 @@ class TopTabsTest: BaseTestCase {
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
             mozWaitForElementToExist(app.cells.staticTexts["Homepage"])
             app.cells.staticTexts["Homepage"].firstMatch.tap()
-            mozWaitForElementToExist(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+            mozWaitForElementToExist(
+                app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+            )
 
             // Close tab
             navigator.nowAt(HomePanelsScreen)
@@ -313,7 +323,9 @@ class TopTabsTest: BaseTestCase {
             // Go to Private Mode
             mozWaitForElementToExist(app.cells.staticTexts["Homepage"])
             app.cells.staticTexts["Homepage"].firstMatch.tap()
-            mozWaitForElementToExist(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+            mozWaitForElementToExist(
+                app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+            )
             navigator.nowAt(HomePanelsScreen)
             navigator.nowAt(NewTabScreen)
             mozWaitForElementToExist(app.buttons["Show Tabs"])
@@ -451,7 +463,8 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
     }
 }
 
-    // Tests to check if Tab Counter is updating correctly after opening three tabs by tapping on '+' button and closing the tabs by tapping 'x' button
+// Tests to check if Tab Counter is updating correctly after opening three tabs by tapping on '+' button
+// and closing the tabs by tapping 'x' button
 class TopTabsTestIpad: IpadOnlyTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307023
     func testUpdateTabCounter() {
@@ -463,13 +476,21 @@ class TopTabsTestIpad: IpadOnlyTestCase {
         let numTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual("3", numTab)
         // Remove one tab by tapping on 'x' button
-        app.collectionViews["Top Tabs View"].children(matching: .cell).matching(identifier: "Homepage").element(boundBy: 1).buttons["Remove page — Homepage"].tap()
+        app.collectionViews["Top Tabs View"]
+            .children(matching: .cell)
+            .matching(identifier: "Homepage")
+            .element(boundBy: 1).buttons["Remove page — Homepage"]
+            .tap()
         waitForTabsButton()
         mozWaitForElementToNotExist(app.buttons["Show Tabs"].staticTexts["3"])
         mozWaitForElementToExist(app.buttons["Show Tabs"].staticTexts["2"])
         let numTabAfterRemovingThirdTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual("2", numTabAfterRemovingThirdTab)
-        app.collectionViews["Top Tabs View"].children(matching: .cell).element(boundBy: 1).buttons["Remove page — Homepage"].tap()
+        app.collectionViews["Top Tabs View"]
+            .children(matching: .cell)
+            .element(boundBy: 1)
+            .buttons["Remove page — Homepage"]
+            .tap()
         waitForTabsButton()
         mozWaitForElementToNotExist(app.buttons["Show Tabs"].staticTexts["2"])
         mozWaitForElementToExist(app.buttons["Show Tabs"].staticTexts["1"])

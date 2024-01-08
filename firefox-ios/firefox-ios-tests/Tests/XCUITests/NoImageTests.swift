@@ -22,7 +22,8 @@ class NoImageTests: BaseTestCase {
         waitUntilPageLoad()
 
         // Select hide images
-        let blockImagesSwitch = app.otherElements.tables.cells.switches[AccessibilityIdentifiers.Settings.BlockImages.title]
+        let blockImagesSwitch = app.otherElements
+            .tables.cells.switches[AccessibilityIdentifiers.Settings.BlockImages.title]
         navigator.goto(SettingsScreen)
         navigator.nowAt(SettingsScreen)
         mozWaitForElementToExist(blockImagesSwitch)

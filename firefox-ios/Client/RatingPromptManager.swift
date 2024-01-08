@@ -8,7 +8,8 @@ import Shared
 import Storage
 import Common
 
-// The `RatingPromptManager` handles app store review requests and the internal logic of when they can be presented to a user.
+/// The `RatingPromptManager` handles app store review requests and the internal logic of when
+/// they can be presented to a user.
 final class RatingPromptManager {
     private let profile: Profile
     private let daysOfUseCounter: CumulativeDaysOfUseCounter
@@ -52,7 +53,8 @@ final class RatingPromptManager {
     }
 
     /// Update rating prompt data. Bookmarks and pinned sites data is loaded asynchronously.
-    /// - Parameter dataLoadingCompletion: Complete when the loading of data from the profile is done - Used in unit tests
+    /// - Parameter dataLoadingCompletion: Complete when the loading of data from the profile is done
+    ///                                    Used in unit tests
     func updateData(dataLoadingCompletion: (() -> Void)? = nil) {
         daysOfUseCounter.updateCounter()
 
@@ -66,7 +68,9 @@ final class RatingPromptManager {
     /// Go to the App Store review page of this application
     /// - Parameter urlOpener: Opens the App Store url
     static func goToAppStoreReview(with urlOpener: URLOpenerProtocol = UIApplication.shared) {
-        guard let url = URL(string: "https://itunes.apple.com/app/id\(AppInfo.appStoreId)?action=write-review") else { return }
+        guard let url = URL(
+            string: "https://itunes.apple.com/app/id\(AppInfo.appStoreId)?action=write-review"
+        ) else { return }
         urlOpener.open(url)
     }
 
@@ -78,12 +82,25 @@ final class RatingPromptManager {
     }
 
     private var lastRequestDate: Date? {
-        get { return UserDefaults.standard.object(forKey: UserDefaultsKey.keyRatingPromptLastRequestDate.rawValue) as? Date }
-        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.keyRatingPromptLastRequestDate.rawValue) }
+        get {
+            return UserDefaults.standard.object(
+                forKey: UserDefaultsKey.keyRatingPromptLastRequestDate.rawValue
+            ) as? Date
+        }
+        set {
+            UserDefaults.standard.set(
+                newValue,
+                forKey: UserDefaultsKey.keyRatingPromptLastRequestDate.rawValue
+            )
+        }
     }
 
     private var requestCount: Int {
-        get { UserDefaults.standard.object(forKey: UserDefaultsKey.keyRatingPromptRequestCount.rawValue) as? Int ?? 0 }
+        get {
+            UserDefaults.standard.object(
+                forKey: UserDefaultsKey.keyRatingPromptRequestCount.rawValue
+            ) as? Int ?? 0
+        }
         set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.keyRatingPromptRequestCount.rawValue) }
     }
 
@@ -112,7 +129,9 @@ final class RatingPromptManager {
 
         // One of the following
         let isBrowserDefault = RatingPromptManager.isBrowserDefault
-        let hasTPStrict = profile.prefs.stringForKey(ContentBlockingConfig.Prefs.StrengthKey).flatMap({ BlockingStrength(rawValue: $0) }) == .strict
+        let hasTPStrict = profile.prefs.stringForKey(
+            ContentBlockingConfig.Prefs.StrengthKey
+        ).flatMap({ BlockingStrength(rawValue: $0) }) == .strict
         guard isBrowserDefault
                 || hasMinimumMobileBookmarksCount
                 || hasTPStrict
@@ -143,7 +162,10 @@ final class RatingPromptManager {
 
     private func updateBookmarksCount(group: DispatchGroupInterface) {
         group.enter()
-        profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false).uponQueue(.main) { [weak self] result in
+        profile.places.getBookmarksTree(
+            rootGUID: BookmarkRoots.MobileFolderGUID,
+            recursive: false
+        ).uponQueue(.main) { [weak self] result in
             guard let strongSelf = self,
                   let mobileFolder = result.successValue as? BookmarkFolderData,
                   let children = mobileFolder.children

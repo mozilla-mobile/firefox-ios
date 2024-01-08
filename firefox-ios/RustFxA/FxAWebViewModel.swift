@@ -49,7 +49,11 @@ class FxAWebViewModel: FeatureFlaggable {
             return
         }
 
-        let userScript = WKUserScript(source: source, injectionTime: .atDocumentStart, forMainFrameOnly: true)
+        let userScript = WKUserScript(
+            source: source,
+            injectionTime: .atDocumentStart,
+            forMainFrameOnly: true
+        )
         controller.addUserScript(userScript)
     }
 
@@ -58,7 +62,8 @@ class FxAWebViewModel: FeatureFlaggable {
      - parameter pageType: Specify login flow or settings page if already logged in.
      - parameter profile: a Profile.
      - parameter deepLinkParams: url parameters that originate from a deep link
-     - parameter shouldAskForNotificationPermission: indicator if notification permissions should be requested from the user upon login.
+     - parameter shouldAskForNotificationPermission: indicator if notification permissions should
+                                                     be requested from the user upon login.
      */
     required init(pageType: FxAPageType,
                   profile: Profile,
@@ -96,7 +101,10 @@ class FxAWebViewModel: FeatureFlaggable {
                         }
                     }
                 case let .qrCode(url):
-                    accountManager.beginPairingAuthentication(pairingUrl: url, entrypoint: "pairing_\(entrypoint)") { [weak self] result in
+                    accountManager.beginPairingAuthentication(
+                        pairingUrl: url,
+                        entrypoint: "pairing_\(entrypoint)"
+                    ) { [weak self] result in
                         guard let self = self else { return }
 
                         if case .success(let url) = result {
@@ -179,7 +187,12 @@ extension FxAWebViewModel {
             case .profileChanged:
                 profile.rustFxA.accountManager?.refreshProfile(ignoreCache: true)
                 // dismiss keyboard after changing profile in order to see notification view
-                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                UIApplication.shared.sendAction(
+                    #selector(UIResponder.resignFirstResponder),
+                    to: nil,
+                    from: nil,
+                    for: nil
+                )
             }
         }
     }
@@ -254,10 +267,14 @@ extension FxAWebViewModel {
         profile.rustFxA.accountManager?.finishAuthentication(authData: auth) { _ in
             self.profile.syncManager.onAddedAccount()
 
-            // only ask for notification permission if it's not onboarding related (e.g. settings) or if the onboarding flow is missing the notifications card
+            // only ask for notification permission if it's not onboarding related (e.g. settings)
+            // or if the onboarding flow is missing the notifications card
             guard self.shouldAskForNotificationPermission else { return }
 
-            MZKeychainWrapper.sharedClientAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
+            MZKeychainWrapper.sharedClientAppContainerKeychain.removeObject(
+                forKey: KeychainKey.apnsToken,
+                withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock
+            )
             NotificationManager().requestAuthorization { granted, error in
                 guard error == nil else { return }
                 if granted {
@@ -292,7 +309,9 @@ extension FxAWebViewModel {
         let redirectUrl = RustFirefoxAccounts.redirectURL
         if let navigationURL = navigationURL {
             let expectedRedirectURL = URL(string: redirectUrl, invalidCharacters: false)!
-            if navigationURL.scheme == expectedRedirectURL.scheme && navigationURL.host == expectedRedirectURL.host && navigationURL.path == expectedRedirectURL.path {
+            if navigationURL.scheme == expectedRedirectURL.scheme
+                && navigationURL.host == expectedRedirectURL.host
+                && navigationURL.path == expectedRedirectURL.path {
                 return .cancel
             }
         }

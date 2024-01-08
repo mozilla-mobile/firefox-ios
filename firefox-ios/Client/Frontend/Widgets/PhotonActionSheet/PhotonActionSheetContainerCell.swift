@@ -62,7 +62,9 @@ class PhotonActionSheetContainerCell: UITableViewCell, ReusableCell, ThemeApplic
             let childView = PhotonActionSheetView()
             childView.configure(with: item, theme: theme)
             childView.addVerticalBorder(ifShouldBeShown: !containerStackView.arrangedSubviews.isEmpty)
-            let widthConstraint = childView.widthAnchor.constraint(lessThanOrEqualToConstant: contentView.bounds.size.width / CGFloat(actions.items.count))
+            let widthConstraint = childView.widthAnchor.constraint(
+                lessThanOrEqualToConstant: contentView.bounds.size.width / CGFloat(actions.items.count)
+            )
             widthConstraint.priority = UILayoutPriority(999)
             widthConstraint.isActive = true
             childView.delegate = self

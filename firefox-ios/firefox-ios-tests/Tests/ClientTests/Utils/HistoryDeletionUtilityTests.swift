@@ -347,7 +347,9 @@ private extension HistoryDeletionUtilityTests {
         let deletionUtility = HistoryDeletionUtility(with: profile)
         trackForMemoryLeaks(deletionUtility)
         deletionUtility.deleteHistoryMetadataOlderThan(dateOption)
-        let emptyResultsRead = profile.places.getHistoryMetadataSince(since: deletionUtility.deletionReferenceValue(for: dateOption)).value
+        let emptyResultsRead = profile.places.getHistoryMetadataSince(
+            since: deletionUtility.deletionReferenceValue(for: dateOption)
+        ).value
         XCTAssertTrue(emptyResultsRead.isSuccess)
         XCTAssertNotNil(emptyResultsRead.successValue)
         XCTAssertEqual(emptyResultsRead.successValue!.count, 0)
@@ -358,11 +360,27 @@ private extension HistoryDeletionUtilityTests {
         file: StaticString = #filePath,
         line: UInt = #line
     ) {
-        XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: 0).value.isSuccess, file: file, line: line)
-        XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: INT64_MAX).value.isSuccess, file: file, line: line)
-        XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: -1).value.isSuccess, file: file, line: line)
+        XCTAssertTrue(
+            profile.places.deleteHistoryMetadataOlderThan(olderThan: 0).value.isSuccess,
+            file: file,
+            line: line
+        )
+        XCTAssertTrue(
+            profile.places.deleteHistoryMetadataOlderThan(olderThan: INT64_MAX).value.isSuccess,
+            file: file,
+            line: line
+        )
+        XCTAssertTrue(
+            profile.places.deleteHistoryMetadataOlderThan(olderThan: -1).value.isSuccess,
+            file: file,
+            line: line
+        )
 
-        XCTAssertTrue(profile.places.deleteVisitsBetween(Date(timeIntervalSince1970: 0)).value.isSuccess, file: file, line: line)
+        XCTAssertTrue(
+            profile.places.deleteVisitsBetween(Date(timeIntervalSince1970: 0)).value.isSuccess,
+            file: file,
+            line: line
+        )
     }
 
     // `shouldSkipMetadata` is a  parameter to deal with the case where AS doesn't allow
@@ -394,10 +412,20 @@ private extension HistoryDeletionUtilityTests {
         file: StaticString = #filePath,
         line: UInt = #line
     ) {
-        let emptyHistory = profile.places.getSitesWithBound(limit: 100, offset: 0, excludedTypes: VisitTransitionSet(0)).value
+        let emptyHistory = profile.places.getSitesWithBound(
+            limit: 100,
+            offset: 0,
+            excludedTypes: VisitTransitionSet(0)
+        ).value
         XCTAssertTrue(emptyHistory.isSuccess, file: file, line: line)
         XCTAssertNotNil(emptyHistory.successValue, file: file, line: line)
-        XCTAssertEqual(emptyHistory.successValue!.count, 0, "History", file: file, line: line)
+        XCTAssertEqual(
+            emptyHistory.successValue!.count,
+            0,
+            "History",
+            file: file,
+            line: line
+        )
     }
 
     func assertDBStateFor(
@@ -429,10 +457,25 @@ private extension HistoryDeletionUtilityTests {
                 return
             }
 
-            XCTAssertEqual(metadataURL, "https://www.\(site.domain).com/\(site.path)", file: file, line: line)
+            XCTAssertEqual(
+                metadataURL,
+                "https://www.\(site.domain).com/\(site.path)",
+                file: file,
+                line: line
+            )
             XCTAssertEqual(metadataTitle, "\(site.domain) test", file: file, line: line)
-            XCTAssertEqual(metadataItems.successValue![index].documentType, DocumentType.regular, file: file, line: line)
-            XCTAssertEqual(metadataItems.successValue![index].totalViewTime, 1, file: file, line: line)
+            XCTAssertEqual(
+                metadataItems.successValue![index].documentType,
+                DocumentType.regular,
+                file: file,
+                line: line
+            )
+            XCTAssertEqual(
+                metadataItems.successValue![index].totalViewTime,
+                1,
+                file: file,
+                line: line
+            )
         }
     }
 
@@ -442,7 +485,11 @@ private extension HistoryDeletionUtilityTests {
         file: StaticString = #filePath,
         line: UInt = #line
     ) {
-        let historyItems = profile.places.getSitesWithBound(limit: 100, offset: 0, excludedTypes: VisitTransitionSet(0)).value
+        let historyItems = profile.places.getSitesWithBound(
+            limit: 100,
+            offset: 0,
+            excludedTypes: VisitTransitionSet(0)
+        ).value
         XCTAssertTrue(historyItems.isSuccess, file: file, line: line)
         XCTAssertNotNil(historyItems.successValue, file: file, line: line)
         XCTAssertEqual(historyItems.successValue!.count, sites.count, file: file, line: line)

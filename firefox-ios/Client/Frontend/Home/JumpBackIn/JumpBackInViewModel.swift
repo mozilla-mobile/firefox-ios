@@ -438,7 +438,10 @@ extension JumpBackInViewModel: HomepageSectionHandler {
                 site = Site(url: item.url?.absoluteString ?? "", title: item.title ?? "")
             }
         } else if hasSyncedTab {
-            site = Site(url: mostRecentSyncedTab?.tab.URL.absoluteString ?? "", title: mostRecentSyncedTab?.tab.title ?? "")
+            site = Site(
+                url: mostRecentSyncedTab?.tab.URL.absoluteString ?? "",
+                title: mostRecentSyncedTab?.tab.title ?? ""
+            )
         }
 
         let sourceView = collectionView.cellForItem(at: indexPath)
