@@ -11,6 +11,7 @@ class ThirdPartySearchTest: BaseTestCase {
         app.buttons["Done"].tap()
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2443998
     func testCustomSearchEngines() {
         addCustomSearchEngine()
 
@@ -34,6 +35,7 @@ class ThirdPartySearchTest: BaseTestCase {
         XCTAssert(url.hasPrefix("https://developer.mozilla.org/en-US"), "The URL should indicate that the search was performed on MDN and not the default")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2444328
     func testCustomSearchEngineAsDefault() {
         addCustomSearchEngine()
 
@@ -58,6 +60,7 @@ class ThirdPartySearchTest: BaseTestCase {
         XCTAssert(url.hasPrefix("https://developer.mozilla.org/en-US/search"), "The URL should indicate that the search was performed on MDN and not the default")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306941
     func testCustomSearchEngineDeletion() {
         addCustomSearchEngine()
         mozWaitForElementToExist(app.navigationBars["Search"].buttons["Settings"], timeout: 3)
@@ -109,6 +112,7 @@ class ThirdPartySearchTest: BaseTestCase {
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2444333
     func testCustomEngineFromIncorrectTemplate() {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
@@ -133,6 +137,7 @@ class ThirdPartySearchTest: BaseTestCase {
         app.navigationBars["Add Search Engine"].buttons["Save"].tap()
 
         mozWaitForElementToExist(app.alerts.element(boundBy: 0))
-        XCTAssert(app.alerts.element(boundBy: 0).label == "Failed")
+        XCTAssertTrue(app.alerts.staticTexts["Failed"].exists, "Alert title is missing or is incorrect")
+        XCTAssertTrue(app.alerts.staticTexts["Please fill all fields correctly."].exists, "Alert message is missing or is incorrect")
     }
 }
