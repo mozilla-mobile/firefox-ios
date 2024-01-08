@@ -7,16 +7,14 @@ import ComponentLibrary
 import UIKit
 import Shared
 import Redux
-import SwiftUI
 
-class FakespotViewController:
-    UIViewController,
-    Themeable,
-    Notifiable,
-    UIAdaptivePresentationControllerDelegate,
-    UISheetPresentationControllerDelegate,
-    UIScrollViewDelegate,
-    StoreSubscriber {
+class FakespotViewController: UIViewController,
+                              Themeable,
+                              Notifiable,
+                              UIAdaptivePresentationControllerDelegate,
+                              UISheetPresentationControllerDelegate,
+                              UIScrollViewDelegate,
+                              StoreSubscriber {
     typealias SubscriberStateType = BrowserViewControllerState
 
     private struct UX {
@@ -45,7 +43,7 @@ class FakespotViewController:
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
-    @ObservedObject private var viewModel: FakespotViewModel
+    private var viewModel: FakespotViewModel
 
     private var adView: FakespotAdView?
 
@@ -504,10 +502,7 @@ class FakespotViewController:
 
             case .analysisInProgress:
                 let view: FakespotMessageCardView = .build()
-                view.configure(
-                    viewModel.analysisProgressViewModel,
-                    fakespotViewModel: viewModel
-                )
+                view.configure(viewModel.analysisProgressViewModel)
                 return view
 
             case .reportProductInStock:

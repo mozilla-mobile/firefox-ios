@@ -7,7 +7,7 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-struct FakespotMessageCardViewModel {
+class FakespotMessageCardViewModel: ObservableObject {
     enum CardType: String, CaseIterable, Identifiable {
         case confirmation
         case warning
@@ -87,6 +87,37 @@ struct FakespotMessageCardViewModel {
     var a11yDescriptionIdentifier: String?
     var a11yPrimaryActionIdentifier: String?
     var a11yLinkActionIdentifier: String?
+
+    @Published var analysisProgress: Double = 0
+    var analysisProgressChanged: ((Double) -> Void)?
+
+    init(
+        type: CardType,
+        title: String,
+        description: String? = nil,
+        linkText: String? = nil,
+        primaryActionText: String? = nil,
+        linkAction: (() -> Void)? = nil,
+        primaryAction: (() -> Void)? = nil,
+        a11yCardIdentifier: String,
+        a11yTitleIdentifier: String,
+        a11yDescriptionIdentifier: String? = nil,
+        a11yPrimaryActionIdentifier: String? = nil,
+        a11yLinkActionIdentifier: String? = nil
+    ) {
+        self.type = type
+        self.title = title
+        self.description = description
+        self.linkText = linkText
+        self.primaryActionText = primaryActionText
+        self.linkAction = linkAction
+        self.primaryAction = primaryAction
+        self.a11yCardIdentifier = a11yCardIdentifier
+        self.a11yTitleIdentifier = a11yTitleIdentifier
+        self.a11yDescriptionIdentifier = a11yDescriptionIdentifier
+        self.a11yPrimaryActionIdentifier = a11yPrimaryActionIdentifier
+        self.a11yLinkActionIdentifier = a11yLinkActionIdentifier
+    }
 }
 
 final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
@@ -196,32 +227,28 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(
-        _ viewModel: FakespotMessageCardViewModel,
-        fakespotViewModel: FakespotViewModel? = nil
-    ) {
+    func configure(_ viewModel: FakespotMessageCardViewModel) {
         self.viewModel = viewModel
         self.type = viewModel.type
 
+        titleLabel.text = viewModel.title
         titleLabel.accessibilityIdentifier = viewModel.a11yTitleIdentifier
 
         let accessoryView: UIView
         switch viewModel.type.accessoryType {
         case .image(name: let name):
-            titleLabel.text = viewModel.title
             let imageView: UIImageView = .build { imageView in
                 imageView.contentMode = .scaleAspectFit
                 imageView.image = UIImage(named: name)
             }
             accessoryView = imageView
         case .progress:
-            guard fakespotViewModel != nil else { return }
             titleLabel.font = DefaultDynamicFontHelper.preferredFont(
                 withTextStyle: .subheadline,
                 size: UX.progressViewFontSize
             )
 
-            fakespotViewModel?.analysisProgressChanged = { [weak self] progress in
+            viewModel.analysisProgressChanged = { [weak self] progress in
                 let progressLevel = NumberFormatter.localizedString(
                     from: NSNumber(value: progress / 100.0),
                     number: .percent
@@ -229,7 +256,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
                 self?.titleLabel.text = String(format: viewModel.title, progressLevel)
             }
 
-            let swiftUICircularProgressView = CircularProgressView(viewModel: fakespotViewModel!)
+            let swiftUICircularProgressView = CircularProgressView(viewModel: viewModel)
             let circularProgressView = UIHostingController(rootView: swiftUICircularProgressView).view!
             circularProgressView.translatesAutoresizingMaskIntoConstraints = false
             circularProgressView.backgroundColor = .clear

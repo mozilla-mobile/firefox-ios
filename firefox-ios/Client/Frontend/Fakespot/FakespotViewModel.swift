@@ -7,7 +7,7 @@ import Common
 import Shared
 import SwiftUI
 
-class FakespotViewModel: ObservableObject {
+class FakespotViewModel {
     enum ViewState {
         case loading
         case onboarding
@@ -167,9 +167,6 @@ class FakespotViewModel: ObservableObject {
             onStateChange?()
         }
     }
-
-    @Published var analysisProgress: Double = 0
-    var analysisProgressChanged: ((Double) -> Void)?
 
     let shoppingProduct: ShoppingProduct
     var onStateChange: (() -> Void)?
@@ -472,8 +469,8 @@ class FakespotViewModel: ObservableObject {
                         }
 
                         await MainActor.run {
-                            self.analysisProgress = result.progress
-                            self.analysisProgressChanged?(self.analysisProgress)
+                            self.analysisProgressViewModel.analysisProgress = result.progress
+                            self.analysisProgressViewModel.analysisProgressChanged?(self.analysisProgressViewModel.analysisProgress)
                         }
 
                         continuation.yield(result.status)

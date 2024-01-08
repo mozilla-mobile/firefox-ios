@@ -7,7 +7,7 @@ import Common
 
 struct CircularProgressView: View, ThemeApplicable {
     @Environment(\.themeType) var themeVal
-    @ObservedObject var viewModel: FakespotViewModel
+    @ObservedObject var viewModel: FakespotMessageCardViewModel
     @State private var backgroundColor: Color = .gray
     @State private var foregroundColor: Color = .blue
 
