@@ -1218,9 +1218,19 @@ workflows:
     steps:
     - cache-pull@2.1:
         is_always_run: true
+    - script@1.1:
+        is_always_run: true
+        title: test script to get env var
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -ex
+            echo $BITRISE_PROJECT_PATH
+            env-man add --key BITRISE_PERFORMANCE_PATH --value "firefox-ios/Clients.xcodeproj"
+            echo "updated BITRISE_PERFORMANCE_PATH: *** ${BITRISE_PERFORMANCE_PATH} ***"
     - xcode-test@4.5:
         inputs:
-        - project_path: firefox-ios/Client.xcodeproj
+        - project_path: $BITRISE_PERFORMANCE_PATH
         - scheme: Fennec
         - destination: platform=iOS Simulator,name=iPhone 15,OS=17.2
         - test_plan: PerformanceTestPlan   
