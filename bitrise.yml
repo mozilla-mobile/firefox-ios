@@ -1235,7 +1235,7 @@ workflows:
             # debug log
             set -x
             # get dependency
-            cd ./firefox-ios/test-fixtures && git clone https://github.com/isabelrios/xcresult_extract.git
+            cd ./test-fixtures && git clone https://github.com/isabelrios/xcresult_extract.git
             
             echo $BITRISE_XCRESULT_PATH
             ls
