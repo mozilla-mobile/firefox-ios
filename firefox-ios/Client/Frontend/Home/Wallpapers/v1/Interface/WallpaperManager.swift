@@ -81,8 +81,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
 
     /// Determines whether the wallpaper settings can be shown
     var canSettingsBeShown: Bool {
-        guard hasEnoughThumbnailsToShow
-        else { return false }
+        guard hasEnoughThumbnailsToShow else { return false }
 
         return true
     }
