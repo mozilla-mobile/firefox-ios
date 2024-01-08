@@ -19,6 +19,7 @@ stages:
 workflows:
   configure_build_fennec:
     before_run:
+    - 0_detect_standalone_build
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
@@ -154,6 +155,7 @@ workflows:
         machine_type_id: g2-m1.8core
   build_and_test_1_SmokeTest2:
     before_run:
+    - 0_detect_standalone_build
     - 1_git_clone_and_post_clone
     - Decision_to_run_UI_Tests
     steps:
@@ -196,6 +198,7 @@ workflows:
         machine_type_id: g2-m1.8core
   build_and_test_2_SmokeTest:
     before_run:
+    - 0_detect_standalone_build
     - 1_git_clone_and_post_clone
     - Decision_to_run_UI_Tests
     steps:
@@ -241,6 +244,7 @@ workflows:
         machine_type_id: g2-m1.8core
   build_and_test_3_SmokeTest3:
     before_run:
+    - 0_detect_standalone_build
     - 1_git_clone_and_post_clone
     - Decision_to_run_UI_Tests
     steps:
@@ -286,6 +290,7 @@ workflows:
         machine_type_id: g2-m1.8core
   build_and_test_4_SmokeTest4:
     before_run:
+    - 0_detect_standalone_build
     - 1_git_clone_and_post_clone
     - Decision_to_run_UI_Tests
     steps:
@@ -354,6 +359,38 @@ workflows:
             App|${BITRISE_APP_URL}
             #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
             Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
+  0_detect_standalone_build:
+    steps:
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+
+            # ANSI color codes
+            RED='\033[31;1m'
+            CYAN='\033[36;1m'
+            GREEN='\033[32;1m'
+            NC='\033[0m'        # No Color (resets color to default)
+
+            # Check if $BITRISEIO_PIPELINE_ID is unset or empty
+            # If so, this is a standalone build and we need to fail it
+            if [ -z "$BITRISEIO_PIPELINE_ID" ]; then
+                printf "\n${RED}Error: BITRISEIO_PIPELINE_ID is not set.${NC}\n\
+                This means you have triggered a build stage or workflow individually, instead of the entire pipeline.\n\n\
+                The current build workflow is: ${RED}$BITRISE_TRIGGERED_WORKFLOW_TITLE${NC}, but needs to be run in ${RED}pipeline_multiple_shards${NC}.\n\n\
+                To trigger a pipeline rebuild in its entirety, please do the following:\n\n\
+                    ${CYAN}1. Select your last failed build for 'pipeline_multiple_shards'.\n\
+                    ${CYAN}2. Click the 'Rebuild' button dropdown icon located in the top right of the page.\n\
+                    ${CYAN}3. From the dropdown menu, select 'Rebuild entire Pipeline'.\n\
+                    ${CYAN}4. If no dropdown menu is present, you are looking at a standalone build\n\
+                       ${CYAN}and need to select the initial Github pipeline triggered by the PR.${NC}\n\n\
+                If you are still having issues, please contact ${GREEN}#mobile-testeng${NC} on Slack.\n"
+                exit 1  # Exit with a failure status
+            else
+                echo "BITRISEIO_PIPELINE_ID is set to $BITRISEIO_PIPELINE_ID"
+            fi
+        title: Detect standalone build
   1_git_clone_and_post_clone:
     steps:
     - activate-ssh-key@4:
@@ -1534,6 +1571,7 @@ workflows:
             sed 's/.*=//;s/'\''/"/g' data.txt > test.json
             cat test.json
             python3 perfTestTransform.py
+
 app:
   envs:
   - opts:
