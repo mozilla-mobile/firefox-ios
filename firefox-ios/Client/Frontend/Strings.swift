@@ -5938,6 +5938,15 @@ extension String {
                 comment: "Label text that gets presented as a confirmation at the bottom of screen when credit card information gets updated successfully",
                 lastUsedInVersion: 121)
         }
+
+        struct v123 {
+            public static let InfoCardProgressAnalysisTitle = MZLocalizedString(
+                key: "Shopping.InfoCard.ProgressAnalysis.Title.v120",
+                tableName: "Shopping",
+                value: "Checking review quality",
+                comment: "Title for info card when the product is in analysis mode",
+                lastUsedInVersion: 123)
+        }
     }
 }
 

@@ -118,13 +118,20 @@ class FakespotMessageCardViewModel: ObservableObject {
         self.a11yPrimaryActionIdentifier = a11yPrimaryActionIdentifier
         self.a11yLinkActionIdentifier = a11yLinkActionIdentifier
     }
+
+    func formatProgress(_ progress: Double = 0) -> String {
+        NumberFormatter.localizedString(
+            from: NSNumber(value: progress),
+            number: .percent
+        )
+    }
 }
 
 final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
     private enum UX {
         static let linkFontSize: CGFloat = 12
         static let buttonFontSize: CGFloat = 16
-        static let progressViewFontSize: CGFloat = 20
+        static let progressViewFontSize: CGFloat = 15
         static let buttonVerticalInset: CGFloat = 12
         static let buttonHorizontalInset: CGFloat = 16
         static let buttonCornerRadius: CGFloat = 13
@@ -231,28 +238,26 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         self.viewModel = viewModel
         self.type = viewModel.type
 
-        titleLabel.text = viewModel.title
         titleLabel.accessibilityIdentifier = viewModel.a11yTitleIdentifier
 
         let accessoryView: UIView
         switch viewModel.type.accessoryType {
         case .image(name: let name):
+            titleLabel.text = viewModel.title
             let imageView: UIImageView = .build { imageView in
                 imageView.contentMode = .scaleAspectFit
                 imageView.image = UIImage(named: name)
             }
             accessoryView = imageView
         case .progress:
+            titleLabel.text = String(format: viewModel.title, viewModel.formatProgress())
             titleLabel.font = DefaultDynamicFontHelper.preferredFont(
                 withTextStyle: .subheadline,
                 size: UX.progressViewFontSize
             )
 
             viewModel.analysisProgressChanged = { [weak self] progress in
-                let progressLevel = NumberFormatter.localizedString(
-                    from: NSNumber(value: progress / 100.0),
-                    number: .percent
-                )
+                let progressLevel = viewModel.formatProgress(progress / 100.0)
                 self?.titleLabel.text = String(format: viewModel.title, progressLevel)
             }
 
