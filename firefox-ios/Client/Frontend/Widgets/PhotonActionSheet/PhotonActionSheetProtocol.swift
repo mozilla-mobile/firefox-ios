@@ -70,7 +70,7 @@ extension PhotonActionSheetProtocol {
             }
         }
 
-        if UIPasteboard.general.string != nil {
+        if UIPasteboard.general.hasStrings {
             return [pasteGoAction.items, pasteAction.items, copyAddressAction.items]
         } else {
             return [copyAddressAction.items]
