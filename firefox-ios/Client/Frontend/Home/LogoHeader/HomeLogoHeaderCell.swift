@@ -63,12 +63,11 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
         containerView.addSubview(logoTextImage)
         contentView.addSubview(containerView)
 
-        // TODO: Felt Privacy - Private mode in Redux to follow
-        let isiPadAndPrivate = UIDevice.current.userInterfaceIdiom == .pad && false
-        let logoSizeConstant = isiPadAndPrivate ? UX.Logo.iPadImageSize : UX.Logo.iPhoneImageSize
-        let topAnchorConstant = isiPadAndPrivate ? UX.Logo.iPadTopConstant : UX.Logo.iPhoneTopConstant
-        let textImageWidthConstant = isiPadAndPrivate ? UX.TextImage.iPadWidth : UX.TextImage.iPhoneWidth
-        let textImageLeadingAnchorConstant = isiPadAndPrivate ? UX.TextImage.iPadLeadingConstant : UX.TextImage.iPhoneLeadingConstant
+        let isiPad = UIDevice.current.userInterfaceIdiom == .pad
+        let logoSizeConstant = isiPad ? UX.Logo.iPadImageSize : UX.Logo.iPhoneImageSize
+        let topAnchorConstant = isiPad ? UX.Logo.iPadTopConstant : UX.Logo.iPhoneTopConstant
+        let textImageWidthConstant = isiPad ? UX.TextImage.iPadWidth : UX.TextImage.iPhoneWidth
+        let textImageLeadingAnchorConstant = isiPad ? UX.TextImage.iPadLeadingConstant : UX.TextImage.iPhoneLeadingConstant
 
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor,
@@ -91,7 +90,7 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
             logoTextImage.centerYAnchor.constraint(equalTo: logoImage.centerYAnchor)
         ])
 
-        if isiPadAndPrivate {
+        if isiPad {
             NSLayoutConstraint.activate([
                 containerView.centerXAnchor.constraint(
                     equalTo: contentView.centerXAnchor

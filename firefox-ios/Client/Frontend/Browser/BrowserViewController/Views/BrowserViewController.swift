@@ -677,21 +677,6 @@ class BrowserViewController: UIViewController,
         view.addSubview(bottomContainer)
     }
 
-    // Configure dimming view to show for private mode
-    func configureDimmingView() {
-        if let selectedTab = tabManager.selectedTab, selectedTab.isPrivate {
-            view.addSubview(privateModeDimmingView)
-            view.bringSubviewToFront(privateModeDimmingView)
-
-            NSLayoutConstraint.activate([
-                privateModeDimmingView.topAnchor.constraint(equalTo: contentStackView.topAnchor),
-                privateModeDimmingView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
-                privateModeDimmingView.bottomAnchor.constraint(equalTo: contentStackView.bottomAnchor),
-                privateModeDimmingView.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor)
-            ])
-        }
-    }
-
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
@@ -1905,6 +1890,41 @@ class BrowserViewController: UIViewController,
                                                                    alertContainer: self.contentContainer)
                 }
             }
+        }
+    }
+
+    // MARK: Overlay View
+    // Disable search suggests view only if user is in private mode and setting is enabled
+    private var shouldDisableSearchSuggestsForPrivateMode: Bool {
+        let featureFlagEnabled = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
+        let alwaysShowSearchSuggestionsView = browserViewControllerState?.searchScreenState.showSearchSugestionsView ?? false
+        let isSettingEnabled = profile.prefs.boolForKey(PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions) ?? false
+        return featureFlagEnabled && !alwaysShowSearchSuggestionsView && !isSettingEnabled
+    }
+
+    // Configure dimming view to show for private mode
+    private func configureDimmingView() {
+        if let selectedTab = tabManager.selectedTab, selectedTab.isPrivate {
+            view.addSubview(privateModeDimmingView)
+            view.bringSubviewToFront(privateModeDimmingView)
+
+            NSLayoutConstraint.activate([
+                privateModeDimmingView.topAnchor.constraint(equalTo: contentStackView.topAnchor),
+                privateModeDimmingView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
+                privateModeDimmingView.bottomAnchor.constraint(equalTo: contentStackView.bottomAnchor),
+                privateModeDimmingView.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor)
+            ])
+        }
+    }
+
+    // Determines the view user should see when editing the url bar
+    // Dimming view appears if private mode search suggest is disabled
+    // Otherwise shows search suggests screen
+    func configureOverlayView() {
+        if shouldDisableSearchSuggestsForPrivateMode {
+            configureDimmingView()
+        } else {
+            showSearchController()
         }
     }
 

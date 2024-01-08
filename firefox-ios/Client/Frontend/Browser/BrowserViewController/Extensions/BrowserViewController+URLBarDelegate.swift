@@ -431,22 +431,4 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView) {
         dismissVisibleMenus()
     }
-
-    private var shouldDisableSearchSuggestsForPrivateMode: Bool {
-        let featureFlagEnabled = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
-        let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
-        let isSettingEnabled = profile.prefs.boolForKey(PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions) ?? false
-        return featureFlagEnabled && isPrivateTab && !isSettingEnabled
-    }
-
-    // Determines the view user should see when editing the url bar
-    // Dimming view appears if private mode search suggest is disabled
-    // Otherwise shows search suggests screen
-    private func configureOverlayView() {
-        if shouldDisableSearchSuggestsForPrivateMode {
-            configureDimmingView()
-        } else {
-            showSearchController()
-        }
-    }
 }
