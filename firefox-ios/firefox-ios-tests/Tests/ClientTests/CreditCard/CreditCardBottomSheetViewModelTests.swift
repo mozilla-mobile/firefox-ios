@@ -189,7 +189,10 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
                                                      ccExpYear: 2023,
                                                      ccType: "MasterCard")
         viewModel.decryptedCreditCard = masterCard
-        let value = viewModel.getConvertedCreditCardValues(bottomSheetState: .save, ccNumberDecrypted: masterCard.ccNumber)
+        let value = viewModel.getConvertedCreditCardValues(
+            bottomSheetState: .save,
+            ccNumberDecrypted: masterCard.ccNumber
+        )
         XCTAssertNotNil(value)
         XCTAssertEqual(value!.ccType, "MasterCard")
     }
@@ -220,7 +223,10 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
                                                              ccExpYear: Int64(upcomingYear),
                                                              ccType: "VISA")
         viewModel.decryptedCreditCard = upcomingExpiryCard
-        let value = viewModel.getConvertedCreditCardValues(bottomSheetState: .save, ccNumberDecrypted: upcomingExpiryCard.ccNumber)
+        let value = viewModel.getConvertedCreditCardValues(
+            bottomSheetState: .save,
+            ccNumberDecrypted: upcomingExpiryCard.ccNumber
+        )
         XCTAssertNotNil(value)
         XCTAssertEqual(value!.ccExpMonth, Int64(upcomingMonth))
         XCTAssertEqual(value!.ccExpYear, Int64(upcomingYear))

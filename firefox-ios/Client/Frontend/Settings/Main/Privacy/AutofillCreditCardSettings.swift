@@ -26,7 +26,9 @@ class AutofillCreditCardSettings: Setting, FeatureFlaggable {
         super.init(
             title: NSAttributedString(
                 string: .SettingsAutofillCreditCard,
-                attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]
+                attributes: [
+                    NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary
+                ]
             )
         )
     }

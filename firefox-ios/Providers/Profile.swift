@@ -56,7 +56,9 @@ class ProfileFileAccessor: FileAccessor {
         // Bug 1147262: First option is for device, second is for simulator.
         var rootPath: String
         let sharedContainerIdentifier = AppInfo.sharedContainerIdentifier
-        if let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: sharedContainerIdentifier) {
+        if let url = FileManager.default.containerURL(
+            forSecurityApplicationGroupIdentifier: sharedContainerIdentifier
+        ) {
             rootPath = url.path
         } else {
             logger.log("Unable to find the shared container. Defaulting profile location to ~/Documents instead.",
@@ -101,8 +103,8 @@ protocol Profile: AnyObject {
     /// or from App Extension code.
     func reopen()
 
-    // I got really weird EXC_BAD_ACCESS errors on a non-null reference when I made this a getter.
-    // Similar to <http://stackoverflow.com/questions/26029317/exc-bad-access-when-indirectly-accessing-inherited-member-in-swift>.
+    // I got really weird EXC_BAD_ACCESS errors on a non-null reference when I made this a getter. Similar to
+    // <http://stackoverflow.com/questions/26029317/exc-bad-access-when-indirectly-accessing-inherited-member-in-swift>
     func localName() -> String
 
     // Async call to wait for result
@@ -271,8 +273,16 @@ open class BrowserProfile: Profile {
         let isNewProfile = !files.exists("")
 
         // Set up our database handles.
-        self.database = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
-        self.readingListDB = BrowserDB(filename: "ReadingList.db", schema: ReadingListSchema(), files: files)
+        self.database = BrowserDB(
+            filename: "browser.db",
+            schema: BrowserSchema(),
+            files: files
+        )
+        self.readingListDB = BrowserDB(
+            filename: "ReadingList.db",
+            schema: ReadingListSchema(),
+            files: files
+        )
 
         if isNewProfile {
             logger.log("New profile. Removing old Keychain/Prefs data.",
@@ -292,8 +302,18 @@ open class BrowserProfile: Profile {
 
         let notificationCenter = NotificationCenter.default
 
-        notificationCenter.addObserver(self, selector: #selector(onLocationChange), name: .OnLocationChange, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(onPageMetadataFetched), name: .OnPageMetadataFetched, object: nil)
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(onLocationChange),
+            name: .OnLocationChange,
+            object: nil
+        )
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(onPageMetadataFetched),
+            name: .OnPageMetadataFetched,
+            object: nil
+        )
 
         if AppInfo.isChinaEdition {
             // Set the default homepage.
@@ -315,8 +335,17 @@ open class BrowserProfile: Profile {
         }
 
         // Create the "Downloads" folder in the documents directory.
-        if let downloadsPath = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("Downloads").path {
-            try? FileManager.default.createDirectory(atPath: downloadsPath, withIntermediateDirectories: true, attributes: nil)
+        if let downloadsPath = try? FileManager.default.url(
+            for: .documentDirectory,
+            in: .userDomainMask,
+            appropriateFor: nil,
+            create: false
+        ).appendingPathComponent("Downloads").path {
+            try? FileManager.default.createDirectory(
+                atPath: downloadsPath,
+                withIntermediateDirectories: true,
+                attributes: nil
+            )
         }
         AppEventQueue.signal(event: .profileInitialized)
     }
@@ -369,9 +398,11 @@ open class BrowserProfile: Profile {
                 )
                 result.upon { result in
                     guard result.isSuccess else {
-                        self.logger.log(result.failureValue?.localizedDescription ?? "Unknown error adding history visit",
-                                        level: .warning,
-                                        category: .sync)
+                        self.logger.log(
+                            result.failureValue?.localizedDescription ?? "Unknown error adding history visit",
+                            level: .warning,
+                            category: .sync
+                        )
                         return
                     }
                 }
@@ -400,7 +431,11 @@ open class BrowserProfile: Profile {
             return
         }
         let defaultMetadataTTL: UInt64 = 3 * 24 * 60 * 60 * 1000 // 3 days for the metadata to live
-        self.metadata.storeMetadata(pageMetadata, forPageURL: pageURL, expireAt: defaultMetadataTTL + Date.now())
+        self.metadata.storeMetadata(
+            pageMetadata,
+            forPageURL: pageURL,
+            expireAt: defaultMetadataTTL + Date.now()
+        )
     }
 
     deinit {
@@ -433,11 +468,19 @@ open class BrowserProfile: Profile {
         return SQLiteMetadata(db: self.database)
     }()
 
-    lazy var browserDbPath = URL(fileURLWithPath: directory).appendingPathComponent("browser.db").path
-    lazy var placesDbPath = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("places.db").path
+    lazy var browserDbPath = URL(
+        fileURLWithPath: directory
+    ).appendingPathComponent("browser.db").path
+    lazy var placesDbPath = URL(
+        fileURLWithPath: directory,
+        isDirectory: true
+    ).appendingPathComponent("places.db").path
     lazy var places = RustPlaces(databasePath: self.placesDbPath)
 
-    public func migrateHistoryToPlaces(callback: @escaping (HistoryMigrationResult) -> Void, errCallback: @escaping (Error?) -> Void) {
+    public func migrateHistoryToPlaces(
+        callback: @escaping (HistoryMigrationResult) -> Void,
+        errCallback: @escaping (Error?) -> Void
+    ) {
         guard FileManager.default.fileExists(atPath: browserDbPath) else {
             // This is the user's first run of the app, they don't have a browserDB, so lets report a successful
             // migration with zero visits
@@ -453,11 +496,17 @@ open class BrowserProfile: Profile {
         )
     }
 
-    lazy var tabsDbPath = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("tabs.db").path
+    lazy var tabsDbPath = URL(
+        fileURLWithPath: directory,
+        isDirectory: true
+    ).appendingPathComponent("tabs.db").path
 
     lazy var tabs = RustRemoteTabs(databasePath: tabsDbPath)
 
-    lazy var autofillDbPath = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("autofill.db").path
+    lazy var autofillDbPath = URL(
+        fileURLWithPath: directory,
+        isDirectory: true
+    ).appendingPathComponent("autofill.db").path
 
     lazy var autofill = RustAutofill(databasePath: autofillDbPath)
 
@@ -561,7 +610,10 @@ open class BrowserProfile: Profile {
             }
             devices.forEach {
                 if let id = $0.id {
-                    constellation.sendEventToDevice(targetDeviceId: id, e: .sendTab(title: item.title ?? "", url: item.url))
+                    constellation.sendEventToDevice(
+                        targetDeviceId: id,
+                        e: .sendTab(title: item.title ?? "", url: item.url)
+                    )
                 }
             }
             self.sendQueuedSyncEvents()
@@ -606,7 +658,10 @@ open class BrowserProfile: Profile {
     }
 
     lazy var logins: RustLogins = {
-        let databasePath = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("loginsPerField.db").path
+        let databasePath = URL(
+            fileURLWithPath: directory,
+            isDirectory: true
+        ).appendingPathComponent("loginsPerField.db").path
         return RustLogins(databasePath: databasePath)
     }()
 
@@ -663,11 +718,16 @@ open class BrowserProfile: Profile {
         let creditCardKey = keychain.string(forKey: rustAutofillKey.ccKeychainKey)
         let rustLoginsKeys = RustLoginEncryptionKeys()
         let perFieldKey = keychain.string(forKey: rustLoginsKeys.loginPerFieldKeychainKey)
-        // Remove all items, removal is not key-by-key specific (due to the risk of failing to delete something), simply restore what is needed.
+        // Remove all items, removal is not key-by-key specific (due to the risk of failing to delete something),
+        // simply restore what is needed.
         keychain.removeAllKeys()
 
         if let perFieldKey = perFieldKey {
-            keychain.set(perFieldKey, forKey: rustLoginsKeys.loginPerFieldKeychainKey, withAccessibility: .afterFirstUnlock)
+            keychain.set(
+                perFieldKey,
+                forKey: rustLoginsKeys.loginPerFieldKeychainKey,
+                withAccessibility: .afterFirstUnlock
+            )
         }
 
         if let creditCardKey = creditCardKey {
@@ -687,7 +747,11 @@ open class BrowserProfile: Profile {
     }
 
     // Profile exists in extensions, UIApp is unavailable there, make this code run for the main app only
-    @available(iOSApplicationExtension, unavailable, message: "UIApplication.shared is unavailable in application extensions")
+    @available(
+        iOSApplicationExtension,
+        unavailable,
+        message: "UIApplication.shared is unavailable in application extensions"
+    )
     private func unregisterRemoteNotifications() {
         Task {
             do {

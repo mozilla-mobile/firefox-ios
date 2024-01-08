@@ -34,7 +34,9 @@ public struct DateDifference {
 }
 
 extension TimeInterval {
-    public static func fromMicrosecondTimestamp(_ microsecondTimestamp: MicrosecondTimestamp) -> TimeInterval {
+    public static func fromMicrosecondTimestamp(
+        _ microsecondTimestamp: MicrosecondTimestamp
+    ) -> TimeInterval {
         return Double(microsecondTimestamp) / 1000000
     }
 
@@ -83,14 +85,23 @@ extension Date {
         return Int((currentYear / 1000) * 1000)
     }
 
-    public func toRelativeTimeString(dateStyle: DateFormatter.Style = .short, timeStyle: DateFormatter.Style = .short) -> String {
+    public func toRelativeTimeString(
+        dateStyle: DateFormatter.Style = .short,
+        timeStyle: DateFormatter.Style = .short
+    ) -> String {
         let now = Date()
 
         let units: Set<Calendar.Component> = [.second, .minute, .day, .weekOfYear, .month, .year, .hour]
         let components = Calendar.current.dateComponents(units, from: self, to: now)
 
         if components.year ?? 0 > 0 {
-            return String(format: DateFormatter.localizedString(from: self, dateStyle: dateStyle, timeStyle: timeStyle))
+            return String(
+                format: DateFormatter.localizedString(
+                    from: self,
+                    dateStyle: dateStyle,
+                    timeStyle: timeStyle
+                )
+            )
         }
 
         if components.month == 1 {
@@ -98,7 +109,13 @@ extension Date {
         }
 
         if components.month ?? 0 > 1 {
-            return String(format: DateFormatter.localizedString(from: self, dateStyle: dateStyle, timeStyle: timeStyle))
+            return String(
+                format: DateFormatter.localizedString(
+                    from: self,
+                    dateStyle: dateStyle,
+                    timeStyle: timeStyle
+                )
+            )
         }
 
         if components.weekOfYear ?? 0 > 0 {

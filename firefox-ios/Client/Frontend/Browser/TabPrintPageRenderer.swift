@@ -30,13 +30,23 @@ class TabPrintPageRenderer: UIPrintPageRenderer {
 
         if let tab = self.tab, let webview = tab.webView {
             let formatter = webview.viewPrintFormatter()
-            formatter.perPageContentInsets = UIEdgeInsets(top: PrintedPageUX.PageInsets, left: PrintedPageUX.PageInsets, bottom: PrintedPageUX.PageInsets, right: PrintedPageUX.PageInsets)
+            formatter.perPageContentInsets = UIEdgeInsets(
+                top: PrintedPageUX.PageInsets,
+                left: PrintedPageUX.PageInsets,
+                bottom: PrintedPageUX.PageInsets,
+                right: PrintedPageUX.PageInsets
+            )
             addPrintFormatter(formatter, startingAtPageAt: 0)
         }
     }
 
     override func drawFooterForPage(at pageIndex: Int, in headerRect: CGRect) {
-        let headerInsets = UIEdgeInsets(top: headerRect.minY, left: PrintedPageUX.PageInsets, bottom: paperRect.maxY - headerRect.maxY, right: PrintedPageUX.PageInsets)
+        let headerInsets = UIEdgeInsets(
+            top: headerRect.minY,
+            left: PrintedPageUX.PageInsets,
+            bottom: paperRect.maxY - headerRect.maxY,
+            right: PrintedPageUX.PageInsets
+        )
         let headerRect = paperRect.inset(by: headerInsets)
 
         // url on left
@@ -48,7 +58,12 @@ class TabPrintPageRenderer: UIPrintPageRenderer {
     }
 
     override func drawHeaderForPage(at pageIndex: Int, in headerRect: CGRect) {
-        let headerInsets = UIEdgeInsets(top: headerRect.minY, left: PrintedPageUX.PageInsets, bottom: paperRect.maxY - headerRect.maxY, right: PrintedPageUX.PageInsets)
+        let headerInsets = UIEdgeInsets(
+            top: headerRect.minY,
+            left: PrintedPageUX.PageInsets,
+            bottom: paperRect.maxY - headerRect.maxY,
+            right: PrintedPageUX.PageInsets
+        )
         let headerRect = paperRect.inset(by: headerInsets)
 
         // page title on left

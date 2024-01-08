@@ -41,9 +41,21 @@ class ReaderModeStyleTests: XCTestCase {
         let themeResult = encodingResult["theme"] as? String
         let fontTypeResult = encodingResult["fontType"] as? String
         let fontSizeResult = encodingResult["fontSize"] as? Int
-        XCTAssertEqual(themeResult, ReaderModeTheme.dark.rawValue, "Encoding as dictionary theme result doesn't reflect style")
-        XCTAssertEqual(fontTypeResult, ReaderModeFontType.sansSerif.rawValue, "Encoding as dictionary fontType result doesn't reflect style")
-        XCTAssertEqual(fontSizeResult, ReaderModeFontSize.size1.rawValue, "Encoding as dictionary fontSize result doesn't reflect style")
+        XCTAssertEqual(
+            themeResult,
+            ReaderModeTheme.dark.rawValue,
+            "Encoding as dictionary theme result doesn't reflect style"
+        )
+        XCTAssertEqual(
+            fontTypeResult,
+            ReaderModeFontType.sansSerif.rawValue,
+            "Encoding as dictionary fontType result doesn't reflect style"
+        )
+        XCTAssertEqual(
+            fontSizeResult,
+            ReaderModeFontSize.size1.rawValue,
+            "Encoding as dictionary fontSize result doesn't reflect style"
+        )
     }
 
     func test_initWithDictionnary_succeeds() {

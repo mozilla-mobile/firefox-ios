@@ -5,17 +5,17 @@
 "New Tab" = "แท็บใหม่";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "สิ่งนี้ช่วยให้คุณถ่ายและอัปโหลดรูปถ่าย";
+"NSCameraUsageDescription" = "Firefox ใช้กล้องของคุณเพื่อสแกนคิวอาร์โค้ด รวมทั้งถ่ายรูปและวิดีโอ";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "เว็บไซต์ที่คุณเยี่ยมชมอาจขอตำแหน่งที่ตั้งของคุณ";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "สิ่งนี้ช่วยให้คุณถ่ายและอัปโหลดวิดีโอ";
+"NSMicrophoneUsageDescription" = "Firefox ใช้ไมโครโฟนของคุณเพื่อบันทึกและอัปโหลดเสียง";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "สิ่งนี้ช่วยให้คุณบันทึกรูปถ่าย";
 
 /* (No Comment) */
-"Scan QR Code" = "สแกนรหัส QR";
+"Scan QR Code" = "สแกนคิวอาร์โค้ด";
 

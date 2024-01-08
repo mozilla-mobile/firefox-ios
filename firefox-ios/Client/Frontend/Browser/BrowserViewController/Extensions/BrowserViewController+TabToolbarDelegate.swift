@@ -96,7 +96,11 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
         let shouldSuppress = UIDevice.current.userInterfaceIdiom == .pad
         let style: UIModalPresentationStyle = shouldSuppress ? .popover : .overCurrentContext
-        let viewModel = PhotonActionSheetViewModel(actions: [urlActions], closeButtonTitle: .CloseButtonTitle, modalStyle: style)
+        let viewModel = PhotonActionSheetViewModel(
+            actions: [urlActions],
+            closeButtonTitle: .CloseButtonTitle,
+            modalStyle: style
+        )
         presentSheetWith(viewModel: viewModel, on: self, from: button)
     }
 
@@ -140,7 +144,12 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         // Ensure that any keyboards or spinners are dismissed before presenting the menu
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        UIApplication.shared.sendAction(
+            #selector(UIResponder.resignFirstResponder),
+            to: nil,
+            from: nil,
+            for: nil
+        )
 
         // Logs homePageMenu or siteMenu depending if HomePage is open or not
         let isHomePage = tabManager.selectedTab?.isFxHomeTab ?? false
@@ -156,8 +165,16 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
         updateZoomPageBarVisibility(visible: false)
         menuHelper.getToolbarActions(navigationController: navigationController) { actions in
-            let shouldInverse = PhotonActionSheetViewModel.hasInvertedMainMenu(trait: self.traitCollection, isBottomSearchBar: self.isBottomSearchBar)
-            let viewModel = PhotonActionSheetViewModel(actions: actions, modalStyle: .popover, isMainMenu: true, isMainMenuInverted: shouldInverse)
+            let shouldInverse = PhotonActionSheetViewModel.hasInvertedMainMenu(
+                trait: self.traitCollection,
+                isBottomSearchBar: self.isBottomSearchBar
+            )
+            let viewModel = PhotonActionSheetViewModel(
+                actions: actions,
+                modalStyle: .popover,
+                isMainMenu: true,
+                isMainMenuInverted: shouldInverse
+            )
             self.presentSheetWith(viewModel: viewModel, on: self, from: button)
         }
     }
@@ -244,13 +261,20 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
 
-        let viewModel = PhotonActionSheetViewModel(actions: actions, closeButtonTitle: .CloseButtonTitle, modalStyle: .overCurrentContext)
+        let viewModel = PhotonActionSheetViewModel(
+            actions: actions,
+            closeButtonTitle: .CloseButtonTitle,
+            modalStyle: .overCurrentContext
+        )
         presentSheetWith(viewModel: viewModel, on: self, from: button)
     }
 
     func showBackForwardList() {
         if let backForwardList = tabManager.selectedTab?.webView?.backForwardList {
-            let backForwardViewController = BackForwardListViewController(profile: profile, backForwardList: backForwardList)
+            let backForwardViewController = BackForwardListViewController(
+                profile: profile,
+                backForwardList: backForwardList
+            )
             backForwardViewController.tabManager = tabManager
             backForwardViewController.browserFrameInfoProvider = self
             backForwardViewController.modalPresentationStyle = .overCurrentContext
@@ -283,7 +307,10 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
             let toast = ButtonToast(viewModel: viewModel,
                                     theme: themeManager.currentTheme) { [weak self] isButtonTapped in
                 guard let strongSelf = self, let currentTab = strongSelf.tabManager.selectedTab else { return }
-                isButtonTapped ? strongSelf.addBookmark(url: currentTab.url?.absoluteString ?? "", title: currentTab.title) : nil
+                isButtonTapped ? strongSelf.addBookmark(
+                    url: currentTab.url?.absoluteString ?? "",
+                    title: currentTab.title
+                ) : nil
             }
             show(toast: toast)
         default:

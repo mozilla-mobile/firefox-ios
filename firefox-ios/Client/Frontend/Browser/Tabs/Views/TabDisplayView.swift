@@ -25,7 +25,6 @@ class TabDisplayView: UIView,
     private(set) var tabsState: TabsPanelState
     private var inactiveTabsSectionManager: InactiveTabsSectionManager
     private var tabsSectionManager: TabsSectionManager
-    private weak var tabPeekDelegate: LegacyTabPeekDelegate?
     var theme: Theme?
 
     private var shouldHideInactiveTabs: Bool {
@@ -60,9 +59,8 @@ class TabDisplayView: UIView,
         return collectionView
     }()
 
-    public init(state: TabsPanelState, tabPeekDelegate: LegacyTabPeekDelegate?) {
+    public init(state: TabsPanelState) {
         self.tabsState = state
-        self.tabPeekDelegate = tabPeekDelegate
         self.inactiveTabsSectionManager = InactiveTabsSectionManager()
         self.tabsSectionManager = TabsSectionManager()
         super.init(frame: .zero)
@@ -208,7 +206,10 @@ class TabDisplayView: UIView,
     -> UICollectionViewCell {
         switch getTabDisplay(for: indexPath.section) {
         case .inactiveTabs:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabsCell.cellIdentifier, for: indexPath) as? InactiveTabsCell
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: InactiveTabsCell.cellIdentifier,
+                for: indexPath
+            ) as? InactiveTabsCell
             else { return UICollectionViewCell() }
 
             cell.configure(with: tabsState.inactiveTabs[indexPath.row])
@@ -217,7 +218,10 @@ class TabDisplayView: UIView,
             }
             return cell
         case .tabs:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TabCell.cellIdentifier, for: indexPath) as? TabCell
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: TabCell.cellIdentifier,
+                for: indexPath
+            ) as? TabCell
             else { return UICollectionViewCell() }
 
             let tabState = tabsState.tabs[indexPath.row]

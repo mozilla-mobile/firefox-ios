@@ -64,16 +64,23 @@ class BookmarksPanel: SiteTableViewController,
     }
 
     private lazy var bottomLeftButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus),
-                                     style: .plain,
-                                     target: self,
-                                     action: #selector(bottomLeftButtonAction))
+        let button = UIBarButtonItem(
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus),
+            style: .plain,
+            target: self,
+            action: #selector(bottomLeftButtonAction)
+        )
         button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomLeftButton
         return button
     }()
 
     private lazy var bottomRightButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: .BookmarksEdit, style: .plain, target: self, action: #selector(bottomRightButtonAction))
+        let button = UIBarButtonItem(
+            title: .BookmarksEdit,
+            style: .plain,
+            target: self,
+            action: #selector(bottomRightButtonAction)
+        )
         button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomRightButton
         return button
     }()
@@ -148,31 +155,36 @@ class BookmarksPanel: SiteTableViewController,
     }
 
     private func getNewBookmarkAction() -> PhotonRowActions {
-        return SingleActionViewModel(title: .BookmarksNewBookmark,
-                                     iconString: StandardImageIdentifiers.Large.bookmark,
-                                     tapHandler: { _ in
-            guard let bookmarkFolder = self.viewModel.bookmarkFolder else { return }
+        return SingleActionViewModel(
+            title: .BookmarksNewBookmark,
+            iconString: StandardImageIdentifiers.Large.bookmark,
+            tapHandler: { _ in
+                guard let bookmarkFolder = self.viewModel.bookmarkFolder else { return }
 
-            self.updatePanelState(newState: .bookmarks(state: .itemEditModeInvalidField))
-            self.bookmarkCoordinatorDelegate?.showBookmarkDetail(
-                bookmarkType: .bookmark,
-                parentBookmarkFolder: bookmarkFolder,
-                updatePanelState: { state in
-                    self.updatePanelState(newState: .bookmarks(state: state))
-                    self.sendPanelChangeNotification()
-                })
-        }).items
+                self.updatePanelState(newState: .bookmarks(state: .itemEditModeInvalidField))
+                self.bookmarkCoordinatorDelegate?.showBookmarkDetail(
+                    bookmarkType: .bookmark,
+                    parentBookmarkFolder: bookmarkFolder,
+                    updatePanelState: { state in
+                        self.updatePanelState(newState: .bookmarks(state: state))
+                        self.sendPanelChangeNotification()
+                    })
+            }).items
     }
 
     private func getNewFolderAction() -> PhotonRowActions {
-        return SingleActionViewModel(title: .BookmarksNewFolder,
-                                     iconString: StandardImageIdentifiers.Large.folder,
-                                     tapHandler: { _ in
-            guard let bookmarkFolder = self.viewModel.bookmarkFolder else { return }
+        return SingleActionViewModel(
+            title: .BookmarksNewFolder,
+            iconString: StandardImageIdentifiers.Large.folder,
+            tapHandler: { _ in
+                guard let bookmarkFolder = self.viewModel.bookmarkFolder else { return }
 
-            self.updatePanelState(newState: .bookmarks(state: .itemEditMode))
-            self.bookmarkCoordinatorDelegate?.showBookmarkDetail(bookmarkType: .folder, parentBookmarkFolder: bookmarkFolder)
-        }).items
+                self.updatePanelState(newState: .bookmarks(state: .itemEditMode))
+                self.bookmarkCoordinatorDelegate?.showBookmarkDetail(
+                    bookmarkType: .folder,
+                    parentBookmarkFolder: bookmarkFolder
+                )
+            }).items
     }
 
     private func getNewSeparatorAction() -> PhotonRowActions {
@@ -444,8 +456,10 @@ class BookmarksPanel: SiteTableViewController,
 
     func tableView(_ tableView: UITableView,
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let deleteAction = UIContextualAction(style: .destructive,
-                                              title: .BookmarksPanelDeleteTableAction) { [weak self] (_, _, completion) in
+        let deleteAction = UIContextualAction(
+            style: .destructive,
+            title: .BookmarksPanelDeleteTableAction
+        ) { [weak self] (_, _, completion) in
             guard let strongSelf = self else { completion(false); return }
 
             strongSelf.deleteBookmarkNodeAtIndexPath(indexPath)

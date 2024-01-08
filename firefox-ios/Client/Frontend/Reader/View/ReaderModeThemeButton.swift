@@ -14,10 +14,16 @@ class ReaderModeThemeButton: UIButton {
             switch fontType {
             case .sansSerif,
                  .sansSerifBold:
-                titleLabel?.font = UIFont(name: "SF-Pro", size: LegacyDynamicFontHelper.defaultHelper.ReaderStandardFontSize)
+                titleLabel?.font = UIFont(
+                    name: "SF-Pro",
+                    size: LegacyDynamicFontHelper.defaultHelper.ReaderStandardFontSize
+                )
             case .serif,
                  .serifBold:
-                titleLabel?.font = UIFont(name: "NewYorkMedium-Regular", size: LegacyDynamicFontHelper.defaultHelper.ReaderStandardFontSize)
+                titleLabel?.font = UIFont(
+                    name: "NewYorkMedium-Regular",
+                    size: LegacyDynamicFontHelper.defaultHelper.ReaderStandardFontSize
+                )
             }
         }
     }

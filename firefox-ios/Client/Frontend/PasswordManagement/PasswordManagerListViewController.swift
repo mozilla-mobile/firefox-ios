@@ -362,7 +362,9 @@ extension PasswordManagerListViewController: UITableViewDelegate {
         if section != 1 {
             return nil
         }
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier
+        ) as? ThemedTableSectionHeaderFooterView else { return nil }
         headerView.titleLabel.text = .LoginsListTitle
         // not using a grouped table: show header borders
         headerView.showBorder(for: .top, true)
@@ -379,7 +381,10 @@ extension PasswordManagerListViewController: UITableViewDelegate {
         return UITableView.automaticDimension
     }
 
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+    func tableView(
+        _ tableView: UITableView,
+        editingStyleForRowAt indexPath: IndexPath
+    ) -> UITableViewCell.EditingStyle {
         return .none
     }
 
@@ -457,7 +462,9 @@ extension PasswordManagerListViewController: LoginViewModelDelegate {
 // MARK: - UITableView extension
 private extension UITableView {
     var allLoginIndexPaths: [IndexPath] {
-        return ((PasswordManagerListViewController.loginsSettingsSection + 1)..<self.numberOfSections).flatMap { sectionNum in
+        return (
+            (PasswordManagerListViewController.loginsSettingsSection + 1)..<self.numberOfSections
+        ).flatMap { sectionNum in
             (0..<self.numberOfRows(inSection: sectionNum)).map {
                 IndexPath(row: $0, section: sectionNum)
             }

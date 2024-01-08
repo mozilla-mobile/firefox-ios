@@ -20,7 +20,10 @@ final class DefaultSearchPrefs {
             return nil
         }
         guard let data = searchManifest.data(using: .utf8),
-              let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String: Any] else {
+              let json = try? JSONSerialization.jsonObject(
+                with: data,
+                options: .fragmentsAllowed
+              ) as? [String: Any] else {
             assertionFailure("Could not serialised")
             return nil
         }

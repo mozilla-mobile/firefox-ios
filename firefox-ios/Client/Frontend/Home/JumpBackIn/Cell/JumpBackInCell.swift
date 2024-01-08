@@ -177,7 +177,9 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
             textContainer.heightAnchor.constraint(greaterThanOrEqualTo: imageContainer.heightAnchor)
         ])
 
-        websiteIconCenterConstraint = websiteLabel.centerYAnchor.constraint(equalTo: websiteImage.centerYAnchor).priority(UILayoutPriority(999))
+        websiteIconCenterConstraint = websiteLabel.centerYAnchor.constraint(
+            equalTo: websiteImage.centerYAnchor
+        ).priority(UILayoutPriority(999))
         websiteIconFirstBaselineConstraint = websiteLabel.firstBaselineAnchor.constraint(
             equalTo: websiteImage.bottomAnchor,
             constant: -UX.websiteIconSize.height / 2)

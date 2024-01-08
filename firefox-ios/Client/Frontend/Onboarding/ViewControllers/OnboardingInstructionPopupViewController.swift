@@ -73,10 +73,12 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
         button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.PrimaryButton"
-        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
-                                                left: UX.buttonHorizontalInset,
-                                                bottom: UX.buttonVerticalInset,
-                                                right: UX.buttonHorizontalInset)
+        button.contentEdgeInsets = UIEdgeInsets(
+            top: UX.buttonVerticalInset,
+            left: UX.buttonHorizontalInset,
+            bottom: UX.buttonVerticalInset,
+            right: UX.buttonHorizontalInset
+        )
     }
 
     var viewModel: OnboardingDefaultBrowserModelProtocol
@@ -155,21 +157,38 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
             bottomPadding = UX.bottomPaddingPhone
         }
 
-        NSLayoutConstraint.activate([
-            // Content view wrapper around text
-            contentContainerView.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.scrollViewVerticalPadding),
-            contentContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            contentContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -UX.scrollViewVerticalPadding),
-            contentContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        NSLayoutConstraint.activate(
+            [
+                // Content view wrapper around text
+                contentContainerView.topAnchor.constraint(
+                    equalTo: view.topAnchor,
+                    constant: UX.scrollViewVerticalPadding
+                ),
+                contentContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                contentContainerView.bottomAnchor.constraint(
+                    equalTo: view.bottomAnchor,
+                    constant: -UX.scrollViewVerticalPadding
+                ),
+                contentContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-            contentStackView.topAnchor.constraint(equalTo: contentContainerView.topAnchor, constant: topPadding),
-            contentStackView.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor, constant: leadingPadding),
-            contentStackView.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor, constant: -trailingPadding),
-            contentStackView.bottomAnchor.constraint(equalTo: contentContainerView.bottomAnchor, constant: -bottomPadding),
-            textStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
-            primaryButton.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
-            primaryButton.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
-        ])
+                contentStackView.topAnchor.constraint(equalTo: contentContainerView.topAnchor, constant: topPadding),
+                contentStackView.leadingAnchor.constraint(
+                    equalTo: contentContainerView.leadingAnchor,
+                    constant: leadingPadding
+                ),
+                contentStackView.trailingAnchor.constraint(
+                    equalTo: contentContainerView.trailingAnchor,
+                    constant: -trailingPadding
+                ),
+                contentStackView.bottomAnchor.constraint(
+                    equalTo: contentContainerView.bottomAnchor,
+                    constant: -bottomPadding
+                ),
+                textStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
+                primaryButton.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
+                primaryButton.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
+            ]
+        )
     }
 
     private func setupNotifications() {

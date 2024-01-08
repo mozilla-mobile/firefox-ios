@@ -73,7 +73,10 @@ class DeferredTests: XCTestCase {
             return succeed()
         }
 
-        var myclass: AccumulateTestClass? = AccumulateTestClass(expectation: expectation, accumulateCall: accumulateCall)
+        var myclass: AccumulateTestClass? = AccumulateTestClass(
+            expectation: expectation,
+            accumulateCall: accumulateCall
+        )
         trackForMemoryLeaks(myclass!)
         myclass = nil
 
@@ -87,7 +90,10 @@ class DeferredTests: XCTestCase {
             return Deferred(value: Maybe(failure: AccumulateTestClass.Error()))
         }
 
-        var myclass: AccumulateTestClass? = AccumulateTestClass(expectation: expectation, accumulateCall: accumulateCall)
+        var myclass: AccumulateTestClass? = AccumulateTestClass(
+            expectation: expectation,
+            accumulateCall: accumulateCall
+        )
         trackForMemoryLeaks(myclass!)
         myclass = nil
 
@@ -120,7 +126,12 @@ private extension DeferredTests {
 
     func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #file, line: UInt = #line) {
         addTeardownBlock { [weak instance] in
-            XCTAssertNil(instance, "Instance should have been deallocated, potential memory leak.", file: file, line: line)
+            XCTAssertNil(
+                instance,
+                "Instance should have been deallocated, potential memory leak.",
+                file: file,
+                line: line
+            )
         }
     }
 }

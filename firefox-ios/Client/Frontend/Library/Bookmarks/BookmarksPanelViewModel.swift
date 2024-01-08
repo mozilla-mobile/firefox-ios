@@ -76,8 +76,9 @@ class BookmarksPanelViewModel {
 
     // MARK: - Private
 
-    /// Since we have a Local Desktop folder that isn't referenced in A-S under the mobile folder, we need to account for this when saving bookmark index in A-S.
-    /// This is done by substracting the Local Desktop Folder number of rows it takes to the actual index.
+    /// Since we have a Local Desktop folder that isn't referenced in A-S under the mobile folder,
+    /// we need to account for this when saving bookmark index in A-S. This is done by substracting
+    /// the Local Desktop Folder number of rows it takes to the actual index.
     func getNewIndex(from index: Int) -> Int {
         guard bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID else {
             return index
@@ -109,7 +110,10 @@ class BookmarksPanelViewModel {
                                                  object: .mobileBookmarks,
                                                  value: .doesHaveMobileBookmarks)
 
-                    let mobileBookmarksExtra = [TelemetryWrapper.EventExtraKey.mobileBookmarksQuantity.rawValue: Int64(mobileBookmarks.count)]
+                    let mobileBookmarksExtra = [
+                        TelemetryWrapper.EventExtraKey.mobileBookmarksQuantity.rawValue: Int64(mobileBookmarks.count)
+                    ]
+
                     TelemetryWrapper.recordEvent(category: .information,
                                                  method: .view,
                                                  object: .mobileBookmarks,

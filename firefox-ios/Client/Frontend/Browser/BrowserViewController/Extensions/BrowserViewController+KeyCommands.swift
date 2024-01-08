@@ -350,10 +350,26 @@ extension BrowserViewController {
         ]
 
         let overridesTextEditing = [
-            UIKeyCommand(action: #selector(nextTabKeyCommand), input: UIKeyCommand.inputRightArrow, modifierFlags: [.command, .shift]),
-            UIKeyCommand(action: #selector(previousTabKeyCommand), input: UIKeyCommand.inputLeftArrow, modifierFlags: [.command, .shift]),
-            UIKeyCommand(action: #selector(goBackKeyCommand), input: UIKeyCommand.inputLeftArrow, modifierFlags: .command),
-            UIKeyCommand(action: #selector(goForwardKeyCommand), input: UIKeyCommand.inputRightArrow, modifierFlags: .command),
+            UIKeyCommand(
+                action: #selector(nextTabKeyCommand),
+                input: UIKeyCommand.inputRightArrow,
+                modifierFlags: [.command, .shift]
+            ),
+            UIKeyCommand(
+                action: #selector(previousTabKeyCommand),
+                input: UIKeyCommand.inputLeftArrow,
+                modifierFlags: [.command, .shift]
+            ),
+            UIKeyCommand(
+                action: #selector(goBackKeyCommand),
+                input: UIKeyCommand.inputLeftArrow,
+                modifierFlags: .command
+            ),
+            UIKeyCommand(
+                action: #selector(goForwardKeyCommand),
+                input: UIKeyCommand.inputRightArrow,
+                modifierFlags: .command
+            ),
         ]
 
         let windowShortcuts = [

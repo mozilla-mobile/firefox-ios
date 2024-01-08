@@ -65,11 +65,15 @@ class RecentlySavedDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiab
 
         // Send telemetry if bookmarks aren't empty
         if !recentBookmarks.isEmpty {
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .view,
-                                         object: .firefoxHomepage,
-                                         value: .recentlySavedBookmarkItemView,
-                                         extras: [TelemetryWrapper.EventObject.recentlySavedBookmarkImpressions.rawValue: "\(bookmarks.count)"])
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .view,
+                object: .firefoxHomepage,
+                value: .recentlySavedBookmarkItemView,
+                extras: [
+                    TelemetryWrapper.EventObject.recentlySavedBookmarkImpressions.rawValue: "\(bookmarks.count)"
+                ]
+            )
         }
     }
 
@@ -87,7 +91,9 @@ class RecentlySavedDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiab
         readingListItems = recentItemsHelper.filterStaleItems(recentItems: readingList) as? [ReadingListItem] ?? []
         delegate?.didLoadNewData()
 
-        let extra = [TelemetryWrapper.EventObject.recentlySavedReadingItemImpressions.rawValue: "\(readingListItems.count)"]
+        let extra = [
+            TelemetryWrapper.EventObject.recentlySavedReadingItemImpressions.rawValue: "\(readingListItems.count)"
+        ]
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .view,
                                      object: .firefoxHomepage,

@@ -23,11 +23,14 @@ class NightModeHelper: TabContentScript {
         return "NightMode"
     }
 
-    func scriptMessageHandlerName() -> String? {
-        return "NightMode"
+    func scriptMessageHandlerNames() -> [String]? {
+        return ["NightMode"]
     }
 
-    func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(
+        _ userContentController: WKUserContentController,
+        didReceiveScriptMessage message: WKScriptMessage
+    ) {
         // Do nothing.
     }
 

@@ -55,10 +55,15 @@ extension BrowserViewController: URLBarDelegate {
             focusedSegment: focusedSegment)
         (tabTrayViewController as? LegacyTabTrayViewController)?.qrCodeNavigationHandler = navigationHandler
         tabTrayViewController?.openInNewTab = { url, isPrivate in
-            let tab = self.tabManager.addTab(URLRequest(url: url), afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
+            let tab = self.tabManager.addTab(
+                URLRequest(url: url),
+                afterTab: self.tabManager.selectedTab,
+                isPrivate: isPrivate
+            )
             // If we are showing toptabs a user can just use the top tab bar
             // If in overlay mode switching doesnt correctly dismiss the homepanels
-            guard !self.topTabsVisible, !self.urlBar.inOverlayMode else { return }
+            guard !self.topTabsVisible,
+                  !self.urlBar.inOverlayMode else { return }
             // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
             let viewModel = ButtonToastViewModel(labelText: .ContextMenuButtonToastNewTabOpenedLabelText,
                                                  buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
@@ -210,20 +215,33 @@ extension BrowserViewController: URLBarDelegate {
         guard let tab = tabManager.selectedTab,
               let url = tab.url?.displayURL
         else {
-            UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAddPageGeneralErrorAccessibilityLabel)
+            UIAccessibility.post(
+                notification: UIAccessibility.Notification.announcement,
+                argument: String.ReaderModeAddPageGeneralErrorAccessibilityLabel
+            )
             return false
         }
 
-        let result = profile.readingList.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.current.name)
+        let result = profile.readingList.createRecordWithURL(
+            url.absoluteString,
+            title: tab.title ?? "",
+            addedBy: UIDevice.current.name
+        )
 
         switch result.value {
         case .success:
-            UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAddPageSuccessAcessibilityLabel)
+            UIAccessibility.post(
+                notification: UIAccessibility.Notification.announcement,
+                argument: String.ReaderModeAddPageSuccessAcessibilityLabel
+            )
             SimpleToast().showAlertWithText(.ShareAddToReadingListDone,
                                             bottomContainer: contentContainer,
                                             theme: themeManager.currentTheme)
         case .failure:
-            UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAddPageMaybeExistsErrorAccessibilityLabel)
+            UIAccessibility.post(
+                notification: UIAccessibility.Notification.announcement,
+                argument: String.ReaderModeAddPageMaybeExistsErrorAccessibilityLabel
+            )
         }
         return true
     }
@@ -237,7 +255,11 @@ extension BrowserViewController: URLBarDelegate {
 
         let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
         let style: UIModalPresentationStyle = !shouldSuppress ? .popover : .overCurrentContext
-        let viewModel = PhotonActionSheetViewModel(actions: [urlActions], closeButtonTitle: .CloseButtonTitle, modalStyle: style)
+        let viewModel = PhotonActionSheetViewModel(
+            actions: [urlActions],
+            closeButtonTitle: .CloseButtonTitle,
+            modalStyle: style
+        )
         presentSheetWith(viewModel: viewModel, on: self, from: button)
     }
 
@@ -269,7 +291,11 @@ extension BrowserViewController: URLBarDelegate {
 
         let shouldSuppress = UIDevice.current.userInterfaceIdiom != .pad
         let style: UIModalPresentationStyle = !shouldSuppress ? .popover : .overCurrentContext
-        let viewModel = PhotonActionSheetViewModel(actions: [urlActions], closeButtonTitle: .CloseButtonTitle, modalStyle: style)
+        let viewModel = PhotonActionSheetViewModel(
+            actions: [urlActions],
+            closeButtonTitle: .CloseButtonTitle,
+            modalStyle: style
+        )
         self.presentSheetWith(viewModel: viewModel, on: self, from: urlBar)
     }
 
@@ -302,7 +328,10 @@ extension BrowserViewController: URLBarDelegate {
         } else {
             configureOverlayView()
         }
-        urlBar.locationTextField?.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false, theme: self.themeManager.currentTheme)
+        urlBar.locationTextField?.applyUIMode(
+            isPrivate: tabManager.selectedTab?.isPrivate ?? false,
+            theme: self.themeManager.currentTheme
+        )
         searchController?.searchQuery = text
         searchLoader?.query = text
     }
@@ -328,8 +357,10 @@ extension BrowserViewController: URLBarDelegate {
 
         profile.places.getBookmarkURLForKeyword(keyword: possibleKeyword).uponQueue(.main) { result in
             if var urlString = result.successValue ?? "",
-                let escapedQuery = possibleQuery.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed),
-                let range = urlString.range(of: "%s") {
+               let escapedQuery = possibleQuery.addingPercentEncoding(
+                withAllowedCharacters: NSCharacterSet.urlQueryAllowed
+               ),
+               let range = urlString.range(of: "%s") {
                 urlString.replaceSubrange(range, with: escapedQuery)
 
                 if let url = URL(string: urlString, invalidCharacters: false) {
@@ -354,13 +385,19 @@ extension BrowserViewController: URLBarDelegate {
         conversionMetrics.didPerformSearch()
         // We couldn't find a matching search keyword, so do a search query.
         Telemetry.default.recordSearch(location: .actionBar, searchEngine: engine.engineID ?? "other")
-        GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.actionBar.rawValue)"].add()
+        GleanMetrics.Search
+            .counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.actionBar.rawValue)"]
+            .add()
         searchTelemetry?.shouldSetUrlTypeSearch = true
 
         let searchData = LegacyTabGroupData(searchTerm: text,
                                             searchUrl: searchURL.absoluteString,
                                             nextReferralUrl: "")
-        tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData, isPrivate: tab.isPrivate)
+        tab.metadataManager?.updateTimerAndObserving(
+            state: .navSearchLoaded,
+            searchData: searchData,
+            isPrivate: tab.isPrivate
+        )
         finishEditingAndSubmit(searchURL, visitType: VisitType.typed, forTab: tab)
     }
 
@@ -369,7 +406,10 @@ extension BrowserViewController: URLBarDelegate {
         guard let profile = profile as? BrowserProfile else { return }
 
         if .blankPage == NewTabAccessors.getNewTabPage(profile.prefs) {
-            UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: UIAccessibility.Notification.screenChanged)
+            UIAccessibility.post(
+                notification: UIAccessibility.Notification.screenChanged,
+                argument: UIAccessibility.Notification.screenChanged
+            )
         } else {
             if let toast = clipboardBarDisplayHandler?.clipboardToast {
                 toast.removeFromSuperview()

@@ -17,7 +17,10 @@ class FasterInactiveTabs: HiddenSetting {
     override var title: NSAttributedString? {
         let isFasterEnabled = UserDefaults.standard.bool(forKey: PrefsKeys.FasterInactiveTabsOverride)
         let buttonTitle = isFasterEnabled ? "Set Inactive Tab Timeout to Default" : "Set Inactive Tab Timeout to 10s"
-        return NSAttributedString(string: buttonTitle, attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
+        return NSAttributedString(
+            string: buttonTitle,
+            attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
+        )
     }
 
     override func onClick(_ navigationController: UINavigationController?) {

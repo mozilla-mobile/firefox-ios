@@ -14,7 +14,11 @@ class SearchSetting: Setting {
 
     override var style: UITableViewCell.CellStyle { return .value1 }
 
-    override var status: NSAttributedString { return NSAttributedString(string: profile.searchEngines.defaultEngine?.shortName ?? "") }
+    override var status: NSAttributedString {
+        return NSAttributedString(
+            string: profile.searchEngines.defaultEngine?.shortName ?? ""
+        )
+    }
 
     override var accessibilityIdentifier: String? {
         return AccessibilityIdentifiers.Settings.Search.title
@@ -24,8 +28,14 @@ class SearchSetting: Setting {
          settingsDelegate: GeneralSettingsDelegate?) {
         self.profile = settings.profile
         self.settingsDelegate = settingsDelegate
-        super.init(title: NSAttributedString(string: .AppSettingsSearch,
-                                             attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
+        super.init(
+            title: NSAttributedString(
+                string: .AppSettingsSearch,
+                attributes: [
+                    NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary
+                ]
+            )
+        )
     }
 
     override func onClick(_ navigationController: UINavigationController?) {

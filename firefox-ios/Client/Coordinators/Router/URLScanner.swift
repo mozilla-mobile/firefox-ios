@@ -4,9 +4,11 @@
 
 import Foundation
 
-/// A utility type for extracting information from URLs, specifically those with certain schemes and formats used by the Mozilla Firefox browser.
+/// A utility type for extracting information from URLs, specifically those with certain schemes
+/// and formats used by the Mozilla Firefox browser.
 ///
-/// - Note: This type is designed for use with URLs that conform to the expected format. Unexpected URLs may result in nil values and/or incorrect information being returned.
+/// - Note: This type is designed for use with URLs that conform to the expected format. Unexpected URLs may
+///         result in nil values and/or incorrect information being returned.
 struct URLScanner {
     /// The path components of the URL, excluding the scheme, host, and query parameters.
     var components: [String]
@@ -42,7 +44,8 @@ struct URLScanner {
         self.queries = urlComponents.queryItems ?? []
     }
 
-    /// Returns a Boolean value indicating whether the URL uses one of the expected Mozilla Firefox extension schemes.
+    /// Returns a Boolean value indicating whether the URL uses one of the expected
+    /// Mozilla Firefox extension schemes.
     var isOurScheme: Bool {
         return [URL.mozPublicScheme, URL.mozInternalScheme].contains(self.scheme)
     }
@@ -51,7 +54,8 @@ struct URLScanner {
     ///
     /// - Parameter query: The name of the query parameter to retrieve.
     ///
-    /// - Returns: The value of the specified query parameter, or `nil` if the parameter was not found in the URL's query string.
+    /// - Returns: The value of the specified query parameter, or `nil` if the parameter was not
+    /// found in the URL's query string.
     func value(query: String) -> String? {
         return self.queries.first { $0.name == query }?.value
     }
@@ -93,7 +97,8 @@ struct URLScanner {
         return ["http", "https"].contains(scheme)
     }
 
-    /// Force the URL's scheme to lowercase to ensure the code below can cope with URLs like the following from an external source. E.g Notes.app
+    /// Force the URL's scheme to lowercase to ensure the code below can cope with URLs like
+    /// the following from an external source. E.g Notes.app
     ///
     /// Https://www.apple.com
     ///

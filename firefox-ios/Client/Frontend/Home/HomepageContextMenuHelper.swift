@@ -47,15 +47,23 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         }
     }
 
-    func getContextMenuActions(for site: Site, with sourceView: UIView?, sectionType: HomepageSectionType) -> [PhotonRowActions]? {
+    func getContextMenuActions(
+        for site: Site,
+        with sourceView: UIView?,
+        sectionType: HomepageSectionType
+    ) -> [PhotonRowActions]? {
         var actions = [PhotonRowActions]()
-        if sectionType == .topSites, let topSitesActions = getTopSitesActions(site: site) {
+        if sectionType == .topSites,
+           let topSitesActions = getTopSitesActions(site: site) {
             actions = topSitesActions
-        } else if sectionType == .pocket, let pocketActions = getPocketActions(site: site, with: sourceView) {
+        } else if sectionType == .pocket,
+                  let pocketActions = getPocketActions(site: site, with: sourceView) {
             actions = pocketActions
-        } else if sectionType == .recentlySaved, let recentlySavedActions = getRecentlySavedActions(site: site, with: sourceView) {
+        } else if sectionType == .recentlySaved,
+                  let recentlySavedActions = getRecentlySavedActions(site: site, with: sourceView) {
             actions = recentlySavedActions
-        } else if sectionType == .jumpBackIn, let jumpBackInActions = getJumpBackInActions(site: site, with: sourceView) {
+        } else if sectionType == .jumpBackIn,
+                  let jumpBackInActions = getJumpBackInActions(site: site, with: sourceView) {
             actions = jumpBackInActions
         }
 
@@ -84,7 +92,11 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
     // MARK: - Default actions
     func getOpenInNewPrivateTabAction(siteURL: URL, sectionType: HomepageSectionType) -> PhotonRowActions {
-        return SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: ImageIdentifiers.newPrivateTab, allowIconScaling: true) { _ in
+        return SingleActionViewModel(
+            title: .OpenInNewPrivateTabContextMenuTitle,
+            iconString: ImageIdentifiers.newPrivateTab,
+            allowIconScaling: true
+        ) { _ in
             self.delegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
             sectionType.newPrivateTabActionTelemetry()
         }.items
@@ -92,7 +104,10 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
     // MARK: - History Highlights
 
-    private func getHistoryHighlightsActions(for highlightItem: HighlightItem, with sourceView: UIView?) -> [PhotonRowActions]? {
+    private func getHistoryHighlightsActions(
+        for highlightItem: HighlightItem,
+        with sourceView: UIView?
+    ) -> [PhotonRowActions]? {
         guard let siteURL = highlightItem.siteUrl else { return nil }
 
         let site = Site(url: siteURL.absoluteString, title: highlightItem.displayTitle)
@@ -143,7 +158,11 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     }
 
     private func getOpenInNewTabAction(siteURL: URL, sectionType: HomepageSectionType) -> PhotonRowActions {
-        return SingleActionViewModel(title: .OpenInNewTabContextMenuTitle, iconString: StandardImageIdentifiers.Large.plus, allowIconScaling: true) { _ in
+        return SingleActionViewModel(
+            title: .OpenInNewTabContextMenuTitle,
+            iconString: StandardImageIdentifiers.Large.plus,
+            allowIconScaling: true
+        ) { _ in
             self.delegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
 
             if sectionType == .pocket {
@@ -285,7 +304,10 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     }
 
     private func getSettingsAction() -> PhotonRowActions {
-        return SingleActionViewModel(title: .FirefoxHomepage.ContextualMenu.Settings, iconString: ImageIdentifiers.settings, allowIconScaling: true, tapHandler: { _ in
+        return SingleActionViewModel(title: .FirefoxHomepage.ContextualMenu.Settings,
+                                     iconString: ImageIdentifiers.settings,
+                                     allowIconScaling: true,
+                                     tapHandler: { _ in
             self.delegate?.homePanelDidRequestToOpenSettings(at: .topSites)
             self.sendTopSiteContextualTelemetry(type: .settings)
         }).items
@@ -318,7 +340,13 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
     private func sendTopSiteContextualTelemetry(type: ContextualActionType) {
         let extras = [TelemetryWrapper.EventExtraKey.contextualMenuType.rawValue: type.rawValue]
-        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .topSiteContextualMenu, value: nil, extras: extras)
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .view,
+            object: .topSiteContextualMenu,
+            value: nil,
+            extras: extras
+        )
     }
 
     func sendHistoryHighlightContextualTelemetry(type: ContextualActionType) {

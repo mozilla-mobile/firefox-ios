@@ -15,10 +15,11 @@ public protocol AutopushProtocol {
     ///  - Throws: If the underlying native call to update the push servers fails
     func updateToken(withDeviceToken deviceToken: Data) async throws
 
-    /// Creates a subscription with the `Autopush` servers with the given scope, returns the subscription if it already exists
+    /// Creates a subscription with the `Autopush` servers with the given scope, 
+    /// returns the subscription if it already exists
     ///
-    ///  - Parameter scope: A consumer controlled string. When push notifications are decrypted, the scope will be broadcased so consumers
-    ///                                             can handle the notification
+    ///  - Parameter scope: A consumer controlled string. When push notifications are decrypted,
+    ///                     the scope will be broadcased so consumers can handle the notification
     ///  - Returns: A `SubscriptionResponse` that includes:
     ///         - Encryption keys to be used to encrypt any push notifications that will be sent to this device
     ///         - A URL that consumer can use to send push notifications to this device
@@ -27,8 +28,8 @@ public protocol AutopushProtocol {
 
     /// Unsubscribes a push subscription with the given scope.
     ///
-    /// - Parameter scope: A consumer controlled string. When push notifications are decrypted, the scope will be broadcased so consumers
-    ///                                             can handle the notification
+    /// - Parameter scope: A consumer controlled string. When push notifications are decrypted,
+    ///                    the scope will be broadcased so consumers can handle the notification
     /// - Returns: `true` if the subscription was unsubscribed, `false` if the subscription did not exist
     /// - Throws: If the underlying native call to unsubscribe with the autopush servers fails
     func unsubscribe(scope: String) async throws -> Bool
@@ -42,7 +43,8 @@ public protocol AutopushProtocol {
     ///
     /// - Parameter payload: A map of String keys and String values representing payload as sent by the push servers
     ///
-    /// - Returns: `DecryptResponse`, which includes both the decrypted payload, and the scope the push notification was for
+    /// - Returns: `DecryptResponse`, which includes both the decrypted payload, 
+    ///            and the scope the push notification was for
     /// - Throws: If the native push client was unable to decrypt the payload
     func decrypt(payload: [String: String]) async throws -> DecryptResponse
 }
@@ -56,7 +58,9 @@ public actor Autopush {
             isDirectory: true
         ).appendingPathComponent("push.db").path
 
-        let pushManagerConfig = try PushConfigurationLabel.fromScheme(scheme: AppConstants.scheme).toConfiguration(dbPath: pushDB)
+        let pushManagerConfig = try PushConfigurationLabel
+            .fromScheme(scheme: AppConstants.scheme)
+            .toConfiguration(dbPath: pushDB)
         self.pushManager = try PushManager(config: pushManagerConfig)
     }
 

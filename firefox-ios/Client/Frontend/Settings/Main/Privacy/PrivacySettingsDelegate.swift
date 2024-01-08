@@ -6,6 +6,7 @@ import Foundation
 
 /// Child settings pages privacy actions
 protocol PrivacySettingsDelegate: AnyObject {
+    func pressedAddressAutofill()
     func pressedCreditCard()
     func pressedClearPrivateData()
     func pressedContentBlocker()

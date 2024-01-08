@@ -42,8 +42,10 @@ public class Store<State: StateType>: DefaultDispatchStore {
     }
 
     /// Adds support to subscribe to subState parts of the store's state
-    public func subscribe<SubState, S: StoreSubscriber>(_ subscriber: S,
-                                                        transform: ((Subscription<State>) -> Subscription<SubState>)?) where S.SubscriberStateType == SubState {
+    public func subscribe<SubState, S: StoreSubscriber>(
+        _ subscriber: S,
+        transform: ((Subscription<State>) -> Subscription<SubState>)?
+    ) where S.SubscriberStateType == SubState {
         let originalSubscription = Subscription<State>()
         let transformedSubscription = transform?(originalSubscription)
         subscribe(subscriber, mainSubscription: originalSubscription, transformedSubscription: transformedSubscription)
@@ -77,12 +79,16 @@ public class Store<State: StateType>: DefaultDispatchStore {
         state = newState
     }
 
-    private func subscribe<SubState, S: StoreSubscriber>(_ subscriber: S,
-                                                         mainSubscription: Subscription<State>,
-                                                         transformedSubscription: Subscription<SubState>?) {
-        let subscriptionWrapper = SubscriptionWrapper(originalSubscription: mainSubscription,
-                                                      transformedSubscription: transformedSubscription,
-                                                      subscriber: subscriber)
+    private func subscribe<SubState, S: StoreSubscriber>(
+        _ subscriber: S,
+        mainSubscription: Subscription<State>,
+        transformedSubscription: Subscription<SubState>?
+    ) {
+        let subscriptionWrapper = SubscriptionWrapper(
+            originalSubscription: mainSubscription,
+            transformedSubscription: transformedSubscription,
+            subscriber: subscriber
+        )
         subscriptions.update(with: subscriptionWrapper)
         mainSubscription.newValues(oldState: nil, newState: state)
     }

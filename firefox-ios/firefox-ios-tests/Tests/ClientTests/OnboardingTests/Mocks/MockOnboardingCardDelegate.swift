@@ -8,7 +8,10 @@ import Common
 
 @testable import Client
 
-class MockOnboardinCardDelegateController: UIViewController, OnboardingCardDelegate, OnboardingViewControllerProtocol, Themeable {
+class MockOnboardinCardDelegateController: UIViewController,
+                                           OnboardingCardDelegate,
+                                           OnboardingViewControllerProtocol,
+                                           Themeable {
     // Protocol conformance
     var pageController = UIPageViewController()
     var pageControl = UIPageControl()

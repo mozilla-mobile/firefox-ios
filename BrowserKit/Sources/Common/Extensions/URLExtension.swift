@@ -180,7 +180,12 @@ extension URL {
                 let literalFromEnd: NSString.CompareOptions = [.literal,        // Match the string exactly.
                                      .backwards,      // Search from the end.
                                      .anchored]         // Stick to the end.
-                let suffixlessHost = host.replacingOccurrences(of: suffix, with: "", options: literalFromEnd, range: nil)
+                let suffixlessHost = host.replacingOccurrences(
+                    of: suffix,
+                    with: "",
+                    options: literalFromEnd,
+                    range: nil
+                )
                 let suffixlessTokens = suffixlessHost.components(separatedBy: ".").filter { !$0.isEmpty }
                 let maxAdditionalCount = max(0, suffixlessTokens.count - additionalPartCount)
                 let additionalParts = suffixlessTokens[maxAdditionalCount..<suffixlessTokens.count]

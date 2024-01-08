@@ -5,7 +5,7 @@
 "Cache" = "Fshehtinë";
 
 /* Settings item for clearing cookies */
-"Cookies" = "Cookies";
+"Cookies" = "“Cookies”";
 
 /* Settings item for deleting downloaded files */
 "Downloaded Files" = "Kartela të Shkarkuara";

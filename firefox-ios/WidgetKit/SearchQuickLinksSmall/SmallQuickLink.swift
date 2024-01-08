@@ -10,12 +10,20 @@ struct IntentProvider: IntentTimelineProvider {
     typealias Intent = QuickActionIntent
     typealias Entry = QuickLinkEntry
 
-    func getSnapshot(for configuration: QuickActionIntent, in context: Context, completion: @escaping (QuickLinkEntry) -> Void) {
+    func getSnapshot(
+        for configuration: QuickActionIntent,
+        in context: Context,
+        completion: @escaping (QuickLinkEntry) -> Void
+    ) {
         let entry = QuickLinkEntry(date: Date(), link: .search)
         completion(entry)
     }
 
-    func getTimeline(for configuration: QuickActionIntent, in context: Context, completion: @escaping (Timeline<QuickLinkEntry>) -> Void) {
+    func getTimeline(
+        for configuration: QuickActionIntent,
+        in context: Context,
+        completion: @escaping (Timeline<QuickLinkEntry>) -> Void
+    ) {
         let entry = QuickLinkEntry(date: Date(), link: QuickLink(rawValue: configuration.actionType.rawValue)!)
         let timeline = Timeline(entries: [entry], policy: .never)
         completion(timeline)
@@ -37,7 +45,13 @@ struct SmallQuickLinkView: View {
     @ViewBuilder var body: some View {
         ImageButtonWithLabel(isSmall: true, link: entry.link)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(LinearGradient(gradient: Gradient(colors: entry.link.backgroundColors), startPoint: .bottomLeading, endPoint: .topTrailing)).widgetURL(entry.link.smallWidgetUrl)
+            .background(
+                LinearGradient(
+                    gradient: Gradient(colors: entry.link.backgroundColors),
+                    startPoint: .bottomLeading,
+                    endPoint: .topTrailing
+                )
+            ).widgetURL(entry.link.smallWidgetUrl)
     }
 }
 

@@ -45,7 +45,10 @@ class MockFileManager: FileManagerProtocol {
         return fileExists
     }
 
-    func urls(for directory: FileManager.SearchPathDirectory, in domainMask: FileManager.SearchPathDomainMask) -> [URL] {
+    func urls(
+        for directory: FileManager.SearchPathDirectory,
+        in domainMask: FileManager.SearchPathDomainMask
+    ) -> [URL] {
         urlsCalledCount += 1
         return urls
     }

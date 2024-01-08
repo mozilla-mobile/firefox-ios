@@ -137,6 +137,13 @@ class OpenSearchParser {
             return nil
         }
 
-        return OpenSearchEngine(engineID: engineID, shortName: shortName, image: uiImage, searchTemplate: searchTemplate, suggestTemplate: suggestTemplate, isCustomEngine: false)
+        return OpenSearchEngine(
+            engineID: engineID,
+            shortName: shortName,
+            image: uiImage,
+            searchTemplate: searchTemplate,
+            suggestTemplate: suggestTemplate,
+            isCustomEngine: false
+        )
     }
 }

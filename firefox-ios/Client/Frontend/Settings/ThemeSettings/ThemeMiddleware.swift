@@ -33,7 +33,9 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
             store.dispatch(ThemeSettingsAction.systemThemeChanged(self.legacyThemeManager.systemThemeIsOn))
         case ThemeSettingsAction.enableAutomaticBrightness(let enabled):
             self.toggleAutomaticBrightness(enabled)
-            store.dispatch(ThemeSettingsAction.automaticBrightnessChanged(self.legacyThemeManager.automaticBrightnessIsOn))
+            store.dispatch(
+                ThemeSettingsAction.automaticBrightnessChanged(self.legacyThemeManager.automaticBrightnessIsOn)
+            )
         case ThemeSettingsAction.switchManualTheme(let theme):
             self.updateManualTheme(theme)
             store.dispatch(ThemeSettingsAction.manualThemeChanged(theme))

@@ -196,7 +196,11 @@ class FindInPageBar: UIView, ThemeApplicable {
 
 extension FindInPageBar: UITextFieldDelegate {
     // Keyboard with a .search returnKeyType doesn't dismiss when return pressed. Handle this manually.
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    func textField(
+        _ textField: UITextField,
+        shouldChangeCharactersIn range: NSRange,
+        replacementString string: String
+    ) -> Bool {
         if string == "\n" {
             textField.resignFirstResponder()
             return false

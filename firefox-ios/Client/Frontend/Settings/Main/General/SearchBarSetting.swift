@@ -26,8 +26,14 @@ class SearchBarSetting: Setting {
          settingsDelegate: GeneralSettingsDelegate?) {
         self.viewModel = SearchBarSettingsViewModel(prefs: settings.profile.prefs)
         self.settingsDelegate = settingsDelegate
-        super.init(title: NSAttributedString(string: viewModel.title,
-                                             attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
+        super.init(
+            title: NSAttributedString(
+                string: viewModel.title,
+                attributes: [
+                    NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary
+                ]
+            )
+        )
     }
 
     override func onClick(_ navigationController: UINavigationController?) {

@@ -21,42 +21,42 @@ final class ClientSyncManagerTests: XCTestCase {
         sut = nil
     }
 
-    func testCheckCreditCardEngineEnablement_WhenMockDeclinedEnginesIsNilAndMockEngineEnabledIsFalse() {
+    func testCreditCardEngineEnablement_WhenMockDeclinedEnginesIsNilAndMockEngineEnabledIsFalse() {
         sut.setMockDeclinedEngines(nil)
         sut.setMockEngineEnabled(false)
         let result = sut.checkCreditCardEngineEnablement()
         XCTAssertEqual(result, false)
     }
 
-    func testCheckCreditCardEngineEnablement_WhenMockDeclinedEnginesIsEmptyAndMockEngineEnabledIsFalse() {
+    func testCreditCardEngineEnablement_WhenMockDeclinedEnginesIsEmptyAndMockEngineEnabledIsFalse() {
         sut.setMockDeclinedEngines([])
         sut.setMockEngineEnabled(false)
         let result = sut.checkCreditCardEngineEnablement()
         XCTAssertEqual(result, false)
     }
 
-    func testCheckCreditCardEngineEnablement_WhenMockDeclinedEnginesContainsCreditCardsAndMockEngineEnabledIsFalse() {
+    func testCreditCardEngineEnablement_WhenMockDeclinedEnginesContainsCreditCardsAndMockEngineEnabledIsFalse() {
         sut.setMockDeclinedEngines([engine])
         sut.setMockEngineEnabled(false)
         let result = sut.checkCreditCardEngineEnablement()
         XCTAssertEqual(result, false)
     }
 
-    func testCheckCreditCardEngineEnablement_WhenMockDeclinedEnginesContainsCreditCardsAndMockEngineEnabledIsTrue() {
+    func testCreditCardEngineEnablement_WhenMockDeclinedEnginesContainsCreditCardsAndMockEngineEnabledIsTrue() {
         sut.setMockDeclinedEngines([engine])
         sut.setMockEngineEnabled(true)
         let result = sut.checkCreditCardEngineEnablement()
         XCTAssertEqual(result, false)
     }
 
-    func testCheckCreditCardEngineEnablement_WhenMockDeclinedEnginesDoesNotContainCreditCardsAndMockEngineEnabledIsTrue() {
+    func testCreditCardEngineEnablement_WhenMockDeclinedEnginesDoesNotContainCreditCardsAndMockEngineEnabledIsTrue() {
         sut.setMockDeclinedEngines(["someengine"])
         sut.setMockEngineEnabled(true)
         let result = sut.checkCreditCardEngineEnablement()
         XCTAssertEqual(result, true)
     }
 
-    func testCheckCreditCardEngineEnablement_WhenMockDeclinedEnginesDoesNotContainCreditCardsAndMockEngineEnabledIsFalse() {
+    func testCreditCardEngineEnablement_WhenMockDeclinedEnginesDoesNotContainCreditCardsAndMockEngineEnabledIsFalse() {
         sut.setMockDeclinedEngines(["someengine"])
         sut.setMockEngineEnabled(false)
         let result = sut.checkCreditCardEngineEnablement()

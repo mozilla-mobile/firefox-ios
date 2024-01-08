@@ -41,11 +41,19 @@ class DevicePickerTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable 
     }
 
     private func setupLayout() {
-        NSLayoutConstraint.activate([
-            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.deviceRowTextPaddingLeft),
-            nameLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.deviceRowTextPaddingRight)
-        ])
+        NSLayoutConstraint.activate(
+            [
+                nameLabel.leadingAnchor.constraint(
+                    equalTo: contentView.leadingAnchor,
+                    constant: UX.deviceRowTextPaddingLeft
+                ),
+                nameLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+                nameLabel.trailingAnchor.constraint(
+                    equalTo: contentView.trailingAnchor,
+                    constant: -UX.deviceRowTextPaddingRight
+                )
+            ]
+        )
     }
 
     func configureCell(_ text: String, _ clientType: ClientType) {

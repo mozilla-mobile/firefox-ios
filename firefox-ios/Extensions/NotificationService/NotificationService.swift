@@ -18,7 +18,10 @@ class NotificationService: UNNotificationServiceExtension {
     // If the app is foregrounded, then the notification.userInfo is passed straight to
     // AppDelegate.application(_:didReceiveRemoteNotification:completionHandler:)
     // Once the notification is tapped, then the same userInfo is passed to the same method in the AppDelegate.
-    override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
+    override func didReceive(
+        _ request: UNNotificationRequest,
+        withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void
+    ) {
         // Set-up Rust network stack. This is needed in addition to the call
         // from the AppDelegate due to the fact that this uses a separate process
         Viaduct.shared.useReqwestBackend()
@@ -101,7 +104,8 @@ class NotificationService: UNNotificationServiceExtension {
 
     override func serviceExtensionTimeWillExpire() {
         // Called just before the extension will be terminated by the system.
-        // Use this as an opportunity to deliver your "best attempt" at modified content, otherwise the original push payload will be used.
+        // Use this as an opportunity to deliver your "best attempt" at modified
+        // content, otherwise the original push payload will be used.
         didFinish(with: .timeout)
     }
 }
@@ -119,7 +123,11 @@ class SyncDataDisplay {
         self.notificationContent = content
     }
 
-    func displayNotification(_ message: PushMessage? = nil, profile: BrowserProfile?, with error: PushMessageError? = nil) {
+    func displayNotification(
+        _ message: PushMessage? = nil,
+        profile: BrowserProfile?,
+        with error: PushMessageError? = nil
+    ) {
         guard let message = message, error == nil else {
             return displayUnknownMessageNotification(debugInfo: "Error \(error?.description ?? "")")
         }
@@ -157,19 +165,31 @@ class SyncDataDisplay {
 
     func displayAccountVerifiedNotification() {
         #if MOZ_CHANNEL_BETA || DEBUG
-            presentNotification(title: .SentTab_NoTabArrivingNotification_title, body: "DEBUG: Account Verified")
+            presentNotification(
+                title: .SentTab_NoTabArrivingNotification_title,
+                body: "DEBUG: Account Verified"
+            )
             return
         #else
-        presentNotification(title: .SentTab_NoTabArrivingNotification_title, body: .SentTab_NoTabArrivingNotification_body)
+            presentNotification(
+                title: .SentTab_NoTabArrivingNotification_title,
+                body: .SentTab_NoTabArrivingNotification_body
+            )
         #endif
     }
 
     func displayUnknownMessageNotification(debugInfo: String) {
         #if MOZ_CHANNEL_BETA || DEBUG
-            presentNotification(title: .SentTab_NoTabArrivingNotification_title, body: "DEBUG: " + debugInfo)
+            presentNotification(
+                title: .SentTab_NoTabArrivingNotification_title,
+                body: "DEBUG: " + debugInfo
+            )
             return
         #else
-        presentNotification(title: .SentTab_NoTabArrivingNotification_title, body: .SentTab_NoTabArrivingNotification_body)
+            presentNotification(
+                title: .SentTab_NoTabArrivingNotification_title,
+                body: .SentTab_NoTabArrivingNotification_body
+            )
         #endif
     }
 
@@ -187,7 +207,10 @@ class SyncDataDisplay {
 
             notificationContent.userInfo[NotificationSentTabs.sentTabsKey] = [tab] as NSArray
 
-            presentNotification(title: .SentTab_TabArrivingNotification_NoDevice_title, body: url.absoluteDisplayExternalString)
+            presentNotification(
+                title: .SentTab_TabArrivingNotification_NoDevice_title,
+                body: url.absoluteDisplayExternalString
+            )
         }
     }
 

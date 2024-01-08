@@ -24,28 +24,56 @@ class TPAccessoryInfo: ThemedTableViewController {
     }
 
     func headerView() -> UIView {
-        let stack = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 10))
+        let stack = UIStackView(
+            frame: CGRect(
+                x: 0,
+                y: 0,
+                width: tableView.frame.width,
+                height: 10
+            )
+        )
         stack.axis = .vertical
 
         let header = UILabel()
         header.text = .TPAccessoryInfoBlocksTitle
-        header.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 13, weight: .semibold)
+        header.font = DefaultDynamicFontHelper.preferredFont(
+            withTextStyle: .body,
+            size: 13,
+            weight: .semibold
+        )
         header.textColor = themeManager.currentTheme.colors.textSecondary
 
         stack.addArrangedSubview(UIView())
         stack.addArrangedSubview(header)
 
-        stack.layoutMargins = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        stack.layoutMargins = UIEdgeInsets(
+            top: 0,
+            left: 16,
+            bottom: 0,
+            right: 16
+        )
         stack.isLayoutMarginsRelativeArrangement = true
 
-        let topStack = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 40))
+        let topStack = UIStackView(
+            frame: CGRect(
+                x: 0,
+                y: 0,
+                width: tableView.frame.width,
+                height: 40
+            )
+        )
         topStack.axis = .vertical
         let sep = UIView()
         topStack.addArrangedSubview(stack)
         topStack.addArrangedSubview(sep)
         topStack.spacing = 10
 
-        topStack.layoutMargins = UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0)
+        topStack.layoutMargins = UIEdgeInsets(
+            top: 8,
+            left: 0,
+            bottom: 0,
+            right: 0
+        )
         topStack.isLayoutMarginsRelativeArrangement = true
 
         sep.backgroundColor = themeManager.currentTheme.colors.borderPrimary
@@ -105,7 +133,11 @@ class TPAccessoryInfo: ThemedTableViewController {
         }
         cell.imageView?.tintColor = themeManager.currentTheme.colors.iconPrimary
         if indexPath.row == 1 {
-            cell.textLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 13, weight: .regular)
+            cell.textLabel?.font = DefaultDynamicFontHelper.preferredFont(
+                withTextStyle: .body,
+                size: 13,
+                weight: .regular
+            )
         }
         cell.textLabel?.numberOfLines = 0
         cell.detailTextLabel?.numberOfLines = 0
@@ -116,7 +148,10 @@ class TPAccessoryInfo: ThemedTableViewController {
     }
 
     override func dequeueCellFor(indexPath: IndexPath) -> ThemedTableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: ThemedSubtitleTableViewCell.cellIdentifier, for: indexPath) as? ThemedSubtitleTableViewCell
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: ThemedSubtitleTableViewCell.cellIdentifier,
+            for: indexPath
+        ) as? ThemedSubtitleTableViewCell
         else {
             return ThemedSubtitleTableViewCell()
         }

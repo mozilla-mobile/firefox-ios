@@ -183,7 +183,8 @@ extension URL {
      */
     public var schemeIsValid: Bool {
         guard let scheme = scheme else { return false }
-        return permanentURISchemes.contains(scheme.lowercased()) && self.absoluteURL.absoluteString.lowercased() != scheme + ":"
+        return permanentURISchemes.contains(scheme.lowercased())
+               && self.absoluteURL.absoluteString.lowercased() != scheme + ":"
     }
 
     public func havingRemovedAuthorisationComponents() -> URL {
@@ -230,7 +231,9 @@ extension URL {
 
 extension URL {
     public static var mozPublicScheme: String = {
-        guard let string = Bundle.main.object(forInfoDictionaryKey: "MozPublicURLScheme") as? String, !string.isEmpty else {
+        guard let string = Bundle.main.object(
+            forInfoDictionaryKey: "MozPublicURLScheme"
+        ) as? String, !string.isEmpty else {
             // Something went wrong/weird, fall back to hard-coded.
             return "firefox"
         }
@@ -238,7 +241,9 @@ extension URL {
     }()
 
     public static var mozInternalScheme: String = {
-        guard let string = Bundle.main.object(forInfoDictionaryKey: "MozInternalURLScheme") as? String, !string.isEmpty else {
+        guard let string = Bundle.main.object(
+            forInfoDictionaryKey: "MozInternalURLScheme"
+        ) as? String, !string.isEmpty else {
             // Something went wrong/weird, fallback to the public one.
             return Self.mozPublicScheme
         }

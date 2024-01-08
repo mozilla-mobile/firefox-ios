@@ -44,7 +44,11 @@ class LegacyTabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIG
         }
     }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        referenceSizeForHeaderInSection section: Int
+    ) -> CGSize {
         return .zero
     }
 
@@ -133,7 +137,11 @@ class LegacyTabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIG
     }
 
     @objc
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumLineSpacingForSectionAt section: Int
+    ) -> CGFloat {
         return LegacyGridTabViewController.UX.margin
     }
 

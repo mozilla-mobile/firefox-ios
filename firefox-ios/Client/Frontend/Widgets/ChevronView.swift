@@ -88,7 +88,8 @@ class ChevronView: UIView {
 
         tintColor.set()
 
-        // The line thickness needs to be proportional to the distance from the arrow head to the tips.  Making it half seems about right.
+        // The line thickness needs to be proportional to the distance from the arrow head to the tips.
+        // Making it half seems about right.
         path.lineCapStyle = lineCapStyle
         path.lineJoinStyle = lineJoinStyle
         path.lineWidth = lineWidth

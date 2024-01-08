@@ -1,3 +1,6 @@
+/* Contextual hints are little popups that appear for the users informing them of new features. This one indicates that a user can tap on the shopping button to start using the Shopping feature. */
+"ContextualHints.Shopping.NotOptedIn.v120" = "ค้นพบว่าคุณสามารถเชื่อถือบทวิจารณ์ของผลิตภัณฑ์นี้ได้หรือไม่ ก่อนที่คุณจะตัดสินใจซื้อ";
+
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing the Shopping feature. It indicates that a user can go directly to the Shopping feature by tapping the text of the action. */
 "ContextualHints.Shopping.NotOptedInAction.v120" = "ลองตัวตรวจสอบบทวิจารณ์";
 
@@ -56,7 +59,13 @@
 "Shopping.HighlightsCard.Title.v120" = "ไฮไลต์จากบทวิจารณ์ล่าสุด";
 
 /* Title for info card when Fakespot cannot analyze reviews for a certain product type */
+"Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Description.v120" = "ขออภัย เราไม่สามารถตรวจสอบคุณภาพบทวิจารณ์สำหรับผลิตภัณฑ์บางชนิดได้ เช่น บัตรของขวัญ วิดีโอสตรีมมิง เพลง และเกม";
+
+/* Title for info card when Fakespot cannot analyze reviews for a certain product type */
 "Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Title.v120" = "ไม่สามารถตรวจสอบบทวิจารณ์เหล่านี้ได้";
+
+/* Description text for an information card used in the review checker section. This message is displayed when the reviews for a product are not yet available but are expected to be provided within the next 24 hours. It serves to inform users of the short wait for reviews and encourages them to return soon for the updated information. */
+"Shopping.InfoCard.InfoComingSoon.Description.v121" = "เราคาดว่าจะได้รับข้อมูลเกี่ยวกับบทวิจารณ์ของผลิตภัณฑ์นี้ภายใน 24 ชั่วโมง โปรดกลับมาตรวจสอบอีกครั้งในภายหลัง";
 
 /* Title for an information card that is displayed in the review checker section when certain details about a product or feature are not currently available but are expected to be provided soon. The message should imply that the user can look forward to receiving more information shortly. */
 "Shopping.InfoCard.InfoComingSoon.Title.v121" = "ข้อมูลจะมาเร็ว ๆ นี้";
@@ -73,11 +82,17 @@
 /* Title for info card when no information is available at the moment */
 "Shopping.InfoCard.NoInfoAvailableRightNow.Title.v120" = "ไม่มีข้อมูลในขณะนี้";
 
+/* Description for info card when there are not enough reviews for a product */
+"Shopping.InfoCard.NotEnoughReviews.Description.v120" = "เมื่อผลิตภัณฑ์นี้มีบทวิจารณ์มากขึ้น เราจะสามารถตรวจสอบคุณภาพของบทวิจารณ์ได้";
+
 /* Title for info card when there are not enough reviews for a product */
 "Shopping.InfoCard.NotEnoughReviews.Title.v120" = "บทวิจารณ์ยังไม่เพียงพอ";
 
+/* Description for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This description is used for info card where the user can report if it's back in stock. */
+"Shopping.InfoCard.ProductNotInStock.Description.v121" = "หากคุณเห็นว่าสินค้านี้มีอยู่ในสต็อกแล้ว โปรดรายงานแล้วเราจะทำการตรวจสอบบทวิจารณ์";
+
 /* Primary action label for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This primary action label is used for info card button where the user can report if it's back in stock. */
-"Shopping.InfoCard.ProductNotInStock.PrimaryAction.v121" = "รายงานสินค้ากลับมาในสต็อก";
+"Shopping.InfoCard.ProductNotInStock.PrimaryAction.v121" = "รายงานว่าสินค้ากลับมาในสต็อกแล้ว";
 
 /* Title for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This title is used for info card where the user can report if it's back in stock. */
 "Shopping.InfoCard.ProductNotInStock.Title.v121" = "สินค้าไม่พร้อมจำหน่าย";
@@ -88,11 +103,17 @@
 /* Title for info card when the product is in analysis mode */
 "Shopping.InfoCard.ProgressAnalysis.Title.v120" = "กำลังตรวจสอบคุณภาพบทวิจารณ์";
 
+/* This description appears beneath the confirmation title on the information card to inform the user that their report regarding the product stock status has been received and is being processed. It serves to set the expectation that the review information will be updated within 24 hours and invites the user to revisit the product page for updates. */
+"Shopping.InfoCard.ReportSubmittedByCurrentUser.Description.v121" = "เราคาดว่าจะได้รับข้อมูลเกี่ยวกับบทวิจารณ์ของผลิตภัณฑ์นี้ภายใน 24 ชั่วโมง โปรดกลับมาตรวจสอบอีกครั้งในภายหลัง";
+
 /* This title is displayed on the information card as a confirmation message after a user reports that a previously out-of-stock product is now available. It's meant to acknowledge the user's contribution and encourage community engagement by letting them know their report has been successfully submitted. */
 "Shopping.InfoCard.ReportSubmittedByCurrentUser.Title.v121" = "ขอบคุณสำหรับการรายงาน!";
 
 /* Text for the analyzer button displayed when an analysis can be updated for a product. */
 "Shopping.NoAnalysisCard.AnalyzerButton.Title.v120" = "ตรวจสอบคุณภาพบทวิจารณ์";
+
+/* Text for the body label, to check the reliability of a product. */
+"Shopping.NoAnalysisCard.BodyLabel.Title.v120" = "หากต้องการทราบว่าบทวิจารณ์ของผลิตภัณฑ์นี้เชื่อถือได้หรือไม่ ให้ตรวจสอบคุณภาพบทวิจารณ์ โดยจะใช้เวลาเพียงประมาณ 60 วินาที";
 
 /* Title for card displayed when a shopping product has not been analysed yet. */
 "Shopping.NoAnalysisCard.HeadlineLabel.Title.v120" = "ยังไม่มีข้อมูลเกี่ยวกับบทวิจารณ์เหล่านี้";
@@ -103,17 +124,32 @@
 /* Title for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
 "Shopping.NoAnalysisCard.InProgress.Headline.Title.v120" = "กำลังตรวจสอบคุณภาพบทวิจารณ์";
 
+/* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replaced by the Fakespot app name. After the colon, what appears are two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
+"Shopping.OptInCard.Disclaimer.Text.v120" = "การเลือก “ใช่ ลองใช้เลย” ถือว่าคุณยอมรับข้อตกลงต่อไปนี้จาก %@:";
+
+/* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. This string is almost identical with 'Shopping.OptInCard.FirstParagraph.Description', but without Best Buy and Walmart websites, which are not available in many locales. */
+"Shopping.OptInCard.FirstParagraph.AmazonOnly.Description.v122" = "ดูว่าบทวิจารณ์ผลิตภัณฑ์น่าเชื่อถือแค่ไหนใน %1$@ ก่อนตัดสินใจซื้อ ตัวตรวจสอบบทวิจารณ์ ซึ่งเป็นคุณลักษณะทดลองจาก %2$@ ถูกบรรจุไว้ภายในตัวเบราว์เซอร์โดยตรง";
+
+/* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. The third and fourth parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. */
+"Shopping.OptInCard.FirstParagraph.Description.v120" = "ดูว่าบทวิจารณ์ผลิตภัณฑ์น่าเชื่อถือแค่ไหนใน %1$@ ก่อนตัดสินใจซื้อ ตัวตรวจสอบบทวิจารณ์ ซึ่งเป็นคุณลักษณะทดลองจาก %2$@ ถูกบรรจุไว้ภายในตัวเบราว์เซอร์โดยตรง ซึ่งสามารถใช้ใน %3$@ และ %4$@ ได้ด้วย";
+
+/* Label for the header of the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.HeaderLabel.Title.v120" = "ลองใช้คำแนะนำที่เชื่อถือได้ของเราเกี่ยวกับบทวิจารณ์ผลิตภัณฑ์";
+
 /* Label for the Learn more button in the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.LearnMoreButtonTitle.Title.v120" = "เรียนรู้เพิ่มเติม";
 
 /* Text for the main button of the Shopping Experience Opt In onboarding Card (Fakespot) */
-"Shopping.OptInCard.MainButton.Title.v120" = "ใช่ลองดู";
+"Shopping.OptInCard.MainButton.Title.v120" = "ใช่ ลองใช้เลย";
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
 "Shopping.OptInCard.PrivacyPolicy.Button.Title.v120" = "นโยบายความเป็นส่วนตัว";
 
 /* Text for the secondary button of the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.SecondaryButton.Title.v120" = "ไม่ใช่ตอนนี้";
+
+/* Label for the second paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be replaced by the Fakespot app name. The second parameter will be replaced the company name of Mozilla. */
+"Shopping.OptInCard.SecondParagraph.Description.v120" = "ด้วยการใช้พลังของ %1$@ โดย %2$@ เราช่วยให้คุณหลีกเลี่ยงบทวิจารณ์ที่มีอคติและไม่น่าไว้วางใจได้ โมเดล AI ของเราจะปรับปรุงอยู่เสมอเพื่อปกป้องคุณในขณะที่คุณซื้อของ";
 
 /* Show Firefox Browser Terms of Use page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
 "Shopping.OptInCard.TermsOfUse.Button.Title.v120" = "เงื่อนไขการใช้งาน";
@@ -133,8 +169,26 @@
 /* Description of the reliability ratings for rating 'D' and 'F' displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQuality.ReliabilityRating.DF.Description.v120" = "บทวิจารณ์ที่ไม่น่าเชื่อถือ";
 
+/* Adjusted rating label from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.AdjustedRating.Label.v120" = "*คะแนนที่ปรับปรุงแล้ว*จะขึ้นอยู่กับบทวิจารณ์ที่เราเชื่อว่าน่าเชื่อถือเท่านั้น";
+
+/* Accessibility label for the up chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.Collapse.AccessibilityLabel.v120" = "ยุบการ์ด วิธีที่เราพิจารณาคุณภาพบทวิจารณ์";
+
+/* Accessibility label for the down chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.Expand.AccessibilityLabel.v120" = "ขยายการ์ด วิธีที่เราพิจารณาคุณภาพบทวิจารณ์";
+
+/* Label of the headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
+"Shopping.ReviewQualityCard.Headline.Label.v120" = "เราใช้เทคโนโลยี AI จาก %1$@ โดย %2$@ เพื่อตรวจสอบความน่าเชื่อถือของบทวิจารณ์ผลิตภัณฑ์ สิ่งนี้จะช่วยคุณประเมินคุณภาพของบทวิจารณ์เพียงอย่างเดียว ไม่ได้ประเมินคุณภาพของผลิตภัณฑ์";
+
+/* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.Highlights.Label.v120" = "*ไฮไลต์*มาจากบทวิจารณ์ใน %1@ ภายใน 80 วันที่ผ่านมา ซึ่งเราเชื่อว่าน่าเชื่อถือ";
+
 /* Title of the 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQualityCard.Label.Title.v120" = "วิธีที่เราพิจารณาคุณภาพบทวิจารณ์";
+
+/* The title of the learn more button from How we determine review quality card displayed in the shopping review quality bottom sheet. The placeholder will be replaced with the Fakespot app name. */
+"Shopping.ReviewQualityCard.LearnMoreButton.Title.v120" = "เรียนรู้เพิ่มเติมเกี่ยวกับวิธีที่ %@ พิจารณาคุณภาพบทวิจารณ์";
 
 /* Mixed reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQualityCard.MixedReviews.Label.v120" = "เราเชื่อว่ามีทั้งบทวิจารณ์ที่น่าเชื่อถือและไม่น่าเชื่อถือปะปนกัน";
@@ -153,6 +207,9 @@
 
 /* Accessibility label for the down chevron icon used to expand or show the details of the Settings Card within the shopping product review bottom sheet. */
 "Shopping.SettingsCard.Expand.AccessibilityLabel.v120" = "ขยายการ์ดการตั้งค่า";
+
+/* Action title of the footer underneath the Settings Card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
+"Shopping.SettingsCard.Footer.Action.v120" = "ตัวตรวจสอบบทวิจารณ์ขับเคลื่อนโดย %1$@ โดย %2$@";
 
 /* Title of the settings card displayed in the shopping review quality bottom sheet. */
 "Shopping.SettingsCard.Label.Title.v120" = "การตั้งค่า";
