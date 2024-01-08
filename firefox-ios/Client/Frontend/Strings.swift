@@ -1715,16 +1715,16 @@ extension String {
                 public static let LearnAboutSuggestions = MZLocalizedString(
                     key: "Settings.Search.Accessibility.LearnAboutSuggestions.v124",
                     tableName: "Settings",
-                    value: "Learn more about %@ Suggest",
-                    comment: "Accessibility label for Learn more about Firefox Suggest. Placeholder is for the app name - Firefox.")
+                    value: "Learn more about Firefox Suggest",
+                    comment: "Accessibility label for Learn more about Firefox Suggest.")
             }
 
             public struct Suggest {
                 public static let AddressBarSettingsTitle = MZLocalizedString(
                     key: "Settings.Search.Suggest.AddressBarSetting.Title.v124",
                     tableName: "Settings",
-                    value: "Address bar - %@ Suggest",
-                    comment: "In the Search page of the Settings menu, the title for the Firefox Suggest settings section. Placeholder is for the app name - Firefox.")
+                    value: "Address bar - Firefox Suggest",
+                    comment: "In the Search page of the Settings menu, the title for the Firefox Suggest settings section.")
                 public static let ShowNonSponsoredSuggestionsTitle = MZLocalizedString(
                     key: "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124",
                     tableName: "Settings",
@@ -1748,8 +1748,8 @@ extension String {
                 public static let LearnAboutSuggestions = MZLocalizedString(
                     key: "Settings.Search.Suggest.LearnAboutSuggestions.v124",
                     tableName: "Settings",
-                    value: "Learn more about %@ Suggest",
-                    comment: "In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. Placeholder is for the app name - Firefox."
+                    value: "Learn more about Firefox Suggest",
+                    comment: "In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest."
                 )
             }
         }
