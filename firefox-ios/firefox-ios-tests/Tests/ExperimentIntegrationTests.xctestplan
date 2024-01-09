@@ -38,7 +38,7 @@
         "FxScreenGraphTests",
         "HistoryTests",
         "HomeButtonTests",
-        "HomePageSettingsUITests",
+        "HomePageSettingsUITests\/testRecentlyVisited()",
         "IntegrationTests",
         "IpadOnlyTestCase",
         "IphoneOnlyTestCase",
