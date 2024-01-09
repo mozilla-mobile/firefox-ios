@@ -8,7 +8,7 @@ import Glean
 import XCTest
 import Common
 
-class TabsQuantityTelemetryTests: XCTestCase {
+class TabsTelemetryTests: XCTestCase {
     var profile: Profile!
     var inactiveTabsManager: MockInactiveTabsManager!
 
@@ -37,7 +37,7 @@ class TabsQuantityTelemetryTests: XCTestCase {
         inactiveTabsManager.activeTabs = [tab]
         _ = inactiveTabsManager.getInactiveTabs(tabs: [tab])
 
-        TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
+        TabsTelemetry.trackTabsQuantity(tabManager: tabManager)
 
         testQuantityMetricSuccess(metric: GleanMetrics.Tabs.privateTabsQuantity,
                                   expectedValue: 0,
@@ -52,7 +52,7 @@ class TabsQuantityTelemetryTests: XCTestCase {
         let tabManager = TabManagerImplementation(profile: profile)
         tabManager.addTab(isPrivate: true)
 
-        TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
+        TabsTelemetry.trackTabsQuantity(tabManager: tabManager)
 
         testQuantityMetricSuccess(metric: GleanMetrics.Tabs.privateTabsQuantity,
                                   expectedValue: 1,
@@ -70,7 +70,7 @@ class TabsQuantityTelemetryTests: XCTestCase {
         inactiveTabsManager.activeTabs = [tab]
         _ = inactiveTabsManager.getInactiveTabs(tabs: [tab])
 
-        TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
+        TabsTelemetry.trackTabsQuantity(tabManager: tabManager)
 
         testQuantityMetricSuccess(metric: GleanMetrics.Tabs.privateTabsQuantity,
                                   expectedValue: 0,
@@ -79,5 +79,16 @@ class TabsQuantityTelemetryTests: XCTestCase {
         testQuantityMetricSuccess(metric: GleanMetrics.Tabs.inactiveTabsCount,
                                   expectedValue: 0,
                                   failureMessage: "Should have no inactive tabs, since a new tab was just created.")
+    }
+
+    func testTabSwitchMeasurement() throws {
+        let subject = TabsTelemetry()
+
+        subject.startTabSwitchMeasurement()
+        subject.stopTabSwitchMeasurement()
+
+        let resultValue = try XCTUnwrap(GleanMetrics.Tabs.tabSwitch.testGetValue())
+        XCTAssertEqual(1, resultValue.count, "Should have been measured once")
+        XCTAssertEqual(0, GleanMetrics.Tabs.tabSwitch.testGetNumRecordedErrors(.invalidValue))
     }
 }

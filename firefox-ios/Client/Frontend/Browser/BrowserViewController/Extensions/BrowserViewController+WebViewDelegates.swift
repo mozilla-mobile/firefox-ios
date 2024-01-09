@@ -769,6 +769,8 @@ extension BrowserViewController: WKNavigationDelegate {
                                             method: .error,
                                             object: .webview,
                                             value: .webviewFail)
+
+        webviewTelemetry.cancel()
     }
 
     /// Invoked when an error occurs while starting to load data for the main frame.
@@ -785,6 +787,8 @@ extension BrowserViewController: WKNavigationDelegate {
                                             method: .error,
                                             object: .webview,
                                             value: .webviewFailProvisional)
+
+        webviewTelemetry.cancel()
 
         // Ignore the "Frame load interrupted" error that is triggered when we cancel a request
         // to open an external application and hand it over to UIApplication.openURL(). The result
@@ -858,6 +862,7 @@ extension BrowserViewController: WKNavigationDelegate {
         else { return }
 
         searchTelemetry?.trackTabAndTopSiteSAP(tab, webView: webView)
+        webviewTelemetry.start()
         tab.url = webView.url
 
         // Only update search term data with valid search term data
@@ -895,6 +900,8 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        webviewTelemetry.stop()
+
         if let tab = tabManager[webView],
            let metadataManager = tab.metadataManager {
             navigateInTab(tab: tab, to: navigation, webViewStatus: .finishedNavigation)
