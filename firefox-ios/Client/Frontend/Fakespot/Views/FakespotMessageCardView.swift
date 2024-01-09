@@ -131,13 +131,10 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
     private enum UX {
         static let linkFontSize: CGFloat = 12
         static let buttonFontSize: CGFloat = 16
-<<<<<<< HEAD
         static let progressViewFontSize: CGFloat = 15
         static let buttonVerticalInset: CGFloat = 12
         static let buttonHorizontalInset: CGFloat = 16
         static let buttonCornerRadius: CGFloat = 13
-=======
->>>>>>> bfef0d9b7 (Fixed white space, implemented ViewModel, preserved fonts, removed redundant color assignments.)
         static let contentHorizontalSpacing: CGFloat = 4
         static let contentVerticalSpacing: CGFloat = 8
         static let iconStackViewSpacing: CGFloat = 4
