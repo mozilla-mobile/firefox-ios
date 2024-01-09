@@ -6,7 +6,8 @@ import SwiftUI
 import Common
 
 struct CircularProgressView: View, ThemeApplicable {
-    @Environment(\.themeType) var themeVal
+    @Environment(\.themeType)
+    var themeVal
     @ObservedObject var viewModel: FakespotMessageCardViewModel
     @State private var backgroundColor: Color = .gray
     @State private var foregroundColor: Color = .blue
@@ -25,8 +26,7 @@ struct CircularProgressView: View, ThemeApplicable {
         }
     }
 
-    @ViewBuilder
-    private var progressCircularView: some View {
+    @ViewBuilder private var progressCircularView: some View {
         ZStack {
             Circle()
                 .stroke(
