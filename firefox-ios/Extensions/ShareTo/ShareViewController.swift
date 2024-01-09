@@ -95,24 +95,21 @@ class ShareViewController: UIViewController {
         setupNavBar()
         setupStackView()
 
-        guard RustFirefoxAccounts.shared.hasAccount() else {
-            // Show brief spinner in UI while necessary startup is finishing
+        if RustFirefoxAccounts.shared.accountManager == nil {
+            // Show brief spinner in UI while startup is finishing
             showProgressIndicator()
 
             let profile = BrowserProfile(localName: "profile")
             Viaduct.shared.useReqwestBackend()
             RustFirefoxAccounts.startup(prefs: profile.prefs) { [weak self] _ in
-                // Hide spinner and finish UI setup
-                // (Note: this completion block is currently guaranteed
-                // to arrive on the main thread. No dispatch needed.)
+                // Hide spinner and finish UI setup (Note: this completion
+                // block is currently guaranteed to arrive on main thread.)
                 self?.hideProgressIndicator()
                 self?.finalizeUISetup()
             }
-
-            return
+        } else {
+            finalizeUISetup()
         }
-
-        finalizeUISetup()
     }
 
     private func finalizeUISetup() {
