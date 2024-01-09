@@ -485,10 +485,10 @@ extension ShareViewController {
         guard let shareItem = shareItem, case .shareItem(let item) = shareItem else { return }
 
         gesture.isEnabled = false
-        sendToDevice = SendToDevice()
-        guard let sendToDevice = sendToDevice else { return }
+        self.sendToDevice = SendToDevice()
+        guard let sendToDevice = self.sendToDevice else { return }
         sendToDevice.sharedItem = item
-        sendToDevice.delegate = delegate
+        sendToDevice.delegate = self.delegate
         let vc = sendToDevice.initialViewController()
         navigationController?.pushViewController(vc, animated: true)
     }
