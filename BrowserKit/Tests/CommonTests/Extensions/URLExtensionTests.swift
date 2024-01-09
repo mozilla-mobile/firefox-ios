@@ -6,6 +6,7 @@ import XCTest
 @testable import Common
 
 final class URLExtensionTests: XCTestCase {
+
     func testNormalBaseDomainWithSingleSubdomain() {
         // TLD Entry: co.uk
         let url = URL(string: "http://a.bbc.co.uk")!
