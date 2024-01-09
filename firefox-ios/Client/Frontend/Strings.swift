@@ -5939,13 +5939,13 @@ extension String {
                 lastUsedInVersion: 121)
         }
 
-        struct v123 {
+        struct v122 {
             public static let InfoCardProgressAnalysisTitle = MZLocalizedString(
                 key: "Shopping.InfoCard.ProgressAnalysis.Title.v120",
                 tableName: "Shopping",
                 value: "Checking review quality",
                 comment: "Title for info card when the product is in analysis mode",
-                lastUsedInVersion: 123)
+                lastUsedInVersion: 122)
         }
     }
 }

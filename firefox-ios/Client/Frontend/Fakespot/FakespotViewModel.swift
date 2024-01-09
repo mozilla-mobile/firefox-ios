@@ -5,7 +5,6 @@
 import UIKit
 import Common
 import Shared
-import SwiftUI
 
 class FakespotViewModel {
     enum ViewState {

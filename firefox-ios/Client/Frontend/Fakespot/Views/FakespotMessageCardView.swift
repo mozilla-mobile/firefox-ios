@@ -250,7 +250,10 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
             }
             accessoryView = imageView
         case .progress:
-            titleLabel.text = String(format: viewModel.title, viewModel.formatProgress())
+            titleLabel.text = String.localizedStringWithFormat(
+                viewModel.title,
+                viewModel.formatProgress()
+            )
             titleLabel.font = DefaultDynamicFontHelper.preferredFont(
                 withTextStyle: .subheadline,
                 size: UX.progressViewFontSize
@@ -258,11 +261,14 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
 
             viewModel.analysisProgressChanged = { [weak self] progress in
                 let progressLevel = viewModel.formatProgress(progress / 100.0)
-                self?.titleLabel.text = String(format: viewModel.title, progressLevel)
+                self?.titleLabel.text = String.localizedStringWithFormat(
+                    viewModel.title,
+                    progressLevel
+                )
             }
 
             let swiftUICircularProgressView = CircularProgressView(viewModel: viewModel)
-            let circularProgressView = UIHostingController(rootView: swiftUICircularProgressView).view!
+            let circularProgressView = UIHostingController(rootView: swiftUICircularProgressView).view ?? UIView()
             circularProgressView.translatesAutoresizingMaskIntoConstraints = false
             circularProgressView.backgroundColor = .clear
 
