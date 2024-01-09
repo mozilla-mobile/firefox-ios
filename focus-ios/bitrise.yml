@@ -119,7 +119,7 @@ workflows:
         - webhook_url: "$SLACK_WEBHOOK"
     meta:
       bitrise.io:
-        stack: osx-xcode-15.1.x
+        stack: osx-xcode-15.2.x
         machine_type_id: g2-m1.8core
   
   ui_test_focus:
@@ -189,7 +189,7 @@ workflows:
 
     meta:
       bitrise.io:
-        stack: osx-xcode-15.1.x
+        stack: osx-xcode-15.2.x
         machine_type_id: g2-m1.8core
 
   unit_test_klar:
@@ -234,7 +234,7 @@ workflows:
         - webhook_url: "$SLACK_WEBHOOK"
     meta:
       bitrise.io:
-        stack: osx-xcode-15.1.x
+        stack: osx-xcode-15.2.x
         machine_type_id: g2-m1.8core
 
   unit_test_focus:
@@ -280,7 +280,7 @@ workflows:
 
     meta:
       bitrise.io:
-        stack: osx-xcode-15.1.x
+        stack: osx-xcode-15.2.x
         machine_type_id: g2-m1.8core
 
 
@@ -299,7 +299,7 @@ workflows:
         title: ContentBlockerGen
     meta:
       bitrise.io:
-        stack: osx-xcode-15.1.x
+        stack: osx-xcode-15.2.x
 
 
   set-project-version:
@@ -326,7 +326,7 @@ workflows:
         title: Set OpenInFocus version numbers
     meta:
       bitrise.io:
-        stack: osx-xcode-15.1.x
+        stack: osx-xcode-15.2.x
 
 
   configure-nimbus:
@@ -343,7 +343,7 @@ workflows:
             /usr/libexec/PlistBuddy -c "Set :NimbusAppChannel ${NIMBUS_APP_CHANNEL}" focus-ios/Blockzilla/Info.plist
     meta:
       bitrise.io:
-        stack: osx-xcode-15.1.x
+        stack: osx-xcode-15.2.x
 
 
   configure-sentry:
@@ -357,7 +357,7 @@ workflows:
             /usr/libexec/PlistBuddy -c "Add :SentryDSN string ${SENTRY_DSN}" focus-ios/Blockzilla/Info.plist
     meta:
       bitrise.io:
-        stack: osx-xcode-15.1.x
+        stack: osx-xcode-15.2.x
 
 
   set-default-browser-entitlement:
@@ -372,7 +372,7 @@ workflows:
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" focus-ios/Klar.entitlements
     meta:
       bitrise.io:
-        stack: osx-xcode-15.1.x
+        stack: osx-xcode-15.2.x
 
 
   release:
@@ -419,7 +419,7 @@ workflows:
               --org mozilla --project klar-ios "$BITRISE_DSYM_DIR_PATH"
     meta:
       bitrise.io:
-        stack: osx-xcode-15.1.x
+        stack: osx-xcode-15.2.x
         machine_type_id: g2-m1.8core
     before_run:
       - clone-and-build-dependencies
@@ -490,7 +490,7 @@ workflows:
         - deploy_path: artifacts/
     meta:
       bitrise.io:
-        stack: osx-xcode-15.1.x
+        stack: osx-xcode-15.2.x
         machine_type_id: g2-m1.8core
   L10nBuild:
     steps:
@@ -532,7 +532,7 @@ workflows:
         - is_compress: 'true'
     meta:
       bitrise.io:
-        stack: osx-xcode-15.1.x
+        stack: osx-xcode-15.2.x
         machine_type_id: g2-m1.8core
 
 app:
@@ -546,5 +546,5 @@ app:
 
 meta:
   bitrise.io:
-    stack: osx-xcode-15.1.x
+    stack: osx-xcode-15.2.x
     machine_type_id: g2-m1.8core
