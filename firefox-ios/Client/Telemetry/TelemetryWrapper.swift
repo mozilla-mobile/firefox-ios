@@ -1731,13 +1731,13 @@ extension TelemetryWrapper {
 
         // MARK: - History Highlights
         case (.action, .tap, .firefoxHomepage, .historyHighlightsShowAll, _):
-            GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
+            GleanMetrics.FirefoxHomePage.historyHighlightsShowAll.add()
         case (.action, .tap, .firefoxHomepage, .historyHighlightsItemOpened, _):
-            GleanMetrics.FirefoxHomePage.historyHighlightsItemOpened.record()
+            GleanMetrics.FirefoxHomePage.historyHighlightsItemOpened.add()
         case (.action, .tap, .firefoxHomepage, .historyHighlightsGroupOpen, _):
-            GleanMetrics.FirefoxHomePage.historyHighlightsGroupOpen.record()
+            GleanMetrics.FirefoxHomePage.historyHighlightsGroupOpen.add()
         case (.action, .view, .historyImpressions, _, _):
-            GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
+            GleanMetrics.FirefoxHomePage.historyImpressions.add()
         case (.action, .view, .historyHighlightContextualMenu, _, let extras):
             if let type = extras?[EventExtraKey.contextualMenuType.rawValue] as? String {
                 let contextExtra = GleanMetrics.FirefoxHomePage.HistoryHighlightsContextExtra(type: type)
