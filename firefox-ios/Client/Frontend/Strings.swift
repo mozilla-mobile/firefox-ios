@@ -229,6 +229,24 @@ extension String {
     }
 }
 
+// MARK: - Address Autofill
+extension String {
+    public struct Addresses {
+        public struct EditCard {
+            public static let ToggleToAllowAutofillTitle = MZLocalizedString(
+                key: "Addresses.Settings.EditCard.ToggleToAllowAutofillTitle.v124",
+                tableName: "Settings",
+                value: "Save and Fill Addresses",
+                comment: "Title label for user to use the toggle settings to allow saving and autofilling of addresses for webpages.")
+            public static let PlaceholderToggleToAllowAutofillTitle = MZLocalizedString(
+                key: "Addresses.Settings.EditCard.PlaceholderToggleToAllowAutofillTitle.v124",
+                tableName: "Settings",
+                value: "Includes phone numbers and email addresses",
+                comment: "Placeholder label for user to use the toggle settings to allow saving and autofilling of addresses for webpages, including phone numbers and email addresses. The placeholder text reads: Includes phone numbers and email addresses.")
+        }
+    }
+}
+
 // MARK: - Credit card
 extension String {
     public struct CreditCard {

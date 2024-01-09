@@ -4,25 +4,33 @@
 
 import UIKit
 import Common
+import SwiftUI
 
 // MARK: - AddressAutofillSettingsViewController
+
+/// View controller for managing address autofill settings.
 class AddressAutofillSettingsViewController: SensitiveViewController, Themeable {
     // MARK: Properties
 
-    // ViewModel for managing address autofill settings
+    /// ViewModel for managing address autofill settings.
     var viewModel: AddressAutofillSettingsViewModel
 
-    // Observer for theme changes
+    /// Observer for theme changes.
     var themeObserver: NSObjectProtocol?
 
-    // Manager responsible for handling themes
+    /// Manager responsible for handling themes.
     var themeManager: ThemeManager
 
-    // NotificationCenter for handling notifications
+    /// NotificationCenter for handling notifications.
     var notificationCenter: NotificationProtocol
 
-    // Logger for logging messages and events
+    /// Logger for logging messages and events.
     private let logger: Logger
+
+    // MARK: Views
+
+    /// Hosting controller for the empty state view in address autofill settings.
+    var addressAutofillEmptyView: UIHostingController<AddressAutofillSettingsEmptyView>
 
     // MARK: Initializers
 
@@ -40,7 +48,8 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.logger = logger
-        // ... initialize other dependencies
+        let emptyView = AddressAutofillSettingsEmptyView(toggleModel: viewModel.toggleModel)
+        self.addressAutofillEmptyView = UIHostingController(rootView: emptyView)
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -54,8 +63,26 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
     /// Called after the controller's view is loaded into memory.
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewSetup()
         listenForThemeChange(view)
         applyTheme()
+    }
+
+    /// Sets up the view hierarchy and initial configurations.
+    func viewSetup() {
+        guard let emptyAddressAutofillView = addressAutofillEmptyView.view else { return }
+        emptyAddressAutofillView.translatesAutoresizingMaskIntoConstraints = false
+
+        addChild(addressAutofillEmptyView)
+        view.addSubview(emptyAddressAutofillView)
+        self.title = .SettingsAddressAutofill
+
+        NSLayoutConstraint.activate([
+            emptyAddressAutofillView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            emptyAddressAutofillView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            emptyAddressAutofillView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            emptyAddressAutofillView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+        ])
     }
 
     // MARK: Themeable Protocol
