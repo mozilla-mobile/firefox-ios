@@ -3874,7 +3874,7 @@ extension String {
         public static let SettingsCardGroupedRecommendedProductsAndSwitchAccessibilityLabel = MZLocalizedString(
             key: "Shopping.SettingsCard.Expand.GroupedRecommendedProductsAndSwitch.AccessibilityLabel.v123",
             tableName: "Shopping",
-            value: "%1$@, switch button,  %2$@.",
+            value: "%1$@, switch button, %2$@.",
             comment: "Accessibility label for the recommended products label and switch, grouped together. The first placeholder is for the recommended products label, and the second placeholder is for the state of the switch: On/Off.")
         public static let SettingsCardGroupedRecommendedProductsAndSwitchAccessibilityHint = MZLocalizedString(
             key: "Shopping.SettingsCard.Expand.GroupedRecommendedProductsAndSwitch.AccessibilityHint.v123",
@@ -3890,7 +3890,7 @@ extension String {
             key: "Shopping.SettingsCard.SwitchValueOn.AccessibilityLabel.v123",
             tableName: "Shopping",
             value: "Off",
-            comment: "Toggled Off accessibility switch valu,e from Settings Card within the shopping product review bottom sheet.")
+            comment: "Toggled Off accessibility switch value from Settings Card within the shopping product review bottom sheet.")
         public static let SettingsCardExpandAccessibilityLabel = MZLocalizedString(
             key: "Shopping.SettingsCard.Expand.AccessibilityLabel.v120",
             tableName: "Shopping",
