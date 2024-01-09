@@ -350,7 +350,6 @@ class HomePageSettingsUITests: BaseTestCase {
             mozWaitForElementToExist(app.collectionViews["FxCollectionView"], timeout: TIMEOUT)
             app.collectionViews["FxCollectionView"].swipeUp()
             app.collectionViews["FxCollectionView"].swipeUp()
-            app.collectionViews["FxCollectionView"].swipeUp()
             mozWaitForElementToExist(
                 app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage],
                 timeout: TIMEOUT
@@ -380,10 +379,12 @@ class HomePageSettingsUITests: BaseTestCase {
 //            app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentlySaved].value as! String,
 //            "1"
 //        )
-        XCTAssertEqual(
-            app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentVisited].value as! String,
-            "1"
-        )
+//        FXIOS-8107: Disabled test as history highlights has been disabled to fix app hangs / slowness
+//        Reloads for notification
+//        XCTAssertEqual(
+//            app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentVisited].value as! String,
+//            "1"
+//        )
         XCTAssertEqual(
             app.cells.switches["Thought-Provoking Stories, Articles powered by Pocket"].value as! String,
             "1"
