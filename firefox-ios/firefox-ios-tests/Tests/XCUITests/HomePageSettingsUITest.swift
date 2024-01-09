@@ -58,8 +58,10 @@ class HomePageSettingsUITests: BaseTestCase {
         XCTAssertEqual("1", jumpBackIn as? String)
         let recentlySaved = app.tables.cells.switches["Recently Saved"].value
         XCTAssertEqual("1", recentlySaved as? String)
-        let recentlyVisited = app.tables.cells.switches["Recently Visited"].value
-        XCTAssertEqual("1", recentlyVisited as? String)
+        // FXIOS-8107: Commented out as history highlights has been disabled to fix app hangs / slowness
+        // Reloads for notification
+        // let recentlyVisited = app.tables.cells.switches["Recently Visited"].value
+        // XCTAssertEqual("1", recentlyVisited as? String)
         let sponsoredStories = app.tables.cells.switches["Thought-Provoking Stories, Articles powered by Pocket"].value
         XCTAssertEqual("1", sponsoredStories as? String)
 
@@ -291,6 +293,8 @@ class HomePageSettingsUITests: BaseTestCase {
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306923
     // Smoketest
+    // FXIOS-8107: Disabled test as history highlights has been disabled to fix app hangs / slowness
+    // Reloads for notification
     func testRecentlyVisited() {
         navigator.openURL(websiteUrl1)
         waitUntilPageLoad()
@@ -379,8 +383,9 @@ class HomePageSettingsUITests: BaseTestCase {
 //            app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentlySaved].value as! String,
 //            "1"
 //        )
-//        FXIOS-8107: Disabled test as history highlights has been disabled to fix app hangs / slowness
-//        Reloads for notification
+
+        // FXIOS-8107: Commented out as history highlights has been disabled to fix app hangs / slowness
+        // Reloads for notification
 //        XCTAssertEqual(
 //            app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentVisited].value as! String,
 //            "1"
