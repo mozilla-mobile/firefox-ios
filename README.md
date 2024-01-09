@@ -7,7 +7,7 @@ Download on the [App Store](https://apps.apple.com/app/firefox-web-browser/id989
 This branch (main)
 -----------
 
-This branch works with [Xcode 15.1](https://developer.apple.com/download/all/?q=xcode), Swift 5.8 and supports iOS 17.2 and above.
+This branch works with [Xcode 15.2](https://developer.apple.com/download/all/?q=xcode), Swift 5.8 and supports iOS 17.2 and above.
 
 Please make sure you aim your pull requests in the right direction.
 
