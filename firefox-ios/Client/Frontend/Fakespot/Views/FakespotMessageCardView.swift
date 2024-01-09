@@ -207,7 +207,6 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .callout,
             size: UX.buttonFontSize)
-        button.titleLabel?.textAlignment = .center
         button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
     }
 
