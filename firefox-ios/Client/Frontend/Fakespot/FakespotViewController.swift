@@ -454,16 +454,13 @@ class FakespotViewController: UIViewController,
              return view
 
         case .productAdCard(let adData):
-            // .trustedDealsPlacement is sent to PE, regardless of whether the component containing the trusted deals is visible on the screen or not
-            self.viewModel.reportAdEvent(eventName: .trustedDealsPlacement, aid: adData.aid)
             guard viewModel.areAdsEnabled else { return nil }
-
             let view: FakespotAdView = .build()
             var viewModel = FakespotAdViewModel(productAdsData: adData)
             viewModel.onTapProductLink = { [weak self] in
                 self?.viewModel.addTab(url: adData.url)
                 self?.viewModel.recordSurfaceAdsClickedTelemetry()
-                self?.viewModel.reportAdEvent(eventName: .trustedDealsLinkClicked, aid: adData.aid)
+                self?.viewModel.reportAdEvent(eventName: .trustedDealsLinkClicked, aidvs: [adData.aid])
                 store.dispatch(FakespotAction.setAppearanceTo(false))
             }
             view.configure(viewModel)

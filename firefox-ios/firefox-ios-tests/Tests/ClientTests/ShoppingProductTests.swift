@@ -332,12 +332,12 @@ final class ShoppingProductTests: XCTestCase {
         let url = URL(string: "https://www.amazon.com/Under-Armour-Charged-Assert-Running/dp/B087T8Q2C4")!
         let sut = ShoppingProduct(url: url, client: client)
 
-        _ = try await sut.reportAdEvent(eventName: .trustedDealsLinkClicked, eventSource: "web", aid: "aidv1")
+        _ = try await sut.reportAdEvent(eventName: .trustedDealsLinkClicked, eventSource: "web", aidvs: ["aidv1"])
 
         XCTAssertTrue(client.reportAdEventCalled)
         XCTAssertEqual(client.lastEventName, .trustedDealsLinkClicked)
         XCTAssertEqual(client.lastEventSource, "web")
-        XCTAssertEqual(client.lastAid, "aidv1")
+        XCTAssertEqual(client.aidvs, ["aidv1"])
     }
 }
 
@@ -375,7 +375,7 @@ final class ThrowingFakeSpotClient: FakespotClientType {
     func reportAdEvent(
         eventName: Client.FakespotAdsEvent,
         eventSource: String,
-        aid: String
+        aidvs: [String]
     ) async throws -> Client.AdEventsResponse {
         reportAdEventCallCount += 1
         throw error
@@ -433,18 +433,18 @@ final class TestFakespotClient: FakespotClientType {
     var reportAdEventCallCount = 0
     var lastEventName: FakespotAdsEvent?
     var lastEventSource: String?
-    var lastAid: String?
+    var aidvs: [String] = []
 
     func reportAdEvent(
         eventName: Client.FakespotAdsEvent,
         eventSource: String,
-        aid: String
+        aidvs: [String]
     ) async throws -> Client.AdEventsResponse {
         self.reportAdEventCalled = true
         self.reportAdEventCallCount += 1
         self.lastEventName = eventName
         self.lastEventSource = eventSource
-        self.lastAid = aid
+        self.aidvs = aidvs
         return [:]
     }
 
