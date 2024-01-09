@@ -15,29 +15,12 @@ class CreditCardBottomSheetFooterView: UITableViewHeaderFooterView, ReusableCell
         static let manageCardsButtonBottomSpace: CGFloat = 24
     }
 
-    public lazy var manageCardsButton: LinkButton  = .build { button in
-//        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
-//            withTextStyle: .callout,
-//            size: UX.manageCardsButtonFontSize)
-//        button.setTitle(.CreditCard.UpdateCreditCard.ManageCardsButtonTitle, for: .normal)
-//        button.titleLabel?.textAlignment = .left
-//        button.contentHorizontalAlignment = .left
-//        button.titleLabel?.adjustsFontForContentSizeCategory = true
-//        button.accessibilityIdentifier = AccessibilityIdentifiers.RememberCreditCard.manageCardsButton
-    }
+    public lazy var manageCardsButton = LinkButton()
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        contentView.addSubview(manageCardsButton)
+        setupManageCardsButton()
         setupView()
-
-        let buttonViewModel = LinkButtonViewModel(
-            title: .CreditCard.UpdateCreditCard.ManageCardsButtonTitle,
-            a11yIdentifier: AccessibilityIdentifiers.RememberCreditCard.manageCardsButton,
-            fontSize: UX.manageCardsButtonFontSize,
-            contentHorizontalAlignment: .left
-        )
-        manageCardsButton.configure(viewModel: buttonViewModel)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -47,6 +30,18 @@ class CreditCardBottomSheetFooterView: UITableViewHeaderFooterView, ReusableCell
     func applyTheme(theme: Theme) {
         contentView.backgroundColor = theme.colors.layer1
         manageCardsButton.applyTheme(theme: theme)
+    }
+
+    func setupManageCardsButton() {
+        contentView.addSubview(manageCardsButton)
+        let buttonViewModel = LinkButtonViewModel(
+            title: .CreditCard.UpdateCreditCard.ManageCardsButtonTitle,
+            a11yIdentifier: AccessibilityIdentifiers.RememberCreditCard.manageCardsButton,
+            fontSize: UX.manageCardsButtonFontSize,
+            contentHorizontalAlignment: .left
+        )
+
+        manageCardsButton.configure(viewModel: buttonViewModel)
     }
 
     private func setupView() {
