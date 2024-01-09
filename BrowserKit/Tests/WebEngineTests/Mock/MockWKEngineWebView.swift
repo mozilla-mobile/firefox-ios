@@ -8,6 +8,7 @@ import WebKit
 
 class MockWKEngineWebView: WKEngineWebView {
     var interactionState: Any?
+    var scrollView = UIScrollView()
     var url: URL?
     var navigationDelegate: WKNavigationDelegate?
     var allowsBackForwardNavigationGestures = true
@@ -25,6 +26,8 @@ class MockWKEngineWebView: WKEngineWebView {
     var goForwardCalled = 0
     var removeAllUserScriptsCalled = 0
     var removeFromSuperviewCalled = 0
+    var addObserverCalled = 0
+    var removeObserverCalled = 0
 
     var loadFileReadAccessURL: URL?
 
@@ -74,5 +77,17 @@ class MockWKEngineWebView: WKEngineWebView {
 
     func removeFromSuperview() {
         removeFromSuperviewCalled += 1
+    }
+
+    func addObserver(_ observer: NSObject,
+                     forKeyPath keyPath: String,
+                     options: NSKeyValueObservingOptions,
+                     context: UnsafeMutableRawPointer?) {
+        addObserverCalled += 1
+    }
+
+    func removeObserver(_ observer: NSObject,
+                        forKeyPath keyPath: String) {
+        removeObserverCalled += 1
     }
 }
