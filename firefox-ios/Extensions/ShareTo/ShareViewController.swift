@@ -485,14 +485,12 @@ extension ShareViewController {
         guard let shareItem = shareItem, case .shareItem(let item) = shareItem else { return }
 
         gesture.isEnabled = false
-        view.isUserInteractionEnabled = false
-        self.view.isUserInteractionEnabled = true
-        self.sendToDevice = SendToDevice()
-        guard let sendToDevice = self.sendToDevice else { return }
+        sendToDevice = SendToDevice()
+        guard let sendToDevice = sendToDevice else { return }
         sendToDevice.sharedItem = item
-        sendToDevice.delegate = self.delegate
+        sendToDevice.delegate = delegate
         let vc = sendToDevice.initialViewController()
-        self.navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
 
     func openFirefox(withUrl url: String, isSearch: Bool) {
