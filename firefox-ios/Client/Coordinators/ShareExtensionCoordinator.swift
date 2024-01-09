@@ -7,7 +7,10 @@ import Common
 import Shared
 import Storage
 
-class ShareExtensionCoordinator: BaseCoordinator, DevicePickerViewControllerDelegate, InstructionsViewDelegate, JSPromptAlertControllerDelegate {
+class ShareExtensionCoordinator: BaseCoordinator,
+                                 DevicePickerViewControllerDelegate,
+                                 InstructionsViewDelegate,
+                                 JSPromptAlertControllerDelegate {
     // MARK: - Properties
 
     private let tabManager: TabManager
@@ -37,9 +40,16 @@ class ShareExtensionCoordinator: BaseCoordinator, DevicePickerViewControllerDele
     // MARK: - Methods
 
     /// Presents the Share extension from the source view
-    func start(url: URL, sourceView: UIView, sourceRect: CGRect? = nil, popoverArrowDirection: UIPopoverArrowDirection = .up) {
+    func start(
+        url: URL,
+        sourceView: UIView,
+        sourceRect: CGRect? = nil,
+        popoverArrowDirection: UIPopoverArrowDirection = .up
+    ) {
         let shareExtension = ShareExtensionHelper(url: url, tab: tabManager.selectedTab)
-        let controller = shareExtension.createActivityViewController(tabManager.selectedTab?.webView) { [weak self] completed, activityType in
+        let controller = shareExtension.createActivityViewController(
+            tabManager.selectedTab?.webView
+        ) { [weak self] completed, activityType in
             guard let self = self else { return }
             self.handleShareExtensionCompletion(activityType: activityType, url: url)
         }
@@ -58,7 +68,10 @@ class ShareExtensionCoordinator: BaseCoordinator, DevicePickerViewControllerDele
         }
     }
 
-    private func handleShareExtensionCompletion(activityType: UIActivity.ActivityType?, url: URL) {
+    private func handleShareExtensionCompletion(
+        activityType: UIActivity.ActivityType?,
+        url: URL
+    ) {
         switch activityType {
         case CustomActivityAction.sendToDevice.actionType:
             showSendToDevice(url: url)
@@ -115,7 +128,10 @@ class ShareExtensionCoordinator: BaseCoordinator, DevicePickerViewControllerDele
         parentCoordinator?.didFinish(from: self)
     }
 
-    func devicePickerViewController(_ devicePickerViewController: DevicePickerViewController, didPickDevices devices: [RemoteDevice]) {
+    func devicePickerViewController(
+        _ devicePickerViewController: DevicePickerViewController,
+        didPickDevices devices: [RemoteDevice]
+    ) {
         guard let shareItem = devicePickerViewController.shareItem
         else {
             router.dismiss()
@@ -124,8 +140,17 @@ class ShareExtensionCoordinator: BaseCoordinator, DevicePickerViewControllerDele
         }
 
         guard shareItem.isShareable else {
-            let alert = UIAlertController(title: .SendToErrorTitle, message: .SendToErrorMessage, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: .SendToErrorOKButton, style: .default) { [weak self] _ in self?.router.dismiss() })
+            let alert = UIAlertController(
+                title: .SendToErrorTitle,
+                message: .SendToErrorMessage,
+                preferredStyle: .alert
+            )
+            alert.addAction(UIAlertAction(
+                title: .SendToErrorOKButton,
+                style: .default
+            ) { [weak self] _ in
+                self?.router.dismiss()
+            })
             router.present(alert, animated: true) { [weak self] in
                 guard let self = self else { return }
                 self.parentCoordinator?.didFinish(from: self)

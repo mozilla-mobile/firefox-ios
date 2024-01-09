@@ -23,11 +23,14 @@ class FindInPageHelper: TabContentScript {
         self.tab = tab
     }
 
-    func scriptMessageHandlerName() -> String? {
-        return "findInPageHandler"
+    func scriptMessageHandlerNames() -> [String]? {
+        return ["findInPageHandler"]
     }
 
-    func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(
+        _ userContentController: WKUserContentController,
+        didReceiveScriptMessage message: WKScriptMessage
+    ) {
         let data = message.body as! [String: Int]
 
         if let currentResult = data["currentResult"] {

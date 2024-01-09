@@ -32,7 +32,10 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
     private lazy var tipsAndFeaturesNotifications: BoolNotificationSetting = {
         return BoolNotificationSetting(
             title: .Settings.Notifications.TipsAndFeaturesNotificationsTitle,
-            description: String(format: .Settings.Notifications.TipsAndFeaturesNotificationsStatus, AppName.shortName.rawValue),
+            description: String(
+                format: .Settings.Notifications.TipsAndFeaturesNotificationsStatus,
+                AppName.shortName.rawValue
+            ),
             prefs: prefs,
             prefKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications,
             enabled: true

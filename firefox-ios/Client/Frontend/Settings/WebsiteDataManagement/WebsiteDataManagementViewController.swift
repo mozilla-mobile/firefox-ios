@@ -6,8 +6,11 @@ import UIKit
 import Shared
 import Common
 
-class WebsiteDataManagementViewController: UIViewController, UITableViewDataSource,
-                                           UITableViewDelegate, UISearchBarDelegate, Themeable {
+class WebsiteDataManagementViewController: UIViewController,
+                                           UITableViewDataSource,
+                                           UITableViewDelegate,
+                                           UISearchBarDelegate,
+                                           Themeable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
@@ -57,11 +60,15 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.allowsSelectionDuringEditing = true
         tableView.register(cellType: ThemedTableViewCell.self)
-        tableView.register(ThemedTableSectionHeaderFooterView.self,
-                           forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
+        tableView.register(
+            ThemedTableSectionHeaderFooterView.self,
+            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier
+        )
 
-        let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width,
-                                                                      height: SettingsUX.TableViewHeaderFooterHeight))
+        let footer = ThemedTableSectionHeaderFooterView(
+            frame: CGRect(width: tableView.bounds.width,
+                          height: SettingsUX.TableViewHeaderFooterHeight)
+        )
         footer.applyTheme(theme: themeManager.currentTheme)
         footer.showBorder(for: .top, true)
         tableView.tableFooterView = footer
@@ -124,7 +131,10 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         unfoldSearchbar()
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(
+        _ tableView: UITableView,
+        cellForRowAt indexPath: IndexPath
+    ) -> UITableViewCell {
         let cell = dequeueCellFor(indexPath: indexPath)
         let section = Section(rawValue: indexPath.section)!
         switch section {
@@ -137,18 +147,27 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
                     tableView.deselectRow(at: indexPath, animated: false)
                 }
             }
-            let cellViewModel = ThemedTableViewCellViewModel(theme: themeManager.currentTheme, type: .standard)
+            let cellViewModel = ThemedTableViewCellViewModel(
+                theme: themeManager.currentTheme,
+                type: .standard
+            )
             cell.configure(viewModel: cellViewModel)
         case .showMore:
             let cellType: ThemedTableViewCellType = showMoreButtonEnabled ? .actionPrimary : .disabled
-            let cellViewModel = ThemedTableViewCellViewModel(theme: themeManager.currentTheme, type: cellType)
+            let cellViewModel = ThemedTableViewCellViewModel(
+                theme: themeManager.currentTheme,
+                type: cellType
+            )
             cell.textLabel?.text = .SettingsWebsiteDataShowMoreButton
             cell.accessibilityTraits = UIAccessibilityTraits.button
             cell.accessibilityIdentifier = "ShowMoreWebsiteData"
             cell.configure(viewModel: cellViewModel)
             showMoreButton = cell
         case .clearButton:
-            let cellViewModel = ThemedTableViewCellViewModel(theme: themeManager.currentTheme, type: .destructive)
+            let cellViewModel = ThemedTableViewCellViewModel(
+                theme: themeManager.currentTheme,
+                type: .destructive
+            )
             cell.textLabel?.text = viewModel.clearButtonTitle
             cell.textLabel?.textAlignment = .center
             cell.accessibilityTraits = UIAccessibilityTraits.button
@@ -161,7 +180,10 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
     }
 
     private func dequeueCellFor(indexPath: IndexPath) -> ThemedTableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: ThemedTableViewCell.cellIdentifier, for: indexPath) as? ThemedTableViewCell
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: ThemedTableViewCell.cellIdentifier,
+            for: indexPath
+        ) as? ThemedTableViewCell
         else {
             return ThemedTableViewCell()
         }
@@ -229,7 +251,9 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier
+        ) as? ThemedTableSectionHeaderFooterView else { return nil }
 
         headerView.titleLabel.text = section == Section.sites.rawValue ? .SettingsWebsiteDataTitle : nil
 
@@ -268,7 +292,9 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
     }
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        guard let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
+        guard let footerView = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier
+        ) as? ThemedTableSectionHeaderFooterView else { return nil }
 
         footerView.showBorder(for: .top, true)
         footerView.showBorder(for: .bottom, true)

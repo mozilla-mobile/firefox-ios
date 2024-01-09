@@ -11,9 +11,10 @@ protocol Coordinator: AnyObject {
     var router: Router { get }
     var logger: Logger { get }
 
-    /// Determines whether this coordinator can be dismissed or not, in some cases the coordinator cannot be dismissed for example due to state saving.
-    /// This isn't ideal for this pattern, but was deemed necessary to keep existing behavior while moving away from previous pattern. By default, all coordinators
-    /// should be dismissable.
+    /// Determines whether this coordinator can be dismissed or not, in some cases the coordinator
+    /// cannot be dismissed for example due to state saving.
+    /// This isn't ideal for this pattern, but was deemed necessary to keep existing behavior while 
+    /// moving away from previous pattern. By default, all coordinators should be dismissable.
     var isDismissable: Bool { get }
 
     /// Will hold the Route the coordinator was asked to navigate to in case the path could not be handled yet.
@@ -48,5 +49,14 @@ protocol Coordinator: AnyObject {
 extension Array where Element == Coordinator {
     subscript<T: Coordinator>(type: T.Type) -> T? {
         self.first(where: { $0 is T }) as? T
+    }
+}
+
+extension Coordinator {
+    /// Recursively performs an operation (defined by the supplied `action`)
+    /// on the receiver and its entire sub-tree of child coordinators.
+    func recurseChildCoordinators(_ action: (Coordinator) -> Void) {
+        action(self)
+        childCoordinators.forEach { $0.recurseChildCoordinators(action) }
     }
 }

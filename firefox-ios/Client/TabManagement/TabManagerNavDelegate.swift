@@ -20,13 +20,21 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
         }
     }
 
-    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+    func webView(
+        _ webView: WKWebView,
+        didFail navigation: WKNavigation!,
+        withError error: Error
+    ) {
         for delegate in delegates {
             delegate.webView?(webView, didFail: navigation, withError: error)
         }
     }
 
-    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+    func webView(
+        _ webView: WKWebView,
+        didFailProvisionalNavigation navigation: WKNavigation!,
+        withError error: Error
+    ) {
         for delegate in delegates {
             delegate.webView?(webView, didFailProvisionalNavigation: navigation, withError: error)
         }
@@ -44,7 +52,11 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
         }
     }
 
-    func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+    func webView(
+        _ webView: WKWebView,
+        didReceive challenge: URLAuthenticationChallenge,
+        completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+    ) {
         let authenticatingDelegates = delegates.filter { wv in
             return wv.responds(to: #selector(webView(_:didReceive:completionHandler:)))
         }
@@ -70,7 +82,11 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
         }
     }
 
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+    func webView(
+        _ webView: WKWebView,
+        decidePolicyFor navigationAction: WKNavigationAction,
+        decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
+    ) {
         var res = WKNavigationActionPolicy.allow
         for delegate in delegates {
             delegate.webView?(webView, decidePolicyFor: navigationAction, decisionHandler: { policy in

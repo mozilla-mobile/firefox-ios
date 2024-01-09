@@ -50,7 +50,9 @@ open class UserAgent {
     }
 
     public static func desktopUserAgent() -> String {
+        // swiftlint:disable line_length
         return "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Safari/605.1.15"
+        // swiftlint:enable line_length
     }
 
     public static func mobileUserAgent() -> String {
@@ -124,7 +126,13 @@ public struct UserAgentBuilder {
     fileprivate var platformDetails = ""
     fileprivate var extensions = ""
 
-    init(product: String, systemInfo: String, platform: String, platformDetails: String, extensions: String) {
+    init(
+        product: String,
+        systemInfo: String,
+        platform: String,
+        platformDetails: String,
+        extensions: String
+    ) {
         self.product = product
         self.systemInfo = systemInfo
         self.platform = platform
@@ -137,12 +145,25 @@ public struct UserAgentBuilder {
         return removeEmptyComponentsAndJoin(uaItems: userAgentItems)
     }
 
-    public func clone(product: String? = nil, systemInfo: String? = nil, platform: String? = nil, platformDetails: String? = nil, extensions: String? = nil) -> String {
-        let userAgentItems = [product ?? self.product, systemInfo ?? self.systemInfo, platform ?? self.platform, platformDetails ?? self.platformDetails, extensions ?? self.extensions]
+    public func clone(
+        product: String? = nil,
+        systemInfo: String? = nil,
+        platform: String? = nil,
+        platformDetails: String? = nil,
+        extensions: String? = nil
+    ) -> String {
+        let userAgentItems = [
+            product ?? self.product,
+            systemInfo ?? self.systemInfo,
+            platform ?? self.platform,
+            platformDetails ?? self.platformDetails,
+            extensions ?? self.extensions
+        ]
         return removeEmptyComponentsAndJoin(uaItems: userAgentItems)
     }
 
-    /// Helper method to remove the empty components from user agent string that contain only whitespaces or are just empty
+    /// Helper method to remove the empty components from user agent string that contain
+    /// only whitespaces or are just empty
     private func removeEmptyComponentsAndJoin(uaItems: [String]) -> String {
         return uaItems.filter { !$0.isEmptyOrWhitespace() }.joined(separator: " ")
     }

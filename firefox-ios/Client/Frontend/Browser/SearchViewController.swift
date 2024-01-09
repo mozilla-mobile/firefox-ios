@@ -34,11 +34,22 @@ private struct SearchViewControllerUX {
 }
 
 protocol SearchViewControllerDelegate: AnyObject {
-    func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL, searchTerm: String?)
+    func searchViewController(
+        _ searchViewController: SearchViewController,
+        didSelectURL url: URL,
+        searchTerm: String?
+    )
     func searchViewController(_ searchViewController: SearchViewController, uuid: String)
     func presentSearchSettingsController()
-    func searchViewController(_ searchViewController: SearchViewController, didHighlightText text: String, search: Bool)
-    func searchViewController(_ searchViewController: SearchViewController, didAppend text: String)
+    func searchViewController(
+        _ searchViewController: SearchViewController,
+        didHighlightText text: String,
+        search: Bool
+    )
+    func searchViewController(
+        _ searchViewController: SearchViewController,
+        didAppend text: String
+    )
 }
 
 // Note: ClientAndTabs data structure contains all tabs under a remote client. To make traversal and search easier
@@ -128,8 +139,10 @@ class SearchViewController: SiteTableViewController,
 
         searchEngineContainerView.layer.shadowRadius = 0
         searchEngineContainerView.layer.shadowOpacity = 100
-        searchEngineContainerView.layer.shadowOffset = CGSize(width: 0,
-                                                              height: -SearchViewControllerUX.SearchEngineTopBorderWidth)
+        searchEngineContainerView.layer.shadowOffset = CGSize(
+            width: 0,
+            height: -SearchViewControllerUX.SearchEngineTopBorderWidth
+        )
         searchEngineContainerView.clipsToBounds = false
 
         searchEngineScrollView.decelerationRate = UIScrollView.DecelerationRate.fast
@@ -170,7 +183,9 @@ class SearchViewController: SiteTableViewController,
     func loadFirefoxSuggestions() -> Task<(), Never>? {
         let includeNonSponsored = profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions) ?? false
         let includeSponsored = profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowSponsoredSuggestions) ?? false
-        guard featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) && (includeNonSponsored || includeSponsored) else { return nil }
+        guard featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser)
+                && (includeNonSponsored || includeSponsored)
+        else { return nil }
 
         profile.firefoxSuggest?.interruptReader()
 
@@ -220,28 +235,45 @@ class SearchViewController: SiteTableViewController,
         bottomConstraintWithoutKeyboard?.isActive = false
 
         if keyboardHeight == 0 {
-            bottomConstraintWithoutKeyboard = searchEngineScrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            bottomConstraintWithoutKeyboard = searchEngineScrollView.bottomAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.bottomAnchor
+            )
             bottomConstraintWithoutKeyboard?.isActive = true
         } else {
             let offset = viewModel.isBottomSearchBar ? 0 : keyboardHeight
-            bottomConstraintWithKeyboard = searchEngineScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -offset)
+            bottomConstraintWithKeyboard = searchEngineScrollView.bottomAnchor.constraint(
+                equalTo: view.bottomAnchor,
+                constant: -offset
+            )
             bottomConstraintWithKeyboard?.isActive = true
         }
     }
 
     private func layoutSearchEngineScrollViewContent() {
-        NSLayoutConstraint.activate([
-            searchEngineScrollViewContent.centerXAnchor.constraint(equalTo: searchEngineScrollView.centerXAnchor).priority(.defaultLow),
-            searchEngineScrollViewContent.centerYAnchor.constraint(equalTo: searchEngineScrollView.centerYAnchor).priority(.defaultLow),
-            searchEngineScrollViewContent.trailingAnchor.constraint(lessThanOrEqualTo: searchEngineScrollView.trailingAnchor).priority(.defaultHigh),
-            searchEngineScrollViewContent.topAnchor.constraint(equalTo: searchEngineScrollView.topAnchor),
-            searchEngineScrollViewContent.bottomAnchor.constraint(equalTo: searchEngineScrollView.bottomAnchor)
-        ])
+        NSLayoutConstraint.activate(
+            [
+                searchEngineScrollViewContent.centerXAnchor.constraint(
+                    equalTo: searchEngineScrollView.centerXAnchor
+                ).priority(.defaultLow),
+                searchEngineScrollViewContent.centerYAnchor.constraint(
+                    equalTo: searchEngineScrollView.centerYAnchor
+                ).priority(.defaultLow),
+                searchEngineScrollViewContent.trailingAnchor.constraint(
+                    lessThanOrEqualTo: searchEngineScrollView.trailingAnchor
+                ).priority(.defaultHigh),
+                searchEngineScrollViewContent.topAnchor.constraint(equalTo: searchEngineScrollView.topAnchor),
+                searchEngineScrollViewContent.bottomAnchor.constraint(equalTo: searchEngineScrollView.bottomAnchor)
+            ]
+        )
 
         // left-align the engines on iphones, center on ipad
         let isCompact = UIScreen.main.traitCollection.horizontalSizeClass == .compact
-        searchEngineScrollViewContent.leadingAnchor.constraint(equalTo: searchEngineScrollView.leadingAnchor).priority(.defaultHigh).isActive = isCompact
-        searchEngineScrollViewContent.leadingAnchor.constraint(greaterThanOrEqualTo: searchEngineScrollView.leadingAnchor).priority(.defaultHigh).isActive = !isCompact
+        searchEngineScrollViewContent.leadingAnchor.constraint(
+            equalTo: searchEngineScrollView.leadingAnchor
+        ).priority(.defaultHigh).isActive = isCompact
+        searchEngineScrollViewContent.leadingAnchor.constraint(
+            greaterThanOrEqualTo: searchEngineScrollView.leadingAnchor
+        ).priority(.defaultHigh).isActive = !isCompact
     }
 
     var searchEngines: SearchEngines? {
@@ -323,14 +355,22 @@ class SearchViewController: SiteTableViewController,
 
         searchEngineScrollViewContent.addSubview(searchButton)
 
-        NSLayoutConstraint.activate([
-            searchButton.widthAnchor.constraint(equalToConstant: SearchViewControllerUX.FaviconSize),
-            searchButton.heightAnchor.constraint(equalToConstant: SearchViewControllerUX.FaviconSize),
-            // offset the left edge to align with search results
-            searchButton.leadingAnchor.constraint(equalTo: leftEdge, constant: 16),
-            searchButton.topAnchor.constraint(equalTo: searchEngineScrollViewContent.topAnchor, constant: SearchViewControllerUX.SuggestionMargin),
-            searchButton.bottomAnchor.constraint(equalTo: searchEngineScrollViewContent.bottomAnchor, constant: -SearchViewControllerUX.SuggestionMargin)
-        ])
+        NSLayoutConstraint.activate(
+            [
+                searchButton.widthAnchor.constraint(equalToConstant: SearchViewControllerUX.FaviconSize),
+                searchButton.heightAnchor.constraint(equalToConstant: SearchViewControllerUX.FaviconSize),
+                // offset the left edge to align with search results
+                searchButton.leadingAnchor.constraint(equalTo: leftEdge, constant: 16),
+                searchButton.topAnchor.constraint(
+                    equalTo: searchEngineScrollViewContent.topAnchor,
+                    constant: SearchViewControllerUX.SuggestionMargin
+                ),
+                searchButton.bottomAnchor.constraint(
+                    equalTo: searchEngineScrollViewContent.bottomAnchor,
+                    constant: -SearchViewControllerUX.SuggestionMargin
+                )
+            ]
+        )
 
         leftEdge = searchButton.trailingAnchor
 
@@ -351,16 +391,24 @@ class SearchViewController: SiteTableViewController,
             }
 
             searchEngineScrollViewContent.addSubview(engineButton)
-            NSLayoutConstraint.activate([
-                engineButton.widthAnchor.constraint(equalToConstant: CGFloat(SearchViewControllerUX.EngineButtonWidth)),
-                engineButton.heightAnchor.constraint(equalToConstant: CGFloat(SearchViewControllerUX.EngineButtonHeight)),
-                engineButton.leadingAnchor.constraint(equalTo: leftEdge),
-                engineButton.topAnchor.constraint(equalTo: searchEngineScrollViewContent.topAnchor),
-                engineButton.bottomAnchor.constraint(equalTo: searchEngineScrollViewContent.bottomAnchor)
-            ])
+            NSLayoutConstraint.activate(
+                [
+                    engineButton.widthAnchor.constraint(
+                        equalToConstant: CGFloat(SearchViewControllerUX.EngineButtonWidth)
+                    ),
+                    engineButton.heightAnchor.constraint(
+                        equalToConstant: CGFloat(SearchViewControllerUX.EngineButtonHeight)
+                    ),
+                    engineButton.leadingAnchor.constraint(equalTo: leftEdge),
+                    engineButton.topAnchor.constraint(equalTo: searchEngineScrollViewContent.topAnchor),
+                    engineButton.bottomAnchor.constraint(equalTo: searchEngineScrollViewContent.bottomAnchor)
+                ]
+            )
 
             if engine === self.searchEngines?.quickSearchEngines.last {
-                engineButton.trailingAnchor.constraint(equalTo: searchEngineScrollViewContent.trailingAnchor).isActive = true
+                engineButton.trailingAnchor.constraint(
+                    equalTo: searchEngineScrollViewContent.trailingAnchor
+                ).isActive = true
             }
 
             leftEdge = engineButton.trailingAnchor
@@ -395,15 +443,24 @@ class SearchViewController: SiteTableViewController,
         self.searchDelegate?.presentSearchSettingsController()
     }
 
-    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
+    func keyboardHelper(
+        _ keyboardHelper: KeyboardHelper,
+        keyboardWillShowWithState state: KeyboardState
+    ) {
         animateSearchEnginesWithKeyboard(state)
     }
 
-    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+    func keyboardHelper(
+        _ keyboardHelper: KeyboardHelper,
+        keyboardWillHideWithState state: KeyboardState
+    ) {
         animateSearchEnginesWithKeyboard(state)
     }
 
-    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {
+    func keyboardHelper(
+        _ keyboardHelper: KeyboardHelper,
+        keyboardWillChangeWithState state: KeyboardState
+    ) {
         animateSearchEnginesWithKeyboard(state)
     }
 
@@ -513,7 +570,9 @@ class SearchViewController: SiteTableViewController,
     private func querySuggestClient() {
         suggestClient?.cancelPendingRequest()
 
-        if searchQuery.isEmpty || !(searchEngines?.shouldShowSearchSuggestions ?? false) || searchQuery.looksLikeAURL() {
+        if searchQuery.isEmpty
+            || !(searchEngines?.shouldShowSearchSuggestions ?? false)
+            || searchQuery.looksLikeAURL() {
             suggestions = []
             tableView.reloadData()
             return
@@ -523,11 +582,14 @@ class SearchViewController: SiteTableViewController,
         _ = loadFirefoxSuggestions()
 
         let tempSearchQuery = searchQuery
-        suggestClient?.query(searchQuery, callback: { suggestions, error in
+        suggestClient?.query(searchQuery,
+                             callback: { suggestions, error in
             if error == nil {
                 self.suggestions = suggestions!
                 // Remove user searching term inside suggestions list
-                self.suggestions?.removeAll(where: { $0.trimmingCharacters(in: .whitespacesAndNewlines) == self.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines) })
+                self.suggestions?.removeAll(where: {
+                    $0.trimmingCharacters(in: .whitespacesAndNewlines) == self.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
+                })
                 // First suggestion should be what the user is searching
                 self.suggestions?.insert(self.searchQuery, at: 0)
             }
@@ -600,20 +662,33 @@ class SearchViewController: SiteTableViewController,
                 let position = SearchListSection.allCases.filter { $0.rawValue < indexPath.section }
                     .reduce(0) { $0 + self.tableView(tableView, numberOfRowsInSection: $1.rawValue) }
                 + indexPath.row + 1
-                recordFirefoxSuggestSelectionTelemetry(clickInfo: clickInfo, position: position)
+                recordFirefoxSuggestSelectionTelemetry(
+                    clickInfo: clickInfo,
+                    position: position
+                )
             }
 
-            searchDelegate?.searchViewController(self, didSelectURL: firefoxSuggestion.url, searchTerm: nil)
+            searchDelegate?.searchViewController(
+                self,
+                didSelectURL: firefoxSuggestion.url,
+                searchTerm: nil
+            )
         }
     }
 
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(
+        _ tableView: UITableView,
+        heightForHeaderInSection section: Int
+    ) -> CGFloat {
         guard shouldShowHeader(for: section) else { return 0 }
 
         return UITableView.automaticDimension
     }
 
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    override func tableView(
+        _ tableView: UITableView,
+        viewForHeaderInSection section: Int
+    ) -> UIView? {
         guard shouldShowHeader(for: section),
               let headerView = tableView.dequeueReusableHeaderFooterView(
                 withIdentifier: SiteTableViewHeader.cellIdentifier) as? SiteTableViewHeader
@@ -638,9 +713,13 @@ class SearchViewController: SiteTableViewController,
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let twoLineImageOverlayCell = tableView.dequeueReusableCell(
-            withIdentifier: TwoLineImageOverlayCell.cellIdentifier, for: indexPath) as! TwoLineImageOverlayCell
-        let oneLineTableViewCell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier,
-                                                                 for: indexPath) as! OneLineTableViewCell
+            withIdentifier: TwoLineImageOverlayCell.cellIdentifier,
+            for: indexPath
+        ) as! TwoLineImageOverlayCell
+        let oneLineTableViewCell = tableView.dequeueReusableCell(
+            withIdentifier: OneLineTableViewCell.cellIdentifier,
+            for: indexPath
+        ) as! OneLineTableViewCell
         return getCellForSection(twoLineImageOverlayCell,
                                  oneLineCell: oneLineTableViewCell,
                                  for: SearchListSection(rawValue: indexPath.section)!,
@@ -692,8 +771,14 @@ class SearchViewController: SiteTableViewController,
         let range = searchPhrase.range(of: query)
         guard searchPhrase != query, let upperBound = range?.upperBound else { return nil }
 
-        let attributedString = searchPhrase.attributedText(boldIn: upperBound..<searchPhrase.endIndex,
-                                                           font: DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17, weight: .regular))
+        let attributedString = searchPhrase.attributedText(
+            boldIn: upperBound..<searchPhrase.endIndex,
+            font: DefaultDynamicFontHelper.preferredFont(
+                withTextStyle: .body,
+                size: 17,
+                weight: .regular
+            )
+        )
         return attributedString
     }
 
@@ -707,12 +792,17 @@ class SearchViewController: SiteTableViewController,
             if let site = suggestions?[indexPath.row] {
                 oneLineCell.titleLabel.text = site
                 if Locale.current.languageCode == "en",
-                    let attributedString = getAttributedBoldSearchSuggestions(searchPhrase: site, query: savedQuery) {
+                   let attributedString = getAttributedBoldSearchSuggestions(
+                    searchPhrase: site,
+                    query: savedQuery
+                   ) {
                     oneLineCell.titleLabel.attributedText = attributedString
                 }
                 oneLineCell.leftImageView.contentMode = .center
                 oneLineCell.leftImageView.layer.borderWidth = 0
-                oneLineCell.leftImageView.manuallySetImage(UIImage(named: SearchViewControllerUX.SearchImage) ?? UIImage())
+                oneLineCell.leftImageView.manuallySetImage(
+                    UIImage(named: SearchViewControllerUX.SearchImage) ?? UIImage()
+                )
                 oneLineCell.leftImageView.tintColor = themeManager.currentTheme.colors.iconPrimary
                 oneLineCell.leftImageView.backgroundColor = nil
                 let appendButton = UIButton(type: .roundedRect)

@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Storage
 
 protocol TabTrayCoordinatorDelegate: AnyObject {
     func didDismissTabTray(from coordinator: TabTrayCoordinator)
@@ -10,6 +11,7 @@ protocol TabTrayCoordinatorDelegate: AnyObject {
 
 protocol TabTrayNavigationHandler: AnyObject {
     func start(panelType: TabTrayPanelType, navigationController: UINavigationController)
+    func shareTab(url: URL, sourceView: UIView)
 }
 
 class TabTrayCoordinator: BaseCoordinator,
@@ -17,13 +19,16 @@ class TabTrayCoordinator: BaseCoordinator,
                           TabTrayViewControllerDelegate,
                           TabTrayNavigationHandler {
     private var tabTrayViewController: TabTrayViewController!
-    private var profile: Profile
+    private let profile: Profile
+    private let tabManager: TabManager
     weak var parentCoordinator: TabTrayCoordinatorDelegate?
 
     init(router: Router,
          tabTraySection: TabTrayPanelType,
-         profile: Profile) {
+         profile: Profile,
+         windowManager: WindowManager = AppContainer.shared.resolve()) {
         self.profile = profile
+        self.tabManager = windowManager.tabManager(for: windowManager.activeWindow)
         super.init(router: router)
         initializeTabTrayViewController(selectedTab: tabTraySection)
     }
@@ -77,6 +82,24 @@ class TabTrayCoordinator: BaseCoordinator,
         add(child: remoteTabsCoordinator)
         remoteTabsCoordinator.parentCoordinator = self
         (navigationController.topViewController as? RemoteTabsPanel)?.remoteTabsDelegate = remoteTabsCoordinator
+    }
+
+    func shareTab(url: URL, sourceView: UIView) {
+        guard !childCoordinators.contains(where: { $0 is ShareExtensionCoordinator }) else { return }
+        let coordinator = makeShareExtensionCoordinator()
+        coordinator.start(url: url, sourceView: sourceView)
+    }
+
+    private func makeShareExtensionCoordinator() -> ShareExtensionCoordinator {
+        let coordinator = ShareExtensionCoordinator(
+            alertContainer: UIView(),
+            router: router,
+            profile: profile,
+            parentCoordinator: self,
+            tabManager: tabManager
+        )
+        add(child: coordinator)
+        return coordinator
     }
 
     // MARK: - ParentCoordinatorDelegate

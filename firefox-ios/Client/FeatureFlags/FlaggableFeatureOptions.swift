@@ -14,8 +14,3 @@ enum StartAtHomeSetting: String, FlaggableFeatureOptions {
     case always
     case disabled
 }
-
-enum WallpaperVersion: String, FlaggableFeatureOptions {
-    case legacy
-    case v1
-}

@@ -88,7 +88,9 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
 
     private lazy var disclosureIndicator: UIImageView = {
         let disclosureIndicator = createIconImageView()
-        disclosureIndicator.image = UIImage(named: StandardImageIdentifiers.Large.chevronRight)?.withRenderingMode(.alwaysTemplate)
+        disclosureIndicator.image = UIImage(
+            named: StandardImageIdentifiers.Large.chevronRight
+        )?.withRenderingMode(.alwaysTemplate)
         return disclosureIndicator
     }()
 
@@ -272,8 +274,14 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
         let statusIconWidth: CGFloat
         let statusIconHeight: CGFloat
         if item?.allowIconScaling ?? false {
-            statusIconWidth = min(UIFontMetrics.default.scaledValue(for: UX.StatusIconSize.width), UX.StatusIconMaxSize.width)
-            statusIconHeight = min(UIFontMetrics.default.scaledValue(for: UX.StatusIconSize.height), UX.StatusIconMaxSize.height)
+            statusIconWidth = min(
+                UIFontMetrics.default.scaledValue(for: UX.StatusIconSize.width),
+                UX.StatusIconMaxSize.width
+            )
+            statusIconHeight = min(
+                UIFontMetrics.default.scaledValue(for: UX.StatusIconSize.height),
+                UX.StatusIconMaxSize.height
+            )
         } else {
             statusIconWidth = UX.StatusIconSize.width
             statusIconHeight = UX.StatusIconSize.height

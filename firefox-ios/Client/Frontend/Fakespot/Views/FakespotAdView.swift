@@ -253,7 +253,9 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         productImageWidthConstraint = imageContainerView.widthAnchor.constraint(equalToConstant: imageWidth)
         productImageWidthConstraint?.isActive = true
 
-        defaultProductImageWidthConstraint = defaultImageView.widthAnchor.constraint(equalToConstant: defaultImageWidth)
+        defaultProductImageWidthConstraint = defaultImageView.widthAnchor.constraint(
+            equalToConstant: defaultImageWidth
+        )
         defaultProductImageWidthConstraint?.isActive = true
 
         NSLayoutConstraint.activate([

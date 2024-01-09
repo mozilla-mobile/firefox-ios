@@ -35,7 +35,11 @@ extension BrowserViewController: DownloadQueueDelegate {
         downloadToast.addDownload(download)
     }
 
-    func downloadQueue(_ downloadQueue: DownloadQueue, didDownloadCombinedBytes combinedBytesDownloaded: Int64, combinedTotalBytesExpected: Int64?) {
+    func downloadQueue(
+        _ downloadQueue: DownloadQueue,
+        didDownloadCombinedBytes combinedBytesDownloaded: Int64,
+        combinedTotalBytesExpected: Int64?
+    ) {
         downloadToast?.combinedBytesDownloaded = combinedBytesDownloaded
     }
 
@@ -59,7 +63,12 @@ extension BrowserViewController: DownloadQueueDelegate {
                     guard buttonPressed else { return }
 
                     self.showLibrary(panel: .downloads)
-                    TelemetryWrapper.recordEvent(category: .action, method: .view, object: .downloadsPanel, value: .downloadCompleteToast)
+                    TelemetryWrapper.recordEvent(
+                        category: .action,
+                        method: .view,
+                        object: .downloadsPanel,
+                        value: .downloadCompleteToast
+                    )
                 })
 
                 self.show(toast: downloadCompleteToast, duration: DispatchTimeInterval.seconds(8))

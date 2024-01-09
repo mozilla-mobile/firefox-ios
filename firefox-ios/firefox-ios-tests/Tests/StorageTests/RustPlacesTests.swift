@@ -14,7 +14,10 @@ class RustPlacesTests: XCTestCase {
         try super.setUpWithError()
         files = MockFiles()
 
-        let databasePath = URL(fileURLWithPath: (try files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("testplaces.db").path
+        let databasePath = URL(
+            fileURLWithPath: (try files.getAndEnsureDirectory()),
+            isDirectory: true
+        ).appendingPathComponent("testplaces.db").path
         try? files.remove("testplaces.db")
 
         places = RustPlaces(databasePath: databasePath)
@@ -35,7 +38,11 @@ class RustPlacesTests: XCTestCase {
         XCTAssertEqual(emptyRead.successValue!.count, 0)
 
         // Observing facts one-by-one.
-        let metadataKey1 = HistoryMetadataKey(url: "https://www.mozilla.org", searchTerm: nil, referrerUrl: nil)
+        let metadataKey1 = HistoryMetadataKey(
+            url: "https://www.mozilla.org",
+            searchTerm: nil,
+            referrerUrl: nil
+        )
         XCTAssertTrue(places.noteHistoryMetadataObservation(
             key: metadataKey1,
             observation: HistoryMetadataObservation(
@@ -133,7 +140,11 @@ class RustPlacesTests: XCTestCase {
         XCTAssertEqual(singleItemRead.successValue![0].title, "Mozilla Test")
 
         // Able to observe facts for multiple keys.
-        let metadataKey2 = HistoryMetadataKey(url: "https://www.mozilla.org/another", searchTerm: nil, referrerUrl: "https://www.mozilla.org")
+        let metadataKey2 = HistoryMetadataKey(
+            url: "https://www.mozilla.org/another",
+            searchTerm: nil,
+            referrerUrl: "https://www.mozilla.org"
+        )
         XCTAssertTrue(places.noteHistoryMetadataObservation(
             key: metadataKey2,
             observation: HistoryMetadataObservation(
@@ -192,7 +203,11 @@ class RustPlacesTests: XCTestCase {
         XCTAssertEqual(queryResults.successValue!.count, 2)
 
         // Able to query by url.
-        let metadataKey3 = HistoryMetadataKey(url: "https://www.firefox.ru/download", searchTerm: nil, referrerUrl: "https://www.mozilla.org")
+        let metadataKey3 = HistoryMetadataKey(
+            url: "https://www.firefox.ru/download",
+            searchTerm: nil,
+            referrerUrl: "https://www.mozilla.org"
+        )
         XCTAssertTrue(places.noteHistoryMetadataObservation(
             key: metadataKey3,
             observation: HistoryMetadataObservation(
@@ -208,7 +223,11 @@ class RustPlacesTests: XCTestCase {
         XCTAssertEqual(queryResults.successValue![0].title, "Скачать Фаерфокс")
 
         // Able to query by search term.
-        let metadataKey4 = HistoryMetadataKey(url: "https://www.example.com", searchTerm: "Sample webpage", referrerUrl: nil)
+        let metadataKey4 = HistoryMetadataKey(
+            url: "https://www.example.com",
+            searchTerm: "Sample webpage",
+            referrerUrl: nil
+        )
         XCTAssertTrue(places.noteHistoryMetadataObservation(
             key: metadataKey4,
             observation: HistoryMetadataObservation(
@@ -223,7 +242,10 @@ class RustPlacesTests: XCTestCase {
         XCTAssertEqual(queryResults.successValue![0].url, "https://www.example.com/")
 
         // Able to query highlights.
-        let highlights = places.getHighlights(weights: HistoryHighlightWeights(viewTime: 1.0, frequency: 1.0), limit: 10).value
+        let highlights = places.getHighlights(
+            weights: HistoryHighlightWeights(viewTime: 1.0, frequency: 1.0),
+            limit: 10
+        ).value
         XCTAssertEqual(highlights.successValue!.count, 4)
 
         // Deletions.

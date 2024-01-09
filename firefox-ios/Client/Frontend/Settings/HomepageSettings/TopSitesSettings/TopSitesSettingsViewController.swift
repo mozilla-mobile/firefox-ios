@@ -66,13 +66,19 @@ extension TopSitesSettingsViewController {
             return NSAttributedString(string: String(format: "%d", numberOfRows))
         }
 
-        override var accessibilityIdentifier: String? { return AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Shortcuts.topSitesRows }
+        override var accessibilityIdentifier: String? {
+            return AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Shortcuts.topSitesRows
+        }
         override var style: UITableViewCell.CellStyle { return .value1 }
 
         init(settings: SettingsTableViewController) {
             self.profile = settings.profile
-            super.init(title: NSAttributedString(string: .Settings.Homepage.Shortcuts.Rows,
-                                                 attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
+            super.init(
+                title: NSAttributedString(
+                    string: .Settings.Homepage.Shortcuts.Rows,
+                    attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]
+                )
+            )
         }
 
         override func onClick(_ navigationController: UINavigationController?) {

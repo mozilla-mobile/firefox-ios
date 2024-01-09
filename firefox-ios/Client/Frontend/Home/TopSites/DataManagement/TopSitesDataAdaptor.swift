@@ -148,7 +148,8 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
     // MARK: - Tiles placement calculation
 
     /// Get available space count for the sponsored tiles and Google tiles
-    /// - Parameter numberOfTilesPerRow: Comes from top sites view model and accounts for different layout (landscape, portrait, iPhone, iPad, etc).
+    /// - Parameter numberOfTilesPerRow: Comes from top sites view model and accounts for different
+    ///                                  layout (landscape, portrait, iPhone, iPad, etc).
     /// - Returns: The available space count for the rest of the calculation
     private func getAvailableSpaceCount(maxTopSites: Int) -> Int {
         let pinnedSiteCount = countPinnedSites(sites: historySites)
@@ -246,7 +247,8 @@ private extension Array where Element == Site {
 
     // Keeping the order of the sites, we remove duplicate tiles.
     // Ex: If a sponsored tile is present then it has precedence over the history sites.
-    // Ex: A default site is present but user has recent history site of the same site. That recent history tile won't be added.
+    // Ex: A default site is present but user has recent history site of the same site.
+    // That recent history tile won't be added.
     mutating func removeDuplicates() {
         var alreadyThere = Set<Site>()
         let uniqueSites = compactMap { (site) -> Site? in

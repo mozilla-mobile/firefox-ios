@@ -64,7 +64,10 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     }
 
     private lazy var dismissButton: UIButton = .build { [weak self] button in
-        button.setImage(UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(
+            UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
+            for: .normal
+        )
         button.addTarget(self, action: #selector(self?.dismissCard), for: .touchUpInside)
         button.accessibilityLabel = BannerCopy.HomeTabBannerCloseAccessibility
     }
@@ -117,33 +120,47 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         cardView.addSubviews(ctaButton, textStackView, dismissButton)
         contentView.addSubview(cardView)
 
-        NSLayoutConstraint.activate([
-            cardView.leadingAnchor.constraint(greaterThanOrEqualTo: contentView.leadingAnchor),
-            cardView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            cardView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor),
-            cardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            cardView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            cardView.widthAnchor.constraint(equalToConstant: UX.cardSizeMaxWidth).priority(.defaultHigh),
+        NSLayoutConstraint.activate(
+            [
+                cardView.leadingAnchor.constraint(greaterThanOrEqualTo: contentView.leadingAnchor),
+                cardView.topAnchor.constraint(equalTo: contentView.topAnchor),
+                cardView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor),
+                cardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+                cardView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+                cardView.widthAnchor.constraint(equalToConstant: UX.cardSizeMaxWidth).priority(.defaultHigh),
 
-            textStackView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: UX.standardSpacing),
-            textStackView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: UX.standardSpacing),
-            textStackView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -UX.standardSpacing),
-            textStackView.bottomAnchor.constraint(equalTo: ctaButton.topAnchor, constant: -UX.standardSpacing),
+                textStackView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: UX.standardSpacing),
+                textStackView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: UX.standardSpacing),
+                textStackView.trailingAnchor.constraint(
+                    equalTo: cardView.trailingAnchor,
+                    constant: -UX.standardSpacing
+                ),
+                textStackView.bottomAnchor.constraint(
+                    equalTo: ctaButton.topAnchor,
+                    constant: -UX.standardSpacing
+                ),
 
-            bannerTitle.topAnchor.constraint(equalTo: titleContainerView.topAnchor),
-            bannerTitle.leadingAnchor.constraint(equalTo: titleContainerView.leadingAnchor),
-            bannerTitle.trailingAnchor.constraint(equalTo: titleContainerView.trailingAnchor, constant: -UX.standardSpacing),
-            bannerTitle.bottomAnchor.constraint(equalTo: titleContainerView.bottomAnchor),
+                bannerTitle.topAnchor.constraint(equalTo: titleContainerView.topAnchor),
+                bannerTitle.leadingAnchor.constraint(equalTo: titleContainerView.leadingAnchor),
+                bannerTitle.trailingAnchor.constraint(
+                    equalTo: titleContainerView.trailingAnchor,
+                    constant: -UX.standardSpacing
+                ),
+                bannerTitle.bottomAnchor.constraint(equalTo: titleContainerView.bottomAnchor),
 
-            dismissButton.topAnchor.constraint(equalTo: textStackView.topAnchor),
-            dismissButton.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -UX.standardSpacing),
-            dismissButton.heightAnchor.constraint(equalToConstant: UX.dismissButtonSize.height),
-            dismissButton.widthAnchor.constraint(equalToConstant: UX.dismissButtonSize.width),
+                dismissButton.topAnchor.constraint(equalTo: textStackView.topAnchor),
+                dismissButton.trailingAnchor.constraint(
+                    equalTo: cardView.trailingAnchor,
+                    constant: -UX.standardSpacing
+                ),
+                dismissButton.heightAnchor.constraint(equalToConstant: UX.dismissButtonSize.height),
+                dismissButton.widthAnchor.constraint(equalToConstant: UX.dismissButtonSize.width),
 
-            ctaButton.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: UX.standardSpacing),
-            ctaButton.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -UX.standardSpacing),
-            ctaButton.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -UX.standardSpacing),
-        ])
+                ctaButton.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: UX.standardSpacing),
+                ctaButton.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -UX.standardSpacing),
+                ctaButton.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -UX.standardSpacing),
+            ]
+        )
     }
 
     // Observing cardView bounds change to set the shadow correctly because initially

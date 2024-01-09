@@ -159,7 +159,10 @@ class TopSitesHelperTests: XCTestCase {
 
     func testGetTopSites_pinnedSitesHasPrecedenceOverDefaultTopSites() {
         let expectation = expectation(description: "Expect top sites to be fetched")
-        let subject = createSubject(mockPinnedSites: true, pinnedSites: [PinnedSite(site: Site(url: "https://facebook.com", title: "Facebook"))])
+        let subject = createSubject(
+            mockPinnedSites: true,
+            pinnedSites: [PinnedSite(site: Site(url: "https://facebook.com", title: "Facebook"))]
+        )
 
         subject.getTopSites { sites in
             guard let sites = sites else {

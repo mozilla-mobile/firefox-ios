@@ -56,7 +56,9 @@ class ContentContainer: UIView {
         addToView(content: content)
     }
 
-    /// Update content in the container. This is used in the case of the webview since it's not removed, we don't need to add it back again.
+    /// Update content in the container. This is used in the case of the webview since
+    /// it's not removed, we don't need to add it back again.
+    ///
     /// - Parameter content: The content to update
     func update(content: ContentContainable) {
         removePreviousContent()

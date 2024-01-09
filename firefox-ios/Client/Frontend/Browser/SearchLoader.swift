@@ -37,7 +37,11 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
         return try? String(contentsOfFile: filePath).components(separatedBy: "\n")
     }()
 
-    fileprivate func getBookmarksAsSites(matchingSearchQuery query: String, limit: UInt, completionHandler: @escaping (([Site]) -> Void)) {
+    fileprivate func getBookmarksAsSites(
+        matchingSearchQuery query: String,
+        limit: UInt,
+        completionHandler: @escaping (([Site]) -> Void)
+    ) {
         profile.places.searchBookmarks(query: query, limit: limit).upon { result in
             guard let bookmarkItems = result.successValue else {
                 completionHandler([])
@@ -49,14 +53,20 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
         }
     }
 
-    private func getHistoryAsSites(matchingSearchQuery query: String, limit: Int, completionHandler: @escaping (([Site]) -> Void)) {
+    private func getHistoryAsSites(
+        matchingSearchQuery query: String,
+        limit: Int,
+        completionHandler: @escaping (([Site]) -> Void)
+    ) {
         profile.places.interruptReader()
         profile.places.queryAutocomplete(matchingSearchQuery: query, limit: limit).upon { result in
             guard let historyItems = result.successValue else {
-                self.logger.log("Error searching history",
-                                level: .warning,
-                                category: .sync,
-                                description: result.failureValue?.localizedDescription ?? "Unknown error searching history")
+                self.logger.log(
+                    "Error searching history",
+                    level: .warning,
+                    category: .sync,
+                    description: result.failureValue?.localizedDescription ?? "Unknown error searching history"
+                )
                 completionHandler([])
                 return
             }
@@ -89,7 +99,10 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
                 guard let self = self else { return }
 
                 var queries = [bookmarks]
-                let historyHighlightsEnabled = self.featureFlags.isFeatureEnabled(.searchHighlights, checking: .buildOnly)
+                let historyHighlightsEnabled = self.featureFlags.isFeatureEnabled(
+                    .searchHighlights,
+                    checking: .buildOnly
+                )
                 if !historyHighlightsEnabled {
                     let group = DispatchGroup()
                     group.enter()

@@ -459,6 +459,7 @@ class FakespotViewController: UIViewController,
             var viewModel = FakespotAdViewModel(productAdsData: adData)
             viewModel.onTapProductLink = { [weak self] in
                 self?.viewModel.addTab(url: adData.url)
+                self?.viewModel.recordSurfaceAdsClickedTelemetry()
                 self?.viewModel.reportAdEvent(eventName: .trustedDealsLinkClicked, aid: adData.aid)
                 store.dispatch(FakespotAction.setAppearanceTo(false))
             }
@@ -497,7 +498,11 @@ class FakespotViewController: UIViewController,
                     self.viewModel.recordTelemetry(for: .messageCard(.needsAnalysis))
                 }
                 view.configure(viewModel.needsAnalysisViewModel)
-                TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingSurfaceStaleAnalysisShown)
+                TelemetryWrapper.recordEvent(
+                    category: .action,
+                    method: .view,
+                    object: .shoppingSurfaceStaleAnalysisShown
+                )
                 return view
 
             case .analysisInProgress:
@@ -543,7 +548,9 @@ class FakespotViewController: UIViewController,
     }
 
     private func updateModalA11y() {
-        var currentDetent: UISheetPresentationController.Detent.Identifier? = viewModel.getCurrentDetent(for: sheetPresentationController)
+        var currentDetent: UISheetPresentationController.Detent.Identifier? = viewModel.getCurrentDetent(
+            for: sheetPresentationController
+        )
 
         if currentDetent == nil,
            let sheetPresentationController,
@@ -588,7 +595,9 @@ class FakespotViewController: UIViewController,
     }
 
     // MARK: - UISheetPresentationControllerDelegate
-    func sheetPresentationControllerDidChangeSelectedDetentIdentifier(_ sheetPresentationController: UISheetPresentationController) {
+    func sheetPresentationControllerDidChangeSelectedDetentIdentifier(
+        _ sheetPresentationController: UISheetPresentationController
+    ) {
         updateModalA11y()
     }
 

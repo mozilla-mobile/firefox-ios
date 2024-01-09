@@ -7,13 +7,39 @@ import Foundation
 import Storage
 
 protocol HomepageContextMenuProtocol {
-    func getContextMenuActions(for site: Site, with sourceView: UIView?, sectionType: HomepageSectionType) -> [PhotonRowActions]?
-    func presentContextMenu(for site: Site, with sourceView: UIView?, sectionType: HomepageSectionType)
-    func presentContextMenu(for site: Site, with sourceView: UIView?, sectionType: HomepageSectionType, completionHandler: @escaping () -> PhotonActionSheet?)
+    func getContextMenuActions(
+        for site: Site,
+        with sourceView: UIView?,
+        sectionType: HomepageSectionType
+    ) -> [PhotonRowActions]?
+    func presentContextMenu(
+        for site: Site,
+        with sourceView: UIView?,
+        sectionType: HomepageSectionType
+    )
+    func presentContextMenu(
+        for site: Site,
+        with sourceView: UIView?,
+        sectionType: HomepageSectionType,
+        completionHandler: @escaping () -> PhotonActionSheet?
+    )
 
-    func getContextMenuActions(for highlightItem: HighlightItem, with sourceView: UIView?, sectionType: HomepageSectionType) -> [PhotonRowActions]?
-    func presentContextMenu(for highlightItem: HighlightItem, with sourceView: UIView?, sectionType: HomepageSectionType)
-    func presentContextMenu(for highlightItem: HighlightItem, with sourceView: UIView?, sectionType: HomepageSectionType, completionHandler: @escaping () -> PhotonActionSheet?)
+    func getContextMenuActions(
+        for highlightItem: HighlightItem,
+        with sourceView: UIView?,
+        sectionType: HomepageSectionType
+    ) -> [PhotonRowActions]?
+    func presentContextMenu(
+        for highlightItem: HighlightItem,
+        with sourceView: UIView?,
+        sectionType: HomepageSectionType
+    )
+    func presentContextMenu(
+        for highlightItem: HighlightItem,
+        with sourceView: UIView?,
+        sectionType: HomepageSectionType,
+        completionHandler: @escaping () -> PhotonActionSheet?
+    )
 }
 
 extension HomepageContextMenuProtocol {
@@ -24,15 +50,23 @@ extension HomepageContextMenuProtocol {
         })
     }
 
-    func contextMenu(for site: Site, with sourceView: UIView?, sectionType: HomepageSectionType) -> PhotonActionSheet? {
-        guard let actions = getContextMenuActions(for: site,
-                                                  with: sourceView,
-                                                  sectionType: sectionType)
+    func contextMenu(
+        for site: Site,
+        with sourceView: UIView?,
+        sectionType: HomepageSectionType
+    ) -> PhotonActionSheet? {
+        guard let actions = getContextMenuActions(
+            for: site,
+            with: sourceView,
+            sectionType: sectionType
+        )
         else { return nil }
 
-        let viewModel = PhotonActionSheetViewModel(actions: [actions],
-                                                   site: site,
-                                                   modalStyle: .overFullScreen)
+        let viewModel = PhotonActionSheetViewModel(
+            actions: [actions],
+            site: site,
+            modalStyle: .overFullScreen
+        )
         let contextMenu = PhotonActionSheet(viewModel: viewModel)
         contextMenu.modalTransitionStyle = .crossDissolve
 
@@ -43,13 +77,21 @@ extension HomepageContextMenuProtocol {
     }
 
     // MARK: - Highlight Item
-    func presentContextMenu(for highlightItem: HighlightItem, with sourceView: UIView?, sectionType: HomepageSectionType) {
+    func presentContextMenu(
+        for highlightItem: HighlightItem,
+        with sourceView: UIView?,
+        sectionType: HomepageSectionType
+    ) {
         presentContextMenu(for: highlightItem, with: sourceView, sectionType: sectionType, completionHandler: {
             return self.contextMenu(for: highlightItem, with: sourceView, sectionType: sectionType)
         })
     }
 
-    func contextMenu(for highlightItem: HighlightItem, with sourceView: UIView?, sectionType: HomepageSectionType) -> PhotonActionSheet? {
+    func contextMenu(
+        for highlightItem: HighlightItem,
+        with sourceView: UIView?,
+        sectionType: HomepageSectionType
+    ) -> PhotonActionSheet? {
         guard let actions = getContextMenuActions(for: highlightItem,
                                                   with: sourceView,
                                                   sectionType: sectionType)

@@ -9,7 +9,10 @@ extension TabContentBlocker {
         stats = TPPageStats()
     }
 
-    func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(
+        _ userContentController: WKUserContentController,
+        didReceiveScriptMessage message: WKScriptMessage
+    ) {
         guard isEnabled,
             let body = message.body as? [String: Any],
             let urls = body["urls"] as? [String],

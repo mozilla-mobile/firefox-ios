@@ -4,8 +4,8 @@
 
 import Foundation
 
-/// Redux `Middleware` provides a third-party extension point between dispatching an `Action`, and the moment it reaches the `Reducer`
-/// Middleware produces side effects or uses dependencies and
+/// Redux `Middleware` provides a third-party extension point between dispatching an `Action`,
+/// and the moment it reaches the `Reducer` Middleware produces side effects or uses dependencies and
 /// is the best place to put logger, API calls or access storage.
 public typealias DispatchFunction = (Action) -> Void
 public typealias Middleware<State> = (State, Action) -> Void

@@ -1715,16 +1715,16 @@ extension String {
                 public static let LearnAboutSuggestions = MZLocalizedString(
                     key: "Settings.Search.Accessibility.LearnAboutSuggestions.v124",
                     tableName: "Settings",
-                    value: "Learn more about %@ Suggest",
-                    comment: "Accessibility label for Learn more about Firefox Suggest. Placeholder is for the app name - Firefox.")
+                    value: "Learn more about Firefox Suggest",
+                    comment: "Accessibility label for Learn more about Firefox Suggest.")
             }
 
             public struct Suggest {
                 public static let AddressBarSettingsTitle = MZLocalizedString(
                     key: "Settings.Search.Suggest.AddressBarSetting.Title.v124",
                     tableName: "Settings",
-                    value: "Address bar - %@ Suggest",
-                    comment: "In the Search page of the Settings menu, the title for the Firefox Suggest settings section. Placeholder is for the app name - Firefox.")
+                    value: "Address bar - Firefox Suggest",
+                    comment: "In the Search page of the Settings menu, the title for the Firefox Suggest settings section.")
                 public static let ShowNonSponsoredSuggestionsTitle = MZLocalizedString(
                     key: "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124",
                     tableName: "Settings",
@@ -1748,8 +1748,8 @@ extension String {
                 public static let LearnAboutSuggestions = MZLocalizedString(
                     key: "Settings.Search.Suggest.LearnAboutSuggestions.v124",
                     tableName: "Settings",
-                    value: "Learn more about %@ Suggest",
-                    comment: "In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. Placeholder is for the app name - Firefox."
+                    value: "Learn more about Firefox Suggest",
+                    comment: "In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest."
                 )
             }
         }
@@ -1918,11 +1918,6 @@ extension String {
 
 // MARK: - Activity Stream
 extension String {
-    public static let ASShortcutsTitle =  MZLocalizedString(
-        key: "ActivityStream.Shortcuts.SectionTitle",
-        tableName: nil,
-        value: "Shortcuts",
-        comment: "Section title label for Shortcuts")
     public static let RecentlySavedSectionTitle = MZLocalizedString(
         key: "ActivityStream.Library.Title",
         tableName: nil,
@@ -2109,6 +2104,11 @@ extension String {
         tableName: "Settings",
         value: "Payment Methods",
         comment: "Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage.")
+    public static let SettingsAddressAutofill = MZLocalizedString(
+        key: "Settings.AddressAutofill.Title.v124",
+        tableName: "Settings",
+        value: "Autofill Addresses",
+        comment: "Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage.")
 }
 
 // MARK: - Error pages
@@ -2286,6 +2286,11 @@ extension String {
         tableName: "FirefoxSync",
         value: "Payment Methods",
         comment: "Toggle for credit cards syncing setting")
+    public static let FirefoxSyncAddressesEngine = MZLocalizedString(
+        key: "FirefoxSync.AddressAutofillEngine.v124",
+        tableName: "FirefoxSync",
+        value: "Addresses",
+        comment: "Toggle for address autofill syncing setting")
 }
 
 // MARK: - Firefox Logins
@@ -5946,6 +5951,15 @@ extension String {
                 value: "Checking review quality",
                 comment: "Title for info card when the product is in analysis mode",
                 lastUsedInVersion: 122)
+        }
+
+        struct v123 {
+            public static let ASShortcutsTitle =  MZLocalizedString(
+                key: "ActivityStream.Shortcuts.SectionTitle",
+                tableName: nil,
+                value: "Shortcuts",
+                comment: "Section title label for Shortcuts",
+                lastUsedInVersion: 123)
         }
     }
 }

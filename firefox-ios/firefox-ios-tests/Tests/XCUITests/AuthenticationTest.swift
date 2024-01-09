@@ -13,7 +13,9 @@ class AuthenticationTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.openURL(testBasicHTTPAuthURL)
         mozWaitForElementToExist(app.staticTexts["Authentication required"], timeout: 100)
-        mozWaitForElementToExist(app.staticTexts["A username and password are being requested by jigsaw.w3.org. The site says: test"])
+        mozWaitForElementToExist(app.staticTexts[
+            "A username and password are being requested by jigsaw.w3.org. The site says: test"
+        ])
 
         let placeholderValueUsername = app.alerts.textFields.element(boundBy: 0).value as! String
         let placeholderValuePassword = app.alerts.secureTextFields.element(boundBy: 0).value as! String

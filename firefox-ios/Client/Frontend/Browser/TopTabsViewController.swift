@@ -74,7 +74,11 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
         let privateModeButton = PrivateModeButton()
         privateModeButton.semanticContentAttribute = .forceLeftToRight
         privateModeButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.TopTabs.privateModeButton
-        privateModeButton.addTarget(self, action: #selector(TopTabsViewController.togglePrivateModeTapped), for: .touchUpInside)
+        privateModeButton.addTarget(
+            self,
+            action: #selector(TopTabsViewController.togglePrivateModeTapped),
+            for: .touchUpInside
+        )
         privateModeButton.translatesAutoresizingMaskIntoConstraints = false
         privateModeButton.showsLargeContentViewer = true
         return privateModeButton
@@ -216,12 +220,21 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
         else { return }
 
         ensureMainThread { [self] in
-            if let frame = collectionView.layoutAttributesForItem(at: IndexPath(row: index, section: 0))?.frame {
+            if let frame = collectionView.layoutAttributesForItem(
+                at: IndexPath(row: index, section: 0)
+            )?.frame {
                 if centerCell {
-                    collectionView.scrollToItem(at: IndexPath(item: index, section: 0), at: .centeredHorizontally, animated: false)
+                    collectionView.scrollToItem(
+                        at: IndexPath(item: index, section: 0),
+                        at: .centeredHorizontally,
+                        animated: false
+                    )
                 } else {
                     // Padding is added to ensure the tab is completely visible (none of the tab is under the fader)
-                    let padFrame = frame.insetBy(dx: -(TopTabsUX.TopTabsBackgroundShadowWidth+TopTabsUX.FaderPading), dy: 0)
+                    let padFrame = frame.insetBy(
+                        dx: -(TopTabsUX.TopTabsBackgroundShadowWidth+TopTabsUX.FaderPading),
+                        dy: 0
+                    )
                     if animated {
                         UIView.animate(withDuration: TopTabsUX.AnimationSpeed, animations: {
                             self.collectionView.scrollRectToVisible(padFrame, animated: true)

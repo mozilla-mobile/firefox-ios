@@ -48,8 +48,9 @@ extension String {
     ///   - boldFont: The font to be used for the bolded parts of the attributed string.
     /// - Returns: An `NSAttributedString` with the specified parts bolded.
     ///
-    /// - Note: This method takes an array of strings (`boldPartsOfString`) and makes those parts bold within the original string.
-    /// It returns an attributed string with the specified parts bolded, using the `boldFont` for those parts and the `initialFont` for the non-bold parts.
+    /// - Note: This method takes an array of strings (`boldPartsOfString`) and makes those parts
+    ///         bold within the original string. It returns an attributed string with the specified
+    ///         parts bolded, using the `boldFont` for those parts and the `initialFont` for the non-bold parts.
     ///
     /// - Example:
     ///   ```

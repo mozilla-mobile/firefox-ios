@@ -19,11 +19,11 @@ final class ContentBlockerParserTests: XCTestCase {
     }
 
     func testParsingAdsFile() throws {
-        let entityJson = parserData.getDictData(from: .entity)
+        let entityJson = try parserData.getDictData(from: .entity)
         let subject = DefaultContentBlockerParser()
         subject.parseEntityList(entityJson)
 
-        let adsList = parserData.getListData(from: .ads)
+        let adsList = try parserData.getListData(from: .ads)
         let result = subject.parseCategoryList(adsList,
                                                actionType: .blockAll)
 
@@ -57,14 +57,15 @@ final class ContentBlockerParserTests: XCTestCase {
     }
 
     func testParsingAdsFile_withoutEntity() throws {
-        let entityJson = parserData.getDictData(from: .emptyEntity)
+        let entityJson = try parserData.getDictData(from: .emptyEntity)
         let subject = DefaultContentBlockerParser()
         subject.parseEntityList(entityJson)
 
-        let adsList = parserData.getListData(from: .ads)
+        let adsList = try parserData.getListData(from: .ads)
         let result = subject.parseCategoryList(adsList,
                                                actionType: .blockAll)
 
+        // swiftlint:disable line_length
         let firstLine = """
         {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\\\.)?2leep\\\\.com","load-type":["third-party"]}}
         """
@@ -83,6 +84,7 @@ final class ContentBlockerParserTests: XCTestCase {
         let fifthLine = """
         {\"action\":{\"type\":\"block\"},\"trigger\":{\"url-filter\":\"^https?://([^/]+\\\\.)?adfox\\\\.yandex\\\\.ru\",\"load-type\":[\"third-party\"]}}
         """
+        // swiftlint:enable line_length
         XCTAssertEqual(result.count, 5)
         XCTAssertEqual(result[0], firstLine)
         XCTAssertEqual(result[1], secondLine)

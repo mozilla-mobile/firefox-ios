@@ -13,7 +13,10 @@ protocol DownloadsNavigationHandler: AnyObject {
     func showDocument(file: DownloadedFile)
 }
 
-class DownloadsCoordinator: BaseCoordinator, ParentCoordinatorDelegate, DownloadsNavigationHandler, UIDocumentInteractionControllerDelegate {
+class DownloadsCoordinator: BaseCoordinator,
+                            ParentCoordinatorDelegate,
+                            DownloadsNavigationHandler,
+                            UIDocumentInteractionControllerDelegate {
     // MARK: - Properties
 
     private weak var parentCoordinator: LibraryCoordinatorDelegate?
@@ -77,7 +80,9 @@ class DownloadsCoordinator: BaseCoordinator, ParentCoordinatorDelegate, Download
 
     // MARK: - UIDocumentInteractionControllerDelegate
 
-    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+    func documentInteractionControllerViewControllerForPreview(
+        _ controller: UIDocumentInteractionController
+    ) -> UIViewController {
         return router.rootViewController ?? UIViewController()
     }
 }

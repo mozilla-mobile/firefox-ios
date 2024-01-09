@@ -38,7 +38,10 @@ class CredentialProviderPresenter {
                     self?.cancel(with: .failed)
                 case .success(let record):
                     if let passwordCredential = record?.passwordCredential {
-                        self?.view?.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
+                        self?.view?.extensionContext.completeRequest(
+                            withSelectedCredential: passwordCredential,
+                            completionHandler: nil
+                        )
                     } else {
                         self?.cancel(with: .userInteractionRequired)
                     }
@@ -79,7 +82,8 @@ class CredentialProviderPresenter {
     }
 
     func credentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-        // Force a short delay before we trigger authentication. See https://github.com/mozilla-mobile/firefox-ios/issues/9354
+        // Force a short delay before we trigger authentication.
+        // See https://github.com/mozilla-mobile/firefox-ios/issues/9354
         DispatchQueue.main.asyncAfter(deadline: .now() + CredentialProviderAuthenticationDelay) {
             self.appAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
                 switch result {

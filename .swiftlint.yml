@@ -1,4 +1,5 @@
 only_rules: # Only enforce these rules, ignore all others
+  # - line_length
   - blanket_disable_command
   - class_delegate_protocol
   - closure_spacing
@@ -90,6 +91,10 @@ only_rules: # Only enforce these rules, ignore all others
   # - prohibited_interface_builder
   # - prohibited_super_call
   # - protocol_property_accessors_order
+
+# line_length:
+#   ignores_urls: true
+#   ignores_interpolated_strings: true
 
 file_header:
   required_string: |

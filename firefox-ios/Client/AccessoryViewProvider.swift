@@ -171,10 +171,27 @@ class AccessoryViewProvider: UIView, Themeable {
             let cardStackViewForBarButton = UIBarButtonItem(customView: cardButtonStackView)
             cardStackViewForBarButton.accessibilityTraits = .button
             cardStackViewForBarButton.accessibilityLabel = .CreditCard.Settings.UseSavedCardFromKeyboard
-            toolbar.items = [previousButton, nextButton, fixedSpacer, cardStackViewForBarButton, flexibleSpacer, doneButton]
-            toolbar.accessibilityElements = [previousButton, nextButton, cardStackViewForBarButton, doneButton]
+            toolbar.items = [
+                previousButton,
+                nextButton,
+                fixedSpacer,
+                cardStackViewForBarButton,
+                flexibleSpacer,
+                doneButton
+            ]
+            toolbar.accessibilityElements = [
+                previousButton,
+                nextButton,
+                cardStackViewForBarButton,
+                doneButton
+            ]
         } else {
-            toolbar.items = [previousButton, nextButton, flexibleSpacer, doneButton]
+            toolbar.items = [
+                previousButton,
+                nextButton,
+                flexibleSpacer,
+                doneButton
+            ]
         }
 
         addSubview(toolbar)

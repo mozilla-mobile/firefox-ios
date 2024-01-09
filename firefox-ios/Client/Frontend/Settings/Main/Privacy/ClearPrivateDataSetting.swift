@@ -22,8 +22,14 @@ class ClearPrivateDataSetting: Setting {
         self.settingsDelegate = settingsDelegate
 
         let clearTitle: String = .SettingsDataManagementSectionName
-        super.init(title: NSAttributedString(string: clearTitle,
-                                             attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
+        super.init(
+            title: NSAttributedString(
+                string: clearTitle,
+                attributes: [
+                    NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary
+                ]
+            )
+        )
     }
 
     override func onClick(_ navigationController: UINavigationController?) {

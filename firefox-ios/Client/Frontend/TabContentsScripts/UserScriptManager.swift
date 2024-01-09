@@ -40,7 +40,11 @@ class UserScriptManager: FeatureFlaggable {
             if let path = Bundle.main.path(forResource: name, ofType: "js"),
                 let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
                 let wrappedSource = "(function() { const APP_ID_TOKEN = '\(UserScriptManager.appIdToken)'; \(source) })()"
-                let userScript = WKUserScript.createInDefaultContentWorld(source: wrappedSource, injectionTime: injectionTime, forMainFrameOnly: mainFrameOnly)
+                let userScript = WKUserScript.createInDefaultContentWorld(
+                    source: wrappedSource,
+                    injectionTime: injectionTime,
+                    forMainFrameOnly: mainFrameOnly
+                )
                 compiledUserScripts[name] = userScript
             }
 
@@ -60,10 +64,20 @@ class UserScriptManager: FeatureFlaggable {
             }
 
             let webcompatName = "Webcompat\(name)"
-            if let webCompatPath = Bundle.main.path(forResource: webcompatName, ofType: "js"),
-                let source = try? NSString(contentsOfFile: webCompatPath, encoding: String.Encoding.utf8.rawValue) as String {
+            if let webCompatPath = Bundle.main.path(
+                forResource: webcompatName,
+                ofType: "js"
+            ),
+               let source = try? NSString(
+                contentsOfFile: webCompatPath,
+                encoding: String.Encoding.utf8.rawValue
+               ) as String {
                 let wrappedSource = "(function() { const APP_ID_TOKEN = '\(UserScriptManager.appIdToken)'; \(source) })()"
-                let userScript = WKUserScript.createInPageContentWorld(source: wrappedSource, injectionTime: injectionTime, forMainFrameOnly: mainFrameOnly)
+                let userScript = WKUserScript.createInPageContentWorld(
+                    source: wrappedSource,
+                    injectionTime: injectionTime,
+                    forMainFrameOnly: mainFrameOnly
+                )
                 compiledUserScripts[webcompatName] = userScript
             }
         }

@@ -26,7 +26,8 @@ open class RustFirefoxAccounts {
     public static let prefKeyLastDeviceName = "prefKeyLastDeviceName"
     private static let clientID = "1b1a3e44c54fbb58"
     public static let redirectURL = "urn:ietf:wg:oauth:2.0:oob:oauth-redirect-webchannel"
-    // The value of the scope comes from https://searchfox.org/mozilla-central/rev/887d4b5da89a11920ed0fd96b7b7f066927a67db/services/fxaccounts/FxAccountsCommon.js#88
+    // The value of the scope comes from
+    // https://searchfox.org/mozilla-central/rev/887d4b5da89a11920ed0fd96b7b7f066927a67db/services/fxaccounts/FxAccountsCommon.js#88
     public static let pushScope = "chrome://fxa-device-update"
     public static let shared = RustFirefoxAccounts()
     public var accountManager: FxAccountManager?
@@ -38,11 +39,19 @@ open class RustFirefoxAccounts {
     private init(logger: Logger = DefaultLogger.shared) {
         self.logger = logger
 
-        NotificationCenter.default.addObserver(forName: .accountAuthenticated, object: nil, queue: .main) { [weak self] _ in
+        NotificationCenter.default.addObserver(
+            forName: .accountAuthenticated,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
             self?.update()
         }
 
-        NotificationCenter.default.addObserver(forName: .accountProfileUpdate, object: nil, queue: .main) { [weak self] _ in
+        NotificationCenter.default.addObserver(
+            forName: .accountProfileUpdate,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
             self?.update()
         }
     }
@@ -54,8 +63,11 @@ open class RustFirefoxAccounts {
      hook into notifications like `.accountProfileUpdate` to refresh once initialize() is complete.
      Or they can wait on the accountManager deferred to fill.
      */
-    public static func startup(prefs: Prefs,
-                               logger: Logger = DefaultLogger.shared, completion: @escaping (FxAccountManager) -> Void) {
+    public static func startup(
+        prefs: Prefs,
+        logger: Logger = DefaultLogger.shared,
+        completion: @escaping (FxAccountManager) -> Void
+    ) {
         assert(Thread.isMainThread)
         if !Thread.isMainThread {
             logger.log("Startup of RustFirefoxAccounts is happening OFF the main thread!",
@@ -116,24 +128,43 @@ open class RustFirefoxAccounts {
         let useCustom = prefs?.boolForKey(PrefsKeys.KeyUseCustomFxAContentServer) ?? false || prefs?.boolForKey(PrefsKeys.KeyUseCustomSyncTokenServerOverride) ?? false
         if useCustom {
             let contentUrl: String
-            if prefs?.boolForKey(PrefsKeys.KeyUseCustomFxAContentServer) ?? false, let url = prefs?.stringForKey(PrefsKeys.KeyCustomFxAContentServer) {
+            if prefs?.boolForKey(PrefsKeys.KeyUseCustomFxAContentServer) ?? false,
+               let url = prefs?.stringForKey(PrefsKeys.KeyCustomFxAContentServer) {
                 contentUrl = url
             } else {
                 contentUrl = "https://stable.dev.lcip.org"
             }
 
             let tokenServer = prefs?.boolForKey(PrefsKeys.KeyUseCustomSyncTokenServerOverride) ?? false ? prefs?.stringForKey(PrefsKeys.KeyCustomSyncTokenServerOverride) : nil
-            config = FxAConfig(contentUrl: contentUrl, clientId: RustFirefoxAccounts.clientID, redirectUri: RustFirefoxAccounts.redirectURL, tokenServerUrlOverride: tokenServer)
+            config = FxAConfig(
+                contentUrl: contentUrl,
+                clientId: RustFirefoxAccounts.clientID,
+                redirectUri: RustFirefoxAccounts.redirectURL,
+                tokenServerUrlOverride: tokenServer
+            )
         } else {
-            config = FxAConfig(server: server, clientId: RustFirefoxAccounts.clientID, redirectUri: RustFirefoxAccounts.redirectURL)
+            config = FxAConfig(
+                server: server,
+                clientId: RustFirefoxAccounts.clientID,
+                redirectUri: RustFirefoxAccounts.redirectURL
+            )
         }
 
         let type = UIDevice.current.userInterfaceIdiom == .pad ? DeviceType.tablet : DeviceType.mobile
-        let deviceConfig = DeviceConfig(name: DeviceInfo.defaultClientName(), deviceType: type, capabilities: [.sendTab])
+        let deviceConfig = DeviceConfig(
+            name: DeviceInfo.defaultClientName(),
+            deviceType: type,
+            capabilities: [.sendTab]
+        )
         let accessGroupPrefix = Bundle.main.object(forInfoDictionaryKey: "MozDevelopmentTeam") as! String
         let accessGroupIdentifier = AppInfo.keychainAccessGroupWithPrefix(accessGroupPrefix)
 
-        return FxAccountManager(config: config, deviceConfig: deviceConfig, applicationScopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session], keychainAccessGroup: accessGroupIdentifier)
+        return FxAccountManager(
+            config: config,
+            deviceConfig: deviceConfig,
+            applicationScopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session],
+            keychainAccessGroup: accessGroupIdentifier
+        )
     }
 
     /// This is typically used to add a UI indicator that FxA needs attention (usually re-login manually).
@@ -150,7 +181,8 @@ open class RustFirefoxAccounts {
             avatar = Avatar(url: url)
         }
 
-        // The userProfile (email, display name, etc) and the device name need to be cached for when the app starts in an offline state. Now is a good time to update those caches.
+        // The userProfile (email, display name, etc) and the device name need to be cached for when
+        // the app starts in an offline state. Now is a good time to update those caches.
 
         // Accessing the profile will trigger a cache update if needed
         _ = userProfile
@@ -160,12 +192,14 @@ open class RustFirefoxAccounts {
             UserDefaults.standard.set(deviceName, forKey: RustFirefoxAccounts.prefKeyLastDeviceName)
         }
 
-        // The legacy system had both of these notifications for UI updates. Possibly they could be made into a single notification
+        // The legacy system had both of these notifications for UI updates. Possibly they could be
+        // made into a single notification
         NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
         NotificationCenter.default.post(name: .FirefoxAccountStateChange, object: self)
     }
 
-    /// Cache the user profile (i.e. email, user name) for when the app starts offline. Notice this gets cleared when an account is disconnected.
+    /// Cache the user profile (i.e. email, user name) for when the app starts offline. Notice this gets
+    /// cleared when an account is disconnected.
     private let prefKeyCachedUserProfile = "prefKeyCachedUserProfile"
     private var cachedUserProfile: FxAUserProfile?
     public var userProfile: FxAUserProfile? {
@@ -196,7 +230,10 @@ open class RustFirefoxAccounts {
         prefs?.removeObjectForKey(prefKeyCachedUserProfile)
         prefs?.removeObjectForKey(PendingAccountDisconnectedKey)
         cachedUserProfile = nil
-        MZKeychainWrapper.sharedClientAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
+        MZKeychainWrapper.sharedClientAppContainerKeychain.removeObject(
+            forKey: KeychainKey.apnsToken,
+            withAccessibility: .afterFirstUnlock
+        )
     }
 
     public func hasAccount(completion: @escaping (Bool) -> Void) {

@@ -720,6 +720,22 @@ shopping:
     send_in_pings:
       - events
 
+  surface_ads_clicked:
+    type: event
+    description: |
+      An ad shown in the fakespot bar was clicked.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7752
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17861
+    data_sensitivity:
+      - interaction
+    expires: "2024-06-01"
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    send_in_pings:
+      - events
+
   address_bar_icon_clicked:
     type: event
     description: |

@@ -24,7 +24,8 @@ protocol TopSitesDimension {
     /// - Parameters:
     ///   - sites: The top sites that we need to show
     ///   - numberOfRows: The number of rows the user has its preference set to
-    ///   - interface: The interface where the top sites are being shown (ex in landscape, iPhone and its horizontal size class)
+    ///   - interface: The interface where the top sites are being shown
+    ///                (ex in landscape, iPhone and its horizontal size class)
     /// - Returns: The top site dimension including its numberOfRows and numberOfTilesPerRow
     func getSectionDimension(for sites: [TopSite],
                              numberOfRows: Int,
@@ -63,7 +64,8 @@ class TopSitesDimensionImplementation: TopSitesDimension {
     }
 
     /// Get the number of tiles per row the user will see. This depends on the UI interface the user has.
-    /// - Parameter interface: Tile number is based on layout, this param contains the parameters needed to computer the tile number
+    /// - Parameter interface: Tile number is based on layout, this param contains the parameters
+    ///                        needed to computer the tile number
     /// - Returns: The number of tiles per row the user will see
     private func getNumberOfTilesPerRow(for interface: TopSitesUIInterface) -> Int {
         let cellWidth = TopSitesViewModel.UX.cellEstimatedSize.width

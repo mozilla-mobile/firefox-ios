@@ -19,7 +19,10 @@ class AdvancedAccountSetting: HiddenSetting {
     }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: .SettingsAdvancedAccountTitle, attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
+        return NSAttributedString(
+            string: .SettingsAdvancedAccountTitle,
+            attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
+        )
     }
 
     init(settings: SettingsTableViewController,

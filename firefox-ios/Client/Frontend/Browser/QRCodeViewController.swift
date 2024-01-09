@@ -95,14 +95,19 @@ class QRCodeViewController: UIViewController {
 
         // Setup the NavigationBar
         navigationController?.navigationBar.barTintColor = UX.navigationBarBackgroundColor
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UX.navigationBarTitleColor]
+        navigationController?.navigationBar.titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: UX.navigationBarTitleColor
+        ]
 
         // Setup the NavigationItem
         navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(named: StandardImageIdentifiers.Large.chevronLeft)?.imageFlippedForRightToLeftLayoutDirection(),
+            image: UIImage(
+                named: StandardImageIdentifiers.Large.chevronLeft
+            )?.imageFlippedForRightToLeftLayoutDirection(),
             style: .plain,
             target: self,
-            action: #selector(goBack))
+            action: #selector(goBack)
+        )
         navigationItem.leftBarButtonItem?.tintColor = UIColor.white
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(

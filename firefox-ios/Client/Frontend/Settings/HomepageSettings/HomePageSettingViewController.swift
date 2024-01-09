@@ -20,8 +20,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     }
 
     var isWallpaperSectionEnabled: Bool {
-        return wallpaperManager.canSettingsBeShown &&
-            featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
+        return wallpaperManager.canSettingsBeShown
     }
 
     var isPocketSectionEnabled: Bool {
@@ -117,9 +116,11 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
 
         showWebPage.alignTextFieldToNatural()
 
-        return SettingSection(title: NSAttributedString(string: .SettingsHomePageURLSectionTitle),
-                              footerTitle: NSAttributedString(string: .Settings.Homepage.Current.Description),
-                              children: [showTopSites, showWebPage])
+        return SettingSection(
+            title: NSAttributedString(string: .SettingsHomePageURLSectionTitle),
+            footerTitle: NSAttributedString(string: .Settings.Homepage.Current.Description),
+            children: [showTopSites, showWebPage]
+        )
     }
 
     private func customizeFirefoxSettingSection() -> SettingSection {
@@ -139,8 +140,10 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             statusText: pocketStatusText
         )
 
-        let jumpBackInSetting = BoolSetting(with: .jumpBackIn,
-                                            titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.JumpBackIn))
+        let jumpBackInSetting = BoolSetting(
+            with: .jumpBackIn,
+            titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.JumpBackIn)
+        )
 
         let recentlySavedSetting = BoolSetting(
             prefs: profile.prefs,
@@ -150,8 +153,10 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             titleText: .Settings.Homepage.CustomizeFirefoxHome.RecentlySaved
         )
 
-        let historyHighlightsSetting = BoolSetting(with: .historyHighlights,
-                                                   titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.RecentlyVisited))
+        let historyHighlightsSetting = BoolSetting(
+            with: .historyHighlights,
+            titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.RecentlyVisited)
+        )
         let wallpaperSetting = WallpaperSettings(settings: self,
                                                  settingsDelegate: settingsDelegate,
                                                  tabManager: tabManager,
@@ -178,9 +183,13 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             sectionItems.append(wallpaperSetting)
         }
 
-        return SettingSection(title: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.Title),
-                              footerTitle: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.Description),
-                              children: sectionItems)
+        return SettingSection(
+            title: NSAttributedString(
+                string: .Settings.Homepage.CustomizeFirefoxHome.Title
+            ),
+            footerTitle: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.Description),
+            children: sectionItems
+        )
     }
 
     private func setupStartAtHomeSection() -> SettingSection {
@@ -193,8 +202,10 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             self?.prefs.setString(option.rawValue, forKey: PrefsKeys.UserFeatureFlagPrefs.StartAtHome)
             self?.tableView.reloadData()
 
-            let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: PrefsKeys.UserFeatureFlagPrefs.StartAtHome,
-                          TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: option.rawValue]
+            let extras = [
+                TelemetryWrapper.EventExtraKey.preference.rawValue: PrefsKeys.UserFeatureFlagPrefs.StartAtHome,
+                TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: option.rawValue
+            ]
             TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, extras: extras)
         }
 
@@ -228,9 +239,13 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
                 onOptionSelected(false, .disabled)
             })
 
-        let section = SettingSection(title: NSAttributedString(string: .Settings.Homepage.StartAtHome.SectionTitle),
-                                     footerTitle: NSAttributedString(string: .Settings.Homepage.StartAtHome.SectionDescription),
-                                     children: [alwaysOption, neverOption, afterFourHoursOption])
+        let section = SettingSection(
+            title: NSAttributedString(string: .Settings.Homepage.StartAtHome.SectionTitle),
+            footerTitle: NSAttributedString(
+                string: .Settings.Homepage.StartAtHome.SectionDescription
+            ),
+            children: [alwaysOption, neverOption, afterFourHoursOption]
+        )
 
         return section
     }
@@ -242,7 +257,9 @@ extension HomePageSettingViewController {
         var profile: Profile
 
         override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
-        override var accessibilityIdentifier: String? { return AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Shortcuts.settingsPage }
+        override var accessibilityIdentifier: String? {
+            return AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Shortcuts.settingsPage
+        }
         override var style: UITableViewCell.CellStyle { return .value1 }
 
         override var status: NSAttributedString {
@@ -273,7 +290,9 @@ extension HomePageSettingViewController {
         weak var settingsDelegate: SettingsDelegate?
 
         override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
-        override var accessibilityIdentifier: String? { return AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.wallpaper }
+        override var accessibilityIdentifier: String? {
+            return AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.wallpaper
+        }
         override var style: UITableViewCell.CellStyle { return .value1 }
 
         init(settings: SettingsTableViewController,

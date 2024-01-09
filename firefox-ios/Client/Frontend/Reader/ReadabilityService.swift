@@ -94,12 +94,20 @@ class ReadabilityOperation: Operation {
 }
 
 extension ReadabilityOperation: WKNavigationDelegate {
-    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+    func webView(
+        _ webView: WKWebView,
+        didFail navigation: WKNavigation!,
+        withError error: Error
+    ) {
         result = ReadabilityOperationResult.error(error as NSError)
         semaphore.signal()
     }
 
-    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+    func webView(
+        _ webView: WKWebView,
+        didFailProvisionalNavigation navigation: WKNavigation!,
+        withError error: Error
+    ) {
         result = ReadabilityOperationResult.error(error as NSError)
         semaphore.signal()
     }
@@ -110,13 +118,24 @@ extension ReadabilityOperation: WKNavigationDelegate {
 }
 
 extension ReadabilityOperation: ReaderModeDelegate {
-    func readerMode(_ readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forTab tab: Tab) {
+    func readerMode(
+        _ readerMode: ReaderMode,
+        didChangeReaderModeState state: ReaderModeState,
+        forTab tab: Tab
+    ) {
     }
 
-    func readerMode(_ readerMode: ReaderMode, didDisplayReaderizedContentForTab tab: Tab) {
+    func readerMode(
+        _ readerMode: ReaderMode,
+        didDisplayReaderizedContentForTab tab: Tab
+    ) {
     }
 
-    func readerMode(_ readerMode: ReaderMode, didParseReadabilityResult readabilityResult: ReadabilityResult, forTab tab: Tab) {
+    func readerMode(
+        _ readerMode: ReaderMode,
+        didParseReadabilityResult readabilityResult: ReadabilityResult,
+        forTab tab: Tab
+    ) {
         logger.log("Did parse ReadabilityResult",
                    level: .debug,
                    category: .library)

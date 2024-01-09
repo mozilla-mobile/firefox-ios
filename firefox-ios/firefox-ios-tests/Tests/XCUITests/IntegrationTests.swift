@@ -54,7 +54,10 @@ class IntegrationTests: BaseTestCase {
         navigator.goto(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
         sleep(5)
-        mozWaitForElementToExist(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: TIMEOUT_LONG)
+        mozWaitForElementToExist(
+            app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar],
+            timeout: TIMEOUT_LONG
+        )
         mozWaitForElementToExist(app.staticTexts["Continue to your Mozilla account"], timeout: TIMEOUT_LONG)
         userState.fxaUsername = ProcessInfo.processInfo.environment["FXA_EMAIL"]!
         userState.fxaPassword = ProcessInfo.processInfo.environment["FXA_PASSWORD"]!
@@ -98,7 +101,10 @@ class IntegrationTests: BaseTestCase {
         navigator.goto(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
 
-        mozWaitForElementToExist(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: TIMEOUT_LONG)
+        mozWaitForElementToExist(
+            app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar],
+            timeout: TIMEOUT_LONG
+        )
     }
 
     func testFxASyncBookmark () {
@@ -139,7 +145,10 @@ class IntegrationTests: BaseTestCase {
         mozWaitForElementToExist(app.tables.cells.element(boundBy: 1), timeout: 10)
         app.tables.cells.element(boundBy: 1).tap()
         mozWaitForElementToExist(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"], timeout: 10)
-        XCTAssertEqual(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"].value! as! String, "Fennec (administrator) on iOS")
+        XCTAssertEqual(
+            app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"].value! as! String,
+            "Fennec (administrator) on iOS"
+        )
 
         // Sync again just to make sure to sync after new name is shown
         app.buttons["Settings"].tap()

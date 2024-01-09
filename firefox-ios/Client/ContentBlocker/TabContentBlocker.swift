@@ -53,11 +53,16 @@ class TabContentBlocker {
 
     init(tab: ContentBlockerTab) {
         self.tab = tab
-        NotificationCenter.default.addObserver(self, selector: #selector(notifiedTabSetupRequired), name: .contentBlockerTabSetupRequired, object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(notifiedTabSetupRequired),
+            name: .contentBlockerTabSetupRequired,
+            object: nil
+        )
     }
 
-    func scriptMessageHandlerName() -> String? {
-        return "trackingProtectionStats"
+    func scriptMessageHandlerNames() -> [String]? {
+        return ["trackingProtectionStats"]
     }
 
     class func prefsChanged() {

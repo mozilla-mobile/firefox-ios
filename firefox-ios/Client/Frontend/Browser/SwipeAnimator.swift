@@ -144,7 +144,13 @@ extension SwipeAnimator {
 
     func close(right: Bool) {
         let direction = CGFloat(right ? -1 : 1)
-        animateAwayWithVelocity(CGPoint(x: -direction * params.minExitVelocity, y: 0), speed: direction * params.minExitVelocity)
+        animateAwayWithVelocity(
+            CGPoint(
+                x: -direction * params.minExitVelocity,
+                y: 0
+            ),
+            speed: direction * params.minExitVelocity
+        )
     }
 
     @objc

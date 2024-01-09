@@ -33,13 +33,19 @@ final class UserConversionMetricsTests: XCTestCase {
     func testShouldRecordMetric() {
         // Set the first app use to the current time (in milliseconds)
         let currentDate = Date.now()
-        mockUserDefaults.set(currentDate, forKey: PrefsKeys.Session.FirstAppUse)
+        mockUserDefaults.set(
+            currentDate,
+            forKey: PrefsKeys.Session.FirstAppUse
+        )
 
         // Check that the method returns true
         XCTAssertTrue(metrics.shouldRecordMetric())
         // Set the first app use to more than a week ago
         let moreThanAWeekAgo = Calendar.current.date(byAdding: .day, value: -8, to: Date())!
-        mockUserDefaults.set(UInt64(moreThanAWeekAgo.timeIntervalSince1970 * 1000), forKey: PrefsKeys.Session.FirstAppUse)
+        mockUserDefaults.set(
+            UInt64(moreThanAWeekAgo.timeIntervalSince1970 * 1000),
+            forKey: PrefsKeys.Session.FirstAppUse
+        )
 
         // Check that the method now returns false
         XCTAssertFalse(metrics.shouldRecordMetric())
