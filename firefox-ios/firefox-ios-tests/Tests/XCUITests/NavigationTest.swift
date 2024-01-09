@@ -419,7 +419,6 @@ class NavigationTest: BaseTestCase {
         XCTAssert(app.keyboards.count > 0, "The keyboard is not shown")
         app.typeText("example.com\n")
 
-        // waitUntilPageLoad()
         mozWaitForValueContains(urlBar, value: "example.com/")
         XCTAssertFalse(app.keyboards.count > 0, "The keyboard is shown")
         // swiftlint:enable empty_count
