@@ -8,15 +8,17 @@ import WebKit
 
 class WKEngineSession: NSObject, EngineSession {
     weak var delegate: EngineSessionDelegate?
-    private var webView: WKEngineWebView
+    var webView: WKEngineWebView
     private var logger: Logger
     private var sessionData: WKEngineSessionData
+    private var contentScriptManager: WKContentScriptManager
 
     init?(userScriptManager: WKUserScriptManager,
           configurationProvider: WKEngineConfigurationProvider = DefaultWKEngineConfigurationProvider(),
           webViewProvider: WKWebViewProvider = DefaultWKWebViewProvider(),
           logger: Logger = DefaultLogger.shared,
-          sessionData: WKEngineSessionData = WKEngineSessionData()) {
+          sessionData: WKEngineSessionData = WKEngineSessionData(),
+          contentScriptManager: WKContentScriptManager = DefaultContentScriptManager()) {
         guard let webView = webViewProvider.createWebview(configurationProvider: configurationProvider) else {
             logger.log("WKEngineWebView creation failed on configuration",
                        level: .fatal,
@@ -27,6 +29,7 @@ class WKEngineSession: NSObject, EngineSession {
         self.webView = webView
         self.logger = logger
         self.sessionData = sessionData
+        self.contentScriptManager = contentScriptManager
         super.init()
 
         self.setupObservers()
@@ -117,7 +120,7 @@ class WKEngineSession: NSObject, EngineSession {
     }
 
     func close() {
-        contentScriptManager.uninstall(tab: self)
+        contentScriptManager.uninstall(session: self)
         webView.removeAllUserScripts()
         removeObservers()
 

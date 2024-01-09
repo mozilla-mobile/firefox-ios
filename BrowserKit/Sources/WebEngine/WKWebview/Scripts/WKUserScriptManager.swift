@@ -5,14 +5,14 @@
 import WebKit
 import Foundation
 
+/// Manager used to inject scripts at document start or end inside a WKEngineWebView
 protocol WKUserScriptManager {
     func injectUserScriptsIntoWebView(_ webView: WKEngineWebView)
 }
 
 class DefaultUserScriptManager: WKUserScriptManager {
-    // Scripts can use this to verify the application (not JS on the web) is calling into them.
-    static let appIdToken = UUID().uuidString
-
+    // Scripts can use this to verify the application (not JS on the web) is calling into them
+    private let appIdToken = UUID().uuidString
     private var compiledUserScripts = [String: WKUserScript]()
 
     struct UserScriptInfo {
@@ -62,7 +62,7 @@ class DefaultUserScriptManager: WKUserScriptManager {
               let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String
         else { return }
 
-        let wrappedSource = "(function() { const APP_ID_TOKEN = '\(DefaultUserScriptManager.appIdToken)'; \(source) })()"
+        let wrappedSource = "(function() { const APP_ID_TOKEN = '\(appIdToken)'; \(source) })()"
         let userScript = WKUserScript.createInDefaultContentWorld(
             source: wrappedSource,
             injectionTime: userScriptInfo.injectionTime,
@@ -79,7 +79,7 @@ class DefaultUserScriptManager: WKUserScriptManager {
                                          encoding: String.Encoding.utf8.rawValue) as String
         else { return }
 
-        let wrappedSource = "(function() { const APP_ID_TOKEN = '\(DefaultUserScriptManager.appIdToken)'; \(source) })()"
+        let wrappedSource = "(function() { const APP_ID_TOKEN = '\(appIdToken)'; \(source) })()"
         let userScript = WKUserScript.createInPageContentWorld(
             source: wrappedSource,
             injectionTime: userScriptInfo.injectionTime,
