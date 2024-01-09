@@ -15,13 +15,7 @@ var uid: String!
 var code: String!
 
 class SyncUITests: BaseTestCase {
-    func testUIFromSettings () {
-        waitForTabsButton()
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(FxASigninScreen)
-        verifyFxASigninScreen()
-    }
-
+    //  https://testrail.stage.mozaws.net/index.php?/cases/view/2448597
     func testSyncUIFromBrowserTabMenu() {
         // Check menu available from HomeScreenPanel
         waitForTabsButton()
@@ -57,6 +51,7 @@ class SyncUITests: BaseTestCase {
         XCTAssertTrue(app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton].exists)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2448874
     func testTypeOnGivenFields() {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
@@ -90,6 +85,7 @@ class SyncUITests: BaseTestCase {
         mozWaitForElementToExist(app.secureTextFields["Repeat password"], timeout: 10)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2449603
     func testCreateAnAccountLink() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(FxASigninScreen)
@@ -104,6 +100,7 @@ class SyncUITests: BaseTestCase {
         mozWaitForElementToExist(app.webViews.buttons["Create account"])
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2449604
     func testShowPassword() {
         // The aim of this test is to check if the option to show password is shown when user starts typing
         // and dissapears when no password is typed
@@ -127,20 +124,17 @@ class SyncUITests: BaseTestCase {
         mozWaitForElementToNotExist(app.webViews.staticTexts["Show password"])
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2449605
     func testQRPairing() {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(Intro_FxASignin)
         // QR does not work on sim but checking that the button works, no crash
         navigator.performAction(Action.OpenEmailToQR)
-        mozWaitForElementToExist(
-            app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar],
-            timeout: 5
-        )
-        app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar]
-            .buttons["Close"].tap()
-        mozWaitForElementToExist(
-            app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
-        )
+        mozWaitForElementToExist(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: 5)
+        mozWaitForElementToExist(app.buttons["Ready to Scan"])
+        mozWaitForElementToExist(app.buttons["Use Email Instead"])
+        app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar].buttons["Close"].tap()
+        mozWaitForElementToExist(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
     }
 }
