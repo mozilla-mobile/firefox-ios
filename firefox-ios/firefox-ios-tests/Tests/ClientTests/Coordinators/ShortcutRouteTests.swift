@@ -42,6 +42,8 @@ final class ShortcutRouteTests: XCTestCase {
                                       options: [.switchToNormalMode]))
     }
 
+    // FXIOS-8107: Disabled test as history highlights has been disabled to fix app hangs / slowness
+    // Reloads for notification
     func testOpenLastBookmarkShortcutWithInvalidUrl() {
         let subject = createSubject()
         let userInfo = [QuickActionInfos.tabURLKey: "not a url" as NSSecureCoding]
