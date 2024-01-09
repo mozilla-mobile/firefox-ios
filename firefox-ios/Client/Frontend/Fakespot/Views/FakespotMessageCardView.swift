@@ -193,28 +193,25 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         label.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
-    private lazy var linkButton: LegacyResizableButton = .build { button in
+    private lazy var linkButton: LinkButton = .build { button in
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
             withTextStyle: .caption1,
             size: UX.linkFontSize)
-        button.buttonEdgeSpacing = 0
         button.contentHorizontalAlignment = .leading
         button.addTarget(self, action: #selector(self.linkAction), for: .touchUpInside)
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
     }
 
-    private lazy var primaryButton: LegacyResizableButton = .build { button in
+    private lazy var primaryButton: PrimaryRoundedButton = .build { button in
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .callout,
             size: UX.buttonFontSize)
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.titleLabel?.textAlignment = .center
         button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
-                                                left: UX.buttonHorizontalInset,
-                                                bottom: UX.buttonVerticalInset,
-                                                right: UX.buttonHorizontalInset)
+        button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: UX.buttonVerticalInset,
+                                                                      leading: UX.buttonHorizontalInset,
+                                                                      bottom: UX.buttonVerticalInset,
+                                                                      trailing: UX.buttonHorizontalInset)
     }
 
     private var iconContainerHeightConstraint: NSLayoutConstraint?
@@ -378,14 +375,18 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
-        titleLabel.textColor = theme.colors.textPrimary
-        descriptionLabel.textColor  = theme.colors.textPrimary
-        iconContainerView.tintColor = theme.colors.textPrimary
+        let colors = theme.colors
+        titleLabel.textColor = colors.textPrimary
+        descriptionLabel.textColor  = colors.textPrimary
+        iconContainerView.tintColor = colors.textPrimary
 
-        linkButton.setTitleColor(theme.colors.textPrimary, for: .normal)
+        linkButton.setTitleColor(colors.textPrimary, for: .normal)
         primaryButton.setTitleColor(type.primaryButtonTextColor(theme: theme), for: .normal)
         primaryButton.backgroundColor = type.primaryButtonBackground(theme: theme)
+
         cardView.applyTheme(theme: theme)
+        linkButton.applyTheme(theme: theme)
+        primaryButton.applyTheme(theme: theme)
     }
 
     private func adjustLayout() {
