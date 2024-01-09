@@ -39,7 +39,9 @@ class MockTabLocationViewDelegate: TabLocationViewDelegate {
         return false
     }
     func tabLocationViewDidLongPressReload(_ tabLocationView: TabLocationView) {}
-    func tabLocationViewLocationAccessibilityActions(_ tabLocationView: TabLocationView) -> [UIAccessibilityCustomAction]? {
+    func tabLocationViewLocationAccessibilityActions(
+        _ tabLocationView: TabLocationView
+    ) -> [UIAccessibilityCustomAction]? {
         return nil
     }
 }

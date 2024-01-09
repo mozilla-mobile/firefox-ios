@@ -36,9 +36,25 @@ public extension EncryptedLogin {
         let httpRealm = protectionSpace.realm
         let username = credentials.user ?? ""
         let password = credentials.password ?? ""
-        let fields = LoginFields(origin: hostname, httpRealm: httpRealm, formActionOrigin: "", usernameField: "", passwordField: "")
-        let record = RecordFields(id: "", timesUsed: 0, timeCreated: 0, timeLastUsed: 0, timePasswordChanged: 0)
-        let login = Login(record: record, fields: fields, secFields: SecureLoginFields(password: password, username: username))
+        let fields = LoginFields(
+            origin: hostname,
+            httpRealm: httpRealm,
+            formActionOrigin: "",
+            usernameField: "",
+            passwordField: ""
+        )
+        let record = RecordFields(
+            id: "",
+            timesUsed: 0,
+            timeCreated: 0,
+            timeLastUsed: 0,
+            timePasswordChanged: 0
+        )
+        let login = Login(
+            record: record,
+            fields: fields,
+            secFields: SecureLoginFields(password: password, username: username)
+        )
 
         self.init(
             record: record,
@@ -136,7 +152,11 @@ public extension EncryptedLogin {
     var credentials: URLCredential {
         let rustLoginsEncryption = RustLoginEncryptionKeys()
         let login = rustLoginsEncryption.decryptSecureFields(login: self)
-        return URLCredential(user: login?.secFields.username ?? "", password: login?.secFields.password ?? "", persistence: .forSession)
+        return URLCredential(
+            user: login?.secFields.username ?? "",
+            password: login?.secFields.password ?? "",
+            persistence: .forSession
+        )
     }
 
     var protectionSpace: URLProtectionSpace {
@@ -225,7 +245,16 @@ public class LoginEntryFlattened {
     var usernameField: String
     var passwordField: String
 
-    public init(id: String, hostname: String, password: String, username: String, httpRealm: String?, formSubmitUrl: String?, usernameField: String, passwordField: String) {
+    public init(
+        id: String,
+        hostname: String,
+        password: String,
+        username: String,
+        httpRealm: String?,
+        formSubmitUrl: String?,
+        usernameField: String,
+        passwordField: String
+    ) {
         self.id = id
         self.hostname = hostname
         self.password = password
@@ -249,7 +278,13 @@ public extension LoginEntry {
         let httpRealm = protectionSpace.realm
         let username = credentials.user
         let password = credentials.password
-        let fields = LoginFields(origin: hostname, httpRealm: httpRealm, formActionOrigin: "", usernameField: "", passwordField: "")
+        let fields = LoginFields(
+            origin: hostname,
+            httpRealm: httpRealm,
+            formActionOrigin: "",
+            usernameField: "",
+            passwordField: ""
+        )
 
         self.init(
             fields: fields,
@@ -341,12 +376,16 @@ public extension LoginEntry {
         // Logins with both a formSubmitUrl and httpRealm are not valid.
         if self.fields.formActionOrigin != nil,
            self.fields.httpRealm != nil {
-            return Maybe(failure: LoginRecordError(description: "Can't add a login with both a httpRealm and formSubmitUrl."))
+            return Maybe(
+                failure: LoginRecordError(description: "Can't add a login with both a httpRealm and formSubmitUrl.")
+            )
         }
 
         // Login must have at least a formSubmitUrl or httpRealm.
         if self.fields.formActionOrigin == nil, self.fields.httpRealm == nil {
-            return Maybe(failure: LoginRecordError(description: "Can't add a login without a httpRealm or formSubmitUrl."))
+            return Maybe(
+                failure: LoginRecordError(description: "Can't add a login without a httpRealm or formSubmitUrl.")
+            )
         }
 
         // All good.
@@ -377,10 +416,16 @@ public class RustLoginEncryptionKeys {
             let secret = try createKey()
             let canary = try createCanary(text: canaryPhrase, encryptionKey: secret)
 
-            keychain.set(secret, forKey: loginPerFieldKeychainKey, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
-            keychain.set(canary,
-                         forKey: canaryPhraseKey,
-                         withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
+            keychain.set(
+                secret,
+                forKey: loginPerFieldKeychainKey,
+                withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock
+            )
+            keychain.set(
+                canary,
+                forKey: canaryPhraseKey,
+                withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock
+            )
 
             return secret
         } catch let err as NSError {
@@ -609,7 +654,10 @@ public class RustLogins {
         }
     }
 
-    public func getLoginsForProtectionSpace(_ protectionSpace: URLProtectionSpace, withUsername username: String? = nil) -> Deferred<Maybe<Cursor<EncryptedLogin>>> {
+    public func getLoginsForProtectionSpace(
+        _ protectionSpace: URLProtectionSpace,
+        withUsername username: String? = nil
+    ) -> Deferred<Maybe<Cursor<EncryptedLogin>>> {
         let rustKeys = RustLoginEncryptionKeys()
         return listLogins().bind { result in
             if let error = result.failureValue {
@@ -851,7 +899,8 @@ public class RustLogins {
                 throw error
             }
         default:
-            // If none of the above cases apply, we're in a state that shouldn't be possible but is disallowed nonetheless
+            // If none of the above cases apply, we're in a state that shouldn't be possible
+            // but is disallowed nonetheless
             throw LoginEncryptionKeyError.illegalState
         }
 

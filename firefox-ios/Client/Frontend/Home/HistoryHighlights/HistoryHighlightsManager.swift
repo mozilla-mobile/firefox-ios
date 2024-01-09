@@ -96,7 +96,8 @@ class HistoryHighlightsManager: HistoryHighlightsManagerProtocol {
     ///   - tabs: List of `Tab` to filter open tabs from the highlight item list
     ///   - shouldGroupHighlights: Toggle to support highlight groups in the future for now is set to false
     ///   - resultCount: The number of results to return
-    ///   - completion: completion handler than contains either a list of `HistoryHighlights` if `shouldGroupHighlights` is set to false
+    ///   - completion: completion handler than contains either a list of `HistoryHighlights`
+    ///                 if `shouldGroupHighlights` is set to false
     ///   or a combine list of `HistoryHighlights` and `ASGroup<HistoryHighlights>`if is true
     func getHighlightsData(
         with profile: Profile,

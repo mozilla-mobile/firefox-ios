@@ -15,7 +15,11 @@ class SensitiveViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        willEnterForegroundNotificationObserver = NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [self] notification in
+        willEnterForegroundNotificationObserver = NotificationCenter.default.addObserver(
+            forName: UIApplication.willEnterForegroundNotification,
+            object: nil,
+            queue: .main
+        ) { [self] notification in
             if !isAuthenticated {
                 AppAuthenticator().authenticateWithDeviceOwnerAuthentication { [self] result in
                     switch result {
@@ -31,7 +35,11 @@ class SensitiveViewController: UIViewController {
             }
         }
 
-        didEnterBackgroundNotificationObserver = NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main) { [weak self] notification in
+        didEnterBackgroundNotificationObserver = NotificationCenter.default.addObserver(
+            forName: UIApplication.didEnterBackgroundNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
             guard let self = self else { return }
 
             self.isAuthenticated = false

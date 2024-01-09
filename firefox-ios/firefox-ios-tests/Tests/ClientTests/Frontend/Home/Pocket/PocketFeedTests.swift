@@ -19,7 +19,11 @@ class PocketStoriesTests: XCTestCase {
         let data = try Data(contentsOf: URL(fileURLWithPath: path!))
 
         webServer = GCDWebServer()
-        webServer.addHandler(forMethod: "GET", path: "/pocketglobalfeed", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse in
+        webServer.addHandler(
+            forMethod: "GET",
+            path: "/pocketglobalfeed",
+            request: GCDWebServerRequest.self
+        ) { (request) -> GCDWebServerResponse in
             return GCDWebServerDataResponse(data: data, contentType: "application/json")
         }
 
@@ -48,7 +52,11 @@ class PocketStoriesTests: XCTestCase {
         pocketFeed.fetchStories(items: feedNumber) { result in
             switch result {
             case .success(let items):
-                XCTAssertEqual(items.count, feedNumber, "We are fetching a static feed. There are \(feedNumber) items in it")
+                XCTAssertEqual(
+                    items.count,
+                    feedNumber,
+                    "We are fetching a static feed. There are \(feedNumber) items in it"
+                )
             case .failure:
                 XCTFail("Expected success, got \(result) instead")
             }
@@ -58,7 +66,11 @@ class PocketStoriesTests: XCTestCase {
             pocketFeed.fetchStories(items: feedNumber) { result in
                 switch result {
                 case .success(let items):
-                    XCTAssertEqual(items.count, feedNumber, "We are fetching a static feed. There are \(feedNumber) items in it")
+                    XCTAssertEqual(
+                        items.count,
+                        feedNumber,
+                        "We are fetching a static feed. There are \(feedNumber) items in it"
+                    )
                     let item = items.first
                     // These are all not optional so they should never be nil.
                     // But lets check in case someone decides to change something

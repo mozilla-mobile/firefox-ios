@@ -166,7 +166,12 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
             completion: nil)
     }
 
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+    override func observeValue(
+        forKeyPath keyPath: String?,
+        of object: Any?,
+        change: [NSKeyValueChangeKey: Any]?,
+        context: UnsafeMutableRawPointer?
+    ) {
         if keyPath == "contentSize" {
             guard isAbleToScroll, toolbarsShowing else { return }
 
@@ -310,14 +315,17 @@ private extension TabScrollingController {
         guard let scrollView = scrollView else { return }
         contentOffsetBeforeAnimation = scrollView.contentOffset
         isAnimatingToolbar = true
-        // If this function is used to fully animate the toolbar from hidden to shown, keep the page from scrolling by adjusting contentOffset,
-        // Otherwise when the toolbar is hidden and a link navigated, showing the toolbar will scroll the page and
-        // produce a ~50px page jumping effect in response to tap navigations.
+        // If this function is used to fully animate the toolbar from hidden to shown, keep the page from scrolling
+        // by adjusting contentOffset, otherwise when the toolbar is hidden and a link navigated, showing the toolbar
+        // will scroll the page and produce a ~50px page jumping effect in response to tap navigations.
         let isShownFromHidden = headerTopOffset == -topScrollHeight && headerOffset == 0
 
         let animation: () -> Void = {
             if isShownFromHidden {
-                scrollView.contentOffset = CGPoint(x: self.contentOffsetBeforeAnimation.x, y: self.contentOffsetBeforeAnimation.y + self.topScrollHeight)
+                scrollView.contentOffset = CGPoint(
+                    x: self.contentOffsetBeforeAnimation.x,
+                    y: self.contentOffsetBeforeAnimation.y + self.topScrollHeight
+                )
             }
             self.headerTopOffset = headerOffset
             self.bottomContainerOffset = bottomContainerOffset
@@ -401,7 +409,10 @@ extension TabScrollingController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard isAnimatingToolbar else { return }
         if contentOffsetBeforeAnimation.y - scrollView.contentOffset.y > UX.abruptScrollEventOffset {
-            scrollView.contentOffset = CGPoint(x: contentOffsetBeforeAnimation.x, y: contentOffsetBeforeAnimation.y + self.topScrollHeight)
+            scrollView.contentOffset = CGPoint(
+                x: contentOffsetBeforeAnimation.x,
+                y: contentOffsetBeforeAnimation.y + self.topScrollHeight
+            )
             contentOffsetBeforeAnimation.y = 0
         }
     }

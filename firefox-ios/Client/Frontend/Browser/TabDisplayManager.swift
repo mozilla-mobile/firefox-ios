@@ -102,7 +102,8 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
     }
 
     // Dragging on the collection view is either an 'active drag' where the item is moved, or
-    // that the item has been long pressed on (and not moved yet), and this gesture recognizer has been triggered
+    // that the item has been long pressed on (and not moved yet), and this gesture recognizer
+    // has been triggered
     var isDragging: Bool {
         return collectionView.hasActiveDrag || isLongPressGestureStarted
     }
@@ -287,7 +288,12 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
 
         UserDefaults.standard.set(isPrivate, forKey: PrefsKeys.LastSessionWasPrivate)
 
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .privateBrowsingButton, extras: ["is-private": isOn.description] )
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .privateBrowsingButton,
+            extras: ["is-private": isOn.description]
+        )
 
         if createTabOnEmptyPrivateMode {
             // if private tabs is empty and we are transitioning to it add a tab
@@ -321,7 +327,12 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
         guard let currentlySelected = currentlySelected else { return nil }
 
         for index in 0..<collectionView.numberOfItems(inSection: inSection) {
-            guard let cell = collectionView.cellForItem(at: IndexPath(row: index, section: inSection)) as? LegacyTabTrayCell,
+            guard let cell = collectionView.cellForItem(
+                at: IndexPath(
+                    row: index,
+                    section: inSection
+                )
+            ) as? LegacyTabTrayCell,
                   cell.isSelectedTab,
                   let tab = dataStore.at(index),
                   tab != currentlySelected
@@ -435,7 +446,10 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
         })
     }
 
-    private func recordEventAndBreadcrumb(object: TelemetryWrapper.EventObject, method: TelemetryWrapper.EventMethod) {
+    private func recordEventAndBreadcrumb(
+        object: TelemetryWrapper.EventObject,
+        method: TelemetryWrapper.EventMethod
+    ) {
         let isTabTray = tabDisplayerDelegate as? LegacyGridTabViewController != nil
         let eventValue = isTabTray ? TelemetryWrapper.EventValue.tabTray : TelemetryWrapper.EventValue.topTabs
         TelemetryWrapper.recordEvent(category: .action, method: method, object: object, value: eventValue)
@@ -473,7 +487,10 @@ extension LegacyTabDisplayManager: UICollectionViewDataSource {
     }
 
     @objc
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
         var cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.tabReuseIdentifier, for: indexPath)
         if tabDisplayType == .TopTabTray {
             guard let tab = dataStore.at(indexPath.row) else { return cell }
@@ -483,7 +500,10 @@ extension LegacyTabDisplayManager: UICollectionViewDataSource {
 
         switch TabDisplaySection(rawValue: indexPath.section) {
         case .inactiveTabs:
-            if let inactiveCell = collectionView.dequeueReusableCell(withReuseIdentifier: LegacyInactiveTabCell.cellIdentifier, for: indexPath) as? LegacyInactiveTabCell {
+            if let inactiveCell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: LegacyInactiveTabCell.cellIdentifier,
+                for: indexPath
+            ) as? LegacyInactiveTabCell {
                 inactiveCell.inactiveTabsViewModel = inactiveViewModel
                 inactiveCell.applyTheme(theme: theme)
                 inactiveCell.hasExpanded = isInactiveViewExpanded
@@ -492,7 +512,13 @@ extension LegacyTabDisplayManager: UICollectionViewDataSource {
                 cell = inactiveCell
                 if !hasSentInactiveTabShownEvent {
                     hasSentInactiveTabShownEvent = true
-                    TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .inactiveTabShown, extras: nil)
+                    TelemetryWrapper.recordEvent(
+                        category: .action,
+                        method: .tap,
+                        object: .inactiveTabTray,
+                        value: .inactiveTabShown,
+                        extras: nil
+                    )
                 }
             }
 
@@ -619,7 +645,13 @@ extension LegacyTabDisplayManager: LegacyInactiveTabsDelegate {
 
     func toggleInactiveTabSection(hasExpanded: Bool) {
         let hasExpandedEvent: TelemetryWrapper.EventValue = hasExpanded ? .inactiveTabExpand : .inactiveTabCollapse
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: hasExpandedEvent, extras: nil)
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .inactiveTabTray,
+            value: hasExpandedEvent,
+            extras: nil
+        )
 
         isInactiveViewExpanded = hasExpanded
         collectionView.reloadSections(IndexSet(integer: TabDisplaySection.inactiveTabs.rawValue))
@@ -651,7 +683,10 @@ extension LegacyTabDisplayManager: TabSelectionDelegate {
 
 // MARK: - UIDropInteractionDelegate
 extension LegacyTabDisplayManager: UIDropInteractionDelegate {
-    func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
+    func dropInteraction(
+        _ interaction: UIDropInteraction,
+        canHandle session: UIDropSession
+    ) -> Bool {
         // Prevent tabs from being dragged and dropped onto the "New Tab" button.
         if let localDragSession = session.localDragSession,
            let item = localDragSession.items.first,
@@ -662,11 +697,17 @@ extension LegacyTabDisplayManager: UIDropInteractionDelegate {
         return session.canLoadObjects(ofClass: URL.self)
     }
 
-    func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
+    func dropInteraction(
+        _ interaction: UIDropInteraction,
+        sessionDidUpdate session: UIDropSession
+    ) -> UIDropProposal {
         return UIDropProposal(operation: .copy)
     }
 
-    func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
+    func dropInteraction(
+        _ interaction: UIDropInteraction,
+        performDrop session: UIDropSession
+    ) {
         recordEventAndBreadcrumb(object: .url, method: .drop)
 
         _ = session.loadObjects(ofClass: URL.self) { urls in
@@ -679,8 +720,10 @@ extension LegacyTabDisplayManager: UIDropInteractionDelegate {
 
 // MARK: - UICollectionViewDragDelegate
 extension LegacyTabDisplayManager: UICollectionViewDragDelegate {
-    // This is called when the user has long-pressed on a cell, please note that `collectionView.hasActiveDrag` is not true
-    // until the user's finger moves. This problem is mitigated by checking the collectionView for activated long press gesture recognizers.
+    // This is called when the user has long-pressed on a cell, please note that
+    // `collectionView.hasActiveDrag` is not true until the user's finger moves.
+    // This problem is mitigated by checking the collectionView for activated long
+    // press gesture recognizers.
     func collectionView(
         _ collectionView: UICollectionView,
         itemsForBeginning session: UIDragSession,
@@ -701,7 +744,8 @@ extension LegacyTabDisplayManager: UICollectionViewDragDelegate {
             }
         }
 
-        // Don't store the URL in the item as dragging a tab near the screen edge will prompt to open Safari with the URL
+        // Don't store the URL in the item as dragging a tab near the screen edge will
+        // prompt to open Safari with the URL
         let itemProvider = NSItemProvider()
 
         recordEventAndBreadcrumb(object: .tab, method: .drag)
@@ -714,25 +758,40 @@ extension LegacyTabDisplayManager: UICollectionViewDragDelegate {
 
 // MARK: - UICollectionViewDropDelegate
 extension LegacyTabDisplayManager: UICollectionViewDropDelegate {
-    private func dragPreviewParameters(_ collectionView: UICollectionView, dragPreviewParametersForItemAt indexPath: IndexPath) -> UIDragPreviewParameters? {
+    private func dragPreviewParameters(
+        _ collectionView: UICollectionView,
+        dragPreviewParametersForItemAt indexPath: IndexPath
+    ) -> UIDragPreviewParameters? {
         guard let cell = collectionView.cellForItem(at: indexPath) as? TopTabCell else { return nil }
         let previewParams = UIDragPreviewParameters()
 
-        let path = UIBezierPath(roundedRect: cell.selectedBackground.frame, cornerRadius: TopTabsUX.TabCornerRadius)
+        let path = UIBezierPath(
+            roundedRect: cell.selectedBackground.frame,
+            cornerRadius: TopTabsUX.TabCornerRadius
+        )
         previewParams.visiblePath = path
 
         return previewParams
     }
 
-    func collectionView(_ collectionView: UICollectionView, dragPreviewParametersForItemAt indexPath: IndexPath) -> UIDragPreviewParameters? {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        dragPreviewParametersForItemAt indexPath: IndexPath
+    ) -> UIDragPreviewParameters? {
         return dragPreviewParameters(collectionView, dragPreviewParametersForItemAt: indexPath)
     }
 
-    func collectionView(_ collectionView: UICollectionView, dropPreviewParametersForItemAt indexPath: IndexPath) -> UIDragPreviewParameters? {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        dropPreviewParametersForItemAt indexPath: IndexPath
+    ) -> UIDragPreviewParameters? {
         return dragPreviewParameters(collectionView, dragPreviewParametersForItemAt: indexPath)
     }
 
-    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        performDropWith coordinator: UICollectionViewDropCoordinator
+    ) {
         guard collectionView.hasActiveDrag,
               let destinationIndexPath = coordinator.destinationIndexPath,
               let dragItem = coordinator.items.first?.dragItem,
@@ -760,8 +819,8 @@ extension LegacyTabDisplayManager: UICollectionViewDropDelegate {
 
         saveRegularOrderedTabs(from: filteredTabs)
 
-        /// According to Apple's documentation the best place to make the changes to the collectionView and dataStore is
-        /// during the completion call of performBatchUpdates
+        /// According to Apple's documentation the best place to make the changes to the collectionView
+        /// and dataStore is during the completion call of performBatchUpdates
         updateWith(animationType: .moveTab) { [weak self] in
             self?.dataStore.removeAll()
 
@@ -777,7 +836,11 @@ extension LegacyTabDisplayManager: UICollectionViewDropDelegate {
         }
     }
 
-    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        dropSessionDidUpdate session: UIDropSession,
+        withDestinationIndexPath destinationIndexPath: IndexPath?
+    ) -> UICollectionViewDropProposal {
         let forbiddenOperation = UICollectionViewDropProposal(operation: .forbidden)
         guard let indexPath = destinationIndexPath else {
             return forbiddenOperation
@@ -834,8 +897,10 @@ extension LegacyTabDisplayManager: TabEventHandler {
                 // Append the previously selected tab to refresh it's state. Useful when the selected tab has change.
                 // This method avoids relying on the state of the "previous" selected tab,
                 // instead it iterates the displayed tabs to see which appears selected.
-                if let previousSelectedIndexPath = self?.indexOfCellDrawnAsPreviouslySelectedTab(currentlySelected: selectedTab,
-                                                                                                 inSection: section) {
+                if let previousSelectedIndexPath = self?.indexOfCellDrawnAsPreviouslySelectedTab(
+                    currentlySelected: selectedTab,
+                    inSection: section
+                ) {
                     indexPaths.append(previousSelectedIndexPath)
                 }
             }
@@ -872,7 +937,12 @@ extension LegacyTabDisplayManager: TabEventHandler {
 
 // MARK: - TabManagerDelegate
 extension LegacyTabDisplayManager: TabManagerDelegate {
-    func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {
+    func tabManager(
+        _ tabManager: TabManager,
+        didSelectedTabChange selected: Tab?,
+        previous: Tab?,
+        isRestoring: Bool
+    ) {
         cancelDragAndGestures()
 
         if let selected = selected {
@@ -889,7 +959,12 @@ extension LegacyTabDisplayManager: TabManagerDelegate {
         // this assumption about the state of the view.
     }
 
-    func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {
+    func tabManager(
+        _ tabManager: TabManager,
+        didAddTab tab: Tab,
+        placeNextToParentTab: Bool,
+        isRestoring: Bool
+    ) {
         if cancelDragAndGestures() {
             refreshStore()
             return
@@ -943,12 +1018,15 @@ extension LegacyTabDisplayManager: TabManagerDelegate {
     /* Function to take operations off the queue recursively, and perform them (i.e. performBatchUpdates) in sequence.
      If this func is called while it (or performBatchUpdates) is running, it returns immediately.
 
-     The `refreshStore()` function will clear the queue and reload data, and the view will instantly match the tab manager.
-     Therefore, don't put operations on the queue that depend on previous operations on the queue. In these cases, just check
-     the current state on-demand in the operation (for example, don't assume that a previous tab is selected because that was the previous operation in queue).
+     The `refreshStore()` function will clear the queue and reload data, and the view will instantly
+     match the tab manager. Therefore, don't put operations on the queue that depend on previous
+     operations on the queue. In these cases, just check the current state on-demand in the
+     operation (for example, don't assume that a previous tab is selected because that was the
+     previous operation in queue).
 
-     For app events where each operation should be animated for the user to see, performedChainedOperations() is the one to use,
-     and for bulk updates where it is ok to just redraw the entire view with the latest state, use `refreshStore()`.
+     For app events where each operation should be animated for the user to see, performedChainedOperations()
+     is the one to use, and for bulk updates where it is ok to just redraw the entire view with
+     the latest state, use `refreshStore()`.
      */
     private func performChainedOperations() {
         guard !performingChainedOperations,

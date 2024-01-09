@@ -172,7 +172,15 @@ private extension RecentItemsHelperTests {
 
     func createBookmarkItem(date: Date = Date()) -> BookmarkItemData {
         let dateAdded = Int64(date.toTimestamp())
-        return BookmarkItemData(guid: "", dateAdded: dateAdded, lastModified: 0, parentGUID: "", position: 0, url: "", title: "")
+        return BookmarkItemData(
+            guid: "",
+            dateAdded: dateAdded,
+            lastModified: 0,
+            parentGUID: "",
+            position: 0,
+            url: "",
+            title: ""
+        )
     }
 
     func createReadingListItems(count: Int, date: Date = Date()) -> [ReadingListItem] {

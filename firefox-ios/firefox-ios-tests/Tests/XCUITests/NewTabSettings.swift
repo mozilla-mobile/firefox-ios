@@ -48,7 +48,9 @@ class NewTabSettingsTest: BaseTestCase {
         mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
-        mozWaitForElementToNotExist(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        mozWaitForElementToNotExist(
+            app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        )
 
         // Now check if it switches to FF Home
         navigator.goto(SettingsScreen)

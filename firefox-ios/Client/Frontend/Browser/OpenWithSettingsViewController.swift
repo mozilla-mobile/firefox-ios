@@ -121,7 +121,10 @@ class OpenWithSettingsViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = super.tableView(tableView, viewForHeaderInSection: section) as? ThemedTableSectionHeaderFooterView else { return nil }
+        guard let headerView = super.tableView(
+            tableView,
+            viewForHeaderInSection: section
+        ) as? ThemedTableSectionHeaderFooterView else { return nil }
 
         headerView.titleLabel.text = .SettingsOpenWithPageTitle.uppercased()
         return headerView

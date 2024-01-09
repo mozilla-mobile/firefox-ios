@@ -77,16 +77,21 @@ class DefaultTabMigrationUtility: TabMigrationUtility {
                 searchTerm: savedTab.tabGroupData?.tabAssociatedSearchTerm,
                 searchUrl: savedTab.tabGroupData?.tabAssociatedSearchUrl,
                 nextUrl: savedTab.tabGroupData?.tabAssociatedNextUrl,
-                tabHistoryCurrentState: TabGroupTimerState(rawValue: savedTab.tabGroupData?.tabHistoryCurrentState ?? ""))
+                tabHistoryCurrentState: TabGroupTimerState(
+                    rawValue: savedTab.tabGroupData?.tabHistoryCurrentState ?? ""
+                )
+            )
 
-            let tabData = TabData(id: savedTabUUID,
-                                  title: savedTab.title,
-                                  siteUrl: savedTab.url?.absoluteString ?? "",
-                                  faviconURL: savedTab.faviconURL,
-                                  isPrivate: savedTab.isPrivate,
-                                  lastUsedTime: Date.fromTimestamp(savedTab.sessionData?.lastUsedTime ?? Date().toTimestamp()),
-                                  createdAtTime: Date.fromTimestamp(savedTab.createdAt ?? Date().toTimestamp()),
-                                  tabGroupData: tabGroupData)
+            let tabData = TabData(
+                id: savedTabUUID,
+                title: savedTab.title,
+                siteUrl: savedTab.url?.absoluteString ?? "",
+                faviconURL: savedTab.faviconURL,
+                isPrivate: savedTab.isPrivate,
+                lastUsedTime: Date.fromTimestamp(savedTab.sessionData?.lastUsedTime ?? Date().toTimestamp()),
+                createdAtTime: Date.fromTimestamp(savedTab.createdAt ?? Date().toTimestamp()),
+                tabGroupData: tabGroupData
+            )
 
             if savedTab.isSelected {
                 selectTabUUID = savedTab.screenshotUUID

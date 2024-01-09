@@ -17,9 +17,9 @@ private let NIMBUS_IS_FIRST_RUN_KEY = "NimbusFirstRun"
 ///
 /// This class is a application specific holder for a the singleton `NimbusApi` class.
 ///
-/// It is needed to be initialized early in the startup of the app, so a lot of the heavy lifting of calculating where the
-/// database should live, and deriving the `Remote Settings` URL for itself. This should be done with the
-/// `initialize(with:,firstRun:)` method.
+/// It is needed to be initialized early in the startup of the app, so a lot of the heavy lifting of
+/// calculating where the database should live, and deriving the `Remote Settings` URL for itself.
+/// This should be done with the `initialize(with:,firstRun:)` method.
 ///
 /// Most usage with be made of `Nimbus` by feature developers who wish to make decisions about how
 /// to configure their features.

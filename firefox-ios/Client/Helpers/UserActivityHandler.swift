@@ -20,7 +20,15 @@ class UserActivityHandler {
 
     init(logger: Logger = DefaultLogger.shared) {
         self.logger = logger
-        register(self, forTabEvents: .didClose, .didLoseFocus, .didGainFocus, .didChangeURL, .didLoadPageMetadata, .didLoadReadability)
+        register(
+            self,
+            forTabEvents: .didClose,
+            .didLoseFocus,
+            .didGainFocus,
+            .didChangeURL,
+            .didLoadPageMetadata,
+            .didLoadReadability
+        )
     }
 
     class func clearSearchIndex(completionHandler: ((Error?) -> Void)? = nil) {
@@ -130,7 +138,11 @@ extension UserActivityHandler {
 
         let identifier = tab.currentURL()?.absoluteString
 
-        let item = CSSearchableItem(uniqueIdentifier: identifier, domainIdentifier: "org.mozilla.ios.firefox", attributeSet: attributeSet)
+        let item = CSSearchableItem(
+            uniqueIdentifier: identifier,
+            domainIdentifier: "org.mozilla.ios.firefox",
+            attributeSet: attributeSet
+        )
 
         if let numDays = spotlightConfig.keepForDays {
             let day: TimeInterval = 60 * 60 * 24

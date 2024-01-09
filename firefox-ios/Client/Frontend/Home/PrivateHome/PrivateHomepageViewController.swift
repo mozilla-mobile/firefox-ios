@@ -138,9 +138,18 @@ final class PrivateHomepageViewController: UIViewController, ContentContainable,
         let contentLayoutGuide = scrollView.contentLayoutGuide
         let frameLayoutGuide = scrollView.frameLayoutGuide
 
-        containerLeadingConstraint = scrollContainer.leadingAnchor.constraint(equalTo: contentLayoutGuide.leadingAnchor, constant: UX.scrollContainerPadding(with: traitCollection))
-        containerTrailingConstraint = scrollContainer.trailingAnchor.constraint(equalTo: contentLayoutGuide.trailingAnchor, constant: -UX.scrollContainerPadding(with: traitCollection))
-        containerWidthConstraint = scrollContainer.widthAnchor.constraint(equalTo: frameLayoutGuide.widthAnchor, constant: -UX.scrollContainerPadding(with: traitCollection) * 2)
+        containerLeadingConstraint = scrollContainer.leadingAnchor.constraint(
+            equalTo: contentLayoutGuide.leadingAnchor,
+            constant: UX.scrollContainerPadding(with: traitCollection)
+        )
+        containerTrailingConstraint = scrollContainer.trailingAnchor.constraint(
+            equalTo: contentLayoutGuide.trailingAnchor,
+            constant: -UX.scrollContainerPadding(with: traitCollection)
+        )
+        containerWidthConstraint = scrollContainer.widthAnchor.constraint(
+            equalTo: frameLayoutGuide.widthAnchor,
+            constant: -UX.scrollContainerPadding(with: traitCollection) * 2
+        )
 
         containerLeadingConstraint?.isActive = true
         containerTrailingConstraint?.isActive = true

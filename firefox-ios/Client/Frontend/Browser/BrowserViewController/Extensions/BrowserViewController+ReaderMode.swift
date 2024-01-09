@@ -21,7 +21,11 @@ extension BrowserViewController: ReaderModeDelegate {
         }
     }
 
-    func readerMode(_ readerMode: ReaderMode, didParseReadabilityResult readabilityResult: ReadabilityResult, forTab tab: Tab) {
+    func readerMode(
+        _ readerMode: ReaderMode,
+        didParseReadabilityResult readabilityResult: ReadabilityResult,
+        forTab tab: Tab
+    ) {
         TabEvent.post(.didLoadReadability(readabilityResult), for: tab)
     }
 }
@@ -58,7 +62,8 @@ extension BrowserViewController {
         guard let readerModeBar = readerModeBar else { return }
         readerModeBar.applyTheme(theme: themeManager.currentTheme)
 
-        if let url = self.tabManager.selectedTab?.url?.displayURL?.absoluteString, let record = profile.readingList.getRecordWithURL(url).value.successValue {
+        if let url = self.tabManager.selectedTab?.url?.displayURL?.absoluteString,
+           let record = profile.readingList.getRecordWithURL(url).value.successValue {
             readerModeBar.unread = record.unread
             readerModeBar.added = true
         } else {

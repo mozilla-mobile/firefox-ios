@@ -15,8 +15,10 @@ public protocol DefaultDispatchStore: DispatchStore {
     var state: State { get }
 
     func subscribe<S: StoreSubscriber>(_ subscriber: S) where S.SubscriberStateType == State
-    func subscribe<SubState, S: StoreSubscriber>(_ subscriber: S,
-                                                 transform: ((Subscription<State>) -> Subscription<SubState>)?) where S.SubscriberStateType == SubState
+    func subscribe<SubState, S: StoreSubscriber>(
+        _ subscriber: S,
+        transform: ((Subscription<State>) -> Subscription<SubState>)?
+    ) where S.SubscriberStateType == SubState
     func unsubscribe<S: StoreSubscriber>(_ subscriber: S) where S.SubscriberStateType == State
     func unsubscribe(_ subscriber: any StoreSubscriber)
 }

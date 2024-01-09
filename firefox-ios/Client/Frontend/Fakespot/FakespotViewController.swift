@@ -8,14 +8,13 @@ import UIKit
 import Shared
 import Redux
 
-class FakespotViewController:
-    UIViewController,
-    Themeable,
-    Notifiable,
-    UIAdaptivePresentationControllerDelegate,
-    UISheetPresentationControllerDelegate,
-    UIScrollViewDelegate,
-    StoreSubscriber {
+class FakespotViewController: UIViewController,
+                              Themeable,
+                              Notifiable,
+                              UIAdaptivePresentationControllerDelegate,
+                              UISheetPresentationControllerDelegate,
+                              UIScrollViewDelegate,
+                              StoreSubscriber {
     typealias SubscriberStateType = BrowserViewControllerState
 
     private struct UX {
@@ -460,6 +459,7 @@ class FakespotViewController:
             var viewModel = FakespotAdViewModel(productAdsData: adData)
             viewModel.onTapProductLink = { [weak self] in
                 self?.viewModel.addTab(url: adData.url)
+                self?.viewModel.recordSurfaceAdsClickedTelemetry()
                 self?.viewModel.reportAdEvent(eventName: .trustedDealsLinkClicked, aid: adData.aid)
                 store.dispatch(FakespotAction.setAppearanceTo(false))
             }
@@ -498,7 +498,11 @@ class FakespotViewController:
                     self.viewModel.recordTelemetry(for: .messageCard(.needsAnalysis))
                 }
                 view.configure(viewModel.needsAnalysisViewModel)
-                TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingSurfaceStaleAnalysisShown)
+                TelemetryWrapper.recordEvent(
+                    category: .action,
+                    method: .view,
+                    object: .shoppingSurfaceStaleAnalysisShown
+                )
                 return view
 
             case .analysisInProgress:
@@ -544,7 +548,9 @@ class FakespotViewController:
     }
 
     private func updateModalA11y() {
-        var currentDetent: UISheetPresentationController.Detent.Identifier? = viewModel.getCurrentDetent(for: sheetPresentationController)
+        var currentDetent: UISheetPresentationController.Detent.Identifier? = viewModel.getCurrentDetent(
+            for: sheetPresentationController
+        )
 
         if currentDetent == nil,
            let sheetPresentationController,
@@ -589,7 +595,9 @@ class FakespotViewController:
     }
 
     // MARK: - UISheetPresentationControllerDelegate
-    func sheetPresentationControllerDidChangeSelectedDetentIdentifier(_ sheetPresentationController: UISheetPresentationController) {
+    func sheetPresentationControllerDidChangeSelectedDetentIdentifier(
+        _ sheetPresentationController: UISheetPresentationController
+    ) {
         updateModalA11y()
     }
 

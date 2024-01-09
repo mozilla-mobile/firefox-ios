@@ -2,7 +2,7 @@
 "CreditCard.RememberCard.Header.v115" = "使用 %@ 安全地保存您的信用卡信息，方便下次使用。";
 
 /* This value is used as the header for the remember card page. The placeholder is for the app name. */
-"CreditCard.RememberCard.Header.v122" = "%@ 会加密卡号。安全码不会被保存。";
+"CreditCard.RememberCard.Header.v122" = "%@ 会将卡号加密保存。安全码不会被保存。";
 
 /* This value is used as the title for the Yes button in the remember credit card page */
 "CreditCard.RememberCard.MainButtonTitle.v115" = "是";

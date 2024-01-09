@@ -11,16 +11,40 @@ class DownloadHelperTests: XCTestCase {
     func test_init_whenMIMETypeIsNil_initializeCorrectly() {
         let response = anyResponse(mimeType: nil)
 
-        var subject = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: true, forceDownload: false)
+        var subject = DownloadHelper(
+            request: anyRequest(),
+            response: response,
+            cookieStore: cookieStore(),
+            canShowInWebView: true,
+            forceDownload: false
+        )
         XCTAssertNotNil(subject)
 
-        subject = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: false, forceDownload: true)
+        subject = DownloadHelper(
+            request: anyRequest(),
+            response: response,
+            cookieStore: cookieStore(),
+            canShowInWebView: false,
+            forceDownload: true
+        )
         XCTAssertNotNil(subject)
 
-        subject = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: false, forceDownload: false)
+        subject = DownloadHelper(
+            request: anyRequest(),
+            response: response,
+            cookieStore: cookieStore(),
+            canShowInWebView: false,
+            forceDownload: false
+        )
         XCTAssertNotNil(subject)
 
-        subject = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: true, forceDownload: true)
+        subject = DownloadHelper(
+            request: anyRequest(),
+            response: response,
+            cookieStore: cookieStore(),
+            canShowInWebView: true,
+            forceDownload: true
+        )
         XCTAssertNotNil(subject)
     }
 
@@ -30,16 +54,40 @@ class DownloadHelperTests: XCTestCase {
 
             let response = anyResponse(mimeType: mimeType)
 
-            var subject = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: true, forceDownload: false)
+            var subject = DownloadHelper(
+                request: anyRequest(),
+                response: response,
+                cookieStore: cookieStore(),
+                canShowInWebView: true,
+                forceDownload: false
+            )
             XCTAssertNil(subject)
 
-            subject = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: false, forceDownload: true)
+            subject = DownloadHelper(
+                request: anyRequest(),
+                response: response,
+                cookieStore: cookieStore(),
+                canShowInWebView: false,
+                forceDownload: true
+            )
             XCTAssertNotNil(subject)
 
-            subject = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: false, forceDownload: false)
+            subject = DownloadHelper(
+                request: anyRequest(),
+                response: response,
+                cookieStore: cookieStore(),
+                canShowInWebView: false,
+                forceDownload: false
+            )
             XCTAssertNotNil(subject)
 
-            subject = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: true, forceDownload: true)
+            subject = DownloadHelper(
+                request: anyRequest(),
+                response: response,
+                cookieStore: cookieStore(),
+                canShowInWebView: true,
+                forceDownload: true
+            )
             XCTAssertNotNil(subject)
         }
     }
@@ -47,22 +95,52 @@ class DownloadHelperTests: XCTestCase {
     func test_init_whenMIMETypeIsOctetStream_initializeCorrectly() {
         let response = anyResponse(mimeType: MIMEType.OctetStream)
 
-        var subject = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: true, forceDownload: false)
+        var subject = DownloadHelper(
+            request: anyRequest(),
+            response: response,
+            cookieStore: cookieStore(),
+            canShowInWebView: true,
+            forceDownload: false
+        )
         XCTAssertNotNil(subject)
 
-        subject = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: false, forceDownload: true)
+        subject = DownloadHelper(
+            request: anyRequest(),
+            response: response,
+            cookieStore: cookieStore(),
+            canShowInWebView: false,
+            forceDownload: true
+        )
         XCTAssertNotNil(subject)
 
-        subject = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: true, forceDownload: true)
+        subject = DownloadHelper(
+            request: anyRequest(),
+            response: response,
+            cookieStore: cookieStore(),
+            canShowInWebView: true,
+            forceDownload: true
+        )
         XCTAssertNotNil(subject)
 
-        subject = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: false, forceDownload: false)
+        subject = DownloadHelper(
+            request: anyRequest(),
+            response: response,
+            cookieStore: cookieStore(),
+            canShowInWebView: false,
+            forceDownload: false
+        )
         XCTAssertNotNil(subject)
     }
 
     func test_downloadViewModel_whenRequestURLIsWrong_deliversEmptyResult() {
         let request = anyRequest(urlString: "wrong-url.com")
-        let subject = DownloadHelper(request: request, response: anyResponse(mimeType: nil), cookieStore: cookieStore(), canShowInWebView: true, forceDownload: false)
+        let subject = DownloadHelper(
+            request: request,
+            response: anyResponse(mimeType: nil),
+            cookieStore: cookieStore(),
+            canShowInWebView: true,
+            forceDownload: false
+        )
 
         let downloadViewModel = subject?.downloadViewModel(okAction: { _ in })
 
@@ -71,7 +149,13 @@ class DownloadHelperTests: XCTestCase {
 
     func test_downloadViewModel_deliversCorrectTitle() {
         let response = anyResponse(urlString: "http://some-domain.com/some-image.jpg")
-        let subject = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: true, forceDownload: false)
+        let subject = DownloadHelper(
+            request: anyRequest(),
+            response: response,
+            cookieStore: cookieStore(),
+            canShowInWebView: true,
+            forceDownload: false
+        )
 
         let downloadViewModel = subject?.downloadViewModel(okAction: { _ in })
 
@@ -79,7 +163,13 @@ class DownloadHelperTests: XCTestCase {
     }
 
     func test_downloadViewModel_deliversCorrectCancelButtonTitle() {
-        let subject = DownloadHelper(request: anyRequest(), response: anyResponse(mimeType: nil), cookieStore: cookieStore(), canShowInWebView: true, forceDownload: false)
+        let subject = DownloadHelper(
+            request: anyRequest(),
+            response: anyResponse(mimeType: nil),
+            cookieStore: cookieStore(),
+            canShowInWebView: true,
+            forceDownload: false
+        )
 
         let downloadViewModel = subject?.downloadViewModel(okAction: { _ in })
 
@@ -93,11 +183,21 @@ class DownloadHelperTests: XCTestCase {
     }
 
     private func anyResponse(mimeType: String?) -> URLResponse {
-        return URLResponse(url: URL(string: "http://any-url.com")!, mimeType: mimeType, expectedContentLength: 10, textEncodingName: nil)
+        return URLResponse(
+            url: URL(string: "http://any-url.com")!,
+            mimeType: mimeType,
+            expectedContentLength: 10,
+            textEncodingName: nil
+        )
     }
 
     private func anyResponse(urlString: String) -> URLResponse {
-        return URLResponse(url: URL(string: urlString)!, mimeType: nil, expectedContentLength: 10, textEncodingName: nil)
+        return URLResponse(
+            url: URL(string: urlString)!,
+            mimeType: nil,
+            expectedContentLength: 10,
+            textEncodingName: nil
+        )
     }
 
     private func cookieStore() -> WKHTTPCookieStore {

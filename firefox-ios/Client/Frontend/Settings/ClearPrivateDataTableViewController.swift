@@ -176,8 +176,9 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = tableView
-            .dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(
+                withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier
+            ) as? ThemedTableSectionHeaderFooterView
         else { return nil }
 
         var sectionTitle: String?

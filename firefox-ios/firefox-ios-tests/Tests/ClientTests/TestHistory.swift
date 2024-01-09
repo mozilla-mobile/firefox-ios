@@ -9,12 +9,22 @@ import Storage
 import XCTest
 
 class TestHistory: ProfileTest {
-    fileprivate func addSite(_ places: RustPlaces, url: String, title: String, bool: Bool = true, visitType: VisitType = .link) {
+    fileprivate func addSite(
+        _ places: RustPlaces,
+        url: String,
+        title: String,
+        bool: Bool = true,
+        visitType: VisitType = .link
+    ) {
         _ = places.reopenIfClosed()
         let site = Site(url: url, title: title)
         let visit = VisitObservation(url: site.url, title: site.title, visitType: visitType)
         let res = places.applyObservation(visitObservation: visit).value
-        XCTAssertEqual(bool, res.isSuccess, "Site added: \(url)., error value: \(res.failureValue ?? "wow")")
+        XCTAssertEqual(
+            bool,
+            res.isSuccess,
+            "Site added: \(url)., error value: \(res.failureValue ?? "wow")"
+        )
     }
 
     fileprivate func innerCheckSites(_ places: RustPlaces, callback: @escaping (_ cursor: Cursor<Site>) -> Void) {
@@ -25,9 +35,16 @@ class TestHistory: ProfileTest {
         }
     }
 
-    fileprivate func checkSites(_ places: RustPlaces, urls: [String: String]) {
+    fileprivate func checkSites(
+        _ places: RustPlaces,
+        urls: [String: String]
+    ) {
         // Retrieve the entry.
-        if let cursor = places.getSitesWithBound(limit: 100, offset: 0, excludedTypes: VisitTransitionSet(0)).value.successValue {
+        if let cursor = places.getSitesWithBound(
+            limit: 100,
+            offset: 0,
+            excludedTypes: VisitTransitionSet(0)
+        ).value.successValue {
             XCTAssertEqual(cursor.status, CursorStatus.success, "Returned success \(cursor.statusMessage).")
             XCTAssertEqual(cursor.count, urls.count, "Cursor has \(urls.count) entries.")
 
@@ -163,12 +180,35 @@ class TestHistory: ProfileTest {
     func testVisitTypes() {
         withTestProfile { profile -> Void in
             let places = profile.places
-            self.addSite(places, url: "http://url1/", title: "title 1", visitType: .link)
-            self.addSite(places, url: "http://url2/", title: "title 2", visitType: .bookmark)
-            self.addSite(places, url: "http://url3/", title: "title 3", visitType: .reload)
+            self.addSite(
+                places,
+                url: "http://url1/",
+                title: "title 1",
+                visitType: .link
+            )
+            self.addSite(
+                places,
+                url: "http://url2/",
+                title: "title 2",
+                visitType: .bookmark
+            )
+            self.addSite(
+                places,
+                url: "http://url3/",
+                title: "title 3",
+                visitType: .reload
+            )
 
-            if let cursor = places.getSitesWithBound(limit: 100, offset: 0, excludedTypes: VisitTransitionSet(0)).value.successValue {
-                XCTAssertEqual(cursor.status, CursorStatus.success, "Returned success \(cursor.statusMessage).")
+            if let cursor = places.getSitesWithBound(
+                limit: 100,
+                offset: 0,
+                excludedTypes: VisitTransitionSet(0)
+            ).value.successValue {
+                XCTAssertEqual(
+                    cursor.status,
+                    CursorStatus.success,
+                    "Returned success \(cursor.statusMessage)."
+                )
                 XCTAssertEqual(cursor.count, 3)
 
                 // Sites will be in order of latest visited (so url3)
@@ -202,7 +242,11 @@ class TestHistory: ProfileTest {
     func testAboutUrls() {
         withTestProfile { (profile) -> Void in
             let places = profile.places
-            self.addSite(places, url: "about:home", title: "About Home")
+            self.addSite(
+                places,
+                url: "about:home",
+                title: "About Home"
+            )
             self.clear(places)
         }
     }
@@ -215,9 +259,14 @@ class TestHistory: ProfileTest {
             let places = profile.places
             var index = 0
 
-            self.measure({ () -> Void in
+            self.measure({
+                () -> Void in
                 for _ in 0...self.numCmds {
-                    self.addSite(places, url: "https://someurl\(index).com/", title: "title \(index)")
+                    self.addSite(
+                        places,
+                        url: "https://someurl\(index).com/",
+                        title: "title \(index)"
+                    )
                     index += 1
                 }
                 self.clear(places)
@@ -233,7 +282,11 @@ class TestHistory: ProfileTest {
 
             self.clear(places)
             for _ in 0...self.numCmds {
-                self.addSite(places, url: "https://someurl\(index).com/", title: "title \(index)")
+                self.addSite(
+                    places,
+                    url: "https://someurl\(index).com/",
+                    title: "title \(index)"
+                )
                 urls["https://someurl\(index).com/"] = "title \(index)"
                 index += 1
             }
@@ -247,15 +300,17 @@ class TestHistory: ProfileTest {
         }
     }
 
-    // Fuzzing tests. These fire random insert/query/clear commands into the history database from threads. The don't check
-    // the results. Just look for crashes.
+    // Fuzzing tests. These fire random insert/query/clear commands into the history database from threads.
+    // The don't check the results. Just look for crashes.
     func testRandomThreading() {
         withTestProfile { profile -> Void in
-            let queue = DispatchQueue(label: "My Queue",
-                                      qos: DispatchQoS.default,
-                                      attributes: DispatchQueue.Attributes.concurrent,
-                                      autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.inherit,
-                                      target: nil)
+            let queue = DispatchQueue(
+                label: "My Queue",
+                qos: DispatchQoS.default,
+                attributes: DispatchQueue.Attributes.concurrent,
+                autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.inherit,
+                target: nil
+            )
             var counter = 0
 
             let expectation = self.expectation(description: "Wait for history")
@@ -276,11 +331,13 @@ class TestHistory: ProfileTest {
     // Same as testRandomThreading, but uses one history connection for all threads
     func testRandomThreading2() {
         withTestProfile { profile -> Void in
-            let queue = DispatchQueue(label: "My Queue",
-                                      qos: DispatchQoS.default,
-                                      attributes: DispatchQueue.Attributes.concurrent,
-                                      autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.inherit,
-                                      target: nil)
+            let queue = DispatchQueue(
+                label: "My Queue",
+                qos: DispatchQoS.default,
+                attributes: DispatchQueue.Attributes.concurrent,
+                autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.inherit,
+                target: nil
+            )
             var places = profile.places
             var counter = 0
 
@@ -327,8 +384,8 @@ class TestHistory: ProfileTest {
         }
     }
 
-    // Calls numCmds random methods on this database. val is a counter used by this interally (i.e. always pass zero for it).
-    // Calls cb when finished.
+    // Calls numCmds random methods on this database. val is a counter used by
+    // this interally (i.e. always pass zero for it). Calls cb when finished.
     fileprivate func runMultiRandom(
         _ places: inout RustPlaces,
         val: Int, numCmds: Int,

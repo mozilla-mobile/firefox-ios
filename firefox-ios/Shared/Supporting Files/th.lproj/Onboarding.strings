@@ -76,6 +76,12 @@
 /* Accessibility label for close button that dismisses the welcome onboarding screen. Placeholder is for the app name. */
 "Onboarding.Welcome.Close.AccessibilityLabel.v121" = "ปิดและออกจาก %@ การเริ่มต้นใช้งาน";
 
+/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Welcome.Description.TreatementA.v120" = "เบราว์เซอร์ที่สนับสนุนโดยองค์กรไม่แสวงหาผลกำไรของเราจะช่วยหยุดบริษัทต่างๆ ไม่ให้แอบติดตามคุณทางเว็บได้";
+
+/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Welcome.Description.v120" = "เบราว์เซอร์ที่สนับสนุนโดยองค์กรไม่แสวงหาผลกำไรของเราจะช่วยหยุดบริษัทต่างๆ ไม่ให้แอบติดตามคุณทางเว็บได้";
+
 /* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Link.Action.v114" = "เรียนรู้เพิ่มเติมในประกาศความเป็นส่วนตัวของเรา";
 

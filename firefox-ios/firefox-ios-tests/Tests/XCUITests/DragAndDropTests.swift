@@ -4,9 +4,18 @@
 
 import XCTest
 
-let firstWebsite = (url: path(forTestPage: "test-mozilla-org.html"), tabName: "Internet for people, not profit — Mozilla")
-let secondWebsite = (url: path(forTestPage: "test-mozilla-book.html"), tabName: "The Book of Mozilla. Currently selected tab.")
-let secondWebsiteUnselected = (url: path(forTestPage: "test-mozilla-book.html"), tabName: "The Book of Mozilla")
+let firstWebsite = (
+    url: path(forTestPage: "test-mozilla-org.html"),
+    tabName: "Internet for people, not profit — Mozilla"
+)
+let secondWebsite = (
+    url: path(forTestPage: "test-mozilla-book.html"),
+    tabName: "The Book of Mozilla. Currently selected tab."
+)
+let secondWebsiteUnselected = (
+    url: path(forTestPage: "test-mozilla-book.html"),
+    tabName: "The Book of Mozilla"
+)
 let homeTabName = "Homepage"
 let websiteWithSearchField = "https://developer.mozilla.org/en-US/"
 
@@ -23,7 +32,10 @@ class DragAndDropTests: BaseTestCase {
         openTwoWebsites()
         navigator.goto(TabTray)
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
-        dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite.tabName].firstMatch, dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch)
+        dragAndDrop(
+            dragElement: app.collectionViews.cells[firstWebsite.tabName].firstMatch,
+            dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch
+        )
         mozWaitForElementToExist(app.collectionViews.cells["Internet for people, not profit — Mozilla"], timeout: 10)
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
     }
@@ -47,10 +59,17 @@ class DragAndDropTests: BaseTestCase {
         navigator.goto(TabTray)
 
         let fourthWebsitePosition = app.collectionViews.cells.element(boundBy: 3).label
-        checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsiteUnselected.tabName)
+        checkTabsOrder(
+            dragAndDropTab: false,
+            firstTab: firstWebsite.tabName,
+            secondTab: secondWebsiteUnselected.tabName
+        )
         XCTAssertEqual(fourthWebsitePosition, thirdWebsite.tabName, "last tab before is not correct")
 
-        dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite.tabName].firstMatch, dropOnElement: app.collectionViews.cells[thirdWebsite.tabName].firstMatch)
+        dragAndDrop(
+            dragElement: app.collectionViews.cells[firstWebsite.tabName].firstMatch,
+            dropOnElement: app.collectionViews.cells[thirdWebsite.tabName].firstMatch
+        )
 
         let thirdWebsitePosition = app.collectionViews.cells.element(boundBy: 2).label
         // Disabling validation on iPad. Dragging and droping action for the first and last tab is not working.
@@ -70,10 +89,16 @@ class DragAndDropTests: BaseTestCase {
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
 
         // Rearrange the tabs via drag home tab and drop it on twitter tab
-        dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite.tabName].firstMatch, dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch)
+        dragAndDrop(
+            dragElement: app.collectionViews.cells[firstWebsite.tabName].firstMatch,
+            dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch
+        )
 
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
-        XCTAssert(secondWebsite.url.contains(app.textFields["url"].value! as! String), "The tab has not been dropped correctly")
+        XCTAssert(
+            secondWebsite.url.contains(app.textFields["url"].value! as! String),
+            "The tab has not been dropped correctly"
+        )
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2361192
@@ -85,10 +110,16 @@ class DragAndDropTests: BaseTestCase {
         checkTabsOrder(dragAndDropTab: false, firstTab: homeTabName, secondTab: secondWebsite.tabName)
 
         // Drag and drop home tab from the first position to the second
-        dragAndDrop(dragElement: app.collectionViews.cells["Homepage"].firstMatch, dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch)
+        dragAndDrop(
+            dragElement: app.collectionViews.cells["Homepage"].firstMatch,
+            dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch
+        )
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: homeTabName)
         // Check that focus is kept on last website open
-        XCTAssert(secondWebsite.url.contains(app.textFields["url"].value! as! String), "The tab has not been dropped correctly")
+        XCTAssert(
+            secondWebsite.url.contains(app.textFields["url"].value! as! String),
+            "The tab has not been dropped correctly"
+        )
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2361193
@@ -100,13 +131,27 @@ class DragAndDropTests: BaseTestCase {
         }
         openTwoWebsites()
         navigator.goto(TabTray)
-        checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
+        checkTabsOrder(
+            dragAndDropTab: false,
+            firstTab: firstWebsite.tabName,
+            secondTab: secondWebsite.tabName
+        )
         // Drag first tab on the second one
-        dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite.tabName].firstMatch, dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch)
+        dragAndDrop(
+            dragElement: app.collectionViews.cells[firstWebsite.tabName].firstMatch,
+            dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch
+        )
 
-        checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
+        checkTabsOrder(
+            dragAndDropTab: true,
+            firstTab: secondWebsite.tabName,
+            secondTab: firstWebsite.tabName
+        )
         // Check that focus is kept on last website open
-        XCTAssert(secondWebsite.url.contains(app.textFields["url"].value! as! String), "The tab has not been dropped correctly")
+        XCTAssert(
+            secondWebsite.url.contains(app.textFields["url"].value! as! String),
+            "The tab has not been dropped correctly"
+        )
     }
 }
 
@@ -156,7 +201,12 @@ private extension BaseTestCase {
 }
 
 class DragAndDropTestIpad: IpadOnlyTestCase {
-    let testWithDB = ["testTryDragAndDropHistoryToURLBar", "testTryDragAndDropBookmarkToURLBar", "testDragAndDropBookmarkEntry", "test3DragAndDropHistoryEntry"]
+    let testWithDB = [
+        "testTryDragAndDropHistoryToURLBar",
+        "testTryDragAndDropBookmarkToURLBar",
+        "testDragAndDropBookmarkEntry",
+        "test3DragAndDropHistoryEntry"
+    ]
 
         // This DDBB contains those 4 websites listed in the name
     let historyAndBookmarksDB = "browserYoutubeTwitterMozillaExample-places.db"
@@ -189,10 +239,16 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         openTwoWebsites()
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
         // Drag first tab on the second one
-        dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite.tabName], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
+        dragAndDrop(
+            dragElement: app.collectionViews.cells[firstWebsite.tabName],
+            dropOnElement: app.collectionViews.cells[secondWebsite.tabName]
+        )
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
         // Check that focus is kept on last website open
-        XCTAssert(secondWebsite.url.contains(app.textFields["url"].value! as! String), "The tab has not been dropped correctly")
+        XCTAssert(
+            secondWebsite.url.contains(app.textFields["url"].value! as! String),
+            "The tab has not been dropped correctly"
+        )
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2361413
@@ -203,7 +259,10 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         navigator.goto(TabTray)
 
         // Drag first tab on the second one
-        dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite.tabName].firstMatch, dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch)
+        dragAndDrop(
+            dragElement: app.collectionViews.cells[firstWebsite.tabName].firstMatch,
+            dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch
+        )
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
 
         // Leave Tab Tray and check order in Top Tabs
@@ -212,7 +271,8 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2417438
-    // This test drags the address bar and since it is not possible to drop it on another app, lets do it in a search box
+    // This test drags the address bar and since it is not possible to drop it on another app,
+    // lets do it in a search box
     func testDragAddressBarIntoSearchBox() {
         if skipPlatform { return }
 

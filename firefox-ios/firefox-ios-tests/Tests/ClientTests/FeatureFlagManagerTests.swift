@@ -44,12 +44,10 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(featureFlags.isFeatureEnabled(.jumpBackIn, checking: .userOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .buildOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .userOnly))
-        XCTAssertTrue(featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly))
     }
 
     func testDefaultNimbusCustomFlags() {
         XCTAssertEqual(featureFlags.getCustomState(for: .searchBarPosition), SearchBarPosition.top)
-        XCTAssertEqual(featureFlags.getCustomState(for: .wallpaperVersion), WallpaperVersion.v1)
     }
 
     // Changing the prefs manually, to make sure settings are respected through

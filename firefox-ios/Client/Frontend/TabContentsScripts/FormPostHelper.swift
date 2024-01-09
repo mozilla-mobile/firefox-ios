@@ -66,11 +66,14 @@ class FormPostHelper: TabContentScript {
         return "FormPostHelper"
     }
 
-    func scriptMessageHandlerName() -> String? {
-        return "formPostHelper"
+    func scriptMessageHandlerNames() -> [String]? {
+        return ["formPostHelper"]
     }
 
-    func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(
+        _ userContentController: WKUserContentController,
+        didReceiveScriptMessage message: WKScriptMessage
+    ) {
         guard let formPostData = FormPostData(messageBody: message.body) else {
             return
         }
@@ -79,7 +82,9 @@ class FormPostHelper: TabContentScript {
     }
 
     func urlRequestForNavigationAction(_ navigationAction: WKNavigationAction) -> URLRequest {
-        guard let formPostData = blankTargetFormPosts.first(where: { $0.matchesNavigationAction(navigationAction) }) else {
+        guard let formPostData = blankTargetFormPosts.first(where: {
+            $0.matchesNavigationAction(navigationAction)
+        }) else {
             return navigationAction.request
         }
 

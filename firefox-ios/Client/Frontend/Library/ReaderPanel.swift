@@ -52,7 +52,9 @@ class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
 
     var unread = true {
         didSet {
-            readStatusImageView.image = UIImage(named: unread ? "MarkAsRead" : "MarkAsUnread")?.withRenderingMode(.alwaysTemplate)
+            readStatusImageView.image = UIImage(
+                named: unread ? "MarkAsRead" : "MarkAsUnread"
+            )?.withRenderingMode(.alwaysTemplate)
             updateAccessibilityLabel()
         }
     }
@@ -82,21 +84,42 @@ class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
         preservesSuperviewLayoutMargins = false
 
         contentView.addSubviews(readStatusImageView, titleLabel, hostnameLabel)
-        NSLayoutConstraint.activate([
-            readStatusImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ReadingListTableViewCellUX.ReadIndicatorLeftOffset),
-            readStatusImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            readStatusImageView.widthAnchor.constraint(equalToConstant: ReadingListTableViewCellUX.ReadIndicatorWidth),
-            readStatusImageView.heightAnchor.constraint(equalToConstant: ReadingListTableViewCellUX.ReadIndicatorHeight),
+        NSLayoutConstraint.activate(
+            [
+                readStatusImageView.leadingAnchor.constraint(
+                    equalTo: contentView.leadingAnchor,
+                    constant: ReadingListTableViewCellUX.ReadIndicatorLeftOffset
+                ),
+                readStatusImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+                readStatusImageView.widthAnchor.constraint(
+                    equalToConstant: ReadingListTableViewCellUX.ReadIndicatorWidth
+                ),
+                readStatusImageView.heightAnchor.constraint(
+                    equalToConstant: ReadingListTableViewCellUX.ReadIndicatorHeight
+                ),
 
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ReadingListTableViewCellUX.TitleLabelTopOffset),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ReadingListTableViewCellUX.TitleLabelLeftOffset),
-            titleLabel.bottomAnchor.constraint(equalTo: hostnameLabel.topAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: ReadingListTableViewCellUX.TitleLabelRightOffset),
+                titleLabel.topAnchor.constraint(
+                    equalTo: contentView.topAnchor,
+                    constant: ReadingListTableViewCellUX.TitleLabelTopOffset
+                ),
+                titleLabel.leadingAnchor.constraint(
+                    equalTo: contentView.leadingAnchor,
+                    constant: ReadingListTableViewCellUX.TitleLabelLeftOffset
+                ),
+                titleLabel.bottomAnchor.constraint(equalTo: hostnameLabel.topAnchor),
+                titleLabel.trailingAnchor.constraint(
+                    equalTo: contentView.trailingAnchor,
+                    constant: ReadingListTableViewCellUX.TitleLabelRightOffset
+                ),
 
-            hostnameLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            hostnameLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ReadingListTableViewCellUX.HostnameLabelBottomOffset),
-            hostnameLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor)
-        ])
+                hostnameLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+                hostnameLabel.bottomAnchor.constraint(
+                    equalTo: contentView.bottomAnchor,
+                    constant: -ReadingListTableViewCellUX.HostnameLabelBottomOffset
+                ),
+                hostnameLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor)
+            ]
+        )
     }
 
     func applyTheme(theme: Theme) {
@@ -139,9 +162,10 @@ class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
             } else {
                 label = string as AnyObject
             }
-            // need to use KVC as accessibilityLabel is of type String! and cannot be set to NSAttributedString other way than this
-            // see bottom of page 121 of the PDF slides of WWDC 2012 "Accessibility for iOS" session for indication that this is OK by Apple
-            // also this combined with Swift's strictness is why we cannot simply override accessibilityLabel and return the label directly...
+            // need to use KVC as accessibilityLabel is of type String! and cannot be set to NSAttributedString
+            // other way than this see bottom of page 121 of the PDF slides of WWDC 2012 "Accessibility for iOS"
+            // session for indication that this is OK by Apple also this combined with Swift's strictness is
+            // why we cannot simply override accessibilityLabel and return the label directly...
             setValue(label, forKey: "accessibilityLabel")
         }
     }
@@ -179,7 +203,12 @@ class ReadingListPanel: UITableViewController,
         [ Notification.Name.FirefoxAccountChanged,
           Notification.Name.DynamicFontChanged,
           Notification.Name.DatabaseWasReopened ].forEach {
-            NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: $0, object: nil)
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(notificationReceived),
+                name: $0,
+                object: nil
+            )
         }
     }
 
@@ -333,41 +362,72 @@ class ReadingListPanel: UITableViewController,
 
         view.addSubview(emptyStateViewWrapper)
 
-        NSLayoutConstraint.activate([
-            // title
-            welcomeLabel.topAnchor.constraint(equalTo: emptyStateViewWrapper.topAnchor),
-            welcomeLabel.leadingAnchor.constraint(equalTo: emptyStateViewWrapper.leadingAnchor),
-            welcomeLabel.trailingAnchor.constraint(equalTo: emptyStateViewWrapper.trailingAnchor),
+        NSLayoutConstraint.activate(
+            [
+                // title
+                welcomeLabel.topAnchor.constraint(equalTo: emptyStateViewWrapper.topAnchor),
+                welcomeLabel.leadingAnchor.constraint(equalTo: emptyStateViewWrapper.leadingAnchor),
+                welcomeLabel.trailingAnchor.constraint(equalTo: emptyStateViewWrapper.trailingAnchor),
 
-            // first row
-            readerModeLabel.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: ReadingListPanelUX.WelcomeScreenPadding),
-            readerModeLabel.leadingAnchor.constraint(equalTo: welcomeLabel.leadingAnchor),
-            readerModeLabel.trailingAnchor.constraint(equalTo: readerModeImageView.leadingAnchor, constant: -ReadingListPanelUX.WelcomeScreenPadding),
+                // first row
+                readerModeLabel.topAnchor.constraint(
+                    equalTo: welcomeLabel.bottomAnchor,
+                    constant: ReadingListPanelUX.WelcomeScreenPadding
+                ),
+                readerModeLabel.leadingAnchor.constraint(equalTo: welcomeLabel.leadingAnchor),
+                readerModeLabel.trailingAnchor.constraint(
+                    equalTo: readerModeImageView.leadingAnchor,
+                    constant: -ReadingListPanelUX.WelcomeScreenPadding
+                ),
 
-            readerModeImageView.centerYAnchor.constraint(equalTo: readerModeLabel.centerYAnchor),
-            readerModeImageView.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor),
-            readerModeImageView.widthAnchor.constraint(equalToConstant: ReadingListPanelUX.WelcomeScreenItemImageWidth),
+                readerModeImageView.centerYAnchor.constraint(equalTo: readerModeLabel.centerYAnchor),
+                readerModeImageView.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor),
+                readerModeImageView.widthAnchor.constraint(
+                    equalToConstant: ReadingListPanelUX.WelcomeScreenItemImageWidth
+                ),
 
-            // second row
-            readingListLabel.topAnchor.constraint(equalTo: readerModeLabel.bottomAnchor, constant: ReadingListPanelUX.WelcomeScreenPadding),
-            readingListLabel.leadingAnchor.constraint(equalTo: welcomeLabel.leadingAnchor),
-            readingListLabel.trailingAnchor.constraint(equalTo: readingListImageView.leadingAnchor, constant: -ReadingListPanelUX.WelcomeScreenPadding),
+                // second row
+                readingListLabel.topAnchor.constraint(
+                    equalTo: readerModeLabel.bottomAnchor,
+                    constant: ReadingListPanelUX.WelcomeScreenPadding
+                ),
+                readingListLabel.leadingAnchor.constraint(equalTo: welcomeLabel.leadingAnchor),
+                readingListLabel.trailingAnchor.constraint(
+                    equalTo: readingListImageView.leadingAnchor,
+                    constant: -ReadingListPanelUX.WelcomeScreenPadding
+                ),
 
-            readingListImageView.centerYAnchor.constraint(equalTo: readingListLabel.centerYAnchor),
-            readingListImageView.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor),
-            readingListImageView.widthAnchor.constraint(equalToConstant: ReadingListPanelUX.WelcomeScreenItemImageWidth),
+                readingListImageView.centerYAnchor.constraint(equalTo: readingListLabel.centerYAnchor),
+                readingListImageView.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor),
+                readingListImageView.widthAnchor.constraint(
+                    equalToConstant: ReadingListPanelUX.WelcomeScreenItemImageWidth
+                ),
 
-            readingListLabel.bottomAnchor.constraint(equalTo: emptyStateViewWrapper.bottomAnchor).priority(.defaultLow),
+                readingListLabel.bottomAnchor.constraint(
+                    equalTo: emptyStateViewWrapper.bottomAnchor
+                ).priority(.defaultLow),
 
-            // overall positioning of emptyStateViewWrapper
-            emptyStateViewWrapper.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: ReadingListPanelUX.WelcomeScreenHorizontalMinPadding),
-            emptyStateViewWrapper.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -ReadingListPanelUX.WelcomeScreenHorizontalMinPadding),
-            emptyStateViewWrapper.widthAnchor.constraint(lessThanOrEqualToConstant: ReadingListPanelUX.WelcomeScreenMaxWidth),
+                // overall positioning of emptyStateViewWrapper
+                emptyStateViewWrapper.leadingAnchor.constraint(
+                    greaterThanOrEqualTo: view.leadingAnchor,
+                    constant: ReadingListPanelUX.WelcomeScreenHorizontalMinPadding
+                ),
+                emptyStateViewWrapper.trailingAnchor.constraint(
+                    lessThanOrEqualTo: view.trailingAnchor,
+                    constant: -ReadingListPanelUX.WelcomeScreenHorizontalMinPadding
+                ),
+                emptyStateViewWrapper.widthAnchor.constraint(
+                    lessThanOrEqualToConstant: ReadingListPanelUX.WelcomeScreenMaxWidth
+                ),
 
-            emptyStateViewWrapper.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            emptyStateViewWrapper.topAnchor.constraint(equalTo: view.topAnchor, constant: ReadingListPanelUX.WelcomeScreenTopPadding),
-            emptyStateViewWrapper.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+                emptyStateViewWrapper.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                emptyStateViewWrapper.topAnchor.constraint(
+                    equalTo: view.topAnchor,
+                    constant: ReadingListPanelUX.WelcomeScreenTopPadding
+                ),
+                emptyStateViewWrapper.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            ]
+        )
 
         welcomeLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
         readerModeLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
@@ -393,7 +453,10 @@ class ReadingListPanel: UITableViewController,
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ReadingListTableViewCell", for: indexPath) as! ReadingListTableViewCell
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: "ReadingListTableViewCell",
+            for: indexPath
+        ) as! ReadingListTableViewCell
         if let record = records?[indexPath.row] {
             cell.title = record.title
             cell.url = URL(string: record.url, invalidCharacters: false)!
@@ -403,11 +466,16 @@ class ReadingListPanel: UITableViewController,
         return cell
     }
 
-    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+    override func tableView(
+        _ tableView: UITableView,
+        trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
+    ) -> UISwipeActionsConfiguration? {
         guard let record = records?[safe: indexPath.row] else { return nil }
 
-        let deleteAction = UIContextualAction(style: .destructive,
-                                              title: .ReaderPanelRemove) { [weak self] (_, _, completion) in
+        let deleteAction = UIContextualAction(
+            style: .destructive,
+            title: .ReaderPanelRemove
+        ) { [weak self] (_, _, completion) in
             guard let strongSelf = self else { completion(false); return }
 
             strongSelf.deleteItem(atIndex: indexPath)
@@ -415,8 +483,10 @@ class ReadingListPanel: UITableViewController,
         }
 
         let toggleText: String = record.unread ? .ReaderPanelMarkAsRead : .ReaderModeBarMarkAsUnread
-        let unreadToggleAction = UIContextualAction(style: .normal,
-                                                    title: toggleText.stringSplitWithNewline()) { [weak self] (_, view, completion) in
+        let unreadToggleAction = UIContextualAction(
+            style: .normal,
+            title: toggleText.stringSplitWithNewline()
+        ) { [weak self] (_, view, completion) in
             guard let strongSelf = self else { completion(false); return }
             strongSelf.toggleItem(atIndex: indexPath)
             completion(true)
@@ -440,13 +510,22 @@ class ReadingListPanel: UITableViewController,
             // Reading list items are closest in concept to bookmarks.
             let visitType = VisitType.bookmark
             navigationHandler?.openUrl(encodedURL, visitType: visitType)
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .readingListItem)
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .open,
+                object: .readingListItem
+            )
         }
     }
 
     fileprivate func deleteItem(atIndex indexPath: IndexPath) {
         if let record = records?[indexPath.row] {
-            TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .readingListItem, value: .readingListPanel)
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .delete,
+                object: .readingListItem,
+                value: .readingListPanel
+            )
             profile.readingList.deleteRecord(record, completion: { success in
                 guard success else { return }
                 self.records?.remove(at: indexPath.row)
@@ -464,8 +543,17 @@ class ReadingListPanel: UITableViewController,
 
     fileprivate func toggleItem(atIndex indexPath: IndexPath) {
         if let record = records?[indexPath.row] {
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readingListItem, value: !record.unread ? .markAsUnread : .markAsRead, extras: [ "from": "reading-list-panel" ])
-            if let updatedRecord = profile.readingList.updateRecord(record, unread: !record.unread).value.successValue {
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .tap,
+                object: .readingListItem,
+                value: !record.unread ? .markAsUnread : .markAsRead,
+                extras: [ "from": "reading-list-panel" ]
+            )
+            if let updatedRecord = profile.readingList.updateRecord(
+                record,
+                unread: !record.unread
+            ).value.successValue {
                 records?[indexPath.row] = updatedRecord
                 tableView.reloadRows(at: [indexPath], with: .automatic)
             }
@@ -481,7 +569,11 @@ class ReadingListPanel: UITableViewController,
 }
 
 extension ReadingListPanel: LibraryPanelContextMenu {
-    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
+    func presentContextMenu(
+        for site: Site,
+        with indexPath: IndexPath,
+        completionHandler: @escaping () -> PhotonActionSheet?
+    ) {
         guard let contextMenu = completionHandler() else { return }
         self.present(contextMenu, animated: true, completion: nil)
     }
@@ -492,7 +584,10 @@ extension ReadingListPanel: LibraryPanelContextMenu {
     }
 
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]? {
-        guard var actions = getDefaultContextMenuActions(for: site, libraryPanelDelegate: libraryPanelDelegate) else { return nil }
+        guard var actions = getDefaultContextMenuActions(
+            for: site,
+            libraryPanelDelegate: libraryPanelDelegate
+        ) else { return nil }
 
         let removeAction = SingleActionViewModel(title: .RemoveContextMenuTitle,
                                                  iconString: StandardImageIdentifiers.Large.cross,
@@ -506,7 +601,11 @@ extension ReadingListPanel: LibraryPanelContextMenu {
 }
 
 extension ReadingListPanel: UITableViewDragDelegate {
-    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+    func tableView(
+        _ tableView: UITableView,
+        itemsForBeginning session: UIDragSession,
+        at indexPath: IndexPath
+    ) -> [UIDragItem] {
         guard let site = getSiteDetails(for: indexPath),
               let url = URL(string: site.url, invalidCharacters: false),
               let itemProvider = NSItemProvider(contentsOf: url)

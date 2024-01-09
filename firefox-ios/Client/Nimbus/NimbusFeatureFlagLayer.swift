@@ -66,10 +66,6 @@ final class NimbusFeatureFlagLayer {
         case .tabTrayRefactor:
             return checkTabTrayRefactorFeature(from: nimbus)
 
-        case .wallpapers,
-                .wallpaperVersion:
-            return checkNimbusForWallpapersFeature(using: nimbus)
-
         case .wallpaperOnboardingSheet:
             return checkNimbusForWallpaperOnboarding(using: nimbus)
 
@@ -141,20 +137,8 @@ final class NimbusFeatureFlagLayer {
         return status
     }
 
-    private func checkNimbusForWallpapersFeature(using nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.wallpaperFeature.value()
-
-        return config.configuration.status
-    }
-
     private func checkNimbusForWallpaperOnboarding(using nimbus: FxNimbus) -> Bool {
         return nimbus.features.wallpaperFeature.value().onboardingSheet
-    }
-
-    public func checkNimbusForWallpapersVersion(using nimbus: FxNimbus = FxNimbus.shared) -> String {
-        let config = nimbus.features.wallpaperFeature.value()
-
-        return config.configuration.version.rawValue
     }
 
     private func checkQRCodeCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {

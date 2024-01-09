@@ -48,16 +48,26 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
 
                 // Grab the name of file in the bundle's test-fixtures dir, and copy it to the runtime app dir.
                 let filename = arg.replacingOccurrences(of: LaunchArguments.LoadDatabasePrefix, with: "")
-                let input = URL(fileURLWithPath: Bundle(for: UITestAppDelegate.self).path(forResource: filename,
-                                                                                          ofType: nil,
-                                                                                          inDirectory: "test-fixtures")!)
-                try? FileManager.default.createDirectory(atPath: dirForTestProfile, withIntermediateDirectories: false, attributes: nil)
+                let input = URL(
+                    fileURLWithPath: Bundle(for: UITestAppDelegate.self).path(
+                        forResource: filename,
+                        ofType: nil,
+                        inDirectory: "test-fixtures"
+                    )!
+                )
+                try? FileManager.default.createDirectory(
+                    atPath: dirForTestProfile,
+                    withIntermediateDirectories: false,
+                    attributes: nil
+                )
                 let output = URL(fileURLWithPath: "\(dirForTestProfile)/places.db")
 
                 let enumerator = FileManager.default.enumerator(atPath: dirForTestProfile)
                 let filePaths = enumerator?.allObjects as! [String]
                 filePaths.filter { $0.contains(".db") }.forEach { item in
-                    try? FileManager.default.removeItem(at: URL(fileURLWithPath: "\(dirForTestProfile)/\(item)"))
+                    try? FileManager.default.removeItem(
+                        at: URL(fileURLWithPath: "\(dirForTestProfile)/\(item)")
+                    )
                 }
 
                 do {
@@ -78,23 +88,38 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
 
                 // Grab the name of file in the bundle's test-fixtures dir, and copy it to the runtime app dir.
                 let filenameArchive = arg.replacingOccurrences(of: LaunchArguments.LoadTabsStateArchive, with: "")
-                let input = URL(fileURLWithPath: Bundle(for: UITestAppDelegate.self).path(forResource: filenameArchive,
-                                                                                          ofType: nil,
-                                                                                          inDirectory: "test-fixtures")!)
-                try? FileManager.default.createDirectory(atPath: tabDirectory, withIntermediateDirectories: false, attributes: nil)
+                let input = URL(
+                    fileURLWithPath: Bundle(for: UITestAppDelegate.self).path(
+                        forResource: filenameArchive,
+                        ofType: nil,
+                        inDirectory: "test-fixtures"
+                    )!
+                )
+                try? FileManager.default.createDirectory(
+                    atPath: tabDirectory,
+                    withIntermediateDirectories: false,
+                    attributes: nil
+                )
                 let outputDir = URL(fileURLWithPath: "\(tabDirectory)/window-data")
-                let outputFile = URL(fileURLWithPath: "\(tabDirectory)/window-data/window-44BA0B7D-097A-484D-8358-91A6E374451D")
+                let outputFile = URL(
+                    fileURLWithPath: "\(tabDirectory)/window-data/window-44BA0B7D-097A-484D-8358-91A6E374451D"
+                )
                 let enumerator = FileManager.default.enumerator(atPath: "\(tabDirectory)/window-data")
                 let filePaths = enumerator?.allObjects as? [String]
                 filePaths?.filter { $0.contains("window-") }.forEach { item in
                     do {
-                        try FileManager.default.removeItem(at: URL(fileURLWithPath: "\(tabDirectory)/window-data/\(item)"))
+                        try FileManager.default.removeItem(
+                            at: URL(fileURLWithPath: "\(tabDirectory)/window-data/\(item)")
+                        )
                     } catch {
                         fatalError("Could not remove items at \(tabDirectory)/window-data/\(item): \(error)")
                     }
                 }
 
-                try? FileManager.default.createDirectory(at: outputDir, withIntermediateDirectories: true)
+                try? FileManager.default.createDirectory(
+                    at: outputDir,
+                    withIntermediateDirectories: true
+                )
 
                 do {
                     try FileManager.default.copyItem(at: input, to: outputFile)
@@ -106,9 +131,16 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
 
         if launchArguments.contains(LaunchArguments.ClearProfile) {
             // Use a clean profile for each test session.
-            profile = BrowserProfile(localName: "testProfile", sendTabDelegate: application.sendTabDelegate, clear: true)
+            profile = BrowserProfile(
+                localName: "testProfile",
+                sendTabDelegate: application.sendTabDelegate,
+                clear: true
+            )
         } else {
-            profile = BrowserProfile(localName: "testProfile", sendTabDelegate: application.sendTabDelegate)
+            profile = BrowserProfile(
+                localName: "testProfile",
+                sendTabDelegate: application.sendTabDelegate
+            )
         }
 
         if launchArguments.contains(LaunchArguments.SkipAddingGoogleTopSite) {
@@ -156,7 +188,10 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
         return profile
     }
 
-    override func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+    override func application(
+        _ application: UIApplication,
+        willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
+    ) -> Bool {
         // If the app is running from a XCUITest reset all settings in the app
         if ProcessInfo.processInfo.arguments.contains(LaunchArguments.ClearProfile) {
             resetApplication()
@@ -200,7 +235,10 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
         }
     }
 
-    override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+    override func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+    ) -> Bool {
         // Speed up the animations to 100 times as fast.
         defer { UIWindow.keyWindow?.layer.speed = 100.0 }
 
@@ -212,7 +250,9 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
     func appRootDir() -> String {
         var rootPath = ""
         let sharedContainerIdentifier = AppInfo.sharedContainerIdentifier
-        if let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: sharedContainerIdentifier) {
+        if let url = FileManager.default.containerURL(
+            forSecurityApplicationGroupIdentifier: sharedContainerIdentifier
+        ) {
             rootPath = url.path
         } else {
             rootPath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])

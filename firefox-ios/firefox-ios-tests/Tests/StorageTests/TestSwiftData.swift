@@ -60,7 +60,10 @@ class TestSwiftData: XCTestCase {
         XCTAssertNil(writeDuringRead(true), "Insertion succeeded")
     }
 
-    fileprivate func writeDuringRead(_ safeQuery: Bool = false, closeTimeout: UInt64? = nil) -> MaybeErrorType? {
+    fileprivate func writeDuringRead(
+        _ safeQuery: Bool = false,
+        closeTimeout: UInt64? = nil
+    ) -> MaybeErrorType? {
         // Query the database and hold the cursor.
         var c: Cursor<SDRow>!
         let result = swiftData!.withConnection(SwiftData.Flags.readOnly) { db -> Void in
@@ -81,7 +84,9 @@ class TestSwiftData: XCTestCase {
         // Close the cursor after a delay if there's a close timeout set.
         if let closeTimeout = closeTimeout {
             let queue = DispatchQueue(label: "cursor timeout queue", attributes: [])
-            queue.asyncAfter(deadline: DispatchTime.now() + Double(Int64(closeTimeout * NSEC_PER_SEC)) / Double(NSEC_PER_SEC)) {
+            queue.asyncAfter(
+                deadline: DispatchTime.now() + Double(Int64(closeTimeout * NSEC_PER_SEC)) / Double(NSEC_PER_SEC)
+            ) {
                 c.close()
             }
         }
@@ -93,7 +98,10 @@ class TestSwiftData: XCTestCase {
     fileprivate func addSite(_ table: BrowserSchema, url: String, title: String) -> MaybeErrorType? {
         let result = swiftData!.withConnection(SwiftData.Flags.readWrite) { connection -> Void in
             let args: Args = [Bytes.generateGUID(), url, title]
-            try connection.executeChange("INSERT INTO history (guid, url, title, is_deleted, should_upload) VALUES (?, ?, ?, 0, 0)", withArgs: args)
+            try connection.executeChange(
+                "INSERT INTO history (guid, url, title, is_deleted, should_upload) VALUES (?, ?, ?, 0, 0)",
+                withArgs: args
+            )
         }
 
         return result.value.failureValue
@@ -107,14 +115,18 @@ class TestSwiftData: XCTestCase {
         db.withConnection(SwiftData.Flags.readWriteCreate) { db in
             try db.executeChange("CREATE TABLE foo ( bar TEXT, baz INTEGER )")
             try db.executeChange("INSERT INTO foo VALUES (NULL, 1), ('here', 2)")
-            let shouldBeString = db.executeQuery("SELECT bar FROM foo WHERE baz = 2", factory: { (row) in row["bar"] }).asArray()[0]
+            let shouldBeString = db.executeQuery("SELECT bar FROM foo WHERE baz = 2",
+                                                 factory: { (row) in row["bar"]
+            }).asArray()[0]
             guard let s = shouldBeString as? String else {
                 XCTFail("Couldn't cast.")
                 return
             }
             XCTAssertEqual(s, "here")
 
-            let shouldBeNull = db.executeQuery("SELECT bar FROM foo WHERE baz = 1", factory: { (row) in row["bar"] }).asArray()[0]
+            let shouldBeNull = db.executeQuery("SELECT bar FROM foo WHERE baz = 1",
+                                               factory: { (row) in row["bar"]
+            }).asArray()[0]
             XCTAssertNil(shouldBeNull as? String)
             XCTAssertNil(shouldBeNull)
         }.succeeded()

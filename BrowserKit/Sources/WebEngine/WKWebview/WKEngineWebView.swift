@@ -18,6 +18,7 @@ protocol WKEngineWebView {
     var allowsBackForwardNavigationGestures: Bool { get set }
     var allowsLinkPreview: Bool { get set }
     var backgroundColor: UIColor? { get set }
+    var interactionState: Any? { get set }
     var url: URL? { get }
 
     @available(iOS 16.4, *)
@@ -101,9 +102,9 @@ extension WKEngineWebView {
 
     func replaceLocation(with url: URL) {
         let charactersToReplace = CharacterSet(charactersIn: "'")
-        guard let safeUrl = url.absoluteString.addingPercentEncoding(withAllowedCharacters: charactersToReplace.inverted) else {
-            return
-        }
+        guard let safeUrl = url.absoluteString
+            .addingPercentEncoding(withAllowedCharacters: charactersToReplace.inverted) else { return }
+
         evaluateJavascriptInDefaultContentWorld("location.replace('\(safeUrl)')")
     }
 }

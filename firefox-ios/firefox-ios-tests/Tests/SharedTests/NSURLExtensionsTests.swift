@@ -88,13 +88,13 @@ class NSURLExtensionsTests: XCTestCase {
         let goodurls = [
             "\(InternalURL.baseUrl)/sessionrestore?url=\(InternalURL.baseUrl)/about/home%23panel%3D1",
             "\(InternalURL.baseUrl)/about/home#panel=0"
-            ]
+        ]
         let badurls = [
             "http://google.com",
             "http://localhost:\(AppInfo.webserverPort)/sessionrestore.html",
             "http://localhost:\(AppInfo.webserverPort)/errors/error.html?url=http%3A//mozilla.com",
             "http://localhost:\(AppInfo.webserverPort)/errors/error.html?url=http%3A//mozilla.com/about/home/%23panel%3D1",
-            ]
+        ]
 
         checkUrls(goodurls: goodurls, badurls: badurls, checker: { url in
             return url.isAboutHomeURL
@@ -106,12 +106,13 @@ class NSURLExtensionsTests: XCTestCase {
             "\(InternalURL.baseUrl)/about/home#panel=0",
             "\(InternalURL.baseUrl)/about/license"
         ]
+
         let badurls = [
             "http://google.com",
             "http://localhost:\(AppInfo.webserverPort)/sessionrestore.html",
             "http://localhost:\(AppInfo.webserverPort)/errors/error.html?url=http%3A//mozilla.com",
             "http://localhost:\(AppInfo.webserverPort)/errors/error.html?url=http%3A//mozilla.com/about/home/%23panel%3D1",
-            ]
+        ]
 
         checkUrls(goodurls: goodurls, badurls: badurls, checker: { url in
             return url.isAboutURL
@@ -169,7 +170,12 @@ class NSURLExtensionsTests: XCTestCase {
             ("https://www.example.com/noauth", "https://www.example.com/noauth")
         ]
 
-        goodurls.forEach { XCTAssertEqual(URL(string: $0.0)!.havingRemovedAuthorisationComponents().absoluteString, $0.1) }
+        goodurls.forEach {
+            XCTAssertEqual(
+                URL(string: $0.0)!.havingRemovedAuthorisationComponents().absoluteString,
+                $0.1
+            )
+        }
     }
 
     func testschemeIsValid() {
@@ -205,7 +211,6 @@ class NSURLExtensionsTests: XCTestCase {
     }
 
     func testdisplayURL() {
-    // swiftlint:disable line_length
         let goodurls = [
             ("http://localhost:\(AppInfo.webserverPort)/reader-mode/page?url=https%3A%2F%2Fen%2Em%2Ewikipedia%2Eorg%2Fwiki%2F",
              "https://en.m.wikipedia.org/wiki/"),
@@ -225,7 +230,6 @@ class NSURLExtensionsTests: XCTestCase {
 
         goodurls.forEach { XCTAssertEqual(URL(string: $0.0)!.displayURL?.absoluteString, $0.1) }
         badurls.forEach { XCTAssertNil(URL(string: $0)!.displayURL) }
-    // swiftlint:enable line_length
     }
 
     func testorigin() {
@@ -264,7 +268,13 @@ class NSURLExtensionsTests: XCTestCase {
 
         // make sure the new url has all the right params.
         let newURLParams = newURL.getQuery()
-        params.forEach { XCTAssertEqual(newURLParams[$0], $1, "The values in params should be the same in newURLParams") }
+        params.forEach {
+            XCTAssertEqual(
+                newURLParams[$0],
+                $1,
+                "The values in params should be the same in newURLParams"
+            )
+        }
     }
 
     func testWithQueryParam() {
@@ -290,7 +300,11 @@ class NSURLExtensionsTests: XCTestCase {
             let url = URL(string: u)!
 
             let original = url.absoluteDisplayString
-            let matches = detector.matches(in: original, options: [], range: NSRange(location: 0, length: original.count))
+            let matches = detector.matches(
+                in: original,
+                options: [],
+                range: NSRange(location: 0, length: original.count)
+            )
             guard !matches.isEmpty else {
                 continue
             }
@@ -298,7 +312,11 @@ class NSURLExtensionsTests: XCTestCase {
             let modified = url.absoluteDisplayExternalString
             XCTAssertNotEqual(original, modified)
 
-            let newMatches = detector.matches(in: modified, options: [], range: NSRange(location: 0, length: modified.count))
+            let newMatches = detector.matches(
+                in: modified,
+                options: [],
+                range: NSRange(location: 0, length: modified.count)
+            )
 
             XCTAssertEqual(0, newMatches.count, "\(modified) is not a valid URL")
         }

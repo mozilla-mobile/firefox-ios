@@ -48,7 +48,12 @@ class LegacyInactiveTabCell: UICollectionViewCell, ReusableCell, ThemeApplicable
         tableView.allowsMultipleSelectionDuringEditing = false
         tableView.sectionHeaderHeight = 0
         tableView.sectionFooterHeight = 0
-        tableView.tableHeaderView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 0, height: CGFloat.leastNormalMagnitude)))
+        tableView.tableHeaderView = UIView(
+            frame: CGRect(
+                origin: .zero,
+                size: CGSize(width: 0, height: CGFloat.leastNormalMagnitude)
+            )
+        )
         tableView.separatorStyle = .none
         tableView.separatorColor = .clear
         tableView.isScrollEnabled = false
@@ -218,7 +223,9 @@ extension LegacyInactiveTabCell: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         switch InactiveTabSection(rawValue: section) {
         case .inactive, .none:
-            guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: LegacyInactiveTabHeader.cellIdentifier) as? LegacyInactiveTabHeader else { return nil }
+            guard let headerView = tableView.dequeueReusableHeaderFooterView(
+                withIdentifier: LegacyInactiveTabHeader.cellIdentifier
+            ) as? LegacyInactiveTabHeader else { return nil }
             headerView.state = hasExpanded ? .down : .trailing
             headerView.title = String.TabsTrayInactiveTabsSectionTitle
             headerView.accessibilityLabel = hasExpanded ?
@@ -242,7 +249,10 @@ extension LegacyInactiveTabCell: UITableViewDataSource, UITableViewDelegate {
         }
     }
 
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+    func tableView(
+        _ tableView: UITableView,
+        editingStyleForRowAt indexPath: IndexPath
+    ) -> UITableViewCell.EditingStyle {
         let section = indexPath.section
         switch InactiveTabSection(rawValue: section) {
         case .inactive:

@@ -2,6 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+// Disabling `line_length` for this whole file because it is going to get refactored/replaced soon.
+// swiftlint:disable line_length
 import Common
 import Glean
 import Shared
@@ -675,6 +677,7 @@ extension TelemetryWrapper {
         case searchSuggestion = "search-suggestion"
         case searchHighlights = "search-highlights"
         case shoppingCFRsDisplayed = "shopping-cfrs-displayed"
+        case surfaceAdsClicked = "surface-ads-clicked"
         case shoppingAdsExposure = "shopping-ads-exposure"
         case shoppingAdsImpression = "shopping-ads-impression"
         case shoppingNoAdsAvailable = "shopping-no-ads-available"
@@ -1179,6 +1182,8 @@ extension TelemetryWrapper {
             }
 
         // MARK: Shopping Experience (Fakespot)
+        case (.action, .view, .shoppingBottomSheet, .surfaceAdsClicked, _):
+            GleanMetrics.Shopping.surfaceAdsClicked.record()
         case (.action, .tap, .shoppingButton, _, _):
             GleanMetrics.Shopping.addressBarIconClicked.record()
         case (.action, .view, .shoppingBottomSheet, .shoppingAdsExposure, _):
@@ -1976,3 +1981,5 @@ extension TelemetryWrapper {
         return [TelemetryWrapper.EventExtraKey.fxHomepageOrigin.rawValue: origin.rawValue]
     }
 }
+
+// swiftlint:enable line_length

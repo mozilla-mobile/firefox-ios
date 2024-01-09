@@ -51,7 +51,9 @@ class TestBrowserDB: XCTestCase {
 
     func testUpgradeV33toV34RemovesLongURLs() {
         let db = BrowserDB(filename: "v33.db", schema: BrowserSchema(), files: SupportingFiles())
-        let results = db.runQuery("SELECT bmkUri, title FROM bookmarksLocal WHERE type = 1", args: nil, factory: { row in
+        let results = db.runQuery("SELECT bmkUri, title FROM bookmarksLocal WHERE type = 1",
+                                  args: nil,
+                                  factory: { row in
             (row[0] as! String, row[1] as! String)
         }).value.successValue!
 
@@ -86,7 +88,12 @@ class TestBrowserDB: XCTestCase {
 
         let center = NotificationCenter.default
         let listener = MockListener()
-        center.addObserver(listener, selector: #selector(MockListener.onDatabaseWasRecreated), name: .DatabaseWasRecreated, object: nil)
+        center.addObserver(
+            listener,
+            selector: #selector(MockListener.onDatabaseWasRecreated),
+            name: .DatabaseWasRecreated,
+            object: nil
+        )
         defer { center.removeObserver(listener) }
 
         // It'll still fail, but it moved our old DB.
@@ -95,7 +102,8 @@ class TestBrowserDB: XCTestCase {
         db.forceClose()
 
         db = BrowserDB(filename: "foo.db", schema: MockFailingSchema(), files: self.files)
-        db.run("CREATE TABLE foo (bar TEXT)").failed() // This won't actually write since we'll get a failed connection
+        // This won't actually write since we'll get a failed connection
+        db.run("CREATE TABLE foo (bar TEXT)").failed()
         db = BrowserDB(filename: "foo.db", schema: BrowserSchema(), files: self.files)
         db.run("CREATE TABLE foo (bar TEXT)").succeeded() // Just so we have writes in the WAL.
 
@@ -127,7 +135,10 @@ class TestBrowserDB: XCTestCase {
         _ = db.withConnection { connection -> Void in
             for i in 0..<1000 {
                 let args: Args = ["bar \(i)"]
-                try connection.executeChange("INSERT INTO foo (bar) VALUES (?)", withArgs: args)
+                try connection.executeChange(
+                    "INSERT INTO foo (bar) VALUES (?)",
+                    withArgs: args
+                )
             }
         }
 
@@ -138,7 +149,11 @@ class TestBrowserDB: XCTestCase {
             return result
         }
 
-        let shortConcurrentQuery = db.runQueryConcurrently("SELECT * FROM foo LIMIT 1", args: nil, factory: fooBarFactory)
+        let shortConcurrentQuery = db.runQueryConcurrently(
+            "SELECT * FROM foo LIMIT 1",
+            args: nil,
+            factory: fooBarFactory
+        )
 
         _ = shortConcurrentQuery.bind { result -> Deferred<Maybe<[[String: Any]]>> in
             if let results = result.successValue?.asArray() {
@@ -156,7 +171,12 @@ class TestBrowserDB: XCTestCase {
 
     func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #file, line: UInt = #line) {
         addTeardownBlock { [weak instance] in
-            XCTAssertNil(instance, "Instance should have been deallocated, potential memory leak.", file: file, line: line)
+            XCTAssertNil(
+                instance,
+                "Instance should have been deallocated, potential memory leak.",
+                file: file,
+                line: line
+            )
         }
     }
 }

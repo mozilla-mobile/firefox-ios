@@ -89,10 +89,12 @@ class TabMetadataManagerTests: XCTestCase {
         let referralURL = "https://www.developer.org/ref"
         let title = "updated title"
 
-        manager.tabGroupData = LegacyTabGroupData(searchTerm: "",
-                                                  searchUrl: stringUrl,
-                                                  nextReferralUrl: referralURL,
-                                                  tabHistoryCurrentState: LegacyTabGroupTimerState.tabNavigatedToDifferentUrl.rawValue)
+        manager.tabGroupData = LegacyTabGroupData(
+            searchTerm: "",
+            searchUrl: stringUrl,
+            nextReferralUrl: referralURL,
+            tabHistoryCurrentState: LegacyTabGroupTimerState.tabNavigatedToDifferentUrl.rawValue
+        )
 
         manager.updateObservationTitle(title) {
             XCTAssertEqual(self.metadataObserver.observation?.url, stringUrl)
@@ -106,10 +108,12 @@ class TabMetadataManagerTests: XCTestCase {
         let referralURL = "https://www.developer.org/ref"
         let title = "updated title"
 
-        manager.tabGroupData = LegacyTabGroupData(searchTerm: "",
-                                                  searchUrl: stringUrl,
-                                                  nextReferralUrl: referralURL,
-                                                  tabHistoryCurrentState: LegacyTabGroupTimerState.openInNewTab.rawValue)
+        manager.tabGroupData = LegacyTabGroupData(
+            searchTerm: "",
+            searchUrl: stringUrl,
+            nextReferralUrl: referralURL,
+            tabHistoryCurrentState: LegacyTabGroupTimerState.openInNewTab.rawValue
+        )
 
         // Title should not be updated for this state
         manager.updateObservationTitle(title) {

@@ -68,7 +68,10 @@ class StringExtensionsTests: XCTestCase {
     func testBoldInRange() {
         let font = UIFont.preferredFont(forTextStyle: .body)
         let text = "abcdefbcde"
-        let attributedText = text.attributedText(boldIn: text.index(text.endIndex, offsetBy: -4)..<text.endIndex, font: font)
+        let attributedText = text.attributedText(
+            boldIn: text.index(text.endIndex, offsetBy: -4)..<text.endIndex,
+            font: font
+        )
         var effectiveRange = NSRange()
 
         XCTAssertEqual(attributedText.attribute(.font, at: 0, effectiveRange: &effectiveRange) as? UIFont, font)
@@ -113,15 +116,19 @@ class StringExtensionsTests: XCTestCase {
 
     func testMatchRegex_withMultipleMatches() {
         let expectedResult = "123" // Only the first match is returned
-        let result = try? getResultFrom(inputString: "https://www.example.com/product/123/item/product/456/item",
-                                        andRegex: "\\/product\\/(\\d+)\\/item")
+        let result = try? getResultFrom(
+            inputString: "https://www.example.com/product/123/item/product/456/item",
+            andRegex: "\\/product\\/(\\d+)\\/item"
+        )
         XCTAssertEqual(result, expectedResult)
     }
 
     func testMatchRegex_withCaptureGroupAtDifferentIndex() {
         let expectedResult = "123"
-        let result = try? getResultFrom(inputString: "https://www.example.com/product/123/item",
-                                        andRegex: "\\/product\\/(\\d+)(\\/item)")
+        let result = try? getResultFrom(
+            inputString: "https://www.example.com/product/123/item",
+            andRegex: "\\/product\\/(\\d+)(\\/item)"
+        )
         XCTAssertEqual(result, expectedResult)
     }
 }

@@ -53,6 +53,19 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
         XCTAssertTrue(result)
     }
 
+    func test_shouldPresentDataClearanceHint() {
+        let result = subject.canPresent(.dataClearance)
+        XCTAssertTrue(result)
+    }
+
+    func test_shouldPresentDataClearanceHint_WithiPad() {
+        subject = ContextualHintEligibilityUtility(with: profile,
+                                                   overlayState: nil,
+                                                   device: MockUIDevice(isIpad: true))
+        let result = subject.canPresent(.dataClearance)
+        XCTAssertTrue(result)
+    }
+
     // MARK: Jump Back in and Synced tabs
     func test_shouldPresentJumpBackHint() {
         subject = ContextualHintEligibilityUtility(with: profile,
@@ -135,6 +148,13 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
         profile.prefs.setBool(true, forKey: CFRPrefsKeys.inactiveTabsKey.rawValue)
 
         let result = subject.canPresent(.inactiveTabs)
+        XCTAssertFalse(result)
+    }
+
+    func test_shouldNotPresentDataClearanceHint() {
+        profile.prefs.setBool(true, forKey: CFRPrefsKeys.dataClearanceKey.rawValue)
+
+        let result = subject.canPresent(.dataClearance)
         XCTAssertFalse(result)
     }
 

@@ -36,8 +36,10 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     func testWebViewDidReceiveChallenge_MethodServerTrust() {
         tabManagerDelegate.insert(subject)
 
-        tabManagerDelegate.webView(anyWebView(),
-                                   didReceive: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodServerTrust")) { disposition, credential in
+        tabManagerDelegate.webView(
+            anyWebView(),
+            didReceive: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodServerTrust")
+        ) { disposition, credential in
             XCTAssertEqual(disposition, .performDefaultHandling)
             XCTAssertNil(credential)
         }
@@ -46,8 +48,10 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     func testWebViewDidReceiveChallenge_MethodHTTPDigest() {
         tabManagerDelegate.insert(subject)
 
-        tabManagerDelegate.webView(anyWebView(),
-                                   didReceive: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodHTTPDigest")) { disposition, credential in
+        tabManagerDelegate.webView(
+            anyWebView(),
+            didReceive: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodHTTPDigest")
+        ) { disposition, credential in
             XCTAssertEqual(disposition, .performDefaultHandling)
             XCTAssertNil(credential)
         }
@@ -56,8 +60,10 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     func testWebViewDidReceiveChallenge_MethodHTTPNTLM() {
         tabManagerDelegate.insert(subject)
 
-        tabManagerDelegate.webView(anyWebView(),
-                                   didReceive: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodNTLM")) { disposition, credential in
+        tabManagerDelegate.webView(
+            anyWebView(),
+            didReceive: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodNTLM")
+        ) { disposition, credential in
             XCTAssertEqual(disposition, .performDefaultHandling)
             XCTAssertNil(credential)
         }
@@ -66,8 +72,10 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     func testWebViewDidReceiveChallenge_MethodHTTPBasic() {
         tabManagerDelegate.insert(subject)
 
-        tabManagerDelegate.webView(anyWebView(),
-                                   didReceive: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodHTTPBasic")) { disposition, credential in
+        tabManagerDelegate.webView(
+            anyWebView(),
+            didReceive: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodHTTPBasic")
+        ) { disposition, credential in
             XCTAssertEqual(disposition, .performDefaultHandling)
             XCTAssertNil(credential)
         }

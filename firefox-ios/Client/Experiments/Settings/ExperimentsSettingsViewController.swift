@@ -29,10 +29,26 @@ class ExperimentsSettingsViewController: UIViewController {
         super.viewDidLoad()
 
         experimentsView.customExperimentDataTextView.delegate = self
-        experimentsView.customRemoteSettingsTextField.addTarget(self, action: #selector(updateState), for: .editingChanged)
-        experimentsView.reloadButton.addTarget(self, action: #selector(loadRemoteExperiments), for: .touchUpInside)
-        experimentsView.updateButton.addTarget(self, action: #selector(tappedUpdate), for: .touchUpInside)
-        experimentsView.usePreviewToggle.addTarget(self, action: #selector(usePreviewToggleTapped), for: .valueChanged)
+        experimentsView.customRemoteSettingsTextField.addTarget(
+            self,
+            action: #selector(updateState),
+            for: .editingChanged
+        )
+        experimentsView.reloadButton.addTarget(
+            self,
+            action: #selector(loadRemoteExperiments),
+            for: .touchUpInside
+        )
+        experimentsView.updateButton.addTarget(
+            self,
+            action: #selector(tappedUpdate),
+            for: .touchUpInside
+        )
+        experimentsView.usePreviewToggle.addTarget(
+            self,
+            action: #selector(usePreviewToggleTapped),
+            for: .valueChanged
+        )
         updateState()
     }
 

@@ -18,8 +18,12 @@ class TabsSetting: Setting {
     init(theme: Theme,
          settingsDelegate: GeneralSettingsDelegate?) {
         self.settingsDelegate = settingsDelegate
-        super.init(title: NSAttributedString(string: .Settings.SectionTitles.TabsTitle,
-                                             attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]))
+        super.init(
+            title: NSAttributedString(
+                string: .Settings.SectionTitles.TabsTitle,
+                attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
+            )
+        )
     }
 
     override func onClick(_ navigationController: UINavigationController?) {

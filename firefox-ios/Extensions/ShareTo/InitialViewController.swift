@@ -52,8 +52,16 @@ class InitialViewController: UIViewController {
         self.getShareItem { shareItem in
             DispatchQueue.main.async {
                 guard let shareItem = shareItem else {
-                    let alert = UIAlertController(title: .SendToErrorTitle, message: .SendToErrorMessage, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: .SendToErrorOKButton, style: .default) { _ in self.finish(afterDelay: 0) })
+                    let alert = UIAlertController(
+                        title: .SendToErrorTitle,
+                        message: .SendToErrorMessage,
+                        preferredStyle: .alert
+                    )
+                    alert.addAction(UIAlertAction(
+                        title: .SendToErrorOKButton,
+                        style: .default
+                    ) { _ in self.finish(afterDelay: 0)
+                    })
                     self.present(alert, animated: true, completion: nil)
                     return
                 }
@@ -64,7 +72,11 @@ class InitialViewController: UIViewController {
                 shareController.shareItem = shareItem
                 self.shareViewController = shareController
 
-                self.embedController = EmbeddedNavController(isSearchMode: !shareItem.isUrlType(), parent: self, rootViewController: shareController)
+                self.embedController = EmbeddedNavController(
+                    isSearchMode: !shareItem.isUrlType(),
+                    parent: self,
+                    rootViewController: shareController
+                )
             }
         }
     }
@@ -91,14 +103,18 @@ class InitialViewController: UIViewController {
         }
     }
 
-    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+    override func willTransition(
+        to newCollection: UITraitCollection,
+        with coordinator: UIViewControllerTransitionCoordinator
+    ) {
         guard let embedController = embedController, let shareViewController = shareViewController else { return }
         coordinator.animate(alongsideTransition: { _ in
             embedController.layout(forTraitCollection: newCollection)
             shareViewController.layout(forTraitCollection: newCollection)
         }) { _ in
-            // There is a layout change propagation bug for this view setup (i.e. container view controller that is a UINavigationViewController).
-            // This is the only way to force UINavigationBar to perform a layout. Without this, the layout is for the previous size class.
+            // There is a layout change propagation bug for this view setup (i.e. container view controller
+            // that is a UINavigationViewController). This is the only way to force UINavigationBar
+            // to perform a layout. Without this, the layout is for the previous size class.
             embedController.navigationController.isNavigationBarHidden = true
             embedController.navigationController.isNavigationBarHidden = false
         }
@@ -122,8 +138,8 @@ extension InitialViewController: ShareControllerDelegate {
         return extensionContext
     }
 
-    // At startup, the extension may show an alert that it can't share. In this case for a better UI, rather than showing
-    // 2 popup dialogs (the main one and then the alert), just show the alert.
+    // At startup, the extension may show an alert that it can't share. In this case for a better UI,
+    // rather than showing 2 popup dialogs (the main one and then the alert), just show the alert.
     func hidePopupWhenShowingAlert() {
         embedController?.navigationController.view.alpha = 0
     }

@@ -97,7 +97,13 @@ public class RustRemoteTabs {
                 let records = storage.getAll()
                 deferred.fill(Maybe(success: records))
             } else {
-                deferred.fill(Maybe(failure: TabsApiError.UnexpectedTabsError(reason: "Unknown error when getting all Rust Tabs") as MaybeErrorType))
+                deferred.fill(
+                    Maybe(
+                        failure: TabsApiError.UnexpectedTabsError(
+                            reason: "Unknown error when getting all Rust Tabs"
+                        ) as MaybeErrorType
+                    )
+                )
             }
         }
 
@@ -166,16 +172,30 @@ public class RustRemoteTabs {
 public extension RemoteTabRecord {
     func toRemoteTab(client: RemoteClient) -> RemoteTab? {
         guard let url = Foundation.URL(string: self.urlHistory[0], invalidCharacters: false) else { return nil }
-        let history = self.urlHistory[1...].map { url in Foundation.URL(string: url, invalidCharacters: false) }.compactMap { $0 }
+        let history = self.urlHistory[1...].map { url in
+            Foundation.URL(
+                string: url,
+                invalidCharacters: false
+            )
+        }.compactMap { $0 }
         let icon = self.icon != nil ? Foundation.URL(fileURLWithPath: self.icon ?? "") : nil
 
-        return RemoteTab(clientGUID: client.guid, URL: url, title: self.title, history: history, lastUsed: Timestamp(self.lastUsed), icon: icon)
+        return RemoteTab(
+            clientGUID: client.guid,
+            URL: url,
+            title: self.title,
+            history: history,
+            lastUsed: Timestamp(self.lastUsed),
+            icon: icon
+        )
     }
 }
 
 public extension ClientRemoteTabs {
     func toClientAndTabs(client: RemoteClient) -> ClientAndTabs {
-        return ClientAndTabs(client: client, tabs: self.remoteTabs.map { $0.toRemoteTab(client: client) }.compactMap { $0 })
+        return ClientAndTabs(
+            client: client,
+            tabs: self.remoteTabs.map { $0.toRemoteTab(client: client) }.compactMap { $0 })
     }
 
     func toClientAndTabs() -> ClientAndTabs {
