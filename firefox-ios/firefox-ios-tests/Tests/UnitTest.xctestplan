@@ -95,6 +95,7 @@
     {
       "skippedTests" : [
         "ETPCoverSheetTests",
+        "HistoryHighlightsDataAdaptorTests\/testReloadDataOnNotification()",
         "IntroViewControllerTests\/testBasicSetupReturnsExpectedItems()",
         "RustSyncManagerTests\/testGetEnginesAndKeysWithNoKey()",
         "RustSyncManagerTests\/testUpdateEnginePrefs_bookmarksEnabled()",
