@@ -64,13 +64,24 @@ class SearchViewControllerTest: XCTestCase {
         profile.prefs.setBool(false, forKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions )
         profile.prefs.setBool(false, forKey: PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions)
         await searchViewController.loadFirefoxSuggestions()?.value
-
         XCTAssertEqual(searchViewController.firefoxSuggestions.count, 0)
     }
 
-    func testFilteredHistoryAndBookmarks() {
-        XCTAssertTrue(searchViewController.containsQueryParameters(searchParamString: "a=b", url: URL(string: "http://example.com?a=b")!))
-        XCTAssertFalse(searchViewController.containsQueryParameters(searchParamString: "c=d", url: URL(string: "http://example.com?a=b")!))
-        XCTAssertFalse(searchViewController.containsQueryParameters(searchParamString: "a=b", url: URL(string: "http://example.com?ba=b")!))
+    func testFirefoxSuggestionsAreFilteredWhenShowSponsoredSuggestionsIsTrue() {
+        profile.prefs.setBool(true, forKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions)
+        let data = ArrayCursor<Site>(data: [ Site(url: "https://example.com?mfadid=adm", title: "Test1"),
+                                             Site(url: "https://example.com", title: "Test2"),
+                                             Site(url: "https://example.com?a=b&c=d", title: "Test3")])
+        searchViewController.loader(dataLoaded: data)
+        XCTAssertEqual(searchViewController.data.count, 2)
+    }
+
+    func testFirefoxSuggestionsAreNotFilteredWhenShowSponsoredSuggestionsIsFalse() {
+        profile.prefs.setBool(false, forKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions)
+        let data = ArrayCursor<Site>(data: [ Site(url: "https://example.com?mfadid=adm", title: "Test1"),
+                                             Site(url: "https://example.com", title: "Test2"),
+                                             Site(url: "https://example.com?a=b&c=d", title: "Test3")])
+        searchViewController.loader(dataLoaded: data)
+        XCTAssertEqual(searchViewController.data.count, 3)
     }
 }
