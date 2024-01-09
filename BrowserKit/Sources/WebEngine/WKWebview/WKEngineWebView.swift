@@ -21,6 +21,7 @@ protocol WKEngineWebView {
     var interactionState: Any? { get set }
     var url: URL? { get }
     var scrollView: UIScrollView { get }
+    var configuration: WKWebViewConfiguration { get }
 
     @available(iOS 16.4, *)
     var isInspectable: Bool { get set }

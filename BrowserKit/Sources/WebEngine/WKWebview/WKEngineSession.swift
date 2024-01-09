@@ -12,7 +12,8 @@ class WKEngineSession: NSObject, EngineSession {
     private var logger: Logger
     private var sessionData: WKEngineSessionData
 
-    init?(configurationProvider: WKEngineConfigurationProvider = DefaultWKEngineConfigurationProvider(),
+    init?(userScriptManager: WKUserScriptManager,
+          configurationProvider: WKEngineConfigurationProvider = DefaultWKEngineConfigurationProvider(),
           webViewProvider: WKWebViewProvider = DefaultWKWebViewProvider(),
           logger: Logger = DefaultLogger.shared,
           sessionData: WKEngineSessionData = WKEngineSessionData()) {
@@ -33,8 +34,7 @@ class WKEngineSession: NSObject, EngineSession {
         // TODO: FXIOS-8106 Add UI delegate
 //        webView.uiDelegate = self
 
-        // TODO: FXIOS-7900 #17645 Handle WKEngineSession scripts
-//        UserScriptManager.shared.injectUserScriptsIntoWebView(webView, nightMode: nightMode, noImageMode: noImageMode)
+        userScriptManager.injectUserScriptsIntoWebView(webView)
 
         // TODO: FXIOS-7901 #17646 Handle WKEngineSession tabDelegate
 //        tabDelegate?.tab(self, didCreateWebView: webView)
@@ -117,8 +117,7 @@ class WKEngineSession: NSObject, EngineSession {
     }
 
     func close() {
-        // TODO: FXIOS-7900 #17645 Handle WKEngineSession scripts
-//        contentScriptManager.uninstall(tab: self)
+        contentScriptManager.uninstall(tab: self)
         webView.removeAllUserScripts()
         removeObservers()
 
