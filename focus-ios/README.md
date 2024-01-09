@@ -19,7 +19,7 @@ We also tag recommended bugs for contributions with [help wanted](https://github
 Main Branch
 ----------------
 
-This branch works with Xcode 15.1 and supports iOS 13.0 and newer.
+This branch works with Xcode 15.2 and supports iOS 13.0 and newer.
 
 Pull requests should be submitted with `main` as the base branch.
 
