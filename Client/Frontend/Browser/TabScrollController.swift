@@ -302,19 +302,12 @@ private extension TabScrollingController {
                                     alpha: CGFloat,
                                     completion: ((_ finished: Bool) -> Void)?) {
         guard let scrollView = scrollView else { return }
-<<<<<<< HEAD:Client/Frontend/Browser/TabScrollController.swift
         let initialContentOffset = scrollView.contentOffset
 
         // If this function is used to fully animate the toolbar from hidden to shown, keep the page from scrolling by adjusting contentOffset,
         // Otherwise when the toolbar is hidden and a link navigated, showing the toolbar will scroll the page and
         // produce a ~50px page jumping effect in response to tap navigations.
-=======
         contentOffsetBeforeAnimation = scrollView.contentOffset
-
-        // If this function is used to fully animate the toolbar from hidden to shown, keep the page from scrolling
-        // by adjusting contentOffset, otherwise when the toolbar is hidden and a link navigated, showing the toolbar
-        // will scroll the page and produce a ~50px page jumping effect in response to tap navigations.
->>>>>>> e9210c520 (Bugfix FXIOS-7497 [v121] Fix scroll bug (#18048)):firefox-ios/Client/Frontend/Browser/TabScrollController.swift
         let isShownFromHidden = headerTopOffset == -topScrollHeight && headerOffset == 0
 
         let animation: () -> Void = {
