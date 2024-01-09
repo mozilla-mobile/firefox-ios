@@ -295,45 +295,45 @@ class HomePageSettingsUITests: BaseTestCase {
     // Smoketest
     // FXIOS-8107: Disabled test as history highlights has been disabled to fix app hangs / slowness
     // Reloads for notification
-    func testRecentlyVisited() {
-        navigator.openURL(websiteUrl1)
-        waitUntilPageLoad()
-        navigator.performAction(Action.GoToHomePage)
-        mozWaitForElementToExist(
-            app.scrollViews
-                .cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell]
-                .staticTexts[urlMozillaLabel]
-        )
-        navigator.goto(HomeSettings)
-        navigator.performAction(Action.ToggleRecentlyVisited)
-
-        // On iPad we have the homepage button always present,
-        // on iPhone we have the search button instead when we're on a new tab page
-        if !iPad() {
-            navigator.performAction(Action.ClickSearchButton)
-        } else {
-            navigator.performAction(Action.GoToHomePage)
-        }
-
-        XCTAssertFalse(
-            app.scrollViews
-                .cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell]
-                .staticTexts[urlMozillaLabel].exists
-        )
-        if !iPad() {
-            mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: 3)
-            navigator.performAction(Action.CloseURLBarOpen)
-        }
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(HomeSettings)
-        navigator.performAction(Action.ToggleRecentlyVisited)
-        navigator.nowAt(HomeSettings)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        XCTAssert(
-            app.scrollViews
-                .cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell]
-                .staticTexts[urlMozillaLabel].exists
-        )
+//    func testRecentlyVisited() {
+//        navigator.openURL(websiteUrl1)
+//        waitUntilPageLoad()
+//        navigator.performAction(Action.GoToHomePage)
+//        mozWaitForElementToExist(
+//            app.scrollViews
+//                .cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell]
+//                .staticTexts[urlMozillaLabel]
+//        )
+//        navigator.goto(HomeSettings)
+//        navigator.performAction(Action.ToggleRecentlyVisited)
+//
+//        // On iPad we have the homepage button always present,
+//        // on iPhone we have the search button instead when we're on a new tab page
+//        if !iPad() {
+//            navigator.performAction(Action.ClickSearchButton)
+//        } else {
+//            navigator.performAction(Action.GoToHomePage)
+//        }
+//
+//        XCTAssertFalse(
+//            app.scrollViews
+//                .cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell]
+//                .staticTexts[urlMozillaLabel].exists
+//        )
+//        if !iPad() {
+//            mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: 3)
+//            navigator.performAction(Action.CloseURLBarOpen)
+//        }
+//        navigator.nowAt(NewTabScreen)
+//        navigator.goto(HomeSettings)
+//        navigator.performAction(Action.ToggleRecentlyVisited)
+//        navigator.nowAt(HomeSettings)
+//        navigator.performAction(Action.OpenNewTabFromTabTray)
+//        XCTAssert(
+//            app.scrollViews
+//                .cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell]
+//                .staticTexts[urlMozillaLabel].exists
+//        )
 
         // swiftlint:disable line_length
 //        Disabled due to https://github.com/mozilla-mobile/firefox-ios/issues/11271
@@ -345,7 +345,7 @@ class HomePageSettingsUITests: BaseTestCase {
 //        selectOptionFromContextMenu(option: "Remove")
 //        XCTAssertFalse(app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell].staticTexts["Mozilla , Pages: 2"].exists)
         // swiftlint:enable line_length
-    }
+//    }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306871
     // Smoketest
