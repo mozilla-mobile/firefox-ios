@@ -71,9 +71,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
 
         guard cfrsHaveBeenShown,
               hasEnoughThumbnailsToShow,
-              !userDefaults.bool(forKey: PrefsKeys.Wallpapers.OnboardingSeenKey),
-              featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet,
-                                            checking: .buildOnly)
+              !userDefaults.bool(forKey: PrefsKeys.Wallpapers.OnboardingSeenKey)
         else { return false }
 
         return true
