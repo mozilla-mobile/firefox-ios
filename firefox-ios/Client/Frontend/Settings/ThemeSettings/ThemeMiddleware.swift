@@ -68,8 +68,9 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
     }
 
     func toggleUsePrivateTheme(to state: Bool) {
-        themeManager.setSystemTheme(isOn: state)
+        themeManager.setPrivateTheme(isOn: state)
     }
+
     func toggleAutomaticBrightness(_ enabled: Bool) {
         legacyThemeManager.automaticBrightnessIsOn = enabled
         themeManager.setAutomaticBrightness(isOn: enabled)
