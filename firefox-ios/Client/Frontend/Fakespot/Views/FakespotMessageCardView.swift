@@ -131,10 +131,13 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
     private enum UX {
         static let linkFontSize: CGFloat = 12
         static let buttonFontSize: CGFloat = 16
+<<<<<<< HEAD
         static let progressViewFontSize: CGFloat = 15
         static let buttonVerticalInset: CGFloat = 12
         static let buttonHorizontalInset: CGFloat = 16
         static let buttonCornerRadius: CGFloat = 13
+=======
+>>>>>>> bfef0d9b7 (Fixed white space, implemented ViewModel, preserved fonts, removed redundant color assignments.)
         static let contentHorizontalSpacing: CGFloat = 4
         static let contentVerticalSpacing: CGFloat = 8
         static let iconStackViewSpacing: CGFloat = 4
@@ -197,7 +200,6 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
             withTextStyle: .caption1,
             size: UX.linkFontSize)
-        button.contentHorizontalAlignment = .leading
         button.addTarget(self, action: #selector(self.linkAction), for: .touchUpInside)
     }
 
@@ -205,13 +207,8 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
             withTextStyle: .callout,
             size: UX.buttonFontSize)
-        button.layer.cornerRadius = UX.buttonCornerRadius
         button.titleLabel?.textAlignment = .center
         button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
-        button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: UX.buttonVerticalInset,
-                                                                      leading: UX.buttonHorizontalInset,
-                                                                      bottom: UX.buttonVerticalInset,
-                                                                      trailing: UX.buttonHorizontalInset)
     }
 
     private var iconContainerHeightConstraint: NSLayoutConstraint?
@@ -282,8 +279,10 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         ])
 
         if let primaryActionText = viewModel.primaryActionText {
-            primaryButton.setTitle(primaryActionText, for: .normal)
-            primaryButton.accessibilityIdentifier = viewModel.a11yPrimaryActionIdentifier
+            let primaryButtonViewModel = PrimaryRoundedButtonViewModel(
+                    title: primaryActionText,
+                    a11yIdentifier: viewModel.a11yPrimaryActionIdentifier ?? "")
+            primaryButton.configure(viewModel: primaryButtonViewModel)
             if primaryButton.superview == nil {
                 containerStackView.addArrangedSubview(primaryButton)
             }
@@ -302,8 +301,12 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         }
 
         if let linkText = viewModel.linkText {
-            linkButton.setTitle(linkText, for: .normal)
-            linkButton.accessibilityIdentifier = viewModel.a11yLinkActionIdentifier
+            let linkButtonViewModel = LinkButtonViewModel(
+                title: linkText,
+                a11yIdentifier: viewModel.a11yLinkActionIdentifier ?? "",
+                fontSize: UX.linkFontSize,
+                contentHorizontalAlignment: .leading)
+            linkButton.configure(viewModel: linkButtonViewModel)
             if linkButton.superview == nil {
                 labelContainerStackView.addArrangedSubview(linkButton)
             }
@@ -379,11 +382,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         titleLabel.textColor = colors.textPrimary
         descriptionLabel.textColor  = colors.textPrimary
         iconContainerView.tintColor = colors.textPrimary
-
-        linkButton.setTitleColor(colors.textPrimary, for: .normal)
-        primaryButton.setTitleColor(type.primaryButtonTextColor(theme: theme), for: .normal)
-        primaryButton.backgroundColor = type.primaryButtonBackground(theme: theme)
-
+        containerStackView.backgroundColor = .clear
         cardView.applyTheme(theme: theme)
         linkButton.applyTheme(theme: theme)
         primaryButton.applyTheme(theme: theme)
