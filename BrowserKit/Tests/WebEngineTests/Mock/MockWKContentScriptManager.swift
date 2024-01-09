@@ -24,11 +24,11 @@ class MockWKContentScriptManager: NSObject, WKContentScriptManager {
         addContentScriptToPageCalled += 1
     }
 
-    func uninstall(session: WebEngine.WKEngineSession) {
+    func uninstall(session: WKEngineSession) {
         uninstallCalled += 1
     }
 
-    func userContentController(_ userContentController: WKUserContentController, 
+    func userContentController(_ userContentController: WKUserContentController,
                                didReceive message: WKScriptMessage) {
         userContentControllerCalled += 1
     }

@@ -9,7 +9,7 @@ import WebKit
 protocol WKContentScript {
     static func name() -> String
 
-    func scriptMessageHandlerNames() -> [String]?
+    func scriptMessageHandlerNames() -> [String]
 
     func userContentController(
         _ userContentController: WKUserContentController,

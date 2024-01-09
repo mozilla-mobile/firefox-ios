@@ -191,14 +191,15 @@ final class WKEngineSessionTests: XCTestCase {
 
     // MARK: Helper
 
-    func createSubject() -> WKEngineSession? {
+    func createSubject(file: StaticString = #file,
+                       line: UInt = #line) -> WKEngineSession? {
         guard let subject = WKEngineSession(userScriptManager: userScriptManager,
                                             configurationProvider: configurationProvider,
                                             webViewProvider: webViewProvider,
                                             contentScriptManager: contentScriptManager) else {
             return nil
         }
-        trackForMemoryLeaks(subject)
+        trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
 }

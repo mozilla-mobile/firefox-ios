@@ -19,7 +19,7 @@ protocol WKContentScriptManager: WKScriptMessageHandler {
 }
 
 class DefaultContentScriptManager: NSObject, WKContentScriptManager {
-    private var scripts = [String: WKContentScript]()
+    var scripts = [String: WKContentScript]()
 
     func addContentScript(_ script: WKContentScript,
                           name: String,
@@ -29,9 +29,8 @@ class DefaultContentScriptManager: NSObject, WKContentScriptManager {
 
         scripts[name] = script
 
-        // If this helper handles script messages, then get the handlers names and register them. The Browser
-        // receives all messages and then dispatches them to the right TabHelper.
-        script.scriptMessageHandlerNames()?.forEach { scriptMessageHandlerName in
+        // If this helper handles script messages, then get the handlers names and register them
+        script.scriptMessageHandlerNames().forEach { scriptMessageHandlerName in
             session.webView.configuration.userContentController.addInDefaultContentWorld(
                 scriptMessageHandler: self,
                 name: scriptMessageHandlerName
@@ -47,9 +46,8 @@ class DefaultContentScriptManager: NSObject, WKContentScriptManager {
 
         scripts[name] = script
 
-        // If this helper handles script messages, then get the handlers names and register them. The Browser
-        // receives all messages and then dispatches them to the right TabHelper.
-        script.scriptMessageHandlerNames()?.forEach { scriptMessageHandlerName in
+        // If this helper handles script messages, then get the handlers names and register them
+        script.scriptMessageHandlerNames().forEach { scriptMessageHandlerName in
             session.webView.configuration.userContentController.addInPageContentWorld(
                 scriptMessageHandler: self,
                 name: scriptMessageHandlerName
@@ -59,18 +57,15 @@ class DefaultContentScriptManager: NSObject, WKContentScriptManager {
 
     func userContentController(_ userContentController: WKUserContentController,
                                didReceive message: WKScriptMessage) {
-        for script in scripts.values {
-            if let scriptMessageHandlerNames = script.scriptMessageHandlerNames(),
-               scriptMessageHandlerNames.contains(message.name) {
-                script.userContentController(userContentController, didReceiveScriptMessage: message)
-                return
-            }
+        for script in scripts.values where script.scriptMessageHandlerNames().contains(message.name) {
+            script.userContentController(userContentController, didReceiveScriptMessage: message)
+            return
         }
     }
 
     func uninstall(session: WKEngineSession) {
         scripts.forEach { script in
-            script.value.scriptMessageHandlerNames()?.forEach { name in
+            script.value.scriptMessageHandlerNames().forEach { name in
                 session.webView.configuration.userContentController.removeScriptMessageHandler(forName: name)
             }
             script.value.prepareForDeinit()
