@@ -307,7 +307,6 @@ private extension TabScrollingController {
         // If this function is used to fully animate the toolbar from hidden to shown, keep the page from scrolling by adjusting contentOffset,
         // Otherwise when the toolbar is hidden and a link navigated, showing the toolbar will scroll the page and
         // produce a ~50px page jumping effect in response to tap navigations.
-        contentOffsetBeforeAnimation = scrollView.contentOffset
         let isShownFromHidden = headerTopOffset == -topScrollHeight && headerOffset == 0
 
         let animation: () -> Void = {
@@ -324,7 +323,6 @@ private extension TabScrollingController {
         }
 
         if animated {
-            isAnimatingToolbar = true
             UIView.animate(withDuration: duration,
                            delay: 0,
                            options: .allowUserInteraction,
