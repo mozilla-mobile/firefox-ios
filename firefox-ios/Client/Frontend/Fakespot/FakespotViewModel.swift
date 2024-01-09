@@ -460,7 +460,7 @@ class FakespotViewModel {
         AsyncThrowingStream<AnalysisStatus, Error> { continuation in
             Task {
                 do {
-                    var sleepDuration: UInt64 = NSEC_PER_SEC * 30
+                    let sleepDuration: UInt64 = NSEC_PER_SEC * 3
 
                     while true {
                         let result = try await shoppingProduct.getProductAnalysisStatus()
@@ -468,6 +468,12 @@ class FakespotViewModel {
                             continuation.finish()
                             break
                         }
+
+                        await MainActor.run {
+                            self.analysisProgressViewModel.analysisProgress = result.progress
+                            self.analysisProgressViewModel.analysisProgressChanged?(self.analysisProgressViewModel.analysisProgress)
+                        }
+
                         continuation.yield(result.status)
                         guard result.status.isAnalyzing == true else {
                             continuation.finish()
@@ -476,11 +482,6 @@ class FakespotViewModel {
 
                         // Sleep for the current duration
                         try await Task.sleep(nanoseconds: sleepDuration)
-
-                        // Decrease the sleep duration by 10 seconds (NSEC_PER_SEC * 10) on each iteration.
-                        if sleepDuration > NSEC_PER_SEC * 10 {
-                            sleepDuration -= NSEC_PER_SEC * 10
-                        }
                     }
                 } catch {
                     continuation.finish(throwing: error)

@@ -8,14 +8,13 @@ import UIKit
 import Shared
 import Redux
 
-class FakespotViewController:
-    UIViewController,
-    Themeable,
-    Notifiable,
-    UIAdaptivePresentationControllerDelegate,
-    UISheetPresentationControllerDelegate,
-    UIScrollViewDelegate,
-    StoreSubscriber {
+class FakespotViewController: UIViewController,
+                              Themeable,
+                              Notifiable,
+                              UIAdaptivePresentationControllerDelegate,
+                              UISheetPresentationControllerDelegate,
+                              UIScrollViewDelegate,
+                              StoreSubscriber {
     typealias SubscriberStateType = BrowserViewControllerState
 
     private struct UX {
