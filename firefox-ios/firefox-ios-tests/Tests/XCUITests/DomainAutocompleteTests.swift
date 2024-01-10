@@ -4,12 +4,25 @@
 
 import XCTest
 
-let website = ["url": "mozilla.org", "value": "mozilla.org", "subDomain": "https://www.mozilla.org/en-US/firefox/products"]
+let website = [
+    "url": "mozilla.org",
+    "value": "mozilla.org",
+    "subDomain": "https://www.mozilla.org/en-US/firefox/products"
+]
 
-let websiteExample = ["url": "www.example.com", "value": "www.example.com"]
+let websiteExample = [
+    "url": "www.example.com",
+    "value": "www.example.com"
+]
 
 class DomainAutocompleteTests: BaseTestCase {
-    let testWithDB = ["test1Autocomplete", "test3AutocompleteDeletingChars", "test5NoMatches", "testMixedCaseAutocompletion", "testDeletingCharsUpdateTheResults"]
+    let testWithDB = [
+        "test1Autocomplete",
+        "test3AutocompleteDeletingChars",
+        "test5NoMatches",
+        "testMixedCaseAutocompletion",
+        "testDeletingCharsUpdateTheResults"
+    ]
 
     // This DB contains 3 entries mozilla.com/github.com/git.es
     let historyDB = "browserAutocomplete-places.db"

@@ -62,8 +62,12 @@ class CreditCardsTests: BaseTestCase {
         app.buttons[creditCardsStaticTexts.EditCreditCard.removeCard].tap()
         // Validate the pop up displayed
         let removeThisCardAlert = app.alerts[creditCardsStaticTexts.EditCreditCard.removeThisCard]
-        let cancelButton = removeThisCardAlert.scrollViews.otherElements.buttons[creditCardsStaticTexts.EditCreditCard.cancel]
-        let removeButton = removeThisCardAlert.scrollViews.otherElements.buttons[creditCardsStaticTexts.EditCreditCard.remove]
+        let cancelButton = removeThisCardAlert.scrollViews.otherElements.buttons[
+            creditCardsStaticTexts.EditCreditCard.cancel
+        ]
+        let removeButton = removeThisCardAlert.scrollViews.otherElements.buttons[
+            creditCardsStaticTexts.EditCreditCard.remove
+        ]
         mozWaitForElementToExist(removeThisCardAlert)
         XCTAssertTrue(cancelButton.exists)
         XCTAssertTrue(removeButton.exists)

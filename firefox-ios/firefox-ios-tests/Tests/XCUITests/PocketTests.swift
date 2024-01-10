@@ -9,10 +9,16 @@ class PocketTests: BaseTestCase {
     func testPocketEnabledByDefault() {
         navigator.goto(NewTabScreen)
         mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket])
-        XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket].label, "Thought-Provoking Stories")
+        XCTAssertEqual(
+            app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket].label,
+            "Thought-Provoking Stories"
+        )
 
         // There should be at least 8 stories on iPhone and three on iPad
-        let numPocketStories = app.collectionViews.containing(.cell, identifier: AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell).children(matching: .cell).count-1
+        let numPocketStories = app.collectionViews.containing(
+            .cell,
+            identifier: AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell
+        ).children(matching: .cell).count-1
         XCTAssertTrue(numPocketStories > 7)
 
         // Disable Pocket

@@ -12,7 +12,11 @@ import Shared
 actor MockRustFirefoxSuggest: RustFirefoxSuggestActor {
     func ingest() async throws {
     }
-    func query(_ keyword: String, includeSponsored: Bool, includeNonSponsored: Bool) async throws -> [RustFirefoxSuggestion] {
+    func query(
+        _ keyword: String,
+        includeSponsored: Bool,
+        includeNonSponsored: Bool
+    ) async throws -> [RustFirefoxSuggestion] {
         return [RustFirefoxSuggestion(title: "Mozilla",
                                       url: URL(string: "https://mozilla.org")!,
                                       isSponsored: true,
@@ -51,6 +55,7 @@ class SearchViewControllerTest: XCTestCase {
             model: engines,
             tabManager: MockTabManager()
         )
+
         remoteClient = RemoteClient(
             guid: nil,
             name: "Fake client",

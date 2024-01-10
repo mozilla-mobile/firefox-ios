@@ -7,6 +7,9 @@
 /* Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered. */
 "CreditCard.Settings.EmptyListTitle.v112" = "Lagre kredittkort til %@";
 
+/* Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered. */
+"CreditCard.Settings.EmptyListTitle.v122" = "Lagre kort til %@";
+
 /* Accessibility label for a credit card list item in autofill settings screen. The first parameter is the credit card issuer (e.g. Visa). The second parameter is is the name of the credit card holder. The third parameter is the last 4 digits of the credit card. The fourth parameter is the card's expiration date. */
 "CreditCard.Settings.ListItemA11y.v118" = "%1$@, skrive ut til %2$@, sluttar på %3$@, går ut %4$@";
 
@@ -90,6 +93,9 @@
 
 /* Navigation title for search page in the Settings menu. */
 "Settings.Search.PageTitle.v121" = "Søk";
+
+/* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in the Private Session section in the Search page in the Settings menu. */
+"Settings.Search.PrivateSession.Setting.v122" = "Vis forslag i privat nettlesing";
 
 /* Title for the `Private Browsing` settings section in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Title.v122" = "Privat nettlesing";

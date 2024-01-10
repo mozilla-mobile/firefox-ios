@@ -12,7 +12,10 @@ struct SponsoredTileTelemetry {
     static let source = "newtab"
 
     static func sendImpressionTelemetry(tile: SponsoredTile, position: Int) {
-        let extra = GleanMetrics.TopSites.ContileImpressionExtra(position: Int32(position), source: SponsoredTileTelemetry.source)
+        let extra = GleanMetrics.TopSites.ContileImpressionExtra(
+            position: Int32(position),
+            source: SponsoredTileTelemetry.source
+        )
         GleanMetrics.TopSites.contileImpression.record(extra)
 
         GleanMetrics.TopSites.contileTileId.set(Int64(tile.tileId))
@@ -22,7 +25,10 @@ struct SponsoredTileTelemetry {
     }
 
     static func sendClickTelemetry(tile: SponsoredTile, position: Int) {
-        let extra = GleanMetrics.TopSites.ContileClickExtra(position: Int32(position), source: SponsoredTileTelemetry.source)
+        let extra = GleanMetrics.TopSites.ContileClickExtra(
+            position: Int32(position),
+            source: SponsoredTileTelemetry.source
+        )
         GleanMetrics.TopSites.contileClick.record(extra)
 
         GleanMetrics.TopSites.contileTileId.set(Int64(tile.tileId))

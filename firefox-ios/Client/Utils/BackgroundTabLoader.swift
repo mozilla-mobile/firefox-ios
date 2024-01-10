@@ -7,8 +7,9 @@ import Foundation
 import Storage
 import Shared
 
-/// `BackgroundTabLoader` loads tabs from users adding tabs to "Load in Background" via the share sheet. In other words, the `ShareViewController`
-/// adds the tab to the `Profile.TabQueue`, and the `BackgroundTabLoader` dequeues them to be added as tabs in the application.
+/// `BackgroundTabLoader` loads tabs from users adding tabs to "Load in Background" via the share sheet.
+/// In other words, the `ShareViewController` adds the tab to the `Profile.TabQueue`, and the
+/// `BackgroundTabLoader` dequeues them to be added as tabs in the application.
 protocol BackgroundTabLoader {
     /// Load the background tabs in the application using deeplinks
     func loadBackgroundTabs()

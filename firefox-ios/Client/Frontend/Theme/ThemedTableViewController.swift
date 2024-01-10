@@ -23,7 +23,10 @@ class ThemedTableViewController: UITableViewController, Themeable {
         super.init(style: style)
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(
+        _ tableView: UITableView,
+        cellForRowAt indexPath: IndexPath
+    ) -> UITableViewCell {
         dequeueCellFor(indexPath: indexPath)
     }
 
@@ -32,22 +35,35 @@ class ThemedTableViewController: UITableViewController, Themeable {
     /// This method could be overridden by subclasses, if subclasses of ThemedTableViewCell are needed to be dequeued.
     /// In order to deque subclasses of ThemedTableViewCell they must be registered in the table view.
     func dequeueCellFor(indexPath: IndexPath) -> ThemedTableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: ThemedTableViewCell.cellIdentifier, for: indexPath) as? ThemedTableViewCell
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: ThemedTableViewCell.cellIdentifier,
+            for: indexPath
+        ) as? ThemedTableViewCell
         else {
             return ThemedTableViewCell()
         }
         return cell
     }
 
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView
+    override func tableView(
+        _ tableView: UITableView,
+        viewForHeaderInSection section: Int
+    ) -> UIView? {
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier
+        ) as? ThemedTableSectionHeaderFooterView
         else { return nil }
         headerView.applyTheme(theme: themeManager.currentTheme)
         return headerView
     }
 
-    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        guard let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView
+    override func tableView(
+        _ tableView: UITableView,
+        viewForFooterInSection section: Int
+    ) -> UIView? {
+        guard let footerView = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier
+        ) as? ThemedTableSectionHeaderFooterView
         else { return nil }
         footerView.applyTheme(theme: themeManager.currentTheme)
         return footerView

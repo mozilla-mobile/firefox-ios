@@ -62,7 +62,10 @@ extension UIAlertController {
 
     - returns: UIAlertController for asking the user to restore tabs after a crash
     */
-    class func restoreTabsAlert(okayCallback: @escaping UIAlertActionCallback, noCallback: @escaping UIAlertActionCallback) -> UIAlertController {
+    class func restoreTabsAlert(
+        okayCallback: @escaping UIAlertActionCallback,
+        noCallback: @escaping UIAlertActionCallback
+    ) -> UIAlertController {
         let titleString = String(format: .Alerts.RestoreTabs.Title, AppName.shortName.rawValue)
 
         let alert = UIAlertController(
@@ -150,9 +153,17 @@ extension UIAlertController {
         hasSyncedLogins: Bool) -> UIAlertController {
         let deleteAlert: UIAlertController
         if hasSyncedLogins {
-            deleteAlert = UIAlertController(title: .DeleteLoginAlertTitle, message: .DeleteLoginAlertSyncedMessage, preferredStyle: .alert)
+            deleteAlert = UIAlertController(
+                title: .DeleteLoginAlertTitle,
+                message: .DeleteLoginAlertSyncedMessage,
+                preferredStyle: .alert
+            )
         } else {
-            deleteAlert = UIAlertController(title: .DeleteLoginAlertTitle, message: .DeleteLoginAlertLocalMessage, preferredStyle: .alert)
+            deleteAlert = UIAlertController(
+                title: .DeleteLoginAlertTitle,
+                message: .DeleteLoginAlertLocalMessage,
+                preferredStyle: .alert
+            )
         }
 
         let cancelAction = UIAlertAction(title: .DeleteLoginAlertCancel, style: .cancel, handler: nil)

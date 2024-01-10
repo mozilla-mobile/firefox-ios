@@ -18,9 +18,10 @@ open class RustSyncManagerAPI {
         case bookmarks
         case history
         case creditcards
+        case addresses
     }
 
-    public var rustTogglableEngines: [TogglableEngine] = [.tabs, .passwords, .bookmarks, .history, .creditcards]
+    public var rustTogglableEngines: [TogglableEngine] = [.tabs, .passwords, .bookmarks, .history, .creditcards, .addresses]
     public init(logger: Logger = DefaultLogger.shared) {
         self.api = SyncManagerComponent()
         self.logger = logger

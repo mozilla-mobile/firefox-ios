@@ -16,7 +16,10 @@ class RustLoginsTests: XCTestCase {
         files = MockFiles()
 
         if let rootDirectory = try? files.getAndEnsureDirectory() {
-            let databasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true).appendingPathComponent("testLoginsPerField.db").path
+            let databasePath = URL(
+                fileURLWithPath: rootDirectory,
+                isDirectory: true
+            ).appendingPathComponent("testLoginsPerField.db").path
             try? files.remove("testLoginsPerField.db")
 
             if let key = try? createKey() {

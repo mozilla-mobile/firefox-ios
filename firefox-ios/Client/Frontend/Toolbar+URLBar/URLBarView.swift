@@ -27,7 +27,8 @@ private struct URLBarViewUX {
 protocol URLBarDelegate: AnyObject {
     func urlBarDidPressTabs(_ urlBar: URLBarView)
     func urlBarDidPressReaderMode(_ urlBar: URLBarView)
-    /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied
+    /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions
+    ///            for even starting handling long-press were not satisfied
     func urlBarDidLongPressReaderMode(_ urlBar: URLBarView) -> Bool
     func urlBarDidLongPressReload(_ urlBar: URLBarView, from button: UIButton)
     func urlBarDidPressStop(_ urlBar: URLBarView)
@@ -167,8 +168,9 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
 
     fileprivate lazy var scrollToTopButton: UIButton = {
         let button = UIButton()
-        // This button interferes with accessibility of the URL bar as it partially overlays it, and keeps getting the VoiceOver focus instead of the URL bar.
-        // @TODO: figure out if there is an iOS standard way to do this that works with accessibility.
+        // This button interferes with accessibility of the URL bar as it partially overlays it, and keeps
+        // getting the VoiceOver focus instead of the URL bar.
+        // TODO: figure out if there is an iOS standard way to do this that works with accessibility.
         button.isAccessibilityElement = false
         button.addTarget(self, action: #selector(tappedScrollToTopArea), for: .touchUpInside)
         return button
@@ -219,11 +221,15 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
 
     var profile: Profile
 
-    fileprivate lazy var privateModeBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.privateModeBadge,
-                                                              isPrivateBadge: true)
+    fileprivate lazy var privateModeBadge = BadgeWithBackdrop(
+        imageName: ImageIdentifiers.privateModeBadge,
+        isPrivateBadge: true
+    )
     fileprivate let appMenuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuBadge)
-    fileprivate let warningMenuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuWarning,
-                                                         imageMask: ImageIdentifiers.menuWarningMask)
+    fileprivate let warningMenuBadge = BadgeWithBackdrop(
+        imageName: ImageIdentifiers.menuWarning,
+        imageMask: ImageIdentifiers.menuWarningMask
+    )
 
     init(profile: Profile) {
         self.profile = profile
@@ -245,9 +251,23 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     fileprivate func commonInit() {
         locationContainer.addSubview(locationView)
 
-        [scrollToTopButton, line, tabsButton, progressBar, cancelButton, showQRScannerButton,
-         homeButton, bookmarksButton, appMenuButton, addNewTabButton, forwardButton, backButton,
-         multiStateButton, locationContainer, searchIconImageView].forEach {
+        [
+            scrollToTopButton,
+            line,
+            tabsButton,
+            progressBar,
+            cancelButton,
+            showQRScannerButton,
+            homeButton,
+            bookmarksButton,
+            appMenuButton,
+            addNewTabButton,
+            forwardButton,
+            backButton,
+            multiStateButton,
+            locationContainer,
+            searchIconImageView
+        ].forEach {
             addSubview($0)
         }
 
@@ -384,11 +404,22 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
                 make.centerY.equalTo(self)
             }
             self.locationView.snp.remakeConstraints { make in
-                make.top.bottom.trailing.equalTo(self.locationContainer).inset(UIEdgeInsets(equalInset: URLBarViewUX.TextFieldBorderWidthSelected))
+                make.top.bottom.trailing.equalTo(self.locationContainer).inset(
+                    UIEdgeInsets(
+                        equalInset: URLBarViewUX.TextFieldBorderWidthSelected
+                    )
+                )
                 make.leading.equalTo(self.searchIconImageView.snp.trailing)
             }
             self.locationTextField?.snp.remakeConstraints { make in
-                make.edges.equalTo(self.locationView).inset(UIEdgeInsets(top: 0, left: URLBarViewUX.LocationLeftPadding, bottom: 0, right: URLBarViewUX.LocationLeftPadding))
+                make.edges.equalTo(self.locationView).inset(
+                    UIEdgeInsets(
+                        top: 0,
+                        left: URLBarViewUX.LocationLeftPadding,
+                        bottom: 0,
+                        right: URLBarViewUX.LocationLeftPadding
+                    )
+                )
             }
         } else {
             searchIconImageView.alpha = 0
@@ -403,14 +434,25 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
                     }
                 } else {
                     // Otherwise, left align the location view
-                    make.leading.trailing.equalTo(self).inset(UIEdgeInsets(top: 0, left: URLBarViewUX.LocationLeftPadding-1, bottom: 0, right: URLBarViewUX.LocationLeftPadding-1))
+                    make.leading.trailing.equalTo(self).inset(
+                        UIEdgeInsets(
+                            top: 0,
+                            left: URLBarViewUX.LocationLeftPadding-1,
+                            bottom: 0,
+                            right: URLBarViewUX.LocationLeftPadding-1
+                        )
+                    )
                 }
                 make.height.greaterThanOrEqualTo(URLBarViewUX.LocationHeight+2)
                 make.centerY.equalTo(self)
             }
             self.locationContainer.layer.borderWidth = URLBarViewUX.TextFieldBorderWidth
             self.locationView.snp.remakeConstraints { make in
-                make.edges.equalTo(self.locationContainer).inset(UIEdgeInsets(equalInset: URLBarViewUX.TextFieldBorderWidth))
+                make.edges.equalTo(self.locationContainer).inset(
+                    UIEdgeInsets(
+                        equalInset: URLBarViewUX.TextFieldBorderWidth
+                    )
+                )
             }
         }
     }
@@ -705,7 +747,18 @@ extension URLBarView: TabToolbarProtocol {
                 return [locationTextField, cancelButton]
             } else {
                 if toolbarIsShowing {
-                    return [backButton, forwardButton, multiStateButton, locationView, tabsButton, homeButton, bookmarksButton, appMenuButton, addNewTabButton, progressBar]
+                    return [
+                        backButton,
+                        forwardButton,
+                        multiStateButton,
+                        locationView,
+                        tabsButton,
+                        homeButton,
+                        bookmarksButton,
+                        appMenuButton,
+                        addNewTabButton,
+                        progressBar
+                    ]
                 } else {
                     return [locationView, progressBar]
                 }
@@ -733,10 +786,13 @@ extension URLBarView: TabLocationViewDelegate {
     }
 
     func tabLocationViewDidTapLocation(_ tabLocationView: TabLocationView) {
-        guard let (locationText, isSearchQuery) = delegate?.urlBarDisplayTextForURL(locationView.url as URL?) else { return }
+        guard let (locationText, isSearchQuery) = delegate?.urlBarDisplayTextForURL(
+            locationView.url as URL?
+        ) else { return }
 
         var overlayText = locationText
-        // Make sure to use the result from urlBarDisplayTextForURL as it is responsible for extracting out search terms when on a search page
+        // Make sure to use the result from urlBarDisplayTextForURL as it is responsible
+        // for extracting out search terms when on a search page
         if let text = locationText,
             let url = URL(string: text, invalidCharacters: false),
             let host = url.host,
@@ -781,7 +837,9 @@ extension URLBarView: TabLocationViewDelegate {
         delegate?.urlBarPresentCFR(at: sourceView)
     }
 
-    func tabLocationViewLocationAccessibilityActions(_ tabLocationView: TabLocationView) -> [UIAccessibilityCustomAction]? {
+    func tabLocationViewLocationAccessibilityActions(
+        _ tabLocationView: TabLocationView
+    ) -> [UIAccessibilityCustomAction]? {
         return delegate?.urlBarLocationAccessibilityActions(self)
     }
 
@@ -874,9 +932,11 @@ extension URLBarView: PrivateModeUI {
         let gradientMiddleColor = isPrivate ? nil : theme.colors.iconAccentPink
         let gradientEndColor = isPrivate ? theme.colors.borderAccentPrivate : theme.colors.iconAccentYellow
         locationActiveBorderColor = isPrivate ? theme.colors.layerAccentPrivateNonOpaque : theme.colors.layerAccentNonOpaque
-        progressBar.setGradientColors(startColor: gradientStartColor,
-                                      middleColor: gradientMiddleColor,
-                                      endColor: gradientEndColor)
+        progressBar.setGradientColors(
+            startColor: gradientStartColor,
+            middleColor: gradientMiddleColor,
+            endColor: gradientEndColor
+        )
         locationTextField?.applyUIMode(isPrivate: isPrivate, theme: theme)
         locationTextField?.applyTheme(theme: theme)
         applyTheme(theme: theme)

@@ -16,7 +16,8 @@ class TwoLineImageOverlayCell: UITableViewCell,
         static let iconBorderWidth: CGFloat = 0.5
     }
 
-    /// Cell reuse causes the chevron to appear where it shouldn't. So, we use a different reuseIdentifier to prevent that.
+    /// Cell reuse causes the chevron to appear where it shouldn't. So, we use a different
+    /// reuseIdentifier to prevent that.
     static let accessoryUsageReuseIdentifier = "temporary-reuse-identifier"
 
     // Tableview cell items
@@ -68,7 +69,14 @@ class TwoLineImageOverlayCell: UITableViewCell,
         }
 
         if atBottom {
-            bottomSeparatorView = UIView(frame: CGRect(x: leading, y: frame.size.height - height, width: frame.size.width, height: height))
+            bottomSeparatorView = UIView(
+                frame: CGRect(
+                    x: leading,
+                    y: frame.size.height - height,
+                    width: frame.size.width,
+                    height: height
+                )
+            )
             bottomSeparatorView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
             contentView.addSubview(bottomSeparatorView)
         }

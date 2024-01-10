@@ -20,17 +20,27 @@ class SearchSuggestClient {
     fileprivate let userAgent: String
     fileprivate var task: URLSessionTask?
 
-    fileprivate lazy var urlSession: URLSession = makeURLSession(userAgent: self.userAgent, configuration: URLSessionConfiguration.ephemeral)
+    fileprivate lazy var urlSession: URLSession = makeURLSession(
+        userAgent: self.userAgent,
+        configuration: URLSessionConfiguration.ephemeral
+    )
 
     init(searchEngine: OpenSearchEngine, userAgent: String) {
         self.searchEngine = searchEngine
         self.userAgent = userAgent
     }
 
-    func query(_ query: String, callback: @escaping (_ response: [String]?, _ error: NSError?) -> Void) {
+    func query(
+        _ query: String,
+        callback: @escaping (_ response: [String]?, _ error: NSError?) -> Void
+    ) {
         let url = searchEngine.suggestURLForQuery(query)
         if url == nil {
-            let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidEngine, userInfo: nil)
+            let error = NSError(
+                domain: SearchSuggestClientErrorDomain,
+                code: SearchSuggestClientErrorInvalidEngine,
+                userInfo: nil
+            )
             callback(nil, error)
             return
         }
@@ -44,7 +54,11 @@ class SearchSuggestClient {
             guard let data = data,
                   validatedHTTPResponse(response, statusCode: 200..<300) != nil
             else {
-                let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidResponse, userInfo: nil)
+                let error = NSError(
+                    domain: SearchSuggestClientErrorDomain,
+                    code: SearchSuggestClientErrorInvalidResponse,
+                    userInfo: nil
+                )
                 callback(nil, error as NSError?)
                 return
             }
@@ -57,13 +71,21 @@ class SearchSuggestClient {
             // That is, an array of at least two elements: the search term and an array of suggestions.
 
             if array?.count ?? 0 < 2 {
-                let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidResponse, userInfo: nil)
+                let error = NSError(
+                    domain: SearchSuggestClientErrorDomain,
+                    code: SearchSuggestClientErrorInvalidResponse,
+                    userInfo: nil
+                )
                 callback(nil, error)
                 return
             }
 
             guard let suggestions = array?[1] as? [String] else {
-                let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidResponse, userInfo: nil)
+                let error = NSError(
+                    domain: SearchSuggestClientErrorDomain,
+                    code: SearchSuggestClientErrorInvalidResponse,
+                    userInfo: nil
+                )
                 callback(nil, error)
                 return
             }

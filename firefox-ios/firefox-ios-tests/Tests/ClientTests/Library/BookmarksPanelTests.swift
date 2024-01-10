@@ -187,7 +187,11 @@ class BookmarksPanelTests: XCTestCase {
         mockNavigationController.setViewControllers([panel, bookmarkDetailPanel], animated: false)
 
         panel.handleRightTopButton()
-        XCTAssertEqual(panel.state, .bookmarks(state: .itemEditModeInvalidField), "No state change when right top button is disabled")
+        XCTAssertEqual(
+            panel.state,
+            .bookmarks(state: .itemEditModeInvalidField),
+            "No state change when right top button is disabled"
+        )
     }
 
     func testBookmarksButtons_MainFolder() {

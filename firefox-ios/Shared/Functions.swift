@@ -109,9 +109,17 @@ public func chunk<T>(_ arr: [T], by: Int) -> [ArraySlice<T>] {
     return result
 }
 
-public func chunkCollection<E, X, T: Collection>(_ items: T, by: Int, f: ([E]) -> [X]) -> [X] where T.Iterator.Element == E {
+public func chunkCollection<E, X, T: Collection>(
+    _ items: T,
+    by: Int,
+    f: ([E]) -> [X]
+) -> [X] where T.Iterator.Element == E {
     guard by >= 0 else {
-        DefaultLogger.shared.log("Chunking must be done with a non-negative value.", level: .warning, category: .unlabeled)
+        DefaultLogger.shared.log(
+            "Chunking must be done with a non-negative value.",
+            level: .warning,
+            category: .unlabeled
+        )
         return []
     }
 
@@ -142,7 +150,10 @@ public extension Sequence {
     // [T] -> (T -> K) -> [K: [T]]
     // As opposed to `groupWith` (to follow Haskell's naming), which would be
     // [T] -> (T -> K) -> [[T]]
-    func groupBy<Key, Value>(_ selector: (Self.Iterator.Element) -> Key, transformer: (Self.Iterator.Element) -> Value) -> [Key: [Value]] {
+    func groupBy<Key, Value>(
+        _ selector: (Self.Iterator.Element) -> Key,
+        transformer: (Self.Iterator.Element) -> Value
+    ) -> [Key: [Value]] {
         var acc: [Key: [Value]] = [:]
         for x in self {
             let k = selector(x)
@@ -248,7 +259,13 @@ public func debounce(_ delay: TimeInterval, action: @escaping () -> Void) -> () 
         if let timer = timer {
             timer.invalidate()
         }
-        timer = Timer(timeInterval: delay, target: callback, selector: #selector(Callback.go), userInfo: nil, repeats: false)
+        timer = Timer(
+            timeInterval: delay,
+            target: callback,
+            selector: #selector(Callback.go),
+            userInfo: nil,
+            repeats: false
+        )
         RunLoop.current.add(timer!, forMode: RunLoop.Mode.default)
     }
 }

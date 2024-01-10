@@ -9,7 +9,11 @@ import Shared
 import Storage
 import UIKit
 
-class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, BottomSheetChild, Themeable {
+class CreditCardBottomSheetViewController: UIViewController,
+                                           UITableViewDelegate,
+                                           UITableViewDataSource,
+                                           BottomSheetChild,
+                                           Themeable {
     // MARK: UX
     struct UX {
         static let containerPadding: CGFloat = 18.0
@@ -81,15 +85,8 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
         stack.spacing = UX.buttonsSpacing
     }
 
-    private lazy var yesButton: LegacyResizableButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .headline,
-            size: UX.yesButtonFontSize)
+    private lazy var yesButton: PrimaryRoundedButton = .build { button in
         button.addTarget(self, action: #selector(self.didTapYes), for: .touchUpInside)
-        button.setTitle(.CreditCard.RememberCreditCard.MainButtonTitle, for: .normal)
-        button.layer.cornerRadius = UX.yesButtonCornerRadius
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.accessibilityIdentifier = AccessibilityIdentifiers.RememberCreditCard.yesButton
     }
 
     private var contentViewHeightConstraint: NSLayoutConstraint!
@@ -144,7 +141,14 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
     func addSubviews() {
         if viewModel.state != .selectSavedCard {
             buttonsContainerStackView.addArrangedSubview(yesButton)
+            let buttonViewModel = PrimaryRoundedButtonViewModel(
+                title: .CreditCard.RememberCreditCard.MainButtonTitle,
+                a11yIdentifier: AccessibilityIdentifiers.RememberCreditCard.yesButton
+            )
+            yesButton.configure(viewModel: buttonViewModel)
+            yesButton.applyTheme(theme: themeManager.currentTheme)
         }
+
         contentView.addSubviews(cardTableView, buttonsContainerStackView)
         view.addSubview(contentView)
     }
@@ -160,31 +164,50 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
             estimatedContentHeight += UX.yesButtonHeight
         }
 
-        contentViewHeightConstraint = contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: estimatedContentHeight)
+        contentViewHeightConstraint = contentView.heightAnchor.constraint(
+            greaterThanOrEqualToConstant: estimatedContentHeight
+        )
         contentViewHeightConstraint.priority = UILayoutPriority(999)
 
         let contentViewWidth = UX.contentViewWidth > view.frame.width ? view.frame.width - UX.containerPadding : UX.contentViewWidth
         contentWidthConstraint = contentView.widthAnchor.constraint(equalToConstant: contentViewWidth)
         contentWidthConstraint.priority = UILayoutPriority(999)
 
-        NSLayoutConstraint.activate([
-            contentView.topAnchor.constraint(equalTo: view.topAnchor),
-            contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            contentView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+        NSLayoutConstraint.activate(
+            [
+                contentView.topAnchor.constraint(equalTo: view.topAnchor),
+                contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                contentView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 
-            cardTableView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: UX.distanceBetweenHeaderAndTop),
-            cardTableView.bottomAnchor.constraint(equalTo: buttonsContainerStackView.topAnchor, constant: 0),
-            cardTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.tableMargin),
-            cardTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.tableMargin),
+                cardTableView.topAnchor.constraint(
+                    equalTo: contentView.topAnchor,
+                    constant: UX.distanceBetweenHeaderAndTop
+                ),
+                cardTableView.bottomAnchor.constraint(equalTo: buttonsContainerStackView.topAnchor, constant: 0),
+                cardTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.tableMargin),
+                cardTableView.trailingAnchor.constraint(
+                    equalTo: contentView.trailingAnchor,
+                    constant: -UX.tableMargin
+                ),
 
-            buttonsContainerStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -UX.bottomSpacing),
-            buttonsContainerStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.tableMargin),
-            buttonsContainerStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.tableMargin),
+                buttonsContainerStackView.bottomAnchor.constraint(
+                    equalTo: contentView.bottomAnchor,
+                    constant: -UX.bottomSpacing
+                ),
+                buttonsContainerStackView.leadingAnchor.constraint(
+                    equalTo: contentView.leadingAnchor,
+                    constant: UX.tableMargin
+                ),
+                buttonsContainerStackView.trailingAnchor.constraint(
+                    equalTo: contentView.trailingAnchor,
+                    constant: -UX.tableMargin
+                ),
 
-            yesButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.yesButtonHeight),
-            contentWidthConstraint,
-            contentViewHeightConstraint
-        ])
+                yesButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.yesButtonHeight),
+                contentWidthConstraint,
+                contentViewHeightConstraint
+            ]
+        )
     }
 
     func updateConstraints() {
@@ -246,15 +269,14 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
 
     private func creditCardCell(indexPath: IndexPath) -> UITableViewCell {
         guard let hostingCell = cardTableView.dequeueReusableCell(
-            withIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier) as? HostingTableViewCell<CreditCardItemRow>,
+            withIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier
+        ) as? HostingTableViewCell<CreditCardItemRow>,
               let creditCard = viewModel.getConvertedCreditCardValues(
                 bottomSheetState: viewModel.state,
                 ccNumberDecrypted: viewModel.decryptCreditCardNumber(card: viewModel.creditCard),
                 row: indexPath.row
               )
-        else {
-            return UITableViewCell()
-        }
+        else { return UITableViewCell() }
 
         let creditCardRow = CreditCardItemRow(
             item: creditCard,
@@ -297,10 +319,14 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
                 return nil
             }
             footerView.applyTheme(theme: themeManager.currentTheme)
-            if !footerView.manageCardsButton.responds(to: #selector(CreditCardBottomSheetViewController.didTapManageCards)) {
-                footerView.manageCardsButton.addTarget(self,
-                                                       action: #selector(CreditCardBottomSheetViewController.didTapManageCards),
-                                                       for: .touchUpInside)
+            if !footerView.manageCardsButton.responds(
+                to: #selector(CreditCardBottomSheetViewController.didTapManageCards)
+            ) {
+                footerView.manageCardsButton.addTarget(
+                    self,
+                    action: #selector(CreditCardBottomSheetViewController.didTapManageCards),
+                    for: .touchUpInside
+                )
             }
 
             return footerView
@@ -328,15 +354,12 @@ class CreditCardBottomSheetViewController: UIViewController, UITableViewDelegate
 
     // MARK: Themable
     func applyTheme() {
-        let currentTheme = themeManager.currentTheme
-        view.backgroundColor = currentTheme.colors.layer1
-        yesButton.backgroundColor = currentTheme.colors.actionPrimary
-        yesButton.setTitleColor(currentTheme.colors.textInverted, for: .normal)
+        let currentTheme = themeManager.currentTheme.colors
+        view.backgroundColor = currentTheme.layer1
         cardTableView.reloadData()
     }
 
     // MARK: Telemetry
-
     fileprivate func sendCreditCardAutofillPromptDismissedTelemetry() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .close,

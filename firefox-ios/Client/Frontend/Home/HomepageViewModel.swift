@@ -32,8 +32,10 @@ class HomepageViewModel: FeatureFlaggable {
         static let generalIconCornerRadius: CGFloat = 4
         static let fallbackFaviconSize = CGSize(width: 36, height: 36)
 
-        static func leadingInset(traitCollection: UITraitCollection,
-                                 interfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) -> CGFloat {
+        static func leadingInset(
+            traitCollection: UITraitCollection,
+            interfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom
+        ) -> CGFloat {
             guard interfaceIdiom != .phone else { return standardInset }
 
             // Handles multitasking on iPad

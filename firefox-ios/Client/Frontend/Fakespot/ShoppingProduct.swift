@@ -37,11 +37,11 @@ class ShoppingProduct: FeatureFlaggable, Equatable {
     ///   - client: An optional parameter of type `FakeSpotClient`. It represents the client used for communication
     ///             with the FakeSpot service.
     ///
-    /// - Note: The `nimbusFakespotFeatureLayer` and `client` parameters are optional and have default values, which means you can
-    ///         omit them when calling this initializer in most cases.
+    /// - Note: The `nimbusFakespotFeatureLayer` and `client` parameters are optional and have default values,
+    ///         which means you can omit them when calling this initializer in most cases.
     ///
-    /// - Important: Make sure to provide a valid `url`. If the URL is invalid or the server cannot be reached, the product
-    ///              information may not be fetched successfully.
+    /// - Important: Make sure to provide a valid `url`. If the URL is invalid or the server cannot be reached, 
+    ///              the product information may not be fetched successfully.
     init(
         url: URL,
         nimbusFakespotFeatureLayer: NimbusFakespotFeatureLayerProtocol = NimbusFakespotFeatureLayer(),
@@ -100,12 +100,18 @@ class ShoppingProduct: FeatureFlaggable, Equatable {
     ///
     /// - Parameters:
     ///   - maxRetries: The number of retry attempts to fetch the data in case of failures. Default is 3.
-    ///   - retryTimeout: The time interval (in milliseconds) to wait between retry attempts. Default is 100 milliseconds.
-    /// - Returns: An instance of `ProductAnalysisData` containing the analysis data for the product, or `nil` if the product is not available.
-    /// - Throws: An error of type `Error` if there's an issue during the data fetching process, even after the specified number of retries.
-    /// - Note: This function is an asynchronous operation and should be called within an asynchronous context using `await`.
-    ///
-    func fetchProductAnalysisData(maxRetries: Int = 3, retryTimeout: Int = 100) async throws -> ProductAnalysisResponse? {
+    ///   - retryTimeout: The time interval (in milliseconds) to wait between retry attempts. Default
+    ///                   is 100 milliseconds.
+    /// - Returns: An instance of `ProductAnalysisData` containing the analysis data for the product,
+    ///            or `nil` if the product is not available.
+    /// - Throws: An error of type `Error` if there's an issue during the data fetching process, even
+    ///           after the specified number of retries.
+    /// - Note: This function is an asynchronous operation and should be called within an asynchronous
+    ///         context using `await`.
+    func fetchProductAnalysisData(
+        maxRetries: Int = 3,
+        retryTimeout: Int = 100
+    ) async throws -> ProductAnalysisResponse? {
         guard let product else { return nil }
 
         // Perform 'retryCount' attempts, and retry on 500 failure:
@@ -142,10 +148,11 @@ class ShoppingProduct: FeatureFlaggable, Equatable {
 
     /// Fetches an array of ads data for a specific product.
     ///
-    /// - Returns: An array of `ProductAdsData` containing the ads data for the product, or an empty array if the product is not available or no ads data is found.
+    /// - Returns: An array of `ProductAdsData` containing the ads data for the product, or an empty array
+    ///            if the product is not available or no ads data is found.
     /// - Throws: An error of type `Error` if there's an issue during the data fetching process.
-    /// - Note: This function is an asynchronous operation and should be called within an asynchronous context using `await`.
-    ///
+    /// - Note: This function is an asynchronous operation and should be called within an asynchronous
+    ///         context using `await`.
     func fetchProductAdsData() async -> [ProductAdsResponse] {
         guard let product else { return [] }
         return (try? await client.fetchProductAdData(productId: product.id, website: product.host)) ?? []
@@ -153,10 +160,11 @@ class ShoppingProduct: FeatureFlaggable, Equatable {
 
     /// Triggers the analysis of the current product.
     ///
-    /// - Returns: An optional `ProductAnalyzeResponse.AnalysisStatus` indicating the status of the analysis, or `nil` if there's no product available.
+    /// - Returns: An optional `ProductAnalyzeResponse.AnalysisStatus` indicating the status of the analysis,
+    ///            or `nil` if there's no product available.
     /// - Throws: An error of type `Error` if there's an issue triggering the analysis.
-    /// - Note: This function is an asynchronous operation and should be called within an asynchronous context using `await`.
-    ///
+    /// - Note: This function is an asynchronous operation and should be called within an asynchronous
+    ///         context using `await`.
     func triggerProductAnalyze() async throws -> AnalysisStatus? {
         // Ensure that a valid product is available
         guard let product = product else { return nil }
@@ -167,10 +175,11 @@ class ShoppingProduct: FeatureFlaggable, Equatable {
 
     /// Retrieves the analysis status for the current product.
     ///
-    /// - Returns: A `ProductAnalysisStatusResponse` containing the analysis status, or `nil` if there's no product available.
+    /// - Returns: A `ProductAnalysisStatusResponse` containing the analysis status, or `nil`
+    ///            if there's no product available.
     /// - Throws: An error of type `Error` if there's an issue retrieving the analysis status.
-    /// - Note: This function is an asynchronous operation and should be called within an asynchronous context using `await`.
-    ///
+    /// - Note: This function is an asynchronous operation and should be called within an asynchronous
+    ///         context using `await`.
     func getProductAnalysisStatus() async throws -> ProductAnalysisStatusResponse? {
         // Ensure that a valid product is available
         guard let product = product else { return nil }
@@ -183,10 +192,11 @@ class ShoppingProduct: FeatureFlaggable, Equatable {
     ///
     /// This function asynchronously reports the current product as back in stock using the product's ID and website.
     ///
-    /// - Returns: A `ReportResponse` containing the result of the reporting operation, or `nil` if there's no product available.
+    /// - Returns: A `ReportResponse` containing the result of the reporting operation, or `nil` if
+    ///            there's no product available.
     /// - Throws: An error of type `Error` if there's an issue reporting the product as back in stock.
-    /// - Note: This function is an asynchronous operation and should be called within an asynchronous context using `await`.
-    ///
+    /// - Note: This function is an asynchronous operation and should be called within an asynchronous
+    ///         context using `await`.
     func reportProductBackInStock() async throws -> ReportResponse? {
         // Ensure that a valid product is available
         guard let product = product else { return nil }

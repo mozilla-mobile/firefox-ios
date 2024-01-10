@@ -29,11 +29,12 @@ const sendMessage =
     });
 
 const creditCardSendMessage = sendMessage(
-  window.webkit.messageHandlers.creditCardMessageHandler
+  window.webkit.messageHandlers.creditCardFormMessageHandler
 );
 
-// TODO: FXCM-703: Define this method for address autofill
-const addressSendMessage = sendMessage();
+const addressSendMessage = sendMessage(
+  window.webkit.messageHandlers.addressFormMessageHandler
+);
 
 // Note: We expect all values to be string based
 const sendCaptureCreditCardFormMessage = creditCardSendMessage(

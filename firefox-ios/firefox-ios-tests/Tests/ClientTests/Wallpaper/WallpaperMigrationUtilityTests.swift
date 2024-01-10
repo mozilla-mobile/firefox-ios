@@ -45,7 +45,11 @@ class WallpaperMigrationUtilityTests: XCTestCase {
     }
 
     // MARK: - Helpers
-    private func verifyFoldersHaveBeenDeleted(with fileManager: FileManager, file: StaticString = #filePath, line: UInt = #line) {
+    private func verifyFoldersHaveBeenDeleted(
+        with fileManager: FileManager,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
         guard let appSupportPath = path(for: .applicationSupport)?.path,
               let docsPath = path(for: .documents)?.path
         else {

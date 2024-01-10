@@ -90,7 +90,10 @@ class RatingPromptManagerTests: XCTestCase {
 
     func testShouldShowPrompt_hasTPStrict_returnsTrue() {
         setupEnvironment()
-        mockProfile.prefs.setString(BlockingStrength.strict.rawValue, forKey: ContentBlockingConfig.Prefs.StrengthKey)
+        mockProfile.prefs.setString(
+            BlockingStrength.strict.rawValue,
+            forKey: ContentBlockingConfig.Prefs.StrengthKey
+        )
 
         promptManager.showRatingPromptIfNeeded()
         XCTAssertEqual(ratingPromptOpenCount, 1)
@@ -157,7 +160,10 @@ class RatingPromptManagerTests: XCTestCase {
         RatingPromptManager.goToAppStoreReview(with: urlOpenerSpy)
 
         XCTAssertEqual(urlOpenerSpy.openURLCount, 1)
-        XCTAssertEqual(urlOpenerSpy.capturedURL?.absoluteString, "https://itunes.apple.com/app/id\(AppInfo.appStoreId)?action=write-review")
+        XCTAssertEqual(
+            urlOpenerSpy.capturedURL?.absoluteString,
+            "https://itunes.apple.com/app/id\(AppInfo.appStoreId)?action=write-review"
+        )
     }
 }
 
@@ -166,7 +172,11 @@ class RatingPromptManagerTests: XCTestCase {
 private extension RatingPromptManagerTests {
     func createFolders(folderCount: Int, withRoot root: String, file: StaticString = #filePath, line: UInt = #line) {
         (1...folderCount).forEach { index in
-            mockProfile.places.createFolder(parentGUID: root, title: "Folder \(index)", position: nil).uponQueue(.main) { guid in
+            mockProfile.places.createFolder(
+                parentGUID: root,
+                title: "Folder \(index)",
+                position: nil
+            ).uponQueue(.main) { guid in
                 guard let guid = guid.successValue else {
                     XCTFail("CreateFolder method did not return GUID", file: file, line: line)
                     return
@@ -183,7 +193,12 @@ private extension RatingPromptManagerTests {
         }
     }
 
-    func createSeparators(separatorCount: Int, withRoot root: String, file: StaticString = #filePath, line: UInt = #line) {
+    func createSeparators(
+        separatorCount: Int,
+        withRoot root: String,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
         (1...separatorCount).forEach { index in
             mockProfile.places.createSeparator(parentGUID: root, position: nil).uponQueue(.main) { guid in
                 guard let guid = guid.successValue else {
@@ -232,7 +247,12 @@ private extension RatingPromptManagerTests {
             }
 
             promptManager.showRatingPromptIfNeeded()
-            XCTAssertEqual(self?.ratingPromptOpenCount, expectedRatingPromptOpenCount, file: file, line: line)
+            XCTAssertEqual(
+                self?.ratingPromptOpenCount,
+                expectedRatingPromptOpenCount,
+                file: file,
+                line: line
+            )
             expectation.fulfill()
         })
         waitForExpectations(timeout: 5, handler: nil)
@@ -273,7 +293,9 @@ private extension RatingPromptManagerTests {
     }
 
     var ratingPromptOpenCount: Int {
-        UserDefaults.standard.object(forKey: RatingPromptManager.UserDefaultsKey.keyRatingPromptRequestCount.rawValue) as? Int ?? 0
+        UserDefaults.standard.object(
+            forKey: RatingPromptManager.UserDefaultsKey.keyRatingPromptRequestCount.rawValue
+        ) as? Int ?? 0
     }
 }
 

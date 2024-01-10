@@ -8,7 +8,9 @@ import Shared
 
 class SentryIDSetting: HiddenSetting {
     private weak var settingsDelegate: SharedSettingsDelegate?
-    private let deviceAppHash = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)?.string(forKey: "SentryDeviceAppHash")
+    private let deviceAppHash = UserDefaults(
+        suiteName: AppInfo.sharedContainerIdentifier
+    )?.string(forKey: "SentryDeviceAppHash")
 
     override var title: NSAttributedString? {
         return NSAttributedString(

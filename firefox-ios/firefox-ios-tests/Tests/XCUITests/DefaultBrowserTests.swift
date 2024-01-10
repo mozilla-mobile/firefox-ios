@@ -4,6 +4,7 @@
 
 import Foundation
 
+// swiftlint:disable line_length
 class DefaultBrowserTests: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306804
     /* Disable test since the option to set Firefox is not available in this build after issue #8513 landed, issue #8627
@@ -39,3 +40,4 @@ class DefaultBrowserTests: BaseTestCase {
         XCTAssertFalse(iOS_Settings.tables.cells.buttons["checkmark"].isEnabled)
     }*/
 }
+// swiftlint:enable line_length

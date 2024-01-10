@@ -36,7 +36,12 @@ class Download: NSObject {
     func resume() {}
 
     fileprivate func uniqueDownloadPathForFilename(_ filename: String) throws -> URL {
-        let downloadsPath = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("Downloads")
+        let downloadsPath = try FileManager.default.url(
+            for: .documentDirectory,
+            in: .userDomainMask,
+            appropriateFor: nil,
+            create: false
+        ).appendingPathComponent("Downloads")
 
         let basePath = downloadsPath.appendingPathComponent(filename)
         let fileExtension = basePath.pathExtension
@@ -147,7 +152,13 @@ extension HTTPDownload: URLSessionTaskDelegate, URLSessionDownloadDelegate {
         delegate?.download(self, didCompleteWithError: error)
     }
 
-    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+    func urlSession(
+        _ session: URLSession,
+        downloadTask: URLSessionDownloadTask,
+        didWriteData bytesWritten: Int64,
+        totalBytesWritten: Int64,
+        totalBytesExpectedToWrite: Int64
+    ) {
         bytesDownloaded = totalBytesWritten
         totalBytesExpected = totalBytesExpectedToWrite
 
@@ -199,7 +210,11 @@ class BlobDownload: Download {
 
 protocol DownloadQueueDelegate: AnyObject {
     func downloadQueue(_ downloadQueue: DownloadQueue, didStartDownload download: Download)
-    func downloadQueue(_ downloadQueue: DownloadQueue, didDownloadCombinedBytes combinedBytesDownloaded: Int64, combinedTotalBytesExpected: Int64?)
+    func downloadQueue(
+        _ downloadQueue: DownloadQueue,
+        didDownloadCombinedBytes combinedBytesDownloaded: Int64,
+        combinedTotalBytesExpected: Int64?
+    )
     func downloadQueue(_ downloadQueue: DownloadQueue, download: Download, didFinishDownloadingTo location: URL)
     func downloadQueue(_ downloadQueue: DownloadQueue, didCompleteWithError error: Error?)
 }
@@ -275,7 +290,11 @@ extension DownloadQueue: DownloadDelegate {
 
     func download(_ download: Download, didDownloadBytes bytesDownloaded: Int64) {
         combinedBytesDownloaded += bytesDownloaded
-        delegate?.downloadQueue(self, didDownloadCombinedBytes: combinedBytesDownloaded, combinedTotalBytesExpected: combinedTotalBytesExpected)
+        delegate?.downloadQueue(
+            self,
+            didDownloadCombinedBytes: combinedBytesDownloaded,
+            combinedTotalBytesExpected: combinedTotalBytesExpected
+        )
     }
 
     func download(_ download: Download, didFinishDownloadingTo location: URL) {

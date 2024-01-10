@@ -19,6 +19,9 @@
 /* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
 "Shopping.AdjustedRating.Description.v120" = "Upålitelege vurderingar er fjerna";
 
+/* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
+"Shopping.AdjustedRating.Description.v121" = "Basert på pålitelege vurderingar";
+
 /* Accessibility label, associated to adjusted rating stars. %@ is a decimal value from 0 to 5 that will only use a tenth (example: 3.5). */
 "Shopping.AdjustedRating.StarsAccessibilityLabel.v120" = "%@ av 5 stjerner";
 
@@ -88,6 +91,9 @@
 /* Description for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This description is used for info card where the user can report if it's back in stock. */
 "Shopping.InfoCard.ProductNotInStock.Description.v121" = "Om du ser at dette produktet er tilbake på lager, rapporter det, så jobbar vi med å kontrollere vurderingane.";
 
+/* Primary action label for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This primary action label is used for info card button where the user can report if it's back in stock. */
+"Shopping.InfoCard.ProductNotInStock.PrimaryAction.v121" = "Rapporter at produktet er tilbake på lager";
+
 /* Title for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This title is used for info card where the user can report if it's back in stock. */
 "Shopping.InfoCard.ProductNotInStock.Title.v121" = "Produktet er ikkje tilgjengeleg";
 
@@ -117,6 +123,12 @@
 
 /* Title for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
 "Shopping.NoAnalysisCard.InProgress.Headline.Title.v120" = "Kontrollerer kvaliteten på vurderinga";
+
+/* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replaced by the Fakespot app name. After the colon, what appears are two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
+"Shopping.OptInCard.Disclaimer.Text.v120" = "Ved å velje «Ja, prøv det» godtek du følgjande frå %@:";
+
+/* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. This string is almost identical with 'Shopping.OptInCard.FirstParagraph.Description', but without Best Buy and Walmart websites, which are not available in many locales. */
+"Shopping.OptInCard.FirstParagraph.AmazonOnly.Description.v122" = "Sjå kor pålitelege produktvurderingar er på %1$@ før du handlar. Vurderingskontrollør, ein eksperimentell funksjon frå %2$@, er innebygd rett i nettlesaren.";
 
 /* Label for the header of the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.HeaderLabel.Title.v120" = "Prøv den pålitelege guiden vår for produktvurderingar";
@@ -154,6 +166,9 @@
 /* Title of the 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQualityCard.Label.Title.v120" = "Korleis vi avgjer kvaliteten på ei vurdering";
 
+/* The title of the learn more button from How we determine review quality card displayed in the shopping review quality bottom sheet. The placeholder will be replaced with the Fakespot app name. */
+"Shopping.ReviewQualityCard.LearnMoreButton.Title.v120" = "Finn ut mer om korleis %@ avgjer vurderingskvalitet";
+
 /* Reliable reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQualityCard.ReliableReviews.Label.v120" = "Pålitelege vurderingar. Vi meinar at vureringane truleg kjem frå ekte kundar som har lagt att ærlege, upartiske vurderingar.";
 
@@ -171,6 +186,9 @@
 
 /* Beta label for the header of the Shopping Experience (Fakespot) sheet */
 "Shopping.Sheet.Beta.Title.v120" = "BETA";
+
+/* Accessibility label for close button that dismisses the Shopping Experience (Fakespot) sheet. */
+"Shopping.Sheet.Close.AccessibilityLabel.v121" = "Lat att vurderingskontrolløren";
 
 /* Label for the header of the Shopping Experience (Fakespot) sheet */
 "Shopping.Sheet.Title.v120" = "Vurderingskontrollør";

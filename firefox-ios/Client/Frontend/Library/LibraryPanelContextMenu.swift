@@ -10,7 +10,11 @@ protocol LibraryPanelContextMenu {
     func getSiteDetails(for indexPath: IndexPath) -> Site?
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]?
     func presentContextMenu(for indexPath: IndexPath)
-    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?)
+    func presentContextMenu(
+        for site: Site,
+        with indexPath: IndexPath,
+        completionHandler: @escaping () -> PhotonActionSheet?
+    )
 }
 
 extension LibraryPanelContextMenu {
@@ -35,35 +39,56 @@ extension LibraryPanelContextMenu {
         return contextMenu
     }
 
-    func getRecentlyClosedTabContexMenuActions(for site: Site, recentlyClosedPanelDelegate: RecentlyClosedPanelDelegate?) -> [PhotonRowActions]? {
+    func getRecentlyClosedTabContexMenuActions(
+        for site: Site,
+        recentlyClosedPanelDelegate: RecentlyClosedPanelDelegate?
+    ) -> [PhotonRowActions]? {
         guard let siteURL = URL(string: site.url, invalidCharacters: false) else { return nil }
 
-        let openInNewTabAction = SingleActionViewModel(title: .OpenInNewTabContextMenuTitle, iconString: StandardImageIdentifiers.Large.plus) { _ in
+        let openInNewTabAction = SingleActionViewModel(
+            title: .OpenInNewTabContextMenuTitle,
+            iconString: StandardImageIdentifiers.Large.plus
+        ) { _ in
             recentlyClosedPanelDelegate?.openRecentlyClosedSiteInNewTab(siteURL, isPrivate: false)
         }
 
-        let openInNewPrivateTabAction = SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: ImageIdentifiers.newPrivateTab) { _ in
+        let openInNewPrivateTabAction = SingleActionViewModel(
+            title: .OpenInNewPrivateTabContextMenuTitle,
+            iconString: ImageIdentifiers.newPrivateTab
+        ) { _ in
             recentlyClosedPanelDelegate?.openRecentlyClosedSiteInNewTab(siteURL, isPrivate: true)
         }
 
         return [PhotonRowActions(openInNewTabAction), PhotonRowActions(openInNewPrivateTabAction)]
     }
 
-    func getRemoteTabContextMenuActions(for site: Site, remotePanelDelegate: RemotePanelDelegate?) -> [PhotonRowActions]? {
+    func getRemoteTabContextMenuActions(
+        for site: Site,
+        remotePanelDelegate: RemotePanelDelegate?
+    ) -> [PhotonRowActions]? {
         guard let siteURL = URL(string: site.url, invalidCharacters: false) else { return nil }
 
-        let openInNewTabAction = SingleActionViewModel(title: .OpenInNewTabContextMenuTitle, iconString: StandardImageIdentifiers.Large.plus) { _ in
+        let openInNewTabAction = SingleActionViewModel(
+            title: .OpenInNewTabContextMenuTitle,
+            iconString: StandardImageIdentifiers.Large.plus
+        ) { _ in
             remotePanelDelegate?.remotePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
         }
 
-        let openInNewPrivateTabAction = SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: ImageIdentifiers.newPrivateTab) { _ in
+        let openInNewPrivateTabAction = SingleActionViewModel(
+            title: .OpenInNewPrivateTabContextMenuTitle,
+            iconString: ImageIdentifiers.newPrivateTab
+        ) { _ in
             remotePanelDelegate?.remotePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }
 
         return [PhotonRowActions(openInNewTabAction), PhotonRowActions(openInNewPrivateTabAction)]
     }
 
-    func getDefaultContextMenuActions(for site: Site, libraryPanelDelegate: LibraryPanelDelegate?) -> [PhotonRowActions]? {
+    func getDefaultContextMenuActions(
+        for site: Site,
+        libraryPanelDelegate: LibraryPanelDelegate?
+    ) -> [PhotonRowActions]? {
         guard let siteURL = URL(string: site.url, invalidCharacters: false) else { return nil }
 
         let openInNewTabAction = SingleActionViewModel(title: .OpenInNewTabContextMenuTitle,

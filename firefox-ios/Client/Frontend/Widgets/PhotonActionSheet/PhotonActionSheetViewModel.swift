@@ -115,7 +115,8 @@ class PhotonActionSheetViewModel {
                     withIdentifier: PhotonActionSheetLineSeparator.cellIdentifier)
             } else {
                 let header = tableView.dequeueReusableHeaderFooterView(
-                    withIdentifier: PhotonActionSheetTitleHeaderView.cellIdentifier) as! PhotonActionSheetTitleHeaderView
+                    withIdentifier: PhotonActionSheetTitleHeaderView.cellIdentifier
+                ) as! PhotonActionSheetTitleHeaderView
                 header.configure(with: title)
                 return header
             }
@@ -155,7 +156,11 @@ class PhotonActionSheetViewModel {
         return isSmallSize ? UIPopoverArrowDirection(rawValue: 0) : .any
     }
 
-    func getMainMenuPopOverMargins(trait: UITraitCollection, view: UIView, presentedOn viewController: UIViewController) -> UIEdgeInsets {
+    func getMainMenuPopOverMargins(
+        trait: UITraitCollection,
+        view: UIView,
+        presentedOn viewController: UIViewController
+    ) -> UIEdgeInsets {
         if PhotonActionSheetViewModel.isSmallSizeForTraitCollection(trait: trait) {
             return getSmallSizeMargins(view: view, presentedOn: viewController)
         } else {

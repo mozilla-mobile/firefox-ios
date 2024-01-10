@@ -98,55 +98,72 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController, Themeable {
         connectionView.addSubviews(connectionImage, connectionStatusLabel)
         baseView.addSubview(connectionView)
 
-        NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            baseView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            baseView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            baseView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-            baseView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-            siteTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            siteTitleLabel.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor),
+        NSLayoutConstraint.activate(
+            [
+                scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+                scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                baseView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+                baseView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+                baseView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+                baseView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+                siteTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                siteTitleLabel.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor),
 
-            closeButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ETPMenuUX.UX.gutterDistance),
-            closeButton.topAnchor.constraint(equalTo: baseView.topAnchor, constant: ETPMenuUX.UX.gutterDistance),
+                closeButton.trailingAnchor.constraint(
+                    equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+                    constant: -ETPMenuUX.UX.gutterDistance
+                ),
+                closeButton.topAnchor.constraint(equalTo: baseView.topAnchor, constant: ETPMenuUX.UX.gutterDistance),
 
-            siteInfoSection.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ETPMenuUX.UX.gutterDistance),
-            siteInfoSection.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 33),
-            siteInfoSection.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ETPMenuUX.UX.gutterDistance),
-            siteInfoSection.bottomAnchor.constraint(equalTo: siteInfoURLLabel.bottomAnchor, constant: 12),
+                siteInfoSection.leadingAnchor.constraint(
+                    equalTo: view.safeAreaLayoutGuide.leadingAnchor,
+                    constant: ETPMenuUX.UX.gutterDistance
+                ),
+                siteInfoSection.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 33),
+                siteInfoSection.trailingAnchor.constraint(
+                    equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+                    constant: -ETPMenuUX.UX.gutterDistance
+                ),
+                siteInfoSection.bottomAnchor.constraint(equalTo: siteInfoURLLabel.bottomAnchor, constant: 12),
 
-            siteInfoImage.leadingAnchor.constraint(equalTo: siteInfoSection.leadingAnchor, constant: 13),
-            siteInfoImage.topAnchor.constraint(equalTo: siteInfoSection.topAnchor, constant: 13),
-            siteInfoImage.heightAnchor.constraint(equalToConstant: ETPMenuUX.UX.faviconImageSize),
-            siteInfoImage.widthAnchor.constraint(equalToConstant: ETPMenuUX.UX.faviconImageSize),
+                siteInfoImage.leadingAnchor.constraint(equalTo: siteInfoSection.leadingAnchor, constant: 13),
+                siteInfoImage.topAnchor.constraint(equalTo: siteInfoSection.topAnchor, constant: 13),
+                siteInfoImage.heightAnchor.constraint(equalToConstant: ETPMenuUX.UX.faviconImageSize),
+                siteInfoImage.widthAnchor.constraint(equalToConstant: ETPMenuUX.UX.faviconImageSize),
 
-            siteInfoTitleLabel.leadingAnchor.constraint(equalTo: siteInfoImage.trailingAnchor, constant: 11),
-            siteInfoTitleLabel.topAnchor.constraint(equalTo: siteInfoSection.topAnchor, constant: 13),
-            siteInfoTitleLabel.trailingAnchor.constraint(equalTo: siteInfoSection.trailingAnchor, constant: -21),
+                siteInfoTitleLabel.leadingAnchor.constraint(equalTo: siteInfoImage.trailingAnchor, constant: 11),
+                siteInfoTitleLabel.topAnchor.constraint(equalTo: siteInfoSection.topAnchor, constant: 13),
+                siteInfoTitleLabel.trailingAnchor.constraint(equalTo: siteInfoSection.trailingAnchor, constant: -21),
 
-            siteInfoURLLabel.leadingAnchor.constraint(equalTo: siteInfoTitleLabel.leadingAnchor),
-            siteInfoURLLabel.topAnchor.constraint(equalTo: siteInfoTitleLabel.bottomAnchor, constant: 2),
-            siteInfoURLLabel.trailingAnchor.constraint(equalTo: siteInfoSection.trailingAnchor, constant: -21),
+                siteInfoURLLabel.leadingAnchor.constraint(equalTo: siteInfoTitleLabel.leadingAnchor),
+                siteInfoURLLabel.topAnchor.constraint(equalTo: siteInfoTitleLabel.bottomAnchor, constant: 2),
+                siteInfoURLLabel.trailingAnchor.constraint(equalTo: siteInfoSection.trailingAnchor, constant: -21),
 
-            connectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ETPMenuUX.UX.gutterDistance),
-            connectionView.topAnchor.constraint(equalTo: siteInfoSection.bottomAnchor, constant: 36),
-            connectionView.bottomAnchor.constraint(equalTo: baseView.bottomAnchor),
-            connectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ETPMenuUX.UX.gutterDistance),
-            connectionView.heightAnchor.constraint(equalToConstant: 60),
+                connectionView.leadingAnchor.constraint(
+                    equalTo: view.safeAreaLayoutGuide.leadingAnchor,
+                    constant: ETPMenuUX.UX.gutterDistance
+                ),
+                connectionView.topAnchor.constraint(equalTo: siteInfoSection.bottomAnchor, constant: 36),
+                connectionView.bottomAnchor.constraint(equalTo: baseView.bottomAnchor),
+                connectionView.trailingAnchor.constraint(
+                    equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+                    constant: -ETPMenuUX.UX.gutterDistance
+                ),
+                connectionView.heightAnchor.constraint(equalToConstant: 60),
 
-            connectionImage.centerYAnchor.constraint(equalTo: connectionView.centerYAnchor),
-            connectionImage.leadingAnchor.constraint(equalTo: connectionView.leadingAnchor, constant: 20),
-            connectionImage.heightAnchor.constraint(equalToConstant: 20),
-            connectionImage.widthAnchor.constraint(equalToConstant: 20),
+                connectionImage.centerYAnchor.constraint(equalTo: connectionView.centerYAnchor),
+                connectionImage.leadingAnchor.constraint(equalTo: connectionView.leadingAnchor, constant: 20),
+                connectionImage.heightAnchor.constraint(equalToConstant: 20),
+                connectionImage.widthAnchor.constraint(equalToConstant: 20),
 
-            connectionStatusLabel.leadingAnchor.constraint(equalTo: connectionImage.trailingAnchor, constant: 28),
-            connectionStatusLabel.trailingAnchor.constraint(equalTo: connectionView.trailingAnchor, constant: -21),
-            connectionStatusLabel.heightAnchor.constraint(equalToConstant: 22),
-            connectionStatusLabel.centerYAnchor.constraint(equalTo: connectionView.centerYAnchor)
-        ])
+                connectionStatusLabel.leadingAnchor.constraint(equalTo: connectionImage.trailingAnchor, constant: 28),
+                connectionStatusLabel.trailingAnchor.constraint(equalTo: connectionView.trailingAnchor, constant: -21),
+                connectionStatusLabel.heightAnchor.constraint(equalToConstant: 22),
+                connectionStatusLabel.centerYAnchor.constraint(equalTo: connectionView.centerYAnchor)
+            ]
+        )
     }
 
     private func updateViewDetails() {

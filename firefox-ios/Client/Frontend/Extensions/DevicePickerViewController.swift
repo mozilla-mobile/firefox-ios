@@ -11,7 +11,10 @@ import Common
 
 protocol DevicePickerViewControllerDelegate: AnyObject {
     func devicePickerViewControllerDidCancel(_ devicePickerViewController: DevicePickerViewController)
-    func devicePickerViewController(_ devicePickerViewController: DevicePickerViewController, didPickDevices devices: [RemoteDevice])
+    func devicePickerViewController(
+        _ devicePickerViewController: DevicePickerViewController,
+        didPickDevices devices: [RemoteDevice]
+    )
 }
 
 private enum LoadingState {
@@ -64,7 +67,7 @@ class DevicePickerViewController: UITableViewController {
     // url later. Currently used only when sharing an item from the Tab Tray from a Preview Action.
     var shareItem: ShareItem?
 
-    init(profile: Profile) {
+    init(profile: Profile = AppContainer.shared.resolve()) {
         self.profile = profile
 
         super.init(nibName: nil, bundle: nil)

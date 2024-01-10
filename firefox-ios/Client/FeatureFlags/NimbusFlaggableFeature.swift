@@ -32,9 +32,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case shareSheetChanges
     case shareToolbarChanges
     case tabTrayRefactor
-    case wallpapers
-    case wallpaperOnboardingSheet
-    case wallpaperVersion
     case zoomFeature
 }
 
@@ -42,7 +39,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
 /// just an ON or OFF setting. These option must also be added to `NimbusFeatureFlagID`
 enum NimbusFeatureFlagWithCustomOptionsID {
     case searchBarPosition
-    case wallpaperVersion
 }
 
 struct NimbusFlaggableFeature: HasNimbusSearchBar {
@@ -66,8 +62,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.InactiveTabs
         case .jumpBackIn:
             return FlagKeys.JumpBackInSection
-        case .wallpapers:
-            return FlagKeys.CustomWallpaper
 
         // Cases where users do not have the option to manipulate a setting.
         case .contextualHintForToolbar,
@@ -86,8 +80,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .shareSheetChanges,
                 .shareToolbarChanges,
                 .tabTrayRefactor,
-                .wallpaperOnboardingSheet,
-                .wallpaperVersion,
                 .zoomFeature:
             return nil
         }
@@ -132,9 +124,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         switch featureID {
         case .bottomSearchBar:
             return nimbusSearchBar.getDefaultPosition().rawValue
-
-        case .wallpaperVersion:
-            return nimbusLayer.checkNimbusForWallpapersVersion()
 
         default: return nil
         }

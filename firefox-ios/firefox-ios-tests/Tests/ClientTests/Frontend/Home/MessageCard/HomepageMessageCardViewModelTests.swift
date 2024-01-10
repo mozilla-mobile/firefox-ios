@@ -107,7 +107,9 @@ class HomepageMessageCardViewModelTests: XCTestCase {
     func testConfigureCallsMethod() throws {
         let subject = createSubject()
         let cell = SpyHomepageMessageCardCell(frame: .zero)
-        let configuredCell = try XCTUnwrap(subject.configure(cell, at: IndexPath(item: 0, section: 0))) as? SpyHomepageMessageCardCell
+        let configuredCell = try XCTUnwrap(
+            subject.configure(cell, at: IndexPath(item: 0, section: 0))
+        ) as? SpyHomepageMessageCardCell
         XCTAssertEqual(configuredCell?.configureCalled, 1)
     }
 

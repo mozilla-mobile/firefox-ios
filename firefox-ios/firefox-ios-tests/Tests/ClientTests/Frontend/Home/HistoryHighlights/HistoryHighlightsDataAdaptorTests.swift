@@ -64,6 +64,7 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
         XCTAssertEqual(delegate.didLoadNewDataCallCount, 1)
     }
 
+    // FXIOS-8107: Disabled test as history highlights has been disabled to fix app hangs / slowness
     // Reloads for notification
     func testReloadDataOnNotification() {
         historyManager.callGetHighlightsDataCompletion(result: [])
