@@ -329,5 +329,4 @@ class HomePageSettingsUITests: BaseTestCase {
         // XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentVisited].value as! String, "1")
         XCTAssertEqual(app.cells.switches["Thought-Provoking Stories, Articles powered by Pocket"].value as! String, "1")
     }
-
 }
