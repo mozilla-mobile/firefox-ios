@@ -33,7 +33,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case shareSheetChanges
     case shareToolbarChanges
     case tabTrayRefactor
-    case wallpaperOnboardingSheet
     case zoomFeature
 }
 
@@ -74,6 +73,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .fakespotFeature,
                 .fakespotProductAds,
                 .isToolbarCFREnabled,
+                .preferSwitchToOpenTabOverDuplicate:
                 .qrCodeCoordinatorRefactor,
                 .reportSiteIssue,
                 .feltPrivacySimplifiedUI,
@@ -82,9 +82,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .shareSheetChanges,
                 .shareToolbarChanges,
                 .tabTrayRefactor,
-                .wallpaperOnboardingSheet,
-                .zoomFeature,
-                .preferSwitchToOpenTabOverDuplicate:
+                .zoomFeature:
             return nil
         }
     }

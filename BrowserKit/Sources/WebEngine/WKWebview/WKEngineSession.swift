@@ -6,7 +6,7 @@ import Common
 import Foundation
 import WebKit
 
-class WKEngineSession: EngineSession {
+class WKEngineSession: NSObject, EngineSession {
     weak var delegate: EngineSessionDelegate?
     private var webView: WKEngineWebView
     private var logger: Logger
@@ -26,10 +26,12 @@ class WKEngineSession: EngineSession {
         self.webView = webView
         self.logger = logger
         self.sessionData = sessionData
+        super.init()
 
-        // TODO: FXIOS-7899 #17644 Handle WKEngineSession observers
-//        self.webView.addObserver(self, forKeyPath: KVOConstants.URL.rawValue, options: .new, context: nil)
-//        self.webView.addObserver(self, forKeyPath: KVOConstants.title.rawValue, options: .new, context: nil)
+        self.setupObservers()
+
+        // TODO: FXIOS-8106 Add UI delegate
+//        webView.uiDelegate = self
 
         // TODO: FXIOS-7900 #17645 Handle WKEngineSession scripts
 //        UserScriptManager.shared.injectUserScriptsIntoWebView(webView, nightMode: nightMode, noImageMode: noImageMode)
@@ -118,15 +120,64 @@ class WKEngineSession: EngineSession {
         // TODO: FXIOS-7900 #17645 Handle WKEngineSession scripts
 //        contentScriptManager.uninstall(tab: self)
         webView.removeAllUserScripts()
-
-        // TODO: FXIOS-7899 #17644 Handle WKEngineSession observers
-//        webView.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
-//        webView.removeObserver(self, forKeyPath: KVOConstants.title.rawValue)
+        removeObservers()
 
         // TODO: FXIOS-7901 #17646 Handle WKEngineSession tabDelegate
 //        tabDelegate?.tab(self, willDeleteWebView: webView)
 
         webView.navigationDelegate = nil
+        // TODO: FXIOS-8106 Add UI delegate
+//        webView.uiDelegate = nil
+
         webView.removeFromSuperview()
+    }
+
+    // MARK: Observe values
+
+    private func setupObservers() {
+        WKEngineKVOConstants.allCases.forEach {
+            webView.addObserver(
+                self,
+                forKeyPath: $0.rawValue,
+                options: .new,
+                context: nil
+            )
+        }
+    }
+
+    private func removeObservers() {
+        WKEngineKVOConstants.allCases.forEach {
+            webView.removeObserver(self, forKeyPath: $0.rawValue)
+        }
+    }
+
+    override func observeValue(
+        forKeyPath keyPath: String?,
+        of object: Any?,
+        change: [NSKeyValueChangeKey: Any]?,
+        context: UnsafeMutableRawPointer?
+    ) {
+        guard let keyPath, let path = WKEngineKVOConstants(rawValue: keyPath) else {
+            logger.log("Unhandled KVO key: \(keyPath ?? "nil")", level: .debug, category: .webview)
+            return
+        }
+
+        // Will be used as needed when we start using the engine session
+        switch path {
+        case .canGoBack:
+            break
+        case .canGoForward:
+            break
+        case .contentSize:
+            break
+        case .estimatedProgress:
+            break
+        case .loading:
+            break
+        case .title:
+            break
+        case .URL:
+            break
+        }
     }
 }

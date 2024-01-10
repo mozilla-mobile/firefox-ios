@@ -69,9 +69,6 @@ final class NimbusFeatureFlagLayer {
         case .tabTrayRefactor:
             return checkTabTrayRefactorFeature(from: nimbus)
 
-        case .wallpaperOnboardingSheet:
-            return checkNimbusForWallpaperOnboarding(using: nimbus)
-
         case .zoomFeature:
             return checkZoomFeature(from: nimbus)
         }
@@ -138,10 +135,6 @@ final class NimbusFeatureFlagLayer {
 
         guard let status = config.featuresEnabled[nimbusID] else { return false }
         return status
-    }
-
-    private func checkNimbusForWallpaperOnboarding(using nimbus: FxNimbus) -> Bool {
-        return nimbus.features.wallpaperFeature.value().onboardingSheet
     }
 
     private func checkQRCodeCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {

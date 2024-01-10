@@ -240,9 +240,8 @@ public struct AccessibilityIdentifiers {
             static let card = "Shopping.SettingsCard.Card"
             static let title = "Shopping.SettingsCard.Title"
             static let expandButton = "Shopping.SettingsCard.ExpandButton"
-            static let productsLabel = "Shopping.SettingsCard.ProductsLabel"
+            static let productsRecommendedGroup = "Shopping.SettingsCard.ProductsRecommendedGroup"
             static let turnOffButton = "Shopping.SettingsCard.TurnOffButton"
-            static let recommendedProductsSwitch = "Shopping.SettingCard.RecommendedProductsSwitch"
             static let footerTitle = "Shopping.SettingCard.footerTitle"
             static let footerAction = "Shopping.SettingCard.footerAction"
         }
@@ -604,6 +603,7 @@ public struct AccessibilityIdentifiers {
     struct RememberCreditCard {
         static let rememberCreditCardHeader = "RememberCreditCard.Header"
         static let yesButton = "RememberCreditCard.yesButton"
+        static let manageCardsButton = "RememberCreditCard.manageCardsButton"
         static let notNowButton = "RememberCreditCard.notNowButton"
     }
 }

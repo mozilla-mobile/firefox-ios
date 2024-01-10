@@ -3876,6 +3876,26 @@ extension String {
             tableName: "Shopping",
             value: "Turn Off Review Checker",
             comment: "Label of the button from settings card displayed in the shopping review quality bottom sheet.")
+        public static let SettingsCardGroupedRecommendedProductsAndSwitchAccessibilityLabel = MZLocalizedString(
+            key: "Shopping.SettingsCard.Expand.GroupedRecommendedProductsAndSwitch.AccessibilityLabel.v123",
+            tableName: "Shopping",
+            value: "%1$@, switch button, %2$@.",
+            comment: "Accessibility label for the recommended products label and switch, grouped together. The first placeholder is for the recommended products label, and the second placeholder is for the state of the switch: On/Off.")
+        public static let SettingsCardGroupedRecommendedProductsAndSwitchAccessibilityHint = MZLocalizedString(
+            key: "Shopping.SettingsCard.Expand.GroupedRecommendedProductsAndSwitch.AccessibilityHint.v123",
+            tableName: "Shopping",
+            value: "Double tap to toggle setting.",
+            comment: "Accessibility hint for the recommended products label and switch, grouped together. When the group is selected in VoiceOver mode, the hint is read to help the user understand what action can be performed.")
+        public static let SettingsCardSwitchValueOnAccessibilityLabel = MZLocalizedString(
+            key: "Shopping.SettingsCard.SwitchValueOn.AccessibilityLabel.v123",
+            tableName: "Shopping",
+            value: "On",
+            comment: "Toggled On accessibility value, from Settings Card within the shopping product review bottom sheet.")
+        public static let SettingsCardSwitchValueOffAccessibilityLabel = MZLocalizedString(
+            key: "Shopping.SettingsCard.SwitchValueOn.AccessibilityLabel.v123",
+            tableName: "Shopping",
+            value: "Off",
+            comment: "Toggled Off accessibility switch value from Settings Card within the shopping product review bottom sheet.")
         public static let SettingsCardExpandAccessibilityLabel = MZLocalizedString(
             key: "Shopping.SettingsCard.Expand.AccessibilityLabel.v120",
             tableName: "Shopping",

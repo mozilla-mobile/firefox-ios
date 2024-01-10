@@ -106,8 +106,4 @@ struct WallpaperMigrationUtility {
     private func markMetadataMigrationComplete() {
         userDefaults.set(true, forKey: metadataMigration)
     }
-
-    private func markLegacyAssetMigrationComplete() {
-        userDefaults.set(true, forKey: metadataMigration)
-    }
 }

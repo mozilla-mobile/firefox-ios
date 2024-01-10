@@ -15,6 +15,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     private let tabSessionStore: TabSessionStore
     private let imageStore: DiskImageStore?
     private let tabMigration: TabMigrationUtility
+    private var tabsTelemetry = TabsTelemetry()
     var notificationCenter: NotificationProtocol
     var inactiveTabsManager: InactiveTabsManagerProtocol
 
@@ -357,11 +358,13 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     }
 
     private func willSelectTab(_ url: URL?) {
+        tabsTelemetry.startTabSwitchMeasurement()
         guard let url else { return }
         AppEventQueue.started(.selectTab(url, windowUUID))
     }
 
     private func didSelectTab(_ url: URL?) {
+        tabsTelemetry.stopTabSwitchMeasurement()
         guard let url else { return }
         AppEventQueue.completed(.selectTab(url, windowUUID))
     }
