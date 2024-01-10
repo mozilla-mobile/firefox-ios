@@ -66,13 +66,9 @@ class BrowserViewController: UIViewController,
     var dataClearanceContextHintVC: ContextualHintViewController
     let shoppingContextHintVC: ContextualHintViewController
     private var backgroundTabLoader: DefaultBackgroundTabLoader
-<<<<<<< HEAD:Client/Frontend/Browser/BrowserViewController/Views/BrowserViewController.swift
-=======
 
     // MARK: Telemetry Variables
-    var webviewTelemetry = WebViewLoadMeasurementTelemetry()
     var privateBrowsingTelemetry = PrivateBrowsingTelemetry()
->>>>>>> 13f294ffc (Add FXIOS-8096 [v122] Telemetry for data clearance button (#18080)):firefox-ios/Client/Frontend/Browser/BrowserViewController/Views/BrowserViewController.swift
 
     // popover rotation handling
     var displayedPopoverController: UIViewController?

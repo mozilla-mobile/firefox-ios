@@ -11072,13 +11072,8 @@
 				8AABBCFB2A0010900089941E /* GleanWrapper.swift */,
 				43F7952425795F69005AEE40 /* SearchTelemetry.swift */,
 				8A04136828258DF600D20B10 /* SponsoredTileTelemetry.swift */,
-<<<<<<< HEAD:Client.xcodeproj/project.pbxproj
 				8AD08D1427E9198E00B8E907 /* TabsQuantityTelemetry.swift */,
-=======
-				8A0727452B4890B50071BB9F /* WebviewTelemetry.swift */,
-				8AD08D1427E9198E00B8E907 /* TabsTelemetry.swift */,
 				8ABCFEA22B45C36100C2988A /* PrivateBrowsingTelemetry.swift */,
->>>>>>> 13f294ffc (Add FXIOS-8096 [v122] Telemetry for data clearance button (#18080)):firefox-ios/Client.xcodeproj/project.pbxproj
 				EBF47E6F1F7979DF00899189 /* TelemetryWrapper.swift */,
 				8ADC2A132A33762900543DAA /* ReferringPage.swift */,
 				8A95FF632B1E969E00AC303D /* TelemetryContextualIdentifier.swift */,
