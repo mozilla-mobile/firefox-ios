@@ -102,23 +102,25 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         static let defaultImageMaxSize = CGSize(width: 70, height: 70)
     }
 
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
+    private var viewModel: FakespotAdViewModel?
+    public var ad: ProductAdsResponse? { viewModel?.productAdsData }
+
     // MARK: Views
     private lazy var cardContainer: ShadowCardView = .build()
     private lazy var imageContainerView: UIView = .build { view in
         view.layer.cornerRadius = UX.productImageCornerRadius
     }
+
     private var defaultImageView: UIImageView = .build { view in
         view.image = UIImage(named: StandardImageIdentifiers.Large.image)?.withRenderingMode(.alwaysTemplate)
     }
+
     private lazy var productImageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = UX.productImageCornerRadius
     }
-
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
-    private var viewModel: FakespotAdViewModel?
-    public var ad: ProductAdsResponse? { viewModel?.productAdsData }
 
     private lazy var titleLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
@@ -145,12 +147,12 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
                                                             weight: .semibold)
         label.numberOfLines = 0
     }
+
     private lazy var productLinkButton: FakespotAdLinkButton = .build { button in
         button.addTarget(self, action: #selector(self.didTapProductLink), for: .touchUpInside)
     }
 
     private lazy var gradeReliabilityScoreView = FakespotReliabilityScoreView(grade: .f)
-
     private lazy var starRatingView: FakespotStarRatingView = .build()
 
     private lazy var secondRowStackView: UIStackView = .build { stackView in
