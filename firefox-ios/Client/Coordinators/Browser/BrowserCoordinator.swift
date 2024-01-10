@@ -621,9 +621,9 @@ class BrowserCoordinator: BaseCoordinator,
     func coordinatorHandleWindowEvent(event: WindowEvent, uuid: WindowUUID) {
         switch event {
         case .windowWillClose:
-            // Was the closed window the window for this browser?
             guard uuid == windowUUID else { return }
-            // If so, perform add'tl cleanup required so BVC and other components are properly released.
+            // Additional cleanup performed when the current iPad window is closed.
+            // This is necessary in order to ensure the BVC and other memory is freed correctly.
             browserViewController.contentContainer.subviews.forEach { $0.removeFromSuperview() }
             browserViewController.removeFromParent()
         case .libraryOpened:
