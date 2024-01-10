@@ -17,6 +17,9 @@ enum WindowEvent {
 
     /// A window opened the library view controller.
     case libraryOpened
+
+    /// A window opened the settings menu.
+    case settingsOpened
 }
 
 /// Abstract protocol that any Coordinator can conform to in order to respond

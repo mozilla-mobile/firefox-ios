@@ -315,6 +315,7 @@ class BrowserCoordinator: BaseCoordinator,
         guard !childCoordinators.contains(where: { $0 is SettingsCoordinator }) else {
             return // route is handled with existing child coordinator
         }
+        windowManager.postWindowEvent(event: .settingsOpened, windowUUID: windowUUID)
         let navigationController = ThemedNavigationController()
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
         let modalPresentationStyle: UIModalPresentationStyle = isPad ? .fullScreen: .formSheet
@@ -632,9 +633,18 @@ class BrowserCoordinator: BaseCoordinator,
 
             guard let libraryCoordinator = childCoordinators[LibraryCoordinator.self] else { return }
             let browserPresentedVC = router.navigationController.presentedViewController
-            let rootVC = (browserPresentedVC as? DismissableNavigationViewController)?.viewControllers.first
+            let rootVC = (browserPresentedVC as? UINavigationController)?.viewControllers.first
             if rootVC === libraryCoordinator.router.rootViewController {
                 router.dismiss(animated: true, completion: nil)
+            }
+        case .settingsOpened:
+            // If the settings were opened for this browser's window, we can ignore
+            guard uuid != windowUUID else { return }
+            guard let settingsCoordinator = childCoordinators[SettingsCoordinator.self] else { return }
+            let browserPresentedVC = router.navigationController.presentedViewController
+            let rootVC = (browserPresentedVC as? UINavigationController)?.viewControllers.first
+            if rootVC === settingsCoordinator.router.rootViewController {
+                didFinishSettings(from: settingsCoordinator)
             }
         }
     }
