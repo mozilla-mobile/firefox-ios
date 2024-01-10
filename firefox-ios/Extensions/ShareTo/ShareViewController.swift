@@ -68,6 +68,7 @@ class ShareViewController: UIViewController {
     var shareItem: ExtensionUtils.ExtractedShareItem?
     private var viewsShownDuringDoneAnimation = [UIView]()
     private var stackView: UIStackView!
+    private var spinner: UIActivityIndicatorView?
     private var actionDoneRow: (row: UIStackView, label: UILabel)!
     private var sendToDevice: SendToDevice?
     private var pageInfoHeight: NSLayoutConstraint?
@@ -93,6 +94,25 @@ class ShareViewController: UIViewController {
 
         setupNavBar()
         setupStackView()
+
+        if RustFirefoxAccounts.shared.accountManager == nil {
+            // Show brief spinner in UI while startup is finishing
+            showProgressIndicator()
+
+            let profile = BrowserProfile(localName: "profile")
+            Viaduct.shared.useReqwestBackend()
+            RustFirefoxAccounts.startup(prefs: profile.prefs) { [weak self] _ in
+                // Hide spinner and finish UI setup (Note: this completion
+                // block is currently guaranteed to arrive on main thread.)
+                self?.hideProgressIndicator()
+                self?.finalizeUISetup()
+            }
+        } else {
+            finalizeUISetup()
+        }
+    }
+
+    private func finalizeUISetup() {
         setupRows()
 
         guard let shareItem = shareItem else { return }
@@ -104,10 +124,6 @@ class ShareViewController: UIViewController {
         case .rawText(let text):
             self.pageInfoRowTitleLabel?.text = text.quoted
         }
-
-        let profile = BrowserProfile(localName: "profile")
-        Viaduct.shared.useReqwestBackend()
-        RustFirefoxAccounts.startup(prefs: profile.prefs) { _ in }
     }
 
     private func setupRows() {
@@ -383,6 +399,27 @@ class ShareViewController: UIViewController {
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
          ])
     }
+
+    private func showProgressIndicator() {
+        let indicator = UIActivityIndicatorView(style: .large)
+        let defaultSize = CGSize(width: 40.0, height: 40.0)
+        view.addSubview(indicator)
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            indicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            indicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            indicator.widthAnchor.constraint(equalToConstant: defaultSize.width),
+            indicator.heightAnchor.constraint(equalToConstant: defaultSize.height),
+         ])
+        indicator.startAnimating()
+        spinner = indicator
+    }
+
+    private func hideProgressIndicator() {
+        spinner?.stopAnimating()
+        spinner?.removeFromSuperview()
+        spinner = nil
+    }
 }
 
 extension ShareViewController {
@@ -448,16 +485,12 @@ extension ShareViewController {
         guard let shareItem = shareItem, case .shareItem(let item) = shareItem else { return }
 
         gesture.isEnabled = false
-        view.isUserInteractionEnabled = false
-        if RustFirefoxAccounts.shared.accountManager != nil {
-            self.view.isUserInteractionEnabled = true
-            self.sendToDevice = SendToDevice()
-            guard let sendToDevice = self.sendToDevice else { return }
-            sendToDevice.sharedItem = item
-            sendToDevice.delegate = self.delegate
-            let vc = sendToDevice.initialViewController()
-            self.navigationController?.pushViewController(vc, animated: true)
-        }
+        self.sendToDevice = SendToDevice()
+        guard let sendToDevice = self.sendToDevice else { return }
+        sendToDevice.sharedItem = item
+        sendToDevice.delegate = self.delegate
+        let vc = sendToDevice.initialViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
 
     func openFirefox(withUrl url: String, isSearch: Bool) {

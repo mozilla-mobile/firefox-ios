@@ -10,7 +10,7 @@ features:
         default:
           {
             "jump-back-in": true,
-            "recent-explorations": true,
+            "recent-explorations": false,
           }
       pocket-sponsored-stories:
         description: >
@@ -23,7 +23,7 @@ features:
         value: {
           "sections-enabled": {
             "jump-back-in": true,
-            "recent-explorations": true,
+            "recent-explorations": false,
           },
           "pocket-sponsored-stories": true
         }
@@ -31,7 +31,7 @@ features:
         value: {
           "sections-enabled": {
             "jump-back-in": true,
-            "recent-explorations": true,
+            "recent-explorations": false,
           },
           "pocket-sponsored-stories": false
         }

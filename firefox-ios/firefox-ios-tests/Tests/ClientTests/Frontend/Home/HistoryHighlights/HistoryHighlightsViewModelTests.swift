@@ -42,7 +42,7 @@ class HistoryHighlightsViewModelTests: XCTestCase {
         subject.didLoadNewData()
 
         XCTAssertEqual(subject.getItemDetailsAt(index: 0)?.displayTitle, "mozilla")
-        XCTAssertEqual(delegate.reloadViewCallCount, 1)
+        XCTAssertEqual(delegate.reloadViewCallCount, 0)
     }
 
     func testLoadNewDataIsNotEnabled() {

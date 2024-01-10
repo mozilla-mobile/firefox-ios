@@ -85,15 +85,8 @@ class CreditCardBottomSheetViewController: UIViewController,
         stack.spacing = UX.buttonsSpacing
     }
 
-    private lazy var yesButton: LegacyResizableButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .headline,
-            size: UX.yesButtonFontSize)
+    private lazy var yesButton: PrimaryRoundedButton = .build { button in
         button.addTarget(self, action: #selector(self.didTapYes), for: .touchUpInside)
-        button.setTitle(.CreditCard.RememberCreditCard.MainButtonTitle, for: .normal)
-        button.layer.cornerRadius = UX.yesButtonCornerRadius
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.accessibilityIdentifier = AccessibilityIdentifiers.RememberCreditCard.yesButton
     }
 
     private var contentViewHeightConstraint: NSLayoutConstraint!
@@ -148,7 +141,14 @@ class CreditCardBottomSheetViewController: UIViewController,
     func addSubviews() {
         if viewModel.state != .selectSavedCard {
             buttonsContainerStackView.addArrangedSubview(yesButton)
+            let buttonViewModel = PrimaryRoundedButtonViewModel(
+                title: .CreditCard.RememberCreditCard.MainButtonTitle,
+                a11yIdentifier: AccessibilityIdentifiers.RememberCreditCard.yesButton
+            )
+            yesButton.configure(viewModel: buttonViewModel)
+            yesButton.applyTheme(theme: themeManager.currentTheme)
         }
+
         contentView.addSubviews(cardTableView, buttonsContainerStackView)
         view.addSubview(contentView)
     }
@@ -354,15 +354,12 @@ class CreditCardBottomSheetViewController: UIViewController,
 
     // MARK: Themable
     func applyTheme() {
-        let currentTheme = themeManager.currentTheme
-        view.backgroundColor = currentTheme.colors.layer1
-        yesButton.backgroundColor = currentTheme.colors.actionPrimary
-        yesButton.setTitleColor(currentTheme.colors.textInverted, for: .normal)
+        let currentTheme = themeManager.currentTheme.colors
+        view.backgroundColor = currentTheme.layer1
         cardTableView.reloadData()
     }
 
     // MARK: Telemetry
-
     fileprivate func sendCreditCardAutofillPromptDismissedTelemetry() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .close,
