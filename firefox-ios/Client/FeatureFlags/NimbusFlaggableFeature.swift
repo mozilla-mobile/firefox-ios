@@ -73,7 +73,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .fakespotFeature,
                 .fakespotProductAds,
                 .isToolbarCFREnabled,
-                .preferSwitchToOpenTabOverDuplicate:
+                .preferSwitchToOpenTabOverDuplicate,
                 .qrCodeCoordinatorRefactor,
                 .reportSiteIssue,
                 .feltPrivacySimplifiedUI,
