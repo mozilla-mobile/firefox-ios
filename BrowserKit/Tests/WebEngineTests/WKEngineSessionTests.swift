@@ -128,6 +128,44 @@ final class WKEngineSessionTests: XCTestCase {
         XCTAssertEqual(webViewProvider.webView.url?.absoluteString, errorPageURL)
     }
 
+    // MARK: Restore
+
+    func testRestoreWhenNoLastRequestThenLoadNotCalled() {
+        let subject = createSubject()
+        let restoredState = Data()
+
+        subject?.restoreState(state: restoredState)
+
+        XCTAssertEqual(webViewProvider.webView.interactionState as! Data, restoredState)
+        XCTAssertEqual(webViewProvider.webView.loadCalled, 0)
+    }
+
+    func testRestoreWhenHasLastRequestThenLoadISCalled() {
+        let subject = createSubject()
+        let restoredState = Data()
+        subject?.load(url: "https://example.com")
+
+        subject?.restoreState(state: restoredState)
+
+        XCTAssertEqual(webViewProvider.webView.interactionState as! Data, restoredState)
+        XCTAssertEqual(webViewProvider.webView.loadCalled, 2, "Load calls it once, then restore calls it again")
+    }
+
+    // MARK: Observers
+
+    func testAddObserversWhenCreatedSubjectThenObserversAreAdded() {
+        _ = createSubject()
+        XCTAssertEqual(webViewProvider.webView.addObserverCalled, 7, "There are 7 KVO Constants")
+    }
+
+    func testRemoveObserversWhenCloseIsCalledThenObserversAreRemoved() {
+        let subject = createSubject()
+
+        subject?.close()
+
+        XCTAssertEqual(webViewProvider.webView.removeObserverCalled, 7, "There are 7 KVO Constants")
+    }
+
     // MARK: Helper
 
     func createSubject() -> WKEngineSession? {

@@ -69,7 +69,12 @@ class HistoryHighlightsTestEntryProvider {
 
     private func add(site: Site) {
         let visit = VisitObservation(url: site.url, title: site.title, visitType: nil)
-        XCTAssertTrue(profile.places.applyObservation(visitObservation: visit).value.isSuccess, "Site added: \(site.url).")
+        XCTAssertTrue(
+            profile.places.applyObservation(
+                visitObservation: visit
+            ).value.isSuccess,
+            "Site added: \(site.url)."
+        )
     }
 
     private func createWebsiteEntry(named name: String, with sufix: String = "") -> Site {

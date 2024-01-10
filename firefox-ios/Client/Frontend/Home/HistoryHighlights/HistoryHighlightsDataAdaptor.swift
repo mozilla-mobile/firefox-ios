@@ -16,7 +16,7 @@ protocol HistoryHighlightsDelegate: AnyObject {
     func didLoadNewData()
 }
 
-class HistoryHighlightsDataAdaptorImplementation: HistoryHighlightsDataAdaptor {
+class HistoryHighlightsDataAdaptorImplementation: HistoryHighlightsDataAdaptor, FeatureFlaggable {
     private var historyItems = [HighlightItem]()
     private var historyManager: HistoryHighlightsManagerProtocol
     private var profile: Profile
@@ -85,7 +85,11 @@ extension HistoryHighlightsDataAdaptorImplementation: Notifiable {
         switch notification.name {
         case .HistoryUpdated,
                 .RustPlacesOpened:
-            loadHistory()
+            // FXIOS-8107: Disabling loadHistory as it is causing the app to slow down on frequent calls
+            // "recent-explorations" in homescreenFeature.yaml has been set to false for all builds
+            if featureFlags.isFeatureEnabled(.historyHighlights, checking: .buildOnly) {
+                loadHistory()
+            }
         default:
             return
         }

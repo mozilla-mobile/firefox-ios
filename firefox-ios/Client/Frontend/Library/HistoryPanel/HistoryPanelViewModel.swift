@@ -145,14 +145,19 @@ class HistoryPanelViewModel: FeatureFlaggable {
         isFetchInProgress = true
 
         profile.places.interruptReader()
-        profile.places.queryAutocomplete(matchingSearchQuery: term, limit: searchQueryFetchLimit).uponQueue(.main) { result in
+        profile.places.queryAutocomplete(
+            matchingSearchQuery: term,
+            limit: searchQueryFetchLimit
+        ).uponQueue(.main) { result in
             self.isFetchInProgress = false
 
             guard result.isSuccess else {
-                self.logger.log("Error searching history panel",
-                                level: .warning,
-                                category: .sync,
-                                description: result.failureValue?.localizedDescription ?? "Unkown error searching history")
+                self.logger.log(
+                    "Error searching history panel",
+                    level: .warning,
+                    category: .sync,
+                    description: result.failureValue?.localizedDescription ?? "Unkown error searching history"
+                )
                 completion(false)
                 return
             }
@@ -212,9 +217,13 @@ class HistoryPanelViewModel: FeatureFlaggable {
 
     /// This helps us place an ASGroup<Site> in the correct section.
     func groupBelongsToSection(asGroup: ASGroup<Site>) -> HistoryPanelViewModel.Sections? {
-        guard let individualItem = asGroup.groupedItems.last, let lastVisit = individualItem.latestVisit else { return nil }
+        guard let individualItem = asGroup.groupedItems.last,
+              let lastVisit = individualItem.latestVisit
+        else { return nil }
 
-        let groupDate = TimeInterval.timeIntervalSince1970ToDate(timeInterval: TimeInterval.fromMicrosecondTimestamp(lastVisit.date))
+        let groupDate = TimeInterval.timeIntervalSince1970ToDate(
+            timeInterval: TimeInterval.fromMicrosecondTimestamp(lastVisit.date)
+        )
 
         if groupDate.isToday() {
             return .today
@@ -319,7 +328,8 @@ class HistoryPanelViewModel: FeatureFlaggable {
     /// Provide de-duplicated history and visible history sections.
     private func populateHistorySites(fetchedSites: [Site]) {
         let allCurrentGroupedSites = self.groupedSites.allItems()
-        let allUniquedSitesToAdd = (allCurrentGroupedSites + fetchedSites).filter { !allCurrentGroupedSites.contains($0) }
+        let allUniquedSitesToAdd = (allCurrentGroupedSites + fetchedSites)
+            .filter { !allCurrentGroupedSites.contains($0) }
 
         allUniquedSitesToAdd.forEach { site in
             if let latestVisit = site.latestVisit {
@@ -329,8 +339,15 @@ class HistoryPanelViewModel: FeatureFlaggable {
     }
 
     /// Provide groups for currently fetched history items.
-    private func populateASGroups(fetchedSites: [Site], completion: @escaping ([ASGroup<Site>]?, _ filteredItems: [Site]) -> Void) {
-        SearchTermGroupsUtility.getSiteGroups(with: self.profile, from: fetchedSites, using: .orderedDescending) { group, individualItems in
+    private func populateASGroups(
+        fetchedSites: [Site],
+        completion: @escaping ([ASGroup<Site>]?, _ filteredItems: [Site]) -> Void
+    ) {
+        SearchTermGroupsUtility.getSiteGroups(
+            with: self.profile,
+            from: fetchedSites,
+            using: .orderedDescending
+        ) { group, individualItems in
             completion(group, individualItems)
         }
     }

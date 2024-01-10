@@ -7,7 +7,10 @@ import Shared
 import ComponentLibrary
 
 protocol SearchEnginePickerDelegate: AnyObject {
-    func searchEnginePicker(_ searchEnginePicker: SearchEnginePicker?, didSelectSearchEngine engine: OpenSearchEngine?)
+    func searchEnginePicker(
+        _ searchEnginePicker: SearchEnginePicker?,
+        didSelectSearchEngine engine: OpenSearchEngine?
+    )
 }
 
 class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlaggable {
@@ -26,7 +29,10 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
             case .privateSession:
                 return .Settings.Search.PrivateSessionTitle
             case .firefoxSuggestSettings:
-                return String.localizedStringWithFormat(.Settings.Search.Suggest.AddressBarSettingsTitle, AppName.shortName.rawValue)
+                return String.localizedStringWithFormat(
+                    .Settings.Search.Suggest.AddressBarSettingsTitle,
+                    AppName.shortName.rawValue
+                )
             }
         }
     }
@@ -81,7 +87,12 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
 
         // Insert Done button if being presented outside of the Settings Nav stack
         if !(self.navigationController is ThemedNavigationController) {
-            self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: .SettingsSearchDoneButton, style: .done, target: self, action: #selector(self.dismissAnimated))
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(
+                title: .SettingsSearchDoneButton,
+                style: .done,
+                target: self,
+                action: #selector(self.dismissAnimated)
+            )
         }
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(
@@ -182,13 +193,21 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
                     theme: themeManager.currentTheme,
                     prefKey: PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions,
                     defaultValue: profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions) ?? true,
-                    titleText: String.localizedStringWithFormat(.Settings.Search.Suggest.ShowNonSponsoredSuggestionsTitle,
-                                                                AppName.shortName.rawValue),
-                    statusText: String.localizedStringWithFormat(.Settings.Search.Suggest.ShowNonSponsoredSuggestionsDescription,
-                                                                 AppName.shortName.rawValue)
+                    titleText: String.localizedStringWithFormat(
+                        .Settings.Search.Suggest.ShowNonSponsoredSuggestionsTitle,
+                        AppName.shortName.rawValue
+                    ),
+                    statusText: String.localizedStringWithFormat(
+                        .Settings.Search.Suggest.ShowNonSponsoredSuggestionsDescription,
+                        AppName.shortName.rawValue
+                    )
                 )
                 setting.onConfigureCell(cell, theme: themeManager.currentTheme)
-                setting.control.addTarget(self, action: #selector(didToggleEnableNonSponsoredSuggestions), for: .valueChanged)
+                setting.control.addTarget(
+                    self,
+                    action: #selector(didToggleEnableNonSponsoredSuggestions),
+                    for: .valueChanged
+                )
                 cell.editingAccessoryView = setting.control
                 cell.selectionStyle = .none
             case ItemSuggestionSponsored:
@@ -198,18 +217,28 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
                     prefKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions,
                     defaultValue: profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowSponsoredSuggestions) ?? true,
                     titleText: .Settings.Search.Suggest.ShowSponsoredSuggestionsTitle,
-                    statusText: String.localizedStringWithFormat(.Settings.Search.Suggest.ShowSponsoredSuggestionsDescription,
-                                                                 AppName.shortName.rawValue)
+                    statusText: String.localizedStringWithFormat(
+                        .Settings.Search.Suggest.ShowSponsoredSuggestionsDescription,
+                        AppName.shortName.rawValue
+                    )
                 )
                 setting.onConfigureCell(cell, theme: themeManager.currentTheme)
-                setting.control.addTarget(self, action: #selector(didToggleEnableSponsoredSuggestions), for: .valueChanged)
+                setting.control.addTarget(
+                    self,
+                    action: #selector(didToggleEnableSponsoredSuggestions),
+                    for: .valueChanged
+                )
                 cell.editingAccessoryView = setting.control
                 cell.selectionStyle = .none
             case ItemSuggestionLearn:
-                cell.accessibilityLabel = String.localizedStringWithFormat(.Settings.Search.AccessibilityLabels.LearnAboutSuggestions,
-                                                                           AppName.shortName.rawValue)
-                cell.textLabel?.text = String.localizedStringWithFormat(.Settings.Search.Suggest.LearnAboutSuggestions,
-                                                                        AppName.shortName.rawValue)
+                cell.accessibilityLabel = String.localizedStringWithFormat(
+                    .Settings.Search.AccessibilityLabels.LearnAboutSuggestions,
+                    AppName.shortName.rawValue
+                )
+                cell.textLabel?.text = String.localizedStringWithFormat(
+                    .Settings.Search.Suggest.LearnAboutSuggestions,
+                    AppName.shortName.rawValue
+                )
                 cell.imageView?.layer.cornerRadius = 4
                 cell.imageView?.layer.masksToBounds = true
                 cell.selectionStyle = .none
@@ -288,7 +317,10 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
     }
 
     // Don't show delete button on the left.
-    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+    override func tableView(
+        _ tableView: UITableView,
+        editingStyleForRowAt indexPath: IndexPath
+    ) -> UITableViewCell.EditingStyle {
         let section = Section(rawValue: sectionsToDisplay[indexPath.section].rawValue) ?? .defaultEngine
         switch section {
         case .defaultEngine, .privateSession, .firefoxSuggestSettings:
@@ -305,11 +337,18 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
     }
 
     // Don't reserve space for the delete button on the left.
-    override func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+    override func tableView(
+        _ tableView: UITableView,
+        shouldIndentWhileEditingRowAt indexPath: IndexPath
+    ) -> Bool {
         return false
     }
 
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    override func tableView(
+        _ tableView: UITableView,
+        willDisplay cell: UITableViewCell,
+        forRowAt indexPath: IndexPath
+    ) {
         // Change color of a thin vertical line that iOS renders between the accessoryView and the reordering control.
         for subview in cell.subviews where subview.classForCoder.description() == "_UITableViewCellVerticalSeparator" {
             subview.backgroundColor = themeManager.currentTheme.colors.borderPrimary
@@ -335,7 +374,10 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = super.tableView(tableView, viewForHeaderInSection: section) as? ThemedTableSectionHeaderFooterView else { return nil }
+        guard let headerView = super.tableView(
+            tableView,
+            viewForHeaderInSection: section
+        ) as? ThemedTableSectionHeaderFooterView else { return nil }
         let section = Section(rawValue: sectionsToDisplay[section].rawValue) ?? .defaultEngine
         headerView.titleLabel.text = section.title
 
@@ -343,7 +385,9 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
     }
 
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        guard let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
+        guard let footerView = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier
+        ) as? ThemedTableSectionHeaderFooterView else { return nil }
         if case .defaultEngine = Section(rawValue: section) {
             footerView.titleLabel.text = .Settings.Search.DefaultSearchEngineFooter
             footerView.titleAlignment = .top
@@ -363,7 +407,11 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
         }
     }
 
-    override func tableView(_ tableView: UITableView, moveRowAt indexPath: IndexPath, to newIndexPath: IndexPath) {
+    override func tableView(
+        _ tableView: UITableView,
+        moveRowAt indexPath: IndexPath,
+        to newIndexPath: IndexPath
+    ) {
         // The first engine (default engine) is not shown in the list, so the indices are off-by-1.
         let index = indexPath.item + 1
         let newIndex = newIndexPath.item + 1
@@ -373,9 +421,14 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
     }
 
     // Snap to first or last row of the list of engines.
-    override func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
+    override func tableView(
+        _ tableView: UITableView,
+        targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath,
+        toProposedIndexPath proposedDestinationIndexPath: IndexPath
+    ) -> IndexPath {
         // You can't drag or drop on the default engine.
-        if sourceIndexPath.section == Section.defaultEngine.rawValue || proposedDestinationIndexPath.section == Section.defaultEngine.rawValue {
+        if sourceIndexPath.section == Section.defaultEngine.rawValue
+            || proposedDestinationIndexPath.section == Section.defaultEngine.rawValue {
             return sourceIndexPath
         }
 
@@ -394,14 +447,19 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
         return proposedDestinationIndexPath
     }
 
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(
+        _ tableView: UITableView,
+        commit editingStyle: UITableViewCell.EditingStyle,
+        forRowAt indexPath: IndexPath
+    ) {
         if editingStyle == .delete {
             let index = indexPath.item + 1
             let engine = model.orderedEngines[index]
 
             model.deleteCustomEngine(engine) { [weak self] in
                 tableView.deleteRows(at: [indexPath], with: .right)
-                // Change navigationItem's right button item title to Edit and disable the edit button once the deletion is done
+                // Change navigationItem's right button item title to Edit and disable the edit button
+                // once the deletion is done
                 self?.setEditing(false, animated: true)
             }
 
@@ -486,7 +544,10 @@ extension SearchSettingsTableViewController {
 }
 
 extension SearchSettingsTableViewController: SearchEnginePickerDelegate {
-    func searchEnginePicker(_ searchEnginePicker: SearchEnginePicker?, didSelectSearchEngine searchEngine: OpenSearchEngine?) {
+    func searchEnginePicker(
+        _ searchEnginePicker: SearchEnginePicker?,
+        didSelectSearchEngine searchEngine: OpenSearchEngine?
+    ) {
         if let engine = searchEngine {
             model.defaultEngine = engine
             updateSearchIcon?()

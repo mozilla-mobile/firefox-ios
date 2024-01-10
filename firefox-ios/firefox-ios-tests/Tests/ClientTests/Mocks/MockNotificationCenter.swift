@@ -29,11 +29,20 @@ class MockNotificationCenter: NotificationProtocol {
         notifiableListener?.handleNotifications(Notification(name: aName))
     }
 
-    func addObserver(_ observer: Any, selector aSelector: Selector, name aName: NSNotification.Name?, object anObject: Any?) {
+    func addObserver(
+        _ observer: Any,
+        selector aSelector: Selector,
+        name aName: NSNotification.Name?,
+        object anObject: Any?
+    ) {
         addObserverCallCount += 1
     }
 
-    func addObserver(name: NSNotification.Name?, queue: OperationQueue?, using block: @escaping (Notification) -> Void) -> NSObjectProtocol? {
+    func addObserver(
+        name: NSNotification.Name?,
+        queue: OperationQueue?,
+        using block: @escaping (Notification) -> Void
+    ) -> NSObjectProtocol? {
         addObserverCallCount += 1
         return nil
     }

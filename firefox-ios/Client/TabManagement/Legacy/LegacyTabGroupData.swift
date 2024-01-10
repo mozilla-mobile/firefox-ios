@@ -23,7 +23,11 @@ class LegacyTabGroupData: Codable {
     var tabHistoryCurrentState = ""
 
     func tabHistoryMetadatakey() -> HistoryMetadataKey {
-        return HistoryMetadataKey(url: tabAssociatedSearchUrl, searchTerm: tabAssociatedSearchTerm, referrerUrl: tabAssociatedNextUrl)
+        return HistoryMetadataKey(
+            url: tabAssociatedSearchUrl,
+            searchTerm: tabAssociatedSearchTerm,
+            referrerUrl: tabAssociatedNextUrl
+        )
     }
 
     enum CodingKeys: String, CodingKey {

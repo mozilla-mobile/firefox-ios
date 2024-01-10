@@ -16,6 +16,21 @@
 /* Label for the button used to delete the current login. */
 "Delete" = "ລຶບ";
 
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "ຍົກເລີກ";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "ລຶບ";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "ທ່ານບໍ່ສາມາດຍົກເລີກການກະທຳນີ້ໄດ້.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "ນີ້ຈະເປັນການລຶບລະຫັດຜ່ານອອກຈາກອຸປະກອນທີ່ຊິ້ງທັງໝົດຂອງທ່ານ.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "ລຶບລະຫັດຜ່ານອອກບໍ?";
+
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "ບໍ່ເລືອກທັງຫມົດ";
 
@@ -36,6 +51,9 @@
 
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "ບໍ່ພົບການເຂົ້າສູ່ລະບົບ";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "ບໍ່ພົບລະຫັດຜ່ານ";
 
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "ເປີດ & ຕື່ມໃສ່";

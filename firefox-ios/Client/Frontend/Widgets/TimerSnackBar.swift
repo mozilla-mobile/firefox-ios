@@ -23,16 +23,29 @@ class TimerSnackBar: SnackBar {
         fatalError("init(coder:) has not been implemented")
     }
 
-    static func showAppStoreConfirmationBar(forTab tab: Tab, appStoreURL: URL, theme: Theme, completion: @escaping (Bool) -> Void) {
+    static func showAppStoreConfirmationBar(
+        forTab tab: Tab,
+        appStoreURL: URL,
+        theme: Theme,
+        completion: @escaping (Bool) -> Void
+    ) {
         let bar = TimerSnackBar(
             text: .ExternalLinkAppStoreConfirmationTitle,
             img: UIImage(named: StandardImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysOriginal))
-        let openAppStore = SnackButton(title: .AppStoreString, accessibilityIdentifier: "ConfirmOpenInAppStore", bold: true) { bar in
+        let openAppStore = SnackButton(
+            title: .AppStoreString,
+            accessibilityIdentifier: "ConfirmOpenInAppStore",
+            bold: true
+        ) { bar in
             tab.removeSnackbar(bar)
             UIApplication.shared.open(appStoreURL, options: [:])
             completion(true)
         }
-        let cancelButton = SnackButton(title: .NotNowString, accessibilityIdentifier: "CancelOpenInAppStore", bold: false) { bar in
+        let cancelButton = SnackButton(
+            title: .NotNowString,
+            accessibilityIdentifier: "CancelOpenInAppStore",
+            bold: false
+        ) { bar in
             tab.removeSnackbar(bar)
             completion(false)
         }
@@ -46,7 +59,13 @@ class TimerSnackBar: SnackBar {
     }
 
     override func show() {
-        self.timer = Timer(timeInterval: timeout, target: self, selector: #selector(timerDone), userInfo: nil, repeats: false)
+        self.timer = Timer(
+            timeInterval: timeout,
+            target: self,
+            selector: #selector(timerDone),
+            userInfo: nil,
+            repeats: false
+        )
         RunLoop.current.add(self.timer!, forMode: RunLoop.Mode.default)
         super.show()
     }

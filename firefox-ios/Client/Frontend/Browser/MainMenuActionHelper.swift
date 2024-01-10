@@ -365,7 +365,11 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                                      iconString: toggleActionIcon) { _ in
             if let url = tab.url {
                 tab.toggleChangeUserAgent()
-                Tab.ChangeUserAgent.updateDomainList(forUrl: url, isChangedUA: tab.changedUserAgent, isPrivate: tab.isPrivate)
+                Tab.ChangeUserAgent.updateDomainList(
+                    forUrl: url,
+                    isChangedUA: tab.changedUserAgent,
+                    isPrivate: tab.isPrivate
+                )
                 TelemetryWrapper.recordEvent(category: .action, method: .tap, object: siteTypeTelemetryObject)
             }
         }.items
@@ -473,7 +477,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             }
 
             // If we've disabled night mode and dark theme was activated by it then disable dark theme
-            if !NightModeHelper.isActivated(), NightModeHelper.hasEnabledDarkTheme(), LegacyThemeManager.instance.currentName == .dark {
+            if !NightModeHelper.isActivated(),
+               NightModeHelper.hasEnabledDarkTheme(),
+               LegacyThemeManager.instance.currentName == .dark {
                 LegacyThemeManager.instance.current = LegacyNormalTheme()
                 self.themeManager.changeCurrentTheme(.light)
                 NightModeHelper.setEnabledDarkTheme(darkTheme: false)
@@ -647,8 +653,17 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                   let url = self.tabUrl?.displayURL
             else { return }
 
-            self.profile.readingList.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.current.name)
-            TelemetryWrapper.recordEvent(category: .action, method: .add, object: .readingListItem, value: .pageActionMenu)
+            self.profile.readingList.createRecordWithURL(
+                url.absoluteString,
+                title: tab.title ?? "",
+                addedBy: UIDevice.current.name
+            )
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .add,
+                object: .readingListItem,
+                value: .pageActionMenu
+            )
             self.delegate?.showToast(message: .AppMenu.AddToReadingListConfirmMessage, toastAction: .addToReadingList)
         }
     }
@@ -704,7 +719,12 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
             // The method in BVC also handles the toast for this use case
             self.delegate?.addBookmark(url: url.absoluteString, title: tab.title)
-            TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .pageActionMenu)
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .add,
+                object: .bookmark,
+                value: .pageActionMenu
+            )
         }
     }
 
@@ -715,11 +735,19 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
             self.profile.places.deleteBookmarksWithURL(url: url.absoluteString).uponQueue(.main) { result in
                 guard result.isSuccess else { return }
-                self.delegate?.showToast(message: .AppMenu.RemoveBookmarkConfirmMessage, toastAction: .removeBookmark)
+                self.delegate?.showToast(
+                    message: .AppMenu.RemoveBookmarkConfirmMessage,
+                    toastAction: .removeBookmark
+                )
                 self.removeBookmarkShortcut()
             }
 
-            TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .pageActionMenu)
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .delete,
+                object: .bookmark,
+                value: .pageActionMenu
+            )
         }
     }
 
@@ -752,7 +780,10 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             let site = Site(url: url.absoluteString, title: title)
             self.profile.pinnedSites.removeFromPinnedTopSites(site).uponQueue(.main) { result in
                 if result.isSuccess {
-                    self.delegate?.showToast(message: .AppMenu.RemovePinFromShortcutsConfirmMessage, toastAction: .removePinPage)
+                    self.delegate?.showToast(
+                        message: .AppMenu.RemovePinFromShortcutsConfirmMessage,
+                        toastAction: .removePinPage
+                    )
                 }
             }
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .removePinnedSite)

@@ -7,7 +7,8 @@ import UIKit
 private struct UX {
     static let BackgroundColor = UIColor.Photon.Purple60
 
-    // The amount of pixels the toggle button will expand over the normal size. This results in the larger -> contract animation.
+    // The amount of pixels the toggle button will expand over the normal size.
+    // This results in the larger -> contract animation.
     static let ExpandDelta: CGFloat = 5
     static let ShowDuration: TimeInterval = 0.4
     static let HideDuration: TimeInterval = 0.2

@@ -103,7 +103,11 @@ class MockBrowserViewController: BrowserViewController {
         closePrivateTabsCount += 1
     }
 
-    override func presentSignInViewController(_ fxaOptions: FxALaunchParams, flowType: FxAPageType = .emailLoginFlow, referringPage: ReferringPage = .none) {
+    override func presentSignInViewController(
+        _ fxaOptions: FxALaunchParams,
+        flowType: FxAPageType = .emailLoginFlow,
+        referringPage: ReferringPage = .none
+    ) {
         presentSignInFxaOptions = fxaOptions
         presentSignInFlowType = flowType
         presentSignInReferringPage = referringPage

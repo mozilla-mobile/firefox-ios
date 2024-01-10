@@ -22,12 +22,24 @@ class ToolbarMenuTests: BaseTestCase {
         mozWaitForElementToExist(firstPocketCell)
         if iPad() {
             mozWaitForElementToExist(bookmarksButton)
-            XCTAssertTrue(hamburgerMenu.isRightOf(rightElement: bookmarksButton), "Menu button is not on the right side of bookmarks button")
-            XCTAssertTrue(hamburgerMenu.isAbove(element: firstPocketCell), "Menu button is not above the pocket cells area")
+            XCTAssertTrue(
+                hamburgerMenu.isRightOf(rightElement: bookmarksButton),
+                "Menu button is not on the right side of bookmarks button"
+            )
+            XCTAssertTrue(
+                hamburgerMenu.isAbove(element: firstPocketCell),
+                "Menu button is not above the pocket cells area"
+            )
         } else {
             mozWaitForElementToExist(tabsButton)
-            XCTAssertTrue(hamburgerMenu.isRightOf(rightElement: tabsButton), "Menu button is not on the right side of tabs button")
-            XCTAssertTrue(hamburgerMenu.isBelow(element: firstPocketCell), "Menu button is not below the pocket cells area")
+            XCTAssertTrue(
+                hamburgerMenu.isRightOf(rightElement: tabsButton),
+                "Menu button is not on the right side of tabs button"
+            )
+            XCTAssertTrue(
+                hamburgerMenu.isBelow(element: firstPocketCell),
+                "Menu button is not below the pocket cells area"
+            )
         }
         navigator.goto(BrowserTabMenu)
         mozWaitForElementToExist(app.tables["Context Menu"])
@@ -39,13 +51,22 @@ class ToolbarMenuTests: BaseTestCase {
         mozWaitForElementToExist(app.webViews["contentView"])
         if iPad() {
             mozWaitForElementToExist(bookmarksButton)
-            XCTAssertTrue(hamburgerMenu.isRightOf(rightElement: bookmarksButton), "Menu button is not on the right side of bookmarks button")
+            XCTAssertTrue(
+                hamburgerMenu.isRightOf(rightElement: bookmarksButton),
+                "Menu button is not on the right side of bookmarks button"
+            )
         } else {
             mozWaitForElementToExist(tabsButton)
-            XCTAssertTrue(hamburgerMenu.isRightOf(rightElement: tabsButton), "Menu button is not on the right side of tabs button")
+            XCTAssertTrue(
+                hamburgerMenu.isRightOf(rightElement: tabsButton),
+                "Menu button is not on the right side of tabs button"
+            )
         }
         mozWaitForElementToExist(firstPocketCell)
-        XCTAssertTrue(hamburgerMenu.isAbove(element: firstPocketCell), "Menu button is not below the pocket cells area")
+        XCTAssertTrue(
+            hamburgerMenu.isAbove(element: firstPocketCell),
+            "Menu button is not below the pocket cells area"
+        )
         hamburgerMenu.tap()
         mozWaitForElementToExist(app.tables["Context Menu"])
         validateMenuOptions()

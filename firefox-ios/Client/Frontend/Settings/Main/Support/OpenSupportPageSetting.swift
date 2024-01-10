@@ -14,9 +14,13 @@ class OpenSupportPageSetting: Setting {
          theme: Theme,
          settingsDelegate: SupportSettingsDelegate?) {
         self.settingsDelegate = settingsDelegate
-        super.init(title: NSAttributedString(string: .AppSettingsHelp,
-                                             attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]),
-                   delegate: delegate)
+        super.init(
+            title: NSAttributedString(
+                string: .AppSettingsHelp,
+                attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
+            ),
+            delegate: delegate
+        )
     }
 
     override func onClick(_ navigationController: UINavigationController?) {

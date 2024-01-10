@@ -3615,6 +3615,18 @@ tabs:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
+  tab_switch:
+    type: timing_distribution
+    time_unit: millisecond
+    description: >
+      Counts how long it takes to switch to another tab
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17717
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/18012
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
 
 # Theme metrics
 theme:
@@ -4982,6 +4994,18 @@ webview:
       - https://github.com/mozilla-mobile/firefox-ios/issues/17716
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/17910
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  page_load:
+    type: timing_distribution
+    time_unit: millisecond
+    description: >
+      Counts how long each page takes to load
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17717
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/18012
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never

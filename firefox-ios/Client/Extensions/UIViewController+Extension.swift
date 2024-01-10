@@ -50,13 +50,24 @@ extension UIViewController {
 
     /// This presents a View Controller with a bar button item that can be used to dismiss the VC
     /// - Parameters:
-    ///     - navItemLocation: Define whether dismiss bar button item should be on the right or left of the navigation bar
+    ///     - navItemLocation: Define whether dismiss bar button item should be on the right
+    ///                        or left of the navigation bar
     ///     - navItemText: Define whether bar button item text should be "Done" or "Close"
     ///     - vcBeingPresented: ViewController to present with this bar button item
     ///     - topTabsVisible: If tabs of browser should still be visible. iPad only.
-    func presentThemedViewController(navItemLocation: NavigationItemLocation, navItemText: NavigationItemText, vcBeingPresented: UIViewController, topTabsVisible: Bool) {
+    func presentThemedViewController(
+        navItemLocation: NavigationItemLocation,
+        navItemText: NavigationItemText,
+        vcBeingPresented: UIViewController,
+        topTabsVisible: Bool
+    ) {
         let vcToPresent = vcBeingPresented
-        let buttonItem = UIBarButtonItem(title: navItemText.localizedString(), style: .plain, target: self, action: #selector(dismissVC))
+        let buttonItem = UIBarButtonItem(
+            title: navItemText.localizedString(),
+            style: .plain,
+            target: self,
+            action: #selector(dismissVC)
+        )
         switch navItemLocation {
         case .Left:
             vcToPresent.navigationItem.leftBarButtonItem = buttonItem
@@ -105,7 +116,8 @@ extension UIViewController {
 
     // MARK: - Logger Swizzling
 
-    /// Ignore some view controller out of logs to avoid spamming the logger, which would reduce the usefulness of logging view controllers
+    /// Ignore some view controller out of logs to avoid spamming the logger,
+    /// which would reduce the usefulness of logging view controllers
     private enum LoggerIgnoreViewController: String, CaseIterable {
         case compatibility = "UICompatibilityInputViewController"
         case defaultTheme = "ThemedDefaultNavigationController"
@@ -117,7 +129,8 @@ extension UIViewController {
         case remoteScreenTime = "STWebRemoteViewController"
     }
 
-    /// Add a swizzle on top of the viewWillAppear function to log whenever a view controller will appear. Needs to be only called once on app launch.
+    /// Add a swizzle on top of the viewWillAppear function to log whenever a view controller will appear.
+    /// Needs to be only called once on app launch.
     static func loggerSwizzle() {
         let originalSelector = #selector(UIViewController.viewWillAppear(_:))
         let swizzledSelector = #selector(UIViewController.loggerViewWillAppear(_:))

@@ -361,6 +361,9 @@ public class RustSyncManager: NSObject, SyncManager {
                                   category: .sync)
                    }
                }
+           case .addresses:
+               profile?.autofill.registerWithSyncManager()
+               rustEngines.append(engine.rawValue)
            case .bookmarks, .history:
                if !registeredPlaces {
                    profile?.places.registerWithSyncManager()
@@ -462,7 +465,9 @@ public class RustSyncManager: NSObject, SyncManager {
                         return
                     }
 
-                    self.getEnginesAndKeys(engines: engines.compactMap { RustSyncManagerAPI.TogglableEngine(rawValue: $0) }) { (rustEngines, localEncryptionKeys) in
+                    self.getEnginesAndKeys(engines: engines.compactMap {
+                        RustSyncManagerAPI.TogglableEngine(rawValue: $0)
+                    }) { (rustEngines, localEncryptionKeys) in
                         let params = SyncParams(
                             reason: why,
                             engines: SyncEngineSelection.some(engines: rustEngines),

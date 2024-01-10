@@ -15,8 +15,9 @@ extension AppInfo {
     }
 
     /// The port for the internal webserver, tests can change this
-    /// Please be aware that we needed to migrate this webserverPort in WebEngine.WKEngineInfo due to Shared target issues in #17721
-    /// This webserverPort needs to be deleted with FXIOS-7960 once the WebEngine package is integrated in Firefox iOS
+    /// Please be aware that we needed to migrate this webserverPort in WebEngine.WKEngineInfo
+    /// due to Shared target issues in #17721. This webserverPort needs to be deleted with
+    /// FXIOS-7960 once the WebEngine package is integrated in Firefox iOS
     public static var webserverPort = 6571
 
     /// Return the keychain access group.
@@ -32,7 +33,8 @@ extension AppInfo {
 
     // Return the MozWhatsNewTopic key from the Info.plist
     public static var whatsNewTopic: String? {
-        // By default we don't want to add dot version to what's new section. Set this to true if you'd like to add dot version for whats new article.
+        // By default we don't want to add dot version to what's new section. Set
+        // this to true if you'd like to add dot version for whats new article.
         let shouldAddDotVersion = false
         let appVersionSplit = AppInfo.appVersion.components(separatedBy: ".")
         let majorAppVersion = appVersionSplit[0]

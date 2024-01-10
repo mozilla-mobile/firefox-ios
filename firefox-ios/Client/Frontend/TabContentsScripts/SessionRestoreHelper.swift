@@ -21,7 +21,10 @@ class SessionRestoreHelper: TabContentScript {
         return ["sessionRestoreHelper"]
     }
 
-    func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(
+        _ userContentController: WKUserContentController,
+        didReceiveScriptMessage message: WKScriptMessage
+    ) {
         guard let tab = tab,
               let params = message.body as? [String: AnyObject],
               let parameter = params["name"] as? String,

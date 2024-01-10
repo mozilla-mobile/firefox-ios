@@ -110,7 +110,12 @@ class BaseTestCase: XCTestCase {
         }
     }
 
-    func waitForExistence(_ element: XCUIElement, timeout: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
+    func waitForExistence(
+        _ element: XCUIElement,
+        timeout: TimeInterval = 5.0,
+        file: String = #file,
+        line: UInt = #line
+    ) {
         waitFor(element, with: "exists == true", timeout: timeout, file: file, line: line)
     }
 
@@ -127,7 +132,12 @@ class BaseTestCase: XCTestCase {
         }
     }
 
-    func waitForNoExistence(_ element: XCUIElement, timeoutValue: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
+    func waitForNoExistence(
+        _ element: XCUIElement,
+        timeoutValue: TimeInterval = 5.0,
+        file: String = #file,
+        line: UInt = #line
+    ) {
         waitFor(element, with: "exists != true", timeout: timeoutValue, file: file, line: line)
     }
 
@@ -162,7 +172,14 @@ class BaseTestCase: XCTestCase {
         }
     }
 
-    private func waitFor(_ element: XCUIElement, with predicateString: String, description: String? = nil, timeout: TimeInterval = 5.0, file: String, line: UInt) {
+    private func waitFor(
+        _ element: XCUIElement,
+        with predicateString: String,
+        description: String? = nil,
+        timeout: TimeInterval = 5.0,
+        file: String,
+        line: UInt
+    ) {
         let predicate = NSPredicate(format: predicateString)
         let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
         let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
@@ -185,9 +202,15 @@ class BaseTestCase: XCTestCase {
     }
 
     func bookmark() {
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: TIMEOUT)
+        mozWaitForElementToExist(
+            app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection],
+            timeout: TIMEOUT
+        )
         navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.bookmark], timeout: TIMEOUT_LONG)
+        mozWaitForElementToExist(
+            app.tables.otherElements[StandardImageIdentifiers.Large.bookmark],
+            timeout: TIMEOUT_LONG
+        )
         app.tables.otherElements[StandardImageIdentifiers.Large.bookmark].tap()
         navigator.nowAt(BrowserTab)
     }
@@ -201,14 +224,26 @@ class BaseTestCase: XCTestCase {
 
     func checkRecentlySaved() {
         waitForTabsButton()
-        let numberOfRecentlyVisitedBookmarks = app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell].otherElements.otherElements.otherElements.otherElements.count
+        let numberOfRecentlyVisitedBookmarks = app.scrollViews
+            .cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell]
+            .otherElements
+            .otherElements
+            .otherElements
+            .otherElements
+            .count
         let numberOfExpectedRecentlyVisitedBookmarks = 3
         XCTAssertEqual(numberOfRecentlyVisitedBookmarks, numberOfExpectedRecentlyVisitedBookmarks)
     }
 
     func checkRecentlySavedUpdated() {
         waitForTabsButton()
-        let numberOfRecentlyVisitedBookmarks = app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell].otherElements.otherElements.otherElements.otherElements.count
+        let numberOfRecentlyVisitedBookmarks = app.scrollViews
+            .cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell]
+            .otherElements
+            .otherElements
+            .otherElements
+            .otherElements
+            .count
         let numberOfExpectedRecentlyVisitedBookmarks = 1
         XCTAssertEqual(numberOfRecentlyVisitedBookmarks, numberOfExpectedRecentlyVisitedBookmarks)
     }
@@ -340,7 +375,8 @@ extension BaseTestCase {
 
 extension XCUIElement {
     func tap(force: Bool) {
-        // There appears to be a bug with tapping elements sometimes, despite them being on-screen and tappable, due to hittable being false.
+        // There appears to be a bug with tapping elements sometimes, despite them being on-screen
+        // and tappable, due to hittable being false.
         // See: http://stackoverflow.com/a/33534187/1248491
         if isHittable {
             tap()
@@ -351,12 +387,16 @@ extension XCUIElement {
 
     /// Tap at @offsetPoint point in @self element view. This might not work for simulators lower than iPhone 14 Plus.
     func tapAtPoint(_ offsetPoint: CGPoint) {
-        self.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0)).withOffset(CGVector(dx: offsetPoint.x, dy: offsetPoint.y)).tap()
+        self.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
+            .withOffset(CGVector(dx: offsetPoint.x, dy: offsetPoint.y))
+            .tap()
     }
 
     /// Press at @offsetPoint point in @self element view
     func pressAtPoint(_ offsetPoint: CGPoint, forDuration duration: TimeInterval) {
-        self.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0)).withOffset(CGVector(dx: offsetPoint.x, dy: offsetPoint.y)).press(forDuration: duration)
+        self.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
+            .withOffset(CGVector(dx: offsetPoint.x, dy: offsetPoint.y))
+            .press(forDuration: duration)
     }
 
     /// Tap on app screen at the central of the current element
@@ -422,7 +462,9 @@ extension XCUIElement {
 
 extension XCUIElementQuery {
     func containingText(_ text: String) -> XCUIElementQuery {
-        return matching(NSPredicate(format: "label CONTAINS %@ OR %@ == '' AND label != nil AND label != ''", text, text))
+        return matching(
+            NSPredicate(format: "label CONTAINS %@ OR %@ == '' AND label != nil AND label != ''", text, text)
+        )
     }
 
     func elementContainingText(_ text: String) -> XCUIElement {

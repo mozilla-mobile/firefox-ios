@@ -18,7 +18,14 @@ class ManageFxAccountSetting: Setting {
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
 
-        super.init(title: NSAttributedString(string: .FxAManageAccount, attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
+        super.init(
+            title: NSAttributedString(
+                string: .FxAManageAccount,
+                attributes: [
+                    NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary
+                ]
+            )
+        )
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -38,7 +45,12 @@ class DisconnectSetting: Setting {
     override var textAlignment: NSTextAlignment { return .center }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: .SettingsDisconnectSyncButton, attributes: [NSAttributedString.Key.foregroundColor: settingsVC.themeManager.currentTheme.colors.textWarning])
+        return NSAttributedString(
+            string: .SettingsDisconnectSyncButton,
+            attributes: [
+                NSAttributedString.Key.foregroundColor: settingsVC.themeManager.currentTheme.colors.textWarning
+            ]
+        )
     }
 
     init(settings: SettingsTableViewController) {
@@ -108,9 +120,19 @@ class DeviceNameSetting: StringSetting {
     init(settings: SettingsTableViewController) {
         tableView = settings
         let settingsIsValid: (String?) -> Bool = { !($0?.isEmpty ?? true) }
-        super.init(defaultValue: DeviceInfo.defaultClientName(), placeholder: "", accessibilityIdentifier: "DeviceNameSetting", persister: DeviceNamePersister(), settingIsValid: settingsIsValid)
+        super.init(
+            defaultValue: DeviceInfo.defaultClientName(),
+            placeholder: "",
+            accessibilityIdentifier: "DeviceNameSetting",
+            persister: DeviceNamePersister(),
+            settingIsValid: settingsIsValid
+        )
 
-        notification = NotificationCenter.default.addObserver(forName: Notification.Name.constellationStateUpdate, object: nil, queue: nil) { [weak self] notification in
+        notification = NotificationCenter.default.addObserver(
+            forName: Notification.Name.constellationStateUpdate,
+            object: nil,
+            queue: nil
+        ) { [weak self] notification in
             self?.tableView?.tableView.reloadData()
         }
     }
@@ -144,7 +166,10 @@ class SyncContentSettingsViewController: SettingsTableViewController, FeatureFla
 
     override func viewWillDisappear(_ animated: Bool) {
         if !enginesToSyncOnExit.isEmpty {
-            _ = self.profile.syncManager.syncNamedCollections(why: .enabledChange, names: Array(enginesToSyncOnExit))
+            _ = self.profile.syncManager.syncNamedCollections(
+                why: .enabledChange,
+                names: Array(enginesToSyncOnExit)
+            )
             enginesToSyncOnExit.removeAll()
         }
         super.viewWillDisappear(animated)
@@ -232,12 +257,26 @@ class SyncContentSettingsViewController: SettingsTableViewController, FeatureFla
             attributedStatusText: nil,
             settingDidChange: engineSettingChanged(.creditcards))
 
+        let addresses = BoolSetting(
+            prefs: profile.prefs,
+            prefKey: "sync.engine.addresses.enabled",
+            defaultValue: true,
+            attributedTitleText: NSAttributedString(string: .FirefoxSyncAddressesEngine),
+            attributedStatusText: nil,
+            settingDidChange: engineSettingChanged(.addresses))
+
         var engineSectionChildren: [Setting] = [bookmarks, history, tabs, passwords]
 
         if featureFlags.isFeatureEnabled(
             .creditCardAutofillStatus,
             checking: .buildOnly) {
             engineSectionChildren.append(creditCards)
+        }
+
+        if featureFlags.isFeatureEnabled(
+            .addressAutofill,
+            checking: .buildOnly) {
+            engineSectionChildren.append(addresses)
         }
 
         let enginesSection = SettingSection(

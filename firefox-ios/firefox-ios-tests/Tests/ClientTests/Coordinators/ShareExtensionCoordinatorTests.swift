@@ -44,7 +44,10 @@ final class ShareExtensionCoordinatorTests: XCTestCase {
     func testDidFinishedCalled_whenDevicePickerDidSelectDevices() {
         let subject = createSubject()
 
-        subject.devicePickerViewController(DevicePickerViewController(profile: MockProfile()), didPickDevices: [])
+        subject.devicePickerViewController(
+            DevicePickerViewController(profile: MockProfile()),
+            didPickDevices: []
+        )
 
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
         XCTAssertEqual(mockRouter.dismissCalled, 1)
@@ -62,7 +65,9 @@ final class ShareExtensionCoordinatorTests: XCTestCase {
     func testDidFinishCelled_whenDidFinishShowJSAlertPrompt() {
         let subject = createSubject()
 
-        subject.promptAlertControllerDidDismiss(JSPromptAlertController(title: nil, message: nil, preferredStyle: .alert))
+        subject.promptAlertControllerDidDismiss(
+            JSPromptAlertController(title: nil, message: nil, preferredStyle: .alert)
+        )
 
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
     }

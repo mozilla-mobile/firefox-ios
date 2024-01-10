@@ -33,7 +33,11 @@ class TabEventHandlerTests: XCTestCase {
 //        IntroScreenManager(prefs: profile.prefs).didSeeIntroScreen()
 //
 //        let webServer = GCDWebServer()
-//        webServer.addHandler(forMethod: "GET", path: "/blankpopup", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse in
+//        webServer.addHandler(
+//            forMethod: "GET",
+//            path: "/blankpopup",
+//            request: GCDWebServerRequest.self
+//        ) { (request) -> GCDWebServerResponse in
 //            let page = """
 //                <html>
 //                <body onload="window.open('')">open about:blank popup</body>

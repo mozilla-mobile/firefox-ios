@@ -11,7 +11,10 @@ class LocalRequestHelper: TabContentScript {
         return ["localRequestHelper"]
     }
 
-    func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(
+        _ userContentController: WKUserContentController,
+        didReceiveScriptMessage message: WKScriptMessage
+    ) {
         guard let requestUrl = message.frameInfo.request.url,
               let internalUrl = InternalURL(requestUrl)
         else { return }
@@ -26,7 +29,8 @@ class LocalRequestHelper: TabContentScript {
 
         if params["type"] == "reload" {
             // If this is triggered by session restore pages, the url to reload is a nested url argument.
-            if let _url = internalUrl.extractedUrlParam, let nested = InternalURL(_url), let url = nested.extractedUrlParam {
+            if let _url = internalUrl.extractedUrlParam,
+               let nested = InternalURL(_url), let url = nested.extractedUrlParam {
                 message.webView?.replaceLocation(with: url)
             } else {
             _ = message.webView?.reload()

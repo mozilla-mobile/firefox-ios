@@ -38,7 +38,8 @@ class FakespotViewModel {
             let productAdCard = productState
                 .productAds
                 .sorted(by: { $0.adjustedRating > $1.adjustedRating })
-                .first(where: { $0.adjustedRating >= minRating }) // Choosing the product with the same or better rating to display
+                // Choosing the product with the same or better rating to display
+                .first(where: { $0.adjustedRating >= minRating })
                 .map(ViewElement.productAdCard)
 
             if product.grade == nil {
@@ -327,7 +328,8 @@ class FakespotViewModel {
                 guard let self else { return }
                 await self.fetchProductAnalysis(adsAvailabilityDecisionClosure)
                 do {
-                    // A product might be already in analysis status so we listen for progress until it's completed, then fetch new information
+                    // A product might be already in analysis status so we listen for progress
+                    // until it's completed, then fetch new information
                     for try await status in self.observeProductAnalysisStatus() where status.isAnalyzing == false {
                         await self.fetchProductAnalysis(showLoading: false, adsAvailabilityDecisionClosure)
                     }
@@ -461,7 +463,7 @@ class FakespotViewModel {
         AsyncThrowingStream<AnalysisStatus, Error> { continuation in
             Task {
                 do {
-                    var sleepDuration: UInt64 = NSEC_PER_SEC * 30
+                    let sleepDuration: UInt64 = NSEC_PER_SEC * 3
 
                     while true {
                         let result = try await shoppingProduct.getProductAnalysisStatus()
@@ -469,6 +471,12 @@ class FakespotViewModel {
                             continuation.finish()
                             break
                         }
+
+                        await MainActor.run {
+                            self.analysisProgressViewModel.analysisProgress = result.progress
+                            self.analysisProgressViewModel.analysisProgressChanged?(self.analysisProgressViewModel.analysisProgress)
+                        }
+
                         continuation.yield(result.status)
                         guard result.status.isAnalyzing == true else {
                             continuation.finish()
@@ -477,11 +485,6 @@ class FakespotViewModel {
 
                         // Sleep for the current duration
                         try await Task.sleep(nanoseconds: sleepDuration)
-
-                        // Decrease the sleep duration by 10 seconds (NSEC_PER_SEC * 10) on each iteration.
-                        if sleepDuration > NSEC_PER_SEC * 10 {
-                            sleepDuration -= NSEC_PER_SEC * 10
-                        }
                     }
                 } catch {
                     continuation.finish(throwing: error)
@@ -495,7 +498,9 @@ class FakespotViewModel {
         observeProductTask?.cancel()
     }
 
-    func getCurrentDetent(for presentedController: UIPresentationController?) -> UISheetPresentationController.Detent.Identifier? {
+    func getCurrentDetent(
+        for presentedController: UIPresentationController?
+    ) -> UISheetPresentationController.Detent.Identifier? {
         guard let sheetController = presentedController as? UISheetPresentationController else { return nil }
         return sheetController.selectedDetentIdentifier
     }

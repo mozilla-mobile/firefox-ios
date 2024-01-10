@@ -12,12 +12,24 @@ protocol BookmarksCoordinatorDelegate: AnyObject {
     func showBookmarkDetail(for node: FxBookmarkNode, folder: FxBookmarkNode)
 
     /// Shows the bookmark detail to create a new bookmark or folder in the parent folder
-    func showBookmarkDetail(bookmarkType: BookmarkNodeType, parentBookmarkFolder: FxBookmarkNode, updatePanelState: ((LibraryPanelSubState) -> Void)?)
+    func showBookmarkDetail(
+        bookmarkType: BookmarkNodeType,
+        parentBookmarkFolder: FxBookmarkNode,
+        updatePanelState: ((LibraryPanelSubState) -> Void)?
+    )
 }
 
 extension BookmarksCoordinatorDelegate {
-    func showBookmarkDetail(bookmarkType: BookmarkNodeType, parentBookmarkFolder: FxBookmarkNode, updatePanelState: ((LibraryPanelSubState) -> Void)? = nil) {
-        showBookmarkDetail(bookmarkType: bookmarkType, parentBookmarkFolder: parentBookmarkFolder, updatePanelState: updatePanelState)
+    func showBookmarkDetail(
+        bookmarkType: BookmarkNodeType,
+        parentBookmarkFolder: FxBookmarkNode,
+        updatePanelState: ((LibraryPanelSubState) -> Void)? = nil
+    ) {
+        showBookmarkDetail(
+            bookmarkType: bookmarkType,
+            parentBookmarkFolder: parentBookmarkFolder,
+            updatePanelState: updatePanelState
+        )
     }
 }
 
@@ -57,7 +69,11 @@ class BookmarksCoordinator: BaseCoordinator, BookmarksCoordinatorDelegate {
         router.push(detailController)
     }
 
-    func showBookmarkDetail(bookmarkType: BookmarkNodeType, parentBookmarkFolder: FxBookmarkNode, updatePanelState: ((LibraryPanelSubState) -> Void)? = nil) {
+    func showBookmarkDetail(
+        bookmarkType: BookmarkNodeType,
+        parentBookmarkFolder: FxBookmarkNode,
+        updatePanelState: ((LibraryPanelSubState) -> Void)? = nil
+    ) {
         let detailController = BookmarkDetailPanel(
             profile: profile,
             withNewBookmarkNodeType: bookmarkType,

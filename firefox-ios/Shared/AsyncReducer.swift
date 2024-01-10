@@ -6,7 +6,10 @@ import Foundation
 
 public let DefaultDispatchQueue = DispatchQueue.global()
 
-public func asyncReducer<T, U>(_ initialValue: T, combine: @escaping (T, U) -> Deferred<Maybe<T>>) -> AsyncReducer<T, U> {
+public func asyncReducer<T, U>(
+    _ initialValue: T,
+    combine: @escaping (T, U) -> Deferred<Maybe<T>>
+) -> AsyncReducer<T, U> {
     return AsyncReducer(initialValue: initialValue, combine: combine)
 }
 
@@ -49,11 +52,19 @@ open class AsyncReducer<T, U> {
         return terminal.isFilled
     }
 
-    public convenience init(initialValue: T, queue: DispatchQueue = DefaultDispatchQueue, combine: @escaping Combine) {
+    public convenience init(
+        initialValue: T,
+        queue: DispatchQueue = DefaultDispatchQueue,
+        combine: @escaping Combine
+    ) {
         self.init(initialValue: deferMaybe(initialValue), queue: queue, combine: combine)
     }
 
-    public init(initialValue: Deferred<Maybe<T>>, queue: DispatchQueue = DefaultDispatchQueue, combine: @escaping Combine) {
+    public init(
+        initialValue: Deferred<Maybe<T>>,
+        queue: DispatchQueue = DefaultDispatchQueue,
+        combine: @escaping Combine
+    ) {
         self.dispatchQueue = queue
         self.combine = combine
         self.initialValueDeferred = initialValue

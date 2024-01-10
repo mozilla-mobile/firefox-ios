@@ -60,7 +60,9 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
         guard let keyboardSpacer = self.keyboardSpacer else { return }
         keyboardSpacer.translatesAutoresizingMaskIntoConstraints = false
         // Remove any existing height constraint on keyboardSpacer
-        if let existingHeightConstraint = keyboardSpacer.constraints.first(where: { $0.firstAttribute == .height && $0.secondItem == nil }) {
+        if let existingHeightConstraint = keyboardSpacer.constraints.first(where: {
+            $0.firstAttribute == .height && $0.secondItem == nil
+        }) {
             keyboardSpacer.removeConstraint(existingHeightConstraint)
         }
 

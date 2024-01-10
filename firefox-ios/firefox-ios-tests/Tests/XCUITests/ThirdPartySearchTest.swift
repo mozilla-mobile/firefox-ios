@@ -122,7 +122,9 @@ class ThirdPartySearchTest: BaseTestCase {
 
         let searchUrl = "http://www.google.com/search?q=&btnI"
         let tablesQuery = app.tables
-        let customengineurlTextView = tablesQuery.textViews["customEngineUrl"].staticTexts["URL (Replace Query with %s)"]
+        let customengineurlTextView = tablesQuery
+            .textViews["customEngineUrl"]
+            .staticTexts["URL (Replace Query with %s)"]
 
         XCTAssertTrue(customengineurlTextView.exists)
 

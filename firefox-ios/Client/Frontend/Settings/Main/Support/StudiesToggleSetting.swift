@@ -14,11 +14,19 @@ class StudiesToggleSetting: BoolSetting {
          theme: Theme,
          settingsDelegate: SupportSettingsDelegate?) {
         let statusText = NSMutableAttributedString()
-        statusText.append(NSAttributedString(string: .SettingsStudiesToggleMessage,
-                                             attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textSecondary]))
+        statusText.append(
+            NSAttributedString(
+                string: .SettingsStudiesToggleMessage,
+                attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textSecondary]
+            )
+        )
         statusText.append(NSAttributedString(string: " "))
-        statusText.append(NSAttributedString(string: .SettingsStudiesToggleLink,
-                                             attributes: [NSAttributedString.Key.foregroundColor: theme.colors.actionPrimary]))
+        statusText.append(
+            NSAttributedString(
+                string: .SettingsStudiesToggleLink,
+                attributes: [NSAttributedString.Key.foregroundColor: theme.colors.actionPrimary]
+            )
+        )
 
         self.settingsDelegate = settingsDelegate
         super.init(

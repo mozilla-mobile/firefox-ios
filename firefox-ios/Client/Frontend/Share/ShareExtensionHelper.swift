@@ -40,8 +40,11 @@ class ShareExtensionHelper: NSObject, FeatureFlaggable {
 
     func createActivityViewController(
         _ webView: WKWebView? = nil,
-        completionHandler: @escaping (_ completed: Bool,
-                                      _ activityType: UIActivity.ActivityType?) -> Void) -> UIActivityViewController {
+        completionHandler: @escaping (
+            _ completed: Bool,
+            _ activityType: UIActivity.ActivityType?
+        ) -> Void
+    ) -> UIActivityViewController {
         var activityItems = getActivityItems(url: url)
         // Note: webview is required for adding websites to the iOS home screen
         if #available(iOS 16.4, *), let webView = webView {
@@ -128,7 +131,10 @@ extension ShareExtensionHelper: UIActivityItemSource {
         return url
     }
 
-    func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
+    func activityViewController(
+        _ activityViewController: UIActivityViewController,
+        itemForActivityType activityType: UIActivity.ActivityType?
+    ) -> Any? {
         if isPasswordManager(activityType: activityType) {
             return onePasswordExtensionItem
         } else if isOpenByCopy(activityType: activityType) {
@@ -140,7 +146,10 @@ extension ShareExtensionHelper: UIActivityItemSource {
         return url.isReaderModeURL ? url.decodeReaderModeURL : url
     }
 
-    func activityViewController(_ activityViewController: UIActivityViewController, dataTypeIdentifierForActivityType activityType: UIActivity.ActivityType?) -> String {
+    func activityViewController(
+        _ activityViewController: UIActivityViewController,
+        dataTypeIdentifierForActivityType activityType: UIActivity.ActivityType?
+    ) -> String {
         if isPasswordManager(activityType: activityType) {
             return browserFillIdentifier
         } else if isOpenByCopy(activityType: activityType) {
@@ -155,7 +164,8 @@ extension ShareExtensionHelper: UIActivityItemSource {
         // A 'password' substring covers the most cases, such as pwsafe and 1Password.
         // com.agilebits.onepassword-ios.extension
         // com.app77.ios.pwsafe2.find-login-action-password-actionExtension
-        // If your extension's bundle identifier does not contain "password", simply submit a pull request by adding your bundle identifier.
+        // If your extension's bundle identifier does not contain "password", simply submit a pull request
+        // by adding your bundle identifier.
         return (activityType.contains("password"))
             || (activityType == "com.lastpass.ilastpass.LastPassExt")
             || (activityType == "in.sinew.Walletx.WalletxExt")

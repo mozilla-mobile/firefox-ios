@@ -1220,6 +1220,7 @@ workflows:
         is_always_run: true
     - xcode-test@4.5:
         inputs:
+        - project_path: firefox-ios/Client.xcodeproj
         - scheme: Fennec
         - destination: platform=iOS Simulator,name=iPhone 15,OS=17.2
         - test_plan: PerformanceTestPlan   
@@ -1234,7 +1235,7 @@ workflows:
             # debug log
             set -x
             # get dependency
-            cd .firefox-ios/test-fixtures && git clone https://github.com/isabelrios/xcresult_extract.git
+            cd ./test-fixtures && git clone https://github.com/isabelrios/xcresult_extract.git
             
             echo $BITRISE_XCRESULT_PATH
             ls

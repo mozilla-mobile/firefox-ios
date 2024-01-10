@@ -293,10 +293,7 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {
-        var textColor: UIColor?
-        if wallpaperManager.featureAvailable {
-            textColor = wallpaperManager.currentWallpaper.textColor
-        }
+        let textColor = wallpaperManager.currentWallpaper.textColor
 
         return LabelButtonHeaderViewModel(
             title: HomepageSectionType.jumpBackIn.title,
@@ -438,7 +435,10 @@ extension JumpBackInViewModel: HomepageSectionHandler {
                 site = Site(url: item.url?.absoluteString ?? "", title: item.title ?? "")
             }
         } else if hasSyncedTab {
-            site = Site(url: mostRecentSyncedTab?.tab.URL.absoluteString ?? "", title: mostRecentSyncedTab?.tab.title ?? "")
+            site = Site(
+                url: mostRecentSyncedTab?.tab.URL.absoluteString ?? "",
+                title: mostRecentSyncedTab?.tab.title ?? ""
+            )
         }
 
         let sourceView = collectionView.cellForItem(at: indexPath)

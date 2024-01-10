@@ -26,7 +26,11 @@ class DefaultDownloadFileFetcher: DownloadFileFetcher {
 
             for file in files {
                 let attributes = try FileManager.default.attributesOfItem(atPath: file.path) as NSDictionary
-                let downloadedFile = DownloadedFile(path: file, size: attributes.fileSize(), lastModified: attributes.fileModificationDate() ?? Date())
+                let downloadedFile = DownloadedFile(
+                    path: file,
+                    size: attributes.fileSize(),
+                    lastModified: attributes.fileModificationDate() ?? Date()
+                )
                 downloadedFiles.append(downloadedFile)
             }
         } catch {

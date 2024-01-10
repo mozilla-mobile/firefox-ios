@@ -178,7 +178,10 @@ open class MockProfile: Client.Profile {
     }()
 
     public lazy var autofill: RustAutofill = {
-        let autofillDbPath = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("autofill.db").path
+        let autofillDbPath = URL(
+            fileURLWithPath: directory,
+            isDirectory: true
+        ).appendingPathComponent("autofill.db").path
         return RustAutofill(databasePath: autofillDbPath)
     }()
 
@@ -191,7 +194,10 @@ open class MockProfile: Client.Profile {
     }()
 
     public lazy var logins: RustLogins = {
-        let newLoginsDatabasePath = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("\(databasePrefix)_loginsPerField.db").path
+        let newLoginsDatabasePath = URL(
+            fileURLWithPath: directory,
+            isDirectory: true
+        ).appendingPathComponent("\(databasePrefix)_loginsPerField.db").path
         try? files.remove("\(databasePrefix)_loginsPerField.db")
 
         let logins = RustLogins(databasePath: newLoginsDatabasePath)
@@ -209,7 +215,10 @@ open class MockProfile: Client.Profile {
     }()
 
     public lazy var places: RustPlaces = {
-        let placesDatabasePath = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("\(databasePrefix)_places.db").path
+        let placesDatabasePath = URL(
+            fileURLWithPath: directory,
+            isDirectory: true
+        ).appendingPathComponent("\(databasePrefix)_places.db").path
         try? files.remove("\(databasePrefix)_places.db")
 
         let places = RustPlaces(databasePath: placesDatabasePath)
@@ -219,7 +228,10 @@ open class MockProfile: Client.Profile {
     }()
 
     public lazy var tabs: RustRemoteTabs = {
-        let tabsDbPath = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("\(databasePrefix)_tabs.db").path
+        let tabsDbPath = URL(
+            fileURLWithPath: directory,
+            isDirectory: true
+        ).appendingPathComponent("\(databasePrefix)_tabs.db").path
         let tabs = RustRemoteTabs(databasePath: tabsDbPath)
 
         return tabs

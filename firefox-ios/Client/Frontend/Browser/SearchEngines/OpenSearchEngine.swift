@@ -158,7 +158,9 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
             // Allow brackets since we use them in our template as our insertion point
             templateAllowedSet.formUnion(with: CharacterSet(charactersIn: "{}"))
 
-            if let encodedSearchTemplate = searchTemplate.addingPercentEncoding(withAllowedCharacters: templateAllowedSet as CharacterSet) {
+            if let encodedSearchTemplate = searchTemplate.addingPercentEncoding(
+                withAllowedCharacters: templateAllowedSet as CharacterSet
+            ) {
                 let localeString = Locale.current.identifier
                 let urlString = encodedSearchTemplate
                     .replacingOccurrences(of: searchTermComponent, with: escapedQuery, options: .literal, range: nil)

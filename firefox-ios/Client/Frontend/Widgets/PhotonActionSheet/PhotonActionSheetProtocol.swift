@@ -31,7 +31,11 @@ extension PhotonActionSheetProtocol {
 
             let trait = viewController.traitCollection
             if viewModel.isMainMenu {
-                let margins = viewModel.getMainMenuPopOverMargins(trait: trait, view: view, presentedOn: viewController)
+                let margins = viewModel.getMainMenuPopOverMargins(
+                    trait: trait,
+                    view: view,
+                    presentedOn: viewController
+                )
                 popoverVC.popoverLayoutMargins = margins
             }
             popoverVC.permittedArrowDirections = viewModel.getPossibleArrowDirections(trait: trait)
@@ -66,7 +70,7 @@ extension PhotonActionSheetProtocol {
             }
         }
 
-        if UIPasteboard.general.string != nil {
+        if UIPasteboard.general.hasStrings {
             return [pasteGoAction.items, pasteAction.items, copyAddressAction.items]
         } else {
             return [copyAddressAction.items]
@@ -89,11 +93,18 @@ extension PhotonActionSheetProtocol {
                                                       iconString: StandardImageIdentifiers.Large.deviceDesktop) { _ in
             if let url = tab.url {
                 tab.toggleChangeUserAgent()
-                Tab.ChangeUserAgent.updateDomainList(forUrl: url, isChangedUA: tab.changedUserAgent, isPrivate: tab.isPrivate)
+                Tab.ChangeUserAgent.updateDomainList(
+                    forUrl: url,
+                    isChangedUA: tab.changedUserAgent,
+                    isPrivate: tab.isPrivate
+                )
             }
         }.items
 
-        if let url = tab.webView?.url, let helper = tab.contentBlocker, helper.isEnabled, helper.blockingStrengthPref == .strict {
+        if let url = tab.webView?.url,
+           let helper = tab.contentBlocker,
+           helper.isEnabled,
+           helper.blockingStrengthPref == .strict {
             let isSafelisted = helper.status == .safelisted
 
             let title: String = !isSafelisted ? .TrackingProtectionReloadWithout : .TrackingProtectionReloadWith

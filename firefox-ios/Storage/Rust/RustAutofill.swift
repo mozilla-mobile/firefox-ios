@@ -99,7 +99,10 @@ public class RustAutofill {
     ///   - creditCard: UnencryptedCreditCardFields representing the credit card to be added.
     ///   - completion: A closure called upon completion with the added credit card or an error.
     /// - Note: Uses a completion handler for asynchronous code execution.
-    public func addCreditCard(creditCard: UnencryptedCreditCardFields, completion: @escaping (CreditCard?, Error?) -> Void) {
+    public func addCreditCard(
+        creditCard: UnencryptedCreditCardFields,
+        completion: @escaping (CreditCard?, Error?) -> Void
+    ) {
         performDatabaseOperation { error in
             guard error == nil else {
                 completion(nil, error)
@@ -200,7 +203,11 @@ public class RustAutofill {
     ///   - creditCard: UnencryptedCreditCardFields representing the updated credit card details.
     ///   - completion: A closure called upon completion with a boolean indicating success and an error if any.
     /// - Note: Updates a credit card and reports the result using a completion handler.
-    public func updateCreditCard(id: String, creditCard: UnencryptedCreditCardFields, completion: @escaping (Bool, Error?) -> Void) {
+    public func updateCreditCard(
+        id: String,
+        creditCard: UnencryptedCreditCardFields,
+        completion: @escaping (Bool, Error?) -> Void
+    ) {
         performDatabaseOperation { error in
             guard error == nil else {
                 completion(false, error)

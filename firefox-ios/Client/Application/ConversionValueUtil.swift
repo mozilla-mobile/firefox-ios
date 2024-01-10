@@ -7,8 +7,10 @@ import Foundation
 import StoreKit
 
 struct ConversionValueUtil {
-    //  fineValue - An unsigned 6-bit value ≥0 and ≤63. The app or the ad network defines the meaning of the fine conversion value.
-    //  coarseValue - An SKAdNetwork.CoarseConversionValue value of low, medium, or high. The app or the ad network defines the meaning of the coarse conversion value.
+    //  fineValue - An unsigned 6-bit value ≥0 and ≤63. The app or the ad network
+    //              defines the meaning of the fine conversion value.
+    //  coarseValue - An SKAdNetwork.CoarseConversionValue value of low, medium, or high.
+    //                The app or the ad network defines the meaning of the coarse conversion value.
 
     var fineValue: Int
     var coarseValue: CoarseCoversionValue

@@ -23,9 +23,13 @@ class TabsSettingsViewController: SettingsTableViewController, FeatureFlaggable 
                                               titleText: NSAttributedString(string: .Settings.Tabs.InactiveTabs))
 
         if featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly) {
-            sectionItems.append(SettingSection(title: NSAttributedString(string: .Settings.Tabs.TabsSectionTitle),
-                                               footerTitle: NSAttributedString(string: .Settings.Tabs.InactiveTabsDescription),
-                                               children: [inactiveTabsSetting]))
+            sectionItems.append(
+                SettingSection(
+                    title: NSAttributedString(string: .Settings.Tabs.TabsSectionTitle),
+                    footerTitle: NSAttributedString(string: .Settings.Tabs.InactiveTabsDescription),
+                    children: [inactiveTabsSetting]
+                )
+            )
         }
 
         return sectionItems
