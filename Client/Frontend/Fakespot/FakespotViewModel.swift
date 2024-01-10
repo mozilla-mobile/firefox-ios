@@ -391,6 +391,7 @@ class FakespotViewModel {
                 recordSurfaceNoAdsAvailableTelemetry()
             } else {
                 recordAdsExposureTelementry()
+                reportAdEvent(eventName: .trustedDealsPlacement, aidvs: productAds.map(\.aid))
             }
         } catch {
             state = .error(error)
@@ -520,7 +521,7 @@ class FakespotViewModel {
     private func timerFired(aid: String) {
         hasTimerFired = true
         recordSurfaceAdsImpressionTelemetry()
-        reportAdEvent(eventName: .trustedDealsImpression, aid: aid)
+        reportAdEvent(eventName: .trustedDealsImpression, aidvs: [aid])
         stopTimer()
     }
 
@@ -547,12 +548,12 @@ class FakespotViewModel {
 
     // MARK: - Telemetry
 
-    func reportAdEvent(eventName: FakespotAdsEvent, aid: String) {
+    func reportAdEvent(eventName: FakespotAdsEvent, aidvs: [String]) {
         Task {
             _ = try? await shoppingProduct.reportAdEvent(
                 eventName: eventName,
                 eventSource: FakespotAdsEvent.eventSource,
-                aid: aid
+                aidvs: aidvs
             )
         }
     }

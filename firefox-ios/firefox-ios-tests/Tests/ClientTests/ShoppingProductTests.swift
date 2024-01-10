@@ -318,12 +318,12 @@ final class ShoppingProductTests: XCTestCase {
         let url = URL(string: "https://www.amazon.com/Under-Armour-Charged-Assert-Running/dp/B087T8Q2C4")!
         let sut = ShoppingProduct(url: url, client: client)
 
-        _ = try await sut.reportAdEvent(eventName: .trustedDealsLinkClicked, eventSource: "web", aid: "aidv1")
+        _ = try await sut.reportAdEvent(eventName: .trustedDealsLinkClicked, eventSource: "web", aidvs: ["aidv1"])
 
         XCTAssertTrue(client.reportAdEventCalled)
         XCTAssertEqual(client.lastEventName, .trustedDealsLinkClicked)
         XCTAssertEqual(client.lastEventSource, "web")
-        XCTAssertEqual(client.lastAid, "aidv1")
+        XCTAssertEqual(client.aidvs, ["aidv1"])
     }
 }
 
@@ -358,7 +358,15 @@ final class ThrowingFakeSpotClient: FakespotClientType {
         self.error = error
     }
 
+<<<<<<< HEAD
     func reportAdEvent(eventName: Client.FakespotAdsEvent, eventSource: String, aid: String) async throws -> Client.AdEventsResponse {
+=======
+    func reportAdEvent(
+        eventName: Client.FakespotAdsEvent,
+        eventSource: String,
+        aidvs: [String]
+    ) async throws -> Client.AdEventsResponse {
+>>>>>>> 00c6eda8d (Add FXIOS-8065 [v122] Send trusted_deals_placement upon fetching the Fakespot ad unit from a server (#18051))
         reportAdEventCallCount += 1
         throw error
     }
@@ -415,14 +423,22 @@ final class TestFakespotClient: FakespotClientType {
     var reportAdEventCallCount = 0
     var lastEventName: FakespotAdsEvent?
     var lastEventSource: String?
-    var lastAid: String?
+    var aidvs: [String] = []
 
+<<<<<<< HEAD
     func reportAdEvent(eventName: Client.FakespotAdsEvent, eventSource: String, aid: String) async throws -> Client.AdEventsResponse {
+=======
+    func reportAdEvent(
+        eventName: Client.FakespotAdsEvent,
+        eventSource: String,
+        aidvs: [String]
+    ) async throws -> Client.AdEventsResponse {
+>>>>>>> 00c6eda8d (Add FXIOS-8065 [v122] Send trusted_deals_placement upon fetching the Fakespot ad unit from a server (#18051))
         self.reportAdEventCalled = true
         self.reportAdEventCallCount += 1
         self.lastEventName = eventName
         self.lastEventSource = eventSource
-        self.lastAid = aid
+        self.aidvs = aidvs
         return [:]
     }
 
