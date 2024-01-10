@@ -34,8 +34,8 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
         // Technically, at this stage, these should be the same.
         XCTAssertTrue(featureFlags.isFeatureEnabled(.bottomSearchBar, checking: .buildOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.bottomSearchBar, checking: .userOnly))
-        XCTAssertTrue(featureFlags.isFeatureEnabled(.historyHighlights, checking: .buildOnly))
-        XCTAssertTrue(featureFlags.isFeatureEnabled(.historyHighlights, checking: .userOnly))
+        XCTAssertFalse(featureFlags.isFeatureEnabled(.historyHighlights, checking: .buildOnly))
+        XCTAssertFalse(featureFlags.isFeatureEnabled(.historyHighlights, checking: .userOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.historyGroups, checking: .buildOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.historyGroups, checking: .userOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly))
