@@ -7,6 +7,7 @@ import WebKit
 @testable import WebEngine
 
 class MockWKEngineWebView: WKEngineWebView {
+    var configuration = WKWebViewConfiguration()
     var interactionState: Any?
     var scrollView = UIScrollView()
     var url: URL?
