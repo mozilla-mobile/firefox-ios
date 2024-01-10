@@ -165,12 +165,6 @@ final class PrivateHomepageViewController: UIViewController, ContentContainable,
     }
 
     func applyTheme() {
-<<<<<<< HEAD:Client/Frontend/Home/PrivateHome/PrivateHomepageViewController.swift
-        // TODO: Felt Privay - Theming System should be handled by Redux 
-        // https://mozilla-hub.atlassian.net/browse/FXIOS-7879
-        themeManager.changeCurrentTheme(.privateMode)
-=======
->>>>>>> e437f90f2 (Add FXIOS-7879 [v122] Redux & private theme (#18083)):firefox-ios/Client/Frontend/Home/PrivateHome/PrivateHomepageViewController.swift
         let theme = themeManager.currentTheme
         gradient.colors = theme.colors.layerHomepage.cgColors
         logoHeaderCell.applyTheme(theme: theme)
