@@ -16,14 +16,14 @@ struct SponsoredContentFilterUtility {
 
     func filterSponsoredSites(from sites: [Site]) -> [Site] {
         return sites.filter { item in
-            guard let url = URL(string: item.url) else {return true}
+            guard let url = URL(string: item.url) else { return true }
 
-            return !(containsSearchParam(url: url) ?? false)
+            return !containsSearchParam(url: url)
         }
     }
 
-    func containsSearchParam(url: URL) -> Bool? {
-        return (url.query?.split(separator: "&").map({ String($0) }).contains(hideWithSearchParam))
+    func containsSearchParam(url: URL) -> Bool {
+        return url.query?.split(separator: "&").contains { $0 == hideWithSearchParam } ?? false
     }
 
     func filterSponsoredTabs(from tabs: [Tab]) -> [Tab] {
