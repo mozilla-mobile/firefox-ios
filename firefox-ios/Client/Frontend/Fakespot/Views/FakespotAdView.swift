@@ -16,6 +16,7 @@ struct FakespotAdViewModel: FeatureFlaggable {
     let titleA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.title
     let cardA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.card
     let priceA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.price
+    let starRatingA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.starRating
     let productTitleA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.productTitle
     let descriptionA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.description
     let footerA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.footer
@@ -195,6 +196,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         starRatingView.isAccessibilityElement = true
         let rating = String(format: "%.1f", productAdsData.adjustedRating)
         starRatingView.accessibilityLabel = String(format: .Shopping.AdjustedRatingStarsAccessibilityLabel, rating)
+        starRatingView.accessibilityIdentifier = viewModel.starRatingA11yId
 
         let productLinkButtonViewModel = LinkButtonViewModel(
             title: productAdsData.name,
