@@ -31,6 +31,10 @@ class ContentContainer: UIView {
         return type == .privateHomepage
     }
 
+    var hasWebView: Bool {
+        return type == .webview
+    }
+
     /// Determine if the content can be added, making sure we only add once
     /// - Parameters:
     ///   - viewController: The view controller to add to the container
