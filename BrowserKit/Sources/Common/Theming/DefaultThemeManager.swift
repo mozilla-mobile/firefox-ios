@@ -51,14 +51,15 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
                 notificationCenter: NotificationProtocol = NotificationCenter.default,
                 mainQueue: DispatchQueueInterface = DispatchQueue.main,
                 sharedContainerIdentifier: String) {
-            self.userDefaults = userDefaults
-            self.notificationCenter = notificationCenter
-            self.mainQueue = mainQueue
-            self.sharedContainerIdentifier = sharedContainerIdentifier
+        self.userDefaults = userDefaults
+        self.notificationCenter = notificationCenter
+        self.mainQueue = mainQueue
+        self.sharedContainerIdentifier = sharedContainerIdentifier
 
-            self.userDefaults.register(defaults: [ThemeKeys.systemThemeIsOn: true,
-                                                  ThemeKeys.NightMode.isOn: NSNumber(value: false)])
+        self.userDefaults.register(defaults: [ThemeKeys.systemThemeIsOn: true,
+                                              ThemeKeys.NightMode.isOn: NSNumber(value: false)])
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         self.userDefaults.register(defaults: [
             ThemeKeys.systemThemeIsOn: true,
@@ -68,16 +69,19 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 =======
             UserDefaults.standard.register(defaults: [DefaultThemeManager.getSystemThemeKey(): true])
 >>>>>>> 91c0aa4c5 (Refactor TelemetryWrapper to Use DefaultThemeManager)
+=======
+        UserDefaults.standard.register(defaults: [DefaultThemeManager.getSystemThemeKey(): true])
+>>>>>>> 64a8b84d8 (Fix indentation in the DefaultThemeManager init method)
 
-            setSystemThemeIsOn = userDefaults.bool(forKey: DefaultThemeManager.getSystemThemeKey())
-            changeCurrentTheme(loadInitialThemeType())
+        setSystemThemeIsOn = userDefaults.bool(forKey: DefaultThemeManager.getSystemThemeKey())
+        changeCurrentTheme(loadInitialThemeType())
 
-            setupNotifications(forObserver: self,
-                               observing: [UIScreen.brightnessDidChangeNotification,
-                                           UIApplication.didBecomeActiveNotification])
+        setupNotifications(forObserver: self,
+                           observing: [UIScreen.brightnessDidChangeNotification,
+                                       UIApplication.didBecomeActiveNotification])
 
-            migrateDefaultsToUseStandard()
-        }
+        migrateDefaultsToUseStandard()
+    }
 
     // MARK: - ThemeManager
 
