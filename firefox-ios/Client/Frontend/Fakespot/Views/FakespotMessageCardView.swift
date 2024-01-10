@@ -194,16 +194,10 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
     }
 
     private lazy var linkButton: LinkButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .caption1,
-            size: UX.linkFontSize)
         button.addTarget(self, action: #selector(self.linkAction), for: .touchUpInside)
     }
 
     private lazy var primaryButton: PrimaryRoundedButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
-            withTextStyle: .callout,
-            size: UX.buttonFontSize)
         button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
     }
 
