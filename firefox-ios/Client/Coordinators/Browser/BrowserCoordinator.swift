@@ -619,16 +619,6 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - WindowEventCoordinator
 
     func coordinatorHandleWindowEvent(event: WindowEvent, uuid: WindowUUID) {
-        func performIfCoordinatorPresented<T: Coordinator>(_ coordinatorType: T.Type,
-                                                           action: (T) -> Void) {
-            guard let expectedCoordinator = childCoordinators[coordinatorType] else { return }
-            let browserPresentedVC = router.navigationController.presentedViewController
-            let rootVC = (browserPresentedVC as? UINavigationController)?.viewControllers.first
-            if rootVC === expectedCoordinator.router.rootViewController {
-                action(expectedCoordinator)
-            }
-        }
-
         switch event {
         case .windowWillClose:
             // Was the closed window the window for this browser?
@@ -639,15 +629,30 @@ class BrowserCoordinator: BaseCoordinator,
         case .libraryOpened:
             // Auto-close library panel if it was opened in another iPad window. [FXIOS-8095]
             guard uuid != windowUUID else { return }
-            performIfCoordinatorPresented(LibraryCoordinator.self) { _ in
+            performIfCoordinatorRootVCIsPresented(LibraryCoordinator.self) { _ in
                 router.dismiss(animated: true, completion: nil)
             }
         case .settingsOpened:
             // Auto-close settings panel if it was opened in another iPad window. [FXIOS-8095]
             guard uuid != windowUUID else { return }
-            performIfCoordinatorPresented(SettingsCoordinator.self) {
+            performIfCoordinatorRootVCIsPresented(SettingsCoordinator.self) {
                 didFinishSettings(from: $0)
             }
+        }
+    }
+
+    /// Utility. Performs the supplied action if a coordinator of the indicated type
+    /// is currently presenting its primary view controller.
+    /// - Parameters:
+    ///   - coordinatorType: the type of coordinator.
+    ///   - action: the action to perform. The Coordinator instance is supplied for convenience.
+    private func performIfCoordinatorRootVCIsPresented<T: Coordinator>(_ coordinatorType: T.Type,
+                                                                       action: (T) -> Void) {
+        guard let expectedCoordinator = childCoordinators[coordinatorType] else { return }
+        let browserPresentedVC = router.navigationController.presentedViewController
+        let rootVC = (browserPresentedVC as? UINavigationController)?.viewControllers.first
+        if rootVC === expectedCoordinator.router.rootViewController {
+            action(expectedCoordinator)
         }
     }
 }
