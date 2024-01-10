@@ -2724,12 +2724,12 @@ private_browsing:
        description: |
          Whether the user confirmed the reset action via the confirmation dialog.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/#####
+      - https://github.com/mozilla-mobile/firefox-ios/issues/18078
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/#####
+      - https://github.com/mozilla-mobile/firefox-ios/pull/18080
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "####-##-##"
+    expires: "2024-07-06"
 
 # Password Manager metrics
 logins:
