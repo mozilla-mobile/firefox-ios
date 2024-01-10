@@ -189,6 +189,25 @@ class WindowManagerTests: XCTestCase {
         XCTAssert(tabManager2 === allTabManagers.first!)
     }
 
+    func testReservedUUIDsAreUnavailableInSuccessiveCalls() {
+        let subject = createSubject()
+        let tabDataStore: TabDataStore = AppContainer.shared.resolve()
+        let mockTabDataStore = tabDataStore as! MockTabDataStore
+        mockTabDataStore.resetMockTabWindowUUIDs()
+
+        let savedUUID = UUID()
+        mockTabDataStore.injectMockTabWindowUUID(savedUUID)
+
+        // Request a UUID. We expect it to be the first persisted WindowData
+        // UUID, which will also be reserved for use.
+        let requestedUUID1 = subject.reserveNextAvailableWindowUUID()
+        XCTAssertEqual(requestedUUID1, savedUUID)
+
+        // Request a 2nd UUID. We expect it to be a different UUID.
+        let requestedUUID2 = subject.reserveNextAvailableWindowUUID()
+        XCTAssertNotEqual(requestedUUID2, savedUUID)
+    }
+
     // MARK: - Test Subject
 
     private func createSubject() -> WindowManager {
