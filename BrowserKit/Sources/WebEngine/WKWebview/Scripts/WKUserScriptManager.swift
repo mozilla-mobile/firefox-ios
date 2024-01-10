@@ -65,11 +65,11 @@ class DefaultUserScriptManager: WKUserScriptManager {
         guard let source = scriptProvider.getScript(for: name) else { return }
 
         let wrappedSource = "(function() { const APP_ID_TOKEN = '\(appIdToken)'; \(source) })()"
-        let userScript = WKUserScript.createInDefaultContentWorld(
-            source: wrappedSource,
-            injectionTime: userScriptInfo.injectionTime,
-            forMainFrameOnly: userScriptInfo.isMainFrame
-        )
+        // Create in default content world
+        let userScript = WKUserScript(source: wrappedSource,
+                                      injectionTime: userScriptInfo.injectionTime,
+                                      forMainFrameOnly: userScriptInfo.isMainFrame,
+                                      in: .defaultClient)
         compiledUserScripts[name] = userScript
     }
 
@@ -78,11 +78,11 @@ class DefaultUserScriptManager: WKUserScriptManager {
         guard let source = scriptProvider.getScript(for: webcompatName) else { return }
 
         let wrappedSource = "(function() { const APP_ID_TOKEN = '\(appIdToken)'; \(source) })()"
-        let userScript = WKUserScript.createInPageContentWorld(
-            source: wrappedSource,
-            injectionTime: userScriptInfo.injectionTime,
-            forMainFrameOnly: userScriptInfo.isMainFrame
-        )
+        // Create in page content world
+        let userScript = WKUserScript(source: wrappedSource,
+                                      injectionTime: userScriptInfo.injectionTime,
+                                      forMainFrameOnly: userScriptInfo.isMainFrame,
+                                      in: .page)
 
         compiledUserScripts[webcompatName] = userScript
     }
