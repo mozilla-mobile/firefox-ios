@@ -67,7 +67,10 @@ class BrowserViewController: UIViewController,
     var dataClearanceContextHintVC: ContextualHintViewController
     let shoppingContextHintVC: ContextualHintViewController
     private var backgroundTabLoader: DefaultBackgroundTabLoader
+
+    // MARK: Telemetry Variables
     var webviewTelemetry = WebViewLoadMeasurementTelemetry()
+    var privateBrowsingTelemetry = PrivateBrowsingTelemetry()
 
     // popover rotation handling
     var displayedPopoverController: UIViewController?

@@ -768,6 +768,8 @@
 		8ABA9C8D28931223002C0077 /* MockDispatchQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABA9C8C28931223002C0077 /* MockDispatchQueue.swift */; };
 		8ABA9C8E28931288002C0077 /* JumpBackInDataAdaptorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABA9C8A28931207002C0077 /* JumpBackInDataAdaptorTests.swift */; };
 		8ABC5AEE284532C900FEA552 /* PocketDiscoverCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABC5AED284532C900FEA552 /* PocketDiscoverCell.swift */; };
+		8ABCFEA32B45C36100C2988A /* PrivateBrowsingTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABCFEA22B45C36100C2988A /* PrivateBrowsingTelemetry.swift */; };
+		8ABCFEA62B45CB4C00C2988A /* PrivateBrowsingTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABCFEA42B45CAC300C2988A /* PrivateBrowsingTelemetryTests.swift */; };
 		8AC1065F28D0CD700013263A /* OpenQLPreviewHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC1065E28D0CD700013263A /* OpenQLPreviewHelper.swift */; };
 		8AC5D55F28BFE6C8001F6F7F /* Presenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5D55E28BFE6C8001F6F7F /* Presenter.swift */; };
 		8ACA8F74291987AE00D3075D /* AccountSyncHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACA8F73291987AE00D3075D /* AccountSyncHandlerTests.swift */; };
@@ -5627,6 +5629,8 @@
 		8ABA9C8A28931207002C0077 /* JumpBackInDataAdaptorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JumpBackInDataAdaptorTests.swift; sourceTree = "<group>"; };
 		8ABA9C8C28931223002C0077 /* MockDispatchQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDispatchQueue.swift; sourceTree = "<group>"; };
 		8ABC5AED284532C900FEA552 /* PocketDiscoverCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketDiscoverCell.swift; sourceTree = "<group>"; };
+		8ABCFEA22B45C36100C2988A /* PrivateBrowsingTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateBrowsingTelemetry.swift; sourceTree = "<group>"; };
+		8ABCFEA42B45CAC300C2988A /* PrivateBrowsingTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateBrowsingTelemetryTests.swift; sourceTree = "<group>"; };
 		8AC1065E28D0CD700013263A /* OpenQLPreviewHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenQLPreviewHelper.swift; sourceTree = "<group>"; };
 		8AC5D55E28BFE6C8001F6F7F /* Presenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Presenter.swift; sourceTree = "<group>"; };
 		8ACA8F73291987AE00D3075D /* AccountSyncHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSyncHandlerTests.swift; sourceTree = "<group>"; };
@@ -11114,6 +11118,7 @@
 				8A04136828258DF600D20B10 /* SponsoredTileTelemetry.swift */,
 				8A0727452B4890B50071BB9F /* WebviewTelemetry.swift */,
 				8AD08D1427E9198E00B8E907 /* TabsTelemetry.swift */,
+				8ABCFEA22B45C36100C2988A /* PrivateBrowsingTelemetry.swift */,
 				EBF47E6F1F7979DF00899189 /* TelemetryWrapper.swift */,
 				8ADC2A132A33762900543DAA /* ReferringPage.swift */,
 				8A95FF632B1E969E00AC303D /* TelemetryContextualIdentifier.swift */,
@@ -11354,6 +11359,7 @@
 				F80D53CD2A09A30F0047ED14 /* RustSyncManagerTests.swift */,
 				8A5D1CA12A30CF2E005AD35C /* Settings */,
 				8A04136A2825ABEA00D20B10 /* SponsoredTileTelemetryTests.swift */,
+				8ABCFEA42B45CAC300C2988A /* PrivateBrowsingTelemetryTests.swift */,
 				213B67A727CE721E000542F5 /* StartAtHomeHelperTests.swift */,
 				2F13E79A1AC0C02700D75081 /* StringExtensionsTests.swift */,
 				F84B21D71A090F8100AAB793 /* Supporting Files */,
@@ -13826,6 +13832,7 @@
 				AB42CC752A1F5240003C9594 /* CreditCardBottomSheetHeaderView.swift in Sources */,
 				21371FA428AA7A8D00BC3F37 /* OnboardingViewModelProtocol.swift in Sources */,
 				21DB34342B20FE35008CCB8E /* LegacyRemoteTabsTableViewController.swift in Sources */,
+				8ABCFEA32B45C36100C2988A /* PrivateBrowsingTelemetry.swift in Sources */,
 				8ADC2A1F2A3399BD00543DAA /* LicenseAndAcknowledgementsSetting.swift in Sources */,
 				8CCCB08B2AE26B5C0073ADB9 /* ReportResponse.swift in Sources */,
 				21A43CDD291461C700B1206D /* ReaderModeFontTypeButton.swift in Sources */,
@@ -13978,6 +13985,7 @@
 				219935F12B07DFA200E5966F /* TabDisplayPanelTests.swift in Sources */,
 				E1AEC179286E0CF500062E29 /* FirefoxHomeViewModelTests.swift in Sources */,
 				DF940A0C2A96352B00C1497D /* FakespotSettingsCardViewModelTests.swift in Sources */,
+				8ABCFEA62B45CB4C00C2988A /* PrivateBrowsingTelemetryTests.swift in Sources */,
 				281B2BEA1ADF4D90002917DC /* MockProfile.swift in Sources */,
 				96AF8C1C29FC14F700EC2219 /* CreditCardInputFieldHelperTests.swift in Sources */,
 				21FA8FB02AE856590013B815 /* RemoteTabsCoordinatorTests.swift in Sources */,
