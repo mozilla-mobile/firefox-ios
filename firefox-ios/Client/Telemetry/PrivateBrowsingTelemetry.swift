@@ -7,7 +7,7 @@ import Glean
 
 struct PrivateBrowsingTelemetry {
     func sendDataClearanceTappedTelemetry(didConfirm: Bool) {
-        let didConfirmExtra = GleanMetrics.PrivateBrowsing.DataClearanceIconTappedExtra(didConfirm: didConfirm.description)
+        let didConfirmExtra = GleanMetrics.PrivateBrowsing.DataClearanceIconTappedExtra(didConfirm: didConfirm)
         GleanMetrics.PrivateBrowsing.dataClearanceIconTapped.record(didConfirmExtra)
     }
 }

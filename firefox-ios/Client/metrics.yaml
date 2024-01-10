@@ -2720,7 +2720,7 @@ private_browsing:
       Records when the private browsing button is tapped.
     extra_keys:
       did_confirm:
-       type: string
+       type: boolean
        description: |
          Whether the user confirmed the reset action via the confirmation dialog.
     bugs:
@@ -2729,7 +2729,7 @@ private_browsing:
       - https://github.com/mozilla-mobile/firefox-ios/pull/18080
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-07-06"
+    expires: "2024-06-01"
 
 # Password Manager metrics
 logins:
