@@ -637,14 +637,13 @@ class BrowserCoordinator: BaseCoordinator,
             browserViewController.contentContainer.subviews.forEach { $0.removeFromSuperview() }
             browserViewController.removeFromParent()
         case .libraryOpened:
-            // If the library was opened for this browser's window, we can ignore
-            // Otherwise, auto-close the panel in this window [FXIOS-8095]
+            // Auto-close library panel if it was opened in another iPad window. [FXIOS-8095]
             guard uuid != windowUUID else { return }
             performIfCoordinatorPresented(LibraryCoordinator.self) { _ in
                 router.dismiss(animated: true, completion: nil)
             }
         case .settingsOpened:
-            // If the settings were opened for this browser's window, we can ignore
+            // Auto-close settings panel if it was opened in another iPad window. [FXIOS-8095]
             guard uuid != windowUUID else { return }
             performIfCoordinatorPresented(SettingsCoordinator.self) {
                 didFinishSettings(from: $0)
