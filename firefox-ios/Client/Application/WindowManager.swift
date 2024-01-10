@@ -34,9 +34,12 @@ protocol WindowManager {
 
     /// Supplies the UUID for the next window the iOS app should open. This
     /// corresponds with the window tab data saved to disk, or, if no data is
-    /// available it provides a new UUID for the window.
+    /// available it provides a new UUID for the window. The resulting UUID
+    /// is then "reserved" in order to ensure that during app launch if multiple
+    /// windows are being restored concurrently, we never supply the same UUID
+    /// to more than one window.
     /// - Returns: a UUID for the next window to be opened.
-    func nextAvailableWindowUUID() -> WindowUUID
+    func reserveNextAvailableWindowUUID() -> WindowUUID
 
     /// Signals the WindowManager that a window event has occurred. Window events
     /// are communicated to any interested Coordinators for _all_ windows, but
@@ -54,6 +57,7 @@ struct AppWindowInfo {
 
 final class WindowManagerImplementation: WindowManager {
     private(set) var windows: [WindowUUID: AppWindowInfo] = [:]
+    private var reservedUUIDs: [WindowUUID] = []
     var activeWindow: WindowUUID {
         get { return uuidForActiveWindow() }
         set { _activeWindowUUID = newValue }
@@ -75,6 +79,9 @@ final class WindowManagerImplementation: WindowManager {
 
     func newBrowserWindowConfigured(_ windowInfo: AppWindowInfo, uuid: WindowUUID) {
         updateWindow(windowInfo, for: uuid)
+        if let reservedUUIDIdx = reservedUUIDs.firstIndex(where: { $0 == uuid }) {
+            reservedUUIDs.remove(at: reservedUUIDIdx)
+        }
     }
 
     func tabManager(for windowUUID: WindowUUID) -> TabManager {
@@ -94,7 +101,7 @@ final class WindowManagerImplementation: WindowManager {
         updateWindow(nil, for: uuid)
     }
 
-    func nextAvailableWindowUUID() -> WindowUUID {
+    func reserveNextAvailableWindowUUID() -> WindowUUID {
         // Continue to provide the expected hardcoded UUID for UI tests.
         guard !AppConstants.isRunningUITests else { return defaultUITestingUUID }
 
@@ -106,9 +113,13 @@ final class WindowManagerImplementation: WindowManager {
         //   TODO: [FXIOS-7929] This ^ is temporary, part of ongoing multi-window work, eventually
         //   we'll be updating this (to use `isPrimary` on WindowData etc). Forthcoming.
         let openWindowUUIDs = windows.keys
-        let uuids = tabDataStore.fetchWindowDataUUIDs().filter { !openWindowUUIDs.contains($0) }
+        let uuids = tabDataStore.fetchWindowDataUUIDs().filter {
+            !openWindowUUIDs.contains($0) && !reservedUUIDs.contains($0)
+        }
         let sortedUUIDs = uuids.sorted(by: { return $0.uuidString > $1.uuidString })
-        return sortedUUIDs.first ?? WindowUUID()
+        let resultUUID = sortedUUIDs.first ?? WindowUUID()
+        reservedUUIDs.append(resultUUID)
+        return resultUUID
     }
 
     func postWindowEvent(event: WindowEvent, windowUUID: WindowUUID) {
