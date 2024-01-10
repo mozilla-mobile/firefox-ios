@@ -310,24 +310,24 @@ class HomePageSettingsUITests: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306871
     // Smoketest
     func testCustomizeHomepage() {
-            if !iPad() {
-                mozWaitForElementToExist(app.collectionViews["FxCollectionView"], timeout: TIMEOUT)
-                app.collectionViews["FxCollectionView"].swipeUp()
-                app.collectionViews["FxCollectionView"].swipeUp()
-                mozWaitForElementToExist(app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage], timeout: TIMEOUT)
-            }
-            app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage].tap()
-            // Verify default settings
-            mozWaitForElementToExist(app.navigationBars[AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar], timeout: TIMEOUT_LONG)
-            XCTAssertTrue(app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.always].exists)
-            XCTAssertTrue(app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.disabled].exists)
-            XCTAssertTrue(app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.afterFourHours].exists)
-            // Commented due to experimental features
-            // XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.jumpBackIn].value as! String, "1")
-            // XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentlySaved].value as! String, "1")
-            // FXIOS-8107: Commented out as history highlights has been disabled to fix app hangs / slowness
-            // XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentVisited].value as! String, "1")
-            XCTAssertEqual(app.cells.switches["Thought-Provoking Stories, Articles powered by Pocket"].value as! String, "1")
+        if !iPad() {
+            mozWaitForElementToExist(app.collectionViews["FxCollectionView"], timeout: TIMEOUT)
+            app.collectionViews["FxCollectionView"].swipeUp()
+            app.collectionViews["FxCollectionView"].swipeUp()
+            mozWaitForElementToExist(app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage], timeout: TIMEOUT)
         }
+        app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage].tap()
+        // Verify default settings
+        mozWaitForElementToExist(app.navigationBars[AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar], timeout: TIMEOUT_LONG)
+        XCTAssertTrue(app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.always].exists)
+        XCTAssertTrue(app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.disabled].exists)
+        XCTAssertTrue(app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.afterFourHours].exists)
+        // Commented due to experimental features
+        // XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.jumpBackIn].value as! String, "1")
+        // XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentlySaved].value as! String, "1")
+        // FXIOS-8107: Commented out as history highlights has been disabled to fix app hangs / slowness
+        // XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentVisited].value as! String, "1")
+        XCTAssertEqual(app.cells.switches["Thought-Provoking Stories, Articles powered by Pocket"].value as! String, "1")
     }
+
 }
