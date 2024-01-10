@@ -8,7 +8,6 @@ import UIKit
 
 class InactiveTabsFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable {
     struct UX {
-        static let buttonInset: CGFloat = 14
         static let buttonImagePadding: CGFloat = 11
         static let iPadOffset: CGFloat = 100
         static let iPhoneOffset: CGFloat = 23
@@ -41,18 +40,6 @@ class InactiveTabsFooterView: UICollectionReusableView, ReusableCell, ThemeAppli
 
     func setupView() {
         addSubview(roundedButton)
-
-        roundedButton.contentEdgeInsets = UIEdgeInsets(
-            top: UX.buttonInset,
-            left: UX.buttonInset,
-            bottom: UX.buttonInset,
-            right: UX.buttonInset)
-        roundedButton.titleEdgeInsets = UIEdgeInsets(
-            top: 0,
-            left: UX.buttonImagePadding,
-            bottom: 0,
-            right: UX.buttonImagePadding
-        )
 
         let horizontalOffSet: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? UX.iPadOffset : UX.iPhoneOffset
         accessibilityIdentifier = AccessibilityIdentifiers.TabTray.InactiveTabs.footerView
