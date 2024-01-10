@@ -619,6 +619,16 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - WindowEventCoordinator
 
     func coordinatorHandleWindowEvent(event: WindowEvent, uuid: WindowUUID) {
+        func performIfCoordinatorPresented<T: Coordinator>(_ coordinatorType: T.Type,
+                                                           action: (T) -> Void) {
+            guard let expectedCoordinator = childCoordinators[coordinatorType] else { return }
+            let browserPresentedVC = router.navigationController.presentedViewController
+            let rootVC = (browserPresentedVC as? UINavigationController)?.viewControllers.first
+            if rootVC === expectedCoordinator.router.rootViewController {
+                action(expectedCoordinator)
+            }
+        }
+
         switch event {
         case .windowWillClose:
             // Was the closed window the window for this browser?
@@ -630,21 +640,14 @@ class BrowserCoordinator: BaseCoordinator,
             // If the library was opened for this browser's window, we can ignore
             // Otherwise, auto-close the panel in this window [FXIOS-8095]
             guard uuid != windowUUID else { return }
-
-            guard let libraryCoordinator = childCoordinators[LibraryCoordinator.self] else { return }
-            let browserPresentedVC = router.navigationController.presentedViewController
-            let rootVC = (browserPresentedVC as? UINavigationController)?.viewControllers.first
-            if rootVC === libraryCoordinator.router.rootViewController {
+            performIfCoordinatorPresented(LibraryCoordinator.self) { _ in
                 router.dismiss(animated: true, completion: nil)
             }
         case .settingsOpened:
             // If the settings were opened for this browser's window, we can ignore
             guard uuid != windowUUID else { return }
-            guard let settingsCoordinator = childCoordinators[SettingsCoordinator.self] else { return }
-            let browserPresentedVC = router.navigationController.presentedViewController
-            let rootVC = (browserPresentedVC as? UINavigationController)?.viewControllers.first
-            if rootVC === settingsCoordinator.router.rootViewController {
-                didFinishSettings(from: settingsCoordinator)
+            performIfCoordinatorPresented(SettingsCoordinator.self) {
+                didFinishSettings(from: $0)
             }
         }
     }
