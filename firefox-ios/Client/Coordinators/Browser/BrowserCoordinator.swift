@@ -332,6 +332,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     private func showLibrary(with homepanelSection: Route.HomepanelSection) {
+        windowManager.postWindowEvent(event: .libraryOpened, windowUUID: windowUUID)
         if let libraryCoordinator = childCoordinators[LibraryCoordinator.self] {
             libraryCoordinator.start(with: homepanelSection)
             (libraryCoordinator.router.navigationController as? UINavigationController).map { router.present($0) }
@@ -626,11 +627,15 @@ class BrowserCoordinator: BaseCoordinator,
             browserViewController.removeFromParent()
         case .libraryOpened:
             // If the library was opened for this browser's window, we can ignore
-            // Otherwise, auto-close the panel in this window (FXIOS-8095)
+            // Otherwise, auto-close the panel in this window [FXIOS-8095]
             guard uuid != windowUUID else { return }
-            
-            //TODO: Close the library panel
-            break
+
+            guard let libraryCoordinator = childCoordinators[LibraryCoordinator.self] else { return }
+            let browserPresentedVC = router.navigationController.presentedViewController
+            let rootVC = (browserPresentedVC as? DismissableNavigationViewController)?.viewControllers.first
+            if rootVC === libraryCoordinator.router.rootViewController {
+                router.dismiss(animated: true, completion: nil)
+            }
         }
     }
 }
