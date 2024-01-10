@@ -613,11 +613,13 @@ class SearchViewController: SiteTableViewController,
     }
 
     func loader(dataLoaded data: Cursor<Site>) {
-        if profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowSponsoredSuggestions) ?? false {
-            self.data = ArrayCursor<Site>(data: SponsoredContentFilterUtility().filterSponsoredSites(from: data.asArray()))
+        let showSponsoredSuggestions = profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowSponsoredSuggestions) ?? false
+        self.data = if showSponsoredSuggestions {
+            ArrayCursor<Site>(data: SponsoredContentFilterUtility().filterSponsoredSites(from: data.asArray()))
         } else {
-            self.data = data
+            data
         }
+
         tableView.reloadData()
     }
 
