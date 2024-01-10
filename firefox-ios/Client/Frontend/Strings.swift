@@ -3892,7 +3892,7 @@ extension String {
             value: "On",
             comment: "Toggled On accessibility value, from Settings Card within the shopping product review bottom sheet.")
         public static let SettingsCardSwitchValueOffAccessibilityLabel = MZLocalizedString(
-            key: "Shopping.SettingsCard.SwitchValueOn.AccessibilityLabel.v123",
+            key: "Shopping.SettingsCard.SwitchValueOff.AccessibilityLabel.v123",
             tableName: "Shopping",
             value: "Off",
             comment: "Toggled Off accessibility switch value from Settings Card within the shopping product review bottom sheet.")
