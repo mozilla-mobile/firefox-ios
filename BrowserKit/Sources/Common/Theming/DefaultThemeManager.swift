@@ -35,33 +35,55 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     public var window: UIWindow?
 
+    public var setSystemThemeIsOn: Bool {
+        didSet {
+            UserDefaults.standard.set(setSystemThemeIsOn, forKey: DefaultThemeManager.getSystemThemeKey())
+        }
+    }
+
+    public static var isSystemThemeOn: Bool {
+        return UserDefaults.standard.bool(forKey: DefaultThemeManager.getSystemThemeKey())
+    }
+
     // MARK: - Init
 
     public init(userDefaults: UserDefaultsInterface = UserDefaults.standard,
                 notificationCenter: NotificationProtocol = NotificationCenter.default,
                 mainQueue: DispatchQueueInterface = DispatchQueue.main,
                 sharedContainerIdentifier: String) {
-        self.userDefaults = userDefaults
-        self.notificationCenter = notificationCenter
-        self.mainQueue = mainQueue
-        self.sharedContainerIdentifier = sharedContainerIdentifier
+            self.userDefaults = userDefaults
+            self.notificationCenter = notificationCenter
+            self.mainQueue = mainQueue
+            self.sharedContainerIdentifier = sharedContainerIdentifier
 
-        migrateDefaultsToUseStandard()
+            self.userDefaults.register(defaults: [ThemeKeys.systemThemeIsOn: true,
+                                                  ThemeKeys.NightMode.isOn: NSNumber(value: false)])
 
+<<<<<<< HEAD
         self.userDefaults.register(defaults: [
             ThemeKeys.systemThemeIsOn: true,
             ThemeKeys.NightMode.isOn: NSNumber(value: false),
             ThemeKeys.PrivateMode.isOn: NSNumber(value: false),
         ])
+=======
+            UserDefaults.standard.register(defaults: [DefaultThemeManager.getSystemThemeKey(): true])
+>>>>>>> 91c0aa4c5 (Refactor TelemetryWrapper to Use DefaultThemeManager)
 
-        changeCurrentTheme(loadInitialThemeType())
+            setSystemThemeIsOn = userDefaults.bool(forKey: DefaultThemeManager.getSystemThemeKey())
+            changeCurrentTheme(loadInitialThemeType())
 
-        setupNotifications(forObserver: self,
-                           observing: [UIScreen.brightnessDidChangeNotification,
-                                       UIApplication.didBecomeActiveNotification])
-    }
+            setupNotifications(forObserver: self,
+                               observing: [UIScreen.brightnessDidChangeNotification,
+                                           UIApplication.didBecomeActiveNotification])
+
+            migrateDefaultsToUseStandard()
+        }
 
     // MARK: - ThemeManager
+
+    public static func getSystemThemeKey() -> String {
+        return ThemeKeys.systemThemeIsOn
+    }
 
     public func changeCurrentTheme(_ newTheme: ThemeType) {
         guard currentTheme.type != newTheme else { return }
