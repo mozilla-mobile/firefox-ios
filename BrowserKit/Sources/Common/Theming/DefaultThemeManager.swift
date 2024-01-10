@@ -105,7 +105,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         userDefaults.set(isOn, forKey: ThemeKeys.PrivateMode.isOn)
 
         changeCurrentTheme(loadInitialThemeType())
-
     }
 
     public func setAutomaticBrightness(isOn: Bool) {
