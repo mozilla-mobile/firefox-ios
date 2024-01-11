@@ -7,7 +7,7 @@ loader: taskgraph.loader.transform:loader
 transforms:
     - ffios_taskgraph.transforms.bitrise:transforms
     - ffios_taskgraph.transforms.secrets:transforms
-    - taskgraph.transforms.job:transforms
+    - taskgraph.transforms.run:transforms
     - taskgraph.transforms.task:transforms
 
 

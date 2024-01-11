@@ -3,10 +3,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 
-from taskgraph.target_tasks import _target_task
+from taskgraph.target_tasks import register_target_task
 
 
-@_target_task('l10n_screenshots')
+@register_target_task('l10n_screenshots')
 def target_tasks_default(full_task_graph, parameters, graph_config):
     """Target the tasks which have indicated they should be run on this project
     via the `run_on_projects` attributes."""
@@ -15,7 +15,7 @@ def target_tasks_default(full_task_graph, parameters, graph_config):
 
     return [l for l, t in full_task_graph.tasks.items() if filter(t, parameters)]
 
-@_target_task('bitrise_performance_test')
+@register_target_task('bitrise_performance_test')
 def target_tasks_default(full_task_graph, parameters, graph_config):
     """Target the tasks which have indicated they should be run on this project
     via the `run_on_projects` attributes."""
@@ -24,7 +24,7 @@ def target_tasks_default(full_task_graph, parameters, graph_config):
 
     return [l for l, t in full_task_graph.tasks.items() if filter(t, parameters)]
 
-@_target_task('firebase_performance_test')
+@register_target_task('firebase_performance_test')
 def target_tasks_default(full_task_graph, parameters, graph_config):
     """Target the tasks which have indicated they should be run on this project
     via the `run_on_projects` attributes."""
