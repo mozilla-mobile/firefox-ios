@@ -13,7 +13,7 @@ enum FakespotAction: Action {
     case show
     case dismiss
     case setAppearanceTo(Bool)
-    case setAdsImpressionTo(Bool, tabUUID: String?)
-    case setAdsExposureTo(Bool, tabUUID: String?)
+    case setAdsImpressionTo(Bool)
+    case setAdsExposureTo
     case sheetDisplayed(Bool)
 }

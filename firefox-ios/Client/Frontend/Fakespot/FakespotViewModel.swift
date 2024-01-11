@@ -170,7 +170,7 @@ class FakespotViewModel {
 
     let shoppingProduct: ShoppingProduct
     var onStateChange: (() -> Void)?
-    var shouldRecordAdsExposureEvents: ((Bool) -> Bool)?
+    var shouldRecordAdsExposureEvents: (() -> Bool)?
     var isSwiping = false
     var isViewIntersected = false
     // Timer-related properties for handling view visibility
@@ -394,19 +394,13 @@ class FakespotViewModel {
 
             guard product != nil else { return }
             if productAds.isEmpty {
-                guard shouldRecordAdsExposureEvents?(true) == false else { return }
+                guard shouldRecordAdsExposureEvents?() == false else { return }
                 recordSurfaceNoAdsAvailableTelemetry()
-                store.dispatch(FakespotAction.setAdsExposureTo(
-                    false,
-                    tabUUID: currentTabbUUID)
-                )
+                store.dispatch(FakespotAction.setAdsExposureTo)
             } else {
-                guard shouldRecordAdsExposureEvents?(false) == false else { return }
+                guard shouldRecordAdsExposureEvents?() == false else { return }
                 recordAdsExposureTelementry()
-                store.dispatch(FakespotAction.setAdsExposureTo(
-                    true,
-                    tabUUID: currentTabbUUID)
-                )
+                store.dispatch(FakespotAction.setAdsExposureTo)
                 reportAdEvent(eventName: .trustedDealsPlacement, aidvs: productAds.map(\.aid))
             }
         } catch {
@@ -542,8 +536,7 @@ class FakespotViewModel {
         reportAdEvent(eventName: .trustedDealsImpression, aidvs: [aid])
         stopTimer()
         store.dispatch(FakespotAction.setAdsImpressionTo(
-            true,
-            tabUUID: currentTabbUUID)
+            true)
         )
         isViewVisible = false
     }

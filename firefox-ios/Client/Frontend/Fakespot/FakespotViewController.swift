@@ -175,7 +175,8 @@ class FakespotViewController: UIViewController,
         super.viewDidAppear(animated)
         notificationCenter.post(name: .FakespotViewControllerDidAppear)
         updateModalA11y()
-        guard !fakespotState.wasSheetDisplayed else { return }
+        guard let tabUUID = viewModel.currentTabbUUID,
+              !(fakespotState.telemetryState[tabUUID]?.wasSheetDisplayed ?? false) else { return }
         viewModel.recordBottomSheetDisplayed(presentationController)
         store.dispatch(FakespotAction.sheetDisplayed(true))
     }
@@ -208,19 +209,16 @@ class FakespotViewController: UIViewController,
     }
 
     private func shouldRecordAdsExposureEvents() {
-        viewModel.shouldRecordAdsExposureEvents = { [weak self] areAdsEmpty in
+        viewModel.shouldRecordAdsExposureEvents = { [weak self] in
             guard let self, let tabUUID = viewModel.currentTabbUUID else { return false }
-            if areAdsEmpty {
-                return (self.fakespotState.tabAdsState[tabUUID]?.notExposedToAdsEvent ?? false)
-            }
-            return (self.fakespotState.tabAdsState[tabUUID]?.exposedToAdsEvent ?? false)
+            return (self.fakespotState.telemetryState[tabUUID]?.adExposureEventSend ?? false)
         }
     }
 
     private func handleAdVisibilityChanges() {
         guard let adView,
                 viewModel.currentTabbUUID != nil,
-              !(fakespotState.tabAdsState[viewModel.currentTabbUUID!]?.areAdsSeen ?? false) else { return }
+              !(fakespotState.telemetryState[viewModel.currentTabbUUID!]?.areAdsSeen ?? false) else { return }
         viewModel.handleVisibilityChanges(for: adView, in: scrollView)
     }
 
