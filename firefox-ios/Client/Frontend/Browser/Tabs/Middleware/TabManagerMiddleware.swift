@@ -10,16 +10,13 @@ import Storage
 
 class TabManagerMiddleware {
     var selectedPanel: TabTrayPanelType = .tabs
-    private let windowManager: WindowManager
     private let profile: Profile
 
     var normalTabsCountText: String {
         (defaultTabManager.normalTabs.count < 100) ? defaultTabManager.normalTabs.count.description : "\u{221E}"
     }
 
-    init(windowManager: WindowManager = AppContainer.shared.resolve(),
-         profile: Profile = AppContainer.shared.resolve()) {
-        self.windowManager = windowManager
+    init(profile: Profile = AppContainer.shared.resolve()) {
         self.profile = profile
     }
 
@@ -330,6 +327,7 @@ class TabManagerMiddleware {
 
     private var defaultTabManager: TabManager {
         // TODO: [FXIOS-8071] Temporary. WIP for Redux + iPad Multi-window.
+        let windowManager: WindowManager = AppContainer.shared.resolve()
         return windowManager.tabManager(for: windowManager.activeWindow)
     }
 
