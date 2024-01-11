@@ -20,13 +20,14 @@ final class BrowserCoordinatorTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
+        let mockTabManager = MockTabManager()
+        self.tabManager = mockTabManager
+        DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
         self.profile = MockProfile()
         self.overlayModeManager = MockOverlayModeManager()
         self.screenshotService = ScreenshotService()
-        self.tabManager = MockTabManager()
         self.applicationHelper = MockApplicationHelper()
         self.glean = MockGleanWrapper()
         self.scrollDelegate = MockStatusBarScrollDelegate()
