@@ -151,7 +151,7 @@ workflows:
         - webhook_url: $WEBHOOK_SLACK_TOKEN_2
     meta:
       bitrise.io:
-        stack: osx-xcode-15.1.x
+        stack: osx-xcode-15.2.x
         machine_type_id: g2-m1.8core
   build_and_test_1_SmokeTest2:
     before_run:
@@ -194,7 +194,7 @@ workflows:
         - pipeline_intermediate_files: '$BITRISE_XCRESULT_PATH:BITRISE_UITESTS_2_XCRESULT_PATH'
     meta:
       bitrise.io:
-        stack: osx-xcode-15.1.x
+        stack: osx-xcode-15.2.x
         machine_type_id: g2-m1.8core
   build_and_test_2_SmokeTest:
     before_run:
@@ -240,7 +240,7 @@ workflows:
         - pipeline_intermediate_files: '$BITRISE_XCRESULT_PATH:BITRISE_UITESTS_XCRESULT_PATH'
     meta:
       bitrise.io:
-        stack: osx-xcode-15.1.x
+        stack: osx-xcode-15.2.x
         machine_type_id: g2-m1.8core
   build_and_test_3_SmokeTest3:
     before_run:
@@ -286,7 +286,7 @@ workflows:
         - pipeline_intermediate_files: '$BITRISE_XCRESULT_PATH:BITRISE_UITESTS_3_XCRESULT_PATH'
     meta:
       bitrise.io:
-        stack: osx-xcode-15.1.x
+        stack: osx-xcode-15.2.x
         machine_type_id: g2-m1.8core
   build_and_test_4_SmokeTest4:
     before_run:
@@ -332,7 +332,7 @@ workflows:
         - pipeline_intermediate_files: '$BITRISE_XCRESULT_PATH:BITRISE_UITESTS_4_XCRESULT_PATH'
     meta:
       bitrise.io:
-        stack: osx-xcode-15.1.x
+        stack: osx-xcode-15.2.x
         machine_type_id: g2-m1.8core
   send_slack_notification:
     steps:
@@ -723,7 +723,7 @@ workflows:
     description: This Workflow is to build the app using latest xcode available in Bitrise
     meta:
       bitrise.io:
-        stack: osx-xcode-15.1.x
+        stack: osx-xcode-15.2.x
         machine_type_id: g2-m1.8core
 
   L10nBuild:
@@ -824,7 +824,7 @@ workflows:
       This Workflow is to run L10n tests in one locale and then share the bundle with the rest of the builds
     meta:
       bitrise.io:
-        stack: osx-xcode-15.1.x
+        stack: osx-xcode-15.2.x
         machine_type_id: g2-m1.8core
 
   L10nScreenshotsTests:
@@ -887,7 +887,7 @@ workflows:
       This Workflow is to run L10n tests for all locales
     meta:
       bitrise.io:
-        stack: osx-xcode-15.1.x
+        stack: osx-xcode-15.2.x
         machine_type_id: g2-m1.8core
   SPM_Deploy_Prod_Beta:
     steps:
@@ -1015,7 +1015,7 @@ workflows:
     description: This step is to build, archive and upload Firefox Release and Beta
     meta:
       bitrise.io:
-        stack: osx-xcode-15.1.x
+        stack: osx-xcode-15.2.x
         machine_type_id: g2-m1.8core
   SPM_Deploy_Beta_Only:
     steps:
@@ -1113,7 +1113,7 @@ workflows:
     description: This step is to build, archive and upload Firefox Release and Beta
     meta:
       bitrise.io:
-        stack: osx-xcode-15.1.x
+        stack: osx-xcode-15.2.x
         machine_type_id: g2-m1.8core
   SPM_Nightly_Beta_Only:
     steps:
@@ -1212,7 +1212,7 @@ workflows:
     description: This step is to build, archive and upload Firefox Release and Beta
     meta:
       bitrise.io:
-        stack: osx-xcode-15.1.x
+        stack: osx-xcode-15.2.x
         machine_type_id: g2-m1.8core
   Bitrise_Performance_Test:
     steps:
@@ -1259,7 +1259,7 @@ workflows:
     - deploy-to-bitrise-io@1.9: {}
     meta:
       bitrise.io:
-        stack: osx-xcode-15.1.x
+        stack: osx-xcode-15.2.x
         machine_type_id: g2-m1.8core
     before_run:
     - 1_git_clone_and_post_clone
@@ -1593,7 +1593,7 @@ app:
 
 meta:
   bitrise.io:
-    stack: osx-xcode-15.1.x
+    stack: osx-xcode-15.2.x
     machine_type_id: g2-m1.8core
 
 trigger_map:
