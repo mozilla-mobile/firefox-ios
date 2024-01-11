@@ -1021,6 +1021,8 @@ class BrowserViewController: UIViewController,
     /// on the tab bar to open a new tab or by pressing the home page button on the tab bar. Inline is false when
     /// it's the zero search page, aka when the home page is shown by clicking the url bar from a loaded web page.
     func showEmbeddedHomepage(inline: Bool) {
+        resetDataClearanceCFRTimer()
+
         guard let isPrivate = browserViewControllerState?.usePrivateHomepage, !isPrivate else {
             browserDelegate?.showPrivateHomepage(overlayManager: overlayManager)
             return
@@ -1286,6 +1288,7 @@ class BrowserViewController: UIViewController,
             configureDataClearanceContextualHint()
             return
         }
+        resetDataClearanceCFRTimer()
         navigationToolbar.updateMiddleButtonState(state)
     }
 
