@@ -8,8 +8,9 @@ import WebKit
 
 class MockWKEngineSession: WKEngineSession {
     init() {
-        super.init(userScriptManager: MockWKUserScriptManager())!
-        let configurationProvider = MockWKEngineConfigurationProvider()
-        webView = MockWKEngineWebView(frame: .zero, configurationProvider: configurationProvider)!
+        super.init(userScriptManager: MockWKUserScriptManager(),
+                   configurationProvider: MockWKEngineConfigurationProvider(),
+                   webViewProvider: MockWKWebViewProvider(),
+                   contentScriptManager: MockWKContentScriptManager())!
     }
 }
