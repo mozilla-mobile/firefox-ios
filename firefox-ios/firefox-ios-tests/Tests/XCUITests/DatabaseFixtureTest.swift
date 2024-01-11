@@ -23,18 +23,7 @@ class DatabaseFixtureTest: BaseTestCase {
         super.setUp()
     }
 
-    /* Disabled due to issue with db: 8281*/
-    /*func testOneBookmark() {
-        mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: 5)
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(LibraryPanel_Bookmarks)
-        mozWaitForElementToExist(app.cells.staticTexts["Mobile Bookmarks"], timeout: 5)
-        navigator.goto(MobileBookmarks)
-        let list = app.tables["Bookmarks List"].cells.count
-        XCTAssertEqual(list, 1, "There should be an entry in the bookmarks list")
-    }*/
-
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2458579
     func testBookmarksDatabaseFixture() {
         // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
@@ -62,6 +51,7 @@ class DatabaseFixtureTest: BaseTestCase {
         app.terminate()
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2459133
    func testHistoryDatabaseFixture() throws {
        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
        mozWaitForElementToExist(tabsButton)
