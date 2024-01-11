@@ -193,28 +193,12 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         label.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
-    private lazy var linkButton: LegacyResizableButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .caption1,
-            size: UX.linkFontSize)
-        button.buttonEdgeSpacing = 0
-        button.contentHorizontalAlignment = .leading
+    private lazy var linkButton: LinkButton = .build { button in
         button.addTarget(self, action: #selector(self.linkAction), for: .touchUpInside)
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
     }
 
-    private lazy var primaryButton: LegacyResizableButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
-            withTextStyle: .callout,
-            size: UX.buttonFontSize)
-        button.layer.cornerRadius = UX.buttonCornerRadius
-        button.titleLabel?.textAlignment = .center
+    private lazy var primaryButton: PrimaryRoundedButton = .build { button in
         button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
-                                                left: UX.buttonHorizontalInset,
-                                                bottom: UX.buttonVerticalInset,
-                                                right: UX.buttonHorizontalInset)
     }
 
     private var iconContainerHeightConstraint: NSLayoutConstraint?
@@ -285,8 +269,10 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         ])
 
         if let primaryActionText = viewModel.primaryActionText {
-            primaryButton.setTitle(primaryActionText, for: .normal)
-            primaryButton.accessibilityIdentifier = viewModel.a11yPrimaryActionIdentifier
+            let primaryButtonViewModel = PrimaryRoundedButtonViewModel(
+                    title: primaryActionText,
+                    a11yIdentifier: viewModel.a11yPrimaryActionIdentifier ?? "")
+            primaryButton.configure(viewModel: primaryButtonViewModel)
             if primaryButton.superview == nil {
                 containerStackView.addArrangedSubview(primaryButton)
             }
@@ -305,8 +291,12 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         }
 
         if let linkText = viewModel.linkText {
-            linkButton.setTitle(linkText, for: .normal)
-            linkButton.accessibilityIdentifier = viewModel.a11yLinkActionIdentifier
+            let linkButtonViewModel = LinkButtonViewModel(
+                title: linkText,
+                a11yIdentifier: viewModel.a11yLinkActionIdentifier ?? "",
+                fontSize: UX.linkFontSize,
+                contentHorizontalAlignment: .leading)
+            linkButton.configure(viewModel: linkButtonViewModel)
             if linkButton.superview == nil {
                 labelContainerStackView.addArrangedSubview(linkButton)
             }
@@ -378,14 +368,14 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
-        titleLabel.textColor = theme.colors.textPrimary
-        descriptionLabel.textColor  = theme.colors.textPrimary
-        iconContainerView.tintColor = theme.colors.textPrimary
-
-        linkButton.setTitleColor(theme.colors.textPrimary, for: .normal)
-        primaryButton.setTitleColor(type.primaryButtonTextColor(theme: theme), for: .normal)
-        primaryButton.backgroundColor = type.primaryButtonBackground(theme: theme)
+        let colors = theme.colors
+        titleLabel.textColor = colors.textPrimary
+        descriptionLabel.textColor  = colors.textPrimary
+        iconContainerView.tintColor = colors.textPrimary
+        containerStackView.backgroundColor = .clear
         cardView.applyTheme(theme: theme)
+        linkButton.applyTheme(theme: theme)
+        primaryButton.applyTheme(theme: theme)
     }
 
     private func adjustLayout() {
