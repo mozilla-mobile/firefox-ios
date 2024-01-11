@@ -8,17 +8,23 @@ import XCTest
 final class WKEngineSessionTests: XCTestCase {
     private var configurationProvider: MockWKEngineConfigurationProvider!
     private var webViewProvider: MockWKWebViewProvider!
+    private var contentScriptManager: MockWKContentScriptManager!
+    private var userScriptManager: MockWKUserScriptManager!
 
     override func setUp() {
         super.setUp()
         configurationProvider = MockWKEngineConfigurationProvider()
         webViewProvider = MockWKWebViewProvider()
+        contentScriptManager = MockWKContentScriptManager()
+        userScriptManager = MockWKUserScriptManager()
     }
 
     override func tearDown() {
         super.tearDown()
         configurationProvider = nil
         webViewProvider = nil
+        contentScriptManager = nil
+        userScriptManager = nil
     }
 
     // MARK: Load URL
@@ -166,14 +172,34 @@ final class WKEngineSessionTests: XCTestCase {
         XCTAssertEqual(webViewProvider.webView.removeObserverCalled, 7, "There are 7 KVO Constants")
     }
 
+    // MARK: User script manager
+
+    func testUserScriptWhenSubjectCreatedThenInjectionIntoWebviewCalled() {
+        _ = createSubject()
+        XCTAssertEqual(userScriptManager.injectUserScriptsIntoWebViewCalled, 1)
+    }
+
+    // MARK: Content script manager
+
+    func testContentScriptWhenCloseCalledThenUninstallIsCalled() {
+        let subject = createSubject()
+
+        subject?.close()
+
+        XCTAssertEqual(contentScriptManager.uninstallCalled, 1)
+    }
+
     // MARK: Helper
 
-    func createSubject() -> WKEngineSession? {
-        guard let subject = WKEngineSession(configurationProvider: configurationProvider,
-                                            webViewProvider: webViewProvider) else {
+    func createSubject(file: StaticString = #file,
+                       line: UInt = #line) -> WKEngineSession? {
+        guard let subject = WKEngineSession(userScriptManager: userScriptManager,
+                                            configurationProvider: configurationProvider,
+                                            webViewProvider: webViewProvider,
+                                            contentScriptManager: contentScriptManager) else {
             return nil
         }
-        trackForMemoryLeaks(subject)
+        trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
 }

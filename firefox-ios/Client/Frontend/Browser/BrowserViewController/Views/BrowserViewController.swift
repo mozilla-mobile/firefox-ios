@@ -67,7 +67,10 @@ class BrowserViewController: UIViewController,
     var dataClearanceContextHintVC: ContextualHintViewController
     let shoppingContextHintVC: ContextualHintViewController
     private var backgroundTabLoader: DefaultBackgroundTabLoader
+
+    // MARK: Telemetry Variables
     var webviewTelemetry = WebViewLoadMeasurementTelemetry()
+    var privateBrowsingTelemetry = PrivateBrowsingTelemetry()
 
     // popover rotation handling
     var displayedPopoverController: UIViewController?
@@ -818,7 +821,10 @@ class BrowserViewController: UIViewController,
     }
 
     private func updateLegacyTheme() {
-        if !NightModeHelper.isActivated() && LegacyThemeManager.instance.systemThemeIsOn {
+        if let state = browserViewControllerState,
+           !NightModeHelper.isActivated()
+            && LegacyThemeManager.instance.systemThemeIsOn
+            && !state.usePrivateHomepage {
             let userInterfaceStyle = traitCollection.userInterfaceStyle
             LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? LegacyDarkTheme() : LegacyNormalTheme()
         }

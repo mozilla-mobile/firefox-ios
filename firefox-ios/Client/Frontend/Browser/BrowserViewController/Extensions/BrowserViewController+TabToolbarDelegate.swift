@@ -46,13 +46,16 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         let cancelAction = UIAlertAction(
             title: .Alerts.FeltDeletion.CancelButton,
             style: .cancel,
-            handler: nil
+            handler: { [weak self] _ in
+                self?.privateBrowsingTelemetry.sendDataClearanceTappedTelemetry(didConfirm: false)
+            }
         )
 
         let deleteDataAction = UIAlertAction(
             title: .Alerts.FeltDeletion.ConfirmButton,
             style: .destructive,
             handler: { [weak self] _ in
+                self?.privateBrowsingTelemetry.sendDataClearanceTappedTelemetry(didConfirm: true)
                 self?.closePrivateTabsAndOpenNewPrivateHomepage()
                 self?.showDataClearanceConfirmationToast()
             }
