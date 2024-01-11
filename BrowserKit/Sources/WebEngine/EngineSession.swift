@@ -26,12 +26,12 @@ public protocol EngineSession {
     /// this session's history  will be updated but the items within it will be unchanged.
     /// Invalid index values are ignored.
     /// - Parameter index: index the index of the session's history to navigate to
-    func goToHistoryIndex(index: Int)
+    func goToHistory(index: Int)
 
     /// Restore a saved state; only data that is saved (history, scroll position, zoom, and form data)
     /// will be restored.
     /// - Parameter state: A saved session state.
-    func restoreState(state: Data)
+    func restore(state: Data)
 
     /// Close the session. This may free underlying objects. Call this when you are finished using this session.
     func close()
