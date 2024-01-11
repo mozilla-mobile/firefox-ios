@@ -59,19 +59,13 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         self.userDefaults.register(defaults: [ThemeKeys.systemThemeIsOn: true,
                                               ThemeKeys.NightMode.isOn: NSNumber(value: false)])
 
-<<<<<<< HEAD
-<<<<<<< HEAD
         self.userDefaults.register(defaults: [
             ThemeKeys.systemThemeIsOn: true,
             ThemeKeys.NightMode.isOn: NSNumber(value: false),
             ThemeKeys.PrivateMode.isOn: NSNumber(value: false),
         ])
-=======
-            UserDefaults.standard.register(defaults: [DefaultThemeManager.getSystemThemeKey(): true])
->>>>>>> 91c0aa4c5 (Refactor TelemetryWrapper to Use DefaultThemeManager)
-=======
+
         UserDefaults.standard.register(defaults: [DefaultThemeManager.getSystemThemeKey(): true])
->>>>>>> 64a8b84d8 (Fix indentation in the DefaultThemeManager init method)
 
         setSystemThemeIsOn = userDefaults.bool(forKey: DefaultThemeManager.getSystemThemeKey())
         changeCurrentTheme(loadInitialThemeType())
