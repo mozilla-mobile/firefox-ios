@@ -10,10 +10,14 @@ struct FakespotState: ScreenState, Equatable {
     var sidebarOpenForiPadLandscape: Bool
     var currentTabUUID: String
     var expandState: [String: ExpandState]
-    var isBottomSheetDisplayed: Bool
-    var exposedToAdsEvent: Bool
-    var notExposedToAdsEvent: Bool
-    var areAdsSeen: Bool
+    var tabAdsState: [String: AdsState]
+    var wasSheetDisplayed: Bool
+
+    struct AdsState: Equatable {
+        var exposedToAdsEvent = false
+        var notExposedToAdsEvent = false
+        var areAdsSeen = false
+    }
 
     struct ExpandState: Equatable {
         var isSettingsExpanded = false
@@ -29,10 +33,8 @@ struct FakespotState: ScreenState, Equatable {
             sidebarOpenForiPadLandscape: appState.fakespotState.sidebarOpenForiPadLandscape,
             currentTabUUID: appState.fakespotState.currentTabUUID,
             expandState: appState.fakespotState.expandState,
-            isBottomSheetDisplayed: appState.fakespotState.isBottomSheetDisplayed,
-            areAdsSeen: appState.fakespotState.areAdsSeen,
-            exposedToAdsEvent: appState.fakespotState.exposedToAdsEvent,
-            notExposedToAdsEvent: appState.fakespotState.notExposedToAdsEvent
+            wasSheetDisplayed: appState.fakespotState.wasSheetDisplayed,
+            tabAdsState: appState.fakespotState.tabAdsState
         )
     }
 
@@ -42,10 +44,8 @@ struct FakespotState: ScreenState, Equatable {
             sidebarOpenForiPadLandscape: false,
             currentTabUUID: "",
             expandState: [:],
-            isBottomSheetDisplayed: false,
-            areAdsSeen: false,
-            exposedToAdsEvent: false,
-            notExposedToAdsEvent: false
+            wasSheetDisplayed: false,
+            tabAdsState: [:]
         )
     }
 
@@ -54,19 +54,15 @@ struct FakespotState: ScreenState, Equatable {
         sidebarOpenForiPadLandscape: Bool,
         currentTabUUID: String,
         expandState: [String: FakespotState.ExpandState] = [:],
-        isBottomSheetDisplayed: Bool,
-        areAdsSeen: Bool,
-        exposedToAdsEvent: Bool,
-        notExposedToAdsEvent: Bool
+        wasSheetDisplayed: Bool,
+        tabAdsState: [String: AdsState] = [:]
     ) {
         self.isOpen = isOpen
         self.sidebarOpenForiPadLandscape = sidebarOpenForiPadLandscape
         self.currentTabUUID = currentTabUUID
         self.expandState = expandState
-        self.isBottomSheetDisplayed = isBottomSheetDisplayed
-        self.areAdsSeen = areAdsSeen
-        self.exposedToAdsEvent = exposedToAdsEvent
-        self.notExposedToAdsEvent = notExposedToAdsEvent
+        self.wasSheetDisplayed = wasSheetDisplayed
+        self.tabAdsState = tabAdsState
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -83,10 +79,16 @@ struct FakespotState: ScreenState, Equatable {
 
         case FakespotAction.tabDidChange(let tabUUID):
             var state = state
+            // This condition checks for a page reload, 
+            // signaling the start of a new browsing session,
+            // and resets the 'areAdsSeen' flag to false.
+            if state.currentTabUUID == tabUUID {
+                state.tabAdsState[tabUUID]?.areAdsSeen = false
+            } else if state.tabAdsState[tabUUID] == nil {
+                state.tabAdsState[tabUUID] = AdsState()
+            }
             state.currentTabUUID = tabUUID
-            state.areAdsSeen = false
-            state.exposedToAdsEvent = false
-            state.notExposedToAdsEvent = false
+
             return state
 
         case FakespotAction.pressedShoppingButton:
@@ -94,7 +96,7 @@ struct FakespotState: ScreenState, Equatable {
             state.isOpen = !state.isOpen
             state.sidebarOpenForiPadLandscape = !state.isOpen
             if !state.isOpen {
-                state.isBottomSheetDisplayed = false
+                state.wasSheetDisplayed = false
             }
             return state
 
@@ -108,31 +110,33 @@ struct FakespotState: ScreenState, Equatable {
             var state = state
             state.isOpen = false
             state.sidebarOpenForiPadLandscape = false
-            state.isBottomSheetDisplayed = false
+            state.wasSheetDisplayed = false
             return state
 
         case FakespotAction.setAppearanceTo(let isEnabled):
             var state = state
             state.isOpen = isEnabled
-            state.isBottomSheetDisplayed = isEnabled
+            state.wasSheetDisplayed = isEnabled
             return state
 
-        case FakespotAction.bottomSheetDisplayed(let isDisplayed):
+        case FakespotAction.sheetDisplayed(let isDisplayed):
             var state = state
-            state.isBottomSheetDisplayed = isDisplayed
+            state.wasSheetDisplayed = isDisplayed
             return state
 
-        case FakespotAction.setAdsImpressionTo(let areAdsSeen):
+        case FakespotAction.setAdsImpressionTo(let areAdsSeen, let tabUUID):
+            guard let tabUUID else { return state }
             var state = state
-            state.areAdsSeen = areAdsSeen
+            state.tabAdsState[tabUUID]?.areAdsSeen = areAdsSeen
             return state
 
-        case FakespotAction.setAdsExposureTo(let isExposedToAds):
+        case FakespotAction.setAdsExposureTo(let isExposedToAds, let tabUUID):
+            guard let tabUUID else { return state }
             var state = state
             if isExposedToAds {
-                state.exposedToAdsEvent = true
+                state.tabAdsState[tabUUID]?.exposedToAdsEvent = true
             } else {
-                state.notExposedToAdsEvent = true
+                state.tabAdsState[tabUUID]?.notExposedToAdsEvent = true
             }
             return state
 

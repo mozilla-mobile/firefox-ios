@@ -44,12 +44,7 @@ class FakespotViewController: UIViewController,
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     private var viewModel: FakespotViewModel
-    private lazy var adsAvailabilityDecisionClosure: ((Bool) -> Bool) = { [weak self] areAdsEmpty in
-        if areAdsEmpty {
-            return (self?.fakespotState?.notExposedToAdsEvent ?? false)
-        }
-        return (self?.fakespotState?.exposedToAdsEvent ?? false)
-    }
+    var fakespotState: FakespotState
 
     private var adView: FakespotAdView?
 
@@ -116,8 +111,8 @@ class FakespotViewController: UIViewController,
         self.viewModel = viewModel
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
+        fakespotState = FakespotState()
         super.init(nibName: nil, bundle: nil)
-
         listenToStateChange()
     }
 
@@ -137,8 +132,9 @@ class FakespotViewController: UIViewController,
 
         setupView()
         listenForThemeChange(view)
-        viewModel.fetchProductIfOptedIn(adsAvailabilityDecisionClosure)
+        viewModel.fetchProductIfOptedIn()
         subscribeToRedux()
+        shouldRecordAdsExposureEvents()
     }
 
     // MARK: - Redux
@@ -152,8 +148,6 @@ class FakespotViewController: UIViewController,
     func unsubscribeFromRedux() {
         store.unsubscribe(self)
     }
-
-    var fakespotState: FakespotState?
 
     func newState(state: BrowserViewControllerState) {
         fakespotState = state.fakespotState
@@ -181,9 +175,9 @@ class FakespotViewController: UIViewController,
         super.viewDidAppear(animated)
         notificationCenter.post(name: .FakespotViewControllerDidAppear)
         updateModalA11y()
-        guard !(fakespotState?.isBottomSheetDisplayed ?? false) else { return }
+        guard !fakespotState.wasSheetDisplayed else { return }
         viewModel.recordBottomSheetDisplayed(presentationController)
-        store.dispatch(FakespotAction.bottomSheetDisplayed(true))
+        store.dispatch(FakespotAction.sheetDisplayed(true))
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -210,11 +204,23 @@ class FakespotViewController: UIViewController,
         listenToStateChange()
 
         guard triggerFetch else { return }
-        viewModel.fetchProductIfOptedIn(adsAvailabilityDecisionClosure)
+        viewModel.fetchProductIfOptedIn()
+    }
+
+    private func shouldRecordAdsExposureEvents() {
+        viewModel.shouldRecordAdsExposureEvents = { [weak self] areAdsEmpty in
+            guard let self, let tabUUID = viewModel.currentTabbUUID else { return false }
+            if areAdsEmpty {
+                return (self.fakespotState.tabAdsState[tabUUID]?.notExposedToAdsEvent ?? false)
+            }
+            return (self.fakespotState.tabAdsState[tabUUID]?.exposedToAdsEvent ?? false)
+        }
     }
 
     private func handleAdVisibilityChanges() {
-        guard let adView, !(fakespotState?.areAdsSeen ?? false) else { return }
+        guard let adView,
+                viewModel.currentTabbUUID != nil,
+              !(fakespotState.tabAdsState[viewModel.currentTabbUUID!]?.areAdsSeen ?? false) else { return }
         viewModel.handleVisibilityChanges(for: adView, in: scrollView)
     }
 
@@ -405,7 +411,7 @@ class FakespotViewController: UIViewController,
             }
             viewModel.optInCardViewModel.onOptIn = { [weak self] in
                 guard let self = self else { return }
-                self.viewModel.fetchProductIfOptedIn(adsAvailabilityDecisionClosure)
+                self.viewModel.fetchProductIfOptedIn()
             }
             view.configure(viewModel.optInCardViewModel)
             return view
@@ -430,7 +436,7 @@ class FakespotViewController: UIViewController,
 
         case .qualityDeterminationCard:
             let reviewQualityCardView: FakespotReviewQualityCardView = .build()
-            viewModel.reviewQualityCardViewModel.expandState = (fakespotState?.isReviewQualityExpanded ?? false)  ? .expanded : .collapsed
+            viewModel.reviewQualityCardViewModel.expandState = fakespotState.isReviewQualityExpanded  ? .expanded : .collapsed
             viewModel.reviewQualityCardViewModel.dismissViewController = {
                 store.dispatch(FakespotAction.setAppearanceTo(false))
             }
@@ -442,11 +448,12 @@ class FakespotViewController: UIViewController,
 
         case .settingsCard:
             let view: FakespotSettingsCardView = .build()
-            viewModel.settingsCardViewModel.expandState = (fakespotState?.isSettingsExpanded ?? false) ? .expanded : .collapsed
+            viewModel.settingsCardViewModel.expandState = fakespotState.isSettingsExpanded ? .expanded : .collapsed
             viewModel.settingsCardViewModel.dismissViewController = { [weak self] action in
                 guard let self = self, let action else { return }
 
                 store.dispatch(FakespotAction.setAppearanceTo(false))
+                store.dispatch(FakespotAction.sheetDisplayed(true))
                 viewModel.recordDismissTelemetry(by: action)
             }
             viewModel.settingsCardViewModel.toggleAdsEnabled = { [weak self] in

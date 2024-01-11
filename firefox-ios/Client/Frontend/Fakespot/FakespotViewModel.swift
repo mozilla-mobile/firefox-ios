@@ -170,6 +170,7 @@ class FakespotViewModel {
 
     let shoppingProduct: ShoppingProduct
     var onStateChange: (() -> Void)?
+    var shouldRecordAdsExposureEvents: ((Bool) -> Bool)?
     var isSwiping = false
     var isViewIntersected = false
     // Timer-related properties for handling view visibility
@@ -189,6 +190,10 @@ class FakespotViewModel {
     private let prefs: Prefs
     private var isOptedIn: Bool {
         return prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false
+    }
+
+    var currentTabbUUID: String? {
+        tabManager.selectedTab?.tabUUID
     }
 
     var areAdsEnabled: Bool {
@@ -322,16 +327,16 @@ class FakespotViewModel {
         self.tabManager = tabManager
     }
 
-    func fetchProductIfOptedIn(_ adsAvailabilityDecisionClosure: ((Bool) -> Bool)? = nil) {
+    func fetchProductIfOptedIn() {
         if isOptedIn {
             fetchProductTask = Task { @MainActor [weak self] in
                 guard let self else { return }
-                await self.fetchProductAnalysis(adsAvailabilityDecisionClosure)
+                await self.fetchProductAnalysis()
                 do {
                     // A product might be already in analysis status so we listen for progress
                     // until it's completed, then fetch new information
                     for try await status in self.observeProductAnalysisStatus() where status.isAnalyzing == false {
-                        await self.fetchProductAnalysis(showLoading: false, adsAvailabilityDecisionClosure)
+                        await self.fetchProductAnalysis(showLoading: false)
                     }
                 } catch {
                     if case .loaded(let productState) = state {
@@ -370,7 +375,7 @@ class FakespotViewModel {
         let analyzeCount: Int
     }
 
-    func fetchProductAnalysis(showLoading: Bool = true, _ adsAvailabilityDecisionClosure: ((Bool) -> Bool)? = nil) async {
+    func fetchProductAnalysis(showLoading: Bool = true) async {
         if showLoading { state = .loading }
         do {
             let product = try await shoppingProduct.fetchProductAnalysisData()
@@ -389,13 +394,19 @@ class FakespotViewModel {
 
             guard product != nil else { return }
             if productAds.isEmpty {
-                guard adsAvailabilityDecisionClosure?(true) == false else { return }
+                guard shouldRecordAdsExposureEvents?(true) == false else { return }
                 recordSurfaceNoAdsAvailableTelemetry()
-                store.dispatch(FakespotAction.setAdsExposureTo(false))
+                store.dispatch(FakespotAction.setAdsExposureTo(
+                    false,
+                    tabUUID: currentTabbUUID)
+                )
             } else {
-                guard adsAvailabilityDecisionClosure?(false) == false else { return }
+                guard shouldRecordAdsExposureEvents?(false) == false else { return }
                 recordAdsExposureTelementry()
-                store.dispatch(FakespotAction.setAdsExposureTo(true))
+                store.dispatch(FakespotAction.setAdsExposureTo(
+                    true,
+                    tabUUID: currentTabbUUID)
+                )
             }
         } catch {
             state = .error(error)
@@ -529,7 +540,10 @@ class FakespotViewModel {
         recordSurfaceAdsImpressionTelemetry()
         reportAdEvent(eventName: .trustedDealsImpression, aid: aid)
         stopTimer()
-        store.dispatch(FakespotAction.setAdsImpressionTo(true))
+        store.dispatch(FakespotAction.setAdsImpressionTo(
+            true,
+            tabUUID: currentTabbUUID)
+        )
         isViewVisible = false
     }
 
