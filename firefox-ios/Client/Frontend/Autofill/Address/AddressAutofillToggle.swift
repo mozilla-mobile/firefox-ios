@@ -45,26 +45,28 @@ struct AddressAutofillToggle: View {
             HStack {
                 // Left-aligned stack for title and description
                 VStack(alignment: .leading) {
+                    // Title for the Toggle
                     Text(String.Addresses.EditCard.ToggleToAllowAutofillTitle)
                         .font(.body)
                         .foregroundColor(textColor)
-                        .padding(.leading, 16)
-                        .padding(.trailing, 16)
 
+                    // Description for the Toggle
                     Text(String.Addresses.EditCard.PlaceholderToggleToAllowAutofillTitle)
                         .font(.footnote)
                         .foregroundColor(descriptionTextColor)
-                        .padding(.leading, 16)
-                        .padding(.trailing, 16)
                 }
+                .padding(.leading, 16)
+
+                Spacer()
 
                 // Toggle switch
                 Toggle(isOn: $model.isEnabled) {
                     EmptyView()
                 }
-                .labelsHidden()
                 .padding(.trailing, 16)
+                .labelsHidden()
                 .toggleStyle(SwitchToggleStyle(tint: toggleTintColor))
+                .frame(alignment: .trailing)
             }
 
             // Divider line to separate content
