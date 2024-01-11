@@ -12,10 +12,7 @@ class AddressAutofillSettingsViewModel {
     // MARK: Properties
 
     /// Model for managing the state of the address autofill toggle.
-    var toggleModel: ToggleModel!
-
-    /// Protocol for app authentication, providing secure access.
-    var appAuthenticator: AppAuthenticationProtocol?
+    lazy var toggleModel = ToggleModel(isEnabled: isAutofillEnabled, delegate: self)
 
     /// RustAutofill instance for handling autofill functionality.
     var autofill: RustAutofill?
@@ -46,12 +43,10 @@ class AddressAutofillSettingsViewModel {
     /// - Parameters:
     ///   - profile: The profile associated with the address autofill settings.
     ///   - appAuthenticator: Protocol for app authentication, providing secure access.
-    init(profile: Profile, appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()) {
+    init(profile: Profile) {
         self.profile = profile
         guard let profile = profile as? BrowserProfile else { return }
         self.autofill = profile.autofill
-        self.appAuthenticator = appAuthenticator
-        self.toggleModel = ToggleModel(isEnabled: isAutofillEnabled, delegate: self)
     }
 }
 

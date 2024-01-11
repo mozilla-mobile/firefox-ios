@@ -38,7 +38,7 @@ struct AddressAutofillSettingsEmptyView: View {
                         .padding(.top, 25)
                         .frame(maxWidth: .infinity)
 
-                    Spacer() // Spacer to fill remaining space
+                    Spacer()
                 }
                 .frame(minHeight: proxy.size.height)
             }
