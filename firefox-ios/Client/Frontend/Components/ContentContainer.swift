@@ -16,7 +16,7 @@ protocol ContentContainable: UIViewController {
 
 /// A container for view controllers, currently used to embed content in BrowserViewController
 class ContentContainer: UIView {
-    var type: ContentType?
+    private var type: ContentType?
     private var contentController: ContentContainable?
 
     var contentView: UIView? {
