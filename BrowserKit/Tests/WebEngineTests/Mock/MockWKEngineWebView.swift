@@ -39,7 +39,7 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func load(_ request: URLRequest) -> WKNavigation? {
         url = request.url
         loadCalled += 1
