@@ -42,7 +42,6 @@ class AddressAutofillSettingsViewModel {
     /// Initializes the AddressAutofillSettingsViewModel.
     /// - Parameters:
     ///   - profile: The profile associated with the address autofill settings.
-    ///   - appAuthenticator: Protocol for app authentication, providing secure access.
     init(profile: Profile) {
         self.profile = profile
         guard let profile = profile as? BrowserProfile else { return }
