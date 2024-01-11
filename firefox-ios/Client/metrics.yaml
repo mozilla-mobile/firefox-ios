@@ -1987,21 +1987,6 @@ firefox_home_page:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
-  history_highlights_view:
-    type: counter
-    description: |
-      Counts the number of times a user sees the
-      History Highlights section on the homepage
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9563
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9563
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2024-06-01"
   history_highlights_item_opened:
     type: event
     description: |
@@ -2015,6 +2000,18 @@ firefox_home_page:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10516
       - https://github.com/mozilla-mobile/firefox-ios/pull/12334
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
+  history_impressions:
+    type: event
+    description: |
+      Records the number of times a user views
+      history highlights section
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/18088
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/18068
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
