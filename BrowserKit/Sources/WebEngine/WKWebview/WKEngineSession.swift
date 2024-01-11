@@ -8,7 +8,7 @@ import WebKit
 
 class WKEngineSession: NSObject, EngineSession {
     weak var delegate: EngineSessionDelegate?
-    var webView: WKEngineWebView
+    private(set) var webView: WKEngineWebView
     private var logger: Logger
     private var sessionData: WKEngineSessionData
     private var contentScriptManager: WKContentScriptManager
