@@ -107,11 +107,11 @@ class WKEngineSession: NSObject, EngineSession {
         logger.log("Go forward", level: .debug, category: .webview)
     }
 
-    func goToHistoryIndex(index: Int) {
+    func goToHistory(index: Int) {
         // TODO: FXIOS-7907 #17651 Handle goToHistoryIndex in WKEngineSession (equivalent to goToBackForwardListItem)
     }
 
-    func restoreState(state: Data) {
+    func restore(state: Data) {
         if let lastRequest = sessionData.lastRequest {
             webView.load(lastRequest)
         }

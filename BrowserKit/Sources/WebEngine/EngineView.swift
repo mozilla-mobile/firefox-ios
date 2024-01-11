@@ -4,6 +4,8 @@
 
 import Foundation
 
+/// View that renders web content.
 public protocol EngineView {
+    /// Render the content of the given session.
     func render(session: EngineSession)
 }
