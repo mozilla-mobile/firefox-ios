@@ -89,6 +89,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         static let footerFontSize: CGFloat = 13
         static let margins = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         static let linkInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        static let titleBottomSpacing: CGFloat = 14
         static let horizontalElementSpacing: CGFloat = 12
         static let verticalElementSpacing: CGFloat = 8
         static let starSize: CGFloat = 24
@@ -325,7 +326,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         contentContainerView.addSubview(secondRowView)
 
         NSLayoutConstraint.activate([
-            firstRowView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: UX.verticalElementSpacing),
+            firstRowView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: UX.titleBottomSpacing),
             firstRowView.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor),
             firstRowView.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor),
 
@@ -373,7 +374,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
 
         NSLayoutConstraint.activate([
             imageContainerView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
-                                                    constant: UX.verticalElementSpacing),
+                                                    constant: UX.titleBottomSpacing),
             imageContainerView.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor),
             imageContainerView.trailingAnchor.constraint(lessThanOrEqualTo: contentContainerView.trailingAnchor),
 
