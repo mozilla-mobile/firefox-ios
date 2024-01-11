@@ -8,7 +8,18 @@ import UIKit
 
 extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     // MARK: Data Clearance CFR / Contextual Hint
+
+    // Reset the CFR timer for the data clearance button to avoid presenting the CFR
+    // In cases, such as if user navigates to homepage or if fire icon is not available
+    func resetDataClearanceCFRTimer() {
+        dataClearanceContextHintVC.stopTimer()
+    }
+
     func configureDataClearanceContextualHint() {
+        guard contentContainer.hasWebView, tabManager.selectedTab?.url?.displayURL?.isWebPage() == true else {
+            resetDataClearanceCFRTimer()
+            return
+        }
         dataClearanceContextHintVC.configure(
             anchor: navigationToolbar.multiStateButton,
             withArrowDirection: topTabsVisible ? .up : .down,
