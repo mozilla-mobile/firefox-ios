@@ -6,7 +6,7 @@ import SwiftUI
 import Common
 import Shared
 
-/// View for an empty state in address autofill settings, providing a placeholder or introductory content.
+/// View for an empty state in address autofill settings
 struct AddressAutofillSettingsEmptyView: View {
     // MARK: - Properties
 
