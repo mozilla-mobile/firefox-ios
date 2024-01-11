@@ -10,5 +10,5 @@ public protocol Engine {
     func createView() -> EngineView
 
     /// Creates a new engine session.
-    func createSession() -> EngineSession
+    func createSession() throws -> EngineSession
 }
