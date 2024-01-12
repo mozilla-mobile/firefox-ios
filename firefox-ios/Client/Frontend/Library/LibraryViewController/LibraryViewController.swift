@@ -128,10 +128,6 @@ class LibraryViewController: UIViewController, Themeable {
         ])
     }
 
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        LegacyThemeManager.instance.statusBarStyle
-    }
-
     func updateViewWithState() {
         setupButtons()
     }
