@@ -6,10 +6,14 @@ import UIKit
 
 open class ResizableButton: UIButton {
     public struct UX {
-        public static let buttonEdgeSpacing: CGFloat = 8
+        public static let buttonEdgeHorizontalSpacing: CGFloat = 8
+        public static let buttonEdgeVerticalSpacing: CGFloat = 0
     }
 
-    public var buttonEdgeSpacing: CGFloat = UX.buttonEdgeSpacing {
+    public var buttonEdgeInsets = NSDirectionalEdgeInsets(top: UX.buttonEdgeVerticalSpacing,
+                                                          leading: UX.buttonEdgeHorizontalSpacing,
+                                                          bottom: UX.buttonEdgeVerticalSpacing,
+                                                          trailing: UX.buttonEdgeHorizontalSpacing) {
         didSet {
             updateContentInsets()
         }
@@ -62,11 +66,6 @@ open class ResizableButton: UIButton {
     }
 
     private func updateContentInsets() {
-        configuration?.contentInsets = NSDirectionalEdgeInsets(
-            top: 0,
-            leading: buttonEdgeSpacing,
-            bottom: 0,
-            trailing: buttonEdgeSpacing
-        )
+        configuration?.contentInsets = buttonEdgeInsets
     }
 }
