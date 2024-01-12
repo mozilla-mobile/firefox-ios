@@ -25,7 +25,7 @@ jobs:
         uses: mozilla-mobile/update-experiments@v3
         with:
           repo-path: firefox-ios
-          output-path: Client/Experiments/initial_experiments.json
+          output-path: firefox-ios/Client/Experiments/initial_experiments.json
           experimenter-url: https://experimenter.services.mozilla.com/api/v6/experiments-first-run/
           app-name: firefox_ios
           branch: automation/update-nimbus-experiments
