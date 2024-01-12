@@ -457,7 +457,7 @@ class FakespotViewController: UIViewController,
                 guard let self = self, let action else { return }
 
                 store.dispatch(FakespotAction.setAppearanceTo(false))
-                store.dispatch(FakespotAction.sheetDisplayed(true))
+                store.dispatch(FakespotAction.sheetDisplayedEventSend)
                 viewModel.recordDismissTelemetry(by: action)
             }
             viewModel.settingsCardViewModel.toggleAdsEnabled = { [weak self] in
