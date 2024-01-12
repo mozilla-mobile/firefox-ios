@@ -78,16 +78,18 @@ struct FakespotState: ScreenState, Equatable {
 
         case FakespotAction.tabDidChange(let tabUUID):
             var state = state
-            // This condition checks for a page reload, 
-            // signaling the start of a new browsing session,
-            // and resets the 'areAdsSeen' flag to false.
-            if state.currentTabUUID == tabUUID {
-                state.telemetryState[tabUUID]?.adEvents = [:]
-            } else if state.telemetryState[tabUUID] == nil {
+            if state.telemetryState[tabUUID] == nil {
                 state.telemetryState[tabUUID] = TelemetryState()
             }
             state.currentTabUUID = tabUUID
 
+            return state
+
+        case FakespotAction.tabDidReload(let tabUUID, let productId):
+            guard state.currentTabUUID == tabUUID else { return state }
+
+            var state = state
+            state.telemetryState[tabUUID]?.adEvents[productId] = AdTelemetryState()
             return state
 
         case FakespotAction.pressedShoppingButton:

@@ -61,6 +61,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             FakespotAction.settingsStateDidChange,
             FakespotAction.reviewQualityDidChange,
             FakespotAction.tabDidChange,
+            FakespotAction.tabDidReload,
             FakespotAction.surfaceDisplayedEventSend,
             FakespotAction.adsImpressionEventSendFor,
             FakespotAction.adsExposureEventSendFor:

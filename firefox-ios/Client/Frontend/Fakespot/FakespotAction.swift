@@ -9,6 +9,7 @@ enum FakespotAction: Action {
     case settingsStateDidChange
     case reviewQualityDidChange
     case tabDidChange(tabUIDD: String)
+    case tabDidReload(tabUIDD: String, productId: String)
     case pressedShoppingButton
     case show
     case dismiss
