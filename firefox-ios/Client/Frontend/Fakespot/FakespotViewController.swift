@@ -175,10 +175,12 @@ class FakespotViewController: UIViewController,
         super.viewDidAppear(animated)
         notificationCenter.post(name: .FakespotViewControllerDidAppear)
         updateModalA11y()
-        guard let tabUUID = viewModel.currentTabbUUID,
-              !(fakespotState.telemetryState[tabUUID]?.wasSheetDisplayed ?? false) else { return }
+
+        guard !fakespotState.currentTabUUID.isEmpty,
+              !(fakespotState.telemetryState[fakespotState.currentTabUUID]?.sheetDisplayedEvent ?? false)
+        else { return }
         viewModel.recordBottomSheetDisplayed(presentationController)
-        store.dispatch(FakespotAction.sheetDisplayed(true))
+        store.dispatch(FakespotAction.sheetDisplayedEventSend)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -210,15 +212,19 @@ class FakespotViewController: UIViewController,
 
     private func shouldRecordAdsExposureEvents() {
         viewModel.shouldRecordAdsExposureEvents = { [weak self] in
-            guard let self, let tabUUID = viewModel.currentTabbUUID else { return false }
-            return (self.fakespotState.telemetryState[tabUUID]?.adExposureEventSend ?? false)
+            guard let self, let productId = viewModel.shoppingProduct.product?.id else { return false }
+            let tabUUID = self.fakespotState.currentTabUUID
+
+            return (self.fakespotState.telemetryState[tabUUID]?.adEvents[productId]?.adExposureEvent ?? false)
         }
     }
 
     private func handleAdVisibilityChanges() {
         guard let adView,
-                viewModel.currentTabbUUID != nil,
-              !(fakespotState.telemetryState[viewModel.currentTabbUUID!]?.areAdsSeen ?? false) else { return }
+              !fakespotState.currentTabUUID.isEmpty,
+              let productId = viewModel.shoppingProduct.product?.id,
+              !(fakespotState.telemetryState[fakespotState.currentTabUUID]?.adEvents[productId]?.adsImpressionEvent ?? false)
+        else { return }
         viewModel.handleVisibilityChanges(for: adView, in: scrollView)
     }
 

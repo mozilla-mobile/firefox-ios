@@ -61,9 +61,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             FakespotAction.settingsStateDidChange,
             FakespotAction.reviewQualityDidChange,
             FakespotAction.tabDidChange,
-            FakespotAction.sheetDisplayed,
-            FakespotAction.setAdsImpressionTo,
-            FakespotAction.setAdsExposureTo:
+            FakespotAction.sheetDisplayedEventSend,
+            FakespotAction.adsImpressionEventSendFor,
+            FakespotAction.adsExposureEventSendFor:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 usePrivateHomepage: state.usePrivateHomepage,

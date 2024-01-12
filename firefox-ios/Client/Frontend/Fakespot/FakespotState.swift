@@ -9,13 +9,17 @@ struct FakespotState: ScreenState, Equatable {
     var isOpen: Bool
     var sidebarOpenForiPadLandscape: Bool
     var currentTabUUID: String
-    var expandState: [String: ExpandState]
-    var telemetryState: [String: TelemetryState]
+    var expandState: [String: ExpandState] // tabUUID as key
+    var telemetryState: [String: TelemetryState] // tabUUID as key
 
     struct TelemetryState: Equatable {
-        var adExposureEventSend = false
-        var areAdsSeen = false
-        var wasSheetDisplayed = false
+        var sheetDisplayedEvent = false
+        var adEvents: [String: AdTelemetryState] = [:] // productId as key
+    }
+
+    struct AdTelemetryState: Equatable {
+        var adExposureEvent = false
+        var adsImpressionEvent = false
     }
 
     struct ExpandState: Equatable {
@@ -78,7 +82,7 @@ struct FakespotState: ScreenState, Equatable {
             // signaling the start of a new browsing session,
             // and resets the 'areAdsSeen' flag to false.
             if state.currentTabUUID == tabUUID {
-                state.telemetryState[tabUUID]?.areAdsSeen = false
+                state.telemetryState[tabUUID]?.adEvents = [:]
             } else if state.telemetryState[tabUUID] == nil {
                 state.telemetryState[tabUUID] = TelemetryState()
             }
@@ -91,7 +95,7 @@ struct FakespotState: ScreenState, Equatable {
             state.isOpen = !state.isOpen
             state.sidebarOpenForiPadLandscape = !state.isOpen
             if !state.isOpen {
-                state.telemetryState[state.currentTabUUID]?.wasSheetDisplayed = false
+                state.telemetryState[state.currentTabUUID]?.sheetDisplayedEvent = false
             }
             return state
 
@@ -114,19 +118,19 @@ struct FakespotState: ScreenState, Equatable {
             state.telemetryState[state.currentTabUUID]?.wasSheetDisplayed = isEnabled
             return state
 
-        case FakespotAction.sheetDisplayed(let isDisplayed):
+        case FakespotAction.sheetDisplayedEventSend:
             var state = state
-            state.telemetryState[state.currentTabUUID]?.wasSheetDisplayed = isDisplayed
+            state.telemetryState[state.currentTabUUID]?.sheetDisplayedEvent = true
             return state
 
-        case FakespotAction.setAdsImpressionTo(let areAdsSeen):
+        case FakespotAction.adsImpressionEventSendFor(let productId):
             var state = state
-            state.telemetryState[state.currentTabUUID]?.areAdsSeen = areAdsSeen
+            state.telemetryState[state.currentTabUUID]?.adEvents[productId]?.adsImpressionEvent = true
             return state
 
-        case FakespotAction.setAdsExposureTo:
+        case FakespotAction.adsExposureEventSendFor(let productId):
             var state = state
-            state.telemetryState[state.currentTabUUID]?.adExposureEventSend = true
+            state.telemetryState[state.currentTabUUID]?.adEvents[productId]?.adExposureEvent = true
             return state
 
         default:

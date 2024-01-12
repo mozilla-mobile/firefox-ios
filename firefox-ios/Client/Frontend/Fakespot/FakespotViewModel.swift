@@ -192,10 +192,6 @@ class FakespotViewModel {
         return prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false
     }
 
-    var currentTabbUUID: String? {
-        tabManager.selectedTab?.tabUUID
-    }
-
     var areAdsEnabled: Bool {
         return prefs.boolForKey(PrefsKeys.Shopping2023EnableAds) ?? true
     }
@@ -392,17 +388,17 @@ class FakespotViewModel {
                 )
             )
 
-            guard product != nil else { return }
+            guard product != nil, let productId = shoppingProduct.product?.id else { return }
             if productAds.isEmpty {
                 guard shouldRecordAdsExposureEvents?() == false else { return }
                 recordSurfaceNoAdsAvailableTelemetry()
-                store.dispatch(FakespotAction.setAdsExposureTo)
             } else {
                 guard shouldRecordAdsExposureEvents?() == false else { return }
                 recordAdsExposureTelemetry()
-                store.dispatch(FakespotAction.setAdsExposureTo)
                 reportAdEvent(eventName: .trustedDealsPlacement, aidvs: productAds.map(\.aid))
             }
+
+            store.dispatch(FakespotAction.adsExposureEventSendFor(productId))
         } catch {
             state = .error(error)
         }
@@ -535,7 +531,9 @@ class FakespotViewModel {
         recordSurfaceAdsImpressionTelemetry()
         reportAdEvent(eventName: .trustedDealsImpression, aidvs: [aid])
         stopTimer()
-        store.dispatch(FakespotAction.setAdsImpressionTo(true))
+
+        guard let productId = shoppingProduct.product?.id else { return }
+        store.dispatch(FakespotAction.adsImpressionEventSendFor(productId))
         isViewVisible = false
     }
 
