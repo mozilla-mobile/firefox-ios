@@ -54,11 +54,9 @@ final class FakespotReliabilityScoreView: UIView, Notifiable, ThemeApplicable {
     }
 
     private func setupLayout() {
-        let size = min(UIFontMetrics.default.scaledValue(for: UX.ratingSize), UX.maxRatingSize)
-        ratingHeightConstraint = heightAnchor.constraint(equalToConstant: size)
+        ratingHeightConstraint = heightAnchor.constraint(equalToConstant: UX.ratingSize)
+        ratingWidthConstraint = widthAnchor.constraint(equalToConstant: UX.ratingSize)
         ratingHeightConstraint?.isActive = true
-
-        ratingWidthConstraint = widthAnchor.constraint(equalToConstant: size)
         ratingWidthConstraint?.isActive = true
 
         addSubview(reliabilityLetterView)

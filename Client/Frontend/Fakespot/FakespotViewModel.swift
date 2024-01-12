@@ -390,8 +390,8 @@ class FakespotViewModel {
             if productAds.isEmpty {
                 recordSurfaceNoAdsAvailableTelemetry()
             } else {
-                recordAdsExposureTelementry()
                 reportAdEvent(eventName: .trustedDealsPlacement, aidvs: productAds.map(\.aid))
+                recordAdsExposureTelemetry()
             }
         } catch {
             state = .error(error)
@@ -593,7 +593,7 @@ class FakespotViewModel {
         )
     }
 
-    private func recordAdsExposureTelementry() {
+    private func recordAdsExposureTelemetry() {
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .view,
