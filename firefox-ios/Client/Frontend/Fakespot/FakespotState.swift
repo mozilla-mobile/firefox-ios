@@ -93,7 +93,7 @@ struct FakespotState: ScreenState, Equatable {
         case FakespotAction.pressedShoppingButton:
             var state = state
             state.isOpen = !state.isOpen
-            state.sidebarOpenForiPadLandscape = !state.isOpen
+            state.sidebarOpenForiPadLandscape = state.isOpen
             if !state.isOpen {
                 state.sendSurfaceDisplayedTelemetryEvent = true
             }
