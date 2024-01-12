@@ -13,7 +13,7 @@ protocol WKEngineWebViewDelegate: AnyObject {
 }
 
 /// Abstraction on top of the `WKWebView`
-protocol WKEngineWebView {
+protocol WKEngineWebView: UIView {
     var navigationDelegate: WKNavigationDelegate? { get set }
     var allowsBackForwardNavigationGestures: Bool { get set }
     var allowsLinkPreview: Bool { get set }

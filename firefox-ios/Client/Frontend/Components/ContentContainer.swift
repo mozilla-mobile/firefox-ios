@@ -16,7 +16,7 @@ protocol ContentContainable: UIViewController {
 
 /// A container for view controllers, currently used to embed content in BrowserViewController
 class ContentContainer: UIView {
-    var type: ContentType?
+    private var type: ContentType?
     private var contentController: ContentContainable?
 
     var contentView: UIView? {
@@ -29,6 +29,10 @@ class ContentContainer: UIView {
 
     var hasPrivateHomepage: Bool {
         return type == .privateHomepage
+    }
+
+    var hasWebView: Bool {
+        return type == .webview
     }
 
     /// Determine if the content can be added, making sure we only add once

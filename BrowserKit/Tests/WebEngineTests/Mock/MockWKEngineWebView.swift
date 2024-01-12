@@ -6,7 +6,7 @@ import UIKit
 import WebKit
 @testable import WebEngine
 
-class MockWKEngineWebView: WKEngineWebView {
+class MockWKEngineWebView: UIView, WKEngineWebView {
     var configuration = WKWebViewConfiguration()
     var interactionState: Any?
     var scrollView = UIScrollView()
@@ -14,7 +14,6 @@ class MockWKEngineWebView: WKEngineWebView {
     var navigationDelegate: WKNavigationDelegate?
     var allowsBackForwardNavigationGestures = true
     var allowsLinkPreview = true
-    var backgroundColor: UIColor? = .black
     var isInspectable = true
 
     // MARK: Test properties
@@ -33,7 +32,13 @@ class MockWKEngineWebView: WKEngineWebView {
     var loadFileReadAccessURL: URL?
 
     required init?(frame: CGRect,
-                   configurationProvider: WKEngineConfigurationProvider) {}
+                   configurationProvider: WKEngineConfigurationProvider) {
+        super.init(frame: frame)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     func load(_ request: URLRequest) -> WKNavigation? {
         url = request.url
@@ -76,19 +81,19 @@ class MockWKEngineWebView: WKEngineWebView {
         removeAllUserScriptsCalled += 1
     }
 
-    func removeFromSuperview() {
+    override func removeFromSuperview() {
         removeFromSuperviewCalled += 1
     }
 
-    func addObserver(_ observer: NSObject,
-                     forKeyPath keyPath: String,
-                     options: NSKeyValueObservingOptions,
-                     context: UnsafeMutableRawPointer?) {
+    override func addObserver(_ observer: NSObject,
+                              forKeyPath keyPath: String,
+                              options: NSKeyValueObservingOptions,
+                              context: UnsafeMutableRawPointer?) {
         addObserverCalled += 1
     }
 
-    func removeObserver(_ observer: NSObject,
-                        forKeyPath keyPath: String) {
+    override func removeObserver(_ observer: NSObject,
+                                 forKeyPath keyPath: String) {
         removeObserverCalled += 1
     }
 }
