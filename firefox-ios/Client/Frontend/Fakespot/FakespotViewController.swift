@@ -223,7 +223,7 @@ class FakespotViewController: UIViewController,
         guard let adView,
               !fakespotState.currentTabUUID.isEmpty,
               let productId = viewModel.shoppingProduct.product?.id,
-              !(fakespotState.telemetryState[fakespotState.currentTabUUID]?.adEvents[productId]?.adsImpressionEvent ?? false)
+              (fakespotState.telemetryState[fakespotState.currentTabUUID]?.adEvents[productId]?.sendAdsImpressionEvent ?? true)
         else { return }
         viewModel.handleVisibilityChanges(for: adView, in: scrollView)
     }
