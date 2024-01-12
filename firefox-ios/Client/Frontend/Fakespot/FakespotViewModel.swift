@@ -388,12 +388,14 @@ class FakespotViewModel {
                 )
             )
 
-            guard product != nil, let productId = shoppingProduct.product?.id else { return }
+            guard product != nil,
+                  let productId = shoppingProduct.product?.id,
+                  shouldRecordAdsExposureEvents?() == true
+            else { return }
+
             if productAds.isEmpty {
-                guard shouldRecordAdsExposureEvents?() == false else { return }
                 recordSurfaceNoAdsAvailableTelemetry()
             } else {
-                guard shouldRecordAdsExposureEvents?() == false else { return }
                 recordAdsExposureTelemetry()
                 reportAdEvent(eventName: .trustedDealsPlacement, aidvs: productAds.map(\.aid))
             }

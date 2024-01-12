@@ -18,7 +18,7 @@ struct FakespotState: ScreenState, Equatable {
     }
 
     struct AdTelemetryState: Equatable {
-        var adExposureEvent = false
+        var sendAdExposureEvent = true
         var adsImpressionEvent = false
     }
 
@@ -130,7 +130,7 @@ struct FakespotState: ScreenState, Equatable {
 
         case FakespotAction.adsExposureEventSendFor(let productId):
             var state = state
-            state.telemetryState[state.currentTabUUID]?.adEvents[productId]?.adExposureEvent = true
+            state.telemetryState[state.currentTabUUID]?.adEvents[productId]?.sendAdExposureEvent = false
             return state
 
         default:

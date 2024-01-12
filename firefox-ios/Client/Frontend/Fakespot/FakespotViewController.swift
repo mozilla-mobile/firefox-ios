@@ -215,7 +215,7 @@ class FakespotViewController: UIViewController,
             guard let self, let productId = viewModel.shoppingProduct.product?.id else { return false }
             let tabUUID = self.fakespotState.currentTabUUID
 
-            return (self.fakespotState.telemetryState[tabUUID]?.adEvents[productId]?.adExposureEvent ?? false)
+            return (self.fakespotState.telemetryState[tabUUID]?.adEvents[productId]?.sendAdExposureEvent ?? true)
         }
     }
 
