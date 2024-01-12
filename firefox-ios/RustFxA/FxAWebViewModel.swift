@@ -95,7 +95,13 @@ class FxAWebViewModel: FeatureFlaggable {
                     accountManager.beginAuthentication(entrypoint: "email_\(entrypoint)") { [weak self] result in
                         guard let self = self else { return }
 
-                        if case .success(let url) = result {
+                        if case .success(var url) = result {
+                            if self.profile.prefs.boolForKey(PrefsKeys.KeyUseReactFxA) ?? false {
+                                url = url.withQueryParams([
+                                    URLQueryItem(name: "forceExperiment", value: "generalizedReactApp"),
+                                    URLQueryItem(name: "forceExperimentGroup", value: "react")
+                                ])
+                            }
                             self.baseURL = url
                             completion(self.makeRequest(url), .emailLogin)
                         }

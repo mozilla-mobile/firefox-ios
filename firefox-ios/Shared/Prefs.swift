@@ -110,6 +110,7 @@ public struct PrefsKeys {
     public static let KeyUseCustomSyncTokenServerOverride = "useCustomSyncTokenServerOverride"
     public static let KeyCustomSyncTokenServerOverride = "customSyncTokenServerOverride"
     public static let KeyUseCustomFxAContentServer = "useCustomFxAContentServer"
+    public static let KeyUseReactFxA = "useReactFxA"
     public static let KeyCustomFxAContentServer = "customFxAContentServer"
     public static let UseStageServer = "useStageSyncService"
     public static let KeyFxALastCommandIndex = "FxALastCommandIndex"

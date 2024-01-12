@@ -2504,6 +2504,7 @@ extension String {
     public static let SettingsAdvancedAccountTitle = "Advanced Sync Settings"
     public static let SettingsAdvancedAccountCustomFxAContentServerURI = "Custom Account Content Server URI"
     public static let SettingsAdvancedAccountUseCustomFxAContentServerURITitle = "Use Custom FxA Content Server"
+    public static let SettingsAdvancedAccountUseReactContentServer = "Use React Content Server"
     public static let SettingsAdvancedAccountCustomSyncTokenServerURI = "Custom Sync Token Server URI"
     public static let SettingsAdvancedAccountUseCustomSyncTokenServerTitle = "Use Custom Sync Token Server"
 }
