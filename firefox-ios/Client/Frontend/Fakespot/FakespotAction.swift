@@ -15,5 +15,5 @@ enum FakespotAction: Action {
     case setAppearanceTo(Bool)
     case adsImpressionEventSendFor(String)
     case adsExposureEventSendFor(String)
-    case sheetDisplayedEventSend
+    case surfaceDisplayedEventSend
 }

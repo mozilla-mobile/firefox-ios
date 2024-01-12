@@ -177,10 +177,10 @@ class FakespotViewController: UIViewController,
         updateModalA11y()
 
         guard !fakespotState.currentTabUUID.isEmpty,
-              !(fakespotState.telemetryState[fakespotState.currentTabUUID]?.sheetDisplayedEvent ?? false)
+              (fakespotState.telemetryState[fakespotState.currentTabUUID]?.sendSurfaceDisplayed ?? true)
         else { return }
         viewModel.recordBottomSheetDisplayed(presentationController)
-        store.dispatch(FakespotAction.sheetDisplayedEventSend)
+        store.dispatch(FakespotAction.surfaceDisplayedEventSend)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -457,7 +457,7 @@ class FakespotViewController: UIViewController,
                 guard let self = self, let action else { return }
 
                 store.dispatch(FakespotAction.setAppearanceTo(false))
-                store.dispatch(FakespotAction.sheetDisplayedEventSend)
+                store.dispatch(FakespotAction.surfaceDisplayedEventSend)
                 viewModel.recordDismissTelemetry(by: action)
             }
             viewModel.settingsCardViewModel.toggleAdsEnabled = { [weak self] in

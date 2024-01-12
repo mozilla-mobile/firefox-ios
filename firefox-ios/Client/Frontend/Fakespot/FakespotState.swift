@@ -13,7 +13,7 @@ struct FakespotState: ScreenState, Equatable {
     var telemetryState: [String: TelemetryState] // tabUUID as key
 
     struct TelemetryState: Equatable {
-        var sheetDisplayedEvent = false
+        var sendSurfaceDisplayed = true
         var adEvents: [String: AdTelemetryState] = [:] // productId as key
     }
 
@@ -95,7 +95,7 @@ struct FakespotState: ScreenState, Equatable {
             state.isOpen = !state.isOpen
             state.sidebarOpenForiPadLandscape = !state.isOpen
             if !state.isOpen {
-                state.telemetryState[state.currentTabUUID]?.sheetDisplayedEvent = false
+                state.telemetryState[state.currentTabUUID]?.sendSurfaceDisplayed = true
             }
             return state
 
@@ -109,18 +109,18 @@ struct FakespotState: ScreenState, Equatable {
             var state = state
             state.isOpen = false
             state.sidebarOpenForiPadLandscape = false
-            state.telemetryState[state.currentTabUUID]?.sheetDisplayedEvent = false
+            state.telemetryState[state.currentTabUUID]?.sendSurfaceDisplayed = true
             return state
 
         case FakespotAction.setAppearanceTo(let isEnabled):
             var state = state
             state.isOpen = isEnabled
-            state.telemetryState[state.currentTabUUID]?.sheetDisplayedEvent = isEnabled
+            state.telemetryState[state.currentTabUUID]?.sendSurfaceDisplayed = !isEnabled
             return state
 
-        case FakespotAction.sheetDisplayedEventSend:
+        case FakespotAction.surfaceDisplayedEventSend:
             var state = state
-            state.telemetryState[state.currentTabUUID]?.sheetDisplayedEvent = true
+            state.telemetryState[state.currentTabUUID]?.sendSurfaceDisplayed = false
             return state
 
         case FakespotAction.adsImpressionEventSendFor(let productId):
