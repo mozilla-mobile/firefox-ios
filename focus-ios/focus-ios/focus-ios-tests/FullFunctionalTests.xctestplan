@@ -35,6 +35,7 @@
         "ShortcutsTest",
         "TrackingProtectionMenu\/testActiveProtectionSidebar()",
         "TrackingProtectionMenu\/testProtectionSidebar()",
+        "URLValidationTest",
         "WebsiteAccessTests\/testVisitWebsite()"
       ],
       "target" : {
