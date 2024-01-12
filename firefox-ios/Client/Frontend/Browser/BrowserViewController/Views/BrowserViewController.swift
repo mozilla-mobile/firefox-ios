@@ -1259,6 +1259,14 @@ class BrowserViewController: UIViewController,
         }
     }
 
+    override func accessibilityPerformMagicTap() -> Bool {
+        if !urlBar.locationView.readerModeButton.isHidden {
+            self.urlBar.tabLocationViewDidTapReaderMode(self.urlBar.locationView)
+            return true
+        }
+        return false
+    }
+
     override func accessibilityPerformEscape() -> Bool {
         if overlayManager.inOverlayMode {
             overlayManager.finishEditing(shouldCancelLoading: true)

@@ -143,7 +143,7 @@ class TabLocationView: UIView, FeatureFlaggable {
         button.largeContentImage = image
     }
 
-    private lazy var readerModeButton: ReaderModeButton = .build { readerModeButton in
+    private(set) lazy var readerModeButton: ReaderModeButton = .build { readerModeButton in
         readerModeButton.addTarget(self, action: #selector(self.tapReaderModeButton), for: .touchUpInside)
         readerModeButton.addGestureRecognizer(
             UILongPressGestureRecognizer(target: self,
