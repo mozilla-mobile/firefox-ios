@@ -390,12 +390,7 @@ class FakespotViewModel {
             if productAds.isEmpty {
                 recordSurfaceNoAdsAvailableTelemetry()
             } else {
-<<<<<<< HEAD:Client/Frontend/Fakespot/FakespotViewModel.swift
-                recordAdsExposureTelementry()
-=======
                 recordAdsExposureTelemetry()
-                reportAdEvent(eventName: .trustedDealsPlacement, aidvs: productAds.map(\.aid))
->>>>>>> 48ea2a320 (Bugfix FXIOS-8100 [v122] [Fakespot] Crashes when changing from portrait to landscape mode while review drawer is opened and an ad is displayed (#18098)):firefox-ios/Client/Frontend/Fakespot/FakespotViewModel.swift
             }
         } catch {
             state = .error(error)
