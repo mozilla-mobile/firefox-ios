@@ -264,7 +264,7 @@ class TabTrayViewController: UIViewController,
         tabTrayState = state
 
         if tabTrayState.shouldDismiss {
-            dismissVC()
+            delegate?.didFinish()
         }
         if let url = tabTrayState.shareURL {
             navigationHandler?.shareTab(url: url, sourceView: self.view)

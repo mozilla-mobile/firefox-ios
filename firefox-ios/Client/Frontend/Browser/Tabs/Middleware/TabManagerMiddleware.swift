@@ -243,24 +243,23 @@ class TabManagerMiddleware {
     private func closeTabFromTabPanel(with tabUUID: String) {
         Task {
             let shouldDismiss = await self.closeTab(with: tabUUID)
-            self.triggerRefresh(with: shouldDismiss)
+            await self.triggerRefresh(with: shouldDismiss)
         }
     }
 
     /// Trigger refreshTabs action after a change in `TabManager`
     /// - Parameter shouldDismiss: If Tab Tray should dismiss while refresh is done
+    @MainActor
     private func triggerRefresh(with shouldDismiss: Bool) {
         let isPrivate = defaultTabManager.selectedTab?.isPrivate ?? false
         let tabs = self.refreshTabs(for: isPrivate)
 
-        ensureMainThread {
-            store.dispatch(TabPanelAction.refreshTab(tabs))
-            if shouldDismiss {
-                // TODO: FXIOS-7978 Handle Undo close last regular tab
-                store.dispatch(TabTrayAction.dismissTabTray)
-            } else {
-                store.dispatch(TabPanelAction.showToast(.singleTab))
-            }
+        store.dispatch(TabPanelAction.refreshTab(tabs))
+        if shouldDismiss {
+            // TODO: FXIOS-7978 Handle Undo close last regular tab
+            store.dispatch(TabTrayAction.dismissTabTray)
+        } else {
+            store.dispatch(TabPanelAction.showToast(.singleTab))
         }
     }
 
@@ -399,7 +398,7 @@ class TabManagerMiddleware {
     private func tabPeekCloseTab(with tabID: String) {
         Task {
             let shouldDismiss = await self.closeTab(with: tabID)
-            self.triggerRefresh(with: shouldDismiss)
+            await self.triggerRefresh(with: shouldDismiss)
         }
     }
 }
