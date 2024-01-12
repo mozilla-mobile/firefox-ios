@@ -341,7 +341,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
             imageContainerView.bottomAnchor.constraint(lessThanOrEqualTo: firstRowView.bottomAnchor),
 
             productLinkButton.topAnchor.constraint(equalTo: firstRowView.topAnchor),
-            productLinkButton.leadingAnchor.constraint(equalTo: imageContainerView.trailingAnchor, 
+            productLinkButton.leadingAnchor.constraint(equalTo: imageContainerView.trailingAnchor,
                                                        constant: UX.horizontalElementSpacing),
             productLinkButton.bottomAnchor.constraint(equalTo: firstRowView.bottomAnchor),
 
@@ -356,7 +356,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
             priceLabel.bottomAnchor.constraint(equalTo: secondRowView.bottomAnchor),
 
             starRatingView.topAnchor.constraint(equalTo: secondRowView.topAnchor),
-            starRatingView.leadingAnchor.constraint(greaterThanOrEqualTo: priceLabel.trailingAnchor, 
+            starRatingView.leadingAnchor.constraint(greaterThanOrEqualTo: priceLabel.trailingAnchor,
                                                     constant: UX.horizontalElementSpacing),
             starRatingView.bottomAnchor.constraint(equalTo: secondRowView.bottomAnchor),
             starRatingView.trailingAnchor.constraint(equalTo: secondRowView.trailingAnchor),
@@ -389,17 +389,17 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
             starRatingView.centerYAnchor.constraint(equalTo: a11ySizeRatingContainerView.centerYAnchor),
 
             gradeReliabilityScoreView.topAnchor.constraint(equalTo: a11ySizeRatingContainerView.topAnchor),
-            gradeReliabilityScoreView.leadingAnchor.constraint(equalTo: starRatingView.trailingAnchor, 
+            gradeReliabilityScoreView.leadingAnchor.constraint(equalTo: starRatingView.trailingAnchor,
                                                                constant: UX.horizontalElementSpacing),
             gradeReliabilityScoreView.bottomAnchor.constraint(equalTo: a11ySizeRatingContainerView.bottomAnchor),
             gradeReliabilityScoreView.trailingAnchor.constraint(equalTo: a11ySizeRatingContainerView.trailingAnchor),
 
-            productLinkButton.topAnchor.constraint(equalTo: a11ySizeRatingContainerView.bottomAnchor, 
+            productLinkButton.topAnchor.constraint(equalTo: a11ySizeRatingContainerView.bottomAnchor,
                                                    constant: UX.verticalElementSpacing),
             productLinkButton.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor),
             productLinkButton.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor),
 
-            priceLabel.topAnchor.constraint(equalTo: productLinkButton.bottomAnchor, 
+            priceLabel.topAnchor.constraint(equalTo: productLinkButton.bottomAnchor,
                                             constant: UX.verticalElementSpacing),
             priceLabel.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor),
             priceLabel.bottomAnchor.constraint(equalTo: contentContainerView.bottomAnchor),
