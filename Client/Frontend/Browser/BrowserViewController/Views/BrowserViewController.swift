@@ -67,6 +67,9 @@ class BrowserViewController: UIViewController,
     let shoppingContextHintVC: ContextualHintViewController
     private var backgroundTabLoader: DefaultBackgroundTabLoader
 
+    // MARK: Telemetry Variables
+    var privateBrowsingTelemetry = PrivateBrowsingTelemetry()
+
     // popover rotation handling
     var displayedPopoverController: UIViewController?
     var updateDisplayedPopoverProperties: (() -> Void)?
@@ -799,7 +802,10 @@ class BrowserViewController: UIViewController,
     }
 
     private func updateLegacyTheme() {
-        if !NightModeHelper.isActivated() && LegacyThemeManager.instance.systemThemeIsOn {
+        if let state = browserViewControllerState,
+           !NightModeHelper.isActivated()
+            && LegacyThemeManager.instance.systemThemeIsOn
+            && !state.usePrivateHomepage {
             let userInterfaceStyle = traitCollection.userInterfaceStyle
             LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? LegacyDarkTheme() : LegacyNormalTheme()
         }
@@ -1015,6 +1021,8 @@ class BrowserViewController: UIViewController,
     /// on the tab bar to open a new tab or by pressing the home page button on the tab bar. Inline is false when
     /// it's the zero search page, aka when the home page is shown by clicking the url bar from a loaded web page.
     func showEmbeddedHomepage(inline: Bool) {
+        resetDataClearanceCFRTimer()
+
         guard let isPrivate = browserViewControllerState?.usePrivateHomepage, !isPrivate else {
             browserDelegate?.showPrivateHomepage(overlayManager: overlayManager)
             return
@@ -1280,6 +1288,7 @@ class BrowserViewController: UIViewController,
             configureDataClearanceContextualHint()
             return
         }
+        resetDataClearanceCFRTimer()
         navigationToolbar.updateMiddleButtonState(state)
     }
 

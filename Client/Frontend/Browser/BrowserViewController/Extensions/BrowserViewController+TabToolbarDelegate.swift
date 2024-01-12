@@ -8,7 +8,18 @@ import UIKit
 
 extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     // MARK: Data Clearance CFR / Contextual Hint
+
+    // Reset the CFR timer for the data clearance button to avoid presenting the CFR
+    // In cases, such as if user navigates to homepage or if fire icon is not available
+    func resetDataClearanceCFRTimer() {
+        dataClearanceContextHintVC.stopTimer()
+    }
+
     func configureDataClearanceContextualHint() {
+        guard contentContainer.hasWebView, tabManager.selectedTab?.url?.displayURL?.isWebPage() == true else {
+            resetDataClearanceCFRTimer()
+            return
+        }
         dataClearanceContextHintVC.configure(
             anchor: navigationToolbar.multiStateButton,
             withArrowDirection: topTabsVisible ? .up : .down,
@@ -46,13 +57,16 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         let cancelAction = UIAlertAction(
             title: .Alerts.FeltDeletion.CancelButton,
             style: .cancel,
-            handler: nil
+            handler: { [weak self] _ in
+                self?.privateBrowsingTelemetry.sendDataClearanceTappedTelemetry(didConfirm: false)
+            }
         )
 
         let deleteDataAction = UIAlertAction(
             title: .Alerts.FeltDeletion.ConfirmButton,
             style: .destructive,
             handler: { [weak self] _ in
+                self?.privateBrowsingTelemetry.sendDataClearanceTappedTelemetry(didConfirm: true)
                 self?.closePrivateTabsAndOpenNewPrivateHomepage()
                 self?.showDataClearanceConfirmationToast()
             }
