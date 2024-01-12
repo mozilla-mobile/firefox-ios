@@ -240,13 +240,9 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         productImageHeightConstraint?.isActive = true
         productImageWidthConstraint?.isActive = true
 
-<<<<<<< HEAD:Client/Frontend/Fakespot/Views/FakespotAdView.swift
-        defaultProductImageWidthConstraint = defaultImageView.widthAnchor.constraint(equalToConstant: defaultImageWidth)
-=======
         defaultProductImageWidthConstraint = defaultImageView.widthAnchor.constraint(
             equalToConstant: UX.defaultImageSize.width
         )
->>>>>>> 48ea2a320 (Bugfix FXIOS-8100 [v122] [Fakespot] Crashes when changing from portrait to landscape mode while review drawer is opened and an ad is displayed (#18098)):firefox-ios/Client/Frontend/Fakespot/Views/FakespotAdView.swift
         defaultProductImageWidthConstraint?.isActive = true
 
         NSLayoutConstraint.activate([
