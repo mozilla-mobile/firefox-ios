@@ -177,7 +177,7 @@ class FakespotViewController: UIViewController,
         updateModalA11y()
 
         guard !fakespotState.currentTabUUID.isEmpty,
-              fakespotState.telemetryState[fakespotState.currentTabUUID]?.sendSurfaceDisplayed ?? true
+              fakespotState.sendSurfaceDisplayedTelemetryEvent
         else { return }
         viewModel.recordBottomSheetDisplayed(presentationController)
         store.dispatch(FakespotAction.surfaceDisplayedEventSend)
