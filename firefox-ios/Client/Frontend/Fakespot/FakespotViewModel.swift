@@ -535,9 +535,7 @@ class FakespotViewModel {
         recordSurfaceAdsImpressionTelemetry()
         reportAdEvent(eventName: .trustedDealsImpression, aidvs: [aid])
         stopTimer()
-        store.dispatch(FakespotAction.setAdsImpressionTo(
-            true)
-        )
+        store.dispatch(FakespotAction.setAdsImpressionTo(true))
         isViewVisible = false
     }
 
