@@ -201,6 +201,8 @@ class FakespotViewController: UIViewController,
         }
 
         self.viewModel = viewModel
+        shouldRecordAdsExposureEvents()
+
         // Sets adView to nil when switching tabs on iPad to prevent retaining references from a previous tab,
         // ensuring accurate ad impression tracking.
         adView = nil
