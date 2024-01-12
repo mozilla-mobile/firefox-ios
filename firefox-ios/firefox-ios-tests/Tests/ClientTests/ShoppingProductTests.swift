@@ -358,15 +358,11 @@ final class ThrowingFakeSpotClient: FakespotClientType {
         self.error = error
     }
 
-<<<<<<< HEAD
-    func reportAdEvent(eventName: Client.FakespotAdsEvent, eventSource: String, aid: String) async throws -> Client.AdEventsResponse {
-=======
     func reportAdEvent(
         eventName: Client.FakespotAdsEvent,
         eventSource: String,
         aidvs: [String]
     ) async throws -> Client.AdEventsResponse {
->>>>>>> 00c6eda8d (Add FXIOS-8065 [v122] Send trusted_deals_placement upon fetching the Fakespot ad unit from a server (#18051))
         reportAdEventCallCount += 1
         throw error
     }
@@ -425,15 +421,11 @@ final class TestFakespotClient: FakespotClientType {
     var lastEventSource: String?
     var aidvs: [String] = []
 
-<<<<<<< HEAD
-    func reportAdEvent(eventName: Client.FakespotAdsEvent, eventSource: String, aid: String) async throws -> Client.AdEventsResponse {
-=======
     func reportAdEvent(
         eventName: Client.FakespotAdsEvent,
         eventSource: String,
         aidvs: [String]
     ) async throws -> Client.AdEventsResponse {
->>>>>>> 00c6eda8d (Add FXIOS-8065 [v122] Send trusted_deals_placement upon fetching the Fakespot ad unit from a server (#18051))
         self.reportAdEventCalled = true
         self.reportAdEventCallCount += 1
         self.lastEventName = eventName
