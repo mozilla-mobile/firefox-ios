@@ -140,7 +140,7 @@ final class WKEngineSessionTests: XCTestCase {
         let subject = createSubject()
         let restoredState = Data()
 
-        subject?.restoreState(state: restoredState)
+        subject?.restore(state: restoredState)
 
         XCTAssertEqual(webViewProvider.webView.interactionState as! Data, restoredState)
         XCTAssertEqual(webViewProvider.webView.loadCalled, 0)
@@ -151,7 +151,7 @@ final class WKEngineSessionTests: XCTestCase {
         let restoredState = Data()
         subject?.load(url: "https://example.com")
 
-        subject?.restoreState(state: restoredState)
+        subject?.restore(state: restoredState)
 
         XCTAssertEqual(webViewProvider.webView.interactionState as! Data, restoredState)
         XCTAssertEqual(webViewProvider.webView.loadCalled, 2, "Load calls it once, then restore calls it again")

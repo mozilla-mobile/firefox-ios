@@ -399,7 +399,7 @@ class FakespotViewModel {
                 store.dispatch(FakespotAction.setAdsExposureTo)
             } else {
                 guard shouldRecordAdsExposureEvents?() == false else { return }
-                recordAdsExposureTelementry()
+                recordAdsExposureTelemetry()
                 store.dispatch(FakespotAction.setAdsExposureTo)
                 reportAdEvent(eventName: .trustedDealsPlacement, aidvs: productAds.map(\.aid))
             }
@@ -606,7 +606,7 @@ class FakespotViewModel {
         )
     }
 
-    private func recordAdsExposureTelementry() {
+    private func recordAdsExposureTelemetry() {
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .view,

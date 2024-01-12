@@ -16,6 +16,7 @@ struct FakespotAdViewModel: FeatureFlaggable {
     let titleA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.title
     let cardA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.card
     let priceA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.price
+    let starRatingA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.starRating
     let productTitleA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.productTitle
     let descriptionA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.description
     let footerA11yId: String = AccessibilityIdentifiers.Shopping.AdCard.footer
@@ -88,9 +89,9 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         static let footerFontSize: CGFloat = 13
         static let margins = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         static let linkInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-        static let titleSpacing: CGFloat = 14
-        static let hStackSpacing: CGFloat = 12
-        static let vStackSpacing: CGFloat = 8
+        static let titleBottomSpacing: CGFloat = 14
+        static let horizontalElementSpacing: CGFloat = 12
+        static let verticalElementSpacing: CGFloat = 8
         static let starSize: CGFloat = 24
         static let starMaxSize: CGFloat = 42
 
@@ -101,23 +102,26 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         static let defaultImageMaxSize = CGSize(width: 70, height: 70)
     }
 
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
+    private var viewModel: FakespotAdViewModel?
+    public var ad: ProductAdsResponse? { viewModel?.productAdsData }
+    private var previousPreferredContentSizeCategory: UIContentSizeCategory?
+
     // MARK: Views
     private lazy var cardContainer: ShadowCardView = .build()
     private lazy var imageContainerView: UIView = .build { view in
         view.layer.cornerRadius = UX.productImageCornerRadius
     }
+
     private var defaultImageView: UIImageView = .build { view in
         view.image = UIImage(named: StandardImageIdentifiers.Large.image)?.withRenderingMode(.alwaysTemplate)
     }
+
     private lazy var productImageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = UX.productImageCornerRadius
     }
-
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
-    private var viewModel: FakespotAdViewModel?
-    public var ad: ProductAdsResponse? { viewModel?.productAdsData }
 
     private lazy var titleLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
@@ -144,32 +148,19 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
                                                             weight: .semibold)
         label.numberOfLines = 0
     }
+
     private lazy var productLinkButton: FakespotAdLinkButton = .build { button in
         button.addTarget(self, action: #selector(self.didTapProductLink), for: .touchUpInside)
     }
 
     private lazy var gradeReliabilityScoreView = FakespotReliabilityScoreView(grade: .f)
-
     private lazy var starRatingView: FakespotStarRatingView = .build()
+    private lazy var contentView: UIView = .build()
+    private lazy var contentContainerView: UIView = .build()
 
-    private lazy var secondRowStackView: UIStackView = .build { stackView in
-        stackView.axis = .horizontal
-        stackView.spacing = UX.hStackSpacing
-    }
-
-    private lazy var thirdRowStackView: UIStackView = .build { stackView in
-        stackView.axis = .horizontal
-        stackView.spacing = UX.hStackSpacing
-    }
-
-    private lazy var contentStackView: UIStackView = .build { stackView in
-        stackView.axis = .vertical
-        stackView.spacing = UX.vStackSpacing
-        stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.layoutMargins = UX.margins
-    }
-
-    private lazy var spacer: UIView = .build()
+    private lazy var firstRowView: UIView = .build()
+    private lazy var secondRowView: UIView = .build()
+    private lazy var a11ySizeRatingContainerView: UIView = .build()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -195,6 +186,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         starRatingView.isAccessibilityElement = true
         let rating = String(format: "%.1f", productAdsData.adjustedRating)
         starRatingView.accessibilityLabel = String(format: .Shopping.AdjustedRatingStarsAccessibilityLabel, rating)
+        starRatingView.accessibilityIdentifier = viewModel.starRatingA11yId
 
         let productLinkButtonViewModel = LinkButtonViewModel(
             title: productAdsData.name,
@@ -214,7 +206,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
             displayProductImage()
         }
 
-        let cardModel = ShadowCardViewModel(view: contentStackView, a11yId: viewModel.cardA11yId)
+        let cardModel = ShadowCardViewModel(view: contentView, a11yId: viewModel.cardA11yId)
         cardContainer.configure(cardModel)
     }
 
@@ -230,31 +222,26 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
     // MARK: Layout Setup
     private func setupLayout() {
         addSubview(cardContainer)
-        insertSubview(footerLabel, belowSubview: cardContainer)
+        addSubview(footerLabel)
+
+        contentView.addSubview(contentContainerView)
+        contentContainerView.addSubview(titleLabel)
 
         imageContainerView.addSubview(defaultImageView)
         imageContainerView.addSubview(productImageView)
 
         // normal setup
-        let starsHeight = minSize(minValue: UX.starSize, maxValue: UX.starMaxSize)
-        let imageWidth = minSize(minValue: UX.productImageMinSize.width,
-                                 maxValue: UX.productImageMaxSize.width)
-        let imageHeight = minSize(minValue: UX.productImageMinSize.height,
-                                  maxValue: UX.productImageMaxSize.height)
-        let defaultImageWidth = minSize(minValue: UX.defaultImageSize.width,
-                                        maxValue: UX.defaultImageMaxSize.width)
-
-        starRatingHeightConstraint = starRatingView.heightAnchor.constraint(equalToConstant: starsHeight)
+        starRatingHeightConstraint = starRatingView.heightAnchor.constraint(equalToConstant: UX.starSize)
         starRatingHeightConstraint?.isActive = true
 
-        productImageHeightConstraint = imageContainerView.heightAnchor.constraint(equalToConstant: imageHeight)
+        let imageSize = UX.productImageMinSize
+        productImageHeightConstraint = imageContainerView.heightAnchor.constraint(equalToConstant: imageSize.height)
+        productImageWidthConstraint = imageContainerView.widthAnchor.constraint(equalToConstant: imageSize.width)
         productImageHeightConstraint?.isActive = true
-
-        productImageWidthConstraint = imageContainerView.widthAnchor.constraint(equalToConstant: imageWidth)
         productImageWidthConstraint?.isActive = true
 
         defaultProductImageWidthConstraint = defaultImageView.widthAnchor.constraint(
-            equalToConstant: defaultImageWidth
+            equalToConstant: UX.defaultImageSize.width
         )
         defaultProductImageWidthConstraint?.isActive = true
 
@@ -262,11 +249,24 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
             cardContainer.leadingAnchor.constraint(equalTo: leadingAnchor),
             cardContainer.topAnchor.constraint(equalTo: topAnchor),
             cardContainer.trailingAnchor.constraint(equalTo: trailingAnchor),
-            cardContainer.bottomAnchor.constraint(equalTo: footerLabel.topAnchor, constant: -UX.vStackSpacing),
+            cardContainer.bottomAnchor.constraint(equalTo: footerLabel.topAnchor,
+                                                  constant: -UX.verticalElementSpacing),
 
             footerLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
             footerLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             footerLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+            contentContainerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                          constant: UX.margins.left),
+            contentContainerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: UX.margins.top),
+            contentContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                           constant: -UX.margins.right),
+            contentContainerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
+                                                         constant: -UX.margins.bottom),
+
+            titleLabel.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor),
+            titleLabel.topAnchor.constraint(equalTo: contentContainerView.topAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor),
 
             defaultImageView.heightAnchor.constraint(equalTo: defaultImageView.widthAnchor),
             defaultImageView.centerXAnchor.constraint(equalTo: imageContainerView.centerXAnchor),
@@ -276,19 +276,12 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
             productImageView.trailingAnchor.constraint(equalTo: imageContainerView.trailingAnchor),
             productImageView.topAnchor.constraint(equalTo: imageContainerView.topAnchor),
             productImageView.bottomAnchor.constraint(equalTo: imageContainerView.bottomAnchor),
-
-            defaultImageView.heightAnchor.constraint(equalTo: defaultImageView.heightAnchor)
         ])
 
         adjustLayout()
     }
 
     private func adjustLayout() {
-        secondRowStackView.removeAllArrangedViews()
-        thirdRowStackView.removeAllArrangedViews()
-        contentStackView.removeAllArrangedViews()
-
-        let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
         starRatingHeightConstraint?.constant = minSize(minValue: UX.starSize, maxValue: UX.starMaxSize)
         productImageHeightConstraint?.constant = minSize(minValue: UX.productImageMinSize.height,
                                                          maxValue: UX.productImageMaxSize.height)
@@ -297,80 +290,121 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         defaultProductImageWidthConstraint?.constant = minSize(minValue: UX.defaultImageSize.width,
                                                                maxValue: UX.defaultImageMaxSize.width)
 
-        if contentSizeCategory.isAccessibilityCategory {
-            secondRowStackView.axis = .vertical
-            spacer.isHidden = false
+        let shouldUpdateLayout = previousPreferredContentSizeCategory?.isAccessibilityCategory != UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
+
+        guard previousPreferredContentSizeCategory == nil || shouldUpdateLayout else { return }
+
+        prepareForLayoutUpdate()
+
+        if UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory {
             setupLayoutForAccessibilityView()
         } else {
-            secondRowStackView.axis = .horizontal
-            spacer.isHidden = true
             setupLayoutForDefaultView()
         }
-        setNeedsLayout()
-        layoutIfNeeded()
+
+        previousPreferredContentSizeCategory = UIApplication.shared.preferredContentSizeCategory
+    }
+
+    private func prepareForLayoutUpdate() {
+        firstRowView.removeFromSuperview()
+        secondRowView.removeFromSuperview()
+        imageContainerView.removeFromSuperview()
+        a11ySizeRatingContainerView.removeFromSuperview()
+        productLinkButton.removeFromSuperview()
+        priceLabel.removeFromSuperview()
     }
 
     private func setupLayoutForDefaultView() {
-        // first line
-        contentStackView.addArrangedSubview(titleLabel)
+        firstRowView.addSubview(imageContainerView)
+        firstRowView.addSubview(productLinkButton)
+        firstRowView.addSubview(gradeReliabilityScoreView)
 
-        // second line
-        productLinkButton.setContentHuggingPriority(.required, for: .vertical)
-        productLinkButton.setContentCompressionResistancePriority(.required, for: .vertical)
-        productLinkButton.setContentHuggingPriority(.required, for: .horizontal)
-        productLinkButton.setContentCompressionResistancePriority(.required, for: .horizontal)
+        secondRowView.addSubview(priceLabel)
+        secondRowView.addSubview(starRatingView)
 
-        secondRowStackView.addArrangedSubview(imageContainerView)
-        secondRowStackView.addArrangedSubview(productLinkButton)
-        secondRowStackView.addArrangedSubview(gradeReliabilityScoreView)
-        secondRowStackView.distribution = .fill
-        secondRowStackView.alignment = .top
+        contentContainerView.addSubview(firstRowView)
+        contentContainerView.addSubview(secondRowView)
 
-        // third line
-        thirdRowStackView.addArrangedSubview(priceLabel)
-        thirdRowStackView.addArrangedSubview(spacer)
-        thirdRowStackView.addArrangedSubview(starRatingView)
-        thirdRowStackView.distribution = .fill
-        thirdRowStackView.alignment = .leading
+        NSLayoutConstraint.activate([
+            firstRowView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: UX.titleBottomSpacing),
+            firstRowView.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor),
+            firstRowView.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor),
 
-        priceLabel.centerYAnchor.constraint(equalTo: starRatingView.centerYAnchor).isActive = true
+            secondRowView.topAnchor.constraint(equalTo: firstRowView.bottomAnchor,
+                                               constant: UX.verticalElementSpacing),
+            secondRowView.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor),
+            secondRowView.bottomAnchor.constraint(equalTo: contentContainerView.bottomAnchor),
+            secondRowView.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor),
 
-        contentStackView.addArrangedSubview(secondRowStackView)
-        contentStackView.addArrangedSubview(thirdRowStackView)
-        contentStackView.distribution = .fill
+            imageContainerView.topAnchor.constraint(equalTo: firstRowView.topAnchor),
+            imageContainerView.leadingAnchor.constraint(equalTo: firstRowView.leadingAnchor),
+            imageContainerView.bottomAnchor.constraint(lessThanOrEqualTo: firstRowView.bottomAnchor),
 
-        contentStackView.setCustomSpacing(UX.titleSpacing, after: titleLabel)
+            productLinkButton.topAnchor.constraint(equalTo: firstRowView.topAnchor),
+            productLinkButton.leadingAnchor.constraint(equalTo: imageContainerView.trailingAnchor,
+                                                       constant: UX.horizontalElementSpacing),
+            productLinkButton.bottomAnchor.constraint(equalTo: firstRowView.bottomAnchor),
+
+            gradeReliabilityScoreView.topAnchor.constraint(equalTo: firstRowView.topAnchor),
+            gradeReliabilityScoreView.leadingAnchor.constraint(equalTo: productLinkButton.trailingAnchor,
+                                                               constant: UX.horizontalElementSpacing),
+            gradeReliabilityScoreView.bottomAnchor.constraint(lessThanOrEqualTo: firstRowView.bottomAnchor),
+            gradeReliabilityScoreView.trailingAnchor.constraint(equalTo: firstRowView.trailingAnchor),
+
+            priceLabel.topAnchor.constraint(equalTo: secondRowView.topAnchor),
+            priceLabel.leadingAnchor.constraint(equalTo: secondRowView.leadingAnchor),
+            priceLabel.bottomAnchor.constraint(equalTo: secondRowView.bottomAnchor),
+
+            starRatingView.topAnchor.constraint(equalTo: secondRowView.topAnchor),
+            starRatingView.leadingAnchor.constraint(greaterThanOrEqualTo: priceLabel.trailingAnchor,
+                                                    constant: UX.horizontalElementSpacing),
+            starRatingView.bottomAnchor.constraint(equalTo: secondRowView.bottomAnchor),
+            starRatingView.trailingAnchor.constraint(equalTo: secondRowView.trailingAnchor),
+        ])
     }
 
     private func setupLayoutForAccessibilityView() {
-        contentStackView.distribution = .fill
+        a11ySizeRatingContainerView.addSubview(starRatingView)
+        a11ySizeRatingContainerView.addSubview(gradeReliabilityScoreView)
 
-        // first line
-        contentStackView.addArrangedSubview(titleLabel)
+        contentContainerView.addSubview(imageContainerView)
+        contentContainerView.addSubview(a11ySizeRatingContainerView)
+        contentContainerView.addSubview(productLinkButton)
+        contentContainerView.addSubview(priceLabel)
 
-        // second line
-        let spacerTrailing = UIView()
-        let secondLineStackView = UIStackView(arrangedSubviews: [imageContainerView, spacerTrailing])
-        secondLineStackView.axis = .horizontal
-        secondLineStackView.distribution = .fill
-        contentStackView.addArrangedSubview(secondLineStackView)
+        NSLayoutConstraint.activate([
+            imageContainerView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
+                                                    constant: UX.titleBottomSpacing),
+            imageContainerView.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor),
+            imageContainerView.trailingAnchor.constraint(lessThanOrEqualTo: contentContainerView.trailingAnchor),
 
-        // third line
-        let spacerBottom = UIView()
-        let gradeStackView = UIStackView(arrangedSubviews: [starRatingView, gradeReliabilityScoreView, spacerBottom])
-        gradeStackView.axis = .horizontal
-        gradeStackView.spacing = UX.hStackSpacing
-        gradeStackView.distribution = .fill
-        gradeReliabilityScoreView.centerYAnchor.constraint(equalTo: starRatingView.centerYAnchor).isActive = true
-        contentStackView.addArrangedSubview(gradeStackView)
+            a11ySizeRatingContainerView.topAnchor.constraint(equalTo: imageContainerView.bottomAnchor,
+                                                             constant: UX.verticalElementSpacing),
+            a11ySizeRatingContainerView.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor),
+            a11ySizeRatingContainerView.trailingAnchor.constraint(lessThanOrEqualTo: contentContainerView.trailingAnchor),
 
-        // fourth line
-        contentStackView.addArrangedSubview(productLinkButton)
+            starRatingView.topAnchor.constraint(greaterThanOrEqualTo: a11ySizeRatingContainerView.topAnchor),
+            starRatingView.leadingAnchor.constraint(equalTo: a11ySizeRatingContainerView.leadingAnchor),
+            starRatingView.bottomAnchor.constraint(lessThanOrEqualTo: a11ySizeRatingContainerView.bottomAnchor),
+            starRatingView.centerYAnchor.constraint(equalTo: a11ySizeRatingContainerView.centerYAnchor),
 
-        // fifth line
-        contentStackView.addArrangedSubview(priceLabel)
+            gradeReliabilityScoreView.topAnchor.constraint(equalTo: a11ySizeRatingContainerView.topAnchor),
+            gradeReliabilityScoreView.leadingAnchor.constraint(equalTo: starRatingView.trailingAnchor,
+                                                               constant: UX.horizontalElementSpacing),
+            gradeReliabilityScoreView.bottomAnchor.constraint(equalTo: a11ySizeRatingContainerView.bottomAnchor),
+            gradeReliabilityScoreView.trailingAnchor.constraint(equalTo: a11ySizeRatingContainerView.trailingAnchor),
 
-        contentStackView.setCustomSpacing(UX.titleSpacing, after: titleLabel)
+            productLinkButton.topAnchor.constraint(equalTo: a11ySizeRatingContainerView.bottomAnchor,
+                                                   constant: UX.verticalElementSpacing),
+            productLinkButton.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor),
+            productLinkButton.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor),
+
+            priceLabel.topAnchor.constraint(equalTo: productLinkButton.bottomAnchor,
+                                            constant: UX.verticalElementSpacing),
+            priceLabel.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor),
+            priceLabel.bottomAnchor.constraint(equalTo: contentContainerView.bottomAnchor),
+            priceLabel.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor),
+        ])
     }
 
     // MARK: Notifications
@@ -391,13 +425,14 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
     // MARK: Theming
     func applyTheme(theme: Theme) {
         cardContainer.applyTheme(theme: theme)
-        titleLabel.textColor = theme.colors.textPrimary
-        priceLabel.textColor = theme.colors.textPrimary
-        footerLabel.textColor = theme.colors.textSecondary
         productLinkButton.applyTheme(theme: theme)
         gradeReliabilityScoreView.applyTheme(theme: theme)
+
+        titleLabel.textColor = theme.colors.textPrimary
         defaultImageView.tintColor = theme.colors.iconSecondary
         imageContainerView.backgroundColor = theme.colors.layer3
+        priceLabel.textColor = theme.colors.textPrimary
+        footerLabel.textColor = theme.colors.textSecondary
     }
 
     private func displayProductImage() {
