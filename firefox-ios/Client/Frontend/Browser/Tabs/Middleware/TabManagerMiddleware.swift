@@ -129,6 +129,7 @@ class TabManagerMiddleware {
 
         case TabPeekAction.closeTab(let tabID):
             self.tabPeekCloseTab(with: tabID)
+            store.dispatch(TabPanelAction.showToast(.singleTab))
         default:
             break
         }
