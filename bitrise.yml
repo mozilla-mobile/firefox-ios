@@ -1326,10 +1326,9 @@ workflows:
                 --results-bucket=firefox_ios_test_artifacts \
                 --no-record-video \
                 --client-details=matrixLabel="Bitrise" \
-                --quiet \
-                2>&1 | tee /dev/stdout)
+                --quiet)
             
-            GCLOUD_EXITCODE=${PIPESTATUS[0]}
+            GCLOUD_EXITCODE=$?
 
             envman add --key GCLOUD_EXIT_CODE --value "$GCLOUD_EXITCODE"
             MATRIX_WEBLINK=$(echo "$GCLOUD_OUTPUT" | grep 'https://console.firebase.google.com/project' | awk -F '[][]' '{print $2}' | head -n 1)
