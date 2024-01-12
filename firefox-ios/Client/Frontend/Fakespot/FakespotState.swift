@@ -105,7 +105,7 @@ struct FakespotState: ScreenState, Equatable {
             var state = state
             state.isOpen = false
             state.sidebarOpenForiPadLandscape = false
-            state.telemetryState[state.currentTabUUID]?.wasSheetDisplayed = true
+            state.telemetryState[state.currentTabUUID]?.wasSheetDisplayed = false
             return state
 
         case FakespotAction.setAppearanceTo(let isEnabled):
