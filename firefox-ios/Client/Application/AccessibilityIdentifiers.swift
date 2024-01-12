@@ -283,6 +283,7 @@ public struct AccessibilityIdentifiers {
             static let card = "Shopping.AdCard.Card"
             static let title = "Shopping.AdCard.Title"
             static let price = "Shopping.AdCard.PriceLabel"
+            static let starRating = "Shopping.AdCard.starRating"
             static let productTitle = "Shopping.AdCard.ProductTitle"
             static let description = "Shopping.AdCard.Description"
             static let footer = "Shopping.AdCard.Footer"

@@ -9688,13 +9688,6 @@
 			path = CreditCardBottomSheet;
 			sourceTree = "<group>";
 		};
-		B26ADF892B362C2400C6E127 /* New Group */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "New Group";
-			sourceTree = "<group>";
-		};
 		B2999FF82B194B3D00F0FEC1 /* FormAutofillHelper */ = {
 			isa = PBXGroup;
 			children = (
@@ -10816,7 +10809,6 @@
 		E1D3FFAF2A66A9BD002D31EF /* Fakespot */ = {
 			isa = PBXGroup;
 			children = (
-				B26ADF892B362C2400C6E127 /* New Group */,
 				8C92DE942A7128FB0090BD28 /* Client */,
 				E16258F02A83D5DE00522742 /* Views */,
 				E13E9AB12AAB0FB4001A0E9D /* FakespotCoordinator.swift */,
