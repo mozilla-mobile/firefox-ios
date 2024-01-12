@@ -37,6 +37,7 @@ public struct PrefsKeys {
     public static let KeyCurrentInstallVersion = "KeyCurrentInstallVersion"
     public static let KeySecondRun = "SecondRun"
     public static let KeyAutofillCreditCardStatus = "KeyAutofillCreditCardStatus"
+    public static let KeyAutofillAddressStatus = "KeyAutofillAddressStatus"
 
     public struct Session {
         public static let FirstAppUse = "firstAppUse"

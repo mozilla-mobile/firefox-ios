@@ -223,7 +223,7 @@ class SettingsCoordinator: BaseCoordinator,
     // MARK: PrivacySettingsDelegate
 
     func pressedAddressAutofill() {
-        let viewModel = AddressAutofillSettingsViewModel()
+        let viewModel = AddressAutofillSettingsViewModel(profile: profile)
         let viewController = AddressAutofillSettingsViewController(addressAutofillViewModel: viewModel)
         router.push(viewController)
     }
