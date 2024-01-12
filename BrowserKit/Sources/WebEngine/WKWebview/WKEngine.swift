@@ -14,7 +14,7 @@ class WKEngine: Engine {
     func createView() -> EngineView {
         return WKEngineView(frame: .zero)
     }
-    
+
     func createSession() throws -> EngineSession {
         guard let session = WKEngineSession(userScriptManager: userScriptManager) else {
             throw EngineError.sessionNotCreated
