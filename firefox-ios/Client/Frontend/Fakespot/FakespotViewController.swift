@@ -177,7 +177,7 @@ class FakespotViewController: UIViewController,
         updateModalA11y()
 
         guard !fakespotState.currentTabUUID.isEmpty,
-              (fakespotState.telemetryState[fakespotState.currentTabUUID]?.sendSurfaceDisplayed ?? true)
+              fakespotState.telemetryState[fakespotState.currentTabUUID]?.sendSurfaceDisplayed ?? true
         else { return }
         viewModel.recordBottomSheetDisplayed(presentationController)
         store.dispatch(FakespotAction.surfaceDisplayedEventSend)
@@ -223,7 +223,7 @@ class FakespotViewController: UIViewController,
         guard let adView,
               !fakespotState.currentTabUUID.isEmpty,
               let productId = viewModel.shoppingProduct.product?.id,
-              (fakespotState.telemetryState[fakespotState.currentTabUUID]?.adEvents[productId]?.sendAdsImpressionEvent ?? true)
+              fakespotState.telemetryState[fakespotState.currentTabUUID]?.adEvents[productId]?.sendAdsImpressionEvent ?? true
         else { return }
         viewModel.handleVisibilityChanges(for: adView, in: scrollView)
     }
@@ -440,7 +440,7 @@ class FakespotViewController: UIViewController,
 
         case .qualityDeterminationCard:
             let reviewQualityCardView: FakespotReviewQualityCardView = .build()
-            viewModel.reviewQualityCardViewModel.expandState = fakespotState.isReviewQualityExpanded  ? .expanded : .collapsed
+            viewModel.reviewQualityCardViewModel.expandState = fakespotState.isReviewQualityExpanded ? .expanded : .collapsed
             viewModel.reviewQualityCardViewModel.dismissViewController = {
                 store.dispatch(FakespotAction.setAppearanceTo(false))
             }
