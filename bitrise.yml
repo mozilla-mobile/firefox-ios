@@ -1314,6 +1314,8 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -ex
+            set -o pipefail
+
             curl -o /tmp/key-file.json $BITRISEIO_GOOGLE_APPLICATION_CREDENTIALS_URL 
             $HOME/sdk/google-cloud-sdk/bin/gcloud version
             $HOME/sdk/google-cloud-sdk/bin/gcloud auth activate-service-account -q --key-file /tmp/key-file.json
@@ -1326,6 +1328,7 @@ workflows:
                 --results-bucket=firefox_ios_test_artifacts \
                 --no-record-video \
                 --client-details=matrixLabel="Bitrise" \
+                --verbosity=debug \
                 --quiet)
             
             GCLOUD_EXITCODE=$?
@@ -1602,7 +1605,7 @@ trigger_map:
 - push_branch: release/v123
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: main
-  workflow: Archive_and_Run_Robo_Test
+  pipeline: pipeline_multiple_shards
 - pull_request_target_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: release/v*
