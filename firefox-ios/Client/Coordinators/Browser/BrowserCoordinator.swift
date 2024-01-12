@@ -36,6 +36,7 @@ class BrowserCoordinator: BaseCoordinator,
     private let glean: GleanWrapper
     private let applicationHelper: ApplicationHelper
     private var browserIsReady = false
+    private var windowUUID: WindowUUID { return tabManager.windowUUID }
 
     init(router: Router,
          screenshotService: ScreenshotService,
@@ -54,11 +55,6 @@ class BrowserCoordinator: BaseCoordinator,
         self.applicationHelper = applicationHelper
         self.glean = glean
         super.init(router: router)
-
-        windowManager.newBrowserWindowConfigured(
-            AppWindowInfo(tabManager: tabManager),
-            uuid: tabManager.windowUUID
-        )
 
         // TODO [7856]: Additional telemetry updates forthcoming once iPad multi-window enabled.
         // For now, we only have a single BVC and TabManager. Plug it into our TelemetryWrapper:
@@ -319,6 +315,7 @@ class BrowserCoordinator: BaseCoordinator,
         guard !childCoordinators.contains(where: { $0 is SettingsCoordinator }) else {
             return // route is handled with existing child coordinator
         }
+        windowManager.postWindowEvent(event: .settingsOpened, windowUUID: windowUUID)
         let navigationController = ThemedNavigationController()
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
         let modalPresentationStyle: UIModalPresentationStyle = isPad ? .fullScreen: .formSheet
@@ -336,6 +333,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     private func showLibrary(with homepanelSection: Route.HomepanelSection) {
+        windowManager.postWindowEvent(event: .libraryOpened, windowUUID: windowUUID)
         if let libraryCoordinator = childCoordinators[LibraryCoordinator.self] {
             libraryCoordinator.start(with: homepanelSection)
             (libraryCoordinator.router.navigationController as? UINavigationController).map { router.present($0) }
@@ -630,9 +628,41 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - WindowEventCoordinator
 
-    func coordinatorWindowWillClose() {
-        // This cleanup is necessary to ensure BVC and other components are properly released.
-        browserViewController.contentContainer.subviews.forEach { $0.removeFromSuperview() }
-        browserViewController.removeFromParent()
+    func coordinatorHandleWindowEvent(event: WindowEvent, uuid: WindowUUID) {
+        switch event {
+        case .windowWillClose:
+            guard uuid == windowUUID else { return }
+            // Additional cleanup performed when the current iPad window is closed.
+            // This is necessary in order to ensure the BVC and other memory is freed correctly.
+            browserViewController.contentContainer.subviews.forEach { $0.removeFromSuperview() }
+            browserViewController.removeFromParent()
+        case .libraryOpened:
+            // Auto-close library panel if it was opened in another iPad window. [FXIOS-8095]
+            guard uuid != windowUUID else { return }
+            performIfCoordinatorRootVCIsPresented(LibraryCoordinator.self) { _ in
+                router.dismiss(animated: true, completion: nil)
+            }
+        case .settingsOpened:
+            // Auto-close settings panel if it was opened in another iPad window. [FXIOS-8095]
+            guard uuid != windowUUID else { return }
+            performIfCoordinatorRootVCIsPresented(SettingsCoordinator.self) {
+                didFinishSettings(from: $0)
+            }
+        }
+    }
+
+    /// Utility. Performs the supplied action if a coordinator of the indicated type
+    /// is currently presenting its primary view controller.
+    /// - Parameters:
+    ///   - coordinatorType: the type of coordinator.
+    ///   - action: the action to perform. The Coordinator instance is supplied for convenience.
+    private func performIfCoordinatorRootVCIsPresented<T: Coordinator>(_ coordinatorType: T.Type,
+                                                                       action: (T) -> Void) {
+        guard let expectedCoordinator = childCoordinators[coordinatorType] else { return }
+        let browserPresentedVC = router.navigationController.presentedViewController
+        let rootVC = (browserPresentedVC as? UINavigationController)?.viewControllers.first
+        if rootVC === expectedCoordinator.router.rootViewController {
+            action(expectedCoordinator)
+        }
     }
 }

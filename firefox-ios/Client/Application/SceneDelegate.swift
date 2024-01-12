@@ -56,14 +56,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Handle clean-up here for closing windows on iPad
         guard let sceneCoordinator = (scene.delegate as? SceneDelegate)?.sceneCoordinator else { return }
 
-        // Give all coordinators a chance to respond to scene disconnect (window close).
-        sceneCoordinator.recurseChildCoordinators {
-            ($0 as? WindowEventCoordinator)?.coordinatorWindowWillClose()
-        }
-
         // Notify WindowManager that window is closing
-        let windowManager: WindowManager = AppContainer.shared.resolve()
-        windowManager.windowDidClose(uuid: sceneCoordinator.windowUUID)
+        (AppContainer.shared.resolve() as WindowManager).windowWillClose(uuid: sceneCoordinator.windowUUID)
     }
 
     // MARK: - Transitioning to Foreground
