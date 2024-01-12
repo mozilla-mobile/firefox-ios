@@ -13,7 +13,7 @@ enum FakespotAction: Action {
     case show
     case dismiss
     case setAppearanceTo(Bool)
-    case adsImpressionEventSendFor(String)
-    case adsExposureEventSendFor(String)
+    case adsImpressionEventSendFor(productId: String)
+    case adsExposureEventSendFor(productId: String)
     case surfaceDisplayedEventSend
 }

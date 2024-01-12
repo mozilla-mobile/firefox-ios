@@ -400,7 +400,7 @@ class FakespotViewModel {
                 reportAdEvent(eventName: .trustedDealsPlacement, aidvs: productAds.map(\.aid))
             }
 
-            store.dispatch(FakespotAction.adsExposureEventSendFor(productId))
+            store.dispatch(FakespotAction.adsExposureEventSendFor(productId: productId))
         } catch {
             state = .error(error)
         }
@@ -535,7 +535,7 @@ class FakespotViewModel {
         stopTimer()
 
         guard let productId = shoppingProduct.product?.id else { return }
-        store.dispatch(FakespotAction.adsImpressionEventSendFor(productId))
+        store.dispatch(FakespotAction.adsImpressionEventSendFor(productId: productId))
         isViewVisible = false
     }
 
