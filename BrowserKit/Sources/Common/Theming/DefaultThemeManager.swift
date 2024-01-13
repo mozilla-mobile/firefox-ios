@@ -35,6 +35,15 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     public var window: UIWindow?
 
+    public var isSystemThemeOn: Bool {
+        return userDefaults.bool(forKey: ThemeKeys.systemThemeIsOn)
+    }
+
+    // UIViewControllers / UINavigationControllers need to have `preferredStatusBarStyle` and call this.
+    public var statusBarStyle: UIStatusBarStyle {
+        return .default
+    }
+
     // MARK: - Init
 
     public init(userDefaults: UserDefaultsInterface = UserDefaults.standard,

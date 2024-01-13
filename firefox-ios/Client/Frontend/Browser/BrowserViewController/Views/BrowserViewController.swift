@@ -180,6 +180,8 @@ class BrowserViewController: UIViewController,
         return NewTabAccessors.getNewTabPage(profile.prefs)
     }
 
+    private var defaultThemeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
+
     @available(iOS 13.4, *)
     func keyboardPressesHandler() -> KeyboardPressesHandler {
         guard let keyboardPressesHandlerValue = keyboardPressesHandlerValue as? KeyboardPressesHandler else {
@@ -252,6 +254,10 @@ class BrowserViewController: UIViewController,
             guard !AppEventQueue.activityIsCompleted(.browserUpdatedForAppActivation(tabWindowUUID)) else { return }
             self?.browserDidBecomeActive()
         }
+    }
+
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        defaultThemeManager.statusBarStyle
     }
 
     @objc
@@ -835,10 +841,10 @@ class BrowserViewController: UIViewController,
     private func updateLegacyTheme() {
         if let state = browserViewControllerState,
            !NightModeHelper.isActivated()
-            && LegacyThemeManager.instance.systemThemeIsOn
+            && defaultThemeManager.isSystemThemeOn
             && !state.usePrivateHomepage {
             let userInterfaceStyle = traitCollection.userInterfaceStyle
-            LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? LegacyDarkTheme() : LegacyNormalTheme()
+            defaultThemeManager.currentTheme = userInterfaceStyle == .dark ? DarkTheme() : LightTheme()
         }
     }
 
