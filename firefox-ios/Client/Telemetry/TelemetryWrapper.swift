@@ -102,7 +102,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.prefkey.trackingprotection.normalbrowsing", withDefaultValue: true)
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.prefkey.trackingprotection.privatebrowsing", withDefaultValue: true)
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.prefkey.trackingprotection.strength", withDefaultValue: "basic")
-        telemetryConfig.measureUserDefaultsSetting(forKey: DefaultThemeManager.getSystemThemeKey(), withDefaultValue: true)
+        telemetryConfig.measureUserDefaultsSetting(forKey: DefaultThemeManager.systemThemeKey, withDefaultValue: true)
 
         let prefs = profile.prefs
         legacyTelemetry.beforeSerializePing(pingType: CorePingBuilder.PingType) { (inputDict) -> [String: Any?] in
@@ -289,7 +289,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
             GleanMetrics.TrackingProtection.strength.set("basic")
         }
         // System theme enabled
-        GleanMetrics.Theme.useSystemTheme.set(DefaultThemeManager.isSystemThemeOn)
+        let themeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
+        GleanMetrics.Theme.useSystemTheme.set(themeManager.isSystemThemeOn)
         // Installed Mozilla applications
         GleanMetrics.InstalledMozillaProducts.focus.set(UIApplication.shared.canOpenURL(URL(string: "firefox-focus://")!))
         GleanMetrics.InstalledMozillaProducts.klar.set(UIApplication.shared.canOpenURL(URL(string: "firefox-klar://")!))

@@ -35,14 +35,12 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     public var window: UIWindow?
 
-    public var setSystemThemeIsOn: Bool {
-        didSet {
-            UserDefaults.standard.set(setSystemThemeIsOn, forKey: DefaultThemeManager.getSystemThemeKey())
-        }
+    public static var systemThemeKey: String {
+        return ThemeKeys.systemThemeIsOn
     }
 
-    public static var isSystemThemeOn: Bool {
-        return UserDefaults.standard.bool(forKey: DefaultThemeManager.getSystemThemeKey())
+    public var isSystemThemeOn: Bool {
+        return userDefaults.bool(forKey: ThemeKeys.systemThemeIsOn)
     }
 
     // MARK: - Init
@@ -56,8 +54,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         self.mainQueue = mainQueue
         self.sharedContainerIdentifier = sharedContainerIdentifier
 
-        self.userDefaults.register(defaults: [ThemeKeys.systemThemeIsOn: true,
-                                              ThemeKeys.NightMode.isOn: NSNumber(value: false)])
+        migrateDefaultsToUseStandard()
 
         self.userDefaults.register(defaults: [
             ThemeKeys.systemThemeIsOn: true,
@@ -65,23 +62,14 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
             ThemeKeys.PrivateMode.isOn: NSNumber(value: false),
         ])
 
-        UserDefaults.standard.register(defaults: [DefaultThemeManager.getSystemThemeKey(): true])
-
-        setSystemThemeIsOn = userDefaults.bool(forKey: DefaultThemeManager.getSystemThemeKey())
         changeCurrentTheme(loadInitialThemeType())
 
         setupNotifications(forObserver: self,
                            observing: [UIScreen.brightnessDidChangeNotification,
                                        UIApplication.didBecomeActiveNotification])
-
-        migrateDefaultsToUseStandard()
     }
 
     // MARK: - ThemeManager
-
-    public static func getSystemThemeKey() -> String {
-        return ThemeKeys.systemThemeIsOn
-    }
 
     public func changeCurrentTheme(_ newTheme: ThemeType) {
         guard currentTheme.type != newTheme else { return }
