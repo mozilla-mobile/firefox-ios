@@ -254,10 +254,6 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        LegacyThemeManager.instance.statusBarStyle
-    }
-
     @objc
     private func didAddPendingBlobDownloadToQueue() {
         pendingDownloadWebView = nil

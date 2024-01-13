@@ -75,11 +75,6 @@ class LegacyThemeManager {
                                                object: nil)
     }
 
-    // UIViewControllers / UINavigationControllers need to have `preferredStatusBarStyle` and call this.
-    var statusBarStyle: UIStatusBarStyle {
-        return .default
-    }
-
     var userInterfaceStyle: UIUserInterfaceStyle {
         switch currentName {
         case .dark:
