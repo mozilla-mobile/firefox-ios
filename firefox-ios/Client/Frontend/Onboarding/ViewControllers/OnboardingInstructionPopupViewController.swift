@@ -64,22 +64,23 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
         stack.spacing = UX.textStackViewSpacing
     }
 
-    private lazy var primaryButton: LegacyResizableButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
-            withTextStyle: .callout,
-            size: UX.buttonFontSize)
-        button.layer.cornerRadius = UX.buttonCornerRadius
-        button.titleLabel?.textAlignment = .center
-        button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.PrimaryButton"
-        button.contentEdgeInsets = UIEdgeInsets(
-            top: UX.buttonVerticalInset,
-            left: UX.buttonHorizontalInset,
-            bottom: UX.buttonVerticalInset,
-            right: UX.buttonHorizontalInset
-        )
-    }
+    private lazy var primaryButton: PrimaryRoundedButton = .build { button in
+           button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
+               withTextStyle: .callout,
+               size: UX.buttonFontSize)
+           button.layer.cornerRadius = UX.buttonCornerRadius
+           button.titleLabel?.textAlignment = .center
+           button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
+           button.titleLabel?.adjustsFontForContentSizeCategory = true
+           button.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.PrimaryButton"
+           button.contentEdgeInsets = UIEdgeInsets(
+               top: UX.buttonVerticalInset,
+               left: UX.buttonHorizontalInset,
+               bottom: UX.buttonVerticalInset,
+               right: UX.buttonHorizontalInset
+           )
+       }
+
 
     var viewModel: OnboardingDefaultBrowserModelProtocol
     var notificationCenter: NotificationProtocol
