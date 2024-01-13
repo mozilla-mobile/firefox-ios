@@ -70,7 +70,10 @@ class SearchTelemetry {
 
     func trackTabAndTopSiteSAP(_ tab: Tab, webView: WKWebView) {
         let provider = tab.getProviderForUrl()
-        let code = SearchPartner.getCode(searchEngine: provider, region: Locale.current.regionCode == "US" ? "US" : "ROW")
+        let code = SearchPartner.getCode(
+            searchEngine: provider,
+            region: Locale.current.regionCode == "US" ? "US" : "ROW"
+        )
         self.code = code
         self.provider = provider
 

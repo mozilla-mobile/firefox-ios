@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Redux
+import Storage
 
 enum ToastType: Equatable {
     case singleTab
@@ -61,6 +62,7 @@ enum TabPanelAction: Action {
     case selectTab(String)
     case showToast(ToastType)
     case hideUndoToast
+    case showShareSheet(URL)
 
     // Middleware actions
     case didLoadTabPanel(TabDisplayModel)

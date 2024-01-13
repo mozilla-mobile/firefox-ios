@@ -23,7 +23,12 @@ final class ShoppingProductTests: XCTestCase {
         let url = URL(string: "https://www.amazon.com/Under-Armour-Charged-Assert-Running/dp/B087T8Q2C4")!
 
         let sut = ShoppingProduct(url: url, client: client)
-        let expected = Product(id: "B087T8Q2C4", host: "amazon.com", topLevelDomain: "com", sitename: "amazon")
+        let expected = Product(
+            id: "B087T8Q2C4",
+            host: "amazon.com",
+            topLevelDomain: "com",
+            sitename: "amazon"
+        )
 
         XCTAssertEqual(sut.product, expected)
     }
@@ -32,7 +37,12 @@ final class ShoppingProductTests: XCTestCase {
         let url = URL(string: "https://www.bestbuy.com/site/macbook-air-13-3-laptop-apple-m1-chip-8gb-memory-256gb-ssd-space-gray/5721600.p?skuId=5721600")!
 
         let sut = ShoppingProduct(url: url, client: client)
-        let expected = Product(id: "5721600.p", host: "bestbuy.com", topLevelDomain: "com", sitename: "bestbuy")
+        let expected = Product(
+            id: "5721600.p",
+            host: "bestbuy.com",
+            topLevelDomain: "com",
+            sitename: "bestbuy"
+        )
 
         XCTAssertEqual(sut.product, expected)
     }
@@ -209,7 +219,11 @@ final class ShoppingProductTests: XCTestCase {
             .sorted(by: { $0.adjustedRating > $1.adjustedRating })
             .first(where: { $0.adjustedRating >= minRating })
 
-        XCTAssertEqual(selectedAdCard, ProductAdsResponse(adjustedRating: 4.7), "The ad with the highest rating should be selected.")
+        XCTAssertEqual(
+            selectedAdCard,
+            ProductAdsResponse(adjustedRating: 4.7),
+            "The ad with the highest rating should be selected."
+        )
     }
 
     func testAdsWithRatingsLowerThanMinRating() {
@@ -318,12 +332,12 @@ final class ShoppingProductTests: XCTestCase {
         let url = URL(string: "https://www.amazon.com/Under-Armour-Charged-Assert-Running/dp/B087T8Q2C4")!
         let sut = ShoppingProduct(url: url, client: client)
 
-        _ = try await sut.reportAdEvent(eventName: .trustedDealsLinkClicked, eventSource: "web", aid: "aidv1")
+        _ = try await sut.reportAdEvent(eventName: .trustedDealsLinkClicked, eventSource: "web", aidvs: ["aidv1"])
 
         XCTAssertTrue(client.reportAdEventCalled)
         XCTAssertEqual(client.lastEventName, .trustedDealsLinkClicked)
         XCTAssertEqual(client.lastEventSource, "web")
-        XCTAssertEqual(client.lastAid, "aidv1")
+        XCTAssertEqual(client.aidvs, ["aidv1"])
     }
 }
 
@@ -358,7 +372,11 @@ final class ThrowingFakeSpotClient: FakespotClientType {
         self.error = error
     }
 
-    func reportAdEvent(eventName: Client.FakespotAdsEvent, eventSource: String, aid: String) async throws -> Client.AdEventsResponse {
+    func reportAdEvent(
+        eventName: Client.FakespotAdsEvent,
+        eventSource: String,
+        aidvs: [String]
+    ) async throws -> Client.AdEventsResponse {
         reportAdEventCallCount += 1
         throw error
     }
@@ -415,14 +433,18 @@ final class TestFakespotClient: FakespotClientType {
     var reportAdEventCallCount = 0
     var lastEventName: FakespotAdsEvent?
     var lastEventSource: String?
-    var lastAid: String?
+    var aidvs: [String] = []
 
-    func reportAdEvent(eventName: Client.FakespotAdsEvent, eventSource: String, aid: String) async throws -> Client.AdEventsResponse {
+    func reportAdEvent(
+        eventName: Client.FakespotAdsEvent,
+        eventSource: String,
+        aidvs: [String]
+    ) async throws -> Client.AdEventsResponse {
         self.reportAdEventCalled = true
         self.reportAdEventCallCount += 1
         self.lastEventName = eventName
         self.lastEventSource = eventSource
-        self.lastAid = aid
+        self.aidvs = aidvs
         return [:]
     }
 

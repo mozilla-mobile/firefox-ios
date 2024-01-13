@@ -68,6 +68,7 @@ class ShareViewController: UIViewController {
     var shareItem: ExtensionUtils.ExtractedShareItem?
     private var viewsShownDuringDoneAnimation = [UIView]()
     private var stackView: UIStackView!
+    private var spinner: UIActivityIndicatorView?
     private var actionDoneRow: (row: UIStackView, label: UILabel)!
     private var sendToDevice: SendToDevice?
     private var pageInfoHeight: NSLayoutConstraint?
@@ -93,6 +94,25 @@ class ShareViewController: UIViewController {
 
         setupNavBar()
         setupStackView()
+
+        if RustFirefoxAccounts.shared.accountManager == nil {
+            // Show brief spinner in UI while startup is finishing
+            showProgressIndicator()
+
+            let profile = BrowserProfile(localName: "profile")
+            Viaduct.shared.useReqwestBackend()
+            RustFirefoxAccounts.startup(prefs: profile.prefs) { [weak self] _ in
+                // Hide spinner and finish UI setup (Note: this completion
+                // block is currently guaranteed to arrive on main thread.)
+                self?.hideProgressIndicator()
+                self?.finalizeUISetup()
+            }
+        } else {
+            finalizeUISetup()
+        }
+    }
+
+    private func finalizeUISetup() {
         setupRows()
 
         guard let shareItem = shareItem else { return }
@@ -104,10 +124,6 @@ class ShareViewController: UIViewController {
         case .rawText(let text):
             self.pageInfoRowTitleLabel?.text = text.quoted
         }
-
-        let profile = BrowserProfile(localName: "profile")
-        Viaduct.shared.useReqwestBackend()
-        RustFirefoxAccounts.startup(prefs: profile.prefs) { _ in }
     }
 
     private func setupRows() {
@@ -117,27 +133,65 @@ class ShareViewController: UIViewController {
         makeSeparator(addTo: stackView)
 
         if shareItem?.isUrlType() ?? true {
-            makeActionRow(addTo: stackView, label: .ShareOpenInFirefox, imageName: "logoFirefoxLarge", action: #selector(actionOpenInFirefoxNow), hasNavigation: false)
-            makeActionRow(addTo: stackView, label: .ShareLoadInBackground, imageName: "tabTrayLarge", action: #selector(actionLoadInBackground), hasNavigation: false)
-            makeActionRow(addTo: stackView, label: .ShareBookmarkThisPage, imageName: "bookmarkLarge", action: #selector(actionBookmarkThisPage), hasNavigation: false)
-            makeActionRow(addTo: stackView, label: .ShareAddToReadingList, imageName: "AddToReadingList", action: #selector(actionAddToReadingList), hasNavigation: false)
+            makeActionRow(
+                addTo: stackView,
+                label: .ShareOpenInFirefox,
+                imageName: "logoFirefoxLarge",
+                action: #selector(actionOpenInFirefoxNow),
+                hasNavigation: false
+            )
+            makeActionRow(
+                addTo: stackView,
+                label: .ShareLoadInBackground,
+                imageName: "tabTrayLarge",
+                action: #selector(actionLoadInBackground),
+                hasNavigation: false
+            )
+            makeActionRow(
+                addTo: stackView,
+                label: .ShareBookmarkThisPage,
+                imageName: "bookmarkLarge",
+                action: #selector(actionBookmarkThisPage),
+                hasNavigation: false
+            )
+            makeActionRow(
+                addTo: stackView,
+                label: .ShareAddToReadingList,
+                imageName: "AddToReadingList",
+                action: #selector(actionAddToReadingList),
+                hasNavigation: false
+            )
             makeSeparator(addTo: stackView)
-            makeActionRow(addTo: stackView, label: .ShareSendToDevice, imageName: "deviceDesktopSendLarge", action: #selector(actionSendToDevice), hasNavigation: true)
+            makeActionRow(
+                addTo: stackView,
+                label: .ShareSendToDevice,
+                imageName: "deviceDesktopSendLarge",
+                action: #selector(actionSendToDevice),
+                hasNavigation: true
+            )
         } else {
             pageInfoRowUrlLabel?.removeFromSuperview()
-            makeActionRow(addTo: stackView, label: .ShareSearchInFirefox, imageName: "quickSearch", action: #selector(actionSearchInFirefox), hasNavigation: false)
+            makeActionRow(
+                addTo: stackView,
+                label: .ShareSearchInFirefox,
+                imageName: "quickSearch",
+                action: #selector(actionSearchInFirefox),
+                hasNavigation: false
+            )
         }
 
         let footerSpaceRow = UIView()
         footerSpaceRow.translatesAutoresizingMaskIntoConstraints = false
         stackView.addArrangedSubview(footerSpaceRow)
-        // Without some growable space at the bottom there are constraint errors because the UIView space doesn't subdivide equally, and none of the rows are growable.
-        // Also, during the animation to the done state, without this space, the page info label moves down slightly.
+        // Without some growable space at the bottom there are constraint errors because the UIView space
+        // doesn't subdivide equally, and none of the rows are growable. Also, during the animation to the
+        // done state, without this space, the page info label moves down slightly.
         footerSpaceRow.heightAnchor.constraint(greaterThanOrEqualToConstant: 0).isActive = true
 
         actionDoneRow = makeActionDoneRow(addTo: stackView)
-        // Fully constructing and pre-adding as a subview ensures that only the show operation will animate during the UIView.animate(),
-        // and other animatable properties will not unexpectedly animate because they are modified in the same event loop as the animation.
+        // Fully constructing and pre-adding as a subview ensures that only the show operation will animate
+        // during the UIView.animate(), and other animatable properties will not unexpectedly animate because
+        // they are modified in the same event loop as the animation.
         actionDoneRow.row.isHidden = true
 
         // All other views are hidden for the done animation.
@@ -162,7 +216,9 @@ class ShareViewController: UIViewController {
             return
         }
 
-        pageInfoHeight?.constant = CGFloat(isLandscapeSmallScreen(traitCollection) ? UX.pageInfoRowHeight - UX.perRowShrinkageForLandscape : UX.pageInfoRowHeight)
+        pageInfoHeight?.constant = CGFloat(
+            isLandscapeSmallScreen(traitCollection) ? UX.pageInfoRowHeight - UX.perRowShrinkageForLandscape : UX.pageInfoRowHeight
+        )
         actionRowHeights.forEach {
             $0.constant = CGFloat(isLandscapeSmallScreen(traitCollection) ? UX.actionRowHeight - UX.perRowShrinkageForLandscape : UX.actionRowHeight)
         }
@@ -181,7 +237,11 @@ class ShareViewController: UIViewController {
         row.translatesAutoresizingMaskIntoConstraints = false
         row.rightLeftEdges(inset: UX.rowInset)
         parent.addArrangedSubview(row)
-        pageInfoHeight = row.heightAnchor.constraint(equalToConstant: CGFloat(isLandscapeSmallScreen(traitCollection) ? UX.pageInfoRowHeight - UX.perRowShrinkageForLandscape : UX.pageInfoRowHeight))
+        pageInfoHeight = row.heightAnchor.constraint(
+            equalToConstant: CGFloat(
+                isLandscapeSmallScreen(traitCollection) ? UX.pageInfoRowHeight - UX.perRowShrinkageForLandscape : UX.pageInfoRowHeight
+            )
+        )
         pageInfoHeight?.isActive = true
 
         let verticalStackView = UIStackView()
@@ -204,14 +264,24 @@ class ShareViewController: UIViewController {
         return PageInfoRow(row: row, titleLabel: pageTitleLabel, urlLabel: urlLabel)
     }
 
-    private func makeActionRow(addTo parent: UIStackView, label: String, imageName: String, action: Selector, hasNavigation: Bool) {
+    private func makeActionRow(
+        addTo parent: UIStackView,
+        label: String,
+        imageName: String,
+        action: Selector,
+        hasNavigation: Bool
+    ) {
         let row = UIStackView()
         row.axis = .horizontal
         row.spacing = UX.actionRowSpacingBetweenIconAndTitle
         row.translatesAutoresizingMaskIntoConstraints = false
         row.rightLeftEdges(inset: UX.rowInset)
         parent.addArrangedSubview(row)
-        let heightConstraint = row.heightAnchor.constraint(equalToConstant: CGFloat(isLandscapeSmallScreen(traitCollection) ? UX.actionRowHeight - UX.perRowShrinkageForLandscape : UX.actionRowHeight))
+        let heightConstraint = row.heightAnchor.constraint(
+            equalToConstant: CGFloat(
+                isLandscapeSmallScreen(traitCollection) ? UX.actionRowHeight - UX.perRowShrinkageForLandscape : UX.actionRowHeight
+            )
+        )
         heightConstraint.isActive = true
         actionRowHeights.append(heightConstraint)
 
@@ -229,7 +299,9 @@ class ShareViewController: UIViewController {
         icon.widthAnchor.constraint(equalToConstant: CGFloat(UX.actionRowIconSize)).isActive = true
 
         if hasNavigation {
-            let navButton = UIImageView(image: UIImage(named: "chevronRightLarge")?.withRenderingMode(.alwaysTemplate))
+            let navButton = UIImageView(
+                image: UIImage(named: "chevronRightLarge")?.withRenderingMode(.alwaysTemplate)
+            )
             navButton.contentMode = .scaleAspectFit
             navButton.tintColor = themeManager.currentTheme.colors.textPrimary
             navButton.translatesAutoresizingMaskIntoConstraints = false
@@ -245,7 +317,9 @@ class ShareViewController: UIViewController {
         navigationItem.leftBarButtonItem = nil
 
         navigationController?.view.translatesAutoresizingMaskIntoConstraints = false
-        navigationController?.view.heightAnchor.constraint(equalToConstant: CGFloat(UX.viewHeightForDoneState)).isActive = true
+        navigationController?.view.heightAnchor.constraint(
+            equalToConstant: CGFloat(UX.viewHeightForDoneState)
+        ).isActive = true
 
         actionDoneRow.label.text = title
 
@@ -304,7 +378,12 @@ class ShareViewController: UIViewController {
         navigationController?.navigationBar.isTranslucent = false
         navigationItem.titleView = UIImageView(image: UIImage(named: "Icon-Small"))
         navigationItem.titleView?.contentMode = .scaleAspectFit
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: .SendToCancelButton, style: .plain, target: self, action: #selector(finish))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            title: .SendToCancelButton,
+            style: .plain,
+            target: self,
+            action: #selector(finish)
+        )
     }
 
     private func setupStackView() {
@@ -319,6 +398,27 @@ class ShareViewController: UIViewController {
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
          ])
+    }
+
+    private func showProgressIndicator() {
+        let indicator = UIActivityIndicatorView(style: .large)
+        let defaultSize = CGSize(width: 40.0, height: 40.0)
+        view.addSubview(indicator)
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            indicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            indicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            indicator.widthAnchor.constraint(equalToConstant: defaultSize.width),
+            indicator.heightAnchor.constraint(equalToConstant: defaultSize.height),
+         ])
+        indicator.startAnimating()
+        spinner = indicator
+    }
+
+    private func hideProgressIndicator() {
+        spinner?.stopAnimating()
+        spinner?.removeFromSuperview()
+        spinner = nil
     }
 }
 
@@ -385,16 +485,12 @@ extension ShareViewController {
         guard let shareItem = shareItem, case .shareItem(let item) = shareItem else { return }
 
         gesture.isEnabled = false
-        view.isUserInteractionEnabled = false
-        if RustFirefoxAccounts.shared.accountManager != nil {
-            self.view.isUserInteractionEnabled = true
-            self.sendToDevice = SendToDevice()
-            guard let sendToDevice = self.sendToDevice else { return }
-            sendToDevice.sharedItem = item
-            sendToDevice.delegate = self.delegate
-            let vc = sendToDevice.initialViewController()
-            self.navigationController?.pushViewController(vc, animated: true)
-        }
+        self.sendToDevice = SendToDevice()
+        guard let sendToDevice = self.sendToDevice else { return }
+        sendToDevice.sharedItem = item
+        sendToDevice.delegate = self.delegate
+        let vc = sendToDevice.initialViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
 
     func openFirefox(withUrl url: String, isSearch: Bool) {

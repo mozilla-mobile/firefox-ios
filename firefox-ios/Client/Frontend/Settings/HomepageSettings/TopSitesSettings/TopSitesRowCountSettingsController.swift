@@ -23,7 +23,12 @@ class TopSitesRowCountSettingsController: SettingsTableViewController {
 
     override func generateSettings() -> [SettingSection] {
         let createSetting: (Int32) -> CheckmarkSetting = { num in
-            return CheckmarkSetting(title: NSAttributedString(string: "\(num)"), subtitle: nil, isChecked: { return num == self.numberOfRows }, onChecked: {
+            return CheckmarkSetting(title: NSAttributedString(string: "\(num)"),
+                                    subtitle: nil,
+                                    isChecked: {
+                return num == self.numberOfRows
+            },
+                                    onChecked: {
                 self.numberOfRows = num
                 self.prefs.setInt(Int32(num), forKey: PrefsKeys.NumberOfTopSiteRows)
                 self.tableView.reloadData()
@@ -31,7 +36,11 @@ class TopSitesRowCountSettingsController: SettingsTableViewController {
         }
 
         let rows = [1, 2, 3, 4].map(createSetting)
-        let section = SettingSection(title: NSAttributedString(string: .Settings.Homepage.Shortcuts.RowSettingFooter), footerTitle: nil, children: rows)
+        let section = SettingSection(
+            title: NSAttributedString(string: .Settings.Homepage.Shortcuts.RowSettingFooter),
+            footerTitle: nil,
+            children: rows
+        )
         return [section]
     }
 }

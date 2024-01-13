@@ -127,7 +127,9 @@ final class URLExtensionTests: XCTestCase {
         let url = URL(string: "http://localhost:1234/reader-mode/page?url=javascript:alert('ALERT')")!
         let genericUrl = url.safeEncodedUrl
         XCTAssertNotNil(genericUrl)
-        XCTAssertTrue(genericUrl!.absoluteString.contains("javascript:alert(%26%2339;ALERT%26%2339;)"))
+        XCTAssertTrue(
+            genericUrl!.absoluteString.contains("javascript:alert(%26%2339;ALERT%26%2339;)")
+        )
     }
 
     func testSafeEncodedUrlGivenScriptInnerHtmlTextSanitization() {
@@ -135,7 +137,9 @@ final class URLExtensionTests: XCTestCase {
         let url = URL(string: "http://localhost:1234/reader-mode/page?url=javascript:document.body.innerText='Hello';")!
         let genericUrl = url.safeEncodedUrl
         XCTAssertNotNil(genericUrl)
-        XCTAssertTrue(genericUrl!.absoluteString.contains("javascript:document.body.innerText%3D%26%2339;Hello%26%2339;;"))
+        XCTAssertTrue(
+            genericUrl!.absoluteString.contains("javascript:document.body.innerText%3D%26%2339;Hello%26%2339;;")
+        )
     }
 
     func testSafeEncodedUrlGivenHTMLFontSanitization() {
@@ -143,7 +147,9 @@ final class URLExtensionTests: XCTestCase {
         let url = URL(string: "http://localhost:1234/reader-mode/page?url=javascript:document.body.style.fontSize='50px';")!
         let genericUrl = url.safeEncodedUrl
         XCTAssertNotNil(genericUrl)
-        XCTAssertTrue(genericUrl!.absoluteString.contains("javascript:document.body.style.fontSize%3D%26%2339;50px%26%2339;;"))
+        XCTAssertTrue(
+            genericUrl!.absoluteString.contains("javascript:document.body.style.fontSize%3D%26%2339;50px%26%2339;;")
+        )
     }
 
     func testSafeEncodedUrlGivenJavaScriptSanitizationNonLocalhost() {

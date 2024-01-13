@@ -7,7 +7,7 @@ loader: ffios_taskgraph.loader.screenshots_locales:loader
 transforms:
     - ffios_taskgraph.transforms.bitrise:transforms
     - ffios_taskgraph.transforms.secrets:transforms
-    - taskgraph.transforms.job:transforms
+    - taskgraph.transforms.run:transforms
     - taskgraph.transforms.task:transforms
 
 kind-dependencies:

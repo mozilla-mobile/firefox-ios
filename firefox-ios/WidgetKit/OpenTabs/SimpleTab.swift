@@ -61,7 +61,8 @@ extension SimpleTab {
                 title = url?.shortDisplayString ?? ""
             }
 
-            // Key for simple tabs dictionary is tab UUID which is used to select proper tab when we send UUID to NavigationRouter class handle widget url
+            // Key for simple tabs dictionary is tab UUID which is used to select proper tab when we send
+            // UUID to NavigationRouter class handle widget url
             let uuidVal = tab.id.uuidString
             let value = SimpleTab(title: title,
                                   url: url,

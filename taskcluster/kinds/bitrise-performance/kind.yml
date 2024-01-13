@@ -7,17 +7,17 @@ loader: taskgraph.loader.transform:loader
 transforms:
     - ffios_taskgraph.transforms.bitrise:transforms
     - ffios_taskgraph.transforms.secrets:transforms
-    - taskgraph.transforms.job:transforms
+    - taskgraph.transforms.run:transforms
     - taskgraph.transforms.task:transforms
 
 
 tasks:
     tests:
-        bitrise-workflow: Firebase_Performance_Test
-        description: Run Performance Tests on Physical Devices in Firebase
+        bitrise-workflow: Bitrise_Performance_Test
+        description: Run Performance Tests on iOS Simulator in Bitrise
         run-on-tasks-for: []
         treeherder:
-            symbol: firebase-perf
+            symbol: bitrise-perf
             kind: test
-            platform: ios-physical-iphone14pro-16-6/opt
+            platform: ios-simulator-iphone14-16-4/opt
             tier: 1

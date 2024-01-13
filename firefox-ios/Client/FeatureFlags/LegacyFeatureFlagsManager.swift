@@ -76,14 +76,12 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags {
 
         switch featureID {
         case .searchBarPosition: return SearchBarPosition(rawValue: userSetting) as? T
-        case .wallpaperVersion: return WallpaperVersion(rawValue: userSetting) as? T
         }
     }
 
     private func convertCustomIDToStandard(_ featureID: NimbusFeatureFlagWithCustomOptionsID) -> NimbusFeatureFlagID {
         switch featureID {
         case .searchBarPosition: return .bottomSearchBar
-        case .wallpaperVersion: return .wallpaperVersion
         }
     }
 
@@ -112,8 +110,6 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags {
             if let option = desiredState as? SearchBarPosition {
                 feature.setUserPreference(to: option.rawValue)
             }
-
-        case .wallpaperVersion: return
         }
     }
 

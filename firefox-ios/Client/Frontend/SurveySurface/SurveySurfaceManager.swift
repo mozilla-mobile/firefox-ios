@@ -50,10 +50,12 @@ class SurveySurfaceManager: SurveySurfaceDelegate {
               let image = UIImage(named: ImageIdentifiers.logo)
         else { return nil }
 
-        let info = SurveySurfaceInfoModel(text: message.text,
-                                          takeSurveyButtonLabel: message.buttonLabel ?? .ResearchSurface.TakeSurveyButtonLabel,
-                                          dismissActionLabel: .ResearchSurface.DismissButtonLabel,
-                                          image: image)
+        let info = SurveySurfaceInfoModel(
+            text: message.text,
+            takeSurveyButtonLabel: message.buttonLabel ?? .ResearchSurface.TakeSurveyButtonLabel,
+            dismissActionLabel: .ResearchSurface.DismissButtonLabel,
+            image: image
+        )
 
         let viewModel = SurveySurfaceViewModel(with: info, delegate: self)
 

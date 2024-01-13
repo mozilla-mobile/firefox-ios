@@ -161,7 +161,9 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
         let tab3 = createTab(profile: mockProfile, urlString: "www.firefox3.com")
         mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
-        let expectation = XCTestExpectation(description: "Main queue fires; updateJumpBackInData(completion:) is called.")
+        let expectation = XCTestExpectation(
+            description: "Main queue fires; updateJumpBackInData(completion:) is called."
+        )
 
         // iPhone layout
         let trait = MockTraitCollection()
@@ -169,8 +171,10 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         trait.overridenVerticalSizeClass = .regular
 
         subject.updateData {
-            self.subject.updateSectionLayout(for: trait, isPortrait: true, device: .phone) // get section layout calculated
-            self.subject.refreshData(for: trait, device: .phone) // Refresh data for specific layout
+            // get section layout calculated
+            self.subject.updateSectionLayout(for: trait, isPortrait: true, device: .phone)
+            // Refresh data for specific layout
+            self.subject.refreshData(for: trait, device: .phone)
             expectation.fulfill()
         }
 
@@ -190,7 +194,9 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
         let tab3 = createTab(profile: mockProfile, urlString: "www.firefox3.com")
         mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
-        let expectation = XCTestExpectation(description: "Main queue fires; updateJumpBackInData(completion:) is called.")
+        let expectation = XCTestExpectation(
+            description: "Main queue fires; updateJumpBackInData(completion:) is called."
+        )
 
         // iPhone layout
         let trait = MockTraitCollection()
@@ -198,8 +204,10 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         trait.overridenVerticalSizeClass = .regular
 
         subject.updateData {
-            self.subject.updateSectionLayout(for: trait, isPortrait: true, device: .phone) // get section layout calculated
-            self.subject.refreshData(for: trait, device: .phone) // Refresh data for specific layout
+            // get section layout calculated
+            self.subject.updateSectionLayout(for: trait, isPortrait: true, device: .phone)
+            // Refresh data for specific layout
+            self.subject.refreshData(for: trait, device: .phone)
             expectation.fulfill()
         }
 
@@ -218,7 +226,9 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
         let tab3 = createTab(profile: mockProfile, urlString: "www.firefox3.com")
         mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
-        let expectation = XCTestExpectation(description: "Main queue fires; updateJumpBackInData(completion:) is called.")
+        let expectation = XCTestExpectation(
+            description: "Main queue fires; updateJumpBackInData(completion:) is called."
+        )
 
         // iPhone landscape layout
         let trait = MockTraitCollection()
@@ -226,8 +236,10 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         trait.overridenVerticalSizeClass = .regular
 
         subject.updateData {
-            self.subject.updateSectionLayout(for: trait, isPortrait: false, device: .phone) // get section layout calculated
-            self.subject.refreshData(for: trait, device: .phone) // Refresh data for specific layout
+            // get section layout calculated
+            self.subject.updateSectionLayout(for: trait, isPortrait: false, device: .phone)
+            // Refresh data for specific layout
+            self.subject.refreshData(for: trait, device: .phone)
             expectation.fulfill()
         }
 
@@ -237,13 +249,19 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(subject.jumpBackInList.tabs.count, 3, "iPhone landscape has 3 tabs in it's jumpbackin layout, up until 4")
+        XCTAssertEqual(
+            subject.jumpBackInList.tabs.count,
+            3,
+            "iPhone landscape has 3 tabs in it's jumpbackin layout, up until 4"
+        )
         XCTAssertEqual(subject.jumpBackInList.tabs[0], tab1)
         XCTAssertEqual(subject.jumpBackInList.tabs[1], tab2)
         XCTAssertEqual(subject.jumpBackInList.tabs[2], tab3)
     }
 
+    // swiftlint:disable line_length
     func test_updateData_tabTrayGroupsDisabled_stubRecentTabsWithStartingURLs_oniPhoneLandscapeLayout_hasAccount_has2() {
+    // swiftlint:enable line_length
         mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(),
                                                        tabs: remoteTabs(idRange: 1...3))]
         subject.featureFlags.set(feature: .tabTrayGroups, to: false)
@@ -251,7 +269,9 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
         let tab3 = createTab(profile: mockProfile, urlString: "www.firefox3.com")
         mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
-        let expectation = XCTestExpectation(description: "Main queue fires; updateJumpBackInData(completion:) is called.")
+        let expectation = XCTestExpectation(
+            description: "Main queue fires; updateJumpBackInData(completion:) is called."
+        )
 
         // iPhone landscape layout
         let trait = MockTraitCollection()
@@ -259,7 +279,11 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         trait.overridenVerticalSizeClass = .regular
 
         subject.updateData {
-            self.subject.updateSectionLayout(for: trait, isPortrait: false, device: .phone) // get section layout calculated
+            self.subject.updateSectionLayout(
+                for: trait,
+                isPortrait: false,
+                device: .phone
+            ) // get section layout calculated
             self.subject.refreshData(for: trait, device: .phone) // Refresh data for specific layout
             expectation.fulfill()
         }
@@ -270,7 +294,11 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(subject.jumpBackInList.tabs.count, 2, "iPhone landscape has 2 tabs in it's jumpbackin layout, up until 2")
+        XCTAssertEqual(
+            subject.jumpBackInList.tabs.count,
+            2,
+            "iPhone landscape has 2 tabs in it's jumpbackin layout, up until 2"
+        )
         XCTAssertEqual(subject.jumpBackInList.tabs[0], tab1)
         XCTAssertEqual(subject.jumpBackInList.tabs[1], tab2)
         XCTAssertFalse(subject.jumpBackInList.tabs.contains(tab3))

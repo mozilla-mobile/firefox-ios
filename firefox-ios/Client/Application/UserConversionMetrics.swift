@@ -39,13 +39,18 @@ class UserConversionMetrics {
         }
     }
 
-    /// there shouldn't be more records added to UserDefaults once this event happens and it should not affect existing users
+    /// there shouldn't be more records added to UserDefaults once this event happens
+    /// and it should not affect existing users
     func shouldRecordMetric() -> Bool {
         guard let firstAppUse = userDefaults.object(forKey: PrefsKeys.Session.FirstAppUse) as? UInt64,
               !userDefaults.bool(forKey: PrefsKeys.Session.didUpdateConversionValue) else { return false }
 
         let firstAppUseDate = Date.fromTimestamp(firstAppUse)
-        guard let oneWeekSinceFirstUse = Calendar.current.date(byAdding: .day, value: 7, to: firstAppUseDate) else { return false }
+        guard let oneWeekSinceFirstUse = Calendar.current.date(
+            byAdding: .day,
+            value: 7,
+            to: firstAppUseDate
+        ) else { return false }
         if Date() > oneWeekSinceFirstUse {
             return false
         }
@@ -66,7 +71,9 @@ class UserConversionMetrics {
             let distinctDaysOpened = Set(appOpensInWeek.map { Calendar.current.startOfDay(for: $0) }).count
 
             // last three days of the first week of usage
-            let searchInLastThreeDays = searchesTimestamps.filter { $0 > lastThreeDaysOfFirstWeek && $0 < oneWeekSinceFirstUse }
+            let searchInLastThreeDays = searchesTimestamps.filter {
+                $0 > lastThreeDaysOfFirstWeek && $0 < oneWeekSinceFirstUse
+            }
             let shouldActivateProfile = distinctDaysOpened >= 3 && !searchInLastThreeDays.isEmpty
             return shouldActivateProfile
         } else {

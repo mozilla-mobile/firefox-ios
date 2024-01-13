@@ -56,22 +56,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Handle clean-up here for closing windows on iPad
         guard let sceneCoordinator = (scene.delegate as? SceneDelegate)?.sceneCoordinator else { return }
 
-        // Give all coordinators a chance to respond to scene disconnect (window close).
-        sceneCoordinator.recurseChildCoordinators {
-            ($0 as? WindowEventCoordinator)?.coordinatorWindowWillClose()
-        }
-
         // Notify WindowManager that window is closing
-        let windowManager: WindowManager = AppContainer.shared.resolve()
-        windowManager.windowDidClose(uuid: sceneCoordinator.windowUUID)
+        (AppContainer.shared.resolve() as WindowManager).windowWillClose(uuid: sceneCoordinator.windowUUID)
     }
 
     // MARK: - Transitioning to Foreground
 
     /// Invoked when the interface is finished loading for your screen, but before that interface appears on screen.
     ///
-    /// Use this method to refresh the contents of your scene's view (especially if it's a restored scene), or other activities that need
-    /// to begin.
+    /// Use this method to refresh the contents of your scene's view (especially if it's a restored scene),
+    /// or other activities that need to begin.
     func sceneDidBecomeActive(_ scene: UIScene) {
         guard !AppConstants.isRunningUnitTest else { return }
 

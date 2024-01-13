@@ -15,10 +15,10 @@ class FakespotSettingsCardViewModel {
     let cardA11yId: String = a11yIds.card
     let showProductsLabelTitle = String.localizedStringWithFormat(.Shopping.SettingsCardRecommendedProductsLabel,
                                                                   AppName.shortName.rawValue)
-    let showProductsLabelTitleA11yId: String = a11yIds.productsLabel
+    let recommendedProductsGroupA11yId: String = a11yIds.productsRecommendedGroup
+    let recommendedProductsGroupA11yHint: String = .Shopping.SettingsCardGroupedRecommendedProductsAndSwitchAccessibilityHint
     let turnOffButtonTitle: String = .Shopping.SettingsCardTurnOffButton
     let turnOffButtonTitleA11yId: String = a11yIds.turnOffButton
-    let recommendedProductsSwitchA11yId: String = a11yIds.recommendedProductsSwitch
     let footerTitle: String = ""
     let footerActionTitle = String.localizedStringWithFormat(.Shopping.SettingsCardFooterAction,
                                                              FakespotName.shortName.rawValue,
@@ -44,6 +44,14 @@ class FakespotSettingsCardViewModel {
 
     var areAdsEnabled: Bool {
         return prefs.boolForKey(PrefsKeys.Shopping2023EnableAds) ?? true
+    }
+
+    var recommendedProductsAndSwitchA11yLabel: String {
+        return String.localizedStringWithFormat(
+            .Shopping.SettingsCardGroupedRecommendedProductsAndSwitchAccessibilityLabel,
+            showProductsLabelTitle,
+            areAdsEnabled ? String.Shopping.SettingsCardSwitchValueOnAccessibilityLabel : String.Shopping.SettingsCardSwitchValueOffAccessibilityLabel
+        )
     }
 
     var footerModel: ActionFooterViewModel {
@@ -95,6 +103,7 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
     private lazy var labelSwitchStackView: UIStackView = .build { stackView in
         stackView.alignment = .center
         stackView.spacing = UX.labelSwitchStackViewSpacing
+        stackView.isAccessibilityElement = true
     }
 
     private lazy var showProductsLabel: UILabel = .build { label in
@@ -121,6 +130,12 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(voiceOverStatusChanged),
+            name: UIAccessibility.voiceOverStatusDidChangeNotification,
+            object: nil
+        )
     }
 
     required init?(coder: NSCoder) {
@@ -163,9 +178,9 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
     func configure(_ viewModel: FakespotSettingsCardViewModel) {
         self.viewModel = viewModel
         recommendedProductsSwitch.isOn = viewModel.areAdsEnabled
+        handleLabelSwitchStackViewTapGesture()
 
         showProductsLabel.text = viewModel.showProductsLabelTitle
-        showProductsLabel.accessibilityIdentifier = viewModel.showProductsLabelTitleA11yId
 
         let turnOffButtonViewModel = SecondaryRoundedButtonViewModel(
             title: viewModel.turnOffButtonTitle,
@@ -173,7 +188,9 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
         )
         turnOffButton.configure(viewModel: turnOffButtonViewModel)
 
-        recommendedProductsSwitch.accessibilityIdentifier = viewModel.recommendedProductsSwitchA11yId
+        labelSwitchStackView.accessibilityIdentifier = viewModel.recommendedProductsGroupA11yId
+        labelSwitchStackView.accessibilityLabel = viewModel.recommendedProductsAndSwitchA11yLabel
+        labelSwitchStackView.accessibilityHint = viewModel.recommendedProductsGroupA11yHint
 
         let collapsibleCardViewModel = CollapsibleCardViewModel(
             contentView: contentView,
@@ -189,6 +206,13 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
                     TelemetryWrapper.recordEvent(category: .action,
                                                  method: .view,
                                                  object: .shoppingSettingsChevronButton)
+                    // Introduces a delay to ensure the completion of the previous accessibility notification.
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        UIAccessibility.post(
+                            notification: .layoutChanged,
+                            argument: self.labelSwitchStackView
+                        )
+                    }
                 }
         }
         collapsibleContainer.configure(collapsibleCardViewModel)
@@ -210,6 +234,37 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
         viewModel?.dismissViewController?(.optingOutOfTheFeature)
     }
 
+    // MARK: - Accessibility
+    @objc
+    private func voiceOverStatusChanged() {
+        handleLabelSwitchStackViewTapGesture()
+    }
+
+    @objc
+    private func labelSwitchStackViewTapped() {
+        recommendedProductsSwitch.setOn(
+            !recommendedProductsSwitch.isOn,
+            animated: true
+        )
+        // Resetting accessibility label and hint during view rebuild,
+        // to prevent conflicts between VoiceOver instances.
+        labelSwitchStackView.accessibilityLabel = nil
+        labelSwitchStackView.accessibilityHint = nil
+        viewModel?.toggleAdsEnabled?()
+    }
+
+    private func handleLabelSwitchStackViewTapGesture() {
+        if UIAccessibility.isVoiceOverRunning {
+            let tapGesture = UITapGestureRecognizer(
+                target: self,
+                action: #selector(self.labelSwitchStackViewTapped)
+            )
+            labelSwitchStackView.addGestureRecognizer(tapGesture)
+        } else {
+            guard let tapGesture = labelSwitchStackView.gestureRecognizers?.first else { return }
+            labelSwitchStackView.removeGestureRecognizer(tapGesture)
+        }
+    }
     // MARK: - Theming System
     func applyTheme(theme: Theme) {
         collapsibleContainer.applyTheme(theme: theme)

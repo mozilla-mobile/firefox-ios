@@ -20,11 +20,16 @@ class DevicePickerTableViewHeaderCell: UITableViewCell, ReusableCell, ThemeAppli
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(nameLabel)
 
-        NSLayoutConstraint.activate([
-            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.tableHeaderTextPaddingLeft),
-            nameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
-        ])
+        NSLayoutConstraint.activate(
+            [
+                nameLabel.leadingAnchor.constraint(
+                    equalTo: contentView.leadingAnchor,
+                    constant: UX.tableHeaderTextPaddingLeft
+                ),
+                nameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+                nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+            ]
+        )
 
         preservesSuperviewLayoutMargins = false
         layoutMargins = .zero

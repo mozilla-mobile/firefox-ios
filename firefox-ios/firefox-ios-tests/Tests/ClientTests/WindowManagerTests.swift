@@ -93,7 +93,7 @@ class WindowManagerTests: XCTestCase {
         XCTAssertEqual(firstWindowUUID, subject.activeWindow)
 
         // Close the first window
-        subject.windowDidClose(uuid: firstWindowUUID)
+        subject.windowWillClose(uuid: firstWindowUUID)
 
         // Check that the second window is now the only window
         XCTAssertEqual(1, subject.windows.count)
@@ -111,8 +111,8 @@ class WindowManagerTests: XCTestCase {
         // Check that asking for two UUIDs results in two unique/random UUIDs
         // Note: there is a possibility of collision between any two randomly-
         // generated UUIDs but it is astronomically small (1 out of 2^122).
-        let uuid1 = subject.nextAvailableWindowUUID()
-        let uuid2 = subject.nextAvailableWindowUUID()
+        let uuid1 = subject.reserveNextAvailableWindowUUID()
+        let uuid2 = subject.reserveNextAvailableWindowUUID()
         XCTAssertNotEqual(uuid1, uuid2)
     }
 
@@ -126,11 +126,11 @@ class WindowManagerTests: XCTestCase {
         mockTabDataStore.injectMockTabWindowUUID(savedUUID)
 
         // Check that asking for first UUID returns the expected UUID
-        XCTAssertEqual(savedUUID, subject.nextAvailableWindowUUID())
+        XCTAssertEqual(savedUUID, subject.reserveNextAvailableWindowUUID())
         // Open a window using this UUID
         subject.newBrowserWindowConfigured(AppWindowInfo(), uuid: savedUUID)
         // Check that asking for another UUID returns a new, random UUID
-        XCTAssertNotEqual(savedUUID, subject.nextAvailableWindowUUID())
+        XCTAssertNotEqual(savedUUID, subject.reserveNextAvailableWindowUUID())
     }
 
     func testNextAvailableUUIDWhenMultipleWindowsSaved() {
@@ -146,9 +146,9 @@ class WindowManagerTests: XCTestCase {
         mockTabDataStore.injectMockTabWindowUUID(uuid2)
 
         // Ask for UUIDs for two windows, which we open and configure
-        let result1 = subject.nextAvailableWindowUUID()
+        let result1 = subject.reserveNextAvailableWindowUUID()
         subject.newBrowserWindowConfigured(AppWindowInfo(), uuid: result1)
-        let result2 = subject.nextAvailableWindowUUID()
+        let result2 = subject.reserveNextAvailableWindowUUID()
         subject.newBrowserWindowConfigured(AppWindowInfo(), uuid: result2)
 
         // Check that our UUIDs are the ones we expected
@@ -158,7 +158,7 @@ class WindowManagerTests: XCTestCase {
         XCTAssertEqual(expectedUUIDs.count, 2)
 
         // Check that asking for a 3rd UUID returns a new, random UUID
-        let result3 = subject.nextAvailableWindowUUID()
+        let result3 = subject.reserveNextAvailableWindowUUID()
         XCTAssertFalse(expectedUUIDs.contains(result3))
         XCTAssertNotEqual(result1, result3)
         XCTAssertNotEqual(result2, result3)
@@ -171,9 +171,9 @@ class WindowManagerTests: XCTestCase {
         let tabManager2 = MockTabManager()
 
         // Create two separate windows with associated Tab Managers
-        let uuid1 = subject.nextAvailableWindowUUID()
+        let uuid1 = subject.reserveNextAvailableWindowUUID()
         subject.newBrowserWindowConfigured(AppWindowInfo(tabManager: tabManager1), uuid: uuid1)
-        let uuid2 = subject.nextAvailableWindowUUID()
+        let uuid2 = subject.reserveNextAvailableWindowUUID()
         subject.newBrowserWindowConfigured(AppWindowInfo(tabManager: tabManager2), uuid: uuid2)
 
         // Check that allWindowTabManagers returns both expected instances
@@ -183,10 +183,29 @@ class WindowManagerTests: XCTestCase {
         XCTAssert(allTabManagers.contains(where: { $0 === tabManager2 }))
 
         // Close first window and check that only the 2nd tab manager instance is returned
-        subject.windowDidClose(uuid: uuid1)
+        subject.windowWillClose(uuid: uuid1)
         allTabManagers = subject.allWindowTabManagers()
         XCTAssertEqual(allTabManagers.count, 1)
         XCTAssert(tabManager2 === allTabManagers.first!)
+    }
+
+    func testReservedUUIDsAreUnavailableInSuccessiveCalls() {
+        let subject = createSubject()
+        let tabDataStore: TabDataStore = AppContainer.shared.resolve()
+        let mockTabDataStore = tabDataStore as! MockTabDataStore
+        mockTabDataStore.resetMockTabWindowUUIDs()
+
+        let savedUUID = UUID()
+        mockTabDataStore.injectMockTabWindowUUID(savedUUID)
+
+        // Request a UUID. We expect it to be the first persisted WindowData
+        // UUID, which will also be reserved for use.
+        let requestedUUID1 = subject.reserveNextAvailableWindowUUID()
+        XCTAssertEqual(requestedUUID1, savedUUID)
+
+        // Request a 2nd UUID. We expect it to be a different UUID.
+        let requestedUUID2 = subject.reserveNextAvailableWindowUUID()
+        XCTAssertNotEqual(requestedUUID2, savedUUID)
     }
 
     // MARK: - Test Subject

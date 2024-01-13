@@ -169,7 +169,10 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         let expectedContileResult = ContileProviderMock.getContiles(contilesCount: 1,
                                                                     duplicateFirstTile: true,
                                                                     pinnedDuplicateTile: true)
-        let subject = createSubject(addPinnedSiteCount: 1, expectedContileResult: ContileResult.success(expectedContileResult))
+        let subject = createSubject(
+            addPinnedSiteCount: 1,
+            expectedContileResult: ContileResult.success(expectedContileResult)
+        )
         let data = subject.getTopSitesData()
 
         XCTAssertTrue(data[0].isGoogleURL)
@@ -180,7 +183,10 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     func testCalculateTopSitesData_addSponsoredTileIfDuplicateIsNotPinned() {
         let expectedContileResult = ContileProviderMock.getContiles(contilesCount: 1,
                                                                     duplicateFirstTile: true)
-        let subject = createSubject(addPinnedSiteCount: 1, expectedContileResult: ContileResult.success(expectedContileResult))
+        let subject = createSubject(
+            addPinnedSiteCount: 1,
+            expectedContileResult: ContileResult.success(expectedContileResult)
+        )
         let data = subject.getTopSitesData()
 
         XCTAssertTrue(data[0].isGoogleURL)
@@ -192,7 +198,10 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         let expectedContileResult = ContileProviderMock.getContiles(contilesCount: 2,
                                                                     duplicateFirstTile: true,
                                                                     pinnedDuplicateTile: true)
-        let subject = createSubject(addPinnedSiteCount: 1, expectedContileResult: ContileResult.success(expectedContileResult))
+        let subject = createSubject(
+            addPinnedSiteCount: 1,
+            expectedContileResult: ContileResult.success(expectedContileResult)
+        )
         let data = subject.getTopSitesData()
 
         XCTAssertTrue(data[0].isGoogleURL)
@@ -299,8 +308,10 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
 
     // Pinned > Sponsored
     func testDuplicates_PinnedTilesHasPrecedenceOnSponsoredTiles() {
-        let subject = createSubject(addPinnedSiteCount: 1,
-                                    expectedContileResult: ContileResult.success([ContileProviderMock.pinnedDuplicateTile]))
+        let subject = createSubject(
+            addPinnedSiteCount: 1,
+            expectedContileResult: ContileResult.success([ContileProviderMock.pinnedDuplicateTile])
+        )
 
         let data = subject.getTopSitesData()
 

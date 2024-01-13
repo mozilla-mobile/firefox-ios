@@ -5,7 +5,8 @@
 import Foundation
 import MozillaAppServices
 
-/// Protocol representing the FakespotClientType, which defines two asynchronous methods for fetching product analysis data and product ad data.
+/// Protocol representing the FakespotClientType, which defines two asynchronous
+/// methods for fetching product analysis data and product ad data.
 protocol FakespotClientType {
     /// Fetches product analysis data for a given product ID and website.
     /// - Parameters:
@@ -56,7 +57,7 @@ protocol FakespotClientType {
     ///   - aid: A string representing identifier for the event.
     /// - Returns: An `AdEventsResponse` object containing the response data.
     /// - Throws: `FakeSpotClientError.invalidURL` if the ad recording endpoint URL is invalid or not set.
-    func reportAdEvent(eventName: FakespotAdsEvent, eventSource: String, aid: String) async throws -> AdEventsResponse
+    func reportAdEvent(eventName: FakespotAdsEvent, eventSource: String, aidvs: [String]) async throws -> AdEventsResponse
 }
 
 /// An enumeration representing different environments for the Fakespot client.
@@ -148,7 +149,8 @@ enum FakespotEnvironment {
     }
 }
 
-/// Struct FakeSpotClient conforms to the FakespotClientType protocol and provides real network implementations for fetching product analysis data and product ad data.
+/// Struct FakeSpotClient conforms to the FakespotClientType protocol and provides real network
+/// implementations for fetching product analysis data and product ad data.
 struct FakespotClient: FakespotClientType {
     private var environment: FakespotEnvironment
 
@@ -249,7 +251,7 @@ struct FakespotClient: FakespotClientType {
     }
 
     /// Reports an advertising event with specified details to the API
-    func reportAdEvent(eventName: FakespotAdsEvent, eventSource: String, aid: String) async throws -> AdEventsResponse {
+    func reportAdEvent(eventName: FakespotAdsEvent, eventSource: String, aidvs: [String]) async throws -> AdEventsResponse {
         // Define the API endpoint URL
         guard let endpointURL = environment.adRecordingEndpoint else {
             throw FakeSpotClientError.invalidURL
@@ -262,13 +264,13 @@ struct FakespotClient: FakespotClientType {
             requestBody = [
                 "event_name": eventName.rawValue,
                 "event_source": eventSource,
-                "aid": aid
+                "aid": aidvs.first
             ]
         case .trustedDealsImpression, .trustedDealsPlacement:
             requestBody = [
                 "event_name": eventName.rawValue,
                 "event_source": eventSource,
-                "aidvs": [aid]
+                "aidvs": aidvs
             ]
         }
 

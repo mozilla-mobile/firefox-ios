@@ -86,7 +86,12 @@ open class GradientProgressBar: UIProgressView {
         // Apply "alphaMaskLayer" as a mask to the gradient layer in order to show only parts of the current "progress"
         gradientLayer.mask = alphaMaskLayer
 
-        gradientLayer.frame = CGRect(x: bounds.origin.x, y: bounds.origin.y, width: bounds.size.width * 2, height: bounds.size.height)
+        gradientLayer.frame = CGRect(
+            x: bounds.origin.x,
+            y: bounds.origin.y,
+            width: bounds.size.width * 2,
+            height: bounds.size.height
+        )
         gradientLayer.colors = gradientColors
         gradientLayer.locations = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.0]
         gradientLayer.startPoint = .zero
@@ -122,7 +127,12 @@ open class GradientProgressBar: UIProgressView {
 
     override open func layoutSubviews() {
         super.layoutSubviews()
-        self.gradientLayer.frame = CGRect(x: bounds.origin.x - 4, y: bounds.origin.y, width: bounds.size.width * 2, height: bounds.size.height)
+        self.gradientLayer.frame = CGRect(
+            x: bounds.origin.x - 4,
+            y: bounds.origin.y,
+            width: bounds.size.width * 2,
+            height: bounds.size.height
+        )
     }
 
     func animateGradient() {

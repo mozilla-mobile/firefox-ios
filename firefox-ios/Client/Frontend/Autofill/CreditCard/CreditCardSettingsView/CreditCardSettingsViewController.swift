@@ -218,7 +218,9 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
     }
 
     private func sendCreditCardsSavedAllTelemetry(numberOfSavedCreditCards: Int) {
-        let savedCardsExtra = [TelemetryWrapper.EventExtraKey.creditCardsQuantity.rawValue: Int64(numberOfSavedCreditCards)]
+        let savedCardsExtra = [
+            TelemetryWrapper.EventExtraKey.creditCardsQuantity.rawValue: Int64(numberOfSavedCreditCards)
+        ]
         TelemetryWrapper.recordEvent(category: .information,
                                      method: .foreground,
                                      object: .creditCardSavedAll,

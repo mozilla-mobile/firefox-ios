@@ -269,7 +269,9 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
             tabContentContainer.heightAnchor.constraint(greaterThanOrEqualTo: tabImageContainer.heightAnchor)
         ])
 
-        syncedDeviceIconCenterConstraint = syncedDeviceLabel.centerYAnchor.constraint(equalTo: syncedDeviceImage.centerYAnchor).priority(UILayoutPriority(999))
+        syncedDeviceIconCenterConstraint = syncedDeviceLabel.centerYAnchor.constraint(
+            equalTo: syncedDeviceImage.centerYAnchor
+        ).priority(UILayoutPriority(999))
         syncedDeviceIconFirstBaselineConstraint = syncedDeviceLabel.firstBaselineAnchor.constraint(
             equalTo: syncedDeviceImage.bottomAnchor,
             constant: -UX.syncedDeviceImageSize.height / 2)

@@ -21,6 +21,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
     var didFinishCalled = 0
     var showFakespotFlowAsModalCalled = 0
     var showFakespotFlowAsSidebarCalled = 0
+    var showBackForwardListCalled = 0
     var dismissFakespotModalCalled = 0
     var dismissFakespotSidebarCalled = 0
     var updateFakespotSidebarCalled = 0
@@ -33,11 +34,22 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
         showRequiredPassCodeCalled += 1
     }
 
-    func showCreditCardAutofill(creditCard: CreditCard?, decryptedCard: UnencryptedCreditCardFields?, viewType state: CreditCardBottomSheetState, frame: WKFrameInfo?, alertContainer: UIView) {
+    func showCreditCardAutofill(
+        creditCard: CreditCard?,
+        decryptedCard: UnencryptedCreditCardFields?,
+        viewType state: CreditCardBottomSheetState,
+        frame: WKFrameInfo?,
+        alertContainer: UIView
+    ) {
         showCreditCardAutofillCalled += 1
     }
 
-    func showShareExtension(url: URL, sourceView: UIView, toastContainer: UIView, popoverArrowDirection: UIPopoverArrowDirection) {
+    func showShareExtension(
+        url: URL,
+        sourceView: UIView,
+        toastContainer: UIView,
+        popoverArrowDirection: UIPopoverArrowDirection
+    ) {
         showShareExtensionCalled += 1
     }
 
@@ -59,6 +71,10 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
 
     func showQRCode() {
         showQrCodeCalled += 1
+    }
+
+    func showBackForwardList() {
+        showBackForwardListCalled += 1
     }
 
     func didFinish(from childCoordinator: Coordinator) {

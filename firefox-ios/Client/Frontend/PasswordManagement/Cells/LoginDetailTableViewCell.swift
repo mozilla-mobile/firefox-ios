@@ -29,7 +29,11 @@ struct LoginDetailTableViewCellModel {
     }
 }
 
-class LoginDetailTableViewCell: UITableViewCell, ThemeApplicable, ReusableCell, UITextFieldDelegate, MenuHelperInterface {
+class LoginDetailTableViewCell: UITableViewCell,
+                                ThemeApplicable,
+                                ReusableCell,
+                                UITextFieldDelegate,
+                                MenuHelperInterface {
     private struct UX {
         static let highlightedFontSize: CGFloat = 12
         static let descriptionFontSize: CGFloat = 16

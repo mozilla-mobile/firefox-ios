@@ -56,18 +56,23 @@ class InactiveTabsHeaderView: UICollectionReusableView, ReusableCell, ThemeAppli
         accessibilityTraits = .button
         accessibilityIdentifier = AccessibilityIdentifiers.TabTray.InactiveTabs.headerView
 
-        NSLayoutConstraint.activate([
-            titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: UX.verticalPadding),
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.verticalPadding),
-            titleLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor,
-                                                constant: UX.horizontalPadding),
-            titleLabel.trailingAnchor.constraint(equalTo: moreButton.leadingAnchor,
-                                                 constant: -UX.horizontalPadding),
+        NSLayoutConstraint.activate(
+            [
+                titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+                titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: UX.verticalPadding),
+                titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.verticalPadding),
+                titleLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor,
+                                                    constant: UX.horizontalPadding),
+                titleLabel.trailingAnchor.constraint(equalTo: moreButton.leadingAnchor,
+                                                     constant: -UX.horizontalPadding),
 
-            moreButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
-            moreButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -UX.buttonBottomPadding),
-        ])
+                moreButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
+                moreButton.trailingAnchor.constraint(
+                    equalTo: safeAreaLayoutGuide.trailingAnchor,
+                    constant: -UX.buttonBottomPadding
+                ),
+            ]
+        )
     }
 
     func applyTheme(theme: Theme) {

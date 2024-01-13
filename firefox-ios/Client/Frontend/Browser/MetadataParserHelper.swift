@@ -21,7 +21,9 @@ class MetadataParserHelper: TabEventHandler {
                 tab.pageMetadata = nil
                 return
         }
-        webView.evaluateJavascriptInDefaultContentWorld("__firefox__.metadata && __firefox__.metadata.getMetadata()") { result, error in
+        webView.evaluateJavascriptInDefaultContentWorld(
+            "__firefox__.metadata && __firefox__.metadata.getMetadata()"
+        ) { result, error in
             guard error == nil else {
                 TabEvent.post(.pageMetadataNotAvailable, for: tab)
                 tab.pageMetadata = nil

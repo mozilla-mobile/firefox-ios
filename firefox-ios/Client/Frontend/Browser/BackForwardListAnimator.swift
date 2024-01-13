@@ -9,7 +9,10 @@ class BackForwardListAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     let animationDuration = 0.4
 
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        let screens = (from: transitionContext.viewController(forKey: .from)!, to: transitionContext.viewController(forKey: .to)!)
+        let screens = (
+            from: transitionContext.viewController(forKey: .from)!,
+            to: transitionContext.viewController(forKey: .to)!
+        )
 
         guard let backForwardViewController = !self.presenting ? screens.from as? BackForwardListViewController : screens.to as? BackForwardListViewController else { return }
 
@@ -20,7 +23,11 @@ class BackForwardListAnimator: NSObject, UIViewControllerAnimatedTransitioning {
         }
 
         if let browserViewController = bottomViewController as? BrowserViewController {
-            animateWithBackForward(backForwardViewController, browserViewController: browserViewController, transitionContext: transitionContext)
+            animateWithBackForward(
+                backForwardViewController,
+                browserViewController: browserViewController,
+                transitionContext: transitionContext
+            )
         }
     }
 
@@ -30,7 +37,11 @@ class BackForwardListAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 }
 
 extension BackForwardListAnimator: UIViewControllerTransitioningDelegate {
-    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    func animationController(
+        forPresented presented: UIViewController,
+        presenting: UIViewController,
+        source: UIViewController
+    ) -> UIViewControllerAnimatedTransitioning? {
         self.presenting = true
         return self
     }
@@ -42,7 +53,11 @@ extension BackForwardListAnimator: UIViewControllerTransitioningDelegate {
 }
 
 extension BackForwardListAnimator {
-    fileprivate func animateWithBackForward(_ backForward: BackForwardListViewController, browserViewController bvc: BrowserViewController, transitionContext: UIViewControllerContextTransitioning) {
+    fileprivate func animateWithBackForward(
+        _ backForward: BackForwardListViewController,
+        browserViewController bvc: BrowserViewController,
+        transitionContext: UIViewControllerContextTransitioning
+    ) {
         let containerView = transitionContext.containerView
 
         if presenting {

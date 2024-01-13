@@ -333,8 +333,9 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
     /// When all history gets deleted, we use this special way to handle Tab History deletion. To make it appear like
     /// the currently open tab also has its history deleted, we close the tab and reload that URL in a new tab.
-    /// We handle it this way because, as far as I can tell, clearing history REQUIRES we nil the webView. The backForwardList
-    /// is not directly mutable. When niling out the webView, we should properly close it since it affects KVO.
+    /// We handle it this way because, as far as I can tell, clearing history REQUIRES we nil the webView.
+    /// The backForwardList is not directly mutable. When niling out the webView, we should properly close
+    /// it since it affects KVO.
     func clearAllTabsHistory() {
         guard let selectedTab = selectedTab, let url = selectedTab.url else { return }
 
@@ -514,7 +515,8 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
         tabs.insert(tabs.remove(at: fromIndex), at: toIndex)
 
-        if let previouslySelectedTab = previouslySelectedTab, let previousSelectedIndex = tabs.firstIndex(of: previouslySelectedTab) {
+        if let previouslySelectedTab = previouslySelectedTab,
+           let previousSelectedIndex = tabs.firstIndex(of: previouslySelectedTab) {
             _selectedIndex = previousSelectedIndex
         }
 

@@ -8,7 +8,9 @@ import Common
 /// HeroImageView supports the hero image layout.
 /// By setting the view model, the image will be updated for you asynchronously.
 ///
-/// - Hero image with a favicon fallback. Any time you set a hero image, if it's not found it will default to a favicon image.
+/// - Hero image with a favicon fallback. Any time you set a hero image, if it's not found it will
+/// default to a favicon image.
+///
 ///     - Can be set through `setHeroImage(_ viewModel: SiteImageViewHeroImageModel)`
 ///     - The layout size is set through the properties of SiteImageViewHeroImageModel
 ///     - Need to setup theme calls through `updateHeroImageTheme(with colors: SiteImageViewColor)`

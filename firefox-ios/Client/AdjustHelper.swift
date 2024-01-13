@@ -72,13 +72,15 @@ final class AdjustHelper: NSObject, FeatureFlaggable {
         return config
     }
 
-    /// Return true if Adjust should be enabled. If the user has disabled the Send Anonymous Usage Data then we only do one ping
-    /// to get the attribution and turn it off (i.e. we only enable it if we have not seen the attribution data yet).
+    /// Return true if Adjust should be enabled. If the user has disabled the Send Anonymous Usage Data 
+    /// then we only do one ping to get the attribution and turn it off (i.e. we only enable it if we
+    /// have not seen the attribution data yet).
     private var shouldEnable: Bool {
         return shouldTrackRetention || !hasAttribution
     }
 
-    /// Return true if retention (session) tracking should be enabled. This follows the Send Anonymous Usage Data setting.
+    /// Return true if retention (session) tracking should be enabled.
+    /// This follows the Send Anonymous Usage Data setting.
     private var shouldTrackRetention: Bool {
         return profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
     }

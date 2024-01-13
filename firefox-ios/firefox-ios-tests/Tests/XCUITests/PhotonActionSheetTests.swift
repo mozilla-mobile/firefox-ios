@@ -94,7 +94,10 @@ class PhotonActionSheetTests: BaseTestCase {
         openNewShareSheet()
         mozWaitForElementToExist(app.staticTexts["Send to Device"])
         app.staticTexts["Send to Device"].tap()
-        mozWaitForElementToExist(app.navigationBars.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton], timeout: 10)
+        mozWaitForElementToExist(
+            app.navigationBars.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton],
+            timeout: 10
+        )
 
         XCTAssertTrue(app.staticTexts["You are not signed in to your account."].exists)
         app.navigationBars.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton].tap()

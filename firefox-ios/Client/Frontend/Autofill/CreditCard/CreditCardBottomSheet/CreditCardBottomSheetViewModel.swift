@@ -138,7 +138,10 @@ class CreditCardBottomSheetViewModel {
     public func saveCreditCard(with decryptedCard: UnencryptedCreditCardFields?,
                                completion: @escaping (CreditCard?, Error?) -> Void) {
         guard let decryptedCard = decryptedCard else {
-            completion(nil, AutofillApiError.UnexpectedAutofillApiError(reason: "SaveCreditCard: nil decryptedCreditCard card"))
+            completion(
+                nil,
+                AutofillApiError.UnexpectedAutofillApiError(reason: "SaveCreditCard: nil decryptedCreditCard card")
+            )
             return
         }
         autofill.addCreditCard(creditCard: decryptedCard,
@@ -154,7 +157,10 @@ class CreditCardBottomSheetViewModel {
             return
         }
         guard let decryptedCard = decryptedCard else {
-            completion(false, AutofillApiError.UnexpectedAutofillApiError(reason: "UpdateCreditCard: nil decryptedCreditCard card"))
+            completion(
+                false,
+                AutofillApiError.UnexpectedAutofillApiError(reason: "UpdateCreditCard: nil decryptedCreditCard card")
+            )
             return
         }
         autofill.updateCreditCard(id: creditCardGUID,
@@ -239,9 +245,11 @@ class CreditCardBottomSheetViewModel {
         return creditCards[row]
     }
 
-    func updateDecryptedCreditCard(from originalCreditCard: CreditCard,
-                                   with ccNumberDecrypted: String,
-                                   fieldValues decryptedCard: UnencryptedCreditCardFields?) -> UnencryptedCreditCardFields? {
+    func updateDecryptedCreditCard(
+        from originalCreditCard: CreditCard,
+        with ccNumberDecrypted: String,
+        fieldValues decryptedCard: UnencryptedCreditCardFields?
+    ) -> UnencryptedCreditCardFields? {
         guard var decryptedCreditCardVal = decryptedCard,
               !ccNumberDecrypted.isEmpty
         else {

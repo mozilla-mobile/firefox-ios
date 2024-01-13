@@ -30,9 +30,11 @@ class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewDelegate
             return UIViewController()
         }
 
-        let colors = SendToDeviceHelper.Colors(defaultBackground: themeManager.currentTheme.colors.layer2,
-                                               textColor: themeManager.currentTheme.colors.textPrimary,
-                                               iconColor: themeManager.currentTheme.colors.iconPrimary)
+        let colors = SendToDeviceHelper.Colors(
+            defaultBackground: themeManager.currentTheme.colors.layer2,
+            textColor: themeManager.currentTheme.colors.textPrimary,
+            iconColor: themeManager.currentTheme.colors.iconPrimary
+        )
         let helper = SendToDeviceHelper(shareItem: shareItem,
                                         profile: profile,
                                         colors: colors,
@@ -47,7 +49,10 @@ class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewDelegate
 
     // MARK: - DevicePickerViewControllerDelegate
 
-    func devicePickerViewController(_ devicePickerViewController: DevicePickerViewController, didPickDevices devices: [RemoteDevice]) {
+    func devicePickerViewController(
+        _ devicePickerViewController: DevicePickerViewController,
+        didPickDevices devices: [RemoteDevice]
+    ) {
         guard let item = sharedItem else {
             return finish()
         }

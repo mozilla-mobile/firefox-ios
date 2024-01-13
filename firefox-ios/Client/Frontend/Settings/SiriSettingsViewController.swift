@@ -23,7 +23,11 @@ class SiriSettingsViewController: SettingsTableViewController {
 
     override func generateSettings() -> [SettingSection] {
         let setting = SiriOpenURLSetting(settings: self)
-        let firstSection = SettingSection(title: nil, footerTitle: NSAttributedString(string: .SettingsSiriSectionDescription), children: [setting])
+        let firstSection = SettingSection(
+            title: nil,
+            footerTitle: NSAttributedString(string: .SettingsSiriSectionDescription),
+            children: [setting]
+        )
         return [firstSection]
     }
 }
@@ -34,7 +38,14 @@ class SiriOpenURLSetting: Setting {
     override var accessibilityIdentifier: String? { return "SiriSettings" }
 
     init(settings: SettingsTableViewController) {
-        super.init(title: NSAttributedString(string: .SettingsSiriOpenURL, attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
+        super.init(
+            title: NSAttributedString(
+                string: .SettingsSiriOpenURL,
+                attributes: [
+                    NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary
+                ]
+            )
+        )
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -45,7 +56,11 @@ class SiriOpenURLSetting: Setting {
 }
 
 extension SiriSettingsViewController: INUIAddVoiceShortcutViewControllerDelegate {
-    func addVoiceShortcutViewController(_ controller: INUIAddVoiceShortcutViewController, didFinishWith voiceShortcut: INVoiceShortcut?, error: Error?) {
+    func addVoiceShortcutViewController(
+        _ controller: INUIAddVoiceShortcutViewController,
+        didFinishWith voiceShortcut: INVoiceShortcut?,
+        error: Error?
+    ) {
         controller.dismiss(animated: true, completion: nil)
     }
 
@@ -55,11 +70,18 @@ extension SiriSettingsViewController: INUIAddVoiceShortcutViewControllerDelegate
 }
 
 extension SiriSettingsViewController: INUIEditVoiceShortcutViewControllerDelegate {
-    func editVoiceShortcutViewController(_ controller: INUIEditVoiceShortcutViewController, didUpdate voiceShortcut: INVoiceShortcut?, error: Error?) {
+    func editVoiceShortcutViewController(
+        _ controller: INUIEditVoiceShortcutViewController,
+        didUpdate voiceShortcut: INVoiceShortcut?,
+        error: Error?
+    ) {
         controller.dismiss(animated: true, completion: nil)
     }
 
-    func editVoiceShortcutViewController(_ controller: INUIEditVoiceShortcutViewController, didDeleteVoiceShortcutWithIdentifier deletedVoiceShortcutIdentifier: UUID) {
+    func editVoiceShortcutViewController(
+        _ controller: INUIEditVoiceShortcutViewController,
+        didDeleteVoiceShortcutWithIdentifier deletedVoiceShortcutIdentifier: UUID
+    ) {
         controller.dismiss(animated: true, completion: nil)
     }
 

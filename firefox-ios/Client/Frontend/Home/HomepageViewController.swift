@@ -81,9 +81,13 @@ class HomepageViewController:
 
         let jumpBackInContextualViewProvider = ContextualHintViewProvider(forHintType: .jumpBackIn,
                                                                           with: viewModel.profile)
-        self.jumpBackInContextualHintViewController = ContextualHintViewController(with: jumpBackInContextualViewProvider)
-        let syncTabContextualViewProvider = ContextualHintViewProvider(forHintType: .jumpBackInSyncedTab,
-                                                                       with: viewModel.profile)
+        self.jumpBackInContextualHintViewController = ContextualHintViewController(
+            with: jumpBackInContextualViewProvider
+        )
+        let syncTabContextualViewProvider = ContextualHintViewProvider(
+            forHintType: .jumpBackInSyncedTab,
+            with: viewModel.profile
+        )
         self.syncTabContextualHintViewController = ContextualHintViewController(with: syncTabContextualViewProvider)
         self.contextMenuHelper = HomepageContextMenuHelper(viewModel: viewModel, toastContainer: toastContainer)
 
@@ -249,8 +253,15 @@ class HomepageViewController:
                   let viewModel = self.viewModel.getSectionViewModel(shownSection: sectionIndex),
                   viewModel.shouldShow
             else { return nil }
-            self.logger.log("Section \(viewModel.sectionType) is going to show", level: .debug, category: .homepage)
-            return viewModel.section(for: layoutEnvironment.traitCollection, size: self.view.frame.size)
+            self.logger.log(
+                "Section \(viewModel.sectionType) is going to show",
+                level: .debug,
+                category: .homepage
+            )
+            return viewModel.section(
+                for: layoutEnvironment.traitCollection,
+                size: self.view.frame.size
+            )
         }
         return layout
     }
@@ -284,8 +295,8 @@ class HomepageViewController:
         viewModel.isZeroSearch = isZeroSearch
     }
 
-    /// On iPhone, we call reloadOnRotation when the trait collection has changed, to ensure calculation
-    /// is done with the new trait. On iPad, trait collection doesn't change from portrait to landscape (and vice-versa)
+    /// On iPhone, we call reloadOnRotation when the trait collection has changed, to ensure calculation is
+    /// done with the new trait. On iPad, trait collection doesn't change from portrait to landscape (and vice-versa)
     /// since it's `.regular` on both. We reloadOnRotation from viewWillTransition in that case.
     private func reloadOnRotation(newSize: CGSize) {
         logger.log("Reload on rotation to new size \(newSize)", level: .info, category: .homepage)
@@ -351,6 +362,7 @@ class HomepageViewController:
 
     private func showSiteWithURLHandler(_ url: URL, isGoogleTopSite: Bool = false) {
         let visitType = VisitType.bookmark
+        // Called from top sites, pocket, learn more in pocket section
         homePanelDelegate?.homePanel(didSelectURL: url, visitType: visitType, isGoogleTopSite: isGoogleTopSite)
     }
 
@@ -376,8 +388,8 @@ class HomepageViewController:
         userDefaults.set(true, forKey: PrefsKeys.Wallpapers.OnboardingSeenKey)
     }
 
-    // Check if we already present something on top of the homepage,
-    // if the homepage is actually being shown to the user and if the page is shown from a loaded webpage (zero search).
+    // Check if we already present something on top of the homepage, if the homepage is actually
+    // being shown to the user and if the page is shown from a loaded webpage (zero search).
     private var canModalBePresented: Bool {
         return presentedViewController == nil && viewModel.isZeroSearch
     }
@@ -398,7 +410,9 @@ class HomepageViewController:
             anchor: view,
             withArrowDirection: .down,
             andDelegate: self,
-            presentedUsing: { self.presentContextualHint(contextualHintViewController: self.jumpBackInContextualHintViewController) },
+            presentedUsing: {
+                self.presentContextualHint(contextualHintViewController: self.jumpBackInContextualHintViewController)
+            },
             sourceRect: rect,
             andActionForButton: { self.openTabsSettings() },
             overlayState: overlayManager)
@@ -415,7 +429,9 @@ class HomepageViewController:
             anchor: cell.getContextualHintAnchor(),
             withArrowDirection: .down,
             andDelegate: self,
-            presentedUsing: { self.presentContextualHint(contextualHintViewController: self.syncTabContextualHintViewController) },
+            presentedUsing: {
+                self.presentContextualHint(contextualHintViewController: self.syncTabContextualHintViewController)
+            },
             overlayState: overlayManager)
     }
 
@@ -491,8 +507,13 @@ extension HomepageViewController: UICollectionViewDelegate, UICollectionViewData
         return viewModel.getSectionViewModel(shownSection: section)?.numberOfItemsInSection() ?? 0
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let viewModel = viewModel.getSectionViewModel(shownSection: indexPath.section) as? HomepageSectionHandler else {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        guard let viewModel = viewModel.getSectionViewModel(
+            shownSection: indexPath.section
+        ) as? HomepageSectionHandler else {
             return UICollectionViewCell()
         }
 
@@ -500,8 +521,14 @@ extension HomepageViewController: UICollectionViewDelegate, UICollectionViewData
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let viewModel = viewModel.getSectionViewModel(shownSection: indexPath.section) as? HomepageSectionHandler else { return }
-        viewModel.didSelectItem(at: indexPath, homePanelDelegate: homePanelDelegate, libraryPanelDelegate: libraryPanelDelegate)
+        guard let viewModel = viewModel.getSectionViewModel(
+            shownSection: indexPath.section
+        ) as? HomepageSectionHandler else { return }
+        viewModel.didSelectItem(
+            at: indexPath,
+            homePanelDelegate: homePanelDelegate,
+            libraryPanelDelegate: libraryPanelDelegate
+        )
     }
 }
 
@@ -527,7 +554,11 @@ private extension HomepageViewController {
         }
 
         viewModel.topSiteViewModel.tileLongPressedHandler = { [weak self] (site, sourceView) in
-            self?.contextMenuHelper.presentContextMenu(for: site, with: sourceView, sectionType: .topSites)
+            self?.contextMenuHelper.presentContextMenu(
+                for: site,
+                with: sourceView,
+                sectionType: .topSites
+            )
         }
 
         // Recently saved
@@ -536,7 +567,11 @@ private extension HomepageViewController {
         }
 
         viewModel.recentlySavedViewModel.onLongPressTileAction = { [weak self] (site, sourceView) in
-            self?.contextMenuHelper.presentContextMenu(for: site, with: sourceView, sectionType: .recentlySaved)
+            self?.contextMenuHelper.presentContextMenu(
+                for: site,
+                with: sourceView,
+                sectionType: .recentlySaved
+            )
         }
 
         // Jumpback in
@@ -545,7 +580,11 @@ private extension HomepageViewController {
         }
 
         viewModel.jumpBackInViewModel.onLongPressTileAction = { [weak self] (site, sourceView) in
-            self?.contextMenuHelper.presentContextMenu(for: site, with: sourceView, sectionType: .recentlySaved)
+            self?.contextMenuHelper.presentContextMenu(
+                for: site,
+                with: sourceView,
+                sectionType: .recentlySaved
+            )
         }
 
         viewModel.jumpBackInViewModel.syncedTabsShowAllAction = { [weak self] in
@@ -563,7 +602,11 @@ private extension HomepageViewController {
         }
 
         viewModel.jumpBackInViewModel.openSyncedTabAction = { [weak self] tabURL in
-            self?.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(tabURL, isPrivate: false, selectNewTab: true)
+            self?.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(
+                tabURL,
+                isPrivate: false,
+                selectNewTab: true
+            )
 
             var extras: [String: String]?
             if let isZeroSearch = self?.viewModel.isZeroSearch {
@@ -592,11 +635,12 @@ private extension HomepageViewController {
                                                isGoogleTopSite: false)
         }
 
-        viewModel.historyHighlightsViewModel.historyHighlightLongPressHandler = { [weak self] (highlightItem, sourceView) in
-            self?.contextMenuHelper.presentContextMenu(for: highlightItem,
-                                                       with: sourceView,
-                                                       sectionType: .historyHighlights)
-        }
+        viewModel.historyHighlightsViewModel
+            .historyHighlightLongPressHandler = { [weak self] (highlightItem, sourceView) in
+                self?.contextMenuHelper.presentContextMenu(for: highlightItem,
+                                                           with: sourceView,
+                                                           sectionType: .historyHighlights)
+            }
 
         viewModel.historyHighlightsViewModel.headerButtonAction = { [weak self] button in
             self?.openHistory(button)
@@ -627,7 +671,10 @@ private extension HomepageViewController {
         let groupSite = ASGroup<Site>(searchTerm: item.displayTitle, groupedItems: groupedSites, timestamp: Date.now())
 
         let asGroupListViewModel = SearchGroupedItemsViewModel(asGroup: groupSite, presenter: .recentlyVisited)
-        let asGroupListVC = SearchGroupedItemsViewController(viewModel: asGroupListViewModel, profile: viewModel.profile)
+        let asGroupListVC = SearchGroupedItemsViewController(
+            viewModel: asGroupListViewModel,
+            profile: viewModel.profile
+        )
 
         let dismissableController: DismissableNavigationViewController
         dismissableController = DismissableNavigationViewController(rootViewController: asGroupListVC)
