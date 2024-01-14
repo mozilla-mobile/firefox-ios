@@ -139,9 +139,17 @@ class LaunchCoordinator: BaseCoordinator,
         if let qrCodeCoordinator = childCoordinators.first(where: { $0 is QRCodeCoordinator }) as? QRCodeCoordinator {
             coordinator = qrCodeCoordinator
         } else {
-            let defaultRouter = DefaultRouter(navigationController: rootNavigationController!)
-            let router = rootNavigationController != nil ? defaultRouter : router
-            coordinator = QRCodeCoordinator(parentCoordinator: self, router: router)
+            if rootNavigationController != nil {
+                coordinator = QRCodeCoordinator(
+                    parentCoordinator: self,
+                    router: DefaultRouter(navigationController: rootNavigationController!)
+                )
+            } else {
+                coordinator = QRCodeCoordinator(
+                    parentCoordinator: self,
+                    router: router
+                )
+            }
             add(child: coordinator)
         }
         coordinator.showQRCode(delegate: delegate)
