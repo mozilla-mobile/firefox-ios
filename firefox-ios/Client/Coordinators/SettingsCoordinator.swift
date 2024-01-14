@@ -209,7 +209,8 @@ class SettingsCoordinator: BaseCoordinator,
         if let qrCodeCoordinator = childCoordinators.first(where: { $0 is QRCodeCoordinator }) as? QRCodeCoordinator {
             coordinator = qrCodeCoordinator
         } else {
-            let router = rootNavigationController != nil ? DefaultRouter(navigationController: rootNavigationController!) : router
+            let defaultRouter = DefaultRouter(navigationController: rootNavigationController!)
+            let router = rootNavigationController != nil ? defaultRouter : router
             coordinator = QRCodeCoordinator(parentCoordinator: self, router: router)
             add(child: coordinator)
         }

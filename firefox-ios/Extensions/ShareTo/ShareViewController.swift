@@ -241,9 +241,10 @@ class ShareViewController: UIViewController {
         row.translatesAutoresizingMaskIntoConstraints = false
         row.rightLeftEdges(inset: UX.rowInset)
         parent.addArrangedSubview(row)
+        let pageInfoHeightAdjustment = UX.pageInfoRowHeight - UX.perRowShrinkageForLandscape
         pageInfoHeight = row.heightAnchor.constraint(
             equalToConstant: CGFloat(
-                isLandscapeSmallScreen(traitCollection) ? UX.pageInfoRowHeight - UX.perRowShrinkageForLandscape : UX.pageInfoRowHeight
+                isLandscapeSmallScreen(traitCollection) ? pageInfoHeightAdjustment : UX.pageInfoRowHeight
             )
         )
         pageInfoHeight?.isActive = true

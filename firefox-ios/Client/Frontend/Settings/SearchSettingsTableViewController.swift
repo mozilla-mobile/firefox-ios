@@ -433,7 +433,9 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
         }
 
         // Can't drag/drop over "Add Custom Engine button"
-        if sourceIndexPath.item + 1 == model.orderedEngines.count || proposedDestinationIndexPath.item + 1 == model.orderedEngines.count {
+        let sourceIndexCheck = sourceIndexPath.item + 1 == model.orderedEngines.count
+        let destinationIndexCheck = proposedDestinationIndexPath.item + 1 == model.orderedEngines.count
+        if sourceIndexCheck || destinationIndexCheck {
             return sourceIndexPath
         }
 
