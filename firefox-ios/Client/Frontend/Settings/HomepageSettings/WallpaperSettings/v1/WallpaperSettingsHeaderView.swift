@@ -20,6 +20,9 @@ struct WallpaperSettingsHeaderViewModel {
     var buttonAction: (() -> Void)?
 }
 
+import UIKit
+import ComponentLibrary // Import your ComponentLibrary module
+
 class WallpaperSettingsHeaderView: UICollectionReusableView, ReusableCell {
     private struct UX {
         static let stackViewSpacing: CGFloat = 4.0
@@ -46,10 +49,11 @@ class WallpaperSettingsHeaderView: UICollectionReusableView, ReusableCell {
         label.numberOfLines = 0
     }
 
-    private lazy var learnMoreButton: LegacyResizableButton = .build { button in
+    private lazy var learnMoreButton: LinkButton = .build { button in
+        // Configure your LinkButton properties
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 12.0)
         button.contentHorizontalAlignment = .leading
-        button.buttonEdgeSpacing = 0
+       
     }
 
     // MARK: - Initializers
@@ -93,7 +97,7 @@ class WallpaperSettingsHeaderView: UICollectionReusableView, ReusableCell {
             setButtonStyle(theme: viewModel.theme)
             learnMoreButton.addTarget(
                 self,
-                action: #selector((buttonTapped(_:))),
+                action: #selector(buttonTapped(_:)),
                 for: .touchUpInside)
             learnMoreButton.accessibilityIdentifier = buttonA11y
 
@@ -141,7 +145,7 @@ extension WallpaperSettingsHeaderView: ThemeApplicable {
         let color = theme.colors.textPrimary
         learnMoreButton.setTitleColor(color, for: .normal)
 
-        // in iOS 13 the title color set is not used for the attributed text color so we have to set it via attributes
+        // in iOS 13, the title color set is not used for the attributed text color, so we have to set it via attributes
         guard let buttonTitle = viewModel?.buttonTitle else { return }
         let labelAttributes: [NSAttributedString.Key: Any] = [
             .font: DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 12.0),
@@ -149,8 +153,7 @@ extension WallpaperSettingsHeaderView: ThemeApplicable {
             .underlineStyle: NSUnderlineStyle.single.rawValue
         ]
 
-        let attributeString = NSMutableAttributedString(string: buttonTitle,
-                                                        attributes: labelAttributes)
+        let attributeString = NSMutableAttributedString(string: buttonTitle, attributes: labelAttributes)
         learnMoreButton.setAttributedTitle(attributeString, for: .normal)
     }
 }
