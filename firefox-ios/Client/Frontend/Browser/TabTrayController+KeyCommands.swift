@@ -7,7 +7,8 @@ import UIKit
 
 extension LegacyGridTabViewController {
     override var keyCommands: [UIKeyCommand]? {
-        let toggleText: String = tabDisplayManager.isPrivate ? .KeyboardShortcuts.NormalBrowsingMode: .KeyboardShortcuts.PrivateBrowsingMode
+        typealias Shortcuts = String.KeyboardShortcuts
+        let toggleText: String = tabDisplayManager.isPrivate ? Shortcuts.NormalBrowsingMode: Shortcuts.PrivateBrowsingMode
         let commands = [
             UIKeyCommand(
                 action: #selector(didTogglePrivateModeKeyCommand),

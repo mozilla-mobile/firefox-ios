@@ -139,7 +139,13 @@ class ThirdPartySearchTest: BaseTestCase {
         app.navigationBars["Add Search Engine"].buttons["Save"].tap()
 
         mozWaitForElementToExist(app.alerts.element(boundBy: 0))
-        XCTAssertTrue(app.alerts.staticTexts["Failed"].exists, "Alert title is missing or is incorrect")
-        XCTAssertTrue(app.alerts.staticTexts["Please fill all fields correctly."].exists, "Alert message is missing or is incorrect")
+        XCTAssertTrue(
+            app.alerts.staticTexts["Failed"].exists,
+            "Alert title is missing or is incorrect"
+        )
+        XCTAssertTrue(
+            app.alerts.staticTexts["Please fill all fields correctly."].exists,
+            "Alert message is missing or is incorrect"
+        )
     }
 }
