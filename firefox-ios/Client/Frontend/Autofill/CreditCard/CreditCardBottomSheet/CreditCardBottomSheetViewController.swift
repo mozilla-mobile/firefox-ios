@@ -158,7 +158,8 @@ class CreditCardBottomSheetViewController: UIViewController,
         let estimatedFooterHeight = cardTableView.estimatedSectionFooterHeight
         let estimatedCellHeight = cardTableView.estimatedRowHeight
 
-        var estimatedContentHeight = headerHeight + estimatedCellHeight + estimatedFooterHeight + UX.yesButtonHeight + UX.bottomSpacing + UX.buttonsSpacing
+        let UXSpacing = UX.yesButtonHeight + UX.bottomSpacing + UX.buttonsSpacing
+        var estimatedContentHeight = headerHeight + estimatedCellHeight + estimatedFooterHeight + UXSpacing
 
         if UIDevice.current.userInterfaceIdiom == .pad {
             estimatedContentHeight += UX.yesButtonHeight
@@ -169,7 +170,8 @@ class CreditCardBottomSheetViewController: UIViewController,
         )
         contentViewHeightConstraint.priority = UILayoutPriority(999)
 
-        let contentViewWidth = UX.contentViewWidth > view.frame.width ? view.frame.width - UX.containerPadding : UX.contentViewWidth
+        let contentWidthCheck = UX.contentViewWidth > view.frame.width
+        let contentViewWidth = contentWidthCheck ? view.frame.width - UX.containerPadding : UX.contentViewWidth
         contentWidthConstraint = contentView.widthAnchor.constraint(equalToConstant: contentViewWidth)
         contentWidthConstraint.priority = UILayoutPriority(999)
 
@@ -216,7 +218,8 @@ class CreditCardBottomSheetViewController: UIViewController,
         let aspectRatio = estimatedContentHeight / contentView.bounds.size.height
         contentViewHeightConstraint.constant = contentViewHeightConstraint.constant * aspectRatio
 
-        let contentViewWidth = UX.contentViewWidth > view.frame.size.width ? view.frame.size.width - UX.containerPadding : UX.contentViewWidth
+        let contentWidthCheck = UX.contentViewWidth > view.frame.size.width
+        let contentViewWidth = contentWidthCheck ? view.frame.size.width - UX.containerPadding : UX.contentViewWidth
         contentWidthConstraint.constant = contentViewWidth
     }
 
@@ -228,10 +231,11 @@ class CreditCardBottomSheetViewController: UIViewController,
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        let contentViewWidth = UX.contentViewWidth > size.width ? size.width - UX.containerPadding : UX.contentViewWidth
+        let contentWidthCheck = UX.contentViewWidth > size.width
+        let contentViewWidth = contentWidthCheck ? size.width - UX.containerPadding : UX.contentViewWidth
         contentWidthConstraint.constant = contentViewWidth
         if let header = cardTableView.headerView(forSection: 0) as? CreditCardBottomSheetHeaderView {
-            header.titleLabelTrailingConstraint.constant = UX.contentViewWidth > size.width ? -UX.closeButtonMarginAndWidth : 0
+            header.titleLabelTrailingConstraint.constant = contentWidthCheck ? -UX.closeButtonMarginAndWidth : 0
         }
     }
 
