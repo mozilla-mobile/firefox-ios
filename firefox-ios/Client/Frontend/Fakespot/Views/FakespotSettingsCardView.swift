@@ -50,7 +50,9 @@ class FakespotSettingsCardViewModel {
         return String.localizedStringWithFormat(
             .Shopping.SettingsCardGroupedRecommendedProductsAndSwitchAccessibilityLabel,
             showProductsLabelTitle,
+            // swiftlint:disable line_length
             areAdsEnabled ? String.Shopping.SettingsCardSwitchValueOnAccessibilityLabel : String.Shopping.SettingsCardSwitchValueOffAccessibilityLabel
+            // swiftlint:enable line_length
         )
     }
 

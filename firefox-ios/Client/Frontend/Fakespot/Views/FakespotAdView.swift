@@ -290,7 +290,9 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         defaultProductImageWidthConstraint?.constant = minSize(minValue: UX.defaultImageSize.width,
                                                                maxValue: UX.defaultImageMaxSize.width)
 
+        // swiftlint:disable line_length
         let shouldUpdateLayout = previousPreferredContentSizeCategory?.isAccessibilityCategory != UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
+        // swiftlint:enable line_length
 
         guard previousPreferredContentSizeCategory == nil || shouldUpdateLayout else { return }
 

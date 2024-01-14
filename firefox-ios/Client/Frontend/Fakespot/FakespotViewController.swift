@@ -322,7 +322,9 @@ class FakespotViewController: UIViewController,
         let betaViewWidth = betaLabelWidth + UX.betaHorizontalSpace * 2
         let maxTitleWidth = availableTitleStackWidth - betaViewWidth - UX.titleStackSpacing
 
+        // swiftlint:disable line_length
         betaView.layer.borderWidth = contentSizeCategory.isAccessibilityCategory ? UX.betaBorderWidthA11ySize : UX.betaBorderWidth
+        // swiftlint:enable line_length
 
         if contentSizeCategory.isAccessibilityCategory || titleTextWidth > maxTitleWidth {
             titleStackView.axis = .vertical
@@ -417,7 +419,8 @@ class FakespotViewController: UIViewController,
 
         case .qualityDeterminationCard:
             let reviewQualityCardView: FakespotReviewQualityCardView = .build()
-            viewModel.reviewQualityCardViewModel.expandState = (fakespotState?.isReviewQualityExpanded ?? false)  ? .expanded : .collapsed
+            let isReviewQualityExpanded = fakespotState?.isReviewQualityExpanded ?? false
+            viewModel.reviewQualityCardViewModel.expandState = isReviewQualityExpanded ? .expanded : .collapsed
             viewModel.reviewQualityCardViewModel.dismissViewController = {
                 store.dispatch(FakespotAction.setAppearanceTo(false))
             }
@@ -425,11 +428,13 @@ class FakespotViewController: UIViewController,
                 store.dispatch(FakespotAction.reviewQualityDidChange)
             }
             reviewQualityCardView.configure(viewModel.reviewQualityCardViewModel)
+
             return reviewQualityCardView
 
         case .settingsCard:
             let view: FakespotSettingsCardView = .build()
-            viewModel.settingsCardViewModel.expandState = (fakespotState?.isSettingsExpanded ?? false) ? .expanded : .collapsed
+            let isSettingsExpanded = fakespotState?.isSettingsExpanded ?? false
+            viewModel.settingsCardViewModel.expandState = isSettingsExpanded ? .expanded : .collapsed
             viewModel.settingsCardViewModel.dismissViewController = { [weak self] action in
                 guard let self = self, let action else { return }
 
@@ -443,6 +448,7 @@ class FakespotViewController: UIViewController,
                 store.dispatch(FakespotAction.settingsStateDidChange)
             }
             view.configure(viewModel.settingsCardViewModel)
+
             return view
 
         case .noAnalysisCard:
