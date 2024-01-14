@@ -18,7 +18,8 @@ class ContentBlockerSetting: Setting {
     }
 
     override var status: NSAttributedString? {
-        let isOn = profile.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? ContentBlockingConfig.Defaults.NormalBrowsing
+        let defaultValue = ContentBlockingConfig.Defaults.NormalBrowsing
+        let isOn = profile.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? defaultValue
 
         if isOn {
             let currentBlockingStrength = profile

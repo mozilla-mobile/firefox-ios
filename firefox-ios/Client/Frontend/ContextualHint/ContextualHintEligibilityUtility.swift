@@ -106,7 +106,8 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
     private var canPresentShoppingCFR: Bool {
         guard !hasAlreadyBeenPresented(.shoppingExperience) else {
             // Retrieve the counter for shopping onboarding CFRs
-            let cfrCounter = profile.prefs.intForKey(PrefsKeys.ContextualHints.shoppingOnboardingCFRsCounterKey.rawValue) ?? 1
+            let shoppingOnboardingKey = PrefsKeys.ContextualHints.shoppingOnboardingCFRsCounterKey.rawValue
+            let cfrCounter = profile.prefs.intForKey(shoppingOnboardingKey) ?? 1
             // Check if the user has opted in for Shopping Experience
             let hasOptedIn = profile.prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false
             // Retrieve the last timestamp for Fakespot CFRs

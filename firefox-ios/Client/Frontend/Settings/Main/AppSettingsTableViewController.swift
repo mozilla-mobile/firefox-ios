@@ -198,7 +198,9 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         let accountSectionTitle = NSAttributedString(string: .FxAFirefoxAccount)
 
-        let accountFooterText = !profile.hasAccount() ? NSAttributedString(string: .Settings.Sync.ButtonDescription) : nil
+        let attributedString = NSAttributedString(string: .Settings.Sync.ButtonDescription)
+        let accountFooterText = !profile.hasAccount() ? attributedString : nil
+
         return [SettingSection(title: accountSectionTitle, footerTitle: accountFooterText, children: [
             // Without a Firefox Account:
             ConnectSetting(settings: self, settingsDelegate: parentCoordinator),

@@ -201,9 +201,15 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         updateZoomPageBarVisibility(visible: false)
-        let segmentToFocus = tabManager.selectedTab?.isPrivate ?? false ? TabTrayPanelType.privateTabs : TabTrayPanelType.tabs
+        let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
+        let segmentToFocus = isPrivateTab ? TabTrayPanelType.privateTabs : TabTrayPanelType.tabs
         showTabTray(focusedSegment: segmentToFocus)
-        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .tabToolbar, value: .tabView)
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .press,
+            object: .tabToolbar,
+            value: .tabView
+        )
     }
 
     func getTabToolbarLongPressActionsForModeSwitching() -> [PhotonRowActions] {

@@ -91,7 +91,9 @@ class BookmarksPanel: SiteTableViewController,
          logger: Logger = DefaultLogger.shared) {
         self.viewModel = viewModel
         self.logger = logger
-        self.state = viewModel.bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID ? .bookmarks(state: .mainView) : .bookmarks(state: .inFolder)
+
+        let guidMatches = viewModel.bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID
+        self.state = guidMatches ? .bookmarks(state: .mainView) : .bookmarks(state: .inFolder)
         self.bookmarksHandler = viewModel.profile.places
         super.init(profile: viewModel.profile)
 
