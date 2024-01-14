@@ -248,7 +248,9 @@ class HomepageViewController:
     }
 
     func createLayout() -> UICollectionViewLayout {
+        // swiftlint:disable line_length
         let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+        // swiftlint:enable line_length
             guard let self = self,
                   let viewModel = self.viewModel.getSectionViewModel(shownSection: sectionIndex),
                   viewModel.shouldShow
@@ -464,7 +466,9 @@ extension HomepageViewController: UICollectionViewDelegate, UICollectionViewData
             else { return reusableView }
 
             // Configure header only if section is shown
+            // swiftlint:disable line_length
             let headerViewModel = sectionViewModel.shouldShow ? sectionViewModel.headerViewModel : LabelButtonHeaderViewModel.emptyHeader
+            // swiftlint:enable line_length
             headerView.configure(viewModel: headerViewModel, theme: themeManager.currentTheme)
 
             // Jump back in header specific setup

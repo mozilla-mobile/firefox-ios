@@ -856,6 +856,8 @@ extension HistoryPanel: UITableViewDataSourcePrefetching {
     func shouldLoadRow(for indexPath: IndexPath) -> Bool {
         guard HistoryPanelSections(rawValue: indexPath.section) != .additionalHistoryActions else { return false }
 
-        return indexPath.row >= viewModel.groupedSites.numberOfItemsForSection(indexPath.section - 1) - historyPanelPrefetchOffset
+        return indexPath.row >= viewModel.groupedSites.numberOfItemsForSection(
+            indexPath.section - 1
+        ) - historyPanelPrefetchOffset
     }
 }

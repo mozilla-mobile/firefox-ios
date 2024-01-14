@@ -43,7 +43,8 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
         self.tabManager = tabManager
 
         title = .SettingsHomePageSectionName
-        navigationController?.navigationBar.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar
+        typealias A11yId = AccessibilityIdentifiers.Settings.Homepage
+        navigationController?.navigationBar.accessibilityIdentifier = A11yId.homePageNavigationBar
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             title: .AppSettingsDone,
@@ -193,8 +194,9 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     }
 
     private func setupStartAtHomeSection() -> SettingSection {
-        let prefs = prefs.stringForKey(PrefsKeys.UserFeatureFlagPrefs.StartAtHome) ?? StartAtHomeSetting.afterFourHours.rawValue
-        currentStartAtHomeSetting = StartAtHomeSetting(rawValue: prefs) ?? .afterFourHours
+        let defaultSetting = StartAtHomeSetting.afterFourHours.rawValue
+        let prefsSetting = prefs.stringForKey(PrefsKeys.UserFeatureFlagPrefs.StartAtHome) ?? defaultSetting
+        currentStartAtHomeSetting = StartAtHomeSetting(rawValue: prefsSetting) ?? .afterFourHours
 
         typealias a11y = AccessibilityIdentifiers.Settings.Homepage.StartAtHome
 
@@ -264,7 +266,8 @@ extension HomePageSettingViewController {
 
         override var status: NSAttributedString {
             let areShortcutsOn = profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.TopSiteSection) ?? true
-            let status: String = areShortcutsOn ? .Settings.Homepage.Shortcuts.ToggleOn : .Settings.Homepage.Shortcuts.ToggleOff
+            typealias Shortcuts = String.Settings.Homepage.Shortcuts
+            let status: String = areShortcutsOn ? Shortcuts.ToggleOn : Shortcuts.ToggleOff
             return NSAttributedString(string: String(format: status))
         }
 

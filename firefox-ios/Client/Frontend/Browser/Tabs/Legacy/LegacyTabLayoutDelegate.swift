@@ -75,7 +75,9 @@ class LegacyTabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIG
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
         let margin = LegacyGridTabViewController.UX.margin * CGFloat(numberOfColumns + 1)
-        let calculatedWidth = collectionView.bounds.width - collectionView.safeAreaInsets.left - collectionView.safeAreaInsets.right - margin
+        let calculatedWidth = collectionView.bounds.width -
+        collectionView.safeAreaInsets.left -
+        collectionView.safeAreaInsets.right - margin
         let cellWidth = floor(calculatedWidth / CGFloat(numberOfColumns))
 
         switch TabDisplaySection(rawValue: indexPath.section) {
