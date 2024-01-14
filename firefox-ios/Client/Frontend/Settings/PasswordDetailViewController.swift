@@ -423,7 +423,9 @@ extension PasswordDetailViewController: LoginDetailTableViewCellDelegate {
             return action == MenuHelper.SelectorCopy
         case .password:
             // Menu actions for password
-            let showRevealOption = cell.descriptionLabel.isSecureTextEntry ? (action == MenuHelper.SelectorReveal) : (action == MenuHelper.SelectorHide)
+            let revealOption = action == MenuHelper.SelectorReveal
+            let hideOption = action == MenuHelper.SelectorHide
+            let showRevealOption = cell.descriptionLabel.isSecureTextEntry ? revealOption : hideOption
             return action == MenuHelper.SelectorCopy || showRevealOption
         default:
             return false

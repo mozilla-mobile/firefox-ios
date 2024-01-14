@@ -115,7 +115,8 @@ class LaunchCoordinator: BaseCoordinator,
         defaultOnboardingViewController.preferredContentSize = CGSize(
             width: ViewControllerConsts.PreferredSize.DBOnboardingViewController.width,
             height: ViewControllerConsts.PreferredSize.DBOnboardingViewController.height)
-        defaultOnboardingViewController.modalPresentationStyle = UIDevice.current.userInterfaceIdiom == .phone ? .fullScreen : .formSheet
+        let isiPhone = UIDevice.current.userInterfaceIdiom == .phone
+        defaultOnboardingViewController.modalPresentationStyle = isiPhone ? .fullScreen : .formSheet
         router.present(defaultOnboardingViewController)
     }
 
@@ -138,7 +139,8 @@ class LaunchCoordinator: BaseCoordinator,
         if let qrCodeCoordinator = childCoordinators.first(where: { $0 is QRCodeCoordinator }) as? QRCodeCoordinator {
             coordinator = qrCodeCoordinator
         } else {
-            let router = rootNavigationController != nil ? DefaultRouter(navigationController: rootNavigationController!) : router
+            let defaultRouter = DefaultRouter(navigationController: rootNavigationController!)
+            let router = rootNavigationController != nil ? defaultRouter : router
             coordinator = QRCodeCoordinator(parentCoordinator: self, router: router)
             add(child: coordinator)
         }

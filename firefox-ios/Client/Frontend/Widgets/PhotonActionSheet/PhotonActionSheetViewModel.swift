@@ -193,10 +193,11 @@ class PhotonActionSheetViewModel {
         let bottomInset = isAtTopMainMenu ? PhotonActionSheet.UX.smallSpacing : PhotonActionSheet.UX.bigSpacing
 
         // Save available space so we can calculate the needed menu height later on
-        let topMenuHeight = convertedPoint.y + view.frame.height)
+        let topMenuHeight = convertedPoint.y + view.frame.height
         let bottomMenuHeight = viewControllerHeight - convertedPoint.y - view.frame.height
         let buttonSpace = isAtTopMainMenu ? topMenuHeight : bottomMenuHeight
-        availableMainMenuHeight = viewControllerHeight - buttonSpace - bottomInset - topInset - viewController.view.safeAreaInsets.top
+        let insetHeight = buttonSpace - bottomInset - topInset
+        availableMainMenuHeight = viewControllerHeight - insetHeight - viewController.view.safeAreaInsets.top
 
         return UIEdgeInsets(top: topInset,
                             left: PhotonActionSheet.UX.spacing,

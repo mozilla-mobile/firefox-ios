@@ -69,7 +69,6 @@ class SearchViewController: SiteTableViewController,
                             LoaderListener,
                             FeatureFlaggable,
                             Notifiable {
-
     typealias ExtraKey = TelemetryWrapper.EventExtraKey
 
     var searchDelegate: SearchViewControllerDelegate?

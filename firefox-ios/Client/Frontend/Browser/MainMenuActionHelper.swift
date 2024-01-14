@@ -351,6 +351,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         let toggleActionTitle: String
         let toggleActionIcon: String
         let siteTypeTelemetryObject: TelemetryWrapper.EventObject
+        // swiftlint:disable line_length
         if defaultUAisDesktop {
             toggleActionTitle = tab.changedUserAgent ? .AppMenu.AppMenuViewDesktopSiteTitleString : .AppMenu.AppMenuViewMobileSiteTitleString
             toggleActionIcon = tab.changedUserAgent ? StandardImageIdentifiers.Large.deviceDesktop : StandardImageIdentifiers.Large.deviceMobile
@@ -360,6 +361,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             toggleActionIcon = tab.changedUserAgent ? StandardImageIdentifiers.Large.deviceMobile : StandardImageIdentifiers.Large.deviceDesktop
             siteTypeTelemetryObject = .requestMobileSite
         }
+        // swiftlint:enable line_length
 
         return SingleActionViewModel(title: toggleActionTitle,
                                      iconString: toggleActionIcon) { _ in
