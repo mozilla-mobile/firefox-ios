@@ -1729,7 +1729,7 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    internal func updateFakespot(tab: Tab) {
+    internal func updateFakespot(tab: Tab, isReload: Bool = false) {
         guard let webView = tab.webView, let url = webView.url else {
             // We're on homepage or a blank tab
             store.dispatch(FakespotAction.setAppearanceTo(false))
@@ -1746,6 +1746,10 @@ class BrowserViewController: UIViewController,
             // Relates to FXIOS-7844
             contentStackView.hideSidebar(self)
             return
+        }
+
+        if isReload, let productId = product.product?.id {
+           store.dispatch(FakespotAction.tabDidReload(tabUIDD: tab.tabUUID, productId: productId))
         }
 
         // Do not update Fakespot when we are not on a selected tab

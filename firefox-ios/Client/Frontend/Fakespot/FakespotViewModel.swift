@@ -170,11 +170,11 @@ class FakespotViewModel {
 
     let shoppingProduct: ShoppingProduct
     var onStateChange: (() -> Void)?
+    var shouldRecordAdsExposureEvents: (() -> Bool)?
     var isSwiping = false
     var isViewIntersected = false
     // Timer-related properties for handling view visibility
     private var isViewVisible = false
-    private var hasTimerFired = false
     private var timer: Timer?
     private let tabManager: TabManager
 
@@ -388,13 +388,19 @@ class FakespotViewModel {
                 )
             )
 
-            guard product != nil else { return }
+            guard product != nil,
+                  let productId = shoppingProduct.product?.id,
+                  shouldRecordAdsExposureEvents?() == true
+            else { return }
+
             if productAds.isEmpty {
                 recordSurfaceNoAdsAvailableTelemetry()
             } else {
                 recordAdsExposureTelemetry()
                 reportAdEvent(eventName: .trustedDealsPlacement, aidvs: productAds.map(\.aid))
             }
+
+            store.dispatch(FakespotAction.adsExposureEventSendFor(productId: productId))
         } catch {
             state = .error(error)
         }
@@ -513,7 +519,7 @@ class FakespotViewModel {
             }
         )
         // Add the timer to the common run loop mode
-        // to ensure that the selector method fires even during user interactions such as scrolling,
+        // to ensure that the timerFired(aid:) method fires even during user interactions such as scrolling,
         // without requiring the user to lift their finger from the screen.
         RunLoop.current.add(timer!, forMode: .common)
     }
@@ -524,14 +530,16 @@ class FakespotViewModel {
     }
 
     private func timerFired(aid: String) {
-        hasTimerFired = true
         recordSurfaceAdsImpressionTelemetry()
         reportAdEvent(eventName: .trustedDealsImpression, aidvs: [aid])
         stopTimer()
+
+        guard let productId = shoppingProduct.product?.id else { return }
+        store.dispatch(FakespotAction.adsImpressionEventSendFor(productId: productId))
+        isViewVisible = false
     }
 
     func handleVisibilityChanges(for view: FakespotAdView, in superview: UIView) {
-        guard !hasTimerFired else { return }
         let halfViewHeight = view.frame.height / 2
         let intersection = superview.bounds.intersection(view.frame)
         let areViewsIntersected = intersection.height >= halfViewHeight && halfViewHeight > 0
