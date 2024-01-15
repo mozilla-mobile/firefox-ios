@@ -5,45 +5,6 @@
 import Redux
 import Storage
 
-enum ToastType: Equatable {
-    case singleTab
-    case allTabs(count: Int)
-    case singleInactiveTabs
-    case allInactiveTabs(count: Int)
-    case copyURL
-    case addBookmark
-
-    var title: String {
-        switch self {
-        case .singleTab, .singleInactiveTabs:
-            return .TabsTray.CloseTabsToast.SingleTabTitle
-        case let .allInactiveTabs(tabsCount),
-            let .allTabs(count: tabsCount):
-            return String.localizedStringWithFormat(
-                .TabsTray.CloseTabsToast.Title,
-                tabsCount)
-        case .copyURL:
-            return .AppMenu.AppMenuCopyURLConfirmMessage
-        case .addBookmark:
-            return .AppMenu.AddBookmarkConfirmMessage
-        }
-    }
-
-    var buttonText: String {
-        return .TabsTray.CloseTabsToast.Action
-    }
-
-    var reduxAction: TabPanelAction? {
-        switch self {
-        case .singleTab: return .undoClose
-        case .singleInactiveTabs: return .undoCloseInactiveTab
-        case .allTabs: return .undoCloseAllTabs
-        case .allInactiveTabs: return .undoCloseAllInactiveTabs
-        case .copyURL, .addBookmark: return nil
-        }
-    }
-}
-
 enum TabPanelAction: Action {
     case tabPanelDidLoad(Bool)
     case tabPanelDidAppear(Bool)

@@ -488,14 +488,9 @@ class BrowserViewController: UIViewController,
 
     func subscribeToRedux() {
         store.dispatch(ActiveScreensStateAction.showScreen(.browserViewController))
-
         store.subscribe(self, transform: {
             $0.select(BrowserViewControllerState.init)
         })
-    }
-
-    func unsubscribeFromRedux() {
-        store.unsubscribe(self)
     }
 
     func newState(state: BrowserViewControllerState) {
@@ -515,7 +510,27 @@ class BrowserViewController: UIViewController,
             // Update states for felt privacy
             updateInContentHomePanel(tabManager.selectedTab?.url)
             setupMiddleButtonStatus(isLoading: false)
+
+            if let toast = state.toast {
+                print("Orla: show toast")
+                self.showToastType(toast: toast)
+            }
         }
+    }
+
+    private func showToastType(toast: ToastType) {
+        let viewModel = ButtonToastViewModel(
+            labelText: toast.title,
+            buttonText: toast.buttonText)
+        let toast = ButtonToast(viewModel: viewModel,
+                                theme: themeManager.currentTheme,
+                                completion: { buttonPressed in
+            if let action = toast.reduxAction, buttonPressed {
+                store.dispatch(action)
+            }
+        })
+
+        show(toast: toast)
     }
 
     // MARK: - Lifecycle
