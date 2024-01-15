@@ -47,7 +47,7 @@ class SidebarEnabledView: BaseAlphaStackView, SidebarEnabledViewProtocol {
 
     func hideSidebar(_ parentViewController: UIViewController) {
         guard isSidebarVisible,
-                let fakespotViewController = parentViewController.children.first(where: { $0 is FakespotViewController })
+              let fakespotViewController = parentViewController.children.first(where: { $0 is FakespotViewController })
         else { return }
 
         fakespotViewController.willMove(toParent: nil)
@@ -58,7 +58,9 @@ class SidebarEnabledView: BaseAlphaStackView, SidebarEnabledViewProtocol {
 
     func updateSidebar(_ viewModel: FakespotViewModel, parentViewController: UIViewController) {
         guard isSidebarVisible,
-                let fakespotViewController = parentViewController.children.first(where: { $0 is FakespotViewController }) as? FakespotViewController
+              let fakespotViewController = parentViewController.children.first(where: {
+                  $0 is FakespotViewController
+              }) as? FakespotViewController
         else { return }
 
         fakespotViewController.update(viewModel: viewModel)

@@ -13,24 +13,13 @@ class CreditCardBottomSheetFooterView: UITableViewHeaderFooterView, ReusableCell
         static let manageCardsButtonLeadingSpace: CGFloat = 0
         static let manageCardsButtonTopSpace: CGFloat = 24
         static let manageCardsButtonBottomSpace: CGFloat = 24
-        static let titleVerticalPadding: CGFloat = 6
-        static let titleVerticalLongPadding: CGFloat = 20
     }
 
-    public lazy var manageCardsButton: LegacyResizableButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .callout,
-            size: UX.manageCardsButtonFontSize)
-        button.setTitle(.CreditCard.UpdateCreditCard.ManageCardsButtonTitle, for: .normal)
-        button.titleLabel?.textAlignment = .left
-        button.contentHorizontalAlignment = .left
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.accessibilityIdentifier = AccessibilityIdentifiers.RememberCreditCard.yesButton
-    }
+    public lazy var manageCardsButton: LinkButton  = .build { button in }
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        contentView.addSubview(manageCardsButton)
+        setupManageCardsButton()
         setupView()
     }
 
@@ -40,7 +29,19 @@ class CreditCardBottomSheetFooterView: UITableViewHeaderFooterView, ReusableCell
 
     func applyTheme(theme: Theme) {
         contentView.backgroundColor = theme.colors.layer1
-        manageCardsButton.setTitleColor(theme.colors.textAccent, for: .normal)
+        manageCardsButton.applyTheme(theme: theme)
+    }
+
+    func setupManageCardsButton() {
+        contentView.addSubview(manageCardsButton)
+        let buttonViewModel = LinkButtonViewModel(
+            title: .CreditCard.UpdateCreditCard.ManageCardsButtonTitle,
+            a11yIdentifier: AccessibilityIdentifiers.RememberCreditCard.manageCardsButton,
+            fontSize: UX.manageCardsButtonFontSize,
+            contentHorizontalAlignment: .left
+        )
+
+        manageCardsButton.configure(viewModel: buttonViewModel)
     }
 
     private func setupView() {

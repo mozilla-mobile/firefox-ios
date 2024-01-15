@@ -37,7 +37,9 @@ final class QRCodeCoordinatorTests: XCTestCase {
 
         subject.showQRCode(delegate: delegate)
 
-        guard let qrCodeViewController = (router.presentedViewController as? QRCodeNavigationController)?.topViewController as? QRCodeViewController
+        guard let qrCodeViewController = (
+            router.presentedViewController as? QRCodeNavigationController
+        )?.topViewController as? QRCodeViewController
         else {
             XCTFail("The QRCodeViewController has to exist")
             return
@@ -51,7 +53,9 @@ final class QRCodeCoordinatorTests: XCTestCase {
 
         subject.showQRCode(delegate: delegate)
 
-        guard let qrCodeViewController = (router.presentedViewController as? QRCodeNavigationController)?.topViewController as? QRCodeViewController
+        guard let qrCodeViewController = (
+            router.presentedViewController as? QRCodeNavigationController
+        )?.topViewController as? QRCodeViewController
         else {
             XCTFail("The QRCodeViewController has to exist")
             return
@@ -65,7 +69,9 @@ final class QRCodeCoordinatorTests: XCTestCase {
 
         subject.showQRCode(delegate: delegate)
 
-        guard let qrCodeViewController = (router.presentedViewController as? QRCodeNavigationController)?.topViewController as? QRCodeViewController
+        guard let qrCodeViewController = (
+            router.presentedViewController as? QRCodeNavigationController
+        )?.topViewController as? QRCodeViewController
         else {
             XCTFail("The QRCodeViewController has to exist")
             return

@@ -25,11 +25,13 @@ protocol OverlayModeManager: OverlayStateProtocol {
     func openNewTab(url: URL?, newTabSettings: NewTabPage)
 
     /// Leave overlay mode when user finishes editing, either by pressing the go button, enter etc
-    /// - Parameter shouldCancelLoading: Bool value determine if the loading animation of the current search should be canceled
+    /// - Parameter shouldCancelLoading: Bool value determine if the loading animation of the current
+    ///                                  search should be canceled
     func finishEditing(shouldCancelLoading: Bool)
 
     /// Leave overlay mode when tab change happens, like switching tabs or open a site from any homepage section
-    /// - Parameter shouldCancelLoading: Bool value determine if the loading animation of the current search should be canceled
+    /// - Parameter shouldCancelLoading: Bool value determine if the loading animation of the current
+    ///                                  search should be canceled
     func switchTab(shouldCancelLoading: Bool)
 }
 

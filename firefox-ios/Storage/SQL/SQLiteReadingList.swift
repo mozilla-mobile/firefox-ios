@@ -18,7 +18,18 @@ public class ReadingListStorageError: MaybeErrorType {
 open class SQLiteReadingList {
     let db: BrowserDB
 
-    let allColumns = ["client_id", "client_last_modified", "id", "last_modified", "url", "title", "added_by", "archived", "favorite", "unread"].joined(separator: ",")
+    let allColumns = [
+        "client_id",
+        "client_last_modified",
+        "id",
+        "last_modified",
+        "url",
+        "title",
+        "added_by",
+        "archived",
+        "favorite",
+        "unread"
+    ].joined(separator: ",")
     let notificationCenter: NotificationCenter
 
     public required init(db: BrowserDB,
@@ -31,7 +42,11 @@ open class SQLiteReadingList {
 extension SQLiteReadingList: ReadingList {
     public func getAvailableRecords(completion: @escaping ([ReadingListItem]) -> Void) {
         let sql = "SELECT \(allColumns) FROM items ORDER BY client_last_modified DESC"
-        let deferredResponse = db.runQuery(sql, args: nil, factory: SQLiteReadingList.ReadingListItemFactory) >>== { cursor in
+        let deferredResponse = db.runQuery(
+            sql,
+            args: nil,
+            factory: SQLiteReadingList.ReadingListItemFactory
+        ) >>== { cursor in
             return deferMaybe(cursor.asArray())
         }
 
@@ -60,7 +75,9 @@ extension SQLiteReadingList: ReadingList {
 
     public func createRecordWithURL(_ url: String, title: String, addedBy: String) -> Deferred<Maybe<ReadingListItem>> {
         return db.transaction { connection -> ReadingListItem in
+            // swiftlint:disable line_length
             let insertSQL = "INSERT OR REPLACE INTO items (client_last_modified, url, title, added_by) VALUES (?, ?, ?, ?)"
+            // swiftlint:enable line_length
             let insertArgs: Args = [ReadingListNow(), url, title, addedBy]
             let lastInsertedRowID = connection.lastInsertedRowID
 
@@ -73,7 +90,11 @@ extension SQLiteReadingList: ReadingList {
             let querySQL = "SELECT \(self.allColumns) FROM items WHERE client_id = ? LIMIT 1"
             let queryArgs: Args = [connection.lastInsertedRowID]
 
-            let cursor = connection.executeQuery(querySQL, factory: SQLiteReadingList.ReadingListItemFactory, withArgs: queryArgs)
+            let cursor = connection.executeQuery(
+                querySQL,
+                factory: SQLiteReadingList.ReadingListItemFactory,
+                withArgs: queryArgs
+            )
 
             let items = cursor.asArray()
             if let item = items.first {
@@ -108,7 +129,11 @@ extension SQLiteReadingList: ReadingList {
             let querySQL = "SELECT \(self.allColumns) FROM items WHERE client_id = ? LIMIT 1"
             let queryArgs: Args = [record.id]
 
-            let cursor = connection.executeQuery(querySQL, factory: SQLiteReadingList.ReadingListItemFactory, withArgs: queryArgs)
+            let cursor = connection.executeQuery(
+                querySQL,
+                factory: SQLiteReadingList.ReadingListItemFactory,
+                withArgs: queryArgs
+            )
 
             let items = cursor.asArray()
             if let item = items.first {
@@ -129,6 +154,15 @@ extension SQLiteReadingList: ReadingList {
         let archived = row.getBoolean("archived")
         let unread = row.getBoolean("unread")
         let favorite = row.getBoolean("favorite")
-        return ReadingListItem(id: id, lastModified: lastModified, url: url, title: title, addedBy: addedBy, unread: unread, archived: archived, favorite: favorite)
+        return ReadingListItem(
+            id: id,
+            lastModified: lastModified,
+            url: url,
+            title: title,
+            addedBy: addedBy,
+            unread: unread,
+            archived: archived,
+            favorite: favorite
+        )
     }
 }

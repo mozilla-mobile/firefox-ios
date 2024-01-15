@@ -5,12 +5,15 @@
 import UIKit
 
 extension UIView {
-    /// Makes the edge constraints (`topAnchor`, `bottomAnchor`, `leadingAnchor`, `trailingAnchor`) of a view equaled to the edge constraints of another view.
+    /// Makes the edge constraints (`topAnchor`, `bottomAnchor`, `leadingAnchor`, `trailingAnchor`)
+    /// of a view equaled to the edge constraints of another view.
+    ///
     /// - Parameters:
     ///   - view: The view that we are constraining the current view's edges to.
     ///   For example : `currentView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true`
     ///   - padding: An equal amount of spacing between each edge of the current view  and `view`.
-    ///   In a superview and subview relationship, `padding` is the equal space that surrounds the subview inside of the superview.
+    ///   In a superview and subview relationship, `padding` is the equal space that surrounds
+    ///   the subview inside of the superview.
     func edges(equalTo view: UIView, padding: CGFloat = 0) {
         NSLayoutConstraint.activate([
             topAnchor.constraint(equalTo: view.topAnchor, constant: padding),

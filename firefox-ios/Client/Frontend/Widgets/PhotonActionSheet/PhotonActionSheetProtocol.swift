@@ -31,7 +31,11 @@ extension PhotonActionSheetProtocol {
 
             let trait = viewController.traitCollection
             if viewModel.isMainMenu {
-                let margins = viewModel.getMainMenuPopOverMargins(trait: trait, view: view, presentedOn: viewController)
+                let margins = viewModel.getMainMenuPopOverMargins(
+                    trait: trait,
+                    view: view,
+                    presentedOn: viewController
+                )
                 popoverVC.popoverLayoutMargins = margins
             }
             popoverVC.permittedArrowDirections = viewModel.getPossibleArrowDirections(trait: trait)
@@ -66,7 +70,7 @@ extension PhotonActionSheetProtocol {
             }
         }
 
-        if UIPasteboard.general.string != nil {
+        if UIPasteboard.general.hasStrings {
             return [pasteGoAction.items, pasteAction.items, copyAddressAction.items]
         } else {
             return [copyAddressAction.items]
@@ -74,26 +78,35 @@ extension PhotonActionSheetProtocol {
     }
 
     func getRefreshLongPressMenu(for tab: Tab) -> [PhotonRowActions] {
-        guard tab.webView?.url != nil && (tab.getContentScript(name: ReaderMode.name()) as? ReaderMode)?.state != .active else {
-            return []
-        }
+        guard tab.webView?.url != nil
+                && (tab.getContentScript(name: ReaderMode.name()) as? ReaderMode)?.state != .active
+        else { return [] }
 
         let defaultUAisDesktop = UserAgent.isDesktop(ua: UserAgent.getUserAgent())
         let toggleActionTitle: String
+        // swiftlint:disable line_length
         if defaultUAisDesktop {
             toggleActionTitle = tab.changedUserAgent ? .AppMenu.AppMenuViewDesktopSiteTitleString : .AppMenu.AppMenuViewMobileSiteTitleString
         } else {
             toggleActionTitle = tab.changedUserAgent ? .AppMenu.AppMenuViewMobileSiteTitleString : .AppMenu.AppMenuViewDesktopSiteTitleString
         }
+        // swiftlint:enable line_length
         let toggleDesktopSite = SingleActionViewModel(title: toggleActionTitle,
                                                       iconString: StandardImageIdentifiers.Large.deviceDesktop) { _ in
             if let url = tab.url {
                 tab.toggleChangeUserAgent()
-                Tab.ChangeUserAgent.updateDomainList(forUrl: url, isChangedUA: tab.changedUserAgent, isPrivate: tab.isPrivate)
+                Tab.ChangeUserAgent.updateDomainList(
+                    forUrl: url,
+                    isChangedUA: tab.changedUserAgent,
+                    isPrivate: tab.isPrivate
+                )
             }
         }.items
 
-        if let url = tab.webView?.url, let helper = tab.contentBlocker, helper.isEnabled, helper.blockingStrengthPref == .strict {
+        if let url = tab.webView?.url,
+           let helper = tab.contentBlocker,
+           helper.isEnabled,
+           helper.blockingStrengthPref == .strict {
             let isSafelisted = helper.status == .safelisted
 
             let title: String = !isSafelisted ? .TrackingProtectionReloadWithout : .TrackingProtectionReloadWith

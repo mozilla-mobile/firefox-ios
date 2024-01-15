@@ -4,9 +4,10 @@
 
 import Foundation
 
-/// `FormAutofillPayloadType` enumerates the different types of payloads that the `FormAutofillHelper` class
-/// may encounter during the autofill process. Each case represents a specific action related to credit card
-/// or address form interaction, providing a clear and structured way to identify and handle different payload scenarios.
+/// `FormAutofillPayloadType` enumerates the different types of payloads that the `FormAutofillHelper`
+/// class may encounter during the autofill process. Each case represents a specific action related to
+/// credit card or address form interaction, providing a clear and structured way to identify and handle
+/// different payload scenarios.
 enum FormAutofillPayloadType: String {
     /// Indicates a payload type for capturing credit card information from a form submission.
     case formSubmit = "capture-credit-card-form"

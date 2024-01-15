@@ -34,7 +34,12 @@ class RemoteTabsCoordinator: BaseCoordinator,
                                                                 deepLinkParams: fxaParams)
         fxAccountViewController = viewController
         fxAccountViewController?.qrCodeNavigationHandler = self
-        let buttonItem = UIBarButtonItem(title: .CloseButtonTitle, style: .plain, target: self, action: #selector(dismissFxAViewController))
+        let buttonItem = UIBarButtonItem(
+            title: .CloseButtonTitle,
+            style: .plain,
+            target: self,
+            action: #selector(dismissFxAViewController)
+        )
         fxAccountViewController?.navigationItem.leftBarButtonItem = buttonItem
         let navController = ThemedNavigationController(rootViewController: viewController)
         router.present(navController)
@@ -62,8 +67,17 @@ class RemoteTabsCoordinator: BaseCoordinator,
         if let qrCodeCoordinator = childCoordinators.first(where: { $0 is QRCodeCoordinator }) as? QRCodeCoordinator {
             coordinator = qrCodeCoordinator
         } else {
-            let router = rootNavigationController != nil ? DefaultRouter(navigationController: rootNavigationController!) : router
-            coordinator = QRCodeCoordinator(parentCoordinator: self, router: router)
+            if rootNavigationController != nil {
+                coordinator = QRCodeCoordinator(
+                    parentCoordinator: self,
+                    router: DefaultRouter(navigationController: rootNavigationController!)
+                )
+            } else {
+                coordinator = QRCodeCoordinator(
+                    parentCoordinator: self,
+                    router: router
+                )
+            }
             add(child: coordinator)
         }
         coordinator.showQRCode(delegate: delegate)

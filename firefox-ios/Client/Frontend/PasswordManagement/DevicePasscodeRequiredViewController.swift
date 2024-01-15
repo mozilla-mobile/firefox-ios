@@ -32,15 +32,26 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
 
         self.view.addSubviews(warningLabel, learnMoreButton)
 
-        NSLayoutConstraint.activate([
-            warningLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            warningLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            warningLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            warningLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+        NSLayoutConstraint.activate(
+            [
+                warningLabel.leadingAnchor.constraint(
+                    equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
+                    constant: 20
+                ),
+                warningLabel.trailingAnchor.constraint(
+                    equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
+                    constant: -20
+                ),
+                warningLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+                warningLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
 
-            learnMoreButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            learnMoreButton.topAnchor.constraint(equalTo: warningLabel.safeAreaLayoutGuide.bottomAnchor, constant: 20)
-        ])
+                learnMoreButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+                learnMoreButton.topAnchor.constraint(
+                    equalTo: warningLabel.safeAreaLayoutGuide.bottomAnchor,
+                    constant: 20
+                )
+            ]
+        )
     }
 
     @objc

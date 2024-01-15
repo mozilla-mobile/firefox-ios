@@ -28,6 +28,8 @@ class MockThemeManager: ThemeManager {
 
     func setSystemTheme(isOn: Bool) {}
 
+    func setPrivateTheme(isOn: Bool) {}
+
     func setAutomaticBrightness(isOn: Bool) {}
 
     func setAutomaticBrightnessValue(_ value: Float) {

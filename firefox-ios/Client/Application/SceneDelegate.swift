@@ -24,7 +24,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     // MARK: - Connecting / Disconnecting Scenes
 
-    /// Invoked when the app creates OR restores an instance of the UI.
+    /// Invoked when the app creates OR restores an instance of the UI. This is also where deeplinks are handled
+    /// when the app is launched from a cold start. The deeplink URLs are passed in via the `connectionOptions`.
     ///
     /// Use this method to respond to the addition of a new scene, and begin loading data that needs to display.
     /// Take advantage of what's given in `options`.
@@ -56,22 +57,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Handle clean-up here for closing windows on iPad
         guard let sceneCoordinator = (scene.delegate as? SceneDelegate)?.sceneCoordinator else { return }
 
-        // Give all coordinators a chance to respond to scene disconnect (window close).
-        sceneCoordinator.recurseChildCoordinators {
-            ($0 as? WindowEventCoordinator)?.coordinatorWindowWillClose()
-        }
-
         // Notify WindowManager that window is closing
-        let windowManager: WindowManager = AppContainer.shared.resolve()
-        windowManager.windowDidClose(uuid: sceneCoordinator.windowUUID)
+        (AppContainer.shared.resolve() as WindowManager).windowWillClose(uuid: sceneCoordinator.windowUUID)
     }
 
     // MARK: - Transitioning to Foreground
 
     /// Invoked when the interface is finished loading for your screen, but before that interface appears on screen.
     ///
-    /// Use this method to refresh the contents of your scene's view (especially if it's a restored scene), or other activities that need
-    /// to begin.
+    /// Use this method to refresh the contents of your scene's view (especially if it's a restored scene),
+    /// or other activities that need to begin.
     func sceneDidBecomeActive(_ scene: UIScene) {
         guard !AppConstants.isRunningUnitTest else { return }
 
@@ -93,7 +88,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     /// Asks the delegate to open one or more URLs.
     ///
-    /// This method is equivalent to AppDelegate's openURL method. We implement deep links this way.
+    /// This method is equivalent to AppDelegate's openURL method. Deeplinks opened while
+    /// the app is running are passed in through this delegate method.
     func scene(
         _ scene: UIScene,
         openURLContexts URLContexts: Set<UIOpenURLContext>

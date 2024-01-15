@@ -48,7 +48,12 @@ final class RouteBuilder {
                 }
 
             case .fxaSignIn where urlScanner.value(query: "signin") != nil:
-                return .fxaSignIn(params: FxALaunchParams(entrypoint: .fxaDeepLinkNavigation, query: url.getQuery()))
+                return .fxaSignIn(
+                    params: FxALaunchParams(
+                        entrypoint: .fxaDeepLinkNavigation,
+                        query: url.getQuery()
+                    )
+                )
 
             case .openUrl:
                 // If we have a URL query, then make sure to check its a webpage
@@ -189,7 +194,11 @@ final class RouteBuilder {
         case .widgetSmallQuickLinkOpenUrl:
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: .smallQuickActionSearch)
         case .widgetMediumQuickLinkOpenUrl:
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: isPrivate ?.mediumQuickActionPrivateSearch:.mediumQuickActionSearch)
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .open,
+                object: isPrivate ?.mediumQuickActionPrivateSearch:.mediumQuickActionSearch
+            )
         case .widgetSmallQuickLinkOpenCopied:
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: .smallQuickActionClosePrivate)
         case .widgetMediumQuickLinkOpenCopied:

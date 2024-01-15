@@ -45,7 +45,10 @@ final class FakespotViewModelTests: XCTestCase {
             )
         ]
 
-        override func fetchProductAnalysisData(maxRetries: Int = 3, retryTimeout: Int = 100) async throws -> ProductAnalysisResponse? {
+        override func fetchProductAnalysisData(
+            maxRetries: Int = 3,
+            retryTimeout: Int = 100
+        ) async throws -> ProductAnalysisResponse? {
             if shouldThrowError {
                 throw NSError(domain: "MockErrorDomain", code: 123, userInfo: nil)
             }

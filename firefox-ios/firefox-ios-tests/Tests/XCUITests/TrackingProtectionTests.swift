@@ -4,8 +4,10 @@
 
 import XCTest
 
+// swiftlint:disable line_length
 let standardBlockedElementsString = "Firefox blocks cross-site trackers, social trackers, cryptominers, and fingerprinters."
 let strictBlockedElementsString = "Firefox blocks cross-site trackers, social trackers, cryptominers, fingerprinters, and tracking content."
+// swiftlint:enable line_length
 
 let websiteWithBlockedElements = "twitter.com"
 let differentWebsite = path(forTestPage: "test-example.html")
@@ -31,7 +33,10 @@ class TrackingProtectionTests: BaseTestCase {
 
         // The lock icon should still be there
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
+        mozWaitForElementToExist(
+            app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton],
+            timeout: 5
+        )
 
         // Switch to Private Browsing
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -40,7 +45,10 @@ class TrackingProtectionTests: BaseTestCase {
 
         // Make sure TP is also there in PBM
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
+        mozWaitForElementToExist(
+            app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton],
+            timeout: TIMEOUT
+        )
         navigator.goto(BrowserTabMenu)
         mozWaitForElementToExist(app.tables.otherElements[ImageIdentifiers.settings], timeout: 5)
         app.tables.otherElements[ImageIdentifiers.settings].tap()
@@ -140,8 +148,14 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.goto(TrackingProtectionContextMenuDetails)
         // A page displaying the connection is secure
         XCTAssertTrue(app.staticTexts["mozilla.org"].exists)
-        XCTAssertTrue(app.staticTexts["Connection is secure"].exists, "Missing Connection is secure info")
-        XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label, "Secure connection")
+        XCTAssertTrue(
+            app.staticTexts["Connection is secure"].exists,
+            "Missing Connection is secure info"
+        )
+        XCTAssertEqual(
+            app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
+            "Secure connection"
+        )
         // Dismiss the view and visit "badssl.com". Tap on "expired"
         app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].tap(force: true)
         navigator.nowAt(BrowserTab)
@@ -150,7 +164,10 @@ class TrackingProtectionTests: BaseTestCase {
         app.links["expired"].tap()
         waitUntilPageLoad()
         // The page is correctly displayed with the lock icon disabled
-        XCTAssertTrue(app.staticTexts["This Connection is Untrusted"].exists, "Missing This Connection is Untrusted info")
+        XCTAssertTrue(
+            app.staticTexts["This Connection is Untrusted"].exists,
+            "Missing This Connection is Untrusted info"
+        )
         XCTAssertTrue(app.staticTexts.elementContainingText("Firefox has not connected to this website.").exists)
         XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label, "Connection not secure")
     }

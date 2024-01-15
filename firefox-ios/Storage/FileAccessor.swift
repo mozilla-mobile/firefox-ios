@@ -60,7 +60,9 @@ open class FileAccessor {
     }
 
     open func attributesForFileAt(relativePath: String) throws -> [FileAttributeKey: Any] {
-        return try FileManager.default.attributesOfItem(atPath: URL(fileURLWithPath: rootPath).appendingPathComponent(relativePath).path)
+        return try FileManager.default.attributesOfItem(
+            atPath: URL(fileURLWithPath: rootPath).appendingPathComponent(relativePath).path
+        )
     }
 
     /**
@@ -78,7 +80,11 @@ open class FileAccessor {
         try FileManager.default.moveItem(atPath: fromPath, toPath: toPath.path)
     }
 
-    open func copyMatching(fromRelativeDirectory relativePath: String, toAbsoluteDirectory absolutePath: String, matching: (String) -> Bool) throws {
+    open func copyMatching(
+        fromRelativeDirectory relativePath: String,
+        toAbsoluteDirectory absolutePath: String,
+        matching: (String) -> Bool
+    ) throws {
         let fileManager = FileManager.default
         let pathURL = URL(fileURLWithPath: rootPath).appendingPathComponent(relativePath)
         let path = pathURL.path
@@ -112,6 +118,10 @@ open class FileAccessor {
      * Does nothing if the directory already exists.
      */
     fileprivate func createDir(_ absolutePath: String) throws {
-        try FileManager.default.createDirectory(atPath: absolutePath, withIntermediateDirectories: true, attributes: nil)
+        try FileManager.default.createDirectory(
+            atPath: absolutePath,
+            withIntermediateDirectories: true,
+            attributes: nil
+        )
     }
 }

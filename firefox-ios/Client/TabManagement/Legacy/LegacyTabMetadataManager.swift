@@ -63,7 +63,8 @@ class LegacyTabMetadataManager {
     /// Update existing or new observation with title once it changes for certain tab states title becomes available
     /// - Parameters:
     ///   - title: Title to be saved
-    ///   - completion: Completion handler that gets called once the recording is done. Initially used only for Unit test
+    ///   - completion: Completion handler that gets called once the recording is done.
+    ///                 Initially used only for Unit test
     func updateObservationTitle(_ title: String, completion: (() -> Void)? = nil) {
         guard shouldUpdateObservationTitle else {
             completion?()
@@ -123,11 +124,14 @@ class LegacyTabMetadataManager {
     }
 
     private func updateNavigatedToDifferentUrl(searchData: LegacyTabGroupData) {
-        if !tabGroupData.tabAssociatedNextUrl.isEmpty && tabGroupData.tabAssociatedSearchUrl.isEmpty || shouldResetTabGroupData {
+        if !tabGroupData.tabAssociatedNextUrl.isEmpty
+            && tabGroupData.tabAssociatedSearchUrl.isEmpty
+            || shouldResetTabGroupData {
             // reset tab group
             tabGroupData = LegacyTabGroupData()
             shouldResetTabGroupData = true
-        // To also capture any server redirects we check if user spent less than 7 sec on the same website before moving to another one
+        // To also capture any server redirects we check if user spent less than 7 sec on the same
+        // website before moving to another one
         } else if tabGroupData.tabAssociatedNextUrl.isEmpty || tabGroupsTimerHelper.elapsedTime < minViewTimeInSeconds {
             let key = tabGroupData.tabHistoryMetadatakey()
             if key.referrerUrl != searchData.tabAssociatedNextUrl {

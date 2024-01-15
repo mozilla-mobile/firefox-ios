@@ -8,14 +8,13 @@ import UIKit
 import Shared
 import Redux
 
-class FakespotViewController:
-    UIViewController,
-    Themeable,
-    Notifiable,
-    UIAdaptivePresentationControllerDelegate,
-    UISheetPresentationControllerDelegate,
-    UIScrollViewDelegate,
-    StoreSubscriber {
+class FakespotViewController: UIViewController,
+                              Themeable,
+                              Notifiable,
+                              UIAdaptivePresentationControllerDelegate,
+                              UISheetPresentationControllerDelegate,
+                              UIScrollViewDelegate,
+                              StoreSubscriber {
     typealias SubscriberStateType = BrowserViewControllerState
 
     private struct UX {
@@ -45,6 +44,7 @@ class FakespotViewController:
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     private var viewModel: FakespotViewModel
+    var fakespotState: FakespotState
 
     private var adView: FakespotAdView?
 
@@ -111,8 +111,8 @@ class FakespotViewController:
         self.viewModel = viewModel
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
+        fakespotState = FakespotState()
         super.init(nibName: nil, bundle: nil)
-
         listenToStateChange()
     }
 
@@ -133,8 +133,8 @@ class FakespotViewController:
         setupView()
         listenForThemeChange(view)
         viewModel.fetchProductIfOptedIn()
-
         subscribeToRedux()
+        shouldRecordAdsExposureEvents()
     }
 
     // MARK: - Redux
@@ -148,8 +148,6 @@ class FakespotViewController:
     func unsubscribeFromRedux() {
         store.unsubscribe(self)
     }
-
-    var fakespotState: FakespotState?
 
     func newState(state: BrowserViewControllerState) {
         fakespotState = state.fakespotState
@@ -176,8 +174,13 @@ class FakespotViewController:
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         notificationCenter.post(name: .FakespotViewControllerDidAppear)
-        viewModel.recordBottomSheetDisplayed(presentationController)
         updateModalA11y()
+
+        guard !fakespotState.currentTabUUID.isEmpty,
+              fakespotState.sendSurfaceDisplayedTelemetryEvent
+        else { return }
+        viewModel.recordBottomSheetDisplayed(presentationController)
+        store.dispatch(FakespotAction.surfaceDisplayedEventSend)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -192,17 +195,38 @@ class FakespotViewController:
 
     func update(viewModel: FakespotViewModel, triggerFetch: Bool = true) {
         // Only update the model if the shopping product changed to avoid unnecessary API calls
-        guard self.viewModel.shoppingProduct != viewModel.shoppingProduct else { return }
+        guard self.viewModel.shoppingProduct != viewModel.shoppingProduct else {
+            handleAdVisibilityChanges()
+            return
+        }
 
         self.viewModel = viewModel
+        shouldRecordAdsExposureEvents()
+
+        // Sets adView to nil when switching tabs on iPad to prevent retaining references from a previous tab,
+        // ensuring accurate ad impression tracking.
+        adView = nil
         listenToStateChange()
 
         guard triggerFetch else { return }
         viewModel.fetchProductIfOptedIn()
     }
 
+    private func shouldRecordAdsExposureEvents() {
+        viewModel.shouldRecordAdsExposureEvents = { [weak self] in
+            guard let self, let productId = viewModel.shoppingProduct.product?.id else { return false }
+            let tabUUID = self.fakespotState.currentTabUUID
+
+            return (self.fakespotState.telemetryState[tabUUID]?.adEvents[productId]?.sendAdExposureEvent ?? true)
+        }
+    }
+
     private func handleAdVisibilityChanges() {
-        guard let adView else { return }
+        guard let adView,
+              !fakespotState.currentTabUUID.isEmpty,
+              let productId = viewModel.shoppingProduct.product?.id,
+              fakespotState.telemetryState[fakespotState.currentTabUUID]?.adEvents[productId]?.sendAdsImpressionEvent ?? true
+        else { return }
         viewModel.handleVisibilityChanges(for: adView, in: scrollView)
     }
 
@@ -323,7 +347,9 @@ class FakespotViewController:
         let betaViewWidth = betaLabelWidth + UX.betaHorizontalSpace * 2
         let maxTitleWidth = availableTitleStackWidth - betaViewWidth - UX.titleStackSpacing
 
+        // swiftlint:disable line_length
         betaView.layer.borderWidth = contentSizeCategory.isAccessibilityCategory ? UX.betaBorderWidthA11ySize : UX.betaBorderWidth
+        // swiftlint:enable line_length
 
         if contentSizeCategory.isAccessibilityCategory || titleTextWidth > maxTitleWidth {
             titleStackView.axis = .vertical
@@ -418,7 +444,7 @@ class FakespotViewController:
 
         case .qualityDeterminationCard:
             let reviewQualityCardView: FakespotReviewQualityCardView = .build()
-            viewModel.reviewQualityCardViewModel.expandState = (fakespotState?.isReviewQualityExpanded ?? false)  ? .expanded : .collapsed
+            viewModel.reviewQualityCardViewModel.expandState = fakespotState.isReviewQualityExpanded ? .expanded : .collapsed
             viewModel.reviewQualityCardViewModel.dismissViewController = {
                 store.dispatch(FakespotAction.setAppearanceTo(false))
             }
@@ -426,15 +452,17 @@ class FakespotViewController:
                 store.dispatch(FakespotAction.reviewQualityDidChange)
             }
             reviewQualityCardView.configure(viewModel.reviewQualityCardViewModel)
+
             return reviewQualityCardView
 
         case .settingsCard:
             let view: FakespotSettingsCardView = .build()
-            viewModel.settingsCardViewModel.expandState = (fakespotState?.isSettingsExpanded ?? false) ? .expanded : .collapsed
+            viewModel.settingsCardViewModel.expandState = fakespotState.isSettingsExpanded ? .expanded : .collapsed
             viewModel.settingsCardViewModel.dismissViewController = { [weak self] action in
                 guard let self = self, let action else { return }
 
                 store.dispatch(FakespotAction.setAppearanceTo(false))
+                store.dispatch(FakespotAction.surfaceDisplayedEventSend)
                 viewModel.recordDismissTelemetry(by: action)
             }
             viewModel.settingsCardViewModel.toggleAdsEnabled = { [weak self] in
@@ -444,6 +472,7 @@ class FakespotViewController:
                 store.dispatch(FakespotAction.settingsStateDidChange)
             }
             view.configure(viewModel.settingsCardViewModel)
+
             return view
 
         case .noAnalysisCard:
@@ -461,7 +490,7 @@ class FakespotViewController:
             viewModel.onTapProductLink = { [weak self] in
                 self?.viewModel.addTab(url: adData.url)
                 self?.viewModel.recordSurfaceAdsClickedTelemetry()
-                self?.viewModel.reportAdEvent(eventName: .trustedDealsLinkClicked, aid: adData.aid)
+                self?.viewModel.reportAdEvent(eventName: .trustedDealsLinkClicked, aidvs: [adData.aid])
                 store.dispatch(FakespotAction.setAppearanceTo(false))
             }
             view.configure(viewModel)
@@ -499,7 +528,11 @@ class FakespotViewController:
                     self.viewModel.recordTelemetry(for: .messageCard(.needsAnalysis))
                 }
                 view.configure(viewModel.needsAnalysisViewModel)
-                TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingSurfaceStaleAnalysisShown)
+                TelemetryWrapper.recordEvent(
+                    category: .action,
+                    method: .view,
+                    object: .shoppingSurfaceStaleAnalysisShown
+                )
                 return view
 
             case .analysisInProgress:
@@ -545,7 +578,9 @@ class FakespotViewController:
     }
 
     private func updateModalA11y() {
-        var currentDetent: UISheetPresentationController.Detent.Identifier? = viewModel.getCurrentDetent(for: sheetPresentationController)
+        var currentDetent: UISheetPresentationController.Detent.Identifier? = viewModel.getCurrentDetent(
+            for: sheetPresentationController
+        )
 
         if currentDetent == nil,
            let sheetPresentationController,
@@ -590,7 +625,9 @@ class FakespotViewController:
     }
 
     // MARK: - UISheetPresentationControllerDelegate
-    func sheetPresentationControllerDidChangeSelectedDetentIdentifier(_ sheetPresentationController: UISheetPresentationController) {
+    func sheetPresentationControllerDidChangeSelectedDetentIdentifier(
+        _ sheetPresentationController: UISheetPresentationController
+    ) {
         updateModalA11y()
     }
 

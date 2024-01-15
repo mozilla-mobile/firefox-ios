@@ -79,9 +79,13 @@ class DefaultSearchEngineProvider: SearchEngineProvider {
             logger.log("Search plugins not found. Check bundle", level: .fatal, category: .setup)
             fatalError("We are unable to populate search engines for this locale because SearchPlugins is missing.")
         }
-        guard let defaultSearchPrefs = DefaultSearchPrefs(with: pluginDirectory.appendingPathComponent("list.json")) else {
+        guard let defaultSearchPrefs = DefaultSearchPrefs(
+            with: pluginDirectory.appendingPathComponent("list.json")
+        ) else {
             logger.log("Failed to parse List.json", level: .fatal, category: .setup)
+            // swiftlint:disable line_length
             fatalError("We are unable to populate search engines for this locale because list.json could not be parsed.")
+            // swiftlint:enable line_length
         }
         let possibilities = possibleLanguageIdentifier
         let engineNames = defaultSearchPrefs.visibleDefaultEngines(for: possibilities, and: region)
@@ -89,7 +93,9 @@ class DefaultSearchEngineProvider: SearchEngineProvider {
 
         guard !engineNames.isEmpty else {
             logger.log("No search engines.", level: .fatal, category: .setup)
+            // swiftlint:disable line_length
             fatalError("We are unable to populate search engines for this locale because the possibilities of search engines is blank.")
+            // swiftlint:enable line_length
         }
 
         DispatchQueue.global().async {

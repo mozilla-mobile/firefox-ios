@@ -14,7 +14,10 @@ extension Tab {
 
         private static var baseDomainList: Set<String> = {
             if let data = try? Data(contentsOf: ChangeUserAgent.file),
-               let hosts = try? NSKeyedUnarchiver.unarchivedObject(ofClasses: [NSSet.self, NSArray.self, NSString.self], from: data) as? Set<String> {
+               let hosts = try? NSKeyedUnarchiver.unarchivedObject(
+                ofClasses: [NSSet.self, NSArray.self, NSString.self],
+                from: data
+               ) as? Set<String> {
                 return hosts
             }
             return Set<String>()
@@ -54,7 +57,10 @@ extension Tab {
 
             // At this point, saving to disk takes place.
             do {
-                let data = try NSKeyedArchiver.archivedData(withRootObject: baseDomainList, requiringSecureCoding: false)
+                let data = try NSKeyedArchiver.archivedData(
+                    withRootObject: baseDomainList,
+                    requiringSecureCoding: false
+                )
                 try data.write(to: ChangeUserAgent.file)
             } catch {}
         }
@@ -64,7 +70,10 @@ extension Tab {
             let subDomainsToRemove: Set<String> = ["m", "mobile"]
 
             guard var components = URLComponents(url: url, resolvingAgainstBaseURL: true) else { return url }
-            guard let parts = components.host?.split(separator: ".").filter({ !subDomainsToRemove.contains(String($0)) }) else { return url }
+            guard let parts = components.host?
+                .split(separator: ".")
+                .filter({ !subDomainsToRemove.contains(String($0)) })
+            else { return url }
 
             let host = parts.joined(separator: ".")
 

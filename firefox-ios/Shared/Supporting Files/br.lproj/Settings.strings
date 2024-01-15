@@ -49,6 +49,9 @@
 /* Settings section title for the old Firefox account */
 "FxA.FirefoxAccount.v119" = "Kont";
 
+/* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
+"Settings.AddressAutofill.Title.v124" = "Leuniañ ar chomlec’hioù ent emgefreek";
+
 /* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
 "Settings.AutofillCreditCard.Title.v122" = "Doareoù paeañ";
 
@@ -82,6 +85,9 @@
 /* Accessibility label for default search engine setting. */
 "Settings.Search.Accessibility.DefaultSearchEngine.v121" = "Keflusker enklask dre ziouer";
 
+/* Accessibility label for Learn more about Firefox Suggest. */
+"Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "Gouzout hiroc’h diwar-benn ar pezh a vez aliet gant Firefox";
+
 /* Title for the `default search engine` settings section in the Search page in the Settings menu. */
 "Settings.Search.DefaultSearchEngine.Title.v121" = "Keflusker enklask dre ziouer";
 
@@ -96,4 +102,16 @@
 
 /* Label for the `show search suggestions` setting, in the Search Settings page. */
 "Settings.Search.ShowSuggestions.v121" = "Diskouez kinnigoù klask";
+
+/* In the Search page of the Settings menu, the title for the Firefox Suggest settings section. */
+"Settings.Search.Suggest.AddressBarSetting.Title.v124" = "Barrenn chomlec’hioù - Alioù Firefox";
+
+/* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
+"Settings.Search.Suggest.LearnAboutSuggestions.v124" = "Gouzout hiroc’h diwar-benn ar pezh a vez aliet gant Firefox";
+
+/* In the Search page of the Settings menu, the title for setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
+"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124" = "Kinnigoù eus %@";
+
+/* In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors. */
+"Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "Kinnigoù paeroniet";
 

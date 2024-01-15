@@ -30,7 +30,9 @@ class TranslationToastHandler: TabEventHandler {
                 return
         }
 
-        guard let url = tab.url, !url.absoluteString.starts(with: setting.useTranslationService.destinationURLPrefix) else {
+        guard let url = tab.url, !url.absoluteString.starts(
+            with: setting.useTranslationService.destinationURLPrefix
+        ) else {
             return
         }
         let pageLocale = Locale(identifier: pageLanguage)
@@ -46,30 +48,64 @@ class TranslationToastHandler: TabEventHandler {
         let localizedPageLanguage = locale.localizedString(forLanguageCode: pageLanguage) ?? pageLanguage
 
         let service = setting.useTranslationService
-        let promptMessage = String(format: Strings.TranslateSnackBarPrompt, localizedPageLanguage, localizedMyLanguage, service.name)
-        let snackBar = SnackBar(text: promptMessage, img: UIImage(named: "search"), snackbarClassIdentifier: snackBarClassIdentifier)
-        let cancel = SnackButton(title: Strings.TranslateSnackBarNo, accessibilityIdentifier: "TranslationPrompt.dontTranslate", bold: false) { bar in
+        let promptMessage = String(
+            format: Strings.TranslateSnackBarPrompt,
+            localizedPageLanguage,
+            localizedMyLanguage,
+            service.name
+        )
+        let snackBar = SnackBar(
+            text: promptMessage,
+            img: UIImage(named: "search"),
+            snackbarClassIdentifier: snackBarClassIdentifier
+        )
+        let cancel = SnackButton(
+            title: Strings.TranslateSnackBarNo,
+            accessibilityIdentifier: "TranslationPrompt.dontTranslate",
+            bold: false
+        ) { bar in
             tab.removeSnackbar(bar)
 
-            TelemetryWrapper.recordEvent(category: .action, method: .translate, object: .tab, extras: ["action": "decline", "from": pageLanguage, "to": myLanguage])
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .translate,
+                object: .tab,
+                extras: ["action": "decline", "from": pageLanguage, "to": myLanguage]
+            )
         }
-        let ok = SnackButton(title: Strings.TranslateSnackBarYes, accessibilityIdentifier: "TranslationPrompt.doTranslate", bold: true) { bar in
+        let ok = SnackButton(
+            title: Strings.TranslateSnackBarYes,
+            accessibilityIdentifier: "TranslationPrompt.doTranslate",
+            bold: true
+        ) { bar in
             tab.removeSnackbar(bar)
             self.translate(tab, from: pageLanguage, to: myLanguage)
 
-            TelemetryWrapper.recordEvent(category: .action, method: .translate, object: .tab, extras: ["action": "accept", "from": pageLanguage, "to": myLanguage])
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .translate,
+                object: .tab,
+                extras: ["action": "accept", "from": pageLanguage, "to": myLanguage]
+            )
         }
         snackBar.addButton(cancel)
         snackBar.addButton(ok)
         tab.addSnackbar(snackBar)
 
-        TelemetryWrapper.recordEvent(category: .prompt, method: .translate, object: .tab, extras: ["from": pageLanguage, "to": myLanguage])
+        TelemetryWrapper.recordEvent(
+            category: .prompt,
+            method: .translate,
+            object: .tab,
+            extras: ["from": pageLanguage, "to": myLanguage]
+        )
     }
 
     func translate(_ tab: Tab, from pageLanguage: String, to myLanguage: String) {
         guard let urlString = tab.pageMetadata?.siteURL,
             let url = URL(string: urlString),
-            let urlQueryParam = url.absoluteString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed) else {
+              let urlQueryParam = url.absoluteString.addingPercentEncoding(
+                withAllowedCharacters: CharacterSet.urlFragmentAllowed
+              ) else {
                 return
         }
 

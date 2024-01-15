@@ -76,6 +76,12 @@
 /* Accessibility label for close button that dismisses the welcome onboarding screen. Placeholder is for the app name. */
 "Onboarding.Welcome.Close.AccessibilityLabel.v121" = "Sulje ja poistu %@in käyttöönottovaiheesta";
 
+/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Welcome.Description.TreatementA.v120" = "Voittoa tavoittelemattoman tahon tukema selain auttaa sinua estämään yrityksiä seuraamasta sinua verkossa.";
+
+/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Welcome.Description.v120" = "Voittoa tavoittelemattoman tahon tukema selaimemme auttaa estämään yrityksiä seuraamasta sinua salaa verkossa.";
+
 /* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Link.Action.v114" = "Lue yksityisyyskäytäntömme";
 

@@ -8,7 +8,10 @@ import Foundation
 import UIKit
 import Shared
 
-class ContextualHintViewController: UIViewController, OnViewDismissable, Themeable, UIAdaptivePresentationControllerDelegate {
+class ContextualHintViewController: UIViewController,
+                                    OnViewDismissable,
+                                    Themeable,
+                                    UIAdaptivePresentationControllerDelegate {
     private struct UX {
         static let contextualHintWidth: CGFloat = 350
         static let contextualHintLandscapeExtraWidth: CGFloat = 60
@@ -144,12 +147,14 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
 
         if delegate == nil { presentationController?.delegate = self }
 
-        var viewModel = ContextualHintViewModel(isActionType: viewProvider.isActionType,
-                                                actionButtonTitle: viewProvider.getCopyFor(.action),
-                                                description: viewProvider.getCopyFor(.description),
-                                                arrowDirection: arrowDirection,
-                                                closeButtonA11yLabel: .ContextualHints.ContextualHintsCloseAccessibility,
-                                                actionButtonA11yId: AccessibilityIdentifiers.ContextualHints.actionButton)
+        var viewModel = ContextualHintViewModel(
+            isActionType: viewProvider.isActionType,
+            actionButtonTitle: viewProvider.getCopyFor(.action),
+            description: viewProvider.getCopyFor(.description),
+            arrowDirection: arrowDirection,
+            closeButtonA11yLabel: .ContextualHints.ContextualHintsCloseAccessibility,
+            actionButtonA11yId: AccessibilityIdentifiers.ContextualHints.actionButton
+        )
         viewModel.closeButtonAction = { [weak self] _ in
             self?.dismissAnimated()
         }
@@ -185,7 +190,10 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
 
     // MARK: - UIAdaptivePresentationControllerDelegate
 
-    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+    func adaptivePresentationStyle(
+        for controller: UIPresentationController,
+        traitCollection: UITraitCollection
+    ) -> UIModalPresentationStyle {
         .none
     }
 

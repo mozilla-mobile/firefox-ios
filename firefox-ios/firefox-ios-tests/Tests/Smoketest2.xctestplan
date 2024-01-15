@@ -95,6 +95,7 @@
         "TrackingProtectionTests\/testBasicMoreInfo()",
         "TrackingProtectionTests\/testETPLockMenu()",
         "TrackingProtectionTests\/testLockIconSecureConnection()",
+        "URLValidationTests",
         "UrlBarTests",
         "WhatsNewTest"
       ],

@@ -95,25 +95,33 @@ class CreditCardBottomSheetHeaderView: UITableViewHeaderFooterView, ReusableCell
 
         addSubview(mainContainerStackView)
         let isCloseButtonOverlapping = traitCollection.horizontalSizeClass != .regular
-        titleLabelTrailingConstraint = titleLabel.trailingAnchor.constraint(equalTo: firstRowContainerView.trailingAnchor, constant: isCloseButtonOverlapping ? -UX.closeButtonMarginAndWidth : 0)
+        titleLabelTrailingConstraint = titleLabel.trailingAnchor.constraint(
+            equalTo: firstRowContainerView.trailingAnchor,
+            constant: isCloseButtonOverlapping ? -UX.closeButtonMarginAndWidth : 0
+        )
 
-        NSLayoutConstraint.activate([
-            firstRowContainerView.heightAnchor.constraint(equalToConstant: UX.logoSize),
-            firefoxLogoImage.widthAnchor.constraint(equalToConstant: UX.logoSize),
-            firefoxLogoImage.heightAnchor.constraint(equalToConstant: UX.logoSize),
-            firefoxLogoImage.centerYAnchor.constraint(equalTo: firstRowContainerView.centerYAnchor),
-            firefoxLogoImage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
+        NSLayoutConstraint.activate(
+            [
+                firstRowContainerView.heightAnchor.constraint(equalToConstant: UX.logoSize),
+                firefoxLogoImage.widthAnchor.constraint(equalToConstant: UX.logoSize),
+                firefoxLogoImage.heightAnchor.constraint(equalToConstant: UX.logoSize),
+                firefoxLogoImage.centerYAnchor.constraint(equalTo: firstRowContainerView.centerYAnchor),
+                firefoxLogoImage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
 
-            titleLabel.leadingAnchor.constraint(equalTo: firefoxLogoImage.trailingAnchor, constant: UX.headerElementsSpacing),
-            titleLabelTrailingConstraint,
-            titleLabel.topAnchor.constraint(equalTo: firstRowContainerView.topAnchor, constant: 0),
-            titleLabel.bottomAnchor.constraint(equalTo: firstRowContainerView.bottomAnchor, constant: 0),
+                titleLabel.leadingAnchor.constraint(
+                    equalTo: firefoxLogoImage.trailingAnchor,
+                    constant: UX.headerElementsSpacing
+                ),
+                titleLabelTrailingConstraint,
+                titleLabel.topAnchor.constraint(equalTo: firstRowContainerView.topAnchor, constant: 0),
+                titleLabel.bottomAnchor.constraint(equalTo: firstRowContainerView.bottomAnchor, constant: 0),
 
-            mainContainerStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
-            mainContainerStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0),
-            mainContainerStackView.topAnchor.constraint(equalTo: topAnchor, constant: 0),
-            mainContainerStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpacing),
-        ])
+                mainContainerStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
+                mainContainerStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0),
+                mainContainerStackView.topAnchor.constraint(equalTo: topAnchor, constant: 0),
+                mainContainerStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpacing),
+            ]
+        )
     }
 
     private func setupContent() {

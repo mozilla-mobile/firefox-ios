@@ -141,7 +141,9 @@ class CreditCardTableViewController: UIViewController, Themeable {
             let saveSuccessMessage: String = .CreditCard.SnackBar.SavedCardLabel
             let updateSuccessMessage: String = .CreditCard.SnackBar.UpdatedCardLabel
             let removeCardMessage: String = .CreditCard.SnackBar.RemovedCardLabel
-            if announcementText == saveSuccessMessage || announcementText == updateSuccessMessage  || announcementText == removeCardMessage {
+            if announcementText == saveSuccessMessage
+                || announcementText == updateSuccessMessage
+                || announcementText == removeCardMessage {
                 if let lastIndex = lastSelectedIndex, let lastSelectedCell = tableView.cellForRow(at: lastIndex) {
                     UIAccessibility.post(notification: .layoutChanged, argument: lastSelectedCell)
                 }
@@ -165,7 +167,8 @@ extension CreditCardTableViewController: UITableViewDelegate,
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard section > 0,
                 let hostingCell = tableView.dequeueReusableHeaderFooterView(
-                    withIdentifier: HostingTableViewSectionHeader<CreditCardSectionHeader>.cellIdentifier) as? HostingTableViewSectionHeader<CreditCardSectionHeader>
+                    withIdentifier: HostingTableViewSectionHeader<CreditCardSectionHeader>.cellIdentifier
+                ) as? HostingTableViewSectionHeader<CreditCardSectionHeader>
         else { return nil }
 
         let headerView = CreditCardSectionHeader(textColor: themeManager.currentTheme.colors.textSecondary.color)
@@ -185,7 +188,8 @@ extension CreditCardTableViewController: UITableViewDelegate,
     // MARK: - Private
     private func toggleCell() -> UITableViewCell {
         guard let hostingCell = tableView.dequeueReusableCell(
-            withIdentifier: HostingTableViewCell<CreditCardAutofillToggle>.cellIdentifier) as? HostingTableViewCell<CreditCardAutofillToggle>,
+            withIdentifier: HostingTableViewCell<CreditCardAutofillToggle>.cellIdentifier
+        ) as? HostingTableViewCell<CreditCardAutofillToggle>,
               let model = viewModel.toggleModel else {
             return UITableViewCell()
         }
@@ -198,7 +202,8 @@ extension CreditCardTableViewController: UITableViewDelegate,
 
     private func creditCardCell(indexPath: IndexPath) -> UITableViewCell {
         guard let hostingCell = tableView.dequeueReusableCell(
-            withIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier) as? HostingTableViewCell<CreditCardItemRow> else {
+            withIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier
+        ) as? HostingTableViewCell<CreditCardItemRow> else {
             return UITableViewCell()
         }
         let creditCardCount = viewModel.creditCards.count

@@ -8,7 +8,18 @@ import UIKit
 
 extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     // MARK: Data Clearance CFR / Contextual Hint
+
+    // Reset the CFR timer for the data clearance button to avoid presenting the CFR
+    // In cases, such as if user navigates to homepage or if fire icon is not available
+    func resetDataClearanceCFRTimer() {
+        dataClearanceContextHintVC.stopTimer()
+    }
+
     func configureDataClearanceContextualHint() {
+        guard contentContainer.hasWebView, tabManager.selectedTab?.url?.displayURL?.isWebPage() == true else {
+            resetDataClearanceCFRTimer()
+            return
+        }
         dataClearanceContextHintVC.configure(
             anchor: navigationToolbar.multiStateButton,
             withArrowDirection: topTabsVisible ? .up : .down,
@@ -46,13 +57,16 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         let cancelAction = UIAlertAction(
             title: .Alerts.FeltDeletion.CancelButton,
             style: .cancel,
-            handler: nil
+            handler: { [weak self] _ in
+                self?.privateBrowsingTelemetry.sendDataClearanceTappedTelemetry(didConfirm: false)
+            }
         )
 
         let deleteDataAction = UIAlertAction(
             title: .Alerts.FeltDeletion.ConfirmButton,
             style: .destructive,
             handler: { [weak self] _ in
+                self?.privateBrowsingTelemetry.sendDataClearanceTappedTelemetry(didConfirm: true)
                 self?.closePrivateTabsAndOpenNewPrivateHomepage()
                 self?.showDataClearanceConfirmationToast()
             }
@@ -96,7 +110,11 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
         let shouldSuppress = UIDevice.current.userInterfaceIdiom == .pad
         let style: UIModalPresentationStyle = shouldSuppress ? .popover : .overCurrentContext
-        let viewModel = PhotonActionSheetViewModel(actions: [urlActions], closeButtonTitle: .CloseButtonTitle, modalStyle: style)
+        let viewModel = PhotonActionSheetViewModel(
+            actions: [urlActions],
+            closeButtonTitle: .CloseButtonTitle,
+            modalStyle: style
+        )
         presentSheetWith(viewModel: viewModel, on: self, from: button)
     }
 
@@ -110,9 +128,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidLongPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        let generator = UIImpactFeedbackGenerator(style: .heavy)
-        generator.impactOccurred()
-        showBackForwardList()
+        handleTabToolBarDidLongPressForwardOrBack()
     }
 
     func tabToolbarDidPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -121,9 +137,17 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidLongPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        handleTabToolBarDidLongPressForwardOrBack()
+    }
+
+    private func handleTabToolBarDidLongPressForwardOrBack() {
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
-        showBackForwardList()
+        if CoordinatorFlagManager.isBackForwardListShownFromCoordaintorEnabled {
+            navigationHandler?.showBackForwardList()
+        } else {
+            showBackForwardList()
+        }
     }
 
     func tabToolbarDidPressBookmarks(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -140,7 +164,12 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         // Ensure that any keyboards or spinners are dismissed before presenting the menu
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        UIApplication.shared.sendAction(
+            #selector(UIResponder.resignFirstResponder),
+            to: nil,
+            from: nil,
+            for: nil
+        )
 
         // Logs homePageMenu or siteMenu depending if HomePage is open or not
         let isHomePage = tabManager.selectedTab?.isFxHomeTab ?? false
@@ -156,17 +185,31 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
         updateZoomPageBarVisibility(visible: false)
         menuHelper.getToolbarActions(navigationController: navigationController) { actions in
-            let shouldInverse = PhotonActionSheetViewModel.hasInvertedMainMenu(trait: self.traitCollection, isBottomSearchBar: self.isBottomSearchBar)
-            let viewModel = PhotonActionSheetViewModel(actions: actions, modalStyle: .popover, isMainMenu: true, isMainMenuInverted: shouldInverse)
+            let shouldInverse = PhotonActionSheetViewModel.hasInvertedMainMenu(
+                trait: self.traitCollection,
+                isBottomSearchBar: self.isBottomSearchBar
+            )
+            let viewModel = PhotonActionSheetViewModel(
+                actions: actions,
+                modalStyle: .popover,
+                isMainMenu: true,
+                isMainMenuInverted: shouldInverse
+            )
             self.presentSheetWith(viewModel: viewModel, on: self, from: button)
         }
     }
 
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         updateZoomPageBarVisibility(visible: false)
-        let segmentToFocus = tabManager.selectedTab?.isPrivate ?? false ? TabTrayPanelType.privateTabs : TabTrayPanelType.tabs
+        let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
+        let segmentToFocus = isPrivateTab ? TabTrayPanelType.privateTabs : TabTrayPanelType.tabs
         showTabTray(focusedSegment: segmentToFocus)
-        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .tabToolbar, value: .tabView)
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .press,
+            object: .tabToolbar,
+            value: .tabView
+        )
     }
 
     func getTabToolbarLongPressActionsForModeSwitching() -> [PhotonRowActions] {
@@ -244,13 +287,20 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
 
-        let viewModel = PhotonActionSheetViewModel(actions: actions, closeButtonTitle: .CloseButtonTitle, modalStyle: .overCurrentContext)
+        let viewModel = PhotonActionSheetViewModel(
+            actions: actions,
+            closeButtonTitle: .CloseButtonTitle,
+            modalStyle: .overCurrentContext
+        )
         presentSheetWith(viewModel: viewModel, on: self, from: button)
     }
 
     func showBackForwardList() {
         if let backForwardList = tabManager.selectedTab?.webView?.backForwardList {
-            let backForwardViewController = BackForwardListViewController(profile: profile, backForwardList: backForwardList)
+            let backForwardViewController = BackForwardListViewController(
+                profile: profile,
+                backForwardList: backForwardList
+            )
             backForwardViewController.tabManager = tabManager
             backForwardViewController.browserFrameInfoProvider = self
             backForwardViewController.modalPresentationStyle = .overCurrentContext
@@ -283,7 +333,10 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
             let toast = ButtonToast(viewModel: viewModel,
                                     theme: themeManager.currentTheme) { [weak self] isButtonTapped in
                 guard let strongSelf = self, let currentTab = strongSelf.tabManager.selectedTab else { return }
-                isButtonTapped ? strongSelf.addBookmark(url: currentTab.url?.absoluteString ?? "", title: currentTab.title) : nil
+                isButtonTapped ? strongSelf.addBookmark(
+                    url: currentTab.url?.absoluteString ?? "",
+                    title: currentTab.title
+                ) : nil
             }
             show(toast: toast)
         default:

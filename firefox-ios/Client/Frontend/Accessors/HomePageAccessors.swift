@@ -9,7 +9,8 @@ import Shared
 // These are pure functions, so it's quite ok to have them
 // as static.
 
-// This HomePagePref is only used when setting the HomePage on the newTab and not setting a custom URL for the Home button.
+// This HomePagePref is only used when setting the HomePage on the newTab
+// and not setting a custom URL for the Home button.
 class NewTabHomePageAccessors {
     static func getHomePage(_ prefs: Prefs) -> URL? {
         let string = prefs.stringForKey(PrefsKeys.NewTabCustomUrlPrefKey) ?? getDefaultHomePageString(prefs)

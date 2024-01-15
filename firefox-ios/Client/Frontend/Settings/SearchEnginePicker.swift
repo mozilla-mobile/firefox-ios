@@ -13,7 +13,12 @@ class SearchEnginePicker: ThemedTableViewController {
         super.viewDidLoad()
 
         navigationItem.title = .SearchEnginePickerTitle
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: .SearchEnginePickerCancel, style: .plain, target: self, action: #selector(cancel))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            title: .SearchEnginePickerCancel,
+            style: .plain,
+            target: self,
+            action: #selector(cancel)
+        )
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

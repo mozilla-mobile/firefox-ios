@@ -6,7 +6,8 @@ import Foundation
 
 /// An enumeration representing different navigational routes in an application.
 enum Route: Equatable {
-    /// Represents a search route that takes a URL, a boolean value indicating whether the search is private or not and an optional set of search options.
+    /// Represents a search route that takes a URL, a boolean value indicating whether the search
+    /// is private or not and an optional set of search options.
     ///
     /// - Parameters:
     ///   - url: A `URL` object representing the URL to be searched. Pass `nil` if the search does not require a URL.
@@ -33,12 +34,15 @@ enum Route: Equatable {
 
     /// Represents a home panel route that takes a `HomepanelSection` value indicating the section to be displayed.
     ///
-    /// - Parameter section: An instance of `HomepanelSection` indicating the section of the home panel to be displayed.
+    /// - Parameter section: An instance of `HomepanelSection` indicating the section of the home
+    ///                      panel to be displayed.
     case homepanel(section: HomepanelSection)
 
-    /// Represents a settings route that takes a `SettingsSection` value indicating the settings section to be displayed.
+    /// Represents a settings route that takes a `SettingsSection` value indicating the settings
+    /// section to be displayed.
     ///
-    /// - Parameter section: An instance of `SettingsSection` indicating the section of the settings menu to be displayed.
+    /// - Parameter section: An instance of `SettingsSection` indicating the section of the settings
+    ///                      menu to be displayed.
     case settings(section: SettingsSection)
 
     /// Represents an application action route that takes an `AppAction` value indicating the action to be performed.
@@ -46,14 +50,17 @@ enum Route: Equatable {
     /// - Parameter action: An instance of `AppAction` indicating the application action to be performed.
     case action(action: AppAction)
 
-    /// Represents a Firefox account sign-in route that takes an `FxALaunchParams` object indicating the parameters for the sign-in.
+    /// Represents a Firefox account sign-in route that takes an `FxALaunchParams` object indicating
+    /// the parameters for the sign-in.
     ///
     /// - Parameter params: An instance of `FxALaunchParams` containing the parameters for the sign-in.
     case fxaSignIn(params: FxALaunchParams)
 
-    /// Represents a default browser route that takes a `DefaultBrowserSection` value indicating the section to be displayed.
+    /// Represents a default browser route that takes a `DefaultBrowserSection` value indicating
+    /// the section to be displayed.
     ///
-    /// - Parameter section: An instance of `DefaultBrowserSection` indicating the section of the default browser settings to be displayed.
+    /// - Parameter section: An instance of `DefaultBrowserSection` indicating the section of the default browser
+    ///                      settings to be displayed.
     case defaultBrowser(section: DefaultBrowserSection)
 
     /// An enumeration representing different sections of the home panel.

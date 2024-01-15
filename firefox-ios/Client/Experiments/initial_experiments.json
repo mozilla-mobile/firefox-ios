@@ -61,6 +61,115 @@
       "featureValidationOptOut": false,
       "localizations": null,
       "locales": null
+    },
+    {
+      "schemaVersion": "1.12.0",
+      "slug": "social-proof-on-ios-default-browser-onboarding-screen",
+      "id": "social-proof-on-ios-default-browser-onboarding-screen",
+      "arguments": {},
+      "application": "org.mozilla.ios.Firefox",
+      "appName": "firefox_ios",
+      "appId": "org.mozilla.ios.Firefox",
+      "channel": "release",
+      "userFacingName": "Social Proof on iOS \"Default Browser\" onboarding screen.",
+      "userFacingDescription": "Testing copy on the default browser screen.",
+      "isEnrollmentPaused": false,
+      "isRollout": false,
+      "bucketConfig": {
+        "randomizationUnit": "nimbus_id",
+        "namespace": "ios-onboarding-framework-feature-release-9",
+        "start": 0,
+        "count": 10000,
+        "total": 10000
+      },
+      "featureIds": [
+        "onboarding-framework-feature"
+      ],
+      "probeSets": [],
+      "outcomes": [
+        {
+          "slug": "onboarding",
+          "priority": "primary"
+        },
+        {
+          "slug": "default_browser",
+          "priority": "secondary"
+        }
+      ],
+      "branches": [
+        {
+          "slug": "control",
+          "ratio": 1,
+          "feature": {
+            "featureId": "this-is-included-for-mobile-pre-96-support",
+            "enabled": false,
+            "value": {}
+          },
+          "features": [
+            {
+              "featureId": "onboarding-framework-feature",
+              "enabled": true,
+              "value": {}
+            }
+          ]
+        },
+        {
+          "slug": "treatment-a",
+          "ratio": 1,
+          "feature": {
+            "featureId": "this-is-included-for-mobile-pre-96-support",
+            "enabled": false,
+            "value": {}
+          },
+          "features": [
+            {
+              "featureId": "onboarding-framework-feature",
+              "enabled": true,
+              "value": {
+                "cards": {
+                  "welcome": {
+                    "title": "Find out why millions love Firefox",
+                    "body": "More than 10 million people protect their privacy by choosing a browser that’s backed by a nonprofit."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "slug": "treatment-b",
+          "ratio": 1,
+          "feature": {
+            "featureId": "this-is-included-for-mobile-pre-96-support",
+            "enabled": false,
+            "value": {}
+          },
+          "features": [
+            {
+              "featureId": "onboarding-framework-feature",
+              "enabled": true,
+              "value": {
+                "cards": {
+                  "welcome": {
+                    "title": "Find out why millions love Firefox",
+                    "body": "More than 100 million people protect their privacy by choosing a browser that’s backed by a nonprofit."
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('120.!') >= 0) && (language in ['en'])))",
+      "startDate": "2024-01-09",
+      "enrollmentEndDate": null,
+      "endDate": null,
+      "proposedDuration": 28,
+      "proposedEnrollment": 7,
+      "referenceBranch": "control",
+      "featureValidationOptOut": false,
+      "localizations": null,
+      "locales": null
     }
   ]
 }

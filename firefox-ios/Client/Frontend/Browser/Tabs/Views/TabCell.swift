@@ -165,7 +165,9 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         if let url = tabModel.url,
            !url.absoluteString.starts(with: "internal"),
            tabModel.hasHomeScreenshot {
-            let defaultImage = UIImage(named: StandardImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysTemplate)
+            let defaultImage = UIImage(
+                named: StandardImageIdentifiers.Large.globe
+            )?.withRenderingMode(.alwaysTemplate)
             smallFaviconView.manuallySetImage(defaultImage ?? UIImage())
             faviconBG.isHidden = false
             screenshotView.image = nil
@@ -230,48 +232,53 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         let imageBackgroundSize = TopSiteItemCell.UX.imageBackgroundSize
         let topSiteIconSize = TopSiteItemCell.UX.iconSize
 
-        NSLayoutConstraint.activate([
-            backgroundHolder.topAnchor.constraint(equalTo: contentView.topAnchor),
-            backgroundHolder.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            backgroundHolder.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            backgroundHolder.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+        NSLayoutConstraint.activate(
+            [
+                backgroundHolder.topAnchor.constraint(equalTo: contentView.topAnchor),
+                backgroundHolder.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+                backgroundHolder.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+                backgroundHolder.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-            title.topAnchor.constraint(equalTo: backgroundHolder.topAnchor),
-            title.leftAnchor.constraint(equalTo: backgroundHolder.leftAnchor),
-            title.rightAnchor.constraint(equalTo: backgroundHolder.rightAnchor),
-            title.heightAnchor.constraint(equalToConstant: textBoxHeight),
+                title.topAnchor.constraint(equalTo: backgroundHolder.topAnchor),
+                title.leftAnchor.constraint(equalTo: backgroundHolder.leftAnchor),
+                title.rightAnchor.constraint(equalTo: backgroundHolder.rightAnchor),
+                title.heightAnchor.constraint(equalToConstant: textBoxHeight),
 
-            favicon.leadingAnchor.constraint(equalTo: title.leadingAnchor, constant: defaultPadding),
-            favicon.topAnchor.constraint(equalTo: title.topAnchor, constant: (LegacyGridTabViewController.UX.textBoxHeight - faviconSize) / 2.0),
-            favicon.heightAnchor.constraint(equalToConstant: faviconSize),
-            favicon.widthAnchor.constraint(equalToConstant: faviconSize),
+                favicon.leadingAnchor.constraint(equalTo: title.leadingAnchor, constant: defaultPadding),
+                favicon.topAnchor.constraint(
+                    equalTo: title.topAnchor,
+                    constant: (LegacyGridTabViewController.UX.textBoxHeight - faviconSize) / 2.0
+                ),
+                favicon.heightAnchor.constraint(equalToConstant: faviconSize),
+                favicon.widthAnchor.constraint(equalToConstant: faviconSize),
 
-            closeButton.heightAnchor.constraint(equalToConstant: closeButtonSize),
-            closeButton.widthAnchor.constraint(equalToConstant: closeButtonSize),
-            closeButton.centerYAnchor.constraint(equalTo: title.contentView.centerYAnchor),
-            closeButton.trailingAnchor.constraint(equalTo: title.trailingAnchor),
+                closeButton.heightAnchor.constraint(equalToConstant: closeButtonSize),
+                closeButton.widthAnchor.constraint(equalToConstant: closeButtonSize),
+                closeButton.centerYAnchor.constraint(equalTo: title.contentView.centerYAnchor),
+                closeButton.trailingAnchor.constraint(equalTo: title.trailingAnchor),
 
-            titleText.leadingAnchor.constraint(equalTo: favicon.trailingAnchor,
-                                               constant: defaultPadding),
-            titleText.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor,
-                                                constant: defaultPadding),
-            titleText.centerYAnchor.constraint(equalTo: title.contentView.centerYAnchor),
+                titleText.leadingAnchor.constraint(equalTo: favicon.trailingAnchor,
+                                                   constant: defaultPadding),
+                titleText.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor,
+                                                    constant: defaultPadding),
+                titleText.centerYAnchor.constraint(equalTo: title.contentView.centerYAnchor),
 
-            screenshotView.topAnchor.constraint(equalTo: topAnchor),
-            screenshotView.leftAnchor.constraint(equalTo: backgroundHolder.leftAnchor),
-            screenshotView.rightAnchor.constraint(equalTo: backgroundHolder.rightAnchor),
-            screenshotView.bottomAnchor.constraint(equalTo: backgroundHolder.bottomAnchor),
+                screenshotView.topAnchor.constraint(equalTo: topAnchor),
+                screenshotView.leftAnchor.constraint(equalTo: backgroundHolder.leftAnchor),
+                screenshotView.rightAnchor.constraint(equalTo: backgroundHolder.rightAnchor),
+                screenshotView.bottomAnchor.constraint(equalTo: backgroundHolder.bottomAnchor),
 
-            faviconBG.centerYAnchor.constraint(equalTo: centerYAnchor, constant: faviconYOffset),
-            faviconBG.centerXAnchor.constraint(equalTo: centerXAnchor),
-            faviconBG.heightAnchor.constraint(equalToConstant: imageBackgroundSize.height),
-            faviconBG.widthAnchor.constraint(equalToConstant: imageBackgroundSize.width),
+                faviconBG.centerYAnchor.constraint(equalTo: centerYAnchor, constant: faviconYOffset),
+                faviconBG.centerXAnchor.constraint(equalTo: centerXAnchor),
+                faviconBG.heightAnchor.constraint(equalToConstant: imageBackgroundSize.height),
+                faviconBG.widthAnchor.constraint(equalToConstant: imageBackgroundSize.width),
 
-            smallFaviconView.heightAnchor.constraint(equalToConstant: topSiteIconSize.height),
-            smallFaviconView.widthAnchor.constraint(equalToConstant: topSiteIconSize.width),
-            smallFaviconView.centerYAnchor.constraint(equalTo: faviconBG.centerYAnchor),
-            smallFaviconView.centerXAnchor.constraint(equalTo: faviconBG.centerXAnchor),
-        ])
+                smallFaviconView.heightAnchor.constraint(equalToConstant: topSiteIconSize.height),
+                smallFaviconView.widthAnchor.constraint(equalToConstant: topSiteIconSize.width),
+                smallFaviconView.centerYAnchor.constraint(equalTo: faviconBG.centerYAnchor),
+                smallFaviconView.centerXAnchor.constraint(equalTo: faviconBG.centerXAnchor),
+            ]
+        )
     }
 
     // MARK: - Accessibility

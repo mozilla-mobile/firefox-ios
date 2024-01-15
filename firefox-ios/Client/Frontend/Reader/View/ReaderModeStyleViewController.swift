@@ -48,7 +48,10 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
         super.viewDidLoad()
 
         // Our preferred content size has a fixed width and height based on the rows + padding
-        preferredContentSize = CGSize(width: ReaderModeStyleViewModel.UX.Width, height: ReaderModeStyleViewModel.UX.Height)
+        preferredContentSize = CGSize(
+            width: ReaderModeStyleViewModel.UX.Width,
+            height: ReaderModeStyleViewModel.UX.Height
+        )
 
         // Font type row
         fontTypeRow = .build()
@@ -131,20 +134,29 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
 
         brightnessRow = .build()
         view.addSubview(brightnessRow)
-        NSLayoutConstraint.activate([
-            brightnessRow.topAnchor.constraint(equalTo: separatorLines[2].bottomAnchor),
-            brightnessRow.leftAnchor.constraint(equalTo: view.leftAnchor),
-            brightnessRow.rightAnchor.constraint(equalTo: view.rightAnchor),
-            brightnessRow.heightAnchor.constraint(equalToConstant: ReaderModeStyleViewModel.UX.RowHeight),
-            brightnessRow.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: viewModel.brightnessRowOffset),
-        ])
+        NSLayoutConstraint.activate(
+            [
+                brightnessRow.topAnchor.constraint(equalTo: separatorLines[2].bottomAnchor),
+                brightnessRow.leftAnchor.constraint(equalTo: view.leftAnchor),
+                brightnessRow.rightAnchor.constraint(equalTo: view.rightAnchor),
+                brightnessRow.heightAnchor.constraint(equalToConstant: ReaderModeStyleViewModel.UX.RowHeight),
+                brightnessRow.bottomAnchor.constraint(
+                    equalTo: view.bottomAnchor,
+                    constant: viewModel.brightnessRowOffset
+                ),
+            ]
+        )
 
         brightnessRow.addSubview(slider)
-        NSLayoutConstraint.activate([
-            slider.centerXAnchor.constraint(equalTo: brightnessRow.centerXAnchor),
-            slider.centerYAnchor.constraint(equalTo: brightnessRow.centerYAnchor),
-            slider.widthAnchor.constraint(equalToConstant: CGFloat(ReaderModeStyleViewModel.UX.BrightnessSliderWidth))
-        ])
+        NSLayoutConstraint.activate(
+            [
+                slider.centerXAnchor.constraint(equalTo: brightnessRow.centerXAnchor),
+                slider.centerYAnchor.constraint(equalTo: brightnessRow.centerYAnchor),
+                slider.widthAnchor.constraint(
+                    equalToConstant: CGFloat(ReaderModeStyleViewModel.UX.BrightnessSliderWidth)
+                )
+            ]
+        )
 
         let brightnessMinImageView: UIImageView = .build { imageView in
             imageView.image = UIImage(named: "brightnessMin")
@@ -152,10 +164,15 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
 
         brightnessRow.addSubview(brightnessMinImageView)
 
-        NSLayoutConstraint.activate([
-            brightnessMinImageView.centerYAnchor.constraint(equalTo: slider.centerYAnchor),
-            brightnessMinImageView.rightAnchor.constraint(equalTo: slider.leftAnchor, constant: -CGFloat(ReaderModeStyleViewModel.UX.BrightnessIconOffset))
-        ])
+        NSLayoutConstraint.activate(
+            [
+                brightnessMinImageView.centerYAnchor.constraint(equalTo: slider.centerYAnchor),
+                brightnessMinImageView.rightAnchor.constraint(
+                    equalTo: slider.leftAnchor,
+                    constant: -CGFloat(ReaderModeStyleViewModel.UX.BrightnessIconOffset)
+                )
+            ]
+        )
 
         let brightnessMaxImageView: UIImageView = .build { imageView in
             imageView.image = UIImage(named: "brightnessMax")
@@ -163,10 +180,15 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
 
         brightnessRow.addSubview(brightnessMaxImageView)
 
-        NSLayoutConstraint.activate([
-            brightnessMaxImageView.centerYAnchor.constraint(equalTo: slider.centerYAnchor),
-            brightnessMaxImageView.leftAnchor.constraint(equalTo: slider.rightAnchor, constant: CGFloat(ReaderModeStyleViewModel.UX.BrightnessIconOffset))
-        ])
+        NSLayoutConstraint.activate(
+            [
+                brightnessMaxImageView.centerYAnchor.constraint(equalTo: slider.centerYAnchor),
+                brightnessMaxImageView.leftAnchor.constraint(
+                    equalTo: slider.rightAnchor,
+                    constant: CGFloat(ReaderModeStyleViewModel.UX.BrightnessIconOffset)
+                )
+            ]
+        )
 
         updateFontSizeButtons()
         updateFontTypeButtons()
@@ -215,12 +237,16 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
     }
 
     private func makeSeparatorView(fromView: UIView, topConstraint: UIView) {
-        NSLayoutConstraint.activate([
-            fromView.topAnchor.constraint(equalTo: topConstraint.bottomAnchor),
-            fromView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            fromView.rightAnchor.constraint(equalTo: view.rightAnchor),
-            fromView.heightAnchor.constraint(equalToConstant: CGFloat(ReaderModeStyleViewModel.UX.SeparatorLineThickness))
-        ])
+        NSLayoutConstraint.activate(
+            [
+                fromView.topAnchor.constraint(equalTo: topConstraint.bottomAnchor),
+                fromView.leftAnchor.constraint(equalTo: view.leftAnchor),
+                fromView.rightAnchor.constraint(equalTo: view.rightAnchor),
+                fromView.heightAnchor.constraint(
+                    equalToConstant: CGFloat(ReaderModeStyleViewModel.UX.SeparatorLineThickness)
+                )
+            ]
+        )
     }
 
     /// Setup constraints for a row of buttons. Left to right. They are all given the same width.

@@ -209,8 +209,17 @@ class SettingsCoordinator: BaseCoordinator,
         if let qrCodeCoordinator = childCoordinators.first(where: { $0 is QRCodeCoordinator }) as? QRCodeCoordinator {
             coordinator = qrCodeCoordinator
         } else {
-            let router = rootNavigationController != nil ? DefaultRouter(navigationController: rootNavigationController!) : router
-            coordinator = QRCodeCoordinator(parentCoordinator: self, router: router)
+            if rootNavigationController != nil {
+                coordinator = QRCodeCoordinator(
+                    parentCoordinator: self,
+                    router: DefaultRouter(navigationController: rootNavigationController!)
+                )
+            } else {
+                coordinator = QRCodeCoordinator(
+                    parentCoordinator: self,
+                    router: router
+                )
+            }
             add(child: coordinator)
         }
         coordinator.showQRCode(delegate: delegate)
@@ -223,7 +232,7 @@ class SettingsCoordinator: BaseCoordinator,
     // MARK: PrivacySettingsDelegate
 
     func pressedAddressAutofill() {
-        let viewModel = AddressAutofillSettingsViewModel()
+        let viewModel = AddressAutofillSettingsViewModel(profile: profile)
         let viewController = AddressAutofillSettingsViewController(addressAutofillViewModel: viewModel)
         router.push(viewController)
     }

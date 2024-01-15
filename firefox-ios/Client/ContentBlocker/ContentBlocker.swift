@@ -44,8 +44,24 @@ enum BlocklistFileName: String, CaseIterable {
 
     var filename: String { return self.rawValue }
 
-    static var basic: [BlocklistFileName] { return [.advertisingCookies, .analyticsCookies, .socialCookies, .cryptomining, .fingerprinting] }
-    static var strict: [BlocklistFileName] { return [.advertisingURLs, .analyticsURLs, .socialURLs, cryptomining, fingerprinting] }
+    static var basic: [BlocklistFileName] {
+        return [
+            .advertisingCookies,
+            .analyticsCookies,
+            .socialCookies,
+            .cryptomining,
+            .fingerprinting
+        ]
+    }
+    static var strict: [BlocklistFileName] {
+        return [
+            .advertisingURLs,
+            .analyticsURLs,
+            .socialURLs,
+            cryptomining,
+            fingerprinting
+        ]
+    }
 
     static func listsForMode(strict: Bool) -> [BlocklistFileName] {
         return strict ? BlocklistFileName.strict : BlocklistFileName.basic
@@ -60,7 +76,8 @@ enum BlockerStatus: String {
 }
 
 struct NoImageModeDefaults {
-    static let Script = "[{'trigger':{'url-filter':'.*','resource-type':['image']},'action':{'type':'block'}}]".replacingOccurrences(of: "'", with: "\"")
+    static let Script = "[{'trigger':{'url-filter':'.*','resource-type':['image']},'action':{'type':'block'}}]"
+        .replacingOccurrences(of: "'", with: "\"")
     static let ScriptName = "images"
 }
 
@@ -80,13 +97,21 @@ class ContentBlocker {
             forIdentifier: NoImageModeDefaults.ScriptName,
             encodedContentRuleList: blockImages) { rule, error in
                 guard error == nil else {
-                    logger.log("We errored with error: \(String(describing: error))", level: .warning, category: .webview)
+                    logger.log(
+                        "We errored with error: \(String(describing: error))",
+                        level: .warning,
+                        category: .webview
+                    )
                     assert(error == nil)
                     return
                 }
 
                 guard rule != nil else {
-                    logger.log("We came across a nil rule set for NoImageMode at this point.", level: .warning, category: .webview)
+                    logger.log(
+                        "We came across a nil rule set for NoImageMode at this point.",
+                        level: .warning,
+                        category: .webview
+                    )
                     assert(rule != nil)
                     return
                 }
@@ -161,7 +186,8 @@ class ContentBlocker {
 
         // Async required here to ensure remove() call is processed.
         DispatchQueue.main.async { [weak tab] in
-            tab?.currentWebView()?.evaluateJavascriptInDefaultContentWorld("window.__firefox__.NoImageMode.setEnabled(\(enabled))")
+            tab?.currentWebView()?
+                .evaluateJavascriptInDefaultContentWorld("window.__firefox__.NoImageMode.setEnabled(\(enabled))")
         }
     }
 }
@@ -297,14 +323,25 @@ extension ContentBlocker {
                     guard let self,
                           let range = str.range(of: "]", options: String.CompareOptions.backwards) else { return }
                     str = str.replacingCharacters(in: range, with: self.safelistAsJSON() + "]")
-                    self.ruleStore?.compileContentRuleList(forIdentifier: filename, encodedContentRuleList: str) { rule, error in
+                    self.ruleStore?.compileContentRuleList(
+                        forIdentifier: filename,
+                        encodedContentRuleList: str
+                    ) { rule, error in
                         guard error == nil else {
-                            self.logger.log("Content blocker errored with: \(String(describing: error))", level: .warning, category: .webview)
+                            self.logger.log(
+                                "Content blocker errored with: \(String(describing: error))",
+                                level: .warning,
+                                category: .webview
+                            )
                             assert(error == nil)
                             return
                         }
                         guard rule != nil else {
-                            self.logger.log("We came across a nil rule set for BlockList.", level: .warning, category: .webview)
+                            self.logger.log(
+                                "We came across a nil rule set for BlockList.",
+                                level: .warning,
+                                category: .webview
+                            )
                             assert(rule != nil)
                             return
                         }

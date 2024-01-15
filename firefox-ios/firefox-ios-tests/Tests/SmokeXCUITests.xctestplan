@@ -190,6 +190,7 @@
         "TrackingProtectionTests\/testBasicMoreInfo()",
         "TrackingProtectionTests\/testETPLockMenu()",
         "TrackingProtectionTests\/testMenuWhenThereAreBlockedElements()",
+        "URLValidationTests",
         "UrlBarTests",
         "WhatsNewTest"
       ],

@@ -81,7 +81,10 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
     weak var recentlyClosedTabsPanel: RecentlyClosedTabsPanel?
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(RecentlyClosedTabsPanelSiteTableViewController.longPress))
+        return UILongPressGestureRecognizer(
+            target: self,
+            action: #selector(RecentlyClosedTabsPanelSiteTableViewController.longPress)
+        )
     }()
 
     override func viewDidLoad() {
@@ -160,7 +163,11 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
 }
 
 extension RecentlyClosedTabsPanelSiteTableViewController: LibraryPanelContextMenu {
-    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
+    func presentContextMenu(
+        for site: Site,
+        with indexPath: IndexPath,
+        completionHandler: @escaping () -> PhotonActionSheet?
+    ) {
         guard let contextMenu = completionHandler() else { return }
         self.present(contextMenu, animated: true, completion: nil)
     }
@@ -178,7 +185,10 @@ extension RecentlyClosedTabsPanelSiteTableViewController: LibraryPanelContextMen
 
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]? {
         guard let libraryPanelDelegate = libraryPanelDelegate else {
-            return getRecentlyClosedTabContexMenuActions(for: site, recentlyClosedPanelDelegate: recentlyClosedTabsDelegate)
+            return getRecentlyClosedTabContexMenuActions(
+                for: site,
+                recentlyClosedPanelDelegate: recentlyClosedTabsDelegate
+            )
         }
         return getDefaultContextMenuActions(for: site, libraryPanelDelegate: libraryPanelDelegate)
     }

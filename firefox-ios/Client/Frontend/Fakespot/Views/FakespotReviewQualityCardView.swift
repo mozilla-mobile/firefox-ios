@@ -25,7 +25,10 @@ final class FakespotReviewQualityCardViewModel {
     var highlightsText: NSAttributedString {
         let currentPartner = PartnerWebsite(for: productSitename?.lowercased()) ?? .amazon
         let highlightedWebsite = currentPartner.title
-        let plainText = String.localizedStringWithFormat(String.Shopping.ReviewQualityCardHighlightsLabel, highlightedWebsite)
+        let plainText = String.localizedStringWithFormat(
+            String.Shopping.ReviewQualityCardHighlightsLabel,
+            highlightedWebsite
+        )
         let result = markupUtility.addAttributesTo(text: plainText)
 
         return result
@@ -287,8 +290,12 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
     func configure(_ viewModel: FakespotReviewQualityCardViewModel) {
         self.viewModel = viewModel
         highlightsLabel.attributedText = viewModel.highlightsText
-        subHeadlineLabel.attributedText = viewModel.markupUtility.addAttributesTo(text: String.Shopping.ReviewQualityCardSubHeadlineLabel)
-        adjustedRatingLabel.attributedText = viewModel.markupUtility.addAttributesTo(text: String.Shopping.ReviewQualityCardAdjustedRatingLabel)
+        subHeadlineLabel.attributedText = viewModel.markupUtility.addAttributesTo(
+            text: String.Shopping.ReviewQualityCardSubHeadlineLabel
+        )
+        adjustedRatingLabel.attributedText = viewModel.markupUtility.addAttributesTo(
+            text: String.Shopping.ReviewQualityCardAdjustedRatingLabel
+        )
 
         let learnMoreButtonViewModel = LinkButtonViewModel(
             title: viewModel.learnMoreButtonTitle,
@@ -325,7 +332,12 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
     func applyTheme(theme: Theme) {
         collapsibleContainer.applyTheme(theme: theme)
         learnMoreButton.applyTheme(theme: theme)
-        [aReliabilityScoreView, bReliabilityScoreView, cReliabilityScoreView, dReliabilityScoreView, fReliabilityScoreView]
-            .forEach { $0.applyTheme(theme: theme) }
+        [
+            aReliabilityScoreView,
+            bReliabilityScoreView,
+            cReliabilityScoreView,
+            dReliabilityScoreView,
+            fReliabilityScoreView
+        ].forEach { $0.applyTheme(theme: theme) }
     }
 }

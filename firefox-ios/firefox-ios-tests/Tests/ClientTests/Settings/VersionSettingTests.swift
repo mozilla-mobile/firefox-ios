@@ -28,7 +28,9 @@ class VersionSettingTests: XCTestCase {
         let settingsTable = SettingsTableViewController(style: .grouped)
         let navigationController = UINavigationController(rootViewController: settingsTable)
         let versionSetting = VersionSetting(settingsDelegate: delegate)
-        versionSetting.theme = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier).currentTheme
+        versionSetting.theme = DefaultThemeManager(
+            sharedContainerIdentifier: AppInfo.sharedContainerIdentifier
+        ).currentTheme
 
         // When
         versionSetting.onLongPress(navigationController)

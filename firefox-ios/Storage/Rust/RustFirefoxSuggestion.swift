@@ -39,7 +39,19 @@ public struct RustFirefoxSuggestion {
         // will never be executed" warning, because Swift treats `Suggestion`
         // as frozen, since we can't build Application Services with library
         // evolution support.
-        if case let .amp(title, urlString, _, iconBytes, fullKeyword, blockId, advertiser, iabCategory, _, clickUrlString, _) = suggestion {
+        if case let .amp(
+            title,
+            urlString,
+            _,
+            iconBytes,
+            fullKeyword,
+            blockId,
+            advertiser,
+            iabCategory,
+            _,
+            clickUrlString,
+            _
+        ) = suggestion {
             // This use of `URL(string:)` is OK; we don't need to use
             // `URL(string:encodingInvalidCharacters:)` here.
             guard let url = URL(string: urlString) else { return nil }
@@ -48,7 +60,12 @@ public struct RustFirefoxSuggestion {
             self.isSponsored = true
             self.iconImage = iconBytes.flatMap { UIImage(data: Data($0)) }
             self.fullKeyword = fullKeyword
-            self.clickInfo = .amp(blockId: blockId, advertiser: advertiser, iabCategory: iabCategory, reportingURL: URL(string: clickUrlString) )
+            self.clickInfo = .amp(
+                blockId: blockId,
+                advertiser: advertiser,
+                iabCategory: iabCategory,
+                reportingURL: URL(string: clickUrlString)
+            )
         } else if case let .wikipedia(title, urlString, iconBytes, fullKeyword) = suggestion {
             // This use of `URL(string:)` is OK.
             guard let url = URL(string: urlString) else { return nil }

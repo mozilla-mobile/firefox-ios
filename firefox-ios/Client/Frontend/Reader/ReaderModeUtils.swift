@@ -5,7 +5,10 @@
 import Foundation
 
 struct ReaderModeUtils {
-    static func generateReaderContent(_ readabilityResult: ReadabilityResult, initialStyle: ReaderModeStyle) -> String? {
+    static func generateReaderContent(
+        _ readabilityResult: ReadabilityResult,
+        initialStyle: ReaderModeStyle
+    ) -> String? {
         guard let stylePath = Bundle.main.path(forResource: "Reader", ofType: "css"),
               let css = try? String(contentsOfFile: stylePath, encoding: .utf8),
               let tmplPath = Bundle.main.path(forResource: "Reader", ofType: "html"),

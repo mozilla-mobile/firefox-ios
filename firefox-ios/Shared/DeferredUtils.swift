@@ -155,7 +155,11 @@ public func effect(_ f: @escaping (Swift.Void) -> Void) -> () -> Success {
  * Return a single Deferred that represents the sequential chaining of
  * f over the provided items, with the return value chained through.
  */
-public func walk<T, U, S: Sequence>(_ items: S, start: Deferred<Maybe<U>>, f: @escaping (T, U) -> Deferred<Maybe<U>>) -> Deferred<Maybe<U>> where S.Iterator.Element == T {
+public func walk<T, U, S: Sequence>(
+    _ items: S,
+    start: Deferred<Maybe<U>>,
+    f: @escaping (T, U) -> Deferred<Maybe<U>>
+) -> Deferred<Maybe<U>> where S.Iterator.Element == T {
     let fs = items.map { item in
         return { val in
             f(item, val)

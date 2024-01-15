@@ -11,7 +11,10 @@ class SyncNowSetting: WithAccountSetting {
     private var notificationCenter: NotificationProtocol
 
     private let imageView = UIImageView(frame: CGRect(width: 30, height: 30))
-    private let syncIconWrapper = UIImage.createWithColor(CGSize(width: 30, height: 30), color: UIColor.clear)
+    private let syncIconWrapper = UIImage.createWithColor(
+        CGSize(width: 30, height: 30),
+        color: UIColor.clear
+    )
     private let syncBlueIcon = UIImage(named: "FxA-Sync-Blue")
 
     // Animation used to rotate the Sync icon 360 degrees while syncing is in progress.
@@ -46,7 +49,11 @@ class SyncNowSetting: WithAccountSetting {
                 string: .FxANoInternetConnection,
                 attributes: [
                     NSAttributedString.Key.foregroundColor: theme.colors.textWarning,
-                    NSAttributedString.Key.font: DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 13, weight: .regular)
+                    NSAttributedString.Key.font: DefaultDynamicFontHelper.preferredFont(
+                        withTextStyle: .body,
+                        size: 13,
+                        weight: .regular
+                    )
                 ]
             )
         }
@@ -57,7 +64,11 @@ class SyncNowSetting: WithAccountSetting {
             string: .FxASyncNow,
             attributes: [
                 NSAttributedString.Key.foregroundColor: self.enabled ? syncText : headerLightText,
-                NSAttributedString.Key.font: DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17, weight: .regular)
+                NSAttributedString.Key.font: DefaultDynamicFontHelper.preferredFont(
+                    withTextStyle: .body,
+                    size: 17,
+                    weight: .regular
+                )
             ]
         )
     }
@@ -106,7 +117,12 @@ class SyncNowSetting: WithAccountSetting {
                 string: message,
                 attributes: [
                     NSAttributedString.Key.foregroundColor: theme.colors.textWarning,
-                    NSAttributedString.Key.font: DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17, weight: .regular)])
+                    NSAttributedString.Key.font: DefaultDynamicFontHelper.preferredFont(
+                        withTextStyle: .body,
+                        size: 17,
+                        weight: .regular
+                    )]
+            )
         case .inProgress:
             return NSAttributedString(
                 string: .SyncingMessageWithEllipsis,
@@ -124,7 +140,10 @@ class SyncNowSetting: WithAccountSetting {
 
         let formattedLabel = timestampFormatter.string(from: Date.fromTimestamp(timestamp))
         let attributedString = NSMutableAttributedString(string: formattedLabel)
-        let attributes = [NSAttributedString.Key.foregroundColor: theme.colors.textSecondary, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)]
+        let attributes = [
+            NSAttributedString.Key.foregroundColor: theme.colors.textSecondary,
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)
+        ]
         let range = NSRange(location: 0, length: attributedString.length)
         attributedString.setAttributes(attributes, range: range)
         return attributedString

@@ -42,7 +42,11 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
     }
 
     private lazy var learnMoreButton: UIButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.fontSize, weight: .semibold)
+        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
+            withTextStyle: .body,
+            size: UX.fontSize,
+            weight: .semibold
+        )
         button.isAccessibilityElement = true
         button.accessibilityTraits = .button
         button.accessibilityLabel = .BreachAlertsLearnMore

@@ -58,8 +58,10 @@ class HomePageSettingsUITests: BaseTestCase {
         XCTAssertEqual("1", jumpBackIn as? String)
         let recentlySaved = app.tables.cells.switches["Recently Saved"].value
         XCTAssertEqual("1", recentlySaved as? String)
-        let recentlyVisited = app.tables.cells.switches["Recently Visited"].value
-        XCTAssertEqual("1", recentlyVisited as? String)
+        // FXIOS-8107: Commented out as history highlights has been disabled to fix app hangs / slowness
+        // Reloads for notification
+        // let recentlyVisited = app.tables.cells.switches["Recently Visited"].value
+        // XCTAssertEqual("1", recentlyVisited as? String)
         let sponsoredStories = app.tables.cells.switches["Thought-Provoking Stories, Articles powered by Pocket"].value
         XCTAssertEqual("1", sponsoredStories as? String)
 
@@ -154,7 +156,10 @@ class HomePageSettingsUITests: BaseTestCase {
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2339489
     func testDisableTopSitesSettingsRemovesSection() {
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
+        mozWaitForElementToExist(
+            app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton],
+            timeout: TIMEOUT
+        )
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
         app.staticTexts["Shortcuts"].tap()
@@ -189,7 +194,11 @@ class HomePageSettingsUITests: BaseTestCase {
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {
         mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
         XCTAssertTrue(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].exists)
-        let numberOfTopSites = app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].collectionViews.cells.count
+        let numberOfTopSites = app
+            .cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+            .collectionViews
+            .cells
+            .count
         XCTAssertEqual(numberOfTopSites, numberOfExpectedTopSites)
     }
 
@@ -204,12 +213,27 @@ class HomePageSettingsUITests: BaseTestCase {
             mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: 5)
             navigator.performAction(Action.CloseURLBarOpen)
         }
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn], timeout: 5)
-        XCTAssertTrue(app.otherElements.cells[AccessibilityIdentifiers.FirefoxHomepage.JumpBackIn.itemCell].staticTexts[urlExampleLabel].exists)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn], timeout: 5)
+        mozWaitForElementToExist(
+            app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn],
+            timeout: 5
+        )
+        XCTAssertTrue(
+            app.otherElements
+                .cells[AccessibilityIdentifiers.FirefoxHomepage.JumpBackIn.itemCell]
+                .staticTexts[urlExampleLabel].exists
+        )
+        mozWaitForElementToExist(
+            app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn],
+            timeout: 5
+        )
         app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn].tap()
         // Tab tray is open with recently open tab
-        mozWaitForElementToExist(app.otherElements.cells[AccessibilityIdentifiers.FirefoxHomepage.JumpBackIn.itemCell].staticTexts[urlExampleLabel], timeout: 3)
+        mozWaitForElementToExist(
+            app.otherElements
+                .cells[AccessibilityIdentifiers.FirefoxHomepage.JumpBackIn.itemCell]
+                .staticTexts[urlExampleLabel],
+            timeout: 3
+        )
         app.buttons["Done"].tap()
         // Validation for when Jump In section is not displayed
         navigator.nowAt(NewTabScreen)
@@ -235,7 +259,9 @@ class HomePageSettingsUITests: BaseTestCase {
         } else {
             navigator.performAction(Action.GoToHomePage)
         }
-        XCTAssertFalse(app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.recentlySaved].exists)
+        XCTAssertFalse(
+            app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.recentlySaved].exists
+        )
         if !iPad() {
             mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: 3)
             navigator.performAction(Action.CloseURLBarOpen)
@@ -249,7 +275,9 @@ class HomePageSettingsUITests: BaseTestCase {
             navigator.performAction(Action.CloseURLBarOpen)
         }
         checkRecentlySaved()
-        app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell].staticTexts[urlExampleLabel].tap()
+        app.scrollViews
+            .cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell]
+            .staticTexts[urlExampleLabel].tap()
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
         unbookmark()
@@ -265,34 +293,49 @@ class HomePageSettingsUITests: BaseTestCase {
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306923
     // Smoketest
-    func testRecentlyVisited() {
-        navigator.openURL(websiteUrl1)
-        waitUntilPageLoad()
-        navigator.performAction(Action.GoToHomePage)
-        mozWaitForElementToExist(app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell].staticTexts[urlMozillaLabel])
-        navigator.goto(HomeSettings)
-        navigator.performAction(Action.ToggleRecentlyVisited)
+    // FXIOS-8107: Disabled test as history highlights has been disabled to fix app hangs / slowness
+    // Reloads for notification
+//    func testRecentlyVisited() {
+//        navigator.openURL(websiteUrl1)
+//        waitUntilPageLoad()
+//        navigator.performAction(Action.GoToHomePage)
+//        mozWaitForElementToExist(
+//            app.scrollViews
+//                .cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell]
+//                .staticTexts[urlMozillaLabel]
+//        )
+//        navigator.goto(HomeSettings)
+//        navigator.performAction(Action.ToggleRecentlyVisited)
+//
+//        // On iPad we have the homepage button always present,
+//        // on iPhone we have the search button instead when we're on a new tab page
+//        if !iPad() {
+//            navigator.performAction(Action.ClickSearchButton)
+//        } else {
+//            navigator.performAction(Action.GoToHomePage)
+//        }
+//
+//        XCTAssertFalse(
+//            app.scrollViews
+//                .cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell]
+//                .staticTexts[urlMozillaLabel].exists
+//        )
+//        if !iPad() {
+//            mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: 3)
+//            navigator.performAction(Action.CloseURLBarOpen)
+//        }
+//        navigator.nowAt(NewTabScreen)
+//        navigator.goto(HomeSettings)
+//        navigator.performAction(Action.ToggleRecentlyVisited)
+//        navigator.nowAt(HomeSettings)
+//        navigator.performAction(Action.OpenNewTabFromTabTray)
+//        XCTAssert(
+//            app.scrollViews
+//                .cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell]
+//                .staticTexts[urlMozillaLabel].exists
+//        )
 
-        // On iPad we have the homepage button always present,
-        // on iPhone we have the search button instead when we're on a new tab page
-        if !iPad() {
-            navigator.performAction(Action.ClickSearchButton)
-        } else {
-            navigator.performAction(Action.GoToHomePage)
-        }
-
-        XCTAssertFalse(app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell].staticTexts[urlMozillaLabel].exists)
-        if !iPad() {
-            mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: 3)
-            navigator.performAction(Action.CloseURLBarOpen)
-        }
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(HomeSettings)
-        navigator.performAction(Action.ToggleRecentlyVisited)
-        navigator.nowAt(HomeSettings)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        XCTAssert(app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell].staticTexts[urlMozillaLabel].exists)
-
+        // swiftlint:disable line_length
 //        Disabled due to https://github.com/mozilla-mobile/firefox-ios/issues/11271
 //        navigator.openURL("mozilla ")
 //        navigator.openURL(websiteUrl2)
@@ -301,7 +344,8 @@ class HomePageSettingsUITests: BaseTestCase {
 //        app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell].staticTexts["Mozilla , Pages: 2"].staticTexts["Mozilla , Pages: 2"].press(forDuration: 1.5)
 //        selectOptionFromContextMenu(option: "Remove")
 //        XCTAssertFalse(app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell].staticTexts["Mozilla , Pages: 2"].exists)
-    }
+        // swiftlint:enable line_length
+//    }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306871
     // Smoketest
@@ -310,19 +354,45 @@ class HomePageSettingsUITests: BaseTestCase {
             mozWaitForElementToExist(app.collectionViews["FxCollectionView"], timeout: TIMEOUT)
             app.collectionViews["FxCollectionView"].swipeUp()
             app.collectionViews["FxCollectionView"].swipeUp()
-            app.collectionViews["FxCollectionView"].swipeUp()
-            mozWaitForElementToExist(app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage], timeout: TIMEOUT)
+            mozWaitForElementToExist(
+                app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage],
+                timeout: TIMEOUT
+            )
         }
         app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage].tap()
         // Verify default settings
-        mozWaitForElementToExist(app.navigationBars[AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar], timeout: TIMEOUT_LONG)
-        XCTAssertTrue(app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.always].exists)
-        XCTAssertTrue(app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.disabled].exists)
-        XCTAssertTrue(app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.afterFourHours].exists)
+        mozWaitForElementToExist(
+            app.navigationBars[AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar],
+            timeout: TIMEOUT_LONG
+        )
+        XCTAssertTrue(
+            app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.always].exists
+        )
+        XCTAssertTrue(
+            app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.disabled].exists
+        )
+        XCTAssertTrue(
+            app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.afterFourHours].exists
+        )
         // Commented due to experimental features
-        // XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.jumpBackIn].value as! String, "1")
-        // XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentlySaved].value as! String, "1")
-        XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentVisited].value as! String, "1")
-        XCTAssertEqual(app.cells.switches["Thought-Provoking Stories, Articles powered by Pocket"].value as! String, "1")
+//        XCTAssertEqual(
+//            app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.jumpBackIn].value as! String,
+//            "1"
+//        )
+//        XCTAssertEqual(
+//            app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentlySaved].value as! String,
+//            "1"
+//        )
+
+        // FXIOS-8107: Commented out as history highlights has been disabled to fix app hangs / slowness
+        // Reloads for notification
+//        XCTAssertEqual(
+//            app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentVisited].value as! String,
+//            "1"
+//        )
+        XCTAssertEqual(
+            app.cells.switches["Thought-Provoking Stories, Articles powered by Pocket"].value as! String,
+            "1"
+        )
     }
 }

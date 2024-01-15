@@ -3,10 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import SwiftUI
 import Common
 import ComponentLibrary
 
-struct FakespotMessageCardViewModel {
+class FakespotMessageCardViewModel: ObservableObject {
     enum CardType: String, CaseIterable, Identifiable {
         case confirmation
         case warning
@@ -86,12 +87,51 @@ struct FakespotMessageCardViewModel {
     var a11yDescriptionIdentifier: String?
     var a11yPrimaryActionIdentifier: String?
     var a11yLinkActionIdentifier: String?
+
+    @Published var analysisProgress: Double = 0
+    var analysisProgressChanged: ((Double) -> Void)?
+
+    init(
+        type: CardType,
+        title: String,
+        description: String? = nil,
+        linkText: String? = nil,
+        primaryActionText: String? = nil,
+        linkAction: (() -> Void)? = nil,
+        primaryAction: (() -> Void)? = nil,
+        a11yCardIdentifier: String,
+        a11yTitleIdentifier: String,
+        a11yDescriptionIdentifier: String? = nil,
+        a11yPrimaryActionIdentifier: String? = nil,
+        a11yLinkActionIdentifier: String? = nil
+    ) {
+        self.type = type
+        self.title = title
+        self.description = description
+        self.linkText = linkText
+        self.primaryActionText = primaryActionText
+        self.linkAction = linkAction
+        self.primaryAction = primaryAction
+        self.a11yCardIdentifier = a11yCardIdentifier
+        self.a11yTitleIdentifier = a11yTitleIdentifier
+        self.a11yDescriptionIdentifier = a11yDescriptionIdentifier
+        self.a11yPrimaryActionIdentifier = a11yPrimaryActionIdentifier
+        self.a11yLinkActionIdentifier = a11yLinkActionIdentifier
+    }
+
+    func formatProgress(_ progress: Double = 0) -> String {
+        NumberFormatter.localizedString(
+            from: NSNumber(value: progress),
+            number: .percent
+        )
+    }
 }
 
 final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
     private enum UX {
         static let linkFontSize: CGFloat = 12
         static let buttonFontSize: CGFloat = 16
+        static let progressViewFontSize: CGFloat = 15
         static let buttonVerticalInset: CGFloat = 12
         static let buttonHorizontalInset: CGFloat = 16
         static let buttonCornerRadius: CGFloat = 13
@@ -153,28 +193,12 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         label.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
-    private lazy var linkButton: LegacyResizableButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .caption1,
-            size: UX.linkFontSize)
-        button.buttonEdgeSpacing = 0
-        button.contentHorizontalAlignment = .leading
+    private lazy var linkButton: LinkButton = .build { button in
         button.addTarget(self, action: #selector(self.linkAction), for: .touchUpInside)
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
     }
 
-    private lazy var primaryButton: LegacyResizableButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
-            withTextStyle: .callout,
-            size: UX.buttonFontSize)
-        button.layer.cornerRadius = UX.buttonCornerRadius
-        button.titleLabel?.textAlignment = .center
+    private lazy var primaryButton: PrimaryRoundedButton = .build { button in
         button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
-                                                left: UX.buttonHorizontalInset,
-                                                bottom: UX.buttonVerticalInset,
-                                                right: UX.buttonHorizontalInset)
     }
 
     private var iconContainerHeightConstraint: NSLayoutConstraint?
@@ -198,21 +222,41 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         self.viewModel = viewModel
         self.type = viewModel.type
 
-        titleLabel.text = viewModel.title
         titleLabel.accessibilityIdentifier = viewModel.a11yTitleIdentifier
 
         let accessoryView: UIView
         switch viewModel.type.accessoryType {
         case .image(name: let name):
+            titleLabel.text = viewModel.title
             let imageView: UIImageView = .build { imageView in
                 imageView.contentMode = .scaleAspectFit
                 imageView.image = UIImage(named: name)
             }
             accessoryView = imageView
         case .progress:
-            let spinner = UIActivityIndicatorView(style: .medium)
-            spinner.startAnimating()
-            accessoryView = spinner
+            titleLabel.text = String.localizedStringWithFormat(
+                viewModel.title,
+                viewModel.formatProgress()
+            )
+            titleLabel.font = DefaultDynamicFontHelper.preferredFont(
+                withTextStyle: .subheadline,
+                size: UX.progressViewFontSize
+            )
+
+            viewModel.analysisProgressChanged = { [weak self] progress in
+                let progressLevel = viewModel.formatProgress(progress / 100.0)
+                self?.titleLabel.text = String.localizedStringWithFormat(
+                    viewModel.title,
+                    progressLevel
+                )
+            }
+
+            let swiftUICircularProgressView = CircularProgressView(viewModel: viewModel)
+            let circularProgressView = UIHostingController(rootView: swiftUICircularProgressView).view ?? UIView()
+            circularProgressView.translatesAutoresizingMaskIntoConstraints = false
+            circularProgressView.backgroundColor = .clear
+
+            accessoryView = circularProgressView
         }
 
         iconContainerView.subviews.forEach { $0.removeFromSuperview() }
@@ -225,8 +269,10 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         ])
 
         if let primaryActionText = viewModel.primaryActionText {
-            primaryButton.setTitle(primaryActionText, for: .normal)
-            primaryButton.accessibilityIdentifier = viewModel.a11yPrimaryActionIdentifier
+            let primaryButtonViewModel = PrimaryRoundedButtonViewModel(
+                    title: primaryActionText,
+                    a11yIdentifier: viewModel.a11yPrimaryActionIdentifier ?? "")
+            primaryButton.configure(viewModel: primaryButtonViewModel)
             if primaryButton.superview == nil {
                 containerStackView.addArrangedSubview(primaryButton)
             }
@@ -245,8 +291,12 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         }
 
         if let linkText = viewModel.linkText {
-            linkButton.setTitle(linkText, for: .normal)
-            linkButton.accessibilityIdentifier = viewModel.a11yLinkActionIdentifier
+            let linkButtonViewModel = LinkButtonViewModel(
+                title: linkText,
+                a11yIdentifier: viewModel.a11yLinkActionIdentifier ?? "",
+                fontSize: UX.linkFontSize,
+                contentHorizontalAlignment: .leading)
+            linkButton.configure(viewModel: linkButtonViewModel)
             if linkButton.superview == nil {
                 labelContainerStackView.addArrangedSubview(linkButton)
             }
@@ -318,18 +368,21 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
-        titleLabel.textColor = theme.colors.textPrimary
-        descriptionLabel.textColor  = theme.colors.textPrimary
-        iconContainerView.tintColor = theme.colors.textPrimary
-
-        linkButton.setTitleColor(theme.colors.textPrimary, for: .normal)
-        primaryButton.setTitleColor(type.primaryButtonTextColor(theme: theme), for: .normal)
-        primaryButton.backgroundColor = type.primaryButtonBackground(theme: theme)
+        let colors = theme.colors
+        titleLabel.textColor = colors.textPrimary
+        descriptionLabel.textColor  = colors.textPrimary
+        iconContainerView.tintColor = colors.textPrimary
+        containerStackView.backgroundColor = .clear
         cardView.applyTheme(theme: theme)
+        linkButton.applyTheme(theme: theme)
+        primaryButton.applyTheme(theme: theme)
     }
 
     private func adjustLayout() {
-        iconContainerHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: UX.iconSize), UX.iconMaxSize)
+        iconContainerHeightConstraint?.constant = min(
+            UIFontMetrics.default.scaledValue(for: UX.iconSize),
+            UX.iconMaxSize
+        )
         setNeedsLayout()
         layoutIfNeeded()
     }

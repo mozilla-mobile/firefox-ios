@@ -33,7 +33,12 @@ class HistoryCoordinator: BaseCoordinator, HistoryCoordinatorDelegate {
         self.parentCoordinator = parentCoordinator
         self.notificationCenter = notificationCenter
         super.init(router: router)
-        self.notificationCenter.addObserver(self, selector: #selector(openClearHistory), name: .OpenClearRecentHistory, object: nil)
+        self.notificationCenter.addObserver(
+            self,
+            selector: #selector(openClearHistory),
+            name: .OpenClearRecentHistory,
+            object: nil
+        )
     }
 
     @objc

@@ -63,7 +63,8 @@ struct GleanPlumbMessage {
     }
 }
 
-/// `MessageMeta` is where we store parts of the message that help us aggregate, query and determine non-expired messages.
+/// `MessageMeta` is where we store parts of the message that help us aggregate, query
+/// and determine non-expired messages.
 class GleanPlumbMessageMetaData: Codable {
     /// The message Key.
     let id: String
