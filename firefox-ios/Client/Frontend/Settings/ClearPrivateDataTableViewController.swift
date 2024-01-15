@@ -56,7 +56,9 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
 
     private var clearButtonEnabled = true {
         didSet {
-            clearButton?.textLabel?.textColor = clearButtonEnabled ? themeManager.currentTheme.colors.textWarning : themeManager.currentTheme.colors.textDisabled
+            let textWarningColor = themeManager.currentTheme.colors.textWarning
+            let textDisabledColor = themeManager.currentTheme.colors.textDisabled
+            clearButton?.textLabel?.textColor = clearButtonEnabled ? textWarningColor : textDisabledColor
         }
     }
 

@@ -46,7 +46,9 @@ class SearchEngines {
         self.prefs = prefs
         // By default, show search suggestions
         self.shouldShowSearchSuggestions = prefs.boolForKey(showSearchSuggestions) ?? true
-        self.shouldShowPrivateModeSearchSuggestions = prefs.boolForKey(PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions) ?? false
+        self.shouldShowPrivateModeSearchSuggestions = prefs.boolForKey(
+            PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions
+        ) ?? false
         self.fileAccessor = files
         self.engineProvider = engineProvider
         self.orderedEngines = []

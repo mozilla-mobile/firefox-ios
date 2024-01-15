@@ -378,7 +378,9 @@ class FakespotViewModel {
             let productAds = await loadProductAds(for: product?.productId)
 
             let needsAnalysis = product?.needsAnalysis ?? false
+            // swiftlint:disable line_length
             let analysis: AnalysisStatus? = needsAnalysis ? try? await shoppingProduct.getProductAnalysisStatus()?.status : nil
+            // swiftlint:enable line_length
             state = .loaded(
                 ProductState(
                     product: product,
@@ -478,7 +480,9 @@ class FakespotViewModel {
 
                         await MainActor.run {
                             self.analysisProgressViewModel.analysisProgress = result.progress
-                            self.analysisProgressViewModel.analysisProgressChanged?(self.analysisProgressViewModel.analysisProgress)
+                            self.analysisProgressViewModel.analysisProgressChanged?(
+                                self.analysisProgressViewModel.analysisProgress
+                            )
                         }
 
                         continuation.yield(result.status)

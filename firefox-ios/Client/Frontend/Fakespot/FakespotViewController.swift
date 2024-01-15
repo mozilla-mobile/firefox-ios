@@ -347,7 +347,9 @@ class FakespotViewController: UIViewController,
         let betaViewWidth = betaLabelWidth + UX.betaHorizontalSpace * 2
         let maxTitleWidth = availableTitleStackWidth - betaViewWidth - UX.titleStackSpacing
 
+        // swiftlint:disable line_length
         betaView.layer.borderWidth = contentSizeCategory.isAccessibilityCategory ? UX.betaBorderWidthA11ySize : UX.betaBorderWidth
+        // swiftlint:enable line_length
 
         if contentSizeCategory.isAccessibilityCategory || titleTextWidth > maxTitleWidth {
             titleStackView.axis = .vertical
@@ -450,6 +452,7 @@ class FakespotViewController: UIViewController,
                 store.dispatch(FakespotAction.reviewQualityDidChange)
             }
             reviewQualityCardView.configure(viewModel.reviewQualityCardViewModel)
+
             return reviewQualityCardView
 
         case .settingsCard:
@@ -469,6 +472,7 @@ class FakespotViewController: UIViewController,
                 store.dispatch(FakespotAction.settingsStateDidChange)
             }
             view.configure(viewModel.settingsCardViewModel)
+
             return view
 
         case .noAnalysisCard:

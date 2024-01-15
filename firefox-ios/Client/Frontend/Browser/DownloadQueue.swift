@@ -54,7 +54,9 @@ class Download: NSObject {
             count += 1
 
             let proposedFilenameWithoutExtension = "\(filenameWithoutExtension) (\(count))"
-            proposedPath = downloadsPath.appendingPathComponent(proposedFilenameWithoutExtension).appendingPathExtension(fileExtension)
+            proposedPath = downloadsPath
+                .appendingPathComponent(proposedFilenameWithoutExtension)
+                .appendingPathExtension(fileExtension)
         }
 
         return proposedPath

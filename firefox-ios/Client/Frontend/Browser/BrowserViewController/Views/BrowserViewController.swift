@@ -781,7 +781,9 @@ class BrowserViewController: UIViewController,
 
         var fakespotNeedsUpdate = false
         if urlBar.currentURL != nil {
-            fakespotNeedsUpdate = contentStackView.isSidebarVisible != FakespotUtils().shouldDisplayInSidebar(viewSize: size)
+            fakespotNeedsUpdate = contentStackView.isSidebarVisible != FakespotUtils().shouldDisplayInSidebar(
+                viewSize: size
+            )
             if let fakespotState = browserViewControllerState?.fakespotState {
                 fakespotNeedsUpdate = fakespotNeedsUpdate && fakespotState.isOpen
             }
@@ -1730,13 +1732,17 @@ class BrowserViewController: UIViewController,
     }
 
     internal func updateFakespot(tab: Tab, isReload: Bool = false) {
-        guard let webView = tab.webView, let url = webView.url else {
+        guard let webView = tab.webView,
+              let url = webView.url
+        else {
             // We're on homepage or a blank tab
             store.dispatch(FakespotAction.setAppearanceTo(false))
             return
         }
+
         store.dispatch(FakespotAction.tabDidChange(tabUIDD: tab.tabUUID))
-        let environment = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI) ? FakespotEnvironment.staging : .prod
+        let isFeatureEnabled = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI)
+        let environment = isFeatureEnabled ? FakespotEnvironment.staging : .prod
         let product = ShoppingProduct(url: url, client: FakespotClient(environment: environment))
 
         guard product.product != nil, !tab.isPrivate else {
@@ -1916,8 +1922,13 @@ class BrowserViewController: UIViewController,
     // Disable search suggests view only if user is in private mode and setting is enabled
     private var shouldDisableSearchSuggestsForPrivateMode: Bool {
         let featureFlagEnabled = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
-        let alwaysShowSearchSuggestionsView = browserViewControllerState?.searchScreenState.showSearchSugestionsView ?? false
-        let isSettingEnabled = profile.prefs.boolForKey(PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions) ?? false
+        let alwaysShowSearchSuggestionsView = browserViewControllerState?
+            .searchScreenState
+            .showSearchSugestionsView ?? false
+        let isSettingEnabled = profile.prefs.boolForKey(
+            PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions
+        ) ?? false
+
         return featureFlagEnabled && !alwaysShowSearchSuggestionsView && !isSettingEnabled
     }
 
@@ -2734,43 +2745,46 @@ extension BrowserViewController {
     }
 
     func trackAccessibility() {
+        typealias Key = TelemetryWrapper.EventExtraKey
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .voiceOver,
             object: .app,
-            extras: [TelemetryWrapper.EventExtraKey.isVoiceOverRunning.rawValue: UIAccessibility.isVoiceOverRunning.description]
+            extras: [Key.isVoiceOverRunning.rawValue: UIAccessibility.isVoiceOverRunning.description]
         )
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .switchControl,
             object: .app,
-            extras: [TelemetryWrapper.EventExtraKey.isSwitchControlRunning.rawValue: UIAccessibility.isSwitchControlRunning.description]
+            extras: [Key.isSwitchControlRunning.rawValue: UIAccessibility.isSwitchControlRunning.description]
         )
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .reduceTransparency,
             object: .app,
-            extras: [TelemetryWrapper.EventExtraKey.isReduceTransparencyEnabled.rawValue: UIAccessibility.isReduceTransparencyEnabled.description]
+            extras: [Key.isReduceTransparencyEnabled.rawValue: UIAccessibility.isReduceTransparencyEnabled.description]
         )
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .reduceMotion,
             object: .app,
-            extras: [TelemetryWrapper.EventExtraKey.isReduceMotionEnabled.rawValue: UIAccessibility.isReduceMotionEnabled.description]
+            extras: [Key.isReduceMotionEnabled.rawValue: UIAccessibility.isReduceMotionEnabled.description]
         )
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .invertColors,
             object: .app,
-            extras: [TelemetryWrapper.EventExtraKey.isInvertColorsEnabled.rawValue: UIAccessibility.isInvertColorsEnabled.description]
+            extras: [Key.isInvertColorsEnabled.rawValue: UIAccessibility.isInvertColorsEnabled.description]
         )
+
+        let a11yEnabled = UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory.description
+        let a11yCategory = UIApplication.shared.preferredContentSizeCategory.rawValue.description
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .dynamicTextSize,
             object: .app,
-            extras: [
-                TelemetryWrapper.EventExtraKey.isAccessibilitySizeEnabled.rawValue: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory.description,
-                TelemetryWrapper.EventExtraKey.preferredContentSizeCategory.rawValue: UIApplication.shared.preferredContentSizeCategory.rawValue.description]
+            extras: [Key.isAccessibilitySizeEnabled.rawValue: a11yEnabled,
+                     Key.preferredContentSizeCategory.rawValue: a11yCategory]
         )
     }
 

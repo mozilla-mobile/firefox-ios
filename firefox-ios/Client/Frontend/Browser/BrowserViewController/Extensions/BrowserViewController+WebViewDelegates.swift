@@ -292,7 +292,10 @@ extension BrowserViewController: WKUIDelegate {
                                                      value: .contextMenu)
                     }
 
-                    let isBookmarkedSite = profile.places.isBookmarked(url: url.absoluteString).value.successValue ?? false
+                    let isBookmarkedSite = profile.places
+                        .isBookmarked(url: url.absoluteString)
+                        .value
+                        .successValue ?? false
                     actions.append(isBookmarkedSite ? removeAction : addBookmarkAction)
 
                     actions.append(UIAction(

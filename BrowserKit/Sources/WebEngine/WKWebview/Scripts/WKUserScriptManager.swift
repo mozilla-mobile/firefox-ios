@@ -31,10 +31,12 @@ class DefaultUserScriptManager: WKUserScriptManager {
         webView.configuration.userContentController.removeAllUserScripts()
 
         // Inject all pre-compiled user scripts.
-        [UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentStart, isMainFrame: false),
-         UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentEnd, isMainFrame: false),
-         UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentStart, isMainFrame: true),
-         UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentEnd, isMainFrame: true)].forEach { userScriptInfo in
+        [
+            UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentStart, isMainFrame: false),
+            UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentEnd, isMainFrame: false),
+            UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentStart, isMainFrame: true),
+            UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentEnd, isMainFrame: true)
+        ].forEach { userScriptInfo in
             let fullName = buildScriptName(from: userScriptInfo)
 
             if let userScript = compiledUserScripts[fullName] {
@@ -50,10 +52,12 @@ class DefaultUserScriptManager: WKUserScriptManager {
 
     /// Cache all of the pre-compiled user scripts so they don't need re-fetched from disk for each webview.
     private func injectUserScripts() {
-        [UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentStart, isMainFrame: false),
-         UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentEnd, isMainFrame: false),
-         UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentStart, isMainFrame: true),
-         UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentEnd, isMainFrame: true)].forEach { userScriptInfo in
+        [
+            UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentStart, isMainFrame: false),
+            UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentEnd, isMainFrame: false),
+            UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentStart, isMainFrame: true),
+            UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentEnd, isMainFrame: true)
+        ].forEach { userScriptInfo in
             let fullName = buildScriptName(from: userScriptInfo)
 
             injectFrameScript(name: fullName, userScriptInfo: userScriptInfo)

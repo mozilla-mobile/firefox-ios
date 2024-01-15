@@ -21,7 +21,8 @@ class SwitchFakespotProduction: HiddenSetting, FeatureFlaggable {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let channels = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI) ? [AppBuildChannel.release] : [.developer, .beta]
+        let useStagingAPI = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI)
+        let channels = useStagingAPI ? [AppBuildChannel.release] : [.developer, .beta]
         featureFlags.set(feature: .useStagingFakespotAPI, toChannels: channels)
 
         settingsDelegate?.askedToReload()

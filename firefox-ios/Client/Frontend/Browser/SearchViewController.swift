@@ -69,6 +69,8 @@ class SearchViewController: SiteTableViewController,
                             LoaderListener,
                             FeatureFlaggable,
                             Notifiable {
+    typealias ExtraKey = TelemetryWrapper.EventExtraKey
+
     var searchDelegate: SearchViewControllerDelegate?
     private let viewModel: SearchViewModel
     private let model: SearchEngines
@@ -429,8 +431,10 @@ class SearchViewController: SiteTableViewController,
             assertionFailure()
             return
         }
-        let extras = [TelemetryWrapper.EventExtraKey.recordSearchLocation.rawValue: SearchesMeasurement.SearchLocation.quickSearch,
-                      TelemetryWrapper.EventExtraKey.recordSearchEngineID.rawValue: engine.engineID as Any] as [String: Any]
+        let extras = [
+            ExtraKey.recordSearchLocation.rawValue: SearchesMeasurement.SearchLocation.quickSearch,
+            ExtraKey.recordSearchEngineID.rawValue: engine.engineID as Any
+        ] as [String: Any]
         TelemetryWrapper.gleanRecordEvent(category: .action,
                                           method: .tap,
                                           object: .recordSearch,
@@ -588,7 +592,9 @@ class SearchViewController: SiteTableViewController,
                 self.suggestions = suggestions!
                 // Remove user searching term inside suggestions list
                 self.suggestions?.removeAll(where: {
+                    // swiftlint:disable line_length
                     $0.trimmingCharacters(in: .whitespacesAndNewlines) == self.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
+                    // swiftlint:enable line_length
                 })
                 // First suggestion should be what the user is searching
                 self.suggestions?.insert(self.searchQuery, at: 0)
@@ -626,8 +632,10 @@ class SearchViewController: SiteTableViewController,
                   let url = defaultEngine.searchURLForQuery(suggestion)
             else { return }
 
-            let extras = [TelemetryWrapper.EventExtraKey.recordSearchLocation.rawValue: SearchesMeasurement.SearchLocation.suggestion,
-                          TelemetryWrapper.EventExtraKey.recordSearchEngineID.rawValue: defaultEngine.engineID as Any] as [String: Any]
+            let extras = [
+                ExtraKey.recordSearchLocation.rawValue: SearchesMeasurement.SearchLocation.suggestion,
+                ExtraKey.recordSearchEngineID.rawValue: defaultEngine.engineID as Any
+            ] as [String: Any]
             TelemetryWrapper.gleanRecordEvent(category: .action,
                                               method: .tap,
                                               object: .recordSearch,

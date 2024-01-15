@@ -413,7 +413,8 @@ extension BrowserViewController {
         // Open tab in background || Open in new tab
         if keyboardPressesHandler().isOnlyCmdPressed || keyboardPressesHandler().isCmdAndShiftPressed {
             guard let isPrivate = tabManager.selectedTab?.isPrivate else { return shouldCancelHandler }
-            let selectNewTab = !keyboardPressesHandler().isOnlyCmdPressed && keyboardPressesHandler().isCmdAndShiftPressed
+            let selectNewTab = !keyboardPressesHandler().isOnlyCmdPressed
+                               && keyboardPressesHandler().isCmdAndShiftPressed
             homePanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate, selectNewTab: selectNewTab)
             shouldCancelHandler = true
 

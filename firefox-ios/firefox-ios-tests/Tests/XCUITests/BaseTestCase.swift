@@ -333,7 +333,13 @@ class BaseTestCase: XCTestCase {
         mozWaitForElementToNotExist(passcodeInput)
     }
 
-    func scrollToElement(_ element: XCUIElement, swipeableElement: XCUIElement? = nil, swipe: String = "up", isHittable: Bool = false, maxNumberOfScreenSwipes: Int = 12) {
+    func scrollToElement(
+        _ element: XCUIElement,
+        swipeableElement: XCUIElement? = nil,
+        swipe: String = "up",
+        isHittable: Bool = false,
+        maxNumberOfScreenSwipes: Int = 12
+    ) {
         let app = XCUIApplication()
         let swipeableElement = swipeableElement ?? app
         var nrOfSwipes = 0

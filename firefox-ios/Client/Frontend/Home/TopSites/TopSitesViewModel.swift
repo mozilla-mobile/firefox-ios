@@ -131,13 +131,11 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {
-        var textColor = wallpaperManager.currentWallpaper.textColor
-
         return LabelButtonHeaderViewModel(
             title: nil,
             titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.topSites,
             isButtonHidden: true,
-            textColor: textColor)
+            textColor: wallpaperManager.currentWallpaper.textColor)
     }
 
     var isEnabled: Bool {

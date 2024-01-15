@@ -69,7 +69,9 @@ struct SimpleToast: ThemeApplicable {
                 toast.frame = frame
             },
             completion: { finished in
-                let voiceOverDelay = UIAccessibility.isVoiceOverRunning ? DispatchTimeInterval.milliseconds(1000) : DispatchTimeInterval.milliseconds(0)
+                let thousandMilliseconds = DispatchTimeInterval.milliseconds(1000)
+                let zeroMilliseconds = DispatchTimeInterval.milliseconds(0)
+                let voiceOverDelay = UIAccessibility.isVoiceOverRunning ? thousandMilliseconds : zeroMilliseconds
                 let dispatchTime = DispatchTime.now() + Toast.UX.toastDismissAfter + voiceOverDelay
 
                 DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {

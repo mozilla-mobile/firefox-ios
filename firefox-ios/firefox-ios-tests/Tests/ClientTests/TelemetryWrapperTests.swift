@@ -8,6 +8,9 @@ import Glean
 import XCTest
 
 class TelemetryWrapperTests: XCTestCase {
+    typealias ExtraKey = TelemetryWrapper.EventExtraKey
+    typealias ValueKey = TelemetryWrapper.EventValue
+
     override func setUp() {
         super.setUp()
         Glean.shared.resetGlean(clearStores: true)
@@ -107,7 +110,10 @@ class TelemetryWrapperTests: XCTestCase {
     }
 
     func test_topSiteContextualMenu_GleanIsCalled() {
-        let extras = [TelemetryWrapper.EventExtraKey.contextualMenuType.rawValue: HomepageContextMenuHelper.ContextualActionType.settings.rawValue]
+        let extras = [
+            ExtraKey.contextualMenuType.rawValue: HomepageContextMenuHelper.ContextualActionType.settings.rawValue
+        ]
+
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .view,
@@ -146,8 +152,11 @@ class TelemetryWrapperTests: XCTestCase {
     // MARK: - Preferences
 
     func test_preferencesWithExtras_GleanIsCalled() {
-        let extras: [String: Any] = [TelemetryWrapper.EventExtraKey.preference.rawValue: "ETP-strength",
-                                      TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: BlockingStrength.strict.rawValue]
+        let extras: [String: Any] = [
+            ExtraKey.preference.rawValue: "ETP-strength",
+            ExtraKey.preferenceChanged.rawValue: BlockingStrength.strict.rawValue
+        ]
+
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .change,
@@ -216,7 +225,7 @@ class TelemetryWrapperTests: XCTestCase {
     }
 
     func test_firefoxHomePageAddView_GleanIsCalled() {
-        let extras = [TelemetryWrapper.EventExtraKey.fxHomepageOrigin.rawValue: TelemetryWrapper.EventValue.fxHomepageOriginZeroSearch.rawValue]
+        let extras = [ExtraKey.fxHomepageOrigin.rawValue: ValueKey.fxHomepageOriginZeroSearch.rawValue]
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .view,
@@ -794,7 +803,7 @@ class TelemetryWrapperTests: XCTestCase {
 
     // MARK: - Awesomebar result tap
     func test_AwesomebarResults_GleanIsCalledForSearchSuggestion() {
-        let extra = [TelemetryWrapper.EventExtraKey.awesomebarSearchTapType.rawValue: TelemetryWrapper.EventValue.searchSuggestion.rawValue]
+        let extra = [ExtraKey.awesomebarSearchTapType.rawValue: ValueKey.searchSuggestion.rawValue]
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .awesomebarResults,
@@ -804,7 +813,7 @@ class TelemetryWrapperTests: XCTestCase {
     }
 
     func test_AwesomebarResults_GleanIsCalledRemoteTabs() {
-        let extra = [TelemetryWrapper.EventExtraKey.awesomebarSearchTapType.rawValue: TelemetryWrapper.EventValue.remoteTab.rawValue]
+        let extra = [ExtraKey.awesomebarSearchTapType.rawValue: ValueKey.remoteTab.rawValue]
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .awesomebarResults,
@@ -814,7 +823,7 @@ class TelemetryWrapperTests: XCTestCase {
     }
 
     func test_AwesomebarResults_GleanIsCalledHighlights() {
-        let extra = [TelemetryWrapper.EventExtraKey.awesomebarSearchTapType.rawValue: TelemetryWrapper.EventValue.searchHighlights.rawValue]
+        let extra = [ExtraKey.awesomebarSearchTapType.rawValue: ValueKey.searchHighlights.rawValue]
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .awesomebarResults,

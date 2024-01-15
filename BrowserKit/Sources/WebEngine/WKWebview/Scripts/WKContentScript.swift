@@ -5,7 +5,8 @@
 import Foundation
 import WebKit
 
-/// Protocol each script injected into a WKEngineSession needs to follow. Scripts are injected through the `WKContentScriptManager`
+/// Protocol each script injected into a WKEngineSession needs to follow.
+/// Scripts are injected through the `WKContentScriptManager`
 protocol WKContentScript {
     static func name() -> String
 

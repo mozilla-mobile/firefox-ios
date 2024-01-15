@@ -195,7 +195,8 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
             readerModeStyleViewController.modalPresentationStyle = .popover
 
             let setupPopover = { [unowned self] in
-                guard let popoverPresentationController = readerModeStyleViewController.popoverPresentationController else { return }
+                guard let popoverPresentationController = readerModeStyleViewController.popoverPresentationController
+                else { return }
 
                 let arrowDirection: UIPopoverArrowDirection = isBottomSearchBar ? .down : .up
                 let ySpacing = isBottomSearchBar ? -1 : UIConstants.ToolbarHeight
