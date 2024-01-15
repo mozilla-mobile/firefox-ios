@@ -1329,10 +1329,17 @@ workflows:
                 --results-bucket=firefox_ios_test_artifacts \
                 --no-record-video \
                 --client-details=matrixLabel="Bitrise" \
-                --verbosity=debug \
                 --quiet)
             
-            GCLOUD_EXITCODE=$?
+            GCLOUD_EXITCODE=$? # this will get the right-most command from the gcloud subshell
+            echo "GCLOUD_EXITCODE: $GCLOUD_EXITCODE"
+
+            # There is a chance the gcloud cli returns a custom array of exit codes, so we will need
+            #    to parse the output to get the exit codes and potentially trigger our own failure
+            # In the case of an Inconclusive Test, we still haven't confirmed what stand-in exit code
+            #   is returned, so we will need to update this script once we know what it is.
+            # We also don't know what order the exit codes will be returned in, so we will need to
+            #   parse the output to get the exit codes and then assign them to variables.
 
             envman add --key GCLOUD_EXIT_CODE --value "$GCLOUD_EXITCODE"
             MATRIX_WEBLINK=$(echo "$GCLOUD_OUTPUT" | grep 'https://console.firebase.google.com/project' | awk -F '[][]' '{print $2}' | head -n 1)
@@ -1342,7 +1349,8 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            if [ "${GCLOUD_EXIT_CODE}" -ne 0 ]; then
+            # unpack GLCOUD_EXIT_CODE from string to int, if gcloud returns string instead of int for exit code
+            if [ $((GCLOUD_EXIT_CODE)) -ne 0 ]; then
                 SLACK_MESSAGE_PRETEXT="*Firefox-iOS* :firefox: *Archive/Robo Test* :x:"
             else 
                 SLACK_MESSAGE_PRETEXT="*Firefox-iOS* :firefox: *Archive/Robo Test* :white_check_mark:"
