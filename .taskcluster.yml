@@ -137,7 +137,7 @@ tasks:
                             else:
                                 name: "Decision Task for cron job ${cron.job_name}"
                                 description: 'Created by a [cron task](https://firefox-ci-tc.services.mozilla.com/tasks/${cron.task_id})'
-                provisionerId: "mobile-${level}"
+                provisionerId: "${trustDomain}-${level}"
                 workerType: "decision-gcp"
                 tags:
                     $if: 'tasks_for == "github-push" || isPullRequest'
@@ -159,15 +159,15 @@ tasks:
                             - tc-treeherder.v2.${project}.${head_sha}
                             - $if: 'tasks_for == "github-push"'
                               then:
-                                - index.mobile.v2.${project}.branch.${short_head_branch}.latest.taskgraph.decision
-                                - index.mobile.v2.${project}.branch.${short_head_branch}.revision.${head_sha}.taskgraph.decision
-                                - index.mobile.v2.${project}.revision.${head_sha}.taskgraph.decision
+                                - index.${trustDomain}.v2.${project}.branch.${short_head_branch}.latest.taskgraph.decision
+                                - index.${trustDomain}.v2.${project}.branch.${short_head_branch}.revision.${head_sha}.taskgraph.decision
+                                - index.${trustDomain}.v2.${project}.revision.${head_sha}.taskgraph.decision
                             - $if: 'tasks_for == "cron"'
                               then:
                                 # cron context provides ${head_branch} as a short one
-                                - index.mobile.v2.${project}.branch.${head_branch}.latest.taskgraph.decision-${cron.job_name}
-                                - index.mobile.v2.${project}.branch.${head_branch}.revision.${head_sha}.taskgraph.decision-${cron.job_name}
-                                - index.mobile.v2.${project}.branch.${head_branch}.revision.${head_sha}.taskgraph.cron.${ownTaskId}
+                                - index.${trustDomain}.v2.${project}.branch.${head_branch}.latest.taskgraph.decision-${cron.job_name}
+                                - index.${trustDomain}.v2.${project}.branch.${head_branch}.revision.${head_sha}.taskgraph.decision-${cron.job_name}
+                                - index.${trustDomain}.v2.${project}.branch.${head_branch}.revision.${head_sha}.taskgraph.cron.${ownTaskId}
                 scopes:
                     $if: 'tasks_for == "github-push"'
                     then:
