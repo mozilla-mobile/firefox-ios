@@ -71,6 +71,7 @@
         "TopTabsTestIpad",
         "TopTabsTestIphone",
         "TrackingProtectionTests",
+        "URLValidationTests",
         "UrlBarTests",
         "WhatsNewTest"
       ],
