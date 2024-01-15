@@ -7,6 +7,7 @@ tasks:
     - $let:
         # Project-specific trustDomain
         trustDomain: mobile
+        canonicalRepo: https://github.com/mozilla-mobile/firefox-ios
 
         # Github events have this stuff in different places...
         ownerEmail:
@@ -97,15 +98,14 @@ tasks:
         $if: >
           tasks_for in ["action", "cron"]
           || (isPullRequest && pullRequestAction in ["opened", "reopened", "synchronize"])
-          || (tasks_for == "github-push" && head_branch[:10] != "refs/tags/")
+          || (tasks_for == "github-push" && (head_branch == "refs/heads/main" || head_branch[:19] == "refs/heads/releases"))
           || (tasks_for == "github-release" && releaseAction == "published")
         then:
             $let:
                 level:
-                    $if: 'tasks_for in ["github-push", "github-release", "action", "cron"] && repoUrl == "https://github.com/mozilla-mobile/firefox-ios"'
+                    $if: 'tasks_for in ["github-push", "github-release", "action", "cron"] && repoUrl == canonicalRepo'
                     then: '3'
                     else: '1'
-
                 short_head_branch:
                     $if: 'head_branch[:11] == "refs/heads/"'
                     then: {$eval: 'head_branch[11:]'}
