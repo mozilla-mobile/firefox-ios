@@ -162,12 +162,15 @@ class SettingSection: Setting {
     }
 }
 
-private class PaddedSwitch: UIView {
+class PaddedSwitch: UIView {
     private struct UX {
         static let padding: CGFloat = 8
     }
 
-    init(switchView: UISwitch) {
+    let switchView: UISwitch
+
+    init() {
+        self.switchView = UISwitch()
         super.init(frame: .zero)
 
         addSubview(switchView)
@@ -177,6 +180,11 @@ private class PaddedSwitch: UIView {
             height: switchView.frame.height
         )
         switchView.frame.origin = CGPoint(x: UX.padding, y: 0)
+    }
+
+    func configureSwitch(onTintColor: UIColor, isEnabled: Bool) {
+        switchView.onTintColor = onTintColor
+        switchView.isEnabled = isEnabled
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -278,29 +286,32 @@ class BoolSetting: Setting, FeatureFlaggable {
         return statusText
     }
 
-    public lazy var control: UISwitch = {
-        let control = UISwitch()
-        control.accessibilityIdentifier = prefKey
-        control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
+    public lazy var control: PaddedSwitch = {
+        let control = PaddedSwitch()
+        control.switchView.accessibilityIdentifier = prefKey
+        control.switchView.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         return control
     }()
 
     override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
         super.onConfigureCell(cell, theme: theme)
 
-        control.onTintColor = theme.colors.actionPrimary
-        control.isEnabled = enabled
+        control.configureSwitch(
+            onTintColor: theme.colors.actionPrimary,
+            isEnabled: enabled
+        )
 
-        displayBool(control)
+        displayBool(control.switchView)
         if let title = title {
             if let status = status {
-                control.accessibilityLabel = "\(title.string), \(status.string)"
+                control.switchView.accessibilityLabel = "\(title.string), \(status.string)"
             } else {
-                control.accessibilityLabel = title.string
+                control.switchView.accessibilityLabel = title.string
             }
             cell.accessibilityLabel = nil
         }
-        cell.accessoryView = PaddedSwitch(switchView: control)
+
+        cell.accessoryView = control
         cell.selectionStyle = .none
 
         if !enabled {
