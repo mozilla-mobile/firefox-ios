@@ -7,6 +7,7 @@ import WebKit
 @testable import WebEngine
 
 class MockWKEngineConfiguration: WKEngineConfiguration {
+    var scriptNameAdded: String?
     var addUserScriptCalled = 0
     var addInDefaultContentWorldCalled = 0
     var addInPageContentWorldCalled = 0
@@ -18,10 +19,12 @@ class MockWKEngineConfiguration: WKEngineConfiguration {
     }
     
     func addInDefaultContentWorld(scriptMessageHandler: WKScriptMessageHandler, name: String) {
+        scriptNameAdded = name
         addInDefaultContentWorldCalled += 1
     }
     
     func addInPageContentWorld(scriptMessageHandler: WKScriptMessageHandler, name: String) {
+        scriptNameAdded = name
         addInPageContentWorldCalled += 1
     }
     
