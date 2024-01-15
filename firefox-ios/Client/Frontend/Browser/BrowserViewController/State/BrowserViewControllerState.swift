@@ -72,7 +72,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: FakespotState.reducer(state.fakespotState, action))
         case GeneralBrowserAction.showToast(let toastType):
-            print("Orla: Handle toast action")
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 usePrivateHomepage: state.usePrivateHomepage,

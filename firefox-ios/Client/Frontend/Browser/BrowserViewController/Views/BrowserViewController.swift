@@ -512,7 +512,6 @@ class BrowserViewController: UIViewController,
             setupMiddleButtonStatus(isLoading: false)
 
             if let toast = state.toast {
-                print("Orla: show toast")
                 self.showToastType(toast: toast)
             }
         }
