@@ -101,7 +101,10 @@ private class MetadataProviderFake: LPMetadataProvider {
 private  class ItemProviderFake: NSItemProvider {
     var imageResult: UIImage? = UIImage()
     var errorResult: Error?
-    override func loadObject(ofClass aClass: NSItemProviderReading.Type, completionHandler: @escaping (NSItemProviderReading?, Error?) -> Void) -> Progress {
+    override func loadObject(
+        ofClass aClass: NSItemProviderReading.Type,
+        completionHandler: @escaping (NSItemProviderReading?, Error?) -> Void
+    ) -> Progress {
         completionHandler(imageResult, errorResult)
         return Progress()
     }

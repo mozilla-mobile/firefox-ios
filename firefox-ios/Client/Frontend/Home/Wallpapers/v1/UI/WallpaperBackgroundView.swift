@@ -63,7 +63,8 @@ class WallpaperBackgroundView: UIView {
     }
 
     private func currentWallpaperImage() -> UIImage? {
-        return UIDevice.current.orientation.isLandscape ? wallpaperManager.currentWallpaper.landscape : wallpaperManager.currentWallpaper.portrait
+        let isLandscape = UIDevice.current.orientation.isLandscape
+        return isLandscape ? wallpaperManager.currentWallpaper.landscape : wallpaperManager.currentWallpaper.portrait
     }
 }
 

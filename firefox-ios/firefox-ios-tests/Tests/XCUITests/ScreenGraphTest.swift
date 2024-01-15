@@ -145,7 +145,11 @@ private func createTestGraph(for test: XCTestCase, with app: XCUIApplication) ->
         screenState.dismissOnUse = true
         screenState.tap(app.tables.cells["Settings"], to: SettingsScreen)
 
-        screenState.tap(app.otherElements.cells.otherElements[ImageIdentifiers.nightMode], forAction: TestActions.ToggleNightMode, transitionTo: BrowserTabMenu) { userState in
+        screenState.tap(
+            app.otherElements.cells.otherElements[ImageIdentifiers.nightMode],
+            forAction: TestActions.ToggleNightMode,
+            transitionTo: BrowserTabMenu
+        ) { userState in
             userState.nightMode = !userState.nightMode
         }
 

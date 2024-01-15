@@ -2,6 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+// Disabling `line_length` for this whole file because it is going to get refactored/replaced soon.
+// swiftlint:disable line_length
 import Common
 import Glean
 import Shared
@@ -1729,13 +1731,13 @@ extension TelemetryWrapper {
 
         // MARK: - History Highlights
         case (.action, .tap, .firefoxHomepage, .historyHighlightsShowAll, _):
-            GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
+            GleanMetrics.FirefoxHomePage.historyHighlightsShowAll.add()
         case (.action, .tap, .firefoxHomepage, .historyHighlightsItemOpened, _):
             GleanMetrics.FirefoxHomePage.historyHighlightsItemOpened.record()
         case (.action, .tap, .firefoxHomepage, .historyHighlightsGroupOpen, _):
             GleanMetrics.FirefoxHomePage.historyHighlightsGroupOpen.record()
         case (.action, .view, .historyImpressions, _, _):
-            GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
+            GleanMetrics.FirefoxHomePage.historyImpressions.record()
         case (.action, .view, .historyHighlightContextualMenu, _, let extras):
             if let type = extras?[EventExtraKey.contextualMenuType.rawValue] as? String {
                 let contextExtra = GleanMetrics.FirefoxHomePage.HistoryHighlightsContextExtra(type: type)
@@ -1979,3 +1981,5 @@ extension TelemetryWrapper {
         return [TelemetryWrapper.EventExtraKey.fxHomepageOrigin.rawValue: origin.rawValue]
     }
 }
+
+// swiftlint:enable line_length

@@ -52,7 +52,10 @@ class RustRemoteTabsTests: XCTestCase {
         files = MockFiles()
 
         if let rootDirectory = try? files.getAndEnsureDirectory() {
-            let databasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true).appendingPathComponent("testTabs.db").path
+            let databasePath = URL(
+                fileURLWithPath: rootDirectory,
+                isDirectory: true
+            ).appendingPathComponent("testTabs.db").path
             try? files.remove("testTabs.db")
 
             let mockDatabasePath = URL(fileURLWithPath: rootDirectory,
@@ -73,7 +76,14 @@ class RustRemoteTabsTests: XCTestCase {
     func testSetLocalTabs() {
         let url = "https://example.com"
         let title = "example"
-        let tab = RemoteTab(clientGUID: nil, URL: URL(string: url)!, title: title, history: [URL(string: url)!], lastUsed: Date.now(), icon: nil)
+        let tab = RemoteTab(
+            clientGUID: nil,
+            URL: URL(string: url)!,
+            title: title,
+            history: [URL(string: url)!],
+            lastUsed: Date.now(),
+            icon: nil
+        )
 
         let count = tabs.setLocalTabs(localTabs: [tab])
             // We are just checking that the `setLocalTabs` call did not return an

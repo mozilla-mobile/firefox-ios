@@ -32,14 +32,25 @@ class SearchGroupedItemsViewController: UIViewController, UITableViewDelegate, T
         tableView.dataSource = self.diffableDatasource
         tableView.accessibilityIdentifier = a11y.tableView
         tableView.delegate = self
-        tableView.register(OneLineTableViewCell.self, forCellReuseIdentifier: OneLineTableViewCell.cellIdentifier)
-        tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier)
+        tableView.register(
+            OneLineTableViewCell.self,
+            forCellReuseIdentifier: OneLineTableViewCell.cellIdentifier
+        )
+        tableView.register(
+            TwoLineImageOverlayCell.self,
+            forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier
+        )
 
         tableView.sectionHeaderTopPadding = 0
     }
 
     private lazy var doneButton: UIBarButtonItem =  {
-        let button = UIBarButtonItem(title: String.AppSettingsDone, style: .done, target: self, action: #selector(doneButtonAction))
+        let button = UIBarButtonItem(
+            title: String.AppSettingsDone,
+            style: .done,
+            target: self,
+            action: #selector(doneButtonAction)
+        )
         button.accessibilityIdentifier = "ShowGroupDoneButton"
         return button
     }()
@@ -109,7 +120,9 @@ class SearchGroupedItemsViewController: UIViewController, UITableViewDelegate, T
     // MARK: - TableView datasource helpers
 
     private func configureDatasource() {
+        // swiftlint:disable line_length
         diffableDatasource = UITableViewDiffableDataSource<Sections, AnyHashable>(tableView: tableView) { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
+        // swiftlint:enable line_length
             guard let self = self else { return nil }
 
             if let site = item as? Site {

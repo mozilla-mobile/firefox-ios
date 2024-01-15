@@ -57,7 +57,14 @@ class DownloadsPanel: UIViewController,
         self.logger = logger
         self.state = .downloads
         super.init(nibName: nil, bundle: nil)
-        events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: $0, object: nil) }
+        events.forEach {
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(notificationReceived),
+                name: $0,
+                object: nil
+            )
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -189,8 +196,14 @@ class DownloadsPanel: UIViewController,
             .foregroundColor: strokeColor
             ])
         let stringHeight: CGFloat = fontSize * 2
-        let stringWidth = attributedString.boundingRect(with: CGSize(width: width, height: stringHeight), options: .usesLineFragmentOrigin, context: nil).size.width
-        attributedString.draw(at: CGPoint(x: (width - stringWidth) / 2 + strokeWidth, y: (height - stringHeight) / 2 + strokeWidth))
+        let stringWidth = attributedString.boundingRect(
+            with: CGSize(width: width, height: stringHeight),
+            options: .usesLineFragmentOrigin,
+            context: nil
+        ).size.width
+        attributedString.draw(
+            at: CGPoint(x: (width - stringWidth) / 2 + strokeWidth, y: (height - stringHeight) / 2 + strokeWidth)
+        )
 
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
@@ -278,8 +291,9 @@ class DownloadsPanel: UIViewController,
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard viewModel.hasDownloadedItem(for: section),
-              let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SiteTableViewHeader.cellIdentifier) as?
-                SiteTableViewHeader
+              let headerView = tableView.dequeueReusableHeaderFooterView(
+                withIdentifier: SiteTableViewHeader.cellIdentifier
+              ) as? SiteTableViewHeader
         else { return nil }
 
         let title = viewModel.headerTitle(for: section) ?? ""
@@ -328,8 +342,14 @@ class DownloadsPanel: UIViewController,
         return viewModel.getNumberOfItems(for: section)
     }
 
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let deleteAction = UIContextualAction(style: .destructive, title: .TabsTray.DownloadsPanel.DeleteTitle) { [weak self] (_, _, completion) in
+    func tableView(
+        _ tableView: UITableView,
+        trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
+    ) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(
+            style: .destructive,
+            title: .TabsTray.DownloadsPanel.DeleteTitle
+        ) { [weak self] (_, _, completion) in
             guard let strongSelf = self else { completion(false); return }
 
             if let downloadedFile = strongSelf.viewModel.downloadedFileForIndexPath(indexPath),
@@ -339,20 +359,33 @@ class DownloadsPanel: UIViewController,
                 strongSelf.tableView.deleteRows(at: [indexPath], with: .right)
                 strongSelf.tableView.endUpdates()
                 strongSelf.updateEmptyPanelState()
-                TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .download, value: .downloadsPanel)
+                TelemetryWrapper.recordEvent(
+                    category: .action,
+                    method: .delete,
+                    object: .download,
+                    value: .downloadsPanel
+                )
                 completion(true)
             } else {
                 completion(false)
             }
         }
 
-        let shareAction = UIContextualAction(style: .normal, title: .TabsTray.DownloadsPanel.ShareTitle) { [weak self] (_, view, completion) in
+        let shareAction = UIContextualAction(
+            style: .normal,
+            title: .TabsTray.DownloadsPanel.ShareTitle
+        ) { [weak self] (_, view, completion) in
             guard let strongSelf = self else { completion(false); return }
 
             view.backgroundColor = strongSelf.view.tintColor
             if let downloadedFile = strongSelf.viewModel.downloadedFileForIndexPath(indexPath) {
                 strongSelf.shareDownloadedFile(downloadedFile, indexPath: indexPath)
-                TelemetryWrapper.recordEvent(category: .action, method: .share, object: .download, value: .downloadsPanel)
+                TelemetryWrapper.recordEvent(
+                    category: .action,
+                    method: .share,
+                    object: .download,
+                    value: .downloadsPanel
+                )
                 completion(true)
             } else {
                 completion(false)
@@ -376,7 +409,9 @@ class DownloadsPanel: UIViewController,
 
 // MARK: - UIDocumentInteractionControllerDelegate
 extension DownloadsPanel: UIDocumentInteractionControllerDelegate {
-    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+    func documentInteractionControllerViewControllerForPreview(
+        _ controller: UIDocumentInteractionController
+    ) -> UIViewController {
         return self
     }
 }

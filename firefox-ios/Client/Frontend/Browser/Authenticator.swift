@@ -10,7 +10,11 @@ import Common
 class Authenticator {
     fileprivate static let MaxAuthenticationAttempts = 3
 
-    static func handleAuthRequest(_ viewController: UIViewController, challenge: URLAuthenticationChallenge, loginsHelper: LoginsHelper?) -> Deferred<Maybe<LoginEntry>> {
+    static func handleAuthRequest(
+        _ viewController: UIViewController,
+        challenge: URLAuthenticationChallenge,
+        loginsHelper: LoginsHelper?
+    ) -> Deferred<Maybe<LoginEntry>> {
         // If there have already been too many login attempts, we'll just fail.
         if challenge.previousFailureCount >= Authenticator.MaxAuthenticationAttempts {
             return deferMaybe(LoginRecordError(description: "Too many attempts to open site"))
@@ -31,27 +35,49 @@ class Authenticator {
 
         // If we have some credentials, we'll show a prompt with them.
         if let credential = credential {
-            return promptForUsernamePassword(viewController, credentials: credential, protectionSpace: challenge.protectionSpace, loginsHelper: loginsHelper)
+            return promptForUsernamePassword(
+                viewController,
+                credentials: credential,
+                protectionSpace: challenge.protectionSpace,
+                loginsHelper: loginsHelper
+            )
         }
 
         // Otherwise, try to look them up and show the prompt.
         if let loginsHelper = loginsHelper {
-            return findMatchingCredentialsForChallenge(challenge, fromLoginsProvider: loginsHelper.logins).bindQueue(.main) { result in
+            return findMatchingCredentialsForChallenge(
+                challenge,
+                fromLoginsProvider: loginsHelper.logins
+            ).bindQueue(.main) { result in
                 guard let credentials = result.successValue else {
                     sendLoginsAutofillFailedTelemetry()
-                    return deferMaybe(result.failureValue ?? LoginRecordError(description: "Unknown error when finding credentials"))
+                    return deferMaybe(
+                        result.failureValue ?? LoginRecordError(description: "Unknown error when finding credentials")
+                    )
                 }
-                return self.promptForUsernamePassword(viewController, credentials: credentials, protectionSpace: challenge.protectionSpace, loginsHelper: loginsHelper)
+                return self.promptForUsernamePassword(
+                    viewController,
+                    credentials: credentials,
+                    protectionSpace: challenge.protectionSpace,
+                    loginsHelper: loginsHelper
+                )
             }
         }
 
         // No credentials, so show an empty prompt.
-        return self.promptForUsernamePassword(viewController, credentials: nil, protectionSpace: challenge.protectionSpace, loginsHelper: nil)
+        return self.promptForUsernamePassword(
+            viewController,
+            credentials: nil,
+            protectionSpace: challenge.protectionSpace,
+            loginsHelper: nil
+        )
     }
 
-    static func findMatchingCredentialsForChallenge(_ challenge: URLAuthenticationChallenge,
-                                                    fromLoginsProvider loginsProvider: RustLogins,
-                                                    logger: Logger = DefaultLogger.shared) -> Deferred<Maybe<URLCredential?>> {
+    static func findMatchingCredentialsForChallenge(
+        _ challenge: URLAuthenticationChallenge,
+        fromLoginsProvider loginsProvider: RustLogins,
+        logger: Logger = DefaultLogger.shared
+    ) -> Deferred<Maybe<URLCredential?>> {
         return loginsProvider.getLoginsForProtectionSpace(challenge.protectionSpace) >>== { cursor in
             guard cursor.count >= 1 else { return deferMaybe(nil) }
 
@@ -65,7 +91,8 @@ class Authenticator {
             // This is a side effect of https://bugzilla.mozilla.org/show_bug.cgi?id=1238103.
             if logins.count > 1 {
                 credentials = (logins.find { login in
-                    (login.protectionSpace.`protocol` == challenge.protectionSpace.`protocol`) && !login.hasMalformedHostname
+                    (login.protectionSpace.`protocol` == challenge.protectionSpace.`protocol`)
+                    && !login.hasMalformedHostname
                 })?.credentials
 
                 let malformedGUIDs: [GUID] = logins.compactMap { login in
@@ -118,7 +145,11 @@ class Authenticator {
         let title: String = .AuthenticatorPromptTitle
         if !(protectionSpace.realm?.isEmpty ?? true) {
             let msg: String = .AuthenticatorPromptRealmMessage
-            let formatted = NSString(format: msg as NSString, protectionSpace.host, protectionSpace.realm ?? "") as String
+            let formatted = NSString(
+                format: msg as NSString,
+                protectionSpace.host,
+                protectionSpace.realm ?? ""
+            ) as String
             alert = AlertController(title: title, message: formatted, preferredStyle: .alert)
         } else {
             let msg: String = .AuthenticatorPromptEmptyRealmMessage
@@ -138,7 +169,10 @@ class Authenticator {
                 return
             }
 
-                let login = LoginEntry(credentials: URLCredential(user: user, password: pass, persistence: .forSession), protectionSpace: protectionSpace)
+            let login = LoginEntry(
+                credentials: URLCredential(user: user, password: pass, persistence: .forSession),
+                protectionSpace: protectionSpace
+            )
                 self.sendLoginsAutofilledTelemetry()
                 deferred.fill(Maybe(success: login))
                 loginsHelper?.setCredentials(login)

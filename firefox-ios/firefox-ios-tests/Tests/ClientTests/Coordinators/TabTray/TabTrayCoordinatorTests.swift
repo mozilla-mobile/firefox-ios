@@ -9,13 +9,16 @@ final class TabTrayCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
     private var profile: MockProfile!
     private var parentCoordinator: MockTabTrayCoordinatorDelegate!
+    private var tabManager: TabManager!
 
     override func setUp() {
         super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
+        let mockTabManager = MockTabManager()
+        DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
         mockRouter = MockRouter(navigationController: MockNavigationController())
         profile = MockProfile()
         parentCoordinator = MockTabTrayCoordinatorDelegate()
+        tabManager = mockTabManager
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 

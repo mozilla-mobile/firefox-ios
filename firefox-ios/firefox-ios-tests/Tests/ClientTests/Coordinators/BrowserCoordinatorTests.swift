@@ -20,13 +20,14 @@ final class BrowserCoordinatorTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
+        let mockTabManager = MockTabManager()
+        self.tabManager = mockTabManager
+        DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
         self.profile = MockProfile()
         self.overlayModeManager = MockOverlayModeManager()
         self.screenshotService = ScreenshotService()
-        self.tabManager = MockTabManager()
         self.applicationHelper = MockApplicationHelper()
         self.glean = MockGleanWrapper()
         self.scrollDelegate = MockStatusBarScrollDelegate()
@@ -260,6 +261,19 @@ final class BrowserCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is QRCodeNavigationController)
+    }
+
+    func testShowBackForwardList_presentsBackForwardListViewController() {
+        let mockTab = Tab(profile: profile, configuration: .init())
+        mockTab.url = URL(string: "https://www.google.com")
+        mockTab.createWebview()
+        tabManager.selectedTab = mockTab
+
+        let subject = createSubject()
+        subject.showBackForwardList()
+
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(mockRouter.presentedViewController is BackForwardListViewController)
     }
 
     func testShowTabTray() throws {

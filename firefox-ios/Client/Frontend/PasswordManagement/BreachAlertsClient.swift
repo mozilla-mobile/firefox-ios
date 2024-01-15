@@ -11,8 +11,16 @@ struct BreachAlertsError: MaybeErrorType {
 }
 /// For mocking and testing BreachAlertsClient.
 protocol BreachAlertsClientProtocol {
-    func fetchEtag(endpoint: BreachAlertsClient.Endpoint, profile: Profile, completion: @escaping (_ etag: String?) -> Void)
-    func fetchData(endpoint: BreachAlertsClient.Endpoint, profile: Profile, completion: @escaping (_ result: Maybe<Data>) -> Void)
+    func fetchEtag(
+        endpoint: BreachAlertsClient.Endpoint,
+        profile: Profile,
+        completion: @escaping (_ etag: String?) -> Void
+    )
+    func fetchData(
+        endpoint: BreachAlertsClient.Endpoint,
+        profile: Profile,
+        completion: @escaping (_ result: Maybe<Data>) -> Void
+    )
 }
 
 /// Handles all network requests for BreachAlertsManager.

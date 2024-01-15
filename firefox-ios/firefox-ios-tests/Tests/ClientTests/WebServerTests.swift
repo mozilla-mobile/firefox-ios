@@ -15,7 +15,11 @@ class WebServerTests: XCTestCase {
     /// Setup a basic web server that binds to a random port and that has one default handler on /hello
     fileprivate func setupWebServer() {
         webServer = GCDWebServer()
-        webServer.addHandler(forMethod: "GET", path: "/hello", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse in
+        webServer.addHandler(
+            forMethod: "GET",
+            path: "/hello",
+            request: GCDWebServerRequest.self
+        ) { (request) -> GCDWebServerResponse in
             return GCDWebServerDataResponse(html: "<html><body><p>Hello World</p></body></html>")!
         }
         if webServer.start(withPort: 0, bonjourName: nil) == false {

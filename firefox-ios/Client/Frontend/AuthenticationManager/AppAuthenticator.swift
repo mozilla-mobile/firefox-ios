@@ -39,7 +39,9 @@ class AppAuthenticator: AppAuthenticationProtocol {
         }
     }
 
-    func authenticateWithDeviceOwnerAuthentication(_ completion: @escaping (Result<Void, AuthenticationError>) -> Void) {
+    func authenticateWithDeviceOwnerAuthentication(
+        _ completion: @escaping (Result<Void, AuthenticationError>) -> Void
+    ) {
         // Get a fresh context for each login. If you use the same context on multiple attempts
         //  (by commenting out the next line), then a previously successful authentication
         //  causes the next policy evaluation to succeed without testing biometry again.
@@ -50,14 +52,21 @@ class AppAuthenticator: AppAuthenticationProtocol {
         var error: NSError?
         let localizedErrorMessage = String.Biometry.Screen.UniversalAuthenticationReasonV2
         if context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) {
-            context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: localizedErrorMessage) { success, error in
+            context.evaluatePolicy(
+                .deviceOwnerAuthentication,
+                localizedReason: localizedErrorMessage
+            ) { success, error in
                 if success {
                     DispatchQueue.main.async {
                         completion(.success(()))
                     }
                 } else {
                     DispatchQueue.main.async {
-                        completion(.failure(.failedAutentication(message: error?.localizedDescription ?? "Failed to authenticate")))
+                        completion(
+                            .failure(
+                                .failedAutentication(message: error?.localizedDescription ?? "Failed to authenticate")
+                            )
+                        )
                     }
                 }
             }

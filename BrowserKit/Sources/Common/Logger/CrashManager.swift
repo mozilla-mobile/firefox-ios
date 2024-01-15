@@ -228,7 +228,8 @@ public class DefaultCrashManager: CrashManager {
     }
 
     /// If we have not already for this install, generate a completely random identifier for this device.
-    /// It is stored in the app group so that the same value will be used for both the main application and the app extensions.
+    /// It is stored in the app group so that the same value will be used for both the main application
+    /// and the app extensions.
     private func configureIdentifier() {
         guard let defaults = UserDefaults(suiteName: appInfo.sharedContainerIdentifier),
               defaults.string(forKey: deviceAppHashKey) == nil else { return }

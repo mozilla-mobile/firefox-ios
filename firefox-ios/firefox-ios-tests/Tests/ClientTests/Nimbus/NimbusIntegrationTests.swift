@@ -12,10 +12,18 @@ import XCTest
 class NimbusIntegrationTests: XCTestCase {
     func testStringBundleAccess() throws {
         XCTAssertEqual(Locale.current.languageCode, "en")
-        let stringWithNoTable = Strings.bundle.localizedString(forKey: "ShareExtension.OpenInFirefoxAction.Title", value: nil, table: nil)
+        let stringWithNoTable = Strings.bundle.localizedString(
+            forKey: "ShareExtension.OpenInFirefoxAction.Title",
+            value: nil,
+            table: nil
+        )
         XCTAssertEqual(stringWithNoTable, "Open in Firefox")
 
-        let stringWithTable = Strings.bundle.localizedString(forKey: "DefaultBrowserCard.Title", value: nil, table: "Default Browser")
+        let stringWithTable = Strings.bundle.localizedString(
+            forKey: "DefaultBrowserCard.Title",
+            value: nil,
+            table: "Default Browser"
+        )
         XCTAssertEqual(stringWithTable, "Switch Your Default Browser")
     }
 
@@ -45,20 +53,38 @@ class NimbusIntegrationTests: XCTestCase {
 
     func testNSLocalizedStringAccess() throws {
         XCTAssertEqual(Locale.current.languageCode, "en")
-        let stringWithNoTable = NSLocalizedString("ShareExtension.OpenInFirefoxAction.Title", bundle: Strings.bundle, comment: "")
+        let stringWithNoTable = NSLocalizedString(
+            "ShareExtension.OpenInFirefoxAction.Title",
+            bundle: Strings.bundle,
+            comment: ""
+        )
         XCTAssertEqual(stringWithNoTable, "Open in Firefox")
 
-        let stringWithTable = NSLocalizedString("DefaultBrowserCard.Title", tableName: "Default Browser", bundle: Strings.bundle, comment: "")
+        let stringWithTable = NSLocalizedString(
+            "DefaultBrowserCard.Title",
+            tableName: "Default Browser",
+            bundle: Strings.bundle,
+            comment: ""
+        )
         XCTAssertEqual(stringWithTable, "Switch Your Default Browser")
     }
 
     func testLocalizedString_ForDefaultBrowserButton() throws {
         XCTAssertEqual(Locale.current.languageCode, "en")
 
-        let nsString = NSLocalizedString("DefaultBrowserCard.Button.v2", tableName: "Default Browser", bundle: Strings.bundle, comment: "")
+        let nsString = NSLocalizedString(
+            "DefaultBrowserCard.Button.v2",
+            tableName: "Default Browser",
+            bundle: Strings.bundle,
+            comment: ""
+        )
         XCTAssertEqual(nsString, "Learn How")
 
-        let localizedString = Strings.bundle.localizedString(forKey: "DefaultBrowserCard.Button.v2", value: nil, table: "Default Browser")
+        let localizedString = Strings.bundle.localizedString(
+            forKey: "DefaultBrowserCard.Button.v2",
+            value: nil,
+            table: "Default Browser"
+        )
         XCTAssertEqual(localizedString, "Learn How")
     }
 }

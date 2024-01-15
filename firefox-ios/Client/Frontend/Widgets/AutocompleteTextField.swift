@@ -72,9 +72,13 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     private func commonInit() {
         super.delegate = self
         super.addTarget(self, action: #selector(AutocompleteTextField.textDidChange), for: .editingChanged)
-        notifyTextChanged = debounce(0.1, action: {
+        notifyTextChanged = debounce(0.1,
+                                     action: {
             if self.isEditing {
-                self.autocompleteDelegate?.autocompleteTextField(self, didEnterText: self.normalizeString(self.text ?? ""))
+                self.autocompleteDelegate?.autocompleteTextField(
+                    self,
+                    didEnterText: self.normalizeString(self.text ?? "")
+                )
             }
         })
 
@@ -92,13 +96,29 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
     override var keyCommands: [UIKeyCommand]? {
         let commands = [
-            UIKeyCommand(input: copyShortcutKey, modifierFlags: .command, action: #selector(self.handleKeyCommand(sender:)))
+            UIKeyCommand(
+                input: copyShortcutKey,
+                modifierFlags: .command,
+                action: #selector(self.handleKeyCommand(sender:))
+            )
         ]
 
         let arrowKeysCommands = [
-            UIKeyCommand(input: UIKeyCommand.inputLeftArrow, modifierFlags: [], action: #selector(self.handleKeyCommand(sender:))),
-            UIKeyCommand(input: UIKeyCommand.inputRightArrow, modifierFlags: [], action: #selector(self.handleKeyCommand(sender:))),
-            UIKeyCommand(input: UIKeyCommand.inputEscape, modifierFlags: [], action: #selector(self.handleKeyCommand(sender:))),
+            UIKeyCommand(
+                input: UIKeyCommand.inputLeftArrow,
+                modifierFlags: [],
+                action: #selector(self.handleKeyCommand(sender:))
+            ),
+            UIKeyCommand(
+                input: UIKeyCommand.inputRightArrow,
+                modifierFlags: [],
+                action: #selector(self.handleKeyCommand(sender:))
+            ),
+            UIKeyCommand(
+                input: UIKeyCommand.inputEscape,
+                modifierFlags: [],
+                action: #selector(self.handleKeyCommand(sender:))
+            ),
         ]
         arrowKeysCommands.forEach { $0.wantsPriorityOverSystemBehavior = true }
 
@@ -110,7 +130,12 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         guard let input = sender.input else { return }
         switch input {
         case UIKeyCommand.inputLeftArrow:
-            TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "autocomplete-left-arrow"])
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .press,
+                object: .keyCommand,
+                extras: ["action": "autocomplete-left-arrow"]
+            )
             if isSelectionActive {
                 applyCompletion()
 
@@ -128,7 +153,12 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
                 selectedTextRange = textRange(from: cursorPosition, to: cursorPosition)
             }
         case UIKeyCommand.inputRightArrow:
-            TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "autocomplete-right-arrow"])
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .press,
+                object: .keyCommand,
+                extras: ["action": "autocomplete-right-arrow"]
+            )
             if isSelectionActive {
                 applyCompletion()
 
@@ -146,7 +176,12 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
                 selectedTextRange = textRange(from: cursorPosition, to: cursorPosition)
             }
         case UIKeyCommand.inputEscape:
-            TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "autocomplete-cancel"])
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .press,
+                object: .keyCommand,
+                extras: ["action": "autocomplete-cancel"]
+            )
             autocompleteDelegate?.autocompleteTextFieldDidCancel(self)
         case copyShortcutKey:
             if isSelectionActive {
@@ -198,7 +233,11 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     // `shouldChangeCharactersInRange` is called before the text changes, and textDidChange is called after.
     // Since the text has changed, remove the completion here, and textDidChange will fire the callback to
     // get the new autocompletion.
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    func textField(
+        _ textField: UITextField,
+        shouldChangeCharactersIn range: NSRange,
+        replacementString string: String
+    ) -> Bool {
         // This happens when you begin typing overtop the old highlighted
         // text immediately after focusing the text field. We need to trigger
         // a `didEnterText` that looks like a `clear()` so that the SearchLoader
@@ -266,7 +305,11 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         label.textColor = self.textColor
         label.textAlignment = .natural
 
-        let enteredTextSize = self.attributedText?.boundingRect(with: self.frame.size, options: NSStringDrawingOptions.usesLineFragmentOrigin, context: nil)
+        let enteredTextSize = self.attributedText?.boundingRect(
+            with: self.frame.size,
+            options: NSStringDrawingOptions.usesLineFragmentOrigin,
+            context: nil
+        )
         frame.origin.x = (enteredTextSize?.width.rounded() ?? 0) + textRect(forBounds: bounds).origin.x
         frame.size.width = self.frame.size.width - clearButtonRect(forBounds: self.frame).size.width - frame.origin.x
         frame.size.height = self.frame.size.height
@@ -359,7 +402,9 @@ extension AutocompleteTextField: ThemeApplicable, PrivateModeUI {
         isPrivateMode = isPrivate
 
         if autocompleteTextLabel?.attributedText != nil {
-            let autocompleteText = NSMutableAttributedString(string: self.autocompleteTextLabel?.attributedText?.string ?? "")
+            let autocompleteText = NSMutableAttributedString(
+                string: self.autocompleteTextLabel?.attributedText?.string ?? ""
+            )
             let color = isPrivateMode ? theme.colors.layerAccentPrivateNonOpaque : theme.colors.layerAccentNonOpaque
             autocompleteText.addAttribute(NSAttributedString.Key.backgroundColor,
                                           value: color,

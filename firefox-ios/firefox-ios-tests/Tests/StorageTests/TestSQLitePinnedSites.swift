@@ -97,7 +97,11 @@ class TestSQLitePinnedSites: XCTestCase {
     }
 
     func testPinnedTopSitesDuplicateDomains() {
-        let database = BrowserDB(filename: "testPinnedTopSitesDuplicateDomains.db", schema: BrowserSchema(), files: files)
+        let database = BrowserDB(
+            filename: "testPinnedTopSitesDuplicateDomains.db",
+            schema: BrowserSchema(),
+            files: files
+        )
         let prefs = MockProfilePrefs()
         let pinnedSites = BrowserDBSQLite(database: database, prefs: prefs)
 

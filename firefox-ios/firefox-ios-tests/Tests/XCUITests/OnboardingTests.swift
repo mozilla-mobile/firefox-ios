@@ -82,10 +82,15 @@ class OnboardingTests: BaseTestCase {
         let releaseVersion = String(mySubstring)
 
         XCTAssertTrue(app.staticTexts[releaseVersion].exists)
-        mozWaitForValueContains(app.textFields["url"], value: "www.mozilla.org/en-US/firefox/ios/" + releaseVersion + "/releasenotes/")
+        mozWaitForValueContains(
+            app.textFields["url"],
+            value: "www.mozilla.org/en-US/firefox/ios/" + releaseVersion + "/releasenotes/"
+        )
         XCTAssertTrue(app.staticTexts["Release Notes"].exists)
         if iPad() {
-            XCTAssertTrue(app.staticTexts["Firefox for iOS \(releaseVersion), See All New Features, Updates and Fixes"].exists)
+            XCTAssertTrue(
+                app.staticTexts["Firefox for iOS \(releaseVersion), See All New Features, Updates and Fixes"].exists
+            )
         }
         XCTAssertTrue(app.staticTexts["Firefox for iOS Release"].exists)
         XCTAssertTrue(app.staticTexts["Get the most recent version"].exists)

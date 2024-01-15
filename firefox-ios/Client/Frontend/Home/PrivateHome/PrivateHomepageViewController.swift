@@ -138,9 +138,18 @@ final class PrivateHomepageViewController: UIViewController, ContentContainable,
         let contentLayoutGuide = scrollView.contentLayoutGuide
         let frameLayoutGuide = scrollView.frameLayoutGuide
 
-        containerLeadingConstraint = scrollContainer.leadingAnchor.constraint(equalTo: contentLayoutGuide.leadingAnchor, constant: UX.scrollContainerPadding(with: traitCollection))
-        containerTrailingConstraint = scrollContainer.trailingAnchor.constraint(equalTo: contentLayoutGuide.trailingAnchor, constant: -UX.scrollContainerPadding(with: traitCollection))
-        containerWidthConstraint = scrollContainer.widthAnchor.constraint(equalTo: frameLayoutGuide.widthAnchor, constant: -UX.scrollContainerPadding(with: traitCollection) * 2)
+        containerLeadingConstraint = scrollContainer.leadingAnchor.constraint(
+            equalTo: contentLayoutGuide.leadingAnchor,
+            constant: UX.scrollContainerPadding(with: traitCollection)
+        )
+        containerTrailingConstraint = scrollContainer.trailingAnchor.constraint(
+            equalTo: contentLayoutGuide.trailingAnchor,
+            constant: -UX.scrollContainerPadding(with: traitCollection)
+        )
+        containerWidthConstraint = scrollContainer.widthAnchor.constraint(
+            equalTo: frameLayoutGuide.widthAnchor,
+            constant: -UX.scrollContainerPadding(with: traitCollection) * 2
+        )
 
         containerLeadingConstraint?.isActive = true
         containerTrailingConstraint?.isActive = true
@@ -165,9 +174,6 @@ final class PrivateHomepageViewController: UIViewController, ContentContainable,
     }
 
     func applyTheme() {
-        // TODO: Felt Privay - Theming System should be handled by Redux
-        // https://mozilla-hub.atlassian.net/browse/FXIOS-7879
-        themeManager.changeCurrentTheme(.privateMode)
         let theme = themeManager.currentTheme
         gradient.colors = theme.colors.layerHomepage.cgColors
         logoHeaderCell.applyTheme(theme: theme)

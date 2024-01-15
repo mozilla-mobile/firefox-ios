@@ -15,7 +15,10 @@ class PhotonActionSheetAnimator: NSObject, UIViewControllerAnimatedTransitioning
     }()
 
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        let screens = (from: transitionContext.viewController(forKey: .from)!, to: transitionContext.viewController(forKey: .to)!)
+        let screens = (
+            from: transitionContext.viewController(forKey: .from)!,
+            to: transitionContext.viewController(forKey: .to)!
+        )
 
         guard let actionSheet = (self.presenting ? screens.to : screens.from) as? PhotonActionSheet else { return }
 
@@ -29,25 +32,38 @@ class PhotonActionSheetAnimator: NSObject, UIViewControllerAnimatedTransitioning
 }
 
 extension PhotonActionSheetAnimator: UIViewControllerTransitioningDelegate {
-    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    func animationController(
+        forPresented presented: UIViewController,
+        presenting: UIViewController,
+        source: UIViewController
+    ) -> UIViewControllerAnimatedTransitioning? {
         self.presenting = true
         return self
     }
 
-    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    func animationController(
+        forDismissed dismissed: UIViewController
+    ) -> UIViewControllerAnimatedTransitioning? {
         self.presenting = false
         return self
     }
 }
 
 extension PhotonActionSheetAnimator {
-    fileprivate func animateWitVC(_ actionSheet: PhotonActionSheet, presentingVC viewController: UIViewController, transitionContext: UIViewControllerContextTransitioning) {
+    fileprivate func animateWitVC(
+        _ actionSheet: PhotonActionSheet,
+        presentingVC viewController: UIViewController,
+        transitionContext: UIViewControllerContextTransitioning
+    ) {
         let containerView = transitionContext.containerView
 
         if presenting {
             shadow.frame = containerView.bounds
             containerView.addSubview(shadow)
-            actionSheet.view.frame = CGRect(origin: CGPoint(x: 0, y: containerView.frame.size.height), size: containerView.frame.size)
+            actionSheet.view.frame = CGRect(
+                origin: CGPoint(x: 0, y: containerView.frame.size.height),
+                size: containerView.frame.size
+            )
             self.shadow.alpha = 0
             containerView.addSubview(actionSheet.view)
             actionSheet.view.layoutIfNeeded()
@@ -72,11 +88,16 @@ extension PhotonActionSheetAnimator {
                 usingSpringWithDamping: 1.2,
                 initialSpringVelocity: 0.0,
                 options: [],
-                animations: { () -> Void in
+                animations: {
+                    () -> Void in
                     self.shadow.alpha = 0
-                    actionSheet.view.frame = CGRect(origin: CGPoint(x: 0, y: containerView.frame.size.height), size: containerView.frame.size)
+                    actionSheet.view.frame = CGRect(
+                        origin: CGPoint(x: 0, y: containerView.frame.size.height),
+                        size: containerView.frame.size
+                    )
                     actionSheet.view.layoutIfNeeded()
-                }, completion: { (completed) -> Void in
+                },
+                completion: { (completed) -> Void in
                     actionSheet.view.removeFromSuperview()
                     self.shadow.removeFromSuperview()
                     transitionContext.completeTransition(completed)

@@ -84,7 +84,9 @@ class ClipBoardTests: BaseTestCase {
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         app.textFields["url"].press(forDuration: 3)
         mozWaitForElementToExist(app.tables["Context Menu"])
-        mozWaitForElementToExist(app.tables["Context Menu"].otherElements[AccessibilityIdentifiers.Photon.pasteAndGoAction])
+        mozWaitForElementToExist(
+            app.tables["Context Menu"].otherElements[AccessibilityIdentifiers.Photon.pasteAndGoAction]
+        )
         app.tables["Context Menu"].otherElements[AccessibilityIdentifiers.Photon.pasteAndGoAction].tap()
         mozWaitForElementToExist(app.textFields["url"])
         mozWaitForValueContains(app.textFields["url"], value: "www.example.com")

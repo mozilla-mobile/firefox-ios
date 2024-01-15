@@ -13,7 +13,9 @@ private class CustomFxAContentServerEnableSetting: BoolSetting {
               prefs: prefs,
               prefKey: PrefsKeys.KeyUseCustomFxAContentServer,
               defaultValue: false,
-              attributedTitleText: NSAttributedString(string: .SettingsAdvancedAccountUseCustomFxAContentServerURITitle),
+              attributedTitleText: NSAttributedString(
+                string: .SettingsAdvancedAccountUseCustomFxAContentServerURITitle
+              ),
               settingDidChange: settingDidChange
           )
       }
@@ -82,6 +84,16 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
             self.tableView.reloadData()
         }
 
+        let useReactFxA = BoolSetting(
+            prefs: prefs,
+            prefKey: PrefsKeys.KeyUseReactFxA,
+            defaultValue: false,
+            attributedTitleText: NSAttributedString(string: .SettingsAdvancedAccountUseReactContentServer)
+        ) { isOn in
+            self.settings = self.generateSettings()
+            self.tableView.reloadData()
+        }
+
         let customFxA = CustomURLSetting(prefs: prefs,
                                          prefKey: PrefsKeys.KeyCustomFxAContentServer,
                                          placeholder: .SettingsAdvancedAccountCustomFxAContentServerURI,
@@ -106,7 +118,7 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
             customSyncTokenServerURISetting
         ]
 
-        var settings: [SettingSection] = [SettingSection(title: nil, children: [useStage])]
+        var settings: [SettingSection] = [SettingSection(title: nil, children: [useStage, useReactFxA])]
 
         if !(prefs.boolForKey(PrefsKeys.UseStageServer) ?? false) {
             settings.append(SettingSection(title: nil, children: autoconfigSettings))
@@ -116,7 +128,9 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier
+        ) as? ThemedTableSectionHeaderFooterView else { return nil }
 
         let sectionSetting = settings[section]
         headerView.titleLabel.text = sectionSetting.title?.string

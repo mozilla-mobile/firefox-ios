@@ -91,8 +91,7 @@ class PocketFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable 
 
     func applyTheme(theme: Theme) {
         let colors = theme.colors
-        titleLabel.textColor = wallpaperManager.featureAvailable ?
-        wallpaperManager.currentWallpaper.textColor : colors.textPrimary
+        titleLabel.textColor = wallpaperManager.currentWallpaper.textColor
         learnMoreLabel.textColor = colors.textAccent
     }
 }

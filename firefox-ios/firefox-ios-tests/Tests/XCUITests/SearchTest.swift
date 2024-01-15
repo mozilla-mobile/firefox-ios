@@ -104,7 +104,10 @@ class SearchTests: BaseTestCase {
         mozWaitForElementToExist(app.tables["SiteTable"])
         if !(app.tables["SiteTable"].cells.staticTexts[SuggestedSite].exists) {
             if !(app.tables["SiteTable"].cells.staticTexts[SuggestedSite2].exists) {
-                mozWaitForElementToExist(app.tables["SiteTable"].cells.staticTexts[SuggestedSite3], timeout: 5)
+                mozWaitForElementToExist(
+                    app.tables["SiteTable"].cells.staticTexts[SuggestedSite3],
+                    timeout: 5
+                )
             }
         }
 
@@ -135,7 +138,10 @@ class SearchTests: BaseTestCase {
         app.buttons["urlBar-cancel"].tap()
 
         navigator.nowAt(HomePanelsScreen)
-        mozWaitForElementToExist(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell], timeout: 10)
+        mozWaitForElementToExist(
+            app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell],
+            timeout: 10
+        )
         mozWaitForElementToExist(app.textFields["url"], timeout: 3)
         app.textFields["url"].tap()
         mozWaitForElementToExist(app.textFields["address"], timeout: 3)
@@ -284,19 +290,25 @@ class SearchTests: BaseTestCase {
         validateSearchSuggestionText(typeText: "localhost")
         restartInBackground()
         // Open new tab
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton], timeout: TIMEOUT)
+        mozWaitForElementToExist(
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton],
+            timeout: TIMEOUT
+        )
         navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         validateSearchSuggestionText(typeText: "localhost")
     }
-//  TODO: Add UI Tests back when felt privay simplified UI feature flag is enabled or when we support feature flags for tests
+// TODO: Add UI Tests back when felt privay simplified UI feature flag is enabled or when
+// we support feature flags for tests
 //    func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOn() {
 //        navigator.nowAt(NewTabScreen)
 //        navigator.goto(SearchSettings)
 //        navigator.nowAt(SearchSettings)
 //        
 //        // By default, disable search suggest in private mode
-//        let privateModeSearchSuggestSwitch = app.otherElements.tables.cells[AccessibilityIdentifiers.Settings.Search.disableSearchSuggestsInPrivateMode]
+//        let privateModeSearchSuggestSwitch = app.otherElements.tables.cells[
+//            AccessibilityIdentifiers.Settings.Search.disableSearchSuggestsInPrivateMode
+//        ]
 //        mozWaitForElementToExist(privateModeSearchSuggestSwitch)
 //
 //        app.navigationBars["Search"].buttons["Settings"].tap()
@@ -338,7 +350,9 @@ class SearchTests: BaseTestCase {
 //        navigator.nowAt(SearchSettings)
 //
 //        // By default, disable search suggest in private mode
-//        let privateModeSearchSuggestSwitch = app.otherElements.tables.cells[AccessibilityIdentifiers.Settings.Search.disableSearchSuggestsInPrivateMode]
+//        let privateModeSearchSuggestSwitch = app.otherElements.tables.cells[
+//            AccessibilityIdentifiers.Settings.Search.disableSearchSuggestsInPrivateMode
+//        ]
 //        mozWaitForElementToExist(privateModeSearchSuggestSwitch)
 //
 //        app.navigationBars["Search"].buttons["Settings"].tap()

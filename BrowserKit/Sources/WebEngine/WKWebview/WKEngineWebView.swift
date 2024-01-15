@@ -13,12 +13,15 @@ protocol WKEngineWebViewDelegate: AnyObject {
 }
 
 /// Abstraction on top of the `WKWebView`
-protocol WKEngineWebView {
+protocol WKEngineWebView: UIView {
     var navigationDelegate: WKNavigationDelegate? { get set }
     var allowsBackForwardNavigationGestures: Bool { get set }
     var allowsLinkPreview: Bool { get set }
     var backgroundColor: UIColor? { get set }
+    var interactionState: Any? { get set }
     var url: URL? { get }
+    var scrollView: UIScrollView { get }
+    var configuration: WKWebViewConfiguration { get }
 
     @available(iOS 16.4, *)
     var isInspectable: Bool { get set }
@@ -56,6 +59,15 @@ protocol WKEngineWebView {
     /// Use JS to redirect the page without adding a history entry
     /// - Parameter url: The URL to replace the location with
     func replaceLocation(with url: URL)
+
+    func addObserver(
+        _ observer: NSObject,
+        forKeyPath keyPath: String,
+        options: NSKeyValueObservingOptions,
+        context: UnsafeMutableRawPointer?
+    )
+
+    func removeObserver(_ observer: NSObject, forKeyPath keyPath: String)
 }
 
 extension WKEngineWebView {
@@ -101,9 +113,9 @@ extension WKEngineWebView {
 
     func replaceLocation(with url: URL) {
         let charactersToReplace = CharacterSet(charactersIn: "'")
-        guard let safeUrl = url.absoluteString.addingPercentEncoding(withAllowedCharacters: charactersToReplace.inverted) else {
-            return
-        }
+        guard let safeUrl = url.absoluteString
+            .addingPercentEncoding(withAllowedCharacters: charactersToReplace.inverted) else { return }
+
         evaluateJavascriptInDefaultContentWorld("location.replace('\(safeUrl)')")
     }
 }

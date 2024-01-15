@@ -119,17 +119,22 @@ class SearchEnginesTests: XCTestCase {
         XCTAssertTrue(engines.isEngineEnabled((engineSet?[1])!))
 
         // The default engine is not included in the quick search engines.
-        XCTAssertEqual(0, engines.quickSearchEngines.filter { engine in engine.shortName == engineSet?[1].shortName }.count)
+        XCTAssertEqual(
+            0,
+            engines.quickSearchEngines.filter { engine in engine.shortName == engineSet?[1].shortName }.count)
 
         // Enable and disable work.
         engines.enableEngine((engineSet?[0])!)
         XCTAssertTrue(engines.isEngineEnabled((engineSet?[0])!))
-        XCTAssertEqual(1, engines.quickSearchEngines.filter { engine in engine.shortName == engineSet?[0].shortName }.count)
+        XCTAssertEqual(
+            1,
+            engines.quickSearchEngines.filter { engine in engine.shortName == engineSet?[0].shortName }.count)
 
         engines.disableEngine((engineSet?[0])!)
         XCTAssertFalse(engines.isEngineEnabled((engineSet?[0])!))
-        XCTAssertEqual(0, engines.quickSearchEngines.filter { engine in engine.shortName == engineSet?[0].shortName }.count)
-
+        XCTAssertEqual(
+            0,
+            engines.quickSearchEngines.filter { engine in engine.shortName == engineSet?[0].shortName }.count)
         // Setting the default engine enables it.
         engines.defaultEngine = (engineSet?[0])!
         XCTAssertTrue(engines.isEngineEnabled((engineSet?[1])!))

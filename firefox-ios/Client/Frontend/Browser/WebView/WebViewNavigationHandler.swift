@@ -17,7 +17,8 @@ protocol WebViewNavigationHandler {
     /// https://blog.mozilla.org/security/2017/11/27/blocking-top-level-navigations-data-urls-firefox-59/
     /// - Parameters:
     ///   - url: url to filter the navigation action on
-    ///   - navigationAction: The navigation action that happened on that url, contains information about an action that may cause a navigation, used for making policy decisions.
+    ///   - navigationAction: The navigation action that happened on that url, contains information
+    ///                       about an action that may cause a navigation, used for making policy decisions.
     func filterDataScheme(url: URL, navigationAction: WKNavigationAction)
 }
 
@@ -58,13 +59,16 @@ struct WebViewNavigationHandlerImplementation: WebViewNavigationHandler {
         }
 
         // Allow video, and certain application types
-        if url.hasPrefix("data:video/") || url.hasPrefix("data:application/pdf") || url.hasPrefix("data:application/json") {
+        if url.hasPrefix("data:video/")
+            || url.hasPrefix("data:application/pdf")
+            || url.hasPrefix("data:application/json") {
             decisionHandler(.allow)
             return
         }
 
         // Allow plain text types.
-        // Note the format of data URLs is `data:[<media type>][;base64],<data>` with empty <media type> indicating plain text.
+        // Note the format of data URLs is `data:[<media type>][;base64],<data>` 
+        // with empty <media type> indicating plain text.
         if url.hasPrefix("data:;base64,")
             || url.hasPrefix("data:,")
             || url.hasPrefix("data:text/plain,")

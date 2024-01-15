@@ -11,7 +11,8 @@ class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlagga
         super.init(style: .grouped)
 
         self.title = .Settings.Homepage.Shortcuts.ShortcutsPageTitle
-        self.navigationController?.navigationBar.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Shortcuts.settingsPage
+        self.navigationController?.navigationBar.accessibilityIdentifier = AccessibilityIdentifiers
+            .Settings.Homepage.CustomizeFirefox.Shortcuts.settingsPage
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -62,17 +63,27 @@ extension TopSitesSettingsViewController {
 
         override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
         override var status: NSAttributedString {
-            let numberOfRows = profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? TopSitesRowCountSettingsController.defaultNumberOfRows
+            let defaultValue = TopSitesRowCountSettingsController.defaultNumberOfRows
+            let numberOfRows = profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? defaultValue
+
             return NSAttributedString(string: String(format: "%d", numberOfRows))
         }
 
-        override var accessibilityIdentifier: String? { return AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Shortcuts.topSitesRows }
+        override var accessibilityIdentifier: String? {
+            return AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Shortcuts.topSitesRows
+        }
         override var style: UITableViewCell.CellStyle { return .value1 }
 
         init(settings: SettingsTableViewController) {
             self.profile = settings.profile
-            super.init(title: NSAttributedString(string: .Settings.Homepage.Shortcuts.Rows,
-                                                 attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
+            super.init(
+                title: NSAttributedString(
+                    string: .Settings.Homepage.Shortcuts.Rows,
+                    attributes: [
+                        NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary
+                    ]
+                )
+            )
         }
 
         override func onClick(_ navigationController: UINavigationController?) {

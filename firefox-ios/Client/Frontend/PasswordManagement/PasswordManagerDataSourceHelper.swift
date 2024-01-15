@@ -53,7 +53,10 @@ class PasswordManagerDataSourceHelper {
         }
     }
 
-    func computeSectionsFromLogins(_ logins: [LoginRecord], completion: @escaping ((([Character], [Character: [LoginRecord]])) -> Void)) {
+    func computeSectionsFromLogins(
+        _ logins: [LoginRecord],
+        completion: @escaping ((([Character], [Character: [LoginRecord]])) -> Void)
+    ) {
         guard !logins.isEmpty else {
             completion( ([Character](), [Character: [LoginRecord]]()) )
             return

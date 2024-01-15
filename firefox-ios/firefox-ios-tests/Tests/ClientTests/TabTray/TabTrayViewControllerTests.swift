@@ -10,12 +10,15 @@ import XCTest
 final class TabTrayViewControllerTests: XCTestCase {
     var delegate: MockTabTrayViewControllerDelegate!
     var navigationController: DismissableNavigationViewController!
+    private var tabManager: MockTabManager!
 
     override func setUp() {
         super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
+        let mockTabManager = MockTabManager()
+        DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
         delegate = MockTabTrayViewControllerDelegate()
         navigationController = DismissableNavigationViewController()
+        tabManager = mockTabManager
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 

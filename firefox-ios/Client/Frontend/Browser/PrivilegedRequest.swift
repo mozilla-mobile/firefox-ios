@@ -19,10 +19,11 @@ private let REQUEST_KEY_PRIVILEGED = "privileged"
  needed, and when you are sure the URL is from a trustworthy source!
 
  TODO: Setting REQUEST_KEY_PRIVILEGED is not reliable, as the code has various session restoration
- scenarios where internal URLs are loaded directly from the webview (only native code can set a request to be a PrivilegedRequest).
- This method should be deprecated in favor of the uuid key url param which is added to valid internal
- urls. The code currently has non-internal URLs which are loaded as PrivilegedRequest(), but the value of
- doing this is not clear as these requests should work fine as regular URLRequest().
+ scenarios where internal URLs are loaded directly from the webview (only native code can set a request
+ to be a PrivilegedRequest). This method should be deprecated in favor of the uuid key url param which
+ is added to valid internal urls. The code currently has non-internal URLs which are loaded as
+ PrivilegedRequest(), but the value of doing this is not clear as these requests should work fine
+ as regular URLRequest().
  **/
 class PrivilegedRequest: NSMutableURLRequest {
     override init(url: URL, cachePolicy: NSURLRequest.CachePolicy, timeoutInterval: TimeInterval) {

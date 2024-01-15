@@ -8,7 +8,8 @@ protocol ImageHandler {
     /// The ImageHandler will fetch the favicon with the following precedence:
     ///     1. Tries to fetch from the bundle.
     ///     2. Tries to fetch from the cache.
-    ///     3. Tries to fetch from the favicon fetcher (from the web) if there's a URL. If there's no URL it fallbacks to the letter favicon.
+    ///     3. Tries to fetch from the favicon fetcher (from the web) if there's a URL. 
+    ///        If there's no URL it fallbacks to the letter favicon.
     ///     4. When all fails it returns the letter favicon.
     ///
     /// Any time the favicon is fetched, it will be cache for future usage.

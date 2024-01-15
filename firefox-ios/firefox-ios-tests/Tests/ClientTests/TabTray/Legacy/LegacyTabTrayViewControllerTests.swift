@@ -59,7 +59,11 @@ final class LegacyTabTrayViewControllerTests: XCTestCase {
 //        gridTab.tabDisplayManager.performCloseAction(for: tabToRemove)
 //        // Wait for notification of .TabClosed when tab is removed
 //        let expectation = expectation(description: "notificationReceived")
-//        NotificationCenter.default.addObserver(forName: .UpdateLabelOnTabClosed, object: nil, queue: nil) { notification in
+//        NotificationCenter.default.addObserver(
+//            forName: .UpdateLabelOnTabClosed,
+//            object: nil,
+//            queue: nil
+//        ) { notification in
 //            expectation.fulfill()
 //
 //            XCTAssertEqual(self.tabTray.viewModel.normalTabsCount, "1")

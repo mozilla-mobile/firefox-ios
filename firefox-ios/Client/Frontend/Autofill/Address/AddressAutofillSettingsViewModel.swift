@@ -2,24 +2,59 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
-/// TODO FXIOS-8067
+import Shared
+import Storage
+
+// MARK: - AddressAutofillSettingsViewModel
+
+/// View model for managing address autofill settings.
 class AddressAutofillSettingsViewModel {
-    // This property holds the current state of address autofill settings
+    // MARK: Properties
+
+    /// Model for managing the state of the address autofill toggle.
+    lazy var toggleModel = ToggleModel(isEnabled: isAutofillEnabled, delegate: self)
+
+    /// RustAutofill instance for handling autofill functionality.
+    var autofill: RustAutofill?
+
+    /// Profile associated with the address autofill settings.
+    var profile: Profile
+
+    /// Boolean indicating whether autofill is currently enabled.
     var isAutofillEnabled: Bool {
-        didSet {
-            // You can perform any additional actions when the value changes
-            // For example, save the new state to UserDefaults or send it to a server
-            UserDefaults.standard.set(isAutofillEnabled, forKey: "IsAutofillEnabled")
+        get {
+            let userDefaults = UserDefaults.standard
+            let key = PrefsKeys.KeyAutofillAddressStatus
+            guard userDefaults.value(forKey: key) != nil else {
+                // Default value is true for address autofill input
+                return true
+            }
+
+            return userDefaults.bool(forKey: key)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: PrefsKeys.KeyAutofillAddressStatus)
         }
     }
 
-    // You can add other properties and methods as needed
+    // MARK: Initializer
 
-    init() {
-        // Initialize the state from UserDefaults or any other source
-        self.isAutofillEnabled = UserDefaults.standard.bool(forKey: "IsAutofillEnabled")
+    /// Initializes the AddressAutofillSettingsViewModel.
+    /// - Parameters:
+    ///   - profile: The profile associated with the address autofill settings.
+    init(profile: Profile) {
+        self.profile = profile
+        guard let profile = profile as? BrowserProfile else { return }
+        self.autofill = profile.autofill
     }
+}
 
-    // Add other methods or properties as needed
+// MARK: - ToggleModelDelegate
+
+extension AddressAutofillSettingsViewModel: ToggleModelDelegate {
+    /// Called when the state of the address autofill toggle changes.
+    /// - Parameter toggleModel: The toggle model whose state changed.
+    func toggleDidChange(_ toggleModel: ToggleModel) {
+        isAutofillEnabled = toggleModel.isEnabled
+    }
 }

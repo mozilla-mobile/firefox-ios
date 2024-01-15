@@ -63,41 +63,47 @@ class LegacyInactiveTabItemCell: UITableViewCell, ReusableCell, ThemeApplicable 
 
         containerViewLeadingConstraint = containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
 
-        NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            containerViewLeadingConstraint,
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+        NSLayoutConstraint.activate(
+            [
+                containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+                containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+                containerViewLeadingConstraint,
+                containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-            leftImageView.heightAnchor.constraint(equalToConstant: LegacyInactiveTabItemCellModel.UX.ImageSize),
-            leftImageView.widthAnchor.constraint(equalToConstant: LegacyInactiveTabItemCellModel.UX.ImageSize),
-            leftImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
-                                                   constant: LegacyInactiveTabItemCellModel.UX.ImageViewLeadingConstant),
-            leftImageView.centerYAnchor.constraint(equalTo: midView.centerYAnchor),
-            leftImageView.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor,
-                                               constant: LegacyInactiveTabItemCellModel.UX.ImageTopBottomMargin),
-            leftImageView.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor,
-                                                  constant: LegacyInactiveTabItemCellModel.UX.ImageTopBottomMargin),
+                leftImageView.heightAnchor.constraint(equalToConstant: LegacyInactiveTabItemCellModel.UX.ImageSize),
+                leftImageView.widthAnchor.constraint(equalToConstant: LegacyInactiveTabItemCellModel.UX.ImageSize),
+                leftImageView.leadingAnchor.constraint(
+                    equalTo: containerView.leadingAnchor,
+                    constant: LegacyInactiveTabItemCellModel.UX.ImageViewLeadingConstant
+                ),
+                leftImageView.centerYAnchor.constraint(equalTo: midView.centerYAnchor),
+                leftImageView.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor,
+                                                   constant: LegacyInactiveTabItemCellModel.UX.ImageTopBottomMargin),
+                leftImageView.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor,
+                                                      constant: LegacyInactiveTabItemCellModel.UX.ImageTopBottomMargin),
 
-            midView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            midView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            midView.leadingAnchor.constraint(equalTo: leftImageView.trailingAnchor,
-                                             constant: LegacyInactiveTabItemCellModel.UX.MidViewLeadingConstant),
-            midView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
-                                              constant: LegacyInactiveTabItemCellModel.UX.MidViewTrailingConstant),
+                midView.topAnchor.constraint(equalTo: containerView.topAnchor),
+                midView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+                midView.leadingAnchor.constraint(equalTo: leftImageView.trailingAnchor,
+                                                 constant: LegacyInactiveTabItemCellModel.UX.MidViewLeadingConstant),
+                midView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
+                                                  constant: LegacyInactiveTabItemCellModel.UX.MidViewTrailingConstant),
 
-            titleLabel.topAnchor.constraint(equalTo: midView.topAnchor,
-                                            constant: LegacyInactiveTabItemCellModel.UX.LabelTopBottomMargin),
-            titleLabel.bottomAnchor.constraint(equalTo: midView.bottomAnchor,
-                                               constant: -LegacyInactiveTabItemCellModel.UX.LabelTopBottomMargin),
-            titleLabel.leadingAnchor.constraint(equalTo: midView.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: midView.trailingAnchor),
+                titleLabel.topAnchor.constraint(equalTo: midView.topAnchor,
+                                                constant: LegacyInactiveTabItemCellModel.UX.LabelTopBottomMargin),
+                titleLabel.bottomAnchor.constraint(equalTo: midView.bottomAnchor,
+                                                   constant: -LegacyInactiveTabItemCellModel.UX.LabelTopBottomMargin),
+                titleLabel.leadingAnchor.constraint(equalTo: midView.leadingAnchor),
+                titleLabel.trailingAnchor.constraint(equalTo: midView.trailingAnchor),
 
-            bottomSeparatorView.heightAnchor.constraint(equalToConstant: LegacyInactiveTabItemCellModel.UX.SeparatorHeight),
-            bottomSeparatorView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            bottomSeparatorView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            bottomSeparatorView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-        ])
+                bottomSeparatorView.heightAnchor.constraint(
+                    equalToConstant: LegacyInactiveTabItemCellModel.UX.SeparatorHeight
+                ),
+                bottomSeparatorView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+                bottomSeparatorView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+                bottomSeparatorView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            ]
+        )
 
         leftImageView.setContentHuggingPriority(.required, for: .vertical)
 

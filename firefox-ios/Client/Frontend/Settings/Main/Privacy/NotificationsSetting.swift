@@ -23,8 +23,12 @@ class NotificationsSetting: Setting {
          settingsDelegate: PrivacySettingsDelegate?) {
         self.profile = profile
         self.settingsDelegate = settingsDelegate
-        super.init(title: NSAttributedString(string: .Settings.Notifications.Title,
-                                             attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]))
+        super.init(
+            title: NSAttributedString(
+                string: .Settings.Notifications.Title,
+                attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
+            )
+        )
     }
 
     override func onClick(_ navigationController: UINavigationController?) {

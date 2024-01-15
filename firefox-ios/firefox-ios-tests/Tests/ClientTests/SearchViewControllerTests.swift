@@ -12,7 +12,11 @@ import Shared
 actor MockRustFirefoxSuggest: RustFirefoxSuggestActor {
     func ingest() async throws {
     }
-    func query(_ keyword: String, includeSponsored: Bool, includeNonSponsored: Bool) async throws -> [RustFirefoxSuggestion] {
+    func query(
+        _ keyword: String,
+        includeSponsored: Bool,
+        includeNonSponsored: Bool
+    ) async throws -> [RustFirefoxSuggestion] {
         return [RustFirefoxSuggestion(title: "Mozilla",
                                       url: URL(string: "https://mozilla.org")!,
                                       isSponsored: true,
@@ -44,7 +48,12 @@ class SearchViewControllerTest: XCTestCase {
         )
         let viewModel = SearchViewModel(isPrivate: false, isBottomSearchBar: false)
 
-        searchViewController = SearchViewController(profile: profile, viewModel: viewModel, model: engines, tabManager: MockTabManager())
+        searchViewController = SearchViewController(
+            profile: profile,
+            viewModel: viewModel,
+            model: engines,
+            tabManager: MockTabManager()
+        )
     }
 
     override func tearDown() {

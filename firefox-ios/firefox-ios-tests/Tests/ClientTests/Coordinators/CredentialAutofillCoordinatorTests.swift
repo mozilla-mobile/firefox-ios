@@ -40,7 +40,13 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
     func testShowCreditCardAutofill() {
         let subject = createSubject()
 
-        subject.showCreditCardAutofill(creditCard: nil, decryptedCard: nil, viewType: .save, frame: nil, alertContainer: UIView())
+        subject.showCreditCardAutofill(
+            creditCard: nil,
+            decryptedCard: nil,
+            viewType: .save,
+            frame: nil,
+            alertContainer: UIView()
+        )
 
         XCTAssertTrue(router.presentedViewController is BottomSheetViewController)
         XCTAssertEqual(router.presentCalled, 1)
@@ -49,11 +55,18 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
     func testShowCreditCardAutofill_didTapYesButton_callDidFinish() {
         let subject = createSubject()
 
-        subject.showCreditCardAutofill(creditCard: nil, decryptedCard: nil, viewType: .save, frame: nil, alertContainer: UIView())
+        subject.showCreditCardAutofill(
+            creditCard: nil,
+            decryptedCard: nil,
+            viewType: .save,
+            frame: nil,
+            alertContainer: UIView()
+        )
 
         if let bottomSheetViewController = router.presentedViewController as? BottomSheetViewController {
             bottomSheetViewController.loadViewIfNeeded()
-            if let creditCardViewController = bottomSheetViewController.children.first(where: {  $0 is CreditCardBottomSheetViewController
+            if let creditCardViewController = bottomSheetViewController.children.first(where: {
+                $0 is CreditCardBottomSheetViewController
             }) as? CreditCardBottomSheetViewController {
                 creditCardViewController.didTapYesClosure?(nil)
                 XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
@@ -68,11 +81,18 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
     func testShowCreditCardAutofill_didTapCreditCardFill_callDidFinish() {
         let subject = createSubject()
 
-        subject.showCreditCardAutofill(creditCard: nil, decryptedCard: nil, viewType: .save, frame: nil, alertContainer: UIView())
+        subject.showCreditCardAutofill(
+            creditCard: nil,
+            decryptedCard: nil,
+            viewType: .save,
+            frame: nil,
+            alertContainer: UIView()
+        )
 
         if let bottomSheetViewController = router.presentedViewController as? BottomSheetViewController {
             bottomSheetViewController.loadViewIfNeeded()
-            if let creditCardViewController = bottomSheetViewController.children.first(where: {  $0 is CreditCardBottomSheetViewController
+            if let creditCardViewController = bottomSheetViewController.children.first(where: {
+                $0 is CreditCardBottomSheetViewController
             }) as? CreditCardBottomSheetViewController {
                 creditCardViewController.didSelectCreditCardToFill?(UnencryptedCreditCardFields())
                 XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
@@ -87,11 +107,18 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
     func testShowCreditCardAutofill_didTapManageCards_callDidFinish() {
         let subject = createSubject()
 
-        subject.showCreditCardAutofill(creditCard: nil, decryptedCard: nil, viewType: .save, frame: nil, alertContainer: UIView())
+        subject.showCreditCardAutofill(
+            creditCard: nil,
+            decryptedCard: nil,
+            viewType: .save,
+            frame: nil,
+            alertContainer: UIView()
+        )
 
         if let bottomSheetViewController = router.presentedViewController as? BottomSheetViewController {
             bottomSheetViewController.loadViewIfNeeded()
-            if let creditCardViewController = bottomSheetViewController.children.first(where: {  $0 is CreditCardBottomSheetViewController
+            if let creditCardViewController = bottomSheetViewController.children.first(where: {
+                $0 is CreditCardBottomSheetViewController
             }) as? CreditCardBottomSheetViewController {
                 creditCardViewController.didTapManageCardsClosure?()
                 XCTAssertEqual(parentCoordinator.didFinishCalled, 1)

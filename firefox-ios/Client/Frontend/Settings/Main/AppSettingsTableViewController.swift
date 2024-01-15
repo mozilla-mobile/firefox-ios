@@ -198,7 +198,9 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         let accountSectionTitle = NSAttributedString(string: .FxAFirefoxAccount)
 
-        let accountFooterText = !profile.hasAccount() ? NSAttributedString(string: .Settings.Sync.ButtonDescription) : nil
+        let attributedString = NSAttributedString(string: .Settings.Sync.ButtonDescription)
+        let accountFooterText = !profile.hasAccount() ? attributedString : nil
+
         return [SettingSection(title: accountSectionTitle, footerTitle: accountFooterText, children: [
             // Without a Firefox Account:
             ConnectSetting(settings: self, settingsDelegate: parentCoordinator),
@@ -227,7 +229,13 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         let inactiveTabsAreBuildActive = featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly)
         if inactiveTabsAreBuildActive {
-            generalSettings.insert(TabsSetting(theme: themeManager.currentTheme, settingsDelegate: parentCoordinator), at: 3)
+            generalSettings.insert(
+                TabsSetting(
+                    theme: themeManager.currentTheme,
+                    settingsDelegate: parentCoordinator
+                ),
+                at: 3
+            )
         }
 
         let offerToOpenCopiedLinksSettings = BoolSetting(
@@ -405,7 +413,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
     // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = super.tableView(tableView, viewForHeaderInSection: section) as! ThemedTableSectionHeaderFooterView
+        let headerView = super.tableView(
+            tableView,
+            viewForHeaderInSection: section
+        ) as! ThemedTableSectionHeaderFooterView
         return headerView
     }
 }

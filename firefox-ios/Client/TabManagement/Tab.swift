@@ -24,7 +24,10 @@ func mostRecentTab(inTabs tabs: [Tab]) -> Tab? {
 protocol TabContentScript {
     static func name() -> String
     func scriptMessageHandlerNames() -> [String]?
-    func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage)
+    func userContentController(
+        _ userContentController: WKUserContentController,
+        didReceiveScriptMessage message: WKScriptMessage
+    )
     func prepareForDeinit()
 }
 
@@ -183,8 +186,8 @@ class Tab: NSObject, ThemeApplicable {
         return nil
     }
 
-    /// This property returns, ideally, the web page's title. Otherwise, based on the page being internal or not, it will
-    /// resort to other displayable titles.
+    /// This property returns, ideally, the web page's title. Otherwise, based on the page being internal
+    /// or not, it will resort to other displayable titles.
     var displayTitle: String {
         if let lastTitle = lastTitle, !lastTitle.isEmpty {
             return lastTitle
@@ -195,16 +198,18 @@ class Tab: NSObject, ThemeApplicable {
             return title
         }
 
-        // If the webView doesn't give a title. check the URL to see if it's our Home URL, with no sessionData on this tab.
-        // When picking a display title. Tabs with sessionData are pending a restore so show their old title.
-        // To prevent flickering of the display title. If a tab is restoring make sure to use its lastTitle.
+        // If the webView doesn't give a title. check the URL to see if it's our Home URL, with no sessionData
+        // on this tab. When picking a display title. Tabs with sessionData are pending a restore so show their
+        // old title. To prevent flickering of the display title. If a tab is restoring make sure to use
+        // its lastTitle.
         if let url = self.url, InternalURL(url)?.isAboutHomeURL ?? false {
             return .AppMenu.AppMenuOpenHomePageTitleString
         }
 
         // Here's another check to see if we're at the Home URL, using sessionData.
         // lets double check the sessionData in case this is a non-restored new tab
-        if let firstURL = sessionData?.urls.first, sessionData?.urls.count == 1, InternalURL(firstURL)?.isAboutHomeURL ?? false {
+        if let firstURL = sessionData?.urls.first, sessionData?.urls.count == 1,
+           InternalURL(firstURL)?.isAboutHomeURL ?? false {
             return .AppMenu.AppMenuOpenHomePageTitleString
         }
 
@@ -255,8 +260,10 @@ class Tab: NSObject, ThemeApplicable {
     private let faviconHelper: SiteImageHandler
     var faviconURL: String? {
         didSet {
-            faviconHelper.cacheFaviconURL(siteURL: url,
-                                          faviconURL: URL(string: faviconURL ?? "", invalidCharacters: false))
+            faviconHelper.cacheFaviconURL(
+                siteURL: url,
+                faviconURL: URL(string: faviconURL ?? "", invalidCharacters: false)
+            )
         }
     }
     fileprivate var lastRequest: URLRequest?
@@ -326,7 +333,11 @@ class Tab: NSObject, ThemeApplicable {
 
             contentBlocker?.noImageMode(enabled: noImageMode)
 
-            UserScriptManager.shared.injectUserScriptsIntoWebView(webView, nightMode: nightMode, noImageMode: noImageMode)
+            UserScriptManager.shared.injectUserScriptsIntoWebView(
+                webView,
+                nightMode: nightMode,
+                noImageMode: noImageMode
+            )
         }
     }
 
@@ -340,7 +351,11 @@ class Tab: NSObject, ThemeApplicable {
             // set to black in the WKWebView init.
             webView?.isOpaque = !nightMode
 
-            UserScriptManager.shared.injectUserScriptsIntoWebView(webView, nightMode: nightMode, noImageMode: noImageMode)
+            UserScriptManager.shared.injectUserScriptsIntoWebView(
+                webView,
+                nightMode: nightMode,
+                noImageMode: noImageMode
+            )
         }
     }
 
@@ -403,7 +418,12 @@ class Tab: NSObject, ThemeApplicable {
         self.isPrivate = isPrivate
         debugTabCount += 1
 
-        TelemetryWrapper.recordEvent(category: .action, method: .add, object: .tab, value: isPrivate ? .privateTab : .normalTab)
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .add,
+            object: .tab,
+            value: isPrivate ? .privateTab : .normalTab
+        )
     }
 
     class func toRemoteTab(_ tab: Tab) -> RemoteTab? {
@@ -485,9 +505,23 @@ class Tab: NSObject, ThemeApplicable {
             }
 
             configureEdgeSwipeGestureRecognizers()
-            self.webView?.addObserver(self, forKeyPath: KVOConstants.URL.rawValue, options: .new, context: nil)
-            self.webView?.addObserver(self, forKeyPath: KVOConstants.title.rawValue, options: .new, context: nil)
-            UserScriptManager.shared.injectUserScriptsIntoWebView(webView, nightMode: nightMode, noImageMode: noImageMode)
+            self.webView?.addObserver(
+                self,
+                forKeyPath: KVOConstants.URL.rawValue,
+                options: .new,
+                context: nil
+            )
+            self.webView?.addObserver(
+                self,
+                forKeyPath: KVOConstants.title.rawValue,
+                options: .new,
+                context: nil
+            )
+            UserScriptManager.shared.injectUserScriptsIntoWebView(
+                webView,
+                nightMode: nightMode,
+                noImageMode: noImageMode
+            )
 
             tabDelegate?.tab(self, didCreateWebView: webView)
         }
@@ -533,7 +567,11 @@ class Tab: NSObject, ThemeApplicable {
         guard let currentlyOpenUrl = lastKnownUrl ?? historyList.last else { return }
 
         url = currentlyOpenUrl
-        sessionData = LegacySessionData(currentPage: 0, urls: [currentlyOpenUrl], lastUsedTime: Date.now())
+        sessionData = LegacySessionData(
+            currentPage: 0,
+            urls: [currentlyOpenUrl],
+            lastUsedTime: Date.now()
+        )
 
         close()
     }
@@ -573,7 +611,9 @@ class Tab: NSObject, ThemeApplicable {
             // Convert about:reader?url=http://example.com URLs to local ReaderMode URLs
             if let url = request.url,
                let syncedReaderModeURL = url.decodeReaderModeURL,
-               let localReaderModeURL = syncedReaderModeURL.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) {
+               let localReaderModeURL = syncedReaderModeURL.encodeReaderModeURL(
+                WebServer.sharedInstance.baseReaderModeURL()
+               ) {
                 let readerModeRequest = PrivilegedRequest(url: localReaderModeURL) as URLRequest
                 lastRequest = readerModeRequest
                 return webView.load(readerModeRequest)
@@ -768,7 +808,12 @@ class Tab: NSObject, ThemeApplicable {
         return alertQueue.removeFirst()
     }
 
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+    override func observeValue(
+        forKeyPath keyPath: String?,
+        of object: Any?,
+        change: [NSKeyValueChangeKey: Any]?,
+        context: UnsafeMutableRawPointer?
+    ) {
         guard let webView = object as? WKWebView,
               webView == self.webView,
               let path = keyPath else {
@@ -821,14 +866,20 @@ class Tab: NSObject, ThemeApplicable {
 
 extension Tab: UIGestureRecognizerDelegate {
     // This prevents the recognition of one gesture recognizer from blocking another
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    func gestureRecognizer(
+        _ gestureRecognizer: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
+    ) -> Bool {
         return true
     }
 
     func configureEdgeSwipeGestureRecognizers() {
         guard let webView = webView else { return }
 
-        let edgeSwipeGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(handleEdgeSwipeTabNavigation(_:)))
+        let edgeSwipeGesture = UIScreenEdgePanGestureRecognizer(
+            target: self,
+            action: #selector(handleEdgeSwipeTabNavigation(_:))
+        )
         edgeSwipeGesture.edges = .left
         edgeSwipeGesture.delegate = self
         webView.addGestureRecognizer(edgeSwipeGesture)
@@ -839,7 +890,11 @@ extension Tab: UIGestureRecognizerDelegate {
         guard let webView = webView else { return }
 
         if sender.state == .ended, sender.velocity(in: webView).x > 150 {
-            TelemetryWrapper.recordEvent(category: .action, method: .swipe, object: .navigateTabHistoryBackSwipe)
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .swipe,
+                object: .navigateTabHistoryBackSwipe
+            )
         }
     }
 }
@@ -848,7 +903,10 @@ extension Tab: TabWebViewDelegate {
     func tabWebView(_ tabWebView: TabWebView, didSelectFindInPageForSelection selection: String) {
         tabDelegate?.tab(self, didSelectFindInPageForSelection: selection)
     }
-    func tabWebViewSearchWithFirefox(_ tabWebViewSearchWithFirefox: TabWebView, didSelectSearchWithFirefoxForSelection selection: String) {
+    func tabWebViewSearchWithFirefox(
+        _ tabWebViewSearchWithFirefox: TabWebView,
+        didSelectSearchWithFirefoxForSelection selection: String
+    ) {
         tabDelegate?.tab(self, didSelectSearchWithFirefoxForSelection: selection)
     }
 }
@@ -883,7 +941,8 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
     @objc
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         for helper in helpers.values {
-            if let scriptMessageHandlerNames = helper.scriptMessageHandlerNames(), scriptMessageHandlerNames.contains(message.name) {
+            if let scriptMessageHandlerNames = helper.scriptMessageHandlerNames(),
+               scriptMessageHandlerNames.contains(message.name) {
                 helper.userContentController(userContentController, didReceiveScriptMessage: message)
                 return
             }
@@ -899,7 +958,10 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
         // If this helper handles script messages, then get the handlers names and register them. The Browser
         // receives all messages and then dispatches them to the right TabHelper.
         helper.scriptMessageHandlerNames()?.forEach { scriptMessageHandlerName in
-            tab.webView?.configuration.userContentController.addInDefaultContentWorld(scriptMessageHandler: self, name: scriptMessageHandlerName)
+            tab.webView?.configuration.userContentController.addInDefaultContentWorld(
+                scriptMessageHandler: self,
+                name: scriptMessageHandlerName
+            )
         }
     }
 
@@ -912,7 +974,10 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
         // If this helper handles script messages, then get the handlers names and register them. The Browser
         // receives all messages and then dispatches them to the right TabHelper.
         helper.scriptMessageHandlerNames()?.forEach { scriptMessageHandlerName in
-            tab.webView?.configuration.userContentController.addInPageContentWorld(scriptMessageHandler: self, name: scriptMessageHandlerName)
+            tab.webView?.configuration.userContentController.addInPageContentWorld(
+                scriptMessageHandler: self,
+                name: scriptMessageHandlerName
+            )
         }
     }
 
@@ -923,7 +988,10 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
 
 protocol TabWebViewDelegate: AnyObject {
     func tabWebView(_ tabWebView: TabWebView, didSelectFindInPageForSelection selection: String)
-    func tabWebViewSearchWithFirefox(_ tabWebViewSearchWithFirefox: TabWebView, didSelectSearchWithFirefoxForSelection selection: String)
+    func tabWebViewSearchWithFirefox(
+        _ tabWebViewSearchWithFirefox: TabWebView,
+        didSelectSearchWithFirefoxForSelection selection: String
+    )
 }
 
 class TabWebView: WKWebView, MenuHelperInterface, ThemeApplicable {

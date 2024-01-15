@@ -5,16 +5,33 @@
 import Common
 import XCTest
 
-let webpage = ["url": "www.mozilla.org", "label": "Internet for people, not profit — Mozilla", "value": "mozilla.org"]
-let oldHistoryEntries: [String] = ["Internet for people, not profit — Mozilla (US)", "Explore / Twitter", "Home - YouTube"]
+let webpage = [
+    "url": "www.mozilla.org",
+    "label": "Internet for people, not profit — Mozilla",
+    "value": "mozilla.org"
+]
+let oldHistoryEntries: [String] = [
+    "Internet for people, not profit — Mozilla (US)",
+    "Explore / Twitter",
+    "Home - YouTube"
+]
 let emptyRecentlyClosedMesg = "Websites you’ve visited recently will show up here."
-// This is part of the info the user will see in recent closed tabs once the default visited website (https://www.mozilla.org/en-US/book/) is closed
-let bookOfMozilla = ["file": "test-mozilla-book.html", "title": "The Book of Mozilla", "label": "localhost:\(serverPort)/test-fixture/test-mozilla-book.html"]
+// This is part of the info the user will see in recent closed tabs once the default
+// visited website (https://www.mozilla.org/en-US/book/) is closed
+let bookOfMozilla = [
+    "file": "test-mozilla-book.html",
+    "title": "The Book of Mozilla",
+    "label": "localhost:\(serverPort)/test-fixture/test-mozilla-book.html"
+]
 
 class HistoryTests: BaseTestCase {
     typealias HistoryPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
 
-    let testWithDB = ["testOpenHistoryFromBrowserContextMenuOptions", "testClearHistoryFromSettings", "testClearRecentHistory"]
+    let testWithDB = [
+        "testOpenHistoryFromBrowserContextMenuOptions",
+        "testClearHistoryFromSettings",
+        "testClearRecentHistory"
+    ]
 
     // This DDBB contains those 4 websites listed in the name
     let historyDB = "browserYoutubeTwitterMozillaExample-places.db"
@@ -292,8 +309,8 @@ class HistoryTests: BaseTestCase {
     func testPrivateClosedSiteDoesNotAppearOnRecentlyClosed() {
         navigator.nowAt(NewTabScreen)
 
-        // Open the two tabs in private mode
-        // It is necessary to open two sites. When one tab is closed private mode, the private mode still has something opened.
+        // Open the two tabs in private mode. It is necessary to open two sites.
+        // When one tab is closed private mode, the private mode still has something opened.
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(path(forTestPage: bookOfMozilla["file"]!))
         waitUntilPageLoad()
@@ -388,7 +405,12 @@ class HistoryTests: BaseTestCase {
         waitForTabsButton()
         navigator.goto(TabTray)
         if isTablet {
-            app.otherElements["Tabs Tray"].collectionViews.cells.element(boundBy: 0).buttons[StandardImageIdentifiers.Large.cross].tap()
+            app.otherElements["Tabs Tray"]
+                .collectionViews
+                .cells
+                .element(boundBy: 0)
+                .buttons[StandardImageIdentifiers.Large.cross]
+                .tap()
         } else {
             app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.tap()
             // app.otherElements.cells.element(boundBy: 0).buttons[StandardImageIdentifiers.Large.cross].tap()
