@@ -64,6 +64,9 @@
 /* Title for info card when Fakespot cannot analyze reviews for a certain product type */
 "Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Title.v120" = "بۇ باھالاشلارنى تەكشۈرەلمەيدۇ";
 
+/* Description text for an information card used in the review checker section. This message is displayed when the reviews for a product are not yet available but are expected to be provided within the next 24 hours. It serves to inform users of the short wait for reviews and encourages them to return soon for the updated information. */
+"Shopping.InfoCard.InfoComingSoon.Description.v121" = "بىز 24 سائەت ئىچىدە بۇ مەھسۇلاتنىڭ باھالىنىشىغا مۇناسىۋەتلىك ئۇچۇرىغا ئېرىشىمىز. قايتا كېلىپ تەكشۈرۈپ بېقىڭ.";
+
 /* Title for an information card that is displayed in the review checker section when certain details about a product or feature are not currently available but are expected to be provided soon. The message should imply that the user can look forward to receiving more information shortly. */
 "Shopping.InfoCard.InfoComingSoon.Title.v121" = "ئۇچۇر پات يېقىندا كېلىدۇ";
 
@@ -124,6 +127,12 @@
 /* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replaced by the Fakespot app name. After the colon, what appears are two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
 "Shopping.OptInCard.Disclaimer.Text.v120" = "«ھەئە، سىناپ باقاي» تاللانسا تۆۋەندىكى %@ غا قوشۇلغان بولىسىز:";
 
+/* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. This string is almost identical with 'Shopping.OptInCard.FirstParagraph.Description', but without Best Buy and Walmart websites, which are not available in many locales. */
+"Shopping.OptInCard.FirstParagraph.AmazonOnly.Description.v122" = "سېتىۋېلىشتىن ئىلگىرى %1$@ دا مەھسۇلات باھالاش تەكشۈرۈشنىڭ قانچىلىك ئىشەنچلىك ئىكەنلىكىنى كۆرۈڭ. باھالاش تەكشۈرگۈچ، %2$@ نىڭ تەجرىبە ئىقتىدارى تور كۆرگۈچكە قۇرۇلدى.";
+
+/* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. The third and fourth parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. */
+"Shopping.OptInCard.FirstParagraph.Description.v120" = "سېتىۋېلىشتىن ئىلگىرى %1$@ دا مەھسۇلات باھالاش تەكشۈرۈشنىڭ قانچىلىك ئىشەنچلىك ئىكەنلىكىنى كۆرۈڭ. باھالاش تەكشۈرگۈچ، %2$@ نىڭ تەجرىبە ئىقتىدارى تور كۆرگۈچكە قۇرۇلدى. ئۇ %3$@ ۋە %4$@ دىمۇ ئىشلەيدۇ.";
+
 /* Label for the header of the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.HeaderLabel.Title.v120" = "مەھسۇلات باھالىنىشغا قارىتا ئىشەنچلىك يېتەكچىمىزنى سىناپ بېقىڭ";
 
@@ -138,6 +147,9 @@
 
 /* Text for the secondary button of the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.SecondaryButton.Title.v120" = "ھازىر ئەمەس";
+
+/* Label for the second paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be replaced by the Fakespot app name. The second parameter will be replaced the company name of Mozilla. */
+"Shopping.OptInCard.SecondParagraph.Description.v120" = "%2$@ قوللايدىغان %1$@ بىر تەرەپلىمە ۋە ئىناۋەتسىز باھالاشلاردىن ساقلىنىشىڭىزغا ياردەم بېرىدۇ. بىزنىڭ سۈنئىي ئەقىل مودېلىمىز مال سېتىۋېلىشىڭىزنى قوغداش ئۈچۈن ھەمىشە ياخشىلىنىۋاتىدۇ.";
 
 /* Show Firefox Browser Terms of Use page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
 "Shopping.OptInCard.TermsOfUse.Button.Title.v120" = "ئىشلىتىش شەرتلىرى";
@@ -160,8 +172,23 @@
 /* Adjusted rating label from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "Shopping.ReviewQualityCard.AdjustedRating.Label.v120" = "بۇ *تەڭشەلگەن باھا* پەقەت بىز ئىشەنچلىك دەپ قارىغان باھالارنىلا ئاساس قىلىدۇ.";
 
+/* Accessibility label for the up chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.Collapse.AccessibilityLabel.v120" = "تەكشۈرۈپ باھالاش سۈپىتىنى قانداق بېكىتىمىز كارتىسىنى ياي";
+
+/* Accessibility label for the down chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.Expand.AccessibilityLabel.v120" = "تەكشۈرۈپ باھالاش سۈپىتىنى قانداق بېكىتىمىز كارتىسىنى يىغ";
+
+/* Label of the headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
+"Shopping.ReviewQualityCard.Headline.Label.v120" = "بىز %2$@ نىڭ %1$@ دىكى سۈنئىي ئەقىل تېخنىكىسىنى ئىشلىتىپ مەھسۇلات باھالىنىشىنىڭ ئىشەنچلىكلىكىنى تەكشۈردۇق. بۇ مەھسۇلات سۈپىتىنى ئەمەس، بەلكى باھالاش سۈپىتىنى باھالىشىڭىزغا ياردەم بېرىدۇ.";
+
+/* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.Highlights.Label.v120" = "*يارقىن نۇقتىلار* بىز ئىشەنچلىك دەپ قارىغان يېقىنقى 80 كۈن ئىچىدىكى %1@ باھادىن كەلگەن.";
+
 /* Title of the 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQualityCard.Label.Title.v120" = "تەكشۈرۈش سۈپىتىنى قانداق بېكىتىمىز";
+
+/* The title of the learn more button from How we determine review quality card displayed in the shopping review quality bottom sheet. The placeholder will be replaced with the Fakespot app name. */
+"Shopping.ReviewQualityCard.LearnMoreButton.Title.v120" = "%@ نىڭ باھالاش سۈپىتىنى قانداق بېكىتىدىغانلىقى ھەققىدىكى تەپسىلاتلار";
 
 /* Mixed reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQualityCard.MixedReviews.Label.v120" = "ئىشەنچلىك ۋە ئىشەنچسىز باھالارنىڭ بارلىقىغا ئىشىنىمىز";

@@ -61,8 +61,17 @@
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title.v119" = "ھېسابات";
 
+/* This is the description for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
+"Settings.Notifications.SyncNotificationsStatus.v112" = "سىز باشقا ئۈسكۈنىدە تىزىمغا كىرگەندە بەتكۈچ تاپشۇرۇۋېلىش ۋە ئۇقتۇرۇش قىلىش چوقۇم ئوچۇق بولۇشى كېرەك.";
+
 /* This is the title for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
 "Settings.Notifications.SyncNotificationsTitle.v112" = "قەدەمداش";
+
+/* This is the footer title informing the user needs to turn on notifications in iOS Settings. Both placeholders will be replaced with the app name. */
+"Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "سىز بارلىق %1$@ ئۇقتۇرۇشلىرىنى تاقىۋەتتىڭىز. ئۈسكۈنە تەڭشەك›ئۇقتۇرۇش›%2$@ دىن ئېچىڭ";
+
+/* This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. The placeholder will be replaced with the app name. */
+"Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "پايدىلىق ئىقتىدارلار ۋە %@ دىن قانداق قىلغاندا تېخىمۇ ئۈنۈملۈك پايدىلىنىشنى ئۆگىنىڭ.";
 
 /* This is the title for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. */
 "Settings.Notifications.TipsAndFeaturesNotificationsTitle.v112" = "كۆرسەتمە ۋە ئىقتىدارلار";
@@ -70,17 +79,26 @@
 /* In the settings menu, in the Privacy section, this is the title for Notifications customization section. */
 "Settings.Notifications.Title.v112" = "ئۇقتۇرۇش";
 
+/* This is the title informing the user needs to turn on notifications in iOS Settings. The placeholder will be replaced with the app name. */
+"Settings.Notifications.TurnOnNotificationsMessage.v112" = "ئۈسكۈنىڭىزنىڭ تەڭشەكلىرىگە كىرىپ %@ دىكى ئۇقتۇرۇشنى ئېچىڭ";
+
 /* This is the title informing the user needs to turn on notifications in iOS Settings. */
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "ئۇقتۇرۇشنى ئاچ";
 
 /* Accessibility label for default search engine setting. */
 "Settings.Search.Accessibility.DefaultSearchEngine.v121" = "كۆڭۈلدىكى ئىزدەش موتورى";
 
+/* Footer for for the `default search engine` settings section in the Search Settings page, which explains in more details what the `Show Search Suggestions` setting includes. */
+"Settings.Search.DefaultSearchEngine.Footer.v122" = "ئىزدەش، تارىخ، خەتكۈچ ۋە باشقىلارنىڭ نەتىجىلىرى";
+
 /* Title for the `default search engine` settings section in the Search page in the Settings menu. */
 "Settings.Search.DefaultSearchEngine.Title.v121" = "كۆڭۈلدىكى ئىزدەش موتورى";
 
 /* Navigation title for search page in the Settings menu. */
 "Settings.Search.PageTitle.v121" = "ئىزدە";
+
+/* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in the Private Session section in the Search page in the Settings menu. */
+"Settings.Search.PrivateSession.Setting.v122" = "شەخسىي زىيارەتتە تەكلىپلەرنى كۆرسىتىدۇ";
 
 /* Title for the `Private Browsing` settings section in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Title.v122" = "شەخسىي زىيارەت";
