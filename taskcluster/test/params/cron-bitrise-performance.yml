@@ -1,0 +1,27 @@
+base_ref: origin/main
+base_repository: https://github.com/mozilla-mobile/firefox-ios
+base_rev: 0c4aebc542bf79294eab9bd485b1038676edd41c
+build_date: 1705010615
+build_number: 1
+do_not_optimize: []
+enable_always_target: true
+existing_tasks: {}
+filters:
+- target_tasks_method
+head_ref: main
+head_repository: https://github.com/mozilla-mobile/firefox-ios
+head_rev: 0c4aebc542bf79294eab9bd485b1038676edd41c
+head_tag: ''
+level: '3'
+moz_build_date: '20240111220335'
+next_version: null
+optimize_strategies: null
+optimize_target_tasks: true
+owner: cron@noreply.mozilla.org
+project: firefox-ios
+pushdate: 0
+pushlog_id: '0'
+repository_type: git
+target_tasks_method: bitrise_performance_test
+tasks_for: cron
+version: null
