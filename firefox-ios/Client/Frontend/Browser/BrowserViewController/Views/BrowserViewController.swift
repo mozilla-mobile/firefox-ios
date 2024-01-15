@@ -555,8 +555,6 @@ class BrowserViewController: UIViewController,
         let dropInteraction = UIDropInteraction(delegate: self)
         view.addInteraction(dropInteraction)
 
-        updateLegacyTheme()
-
         searchTelemetry = SearchTelemetry()
 
         // Awesomebar Location Telemetry
@@ -827,19 +825,8 @@ class BrowserViewController: UIViewController,
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             themeManager.systemThemeChanged()
-            updateLegacyTheme()
         }
         setupMiddleButtonStatus(isLoading: false)
-    }
-
-    private func updateLegacyTheme() {
-        if let state = browserViewControllerState,
-           !NightModeHelper.isActivated()
-            && LegacyThemeManager.instance.systemThemeIsOn
-            && !state.usePrivateHomepage {
-            let userInterfaceStyle = traitCollection.userInterfaceStyle
-            LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? LegacyDarkTheme() : LegacyNormalTheme()
-        }
     }
 
     // MARK: - Constraints
