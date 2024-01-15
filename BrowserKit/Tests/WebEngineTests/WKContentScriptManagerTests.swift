@@ -88,8 +88,7 @@ final class WKContentScriptManagerTests: XCTestCase {
     func createSubject(file: StaticString = #file,
                        line: UInt = #line) -> DefaultContentScriptManager {
         let subject = DefaultContentScriptManager()
-        // FXIOS-8115 Leaks caused by WKWebViewConfiguration
-//        trackForMemoryLeaks(subject, file: file, line: line)
+        trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
 }

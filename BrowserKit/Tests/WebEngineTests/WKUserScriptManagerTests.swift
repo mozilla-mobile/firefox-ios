@@ -23,8 +23,7 @@ final class WKUserScriptManagerTests: XCTestCase {
 
     func createSubject() -> DefaultUserScriptManager {
         let subject = DefaultUserScriptManager(scriptProvider: MockUserScriptProvider())
-        // FXIOS-8115 Leaks caused by WKWebViewConfiguration
-//        trackForMemoryLeaks(subject)
+        trackForMemoryLeaks(subject)
         return subject
     }
 }

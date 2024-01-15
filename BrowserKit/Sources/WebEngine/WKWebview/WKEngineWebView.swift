@@ -21,7 +21,7 @@ protocol WKEngineWebView: UIView {
     var interactionState: Any? { get set }
     var url: URL? { get }
     var scrollView: UIScrollView { get }
-    var configuration: WKWebViewConfiguration { get }
+    var engineConfiguration: WKEngineConfiguration { get }
 
     @available(iOS 16.4, *)
     var isInspectable: Bool { get set }
@@ -123,6 +123,7 @@ extension WKEngineWebView {
 // TODO: FXIOS-7896 #17641 Handle WKEngineWebView ThemeApplicable
 // TODO: FXIOS-7897 #17642 Handle WKEngineWebView AccessoryViewProvider
 class DefaultWKEngineWebView: WKWebView, WKEngineWebView {
+    var engineConfiguration: WKEngineConfiguration
     weak var delegate: WKEngineWebViewDelegate?
     func configure(delegate: WKEngineWebViewDelegate,
                    navigationDelegate: WKNavigationDelegate?) {
@@ -132,8 +133,9 @@ class DefaultWKEngineWebView: WKWebView, WKEngineWebView {
 
     required init?(frame: CGRect, configurationProvider: WKEngineConfigurationProvider) {
         let configuration = configurationProvider.createConfiguration()
-        guard let webViewConfiguration = configuration as? WKWebViewConfiguration else { return nil }
-        super.init(frame: frame, configuration: webViewConfiguration)
+        self.engineConfiguration = configuration
+        guard let configuration = configuration as? DefaultEngineConfiguration else { return nil }
+        super.init(frame: frame, configuration: configuration.webViewConfiguration)
     }
 
     required init?(coder: NSCoder) {

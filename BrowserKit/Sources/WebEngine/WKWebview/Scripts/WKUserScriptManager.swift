@@ -28,7 +28,7 @@ class DefaultUserScriptManager: WKUserScriptManager {
 
     func injectUserScriptsIntoWebView(_ webView: WKEngineWebView) {
         // Remove any previously-added user scripts to prevent the same script from being injected twice
-        webView.configuration.userContentController.removeAllUserScripts()
+        webView.engineConfiguration.removeAllUserScripts()
 
         // Inject all pre-compiled user scripts.
         [
@@ -40,12 +40,12 @@ class DefaultUserScriptManager: WKUserScriptManager {
             let fullName = buildScriptName(from: userScriptInfo)
 
             if let userScript = compiledUserScripts[fullName] {
-                webView.configuration.userContentController.addUserScript(userScript)
+                webView.engineConfiguration.addUserScript(userScript)
             }
 
             let webcompatName = "Webcompat\(fullName)"
             if let webcompatUserScript = compiledUserScripts[webcompatName] {
-                webView.configuration.userContentController.addUserScript(webcompatUserScript)
+                webView.engineConfiguration.addUserScript(webcompatUserScript)
             }
         }
     }
