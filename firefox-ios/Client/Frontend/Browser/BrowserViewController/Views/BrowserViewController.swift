@@ -256,10 +256,6 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        defaultThemeManager.statusBarStyle
-    }
-
     @objc
     private func didAddPendingBlobDownloadToQueue() {
         pendingDownloadWebView = nil
@@ -561,8 +557,6 @@ class BrowserViewController: UIViewController,
         let dropInteraction = UIDropInteraction(delegate: self)
         view.addInteraction(dropInteraction)
 
-        updateLegacyTheme()
-
         searchTelemetry = SearchTelemetry()
 
         // Awesomebar Location Telemetry
@@ -833,19 +827,8 @@ class BrowserViewController: UIViewController,
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             themeManager.systemThemeChanged()
-            updateLegacyTheme()
         }
         setupMiddleButtonStatus(isLoading: false)
-    }
-
-    private func updateLegacyTheme() {
-        if let state = browserViewControllerState,
-           !NightModeHelper.isActivated()
-            && defaultThemeManager.isSystemThemeOn
-            && !state.usePrivateHomepage {
-            let userInterfaceStyle = traitCollection.userInterfaceStyle
-            defaultThemeManager.currentTheme = userInterfaceStyle == .dark ? DarkTheme() : LightTheme()
-        }
     }
 
     // MARK: - Constraints
