@@ -180,8 +180,6 @@ class BrowserViewController: UIViewController,
         return NewTabAccessors.getNewTabPage(profile.prefs)
     }
 
-    private var defaultThemeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
-
     @available(iOS 13.4, *)
     func keyboardPressesHandler() -> KeyboardPressesHandler {
         guard let keyboardPressesHandlerValue = keyboardPressesHandlerValue as? KeyboardPressesHandler else {
