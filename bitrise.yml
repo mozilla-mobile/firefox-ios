@@ -1330,9 +1330,9 @@ workflows:
                 --client-details=matrixLabel="Bitrise" \
                 --quiet)
             
-            GCLOUD_OUTPUT = $? # this will get the right-most command from the gcloud subshell
-            echo "GCLOUD_OUTPUT: $GCLOUD_OUTPUT"
-            
+            GCLOUD_EXITCODE=$? # this will get the right-most command from the gcloud subshell
+            echo "GCLOUD_EXITCODE: $GCLOUD_EXITCODE"
+
             # There is a chance the gcloud cli returns a custom array of exit codes, so we will need
             #    to parse the output to get the exit codes and potentially trigger our own failure
             # In the case of an Inconclusive Test, we still haven't confirmed what stand-in exit code
