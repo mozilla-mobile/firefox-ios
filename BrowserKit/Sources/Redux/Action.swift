@@ -7,3 +7,11 @@ import Foundation
 /// Are a declarative way of describing a state change. Actions don’t contain any code,
 /// they are consumed by the store and forwarded to reducers. Are used to express intended state changes. 
 public protocol Action {}
+
+extension Action {
+    func displayString() -> String {
+        let className = String(describing: Self.self)
+        let actionName = String(describing: self).prefix(20)
+        return "\(className).\(actionName)"
+    }
+}

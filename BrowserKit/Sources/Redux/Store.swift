@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
 
 /// Stores your entire app state in the form of a single data structure.
 /// This state can only be modified by dispatching Actions to the store.
@@ -27,13 +28,16 @@ public class Store<State: StateType>: DefaultDispatchStore {
     private var middlewares: [Middleware<State>]
     private var subscriptions: Set<SubscriptionType> = []
     private var actionRunning = false
+    private let logger: Logger
 
     public init(state: State,
                 reducer: @escaping Reducer<State>,
-                middlewares: [Middleware<State>] = []) {
+                middlewares: [Middleware<State>] = [],
+                logger: Logger = DefaultLogger.shared) {
         self.state = state
         self.reducer = reducer
         self.middlewares = middlewares
+        self.logger = logger
     }
 
     /// General subscription to app main state
@@ -64,6 +68,7 @@ public class Store<State: StateType>: DefaultDispatchStore {
     }
 
     public func dispatch(_ action: Action) {
+        logger.log("Dispatched action: \(action.displayString())", level: .info, category: .redux)
         guard Thread.isMainThread && !actionRunning else {
             DispatchQueue.main.async { [weak self] in self?.dispatch(action) }
             return

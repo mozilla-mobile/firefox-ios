@@ -606,6 +606,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
             return
         }
 
+        backupCloseTab = BackupCloseTab(tab: tab, restorePosition: removalIndex)
         let prevCount = count
         tabs.remove(at: removalIndex)
         assert(count == prevCount - 1, "Make sure the tab count was actually removed")

@@ -444,6 +444,8 @@
 		59A68FD5260B8D520F890F4A /* ReaderPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */; };
 		5A06135A29D6052E008F3D38 /* TabDataStore in Frameworks */ = {isa = PBXBuildFile; productRef = 5A06135929D6052E008F3D38 /* TabDataStore */; };
 		5A271ABD2860B0D700471CE4 /* WebServerUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A271ABC2860B0D700471CE4 /* WebServerUtil.swift */; };
+		5A2918CB2B522338002B197E /* GeneralBrowserAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A2918CA2B522338002B197E /* GeneralBrowserAction.swift */; };
+		5A2918CD2B522381002B197E /* ToastType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A2918CC2B522381002B197E /* ToastType.swift */; };
 		5A292129295CA8A900242235 /* ThemableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A96C4B828F9DD8700B75884 /* ThemableTests.swift */; };
 		5A29212A295CAA1700242235 /* XCTestCaseRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A96C4BA28F9E7B300B75884 /* XCTestCaseRootViewController.swift */; };
 		5A31275828906422001F30FA /* RecentlySavedDelegateMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A31275728906422001F30FA /* RecentlySavedDelegateMock.swift */; };
@@ -5066,6 +5068,8 @@
 		5A1B494BAB7DF7D2319677F2 /* hsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hsb; path = hsb.lproj/Today.strings; sourceTree = "<group>"; };
 		5A1D409EB92D8E6AB8FC8813 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		5A271ABC2860B0D700471CE4 /* WebServerUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebServerUtil.swift; sourceTree = "<group>"; };
+		5A2918CA2B522338002B197E /* GeneralBrowserAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralBrowserAction.swift; sourceTree = "<group>"; };
+		5A2918CC2B522381002B197E /* ToastType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastType.swift; sourceTree = "<group>"; };
 		5A31275728906422001F30FA /* RecentlySavedDelegateMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlySavedDelegateMock.swift; sourceTree = "<group>"; };
 		5A32C2B52AD8517200A9B5A4 /* MetricKitWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricKitWrapper.swift; sourceTree = "<group>"; };
 		5A3A2A0C287F742C00B79EAC /* BackgroundSyncUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundSyncUtility.swift; sourceTree = "<group>"; };
@@ -8751,6 +8755,14 @@
 			name = WebServer;
 			sourceTree = "<group>";
 		};
+		5A2918C92B522326002B197E /* Actions */ = {
+			isa = PBXGroup;
+			children = (
+				5A2918CA2B522338002B197E /* GeneralBrowserAction.swift */,
+			);
+			path = Actions;
+			sourceTree = "<group>";
+		};
 		5A292121295C8C1B00242235 /* Theme */ = {
 			isa = PBXGroup;
 			children = (
@@ -10338,6 +10350,7 @@
 		C8F457A61F1FD75A000CB895 /* BrowserViewController */ = {
 			isa = PBXGroup;
 			children = (
+				5A2918C92B522326002B197E /* Actions */,
 				81122E1F2B2219AA003DD9F8 /* Views */,
 				81122E1E2B2219A0003DD9F8 /* State */,
 				81122E1D2B221998003DD9F8 /* Extensions */,
@@ -10613,6 +10626,7 @@
 				E1877A7F286E0EFD00F5BDF2 /* WebView */,
 				DA4F826629AD221600189590 /* ZoomPageBar.swift */,
 				E1380B8C2AEA897C00630AFA /* SidebarEnabledView.swift */,
+				5A2918CC2B522381002B197E /* ToastType.swift */,
 			);
 			path = Browser;
 			sourceTree = "<group>";
@@ -13393,6 +13407,7 @@
 				C8DC90C32A066B4A0008832B /* MarkupToken.swift in Sources */,
 				FA6B2AC21D41F02D00429414 /* String+Punycode.swift in Sources */,
 				E174963C2992B6A60096900A /* HostingTableViewSectionHeader.swift in Sources */,
+				5A2918CD2B522381002B197E /* ToastType.swift in Sources */,
 				8A471185287F6E4800F5A6EA /* SeparatorTableViewCell.swift in Sources */,
 				D301AAEE1A3A55B70078DD1D /* LegacyGridTabViewController.swift in Sources */,
 				EB9A179B20E69A7F00B12184 /* LegacyThemeManager.swift in Sources */,
@@ -13826,6 +13841,7 @@
 				8AF10D8F29D774090086351D /* SceneSetupHelper.swift in Sources */,
 				C4E398601D22C409004E89BA /* TopTabsLayout.swift in Sources */,
 				E1A102D62AC19B30007B617A /* FakespotUtils.swift in Sources */,
+				5A2918CB2B522338002B197E /* GeneralBrowserAction.swift in Sources */,
 				8A5D1CC12A30DCA4005AD35C /* SettingDisclosureUtility.swift in Sources */,
 				E1442FD5294782D9003680B0 /* UIView+SnapKit.swift in Sources */,
 				E1ADE23C2B0649F200FD17AA /* FakespotState.swift in Sources */,

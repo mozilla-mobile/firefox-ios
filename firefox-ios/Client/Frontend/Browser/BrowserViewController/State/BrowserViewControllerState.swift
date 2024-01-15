@@ -10,6 +10,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
     var usePrivateHomepage: Bool
     var showDataClearanceFlow: Bool
     var fakespotState: FakespotState
+    var toast: ToastType?
 
     init(_ appState: AppState) {
         guard let bvcState = store.state.screenState(
@@ -23,7 +24,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         self.init(searchScreenState: bvcState.searchScreenState,
                   usePrivateHomepage: bvcState.usePrivateHomepage,
                   showDataClearanceFlow: bvcState.showDataClearanceFlow,
-                  fakespotState: bvcState.fakespotState)
+                  fakespotState: bvcState.fakespotState,
+                  toast: bvcState.toast)
     }
 
     init() {
@@ -31,19 +33,22 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             searchScreenState: SearchScreenState(),
             usePrivateHomepage: false,
             showDataClearanceFlow: false,
-            fakespotState: FakespotState())
+            fakespotState: FakespotState(),
+            toast: nil)
     }
 
     init(
         searchScreenState: SearchScreenState,
         usePrivateHomepage: Bool,
         showDataClearanceFlow: Bool,
-        fakespotState: FakespotState
+        fakespotState: FakespotState,
+        toast: ToastType? = nil
     ) {
         self.searchScreenState = searchScreenState
         self.usePrivateHomepage = usePrivateHomepage
         self.showDataClearanceFlow = showDataClearanceFlow
         self.fakespotState = fakespotState
+        self.toast = toast
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -70,6 +75,13 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 usePrivateHomepage: state.usePrivateHomepage,
                 showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: FakespotState.reducer(state.fakespotState, action))
+        case GeneralBrowserAction.showToast(let toastType):
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                usePrivateHomepage: state.usePrivateHomepage,
+                showDataClearanceFlow: state.showDataClearanceFlow,
+                fakespotState: state.fakespotState,
+                toast: toastType)
         default:
             return state
         }
