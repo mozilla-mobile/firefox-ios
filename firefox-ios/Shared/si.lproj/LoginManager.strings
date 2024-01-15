@@ -16,6 +16,21 @@
 /* Label for the button used to delete the current login. */
 "Delete" = "මකන්න";
 
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "අවලංගු";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "ඉවත් කරන්න";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "මෙම ක්‍රියාමාර්ගය අප්‍රතිවර්ත්‍යයි.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "මෙය ඔබගේ සියළුම සමමුහූර්ත උපාංග වලින් මුරපදය ඉවත් කෙරේ.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "මුරපදය ඉවත් කරන්නද?";
+
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "සියල්ල නොතෝරන්න";
 
@@ -36,6 +51,9 @@
 
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "පිවිසුම් හමු නොවුණි";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "මුරපද හමු නොවිණි";
 
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "විවෘත කර පුරවන්න";

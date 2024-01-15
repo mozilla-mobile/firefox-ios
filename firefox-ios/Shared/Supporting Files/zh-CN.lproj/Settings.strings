@@ -55,6 +55,9 @@
 /* Settings section title for the old Firefox account */
 "FxA.FirefoxAccount.v119" = "账户";
 
+/* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
+"Settings.AddressAutofill.Title.v124" = "自动填充地址";
+
 /* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
 "Settings.AutofillCreditCard.Title.v122" = "付款方式";
 
@@ -88,6 +91,12 @@
 /* Accessibility label for default search engine setting. */
 "Settings.Search.Accessibility.DefaultSearchEngine.v121" = "默认搜索引擎";
 
+/* Accessibility label for Learn more about Firefox Suggest. */
+"Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "详细了解 Firefox 建议";
+
+/* Footer for for the `default search engine` settings section in the Search Settings page, which explains in more details what the `Show Search Suggestions` setting includes. */
+"Settings.Search.DefaultSearchEngine.Footer.v122" = "来自搜索关键词、历史、书签等的结果";
+
 /* Title for the `default search engine` settings section in the Search page in the Settings menu. */
 "Settings.Search.DefaultSearchEngine.Title.v121" = "默认搜索引擎";
 
@@ -105,4 +114,22 @@
 
 /* Label for the `show search suggestions` setting, in the Search Settings page. */
 "Settings.Search.ShowSuggestions.v121" = "显示搜索建议";
+
+/* In the Search page of the Settings menu, the title for the Firefox Suggest settings section. */
+"Settings.Search.Suggest.AddressBarSetting.Title.v124" = "地址栏 - Firefox 建议";
+
+/* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
+"Settings.Search.Suggest.LearnAboutSuggestions.v124" = "详细了解 Firefox 建议";
+
+/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. */
+"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124" = "从网络上获取与您的搜索关键词相关的建议";
+
+/* In the Search page of the Settings menu, the title for setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
+"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124" = "%@ 的建议";
+
+/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from sponsors. Placeholder is for the app name - Firefox. */
+"Settings.Search.Suggest.ShowSponsoredSuggestions.Description.v124" = "不定期提供赞助商建议以支持 %@";
+
+/* In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors. */
+"Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "赞助商建议";
 

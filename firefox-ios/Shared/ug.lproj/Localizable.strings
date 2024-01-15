@@ -853,6 +853,21 @@
 /* The title that shows the number of cryptomining scripts blocked */
 "Menu.TrackingProtectionCryptominersBlocked.Title" = "شىفىرلىق پۇل قازغۇچ";
 
+/* Description of content trackers. */
+"Menu.TrackingProtectionDescription.ContentTrackers" = "تور بېكەتلەر يوشۇرۇن ئىز قوغلىغۇچ بار ئېلان، سىن ۋە باشقا مەزمۇنلارنى يۈكلىشى مۇمكىن. بۇنى توسۇش تور بېكەتنىڭ يۈكلىنشىنى تېزلىتىدۇ ، ئەمما بەزى توپچە، كۆزنەك ۋە تىزىمغا كىرىش بۆلەكلىرى ئىشلىمەسلىكى مۇمكىن.";
+
+/* Description of cross-site trackers. */
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "بۇ ساقلانمىلار تور بېكەتتىن تور بېكەتكە ئەگىشىپ تورغا چىقىپ نېمە ئىش قىلىدىغانلىقىڭىز ھەققىدە ئۇچۇر توپلايدۇ. ئۇلارنى ئېلان بەرگۈچىلەر ۋە تەھلىل شىركىتى قاتارلىق ئۈچىنچى تەرەپلەر بەلگىلەيدۇ.";
+
+/* Description of cryptominers. */
+"Menu.TrackingProtectionDescription.CryptominersNew" = "شىفىرلىق پۇل قازغۇچ سىستېمىڭىزنىڭ ھېسابلاش كۈچىنى مەخپىي ئىشلىتىپ رەقەملىك پۇل قازىدۇ. شىفىرلىق پۇل قازغۇچ قوليازمىسى باتارېيەڭىزنى خورىتىدۇ، كومپيۇتېرىڭىزنى ئاستىلىتىدۇ ۋە توك ئىشلىتىش چىقىمىڭىزنى ئاشۇرۇۋېتىدۇ.";
+
+/* Description of fingerprinters. */
+"Menu.TrackingProtectionDescription.Fingerprinters" = "تور كۆرگۈ ۋە كومپيۇتېرىڭىزدىكى تەڭشەكلەر بىردىنبىرلىككە ئىگە. بارماق ئىزى بۇ خىل ئۆزگىچە تەڭشەكلەرنى توپلاپ، تەرجىمىھالىڭىزنى ھاسىل قىلىدۇ ، بۇ توركۆرگۈدە سىزنى ئىز قوغلاشقا ئىشلىتىلىدۇ.";
+
+/* Description of social network trackers. */
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "ئىجتىمائىي ئالاقە تورى تېخىمۇ مۇكەممەل ۋە نىشانلىق تەرجىمىھالىڭىزنى تۇرغۇزۇش ئۈچۈن ئىز قوغلىغۇچىلارنى باشقا تور بېكەتلەرگە قويىدۇ. بۇ ئىز قوغلىغۇچىلارنى توسۇش سىزنىڭ توردا نېمىلەرنى كۆرگەنلىكىڭىزنى ئىجتىمائىي ئالاقە شىركەتلىرىنىڭ بىلىشىنى ئازايتىدۇ.";
+
 /* The title that shows the number of fingerprinting scripts blocked */
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "بارماق ئىزى ئىزلىغۇچ";
 
@@ -894,6 +909,9 @@
 
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "ئاپلا! Firefox يىمىرىلدى";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "ماۋزۇ بالداقتا كىتاب سىنبەلگىسى كۆرۈنگەندە ئۇنى چېكىپ ئوقۇش كۆرۈنۈشىدە ماقالىنى ئاچالايسىز.";
 
 /* See http://mzl.la/1G7uHo7 */
 "Open Settings" = "تەڭشەكنى ئاچ";
@@ -1513,6 +1531,9 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "ماقۇل، چۈشىنىشلىك";
 
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "ئەگەر بىر تور بېكەت كۈتكەندەك ئىشلىمىسە، ئادرېس بالداقتىكى قۇلۇپنى چېكىپ، بۇ بەتتىكى كۈچەيتىلگەن ئىزلاشتىن قوغلاشنى تاقاڭ.";
+
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "دىققەت!";
 
@@ -1521,6 +1542,21 @@
 
 /* 'Learn more' info link on the Tracking Protection settings screen. */
 "Settings.TrackingProtection.LearnMore" = "تەپسىلاتى";
+
+/* Additional information about your Enhanced Tracking Protection */
+"Settings.TrackingProtection.ProtectionCellFooter" = "نىشانلىق ئېلاننى ئازايتىدۇ ۋە ئېلان بەرگۈچىلەرنىڭ تور كۆرگۈڭىزنى ئىزلىشىنى توختىتىدۇ.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "ئەگەر بىر تور بېكەت كۈتكەندەك ئىشلىمىسە، ئادرېس بالداقتىكى قۇلۇپنى چېكىپ، بۇ بەتتىكى كۈچەيتىلگەن ئىزلاشتىن قوغلاشنى تاقاڭ.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "ئەگەر بىر تور بېكەت كۈتكەندەك ئىشلىمىسە، ئادرېس بالداقتىكى قۇلۇپنى چېكىپ، بۇ بەتتىكى كۈچەيتىلگەن ئىزلاشتىن قوغلاشنى تاقاڭ.";
+
+/* Description for standard level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "بەزى ئېلاننىڭ ئىز قوغلىشىغا يول قويىدۇ، شۇڭا تور بېكەتلەر نورمال ئىشلەيدۇ.";
+
+/* Description for strict level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "تېخىمۇ كۆپ ئىز قوغلىغۇچ، ئېلان ۋە قاڭقىش كۆزنەكلىرىنى توسىدۇ. بەتلەر تېز يۈكلىنىدۇ، ئەمما بەزى ئىقتىدارى ئىشلىمەسلىكى مۇمكىن.";
 
 /* Title for tracking protection options section where level can be selected. */
 "Settings.TrackingProtection.ProtectionLevelTitle" = "قوغداش دەرىجىسى";
