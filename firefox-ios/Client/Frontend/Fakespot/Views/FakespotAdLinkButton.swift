@@ -36,13 +36,13 @@ class FakespotAdLinkButton: LinkButton {
     }
 
     override public func layoutSubviews() {
+        if let titleLabel {
+            // hack to be able to restrict the number of lines displayed
+            titleLabel.numberOfLines = UX.numberOfLines
+            sizeToFit()
+        }
+
         super.layoutSubviews()
-
-        guard let titleLabel else { return }
-
-        // hack to be able to restrict the number of lines displayed
-        titleLabel.numberOfLines = UX.numberOfLines
-        sizeToFit()
     }
 
     override public var intrinsicContentSize: CGSize {
