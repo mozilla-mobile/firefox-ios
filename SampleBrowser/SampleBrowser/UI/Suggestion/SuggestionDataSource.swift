@@ -4,7 +4,7 @@
 
 import UIKit
 
-class SuggestionDataSource: NSObject {
+class SuggestionDataSource: NSObject, UITableViewDataSource {
     var suggestions = [String]() {
         didSet {
             buildModels()
@@ -18,9 +18,9 @@ class SuggestionDataSource: NSObject {
             models.append(SuggestionCellViewModel(title: suggestion))
         }
     }
-}
 
-extension SuggestionDataSource: UITableViewDataSource {
+    // MARK: UITableViewDataSource
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return models.count
     }

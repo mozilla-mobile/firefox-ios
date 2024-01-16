@@ -94,18 +94,39 @@
 		8A0F446F2B56FD2A00438589 /* Search */ = {
 			isa = PBXGroup;
 			children = (
-				8A0F44702B56FD3600438589 /* SearchViewController.swift */,
-				8A0F44722B56FD4500438589 /* SuggestionViewController.swift */,
-				8A0F44762B56FD6300438589 /* SuggestionDataSource.swift */,
-				8A0F44782B56FD6E00438589 /* SuggestionCellViewModel.swift */,
-				8A0F44742B56FD5300438589 /* SearchViewModel.swift */,
-				8A0F44802B56FDEA00438589 /* SearchDataProvider.swift */,
-				8A0F447A2B56FD8300438589 /* SearchDataProviderProtocol.swift */,
-				8A0F447C2B56FD9600438589 /* SearchModel.swift */,
-				8A0F447E2B56FDAD00438589 /* BrowserError.swift */,
 				8A0F44842B56FFFC00438589 /* SearchTerm.swift */,
+				8A0F44702B56FD3600438589 /* SearchViewController.swift */,
 			);
 			path = Search;
+			sourceTree = "<group>";
+		};
+		8A0F44882B5704C100438589 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				8A0F447E2B56FDAD00438589 /* BrowserError.swift */,
+				8A0F447C2B56FD9600438589 /* SearchModel.swift */,
+				8A0F44742B56FD5300438589 /* SearchViewModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		8A0F44892B57050200438589 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				8A0F44802B56FDEA00438589 /* SearchDataProvider.swift */,
+				8A0F447A2B56FD8300438589 /* SearchDataProviderProtocol.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		8A0F448A2B57053500438589 /* Suggestion */ = {
+			isa = PBXGroup;
+			children = (
+				8A0F44782B56FD6E00438589 /* SuggestionCellViewModel.swift */,
+				8A0F44762B56FD6300438589 /* SuggestionDataSource.swift */,
+				8A0F44722B56FD4500438589 /* SuggestionViewController.swift */,
+			);
+			path = Suggestion;
 			sourceTree = "<group>";
 		};
 		8A4601D82B0FE20500FFD17F = {
@@ -129,13 +150,16 @@
 		8A4601E32B0FE20500FFD17F /* SampleBrowser */ = {
 			isa = PBXGroup;
 			children = (
-				8A0F44692B56EDC000438589 /* Engine */,
-				8A4602142B0FE40E00FFD17F /* UI */,
 				8A4601E42B0FE20500FFD17F /* AppDelegate.swift */,
-				8A4601E62B0FE20500FFD17F /* SceneDelegate.swift */,
 				8A4601ED2B0FE20700FFD17F /* Assets.xcassets */,
-				8A4601EF2B0FE20700FFD17F /* LaunchScreen.storyboard */,
+				8A0F44692B56EDC000438589 /* Engine */,
+				8A46021C2B0FE4F600FFD17F /* Extensions */,
 				8A4601F22B0FE20700FFD17F /* Info.plist */,
+				8A4601EF2B0FE20700FFD17F /* LaunchScreen.storyboard */,
+				8A0F44882B5704C100438589 /* Model */,
+				8A0F44892B57050200438589 /* Networking */,
+				8A4601E62B0FE20500FFD17F /* SceneDelegate.swift */,
+				8A4602142B0FE40E00FFD17F /* UI */,
 			);
 			path = SampleBrowser;
 			sourceTree = "<group>";
@@ -143,11 +167,11 @@
 		8A4602142B0FE40E00FFD17F /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				8A0F446F2B56FD2A00438589 /* Search */,
+				8A0F448A2B57053500438589 /* Suggestion */,
 				8A4602232B0FE57C00FFD17F /* Browser */,
-				8A46021C2B0FE4F600FFD17F /* Extensions */,
 				8A4602152B0FE42300FFD17F /* Components */,
 				8A4601E82B0FE20500FFD17F /* RootViewController.swift */,
+				8A0F446F2B56FD2A00438589 /* Search */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -164,11 +188,11 @@
 		8A46021C2B0FE4F600FFD17F /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				8A46021D2B0FE50D00FFD17F /* UIView+Extension.swift */,
-				8A46021F2B0FE52F00FFD17F /* UISearchbar+Extension.swift */,
-				8A4602212B0FE55300FFD17F /* UIViewController+Extension.swift */,
-				8A0F44822B56FE1300438589 /* UIAlertController+Error.swift */,
 				8A0F44862B57000C00438589 /* String+Extension.swift */,
+				8A0F44822B56FE1300438589 /* UIAlertController+Error.swift */,
+				8A46021F2B0FE52F00FFD17F /* UISearchbar+Extension.swift */,
+				8A46021D2B0FE50D00FFD17F /* UIView+Extension.swift */,
+				8A4602212B0FE55300FFD17F /* UIViewController+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";

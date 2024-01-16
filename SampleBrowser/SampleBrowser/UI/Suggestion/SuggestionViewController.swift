@@ -8,11 +8,7 @@ protocol SuggestionViewControllerDelegate: AnyObject {
     func tapOnSuggestion(term: String)
 }
 
-class SuggestionViewController: UIViewController {
-    private lazy var iconView: UIImageView = .build { view in
-        view.image = UIImage(named: "Dogefox")
-    }
-
+class SuggestionViewController: UIViewController, UITableViewDelegate {
     private var tableView: UITableView
     private var dataSource: SuggestionDataSource!
     private weak var delegate: SuggestionViewControllerDelegate?
@@ -34,7 +30,6 @@ class SuggestionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        configureIcon()
         configureTableView()
 
         // Showing app logo when no search is visible
@@ -82,18 +77,6 @@ class SuggestionViewController: UIViewController {
         tableView.register(SuggestionCell.self, forCellReuseIdentifier: SuggestionCell.identifier)
     }
 
-    private func configureIcon() {
-        view.addSubview(iconView)
-        topIconConstraint = iconView.topAnchor.constraint(equalTo: view.topAnchor)
-
-        NSLayoutConstraint.activate([
-            topIconConstraint!,
-            iconView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            iconView.heightAnchor.constraint(equalToConstant: 200),
-            iconView.widthAnchor.constraint(equalToConstant: 200)
-        ])
-    }
-
     func configure(dataSource: SuggestionDataSource,
                    delegate: SuggestionViewControllerDelegate?) {
         self.dataSource = dataSource
@@ -106,10 +89,9 @@ class SuggestionViewController: UIViewController {
         dataSource.suggestions = suggestions
         tableView.reloadData()
     }
-}
 
-// MARK: - UITableViewDelegate
-extension SuggestionViewController: UITableViewDelegate {
+    // MARK: - UITableViewDelegate
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let term = dataSource.suggestions[indexPath.row]
         delegate?.tapOnSuggestion(term: term)

@@ -9,7 +9,7 @@ protocol SearchSuggestionDelegate: AnyObject {
     func openBrowser(searchTerm: String)
 }
 
-class SearchViewController: UIViewController {
+class SearchViewController: UIViewController, SuggestionViewControllerDelegate {
     weak var searchViewDelegate: SearchSuggestionDelegate?
     private var suggestionVC: SuggestionViewController
     let viewModel = SearchViewModel()
@@ -69,10 +69,9 @@ class SearchViewController: UIViewController {
     private func toggleSuggestionView(isShown: Bool) {
         suggestionVC.view.isHidden = !isShown
     }
-}
 
-// MARK: - SuggestionViewControllerDelegate
-extension SearchViewController: SuggestionViewControllerDelegate {
+    // MARK: - SuggestionViewControllerDelegate
+
     func tapOnSuggestion(term: String) {
         searchViewDelegate?.tapOnSuggestion(term: term)
     }
