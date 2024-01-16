@@ -455,6 +455,7 @@ public struct AccessibilityIdentifiers {
             struct ViewCreditCard {
                 static let viewCard = "View Card"
                 static let edit = "Edit"
+                static let close = "Close"
             }
 
             struct EditCreditCard {
