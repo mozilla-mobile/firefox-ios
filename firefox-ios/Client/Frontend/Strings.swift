@@ -1130,9 +1130,9 @@ extension String {
                 value: "Stay encrypted when you hop between devices",
                 comment: "String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens.")
             public static let Description = MZLocalizedString(
-                key: "Onboarding.Sync.Description.v120",
+                key: "Onboarding.Sync.Description.v123",
                 tableName: "Onboarding",
-                value: "When you’re signed in and synced, you’re safer. %@ encrypts your passwords, bookmarks, and more.",
+                value: "%@ encrypts your passwords, bookmarks, and more when you're synced.",
                 comment: "String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name.")
             public static let SignInAction = MZLocalizedString(
                 key: "Onboarding.Sync.SignIn.Action.v114",
