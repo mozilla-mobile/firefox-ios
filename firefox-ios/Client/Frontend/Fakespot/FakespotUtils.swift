@@ -22,12 +22,12 @@ public struct FakespotUtils: FeatureFlaggable {
 
     public static var privacyPolicyUrl: URL? {
         // Returns the predefined URL associated to privacy policy button action.
-        return URL(string: "https://www.fakespot.com/privacy-policy")
+        return URL(string: "https://www.mozilla.org/en-US/privacy/firefox?utm_source=review-checker&utm_campaign=privacy-policy&utm_medium=in-product&utm_term=opt-in-screen")
     }
 
     public static var termsOfUseUrl: URL? {
         // Returns the predefined URL associated to terms of use button action.
-        return URL(string: "https://www.fakespot.com/terms")
+        return URL(string: "https://www.fakespot.com/privacy-policy?utm_source=review-checker&utm_campaign=privacy-policy&utm_medium=in-product&utm_term=opt-in-screen")
     }
 
     public static var fakespotUrl: URL? {
