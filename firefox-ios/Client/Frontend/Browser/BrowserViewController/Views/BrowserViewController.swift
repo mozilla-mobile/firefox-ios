@@ -1980,18 +1980,25 @@ class BrowserViewController: UIViewController,
         applyThemeForPreferences(profile.prefs, contentScript: contentScript)
     }
 
+    var isPreferSwitchToOpenTabOverDuplicateFeatureEnabled: Bool {
+        featureFlags.isFeatureEnabled(.preferSwitchToOpenTabOverDuplicate, checking: .buildOnly)
+    }
+
     // MARK: - LibraryPanelDelegate
 
     func libraryPanel(didSelectURL url: URL, visitType: VisitType) {
-        guard let tab = tabManager.selectedTab else { return }
+        if isPreferSwitchToOpenTabOverDuplicateFeatureEnabled, let tab = tabManager.getTabFor(url, reversed: true) {
+            tabManager.selectTab(tab)
+        } else {
+            guard let tab = tabManager.selectedTab else { return }
 
-        // Handle keyboard shortcuts from homepage with url selection
-        // (ex: Cmd + Tap on Link; which is a cell in this case)
-        if navigateLinkShortcutIfNeeded(url: url) {
-            return
+            // Handle keyboard shortcuts from homepage with url selection
+            // (ex: Cmd + Tap on Link; which is a cell in this case)
+            if navigateLinkShortcutIfNeeded(url: url) {
+                return
+            }
+            finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
         }
-
-        finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
     }
 
     func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
@@ -2246,19 +2253,23 @@ extension BrowserViewController: HomePanelDelegate {
     }
 
     func homePanel(didSelectURL url: URL, visitType: VisitType, isGoogleTopSite: Bool) {
-        guard let tab = tabManager.selectedTab else { return }
-        if isGoogleTopSite {
-            tab.urlType = .googleTopSite
-            searchTelemetry?.shouldSetGoogleTopSiteSearch = true
-        }
+        if isPreferSwitchToOpenTabOverDuplicateFeatureEnabled, let tab = tabManager.getTabFor(url, reversed: true) {
+            tabManager.selectTab(tab)
+        } else {
+            guard let tab = tabManager.selectedTab else { return }
+            if isGoogleTopSite {
+                tab.urlType = .googleTopSite
+                searchTelemetry?.shouldSetGoogleTopSiteSearch = true
+            }
 
-        // Handle keyboard shortcuts from homepage with url selection
-        // (ex: Cmd + Tap on Link; which is a cell in this case)
-        if navigateLinkShortcutIfNeeded(url: url) {
-            return
-        }
+            // Handle keyboard shortcuts from homepage with url selection
+            // (ex: Cmd + Tap on Link; which is a cell in this case)
+            if navigateLinkShortcutIfNeeded(url: url) {
+                return
+            }
 
-        finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
+            finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
+        }
     }
 
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool = false) {
