@@ -287,15 +287,18 @@ class SearchViewController: SiteTableViewController,
             // Query and reload the table with new search suggestions.
             querySuggestClient()
 
-            // Show the default search engine first.
-            if !viewModel.isPrivate {
-                let ua = SearchViewController.userAgent ?? "FxSearch"
-                suggestClient = SearchSuggestClient(searchEngine: defaultEngine, userAgent: ua)
-            }
+            setupSuggestClient(with: defaultEngine)
 
             // Reload the footer list of search engines.
             reloadSearchEngines()
         }
+    }
+
+    /// Sets up the suggestClient used to query our searches
+    /// - Parameter defaultEngine: default search engine set in settings (i.e. Google)
+    private func setupSuggestClient(with defaultEngine: OpenSearchEngine) {
+        let ua = SearchViewController.userAgent ?? "FxSearch"
+        suggestClient = SearchSuggestClient(searchEngine: defaultEngine, userAgent: ua)
     }
 
     private var quickSearchEngines: [OpenSearchEngine] {
@@ -305,7 +308,7 @@ class SearchViewController: SiteTableViewController,
 
         // If we're not showing search suggestions, the default search engine won't be visible
         // at the top of the table. Show it with the others in the bottom search bar.
-        if viewModel.isPrivate || !(searchEngines?.shouldShowSearchSuggestions ?? false) {
+        if !(searchEngines?.shouldShowSearchSuggestions ?? false) {
             engines?.insert(defaultEngine, at: 0)
         }
 
