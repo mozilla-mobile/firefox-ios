@@ -125,7 +125,7 @@ class BrowserViewController: UIViewController, EngineSessionDelegate {
     }
 
     func onNavigationStateChange(canGoBack: Bool?, canGoForward: Bool?) {
-        navigationDelegate?.onNavigationStateChange(canGoBack: canGoBack, 
+        navigationDelegate?.onNavigationStateChange(canGoBack: canGoBack,
                                                     canGoForward: canGoForward)
     }
 }
