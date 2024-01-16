@@ -12,5 +12,7 @@ transforms:
 
 tasks:
     github:
-        bitrise-workflow: Bitrise_Performance_Test
+        bitrise-pipeline: pipeline_multiple_shards
         description: Trigger Bitrise Pipeline on github events
+            #optimization:
+                #skip-unless-changed: []  # Paths are dynamically added by transforms

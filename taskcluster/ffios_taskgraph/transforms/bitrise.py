@@ -77,17 +77,29 @@ def set_worker_config(config, tasks):
 def add_bitrise_command(config, tasks):
     for task in tasks:
         commands = task["run"].setdefault("commands", [])
-        workflow = task.pop("bitrise-workflow")
 
-        command = [
-            "python3",
-            "taskcluster/scripts/bitrise-schedule.py",
-            "--token-file", ".bitrise_token",
-            "--branch", config.params["head_ref"],
-            "--commit", config.params["head_rev"],
-            "--workflow", workflow,
-            "--artifacts-directory", _ARTIFACTS_DIRECTORY
-        ]
+        if "bitrise-workflow" in task:
+            workflow = task.pop("bitrise-workflow")
+            command = [
+                "python3",
+                "taskcluster/scripts/bitrise-schedule.py",
+                "--token-file", ".bitrise_token",
+                "--branch", config.params["head_ref"],
+                "--commit", config.params["head_rev"],
+                "--workflow", workflow,
+                "--artifacts-directory", _ARTIFACTS_DIRECTORY
+            ]
+        else:
+            pipeline = task.pop("bitrise-pipeline")
+            command = [
+                "python3",
+                "taskcluster/scripts/bitrise-schedule.py",
+                "--token-file", ".bitrise_token",
+                "--branch", config.params["head_ref"],
+                "--commit", config.params["head_rev"],
+                "--pipeline", pipeline,
+                "--artifacts-directory", _ARTIFACTS_DIRECTORY
+            ]
 
         for locale in task.get("attributes", {}).get("chunk_locales", []):
             command.extend(["--importLocales", locale])

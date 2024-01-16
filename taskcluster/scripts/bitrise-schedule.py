@@ -51,7 +51,8 @@ def sync_main(
     parser.add_argument("--token-file", required=True, type=argparse.FileType("r"), help="file that contains the bitrise.io token")
     parser.add_argument("--branch", required=True, help="the git branch to generate screenshots from")
     parser.add_argument("--commit", required=True, help="the git commit hash to generate screenshots from")
-    parser.add_argument("--workflow", required=True, help="the bitrise workflow to schedule")
+    parser.add_argument("--workflow", help="the bitrise workflow to schedule")
+    parser.add_argument("--pipeline", help="the bitrise pipeline to schedule")
     parser.add_argument("--artifacts-directory", required=True, help="The directory to store bitrise artifacts")
     parser.add_argument("--importLocales", dest="locales", metavar="LOCALE", action="append", help="locale to generate the screenshots for (can be repeated)")
     parser.add_argument("--derived-data-path", default=None, help="the URL to download an existing build")
@@ -65,7 +66,7 @@ def sync_main(
 
     loop = loop_function()
     loop.run_until_complete(_handle_asyncio_loop(
-        async_main, token, result.branch, result.commit, result.workflow,
+        async_main, token, result.branch, result.commit, result.workflow, result.pipeline,
         result.artifacts_directory, result.locales, result.derived_data_path
     ))
 
@@ -85,23 +86,29 @@ async def _handle_asyncio_loop(async_main, *args):
         sys.exit(exc.exit_code)
 
 
-async def async_main(token, branch, commit, workflow, artifacts_directory, locales, derived_data_path=None):
+async def async_main(token, branch, commit, workflow, pipeline, artifacts_directory, locales, derived_data_path=None):
     headers = {"Authorization": token}
     async with RetryClient(headers=headers) as client:
-        build_slug = await schedule_build(client, branch, commit, workflow, locales, derived_data_path)
+        build_slug = await schedule_build(client, branch, commit, workflow, pipeline, locales, derived_data_path)
         log.info(f"Created new job. Slug: {build_slug}")
 
         try:
-            await wait_for_job_to_finish(client, build_slug)
-            log.info(f"Job {build_slug} is successful. Retrieving artifacts...")
-            await download_artifacts(client, build_slug, artifacts_directory)
+            if workflow == None: 
+                await wait_for_job_to_finish(client, build_slug, pipeline=True)
+                log.info(f"Job {build_slug} is successful. Retrieving artifacts...")
+            else:
+                await wait_for_job_to_finish(client, build_slug, pipeline=False)
+                log.info(f"Job {build_slug} is successful. Retrieving artifacts...")
+                await download_artifacts(client, build_slug, artifacts_directory)
         finally:
-            log.info("Retrieving bitrise log...")
-            await download_log(client, build_slug, artifacts_directory)
-            await log_bitrise_perfherder_data(os.path.join(artifacts_directory, "bitrise.log"))
+            if pipeline == None: 
+                log.info("Retrieving bitrise log...")
+                await download_log(client, build_slug, artifacts_directory)
+                await log_bitrise_perfherder_data(os.path.join(artifacts_directory, "bitrise.log"))
+            else:
+                log.info(f"Job {build_slug} is a Pipeline, decide what to retrieve")
 
-
-async def schedule_build(client, branch, commit, workflow, locales=None, derived_data_path=None):
+async def schedule_build(client, branch, commit, workflow=None, pipeline=None, locales=None, derived_data_path=None):
     url = BITRISE_URL_TEMPLATE.format(suffix="builds")
 
     if locales:
@@ -117,7 +124,8 @@ async def schedule_build(client, branch, commit, workflow, locales=None, derived
         ("MOZ_DERIVED_DATA_PATH", derived_data_path),
     ) if environment_variable_value]
 
-    data = {
+    if workflow == None: 
+        data = {
         "hook_info": {
             "type": "bitrise",
         },
@@ -125,9 +133,23 @@ async def schedule_build(client, branch, commit, workflow, locales=None, derived
             "branch": branch,
             "commit_hash": commit,
             "environments": environment_variables,
-            "workflow_id": workflow,
+            "pipeline_id": pipeline
+            }
+        }
+    else: 
+        data = {
+        "hook_info": {
+            "type": "bitrise",
         },
-    }
+        "build_params": {
+            "branch": branch,
+            "commit_hash": commit,
+            "environments": environment_variables,
+            "workflow_id": workflow
+            }
+        }
+    
+    log.info(f"Pasing this data {data}")
 
     response = await do_http_request_json(client, url, method="post", json=data)
     if response.get("status", "") != "ok":
@@ -136,25 +158,33 @@ async def schedule_build(client, branch, commit, workflow, locales=None, derived
     return response["build_slug"]
 
 
-async def wait_for_job_to_finish(client, build_slug):
-    suffix = f"builds/{build_slug}"
+async def wait_for_job_to_finish(client, build_slug, pipeline=False):
+    if pipeline:
+        suffix=f"pipelines/{build_slug}"
+    else:
+        suffix = f"builds/{build_slug}"
+
     url = BITRISE_URL_TEMPLATE.format(suffix=suffix)
 
     while True:
         response = await do_http_request_json(client, url)
-        if response["data"]["finished_at"]:
-            log.info(f"Job {build_slug} is now finished, checking result...")
+        if pipeline:
+            log.info(f"Job {build_slug} is a pipeline TBD what to do next")
             break
         else:
-            log.info(f"Job {build_slug} is still running. Waiting another minute...")
-            await asyncio.sleep(60)
+            if response["data"]["finished_at"]:
+                log.info(f"Job {build_slug} is now finished, checking result...")
+                break
+            else:
+                log.info(f"Job {build_slug} is still running. Waiting another minute...")
+                await asyncio.sleep(60)
 
-    if response["data"]["status_text"] != "success":
-        if response["data"]["status_text"] == "error":
-            raise TaskException(f"Job {build_slug} errored! Got: {response}", exit_code=1)
-        if response["data"]["status_text"] == "aborted":
-            raise TaskException(f"Job {build_slug} was aborted. Got: {response}", exit_code=2)
-        raise TaskException(f"Job {build_slug} is finished but not successful. Got: {response}", exit_code=3)
+        if response["data"]["status_text"] != "success":
+            if response["data"]["status_text"] == "error":
+                raise TaskException(f"Job {build_slug} errored! Got: {response}", exit_code=1)
+            if response["data"]["status_text"] == "aborted":
+                raise TaskException(f"Job {build_slug} was aborted. Got: {response}", exit_code=2)
+            raise TaskException(f"Job {build_slug} is finished but not successful. Got: {response}", exit_code=3)
 
 
 async def download_artifacts(client, build_slug, artifacts_directory):
@@ -179,6 +209,7 @@ async def download_artifacts(client, build_slug, artifacts_directory):
 
 async def download_log(client, build_slug, artifacts_directory):
     suffix = f"builds/{build_slug}/log"
+
     url = BITRISE_URL_TEMPLATE.format(suffix=suffix)
 
     while True:
