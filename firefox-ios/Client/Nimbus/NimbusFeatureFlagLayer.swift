@@ -234,8 +234,7 @@ final class NimbusFeatureFlagLayer {
     }
 
     private func checkPreferSwitchToOpenTabOverDuplicate(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.preferSwitchToOpenTab.value()
-        return config.enabled
+        return nimbus.features.homescreenFeature.value().preferSwitchToOpenTab
     }
 
     private func checkAddressAutofill(from nimbus: FxNimbus) -> Bool {
