@@ -4,6 +4,10 @@
 
 import UIKit
 
+struct SearchBarViewModel {
+    let placeholder: String
+}
+
 protocol SearchBarDelegate: AnyObject {
     func searchSuggestions(searchTerm: String)
     func openBrowser(searchTerm: String)

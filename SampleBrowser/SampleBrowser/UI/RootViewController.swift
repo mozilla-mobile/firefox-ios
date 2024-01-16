@@ -9,6 +9,7 @@ class RootViewController: UIViewController,
                           ToolbarDelegate,
                           NavigationDelegate,
                           SearchBarDelegate,
+                          SearchSuggestionDelegate,
                           MenuDelegate {
     private lazy var toolbar: BrowserToolbar = .build { _ in }
     private lazy var searchBar: BrowserSearchBar =  .build { _ in }
@@ -17,11 +18,13 @@ class RootViewController: UIViewController,
     }
 
     private var browserVC: BrowserViewController
+    private var searchVC: SearchViewController
 
     // MARK: - Init
 
     init(engineProvider: EngineProvider) {
         self.browserVC = BrowserViewController(engineProvider: engineProvider)
+        self.searchVC = SearchViewController()
         super.init(nibName: nil, bundle: nil)
         view.backgroundColor = .black
     }
@@ -37,6 +40,7 @@ class RootViewController: UIViewController,
 
         configureBrowserView()
         configureSearchbar()
+        configureSearchView()
         configureToolbar()
     }
 
@@ -71,6 +75,23 @@ class RootViewController: UIViewController,
         searchBar.configure(searchBarDelegate: self,
                             menuDelegate: self)
         searchBar.becomeFirstResponder()
+    }
+
+    private func configureSearchView() {
+        searchVC.searchViewDelegate = self
+        searchVC.view.translatesAutoresizingMaskIntoConstraints = false
+    }
+
+    private func addSearchView() {
+        guard searchVC.parent == nil else { return }
+        add(searchVC)
+
+        NSLayoutConstraint.activate([
+            searchVC.view.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
+            searchVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            searchVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            searchVC.view.bottomAnchor.constraint(equalTo: toolbar.topAnchor)
+        ])
     }
 
     private func configureToolbar() {
@@ -130,11 +151,18 @@ class RootViewController: UIViewController,
 
     func searchSuggestions(searchTerm: String) {
         guard !searchTerm.isEmpty else {
+            searchVC.viewModel.resetSearch()
+            searchVC.openSuggestions()
             return
         }
+
+        addSearchView()
+        searchVC.requestSearch(term: searchTerm)
     }
 
     func openSuggestions(searchTerm: String) {
+        addSearchView()
+        searchVC.openSuggestions()
     }
 
     func openBrowser(searchTerm: String) {
@@ -146,5 +174,12 @@ class RootViewController: UIViewController,
 
     func didClickMenu() {
         // Not implementing Settings for now, will see later on if this is needed or not
+    }
+
+    // MARK: - SearchViewDelegate
+
+    func tapOnSuggestion(term: String) {
+        searchBar.setSearchBarText(term)
+        browse(to: term)
     }
 }
