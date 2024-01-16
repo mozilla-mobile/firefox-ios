@@ -116,15 +116,6 @@
         "revision" : "1080914828ef1c9ca9cd2bad50667b3d847dabff",
         "version" : "2.0.0"
       }
-    },
-    {
-      "identity" : "telemetry-ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/mozilla-mobile/telemetry-ios",
-      "state" : {
-        "revision" : "68f2d813320c9fda2fb4aee4548c64293500200a",
-        "version" : "2.0.0"
-      }
     }
   ],
   "version" : 2
