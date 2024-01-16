@@ -65,21 +65,11 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
     }
 
     private lazy var primaryButton: PrimaryRoundedButton = .build { button in
-           button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
-               withTextStyle: .callout,
-               size: UX.buttonFontSize)
-           button.layer.cornerRadius = UX.buttonCornerRadius
-           button.titleLabel?.textAlignment = .center
-           button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
-           button.titleLabel?.adjustsFontForContentSizeCategory = true
-           button.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.PrimaryButton"
-           button.contentEdgeInsets = UIEdgeInsets(
-               top: UX.buttonVerticalInset,
-               left: UX.buttonHorizontalInset,
-               bottom: UX.buttonVerticalInset,
-               right: UX.buttonHorizontalInset
-           )
-       }
+        // Removed the lines that set font, corner radius, text alignment, adjustsFontForContentSizeCategory, and content edge insets
+        button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
+        button.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.PrimaryButton"
+    }
+
 
 
     var viewModel: OnboardingDefaultBrowserModelProtocol
@@ -203,8 +193,14 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
     private func updateLayout() {
         titleLabel.text = viewModel.title
         primaryButton.setTitle(viewModel.buttonTitle, for: .normal)
-    }
 
+        // Create PrimaryRoundedButtonViewModel instance with a11yIdRoot
+        let buttonViewModel = PrimaryRoundedButtonViewModel(title: "Button Title", a11yIdentifier: "YourAccessibilityIdentifier")
+
+
+        // Configure the primaryButton with the buttonViewModel
+        primaryButton.configure(viewModel: buttonViewModel)
+    }
     private func addViewsToView() {
         createLabels(from: viewModel.instructionSteps)
 
@@ -270,8 +266,8 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
         titleLabel.textColor = theme.colors.textPrimary
         numeratedLabels.forEach { $0.textColor = theme.colors.textPrimary }
 
-        primaryButton.setTitleColor(theme.colors.textInverted, for: .normal)
-        primaryButton.backgroundColor = theme.colors.actionPrimary
+        // Call applyTheme() on primaryButton to let it handle theme-specific styling
+        primaryButton.applyTheme(theme: theme)
 
         view.backgroundColor = theme.colors.layer1
     }
