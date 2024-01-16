@@ -22,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8A0F44682B56ECBF00438589 /* BrowserKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = BrowserKit; path = ../BrowserKit; sourceTree = "<group>"; };
 		8A4601E12B0FE20500FFD17F /* SampleBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SampleBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A4601E42B0FE20500FFD17F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8A4601E62B0FE20500FFD17F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -52,6 +53,7 @@
 		8A4601D82B0FE20500FFD17F = {
 			isa = PBXGroup;
 			children = (
+				8A0F44682B56ECBF00438589 /* BrowserKit */,
 				8A4601E32B0FE20500FFD17F /* SampleBrowser */,
 				8A4601E22B0FE20500FFD17F /* Products */,
 			);
