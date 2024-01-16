@@ -2351,7 +2351,7 @@ extension BrowserViewController: TabManagerDelegate {
 
         if let tab = selected, let webView = tab.webView {
             updateURLBarDisplayURL(tab)
-            if urlBar.inOverlayMode { urlBar.leaveOverlayMode(didCancel: false) }
+            if urlBar.inOverlayMode, tab.url?.displayURL != nil { urlBar.leaveOverlayMode(didCancel: false) }
 
             if previous == nil || tab.isPrivate != previous?.isPrivate {
                 applyTheme()
