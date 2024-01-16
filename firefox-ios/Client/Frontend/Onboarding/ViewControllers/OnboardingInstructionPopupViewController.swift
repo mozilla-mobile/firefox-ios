@@ -65,12 +65,7 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
     }
 
     private lazy var primaryButton: PrimaryRoundedButton = .build { button in
-        // Removed the lines that set font, corner radius, text alignment, adjustsFontForContentSizeCategory, and content edge insets
-        button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
-        button.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.PrimaryButton"
     }
-
-
 
     var viewModel: OnboardingDefaultBrowserModelProtocol
     var notificationCenter: NotificationProtocol
@@ -192,13 +187,10 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
 
     private func updateLayout() {
         titleLabel.text = viewModel.title
-        primaryButton.setTitle(viewModel.buttonTitle, for: .normal)
-
-        // Create PrimaryRoundedButtonViewModel instance with a11yIdRoot
-        let buttonViewModel = PrimaryRoundedButtonViewModel(title: "Button Title", a11yIdentifier: "YourAccessibilityIdentifier")
-
-
-        // Configure the primaryButton with the buttonViewModel
+        let buttonViewModel = PrimaryRoundedButtonViewModel(
+            title: viewModel.buttonTitle,
+            a11yIdentifier: "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.PrimaryButton"
+        )
         primaryButton.configure(viewModel: buttonViewModel)
     }
     private func addViewsToView() {
