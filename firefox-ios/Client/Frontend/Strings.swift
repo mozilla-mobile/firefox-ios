@@ -1213,7 +1213,7 @@ extension String {
                     key: "Onboarding.Customization.Intro.Description.v123",
                     tableName: "Onboarding",
                     value: "Set your theme and toolbar to match your unique browsing style.",
-                    comment: "String used to describe the description label of the customization onboarding page in our Onboarding screens. Placeholder is for the app name.")
+                    comment: "String used to describe the description label of the customization onboarding page in our Onboarding screens.")
                 public static let ContinueAction = MZLocalizedString(
                     key: "Onboarding.Customization.Intro.Continue.Action.v123",
                     tableName: "Onboarding",
