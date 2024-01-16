@@ -101,9 +101,12 @@ class PhotonActionSheet: UIViewController, Themeable {
 
         setupLayout()
 
-        setupNotifications(forObserver: self, observing: [.ProfileDidFinishSyncing,
-                                                          .ProfileDidStartSyncing,
-                                                          UIAccessibility.reduceTransparencyStatusDidChangeNotification])
+        setupNotifications(
+            forObserver: self,
+            observing: [.ProfileDidFinishSyncing,
+                        .ProfileDidStartSyncing,
+                        UIAccessibility.reduceTransparencyStatusDidChangeNotification]
+        )
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -214,11 +217,9 @@ class PhotonActionSheet: UIViewController, Themeable {
         ]
 
         // Can't set this on iPad (not in multitasking) since it causes the menu to take all the width of the screen.
-        if PhotonActionSheetViewModel.isSmallSizeForTraitCollection(trait: view.traitCollection) {
-            tableViewConstraints.append(
-                tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-            )
-        }
+        tableViewConstraints.append(
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        )
 
         constraints.append(contentsOf: tableViewConstraints)
     }
@@ -312,7 +313,8 @@ class PhotonActionSheet: UIViewController, Themeable {
                                change: [NSKeyValueChangeKey: Any]?,
                                context: UnsafeMutableRawPointer?) {
         if viewModel.presentationStyle == .popover && !wasHeightOverridden {
-            preferredContentSize = tableView.contentSize
+            let size = view.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+            preferredContentSize = CGSize(width: size.width, height: tableView.contentSize.height)
         }
     }
 

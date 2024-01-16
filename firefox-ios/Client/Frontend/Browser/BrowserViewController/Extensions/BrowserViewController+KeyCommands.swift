@@ -350,10 +350,26 @@ extension BrowserViewController {
         ]
 
         let overridesTextEditing = [
-            UIKeyCommand(action: #selector(nextTabKeyCommand), input: UIKeyCommand.inputRightArrow, modifierFlags: [.command, .shift]),
-            UIKeyCommand(action: #selector(previousTabKeyCommand), input: UIKeyCommand.inputLeftArrow, modifierFlags: [.command, .shift]),
-            UIKeyCommand(action: #selector(goBackKeyCommand), input: UIKeyCommand.inputLeftArrow, modifierFlags: .command),
-            UIKeyCommand(action: #selector(goForwardKeyCommand), input: UIKeyCommand.inputRightArrow, modifierFlags: .command),
+            UIKeyCommand(
+                action: #selector(nextTabKeyCommand),
+                input: UIKeyCommand.inputRightArrow,
+                modifierFlags: [.command, .shift]
+            ),
+            UIKeyCommand(
+                action: #selector(previousTabKeyCommand),
+                input: UIKeyCommand.inputLeftArrow,
+                modifierFlags: [.command, .shift]
+            ),
+            UIKeyCommand(
+                action: #selector(goBackKeyCommand),
+                input: UIKeyCommand.inputLeftArrow,
+                modifierFlags: .command
+            ),
+            UIKeyCommand(
+                action: #selector(goForwardKeyCommand),
+                input: UIKeyCommand.inputRightArrow,
+                modifierFlags: .command
+            ),
         ]
 
         let windowShortcuts = [
@@ -397,7 +413,8 @@ extension BrowserViewController {
         // Open tab in background || Open in new tab
         if keyboardPressesHandler().isOnlyCmdPressed || keyboardPressesHandler().isCmdAndShiftPressed {
             guard let isPrivate = tabManager.selectedTab?.isPrivate else { return shouldCancelHandler }
-            let selectNewTab = !keyboardPressesHandler().isOnlyCmdPressed && keyboardPressesHandler().isCmdAndShiftPressed
+            let selectNewTab = !keyboardPressesHandler().isOnlyCmdPressed
+                               && keyboardPressesHandler().isCmdAndShiftPressed
             homePanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate, selectNewTab: selectNewTab)
             shouldCancelHandler = true
 

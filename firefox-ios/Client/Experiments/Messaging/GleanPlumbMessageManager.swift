@@ -16,7 +16,8 @@ protocol GleanPlumbMessageManagerProtocol {
     /// Surface calls.
     func getNextMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage?
 
-    /// Report impressions in Glean, and then pass the bookkeeping to increment the impression count and expire to `MessageStore`.
+    /// Report impressions in Glean, and then pass the bookkeeping to increment
+    /// the impression count and expire to `MessageStore`.
     /// Surface calls.
     func onMessageDisplayed(_ message: GleanPlumbMessage)
 
@@ -96,7 +97,10 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         return getNextMessage(for: surface, availableMessages: getMessages(messagingFeature.value()))
     }
 
-    public func getNextMessage(for surface: MessageSurfaceId, availableMessages: [GleanPlumbMessage]) -> GleanPlumbMessage? {
+    public func getNextMessage(
+        for surface: MessageSurfaceId,
+        availableMessages: [GleanPlumbMessage]
+    ) -> GleanPlumbMessage? {
         // If `NimbusMessagingHelper` creation fails, we cannot continue with this
         // feature! For that reason, return `nil`. We need to recreate the helper
         // for each request to get a message because device context can change.

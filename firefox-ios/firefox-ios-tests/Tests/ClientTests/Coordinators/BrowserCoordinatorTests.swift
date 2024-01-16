@@ -20,13 +20,14 @@ final class BrowserCoordinatorTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
+        let mockTabManager = MockTabManager()
+        self.tabManager = mockTabManager
+        DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
         self.profile = MockProfile()
         self.overlayModeManager = MockOverlayModeManager()
         self.screenshotService = ScreenshotService()
-        self.tabManager = MockTabManager()
         self.applicationHelper = MockApplicationHelper()
         self.glean = MockGleanWrapper()
         self.scrollDelegate = MockStatusBarScrollDelegate()
@@ -202,7 +203,13 @@ final class BrowserCoordinatorTests: XCTestCase {
     func testShowShareExtension_addsShareExtensionCoordinator() {
         let subject = createSubject()
 
-        subject.showShareExtension(url: URL(string: "https://www.google.com")!, sourceView: UIView(), toastContainer: UIView())
+        subject.showShareExtension(
+            url: URL(
+                string: "https://www.google.com"
+            )!,
+            sourceView: UIView(),
+            toastContainer: UIView()
+        )
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertTrue(subject.childCoordinators.first is ShareExtensionCoordinator)
@@ -213,7 +220,13 @@ final class BrowserCoordinatorTests: XCTestCase {
     func testShowCreditCardAutofill_addsCredentialAutofillCoordinator() {
         let subject = createSubject()
 
-        subject.showCreditCardAutofill(creditCard: nil, decryptedCard: nil, viewType: .save, frame: nil, alertContainer: UIView())
+        subject.showCreditCardAutofill(
+            creditCard: nil,
+            decryptedCard: nil,
+            viewType: .save,
+            frame: nil,
+            alertContainer: UIView()
+        )
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertTrue(subject.childCoordinators.first is CredentialAutofillCoordinator)
@@ -248,6 +261,19 @@ final class BrowserCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is QRCodeNavigationController)
+    }
+
+    func testShowBackForwardList_presentsBackForwardListViewController() {
+        let mockTab = Tab(profile: profile, configuration: .init())
+        mockTab.url = URL(string: "https://www.google.com")
+        mockTab.createWebview()
+        tabManager.selectedTab = mockTab
+
+        let subject = createSubject()
+        subject.showBackForwardList()
+
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(mockRouter.presentedViewController is BackForwardListViewController)
     }
 
     func testShowTabTray() throws {
@@ -362,7 +388,13 @@ final class BrowserCoordinatorTests: XCTestCase {
         subject.browserViewController = mbvc
         subject.browserHasLoaded()
 
-        let result = testCanHandleAndHandle(subject, route: .searchURL(url: URL(string: "https://example.com")!, tabId: "1234"))
+        let result = testCanHandleAndHandle(
+            subject,
+            route: .searchURL(
+                url: URL(string: "https://example.com")!,
+                tabId: "1234"
+            )
+        )
 
         XCTAssertTrue(result)
         XCTAssertTrue(mbvc.switchToTabForURLOrOpenCalled)
@@ -768,7 +800,9 @@ final class BrowserCoordinatorTests: XCTestCase {
         // Checking to see if there's one library coordinator instance presented
         XCTAssertEqual(subject.childCoordinators.filter { $0 is LibraryCoordinator }.count, 1)
 
-        // We try to show the library again on downloads tab (notice for now the Done button is not connected and will not remove the coordinator). Showing the library again should use the existing instance of the LibraryCoordinator
+        // We try to show the library again on downloads tab (notice for now the Done
+        // button is not connected and will not remove the coordinator). Showing the
+        // library again should use the existing instance of the LibraryCoordinator
         subject.show(homepanelSection: .downloads)
 
         // Checking to see if there's only one library coordinator instance presented
@@ -783,7 +817,8 @@ final class BrowserCoordinatorTests: XCTestCase {
         // We show the library with bookmarks tab
         subject.show(homepanelSection: .bookmarks)
 
-        let coordinator = try XCTUnwrap(subject.childCoordinators.first { $0 is LibraryCoordinator } as? LibraryCoordinator)
+        let coordinator = try XCTUnwrap(
+            subject.childCoordinators.first { $0 is LibraryCoordinator } as? LibraryCoordinator)
         let url = URL(string: "http://google.com")!
         coordinator.libraryPanel(didSelectURL: url, visitType: .bookmark)
 
@@ -800,7 +835,8 @@ final class BrowserCoordinatorTests: XCTestCase {
         // We show the library with bookmarks tab
         subject.show(homepanelSection: .bookmarks)
 
-        let coordinator = try XCTUnwrap(subject.childCoordinators.first { $0 is LibraryCoordinator } as? LibraryCoordinator)
+        let coordinator = try XCTUnwrap(
+            subject.childCoordinators.first { $0 is LibraryCoordinator } as? LibraryCoordinator)
         let url = URL(string: "http://google.com")!
         coordinator.libraryPanelDidRequestToOpenInNewTab(url, isPrivate: true)
 

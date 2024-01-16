@@ -60,7 +60,9 @@ final class RemoteTabsCoordinatorTests: XCTestCase {
         let subject = createSubject()
         subject.showQRCode(delegate: qrDelegate)
 
-        guard let qrCodeCoordinator = subject.childCoordinators.first(where: { $0 is QRCodeCoordinator }) as? QRCodeCoordinator else {
+        guard let qrCodeCoordinator = subject.childCoordinators.first(where: {
+            $0 is QRCodeCoordinator
+        }) as? QRCodeCoordinator else {
             XCTFail("QRCodeCoordinator expected to be found")
             return
         }

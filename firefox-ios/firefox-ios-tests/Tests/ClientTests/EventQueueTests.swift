@@ -294,4 +294,20 @@ final class EventQueueTests: XCTestCase {
         // At this point all dependencies should be complete.
         XCTAssertTrue(queue.hasSignalled(.parentEvent))
     }
+
+    // This tests an edge case bug that can cause actions to not be executed correctly.
+    func testEnqueuingActionDuringProcessingWhoseDependenciesAreSatisfiedWillBeRunCorrectly() {
+        let expectation = XCTestExpectation(description: "Nested action expectation.")
+        queue.wait(for: [.startingEvent, .laterEvent], then: {
+            self.queue.wait(for: [.startingEvent, .laterEvent], then: {
+                expectation.fulfill()
+            })
+        })
+        queue.signal(event: .startingEvent)
+        queue.signal(event: .laterEvent)
+        // Note: there's no way currently to test this bug synchronously, however
+        // the risk of flakiness to our CI should be low given the minimal processing
+        // overhead of the event queue.
+        wait(for: [expectation], timeout: 0.5)
+    }
 }

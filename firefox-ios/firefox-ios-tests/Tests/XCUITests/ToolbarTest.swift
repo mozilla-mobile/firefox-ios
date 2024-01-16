@@ -4,7 +4,12 @@
 
 import XCTest
 
-let website1: [String: String] = ["url": path(forTestPage: "test-mozilla-org.html"), "label": "Internet for people, not profit — Mozilla", "value": "localhost", "longValue": "localhost:\(serverPort)/test-fixture/test-mozilla-org.html"]
+let website1: [String: String] = [
+    "url": path(forTestPage: "test-mozilla-org.html"),
+    "label": "Internet for people, not profit — Mozilla",
+    "value": "localhost",
+    "longValue": "localhost:\(serverPort)/test-fixture/test-mozilla-org.html"
+]
 let website2 = path(forTestPage: "test-example.html")
 
 class ToolbarTests: BaseTestCase {
@@ -95,7 +100,8 @@ class ToolbarTests: BaseTestCase {
         XCTAssertEqual(value as? String, "", "The url has not been removed correctly")
     }
 
-    // Check that after scrolling on a page, the URL bar is hidden. Tapping one on the status bar will reveal the URL bar, tapping again on the status will scroll to the top
+    // Check that after scrolling on a page, the URL bar is hidden. Tapping one on the status bar will reveal
+    // the URL bar, tapping again on the status will scroll to the top
     // Skipping for iPad for now, not sure how to implement it there
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2344431
     func testRevealToolbarWhenTappingOnStatusbar() {
@@ -110,13 +116,20 @@ class ToolbarTests: BaseTestCase {
             waitUntilPageLoad()
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
             let PageOptionsMenu = app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
-            let statusbarElement: XCUIElement = XCUIApplication(bundleIdentifier: "com.apple.springboard").statusBars.element(boundBy: 1)
+            let statusbarElement: XCUIElement = XCUIApplication(
+                bundleIdentifier: "com.apple.springboard"
+            ).statusBars.element(boundBy: 1)
             app.swipeUp()
             XCTAssertFalse(PageOptionsMenu.isHittable)
             statusbarElement.tap(force: true)
             XCTAssertTrue(PageOptionsMenu.isHittable)
             statusbarElement.tap(force: true)
-            let topElement = app.webViews.otherElements["Internet for people, not profit — Mozilla"].children(matching: .other).matching(identifier: "navigation").element(boundBy: 0).staticTexts["Mozilla"]
+            let topElement = app.webViews
+                .otherElements["Internet for people, not profit — Mozilla"]
+                .children(matching: .other)
+                .matching(identifier: "navigation")
+                .element(boundBy: 0)
+                .staticTexts["Mozilla"]
             mozWaitForElementToExist(topElement, timeout: 10)
             XCTAssertTrue(topElement.isHittable)
         }

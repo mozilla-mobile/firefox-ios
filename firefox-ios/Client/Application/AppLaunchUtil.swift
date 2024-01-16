@@ -62,10 +62,18 @@ class AppLaunchUtil {
             self.runAppServicesHistoryMigration()
         }
 
-        NotificationCenter.default.addObserver(forName: .FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
+        NotificationCenter.default.addObserver(
+            forName: .FSReadingListAddReadingListItem,
+            object: nil,
+            queue: nil
+        ) { (notification) -> Void in
             if let userInfo = notification.userInfo, let url = userInfo["URL"] as? URL {
                 let title = (userInfo["Title"] as? String) ?? ""
-                self.profile.readingList.createRecordWithURL(url.absoluteString, title: title, addedBy: UIDevice.current.name)
+                self.profile.readingList.createRecordWithURL(
+                    url.absoluteString,
+                    title: title,
+                    addedBy: UIDevice.current.name
+                )
             }
         }
 

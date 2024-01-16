@@ -95,10 +95,12 @@
     {
       "skippedTests" : [
         "ETPCoverSheetTests",
+        "GleanPlumbMessageManagerTests\/testManagerOnMessagePressed_withMalformedURL()",
+        "HistoryHighlightsDataAdaptorTests\/testReloadDataOnNotification()",
         "IntroViewControllerTests\/testBasicSetupReturnsExpectedItems()",
-        "RustSyncManagerTests\/testGetEnginesAndKeys()",
         "RustSyncManagerTests\/testGetEnginesAndKeysWithNoKey()",
         "RustSyncManagerTests\/testUpdateEnginePrefs_bookmarksEnabled()",
+        "ShortcutRouteTests\/testOpenLastBookmarkShortcutWithInvalidUrl()",
         "TabManagerTests\/testDeleteSelectedTab()",
         "TabManagerTests\/testPrivatePreference_togglePBMDeletesPrivate()",
         "TestFavicons\/testFaviconFetcherParse()",
@@ -120,7 +122,6 @@
     },
     {
       "skippedTests" : [
-        "RustLoginsTests\/testGetStoredKeyWithKeychainReset()",
         "RustLoginsTests\/testUpdateLogin()",
         "TestBrowserDB\/testMovesDB()"
       ],

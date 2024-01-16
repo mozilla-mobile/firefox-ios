@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import WebKit
 import GCDWebServers
@@ -46,7 +47,8 @@ private func certFromErrorURL(_ url: URL) -> SecCertificate? {
         return result
     }
 
-    // Fallback case when the error url is nested, this happens when restoring an error url, it will be inside a 'sessionrestore' url.
+    // Fallback case when the error url is nested, this happens when restoring an error url,
+    // it will be inside a 'sessionrestore' url.
     // TODO: Investigate if we can restore directly as an error url and avoid the 'sessionrestore?url=' wrapping.
     if let internalUrl = InternalURL(url), let url = internalUrl.extractedUrlParam {
         return getCert(url)
@@ -81,7 +83,9 @@ private func cfErrorToName(_ err: CFNetworkErrors) -> String {
     case .cfErrorPACFileError: return "CFErrorPACFileError"
     case .cfErrorPACFileAuth: return "CFErrorPACFileAuth"
     case .cfErrorHTTPSProxyConnectionFailure: return "CFErrorHTTPSProxyConnectionFailure"
+    // swiftlint:disable line_length
     case .cfStreamErrorHTTPSProxyFailureUnexpectedResponseToCONNECTMethod: return "CFStreamErrorHTTPSProxyFailureUnexpectedResponseToCONNECTMethod"
+    // swiftlint:enable line_length
 
     case .cfurlErrorBackgroundSessionInUseByAnotherProcess: return "CFURLErrorBackgroundSessionInUseByAnotherProcess"
     case .cfurlErrorBackgroundSessionWasDisconnected: return "CFURLErrorBackgroundSessionWasDisconnected"
@@ -148,7 +152,9 @@ class ErrorPageHandler: InternalSchemeResponse {
     static let path = InternalURL.Path.errorpage.rawValue
 
     func response(forRequest request: URLRequest) -> (URLResponse, Data)? {
-        guard let requestUrl = request.url, let originalUrl = InternalURL(requestUrl)?.originalURLFromErrorPage else { return nil }
+        guard let requestUrl = request.url,
+              let originalUrl = InternalURL(requestUrl)?.originalURLFromErrorPage
+        else { return nil }
 
         guard let url = request.url,
             let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
@@ -168,8 +174,10 @@ class ErrorPageHandler: InternalSchemeResponse {
             ]
 
         let tryAgain: String = .ErrorPageTryAgain
+        // swiftlint:disable line_length
         var actions = "<script>function reloader() { location.replace((new URL(location.href)).searchParams.get(\"url\")); }" +
                     "</script><button onclick='reloader()'>\(tryAgain)</button>"
+        // swiftlint:enable line_length
 
         if errDomain == kCFErrorDomainCFNetwork as String {
             if let code = CFNetworkErrors(rawValue: Int32(errCode)) {
@@ -224,13 +232,18 @@ class ErrorPageHandler: InternalSchemeResponse {
 
 class ErrorPageHelper {
     fileprivate weak var certStore: CertStore?
+    private var logger: Logger
 
-    init(certStore: CertStore?) {
+    init(certStore: CertStore?,
+         logger: Logger = DefaultLogger.shared) {
         self.certStore = certStore
+        self.logger = logger
     }
 
     func loadPage(_ error: NSError, forUrl url: URL, inWebView webView: WKWebView) {
-        guard var components = URLComponents(string: "\(InternalURL.baseUrl)/\(ErrorPageHandler.path)"), let webViewUrl = webView.url else { return }
+        guard var components = URLComponents(
+            string: "\(InternalURL.baseUrl)/\(ErrorPageHandler.path)"
+        ), let webViewUrl = webView.url else { return }
 
         // Page has failed to load again, just return and keep showing the existing error page.
         if let internalUrl = InternalURL(webViewUrl), internalUrl.originalURLFromErrorPage == url {
@@ -264,8 +277,24 @@ class ErrorPageHelper {
 
         components.queryItems = queryItems
         if let urlWithQuery = components.url {
-            if let internalUrl = InternalURL(webViewUrl), internalUrl.isSessionRestore, let page = InternalURL.authorize(url: urlWithQuery) {
-                // A session restore page is already on the history stack, so don't load another page on the history stack.
+            logger.log("An error page will show.",
+                       level: .info,
+                       category: .webview,
+                       extra: ["Error code": "\(error.code)"])
+
+            TelemetryWrapper.shared.recordEvent(
+                category: .information,
+                method: .error,
+                object: .webview,
+                value: .webviewShowErrorPage,
+                extras: [TelemetryWrapper.EventExtraKey.errorCode.rawValue: "\(error.code)"]
+            )
+
+            if let internalUrl = InternalURL(webViewUrl),
+               internalUrl.isSessionRestore,
+               let page = InternalURL.authorize(url: urlWithQuery) {
+                // A session restore page is already on the history stack, so don't load another
+                // page on the history stack.
                 webView.replaceLocation(with: page)
             } else {
                 // A new page needs to be added to the history stack (i.e. the simple case
@@ -283,11 +312,14 @@ extension ErrorPageHelper: TabContentScript {
         return "ErrorPageHelper"
     }
 
-    func scriptMessageHandlerName() -> String? {
-        return "errorPageHelperMessageManager"
+    func scriptMessageHandlerNames() -> [String]? {
+        return ["errorPageHelperMessageManager"]
     }
 
-    func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(
+        _ userContentController: WKUserContentController,
+        didReceiveScriptMessage message: WKScriptMessage
+    ) {
         guard let errorURL = message.frameInfo.request.url,
             let internalUrl = InternalURL(errorURL),
             internalUrl.isErrorPage,

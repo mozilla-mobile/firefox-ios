@@ -52,37 +52,60 @@ class ExperimentsSettingsView: UIView {
     }
 
     private func setupConstraints() {
-        NSLayoutConstraint.activate([
-            reloadButton.heightAnchor.constraint(equalTo: customRemoteSettingsTextField.heightAnchor),
-            reloadButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8.0),
-            reloadButton.widthAnchor.constraint(equalTo: reloadButton.heightAnchor),
-            reloadButton.topAnchor.constraint(equalTo: customRemoteSettingsTextField.topAnchor),
-            customRemoteSettingsTextField.heightAnchor.constraint(equalToConstant: 44.0),
-            customRemoteSettingsTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8.0),
-            customRemoteSettingsTextField.trailingAnchor.constraint(equalTo: reloadButton.leadingAnchor, constant: -8.0),
-            customRemoteSettingsTextField.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 8.0),
-            usePreviewPrompt.topAnchor.constraint(equalTo: customRemoteSettingsTextField.bottomAnchor, constant: 8.0),
-            usePreviewPrompt.heightAnchor.constraint(equalToConstant: 44.0),
-            usePreviewPrompt.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8.0),
-            usePreviewPrompt.trailingAnchor.constraint(equalTo: usePreviewToggle.leadingAnchor, constant: -8.0),
-            usePreviewPrompt.bottomAnchor.constraint(equalTo: customExperimentDataTextView.topAnchor, constant: 8.0),
-            usePreviewToggle.topAnchor.constraint(equalTo: customRemoteSettingsTextField.bottomAnchor, constant: 8.0),
-            usePreviewToggle.heightAnchor.constraint(equalToConstant: 44.0),
-            usePreviewToggle.leadingAnchor.constraint(equalTo: usePreviewPrompt.trailingAnchor, constant: 8.0),
-            usePreviewToggle.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8.0),
-            usePreviewToggle.bottomAnchor.constraint(equalTo: customExperimentDataTextView.topAnchor, constant: 8.0),
-            customExperimentDataTextView.topAnchor.constraint(equalTo: usePreviewPrompt.bottomAnchor, constant: 8.0),
-            customExperimentDataTextView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8.0),
-            customExperimentDataTextView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8.0),
-            customExperimentDataTextView.bottomAnchor.constraint(equalTo: updateButton.topAnchor, constant: -8.0),
-            updateButton.heightAnchor.constraint(equalToConstant: 44.0),
-            updateButton.leadingAnchor.constraint(equalTo: leadingAnchor),
-            updateButton.trailingAnchor.constraint(equalTo: trailingAnchor),
-            updateButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
-            gapView.topAnchor.constraint(equalTo: updateButton.bottomAnchor),
-            gapView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            gapView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            gapView.bottomAnchor.constraint(equalTo: bottomAnchor),
-        ])
+        NSLayoutConstraint.activate(
+            [
+                reloadButton.heightAnchor.constraint(equalTo: customRemoteSettingsTextField.heightAnchor),
+                reloadButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8.0),
+                reloadButton.widthAnchor.constraint(equalTo: reloadButton.heightAnchor),
+                reloadButton.topAnchor.constraint(equalTo: customRemoteSettingsTextField.topAnchor),
+                customRemoteSettingsTextField.heightAnchor.constraint(equalToConstant: 44.0),
+                customRemoteSettingsTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8.0),
+                customRemoteSettingsTextField.trailingAnchor.constraint(
+                    equalTo: reloadButton.leadingAnchor,
+                    constant: -8.0
+                ),
+                customRemoteSettingsTextField.topAnchor.constraint(
+                    equalTo: safeAreaLayoutGuide.topAnchor,
+                    constant: 8.0
+                ),
+                usePreviewPrompt.topAnchor.constraint(
+                    equalTo: customRemoteSettingsTextField.bottomAnchor,
+                    constant: 8.0
+                ),
+                usePreviewPrompt.heightAnchor.constraint(equalToConstant: 44.0),
+                usePreviewPrompt.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8.0),
+                usePreviewPrompt.trailingAnchor.constraint(equalTo: usePreviewToggle.leadingAnchor, constant: -8.0),
+                usePreviewPrompt.bottomAnchor.constraint(
+                    equalTo: customExperimentDataTextView.topAnchor,
+                    constant: 8.0
+                ),
+                usePreviewToggle.topAnchor.constraint(
+                    equalTo: customRemoteSettingsTextField.bottomAnchor,
+                    constant: 8.0
+                ),
+                usePreviewToggle.heightAnchor.constraint(equalToConstant: 44.0),
+                usePreviewToggle.leadingAnchor.constraint(equalTo: usePreviewPrompt.trailingAnchor, constant: 8.0),
+                usePreviewToggle.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8.0),
+                usePreviewToggle.bottomAnchor.constraint(
+                    equalTo: customExperimentDataTextView.topAnchor,
+                    constant: 8.0
+                ),
+                customExperimentDataTextView.topAnchor.constraint(
+                    equalTo: usePreviewPrompt.bottomAnchor,
+                    constant: 8.0
+                ),
+                customExperimentDataTextView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8.0),
+                customExperimentDataTextView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8.0),
+                customExperimentDataTextView.bottomAnchor.constraint(equalTo: updateButton.topAnchor, constant: -8.0),
+                updateButton.heightAnchor.constraint(equalToConstant: 44.0),
+                updateButton.leadingAnchor.constraint(equalTo: leadingAnchor),
+                updateButton.trailingAnchor.constraint(equalTo: trailingAnchor),
+                updateButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
+                gapView.topAnchor.constraint(equalTo: updateButton.bottomAnchor),
+                gapView.leadingAnchor.constraint(equalTo: leadingAnchor),
+                gapView.trailingAnchor.constraint(equalTo: trailingAnchor),
+                gapView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            ]
+        )
     }
 }

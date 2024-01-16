@@ -56,7 +56,10 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
         return URLCache.shared
     }
 
-    private lazy var urlSession = makeURLSession(userAgent: UserAgent.defaultClientUserAgent, configuration: URLSessionConfiguration.default)
+    private lazy var urlSession = makeURLSession(
+        userAgent: UserAgent.defaultClientUserAgent,
+        configuration: URLSessionConfiguration.default
+    )
 
     private lazy var pocketKey: String? = {
         return Bundle.main.object(forInfoDictionaryKey: pocketEnvAPIKey) as? String
@@ -91,14 +94,15 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
             return completion(.failure(Error.failure))
         }
 
-        if let cachedResponse = findCachedResponse(for: request), let items = cachedResponse["recommendations"] as? [[String: Any]] {
+        if let cachedResponse = findCachedResponse(for: request),
+           let items = cachedResponse["recommendations"] as? [[String: Any]] {
             return completion(.success(PocketFeedStory.parseJSON(list: items)))
         }
 
         urlSession.dataTask(with: request) { (data, response, error) in
-            guard let response = validatedHTTPResponse(response, contentType: "application/json"), let data = data else {
-                return completion(.failure(Error.failure))
-            }
+            guard let response = validatedHTTPResponse(response, contentType: "application/json"),
+                  let data = data
+            else { return completion(.failure(Error.failure)) }
 
             self.cache(response: response, for: request, with: data)
 
@@ -122,12 +126,22 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
 
         let locale = Locale.current.identifier
         let pocketLocale = locale.replacingOccurrences(of: "_", with: "-")
-        var params = [URLQueryItem(name: "count", value: String(items)), URLQueryItem(name: "locale_lang", value: pocketLocale), URLQueryItem(name: "version", value: "3")]
+        var params = [
+            URLQueryItem(
+                name: "count",
+                value: String(items)
+            ),
+            URLQueryItem(name: "locale_lang", value: pocketLocale),
+            URLQueryItem(name: "version", value: "3")
+        ]
         if let pocketKey = pocketKey {
             params.append(URLQueryItem(name: "consumer_key", value: pocketKey))
         }
 
-        guard let feedURL = URL(string: pocketGlobalFeed, invalidCharacters: false)?.withQueryParams(params) else { return nil }
+        guard let feedURL = URL(
+            string: pocketGlobalFeed,
+            invalidCharacters: false
+        )?.withQueryParams(params) else { return nil }
 
         return URLRequest(url: feedURL, cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 5)
     }

@@ -17,7 +17,7 @@ private struct PrivateModeColorPalette: ThemeColourPalette {
     var layer2: UIColor = FXColors.Ink50
     var layer3: UIColor = FXColors.Ink90
     var layer4: UIColor = FXColors.DarkGrey20.withAlphaComponent(0.7)
-    var layer5: UIColor = FXColors.DarkGrey40
+    var layer5: UIColor = FXColors.Ink20
     var layer6: UIColor = FXColors.DarkGrey60
     var layer5Hover: UIColor = FXColors.DarkGrey20
     var layerScrim: UIColor = FXColors.DarkGrey90.withAlphaComponent(0.95)

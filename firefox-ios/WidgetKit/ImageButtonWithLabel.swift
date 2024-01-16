@@ -64,7 +64,13 @@ struct ImageButtonWithLabel: View {
             ZStack(alignment: .leading) {
                 if !isSmall {
                     ContainerRelativeShape()
-                        .fill(LinearGradient(gradient: Gradient(colors: link.backgroundColors), startPoint: .bottomLeading, endPoint: .topTrailing))
+                        .fill(
+                            LinearGradient(
+                                gradient: Gradient(colors: link.backgroundColors),
+                                startPoint: .bottomLeading,
+                                endPoint: .topTrailing
+                            )
+                        )
                 }
 
                 VStack(alignment: .center, spacing: 50.0) {

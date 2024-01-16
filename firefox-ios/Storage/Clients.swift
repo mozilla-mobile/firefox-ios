@@ -21,7 +21,16 @@ public struct RemoteClient: Equatable {
     let formfactor: String?
     let device: String?
 
-    public init(guid: GUID?, name: String, modified: Timestamp, type: String?, formfactor: String?, os: String?, version: String?, fxaDeviceId: String?) {
+    public init(
+        guid: GUID?,
+        name: String,
+        modified: Timestamp,
+        type: String?,
+        formfactor: String?,
+        os: String?,
+        version: String?,
+        fxaDeviceId: String?
+    ) {
         self.guid = guid
         self.name = name
         self.modified = modified

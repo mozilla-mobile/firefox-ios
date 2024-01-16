@@ -12,7 +12,6 @@ public struct PrefsKeys {
 
     // Global sync state for rust sync manager
     public static let RustSyncManagerPersistedState = "rustSyncManagerPersistedStateKey"
-    public static let HasVerifiedRustLogins = "hasVerifiedRustLogins"
 
     public static let KeyLastSyncFinishTime = "lastSyncFinishTime"
     public static let KeyDefaultHomePageURL = "KeyDefaultHomePageURL"
@@ -38,6 +37,7 @@ public struct PrefsKeys {
     public static let KeyCurrentInstallVersion = "KeyCurrentInstallVersion"
     public static let KeySecondRun = "SecondRun"
     public static let KeyAutofillCreditCardStatus = "KeyAutofillCreditCardStatus"
+    public static let KeyAutofillAddressStatus = "KeyAutofillAddressStatus"
 
     public struct Session {
         public static let FirstAppUse = "firstAppUse"
@@ -69,7 +69,6 @@ public struct PrefsKeys {
 
     // For ease of use, please list keys alphabetically.
     public struct FeatureFlags {
-        public static let CustomWallpaper = "CustomWallpaperUserPrefsKey"
         public static let FirefoxSuggest = "FirefoxSuggest"
         public static let HistoryHighlightsSection = "HistoryHighlightsSectionUserPrefsKey"
         public static let HistoryGroups = "HistoryGroupsUserPrefsKey"
@@ -92,6 +91,7 @@ public struct PrefsKeys {
 
     // Firefox contextual hint
     public enum ContextualHints: String, CaseIterable {
+        case dataClearanceKey = "ContextualHintDataClearance"
         case jumpBackinKey = "ContextualHintJumpBackin"
         case jumpBackInConfiguredKey = "JumpBackInConfigured"
         case jumpBackInSyncedTabKey = "ContextualHintJumpBackInSyncedTab"
@@ -110,6 +110,7 @@ public struct PrefsKeys {
     public static let KeyUseCustomSyncTokenServerOverride = "useCustomSyncTokenServerOverride"
     public static let KeyCustomSyncTokenServerOverride = "customSyncTokenServerOverride"
     public static let KeyUseCustomFxAContentServer = "useCustomFxAContentServer"
+    public static let KeyUseReactFxA = "useReactFxA"
     public static let KeyCustomFxAContentServer = "customFxAContentServer"
     public static let UseStageServer = "useStageSyncService"
     public static let KeyFxALastCommandIndex = "FxALastCommandIndex"

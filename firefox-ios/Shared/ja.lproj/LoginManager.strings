@@ -16,6 +16,21 @@
 /* Label for the button used to delete the current login. */
 "Delete" = "削除";
 
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "キャンセル";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "削除";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "この操作は取り消すことができません。";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "これにより、同期しているすべての端末からパスワードが削除されます。";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "パスワードを削除しますか？";
+
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "全選択を解除";
 
@@ -36,6 +51,9 @@
 
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "ログイン情報が見つかりませんでした";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "パスワードが見つかりませんでした";
 
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "開いて入力";

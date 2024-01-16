@@ -96,7 +96,11 @@ open class BrowserDB {
         }
     }
 
-    public func runQueryConcurrently<T>(_ sql: String, args: Args?, factory: @escaping (SDRow) -> T) -> Deferred<Maybe<Cursor<T>>> {
+    public func runQueryConcurrently<T>(
+        _ sql: String,
+        args: Args?,
+        factory: @escaping (SDRow) -> T
+    ) -> Deferred<Maybe<Cursor<T>>> {
         return withConnection(flags: .readOnly) { connection -> Cursor<T> in
             connection.executeQuery(sql, factory: factory, withArgs: args)
         }

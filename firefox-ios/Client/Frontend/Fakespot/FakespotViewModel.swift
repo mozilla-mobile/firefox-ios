@@ -38,7 +38,8 @@ class FakespotViewModel {
             let productAdCard = productState
                 .productAds
                 .sorted(by: { $0.adjustedRating > $1.adjustedRating })
-                .first(where: { $0.adjustedRating >= minRating }) // Choosing the product with the same or better rating to display
+                // Choosing the product with the same or better rating to display
+                .first(where: { $0.adjustedRating >= minRating })
                 .map(ViewElement.productAdCard)
 
             if product.grade == nil {
@@ -169,11 +170,11 @@ class FakespotViewModel {
 
     let shoppingProduct: ShoppingProduct
     var onStateChange: (() -> Void)?
+    var shouldRecordAdsExposureEvents: (() -> Bool)?
     var isSwiping = false
     var isViewIntersected = false
     // Timer-related properties for handling view visibility
     private var isViewVisible = false
-    private var hasTimerFired = false
     private var timer: Timer?
     private let tabManager: TabManager
 
@@ -328,7 +329,8 @@ class FakespotViewModel {
                 guard let self else { return }
                 await self.fetchProductAnalysis()
                 do {
-                    // A product might be already in analysis status so we listen for progress until it's completed, then fetch new information
+                    // A product might be already in analysis status so we listen for progress
+                    // until it's completed, then fetch new information
                     for try await status in self.observeProductAnalysisStatus() where status.isAnalyzing == false {
                         await self.fetchProductAnalysis(showLoading: false)
                     }
@@ -376,7 +378,9 @@ class FakespotViewModel {
             let productAds = await loadProductAds(for: product?.productId)
 
             let needsAnalysis = product?.needsAnalysis ?? false
+            // swiftlint:disable line_length
             let analysis: AnalysisStatus? = needsAnalysis ? try? await shoppingProduct.getProductAnalysisStatus()?.status : nil
+            // swiftlint:enable line_length
             state = .loaded(
                 ProductState(
                     product: product,
@@ -386,12 +390,19 @@ class FakespotViewModel {
                 )
             )
 
-            guard product != nil else { return }
+            guard product != nil,
+                  let productId = shoppingProduct.product?.id,
+                  shouldRecordAdsExposureEvents?() == true
+            else { return }
+
             if productAds.isEmpty {
                 recordSurfaceNoAdsAvailableTelemetry()
             } else {
-                recordAdsExposureTelementry()
+                recordAdsExposureTelemetry()
+                reportAdEvent(eventName: .trustedDealsPlacement, aidvs: productAds.map(\.aid))
             }
+
+            store.dispatch(FakespotAction.adsExposureEventSendFor(productId: productId))
         } catch {
             state = .error(error)
         }
@@ -458,7 +469,7 @@ class FakespotViewModel {
         AsyncThrowingStream<AnalysisStatus, Error> { continuation in
             Task {
                 do {
-                    var sleepDuration: UInt64 = NSEC_PER_SEC * 30
+                    let sleepDuration: UInt64 = NSEC_PER_SEC * 3
 
                     while true {
                         let result = try await shoppingProduct.getProductAnalysisStatus()
@@ -466,6 +477,14 @@ class FakespotViewModel {
                             continuation.finish()
                             break
                         }
+
+                        await MainActor.run {
+                            self.analysisProgressViewModel.analysisProgress = result.progress
+                            self.analysisProgressViewModel.analysisProgressChanged?(
+                                self.analysisProgressViewModel.analysisProgress
+                            )
+                        }
+
                         continuation.yield(result.status)
                         guard result.status.isAnalyzing == true else {
                             continuation.finish()
@@ -474,11 +493,6 @@ class FakespotViewModel {
 
                         // Sleep for the current duration
                         try await Task.sleep(nanoseconds: sleepDuration)
-
-                        // Decrease the sleep duration by 10 seconds (NSEC_PER_SEC * 10) on each iteration.
-                        if sleepDuration > NSEC_PER_SEC * 10 {
-                            sleepDuration -= NSEC_PER_SEC * 10
-                        }
                     }
                 } catch {
                     continuation.finish(throwing: error)
@@ -492,7 +506,9 @@ class FakespotViewModel {
         observeProductTask?.cancel()
     }
 
-    func getCurrentDetent(for presentedController: UIPresentationController?) -> UISheetPresentationController.Detent.Identifier? {
+    func getCurrentDetent(
+        for presentedController: UIPresentationController?
+    ) -> UISheetPresentationController.Detent.Identifier? {
         guard let sheetController = presentedController as? UISheetPresentationController else { return nil }
         return sheetController.selectedDetentIdentifier
     }
@@ -507,7 +523,7 @@ class FakespotViewModel {
             }
         )
         // Add the timer to the common run loop mode
-        // to ensure that the selector method fires even during user interactions such as scrolling,
+        // to ensure that the timerFired(aid:) method fires even during user interactions such as scrolling,
         // without requiring the user to lift their finger from the screen.
         RunLoop.current.add(timer!, forMode: .common)
     }
@@ -518,14 +534,16 @@ class FakespotViewModel {
     }
 
     private func timerFired(aid: String) {
-        hasTimerFired = true
         recordSurfaceAdsImpressionTelemetry()
-        reportAdEvent(eventName: .trustedDealsImpression, aid: aid)
+        reportAdEvent(eventName: .trustedDealsImpression, aidvs: [aid])
         stopTimer()
+
+        guard let productId = shoppingProduct.product?.id else { return }
+        store.dispatch(FakespotAction.adsImpressionEventSendFor(productId: productId))
+        isViewVisible = false
     }
 
     func handleVisibilityChanges(for view: FakespotAdView, in superview: UIView) {
-        guard !hasTimerFired else { return }
         let halfViewHeight = view.frame.height / 2
         let intersection = superview.bounds.intersection(view.frame)
         let areViewsIntersected = intersection.height >= halfViewHeight && halfViewHeight > 0
@@ -547,14 +565,23 @@ class FakespotViewModel {
 
     // MARK: - Telemetry
 
-    func reportAdEvent(eventName: FakespotAdsEvent, aid: String) {
+    func reportAdEvent(eventName: FakespotAdsEvent, aidvs: [String]) {
         Task {
             _ = try? await shoppingProduct.reportAdEvent(
                 eventName: eventName,
                 eventSource: FakespotAdsEvent.eventSource,
-                aid: aid
+                aidvs: aidvs
             )
         }
+    }
+
+    public func recordSurfaceAdsClickedTelemetry() {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .view,
+            object: .shoppingBottomSheet,
+            value: .surfaceAdsClicked
+        )
     }
 
     private static func recordNoReviewReliabilityAvailableTelemetry() {
@@ -583,7 +610,7 @@ class FakespotViewModel {
         )
     }
 
-    private func recordAdsExposureTelementry() {
+    private func recordAdsExposureTelemetry() {
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .view,

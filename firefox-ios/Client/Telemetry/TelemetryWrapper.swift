@@ -2,6 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+// Disabling `line_length` for this whole file because it is going to get refactored/replaced soon.
+// swiftlint:disable line_length
 import Common
 import Glean
 import Shared
@@ -584,6 +586,7 @@ extension TelemetryWrapper {
         case createNewTab = "create-new-tab"
         case sponsoredShortcuts = "sponsored-shortcuts"
         case fxSuggest = "fx-suggest"
+        case webview = "webview"
     }
 
     public enum EventValue: String {
@@ -674,6 +677,7 @@ extension TelemetryWrapper {
         case searchSuggestion = "search-suggestion"
         case searchHighlights = "search-highlights"
         case shoppingCFRsDisplayed = "shopping-cfrs-displayed"
+        case surfaceAdsClicked = "surface-ads-clicked"
         case shoppingAdsExposure = "shopping-ads-exposure"
         case shoppingAdsImpression = "shopping-ads-impression"
         case shoppingNoAdsAvailable = "shopping-no-ads-available"
@@ -684,6 +688,9 @@ extension TelemetryWrapper {
         case hangException = "hang-exception"
         case fxSuggestionClickInfo = "fx-suggestion-click-info"
         case fxSuggestionPosition = "fx-suggestion-position"
+        case webviewFail = "webview-fail"
+        case webviewFailProvisional = "webview-fail-provisional"
+        case webviewShowErrorPage = "webview-show-error-page"
     }
 
     public enum EventExtraKey: String, CustomStringConvertible {
@@ -703,6 +710,7 @@ extension TelemetryWrapper {
         case isPrivate = "is-private"
         case action = "action"
         case size = "size"
+        case errorCode = "errorCode"
 
         case wallpaperName = "wallpaperName"
         case wallpaperType = "wallpaperType"
@@ -1099,7 +1107,9 @@ extension TelemetryWrapper {
         case (.action, .tap, .startSearchButton, _, _):
             GleanMetrics.Search.startSearchPressed.add()
         case(.action, .tap, .recordSearch, _, let extras):
-            if let searchLocation = extras?[EventExtraKey.recordSearchLocation.rawValue] as? SearchesMeasurement.SearchLocation, let searchEngineID = extras?[EventExtraKey.recordSearchEngineID.rawValue] as? String? {
+            if let searchLocation = extras?[EventExtraKey.recordSearchLocation.rawValue]
+                as? SearchesMeasurement.SearchLocation,
+               let searchEngineID = extras?[EventExtraKey.recordSearchEngineID.rawValue] as? String? {
                 Telemetry.default.recordSearch(location: searchLocation, searchEngine: searchEngineID ?? "other")
                 GleanMetrics.Search.counts["\(searchEngineID ?? "custom").\(searchLocation.rawValue)"].add()
             } else {
@@ -1172,6 +1182,8 @@ extension TelemetryWrapper {
             }
 
         // MARK: Shopping Experience (Fakespot)
+        case (.action, .view, .shoppingBottomSheet, .surfaceAdsClicked, _):
+            GleanMetrics.Shopping.surfaceAdsClicked.record()
         case (.action, .tap, .shoppingButton, _, _):
             GleanMetrics.Shopping.addressBarIconClicked.record()
         case (.action, .view, .shoppingBottomSheet, .shoppingAdsExposure, _):
@@ -1719,13 +1731,13 @@ extension TelemetryWrapper {
 
         // MARK: - History Highlights
         case (.action, .tap, .firefoxHomepage, .historyHighlightsShowAll, _):
-            GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
+            GleanMetrics.FirefoxHomePage.historyHighlightsShowAll.add()
         case (.action, .tap, .firefoxHomepage, .historyHighlightsItemOpened, _):
             GleanMetrics.FirefoxHomePage.historyHighlightsItemOpened.record()
         case (.action, .tap, .firefoxHomepage, .historyHighlightsGroupOpen, _):
             GleanMetrics.FirefoxHomePage.historyHighlightsGroupOpen.record()
         case (.action, .view, .historyImpressions, _, _):
-            GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
+            GleanMetrics.FirefoxHomePage.historyImpressions.record()
         case (.action, .view, .historyHighlightContextualMenu, _, let extras):
             if let type = extras?[EventExtraKey.contextualMenuType.rawValue] as? String {
                 let contextExtra = GleanMetrics.FirefoxHomePage.HistoryHighlightsContextExtra(type: type)
@@ -1880,6 +1892,8 @@ extension TelemetryWrapper {
             if let quantity = extras?[EventExtraKey.size.rawValue] as? Int32 {
                 let properties = GleanMetrics.AppErrors.LargeFileWriteExtra(size: quantity)
                 GleanMetrics.AppErrors.largeFileWrite.record(properties)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
         case(.information, .error, .app, .crashedLastLaunch, _):
             GleanMetrics.AppErrors.crashedLastLaunch.record()
@@ -1887,11 +1901,28 @@ extension TelemetryWrapper {
             if let quantity = extras?[EventExtraKey.size.rawValue] as? Int32 {
                 let properties = GleanMetrics.AppErrors.CpuExceptionExtra(size: quantity)
                 GleanMetrics.AppErrors.cpuException.record(properties)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
         case(.information, .error, .app, .hangException, let extras):
             if let quantity = extras?[EventExtraKey.size.rawValue] as? Int32 {
                 let properties = GleanMetrics.AppErrors.HangExceptionExtra(size: quantity)
                 GleanMetrics.AppErrors.hangException.record(properties)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+
+        // MARK: Webview
+        case(.information, .error, .webview, .webviewFail, _):
+            GleanMetrics.Webview.didFail.record()
+        case(.information, .error, .webview, .webviewFailProvisional, _):
+            GleanMetrics.Webview.didFailProvisional.record()
+        case(.information, .error, .webview, .webviewShowErrorPage, let extras):
+            if let errorCode = extras?[EventExtraKey.errorCode.rawValue] as? String {
+                let errorCodeExtra = GleanMetrics.Webview.ShowErrorPageExtra(errorCode: errorCode)
+                GleanMetrics.Webview.showErrorPage.record(errorCodeExtra)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
 
         // MARK: - FX Suggest
@@ -1950,3 +1981,5 @@ extension TelemetryWrapper {
         return [TelemetryWrapper.EventExtraKey.fxHomepageOrigin.rawValue: origin.rawValue]
     }
 }
+
+// swiftlint:enable line_length

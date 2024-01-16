@@ -259,7 +259,10 @@ class LegacyGridTabViewController: UIViewController,
     func didTogglePrivateMode() {
         tabManager.willSwitchTabMode(leavingPBM: tabDisplayManager.isPrivate)
 
-        tabDisplayManager.togglePrivateMode(isOn: !tabDisplayManager.isPrivate, createTabOnEmptyPrivateMode: false)
+        tabDisplayManager.togglePrivateMode(
+            isOn: !tabDisplayManager.isPrivate,
+            createTabOnEmptyPrivateMode: false
+        )
 
         emptyPrivateTabsView.alpha = 0.0
         emptyPrivateTabsView.isHidden = !privateTabsAreEmpty
@@ -305,18 +308,22 @@ class LegacyGridTabViewController: UIViewController,
     func closeTabsTrayBackground() {
         tabDisplayManager.removeAllTabsFromView()
 
-        tabManager.backgroundRemoveAllTabs(isPrivate: tabDisplayManager.isPrivate) { recentlyClosedTabs, isPrivateState, previousTabUUID in
+        tabManager.backgroundRemoveAllTabs(
+            isPrivate: tabDisplayManager.isPrivate
+        ) { recentlyClosedTabs, isPrivateState, previousTabUUID in
             DispatchQueue.main.async { [unowned self] in
                 if isPrivateState {
                     let previousTab = self.tabManager.tabs.first(where: { $0.tabUUID == previousTabUUID })
                     self.tabManager.cleanupClosedTabs(recentlyClosedTabs,
                                                       previous: previousTab,
                                                       isPrivate: isPrivateState)
-                    TelemetryWrapper.recordEvent(category: .action,
-                                                 method: .tap,
-                                                 object: .privateBrowsingIcon,
-                                                 value: .tabTray,
-                                                 extras: [TelemetryWrapper.EventExtraKey.action.rawValue: "close_all_tabs"] )
+                    TelemetryWrapper.recordEvent(
+                        category: .action,
+                        method: .tap,
+                        object: .privateBrowsingIcon,
+                        value: .tabTray,
+                        extras: [TelemetryWrapper.EventExtraKey.action.rawValue: "close_all_tabs"]
+                    )
                 } else {
                     self.tabManager.makeToastFromRecentlyClosedUrls(recentlyClosedTabs,
                                                                     isPrivate: isPrivateState,
@@ -331,7 +338,8 @@ class LegacyGridTabViewController: UIViewController,
         if tabDisplayManager.isPrivate {
             emptyPrivateTabsView.isHidden = !privateTabsAreEmpty
             if !emptyPrivateTabsView.isHidden {
-                // Fade in the empty private tabs message. This slow fade allows time for the closing tab animations to complete.
+                // Fade in the empty private tabs message. This slow fade allows time for the
+                // closing tab animations to complete.
                 emptyPrivateTabsView.alpha = 0
                 UIView.animate(
                     withDuration: 0.5,
@@ -499,7 +507,8 @@ extension LegacyGridTabViewController: UIScrollViewAccessibilityDelegate {
                                  dy: collectionView.contentInset.top)
         bounds.size.width -= collectionView.contentInset.left + collectionView.contentInset.right
         bounds.size.height -= collectionView.contentInset.top + collectionView.contentInset.bottom
-        // visible cells do sometimes return also not visible cells when attempting to go past the last cell with VoiceOver right-flick gesture; so make sure we have only visible cells (yeah...)
+        // visible cells do sometimes return also not visible cells when attempting to go past the last cell
+        // with VoiceOver right-flick gesture; so make sure we have only visible cells (yeah...)
         visibleCells = visibleCells.filter { !$0.frame.intersection(bounds).isEmpty }
 
         let cells = visibleCells.map { self.collectionView.indexPath(for: $0)! }
@@ -517,10 +526,19 @@ extension LegacyGridTabViewController: UIScrollViewAccessibilityDelegate {
 
         if firstTab == lastTab {
             let format: String = .TabTrayVisibleTabRangeAccessibilityHint
-            return String(format: format, NSNumber(value: firstTab as Int), NSNumber(value: tabCount as Int))
+            return String(
+                format: format,
+                NSNumber(value: firstTab as Int),
+                NSNumber(value: tabCount as Int)
+            )
         } else {
             let format: String = .TabTrayVisiblePartialRangeAccessibilityHint
-            return String(format: format, NSNumber(value: firstTab as Int), NSNumber(value: lastTab as Int), NSNumber(value: tabCount as Int))
+            return String(
+                format: format,
+                NSNumber(value: firstTab as Int),
+                NSNumber(value: lastTab as Int),
+                NSNumber(value: tabCount as Int)
+            )
         }
     }
 }
@@ -566,7 +584,9 @@ extension LegacyGridTabViewController: LegacyTabPeekDelegate {
     func tabPeekDidCloseTab(_ tab: Tab) {
         // Tab peek is only available on regular tabs
         if let index = tabDisplayManager.dataStore.index(of: tab),
-           let cell = self.collectionView?.cellForItem(at: IndexPath(item: index, section: TabDisplaySection.regularTabs.rawValue)) as? LegacyTabCell {
+           let cell = self.collectionView?.cellForItem(
+            at: IndexPath(item: index, section: TabDisplaySection.regularTabs.rawValue)
+           ) as? LegacyTabCell {
             cell.close()
         }
     }
@@ -664,7 +684,10 @@ extension LegacyGridTabViewController {
 
 // MARK: - DevicePickerViewControllerDelegate
 extension LegacyGridTabViewController: DevicePickerViewControllerDelegate {
-    func devicePickerViewController(_ devicePickerViewController: DevicePickerViewController, didPickDevices devices: [RemoteDevice]) {
+    func devicePickerViewController(
+        _ devicePickerViewController: DevicePickerViewController,
+        didPickDevices devices: [RemoteDevice]
+    ) {
         if let item = devicePickerViewController.shareItem {
             _ = self.profile.sendItem(item, toDevices: devices)
         }
@@ -677,10 +700,14 @@ extension LegacyGridTabViewController: DevicePickerViewControllerDelegate {
 }
 
 // MARK: - Presentation Delegates
-extension LegacyGridTabViewController: UIAdaptivePresentationControllerDelegate, UIPopoverPresentationControllerDelegate {
+extension LegacyGridTabViewController: UIAdaptivePresentationControllerDelegate,
+                                       UIPopoverPresentationControllerDelegate {
     // Returning None here makes sure that the Popover is actually presented as a Popover and
     // not as a full-screen modal, which is the default on compact device classes.
-    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+    func adaptivePresentationStyle(
+        for controller: UIPresentationController,
+        traitCollection: UITraitCollection
+    ) -> UIModalPresentationStyle {
         return .none
     }
 }

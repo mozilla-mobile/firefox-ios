@@ -21,7 +21,8 @@ class BrowserCoordinator: BaseCoordinator,
                           ParentCoordinatorDelegate,
                           TabManagerDelegate,
                           TabTrayCoordinatorDelegate,
-                          PrivateHomepageDelegate {
+                          PrivateHomepageDelegate,
+                          WindowEventCoordinator {
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
@@ -35,6 +36,7 @@ class BrowserCoordinator: BaseCoordinator,
     private let glean: GleanWrapper
     private let applicationHelper: ApplicationHelper
     private var browserIsReady = false
+    private var windowUUID: WindowUUID { return tabManager.windowUUID }
 
     init(router: Router,
          screenshotService: ScreenshotService,
@@ -53,8 +55,6 @@ class BrowserCoordinator: BaseCoordinator,
         self.applicationHelper = applicationHelper
         self.glean = glean
         super.init(router: router)
-
-        windowManager.newBrowserWindowConfigured(AppWindowInfo(tabManager: tabManager), uuid: tabManager.windowUUID)
 
         // TODO [7856]: Additional telemetry updates forthcoming once iPad multi-window enabled.
         // For now, we only have a single BVC and TabManager. Plug it into our TelemetryWrapper:
@@ -129,7 +129,11 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - PrivateHomepageDelegate
 
     func homePanelDidRequestToOpenInNewTab(with url: URL, isPrivate: Bool, selectNewTab: Bool) {
-        browserViewController.homePanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate, selectNewTab: selectNewTab)
+        browserViewController.homePanelDidRequestToOpenInNewTab(
+            url,
+            isPrivate: isPrivate,
+            selectNewTab: selectNewTab
+        )
     }
 
     func show(webView: WKWebView) {
@@ -138,7 +142,10 @@ class BrowserCoordinator: BaseCoordinator,
             webviewController.update(webView: webView, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
             browserViewController.frontEmbeddedContent(webviewController)
         } else {
-            let webviewViewController = WebviewViewController(webView: webView, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+            let webviewViewController = WebviewViewController(
+                webView: webView,
+                isPrivate: tabManager.selectedTab?.isPrivate ?? false
+            )
             webviewController = webviewViewController
             _ = browserViewController.embedContent(webviewViewController)
         }
@@ -308,6 +315,7 @@ class BrowserCoordinator: BaseCoordinator,
         guard !childCoordinators.contains(where: { $0 is SettingsCoordinator }) else {
             return // route is handled with existing child coordinator
         }
+        windowManager.postWindowEvent(event: .settingsOpened, windowUUID: windowUUID)
         let navigationController = ThemedNavigationController()
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
         let modalPresentationStyle: UIModalPresentationStyle = isPad ? .fullScreen: .formSheet
@@ -325,6 +333,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     private func showLibrary(with homepanelSection: Route.HomepanelSection) {
+        windowManager.postWindowEvent(event: .libraryOpened, windowUUID: windowUUID)
         if let libraryCoordinator = childCoordinators[LibraryCoordinator.self] {
             libraryCoordinator.start(with: homepanelSection)
             (libraryCoordinator.router.navigationController as? UINavigationController).map { router.present($0) }
@@ -447,14 +456,18 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func dismissFakespotModal(animated: Bool = true) {
-        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator }) as? FakespotCoordinator else {
+        guard let fakespotCoordinator = childCoordinators.first(where: {
+            $0 is FakespotCoordinator
+        }) as? FakespotCoordinator else {
             return // there is no modal to close
         }
         fakespotCoordinator.dismissModal(animated: animated)
     }
 
     func dismissFakespotSidebar(sidebarContainer: SidebarEnabledViewProtocol, parentViewController: UIViewController) {
-        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator }) as? FakespotCoordinator else {
+        guard let fakespotCoordinator = childCoordinators.first(where: {
+            $0 is FakespotCoordinator
+        }) as? FakespotCoordinator else {
             return // there is no sidebar to close
         }
         fakespotCoordinator.closeSidebar(sidebarContainer: sidebarContainer,
@@ -464,7 +477,9 @@ class BrowserCoordinator: BaseCoordinator,
     func updateFakespotSidebar(productURL: URL,
                                sidebarContainer: SidebarEnabledViewProtocol,
                                parentViewController: UIViewController) {
-        guard let fakespotCoordinator = childCoordinators.first(where: { $0 is FakespotCoordinator }) as? FakespotCoordinator else {
+        guard let fakespotCoordinator = childCoordinators.first(where: {
+            $0 is FakespotCoordinator
+        }) as? FakespotCoordinator else {
             return // there is no sidebar
         }
         fakespotCoordinator.updateSidebar(productURL: productURL,
@@ -483,15 +498,33 @@ class BrowserCoordinator: BaseCoordinator,
         return coordinator
     }
 
-    func showShareExtension(url: URL, sourceView: UIView, sourceRect: CGRect?, toastContainer: UIView, popoverArrowDirection: UIPopoverArrowDirection) {
+    func showShareExtension(
+        url: URL,
+        sourceView: UIView,
+        sourceRect: CGRect?,
+        toastContainer: UIView,
+        popoverArrowDirection: UIPopoverArrowDirection
+    ) {
         guard childCoordinators.first(where: { $0 is ShareExtensionCoordinator }) as? ShareExtensionCoordinator == nil
         else {
-            // If this case is hitted it means the share extension coordinator wasn't removed correctly in the previous session.
+            // If this case is hitted it means the share extension coordinator wasn't removed
+            // correctly in the previous session.
             return
         }
-        let shareExtensionCoordinator = ShareExtensionCoordinator(alertContainer: toastContainer, router: router, profile: profile, parentCoordinator: self, tabManager: tabManager)
+        let shareExtensionCoordinator = ShareExtensionCoordinator(
+            alertContainer: toastContainer,
+            router: router,
+            profile: profile,
+            parentCoordinator: self,
+            tabManager: tabManager
+        )
         add(child: shareExtensionCoordinator)
-        shareExtensionCoordinator.start(url: url, sourceView: sourceView, sourceRect: sourceRect, popoverArrowDirection: popoverArrowDirection)
+        shareExtensionCoordinator.start(
+            url: url,
+            sourceView: sourceView,
+            sourceRect: sourceRect,
+            popoverArrowDirection: popoverArrowDirection
+        )
     }
 
     func showCreditCardAutofill(creditCard: CreditCard?,
@@ -500,7 +533,13 @@ class BrowserCoordinator: BaseCoordinator,
                                 frame: WKFrameInfo?,
                                 alertContainer: UIView) {
         let bottomSheetCoordinator = makeCredentialAutofillCoordinator()
-        bottomSheetCoordinator.showCreditCardAutofill(creditCard: creditCard, decryptedCard: decryptedCard, viewType: state, frame: frame, alertContainer: alertContainer)
+        bottomSheetCoordinator.showCreditCardAutofill(
+            creditCard: creditCard,
+            decryptedCard: decryptedCard,
+            viewType: state,
+            frame: frame,
+            alertContainer: alertContainer
+        )
     }
 
     func showRequiredPassCode() {
@@ -509,10 +548,17 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     private func makeCredentialAutofillCoordinator() -> CredentialAutofillCoordinator {
-        if let bottomSheetCoordinator = childCoordinators.first(where: { $0 is CredentialAutofillCoordinator }) as? CredentialAutofillCoordinator {
+        if let bottomSheetCoordinator = childCoordinators.first(where: {
+            $0 is CredentialAutofillCoordinator
+        }) as? CredentialAutofillCoordinator {
             return bottomSheetCoordinator
         }
-        let bottomSheetCoordinator = CredentialAutofillCoordinator(profile: profile, router: router, parentCoordinator: self, tabManager: tabManager)
+        let bottomSheetCoordinator = CredentialAutofillCoordinator(
+            profile: profile,
+            router: router,
+            parentCoordinator: self,
+            tabManager: tabManager
+        )
         add(child: bottomSheetCoordinator)
         return bottomSheetCoordinator
     }
@@ -522,8 +568,18 @@ class BrowserCoordinator: BaseCoordinator,
         if let qrCodeCoordinator = childCoordinators.first(where: { $0 is QRCodeCoordinator }) as? QRCodeCoordinator {
             coordinator = qrCodeCoordinator
         } else {
-            let router = rootNavigationController != nil ? DefaultRouter(navigationController: rootNavigationController!) : router
-            coordinator = QRCodeCoordinator(parentCoordinator: self, router: router)
+            if rootNavigationController != nil {
+                coordinator = QRCodeCoordinator(
+                    parentCoordinator: self,
+                    router: DefaultRouter(navigationController: rootNavigationController!)
+                )
+            } else {
+                coordinator = QRCodeCoordinator(
+                    parentCoordinator: self,
+                    router: router
+                )
+            }
+
             add(child: coordinator)
         }
         coordinator.showQRCode(delegate: delegate)
@@ -551,6 +607,16 @@ class BrowserCoordinator: BaseCoordinator,
         router.present(navigationController)
     }
 
+    func showBackForwardList() {
+        guard let backForwardList = tabManager.selectedTab?.webView?.backForwardList else { return }
+        let backForwardListVC = BackForwardListViewController(profile: profile, backForwardList: backForwardList)
+        backForwardListVC.backForwardTransitionDelegate = BackForwardListAnimator()
+        backForwardListVC.browserFrameInfoProvider = browserViewController
+        backForwardListVC.tabManager = tabManager
+        backForwardListVC.modalPresentationStyle = .overCurrentContext
+        router.present(backForwardListVC)
+    }
+
     // MARK: - ParentCoordinatorDelegate
     func didFinish(from childCoordinator: Coordinator) {
         remove(child: childCoordinator)
@@ -568,5 +634,45 @@ class BrowserCoordinator: BaseCoordinator,
     func didDismissTabTray(from coordinator: TabTrayCoordinator) {
         router.dismiss(animated: true, completion: nil)
         remove(child: coordinator)
+    }
+
+    // MARK: - WindowEventCoordinator
+
+    func coordinatorHandleWindowEvent(event: WindowEvent, uuid: WindowUUID) {
+        switch event {
+        case .windowWillClose:
+            guard uuid == windowUUID else { return }
+            // Additional cleanup performed when the current iPad window is closed.
+            // This is necessary in order to ensure the BVC and other memory is freed correctly.
+            browserViewController.contentContainer.subviews.forEach { $0.removeFromSuperview() }
+            browserViewController.removeFromParent()
+        case .libraryOpened:
+            // Auto-close library panel if it was opened in another iPad window. [FXIOS-8095]
+            guard uuid != windowUUID else { return }
+            performIfCoordinatorRootVCIsPresented(LibraryCoordinator.self) { _ in
+                router.dismiss(animated: true, completion: nil)
+            }
+        case .settingsOpened:
+            // Auto-close settings panel if it was opened in another iPad window. [FXIOS-8095]
+            guard uuid != windowUUID else { return }
+            performIfCoordinatorRootVCIsPresented(SettingsCoordinator.self) {
+                didFinishSettings(from: $0)
+            }
+        }
+    }
+
+    /// Utility. Performs the supplied action if a coordinator of the indicated type
+    /// is currently presenting its primary view controller.
+    /// - Parameters:
+    ///   - coordinatorType: the type of coordinator.
+    ///   - action: the action to perform. The Coordinator instance is supplied for convenience.
+    private func performIfCoordinatorRootVCIsPresented<T: Coordinator>(_ coordinatorType: T.Type,
+                                                                       action: (T) -> Void) {
+        guard let expectedCoordinator = childCoordinators[coordinatorType] else { return }
+        let browserPresentedVC = router.navigationController.presentedViewController
+        let rootVC = (browserPresentedVC as? UINavigationController)?.viewControllers.first
+        if rootVC === expectedCoordinator.router.rootViewController {
+            action(expectedCoordinator)
+        }
     }
 }

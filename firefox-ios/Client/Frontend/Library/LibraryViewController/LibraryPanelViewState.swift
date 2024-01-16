@@ -151,7 +151,9 @@ class LibraryPanelViewState {
     ) {
         if isChangingPanels {
             self.state = category
-        } else if newSubviewState.isChildState(of: oldSubviewState) || newSubviewState.isParentState(of: oldSubviewState) || oldSubviewState == newSubviewState {
+        } else if newSubviewState.isChildState(of: oldSubviewState)
+                    || newSubviewState.isParentState(of: oldSubviewState)
+                    || oldSubviewState == newSubviewState {
             self.state = newState
         } else if newSubviewState == .search || oldSubviewState == .search {
             self.state = newState

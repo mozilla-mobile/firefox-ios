@@ -31,7 +31,7 @@ class ThemedNavigationController: DismissableNavigationViewController, Themeable
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return topViewController?.preferredStatusBarStyle ?? LegacyThemeManager.instance.statusBarStyle
+        return topViewController?.preferredStatusBarStyle ?? .default
     }
 
     override func viewDidLoad() {

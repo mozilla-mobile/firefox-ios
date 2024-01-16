@@ -158,7 +158,10 @@ class DownloadsTests: BaseTestCase {
 
             app.webViews.links[testFileName].firstMatch.tap()
 
-            mozWaitForElementToExist(app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.download], timeout: TIMEOUT)
+            mozWaitForElementToExist(
+                app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.download],
+                timeout: TIMEOUT
+            )
             app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.download].tap()
         }
     }

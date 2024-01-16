@@ -142,7 +142,8 @@ class TabsButton: UIButton, ThemeApplicable {
         let hasDescriptionChanged = (clonedTabsButton?.countLabel.text ?? count.description) != count.description
         guard currentCount != count.description || hasDescriptionChanged else { return }
 
-        // Re-entrancy guard: if this code is running just update the tab count value without starting another animation.
+        // Re-entrancy guard: if this code is running just update the tab count value without
+        // starting another animation.
         if isUpdatingTabCount {
             if let clone = clonedTabsButton {
                 clone.countLabel.text = countToBe

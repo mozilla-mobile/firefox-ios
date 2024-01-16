@@ -30,6 +30,7 @@ protocol TabToolbarProtocol: AnyObject {
 }
 
 protocol TabToolbarDelegate: AnyObject {
+    func configureDataClearanceContextualHint()
     func tabToolbarDidPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidLongPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton)
@@ -119,7 +120,11 @@ open class TabToolbarHelper: NSObject {
 
         toolbar.addUILargeContentViewInteraction(interaction: uiLargeContentViewInteraction)
 
-        toolbar.backButton.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.back)?.imageFlippedForRightToLeftLayoutDirection(), for: .normal)
+        toolbar.backButton.setImage(
+            UIImage.templateImageNamed(StandardImageIdentifiers.Large.back)?
+                .imageFlippedForRightToLeftLayoutDirection(),
+            for: .normal
+        )
         toolbar.backButton.accessibilityLabel = .TabToolbarBackAccessibilityLabel
         toolbar.backButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.backButton
         toolbar.backButton.showsLargeContentViewer = true
@@ -130,13 +135,18 @@ open class TabToolbarHelper: NSObject {
         toolbar.backButton.addTarget(self, action: #selector(didClickBack), for: .touchUpInside)
 
         toolbar.forwardButton.setImage(
-            UIImage.templateImageNamed(StandardImageIdentifiers.Large.forward)?.imageFlippedForRightToLeftLayoutDirection(),
-            for: .normal)
+            UIImage.templateImageNamed(StandardImageIdentifiers.Large.forward)?
+                .imageFlippedForRightToLeftLayoutDirection(),
+            for: .normal
+        )
         toolbar.forwardButton.accessibilityLabel = .TabToolbarForwardAccessibilityLabel
         toolbar.forwardButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.forwardButton
         toolbar.forwardButton.showsLargeContentViewer = true
         toolbar.forwardButton.largeContentTitle = .TabToolbarForwardAccessibilityLabel
-        let longPressGestureForwardButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressForward))
+        let longPressGestureForwardButton = UILongPressGestureRecognizer(
+            target: self,
+            action: #selector(didLongPressForward)
+        )
         longPressGestureRecognizers.append(longPressGestureForwardButton)
 
         toolbar.forwardButton.addGestureRecognizer(longPressGestureForwardButton)
@@ -150,7 +160,10 @@ open class TabToolbarHelper: NSObject {
         toolbar.multiStateButton.accessibilityLabel = .TabToolbarReloadAccessibilityLabel
         toolbar.multiStateButton.showsLargeContentViewer = true
 
-        let longPressMultiStateButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressMultiStateButton))
+        let longPressMultiStateButton = UILongPressGestureRecognizer(
+            target: self,
+            action: #selector(didLongPressMultiStateButton)
+        )
         longPressMultiStateButton.delegate = self
         toolbar.multiStateButton.addGestureRecognizer(longPressMultiStateButton)
         toolbar.multiStateButton.addTarget(self, action: #selector(didPressMultiStateButton), for: .touchUpInside)

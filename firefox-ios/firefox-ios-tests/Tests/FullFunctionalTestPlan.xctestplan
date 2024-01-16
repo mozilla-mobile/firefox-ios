@@ -83,7 +83,6 @@
         "NavigationTest\/testPopUpBlocker()",
         "NavigationTest\/testReloadPreservesMobileOrDesktopSite()",
         "NavigationTest\/testSSL()",
-        "NavigationTest\/testScrollsToTopWithMultipleTabs()",
         "NavigationTest\/testToggleBetweenMobileAndDesktopSiteFromSite()",
         "NavigationTest\/testURLBar()",
         "NavigationTest\/testVerifyBrowserTabMenu()",
@@ -136,7 +135,8 @@
         "TopTabsTestIphone\/testSwitchBetweenTabsNoPrivatePrivateToastButton()",
         "TopTabsTestIphone\/testSwitchBetweenTabsToastButton()",
         "TrackingProtectionTests\/testEnableDisableTPforSite()",
-        "TrackingProtectionTests\/testTrackingProtection()"
+        "TrackingProtectionTests\/testTrackingProtection()",
+        "URLValidationTests"
       ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",

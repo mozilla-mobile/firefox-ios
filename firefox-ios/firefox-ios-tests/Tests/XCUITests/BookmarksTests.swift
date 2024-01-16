@@ -67,7 +67,10 @@ class BookmarksTests: BaseTestCase {
         waitForTabsButton()
         navigator.goto(TabTray)
         if iPad() {
-            app.collectionViews.cells["Example Domain"].children(matching: .other).element.children(matching: .other).element.tap()
+            app.collectionViews
+                .cells["Example Domain"].children(matching: .other)
+                .element.children(matching: .other)
+                .element.tap()
         } else {
             app.cells.staticTexts["Example Domain"].tap()
         }
@@ -298,7 +301,10 @@ class BookmarksTests: BaseTestCase {
         app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].swipeLeft()
         app.buttons["Delete"].tap()
         mozWaitForElementToNotExist(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"], timeout: 10)
-        XCTAssertFalse(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].exists, "Bookmark not removed successfully")
+        XCTAssertFalse(
+            app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].exists,
+            "Bookmark not removed successfully"
+        )
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306910

@@ -34,6 +34,7 @@ func checkCodeCoverage() {
 
 // MARK: - PR guidelines
 
+// swiftlint:disable line_length
 // Encourage smaller PRs
 func checkBigPullRequest() {
     let bigPRThreshold = 800
@@ -89,6 +90,7 @@ enum CodeUsageToDetect: CaseIterable {
         }
     }
 }
+// swiftlint:enable line_length
 
 // Detects CodeUsageToDetect in PR so certain functions are not used in new code.
 func checkForCodeUsage() {

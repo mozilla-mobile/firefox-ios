@@ -127,7 +127,9 @@ class WebsiteDataSearchResultsViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier
+        ) as? ThemedTableSectionHeaderFooterView else { return nil }
 
         headerView.titleLabel.text = section == Section.sites.rawValue ? .SettingsWebsiteDataTitle : nil
 

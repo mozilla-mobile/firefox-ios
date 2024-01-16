@@ -127,7 +127,11 @@ class MockDownloadQueueDelegate: DownloadQueueDelegate {
         methodCalled = #function
     }
 
-    func downloadQueue(_ downloadQueue: DownloadQueue, didDownloadCombinedBytes combinedBytesDownloaded: Int64, combinedTotalBytesExpected: Int64?) {
+    func downloadQueue(
+        _ downloadQueue: DownloadQueue,
+        didDownloadCombinedBytes combinedBytesDownloaded: Int64,
+        combinedTotalBytesExpected: Int64?
+    ) {
         methodCalled = #function
     }
 

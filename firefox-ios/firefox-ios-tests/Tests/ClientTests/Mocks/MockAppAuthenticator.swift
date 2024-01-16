@@ -18,7 +18,9 @@ class MockAppAuthenticator: AppAuthenticationProtocol {
         return shouldAuthenticateDeviceOwner
     }
 
-    func authenticateWithDeviceOwnerAuthentication(_ completion: @escaping (Result<Void, AuthenticationError>) -> Void) {
+    func authenticateWithDeviceOwnerAuthentication(
+        _ completion: @escaping (Result<Void, AuthenticationError>) -> Void
+    ) {
         if shouldSucceed {
             completion(.success(()))
         } else {

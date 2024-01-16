@@ -229,6 +229,24 @@ extension String {
     }
 }
 
+// MARK: - Address Autofill
+extension String {
+    public struct Addresses {
+        public struct EditCard {
+            public static let ToggleToAllowAutofillTitle = MZLocalizedString(
+                key: "Addresses.Settings.EditCard.ToggleToAllowAutofillTitle.v124",
+                tableName: "Settings",
+                value: "Save and Fill Addresses",
+                comment: "Title label for user to use the toggle settings to allow saving and autofilling of addresses for webpages.")
+            public static let PlaceholderToggleToAllowAutofillTitle = MZLocalizedString(
+                key: "Addresses.Settings.EditCard.PlaceholderToggleToAllowAutofillTitle.v124",
+                tableName: "Settings",
+                value: "Includes phone numbers and email addresses",
+                comment: "Placeholder label for user to use the toggle settings to allow saving and autofilling of addresses for webpages, including phone numbers and email addresses. The placeholder text reads: Includes phone numbers and email addresses.")
+        }
+    }
+}
+
 // MARK: - Credit card
 extension String {
     public struct CreditCard {
@@ -1715,16 +1733,16 @@ extension String {
                 public static let LearnAboutSuggestions = MZLocalizedString(
                     key: "Settings.Search.Accessibility.LearnAboutSuggestions.v124",
                     tableName: "Settings",
-                    value: "Learn more about %@ Suggest",
-                    comment: "Accessibility label for Learn more about Firefox Suggest. Placeholder is for the app name - Firefox.")
+                    value: "Learn more about Firefox Suggest",
+                    comment: "Accessibility label for Learn more about Firefox Suggest.")
             }
 
             public struct Suggest {
                 public static let AddressBarSettingsTitle = MZLocalizedString(
                     key: "Settings.Search.Suggest.AddressBarSetting.Title.v124",
                     tableName: "Settings",
-                    value: "Address bar - %@ Suggest",
-                    comment: "In the Search page of the Settings menu, the title for the Firefox Suggest settings section. Placeholder is for the app name - Firefox.")
+                    value: "Address bar - Firefox Suggest",
+                    comment: "In the Search page of the Settings menu, the title for the Firefox Suggest settings section.")
                 public static let ShowNonSponsoredSuggestionsTitle = MZLocalizedString(
                     key: "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124",
                     tableName: "Settings",
@@ -1748,8 +1766,8 @@ extension String {
                 public static let LearnAboutSuggestions = MZLocalizedString(
                     key: "Settings.Search.Suggest.LearnAboutSuggestions.v124",
                     tableName: "Settings",
-                    value: "Learn more about %@ Suggest",
-                    comment: "In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. Placeholder is for the app name - Firefox."
+                    value: "Learn more about Firefox Suggest",
+                    comment: "In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest."
                 )
             }
         }
@@ -1918,11 +1936,6 @@ extension String {
 
 // MARK: - Activity Stream
 extension String {
-    public static let ASShortcutsTitle =  MZLocalizedString(
-        key: "ActivityStream.Shortcuts.SectionTitle",
-        tableName: nil,
-        value: "Shortcuts",
-        comment: "Section title label for Shortcuts")
     public static let RecentlySavedSectionTitle = MZLocalizedString(
         key: "ActivityStream.Library.Title",
         tableName: nil,
@@ -2109,6 +2122,11 @@ extension String {
         tableName: "Settings",
         value: "Payment Methods",
         comment: "Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage.")
+    public static let SettingsAddressAutofill = MZLocalizedString(
+        key: "Settings.AddressAutofill.Title.v124",
+        tableName: "Settings",
+        value: "Autofill Addresses",
+        comment: "Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage.")
 }
 
 // MARK: - Error pages
@@ -2286,6 +2304,11 @@ extension String {
         tableName: "FirefoxSync",
         value: "Payment Methods",
         comment: "Toggle for credit cards syncing setting")
+    public static let FirefoxSyncAddressesEngine = MZLocalizedString(
+        key: "FirefoxSync.AddressAutofillEngine.v124",
+        tableName: "FirefoxSync",
+        value: "Addresses",
+        comment: "Toggle for address autofill syncing setting")
 }
 
 // MARK: - Firefox Logins
@@ -2481,6 +2504,7 @@ extension String {
     public static let SettingsAdvancedAccountTitle = "Advanced Sync Settings"
     public static let SettingsAdvancedAccountCustomFxAContentServerURI = "Custom Account Content Server URI"
     public static let SettingsAdvancedAccountUseCustomFxAContentServerURITitle = "Use Custom FxA Content Server"
+    public static let SettingsAdvancedAccountUseReactContentServer = "Use React Content Server"
     public static let SettingsAdvancedAccountCustomSyncTokenServerURI = "Custom Sync Token Server URI"
     public static let SettingsAdvancedAccountUseCustomSyncTokenServerTitle = "Use Custom Sync Token Server"
 }
@@ -3871,6 +3895,26 @@ extension String {
             tableName: "Shopping",
             value: "Turn Off Review Checker",
             comment: "Label of the button from settings card displayed in the shopping review quality bottom sheet.")
+        public static let SettingsCardGroupedRecommendedProductsAndSwitchAccessibilityLabel = MZLocalizedString(
+            key: "Shopping.SettingsCard.Expand.GroupedRecommendedProductsAndSwitch.AccessibilityLabel.v123",
+            tableName: "Shopping",
+            value: "%1$@, switch button, %2$@.",
+            comment: "Accessibility label for the recommended products label and switch, grouped together. The first placeholder is for the recommended products label, and the second placeholder is for the state of the switch: On/Off.")
+        public static let SettingsCardGroupedRecommendedProductsAndSwitchAccessibilityHint = MZLocalizedString(
+            key: "Shopping.SettingsCard.Expand.GroupedRecommendedProductsAndSwitch.AccessibilityHint.v123",
+            tableName: "Shopping",
+            value: "Double tap to toggle setting.",
+            comment: "Accessibility hint for the recommended products label and switch, grouped together. When the group is selected in VoiceOver mode, the hint is read to help the user understand what action can be performed.")
+        public static let SettingsCardSwitchValueOnAccessibilityLabel = MZLocalizedString(
+            key: "Shopping.SettingsCard.SwitchValueOn.AccessibilityLabel.v123",
+            tableName: "Shopping",
+            value: "On",
+            comment: "Toggled On accessibility value, from Settings Card within the shopping product review bottom sheet.")
+        public static let SettingsCardSwitchValueOffAccessibilityLabel = MZLocalizedString(
+            key: "Shopping.SettingsCard.SwitchValueOff.AccessibilityLabel.v123",
+            tableName: "Shopping",
+            value: "Off",
+            comment: "Toggled Off accessibility switch value from Settings Card within the shopping product review bottom sheet.")
         public static let SettingsCardExpandAccessibilityLabel = MZLocalizedString(
             key: "Shopping.SettingsCard.Expand.AccessibilityLabel.v120",
             tableName: "Shopping",
@@ -4062,10 +4106,10 @@ extension String {
             value: "Check Now",
             comment: "Primary action title for info card when the product needs analysis")
         public static let InfoCardProgressAnalysisTitle = MZLocalizedString(
-            key: "Shopping.InfoCard.ProgressAnalysis.Title.v120",
+            key: "Shopping.InfoCard.ProgressAnalysis.Title.v123",
             tableName: "Shopping",
-            value: "Checking review quality",
-            comment: "Title for info card when the product is in analysis mode")
+            value: "Checking review quality (%@)",
+            comment: "Title for info card when the product is in analysis mode. The placeholder represents the percentage of the analysis progress, ranging between 1 and 100.")
         public static let InfoCardProgressAnalysisDescription = MZLocalizedString(
             key: "Shopping.InfoCard.ProgressAnalysis.Description.v120",
             tableName: "Shopping",
@@ -5937,6 +5981,24 @@ extension String {
                 value: "Card Information updated",
                 comment: "Label text that gets presented as a confirmation at the bottom of screen when credit card information gets updated successfully",
                 lastUsedInVersion: 121)
+        }
+
+        struct v122 {
+            public static let InfoCardProgressAnalysisTitle = MZLocalizedString(
+                key: "Shopping.InfoCard.ProgressAnalysis.Title.v120",
+                tableName: "Shopping",
+                value: "Checking review quality",
+                comment: "Title for info card when the product is in analysis mode",
+                lastUsedInVersion: 122)
+        }
+
+        struct v123 {
+            public static let ASShortcutsTitle =  MZLocalizedString(
+                key: "ActivityStream.Shortcuts.SectionTitle",
+                tableName: nil,
+                value: "Shortcuts",
+                comment: "Section title label for Shortcuts",
+                lastUsedInVersion: 123)
         }
     }
 }

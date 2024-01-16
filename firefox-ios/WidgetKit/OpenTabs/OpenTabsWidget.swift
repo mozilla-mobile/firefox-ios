@@ -59,7 +59,9 @@ struct OpenTabsView: View {
     var openFirefoxButton: some View {
         HStack(alignment: .center, spacing: 15) {
             Image("openFirefox").foregroundColor(Color.white)
-            Text("Open Firefox").foregroundColor(Color.white).lineLimit(1).font(.system(size: 13, weight: .semibold, design: .default))
+            Text("Open Firefox")
+                .foregroundColor(Color.white).lineLimit(1)
+                .font(.system(size: 13, weight: .semibold, design: .default))
             Spacer()
         }.padding([.horizontal])
     }
@@ -80,7 +82,9 @@ struct OpenTabsView: View {
                     HStack {
                         Spacer()
                         Image("openFirefox")
-                        Text(String.OpenFirefoxLabel).foregroundColor(Color.white).lineLimit(1).font(.system(size: 13, weight: .semibold, design: .default))
+                        Text(String.OpenFirefoxLabel)
+                            .foregroundColor(Color.white).lineLimit(1)
+                            .font(.system(size: 13, weight: .semibold, design: .default))
                         Spacer()
                     }.padding(10)
                 }.foregroundColor(Color.white)
@@ -93,8 +97,15 @@ struct OpenTabsView: View {
                     if entry.tabs.count > numberOfTabsToDisplay {
                         HStack(alignment: .center, spacing: 15) {
                             Image("openFirefox").foregroundColor(Color.white).frame(width: 16, height: 16)
-                            Text(String.localizedStringWithFormat(String.MoreTabsLabel, (entry.tabs.count - numberOfTabsToDisplay)))
-                                .foregroundColor(Color.white).lineLimit(1).font(.system(size: 13, weight: .semibold, design: .default))
+                            Text(
+                                String.localizedStringWithFormat(
+                                    String.MoreTabsLabel,
+                                    (entry.tabs.count - numberOfTabsToDisplay)
+                                )
+                            )
+                            .foregroundColor(Color.white)
+                            .lineLimit(1)
+                            .font(.system(size: 13, weight: .semibold, design: .default))
                             Spacer()
                         }.padding([.horizontal])
                     } else {

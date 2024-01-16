@@ -51,7 +51,8 @@ class OnboardingTelemetryDelegationTests: XCTestCase {
         }
         subject.showNextPage(from: firstVC.viewModel.name, completionIfLastCard: { })
         subject.pageChanged(from: firstVC.viewModel.name)
-        guard let result = subject.pageController.viewControllers?[subject.pageControl.currentPage] as? OnboardingCardViewController else {
+        guard let result = subject.pageController
+            .viewControllers?[subject.pageControl.currentPage] as? OnboardingCardViewController else {
             XCTFail("expected a view controller, but got nothing")
             return
         }

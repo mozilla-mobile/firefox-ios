@@ -169,7 +169,10 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         let expectedContileResult = ContileProviderMock.getContiles(contilesCount: 1,
                                                                     duplicateFirstTile: true,
                                                                     pinnedDuplicateTile: true)
-        let subject = createSubject(addPinnedSiteCount: 1, expectedContileResult: ContileResult.success(expectedContileResult))
+        let subject = createSubject(
+            addPinnedSiteCount: 1,
+            expectedContileResult: ContileResult.success(expectedContileResult)
+        )
         let data = subject.getTopSitesData()
 
         XCTAssertTrue(data[0].isGoogleURL)
@@ -180,7 +183,10 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     func testCalculateTopSitesData_addSponsoredTileIfDuplicateIsNotPinned() {
         let expectedContileResult = ContileProviderMock.getContiles(contilesCount: 1,
                                                                     duplicateFirstTile: true)
-        let subject = createSubject(addPinnedSiteCount: 1, expectedContileResult: ContileResult.success(expectedContileResult))
+        let subject = createSubject(
+            addPinnedSiteCount: 1,
+            expectedContileResult: ContileResult.success(expectedContileResult)
+        )
         let data = subject.getTopSitesData()
 
         XCTAssertTrue(data[0].isGoogleURL)
@@ -192,7 +198,10 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         let expectedContileResult = ContileProviderMock.getContiles(contilesCount: 2,
                                                                     duplicateFirstTile: true,
                                                                     pinnedDuplicateTile: true)
-        let subject = createSubject(addPinnedSiteCount: 1, expectedContileResult: ContileResult.success(expectedContileResult))
+        let subject = createSubject(
+            addPinnedSiteCount: 1,
+            expectedContileResult: ContileResult.success(expectedContileResult)
+        )
         let data = subject.getTopSitesData()
 
         XCTAssertTrue(data[0].isGoogleURL)
@@ -299,8 +308,10 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
 
     // Pinned > Sponsored
     func testDuplicates_PinnedTilesHasPrecedenceOnSponsoredTiles() {
-        let subject = createSubject(addPinnedSiteCount: 1,
-                                    expectedContileResult: ContileResult.success([ContileProviderMock.pinnedDuplicateTile]))
+        let subject = createSubject(
+            addPinnedSiteCount: 1,
+            expectedContileResult: ContileResult.success([ContileProviderMock.pinnedDuplicateTile])
+        )
 
         let data = subject.getTopSitesData()
 
@@ -420,6 +431,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
 
 // MARK: - ContileProviderMock
 class ContileProviderMock: ContileProviderInterface {
+    typealias Mock = ContileProviderMock
     private var result: ContileResult
 
     static var defaultSuccessData: [Contile] {
@@ -465,7 +477,7 @@ extension ContileProviderMock {
         var defaultData = ContileProviderMock.defaultSuccessData
 
         if duplicateFirstTile {
-            let duplicateTile = pinnedDuplicateTile ? ContileProviderMock.pinnedDuplicateTile : ContileProviderMock.duplicateTile
+            let duplicateTile = pinnedDuplicateTile ? Mock.pinnedDuplicateTile : Mock.duplicateTile
             defaultData.insert(duplicateTile, at: 0)
         }
 
@@ -479,8 +491,8 @@ extension ContileProviderMock {
 
     static var pinnedDuplicateTile: Contile {
         return Contile(id: 1,
-                       name: String(format: ContileProviderMock.pinnedTitle, "0"),
-                       url: String(format: ContileProviderMock.pinnedURL, "0"),
+                       name: String(format: Mock.pinnedTitle, "0"),
+                       url: String(format: Mock.pinnedURL, "0"),
                        clickUrl: "https://www.test.com/click",
                        imageUrl: "https://test.com/image0.jpg",
                        imageSize: 200,
@@ -490,8 +502,8 @@ extension ContileProviderMock {
 
     static var duplicateTile: Contile {
         return Contile(id: 1,
-                       name: String(format: ContileProviderMock.title, "0"),
-                       url: String(format: ContileProviderMock.url, "0"),
+                       name: String(format: Mock.title, "0"),
+                       url: String(format: Mock.url, "0"),
                        clickUrl: "https://www.test.com/click",
                        imageUrl: "https://test.com/image0.jpg",
                        imageSize: 200,

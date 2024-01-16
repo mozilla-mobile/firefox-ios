@@ -70,11 +70,8 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
         let cfrsHaveBeenShown = toolbarCFRShown && jumpBackInCFRShown
 
         guard cfrsHaveBeenShown,
-              featureAvailable,
               hasEnoughThumbnailsToShow,
-              !userDefaults.bool(forKey: PrefsKeys.Wallpapers.OnboardingSeenKey),
-              featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet,
-                                            checking: .buildOnly)
+              !userDefaults.bool(forKey: PrefsKeys.Wallpapers.OnboardingSeenKey)
         else { return false }
 
         return true
@@ -82,9 +79,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
 
     /// Determines whether the wallpaper settings can be shown
     var canSettingsBeShown: Bool {
-        guard featureAvailable,
-              hasEnoughThumbnailsToShow
-        else { return false }
+        guard hasEnoughThumbnailsToShow else { return false }
 
         return true
     }
@@ -93,17 +88,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
     private var hasEnoughThumbnailsToShow: Bool {
         let thumbnailUtility = WallpaperThumbnailUtility(with: networkingModule)
 
-        guard featureAvailable, thumbnailUtility.areThumbnailsAvailable else { return false }
-
-        return true
-    }
-
-    /// Returns true if the feature is enabled for the build and the version matches the
-    /// current shipped version.
-    public var featureAvailable: Bool {
-        guard let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
-              wallpaperVersion == .v1
-        else { return false }
+        guard thumbnailUtility.areThumbnailsAvailable else { return false }
 
         return true
     }

@@ -48,8 +48,13 @@ class AccountStatusSetting: WithAccountSetting {
         return NSAttributedString(
             string: string,
             attributes: [
-                NSAttributedString.Key.font: DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17, weight: .semibold),
-                NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
+                NSAttributedString.Key.font: DefaultDynamicFontHelper.preferredFont(
+                    withTextStyle: .body,
+                    size: 17,
+                    weight: .semibold
+                ),
+                NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
+        )
     }
 
     override var status: NSAttributedString? {
