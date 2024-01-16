@@ -1306,13 +1306,7 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        if traitCollection.horizontalSizeClass == .compact {
-            state = .home
-        } else {
-            state = isLoading ? .stop : .reload
-        }
-
-        handleMiddleButtonState(state)
+        handleMiddleButtonState(.home)
         if !toolbar.isHidden {
             urlBar.locationView.reloadButton.reloadButtonState = isLoading ? .stop : .reload
         }
