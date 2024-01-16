@@ -4,18 +4,22 @@
 
 import Foundation
 
-class WKEngine: Engine {
+public class WKEngine: Engine {
     private let userScriptManager: WKUserScriptManager
+
+    public static func factory() -> WKEngine {
+        return WKEngine()
+    }
 
     init(userScriptManager: WKUserScriptManager = DefaultUserScriptManager()) {
         self.userScriptManager = userScriptManager
     }
 
-    func createView() -> EngineView {
+    public func createView() -> EngineView {
         return WKEngineView(frame: .zero)
     }
 
-    func createSession() throws -> EngineSession {
+    public func createSession() throws -> EngineSession {
         guard let session = WKEngineSession(userScriptManager: userScriptManager) else {
             throw EngineError.sessionNotCreated
         }

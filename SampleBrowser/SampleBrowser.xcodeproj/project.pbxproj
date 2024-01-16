@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8A0F446B2B56EDC900438589 /* EngineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0F446A2B56EDC900438589 /* EngineProvider.swift */; };
+		8A0F446E2B56EF1A00438589 /* WebEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 8A0F446D2B56EF1A00438589 /* WebEngine */; };
 		8A4601E52B0FE20500FFD17F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4601E42B0FE20500FFD17F /* AppDelegate.swift */; };
 		8A4601E72B0FE20500FFD17F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4601E62B0FE20500FFD17F /* SceneDelegate.swift */; };
 		8A4601E92B0FE20500FFD17F /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4601E82B0FE20500FFD17F /* RootViewController.swift */; };
@@ -18,11 +20,11 @@
 		8A46021E2B0FE50D00FFD17F /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A46021D2B0FE50D00FFD17F /* UIView+Extension.swift */; };
 		8A4602202B0FE52F00FFD17F /* UISearchbar+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A46021F2B0FE52F00FFD17F /* UISearchbar+Extension.swift */; };
 		8A4602222B0FE55300FFD17F /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4602212B0FE55300FFD17F /* UIViewController+Extension.swift */; };
-		8A4602252B0FE58700FFD17F /* BrowserDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4602242B0FE58700FFD17F /* BrowserDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		8A0F44682B56ECBF00438589 /* BrowserKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = BrowserKit; path = ../BrowserKit; sourceTree = "<group>"; };
+		8A0F446A2B56EDC900438589 /* EngineProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngineProvider.swift; sourceTree = "<group>"; };
 		8A4601E12B0FE20500FFD17F /* SampleBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SampleBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A4601E42B0FE20500FFD17F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8A4601E62B0FE20500FFD17F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -36,7 +38,6 @@
 		8A46021D2B0FE50D00FFD17F /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		8A46021F2B0FE52F00FFD17F /* UISearchbar+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISearchbar+Extension.swift"; sourceTree = "<group>"; };
 		8A4602212B0FE55300FFD17F /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
-		8A4602242B0FE58700FFD17F /* BrowserDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,18 +45,35 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A0F446E2B56EF1A00438589 /* WebEngine in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8A0F44692B56EDC000438589 /* Engine */ = {
+			isa = PBXGroup;
+			children = (
+				8A0F446A2B56EDC900438589 /* EngineProvider.swift */,
+			);
+			path = Engine;
+			sourceTree = "<group>";
+		};
+		8A0F446C2B56EF1A00438589 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		8A4601D82B0FE20500FFD17F = {
 			isa = PBXGroup;
 			children = (
 				8A0F44682B56ECBF00438589 /* BrowserKit */,
 				8A4601E32B0FE20500FFD17F /* SampleBrowser */,
 				8A4601E22B0FE20500FFD17F /* Products */,
+				8A0F446C2B56EF1A00438589 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -70,6 +88,7 @@
 		8A4601E32B0FE20500FFD17F /* SampleBrowser */ = {
 			isa = PBXGroup;
 			children = (
+				8A0F44692B56EDC000438589 /* Engine */,
 				8A4602142B0FE40E00FFD17F /* UI */,
 				8A4601E42B0FE20500FFD17F /* AppDelegate.swift */,
 				8A4601E62B0FE20500FFD17F /* SceneDelegate.swift */,
@@ -114,7 +133,6 @@
 			isa = PBXGroup;
 			children = (
 				8A46021A2B0FE47C00FFD17F /* BrowserViewController.swift */,
-				8A4602242B0FE58700FFD17F /* BrowserDelegate.swift */,
 			);
 			path = Browser;
 			sourceTree = "<group>";
@@ -135,6 +153,9 @@
 			dependencies = (
 			);
 			name = SampleBrowser;
+			packageProductDependencies = (
+				8A0F446D2B56EF1A00438589 /* WebEngine */,
+			);
 			productName = SampleBrowser;
 			productReference = 8A4601E12B0FE20500FFD17F /* SampleBrowser.app */;
 			productType = "com.apple.product-type.application";
@@ -190,13 +211,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				8A4602222B0FE55300FFD17F /* UIViewController+Extension.swift in Sources */,
-				8A4602252B0FE58700FFD17F /* BrowserDelegate.swift in Sources */,
 				8A4602172B0FE43A00FFD17F /* BrowserSearchBar.swift in Sources */,
 				8A46021E2B0FE50D00FFD17F /* UIView+Extension.swift in Sources */,
 				8A46021B2B0FE47C00FFD17F /* BrowserViewController.swift in Sources */,
 				8A4601E92B0FE20500FFD17F /* RootViewController.swift in Sources */,
 				8A4601E52B0FE20500FFD17F /* AppDelegate.swift in Sources */,
 				8A4602192B0FE45200FFD17F /* BrowserToolbar.swift in Sources */,
+				8A0F446B2B56EDC900438589 /* EngineProvider.swift in Sources */,
 				8A4601E72B0FE20500FFD17F /* SceneDelegate.swift in Sources */,
 				8A4602202B0FE52F00FFD17F /* UISearchbar+Extension.swift in Sources */,
 			);
@@ -413,6 +434,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8A0F446D2B56EF1A00438589 /* WebEngine */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WebEngine;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8A4601D92B0FE20500FFD17F /* Project object */;
 }

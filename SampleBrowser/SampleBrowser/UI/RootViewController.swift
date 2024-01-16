@@ -6,10 +6,10 @@ import UIKit
 
 // Holds toolbar, search bar, search and browser VCs
 class RootViewController: UIViewController,
-                          BrowserToolbarDelegate,
-                          BrowserReloadStopDelegate,
-                          BrowserSearchBarDelegate,
-                          BrowserMenuDelegate {
+                          ToolbarDelegate,
+                          NavigationDelegate,
+                          SearchBarDelegate,
+                          MenuDelegate {
     private lazy var toolbar: BrowserToolbar = .build { _ in }
     private lazy var searchBar: BrowserSearchBar =  .build { _ in }
     private lazy var statusBarFiller: UIView =  .build { view in
@@ -18,14 +18,10 @@ class RootViewController: UIViewController,
 
     private var browserVC: BrowserViewController
 
-    // Note: For easier debugging, we might need to load
-    // same URL again and for this use the following homepage url
-    private var homepage = ""
-
     // MARK: - Init
 
-    init() {
-        self.browserVC = BrowserViewController()
+    init(engineProvider: EngineProvider) {
+        self.browserVC = BrowserViewController(engineProvider: engineProvider)
         super.init(nibName: nil, bundle: nil)
         view.backgroundColor = .black
     }
@@ -42,10 +38,6 @@ class RootViewController: UIViewController,
         configureBrowserView()
         configureSearchbar()
         configureToolbar()
-
-        if !homepage.isEmpty {
-            browse(to: homepage)
-        }
     }
 
     private func configureBrowserView() {
@@ -57,7 +49,7 @@ class RootViewController: UIViewController,
             browserVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
 
-        browserVC.reloadStopDelegate = self
+        browserVC.navigationDelegate = self
     }
 
     private func configureSearchbar() {
@@ -76,8 +68,8 @@ class RootViewController: UIViewController,
             searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
 
-        searchBar.configure(browserDelegate: self,
-                            browserMenuDelegate: self)
+        searchBar.configure(searchBarDelegate: self,
+                            menuDelegate: self)
         searchBar.becomeFirstResponder()
     }
 
@@ -105,38 +97,36 @@ class RootViewController: UIViewController,
 
     func backButtonClicked() {
         // TODO: FXIOS-7823 Integrate WebEngine in SampleBrowser
-//        browserVC.currentBrowser.goBack()
+//        browserVC.goBack()
     }
 
     func forwardButtonClicked() {
         // TODO: FXIOS-7823 Integrate WebEngine in SampleBrowser
-//        browserVC.currentBrowser.goForward()
+//        browserVC.goForward()
     }
 
     func reloadButtonClicked() {
         // TODO: FXIOS-7823 Integrate WebEngine in SampleBrowser
-//        browserVC.currentBrowser.reload()
+//        browserVC.reload()
     }
 
     func stopButtonClicked() {
         // TODO: FXIOS-7823 Integrate WebEngine in SampleBrowser
-//        browserVC.currentBrowser.stop()
+//        browserVC.stop()
     }
 
-    // MARK: - BrowserReloadStopDelegate
+    // MARK: - NavigationDelegate
+
+    func onNavigationStateChange(canGoBack: Bool?, canGoForward: Bool?) {
+        toolbar.updateBackForwardButtons(canGoBack: canGoBack, canGoForward: canGoForward)
+    }
 
     func browserIsLoading(isLoading: Bool) {
+        // TODO: Laurie
         toolbar.updateReloadStopButton(isLoading: isLoading)
-
-        // Update back and forward buttons when we're done loading
-        if !isLoading {
-            // TODO: FXIOS-7823 Integrate WebEngine in SampleBrowser
-//            toolbar.updateBackForwardButtons(canGoBack: browserVC.currentBrowser.canGoBack,
-//                                             canGoForward: browserVC.currentBrowser.canGoForward)
-        }
     }
 
-// MARK: - BrowserSearchBarDelegate
+    // MARK: - SearchBarDelegate
 
     func searchSuggestions(searchTerm: String) {
         guard !searchTerm.isEmpty else {
@@ -152,7 +142,7 @@ class RootViewController: UIViewController,
         browse(to: searchText)
     }
 
-    // MARK: - BrowserMenuDelegate
+    // MARK: - MenuDelegate
 
     func didClickMenu() {
         // Not implementing Settings for now, will see later on if this is needed or not
