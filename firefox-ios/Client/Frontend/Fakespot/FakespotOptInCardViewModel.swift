@@ -29,8 +29,7 @@ struct FakespotOptInCardViewModel {
                                                                FakespotName.shortName.rawValue,
                                                                MozillaName.shortName.rawValue)
     let bodyA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.optInCopy
-    let disclaimer = String.localizedStringWithFormat(.Shopping.OptInCardDisclaimerText,
-                                                      FakespotName.shortName.rawValue)
+    let disclaimer: String = .Shopping.OptInCardDisclaimerText
     let disclaimerLabelA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.disclaimerText
 
     // MARK: Buttons
