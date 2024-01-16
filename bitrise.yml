@@ -1329,7 +1329,7 @@ workflows:
                 --results-bucket=firefox_ios_test_artifacts \
                 --no-record-video \
                 --client-details=matrixLabel="Bitrise" \
-                --quiet)
+                --quiet 2>&1)
             
             GCLOUD_EXITCODE=$? # this will get the right-most command from the gcloud subshell
             echo "GCLOUD_EXITCODE: $GCLOUD_EXITCODE"
