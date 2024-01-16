@@ -111,29 +111,26 @@ class RootViewController: UIViewController,
 
     private func browse(to term: String) {
         searchBar.resignFirstResponder()
-        browserVC.loadUrlOrSearch(term)
+        browserVC.loadUrlOrSearch(SearchTerm(searchTerm: term))
+        searchVC.remove()
     }
 
     // MARK: - BrowserToolbarDelegate
 
     func backButtonClicked() {
-        // TODO: FXIOS-7823 Integrate WebEngine in SampleBrowser
-//        browserVC.goBack()
+        browserVC.goBack()
     }
 
     func forwardButtonClicked() {
-        // TODO: FXIOS-7823 Integrate WebEngine in SampleBrowser
-//        browserVC.goForward()
+        browserVC.goForward()
     }
 
     func reloadButtonClicked() {
-        // TODO: FXIOS-7823 Integrate WebEngine in SampleBrowser
-//        browserVC.reload()
+        browserVC.reload()
     }
 
     func stopButtonClicked() {
-        // TODO: FXIOS-7823 Integrate WebEngine in SampleBrowser
-//        browserVC.stop()
+        browserVC.stop()
     }
 
     // MARK: - NavigationDelegate
@@ -143,7 +140,7 @@ class RootViewController: UIViewController,
     }
 
     func browserIsLoading(isLoading: Bool) {
-        // TODO: Laurie
+        // TODO: FXIOS-8180 Fix navigation in SampleBrowser
         toolbar.updateReloadStopButton(isLoading: isLoading)
     }
 

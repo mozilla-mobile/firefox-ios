@@ -64,12 +64,42 @@ class BrowserViewController: UIViewController, EngineSessionDelegate {
             progressView.heightAnchor.constraint(equalToConstant: 3)
         ])
         progressView.progressTintColor = .orange
+        progressView.backgroundColor = .white
+    }
+
+    // MARK: - Browser actions
+
+    func goBack() {
+        engineSession.goBack()
+    }
+
+    func goForward() {
+        engineSession.goForward()
+    }
+
+    func reload() {
+        engineSession.reload()
+    }
+
+    func stop() {
+        engineSession.stopLoading()
     }
 
     // MARK: - Search
 
-    func loadUrlOrSearch(_ searchTerm: String) {
-        engineSession.load(url: searchTerm)
+    func loadUrlOrSearch(_ searchTerm: SearchTerm) {
+        guard searchTerm.isValidUrl, let url = URL(string: searchTerm.searchTerm) else {
+            search(searchTerm)
+            return
+        }
+
+        engineSession.load(url: url.absoluteString)
+    }
+
+    private func search(_ searchTerm: SearchTerm) {
+        guard let url = searchTerm.encodedURL else { return }
+
+        engineSession.load(url: url.absoluteString)
     }
 
     // MARK: - EngineSessionDelegate
