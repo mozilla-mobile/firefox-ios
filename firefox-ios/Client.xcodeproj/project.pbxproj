@@ -39,7 +39,6 @@
 		0BF8F8DA1AEFF1C900E90BC2 /* noTitle.html in Resources */ = {isa = PBXBuildFile; fileRef = 0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */; };
 		158241282820698B00956B39 /* RustRemoteTabsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158241272820698B00956B39 /* RustRemoteTabsTests.swift */; };
 		15DE98FD27FCED4F00F1ECDB /* RustRemoteTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15DE98FC27FCED4F00F1ECDB /* RustRemoteTabs.swift */; };
-		1B3D99F1270E89D0006E1264 /* Telemetry in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D99F0270E89D0006E1264 /* Telemetry */; };
 		1D06AE6624FEE4D5000B092B /* TopSitesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D06AE6524FEE4D5000B092B /* TopSitesProvider.swift */; };
 		1D06AE6A24FEE8D6000B092B /* TabProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D06AE6924FEE8D6000B092B /* TabProvider.swift */; };
 		1D0BA05C24F46A0400D731B5 /* TopSitesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D0BA05B24F46A0400D731B5 /* TopSitesProvider.swift */; };
@@ -7699,7 +7698,6 @@
 				E6231C011B90A44F005ABB0D /* libz.tbd in Frameworks */,
 				E4B3348A1BBF23F9004E2BFF /* AdSupport.framework in Frameworks */,
 				5A871488292EA1440039A5BD /* Fuzi in Frameworks */,
-				1B3D99F1270E89D0006E1264 /* Telemetry in Frameworks */,
 				432BD0242790EBD000A0F3C3 /* Adjust in Frameworks */,
 				0B8E0FF41A932BD500161DC3 /* ImageIO.framework in Frameworks */,
 				435C85F02788F4D00072B526 /* Glean in Frameworks */,
@@ -12060,7 +12058,6 @@
 			);
 			name = Client;
 			packageProductDependencies = (
-				1B3D99F0270E89D0006E1264 /* Telemetry */,
 				433F87CD2788EAB600693368 /* GCDWebServers */,
 				435C85EF2788F4D00072B526 /* Glean */,
 				432BD0232790EBD000A0F3C3 /* Adjust */,
@@ -12381,7 +12378,6 @@
 			);
 			mainGroup = F84B21B51A090F8100AAB793;
 			packageReferences = (
-				1B3D99EF270E89D0006E1264 /* XCRemoteSwiftPackageReference "telemetry-ios" */,
 				433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer" */,
 				433F87D12788EF5B00693368 /* XCRemoteSwiftPackageReference "KIF" */,
 				433F87D62788F34500693368 /* XCRemoteSwiftPackageReference "rust-components-swift" */,
@@ -20859,14 +20855,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		1B3D99EF270E89D0006E1264 /* XCRemoteSwiftPackageReference "telemetry-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/mozilla-mobile/telemetry-ios";
-			requirement = {
-				kind = exactVersion;
-				version = 2.0.0;
-			};
-		};
 		432BD0222790EBD000A0F3C3 /* XCRemoteSwiftPackageReference "ios_sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/adjust/ios_sdk.git";
@@ -20942,11 +20930,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		1B3D99F0270E89D0006E1264 /* Telemetry */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B3D99EF270E89D0006E1264 /* XCRemoteSwiftPackageReference "telemetry-ios" */;
-			productName = Telemetry;
-		};
 		216A0D752A40E7AB008077BA /* Redux */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Redux;
