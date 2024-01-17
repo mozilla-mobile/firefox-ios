@@ -95,6 +95,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     func tabToolbarDidPressLibrary(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
     }
 
+<<<<<<< HEAD:Client/Frontend/Browser/BrowserViewController/Extensions/BrowserViewController+TabToolbarDelegate.swift
     func tabToolbarDidPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         tabManager.selectedTab?.reload()
     }
@@ -118,6 +119,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         tabManager.selectedTab?.stop()
     }
 
+=======
+>>>>>>> 533a38829 (Add FXIOS-8175 [v122.1] Refresh button to URL bar and keep toolbar button consistent on iPad (#18197)):firefox-ios/Client/Frontend/Browser/BrowserViewController/Extensions/BrowserViewController+TabToolbarDelegate.swift
     func tabToolbarDidPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         updateZoomPageBarVisibility(visible: false)
         tabManager.selectedTab?.goBack()

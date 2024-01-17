@@ -324,9 +324,8 @@ class BrowserViewController: UIViewController,
         let showToolbar = shouldShowToolbarForTraitCollection(newCollection)
         let showTopTabs = shouldShowTopTabsForTraitCollection(newCollection)
 
-        let hideReloadButton = shouldUseiPadSetup(traitCollection: newCollection)
         urlBar.topTabsIsShowing = showTopTabs
-        urlBar.setShowToolbar(!showToolbar, hideReloadButton: hideReloadButton)
+        urlBar.setShowToolbar(!showToolbar)
         toolbar.addNewTabButton.isHidden = showToolbar
 
         if showToolbar {
@@ -1071,7 +1070,7 @@ class BrowserViewController: UIViewController,
             }
         } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
             showEmbeddedWebview()
-            urlBar.shouldHideReloadButton(shouldUseiPadSetup())
+            urlBar.locationView.reloadButton.isHidden = false
         }
 
         if UIDevice.current.userInterfaceIdiom == .pad {
@@ -1267,16 +1266,8 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        if traitCollection.horizontalSizeClass == .compact {
-            state = .home
-        } else {
-            state = isLoading ? .stop : .reload
-        }
-
-        handleMiddleButtonState(state)
-        if !toolbar.isHidden {
-            urlBar.locationView.reloadButton.reloadButtonState = isLoading ? .stop : .reload
-        }
+        handleMiddleButtonState(.home)
+        urlBar.locationView.reloadButton.reloadButtonState = isLoading ? .stop : .reload
         currentMiddleButtonState = state
     }
 
@@ -2292,14 +2283,14 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         if let readerMode = selected?.getContentScript(name: ReaderMode.name()) as? ReaderMode {
-            urlBar.updateReaderModeState(readerMode.state, hideReloadButton: shouldUseiPadSetup())
+            urlBar.updateReaderModeState(readerMode.state)
             if readerMode.state == .active {
                 showReaderModeBar(animated: false)
             } else {
                 hideReaderModeBar(animated: false)
             }
         } else {
-            urlBar.updateReaderModeState(ReaderModeState.unavailable, hideReloadButton: shouldUseiPadSetup())
+            urlBar.updateReaderModeState(ReaderModeState.unavailable)
         }
 
         if topTabsVisible {

@@ -103,9 +103,6 @@ class MockTabToolbar: TabToolbarProtocol {
     var _addNewTabButton = MockToolbarButton()
     var addNewTabButton: ToolbarButton { return _addNewTabButton }
 
-    var _homeButton = MockToolbarButton()
-    var homeButton: ToolbarButton { return _homeButton }
-
     var _appMenuButton = MockToolbarButton()
     var appMenuButton: ToolbarButton { return _appMenuButton }
 
