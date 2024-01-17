@@ -5737,6 +5737,8 @@ extension String {
 
 // MARK: - Strings to be removed
 extension String {
+    /// For more detailed information on how to use this struct, please see
+    /// https://github.com/mozilla-mobile/firefox-ios/wiki/How-to-add-and-modify-Strings#how-to-remove-a-string
     struct OldStrings {
         struct v121 {
             public static let FirefoxSyncLoginsEngine = MZLocalizedString(
