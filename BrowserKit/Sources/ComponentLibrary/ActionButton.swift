@@ -3,26 +3,52 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Common
 
-public class ActionButton: LegacyResizableButton {
-    public var touchUpAction: ((UIButton) -> Void)? {
+public class ActionButton: ResizableButton {
+    public var foregroundColorNormal: UIColor = .clear {
         didSet {
-            setupButton()
+            configuration?.baseForegroundColor = foregroundColorNormal
         }
     }
 
-    required init?(coder aDecoder: NSCoder) { fatalError("init(coder:)") }
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupButton()
+    public var backgroundColorNormal: UIColor = .clear {
+        didSet {
+            configuration?.background.backgroundColor = backgroundColorNormal
+        }
     }
 
-    private func setupButton() {
-        addTarget(self, action: #selector(touchUpInside), for: .touchUpInside)
-    }
+    private var viewModel: ActionButtonViewModel?
 
     @objc
     func touchUpInside(sender: UIButton) {
-        touchUpAction?(sender)
+        viewModel?.touchUpAction?(sender)
+    }
+
+    open func configure(viewModel: ActionButtonViewModel) {
+        self.viewModel = viewModel
+        guard let config = configuration else {
+            return
+        }
+        var updatedConfiguration = config
+
+        updatedConfiguration.title = viewModel.title
+        updatedConfiguration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
+                                                                   size: viewModel.fontSize)
+            return outgoing
+        }
+        configuration = updatedConfiguration
+        self.buttonEdgeInsets = NSDirectionalEdgeInsets(top: viewModel.verticalInset,
+                                                        leading: viewModel.horizontalInset,
+                                                        bottom: viewModel.verticalInset,
+                                                        trailing: viewModel.horizontalInset)
+
+        accessibilityIdentifier = viewModel.a11yIdentifier
+
+        addTarget(self, action: #selector(touchUpInside), for: .touchUpInside)
+
+        layoutIfNeeded()
     }
 }

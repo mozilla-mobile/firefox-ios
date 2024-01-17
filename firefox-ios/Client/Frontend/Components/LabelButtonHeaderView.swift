@@ -26,7 +26,6 @@ struct LabelButtonHeaderViewModel {
 class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
     struct UX {
         static let titleLabelTextSize: CGFloat = 20
-        static let moreButtonTextSize: CGFloat = 15
         static let inBetweenSpace: CGFloat = 12
         static let bottomSpace: CGFloat = 10
         static let bottomButtonSpace: CGFloat = 6
@@ -52,8 +51,6 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
 
     private lazy var moreButton: ActionButton = .build { button in
         button.isHidden = true
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
-                                                                         size: UX.moreButtonTextSize)
     }
 
     // MARK: - Variables
@@ -127,9 +124,10 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
 
         moreButton.isHidden = viewModel.isButtonHidden
         if !viewModel.isButtonHidden {
-            moreButton.setTitle(.RecentlySavedShowAllText, for: .normal)
-            moreButton.touchUpAction = viewModel.buttonAction
-            moreButton.accessibilityIdentifier = viewModel.buttonA11yIdentifier
+            let moreButtonViewModel = ActionButtonViewModel(title: .RecentlySavedShowAllText,
+                                                            a11yIdentifier: viewModel.buttonA11yIdentifier,
+                                                            touchUpAction: viewModel.buttonAction)
+            moreButton.configure(viewModel: moreButtonViewModel)
         }
 
         // Update constant value for `TabDisplayManager` usage that is not using Section inset
@@ -169,7 +167,7 @@ extension LabelButtonHeaderView: ThemeApplicable {
         let moreButtonColor = viewModel?.textColor ?? theme.colors.textAccent
 
         titleLabel.textColor = titleColor
-        moreButton.setTitleColor(moreButtonColor, for: .normal)
+        moreButton.foregroundColorNormal = moreButtonColor
     }
 }
 
