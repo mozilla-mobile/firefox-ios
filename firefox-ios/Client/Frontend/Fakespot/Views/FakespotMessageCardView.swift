@@ -197,7 +197,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         button.addTarget(self, action: #selector(self.linkAction), for: .touchUpInside)
     }
 
-    private lazy var primaryButton: PrimaryRoundedButton = .build { button in
+    private lazy var primaryButton: FakespotMessageCardButton = .build { button in
         button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
     }
 
@@ -269,9 +269,10 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
         ])
 
         if let primaryActionText = viewModel.primaryActionText {
-            let primaryButtonViewModel = PrimaryRoundedButtonViewModel(
+            let primaryButtonViewModel = FakespotMessageCardButtonViewModel(
                     title: primaryActionText,
-                    a11yIdentifier: viewModel.a11yPrimaryActionIdentifier ?? "")
+                    a11yIdentifier: viewModel.a11yPrimaryActionIdentifier ?? "",
+                    type: viewModel.type)
             primaryButton.configure(viewModel: primaryButtonViewModel)
             if primaryButton.superview == nil {
                 containerStackView.addArrangedSubview(primaryButton)
