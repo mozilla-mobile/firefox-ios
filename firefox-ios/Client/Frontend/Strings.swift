@@ -4127,20 +4127,20 @@ extension String {
             value: "Learn more",
             comment: "Label for the Learn more button in the Shopping Experience Opt In onboarding Card (Fakespot)")
         public static let OptInCardDisclaimerText = MZLocalizedString(
-            key: "Shopping.OptInCard.Disclaimer.Text.v120",
+            key: "Shopping.OptInCard.Disclaimer.Text.v123",
             tableName: "Shopping",
-            value: "By selecting “Yes, Try It” you agree to the following from %@:",
-            comment: "Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replaced by the Fakespot app name. After the colon, what appears are two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use.")
+            value: "By selecting “Yes, Try It” you agree to these items:",
+            comment: "Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). After the colon, there will be two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use.")
         public static let OptInCardPrivacyPolicy = MZLocalizedString(
-            key: "Shopping.OptInCard.PrivacyPolicy.Button.Title.v120",
+            key: "Shopping.OptInCard.PrivacyPolicy.Button.Title.v123",
             tableName: "Shopping",
-            value: "Privacy policy",
-            comment: "Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/")
+            value: "%@'s privacy notice",
+            comment: "Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Firefox app name.")
         public static let OptInCardTermsOfUse = MZLocalizedString(
-            key: "Shopping.OptInCard.TermsOfUse.Button.Title.v120",
+            key: "Shopping.OptInCard.TermsOfUse.Button.Title.v123",
             tableName: "Shopping",
-            value: "Terms of use",
-            comment: "Show Firefox Browser Terms of Use page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/")
+            value: "%@'s terms of use",
+            comment: "Show Fakespot Terms of Use page in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Fakespot name.")
         public static let OptInCardMainButtonTitle = MZLocalizedString(
             key: "Shopping.OptInCard.MainButton.Title.v120",
             tableName: "Shopping",
@@ -6085,6 +6085,24 @@ extension String {
                 tableName: "Shopping",
                 value: "Checking review quality",
                 comment: "Title for info card when the product is in analysis mode",
+                lastUsedInVersion: 122)
+            public static let OptInCardDisclaimerText = MZLocalizedString(
+                key: "Shopping.OptInCard.Disclaimer.Text.v120",
+                tableName: "Shopping",
+                value: "By selecting “Yes, Try It” you agree to the following from %@:",
+                comment: "Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replaced by the Fakespot app name. After the colon, what appears are two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use.",
+                lastUsedInVersion: 122)
+            public static let OptInCardPrivacyPolicy = MZLocalizedString(
+                key: "Shopping.OptInCard.PrivacyPolicy.Button.Title.v120",
+                tableName: "Shopping",
+                value: "Privacy policy",
+                comment: "Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/",
+                lastUsedInVersion: 122)
+            public static let OptInCardTermsOfUse = MZLocalizedString(
+                key: "Shopping.OptInCard.TermsOfUse.Button.Title.v120",
+                tableName: "Shopping",
+                value: "Terms of use",
+                comment: "Show Firefox Browser Terms of Use page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/",
                 lastUsedInVersion: 122)
         }
 
