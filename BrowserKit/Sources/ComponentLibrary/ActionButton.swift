@@ -40,7 +40,10 @@ public class ActionButton: ResizableButton {
             return outgoing
         }
         configuration = updatedConfiguration
-        self.buttonEdgeInsets = NSDirectionalEdgeInsets(top: viewModel.verticalInset, leading: viewModel.horizontalInset, bottom: viewModel.verticalInset, trailing: viewModel.horizontalInset)
+        self.buttonEdgeInsets = NSDirectionalEdgeInsets(top: viewModel.verticalInset,
+                                                        leading: viewModel.horizontalInset,
+                                                        bottom: viewModel.verticalInset,
+                                                        trailing: viewModel.horizontalInset)
 
         accessibilityIdentifier = viewModel.a11yIdentifier
 
