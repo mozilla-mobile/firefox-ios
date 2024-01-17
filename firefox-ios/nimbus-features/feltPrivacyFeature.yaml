@@ -20,5 +20,5 @@ features:
       - channel: developer
         value:
           simplified-ui-enabled: true
-          felt-deletion-enabled: false
+          felt-deletion-enabled: true
 

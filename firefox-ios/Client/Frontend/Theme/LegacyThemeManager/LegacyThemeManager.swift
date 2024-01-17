@@ -14,18 +14,8 @@ enum LegacyThemeManagerPrefs: String {
 class LegacyThemeManager {
     static let instance = LegacyThemeManager()
 
-    var current: LegacyTheme = themeFrom(
-        name: UserDefaults.standard.string(forKey: LegacyThemeManagerPrefs.themeName.rawValue)
-    ) {
-        didSet {
-            ensureMainThread {
-                UserDefaults.standard.set(
-                    self.current.name,
-                    forKey: LegacyThemeManagerPrefs.themeName.rawValue
-                )
-            }
-        }
-    }
+    var current: LegacyTheme = themeFrom(name: UserDefaults.standard.string(
+        forKey: LegacyThemeManagerPrefs.themeName.rawValue))
 
     var currentName: BuiltinThemeName {
         return BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
@@ -57,7 +47,10 @@ class LegacyThemeManager {
 
     var systemThemeIsOn: Bool {
         didSet {
-            UserDefaults.standard.set(systemThemeIsOn, forKey: LegacyThemeManagerPrefs.systemThemeIsOn.rawValue)
+            UserDefaults.standard.set(
+                systemThemeIsOn,
+                forKey: LegacyThemeManagerPrefs.systemThemeIsOn.rawValue
+            )
         }
     }
 

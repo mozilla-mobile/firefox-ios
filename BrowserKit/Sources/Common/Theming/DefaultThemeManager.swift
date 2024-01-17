@@ -136,7 +136,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         // As the private theme is a special instance of a theme,
         // we don't want to save it.
         guard newTheme != .privateMode else { return }
-        userDefaults.set(newTheme, forKey: ThemeKeys.themeName)
+        userDefaults.set(newTheme.rawValue, forKey: ThemeKeys.themeName)
     }
 
     private func updateCurrentTheme(to newTheme: ThemeType) {
