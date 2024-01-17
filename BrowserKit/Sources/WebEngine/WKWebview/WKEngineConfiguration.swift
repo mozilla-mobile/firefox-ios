@@ -17,24 +17,20 @@ protocol WKEngineConfiguration {
 struct DefaultEngineConfiguration: WKEngineConfiguration {
     var webViewConfiguration: WKWebViewConfiguration
 
-    init(webViewConfiguration: WKWebViewConfiguration) {
-        self.webViewConfiguration = webViewConfiguration
-    }
-
     func addUserScript(_ userScript: WKUserScript) {
         webViewConfiguration.userContentController.addUserScript(userScript)
     }
 
-    func addInDefaultContentWorld(scriptMessageHandler: WKScriptMessageHandler, 
+    func addInDefaultContentWorld(scriptMessageHandler: WKScriptMessageHandler,
                                   name: String) {
-        webViewConfiguration.userContentController.add(scriptMessageHandler, 
+        webViewConfiguration.userContentController.add(scriptMessageHandler,
                                                        contentWorld: .defaultClient,
                                                        name: name)
     }
 
     func addInPageContentWorld(scriptMessageHandler: WKScriptMessageHandler,
                                name: String) {
-        webViewConfiguration.userContentController.add(scriptMessageHandler, 
+        webViewConfiguration.userContentController.add(scriptMessageHandler,
                                                        contentWorld: .page,
                                                        name: name)
     }

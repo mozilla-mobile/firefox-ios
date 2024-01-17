@@ -17,21 +17,21 @@ class MockWKEngineConfiguration: WKEngineConfiguration {
     func addUserScript(_ userScript: WKUserScript) {
         addUserScriptCalled += 1
     }
-    
+
     func addInDefaultContentWorld(scriptMessageHandler: WKScriptMessageHandler, name: String) {
         scriptNameAdded = name
         addInDefaultContentWorldCalled += 1
     }
-    
+
     func addInPageContentWorld(scriptMessageHandler: WKScriptMessageHandler, name: String) {
         scriptNameAdded = name
         addInPageContentWorldCalled += 1
     }
-    
+
     func removeScriptMessageHandler(forName name: String) {
         removeScriptMessageHandlerCalled += 1
     }
-    
+
     func removeAllUserScripts() {
         removeAllUserScriptsCalled += 1
     }
