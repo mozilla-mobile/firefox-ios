@@ -4038,13 +4038,13 @@ extension String {
         public static let OptInCardPrivacyPolicy = MZLocalizedString(
             key: "Shopping.OptInCard.PrivacyPolicy.Button.Title.v123",
             tableName: "Shopping",
-            value: "Firefox's privacy notice",
-            comment: "Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot).")
+            value: "%@'s privacy notice",
+            comment: "Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Firefox app name.")
         public static let OptInCardTermsOfUse = MZLocalizedString(
             key: "Shopping.OptInCard.TermsOfUse.Button.Title.v123",
             tableName: "Shopping",
-            value: "Fakespot's terms of use",
-            comment: "Show Fakespot Terms of Use page in the Shopping Experience Opt In onboarding Card (Fakespot).")
+            value: "%@'s terms of use",
+            comment: "Show Fakespot Terms of Use page in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Fakespot name.")
         public static let OptInCardMainButtonTitle = MZLocalizedString(
             key: "Shopping.OptInCard.MainButton.Title.v120",
             tableName: "Shopping",

@@ -35,9 +35,11 @@ struct FakespotOptInCardViewModel {
     // MARK: Buttons
     let learnMoreButtonText: String = .Shopping.OptInCardLearnMoreButtonTitle
     let learnMoreButtonA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.learnMoreButton
-    let termsOfUseButtonText: String = .Shopping.OptInCardTermsOfUse
+    let termsOfUseButtonText: String = String.localizedStringWithFormat(.Shopping.OptInCardTermsOfUse,
+                                                                        FakespotName.shortName.rawValue)
     let termsOfUseButtonA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.termsOfUseButton
-    let privacyPolicyButtonText: String = .Shopping.OptInCardPrivacyPolicy
+    let privacyPolicyButtonText: String = String.localizedStringWithFormat(.Shopping.OptInCardPrivacyPolicy,
+                                                                           AppName.shortName.rawValue)
     let privacyPolicyButtonA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.privacyPolicyButton
     let mainButtonText: String = .Shopping.OptInCardMainButtonTitle
     let mainButtonA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.mainButton
