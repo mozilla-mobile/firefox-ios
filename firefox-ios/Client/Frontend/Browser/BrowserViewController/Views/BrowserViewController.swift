@@ -400,7 +400,6 @@ class BrowserViewController: UIViewController,
         // TODO: [FXIOS-7856] Some additional updates for telemetry forthcoming, once iPad multi-window is enabled.
         SearchBarSettingsViewModel.recordLocationTelemetry(for: isBottomSearchBar ? .bottom : .top)
         TabsTelemetry.trackTabsQuantity(tabManager: tabManager)
-
     }
 
     @objc
