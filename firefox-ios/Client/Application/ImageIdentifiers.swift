@@ -39,7 +39,6 @@ public struct ImageIdentifiers {
     public static let menuWarningMask = "warning-mask"
     public static let navTabCounter = "nav-tabcounter"
     public static let newPrivateTab = "quick_action_new_private_tab"
-    public static let nightMode = "menu-NightMode"
     public static let onboardingWelcomev106 = "onboardingWelcome"
     public static let onboardingSyncv106 = "onboardingSync"
     public static let onboardingNotification = "onboardingNotification"

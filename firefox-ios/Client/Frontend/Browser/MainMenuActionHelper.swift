@@ -461,7 +461,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         let nightModeEnabled = NightModeHelper.isActivated()
         let nightModeTitle: String = nightModeEnabled ? .AppMenu.AppMenuTurnOffNightMode : .AppMenu.AppMenuTurnOnNightMode
         let nightMode = SingleActionViewModel(title: nightModeTitle,
-                                              iconString: ImageIdentifiers.nightMode,
+                                              iconString: StandardImageIdentifiers.Large.nightMode,
                                               isEnabled: nightModeEnabled) { _ in
             NightModeHelper.toggle(tabManager: self.tabManager)
 
