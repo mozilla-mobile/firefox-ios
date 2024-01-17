@@ -10786,22 +10786,22 @@
 		E16258F02A83D5DE00522742 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				8CAF299F2AA5E76B00DC3486 /* FakespotMessageCardView.swift */,
 				8C6F94632A972EB300415FF6 /* FakespotAdjustRatingView.swift */,
-				8C6F94642A972EB300415FF6 /* FakespotStarRatingView.swift */,
-				E16258EE2A83BE0800522742 /* FakespotLoadingView.swift */,
-				E1FC23F02A8629380089E14D /* FakespotReliabilityCardView.swift */,
-				E16AD22B2A8A7AE800F0AA58 /* FakespotHighlightsCardView.swift */,
-				E17BE4C32A94BA6900C5124E /* FakespotHighlightGroupView.swift */,
-				E1C437A22A96343A00D188CB /* FakespotFadeLabel.swift */,
-				DF5D47512A9381C700D6AE74 /* FakespotSettingsCardView.swift */,
-				DF1E6AAA2A976FE7000D4854 /* FakespotNoAnalysisCardView.swift */,
-				DF529E9E2AA86FF4003C5373 /* FakespotReviewQualityCardView.swift */,
-				AB0303292AB47AF300DCD8EF /* FakespotOptInCardView.swift */,
-				DF529EA02AB1B421003C5373 /* FakespotReliabilityScoreView.swift */,
 				AB6FEA1F2AEA5CA200E7B2F2 /* FakespotAdView.swift */,
 				E134D57F2B31FF3000C6B17B /* FakespotAdLinkButton.swift */,
+				E1C437A22A96343A00D188CB /* FakespotFadeLabel.swift */,
+				E16AD22B2A8A7AE800F0AA58 /* FakespotHighlightsCardView.swift */,
+				E17BE4C32A94BA6900C5124E /* FakespotHighlightGroupView.swift */,
+				E16258EE2A83BE0800522742 /* FakespotLoadingView.swift */,
+				8CAF299F2AA5E76B00DC3486 /* FakespotMessageCardView.swift */,
+				DF1E6AAA2A976FE7000D4854 /* FakespotNoAnalysisCardView.swift */,
+				AB0303292AB47AF300DCD8EF /* FakespotOptInCardView.swift */,
 				BD6B361D2B3C2511005E5345 /* CircularProgressView.swift */,
+				E1FC23F02A8629380089E14D /* FakespotReliabilityCardView.swift */,
+				DF529EA02AB1B421003C5373 /* FakespotReliabilityScoreView.swift */,
+				DF529E9E2AA86FF4003C5373 /* FakespotReviewQualityCardView.swift */,
+				DF5D47512A9381C700D6AE74 /* FakespotSettingsCardView.swift */,
+				8C6F94642A972EB300415FF6 /* FakespotStarRatingView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
