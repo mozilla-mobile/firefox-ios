@@ -27,14 +27,11 @@ public struct Strings {
 ///   - value: The value is always the text that needs to be localized.  This can be nil for existing strings, `new string shouldn't have a nil value`.
 ///   - comment: The comment is an explanation aimed towards people that will translate the string value. Make sure it follow the l10n documentation
 ///   https://mozilla-l10n.github.io/documentation/localization/dev_best_practices.html#add-localization-notes
-///   - lastUsedInVersion: Whenever we remove or modify a string, we keep the translated version of that string a bit longer to ensure the last version it was
-///   used in will be release in the App Store before we remove the string from the l10n repository
 private func MZLocalizedString(
     key: String,
     tableName: String?,
     value: String?,
-    comment: String,
-    lastUsedInVersion: Int? = nil
+    comment: String
 ) -> String {
     return NSLocalizedString(key,
                              tableName: tableName,
