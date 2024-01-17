@@ -243,28 +243,8 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     fileprivate func commonInit() {
         locationContainer.addSubview(locationView)
 
-<<<<<<< HEAD:Client/Frontend/Toolbar+URLBar/URLBarView.swift
-        [scrollToTopButton, line, tabsButton, progressBar, cancelButton, showQRScannerButton,
-         homeButton, bookmarksButton, appMenuButton, addNewTabButton, forwardButton, backButton,
+        [scrollToTopButton, line, tabsButton, progressBar, cancelButton, showQRScannerButton, bookmarksButton, appMenuButton, addNewTabButton, forwardButton, backButton,
          multiStateButton, locationContainer, searchIconImageView].forEach {
-=======
-        [
-            scrollToTopButton,
-            line,
-            tabsButton,
-            progressBar,
-            cancelButton,
-            showQRScannerButton,
-            bookmarksButton,
-            appMenuButton,
-            addNewTabButton,
-            forwardButton,
-            backButton,
-            multiStateButton,
-            locationContainer,
-            searchIconImageView
-        ].forEach {
->>>>>>> 533a38829 (Add FXIOS-8175 [v122.1] Refresh button to URL bar and keep toolbar button consistent on iPad (#18197)):firefox-ios/Client/Frontend/Toolbar+URLBar/URLBarView.swift
             addSubview($0)
         }
 
@@ -705,21 +685,7 @@ extension URLBarView: TabToolbarProtocol {
                 return [locationTextField, cancelButton]
             } else {
                 if toolbarIsShowing {
-<<<<<<< HEAD:Client/Frontend/Toolbar+URLBar/URLBarView.swift
-                    return [backButton, forwardButton, multiStateButton, locationView, tabsButton, homeButton, bookmarksButton, appMenuButton, addNewTabButton, progressBar]
-=======
-                    return [
-                        backButton,
-                        forwardButton,
-                        multiStateButton,
-                        locationView,
-                        tabsButton,
-                        bookmarksButton,
-                        appMenuButton,
-                        addNewTabButton,
-                        progressBar
-                    ]
->>>>>>> 533a38829 (Add FXIOS-8175 [v122.1] Refresh button to URL bar and keep toolbar button consistent on iPad (#18197)):firefox-ios/Client/Frontend/Toolbar+URLBar/URLBarView.swift
+                    return [backButton, forwardButton, multiStateButton, locationView, tabsButton, bookmarksButton, appMenuButton, addNewTabButton, progressBar]
                 } else {
                     return [locationView, progressBar]
                 }

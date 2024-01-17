@@ -124,13 +124,6 @@ open class TabToolbarHelper: NSObject {
         toolbar.multiStateButton.setImage(ImageHome, for: .normal)
         toolbar.multiStateButton.accessibilityLabel = .TabToolbarReloadAccessibilityLabel
         toolbar.multiStateButton.showsLargeContentViewer = true
-<<<<<<< HEAD:Client/Frontend/Toolbar+URLBar/TabToolbarHelper.swift
-
-        let longPressMultiStateButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressMultiStateButton))
-        longPressMultiStateButton.delegate = self
-        toolbar.multiStateButton.addGestureRecognizer(longPressMultiStateButton)
-=======
->>>>>>> 533a38829 (Add FXIOS-8175 [v122.1] Refresh button to URL bar and keep toolbar button consistent on iPad (#18197)):firefox-ios/Client/Frontend/Toolbar+URLBar/TabToolbarHelper.swift
         toolbar.multiStateButton.addTarget(self, action: #selector(didPressMultiStateButton), for: .touchUpInside)
 
         toolbar.tabsButton.addTarget(self, action: #selector(didClickTabs), for: .touchUpInside)

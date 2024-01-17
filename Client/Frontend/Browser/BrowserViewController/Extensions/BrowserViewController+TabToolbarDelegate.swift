@@ -95,32 +95,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     func tabToolbarDidPressLibrary(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
     }
 
-<<<<<<< HEAD:Client/Frontend/Browser/BrowserViewController/Extensions/BrowserViewController+TabToolbarDelegate.swift
-    func tabToolbarDidPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        tabManager.selectedTab?.reload()
-    }
-
-    func tabToolbarDidLongPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        guard let tab = tabManager.selectedTab else { return }
-
-        let urlActions = self.getRefreshLongPressMenu(for: tab)
-        guard !urlActions.isEmpty else { return }
-
-        let generator = UIImpactFeedbackGenerator(style: .heavy)
-        generator.impactOccurred()
-
-        let shouldSuppress = UIDevice.current.userInterfaceIdiom == .pad
-        let style: UIModalPresentationStyle = shouldSuppress ? .popover : .overCurrentContext
-        let viewModel = PhotonActionSheetViewModel(actions: [urlActions], closeButtonTitle: .CloseButtonTitle, modalStyle: style)
-        presentSheetWith(viewModel: viewModel, on: self, from: button)
-    }
-
-    func tabToolbarDidPressStop(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        tabManager.selectedTab?.stop()
-    }
-
-=======
->>>>>>> 533a38829 (Add FXIOS-8175 [v122.1] Refresh button to URL bar and keep toolbar button consistent on iPad (#18197)):firefox-ios/Client/Frontend/Browser/BrowserViewController/Extensions/BrowserViewController+TabToolbarDelegate.swift
     func tabToolbarDidPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         updateZoomPageBarVisibility(visible: false)
         tabManager.selectedTab?.goBack()
