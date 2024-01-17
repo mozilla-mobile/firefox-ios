@@ -11,7 +11,6 @@ import Storage
 import SnapKit
 import Account
 import MobileCoreServices
-import Telemetry
 import Common
 import ComponentLibrary
 import Redux

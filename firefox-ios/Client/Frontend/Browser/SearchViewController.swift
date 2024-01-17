@@ -5,7 +5,6 @@
 import UIKit
 import Shared
 import Storage
-import Telemetry
 import Common
 import SiteImageView
 
@@ -435,7 +434,7 @@ class SearchViewController: SiteTableViewController,
             return
         }
         let extras = [
-            ExtraKey.recordSearchLocation.rawValue: SearchesMeasurement.SearchLocation.quickSearch,
+            ExtraKey.recordSearchLocation.rawValue: SearchLocation.quickSearch,
             ExtraKey.recordSearchEngineID.rawValue: engine.engineID as Any
         ] as [String: Any]
         TelemetryWrapper.gleanRecordEvent(category: .action,
@@ -636,7 +635,7 @@ class SearchViewController: SiteTableViewController,
             else { return }
 
             let extras = [
-                ExtraKey.recordSearchLocation.rawValue: SearchesMeasurement.SearchLocation.suggestion,
+                ExtraKey.recordSearchLocation.rawValue: SearchLocation.suggestion,
                 ExtraKey.recordSearchEngineID.rawValue: defaultEngine.engineID as Any
             ] as [String: Any]
             TelemetryWrapper.gleanRecordEvent(category: .action,
