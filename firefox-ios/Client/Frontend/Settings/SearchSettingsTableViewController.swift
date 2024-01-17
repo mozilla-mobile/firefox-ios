@@ -204,7 +204,7 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
                     )
                 )
                 setting.onConfigureCell(cell, theme: themeManager.currentTheme)
-                setting.control.addTarget(
+                setting.control.switchView.addTarget(
                     self,
                     action: #selector(didToggleEnableNonSponsoredSuggestions),
                     for: .valueChanged
@@ -224,7 +224,7 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
                     )
                 )
                 setting.onConfigureCell(cell, theme: themeManager.currentTheme)
-                setting.control.addTarget(
+                setting.control.switchView.addTarget(
                     self,
                     action: #selector(didToggleEnableSponsoredSuggestions),
                     for: .valueChanged
