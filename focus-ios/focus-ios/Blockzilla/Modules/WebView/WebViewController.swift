@@ -379,6 +379,16 @@ extension WebViewController: UIScrollViewDelegate {
 }
 
 extension WebViewController: WKNavigationDelegate {
+    func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
+        // validate the URL using URIFixup
+        guard let urlString = webView.url?.absoluteString,
+              URIFixup.getURL(entry: urlString) != nil else {
+            // URL failed validation, prevent loading
+            stop()
+            return
+        }
+    }
+
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         delegate?.webControllerDidStartNavigation(self)
         trackingProtectionManager.trackingProtectionStatus.trackingInformation = TPPageStats()
