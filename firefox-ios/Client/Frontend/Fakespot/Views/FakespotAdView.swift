@@ -92,7 +92,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         static let titleBottomSpacing: CGFloat = 14
         static let horizontalElementSpacing: CGFloat = 12
         static let verticalElementSpacing: CGFloat = 8
-        static let starSize: CGFloat = 24
+        static let starSize: CGFloat = 20
         static let starMaxSize: CGFloat = 42
 
         static let productImageCornerRadius: CGFloat = 2
