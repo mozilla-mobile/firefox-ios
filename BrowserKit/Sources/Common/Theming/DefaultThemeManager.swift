@@ -35,6 +35,10 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     public var window: UIWindow?
 
+    public var isSystemThemeOn: Bool {
+        return userDefaults.bool(forKey: ThemeKeys.systemThemeIsOn)
+    }
+
     // MARK: - Init
 
     public init(userDefaults: UserDefaultsInterface = UserDefaults.standard,
