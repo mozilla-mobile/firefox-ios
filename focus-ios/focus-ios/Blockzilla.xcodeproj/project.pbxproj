@@ -239,7 +239,6 @@
 		F8324CE6264EA223007E4BFA /* style.css in Resources */ = {isa = PBXBuildFile; fileRef = F8324CE1264EA223007E4BFA /* style.css */; };
 		F85F7A292655AD5800395515 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A282655AD5800395515 /* SnapKit */; };
 		F85F7A2B2655AD5800395515 /* Fuzi in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A2A2655AD5800395515 /* Fuzi */; };
-		F85F7A2F2655AD5800395515 /* Telemetry in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A2E2655AD5800395515 /* Telemetry */; };
 		F861799B2795D95E00CFD324 /* InternalExperimentsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F861799A2795D95E00CFD324 /* InternalExperimentsSettingsView.swift */; };
 		F861799D2795EE9800CFD324 /* InternalExperimentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F861799C2795EE9800CFD324 /* InternalExperimentDetailView.swift */; };
 		F861799F27961F4200CFD324 /* InternalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F861799E27961F4200CFD324 /* InternalSettings.swift */; };
@@ -1253,7 +1252,6 @@
 				CDFA746F27ABD43D0055FE55 /* Glean in Frameworks */,
 				45E8FFE72828DE4A0027A8F5 /* FocusAppServices in Frameworks */,
 				C8FB1E6427F59D9C00C60DC6 /* UIHelpers in Frameworks */,
-				F85F7A2F2655AD5800395515 /* Telemetry in Frameworks */,
 				F8B92FBE279EC73700183998 /* Sentry in Frameworks */,
 				C8FB1E6627F5A79300C60DC6 /* DesignSystem in Frameworks */,
 				C82F45F728193EE8000D7D84 /* AppShortcuts in Frameworks */,
@@ -2081,7 +2079,6 @@
 			packageProductDependencies = (
 				F85F7A282655AD5800395515 /* SnapKit */,
 				F85F7A2A2655AD5800395515 /* Fuzi */,
-				F85F7A2E2655AD5800395515 /* Telemetry */,
 				F8B92FBD279EC73700183998 /* Sentry */,
 				CDFA746E27ABD43D0055FE55 /* Glean */,
 				C8FB1E6327F59D9C00C60DC6 /* UIHelpers */,
@@ -2276,7 +2273,6 @@
 			packageReferences = (
 				F8324C2D264C807C007E4BFA /* XCRemoteSwiftPackageReference "SnapKit" */,
 				F8324CB8264DC8ED007E4BFA /* XCRemoteSwiftPackageReference "Fuzi" */,
-				F8324E0726556E45007E4BFA /* XCRemoteSwiftPackageReference "telemetry-ios" */,
 				F8B92FBC279EC73700183998 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 				CDFA746D27ABD43D0055FE55 /* XCRemoteSwiftPackageReference "glean-swift" */,
 				45E8FFE52828DE4A0027A8F5 /* XCRemoteSwiftPackageReference "rust-components-swift" */,
@@ -6536,14 +6532,6 @@
 				version = 3.1.3;
 			};
 		};
-		F8324E0726556E45007E4BFA /* XCRemoteSwiftPackageReference "telemetry-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/mozilla-mobile/telemetry-ios";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 		F8B92FBC279EC73700183998 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa";
@@ -6598,11 +6586,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F8324CB8264DC8ED007E4BFA /* XCRemoteSwiftPackageReference "Fuzi" */;
 			productName = Fuzi;
-		};
-		F85F7A2E2655AD5800395515 /* Telemetry */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F8324E0726556E45007E4BFA /* XCRemoteSwiftPackageReference "telemetry-ios" */;
-			productName = Telemetry;
 		};
 		F8B92FBD279EC73700183998 /* Sentry */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import Telemetry
 import Glean
 import Sentry
 import Combine
@@ -229,10 +228,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             browserViewController.navigationController?.popViewController(animated: true)
             browserViewController.resetBrowser(hidePreviousSession: true)
             Settings.setSiriRequestErase(to: false)
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.siri, object: TelemetryEventObject.eraseInBackground)
             GleanMetrics.Siri.eraseInBackground.record()
         }
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.foreground, object: TelemetryEventObject.app)
 
         if isWidgetURL {
             _ = NavigationPath.handle(application, navigation: .widget, with: browserViewController)
@@ -240,8 +237,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         if let url = queuedUrl {
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.openedFromExtension, object: TelemetryEventObject.app)
-
             browserViewController.ensureBrowsingMode()
             browserViewController.deactivateUrlBarOnHomeView()
             browserViewController.dismissSettings()
@@ -249,8 +244,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             browserViewController.submit(url: url, source: .action)
             queuedUrl = nil
         } else if let text = queuedString {
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.openedFromExtension, object: TelemetryEventObject.app)
-
             browserViewController.ensureBrowsingMode()
             browserViewController.deactivateUrlBarOnHomeView()
             browserViewController.dismissSettings()
@@ -271,14 +264,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        // Record an event indicating that we have entered the background and end our telemetry
-        // session. This gets called every time the app goes to background but should not get
+        // This gets called every time the app goes to background but should not get
         // called for *temporary* interruptions such as an incoming phone call until the user
         // takes action and we are officially backgrounded.
         appPhase = .didEnterBackground
-        let orientation = UIDevice.current.orientation.isPortrait ? "Portrait" : "Landscape"
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.background, object:
-            TelemetryEventObject.app, value: nil, extras: ["orientation": orientation])
     }
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
@@ -288,7 +277,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         switch userActivity.activityType {
         case "org.mozilla.ios.Klar.eraseAndOpen":
             browserViewController.resetBrowser(hidePreviousSession: true)
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.siri, object: TelemetryEventObject.eraseAndOpen)
             GleanMetrics.Siri.eraseAndOpen.record()
         case "org.mozilla.ios.Klar.openUrl":
             guard let urlString = userActivity.userInfo?["url"] as? String,
@@ -297,12 +285,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             browserViewController.ensureBrowsingMode()
             browserViewController.deactivateUrlBarOnHomeView()
             browserViewController.submit(url: url, source: .action)
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.siri, object: TelemetryEventObject.openFavoriteSite)
             GleanMetrics.Siri.openFavoriteSite.record()
         case "EraseIntent":
             guard userActivity.interaction?.intent as? EraseIntent != nil else { return false }
             browserViewController.resetBrowser()
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.siri, object: TelemetryEventObject.eraseInBackground)
             GleanMetrics.Siri.eraseInBackground.record()
         default: break
         }
@@ -355,52 +341,9 @@ extension AppDelegate {
 extension AppDelegate {
 
     func setupTelemetry() {
-
-        let telemetryConfig = Telemetry.default.configuration
-        telemetryConfig.appName = AppInfo.isKlar ? "Klar" : "Focus"
-        telemetryConfig.userDefaultsSuiteName = AppInfo.sharedContainerIdentifier
-        telemetryConfig.appVersion = AppInfo.shortVersion
-
-        // Since Focus always clears the caches directory and Telemetry files are
-        // excluded from iCloud backup, we store pings in documents.
-        telemetryConfig.dataDirectory = .documentDirectory
-
         let activeSearchEngine = SearchEngineManager(prefs: UserDefaults.standard).activeEngine
         let defaultSearchEngineProvider = activeSearchEngine.isCustom ? "custom" : activeSearchEngine.name
-        telemetryConfig.defaultSearchEngineProvider = defaultSearchEngineProvider
-
         GleanMetrics.Search.defaultEngine.set(defaultSearchEngineProvider)
-
-        telemetryConfig.measureUserDefaultsSetting(forKey: SearchEngineManager.prefKeyEngine, withDefaultValue: defaultSearchEngineProvider)
-        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockAds, withDefaultValue: Settings.getToggle(.blockAds))
-        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockAnalytics, withDefaultValue: Settings.getToggle(.blockAnalytics))
-        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockSocial, withDefaultValue: Settings.getToggle(.blockSocial))
-        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockOther, withDefaultValue: Settings.getToggle(.blockOther))
-        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockFonts, withDefaultValue: Settings.getToggle(.blockFonts))
-        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.biometricLogin, withDefaultValue: Settings.getToggle(.biometricLogin))
-        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.enableSearchSuggestions, withDefaultValue: Settings.getToggle(.enableSearchSuggestions))
-
-        #if DEBUG
-            telemetryConfig.updateChannel = "debug"
-            telemetryConfig.isCollectionEnabled = false
-            telemetryConfig.isUploadEnabled = false
-        #else
-            telemetryConfig.updateChannel = "release"
-            telemetryConfig.isCollectionEnabled = Settings.getToggle(.sendAnonymousUsageData)
-            telemetryConfig.isUploadEnabled = Settings.getToggle(.sendAnonymousUsageData)
-        #endif
-
-        Telemetry.default.add(pingBuilderType: CorePingBuilder.self)
-        Telemetry.default.add(pingBuilderType: FocusEventPingBuilder.self)
-
-        // Start the telemetry session and record an event indicating that we have entered the
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.foreground, object: TelemetryEventObject.app)
-
-        if let clientId = UserDefaults
-            .standard.string(forKey: "telemetry-key-prefix-clientId")
-            .flatMap(UUID.init(uuidString:)) {
-            GleanMetrics.LegacyIds.clientId.set(clientId)
-        }
 
         if UserDefaults.standard.bool(forKey: GleanLogPingsToConsole) {
             let url = URL(string: "focus-glean-settings://glean?logPings=true", invalidCharacters: false)!

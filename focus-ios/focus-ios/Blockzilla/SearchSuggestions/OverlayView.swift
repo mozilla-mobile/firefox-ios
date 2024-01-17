@@ -4,7 +4,6 @@
 
 import UIKit
 import SnapKit
-import Telemetry
 import Glean
 import UIHelpers
 
@@ -462,7 +461,6 @@ class OverlayView: UIView {
         let activeSearchEngine = SearchEngineManager(prefs: UserDefaults.standard).activeEngine
         let defaultSearchEngineProvider = activeSearchEngine.isCustom ? "custom" : activeSearchEngine.name
         if sender.getIndex() == 0 {
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.searchSuggestionNotSelected)
             GleanMetrics
                 .SearchSuggestions
                 .searchTapped
@@ -472,7 +470,6 @@ class OverlayView: UIView {
                         .SearchTappedExtra(engineName: defaultSearchEngineProvider)
                 )
         } else {
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.searchSuggestionSelected)
             GleanMetrics
                 .SearchSuggestions
                 .suggestionTapped

@@ -5,7 +5,6 @@
 import Foundation
 import SnapKit
 import UIKit
-import Telemetry
 import Glean
 import Combine
 import UIHelpers
@@ -350,10 +349,6 @@ class TrackingProtectionViewController: UIViewController {
     }
 
     fileprivate func updateTelemetry(_ settingsKey: SettingsToggle, _ isOn: Bool) {
-        let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: "setting", value: settingsKey.rawValue)
-        telemetryEvent.addExtra(key: "to", value: isOn)
-        Telemetry.default.recordEvent(telemetryEvent)
-
         Settings.set(isOn, forToggle: settingsKey)
         ContentBlockerHelper.shared.reload()
     }
@@ -377,15 +372,6 @@ class TrackingProtectionViewController: UIViewController {
     }
 
     private func toggleProtection(isOn: Bool) {
-        let telemetryEvent = TelemetryEvent(
-            category: TelemetryEventCategory.action,
-            method: TelemetryEventMethod.change,
-            object: "setting",
-            value: SettingsToggle.trackingProtection.rawValue
-        )
-        telemetryEvent.addExtra(key: "to", value: isOn)
-        Telemetry.default.recordEvent(telemetryEvent)
-
         GleanMetrics.TrackingProtection.trackingProtectionChanged.record(.init(isEnabled: isOn))
         GleanMetrics.TrackingProtection.hasEverChangedEtp.set(true)
 

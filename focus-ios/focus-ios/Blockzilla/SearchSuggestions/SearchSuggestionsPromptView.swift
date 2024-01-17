@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import Telemetry
 import Glean
 
 protocol SearchSuggestionsPromptViewDelegate: AnyObject {
@@ -156,13 +155,11 @@ class SearchSuggestionsPromptView: UIView {
 
     @objc private func didPressDisable() {
         delegate?.searchSuggestionsPromptView(self, didEnable: false)
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.searchSuggestionsOff)
         GleanMetrics.ShowSearchSuggestions.disabledFromPanel.record()
     }
 
     @objc private func didPressEnable() {
         delegate?.searchSuggestionsPromptView(self, didEnable: true)
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.searchSuggestionsOn)
         GleanMetrics.ShowSearchSuggestions.enabledFromPanel.record()
     }
 }

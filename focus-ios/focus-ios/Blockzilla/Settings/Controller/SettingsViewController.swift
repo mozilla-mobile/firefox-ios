@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import Telemetry
 import Intents
 import IntentsUI
 import Glean
@@ -531,10 +530,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let toggle = toggles.values.filter { $0.values.filter { $0.toggle == sender } != []}[0].values.filter { $0.toggle == sender }[0]
 
         func updateSetting() {
-            let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: "setting", value: toggle.setting.rawValue)
-            telemetryEvent.addExtra(key: "to", value: sender.isOn)
-            Telemetry.default.recordEvent(telemetryEvent)
-
             Settings.set(sender.isOn, forToggle: toggle.setting)
             ContentBlockerHelper.shared.reload()
             Utils.reloadSafariContentBlocker()
@@ -543,8 +538,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         // The following settings are special and need to be in effect immediately.
 
         if toggle.setting == .sendAnonymousUsageData {
-            Telemetry.default.configuration.isCollectionEnabled = sender.isOn
-            Telemetry.default.configuration.isUploadEnabled = sender.isOn
             Glean.shared.setUploadEnabled(sender.isOn)
             if !sender.isOn {
                 NimbusWrapper.shared.nimbus.resetTelemetryIdentifiers()

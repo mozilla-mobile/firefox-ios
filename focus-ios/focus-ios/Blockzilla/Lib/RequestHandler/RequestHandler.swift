@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import Telemetry
 
 private let internalSchemes: Set<String> = ["http", "https", "ftp", "file", "about", "javascript", "data"]
 
@@ -35,12 +34,10 @@ class RequestHandler {
                 alertCallback(alert)
             default:
                 let openAction = UIAlertAction(title: UIConstants.strings.open, style: .default) { _ in
-                    Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.requestHandler, value: "external link")
                     UIApplication.shared.open(url, options: [:])
                 }
 
                 let cancelAction = UIAlertAction(title: UIConstants.strings.externalLinkCancel, style: .cancel) { _ in
-                    Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.cancel, object: TelemetryEventObject.requestHandler, value: "external link")
                 }
 
                 let alert = UIAlertController(title: String(format: UIConstants.strings.externalAppLink, AppInfo.productName),

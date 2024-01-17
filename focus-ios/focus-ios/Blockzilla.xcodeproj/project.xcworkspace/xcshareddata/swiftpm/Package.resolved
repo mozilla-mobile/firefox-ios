@@ -45,15 +45,6 @@
           "revision": "f222cbdf325885926566172f6f5f06af95473158",
           "version": "5.6.0"
         }
-      },
-      {
-        "package": "Telemetry",
-        "repositoryURL": "https://github.com/mozilla-mobile/telemetry-ios",
-        "state": {
-          "branch": "main",
-          "revision": "68f2d813320c9fda2fb4aee4548c64293500200a",
-          "version": null
-        }
       }
     ]
   },

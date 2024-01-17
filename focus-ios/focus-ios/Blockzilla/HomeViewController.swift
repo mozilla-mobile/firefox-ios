@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import Telemetry
 import Onboarding
 
 protocol HomeViewControllerDelegate: AnyObject {
@@ -104,7 +103,6 @@ class HomeViewController: UIViewController {
                         self.delegate?.homeViewControllerDidTapShareTrackers(self, sender: sender)
                     }
                 )))
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.trackerStatsShareButton)
     }
 
     @objc private func rotated() {
@@ -139,24 +137,6 @@ class HomeViewController: UIViewController {
 
     private func showTips() {
         tipsViewController.view.isHidden = false
-    }
-
-    func logTelemetry(for tip: TipManager.Tip) {
-
-        switch tip.identifier {
-        case TipManager.TipKey.biometricTip:
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.biometricTip)
-        case TipManager.TipKey.requestDesktopTip:
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.requestDesktopTip)
-        case TipManager.TipKey.siriEraseTip:
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.siriEraseTip)
-        case TipManager.TipKey.siriFavoriteTip:
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.siriFavoriteTip)
-        case TipManager.TipKey.sitesNotWorkingTip:
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.sitesNotWorkingTip)
-        default:
-            break
-        }
     }
 
     func updateUI(urlBarIsActive: Bool, isBrowsing: Bool = false) {

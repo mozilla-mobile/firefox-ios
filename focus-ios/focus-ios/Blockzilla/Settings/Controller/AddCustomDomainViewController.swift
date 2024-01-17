@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import Telemetry
 import Glean
 
 protocol AddCustomDomainViewControllerDelegate: AnyObject {
@@ -115,7 +114,6 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
             guard !error.message.isEmpty else { return }
             Toast(text: error.message).show()
         case .success:
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.customDomain)
             GleanMetrics.SettingsScreen.autocompleteDomainAdded.add()
             Toast(text: UIConstants.strings.autocompleteCustomURLAdded).show()
             finish()

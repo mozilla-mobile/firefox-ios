@@ -5,7 +5,6 @@
 import Foundation
 import UIKit
 import SnapKit
-import Telemetry
 import StoreKit
 import Intents
 import Glean
@@ -379,14 +378,6 @@ class BrowserViewController: UIViewController {
 
         case .onboarding(let onboardingType):
             let dismissOnboarding = { [unowned self] in
-                Telemetry
-                    .default
-                    .recordEvent(
-                        category: TelemetryEventCategory.action,
-                        method: TelemetryEventMethod.click,
-                        object: TelemetryEventObject.onboarding,
-                        value: "finish"
-                    )
                 UserDefaults.standard.set(true, forKey: OnboardingConstants.onboardingDidAppear)
                 urlBar.activateTextField()
                 onboardingEventsHandler.route = nil
@@ -734,8 +725,6 @@ class BrowserViewController: UIViewController {
     func updateFindInPageVisibility(visible: Bool, text: String = "") {
         if visible {
             if findInPageBar == nil {
-                Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.findInPageBar)
-
                 urlBar.dismiss {
                     // Start our animation after urlBar dismisses
                     let findInPageBar = FindInPageBar()
@@ -812,8 +801,6 @@ class BrowserViewController: UIViewController {
                 self.onboardingEventsHandler.send(.clearTapped)
             }
         })
-
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.eraseButton)
 
         userActivity = SiriShortcuts().getActivity(for: .eraseAndOpen)
         let interaction = INInteraction(intent: eraseIntent, response: nil)
@@ -911,12 +898,8 @@ class BrowserViewController: UIViewController {
     func submit(text: String, source: Source) {
         var url = URIFixup.getURL(entry: text)
         if url == nil {
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
-            Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
             recordSearchEvent(source)
             url = searchEngineManager.activeEngine.urlForQuery(text)
-        } else {
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)
         }
 
         if let url = url {
@@ -1216,7 +1199,6 @@ extension BrowserViewController: UIDropInteractionDelegate {
             self.ensureBrowsingMode()
             self.urlBar.fillUrlBar(text: url.absoluteString)
             self.submit(url: url, source: .action)
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.drop, object: TelemetryEventObject.searchBar)
             GleanMetrics.UrlInteraction.dropEnded.record()
         }
     }
@@ -1228,19 +1210,16 @@ extension BrowserViewController: FindInPageBarDelegate {
     }
 
     func findInPage(_ findInPage: FindInPageBar, didFindNextWithText text: String) {
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.findNext)
         findInPageBar?.endEditing(true)
         find(text, function: "findNext")
     }
 
     func findInPage(_ findInPage: FindInPageBar, didFindPreviousWithText text: String) {
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.findPrev)
         findInPageBar?.endEditing(true)
         find(text, function: "findPrevious")
     }
 
     func findInPageDidPressClose(_ findInPage: FindInPageBar) {
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.close, object: TelemetryEventObject.findInPageBar)
         updateFindInPageVisibility(visible: false)
     }
 
@@ -1277,7 +1256,6 @@ extension BrowserViewController: URLBarDelegate {
             guard !error.message.isEmpty else { return }
             Toast(text: error.message).show()
         case .success:
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.customDomain)
             Toast(text: UIConstants.strings.autocompleteCustomURLAdded).show()
         }
     }
@@ -1350,12 +1328,8 @@ extension BrowserViewController: URLBarDelegate {
 
         var url = URIFixup.getURL(entry: text)
         if url == nil {
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
-            Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
             recordSearchEvent(source)
             url = searchEngineManager.activeEngine.urlForQuery(text)
-        } else {
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)
         }
         if let urlBarURL = url {
             submit(url: urlBarURL, source: source)
@@ -1403,7 +1377,6 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidTapShield(_ urlBar: URLBar) {
-        Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.trackingProtectionDrawer))
         GleanMetrics.TrackingProtection.toolbarShieldClicked.add()
 
         guard let modalDelegate = modalDelegate else { return }
@@ -1472,9 +1445,6 @@ extension BrowserViewController: PhotonActionSheetDelegate {
     func photonActionSheetDidToggleProtection(enabled: Bool) {
         enabled ? webViewController.enableTrackingProtection() : webViewController.disableTrackingProtection()
 
-        let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.trackingProtectionToggle)
-        telemetryEvent.addExtra(key: "to", value: enabled)
-        Telemetry.default.recordEvent(telemetryEvent)
         TipManager.sitesNotWorkingTip = false
 
         webViewController.reload()
@@ -1492,10 +1462,7 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 extension BrowserViewController: TrackingProtectionDelegate {
     func trackingProtectionDidToggleProtection(enabled: Bool) {
         enabled ? webViewController.enableTrackingProtection() : webViewController.disableTrackingProtection()
-
-        let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.trackingProtectionToggle)
-        telemetryEvent.addExtra(key: "to", value: enabled)
-        Telemetry.default.recordEvent(telemetryEvent)
+        
         TipManager.sitesNotWorkingTip = false
 
         webViewController.reload()
@@ -1508,8 +1475,6 @@ extension BrowserViewController: HomeViewControllerDelegate {
     }
 
     func homeViewControllerDidTapShareTrackers(_ controller: HomeViewController, sender: UIButton) {
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.share, object: TelemetryEventObject.trackerStatsShareButton)
-
         let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
         let appStoreUrl = URL(string: String(format: "https://mzl.la/2GZBav0"), invalidCharacters: false)
         // Add space after shareTrackerStatsText to add URL in sentence
@@ -1538,18 +1503,14 @@ extension BrowserViewController: HomeViewControllerDelegate {
         guard let action = tip.action else { return }
         switch action {
         case .visit(let topic):
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.releaseTip)
             visit(url: URL(forSupportTopic: topic))
         case .showSettings(let destination):
             switch destination {
             case .siri:
-                Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.siriEraseTip)
                 showSettings(shouldScrollToSiri: true)
             case .biometric:
-                Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.biometricTip)
                 showSettings()
             case .siriFavorite:
-                Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.siriFavoriteTip)
                 showSiriFavoriteSettings()
             }
         }
@@ -1568,8 +1529,6 @@ extension BrowserViewController: OverlayViewDelegate {
 
     func overlayView(_ overlayView: OverlayView, didSearchForQuery query: String) {
         if searchEngineManager.activeEngine.urlForQuery(query) != nil {
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.selectQuery, object: TelemetryEventObject.searchBar)
-            Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
             urlBar(urlBar, didSubmitText: query, source: .suggestion)
         }
 
@@ -1596,7 +1555,6 @@ extension BrowserViewController: OverlayViewDelegate {
             guard !error.message.isEmpty else { return }
             Toast(text: error.message).show()
         case .success:
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.customDomain)
             Toast(text: UIConstants.strings.autocompleteCustomURLAdded).show()
         }
     }
@@ -1610,12 +1568,8 @@ extension BrowserViewController: OverlayViewDelegate {
 
         var url = URIFixup.getURL(entry: text)
         if url == nil {
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
-            Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
             recordSearchEvent(.suggestion)
             url = searchEngineManager.activeEngine.urlForQuery(text)
-        } else {
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)
         }
         if let overlayURL = url {
             submit(url: overlayURL, source: .suggestion)
@@ -1954,7 +1908,6 @@ extension BrowserViewController: MenuActionable {
 
         UIApplication.shared.open(firefoxURL, options: [:])
 
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.menu, value: "firefox")
         GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "open_in_firefox"))
     }
 
@@ -1967,7 +1920,6 @@ extension BrowserViewController: MenuActionable {
     func openInDefaultBrowser(url: URL) {
         UIApplication.shared.open(url, options: [:])
 
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.menu, value: "default")
         GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "open_in_default_browser"))
     }
 
@@ -2003,14 +1955,12 @@ extension BrowserViewController: MenuActionable {
     func requestDesktopBrowsing() {
         NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification)))
 
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.requestDesktop)
         GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "desktop_view_on"))
     }
 
     func requestMobileBrowsing() {
         NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: UIConstants.strings.requestMobileNotification)))
 
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.requestMobile)
         GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "desktop_view_off"))
     }
 
@@ -2049,7 +1999,6 @@ extension BrowserViewController: MenuActionable {
 
         modalDelegate.presentModal(viewController: settingsNavController, animated: true)
 
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.settingsButton)
         GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "settings"))
     }
 

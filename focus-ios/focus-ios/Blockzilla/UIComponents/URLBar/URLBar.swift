@@ -4,7 +4,6 @@
 
 import UIKit
 import SnapKit
-import Telemetry
 import Glean
 import Combine
 
@@ -651,7 +650,6 @@ class URLBar: UIView {
 
     @objc func addCustomURL() {
         guard let url = self.url else { return }
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.quickAddCustomDomainButton)
         delegate?.urlBar(self, didAddCustomURL: url)
     }
 
@@ -670,7 +668,6 @@ class URLBar: UIView {
         delegate?.urlBarDidActivate(self)
         delegate?.urlBar(self, didSubmitText: clipboardString, source: .action)
 
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.pasteAndGo)
         GleanMetrics.UrlInteraction.pasteAndGo.record()
     }
 
@@ -1104,15 +1101,10 @@ extension URLBar: AutocompleteTextFieldDelegate {
         var source = Source.action
         if let autocompleteText = autocompleteTextField.text, autocompleteText != userInputText {
             source = .topsite
-            Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.autofill))
         }
         userInputText = nil
 
         delegate?.urlBar(self, didSubmitText: autocompleteTextField.text ?? "", source: source)
-
-        if Settings.getToggle(.enableSearchSuggestions) {
-            Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.searchSuggestionNotSelected))
-        }
 
         return true
     }
@@ -1143,7 +1135,6 @@ extension URLBar: UIDragInteractionDelegate {
     func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
         guard let url = url, let itemProvider = NSItemProvider(contentsOf: url) else { return [] }
         let dragItem = UIDragItem(itemProvider: itemProvider)
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.drag, object: TelemetryEventObject.searchBar)
         GleanMetrics.UrlInteraction.dragStarted.record()
         return [dragItem]
     }
