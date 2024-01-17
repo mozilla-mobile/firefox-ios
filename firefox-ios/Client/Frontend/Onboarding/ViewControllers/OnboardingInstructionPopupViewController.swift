@@ -65,6 +65,7 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
     }
 
     private lazy var primaryButton: PrimaryRoundedButton = .build { button in
+        button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
     }
 
     var viewModel: OnboardingDefaultBrowserModelProtocol
