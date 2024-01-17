@@ -16,6 +16,6 @@ struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvider {
         configuration.userContentController = WKUserContentController()
         configuration.allowsInlineMediaPlayback = true
 
-        return configuration
+        return DefaultEngineConfiguration(webViewConfiguration: configuration)
     }
 }
