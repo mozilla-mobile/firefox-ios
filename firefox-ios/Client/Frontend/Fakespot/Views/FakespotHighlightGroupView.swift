@@ -108,7 +108,11 @@ class FakespotHighlightGroupView: UIView, ThemeApplicable, Notifiable {
     }
 
     private func updateHighlightLabel(_ highlights: [String]) {
-        let highlightText = "\"\(highlights.joined(separator: "\"\n\""))\""
+        let locale = Locale.current
+        let quotationBegin = locale.quotationBeginDelimiter ?? "\""
+        let quotationEnd = locale.quotationEndDelimiter ?? "\""
+        let joinedHighlights = highlights.joined(separator: "\(quotationEnd)\n\(quotationBegin)")
+        let highlightText = "\(quotationBegin)\(joinedHighlights)\(quotationEnd)"
 
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.paragraphSpacing = 8
