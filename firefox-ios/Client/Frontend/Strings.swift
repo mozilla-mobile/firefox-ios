@@ -1130,9 +1130,9 @@ extension String {
                 value: "Stay encrypted when you hop between devices",
                 comment: "String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens.")
             public static let Description = MZLocalizedString(
-                key: "Onboarding.Sync.Description.v120",
+                key: "Onboarding.Sync.Description.v123",
                 tableName: "Onboarding",
-                value: "When you’re signed in and synced, you’re safer. %@ encrypts your passwords, bookmarks, and more.",
+                value: "%@ encrypts your passwords, bookmarks, and more when you're synced.",
                 comment: "String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name.")
             public static let SignInAction = MZLocalizedString(
                 key: "Onboarding.Sync.SignIn.Action.v114",
@@ -1200,6 +1200,102 @@ extension String {
                 tableName: "Onboarding",
                 value: "Go to Settings",
                 comment: "The title of the button on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser.")
+        }
+
+        public struct Customization {
+            public struct Intro {
+                public static let Title = MZLocalizedString(
+                    key: "Onboarding.Customization.Intro.Title.v123",
+                    tableName: "Onboarding",
+                    value: "%@ puts you in control",
+                    comment: "String used to describe the title of the customization onboarding page in our Onboarding screens. Placeholder is for the app name.")
+                public static let Description = MZLocalizedString(
+                    key: "Onboarding.Customization.Intro.Description.v123",
+                    tableName: "Onboarding",
+                    value: "Set your theme and toolbar to match your unique browsing style.",
+                    comment: "String used to describe the description label of the customization onboarding page in our Onboarding screens.")
+                public static let ContinueAction = MZLocalizedString(
+                    key: "Onboarding.Customization.Intro.Continue.Action.v123",
+                    tableName: "Onboarding",
+                    value: "Customize %@",
+                    comment: "String used to describe the option to continue to the next onboarding card in Firefox Onboarding screens. Placeholder is for the app name.")
+                public static let SkipAction = MZLocalizedString(
+                    key: "Onboarding.Customization.Intro.Skip.Action.v123",
+                    tableName: "Onboarding",
+                    value: "Start Browsing",
+                    comment: "String used to describe the option to skip the customization cards in Firefox Onboarding screens and start browsing.")
+            }
+
+            public struct Theme {
+                public static let Title = MZLocalizedString(
+                    key: "Onboarding.Customization.Theme.Title.v123",
+                    tableName: "Onboarding",
+                    value: "Pick a theme",
+                    comment: "String used to describe the title of the theme customization onboarding page in our Onboarding screens.")
+                public static let Description = MZLocalizedString(
+                    key: "Onboarding.Customization.Theme.Description.v123",
+                    tableName: "Onboarding",
+                    value: "See the web in the best light.",
+                    comment: "String used to describe the description label of the theme customization onboarding page in our Onboarding screens.")
+                public static let SystemAction = MZLocalizedString(
+                    key: "Onboarding.Customization.Theme.System.Action.v123",
+                    tableName: "Onboarding",
+                    value: "System Auto",
+                    comment: "On the theme customization onboarding card, the string used to describe the option to set the theme to system theme from the available choices.")
+                public static let LightAction = MZLocalizedString(
+                    key: "Onboarding.Customization.Theme.Light.Action.v123",
+                    tableName: "Onboarding",
+                    value: "Light",
+                    comment: "On the theme customization onboarding card, the string used to describe the option to set the theme to light theme from the available choices.")
+                public static let DarkAction = MZLocalizedString(
+                    key: "Onboarding.Customization.Theme.Dark.Action.v123",
+                    tableName: "Onboarding",
+                    value: "Dark",
+                    comment: "On the theme customization onboarding card, the string used to describe the option to set the theme to dark theme from the available choices.")
+                public static let ContinueAction = MZLocalizedString(
+                    key: "Onboarding.Customization.Theme.Continue.Action.v123",
+                    tableName: "Onboarding",
+                    value: "Save and Continue",
+                    comment: "String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens.")
+                public static let SkipAction = MZLocalizedString(
+                    key: "Onboarding.Customization.Theme.Skip.Action.v123",
+                    tableName: "Onboarding",
+                    value: "Skip",
+                    comment: "String used to describe the option to skip the theme customization in Firefox Onboarding screens.")
+            }
+
+            public struct Toolbar {
+                public static let Title = MZLocalizedString(
+                    key: "Onboarding.Customization.Toolbar.Title.v123",
+                    tableName: "Onboarding",
+                    value: "Pick a toolbar placement",
+                    comment: "String used to describe the title of the toolbar customization onboarding page in our Onboarding screens.")
+                public static let Description = MZLocalizedString(
+                    key: "Onboarding.Customization.Toolbar.Description.v123",
+                    tableName: "Onboarding",
+                    value: "Keep searches within reach.",
+                    comment: "String used to describe the description label of the toolbar customization onboarding page in our Onboarding screens.")
+                public static let TopAction = MZLocalizedString(
+                    key: "Onboarding.Customization.Toolbar.Top.Action.v123",
+                    tableName: "Onboarding",
+                    value: "Top",
+                    comment: "On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen.")
+                public static let BottomAction = MZLocalizedString(
+                    key: "Onboarding.Customization.Toolbar.Bottom.Action.v123",
+                    tableName: "Onboarding",
+                    value: "Bottom",
+                    comment: "On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen.")
+                public static let ContinueAction = MZLocalizedString(
+                    key: "Onboarding.Customization.Toolbar.Continue.Action.v123",
+                    tableName: "Onboarding",
+                    value: "Save and Start Browsing",
+                    comment: "String used to describe the option to save set preferences and leave onboarding to start browsing in the app.")
+                public static let SkipAction = MZLocalizedString(
+                    key: "Onboarding.Customization.Toolbar.Skip.Action.v123",
+                    tableName: "Onboarding",
+                    value: "Skip",
+                    comment: "String used to describe the option to skip the toolbar customization in Firefox Onboarding screens and start browisg in the app.")
+            }
         }
     }
 }
@@ -5999,6 +6095,12 @@ extension String {
                 value: "Shortcuts",
                 comment: "Section title label for Shortcuts",
                 lastUsedInVersion: 123)
+            public static let Description = MZLocalizedString(
+                key: "Onboarding.Sync.Description.v120",
+                tableName: "Onboarding",
+                value: "When you’re signed in and synced, you’re safer. %@ encrypts your passwords, bookmarks, and more.",
+                comment: "String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name.",
+                lastUsedInVersion: 122)
         }
     }
 }
