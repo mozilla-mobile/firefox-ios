@@ -227,7 +227,7 @@ class BrowserUtils {
         tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.tabsButton)
         
         // if in private mode, close all tabs
-        tester.tapView(withAccessibilityLabel: "smallPrivateMask")
+        tester.tapView(withAccessibilityLabel: "privateModeLarge")
 
         tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.closeAllTabsButton)
         tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)

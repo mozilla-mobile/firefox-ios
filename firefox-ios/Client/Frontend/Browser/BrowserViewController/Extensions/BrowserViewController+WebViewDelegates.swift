@@ -262,7 +262,7 @@ extension BrowserViewController: WKUIDelegate {
                     actions.append(
                         UIAction(
                             title: .ContextMenuOpenInNewPrivateTab,
-                            image: UIImage.templateImageNamed("menu-NewPrivateTab"),
+                            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.privateMode),
                             identifier: UIAction.Identifier("linkContextMenu.openInNewPrivateTab")
                         ) { _ in
                             addTab(url, true)
