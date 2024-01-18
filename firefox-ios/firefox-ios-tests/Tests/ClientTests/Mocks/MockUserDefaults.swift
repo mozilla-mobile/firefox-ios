@@ -9,10 +9,12 @@ import Common
 class MockUserDefaults: UserDefaultsInterface {
     // MARK: - Properties
     public var savedData: [String: Any?]
+    public var registrationDictionary: [String: Any]
 
     // MARK: - Initializers
     init() {
         self.savedData = [:]
+        self.registrationDictionary = [:]
     }
 
     // MARK: - Public interface
@@ -44,5 +46,7 @@ class MockUserDefaults: UserDefaultsInterface {
         return savedData[defaultName] as? [Any]
     }
 
-    func register(defaults registrationDictionary: [String: Any]) {}
+    func register(defaults registrationDictionary: [String: Any]) {
+        self.registrationDictionary = registrationDictionary
+    }
 }

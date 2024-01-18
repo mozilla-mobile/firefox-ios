@@ -7,7 +7,7 @@ import UIKit
 /// The `ThemeManager` will be responsible for providing the theme throughout the app
 public final class DefaultThemeManager: ThemeManager, Notifiable {
     // These have been carried over from the legacy system to maintain backwards compatibility
-    private enum ThemeKeys {
+    enum ThemeKeys {
         static let themeName = "prefKeyThemeName"
         static let systemThemeIsOn = "prefKeySystemThemeSwitchOnOff"
 
@@ -29,22 +29,36 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     public var currentTheme: Theme = LightTheme()
     public var notificationCenter: NotificationProtocol
+    public var window: UIWindow?
+
     private var userDefaults: UserDefaultsInterface
     private var mainQueue: DispatchQueueInterface
     private var sharedContainerIdentifier: String
 
-    public var window: UIWindow?
+    private var nightModeIsOn: Bool {
+        guard let isOn = userDefaults.object(forKey: ThemeKeys.NightMode.isOn) as? NSNumber,
+              isOn.boolValue == true
+        else { return false }
+
+        return true
+    }
+
+    private var privateModeIsOn: Bool {
+        return userDefaults.bool(forKey: ThemeKeys.PrivateMode.isOn)
+    }
 
     public var isSystemThemeOn: Bool {
         return userDefaults.bool(forKey: ThemeKeys.systemThemeIsOn)
     }
 
-    // MARK: - Init
+    // MARK: - Initializers
 
-    public init(userDefaults: UserDefaultsInterface = UserDefaults.standard,
-                notificationCenter: NotificationProtocol = NotificationCenter.default,
-                mainQueue: DispatchQueueInterface = DispatchQueue.main,
-                sharedContainerIdentifier: String) {
+    public init(
+        userDefaults: UserDefaultsInterface = UserDefaults.standard,
+        notificationCenter: NotificationProtocol = NotificationCenter.default,
+        mainQueue: DispatchQueueInterface = DispatchQueue.main,
+        sharedContainerIdentifier: String
+    ) {
         self.userDefaults = userDefaults
         self.notificationCenter = notificationCenter
         self.mainQueue = mainQueue
@@ -55,10 +69,10 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         self.userDefaults.register(defaults: [
             ThemeKeys.systemThemeIsOn: true,
             ThemeKeys.NightMode.isOn: NSNumber(value: false),
-            ThemeKeys.PrivateMode.isOn: NSNumber(value: false),
+            ThemeKeys.PrivateMode.isOn: false,
         ])
 
-        changeCurrentTheme(loadInitialThemeType())
+        changeCurrentTheme(fetchSavedThemeType())
 
         setupNotifications(forObserver: self,
                            observing: [UIScreen.brightnessDidChangeNotification,
@@ -69,15 +83,9 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     public func changeCurrentTheme(_ newTheme: ThemeType) {
         guard currentTheme.type != newTheme else { return }
-        currentTheme = newThemeForType(newTheme)
 
-        // overwrite the user interface style on the window attached to our scene
-        // once we have multiple scenes we need to update all of them
-        window?.overrideUserInterfaceStyle = currentTheme.type.getInterfaceStyle()
-
-        mainQueue.ensureMainThread { [weak self] in
-            self?.notificationCenter.post(name: .ThemeDidChange)
-        }
+        updateSavedTheme(to: newTheme)
+        updateCurrentTheme(to: fetchSavedThemeType())
     }
 
     public func systemThemeChanged() {
@@ -85,11 +93,9 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         // the system theme is off
         // OR night mode is on
         // OR private mode is on
-        guard userDefaults.bool(forKey: ThemeKeys.systemThemeIsOn),
-              let nightModeIsOn = userDefaults.object(forKey: ThemeKeys.NightMode.isOn) as? NSNumber,
-              nightModeIsOn.boolValue == false,
-              let privateModeIsOn = userDefaults.object(forKey: ThemeKeys.PrivateMode.isOn) as? NSNumber,
-              privateModeIsOn.boolValue == false
+        guard isSystemThemeOn,
+              !nightModeIsOn,
+              !privateModeIsOn
         else { return }
 
         changeCurrentTheme(getSystemThemeType())
@@ -108,7 +114,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     public func setPrivateTheme(isOn: Bool) {
         userDefaults.set(isOn, forKey: ThemeKeys.PrivateMode.isOn)
 
-        changeCurrentTheme(loadInitialThemeType())
+        updateCurrentTheme(to: fetchSavedThemeType())
     }
 
     public func setAutomaticBrightness(isOn: Bool) {
@@ -126,16 +132,29 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     // MARK: - Private methods
 
-    private func loadInitialThemeType() -> ThemeType {
-        if let privateModeIsOn = userDefaults.object(forKey: ThemeKeys.PrivateMode.isOn) as? NSNumber,
-           privateModeIsOn.boolValue == true {
-            return .privateMode
-        }
+    private func updateSavedTheme(to newTheme: ThemeType) {
+        // We never want to save the private theme because it's meant to override
+        // whatever current theme is set. This means that we need to know the theme
+        // before we went into private mode, in order to be able to return to it.
+        guard newTheme != .privateMode else { return }
+        userDefaults.set(newTheme.rawValue, forKey: ThemeKeys.themeName)
+    }
 
-        if let nightModeIsOn = userDefaults.object(forKey: ThemeKeys.NightMode.isOn) as? NSNumber,
-           nightModeIsOn.boolValue == true {
-            return .dark
+    private func updateCurrentTheme(to newTheme: ThemeType) {
+        currentTheme = newThemeForType(newTheme)
+
+        // Overwrite the user interface style on the window attached to our scene
+        // once we have multiple scenes we need to update all of them
+        window?.overrideUserInterfaceStyle = currentTheme.type.getInterfaceStyle()
+
+        mainQueue.ensureMainThread { [weak self] in
+            self?.notificationCenter.post(name: .ThemeDidChange)
         }
+    }
+
+    private func fetchSavedThemeType() -> ThemeType {
+        if privateModeIsOn { return .privateMode }
+        if nightModeIsOn { return .dark }
 
         var themeType = getSystemThemeType()
         if let savedThemeDescription = userDefaults.string(forKey: ThemeKeys.themeName),
