@@ -7,7 +7,7 @@ import UIKit
 /// The `ThemeManager` will be responsible for providing the theme throughout the app
 public final class DefaultThemeManager: ThemeManager, Notifiable {
     // These have been carried over from the legacy system to maintain backwards compatibility
-    private enum ThemeKeys {
+    enum ThemeKeys {
         static let themeName = "prefKeyThemeName"
         static let systemThemeIsOn = "prefKeySystemThemeSwitchOnOff"
 
@@ -114,7 +114,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     public func setPrivateTheme(isOn: Bool) {
         userDefaults.set(isOn, forKey: ThemeKeys.PrivateMode.isOn)
 
-        changeCurrentTheme(fetchSavedThemeType())
+        updateCurrentTheme(to: fetchSavedThemeType())
     }
 
     public func setAutomaticBrightness(isOn: Bool) {
@@ -133,8 +133,9 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     // MARK: - Private methods
 
     private func updateSavedTheme(to newTheme: ThemeType) {
-        // As the private theme is a special instance of a theme,
-        // we don't want to save it.
+        // We never want to save the private theme because it's meant to override
+        // whatever current theme is set. This means that we need to know the theme
+        // before we went into private mode, in order to be able to return to it.
         guard newTheme != .privateMode else { return }
         userDefaults.set(newTheme.rawValue, forKey: ThemeKeys.themeName)
     }
