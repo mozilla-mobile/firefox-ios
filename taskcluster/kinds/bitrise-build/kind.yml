@@ -11,7 +11,7 @@ transforms:
     - taskgraph.transforms.task:transforms
 
 tasks:
-    github:
+    firefox-ios:
         bitrise-pipeline: pipeline_multiple_shards
         description: Trigger Bitrise Pipeline on github events
             #optimization:
