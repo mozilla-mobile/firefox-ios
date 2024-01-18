@@ -41,7 +41,9 @@ final class WKContentScriptManagerTests: XCTestCase {
                                  forSession: session)
 
         XCTAssertEqual(script.scriptMessageHandlerNamesCalled, 1)
-        // FXIOS-8115 Test that configuration has the scripts
+        let config = session.webView.engineConfiguration as! MockWKEngineConfiguration
+        XCTAssertEqual(config.addInDefaultContentWorldCalled, 1)
+        XCTAssertEqual(config.scriptNameAdded, "MockWKContentScriptHandler")
     }
 
     func testAddContentToPageGivenAddedTwiceThenOnlyAddOnce() {
@@ -67,7 +69,9 @@ final class WKContentScriptManagerTests: XCTestCase {
                                        forSession: session)
 
         XCTAssertEqual(script.scriptMessageHandlerNamesCalled, 1)
-        // FXIOS-8115 Test that configuration has the scripts
+        let config = session.webView.engineConfiguration as! MockWKEngineConfiguration
+        XCTAssertEqual(config.addInPageContentWorldCalled, 1)
+        XCTAssertEqual(config.scriptNameAdded, "MockWKContentScriptHandler")
     }
 
     func testUninstallGivenAScriptThenCallsDeinitAndMessageHandlerNames() {
@@ -88,8 +92,7 @@ final class WKContentScriptManagerTests: XCTestCase {
     func createSubject(file: StaticString = #file,
                        line: UInt = #line) -> DefaultContentScriptManager {
         let subject = DefaultContentScriptManager()
-        // FXIOS-8115 Leaks caused by WKWebViewConfiguration
-//        trackForMemoryLeaks(subject, file: file, line: line)
+        trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
 }

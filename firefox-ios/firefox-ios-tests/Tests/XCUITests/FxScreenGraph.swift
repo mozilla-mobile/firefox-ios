@@ -946,15 +946,9 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.press(link, to: WebLinkContextMenu)
         screenState.press(image, to: WebImageContextMenu)
 
-        if !isTablet {
-            let reloadButton = app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton]
+        let reloadButton = app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton]
         screenState.press(reloadButton, to: ReloadLongPressMenu)
         screenState.tap(reloadButton, forAction: Action.ReloadURL, transitionTo: WebPageLoading) { _ in }
-        } else {
-            let reloadButton = app.buttons["Reload"]
-        screenState.press(reloadButton, to: ReloadLongPressMenu)
-        screenState.tap(reloadButton, forAction: Action.ReloadURL, transitionTo: WebPageLoading) { _ in }
-        }
         // For iPad there is no long press on tabs button
         if !isTablet {
             let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]

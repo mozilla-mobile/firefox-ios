@@ -9,7 +9,7 @@ extension BrowserViewController: ReaderModeDelegate {
     func readerMode(_ readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forTab tab: Tab) {
         // Update reader mode state if is the selected tab. Otherwise it will update once is active
         if tabManager.selectedTab === tab {
-            urlBar.updateReaderModeState(state, hideReloadButton: shouldUseiPadSetup())
+            urlBar.updateReaderModeState(state)
         }
     }
 

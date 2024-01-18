@@ -61,6 +61,7 @@
         "DragAndDropTestIpad\/testTryDragAndDropHistoryToURLBar()",
         "DragAndDropTests\/testRearrangeTabsTabTray()",
         "ExperimentIntegrationTests",
+        "FakespotTests\/testReviewQualityCheckBottomSheetUI()",
         "FindInPageTests\/testFindFromMenu()",
         "HistoryTests\/testClearPrivateData()",
         "HistoryTests\/testClearPrivateDataButtonDisabled()",

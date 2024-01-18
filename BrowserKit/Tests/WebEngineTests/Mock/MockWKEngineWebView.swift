@@ -7,7 +7,7 @@ import WebKit
 @testable import WebEngine
 
 class MockWKEngineWebView: UIView, WKEngineWebView {
-    var configuration = WKWebViewConfiguration()
+    var engineConfiguration: WKEngineConfiguration
     var interactionState: Any?
     var scrollView = UIScrollView()
     var url: URL?
@@ -33,6 +33,7 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
 
     required init?(frame: CGRect,
                    configurationProvider: WKEngineConfigurationProvider) {
+        self.engineConfiguration = configurationProvider.createConfiguration()
         super.init(frame: frame)
     }
 

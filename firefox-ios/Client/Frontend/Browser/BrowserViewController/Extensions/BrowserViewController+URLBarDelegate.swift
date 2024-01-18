@@ -4,7 +4,6 @@
 
 import Shared
 import Storage
-import Telemetry
 import Glean
 import Common
 import ComponentLibrary
@@ -383,10 +382,8 @@ extension BrowserViewController: URLBarDelegate {
 
         let conversionMetrics = UserConversionMetrics()
         conversionMetrics.didPerformSearch()
-        // We couldn't find a matching search keyword, so do a search query.
-        Telemetry.default.recordSearch(location: .actionBar, searchEngine: engine.engineID ?? "other")
         GleanMetrics.Search
-            .counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.actionBar.rawValue)"]
+            .counts["\(engine.engineID ?? "custom").\(SearchLocation.actionBar.rawValue)"]
             .add()
         searchTelemetry?.shouldSetUrlTypeSearch = true
 
