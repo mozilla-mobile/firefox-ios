@@ -47,15 +47,11 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         return userDefaults.bool(forKey: ThemeKeys.PrivateMode.isOn)
     }
 
-<<<<<<< HEAD
-    // MARK: - Init
-=======
     public var isSystemThemeOn: Bool {
         return userDefaults.bool(forKey: ThemeKeys.systemThemeIsOn)
     }
 
     // MARK: - Initializers
->>>>>>> 3096c2e8d (Refactor FXIOS-8169 [v122.1] Theming manager not saving theme (#18211))
 
     public init(
         userDefaults: UserDefaultsInterface = UserDefaults.standard,
