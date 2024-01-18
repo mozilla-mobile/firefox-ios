@@ -34,13 +34,14 @@ class PhotonActionSheetTests: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2322067
     // Smoketest
     func testShareOptionIsShown() {
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
-        waitUntilPageLoad()
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton], timeout: 10)
-        app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
-
-        // Wait to see the Share options sheet
-        mozWaitForElementToExist(app.cells["Copy"], timeout: 15)
+        // Temporarily disabled until url bar redesign work FXIOS-8172
+//        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+//        waitUntilPageLoad()
+//        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton], timeout: 10)
+//        app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
+//
+//        // Wait to see the Share options sheet
+//        mozWaitForElementToExist(app.cells["Copy"], timeout: 15)
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2322667
@@ -80,13 +81,14 @@ class PhotonActionSheetTests: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306841
     // Smoketest
     func testSharePageWithShareSheetOptions() {
-        openNewShareSheet()
-        mozWaitForElementToExist(app.staticTexts["Open in Firefox"], timeout: 10)
-        XCTAssertTrue(app.staticTexts["Open in Firefox"].exists)
-        XCTAssertTrue(app.staticTexts["Load in Background"].exists)
-        XCTAssertTrue(app.staticTexts["Bookmark This Page"].exists)
-        XCTAssertTrue(app.staticTexts["Add to Reading List"].exists)
-        XCTAssertTrue(app.staticTexts["Send to Device"].exists)
+        // Temporarily disabled until url bar redesign work FXIOS-8172
+//        openNewShareSheet()
+//        mozWaitForElementToExist(app.staticTexts["Open in Firefox"], timeout: 10)
+//        XCTAssertTrue(app.staticTexts["Open in Firefox"].exists)
+//        XCTAssertTrue(app.staticTexts["Load in Background"].exists)
+//        XCTAssertTrue(app.staticTexts["Bookmark This Page"].exists)
+//        XCTAssertTrue(app.staticTexts["Add to Reading List"].exists)
+//        XCTAssertTrue(app.staticTexts["Send to Device"].exists)
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2323203
