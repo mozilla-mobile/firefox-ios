@@ -25,7 +25,7 @@ final class DefaultThemeManagerTests: XCTestCase {
     func test_mockDefaultsInitializesEmpty() {
         XCTAssert(
             userDefaults.savedData.isEmpty,
-            "savedData should be empty when intitializing object"
+            "savedData should be empty when initializing object"
         )
 
         XCTAssert(
