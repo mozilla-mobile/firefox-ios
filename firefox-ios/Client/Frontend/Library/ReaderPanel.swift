@@ -52,8 +52,11 @@ class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
 
     var unread = true {
         didSet {
-            let imageName = unread ? StandardImageIdentifiers.Small.notificationDotFill : "MarkAsUnread"
-            readStatusImageView.image = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
+            let markAsRead = StandardImageIdentifiers.Small.notificationDotFill
+            let markAsUnread = StandardImageIdentifiers.Small.notificationDot
+            readStatusImageView.image = UIImage(
+                named: unread ? markAsRead : markAsUnread
+            )?.withRenderingMode(.alwaysTemplate)
             updateAccessibilityLabel()
         }
     }
