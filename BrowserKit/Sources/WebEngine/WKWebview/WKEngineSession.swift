@@ -167,10 +167,10 @@ class WKEngineSession: NSObject, EngineSession {
         // Will be used as needed when we start using the engine session
         switch path {
         case .canGoBack:
-            delegate?.onNavigationStateChange(canGoBack: webView.canGoBack, 
+            delegate?.onNavigationStateChange(canGoBack: webView.canGoBack,
                                               canGoForward: webView.canGoForward)
         case .canGoForward:
-            delegate?.onNavigationStateChange(canGoBack: webView.canGoBack, 
+            delegate?.onNavigationStateChange(canGoBack: webView.canGoBack,
                                               canGoForward: webView.canGoForward)
         case .contentSize:
             break
