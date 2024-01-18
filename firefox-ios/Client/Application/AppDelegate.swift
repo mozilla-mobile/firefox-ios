@@ -173,7 +173,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         logger.log("didFinishLaunchingWithOptions end",
                    level: .info,
                    category: .lifecycle)
-        sendStartupTelemetry()
 
         return true
     }
@@ -268,46 +267,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func updateTopSitesWidget() {
         // Since we only need the topSites data in the archiver, let's write it
         widgetManager?.writeWidgetKitTopSites()
-    }
-
-    // MARK: Telemetry
-    private func sendStartupTelemetry() {
-        _ = profile.autofill.reopenIfClosed()
-        profile.autofill.listCreditCards(completion: { cards, error in
-            guard let cards = cards, error == nil else { return }
-            self.sendCreditCardsSavedAllTelemetry(numberOfSavedCreditCards: cards.count)
-        })
-
-        let searchController = UISearchController()
-        let loginsViewModel = PasswordManagerViewModel(
-            profile: profile,
-            searchController: searchController,
-            theme: LightTheme()
-        )
-        let dataSource = LoginDataSource(viewModel: loginsViewModel)
-        loginsViewModel.loadLogins(loginDataSource: dataSource)
-
-        loginsViewModel.queryLogins("") { logins in
-            self.sendLoginsSavedAllTelemetry(numberOfSavedLogins: logins.count)
-        }
-    }
-
-    private func sendLoginsSavedAllTelemetry(numberOfSavedLogins: Int) {
-        let savedLoginsExtra = [TelemetryWrapper.EventExtraKey.loginsQuantity.rawValue: Int64(numberOfSavedLogins)]
-        TelemetryWrapper.recordEvent(category: .information,
-                                     method: .foreground,
-                                     object: .loginsSavedAll,
-                                     extras: savedLoginsExtra)
-    }
-
-    private func sendCreditCardsSavedAllTelemetry(numberOfSavedCreditCards: Int) {
-        let savedCardsExtra = [
-            TelemetryWrapper.EventExtraKey.creditCardsQuantity.rawValue: Int64(numberOfSavedCreditCards)
-        ]
-        TelemetryWrapper.recordEvent(category: .information,
-                                     method: .foreground,
-                                     object: .creditCardSavedAll,
-                                     extras: savedCardsExtra)
     }
 }
 
