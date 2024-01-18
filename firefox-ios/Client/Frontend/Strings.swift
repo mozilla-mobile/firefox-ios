@@ -230,16 +230,16 @@ extension String {
 extension String {
     public struct Addresses {
         public struct EditCard {
-            public static let ToggleToAllowAutofillTitle = MZLocalizedString(
-                key: "Addresses.Settings.EditCard.ToggleToAllowAutofillTitle.v124",
+            public static let SwitchTitle = MZLocalizedString(
+                key: "Addresses.Settings.EditCard.Switch.Title.v124",
                 tableName: "Settings",
                 value: "Save and Fill Addresses",
                 comment: "Title label for user to use the toggle settings to allow saving and autofilling of addresses for webpages.")
-            public static let PlaceholderToggleToAllowAutofillTitle = MZLocalizedString(
-                key: "Addresses.Settings.EditCard.PlaceholderToggleToAllowAutofillTitle.v124",
+            public static let SwitchDescription = MZLocalizedString(
+                key: "Addresses.Settings.EditCard.Switch.Description.v124",
                 tableName: "Settings",
                 value: "Includes phone numbers and email addresses",
-                comment: "Placeholder label for user to use the toggle settings to allow saving and autofilling of addresses for webpages, including phone numbers and email addresses. The placeholder text reads: Includes phone numbers and email addresses.")
+                comment: "On the autofill settings screen, a label under the title label to add additional context for user in regards to what the toggle switch that allow saving and autofilling of addresses for webpages does, letting users know that this action includes phone numbers and email addresses.")
         }
     }
 }
