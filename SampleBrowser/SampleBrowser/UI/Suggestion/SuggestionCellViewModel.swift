@@ -11,7 +11,7 @@ struct SuggestionCellViewModel {
 class SuggestionCell: UITableViewCell {
     static let identifier = "SuggestionIdentifier"
 
-    private lazy var titleLabel: UILabel = .build { _ in }
+    private lazy var titleLabel: UILabel = .build()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

@@ -43,7 +43,7 @@ class SuggestionViewController: UIViewController, UITableViewDelegate {
     }
 
     private func setTopConstraint() {
-        let height = view.frame.height * 1 / 5
+        let height = view.frame.height / 5
         topIconConstraint?.constant = height
     }
 
