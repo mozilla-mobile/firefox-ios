@@ -4,7 +4,7 @@
 
 import UIKit
 
-protocol BrowserToolbarDelegate: AnyObject {
+protocol ToolbarDelegate: AnyObject {
     func backButtonClicked()
     func forwardButtonClicked()
     func reloadButtonClicked()
@@ -12,7 +12,7 @@ protocol BrowserToolbarDelegate: AnyObject {
 }
 
 class BrowserToolbar: UIToolbar {
-    weak var toolbarDelegate: BrowserToolbarDelegate?
+    weak var toolbarDelegate: ToolbarDelegate?
     private var reloadStopButton: UIBarButtonItem!
     private var backButton: UIBarButtonItem!
     private var forwardButton: UIBarButtonItem!
@@ -65,9 +65,9 @@ class BrowserToolbar: UIToolbar {
         self.isReloading = isLoading
     }
 
-    func updateBackForwardButtons(canGoBack: Bool, canGoForward: Bool) {
-        backButton.isEnabled = canGoBack
-        forwardButton.isEnabled = canGoForward
+    func updateBackForwardButtons(canGoBack: Bool?, canGoForward: Bool?) {
+        backButton.isEnabled = canGoBack ?? false
+        forwardButton.isEnabled = canGoForward ?? false
     }
 
     // MARK: - Actions
