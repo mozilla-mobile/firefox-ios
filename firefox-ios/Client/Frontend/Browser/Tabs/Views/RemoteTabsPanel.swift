@@ -29,11 +29,14 @@ class RemoteTabsPanel: UIViewController,
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
+    private let windowUUID: WindowUUID
 
     // MARK: - Initializer
 
-    init(themeManager: ThemeManager = AppContainer.shared.resolve(),
+    init(windowUUID: WindowUUID,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.windowUUID = windowUUID
         self.state = RemoteTabsPanelState()
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
@@ -99,7 +102,9 @@ class RemoteTabsPanel: UIViewController,
     // MARK: - Redux
 
     func subscribeToRedux() {
-        store.dispatch(ActiveScreensStateAction.showScreen(.remoteTabsPanel))
+        store.dispatch(ActiveScreensStateAction.showScreen(
+            ScreenActionContext(screen: .remoteTabsPanel, windowUUID: windowUUID)
+        ))
         store.dispatch(RemoteTabsPanelAction.panelDidAppear)
         store.subscribe(self, transform: {
             return $0.select(RemoteTabsPanelState.init)
@@ -107,7 +112,9 @@ class RemoteTabsPanel: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        store.dispatch(ActiveScreensStateAction.closeScreen(.remoteTabsPanel))
+        store.dispatch(ActiveScreensStateAction.closeScreen(
+            ScreenActionContext(screen: .remoteTabsPanel, windowUUID: windowUUID)
+        ))
         store.unsubscribe(self)
     }
 

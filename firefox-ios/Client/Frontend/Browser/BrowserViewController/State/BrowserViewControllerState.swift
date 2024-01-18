@@ -6,18 +6,22 @@ import Foundation
 import Redux
 
 struct BrowserViewControllerState: ScreenState, Equatable {
+    let windowUUID: WindowUUID
     var searchScreenState: SearchScreenState
     var usePrivateHomepage: Bool
     var showDataClearanceFlow: Bool
     var fakespotState: FakespotState
     var toast: ToastType?
 
-    init(_ appState: AppState) {
+    init(appState: AppState, uuid: WindowUUID) {
         guard let bvcState = store.state.screenState(
             BrowserViewControllerState.self,
-            for: .browserViewController)
+            for: .browserViewController,
+            window: uuid
+        )
         else {
-            self.init()
+            // TODO: FIX? Is this ever called?
+            self.init(windowUUID: WindowUUID())
             return
         }
 
@@ -25,16 +29,18 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                   usePrivateHomepage: bvcState.usePrivateHomepage,
                   showDataClearanceFlow: bvcState.showDataClearanceFlow,
                   fakespotState: bvcState.fakespotState,
-                  toast: bvcState.toast)
+                  toast: bvcState.toast,
+                  windowUUID: bvcState.windowUUID)
     }
 
-    init() {
+    init(windowUUID: WindowUUID) {
         self.init(
             searchScreenState: SearchScreenState(),
             usePrivateHomepage: false,
             showDataClearanceFlow: false,
             fakespotState: FakespotState(),
-            toast: nil)
+            toast: nil,
+            windowUUID: windowUUID)
     }
 
     init(
@@ -42,13 +48,15 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         usePrivateHomepage: Bool,
         showDataClearanceFlow: Bool,
         fakespotState: FakespotState,
-        toast: ToastType? = nil
+        toast: ToastType? = nil,
+        windowUUID: WindowUUID
     ) {
         self.searchScreenState = searchScreenState
         self.usePrivateHomepage = usePrivateHomepage
         self.showDataClearanceFlow = showDataClearanceFlow
         self.fakespotState = fakespotState
         self.toast = toast
+        self.windowUUID = windowUUID
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -58,7 +66,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 searchScreenState: SearchScreenState(inPrivateMode: privacyState),
                 usePrivateHomepage: privacyState,
                 showDataClearanceFlow: privacyState,
-                fakespotState: state.fakespotState)
+                fakespotState: state.fakespotState,
+                windowUUID: state.windowUUID)
         case FakespotAction.pressedShoppingButton,
             FakespotAction.show,
             FakespotAction.dismiss,
@@ -74,14 +83,16 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 searchScreenState: state.searchScreenState,
                 usePrivateHomepage: state.usePrivateHomepage,
                 showDataClearanceFlow: state.showDataClearanceFlow,
-                fakespotState: FakespotState.reducer(state.fakespotState, action))
+                fakespotState: FakespotState.reducer(state.fakespotState, action),
+                windowUUID: state.windowUUID)
         case GeneralBrowserAction.showToast(let toastType):
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 usePrivateHomepage: state.usePrivateHomepage,
                 showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
-                toast: toastType)
+                toast: toastType,
+                windowUUID: state.windowUUID)
         default:
             return state
         }

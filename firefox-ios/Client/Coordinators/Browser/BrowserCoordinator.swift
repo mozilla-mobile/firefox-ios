@@ -598,7 +598,8 @@ class BrowserCoordinator: BaseCoordinator,
         let tabTrayCoordinator = TabTrayCoordinator(
             router: DefaultRouter(navigationController: navigationController),
             tabTraySection: selectedPanel,
-            profile: profile
+            profile: profile,
+            tabManager: tabManager
         )
         tabTrayCoordinator.parentCoordinator = self
         add(child: tabTrayCoordinator)

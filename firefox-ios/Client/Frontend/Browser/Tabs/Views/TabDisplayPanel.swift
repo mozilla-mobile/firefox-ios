@@ -21,10 +21,11 @@ class TabDisplayPanel: UIViewController,
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var tabsState: TabsPanelState
+    private let windowUUID: WindowUUID
 
     // MARK: UI elements
     private lazy var tabDisplayView: TabDisplayView = {
-        let view = TabDisplayView(state: self.tabsState)
+        let view = TabDisplayView(state: self.tabsState, windowUUID: windowUUID)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -37,11 +38,13 @@ class TabDisplayPanel: UIViewController,
     }
 
     init(isPrivateMode: Bool,
+         windowUUID: WindowUUID,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.tabsState = TabsPanelState(isPrivateMode: isPrivateMode)
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
+        self.windowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -144,7 +147,9 @@ class TabDisplayPanel: UIViewController,
     // MARK: - Redux
 
     func subscribeToRedux() {
-        store.dispatch(ActiveScreensStateAction.showScreen(.tabsPanel))
+        store.dispatch(ActiveScreensStateAction.showScreen(
+            ScreenActionContext(screen: .tabsPanel, windowUUID: windowUUID)
+        ))
         store.dispatch(TabPanelAction.tabPanelDidLoad(tabsState.isPrivateMode))
         store.subscribe(self, transform: {
             return $0.select(TabsPanelState.init)
@@ -152,7 +157,9 @@ class TabDisplayPanel: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        store.dispatch(ActiveScreensStateAction.closeScreen(.tabsPanel))
+        store.dispatch(ActiveScreensStateAction.closeScreen(
+            ScreenActionContext(screen: .tabsPanel, windowUUID: windowUUID)
+        ))
         store.unsubscribe(self)
     }
 

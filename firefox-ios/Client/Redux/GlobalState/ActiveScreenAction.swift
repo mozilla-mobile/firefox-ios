@@ -5,6 +5,14 @@
 import Foundation
 import Redux
 
+class ScreenActionContext: ActionContext {
+    let screen: AppScreen
+    init(screen: AppScreen, windowUUID: WindowUUID) {
+        self.screen = screen
+        super.init(windowUUID: windowUUID)
+    }
+}
+
 enum AppScreen {
     case browserViewController
     case themeSettings
@@ -15,6 +23,6 @@ enum AppScreen {
 }
 
 enum ActiveScreensStateAction: Action {
-    case showScreen(AppScreen)
-    case closeScreen(AppScreen)
+    case showScreen(ScreenActionContext)
+    case closeScreen(ScreenActionContext)
 }

@@ -25,6 +25,7 @@ class TabDisplayView: UIView,
     private(set) var tabsState: TabsPanelState
     private var inactiveTabsSectionManager: InactiveTabsSectionManager
     private var tabsSectionManager: TabsSectionManager
+    private let windowUUID: WindowUUID
     var theme: Theme?
 
     private var shouldHideInactiveTabs: Bool {
@@ -59,10 +60,11 @@ class TabDisplayView: UIView,
         return collectionView
     }()
 
-    public init(state: TabsPanelState) {
+    public init(state: TabsPanelState, windowUUID: WindowUUID) {
         self.tabsState = state
         self.inactiveTabsSectionManager = InactiveTabsSectionManager()
         self.tabsSectionManager = TabsSectionManager()
+        self.windowUUID = windowUUID
         super.init(frame: .zero)
         self.inactiveTabsSectionManager.delegate = self
         setupLayout()
@@ -249,7 +251,7 @@ class TabDisplayView: UIView,
         guard getTabDisplay(for: indexPath.section) == .tabs
         else { return nil }
 
-        let tabVC = TabPeekViewController(tab: tabsState.tabs[indexPath.row])
+        let tabVC = TabPeekViewController(tab: tabsState.tabs[indexPath.row], windowUUID: windowUUID)
         return UIContextMenuConfiguration(identifier: nil,
                                           previewProvider: { return tabVC },
                                           actionProvider: tabVC.contextActions)

@@ -12,6 +12,7 @@ struct FakespotState: ScreenState, Equatable {
     var expandState: [String: ExpandState] // tabUUID as key
     var telemetryState: [String: TelemetryState] // tabUUID as key
     var sendSurfaceDisplayedTelemetryEvent = true
+    var windowUUID: WindowUUID
 
     struct TelemetryState: Equatable {
         var adEvents: [String: AdTelemetryState] = [:] // productId as key
@@ -32,6 +33,7 @@ struct FakespotState: ScreenState, Equatable {
 
     init(_ appState: BrowserViewControllerState) {
         self.init(
+            windowUUID: WindowUUID(),
             isOpen: appState.fakespotState.isOpen,
             sidebarOpenForiPadLandscape: appState.fakespotState.sidebarOpenForiPadLandscape,
             currentTabUUID: appState.fakespotState.currentTabUUID,
@@ -42,6 +44,7 @@ struct FakespotState: ScreenState, Equatable {
 
     init() {
         self.init(
+            windowUUID: WindowUUID(),
             isOpen: false,
             sidebarOpenForiPadLandscape: false,
             currentTabUUID: "",
@@ -51,12 +54,14 @@ struct FakespotState: ScreenState, Equatable {
     }
 
     init(
+        windowUUID: WindowUUID,
         isOpen: Bool,
         sidebarOpenForiPadLandscape: Bool,
         currentTabUUID: String,
         expandState: [String: FakespotState.ExpandState] = [:],
         telemetryState: [String: TelemetryState] = [:]
     ) {
+        self.windowUUID = windowUUID
         self.isOpen = isOpen
         self.sidebarOpenForiPadLandscape = sidebarOpenForiPadLandscape
         self.currentTabUUID = currentTabUUID

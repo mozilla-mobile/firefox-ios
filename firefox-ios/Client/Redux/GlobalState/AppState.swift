@@ -12,7 +12,11 @@ struct AppState: StateType {
         AppState(activeScreens: ActiveScreensState.reducer(state.activeScreens, action))
     }
 
-    func screenState<S: ScreenState>(_ s: S.Type, for screen: AppScreen) -> S? {
+    func screenState<S: ScreenState>(_ s: S.Type,
+                                     for screen: AppScreen,
+                                     /* TODO: Fix me. This shouldn't be optional? */
+                                     window: WindowUUID?) -> S? {
+        // TODO: Need to fix this?
         return activeScreens.screens
             .compactMap {
                 switch ($0, screen) {
@@ -25,13 +29,26 @@ struct AppState: StateType {
                 default: return nil
                 }
             }
-            .first
+            .first(where: { 
+                // Only the screen state for the specific window
+                guard let windowUUIDFilter = window else { return true }
+                return $0.windowUUID == window
+            })
     }
 }
 
 extension AppState {
     init() {
         activeScreens = ActiveScreensState()
+    }
+}
+
+// Client base ActionContext class.
+class ActionContext {
+    let windowUUID: WindowUUID
+
+    init(windowUUID: WindowUUID) {
+        self.windowUUID = windowUUID
     }
 }
 

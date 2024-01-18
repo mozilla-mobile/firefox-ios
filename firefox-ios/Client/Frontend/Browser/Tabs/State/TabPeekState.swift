@@ -11,14 +11,17 @@ struct TabPeekState: ScreenState, Equatable {
     let showCloseTab: Bool
     let previewAccessibilityLabel: String
     let screenshot: UIImage
+    let windowUUID: WindowUUID
 
     init(_ appState: AppState) {
-        guard let tabPeekState = store.state.screenState(TabPeekState.self, for: AppScreen.tabPeek) else {
-            self.init()
+        guard let tabPeekState = store.state.screenState(TabPeekState.self, for: AppScreen.tabPeek, window: nil) else {
+            // TODO: Fix? 
+            self.init(windowUUID: WindowUUID())
             return
         }
 
-        self.init(showAddToBookmarks: tabPeekState.showAddToBookmarks,
+        self.init(windowUUID: WindowUUID(),
+                  showAddToBookmarks: tabPeekState.showAddToBookmarks,
                   showSendToDevice: tabPeekState.showSendToDevice,
                   showCopyURL: tabPeekState.showCopyURL,
                   showCloseTab: tabPeekState.showCloseTab,
@@ -26,12 +29,14 @@ struct TabPeekState: ScreenState, Equatable {
                   screenshot: tabPeekState.screenshot)
     }
 
-    init(showAddToBookmarks: Bool = false,
+    init(windowUUID: WindowUUID,
+         showAddToBookmarks: Bool = false,
          showSendToDevice: Bool = false,
          showCopyURL: Bool = true,
          showCloseTab: Bool = true,
          previewAccessibilityLabel: String = "",
          screenshot: UIImage = UIImage()) {
+        self.windowUUID = windowUUID
         self.showAddToBookmarks = showAddToBookmarks
         self.showSendToDevice = showSendToDevice
         self.showCopyURL = showCopyURL
@@ -43,7 +48,8 @@ struct TabPeekState: ScreenState, Equatable {
     static let reducer: Reducer<Self> = { state, action in
         switch action {
         case TabPeekAction.loadTabPeek(let tabPeekModel):
-            return TabPeekState(showAddToBookmarks: tabPeekModel.canTabBeSaved,
+            return TabPeekState(windowUUID: state.windowUUID,
+                                showAddToBookmarks: tabPeekModel.canTabBeSaved,
                                 showSendToDevice: tabPeekModel.isSyncEnabled && tabPeekModel.canTabBeSaved,
                                 previewAccessibilityLabel: tabPeekModel.accessiblityLabel,
                                 screenshot: tabPeekModel.screenshot)

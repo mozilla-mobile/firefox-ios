@@ -15,11 +15,16 @@ enum AppScreenState: Equatable {
 
     static let reducer: Reducer<Self> = { state, action in
         switch state {
-        case .tabPeek(let state): return .tabPeek(TabPeekState.reducer(state, action))
-        case .themeSettings(let state): return .themeSettings(ThemeSettingsState.reducer(state, action))
-        case .tabsTray(let state): return .tabsTray(TabTrayState.reducer(state, action))
-        case .tabsPanel(let state): return .tabsPanel(TabsPanelState.reducer(state, action))
-        case .remoteTabsPanel(let state): return .remoteTabsPanel(RemoteTabsPanelState.reducer(state, action))
+        case .tabPeek(let state):
+            return .tabPeek(TabPeekState.reducer(state, action))
+        case .themeSettings(let state):
+            return .themeSettings(ThemeSettingsState.reducer(state, action))
+        case .tabsTray(let state):
+            return .tabsTray(TabTrayState.reducer(state, action))
+        case .tabsPanel(let state):
+            return .tabsPanel(TabsPanelState.reducer(state, action))
+        case .remoteTabsPanel(let state):
+            return .remoteTabsPanel(RemoteTabsPanelState.reducer(state, action))
         case .browserViewController(let state):
             return .browserViewController(BrowserViewControllerState.reducer(state, action))
         }
@@ -54,20 +59,29 @@ struct ActiveScreensState: Equatable {
 
         if let action = action as? ActiveScreensStateAction {
             switch action {
-            case .closeScreen(let screenType):
+            case .closeScreen(let context):
+                let screenType = context.screen
+                // TODO: Needs to check the UUID before removing
                 screens = screens.filter({ return $0.associatedAppScreen != screenType })
-            case .showScreen(.browserViewController):
-                screens += [.browserViewController(BrowserViewControllerState())]
-            case .showScreen(.remoteTabsPanel):
-                screens += [.remoteTabsPanel(RemoteTabsPanelState())]
-            case .showScreen(.tabsTray):
-                screens += [.tabsTray(TabTrayState())]
-            case .showScreen(.tabsPanel):
-                screens += [.tabsPanel(TabsPanelState())]
-            case .showScreen(.themeSettings):
-                screens += [.themeSettings(ThemeSettingsState())]
-            case .showScreen(.tabPeek):
-                screens += [.tabPeek(TabPeekState())]
+            case .showScreen(let context):
+                // TODO: Needs to be sure windowUUID is set and associated with each screen state
+                let screenType = context.screen
+                switch screenType {
+                case .browserViewController:
+                    screens.append(
+                        .browserViewController(BrowserViewControllerState(windowUUID: context.windowUUID))
+                    )
+                case .remoteTabsPanel:
+                    screens += [.remoteTabsPanel(RemoteTabsPanelState())]
+                case .tabsTray:
+                    screens += [.tabsTray(TabTrayState())]
+                case .tabsPanel:
+                    screens += [.tabsPanel(TabsPanelState())]
+                case .themeSettings:
+                    screens += [.themeSettings(ThemeSettingsState())]
+                case .tabPeek:
+                    screens += [.tabPeek(TabPeekState(windowUUID: context.windowUUID))]
+                }
             }
         }
 

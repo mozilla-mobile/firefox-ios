@@ -62,6 +62,7 @@ class TabManagerMiddleware {
             self.undoCloseAllInactiveTabs()
 
         case TabPanelAction.closeInactiveTabs(let tabUUID):
+
             self.closeInactiveTab(for: tabUUID, state: state)
 
         case TabPanelAction.undoCloseInactiveTab:

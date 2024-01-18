@@ -132,6 +132,7 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         // is avoided by making sure we wait for our expected tab above to be selected before
         // notifying our library panel delegate. [FXIOS-7741]
 
+        // TODO: We should not be using activeWindow in this manner. Needs to be fixed.
         let tabWindowUUID = windowManager.activeWindow
         AppEventQueue.wait(for: .selectTab(url, tabWindowUUID)) {
             let visitType = VisitType.typed    // Means History, too.

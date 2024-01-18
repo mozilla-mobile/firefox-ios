@@ -5,6 +5,14 @@
 import Redux
 import Storage
 
+class BooleanValueContext: ActionContext {
+    let boolValue: Bool
+    init(boolValue: Bool, windowUUID: WindowUUID) {
+        self.boolValue = boolValue
+        super.init(windowUUID: windowUUID)
+    }
+}
+
 enum TabPanelAction: Action {
     case tabPanelDidLoad(Bool)
     case tabPanelDidAppear(Bool)

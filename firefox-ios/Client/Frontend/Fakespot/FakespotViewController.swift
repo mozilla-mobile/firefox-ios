@@ -44,6 +44,7 @@ class FakespotViewController: UIViewController,
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     private var viewModel: FakespotViewModel
+    private let windowUUID: WindowUUID
     var fakespotState: FakespotState
 
     private var adView: FakespotAdView?
@@ -104,11 +105,13 @@ class FakespotViewController: UIViewController,
 
     // MARK: - Initializers
     init(
+        windowUUID: WindowUUID,
         viewModel: FakespotViewModel,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         themeManager: ThemeManager = AppContainer.shared.resolve()
     ) {
         self.viewModel = viewModel
+        self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         fakespotState = FakespotState()
@@ -140,8 +143,11 @@ class FakespotViewController: UIViewController,
     // MARK: - Redux
 
     func subscribeToRedux() {
+        let uuid = windowUUID
         store.subscribe(self, transform: {
-            $0.select(BrowserViewControllerState.init)
+            $0.select({ appState in
+                return BrowserViewControllerState(windowUUID: uuid)
+            })
         })
     }
 

@@ -66,6 +66,7 @@ class BrowserViewController: UIViewController,
     var dataClearanceContextHintVC: ContextualHintViewController
     let shoppingContextHintVC: ContextualHintViewController
     private var backgroundTabLoader: DefaultBackgroundTabLoader
+    var windowUUID: WindowUUID { return tabManager.windowUUID }
 
     // MARK: Telemetry Variables
     var webviewTelemetry = WebViewLoadMeasurementTelemetry()
@@ -482,13 +483,21 @@ class BrowserViewController: UIViewController,
     // MARK: - Redux
 
     func subscribeToRedux() {
-        store.dispatch(ActiveScreensStateAction.showScreen(.browserViewController))
+        store.dispatch(ActiveScreensStateAction.showScreen(
+            ScreenActionContext(screen: .browserViewController, windowUUID: windowUUID)
+        ))
+        let uuid = self.windowUUID
         store.subscribe(self, transform: {
-            $0.select(BrowserViewControllerState.init)
+            $0.select({ appState in
+                return BrowserViewControllerState(appState: appState, uuid: uuid)
+            })
         })
     }
 
     func newState(state: BrowserViewControllerState) {
+        // We only care about Redux updates for this window
+        guard windowUUID == state.windowUUID else { return }
+
         ensureMainThread { [weak self] in
             guard let self else { return }
 

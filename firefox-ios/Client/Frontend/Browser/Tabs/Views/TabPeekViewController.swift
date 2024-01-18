@@ -13,6 +13,7 @@ class TabPeekViewController: UIViewController,
 
     var tabPeekState: TabPeekState
     var contextActions: UIContextMenuActionProvider = { _ in return nil }
+    private let windowUUID: WindowUUID
 
     private var tab: TabModel
 
@@ -22,9 +23,10 @@ class TabPeekViewController: UIViewController,
 
     // MARK: - Lifecycle methods
 
-    init(tab: TabModel) {
-        tabPeekState = TabPeekState()
+    init(tab: TabModel, windowUUID: WindowUUID) {
+        tabPeekState = TabPeekState(windowUUID: windowUUID)
         self.tab = tab
+        self.windowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
 
         subscribeToRedux()
@@ -52,14 +54,18 @@ class TabPeekViewController: UIViewController,
     // MARK: - Private helper methods
 
     func subscribeToRedux() {
-        store.dispatch(ActiveScreensStateAction.showScreen(.tabPeek))
+        store.dispatch(ActiveScreensStateAction.showScreen(
+            ScreenActionContext(screen: .tabPeek, windowUUID: windowUUID)
+        ))
         store.subscribe(self, transform: {
             return $0.select(TabPeekState.init)
         })
     }
 
     func unsubscribeFromRedux() {
-        store.dispatch(ActiveScreensStateAction.closeScreen(.tabPeek))
+        store.dispatch(ActiveScreensStateAction.closeScreen(
+            ScreenActionContext(screen: .tabPeek, windowUUID: windowUUID)
+        ))
         store.unsubscribe(self)
     }
 
