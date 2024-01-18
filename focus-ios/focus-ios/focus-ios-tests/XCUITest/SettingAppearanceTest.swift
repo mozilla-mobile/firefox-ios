@@ -248,7 +248,7 @@ class SettingAppearanceTest: BaseTestCase {
         } else {
             iOS_Settings.cells.staticTexts["CONTENT_BLOCKERS"].tap()
         }
-        iOS_Settings.tables.cells.element(boundBy: 0).tap()
+        iOS_Settings.tables.cells.staticTexts["Firefox Focus"].tap()
         iOS_Settings.tables.cells.switches.element(boundBy: 0).tap()
         iOS_Settings.terminate()
 
