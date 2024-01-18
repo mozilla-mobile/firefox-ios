@@ -27,7 +27,6 @@ private struct LightColourPalette: ThemeColourPalette {
     var layerAccentNonOpaque: UIColor = FXColors.Blue50.withAlphaComponent(0.1)
     var layerAccentPrivate: UIColor = FXColors.Purple60
     var layerAccentPrivateNonOpaque: UIColor = FXColors.Purple60.withAlphaComponent(0.1)
-    var layerLightGrey30: UIColor = FXColors.LightGrey30
     var layerSepia: UIColor = FXColors.Orange05
     var layerHomepage = Gradient(colors: [
         FXColors.LightGrey10.withAlphaComponent(1),

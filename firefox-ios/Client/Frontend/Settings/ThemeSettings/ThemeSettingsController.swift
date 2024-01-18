@@ -146,7 +146,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         let images = [ImageIdentifiers.nightMode, "themeBrightness"].map { name in
             UIImage(imageLiteralResourceName: name)
                 .createScaled(size)
-                .tinted(withColor: themeManager.currentTheme.colors.layerLightGrey30)
+                .tinted(withColor: themeManager.currentTheme.colors.iconSecondary)
         }
 
         let slider: UISlider = .build { slider in

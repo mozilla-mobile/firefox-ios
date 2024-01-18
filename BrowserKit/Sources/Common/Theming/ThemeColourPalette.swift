@@ -22,7 +22,6 @@ public protocol ThemeColourPalette {
     var layerAccentNonOpaque: UIColor { get }
     var layerAccentPrivate: UIColor { get }
     var layerAccentPrivateNonOpaque: UIColor { get }
-    var layerLightGrey30: UIColor { get }
     var layerSepia: UIColor { get }
     var layerHomepage: Gradient { get }
     var layerInfo: UIColor { get }
