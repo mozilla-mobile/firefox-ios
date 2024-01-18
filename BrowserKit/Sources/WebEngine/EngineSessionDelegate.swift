@@ -23,7 +23,4 @@ public protocol EngineSessionDelegate: AnyObject {
 
     /// Event to indicate the loading state has changed
     func onLoadingStateChange(loading: Bool)
-
-    /// Event to indicate that a url was loaded to this session.
-    func onLoadUrl()
 }

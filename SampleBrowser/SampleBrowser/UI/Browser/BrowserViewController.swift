@@ -68,6 +68,10 @@ class BrowserViewController: UIViewController, EngineSessionDelegate {
         progressView.backgroundColor = .white
     }
 
+    private func updateProgressView(loading: Bool) {
+        progressView.isHidden = !loading
+    }
+
     // MARK: - Browser actions
 
     func goBack() {
@@ -119,10 +123,7 @@ class BrowserViewController: UIViewController, EngineSessionDelegate {
 
     func onLoadingStateChange(loading: Bool) {
         navigationDelegate?.onLoadingStateChange(loading: loading)
-    }
-
-    func onLoadUrl() {
-        // Handle onTitle and onURL changes with FXIOS-8179
+        updateProgressView(loading: loading)
     }
 
     func onProgress(progress: Double) {
