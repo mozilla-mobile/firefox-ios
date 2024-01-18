@@ -270,8 +270,14 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
 
         if let primaryActionText = viewModel.primaryActionText {
             let primaryButtonViewModel = PrimaryRoundedButtonViewModel(
-                    title: primaryActionText,
-                    a11yIdentifier: viewModel.a11yPrimaryActionIdentifier ?? "")
+                title: primaryActionText,
+                a11yIdentifier: viewModel.a11yPrimaryActionIdentifier ?? "",
+                backgroundColor: { theme in
+                    return viewModel.type.primaryButtonBackground(theme: theme)
+                },
+                titleColor: { theme in
+                    return viewModel.type.primaryButtonTextColor(theme: theme)
+                })
             primaryButton.configure(viewModel: primaryButtonViewModel)
             if primaryButton.superview == nil {
                 containerStackView.addArrangedSubview(primaryButton)
