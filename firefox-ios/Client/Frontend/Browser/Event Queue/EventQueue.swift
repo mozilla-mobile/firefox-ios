@@ -88,8 +88,7 @@ public final class EventQueue<QueueEventType: Hashable> {
             }
 
             let enqueued = EnqueuedAction(token: token, action: action, dependencies: events)
-            self.actions.append(enqueued)
-            self.processActions()
+            self.processActions(incomingActions: [enqueued])
         }
         return token
     }
@@ -220,15 +219,21 @@ public final class EventQueue<QueueEventType: Hashable> {
         return signalledEvents[event] == state
     }
 
-    private func processActions(for event: QueueEventType? = nil) {
+    private func processActions(for event: QueueEventType? = nil,
+                                incomingActions: [EnqueuedAction] = []) {
         assert(Thread.isMainThread, "Expects to be called on the main thread.")
-        guard !isProcessingActions else {
+        if isProcessingActions {
             // processActions() does not support reentrancy. If this gets called
             // recursively, defer next call to the subequent iteration of the MT
             // run loop. This fixes some edge case bugs with nested dependencies
             // which can potentially cause actions to be executed twice incorrectly.
-            mainQueue.async { [weak self] in self?.processActions() }
+            mainQueue.async { [weak self] in
+                self?.actions.append(contentsOf: incomingActions)
+                self?.processActions()
+            }
             return
+        } else {
+            actions.append(contentsOf: incomingActions)
         }
         isProcessingActions = true
         defer { isProcessingActions = false }

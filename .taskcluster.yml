@@ -7,6 +7,7 @@ tasks:
     - $let:
         # Project-specific trustDomain
         trustDomain: mobile
+        canonicalRepo: https://github.com/mozilla-mobile/firefox-ios
 
         # Github events have this stuff in different places...
         ownerEmail:
@@ -97,15 +98,14 @@ tasks:
         $if: >
           tasks_for in ["action", "cron"]
           || (isPullRequest && pullRequestAction in ["opened", "reopened", "synchronize"])
-          || (tasks_for == "github-push" && head_branch[:10] != "refs/tags/")
+          || (tasks_for == "github-push" && (head_branch == "refs/heads/main" || head_branch[:19] == "refs/heads/releases"))
           || (tasks_for == "github-release" && releaseAction == "published")
         then:
             $let:
                 level:
-                    $if: 'tasks_for in ["github-push", "github-release", "action", "cron"] && repoUrl == "https://github.com/mozilla-mobile/firefox-ios"'
+                    $if: 'tasks_for in ["github-push", "github-release", "action", "cron"] && repoUrl == canonicalRepo'
                     then: '3'
                     else: '1'
-
                 short_head_branch:
                     $if: 'head_branch[:11] == "refs/heads/"'
                     then: {$eval: 'head_branch[11:]'}
@@ -127,7 +127,7 @@ tasks:
                           source: '${repoUrl}/raw/${head_sha}/.taskcluster.yml'
                         - $if: 'isPullRequest || tasks_for in ["github-push", "github-release"]'
                           then:
-                            name: "Decision Task"
+                            name: "Decision Task (${tasks_for[7:]})"  # strip out "github-" from tasks_for
                             description: 'The task that creates all of the other tasks in the task graph'
                           else:
                             $if: 'tasks_for == "action"'
@@ -137,7 +137,7 @@ tasks:
                             else:
                                 name: "Decision Task for cron job ${cron.job_name}"
                                 description: 'Created by a [cron task](https://firefox-ci-tc.services.mozilla.com/tasks/${cron.task_id})'
-                provisionerId: "mobile-${level}"
+                provisionerId: "${trustDomain}-${level}"
                 workerType: "decision-gcp"
                 tags:
                     $if: 'tasks_for == "github-push" || isPullRequest'
@@ -159,15 +159,15 @@ tasks:
                             - tc-treeherder.v2.${project}.${head_sha}
                             - $if: 'tasks_for == "github-push"'
                               then:
-                                - index.mobile.v2.${project}.branch.${short_head_branch}.latest.taskgraph.decision
-                                - index.mobile.v2.${project}.branch.${short_head_branch}.revision.${head_sha}.taskgraph.decision
-                                - index.mobile.v2.${project}.revision.${head_sha}.taskgraph.decision
+                                - index.${trustDomain}.v2.${project}.branch.${short_head_branch}.latest.taskgraph.decision
+                                - index.${trustDomain}.v2.${project}.branch.${short_head_branch}.revision.${head_sha}.taskgraph.decision
+                                - index.${trustDomain}.v2.${project}.revision.${head_sha}.taskgraph.decision
                             - $if: 'tasks_for == "cron"'
                               then:
                                 # cron context provides ${head_branch} as a short one
-                                - index.mobile.v2.${project}.branch.${head_branch}.latest.taskgraph.decision-${cron.job_name}
-                                - index.mobile.v2.${project}.branch.${head_branch}.revision.${head_sha}.taskgraph.decision-${cron.job_name}
-                                - index.mobile.v2.${project}.branch.${head_branch}.revision.${head_sha}.taskgraph.cron.${ownTaskId}
+                                - index.${trustDomain}.v2.${project}.branch.${head_branch}.latest.taskgraph.decision-${cron.job_name}
+                                - index.${trustDomain}.v2.${project}.branch.${head_branch}.revision.${head_sha}.taskgraph.decision-${cron.job_name}
+                                - index.${trustDomain}.v2.${project}.branch.${head_branch}.revision.${head_sha}.taskgraph.cron.${ownTaskId}
                 scopes:
                     $if: 'tasks_for == "github-push"'
                     then:
@@ -208,6 +208,7 @@ tasks:
                               REPOSITORIES: {$json: {mobile: "Firefox for iOS"}}
                               HG_STORE_PATH: /builds/worker/checkouts/hg-store
                               ANDROID_SDK_ROOT: /builds/worker/android-sdk
+                              TASKCLUSTER_CACHES: /builds/worker/checkouts
                             - $if: 'isPullRequest'
                               then:
                                 MOBILE_PULL_REQUEST_NUMBER: '${event.pull_request.number}'
@@ -220,6 +221,8 @@ tasks:
                             - $if: 'tasks_for == "github-release"'
                               then:
                                 MOBILE_HEAD_TAG: '${event.release.tag_name}'
+                    cache:
+                        "${trustDomain}-level-${level}-checkouts-v1": /builds/worker/checkouts
                     features:
                         taskclusterProxy: true
                         chainOfTrust: true

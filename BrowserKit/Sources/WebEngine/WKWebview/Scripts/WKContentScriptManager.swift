@@ -31,7 +31,7 @@ class DefaultContentScriptManager: NSObject, WKContentScriptManager {
 
         // If this helper handles script messages, then get the handlers names and register them
         script.scriptMessageHandlerNames().forEach { scriptMessageHandlerName in
-            session.webView.configuration.userContentController.addInDefaultContentWorld(
+            session.webView.engineConfiguration.addInDefaultContentWorld(
                 scriptMessageHandler: self,
                 name: scriptMessageHandlerName
             )
@@ -48,7 +48,7 @@ class DefaultContentScriptManager: NSObject, WKContentScriptManager {
 
         // If this helper handles script messages, then get the handlers names and register them
         script.scriptMessageHandlerNames().forEach { scriptMessageHandlerName in
-            session.webView.configuration.userContentController.addInPageContentWorld(
+            session.webView.engineConfiguration.addInPageContentWorld(
                 scriptMessageHandler: self,
                 name: scriptMessageHandlerName
             )
@@ -66,7 +66,7 @@ class DefaultContentScriptManager: NSObject, WKContentScriptManager {
     func uninstall(session: WKEngineSession) {
         scripts.forEach { script in
             script.value.scriptMessageHandlerNames().forEach { name in
-                session.webView.configuration.userContentController.removeScriptMessageHandler(forName: name)
+                session.webView.engineConfiguration.removeScriptMessageHandler(forName: name)
             }
             script.value.prepareForDeinit()
         }

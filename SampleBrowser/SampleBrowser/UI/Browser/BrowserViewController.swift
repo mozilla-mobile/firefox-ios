@@ -3,21 +3,24 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import WebEngine
 
-protocol BrowserReloadStopDelegate: AnyObject {
-    func browserIsLoading(isLoading: Bool)
+protocol NavigationDelegate: AnyObject {
+    func onNavigationStateChange(canGoBack: Bool?, canGoForward: Bool?)
 }
 
 // Holds different type of browser views, communicating through protocols with them
-class BrowserViewController: UIViewController, BrowserDelegate {
-    weak var reloadStopDelegate: BrowserReloadStopDelegate?
+class BrowserViewController: UIViewController, EngineSessionDelegate {
+    weak var navigationDelegate: NavigationDelegate?
     private lazy var progressView: UIProgressView = .build { _ in }
-    // TODO: FXIOS-7823 Integrate WebEngine in SampleBrowser
-    // var currentBrowser: WebEngine!
+    private var engineSession: EngineSession!
+    private var engineView: EngineView!
 
     // MARK: - Init
 
-    init() {
+    init(engineProvider: EngineProvider) {
+        engineSession = engineProvider.session
+        engineView = engineProvider.view
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -32,22 +35,23 @@ class BrowserViewController: UIViewController, BrowserDelegate {
 
         view.backgroundColor = .clear
         setupProgressBar()
-        // TODO: FXIOS-7823 Integrate WebEngine in SampleBrowser
-//        setupBrowserView(TODO)
-//        currentBrowser.browserDelegate = self
+
+        setupBrowserView(engineView)
+        engineSession.delegate = self
     }
 
-    private func setupBrowserView(_ viewController: UIViewController) {
-        viewController.view.translatesAutoresizingMaskIntoConstraints = false
-        add(viewController)
+    private func setupBrowserView(_ engineView: EngineView) {
+        engineView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(engineView)
 
         NSLayoutConstraint.activate([
-            viewController.view.topAnchor.constraint(equalTo: progressView.bottomAnchor),
-            viewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            viewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            viewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            engineView.topAnchor.constraint(equalTo: progressView.bottomAnchor),
+            engineView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            engineView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            engineView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
-//        currentBrowser = viewController
+
+        engineView.render(session: engineSession)
     }
 
     private func setupProgressBar() {
@@ -60,21 +64,68 @@ class BrowserViewController: UIViewController, BrowserDelegate {
             progressView.heightAnchor.constraint(equalToConstant: 3)
         ])
         progressView.progressTintColor = .orange
+        progressView.backgroundColor = .white
+    }
+
+    // MARK: - Browser actions
+
+    func goBack() {
+        engineSession.goBack()
+    }
+
+    func goForward() {
+        engineSession.goForward()
+    }
+
+    func reload() {
+        engineSession.reload()
+    }
+
+    func stop() {
+        engineSession.stopLoading()
     }
 
     // MARK: - Search
 
-    func loadUrlOrSearch(_ searchTerm: String) {
-        // TODO: FXIOS-7823 Integrate WebEngine in SampleBrowser
-//        currentBrowser.loadUrlOrSearch(searchTerm)
+    func loadUrlOrSearch(_ searchTerm: SearchTerm) {
+        guard searchTerm.isValidUrl, let url = URL(string: searchTerm.searchTerm) else {
+            search(searchTerm)
+            return
+        }
+
+        engineSession.load(url: url.absoluteString)
     }
 
-    // MARK: - BrowserDelegate
+    private func search(_ searchTerm: SearchTerm) {
+        guard let url = searchTerm.encodedURL else { return }
 
-    func setProgressBarStatus(status: ProgressBarStatus) {
-        progressView.progress = Float(status.progress)
-        progressView.isHidden = status.isHidden
+        engineSession.load(url: url.absoluteString)
+    }
 
-        reloadStopDelegate?.browserIsLoading(isLoading: !status.isHidden)
+    // MARK: - EngineSessionDelegate
+
+    func onScrollChange(scrollX: Int, scrollY: Int) {
+        // Handle view port with FXIOS-8086
+    }
+
+    func onLongPress(touchPoint: CGPoint) {
+        // Handle preview with FXIOS-8178
+    }
+
+    func onTitleChange(title: String) {
+        // Handle onTitle and onURL changes with FXIOS-8179
+    }
+
+    func onLoadUrl() {
+        // Handle onTitle and onURL changes with FXIOS-8179
+    }
+
+    func onProgress(progress: Int) {
+        progressView.setProgress(Float(progress), animated: true)
+    }
+
+    func onNavigationStateChange(canGoBack: Bool?, canGoForward: Bool?) {
+        navigationDelegate?.onNavigationStateChange(canGoBack: canGoBack,
+                                                    canGoForward: canGoForward)
     }
 }

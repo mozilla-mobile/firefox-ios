@@ -17,14 +17,13 @@ final class WKUserScriptManagerTests: XCTestCase {
         let subject = createSubject()
 
         subject.injectUserScriptsIntoWebView(webview)
-
-        // FXIOS-8115 Test that configuration has the scripts
+        let config = webview.engineConfiguration as! MockWKEngineConfiguration
+        XCTAssertEqual(config.addUserScriptCalled, 8)
     }
 
     func createSubject() -> DefaultUserScriptManager {
         let subject = DefaultUserScriptManager(scriptProvider: MockUserScriptProvider())
-        // FXIOS-8115 Leaks caused by WKWebViewConfiguration
-//        trackForMemoryLeaks(subject)
+        trackForMemoryLeaks(subject)
         return subject
     }
 }

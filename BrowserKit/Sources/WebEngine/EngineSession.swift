@@ -6,6 +6,8 @@ import Foundation
 
 /// Protocol representing a single engine session. In browsers usually a session corresponds to a tab.
 public protocol EngineSession {
+    var delegate: EngineSessionDelegate? { get set }
+
     /// The engine received a request to load a URL.
     /// - Parameter url: The URL string that is requested
     func load(url: String)

@@ -188,7 +188,6 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
 
     var appMenuButton = ToolbarButton()
     var bookmarksButton = ToolbarButton()
-    var homeButton = ToolbarButton()
     var addNewTabButton = ToolbarButton()
     var forwardButton = ToolbarButton()
     var multiStateButton = ToolbarButton()
@@ -201,7 +200,6 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
 
     lazy var actionButtons: [ThemeApplicable & UIButton] = [
         self.tabsButton,
-        self.homeButton,
         self.bookmarksButton,
         self.appMenuButton,
         self.addNewTabButton,
@@ -258,7 +256,6 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
             progressBar,
             cancelButton,
             showQRScannerButton,
-            homeButton,
             bookmarksButton,
             appMenuButton,
             addNewTabButton,
@@ -322,12 +319,6 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
 
         multiStateButton.snp.makeConstraints { make in
             make.leading.equalTo(self.forwardButton.snp.trailing)
-            make.centerY.equalTo(self)
-            make.size.equalTo(URLBarViewUX.ButtonHeight)
-        }
-
-        homeButton.snp.makeConstraints { make in
-            make.trailing.equalTo(self.bookmarksButton.snp.leading)
             make.centerY.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
@@ -428,7 +419,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
                     // If we are showing a toolbar, show the text field next to the forward button
                     make.leading.equalTo(self.multiStateButton.snp.trailing).offset(URLBarViewUX.Padding)
                     if self.topTabsIsShowing {
-                        make.trailing.equalTo(self.homeButton.snp.leading).offset(-URLBarViewUX.Padding)
+                        make.trailing.equalTo(self.bookmarksButton.snp.leading).offset(-URLBarViewUX.Padding)
                     } else {
                         make.trailing.equalTo(self.addNewTabButton.snp.leading).offset(-URLBarViewUX.Padding)
                     }
@@ -490,8 +481,8 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
 
     /// Ideally we'd split this implementation in two, one URLBarView with a toolbar and one without
     /// However, switching views dynamically at runtime is a difficult. For now, we just use one view
-    /// that can show in either mode. For the reload button, we hide it on iPad (apart from multitasking mode)
-    func setShowToolbar(_ shouldShow: Bool, hideReloadButton: Bool) {
+    /// that can show in either mode.
+    func setShowToolbar(_ shouldShow: Bool) {
         toolbarIsShowing = shouldShow
         setNeedsUpdateConstraints()
         // when we transition from portrait to landscape, calling this here causes
@@ -499,7 +490,6 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         if !toolbarIsShowing {
             updateConstraintsIfNeeded()
         }
-        shouldHideReloadButton(hideReloadButton)
         updateViewsForOverlayModeAndToolbarChanges()
     }
 
@@ -519,15 +509,8 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         progressBar.setProgress(0, animated: false)
     }
 
-    /// We hide reload button on iPad, but not in multitasking mode
-    func updateReaderModeState(_ state: ReaderModeState, hideReloadButton: Bool) {
+    func updateReaderModeState(_ state: ReaderModeState) {
         locationView.readerModeState = state
-        shouldHideReloadButton(hideReloadButton)
-    }
-
-    /// We hide reload button on iPad, but not in multitasking mode
-    func shouldHideReloadButton(_ isHidden: Bool) {
-        locationView.reloadButton.isHidden = isHidden
     }
 
     func setAutocompleteSuggestion(_ suggestion: String?) {
@@ -596,7 +579,6 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         progressBar.isHidden = false
         addNewTabButton.isHidden = !toolbarIsShowing || topTabsIsShowing
         appMenuButton.isHidden = !toolbarIsShowing
-        homeButton.isHidden = !toolbarIsShowing || !topTabsIsShowing
         bookmarksButton.isHidden = !toolbarIsShowing || !topTabsIsShowing
         forwardButton.isHidden = !toolbarIsShowing
         backButton.isHidden = !toolbarIsShowing
@@ -611,7 +593,6 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         progressBar.alpha = inOverlayMode || didCancel ? 0 : 1
         tabsButton.alpha = inOverlayMode ? 0 : 1
         appMenuButton.alpha = inOverlayMode ? 0 : 1
-        homeButton.alpha = inOverlayMode ? 0 : 1
         bookmarksButton.alpha = inOverlayMode ? 0 : 1
         addNewTabButton.alpha = inOverlayMode ? 0 : 1
         forwardButton.alpha = inOverlayMode ? 0 : 1
@@ -643,7 +624,6 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         progressBar.isHidden = inOverlayMode
         addNewTabButton.isHidden = !toolbarIsShowing || topTabsIsShowing || inOverlayMode
         appMenuButton.isHidden = !toolbarIsShowing || inOverlayMode
-        homeButton.isHidden = !toolbarIsShowing || inOverlayMode || !topTabsIsShowing
         bookmarksButton.isHidden = !toolbarIsShowing || inOverlayMode || !topTabsIsShowing
         forwardButton.isHidden = !toolbarIsShowing || inOverlayMode
         backButton.isHidden = !toolbarIsShowing || inOverlayMode
@@ -753,7 +733,6 @@ extension URLBarView: TabToolbarProtocol {
                         multiStateButton,
                         locationView,
                         tabsButton,
-                        homeButton,
                         bookmarksButton,
                         appMenuButton,
                         addNewTabButton,

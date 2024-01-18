@@ -126,7 +126,6 @@ class RemoteTabsTableViewController: UITableViewController,
     }
 
     func applyTheme() {
-        tableView.separatorColor = themeManager.currentTheme.colors.layerLightGrey30
         let theme = themeManager.currentTheme
         emptyView.applyTheme(theme: theme)
         tableView.visibleCells.forEach { ($0 as? ThemeApplicable)?.applyTheme(theme: theme) }

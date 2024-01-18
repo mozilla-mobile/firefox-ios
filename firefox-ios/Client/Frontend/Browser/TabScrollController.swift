@@ -238,7 +238,10 @@ private extension TabScrollingController {
 
     func isBouncingAtBottom() -> Bool {
         guard let scrollView = scrollView else { return false }
-        return contentOffset.y > (contentSize.height - scrollView.frame.size.height) && contentSize.height > scrollView.frame.size.height
+        let yOffsetCheck = contentOffset.y > (contentSize.height - scrollView.frame.size.height)
+        let heightCheck = contentSize.height > scrollView.frame.size.height
+
+        return yOffsetCheck && heightCheck
     }
 
     func shouldAllowScroll(with topIsRubberbanding: Bool,

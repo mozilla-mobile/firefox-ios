@@ -84,6 +84,8 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
 
         tableView.register(ThemedTableSectionHeaderFooterView.self,
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
+        tableView.register(ThemedSubtitleTableViewCell.self,
+                           forCellReuseIdentifier: ThemedSubtitleTableViewCell.cellIdentifier)
 
         // Insert Done button if being presented outside of the Settings Nav stack
         if !(self.navigationController is ThemedNavigationController) {
@@ -117,8 +119,7 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = dequeueCellFor(indexPath: indexPath)
-        cell.applyTheme(theme: themeManager.currentTheme)
+        let cell = tableView.dequeueReusableCell(withIdentifier: ThemedSubtitleTableViewCell.cellIdentifier, for: indexPath)
         var engine: OpenSearchEngine!
         let section = Section(rawValue: sectionsToDisplay[indexPath.section].rawValue) ?? .defaultEngine
         switch section {
@@ -203,7 +204,7 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
                     )
                 )
                 setting.onConfigureCell(cell, theme: themeManager.currentTheme)
-                setting.control.addTarget(
+                setting.control.switchView.addTarget(
                     self,
                     action: #selector(didToggleEnableNonSponsoredSuggestions),
                     for: .valueChanged
@@ -223,7 +224,7 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
                     )
                 )
                 setting.onConfigureCell(cell, theme: themeManager.currentTheme)
-                setting.control.addTarget(
+                setting.control.switchView.addTarget(
                     self,
                     action: #selector(didToggleEnableSponsoredSuggestions),
                     for: .valueChanged
@@ -433,7 +434,9 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
         }
 
         // Can't drag/drop over "Add Custom Engine button"
-        if sourceIndexPath.item + 1 == model.orderedEngines.count || proposedDestinationIndexPath.item + 1 == model.orderedEngines.count {
+        let sourceIndexCheck = sourceIndexPath.item + 1 == model.orderedEngines.count
+        let destinationIndexCheck = proposedDestinationIndexPath.item + 1 == model.orderedEngines.count
+        if sourceIndexCheck || destinationIndexCheck {
             return sourceIndexPath
         }
 

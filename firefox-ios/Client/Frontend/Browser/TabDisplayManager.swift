@@ -204,7 +204,10 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
         self.dataStore.removeAll()
         getTabsAndUpdateInactiveState { [weak self] tabsToDisplay in
             guard let self, !tabsToDisplay.isEmpty else { return }
-            let orderedRegularTabs = tabDisplayType == .TopTabTray ? tabsToDisplay : self.getRegularOrderedTabs() ?? tabsToDisplay
+
+            let defaultTabsValue = self.getRegularOrderedTabs() ?? tabsToDisplay
+            let orderedRegularTabs = tabDisplayType == .TopTabTray ? tabsToDisplay : defaultTabsValue
+
             if self.getRegularOrderedTabs() == nil {
                 self.saveRegularOrderedTabs(from: tabsToDisplay)
             }

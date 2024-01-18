@@ -1769,16 +1769,16 @@
 "Username" = "שם משתמש";
 
 /* The message of the error displayed to a user when they trying to change a wallpaper failed. */
-"Wallpaper.Change.Error.Body.v106" = "משהו השתבש עם הטפט הזה.";
+"Wallpaper.Change.Error.Body.v106" = "משהו השתבש עם תמונת הרקע הזו.";
 
 /* The title of the error displayed when changing wallpaper fails. */
-"Wallpaper.Change.Error.Title.v106" = "לא ניתן להחליף טפט";
+"Wallpaper.Change.Error.Title.v106" = "לא ניתן להחליף תמונת רקע";
 
 /* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
 "Wallpaper.Download.Error.Body.v106" = "משהו השתבש בהורדה שלך.";
 
 /* The title of the error displayed if download fails when changing a wallpaper. */
-"Wallpaper.Download.Error.Title.v106" = "לא ניתן להוריד טפט";
+"Wallpaper.Download.Error.Title.v106" = "לא ניתן להוריד תמונת רקע";
 
 /* An action for the error displayed to a user when they trying to change a wallpaper failed. */
 "Wallpaper.Error.Dismiss.v106" = "ביטול";

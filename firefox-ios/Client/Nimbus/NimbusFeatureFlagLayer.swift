@@ -53,6 +53,9 @@ final class NimbusFeatureFlagLayer {
         case .fakespotBackInStock:
             return checkProductBackInStockFakespotFeature(from: nimbus)
 
+        case .preferSwitchToOpenTabOverDuplicate:
+            return checkPreferSwitchToOpenTabOverDuplicate(from: nimbus)
+
         case .qrCodeCoordinatorRefactor:
             return checkQRCodeCoordinatorRefactorFeature(from: nimbus)
 
@@ -228,6 +231,10 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.shopping2023.value()
 
         return config.backInStockReporting
+    }
+
+    private func checkPreferSwitchToOpenTabOverDuplicate(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.homescreenFeature.value().preferSwitchToOpenTab
     }
 
     private func checkAddressAutofill(from nimbus: FxNimbus) -> Bool {

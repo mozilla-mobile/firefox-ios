@@ -5,7 +5,6 @@
 import UIKit
 import Shared
 import Storage
-import Telemetry
 import Common
 import SiteImageView
 
@@ -69,6 +68,8 @@ class SearchViewController: SiteTableViewController,
                             LoaderListener,
                             FeatureFlaggable,
                             Notifiable {
+    typealias ExtraKey = TelemetryWrapper.EventExtraKey
+
     var searchDelegate: SearchViewControllerDelegate?
     private let viewModel: SearchViewModel
     private let model: SearchEngines
@@ -285,15 +286,18 @@ class SearchViewController: SiteTableViewController,
             // Query and reload the table with new search suggestions.
             querySuggestClient()
 
-            // Show the default search engine first.
-            if !viewModel.isPrivate {
-                let ua = SearchViewController.userAgent ?? "FxSearch"
-                suggestClient = SearchSuggestClient(searchEngine: defaultEngine, userAgent: ua)
-            }
+            setupSuggestClient(with: defaultEngine)
 
             // Reload the footer list of search engines.
             reloadSearchEngines()
         }
+    }
+
+    /// Sets up the suggestClient used to query our searches
+    /// - Parameter defaultEngine: default search engine set in settings (i.e. Google)
+    private func setupSuggestClient(with defaultEngine: OpenSearchEngine) {
+        let ua = SearchViewController.userAgent ?? "FxSearch"
+        suggestClient = SearchSuggestClient(searchEngine: defaultEngine, userAgent: ua)
     }
 
     private var quickSearchEngines: [OpenSearchEngine] {
@@ -303,7 +307,7 @@ class SearchViewController: SiteTableViewController,
 
         // If we're not showing search suggestions, the default search engine won't be visible
         // at the top of the table. Show it with the others in the bottom search bar.
-        if viewModel.isPrivate || !(searchEngines?.shouldShowSearchSuggestions ?? false) {
+        if !(searchEngines?.shouldShowSearchSuggestions ?? false) {
             engines?.insert(defaultEngine, at: 0)
         }
 
@@ -429,8 +433,10 @@ class SearchViewController: SiteTableViewController,
             assertionFailure()
             return
         }
-        let extras = [TelemetryWrapper.EventExtraKey.recordSearchLocation.rawValue: SearchesMeasurement.SearchLocation.quickSearch,
-                      TelemetryWrapper.EventExtraKey.recordSearchEngineID.rawValue: engine.engineID as Any] as [String: Any]
+        let extras = [
+            ExtraKey.recordSearchLocation.rawValue: SearchLocation.quickSearch,
+            ExtraKey.recordSearchEngineID.rawValue: engine.engineID as Any
+        ] as [String: Any]
         TelemetryWrapper.gleanRecordEvent(category: .action,
                                           method: .tap,
                                           object: .recordSearch,
@@ -588,7 +594,9 @@ class SearchViewController: SiteTableViewController,
                 self.suggestions = suggestions!
                 // Remove user searching term inside suggestions list
                 self.suggestions?.removeAll(where: {
+                    // swiftlint:disable line_length
                     $0.trimmingCharacters(in: .whitespacesAndNewlines) == self.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
+                    // swiftlint:enable line_length
                 })
                 // First suggestion should be what the user is searching
                 self.suggestions?.insert(self.searchQuery, at: 0)
@@ -626,8 +634,10 @@ class SearchViewController: SiteTableViewController,
                   let url = defaultEngine.searchURLForQuery(suggestion)
             else { return }
 
-            let extras = [TelemetryWrapper.EventExtraKey.recordSearchLocation.rawValue: SearchesMeasurement.SearchLocation.suggestion,
-                          TelemetryWrapper.EventExtraKey.recordSearchEngineID.rawValue: defaultEngine.engineID as Any] as [String: Any]
+            let extras = [
+                ExtraKey.recordSearchLocation.rawValue: SearchLocation.suggestion,
+                ExtraKey.recordSearchEngineID.rawValue: defaultEngine.engineID as Any
+            ] as [String: Any]
             TelemetryWrapper.gleanRecordEvent(category: .action,
                                               method: .tap,
                                               object: .recordSearch,

@@ -131,7 +131,10 @@ class SyncUITests: BaseTestCase {
         navigator.goto(Intro_FxASignin)
         // QR does not work on sim but checking that the button works, no crash
         navigator.performAction(Action.OpenEmailToQR)
-        mozWaitForElementToExist(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: 5)
+        mozWaitForElementToExist(
+            app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar],
+            timeout: 5
+        )
         mozWaitForElementToExist(app.buttons["Ready to Scan"])
         mozWaitForElementToExist(app.buttons["Use Email Instead"])
         app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar].buttons["Close"].tap()

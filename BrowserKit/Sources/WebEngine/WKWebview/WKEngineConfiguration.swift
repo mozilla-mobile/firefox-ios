@@ -5,10 +5,41 @@
 import Foundation
 import WebKit
 
-/// Abstraction on top of `WKWebViewConfiguration`
+/// Abstraction on top of `WKWebViewConfiguration` and the `WKUserContentController`
 protocol WKEngineConfiguration {
-    var userContentController: WKUserContentController { get set }
-    var allowsInlineMediaPlayback: Bool { get set }
+    func addUserScript(_ userScript: WKUserScript)
+    func addInDefaultContentWorld(scriptMessageHandler: WKScriptMessageHandler, name: String)
+    func addInPageContentWorld(scriptMessageHandler: WKScriptMessageHandler, name: String)
+    func removeScriptMessageHandler(forName name: String)
+    func removeAllUserScripts()
 }
 
-extension WKWebViewConfiguration: WKEngineConfiguration {}
+struct DefaultEngineConfiguration: WKEngineConfiguration {
+    var webViewConfiguration: WKWebViewConfiguration
+
+    func addUserScript(_ userScript: WKUserScript) {
+        webViewConfiguration.userContentController.addUserScript(userScript)
+    }
+
+    func addInDefaultContentWorld(scriptMessageHandler: WKScriptMessageHandler,
+                                  name: String) {
+        webViewConfiguration.userContentController.add(scriptMessageHandler,
+                                                       contentWorld: .defaultClient,
+                                                       name: name)
+    }
+
+    func addInPageContentWorld(scriptMessageHandler: WKScriptMessageHandler,
+                               name: String) {
+        webViewConfiguration.userContentController.add(scriptMessageHandler,
+                                                       contentWorld: .page,
+                                                       name: name)
+    }
+
+    func removeScriptMessageHandler(forName name: String) {
+        webViewConfiguration.userContentController.removeScriptMessageHandler(forName: name)
+    }
+
+    func removeAllUserScripts() {
+        webViewConfiguration.userContentController.removeAllUserScripts()
+    }
+}

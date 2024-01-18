@@ -36,7 +36,9 @@ class UserScriptManager: FeatureFlaggable {
          (WKUserScriptInjectionTime.atDocumentStart, mainFrameOnly: true),
          (WKUserScriptInjectionTime.atDocumentEnd, mainFrameOnly: true)].forEach { arg in
             let (injectionTime, mainFrameOnly) = arg
-            let name = (mainFrameOnly ? "MainFrame" : "AllFrames") + "AtDocument" + (injectionTime == .atDocumentStart ? "Start" : "End")
+            let mainframeString = mainFrameOnly ? "MainFrame" : "AllFrames"
+            let injectionString = injectionTime == .atDocumentStart ? "Start" : "End"
+            let name = mainframeString + "AtDocument" + injectionString
             if let path = Bundle.main.path(forResource: name, ofType: "js"),
                 let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
                 let wrappedSource = "(function() { const APP_ID_TOKEN = '\(UserScriptManager.appIdToken)'; \(source) })()"
@@ -96,7 +98,9 @@ class UserScriptManager: FeatureFlaggable {
          (WKUserScriptInjectionTime.atDocumentStart, mainFrameOnly: true),
          (WKUserScriptInjectionTime.atDocumentEnd, mainFrameOnly: true)].forEach { arg in
             let (injectionTime, mainFrameOnly) = arg
-            let name = (mainFrameOnly ? "MainFrame" : "AllFrames") + "AtDocument" + (injectionTime == .atDocumentStart ? "Start" : "End")
+            let mainframeString = mainFrameOnly ? "MainFrame" : "AllFrames"
+            let injectionString = injectionTime == .atDocumentStart ? "Start" : "End"
+            let name = mainframeString + "AtDocument" + injectionString
             if let userScript = compiledUserScripts[name] {
                 webView?.configuration.userContentController.addUserScript(userScript)
             }

@@ -11,7 +11,6 @@ import Storage
 import SnapKit
 import Account
 import MobileCoreServices
-import Telemetry
 import Common
 import ComponentLibrary
 import Redux
@@ -328,9 +327,8 @@ class BrowserViewController: UIViewController,
         let showToolbar = shouldShowToolbarForTraitCollection(newCollection)
         let showTopTabs = shouldShowTopTabsForTraitCollection(newCollection)
 
-        let hideReloadButton = shouldUseiPadSetup(traitCollection: newCollection)
         urlBar.topTabsIsShowing = showTopTabs
-        urlBar.setShowToolbar(!showToolbar, hideReloadButton: hideReloadButton)
+        urlBar.setShowToolbar(!showToolbar)
         toolbar.addNewTabButton.isHidden = showToolbar
 
         if showToolbar {
@@ -398,6 +396,7 @@ class BrowserViewController: UIViewController,
         // individual TabManager instances for each BVC, so we perform these here instead.
         tabManager.preserveTabs()
         // TODO: [FXIOS-7856] Some additional updates for telemetry forthcoming, once iPad multi-window is enabled.
+        SearchBarSettingsViewModel.recordLocationTelemetry(for: isBottomSearchBar ? .bottom : .top)
         TabsTelemetry.trackTabsQuantity(tabManager: tabManager)
     }
 
@@ -484,14 +483,9 @@ class BrowserViewController: UIViewController,
 
     func subscribeToRedux() {
         store.dispatch(ActiveScreensStateAction.showScreen(.browserViewController))
-
         store.subscribe(self, transform: {
             $0.select(BrowserViewControllerState.init)
         })
-    }
-
-    func unsubscribeFromRedux() {
-        store.unsubscribe(self)
     }
 
     func newState(state: BrowserViewControllerState) {
@@ -511,7 +505,26 @@ class BrowserViewController: UIViewController,
             // Update states for felt privacy
             updateInContentHomePanel(tabManager.selectedTab?.url)
             setupMiddleButtonStatus(isLoading: false)
+
+            if let toast = state.toast {
+                self.showToastType(toast: toast)
+            }
         }
+    }
+
+    private func showToastType(toast: ToastType) {
+        let viewModel = ButtonToastViewModel(
+            labelText: toast.title,
+            buttonText: toast.buttonText)
+        let toast = ButtonToast(viewModel: viewModel,
+                                theme: themeManager.currentTheme,
+                                completion: { buttonPressed in
+            if let action = toast.reduxAction, buttonPressed {
+                store.dispatch(action)
+            }
+        })
+
+        show(toast: toast)
     }
 
     // MARK: - Lifecycle
@@ -540,8 +553,6 @@ class BrowserViewController: UIViewController,
         // links into the view from other apps.
         let dropInteraction = UIDropInteraction(delegate: self)
         view.addInteraction(dropInteraction)
-
-        updateLegacyTheme()
 
         searchTelemetry = SearchTelemetry()
 
@@ -781,7 +792,9 @@ class BrowserViewController: UIViewController,
 
         var fakespotNeedsUpdate = false
         if urlBar.currentURL != nil {
-            fakespotNeedsUpdate = contentStackView.isSidebarVisible != FakespotUtils().shouldDisplayInSidebar(viewSize: size)
+            fakespotNeedsUpdate = contentStackView.isSidebarVisible != FakespotUtils().shouldDisplayInSidebar(
+                viewSize: size
+            )
             if let fakespotState = browserViewControllerState?.fakespotState {
                 fakespotNeedsUpdate = fakespotNeedsUpdate && fakespotState.isOpen
             }
@@ -811,19 +824,8 @@ class BrowserViewController: UIViewController,
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             themeManager.systemThemeChanged()
-            updateLegacyTheme()
         }
         setupMiddleButtonStatus(isLoading: false)
-    }
-
-    private func updateLegacyTheme() {
-        if let state = browserViewControllerState,
-           !NightModeHelper.isActivated()
-            && LegacyThemeManager.instance.systemThemeIsOn
-            && !state.usePrivateHomepage {
-            let userInterfaceStyle = traitCollection.userInterfaceStyle
-            LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? LegacyDarkTheme() : LegacyNormalTheme()
-        }
     }
 
     // MARK: - Constraints
@@ -1091,7 +1093,7 @@ class BrowserViewController: UIViewController,
             }
         } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
             showEmbeddedWebview()
-            urlBar.shouldHideReloadButton(shouldUseiPadSetup())
+            urlBar.locationView.reloadButton.isHidden = false
         }
 
         if UIDevice.current.userInterfaceIdiom == .pad {
@@ -1303,16 +1305,8 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        if traitCollection.horizontalSizeClass == .compact {
-            state = .home
-        } else {
-            state = isLoading ? .stop : .reload
-        }
-
-        handleMiddleButtonState(state)
-        if !toolbar.isHidden {
-            urlBar.locationView.reloadButton.reloadButtonState = isLoading ? .stop : .reload
-        }
+        handleMiddleButtonState(.home)
+        urlBar.locationView.reloadButton.reloadButtonState = isLoading ? .stop : .reload
         currentMiddleButtonState = state
     }
 
@@ -1729,14 +1723,18 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    internal func updateFakespot(tab: Tab) {
-        guard let webView = tab.webView, let url = webView.url else {
+    internal func updateFakespot(tab: Tab, isReload: Bool = false) {
+        guard let webView = tab.webView,
+              let url = webView.url
+        else {
             // We're on homepage or a blank tab
             store.dispatch(FakespotAction.setAppearanceTo(false))
             return
         }
+
         store.dispatch(FakespotAction.tabDidChange(tabUIDD: tab.tabUUID))
-        let environment = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI) ? FakespotEnvironment.staging : .prod
+        let isFeatureEnabled = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI)
+        let environment = isFeatureEnabled ? FakespotEnvironment.staging : .prod
         let product = ShoppingProduct(url: url, client: FakespotClient(environment: environment))
 
         guard product.product != nil, !tab.isPrivate else {
@@ -1746,6 +1744,10 @@ class BrowserViewController: UIViewController,
             // Relates to FXIOS-7844
             contentStackView.hideSidebar(self)
             return
+        }
+
+        if isReload, let productId = product.product?.id {
+           store.dispatch(FakespotAction.tabDidReload(tabUIDD: tab.tabUUID, productId: productId))
         }
 
         // Do not update Fakespot when we are not on a selected tab
@@ -1912,8 +1914,13 @@ class BrowserViewController: UIViewController,
     // Disable search suggests view only if user is in private mode and setting is enabled
     private var shouldDisableSearchSuggestsForPrivateMode: Bool {
         let featureFlagEnabled = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
-        let alwaysShowSearchSuggestionsView = browserViewControllerState?.searchScreenState.showSearchSugestionsView ?? false
-        let isSettingEnabled = profile.prefs.boolForKey(PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions) ?? false
+        let alwaysShowSearchSuggestionsView = browserViewControllerState?
+            .searchScreenState
+            .showSearchSugestionsView ?? false
+        let isSettingEnabled = profile.prefs.boolForKey(
+            PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions
+        ) ?? false
+
         return featureFlagEnabled && !alwaysShowSearchSuggestionsView && !isSettingEnabled
     }
 
@@ -1964,18 +1971,25 @@ class BrowserViewController: UIViewController,
         applyThemeForPreferences(profile.prefs, contentScript: contentScript)
     }
 
+    var isPreferSwitchToOpenTabOverDuplicateFeatureEnabled: Bool {
+        featureFlags.isFeatureEnabled(.preferSwitchToOpenTabOverDuplicate, checking: .buildOnly)
+    }
+
     // MARK: - LibraryPanelDelegate
 
     func libraryPanel(didSelectURL url: URL, visitType: VisitType) {
-        guard let tab = tabManager.selectedTab else { return }
+        if isPreferSwitchToOpenTabOverDuplicateFeatureEnabled, let tab = tabManager.getTabFor(url, reversed: true) {
+            tabManager.selectTab(tab)
+        } else {
+            guard let tab = tabManager.selectedTab else { return }
 
-        // Handle keyboard shortcuts from homepage with url selection
-        // (ex: Cmd + Tap on Link; which is a cell in this case)
-        if navigateLinkShortcutIfNeeded(url: url) {
-            return
+            // Handle keyboard shortcuts from homepage with url selection
+            // (ex: Cmd + Tap on Link; which is a cell in this case)
+            if navigateLinkShortcutIfNeeded(url: url) {
+                return
+            }
+            finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
         }
-
-        finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
     }
 
     func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
@@ -2230,19 +2244,23 @@ extension BrowserViewController: HomePanelDelegate {
     }
 
     func homePanel(didSelectURL url: URL, visitType: VisitType, isGoogleTopSite: Bool) {
-        guard let tab = tabManager.selectedTab else { return }
-        if isGoogleTopSite {
-            tab.urlType = .googleTopSite
-            searchTelemetry?.shouldSetGoogleTopSiteSearch = true
-        }
+        if isPreferSwitchToOpenTabOverDuplicateFeatureEnabled, let tab = tabManager.getTabFor(url, reversed: true) {
+            tabManager.selectTab(tab)
+        } else {
+            guard let tab = tabManager.selectedTab else { return }
+            if isGoogleTopSite {
+                tab.urlType = .googleTopSite
+                searchTelemetry?.shouldSetGoogleTopSiteSearch = true
+            }
 
-        // Handle keyboard shortcuts from homepage with url selection
-        // (ex: Cmd + Tap on Link; which is a cell in this case)
-        if navigateLinkShortcutIfNeeded(url: url) {
-            return
-        }
+            // Handle keyboard shortcuts from homepage with url selection
+            // (ex: Cmd + Tap on Link; which is a cell in this case)
+            if navigateLinkShortcutIfNeeded(url: url) {
+                return
+            }
 
-        finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
+            finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
+        }
     }
 
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool = false) {
@@ -2347,6 +2365,7 @@ extension BrowserViewController: TabManagerDelegate {
 
         if let tab = selected, let webView = tab.webView {
             updateURLBarDisplayURL(tab)
+            if urlBar.inOverlayMode, tab.url?.displayURL != nil { urlBar.leaveOverlayMode(didCancel: false) }
 
             if previous == nil || tab.isPrivate != previous?.isPrivate {
                 applyTheme()
@@ -2403,14 +2422,14 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         if let readerMode = selected?.getContentScript(name: ReaderMode.name()) as? ReaderMode {
-            urlBar.updateReaderModeState(readerMode.state, hideReloadButton: shouldUseiPadSetup())
+            urlBar.updateReaderModeState(readerMode.state)
             if readerMode.state == .active {
                 showReaderModeBar(animated: false)
             } else {
                 hideReaderModeBar(animated: false)
             }
         } else {
-            urlBar.updateReaderModeState(ReaderModeState.unavailable, hideReloadButton: shouldUseiPadSetup())
+            urlBar.updateReaderModeState(ReaderModeState.unavailable)
         }
 
         if topTabsVisible {
@@ -2730,43 +2749,46 @@ extension BrowserViewController {
     }
 
     func trackAccessibility() {
+        typealias Key = TelemetryWrapper.EventExtraKey
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .voiceOver,
             object: .app,
-            extras: [TelemetryWrapper.EventExtraKey.isVoiceOverRunning.rawValue: UIAccessibility.isVoiceOverRunning.description]
+            extras: [Key.isVoiceOverRunning.rawValue: UIAccessibility.isVoiceOverRunning.description]
         )
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .switchControl,
             object: .app,
-            extras: [TelemetryWrapper.EventExtraKey.isSwitchControlRunning.rawValue: UIAccessibility.isSwitchControlRunning.description]
+            extras: [Key.isSwitchControlRunning.rawValue: UIAccessibility.isSwitchControlRunning.description]
         )
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .reduceTransparency,
             object: .app,
-            extras: [TelemetryWrapper.EventExtraKey.isReduceTransparencyEnabled.rawValue: UIAccessibility.isReduceTransparencyEnabled.description]
+            extras: [Key.isReduceTransparencyEnabled.rawValue: UIAccessibility.isReduceTransparencyEnabled.description]
         )
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .reduceMotion,
             object: .app,
-            extras: [TelemetryWrapper.EventExtraKey.isReduceMotionEnabled.rawValue: UIAccessibility.isReduceMotionEnabled.description]
+            extras: [Key.isReduceMotionEnabled.rawValue: UIAccessibility.isReduceMotionEnabled.description]
         )
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .invertColors,
             object: .app,
-            extras: [TelemetryWrapper.EventExtraKey.isInvertColorsEnabled.rawValue: UIAccessibility.isInvertColorsEnabled.description]
+            extras: [Key.isInvertColorsEnabled.rawValue: UIAccessibility.isInvertColorsEnabled.description]
         )
+
+        let a11yEnabled = UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory.description
+        let a11yCategory = UIApplication.shared.preferredContentSizeCategory.rawValue.description
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .dynamicTextSize,
             object: .app,
-            extras: [
-                TelemetryWrapper.EventExtraKey.isAccessibilitySizeEnabled.rawValue: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory.description,
-                TelemetryWrapper.EventExtraKey.preferredContentSizeCategory.rawValue: UIApplication.shared.preferredContentSizeCategory.rawValue.description]
+            extras: [Key.isAccessibilitySizeEnabled.rawValue: a11yEnabled,
+                     Key.preferredContentSizeCategory.rawValue: a11yCategory]
         )
     }
 

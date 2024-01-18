@@ -64,21 +64,8 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
         stack.spacing = UX.textStackViewSpacing
     }
 
-    private lazy var primaryButton: LegacyResizableButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
-            withTextStyle: .callout,
-            size: UX.buttonFontSize)
-        button.layer.cornerRadius = UX.buttonCornerRadius
-        button.titleLabel?.textAlignment = .center
+    private lazy var primaryButton: PrimaryRoundedButton = .build { button in
         button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.PrimaryButton"
-        button.contentEdgeInsets = UIEdgeInsets(
-            top: UX.buttonVerticalInset,
-            left: UX.buttonHorizontalInset,
-            bottom: UX.buttonVerticalInset,
-            right: UX.buttonHorizontalInset
-        )
     }
 
     var viewModel: OnboardingDefaultBrowserModelProtocol
@@ -201,9 +188,12 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
 
     private func updateLayout() {
         titleLabel.text = viewModel.title
-        primaryButton.setTitle(viewModel.buttonTitle, for: .normal)
+        let buttonViewModel = PrimaryRoundedButtonViewModel(
+            title: viewModel.buttonTitle,
+            a11yIdentifier: "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.PrimaryButton"
+        )
+        primaryButton.configure(viewModel: buttonViewModel)
     }
-
     private func addViewsToView() {
         createLabels(from: viewModel.instructionSteps)
 
@@ -269,8 +259,8 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
         titleLabel.textColor = theme.colors.textPrimary
         numeratedLabels.forEach { $0.textColor = theme.colors.textPrimary }
 
-        primaryButton.setTitleColor(theme.colors.textInverted, for: .normal)
-        primaryButton.backgroundColor = theme.colors.actionPrimary
+        // Call applyTheme() on primaryButton to let it handle theme-specific styling
+        primaryButton.applyTheme(theme: theme)
 
         view.backgroundColor = theme.colors.layer1
     }

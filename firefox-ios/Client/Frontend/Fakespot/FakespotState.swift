@@ -9,7 +9,18 @@ struct FakespotState: ScreenState, Equatable {
     var isOpen: Bool
     var sidebarOpenForiPadLandscape: Bool
     var currentTabUUID: String
-    var expandState: [String: ExpandState]
+    var expandState: [String: ExpandState] // tabUUID as key
+    var telemetryState: [String: TelemetryState] // tabUUID as key
+    var sendSurfaceDisplayedTelemetryEvent = true
+
+    struct TelemetryState: Equatable {
+        var adEvents: [String: AdTelemetryState] = [:] // productId as key
+    }
+
+    struct AdTelemetryState: Equatable {
+        var sendAdExposureEvent = true
+        var sendAdsImpressionEvent = true
+    }
 
     struct ExpandState: Equatable {
         var isSettingsExpanded = false
@@ -24,24 +35,33 @@ struct FakespotState: ScreenState, Equatable {
             isOpen: appState.fakespotState.isOpen,
             sidebarOpenForiPadLandscape: appState.fakespotState.sidebarOpenForiPadLandscape,
             currentTabUUID: appState.fakespotState.currentTabUUID,
-            expandState: appState.fakespotState.expandState
+            expandState: appState.fakespotState.expandState,
+            telemetryState: appState.fakespotState.telemetryState
         )
     }
 
     init() {
-        self.init(isOpen: false, sidebarOpenForiPadLandscape: false, currentTabUUID: "", expandState: [:])
+        self.init(
+            isOpen: false,
+            sidebarOpenForiPadLandscape: false,
+            currentTabUUID: "",
+            expandState: [:],
+            telemetryState: [:]
+        )
     }
 
     init(
         isOpen: Bool,
         sidebarOpenForiPadLandscape: Bool,
         currentTabUUID: String,
-        expandState: [String: FakespotState.ExpandState] = [:]
+        expandState: [String: FakespotState.ExpandState] = [:],
+        telemetryState: [String: TelemetryState] = [:]
     ) {
         self.isOpen = isOpen
         self.sidebarOpenForiPadLandscape = sidebarOpenForiPadLandscape
         self.currentTabUUID = currentTabUUID
         self.expandState = expandState
+        self.telemetryState = telemetryState
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -58,13 +78,27 @@ struct FakespotState: ScreenState, Equatable {
 
         case FakespotAction.tabDidChange(let tabUUID):
             var state = state
+            if state.telemetryState[tabUUID] == nil {
+                state.telemetryState[tabUUID] = TelemetryState()
+            }
             state.currentTabUUID = tabUUID
+
+            return state
+
+        case FakespotAction.tabDidReload(let tabUUID, let productId):
+            guard state.currentTabUUID == tabUUID else { return state }
+
+            var state = state
+            state.telemetryState[tabUUID]?.adEvents[productId] = AdTelemetryState()
             return state
 
         case FakespotAction.pressedShoppingButton:
             var state = state
             state.isOpen = !state.isOpen
-            state.sidebarOpenForiPadLandscape = !state.isOpen
+            state.sidebarOpenForiPadLandscape = state.isOpen
+            if !state.isOpen {
+                state.sendSurfaceDisplayedTelemetryEvent = true
+            }
             return state
 
         case FakespotAction.show:
@@ -77,11 +111,34 @@ struct FakespotState: ScreenState, Equatable {
             var state = state
             state.isOpen = false
             state.sidebarOpenForiPadLandscape = false
+            state.sendSurfaceDisplayedTelemetryEvent = true
             return state
 
         case FakespotAction.setAppearanceTo(let isEnabled):
             var state = state
             state.isOpen = isEnabled
+            state.sendSurfaceDisplayedTelemetryEvent = !isEnabled
+            return state
+
+        case FakespotAction.surfaceDisplayedEventSend:
+            var state = state
+            state.sendSurfaceDisplayedTelemetryEvent = false
+            return state
+
+        case FakespotAction.adsImpressionEventSendFor(let productId):
+            var state = state
+            if state.telemetryState[state.currentTabUUID]?.adEvents[productId] == nil {
+                state.telemetryState[state.currentTabUUID]?.adEvents[productId] = AdTelemetryState()
+            }
+            state.telemetryState[state.currentTabUUID]?.adEvents[productId]?.sendAdsImpressionEvent = false
+            return state
+
+        case FakespotAction.adsExposureEventSendFor(let productId):
+            var state = state
+            if state.telemetryState[state.currentTabUUID]?.adEvents[productId] == nil {
+                state.telemetryState[state.currentTabUUID]?.adEvents[productId] = AdTelemetryState()
+            }
+            state.telemetryState[state.currentTabUUID]?.adEvents[productId]?.sendAdExposureEvent = false
             return state
 
         default:

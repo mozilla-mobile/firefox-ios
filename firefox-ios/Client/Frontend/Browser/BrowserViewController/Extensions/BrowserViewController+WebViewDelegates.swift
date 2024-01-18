@@ -292,7 +292,10 @@ extension BrowserViewController: WKUIDelegate {
                                                      value: .contextMenu)
                     }
 
-                    let isBookmarkedSite = profile.places.isBookmarked(url: url.absoluteString).value.successValue ?? false
+                    let isBookmarkedSite = profile.places
+                        .isBookmarked(url: url.absoluteString)
+                        .value
+                        .successValue ?? false
                     actions.append(isBookmarkedSite ? removeAction : addBookmarkAction)
 
                     actions.append(UIAction(
@@ -465,7 +468,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // (orange color) as soon as the page has loaded.
         if let url = webView.url {
             if !url.isReaderModeURL {
-                urlBar.updateReaderModeState(ReaderModeState.unavailable, hideReloadButton: shouldUseiPadSetup())
+                urlBar.updateReaderModeState(ReaderModeState.unavailable)
                 hideReaderModeBar(animated: false)
             }
         }
@@ -895,7 +898,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
         if tabManager.selectedTab === tab {
             updateUIForReaderHomeStateForTab(tab, focusUrlBar: true)
-            updateFakespot(tab: tab)
+            updateFakespot(tab: tab, isReload: true)
         }
     }
 

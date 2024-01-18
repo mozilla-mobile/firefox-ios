@@ -78,17 +78,19 @@ extension PhotonActionSheetProtocol {
     }
 
     func getRefreshLongPressMenu(for tab: Tab) -> [PhotonRowActions] {
-        guard tab.webView?.url != nil && (tab.getContentScript(name: ReaderMode.name()) as? ReaderMode)?.state != .active else {
-            return []
-        }
+        guard tab.webView?.url != nil
+                && (tab.getContentScript(name: ReaderMode.name()) as? ReaderMode)?.state != .active
+        else { return [] }
 
         let defaultUAisDesktop = UserAgent.isDesktop(ua: UserAgent.getUserAgent())
         let toggleActionTitle: String
+        // swiftlint:disable line_length
         if defaultUAisDesktop {
             toggleActionTitle = tab.changedUserAgent ? .AppMenu.AppMenuViewDesktopSiteTitleString : .AppMenu.AppMenuViewMobileSiteTitleString
         } else {
             toggleActionTitle = tab.changedUserAgent ? .AppMenu.AppMenuViewMobileSiteTitleString : .AppMenu.AppMenuViewDesktopSiteTitleString
         }
+        // swiftlint:enable line_length
         let toggleDesktopSite = SingleActionViewModel(title: toggleActionTitle,
                                                       iconString: StandardImageIdentifiers.Large.deviceDesktop) { _ in
             if let url = tab.url {

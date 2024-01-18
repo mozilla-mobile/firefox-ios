@@ -232,7 +232,8 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     }
 
     // MARK: Get tabs
-    func getTabFor(_ url: URL) -> Tab? {
+    func getTabFor(_ url: URL, reversed: Bool = false) -> Tab? {
+        let tabs = reversed ? self.tabs.reversed() : self.tabs
         for tab in tabs {
             if let webViewUrl = tab.webView?.url,
                url.isEqual(webViewUrl) {
@@ -606,6 +607,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
             return
         }
 
+        backupCloseTab = BackupCloseTab(tab: tab, restorePosition: removalIndex)
         let prevCount = count
         tabs.remove(at: removalIndex)
         assert(count == prevCount - 1, "Make sure the tab count was actually removed")

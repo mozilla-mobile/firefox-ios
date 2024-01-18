@@ -61,6 +61,7 @@
         "DragAndDropTestIpad\/testTryDragAndDropHistoryToURLBar()",
         "DragAndDropTests\/testRearrangeTabsTabTray()",
         "ExperimentIntegrationTests",
+        "FakespotTests\/testReviewQualityCheckBottomSheetUI()",
         "FindInPageTests\/testFindFromMenu()",
         "HistoryTests\/testClearPrivateData()",
         "HistoryTests\/testClearPrivateDataButtonDisabled()",
@@ -135,7 +136,8 @@
         "TopTabsTestIphone\/testSwitchBetweenTabsNoPrivatePrivateToastButton()",
         "TopTabsTestIphone\/testSwitchBetweenTabsToastButton()",
         "TrackingProtectionTests\/testEnableDisableTPforSite()",
-        "TrackingProtectionTests\/testTrackingProtection()"
+        "TrackingProtectionTests\/testTrackingProtection()",
+        "URLValidationTests"
       ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",

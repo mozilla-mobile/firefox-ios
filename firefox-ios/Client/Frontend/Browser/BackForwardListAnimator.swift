@@ -14,7 +14,9 @@ class BackForwardListAnimator: NSObject, UIViewControllerAnimatedTransitioning {
             to: transitionContext.viewController(forKey: .to)!
         )
 
-        guard let backForwardViewController = !self.presenting ? screens.from as? BackForwardListViewController : screens.to as? BackForwardListViewController else { return }
+        let screensFrom = screens.from as? BackForwardListViewController
+        let screensTo = screens.to as? BackForwardListViewController
+        guard let backForwardViewController = !self.presenting ? screensFrom : screensTo else { return }
 
         var bottomViewController = !self.presenting ? screens.to as UIViewController : screens.from as UIViewController
 

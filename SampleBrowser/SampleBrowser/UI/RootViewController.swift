@@ -6,10 +6,11 @@ import UIKit
 
 // Holds toolbar, search bar, search and browser VCs
 class RootViewController: UIViewController,
-                          BrowserToolbarDelegate,
-                          BrowserReloadStopDelegate,
-                          BrowserSearchBarDelegate,
-                          BrowserMenuDelegate {
+                          ToolbarDelegate,
+                          NavigationDelegate,
+                          SearchBarDelegate,
+                          SearchSuggestionDelegate,
+                          MenuDelegate {
     private lazy var toolbar: BrowserToolbar = .build { _ in }
     private lazy var searchBar: BrowserSearchBar =  .build { _ in }
     private lazy var statusBarFiller: UIView =  .build { view in
@@ -17,15 +18,13 @@ class RootViewController: UIViewController,
     }
 
     private var browserVC: BrowserViewController
-
-    // Note: For easier debugging, we might need to load
-    // same URL again and for this use the following homepage url
-    private var homepage = ""
+    private var searchVC: SearchViewController
 
     // MARK: - Init
 
-    init() {
-        self.browserVC = BrowserViewController()
+    init(engineProvider: EngineProvider) {
+        self.browserVC = BrowserViewController(engineProvider: engineProvider)
+        self.searchVC = SearchViewController()
         super.init(nibName: nil, bundle: nil)
         view.backgroundColor = .black
     }
@@ -41,11 +40,8 @@ class RootViewController: UIViewController,
 
         configureBrowserView()
         configureSearchbar()
+        configureSearchView()
         configureToolbar()
-
-        if !homepage.isEmpty {
-            browse(to: homepage)
-        }
     }
 
     private func configureBrowserView() {
@@ -57,7 +53,7 @@ class RootViewController: UIViewController,
             browserVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
 
-        browserVC.reloadStopDelegate = self
+        browserVC.navigationDelegate = self
     }
 
     private func configureSearchbar() {
@@ -76,9 +72,26 @@ class RootViewController: UIViewController,
             searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
 
-        searchBar.configure(browserDelegate: self,
-                            browserMenuDelegate: self)
+        searchBar.configure(searchBarDelegate: self,
+                            menuDelegate: self)
         searchBar.becomeFirstResponder()
+    }
+
+    private func configureSearchView() {
+        searchVC.searchViewDelegate = self
+        searchVC.view.translatesAutoresizingMaskIntoConstraints = false
+    }
+
+    private func addSearchView() {
+        guard searchVC.parent == nil else { return }
+        add(searchVC)
+
+        NSLayoutConstraint.activate([
+            searchVC.view.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
+            searchVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            searchVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            searchVC.view.bottomAnchor.constraint(equalTo: toolbar.topAnchor)
+        ])
     }
 
     private func configureToolbar() {
@@ -98,53 +111,55 @@ class RootViewController: UIViewController,
 
     private func browse(to term: String) {
         searchBar.resignFirstResponder()
-        browserVC.loadUrlOrSearch(term)
+        browserVC.loadUrlOrSearch(SearchTerm(searchTerm: term))
+        searchVC.remove()
     }
 
     // MARK: - BrowserToolbarDelegate
 
     func backButtonClicked() {
-        // TODO: FXIOS-7823 Integrate WebEngine in SampleBrowser
-//        browserVC.currentBrowser.goBack()
+        browserVC.goBack()
     }
 
     func forwardButtonClicked() {
-        // TODO: FXIOS-7823 Integrate WebEngine in SampleBrowser
-//        browserVC.currentBrowser.goForward()
+        browserVC.goForward()
     }
 
     func reloadButtonClicked() {
-        // TODO: FXIOS-7823 Integrate WebEngine in SampleBrowser
-//        browserVC.currentBrowser.reload()
+        browserVC.reload()
     }
 
     func stopButtonClicked() {
-        // TODO: FXIOS-7823 Integrate WebEngine in SampleBrowser
-//        browserVC.currentBrowser.stop()
+        browserVC.stop()
     }
 
-    // MARK: - BrowserReloadStopDelegate
+    // MARK: - NavigationDelegate
+
+    func onNavigationStateChange(canGoBack: Bool?, canGoForward: Bool?) {
+        toolbar.updateBackForwardButtons(canGoBack: canGoBack, canGoForward: canGoForward)
+    }
 
     func browserIsLoading(isLoading: Bool) {
+        // TODO: FXIOS-8180 Fix navigation in SampleBrowser
         toolbar.updateReloadStopButton(isLoading: isLoading)
-
-        // Update back and forward buttons when we're done loading
-        if !isLoading {
-            // TODO: FXIOS-7823 Integrate WebEngine in SampleBrowser
-//            toolbar.updateBackForwardButtons(canGoBack: browserVC.currentBrowser.canGoBack,
-//                                             canGoForward: browserVC.currentBrowser.canGoForward)
-        }
     }
 
-// MARK: - BrowserSearchBarDelegate
+    // MARK: - SearchBarDelegate
 
     func searchSuggestions(searchTerm: String) {
         guard !searchTerm.isEmpty else {
+            searchVC.viewModel.resetSearch()
+            searchVC.openSuggestions()
             return
         }
+
+        addSearchView()
+        searchVC.requestSearch(term: searchTerm)
     }
 
     func openSuggestions(searchTerm: String) {
+        addSearchView()
+        searchVC.openSuggestions()
     }
 
     func openBrowser(searchTerm: String) {
@@ -152,9 +167,16 @@ class RootViewController: UIViewController,
         browse(to: searchText)
     }
 
-    // MARK: - BrowserMenuDelegate
+    // MARK: - MenuDelegate
 
     func didClickMenu() {
         // Not implementing Settings for now, will see later on if this is needed or not
+    }
+
+    // MARK: - SearchViewDelegate
+
+    func tapOnSuggestion(term: String) {
+        searchBar.setSearchBarText(term)
+        browse(to: term)
     }
 }

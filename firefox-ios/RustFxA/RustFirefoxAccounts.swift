@@ -125,7 +125,11 @@ open class RustFirefoxAccounts {
         }
 
         let config: FxAConfig
-        let useCustom = prefs?.boolForKey(PrefsKeys.KeyUseCustomFxAContentServer) ?? false || prefs?.boolForKey(PrefsKeys.KeyUseCustomSyncTokenServerOverride) ?? false
+        let useCustom = prefs?.boolForKey(
+            PrefsKeys.KeyUseCustomFxAContentServer
+        ) ?? false || prefs?.boolForKey(
+            PrefsKeys.KeyUseCustomSyncTokenServerOverride
+        ) ?? false
         if useCustom {
             let contentUrl: String
             if prefs?.boolForKey(PrefsKeys.KeyUseCustomFxAContentServer) ?? false,
@@ -135,7 +139,8 @@ open class RustFirefoxAccounts {
                 contentUrl = "https://stable.dev.lcip.org"
             }
 
-            let tokenServer = prefs?.boolForKey(PrefsKeys.KeyUseCustomSyncTokenServerOverride) ?? false ? prefs?.stringForKey(PrefsKeys.KeyCustomSyncTokenServerOverride) : nil
+            let serverOverride = prefs?.boolForKey(PrefsKeys.KeyUseCustomSyncTokenServerOverride) ?? false
+            let tokenServer = serverOverride ? prefs?.stringForKey(PrefsKeys.KeyCustomSyncTokenServerOverride) : nil
             config = FxAConfig(
                 contentUrl: contentUrl,
                 clientId: RustFirefoxAccounts.clientID,

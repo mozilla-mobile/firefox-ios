@@ -79,6 +79,7 @@ let package = Package(
             dependencies: ["TabDataStore"]),
         .target(
             name: "Redux",
+            dependencies: ["Common"],
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "ReduxTests",

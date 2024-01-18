@@ -28,32 +28,36 @@ class DefaultUserScriptManager: WKUserScriptManager {
 
     func injectUserScriptsIntoWebView(_ webView: WKEngineWebView) {
         // Remove any previously-added user scripts to prevent the same script from being injected twice
-        webView.configuration.userContentController.removeAllUserScripts()
+        webView.engineConfiguration.removeAllUserScripts()
 
         // Inject all pre-compiled user scripts.
-        [UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentStart, isMainFrame: false),
-         UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentEnd, isMainFrame: false),
-         UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentStart, isMainFrame: true),
-         UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentEnd, isMainFrame: true)].forEach { userScriptInfo in
+        [
+            UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentStart, isMainFrame: false),
+            UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentEnd, isMainFrame: false),
+            UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentStart, isMainFrame: true),
+            UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentEnd, isMainFrame: true)
+        ].forEach { userScriptInfo in
             let fullName = buildScriptName(from: userScriptInfo)
 
             if let userScript = compiledUserScripts[fullName] {
-                webView.configuration.userContentController.addUserScript(userScript)
+                webView.engineConfiguration.addUserScript(userScript)
             }
 
             let webcompatName = "Webcompat\(fullName)"
             if let webcompatUserScript = compiledUserScripts[webcompatName] {
-                webView.configuration.userContentController.addUserScript(webcompatUserScript)
+                webView.engineConfiguration.addUserScript(webcompatUserScript)
             }
         }
     }
 
     /// Cache all of the pre-compiled user scripts so they don't need re-fetched from disk for each webview.
     private func injectUserScripts() {
-        [UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentStart, isMainFrame: false),
-         UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentEnd, isMainFrame: false),
-         UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentStart, isMainFrame: true),
-         UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentEnd, isMainFrame: true)].forEach { userScriptInfo in
+        [
+            UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentStart, isMainFrame: false),
+            UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentEnd, isMainFrame: false),
+            UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentStart, isMainFrame: true),
+            UserScriptInfo(injectionTime: WKUserScriptInjectionTime.atDocumentEnd, isMainFrame: true)
+        ].forEach { userScriptInfo in
             let fullName = buildScriptName(from: userScriptInfo)
 
             injectFrameScript(name: fullName, userScriptInfo: userScriptInfo)
