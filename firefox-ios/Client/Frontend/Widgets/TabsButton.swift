@@ -124,9 +124,14 @@ class TabsButton: UIButton, ThemeApplicable {
         button.countLabel.font = countLabel.font
         button.countLabel.layer.cornerRadius = countLabel.layer.cornerRadius
         button.labelBackground.layer.cornerRadius = labelBackground.layer.cornerRadius
+        
+        // Issue #17863 - theme property is never set and is always nil.  Since button.applyTheme(theme:) never runs, button is styled with a default blue border.
         if let theme {
             button.applyTheme(theme: theme)
         }
+        
+        // Issue #17863 - button.borderView.tintColor is set directly to self.unselectedTintColor to fix issue.
+        button.borderView.tintColor = self.unselectedTintColor
 
         return button
     }
