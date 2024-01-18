@@ -14,18 +14,8 @@ enum LegacyThemeManagerPrefs: String {
 class LegacyThemeManager {
     static let instance = LegacyThemeManager()
 
-<<<<<<< HEAD:Client/Frontend/Theme/LegacyThemeManager/LegacyThemeManager.swift
-    var current: LegacyTheme = themeFrom(name: UserDefaults.standard.string(forKey: LegacyThemeManagerPrefs.themeName.rawValue)) {
-        didSet {
-            ensureMainThread {
-                UserDefaults.standard.set(self.current.name, forKey: LegacyThemeManagerPrefs.themeName.rawValue)
-            }
-        }
-    }
-=======
     var current: LegacyTheme = themeFrom(name: UserDefaults.standard.string(
         forKey: LegacyThemeManagerPrefs.themeName.rawValue))
->>>>>>> 3096c2e8d (Refactor FXIOS-8169 [v122.1] Theming manager not saving theme (#18211)):firefox-ios/Client/Frontend/Theme/LegacyThemeManager/LegacyThemeManager.swift
 
     var currentName: BuiltinThemeName {
         return BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
