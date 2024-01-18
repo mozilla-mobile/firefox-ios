@@ -11420,11 +11420,8 @@
 				8A6E139B2A71BB5700A88FA8 /* LegacyTabCellTests.swift */,
 				8A6E139D2A71C78A00A88FA8 /* GridTabViewControllerTests.swift */,
 				1D74FF4D2B27962200FF01D0 /* WindowManagerTests.swift */,
-<<<<<<< HEAD:Client.xcodeproj/project.pbxproj
-=======
 				253648E02B2111C100D5C2C5 /* SearchViewControllerTests.swift */,
 				814A62452B587A3E00608195 /* DefaultThemeManagerTests.swift */,
->>>>>>> 3096c2e8d (Refactor FXIOS-8169 [v122.1] Theming manager not saving theme (#18211)):firefox-ios/Client.xcodeproj/project.pbxproj
 			);
 			path = ClientTests;
 			sourceTree = "<group>";
