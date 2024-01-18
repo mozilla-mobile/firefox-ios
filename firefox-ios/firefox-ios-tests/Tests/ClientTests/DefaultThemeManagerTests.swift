@@ -30,7 +30,7 @@ final class DefaultThemeManagerTests: XCTestCase {
 
         XCTAssert(
             userDefaults.registrationDictionary.isEmpty,
-            "registrationDictionary should be empty when intitializing object"
+            "registrationDictionary should be empty when initializing object"
         )
     }
 
