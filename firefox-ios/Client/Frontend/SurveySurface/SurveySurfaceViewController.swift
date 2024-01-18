@@ -14,13 +14,9 @@ protocol SurveySurfaceViewControllerDelegate: AnyObject {
 
 class SurveySurfaceViewController: UIViewController, Themeable {
     struct UX {
-        static let buttonCornerRadius: CGFloat = 13
-        static let buttonFontSize: CGFloat  = 16
         static let buttonMaxWidth: CGFloat  = 400
         static let buttonHeight: CGFloat = 45
         static let buttonSeparation: CGFloat = 8
-        static let buttonVerticalInset: CGFloat = 12
-        static let buttonHorizontalInset: CGFloat = 16
         static let buttonBottomMarginMultiplier: CGFloat  = 0.1
 
         static let sideMarginMultiplier: CGFloat  = 0.05
@@ -74,36 +70,22 @@ class SurveySurfaceViewController: UIViewController, Themeable {
         label.alpha = 0.0
     }
 
-    private lazy var takeSurveyButton: LegacyResizableButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
-            withTextStyle: .callout,
-            size: UX.buttonFontSize)
-        button.layer.cornerRadius = UX.buttonCornerRadius
-        button.titleLabel?.textAlignment = .center
+    private lazy var takeSurveyButton: PrimaryRoundedButton = .build { button in
+        let viewModel = PrimaryRoundedButtonViewModel(
+            title: .ResearchSurface.TakeSurveyButtonLabel,
+            a11yIdentifier: AccessibilityIdentifiers.SurveySurface.takeSurveyButton
+        )
+        button.configure(viewModel: viewModel)
         button.addTarget(self, action: #selector(self.takeSurveyAction), for: .touchUpInside)
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.accessibilityIdentifier = AccessibilityIdentifiers.SurveySurface.takeSurveyButton
-        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
-                                                left: UX.buttonHorizontalInset,
-                                                bottom: UX.buttonVerticalInset,
-                                                right: UX.buttonHorizontalInset)
-        button.alpha = 0.0
     }
 
-    private lazy var dismissSurveyButton: LegacyResizableButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(
-            withTextStyle: .callout,
-            size: UX.buttonFontSize)
-        button.layer.cornerRadius = UX.buttonCornerRadius
-        button.titleLabel?.textAlignment = .center
+    private lazy var dismissSurveyButton: SecondaryRoundedButton = .build { button in
+        let viewModel = SecondaryRoundedButtonViewModel(
+            title: .ResearchSurface.DismissButtonLabel,
+            a11yIdentifier: AccessibilityIdentifiers.SurveySurface.dismissButton
+        )
+        button.configure(viewModel: viewModel)
         button.addTarget(self, action: #selector(self.dismissAction), for: .touchUpInside)
-        button.accessibilityIdentifier = AccessibilityIdentifiers.SurveySurface.dismissButton
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
-                                                left: UX.buttonHorizontalInset,
-                                                bottom: UX.buttonVerticalInset,
-                                                right: UX.buttonHorizontalInset)
-        button.alpha = 0.0
     }
 
     // MARK: - View Lifecyle
@@ -201,8 +183,8 @@ class SurveySurfaceViewController: UIViewController, Themeable {
         let titleString = String(format: viewModel.info.text, AppName.shortName.rawValue)
         titleLabel.text = titleString
         imageView.image = viewModel.info.image
-        takeSurveyButton.setTitle(viewModel.info.takeSurveyButtonLabel, for: .normal)
-        dismissSurveyButton.setTitle(viewModel.info.dismissActionLabel, for: .normal)
+        takeSurveyButton.configuration?.title = viewModel.info.takeSurveyButtonLabel
+        dismissSurveyButton.configuration?.title = viewModel.info.dismissActionLabel
     }
 
     /// Animates the elements of the view from their initial position and alpha settings,
@@ -256,10 +238,8 @@ class SurveySurfaceViewController: UIViewController, Themeable {
 
         titleLabel.textColor = theme.colors.textPrimary
 
-        takeSurveyButton.setTitleColor(theme.colors.textInverted, for: .normal)
-        takeSurveyButton.backgroundColor = theme.colors.actionPrimary
+        takeSurveyButton.applyTheme(theme: theme)
 
-        dismissSurveyButton.setTitleColor(theme.colors.textOnLight, for: .normal)
-        dismissSurveyButton.backgroundColor = theme.colors.actionSecondary
+        dismissSurveyButton.applyTheme(theme: theme)
     }
 }
