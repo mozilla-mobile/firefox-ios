@@ -167,6 +167,7 @@ class TabDisplayPanel: UIViewController,
     }
 
     func newState(state: TabsPanelState) {
+        guard state.windowUUID == windowUUID else { return }
         tabsState = state
         tabDisplayView.newState(state: tabsState)
         shouldShowEmptyView(tabsState.isPrivateTabsEmpty)

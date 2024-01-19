@@ -398,7 +398,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     var libraryPanelWindowUUID: WindowUUID {
-        return browserViewController.windowUUID
+        return windowUUID
     }
 
     func didFinishLibrary(from coordinator: LibraryCoordinator) {

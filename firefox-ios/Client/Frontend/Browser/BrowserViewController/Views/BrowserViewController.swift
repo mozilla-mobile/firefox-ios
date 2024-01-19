@@ -495,7 +495,6 @@ class BrowserViewController: UIViewController,
     }
 
     func newState(state: BrowserViewControllerState) {
-        // We only care about Redux updates for this window
         guard windowUUID == state.windowUUID else { return }
 
         ensureMainThread { [weak self] in

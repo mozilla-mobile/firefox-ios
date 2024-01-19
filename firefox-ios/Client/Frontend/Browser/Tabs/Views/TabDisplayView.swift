@@ -75,6 +75,7 @@ class TabDisplayView: UIView,
     }
 
     func newState(state: TabsPanelState) {
+        guard state.windowUUID == windowUUID else { return }
         tabsState = state
         collectionView.reloadData()
     }

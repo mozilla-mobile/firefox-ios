@@ -40,7 +40,7 @@ class RemoteTabsPanel: UIViewController,
         self.state = RemoteTabsPanelState(windowUUID: windowUUID)
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
-        self.tableViewController = RemoteTabsTableViewController(state: state)
+        self.tableViewController = RemoteTabsTableViewController(state: state, windowUUID: windowUUID)
 
         super.init(nibName: nil, bundle: nil)
 
@@ -122,6 +122,7 @@ class RemoteTabsPanel: UIViewController,
     }
 
     func newState(state: RemoteTabsPanelState) {
+        guard state.windowUUID == windowUUID else { return }
         ensureMainThread { [weak self] in
             guard let self else { return }
 

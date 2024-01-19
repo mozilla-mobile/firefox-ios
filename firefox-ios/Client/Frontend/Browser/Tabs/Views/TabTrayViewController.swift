@@ -272,6 +272,7 @@ class TabTrayViewController: UIViewController,
     }
 
     func newState(state: TabTrayState) {
+        guard state.windowUUID == windowUUID else { return }
         tabTrayState = state
 
         if tabTrayState.shouldDismiss {

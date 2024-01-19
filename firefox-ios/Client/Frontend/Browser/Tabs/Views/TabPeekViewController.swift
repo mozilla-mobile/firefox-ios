@@ -47,6 +47,8 @@ class TabPeekViewController: UIViewController,
     }
 
     func newState(state: TabPeekState) {
+        // We are only 
+        guard state.windowUUID == windowUUID else { return }
         tabPeekState = state
         setupWithScreenshot()
     }
