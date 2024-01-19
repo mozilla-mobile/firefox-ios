@@ -27,28 +27,28 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
         savedScrollX = scrollX
         savedScrollY = scrollY
     }
-    
+
     func onLongPress(touchPoint: CGPoint) {
         onLongPressCalled += 1
         savedTouchPoint = touchPoint
     }
-    
+
     func onTitleChange(title: String) {
         onTitleChangeCalled += 1
         savedTitleChange = title
     }
-    
+
     func onProgress(progress: Double) {
         onProgressCalled += 1
         savedProgressValue = progress
     }
-    
+
     func onNavigationStateChange(canGoBack: Bool, canGoForward: Bool) {
         onNavigationStateChangeCalled += 1
         savedCanGoBack = canGoBack
         savedCanGoForward = canGoForward
     }
-    
+
     func onLoadingStateChange(loading: Bool) {
         onLoadingStateChangeCalled += 1
         savedLoading = loading
