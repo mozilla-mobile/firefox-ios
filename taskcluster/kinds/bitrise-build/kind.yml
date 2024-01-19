@@ -18,7 +18,7 @@ tasks:
                 #skip-unless-changed: []  # Paths are dynamically added by transforms
     focus-ios:
         # random workflow from firefox repo to test this out
-        bitrise-pipeline: 1_git_clone_and_post_clone
+        bitrise-workflow: 1_git_clone_and_post_clone
         description: Trigger Bitrise Pipeline on github events
             #optimization:
                 #skip-unless-changed: []  # Paths are dynamically added by transforms

@@ -80,37 +80,35 @@ def add_bitrise_command(config, tasks):
 
         if "bitrise-workflow" in task:
             workflow = task.pop("bitrise-workflow")
-            command = [
-                "python3",
-                "taskcluster/scripts/bitrise-schedule.py",
-                "--token-file", ".bitrise_token",
-                "--branch", config.params["head_ref"],
-                "--commit", config.params["head_rev"],
-                "--workflow", workflow,
-                "--artifacts-directory", _ARTIFACTS_DIRECTORY
-            ]
+            command = create_command(config, workflow, "workflow")
         else:
             pipeline = task.pop("bitrise-pipeline")
-            command = [
-                "python3",
-                "taskcluster/scripts/bitrise-schedule.py",
-                "--token-file", ".bitrise_token",
-                "--branch", config.params["head_ref"],
-                "--commit", config.params["head_rev"],
-                "--pipeline", pipeline,
-                "--artifacts-directory", _ARTIFACTS_DIRECTORY
-            ]
+            command = create_command(config, pipeline, "pipeline")
 
         for locale in task.get("attributes", {}).get("chunk_locales", []):
             command.extend(["--importLocales", locale])
 
         derived_data_path = task.pop("build-derived-data-path", "")
+
         if derived_data_path:
             command.extend(["--derived-data-path", derived_data_path])
 
         commands.append(command)
 
         yield task
+
+
+def create_command(config, workflow_or_pipeline, param):
+    command = [
+        "python3",
+        "taskcluster/scripts/bitrise-schedule.py",
+        "--token-file", ".bitrise_token",
+        "--branch", config.params["head_ref"],
+        "--commit", config.params["head_rev"],
+        f"--{param}", workflow_or_pipeline,
+        "--artifacts-directory", _ARTIFACTS_DIRECTORY
+    ]
+    return command
 
 # Commented functuion due to issue #7248 causing less screenshots taken
 # @transforms.add
