@@ -14,6 +14,7 @@ enum AppScreenState: Equatable {
     case tabPeek(TabPeekState)
 
     static let reducer: Reducer<Self> = { state, action in
+        //TODO: FIXME Each reducer needs to check whether the action applies to this state based on WindowUUID
         switch state {
         case .tabPeek(let state):
             return .tabPeek(TabPeekState.reducer(state, action))
