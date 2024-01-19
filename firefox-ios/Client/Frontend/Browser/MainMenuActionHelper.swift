@@ -567,7 +567,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getShareFileAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .AppMenu.AppMenuSharePageTitleString,
-                                     iconString: ImageIdentifiers.share) { _ in
+                                     iconString: StandardImageIdentifiers.Large.shareApple) { _ in
             guard let tab = self.selectedTab,
                   let url = tab.url
             else { return }
@@ -578,7 +578,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getShareAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .AppMenu.Share,
-                                     iconString: ImageIdentifiers.share) { _ in
+                                     iconString: StandardImageIdentifiers.Large.shareApple) { _ in
             guard let tab = self.selectedTab, let url = tab.canonicalURL?.displayURL else { return }
 
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)

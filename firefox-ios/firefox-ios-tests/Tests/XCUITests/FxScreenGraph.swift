@@ -1097,7 +1097,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
 
         screenState.tap(
-            app.tables.otherElements[ImageIdentifiers.share],
+            app.tables.otherElements[StandardImageIdentifiers.Large.shareApple],
             forAction: Action.ShareBrowserTabMenuOption
         ) { userState in
         }

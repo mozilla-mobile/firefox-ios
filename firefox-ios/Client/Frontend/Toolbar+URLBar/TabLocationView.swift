@@ -125,7 +125,7 @@ class TabLocationView: UIView, FeatureFlaggable {
         shareButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.shareButton
         shareButton.accessibilityLabel = .TabLocationShareAccessibilityLabel
         shareButton.showsLargeContentViewer = true
-        shareButton.largeContentImage = .templateImageNamed(ImageIdentifiers.share)
+        shareButton.largeContentImage = .templateImageNamed(StandardImageIdentifiers.Large.shareApple)
         shareButton.largeContentTitle = .TabLocationShareButtonLargeContentTitle
     }
 
