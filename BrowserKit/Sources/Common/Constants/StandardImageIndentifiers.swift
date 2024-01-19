@@ -73,6 +73,7 @@ public struct StandardImageIdentifiers {
         public static let search = "searchLarge"
         public static let settings = "settingsLarge"
         public static let shareApple = "shareAppleLarge"
+        public static let shieldSlash = "shieldSlashLarge"
         public static let shield = "shieldLarge"
         public static let shipping = "shippingLarge"
         public static let shopping = "shoppingLarge"
