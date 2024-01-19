@@ -45,8 +45,8 @@ struct TabTrayState: ScreenState, Equatable {
                   shareURL: panelState.shareURL)
     }
 
-    init() {
-        self.init(windowUUID: WindowUUID.unavailable,
+    init(windowUUID: WindowUUID) {
+        self.init(windowUUID: windowUUID,
                   isPrivateMode: false,
                   selectedPanel: .tabs,
                   normalTabsCount: "0",

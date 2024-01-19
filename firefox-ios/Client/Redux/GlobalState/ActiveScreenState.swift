@@ -61,10 +61,9 @@ struct ActiveScreensState: Equatable {
             switch action {
             case .closeScreen(let context):
                 let screenType = context.screen
-                // TODO: Needs to check the UUID before removing
+                // TODO: FIXME Needs to check the UUID before removing
                 screens = screens.filter({ return $0.associatedAppScreen != screenType })
             case .showScreen(let context):
-                // TODO: FIXME Needs to be sure windowUUID is set and associated with each screen state
                 let screenType = context.screen
                 switch screenType {
                 case .browserViewController:
@@ -72,7 +71,7 @@ struct ActiveScreensState: Equatable {
                 case .remoteTabsPanel:
                     screens += [.remoteTabsPanel(RemoteTabsPanelState(windowUUID: context.windowUUID))]
                 case .tabsTray:
-                    screens += [.tabsTray(TabTrayState())]
+                    screens += [.tabsTray(TabTrayState(windowUUID: context.windowUUID))]
                 case .tabsPanel:
                     screens += [.tabsPanel(TabsPanelState(windowUUID: context.windowUUID))]
                 case .themeSettings:
