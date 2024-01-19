@@ -6,12 +6,16 @@ import UIKit
 
 class SettingsDataSource: NSObject, UITableViewDataSource {
     var models: [SettingsCellViewModel] {
-        var settingsModel = [
+        return [
+            SettingsCellViewModel(settingType: .contentBlocking,
+                                  title: "Trigger content blocking"),
             SettingsCellViewModel(settingType: .findInPage,
-                                  title: "Trigger find in page")
+                                  title: "Trigger find in page"),
+            SettingsCellViewModel(settingType: .scrollingToTop,
+                                  title: "Trigger scroll to top"),
+            SettingsCellViewModel(settingType: .zoom,
+                                  title: "Trigger zoom")
         ]
-
-        return settingsModel
     }
 
     // MARK: - UITableViewDataSource

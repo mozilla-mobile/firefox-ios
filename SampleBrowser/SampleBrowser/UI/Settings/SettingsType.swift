@@ -6,8 +6,8 @@ import Foundation
 
 // Used to trigger some functionalities from the WebEngine with a simple UI
 public enum SettingsType: String {
-    case findInPage
     case contentBlocking
-    case zoom
+    case findInPage
     case scrollingToTop
+    case zoom
 }

@@ -15,6 +15,10 @@ class SettingsCell: UITableViewCell {
         initialViewSetup()
     }
 
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        contentView.backgroundColor = highlighted ? .lightGray.withAlphaComponent(0.2) : .white
+    }
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -26,7 +30,7 @@ class SettingsCell: UITableViewCell {
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: -8)
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8)
         ])
     }
 
