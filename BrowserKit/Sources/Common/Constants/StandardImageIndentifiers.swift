@@ -23,6 +23,7 @@ public struct StandardImageIdentifiers {
     public struct Large {
         public static let appendUp = "appendUpLarge"
         public static let appMenu = "appMenuLarge"
+        public static let arrowClockwise = "arrowClockwiseLarge"
         public static let avatarCircle = "avatarCircleLarge"
         public static let back = "backLarge"
         public static let bookmark = "bookmarkLarge"
