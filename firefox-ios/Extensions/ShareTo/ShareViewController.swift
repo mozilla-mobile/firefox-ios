@@ -174,7 +174,7 @@ class ShareViewController: UIViewController {
             makeActionRow(
                 addTo: stackView,
                 label: .ShareSearchInFirefox,
-                imageName: "quickSearch",
+                imageName: "searchLarge",
                 action: #selector(actionSearchInFirefox),
                 hasNavigation: false
             )

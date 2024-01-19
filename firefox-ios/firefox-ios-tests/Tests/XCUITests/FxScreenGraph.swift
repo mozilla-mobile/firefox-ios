@@ -1111,7 +1111,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             to: RequestMobileSite
         )
         screenState.tap(
-            app.tables.otherElements[ImageIdentifiers.findInPage],
+            app.tables.otherElements[StandardImageIdentifiers.Large.search],
             to: FindInPage
         )
         // TODO: Add new state

@@ -338,7 +338,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getFindInPageAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .AppMenu.AppMenuFindInPageTitleString,
-                                     iconString: ImageIdentifiers.findInPage) { _ in
+                                     iconString: StandardImageIdentifiers.Large.search) { _ in
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .findInPage)
             self.delegate?.showFindInPage()
         }.items
