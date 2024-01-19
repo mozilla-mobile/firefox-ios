@@ -159,7 +159,7 @@ class TabLocationView: UIView, FeatureFlaggable {
                 selector: #selector(self.readerModeCustomAction))]
         readerModeButton.showsLargeContentViewer = true
         readerModeButton.largeContentTitle = .TabLocationReaderModeAccessibilityLabel
-        readerModeButton.largeContentImage = .templateImageNamed("reader")
+        readerModeButton.largeContentImage = .templateImageNamed(StandardImageIdentifiers.Large.readerView)
     }
 
     lazy var reloadButton: StatefulButton = {
