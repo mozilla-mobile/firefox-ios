@@ -33,7 +33,7 @@ struct FakespotState: ScreenState, Equatable {
 
     init(_ appState: BrowserViewControllerState) {
         self.init(
-            windowUUID: WindowUUID(),
+            windowUUID: appState.windowUUID,
             isOpen: appState.fakespotState.isOpen,
             sidebarOpenForiPadLandscape: appState.fakespotState.sidebarOpenForiPadLandscape,
             currentTabUUID: appState.fakespotState.currentTabUUID,
@@ -44,7 +44,7 @@ struct FakespotState: ScreenState, Equatable {
 
     init() {
         self.init(
-            windowUUID: WindowUUID(),
+            windowUUID: WindowUUID.unavailable,
             isOpen: false,
             sidebarOpenForiPadLandscape: false,
             currentTabUUID: "",

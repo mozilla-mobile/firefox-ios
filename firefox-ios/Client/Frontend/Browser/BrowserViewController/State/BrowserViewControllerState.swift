@@ -17,11 +17,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         guard let bvcState = store.state.screenState(
             BrowserViewControllerState.self,
             for: .browserViewController,
-            window: uuid
-        )
+            window: uuid)
         else {
-            // TODO: FIX? Is this ever called?
-            self.init(windowUUID: WindowUUID())
+            self.init(windowUUID: uuid)
             return
         }
 

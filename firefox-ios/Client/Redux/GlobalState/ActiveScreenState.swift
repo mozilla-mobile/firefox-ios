@@ -68,17 +68,15 @@ struct ActiveScreensState: Equatable {
                 let screenType = context.screen
                 switch screenType {
                 case .browserViewController:
-                    screens.append(
-                        .browserViewController(BrowserViewControllerState(windowUUID: context.windowUUID))
-                    )
+                    screens += [.browserViewController(BrowserViewControllerState(windowUUID: context.windowUUID))]
                 case .remoteTabsPanel:
-                    screens += [.remoteTabsPanel(RemoteTabsPanelState())]
+                    screens += [.remoteTabsPanel(RemoteTabsPanelState(windowUUID: context.windowUUID))]
                 case .tabsTray:
                     screens += [.tabsTray(TabTrayState())]
                 case .tabsPanel:
-                    screens += [.tabsPanel(TabsPanelState())]
+                    screens += [.tabsPanel(TabsPanelState(windowUUID: context.windowUUID))]
                 case .themeSettings:
-                    screens += [.themeSettings(ThemeSettingsState())]
+                    screens += [.themeSettings(ThemeSettingsState(windowUUID: context.windowUUID))]
                 case .tabPeek:
                     screens += [.tabPeek(TabPeekState(windowUUID: context.windowUUID))]
                 }

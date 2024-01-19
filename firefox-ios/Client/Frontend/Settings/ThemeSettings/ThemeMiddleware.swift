@@ -56,7 +56,7 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
     // MARK: - Helper func
     func getCurrentThemeManagerState() -> ThemeSettingsState {
         // TODO: FIX ME
-        ThemeSettingsState(windowUUID: WindowUUID(),
+        ThemeSettingsState(windowUUID: WindowUUID.unavailable,
                            useSystemAppearance: legacyThemeManager.systemThemeIsOn,
                            isAutomaticBrightnessEnable: legacyThemeManager.automaticBrightnessIsOn,
                            manualThemeSelected: themeManager.currentTheme.type,

@@ -18,14 +18,15 @@ struct TabsPanelState: ScreenState, Equatable {
         return tabs.isEmpty
     }
 
-    init(_ appState: AppState) {
-        // TODO: FIXME
-        guard let panelState = store.state.screenState(TabsPanelState.self, for: .tabsPanel, window: nil) else {
-            self.init()
+    init(appState: AppState, uuid: WindowUUID) {
+        guard let panelState = store.state.screenState(TabsPanelState.self,
+                                                       for: .tabsPanel,
+                                                       window: uuid) else {
+            self.init(windowUUID: uuid)
             return
         }
 
-        self.init(windowUUID: WindowUUID(),
+        self.init(windowUUID: panelState.windowUUID,
                   isPrivateMode: panelState.isPrivateMode,
                   tabs: panelState.tabs,
                   inactiveTabs: panelState.inactiveTabs,
@@ -33,9 +34,9 @@ struct TabsPanelState: ScreenState, Equatable {
                   toastType: panelState.toastType)
     }
 
-    init(isPrivateMode: Bool = false) {
+    init(windowUUID: WindowUUID, isPrivateMode: Bool = false) {
         self.init(
-            windowUUID: WindowUUID(),
+            windowUUID: windowUUID,
             isPrivateMode: isPrivateMode,
             tabs: [TabModel](),
             inactiveTabs: [InactiveTabsModel](),

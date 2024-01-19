@@ -14,9 +14,7 @@ struct AppState: StateType {
 
     func screenState<S: ScreenState>(_ s: S.Type,
                                      for screen: AppScreen,
-                                     /* TODO: Fix me. This shouldn't be optional? */
                                      window: WindowUUID?) -> S? {
-        // TODO: Need to fix this?
         return activeScreens.screens
             .compactMap {
                 switch ($0, screen) {
@@ -30,9 +28,11 @@ struct AppState: StateType {
                 }
             }
             .first(where: { 
-                // Only the screen state for the specific window
-                guard let windowUUIDFilter = window else { return true }
-                return $0.windowUUID == window
+                // Most screens should be filtered based on the specific identifying UUID.
+                // This is necessary to allow us to have more than 1 of the same type of
+                // screen in Redux at the same time. If no UUID is provided we return `first`.
+                guard let expectedUUID = window else { return true }
+                return $0.windowUUID == expectedUUID
             })
     }
 }

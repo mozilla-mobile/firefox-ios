@@ -28,14 +28,15 @@ struct TabTrayState: ScreenState, Equatable {
         return selectedPanel == .syncedTabs
     }
 
-    init(_ appState: AppState) {
-        // TODO: FIXME
-        guard let panelState = store.state.screenState(TabTrayState.self, for: .tabsTray, window: nil) else {
-            self.init()
+    init(appState: AppState, uuid: WindowUUID) {
+        guard let panelState = store.state.screenState(TabTrayState.self,
+                                                       for: .tabsTray,
+                                                       window: uuid) else {
+            self.init(windowUUID: uuid, panelType: .tabs)
             return
         }
 
-        self.init(windowUUID: WindowUUID(),
+        self.init(windowUUID: panelState.windowUUID,
                   isPrivateMode: panelState.isPrivateMode,
                   selectedPanel: panelState.selectedPanel,
                   normalTabsCount: panelState.normalTabsCount,
@@ -45,7 +46,7 @@ struct TabTrayState: ScreenState, Equatable {
     }
 
     init() {
-        self.init(windowUUID: WindowUUID(),
+        self.init(windowUUID: WindowUUID.unavailable,
                   isPrivateMode: false,
                   selectedPanel: .tabs,
                   normalTabsCount: "0",

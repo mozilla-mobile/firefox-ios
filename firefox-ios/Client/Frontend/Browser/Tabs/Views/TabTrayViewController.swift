@@ -256,8 +256,11 @@ class TabTrayViewController: UIViewController,
             ScreenActionContext(screen: .tabsTray, windowUUID: windowUUID)
         ))
         store.dispatch(TabTrayAction.tabTrayDidLoad(tabTrayState.selectedPanel))
+        let uuid = windowUUID
         store.subscribe(self, transform: {
-            return $0.select(TabTrayState.init)
+            $0.select({ appState in
+                return TabTrayState(appState: appState, uuid: uuid)
+            })
         })
     }
 

@@ -13,14 +13,15 @@ struct TabPeekState: ScreenState, Equatable {
     let screenshot: UIImage
     let windowUUID: WindowUUID
 
-    init(_ appState: AppState) {
-        guard let tabPeekState = store.state.screenState(TabPeekState.self, for: AppScreen.tabPeek, window: nil) else {
-            // TODO: Fix? 
-            self.init(windowUUID: WindowUUID())
+    init(appState: AppState, uuid: WindowUUID) {
+        guard let tabPeekState = store.state.screenState(TabPeekState.self,
+                                                         for: AppScreen.tabPeek,
+                                                         window: uuid) else {
+            self.init(windowUUID: uuid)
             return
         }
 
-        self.init(windowUUID: WindowUUID(),
+        self.init(windowUUID: tabPeekState.windowUUID,
                   showAddToBookmarks: tabPeekState.showAddToBookmarks,
                   showSendToDevice: tabPeekState.showSendToDevice,
                   showCopyURL: tabPeekState.showCopyURL,

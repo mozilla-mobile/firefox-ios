@@ -57,8 +57,11 @@ class TabPeekViewController: UIViewController,
         store.dispatch(ActiveScreensStateAction.showScreen(
             ScreenActionContext(screen: .tabPeek, windowUUID: windowUUID)
         ))
+        let uuid = windowUUID
         store.subscribe(self, transform: {
-            return $0.select(TabPeekState.init)
+            return $0.select({ appState in
+                return TabPeekState(appState: appState, uuid: uuid)
+            })
         })
     }
 

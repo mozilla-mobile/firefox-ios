@@ -41,7 +41,7 @@ class TabDisplayPanel: UIViewController,
          windowUUID: WindowUUID,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
-        self.tabsState = TabsPanelState(isPrivateMode: isPrivateMode)
+        self.tabsState = TabsPanelState(windowUUID: windowUUID, isPrivateMode: isPrivateMode)
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         self.windowUUID = windowUUID
@@ -151,8 +151,11 @@ class TabDisplayPanel: UIViewController,
             ScreenActionContext(screen: .tabsPanel, windowUUID: windowUUID)
         ))
         store.dispatch(TabPanelAction.tabPanelDidLoad(tabsState.isPrivateMode))
+        let uuid = windowUUID
         store.subscribe(self, transform: {
-            return $0.select(TabsPanelState.init)
+            return $0.select({ appState in
+                return TabsPanelState(appState: appState, uuid: uuid)
+            })
         })
     }
 

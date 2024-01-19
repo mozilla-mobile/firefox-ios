@@ -13,14 +13,15 @@ struct ThemeSettingsState: ScreenState, Equatable {
     var systemBrightness: Float
     var windowUUID: WindowUUID
 
-    init(_ appState: AppState) {
-        // TODO: FIXME
-        guard let themeState = store.state.screenState(ThemeSettingsState.self, for: .themeSettings, window: nil) else {
-            self.init()
+    init(appState: AppState, uuid: WindowUUID) {
+        guard let themeState = store.state.screenState(ThemeSettingsState.self,
+                                                       for: .themeSettings,
+                                                       window: uuid) else {
+            self.init(windowUUID: uuid)
             return
         }
 
-        self.init(windowUUID: WindowUUID(),
+        self.init(windowUUID: themeState.windowUUID,
                   useSystemAppearance: themeState.useSystemAppearance,
                   isAutomaticBrightnessEnable: themeState.isAutomaticBrightnessEnable,
                   manualThemeSelected: themeState.manualThemeSelected,
@@ -28,8 +29,8 @@ struct ThemeSettingsState: ScreenState, Equatable {
                   systemBrightness: themeState.systemBrightness)
     }
 
-    init() {
-        self.init(windowUUID: WindowUUID(),
+    init(windowUUID: WindowUUID) {
+        self.init(windowUUID: windowUUID,
                   useSystemAppearance: false,
                   isAutomaticBrightnessEnable: false,
                   manualThemeSelected: ThemeType.light,

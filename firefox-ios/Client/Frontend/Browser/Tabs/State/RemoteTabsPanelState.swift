@@ -52,10 +52,11 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
     let showingEmptyState: RemoteTabsPanelEmptyStateReason?// If showing empty (or error) state
     let windowUUID: WindowUUID
 
-    init(_ appState: AppState) {
-        // TODO: FIX ME
-        guard let panelState = store.state.screenState(RemoteTabsPanelState.self, for: .remoteTabsPanel, window: nil) else {
-            self.init()
+    init(appState: AppState, uuid: WindowUUID) {
+        guard let panelState = store.state.screenState(RemoteTabsPanelState.self,
+                                                       for: .remoteTabsPanel,
+                                                       window: uuid) else {
+            self.init(windowUUID: uuid)
             return
         }
 
@@ -66,8 +67,8 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
                   showingEmptyState: panelState.showingEmptyState)
     }
 
-    init() {
-        self.init(windowUUID: WindowUUID.unavailable,
+    init(windowUUID: WindowUUID) {
+        self.init(windowUUID: windowUUID,
                   refreshState: .idle,
                   allowsRefresh: false,
                   clientAndTabs: [],

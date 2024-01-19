@@ -37,7 +37,7 @@ class RemoteTabsPanel: UIViewController,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.windowUUID = windowUUID
-        self.state = RemoteTabsPanelState()
+        self.state = RemoteTabsPanelState(windowUUID: windowUUID)
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.tableViewController = RemoteTabsTableViewController(state: state)
@@ -106,8 +106,11 @@ class RemoteTabsPanel: UIViewController,
             ScreenActionContext(screen: .remoteTabsPanel, windowUUID: windowUUID)
         ))
         store.dispatch(RemoteTabsPanelAction.panelDidAppear)
+        let uuid = windowUUID
         store.subscribe(self, transform: {
-            return $0.select(RemoteTabsPanelState.init)
+            $0.select({ appState in
+                return RemoteTabsPanelState(appState: appState, uuid: uuid)
+            })
         })
     }
 

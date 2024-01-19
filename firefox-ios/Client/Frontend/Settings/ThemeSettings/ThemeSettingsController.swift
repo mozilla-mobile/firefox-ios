@@ -43,7 +43,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     }
 
     init(windowUUID: WindowUUID) {
-        self.themeState = ThemeSettingsState()
+        self.themeState = ThemeSettingsState(windowUUID: windowUUID)
         self.windowUUID = windowUUID
         super.init(style: .grouped)
     }
@@ -77,8 +77,11 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
 
     func subscribeToRedux() {
         store.dispatch(ThemeSettingsAction.themeSettingsDidAppear)
+        let uuid = windowUUID
         store.subscribe(self, transform: {
-            $0.select(ThemeSettingsState.init)
+            $0.select({ appState in
+                return ThemeSettingsState(appState: appState, uuid: uuid)
+            })
         })
     }
 

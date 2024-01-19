@@ -11,14 +11,11 @@ import Foundation
 public typealias WindowUUID = UUID
 
 extension WindowUUID {
-    // Ideally we would not need this, however we want to enforce a non-optional WindowUUID in
-    // the vast majority of the codebase. Conversely, in a few exceptional places or in unexpected
-    // circumstances we may not be able to provide a WindowUUID or it may not make sense to provide
-    // one. In order to avoid bugs caused by having code that simply passes in `WindowUUID()`,
-    // which will constantly generate new and randomized UUIDs, this hardcoded UUID is provided as
-    // a sentinel value to identify those areas where a proper UUID isn't available.
-    static let unavailable = 
-    {
-        return WindowUUID(uuidString: "E63C9325-6B47-49E5-9D58-CD68A019860B")!
-    }()
+    // We want to enforce non-optional WindowUUIDs in the vast majority of codebase APIs.
+    // However, in some exceptional circumstances, or in error handlers, we may not be able
+    // to provide a UUID or it may not make sense. In order to avoid bugs caused by having
+    // code that defaults to `WindowUUID()` (which will constantly generate new and randomized
+    // UUIDs), this hardcoded UUID is provided as a sentinel value to be used when a valid
+    // UUID isn't available for some unexpected reason.
+    static let unavailable = WindowUUID(uuidString: "E1E1E1E1-6B47-49E5-9D58-CD68A019860B")!
 }
