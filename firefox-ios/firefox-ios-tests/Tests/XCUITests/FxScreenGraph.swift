@@ -1069,7 +1069,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             to: LibraryPanel_Downloads
         )
         screenState.tap(
-            app.tables.otherElements[ImageIdentifiers.readingList],
+            app.tables.otherElements[StandardImageIdentifiers.Large.readingList],
             to: LibraryPanel_ReadingList
         )
         screenState.tap(

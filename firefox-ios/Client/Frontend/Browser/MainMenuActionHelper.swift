@@ -639,7 +639,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getReadingListLibraryAction() -> SingleActionViewModel {
         return SingleActionViewModel(title: .AppMenu.ReadingList,
-                                     iconString: ImageIdentifiers.readingList) { _ in
+                                     iconString: StandardImageIdentifiers.Large.readingList) { _ in
             self.delegate?.showLibrary(panel: .readingList)
         }
     }

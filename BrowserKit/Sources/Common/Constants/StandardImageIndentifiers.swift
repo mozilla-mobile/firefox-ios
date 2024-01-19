@@ -68,6 +68,7 @@ public struct StandardImageIdentifiers {
         public static let qrCode = "qrCodeLarge"
         public static let readerView = "readerViewLarge"
         public static let readingListAdd = "readingListAddLarge"
+        public static let readingList = "readingListLarge"
         public static let shipping = "shippingLarge"
         public static let shopping = "shoppingLarge"
         public static let tabTray = "tabTrayLarge"
