@@ -199,7 +199,7 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
             cell.editingAccessoryView = toggle
             cell.selectionStyle = .none
             cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Search.disableSearchSuggestsInPrivateMode
-                cell.applyTheme(theme: themeManager.currentTheme)
+            cell.applyTheme(theme: themeManager.currentTheme)
 
         case .firefoxSuggestSettings:
             switch indexPath.item {
@@ -500,7 +500,7 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
         }
         navigationItem.rightBarButtonItem?.isEnabled = isEditable
         navigationItem.rightBarButtonItem?.action = editing ?
-            #selector(finishEditing) : #selector(beginEditing)
+        #selector(finishEditing) : #selector(beginEditing)
         tableView.reloadData()
     }
 
