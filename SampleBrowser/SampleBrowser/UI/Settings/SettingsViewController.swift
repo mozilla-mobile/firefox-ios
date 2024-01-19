@@ -73,6 +73,12 @@ class SettingsViewController: UIViewController, UITableViewDelegate {
         switch settingType {
         case .findInPage:
             break // TODO: FXIOS-8087 - Handle find in page in WebEngine
+        case .contentBlocking:
+            break // TODO: FXIOS-8088 - Handle content blocking in WebEngine
+        case .zoom:
+            break // TODO: FXIOS-8089 - Handle zoom in WebEngine
+        case .scrollingToTop:
+            break // TODO: FXIOS-8092 - Handle scrolling to top in WebEngine
         }
     }
 }
