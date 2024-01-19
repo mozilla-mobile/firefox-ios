@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "Group.pdf",
+      "filename" : "readingListAddLarge.pdf",
       "idiom" : "universal"
     }
   ],
@@ -10,6 +10,6 @@
     "version" : 1
   },
   "properties" : {
-    "template-rendering-intent" : "template"
+    "preserves-vector-representation" : true
   }
 }

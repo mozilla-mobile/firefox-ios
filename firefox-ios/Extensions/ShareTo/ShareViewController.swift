@@ -157,7 +157,7 @@ class ShareViewController: UIViewController {
             makeActionRow(
                 addTo: stackView,
                 label: .ShareAddToReadingList,
-                imageName: "AddToReadingList",
+                imageName: "readingListAddLarge",
                 action: #selector(actionAddToReadingList),
                 hasNavigation: false
             )

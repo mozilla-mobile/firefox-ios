@@ -650,7 +650,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getAddReadingListAction() -> SingleActionViewModel {
         return SingleActionViewModel(title: .AppMenu.AddReadingList,
-                                     iconString: ImageIdentifiers.addToReadingList) { _ in
+                                     iconString: StandardImageIdentifiers.Large.readingListAdd) { _ in
             guard let tab = self.selectedTab,
                   let url = self.tabUrl?.displayURL
             else { return }
