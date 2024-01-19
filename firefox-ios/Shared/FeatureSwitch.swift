@@ -18,7 +18,12 @@ open class FeatureSwitch {
     let nonChannelValue: Bool
     let percentage: Int
     fileprivate let switchKey: String
-    init(named featureID: String, _ value: Bool = true, allowPercentage percentage: Int, buildChannel: AppBuildChannel = .release) {
+    init(
+        named featureID: String,
+        _ value: Bool = true,
+        allowPercentage percentage: Int,
+        buildChannel: AppBuildChannel = .release
+    ) {
         self.featureID = featureID
         self.percentage = percentage
         self.buildChannel = buildChannel

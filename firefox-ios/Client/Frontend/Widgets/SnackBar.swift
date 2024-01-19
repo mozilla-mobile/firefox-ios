@@ -56,7 +56,9 @@ class SnackBar: UIView, ThemeApplicable {
     init(text: String, img: UIImage?, snackbarClassIdentifier: String? = nil) {
         self.snackbarClassIdentifier = snackbarClassIdentifier ?? text
         super.init(frame: .zero)
-        imageView.image = img ?? UIImage(named: StandardImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysOriginal)
+        imageView.image = img ?? UIImage(
+            named: StandardImageIdentifiers.Large.globe
+        )?.withRenderingMode(.alwaysOriginal)
         textLabel.text = text
         setupLayout()
         setupUI()
@@ -87,28 +89,33 @@ class SnackBar: UIView, ThemeApplicable {
         let titleViewCenterXConstraint = titleView.centerXAnchor.constraint(equalTo: centerXAnchor)
         titleViewCenterXConstraint.priority = UILayoutPriority(500)
 
-        NSLayoutConstraint.activate([
-            separator.leadingAnchor.constraint(equalTo: leadingAnchor),
-            separator.trailingAnchor.constraint(equalTo: trailingAnchor),
-            separator.heightAnchor.constraint(equalToConstant: UX.borderWidth),
-            separator.topAnchor.constraint(equalTo: buttonsView.topAnchor, constant: -1),
+        NSLayoutConstraint.activate(
+            [
+                separator.leadingAnchor.constraint(equalTo: leadingAnchor),
+                separator.trailingAnchor.constraint(equalTo: trailingAnchor),
+                separator.heightAnchor.constraint(equalToConstant: UX.borderWidth),
+                separator.topAnchor.constraint(equalTo: buttonsView.topAnchor, constant: -1),
 
-            backgroundView.topAnchor.constraint(equalTo: topAnchor),
-            backgroundView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            backgroundView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            backgroundView.trailingAnchor.constraint(equalTo: trailingAnchor),
+                backgroundView.topAnchor.constraint(equalTo: topAnchor),
+                backgroundView.bottomAnchor.constraint(equalTo: bottomAnchor),
+                backgroundView.leadingAnchor.constraint(equalTo: leadingAnchor),
+                backgroundView.trailingAnchor.constraint(equalTo: trailingAnchor),
 
-            scrollView.topAnchor.constraint(equalTo: topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: buttonsView.topAnchor),
+                scrollView.topAnchor.constraint(equalTo: topAnchor),
+                scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
+                scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
+                scrollView.bottomAnchor.constraint(equalTo: buttonsView.topAnchor),
 
-            titleView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            titleView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            titleView.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor, constant: -(UIConstants.DefaultPadding * 4)),
-            titleViewHeightConstraint,
-            titleViewCenterXConstraint
-        ])
+                titleView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+                titleView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+                titleView.widthAnchor.constraint(
+                    lessThanOrEqualTo: widthAnchor,
+                    constant: -(UIConstants.DefaultPadding * 4)
+                ),
+                titleViewHeightConstraint,
+                titleViewCenterXConstraint
+            ]
+        )
     }
 
     /**
@@ -127,9 +134,11 @@ class SnackBar: UIView, ThemeApplicable {
             buttonsView.leadingAnchor.constraint(equalTo: leadingAnchor),
             buttonsView.trailingAnchor.constraint(equalTo: trailingAnchor)
         ]
-        buttonsViewConstraints.append(!buttonsView.subviews.isEmpty ?
-                                      buttonsView.heightAnchor.constraint(equalToConstant: UIConstants.SnackbarButtonHeight) :
-                                        buttonsView.heightAnchor.constraint(equalToConstant: 0))
+        buttonsViewConstraints.append(
+            !buttonsView.subviews.isEmpty ?
+            buttonsView.heightAnchor.constraint(equalToConstant: UIConstants.SnackbarButtonHeight) :
+                buttonsView.heightAnchor.constraint(equalToConstant: 0)
+        )
         NSLayoutConstraint.activate(buttonsViewConstraints)
     }
 

@@ -311,7 +311,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "ਇਹ ਗਲਤ ਸੰਰਚਨਾ ਹੋ ਸਕਦੀ ਹੈ ਜਾਂ ਹਮਲਾਵਰ ਵਲੋਂ ਨੁਕਸਾਨਿਆ ਗਿਆ। ਤਾਂ ਹੀ ਜਾਰੀ ਰੱਖੋ ਜੇ ਤੁਸੀਂ ਸੰਭਾਵਿਤ ਖ਼ਤਰੇ ਨੂੰ ਮੰਨਦੇ ਹੋ।";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "%@ ਦੇ ਮਾਲਕ ਨੇ ਆਪਣੀ ਵੈੱਬਸਾਈਟ ਨੂੰ ਗਲਤ ਢੰਗ ਨਾਲ ਸੰਰਚਿਤ ਕੀਤਾ ਹੈ। ਤੁਹਾਡੀ ਜਾਣਕਾਰੀ ਨੂੰ ਚੋਰੀ ਹੋਣ ਤੋਂ ਬਚਾਉਣ ਲਈ ਫਾਇਰਫਾਕਸ ਇਸ ਵੈੱਬਸਾਈਟ ਨਾਲ ਕਨੈਕਟ ਨਹੀਂ ਹੈ।";
+"ErrorPages.CertWarning.Description" = "%@ ਦੇ ਮਾਲਕ ਨੇ ਆਪਣੀ ਵੈੱਬਸਾਈਟ ਨੂੰ ਗਲਤ ਢੰਗ ਨਾਲ ਸੰਰਚਿਤ ਕੀਤਾ ਹੈ। ਤੁਹਾਡੀ ਜਾਣਕਾਰੀ ਨੂੰ ਚੋਰੀ ਹੋਣ ਤੋਂ ਬਚਾਉਣ ਲਈ Firefox ਇਸ ਵੈੱਬਸਾਈਟ ਨਾਲ ਕਨੈਕਟ ਨਹੀਂ ਹੈ।";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "ਇਹ ਸੰਪਰਕ ਗ਼ੈਰ-ਭਰੋਸੇਯੋਗ ਹੈ";
@@ -332,7 +332,7 @@
 "Facebook" = "ਫੇਸਬੁੱਕ";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "ਫਾਇਰਫਾਕਸ ਮੁੱਖ ਸਫ਼ਾ";
+"Firefox.HomePage.Title" = "Firefox ਮੁੱਖ ਸਫ਼ਾ";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "ਮੁੱਖ-ਸਫ਼ੇ ਨੂੰ ਕਸਟਮਾਈਜ਼ ਕਰੋ";
@@ -377,7 +377,7 @@
 "Forward" = "ਅੱਗੇ";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "ਫਾਇਰਫਾਕਸ ਖਾਤਾ";
+"FxA.FirefoxAccount" = "Firefox ਖਾਤਾ";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "ਖਾਤੇ ਤੇ ਡਿਵਾਈਸਾਂ ਦਾ ਇੰਤਜ਼ਾਮ";
@@ -389,7 +389,7 @@
 "fxa.signin.camera-signin" = "ਆਪਣੇ ਕੈਮਰੇ ਨਾਲ ਸਾਈਨ ਇਨ ਕਰੋ";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "ਆਪਣੇ ਕੰਪਿਊਟਰ ਉੱਤੇ ਫਾਇਰਫਾਕਸ ਖੋਲ੍ਹੋ ਅਤੇ firefox.com/pair ਉੱਤੇ ਜਾਓ";
+"fxa.signin.qr-link-instruction" = "ਆਪਣੇ ਕੰਪਿਊਟਰ ਉੱਤੇ Firefox ਖੋਲ੍ਹੋ ਅਤੇ firefox.com/pair ਉੱਤੇ ਜਾਓ";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "ਸਕੈਨ ਕਰਨ ਲਈ ਤਿਆਰ";
@@ -401,7 +401,7 @@
 "FxA.SyncNow" = "ਹੁਣੇ ਸਿੰਕ ਕਰੋ";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "ਫਾਇਰਫਾਕਸ ਸਿੰਕ %@ ਨਾਲ ਕਨੈਕਟ ਹੋ ਚੁੱਕਾ ਹੈ";
+"FxAPush_DeviceConnected_body" = "Firefox ਸਿੰਕ %@ ਨਾਲ ਕਨੈਕਟ ਹੋ ਚੁੱਕਾ ਹੈ";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "ਸਿੰਕ ਕਨੈਕਟ ਹੈ";
@@ -410,7 +410,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ ਕਾਮਯਾਬੀ ਨਾਲ ਡਿਸ-ਕਨੈਕਟ ਹੋ ਚੁੱਕਾ ਹੈ।";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "ਇਹ ਡਿਵਾਈਸ ਕਾਮਯਾਬੀ ਨਾਲ ਫਾਇਰਫਾਕਸ ਸਿੰਕ ਤੋਂ ਡਿਸਕਨੈਕਟ ਕੀਤਾ ਜਾ ਚੁੱਕਾ ਹੈ।";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "ਇਹ ਡਿਵਾਈਸ ਕਾਮਯਾਬੀ ਨਾਲ Firefox ਸਿੰਕ ਤੋਂ ਡਿਸਕਨੈਕਟ ਕੀਤਾ ਜਾ ਚੁੱਕਾ ਹੈ।";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "ਸਿੰਕ ਡਿਸ-ਕਨੈਕਟ ਹੈ";
@@ -419,7 +419,7 @@
 "FxAPush_DeviceDisconnected_title" = "ਸਿੰਕ ਡਿਸ-ਕਨੈਕਟ ਹੈ";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "ਫਾਇਰਫਾਕਸ ਸਿੰਕ ਤੋਂ ਡਿਵਾਈਸ ਡਿਸ-ਕਨੈਕਟ ਕੀਤਾ ਗਿਆ";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Firefox ਸਿੰਕ ਤੋਂ ਡਿਵਾਈਸ ਡਿਸ-ਕਨੈਕਟ ਕੀਤਾ ਗਿਆ";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
 "FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox ਲੋਗੋ, ਵਾਲਪੇਪਰ ਬਦਲੋ";
@@ -455,7 +455,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "ਆਪਣੇ ਹੋਰ ਡਿਵਾਈਸਾਂ ਤੋਂ ਟੈਬਾਂ ਦੀ ਸੂਚੀ ਖੋਲ੍ਹਣ ਲਈ ਸਾਈਨ ਇਨ ਕਰੋ।";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "ਫਾਇਰਫਾਕਸ ਸਿੰਕ";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox ਸਿੰਕ";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "ਅਤੀਤ";
@@ -722,7 +722,7 @@
 "LoginsList.Title" = "ਸੰਭਾਲੇ ਗਏ ਲਾਗਇਨ";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "ਜਾਪਦਾ ਹੈ ਕਿ ਪਿਛਲੀ ਵਾਰ ਫਾਇਰਫਾਕਸ ਕਰੈਸ਼ ਹੋ ਗਿਆ ਸੀ। ਕੀ ਤੁਸੀਂ ਆਪਣੀਆਂ ਟੈਬਾਂ ਨੂੰ ਮੁੜ-ਸਟੋਰ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "ਜਾਪਦਾ ਹੈ ਕਿ ਪਿਛਲੀ ਵਾਰ Firefox ਕਰੈਸ਼ ਹੋ ਗਿਆ ਸੀ। ਕੀ ਤੁਸੀਂ ਆਪਣੀਆਂ ਟੈਬਾਂ ਨੂੰ ਮੁੜ-ਸਟੋਰ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "ਪੜ੍ਹੇ ਵਜੋਂ ਨਿਸ਼ਾਨੀ ਲਾਓ";
@@ -908,7 +908,7 @@
 "Onboarding.WhatsNew.Button.Title" = "ਬਰਾਊਜ਼ ਕਰਨਾ ਸ਼ੁਰੂ ਕਰੋ";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "ਓਹ ਹੋ! ਫਾਇਰਫਾਕਸ ਕਰੈਸ਼ ਹੋ ਗਿਆ";
+"Oops! Firefox crashed" = "ਓਹ ਹੋ! Firefox ਕਰੈਸ਼ ਹੋ ਗਿਆ";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "ਲੇਖਾਂ ਨੂੰ ਪੜ੍ਹਨ ਝਲਕ ਵਿੱਚ ਕਿਤਾਬ ਦੇ ਆਈਕਾਨ ਉੱਤੇ ਛੂਹ ਕੇ ਖੋਲ੍ਹੋ, ਜਦੋਂ ਕਿ ਉਹ ਟਾਈਟਲ ਪੱਟੀ ਵਿੱਚ ਦਿਖਾਈ ਦਿੰਦੇ ਹਨ।";
@@ -920,7 +920,7 @@
 "Open Tabs" = "ਟੈਬਾਂ ਖੋਲ੍ਹੋ";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "ਫਾਇਰਫਾਕਸ ਗਲਤ ਸਿਰਨਾਵਾਂ ਹੋਣ ਕਰਕੇ ਸਫ਼ੇ ਨੂੰ ਖੋਲ੍ਹ ਨਹੀਂ ਸਕਦਾ ਹੈ।";
+"OpenURL.Error.Message" = "Firefox ਗਲਤ ਸਿਰਨਾਵਾਂ ਹੋਣ ਕਰਕੇ ਸਫ਼ੇ ਨੂੰ ਖੋਲ੍ਹ ਨਹੀਂ ਸਕਦਾ ਹੈ।";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "ਸਫ਼ੇ ਨੂੰ ਖੋਲ੍ਹਿਆ ਨਹੀਂ ਜਾ ਸਕਦਾ";
@@ -932,7 +932,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "ਇਹ ਤੁਹਾਨੂੰ ਚਿੱਤਰਾਂ ਨੂੰ ਤੁਹਾਡੇ ਕੈਮਰਾ ਰੋਲ ਵਿੱਚ ਸੰਭਾਲਣ ਲਈ ਇਜਾਜ਼ਤ ਦਿੰਦਾ ਹੈ।";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "ਫਾਇਰਫਾਕਸ ਨੂੰ ਆਪਣੀਆਂ ਫੋਟੋਆਂ ਲਈ ਪਹੁੰਚ ਚਾਹੁੰਦਾ ਹੈ";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox ਨੂੰ ਆਪਣੀਆਂ ਫੋਟੋਆਂ (Photos) ਲਈ ਪਹੁੰਚ ਚਾਹੁੰਦਾ ਹੈ";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "ਬੰਦ ਕਰੋ";
@@ -1109,13 +1109,13 @@
 "SendTo.NavBar.Title" = "ਟੈਬ ਭੇਜੋ";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "ਤੁਹਾਡੇ ਕੋਲ ਸਿੰਕ ਕਰਨ ਲਈ ਇਸ ਫਾਇਰਫਾਕਸ ਖਾਤੇ ਨਾਲ ਹੋਰ ਕੋਈ ਡਿਵਾਈਸ ਕਨੈਕਟ ਨਹੀਂ ਹੈ।";
+"SendTo.NoDevicesFound.Message" = "ਤੁਹਾਡੇ ਕੋਲ ਸਿੰਕ ਕਰਨ ਲਈ ਇਸ Firefox ਖਾਤੇ ਨਾਲ ਹੋਰ ਕੋਈ ਡਿਵਾਈਸ ਕਨੈਕਟ ਨਹੀਂ ਹੈ।";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "ਜਾਰੀ ਰੱਖਣ ਲਈ ਫਾਇਰਫਾਕਸ ਖੋਲ੍ਹੋ, ਸੈਟਿੰਗਾਂ 'ਤੇ ਜਾਓ ਅਤੇ ਸਾਈਨ ਇਨ ਕਰੋ।";
+"SendTo.NotSignedIn.Message" = "ਜਾਰੀ ਰੱਖਣ ਲਈ Firefox ਖੋਲ੍ਹੋ, ਸੈਟਿੰਗਾਂ 'ਤੇ ਜਾਓ ਅਤੇ ਸਾਈਨ ਇਨ ਕਰੋ।";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "ਤੁਸੀਂ ਆਪਣੇ ਫਾਇਰਫਾਕਸ ਖਾਤੇ ਵਿੱਚ ਸਾਈਨ ਇਨ ਨਹੀਂ ਕੀਤਾ ਹੈ।";
+"SendTo.NotSignedIn.Title" = "ਤੁਸੀਂ ਆਪਣੇ Firefox ਖਾਤੇ ਵਿੱਚ ਸਾਈਨ ਇਨ ਨਹੀਂ ਕੀਤਾ ਹੈ।";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "ਭੇਜੋ";
@@ -1136,7 +1136,7 @@
 "SentTab.NoTabArrivingNotification.body" = "ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਟੈਪ ਕਰੋ";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "ਫਾਇਰਫਾਕਸ ਸਿੰਕ";
+"SentTab.NoTabArrivingNotification.title" = "Firefox ਸਿੰਕ";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "ਵੇਖੋ";
@@ -1199,7 +1199,7 @@
 "Settings.DataManagement.Title" = "ਡਾਟਾ ਬੰਦੋਬਸਤ";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "ਫਾਇਰਫਾਕਸ ਤੁੁਹਾਡੇ ਖਾਤੇ ਨੂੰ ਸਿੰਕ ਕਰਨ ਤੋਂ ਰੋਕੇਗਾ, ਪਰ ਇਸ ਡਿਵਾਈਸ ਲਈ ਤੁਹਾਡੇ ਬਰਾਊਜ਼ ਕਰਨ ਵਾਲੇ ਕਿਸੇ ਵੀ ਡਾਟੇ ਨੂੰ ਹਟਾਏਗਾ ਨਹੀਂ।";
+"Settings.Disconnect.Body" = "Firefox ਤੁੁਹਾਡੇ ਖਾਤੇ ਨੂੰ ਸਿੰਕ ਕਰਨ ਤੋਂ ਰੋਕੇਗਾ, ਪਰ ਇਸ ਡਿਵਾਈਸ ਲਈ ਤੁਹਾਡੇ ਬਰਾਊਜ਼ ਕਰਨ ਵਾਲੇ ਕਿਸੇ ਵੀ ਡਾਟੇ ਨੂੰ ਹਟਾਏਗਾ ਨਹੀਂ।";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "ਸਿੰਕ ਡਿਸ-ਕਨੈਕਟ ਕਰੋ";
@@ -1265,7 +1265,7 @@
 "Settings.FxA.Sync.SectionName" = "ਸਿੰਕ ਸੈਟਿੰਗਾਂ";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "ਫਾਇਰਫਾਕਸ ਖਾਤਾ";
+"Settings.FxA.Title" = "Firefox ਖਾਤਾ";
 
 /* General settings section title */
 "Settings.General.SectionName" = "ਆਮ";
@@ -1406,7 +1406,7 @@
 "Settings.NewTab.Option.Custom" = "ਕਸਟਮ";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "ਫਾਇਰਫਾਕਸ ਮੁੱਖ-ਸਫ਼ਾ";
+"Settings.NewTab.Option.FirefoxHome" = "Firefox ਮੁੱਖ-ਸਫ਼ਾ";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "ਮੁੱਖ-ਸਫ਼ਾ";
@@ -1427,7 +1427,7 @@
 "Settings.NoImageModeBlockImages.Label.v99" = "ਚਿੱਤਰਾਂ ਤੇ ਪਾਬੰਦੀ ਲਾਓ";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "ਜਦੋਂ ਫਾਇਰਫਾਕਸ ਖੋਲ੍ਹਣਾ ਹੋਵੇ";
+"Settings.OfferClipboardBar.Status" = "ਜਦੋਂ Firefox ਖੋਲ੍ਹਣਾ ਹੋਵੇ";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "ਕਾਪੀ ਕੀਤੇ ਲਿੰਕਾਂ ਨੂੰ ਖੋਲ੍ਹਣ ਦੀ ਪੇਸ਼ਕਸ਼ ਕਰੋ";
@@ -1463,7 +1463,7 @@
 "Settings.SendUsage.Link" = "ਹੋਰ ਜਾਣੋ।";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla ਸਿਰਫ਼ ਉਹੀ ਇਕੱਤਰ ਕਰਨਾ ਚਾਹੁੰਦਾ ਹੈ, ਜੋ ਕਿ ਸਾਨੂੰ ਹਰ ਕਿਸੇ ਲਈ ਫਾਇਰਫਾਕਸ ਪਹੁੰਚਣ ਅਤੇ ਸੁਧਾਰਨ ਲਈ ਚਾਹੀਦਾ ਹੈ।";
+"Settings.SendUsage.Message" = "Mozilla ਸਿਰਫ਼ ਉਹੀ ਇਕੱਤਰ ਕਰਨਾ ਚਾਹੁੰਦਾ ਹੈ, ਜੋ ਕਿ ਸਾਨੂੰ ਹਰ ਕਿਸੇ ਲਈ Firefox ਪਹੁੰਚਣ ਅਤੇ ਸੁਧਾਰਨ ਲਈ ਚਾਹੀਦਾ ਹੈ।";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "ਵਰਤੋ ਡਾਟੇ ਨੂੰ ਭੇਜੋ";
@@ -1481,7 +1481,7 @@
 "Settings.Siri.OpenTabShortcut" = "ਨਵੀਂ ਟੈਬ ਖੋਲ੍ਹੋ";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "ਸੀਰੀ ਰਾਹੀਂ ਤੁਰੰਤ ਫਾਇਰਫਾਕਸ ਖੋਲ੍ਹਣ ਲਈ ਸੀਰੀ ਸ਼ਾਰਟਕੱਟਾਂ ਨੂੰ ਵਰਤੋਂ";
+"Settings.Siri.SectionDescription" = "Siri ਰਾਹੀਂ ਤੁਰੰਤ Firefox ਖੋਲ੍ਹਣ ਲਈ ਸੀਰੀ ਸ਼ਾਰਟਕੱਟਾਂ ਨੂੰ ਵਰਤੋਂ";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "ਸੀਰੀ ਸ਼ਾਰਟਕੱਟ";
@@ -1607,13 +1607,13 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "ਬੈਕਗਰਾਊਂਡ 'ਚ ਲੋਡ ਕਰੋ";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "ਫਾਇਰਫਾਕਸ ਵਿੱਚ ਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Firefox ਵਿੱਚ ਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "ਫਾਇਰਫਾਕਸ 'ਚ ਖੋਲ੍ਹੋ";
+"ShareExtension.OpenInFirefoxAction.Title" = "Firefox 'ਚ ਖੋਲ੍ਹੋ";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "ਫਾਇਰਫਾਕਸ ਵਿੱਚ ਖੋਜੋ";
+"ShareExtension.SeachInFirefoxAction.Title" = "Firefox ਵਿੱਚ ਖੋਜੋ";
 
 /* Button in share sheet to copy the url of the current tab. */
 "ShareSheet.Copy.Title.v108" = "ਕਾਪੀ ਕਰੋ";
@@ -1760,7 +1760,7 @@
 "UIMenuItem.PasteGo" = "ਚੇਪੋ ਤੇ ਜਾਓ";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "ਫਾਇਰਫਾਕਸ ਨਾਲ ਖੋਜੋ";
+"UIMenuItem.SearchWithFirefox" = "Firefox ਨਾਲ ਖੋਜੋ";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "ਨਾ-ਪੜ੍ਹੇ";
@@ -1808,7 +1808,7 @@
 "Yesterday" = "ਕੱਲ੍ਹ";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "ਤੁਹਾਡੇ ਕੋਲ ਤੁਹਾਡੇ ਹੋਰ ਡਿਵਾਈਸ ਉੱਤੇ ਫਾਇਰਫਾਕਸ ਵਿੱਚ ਕੋਈ ਟੈਬ ਨਹੀਂ ਖੁੱਲ੍ਹੀ ਹੈ।";
+"You don’t have any tabs open in Firefox on your other devices." = "ਤੁਹਾਡੇ ਕੋਲ ਤੁਹਾਡੇ ਹੋਰ ਡਿਵਾਈਸ ਉੱਤੇ Firefox ਵਿੱਚ ਕੋਈ ਟੈਬ ਨਹੀਂ ਖੁੱਲ੍ਹੀ ਹੈ।";
 
 /* Your Rights settings section title */
 "Your Rights" = "ਤੁਹਾਡੇ ਅਧਿਕਾਰ";

@@ -8,17 +8,26 @@ import XCTest
 final class WKEngineSessionTests: XCTestCase {
     private var configurationProvider: MockWKEngineConfigurationProvider!
     private var webViewProvider: MockWKWebViewProvider!
+    private var contentScriptManager: MockWKContentScriptManager!
+    private var userScriptManager: MockWKUserScriptManager!
+    private var engineSessionDelegate: MockEngineSessionDelegate!
 
     override func setUp() {
         super.setUp()
         configurationProvider = MockWKEngineConfigurationProvider()
         webViewProvider = MockWKWebViewProvider()
+        contentScriptManager = MockWKContentScriptManager()
+        userScriptManager = MockWKUserScriptManager()
+        engineSessionDelegate = MockEngineSessionDelegate()
     }
 
     override func tearDown() {
         super.tearDown()
         configurationProvider = nil
         webViewProvider = nil
+        contentScriptManager = nil
+        userScriptManager = nil
+        engineSessionDelegate = nil
     }
 
     // MARK: Load URL
@@ -128,14 +137,155 @@ final class WKEngineSessionTests: XCTestCase {
         XCTAssertEqual(webViewProvider.webView.url?.absoluteString, errorPageURL)
     }
 
+    // MARK: Restore
+
+    func testRestoreWhenNoLastRequestThenLoadNotCalled() {
+        let subject = createSubject()
+        let restoredState = Data()
+
+        subject?.restore(state: restoredState)
+
+        XCTAssertEqual(webViewProvider.webView.interactionState as! Data, restoredState)
+        XCTAssertEqual(webViewProvider.webView.loadCalled, 0)
+    }
+
+    func testRestoreWhenHasLastRequestThenLoadISCalled() {
+        let subject = createSubject()
+        let restoredState = Data()
+        subject?.load(url: "https://example.com")
+
+        subject?.restore(state: restoredState)
+
+        XCTAssertEqual(webViewProvider.webView.interactionState as! Data, restoredState)
+        XCTAssertEqual(webViewProvider.webView.loadCalled, 2, "Load calls it once, then restore calls it again")
+    }
+
+    // MARK: Observers
+
+    func testAddObserversWhenCreatedSubjectThenObserversAreAdded() {
+        _ = createSubject()
+        XCTAssertEqual(webViewProvider.webView.addObserverCalled, 7, "There are 7 KVO Constants")
+    }
+
+    func testRemoveObserversWhenCloseIsCalledThenObserversAreRemoved() {
+        let subject = createSubject()
+
+        subject?.close()
+
+        XCTAssertEqual(webViewProvider.webView.removeObserverCalled, 7, "There are 7 KVO Constants")
+    }
+
+    func testCanGoBackGivenWebviewStateThenCallsNavigationStateChanged() {
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+        webViewProvider.webView.canGoBack = true
+        webViewProvider.webView.canGoForward = false
+
+        subject?.observeValue(forKeyPath: "canGoBack",
+                              of: nil,
+                              change: nil,
+                              context: nil)
+
+        XCTAssertEqual(engineSessionDelegate.onNavigationStateChangeCalled, 1)
+        XCTAssertTrue(engineSessionDelegate.savedCanGoBack!)
+        XCTAssertFalse(engineSessionDelegate.savedCanGoForward!)
+    }
+
+    func testCanGoForwardGivenWebviewStateThenCallsNavigationStateChanged() {
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+        webViewProvider.webView.canGoBack = false
+        webViewProvider.webView.canGoForward = true
+
+        subject?.observeValue(forKeyPath: "canGoForward",
+                              of: nil,
+                              change: nil,
+                              context: nil)
+
+        XCTAssertEqual(engineSessionDelegate.onNavigationStateChangeCalled, 1)
+        XCTAssertFalse(engineSessionDelegate.savedCanGoBack!)
+        XCTAssertTrue(engineSessionDelegate.savedCanGoForward!)
+    }
+
+    func testEstimatedProgressGivenWebviewStateThenCallsOnProgress() {
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+        webViewProvider.webView.estimatedProgress = 70
+
+        subject?.observeValue(forKeyPath: "estimatedProgress",
+                              of: nil,
+                              change: nil,
+                              context: nil)
+
+        XCTAssertEqual(engineSessionDelegate.onProgressCalled, 1)
+        XCTAssertEqual(engineSessionDelegate.savedProgressValue, 70)
+    }
+
+    func testLoadingGivenNoChangeThenDoesNotCallOnLoadingStateChange() {
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+
+        subject?.observeValue(forKeyPath: "loading",
+                              of: nil,
+                              change: nil,
+                              context: nil)
+
+        XCTAssertEqual(engineSessionDelegate.onLoadingStateChangeCalled, 0)
+    }
+
+    func testLoadingGivenOldKeyThenDoesNotCallOnLoadingStateChange() {
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+
+        subject?.observeValue(forKeyPath: "loading",
+                              of: nil,
+                              change: [.oldKey: true],
+                              context: nil)
+
+        XCTAssertEqual(engineSessionDelegate.onLoadingStateChangeCalled, 0)
+    }
+
+    func testLoadingGivenNewKeyThenCallsOnLoadingStateChange() {
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+
+        subject?.observeValue(forKeyPath: "loading",
+                              of: nil,
+                              change: [.newKey: true],
+                              context: nil)
+
+        XCTAssertEqual(engineSessionDelegate.onLoadingStateChangeCalled, 1)
+        XCTAssertTrue(engineSessionDelegate.savedLoading!)
+    }
+
+    // MARK: User script manager
+
+    func testUserScriptWhenSubjectCreatedThenInjectionIntoWebviewCalled() {
+        _ = createSubject()
+        XCTAssertEqual(userScriptManager.injectUserScriptsIntoWebViewCalled, 1)
+    }
+
+    // MARK: Content script manager
+
+    func testContentScriptWhenCloseCalledThenUninstallIsCalled() {
+        let subject = createSubject()
+
+        subject?.close()
+
+        XCTAssertEqual(contentScriptManager.uninstallCalled, 1)
+    }
+
     // MARK: Helper
 
-    func createSubject() -> WKEngineSession? {
-        guard let subject = WKEngineSession(configurationProvider: configurationProvider,
-                                            webViewProvider: webViewProvider) else {
+    func createSubject(file: StaticString = #file,
+                       line: UInt = #line) -> WKEngineSession? {
+        guard let subject = WKEngineSession(userScriptManager: userScriptManager,
+                                            configurationProvider: configurationProvider,
+                                            webViewProvider: webViewProvider,
+                                            contentScriptManager: contentScriptManager) else {
             return nil
         }
-        trackForMemoryLeaks(subject)
+        trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
 }

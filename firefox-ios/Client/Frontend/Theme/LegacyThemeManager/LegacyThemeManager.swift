@@ -14,27 +14,32 @@ enum LegacyThemeManagerPrefs: String {
 class LegacyThemeManager {
     static let instance = LegacyThemeManager()
 
-    var current: LegacyTheme = themeFrom(name: UserDefaults.standard.string(forKey: LegacyThemeManagerPrefs.themeName.rawValue)) {
-        didSet {
-            ensureMainThread {
-                UserDefaults.standard.set(self.current.name, forKey: LegacyThemeManagerPrefs.themeName.rawValue)
-            }
-        }
-    }
+    var current: LegacyTheme = themeFrom(name: UserDefaults.standard.string(
+        forKey: LegacyThemeManagerPrefs.themeName.rawValue))
 
     var currentName: BuiltinThemeName {
         return BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
     }
 
-    var automaticBrightnessValue: Float = UserDefaults.standard.float(forKey: LegacyThemeManagerPrefs.automaticSliderValue.rawValue) {
+    var automaticBrightnessValue: Float = UserDefaults.standard.float(
+        forKey: LegacyThemeManagerPrefs.automaticSliderValue.rawValue
+    ) {
         didSet {
-            UserDefaults.standard.set(automaticBrightnessValue, forKey: LegacyThemeManagerPrefs.automaticSliderValue.rawValue)
+            UserDefaults.standard.set(
+                automaticBrightnessValue,
+                forKey: LegacyThemeManagerPrefs.automaticSliderValue.rawValue
+            )
         }
     }
 
-    var automaticBrightnessIsOn: Bool = UserDefaults.standard.bool(forKey: LegacyThemeManagerPrefs.automaticSwitchIsOn.rawValue) {
+    var automaticBrightnessIsOn: Bool = UserDefaults.standard.bool(
+        forKey: LegacyThemeManagerPrefs.automaticSwitchIsOn.rawValue
+    ) {
         didSet {
-            UserDefaults.standard.set(automaticBrightnessIsOn, forKey: LegacyThemeManagerPrefs.automaticSwitchIsOn.rawValue)
+            UserDefaults.standard.set(
+                automaticBrightnessIsOn,
+                forKey: LegacyThemeManagerPrefs.automaticSwitchIsOn.rawValue
+            )
             guard automaticBrightnessIsOn else { return }
             updateCurrentThemeBasedOnScreenBrightness()
         }
@@ -42,7 +47,10 @@ class LegacyThemeManager {
 
     var systemThemeIsOn: Bool {
         didSet {
-            UserDefaults.standard.set(systemThemeIsOn, forKey: LegacyThemeManagerPrefs.systemThemeIsOn.rawValue)
+            UserDefaults.standard.set(
+                systemThemeIsOn,
+                forKey: LegacyThemeManagerPrefs.systemThemeIsOn.rawValue
+            )
         }
     }
 
@@ -58,11 +66,6 @@ class LegacyThemeManager {
                                                selector: #selector(applicationDidBecomeActive),
                                                name: UIApplication.didBecomeActiveNotification,
                                                object: nil)
-    }
-
-    // UIViewControllers / UINavigationControllers need to have `preferredStatusBarStyle` and call this.
-    var statusBarStyle: UIStatusBarStyle {
-        return .default
     }
 
     var userInterfaceStyle: UIUserInterfaceStyle {

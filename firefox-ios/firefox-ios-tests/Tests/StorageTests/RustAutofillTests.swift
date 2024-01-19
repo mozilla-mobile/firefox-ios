@@ -165,7 +165,9 @@ class RustAutofillTests: XCTestCase {
     }
 
     func testListAllAddressesEmpty() {
-        let expectationListAddresses = expectation(description: "Completes the list all addresses operation for an empty list")
+        let expectationListAddresses = expectation(
+            description: "Completes the list all addresses operation for an empty list"
+        )
 
         autofill.listAllAddresses { addresses, error in
             XCTAssertNil(error, "Error should be nil")

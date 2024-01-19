@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
 
 /// Stores your entire app state in the form of a single data structure.
 /// This state can only be modified by dispatching Actions to the store.
@@ -27,13 +28,16 @@ public class Store<State: StateType>: DefaultDispatchStore {
     private var middlewares: [Middleware<State>]
     private var subscriptions: Set<SubscriptionType> = []
     private var actionRunning = false
+    private let logger: Logger
 
     public init(state: State,
                 reducer: @escaping Reducer<State>,
-                middlewares: [Middleware<State>] = []) {
+                middlewares: [Middleware<State>] = [],
+                logger: Logger = DefaultLogger.shared) {
         self.state = state
         self.reducer = reducer
         self.middlewares = middlewares
+        self.logger = logger
     }
 
     /// General subscription to app main state
@@ -42,8 +46,10 @@ public class Store<State: StateType>: DefaultDispatchStore {
     }
 
     /// Adds support to subscribe to subState parts of the store's state
-    public func subscribe<SubState, S: StoreSubscriber>(_ subscriber: S,
-                                                        transform: ((Subscription<State>) -> Subscription<SubState>)?) where S.SubscriberStateType == SubState {
+    public func subscribe<SubState, S: StoreSubscriber>(
+        _ subscriber: S,
+        transform: ((Subscription<State>) -> Subscription<SubState>)?
+    ) where S.SubscriberStateType == SubState {
         let originalSubscription = Subscription<State>()
         let transformedSubscription = transform?(originalSubscription)
         subscribe(subscriber, mainSubscription: originalSubscription, transformedSubscription: transformedSubscription)
@@ -62,6 +68,7 @@ public class Store<State: StateType>: DefaultDispatchStore {
     }
 
     public func dispatch(_ action: Action) {
+        logger.log("Dispatched action: \(action.displayString())", level: .info, category: .redux)
         guard Thread.isMainThread && !actionRunning else {
             DispatchQueue.main.async { [weak self] in self?.dispatch(action) }
             return
@@ -77,12 +84,16 @@ public class Store<State: StateType>: DefaultDispatchStore {
         state = newState
     }
 
-    private func subscribe<SubState, S: StoreSubscriber>(_ subscriber: S,
-                                                         mainSubscription: Subscription<State>,
-                                                         transformedSubscription: Subscription<SubState>?) {
-        let subscriptionWrapper = SubscriptionWrapper(originalSubscription: mainSubscription,
-                                                      transformedSubscription: transformedSubscription,
-                                                      subscriber: subscriber)
+    private func subscribe<SubState, S: StoreSubscriber>(
+        _ subscriber: S,
+        mainSubscription: Subscription<State>,
+        transformedSubscription: Subscription<SubState>?
+    ) {
+        let subscriptionWrapper = SubscriptionWrapper(
+            originalSubscription: mainSubscription,
+            transformedSubscription: transformedSubscription,
+            subscriber: subscriber
+        )
         subscriptions.update(with: subscriptionWrapper)
         mainSubscription.newValues(oldState: nil, newState: state)
     }

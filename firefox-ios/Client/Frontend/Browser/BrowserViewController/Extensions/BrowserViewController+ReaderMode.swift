@@ -9,7 +9,7 @@ extension BrowserViewController: ReaderModeDelegate {
     func readerMode(_ readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forTab tab: Tab) {
         // Update reader mode state if is the selected tab. Otherwise it will update once is active
         if tabManager.selectedTab === tab {
-            urlBar.updateReaderModeState(state, hideReloadButton: shouldUseiPadSetup())
+            urlBar.updateReaderModeState(state)
         }
     }
 
@@ -21,7 +21,11 @@ extension BrowserViewController: ReaderModeDelegate {
         }
     }
 
-    func readerMode(_ readerMode: ReaderMode, didParseReadabilityResult readabilityResult: ReadabilityResult, forTab tab: Tab) {
+    func readerMode(
+        _ readerMode: ReaderMode,
+        didParseReadabilityResult readabilityResult: ReadabilityResult,
+        forTab tab: Tab
+    ) {
         TabEvent.post(.didLoadReadability(readabilityResult), for: tab)
     }
 }
@@ -58,7 +62,8 @@ extension BrowserViewController {
         guard let readerModeBar = readerModeBar else { return }
         readerModeBar.applyTheme(theme: themeManager.currentTheme)
 
-        if let url = self.tabManager.selectedTab?.url?.displayURL?.absoluteString, let record = profile.readingList.getRecordWithURL(url).value.successValue {
+        if let url = self.tabManager.selectedTab?.url?.displayURL?.absoluteString,
+           let record = profile.readingList.getRecordWithURL(url).value.successValue {
             readerModeBar.unread = record.unread
             readerModeBar.added = true
         } else {
@@ -190,7 +195,8 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
             readerModeStyleViewController.modalPresentationStyle = .popover
 
             let setupPopover = { [unowned self] in
-                guard let popoverPresentationController = readerModeStyleViewController.popoverPresentationController else { return }
+                guard let popoverPresentationController = readerModeStyleViewController.popoverPresentationController
+                else { return }
 
                 let arrowDirection: UIPopoverArrowDirection = isBottomSearchBar ? .down : .up
                 let ySpacing = isBottomSearchBar ? -1 : UIConstants.ToolbarHeight

@@ -14,7 +14,6 @@ class TabToolbar: UIView, SearchBarLocationProvider {
     let tabsButton = TabsButton()
     let addNewTabButton = ToolbarButton()
     let appMenuButton = ToolbarButton()
-    let homeButton = ToolbarButton()
     let bookmarksButton = ToolbarButton()
     let forwardButton = ToolbarButton()
     let backButton = ToolbarButton()

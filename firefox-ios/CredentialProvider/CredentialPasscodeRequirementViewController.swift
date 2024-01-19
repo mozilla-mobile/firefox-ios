@@ -66,35 +66,72 @@ class CredentialPasscodeRequirementViewController: UIViewController {
 
         view.addSubviews(logoImageView, titleLabel, taglineLabel, warningLabel, cancelButton)
 
-        NSLayoutConstraint.activate([
-            logoImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            logoImageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, multiplier: 0.4),
+        NSLayoutConstraint.activate(
+            [
+                logoImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+                logoImageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, multiplier: 0.4),
 
-            titleLabel.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 40),
-            titleLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 35, priority: .defaultHigh),
-            titleLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -35, priority: .defaultHigh),
-            titleLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 440),
+                titleLabel.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 40),
+                titleLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+                titleLabel.leadingAnchor.constraint(
+                    equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
+                    constant: 35,
+                    priority: .defaultHigh
+                ),
+                titleLabel.trailingAnchor.constraint(
+                    equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
+                    constant: -35,
+                    priority: .defaultHigh
+                ),
+                titleLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 440),
 
-            taglineLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
-            taglineLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            taglineLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 35, priority: .defaultHigh),
-            taglineLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -35, priority: .defaultHigh),
-            taglineLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 440),
+                taglineLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
+                taglineLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+                taglineLabel.leadingAnchor.constraint(
+                    equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
+                    constant: 35,
+                    priority: .defaultHigh
+                ),
+                taglineLabel.trailingAnchor.constraint(
+                    equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
+                    constant: -35,
+                    priority: .defaultHigh
+                ),
+                taglineLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 440),
 
-            warningLabel.topAnchor.constraint(equalTo: taglineLabel.bottomAnchor, constant: 20),
-            warningLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            warningLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 35, priority: .defaultHigh),
-            warningLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -35, priority: .defaultHigh),
-            warningLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 440),
+                warningLabel.topAnchor.constraint(equalTo: taglineLabel.bottomAnchor, constant: 20),
+                warningLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+                warningLabel.leadingAnchor.constraint(
+                    equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
+                    constant: 35,
+                    priority: .defaultHigh
+                ),
+                warningLabel.trailingAnchor.constraint(
+                    equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
+                    constant: -35,
+                    priority: .defaultHigh
+                ),
+                warningLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 440),
 
-            cancelButton.bottomAnchor.constraint(equalTo: self.view.layoutMarginsGuide.bottomAnchor, constant: -20),
-            cancelButton.heightAnchor.constraint(equalToConstant: 44),
-            cancelButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            cancelButton.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 35, priority: .defaultHigh),
-            cancelButton.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -35, priority: .defaultHigh),
-            cancelButton.widthAnchor.constraint(lessThanOrEqualToConstant: 360)
-        ])
+                cancelButton.bottomAnchor.constraint(
+                    equalTo: self.view.layoutMarginsGuide.bottomAnchor,
+                    constant: -20
+                ),
+                cancelButton.heightAnchor.constraint(equalToConstant: 44),
+                cancelButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+                cancelButton.leadingAnchor.constraint(
+                    equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
+                    constant: 35,
+                    priority: .defaultHigh
+                ),
+                cancelButton.trailingAnchor.constraint(
+                    equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
+                    constant: -35,
+                    priority: .defaultHigh
+                ),
+                cancelButton.widthAnchor.constraint(lessThanOrEqualToConstant: 360)
+            ]
+        )
     }
 
     @objc

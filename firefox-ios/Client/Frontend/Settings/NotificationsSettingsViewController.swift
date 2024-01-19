@@ -20,8 +20,8 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
 
             Task {
                 let shouldEnable = await self.notificationsChanged(value)
-                self.syncNotifications.control.setOn(shouldEnable, animated: true)
-                self.syncNotifications.writeBool(self.syncNotifications.control)
+                self.syncNotifications.control.switchView.setOn(shouldEnable, animated: true)
+                self.syncNotifications.writeBool(self.syncNotifications.control.switchView)
 
                 // enable/disable sync notifications
                 NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
@@ -32,7 +32,10 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
     private lazy var tipsAndFeaturesNotifications: BoolNotificationSetting = {
         return BoolNotificationSetting(
             title: .Settings.Notifications.TipsAndFeaturesNotificationsTitle,
-            description: String(format: .Settings.Notifications.TipsAndFeaturesNotificationsStatus, AppName.shortName.rawValue),
+            description: String(
+                format: .Settings.Notifications.TipsAndFeaturesNotificationsStatus,
+                AppName.shortName.rawValue
+            ),
             prefs: prefs,
             prefKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications,
             enabled: true
@@ -41,8 +44,8 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
 
             Task {
                 let shouldEnable = await self.notificationsChanged(value)
-                self.tipsAndFeaturesNotifications.control.setOn(shouldEnable, animated: true)
-                self.tipsAndFeaturesNotifications.writeBool(self.tipsAndFeaturesNotifications.control)
+                self.tipsAndFeaturesNotifications.control.switchView.setOn(shouldEnable, animated: true)
+                self.tipsAndFeaturesNotifications.writeBool(self.tipsAndFeaturesNotifications.control.switchView)
             }
         }
     }()

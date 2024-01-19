@@ -13,8 +13,10 @@ class TabToolbarHelperTests: XCTestCase {
     var subject: TabToolbarHelper!
     var mockToolbar: MockTabToolbar!
 
-    let backButtonImage = UIImage.templateImageNamed(StandardImageIdentifiers.Large.back)?.imageFlippedForRightToLeftLayoutDirection()
-    let forwardButtonImage = UIImage.templateImageNamed(StandardImageIdentifiers.Large.forward)?.imageFlippedForRightToLeftLayoutDirection()
+    let backButtonImage = UIImage.templateImageNamed(StandardImageIdentifiers.Large.back)?
+        .imageFlippedForRightToLeftLayoutDirection()
+    let forwardButtonImage = UIImage.templateImageNamed(StandardImageIdentifiers.Large.forward)?
+        .imageFlippedForRightToLeftLayoutDirection()
     let menuButtonImage = UIImage.templateImageNamed(StandardImageIdentifiers.Large.appMenu)
     let searchButtonImage = UIImage.templateImageNamed("search")
     let imageNewTab = UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus)
@@ -102,9 +104,6 @@ class MockTabToolbar: TabToolbarProtocol {
 
     var _addNewTabButton = MockToolbarButton()
     var addNewTabButton: ToolbarButton { return _addNewTabButton }
-
-    var _homeButton = MockToolbarButton()
-    var homeButton: ToolbarButton { return _homeButton }
 
     var _appMenuButton = MockToolbarButton()
     var appMenuButton: ToolbarButton { return _appMenuButton }

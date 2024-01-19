@@ -129,8 +129,8 @@ class CustomSearchViewController: SettingsTableViewController {
     }
 
     func getSearchTemplate(withString query: String) -> String? {
-        let SearchTermComponent = "%s"      // Placeholder in User Entered String
-        let placeholder = "{searchTerms}"   // Placeholder looked for when using Custom Search Engine in OpenSearch.swift
+        let SearchTermComponent = "%s"    // Placeholder in User Entered String
+        let placeholder = "{searchTerms}" // Placeholder looked for when using Custom Search Engine in OpenSearch.swift
 
         if query.contains(SearchTermComponent) {
             return query.replacingOccurrences(of: SearchTermComponent, with: placeholder)
@@ -180,11 +180,22 @@ class CustomSearchViewController: SettingsTableViewController {
         urlField.textField.accessibilityIdentifier = "customEngineUrl"
 
         let settings: [SettingSection] = [
-            SettingSection(title: NSAttributedString(string: .SettingsAddCustomEngineTitleLabel), children: [titleField]),
-            SettingSection(title: NSAttributedString(string: .SettingsAddCustomEngineURLLabel), footerTitle: NSAttributedString(string: "https://youtube.com/search?q=%s"), children: [urlField])
+            SettingSection(
+                title: NSAttributedString(string: .SettingsAddCustomEngineTitleLabel),
+                children: [titleField]
+            ),
+            SettingSection(
+                title: NSAttributedString(string: .SettingsAddCustomEngineURLLabel),
+                footerTitle: NSAttributedString(string: "https://youtube.com/search?q=%s"),
+                children: [urlField]
+            )
         ]
 
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(self.addCustomSearchEngine))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .save,
+            target: self,
+            action: #selector(self.addCustomSearchEngine)
+        )
         self.navigationItem.rightBarButtonItem?.accessibilityIdentifier = "customEngineSaveButton"
 
         self.navigationItem.rightBarButtonItem?.isEnabled = false

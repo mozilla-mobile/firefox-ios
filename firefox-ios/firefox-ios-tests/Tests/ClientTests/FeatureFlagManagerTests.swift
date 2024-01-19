@@ -34,8 +34,8 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
         // Technically, at this stage, these should be the same.
         XCTAssertTrue(featureFlags.isFeatureEnabled(.bottomSearchBar, checking: .buildOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.bottomSearchBar, checking: .userOnly))
-        XCTAssertTrue(featureFlags.isFeatureEnabled(.historyHighlights, checking: .buildOnly))
-        XCTAssertTrue(featureFlags.isFeatureEnabled(.historyHighlights, checking: .userOnly))
+        XCTAssertFalse(featureFlags.isFeatureEnabled(.historyHighlights, checking: .buildOnly))
+        XCTAssertFalse(featureFlags.isFeatureEnabled(.historyHighlights, checking: .userOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.historyGroups, checking: .buildOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.historyGroups, checking: .userOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly))
@@ -44,12 +44,10 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(featureFlags.isFeatureEnabled(.jumpBackIn, checking: .userOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .buildOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .userOnly))
-        XCTAssertTrue(featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly))
     }
 
     func testDefaultNimbusCustomFlags() {
         XCTAssertEqual(featureFlags.getCustomState(for: .searchBarPosition), SearchBarPosition.top)
-        XCTAssertEqual(featureFlags.getCustomState(for: .wallpaperVersion), WallpaperVersion.v1)
     }
 
     // Changing the prefs manually, to make sure settings are respected through

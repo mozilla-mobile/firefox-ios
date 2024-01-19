@@ -21,7 +21,8 @@ enum AnalysisStatus: String, Decodable {
     /// The current analysis status with provided parameters is not found.
     case notFound = "not_found"
 
-    /// The product cannot be analyzed with the provided data, often due to issues like an incorrect website or product ID.
+    /// The product cannot be analyzed with the provided data, often due to issues like
+    /// an incorrect website or product ID.
     case unprocessable = "unprocessable"
 
     /// The analysis is stale, returned if the analysis is not finished within 3 minutes.

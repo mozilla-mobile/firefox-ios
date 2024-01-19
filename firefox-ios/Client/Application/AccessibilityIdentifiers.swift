@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+// swiftlint:disable line_length
 import Foundation
 
 /// This struct defines all the accessibility identifiers to be added to
@@ -239,9 +240,8 @@ public struct AccessibilityIdentifiers {
             static let card = "Shopping.SettingsCard.Card"
             static let title = "Shopping.SettingsCard.Title"
             static let expandButton = "Shopping.SettingsCard.ExpandButton"
-            static let productsLabel = "Shopping.SettingsCard.ProductsLabel"
+            static let productsRecommendedGroup = "Shopping.SettingsCard.ProductsRecommendedGroup"
             static let turnOffButton = "Shopping.SettingsCard.TurnOffButton"
-            static let recommendedProductsSwitch = "Shopping.SettingCard.RecommendedProductsSwitch"
             static let footerTitle = "Shopping.SettingCard.footerTitle"
             static let footerAction = "Shopping.SettingCard.footerAction"
         }
@@ -283,6 +283,7 @@ public struct AccessibilityIdentifiers {
             static let card = "Shopping.AdCard.Card"
             static let title = "Shopping.AdCard.Title"
             static let price = "Shopping.AdCard.PriceLabel"
+            static let starRating = "Shopping.AdCard.starRating"
             static let productTitle = "Shopping.AdCard.ProductTitle"
             static let description = "Shopping.AdCard.Description"
             static let footer = "Shopping.AdCard.Footer"
@@ -454,6 +455,7 @@ public struct AccessibilityIdentifiers {
             struct ViewCreditCard {
                 static let viewCard = "View Card"
                 static let edit = "Edit"
+                static let close = "Close"
             }
 
             struct EditCreditCard {
@@ -603,6 +605,8 @@ public struct AccessibilityIdentifiers {
     struct RememberCreditCard {
         static let rememberCreditCardHeader = "RememberCreditCard.Header"
         static let yesButton = "RememberCreditCard.yesButton"
+        static let manageCardsButton = "RememberCreditCard.manageCardsButton"
         static let notNowButton = "RememberCreditCard.notNowButton"
     }
 }
+// swiftlint:enable line_length

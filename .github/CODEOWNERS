@@ -4,6 +4,10 @@
 # Order is important; the last matching pattern takes the most
 # precedence. 
 
+# When someone opens a pull request that only modifies those folders / files,
+# those specific persons will be asked for review and not the global owners.
+/firefox-ios/Client/Experiments/initial_experiments.json @dnarcese @afurlan-firefox
+
 # When someone opens a pull request that only modifies those folders / files, 
 # only @mozilla-mobile/fxios-automation and not the global
 # owners will be requested for a review.

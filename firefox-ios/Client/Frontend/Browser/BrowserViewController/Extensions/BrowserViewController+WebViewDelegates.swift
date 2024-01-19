@@ -292,7 +292,10 @@ extension BrowserViewController: WKUIDelegate {
                                                      value: .contextMenu)
                     }
 
-                    let isBookmarkedSite = profile.places.isBookmarked(url: url.absoluteString).value.successValue ?? false
+                    let isBookmarkedSite = profile.places
+                        .isBookmarked(url: url.absoluteString)
+                        .value
+                        .successValue ?? false
                     actions.append(isBookmarkedSite ? removeAction : addBookmarkAction)
 
                     actions.append(UIAction(
@@ -465,7 +468,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // (orange color) as soon as the page has loaded.
         if let url = webView.url {
             if !url.isReaderModeURL {
-                urlBar.updateReaderModeState(ReaderModeState.unavailable, hideReloadButton: shouldUseiPadSetup())
+                urlBar.updateReaderModeState(ReaderModeState.unavailable)
                 hideReaderModeBar(animated: false)
             }
         }
@@ -576,7 +579,11 @@ extension BrowserViewController: WKNavigationDelegate {
                 if let mailToMetadata = url.mailToMetadata(),
                    let mailScheme = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption),
                    mailScheme != "mailto" {
-                    self.mailtoLinkHandler.launchMailClientForScheme(mailScheme, metadata: mailToMetadata, defaultMailtoURL: url)
+                    self.mailtoLinkHandler.launchMailClientForScheme(
+                        mailScheme,
+                        metadata: mailToMetadata,
+                        defaultMailtoURL: url
+                    )
                 } else {
                     UIApplication.shared.open(url, options: [:])
                 }
@@ -631,7 +638,11 @@ extension BrowserViewController: WKNavigationDelegate {
                     // Do not show error message for JS navigated links or 
                     // redirect as it's not the result of a user action.
                     if !openedURL, navigationAction.navigationType == .linkActivated {
-                        let alert = UIAlertController(title: .UnableToOpenURLErrorTitle, message: .UnableToOpenURLError, preferredStyle: .alert)
+                        let alert = UIAlertController(
+                            title: .UnableToOpenURLErrorTitle,
+                            message: .UnableToOpenURLError,
+                            preferredStyle: .alert
+                        )
                         alert.addAction(UIAlertAction(title: .OKString, style: .default, handler: nil))
                         self.present(alert, animated: true, completion: nil)
                     }
@@ -761,6 +772,8 @@ extension BrowserViewController: WKNavigationDelegate {
                                             method: .error,
                                             object: .webview,
                                             value: .webviewFail)
+
+        webviewTelemetry.cancel()
     }
 
     /// Invoked when an error occurs while starting to load data for the main frame.
@@ -777,6 +790,8 @@ extension BrowserViewController: WKNavigationDelegate {
                                             method: .error,
                                             object: .webview,
                                             value: .webviewFailProvisional)
+
+        webviewTelemetry.cancel()
 
         // Ignore the "Frame load interrupted" error that is triggered when we cancel a request
         // to open an external application and hand it over to UIApplication.openURL(). The result
@@ -850,6 +865,7 @@ extension BrowserViewController: WKNavigationDelegate {
         else { return }
 
         searchTelemetry?.trackTabAndTopSiteSAP(tab, webView: webView)
+        webviewTelemetry.start()
         tab.url = webView.url
 
         // Only update search term data with valid search term data
@@ -881,13 +897,14 @@ extension BrowserViewController: WKNavigationDelegate {
         self.scrollController.resetZoomState()
 
         if tabManager.selectedTab === tab {
-            self.scrollController.showToolbars(animated: false)
             updateUIForReaderHomeStateForTab(tab, focusUrlBar: true)
-            updateFakespot(tab: tab)
+            updateFakespot(tab: tab, isReload: true)
         }
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        webviewTelemetry.stop()
+
         if let tab = tabManager[webView],
            let metadataManager = tab.metadataManager {
             navigateInTab(tab: tab, to: navigation, webViewStatus: .finishedNavigation)

@@ -5,7 +5,11 @@
 import Foundation
 import Network
 
-public func makeURLSession(userAgent: String, configuration: URLSessionConfiguration, timeout: TimeInterval? = nil) -> URLSession {
+public func makeURLSession(
+    userAgent: String,
+    configuration: URLSessionConfiguration,
+    timeout: TimeInterval? = nil
+) -> URLSession {
     configuration.httpAdditionalHeaders = ["User-Agent": userAgent]
     if let t = timeout {
         configuration.timeoutIntervalForRequest = t
@@ -14,7 +18,11 @@ public func makeURLSession(userAgent: String, configuration: URLSessionConfigura
 }
 
 // Used to help replace Alamofire's response.validate()
-public func validatedHTTPResponse(_ response: URLResponse?, contentType: String? = nil, statusCode: Range<Int>?  = nil) -> HTTPURLResponse? {
+public func validatedHTTPResponse(
+    _ response: URLResponse?,
+    contentType: String? = nil,
+    statusCode: Range<Int>?  = nil
+) -> HTTPURLResponse? {
     if let response = response as? HTTPURLResponse {
         if let range = statusCode {
             return range.contains(response.statusCode) ? response : nil

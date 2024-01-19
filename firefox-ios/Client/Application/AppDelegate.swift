@@ -27,7 +27,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         creditCardAutofillEnabled: creditCardAutofillStatus
     )
 
-    lazy var themeManager: ThemeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
+    lazy var themeManager: ThemeManager = DefaultThemeManager(
+        sharedContainerIdentifier: AppInfo.sharedContainerIdentifier
+    )
     lazy var ratingPromptManager = RatingPromptManager(profile: profile)
     lazy var appSessionManager: AppSessionProvider = AppSessionManager()
     lazy var notificationSurfaceManager = NotificationSurfaceManager()
@@ -124,7 +126,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // `isActive` tracks active status to avoid double-triggers.
         handleForegroundEvent()
 
-        // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
+        // Set up a web server that serves us static content.
+        // Do this early so that it is ready when the UI is presented.
         webServerUtil = WebServerUtil(profile: profile)
         webServerUtil?.setUpWebServer()
 
@@ -232,7 +235,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         profile.syncManager.applicationDidEnterBackground()
 
         let singleShotTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
-        // 2 seconds is ample for a localhost request to be completed by GCDWebServer. <500ms is expected on newer devices.
+        // 2 seconds is ample for a localhost request to be completed by GCDWebServer.
+        // <500ms is expected on newer devices.
         singleShotTimer.schedule(deadline: .now() + 2.0, repeating: .never)
         singleShotTimer.setEventHandler {
             WebServer.sharedInstance.server.stop()
@@ -274,7 +278,8 @@ extension AppDelegate: Notifiable {
                                                           UIApplication.willEnterForegroundNotification])
     }
 
-    /// When migrated to Scenes, these methods aren't called. Consider this a temporary solution to calling into those methods.
+    /// When migrated to Scenes, these methods aren't called.
+    /// Consider this a temporary solution to calling into those methods.
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIApplication.didBecomeActiveNotification:

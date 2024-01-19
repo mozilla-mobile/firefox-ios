@@ -100,7 +100,8 @@ class ToolbarTests: BaseTestCase {
         XCTAssertEqual(value as? String, "", "The url has not been removed correctly")
     }
 
-    // Check that after scrolling on a page, the URL bar is hidden. Tapping one on the status bar will reveal the URL bar, tapping again on the status will scroll to the top
+    // Check that after scrolling on a page, the URL bar is hidden. Tapping one on the status bar will reveal
+    // the URL bar, tapping again on the status will scroll to the top
     // Skipping for iPad for now, not sure how to implement it there
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2344431
     func testRevealToolbarWhenTappingOnStatusbar() {
@@ -115,7 +116,9 @@ class ToolbarTests: BaseTestCase {
             waitUntilPageLoad()
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
             let PageOptionsMenu = app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
-            let statusbarElement: XCUIElement = XCUIApplication(bundleIdentifier: "com.apple.springboard").statusBars.element(boundBy: 1)
+            let statusbarElement: XCUIElement = XCUIApplication(
+                bundleIdentifier: "com.apple.springboard"
+            ).statusBars.element(boundBy: 1)
             app.swipeUp()
             XCTAssertFalse(PageOptionsMenu.isHittable)
             statusbarElement.tap(force: true)

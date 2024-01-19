@@ -17,7 +17,8 @@
 # `include` block of the FML
 addFeatureFilesToNimbus() {
     for filename in firefox-ios/nimbus-features/*.yaml; do
-        echo "  - $filename" >> $1
+        relativeName="${filename#firefox-ios/}"
+        echo "  - $relativeName" >> $1
     done
 }
 

@@ -44,7 +44,9 @@ class TopSiteHistoryManager: DataObserver {
     }
 
     private func deleteTileForSuggestedSite(_ siteURL: String) {
-        var deletedSuggestedSites = profile.prefs.arrayForKey(topSitesProvider.defaultSuggestedSitesKey) as? [String] ?? []
+        var deletedSuggestedSites = profile.prefs.arrayForKey(
+            topSitesProvider.defaultSuggestedSitesKey
+        ) as? [String] ?? []
         deletedSuggestedSites.append(siteURL)
         profile.prefs.setObject(deletedSuggestedSites, forKey: topSitesProvider.defaultSuggestedSitesKey)
     }

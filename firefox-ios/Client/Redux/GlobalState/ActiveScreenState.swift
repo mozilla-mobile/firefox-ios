@@ -20,7 +20,8 @@ enum AppScreenState: Equatable {
         case .tabsTray(let state): return .tabsTray(TabTrayState.reducer(state, action))
         case .tabsPanel(let state): return .tabsPanel(TabsPanelState.reducer(state, action))
         case .remoteTabsPanel(let state): return .remoteTabsPanel(RemoteTabsPanelState.reducer(state, action))
-        case .browserViewController(let state): return .browserViewController(BrowserViewControllerState.reducer(state, action))
+        case .browserViewController(let state):
+            return .browserViewController(BrowserViewControllerState.reducer(state, action))
         }
     }
 

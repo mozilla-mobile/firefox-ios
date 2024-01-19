@@ -35,7 +35,7 @@
         "DragAndDropTests\/testRearrangeTabsTabTrayLandscape()",
         "EngagementNotificationTests",
         "ExperimentIntegrationTests",
-        "FakespotTests",
+        "FakespotTests\/testFakespotAvailable()",
         "FindInPageTests",
         "FirefoxSuggestTest",
         "FxScreenGraphTests",

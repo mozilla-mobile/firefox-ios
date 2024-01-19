@@ -227,6 +227,8 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.clicked)
     }
 
+    // FXIOS-8107: Disabled test as history highlights has been disabled to fix app hangs / slowness
+    // Reloads for notification
     func testManagerOnMessagePressed_withMalformedURL() {
         let message = createMessage(messageId: messageId, action: "http://www.google.com?q=א")
         subject.onMessagePressed(message)

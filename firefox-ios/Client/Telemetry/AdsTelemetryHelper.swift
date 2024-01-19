@@ -111,7 +111,10 @@ class AdsTelemetryHelper: TabContentScript {
         return ["adsMessageHandler"]
     }
 
-    func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(
+        _ userContentController: WKUserContentController,
+        didReceiveScriptMessage message: WKScriptMessage
+    ) {
         guard
             let provider = getProviderForMessage(message: message),
             let body = message.body as? [String: Any],

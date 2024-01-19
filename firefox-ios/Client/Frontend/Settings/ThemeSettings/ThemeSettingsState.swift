@@ -50,7 +50,8 @@ struct ThemeSettingsState: ScreenState, Equatable {
         case ThemeSettingsAction.receivedThemeManagerValues(let themeState):
             return themeState
 
-        case ThemeSettingsAction.toggleUseSystemAppearance(let isEnabled), ThemeSettingsAction.systemThemeChanged(let isEnabled):
+        case ThemeSettingsAction.toggleUseSystemAppearance(let isEnabled),
+            ThemeSettingsAction.systemThemeChanged(let isEnabled):
             return ThemeSettingsState(useSystemAppearance: isEnabled,
                                       isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnable,
                                       manualThemeSelected: state.manualThemeSelected,

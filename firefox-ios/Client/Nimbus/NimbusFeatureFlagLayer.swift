@@ -53,6 +53,9 @@ final class NimbusFeatureFlagLayer {
         case .fakespotBackInStock:
             return checkProductBackInStockFakespotFeature(from: nimbus)
 
+        case .preferSwitchToOpenTabOverDuplicate:
+            return checkPreferSwitchToOpenTabOverDuplicate(from: nimbus)
+
         case .qrCodeCoordinatorRefactor:
             return checkQRCodeCoordinatorRefactorFeature(from: nimbus)
 
@@ -65,13 +68,6 @@ final class NimbusFeatureFlagLayer {
 
         case .tabTrayRefactor:
             return checkTabTrayRefactorFeature(from: nimbus)
-
-        case .wallpapers,
-                .wallpaperVersion:
-            return checkNimbusForWallpapersFeature(using: nimbus)
-
-        case .wallpaperOnboardingSheet:
-            return checkNimbusForWallpaperOnboarding(using: nimbus)
 
         case .zoomFeature:
             return checkZoomFeature(from: nimbus)
@@ -139,22 +135,6 @@ final class NimbusFeatureFlagLayer {
 
         guard let status = config.featuresEnabled[nimbusID] else { return false }
         return status
-    }
-
-    private func checkNimbusForWallpapersFeature(using nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.wallpaperFeature.value()
-
-        return config.configuration.status
-    }
-
-    private func checkNimbusForWallpaperOnboarding(using nimbus: FxNimbus) -> Bool {
-        return nimbus.features.wallpaperFeature.value().onboardingSheet
-    }
-
-    public func checkNimbusForWallpapersVersion(using nimbus: FxNimbus = FxNimbus.shared) -> String {
-        let config = nimbus.features.wallpaperFeature.value()
-
-        return config.configuration.version.rawValue
     }
 
     private func checkQRCodeCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
@@ -251,6 +231,10 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.shopping2023.value()
 
         return config.backInStockReporting
+    }
+
+    private func checkPreferSwitchToOpenTabOverDuplicate(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.homescreenFeature.value().preferSwitchToOpenTab
     }
 
     private func checkAddressAutofill(from nimbus: FxNimbus) -> Bool {

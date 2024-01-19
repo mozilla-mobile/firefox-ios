@@ -6,7 +6,33 @@ import Foundation
 import WebKit
 @testable import WebEngine
 
-struct MockWKEngineConfiguration: WKEngineConfiguration {
-    var userContentController = WKUserContentController()
-    var allowsInlineMediaPlayback = true
+class MockWKEngineConfiguration: WKEngineConfiguration {
+    var scriptNameAdded: String?
+    var addUserScriptCalled = 0
+    var addInDefaultContentWorldCalled = 0
+    var addInPageContentWorldCalled = 0
+    var removeScriptMessageHandlerCalled = 0
+    var removeAllUserScriptsCalled = 0
+
+    func addUserScript(_ userScript: WKUserScript) {
+        addUserScriptCalled += 1
+    }
+
+    func addInDefaultContentWorld(scriptMessageHandler: WKScriptMessageHandler, name: String) {
+        scriptNameAdded = name
+        addInDefaultContentWorldCalled += 1
+    }
+
+    func addInPageContentWorld(scriptMessageHandler: WKScriptMessageHandler, name: String) {
+        scriptNameAdded = name
+        addInPageContentWorldCalled += 1
+    }
+
+    func removeScriptMessageHandler(forName name: String) {
+        removeScriptMessageHandlerCalled += 1
+    }
+
+    func removeAllUserScripts() {
+        removeAllUserScriptsCalled += 1
+    }
 }

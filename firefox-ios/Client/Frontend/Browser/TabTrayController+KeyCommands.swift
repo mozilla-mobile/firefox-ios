@@ -7,20 +7,44 @@ import UIKit
 
 extension LegacyGridTabViewController {
     override var keyCommands: [UIKeyCommand]? {
-        let toggleText: String = tabDisplayManager.isPrivate ? .KeyboardShortcuts.NormalBrowsingMode: .KeyboardShortcuts.PrivateBrowsingMode
+        typealias Shortcuts = String.KeyboardShortcuts
+        let toggleText: String = tabDisplayManager.isPrivate ? Shortcuts.NormalBrowsingMode: Shortcuts.PrivateBrowsingMode
         let commands = [
-            UIKeyCommand(action: #selector(didTogglePrivateModeKeyCommand), input: "`", modifierFlags: .command, discoverabilityTitle: toggleText),
+            UIKeyCommand(
+                action: #selector(didTogglePrivateModeKeyCommand),
+                input: "`",
+                modifierFlags: .command,
+                discoverabilityTitle: toggleText
+            ),
             UIKeyCommand(input: "w", modifierFlags: .command, action: #selector(didCloseTabKeyCommand)),
 
-            UIKeyCommand(action: #selector(didCloseAllTabsKeyCommand), input: "w", modifierFlags: [.command, .shift], discoverabilityTitle: .KeyboardShortcuts.CloseAllTabsInTabTray),
+            UIKeyCommand(
+                action: #selector(didCloseAllTabsKeyCommand),
+                input: "w",
+                modifierFlags: [.command, .shift],
+                discoverabilityTitle: .KeyboardShortcuts.CloseAllTabsInTabTray
+            ),
             UIKeyCommand(input: "\\", modifierFlags: [.command, .shift], action: #selector(didEnterTabKeyCommand)),
             UIKeyCommand(input: "\t", modifierFlags: [.command, .alternate], action: #selector(didEnterTabKeyCommand)),
-            UIKeyCommand(action: #selector(didOpenNewTabKeyCommand), input: "t", modifierFlags: .command, discoverabilityTitle: .KeyboardShortcuts.OpenNewTabInTabTray),
+            UIKeyCommand(
+                action: #selector(didOpenNewTabKeyCommand),
+                input: "t",
+                modifierFlags: .command,
+                discoverabilityTitle: .KeyboardShortcuts.OpenNewTabInTabTray
+            ),
         ]
 
         let arrowKeysCommands = [
-            UIKeyCommand(input: UIKeyCommand.inputDownArrow, modifierFlags: [], action: #selector(didChangeSelectedTabKeyCommand(sender:))),
-            UIKeyCommand(input: UIKeyCommand.inputUpArrow, modifierFlags: [], action: #selector(didChangeSelectedTabKeyCommand(sender:))),
+            UIKeyCommand(
+                input: UIKeyCommand.inputDownArrow,
+                modifierFlags: [],
+                action: #selector(didChangeSelectedTabKeyCommand(sender:))
+            ),
+            UIKeyCommand(
+                input: UIKeyCommand.inputUpArrow,
+                modifierFlags: [],
+                action: #selector(didChangeSelectedTabKeyCommand(sender:))
+            ),
         ]
         arrowKeysCommands.forEach { $0.wantsPriorityOverSystemBehavior = true }
 
@@ -35,7 +59,12 @@ extension LegacyGridTabViewController {
 
     @objc
     func didCloseTabKeyCommand() {
-        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "close-tab"])
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .press,
+            object: .keyCommand,
+            extras: ["action": "close-tab"]
+        )
         if let tab = tabManager.selectedTab {
             tabManager.removeTab(tab)
         }
@@ -43,25 +72,45 @@ extension LegacyGridTabViewController {
 
     @objc
     func didCloseAllTabsKeyCommand() {
-        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "close-all-tabs"])
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .press,
+            object: .keyCommand,
+            extras: ["action": "close-all-tabs"]
+        )
         closeTabsTrayBackground()
     }
 
     @objc
     func didEnterTabKeyCommand() {
-        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "enter-tab"])
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .press,
+            object: .keyCommand,
+            extras: ["action": "enter-tab"]
+        )
         dismissVC()
     }
 
     @objc
     func didOpenNewTabKeyCommand() {
-        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "new-tab"])
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .press,
+            object: .keyCommand,
+            extras: ["action": "new-tab"]
+        )
         openNewTab(isPrivate: tabDisplayManager.isPrivate)
     }
 
     @objc
     func didChangeSelectedTabKeyCommand(sender: UIKeyCommand) {
-        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "select-tab"])
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .press,
+            object: .keyCommand,
+            extras: ["action": "select-tab"]
+        )
         let step: Int
         guard let input = sender.input else { return }
         switch input {

@@ -31,7 +31,10 @@ class IntroViewController: UIViewController,
     private lazy var closeButton: UIButton = .build { button in
         button.setImage(UIImage(named: StandardImageIdentifiers.ExtraLarge.crossCircleFill), for: .normal)
         button.addTarget(self, action: #selector(self.closeOnboarding), for: .touchUpInside)
-        button.accessibilityLabel = String.localizedStringWithFormat(.Onboarding.Welcome.CloseButtonAccessibilityLabel, AppName.shortName.rawValue)
+        button.accessibilityLabel = String.localizedStringWithFormat(
+            .Onboarding.Welcome.CloseButtonAccessibilityLabel,
+            AppName.shortName.rawValue
+        )
         button.accessibilityIdentifier = AccessibilityIdentifiers.Onboarding.closeButton
     }
 

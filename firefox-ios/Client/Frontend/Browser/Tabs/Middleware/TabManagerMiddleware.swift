@@ -10,16 +10,13 @@ import Storage
 
 class TabManagerMiddleware {
     var selectedPanel: TabTrayPanelType = .tabs
-    private let windowManager: WindowManager
     private let profile: Profile
 
     var normalTabsCountText: String {
         (defaultTabManager.normalTabs.count < 100) ? defaultTabManager.normalTabs.count.description : "\u{221E}"
     }
 
-    init(windowManager: WindowManager = AppContainer.shared.resolve(),
-         profile: Profile = AppContainer.shared.resolve()) {
-        self.windowManager = windowManager
+    init(profile: Profile = AppContainer.shared.resolve()) {
         self.profile = profile
     }
 
@@ -64,17 +61,18 @@ class TabManagerMiddleware {
         case TabPanelAction.closeAllTabs:
             guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel) else { return }
             Task {
+                let count = self.defaultTabManager.tabs.count
                 await self.closeAllTabs(isPrivateMode: tabsState.isPrivateMode)
                 ensureMainThread { [self] in
                     let tabs = self.refreshTabs(for: tabsState.isPrivateMode)
                     store.dispatch(TabPanelAction.refreshTab(tabs))
                     store.dispatch(TabTrayAction.dismissTabTray)
+                    store.dispatch(GeneralBrowserAction.showToast(.allTabs(count: count)))
                 }
             }
 
         case TabPanelAction.undoCloseAllTabs:
-            // TODO: FXIOS-7978 Handle Undo close all tabs
-            break
+            self.defaultTabManager.undoCloseAllTabs()
 
         case TabPanelAction.selectTab(let tabUUID):
             self.selectTab(for: tabUUID)
@@ -132,12 +130,15 @@ class TabManagerMiddleware {
 
         case TabPeekAction.closeTab(let tabID):
             self.tabPeekCloseTab(with: tabID)
+            store.dispatch(TabPanelAction.showToast(.singleTab))
         default:
             break
         }
     }
 
-    /// Gets initial state for TabTrayModel includes panelType, if is on Private mode, normalTabsCountText and if syncAccount is enabled
+    /// Gets initial state for TabTrayModel includes panelType, if is on Private mode,
+    /// normalTabsCountText and if syncAccount is enabled
+    /// 
     /// - Parameter panelType: The selected panelType
     /// - Returns: Initial state of TabTrayModel
     private func getTabTrayModel(for panelType: TabTrayPanelType) -> TabTrayModel {
@@ -187,7 +188,9 @@ class TabManagerMiddleware {
         return tabs
     }
 
-    /// Gets the list of inactive tabs from `TabManager` and builds the array of InactiveTabsModel to use in TabDisplayView
+    /// Gets the list of inactive tabs from `TabManager` and builds the array of InactiveTabsModel
+    /// to use in TabDisplayView
+    ///
     /// - Parameter isPrivateMode: is on Private mode or not
     /// - Returns: Array of InactiveTabsModel used to configure collection view
     private func refreshInactiveTabs(for isPrivateMode: Bool = false) -> [InactiveTabsModel] {
@@ -205,16 +208,19 @@ class TabManagerMiddleware {
     }
 
     /// Creates a new tab in `TabManager` using optional `URLRequest`
+    ///
     /// - Parameters:
     ///   - urlRequest: URL request to load
     ///   - isPrivate: if the tab should be created in private mode or not
     private func addNewTab(with urlRequest: URLRequest?, isPrivate: Bool) {
-        // TODO: Legacy class has a guard to cancel adding new tab if dragging was enabled, check if change is still needed
+        // TODO: Legacy class has a guard to cancel adding new tab if dragging was enabled,
+        // check if change is still needed
         let tab = defaultTabManager.addTab(urlRequest, isPrivate: isPrivate)
         defaultTabManager.selectTab(tab)
     }
 
     /// Move tab on `TabManager` array to support drag and drop
+    ///
     /// - Parameters:
     ///   - originIndex: from original position
     ///   - destinationIndex: to destination position
@@ -222,7 +228,9 @@ class TabManagerMiddleware {
         defaultTabManager.moveTab(isPrivate: false, fromIndex: originIndex, toIndex: destinationIndex)
     }
 
-    /// Async close single tab. If is the last tab the Tab Tray is dismissed and undo option is presented in Homepage
+    /// Async close single tab. If is the last tab the Tab Tray is dismissed and undo
+    /// option is presented in Homepage
+    ///
     /// - Parameters:
     ///   - tabUUID: UUID of the tab to be closed/removed
     /// - Returns: If is the last tab to be closed used to trigger dismissTabTray action
@@ -237,25 +245,24 @@ class TabManagerMiddleware {
     private func closeTabFromTabPanel(with tabUUID: String) {
         Task {
             let shouldDismiss = await self.closeTab(with: tabUUID)
-            self.triggerRefresh(with: shouldDismiss)
+            await self.triggerRefresh(with: shouldDismiss)
+            if shouldDismiss {
+                store.dispatch(TabTrayAction.dismissTabTray)
+                store.dispatch(GeneralBrowserAction.showToast(.singleTab))
+            } else {
+                store.dispatch(TabPanelAction.showToast(.singleTab))
+            }
         }
     }
 
     /// Trigger refreshTabs action after a change in `TabManager`
     /// - Parameter shouldDismiss: If Tab Tray should dismiss while refresh is done
+    @MainActor
     private func triggerRefresh(with shouldDismiss: Bool) {
         let isPrivate = defaultTabManager.selectedTab?.isPrivate ?? false
         let tabs = self.refreshTabs(for: isPrivate)
 
-        ensureMainThread {
-            store.dispatch(TabPanelAction.refreshTab(tabs))
-            if shouldDismiss {
-                // TODO: FXIOS-7978 Handle Undo close last regular tab
-                store.dispatch(TabTrayAction.dismissTabTray)
-            } else {
-                store.dispatch(TabPanelAction.showToast(.singleTab))
-            }
-        }
+        store.dispatch(TabPanelAction.refreshTab(tabs))
     }
 
     /// Handles undoing the close tab action, gets the backup tab from `TabManager`
@@ -264,13 +271,16 @@ class TabManagerMiddleware {
         defaultTabManager.undoCloseTab(tab: backupTab.tab, position: backupTab.restorePosition)
     }
 
-    /// Close all tabs calling removeAllTabs from `TabManager` internally makes a backup of the array in case the undo option is pressed.
+    /// Close all tabs calling removeAllTabs from `TabManager` internally makes a backup
+    /// of the array in case the undo option is pressed.
+    ///
     /// - Parameter isPrivateMode: If is private mode
     private func closeAllTabs(isPrivateMode: Bool) async {
         await defaultTabManager.removeAllTabs(isPrivateMode: isPrivateMode)
     }
 
     /// Handles undo close all tabs. Adds back all tabs depending on mode
+    ///
     /// - Parameter isPrivateMode: if private mode is active or not
     private func undoCloseAllTabs(isPrivateMode: Bool) {
         // TODO: FXIOS-7978 Handle Undo close all tabs
@@ -279,7 +289,8 @@ class TabManagerMiddleware {
 
     // MARK: - Inactive tabs helper
 
-    /// Close all inactive tabs removing them from the tabs array on `TabManager`. Makes a backup of tabs to be deleted in case undo option is selected
+    /// Close all inactive tabs removing them from the tabs array on `TabManager`.
+    /// Makes a backup of tabs to be deleted in case undo option is selected
     private func closeAllInactiveTabs() async {
         await defaultTabManager.removeAllInactiveTabs()
     }
@@ -317,6 +328,7 @@ class TabManagerMiddleware {
 
     private var defaultTabManager: TabManager {
         // TODO: [FXIOS-8071] Temporary. WIP for Redux + iPad Multi-window.
+        let windowManager: WindowManager = AppContainer.shared.resolve()
         return windowManager.tabManager(for: windowManager.activeWindow)
     }
 
@@ -386,9 +398,6 @@ class TabManagerMiddleware {
     }
 
     private func tabPeekCloseTab(with tabID: String) {
-        Task {
-            let shouldDismiss = await self.closeTab(with: tabID)
-            self.triggerRefresh(with: shouldDismiss)
-        }
+        closeTabFromTabPanel(with: tabID)
     }
 }

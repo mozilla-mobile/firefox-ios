@@ -2,10 +2,11 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+// Disabling `line_length` for this whole file because it is going to get refactored/replaced soon.
+// swiftlint:disable line_length
 import Common
 import Glean
 import Shared
-import Telemetry
 import Account
 import Sync
 import Storage
@@ -32,6 +33,13 @@ extension TelemetryWrapperProtocol {
     }
 }
 
+enum SearchLocation: String {
+    case actionBar = "actionbar"
+    case listItem = "listitem"
+    case suggestion = "suggestion"
+    case quickSearch = "quicksearch"
+}
+
 class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
     typealias ExtraKey = TelemetryWrapper.EventExtraKey
 
@@ -40,7 +48,6 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
     // TODO [7856]: Temporary. Additional telemetry updates forthcoming once iPad multi-window enabled.
     var defaultTabManager: TabManager?
 
-    let legacyTelemetry = Telemetry.default
     let glean = Glean.shared
     // Boolean flag to temporarily remember if we crashed during the
     // last run of the app. We cannot simply use `Sentry.crashedLastLaunch`
@@ -81,86 +88,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         migratePathComponentInDocumentsDirectory("MozTelemetry-Default-mobile-event", to: .cachesDirectory)
         migratePathComponentInDocumentsDirectory("eventArray-MozTelemetry-Default-mobile-event.json", to: .cachesDirectory)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(uploadError), name: Telemetry.notificationReportError, object: nil)
-
-        let telemetryConfig = legacyTelemetry.configuration
-        telemetryConfig.appName = "Fennec"
-        telemetryConfig.userDefaultsSuiteName = AppInfo.sharedContainerIdentifier
-        telemetryConfig.dataDirectory = .cachesDirectory
-        telemetryConfig.updateChannel = AppConstants.buildChannel.rawValue
         let sendUsageData = profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
-        telemetryConfig.isCollectionEnabled = sendUsageData
-        telemetryConfig.isUploadEnabled = sendUsageData
-
-        telemetryConfig.measureUserDefaultsSetting(forKey: "profile.saveLogins", withDefaultValue: true)
-        telemetryConfig.measureUserDefaultsSetting(forKey: "profile.showClipboardBar", withDefaultValue: false)
-        telemetryConfig.measureUserDefaultsSetting(forKey: "profile.settings.closePrivateTabs", withDefaultValue: false)
-        telemetryConfig.measureUserDefaultsSetting(forKey: "profile.ASPocketStoriesVisible", withDefaultValue: true)
-        telemetryConfig.measureUserDefaultsSetting(forKey: "profile.ASBookmarkHighlightsVisible", withDefaultValue: true)
-        telemetryConfig.measureUserDefaultsSetting(forKey: "profile.prefkey.trackingprotection.normalbrowsing", withDefaultValue: true)
-        telemetryConfig.measureUserDefaultsSetting(forKey: "profile.prefkey.trackingprotection.privatebrowsing", withDefaultValue: true)
-        telemetryConfig.measureUserDefaultsSetting(forKey: "profile.prefkey.trackingprotection.strength", withDefaultValue: "basic")
-        telemetryConfig.measureUserDefaultsSetting(forKey: LegacyThemeManagerPrefs.systemThemeIsOn.rawValue, withDefaultValue: true)
-
-        let prefs = profile.prefs
-        legacyTelemetry.beforeSerializePing(pingType: CorePingBuilder.PingType) { (inputDict) -> [String: Any?] in
-            var outputDict = inputDict // make a mutable copy
-
-            var settings: [String: Any?] = inputDict["settings"] as? [String: Any?] ?? [:]
-
-            if let newTabChoice = prefs.stringForKey(NewTabAccessors.HomePrefKey) {
-                outputDict["defaultNewTabExperience"] = newTabChoice as AnyObject?
-            }
-
-            // Report this flag as a `1` or `0` integer to allow it
-            // to be counted easily when reporting. Then, clear the
-            // flag to avoid it getting reported multiple times.
-            settings["crashedLastLaunch"] = self.crashedLastLaunch ? 1 : 0
-            self.crashedLastLaunch = false
-
-            outputDict["settings"] = settings
-
-            // TODO [7856]: Additional telemetry updates forthcoming once iPad multi-window enabled.
-            outputDict["openTabCount"] = self.defaultTabManager?.count ?? 0
-
-            outputDict["systemTheme"] = UITraitCollection.current.userInterfaceStyle == .dark ? "dark" : "light"
-
-            return outputDict
-        }
-
-        legacyTelemetry.beforeSerializePing(pingType: MobileEventPingBuilder.PingType) { (inputDict) -> [String: Any?] in
-            var outputDict = inputDict
-
-            var settings: [String: String?] = inputDict["settings"] as? [String: String?] ?? [:]
-
-            let defaultEngine = profile.searchEngines.defaultEngine
-            settings["defaultSearchEngine"] = defaultEngine?.engineID ?? "custom"
-
-            if let windowBounds = UIWindow.keyWindow?.bounds {
-                settings["windowWidth"] = String(describing: windowBounds.width)
-                settings["windowHeight"] = String(describing: windowBounds.height)
-            }
-
-            outputDict["settings"] = settings
-
-            // App Extension telemetry requires reading events stored in prefs, then clearing them from prefs.
-            if let extensionEvents = profile.prefs.arrayForKey(PrefsKeys.AppExtensionTelemetryEventArray) as? [[String: String]],
-                var pingEvents = outputDict["events"] as? [[Any?]] {
-                profile.prefs.removeObjectForKey(PrefsKeys.AppExtensionTelemetryEventArray)
-
-                extensionEvents.forEach { extensionEvent in
-                    let category = TelemetryWrapper.EventCategory.appExtensionAction.rawValue
-                    let newEvent = TelemetryEvent(category: category, method: extensionEvent["method"] ?? "", object: extensionEvent["object"] ?? "")
-                    pingEvents.append(newEvent.toArray())
-                }
-                outputDict["events"] = pingEvents
-            }
-
-            return outputDict
-        }
-
-        legacyTelemetry.add(pingBuilderType: CorePingBuilder.self)
-        legacyTelemetry.add(pingBuilderType: MobileEventPingBuilder.self)
 
         // Initialize Glean
         initGlean(profile, sendUsageData: sendUsageData)
@@ -287,7 +215,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
             GleanMetrics.TrackingProtection.strength.set("basic")
         }
         // System theme enabled
-        GleanMetrics.Theme.useSystemTheme.set(LegacyThemeManager.instance.systemThemeIsOn)
+        let themeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
+        GleanMetrics.Theme.useSystemTheme.set(themeManager.isSystemThemeOn)
         // Installed Mozilla applications
         GleanMetrics.InstalledMozillaProducts.focus.set(UIApplication.shared.canOpenURL(URL(string: "firefox-focus://")!))
         GleanMetrics.InstalledMozillaProducts.klar.set(UIApplication.shared.canOpenURL(URL(string: "firefox-klar://")!))
@@ -806,8 +735,6 @@ extension TelemetryWrapper {
     }
 
     public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue? = nil, extras: [String: Any]? = nil) {
-        Telemetry.default.recordEvent(category: category.rawValue, method: method.rawValue, object: object.rawValue, value: value?.rawValue ?? "", extras: extras)
-
         gleanRecordEvent(category: category, method: method, object: object, value: value, extras: extras)
     }
 
@@ -1106,9 +1033,8 @@ extension TelemetryWrapper {
             GleanMetrics.Search.startSearchPressed.add()
         case(.action, .tap, .recordSearch, _, let extras):
             if let searchLocation = extras?[EventExtraKey.recordSearchLocation.rawValue]
-                as? SearchesMeasurement.SearchLocation,
+                as? SearchLocation,
                let searchEngineID = extras?[EventExtraKey.recordSearchEngineID.rawValue] as? String? {
-                Telemetry.default.recordSearch(location: searchLocation, searchEngine: searchEngineID ?? "other")
                 GleanMetrics.Search.counts["\(searchEngineID ?? "custom").\(searchLocation.rawValue)"].add()
             } else {
                 recordUninstrumentedMetrics(
@@ -1729,13 +1655,13 @@ extension TelemetryWrapper {
 
         // MARK: - History Highlights
         case (.action, .tap, .firefoxHomepage, .historyHighlightsShowAll, _):
-            GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
+            GleanMetrics.FirefoxHomePage.historyHighlightsShowAll.add()
         case (.action, .tap, .firefoxHomepage, .historyHighlightsItemOpened, _):
             GleanMetrics.FirefoxHomePage.historyHighlightsItemOpened.record()
         case (.action, .tap, .firefoxHomepage, .historyHighlightsGroupOpen, _):
             GleanMetrics.FirefoxHomePage.historyHighlightsGroupOpen.record()
         case (.action, .view, .historyImpressions, _, _):
-            GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
+            GleanMetrics.FirefoxHomePage.historyImpressions.record()
         case (.action, .view, .historyHighlightContextualMenu, _, let extras):
             if let type = extras?[EventExtraKey.contextualMenuType.rawValue] as? String {
                 let contextExtra = GleanMetrics.FirefoxHomePage.HistoryHighlightsContextExtra(type: type)
@@ -1979,3 +1905,5 @@ extension TelemetryWrapper {
         return [TelemetryWrapper.EventExtraKey.fxHomepageOrigin.rawValue: origin.rawValue]
     }
 }
+
+// swiftlint:enable line_length

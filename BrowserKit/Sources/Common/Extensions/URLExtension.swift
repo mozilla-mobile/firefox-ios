@@ -7,11 +7,9 @@ import Foundation
 extension URL {
     /// Temporary init that will be removed with the update to XCode 15 where this URL API is available
     public init?(string: String, invalidCharacters: Bool) {
-        if #available(iOS 17, *) {
-            self.init(string: string, encodingInvalidCharacters: invalidCharacters)
-        } else {
-            self.init(string: string)
-        }
+        // FXIOS-8107: Removed 'encodingInvalidCharacters' init for
+        // compatibility reasons that is available for iOS 17+ only
+        self.init(string: string)
     }
 
     /// Returns a shorter displayable string for a domain
@@ -180,7 +178,12 @@ extension URL {
                 let literalFromEnd: NSString.CompareOptions = [.literal,        // Match the string exactly.
                                      .backwards,      // Search from the end.
                                      .anchored]         // Stick to the end.
-                let suffixlessHost = host.replacingOccurrences(of: suffix, with: "", options: literalFromEnd, range: nil)
+                let suffixlessHost = host.replacingOccurrences(
+                    of: suffix,
+                    with: "",
+                    options: literalFromEnd,
+                    range: nil
+                )
                 let suffixlessTokens = suffixlessHost.components(separatedBy: ".").filter { !$0.isEmpty }
                 let maxAdditionalCount = max(0, suffixlessTokens.count - additionalPartCount)
                 let additionalParts = suffixlessTokens[maxAdditionalCount..<suffixlessTokens.count]

@@ -10,7 +10,8 @@ let _TableBookmarks = "bookmarks"                                      // Remove
 let TableBookmarksMirror = "bookmarksMirror"                           // Added in v9.
 let TableBookmarksMirrorStructure = "bookmarksMirrorStructure"         // Added in v10.
 
-let TableBookmarksBuffer = "bookmarksBuffer"                           // Added in v12. bookmarksMirror is renamed to bookmarksBuffer.
+// Added in v12. bookmarksMirror is renamed to bookmarksBuffer.
+let TableBookmarksBuffer = "bookmarksBuffer"
 let TableBookmarksBufferStructure = "bookmarksBufferStructure"         // Added in v12.
 let TableBookmarksLocal = "bookmarksLocal"                             // Added in v12. Supersedes 'bookmarks'.
 let TableBookmarksLocalStructure = "bookmarksLocalStructure"           // Added in v12.
@@ -236,9 +237,14 @@ open class BrowserSchema: Schema {
         // reparent these -- and we'll use the current locale's string, retrieved
         // via titleForSpecialGUID, if necessary.
 
+        // swiftlint:disable line_length
         let local =
             "INSERT INTO bookmarksLocal (id, guid, type, date_added, parentid, title, parentName, sync_status, local_modified) VALUES " +
-            Array(repeating: "(?, ?, ?, ?, ?, '', '', ?, ?)", count: rootChildren.count + 1).joined(separator: ", ")
+        Array(
+            repeating: "(?, ?, ?, ?, ?, '', '', ?, ?)",
+            count: rootChildren.count + 1
+        ).joined(separator: ", ")
+        // swiftlint:enable line_length
 
         let structure =
             "INSERT INTO bookmarksLocalStructure (parent, child, idx) VALUES " +
@@ -465,7 +471,10 @@ open class BrowserSchema: Schema {
      * We need to explicitly store what's provided by the server, because we can't rely on
      * referenced child nodes to exist yet!
      */
-    func getBookmarksStructureTableCreationStringForTable(_ table: String, referencingMirror mirror: String) -> String {
+    func getBookmarksStructureTableCreationStringForTable(
+        _ table: String,
+        referencingMirror mirror: String
+    ) -> String {
         let sql = """
             CREATE TABLE IF NOT EXISTS \(table) (
                 parent TEXT NOT NULL REFERENCES \(mirror)(guid) ON DELETE CASCADE,
@@ -666,11 +675,13 @@ open class BrowserSchema: Schema {
 
     // Join all bookmarks against history to find the most recent visit.
     // visits.
+    // swiftlint:disable line_length
     fileprivate let awesomebarBookmarksView = """
         CREATE VIEW view_awesomebar_bookmarks AS
         SELECT b.guid AS guid, b.url AS url, b.title AS title, b.description AS description, b.faviconID AS faviconID, h.visitDate AS visitDate
         FROM view_all_bookmarks b LEFT JOIN view_history_visits h ON b.url = h.url
         """
+    // swiftlint:enable line_length
 
     fileprivate let awesomebarBookmarksWithIconsView = """
         CREATE VIEW view_awesomebar_bookmarks_with_favicons AS
@@ -829,12 +840,30 @@ open class BrowserSchema: Schema {
         // Locally we track faviconID.
         // Local changes end up in the mirror, so we track it there too.
         // The buffer and the mirror additionally track some server metadata.
-        let bookmarksLocal = getBookmarksTableCreationStringForTable(TableBookmarksLocal, withAdditionalColumns: self.localColumns + self.iconColumns)
-        let bookmarksLocalStructure = getBookmarksStructureTableCreationStringForTable(TableBookmarksLocalStructure, referencingMirror: TableBookmarksLocal)
-        let bookmarksBuffer = getBookmarksTableCreationStringForTable(TableBookmarksBuffer, withAdditionalColumns: self.serverColumns)
-        let bookmarksBufferStructure = getBookmarksStructureTableCreationStringForTable(TableBookmarksBufferStructure, referencingMirror: TableBookmarksBuffer)
-        let bookmarksMirror = getBookmarksTableCreationStringForTable(TableBookmarksMirror, withAdditionalColumns: self.serverColumns + self.mirrorColumns + self.iconColumns)
-        let bookmarksMirrorStructure = getBookmarksStructureTableCreationStringForTable(TableBookmarksMirrorStructure, referencingMirror: TableBookmarksMirror)
+        let bookmarksLocal = getBookmarksTableCreationStringForTable(
+            TableBookmarksLocal,
+            withAdditionalColumns: self.localColumns + self.iconColumns
+        )
+        let bookmarksLocalStructure = getBookmarksStructureTableCreationStringForTable(
+            TableBookmarksLocalStructure,
+            referencingMirror: TableBookmarksLocal
+        )
+        let bookmarksBuffer = getBookmarksTableCreationStringForTable(
+            TableBookmarksBuffer,
+            withAdditionalColumns: self.serverColumns
+        )
+        let bookmarksBufferStructure = getBookmarksStructureTableCreationStringForTable(
+            TableBookmarksBufferStructure,
+            referencingMirror: TableBookmarksBuffer
+        )
+        let bookmarksMirror = getBookmarksTableCreationStringForTable(
+            TableBookmarksMirror,
+            withAdditionalColumns: self.serverColumns + self.mirrorColumns + self.iconColumns
+        )
+        let bookmarksMirrorStructure = getBookmarksStructureTableCreationStringForTable(
+            TableBookmarksMirrorStructure,
+            referencingMirror: TableBookmarksMirror
+        )
 
         let indexLocalStructureParentIdx = """
             CREATE INDEX IF NOT EXISTS idx_bookmarksLocalStructure_parent_idx
@@ -919,7 +948,10 @@ open class BrowserSchema: Schema {
                        level: .warning,
                        category: .storage)
         }
-        assert(queries.count == AllTablesIndicesTriggersAndViews.count, "Did you forget to add your table, index, trigger, or view to the list?")
+        assert(
+            queries.count == AllTablesIndicesTriggersAndViews.count,
+            "Did you forget to add your table, index, trigger, or view to the list?"
+        )
 
         logger.log("Creating \(queries.count) tables, views, triggers, and indices.",
                    level: .debug,
@@ -1015,7 +1047,13 @@ open class BrowserSchema: Schema {
         }
 
         if from < 10 && to >= 10 {
-            if !self.run(db, sql: getBookmarksStructureTableCreationStringForTable(TableBookmarksMirrorStructure, referencingMirror: TableBookmarksMirror)) {
+            if !self.run(
+                db,
+                sql: getBookmarksStructureTableCreationStringForTable(
+                    TableBookmarksMirrorStructure,
+                    referencingMirror: TableBookmarksMirror
+                )
+            ) {
                 return false
             }
 
@@ -1036,10 +1074,22 @@ open class BrowserSchema: Schema {
         }
 
         if from < 12 && to >= 12 {
-            let bookmarksLocal = getBookmarksTableCreationStringForTable(TableBookmarksLocal, withAdditionalColumns: self.localColumns + self.iconColumns)
-            let bookmarksLocalStructure = getBookmarksStructureTableCreationStringForTable(TableBookmarksLocalStructure, referencingMirror: TableBookmarksLocal)
-            let bookmarksMirror = getBookmarksTableCreationStringForTable(TableBookmarksMirror, withAdditionalColumns: self.serverColumns + self.mirrorColumns + self.iconColumns)
-            let bookmarksMirrorStructure = getBookmarksStructureTableCreationStringForTable(TableBookmarksMirrorStructure, referencingMirror: TableBookmarksMirror)
+            let bookmarksLocal = getBookmarksTableCreationStringForTable(
+                TableBookmarksLocal,
+                withAdditionalColumns: self.localColumns + self.iconColumns
+            )
+            let bookmarksLocalStructure = getBookmarksStructureTableCreationStringForTable(
+                TableBookmarksLocalStructure,
+                referencingMirror: TableBookmarksLocal
+            )
+            let bookmarksMirror = getBookmarksTableCreationStringForTable(
+                TableBookmarksMirror,
+                withAdditionalColumns: self.serverColumns + self.mirrorColumns + self.iconColumns
+            )
+            let bookmarksMirrorStructure = getBookmarksStructureTableCreationStringForTable(
+                TableBookmarksMirrorStructure,
+                referencingMirror: TableBookmarksMirror
+            )
 
             let indexLocalStructureParentIdx = """
                 CREATE INDEX IF NOT EXISTS idx_bookmarksLocalStructure_parent_idx
@@ -1079,11 +1129,13 @@ open class BrowserSchema: Schema {
             // We don't specify a title, expecting it to be generated on the fly, because we're smarter than Android.
             // We also don't migrate the 'id' column; we'll generate new ones that won't conflict with our roots.
             let migrateArgs: Args = [BookmarkRoots.MobileFolderGUID]
+            // swiftlint:disable line_length
             let migrateLocal = """
                 INSERT INTO bookmarksLocal (guid, type, bmkUri, title, faviconID, local_modified, sync_status, parentid, parentName)
                 SELECT guid, type, url AS bmkUri, title, faviconID, \(modified) AS local_modified, \(status) AS sync_status, ?, ''
                 FROM bookmarks WHERE type IS \(BookmarkNodeType.bookmark.rawValue)
                 """
+            // swiftlint:enable line_length
 
             // Create structure for our migrated bookmarks.
             // In order to get contiguous positions (idx), we first insert everything we just migrated under
@@ -1353,6 +1405,7 @@ open class BrowserSchema: Schema {
             // Hard-code values here both for simplicity and to make
             // migrations predictable.
             // We don't need to worry about description: we never wrote it.
+            // swiftlint:disable line_length
             if !self.run(db, queries: [
                 "DELETE FROM history WHERE is_deleted = 0 AND length(url) > 65536",
                 "DELETE FROM page_metadata WHERE length(site_url) > 65536",
@@ -1361,6 +1414,7 @@ open class BrowserSchema: Schema {
                 ]) {
                 return false
             }
+            // swiftlint:enable line_length
         }
 
         if from < 35 && to >= 35 {
@@ -1455,7 +1509,11 @@ open class BrowserSchema: Schema {
 
         // Query for the existence of the `tableList` table to determine if we are
         // migrating from an older DB version or if this is just a brand new DB.
-        let sqliteMainCursor = db.executeQueryUnsafe("SELECT count(*) AS number FROM sqlite_master WHERE type = 'table' AND name = 'tableList'", factory: IntFactory, withArgs: [] as Args)
+        let sqliteMainCursor = db.executeQueryUnsafe(
+            "SELECT count(*) AS number FROM sqlite_master WHERE type = 'table' AND name = 'tableList'",
+            factory: IntFactory,
+            withArgs: [] as Args
+        )
 
         let tableListTableExists = sqliteMainCursor[0] == 1
         sqliteMainCursor.close()
@@ -1476,7 +1534,11 @@ open class BrowserSchema: Schema {
 
         // Get the *previous* schema version (prior to v31) specified in `tableList`
         // before dropping it.
-        let previousVersionCursor = db.executeQueryUnsafe("SELECT version FROM tableList WHERE name = 'BROWSER'", factory: IntFactory, withArgs: [] as Args)
+        let previousVersionCursor = db.executeQueryUnsafe(
+            "SELECT version FROM tableList WHERE name = 'BROWSER'",
+            factory: IntFactory,
+            withArgs: [] as Args
+        )
 
         let previousVersion = previousVersionCursor[0] ?? 0
         previousVersionCursor.close()
@@ -1524,7 +1586,11 @@ open class BrowserSchema: Schema {
     fileprivate func migrateClientsTableFromSchemaTableIfNeeded(_ db: SQLiteDBConnection) -> SchemaUpgradeResult {
         // Query for the existence of the `clients` table to determine if we are
         // migrating from an older DB version or if this is just a brand new DB.
-        let sqliteMainCursor = db.executeQueryUnsafe("SELECT count(*) AS number FROM sqlite_master WHERE type = 'table' AND name = 'clients'", factory: IntFactory, withArgs: [] as Args)
+        let sqliteMainCursor = db.executeQueryUnsafe(
+            "SELECT count(*) AS number FROM sqlite_master WHERE type = 'table' AND name = 'clients'",
+            factory: IntFactory,
+            withArgs: [] as Args
+        )
 
         let clientsTableExists = sqliteMainCursor[0] == 1
         sqliteMainCursor.close()
@@ -1534,7 +1600,11 @@ open class BrowserSchema: Schema {
         }
 
         // Check if intermediate migrations are necessary for the 'clients' table.
-        let previousVersionCursor = db.executeQueryUnsafe("SELECT version FROM tableList WHERE name = 'clients'", factory: IntFactory, withArgs: [] as Args)
+        let previousVersionCursor = db.executeQueryUnsafe(
+            "SELECT version FROM tableList WHERE name = 'clients'",
+            factory: IntFactory,
+            withArgs: [] as Args
+        )
 
         let previousClientsTableVersion = previousVersionCursor[0] ?? 0
         previousVersionCursor.close()
@@ -1596,21 +1666,24 @@ open class BrowserSchema: Schema {
         let tmpTable = "tmp_hostnames"
         let table = "CREATE TEMP TABLE \(tmpTable) (url TEXT NOT NULL UNIQUE, domain TEXT NOT NULL, domain_id INT)"
         if !self.run(db, sql: table, args: nil) {
-            logger.log("Can't create temporary table. Unable to migrate domain names. Top Sites is likely to be broken.",
-                       level: .warning,
-                       category: .storage)
+            logger.log(
+                "Can't create temporary table. Unable to migrate domain names. Top Sites is likely to be broken.",
+                level: .warning,
+                category: .storage
+            )
             return false
         }
 
         // Now insert these into the temporary table. Chunk by an even number, for obvious reasons.
         let chunks = chunk(pairs, by: BrowserDB.MaxVariableNumber - (BrowserDB.MaxVariableNumber % 2))
         for chunk in chunks {
-            let ins =
-                "INSERT INTO \(tmpTable) (url, domain) VALUES " + [String](repeating: "(?, ?)", count: chunk.count / 2).joined(separator: ", ")
+            let ins = "INSERT INTO \(tmpTable) (url, domain) VALUES " + [String](repeating: "(?, ?)", count: chunk.count / 2).joined(separator: ", ")
             if !self.run(db, sql: ins, args: Array(chunk)) {
-                logger.log("Couldn't insert domains into temporary table. Aborting migration.",
-                           level: .warning,
-                           category: .storage)
+                logger.log(
+                    "Couldn't insert domains into temporary table. Aborting migration.",
+                    level: .warning,
+                    category: .storage
+                )
                 return false
             }
         }

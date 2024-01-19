@@ -12,9 +12,15 @@ class TabDisplayPanel: UIViewController,
                        EmptyPrivateTabsViewDelegate,
                        StoreSubscriber {
     typealias SubscriberStateType = TabsPanelState
+    struct UX {
+        static let undoToastDelay = DispatchTimeInterval.seconds(0)
+        static let undoToastDuration = DispatchTimeInterval.seconds(3)
+    }
+
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
+    var tabsState: TabsPanelState
 
     // MARK: UI elements
     private lazy var tabDisplayView: TabDisplayView = {
@@ -24,8 +30,11 @@ class TabDisplayPanel: UIViewController,
     }()
     private var backgroundPrivacyOverlay: UIView = .build()
     private lazy var emptyPrivateTabsView: EmptyPrivateTabsView = .build()
+    var shownToast: Toast?
 
-    var tabsState: TabsPanelState
+    var toolbarHeight: CGFloat {
+        return !shouldUseiPadSetup() ? view.safeAreaInsets.bottom : 0
+    }
 
     init(isPrivateMode: Bool,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
@@ -97,6 +106,41 @@ class TabDisplayPanel: UIViewController,
         emptyPrivateTabsView.applyTheme(themeManager.currentTheme)
     }
 
+    private func presentToast(toastType: ToastType,
+                              completion: @escaping (Bool) -> Void) {
+        if let currentToast = shownToast {
+            currentToast.dismiss(false)
+        }
+
+        if toastType.reduxAction != nil {
+            let viewModel = ButtonToastViewModel(
+                labelText: toastType.title,
+                buttonText: toastType.buttonText)
+            let toast = ButtonToast(viewModel: viewModel,
+                                    theme: themeManager.currentTheme,
+                                    completion: { buttonPressed in
+                completion(buttonPressed)
+            })
+            toast.showToast(viewController: self,
+                            delay: UX.undoToastDelay,
+                            duration: UX.undoToastDuration) { toast in
+                [
+                    toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+                    toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+                    toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor,
+                                                  constant: -self.toolbarHeight)
+                ]
+            }
+            shownToast = toast
+        } else {
+            let toast = SimpleToast()
+            toast.showAlertWithText(toastType.title,
+                                    bottomContainer: view,
+                                    theme: themeManager.currentTheme,
+                                    bottomConstraintPadding: -toolbarHeight)
+        }
+    }
+
     // MARK: - Redux
 
     func subscribeToRedux() {
@@ -116,6 +160,18 @@ class TabDisplayPanel: UIViewController,
         tabsState = state
         tabDisplayView.newState(state: tabsState)
         shouldShowEmptyView(tabsState.isPrivateTabsEmpty)
+
+        // Avoid showing toast multiple times
+        if let toastType = tabsState.toastType,
+            shownToast == nil {
+            store.dispatch(TabPanelAction.hideUndoToast)
+            presentToast(toastType: toastType) { undoClose in
+                if let action = toastType.reduxAction, undoClose {
+                    store.dispatch(action)
+                }
+                self.shownToast = nil
+            }
+        }
     }
 
     // MARK: EmptyPrivateTabsViewDelegate
@@ -123,4 +179,12 @@ class TabDisplayPanel: UIViewController,
     func didTapLearnMore(urlRequest: URLRequest) {
         store.dispatch(TabPanelAction.learnMorePrivateMode(urlRequest))
     }
+}
+
+extension TabDisplayPanel: LegacyTabPeekDelegate {
+    func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListItem? { return nil }
+    func tabPeekDidAddBookmark(_ tab: Tab) {}
+    func tabPeekRequestsPresentationOf(_ viewController: UIViewController) {}
+    func tabPeekDidCloseTab(_ tab: Tab) {}
+    func tabPeekDidCopyUrl() {}
 }

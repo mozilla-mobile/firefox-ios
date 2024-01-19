@@ -10,7 +10,7 @@ import Shared
 /// A cell used in FxHomeScreen's History Highlights section.
 class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
     struct UX {
-        static let verticalSpacing: CGFloat = 20
+        static let verticalSpacing: CGFloat = 10
         static let horizontalSpacing: CGFloat = 16
         static let heroImageDimension: CGFloat = 24
     }
@@ -54,6 +54,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Variables
     private var cellModel: HistoryHighlightsModel?
+    private var needsShadow = false
 
     // MARK: - Inits
 
@@ -122,6 +123,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
             textStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                 constant: -UX.horizontalSpacing),
             textStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            textStack.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: UX.verticalSpacing),
 
             bottomLine.heightAnchor.constraint(equalToConstant: 0.5),
             bottomLine.leadingAnchor.constraint(equalTo: itemTitle.leadingAnchor),
@@ -131,19 +133,8 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
         ])
     }
 
-    private func setupShadow(_ shouldAddShadow: Bool,
-                             cornersToRound: CACornerMask?,
-                             theme: Theme) {
-        contentView.layer.maskedCorners = cornersToRound ?? .layerMaxXMinYCorner
-        contentView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
-
-        var needsShadow = shouldAddShadow
-        if let cornersToRound = cornersToRound {
-            needsShadow = cornersToRound.contains(.layerMinXMaxYCorner) ||
-                cornersToRound.contains(.layerMaxXMaxYCorner) ||
-                shouldAddShadow
-        }
-
+    override public func layoutSubviews() {
+        super.layoutSubviews()
         if needsShadow {
             let size: CGFloat = 5
             let distance: CGFloat = 0
@@ -153,12 +144,28 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
                 width: contentView.frame.width + size * 2,
                 height: size
             )
+            contentView.layer.shadowPath = UIBezierPath(ovalIn: rect).cgPath
+        }
+    }
 
+    private func setupShadow(_ shouldAddShadow: Bool,
+                             cornersToRound: CACornerMask?,
+                             theme: Theme) {
+        contentView.layer.maskedCorners = cornersToRound ?? .layerMaxXMinYCorner
+        contentView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
+
+        needsShadow = shouldAddShadow
+        if let cornersToRound = cornersToRound {
+            needsShadow = cornersToRound.contains(.layerMinXMaxYCorner) ||
+                cornersToRound.contains(.layerMaxXMaxYCorner) ||
+                shouldAddShadow
+        }
+
+        if needsShadow {
             contentView.layer.shadowColor = theme.colors.shadowDefault.cgColor
             contentView.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
             contentView.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
             contentView.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
-            contentView.layer.shadowPath = UIBezierPath(ovalIn: rect).cgPath
         }
     }
 }

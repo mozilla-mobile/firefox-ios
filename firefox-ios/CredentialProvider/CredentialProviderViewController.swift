@@ -83,14 +83,16 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
 
     /*! @abstract Prepare the view controller to show user interface for providing the user-requested credential.
      @param credentialIdentity the credential identity for which a credential should be provided.
-     @discussion The system calls this method when your extension cannot provide the requested credential without user interaction.
-     Set up the view controller for any user interaction required to provide the requested credential only. The user interaction should
-     be limited in nature to operations required for providing the requested credential. An example is showing an authentication UI to
-     unlock the user's passwords database.
-     Call -[ASCredentialProviderExtensionContext completeRequestWithSelectedCredential:completionHandler:] to provide the credential.
-     If an error occurs, call -[ASCredentialProviderExtensionContext cancelRequestWithError:] and pass an error with domain
-     ASExtensionErrorDomain and an appropriate error code from ASExtensionErrorCode. For example, if the credential identity cannot
-     be found in the database, pass an error with code ASExtensionErrorCodeCredentialIdentityNotFound.
+     @discussion The system calls this method when your extension cannot provide the requested credential 
+     without user interaction. Set up the view controller for any user interaction required to provide the
+     requested credential only. The user interaction should be limited in nature to operations required
+     for providing the requested credential. An example is showing an authentication UI to unlock
+     the user's passwords database.
+     Call -[ASCredentialProviderExtensionContext completeRequestWithSelectedCredential:completionHandler:] to
+     provide the credential. If an error occurs, call -[ASCredentialProviderExtensionContext cancelRequestWithError:]
+     and pass an error with domain ASExtensionErrorDomain and an appropriate error code from ASExtensionErrorCode.
+     For example, if the credential identity cannot be found in the database, pass an error with
+     code ASExtensionErrorCodeCredentialIdentityNotFound.
      */
 
     override func prepareInterfaceToProvideCredential(for credentialIdentity: ASPasswordCredentialIdentity) {
@@ -121,7 +123,8 @@ extension CredentialProviderViewController: CredentialProviderViewProtocol {
 extension CredentialProviderViewController: CredentialWelcomeViewControllerDelegate {
     func credentialWelcomeViewControllerDidCancel() {
         self.currentViewController?.dismiss(animated: false) {
-            self.extensionContext.cancelRequest(withError: ASExtensionError(.userCanceled)) // This does not actually work - the extension is still selected, file a bug with Apple?
+            // This does not actually work - the extension is still selected, file a bug with Apple?
+            self.extensionContext.cancelRequest(withError: ASExtensionError(.userCanceled))
         }
     }
 

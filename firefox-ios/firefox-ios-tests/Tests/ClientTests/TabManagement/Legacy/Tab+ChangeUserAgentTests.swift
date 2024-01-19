@@ -18,7 +18,9 @@ class ChangeUserAgentTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        testFile = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("test-changed-ua-set-of-hosts.xcarchive")
+        testFile = URL(
+            fileURLWithPath: NSTemporaryDirectory()
+        ).appendingPathComponent("test-changed-ua-set-of-hosts.xcarchive")
     }
 
     override func tearDown() {
@@ -27,47 +29,107 @@ class ChangeUserAgentTests: XCTestCase {
     }
 
     func testUpdateAndContainsDidChangeUANotPrivate() {
-        let testMockData = ChangeUserAgentsMockData(urlString: "https://www.google.com", isChangedUA: true, isPrivate: false, expectContainsURL: true)
+        let testMockData = ChangeUserAgentsMockData(
+            urlString: "https://www.google.com",
+            isChangedUA: true,
+            isPrivate: false,
+            expectContainsURL: true
+        )
         let url = URL(string: testMockData.urlString)!
 
-        Tab.ChangeUserAgent.updateDomainList(forUrl: url, isChangedUA: testMockData.isChangedUA, isPrivate: testMockData.isPrivate)
+        Tab.ChangeUserAgent.updateDomainList(
+            forUrl: url,
+            isChangedUA: testMockData.isChangedUA,
+            isPrivate: testMockData.isPrivate
+        )
         XCTAssertEqual(Tab.ChangeUserAgent.contains(url: url), testMockData.expectContainsURL)
     }
 
     func testUpdateAndContainsDidChangeUAAndPrivate() {
-        let testMockData = ChangeUserAgentsMockData(urlString: "https://www.mozilla.org", isChangedUA: true, isPrivate: true, expectContainsURL: true)
+        let testMockData = ChangeUserAgentsMockData(
+            urlString: "https://www.mozilla.org",
+            isChangedUA: true,
+            isPrivate: true,
+            expectContainsURL: true
+        )
         let url = URL(string: testMockData.urlString)!
 
-        Tab.ChangeUserAgent.updateDomainList(forUrl: url, isChangedUA: testMockData.isChangedUA, isPrivate: testMockData.isPrivate)
+        Tab.ChangeUserAgent.updateDomainList(
+            forUrl: url,
+            isChangedUA: testMockData.isChangedUA,
+            isPrivate: testMockData.isPrivate
+        )
         XCTAssertEqual(Tab.ChangeUserAgent.contains(url: url), testMockData.expectContainsURL)
     }
 
     func testUpdateAndContainsNoChangeUANotPrivate() {
-        let testMockData = ChangeUserAgentsMockData(urlString: "https://www.apple.com", isChangedUA: false, isPrivate: false, expectContainsURL: false)
+        let testMockData = ChangeUserAgentsMockData(
+            urlString: "https://www.apple.com",
+            isChangedUA: false,
+            isPrivate: false,
+            expectContainsURL: false
+        )
 
         let url = URL(string: testMockData.urlString)!
 
-        Tab.ChangeUserAgent.updateDomainList(forUrl: url, isChangedUA: testMockData.isChangedUA, isPrivate: testMockData.isPrivate)
+        Tab.ChangeUserAgent.updateDomainList(
+            forUrl: url,
+            isChangedUA: testMockData.isChangedUA,
+            isPrivate: testMockData.isPrivate
+        )
         XCTAssertEqual(Tab.ChangeUserAgent.contains(url: url), testMockData.expectContainsURL)
     }
 
     func testUpdateAndContainsNoChangeUAAndPrivate() {
-        let testMockData = ChangeUserAgentsMockData(urlString: "https://www.yahoo.com", isChangedUA: false, isPrivate: true, expectContainsURL: false)
+        let testMockData = ChangeUserAgentsMockData(
+            urlString: "https://www.yahoo.com",
+            isChangedUA: false,
+            isPrivate: true,
+            expectContainsURL: false
+        )
         let url = URL(string: testMockData.urlString)!
 
-        Tab.ChangeUserAgent.updateDomainList(forUrl: url, isChangedUA: testMockData.isChangedUA, isPrivate: testMockData.isPrivate)
+        Tab.ChangeUserAgent.updateDomainList(
+            forUrl: url,
+            isChangedUA: testMockData.isChangedUA,
+            isPrivate: testMockData.isPrivate
+        )
         XCTAssertEqual(Tab.ChangeUserAgent.contains(url: url), testMockData.expectContainsURL)
     }
 
     func tryAllCasesForUpdateAndContains() {
-        let testMockData1 = ChangeUserAgentsMockData(urlString: "https://www.google.com", isChangedUA: true, isPrivate: false, expectContainsURL: true)
-        let testMockData2 = ChangeUserAgentsMockData(urlString: "https://www.mozilla.org", isChangedUA: true, isPrivate: true, expectContainsURL: true)
-        let testMockData3 = ChangeUserAgentsMockData(urlString: "https://www.apple.com", isChangedUA: false, isPrivate: false, expectContainsURL: false)
-        let testMockData4 = ChangeUserAgentsMockData(urlString: "https://www.yahoo.com", isChangedUA: false, isPrivate: true, expectContainsURL: false)
+        let testMockData1 = ChangeUserAgentsMockData(
+            urlString: "https://www.google.com",
+            isChangedUA: true,
+            isPrivate: false,
+            expectContainsURL: true
+        )
+        let testMockData2 = ChangeUserAgentsMockData(
+            urlString: "https://www.mozilla.org",
+            isChangedUA: true,
+            isPrivate: true,
+            expectContainsURL: true
+        )
+        let testMockData3 = ChangeUserAgentsMockData(
+            urlString: "https://www.apple.com",
+            isChangedUA: false,
+            isPrivate: false,
+            expectContainsURL: false
+        )
+        let testMockData4 = ChangeUserAgentsMockData(
+            urlString: "https://www.yahoo.com",
+            isChangedUA: false,
+            isPrivate: true,
+            expectContainsURL: false
+        )
         let testCases = [testMockData1, testMockData2, testMockData3, testMockData4]
         for testCase in testCases {
             let url = URL(string: testCase.urlString)!
-            Tab.ChangeUserAgent.updateDomainList(forUrl: url, isChangedUA: testCase.isChangedUA, isPrivate: testCase.isPrivate)
+            Tab.ChangeUserAgent.updateDomainList(
+                forUrl: url,
+                isChangedUA: testCase.isChangedUA,
+                isPrivate: testCase.isPrivate
+            )
             XCTAssertEqual(Tab.ChangeUserAgent.contains(url: url), testCase.expectContainsURL)
         }
     }

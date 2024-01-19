@@ -1,0 +1,36 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+---
+
+loader: taskgraph.loader.transform:loader
+
+transforms:
+    - taskgraph.transforms.run:transforms
+    - taskgraph.transforms.task:transforms
+
+tasks:
+    taskgraph-definition:
+        worker-type: misc
+        worker:
+            docker-image: {in-tree: alpine}
+            max-run-time: 1800
+        description: "Test the full `firefox_ios_taskgraph` to validate the latest changes"
+        treeherder:
+            symbol: test-taskgraph-definition
+            kind: test
+            platform: tests/opt
+            tier: 1
+        run:
+            using: run-task
+            use-caches: true
+            cwd: '{checkout}'
+            command: >-
+                pip3 install --break-system-packages -r taskcluster/requirements.txt &&
+                for param in `ls taskcluster/test/params`; do
+                    taskgraph full -p taskcluster/test/params/$param
+                done &&
+                taskgraph full
+        when:
+            files-changed:
+                - taskcluster/**

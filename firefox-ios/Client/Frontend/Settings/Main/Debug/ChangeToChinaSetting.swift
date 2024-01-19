@@ -7,7 +7,10 @@ import Foundation
 
 class ChangeToChinaSetting: HiddenSetting {
     override var title: NSAttributedString? {
-        return NSAttributedString(string: "Toggle China version (needs restart)", attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
+        return NSAttributedString(
+            string: "Toggle China version (needs restart)",
+            attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
+        )
     }
 
     override func onClick(_ navigationController: UINavigationController?) {

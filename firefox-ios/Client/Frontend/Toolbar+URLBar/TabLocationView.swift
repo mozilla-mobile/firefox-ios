@@ -16,11 +16,14 @@ protocol TabLocationViewDelegate: AnyObject {
     func tabLocationViewDidTapShare(_ tabLocationView: TabLocationView, button: UIButton)
     func tabLocationViewPresentCFR(at sourceView: UIView)
 
-    /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied
+    /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions
+    /// for even starting handling long-press were not satisfied
     @discardableResult
     func tabLocationViewDidLongPressReaderMode(_ tabLocationView: TabLocationView) -> Bool
     func tabLocationViewDidLongPressReload(_ tabLocationView: TabLocationView)
-    func tabLocationViewLocationAccessibilityActions(_ tabLocationView: TabLocationView) -> [UIAccessibilityCustomAction]?
+    func tabLocationViewLocationAccessibilityActions(
+        _ tabLocationView: TabLocationView
+    ) -> [UIAccessibilityCustomAction]?
 }
 
 class TabLocationView: UIView, FeatureFlaggable {
@@ -95,12 +98,18 @@ class TabLocationView: UIView, FeatureFlaggable {
 
     private func setURLTextfieldPlaceholder(theme: Theme) {
         let attributes = [NSAttributedString.Key.foregroundColor: theme.colors.textSecondary]
-        urlTextField.attributedPlaceholder = NSAttributedString(string: .TabLocationURLPlaceholder,
-                                                                attributes: attributes)
+        urlTextField.attributedPlaceholder = NSAttributedString(
+            string: .TabLocationURLPlaceholder,
+            attributes: attributes
+        )
     }
 
     lazy var trackingProtectionButton: LockButton = .build { trackingProtectionButton in
-        trackingProtectionButton.addTarget(self, action: #selector(self.didPressTPShieldButton(_:)), for: .touchUpInside)
+        trackingProtectionButton.addTarget(
+            self,
+            action: #selector(self.didPressTPShieldButton(_:)),
+            for: .touchUpInside
+        )
         trackingProtectionButton.clipsToBounds = false
         trackingProtectionButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.trackingProtection
         trackingProtectionButton.showsLargeContentViewer = true
@@ -134,7 +143,7 @@ class TabLocationView: UIView, FeatureFlaggable {
         button.largeContentImage = image
     }
 
-    private lazy var readerModeButton: ReaderModeButton = .build { readerModeButton in
+    private(set) lazy var readerModeButton: ReaderModeButton = .build { readerModeButton in
         readerModeButton.addTarget(self, action: #selector(self.tapReaderModeButton), for: .touchUpInside)
         readerModeButton.addGestureRecognizer(
             UILongPressGestureRecognizer(target: self,
@@ -176,7 +185,13 @@ class TabLocationView: UIView, FeatureFlaggable {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupNotifications(forObserver: self, observing: [.FakespotViewControllerDidDismiss, .FakespotViewControllerDidAppear])
+        setupNotifications(
+            forObserver: self,
+            observing: [
+                .FakespotViewControllerDidDismiss,
+                .FakespotViewControllerDidAppear
+            ]
+        )
         register(self, forTabEvents: .didGainFocus, .didToggleDesktopMode, .didChangeContentBlocking)
         longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressLocation))
         longPressRecognizer.delegate = self
@@ -190,7 +205,15 @@ class TabLocationView: UIView, FeatureFlaggable {
         let space1px = UIView.build()
         space1px.widthAnchor.constraint(equalToConstant: 1).isActive = true
 
-        let subviews = [trackingProtectionButton, space1px, urlTextField, shoppingButton, readerModeButton, shareButton, reloadButton]
+        let subviews = [
+            trackingProtectionButton,
+            space1px,
+            urlTextField,
+            shoppingButton,
+            readerModeButton,
+            shareButton,
+            reloadButton
+        ]
         contentView = UIStackView(arrangedSubviews: subviews)
         contentView.distribution = .fill
         contentView.alignment = .center
@@ -227,7 +250,14 @@ class TabLocationView: UIView, FeatureFlaggable {
 
     // MARK: - Accessibility
 
-    private lazy var _accessibilityElements = [trackingProtectionButton, urlTextField, shoppingButton, readerModeButton, shareButton, reloadButton]
+    private lazy var _accessibilityElements = [
+        trackingProtectionButton,
+        urlTextField,
+        shoppingButton,
+        readerModeButton,
+        shareButton,
+        reloadButton
+    ]
 
     override var accessibilityElements: [Any]? {
         get {
@@ -372,7 +402,9 @@ class TabLocationView: UIView, FeatureFlaggable {
             trackingProtectionButton.accessibilityLabel = hasSecureContent ?
                 .TabLocationETPOnSecureAccessibilityLabel : .TabLocationETPOnNotSecureAccessibilityLabel
         case .safelisted:
-            if let smallDotImage = UIImage(systemName: ImageIdentifiers.circleFill)?.withTintColor(theme.colors.iconAccentBlue) {
+            if let smallDotImage = UIImage(
+                systemName: ImageIdentifiers.circleFill
+            )?.withTintColor(theme.colors.iconAccentBlue) {
                 trackingProtectionButton.setImage(lockImage?.overlayWith(image: smallDotImage), for: .normal)
                 trackingProtectionButton.accessibilityLabel = hasSecureContent ?
                     .TabLocationETPOffSecureAccessibilityLabel : .TabLocationETPOffNotSecureAccessibilityLabel
@@ -397,7 +429,8 @@ private extension TabLocationView {
         self.readerModeButton.readerModeState = newReaderModeState
 
         readerModeButton.isHidden = shoppingButton.isHidden ? newReaderModeState == .unavailable : true
-        // When the user turns on the reader mode we need to hide the trackingProtectionButton (according to 16400), we will hide it once the newReaderModeState == .active
+        // When the user turns on the reader mode we need to hide the trackingProtectionButton (according to 16400),
+        // we will hide it once the newReaderModeState == .active
         self.trackingProtectionButton.isHidden = newReaderModeState == .active
 
         if wasHidden != readerModeButton.isHidden {
@@ -405,7 +438,10 @@ private extension TabLocationView {
             if !readerModeButton.isHidden {
                 // Delay the Reader Mode accessibility announcement briefly to prevent interruptions.
                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-                    UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAvailableVoiceOverAnnouncement)
+                    UIAccessibility.post(
+                        notification: UIAccessibility.Notification.announcement,
+                        argument: String.ReaderModeAvailableVoiceOverAnnouncement
+                    )
                 }
             }
         }
@@ -428,12 +464,18 @@ extension TabLocationView: Notifiable {
 }
 
 extension TabLocationView: UIGestureRecognizerDelegate {
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    func gestureRecognizer(
+        _ gestureRecognizer: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
+    ) -> Bool {
         // When long pressing a button make sure the textfield's long press gesture is not triggered
         return !(otherGestureRecognizer.view is UIButton)
     }
 
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    func gestureRecognizer(
+        _ gestureRecognizer: UIGestureRecognizer,
+        shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer
+    ) -> Bool {
         // If the longPressRecognizer is active, fail the tap recognizer to avoid conflicts.
         return gestureRecognizer == longPressRecognizer && otherGestureRecognizer == tapRecognizer
     }
