@@ -6,12 +6,13 @@ import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
+    var engineProvider = EngineProvider()
 
     func scene(_ scene: UIScene,
                willConnectTo session: UISceneSession,
                options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        let baseViewController = RootViewController()
+        let baseViewController = RootViewController(engineProvider: engineProvider)
         window = UIWindow(windowScene: windowScene)
         window?.rootViewController = baseViewController
         window?.makeKeyAndVisible()
