@@ -64,7 +64,7 @@ struct ActiveScreensState: Equatable {
                 // TODO: Needs to check the UUID before removing
                 screens = screens.filter({ return $0.associatedAppScreen != screenType })
             case .showScreen(let context):
-                // TODO: Needs to be sure windowUUID is set and associated with each screen state
+                // TODO: FIXME Needs to be sure windowUUID is set and associated with each screen state
                 let screenType = context.screen
                 switch screenType {
                 case .browserViewController:

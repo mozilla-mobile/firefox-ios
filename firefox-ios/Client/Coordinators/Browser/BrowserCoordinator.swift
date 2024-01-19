@@ -397,6 +397,10 @@ class BrowserCoordinator: BaseCoordinator,
         router.dismiss()
     }
 
+    var libraryPanelWindowUUID: WindowUUID {
+        return browserViewController.windowUUID
+    }
+
     func didFinishLibrary(from coordinator: LibraryCoordinator) {
         router.dismiss(animated: true, completion: nil)
         remove(child: coordinator)

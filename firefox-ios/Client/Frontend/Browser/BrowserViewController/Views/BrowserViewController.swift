@@ -1257,6 +1257,7 @@ class BrowserViewController: UIViewController,
             else { return }
 
             let detailController = BookmarkDetailPanel(profile: self.profile,
+                                                       windowUUID: self.windowUUID,
                                                        bookmarkNode: bookmarkNode,
                                                        parentBookmarkFolder: bookmarkFolder,
                                                        presentedFromToast: true)
@@ -2010,6 +2011,10 @@ class BrowserViewController: UIViewController,
             }
         })
         self.show(toast: toast)
+    }
+
+    var libraryPanelWindowUUID: WindowUUID {
+        return windowUUID
     }
 
     // MARK: - RecentlyClosedPanelDelegate

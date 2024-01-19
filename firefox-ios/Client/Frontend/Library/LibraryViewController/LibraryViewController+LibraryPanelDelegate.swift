@@ -17,4 +17,8 @@ extension LibraryViewController: LibraryPanelDelegate {
         delegate?.libraryPanel(didSelectURL: url, visitType: visitType)
         dismiss(animated: true, completion: nil)
     }
+
+    var libraryPanelWindowUUID: WindowUUID {
+        return windowUUID
+    }
 }
