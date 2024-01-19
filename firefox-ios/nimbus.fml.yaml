@@ -13,6 +13,7 @@ channels:
   - beta
   - release
 include:
+  - nimbus-features/accountSettingsReduxFeature.yaml
   - nimbus-features/addressAutofillFeature.yaml
   - nimbus-features/backForwardListCoordinatorRefactorFeature.yaml
   - nimbus-features/contextualHintFeature.yaml
