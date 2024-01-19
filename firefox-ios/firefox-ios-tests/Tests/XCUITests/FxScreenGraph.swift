@@ -1044,7 +1044,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(BrowserTabMenu) { screenState in
         screenState.tap(
-            app.tables.otherElements[ImageIdentifiers.settings],
+            app.tables.otherElements[StandardImageIdentifiers.Large.settings],
             to: SettingsScreen
         )
         screenState.tap(

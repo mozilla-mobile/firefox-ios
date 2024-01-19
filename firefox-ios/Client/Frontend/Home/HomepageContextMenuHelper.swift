@@ -305,7 +305,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
     private func getSettingsAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .FirefoxHomepage.ContextualMenu.Settings,
-                                     iconString: ImageIdentifiers.settings,
+                                     iconString: StandardImageIdentifiers.Large.settings,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
             self.delegate?.homePanelDidRequestToOpenSettings(at: .topSites)

@@ -444,7 +444,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getSettingsAction() -> PhotonRowActions {
         let openSettings = SingleActionViewModel(title: .AppMenu.AppMenuSettingsTitleString,
-                                                 iconString: ImageIdentifiers.settings) { _ in
+                                                 iconString: StandardImageIdentifiers.Large.settings) { _ in
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: .settings)
 
             // Wait to show settings in async dispatch since hamburger menu is still showing at that time

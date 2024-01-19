@@ -401,7 +401,7 @@ class NavigationTest: BaseTestCase {
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.whatsNew].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.help].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.customizeHomepage].exists)
-        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.settings].exists)
+        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.settings].exists)
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2441775

@@ -55,7 +55,6 @@ public struct ImageIdentifiers {
     public static let privateModeBadge = "privateModeBadge"
     public static let redCaution = "RedCaution"
     public static let reportSiteIssue = "menu-reportSiteIssue"
-    public static let settings = "menu-Settings"
     public static let share = "action_share"
     public static let shipping = "shipping"
     public static let shoppingNoAnalysisImage = "shoppingNoAnalysisImage"
