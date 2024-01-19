@@ -119,9 +119,16 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: ThemedSubtitleTableViewCell.cellIdentifier, for: indexPath)
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: ThemedSubtitleTableViewCell.cellIdentifier,
+            for: indexPath
+        ) as? ThemedSubtitleTableViewCell else {
+            return UITableViewCell()
+        }
+
         var engine: OpenSearchEngine!
         let section = Section(rawValue: sectionsToDisplay[indexPath.section].rawValue) ?? .defaultEngine
+
         switch section {
         case .defaultEngine:
             switch indexPath.item {
@@ -134,6 +141,7 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
                 cell.imageView?.image = engine.image.createScaled(IconSize)
                 cell.imageView?.layer.cornerRadius = 4
                 cell.imageView?.layer.masksToBounds = true
+                cell.applyTheme(theme: themeManager.currentTheme)
             case ItemDefaultSuggestions:
                 cell.textLabel?.text = .Settings.Search.ShowSearchSuggestions
                 cell.textLabel?.numberOfLines = 0
@@ -143,10 +151,12 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
                 toggle.isOn = model.shouldShowSearchSuggestions
                 cell.editingAccessoryView = toggle
                 cell.selectionStyle = .none
+                cell.applyTheme(theme: themeManager.currentTheme)
             default:
                 // Should not happen.
                 break
             }
+
         case .quickEngines:
             // The default engine is not a quick search engine.
             let index = indexPath.item + 1
@@ -170,12 +180,15 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
                 cell.imageView?.layer.cornerRadius = 4
                 cell.imageView?.layer.masksToBounds = true
                 cell.selectionStyle = .none
+                cell.applyTheme(theme: themeManager.currentTheme)
             } else {
                 cell.editingAccessoryType = .disclosureIndicator
                 cell.accessibilityLabel = .SettingsAddCustomEngineTitle
                 cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Search.customEngineViewButton
                 cell.textLabel?.text = .SettingsAddCustomEngine
+                cell.applyTheme(theme: themeManager.currentTheme)
             }
+
         case .privateSession:
             cell.textLabel?.text = .Settings.Search.PrivateSessionSetting
             cell.textLabel?.numberOfLines = 0
@@ -186,6 +199,8 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
             cell.editingAccessoryView = toggle
             cell.selectionStyle = .none
             cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Search.disableSearchSuggestsInPrivateMode
+            cell.applyTheme(theme: themeManager.currentTheme)
+
         case .firefoxSuggestSettings:
             switch indexPath.item {
             case ItemSuggestionNonSponsored:
@@ -211,6 +226,7 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
                 )
                 cell.editingAccessoryView = setting.control
                 cell.selectionStyle = .none
+
             case ItemSuggestionSponsored:
                 let setting = BoolSetting(
                     prefs: profile.prefs,
@@ -231,6 +247,7 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
                 )
                 cell.editingAccessoryView = setting.control
                 cell.selectionStyle = .none
+
             case ItemSuggestionLearn:
                 cell.accessibilityLabel = String.localizedStringWithFormat(
                     .Settings.Search.AccessibilityLabels.LearnAboutSuggestions,
@@ -243,6 +260,7 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
                 cell.imageView?.layer.cornerRadius = 4
                 cell.imageView?.layer.masksToBounds = true
                 cell.selectionStyle = .none
+                cell.applyTheme(theme: themeManager.currentTheme)
 
             default:
                 break
@@ -482,7 +500,7 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
         }
         navigationItem.rightBarButtonItem?.isEnabled = isEditable
         navigationItem.rightBarButtonItem?.action = editing ?
-            #selector(finishEditing) : #selector(beginEditing)
+        #selector(finishEditing) : #selector(beginEditing)
         tableView.reloadData()
     }
 
