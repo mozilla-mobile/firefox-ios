@@ -116,7 +116,6 @@ class TabManagerMiddleware {
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .open,
                                          object: .syncTab)
-            
             let urlRequest = URLRequest(url: url)
             self.addNewTab(with: urlRequest, isPrivate: false)
             store.dispatch(TabTrayAction.dismissTabTray)
