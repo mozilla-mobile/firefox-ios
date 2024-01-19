@@ -50,6 +50,9 @@ class BrowserToolbar: UIToolbar {
         setItems(items, animated: false)
 
         barTintColor = .white
+
+        // initial state for buttons
+        updateBackForwardButtons(canGoBack: false, canGoForward: false)
     }
 
     required init?(coder: NSCoder) {
@@ -58,16 +61,16 @@ class BrowserToolbar: UIToolbar {
 
     // MARK: - Button states
 
-    func updateReloadStopButton(isLoading: Bool) {
-        guard isLoading != isReloading else { return }
-        reloadStopButton.image = isLoading ? UIImage(named: "Stop") : UIImage(named: "Reload")
-        reloadStopButton.action = isLoading ? #selector(stopButtonClicked) : #selector(reloadButtonClicked)
-        self.isReloading = isLoading
+    func updateReloadStopButton(loading: Bool) {
+        guard loading != isReloading else { return }
+        reloadStopButton.image = loading ? UIImage(named: "Stop") : UIImage(named: "Reload")
+        reloadStopButton.action = loading ? #selector(stopButtonClicked) : #selector(reloadButtonClicked)
+        self.isReloading = loading
     }
 
-    func updateBackForwardButtons(canGoBack: Bool?, canGoForward: Bool?) {
-        backButton.isEnabled = canGoBack ?? false
-        forwardButton.isEnabled = canGoForward ?? false
+    func updateBackForwardButtons(canGoBack: Bool, canGoForward: Bool) {
+        backButton.isEnabled = canGoBack
+        forwardButton.isEnabled = canGoForward
     }
 
     // MARK: - Actions

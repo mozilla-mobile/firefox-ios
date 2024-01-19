@@ -135,13 +135,12 @@ class RootViewController: UIViewController,
 
     // MARK: - NavigationDelegate
 
-    func onNavigationStateChange(canGoBack: Bool?, canGoForward: Bool?) {
-        toolbar.updateBackForwardButtons(canGoBack: canGoBack, canGoForward: canGoForward)
+    func onLoadingStateChange(loading: Bool) {
+        toolbar.updateReloadStopButton(loading: loading)
     }
 
-    func browserIsLoading(isLoading: Bool) {
-        // TODO: FXIOS-8180 Fix navigation in SampleBrowser
-        toolbar.updateReloadStopButton(isLoading: isLoading)
+    func onNavigationStateChange(canGoBack: Bool, canGoForward: Bool) {
+        toolbar.updateBackForwardButtons(canGoBack: canGoBack, canGoForward: canGoForward)
     }
 
     // MARK: - SearchBarDelegate
