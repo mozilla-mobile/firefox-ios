@@ -76,7 +76,6 @@ class PhotonActionSheetTests: BaseTestCase {
 
         // This is not ideal but only way to get the element on iPhone 8
         // for iPhone 11, that would be boundBy: 2
-
         mozWaitForElementToExist(app.otherElements["ActivityListView"].otherElements["Example Domain"])
         mozWaitForElementToExist(app.otherElements["ActivityListView"].otherElements["example.com"])
         mozWaitForElementToExist(app.collectionViews.cells["Copy"], timeout: TIMEOUT)
