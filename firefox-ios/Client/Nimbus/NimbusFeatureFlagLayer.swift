@@ -59,6 +59,9 @@ final class NimbusFeatureFlagLayer {
         case .qrCodeCoordinatorRefactor:
             return checkQRCodeCoordinatorRefactorFeature(from: nimbus)
 
+        case .reduxSearchSettings:
+            return checkReduxSearchSettingsFeature(from: nimbus)
+
         case .reportSiteIssue:
             return checkGeneralFeature(for: featureID, from: nimbus)
 
@@ -253,5 +256,10 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.firefoxSuggestFeature.value()
 
         return config.status
+    }
+
+    private func checkReduxSearchSettingsFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.reduxSearchSettingsFeature.value()
+        return config.enabled
     }
 }
