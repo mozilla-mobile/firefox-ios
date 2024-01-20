@@ -984,6 +984,9 @@
 		C2D80BE72AADE38100CDF7A9 /* CredentialAutofillCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D80BE62AADE38100CDF7A9 /* CredentialAutofillCoordinator.swift */; };
 		C2D80BEB2AAF395200CDF7A9 /* CredentialAutofillCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D80BEA2AAF395200CDF7A9 /* CredentialAutofillCoordinatorTests.swift */; };
 		C2D80BED2AAF3C6B00CDF7A9 /* MockBrowserCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D80BEC2AAF3C6B00CDF7A9 /* MockBrowserCoordinator.swift */; };
+		C2E929252B5C118100A8C8EB /* AccountSyncMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E929242B5C118100A8C8EB /* AccountSyncMiddleware.swift */; };
+		C2E929272B5C11B500A8C8EB /* SettingsAccountState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E929262B5C11B500A8C8EB /* SettingsAccountState.swift */; };
+		C2E929292B5C11C200A8C8EB /* SettingsAccountAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E929282B5C11C200A8C8EB /* SettingsAccountAction.swift */; };
 		C400467C1CF4E43E00B08303 /* BackForwardListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C400467B1CF4E43E00B08303 /* BackForwardListViewController.swift */; };
 		C40046FA1CF8E0B200B08303 /* BackForwardListAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40046F91CF8E0B200B08303 /* BackForwardListAnimator.swift */; };
 		C45F44691D087DB600CB7EF0 /* TopTabsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45F44681D087DB600CB7EF0 /* TopTabsViewController.swift */; };
@@ -6362,6 +6365,9 @@
 		C2D80BEC2AAF3C6B00CDF7A9 /* MockBrowserCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBrowserCoordinator.swift; sourceTree = "<group>"; };
 		C2D8478BB059B9BFF018B491 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
 		C2E645149EB18AD0BDBB9696 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/Search.strings"; sourceTree = "<group>"; };
+		C2E929242B5C118100A8C8EB /* AccountSyncMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSyncMiddleware.swift; sourceTree = "<group>"; };
+		C2E929262B5C11B500A8C8EB /* SettingsAccountState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAccountState.swift; sourceTree = "<group>"; };
+		C2E929282B5C11C200A8C8EB /* SettingsAccountAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAccountAction.swift; sourceTree = "<group>"; };
 		C326435B8F6E47257506096B /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Search.strings; sourceTree = "<group>"; };
 		C3334FC58A76876D8E9F00F3 /* az */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = az; path = az.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		C34D464780B65FD5A9F3118B /* ga */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ga; path = ga.lproj/Search.strings; sourceTree = "<group>"; };
@@ -8322,6 +8328,7 @@
 			isa = PBXGroup;
 			children = (
 				A5519CF32B5D572A0062BECB /* SearchSettings */,
+				C2E929232B5C114700A8C8EB /* AccountSyncSettings */,
 				216A0D772A40E83F008077BA /* ThemeSettings */,
 				8A3EF7ED2A2FCEC900796E3A /* Main */,
 				EBB895322193FFF400EB91A0 /* ContentBlockerSettingViewController.swift */,
@@ -8343,7 +8350,6 @@
 				2F44FCC41A9E85E900FD20CC /* SettingsTableViewController.swift */,
 				F85C7F0D2711C555004BDBA4 /* SettingsViewController.swift */,
 				D821E9052141B71C00452C55 /* SiriSettingsViewController.swift */,
-				CEFA977D1FAA6B490016F365 /* SyncContentSettingsViewController.swift */,
 				8AE1E1CE27B191160024C45E /* SearchBar */,
 				C22753422A3CA25100B9C0D1 /* WebsiteDataManagement */,
 				211046CC2A7D842A00A7309F /* TPAccessoryInfo.swift */,
@@ -9892,6 +9898,17 @@
 				C2D71B9A2A3850B4003DEC7A /* ThemedTableViewCellViewModel.swift */,
 			);
 			path = ThemedTableViewCells;
+			sourceTree = "<group>";
+		};
+		C2E929232B5C114700A8C8EB /* AccountSyncSettings */ = {
+			isa = PBXGroup;
+			children = (
+				CEFA977D1FAA6B490016F365 /* SyncContentSettingsViewController.swift */,
+				C2E929242B5C118100A8C8EB /* AccountSyncMiddleware.swift */,
+				C2E929262B5C11B500A8C8EB /* SettingsAccountState.swift */,
+				C2E929282B5C11C200A8C8EB /* SettingsAccountAction.swift */,
+			);
+			path = AccountSyncSettings;
 			sourceTree = "<group>";
 		};
 		C80C11F228B3CD3E0062922A /* MockTests */ = {
@@ -13369,6 +13386,7 @@
 				31ADB5DA1E58CEC300E87909 /* ClipboardBarDisplayHandler.swift in Sources */,
 				8AD1980F27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift in Sources */,
 				EB9A179D20E69A7F00B12184 /* LegacyTheme.swift in Sources */,
+				C2E929272B5C11B500A8C8EB /* SettingsAccountState.swift in Sources */,
 				2128E2802934FBB400FB91BE /* CopyLinkActivity.swift in Sources */,
 				E17BE4C42A94BA6900C5124E /* FakespotHighlightGroupView.swift in Sources */,
 				C825E9832832A425006CB811 /* NimbusSearchBarLayer.swift in Sources */,
@@ -13443,6 +13461,7 @@
 				C45F44691D087DB600CB7EF0 /* TopTabsViewController.swift in Sources */,
 				8A0727462B4890B50071BB9F /* WebviewTelemetry.swift in Sources */,
 				8ADC2A212A3399DC00543DAA /* YourRightsSetting.swift in Sources */,
+				C2E929292B5C11C200A8C8EB /* SettingsAccountAction.swift in Sources */,
 				DF529E9F2AA86FF4003C5373 /* FakespotReviewQualityCardView.swift in Sources */,
 				DFACDFAF274D4D6D00A94EEC /* ReusableCell.swift in Sources */,
 				1D0BA05C24F46A0400D731B5 /* TopSitesProvider.swift in Sources */,
@@ -13939,6 +13958,7 @@
 				45D5EDA729269F7500311934 /* DataObserver.swift in Sources */,
 				961577922A38FDB300391E8D /* SponsoredTileDataUtility.swift in Sources */,
 				D863C8F21F68BFC20058D95F /* GradientProgressBar.swift in Sources */,
+				C2E929252B5C118100A8C8EB /* AccountSyncMiddleware.swift in Sources */,
 				C8445A14264428DC00B83F53 /* LibraryPanelViewState.swift in Sources */,
 				D5D052D92645ABF400759F85 /* ExperimentsSettingsView.swift in Sources */,
 				E134D5802B31FF3100C6B17B /* FakespotAdLinkButton.swift in Sources */,
