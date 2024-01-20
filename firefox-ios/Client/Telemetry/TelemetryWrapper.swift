@@ -615,6 +615,7 @@ extension TelemetryWrapper {
         case hangException = "hang-exception"
         case fxSuggestionTelemetryInfo = "fx-suggestion-telemetry-info"
         case fxSuggestionPosition = "fx-suggestion-position"
+        case fxSuggestionDidTap = "fx-suggestion-did-tap"
         case webviewFail = "webview-fail"
         case webviewFailProvisional = "webview-fail-provisional"
         case webviewShowErrorPage = "webview-show-error-page"
@@ -1860,6 +1861,7 @@ extension TelemetryWrapper {
             }
             GleanMetrics.FxSuggest.contextId.set(contextId)
             GleanMetrics.FxSuggest.pingType.set("fxsuggest-click")
+            GleanMetrics.FxSuggest.isClicked.set(true)
             GleanMetrics.FxSuggest.position.set(Int64(position))
             switch telemetryInfo {
             case let .amp(blockId, advertiser, iabCategory, _, clickReportingURL):
@@ -1877,11 +1879,13 @@ extension TelemetryWrapper {
             guard let contextIdString = TelemetryContextualIdentifier.contextId,
                   let contextId = UUID(uuidString: contextIdString),
                   let telemetryInfo = extras?[EventValue.fxSuggestionTelemetryInfo.rawValue] as? RustFirefoxSuggestionTelemetryInfo,
-                  let position = extras?[EventValue.fxSuggestionPosition.rawValue] as? Int else {
+                  let position = extras?[EventValue.fxSuggestionPosition.rawValue] as? Int,
+                  let didTap = extras?[EventValue.fxSuggestionDidTap.rawValue] as? Bool else {
                 return recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
             GleanMetrics.FxSuggest.contextId.set(contextId)
             GleanMetrics.FxSuggest.pingType.set("fxsuggest-impression")
+            GleanMetrics.FxSuggest.isClicked.set(didTap)
             GleanMetrics.FxSuggest.position.set(Int64(position))
             switch telemetryInfo {
             case let .amp(blockId, advertiser, iabCategory, impressionReportingURL, _):

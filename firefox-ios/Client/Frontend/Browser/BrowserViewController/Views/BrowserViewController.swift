@@ -2381,6 +2381,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
                 extras: [
                     TelemetryWrapper.EventValue.fxSuggestionTelemetryInfo.rawValue: telemetryInfo,
                     TelemetryWrapper.EventValue.fxSuggestionPosition.rawValue: position,
+                    TelemetryWrapper.EventValue.fxSuggestionDidTap.rawValue: didTap,
                 ]
             )
             if didTap {

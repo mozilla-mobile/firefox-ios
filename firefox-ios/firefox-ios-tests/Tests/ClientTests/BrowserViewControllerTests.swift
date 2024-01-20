@@ -42,6 +42,7 @@ class BrowserViewControllerTests: XCTestCase {
                 GleanMetrics.FxSuggest.contextId.testGetValue()?.uuidString,
                 TelemetryContextualIdentifier.contextId
             )
+            XCTAssertEqual(GleanMetrics.FxSuggest.isClicked.testGetValue(), false)
             XCTAssertEqual(GleanMetrics.FxSuggest.position.testGetValue(), 3)
             XCTAssertEqual(GleanMetrics.FxSuggest.blockId.testGetValue(), 1)
             XCTAssertEqual(GleanMetrics.FxSuggest.advertiser.testGetValue(), "test advertiser")
