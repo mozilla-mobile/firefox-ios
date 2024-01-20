@@ -7,10 +7,33 @@ extension Tab {
         // Track these in-memory only
         static var privateModeHostList = Set<String>()
 
+        private static let uaSetFilename = "changed-ua-set-of-hosts.xcarchive"
+
         private static let file: URL = {
-            let root = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            return root.appendingPathComponent("changed-ua-set-of-hosts.xcarchive")
+            let cache = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+            return cache.appendingPathComponent(uaSetFilename)
         }()
+
+        // Migration function to move the file from documents to cache directory
+        static func migrateFile() {
+            let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            let oldFilePath = documents.appendingPathComponent(uaSetFilename)
+
+            if FileManager.default.fileExists(atPath: oldFilePath.path) {
+                do {
+                    let cache = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+                    let newFilePath = cache.appendingPathComponent(uaSetFilename)
+
+                    try FileManager.default.moveItem(at: oldFilePath, to: newFilePath)
+                } catch {
+                    print("Error migrating file: \(error.localizedDescription)")
+                }
+            }
+        }
+
+        static func performMigrationIfNeeded() {
+            migrateFile()
+        }
 
         private static var baseDomainList: Set<String> = {
             if let data = try? Data(contentsOf: ChangeUserAgent.file),

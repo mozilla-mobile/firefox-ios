@@ -137,6 +137,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                    level: .info,
                    category: .lifecycle)
 
+        // Perform migration if needed
+        Tab.ChangeUserAgent.performMigrationIfNeeded()
+
         return true
     }
 
