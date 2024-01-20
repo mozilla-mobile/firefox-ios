@@ -412,6 +412,11 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBar(_ urlBar: URLBarView, didLeaveOverlayModeForReason reason: URLBarLeaveOverlayModeReason) {
+        searchEngagementState = switch reason {
+        case .finished: .engaged
+        case .cancelled: .abandoned
+        }
+
         destroySearchController()
         updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
 
