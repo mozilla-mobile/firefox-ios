@@ -1267,7 +1267,7 @@ class BrowserViewController: UIViewController,
 
     override func accessibilityPerformEscape() -> Bool {
         if overlayManager.inOverlayMode {
-            overlayManager.finishEditing(shouldCancelLoading: true)
+            overlayManager.cancelEditing(shouldCancelLoading: true)
             return true
         } else if let selectedTab = tabManager.selectedTab, selectedTab.canGoBack {
             selectedTab.goBack()
@@ -2354,7 +2354,9 @@ extension BrowserViewController: TabManagerDelegate {
 
         if let tab = selected, let webView = tab.webView {
             updateURLBarDisplayURL(tab)
-            if urlBar.inOverlayMode, tab.url?.displayURL != nil { urlBar.leaveOverlayMode(didCancel: false) }
+            if urlBar.inOverlayMode, tab.url?.displayURL != nil {
+                urlBar.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
+            }
 
             if previous == nil || tab.isPrivate != previous?.isPrivate {
                 applyTheme()
@@ -2601,7 +2603,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
         // If keyboard is dismiss leave edition mode Homepage case is handled in HomepageVC
         let newTabChoice = NewTabAccessors.getNewTabPage(profile.prefs)
         if newTabChoice != .topSites, newTabChoice != .blankPage {
-            overlayManager.finishEditing(shouldCancelLoading: false)
+            overlayManager.cancelEditing(shouldCancelLoading: false)
         }
     }
 }

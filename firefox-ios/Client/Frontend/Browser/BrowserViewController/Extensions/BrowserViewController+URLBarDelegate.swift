@@ -411,7 +411,7 @@ extension BrowserViewController: URLBarDelegate {
         urlBar.applyTheme(theme: themeManager.currentTheme)
     }
 
-    func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView) {
+    func urlBar(_ urlBar: URLBarView, didLeaveOverlayModeForReason reason: URLBarLeaveOverlayModeReason) {
         destroySearchController()
         updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
 
