@@ -9900,7 +9900,7 @@
 			path = ThemedTableViewCells;
 			sourceTree = "<group>";
 		};
-		C2E929232B5C114700A8C8EB /* AccountSyncSettings */ = {
+		C2E929232B5C114700A8C8EB /* AccountSettings */ = {
 			isa = PBXGroup;
 			children = (
 				CEFA977D1FAA6B490016F365 /* SyncContentSettingsViewController.swift */,
@@ -9908,7 +9908,7 @@
 				C2E929262B5C11B500A8C8EB /* SettingsAccountState.swift */,
 				C2E929282B5C11C200A8C8EB /* SettingsAccountAction.swift */,
 			);
-			path = AccountSyncSettings;
+			path = AccountSettings;
 			sourceTree = "<group>";
 		};
 		C80C11F228B3CD3E0062922A /* MockTests */ = {

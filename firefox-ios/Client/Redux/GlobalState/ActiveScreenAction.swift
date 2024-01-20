@@ -6,6 +6,7 @@ import Foundation
 import Redux
 
 enum AppScreen {
+    case accountSettings
     case browserViewController
     case themeSettings
     case tabsTray

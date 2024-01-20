@@ -5,5 +5,6 @@
 import Foundation
 import Redux
 
-struct SettingsAccountAction: Action {
+enum SettingsAccountAction: Action {
+    case accountSettingsDidLoad
 }

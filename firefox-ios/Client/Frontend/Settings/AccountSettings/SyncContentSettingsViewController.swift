@@ -7,6 +7,7 @@ import Foundation
 import Shared
 import Sync
 import Account
+import Redux
 
 class ManageFxAccountSetting: Setting {
     let profile: Profile
@@ -149,8 +150,11 @@ class DeviceNameSetting: StringSetting {
     }
 }
 
-class SyncContentSettingsViewController: SettingsTableViewController, FeatureFlaggable {
+class SyncContentSettingsViewController: SettingsTableViewController, StoreSubscriber, FeatureFlaggable {
+    typealias SubscriberStateType = SettingsAccountState
     fileprivate var enginesToSyncOnExit: Set<String> = Set()
+    private lazy var isAccountSettingsReduxEnabled = featureFlags.isFeatureEnabled(.accountSettingsRedux, checking: .buildOnly)
+    fileprivate var accountSettingsState = SettingsAccountState()
 
     init() {
         super.init(style: .grouped)
@@ -164,6 +168,13 @@ class SyncContentSettingsViewController: SettingsTableViewController, FeatureFla
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        if isAccountSettingsReduxEnabled {
+            subscribeToRedux()
+        }
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         if !enginesToSyncOnExit.isEmpty {
             _ = self.profile.syncManager.syncNamedCollections(
@@ -173,6 +184,24 @@ class SyncContentSettingsViewController: SettingsTableViewController, FeatureFla
             enginesToSyncOnExit.removeAll()
         }
         super.viewWillDisappear(animated)
+    }
+
+    // MARK: - StoreSubscriber
+
+    func subscribeToRedux() {
+        store.subscribe(self) {
+            return $0.select(SettingsAccountState.init)
+        }
+        store.dispatch(SettingsAccountAction.accountSettingsDidLoad)
+    }
+
+    func newState(state: SettingsAccountState) {
+        accountSettingsState = state
+        tableView.reloadData()
+    }
+
+    func unsubscribeToRedux() {
+        store.unsubscribe(self)
     }
 
     func engineSettingChanged(_ engineName: RustSyncManagerAPI.TogglableEngine) -> (Bool) -> Void {
@@ -294,5 +323,11 @@ class SyncContentSettingsViewController: SettingsTableViewController, FeatureFla
         let disconnectSection = SettingSection(title: nil, footerTitle: nil, children: [disconnect])
 
         return [manageSection, enginesSection, deviceNameSection, disconnectSection]
+    }
+
+    deinit {
+        if isAccountSettingsReduxEnabled {
+            unsubscribeToRedux()
+        }
     }
 }

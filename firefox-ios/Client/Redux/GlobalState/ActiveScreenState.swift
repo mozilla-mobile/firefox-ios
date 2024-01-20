@@ -68,6 +68,9 @@ struct ActiveScreensState: Equatable {
                 screens += [.themeSettings(ThemeSettingsState())]
             case .showScreen(.tabPeek):
                 screens += [.tabPeek(TabPeekState())]
+            case .showScreen(.accountSettings):
+                // this state is not handled, beacuse the sync content settings view controller needs to be refactored
+                break
             }
         }
 
