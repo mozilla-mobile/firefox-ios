@@ -158,7 +158,7 @@
 "ExternalLink.cancelButton" = "Zrušiť";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.emailButton" = "Poslať e-mail";
+"ExternalLink.emailButton" = "Poslať e‑mail";
 
 /* Accessibility label for done button in Find in Page Toolbar. */
 "FindInPage.Done" = "Hľadanie na stránke bolo dokončené";
@@ -356,7 +356,7 @@
 "Settings.setAsDefaultBrowser" = "Nastaviť ako predvolený prehliadač";
 
 /* %@ is the name of the app. Description for set as default browser option */
-"Settings.setAsDefaultBrowserDescription" = "Nastavte si automatické otváranie webových stránok, e-mailov a správ vo %@e.";
+"Settings.setAsDefaultBrowserDescription" = "Nastavte si automatické otváranie webových stránok, e‑mailov a správ vo %@e.";
 
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "Systémová téma";
