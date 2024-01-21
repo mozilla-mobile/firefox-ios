@@ -5,6 +5,7 @@
 import UIKit
 import Shared
 import ComponentLibrary
+import Redux
 
 protocol SearchEnginePickerDelegate: AnyObject {
     func searchEnginePicker(
@@ -13,7 +14,8 @@ protocol SearchEnginePickerDelegate: AnyObject {
     )
 }
 
-class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlaggable {
+class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlaggable, StoreSubscriber {
+    typealias SubscriberStateType = SearchSettingsState
     private enum Section: Int, CaseIterable {
         case defaultEngine
         case quickEngines
@@ -50,6 +52,7 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
 
     private var showDeletion = false
     private var sectionsToDisplay: [SearchSettingsTableViewController.Section] = []
+    private var searchSettingsState: SearchSettingsState
 
     var updateSearchIcon: (() -> Void)?
     private var isEditable: Bool {
@@ -64,7 +67,7 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
     init(profile: Profile) {
         self.profile = profile
         model = profile.searchEngines
-
+        self.searchSettingsState = SearchSettingsState()
         super.init()
     }
 
@@ -74,13 +77,7 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        navigationItem.title = .Settings.Search.Title
-
-        // To allow re-ordering the list of search engines at all times.
-        tableView.isEditing = true
-        // So that we push the default search engine controller on selection.
-        tableView.allowsSelectionDuringEditing = true
+        subscribeToRedux()
 
         tableView.register(ThemedTableSectionHeaderFooterView.self,
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
@@ -116,6 +113,32 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         setEditing(false, animated: false)
+        unsubscribeFromRedux()
+    }
+
+    // MARK: - Redux
+
+    func subscribeToRedux() {
+        store.dispatch(SearchSettingsAction.searchSettingsDidLoad)
+        store.subscribe(self, transform: {
+            $0.select(SearchSettingsState.init)
+        })
+    }
+
+    func unsubscribeFromRedux() {
+        store.unsubscribe(self)
+    }
+
+    func newState(state: SearchSettingsState) {
+        searchSettingsState = state
+        ensureMainThread {
+            self.navigationItem.title = .Settings.Search.Title
+
+            // To allow re-ordering the list of search engines at all times.
+            self.tableView.isEditing = true
+            // So that we push the default search engine controller on selection.
+            self.tableView.allowsSelectionDuringEditing = true
+        }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

@@ -5,4 +5,6 @@
 import Redux
 
 enum SearchSettingsAction: Action {
+    // UI trigger actions
+    case searchSettingsDidLoad
 }
