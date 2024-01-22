@@ -97,7 +97,7 @@ class TabPeekViewController: UIViewController,
                 identifier: nil) { _ in
                     store.dispatch(TabPeekAction.sendToDevice(tabID: self.tab.tabUUID))
                     return
-                })
+            })
         }
         if tabPeekState.showCopyURL {
             actions.append(UIAction(title: .TabPeekCopyUrl,
