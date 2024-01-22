@@ -155,6 +155,10 @@ class FakespotViewController: UIViewController,
         store.unsubscribe(self)
     }
 
+    func validateState(state: BrowserViewControllerState) -> Bool {
+        return fakespotState.windowUUID == windowUUID
+    }
+
     func newState(state: BrowserViewControllerState) {
         fakespotState = state.fakespotState
     }

@@ -103,8 +103,11 @@ class RemoteTabsTableViewController: UITableViewController,
         addRefreshControl()
     }
 
+    func validateState(state: RemoteTabsPanelState) -> Bool {
+        return state.windowUUID == windowUUID
+    }
+
     func newState(state: RemoteTabsPanelState) {
-        guard state.windowUUID == windowUUID else { return }
         self.state = state
         reloadUI()
     }

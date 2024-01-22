@@ -271,8 +271,11 @@ class TabTrayViewController: UIViewController,
         store.unsubscribe(self)
     }
 
+    func validateState(state: TabTrayState) -> Bool {
+        return state.windowUUID == windowUUID
+    }
+
     func newState(state: TabTrayState) {
-        guard state.windowUUID == windowUUID else { return }
         tabTrayState = state
 
         if tabTrayState.shouldDismiss {

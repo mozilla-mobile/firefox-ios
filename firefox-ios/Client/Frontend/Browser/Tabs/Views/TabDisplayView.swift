@@ -74,8 +74,11 @@ class TabDisplayView: UIView,
         fatalError("init(coder:) has not been implemented")
     }
 
+    func validateState(state: TabsPanelState) -> Bool {
+        return state.windowUUID == windowUUID
+    }
+
     func newState(state: TabsPanelState) {
-        guard state.windowUUID == windowUUID else { return }
         tabsState = state
         collectionView.reloadData()
     }

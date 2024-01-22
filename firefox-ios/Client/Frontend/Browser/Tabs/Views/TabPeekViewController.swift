@@ -46,9 +46,11 @@ class TabPeekViewController: UIViewController,
         self.contextActions = contextActions(defaultActions:)
     }
 
+    func validateState(state: TabPeekState) -> Bool {
+        return state.windowUUID == windowUUID
+    }
+
     func newState(state: TabPeekState) {
-        // We are only 
-        guard state.windowUUID == windowUUID else { return }
         tabPeekState = state
         setupWithScreenshot()
     }

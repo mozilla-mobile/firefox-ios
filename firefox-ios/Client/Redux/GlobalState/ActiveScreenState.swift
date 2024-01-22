@@ -13,20 +13,39 @@ enum AppScreenState: Equatable {
     case themeSettings(ThemeSettingsState)
     case tabPeek(TabPeekState)
 
-    static let reducer: Reducer<Self> = { state, action in
-        //TODO: FIXME Each reducer needs to check whether the action applies to this state based on WindowUUID
-        switch state {
+    static let reducer: Reducer<Self> = { screen, action in
+        let actionUUID = action.windowUUID
+
+        func applyReducer(_ actionUUID: UUID?, _ incomingState: ScreenState) -> Bool {
+            // TODO: [8188] UUID will eventually be non-optional. Forthcoming.
+            // If the action UUID does not match this screen, we do not apply the
+            // reducer (the screen state remains unchanged, we simply return it).
+            return (actionUUID == nil || actionUUID == incomingState.windowUUID)
+        }
+
+        switch screen {
         case .tabPeek(let state):
+            guard applyReducer(actionUUID, state) else { return screen }
             return .tabPeek(TabPeekState.reducer(state, action))
+
         case .themeSettings(let state):
+            guard applyReducer(actionUUID, state) else { return screen }
             return .themeSettings(ThemeSettingsState.reducer(state, action))
+
         case .tabsTray(let state):
+            guard applyReducer(actionUUID, state) else { return screen }
             return .tabsTray(TabTrayState.reducer(state, action))
+
         case .tabsPanel(let state):
+            guard applyReducer(actionUUID, state) else { return screen }
             return .tabsPanel(TabsPanelState.reducer(state, action))
+
         case .remoteTabsPanel(let state):
+            guard applyReducer(actionUUID, state) else { return screen }
             return .remoteTabsPanel(RemoteTabsPanelState.reducer(state, action))
+
         case .browserViewController(let state):
+            guard applyReducer(actionUUID, state) else { return screen }
             return .browserViewController(BrowserViewControllerState.reducer(state, action))
         }
     }
@@ -61,9 +80,23 @@ struct ActiveScreensState: Equatable {
         if let action = action as? ActiveScreensStateAction {
             switch action {
             case .closeScreen(let context):
-                let screenType = context.screen
-                // TODO: FIXME Needs to check the UUID before removing
-                screens = screens.filter({ return $0.associatedAppScreen != screenType })
+                let uuid = context.windowUUID
+                screens = screens.filter({
+                    switch $0 {
+                    case .browserViewController(let state):
+                        return state.windowUUID != uuid
+                    case .remoteTabsPanel(let state):
+                        return state.windowUUID != uuid
+                    case .tabsTray(let state):
+                        return state.windowUUID != uuid
+                    case .tabsPanel(let state):
+                        return state.windowUUID != uuid
+                    case .themeSettings(let state):
+                        return state.windowUUID != uuid
+                    case .tabPeek(let state):
+                        return state.windowUUID != uuid
+                    }
+                })
             case .showScreen(let context):
                 let screenType = context.screen
                 switch screenType {

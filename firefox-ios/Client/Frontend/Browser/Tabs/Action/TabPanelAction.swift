@@ -37,4 +37,11 @@ enum TabPanelAction: Action {
     case didLoadTabPanel(TabDisplayModel)
     case refreshTab([TabModel]) // Response to all user actions involving tabs ex: add, close and close all tabs
     case refreshInactiveTabs([InactiveTabsModel])
+
+    var windowUUID: UUID? {
+        // TODO: [8188] Update to be non-optional and return windowUUID. Forthcoming.
+        switch self {
+        default: return nil
+        }
+    }
 }

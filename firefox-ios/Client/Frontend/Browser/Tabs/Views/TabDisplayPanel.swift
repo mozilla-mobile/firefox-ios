@@ -166,8 +166,11 @@ class TabDisplayPanel: UIViewController,
         store.unsubscribe(self)
     }
 
+    func validateState(state: TabsPanelState) -> Bool {
+        return state.windowUUID == windowUUID
+    }
+
     func newState(state: TabsPanelState) {
-        guard state.windowUUID == windowUUID else { return }
         tabsState = state
         tabDisplayView.newState(state: tabsState)
         shouldShowEmptyView(tabsState.isPrivateTabsEmpty)

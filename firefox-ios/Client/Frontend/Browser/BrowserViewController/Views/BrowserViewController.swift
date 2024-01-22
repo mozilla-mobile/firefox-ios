@@ -494,9 +494,11 @@ class BrowserViewController: UIViewController,
         })
     }
 
-    func newState(state: BrowserViewControllerState) {
-        guard windowUUID == state.windowUUID else { return }
+    func validateState(state: BrowserViewControllerState) -> Bool {
+        return state.windowUUID == windowUUID
+    }
 
+    func newState(state: BrowserViewControllerState) {
         ensureMainThread { [weak self] in
             guard let self else { return }
 
