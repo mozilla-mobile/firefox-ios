@@ -330,7 +330,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         let zoomLevel = NumberFormatter.localizedString(from: NSNumber(value: tab.pageZoom), number: .percent)
         let title = String(format: .AppMenu.ZoomPageTitle, zoomLevel)
         let zoomAction = SingleActionViewModel(title: title,
-                                               iconString: ImageIdentifiers.zoomIn) { _ in
+                                               iconString: StandardImageIdentifiers.Large.pageZoom) { _ in
             self.delegate?.showZoomPage(tab: tab)
         }.items
         return zoomAction

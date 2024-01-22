@@ -60,6 +60,7 @@ public struct StandardImageIdentifiers {
         public static let link = "linkLarge"
         public static let login = "loginLarge"
         public static let packaging = "packagingLarge"
+        public static let pageZoom = "pageZoomLarge"
         public static let pin = "pinLarge"
         public static let pinSlash = "pinSlashLarge"
         public static let plus = "plusLarge"
