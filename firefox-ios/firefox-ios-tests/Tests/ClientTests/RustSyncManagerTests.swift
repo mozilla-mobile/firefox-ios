@@ -193,7 +193,7 @@ class RustSyncManagerTests: XCTestCase {
         XCTAssertNil(profile.prefs.boolForKey(Keys.addressesStateChangedPrefKey))
     }
 
-///  TO DO FXIOS-8225 
+//  TO DO FXIOS-8225 
 //    func testUpdateEnginePrefs_addressesDisabled() throws {
 //        profile.prefs.setBool(false, forKey: Keys.addressesEnabledPrefKey)
 //        profile.prefs.setBool(false, forKey: Keys.addressesStateChangedPrefKey)
