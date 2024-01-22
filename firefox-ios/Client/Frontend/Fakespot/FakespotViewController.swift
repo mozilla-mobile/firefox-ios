@@ -114,7 +114,7 @@ class FakespotViewController: UIViewController,
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
-        fakespotState = FakespotState()
+        fakespotState = FakespotState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
         listenToStateChange()
     }

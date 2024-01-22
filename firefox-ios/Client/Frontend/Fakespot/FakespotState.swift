@@ -42,9 +42,9 @@ struct FakespotState: ScreenState, Equatable {
         )
     }
 
-    init() {
+    init(windowUUID: WindowUUID) {
         self.init(
-            windowUUID: WindowUUID.unavailable,
+            windowUUID: windowUUID,
             isOpen: false,
             sidebarOpenForiPadLandscape: false,
             currentTabUUID: "",

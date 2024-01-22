@@ -36,7 +36,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             searchScreenState: SearchScreenState(),
             usePrivateHomepage: false,
             showDataClearanceFlow: false,
-            fakespotState: FakespotState(),
+            fakespotState: FakespotState(windowUUID: windowUUID),
             toast: nil,
             windowUUID: windowUUID)
     }
