@@ -1404,6 +1404,7 @@
 		E18EA56F28AD3279003F97FC /* UIDevice+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18EA56E28AD3279003F97FC /* UIDevice+Extension.swift */; };
 		E18EA57128AD46D3003F97FC /* WallpaperCollectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18EA57028AD46D3003F97FC /* WallpaperCollectionType.swift */; };
 		E18F44072A951C330056160F /* FakespotHighlightGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18F44062A951C330056160F /* FakespotHighlightGroup.swift */; };
+		E192C1412B57DC860003BC0B /* FakespotMessageCardButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E192C1402B57DC860003BC0B /* FakespotMessageCardButton.swift */; };
 		E19443F62AF9413300964EA5 /* FakespotUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19443F52AF9413300964EA5 /* FakespotUtilsTests.swift */; };
 		E19443F82AF953B000964EA5 /* MockSidebarEnabledView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19443F72AF953B000964EA5 /* MockSidebarEnabledView.swift */; };
 		E19B38B128A3E69300D8C541 /* WallpaperCollectionAvailabilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19B38B028A3E69300D8C541 /* WallpaperCollectionAvailabilityTests.swift */; };
@@ -7230,6 +7231,7 @@
 		E18EA56E28AD3279003F97FC /* UIDevice+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extension.swift"; sourceTree = "<group>"; };
 		E18EA57028AD46D3003F97FC /* WallpaperCollectionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperCollectionType.swift; sourceTree = "<group>"; };
 		E18F44062A951C330056160F /* FakespotHighlightGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotHighlightGroup.swift; sourceTree = "<group>"; };
+		E192C1402B57DC860003BC0B /* FakespotMessageCardButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotMessageCardButton.swift; sourceTree = "<group>"; };
 		E19443F52AF9413300964EA5 /* FakespotUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotUtilsTests.swift; sourceTree = "<group>"; };
 		E19443F72AF953B000964EA5 /* MockSidebarEnabledView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSidebarEnabledView.swift; sourceTree = "<group>"; };
 		E19B38B028A3E69300D8C541 /* WallpaperCollectionAvailabilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperCollectionAvailabilityTests.swift; sourceTree = "<group>"; };
@@ -10809,22 +10811,23 @@
 		E16258F02A83D5DE00522742 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				8CAF299F2AA5E76B00DC3486 /* FakespotMessageCardView.swift */,
 				8C6F94632A972EB300415FF6 /* FakespotAdjustRatingView.swift */,
-				8C6F94642A972EB300415FF6 /* FakespotStarRatingView.swift */,
-				E16258EE2A83BE0800522742 /* FakespotLoadingView.swift */,
-				E1FC23F02A8629380089E14D /* FakespotReliabilityCardView.swift */,
-				E16AD22B2A8A7AE800F0AA58 /* FakespotHighlightsCardView.swift */,
-				E17BE4C32A94BA6900C5124E /* FakespotHighlightGroupView.swift */,
-				E1C437A22A96343A00D188CB /* FakespotFadeLabel.swift */,
-				DF5D47512A9381C700D6AE74 /* FakespotSettingsCardView.swift */,
-				DF1E6AAA2A976FE7000D4854 /* FakespotNoAnalysisCardView.swift */,
-				DF529E9E2AA86FF4003C5373 /* FakespotReviewQualityCardView.swift */,
-				AB0303292AB47AF300DCD8EF /* FakespotOptInCardView.swift */,
-				DF529EA02AB1B421003C5373 /* FakespotReliabilityScoreView.swift */,
 				AB6FEA1F2AEA5CA200E7B2F2 /* FakespotAdView.swift */,
 				E134D57F2B31FF3000C6B17B /* FakespotAdLinkButton.swift */,
+				E1C437A22A96343A00D188CB /* FakespotFadeLabel.swift */,
+				E16AD22B2A8A7AE800F0AA58 /* FakespotHighlightsCardView.swift */,
+				E17BE4C32A94BA6900C5124E /* FakespotHighlightGroupView.swift */,
+				E16258EE2A83BE0800522742 /* FakespotLoadingView.swift */,
+				8CAF299F2AA5E76B00DC3486 /* FakespotMessageCardView.swift */,
+				E192C1402B57DC860003BC0B /* FakespotMessageCardButton.swift */,
+				DF1E6AAA2A976FE7000D4854 /* FakespotNoAnalysisCardView.swift */,
+				AB0303292AB47AF300DCD8EF /* FakespotOptInCardView.swift */,
 				BD6B361D2B3C2511005E5345 /* CircularProgressView.swift */,
+				E1FC23F02A8629380089E14D /* FakespotReliabilityCardView.swift */,
+				DF529EA02AB1B421003C5373 /* FakespotReliabilityScoreView.swift */,
+				DF529E9E2AA86FF4003C5373 /* FakespotReviewQualityCardView.swift */,
+				DF5D47512A9381C700D6AE74 /* FakespotSettingsCardView.swift */,
+				8C6F94642A972EB300415FF6 /* FakespotStarRatingView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -14001,6 +14004,7 @@
 				8A9F0B5627C595F300FE09AE /* ImageIdentifiers.swift in Sources */,
 				7B844E3D1BBDDB9D00E733A2 /* ChevronView.swift in Sources */,
 				43A5643823CD1E1C00B6857D /* UpdateViewController.swift in Sources */,
+				E192C1412B57DC860003BC0B /* FakespotMessageCardButton.swift in Sources */,
 				437A9B682681256800FB41C1 /* LegacyInactiveTabCell.swift in Sources */,
 				1D69FF8D27B17286001F660E /* HomeLogoHeaderCell.swift in Sources */,
 				E4C358551AF144BA00299F7E /* FSReadingList.m in Sources */,
