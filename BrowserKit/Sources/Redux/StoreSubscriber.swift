@@ -31,7 +31,7 @@ public protocol StoreSubscriber: AnyStoreSubscriber {
     /// on other windows to update their own state, may simply return true here
     /// and they will receive all screen state updates for their given type.
     /// - Parameter state: the state update that is incoming.
-    /// - Returns: return true if the
+    /// - Returns: return true to receive the state update.
     func validateState(state: SubscriberStateType) -> Bool
 }
 
