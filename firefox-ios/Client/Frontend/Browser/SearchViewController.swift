@@ -74,8 +74,8 @@ class SearchViewController: SiteTableViewController,
     private let viewModel: SearchViewModel
     private let model: SearchEngines
     private var suggestClient: SearchSuggestClient?
-    private var remoteClientTabs = [ClientTabsSearchWrapper]()
-    private var filteredRemoteClientTabs = [ClientTabsSearchWrapper]()
+    var remoteClientTabs = [ClientTabsSearchWrapper]()
+    var filteredRemoteClientTabs = [ClientTabsSearchWrapper]()
     private var openedTabs = [Tab]()
     private var filteredOpenedTabs = [Tab]()
     private var tabManager: TabManager
@@ -561,6 +561,11 @@ class SearchViewController: SiteTableViewController,
                 return false
             }
 
+            if profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowSponsoredSuggestions) ?? false &&
+                SponsoredContentFilterUtility().containsSearchParam(url: tab.URL) {
+                return false
+            }
+
             if tab.title.lowercased().contains(searchString.lowercased()) {
                 return true
             }
@@ -616,7 +621,13 @@ class SearchViewController: SiteTableViewController,
     }
 
     func loader(dataLoaded data: Cursor<Site>) {
-        self.data = data
+        let showSponsoredSuggestions = profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowSponsoredSuggestions) ?? false
+        self.data = if showSponsoredSuggestions {
+            ArrayCursor<Site>(data: SponsoredContentFilterUtility().filterSponsoredSites(from: data.asArray()))
+        } else {
+            data
+        }
+
         tableView.reloadData()
     }
 
