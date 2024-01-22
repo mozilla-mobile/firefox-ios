@@ -7,6 +7,11 @@ import WebKit
 
 /// The settings page
 class SettingsViewController: UIViewController, UITableViewDelegate {
+    private struct UX {
+        static let titleLabelVerticalSpacing: CGFloat = 16
+        static let titleLabelHorizontalSpacing: CGFloat = 8
+    }
+
     private var tableView: UITableView
     private var dataSource = SettingsDataSource()
 
@@ -46,6 +51,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
 
+        // this ensures the table view header is removed and not shown
         tableView.tableHeaderView = UIView(frame: CGRect(origin: .zero,
                                                          size: CGSize(width: 0, height: CGFloat.leastNormalMagnitude)))
         tableView.dataSource = dataSource
@@ -57,9 +63,12 @@ class SettingsViewController: UIViewController, UITableViewDelegate {
         view.addSubview(titleLabel)
 
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
-            titleLabel.bottomAnchor.constraint(equalTo: tableView.topAnchor, constant: -16),
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
+                                            constant: UX.titleLabelVerticalSpacing),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                constant: UX.titleLabelHorizontalSpacing),
+            titleLabel.bottomAnchor.constraint(equalTo: tableView.topAnchor,
+                                               constant: -UX.titleLabelVerticalSpacing),
             titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
