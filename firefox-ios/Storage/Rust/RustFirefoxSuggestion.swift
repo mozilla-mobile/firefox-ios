@@ -51,7 +51,7 @@ public struct RustFirefoxSuggestion {
             _,
             clickUrlString,
             _,
-            _,
+            _
         ) = suggestion {
             // This use of `URL(string:)` is OK; we don't need to use
             // `URL(string:encodingInvalidCharacters:)` here.
