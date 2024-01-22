@@ -118,7 +118,6 @@ class SyncUITests: BaseTestCase {
         // Typing on Password should show Show (password) option
         userState.fxaPassword = "f"
         navigator.performAction(Action.FxATypePassword)
-        print(app.debugDescription)
         let passMessage = "Show password as plain text. Your password will be visible on screen."
         mozWaitForElementToExist(app.webViews.otherElements.buttons[passMessage], timeout: 3)
         // Remove the password typed, Show (password) option should not be shown
