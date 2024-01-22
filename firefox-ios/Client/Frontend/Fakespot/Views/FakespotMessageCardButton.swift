@@ -57,9 +57,7 @@ class FakespotMessageCardButton: ResizableButton, ThemeApplicable {
 
         updatedConfiguration.background.backgroundColor = backgroundColorNormal
 
-        // swiftlint:disable line_length
-        updatedConfiguration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { [weak self] incoming in
-        // swiftlint:enable line_length
+        let transformer = UIConfigurationTextAttributesTransformer { [weak self] incoming in
             var container = incoming
             container.foregroundColor = self?.foregroundColor
             container.font = DefaultDynamicFontHelper.preferredBoldFont(
@@ -68,6 +66,7 @@ class FakespotMessageCardButton: ResizableButton, ThemeApplicable {
             )
             return container
         }
+        updatedConfiguration.titleTextAttributesTransformer = transformer
 
         configuration = updatedConfiguration
     }
