@@ -26,6 +26,7 @@ include:
   - nimbus-features/messagingFeature.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml
   - nimbus-features/qrCodeCoordinatorRefactor.yaml
+  - nimbus-features/reduxSearchSettingsFeature.yaml
   - nimbus-features/searchFeature.yaml
   - nimbus-features/searchTermGroupsFeature.yaml
   - nimbus-features/shareSheetFeature.yaml
