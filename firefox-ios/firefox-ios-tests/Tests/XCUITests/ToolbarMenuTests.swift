@@ -80,7 +80,7 @@ class ToolbarMenuTests: BaseTestCase {
         XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.download].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.readingList].exists)
         XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.login].exists)
-        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.sync].exists)
+        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.sync].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.nightMode].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.whatsNew].exists)
         XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.help].exists)

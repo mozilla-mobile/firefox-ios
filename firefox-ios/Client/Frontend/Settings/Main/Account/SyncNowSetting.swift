@@ -15,7 +15,7 @@ class SyncNowSetting: WithAccountSetting {
         CGSize(width: 30, height: 30),
         color: UIColor.clear
     )
-    private let syncBlueIcon = UIImage(named: "FxA-Sync-Blue")
+    private let syncIcon = UIImage(named: StandardImageIdentifiers.Large.sync)
 
     // Animation used to rotate the Sync icon 360 degrees while syncing is in progress.
     private let continuousRotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
@@ -89,17 +89,15 @@ class SyncNowSetting: WithAccountSetting {
     override var accessoryType: UITableViewCell.AccessoryType { return .none }
 
     override var image: UIImage? {
-        let syncIcon = UIImage(named: "FxA-Sync")?.tinted(withColor: theme.colors.iconPrimary)
-
         guard let syncStatus = profile.syncManager.syncDisplayState else {
-            return syncIcon
+            return syncIcon?.tinted(withColor: theme.colors.iconPrimary)
         }
 
         switch syncStatus {
         case .inProgress:
-            return syncBlueIcon
+            return syncIcon?.tinted(withColor: theme.colors.iconAction)
         default:
-            return syncIcon
+            return syncIcon?.tinted(withColor: theme.colors.iconPrimary)
         }
     }
 

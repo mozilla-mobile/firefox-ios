@@ -507,7 +507,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
         guard let userProfile = rustAccount.userProfile else {
             return SingleActionViewModel(title: .AppMenu.SyncAndSaveData,
-                                         iconString: ImageIdentifiers.sync,
+                                         iconString: StandardImageIdentifiers.Large.sync,
                                          tapHandler: action).items
         }
 

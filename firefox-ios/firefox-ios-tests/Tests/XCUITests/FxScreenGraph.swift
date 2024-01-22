@@ -1048,7 +1048,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             to: SettingsScreen
         )
         screenState.tap(
-            app.tables.otherElements[ImageIdentifiers.sync],
+            app.tables.otherElements[StandardImageIdentifiers.Large.sync],
             to: Intro_FxASignin,
             if: "fxaUsername == nil"
         )

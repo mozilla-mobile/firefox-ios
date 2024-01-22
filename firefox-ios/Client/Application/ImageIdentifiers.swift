@@ -72,7 +72,6 @@ public struct ImageIdentifiers {
     public static let starFill = "starFill"
     public static let starHalf = "starHalf"
     public static let subtract = "subtract"
-    public static let sync = "menu-sync"
     public static let syncedDevicesIcon = "synced_devices"
     public static let upgradeBackground = "onboardingBackground"
     public static let breachedWebsite = "Breached Website"
