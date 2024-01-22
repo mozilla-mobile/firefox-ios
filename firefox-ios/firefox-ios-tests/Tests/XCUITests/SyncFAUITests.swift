@@ -119,10 +119,11 @@ class SyncUITests: BaseTestCase {
         userState.fxaPassword = "f"
         navigator.performAction(Action.FxATypePassword)
         print(app.debugDescription)
-        mozWaitForElementToExist(app.webViews.otherElements.buttons["Show password as plain text. Your password will be visible on screen."], timeout: 3)
+        let passMessage = "Show password as plain text. Your password will be visible on screen."
+        mozWaitForElementToExist(app.webViews.otherElements.buttons[passMessage], timeout: 3)
         // Remove the password typed, Show (password) option should not be shown
         app.secureTextFields.element(boundBy: 0).typeText(XCUIKeyboardKey.delete.rawValue)
-        mozWaitForElementToNotExist(app.webViews.staticTexts.buttons["Show password as plain text. Your password will be visible on screen."])
+        mozWaitForElementToNotExist(app.webViews.staticTexts.buttons[passMessage])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2449605
