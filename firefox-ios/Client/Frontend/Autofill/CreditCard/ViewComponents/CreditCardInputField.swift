@@ -165,7 +165,7 @@ struct CreditCardInputField: View {
     @ViewBuilder
     private func errorViewWith(errorString: String) -> some View {
         HStack(spacing: 0) {
-            Image(ImageIdentifiers.errorAutofill)
+            Image(StandardImageIdentifiers.Large.warning)
                 .renderingMode(.template)
                 .foregroundColor(errorColor)
                 .accessibilityHidden(true)

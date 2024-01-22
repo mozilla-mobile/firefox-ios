@@ -15,7 +15,6 @@ public struct ImageIdentifiers {
     public static let circleFill = "circle.fill"
     public static let competitiveness = "competitiveness"
     public static let creditCardPlaceholder = "credit_card_placeholder"
-    public static let errorAutofill = "error_autofill"
     public static let emptySyncImageName = "emptySync"
     public static let findInPage = "menu-FindInPage"
     public static let firefoxFavicon = "faviconFox"
