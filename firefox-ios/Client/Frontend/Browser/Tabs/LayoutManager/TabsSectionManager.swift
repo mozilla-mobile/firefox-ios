@@ -6,7 +6,8 @@ import Foundation
 
 class TabsSectionManager {
     struct UX {
-        static let cellEstimatedWidth: CGFloat = 170
+        // On iPad we can set to have bigger tabs, on iPhone we need smaller ones
+        static let cellEstimatedWidth: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 170
         static let cellAbsoluteHeight: CGFloat = 200
         static let cardSpacing: CGFloat = 16
         static let standardInset: CGFloat = 18
