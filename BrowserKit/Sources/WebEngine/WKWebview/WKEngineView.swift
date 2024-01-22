@@ -40,6 +40,7 @@ class WKEngineView: UIView, EngineView {
 
     private func add(session: WKEngineSession) {
         self.session = session
+        addSubview(session.webView)
 
         let webView = session.webView
         webView.translatesAutoresizingMaskIntoConstraints = false

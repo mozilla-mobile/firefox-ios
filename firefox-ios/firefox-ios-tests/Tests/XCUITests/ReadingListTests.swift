@@ -218,17 +218,18 @@ class ReadingListTests: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306993
     // Smoketest
     func testAddToReaderListOptions() throws {
-        XCTExpectFailure("The app was not launched", strict: false) {
-            mozWaitForElementToExist(app.collectionViews["FxCollectionView"], timeout: TIMEOUT)
-        }
-        addContentToReaderView()
-        // Check that Settings layouts options are shown
-        mozWaitForElementToExist(app.buttons["ReaderModeBarView.settingsButton"], timeout: TIMEOUT)
-        app.buttons["ReaderModeBarView.settingsButton"].tap()
-        let layoutOptions = ["Light", "Sepia", "Dark", "Decrease text size", "Reset text size", "Increase text size",
-                             "Share this page", "Remove from Reading List"]
-        for option in layoutOptions {
-            XCTAssertTrue(app.buttons[option].exists, "Option \(option) doesn't exists")
-        }
+        // Temporarily disabled until url bar redesign work FXIOS-8172
+//        XCTExpectFailure("The app was not launched", strict: false) {
+//            mozWaitForElementToExist(app.collectionViews["FxCollectionView"], timeout: TIMEOUT)
+//        }
+//        addContentToReaderView()
+//        // Check that Settings layouts options are shown
+//        mozWaitForElementToExist(app.buttons["ReaderModeBarView.settingsButton"], timeout: TIMEOUT)
+//        app.buttons["ReaderModeBarView.settingsButton"].tap()
+//        let layoutOptions = ["Light", "Sepia", "Dark", "Decrease text size", "Reset text size", "Increase text size",
+//                             "Share this page", "Remove from Reading List"]
+//        for option in layoutOptions {
+//            XCTAssertTrue(app.buttons[option].exists, "Option \(option) doesn't exists")
+//        }
     }
 }

@@ -46,6 +46,9 @@ class RemoteTabsCoordinator: BaseCoordinator,
     }
 
     func presentFxAccountSettings() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .syncSignIn)
         parentCoordinator?.didFinish(from: self)
         let urlString = URL.mozInternalScheme + "://deep-link?url=/settings/fxa"
         guard let url = URL(string: urlString) else { return }

@@ -7,7 +7,7 @@ import WebKit
 @testable import WebEngine
 
 class MockWKEngineWebView: UIView, WKEngineWebView {
-    var configuration = WKWebViewConfiguration()
+    var engineConfiguration: WKEngineConfiguration
     var interactionState: Any?
     var scrollView = UIScrollView()
     var url: URL?
@@ -15,6 +15,10 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
     var allowsBackForwardNavigationGestures = true
     var allowsLinkPreview = true
     var isInspectable = true
+
+    var estimatedProgress: Double = 0
+    var canGoBack = false
+    var canGoForward = false
 
     // MARK: Test properties
     var loadCalled = 0
@@ -33,6 +37,7 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
 
     required init?(frame: CGRect,
                    configurationProvider: WKEngineConfigurationProvider) {
+        self.engineConfiguration = configurationProvider.createConfiguration()
         super.init(frame: frame)
     }
 

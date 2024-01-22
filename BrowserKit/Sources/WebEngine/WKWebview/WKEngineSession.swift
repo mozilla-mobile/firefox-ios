@@ -167,15 +167,18 @@ class WKEngineSession: NSObject, EngineSession {
         // Will be used as needed when we start using the engine session
         switch path {
         case .canGoBack:
-            break
+            delegate?.onNavigationStateChange(canGoBack: webView.canGoBack,
+                                              canGoForward: webView.canGoForward)
         case .canGoForward:
-            break
+            delegate?.onNavigationStateChange(canGoBack: webView.canGoBack,
+                                              canGoForward: webView.canGoForward)
         case .contentSize:
             break
         case .estimatedProgress:
-            break
+            delegate?.onProgress(progress: webView.estimatedProgress)
         case .loading:
-            break
+            guard let loading = change?[.newKey] as? Bool else { break }
+            delegate?.onLoadingStateChange(loading: loading)
         case .title:
             break
         case .URL:

@@ -105,7 +105,6 @@ class LegacyRemoteTabsTableViewController: UITableViewController, Themeable {
     }
 
     func applyTheme() {
-        tableView.separatorColor = themeManager.currentTheme.colors.layerLightGrey30
         if let delegate = tableViewDelegate as? LegacyRemoteTabsErrorDataSource {
             delegate.applyTheme(theme: themeManager.currentTheme)
         }

@@ -11,7 +11,6 @@ class CustomizeHomepageSectionCell: UICollectionViewCell, ReusableCell {
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
 
     private struct UX {
-        static let buttonFontSize: CGFloat = 15
         static let buttonTrailingSpace: CGFloat = 12
         static let buttonVerticalInset: CGFloat = 11
         static let buttonCornerRadius: CGFloat = 4
@@ -19,15 +18,7 @@ class CustomizeHomepageSectionCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - UI Elements
     private let goToSettingsButton: ActionButton = .build { button in
-        button.setTitle(.FirefoxHomepage.CustomizeHomepage.ButtonTitle, for: .normal)
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .subheadline,
-                                                                             size: UX.buttonFontSize)
         button.layer.cornerRadius = UX.buttonCornerRadius
-        button.accessibilityIdentifier = a11y.customizeHome
-        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
-                                                left: LegacyResizableButton.UX.buttonEdgeSpacing,
-                                                bottom: UX.buttonVerticalInset,
-                                                right: LegacyResizableButton.UX.buttonEdgeSpacing)
     }
 
     // MARK: - Initializers
@@ -66,7 +57,11 @@ class CustomizeHomepageSectionCell: UICollectionViewCell, ReusableCell {
     }
 
     func configure(onTapAction: ((UIButton) -> Void)?, theme: Theme) {
-        goToSettingsButton.touchUpAction = onTapAction
+        let goToSettingsButtonViewModel = ActionButtonViewModel(title: .FirefoxHomepage.CustomizeHomepage.ButtonTitle,
+                                                                a11yIdentifier: a11y.customizeHome,
+                                                                verticalInset: UX.buttonVerticalInset,
+                                                                touchUpAction: onTapAction)
+        goToSettingsButton.configure(viewModel: goToSettingsButtonViewModel)
         applyTheme(theme: theme)
     }
 }
@@ -85,8 +80,8 @@ extension CustomizeHomepageSectionCell: Blurrable {
 // MARK: - ThemeApplicable
 extension CustomizeHomepageSectionCell: ThemeApplicable {
     func applyTheme(theme: Theme) {
-        goToSettingsButton.backgroundColor = theme.colors.layer4
-        goToSettingsButton.setTitleColor(theme.colors.textPrimary, for: .normal)
+        goToSettingsButton.backgroundColorNormal = theme.colors.layer4
+        goToSettingsButton.foregroundColorNormal = theme.colors.textPrimary
 
         adjustBlur(theme: theme)
     }

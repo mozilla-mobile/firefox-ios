@@ -4,19 +4,23 @@
 
 import UIKit
 
-protocol BrowserSearchBarDelegate: AnyObject {
+struct SearchBarViewModel {
+    let placeholder: String
+}
+
+protocol SearchBarDelegate: AnyObject {
     func searchSuggestions(searchTerm: String)
     func openBrowser(searchTerm: String)
     func openSuggestions(searchTerm: String)
 }
 
-protocol BrowserMenuDelegate: AnyObject {
+protocol MenuDelegate: AnyObject {
     func didClickMenu()
 }
 
 class BrowserSearchBar: UIView, UISearchBarDelegate {
-    private weak var browserDelegate: BrowserSearchBarDelegate?
-    private weak var browserMenuDelegate: BrowserMenuDelegate?
+    private weak var searchBarDelegate: SearchBarDelegate?
+    private weak var menuDelegate: MenuDelegate?
 
     private lazy var searchBar: UISearchBar = .build { bar in
         bar.searchBarStyle = .minimal
@@ -41,11 +45,11 @@ class BrowserSearchBar: UIView, UISearchBarDelegate {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(browserDelegate: BrowserSearchBarDelegate,
-                   browserMenuDelegate: BrowserMenuDelegate) {
+    func configure(searchBarDelegate: SearchBarDelegate,
+                   menuDelegate: MenuDelegate) {
         self.searchBar.delegate = self
-        self.browserDelegate = browserDelegate
-        self.browserMenuDelegate = browserMenuDelegate
+        self.searchBarDelegate = searchBarDelegate
+        self.menuDelegate = menuDelegate
     }
 
     func setSearchBarText(_ text: String?) {
@@ -72,7 +76,7 @@ class BrowserSearchBar: UIView, UISearchBarDelegate {
 
     @objc
     private func didClickMenu() {
-        browserMenuDelegate?.didClickMenu()
+        menuDelegate?.didClickMenu()
     }
 
     private func setupSearchBar() {
@@ -101,17 +105,17 @@ class BrowserSearchBar: UIView, UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchText = searchBar.lowercased, !searchText.isEmpty else { return }
 
-        browserDelegate?.openBrowser(searchTerm: searchText)
+        searchBarDelegate?.openBrowser(searchTerm: searchText)
     }
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard let searchText = searchBar.lowercased else { return }
         searchBar.text = searchText
 
-        browserDelegate?.searchSuggestions(searchTerm: searchText)
+        searchBarDelegate?.searchSuggestions(searchTerm: searchText)
     }
 
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        browserDelegate?.openSuggestions(searchTerm: searchBar.lowercased ?? "")
+        searchBarDelegate?.openSuggestions(searchTerm: searchBar.lowercased ?? "")
     }
 }

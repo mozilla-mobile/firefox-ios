@@ -9,6 +9,7 @@ import Shared
 class ThemedTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
     var viewModel: ThemedTableViewCellViewModel?
     var cellStyle: UITableViewCell.CellStyle
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         self.cellStyle = style
         super.init(style: style, reuseIdentifier: reuseIdentifier)

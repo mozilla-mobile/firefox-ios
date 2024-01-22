@@ -17,7 +17,7 @@ class MockWKContentScript: WKContentScript {
 
     func scriptMessageHandlerNames() -> [String] {
         scriptMessageHandlerNamesCalled += 1
-        return ["Handler"]
+        return ["MockWKContentScriptHandler"]
     }
 
     func userContentController(_ userContentController: WKUserContentController,

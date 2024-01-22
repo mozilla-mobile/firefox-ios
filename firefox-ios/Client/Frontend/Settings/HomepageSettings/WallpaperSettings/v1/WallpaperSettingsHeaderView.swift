@@ -46,10 +46,8 @@ class WallpaperSettingsHeaderView: UICollectionReusableView, ReusableCell {
         label.numberOfLines = 0
     }
 
-    private lazy var learnMoreButton: LegacyResizableButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 12.0)
-        button.contentHorizontalAlignment = .leading
-        button.buttonEdgeSpacing = 0
+    private lazy var learnMoreButton: LinkButton = .build { button in
+        button.addTarget(self, action: #selector(self.buttonTapped), for: .touchUpInside)
     }
 
     // MARK: - Initializers
@@ -87,15 +85,18 @@ class WallpaperSettingsHeaderView: UICollectionReusableView, ReusableCell {
             contentStackView.addArrangedSubview(descriptionLabel)
         }
 
-        if viewModel.buttonTitle != nil,
+        if let buttonTitle = viewModel.buttonTitle,
            let buttonA11y = viewModel.buttonA11yIdentifier,
            viewModel.buttonAction != nil {
+            let learnMoreButtonViewModel = LinkButtonViewModel(
+                title: buttonTitle,
+                a11yIdentifier: buttonA11y,
+                fontSize: 12.0,
+                contentInsets: .zero
+            )
+            learnMoreButton.configure(viewModel: learnMoreButtonViewModel)
+
             setButtonStyle(theme: viewModel.theme)
-            learnMoreButton.addTarget(
-                self,
-                action: #selector((buttonTapped(_:))),
-                for: .touchUpInside)
-            learnMoreButton.accessibilityIdentifier = buttonA11y
 
             contentStackView.addArrangedSubview(learnMoreButton)
 

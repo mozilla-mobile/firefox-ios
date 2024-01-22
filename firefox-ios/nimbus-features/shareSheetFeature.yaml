@@ -13,11 +13,11 @@ features:
     defaults:
       - channel: developer
         value: {
-            "move-actions": true,
-            "toolbar-changes": true
+            "move-actions": false,
+            "toolbar-changes": false
         }
       - channel: beta
         value: {
-            "move-actions": true,
-            "toolbar-changes": true
+            "move-actions": false,
+            "toolbar-changes": false
         }

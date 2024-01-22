@@ -16,11 +16,11 @@ public protocol EngineSessionDelegate: AnyObject {
     func onTitleChange(title: String)
 
     /// Event to indicate the loading progress has been updated.
-    func onProgress(progress: Int)
+    func onProgress(progress: Double)
 
     /// Event to indicate there has been a navigation change.
-    func onNavigationStateChange(canGoBack: Bool?, canGoForward: Bool?)
+    func onNavigationStateChange(canGoBack: Bool, canGoForward: Bool)
 
-    /// Event to indicate that a url was loaded to this session.
-    func onLoadUrl()
+    /// Event to indicate the loading state has changed
+    func onLoadingStateChange(loading: Bool)
 }
