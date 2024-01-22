@@ -31,6 +31,7 @@ class TabManagerMiddleware {
             store.dispatch(TabPanelAction.didLoadTabPanel(tabState))
 
         case TabTrayAction.changePanel(let panelType):
+            self.trackPanelChange(panelType)
             let isPrivate = panelType == TabTrayPanelType.privateTabs
             let tabState = self.getTabsDisplayModel(for: isPrivate)
             if panelType != .syncedTabs {
@@ -112,6 +113,9 @@ class TabManagerMiddleware {
             store.dispatch(TabTrayAction.dismissTabTray)
 
         case RemoteTabsPanelAction.openSelectedURL(let url):
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .open,
+                                         object: .syncTab)
             let urlRequest = URLRequest(url: url)
             self.addNewTab(with: urlRequest, isPrivate: false)
             store.dispatch(TabTrayAction.dismissTabTray)
@@ -225,6 +229,10 @@ class TabManagerMiddleware {
     ///   - originIndex: from original position
     ///   - destinationIndex: to destination position
     private func moveTab(from originIndex: Int, to destinationIndex: Int) {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .drop,
+                                     object: .tab,
+                                     value: .tabTray)
         defaultTabManager.moveTab(isPrivate: false, fromIndex: originIndex, toIndex: destinationIndex)
     }
 
@@ -399,5 +407,28 @@ class TabManagerMiddleware {
 
     private func tabPeekCloseTab(with tabID: String) {
         closeTabFromTabPanel(with: tabID)
+    }
+
+    private func trackPanelChange(_ panel: TabTrayPanelType) {
+        switch panel {
+        case .tabs:
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .tap,
+                object: .privateBrowsingButton,
+                extras: ["is-private": false.description])
+        case .privateTabs:
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .tap,
+                object: .privateBrowsingButton,
+                extras: ["is-private": true.description])
+        case .syncedTabs:
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .libraryPanel,
+                                         value: .syncPanel,
+                                         extras: nil)
+        }
     }
 }

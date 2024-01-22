@@ -6,7 +6,8 @@ import UIKit
 import WebEngine
 
 protocol NavigationDelegate: AnyObject {
-    func onNavigationStateChange(canGoBack: Bool?, canGoForward: Bool?)
+    func onLoadingStateChange(loading: Bool)
+    func onNavigationStateChange(canGoBack: Bool, canGoForward: Bool)
 }
 
 // Holds different type of browser views, communicating through protocols with them
@@ -67,6 +68,10 @@ class BrowserViewController: UIViewController, EngineSessionDelegate {
         progressView.backgroundColor = .white
     }
 
+    private func updateProgressView(loading: Bool) {
+        progressView.isHidden = !loading
+    }
+
     // MARK: - Browser actions
 
     func goBack() {
@@ -116,15 +121,16 @@ class BrowserViewController: UIViewController, EngineSessionDelegate {
         // Handle onTitle and onURL changes with FXIOS-8179
     }
 
-    func onLoadUrl() {
-        // Handle onTitle and onURL changes with FXIOS-8179
+    func onLoadingStateChange(loading: Bool) {
+        navigationDelegate?.onLoadingStateChange(loading: loading)
+        updateProgressView(loading: loading)
     }
 
-    func onProgress(progress: Int) {
+    func onProgress(progress: Double) {
         progressView.setProgress(Float(progress), animated: true)
     }
 
-    func onNavigationStateChange(canGoBack: Bool?, canGoForward: Bool?) {
+    func onNavigationStateChange(canGoBack: Bool, canGoForward: Bool) {
         navigationDelegate?.onNavigationStateChange(canGoBack: canGoBack,
                                                     canGoForward: canGoForward)
     }

@@ -16,6 +16,10 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
     var allowsLinkPreview = true
     var isInspectable = true
 
+    var estimatedProgress: Double = 0
+    var canGoBack = false
+    var canGoForward = false
+
     // MARK: Test properties
     var loadCalled = 0
     var loadFileURLCalled = 0
