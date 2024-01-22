@@ -21,6 +21,11 @@
 		8A0F44832B56FE1300438589 /* UIAlertController+Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0F44822B56FE1300438589 /* UIAlertController+Error.swift */; };
 		8A0F44852B56FFFC00438589 /* SearchTerm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0F44842B56FFFC00438589 /* SearchTerm.swift */; };
 		8A0F44872B57000C00438589 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0F44862B57000C00438589 /* String+Extension.swift */; };
+		8A3DB32D2B5AD3C700F89705 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3DB32C2B5AD3C700F89705 /* SettingsViewController.swift */; };
+		8A3DB32F2B5AD3D400F89705 /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3DB32E2B5AD3D400F89705 /* SettingsCell.swift */; };
+		8A3DB3312B5AD3E000F89705 /* SettingsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3DB3302B5AD3E000F89705 /* SettingsDataSource.swift */; };
+		8A3DB3332B5AD3EC00F89705 /* SettingsCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3DB3322B5AD3EC00F89705 /* SettingsCellViewModel.swift */; };
+		8A3DB3352B5AD47500F89705 /* SettingsType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3DB3342B5AD47500F89705 /* SettingsType.swift */; };
 		8A4601E52B0FE20500FFD17F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4601E42B0FE20500FFD17F /* AppDelegate.swift */; };
 		8A4601E72B0FE20500FFD17F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4601E62B0FE20500FFD17F /* SceneDelegate.swift */; };
 		8A4601E92B0FE20500FFD17F /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4601E82B0FE20500FFD17F /* RootViewController.swift */; };
@@ -49,6 +54,11 @@
 		8A0F44822B56FE1300438589 /* UIAlertController+Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Error.swift"; sourceTree = "<group>"; };
 		8A0F44842B56FFFC00438589 /* SearchTerm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTerm.swift; sourceTree = "<group>"; };
 		8A0F44862B57000C00438589 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
+		8A3DB32C2B5AD3C700F89705 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		8A3DB32E2B5AD3D400F89705 /* SettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
+		8A3DB3302B5AD3E000F89705 /* SettingsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDataSource.swift; sourceTree = "<group>"; };
+		8A3DB3322B5AD3EC00F89705 /* SettingsCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCellViewModel.swift; sourceTree = "<group>"; };
+		8A3DB3342B5AD47500F89705 /* SettingsType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsType.swift; sourceTree = "<group>"; };
 		8A4601E12B0FE20500FFD17F /* SampleBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SampleBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A4601E42B0FE20500FFD17F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8A4601E62B0FE20500FFD17F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -129,6 +139,18 @@
 			path = Suggestion;
 			sourceTree = "<group>";
 		};
+		8A3DB32B2B5AD3B200F89705 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				8A3DB32C2B5AD3C700F89705 /* SettingsViewController.swift */,
+				8A3DB32E2B5AD3D400F89705 /* SettingsCell.swift */,
+				8A3DB3302B5AD3E000F89705 /* SettingsDataSource.swift */,
+				8A3DB3322B5AD3EC00F89705 /* SettingsCellViewModel.swift */,
+				8A3DB3342B5AD47500F89705 /* SettingsType.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
 		8A4601D82B0FE20500FFD17F = {
 			isa = PBXGroup;
 			children = (
@@ -167,6 +189,7 @@
 		8A4602142B0FE40E00FFD17F /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				8A3DB32B2B5AD3B200F89705 /* Settings */,
 				8A0F448A2B57053500438589 /* Suggestion */,
 				8A4602232B0FE57C00FFD17F /* Browser */,
 				8A4602152B0FE42300FFD17F /* Components */,
@@ -281,9 +304,11 @@
 				8A0F447B2B56FD8300438589 /* SearchDataProviderProtocol.swift in Sources */,
 				8A4602222B0FE55300FFD17F /* UIViewController+Extension.swift in Sources */,
 				8A0F44712B56FD3600438589 /* SearchViewController.swift in Sources */,
+				8A3DB3352B5AD47500F89705 /* SettingsType.swift in Sources */,
 				8A0F44832B56FE1300438589 /* UIAlertController+Error.swift in Sources */,
 				8A4602172B0FE43A00FFD17F /* BrowserSearchBar.swift in Sources */,
 				8A46021E2B0FE50D00FFD17F /* UIView+Extension.swift in Sources */,
+				8A3DB3332B5AD3EC00F89705 /* SettingsCellViewModel.swift in Sources */,
 				8A46021B2B0FE47C00FFD17F /* BrowserViewController.swift in Sources */,
 				8A0F44752B56FD5300438589 /* SearchViewModel.swift in Sources */,
 				8A0F44772B56FD6300438589 /* SuggestionDataSource.swift in Sources */,
@@ -292,7 +317,9 @@
 				8A0F447D2B56FD9600438589 /* SearchModel.swift in Sources */,
 				8A0F44872B57000C00438589 /* String+Extension.swift in Sources */,
 				8A0F44852B56FFFC00438589 /* SearchTerm.swift in Sources */,
+				8A3DB32F2B5AD3D400F89705 /* SettingsCell.swift in Sources */,
 				8A0F44792B56FD6E00438589 /* SuggestionCellViewModel.swift in Sources */,
+				8A3DB32D2B5AD3C700F89705 /* SettingsViewController.swift in Sources */,
 				8A4602192B0FE45200FFD17F /* BrowserToolbar.swift in Sources */,
 				8A0F44732B56FD4500438589 /* SuggestionViewController.swift in Sources */,
 				8A0F446B2B56EDC900438589 /* EngineProvider.swift in Sources */,
@@ -300,6 +327,7 @@
 				8A4601E72B0FE20500FFD17F /* SceneDelegate.swift in Sources */,
 				8A0F44812B56FDEA00438589 /* SearchDataProvider.swift in Sources */,
 				8A4602202B0FE52F00FFD17F /* UISearchbar+Extension.swift in Sources */,
+				8A3DB3312B5AD3E000F89705 /* SettingsDataSource.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
