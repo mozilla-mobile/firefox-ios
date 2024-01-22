@@ -41,7 +41,17 @@ class SearchSettingsUITests: BaseTestCase {
         mozWaitForElementToExist(app.buttons["Edit"])
         XCTAssertTrue(app.buttons["Edit"].isEnabled)
         app.buttons["Edit"].tap()
-        mozWaitForElementToExist(app.tables.buttons["Remove \(customSearchEngine["name"]!)"])
+        // Workaround for https://github.com/mozilla-mobile/firefox-ios/issues/18278
+        // Remove if/else after fix
+        if !iPad() {
+            mozWaitForElementToExist(app.tables.buttons["Remove \(customSearchEngine["name"]!)"])
+        } else {
+            navigator.goto(SettingsScreen)
+            navigator.goto(SearchSettings)
+            mozWaitForElementToExist(app.buttons["Edit"])
+            app.buttons["Edit"].tap()
+            mozWaitForElementToExist(app.tables.buttons["Remove \(customSearchEngine["name"]!)"])
+        }
     }
 
     private func addCustomSearchEngine() {
@@ -123,7 +133,18 @@ class SearchSettingsUITests: BaseTestCase {
         app.buttons["Edit"].tap()
         // Remove the custom search engine and check that edit is disabled
         let tablesQuery = app.tables
-        tablesQuery.buttons["Remove \(customSearchEngine["name"]!)"].tap()
+        // Workaround for https://github.com/mozilla-mobile/firefox-ios/issues/18278
+        // Remove if/else after fix
+        if !iPad() {
+            tablesQuery.buttons["Remove \(customSearchEngine["name"]!)"].tap()
+        } else {
+            navigator.goto(SettingsScreen)
+            navigator.goto(SearchSettings)
+            mozWaitForElementToExist(app.buttons["Edit"])
+            app.buttons["Edit"].tap()
+            mozWaitForElementToExist(tablesQuery.buttons["Remove \(customSearchEngine["name"]!)"])
+            tablesQuery.buttons["Remove \(customSearchEngine["name"]!)"].tap()
+        }
         tablesQuery.buttons[AccessibilityIdentifiers.Settings.Search.deleteButton].tap()
         XCTAssertFalse(app.buttons["Edit"].isEnabled)
     }
