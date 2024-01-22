@@ -15,8 +15,6 @@ struct TabModel: Equatable {
     let screenshot: UIImage?
     let hasHomeScreenshot: Bool
 
-    let margin: CGFloat // (Changes depending on fullscreen)
-
     static func emptyTabState(tabUUID: String, title: String) -> TabModel {
         return TabModel(
             tabUUID: tabUUID,
@@ -26,8 +24,7 @@ struct TabModel: Equatable {
             tabTitle: title,
             url: nil,
             screenshot: nil,
-            hasHomeScreenshot: false,
-            margin: 0.0
+            hasHomeScreenshot: false
         )
     }
 }
