@@ -184,8 +184,7 @@ class TabManagerMiddleware {
                                     tabTitle: tab.displayTitle,
                                     url: tab.url,
                                     screenshot: tab.screenshot,
-                                    hasHomeScreenshot: tab.hasHomeScreenshot,
-                                    margin: 0)
+                                    hasHomeScreenshot: tab.hasHomeScreenshot)
             tabs.append(tabModel)
         }
 
