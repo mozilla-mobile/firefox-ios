@@ -694,9 +694,6 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filtre";
 
-/* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "Els inicis de sessió desats es mostraran aquí. Si heu desat inicis de sessió al Firefox en un altre dispositiu, inicieu la sessió al vostre compte del Firefox.";
-
 /* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
 "LoginsList.NoLoginsFound.Description.v119" = "Els inicis de sessió desats es mostraran aquí. Si heu desat inicis de sessió al %@ en un altre dispositiu, inicieu la sessió al vostre compte.";
 
@@ -1068,15 +1065,6 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "D'acord";
-
-/* Accessibility label for default search engine setting. */
-"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Motor de cerca per defecte";
-
-/* Title for default search engine settings section. */
-"SearchSettings.Title.DefaultSearchEngine.v106" = "Motor de cerca per defecte";
-
-/* Navigation title for search settings. */
-"SearchSettings.Title.Search.v106" = "Cerca";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Voleu enviar un informe de fallada perquè Mozilla pugui solucionar el problema?";

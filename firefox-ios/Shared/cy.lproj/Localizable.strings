@@ -694,9 +694,6 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Hidl";
 
-/* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "Bydd mewngofnodi wedi'u cadw yn ymddangos yma. Os ydych wedi cadw eich mewngofnodion i Firefox ar ddyfais wahanol, mewngofnodwch i'ch Cyfrif Firefox.";
-
 /* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
 "LoginsList.NoLoginsFound.Description.v119" = "Bydd mewngofnodi wedi'u cadw yn ymddangos yma. Os ydych wedi cadw eich mewngofnodion i %@ ar ddyfais wahanol, mewngofnodwch i'ch Cyfrif Firefox.";
 
@@ -1068,15 +1065,6 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "Iawn";
-
-/* Accessibility label for default search engine setting. */
-"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Peiriant Chwilio Rhagosodedig";
-
-/* Title for default search engine settings section. */
-"SearchSettings.Title.DefaultSearchEngine.v106" = "Peiriant Chwilio Rhagosodedig";
-
-/* Navigation title for search settings. */
-"SearchSettings.Title.Search.v106" = "Chwilio";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Anfon adroddiad chwalu fel bod modd i Mozilla drwsio'r anhawster?";

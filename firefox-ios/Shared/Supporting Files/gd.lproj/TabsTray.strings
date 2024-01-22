@@ -10,6 +10,3 @@
 /* This is the swipe action title for closing an inactive tab by swiping, located in the Inactive Tabs section of the Tabs Tray */
 "InactiveTabs.TabTray.CloseSwipeActionTitle.v115" = "Dùin";
 
-/* Button label to sync tabs in your Firefox Account */
-"TabsTray.SyncTabs.SyncTabsButton.Title.v109" = "Sioncronaich na tabaichean";
-

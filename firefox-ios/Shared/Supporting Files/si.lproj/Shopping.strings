@@ -7,9 +7,6 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears after the user has opted in for the Shopping feature. It indicates that a user can directly open the review checker by tapping the text of the action. */
 "ContextualHints.Shopping.OptedInAction.v120" = "සමාලෝචන සෝදිසිකරු අරින්න";
 
-/* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
-"Shopping.AdjustedRating.Description.v120" = "අවිශ්වසනීය සමාලෝචන ඉවත් කර ඇත";
-
 /* Accessibility label, associated to adjusted rating stars. %@ is a decimal value from 0 to 5 that will only use a tenth (example: 3.5). */
 "Shopping.AdjustedRating.StarsAccessibilityLabel.v120" = "තරු 5 න් %@";
 
@@ -63,12 +60,6 @@
 
 /* Title for card displayed when a shopping product has not been analysed yet. */
 "Shopping.NoAnalysisCard.HeadlineLabel.Title.v120" = "මෙම සමාලෝචන ගැන තවමත් තොරතුරු නැත";
-
-/* Description for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
-"Shopping.NoAnalysisCard.InProgress.Body.Label.v120" = "මෙයට තත්. 60 ක් පමණ ගත වනු ඇත.";
-
-/* Title for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
-"Shopping.NoAnalysisCard.InProgress.Headline.Title.v120" = "සමාලෝචනයේ ගුණත්‍වය පරීක්‍ෂා වෙමින්";
 
 /* Label for the Learn more button in the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.LearnMoreButtonTitle.Title.v120" = "තව දැනගන්න";

@@ -694,9 +694,6 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Zizdeg";
 
-/* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "Inekcamen ittwaskelsen ad ttwaseknen da. Ma yella teskelseḍ inekcam-inek·inem Firefox deg ibenk-nniḍen, qqen ɣer umiḍan Firefox.";
-
 /* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
 "LoginsList.NoLoginsFound.Description.v119" = "Inekcamen ittwaskelsen ad ttwaseknen da. Ma yella teskelseḍ inekcam-ik·im ɣer %@ deg ibenk niḍen, qqen ɣer umiḍan-ik.";
 
@@ -1068,15 +1065,6 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "Ih";
-
-/* Accessibility label for default search engine setting. */
-"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Amsedday n unadi amezwer";
-
-/* Title for default search engine settings section. */
-"SearchSettings.Title.DefaultSearchEngine.v106" = "Amsedday n unadi amezwer";
-
-/* Navigation title for search settings. */
-"SearchSettings.Title.Search.v106" = "Nadi";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Azen aneqqis n uɣelluy akken Mozilla ad tefru ugur?";
