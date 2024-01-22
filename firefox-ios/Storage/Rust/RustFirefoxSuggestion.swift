@@ -21,7 +21,6 @@ public struct RustFirefoxSuggestion {
     public let iconImage: UIImage?
     public let fullKeyword: String
     public let clickInfo: RustFirefoxSuggestionInteractionInfo?
-    public let score: Float?
 
     public init(title: String, url: URL, isSponsored: Bool, iconImage: UIImage?, fullKeyword: String) {
         self.title = title
@@ -30,7 +29,6 @@ public struct RustFirefoxSuggestion {
         self.iconImage = iconImage
         self.fullKeyword = fullKeyword
         self.clickInfo = nil
-        self.score = nil
     }
 
     internal init?(_ suggestion: Suggestion) {
@@ -53,7 +51,7 @@ public struct RustFirefoxSuggestion {
             _,
             clickUrlString,
             _,
-            score,
+            _,
         ) = suggestion {
             // This use of `URL(string:)` is OK; we don't need to use
             // `URL(string:encodingInvalidCharacters:)` here.
@@ -69,7 +67,6 @@ public struct RustFirefoxSuggestion {
                 iabCategory: iabCategory,
                 reportingURL: URL(string: clickUrlString)
             )
-            self.score = score
         } else if case let .wikipedia(title, urlString, iconBytes, fullKeyword) = suggestion {
             // This use of `URL(string:)` is OK.
             guard let url = URL(string: urlString) else { return nil }
