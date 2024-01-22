@@ -5,7 +5,7 @@ import XCTest
 
 class FakespotTests: IphoneOnlyTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307128
-    func testFakespotAvailable() throws {
+    func testFakespotAvailable() {
         reachReviewChecker()
         mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
         XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle].label, "Review Checker")
@@ -17,7 +17,7 @@ class FakespotTests: IphoneOnlyTestCase {
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2358865
     // Smoketest
-    func testReviewQualityCheckBottomSheetUI() throws {
+    func testReviewQualityCheckBottomSheetUI() {
         reachReviewChecker()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton])
         app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton].tap()
@@ -44,26 +44,24 @@ class FakespotTests: IphoneOnlyTestCase {
 
     private func validateHighlightsSection() {
         if app.staticTexts[AccessibilityIdentifiers.Shopping.HighlightsCard.title].exists {
-            XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.HighlightsCard.title].label,
-                           "Highlights from recent reviews")
+            let highlights = AccessibilityIdentifiers.Shopping.HighlightsCard.self
+            XCTAssertEqual(app.staticTexts[highlights.title].label, "Highlights from recent reviews")
             if app.staticTexts["Show More"].exists {
                 app.staticTexts["Show More"].tap()
-                let highlights = AccessibilityIdentifiers.Shopping.HighlightsCard.self
-                if app.staticTexts[highlights.groupPriceTitle].exists {
-                    XCTAssertEqual(app.staticTexts[highlights.groupPriceTitle].label,
-                                   "Price")
-                } else if app.staticTexts[highlights.groupQualityTitle].exists {
-                    XCTAssertEqual(app.staticTexts[highlights.groupQualityTitle].label,
-                                   "Quality")
-                } else if app.staticTexts[highlights.groupShippingTitle].exists {
-                    XCTAssertEqual(app.staticTexts[highlights.groupShippingTitle].label,
-                                   "Shipping")
-                } else if app.staticTexts[highlights.groupPackagingTitle].exists {
-                    XCTAssertEqual(app.staticTexts[highlights.groupPackagingTitle].label,
-                                   "Packaging")
-                } else if app.staticTexts[highlights.groupCompetitivenessTitle].exists {
-                    XCTAssertEqual(app.staticTexts[highlights.groupCompetitivenessTitle].label,
-                                   "Competitiveness")
+                let isVisible = true
+                switch isVisible {
+                case app.staticTexts[highlights.groupPriceTitle].exists:
+                    XCTAssertEqual(app.staticTexts[highlights.groupPriceTitle].label, "Price")
+                case app.staticTexts[highlights.groupQualityTitle].exists:
+                    XCTAssertEqual(app.staticTexts[highlights.groupQualityTitle].label, "Quality")
+                case app.staticTexts[highlights.groupShippingTitle].exists:
+                    XCTAssertEqual(app.staticTexts[highlights.groupQualityTitle].label, "Shipping")
+                case app.staticTexts[highlights.groupPackagingTitle].exists:
+                    XCTAssertEqual(app.staticTexts[highlights.groupQualityTitle].label, "Packaging")
+                case app.staticTexts[highlights.groupCompetitivenessTitle].exists:
+                    XCTAssertEqual(app.staticTexts[highlights.groupQualityTitle].label, "Competitiveness")
+                default:
+                    break
                 }
                 scrollToElement(app.staticTexts["Show Less"])
                 app.staticTexts["Show Less"].tap()
@@ -75,6 +73,18 @@ class FakespotTests: IphoneOnlyTestCase {
     }
 
     private func reachReviewChecker() {
+        loadWebsiteAndSelectFirstResult()
+        let shoppingButton = app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton]
+
+        // Retry loading the page if shopping button is not visible
+        while !shoppingButton.exists {
+            loadWebsiteAndSelectFirstResult()
+        }
+        // Tap the shopping cart icon
+        app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton].tap()
+    }
+
+    private func loadWebsiteAndSelectFirstResult() {
         navigator.openURL("https://www.amazon.com")
         waitUntilPageLoad()
 
@@ -84,14 +94,13 @@ class FakespotTests: IphoneOnlyTestCase {
         mozWaitForElementToExist(searchAmazon)
         XCTAssert(searchAmazon.isEnabled)
         searchAmazon.tap()
+        if !app.keyboards.element.isHittable {
+            searchAmazon.tap()
+        }
         searchAmazon.typeText("Shoe")
         website.buttons["Go"].tap()
         waitUntilPageLoad()
         website.images.firstMatch.tap()
-
-        // Tap the shopping cart icon
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton])
-        app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton].tap()
     }
 }

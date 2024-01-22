@@ -1129,7 +1129,7 @@ extension String {
             public static let Description = MZLocalizedString(
                 key: "Onboarding.Sync.Description.v123",
                 tableName: "Onboarding",
-                value: "%@ encrypts your passwords, bookmarks, and more when you're synced.",
+                value: "%@ encrypts your passwords, bookmarks, and more when you’re synced.",
                 comment: "String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name.")
             public static let SignInAction = MZLocalizedString(
                 key: "Onboarding.Sync.SignIn.Action.v114",
@@ -4131,12 +4131,12 @@ extension String {
         public static let OptInCardPrivacyPolicy = MZLocalizedString(
             key: "Shopping.OptInCard.PrivacyPolicy.Button.Title.v123",
             tableName: "Shopping",
-            value: "%@'s privacy notice",
+            value: "%@’s privacy notice",
             comment: "Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Firefox app name.")
         public static let OptInCardTermsOfUse = MZLocalizedString(
             key: "Shopping.OptInCard.TermsOfUse.Button.Title.v123",
             tableName: "Shopping",
-            value: "%@'s terms of use",
+            value: "%@’s terms of use",
             comment: "Show Fakespot Terms of Use page in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Fakespot name.")
         public static let OptInCardMainButtonTitle = MZLocalizedString(
             key: "Shopping.OptInCard.MainButton.Title.v120",

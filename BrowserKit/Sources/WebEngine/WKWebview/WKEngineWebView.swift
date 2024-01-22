@@ -23,6 +23,10 @@ protocol WKEngineWebView: UIView {
     var scrollView: UIScrollView { get }
     var engineConfiguration: WKEngineConfiguration { get }
 
+    var estimatedProgress: Double { get }
+    var canGoBack: Bool { get }
+    var canGoForward: Bool { get }
+
     @available(iOS 16.4, *)
     var isInspectable: Bool { get set }
 
