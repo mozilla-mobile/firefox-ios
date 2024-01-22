@@ -72,6 +72,7 @@ public struct StandardImageIdentifiers {
         public static let sync = "syncLarge"
         public static let tabTray = "tabTrayLarge"
         public static let warningFill = "warningFillLarge"
+        public static let whatsNew = "whatsNewLarge"
     }
 
     // Icon size 30x30

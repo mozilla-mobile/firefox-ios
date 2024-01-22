@@ -549,7 +549,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         }
 
         whatsNewAction = SingleActionViewModel(title: .AppMenu.WhatsNewString,
-                                               iconString: ImageIdentifiers.whatsNew,
+                                               iconString: StandardImageIdentifiers.Large.whatsNew,
                                                isEnabled: showBadgeForWhatsNew) { _ in
             if let whatsNewURL = SupportUtils.URLForWhatsNew {
                 TelemetryWrapper.recordEvent(category: .action, method: .open, object: .whatsNew)

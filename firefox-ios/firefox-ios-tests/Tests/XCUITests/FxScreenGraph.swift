@@ -1086,7 +1086,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
 
         screenState.tap(
-            app.tables.otherElements[ImageIdentifiers.whatsNew],
+            app.tables.otherElements[StandardImageIdentifiers.Large.whatsNew],
             forAction: Action.OpenWhatsNewPage
         ) { userState in
         }
