@@ -392,10 +392,10 @@
 "fxa.signin.qr-link-instruction" = "Spustite Firefox na svojom počítači a navštívte stránku firefox.com/pair";
 
 /* FxA sign in view qr code scan button */
-"fxa.signin.ready-to-scan" = "Pripravené na skenovanie";
+"fxa.signin.ready-to-scan" = "Pripravené na zosnímanie";
 
 /* FxA sign in view email login button */
-"fxa.signin.use-email-instead" = "Použiť radšej e-mailovú adresu";
+"fxa.signin.use-email-instead" = "Použiť radšej e‑mailovú adresu";
 
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "Synchronizovať";
@@ -530,7 +530,7 @@
 "Increase text size" = "Zväčšiť veľkosť textu";
 
 /* Relative time for a tab that was visited within the last few moments. */
-"just now" = "teraz";
+"just now" = "práve teraz";
 
 /* A label indicating the keyboard shortcut of resetting a web page's view to the standard viewing size. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ActualSize" = "Skutočná veľkosť";
@@ -693,9 +693,6 @@
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filtrovať";
-
-/* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "Tu sa zobrazia uložené prihlasovacie údaje. Ak ste prihlasovacie údaje do prehliadača Firefox uložili na inom zariadení, prihláste sa do svojho účtu Firefox.";
 
 /* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
 "LoginsList.NoLoginsFound.Description.v119" = "Tu sa zobrazia uložené prihlasovacie údaje. Ak ste prihlasovacie údaje do prehliadača %@ uložili na inom zariadení, prihláste sa do svojho účtu.";
@@ -1069,15 +1066,6 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "OK";
 
-/* Accessibility label for default search engine setting. */
-"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Predvolený vyhľadávací modul";
-
-/* Title for default search engine settings section. */
-"SearchSettings.Title.DefaultSearchEngine.v106" = "Predvolený vyhľadávací modul";
-
-/* Navigation title for search settings. */
-"SearchSettings.Title.Search.v106" = "Vyhľadávanie";
-
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Odoslať hlásenie o zlyhaní, aby mohla Mozilla opraviť problém?";
 
@@ -1433,10 +1421,10 @@
 "Settings.OfferClipboardBar.Title" = "Ponúknuť otvorenie skopírovaných odkazov";
 
 /* Title for Open With Settings */
-"Settings.OpenWith.PageTitle" = "Otvárať e-mailové odkazy pomocou";
+"Settings.OpenWith.PageTitle" = "Otvárať e‑mailové odkazy pomocou";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
-"Settings.OpenWith.SectionName" = "Aplikácia e-mailu";
+"Settings.OpenWith.SectionName" = "Aplikácia Mail";
 
 /* Touch ID prompt subtitle when accessing logins and passwords */
 "Settings.Passwords.FingerPrintReason.v103" = "Na prístup k heslám použite odtlačok prsta.";

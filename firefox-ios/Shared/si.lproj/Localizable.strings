@@ -694,9 +694,6 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "පෙරහන";
 
-/* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "සුරැකි පිවිසුම් මෙහි පෙන්වනු ඇත. ෆයර්ෆොක්ස් වෙත පිවිසුම් වෙනත් උපාංගයක සුරැකුවේ නම්, ඔබගේ ෆයර්ෆොක්ස් ගිණුමට පිවිසෙන්න.";
-
 /* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
 "LoginsList.NoLoginsFound.Description.v119" = "සුරැකි පිවිසුම් මෙහි පෙන්වනු ඇත. %@ වෙත පිවිසුම් වෙනත් උපාංගයක සුරැකුවේ නම්, ඔබගේ ගිණුමට පිවිසෙන්න.";
 
@@ -1062,15 +1059,6 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "හරි";
-
-/* Accessibility label for default search engine setting. */
-"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "පෙරනිමි සෙවුම් එළවුම";
-
-/* Title for default search engine settings section. */
-"SearchSettings.Title.DefaultSearchEngine.v106" = "පෙරනිමි සෙවුම් එළවුම";
-
-/* Navigation title for search settings. */
-"SearchSettings.Title.Search.v106" = "සොයන්න";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "ගැටලුව විසඳීමට මොසිල්ලා වෙත බිඳ වැටීමේ වාර්තාවක් යවන්නද?";

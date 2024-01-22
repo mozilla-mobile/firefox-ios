@@ -766,9 +766,6 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "D'acòrd";
 
-/* Navigation title for search settings. */
-"SearchSettings.Title.Search.v106" = "Recercar";
-
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Enviar un rapòrt de plantatge que Mozilla pòsca corregir lo problèma ?";
 

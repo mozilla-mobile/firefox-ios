@@ -694,9 +694,6 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "סינון";
 
-/* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "כניסות שמורות תופענה כאן. אם שמרת את הכניסות שלך ב־Firefox על מכשיר אחר, יש להתחבר לחשבון ה־Firefox שלך.";
-
 /* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
 "LoginsList.NoLoginsFound.Description.v119" = "כניסות שמורות תופענה כאן. אם שמרת את הכניסות שלך ב־%@ על מכשיר אחר, יש להתחבר לחשבון שלך.";
 
@@ -1065,15 +1062,6 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "אישור";
-
-/* Accessibility label for default search engine setting. */
-"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "מנוע חיפוש ברירת מחדל";
-
-/* Title for default search engine settings section. */
-"SearchSettings.Title.DefaultSearchEngine.v106" = "מנוע חיפוש ברירת מחדל";
-
-/* Navigation title for search settings. */
-"SearchSettings.Title.Search.v106" = "חיפוש";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "האם לשלוח דיווח קריסה אל Mozilla כדי לסייע בתיקון הבעיה?";

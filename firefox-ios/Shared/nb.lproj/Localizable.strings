@@ -694,9 +694,6 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filter";
 
-/* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "Lagrede innlogginger vises her. Hvis du lagret innloggingene dine i Firefox på en annen enhet, logger du inn på Firefox-kontoen din.";
-
 /* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
 "LoginsList.NoLoginsFound.Description.v119" = "Lagrede innlogginger vises her. Hvis du lagret innloggingene dine i %@ på en annen enhet, logger du inn på kontoen din.";
 
@@ -1068,15 +1065,6 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "OK";
-
-/* Accessibility label for default search engine setting. */
-"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Standard søkemotor";
-
-/* Title for default search engine settings section. */
-"SearchSettings.Title.DefaultSearchEngine.v106" = "Standard søkemotor";
-
-/* Navigation title for search settings. */
-"SearchSettings.Title.Search.v106" = "Søk";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Send en krasjrapport slik at Mozilla kan ordna problemet?";
