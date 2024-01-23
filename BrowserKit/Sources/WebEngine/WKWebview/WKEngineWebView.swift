@@ -15,6 +15,8 @@ protocol WKEngineWebViewDelegate: AnyObject {
 /// Abstraction on top of the `WKWebView`
 protocol WKEngineWebView: UIView {
     var navigationDelegate: WKNavigationDelegate? { get set }
+    var uiDelegate: WKUIDelegate? { get set }
+
     var allowsBackForwardNavigationGestures: Bool { get set }
     var allowsLinkPreview: Bool { get set }
     var backgroundColor: UIColor? { get set }
