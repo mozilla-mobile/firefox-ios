@@ -310,11 +310,7 @@ class QRCodeViewController: UIViewController {
     }
 
     private func dismissController(_ completion: (() -> Void)? = nil) {
-        if CoordinatorFlagManager.isQRCodeCoordinatorEnabled {
-            dismissHandler?.dismiss(completion)
-        } else {
-            dismiss(animated: true, completion: completion)
-        }
+        dismissHandler?.dismiss(completion)
     }
 }
 

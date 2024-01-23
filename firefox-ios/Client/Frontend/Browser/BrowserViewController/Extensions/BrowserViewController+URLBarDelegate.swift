@@ -170,14 +170,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressQRButton(_ urlBar: URLBarView) {
-        if CoordinatorFlagManager.isQRCodeCoordinatorEnabled {
-            navigationHandler?.showQRCode(delegate: self)
-        } else {
-            let qrCodeViewController = QRCodeViewController()
-            qrCodeViewController.qrCodeDelegate = self
-            let controller = QRCodeNavigationController(rootViewController: qrCodeViewController)
-            self.present(controller, animated: true, completion: nil)
-        }
+        navigationHandler?.showQRCode(delegate: self)
     }
 
     func urlBarDidTapShield(_ urlBar: URLBarView) {

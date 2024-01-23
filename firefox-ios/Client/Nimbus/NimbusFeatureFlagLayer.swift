@@ -59,9 +59,6 @@ final class NimbusFeatureFlagLayer {
         case .preferSwitchToOpenTabOverDuplicate:
             return checkPreferSwitchToOpenTabOverDuplicate(from: nimbus)
 
-        case .qrCodeCoordinatorRefactor:
-            return checkQRCodeCoordinatorRefactorFeature(from: nimbus)
-
         case .reduxSearchSettings:
             return checkReduxSearchSettingsFeature(from: nimbus)
 
@@ -145,10 +142,6 @@ final class NimbusFeatureFlagLayer {
 
         guard let status = config.featuresEnabled[nimbusID] else { return false }
         return status
-    }
-
-    private func checkQRCodeCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.qrCodeCoordinatorRefactor.value().enabled
     }
 
     private func checkTabTrayRefactorFeature(from nimbus: FxNimbus) -> Bool {
