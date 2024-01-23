@@ -694,9 +694,6 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Ayak";
 
-/* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "Login anu diteundeun bakal némbongan di dieu. Lamun anjeun neundeun login ka Firefox di séjén paranti, asup ka Firefox Account.";
-
 /* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
 "LoginsList.NoLoginsFound.Description.v119" = "Login anu diteundeun bakal némbongan di dieu. Lamun anjeun neundeun login ka %@ di séjén piranti, asup ka akun anjeun.";
 
@@ -1068,15 +1065,6 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "OKÉH";
-
-/* Accessibility label for default search engine setting. */
-"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Mesin Pamaluruh Baku";
-
-/* Title for default search engine settings section. */
-"SearchSettings.Title.DefaultSearchEngine.v106" = "Mesin Pamaluruh Baku";
-
-/* Navigation title for search settings. */
-"SearchSettings.Title.Search.v106" = "Paluruh";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Kirim laporan karuksakan sangkan Mozilla bisa ngoméan masalahna?";

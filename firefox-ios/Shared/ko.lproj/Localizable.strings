@@ -694,9 +694,6 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "필터";
 
-/* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "저장된 로그인이 여기에 보여집니다. 다른 기기의 Firefox에서 로그인을 저장했다면 Firefox 계정에 로그인 하세요.";
-
 /* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
 "LoginsList.NoLoginsFound.Description.v119" = "저장된 로그인이 여기에 표시됩니다. 다른 기기에서 %@에 대한 로그인을 저장한 경우 계정에 로그인하세요.";
 
@@ -1068,15 +1065,6 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "확인";
-
-/* Accessibility label for default search engine setting. */
-"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "기본 검색 엔진";
-
-/* Title for default search engine settings section. */
-"SearchSettings.Title.DefaultSearchEngine.v106" = "기본 검색 엔진";
-
-/* Navigation title for search settings. */
-"SearchSettings.Title.Search.v106" = "검색";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Mozilla가 문제를 고칠 수 있도록 보고서를 전송하시겠습니까?";

@@ -625,9 +625,6 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "फिल्टर";
 
-/* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "सुरक्षित गरिएका लगइनहरू यहाँ देखिने छन्। यदि तपाईंले आफ्नो लगइनहरू Firefox मा फरक यन्त्रमा सुरक्षित गर्नुभयो भने, आफ्नो Firefox खातामा साइन इन गर्नुहोस्।";
-
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "कुनै पनि लगइनहरु फेला परेनन्";
 

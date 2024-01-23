@@ -7,9 +7,6 @@
 /* Title label for the Fakespot Ad card. This is displayed above a product image, suggested as an alternative to the product reviewed. */
 "Shopping.AdCard.Title.v121" = "Més productes a tenir en compte";
 
-/* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
-"Shopping.AdjustedRating.Description.v120" = "S’han eliminat les ressenyes poc fiables";
-
 /* Button text of the confirmation displayed in the shopping review quality bottom sheet. */
 "Shopping.ConfirmationCard.Button.Text.v120" = "Entesos";
 
@@ -87,12 +84,6 @@
 
 /* Title for card displayed when a shopping product has not been analysed yet. */
 "Shopping.NoAnalysisCard.HeadlineLabel.Title.v120" = "Encara no hi ha informació sobre aquestes ressenyes";
-
-/* Description for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
-"Shopping.NoAnalysisCard.InProgress.Body.Label.v120" = "Això pot trigar uns 60 segons.";
-
-/* Title for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
-"Shopping.NoAnalysisCard.InProgress.Headline.Title.v120" = "S'està comprovant la qualitat de les ressenyes";
 
 /* Label for the Learn more button in the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.LearnMoreButtonTitle.Title.v120" = "Més informació";

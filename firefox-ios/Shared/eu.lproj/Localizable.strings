@@ -694,9 +694,6 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Iragazkia";
 
-/* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "Gordetako saio-hasierak hemen agertuko dira. Beste gailu bateko Firefoxen saio-hasierak gorde badituzu, hasi saioa zure Firefox kontuan.";
-
 /* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
 "LoginsList.NoLoginsFound.Description.v119" = "Gordetako saio-hasierak hemen agertuko dira. Beste gailu bateko %@(e)n saio-hasierak gorde badituzu, hasi saioa zure kontuan.";
 
@@ -1068,15 +1065,6 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "Ados";
-
-/* Accessibility label for default search engine setting. */
-"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Bilaketa-motor lehenetsia";
-
-/* Title for default search engine settings section. */
-"SearchSettings.Title.DefaultSearchEngine.v106" = "Bilaketa-motor lehenetsia";
-
-/* Navigation title for search settings. */
-"SearchSettings.Title.Search.v106" = "Bilatu";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Bidali hutsegite-txostena Mozillari arazoa konpondu ahal izateko?";

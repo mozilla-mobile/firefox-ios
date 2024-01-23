@@ -326,7 +326,7 @@ extension BrowserViewController: WKUIDelegate {
 
                     actions.append(UIAction(
                         title: .ContextMenuShareLink,
-                        image: UIImage.templateImageNamed(ImageIdentifiers.share),
+                        image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.shareApple),
                         identifier: UIAction.Identifier("linkContextMenu.share")
                     ) { _ in
                         guard let tab = self.tabManager[webView],
