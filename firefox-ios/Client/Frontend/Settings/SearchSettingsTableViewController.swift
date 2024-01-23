@@ -131,14 +131,12 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
 
     func newState(state: SearchSettingsState) {
         searchSettingsState = state
-        ensureMainThread {
-            self.navigationItem.title = .Settings.Search.Title
-
-            // To allow re-ordering the list of search engines at all times.
-            self.tableView.isEditing = true
-            // So that we push the default search engine controller on selection.
-            self.tableView.allowsSelectionDuringEditing = true
-        }
+        self.navigationItem.title = .Settings.Search.Title
+        
+        // To allow re-ordering the list of search engines at all times.
+        self.tableView.isEditing = true
+        // So that we push the default search engine controller on selection.
+        self.tableView.allowsSelectionDuringEditing = true
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
