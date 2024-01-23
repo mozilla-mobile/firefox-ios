@@ -182,7 +182,8 @@ class HistoryTests: BaseTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307479
-    func testRemoveAllTabsButtonRecentlyClosedHistory() {
+    // Disabling test due to https://github.com/mozilla-mobile/firefox-ios/issues/16810 crash
+ /*   func testRemoveAllTabsButtonRecentlyClosedHistory() {
         // Open "Book of Mozilla"
         openBookOfMozilla()
 
@@ -199,7 +200,7 @@ class HistoryTests: BaseTestCase {
         mozWaitForElementToExist(app.tables["Recently Closed Tabs List"], timeout: TIMEOUT)
         XCTAssertTrue(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
     }
-
+*/
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307482
     func testClearRecentlyClosedHistory() {
         // Open "Book of Mozilla" and close the tab

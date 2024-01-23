@@ -75,10 +75,15 @@ class DomainAutocompleteTests: BaseTestCase {
         // The autocomplete does not display the history item from the DB. Workaroud is to manually visit "mozilla.org".
         navigator.openURL("mozilla.org")
         waitUntilPageLoad()
-
         navigator.goto(TabTray)
-        navigator.goto(CloseTabMenu)
-        navigator.performAction(Action.AcceptRemovingAllTabs)
+
+        // Workaround to avoid https://github.com/mozilla-mobile/firefox-ios/issues/16810 crash
+        // navigator.goto(CloseTabMenu)
+        // navigator.performAction(Action.AcceptRemovingAllTabs)
+        mozWaitForElementToExist(app.collectionViews.buttons["crossLarge"])
+        app.collectionViews.buttons["crossLarge"].tap()
+        navigator.nowAt(HomePanelsScreen)
+
         navigator.goto(URLBarOpen)
         mozWaitForElementToExist(app.textFields["address"])
         app.textFields["address"].typeText("moz")
