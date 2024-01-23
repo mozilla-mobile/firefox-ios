@@ -16,7 +16,7 @@ def get_screenshots_locales():
     config = {"locales": []}
 
     # Check all *.lproj files as there is one per locale
-    for file in os.listdir(os.path.join(project_dir, 'Blockzilla')):
+    for file in os.listdir(os.path.join(project_dir, 'focus-ios/Blockzilla')):
         if file.endswith(".lproj"):
                 config["locales"].append(file)
 

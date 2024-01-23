@@ -7,23 +7,23 @@ loader: focusios_taskgraph.loader.screenshots_locales:loader
 transforms:
     - focusios_taskgraph.transforms.bitrise:transforms
     - focusios_taskgraph.transforms.secrets:transforms
-    - taskgraph.transforms.job:transforms
+    - taskgraph.transforms.run:transforms
     - taskgraph.transforms.task:transforms
 
 kind-dependencies:
-    - build
+    - build-focus
 
 not-for-locales:
     - en-US   # Already built as part of the build task
 
 locales-per-chunk: 6
 
-job-defaults:
+task-defaults:
     bitrise-workflow: L10nScreenshotsTests
     build-derived-data-path: {artifact-reference: '<build/public/build/target.zip>'}
     description: Generate localized screenshots by delegating the work to bitrise.io
     dependencies:
-        build: build-screenshots
+        build: build-focus-screenshots
     index:
         type: l10n-screenshots
     run-on-tasks-for: []

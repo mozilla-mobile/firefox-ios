@@ -7,11 +7,11 @@ loader: taskgraph.loader.transform:loader
 transforms:
     - focusios_taskgraph.transforms.bitrise:transforms
     - focusios_taskgraph.transforms.secrets:transforms
-    - taskgraph.transforms.job:transforms
+    - taskgraph.transforms.run:transforms
     - taskgraph.transforms.task:transforms
 
 
-jobs:
+tasks:
     screenshots:
         attributes:
             chunk_locales: ["en-US"]
