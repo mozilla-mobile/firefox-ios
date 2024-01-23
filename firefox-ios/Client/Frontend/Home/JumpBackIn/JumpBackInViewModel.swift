@@ -99,8 +99,8 @@ class JumpBackInViewModel: FeatureFlaggable {
     }
 
     private func updateSectionLayout(for traitCollection: UITraitCollection,
-                                     isPortrait: Bool = UIWindow.isPortrait,
-                                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
+                                     isPortrait: Bool,
+                                     device: UIUserInterfaceIdiom) {
         let isPhoneInLandscape = device == .phone && !isPortrait
         let isPadInPortrait = device == .pad && isPortrait
         let isPadInLandscapeTwoThirdSplit = isPadInLandscapeSplit(split: 2/3, isPortrait: isPortrait, device: device)
@@ -315,8 +315,12 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
         return jumpBackInList.itemsToDisplay + (hasSyncedTab ? UX.maxDisplayedSyncedTabs : 0)
     }
 
-    func section(for traitCollection: UITraitCollection, size: CGSize) -> NSCollectionLayoutSection {
-        refreshData(for: traitCollection)
+    func section(for traitCollection: UITraitCollection,
+                 size: CGSize,
+                 isPortrait: Bool = UIWindow.isPortrait,
+                 device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom
+    ) -> NSCollectionLayoutSection {
+        refreshData(for: traitCollection, isPortrait: isPortrait, device: device)
 
         // Prepare section layout with refreshed data
         var section: NSCollectionLayoutSection
@@ -346,10 +350,13 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
     }
 
     /// Refresh our data set for jump back in, should only be called when we build the section layout
-    private func refreshData(for traitCollection: UITraitCollection) {
-        updateSectionLayout(for: traitCollection)
+    private func refreshData(for traitCollection: UITraitCollection,
+                             isPortrait: Bool,
+                             device: UIUserInterfaceIdiom) {
+        updateSectionLayout(for: traitCollection, isPortrait: isPortrait, device: device)
         let maxItemsToDisplay = sectionLayout.maxItemsToDisplay(
-            hasAccount: isSyncTabFeatureEnabled
+            hasAccount: isSyncTabFeatureEnabled,
+            device: device
         )
         refreshData(maxItemsToDisplay: maxItemsToDisplay)
     }

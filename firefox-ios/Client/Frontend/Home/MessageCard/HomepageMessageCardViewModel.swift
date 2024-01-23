@@ -62,7 +62,11 @@ extension HomepageMessageCardViewModel: HomepageViewModelProtocol {
         return .messageCard
     }
 
-    func section(for traitCollection: UITraitCollection, size: CGSize) -> NSCollectionLayoutSection {
+    func section(for traitCollection: UITraitCollection,
+                 size: CGSize,
+                 isPortrait: Bool = UIWindow.isPortrait,
+                 device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom
+    ) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                               heightDimension: .estimated(180))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)

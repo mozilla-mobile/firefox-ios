@@ -11,7 +11,11 @@ protocol HomepageViewModelProtocol {
     var sectionType: HomepageSectionType { get }
 
     // Layout section so HomepageViewController view controller can setup the section
-    func section(for traitCollection: UITraitCollection, size: CGSize) -> NSCollectionLayoutSection
+    func section(for traitCollection: UITraitCollection,
+                 size: CGSize,
+                 isPortrait: Bool,
+                 device: UIUserInterfaceIdiom
+    ) -> NSCollectionLayoutSection
 
     func numberOfItemsInSection() -> Int
 
@@ -39,6 +43,14 @@ protocol HomepageViewModelProtocol {
 }
 
 extension HomepageViewModelProtocol {
+    func section(for traitCollection: UITraitCollection,
+                 size: CGSize,
+                 isPortrait: Bool = UIWindow.isPortrait,
+                 device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom
+    ) -> NSCollectionLayoutSection {
+        section(for: traitCollection, size: size, isPortrait: isPortrait, device: device)
+    }
+
     var hasData: Bool { return true }
 
     var shouldShow: Bool {
