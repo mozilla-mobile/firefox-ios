@@ -76,6 +76,7 @@ class SyncUITests: BaseTestCase {
 
         // Enter invalid (too short, it should be at least 8 chars) and incorrect password
         userState.fxaPassword = "foo"
+        mozWaitForElementToExist(app.secureTextFields.element(boundBy: 0))
         navigator.performAction(Action.FxATypePassword)
         mozWaitForElementToExist(app.webViews.staticTexts["At least 8 characters"])
 
@@ -117,6 +118,7 @@ class SyncUITests: BaseTestCase {
         navigator.performAction(Action.FxATapOnContinueButton)
         // Typing on Password should show Show (password) option
         userState.fxaPassword = "f"
+        mozWaitForElementToExist(app.secureTextFields.element(boundBy: 0))
         navigator.performAction(Action.FxATypePassword)
         let passMessage = "Show password as plain text. Your password will be visible on screen."
         mozWaitForElementToExist(app.webViews.otherElements.buttons[passMessage], timeout: 3)
