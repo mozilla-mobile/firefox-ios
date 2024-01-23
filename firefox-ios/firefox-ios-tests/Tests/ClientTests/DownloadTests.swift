@@ -65,8 +65,14 @@ class DownloadTests: XCTestCase {
     }
 }
 
+// MARK: - DownloadDelegate Methods
 class MockDownloadDelegate: DownloadDelegate {
+    // Called when the download is complete
     func download(_ download: Download, didCompleteWithError error: Error?) { }
+
+    // Called when a certain amount of bytes have been downloaded
     func download(_ download: Download, didDownloadBytes bytesDownloaded: Int64) { }
+
+    // Called when the download finishes and provides the location of the downloaded file
     func download(_ download: Download, didFinishDownloadingTo location: URL) { }
 }
