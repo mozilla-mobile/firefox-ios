@@ -49,7 +49,7 @@ workflows:
         - destination: platform=iOS Simulator,name=iPhone 15,OS=17.2
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"
             "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"
-            "-test-iterations" "1000" "-only-testing:ClientTests/RustSyncManagerTests/testUpdateEnginePrefs_addressesDisabled"'
+            "-test-iterations" "100" "-only-testing:ClientTests/RustSyncManagerTests"'
         - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_UnitTest_iphonesimulator17.2-arm64.xctestrun"
         - maximum_test_repetitions: 2
     - save-spm-cache@1:
