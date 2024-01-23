@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Common
 
 // swiftlint:disable line_length
 let standardBlockedElementsString = "Firefox blocks cross-site trackers, social trackers, cryptominers, and fingerprinters."
@@ -50,8 +51,8 @@ class TrackingProtectionTests: BaseTestCase {
             timeout: TIMEOUT
         )
         navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(app.tables.otherElements[ImageIdentifiers.settings], timeout: 5)
-        app.tables.otherElements[ImageIdentifiers.settings].tap()
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.settings], timeout: 5)
+        app.tables.otherElements[StandardImageIdentifiers.Large.settings].tap()
         navigator.nowAt(SettingsScreen)
         mozWaitForElementToExist(app.tables.cells["NewTab"], timeout: 5)
         app.tables.cells["NewTab"].swipeUp()

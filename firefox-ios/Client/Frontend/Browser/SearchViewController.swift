@@ -22,7 +22,7 @@ private struct SearchViewControllerUX {
     static let EngineButtonWidth = EngineButtonHeight * 1.4
     static let EngineButtonBackgroundColor = UIColor.clear.cgColor
 
-    static let SearchImage = "search"
+    static let SearchImage = StandardImageIdentifiers.Large.search
     static let SearchEngineTopBorderWidth = 0.5
     static let SuggestionMargin: CGFloat = 8
 
@@ -98,6 +98,14 @@ class SearchViewController: SiteTableViewController,
     private lazy var openAndSyncTabBadge: UIImage = {
         return UIImage(named: "sync_open_tab")!
     }()
+
+    private lazy var searchButton: UIButton = .build { button in
+        let image = UIImage(named: StandardImageIdentifiers.Large.search)?.withRenderingMode(.alwaysTemplate)
+        button.setImage(image, for: [])
+        button.imageView?.contentMode = .scaleAspectFit
+        button.addTarget(self, action: #selector(self.didClickSearchButton), for: .touchUpInside)
+        button.accessibilityLabel = String(format: .SearchSettingsAccessibilityLabel)
+    }
 
     var suggestions: [String]? = []
     var savedQuery: String = ""
@@ -341,14 +349,6 @@ class SearchViewController: SiteTableViewController,
     func reloadSearchEngines() {
         searchEngineScrollViewContent.subviews.forEach { $0.removeFromSuperview() }
         var leftEdge = searchEngineScrollViewContent.leadingAnchor
-
-        // search settings icon
-        let searchButton: UIButton = .build()
-        searchButton.setImage(UIImage(named: "quickSearch"), for: [])
-        searchButton.imageView?.contentMode = .scaleAspectFit
-        searchButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
-        searchButton.addTarget(self, action: #selector(didClickSearchButton), for: .touchUpInside)
-        searchButton.accessibilityLabel = String(format: .SearchSettingsAccessibilityLabel)
 
         if let imageView = searchButton.imageView {
             NSLayoutConstraint.activate([
@@ -781,6 +781,11 @@ class SearchViewController: SiteTableViewController,
     override func applyTheme() {
         super.applyTheme()
         view.backgroundColor = themeManager.currentTheme.colors.layer5
+
+        // search settings icon
+        searchButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
+        searchButton.tintColor = themeManager.currentTheme.colors.iconPrimary
+
         searchEngineContainerView.layer.backgroundColor = themeManager.currentTheme.colors.layer1.cgColor
         searchEngineContainerView.layer.shadowColor = themeManager.currentTheme.colors.shadowDefault.cgColor
         reloadData()
@@ -822,7 +827,7 @@ class SearchViewController: SiteTableViewController,
                 oneLineCell.leftImageView.contentMode = .center
                 oneLineCell.leftImageView.layer.borderWidth = 0
                 oneLineCell.leftImageView.manuallySetImage(
-                    UIImage(named: SearchViewControllerUX.SearchImage) ?? UIImage()
+                    UIImage(named: SearchViewControllerUX.SearchImage)?.withRenderingMode(.alwaysTemplate) ?? UIImage()
                 )
                 oneLineCell.leftImageView.tintColor = themeManager.currentTheme.colors.iconPrimary
                 oneLineCell.leftImageView.backgroundColor = nil

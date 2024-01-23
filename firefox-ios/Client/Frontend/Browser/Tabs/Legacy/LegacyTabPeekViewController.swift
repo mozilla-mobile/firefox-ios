@@ -100,7 +100,7 @@ class LegacyTabPeekViewController: UIViewController, WKNavigationDelegate {
             if self.hasRemoteClients {
                 actions.append(UIAction(
                     title: .AppMenu.TouchActions.SendToDeviceTitle,
-                    image: UIImage.templateImageNamed("menu-Send"),
+                    image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.shareApple),
                     identifier: nil
                 ) { [weak self] _ in
                     guard let wself = self,

@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Common
 
 class ExperimentsSettingsView: UIView {
     let customRemoteSettingsTextField: UITextField = .build { textField in
@@ -11,7 +12,7 @@ class ExperimentsSettingsView: UIView {
     }
 
     let reloadButton: UIButton = .build { button in
-        button.setImage(UIImage(named: "nav-refresh"), for: .normal)
+        button.setImage(UIImage(named: StandardImageIdentifiers.Large.arrowClockwise), for: .normal)
     }
 
     let usePreviewPrompt: UITextView = .build { prompt in

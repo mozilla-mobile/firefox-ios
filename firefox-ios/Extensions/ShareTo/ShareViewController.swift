@@ -157,7 +157,7 @@ class ShareViewController: UIViewController {
             makeActionRow(
                 addTo: stackView,
                 label: .ShareAddToReadingList,
-                imageName: "AddToReadingList",
+                imageName: "readingListAddLarge",
                 action: #selector(actionAddToReadingList),
                 hasNavigation: false
             )
@@ -174,7 +174,7 @@ class ShareViewController: UIViewController {
             makeActionRow(
                 addTo: stackView,
                 label: .ShareSearchInFirefox,
-                imageName: "quickSearch",
+                imageName: "searchLarge",
                 action: #selector(actionSearchInFirefox),
                 hasNavigation: false
             )

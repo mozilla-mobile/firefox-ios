@@ -11,7 +11,7 @@ class ReaderModeButton: UIButton {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setImage(UIImage.templateImageNamed("reader"), for: .normal)
+        setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.readerView), for: .normal)
         imageView?.contentMode = .scaleAspectFit
         contentHorizontalAlignment = .center
         configuration = .plain()

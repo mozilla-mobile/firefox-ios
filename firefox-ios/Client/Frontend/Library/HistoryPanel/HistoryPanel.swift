@@ -81,7 +81,7 @@ class HistoryPanel: UIViewController,
 
     // UI
     private lazy var bottomSearchButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: UIImage.templateImageNamed(ImageIdentifiers.libraryPanelSearch),
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.search),
                                      style: .plain,
                                      target: self,
                                      action: #selector(bottomSearchButtonAction))
