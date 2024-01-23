@@ -10,7 +10,7 @@ import Shared
 protocol HomepageViewModelProtocol {
     var sectionType: HomepageSectionType { get }
 
-    // Layout section so FirefoxHomeViewController view controller can setup the section
+    // Layout section so HomepageViewController view controller can setup the section
     func section(for traitCollection: UITraitCollection, size: CGSize) -> NSCollectionLayoutSection
 
     func numberOfItemsInSection() -> Int
@@ -26,12 +26,6 @@ protocol HomepageViewModelProtocol {
 
     // Returns true when section has data and is enabled
     var shouldShow: Bool { get }
-
-    // Refresh data from adaptor to ensure it refresh the right state before laying itself out
-    func refreshData(for traitCollection: UITraitCollection,
-                     size: CGSize,
-                     isPortrait: Bool,
-                     device: UIUserInterfaceIdiom)
 
     // Update section that are privacy sensitive, only implement when needed
     func updatePrivacyConcernedSection(isPrivate: Bool)
@@ -52,11 +46,6 @@ extension HomepageViewModelProtocol {
     }
 
     func updatePrivacyConcernedSection(isPrivate: Bool) {}
-
-    func refreshData(for traitCollection: UITraitCollection,
-                     size: CGSize,
-                     isPortrait: Bool,
-                     device: UIUserInterfaceIdiom) {}
 
     func screenWasShown() {}
 }

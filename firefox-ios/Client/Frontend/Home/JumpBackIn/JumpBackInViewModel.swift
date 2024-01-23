@@ -316,6 +316,9 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
     }
 
     func section(for traitCollection: UITraitCollection, size: CGSize) -> NSCollectionLayoutSection {
+        refreshData(for: traitCollection)
+
+        // Prepare section layout with refreshed data
         var section: NSCollectionLayoutSection
         switch sectionLayout {
         case .compactSyncedTab, .compactJumpBackInAndSyncedTab:
@@ -342,25 +345,17 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
         return section
     }
 
-    var hasData: Bool {
-        return hasJumpBackIn || hasSyncedTab
-    }
-
-    func refreshData(for traitCollection: UITraitCollection,
-                     size: CGSize,
-                     isPortrait: Bool = UIWindow.isPortrait,
-                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
-        updateSectionLayout(for: traitCollection,
-                            isPortrait: isPortrait,
-                            device: device)
+    /// Refresh our data set for jump back in, should only be called when we build the section layout
+    private func refreshData(for traitCollection: UITraitCollection) {
+        updateSectionLayout(for: traitCollection)
         let maxItemsToDisplay = sectionLayout.maxItemsToDisplay(
-            hasAccount: isSyncTabFeatureEnabled,
-            device: device
+            hasAccount: isSyncTabFeatureEnabled
         )
         refreshData(maxItemsToDisplay: maxItemsToDisplay)
-        logger.log("JumpBackIn section shouldShow \(shouldShow)",
-                   level: .debug,
-                   category: .homepage)
+    }
+
+    var hasData: Bool {
+        return hasJumpBackIn || hasSyncedTab
     }
 
     func updatePrivacyConcernedSection(isPrivate: Bool) {

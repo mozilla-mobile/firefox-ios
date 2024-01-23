@@ -262,7 +262,7 @@ class HomepageViewController:
             )
             return viewModel.section(
                 for: layoutEnvironment.traitCollection,
-                size: self.view.frame.size
+                size: layoutEnvironment.container.effectiveContentSize
             )
         }
         return layout
@@ -308,7 +308,7 @@ class HomepageViewController:
         }
 
         // Force the entire collection view to re-layout
-        viewModel.refreshData(for: traitCollection, size: newSize)
+        viewModel.updateEnabledSections()
         collectionView.reloadData()
         collectionView.collectionViewLayout.invalidateLayout()
 
@@ -814,7 +814,7 @@ extension HomepageViewController: HomepageViewModelDelegate {
         ensureMainThread { [weak self] in
             guard let self = self else { return }
 
-            self.viewModel.refreshData(for: self.traitCollection, size: self.view.frame.size)
+            self.viewModel.updateEnabledSections()
             self.collectionView.reloadData()
             self.collectionView.collectionViewLayout.invalidateLayout()
             self.logger.log("Amount of sections shown is \(self.viewModel.shownSections.count)",
