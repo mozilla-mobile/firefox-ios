@@ -11,9 +11,6 @@
 "ContextualHints.Shopping.OptedInBody.v120" = "Ovatko nämä arvostelut luotettavia? Tarkista nyt, niin näet oikaistun arvosanan.";
 
 /* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
-"Shopping.AdjustedRating.Description.v120" = "Epäluotettavat arvostelut poistettu";
-
-/* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
 "Shopping.AdjustedRating.Description.v121" = "Luotettavien arvostelujen pohjalta";
 
 /* Accessibility label, associated to adjusted rating stars. %@ is a decimal value from 0 to 5 that will only use a tenth (example: 3.5). */
@@ -114,12 +111,6 @@
 
 /* Title for card displayed when a shopping product has not been analysed yet. */
 "Shopping.NoAnalysisCard.HeadlineLabel.Title.v120" = "Näistä arvosteluista ei ole vielä tietoa";
-
-/* Description for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
-"Shopping.NoAnalysisCard.InProgress.Body.Label.v120" = "Tämä voi kestää noin 60 sekuntia.";
-
-/* Title for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
-"Shopping.NoAnalysisCard.InProgress.Headline.Title.v120" = "Tarkistetaan arvostelun laatua";
 
 /* Label for the Learn more button in the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.LearnMoreButtonTitle.Title.v120" = "Lue lisää";

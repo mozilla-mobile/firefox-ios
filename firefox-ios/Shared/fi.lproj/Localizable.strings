@@ -694,9 +694,6 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Suodata";
 
-/* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "Tallennetut kirjautumistiedot näkyvät täällä. Jos olet tallentanut kirjautumistietosi Firefoxiin toisella laitteella, kirjaudu sisään Firefox-tilillesi.";
-
 /* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
 "LoginsList.NoLoginsFound.Description.v119" = "Tallennetut kirjautumiset näkyvät täällä. Jos tallensit kirjautumistietosi %@iin toisella laitteella, kirjaudu sisään tiliisi.";
 
@@ -1068,15 +1065,6 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "OK";
-
-/* Accessibility label for default search engine setting. */
-"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Oletushakukone";
-
-/* Title for default search engine settings section. */
-"SearchSettings.Title.DefaultSearchEngine.v106" = "Oletushakukone";
-
-/* Navigation title for search settings. */
-"SearchSettings.Title.Search.v106" = "Haku";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Lähetätkö virheraportin, jotta Mozilla voi korjata ongelman?";

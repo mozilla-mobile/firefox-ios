@@ -694,9 +694,6 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Szukaj";
 
-/* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "Zachowane dane logowania będą wyświetlane w tym miejscu. Jeśli zachowano dane logowania w Firefoksie na innym urządzeniu, zaloguj się na koncie Firefoksa.";
-
 /* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
 "LoginsList.NoLoginsFound.Description.v119" = "Zachowane dane logowania będą wyświetlane w tym miejscu. Jeśli zachowano dane logowania w przeglądarce %@ na innym urządzeniu, zaloguj się na swoim koncie.";
 
@@ -1068,15 +1065,6 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "OK";
-
-/* Accessibility label for default search engine setting. */
-"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Domyślna wyszukiwarka";
-
-/* Title for default search engine settings section. */
-"SearchSettings.Title.DefaultSearchEngine.v106" = "Domyślna wyszukiwarka";
-
-/* Navigation title for search settings. */
-"SearchSettings.Title.Search.v106" = "Wyszukiwanie";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Czy wysłać raport z awarii, by ułatwić Mozilli naprawę problemu?";

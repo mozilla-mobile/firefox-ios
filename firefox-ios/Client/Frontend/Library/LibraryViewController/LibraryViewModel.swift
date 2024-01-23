@@ -14,7 +14,7 @@ class LibraryViewModel {
         [UIImage(named: StandardImageIdentifiers.Large.bookmarkTrayFill) ?? UIImage(),
          UIImage(named: StandardImageIdentifiers.Large.history) ?? UIImage(),
          UIImage(named: StandardImageIdentifiers.Large.download) ?? UIImage(),
-         UIImage(named: ImageIdentifiers.libraryReadingList) ?? UIImage()]
+         UIImage(named: StandardImageIdentifiers.Large.readingList) ?? UIImage()]
     }
 
     init(withProfile profile: Profile) {

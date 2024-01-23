@@ -7,6 +7,3 @@
 /* When the user closes tabs in the tab tray, a popup will appear informing them how many tabs were closed. This is the text for the popup. The placeholder is the number of tabs */
 "CloseTabsToast.Title.v113" = "Pestañas cerradas: %d";
 
-/* Button label to sync tabs in your Firefox Account */
-"TabsTray.SyncTabs.SyncTabsButton.Title.v109" = "Sincronizar pestañas";
-

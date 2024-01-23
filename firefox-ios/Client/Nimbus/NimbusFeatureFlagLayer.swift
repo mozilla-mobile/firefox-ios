@@ -11,6 +11,9 @@ final class NimbusFeatureFlagLayer {
                                      from nimbus: FxNimbus = FxNimbus.shared
     ) -> Bool {
         switch featureID {
+        case .accountSettingsRedux:
+            return checkAccountSettingsRedux(from: nimbus)
+
         case .addressAutofill:
             return checkAddressAutofill(from: nimbus)
 
@@ -59,6 +62,9 @@ final class NimbusFeatureFlagLayer {
         case .qrCodeCoordinatorRefactor:
             return checkQRCodeCoordinatorRefactorFeature(from: nimbus)
 
+        case .reduxSearchSettings:
+            return checkReduxSearchSettingsFeature(from: nimbus)
+
         case .reportSiteIssue:
             return checkGeneralFeature(for: featureID, from: nimbus)
 
@@ -75,6 +81,10 @@ final class NimbusFeatureFlagLayer {
     }
 
     // MARK: - Private methods
+    private func checkAccountSettingsRedux(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.accountSettingsReduxFeature.value().enabled
+    }
+
     private func checkGeneralFeature(for featureID: NimbusFeatureFlagID,
                                      from nimbus: FxNimbus
     ) -> Bool {
@@ -253,5 +263,10 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.firefoxSuggestFeature.value()
 
         return config.status
+    }
+
+    private func checkReduxSearchSettingsFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.reduxSearchSettingsFeature.value()
+        return config.enabled
     }
 }

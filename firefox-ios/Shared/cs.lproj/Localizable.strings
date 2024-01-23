@@ -694,9 +694,6 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Hledat";
 
-/* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "Tady se zobrazí uložené přihlašovací údaje. Pokud jste si přihlašovací údaje uložili do Firefoxu na jiném zařízení, přihlaste se ke svému účtu Firefoxu.";
-
 /* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
 "LoginsList.NoLoginsFound.Description.v119" = "Zde se zobrazí uložená přihlášení. Pokud jste přihlašovací údaje uložili do %@ na jiném zařízení, přihlaste se ke svému účtu.";
 
@@ -1068,15 +1065,6 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "OK";
-
-/* Accessibility label for default search engine setting. */
-"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Výchozí vyhledávač";
-
-/* Title for default search engine settings section. */
-"SearchSettings.Title.DefaultSearchEngine.v106" = "Výchozí vyhledávač";
-
-/* Navigation title for search settings. */
-"SearchSettings.Title.Search.v106" = "Vyhledávání";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Odeslat hlášení o pádu Mozille, aby mohla problém vyřešit?";

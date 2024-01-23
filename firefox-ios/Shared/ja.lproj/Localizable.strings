@@ -694,9 +694,6 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "フィルター";
 
-/* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "保存されたログイン情報がここに表示されます。別の端末の Firefox で保存したログイン情報を表示するには、Firefox アカウントにログインしてください。";
-
 /* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
 "LoginsList.NoLoginsFound.Description.v119" = "保存されたログイン情報がここに表示されます。別の端末の %@ で保存したログイン情報を表示するには、アカウントにログインしてください。";
 
@@ -1068,15 +1065,6 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "OK";
-
-/* Accessibility label for default search engine setting. */
-"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "デフォルト検索エンジン";
-
-/* Title for default search engine settings section. */
-"SearchSettings.Title.DefaultSearchEngine.v106" = "デフォルト検索エンジン";
-
-/* Navigation title for search settings. */
-"SearchSettings.Title.Search.v106" = "検索";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "問題の原因特定と解決のためにご協力いただだける方は、クラッシュレポートの送信をお願いします。";

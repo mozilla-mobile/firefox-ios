@@ -7,3 +7,6 @@
 /* Label text that gets presented as a confirmation at the bottom of screen when credit card information gets updated successfully */
 "CreditCard.SnackBar.UpdatedCardLabel.v112" = "카드 정보 업데이트됨";
 
+/* Label text that gets presented as a confirmation at the bottom of screen when credit card information gets updated successfully */
+"CreditCard.SnackBar.UpdatedCardLabel.v122" = "카드 정보 수정됨";
+

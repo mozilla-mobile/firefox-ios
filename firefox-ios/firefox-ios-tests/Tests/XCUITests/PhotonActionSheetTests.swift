@@ -49,6 +49,8 @@ class PhotonActionSheetTests: BaseTestCase {
         // User not logged in
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
+        // Temporarily disabled until url bar redesign work FXIOS-8172
+        /*
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton], timeout: 10)
         app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
         mozWaitForElementToExist(app.cells["Send Link to Device"], timeout: 10)
@@ -56,6 +58,7 @@ class PhotonActionSheetTests: BaseTestCase {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton])
         XCTAssertTrue(app.staticTexts["You are not signed in to your account."].exists)
         XCTAssertTrue(app.staticTexts["Please open Firefox, go to Settings and sign in to continue."].exists)
+        */
     }
 
     private func openNewShareSheet() {
@@ -63,8 +66,13 @@ class PhotonActionSheetTests: BaseTestCase {
         waitUntilPageLoad()
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from CoreSimulatorBridge"])
 
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton], timeout: 10)
-        app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
+        // Temporarily workaround for the url bar redesign work FXIOS-8172:
+        // Launch "Share" from the hamburger menu instead of the share icon from the
+        // awesome bar.
+        // mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton], timeout: 10)
+        // app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
+        navigator.goto(BrowserTabMenu)
+        app.otherElements[ImageIdentifiers.share].tap()
 
         // This is not ideal but only way to get the element on iPhone 8
         // for iPhone 11, that would be boundBy: 2
@@ -81,14 +89,13 @@ class PhotonActionSheetTests: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306841
     // Smoketest
     func testSharePageWithShareSheetOptions() {
-        // Temporarily disabled until url bar redesign work FXIOS-8172
-//        openNewShareSheet()
-//        mozWaitForElementToExist(app.staticTexts["Open in Firefox"], timeout: 10)
-//        XCTAssertTrue(app.staticTexts["Open in Firefox"].exists)
-//        XCTAssertTrue(app.staticTexts["Load in Background"].exists)
-//        XCTAssertTrue(app.staticTexts["Bookmark This Page"].exists)
-//        XCTAssertTrue(app.staticTexts["Add to Reading List"].exists)
-//        XCTAssertTrue(app.staticTexts["Send to Device"].exists)
+        openNewShareSheet()
+        mozWaitForElementToExist(app.staticTexts["Open in Firefox"], timeout: 10)
+        XCTAssertTrue(app.staticTexts["Open in Firefox"].exists)
+        XCTAssertTrue(app.staticTexts["Load in Background"].exists)
+        XCTAssertTrue(app.staticTexts["Bookmark This Page"].exists)
+        XCTAssertTrue(app.staticTexts["Add to Reading List"].exists)
+        XCTAssertTrue(app.staticTexts["Send to Device"].exists)
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2323203

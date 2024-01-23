@@ -22,7 +22,7 @@ private struct SearchViewControllerUX {
     static let EngineButtonWidth = EngineButtonHeight * 1.4
     static let EngineButtonBackgroundColor = UIColor.clear.cgColor
 
-    static let SearchImage = "search"
+    static let SearchImage = StandardImageIdentifiers.Large.search
     static let SearchEngineTopBorderWidth = 0.5
     static let SuggestionMargin: CGFloat = 8
 
@@ -74,8 +74,8 @@ class SearchViewController: SiteTableViewController,
     private let viewModel: SearchViewModel
     private let model: SearchEngines
     private var suggestClient: SearchSuggestClient?
-    private var remoteClientTabs = [ClientTabsSearchWrapper]()
-    private var filteredRemoteClientTabs = [ClientTabsSearchWrapper]()
+    var remoteClientTabs = [ClientTabsSearchWrapper]()
+    var filteredRemoteClientTabs = [ClientTabsSearchWrapper]()
     private var openedTabs = [Tab]()
     private var filteredOpenedTabs = [Tab]()
     private var tabManager: TabManager
@@ -98,6 +98,14 @@ class SearchViewController: SiteTableViewController,
     private lazy var openAndSyncTabBadge: UIImage = {
         return UIImage(named: "sync_open_tab")!
     }()
+
+    private lazy var searchButton: UIButton = .build { button in
+        let image = UIImage(named: StandardImageIdentifiers.Large.search)?.withRenderingMode(.alwaysTemplate)
+        button.setImage(image, for: [])
+        button.imageView?.contentMode = .scaleAspectFit
+        button.addTarget(self, action: #selector(self.didClickSearchButton), for: .touchUpInside)
+        button.accessibilityLabel = String(format: .SearchSettingsAccessibilityLabel)
+    }
 
     var suggestions: [String]? = []
     var savedQuery: String = ""
@@ -342,14 +350,6 @@ class SearchViewController: SiteTableViewController,
         searchEngineScrollViewContent.subviews.forEach { $0.removeFromSuperview() }
         var leftEdge = searchEngineScrollViewContent.leadingAnchor
 
-        // search settings icon
-        let searchButton: UIButton = .build()
-        searchButton.setImage(UIImage(named: "quickSearch"), for: [])
-        searchButton.imageView?.contentMode = .scaleAspectFit
-        searchButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
-        searchButton.addTarget(self, action: #selector(didClickSearchButton), for: .touchUpInside)
-        searchButton.accessibilityLabel = String(format: .SearchSettingsAccessibilityLabel)
-
         if let imageView = searchButton.imageView {
             NSLayoutConstraint.activate([
                 imageView.widthAnchor.constraint(equalToConstant: 20),
@@ -561,6 +561,11 @@ class SearchViewController: SiteTableViewController,
                 return false
             }
 
+            if profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowSponsoredSuggestions) ?? false &&
+                SponsoredContentFilterUtility().containsSearchParam(url: tab.URL) {
+                return false
+            }
+
             if tab.title.lowercased().contains(searchString.lowercased()) {
                 return true
             }
@@ -616,7 +621,13 @@ class SearchViewController: SiteTableViewController,
     }
 
     func loader(dataLoaded data: Cursor<Site>) {
-        self.data = data
+        let showSponsoredSuggestions = profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowSponsoredSuggestions) ?? false
+        self.data = if showSponsoredSuggestions {
+            ArrayCursor<Site>(data: SponsoredContentFilterUtility().filterSponsoredSites(from: data.asArray()))
+        } else {
+            data
+        }
+
         tableView.reloadData()
     }
 
@@ -770,6 +781,11 @@ class SearchViewController: SiteTableViewController,
     override func applyTheme() {
         super.applyTheme()
         view.backgroundColor = themeManager.currentTheme.colors.layer5
+
+        // search settings icon
+        searchButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
+        searchButton.tintColor = themeManager.currentTheme.colors.iconPrimary
+
         searchEngineContainerView.layer.backgroundColor = themeManager.currentTheme.colors.layer1.cgColor
         searchEngineContainerView.layer.shadowColor = themeManager.currentTheme.colors.shadowDefault.cgColor
         reloadData()
@@ -811,7 +827,7 @@ class SearchViewController: SiteTableViewController,
                 oneLineCell.leftImageView.contentMode = .center
                 oneLineCell.leftImageView.layer.borderWidth = 0
                 oneLineCell.leftImageView.manuallySetImage(
-                    UIImage(named: SearchViewControllerUX.SearchImage) ?? UIImage()
+                    UIImage(named: SearchViewControllerUX.SearchImage)?.withRenderingMode(.alwaysTemplate) ?? UIImage()
                 )
                 oneLineCell.leftImageView.tintColor = themeManager.currentTheme.colors.iconPrimary
                 oneLineCell.leftImageView.backgroundColor = nil

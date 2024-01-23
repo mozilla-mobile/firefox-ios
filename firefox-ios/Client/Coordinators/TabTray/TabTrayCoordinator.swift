@@ -57,6 +57,9 @@ class TabTrayCoordinator: BaseCoordinator,
     }
 
     func start(panelType: TabTrayPanelType, navigationController: UINavigationController) {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .open,
+                                     object: .tabTray)
         switch panelType {
         case .tabs:
             makeTabsCoordinator(navigationController: navigationController)
@@ -104,12 +107,18 @@ class TabTrayCoordinator: BaseCoordinator,
 
     // MARK: - ParentCoordinatorDelegate
     func didFinish(from childCoordinator: Coordinator) {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .close,
+                                     object: .tabTray)
         remove(child: childCoordinator)
         parentCoordinator?.didDismissTabTray(from: self)
     }
 
     // MARK: - TabTrayViewControllerDelegate
     func didFinish() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .close,
+                                     object: .tabTray)
         parentCoordinator?.didDismissTabTray(from: self)
     }
 }

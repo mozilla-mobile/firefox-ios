@@ -143,7 +143,6 @@ class RemoteTabsPanel: UIViewController,
     }
 
     private func handleOpenSelectedURL(_ url: URL) {
-        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .syncTab)
         store.dispatch(RemoteTabsPanelAction.openSelectedURL(url))
     }
 }

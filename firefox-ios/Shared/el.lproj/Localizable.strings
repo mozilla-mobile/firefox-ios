@@ -694,9 +694,6 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Φίλτρο";
 
-/* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "Οι αποθηκευμένες συνδέσεις θα εμφανίζονται εδώ. Εάν αποθηκεύσατε τις συνδέσεις σας στο Firefox διαφορετικής συσκευής, συνδεθείτε στον λογαριασμό Firefox σας.";
-
 /* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
 "LoginsList.NoLoginsFound.Description.v119" = "Οι αποθηκευμένες συνδέσεις θα εμφανίζονται εδώ. Εάν αποθηκεύσατε τις συνδέσεις σας στο %@ κάποιας άλλης συσκευής, συνδεθείτε στον λογαριασμό σας.";
 
@@ -1068,15 +1065,6 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "OK";
-
-/* Accessibility label for default search engine setting. */
-"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Προεπιλεγμένη μηχανή αναζήτησης";
-
-/* Title for default search engine settings section. */
-"SearchSettings.Title.DefaultSearchEngine.v106" = "Προεπιλεγμένη μηχανή αναζήτησης";
-
-/* Navigation title for search settings. */
-"SearchSettings.Title.Search.v106" = "Αναζήτηση";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Αποστολή αναφοράς κατάρρευσης, ώστε να μπορέσει η Mozilla να διορθώσει το πρόβλημα;";

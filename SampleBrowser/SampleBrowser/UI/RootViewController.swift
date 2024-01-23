@@ -169,7 +169,8 @@ class RootViewController: UIViewController,
     // MARK: - MenuDelegate
 
     func didClickMenu() {
-        // Not implementing Settings for now, will see later on if this is needed or not
+        let settingsVC = SettingsViewController()
+        present(settingsVC, animated: true)
     }
 
     // MARK: - SearchViewDelegate

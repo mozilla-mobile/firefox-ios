@@ -1,0 +1,18 @@
+# The configuration for the reduxSearchSettingsFeature feature
+features:
+  redux-search-settings-feature:
+    description: >
+      This feature is for managing the roll out of redux on the search settings screen
+    variables:
+      enabled:
+        description: >
+          Enables the feature
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: false

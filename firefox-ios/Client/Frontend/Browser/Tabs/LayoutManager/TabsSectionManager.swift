@@ -25,13 +25,13 @@ class TabsSectionManager {
     func layoutSection(_ layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(0.5),
-            heightDimension: .estimated(UX.cellEstimatedHeight)
+            heightDimension: .absolute(UX.cellEstimatedHeight)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(UX.cellEstimatedHeight)
+            heightDimension: .absolute(UX.cellEstimatedHeight)
         )
 
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
