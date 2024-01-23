@@ -54,10 +54,6 @@ class HistoryPanel: UIViewController,
     }
 
     var shouldShowSearch: Bool {
-        guard viewModel.featureFlags.isFeatureEnabled(.historyGroups, checking: .buildOnly) else {
-            return false
-        }
-
         return state == .history(state: .mainView) || state == .history(state: .search)
     }
 
