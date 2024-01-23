@@ -6,6 +6,7 @@ import XCTest
 class FakespotTests: IphoneOnlyTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307128
     func testFakespotAvailable() {
+        if skipPlatform { return }
         reachReviewChecker()
         mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
         XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle].label, "Review Checker")
@@ -18,6 +19,7 @@ class FakespotTests: IphoneOnlyTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2358865
     // Smoketest
     func testReviewQualityCheckBottomSheetUI() {
+        if skipPlatform { return }
         reachReviewChecker()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton])
         app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton].tap()
@@ -40,6 +42,28 @@ class FakespotTests: IphoneOnlyTestCase {
                        "How we determine review quality")
         XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.SettingsCard.title].label, "Settings")
         XCTAssertTrue(app.staticTexts["Review Checker is powered by Fakespot by Mozilla"].exists)
+    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358902
+    // Smoketest
+    func testPriceTagIconAvailableOnlyOnDetailPage() {
+        if skipPlatform { return }
+        // Search for a product but do not open the product detail page
+        loadWebsiteAndPerformSearch()
+
+        // The Price tag icon is NOT displayed on the address bar of the search result page
+        mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton])
+    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358904
+    // Smoketest
+    func testPriceTagNotDisplayedInPrivateMode() {
+        if skipPlatform { return }
+        // Open a product detail page using a private tab and check the address bar
+        loadWebsiteInPrivateMode()
+
+        // The Price tag icon is NOT displayed
+        mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton])
     }
 
     private func validateHighlightsSection() {
@@ -73,18 +97,20 @@ class FakespotTests: IphoneOnlyTestCase {
     }
 
     private func reachReviewChecker() {
-        loadWebsiteAndSelectFirstResult()
+        loadWebsiteAndPerformSearch()
+        app.webViews["contentView"].firstMatch.images.firstMatch.tap()
+        waitUntilPageLoad()
         let shoppingButton = app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton]
 
         // Retry loading the page if shopping button is not visible
         while !shoppingButton.exists {
-            loadWebsiteAndSelectFirstResult()
+            loadWebsiteAndPerformSearch()
         }
         // Tap the shopping cart icon
         app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton].tap()
     }
 
-    private func loadWebsiteAndSelectFirstResult() {
+    private func loadWebsiteAndPerformSearch() {
         navigator.openURL("https://www.amazon.com")
         waitUntilPageLoad()
 
@@ -100,7 +126,29 @@ class FakespotTests: IphoneOnlyTestCase {
         searchAmazon.typeText("Shoe")
         website.buttons["Go"].tap()
         waitUntilPageLoad()
-        website.images.firstMatch.tap()
+    }
+
+    private func loadWebsiteInPrivateMode() {
+        navigator.nowAt(NewTabScreen)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.openURL("https://www.amazon.com")
+        waitUntilPageLoad()
+        let website = app.webViews["contentView"].firstMatch
+        let searchAmazon = website.textFields["Search Amazon"]
+        while !searchAmazon.exists {
+            app.buttons["Reload page"].tap()
+            waitUntilPageLoad()
+        }
+        mozWaitForElementToExist(searchAmazon)
+        searchAmazon.tap()
+        if !app.keyboards.element.isHittable {
+            searchAmazon.tap()
+        }
+        searchAmazon.typeText("Shoe")
+        website.buttons["Go"].tap()
+        waitUntilPageLoad()
+        app.webViews["contentView"].firstMatch.images.firstMatch.tap()
         waitUntilPageLoad()
     }
 }
