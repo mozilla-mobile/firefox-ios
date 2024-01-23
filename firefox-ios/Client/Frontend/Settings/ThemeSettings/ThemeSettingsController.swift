@@ -92,10 +92,6 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         store.unsubscribe(self)
     }
 
-    func validateState(state: ThemeSettingsState) -> Bool {
-        return state.windowUUID == windowUUID
-    }
-
     func newState(state: ThemeSettingsState) {
         themeState = state
         // Reload of tableView is needed to reflect the new state. Currently applyTheme calls tableview.reload

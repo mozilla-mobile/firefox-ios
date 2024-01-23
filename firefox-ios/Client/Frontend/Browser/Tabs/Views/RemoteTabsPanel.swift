@@ -121,10 +121,6 @@ class RemoteTabsPanel: UIViewController,
         store.unsubscribe(self)
     }
 
-    func validateState(state: RemoteTabsPanelState) -> Bool {
-        return state.windowUUID == windowUUID
-    }
-
     func newState(state: RemoteTabsPanelState) {
         ensureMainThread { [weak self] in
             guard let self else { return }

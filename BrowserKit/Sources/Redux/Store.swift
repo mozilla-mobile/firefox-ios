@@ -77,6 +77,7 @@ public class Store<State: StateType>: DefaultDispatchStore {
 
         let newState = reducer(state, action)
 
+        //TODO: [8188] Need to ensure middlewares handle actions only for their window's UUID (similar to reducers)
         middlewares.forEach { middleware in
             middleware(newState, action)
         }
