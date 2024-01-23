@@ -13,9 +13,6 @@
 /* Users can disable syncing tabs from other devices. In the Sync Tabs panel of the Tab Tray, we inform the user tab syncing can be switched back on to view those tabs. */
 "TabsTray.Sync.SyncTabsDisabled.v116" = "开启标签页同步服务，即可查看您的其他设备上的标签页列表。";
 
-/* Button label to sync tabs in your Firefox Account */
-"TabsTray.SyncTabs.SyncTabsButton.Title.v109" = "同步标签页";
-
 /* Button label to sync tabs in your account */
 "TabsTray.SyncTabs.SyncTabsButton.Title.v119" = "同步标签页";
 

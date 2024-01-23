@@ -1,6 +1,3 @@
-/* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
-"Shopping.AdjustedRating.Description.v120" = "Nezanesljiva mnenja odstranjena";
-
 /* Button text of the confirmation displayed in the shopping review quality bottom sheet. */
 "Shopping.ConfirmationCard.Button.Text.v120" = "Razumem";
 

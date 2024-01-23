@@ -985,9 +985,6 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "ٹھیک ہے";
 
-/* Navigation title for search settings. */
-"SearchSettings.Title.Search.v106" = "تلاش کریں";
-
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "ایک تباہ رپورٹ ارسال کریں تاکہ Mozilla مسلہ کو جل کرسکے؟";
 

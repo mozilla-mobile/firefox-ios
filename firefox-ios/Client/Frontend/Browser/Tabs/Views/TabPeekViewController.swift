@@ -91,11 +91,12 @@ class TabPeekViewController: UIViewController,
             })
         }
         if tabPeekState.showSendToDevice {
-            actions.append(UIAction(title: .AppMenu.TouchActions.SendToDeviceTitle,
-                                    image: UIImage.templateImageNamed("menu-Send"),
-                                    identifier: nil) { _ in
-                store.dispatch(TabPeekAction.sendToDevice(tabID: self.tab.tabUUID))
-                return
+            actions.append(UIAction(
+                title: .AppMenu.TouchActions.SendToDeviceTitle,
+                image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.shareApple),
+                identifier: nil) { _ in
+                    store.dispatch(TabPeekAction.sendToDevice(tabID: self.tab.tabUUID))
+                    return
             })
         }
         if tabPeekState.showCopyURL {

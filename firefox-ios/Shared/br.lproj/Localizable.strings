@@ -694,9 +694,6 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Sil";
 
-/* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "An anaouderien enrollet a vo diskouezet amañ. M'ho peus enrollet oc'h anaouderien evit Firefox en un drevnad all, kennaskit ouzh ho kont Firefox.";
-
 /* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
 "LoginsList.NoLoginsFound.Description.v119" = "An anaouderien enrollet a vo diskouezet amañ. M’ho peus enrollet oc’h anaouderien war %@ en un drevnad all, kennaskit ouzh ho kont.";
 
@@ -1068,15 +1065,6 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "Mat eo";
-
-/* Accessibility label for default search engine setting. */
-"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Keflusker enklask dre ziouer";
-
-/* Title for default search engine settings section. */
-"SearchSettings.Title.DefaultSearchEngine.v106" = "Keflusker enklask dre ziouer";
-
-/* Navigation title for search settings. */
-"SearchSettings.Title.Search.v106" = "Klask";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Kas un danevell sac’hadenn evit ma c’hallfe Mozilla ratreañ ar gudenn?";

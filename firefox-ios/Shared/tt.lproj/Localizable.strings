@@ -955,15 +955,6 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "ОК";
 
-/* Accessibility label for default search engine setting. */
-"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Стандарт эзләү системасы";
-
-/* Title for default search engine settings section. */
-"SearchSettings.Title.DefaultSearchEngine.v106" = "Стандарт эзләү системасы";
-
-/* Navigation title for search settings. */
-"SearchSettings.Title.Search.v106" = "Эзләү";
-
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Mozilla проблеманы хәл итә алсын өчен, ватылу турында хәбәр җибәрелсенме?";
 

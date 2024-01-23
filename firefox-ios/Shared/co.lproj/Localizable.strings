@@ -694,9 +694,6 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filtrà";
 
-/* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "L’identificazioni di cunnessione arregistrate seranu affissate quì. S’è vo avete arregistratu e vostre identificazioni di cunnessione Firefox nant’à un altru apparechju, cunnittitevi à u vostru contu Firefox.";
-
 /* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
 "LoginsList.NoLoginsFound.Description.v119" = "L’identificazioni di cunnessione arregistrate seranu affissate quì. S’è vo avete arregistratu e vostre identificazioni di cunnessione in %@ nant’à un altru apparechju, cunnittitevi à u vostru contu.";
 
@@ -1068,15 +1065,6 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "Vai";
-
-/* Accessibility label for default search engine setting. */
-"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Mutore di ricerca predefinitu";
-
-/* Title for default search engine settings section. */
-"SearchSettings.Title.DefaultSearchEngine.v106" = "Mutore di ricerca predefinitu";
-
-/* Navigation title for search settings. */
-"SearchSettings.Title.Search.v106" = "Ricercà";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Mandà un raportu d’accidente per chì Mozilla possa currege u penseru ?";

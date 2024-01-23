@@ -13,9 +13,6 @@
 /* Users can disable syncing tabs from other devices. In the Sync Tabs panel of the Tab Tray, we inform the user tab syncing can be switched back on to view those tabs. */
 "TabsTray.Sync.SyncTabsDisabled.v116" = "වෙනත් උපාංගයකින් පටිති බැලීමට පටිති සමමුහූර්තය සබල කරන්න.";
 
-/* Button label to sync tabs in your Firefox Account */
-"TabsTray.SyncTabs.SyncTabsButton.Title.v109" = "පටිති සමමුහූර්තය";
-
 /* Button label to sync tabs in your account */
 "TabsTray.SyncTabs.SyncTabsButton.Title.v119" = "පටිති සමමුහූර්තය";
 

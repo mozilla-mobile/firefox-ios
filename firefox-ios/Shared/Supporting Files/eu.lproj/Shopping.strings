@@ -17,9 +17,6 @@
 "Shopping.AdCard.Title.v121" = "Kontuan hartzeko gehiago";
 
 /* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
-"Shopping.AdjustedRating.Description.v120" = "Balorazio fidagaitzak kenduta";
-
-/* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
 "Shopping.AdjustedRating.Description.v121" = "Balorazio fidagarrietan oinarrituta";
 
 /* Accessibility label, associated to adjusted rating stars. %@ is a decimal value from 0 to 5 that will only use a tenth (example: 3.5). */
@@ -103,6 +100,9 @@
 /* Title for info card when the product is in analysis mode */
 "Shopping.InfoCard.ProgressAnalysis.Title.v120" = "Balorazioaren kalitatea egiaztatzen";
 
+/* Title for info card when the product is in analysis mode. The placeholder represents the percentage of the analysis progress, ranging between 1 and 100. */
+"Shopping.InfoCard.ProgressAnalysis.Title.v123" = "Balorazioaren kalitatea egiaztatzen (%@)";
+
 /* This description appears beneath the confirmation title on the information card to inform the user that their report regarding the product stock status has been received and is being processed. It serves to set the expectation that the review information will be updated within 24 hours and invites the user to revisit the product page for updates. */
 "Shopping.InfoCard.ReportSubmittedByCurrentUser.Description.v121" = "Produktu honen balorazioei buruzko informazioa 24 ordu barru izan behar genuke. Itzuli geroago mesedez.";
 
@@ -117,12 +117,6 @@
 
 /* Title for card displayed when a shopping product has not been analysed yet. */
 "Shopping.NoAnalysisCard.HeadlineLabel.Title.v120" = "Balorazio hauei buruzko informaziorik ez oraindik";
-
-/* Description for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
-"Shopping.NoAnalysisCard.InProgress.Body.Label.v120" = "60 bat segundo har litzake honek.";
-
-/* Title for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
-"Shopping.NoAnalysisCard.InProgress.Headline.Title.v120" = "Balorazioaren kalitatea egiaztatzen";
 
 /* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replaced by the Fakespot app name. After the colon, what appears are two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
 "Shopping.OptInCard.Disclaimer.Text.v120" = "\"Bai, probatu\" hautatuz gero, ondorengoa onartzen duzu %@(e)tik:";
@@ -208,6 +202,12 @@
 /* Accessibility label for the down chevron icon used to expand or show the details of the Settings Card within the shopping product review bottom sheet. */
 "Shopping.SettingsCard.Expand.AccessibilityLabel.v120" = "Zabaldu ezarpenen atala";
 
+/* Accessibility hint for the recommended products label and switch, grouped together. When the group is selected in VoiceOver mode, the hint is read to help the user understand what action can be performed. */
+"Shopping.SettingsCard.Expand.GroupedRecommendedProductsAndSwitch.AccessibilityHint.v123" = "Sakatu bitan ezarpena txandakatzeko.";
+
+/* Accessibility label for the recommended products label and switch, grouped together. The first placeholder is for the recommended products label, and the second placeholder is for the state of the switch: On/Off. */
+"Shopping.SettingsCard.Expand.GroupedRecommendedProductsAndSwitch.AccessibilityLabel.v123" = "%1$@, aldatzeko botoia, %2$@.";
+
 /* Action title of the footer underneath the Settings Card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
 "Shopping.SettingsCard.Footer.Action.v120" = "Balorazioen egiaztatzailea %2$@(r)en %1$@(e)k hornituta";
 
@@ -216,6 +216,12 @@
 
 /* Label of the switch from settings card displayed in the shopping review quality bottom sheet. The placeholder will be replaced with the app name. */
 "Shopping.SettingsCard.RecommendedProducts.Label.v120" = "Erakutsi %@(e)k gomendatutako produktuak";
+
+/* Toggled Off accessibility switch value from Settings Card within the shopping product review bottom sheet. */
+"Shopping.SettingsCard.SwitchValueOff.AccessibilityLabel.v123" = "Desaktibatuta";
+
+/* Toggled On accessibility value, from Settings Card within the shopping product review bottom sheet. */
+"Shopping.SettingsCard.SwitchValueOn.AccessibilityLabel.v123" = "Aktibatuta";
 
 /* Label of the button from settings card displayed in the shopping review quality bottom sheet. */
 "Shopping.SettingsCard.TurnOffButton.Title.v120" = "Desgaitu balorazioen egiaztatzailea";

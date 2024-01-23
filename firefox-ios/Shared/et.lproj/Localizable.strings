@@ -652,9 +652,6 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filtreeri";
 
-/* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "Salvestatud kasutajatunnuseid kuvatakse siin. Kui salvestasid oma kasutajatunnused teises seadmes olevasse Firefoxi, siis logi sisse oma Firefoxi kontosse.";
-
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Kasutajakontosid ei leitud";
 

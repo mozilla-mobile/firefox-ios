@@ -18,7 +18,7 @@ class TabToolbarHelperTests: XCTestCase {
     let forwardButtonImage = UIImage.templateImageNamed(StandardImageIdentifiers.Large.forward)?
         .imageFlippedForRightToLeftLayoutDirection()
     let menuButtonImage = UIImage.templateImageNamed(StandardImageIdentifiers.Large.appMenu)
-    let searchButtonImage = UIImage.templateImageNamed("search")
+    let searchButtonImage = UIImage.templateImageNamed(StandardImageIdentifiers.Large.search)
     let imageNewTab = UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus)
     let imageHome = UIImage.templateImageNamed(StandardImageIdentifiers.Large.home)
 

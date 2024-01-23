@@ -4,6 +4,9 @@
 /* This value is used as the title for the Yes button in the remember credit card page */
 "CreditCard.RememberCard.MainButtonTitle.v115" = "Sim";
 
+/* This value is used as the title for the Yes button in the remember credit card page */
+"CreditCard.RememberCard.MainButtonTitle.v122" = "Guardar";
+
 /* This value is used as the title for the remember credit card page */
 "CreditCard.RememberCard.MainTitle.v115" = "Memorizar este cartão?";
 

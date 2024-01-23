@@ -338,7 +338,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getFindInPageAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .AppMenu.AppMenuFindInPageTitleString,
-                                     iconString: ImageIdentifiers.findInPage) { _ in
+                                     iconString: StandardImageIdentifiers.Large.search) { _ in
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .findInPage)
             self.delegate?.showFindInPage()
         }.items
@@ -444,7 +444,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getSettingsAction() -> PhotonRowActions {
         let openSettings = SingleActionViewModel(title: .AppMenu.AppMenuSettingsTitleString,
-                                                 iconString: ImageIdentifiers.settings) { _ in
+                                                 iconString: StandardImageIdentifiers.Large.settings) { _ in
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: .settings)
 
             // Wait to show settings in async dispatch since hamburger menu is still showing at that time
@@ -567,7 +567,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getShareFileAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .AppMenu.AppMenuSharePageTitleString,
-                                     iconString: ImageIdentifiers.share) { _ in
+                                     iconString: StandardImageIdentifiers.Large.shareApple) { _ in
             guard let tab = self.selectedTab,
                   let url = tab.url
             else { return }
@@ -578,7 +578,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getShareAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .AppMenu.Share,
-                                     iconString: ImageIdentifiers.share) { _ in
+                                     iconString: StandardImageIdentifiers.Large.shareApple) { _ in
             guard let tab = self.selectedTab, let url = tab.canonicalURL?.displayURL else { return }
 
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
@@ -639,7 +639,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getReadingListLibraryAction() -> SingleActionViewModel {
         return SingleActionViewModel(title: .AppMenu.ReadingList,
-                                     iconString: ImageIdentifiers.readingList) { _ in
+                                     iconString: StandardImageIdentifiers.Large.readingList) { _ in
             self.delegate?.showLibrary(panel: .readingList)
         }
     }
@@ -650,7 +650,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getAddReadingListAction() -> SingleActionViewModel {
         return SingleActionViewModel(title: .AppMenu.AddReadingList,
-                                     iconString: ImageIdentifiers.addToReadingList) { _ in
+                                     iconString: StandardImageIdentifiers.Large.readingListAdd) { _ in
             guard let tab = self.selectedTab,
                   let url = self.tabUrl?.displayURL
             else { return }

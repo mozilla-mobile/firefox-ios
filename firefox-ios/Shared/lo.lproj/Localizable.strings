@@ -694,9 +694,6 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "ຕົວກັ່ນຕອງ";
 
-/* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "ການລັອກອິນທີ່ໄດ້ບັນທຶກໄວ້ຈະສະແດງຂື້ນຢູ່ທີ່ນີ້. ເຂົ້າສູ່ລະບົບບັນຊີ Firefox ຂອງທ່ານ ຖ້າຫາກວ່າທ່ານໄດ້ບັນທຶກການລັອກອິນຂອງທ່ານໄວ້ໃນ Firefox ໃນອຸປະກອນອື່ນໆ.";
-
 /* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
 "LoginsList.NoLoginsFound.Description.v119" = "ການເຂົ້າສູ່ລະບົບທີ່ບັນທຶກໄວ້ຈະປາກົດຢູ່ບ່ອນນີ້. ຖ້າທ່ານບັນທຶກການເຂົ້າສູ່ລະບົບຂອງທ່ານໄປທີ່ %@ ໃນອຸປະກອນອື່ນ, ເຂົ້າສູ່ລະບົບບັນຊີຂອງທ່ານ.";
 
@@ -1068,15 +1065,6 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "ຕົກລົງ";
-
-/* Accessibility label for default search engine setting. */
-"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "ເຄື່ອງມືການຊອກຫາເລີ່ມຕົ້ນ";
-
-/* Title for default search engine settings section. */
-"SearchSettings.Title.DefaultSearchEngine.v106" = "ເຄື່ອງມືການຊອກຫາເລີ່ມຕົ້ນ";
-
-/* Navigation title for search settings. */
-"SearchSettings.Title.Search.v106" = "ຄົ້ນຫາ";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "ຕ້ອງການສົ່ງລາຍງານຂໍ້ຜິດພາດນີ້ໄປເພື່ອເຮັດໃຫ້ Mozilla ສາມາດແກ້ໄຂບັນຫານີ້ໄດ້ບໍ?";

@@ -342,7 +342,8 @@ class ReadingListPanel: UITableViewController,
         }
         let readerModeImageView: UIImageView = .build { imageView in
             imageView.contentMode = .scaleAspectFit
-            imageView.image = UIImage(named: "ReaderModeCircle")?.withRenderingMode(.alwaysTemplate)
+            imageView.image = UIImage(named: StandardImageIdentifiers.Large.readerView)?
+                .withRenderingMode(.alwaysTemplate)
             imageView.tintColor = self.themeManager.currentTheme.colors.textSecondary
         }
         let readingListLabel: UILabel = .build { label in
@@ -353,7 +354,8 @@ class ReadingListPanel: UITableViewController,
         }
         let readingListImageView: UIImageView = .build { imageView in
             imageView.contentMode = .scaleAspectFit
-            imageView.image = UIImage(named: "AddToReadingListCircle")?.withRenderingMode(.alwaysTemplate)
+            imageView.image = UIImage(named: StandardImageIdentifiers.Large.readingListAdd)?
+                .withRenderingMode(.alwaysTemplate)
             imageView.tintColor = self.themeManager.currentTheme.colors.textSecondary
         }
         let emptyStateViewWrapper: UIView = .build { view in

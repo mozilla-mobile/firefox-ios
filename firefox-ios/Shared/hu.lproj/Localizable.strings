@@ -694,9 +694,6 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Szűrő";
 
-/* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "A mentett fiókok itt fognak megjelenni. Ha más eszközén mentette a Firefoxba a bejelentkezéseit, akkor jelentkezzen be a Firefox-fiókjába.";
-
 /* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
 "LoginsList.NoLoginsFound.Description.v119" = "A mentett fiókok itt fognak megjelenni. Ha egy másik eszközén mentette a %@ba a bejelentkezéseit, akkor jelentkezzen be a fiókjába.";
 
@@ -1068,15 +1065,6 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "Rendben";
-
-/* Accessibility label for default search engine setting. */
-"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Alapértelmezett keresőszolgáltatás";
-
-/* Title for default search engine settings section. */
-"SearchSettings.Title.DefaultSearchEngine.v106" = "Alapértelmezett keresőszolgáltatás";
-
-/* Navigation title for search settings. */
-"SearchSettings.Title.Search.v106" = "Keresés";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Összeomlás jelentése, hogy a Mozilla javíthassa a hibát?";
