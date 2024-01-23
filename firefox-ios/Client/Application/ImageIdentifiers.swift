@@ -58,7 +58,6 @@ public struct ImageIdentifiers {
     public static let shoppingNoAnalysisImage = "shoppingNoAnalysisImage"
     public static let shoppingOptInCardImage = "shoppingOptInCardImage"
     public static let signinSync = "signin-sync"
-    public static let signinSyncQRButton = "qr-code-icon-white"
     public static let sponsoredStar = "sponsored-star"
     public static let starEmpty = "starEmpty"
     public static let starFill = "starFill"
