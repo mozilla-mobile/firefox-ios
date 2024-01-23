@@ -11,7 +11,7 @@ public protocol AnyStoreSubscriber: AnyObject {
 
 /// Subscribers listen for state changes.
 /// While all reducers will be called when a action gets dispatched, the subscriber will only be called
-/// when an actual state change happens. See also: notes below in `newState(state: Any)`
+/// when an actual state change happens.
 public protocol StoreSubscriber: AnyStoreSubscriber {
     associatedtype SubscriberStateType
 
