@@ -236,8 +236,8 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
             backgroundHolder.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
             headerView.topAnchor.constraint(equalTo: backgroundHolder.topAnchor),
-            headerView.leftAnchor.constraint(equalTo: backgroundHolder.leftAnchor),
-            headerView.rightAnchor.constraint(equalTo: backgroundHolder.rightAnchor),
+            headerView.leadingAnchor.constraint(equalTo: backgroundHolder.leadingAnchor),
+            headerView.trailingAnchor.constraint(equalTo: backgroundHolder.trailingAnchor),
             headerView.heightAnchor.constraint(equalToConstant: UX.textBoxHeight),
 
             // Parts of the header view
@@ -263,8 +263,8 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
 
             // Screenshot either shown or favicon takes its place as fallback
             screenshotView.topAnchor.constraint(equalTo: headerView.contentView.bottomAnchor),
-            screenshotView.leftAnchor.constraint(equalTo: backgroundHolder.leftAnchor),
-            screenshotView.rightAnchor.constraint(equalTo: backgroundHolder.rightAnchor),
+            screenshotView.leadingAnchor.constraint(equalTo: backgroundHolder.leadingAnchor),
+            screenshotView.trailingAnchor.constraint(equalTo: backgroundHolder.trailingAnchor),
             screenshotView.bottomAnchor.constraint(equalTo: backgroundHolder.bottomAnchor),
 
             faviconBG.centerYAnchor.constraint(equalTo: backgroundHolder.centerYAnchor, constant: UX.faviconYOffset),

@@ -6,7 +6,9 @@ import Foundation
 
 class TabsSectionManager {
     struct UX {
-        static let cellEstimatedHeight: CGFloat = 200
+        // On iPad we can set to have bigger tabs, on iPhone we need smaller ones
+        static let cellEstimatedWidth: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 170
+        static let cellAbsoluteHeight: CGFloat = 200
         static let cardSpacing: CGFloat = 16
         static let standardInset: CGFloat = 18
         static let iPadInset: CGFloat = 50
@@ -23,21 +25,23 @@ class TabsSectionManager {
     }
 
     func layoutSection(_ layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
+        let availableWidth = layoutEnvironment.container.effectiveContentSize.width
+        let maxNumberOfCellPerRow = Int(availableWidth / UX.cellEstimatedWidth)
+
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(0.5),
-            heightDimension: .absolute(UX.cellEstimatedHeight)
+            widthDimension: .estimated(UX.cellEstimatedWidth),
+            heightDimension: .absolute(UX.cellAbsoluteHeight)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .absolute(UX.cellEstimatedHeight)
+            heightDimension: .estimated(UX.cellAbsoluteHeight)
         )
-
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                        subitem: item,
-                                                       count: 2)
-        group.interItemSpacing = NSCollectionLayoutSpacing.fixed(UX.cardSpacing)
+                                                       count: maxNumberOfCellPerRow)
+        group.interItemSpacing = .fixed(UX.cardSpacing)
         let section = NSCollectionLayoutSection(group: group)
 
         let horizontalInset = TabsSectionManager.leadingInset(traitCollection: layoutEnvironment.traitCollection)
