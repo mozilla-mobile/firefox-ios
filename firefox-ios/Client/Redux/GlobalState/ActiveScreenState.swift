@@ -61,6 +61,17 @@ enum AppScreenState: Equatable {
         case .tabPeek: return .tabPeek
         }
     }
+
+    var windowUUID: WindowUUID? {
+        switch self {
+        case .browserViewController(let state): return state.windowUUID
+        case .remoteTabsPanel(let state): return state.windowUUID
+        case .tabsTray(let state): return state.windowUUID
+        case .tabsPanel(let state): return state.windowUUID
+        case .themeSettings(let state): return state.windowUUID
+        case .tabPeek(let state): return state.windowUUID
+        }
+    }
 }
 
 struct ActiveScreensState: Equatable {
@@ -81,21 +92,9 @@ struct ActiveScreensState: Equatable {
             switch action {
             case .closeScreen(let context):
                 let uuid = context.windowUUID
+                let screenType = context.screen
                 screens = screens.filter({
-                    switch $0 {
-                    case .browserViewController(let state):
-                        return state.windowUUID != uuid
-                    case .remoteTabsPanel(let state):
-                        return state.windowUUID != uuid
-                    case .tabsTray(let state):
-                        return state.windowUUID != uuid
-                    case .tabsPanel(let state):
-                        return state.windowUUID != uuid
-                    case .themeSettings(let state):
-                        return state.windowUUID != uuid
-                    case .tabPeek(let state):
-                        return state.windowUUID != uuid
-                    }
+                    return $0.associatedAppScreen != screenType || $0.windowUUID != uuid
                 })
             case .showScreen(let context):
                 let screenType = context.screen
