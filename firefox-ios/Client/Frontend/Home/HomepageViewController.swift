@@ -249,7 +249,7 @@ class HomepageViewController:
 
     func createLayout() -> UICollectionViewLayout {
         // swiftlint:disable line_length
-        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+        return UICollectionViewCompositionalLayout { [weak self] (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
         // swiftlint:enable line_length
             guard let self = self,
                   let viewModel = self.viewModel.getSectionViewModel(shownSection: sectionIndex),
@@ -265,7 +265,6 @@ class HomepageViewController:
                 size: layoutEnvironment.container.effectiveContentSize
             )
         }
-        return layout
     }
 
     // MARK: Long press

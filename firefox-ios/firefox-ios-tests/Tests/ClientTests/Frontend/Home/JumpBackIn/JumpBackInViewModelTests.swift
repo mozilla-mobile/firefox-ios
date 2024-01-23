@@ -350,7 +350,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
         // Mock rotation to landscape
         let landscapeTrait = MockTraitCollection(verticalSizeClass: .compact).getTraitCollection()
-        _ = subject.section(for: trait, size: iPhone14ScreenSize, isPortrait: false, device: .phone)
+        _ = subject.section(for: landscapeTrait, size: iPhone14ScreenSize, isPortrait: false, device: .phone)
         XCTAssertEqual(subject.sectionLayout, .medium)
 
         // Go back to portrait
