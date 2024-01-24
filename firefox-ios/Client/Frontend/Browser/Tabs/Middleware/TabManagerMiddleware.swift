@@ -186,7 +186,7 @@ class TabManagerMiddleware {
         defaultTabManager.selectTab(tab)
 
         let tabs = self.refreshTabs(for: isPrivate)
-        store.dispatch(TabPanelAction.refreshTab(tabs))
+        store.dispatch(TabPanelAction.refreshTab(tabs, true))
         store.dispatch(TabTrayAction.dismissTabTray)
     }
 
@@ -206,7 +206,7 @@ class TabManagerMiddleware {
         defaultTabManager.moveTab(isPrivate: false, fromIndex: originIndex, toIndex: destinationIndex)
 
         let tabs = self.refreshTabs(for: tabsState.isPrivateMode)
-        store.dispatch(TabPanelAction.refreshTab(tabs))
+        store.dispatch(TabPanelAction.refreshTab(tabs, false))
     }
 
     /// Async close single tab. If is the last tab the Tab Tray is dismissed and undo
@@ -226,7 +226,7 @@ class TabManagerMiddleware {
     private func closeTabFromTabPanel(with tabUUID: String) {
         Task {
             let shouldDismiss = await self.closeTab(with: tabUUID)
-            await self.triggerRefresh(with: shouldDismiss)
+            await self.triggerRefresh(with: shouldDismiss, shouldScrollToTab: false)
             if shouldDismiss {
                 store.dispatch(TabTrayAction.dismissTabTray)
                 store.dispatch(GeneralBrowserAction.showToast(.singleTab))
@@ -239,11 +239,11 @@ class TabManagerMiddleware {
     /// Trigger refreshTabs action after a change in `TabManager`
     /// - Parameter shouldDismiss: If Tab Tray should dismiss while refresh is done
     @MainActor
-    private func triggerRefresh(with shouldDismiss: Bool) {
+    private func triggerRefresh(with shouldDismiss: Bool, shouldScrollToTab: Bool) {
         let isPrivate = defaultTabManager.selectedTab?.isPrivate ?? false
         let tabs = self.refreshTabs(for: isPrivate)
 
-        store.dispatch(TabPanelAction.refreshTab(tabs))
+        store.dispatch(TabPanelAction.refreshTab(tabs, shouldScrollToTab))
     }
 
     /// Handles undoing the close tab action, gets the backup tab from `TabManager`
@@ -255,7 +255,7 @@ class TabManagerMiddleware {
 
         defaultTabManager.undoCloseTab(tab: backupTab.tab, position: backupTab.restorePosition)
         let tabs = self.refreshTabs(for: tabsState.isPrivateMode)
-        store.dispatch(TabPanelAction.refreshTab(tabs))
+        store.dispatch(TabPanelAction.refreshTab(tabs, false))
     }
 
     private func closeAllTabs(state: AppState) {
@@ -267,7 +267,7 @@ class TabManagerMiddleware {
 
             ensureMainThread { [self] in
                 let tabs = self.refreshTabs(for: tabsState.isPrivateMode)
-                store.dispatch(TabPanelAction.refreshTab(tabs))
+                store.dispatch(TabPanelAction.refreshTab(tabs, false))
                 store.dispatch(TabTrayAction.dismissTabTray)
                 store.dispatch(GeneralBrowserAction.showToast(.allTabs(count: count)))
             }
@@ -332,7 +332,7 @@ class TabManagerMiddleware {
     private func didTapLearnMoreAboutPrivate(with urlRequest: URLRequest) {
         addNewTab(with: urlRequest, isPrivate: true)
         let tabs = self.refreshTabs(for: true)
-        store.dispatch(TabPanelAction.refreshTab(tabs))
+        store.dispatch(TabPanelAction.refreshTab(tabs, false))
         store.dispatch(TabTrayAction.dismissTabTray)
     }
 

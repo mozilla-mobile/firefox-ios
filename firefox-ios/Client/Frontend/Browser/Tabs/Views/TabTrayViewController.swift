@@ -89,7 +89,7 @@ class TabTrayViewController: UIViewController,
         label.font = TabsButton.UX.titleFont
         label.layer.cornerRadius = TabsButton.UX.cornerRadius
         label.textAlignment = .center
-        label.text = self.tabTrayState.normalTabsCount
+        label.text = "0"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -273,6 +273,7 @@ class TabTrayViewController: UIViewController,
 
     func newState(state: TabTrayState) {
         tabTrayState = state
+        countLabel.text = self.tabTrayState.normalTabsCount
 
         if tabTrayState.shouldDismiss {
             delegate?.didFinish()
