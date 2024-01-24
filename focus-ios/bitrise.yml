@@ -7,6 +7,12 @@ project_type: ios
 trigger_map:
 - push_branch: main
   pipeline: pipeline_build_and_run_tests_focus
+- push_branch: releases_v122
+  pipeline: pipeline_build_and_run_tests_focus
+- pull_request_target_branch: main
+  pipeline: pipeline_build_and_run_tests_focus
+- pull_request_target_branch: releases_v*
+  pipeline: pipeline_build_and_run_tests_focus
 - pull_request_source_branch: "*"
   pipeline: pipeline_build_and_run_tests_focus
 - tag: "*"
@@ -245,22 +251,22 @@ workflows:
     steps:
     - set-xcode-build-number@1:
         inputs:
-        - build_version_offset: '3250'
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
         - plist_path: focus-ios/Blockzilla/Info.plist
         title: Set Blockzilla version numbers
     - set-xcode-build-number@1:
         inputs:
-        - build_version_offset: '3250'
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
         - plist_path: focus-ios/ContentBlocker/Info.plist
         title: Set ContentBlocker version numbers
     - set-xcode-build-number@1:
         inputs:
-        - build_version_offset: '3250'
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
         - plist_path: focus-ios/FocusIntentExtension/Info.plist
         title: Set FocusIntentExtension version numbers
     - set-xcode-build-number@1:
         inputs:
-        - build_version_offset: '3250'
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
         - plist_path: focus-ios/OpenInFocus/Info.plist
         title: Set OpenInFocus version numbers
 
@@ -296,6 +302,144 @@ workflows:
             set -x
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" focus-ios/Focus.entitlements
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" focus-ios/Klar.entitlements
+
+  focus_SPM_Beta:
+    steps:
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_BETA_VERSION"
+        - plist_path: focus-ios/Blockzilla/Info.plist
+        title: Set Blockzilla version numbers
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_BETA_VERSION"
+        - plist_path: focus-ios/ContentBlocker/Info.plist
+        title: Set ContentBlocker version numbers
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_BETA_VERSION"
+        - plist_path: focus-ios/FocusIntentExtension/Info.plist
+        title: Set FocusIntentExtension version numbers
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_BETA_VERSION"
+        - plist_path: focus-ios/OpenInFocus/Info.plist
+        title: Set OpenInFocus version numbers
+    - certificate-and-profile-installer@1: {}
+    - xcode-archive@3:
+        inputs:
+        - project_path: focus-ios/Blockzilla.xcodeproj
+        - scheme: Focus
+        - team_id: 43AQ936H96
+        - export_method: app-store
+        title: Build Focus
+    - deploy-to-itunesconnect-application-loader@1:
+        inputs:
+        - connection: 'off'
+        - app_password: "$APPLE_ACCOUNT_PW"
+        - itunescon_user: "$APPLE_ACCOUNT_ID"
+    - script@1:
+        title: Upload Focus Symbols
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            focus-ios/focus-ios-tests/tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+              --org mozilla --project focus-ios "$BITRISE_DSYM_DIR_PATH"
+    - xcode-archive@3:
+        inputs:
+        - project_path: focus-ios/Blockzilla.xcodeproj
+        - scheme: Klar
+        - export_method: app-store
+        title: Build Klar
+    - deploy-to-itunesconnect-application-loader@1:
+        inputs:
+        - connection: 'off'
+        - app_password: "$APPLE_ACCOUNT_PW"
+        - itunescon_user: "$APPLE_ACCOUNT_ID"
+    - script@1:
+        title: Upload Klar Symbols
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            focus-ios/focus-ios-tests/tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+              --org mozilla --project klar-ios "$BITRISE_DSYM_DIR_PATH"
+
+    before_run:
+      - clone-and-build-dependencies
+      - set-default-browser-entitlement
+      - configure-nimbus
+      - configure-sentry
+
+  focus_SPM_Nightly:
+    steps:
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
+        - plist_path: focus-ios/Blockzilla/Info.plist
+        title: Set Blockzilla version numbers
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
+        - plist_path: focus-ios/ContentBlocker/Info.plist
+        title: Set ContentBlocker version numbers
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
+        - plist_path: focus-ios/FocusIntentExtension/Info.plist
+        title: Set FocusIntentExtension version numbers
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
+        - plist_path: focus-ios/OpenInFocus/Info.plist
+        title: Set OpenInFocus version numbers
+    - certificate-and-profile-installer@1: {}
+    - xcode-archive@3:
+        inputs:
+        - project_path: focus-ios/Blockzilla.xcodeproj
+        - scheme: Focus
+        - team_id: 43AQ936H96
+        - export_method: app-store
+        title: Build Focus
+    - deploy-to-itunesconnect-application-loader@1:
+        inputs:
+        - connection: 'off'
+        - app_password: "$APPLE_ACCOUNT_PW"
+        - itunescon_user: "$APPLE_ACCOUNT_ID"
+    - script@1:
+        title: Upload Focus Symbols
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            focus-ios/focus-ios-tests/tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+              --org mozilla --project focus-ios "$BITRISE_DSYM_DIR_PATH"
+    - xcode-archive@3:
+        inputs:
+        - project_path: focus-ios/Blockzilla.xcodeproj
+        - scheme: Klar
+        - export_method: app-store
+        title: Build Klar
+    - deploy-to-itunesconnect-application-loader@1:
+        inputs:
+        - connection: 'off'
+        - app_password: "$APPLE_ACCOUNT_PW"
+        - itunescon_user: "$APPLE_ACCOUNT_ID"
+    - script@1:
+        title: Upload Klar Symbols
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            focus-ios/focus-ios-tests/tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+              --org mozilla --project klar-ios "$BITRISE_DSYM_DIR_PATH"
+
+    before_run:
+      - clone-and-build-dependencies
+      - set-default-browser-entitlement
+      - configure-nimbus
+      - configure-sentry
 
   release:
     steps:
@@ -438,6 +582,15 @@ app:
   - opts:
       is_expand: false
     BITRISE_EXPORT_METHOD: app-store
+  - opts:
+      is_expand: false
+    BITRISE_NIGHTLY_VERSION: '9000'
+  - opts:
+      is_expand: false
+    BITRISE_RELEASE_VERSION: '123.0'
+  - opts:
+      is_expand: false
+    BITRISE_BETA_VERSION: '123.0'
 
 meta:
   bitrise.io:
