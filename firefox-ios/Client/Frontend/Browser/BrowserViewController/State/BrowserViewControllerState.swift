@@ -58,6 +58,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
     }
 
     static let reducer: Reducer<Self> = { state, action in
+        // Only process actions for the current window
+        guard action.windowUUID == nil || action.windowUUID == state.windowUUID else { return state }
+
         switch action {
         case PrivateModeMiddlewareAction.privateModeUpdated(let privacyState):
             return BrowserViewControllerState(

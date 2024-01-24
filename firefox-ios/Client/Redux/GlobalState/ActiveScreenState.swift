@@ -13,39 +13,19 @@ enum AppScreenState: Equatable {
     case themeSettings(ThemeSettingsState)
     case tabPeek(TabPeekState)
 
-    static let reducer: Reducer<Self> = { screen, action in
-        let actionUUID = action.windowUUID
-
-        func applyReducer(_ actionUUID: UUID?, _ incomingState: ScreenState) -> Bool {
-            // TODO: [8188] UUID will eventually be non-optional. Forthcoming.
-            // If the action UUID does not match this screen, we do not apply the
-            // reducer (the screen state remains unchanged, we simply return it).
-            return (actionUUID == nil || actionUUID == incomingState.windowUUID)
-        }
-
-        switch screen {
+    static let reducer: Reducer<Self> = { state, action in
+        switch state {
         case .tabPeek(let state):
-            guard applyReducer(actionUUID, state) else { return screen }
             return .tabPeek(TabPeekState.reducer(state, action))
-
         case .themeSettings(let state):
-            guard applyReducer(actionUUID, state) else { return screen }
             return .themeSettings(ThemeSettingsState.reducer(state, action))
-
         case .tabsTray(let state):
-            guard applyReducer(actionUUID, state) else { return screen }
             return .tabsTray(TabTrayState.reducer(state, action))
-
         case .tabsPanel(let state):
-            guard applyReducer(actionUUID, state) else { return screen }
             return .tabsPanel(TabsPanelState.reducer(state, action))
-
         case .remoteTabsPanel(let state):
-            guard applyReducer(actionUUID, state) else { return screen }
             return .remoteTabsPanel(RemoteTabsPanelState.reducer(state, action))
-
         case .browserViewController(let state):
-            guard applyReducer(actionUUID, state) else { return screen }
             return .browserViewController(BrowserViewControllerState.reducer(state, action))
         }
     }
