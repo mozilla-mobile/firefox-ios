@@ -170,6 +170,7 @@ class WKEngineSession: NSObject, EngineSession, WKUIDelegate {
             delegate?.onNavigationStateChange(canGoBack: webView.canGoBack,
                                               canGoForward: webView.canGoForward)
         case .contentSize:
+            // TODO: FXIOS-8086 - Handle view port in WebEngine
             break
         case .estimatedProgress:
             delegate?.onProgress(progress: webView.estimatedProgress)
@@ -177,9 +178,37 @@ class WKEngineSession: NSObject, EngineSession, WKUIDelegate {
             guard let loading = change?[.newKey] as? Bool else { break }
             delegate?.onLoadingStateChange(loading: loading)
         case .title:
-            break
+            guard let title = webView.title else { break }
+            handleTitleChange(title: title)
         case .URL:
-            break
+            handleURLChange()
+        }
+    }
+
+    private func handleTitleChange(title: String) {
+        // Ensure that the title actually changed to prevent repeated calls to navigateInTab(tab:).
+        if !title.isEmpty {
+            sessionData.title = title
+            delegate?.onTitleChange(title: title)
+        }
+
+        // TODO: FXIOS-8273 - Add telemetry integration in WebEngine and first telemetry call
+        // TelemetryWrapper.recordEvent(category: .action, method: .navigate, object: .tab)
+    }
+
+    private func handleURLChange() {
+        // Special case for "about:blank" popups, if the webView.url is nil, keep the sessionData url as "about:blank"
+        guard sessionData.url?.absoluteString == EngineConstants.aboutBlank
+                && webView.url == nil else { return }
+
+        // To prevent spoofing, only change the URL immediately if the new URL is on
+        // the same origin as the current URL. Otherwise, do nothing and wait for
+        // didCommitNavigation to confirm the page load.
+        guard sessionData.url?.origin == webView.url?.origin else { return }
+
+        sessionData.url = webView.url
+        if let url = webView.url {
+            delegate?.onLocationChange(url: url.absoluteString)
         }
     }
 
