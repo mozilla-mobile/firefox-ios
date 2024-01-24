@@ -60,6 +60,7 @@ final class HistoryCoordinatorTests: XCTestCase {
     private func createSubject() -> HistoryCoordinator {
         let subject = HistoryCoordinator(
             profile: profile,
+            windowUUID: .XCTestDefaultUUID,
             router: router,
             notificationCenter: notificationCenter,
             parentCoordinator: parentCoordinator
