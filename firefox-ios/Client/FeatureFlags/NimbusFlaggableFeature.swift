@@ -23,7 +23,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case feltPrivacyFeltDeletion
     case firefoxSuggestFeature
     case historyHighlights
-    case historyGroups
     case inactiveTabs
     case isToolbarCFREnabled
     case jumpBackIn
@@ -58,8 +57,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.FirefoxSuggest
         case .historyHighlights:
             return FlagKeys.HistoryHighlightsSection
-        case .historyGroups:
-            return FlagKeys.HistoryGroups
         case .inactiveTabs:
             return FlagKeys.InactiveTabs
         case .jumpBackIn:

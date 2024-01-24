@@ -47,9 +47,6 @@ final class NimbusFeatureFlagLayer {
         case .firefoxSuggestFeature:
             return checkFirefoxSuggestFeature(from: nimbus)
 
-        case .historyGroups:
-            return checkGroupingFeature(for: featureID, from: nimbus)
-
         case .feltPrivacySimplifiedUI, .feltPrivacyFeltDeletion:
             return checkFeltPrivacyFeature(for: featureID, from: nimbus)
 
@@ -197,23 +194,6 @@ final class NimbusFeatureFlagLayer {
         }
 
         guard let status = config.sectionsEnabled[nimbusID] else { return false }
-
-        return status
-    }
-
-    private func checkGroupingFeature(
-        for featureID: NimbusFeatureFlagID,
-        from nimbus: FxNimbus
-    ) -> Bool {
-        let config = nimbus.features.searchTermGroupsFeature.value()
-        var nimbusID: SearchTermGroups
-
-        switch featureID {
-        case .historyGroups: nimbusID = SearchTermGroups.historyGroups
-        default: return false
-        }
-
-        guard let status = config.groupingEnabled[nimbusID] else { return false }
 
         return status
     }
