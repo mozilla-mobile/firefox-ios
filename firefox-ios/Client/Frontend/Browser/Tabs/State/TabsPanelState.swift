@@ -115,7 +115,6 @@ struct TabsPanelState: ScreenState, Equatable {
                                        tabs: state.tabs,
                                        inactiveTabs: state.inactiveTabs,
                                        isInactiveTabsExpanded: state.isInactiveTabsExpanded)
-
         }
     }
 }
