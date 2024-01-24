@@ -224,16 +224,6 @@ class HomepageViewModel: FeatureFlaggable {
                    category: .homepage)
     }
 
-    func refreshData(for traitCollection: UITraitCollection, size: CGSize) {
-        updateEnabledSections()
-        childViewModels.forEach {
-            $0.refreshData(for: traitCollection,
-                           size: size,
-                           isPortrait: UIWindow.isPortrait,
-                           device: UIDevice.current.userInterfaceIdiom)
-        }
-    }
-
     // MARK: - Section ViewModel helper
 
     func getSectionViewModel(shownSection: Int) -> HomepageViewModelProtocol? {

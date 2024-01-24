@@ -1287,7 +1287,7 @@ class BrowserViewController: UIViewController,
     func setupMiddleButtonStatus(isLoading: Bool) {
         // Setting the default state to search to account for no tab or starting page tab
         // `state` will be modified later if needed
-        var state: MiddleButtonState = .search
+        let state: MiddleButtonState = .search
 
         // No tab
         guard let tab = tabManager.selectedTab else {
