@@ -1,10 +1,6 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
-"""
-Resolve secrets and dummy secrets
-"""
-
 
 from taskgraph.transforms.base import TransformSequence
 
@@ -18,27 +14,11 @@ def set_run_config(config, tasks):
         run = task.setdefault("run", {})
         run.setdefault("using", "run-commands")
         run.setdefault("use-caches", False)
-
-        run["secrets"] = {
-            "by-level": {
-                "3": [{
-                    "name": "project/mobile/firefox-ios/bitrise",
-                    "key": "api_key",
-                    "path": ".bitrise_token",
-                }],
-                "default": [],
-            },
-        }
-
-        run["dummy-secrets"] = {
-            "by-level": {
-                "3": [],
-                "default": [{
-                    "content": "faketoken",
-                    "path": ".bitrise_token",
-                }],
-            },
-        }
+        run["secrets"] = [{
+            "name": "project/mobile/firefox-ios/bitrise",
+            "key": "api_key",
+            "path": ".bitrise_token",
+        }]
 
         yield task
 
