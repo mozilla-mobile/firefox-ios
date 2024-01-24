@@ -198,8 +198,8 @@ class WKEngineSession: NSObject, EngineSession, WKUIDelegate {
 
     private func handleURLChange() {
         // Special case for "about:blank" popups, if the webView.url is nil, keep the sessionData url as "about:blank"
-        guard sessionData.url?.absoluteString == EngineConstants.aboutBlank
-                && webView.url == nil else { return }
+        if sessionData.url?.absoluteString == EngineConstants.aboutBlank
+                && webView.url == nil { return }
 
         // To prevent spoofing, only change the URL immediately if the new URL is on
         // the same origin as the current URL. Otherwise, do nothing and wait for
