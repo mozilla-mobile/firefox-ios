@@ -433,6 +433,7 @@ class SearchViewController: SiteTableViewController,
             assertionFailure()
             return
         }
+
         let extras = [
             ExtraKey.recordSearchLocation.rawValue: SearchLocation.quickSearch,
             ExtraKey.recordSearchEngineID.rawValue: engine.engineID as Any

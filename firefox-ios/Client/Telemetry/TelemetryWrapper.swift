@@ -1028,14 +1028,15 @@ extension TelemetryWrapper {
                     value: value,
                     extras: extras)
             }
+
         // MARK: Start Search Button
         case (.action, .tap, .startSearchButton, _, _):
             GleanMetrics.Search.startSearchPressed.add()
         case(.action, .tap, .recordSearch, _, let extras):
             if let searchLocation = extras?[EventExtraKey.recordSearchLocation.rawValue]
                 as? SearchLocation,
-               let searchEngineID = extras?[EventExtraKey.recordSearchEngineID.rawValue] as? String? {
-                GleanMetrics.Search.counts["\(searchEngineID ?? "custom").\(searchLocation.rawValue)"].add()
+               let searchEngineID = extras?[EventExtraKey.recordSearchEngineID.rawValue] as? String? ?? "custom" {
+                GleanMetrics.Search.counts["\(searchEngineID).\(searchLocation.rawValue)"].add()
             } else {
                 recordUninstrumentedMetrics(
                     category: category,
