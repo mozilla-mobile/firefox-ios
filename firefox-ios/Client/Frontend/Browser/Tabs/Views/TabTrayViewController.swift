@@ -273,7 +273,7 @@ class TabTrayViewController: UIViewController,
 
     func newState(state: TabTrayState) {
         tabTrayState = state
-        countLabel.text = self.tabTrayState.normalTabsCount
+        updateTabCountImage(count: state.normalTabsCount)
 
         if tabTrayState.shouldDismiss {
             delegate?.didFinish()
@@ -281,6 +281,12 @@ class TabTrayViewController: UIViewController,
         if let url = tabTrayState.shareURL {
             navigationHandler?.shareTab(url: url, sourceView: self.view)
         }
+    }
+
+    func updateTabCountImage(count: String) {
+        countLabel.text = count
+        segmentedControl.setImage(TabTrayPanelType.tabs.image!.overlayWith(image: countLabel),
+                                  forSegmentAt: 0)
     }
 
     // MARK: Themeable
