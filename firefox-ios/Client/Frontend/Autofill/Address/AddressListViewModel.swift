@@ -1,0 +1,49 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+import SwiftUI
+import Common
+import Shared
+import Storage
+
+// TODO: PHASE-2 FXIOS-7653
+// AddressListViewModelDelegate: A protocol to notify delegates about address updates.
+// protocol AddressListViewModelDelegate: AnyObject {
+//     func didUpdateAddresses(_ addresses: [Address])
+// }
+
+// AddressListViewModel: A view model for managing addresses.
+class AddressListViewModel: ObservableObject {
+    // MARK: - Properties
+
+    @Published var addresses: [Address] = []
+    @Published var showSection = false
+    private let profile: Profile?
+
+    // MARK: - Initializer
+
+    /// Initializes the AddressListViewModel.
+    /// - Parameter profile: The profile associated with the address list.
+    init(profile: Profile? = nil) {
+        self.profile = profile
+    }
+
+    // MARK: - Fetch Addresses
+
+    /// Fetches addresses from the associated profile's autofill.
+    func fetchAddresses() {
+        // Assuming profile is a class-level variable
+        profile?.autofill.listAllAddresses { [weak self] storedAddresses, error in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                if let addresses = storedAddresses {
+                    self.addresses = addresses
+                    self.showSection = !addresses.isEmpty
+                } else if let error = error {
+                    print("Error fetching addresses: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+}

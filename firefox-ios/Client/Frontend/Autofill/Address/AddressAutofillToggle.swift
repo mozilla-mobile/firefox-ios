@@ -46,12 +46,12 @@ struct AddressAutofillToggle: View {
                 // Left-aligned stack for title and description
                 VStack(alignment: .leading) {
                     // Title for the Toggle
-                    Text(String.Addresses.EditCard.SwitchTitle)
+                    Text(String.Addresses.Settings.SwitchTitle)
                         .font(.body)
                         .foregroundColor(textColor)
 
                     // Description for the Toggle
-                    Text(String.Addresses.EditCard.SwitchDescription)
+                    Text(String.Addresses.Settings.SwitchDescription)
                         .font(.footnote)
                         .foregroundColor(descriptionTextColor)
                 }
