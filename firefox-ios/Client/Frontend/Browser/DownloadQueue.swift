@@ -12,7 +12,7 @@ protocol DownloadDelegate: AnyObject {
 }
 
 class Download: NSObject {
-    var delegate: DownloadDelegate?
+    weak var delegate: DownloadDelegate?
 
     fileprivate(set) var filename: String
     fileprivate(set) var mimeType: String
