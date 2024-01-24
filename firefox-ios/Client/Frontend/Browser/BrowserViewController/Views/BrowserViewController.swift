@@ -502,6 +502,7 @@ class BrowserViewController: UIViewController,
         store.dispatch(ActiveScreensStateAction.closeScreen(
             ScreenActionContext(screen: .browserViewController, windowUUID: windowUUID)
         ))
+        // Note: actual `store.unsubscribe()` is not strictly needed; Redux uses weak subscribers
     }
 
     func newState(state: BrowserViewControllerState) {
