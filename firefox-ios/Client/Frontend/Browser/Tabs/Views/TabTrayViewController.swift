@@ -280,9 +280,6 @@ class TabTrayViewController: UIViewController,
         }
         if let url = tabTrayState.shareURL {
             navigationHandler?.shareTab(url: url, sourceView: self.view)
-
-            // Reload to clear the share sheet item
-            store.dispatch(TabTrayAction.tabTrayDidLoad(tabTrayState.selectedPanel))
         }
     }
 

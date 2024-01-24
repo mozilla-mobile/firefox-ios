@@ -110,9 +110,12 @@ struct TabsPanelState: ScreenState, Equatable {
                                   isPrivateMode: state.isPrivateMode,
                                   tabs: state.tabs,
                                   inactiveTabs: state.inactiveTabs,
-                                  isInactiveTabsExpanded: state.isInactiveTabsExpanded,
-                                  toastType: nil)
-        default: return state
+                                  isInactiveTabsExpanded: state.isInactiveTabsExpanded)
+        default: return TabsPanelState(isPrivateMode: state.isPrivateMode,
+                                       tabs: state.tabs,
+                                       inactiveTabs: state.inactiveTabs,
+                                       isInactiveTabsExpanded: state.isInactiveTabsExpanded)
+
         }
     }
 }
