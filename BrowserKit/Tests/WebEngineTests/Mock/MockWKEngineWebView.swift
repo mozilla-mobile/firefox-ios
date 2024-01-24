@@ -13,6 +13,7 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
     var interactionState: Any?
     var scrollView = UIScrollView()
     var url: URL?
+    var title: String?
     var allowsBackForwardNavigationGestures = true
     var allowsLinkPreview = true
     var isInspectable = true

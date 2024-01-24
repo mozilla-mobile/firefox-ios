@@ -10,7 +10,7 @@ class WKEngineSession: NSObject, EngineSession, WKUIDelegate {
     weak var delegate: EngineSessionDelegate?
     private(set) var webView: WKEngineWebView
     private var logger: Logger
-    private var sessionData: WKEngineSessionData
+    var sessionData: WKEngineSessionData
     private var contentScriptManager: WKContentScriptManager
 
     init?(userScriptManager: WKUserScriptManager,
