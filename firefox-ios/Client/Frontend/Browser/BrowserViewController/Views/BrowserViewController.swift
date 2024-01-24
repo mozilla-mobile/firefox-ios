@@ -229,6 +229,10 @@ class BrowserViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        unscubscribeFromRedux()
+    }
+
     override var prefersStatusBarHidden: Bool {
         return false
     }
@@ -492,6 +496,12 @@ class BrowserViewController: UIViewController,
                 return BrowserViewControllerState(appState: appState, uuid: uuid)
             })
         })
+    }
+
+    func unscubscribeFromRedux() {
+        store.dispatch(ActiveScreensStateAction.closeScreen(
+            ScreenActionContext(screen: .browserViewController, windowUUID: windowUUID)
+        ))
     }
 
     func newState(state: BrowserViewControllerState) {
