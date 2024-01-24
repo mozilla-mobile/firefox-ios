@@ -188,4 +188,56 @@ final class URLExtensionTests: XCTestCase {
 
         XCTAssertEqual(urlParams["a"], "%20")
     }
+
+    // MARK: isWebPage
+
+    // Laurie todo tests
+
+    func testisWebPage() {
+//        let goodurls = [
+//            "http://localhost:\(AppInfo.webserverPort)/reader-mode/page",
+//            "https://127.0.0.1:\(AppInfo.webserverPort)/sessionrestore.html",
+//            "data://:\(AppInfo.webserverPort)/sessionrestore.html"
+//        ]
+//        let badurls = [
+//            "about://google.com",
+//            "tel:6044044004",
+//            "hax://localhost:\(AppInfo.webserverPort)/about"
+//        ]
+//
+//        goodurls.forEach { XCTAssertTrue(URL(string: $0)!.isWebPage(), $0) }
+//        badurls.forEach { XCTAssertFalse(URL(string: $0)!.isWebPage(), $0) }
+    }
+
+    // MARK: Host port
+
+    func testhostPort() {
+        let urls = [
+            ("https://www.example.com", "www.example.com"),
+            ("https://user:pass@www.example.com", "www.example.com"),
+            ("http://localhost:6000/blah", "localhost:6000")
+        ]
+
+        let badurls = [
+            "blah",
+            "http://"
+        ]
+        urls.forEach { XCTAssertEqual(URL(string: $0.0)!.hostPort, $0.1) }
+        badurls.forEach { XCTAssertNil(URL(string: $0)!.hostPort) }
+    }
+
+    // MARK: Origin
+
+    func testorigin() {
+        let urls = [
+            ("https://www.example.com/index.html", "https://www.example.com"),
+            ("https://user:pass@m.foo.com/bar/baz?noo=abc#123", "https://m.foo.com"),
+        ]
+
+        let badurls = [
+            "data://google.com"
+        ]
+        urls.forEach { XCTAssertEqual(URL(string: $0.0)!.origin, $0.1) }
+        badurls.forEach { XCTAssertNil(URL(string: $0)!.origin) }
+    }
 }
