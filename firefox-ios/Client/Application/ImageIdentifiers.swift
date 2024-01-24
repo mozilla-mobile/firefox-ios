@@ -66,4 +66,5 @@ public struct ImageIdentifiers {
     public static let breachedWebsite = "Breached Website"
     public static let customizeHomepage = "editLarge"
     public static let help = "helpCircleLarge"
+    public static let share = "Share"
 }

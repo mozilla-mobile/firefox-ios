@@ -245,18 +245,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     /// Scan QR code button tapped
     @objc
     func scanbuttonTapped(_ sender: UIButton) {
-        if CoordinatorFlagManager.isQRCodeCoordinatorEnabled {
-            qrCodeNavigationHandler?.showQRCode(delegate: self, rootNavigationController: navigationController)
-        } else {
-            let qrCodeVC = QRCodeViewController()
-            qrCodeVC.qrCodeDelegate = self
-            presentThemedViewController(
-                navItemLocation: .Left,
-                navItemText: .Close,
-                vcBeingPresented: qrCodeVC,
-                topTabsVisible: true
-            )
-        }
+        qrCodeNavigationHandler?.showQRCode(delegate: self, rootNavigationController: navigationController)
         TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .tap, object: .syncSignInScanQRCode)
     }
 

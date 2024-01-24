@@ -6,7 +6,7 @@ import Common
 import Foundation
 import WebKit
 
-class WKEngineSession: NSObject, EngineSession {
+class WKEngineSession: NSObject, EngineSession, WKUIDelegate {
     weak var delegate: EngineSessionDelegate?
     private(set) var webView: WKEngineWebView
     private var logger: Logger
@@ -34,9 +34,7 @@ class WKEngineSession: NSObject, EngineSession {
 
         self.setupObservers()
 
-        // TODO: FXIOS-8106 Add UI delegate
-//        webView.uiDelegate = self
-
+        webView.uiDelegate = self
         userScriptManager.injectUserScriptsIntoWebView(webView)
 
         // TODO: FXIOS-7901 #17646 Handle WKEngineSession tabDelegate
@@ -128,8 +126,7 @@ class WKEngineSession: NSObject, EngineSession {
 //        tabDelegate?.tab(self, willDeleteWebView: webView)
 
         webView.navigationDelegate = nil
-        // TODO: FXIOS-8106 Add UI delegate
-//        webView.uiDelegate = nil
+        webView.uiDelegate = nil
 
         webView.removeFromSuperview()
     }
@@ -184,5 +181,64 @@ class WKEngineSession: NSObject, EngineSession {
         case .URL:
             break
         }
+    }
+
+    // MARK: - WKUIDelegate
+
+    func webView(_ webView: WKWebView,
+                 createWebViewWith configuration: WKWebViewConfiguration,
+                 for navigationAction: WKNavigationAction,
+                 windowFeatures: WKWindowFeatures) -> WKWebView? {
+        // FXIOS-8243 - Handle popup windows with createWebViewWith in WebEngine (epic part 2)
+        return nil
+    }
+
+    func webView(
+        _ webView: WKWebView,
+        runJavaScriptAlertPanelWithMessage message: String,
+        initiatedByFrame frame: WKFrameInfo,
+        completionHandler: @escaping () -> Void
+    ) {
+        // FXIOS-8244 - Handle Javascript panel messages in WebEngine (epic part 3)
+    }
+
+    func webView(
+        _ webView: WKWebView,
+        runJavaScriptConfirmPanelWithMessage message: String,
+        initiatedByFrame frame: WKFrameInfo,
+        completionHandler: @escaping (Bool) -> Void
+    ) {
+        // FXIOS-8244 - Handle Javascript panel messages in WebEngine (epic part 3)
+    }
+
+    func webView(
+        _ webView: WKWebView,
+        runJavaScriptTextInputPanelWithPrompt prompt: String,
+        defaultText: String?,
+        initiatedByFrame frame: WKFrameInfo,
+        completionHandler: @escaping (String?) -> Void
+    ) {
+        // FXIOS-8244 - Handle Javascript panel messages in WebEngine (epic part 3)
+    }
+
+    func webViewDidClose(_ webView: WKWebView) {
+        // FXIOS-8245 - Handle webViewDidClose in WebEngine (epic part 3)
+    }
+
+    func webView(
+        _ webView: WKWebView,
+        contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo,
+        completionHandler: @escaping (UIContextMenuConfiguration?) -> Void
+    ) {
+        // FXIOS-8246 - Handle context menu in WebEngine (epic part 3)
+    }
+
+    @available(iOS 15, *)
+    func webView(_ webView: WKWebView,
+                 requestMediaCapturePermissionFor origin: WKSecurityOrigin,
+                 initiatedByFrame frame: WKFrameInfo,
+                 type: WKMediaCaptureType,
+                 decisionHandler: @escaping (WKPermissionDecision) -> Void) {
+        // FXIOS-8247 - Handle media capture in WebEngine (epic part 3)
     }
 }

@@ -36,6 +36,8 @@
         "EngagementNotificationTests",
         "ExperimentIntegrationTests",
         "FakespotTests\/testFakespotAvailable()",
+        "FakespotTests\/testPriceTagIconAvailableOnlyOnDetailPage()",
+        "FakespotTests\/testPriceTagNotDisplayedInPrivateMode()",
         "FindInPageTests",
         "FirefoxSuggestTest",
         "FxScreenGraphTests",
