@@ -1582,6 +1582,47 @@ workflows:
             sed 's/.*=//;s/'\''/"/g' data.txt > test.json
             cat test.json
             python3 perfTestTransform.py
+  Test_App_Diff_Check:
+    steps:
+    - git-clone@6.2: {}
+    - script@1:
+        title: Determine which application to base configuration
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+
+            # Determine which application to base configuration
+            APPS_AFFECTED=$(git diff --name-only origin/main..."$BITRISE_GIT_COMMIT" | xargs -n1 dirname | sort | uniq)
+
+            if [[ "$APPS_AFFECTED" == *"firefox-ios"* ]]; then
+                envman add --key BUILD_FIREFOX_IOS --value "true"
+            fi
+            if [[ "$APPS_AFFECTED" == *"focus-ios"* ]]; then
+                envman add --key BUILD_FOCUS_IOS --value "true"
+            fi
+            if [[ "$APPS_AFFECTED" == *"SampleBrowser"* ]]; then
+                envman add --key BUILD_SAMPLE_BROWSER_IOS --value "true"
+            fi
+    - share-pipeline-variable@1:
+        title: Share which application(s) to base configuration off of
+        inputs:
+        - variables: |-
+            BUILD_FIREFOX_IOS
+            BUILD_SAMPLE_BROWSER_IOS
+
+    - script@1:
+        title: Show which configuration is set to true
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -ex
+
+            echo "BUILD_FIREFOX_IOS: $BUILD_FIREFOX_IOS"
+            echo "BUILD_FOCUS_IOS: $BUILD_FOCUS_IOS"
+            echo "BUILD_SAMPLE_BROWSER_IOS: $BUILD_SAMPLE_BROWSER_IOS"
+
+
 
 app:
   envs:
@@ -1614,7 +1655,7 @@ trigger_map:
 - push_branch: release/v124
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: main
-  pipeline: pipeline_multiple_shards
+  workflow: Test_App_Diff_Check
 - pull_request_target_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: release/v*
