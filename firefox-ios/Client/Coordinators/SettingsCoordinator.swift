@@ -96,7 +96,7 @@ class SettingsCoordinator: BaseCoordinator,
             return viewController
 
         case .search:
-            let viewController = SearchSettingsTableViewController(profile: profile)
+            let viewController = SearchSettingsTableViewController(profile: profile, windowUUID: windowUUID)
             return viewController
 
         case .clearPrivateData:
@@ -295,7 +295,7 @@ class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedSearchEngine() {
-        let viewController = SearchSettingsTableViewController(profile: profile)
+        let viewController = SearchSettingsTableViewController(profile: profile, windowUUID: windowUUID)
         router.push(viewController)
     }
 

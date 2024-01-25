@@ -2357,7 +2357,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
     }
 
     func presentSearchSettingsController() {
-        let searchSettingsTableViewController = SearchSettingsTableViewController(profile: profile)
+        let searchSettingsTableViewController = SearchSettingsTableViewController(profile: profile, windowUUID: windowUUID)
 
         // Update search icon when the searchengine changes
         searchSettingsTableViewController.updateSearchIcon = {

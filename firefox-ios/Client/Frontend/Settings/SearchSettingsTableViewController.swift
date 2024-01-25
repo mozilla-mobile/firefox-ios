@@ -41,6 +41,7 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
 
     private let profile: Profile
     private let model: SearchEngines
+    private let windowUUID: WindowUUID
 
     private let ItemDefaultEngine = 0
     private let ItemDefaultSuggestions = 1
@@ -64,9 +65,10 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
         return defaultEngine.isCustomEngine ? customEngineCount > 1 : customEngineCount > 0
     }
 
-    init(profile: Profile) {
+    init(profile: Profile, windowUUID: WindowUUID) {
         self.profile = profile
         model = profile.searchEngines
+        self.windowUUID = windowUUID
         super.init()
     }
 
@@ -127,8 +129,11 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
 
     func subscribeToRedux() {
         store.dispatch(SearchSettingsAction.searchSettingsDidLoad)
+        let uuid = windowUUID
         store.subscribe(self, transform: {
-            $0.select(SearchSettingsState.init)
+            $0.select({ appState in
+                return SearchSettingsState(appState, windowUUID: uuid)
+            })
         })
     }
 
