@@ -28,7 +28,6 @@ protocol WKEngineWebView: UIView {
     var estimatedProgress: Double { get }
     var canGoBack: Bool { get }
     var canGoForward: Bool { get }
-    var hasOnlySecureContent: Bool { get }
 
     @available(iOS 16.4, *)
     var isInspectable: Bool { get set }

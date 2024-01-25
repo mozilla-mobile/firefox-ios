@@ -53,7 +53,7 @@ class TabLocationView: UIView, FeatureFlaggable {
 
     var hasSecureContent = false {
         didSet {
-            if oldValue != blockerStatus { setTrackingProtection() }
+            if oldValue != hasSecureContent { setTrackingProtection() }
         }
     }
 
