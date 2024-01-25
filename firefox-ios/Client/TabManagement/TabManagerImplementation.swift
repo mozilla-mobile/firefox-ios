@@ -28,7 +28,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     init(profile: Profile,
          imageStore: DiskImageStore = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
-         uuid: WindowUUID = WindowUUID(),
+         uuid: WindowUUID,
          tabDataStore: TabDataStore = AppContainer.shared.resolve(),
          tabSessionStore: TabSessionStore = DefaultTabSessionStore(),
          tabMigration: TabMigrationUtility = DefaultTabMigrationUtility(),

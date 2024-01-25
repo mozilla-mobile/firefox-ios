@@ -15,6 +15,8 @@ public protocol AnyStoreSubscriber: AnyObject {
 public protocol StoreSubscriber: AnyStoreSubscriber {
     associatedtype SubscriberStateType
 
+    /// Updates the subscriber with a new State for its screen state type.
+    /// - Parameter state: the changed screen state.
     func newState(state: SubscriberStateType)
 }
 

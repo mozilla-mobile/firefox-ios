@@ -124,7 +124,7 @@ class SearchViewController: SiteTableViewController,
         self.tabManager = tabManager
         self.searchFeature = featureConfig
         self.highlightManager = highlightManager
-        super.init(profile: profile)
+        super.init(profile: profile, windowUUID: tabManager.windowUUID)
 
         tableView.sectionHeaderTopPadding = 0
     }

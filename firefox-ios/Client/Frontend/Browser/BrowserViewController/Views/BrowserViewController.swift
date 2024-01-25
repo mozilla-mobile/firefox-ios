@@ -66,6 +66,7 @@ class BrowserViewController: UIViewController,
     var dataClearanceContextHintVC: ContextualHintViewController
     let shoppingContextHintVC: ContextualHintViewController
     private var backgroundTabLoader: DefaultBackgroundTabLoader
+    var windowUUID: WindowUUID { return tabManager.windowUUID }
 
     // MARK: Telemetry Variables
     var webviewTelemetry = WebViewLoadMeasurementTelemetry()
@@ -226,6 +227,10 @@ class BrowserViewController: UIViewController,
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        unscubscribeFromRedux()
     }
 
     override var prefersStatusBarHidden: Bool {
@@ -482,10 +487,22 @@ class BrowserViewController: UIViewController,
     // MARK: - Redux
 
     func subscribeToRedux() {
-        store.dispatch(ActiveScreensStateAction.showScreen(.browserViewController))
+        store.dispatch(ActiveScreensStateAction.showScreen(
+            ScreenActionContext(screen: .browserViewController, windowUUID: windowUUID)
+        ))
+        let uuid = self.windowUUID
         store.subscribe(self, transform: {
-            $0.select(BrowserViewControllerState.init)
+            $0.select({ appState in
+                return BrowserViewControllerState(appState: appState, uuid: uuid)
+            })
         })
+    }
+
+    func unscubscribeFromRedux() {
+        store.dispatch(ActiveScreensStateAction.closeScreen(
+            ScreenActionContext(screen: .browserViewController, windowUUID: windowUUID)
+        ))
+        // Note: actual `store.unsubscribe()` is not strictly needed; Redux uses weak subscribers
     }
 
     func newState(state: BrowserViewControllerState) {
@@ -1248,6 +1265,7 @@ class BrowserViewController: UIViewController,
             else { return }
 
             let detailController = BookmarkDetailPanel(profile: self.profile,
+                                                       windowUUID: self.windowUUID,
                                                        bookmarkNode: bookmarkNode,
                                                        parentBookmarkFolder: bookmarkFolder,
                                                        presentedFromToast: true)
@@ -2012,6 +2030,10 @@ class BrowserViewController: UIViewController,
             }
         })
         self.show(toast: toast)
+    }
+
+    var libraryPanelWindowUUID: WindowUUID {
+        return windowUUID
     }
 
     // MARK: - RecentlyClosedPanelDelegate

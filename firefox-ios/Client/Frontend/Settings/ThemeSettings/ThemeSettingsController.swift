@@ -28,6 +28,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
 
     // A non-interactable slider is underlaid to show the current screen brightness indicator
     private var slider: (control: UISlider, deviceBrightnessIndicator: UISlider)?
+    private let windowUUID: WindowUUID
 
     var isAutoBrightnessOn: Bool {
         return themeState.isAutomaticBrightnessEnabled
@@ -41,8 +42,9 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         return themeState.manualThemeSelected
     }
 
-    init() {
-        self.themeState = ThemeSettingsState()
+    init(windowUUID: WindowUUID) {
+        self.themeState = ThemeSettingsState(windowUUID: windowUUID)
+        self.windowUUID = windowUUID
         super.init(style: .grouped)
     }
 
@@ -74,14 +76,19 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     // MARK: - Redux
 
     func subscribeToRedux() {
-        store.dispatch(ThemeSettingsAction.themeSettingsDidAppear)
+        store.dispatch(ThemeSettingsAction.themeSettingsDidAppear(ActionContext(windowUUID: windowUUID)))
+        let uuid = windowUUID
         store.subscribe(self, transform: {
-            $0.select(ThemeSettingsState.init)
+            $0.select({ appState in
+                return ThemeSettingsState(appState: appState, uuid: uuid)
+            })
         })
     }
 
     func unsubscribeFromRedux() {
-        store.dispatch(ActiveScreensStateAction.closeScreen(.themeSettings))
+        store.dispatch(ActiveScreensStateAction.closeScreen(
+            ScreenActionContext(screen: .themeSettings, windowUUID: windowUUID)
+        ))
         store.unsubscribe(self)
     }
 
