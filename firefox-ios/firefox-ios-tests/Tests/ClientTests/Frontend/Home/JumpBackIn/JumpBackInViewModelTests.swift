@@ -80,13 +80,15 @@ class JumpBackInViewModelTests: XCTestCase {
 
     func testMaxJumpBackInItemsToDisplay_compactJumpBackIn() async {
         let subject = createSubject()
+        let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
+        await adaptor.setRecentTabs(recentTabs: [tab1])
 
         // iPhone layout portrait
         let trait = MockTraitCollection(horizontalSizeClass: .compact).getTraitCollection()
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
-        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
+        _ = subject.section(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: false,
                                                                device: .phone)
         XCTAssertEqual(maxItems.tabsCount, 2)
@@ -103,7 +105,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
-        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
+        _ = subject.section(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
                                                                device: .phone)
 
@@ -123,7 +125,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
-        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
+        _ = subject.section(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
                                                                device: .phone)
 
@@ -143,7 +145,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
-        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: false, device: .phone)
+        _ = subject.section(for: trait, size: iPhone14ScreenSize, isPortrait: false, device: .phone)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
                                                                device: .phone)
 
@@ -163,7 +165,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
-        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: false, device: .phone)
+        _ = subject.section(for: trait, size: iPhone14ScreenSize, isPortrait: false, device: .phone)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
                                                                device: .phone)
 
@@ -183,7 +185,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
-        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .pad)
+        _ = subject.section(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .pad)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
                                                                device: .pad)
 
@@ -203,7 +205,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
-        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .pad)
+        _ = subject.section(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .pad)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
                                                                device: .pad)
 
@@ -223,7 +225,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
-        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: false, device: .pad)
+        _ = subject.section(for: trait, size: iPhone14ScreenSize, isPortrait: false, device: .pad)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
                                                                device: .pad)
 
@@ -243,7 +245,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let trait = MockTraitCollection(verticalSizeClass: .compact).getTraitCollection()
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
-        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
+        _ = subject.section(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
                                                                device: .phone)
 
@@ -263,7 +265,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
-        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: false, device: .pad)
+        _ = subject.section(for: trait, size: iPhone14ScreenSize, isPortrait: false, device: .pad)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
                                                                device: .pad)
 
@@ -284,7 +286,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
-        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
+        _ = subject.section(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
                                                                device: .phone)
 
@@ -303,7 +305,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
-        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: false, device: .phone)
+        _ = subject.section(for: trait, size: iPhone14ScreenSize, isPortrait: false, device: .phone)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
                                                                device: .phone)
 
@@ -322,7 +324,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
-        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: false, device: .pad)
+        _ = subject.section(for: trait, size: iPhone14ScreenSize, isPortrait: false, device: .pad)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
                                                                device: .pad)
 
@@ -341,18 +343,18 @@ class JumpBackInViewModelTests: XCTestCase {
         try? await Task.sleep(nanoseconds: sleepTime)
 
         // Start in portrait
-        let portraitTrait = MockTraitCollection(horizontalSizeClass: .compact).getTraitCollection()
+        let trait = MockTraitCollection(horizontalSizeClass: .compact).getTraitCollection()
 
-        subject.refreshData(for: portraitTrait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
+        _ = subject.section(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
         XCTAssertEqual(subject.sectionLayout, .compactJumpBackIn)
 
         // Mock rotation to landscape
         let landscapeTrait = MockTraitCollection(verticalSizeClass: .compact).getTraitCollection()
-        subject.refreshData(for: landscapeTrait, size: iPhone14ScreenSize, isPortrait: false, device: .phone)
+        _ = subject.section(for: landscapeTrait, size: iPhone14ScreenSize, isPortrait: false, device: .phone)
         XCTAssertEqual(subject.sectionLayout, .medium)
 
         // Go back to portrait
-        subject.refreshData(for: portraitTrait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
+        _ = subject.section(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
         XCTAssertEqual(subject.sectionLayout, .compactJumpBackIn)
     }
 
@@ -382,7 +384,6 @@ class JumpBackInViewModelTests: XCTestCase {
         let subject = createSubject()
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
-        subject.refreshData(for: MockTraitCollection().getTraitCollection(), size: iPhone14ScreenSize)
 
         XCTAssertEqual(subject.jumpBackInList.tabs.count, 0)
         XCTAssertNil(subject.mostRecentSyncedTab)
@@ -392,9 +393,10 @@ class JumpBackInViewModelTests: XCTestCase {
         let subject = createSubject()
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
         await adaptor.setRecentTabs(recentTabs: [tab1])
+
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
-        subject.refreshData(for: MockTraitCollection().getTraitCollection(), size: iPhone14ScreenSize)
+        _ = subject.section(for: MockTraitCollection().getTraitCollection(), size: iPhone14ScreenSize)
 
         XCTAssertEqual(subject.jumpBackInList.tabs.count, 1)
         XCTAssertNil(subject.mostRecentSyncedTab)
@@ -406,7 +408,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
-        subject.refreshData(for: MockTraitCollection().getTraitCollection(), size: iPhone14ScreenSize)
+        _ = subject.section(for: MockTraitCollection().getTraitCollection(), size: iPhone14ScreenSize)
 
         XCTAssertEqual(subject.jumpBackInList.tabs.count, 0)
         XCTAssertNotNil(subject.mostRecentSyncedTab)
@@ -426,7 +428,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
-        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
+        _ = subject.section(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
 
         XCTAssertEqual(subject.sectionLayout, .compactJumpBackIn)
         let jumpBackIn = subject.jumpBackInList
@@ -446,7 +448,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
-        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
+        _ = subject.section(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
 
         XCTAssertEqual(subject.sectionLayout, .compactJumpBackIn)
         let jumpBackIn = subject.jumpBackInList
@@ -467,7 +469,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
-        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
+        _ = subject.section(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
 
         let jumpBackIn = subject.jumpBackInList
         XCTAssertEqual(jumpBackIn.tabs.count, 1, "iPhone portrait has 1 tab in it's jumpbackin layout")
@@ -492,7 +494,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
-        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: false, device: .phone)
+        _ = subject.section(for: trait, size: iPhone14ScreenSize, isPortrait: false, device: .phone)
 
         let jumpBackIn = subject.jumpBackInList
         XCTAssertEqual(jumpBackIn.tabs.count, 3, "iPhone landscape has 3 tabs in it's jumpbackin layout, up until 4")
@@ -518,7 +520,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
         subject.didLoadNewData()
         try? await Task.sleep(nanoseconds: sleepTime)
-        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: false, device: .phone)
+        _ = subject.section(for: trait, size: iPhone14ScreenSize, isPortrait: false, device: .phone)
 
         let jumpBackIn = subject.jumpBackInList
         XCTAssertEqual(jumpBackIn.tabs.count, 2, "iPhone landscape has 2 tabs in it's jumpbackin layout, up until 2")

@@ -99,8 +99,8 @@ class JumpBackInViewModel: FeatureFlaggable {
     }
 
     private func updateSectionLayout(for traitCollection: UITraitCollection,
-                                     isPortrait: Bool = UIWindow.isPortrait,
-                                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
+                                     isPortrait: Bool,
+                                     device: UIUserInterfaceIdiom) {
         let isPhoneInLandscape = device == .phone && !isPortrait
         let isPadInPortrait = device == .pad && isPortrait
         let isPadInLandscapeTwoThirdSplit = isPadInLandscapeSplit(split: 2/3, isPortrait: isPortrait, device: device)
@@ -315,7 +315,14 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
         return jumpBackInList.itemsToDisplay + (hasSyncedTab ? UX.maxDisplayedSyncedTabs : 0)
     }
 
-    func section(for traitCollection: UITraitCollection, size: CGSize) -> NSCollectionLayoutSection {
+    func section(for traitCollection: UITraitCollection,
+                 size: CGSize,
+                 isPortrait: Bool = UIWindow.isPortrait,
+                 device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom
+    ) -> NSCollectionLayoutSection {
+        refreshData(for: traitCollection, isPortrait: isPortrait, device: device)
+
+        // Prepare section layout with refreshed data
         var section: NSCollectionLayoutSection
         switch sectionLayout {
         case .compactSyncedTab, .compactJumpBackInAndSyncedTab:
@@ -342,25 +349,20 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
         return section
     }
 
-    var hasData: Bool {
-        return hasJumpBackIn || hasSyncedTab
-    }
-
-    func refreshData(for traitCollection: UITraitCollection,
-                     size: CGSize,
-                     isPortrait: Bool = UIWindow.isPortrait,
-                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
-        updateSectionLayout(for: traitCollection,
-                            isPortrait: isPortrait,
-                            device: device)
+    /// Refresh our data set for jump back in, should only be called when we build the section layout
+    private func refreshData(for traitCollection: UITraitCollection,
+                             isPortrait: Bool,
+                             device: UIUserInterfaceIdiom) {
+        updateSectionLayout(for: traitCollection, isPortrait: isPortrait, device: device)
         let maxItemsToDisplay = sectionLayout.maxItemsToDisplay(
             hasAccount: isSyncTabFeatureEnabled,
             device: device
         )
         refreshData(maxItemsToDisplay: maxItemsToDisplay)
-        logger.log("JumpBackIn section shouldShow \(shouldShow)",
-                   level: .debug,
-                   category: .homepage)
+    }
+
+    var hasData: Bool {
+        return hasJumpBackIn || hasSyncedTab
     }
 
     func updatePrivacyConcernedSection(isPrivate: Bool) {

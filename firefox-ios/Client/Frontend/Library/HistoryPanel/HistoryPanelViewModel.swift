@@ -112,21 +112,15 @@ class HistoryPanelViewModel: FeatureFlaggable {
                 }
 
                 self.currentFetchOffset += self.queryFetchLimit
-                if self.featureFlags.isFeatureEnabled(.historyGroups, checking: .buildOnly) {
-                    self.populateASGroups(fetchedSites: fetchedSites) { groups, items in
-                        guard let groups = groups else {
-                            completion(false)
-                            return
-                        }
-
-                        self.searchTermGroups.append(contentsOf: groups)
-                        self.createGroupedSites(sites: items)
-                        self.buildGroupsVisibleSections()
-                        completion(true)
+                self.populateASGroups(fetchedSites: fetchedSites) { groups, items in
+                    guard let groups = groups else {
+                        completion(false)
+                        return
                     }
-                } else {
-                    self.populateHistorySites(fetchedSites: fetchedSites)
-                    self.buildVisibleSections()
+
+                    self.searchTermGroups.append(contentsOf: groups)
+                    self.createGroupedSites(sites: items)
+                    self.buildGroupsVisibleSections()
                     completion(true)
                 }
             }
