@@ -1287,7 +1287,7 @@ class BrowserViewController: UIViewController,
     func setupMiddleButtonStatus(isLoading: Bool) {
         // Setting the default state to search to account for no tab or starting page tab
         // `state` will be modified later if needed
-        var state: MiddleButtonState = .search
+        let state: MiddleButtonState = .search
 
         // No tab
         guard let tab = tabManager.selectedTab else {
@@ -1498,18 +1498,7 @@ class BrowserViewController: UIViewController,
     }
 
     func handleQRCode() {
-        if CoordinatorFlagManager.isQRCodeCoordinatorEnabled {
-            navigationHandler?.showQRCode(delegate: self)
-        } else {
-            let qrCodeViewController = QRCodeViewController()
-            qrCodeViewController.qrCodeDelegate = self
-            presentedViewController?.dismiss(animated: true)
-            present(
-                UINavigationController(rootViewController: qrCodeViewController),
-                animated: true,
-                completion: nil
-            )
-        }
+        navigationHandler?.showQRCode(delegate: self)
     }
 
     func handleClosePrivateTabs() {

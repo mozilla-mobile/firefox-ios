@@ -249,7 +249,6 @@ class TabDisplayView: UIView,
         guard getTabDisplay(for: indexPath.section) == .tabs
         else { return nil }
 
-        // TODO: Add browserProfile and clientPickerDelegate
         let tabVC = TabPeekViewController(tab: tabsState.tabs[indexPath.row])
         return UIContextMenuConfiguration(identifier: nil,
                                           previewProvider: { return tabVC },
@@ -275,7 +274,6 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
                         at indexPath: IndexPath) -> [UIDragItem] {
         guard getTabDisplay(for: indexPath.section) == .tabs else { return [] }
 
-        // TODO: Add telemetry
         let itemProvider = NSItemProvider()
         let dragItem = UIDragItem(itemProvider: itemProvider)
         dragItem.localObject = tabsState.tabs[indexPath.row]
