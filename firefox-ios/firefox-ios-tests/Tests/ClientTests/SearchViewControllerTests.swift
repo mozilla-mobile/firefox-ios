@@ -114,7 +114,8 @@ class SearchViewControllerTest: XCTestCase {
             title: "Mozilla 1",
             history: [],
             lastUsed: UInt64(1),
-            icon: nil
+            icon: nil,
+            inactive: false
         )
         let remoteTab2 = RemoteTab(
             clientGUID: "2",
@@ -122,7 +123,8 @@ class SearchViewControllerTest: XCTestCase {
             title: "Mozilla 2",
             history: [],
             lastUsed: UInt64(2),
-            icon: nil
+            icon: nil,
+            inactive: false
         )
         let remoteTab3 = RemoteTab(
             clientGUID: "3",
@@ -130,7 +132,8 @@ class SearchViewControllerTest: XCTestCase {
             title: "Mozilla 3",
             history: [],
             lastUsed: UInt64(3),
-            icon: nil
+            icon: nil,
+            inactive: false
         )
         searchViewController.remoteClientTabs = [ClientTabsSearchWrapper(client: remoteClient, tab: remoteTab1),
                                                  ClientTabsSearchWrapper(client: remoteClient, tab: remoteTab2),
@@ -148,7 +151,8 @@ class SearchViewControllerTest: XCTestCase {
             title: "Mozilla 1",
             history: [],
             lastUsed: UInt64(1),
-            icon: nil
+            icon: nil,
+            inactive: false
         )
         let remoteTab2 = RemoteTab(
             clientGUID: "2",
@@ -156,7 +160,8 @@ class SearchViewControllerTest: XCTestCase {
             title: "Mozilla 2",
             history: [],
             lastUsed: UInt64(2),
-            icon: nil
+            icon: nil,
+            inactive: false
         )
         let remoteTab3 = RemoteTab(
             clientGUID: "3",
@@ -164,7 +169,8 @@ class SearchViewControllerTest: XCTestCase {
             title: "Mozilla 3",
             history: [],
             lastUsed: UInt64(3),
-            icon: nil
+            icon: nil,
+            inactive: false
         )
         searchViewController.remoteClientTabs = [ClientTabsSearchWrapper(client: remoteClient, tab: remoteTab1),
                                                  ClientTabsSearchWrapper(client: remoteClient, tab: remoteTab2),
