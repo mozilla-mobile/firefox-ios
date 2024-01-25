@@ -7,6 +7,7 @@ import Redux
 enum SearchSettingsAction: Action {
     // UI trigger actions
     case searchSettingsDidLoad
+    case toggleSearchSuggestions(Bool)
     var windowUUID: UUID? {
         // TODO: [8188] Revisit UUIDs here.
         switch self {
