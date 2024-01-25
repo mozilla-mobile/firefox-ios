@@ -52,7 +52,7 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
 
     private var showDeletion = false
     private var sectionsToDisplay: [SearchSettingsTableViewController.Section] = []
-    private var searchSettingsState: SearchSettingsState
+    private var searchSettingsState: SearchSettingsState?
 
     var updateSearchIcon: (() -> Void)?
     private var isEditable: Bool {
@@ -67,7 +67,6 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
     init(profile: Profile) {
         self.profile = profile
         model = profile.searchEngines
-        self.searchSettingsState = SearchSettingsState()
         super.init()
     }
 
@@ -77,7 +76,15 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        subscribeToRedux()
+        if featureFlags.isFeatureEnabled(.reduxSearchSettings, checking: .buildOnly) {
+            subscribeToRedux()
+        }
+
+        self.navigationItem.title = .Settings.Search.Title
+        // To allow re-ordering the list of search engines at all times.
+        self.tableView.isEditing = true
+        // So that we push the default search engine controller on selection.
+        self.tableView.allowsSelectionDuringEditing = true
 
         tableView.register(ThemedTableSectionHeaderFooterView.self,
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
@@ -131,12 +138,6 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
 
     func newState(state: SearchSettingsState) {
         searchSettingsState = state
-        self.navigationItem.title = .Settings.Search.Title
-        
-        // To allow re-ordering the list of search engines at all times.
-        self.tableView.isEditing = true
-        // So that we push the default search engine controller on selection.
-        self.tableView.allowsSelectionDuringEditing = true
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
