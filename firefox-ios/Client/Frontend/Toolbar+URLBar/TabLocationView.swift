@@ -45,8 +45,17 @@ class TabLocationView: UIView, FeatureFlaggable {
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     /// Tracking protection button, gets updated from tabDidChangeContentBlocking
-    private var blockerStatus: BlockerStatus = .noBlockedURLs
-    private var hasSecureContent = false
+    var blockerStatus: BlockerStatus = .noBlockedURLs {
+        didSet {
+            if oldValue != blockerStatus { setTrackingProtection() }
+        }
+    }
+
+    var hasSecureContent = false {
+        didSet {
+            if oldValue != blockerStatus { setTrackingProtection() }
+        }
+    }
 
     private let menuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuBadge, backdropCircleSize: 32)
 
@@ -55,8 +64,8 @@ class TabLocationView: UIView, FeatureFlaggable {
         didSet {
             hideButtons()
             updateTextWithURL()
-            trackingProtectionButton.isHidden = !isValidHttpUrlProtocol
-            shareButton.isHidden = !(shouldEnableShareButtonFeature && isValidHttpUrlProtocol)
+            hideTrackingProtectionButton()
+            shareButton.isHidden = !(shouldEnableShareButtonFeature && isValidHttpUrlProtocol(url))
             setNeedsUpdateConstraints()
         }
     }
@@ -237,6 +246,7 @@ class TabLocationView: UIView, FeatureFlaggable {
 
         menuBadge.add(toParent: contentView)
         menuBadge.show(false)
+        hideTrackingProtectionButton()
     }
 
     required init(coder: NSCoder) {
@@ -377,7 +387,19 @@ class TabLocationView: UIView, FeatureFlaggable {
         }
     }
 
-    private func setTrackingProtection(theme: Theme) {
+    func hideTrackingProtectionButton() {
+        ensureMainThread {
+            self.trackingProtectionButton.isHidden = true
+        }
+    }
+
+    func showTrackingProtectionButton(for url: URL?) {
+        ensureMainThread {
+            self.trackingProtectionButton.isHidden = !self.isValidHttpUrlProtocol(url)
+        }
+    }
+
+    private func setTrackingProtection(themeManager: ThemeManager = AppContainer.shared.resolve()) {
         var lockImage: UIImage?
         if !hasSecureContent {
             lockImage = UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.lockSlash)
@@ -394,7 +416,7 @@ class TabLocationView: UIView, FeatureFlaggable {
         case .safelisted:
             if let smallDotImage = UIImage(
                 systemName: ImageIdentifiers.circleFill
-            )?.withTintColor(theme.colors.iconAccentBlue) {
+            )?.withTintColor(themeManager.currentTheme.colors.iconAccentBlue) {
                 trackingProtectionButton.setImage(lockImage?.overlayWith(image: smallDotImage), for: .normal)
                 trackingProtectionButton.accessibilityLabel = hasSecureContent ?
                     .TabLocationETPOffSecureAccessibilityLabel : .TabLocationETPOffNotSecureAccessibilityLabel
@@ -410,7 +432,7 @@ class TabLocationView: UIView, FeatureFlaggable {
 
 // MARK: - Private
 private extension TabLocationView {
-    var isValidHttpUrlProtocol: Bool {
+    func isValidHttpUrlProtocol(_ url: URL?) -> Bool {
         ["https", "http"].contains(url?.scheme ?? "")
     }
 
@@ -509,7 +531,6 @@ extension TabLocationView: ThemeApplicable {
         shareButton.applyTheme(theme: theme)
         reloadButton.applyTheme(theme: theme)
         menuBadge.badge.tintBackground(color: theme.colors.layer3)
-        setTrackingProtection(theme: theme)
         shoppingButton.tintColor = theme.colors.textPrimary
         shoppingButton.setImage(UIImage(named: StandardImageIdentifiers.Large.shopping)?
             .withTintColor(theme.colors.actionPrimary),
@@ -519,22 +540,19 @@ extension TabLocationView: ThemeApplicable {
 
 extension TabLocationView: TabEventHandler {
     func tabDidChangeContentBlocking(_ tab: Tab) {
-        updateBlockerStatus(forTab: tab)
-    }
-
-    private func updateBlockerStatus(forTab tab: Tab) {
         guard let blocker = tab.contentBlocker else { return }
 
         ensureMainThread { [self] in
-            trackingProtectionButton.alpha = 1.0
-            let themeManager: ThemeManager = AppContainer.shared.resolve()
             self.blockerStatus = blocker.status
-            self.hasSecureContent = (tab.webView?.hasOnlySecureContent ?? false)
-            setTrackingProtection(theme: themeManager.currentTheme)
         }
     }
-
+    
     func tabDidGainFocus(_ tab: Tab) {
-        updateBlockerStatus(forTab: tab)
+        guard let blocker = tab.contentBlocker else { return }
+
+        ensureMainThread { [self] in
+            self.hasSecureContent = (tab.webView?.hasOnlySecureContent ?? false)
+            self.blockerStatus = blocker.status
+        }
     }
 }
