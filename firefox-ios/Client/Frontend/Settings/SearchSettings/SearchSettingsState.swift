@@ -6,26 +6,7 @@ import Redux
 import Shared
 
 struct SearchSettingsState: ScreenState, Equatable {
-    var navigationItemTitle: String
-    var isTableViewEditing: Bool
-    var allowTableViewSelectionDuringEditing: Bool
-
     init(_ appState: AppState) {
-        self.init()
-    }
-
-    init() {
-        self.init(navigationItemTitle: .Settings.Search.Title,
-                  isTableViewEditing: true,
-                  allowTableViewSelectionDuringEditing: true)
-    }
-
-    init(navigationItemTitle: String,
-         isTableViewEditing: Bool,
-         allowTableViewSelectionDuringEditing: Bool) {
-        self.navigationItemTitle = navigationItemTitle
-        self.isTableViewEditing = isTableViewEditing
-        self.allowTableViewSelectionDuringEditing = allowTableViewSelectionDuringEditing
     }
 
     static let reducer: Reducer<Self> = { state, action in

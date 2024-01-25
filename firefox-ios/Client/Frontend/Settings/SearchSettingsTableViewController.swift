@@ -80,11 +80,11 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
             subscribeToRedux()
         }
 
-        self.navigationItem.title = .Settings.Search.Title
+        navigationItem.title = .Settings.Search.Title
         // To allow re-ordering the list of search engines at all times.
-        self.tableView.isEditing = true
+        tableView.isEditing = true
         // So that we push the default search engine controller on selection.
-        self.tableView.allowsSelectionDuringEditing = true
+        tableView.allowsSelectionDuringEditing = true
 
         tableView.register(ThemedTableSectionHeaderFooterView.self,
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
