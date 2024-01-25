@@ -28,17 +28,21 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel, Themeable {
     weak var recentlyClosedTabsDelegate: RecentlyClosedPanelDelegate?
     let profile: Profile
     var bottomToolbarItems: [UIBarButtonItem] = [UIBarButtonItem]()
+    private let windowUUID: WindowUUID
 
-    fileprivate lazy var tableViewController = RecentlyClosedTabsPanelSiteTableViewController(profile: profile)
+    fileprivate lazy var tableViewController =
+    RecentlyClosedTabsPanelSiteTableViewController(profile: profile, windowUUID: windowUUID)
 
     init(
         profile: Profile,
+        windowUUID: WindowUUID,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.profile = profile
+        self.windowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -132,7 +136,7 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         // is avoided by making sure we wait for our expected tab above to be selected before
         // notifying our library panel delegate. [FXIOS-7741]
 
-        let tabWindowUUID = windowManager.activeWindow
+        let tabWindowUUID = windowUUID
         AppEventQueue.wait(for: .selectTab(url, tabWindowUUID)) {
             let visitType = VisitType.typed    // Means History, too.
             self.libraryPanelDelegate?.libraryPanel(didSelectURL: url, visitType: visitType)

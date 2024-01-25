@@ -49,7 +49,7 @@ final class TabPanelStateTests: XCTestCase {
     }
 
     private func createInitialState() -> TabsPanelState {
-        return TabsPanelState()
+        return TabsPanelState(windowUUID: .XCTestDefaultUUID)
     }
 
     private func createTabs() -> [TabModel] {

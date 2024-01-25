@@ -58,12 +58,13 @@ extension LocalDesktopFolder: BookmarksFolderCell {
     }
 
     func didSelect(profile: Profile,
+                   windowUUID: WindowUUID,
                    libraryPanelDelegate: LibraryPanelDelegate?,
                    navigationController: UINavigationController?,
                    logger: Logger) {
         let viewModel = BookmarksPanelViewModel(profile: profile,
                                                 bookmarkFolderGUID: guid)
-        let nextController = BookmarksPanel(viewModel: viewModel)
+        let nextController = BookmarksPanel(viewModel: viewModel, windowUUID: windowUUID)
         nextController.title = .Bookmarks.Menu.DesktopBookmarks
         if let localizedString = LocalizedRootBookmarkFolderStrings[guid] {
             nextController.title = localizedString

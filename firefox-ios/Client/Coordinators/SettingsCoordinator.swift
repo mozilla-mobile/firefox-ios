@@ -29,6 +29,7 @@ class SettingsCoordinator: BaseCoordinator,
     private let tabManager: TabManager
     private let themeManager: ThemeManager
     weak var parentCoordinator: SettingsCoordinatorDelegate?
+    private var windowUUID: WindowUUID { return tabManager.windowUUID }
 
     init(router: Router,
          wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
@@ -114,7 +115,7 @@ class SettingsCoordinator: BaseCoordinator,
             return viewController
 
         case .theme:
-            return ThemeSettingsController()
+            return ThemeSettingsController(windowUUID: windowUUID)
 
         case .wallpaper:
             if wallpaperManager.canSettingsBeShown {
@@ -316,8 +317,10 @@ class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedTheme() {
-        store.dispatch(ActiveScreensStateAction.showScreen(.themeSettings))
-        router.push(ThemeSettingsController())
+        store.dispatch(ActiveScreensStateAction.showScreen(
+            ScreenActionContext(screen: .themeSettings, windowUUID: windowUUID)
+        ))
+        router.push(ThemeSettingsController(windowUUID: windowUUID))
     }
 
     // MARK: AccountSettingsDelegate

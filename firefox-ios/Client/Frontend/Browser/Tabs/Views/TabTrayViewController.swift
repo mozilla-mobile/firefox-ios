@@ -180,12 +180,16 @@ class TabTrayViewController: UIViewController,
         }
     }
 
+    private let windowUUID: WindowUUID
+
     init(selectedTab: TabTrayPanelType,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
+         windowUUID: WindowUUID,
          and notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.tabTrayState = TabTrayState(panelType: selectedTab)
+        self.tabTrayState = TabTrayState(windowUUID: windowUUID, panelType: selectedTab)
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.windowUUID = windowUUID
 
         super.init(nibName: nil, bundle: nil)
         self.applyTheme()
@@ -248,15 +252,22 @@ class TabTrayViewController: UIViewController,
     // MARK: - Redux
 
     func subscribeToRedux() {
-        store.dispatch(ActiveScreensStateAction.showScreen(.tabsTray))
+        store.dispatch(ActiveScreensStateAction.showScreen(
+            ScreenActionContext(screen: .tabsTray, windowUUID: windowUUID)
+        ))
         store.dispatch(TabTrayAction.tabTrayDidLoad(tabTrayState.selectedPanel))
+        let uuid = windowUUID
         store.subscribe(self, transform: {
-            return $0.select(TabTrayState.init)
+            $0.select({ appState in
+                return TabTrayState(appState: appState, uuid: uuid)
+            })
         })
     }
 
     func unsubscribeFromRedux() {
-        store.dispatch(ActiveScreensStateAction.closeScreen(.tabsTray))
+        store.dispatch(ActiveScreensStateAction.closeScreen(
+            ScreenActionContext(screen: .tabsTray, windowUUID: windowUUID)
+        ))
         store.unsubscribe(self)
     }
 

@@ -26,15 +26,15 @@ class TabTrayCoordinator: BaseCoordinator,
     init(router: Router,
          tabTraySection: TabTrayPanelType,
          profile: Profile,
-         windowManager: WindowManager = AppContainer.shared.resolve()) {
+         tabManager: TabManager) {
         self.profile = profile
-        self.tabManager = windowManager.tabManager(for: windowManager.activeWindow)
+        self.tabManager = tabManager
         super.init(router: router)
         initializeTabTrayViewController(selectedTab: tabTraySection)
     }
 
     private func initializeTabTrayViewController(selectedTab: TabTrayPanelType) {
-        tabTrayViewController = TabTrayViewController(selectedTab: selectedTab)
+        tabTrayViewController = TabTrayViewController(selectedTab: selectedTab, windowUUID: tabManager.windowUUID)
         router.setRootViewController(tabTrayViewController)
         tabTrayViewController.childPanelControllers = makeChildPanels()
         tabTrayViewController.delegate = self
@@ -46,9 +46,10 @@ class TabTrayCoordinator: BaseCoordinator,
     }
 
     private func makeChildPanels() -> [UINavigationController] {
-        let regularTabsPanel = TabDisplayPanel(isPrivateMode: false)
-        let privateTabsPanel = TabDisplayPanel(isPrivateMode: true)
-        let syncTabs = RemoteTabsPanel()
+        let windowUUID = tabManager.windowUUID
+        let regularTabsPanel = TabDisplayPanel(isPrivateMode: false, windowUUID: windowUUID)
+        let privateTabsPanel = TabDisplayPanel(isPrivateMode: true, windowUUID: windowUUID)
+        let syncTabs = RemoteTabsPanel(windowUUID: windowUUID)
         return [
             ThemedNavigationController(rootViewController: regularTabsPanel),
             ThemedNavigationController(rootViewController: privateTabsPanel),
