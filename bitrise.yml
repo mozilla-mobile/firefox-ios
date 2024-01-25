@@ -1604,6 +1604,8 @@ workflows:
             if [[ "$APPS_AFFECTED" == *"SampleBrowser"* ]]; then
                 envman add --key BUILD_SAMPLE_BROWSER_IOS --value "true"
             fi
+
+            echo $APPS_AFFECTED
     - share-pipeline-variable@1:
         title: Share which application(s) to base configuration off of
         inputs:
@@ -1621,8 +1623,6 @@ workflows:
             echo "BUILD_FIREFOX_IOS: $BUILD_FIREFOX_IOS"
             echo "BUILD_FOCUS_IOS: $BUILD_FOCUS_IOS"
             echo "BUILD_SAMPLE_BROWSER_IOS: $BUILD_SAMPLE_BROWSER_IOS"
-
-
 
 app:
   envs:
