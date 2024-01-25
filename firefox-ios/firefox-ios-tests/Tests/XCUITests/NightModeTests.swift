@@ -3,13 +3,15 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Common
+
 class NightModeTests: BaseTestCase {
     private func checkNightModeOn() {
-        mozWaitForElementToExist(app.tables.otherElements[ImageIdentifiers.nightMode])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.nightMode])
     }
 
     private func checkNightModeOff() {
-        mozWaitForElementToExist(app.tables.otherElements[ImageIdentifiers.nightMode])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.nightMode])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307056
