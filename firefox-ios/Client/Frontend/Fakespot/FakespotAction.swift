@@ -6,8 +6,9 @@ import Common
 import Redux
 
 enum FakespotAction: Action {
-    case settingsStateDidChange
-    case reviewQualityDidChange
+    case settingsStateDidChange(isExpanded: Bool)
+    case reviewQualityDidChange(isExpanded: Bool)
+    case highlightsDidChange(isExpanded: Bool)
     case tabDidChange(tabUIDD: String)
     case tabDidReload(tabUIDD: String, productId: String)
     case pressedShoppingButton
