@@ -6,7 +6,10 @@ import Redux
 import Shared
 
 struct SearchSettingsState: ScreenState, Equatable {
-    init(_ appState: AppState) {
+    let windowUUID: WindowUUID
+
+    init(_ appState: AppState, windowUUID: WindowUUID) {
+        self.windowUUID = windowUUID
     }
 
     static let reducer: Reducer<Self> = { state, action in

@@ -28,7 +28,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     init(profile: Profile,
          imageStore: DiskImageStore = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
-         uuid: WindowUUID = WindowUUID(),
+         uuid: WindowUUID,
          tabDataStore: TabDataStore = AppContainer.shared.resolve(),
          tabSessionStore: TabSessionStore = DefaultTabSessionStore(),
          tabMigration: TabMigrationUtility = DefaultTabMigrationUtility(),
@@ -340,6 +340,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
             if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
                 store.dispatch(PrivateModeUserAction.setPrivateModeTo(tab.isPrivate))
+            } else {
+                store.dispatch(PrivateModeUserAction.setPrivateModeTo(false))
             }
 
             didSelectTab(url)

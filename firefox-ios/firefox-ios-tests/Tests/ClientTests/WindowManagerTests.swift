@@ -11,8 +11,8 @@ import TabDataStore
 @testable import Client
 
 class WindowManagerTests: XCTestCase {
-    let tabManager = MockTabManager()
-    let secondTabManager = MockTabManager()
+    let tabManager = MockTabManager(windowUUID: WindowUUID())
+    let secondTabManager = MockTabManager(windowUUID: WindowUUID())
 
     override func setUp() {
         super.setUp()

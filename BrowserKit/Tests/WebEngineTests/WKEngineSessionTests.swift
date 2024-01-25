@@ -39,6 +39,7 @@ final class WKEngineSessionTests: XCTestCase {
         subject?.load(url: url)
 
         XCTAssertEqual(webViewProvider.webView.loadCalled, 0)
+        prepareForTearDown(subject!)
     }
 
     func testLoadURLGivenNotAURLThenDoesntLoad() {
@@ -49,6 +50,7 @@ final class WKEngineSessionTests: XCTestCase {
 
         // TODO: FXIOS-7981 Check scheme before loading
         XCTAssertEqual(webViewProvider.webView.loadCalled, 1)
+        prepareForTearDown(subject!)
     }
 
     func testLoadURLGivenNormalURLThenLoad() {
@@ -59,6 +61,7 @@ final class WKEngineSessionTests: XCTestCase {
 
         XCTAssertEqual(webViewProvider.webView.loadCalled, 1)
         XCTAssertEqual(webViewProvider.webView.url?.absoluteString, url)
+        prepareForTearDown(subject!)
     }
 
     func testLoadURLGivenReaderModeURLThenLoad() {
@@ -70,6 +73,7 @@ final class WKEngineSessionTests: XCTestCase {
         XCTAssertEqual(webViewProvider.webView.loadCalled, 1)
         XCTAssertEqual(webViewProvider.webView.url?.absoluteString,
                        "http://localhost:0/reader-mode/page?url=http%3A%2F%2Fexample%2Ecom")
+        prepareForTearDown(subject!)
     }
 
     func testLoadURLGivenFileURLThenLoadFileURL() {
@@ -82,6 +86,7 @@ final class WKEngineSessionTests: XCTestCase {
         XCTAssertEqual(webViewProvider.webView.loadFileURLCalled, 1)
         XCTAssertEqual(webViewProvider.webView.url?.absoluteString, "file://path/to/abc/dirA/A.html")
         XCTAssertEqual(webViewProvider.webView.loadFileReadAccessURL?.absoluteString, "file://path/to/abc/dirA/")
+        prepareForTearDown(subject!)
     }
 
     // MARK: Stop URL
@@ -92,6 +97,7 @@ final class WKEngineSessionTests: XCTestCase {
         subject?.stopLoading()
 
         XCTAssertEqual(webViewProvider.webView.stopLoadingCalled, 1)
+        prepareForTearDown(subject!)
     }
 
     // MARK: Go back
@@ -102,6 +108,7 @@ final class WKEngineSessionTests: XCTestCase {
         subject?.goBack()
 
         XCTAssertEqual(webViewProvider.webView.goBackCalled, 1)
+        prepareForTearDown(subject!)
     }
 
     // MARK: Go forward
@@ -112,6 +119,7 @@ final class WKEngineSessionTests: XCTestCase {
         subject?.goForward()
 
         XCTAssertEqual(webViewProvider.webView.goForwardCalled, 1)
+        prepareForTearDown(subject!)
     }
 
     // MARK: Reload
@@ -122,6 +130,7 @@ final class WKEngineSessionTests: XCTestCase {
         subject?.reload()
 
         XCTAssertEqual(webViewProvider.webView.reloadFromOriginCalled, 1)
+        prepareForTearDown(subject!)
     }
 
     func testReloadWhenErrorPageThenReplaceLocation() {
@@ -135,6 +144,7 @@ final class WKEngineSessionTests: XCTestCase {
         XCTAssertEqual(webViewProvider.webView.reloadFromOriginCalled, 0)
         XCTAssertEqual(webViewProvider.webView.replaceLocationCalled, 1)
         XCTAssertEqual(webViewProvider.webView.url?.absoluteString, errorPageURL)
+        prepareForTearDown(subject!)
     }
 
     // MARK: Restore
@@ -147,6 +157,7 @@ final class WKEngineSessionTests: XCTestCase {
 
         XCTAssertEqual(webViewProvider.webView.interactionState as! Data, restoredState)
         XCTAssertEqual(webViewProvider.webView.loadCalled, 0)
+        prepareForTearDown(subject!)
     }
 
     func testRestoreWhenHasLastRequestThenLoadISCalled() {
@@ -158,13 +169,15 @@ final class WKEngineSessionTests: XCTestCase {
 
         XCTAssertEqual(webViewProvider.webView.interactionState as! Data, restoredState)
         XCTAssertEqual(webViewProvider.webView.loadCalled, 2, "Load calls it once, then restore calls it again")
+        prepareForTearDown(subject!)
     }
 
     // MARK: Observers
 
     func testAddObserversWhenCreatedSubjectThenObserversAreAdded() {
-        _ = createSubject()
+        let subject = createSubject()
         XCTAssertEqual(webViewProvider.webView.addObserverCalled, 7, "There are 7 KVO Constants")
+        prepareForTearDown(subject!)
     }
 
     func testRemoveObserversWhenCloseIsCalledThenObserversAreRemoved() {
@@ -173,6 +186,7 @@ final class WKEngineSessionTests: XCTestCase {
         subject?.close()
 
         XCTAssertEqual(webViewProvider.webView.removeObserverCalled, 7, "There are 7 KVO Constants")
+        prepareForTearDown(subject!)
     }
 
     func testCanGoBackGivenWebviewStateThenCallsNavigationStateChanged() {
@@ -189,6 +203,7 @@ final class WKEngineSessionTests: XCTestCase {
         XCTAssertEqual(engineSessionDelegate.onNavigationStateChangeCalled, 1)
         XCTAssertTrue(engineSessionDelegate.savedCanGoBack!)
         XCTAssertFalse(engineSessionDelegate.savedCanGoForward!)
+        prepareForTearDown(subject!)
     }
 
     func testCanGoForwardGivenWebviewStateThenCallsNavigationStateChanged() {
@@ -205,6 +220,7 @@ final class WKEngineSessionTests: XCTestCase {
         XCTAssertEqual(engineSessionDelegate.onNavigationStateChangeCalled, 1)
         XCTAssertFalse(engineSessionDelegate.savedCanGoBack!)
         XCTAssertTrue(engineSessionDelegate.savedCanGoForward!)
+        prepareForTearDown(subject!)
     }
 
     func testEstimatedProgressGivenWebviewStateThenCallsOnProgress() {
@@ -219,6 +235,7 @@ final class WKEngineSessionTests: XCTestCase {
 
         XCTAssertEqual(engineSessionDelegate.onProgressCalled, 1)
         XCTAssertEqual(engineSessionDelegate.savedProgressValue, 70)
+        prepareForTearDown(subject!)
     }
 
     func testLoadingGivenNoChangeThenDoesNotCallOnLoadingStateChange() {
@@ -231,6 +248,7 @@ final class WKEngineSessionTests: XCTestCase {
                               context: nil)
 
         XCTAssertEqual(engineSessionDelegate.onLoadingStateChangeCalled, 0)
+        prepareForTearDown(subject!)
     }
 
     func testLoadingGivenOldKeyThenDoesNotCallOnLoadingStateChange() {
@@ -243,6 +261,7 @@ final class WKEngineSessionTests: XCTestCase {
                               context: nil)
 
         XCTAssertEqual(engineSessionDelegate.onLoadingStateChangeCalled, 0)
+        prepareForTearDown(subject!)
     }
 
     func testLoadingGivenNewKeyThenCallsOnLoadingStateChange() {
@@ -256,13 +275,15 @@ final class WKEngineSessionTests: XCTestCase {
 
         XCTAssertEqual(engineSessionDelegate.onLoadingStateChangeCalled, 1)
         XCTAssertTrue(engineSessionDelegate.savedLoading!)
+        prepareForTearDown(subject!)
     }
 
     // MARK: User script manager
 
     func testUserScriptWhenSubjectCreatedThenInjectionIntoWebviewCalled() {
-        _ = createSubject()
+        let subject = createSubject()
         XCTAssertEqual(userScriptManager.injectUserScriptsIntoWebViewCalled, 1)
+        prepareForTearDown(subject!)
     }
 
     // MARK: Content script manager
@@ -285,7 +306,16 @@ final class WKEngineSessionTests: XCTestCase {
                                             contentScriptManager: contentScriptManager) else {
             return nil
         }
+
         trackForMemoryLeaks(subject, file: file, line: line)
+
         return subject
+    }
+
+    // Adding a special teardown since as part of tracking memory leaks, we can't use an instance variable on the
+    // test suite. A normal instance `tearDown` is called after a `addTeardownBlock`. To ensure we still can
+    // `trackForMemoryLeaks` we need to always close any engine session that is opened, otherwise leaks happens.
+    func prepareForTearDown(_ subject: WKEngineSession) {
+        subject.close()
     }
 }

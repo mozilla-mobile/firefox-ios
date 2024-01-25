@@ -24,10 +24,18 @@ protocol OverlayModeManager: OverlayStateProtocol {
     ///   - newTabSettings: User option for new tab, if it's a custom url (homepage) the keyboard is not raised
     func openNewTab(url: URL?, newTabSettings: NewTabPage)
 
-    /// Leave overlay mode when user finishes editing, either by pressing the go button, enter etc
+    /// Leave overlay mode when the user finishes editing. This is called when
+    /// the user commits their edits, either by tapping "go" / Enter on the
+    /// keyboard, or by tapping on a suggestion in the search view.
     /// - Parameter shouldCancelLoading: Bool value determine if the loading animation of the current
     ///                                  search should be canceled
     func finishEditing(shouldCancelLoading: Bool)
+
+    /// Leave overlay mode when the user cancels editing. This is called when
+    /// the user dismisses the search view without committing their edits.
+    /// - Parameter shouldCancelLoading: Bool value determine if the loading animation of the current
+    ///                                  search should be canceled
+    func cancelEditing(shouldCancelLoading: Bool)
 
     /// Leave overlay mode when tab change happens, like switching tabs or open a site from any homepage section
     /// - Parameter shouldCancelLoading: Bool value determine if the loading animation of the current
@@ -59,13 +67,17 @@ class DefaultOverlayModeManager: OverlayModeManager {
     }
 
     func finishEditing(shouldCancelLoading: Bool) {
-        leaveOverlayMode(didCancel: shouldCancelLoading)
+        leaveOverlayMode(reason: .finished, shouldCancelLoading: shouldCancelLoading)
+    }
+
+    func cancelEditing(shouldCancelLoading: Bool) {
+        leaveOverlayMode(reason: .cancelled, shouldCancelLoading: shouldCancelLoading)
     }
 
     func switchTab(shouldCancelLoading: Bool) {
         guard inOverlayMode else { return }
 
-        leaveOverlayMode(didCancel: shouldCancelLoading)
+        leaveOverlayMode(reason: .finished, shouldCancelLoading: shouldCancelLoading)
     }
 
     private func shouldEnterOverlay(for url: URL?, newTabSettings: NewTabPage) -> Bool {
@@ -82,7 +94,7 @@ class DefaultOverlayModeManager: OverlayModeManager {
         urlBarView?.enterOverlayMode(locationText, pasted: pasted, search: search)
     }
 
-    private func leaveOverlayMode(didCancel cancel: Bool) {
-        urlBarView?.leaveOverlayMode(didCancel: cancel)
+    private func leaveOverlayMode(reason: URLBarLeaveOverlayModeReason, shouldCancelLoading cancel: Bool) {
+        urlBarView?.leaveOverlayMode(reason: reason, shouldCancelLoading: cancel)
     }
 }

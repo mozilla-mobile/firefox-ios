@@ -21,6 +21,7 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
     private var libraryViewController: LibraryViewController!
     weak var parentCoordinator: LibraryCoordinatorDelegate?
     override var isDismissable: Bool { false }
+    private var windowUUID: WindowUUID { return tabManager.windowUUID }
 
     init(
         router: Router,
@@ -46,7 +47,8 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
     }
 
     private func makeChildPanels() -> [UINavigationController] {
-        let bookmarksPanel = BookmarksPanel(viewModel: BookmarksPanelViewModel(profile: profile))
+        let bookmarksPanel = BookmarksPanel(viewModel: BookmarksPanelViewModel(profile: profile),
+                                            windowUUID: windowUUID)
         let historyPanel = HistoryPanel(profile: profile)
         let downloadsPanel = DownloadsPanel()
         let readingListPanel = ReadingListPanel(profile: profile)
@@ -79,6 +81,7 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
         let bookmarksCoordinator = BookmarksCoordinator(
             router: router,
             profile: profile,
+            windowUUID: windowUUID,
             parentCoordinator: parentCoordinator
         )
         add(child: bookmarksCoordinator)
@@ -90,6 +93,7 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
         let router = DefaultRouter(navigationController: navigationController)
         let historyCoordinator = HistoryCoordinator(
             profile: profile,
+            windowUUID: windowUUID,
             router: router,
             parentCoordinator: parentCoordinator
         )
@@ -133,5 +137,9 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
 
     func didFinish() {
         parentCoordinator?.didFinishLibrary(from: self)
+    }
+
+    var libraryPanelWindowUUID: WindowUUID {
+        return windowUUID
     }
 }

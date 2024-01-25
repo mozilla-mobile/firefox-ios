@@ -25,6 +25,7 @@ class RemoteTabsTableViewController: UITableViewController,
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
     weak var remoteTabsPanel: RemoteTabsPanel?
+    private let windowUUID: WindowUUID
 
     private var isShowingEmptyView: Bool { state.showingEmptyState != nil }
     private let emptyView: RemoteTabsEmptyView = .build()
@@ -36,9 +37,11 @@ class RemoteTabsTableViewController: UITableViewController,
     // MARK: - Initializer
 
     init(state: RemoteTabsPanelState,
+         windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.state = state
+        self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)

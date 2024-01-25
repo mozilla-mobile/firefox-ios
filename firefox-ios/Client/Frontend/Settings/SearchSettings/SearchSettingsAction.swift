@@ -7,4 +7,10 @@ import Redux
 enum SearchSettingsAction: Action {
     // UI trigger actions
     case searchSettingsDidLoad
+    var windowUUID: UUID? {
+        // TODO: [8188] Revisit UUIDs here.
+        switch self {
+        default: return nil
+        }
+    }
 }
