@@ -8,8 +8,14 @@ import UIKit
 
 /// Additional information about a Firefox Suggestion to record
 /// in telemetry when the user interacts with the suggestion
-public enum RustFirefoxSuggestionInteractionInfo {
-    case amp(blockId: Int64, advertiser: String, iabCategory: String, reportingURL: URL?)
+public enum RustFirefoxSuggestionTelemetryInfo {
+    case amp(
+        blockId: Int64,
+        advertiser: String,
+        iabCategory: String,
+        impressionReportingURL: URL?,
+        clickReportingURL: URL?
+    )
     case wikipedia
 }
 /// A Firefox Suggest search suggestion. This struct is a Swiftier
@@ -20,7 +26,7 @@ public struct RustFirefoxSuggestion {
     public let isSponsored: Bool
     public let iconImage: UIImage?
     public let fullKeyword: String
-    public let clickInfo: RustFirefoxSuggestionInteractionInfo?
+    public let telemetryInfo: RustFirefoxSuggestionTelemetryInfo?
 
     public init(title: String, url: URL, isSponsored: Bool, iconImage: UIImage?, fullKeyword: String) {
         self.title = title
@@ -28,7 +34,7 @@ public struct RustFirefoxSuggestion {
         self.isSponsored = isSponsored
         self.iconImage = iconImage
         self.fullKeyword = fullKeyword
-        self.clickInfo = nil
+        self.telemetryInfo = nil
     }
 
     internal init?(_ suggestion: Suggestion) {
@@ -48,7 +54,7 @@ public struct RustFirefoxSuggestion {
             blockId,
             advertiser,
             iabCategory,
-            _,
+            impressionUrlString,
             clickUrlString,
             _,
             _
@@ -61,11 +67,12 @@ public struct RustFirefoxSuggestion {
             self.isSponsored = true
             self.iconImage = iconBytes.flatMap { UIImage(data: Data($0)) }
             self.fullKeyword = fullKeyword
-            self.clickInfo = .amp(
+            self.telemetryInfo = .amp(
                 blockId: blockId,
-                advertiser: advertiser,
+                advertiser: advertiser.lowercased(),
                 iabCategory: iabCategory,
-                reportingURL: URL(string: clickUrlString)
+                impressionReportingURL: URL(string: impressionUrlString),
+                clickReportingURL: URL(string: clickUrlString)
             )
         } else if case let .wikipedia(title, urlString, iconBytes, fullKeyword) = suggestion {
             // This use of `URL(string:)` is OK.
@@ -75,7 +82,7 @@ public struct RustFirefoxSuggestion {
             self.isSponsored = false
             self.iconImage = iconBytes.flatMap { UIImage(data: Data($0)) }
             self.fullKeyword = fullKeyword
-            self.clickInfo = .wikipedia
+            self.telemetryInfo = .wikipedia
         } else {
             return nil
         }

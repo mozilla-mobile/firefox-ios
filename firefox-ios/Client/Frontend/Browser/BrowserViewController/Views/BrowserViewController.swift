@@ -28,6 +28,23 @@ class BrowserViewController: UIViewController,
         static let ActionSheetTitleMaxLength = 120
     }
 
+    /// Describes how the user completed their interaction with the URL bar.
+    /// This state is used to record search engagement telemetry.
+    enum SearchEngagementState {
+        /// The user is currently interacting with the URL bar. The URL bar's
+        /// text field is focused, but the search controller may be hidden
+        /// if the text field is empty.
+        case active
+
+        /// The user completed their interaction by navigating to a destination,
+        /// either by tapping on a suggestion, or by entering a search term or
+        /// a URL.
+        case engaged
+
+        /// The user completed their interaction by dismissing the URL bar.
+        case abandoned
+    }
+
     typealias SubscriberStateType = BrowserViewControllerState
 
     private let KVOs: [KVOConstants] = [
@@ -49,6 +66,7 @@ class BrowserViewController: UIViewController,
     var readerModeCache: ReaderModeCache
     var statusBarOverlay: StatusBarOverlay = .build { _ in }
     var searchController: SearchViewController?
+    var searchEngagementState: SearchEngagementState?
     var screenshotHelper: ScreenshotHelper!
     var searchTelemetry: SearchTelemetry?
     var searchLoader: SearchLoader?
@@ -1140,6 +1158,7 @@ class BrowserViewController: UIViewController,
         searchLoader.addListener(searchController)
 
         self.searchController = searchController
+        self.searchEngagementState = .active
         self.searchLoader = searchLoader
     }
 
@@ -1190,6 +1209,7 @@ class BrowserViewController: UIViewController,
         hideSearchController()
 
         searchController = nil
+        searchEngagementState = nil
         searchLoader = nil
     }
 
@@ -1285,7 +1305,7 @@ class BrowserViewController: UIViewController,
 
     override func accessibilityPerformEscape() -> Bool {
         if overlayManager.inOverlayMode {
-            overlayManager.finishEditing(shouldCancelLoading: true)
+            overlayManager.cancelEditing(shouldCancelLoading: true)
             return true
         } else if let selectedTab = tabManager.selectedTab, selectedTab.canGoBack {
             selectedTab.goBack()
@@ -2360,6 +2380,45 @@ extension BrowserViewController: SearchViewControllerDelegate {
     func searchViewController(_ searchViewController: SearchViewController, didAppend text: String) {
         self.urlBar.setLocation(text, search: false)
     }
+
+    func searchViewControllerWillHide(_ searchViewController: SearchViewController) {
+        guard searchEngagementState == .engaged else { return }
+        let visibleSuggestionsTelemetryInfo = searchViewController.visibleSuggestionsTelemetryInfo
+        for info in visibleSuggestionsTelemetryInfo {
+            trackEngagedSearchTelemetry(visibleSuggestionInfo: info)
+        }
+    }
+
+    /// Records telemetry for a suggestion that was visible during an engaged
+    /// search. The user may have tapped on this suggestion or on a different
+    /// suggestion, or typed in a search term or a URL.
+    func trackEngagedSearchTelemetry(visibleSuggestionInfo info: SearchViewVisibleSuggestionTelemetryInfo) {
+        switch info {
+        // A sponsored or non-sponsored suggestion from Firefox Suggest.
+        case let .firefoxSuggestion(telemetryInfo, position, didTap):
+            TelemetryWrapper.gleanRecordEvent(
+                category: .action,
+                method: .view,
+                object: TelemetryWrapper.EventObject.fxSuggest,
+                extras: [
+                    TelemetryWrapper.EventValue.fxSuggestionTelemetryInfo.rawValue: telemetryInfo,
+                    TelemetryWrapper.EventValue.fxSuggestionPosition.rawValue: position,
+                    TelemetryWrapper.EventValue.fxSuggestionDidTap.rawValue: didTap,
+                ]
+            )
+            if didTap {
+                TelemetryWrapper.gleanRecordEvent(
+                    category: .action,
+                    method: .tap,
+                    object: TelemetryWrapper.EventObject.fxSuggest,
+                    extras: [
+                        TelemetryWrapper.EventValue.fxSuggestionTelemetryInfo.rawValue: telemetryInfo,
+                        TelemetryWrapper.EventValue.fxSuggestionPosition.rawValue: position,
+                    ]
+                )
+            }
+        }
+    }
 }
 
 extension BrowserViewController: TabManagerDelegate {
@@ -2376,7 +2435,9 @@ extension BrowserViewController: TabManagerDelegate {
 
         if let tab = selected, let webView = tab.webView {
             updateURLBarDisplayURL(tab)
-            if urlBar.inOverlayMode, tab.url?.displayURL != nil { urlBar.leaveOverlayMode(didCancel: false) }
+            if urlBar.inOverlayMode, tab.url?.displayURL != nil {
+                urlBar.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
+            }
 
             if previous == nil || tab.isPrivate != previous?.isPrivate {
                 applyTheme()
@@ -2623,7 +2684,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
         // If keyboard is dismiss leave edition mode Homepage case is handled in HomepageVC
         let newTabChoice = NewTabAccessors.getNewTabPage(profile.prefs)
         if newTabChoice != .topSites, newTabChoice != .blankPage {
-            overlayManager.finishEditing(shouldCancelLoading: false)
+            overlayManager.cancelEditing(shouldCancelLoading: false)
         }
     }
 }

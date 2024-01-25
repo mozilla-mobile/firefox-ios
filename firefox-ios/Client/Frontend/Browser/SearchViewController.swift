@@ -49,6 +49,7 @@ protocol SearchViewControllerDelegate: AnyObject {
         _ searchViewController: SearchViewController,
         didAppend text: String
     )
+    func searchViewControllerWillHide(_ searchViewController: SearchViewController)
 }
 
 // Note: ClientAndTabs data structure contains all tabs under a remote client. To make traversal and search easier
@@ -61,6 +62,22 @@ struct ClientTabsSearchWrapper {
 struct SearchViewModel {
     let isPrivate: Bool
     let isBottomSearchBar: Bool
+}
+
+/// Type-specific information to record in telemetry about a visible search
+/// suggestion.
+enum SearchViewVisibleSuggestionTelemetryInfo {
+    /// Information to record in telemetry about a visible sponsored or
+    /// non-sponsored suggestion from Firefox Suggest.
+    ///
+    /// `position` is the 1-based position of this suggestion relative to the
+    /// top of the search results view. `didTap` indicates if the user
+    /// tapped on this suggestion.
+    case firefoxSuggestion(
+        RustFirefoxSuggestionTelemetryInfo,
+        position: Int,
+        didTap: Bool
+    )
 }
 
 class SearchViewController: SiteTableViewController,
@@ -82,6 +99,8 @@ class SearchViewController: SiteTableViewController,
     private var searchHighlights = [HighlightItem]()
     var firefoxSuggestions = [RustFirefoxSuggestion]()
     private var highlightManager: HistoryHighlightsManagerProtocol
+
+    private var selectedIndexPath: IndexPath?
 
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
     // scrollable container; searchEngineScrollViewContent contains the actual set of search engine buttons.
@@ -230,6 +249,11 @@ class SearchViewController: SiteTableViewController,
         searchFeature.recordExposure()
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        searchDelegate?.searchViewControllerWillHide(self)
+        super.viewWillDisappear(animated)
+    }
+
     private func layoutSearchEngineScrollView() {
         let keyboardHeight = KeyboardHelper.defaultHelper.currentState?.intersectionHeightForView(self.view) ?? 0
 
@@ -326,6 +350,29 @@ class SearchViewController: SiteTableViewController,
         didSet {
             // Reload the tableView to show the updated text in each engine.
             reloadData()
+        }
+    }
+
+    /// Information to record in telemetry for the currently visible
+    /// suggestions.
+    var visibleSuggestionsTelemetryInfo: [SearchViewVisibleSuggestionTelemetryInfo] {
+        let visibleIndexPaths = tableView.indexPathsForVisibleRows ?? []
+        return visibleIndexPaths.enumerated().compactMap { (position, indexPath) in
+            switch SearchListSection(rawValue: indexPath.section)! {
+            case .firefoxSuggestions:
+                let firefoxSuggestion = firefoxSuggestions[indexPath.row]
+                guard let telemetryInfo = firefoxSuggestion.telemetryInfo else {
+                    return nil
+                }
+                return .firefoxSuggestion(
+                    telemetryInfo,
+                    position: position + 1,
+                    didTap: indexPath == selectedIndexPath
+                )
+
+            default:
+                return nil
+            }
         }
     }
 
@@ -654,20 +701,24 @@ class SearchViewController: SiteTableViewController,
                                               method: .tap,
                                               object: .recordSearch,
                                               extras: extras)
+            selectedIndexPath = indexPath
             searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: suggestion)
         case .openedTabs:
             recordSearchListSelectionTelemetry(type: .openedTabs)
             let tab = self.filteredOpenedTabs[indexPath.row]
+            selectedIndexPath = indexPath
             searchDelegate?.searchViewController(self, uuid: tab.tabUUID)
         case .remoteTabs:
             recordSearchListSelectionTelemetry(type: .remoteTabs)
             let remoteTab = self.filteredRemoteClientTabs[indexPath.row].tab
+            selectedIndexPath = indexPath
             searchDelegate?.searchViewController(self, didSelectURL: remoteTab.URL, searchTerm: nil)
         case .bookmarksAndHistory:
             if let site = data[indexPath.row] {
                 recordSearchListSelectionTelemetry(type: .bookmarksAndHistory,
                                                    isBookmark: site.bookmarked ?? false)
                 if let url = URL(string: site.url, invalidCharacters: false) {
+                    selectedIndexPath = indexPath
                     searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
                 }
             }
@@ -675,21 +726,12 @@ class SearchViewController: SiteTableViewController,
             if let urlString = searchHighlights[indexPath.row].urlString,
                 let url = URL(string: urlString, invalidCharacters: false) {
                 recordSearchListSelectionTelemetry(type: .searchHighlights)
+                selectedIndexPath = indexPath
                 searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
             }
         case .firefoxSuggestions:
             let firefoxSuggestion = firefoxSuggestions[indexPath.row]
-            if let clickInfo = firefoxSuggestion.clickInfo {
-                // The 1-based position of this suggestion, relative to the top of the table.
-                let position = SearchListSection.allCases.filter { $0.rawValue < indexPath.section }
-                    .reduce(0) { $0 + self.tableView(tableView, numberOfRowsInSection: $1.rawValue) }
-                + indexPath.row + 1
-                recordFirefoxSuggestSelectionTelemetry(
-                    clickInfo: clickInfo,
-                    position: position
-                )
-            }
-
+            selectedIndexPath = indexPath
             searchDelegate?.searchViewController(
                 self,
                 didSelectURL: firefoxSuggestion.url,
@@ -992,16 +1034,6 @@ private extension SearchViewController {
                                      method: .tap,
                                      object: .awesomebarResults,
                                      extras: [key: extra])
-    }
-
-    func recordFirefoxSuggestSelectionTelemetry(clickInfo: RustFirefoxSuggestionInteractionInfo, position: Int) {
-        TelemetryWrapper.gleanRecordEvent(category: .action,
-                                          method: .tap,
-                                          object: TelemetryWrapper.EventObject.fxSuggest,
-                                          extras: [
-                                            TelemetryWrapper.EventValue.fxSuggestionClickInfo.rawValue: clickInfo,
-                                            TelemetryWrapper.EventValue.fxSuggestionPosition.rawValue: position
-                                          ])
     }
 }
 
