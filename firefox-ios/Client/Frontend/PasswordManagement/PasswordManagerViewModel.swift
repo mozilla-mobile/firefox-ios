@@ -88,7 +88,6 @@ final class PasswordManagerViewModel {
                     completion([])
                     return
                 }
-                self.sendLoginsSavedAllTelemetry(numberOfSavedLogins: logins.count)
                 completion(logins.asArray())
             }
         }
@@ -186,14 +185,6 @@ final class PasswordManagerViewModel {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .add,
                                      object: .loginsSaved)
-    }
-
-    private func sendLoginsSavedAllTelemetry(numberOfSavedLogins: Int) {
-        let savedLoginsExtra = [TelemetryWrapper.EventExtraKey.loginsQuantity.rawValue: Int64(numberOfSavedLogins)]
-        TelemetryWrapper.recordEvent(category: .information,
-                                     method: .foreground,
-                                     object: .loginsSavedAll,
-                                     extras: savedLoginsExtra)
     }
 }
 

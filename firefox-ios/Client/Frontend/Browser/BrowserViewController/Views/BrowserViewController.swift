@@ -89,6 +89,7 @@ class BrowserViewController: UIViewController,
     // MARK: Telemetry Variables
     var webviewTelemetry = WebViewLoadMeasurementTelemetry()
     var privateBrowsingTelemetry = PrivateBrowsingTelemetry()
+    var appStartupTelemetry = AppStartupTelemetry()
 
     // popover rotation handling
     var displayedPopoverController: UIViewController?
@@ -2818,6 +2819,7 @@ extension BrowserViewController {
     func trackTelemetry() {
         trackAccessibility()
         trackNotificationPermission()
+        appStartupTelemetry.sendStartupTelemetry()
     }
 
     func trackAccessibility() {

@@ -918,6 +918,7 @@
 		AB03032B2AB47AF300DCD8EF /* FakespotOptInCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0303292AB47AF300DCD8EF /* FakespotOptInCardView.swift */; };
 		AB03032C2AB47AF300DCD8EF /* FakespotOptInCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB03032A2AB47AF300DCD8EF /* FakespotOptInCardViewModel.swift */; };
 		AB03032F2AB8561700DCD8EF /* FakespotOptInViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB03032D2AB484B700DCD8EF /* FakespotOptInViewModelTests.swift */; };
+		AB3DB0C92B596739001D32CB /* AppStartupTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB3DB0C82B596739001D32CB /* AppStartupTelemetry.swift */; };
 		AB42CC742A1F5240003C9594 /* CreditCardBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB42CC722A1F523F003C9594 /* CreditCardBottomSheetViewController.swift */; };
 		AB42CC752A1F5240003C9594 /* CreditCardBottomSheetHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB42CC732A1F5240003C9594 /* CreditCardBottomSheetHeaderView.swift */; };
 		AB52ED3B2A0E8873001067F5 /* UserConversionMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB52ED3A2A0E8873001067F5 /* UserConversionMetrics.swift */; };
@@ -6136,6 +6137,7 @@
 		AB03032A2AB47AF300DCD8EF /* FakespotOptInCardViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakespotOptInCardViewModel.swift; sourceTree = "<group>"; };
 		AB03032D2AB484B700DCD8EF /* FakespotOptInViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotOptInViewModelTests.swift; sourceTree = "<group>"; };
 		AB2B45078A7F1E09F65ACEC5 /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cy; path = cy.lproj/Shared.strings; sourceTree = "<group>"; };
+		AB3DB0C82B596739001D32CB /* AppStartupTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStartupTelemetry.swift; sourceTree = "<group>"; };
 		AB42CC722A1F523F003C9594 /* CreditCardBottomSheetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreditCardBottomSheetViewController.swift; sourceTree = "<group>"; };
 		AB42CC732A1F5240003C9594 /* CreditCardBottomSheetHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreditCardBottomSheetHeaderView.swift; sourceTree = "<group>"; };
 		AB52ED3A2A0E8873001067F5 /* UserConversionMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConversionMetrics.swift; sourceTree = "<group>"; };
@@ -11235,6 +11237,7 @@
 			isa = PBXGroup;
 			children = (
 				43175DB726B87D2C00C41C31 /* AdsTelemetryHelper.swift */,
+				AB3DB0C82B596739001D32CB /* AppStartupTelemetry.swift */,
 				8AABBCFB2A0010900089941E /* GleanWrapper.swift */,
 				5A32C2B42AD8515F00A9B5A4 /* MetricKit */,
 				8ABCFEA22B45C36100C2988A /* PrivateBrowsingTelemetry.swift */,
@@ -13787,6 +13790,7 @@
 				8A83B7462A264FA0002FF9AC /* SettingsCoordinator.swift in Sources */,
 				A9072B801D07B34100459960 /* NoImageModeHelper.swift in Sources */,
 				433396C827ACE92500491049 /* LegacyInactiveTabButton.swift in Sources */,
+				AB3DB0C92B596739001D32CB /* AppStartupTelemetry.swift in Sources */,
 				D8AA923421A602DC002605C0 /* HomePageSettingViewController.swift in Sources */,
 				8A161411282C035D00DDBB02 /* CustomizeHomepageSectionViewModel.swift in Sources */,
 				C8DC90C52A066B6A0008832B /* MarkupTokenizingUtility.swift in Sources */,
