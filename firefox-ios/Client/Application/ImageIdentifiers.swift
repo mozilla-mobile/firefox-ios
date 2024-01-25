@@ -9,7 +9,6 @@ import Foundation
 /// When adding new identifiers, please respect alphabetical order.
 /// Sing the song if you must.
 public struct ImageIdentifiers {
-    public static let amberCaution = "AmberCaution"
     public static let badgeMask = "badge-mask"
     public static let circleFill = "circle.fill"
     public static let competitiveness = "competitiveness"
@@ -51,7 +50,6 @@ public struct ImageIdentifiers {
     public static let qrCodeLightTurnedOn = "qrcode-isLighting"
     public static let privateMaskSmall = "smallPrivateMask"
     public static let privateModeBadge = "privateModeBadge"
-    public static let redCaution = "RedCaution"
     public static let reportSiteIssue = "menu-reportSiteIssue"
     public static let shipping = "shipping"
     public static let shoppingNoAnalysisImage = "shoppingNoAnalysisImage"
@@ -63,7 +61,6 @@ public struct ImageIdentifiers {
     public static let starHalf = "starHalf"
     public static let subtract = "subtract"
     public static let upgradeBackground = "onboardingBackground"
-    public static let breachedWebsite = "Breached Website"
     public static let customizeHomepage = "editLarge"
     public static let help = "helpCircleLarge"
     public static let share = "Share"
