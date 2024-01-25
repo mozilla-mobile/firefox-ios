@@ -584,7 +584,7 @@ app:
     BITRISE_EXPORT_METHOD: app-store
   - opts:
       is_expand: false
-    BITRISE_NIGHTLY_VERSION: '9000'
+    BITRISE_NIGHTLY_VERSION: '9001'
   - opts:
       is_expand: false
     BITRISE_RELEASE_VERSION: '123.0'
