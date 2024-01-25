@@ -146,7 +146,14 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         return numberOfItems
     }
 
-    func section(for traitCollection: UITraitCollection, size: CGSize) -> NSCollectionLayoutSection {
+    func section(for traitCollection: UITraitCollection,
+                 size: CGSize,
+                 isPortrait: Bool = UIWindow.isPortrait,
+                 device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom
+    ) -> NSCollectionLayoutSection {
+        let sectionDimension = refreshData(for: traitCollection, size: size)
+
+        // Prepare section layout with refreshed data
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .estimated(UX.cellEstimatedSize.height)
@@ -158,10 +165,6 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
             heightDimension: .estimated(UX.cellEstimatedSize.height)
         )
 
-        let interface = TopSitesUIInterface(trait: traitCollection, availableWidth: size.width)
-        let sectionDimension = dimensionManager.getSectionDimension(for: topSites,
-                                                                    numberOfRows: numberOfRows,
-                                                                    interface: interface)
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                        subitem: item,
                                                        count: sectionDimension.numberOfTilesPerRow)
@@ -180,14 +183,8 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         return section
     }
 
-    var hasData: Bool {
-        return !topSites.isEmpty
-    }
-
-    func refreshData(for traitCollection: UITraitCollection,
-                     size: CGSize,
-                     isPortrait: Bool = UIWindow.isPortrait,
-                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
+    /// Refresh our data set for top sites, should only be called when we build the section layout
+    private func refreshData(for traitCollection: UITraitCollection, size: CGSize) -> TopSitesSectionDimension {
         let interface = TopSitesUIInterface(trait: traitCollection,
                                             availableWidth: size.width)
         let sectionDimension = dimensionManager.getSectionDimension(for: topSites,
@@ -199,6 +196,12 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
             let range = numberOfItems..<unfilteredTopSites.count
             topSites.removeSubrange(range)
         }
+
+        return sectionDimension
+    }
+
+    var hasData: Bool {
+        return !topSites.isEmpty
     }
 
     func screenWasShown() {

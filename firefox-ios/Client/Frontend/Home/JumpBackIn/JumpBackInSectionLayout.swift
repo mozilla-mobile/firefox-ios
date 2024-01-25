@@ -54,7 +54,7 @@ enum JumpBackInSectionLayout: Equatable {
 
     // The maximum number of items to display in the whole section
     func maxItemsToDisplay(hasAccount: Bool,
-                           device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom
+                           device: UIUserInterfaceIdiom
     ) -> JumpBackInDisplayGroupCount {
         return JumpBackInDisplayGroupCount(
             tabsCount: maxJumpBackInItemsToDisplay(device: device),
