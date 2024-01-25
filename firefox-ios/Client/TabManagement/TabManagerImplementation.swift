@@ -340,6 +340,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
             if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
                 store.dispatch(PrivateModeUserAction.setPrivateModeTo(tab.isPrivate))
+            } else {
+                store.dispatch(PrivateModeUserAction.setPrivateModeTo(false))
             }
 
             didSelectTab(url)
