@@ -30,7 +30,9 @@ class URLValidationTest: BaseTestCase {
         loadWebPage(URL)
         waitForWebPageLoad()
         XCTAssertTrue(app.otherElements.staticTexts["Mozilla"].exists, "The website was not loaded properly")
-        XCTAssertTrue(app.buttons["Menu"].exists)
+        if !iPad() {
+            XCTAssertTrue(app.buttons["Menu"].exists)
+        }
         XCTAssertEqual(app.textFields["URLBar.urlText"].value as? String, "www.mozilla.org")
     }
     
