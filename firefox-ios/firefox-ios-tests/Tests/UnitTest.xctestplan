@@ -98,6 +98,7 @@
         "GleanPlumbMessageManagerTests\/testManagerOnMessagePressed_withMalformedURL()",
         "HistoryHighlightsDataAdaptorTests\/testReloadDataOnNotification()",
         "IntroViewControllerTests\/testBasicSetupReturnsExpectedItems()",
+        "RustSyncManagerTests\/testGetEnginesAndKeys()",
         "RustSyncManagerTests\/testGetEnginesAndKeysWithNoKey()",
         "RustSyncManagerTests\/testUpdateEnginePrefs_bookmarksEnabled()",
         "ShortcutRouteTests\/testOpenLastBookmarkShortcutWithInvalidUrl()",
