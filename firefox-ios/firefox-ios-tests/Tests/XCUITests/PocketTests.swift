@@ -14,12 +14,18 @@ class PocketTests: BaseTestCase {
             "Thought-Provoking Stories"
         )
 
-        // There should be at least 8 stories on iPhone and three on iPad
+        // There should be at least 8 stories on iPhone and 7 on iPad.
+        // You can see more stories on iPhone by swiping left, but not all
+        // stories are displayed at once.
         let numPocketStories = app.collectionViews.containing(
             .cell,
             identifier: AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell
         ).children(matching: .cell).count-1
-        XCTAssertTrue(numPocketStories > 7)
+        if iPad() {
+            XCTAssertTrue(numPocketStories > 7)
+        } else {
+            XCTAssertTrue(numPocketStories > 6)
+        }
 
         // Disable Pocket
         navigator.performAction(Action.TogglePocketInNewTab)
