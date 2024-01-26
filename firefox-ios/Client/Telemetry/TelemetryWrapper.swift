@@ -225,9 +225,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         }
 
         // System theme enabled
-        if let systemThemeIsOn = prefs.bool(forKey: DefaultThemeManager.ThemeKeys.systemThemeIsOn) {
-            GleanMetrics.Theme.useSystemTheme.set(systemThemeIsOn)
-        }
+        let themeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
+        GleanMetrics.Theme.useSystemTheme.set(themeManager.systemThemeIsOn)
 
         // Installed Mozilla applications
         GleanMetrics.InstalledMozillaProducts.focus.set(UIApplication.shared.canOpenURL(URL(string: "firefox-focus://")!))
