@@ -18,6 +18,7 @@ stages:
     - build_and_test_4_SmokeTest4: {}
 workflows:
   configure_build_fennec:
+    run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
     before_run:
     - determine_apps_affected
     - 0_detect_standalone_build
@@ -30,13 +31,6 @@ workflows:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - restore-spm-cache@1:
         is_always_run: true
-    - script@1.1:
-        title: Check apps affected 
-        inputs:
-        - content: |
-            echo "Aaron Test"
-            echo "BUILD_FIREFOX_IOS: $BUILD_FIREFOX_IOS"
-            echo "BUILD_SAMPLE_BROWSER: $BUILD_SAMPLE_BROWSER"
     - script@1.1:
         title: Build for Testing
         inputs:
