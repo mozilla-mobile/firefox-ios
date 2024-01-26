@@ -9,10 +9,6 @@ import MozillaAppServices
 open class PushNotificationSetup {
     /// Disables FxA push notifications for the user
     public func disableNotifications() {
-        MZKeychainWrapper.sharedClientAppContainerKeychain.removeObject(
-            forKey: KeychainKey.apnsToken,
-            withAccessibility: .afterFirstUnlock
-        )
         if let accountManager = RustFirefoxAccounts.shared.accountManager {
             let subscriptionEndpoint = accountManager.deviceConstellation()?
                 .state()?.localDevice?.pushSubscription?.endpoint

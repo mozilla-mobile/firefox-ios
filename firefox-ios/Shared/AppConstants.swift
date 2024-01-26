@@ -47,10 +47,6 @@ public enum KVOConstants: String {
     case contentSize
 }
 
-public struct KeychainKey {
-    public static let apnsToken = "apnsToken"
-}
-
 public class AppConstants {
     // Any type of tests (UI and Unit)
     public static let isRunningTest = NSClassFromString("XCTestCase") != nil
