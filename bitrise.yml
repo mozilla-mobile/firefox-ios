@@ -9,8 +9,9 @@ pipelines:
 stages:
   stage_1:
     workflows:
-    #- configure_build_fennec: {}
-    - Test_App_Diff_Check: {}
+    - determine_apps_affected: {}
+    - configure_build_fennec:
+        run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
   stage_2:
     workflows:
     - build_and_test_1_SmokeTest2: {}
@@ -335,6 +336,54 @@ workflows:
       bitrise.io:
         stack: osx-xcode-15.2.x
         machine_type_id: g2-m1.8core
+  determine_apps_affected:
+    steps:
+    - git-clone@6.2: {}
+    - script@1:
+        title: Determine which application to base configuration
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+
+            # Determine which application to base configuration
+            APPS_AFFECTED=$(git diff --name-only origin/main..."$BITRISE_GIT_COMMIT" | xargs -n1 dirname | sort | uniq)
+
+            if [[ "$APPS_AFFECTED" == *"firefox-ios"* ]]; then
+                envman add --key BUILD_FIREFOX_IOS --value "true"
+            fi
+            if [[ "$APPS_AFFECTED" == *"focus-ios"* ]]; then
+                envman add --key BUILD_FOCUS_IOS --value "true"
+            fi
+            if [[ "$APPS_AFFECTED" == *"SampleBrowser"* ]]; then
+                envman add --key BUILD_SAMPLE_BROWSER_IOS --value "true"
+            fi
+
+            # Mono-repo root changes (e.g, package.json, bitrise.yml, etc.)
+            # If there are changes in the root of the mono-repo, then we need to build all apps (?)
+            # if [[ "$APPS_AFFECTED" == *"."* ]]; then
+            #     set all apps to true?
+            # fi
+
+            echo $APPS_AFFECTED
+    - share-pipeline-variable@1:
+        title: Share which application(s) to base configuration off of
+        inputs:
+        - variables: |-
+            BUILD_FIREFOX_IOS
+            BUILD_FOCUS_IOS
+            BUILD_SAMPLE_BROWSER_IOS
+    - script@1:
+        title: Echo build keys
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -ex
+
+            echo "BUILD_FIREFOX_IOS: $BUILD_FIREFOX_IOS"
+            echo "BUILD_FOCUS_IOS: $BUILD_FOCUS_IOS"
+            echo "BUILD_SAMPLE_BROWSER_IOS: $BUILD_SAMPLE_BROWSER_IOS"
+
   send_slack_notification:
     steps:
     - slack@3.1:
@@ -1583,47 +1632,6 @@ workflows:
             sed 's/.*=//;s/'\''/"/g' data.txt > test.json
             cat test.json
             python3 perfTestTransform.py
-  Test_App_Diff_Check:
-    steps:
-    - git-clone@6.2: {}
-    - script@1:
-        title: Determine which application to base configuration
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            set -e
-
-            # Determine which application to base configuration
-            APPS_AFFECTED=$(git diff --name-only origin/main..."$BITRISE_GIT_COMMIT" | xargs -n1 dirname | sort | uniq)
-
-            if [[ "$APPS_AFFECTED" == *"firefox-ios"* ]]; then
-                envman add --key BUILD_FIREFOX_IOS --value "true"
-            fi
-            if [[ "$APPS_AFFECTED" == *"focus-ios"* ]]; then
-                envman add --key BUILD_FOCUS_IOS --value "true"
-            fi
-            if [[ "$APPS_AFFECTED" == *"SampleBrowser"* ]]; then
-                envman add --key BUILD_SAMPLE_BROWSER_IOS --value "true"
-            fi
-
-            echo $APPS_AFFECTED
-    - share-pipeline-variable@1:
-        title: Share which application(s) to base configuration off of
-        inputs:
-        - variables: |-
-            BUILD_FIREFOX_IOS
-            BUILD_SAMPLE_BROWSER_IOS
-
-    - script@1:
-        title: Show which configuration is set to true
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            set -ex
-
-            echo "BUILD_FIREFOX_IOS: $BUILD_FIREFOX_IOS"
-            echo "BUILD_FOCUS_IOS: $BUILD_FOCUS_IOS"
-            echo "BUILD_SAMPLE_BROWSER_IOS: $BUILD_SAMPLE_BROWSER_IOS"
 
 app:
   envs:
