@@ -546,11 +546,12 @@ extension TabLocationView: TabEventHandler {
             self.blockerStatus = blocker.status
         }
     }
-    
+
     func tabDidGainFocus(_ tab: Tab) {
         guard let blocker = tab.contentBlocker else { return }
 
         ensureMainThread { [self] in
+            self.showTrackingProtectionButton(for: tab.webView?.url)
             self.hasSecureContent = (tab.webView?.hasOnlySecureContent ?? false)
             self.blockerStatus = blocker.status
         }
