@@ -338,7 +338,6 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
                 cell.textLabel?.text = .DisplayThemeOptionDark
             }
 
-            // ROUX
             let themeType = themeManager.currentTheme.type
             if (indexPath.row == 0 && themeType == .light) ||
                 (indexPath.row == 1 && themeType == .dark) {
