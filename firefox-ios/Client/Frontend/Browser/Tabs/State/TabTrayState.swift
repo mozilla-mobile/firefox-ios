@@ -80,22 +80,25 @@ struct TabTrayState: ScreenState, Equatable {
 
     static let reducer: Reducer<Self> = { state, action in
         // Only process actions for the current window
-        guard action.windowUUID == nil || action.windowUUID == state.windowUUID else { return state }
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
 
         switch action {
-        case TabTrayAction.didLoadTabTray(let tabTrayModel):
+        case TabTrayAction.didLoadTabTray(let context):
+            let tabTrayModel = context.tabTrayModel
             return TabTrayState(windowUUID: state.windowUUID,
                                 isPrivateMode: tabTrayModel.isPrivateMode,
                                 selectedPanel: tabTrayModel.selectedPanel,
                                 normalTabsCount: tabTrayModel.normalTabsCount,
                                 hasSyncableAccount: tabTrayModel.hasSyncableAccount)
-        case TabTrayAction.changePanel(let panelType):
+        case TabTrayAction.changePanel(let context):
+            let panelType = context.panelType
             return TabTrayState(windowUUID: state.windowUUID,
                                 isPrivateMode: panelType == .privateTabs,
                                 selectedPanel: panelType,
                                 normalTabsCount: state.normalTabsCount,
                                 hasSyncableAccount: state.hasSyncableAccount)
-        case TabPanelAction.didLoadTabPanel(let tabState):
+        case TabPanelAction.didLoadTabPanel(let context):
+            let tabState = context.tabDisplayModel
             let panelType = tabState.isPrivateMode ? TabTrayPanelType.privateTabs : TabTrayPanelType.tabs
             return TabTrayState(windowUUID: state.windowUUID,
                                 isPrivateMode: tabState.isPrivateMode,
@@ -109,12 +112,13 @@ struct TabTrayState: ScreenState, Equatable {
                                 normalTabsCount: state.normalTabsCount,
                                 hasSyncableAccount: state.hasSyncableAccount,
                                 shouldDismiss: true)
-        case TabTrayAction.firefoxAccountChanged(let isSyncAccountEnabled):
-                return TabTrayState(windowUUID: state.windowUUID,
-                                    isPrivateMode: state.isPrivateMode,
-                                    selectedPanel: state.selectedPanel,
-                                    normalTabsCount: state.normalTabsCount,
-                                    hasSyncableAccount: isSyncAccountEnabled)
+        case TabTrayAction.firefoxAccountChanged(let context):
+            let isSyncAccountEnabled = context.hasSyncableAccount
+            return TabTrayState(windowUUID: state.windowUUID,
+                                isPrivateMode: state.isPrivateMode,
+                                selectedPanel: state.selectedPanel,
+                                normalTabsCount: state.normalTabsCount,
+                                hasSyncableAccount: isSyncAccountEnabled)
         case TabPanelAction.showShareSheet(let shareURL):
             return TabTrayState(windowUUID: state.windowUUID,
                                 isPrivateMode: state.isPrivateMode,

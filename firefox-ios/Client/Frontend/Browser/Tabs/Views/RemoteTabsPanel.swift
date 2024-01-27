@@ -64,7 +64,7 @@ class RemoteTabsPanel: UIViewController,
     private func refreshTabs() {
         // Ensure we do not already have a refresh in progress
         guard state.refreshState != .refreshing else { return }
-        store.dispatch(RemoteTabsPanelAction.refreshTabs)
+        store.dispatch(RemoteTabsPanelAction.refreshTabs(ActionContext(windowUUID: windowUUID)))
     }
 
     // MARK: - View & Layout
@@ -105,7 +105,7 @@ class RemoteTabsPanel: UIViewController,
         store.dispatch(ActiveScreensStateAction.showScreen(
             ScreenActionContext(screen: .remoteTabsPanel, windowUUID: windowUUID)
         ))
-        store.dispatch(RemoteTabsPanelAction.panelDidAppear)
+        store.dispatch(RemoteTabsPanelAction.panelDidAppear(ActionContext(windowUUID: windowUUID)))
         let uuid = windowUUID
         store.subscribe(self, transform: {
             $0.select({ appState in
@@ -153,6 +153,7 @@ class RemoteTabsPanel: UIViewController,
     }
 
     private func handleOpenSelectedURL(_ url: URL) {
-        store.dispatch(RemoteTabsPanelAction.openSelectedURL(url))
+        let context = URLActionContext(url: url, windowUUID: windowUUID)
+        store.dispatch(RemoteTabsPanelAction.openSelectedURL(context))
     }
 }

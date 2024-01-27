@@ -64,10 +64,11 @@ struct TabsPanelState: ScreenState, Equatable {
 
     static let reducer: Reducer<Self> = { state, action in
         // Only process actions for the current window
-        guard action.windowUUID == nil || action.windowUUID == state.windowUUID else { return state }
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
 
         switch action {
-        case TabPanelAction.didLoadTabPanel(let tabsModel):
+        case TabPanelAction.didLoadTabPanel(let context):
+            let tabsModel = context.tabDisplayModel
             let selectedTabIndex = tabsModel.tabs.firstIndex(where: { $0.isSelected })
             return TabsPanelState(windowUUID: state.windowUUID,
                                   isPrivateMode: tabsModel.isPrivateMode,

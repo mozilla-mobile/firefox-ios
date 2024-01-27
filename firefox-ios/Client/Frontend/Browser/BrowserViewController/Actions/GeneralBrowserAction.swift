@@ -8,10 +8,10 @@ import Redux
 enum GeneralBrowserAction: Action {
     case showToast(ToastType)
 
-    var windowUUID: UUID? {
+    var windowUUID: UUID {
         // TODO: [8188] Update to be non-optional and return windowUUID. Forthcoming.
         switch self {
-        default: return nil
+        default: return .unavailable
         }
     }
 }

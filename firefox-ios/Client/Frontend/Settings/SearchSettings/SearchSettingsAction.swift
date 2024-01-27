@@ -5,10 +5,10 @@
 import Redux
 
 enum SearchSettingsAction: Action {
-    var windowUUID: UUID? {
+    var windowUUID: UUID {
         // TODO: [8188] Revisit UUIDs here.
         switch self {
-        default: return nil
+        default: return .unavailable
         }
     }
 }

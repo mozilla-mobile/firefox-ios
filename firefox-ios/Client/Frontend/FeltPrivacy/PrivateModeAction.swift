@@ -8,10 +8,10 @@ import Redux
 enum PrivateModeMiddlewareAction: Action {
     case privateModeUpdated(Bool)
 
-    var windowUUID: UUID? {
+    var windowUUID: UUID {
         // TODO: [8188] Update to be non-optional and return windowUUID. Forthcoming.
         switch self {
-        default: return nil
+        default: return .unavailable
         }
     }
 }
@@ -19,10 +19,10 @@ enum PrivateModeMiddlewareAction: Action {
 enum PrivateModeUserAction: Action {
     case setPrivateModeTo(Bool)
 
-    var windowUUID: UUID? {
+    var windowUUID: UUID {
         // TODO: [8188] Update to be non-optional and return windowUUID. Forthcoming.
         switch self {
-        default: return nil
+        default: return .unavailable
         }
     }
 }

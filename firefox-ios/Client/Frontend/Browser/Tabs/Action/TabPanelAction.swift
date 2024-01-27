@@ -5,6 +5,14 @@
 import Redux
 import Storage
 
+class TabDisplayModelContext: ActionContext {
+    let tabDisplayModel: TabDisplayModel
+    init(tabDisplayModel: TabDisplayModel, windowUUID: WindowUUID) {
+        self.tabDisplayModel = tabDisplayModel
+        super.init(windowUUID: windowUUID)
+    }
+}
+
 class BooleanValueContext: ActionContext {
     let boolValue: Bool
     init(boolValue: Bool, windowUUID: WindowUUID) {
@@ -13,10 +21,20 @@ class BooleanValueContext: ActionContext {
     }
 }
 
+class AddNewTabContext: ActionContext {
+    let urlRequest: URLRequest?
+    let isPrivate: Bool
+    init(urlRequest: URLRequest?, isPrivate: Bool, windowUUID: WindowUUID) {
+        self.urlRequest = urlRequest
+        self.isPrivate = isPrivate
+        super.init(windowUUID: windowUUID)
+    }
+}
+
 enum TabPanelAction: Action {
     case tabPanelDidLoad(Bool)
     case tabPanelDidAppear(Bool)
-    case addNewTab(URLRequest?, Bool)
+    case addNewTab(AddNewTabContext)
     case closeTab(String)
     case undoClose
     case closeAllTabs
@@ -34,14 +52,14 @@ enum TabPanelAction: Action {
     case showShareSheet(URL)
 
     // Middleware actions
-    case didLoadTabPanel(TabDisplayModel)
-    case refreshTab(TabDisplayModel) // Response to all user actions involving tabs ex: add, close and close all tabs
+    case didLoadTabPanel(TabDisplayModelContext)
+    case refreshTab(TabDisplayModelContext) // Response to all user actions involving tabs ex: add, close and close all tabs
     case refreshInactiveTabs([InactiveTabsModel])
 
-    var windowUUID: UUID? {
+    var windowUUID: UUID {
         // TODO: [8188] Update to be non-optional and return windowUUID. Forthcoming.
         switch self {
-        default: return nil
+        default: return .unavailable
         }
     }
 }

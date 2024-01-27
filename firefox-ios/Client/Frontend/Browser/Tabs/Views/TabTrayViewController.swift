@@ -255,7 +255,8 @@ class TabTrayViewController: UIViewController,
         store.dispatch(ActiveScreensStateAction.showScreen(
             ScreenActionContext(screen: .tabsTray, windowUUID: windowUUID)
         ))
-        store.dispatch(TabTrayAction.tabTrayDidLoad(tabTrayState.selectedPanel))
+        let context = TabTrayPanelContext(panelType: tabTrayState.selectedPanel, windowUUID: windowUUID)
+        store.dispatch(TabTrayAction.tabTrayDidLoad(context))
         let uuid = windowUUID
         store.subscribe(self, transform: {
             $0.select({ appState in
@@ -450,7 +451,8 @@ class TabTrayViewController: UIViewController,
               tabTrayState.selectedPanel != panelType else { return }
 
         setupOpenPanel(panelType: panelType)
-        store.dispatch(TabTrayAction.changePanel(panelType))
+        let context = TabTrayPanelContext(panelType: panelType, windowUUID: windowUUID)
+        store.dispatch(TabTrayAction.changePanel(context))
     }
 
     @objc
@@ -459,8 +461,9 @@ class TabTrayViewController: UIViewController,
     }
 
     @objc
-    private func newTabButtonTapped() {
-        store.dispatch(TabPanelAction.addNewTab(nil, tabTrayState.isPrivateMode))
+    private func newTabButtonTapped(uuid: WindowUUID) {
+        let context = AddNewTabContext(urlRequest: nil, isPrivate: tabTrayState.isPrivateMode, windowUUID: uuid)
+        store.dispatch(TabPanelAction.addNewTab(context))
     }
 
     @objc
@@ -471,7 +474,7 @@ class TabTrayViewController: UIViewController,
     }
 
     @objc
-    private func syncTabsTapped() {
-        store.dispatch(RemoteTabsPanelAction.refreshTabs)
+    private func syncTabsTapped(uuid: WindowUUID) {
+        store.dispatch(RemoteTabsPanelAction.refreshTabs(ActionContext(windowUUID: windowUUID)))
     }
 }
