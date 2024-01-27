@@ -143,7 +143,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         }
     }
 
-
     // MARK: - Private methods
 
     private func updateSavedTheme(to newTheme: ThemeType) {

@@ -3,40 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import UIKit
-import Shared
 
 protocol PrivateModeUI {
     func applyUIMode(isPrivate: Bool, theme: Theme)
-}
-
-extension UIColor {
-    static var legacyTheme: LegacyTheme {
-        return LegacyThemeManager.instance.current
-    }
-}
-
-enum BuiltinThemeName: String {
-    case normal
-    case dark
-}
-
-class BrowserColor {
-    var background: UIColor { return UIColor.Photon.Grey10 } // layer1
-}
-
-class TabTrayColor {
-    var tabTitleBlur: UIBlurEffect.Style { return UIBlurEffect.Style.extraLight }
-}
-
-protocol LegacyTheme {
-    var name: String { get }
-    var browser: BrowserColor { get }
-    var tabTray: TabTrayColor { get }
-}
-
-class LegacyNormalTheme: LegacyTheme {
-    var name: String { return BuiltinThemeName.normal.rawValue }
-    var browser: BrowserColor { return BrowserColor() }
-    var tabTray: TabTrayColor { return TabTrayColor() }
 }
