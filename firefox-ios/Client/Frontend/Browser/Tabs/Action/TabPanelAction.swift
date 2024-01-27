@@ -57,7 +57,7 @@ enum TabPanelAction: Action {
     case refreshInactiveTabs([InactiveTabsModel])
 
     var windowUUID: UUID {
-        // TODO: [8188] Update to be non-optional and return windowUUID. Forthcoming.
+       // TODO: [8188] Use of .unavailable UUID is temporary as part of early MW refactors. WIP. 
         switch self {
         default: return .unavailable
         }
