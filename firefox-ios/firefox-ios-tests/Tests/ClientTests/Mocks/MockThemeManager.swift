@@ -13,6 +13,8 @@ class MockThemeManager: ThemeManager {
 
     var automaticBrightnessIsOn: Bool { return false}
 
+    var automaticBrightnessValue: Float { return 0.4}
+
     func getInterfaceStyle() -> UIUserInterfaceStyle {
         return .light
     }
@@ -45,4 +47,6 @@ class MockThemeManager: ThemeManager {
             changeCurrentTheme(.light)
         }
     }
+
+    func brightnessChanged() { }
 }
