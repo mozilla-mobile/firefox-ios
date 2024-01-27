@@ -45,4 +45,12 @@ public enum ThemeType: String {
             .dark
         }
     }
+
+    public func tabTitleBlurStyle() -> UIBlurEffect.Style {
+        return switch self {
+        case .dark: UIBlurEffect.Style.dark
+        case .light: UIBlurEffect.Style.extraLight
+        case .privateMode: UIBlurEffect.Style.dark
+        }
+    }
 }

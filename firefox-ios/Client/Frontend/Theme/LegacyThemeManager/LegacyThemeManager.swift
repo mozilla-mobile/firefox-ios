@@ -17,85 +17,8 @@ class LegacyThemeManager {
     var current: LegacyTheme = themeFrom(name: UserDefaults.standard.string(
         forKey: LegacyThemeManagerPrefs.themeName.rawValue))
 
-    var currentName: BuiltinThemeName {
-        return BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-    }
-
-    var automaticBrightnessValue: Float = UserDefaults.standard.float(
-        forKey: LegacyThemeManagerPrefs.automaticSliderValue.rawValue
-    ) {
-        didSet {
-            UserDefaults.standard.set(
-                automaticBrightnessValue,
-                forKey: LegacyThemeManagerPrefs.automaticSliderValue.rawValue
-            )
-        }
-    }
-
-    var automaticBrightnessIsOn: Bool = UserDefaults.standard.bool(
-        forKey: LegacyThemeManagerPrefs.automaticSwitchIsOn.rawValue
-    ) {
-        didSet {
-            UserDefaults.standard.set(
-                automaticBrightnessIsOn,
-                forKey: LegacyThemeManagerPrefs.automaticSwitchIsOn.rawValue
-            )
-            guard automaticBrightnessIsOn else { return }
-            updateCurrentThemeBasedOnScreenBrightness()
-        }
-    }
-
-    private var systemThemeIsOn: Bool {
-        return UserDefaults.standard.bool(forKey: LegacyThemeManagerPrefs.systemThemeIsOn.rawValue)
-    }
-
     private init() {
         UserDefaults.standard.register(defaults: [LegacyThemeManagerPrefs.systemThemeIsOn.rawValue: true])
-
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(brightnessChanged),
-                                               name: UIScreen.brightnessDidChangeNotification,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(applicationDidBecomeActive),
-                                               name: UIApplication.didBecomeActiveNotification,
-                                               object: nil)
-    }
-
-    var userInterfaceStyle: UIUserInterfaceStyle {
-        switch currentName {
-        case .dark:
-            return .dark
-        default:
-            return .light
-        }
-    }
-
-    func updateCurrentThemeBasedOnScreenBrightness() {
-        let prefValue = UserDefaults.standard.float(forKey: LegacyThemeManagerPrefs.automaticSliderValue.rawValue)
-
-        let screenLessThanPref = Float(UIScreen.main.brightness) < prefValue
-
-        if screenLessThanPref, self.currentName == .normal {
-            self.current = LegacyDarkTheme()
-        } else if !screenLessThanPref, self.currentName == .dark {
-            self.current = LegacyNormalTheme()
-        }
-    }
-
-    @objc
-    private func brightnessChanged() {
-        guard automaticBrightnessIsOn else { return }
-        updateCurrentThemeBasedOnScreenBrightness()
-    }
-
-    @objc
-    private func applicationDidBecomeActive() {
-        let nightMode = UserDefaults.standard.bool(forKey: "profile.NightModeStatus")
-        if !nightMode && LegacyThemeManager.instance.systemThemeIsOn {
-            let userInterfaceStyle = UIScreen.main.traitCollection.userInterfaceStyle
-            LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? LegacyDarkTheme() : LegacyNormalTheme()
-        }
     }
 }
 
