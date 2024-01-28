@@ -11,7 +11,7 @@
 "About.privateBullet2" = "Блокуйте стеження (або оновіть налаштування, щоб дозволити стеження)";
 
 /* Label on About screen */
-"About.privateBullet3" = "Стирайте для видалення куків, а також історії пошуку й перегляду";
+"About.privateBullet3" = "Видаліть файли cookie, а також історію пошуку й перегляду";
 
 /* Label on About screen */
 "About.privateBulletHeader" = "Використовуйте як приватний браузер:";
@@ -203,7 +203,7 @@
 "Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Установити типовим браузером";
 
 /* Text for a label that indicates the description of history section from onboarding screen. */
-"Onboarding.History.Description" = "Зітріть історію перегляду, паролі, куки, щоб запобігти стеженню за вами небажаною рекламою, одним натиском!";
+"Onboarding.History.Description" = "Зітріть історію перегляду, паролі, файли cookie, щоб запобігти стеженню за вами небажаною рекламою, одним дотиком!";
 
 /* Text for a label that indicates the title of history section from onboarding screen. */
 "Onboarding.History.Title" = "Ваша історія не стежить за вами";
@@ -581,7 +581,7 @@
 "TooltipBodyText.TrashIcon" = "Торкніться кошика будь-коли, щоб вилучити всі сліди поточного сеансу.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
-"TooltipBodyText.TrashIcon.V2" = "Торкніться тут, щоб стерти все — історію, куки й інші дані — та розпочніть начисто у новій вкладці.";
+"TooltipBodyText.TrashIcon.V2" = "Торкніться тут, щоб стерти все – історію, файли cookie й інші дані – та розпочніть начисто у новій вкладці.";
 
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "Ви захищені!";

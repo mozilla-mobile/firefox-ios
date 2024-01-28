@@ -1,5 +1,5 @@
 /* Description for the 'History' panel in the First Run tour. */
-"Intro.Slides.History.Description" = "Будь-коли стирайте всю історію перегляду, паролі та куки одним дотиком.";
+"Intro.Slides.History.Description" = "Будь-коли стирайте всю історію перегляду, паролі та файли cookie одним дотиком.";
 
 /* Title for the third  panel 'History' in the First Run tour. */
 "Intro.Slides.History.Title" = "Ваша історія залишається історією";
