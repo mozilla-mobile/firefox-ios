@@ -15,6 +15,8 @@ struct AddressCellView: View {
 
     @State private var textColor: Color = .clear
     @State private var customLightGray: Color = .clear
+    @State private var iconPrimary: Color = .clear
+
     private(set) var address: Address
     @Environment(\.themeType)
     var themeVal
@@ -27,8 +29,9 @@ struct AddressCellView: View {
             VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 24) {
                     Image(ImageIdentifiers.location)
+                        .renderingMode(.template)
                         .padding(.leading, 16)
-                        .foregroundColor(.primary)
+                        .foregroundColor(iconPrimary)
                         .offset(y: -14)
                     VStack(alignment: .leading) {
                         Text(address.givenName + " " + address.familyName)
@@ -67,6 +70,7 @@ struct AddressCellView: View {
         let color = theme.colors
         textColor = Color(color.textPrimary)
         customLightGray = Color(color.textSecondary)
+        iconPrimary = Color(color.iconPrimary)
     }
 }
 

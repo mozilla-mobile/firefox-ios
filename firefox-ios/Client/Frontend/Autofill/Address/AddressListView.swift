@@ -15,7 +15,7 @@ struct AddressListView: View {
 
     @Environment(\.themeType)
     var themeVal
-    @ObservedObject var viewModel = AddressListViewModel()
+    @ObservedObject var viewModel: AddressListViewModel
     @State private var customLightGray: Color = .clear
 
     // MARK: - Body
