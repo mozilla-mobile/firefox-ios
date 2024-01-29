@@ -340,6 +340,20 @@ workflows:
     steps:
     - git-clone@6.2: {}
     - script@1:
+        title: Determine if source is available
+        run_if: true
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+
+            # Set IS_SOURCE_AVAILABLE based on the existence of BITRISE_SOURCE_DIR  (i.e. did the Git clone step succeed?)
+            IS_SOURCE_AVAILABLE=$([ -d "$BITRISE_SOURCE_DIR" ] && echo "true" || echo "false")
+            
+            envman add --key IS_SOURCE_AVAILABLE --value="$IS_SOURCE_AVAILABLE"
+            
+            echo "$IS_SOURCE_AVAILABLE"
+    - script@1:
         title: Determine which application to base configuration
         inputs:
         - content: |-
@@ -379,8 +393,6 @@ workflows:
             envman add --key BUILD_FIREFOX_IOS --value "$BUILD_FIREFOX_IOS"
             envman add --key BUILD_FOCUS_IOS --value "$BUILD_FOCUS_IOS"
             envman add --key BUILD_SAMPLE_BROWSER_IOS --value "$BUILD_SAMPLE_BROWSER_IOS"
-
-            echo $APPS_AFFECTED
     - share-pipeline-variable@1:
         title: Share which application(s) to base configuration off of
         inputs:
@@ -460,7 +472,8 @@ workflows:
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6.2: {}
+    - git-clone@6.2:
+        run_if: '{{getenv "IS_SOURCE_AVAILABLE" | eq "false"}}'
     - script@1.1:
         inputs:
         - content: |-
