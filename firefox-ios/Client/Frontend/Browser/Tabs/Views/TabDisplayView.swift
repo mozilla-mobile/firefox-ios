@@ -77,6 +77,19 @@ class TabDisplayView: UIView,
     func newState(state: TabsPanelState) {
         tabsState = state
         collectionView.reloadData()
+
+        if let index = state.scrollToIndex {
+            scrollToTab(index)
+        }
+    }
+
+    private func scrollToTab(_ index: Int) {
+        let section = shouldHideInactiveTabs ? 0 : 1
+        let indexPath = IndexPath(row: index,
+                                  section: section)
+            collectionView.scrollToItem(at: indexPath,
+                                        at: .centeredVertically,
+                                        animated: false)
     }
 
     private func setupLayout() {
