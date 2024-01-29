@@ -318,6 +318,8 @@ extension TelemetryWrapper {
         case switchControl = "switch-control"
         case dynamicTextSize = "dynamic-text-size"
         case error = "error"
+        case engagement = "engagement"
+        case abandonment = "abandonment"
     }
 
     public enum EventObject: String {
@@ -628,6 +630,7 @@ extension TelemetryWrapper {
         case fxSuggestionTelemetryInfo = "fx-suggestion-telemetry-info"
         case fxSuggestionPosition = "fx-suggestion-position"
         case fxSuggestionDidTap = "fx-suggestion-did-tap"
+        case fxSuggestionDidAbandonSearchSession = "fx-suggestion-did-abandon-search-session"
         case webviewFail = "webview-fail"
         case webviewFailProvisional = "webview-fail-provisional"
         case webviewShowErrorPage = "webview-show-error-page"
@@ -1749,6 +1752,10 @@ extension TelemetryWrapper {
             GleanMetrics.Awesomebar.shareButtonTapped.record()
         case (.action, .drag, .locationBar, _, _):
             GleanMetrics.Awesomebar.dragLocationBar.record()
+        case (.action, .engagement, .locationBar, _, _):
+            GleanMetrics.Awesomebar.engagement.record()
+        case (.action, .abandonment, .locationBar, _, _):
+            GleanMetrics.Awesomebar.abandonment.record()
         // MARK: - GleanPlumb Messaging
         case (.information, .view, .messaging, .messageImpression, let extras):
             guard let messageSurface = extras?[EventExtraKey.messageSurface.rawValue] as? String,
@@ -1871,6 +1878,17 @@ extension TelemetryWrapper {
                   let position = extras?[EventValue.fxSuggestionPosition.rawValue] as? Int else {
                 return recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
+
+            // Record an event for this tap in the `events` ping.
+            // These events include the `client_id`.
+            let searchResultTapExtra = switch telemetryInfo {
+            case .amp: GleanMetrics.Awesomebar.SearchResultTapExtra(type: "amp-suggestion")
+            case .wikipedia: GleanMetrics.Awesomebar.SearchResultTapExtra(type: "wikipedia-suggestion")
+            }
+            GleanMetrics.Awesomebar.searchResultTap.record(searchResultTapExtra)
+
+            // Submit a separate `fx-suggest` ping for this tap.
+            // These pings do not include the `client_id`.
             GleanMetrics.FxSuggest.contextId.set(contextId)
             GleanMetrics.FxSuggest.pingType.set("fxsuggest-click")
             GleanMetrics.FxSuggest.isClicked.set(true)
@@ -1887,14 +1905,30 @@ extension TelemetryWrapper {
                 GleanMetrics.FxSuggest.advertiser.set("wikipedia")
             }
             GleanMetrics.Pings.shared.fxSuggest.submit()
+
         case(.action, .view, .fxSuggest, _, let extras):
             guard let contextIdString = TelemetryContextualIdentifier.contextId,
                   let contextId = UUID(uuidString: contextIdString),
                   let telemetryInfo = extras?[EventValue.fxSuggestionTelemetryInfo.rawValue] as? RustFirefoxSuggestionTelemetryInfo,
                   let position = extras?[EventValue.fxSuggestionPosition.rawValue] as? Int,
-                  let didTap = extras?[EventValue.fxSuggestionDidTap.rawValue] as? Bool else {
+                  let didTap = extras?[EventValue.fxSuggestionDidTap.rawValue] as? Bool,
+                  let didAbandonSearchSession = extras?[EventValue.fxSuggestionDidAbandonSearchSession.rawValue] as? Bool else {
                 return recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
+
+            // Record an event for this impression in the `events` ping.
+            // These events include the `client_id`, and we record them for
+            // engaged and abandoned search sessions.
+            let searchResultImpressionExtra = switch telemetryInfo {
+            case .amp: GleanMetrics.Awesomebar.SearchResultImpressionExtra(type: "amp-suggestion")
+            case .wikipedia: GleanMetrics.Awesomebar.SearchResultImpressionExtra(type: "wikipedia-suggestion")
+            }
+            GleanMetrics.Awesomebar.searchResultImpression.record(searchResultImpressionExtra)
+
+            // Submit a separate `fx-suggest` ping for this impression.
+            // These pings do not include the `client_id`, and we only submit
+            // them for engaged search sessions.
+            if didAbandonSearchSession { break }
             GleanMetrics.FxSuggest.contextId.set(contextId)
             GleanMetrics.FxSuggest.pingType.set("fxsuggest-impression")
             GleanMetrics.FxSuggest.isClicked.set(didTap)

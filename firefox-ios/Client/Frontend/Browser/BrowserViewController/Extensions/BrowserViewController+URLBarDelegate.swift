@@ -412,9 +412,13 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBar(_ urlBar: URLBarView, didLeaveOverlayModeForReason reason: URLBarLeaveOverlayModeReason) {
-        searchEngagementState = switch reason {
-        case .finished: .engaged
-        case .cancelled: .abandoned
+        if searchEngagementState == .active {
+            // Only update the engagement state if the user is completing a
+            // search.
+            searchEngagementState = switch reason {
+            case .finished: .engaged
+            case .cancelled: .abandoned
+            }
         }
 
         destroySearchController()
