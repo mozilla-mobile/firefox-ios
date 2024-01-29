@@ -61,6 +61,7 @@
         "DragAndDropTestIpad\/testTryDragAndDropHistoryToURLBar()",
         "DragAndDropTests\/testRearrangeTabsTabTray()",
         "ExperimentIntegrationTests",
+        "FakespotTests\/testAcceptTheRejectedOptInNotification()",
         "FakespotTests\/testPriceTagIconAvailableOnlyOnDetailPage()",
         "FakespotTests\/testPriceTagNotDisplayedInPrivateMode()",
         "FakespotTests\/testReviewQualityCheckBottomSheetUI()",
