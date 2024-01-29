@@ -16,6 +16,7 @@ protocol WKEngineWebViewDelegate: AnyObject {
 protocol WKEngineWebView: UIView {
     var navigationDelegate: WKNavigationDelegate? { get set }
     var uiDelegate: WKUIDelegate? { get set }
+    var delegate: WKEngineWebViewDelegate? { get set }
 
     var allowsBackForwardNavigationGestures: Bool { get set }
     var allowsLinkPreview: Bool { get set }
@@ -131,11 +132,6 @@ extension WKEngineWebView {
 class DefaultWKEngineWebView: WKWebView, WKEngineWebView {
     var engineConfiguration: WKEngineConfiguration
     weak var delegate: WKEngineWebViewDelegate?
-    func configure(delegate: WKEngineWebViewDelegate,
-                   navigationDelegate: WKNavigationDelegate?) {
-        self.delegate = delegate
-        self.navigationDelegate = navigationDelegate
-    }
 
     required init?(frame: CGRect, configurationProvider: WKEngineConfigurationProvider) {
         let configuration = configurationProvider.createConfiguration()
