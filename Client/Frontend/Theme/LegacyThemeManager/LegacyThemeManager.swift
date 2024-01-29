@@ -40,15 +40,8 @@ class LegacyThemeManager {
         }
     }
 
-<<<<<<< HEAD:Client/Frontend/Theme/LegacyThemeManager/LegacyThemeManager.swift
-    var systemThemeIsOn: Bool {
-        didSet {
-            UserDefaults.standard.set(systemThemeIsOn, forKey: LegacyThemeManagerPrefs.systemThemeIsOn.rawValue)
-        }
-=======
     private var systemThemeIsOn: Bool {
         return UserDefaults.standard.bool(forKey: LegacyThemeManagerPrefs.systemThemeIsOn.rawValue)
->>>>>>> 43e00b79f (Bugfix FXIOS-8309 [v122.1] System theme resetting bug (#18429)):firefox-ios/Client/Frontend/Theme/LegacyThemeManager/LegacyThemeManager.swift
     }
 
     private init() {
