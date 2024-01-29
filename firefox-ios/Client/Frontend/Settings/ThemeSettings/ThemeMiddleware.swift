@@ -51,17 +51,9 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
     }
 
     // MARK: - Helper func
-<<<<<<< HEAD
     func getCurrentThemeManagerState() -> ThemeSettingsState {
         ThemeSettingsState(useSystemAppearance: themeManager.systemThemeIsOn,
-                           isAutomaticBrightnessEnable: legacyThemeManager.automaticBrightnessIsOn,
-=======
-    func getCurrentThemeManagerState(windowUUID: WindowUUID?) -> ThemeSettingsState {
-        // TODO: [8188] Revisit UUID handling, needs additional investigation.
-        ThemeSettingsState(windowUUID: windowUUID ?? WindowUUID.unavailable,
-                           useSystemAppearance: themeManager.systemThemeIsOn,
                            isAutomaticBrightnessEnable: themeManager.automaticBrightnessIsOn,
->>>>>>> eaa0121c1 (Remove FXIOS-5064/8318/3960 [v123] LegacyThemeManager removal (#18437))
                            manualThemeSelected: themeManager.currentTheme.type,
                            userBrightnessThreshold: themeManager.automaticBrightnessValue,
                            systemBrightness: getScreenBrightness())
