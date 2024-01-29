@@ -349,21 +349,36 @@ workflows:
             # Determine which application to base configuration
             APPS_AFFECTED=$(git diff --name-only origin/main..."$BITRISE_GIT_COMMIT" | xargs -n1 dirname | sort | uniq)
 
-            if [[ "$APPS_AFFECTED" == *"firefox-ios"* ]]; then
-                envman add --key BUILD_FIREFOX_IOS --value "true"
-            fi
-            if [[ "$APPS_AFFECTED" == *"focus-ios"* ]]; then
-                envman add --key BUILD_FOCUS_IOS --value "true"
-            fi
-            if [[ "$APPS_AFFECTED" == *"SampleBrowser"* ]]; then
-                envman add --key BUILD_SAMPLE_BROWSER_IOS --value "true"
-            fi
+            # Initialize all application flags as "false" by default
+            BUILD_FIREFOX_IOS="false"
+            BUILD_FOCUS_IOS="false"
+            BUILD_SAMPLE_BROWSER_IOS="false"
 
-            # Mono-repo root changes (e.g, package.json, bitrise.yml, etc.)
-            # If there are changes in the root of the mono-repo, then we need to build all apps (?)
-            # if [[ "$APPS_AFFECTED" == *"."* ]]; then
-            #     set all apps to true?
-            # fi
+            # Check for specific applications and set flags accordingly
+            for app in $APPS_AFFECTED; do
+                case "$app" in
+                    "firefox-ios")
+                        BUILD_FIREFOX_IOS="true"
+                        ;;
+                    "focus-ios")
+                        BUILD_FOCUS_IOS="true"
+                        ;;
+                    "SampleBrowser")
+                        BUILD_SAMPLE_BROWSER_IOS="true"
+                        ;;
+                    ".")
+                        # Root directory changes - build all applications
+                        BUILD_FIREFOX_IOS="true"
+                        BUILD_FOCUS_IOS="true"
+                        BUILD_SAMPLE_BROWSER_IOS="true"
+                        ;;
+                esac
+            done
+
+            # Set environment variables
+            envman add --key BUILD_FIREFOX_IOS --value "$BUILD_FIREFOX_IOS"
+            envman add --key BUILD_FOCUS_IOS --value "$BUILD_FOCUS_IOS"
+            envman add --key BUILD_SAMPLE_BROWSER_IOS --value "$BUILD_SAMPLE_BROWSER_IOS"
 
             echo $APPS_AFFECTED
     - share-pipeline-variable@1:
