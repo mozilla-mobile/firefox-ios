@@ -51,7 +51,8 @@ struct TabPeekState: ScreenState, Equatable {
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
 
         switch action {
-        case TabPeekAction.loadTabPeek(let tabPeekModel):
+        case TabPeekAction.loadTabPeek(let context):
+            let tabPeekModel = context.tabPeekModel
             return TabPeekState(windowUUID: state.windowUUID,
                                 showAddToBookmarks: tabPeekModel.canTabBeSaved,
                                 showSendToDevice: tabPeekModel.isSyncEnabled && tabPeekModel.canTabBeSaved,

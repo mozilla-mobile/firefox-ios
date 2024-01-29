@@ -427,7 +427,8 @@ class TabManagerMiddleware {
                                          isSyncEnabled: !(result?.isEmpty ?? true),
                                          screenshot: tab?.screenshot ?? UIImage(),
                                          accessiblityLabel: tab?.webView?.accessibilityLabel ?? "")
-                store.dispatch(TabPeekAction.loadTabPeek(tabPeekModel: model))
+                let context = TabPeekModelContext(tabPeekModel: model, windowUUID: uuid)
+                store.dispatch(TabPeekAction.loadTabPeek(context))
             }
         }
     }
