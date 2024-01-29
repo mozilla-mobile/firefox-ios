@@ -110,7 +110,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     public func setSystemTheme(isOn: Bool) {
         userDefaults.set(isOn, forKey: ThemeKeys.systemThemeIsOn)
 
-        if systemThemeIsOn {
+        if isOn {
             systemThemeChanged()
         } else if automaticBrightnessIsOn {
             updateThemeBasedOnBrightness()
@@ -138,8 +138,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     public func brightnessChanged() {
         if automaticBrightnessIsOn {
             updateThemeBasedOnBrightness()
-        } else {
-            systemThemeChanged()
         }
     }
 
