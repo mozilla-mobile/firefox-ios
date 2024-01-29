@@ -30,12 +30,11 @@ struct AddressListView: View {
                             themeVal: _themeVal,
                             onTap: {
                                 // TODO: PHASE - 2: FXIOS-7653 Handle action when address cell is tapped.
-                                print("Hello")
                             }
                         )
                     }
                 }
-                .preferredBodyFont(size: 12)
+                .font(.caption)
                 .foregroundColor(customLightGray)
             }
         }
