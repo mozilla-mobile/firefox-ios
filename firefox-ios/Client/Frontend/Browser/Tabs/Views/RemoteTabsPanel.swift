@@ -64,7 +64,7 @@ class RemoteTabsPanel: UIViewController,
     private func refreshTabs() {
         // Ensure we do not already have a refresh in progress
         guard state.refreshState != .refreshing else { return }
-        store.dispatch(RemoteTabsPanelAction.refreshTabs(ActionContext(windowUUID: windowUUID)))
+        store.dispatch(RemoteTabsPanelAction.refreshTabs(windowUUID.context))
     }
 
     // MARK: - View & Layout
@@ -102,10 +102,9 @@ class RemoteTabsPanel: UIViewController,
     // MARK: - Redux
 
     func subscribeToRedux() {
-        store.dispatch(ActiveScreensStateAction.showScreen(
-            ScreenActionContext(screen: .remoteTabsPanel, windowUUID: windowUUID)
-        ))
-        store.dispatch(RemoteTabsPanelAction.panelDidAppear(ActionContext(windowUUID: windowUUID)))
+        store.dispatch(ActiveScreensStateAction.showScreen(ScreenActionContext(screen: .remoteTabsPanel,
+                                                                               windowUUID: windowUUID)))
+        store.dispatch(RemoteTabsPanelAction.panelDidAppear(windowUUID.context))
         let uuid = windowUUID
         store.subscribe(self, transform: {
             $0.select({ appState in

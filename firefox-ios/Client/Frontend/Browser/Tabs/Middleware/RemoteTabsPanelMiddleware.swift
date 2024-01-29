@@ -29,9 +29,7 @@ class RemoteTabsPanelMiddleware {
         switch action {
         case RemoteTabsPanelAction.panelDidAppear:
             self.getSyncState(window: uuid)
-            let context =
-            HasSyncableAccountContext(hasSyncableAccount: self.hasSyncableAccount,
-                                      windowUUID: action.windowUUID)
+            let context = HasSyncableAccountContext(hasSyncableAccount: self.hasSyncableAccount, windowUUID: uuid)
             store.dispatch(TabTrayAction.firefoxAccountChanged(context))
         case RemoteTabsPanelAction.refreshTabs:
             self.getSyncState(window: uuid)
@@ -59,7 +57,7 @@ class RemoteTabsPanelMiddleware {
             // If above checks have succeeded, we know we can perform the tab refresh. We
             // need to update the State to .refreshing since there are implications for being
             // in the middle of a refresh (pull-to-refresh shouldn't trigger a new update etc.)
-            store.dispatch(RemoteTabsPanelAction.refreshDidBegin(ActionContext(windowUUID: window)))
+            store.dispatch(RemoteTabsPanelAction.refreshDidBegin(window.context))
 
             getCachedRemoteTabs(window: window)
         }

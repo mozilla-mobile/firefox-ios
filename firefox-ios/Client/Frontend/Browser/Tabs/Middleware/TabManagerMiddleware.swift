@@ -64,7 +64,7 @@ class TabManagerMiddleware {
         case TabPanelAction.selectTab(let context):
             let tabUUID = context.tabUUID
             self.selectTab(for: tabUUID, uuid: uuid)
-            store.dispatch(TabTrayAction.dismissTabTray(ActionContext(windowUUID: uuid)))
+            store.dispatch(TabTrayAction.dismissTabTray(uuid.context))
 
         case TabPanelAction.closeAllInactiveTabs:
             self.closeAllInactiveTabs(state: state, uuid: uuid)
@@ -125,7 +125,7 @@ class TabManagerMiddleware {
                                      object: .syncTab)
         let urlRequest = URLRequest(url: url)
         self.addNewTab(with: urlRequest, isPrivate: false, for: windowUUID)
-        store.dispatch(TabTrayAction.dismissTabTray(ActionContext(windowUUID: windowUUID)))
+        store.dispatch(TabTrayAction.dismissTabTray(windowUUID.context))
     }
 
     /// Gets initial state for TabTrayModel includes panelType, if is on Private mode,
@@ -217,7 +217,7 @@ class TabManagerMiddleware {
 
         let model = getTabsDisplayModel(for: isPrivate, shouldScrollToTab: true, uuid: uuid)
         store.dispatch(TabPanelAction.refreshTab(RefreshTabContext(tabModels: model, windowUUID: uuid)))
-        store.dispatch(TabTrayAction.dismissTabTray(ActionContext(windowUUID: uuid)))
+        store.dispatch(TabTrayAction.dismissTabTray(uuid.context))
     }
 
     /// Move tab on `TabManager` array to support drag and drop
@@ -264,7 +264,7 @@ class TabManagerMiddleware {
             let shouldDismiss = await self.closeTab(with: tabUUID, uuid: uuid)
             await self.triggerRefresh(shouldScrollToTab: false, uuid: uuid)
             if shouldDismiss {
-                store.dispatch(TabTrayAction.dismissTabTray(ActionContext(windowUUID: uuid)))
+                store.dispatch(TabTrayAction.dismissTabTray(uuid.context))
                 store.dispatch(GeneralBrowserAction.showToast(.singleTab))
             } else {
                 store.dispatch(TabPanelAction.showToast(ToastTypeContext(toastType: .singleTab, windowUUID: uuid)))
@@ -309,7 +309,7 @@ class TabManagerMiddleware {
                 let model = getTabsDisplayModel(for: tabsState.isPrivateMode, shouldScrollToTab: false, uuid: uuid)
                 let context = RefreshTabContext(tabModels: model, windowUUID: uuid)
                 store.dispatch(TabPanelAction.refreshTab(model))
-                store.dispatch(TabTrayAction.dismissTabTray(ActionContext(windowUUID: uuid)))
+                store.dispatch(TabTrayAction.dismissTabTray(uuid.context))
                 store.dispatch(GeneralBrowserAction.showToast(.allTabs(count: count)))
             }
         }
@@ -387,7 +387,7 @@ class TabManagerMiddleware {
         let model = getTabsDisplayModel(for: true, shouldScrollToTab: false, uuid: uuid)
         let context = RefreshTabContext(tabModels: tabs, windowUUID: uuid)
         store.dispatch(TabPanelAction.refreshTab(context))
-        store.dispatch(TabTrayAction.dismissTabTray(ActionContext(windowUUID: uuid)))
+        store.dispatch(TabTrayAction.dismissTabTray(uuid.context))
     }
 
     private func selectTab(for tabUUID: String, uuid: WindowUUID) {
