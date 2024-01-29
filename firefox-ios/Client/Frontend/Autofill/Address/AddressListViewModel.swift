@@ -41,7 +41,10 @@ class AddressListViewModel: ObservableObject {
                     self.addresses = addresses
                     self.showSection = !addresses.isEmpty
                 } else if let error = error {
-                    print("Error fetching addresses: \(error.localizedDescription)")
+                    self.logger.log("Error fetching addresses",
+                                    level: .warning,
+                                    category: .address,
+                                    description: "Error fetching addresses: \(error.localizedDescription)")
                 }
             }
         }
