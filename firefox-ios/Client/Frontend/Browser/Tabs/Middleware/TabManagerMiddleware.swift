@@ -12,9 +12,12 @@ import Storage
 class TabManagerMiddleware {
     var selectedPanel: TabTrayPanelType = .tabs
     private let profile: Profile
+    private let logger: Logger
 
-    init(profile: Profile = AppContainer.shared.resolve()) {
+    init(profile: Profile = AppContainer.shared.resolve(),
+         logger: Logger = DefaultLogger.shared) {
         self.profile = profile
+        self.logger = logger
     }
 
     lazy var tabsPanelProvider: Middleware<AppState> = { state, action in
@@ -371,6 +374,11 @@ class TabManagerMiddleware {
 
     private func tabManager(for uuid: WindowUUID) -> TabManager {
         let windowManager: WindowManager = AppContainer.shared.resolve()
+        guard uuid != .unavailable else {
+            logger.log("Unexpected or unavailable UUID for TabManager. Returning active window tab manager by default.", level: .warning, category: .tabs)
+            return windowManager.tabManager(for: windowManager.activeWindow)
+        }
+
         return windowManager.tabManager(for: uuid)
     }
 
