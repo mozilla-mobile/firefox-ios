@@ -8,7 +8,6 @@ import TabDataStore
 import Shared
 import Storage
 
-// TODO: [8188] Middlewares are currently handling actions globally. Need updates for multi-window. Forthcoming.
 class TabManagerMiddleware {
     var selectedPanel: TabTrayPanelType = .tabs
     private let profile: Profile
@@ -229,7 +228,6 @@ class TabManagerMiddleware {
                          from originIndex: Int,
                          to destinationIndex: Int,
                          uuid: WindowUUID) {
-        // TODO: [8188] Tab actions will be updated soon to include UUID in related context object. Forthcoming.
         guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: nil) else { return }
 
         let tabManager = tabManager(for: uuid)
@@ -285,7 +283,6 @@ class TabManagerMiddleware {
     /// Handles undoing the close tab action, gets the backup tab from `TabManager`
     private func undoCloseTab(state: AppState, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
-        // TODO: [8188] Tab actions will be updated soon to include UUID in related context object. Forthcoming.
         guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: nil),
               let backupTab = tabManager.backupCloseTab
         else { return }
@@ -299,7 +296,6 @@ class TabManagerMiddleware {
 
     private func closeAllTabs(state: AppState, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
-        // TODO: [8188] Tab actions will be updated soon to include UUID in related context object. Forthcoming.
         guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: nil) else { return }
         Task {
             let count = tabManager.tabs.count
@@ -330,7 +326,6 @@ class TabManagerMiddleware {
     /// Close all inactive tabs removing them from the tabs array on `TabManager`.
     /// Makes a backup of tabs to be deleted in case undo option is selected
     private func closeAllInactiveTabs(state: AppState, uuid: WindowUUID) {
-        // TODO: [8188] Tab actions will be updated soon to include UUID in related context object. Forthcoming.
         guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: nil) else { return }
         let tabManager = tabManager(for: uuid)
         Task {
@@ -355,7 +350,6 @@ class TabManagerMiddleware {
     }
 
     private func closeInactiveTab(for tabUUID: String, state: AppState, uuid: WindowUUID) {
-        // TODO: [8188] Tab actions will be updated soon to include UUID in related context object. Forthcoming.
         guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: nil) else { return }
         let tabManager = tabManager(for: uuid)
         Task {
