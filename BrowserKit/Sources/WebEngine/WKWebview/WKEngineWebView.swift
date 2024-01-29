@@ -23,6 +23,7 @@ protocol WKEngineWebView: UIView {
     var backgroundColor: UIColor? { get set }
     var interactionState: Any? { get set }
     var url: URL? { get }
+    var title: String? { get }
     var scrollView: UIScrollView { get }
     var engineConfiguration: WKEngineConfiguration { get }
 

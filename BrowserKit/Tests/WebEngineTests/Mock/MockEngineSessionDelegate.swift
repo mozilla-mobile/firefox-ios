@@ -12,11 +12,13 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
     var onProgressCalled = 0
     var onNavigationStateChangeCalled = 0
     var onLoadingStateChangeCalled = 0
+    var onLocationChangedCalled = 0
 
     var savedScrollX: Int?
     var savedScrollY: Int?
     var savedTouchPoint: CGPoint?
     var savedTitleChange: String?
+    var savedURL: String?
     var savedProgressValue: Double?
     var savedCanGoBack: Bool?
     var savedCanGoForward: Bool?
@@ -36,6 +38,11 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
     func onTitleChange(title: String) {
         onTitleChangeCalled += 1
         savedTitleChange = title
+    }
+
+    func onLocationChange(url: String) {
+        onLocationChangedCalled += 1
+        savedURL = url
     }
 
     func onProgress(progress: Double) {
