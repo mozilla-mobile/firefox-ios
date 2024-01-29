@@ -472,8 +472,8 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             }
 
             // If we've enabled night mode and the theme is normal, enable dark theme
-            if NightModeHelper.isActivated(), LegacyThemeManager.instance.currentName == .normal {
-                LegacyThemeManager.instance.current = LegacyDarkTheme()
+            if NightModeHelper.isActivated(),
+               self.themeManager.currentTheme.type == .light {
                 self.themeManager.changeCurrentTheme(.dark)
                 NightModeHelper.setEnabledDarkTheme(darkTheme: true)
             }
@@ -481,8 +481,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             // If we've disabled night mode and dark theme was activated by it then disable dark theme
             if !NightModeHelper.isActivated(),
                NightModeHelper.hasEnabledDarkTheme(),
-               LegacyThemeManager.instance.currentName == .dark {
-                LegacyThemeManager.instance.current = LegacyNormalTheme()
+               self.themeManager.currentTheme.type == .dark {
                 self.themeManager.changeCurrentTheme(.light)
                 NightModeHelper.setEnabledDarkTheme(darkTheme: false)
             }

@@ -55,6 +55,10 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         return userDefaults.bool(forKey: ThemeKeys.AutomaticBrightness.isOn)
     }
 
+    public var automaticBrightnessValue: Float {
+        return userDefaults.float(forKey: ThemeKeys.AutomaticBrightness.thresholdValue)
+    }
+
     // MARK: - Initializers
 
     public init(
@@ -106,7 +110,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     public func setSystemTheme(isOn: Bool) {
         userDefaults.set(isOn, forKey: ThemeKeys.systemThemeIsOn)
 
-        if systemThemeIsOn {
+        if isOn {
             systemThemeChanged()
         } else if automaticBrightnessIsOn {
             updateThemeBasedOnBrightness()
@@ -129,6 +133,12 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     public func setAutomaticBrightnessValue(_ value: Float) {
         userDefaults.set(value, forKey: ThemeKeys.AutomaticBrightness.thresholdValue)
         brightnessChanged()
+    }
+
+    public func brightnessChanged() {
+        if automaticBrightnessIsOn {
+            updateThemeBasedOnBrightness()
+        }
     }
 
     // MARK: - Private methods
@@ -181,19 +191,10 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         }
     }
 
-    private func brightnessChanged() {
-        if automaticBrightnessIsOn {
-            updateThemeBasedOnBrightness()
-        } else {
-            systemThemeChanged()
-        }
-    }
-
     private func updateThemeBasedOnBrightness() {
-        let thresholdValue = userDefaults.float(forKey: ThemeKeys.AutomaticBrightness.thresholdValue)
         let currentValue = Float(UIScreen.main.brightness)
 
-        if currentValue < thresholdValue {
+        if currentValue < automaticBrightnessValue {
             changeCurrentTheme(.dark)
         } else {
             changeCurrentTheme(.light)

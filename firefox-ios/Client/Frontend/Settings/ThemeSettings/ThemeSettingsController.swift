@@ -30,7 +30,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     private var slider: (control: UISlider, deviceBrightnessIndicator: UISlider)?
 
     var isAutoBrightnessOn: Bool {
-        return themeState.isAutomaticBrightnessEnable
+        return themeState.isAutomaticBrightnessEnabled
     }
 
     var isSystemThemeOn: Bool {
@@ -96,15 +96,6 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     func systemThemeSwitchValueChanged(control: UISwitch) {
         store.dispatch(ThemeSettingsAction.toggleUseSystemAppearance(control.isOn))
 
-        if control.isOn {
-            // Reset the user interface style to the default before choosing our theme
-            UIApplication.shared.delegate?.window??.overrideUserInterfaceStyle = .unspecified
-            let userInterfaceStyle = traitCollection.userInterfaceStyle
-            LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? LegacyDarkTheme() : LegacyNormalTheme()
-        } else if LegacyThemeManager.instance.automaticBrightnessIsOn {
-            LegacyThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
-        }
-
         // Switch animation must begin prior to scheduling table view update animation
         // (or the switch will be auto-synchronized to the slower tableview animation
         // and makes the switch behaviour feel slow and non-standard).
@@ -121,7 +112,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
 
     @objc
     func systemBrightnessChanged() {
-        guard LegacyThemeManager.instance.automaticBrightnessIsOn else { return }
+        guard themeState.isAutomaticBrightnessEnabled else { return }
 
         store.dispatch(ThemeSettingsAction.receivedSystemBrightnessChange)
         brightnessChanged()
@@ -129,7 +120,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
 
     /// Update Theme if user or system brightness change due to user action
     func brightnessChanged() {
-        guard LegacyThemeManager.instance.automaticBrightnessIsOn else { return }
+        guard themeState.isAutomaticBrightnessEnabled else { return }
 
         applyTheme()
     }
@@ -340,9 +331,9 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
                 cell.textLabel?.text = .DisplayThemeOptionDark
             }
 
-            let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-            if (indexPath.row == 0 && theme == .normal) ||
-                (indexPath.row == 1 && theme == .dark) {
+            let themeType = themeManager.currentTheme.type
+            if (indexPath.row == 0 && themeType == .light) ||
+                (indexPath.row == 1 && themeType == .dark) {
                 cell.accessoryType = .checkmark
                 tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
             } else {
