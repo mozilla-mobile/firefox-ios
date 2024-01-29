@@ -40,7 +40,7 @@ class LegacyThemeManager {
         }
     }
 
-    private var systemThemeIsOn: Bool {
+    var systemThemeIsOn: Bool {
         return UserDefaults.standard.bool(forKey: LegacyThemeManagerPrefs.systemThemeIsOn.rawValue)
     }
 
