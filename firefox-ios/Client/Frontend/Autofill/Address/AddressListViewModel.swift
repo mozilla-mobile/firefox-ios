@@ -20,6 +20,7 @@ class AddressListViewModel: ObservableObject {
     @Published var addresses: [Address] = []
     @Published var showSection = false
     private let profile: Profile?
+    private let logger: Logger
 
     // MARK: - Initializer
 
