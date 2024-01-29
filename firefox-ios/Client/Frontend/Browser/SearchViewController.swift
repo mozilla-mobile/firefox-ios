@@ -215,13 +215,13 @@ class SearchViewController: SiteTableViewController,
     /// is switched on.
     private var shouldShowSponsoredSuggestions: Bool {
         !viewModel.isPrivate &&
-            profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowSponsoredSuggestions) ?? false
+            profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowSponsoredSuggestions) ?? true
     }
 
     /// Whether to show non-sponsored suggestions from Firefox Suggest.
     private var shouldShowNonSponsoredSuggestions: Bool {
         !viewModel.isPrivate &&
-            profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions) ?? false
+            profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions) ?? true
     }
 
     func loadFirefoxSuggestions() -> Task<(), Never>? {
