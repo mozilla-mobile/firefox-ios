@@ -54,15 +54,8 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
     }
 
     // MARK: - Helper func
-<<<<<<< HEAD
     func getCurrentThemeManagerState() -> ThemeSettingsState {
-        ThemeSettingsState(useSystemAppearance: legacyThemeManager.systemThemeIsOn,
-=======
-    func getCurrentThemeManagerState(windowUUID: WindowUUID?) -> ThemeSettingsState {
-        // TODO: [8188] Revisit UUID handling, needs additional investigation.
-        ThemeSettingsState(windowUUID: windowUUID ?? WindowUUID.unavailable,
-                           useSystemAppearance: themeManager.systemThemeIsOn,
->>>>>>> 43e00b79f (Bugfix FXIOS-8309 [v122.1] System theme resetting bug (#18429))
+        ThemeSettingsState(useSystemAppearance: themeManager.systemThemeIsOn,
                            isAutomaticBrightnessEnable: legacyThemeManager.automaticBrightnessIsOn,
                            manualThemeSelected: themeManager.currentTheme.type,
                            userBrightnessThreshold: legacyThemeManager.automaticBrightnessValue,
