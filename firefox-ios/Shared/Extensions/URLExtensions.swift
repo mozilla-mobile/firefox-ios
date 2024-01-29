@@ -119,25 +119,6 @@ extension URL {
         return components.url!
     }
 
-    public var hostPort: String? {
-        if let host = self.host {
-            if let port = (self as NSURL).port?.int32Value {
-                return "\(host):\(port)"
-            }
-            return host
-        }
-        return nil
-    }
-
-    public var origin: String? {
-        guard isWebPage(includeDataURIs: false),
-              let hostPort = self.hostPort,
-              let scheme = scheme
-        else { return nil }
-
-        return "\(scheme)://\(hostPort)"
-    }
-
     /// String suitable for displaying outside of the app, for example in notifications, were Data Detectors will
     /// linkify the text and make it into a openable-in-Safari link.
     public var absoluteDisplayExternalString: String {
@@ -170,11 +151,6 @@ extension URL {
         }
 
         return nil
-    }
-
-    public func isWebPage(includeDataURIs: Bool = true) -> Bool {
-        let schemes = includeDataURIs ? ["http", "https", "data"] : ["http", "https"]
-        return scheme.map { schemes.contains($0) } ?? false
     }
 
     /**
