@@ -15,12 +15,9 @@ protocol ThemeManagerProvider {
 
 // TODO: [8188] Middlewares are currently handling actions globally. Need updates for multi-window. Forthcoming.
 class ThemeManagerMiddleware: ThemeManagerProvider {
-    var legacyThemeManager: LegacyThemeManager
     var themeManager: ThemeManager
 
-    init(legacyThemeManager: LegacyThemeManager = LegacyThemeManager.instance,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
-        self.legacyThemeManager = legacyThemeManager
+    init(themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.themeManager = themeManager
     }
 
@@ -35,7 +32,7 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
         case ThemeSettingsAction.enableAutomaticBrightness(let enabled):
             self.toggleAutomaticBrightness(enabled)
             store.dispatch(
-                ThemeSettingsAction.automaticBrightnessChanged(self.legacyThemeManager.automaticBrightnessIsOn)
+                ThemeSettingsAction.automaticBrightnessChanged(self.themeManager.automaticBrightnessIsOn)
             )
         case ThemeSettingsAction.switchManualTheme(let theme):
             self.updateManualTheme(theme)
@@ -59,9 +56,9 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
         // TODO: [8188] Revisit UUID handling, needs additional investigation.
         ThemeSettingsState(windowUUID: windowUUID ?? WindowUUID.unavailable,
                            useSystemAppearance: themeManager.systemThemeIsOn,
-                           isAutomaticBrightnessEnable: legacyThemeManager.automaticBrightnessIsOn,
+                           isAutomaticBrightnessEnable: themeManager.automaticBrightnessIsOn,
                            manualThemeSelected: themeManager.currentTheme.type,
-                           userBrightnessThreshold: legacyThemeManager.automaticBrightnessValue,
+                           userBrightnessThreshold: themeManager.automaticBrightnessValue,
                            systemBrightness: getScreenBrightness())
     }
 
@@ -74,23 +71,19 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
     }
 
     func toggleAutomaticBrightness(_ enabled: Bool) {
-        legacyThemeManager.automaticBrightnessIsOn = enabled
         themeManager.setAutomaticBrightness(isOn: enabled)
     }
 
     func updateManualTheme(_ newTheme: ThemeType) {
-        let isLightTheme = newTheme == .light
-        legacyThemeManager.current = isLightTheme ? LegacyNormalTheme() : LegacyDarkTheme()
         themeManager.changeCurrentTheme(newTheme)
     }
 
     func updateUserBrightness(_ value: Float) {
         themeManager.setAutomaticBrightnessValue(value)
-        legacyThemeManager.automaticBrightnessValue = value
     }
 
     func updateThemeBasedOnSystemBrightness() {
-        legacyThemeManager.updateCurrentThemeBasedOnScreenBrightness()
+        themeManager.brightnessChanged()
     }
 
     func getScreenBrightness() -> Float {

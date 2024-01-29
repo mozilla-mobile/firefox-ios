@@ -104,7 +104,8 @@ class OpenWithSettingsViewController: ThemedTableViewController {
         let option = mailProviderSource[indexPath.row]
 
         cell.applyTheme(theme: themeManager.currentTheme)
-        cell.textLabel?.attributedText = NSAttributedString.tableRowTitle(option.name, enabled: option.enabled)
+
+        cell.textLabel?.attributedText = tableRowTitle(option.name, enabled: option.enabled)
         cell.accessoryType = (currentChoice == option.scheme && option.enabled) ? .checkmark : .none
         cell.isUserInteractionEnabled = option.enabled
 
@@ -136,5 +137,20 @@ class OpenWithSettingsViewController: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return UITableView.automaticDimension
+    }
+
+    private func tableRowTitle(_ string: String, enabled: Bool) -> NSAttributedString {
+        var color: [NSAttributedString.Key: UIColor]
+        if enabled {
+            color = [
+                NSAttributedString.Key.foregroundColor: themeManager.currentTheme.colors.textPrimary
+            ]
+        } else {
+            color = [
+                NSAttributedString.Key.foregroundColor: themeManager.currentTheme.colors.textDisabled
+            ]
+        }
+
+        return NSAttributedString(string: string, attributes: color)
     }
 }

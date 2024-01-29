@@ -69,8 +69,7 @@ class LegacyTabCell: UICollectionViewCell,
         button.imageEdgeInsets = UIEdgeInsets(equalInset: LegacyGridTabViewController.UX.closeButtonEdgeInset)
     }
 
-    // TODO: Handle visual effects theming FXIOS-5064
-    private var title = UIVisualEffectView(effect: UIBlurEffect(style: UIColor.legacyTheme.tabTray.tabTitleBlur))
+    private var title = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     var animator: SwipeAnimator?
     var isSelectedTab = false
 
@@ -220,6 +219,7 @@ class LegacyTabCell: UICollectionViewCell,
     }
 
     func applyTheme(theme: Theme) {
+        title.effect = UIBlurEffect(style: theme.type.tabTitleBlurStyle())
         backgroundHolder.backgroundColor = theme.colors.layer1
         closeButton.tintColor = theme.colors.indicatorActive
         titleText.textColor = theme.colors.textPrimary
