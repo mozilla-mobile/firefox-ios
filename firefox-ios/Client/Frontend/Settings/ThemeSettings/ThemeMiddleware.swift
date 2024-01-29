@@ -31,7 +31,7 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
             store.dispatch(ThemeSettingsAction.receivedThemeManagerValues(currentThemeState))
         case ThemeSettingsAction.toggleUseSystemAppearance(let enabled):
             self.toggleUseSystemAppearance(enabled)
-            store.dispatch(ThemeSettingsAction.systemThemeChanged(self.legacyThemeManager.systemThemeIsOn))
+            store.dispatch(ThemeSettingsAction.systemThemeChanged(self.themeManager.systemThemeIsOn))
         case ThemeSettingsAction.enableAutomaticBrightness(let enabled):
             self.toggleAutomaticBrightness(enabled)
             store.dispatch(
@@ -58,7 +58,7 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
     func getCurrentThemeManagerState(windowUUID: WindowUUID?) -> ThemeSettingsState {
         // TODO: [8188] Revisit UUID handling, needs additional investigation.
         ThemeSettingsState(windowUUID: windowUUID ?? WindowUUID.unavailable,
-                           useSystemAppearance: legacyThemeManager.systemThemeIsOn,
+                           useSystemAppearance: themeManager.systemThemeIsOn,
                            isAutomaticBrightnessEnable: legacyThemeManager.automaticBrightnessIsOn,
                            manualThemeSelected: themeManager.currentTheme.type,
                            userBrightnessThreshold: legacyThemeManager.automaticBrightnessValue,
@@ -66,7 +66,6 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
     }
 
     func toggleUseSystemAppearance(_ enabled: Bool) {
-        legacyThemeManager.systemThemeIsOn = enabled
         themeManager.setSystemTheme(isOn: enabled)
     }
 
@@ -79,10 +78,10 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
         themeManager.setAutomaticBrightness(isOn: enabled)
     }
 
-    func updateManualTheme(_ theme: ThemeType) {
-        let isLightTheme = theme == .light
+    func updateManualTheme(_ newTheme: ThemeType) {
+        let isLightTheme = newTheme == .light
         legacyThemeManager.current = isLightTheme ? LegacyNormalTheme() : LegacyDarkTheme()
-        themeManager.changeCurrentTheme(isLightTheme ? .light : .dark)
+        themeManager.changeCurrentTheme(newTheme)
     }
 
     func updateUserBrightness(_ value: Float) {
