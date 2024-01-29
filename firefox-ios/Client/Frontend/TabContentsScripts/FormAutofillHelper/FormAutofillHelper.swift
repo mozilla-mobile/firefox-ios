@@ -151,8 +151,8 @@ class FormAutofillHelper: TabContentScript {
         let injectionJSON: [String: Any] = [
                 "cc-name": sanitizedName,
                 "cc-number": sanitizedNumber,
-                "cc-exp-month": "\(card.ccExpMonth)",
-                "cc-exp-year": "\(card.ccExpYear)",
+                "cc-exp-month": card.ccExpMonth,
+                "cc-exp-year": card.ccExpYear,
                 "cc-exp": "\(card.ccExpMonth)/\(card.ccExpYear)",
         ]
         return injectionJSON
