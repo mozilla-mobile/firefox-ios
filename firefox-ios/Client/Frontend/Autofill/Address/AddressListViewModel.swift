@@ -25,8 +25,9 @@ class AddressListViewModel: ObservableObject {
 
     /// Initializes the AddressListViewModel.
     /// - Parameter profile: The profile associated with the address list.
-    init(profile: Profile? = nil) {
+    init(profile: Profile? = nil, logger: Logger = DefaultLogger.shared) {
         self.profile = profile
+        self.logger = logger
     }
 
     // MARK: - Fetch Addresses
