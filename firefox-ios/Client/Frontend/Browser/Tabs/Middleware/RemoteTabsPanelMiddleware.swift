@@ -94,8 +94,9 @@ class RemoteTabsPanelMiddleware {
         switch notification.name {
         case .FirefoxAccountChanged,
                 .ProfileDidFinishSyncing:
-            // This state change is global in scope and typically occurs independently of specific windows
-            // For now we send .unavailable as the UUID. (Aspects of this are in flux.) [FXIOS-8188]
+            // This update occurs independently of any specific window, so for now we send `.unavailable`
+            // as the window UUID. Aspects of this are TBD and part of ongoing MW/Redux refactors.
+            // TODO: [8188] Revisit UUID here to determine ideal handling.
             let uuid = WindowUUID.unavailable
             let context = HasSyncableAccountContext(hasSyncableAccount: hasSyncableAccount, windowUUID: uuid)
             getCachedRemoteTabs(window: .unavailable)
