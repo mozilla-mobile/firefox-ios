@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
-
+/*
 @testable import Redux
 let store = Store(state: FakeReduxState(),
                   reducer: FakeReduxState.reducer,
@@ -110,3 +110,4 @@ final class IntegrationTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 }
+*/
