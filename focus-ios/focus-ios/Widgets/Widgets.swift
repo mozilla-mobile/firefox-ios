@@ -31,8 +31,13 @@ struct FocusWidgetsEntryView : View {
     var entry: Provider.Entry
 
     var body: some View {
-        SearchWidgetView(title: String(format: .searchInAppFormat, String.appNameForBundle))
+        SearchWidgetView(title: String(format: .searchInAppFormat, String.appNameForBundle), padding: !Bool.isIOS17OrLater, background: false)
             .widgetURL(.deepLinkURL)
+            .widgetBackground(backgroundView:
+                                LinearGradient(
+                                    gradient: .quickAccessWidget,
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing))
     }
 }
 
@@ -55,6 +60,10 @@ struct FocusWidgets_Previews: PreviewProvider {
         FocusWidgetsEntryView(entry: SimpleEntry(date: Date()))
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
+}
+
+fileprivate extension Gradient {
+    static let quickAccessWidget = Gradient(colors: [Color("GradientFirst"), Color("GradientSecond")])
 }
 
 fileprivate extension String {
@@ -85,6 +94,28 @@ fileprivate extension String {
     static let searchInApp = String(format: searchInAppFormat, AppInfo.shortProductName)
 }
 
+fileprivate extension Bool {
+    static var isIOS17OrLater: Bool {
+        if #available(iOS 17, *) {
+            return true
+        } else {
+            return false
+        }
+    }
+}
+
 fileprivate extension URL {
     static let deepLinkURL: URL = URL(string: "firefox-focus://widget")!
+}
+
+fileprivate extension View {
+    func widgetBackground(backgroundView: some View) -> some View {
+        if #available(watchOS 10.0, iOSApplicationExtension 17.0, iOS 17.0, macOSApplicationExtension 14.0, *) {
+            return containerBackground(for: .widget) {
+                backgroundView
+            }
+        } else {
+            return background(backgroundView)
+        }
+    }
 }

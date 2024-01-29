@@ -6,9 +6,13 @@ import SwiftUI
 
 public struct SearchWidgetView: View {
     let title: String
+    let padding: Bool
+    let background: Bool
 
-    public init(title: String) {
+    public init(title: String, padding: Bool, background: Bool) {
         self.title = title
+        self.padding = padding
+        self.background = background
     }
 
     public var body: some View {
@@ -17,11 +21,11 @@ public struct SearchWidgetView: View {
                 Text(title)
                     .font(.headline)
                     .fontWeight(.medium)
-                .minimumScaleFactor(0.8)
-                .foregroundColor(.white)
+                    .minimumScaleFactor(0.8)
+                    .foregroundColor(.white)
 
                 Spacer()
-
+                
                 Image.magnifyingGlass
                     .foregroundColor(.white)
                     .frame(height: .magnifyingGlassHeight)
@@ -36,12 +40,12 @@ public struct SearchWidgetView: View {
                     .frame(height: .logoHeight)
             }
         }
-        .padding()
+        .padding(.all, padding ? 10 : 0)
         .background(
-            LinearGradient(
+            background ? LinearGradient(
                 gradient: .quickAccessWidget,
                 startPoint: .topLeading,
-                endPoint: .bottomTrailing)
+                endPoint: .bottomTrailing) : nil
         )
     }
 }
@@ -49,7 +53,7 @@ public struct SearchWidgetView: View {
 @available(iOS 14, *)
 struct SearchWidgetView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchWidgetView(title: "Search in Focus")
+        SearchWidgetView(title: "Search in Focus", padding: true, background: true)
             .previewLayout(.sizeThatFits)
             .frame(width: 135, height: 135)
             .clipShape(RoundedRectangle(cornerRadius: 20))
