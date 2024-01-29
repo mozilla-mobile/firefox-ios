@@ -96,7 +96,8 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         // OR night mode is on
         // OR private mode is on
         guard systemThemeIsOn,
-              !nightModeIsOn,
+              let nightModeIsOn = userDefaults.object(forKey: ThemeKeys.NightMode.isOn) as? NSNumber,
+              nightModeIsOn.boolValue == false,
               !privateModeIsOn
         else { return }
 
