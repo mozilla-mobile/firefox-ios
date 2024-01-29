@@ -296,13 +296,9 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         }
 
         // System theme enabled
-<<<<<<< HEAD:Client/Telemetry/TelemetryWrapper.swift
-        GleanMetrics.Theme.useSystemTheme.set(LegacyThemeManager.instance.systemThemeIsOn)
-=======
         let themeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
         GleanMetrics.Theme.useSystemTheme.set(themeManager.systemThemeIsOn)
 
->>>>>>> 43e00b79f (Bugfix FXIOS-8309 [v122.1] System theme resetting bug (#18429)):firefox-ios/Client/Telemetry/TelemetryWrapper.swift
         // Installed Mozilla applications
         GleanMetrics.InstalledMozillaProducts.focus.set(UIApplication.shared.canOpenURL(URL(string: "firefox-focus://")!))
         GleanMetrics.InstalledMozillaProducts.klar.set(UIApplication.shared.canOpenURL(URL(string: "firefox-klar://")!))
