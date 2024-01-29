@@ -104,7 +104,6 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
             DispatchQueue.main.async { [weak self] in
                 let newState = creditCards?.isEmpty ?? true ? CreditCardSettingsState.empty : CreditCardSettingsState.list
                 self?.updateState(type: newState)
-                self?.sendCreditCardsSavedAllTelemetry(numberOfSavedCreditCards: creditCards?.count ?? 0)
             }
         }
     }
@@ -215,16 +214,6 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .creditCardManagementCardTapped)
-    }
-
-    private func sendCreditCardsSavedAllTelemetry(numberOfSavedCreditCards: Int) {
-        let savedCardsExtra = [
-            TelemetryWrapper.EventExtraKey.creditCardsQuantity.rawValue: Int64(numberOfSavedCreditCards)
-        ]
-        TelemetryWrapper.recordEvent(category: .information,
-                                     method: .foreground,
-                                     object: .creditCardSavedAll,
-                                     extras: savedCardsExtra)
     }
 
     private func sendCreditCardsSavedTelemetry() {

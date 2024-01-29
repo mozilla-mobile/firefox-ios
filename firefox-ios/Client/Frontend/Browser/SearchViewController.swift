@@ -208,9 +208,25 @@ class SearchViewController: SiteTableViewController,
         }
     }
 
+    /// Whether to show sponsored suggestions from Firefox Suggest.
+    ///
+    /// Sponsored suggestions can be toggled by the user, and are never shown in
+    /// private browsing mode, even if "Show Suggestions in Private Browsing"
+    /// is switched on.
+    private var shouldShowSponsoredSuggestions: Bool {
+        !viewModel.isPrivate &&
+            profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowSponsoredSuggestions) ?? false
+    }
+
+    /// Whether to show non-sponsored suggestions from Firefox Suggest.
+    private var shouldShowNonSponsoredSuggestions: Bool {
+        !viewModel.isPrivate &&
+            profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions) ?? false
+    }
+
     func loadFirefoxSuggestions() -> Task<(), Never>? {
-        let includeNonSponsored = profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions) ?? false
-        let includeSponsored = profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowSponsoredSuggestions) ?? false
+        let includeNonSponsored = shouldShowNonSponsoredSuggestions
+        let includeSponsored = shouldShowSponsoredSuggestions
         guard featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser)
                 && (includeNonSponsored || includeSponsored)
         else { return nil }
@@ -609,7 +625,7 @@ class SearchViewController: SiteTableViewController,
                 return false
             }
 
-            if profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowSponsoredSuggestions) ?? false &&
+            if shouldShowSponsoredSuggestions &&
                 SponsoredContentFilterUtility().containsSearchParam(url: tab.URL) {
                 return false
             }
@@ -669,8 +685,7 @@ class SearchViewController: SiteTableViewController,
     }
 
     func loader(dataLoaded data: Cursor<Site>) {
-        let showSponsoredSuggestions = profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowSponsoredSuggestions) ?? false
-        self.data = if showSponsoredSuggestions {
+        self.data = if shouldShowSponsoredSuggestions {
             ArrayCursor<Site>(data: SponsoredContentFilterUtility().filterSponsoredSites(from: data.asArray()))
         } else {
             data

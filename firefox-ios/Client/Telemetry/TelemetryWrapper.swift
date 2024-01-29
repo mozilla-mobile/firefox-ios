@@ -161,14 +161,17 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         // If the setting exists at the key location, use that value. Otherwise record the default
         // value for that preference to ensure it makes it into the metrics ping.
         let prefs = profile.prefs
+
         // FxA Account Login status
         GleanMetrics.Preferences.fxaLoggedIn.set(profile.hasSyncableAccount())
+
         // Record New Tab setting
         if let newTabChoice = prefs.stringForKey(NewTabAccessors.HomePrefKey) {
             GleanMetrics.Preferences.newTabExperience.set(newTabChoice)
         } else {
             GleanMetrics.Preferences.newTabExperience.set(NewTabAccessors.Default.rawValue)
         }
+
         // Record `Home` setting, where Firefox Home is "Home", a custom URL is "other" and blank is "Blank".
         let homePageSetting = NewTabAccessors.getHomePage(prefs)
         switch homePageSetting {
@@ -181,45 +184,54 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         default:
             GleanMetrics.Preferences.homePageSetting.set(homePageSetting.rawValue)
         }
+
         // Notifications
         GleanMetrics.Preferences.tipsAndFeaturesNotifs.set(UserDefaults.standard.bool(forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications))
         GleanMetrics.Preferences.syncNotifs.set(UserDefaults.standard.bool(forKey: PrefsKeys.Notifications.SyncNotifications))
+
         // Save logins
         if let saveLogins = prefs.boolForKey(PrefsKeys.LoginsSaveEnabled) {
             GleanMetrics.Preferences.saveLogins.set(saveLogins)
         } else {
             GleanMetrics.Preferences.saveLogins.set(true)
         }
+
         // Show clipboard bar
         if let showClipboardBar = prefs.boolForKey("showClipboardBar") {
             GleanMetrics.Preferences.showClipboardBar.set(showClipboardBar)
         } else {
             GleanMetrics.Preferences.showClipboardBar.set(false)
         }
+
         // Close private tabs
         if let closePrivateTabs = prefs.boolForKey("settings.closePrivateTabs") {
             GleanMetrics.Preferences.closePrivateTabs.set(closePrivateTabs)
         } else {
             GleanMetrics.Preferences.closePrivateTabs.set(false)
         }
+
         // Tracking protection - enabled
         if let tpEnabled = prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) {
             GleanMetrics.TrackingProtection.enabled.set(tpEnabled)
         } else {
             GleanMetrics.TrackingProtection.enabled.set(true)
         }
+
         // Tracking protection - strength
         if let tpStrength = prefs.stringForKey(ContentBlockingConfig.Prefs.StrengthKey) {
             GleanMetrics.TrackingProtection.strength.set(tpStrength)
         } else {
             GleanMetrics.TrackingProtection.strength.set("basic")
         }
+
         // System theme enabled
         let themeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
-        GleanMetrics.Theme.useSystemTheme.set(themeManager.isSystemThemeOn)
+        GleanMetrics.Theme.useSystemTheme.set(themeManager.systemThemeIsOn)
+
         // Installed Mozilla applications
         GleanMetrics.InstalledMozillaProducts.focus.set(UIApplication.shared.canOpenURL(URL(string: "firefox-focus://")!))
         GleanMetrics.InstalledMozillaProducts.klar.set(UIApplication.shared.canOpenURL(URL(string: "firefox-klar://")!))
+
         // Device Authentication
         GleanMetrics.Device.authentication.set(AppAuthenticator().canAuthenticateDeviceOwner)
 

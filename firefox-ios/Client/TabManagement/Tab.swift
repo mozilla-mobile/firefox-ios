@@ -426,11 +426,12 @@ class Tab: NSObject, ThemeApplicable {
         )
     }
 
-    class func toRemoteTab(_ tab: Tab) -> RemoteTab? {
+    class func toRemoteTab(_ tab: Tab, inactive: Bool) -> RemoteTab? {
         if tab.isPrivate {
             return nil
         }
 
+        let icon = (tab.faviconURL ?? tab.pageMetadata?.faviconURL).flatMap { URL(string: $0) }
         if let displayURL = tab.url?.displayURL, RemoteTab.shouldIncludeURL(displayURL) {
             let history = Array(tab.historyList.filter(RemoteTab.shouldIncludeURL).reversed())
             return RemoteTab(
@@ -439,7 +440,8 @@ class Tab: NSObject, ThemeApplicable {
                 title: tab.title ?? tab.displayTitle,
                 history: history,
                 lastUsed: tab.lastExecutedTime ?? 0,
-                icon: nil
+                icon: icon,
+                inactive: inactive
             )
         } else if let sessionData = tab.sessionData, !sessionData.urls.isEmpty {
             let history = Array(sessionData.urls.filter(RemoteTab.shouldIncludeURL).reversed())
@@ -450,7 +452,8 @@ class Tab: NSObject, ThemeApplicable {
                     title: tab.title ?? tab.displayTitle,
                     history: history,
                     lastUsed: sessionData.lastUsedTime,
-                    icon: nil
+                    icon: icon,
+                    inactive: inactive
                 )
             }
         }
@@ -827,7 +830,7 @@ class Tab: NSObject, ThemeApplicable {
         if let title = self.webView?.title, !title.isEmpty,
            path == KVOConstants.title.rawValue {
             metadataManager?.updateObservationTitle(title)
-            _ = Tab.toRemoteTab(self)
+            _ = Tab.toRemoteTab(self, inactive: false)
         }
     }
 

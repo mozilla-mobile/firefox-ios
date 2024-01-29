@@ -285,7 +285,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
     /// storeChanges is called when a web view has finished loading a page
     override func storeChanges() {
-        saveTabs(toProfile: profile, normalTabs)
+        saveTabs(toProfile: profile, normalTabs, inactiveTabs)
         preserveTabs()
         saveCurrentTabSessionData()
     }
