@@ -15,7 +15,7 @@ struct ThemeSettingsState: ScreenState, Equatable {
     init(_ appState: AppState) {
          guard let themeState = store.state.screenState(
             ThemeSettingsState.self,
-            for: .themeSettings,
+            for: .themeSettings
         ) else {
             self.init()
             return
