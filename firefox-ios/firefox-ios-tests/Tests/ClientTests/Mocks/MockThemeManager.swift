@@ -9,6 +9,15 @@ class MockThemeManager: ThemeManager {
     var currentTheme: Theme = LightTheme()
     var window: UIWindow?
 
+<<<<<<< HEAD
+=======
+    var systemThemeIsOn: Bool { return true}
+
+    var automaticBrightnessIsOn: Bool { return false}
+
+    var automaticBrightnessValue: Float { return 0.4}
+
+>>>>>>> eaa0121c1 (Remove FXIOS-5064/8318/3960 [v123] LegacyThemeManager removal (#18437))
     func getInterfaceStyle() -> UIUserInterfaceStyle {
         return .light
     }
@@ -41,4 +50,6 @@ class MockThemeManager: ThemeManager {
             changeCurrentTheme(.light)
         }
     }
+
+    func brightnessChanged() { }
 }

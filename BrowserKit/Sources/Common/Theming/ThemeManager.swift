@@ -8,10 +8,18 @@ public protocol ThemeManager {
     var currentTheme: Theme { get }
     var window: UIWindow? { get set }
 
+<<<<<<< HEAD
+=======
+    var systemThemeIsOn: Bool { get }
+    var automaticBrightnessIsOn: Bool { get }
+    var automaticBrightnessValue: Float { get }
+
+>>>>>>> eaa0121c1 (Remove FXIOS-5064/8318/3960 [v123] LegacyThemeManager removal (#18437))
     func changeCurrentTheme(_ newTheme: ThemeType)
     func systemThemeChanged()
     func setSystemTheme(isOn: Bool)
     func setPrivateTheme(isOn: Bool)
     func setAutomaticBrightness(isOn: Bool)
     func setAutomaticBrightnessValue(_ value: Float)
+    func brightnessChanged()
 }

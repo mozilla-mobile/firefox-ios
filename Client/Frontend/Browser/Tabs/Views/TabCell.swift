@@ -31,8 +31,12 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
 
     private lazy var smallFaviconView: FaviconImageView = .build()
     private lazy var favicon: FaviconImageView = .build()
+<<<<<<< HEAD:Client/Frontend/Browser/Tabs/Views/TabCell.swift
     private var title =
         UIVisualEffectView(effect: UIBlurEffect(style: UIColor.legacyTheme.tabTray.tabTitleBlur))
+=======
+    private var headerView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+>>>>>>> eaa0121c1 (Remove FXIOS-5064/8318/3960 [v123] LegacyThemeManager removal (#18437)):firefox-ios/Client/Frontend/Browser/Tabs/Views/TabCell.swift
 
     // MARK: - UI
 
@@ -137,6 +141,7 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     // MARK: - Configuration
 
     func applyTheme(theme: Theme) {
+        headerView.effect = UIBlurEffect(style: theme.type.tabTitleBlurStyle())
         backgroundHolder.backgroundColor = theme.colors.layer1
         closeButton.tintColor = theme.colors.indicatorActive
         titleText.textColor = theme.colors.textPrimary

@@ -37,10 +37,37 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     // MARK: - Init
 
+<<<<<<< HEAD
     public init(userDefaults: UserDefaultsInterface = UserDefaults.standard,
                 notificationCenter: NotificationProtocol = NotificationCenter.default,
                 mainQueue: DispatchQueueInterface = DispatchQueue.main,
                 sharedContainerIdentifier: String) {
+=======
+    private var privateModeIsOn: Bool {
+        return userDefaults.bool(forKey: ThemeKeys.PrivateMode.isOn)
+    }
+
+    public var systemThemeIsOn: Bool {
+        return userDefaults.bool(forKey: ThemeKeys.systemThemeIsOn)
+    }
+
+    public var automaticBrightnessIsOn: Bool {
+        return userDefaults.bool(forKey: ThemeKeys.AutomaticBrightness.isOn)
+    }
+
+    public var automaticBrightnessValue: Float {
+        return userDefaults.float(forKey: ThemeKeys.AutomaticBrightness.thresholdValue)
+    }
+
+    // MARK: - Initializers
+
+    public init(
+        userDefaults: UserDefaultsInterface = UserDefaults.standard,
+        notificationCenter: NotificationProtocol = NotificationCenter.default,
+        mainQueue: DispatchQueueInterface = DispatchQueue.main,
+        sharedContainerIdentifier: String
+    ) {
+>>>>>>> eaa0121c1 (Remove FXIOS-5064/8318/3960 [v123] LegacyThemeManager removal (#18437))
         self.userDefaults = userDefaults
         self.notificationCenter = notificationCenter
         self.mainQueue = mainQueue
@@ -120,6 +147,12 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         brightnessChanged()
     }
 
+    public func brightnessChanged() {
+        if automaticBrightnessIsOn {
+            updateThemeBasedOnBrightness()
+        }
+    }
+
     // MARK: - Private methods
 
     private func loadInitialThemeType() -> ThemeType {
@@ -157,6 +190,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         }
     }
 
+<<<<<<< HEAD
     private func brightnessChanged() {
         let brightnessIsOn = userDefaults.bool(forKey: ThemeKeys.AutomaticBrightness.isOn)
 
@@ -167,11 +201,12 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         }
     }
 
+=======
+>>>>>>> eaa0121c1 (Remove FXIOS-5064/8318/3960 [v123] LegacyThemeManager removal (#18437))
     private func updateThemeBasedOnBrightness() {
-        let thresholdValue = userDefaults.float(forKey: ThemeKeys.AutomaticBrightness.thresholdValue)
         let currentValue = Float(UIScreen.main.brightness)
 
-        if currentValue < thresholdValue {
+        if currentValue < automaticBrightnessValue {
             changeCurrentTheme(.dark)
         } else {
             changeCurrentTheme(.light)

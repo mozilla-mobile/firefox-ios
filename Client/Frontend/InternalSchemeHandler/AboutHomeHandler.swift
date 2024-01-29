@@ -9,8 +9,14 @@ class AboutHomeHandler: InternalSchemeResponse {
     func response(forRequest request: URLRequest) -> (URLResponse, Data)? {
         guard let url = request.url else { return nil }
         let response = InternalSchemeHandler.response(forUrl: url)
+<<<<<<< HEAD:Client/Frontend/InternalSchemeHandler/AboutHomeHandler.swift
         let backgroundColor = UIColor.legacyTheme.browser.background.hexString
         // Blank page with a color matching the background of the panels which is displayed for a split-second until the panel shows.
+=======
+        let backgroundColor = UIColor.systemGray.hexString
+        // Blank page with a color matching the background of the panels which
+        // is displayed for a split-second until the panel shows.
+>>>>>>> eaa0121c1 (Remove FXIOS-5064/8318/3960 [v123] LegacyThemeManager removal (#18437)):firefox-ios/Client/Frontend/InternalSchemeHandler/AboutHomeHandler.swift
         let html = """
             <!DOCTYPE html>
             <html>
