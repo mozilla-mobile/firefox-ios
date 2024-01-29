@@ -265,7 +265,7 @@ class TabManagerMiddleware {
             await self.triggerRefresh(shouldScrollToTab: false, uuid: uuid)
             if shouldDismiss {
                 store.dispatch(TabTrayAction.dismissTabTray(uuid.context))
-                store.dispatch(GeneralBrowserAction.showToast(.singleTab))
+                store.dispatch(GeneralBrowserAction.showToast(ToastTypeContext(toastType: .singleTab, windowUUID: uuid)))
             } else {
                 store.dispatch(TabPanelAction.showToast(ToastTypeContext(toastType: .singleTab, windowUUID: uuid)))
             }
@@ -310,7 +310,8 @@ class TabManagerMiddleware {
                 let context = RefreshTabContext(tabModels: model, windowUUID: uuid)
                 store.dispatch(TabPanelAction.refreshTab(model))
                 store.dispatch(TabTrayAction.dismissTabTray(uuid.context))
-                store.dispatch(GeneralBrowserAction.showToast(.allTabs(count: count)))
+                store.dispatch(GeneralBrowserAction.showToast(ToastTypeContext(toastType: .allTabs(count: count),
+                                                                               windowUUID: uuid)))
             }
         }
     }

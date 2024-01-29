@@ -87,7 +87,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: FakespotState.reducer(state.fakespotState, action),
                 windowUUID: state.windowUUID)
-        case GeneralBrowserAction.showToast(let toastType):
+        case GeneralBrowserAction.showToast(let context):
+            let toastType = context.toastType
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 usePrivateHomepage: state.usePrivateHomepage,

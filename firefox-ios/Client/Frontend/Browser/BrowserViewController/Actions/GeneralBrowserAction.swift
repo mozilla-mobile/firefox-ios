@@ -6,12 +6,12 @@ import Foundation
 import Redux
 
 enum GeneralBrowserAction: Action {
-    case showToast(ToastType)
+    case showToast(ToastTypeContext)
 
     var windowUUID: UUID {
-       // TODO: [8188] Use of .unavailable UUID is temporary as part of early MW refactors. WIP. 
         switch self {
-        default: return .unavailable
+        case .showToast(let context as ActionContext):
+            return context.windowUUID
         }
     }
 }
