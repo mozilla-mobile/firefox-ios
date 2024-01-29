@@ -6,9 +6,9 @@ import Common
 import Foundation
 import WebKit
 
-class WKEngineSession: NSObject, 
+class WKEngineSession: NSObject,
                         EngineSession,
-                        WKUIDelegate, 
+                        WKUIDelegate,
                         WKNavigationDelegate,
                         WKEngineWebViewDelegate {
     weak var delegate: EngineSessionDelegate?
@@ -256,18 +256,18 @@ class WKEngineSession: NSObject,
         // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
     }
 
-    func webView(_ webView: WKWebView, 
+    func webView(_ webView: WKWebView,
                  didFinish navigation: WKNavigation!) {
         // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
     }
 
-    func webView(_ webView: WKWebView, 
+    func webView(_ webView: WKWebView,
                  didFail navigation: WKNavigation!,
                  withError error: Error) {
         // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
     }
 
-    func webView(_ webView: WKWebView, 
+    func webView(_ webView: WKWebView,
                  didFailProvisionalNavigation navigation: WKNavigation!,
                  withError error: Error) {
         // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
@@ -284,7 +284,7 @@ class WKEngineSession: NSObject,
         // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
     }
 
-    func webView(_ webView: WKWebView, 
+    func webView(_ webView: WKWebView,
                  decidePolicyFor navigationAction: WKNavigationAction,
                  preferences: WKWebpagePreferences,
                  decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> Void) {

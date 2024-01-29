@@ -16,7 +16,7 @@ protocol WKEngineWebViewDelegate: AnyObject {
 protocol WKEngineWebView: UIView {
     var navigationDelegate: WKNavigationDelegate? { get set }
     var uiDelegate: WKUIDelegate? { get set }
-    var delegate: WKEngineWebViewDelegate?  { get set }
+    var delegate: WKEngineWebViewDelegate? { get set }
 
     var allowsBackForwardNavigationGestures: Bool { get set }
     var allowsLinkPreview: Bool { get set }
