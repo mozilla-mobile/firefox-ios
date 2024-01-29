@@ -278,6 +278,113 @@ final class WKEngineSessionTests: XCTestCase {
         prepareForTearDown(subject!)
     }
 
+    func testTitleChangeGivenEmptyTitleThenDoesntCallDelegate() {
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+        webViewProvider.webView.title = nil
+
+        subject?.observeValue(forKeyPath: "title",
+                              of: nil,
+                              change: nil,
+                              context: nil)
+
+        XCTAssertNil(subject?.sessionData.title)
+        XCTAssertEqual(engineSessionDelegate.onTitleChangeCalled, 0)
+        prepareForTearDown(subject!)
+    }
+
+    func testTitleChangeGivenATitleThenCallsDelegate() {
+        let expectedTitle = "Webview title"
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+        webViewProvider.webView.title = expectedTitle
+
+        subject?.observeValue(forKeyPath: "title",
+                              of: nil,
+                              change: nil,
+                              context: nil)
+
+        XCTAssertEqual(subject?.sessionData.title, expectedTitle)
+        XCTAssertEqual(engineSessionDelegate.onTitleChangeCalled, 1)
+        prepareForTearDown(subject!)
+    }
+
+    func testURLChangeGivenNilURLThenDoesntCallDelegate() {
+        let subject = createSubject()
+        webViewProvider.webView.title = nil
+
+        subject?.observeValue(forKeyPath: "URL",
+                              of: nil,
+                              change: nil,
+                              context: nil)
+
+        XCTAssertNil(subject?.sessionData.url)
+        XCTAssertEqual(engineSessionDelegate.onLoadingStateChangeCalled, 0)
+        prepareForTearDown(subject!)
+    }
+
+    func testURLChangeGivenAboutBlankWithNilURLThenDoesntCallDelegate() {
+        let subject = createSubject()
+        subject?.sessionData.url = URL(string: "about:blank")!
+        webViewProvider.webView.title = nil
+
+        subject?.observeValue(forKeyPath: "URL",
+                              of: nil,
+                              change: nil,
+                              context: nil)
+
+        XCTAssertEqual(engineSessionDelegate.onLoadingStateChangeCalled, 0)
+        prepareForTearDown(subject!)
+    }
+
+    func testURLChangeGivenNotTheSameOriginThenDoesntCallDelegate() {
+        let subject = createSubject()
+        subject?.sessionData.url = URL(string: "www.example.com/path1")!
+        webViewProvider.webView.url = URL(string: "www.anotherWebsite.com/path2")!
+
+        subject?.observeValue(forKeyPath: "URL",
+                              of: nil,
+                              change: nil,
+                              context: nil)
+
+        XCTAssertEqual(engineSessionDelegate.onLoadingStateChangeCalled, 0)
+        prepareForTearDown(subject!)
+    }
+
+    func testURLChangeGivenAboutBlankWithURLThenCallsDelegate() {
+        let aboutBlankURL = URL(string: "about:blank")!
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+        subject?.sessionData.url = aboutBlankURL
+        webViewProvider.webView.url = aboutBlankURL
+
+        subject?.observeValue(forKeyPath: "URL",
+                              of: nil,
+                              change: nil,
+                              context: nil)
+
+        XCTAssertEqual(subject?.sessionData.url, aboutBlankURL)
+        XCTAssertEqual(engineSessionDelegate.onLocationChangedCalled, 1)
+        prepareForTearDown(subject!)
+    }
+
+    func testURLChangeGivenLoadedURLWithURLThenCallsDelegate() {
+        let loadedURL = URL(string: "www.example.com")!
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+        subject?.sessionData.url = loadedURL
+        webViewProvider.webView.url = loadedURL
+
+        subject?.observeValue(forKeyPath: "URL",
+                              of: nil,
+                              change: nil,
+                              context: nil)
+
+        XCTAssertEqual(subject?.sessionData.url, loadedURL)
+        XCTAssertEqual(engineSessionDelegate.onLocationChangedCalled, 1)
+        prepareForTearDown(subject!)
+    }
+
     // MARK: User script manager
 
     func testUserScriptWhenSubjectCreatedThenInjectionIntoWebviewCalled() {

@@ -208,7 +208,7 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
                     prefs: profile.prefs,
                     theme: themeManager.currentTheme,
                     prefKey: PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions,
-                    defaultValue: profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions) ?? false,
+                    defaultValue: profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions) ?? true,
                     titleText: String.localizedStringWithFormat(
                         .Settings.Search.Suggest.ShowNonSponsoredSuggestionsTitle,
                         AppName.shortName.rawValue
@@ -232,7 +232,7 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
                     prefs: profile.prefs,
                     theme: themeManager.currentTheme,
                     prefKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions,
-                    defaultValue: profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowSponsoredSuggestions) ?? false,
+                    defaultValue: profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowSponsoredSuggestions) ?? true,
                     titleText: .Settings.Search.Suggest.ShowSponsoredSuggestionsTitle,
                     statusText: String.localizedStringWithFormat(
                         .Settings.Search.Suggest.ShowSponsoredSuggestionsDescription,

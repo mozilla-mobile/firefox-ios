@@ -5,6 +5,7 @@
 import UIKit
 
 @testable import Redux
+/*
 class FakeReduxViewController: UIViewController, StoreSubscriber {
     typealias SubscriberStateType = FakeReduxState
 
@@ -52,3 +53,4 @@ class FakeReduxViewController: UIViewController, StoreSubscriber {
         store.dispatch(FakeReduxAction.setPrivateModeTo(value))
     }
 }
+*/

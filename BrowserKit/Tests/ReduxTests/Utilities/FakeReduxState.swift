@@ -5,6 +5,7 @@
 import Foundation
 
 @testable import Redux
+/*
 struct FakeReduxState: StateType, Equatable {
     var counter: Int = 0
     var isInPrivateMode = false
@@ -24,3 +25,4 @@ struct FakeReduxState: StateType, Equatable {
         }
     }
 }
+ */
