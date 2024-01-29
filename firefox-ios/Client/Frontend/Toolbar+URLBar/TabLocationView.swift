@@ -34,6 +34,8 @@ class TabLocationView: UIView, FeatureFlaggable {
         static let statusIconSize: CGFloat = 18
         static let buttonSize: CGFloat = 40
         static let urlBarPadding = 4
+        static let trackingProtectionAnimationDuration = 0.3
+        static let trackingProtectionxOffset = CGAffineTransform(translationX: 25, y: 0)
     }
 
     // MARK: Variables
@@ -397,10 +399,10 @@ class TabLocationView: UIView, FeatureFlaggable {
             ensureMainThread {
                 let isValidHttpUrlProtocol = self.isValidHttpUrlProtocol(url)
                 if isValidHttpUrlProtocol, self.trackingProtectionButton.isHidden {
-                    self.trackingProtectionButton.transform = CGAffineTransform(translationX: 25, y: 0)
+                    self.trackingProtectionButton.transform = UX.trackingProtectionxOffset
                     self.trackingProtectionButton.alpha = 0
                     self.trackingProtectionButton.isHidden = false
-                    UIView.animate(withDuration: 0.3) {
+                    UIView.animate(withDuration: UX.trackingProtectionAnimationDuration) {
                         self.trackingProtectionButton.alpha = 1
                         self.trackingProtectionButton.transform = .identity
                     }
