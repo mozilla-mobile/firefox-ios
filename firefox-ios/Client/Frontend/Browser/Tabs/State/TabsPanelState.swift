@@ -76,7 +76,8 @@ struct TabsPanelState: ScreenState, Equatable {
                                   inactiveTabs: tabsModel.inactiveTabs,
                                   isInactiveTabsExpanded: tabsModel.isInactiveTabsExpanded,
                                   scrollToIndex: selectedTabIndex)
-        case TabPanelAction.refreshTab(let tabModel):
+        case TabPanelAction.refreshTab(let context):
+            let tabModel = context.tabModel
             var selectedTabIndex: Int?
             if tabModel.shouldScrollToTab {
                 selectedTabIndex = tabModel.tabs.firstIndex(where: { $0.isSelected })
@@ -93,13 +94,15 @@ struct TabsPanelState: ScreenState, Equatable {
                                   tabs: state.tabs,
                                   inactiveTabs: state.inactiveTabs,
                                   isInactiveTabsExpanded: !state.isInactiveTabsExpanded)
-        case TabPanelAction.refreshInactiveTabs(let inactiveTabs):
+        case TabPanelAction.refreshInactiveTabs(let context):
+            let inactiveTabs = context.inactiveTabModels
             return TabsPanelState(windowUUID: state.windowUUID,
                                   isPrivateMode: state.isPrivateMode,
                                   tabs: state.tabs,
                                   inactiveTabs: inactiveTabs,
                                   isInactiveTabsExpanded: state.isInactiveTabsExpanded)
-        case TabPanelAction.showToast(let type):
+        case TabPanelAction.showToast(let context):
+            let type = context.toastType
             return TabsPanelState(windowUUID: state.windowUUID,
                                   isPrivateMode: state.isPrivateMode,
                                   tabs: state.tabs,

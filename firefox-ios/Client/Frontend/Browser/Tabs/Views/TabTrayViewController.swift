@@ -457,7 +457,7 @@ class TabTrayViewController: UIViewController,
 
     @objc
     private func deleteTabsButtonTapped() {
-        store.dispatch(TabPanelAction.closeAllTabs)
+        store.dispatch(TabPanelAction.closeAllTabs(windowUUID.context))
     }
 
     @objc

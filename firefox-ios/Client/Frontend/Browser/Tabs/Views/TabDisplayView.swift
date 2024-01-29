@@ -148,7 +148,8 @@ class TabDisplayView: UIView,
 
     func deleteInactiveTab(for index: Int) {
         let inactiveTabs = tabsState.inactiveTabs[index]
-        store.dispatch(TabPanelAction.closeInactiveTabs(inactiveTabs.tabUUID))
+        let context = TabUUIDContext(tabUUID: inactiveTabs.tabUUID, windowUUID: windowUUID)
+        store.dispatch(TabPanelAction.closeInactiveTabs(context))
     }
 
     // MARK: UICollectionViewDataSource
@@ -207,8 +208,9 @@ class TabDisplayView: UIView,
                 if let theme = theme {
                     footerView.applyTheme(theme: theme)
                 }
+                let context = windowUUID.context
                 footerView.buttonClosure = {
-                    store.dispatch(TabPanelAction.closeAllInactiveTabs)
+                    store.dispatch(TabPanelAction.closeAllInactiveTabs(context))
                 }
                 return footerView
             }
@@ -251,10 +253,10 @@ class TabDisplayView: UIView,
         switch getTabDisplay(for: indexPath.section) {
         case .inactiveTabs:
             let tabUUID = tabsState.inactiveTabs[indexPath.row].tabUUID
-            store.dispatch(TabPanelAction.selectTab(tabUUID))
+            store.dispatch(TabPanelAction.selectTab(TabUUIDContext(tabUUID: tabUUID, windowUUID: windowUUID)))
         case .tabs:
             let tabUUID = tabsState.tabs[indexPath.row].tabUUID
-            store.dispatch(TabPanelAction.selectTab(tabUUID))
+            store.dispatch(TabPanelAction.selectTab(TabUUIDContext(tabUUID: tabUUID, windowUUID: windowUUID)))
         }
     }
 
@@ -272,13 +274,13 @@ class TabDisplayView: UIView,
 
     @objc
     func toggleInactiveTab() {
-        store.dispatch(TabPanelAction.toggleInactiveTabs)
+        store.dispatch(TabPanelAction.toggleInactiveTabs(windowUUID.context))
         collectionView.collectionViewLayout.invalidateLayout()
     }
 
     // MARK: - TabCellDelegate
     func tabCellDidClose(for tabUUID: String) {
-        store.dispatch(TabPanelAction.closeTab(tabUUID))
+        store.dispatch(TabPanelAction.closeTab(TabUUIDContext(tabUUID: tabUUID, windowUUID: windowUUID)))
     }
 }
 
@@ -312,7 +314,9 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
         let section = destinationIndexPath.section
         let start = IndexPath(row: sourceIndex, section: section)
         let end = IndexPath(row: destinationIndexPath.item, section: section)
-        store.dispatch(TabPanelAction.moveTab(start.row, end.row))
+        store.dispatch(TabPanelAction.moveTab(MoveTabContext(originIndex: start.row,
+                                                             destinationIndex: end.row,
+                                                             windowUUID: windowUUID)))
         coordinator.drop(dragItem, toItemAt: destinationIndexPath)
 
         collectionView.moveItem(at: start, to: end)

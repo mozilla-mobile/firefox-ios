@@ -119,7 +119,8 @@ struct TabTrayState: ScreenState, Equatable {
                                 selectedPanel: state.selectedPanel,
                                 normalTabsCount: state.normalTabsCount,
                                 hasSyncableAccount: isSyncAccountEnabled)
-        case TabPanelAction.showShareSheet(let shareURL):
+        case TabPanelAction.showShareSheet(let context):
+            let shareURL = context.url
             return TabTrayState(windowUUID: state.windowUUID,
                                 isPrivateMode: state.isPrivateMode,
                                 selectedPanel: state.selectedPanel,
