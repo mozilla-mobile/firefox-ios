@@ -235,10 +235,6 @@ open class RustFirefoxAccounts {
         prefs?.removeObjectForKey(prefKeyCachedUserProfile)
         prefs?.removeObjectForKey(PendingAccountDisconnectedKey)
         cachedUserProfile = nil
-        MZKeychainWrapper.sharedClientAppContainerKeychain.removeObject(
-            forKey: KeychainKey.apnsToken,
-            withAccessibility: .afterFirstUnlock
-        )
     }
 
     public func hasAccount(completion: @escaping (Bool) -> Void) {
