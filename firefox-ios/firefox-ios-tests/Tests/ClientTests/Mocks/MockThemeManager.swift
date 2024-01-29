@@ -9,6 +9,10 @@ class MockThemeManager: ThemeManager {
     var currentTheme: Theme = LightTheme()
     var window: UIWindow?
 
+    var systemThemeIsOn: Bool { return true}
+
+    var automaticBrightnessIsOn: Bool { return false}
+
     func getInterfaceStyle() -> UIUserInterfaceStyle {
         return .light
     }

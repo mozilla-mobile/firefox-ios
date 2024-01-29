@@ -8,6 +8,9 @@ public protocol ThemeManager {
     var currentTheme: Theme { get }
     var window: UIWindow? { get set }
 
+    var systemThemeIsOn: Bool { get }
+    var automaticBrightnessIsOn: Bool { get }
+
     func changeCurrentTheme(_ newTheme: ThemeType)
     func systemThemeChanged()
     func setSystemTheme(isOn: Bool)

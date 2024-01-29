@@ -45,18 +45,12 @@ class LegacyThemeManager {
         }
     }
 
-    var systemThemeIsOn: Bool {
-        didSet {
-            UserDefaults.standard.set(
-                systemThemeIsOn,
-                forKey: LegacyThemeManagerPrefs.systemThemeIsOn.rawValue
-            )
-        }
+    private var systemThemeIsOn: Bool {
+        return UserDefaults.standard.bool(forKey: LegacyThemeManagerPrefs.systemThemeIsOn.rawValue)
     }
 
     private init() {
         UserDefaults.standard.register(defaults: [LegacyThemeManagerPrefs.systemThemeIsOn.rawValue: true])
-        systemThemeIsOn = UserDefaults.standard.bool(forKey: LegacyThemeManagerPrefs.systemThemeIsOn.rawValue)
 
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(brightnessChanged),
