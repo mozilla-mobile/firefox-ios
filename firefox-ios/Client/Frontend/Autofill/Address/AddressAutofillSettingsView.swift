@@ -28,19 +28,16 @@ struct AddressAutofillSettingsView: View {
         ZStack {
             // Clear color to fill the entire safe area
             Color.clear.edgesIgnoringSafeArea(.all)
+            VStack {
+                // Address autofill toggle component
+                AddressAutofillToggle(model: toggleModel)
+                    .padding(.top, 25)
+                    .frame(maxWidth: .infinity)
 
-            GeometryReader { proxy in
-                VStack {
-                    // Address autofill toggle component
-                    AddressAutofillToggle(model: toggleModel)
-                        .padding(.top, 25)
-                        .frame(maxWidth: .infinity)
-
-                    // Address list view
-                    AddressListView(viewModel: addressListViewModel)
-                }
-                .background(viewBackground)
+                // Address list view
+                AddressListView(viewModel: addressListViewModel)
             }
+            .background(viewBackground)
             .onAppear {
                 // Apply the theme when the view appears
                 applyTheme(theme: themeVal.theme)

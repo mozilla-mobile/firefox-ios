@@ -15,10 +15,10 @@ struct AddressCellView: View {
 
     @State private var textColor: Color = .clear
     @State private var customLightGray: Color = .clear
-    var address: Address
+    private(set) var address: Address
     @Environment(\.themeType)
     var themeVal
-    var onTap: () -> Void
+    private(set) var onTap: () -> Void
 
     // MARK: - Body
 
