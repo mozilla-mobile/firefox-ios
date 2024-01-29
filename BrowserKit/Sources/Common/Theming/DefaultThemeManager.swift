@@ -37,12 +37,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     // MARK: - Init
 
-<<<<<<< HEAD
-    public init(userDefaults: UserDefaultsInterface = UserDefaults.standard,
-                notificationCenter: NotificationProtocol = NotificationCenter.default,
-                mainQueue: DispatchQueueInterface = DispatchQueue.main,
-                sharedContainerIdentifier: String) {
-=======
     private var privateModeIsOn: Bool {
         return userDefaults.bool(forKey: ThemeKeys.PrivateMode.isOn)
     }
@@ -63,7 +57,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         mainQueue: DispatchQueueInterface = DispatchQueue.main,
         sharedContainerIdentifier: String
     ) {
->>>>>>> 43e00b79f (Bugfix FXIOS-8309 [v122.1] System theme resetting bug (#18429))
         self.userDefaults = userDefaults
         self.notificationCenter = notificationCenter
         self.mainQueue = mainQueue
@@ -102,17 +95,9 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         // the system theme is off
         // OR night mode is on
         // OR private mode is on
-<<<<<<< HEAD
-        guard userDefaults.bool(forKey: ThemeKeys.systemThemeIsOn),
-              let nightModeIsOn = userDefaults.object(forKey: ThemeKeys.NightMode.isOn) as? NSNumber,
-              nightModeIsOn.boolValue == false,
-              let privateModeIsOn = userDefaults.object(forKey: ThemeKeys.PrivateMode.isOn) as? NSNumber,
-              privateModeIsOn.boolValue == false
-=======
         guard systemThemeIsOn,
               !nightModeIsOn,
               !privateModeIsOn
->>>>>>> 43e00b79f (Bugfix FXIOS-8309 [v122.1] System theme resetting bug (#18429))
         else { return }
 
         changeCurrentTheme(getSystemThemeType())
