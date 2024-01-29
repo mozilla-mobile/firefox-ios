@@ -37,10 +37,6 @@ class ThemeSetting: Setting {
     ) {
         self.profile = settings.profile
         self.settingsDelegate = settingsDelegate
-<<<<<<< HEAD:Client/Frontend/Settings/Main/General/ThemeSetting.swift
-        super.init(title: NSAttributedString(string: .SettingsDisplayThemeTitle,
-                                             attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
-=======
         self.themeManager = themeManager
 
         super.init(
@@ -51,7 +47,6 @@ class ThemeSetting: Setting {
                 ]
             )
         )
->>>>>>> 43e00b79f (Bugfix FXIOS-8309 [v122.1] System theme resetting bug (#18429)):firefox-ios/Client/Frontend/Settings/Main/General/ThemeSetting.swift
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
