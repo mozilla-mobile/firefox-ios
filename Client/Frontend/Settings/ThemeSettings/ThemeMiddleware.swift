@@ -30,7 +30,7 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
             store.dispatch(ThemeSettingsAction.receivedThemeManagerValues(currentThemeState))
         case ThemeSettingsAction.toggleUseSystemAppearance(let enabled):
             self.toggleUseSystemAppearance(enabled)
-            store.dispatch(ThemeSettingsAction.systemThemeChanged(self.legacyThemeManager.systemThemeIsOn))
+            store.dispatch(ThemeSettingsAction.systemThemeChanged(self.themeManager.systemThemeIsOn))
         case ThemeSettingsAction.enableAutomaticBrightness(let enabled):
             self.toggleAutomaticBrightness(enabled)
             store.dispatch(ThemeSettingsAction.automaticBrightnessChanged(self.legacyThemeManager.automaticBrightnessIsOn))
@@ -52,8 +52,15 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
     }
 
     // MARK: - Helper func
+<<<<<<< HEAD:Client/Frontend/Settings/ThemeSettings/ThemeMiddleware.swift
     func getCurrentThemeManagerState() -> ThemeSettingsState {
         ThemeSettingsState(useSystemAppearance: legacyThemeManager.systemThemeIsOn,
+=======
+    func getCurrentThemeManagerState(windowUUID: WindowUUID?) -> ThemeSettingsState {
+        // TODO: [8188] Revisit UUID handling, needs additional investigation.
+        ThemeSettingsState(windowUUID: windowUUID ?? WindowUUID.unavailable,
+                           useSystemAppearance: themeManager.systemThemeIsOn,
+>>>>>>> 43e00b79f (Bugfix FXIOS-8309 [v122.1] System theme resetting bug (#18429)):firefox-ios/Client/Frontend/Settings/ThemeSettings/ThemeMiddleware.swift
                            isAutomaticBrightnessEnable: legacyThemeManager.automaticBrightnessIsOn,
                            manualThemeSelected: themeManager.currentTheme.type,
                            userBrightnessThreshold: legacyThemeManager.automaticBrightnessValue,
@@ -61,7 +68,6 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
     }
 
     func toggleUseSystemAppearance(_ enabled: Bool) {
-        legacyThemeManager.systemThemeIsOn = enabled
         themeManager.setSystemTheme(isOn: enabled)
     }
 
@@ -74,10 +80,10 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
         themeManager.setAutomaticBrightness(isOn: enabled)
     }
 
-    func updateManualTheme(_ theme: ThemeType) {
-        let isLightTheme = theme == .light
+    func updateManualTheme(_ newTheme: ThemeType) {
+        let isLightTheme = newTheme == .light
         legacyThemeManager.current = isLightTheme ? LegacyNormalTheme() : LegacyDarkTheme()
-        themeManager.changeCurrentTheme(isLightTheme ? .light : .dark)
+        themeManager.changeCurrentTheme(newTheme)
     }
 
     func updateUserBrightness(_ value: Float) {

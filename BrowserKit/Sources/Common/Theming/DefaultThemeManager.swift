@@ -37,16 +37,37 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     // MARK: - Init
 
+<<<<<<< HEAD
     public init(userDefaults: UserDefaultsInterface = UserDefaults.standard,
                 notificationCenter: NotificationProtocol = NotificationCenter.default,
                 mainQueue: DispatchQueueInterface = DispatchQueue.main,
                 sharedContainerIdentifier: String) {
+=======
+    private var privateModeIsOn: Bool {
+        return userDefaults.bool(forKey: ThemeKeys.PrivateMode.isOn)
+    }
+
+    public var systemThemeIsOn: Bool {
+        return userDefaults.bool(forKey: ThemeKeys.systemThemeIsOn)
+    }
+
+    public var automaticBrightnessIsOn: Bool {
+        return userDefaults.bool(forKey: ThemeKeys.AutomaticBrightness.isOn)
+    }
+
+    // MARK: - Initializers
+
+    public init(
+        userDefaults: UserDefaultsInterface = UserDefaults.standard,
+        notificationCenter: NotificationProtocol = NotificationCenter.default,
+        mainQueue: DispatchQueueInterface = DispatchQueue.main,
+        sharedContainerIdentifier: String
+    ) {
+>>>>>>> 43e00b79f (Bugfix FXIOS-8309 [v122.1] System theme resetting bug (#18429))
         self.userDefaults = userDefaults
         self.notificationCenter = notificationCenter
         self.mainQueue = mainQueue
         self.sharedContainerIdentifier = sharedContainerIdentifier
-
-        migrateDefaultsToUseStandard()
 
         self.userDefaults.register(defaults: [
             ThemeKeys.systemThemeIsOn: true,
@@ -81,11 +102,17 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         // the system theme is off
         // OR night mode is on
         // OR private mode is on
+<<<<<<< HEAD
         guard userDefaults.bool(forKey: ThemeKeys.systemThemeIsOn),
               let nightModeIsOn = userDefaults.object(forKey: ThemeKeys.NightMode.isOn) as? NSNumber,
               nightModeIsOn.boolValue == false,
               let privateModeIsOn = userDefaults.object(forKey: ThemeKeys.PrivateMode.isOn) as? NSNumber,
               privateModeIsOn.boolValue == false
+=======
+        guard systemThemeIsOn,
+              !nightModeIsOn,
+              !privateModeIsOn
+>>>>>>> 43e00b79f (Bugfix FXIOS-8309 [v122.1] System theme resetting bug (#18429))
         else { return }
 
         changeCurrentTheme(getSystemThemeType())
@@ -94,9 +121,9 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     public func setSystemTheme(isOn: Bool) {
         userDefaults.set(isOn, forKey: ThemeKeys.systemThemeIsOn)
 
-        if isOn {
+        if systemThemeIsOn {
             systemThemeChanged()
-        } else if userDefaults.bool(forKey: ThemeKeys.AutomaticBrightness.isOn) {
+        } else if automaticBrightnessIsOn {
             updateThemeBasedOnBrightness()
         }
     }
@@ -108,8 +135,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     public func setAutomaticBrightness(isOn: Bool) {
-        let currentState = userDefaults.bool(forKey: ThemeKeys.AutomaticBrightness.isOn)
-        guard currentState != isOn else { return }
+        guard automaticBrightnessIsOn != isOn else { return }
 
         userDefaults.set(isOn, forKey: ThemeKeys.AutomaticBrightness.isOn)
         brightnessChanged()
@@ -158,9 +184,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     private func brightnessChanged() {
-        let brightnessIsOn = userDefaults.bool(forKey: ThemeKeys.AutomaticBrightness.isOn)
-
-        if brightnessIsOn {
+        if automaticBrightnessIsOn {
             updateThemeBasedOnBrightness()
         } else {
             systemThemeChanged()
@@ -175,23 +199,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
             changeCurrentTheme(.dark)
         } else {
             changeCurrentTheme(.light)
-        }
-    }
-
-    private func migrateDefaultsToUseStandard() {
-        guard let oldDefaultsStore = UserDefaults(suiteName: sharedContainerIdentifier) else { return }
-
-        if let systemThemeIsOn = oldDefaultsStore.value(forKey: ThemeKeys.systemThemeIsOn) {
-            userDefaults.set(systemThemeIsOn, forKey: ThemeKeys.systemThemeIsOn)
-        }
-        if let nightModeIsOn = oldDefaultsStore.value(forKey: ThemeKeys.NightMode.isOn) {
-            userDefaults.set(nightModeIsOn, forKey: ThemeKeys.NightMode.isOn)
-        }
-        if let automaticBrightnessIsOn = oldDefaultsStore.value(forKey: ThemeKeys.AutomaticBrightness.isOn) {
-            userDefaults.set(automaticBrightnessIsOn, forKey: ThemeKeys.AutomaticBrightness.isOn)
-        }
-        if let automaticBrighnessValue = oldDefaultsStore.value(forKey: ThemeKeys.AutomaticBrightness.thresholdValue) {
-            userDefaults.set(automaticBrighnessValue, forKey: ThemeKeys.AutomaticBrightness.thresholdValue)
         }
     }
 
