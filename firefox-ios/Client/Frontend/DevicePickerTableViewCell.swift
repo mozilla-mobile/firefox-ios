@@ -9,8 +9,12 @@ import Shared
 class DevicePickerTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
         static let deviceRowTextFont = UIFont.systemFont(ofSize: 16)
-        static let deviceRowTextPaddingLeft: CGFloat = 72
-        static let deviceRowTextPaddingRight: CGFloat = 50
+        static let deviceRowTextPaddingLeft: CGFloat = 60
+        static let deviceRowTextPaddingRight: CGFloat = 20
+        static let deviceRowTopMargin: CGFloat = 0
+        static let deviceRowLeadingMargin: CGFloat = 16
+        static let deviceRowBottomMargin: CGFloat = 0
+        static let deviceRowTrailingMargin: CGFloat = 0
     }
 
     private lazy var nameLabel: UILabel = .build { label in
@@ -59,6 +63,12 @@ class DevicePickerTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable 
     func configureCell(_ text: String, _ clientType: ClientType) {
         nameLabel.text = text
         self.clientType = clientType
+        directionalLayoutMargins = NSDirectionalEdgeInsets(
+            top: UX.deviceRowTopMargin,
+            leading: UX.deviceRowLeadingMargin,
+            bottom: UX.deviceRowBottomMargin,
+            trailing: UX.deviceRowTrailingMargin
+        )
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -70,5 +80,7 @@ class DevicePickerTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable 
         nameLabel.textColor = colors.textPrimary
         imageView?.image = imageView?.image?.withRenderingMode(.alwaysTemplate)
         imageView?.tintColor = colors.textPrimary
+        backgroundColor = colors.layer2
+        tintColor = colors.textPrimary
     }
 }
