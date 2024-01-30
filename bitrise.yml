@@ -5,26 +5,27 @@ pipelines:
   pipeline_multiple_shards:
     stages:
     - stage_1: {}
-    #- stage_2: {}
+    - stage_2: {}
 stages:
   stage_1:
     workflows:
     - configure_build_fennec: {}
+    - L10nBuild: {}
   stage_2:
     workflows:
     - build_and_test_1_SmokeTest2: {}
-    - build_and_test_2_SmokeTest: {}
-    - build_and_test_3_SmokeTest3: {}
-    - build_and_test_4_SmokeTest4: {}
+    # - build_and_test_2_SmokeTest: {}
+    # - build_and_test_3_SmokeTest3: {}
+    # - build_and_test_4_SmokeTest4: {}
 workflows:
   configure_build_fennec:
     run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
     before_run:
-    - determine_apps_affected
     - 0_detect_standalone_build
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
+    - determine_apps_affected
     - Decision_to_run_UI_Tests
     steps:
     - activate-ssh-key@4:
@@ -156,6 +157,7 @@ workflows:
         stack: osx-xcode-15.2.x
         machine_type_id: g2-m1.8core
   build_and_test_1_SmokeTest2:
+    run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
     before_run:
     - 0_detect_standalone_build
     - 1_git_clone_and_post_clone
@@ -338,21 +340,6 @@ workflows:
         machine_type_id: g2-m1.8core
   determine_apps_affected:
     steps:
-    - git-clone@6.2: {}
-    - script@1:
-        title: Determine if source is available
-        run_if: true
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            set -e
-
-            # Set IS_SOURCE_AVAILABLE based on the existence of BITRISE_SOURCE_DIR  (i.e. did the Git clone step succeed?)
-            IS_SOURCE_AVAILABLE=$([ -d "$BITRISE_SOURCE_DIR" ] && echo "true" || echo "false")
-            
-            envman add --key IS_SOURCE_AVAILABLE --value="$IS_SOURCE_AVAILABLE"
-            
-            echo "$IS_SOURCE_AVAILABLE"
     - script@1:
         title: Determine which application to base configuration
         inputs:
@@ -360,8 +347,28 @@ workflows:
             #!/usr/bin/env bash
             set -e
 
-            # Determine which application to base configuration
-            APPS_AFFECTED=$(git diff --name-only origin/main..."$BITRISE_GIT_COMMIT" | xargs -n1 dirname | sort | uniq)
+            # Determine which application to base configuration while comparing against branch destination:
+            # Bitrise: https://devcenter.bitrise.io/en/references/available-environment-variables.html
+            #  
+            # BITRISEIO_GIT_BRANCH_DEST is used only on pull requests and is set to destination/branch (i.e, release/v123 )
+            # BITRISE_GIT_BRANCH is the git branch that is built by Bitrise (i.e, release/v123 )
+            # BITRISE_GIT_COMMIT is the git commit hash that is built by Bitrise
+            #
+            # If the destination branch is a release or epic branch, we need to compare changes against that destination branch
+            # If the branch built by Bitrise is a release or epic branch, we need to compare changes against that branch
+            # Otherwise, we need to compare changes against origin/main
+
+
+            if [[ $BITRISEIO_GIT_BRANCH_DEST = release* ]] || [[ $BITRISEIO_GIT_BRANCH_DEST = epic* ]]; then
+                BASE_BRANCH="$BITRISEIO_GIT_BRANCH_DEST"
+            elif [[ $BITRISE_GIT_BRANCH = release* ]] || [[ $BITRISE_GIT_BRANCH = epic* ]]; then
+                BASE_BRANCH="$BITRISE_GIT_BRANCH"
+            else
+                BASE_BRANCH="origin/main"
+            fi
+
+            # Determine apps affected by the changes
+            APPS_AFFECTED=$(git diff --name-only $BASE_BRANCH..."$BITRISE_GIT_COMMIT" | xargs -n1 dirname | sort | uniq)
 
             # Initialize all application flags as "false" by default
             BUILD_FIREFOX_IOS="false"
@@ -473,7 +480,6 @@ workflows:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@6.2:
-        run_if: '{{getenv "IS_SOURCE_AVAILABLE" | eq "false"}}'
     - script@1.1:
         inputs:
         - content: |-
