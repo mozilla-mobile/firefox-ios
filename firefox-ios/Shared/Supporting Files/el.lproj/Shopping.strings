@@ -121,6 +121,9 @@
 /* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replaced by the Fakespot app name. After the colon, what appears are two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
 "Shopping.OptInCard.Disclaimer.Text.v120" = "Επιλέγοντας «Έναρξη δοκιμής», συμφωνείτε με τα ακόλουθα από το %@:";
 
+/* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). After the colon, there will be two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
+"Shopping.OptInCard.Disclaimer.Text.v123" = "Επιλέγοντας «Έναρξη δοκιμής», συμφωνείτε με τα εξής:";
+
 /* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. This string is almost identical with 'Shopping.OptInCard.FirstParagraph.Description', but without Best Buy and Walmart websites, which are not available in many locales. */
 "Shopping.OptInCard.FirstParagraph.AmazonOnly.Description.v122" = "Δείτε πόσο αξιόπιστες είναι οι κριτικές των προϊόντων στο %1$@ πριν αγοράσετε. Ο έλεγχος κριτικών, μια πειραματική δυνατότητα από τo %2$@, ενσωματώνεται στο πρόγραμμα περιήγησης.";
 
