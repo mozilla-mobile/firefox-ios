@@ -13,6 +13,16 @@ import Storage
 //     func didUpdateAddresses(_ addresses: [Address])
 // }
 
+extension Address {
+    var fullName: String {
+        return "\(givenName) \(familyName)"
+    }
+
+    var addressCityStateZipcode: String {
+        return "\(addressLevel2),  \(addressLevel1) \(postalCode)"
+    }
+}
+
 // AddressListViewModel: A view model for managing addresses.
 class AddressListViewModel: ObservableObject {
     // MARK: - Properties

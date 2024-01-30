@@ -34,13 +34,13 @@ struct AddressCellView: View {
                         .foregroundColor(iconPrimary)
                         .offset(y: -14)
                     VStack(alignment: .leading) {
-                        Text(address.givenName + " " + address.familyName)
+                        Text(address.fullName)
                             .font(.body)
                             .foregroundColor(textColor)
                         Text(address.streetAddress)
                             .font(.subheadline)
                             .foregroundColor(customLightGray)
-                        Text(address.addressLevel2 + ", " + address.addressLevel1 + " " + address.postalCode)
+                        Text(address.addressCityStateZipcode)
                             .font(.subheadline)
                             .foregroundColor(customLightGray)
                     }
