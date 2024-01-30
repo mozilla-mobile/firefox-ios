@@ -128,9 +128,10 @@ class FakespotTests: IphoneOnlyTestCase {
         app.webViews["contentView"].firstMatch.images.firstMatch.tap()
         waitUntilPageLoad()
 
-        // Retry loading the page if shopping button is not visible
+        // Retry loading the page if page is not loading
         while app.webViews.staticTexts["Enter the characters you see below"].exists {
-            reachReviewChecker()
+            app.buttons["Reload page"].tap()
+            waitUntilPageLoad()
         }
         // Tap the shopping cart icon
         app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton].tap()
@@ -143,6 +144,10 @@ class FakespotTests: IphoneOnlyTestCase {
 
         // Search for and open a shoe listing
         let searchAmazon = website.textFields["Search Amazon"]
+        if !searchAmazon.exists {
+            navigator.openURL("https://www.amazon.com")
+            waitUntilPageLoad()
+        }
         mozWaitForElementToExist(searchAmazon)
         XCTAssert(searchAmazon.isEnabled)
         searchAmazon.tap()
