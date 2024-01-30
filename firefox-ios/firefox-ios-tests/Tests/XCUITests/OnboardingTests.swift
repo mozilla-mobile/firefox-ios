@@ -53,12 +53,6 @@ class OnboardingTests: BaseTestCase {
 
         // Finish onboarding
         app.buttons["\(rootA11yId)SecondaryButton"].tap()
-        // Workaround to bypass https://github.com/mozilla-mobile/firefox-ios/issues/18370
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(HomeSettings)
-        navigator.goto(SettingsScreen)
-        navigator.goto(NewTabScreen)
-
         let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         mozWaitForElementToExist(topSites)
     }
@@ -67,12 +61,6 @@ class OnboardingTests: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306816
     func testCloseTour() {
         app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"].tap()
-        // Workaround to bypass https://github.com/mozilla-mobile/firefox-ios/issues/18370
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(HomeSettings)
-        navigator.goto(SettingsScreen)
-        navigator.goto(NewTabScreen)
-
         let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         mozWaitForElementToExist(topSites)
     }
