@@ -187,7 +187,7 @@
       "channel": "release",
       "userFacingName": "Social Proof on iOS \"Default Browser\" onboarding screen.",
       "userFacingDescription": "Testing copy on the default browser screen.",
-      "isEnrollmentPaused": false,
+      "isEnrollmentPaused": true,
       "isRollout": false,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
