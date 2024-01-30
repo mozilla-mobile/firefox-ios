@@ -45,6 +45,7 @@ public enum KVOConstants: String {
     case canGoBack
     case canGoForward
     case contentSize
+    case hasOnlySecureContent
 }
 
 public class AppConstants {
