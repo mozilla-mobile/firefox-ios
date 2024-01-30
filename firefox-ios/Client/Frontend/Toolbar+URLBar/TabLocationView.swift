@@ -396,20 +396,20 @@ class TabLocationView: UIView, FeatureFlaggable {
     }
 
     func showTrackingProtectionButton(for url: URL?) {
-            ensureMainThread {
-                let isValidHttpUrlProtocol = self.isValidHttpUrlProtocol(url)
-                if isValidHttpUrlProtocol, self.trackingProtectionButton.isHidden {
-                    self.trackingProtectionButton.transform = UX.trackingProtectionxOffset
-                    self.trackingProtectionButton.alpha = 0
-                    self.trackingProtectionButton.isHidden = false
-                    UIView.animate(withDuration: UX.trackingProtectionAnimationDuration) {
-                        self.trackingProtectionButton.alpha = 1
-                        self.trackingProtectionButton.transform = .identity
-                    }
+        ensureMainThread {
+            let isValidHttpUrlProtocol = self.isValidHttpUrlProtocol(url)
+            if isValidHttpUrlProtocol, self.trackingProtectionButton.isHidden {
+                self.trackingProtectionButton.transform = UX.trackingProtectionxOffset
+                self.trackingProtectionButton.alpha = 0
+                self.trackingProtectionButton.isHidden = false
+                UIView.animate(withDuration: UX.trackingProtectionAnimationDuration) {
+                    self.trackingProtectionButton.alpha = 1
+                    self.trackingProtectionButton.transform = .identity
                 }
-                self.trackingProtectionButton.isHidden = !isValidHttpUrlProtocol
             }
+            self.trackingProtectionButton.isHidden = !isValidHttpUrlProtocol
         }
+    }
 
     private func setTrackingProtection(themeManager: ThemeManager = AppContainer.shared.resolve()) {
         var lockImage: UIImage?
