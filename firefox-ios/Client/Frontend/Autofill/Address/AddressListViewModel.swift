@@ -13,6 +13,7 @@ import Storage
 //     func didUpdateAddresses(_ addresses: [Address])
 // }
 
+// TODO: Refactor the Address extension for global usage (FXIOS-8337)
 extension Address {
     var fullName: String {
         return "\(givenName) \(familyName)"

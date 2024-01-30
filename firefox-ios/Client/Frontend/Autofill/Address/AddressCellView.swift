@@ -28,7 +28,7 @@ struct AddressCellView: View {
         Button(action: onTap) {
             VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 24) {
-                    Image(ImageIdentifiers.locationAddressAutofillIcon)
+                    Image(StandardImageIdentifiers.Large.location)
                         .renderingMode(.template)
                         .padding(.leading, 16)
                         .foregroundColor(iconPrimary)
