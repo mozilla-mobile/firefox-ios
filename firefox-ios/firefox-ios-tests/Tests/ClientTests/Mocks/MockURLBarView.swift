@@ -9,7 +9,7 @@ class MockURLBarView: URLBarViewProtocol {
     var leaveOverlayModeCallCount = 0
     var enterOverlayModeCallCount = 0
 
-    func leaveOverlayMode(didCancel cancel: Bool) {
+    func leaveOverlayMode(reason: URLBarLeaveOverlayModeReason, shouldCancelLoading cancel: Bool) {
         leaveOverlayModeCallCount += 1
         inOverlayMode = false
     }

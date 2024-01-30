@@ -190,7 +190,8 @@ extension JumpBackInDataAdaptorTests {
                                 title: "Mozilla \(index)",
                                 history: [],
                                 lastUsed: UInt64(index),
-                                icon: nil)
+                                icon: nil,
+                                inactive: false)
             remoteTabs.append(tab)
         }
         return remoteTabs

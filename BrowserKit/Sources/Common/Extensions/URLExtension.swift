@@ -240,6 +240,30 @@ extension URL {
 
         return results
     }
+
+    public var origin: String? {
+        guard isWebPage(includeDataURIs: false),
+              let hostPort = self.hostPort,
+              let scheme = scheme
+        else { return nil }
+
+        return "\(scheme)://\(hostPort)"
+    }
+
+    public var hostPort: String? {
+        if let host = self.host {
+            if let port = (self as NSURL).port?.int32Value {
+                return "\(host):\(port)"
+            }
+            return host
+        }
+        return nil
+    }
+
+    public func isWebPage(includeDataURIs: Bool = true) -> Bool {
+        let schemes = includeDataURIs ? ["http", "https", "data"] : ["http", "https"]
+        return scheme.map { schemes.contains($0) } ?? false
+    }
 }
 
 private struct ETLDEntry: CustomStringConvertible {

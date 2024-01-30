@@ -107,12 +107,13 @@ final class TabDisplayViewTests: XCTestCase {
             }
         }
         let isInactiveTabsExpanded = !isPrivateMode && !inactiveTabs.isEmpty
-        let tabState = TabsPanelState(isPrivateMode: isPrivateMode,
+        let tabState = TabsPanelState(windowUUID: .XCTestDefaultUUID,
+                                      isPrivateMode: isPrivateMode,
                                       tabs: tabs,
                                       inactiveTabs: inactiveTabs,
                                       isInactiveTabsExpanded: isInactiveTabsExpanded)
 
-        let subject = TabDisplayView(state: tabState)
+        let subject = TabDisplayView(state: tabState, windowUUID: .XCTestDefaultUUID)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }

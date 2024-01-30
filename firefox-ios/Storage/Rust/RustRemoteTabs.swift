@@ -186,7 +186,8 @@ public extension RemoteTabRecord {
             title: self.title,
             history: history,
             lastUsed: Timestamp(self.lastUsed),
-            icon: icon
+            icon: icon,
+            inactive: self.inactive
         )
     }
 }

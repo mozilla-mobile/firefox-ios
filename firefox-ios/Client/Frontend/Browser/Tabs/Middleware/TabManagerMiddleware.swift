@@ -8,6 +8,7 @@ import TabDataStore
 import Shared
 import Storage
 
+// TODO: [8188] Middlewares are currently handling actions globally. Need updates for multi-window. Forthcoming.
 class TabManagerMiddleware {
     var selectedPanel: TabTrayPanelType = .tabs
     private let profile: Profile
@@ -27,7 +28,7 @@ class TabManagerMiddleware {
             store.dispatch(TabTrayAction.didLoadTabTray(tabTrayModel))
 
         case TabPanelAction.tabPanelDidLoad(let isPrivate):
-            let tabState = self.getTabsDisplayModel(for: isPrivate)
+            let tabState = self.getTabsDisplayModel(for: isPrivate, shouldScrollToTab: true)
             store.dispatch(TabPanelAction.didLoadTabPanel(tabState))
 
         case TabTrayAction.changePanel(let panelType):
@@ -62,6 +63,7 @@ class TabManagerMiddleware {
             self.undoCloseAllInactiveTabs()
 
         case TabPanelAction.closeInactiveTabs(let tabUUID):
+
             self.closeInactiveTab(for: tabUUID, state: state)
 
         case TabPanelAction.undoCloseInactiveTab:
@@ -120,14 +122,16 @@ class TabManagerMiddleware {
     /// Gets initial model for TabDisplay from `TabManager`, including list of tabs and inactive tabs.
     /// - Parameter isPrivateMode: if Private mode is enabled or not
     /// - Returns:  initial model for `TabDisplayPanel`
-    private func getTabsDisplayModel(for isPrivateMode: Bool) -> TabDisplayModel {
+    private func getTabsDisplayModel(for isPrivateMode: Bool,
+                                     shouldScrollToTab: Bool) -> TabDisplayModel {
         let tabs = refreshTabs(for: isPrivateMode)
         let inactiveTabs = refreshInactiveTabs(for: isPrivateMode)
         let tabDisplayModel = TabDisplayModel(isPrivateMode: isPrivateMode,
                                               tabs: tabs,
                                               normalTabsCount: normalTabsCountText,
                                               inactiveTabs: inactiveTabs,
-                                              isInactiveTabsExpanded: false)
+                                              isInactiveTabsExpanded: false,
+                                              shouldScrollToTab: shouldScrollToTab)
         return tabDisplayModel
     }
 
@@ -183,8 +187,8 @@ class TabManagerMiddleware {
         let tab = defaultTabManager.addTab(urlRequest, isPrivate: isPrivate)
         defaultTabManager.selectTab(tab)
 
-        let tabs = self.refreshTabs(for: isPrivate)
-        store.dispatch(TabPanelAction.refreshTab(tabs))
+        let model = getTabsDisplayModel(for: isPrivate, shouldScrollToTab: true)
+        store.dispatch(TabPanelAction.refreshTab(model))
         store.dispatch(TabTrayAction.dismissTabTray)
     }
 
@@ -194,7 +198,8 @@ class TabManagerMiddleware {
     ///   - originIndex: from original position
     ///   - destinationIndex: to destination position
     private func moveTab(state: AppState, from originIndex: Int, to destinationIndex: Int) {
-        guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel) else { return }
+        // TODO: [8188] Tab actions will be updated soon to include UUID in related context object. Forthcoming.
+        guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: nil) else { return }
 
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .drop,
@@ -202,8 +207,8 @@ class TabManagerMiddleware {
                                      value: .tabTray)
         defaultTabManager.moveTab(isPrivate: false, fromIndex: originIndex, toIndex: destinationIndex)
 
-        let tabs = self.refreshTabs(for: tabsState.isPrivateMode)
-        store.dispatch(TabPanelAction.refreshTab(tabs))
+        let model = getTabsDisplayModel(for: tabsState.isPrivateMode, shouldScrollToTab: false)
+        store.dispatch(TabPanelAction.refreshTab(model))
     }
 
     /// Async close single tab. If is the last tab the Tab Tray is dismissed and undo
@@ -223,7 +228,7 @@ class TabManagerMiddleware {
     private func closeTabFromTabPanel(with tabUUID: String) {
         Task {
             let shouldDismiss = await self.closeTab(with: tabUUID)
-            await self.triggerRefresh(with: shouldDismiss)
+            await self.triggerRefresh(shouldScrollToTab: false)
             if shouldDismiss {
                 store.dispatch(TabTrayAction.dismissTabTray)
                 store.dispatch(GeneralBrowserAction.showToast(.singleTab))
@@ -234,35 +239,35 @@ class TabManagerMiddleware {
     }
 
     /// Trigger refreshTabs action after a change in `TabManager`
-    /// - Parameter shouldDismiss: If Tab Tray should dismiss while refresh is done
     @MainActor
-    private func triggerRefresh(with shouldDismiss: Bool) {
+    private func triggerRefresh(shouldScrollToTab: Bool) {
         let isPrivate = defaultTabManager.selectedTab?.isPrivate ?? false
-        let tabs = self.refreshTabs(for: isPrivate)
-
-        store.dispatch(TabPanelAction.refreshTab(tabs))
+        let model = getTabsDisplayModel(for: isPrivate, shouldScrollToTab: shouldScrollToTab)
+        store.dispatch(TabPanelAction.refreshTab(model))
     }
 
     /// Handles undoing the close tab action, gets the backup tab from `TabManager`
     private func undoCloseTab(state: AppState) {
-        guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel),
+        // TODO: [8188] Tab actions will be updated soon to include UUID in related context object. Forthcoming.
+        guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: nil),
               let backupTab = defaultTabManager.backupCloseTab
         else { return }
 
         defaultTabManager.undoCloseTab(tab: backupTab.tab, position: backupTab.restorePosition)
-        let tabs = self.refreshTabs(for: tabsState.isPrivateMode)
-        store.dispatch(TabPanelAction.refreshTab(tabs))
+        let model = getTabsDisplayModel(for: tabsState.isPrivateMode, shouldScrollToTab: false)
+        store.dispatch(TabPanelAction.refreshTab(model))
     }
 
     private func closeAllTabs(state: AppState) {
-        guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel) else { return }
+        // TODO: [8188] Tab actions will be updated soon to include UUID in related context object. Forthcoming.
+        guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: nil) else { return }
         Task {
             let count = self.defaultTabManager.tabs.count
             await defaultTabManager.removeAllTabs(isPrivateMode: tabsState.isPrivateMode)
 
             ensureMainThread { [self] in
-                let tabs = self.refreshTabs(for: tabsState.isPrivateMode)
-                store.dispatch(TabPanelAction.refreshTab(tabs))
+                let model = getTabsDisplayModel(for: tabsState.isPrivateMode, shouldScrollToTab: false)
+                store.dispatch(TabPanelAction.refreshTab(model))
                 store.dispatch(TabTrayAction.dismissTabTray)
                 store.dispatch(GeneralBrowserAction.showToast(.allTabs(count: count)))
             }
@@ -282,7 +287,8 @@ class TabManagerMiddleware {
     /// Close all inactive tabs removing them from the tabs array on `TabManager`.
     /// Makes a backup of tabs to be deleted in case undo option is selected
     private func closeAllInactiveTabs(state: AppState) {
-        guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel) else { return }
+        // TODO: [8188] Tab actions will be updated soon to include UUID in related context object. Forthcoming.
+        guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: nil) else { return }
         Task {
             await defaultTabManager.removeAllInactiveTabs()
             store.dispatch(TabPanelAction.refreshInactiveTabs([InactiveTabsModel]()))
@@ -300,7 +306,8 @@ class TabManagerMiddleware {
     }
 
     private func closeInactiveTab(for tabUUID: String, state: AppState) {
-        guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel) else { return }
+        // TODO: [8188] Tab actions will be updated soon to include UUID in related context object. Forthcoming.
+        guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: nil) else { return }
         Task {
             if let tabToClose = defaultTabManager.getTabForUUID(uuid: tabUUID) {
                 let index = tabsState.inactiveTabs.firstIndex { $0.tabUUID == tabUUID }
@@ -324,8 +331,8 @@ class TabManagerMiddleware {
 
     private func didTapLearnMoreAboutPrivate(with urlRequest: URLRequest) {
         addNewTab(with: urlRequest, isPrivate: true)
-        let tabs = self.refreshTabs(for: true)
-        store.dispatch(TabPanelAction.refreshTab(tabs))
+        let model = getTabsDisplayModel(for: true, shouldScrollToTab: false)
+        store.dispatch(TabPanelAction.refreshTab(model))
         store.dispatch(TabTrayAction.dismissTabTray)
     }
 
@@ -413,7 +420,7 @@ class TabManagerMiddleware {
     private func changePanel(_ panel: TabTrayPanelType) {
         self.trackPanelChange(panel)
         let isPrivate = panel == TabTrayPanelType.privateTabs
-        let tabState = self.getTabsDisplayModel(for: isPrivate)
+        let tabState = self.getTabsDisplayModel(for: isPrivate, shouldScrollToTab: false)
         if panel != .syncedTabs {
             store.dispatch(TabPanelAction.didLoadTabPanel(tabState))
         }

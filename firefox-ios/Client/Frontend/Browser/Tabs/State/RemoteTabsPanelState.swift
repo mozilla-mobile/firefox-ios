@@ -50,30 +50,37 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
     let allowsRefresh: Bool
     let clientAndTabs: [ClientAndTabs]
     let showingEmptyState: RemoteTabsPanelEmptyStateReason?// If showing empty (or error) state
+    let windowUUID: WindowUUID
 
-    init(_ appState: AppState) {
-        guard let panelState = store.state.screenState(RemoteTabsPanelState.self, for: .remoteTabsPanel) else {
-            self.init()
+    init(appState: AppState, uuid: WindowUUID) {
+        guard let panelState = store.state.screenState(RemoteTabsPanelState.self,
+                                                       for: .remoteTabsPanel,
+                                                       window: uuid) else {
+            self.init(windowUUID: uuid)
             return
         }
 
-        self.init(refreshState: panelState.refreshState,
+        self.init(windowUUID: panelState.windowUUID,
+                  refreshState: panelState.refreshState,
                   allowsRefresh: panelState.allowsRefresh,
                   clientAndTabs: panelState.clientAndTabs,
                   showingEmptyState: panelState.showingEmptyState)
     }
 
-    init() {
-        self.init(refreshState: .idle,
+    init(windowUUID: WindowUUID) {
+        self.init(windowUUID: windowUUID,
+                  refreshState: .idle,
                   allowsRefresh: false,
                   clientAndTabs: [],
                   showingEmptyState: .noTabs)
     }
 
-    init(refreshState: RemoteTabsPanelRefreshState,
+    init(windowUUID: WindowUUID,
+         refreshState: RemoteTabsPanelRefreshState,
          allowsRefresh: Bool,
          clientAndTabs: [ClientAndTabs],
          showingEmptyState: RemoteTabsPanelEmptyStateReason?) {
+        self.windowUUID = windowUUID
         self.refreshState = refreshState
         self.allowsRefresh = allowsRefresh
         self.clientAndTabs = clientAndTabs
@@ -81,9 +88,13 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
     }
 
     static let reducer: Reducer<Self> = { state, action in
+        // Only process actions for the current window
+        guard action.windowUUID == nil || action.windowUUID == state.windowUUID else { return state }
+
         switch action {
         case RemoteTabsPanelAction.refreshDidBegin:
-            let newState = RemoteTabsPanelState(refreshState: .refreshing,
+            let newState = RemoteTabsPanelState(windowUUID: state.windowUUID,
+                                                refreshState: .refreshing,
                                                 allowsRefresh: state.allowsRefresh,
                                                 clientAndTabs: state.clientAndTabs,
                                                 showingEmptyState: state.showingEmptyState)
@@ -91,13 +102,15 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
         case RemoteTabsPanelAction.refreshDidFail(let reason):
             // Refresh failed. Show error empty state.
             let allowsRefresh = reason.allowsRefresh
-            let newState = RemoteTabsPanelState(refreshState: .idle,
+            let newState = RemoteTabsPanelState(windowUUID: state.windowUUID,
+                                                refreshState: .idle,
                                                 allowsRefresh: allowsRefresh,
                                                 clientAndTabs: state.clientAndTabs,
                                                 showingEmptyState: reason)
             return newState
         case RemoteTabsPanelAction.refreshDidSucceed(let newClientAndTabs):
-            let newState = RemoteTabsPanelState(refreshState: .idle,
+            let newState = RemoteTabsPanelState(windowUUID: state.windowUUID,
+                                                refreshState: .idle,
                                                 allowsRefresh: true,
                                                 clientAndTabs: newClientAndTabs,
                                                 showingEmptyState: nil)

@@ -154,37 +154,38 @@
     },
     {
       "target" : {
-        "containerPath" : "container:BrowserKit",
+        "containerPath" : "container:..\/BrowserKit",
         "identifier" : "CommonTests",
         "name" : "CommonTests"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:BrowserKit",
+        "containerPath" : "container:..\/BrowserKit",
         "identifier" : "SiteImageViewTests",
         "name" : "SiteImageViewTests"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:BrowserKit",
+        "containerPath" : "container:..\/BrowserKit",
+        "identifier" : "WebEngineTests",
+        "name" : "WebEngineTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/BrowserKit",
         "identifier" : "TabDataStoreTests",
         "name" : "TabDataStoreTests"
       }
     },
     {
+      "enabled" : false,
       "target" : {
-        "containerPath" : "container:BrowserKit",
+        "containerPath" : "container:..\/BrowserKit",
         "identifier" : "ReduxTests",
         "name" : "ReduxTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:BrowserKit",
-        "identifier" : "WebEngineTests",
-        "name" : "WebEngineTests"
       }
     }
   ],

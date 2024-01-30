@@ -33,6 +33,7 @@
         "DragAndDropTests",
         "EngagementNotificationTests",
         "ExperimentIntegrationTests",
+        "FakespotTests\/testAcceptTheRejectedOptInNotification()",
         "FakespotTests\/testFakespotAvailable()",
         "FakespotTests\/testPriceTagIconAvailableOnlyOnDetailPage()",
         "FakespotTests\/testReviewQualityCheckBottomSheetUI()",

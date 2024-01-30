@@ -8,6 +8,7 @@ import Common
 import Shared
 import Redux
 
+// TODO: [8188] Middlewares are currently handling actions globally. Need updates for multi-window. Forthcoming.
 class RemoteTabsPanelMiddleware {
     private let profile: Profile
     var notificationCenter: NotificationProtocol

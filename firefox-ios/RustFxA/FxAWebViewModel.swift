@@ -281,10 +281,6 @@ extension FxAWebViewModel {
             // or if the onboarding flow is missing the notifications card
             guard self.shouldAskForNotificationPermission else { return }
 
-            MZKeychainWrapper.sharedClientAppContainerKeychain.removeObject(
-                forKey: KeychainKey.apnsToken,
-                withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock
-            )
             NotificationManager().requestAuthorization { granted, error in
                 guard error == nil else { return }
                 if granted {
