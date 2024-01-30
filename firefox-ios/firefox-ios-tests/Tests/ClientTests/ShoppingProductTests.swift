@@ -376,7 +376,7 @@ final class ThrowingFakeSpotClient: FakespotClientType {
         eventName: Client.FakespotAdsEvent,
         eventSource: String,
         aidvs: [String]
-    ) async throws -> Client.AdEventsResponse {
+    ) async throws -> Client.AdEventsResponse? {
         reportAdEventCallCount += 1
         throw error
     }
@@ -439,7 +439,7 @@ final class TestFakespotClient: FakespotClientType {
         eventName: Client.FakespotAdsEvent,
         eventSource: String,
         aidvs: [String]
-    ) async throws -> Client.AdEventsResponse {
+    ) async throws -> Client.AdEventsResponse? {
         self.reportAdEventCalled = true
         self.reportAdEventCallCount += 1
         self.lastEventName = eventName
