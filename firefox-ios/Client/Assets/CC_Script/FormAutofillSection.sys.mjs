@@ -174,28 +174,26 @@ export class FormAutofillSection {
       this._cacheValue.matchingSelectOption = new WeakMap();
     }
 
-    for (let fieldName in profile) {
-      let fieldDetail = this.getFieldDetailByName(fieldName);
-      if (!fieldDetail) {
-        continue;
-      }
+    for (const fieldName in profile) {
+      const fieldDetail = this.getFieldDetailByName(fieldName);
+      const element = fieldDetail?.element;
 
-      let element = fieldDetail.element;
       if (!HTMLSelectElement.isInstance(element)) {
         continue;
       }
 
-      let cache = this._cacheValue.matchingSelectOption.get(element) || {};
-      let value = profile[fieldName];
+      const cache = this._cacheValue.matchingSelectOption.get(element) || {};
+      const value = profile[fieldName];
       if (cache[value] && cache[value].deref()) {
         continue;
       }
 
-      let option = FormAutofillUtils.findSelectOption(
+      const option = FormAutofillUtils.findSelectOption(
         element,
         profile,
         fieldName
       );
+
       if (option) {
         cache[value] = new WeakRef(option);
         this._cacheValue.matchingSelectOption.set(element, cache);
@@ -204,9 +202,14 @@ export class FormAutofillSection {
           delete cache[value];
           this._cacheValue.matchingSelectOption.set(element, cache);
         }
-        // Delete the field so the phishing hint won't treat it as a "also fill"
-        // field.
-        delete profile[fieldName];
+        // Skip removing cc-type since this is needed for displaying the icon for credit card network
+        // TODO(Bug 1874339): Cleanup transformation and normalization of data to not remove any
+        // fields and be more consistent
+        if (!["cc-type"].includes(fieldName)) {
+          // Delete the field so the phishing hint won't treat it as a "also fill"
+          // field.
+          delete profile[fieldName];
+        }
       }
     }
   }
@@ -323,6 +326,7 @@ export class FormAutofillSection {
       throw new Error("No fieldDetail for the focused input.");
     }
 
+    this.getAdaptedProfiles([profile]);
     if (!(await this.prepareFillingProfile(profile))) {
       this.log.debug("profile cannot be filled");
       return false;
@@ -1283,15 +1287,6 @@ export class FormAutofillCreditCardSection extends FormAutofillSection {
 
       profile["cc-number"] = decrypted;
     }
-    return true;
-  }
-
-  async autofillFields(profile) {
-    this.getAdaptedProfiles([profile]);
-    if (!(await super.autofillFields(profile))) {
-      return false;
-    }
-
     return true;
   }
 }

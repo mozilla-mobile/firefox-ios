@@ -60,7 +60,8 @@
       "referenceBranch": "treatment-a",
       "featureValidationOptOut": false,
       "localizations": null,
-      "locales": null
+      "locales": null,
+      "publishedDate": null
     },
     {
       "schemaVersion": "1.12.0",
@@ -172,7 +173,8 @@
       "referenceBranch": "control",
       "featureValidationOptOut": false,
       "localizations": null,
-      "locales": null
+      "locales": null,
+      "publishedDate": null
     },
     {
       "schemaVersion": "1.12.0",
@@ -276,12 +278,13 @@
       "startDate": "2024-01-09",
       "enrollmentEndDate": null,
       "endDate": null,
-      "proposedDuration": 28,
-      "proposedEnrollment": 7,
+      "proposedDuration": 42,
+      "proposedEnrollment": 14,
       "referenceBranch": "control",
       "featureValidationOptOut": false,
       "localizations": null,
-      "locales": null
+      "locales": null,
+      "publishedDate": null
     }
   ]
 }

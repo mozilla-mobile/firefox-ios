@@ -124,7 +124,8 @@ private extension LegacyRemoteTabsPanelTests {
                           title: "Mozilla",
                           history: [],
                           lastUsed: 1,
-                          icon: nil)]
+                          icon: nil,
+                          inactive: false)]
     }
 
     func panelRefreshWithExpectation(panel: LegacyRemoteTabsPanel, completion: @escaping () -> Void) {

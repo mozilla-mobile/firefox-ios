@@ -66,6 +66,33 @@ class FakespotTests: IphoneOnlyTestCase {
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton])
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358924
+    // Smoketest
+    func testAcceptTheRejectedOptInNotification() {
+        if skipPlatform { return }
+        reachReviewChecker()
+        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
+        XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle].label, "Review Checker")
+
+        // Reject the Opt-in notification
+        app.otherElements.buttons[AccessibilityIdentifiers.Shopping.sheetCloseButton].tap()
+        // The sheet is dismissed and the user remains opted-out
+        mozWaitForElementToNotExist(app.otherElements[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton])
+        // Tap again the Price tag icon
+        app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton].tap()
+        // The contextual onboarding screen is displayed
+        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
+        XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle].label, "Review Checker")
+        // Tap the "Yes, Try it" button
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton])
+        app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton].tap()
+        // The sheet is populated with product feedback data
+        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
+        XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle].label, "Review Checker")
+        XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Shopping.sheetCloseButton].label, "Close Review Checker")
+    }
+
     private func validateHighlightsSection() {
         if app.staticTexts[AccessibilityIdentifiers.Shopping.HighlightsCard.title].exists {
             let highlights = AccessibilityIdentifiers.Shopping.HighlightsCard.self
@@ -100,11 +127,11 @@ class FakespotTests: IphoneOnlyTestCase {
         loadWebsiteAndPerformSearch()
         app.webViews["contentView"].firstMatch.images.firstMatch.tap()
         waitUntilPageLoad()
-        let shoppingButton = app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton]
 
-        // Retry loading the page if shopping button is not visible
-        while !shoppingButton.exists {
-            loadWebsiteAndPerformSearch()
+        // Retry loading the page if page is not loading
+        while app.webViews.staticTexts["Enter the characters you see below"].exists {
+            app.buttons["Reload page"].tap()
+            waitUntilPageLoad()
         }
         // Tap the shopping cart icon
         app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton].tap()
@@ -113,10 +140,14 @@ class FakespotTests: IphoneOnlyTestCase {
     private func loadWebsiteAndPerformSearch() {
         navigator.openURL("https://www.amazon.com")
         waitUntilPageLoad()
+        let website = app.webViews["contentView"].firstMatch
 
         // Search for and open a shoe listing
-        let website = app.webViews["contentView"].firstMatch
         let searchAmazon = website.textFields["Search Amazon"]
+        if !searchAmazon.exists {
+            navigator.openURL("https://www.amazon.com")
+            waitUntilPageLoad()
+        }
         mozWaitForElementToExist(searchAmazon)
         XCTAssert(searchAmazon.isEnabled)
         searchAmazon.tap()
@@ -126,6 +157,10 @@ class FakespotTests: IphoneOnlyTestCase {
         searchAmazon.typeText("Shoe")
         website.buttons["Go"].tap()
         waitUntilPageLoad()
+        while website.links.elementContainingText("Sorry! Something went wrong on our end.").exists {
+            app.buttons["Reload page"].tap()
+            waitUntilPageLoad()
+        }
     }
 
     private func loadWebsiteInPrivateMode() {

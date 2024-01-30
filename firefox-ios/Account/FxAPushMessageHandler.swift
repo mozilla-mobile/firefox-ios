@@ -10,11 +10,8 @@ import Common
 let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
 
 /// This class provides handles push messages from FxA.
-/// For reference, the [message schema][0] and [Android implementation][1] are both useful resources.
-/// [0]: https://github.com/mozilla/fxa-auth-server/blob/master/docs/pushpayloads.schema.json#L26
-/// [1]: https://dxr.mozilla.org/mozilla-central/source/mobile/android/services/src/main/java/org/mozilla/gecko/fxa/FxAccountPushHandler.java
-/// The main entry points are `handle` methods, to accept the raw APNS `userInfo` and then to process
-/// the resulting JSON.
+/// The main entry point is the `handleDecryptedMessage` method to accept the decrypted push message and parse it into a
+/// `PushMessage`
 class FxAPushMessageHandler {
     let profile: Profile
     private let logger: Logger

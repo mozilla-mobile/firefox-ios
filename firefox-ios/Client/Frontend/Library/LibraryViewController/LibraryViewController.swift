@@ -29,6 +29,7 @@ class LibraryViewController: UIViewController, Themeable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var logger: Logger
+    let windowUUID: WindowUUID
 
     // Views
     private var controllerContainerView: UIView = .build { view in }
@@ -82,6 +83,7 @@ class LibraryViewController: UIViewController, Themeable {
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         self.logger = logger
+        self.windowUUID = tabManager.windowUUID
 
         super.init(nibName: nil, bundle: nil)
     }

@@ -28,6 +28,31 @@ const sendMessage =
       payload: transformer(payload),
     });
 
+// This should be handled by CreditCardRecord.normalizeFields
+// TODO(issam, FXCM-810): Revisit data representation for address and credit card as this has caused a lot of bugs
+// for now we explicitely define the data shape we expect and defaults.
+const expectedCreditCardPayloadShape = {
+  "cc-name": "",
+  "cc-exp-month": "",
+  "cc-exp-year": "",
+};
+
+const normalizePayload = (payload) => {
+  const items = Array.isArray(payload) ? payload : [payload];
+  const normalizedPaylod = {
+    ...expectedCreditCardPayloadShape,
+    ...(items?.[0] ?? {}),
+  };
+
+  return Object.entries(normalizedPaylod).reduce(
+    (acc, [key, val]) => ({
+      ...acc,
+      [key]: String(val),
+    }),
+    {}
+  );
+};
+
 const creditCardSendMessage = sendMessage(
   window.webkit.messageHandlers.creditCardFormMessageHandler
 );
@@ -39,17 +64,12 @@ const addressSendMessage = sendMessage(
 // Note: We expect all values to be string based
 const sendCaptureCreditCardFormMessage = creditCardSendMessage(
   messageTypes.CAPTURE_CREDIT_CARD_FORM,
-  (payload) => {
-    const modifiedPayload = Object.entries(payload?.[0]).reduce((acc, [key, val]) => ({
-      ...acc,
-      [key]: String(val)
-    }), {});
-    return modifiedPayload;
-  }
+  normalizePayload
 );
 
 const sendFillCreditCardFormMessage = creditCardSendMessage(
-  messageTypes.FILL_CREDIT_CARD_FORM
+  messageTypes.FILL_CREDIT_CARD_FORM,
+  normalizePayload
 );
 
 const sendFillAddressFormMessage = addressSendMessage(

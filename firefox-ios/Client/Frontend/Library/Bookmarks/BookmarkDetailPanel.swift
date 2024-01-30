@@ -97,12 +97,14 @@ class BookmarkDetailPanel: SiteTableViewController {
     // MARK: - Initializers
     convenience init(
         profile: Profile,
+        windowUUID: WindowUUID,
         bookmarkNode: FxBookmarkNode,
         parentBookmarkFolder: FxBookmarkNode,
         presentedFromToast fromToast: Bool = false
     ) {
         let bookmarkItemData = bookmarkNode as? BookmarkItemData
         self.init(profile: profile,
+                  windowUUID: windowUUID,
                   bookmarkNodeGUID: bookmarkNode.guid,
                   bookmarkNodeType: bookmarkNode.type,
                   parentBookmarkFolder: parentBookmarkFolder,
@@ -125,12 +127,14 @@ class BookmarkDetailPanel: SiteTableViewController {
 
     convenience init(
         profile: Profile,
+        windowUUID: WindowUUID,
         withNewBookmarkNodeType bookmarkNodeType: BookmarkNodeType,
         parentBookmarkFolder: FxBookmarkNode,
         updatePanelState: ((LibraryPanelSubState) -> Void)? = nil
     ) {
         self.init(
             profile: profile,
+            windowUUID: windowUUID,
             bookmarkNodeGUID: nil,
             bookmarkNodeType: bookmarkNodeType,
             parentBookmarkFolder: parentBookmarkFolder
@@ -151,6 +155,7 @@ class BookmarkDetailPanel: SiteTableViewController {
 
     private init(
         profile: Profile,
+        windowUUID: WindowUUID,
         bookmarkNodeGUID: GUID?,
         bookmarkNodeType: BookmarkNodeType,
         parentBookmarkFolder: FxBookmarkNode,
@@ -163,7 +168,7 @@ class BookmarkDetailPanel: SiteTableViewController {
         self.isPresentedFromToast = fromToast
         self.bookmarkItemURL = bookmarkItemURL
 
-        super.init(profile: profile)
+        super.init(profile: profile, windowUUID: windowUUID)
 
         self.tableView.accessibilityIdentifier = "Bookmark Detail"
         self.tableView.keyboardDismissMode = .onDrag

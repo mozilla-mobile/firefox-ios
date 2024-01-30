@@ -12,7 +12,9 @@ struct AppState: StateType {
         AppState(activeScreens: ActiveScreensState.reducer(state.activeScreens, action))
     }
 
-    func screenState<S: ScreenState>(_ s: S.Type, for screen: AppScreen) -> S? {
+    func screenState<S: ScreenState>(_ s: S.Type,
+                                     for screen: AppScreen,
+                                     window: WindowUUID?) -> S? {
         return activeScreens.screens
             .compactMap {
                 switch ($0, screen) {
@@ -24,14 +26,28 @@ struct AppState: StateType {
                 case (.browserViewController(let state), .browserViewController): return state as? S
                 default: return nil
                 }
-            }
-            .first
+            }.first(where: {
+                // Most screens should be filtered based on the specific identifying UUID.
+                // This is necessary to allow us to have more than 1 of the same type of
+                // screen in Redux at the same time. If no UUID is provided we return `first`.
+                guard let expectedUUID = window else { return true }
+                return $0.windowUUID == expectedUUID
+            })
     }
 }
 
 extension AppState {
     init() {
         activeScreens = ActiveScreensState()
+    }
+}
+
+// Client base ActionContext class.
+class ActionContext {
+    let windowUUID: WindowUUID
+
+    init(windowUUID: WindowUUID) {
+        self.windowUUID = windowUUID
     }
 }
 

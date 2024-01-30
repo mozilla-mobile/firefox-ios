@@ -4,6 +4,7 @@
 
 import { XPCOMUtils } from "resource://gre/modules/XPCOMUtils.sys.mjs";
 import { Region } from "resource://gre/modules/Region.sys.mjs";
+import { AddressMetaDataLoader } from "resource://gre/modules/shared/AddressMetaDataLoader.sys.mjs";
 
 const AUTOFILL_ADDRESSES_AVAILABLE_PREF =
   "extensions.formautofill.addresses.supported";
@@ -17,8 +18,8 @@ const ENABLED_AUTOFILL_ADDRESSES_PREF =
   "extensions.formautofill.addresses.enabled";
 const ENABLED_AUTOFILL_ADDRESSES_CAPTURE_PREF =
   "extensions.formautofill.addresses.capture.enabled";
-const ENABLED_AUTOFILL_ADDRESSES_CAPTURE_V2_PREF =
-  "extensions.formautofill.addresses.capture.v2.enabled";
+const ENABLED_AUTOFILL_ADDRESSES_CAPTURE_REQUIRED_FIELDS_PREF =
+  "extensions.formautofill.addresses.capture.requiredFields";
 const ENABLED_AUTOFILL_ADDRESSES_SUPPORTED_COUNTRIES_PREF =
   "extensions.formautofill.addresses.supportedCountries";
 const ENABLED_AUTOFILL_CREDITCARDS_PREF =
@@ -40,7 +41,6 @@ const ENABLED_AUTOFILL_CAPTURE_ON_PAGE_NAVIGATION =
 export const FormAutofill = {
   ENABLED_AUTOFILL_ADDRESSES_PREF,
   ENABLED_AUTOFILL_ADDRESSES_CAPTURE_PREF,
-  ENABLED_AUTOFILL_ADDRESSES_CAPTURE_V2_PREF,
   ENABLED_AUTOFILL_CAPTURE_ON_FORM_REMOVAL,
   ENABLED_AUTOFILL_CAPTURE_ON_PAGE_NAVIGATION,
   ENABLED_AUTOFILL_CREDITCARDS_PREF,
@@ -210,11 +210,6 @@ XPCOMUtils.defineLazyPreferenceGetter(
 );
 XPCOMUtils.defineLazyPreferenceGetter(
   FormAutofill,
-  "isAutofillAddressesCaptureV2Enabled",
-  ENABLED_AUTOFILL_ADDRESSES_CAPTURE_V2_PREF
-);
-XPCOMUtils.defineLazyPreferenceGetter(
-  FormAutofill,
   "_isAutofillCreditCardsAvailable",
   AUTOFILL_CREDITCARDS_AVAILABLE_PREF
 );
@@ -268,18 +263,15 @@ XPCOMUtils.defineLazyPreferenceGetter(
   "captureOnPageNavigation",
   ENABLED_AUTOFILL_CAPTURE_ON_PAGE_NAVIGATION
 );
+XPCOMUtils.defineLazyPreferenceGetter(
+  FormAutofill,
+  "addressCaptureRequiredFields",
+  ENABLED_AUTOFILL_ADDRESSES_CAPTURE_REQUIRED_FIELDS_PREF,
+  null,
+  null,
+  val => val?.split(",").filter(v => !!v)
+);
 
-// XXX: This should be invalidated on intl:app-locales-changed.
-ChromeUtils.defineLazyGetter(FormAutofill, "countries", () => {
-  let availableRegionCodes =
-    Services.intl.getAvailableLocaleDisplayNames("region");
-  let displayNames = Services.intl.getRegionDisplayNames(
-    undefined,
-    availableRegionCodes
-  );
-  let result = new Map();
-  for (let i = 0; i < availableRegionCodes.length; i++) {
-    result.set(availableRegionCodes[i].toUpperCase(), displayNames[i]);
-  }
-  return result;
-});
+ChromeUtils.defineLazyGetter(FormAutofill, "countries", () =>
+  AddressMetaDataLoader.getCountries()
+);

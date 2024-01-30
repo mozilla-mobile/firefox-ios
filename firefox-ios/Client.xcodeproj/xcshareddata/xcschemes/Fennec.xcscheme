@@ -437,6 +437,66 @@
                ReferencedContainer = "container:BrowserKit">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "CommonTests"
+               BuildableName = "CommonTests"
+               BlueprintName = "CommonTests"
+               ReferencedContainer = "container:../BrowserKit">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "SiteImageViewTests"
+               BuildableName = "SiteImageViewTests"
+               BlueprintName = "SiteImageViewTests"
+               ReferencedContainer = "container:../BrowserKit">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "WebEngineTests"
+               BuildableName = "WebEngineTests"
+               BlueprintName = "WebEngineTests"
+               ReferencedContainer = "container:../BrowserKit">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "TabDataStoreTests"
+               BuildableName = "TabDataStoreTests"
+               BlueprintName = "TabDataStoreTests"
+               ReferencedContainer = "container:../BrowserKit">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "ReduxTests"
+               BuildableName = "ReduxTests"
+               BlueprintName = "ReduxTests"
+               ReferencedContainer = "container:../BrowserKit">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "ReduxTests"
+               BuildableName = "ReduxTests"
+               BlueprintName = "ReduxTests"
+               ReferencedContainer = "container:../BrowserKit">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

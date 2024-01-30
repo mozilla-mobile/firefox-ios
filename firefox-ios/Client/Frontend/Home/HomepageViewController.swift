@@ -348,7 +348,7 @@ class HomepageViewController:
     @objc
     private func dismissKeyboard() {
         if currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false {
-            overlayManager.finishEditing(shouldCancelLoading: false)
+            overlayManager.cancelEditing(shouldCancelLoading: false)
         }
     }
 

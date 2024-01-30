@@ -17,7 +17,7 @@ class AppSettingsTableViewControllerTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
         self.profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
-        self.tabManager = TabManagerImplementation(profile: profile)
+        self.tabManager = TabManagerImplementation(profile: profile, uuid: .XCTestDefaultUUID)
         self.appAuthenticator = MockAppAuthenticator()
         self.delegate = MockSettingsFlowDelegate()
         self.applicationHelper = MockApplicationHelper()

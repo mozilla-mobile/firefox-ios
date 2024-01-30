@@ -24,6 +24,15 @@ private struct URLBarViewUX {
     static let urlBarLineHeight = 0.5
 }
 
+/// Describes the reason for leaving overlay mode.
+enum URLBarLeaveOverlayModeReason {
+    /// The user committed their edits.
+    case finished
+
+    /// The user aborted their edits.
+    case cancelled
+}
+
 protocol URLBarDelegate: AnyObject {
     func urlBarDidPressTabs(_ urlBar: URLBarView)
     func urlBarDidPressReaderMode(_ urlBar: URLBarView)
@@ -34,7 +43,7 @@ protocol URLBarDelegate: AnyObject {
     func urlBarDidPressStop(_ urlBar: URLBarView)
     func urlBarDidPressReload(_ urlBar: URLBarView)
     func urlBarDidEnterOverlayMode(_ urlBar: URLBarView)
-    func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView)
+    func urlBar(_ urlBar: URLBarView, didLeaveOverlayModeForReason: URLBarLeaveOverlayModeReason)
     func urlBarDidLongPressLocation(_ urlBar: URLBarView)
     func urlBarDidPressQRButton(_ urlBar: URLBarView)
     func urlBarDidTapShield(_ urlBar: URLBarView)
@@ -53,13 +62,7 @@ protocol URLBarDelegate: AnyObject {
 protocol URLBarViewProtocol {
     var inOverlayMode: Bool { get }
     func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool)
-    func leaveOverlayMode(didCancel cancel: Bool)
-}
-
-extension URLBarViewProtocol {
-    func leaveOverlayMode(didCancel cancel: Bool = false) {
-        leaveOverlayMode(didCancel: cancel)
-    }
+    func leaveOverlayMode(reason: URLBarLeaveOverlayModeReason, shouldCancelLoading cancel: Bool)
 }
 
 class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchangeable,
@@ -564,10 +567,10 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         }
     }
 
-    func leaveOverlayMode(didCancel cancel: Bool) {
+    func leaveOverlayMode(reason: URLBarLeaveOverlayModeReason, shouldCancelLoading cancel: Bool) {
         locationTextField?.resignFirstResponder()
         animateToOverlayState(overlayMode: false, didCancel: cancel)
-        delegate?.urlBarDidLeaveOverlayMode(self)
+        delegate?.urlBar(self, didLeaveOverlayModeForReason: reason)
     }
 
     func prepareOverlayAnimation() {
@@ -668,7 +671,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
 
     @objc
     private func didClickCancel() {
-        leaveOverlayMode(didCancel: true)
+        leaveOverlayMode(reason: .cancelled, shouldCancelLoading: true)
     }
 
     @objc
@@ -852,7 +855,7 @@ extension URLBarView: AutocompleteTextFieldDelegate {
     }
 
     func autocompleteTextFieldDidCancel(_ autocompleteTextField: AutocompleteTextField) {
-        leaveOverlayMode(didCancel: true)
+        leaveOverlayMode(reason: .cancelled, shouldCancelLoading: true)
     }
 
     func autocompletePasteAndGo(_ autocompleteTextField: AutocompleteTextField) {

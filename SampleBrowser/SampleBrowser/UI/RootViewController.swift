@@ -143,6 +143,10 @@ class RootViewController: UIViewController,
         toolbar.updateBackForwardButtons(canGoBack: canGoBack, canGoForward: canGoForward)
     }
 
+    func onURLChange(url: String) {
+        searchBar.setSearchBarText(url)
+    }
+
     // MARK: - SearchBarDelegate
 
     func searchSuggestions(searchTerm: String) {

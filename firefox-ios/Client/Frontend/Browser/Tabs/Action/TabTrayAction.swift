@@ -12,4 +12,11 @@ enum TabTrayAction: Action {
     case didLoadTabTray(TabTrayModel)
     case dismissTabTray
     case firefoxAccountChanged(Bool)
+
+    var windowUUID: UUID? {
+        // TODO: [8188] Update to be non-optional and return windowUUID. Forthcoming.
+        switch self {
+        default: return nil
+        }
+    }
 }

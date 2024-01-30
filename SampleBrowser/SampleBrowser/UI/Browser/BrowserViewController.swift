@@ -6,6 +6,7 @@ import UIKit
 import WebEngine
 
 protocol NavigationDelegate: AnyObject {
+    func onURLChange(url: String)
     func onLoadingStateChange(loading: Bool)
     func onNavigationStateChange(canGoBack: Bool, canGoForward: Bool)
 }
@@ -118,7 +119,11 @@ class BrowserViewController: UIViewController, EngineSessionDelegate {
     }
 
     func onTitleChange(title: String) {
-        // Handle onTitle and onURL changes with FXIOS-8179
+        // If the Client needs to save a title like saving it inside some tab storage then it would do it here
+    }
+
+    func onLocationChange(url: String) {
+        navigationDelegate?.onURLChange(url: url)
     }
 
     func onLoadingStateChange(loading: Bool) {
