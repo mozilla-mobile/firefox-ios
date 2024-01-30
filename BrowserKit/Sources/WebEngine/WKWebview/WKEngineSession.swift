@@ -42,9 +42,6 @@ class WKEngineSession: NSObject,
         webView.navigationDelegate = self
         webView.delegate = self
         userScriptManager.injectUserScriptsIntoWebView(webView)
-
-        // TODO: FXIOS-7901 #17646 Handle WKEngineSession tabDelegate
-//        tabDelegate?.tab(self, didCreateWebView: webView)
     }
 
     // TODO: FXIOS-7903 #17648 no return from this load(url:), we need a way to recordNavigationInTab
@@ -127,9 +124,6 @@ class WKEngineSession: NSObject,
         contentScriptManager.uninstall(session: self)
         webView.removeAllUserScripts()
         removeObservers()
-
-        // TODO: FXIOS-7901 #17646 Handle WKEngineSession tabDelegate
-//        tabDelegate?.tab(self, willDeleteWebView: webView)
 
         webView.navigationDelegate = nil
         webView.uiDelegate = nil
@@ -311,6 +305,7 @@ class WKEngineSession: NSObject,
                  decidePolicyFor navigationResponse: WKNavigationResponse,
                  decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
         // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
+        decisionHandler(.allow)
     }
 
     func webView(_ webView: WKWebView,
@@ -318,6 +313,7 @@ class WKEngineSession: NSObject,
                  preferences: WKWebpagePreferences,
                  decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> Void) {
         // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
+        decisionHandler(.allow, preferences)
     }
 
     func webView(_ webView: WKWebView,
@@ -329,6 +325,7 @@ class WKEngineSession: NSObject,
                  didReceive challenge: URLAuthenticationChallenge,
                  completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         // TODO: FXIOS-8276 - Handle didReceive challenge: URLAuthenticationChallenge (epic part 3)
+        completionHandler(.performDefaultHandling, nil)
     }
 
     // MARK: - WKEngineWebViewDelegate

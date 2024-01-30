@@ -41,7 +41,8 @@ class AppLaunchUtil {
 
         KeyboardHelper.defaultHelper.startObserving()
         LegacyDynamicFontHelper.defaultHelper.startObserving()
-        MenuHelper.defaultHelper.setItems()
+
+        setMenuItems()
 
         // Initialize conversion value by specifying fineValue and coarseValue.
         // Call update postback conversion value for install event.
@@ -213,5 +214,19 @@ class AppLaunchUtil {
                                          object: .app,
                                          value: .crashedLastLaunch)
         }
+    }
+
+    private func setMenuItems() {
+        let webViewModel = MenuHelperWebViewModel(searchTitle: .MenuHelperSearchWithFirefox,
+                                                  findInPageTitle: .MenuHelperFindInPage)
+        let loginModel = MenuHelperLoginModel(revealPasswordTitle: .MenuHelperReveal,
+                                              hidePasswordTitle: .MenuHelperHide,
+                                              copyItemTitle: .MenuHelperCopy,
+                                              openAndFillTitle: .MenuHelperOpenAndFill)
+        let urlBarModel = MenuHelperURLBarModel(pasteAndGoTitle: .MenuHelperPasteAndGo)
+
+        DefaultMenuHelper().setItems(webViewModel: webViewModel,
+                                     loginModel: loginModel,
+                                     urlBarModel: urlBarModel)
     }
 }
