@@ -7,11 +7,15 @@ import WebKit
 @testable import WebEngine
 
 class MockWKEngineWebView: UIView, WKEngineWebView {
+    var delegate: WKEngineWebViewDelegate?
+    var uiDelegate: WKUIDelegate?
+    var navigationDelegate: WKNavigationDelegate?
+
     var engineConfiguration: WKEngineConfiguration
     var interactionState: Any?
     var scrollView = UIScrollView()
     var url: URL?
-    var navigationDelegate: WKNavigationDelegate?
+    var title: String?
     var allowsBackForwardNavigationGestures = true
     var allowsLinkPreview = true
     var isInspectable = true

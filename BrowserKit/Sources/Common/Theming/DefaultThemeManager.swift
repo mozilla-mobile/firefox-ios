@@ -47,8 +47,16 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         return userDefaults.bool(forKey: ThemeKeys.PrivateMode.isOn)
     }
 
-    public var isSystemThemeOn: Bool {
+    public var systemThemeIsOn: Bool {
         return userDefaults.bool(forKey: ThemeKeys.systemThemeIsOn)
+    }
+
+    public var automaticBrightnessIsOn: Bool {
+        return userDefaults.bool(forKey: ThemeKeys.AutomaticBrightness.isOn)
+    }
+
+    public var automaticBrightnessValue: Float {
+        return userDefaults.float(forKey: ThemeKeys.AutomaticBrightness.thresholdValue)
     }
 
     // MARK: - Initializers
@@ -63,8 +71,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         self.notificationCenter = notificationCenter
         self.mainQueue = mainQueue
         self.sharedContainerIdentifier = sharedContainerIdentifier
-
-        migrateDefaultsToUseStandard()
 
         self.userDefaults.register(defaults: [
             ThemeKeys.systemThemeIsOn: true,
@@ -93,7 +99,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         // the system theme is off
         // OR night mode is on
         // OR private mode is on
-        guard isSystemThemeOn,
+        guard systemThemeIsOn,
               !nightModeIsOn,
               !privateModeIsOn
         else { return }
@@ -106,7 +112,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
         if isOn {
             systemThemeChanged()
-        } else if userDefaults.bool(forKey: ThemeKeys.AutomaticBrightness.isOn) {
+        } else if automaticBrightnessIsOn {
             updateThemeBasedOnBrightness()
         }
     }
@@ -118,8 +124,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     public func setAutomaticBrightness(isOn: Bool) {
-        let currentState = userDefaults.bool(forKey: ThemeKeys.AutomaticBrightness.isOn)
-        guard currentState != isOn else { return }
+        guard automaticBrightnessIsOn != isOn else { return }
 
         userDefaults.set(isOn, forKey: ThemeKeys.AutomaticBrightness.isOn)
         brightnessChanged()
@@ -128,6 +133,12 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     public func setAutomaticBrightnessValue(_ value: Float) {
         userDefaults.set(value, forKey: ThemeKeys.AutomaticBrightness.thresholdValue)
         brightnessChanged()
+    }
+
+    public func brightnessChanged() {
+        if automaticBrightnessIsOn {
+            updateThemeBasedOnBrightness()
+        }
     }
 
     // MARK: - Private methods
@@ -180,41 +191,13 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         }
     }
 
-    private func brightnessChanged() {
-        let brightnessIsOn = userDefaults.bool(forKey: ThemeKeys.AutomaticBrightness.isOn)
-
-        if brightnessIsOn {
-            updateThemeBasedOnBrightness()
-        } else {
-            systemThemeChanged()
-        }
-    }
-
     private func updateThemeBasedOnBrightness() {
-        let thresholdValue = userDefaults.float(forKey: ThemeKeys.AutomaticBrightness.thresholdValue)
         let currentValue = Float(UIScreen.main.brightness)
 
-        if currentValue < thresholdValue {
+        if currentValue < automaticBrightnessValue {
             changeCurrentTheme(.dark)
         } else {
             changeCurrentTheme(.light)
-        }
-    }
-
-    private func migrateDefaultsToUseStandard() {
-        guard let oldDefaultsStore = UserDefaults(suiteName: sharedContainerIdentifier) else { return }
-
-        if let systemThemeIsOn = oldDefaultsStore.value(forKey: ThemeKeys.systemThemeIsOn) {
-            userDefaults.set(systemThemeIsOn, forKey: ThemeKeys.systemThemeIsOn)
-        }
-        if let nightModeIsOn = oldDefaultsStore.value(forKey: ThemeKeys.NightMode.isOn) {
-            userDefaults.set(nightModeIsOn, forKey: ThemeKeys.NightMode.isOn)
-        }
-        if let automaticBrightnessIsOn = oldDefaultsStore.value(forKey: ThemeKeys.AutomaticBrightness.isOn) {
-            userDefaults.set(automaticBrightnessIsOn, forKey: ThemeKeys.AutomaticBrightness.isOn)
-        }
-        if let automaticBrighnessValue = oldDefaultsStore.value(forKey: ThemeKeys.AutomaticBrightness.thresholdValue) {
-            userDefaults.set(automaticBrighnessValue, forKey: ThemeKeys.AutomaticBrightness.thresholdValue)
         }
     }
 

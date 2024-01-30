@@ -72,7 +72,7 @@ class PhotonActionSheetTests: BaseTestCase {
         // mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton], timeout: 10)
         // app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
         navigator.goto(BrowserTabMenu)
-        app.otherElements[ImageIdentifiers.share].tap()
+        app.otherElements[StandardImageIdentifiers.Large.shareApple].tap()
 
         // This is not ideal but only way to get the element on iPhone 8
         // for iPhone 11, that would be boundBy: 2

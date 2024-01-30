@@ -40,8 +40,7 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
 
     private lazy var smallFaviconView: FaviconImageView = .build()
     private lazy var favicon: FaviconImageView = .build()
-    private var headerView =
-    UIVisualEffectView(effect: UIBlurEffect(style: UIColor.legacyTheme.tabTray.tabTitleBlur))
+    private var headerView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
 
     // MARK: - UI
 
@@ -144,6 +143,7 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
+        headerView.effect = UIBlurEffect(style: theme.type.tabTitleBlurStyle())
         backgroundHolder.backgroundColor = theme.colors.layer1
         closeButton.tintColor = theme.colors.indicatorActive
         titleText.textColor = theme.colors.textPrimary

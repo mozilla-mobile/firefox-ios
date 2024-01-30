@@ -16,7 +16,8 @@ class MockRustRemoteTabs: RustRemoteTabs {
                             title: title,
                             history: [URL(string: url)!],
                             lastUsed: Date.now(),
-                            icon: nil)
+                            icon: nil,
+                            inactive: false)
         let clientRemoteTab = ClientRemoteTabs(clientId: clientGUID,
                                                clientName: "testClient",
                                                deviceType: .mobile,
@@ -31,7 +32,8 @@ class MockRustRemoteTabs: RustRemoteTabs {
                              title: title2,
                              history: [URL(string: url2)!],
                              lastUsed: Date.now(),
-                             icon: nil)
+                             icon: nil,
+                             inactive: false)
 
         let clientRemoteTab2 = ClientRemoteTabs(clientId: clientGUID2,
                                                 clientName: "testClient2",
@@ -82,7 +84,8 @@ class RustRemoteTabsTests: XCTestCase {
             title: title,
             history: [URL(string: url)!],
             lastUsed: Date.now(),
-            icon: nil
+            icon: nil,
+            inactive: false
         )
 
         let count = tabs.setLocalTabs(localTabs: [tab])

@@ -8,7 +8,7 @@ import WebKit
 @testable import Client
 
 class MockTabManager: TabManager {
-    let windowUUID = WindowUUID()
+    let windowUUID: WindowUUID
     var isRestoringTabs = false
     var selectedTab: Tab?
     var backupCloseTab: BackupCloseTab?
@@ -32,6 +32,10 @@ class MockTabManager: TabManager {
     var inactiveTabs = [Tab]()
     var privateTabs = [Tab]()
     var tabDisplayType: TabDisplayType = .TabGrid
+
+    init(windowUUID: WindowUUID = WindowUUID.XCTestDefaultUUID) {
+        self.windowUUID = windowUUID
+    }
 
     subscript(index: Int) -> Tab? {
         return nil

@@ -6,11 +6,15 @@ import Common
 import Foundation
 import WebKit
 
-class WKEngineSession: NSObject, EngineSession, WKUIDelegate {
+class WKEngineSession: NSObject,
+                        EngineSession,
+                        WKUIDelegate,
+                        WKNavigationDelegate,
+                        WKEngineWebViewDelegate {
     weak var delegate: EngineSessionDelegate?
     private(set) var webView: WKEngineWebView
     private var logger: Logger
-    private var sessionData: WKEngineSessionData
+    var sessionData: WKEngineSessionData
     private var contentScriptManager: WKContentScriptManager
 
     init?(userScriptManager: WKUserScriptManager,
@@ -35,6 +39,8 @@ class WKEngineSession: NSObject, EngineSession, WKUIDelegate {
         self.setupObservers()
 
         webView.uiDelegate = self
+        webView.navigationDelegate = self
+        webView.delegate = self
         userScriptManager.injectUserScriptsIntoWebView(webView)
 
         // TODO: FXIOS-7901 #17646 Handle WKEngineSession tabDelegate
@@ -127,6 +133,7 @@ class WKEngineSession: NSObject, EngineSession, WKUIDelegate {
 
         webView.navigationDelegate = nil
         webView.uiDelegate = nil
+        webView.delegate = nil
 
         webView.removeFromSuperview()
     }
@@ -170,6 +177,7 @@ class WKEngineSession: NSObject, EngineSession, WKUIDelegate {
             delegate?.onNavigationStateChange(canGoBack: webView.canGoBack,
                                               canGoForward: webView.canGoForward)
         case .contentSize:
+            // TODO: FXIOS-8086 - Handle view port in WebEngine
             break
         case .estimatedProgress:
             delegate?.onProgress(progress: webView.estimatedProgress)
@@ -177,9 +185,37 @@ class WKEngineSession: NSObject, EngineSession, WKUIDelegate {
             guard let loading = change?[.newKey] as? Bool else { break }
             delegate?.onLoadingStateChange(loading: loading)
         case .title:
-            break
+            guard let title = webView.title else { break }
+            handleTitleChange(title: title)
         case .URL:
-            break
+            handleURLChange()
+        }
+    }
+
+    private func handleTitleChange(title: String) {
+        // Ensure that the title actually changed to prevent repeated calls to navigateInTab(tab:).
+        if !title.isEmpty {
+            sessionData.title = title
+            delegate?.onTitleChange(title: title)
+        }
+
+        // TODO: FXIOS-8273 - Add telemetry integration in WebEngine and first telemetry call
+        // TelemetryWrapper.recordEvent(category: .action, method: .navigate, object: .tab)
+    }
+
+    private func handleURLChange() {
+        // Special case for "about:blank" popups, if the webView.url is nil, keep the sessionData url as "about:blank"
+        if sessionData.url?.absoluteString == EngineConstants.aboutBlank
+                && webView.url == nil { return }
+
+        // To prevent spoofing, only change the URL immediately if the new URL is on
+        // the same origin as the current URL. Otherwise, do nothing and wait for
+        // didCommitNavigation to confirm the page load.
+        guard sessionData.url?.origin == webView.url?.origin else { return }
+
+        sessionData.url = webView.url
+        if let url = webView.url {
+            delegate?.onLocationChange(url: url.absoluteString)
         }
     }
 
@@ -189,7 +225,7 @@ class WKEngineSession: NSObject, EngineSession, WKUIDelegate {
                  createWebViewWith configuration: WKWebViewConfiguration,
                  for navigationAction: WKNavigationAction,
                  windowFeatures: WKWindowFeatures) -> WKWebView? {
-        // FXIOS-8243 - Handle popup windows with createWebViewWith in WebEngine (epic part 2)
+        // TODO: FXIOS-8243 - Handle popup windows with createWebViewWith in WebEngine (epic part 2)
         return nil
     }
 
@@ -199,7 +235,7 @@ class WKEngineSession: NSObject, EngineSession, WKUIDelegate {
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping () -> Void
     ) {
-        // FXIOS-8244 - Handle Javascript panel messages in WebEngine (epic part 3)
+        // TODO: FXIOS-8244 - Handle Javascript panel messages in WebEngine (epic part 3)
     }
 
     func webView(
@@ -208,7 +244,7 @@ class WKEngineSession: NSObject, EngineSession, WKUIDelegate {
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping (Bool) -> Void
     ) {
-        // FXIOS-8244 - Handle Javascript panel messages in WebEngine (epic part 3)
+        // TODO: FXIOS-8244 - Handle Javascript panel messages in WebEngine (epic part 3)
     }
 
     func webView(
@@ -218,11 +254,11 @@ class WKEngineSession: NSObject, EngineSession, WKUIDelegate {
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping (String?) -> Void
     ) {
-        // FXIOS-8244 - Handle Javascript panel messages in WebEngine (epic part 3)
+        // TODO: FXIOS-8244 - Handle Javascript panel messages in WebEngine (epic part 3)
     }
 
     func webViewDidClose(_ webView: WKWebView) {
-        // FXIOS-8245 - Handle webViewDidClose in WebEngine (epic part 3)
+        // TODO: FXIOS-8245 - Handle webViewDidClose in WebEngine (epic part 3)
     }
 
     func webView(
@@ -230,7 +266,7 @@ class WKEngineSession: NSObject, EngineSession, WKUIDelegate {
         contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo,
         completionHandler: @escaping (UIContextMenuConfiguration?) -> Void
     ) {
-        // FXIOS-8246 - Handle context menu in WebEngine (epic part 3)
+        // TODO: FXIOS-8246 - Handle context menu in WebEngine (epic part 3)
     }
 
     @available(iOS 15, *)
@@ -239,6 +275,69 @@ class WKEngineSession: NSObject, EngineSession, WKUIDelegate {
                  initiatedByFrame frame: WKFrameInfo,
                  type: WKMediaCaptureType,
                  decisionHandler: @escaping (WKPermissionDecision) -> Void) {
-        // FXIOS-8247 - Handle media capture in WebEngine (epic part 3)
+        // TODO: FXIOS-8247 - Handle media capture in WebEngine (epic part 3)
+    }
+
+    // MARK: - WKNavigationDelegate
+
+    func webView(_ webView: WKWebView,
+                 didCommit navigation: WKNavigation!) {
+        // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
+    }
+
+    func webView(_ webView: WKWebView,
+                 didFinish navigation: WKNavigation!) {
+        // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
+    }
+
+    func webView(_ webView: WKWebView,
+                 didFail navigation: WKNavigation!,
+                 withError error: Error) {
+        // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
+    }
+
+    func webView(_ webView: WKWebView,
+                 didFailProvisionalNavigation navigation: WKNavigation!,
+                 withError error: Error) {
+        // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
+    }
+
+    func webView(_ webView: WKWebView,
+                 didStartProvisionalNavigation navigation: WKNavigation!) {
+        // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
+    }
+
+    func webView(_ webView: WKWebView,
+                 decidePolicyFor navigationResponse: WKNavigationResponse,
+                 decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
+        // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
+    }
+
+    func webView(_ webView: WKWebView,
+                 decidePolicyFor navigationAction: WKNavigationAction,
+                 preferences: WKWebpagePreferences,
+                 decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> Void) {
+        // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
+    }
+
+    func webView(_ webView: WKWebView,
+                 didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
+        // TODO: FXIOS-8275 - Handle didReceiveServerRedirectForProvisionalNavigation (epic part 3)
+    }
+
+    func webView(_ webView: WKWebView,
+                 didReceive challenge: URLAuthenticationChallenge,
+                 completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+        // TODO: FXIOS-8276 - Handle didReceive challenge: URLAuthenticationChallenge (epic part 3)
+    }
+
+    // MARK: - WKEngineWebViewDelegate
+
+    func tabWebView(_ webView: WKEngineWebView, findInPageSelection: String) {
+        // TODO: FXIOS-7901 - Handle WKEngineSession tabDelegate
+    }
+
+    func tabWebView(_ webView: WKEngineWebView, searchSelection: String) {
+        // TODO: FXIOS-7901 - Handle WKEngineSession tabDelegate
     }
 }
