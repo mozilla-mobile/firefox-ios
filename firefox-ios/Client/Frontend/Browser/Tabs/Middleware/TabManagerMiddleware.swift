@@ -402,7 +402,6 @@ class TabManagerMiddleware {
             return windowManager.tabManager(for: windowManager.activeWindow)
         }
 
-        logger.log(("DBG: returning TM for \(uuid)"), level: .warning, category: .tabs)
         return windowManager.tabManager(for: uuid)
     }
 
