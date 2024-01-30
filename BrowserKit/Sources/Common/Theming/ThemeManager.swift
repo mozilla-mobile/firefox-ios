@@ -10,6 +10,7 @@ public protocol ThemeManager {
 
     var systemThemeIsOn: Bool { get }
     var automaticBrightnessIsOn: Bool { get }
+    var automaticBrightnessValue: Float { get }
 
     func changeCurrentTheme(_ newTheme: ThemeType)
     func systemThemeChanged()
@@ -17,4 +18,5 @@ public protocol ThemeManager {
     func setPrivateTheme(isOn: Bool)
     func setAutomaticBrightness(isOn: Bool)
     func setAutomaticBrightnessValue(_ value: Float)
+    func brightnessChanged()
 }

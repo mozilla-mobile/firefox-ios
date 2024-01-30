@@ -7,19 +7,22 @@ import Redux
 
 struct ThemeSettingsState: ScreenState, Equatable {
     var useSystemAppearance: Bool
-    var isAutomaticBrightnessEnable: Bool
+    var isAutomaticBrightnessEnabled: Bool
     var manualThemeSelected: ThemeType
     var userBrightnessThreshold: Float
     var systemBrightness: Float
 
     init(_ appState: AppState) {
-        guard let themeState = store.state.screenState(ThemeSettingsState.self, for: .themeSettings) else {
+         guard let themeState = store.state.screenState(
+            ThemeSettingsState.self,
+            for: .themeSettings
+        ) else {
             self.init()
             return
         }
 
         self.init(useSystemAppearance: themeState.useSystemAppearance,
-                  isAutomaticBrightnessEnable: themeState.isAutomaticBrightnessEnable,
+                  isAutomaticBrightnessEnable: themeState.isAutomaticBrightnessEnabled,
                   manualThemeSelected: themeState.manualThemeSelected,
                   userBrightnessThreshold: themeState.userBrightnessThreshold,
                   systemBrightness: themeState.systemBrightness)
@@ -39,7 +42,7 @@ struct ThemeSettingsState: ScreenState, Equatable {
          userBrightnessThreshold: Float,
          systemBrightness: Float) {
         self.useSystemAppearance = useSystemAppearance
-        self.isAutomaticBrightnessEnable = isAutomaticBrightnessEnable
+        self.isAutomaticBrightnessEnabled = isAutomaticBrightnessEnable
         self.manualThemeSelected = manualThemeSelected
         self.userBrightnessThreshold = userBrightnessThreshold
         self.systemBrightness = systemBrightness
@@ -52,8 +55,9 @@ struct ThemeSettingsState: ScreenState, Equatable {
 
         case ThemeSettingsAction.toggleUseSystemAppearance(let isEnabled),
             ThemeSettingsAction.systemThemeChanged(let isEnabled):
+
             return ThemeSettingsState(useSystemAppearance: isEnabled,
-                                      isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnable,
+                                      isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnabled,
                                       manualThemeSelected: state.manualThemeSelected,
                                       userBrightnessThreshold: state.userBrightnessThreshold,
                                       systemBrightness: state.systemBrightness)
@@ -68,23 +72,26 @@ struct ThemeSettingsState: ScreenState, Equatable {
 
         case ThemeSettingsAction.switchManualTheme(let theme),
             ThemeSettingsAction.manualThemeChanged(let theme):
+
             return ThemeSettingsState(useSystemAppearance: state.useSystemAppearance,
-                                      isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnable,
+                                      isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnabled,
                                       manualThemeSelected: theme,
                                       userBrightnessThreshold: state.userBrightnessThreshold,
                                       systemBrightness: state.systemBrightness)
 
         case ThemeSettingsAction.updateUserBrightness(let brightnessValue),
             ThemeSettingsAction.userBrightnessChanged(let brightnessValue):
+
             return ThemeSettingsState(useSystemAppearance: state.useSystemAppearance,
-                                      isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnable,
+                                      isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnabled,
                                       manualThemeSelected: state.manualThemeSelected,
                                       userBrightnessThreshold: brightnessValue,
                                       systemBrightness: state.systemBrightness)
 
         case ThemeSettingsAction.systemBrightnessChanged(let brightnessValue):
+
             return ThemeSettingsState(useSystemAppearance: state.useSystemAppearance,
-                                      isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnable,
+                                      isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnabled,
                                       manualThemeSelected: state.manualThemeSelected,
                                       userBrightnessThreshold: state.userBrightnessThreshold,
                                       systemBrightness: brightnessValue)
@@ -95,7 +102,7 @@ struct ThemeSettingsState: ScreenState, Equatable {
 
     static func == (lhs: ThemeSettingsState, rhs: ThemeSettingsState) -> Bool {
         return lhs.useSystemAppearance == rhs.useSystemAppearance
-        && lhs.isAutomaticBrightnessEnable == rhs.isAutomaticBrightnessEnable
+        && lhs.isAutomaticBrightnessEnabled == rhs.isAutomaticBrightnessEnabled
         && lhs.manualThemeSelected == rhs.manualThemeSelected
         && lhs.userBrightnessThreshold == rhs.userBrightnessThreshold
     }
