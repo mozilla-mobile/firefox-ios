@@ -53,7 +53,7 @@ class DevicePickerViewController: UITableViewController {
         static let deviceRowHeight: CGFloat = 50
         static let tabTitleTextFont = UIFont.boldSystemFont(ofSize: 16)
     }
-    
+
     private lazy var tabTitleLabel: UILabel = .build { label in
         label.font = UX.tabTitleTextFont
         label.textColor = self.themeManager.currentTheme.colors.textPrimary
