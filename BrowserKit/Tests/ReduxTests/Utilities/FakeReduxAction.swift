@@ -5,9 +5,8 @@
 import Foundation
 
 @testable import Redux
-/*
-enum FakeReduxAction: Action {
 
+enum FakeReduxAction: Action {
     // User action
     case requestInitialValue
     case increaseCounter
@@ -18,5 +17,11 @@ enum FakeReduxAction: Action {
     case counterIncreased(Int)
     case counterDecreased(Int)
     case setPrivateModeTo(Bool)
+
+    var windowUUID: UUID? {
+        // TODO: [8188] Update to be non-optional and return windowUUID. Forthcoming.
+        switch self {
+        default: return nil
+        }
+    }
 }
-*/

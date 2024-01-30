@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-/*
+
 @testable import Redux
 class FakeReduxMiddleware {
     lazy var fakeProvider: Middleware<FakeReduxState> = { state, action in
@@ -42,4 +42,3 @@ class FakeReduxMiddleware {
         return Int.random(in: 1...9)
     }
 }
-*/

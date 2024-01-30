@@ -181,7 +181,6 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:..\/BrowserKit",
         "identifier" : "ReduxTests",
