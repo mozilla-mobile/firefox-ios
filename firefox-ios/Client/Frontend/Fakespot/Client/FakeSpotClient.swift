@@ -57,7 +57,9 @@ protocol FakespotClientType {
     ///   - aid: A string representing identifier for the event.
     /// - Returns: An `AdEventsResponse` object containing the response data.
     /// - Throws: `FakeSpotClientError.invalidURL` if the ad recording endpoint URL is invalid or not set.
-    func reportAdEvent(eventName: FakespotAdsEvent, eventSource: String, aidvs: [String]) async throws -> AdEventsResponse
+    func reportAdEvent(eventName: FakespotAdsEvent,
+                       eventSource: String,
+                       aidvs: [String]) async throws -> AdEventsResponse?
 }
 
 /// An enumeration representing different environments for the Fakespot client.
@@ -251,7 +253,9 @@ struct FakespotClient: FakespotClientType {
     }
 
     /// Reports an advertising event with specified details to the API
-    func reportAdEvent(eventName: FakespotAdsEvent, eventSource: String, aidvs: [String]) async throws -> AdEventsResponse {
+    func reportAdEvent(eventName: FakespotAdsEvent,
+                       eventSource: String,
+                       aidvs: [String]) async throws -> AdEventsResponse? {
         // Define the API endpoint URL
         guard let endpointURL = environment.adRecordingEndpoint else {
             throw FakeSpotClientError.invalidURL
@@ -261,10 +265,11 @@ struct FakespotClient: FakespotClientType {
 
         switch eventName {
         case .trustedDealsLinkClicked:
+            guard let firstItem = aidvs.first else { return nil }
             requestBody = [
                 "event_name": eventName.rawValue,
                 "event_source": eventSource,
-                "aid": aidvs.first
+                "aid": firstItem
             ]
         case .trustedDealsImpression, .trustedDealsPlacement:
             requestBody = [
