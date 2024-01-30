@@ -129,7 +129,9 @@ class ShareViewController: UIViewController {
     private func setupRows() {
         let pageInfoRow = makePageInfoRow(addTo: stackView)
         pageInfoRowTitleLabel = pageInfoRow.titleLabel
+        pageInfoRowTitleLabel?.textColor = themeManager.currentTheme.colors.textPrimary
         pageInfoRowUrlLabel = pageInfoRow.urlLabel
+        pageInfoRowUrlLabel?.textColor = themeManager.currentTheme.colors.textPrimary
         makeSeparator(addTo: stackView)
 
         if shareItem?.isUrlType() ?? true {
