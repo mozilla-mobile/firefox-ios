@@ -520,6 +520,12 @@ class Tab: NSObject, ThemeApplicable {
                 options: .new,
                 context: nil
             )
+            self.webView?.addObserver(
+                self,
+                forKeyPath: KVOConstants.hasOnlySecureContent.rawValue,
+                options: .new,
+                context: nil
+            )
             UserScriptManager.shared.injectUserScriptsIntoWebView(
                 webView,
                 nightMode: nightMode,
