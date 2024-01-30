@@ -8,11 +8,11 @@ import SwiftUI
 
 // MARK: - AddressAutofillSettingsViewController
 
-/// View controller for managing address autofill settings.
+/// View controller responsible for managing address autofill settings.
 class AddressAutofillSettingsViewController: SensitiveViewController, Themeable {
     // MARK: Properties
 
-    /// ViewModel for managing address autofill settings.
+    /// ViewModel for handling address autofill settings.
     var viewModel: AddressAutofillSettingsViewModel
 
     /// Observer for theme changes.
@@ -30,11 +30,11 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
     // MARK: Views
 
     /// Hosting controller for the empty state view in address autofill settings.
-    var addressAutofillEmptyView: UIHostingController<AddressAutofillSettingsEmptyView>
+    var addressAutofillSettingsPageView: UIHostingController<AddressAutofillSettingsView>
 
     // MARK: Initializers
 
-    /// Initialize the AddressAutofillSettingsViewController.
+    /// Initializes the AddressAutofillSettingsViewController.
     /// - Parameters:
     ///   - addressAutofillViewModel: The ViewModel for address autofill settings.
     ///   - themeManager: The ThemeManager for managing app themes.
@@ -48,8 +48,13 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.logger = logger
-        let emptyView = AddressAutofillSettingsEmptyView(toggleModel: viewModel.toggleModel)
-        self.addressAutofillEmptyView = UIHostingController(rootView: emptyView)
+
+        // Initialize the AddressAutofillSettingsView and its hosting controller
+        let addressAutofillSettingsVC = AddressAutofillSettingsView(
+            toggleModel: viewModel.toggleModel,
+            addressListViewModel: viewModel.addressListViewModel)
+        self.addressAutofillSettingsPageView = UIHostingController(rootView: addressAutofillSettingsVC)
+
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -63,17 +68,19 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
     /// Called after the controller's view is loaded into memory.
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewSetup()
+        setupView()
         listenForThemeChange(view)
         applyTheme()
     }
 
+    // MARK: View Setup
+
     /// Sets up the view hierarchy and initial configurations.
-    func viewSetup() {
-        guard let emptyAddressAutofillView = addressAutofillEmptyView.view else { return }
+    func setupView() {
+        guard let emptyAddressAutofillView = addressAutofillSettingsPageView.view else { return }
         emptyAddressAutofillView.translatesAutoresizingMaskIntoConstraints = false
 
-        addChild(addressAutofillEmptyView)
+        addChild(addressAutofillSettingsPageView)
         view.addSubview(emptyAddressAutofillView)
         self.title = .SettingsAddressAutofill
 
