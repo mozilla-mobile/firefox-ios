@@ -19,7 +19,7 @@ extension Address {
     }
 
     var addressCityStateZipcode: String {
-        return "\(addressLevel2),  \(addressLevel1) \(postalCode)"
+        return "\(addressLevel2), \(addressLevel1) \(postalCode)"
     }
 }
 
