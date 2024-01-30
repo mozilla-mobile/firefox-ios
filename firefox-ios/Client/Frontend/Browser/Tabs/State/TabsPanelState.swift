@@ -77,7 +77,7 @@ struct TabsPanelState: ScreenState, Equatable {
                                   isInactiveTabsExpanded: tabsModel.isInactiveTabsExpanded,
                                   scrollToIndex: selectedTabIndex)
         case TabPanelAction.refreshTab(let context):
-            let tabModel = context.tabModel
+            let tabModel = context.tabDisplayModel
             var selectedTabIndex: Int?
             if tabModel.shouldScrollToTab {
                 selectedTabIndex = tabModel.tabs.firstIndex(where: { $0.isSelected })

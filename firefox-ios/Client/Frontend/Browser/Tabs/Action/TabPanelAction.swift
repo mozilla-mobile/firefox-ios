@@ -74,9 +74,9 @@ class ToastTypeContext: ActionContext {
 }
 
 class RefreshTabContext: ActionContext {
-    let tabModels: [TabModel]
-    init(tabModels: [TabModel], windowUUID: WindowUUID) {
-        self.tabModels = tabModels
+    let tabDisplayModel: TabDisplayModel
+    init(tabDisplayModel: TabDisplayModel, windowUUID: WindowUUID) {
+        self.tabDisplayModel = tabDisplayModel
         super.init(windowUUID: windowUUID)
     }
 }
