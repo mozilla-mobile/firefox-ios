@@ -331,10 +331,10 @@ class WKEngineSession: NSObject,
     // MARK: - WKEngineWebViewDelegate
 
     func tabWebView(_ webView: WKEngineWebView, findInPageSelection: String) {
-        // TODO: FXIOS-7901 - Handle WKEngineSession tabDelegate
+        delegate?.findInPage(with: findInPageSelection)
     }
 
     func tabWebView(_ webView: WKEngineWebView, searchSelection: String) {
-        // TODO: FXIOS-7901 - Handle WKEngineSession tabDelegate
+        delegate?.search(with: searchSelection)
     }
 }

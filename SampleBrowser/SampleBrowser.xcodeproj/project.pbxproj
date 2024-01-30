@@ -37,6 +37,7 @@
 		8A46021E2B0FE50D00FFD17F /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A46021D2B0FE50D00FFD17F /* UIView+Extension.swift */; };
 		8A4602202B0FE52F00FFD17F /* UISearchbar+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A46021F2B0FE52F00FFD17F /* UISearchbar+Extension.swift */; };
 		8A4602222B0FE55300FFD17F /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4602212B0FE55300FFD17F /* UIViewController+Extension.swift */; };
+		8AEBDD712B69A8C300FE9192 /* AppLaunchUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEBDD702B69A8C300FE9192 /* AppLaunchUtil.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,6 +73,7 @@
 		8A46021D2B0FE50D00FFD17F /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		8A46021F2B0FE52F00FFD17F /* UISearchbar+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISearchbar+Extension.swift"; sourceTree = "<group>"; };
 		8A4602212B0FE55300FFD17F /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		8AEBDD702B69A8C300FE9192 /* AppLaunchUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchUtil.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,6 +175,7 @@
 			isa = PBXGroup;
 			children = (
 				8A4601E42B0FE20500FFD17F /* AppDelegate.swift */,
+				8AEBDD702B69A8C300FE9192 /* AppLaunchUtil.swift */,
 				8A4601ED2B0FE20700FFD17F /* Assets.xcassets */,
 				8A0F44692B56EDC000438589 /* Engine */,
 				8A46021C2B0FE4F600FFD17F /* Extensions */,
@@ -321,6 +324,7 @@
 				8A0F44792B56FD6E00438589 /* SuggestionCellViewModel.swift in Sources */,
 				8A3DB32D2B5AD3C700F89705 /* SettingsViewController.swift in Sources */,
 				8A4602192B0FE45200FFD17F /* BrowserToolbar.swift in Sources */,
+				8AEBDD712B69A8C300FE9192 /* AppLaunchUtil.swift in Sources */,
 				8A0F44732B56FD4500438589 /* SuggestionViewController.swift in Sources */,
 				8A0F446B2B56EDC900438589 /* EngineProvider.swift in Sources */,
 				8A0F447F2B56FDAD00438589 /* BrowserError.swift in Sources */,

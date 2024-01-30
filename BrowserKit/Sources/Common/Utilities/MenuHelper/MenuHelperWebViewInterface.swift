@@ -23,7 +23,7 @@ public struct MenuHelperWebViewModel {
     var searchTitle: String
     var findInPageTitle: String
 
-    public init(searchTitle: String, 
+    public init(searchTitle: String,
                 findInPageTitle: String) {
         self.searchTitle = searchTitle
         self.findInPageTitle = findInPageTitle

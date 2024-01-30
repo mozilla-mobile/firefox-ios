@@ -35,8 +35,8 @@ public struct MenuHelperLoginModel {
     var copyItemTitle: String
     var openAndFillTitle: String
 
-    public init(revealPasswordTitle: String, 
-                hidePasswordTitle: String, 
+    public init(revealPasswordTitle: String,
+                hidePasswordTitle: String,
                 copyItemTitle: String,
                 openAndFillTitle: String) {
         self.revealPasswordTitle = revealPasswordTitle
