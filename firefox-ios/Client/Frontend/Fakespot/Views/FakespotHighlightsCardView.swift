@@ -15,6 +15,9 @@ struct FakespotHighlightsCardViewModel {
     let lessButtonTitle: String = .Shopping.HighlightsCardLessButtonTitle
     let lessButtonA11yId: String = AccessibilityIdentifiers.Shopping.HighlightsCard.lessButton
 
+    var expandState: CollapsibleCardView.ExpandButtonState = .collapsed
+    var onExpandStateChanged: ((CollapsibleCardView.ExpandButtonState) -> Void)?
+
     let highlights: [FakespotHighlightGroup]
 
     var longestTextFromReviews: String? {
@@ -144,6 +147,10 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
             }
             contentStackBottomConstraint?.constant = -UX.highlightStackBottomSpace
         }
+
+        isShowingPreview = viewModel.expandState == .collapsed
+        updateHighlights()
+        updateExpandState()
     }
 
     func applyTheme(theme: Theme) {
@@ -229,10 +236,14 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
 
     @objc
     private func showMoreAction() {
-        guard let viewModel else { return }
-
         isShowingPreview = !isShowingPreview
         updateHighlights()
+        updateExpandState()
+        viewModel?.onExpandStateChanged?(isShowingPreview ? .collapsed : .expanded)
+    }
+
+    func updateExpandState() {
+        guard let viewModel else { return }
 
         let moreButtonViewModel = SecondaryRoundedButtonViewModel(
             title: isShowingPreview ? viewModel.moreButtonTitle : viewModel.lessButtonTitle,
