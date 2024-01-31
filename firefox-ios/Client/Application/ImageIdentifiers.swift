@@ -67,6 +67,7 @@ public struct ImageIdentifiers {
     public static let subtract = "subtract"
     public static let sync = "menu-sync"
     public static let syncedDevicesIcon = "synced_devices"
+    public static let syncOpenTab = "sync_open_tab"
     public static let upgradeBackground = "onboardingBackground"
     public static let breachedWebsite = "Breached Website"
     public static let whatsNew = "whatsnew"
