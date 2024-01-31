@@ -51,6 +51,13 @@ class ActionContext {
     }
 }
 
+extension WindowUUID {
+    /// Convenience. Returns an ActionContext object for the receiver.
+    var context: ActionContext {
+        return ActionContext(windowUUID: self)
+    }
+}
+
 let store = Store(state: AppState(),
                   reducer: AppState.reducer,
                   middlewares: [
