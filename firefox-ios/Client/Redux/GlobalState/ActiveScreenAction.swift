@@ -26,10 +26,11 @@ enum ActiveScreensStateAction: Action {
     case showScreen(ScreenActionContext)
     case closeScreen(ScreenActionContext)
 
-    var windowUUID: UUID? {
+    var windowUUID: UUID {
         switch self {
-        case .showScreen(let context): return context.windowUUID
-        case .closeScreen(let context): return context.windowUUID
+        case .showScreen(let context as ActionContext),
+                .closeScreen(let context as ActionContext):
+            return context.windowUUID
         }
     }
 }

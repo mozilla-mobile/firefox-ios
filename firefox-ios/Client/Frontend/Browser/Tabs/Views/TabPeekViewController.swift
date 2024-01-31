@@ -30,7 +30,8 @@ class TabPeekViewController: UIViewController,
         super.init(nibName: nil, bundle: nil)
 
         subscribeToRedux()
-        store.dispatch(TabPeekAction.didLoadTabPeek(tabID: tab.tabUUID))
+        let context = TabUUIDContext(tabUUID: tab.tabUUID, windowUUID: windowUUID)
+        store.dispatch(TabPeekAction.didLoadTabPeek(context))
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -95,7 +96,9 @@ class TabPeekViewController: UIViewController,
             actions.append(UIAction(title: .TabPeekAddToBookmarks,
                                     image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.bookmark),
                                     identifier: nil) { _ in
-                store.dispatch(TabPeekAction.addToBookmarks(tabID: self.tab.tabUUID))
+                let context = TabUUIDContext(tabUUID: self.tab.tabUUID,
+                                             windowUUID: self.windowUUID)
+                store.dispatch(TabPeekAction.addToBookmarks(context))
                 return
             })
         }
@@ -104,7 +107,9 @@ class TabPeekViewController: UIViewController,
                 title: .AppMenu.TouchActions.SendToDeviceTitle,
                 image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.shareApple),
                 identifier: nil) { _ in
-                    store.dispatch(TabPeekAction.sendToDevice(tabID: self.tab.tabUUID))
+                    let context = TabUUIDContext(tabUUID: self.tab.tabUUID,
+                                                 windowUUID: self.windowUUID)
+                    store.dispatch(TabPeekAction.sendToDevice(context))
                     return
             })
         }
@@ -112,7 +117,9 @@ class TabPeekViewController: UIViewController,
             actions.append(UIAction(title: .TabPeekCopyUrl,
                                     image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.link),
                                     identifier: nil) { _ in
-                store.dispatch(TabPeekAction.copyURL(tabID: self.tab.tabUUID))
+                let context = TabUUIDContext(tabUUID: self.tab.tabUUID,
+                                             windowUUID: self.windowUUID)
+                store.dispatch(TabPeekAction.copyURL(context))
                 return
             })
         }
@@ -120,7 +127,9 @@ class TabPeekViewController: UIViewController,
             actions.append(UIAction(title: .TabPeekCloseTab,
                                     image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
                                     identifier: nil) { _ in
-                store.dispatch(TabPeekAction.closeTab(tabID: self.tab.tabUUID))
+                let context = TabUUIDContext(tabUUID: self.tab.tabUUID,
+                                             windowUUID: self.windowUUID)
+                store.dispatch(TabPeekAction.closeTab(context))
                 return
             })
         }

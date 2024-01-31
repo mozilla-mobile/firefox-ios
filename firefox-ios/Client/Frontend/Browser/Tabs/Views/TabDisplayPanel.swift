@@ -115,7 +115,7 @@ class TabDisplayPanel: UIViewController,
             currentToast.dismiss(false)
         }
 
-        if toastType.reduxAction != nil {
+        if toastType.reduxAction(for: windowUUID) != nil {
             let viewModel = ButtonToastViewModel(
                 labelText: toastType.title,
                 buttonText: toastType.buttonText)
@@ -150,7 +150,8 @@ class TabDisplayPanel: UIViewController,
         store.dispatch(ActiveScreensStateAction.showScreen(
             ScreenActionContext(screen: .tabsPanel, windowUUID: windowUUID)
         ))
-        store.dispatch(TabPanelAction.tabPanelDidLoad(tabsState.isPrivateMode))
+        store.dispatch(TabPanelAction.tabPanelDidLoad(BoolValueContext(boolValue: tabsState.isPrivateMode,
+                                                                       windowUUID: windowUUID)))
         let uuid = windowUUID
         store.subscribe(self, transform: {
             return $0.select({ appState in
@@ -170,13 +171,13 @@ class TabDisplayPanel: UIViewController,
         tabsState = state
         tabDisplayView.newState(state: tabsState)
         shouldShowEmptyView(tabsState.isPrivateTabsEmpty)
-
+        let uuid = windowUUID
         // Avoid showing toast multiple times
         if let toastType = tabsState.toastType,
             shownToast == nil {
-            store.dispatch(TabPanelAction.hideUndoToast)
+            store.dispatch(TabPanelAction.hideUndoToast(windowUUID.context))
             presentToast(toastType: toastType) { undoClose in
-                if let action = toastType.reduxAction, undoClose {
+                if let action = toastType.reduxAction(for: uuid), undoClose {
                     store.dispatch(action)
                 }
                 self.shownToast = nil
@@ -187,7 +188,8 @@ class TabDisplayPanel: UIViewController,
     // MARK: EmptyPrivateTabsViewDelegate
 
     func didTapLearnMore(urlRequest: URLRequest) {
-        store.dispatch(TabPanelAction.learnMorePrivateMode(urlRequest))
+        let context = URLRequestContext(urlRequest: urlRequest, windowUUID: windowUUID)
+        store.dispatch(TabPanelAction.learnMorePrivateMode(context))
     }
 }
 
