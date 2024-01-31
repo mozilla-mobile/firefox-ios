@@ -330,11 +330,22 @@ public class RustSyncManager: NSObject, SyncManager {
 
     func getEnginesAndKeys(engines: [RustSyncManagerAPI.TogglableEngine],
                            completion: @escaping (([String], [String: String])) -> Void) {
-       var localEncryptionKeys: [String: String] = [:]
-       var rustEngines: [String] = []
-       var registeredPlaces = false
+        var localEncryptionKeys: [String: String] = [:]
+        var rustEngines: [String] = []
+        var registeredPlaces = false
 
-        let registerEngines: (String?) -> Void = { loginKey in
+        profile?.logins.getStoredKey { loginsResult in
+            var loginsKey: String?
+
+            switch loginsResult {
+            case .success(let key):
+                loginsKey = key
+            case .failure(let err):
+                self.logger.log("Login encryption key could not be retrieved for syncing: \(err)",
+                                level: .warning,
+                                category: .sync)
+            }
+
             for engine in engines.filter({ self.syncManagerAPI.rustTogglableEngines.contains($0) }) {
                 switch engine {
                 case .tabs:
@@ -342,7 +353,7 @@ public class RustSyncManager: NSObject, SyncManager {
                     rustEngines.append(engine.rawValue)
                 case .passwords:
                     self.profile?.logins.registerWithSyncManager()
-                    if let key = loginKey {
+                    if let key = loginsKey {
                         localEncryptionKeys[engine.rawValue] = key
                         rustEngines.append(engine.rawValue)
                     }
@@ -369,24 +380,7 @@ public class RustSyncManager: NSObject, SyncManager {
                     rustEngines.append(engine.rawValue)
                 }
             }
-        }
 
-        let shouldSyncLogins = engines.contains(RustSyncManagerAPI.TogglableEngine.passwords)
-        if shouldSyncLogins {
-            profile?.logins.getStoredKey { result in
-                switch result {
-                case .success(let key):
-                    registerEngines(key)
-                case .failure(let err):
-                    self.logger.log("Login encryption key could not be retrieved for syncing: \(err)",
-                                    level: .warning,
-                                    category: .sync)
-                    registerEngines(nil)
-                }
-                completion((rustEngines, localEncryptionKeys))
-            }
-        } else {
-            registerEngines(nil)
             completion((rustEngines, localEncryptionKeys))
         }
    }
