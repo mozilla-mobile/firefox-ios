@@ -9,8 +9,10 @@ pipelines:
 stages:
   build_application:
     workflows:
-    - configure_build_fennec: {}
-    - L10nBuild: {}
+    - configure_build_fennec:
+        run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
+    - L10nBuild:
+        run_if: '{{ false }}'
   run_tests:
     workflows:
     - build_and_test_1_SmokeTest2: {}
@@ -19,7 +21,6 @@ stages:
     # - build_and_test_4_SmokeTest4: {}
 workflows:
   configure_build_fennec:
-    run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
     before_run:
     - 0_detect_standalone_build
     - 1_git_clone_and_post_clone
@@ -812,7 +813,6 @@ workflows:
 
   L10nBuild:
     # Debug - force not to run this
-    run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
     before_run:
     - determine_apps_affected
     steps:
