@@ -812,7 +812,7 @@ workflows:
 
   L10nBuild:
     # Debug - force not to run this
-    run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "false"}}'
+    run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
     before_run:
     - determine_apps_affected
     steps:
