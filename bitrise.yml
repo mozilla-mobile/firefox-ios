@@ -4,25 +4,30 @@ project_type: ios
 pipelines:
   pipeline_build_and_test:
     stages:
-    - determine_application: {}
-    - build_application: {}
+    - pre_configuration: {}
+    - build_applications: {}
     - run_tests: {}
 stages:
-  determine_application:
+  pre_configuration:
     workflows:
     - determine_apps_affected: {}
-  build_application:
+  build_applications:
     workflows:
     - configure_build_fennec:
         run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
-    - L10nBuild:
-        run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "false"}}'
+    # - configure_build_focus:
+    #     run_if: '{{getenv "BUILD_FOCUS_IOS" | eq "true"}}'
   run_tests:
     workflows:
-    - build_and_test_1_SmokeTest2: {}
-    # - build_and_test_2_SmokeTest: {}
-    # - build_and_test_3_SmokeTest3: {}
-    # - build_and_test_4_SmokeTest4: {}
+    - build_and_test_1_SmokeTest2:
+        run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
+    - build_and_test_2_SmokeTest:
+        run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
+    - build_and_test_3_SmokeTest3:
+        run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
+    - build_and_test_4_SmokeTest4:
+        run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
+
 workflows:
   configure_build_fennec:
     before_run:
@@ -30,8 +35,7 @@ workflows:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
-    #- determine_apps_affected
-    - Decision_to_run_UI_Tests
+    - decision_to_run_UI_Tests
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
@@ -162,18 +166,17 @@ workflows:
         stack: osx-xcode-15.2.x
         machine_type_id: g2-m1.8core
   build_and_test_1_SmokeTest2:
-    run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
     before_run:
     - 0_detect_standalone_build
     - 1_git_clone_and_post_clone
-    - Decision_to_run_UI_Tests
+    - decision_to_run_UI_Tests
     steps:
     - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Pull artifacts
         inputs:
         - verbose: true
-        - artifact_sources: build_application.configure_build_fennec
+        - artifact_sources: build_applications.configure_build_fennec
     - script@1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Unzip
@@ -209,14 +212,14 @@ workflows:
     before_run:
     - 0_detect_standalone_build
     - 1_git_clone_and_post_clone
-    - Decision_to_run_UI_Tests
+    - decision_to_run_UI_Tests
     steps:
     - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Pull artifacts
         inputs:
         - verbose: true
-        - artifact_sources: build_application.configure_build_fennec
+        - artifact_sources: build_applications.configure_build_fennec
     - script@1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Unzip
@@ -255,14 +258,14 @@ workflows:
     before_run:
     - 0_detect_standalone_build
     - 1_git_clone_and_post_clone
-    - Decision_to_run_UI_Tests
+    - decision_to_run_UI_Tests
     steps:
     - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Pull artifacts
         inputs:
         - verbose: true
-        - artifact_sources: build_application.configure_build_fennec
+        - artifact_sources: build_applications.configure_build_fennec
     - script@1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Unzip
@@ -301,14 +304,14 @@ workflows:
     before_run:
     - 0_detect_standalone_build
     - 1_git_clone_and_post_clone
-    - Decision_to_run_UI_Tests
+    - decision_to_run_UI_Tests
     steps:
     - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Pull artifacts
         inputs:
         - verbose: true
-        - artifact_sources: build_application.configure_build_fennec
+        - artifact_sources: build_applications.configure_build_fennec
     - script@1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Unzip
@@ -345,7 +348,7 @@ workflows:
         machine_type_id: g2-m1.8core
   determine_apps_affected:
     steps:
-    - git-clone@6.2:
+    - git-clone@6.2: {}
     - script@1:
         title: Determine which application to base configuration
         inputs:
@@ -363,7 +366,6 @@ workflows:
             # If the destination branch is a release or epic branch, we need to compare changes against that destination branch
             # If the branch built by Bitrise is a release or epic branch, we need to compare changes against that branch
             # Otherwise, we need to compare changes against origin/main
-
 
             if [[ $BITRISEIO_GIT_BRANCH_DEST = release* ]] || [[ $BITRISEIO_GIT_BRANCH_DEST = epic* ]]; then
                 BASE_BRANCH="$BITRISEIO_GIT_BRANCH_DEST"
@@ -414,7 +416,7 @@ workflows:
             BUILD_FOCUS_IOS
             BUILD_SAMPLE_BROWSER_IOS
     - script@1:
-        title: Echo build keys
+        title: Echo applications set
         inputs:
         - content: |-
             #!/usr/bin/env bash
@@ -423,7 +425,6 @@ workflows:
             echo "BUILD_FIREFOX_IOS: $BUILD_FIREFOX_IOS"
             echo "BUILD_FOCUS_IOS: $BUILD_FOCUS_IOS"
             echo "BUILD_SAMPLE_BROWSER_IOS: $BUILD_SAMPLE_BROWSER_IOS"
-
   send_slack_notification:
     steps:
     - slack@3.1:
@@ -485,7 +486,7 @@ workflows:
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6.2:
+    - git-clone@6.2: {}
     - script@1.1:
         inputs:
         - content: |-
@@ -626,7 +627,7 @@ workflows:
                 exit 1
             fi
         is_always_run: true
-  Decision_to_run_UI_Tests:
+  decision_to_run_UI_Tests:
     steps:
     - script@1:
         title: Files changed in commit
@@ -642,7 +643,7 @@ workflows:
             if [[ $BITRISEIO_GIT_BRANCH_DEST = release* ]] || [[ $BITRISEIO_GIT_BRANCH_DEST = epic* ]]; then
                 FILES_CHANGED=$(git diff --name-only $BITRISEIO_GIT_BRANCH_DEST..."$BITRISE_GIT_COMMIT")
             elif [[ $BITRISE_GIT_BRANCH = release* ]] || [[ $BITRISE_GIT_BRANCH = epic* ]]; then
-                echo "Skipping Blacklist check for Merging into $BITRISE_BIT_BRANCH..."
+                echo "Skipping Blacklist check for Merging into $BITRISE_GIT_BRANCH..."
                 exit 0
                 FILES_CHANGED=$(git diff --name-only $BITRISE_GIT_BRANCH..."$BITRISE_GIT_COMMIT")
             else
@@ -815,9 +816,7 @@ workflows:
       bitrise.io:
         stack: osx-xcode-15.2.x
         machine_type_id: g2-m1.8core
-
   L10nBuild:
-    # Debug - force not to run this
     before_run:
     - determine_apps_affected
     steps:
@@ -919,7 +918,6 @@ workflows:
       bitrise.io:
         stack: osx-xcode-15.2.x
         machine_type_id: g2-m1.8core
-
   L10nScreenshotsTests:
     steps:
     - activate-ssh-key@4:
@@ -1376,7 +1374,6 @@ workflows:
         - output_tool: xcodebuild
         - scheme: Fennec_Enterprise
         - configuration: Fennec_Enterprise
-        - project_path: "$BITRISE_PROJECT_PATH"
     - deploy-to-bitrise-io@2: {}
     - cache-pull@2.7.2:
         inputs:
@@ -1488,7 +1485,6 @@ workflows:
         - output_tool: xcodebuild
         - scheme: Fennec_Enterprise
         - configuration: Fennec_Enterprise
-        - project_path: "$BITRISE_PROJECT_PATH"
     - deploy-to-bitrise-io@2: {}
     - script@1.1:
         title: Firebase Build for Testing Physical Devices
@@ -1678,9 +1674,6 @@ workflows:
 
 app:
   envs:
-  - opts:
-      is_expand: false
-    BITRISE_PROJECT_PATH: Client.xcodeproj
   - opts:
       is_expand: false
     BITRISE_EXPORT_METHOD: development
