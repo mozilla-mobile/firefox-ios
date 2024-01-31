@@ -173,8 +173,7 @@ class TabDisplayPanel: UIViewController,
         shouldShowEmptyView(tabsState.isPrivateTabsEmpty)
         let uuid = windowUUID
         // Avoid showing toast multiple times
-        if let toastType = tabsState.toastType,
-            shownToast == nil {
+        if let toastType = tabsState.toastType {
             store.dispatch(TabPanelAction.hideUndoToast(windowUUID.context))
             presentToast(toastType: toastType) { undoClose in
                 if let action = toastType.reduxAction(for: uuid), undoClose {
