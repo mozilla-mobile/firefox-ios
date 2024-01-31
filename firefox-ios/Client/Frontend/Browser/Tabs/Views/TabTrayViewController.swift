@@ -89,7 +89,7 @@ class TabTrayViewController: UIViewController,
         label.font = TabsButton.UX.titleFont
         label.layer.cornerRadius = TabsButton.UX.cornerRadius
         label.textAlignment = .center
-        label.text = self.tabTrayState.normalTabsCount
+        label.text = "0"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -273,16 +273,20 @@ class TabTrayViewController: UIViewController,
 
     func newState(state: TabTrayState) {
         tabTrayState = state
+        updateTabCountImage(count: state.normalTabsCount)
 
         if tabTrayState.shouldDismiss {
             delegate?.didFinish()
         }
         if let url = tabTrayState.shareURL {
             navigationHandler?.shareTab(url: url, sourceView: self.view)
-
-            // Reload to clear the share sheet item
-            store.dispatch(TabTrayAction.tabTrayDidLoad(tabTrayState.selectedPanel))
         }
+    }
+
+    func updateTabCountImage(count: String) {
+        countLabel.text = count
+        segmentedControl.setImage(TabTrayPanelType.tabs.image!.overlayWith(image: countLabel),
+                                  forSegmentAt: 0)
     }
 
     // MARK: Themeable
