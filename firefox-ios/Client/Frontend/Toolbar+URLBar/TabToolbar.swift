@@ -23,7 +23,7 @@ class TabToolbar: UIView, SearchBarLocationProvider {
     private let privateModeBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.privateModeBadge,
                                                      isPrivateBadge: true)
     private let appMenuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuBadge)
-    private let warningMenuBadge = BadgeWithBackdrop(imageName: StandardImageIdentifiers.Large.warningFill, 
+    private let warningMenuBadge = BadgeWithBackdrop(imageName: StandardImageIdentifiers.Large.warningFill,
                                                      imageMask: ImageIdentifiers.menuWarningMask)
 
     var helper: TabToolbarHelper?
