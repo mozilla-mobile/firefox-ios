@@ -68,6 +68,11 @@ struct AddressAutofillToggle: View {
                 .toggleStyle(SwitchToggleStyle(tint: toggleTintColor))
                 .frame(alignment: .trailing)
             }
+            .accessibilityElement()
+            .accessibilityLabel("\(String.Addresses.Settings.SwitchTitle), \(String.Addresses.Settings.SwitchDescription)")
+            .accessibilityAction {
+                model.isEnabled = !model.isEnabled
+            }
 
             // Divider line to separate content
             Divider()
@@ -105,4 +110,4 @@ struct AutofillToggle_Previews: PreviewProvider {
         let model = ToggleModel(isEnabled: true)
         AddressAutofillToggle(model: model)
     }
- }
+}
