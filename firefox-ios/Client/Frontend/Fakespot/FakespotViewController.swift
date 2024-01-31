@@ -443,7 +443,11 @@ class FakespotViewController: UIViewController,
             return view
 
         case .highlightsCard:
-            guard let cardViewModel = viewModel.highlightsCardViewModel else { return nil }
+            guard var cardViewModel = viewModel.highlightsCardViewModel else { return nil }
+            cardViewModel.expandState = fakespotState.isHighlightsSectionExpanded ? .expanded : .collapsed
+            cardViewModel.onExpandStateChanged = { state in
+                store.dispatch(FakespotAction.highlightsDidChange(isExpanded: state == .expanded))
+            }
             let view: FakespotHighlightsCardView = .build()
             view.configure(cardViewModel)
             return view
@@ -455,7 +459,7 @@ class FakespotViewController: UIViewController,
                 store.dispatch(FakespotAction.setAppearanceTo(false))
             }
             viewModel.reviewQualityCardViewModel.onExpandStateChanged = { state in
-                store.dispatch(FakespotAction.reviewQualityDidChange)
+                store.dispatch(FakespotAction.reviewQualityDidChange(isExpanded: state == .expanded))
             }
             reviewQualityCardView.configure(viewModel.reviewQualityCardViewModel)
 
@@ -475,7 +479,7 @@ class FakespotViewController: UIViewController,
                 self?.viewModel.toggleAdsEnabled()
             }
             viewModel.settingsCardViewModel.onExpandStateChanged = { state in
-                store.dispatch(FakespotAction.settingsStateDidChange)
+                store.dispatch(FakespotAction.settingsStateDidChange(isExpanded: state == .expanded))
             }
             view.configure(viewModel.settingsCardViewModel)
 
