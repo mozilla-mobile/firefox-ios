@@ -16,7 +16,7 @@ stages:
     - configure_build_fennec:
         run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
     - L10nBuild:
-        run_if: '{{ false }}'
+        run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "false"}}'
   run_tests:
     workflows:
     - build_and_test_1_SmokeTest2: {}
