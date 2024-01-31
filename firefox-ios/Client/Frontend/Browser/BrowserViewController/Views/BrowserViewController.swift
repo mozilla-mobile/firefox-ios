@@ -1136,6 +1136,10 @@ class BrowserViewController: UIViewController,
         if UIDevice.current.userInterfaceIdiom == .pad {
             topTabsViewController?.refreshTabs()
         }
+
+        if !focusUrlBar, urlBar.inOverlayMode {
+            urlBar.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
+        }
     }
 
     func showLibrary(panel: LibraryPanelType) {
