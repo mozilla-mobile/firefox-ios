@@ -474,7 +474,7 @@ class TabTrayViewController: UIViewController,
     }
 
     @objc
-    private func syncTabsTapped(uuid: WindowUUID) {
+    private func syncTabsTapped() {
         store.dispatch(RemoteTabsPanelAction.refreshTabs(windowUUID.context))
     }
 }
