@@ -96,6 +96,7 @@
         "NewTabSettingsTest\/testChangeNewTabSettingsShowYourHistory()",
         "NewTabSettingsTest\/testCheckNewTabSettingsByDefault()",
         "NewTabSettingsTest\/testKeyboardRaisedWhenTabOpenedFromTabTray()",
+        "NewTabSettingsTest\/testNewTabCustomURLKeyboardNotRaised()",
         "NewTabSettingsTest\/testToggleOffOnAdditionalContentBookmarks()",
         "OnboardingTests\/testCloseTour()",
         "OnboardingTests\/testFirstRunTour()",
