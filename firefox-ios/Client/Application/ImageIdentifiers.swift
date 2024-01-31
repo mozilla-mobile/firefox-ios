@@ -11,7 +11,6 @@ import Foundation
 public struct ImageIdentifiers {
     public static let amberCaution = "AmberCaution"
     public static let badgeMask = "badge-mask"
-    public static let circleFill = "circle.fill"
     public static let competitiveness = "competitiveness"
     public static let creditCardPlaceholder = "credit_card_placeholder"
     public static let errorAutofill = "error_autofill"

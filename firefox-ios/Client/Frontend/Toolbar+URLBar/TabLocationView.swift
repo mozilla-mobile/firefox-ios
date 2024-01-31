@@ -427,9 +427,12 @@ class TabLocationView: UIView, FeatureFlaggable {
                 .TabLocationETPOnSecureAccessibilityLabel : .TabLocationETPOnNotSecureAccessibilityLabel
         case .safelisted:
             if let smallDotImage = UIImage(
-                systemName: ImageIdentifiers.circleFill
+                named: StandardImageIdentifiers.Small.notificationDotFill
             )?.withTintColor(themeManager.currentTheme.colors.iconAccentBlue) {
-                trackingProtectionButton.setImage(lockImage?.overlayWith(image: smallDotImage), for: .normal)
+                let image = lockImage?.overlayWith(image: smallDotImage,
+                                                   modifier: 0.4,
+                                                   origin: CGPoint(x: 15, y: 15))
+                trackingProtectionButton.setImage(image, for: .normal)
                 trackingProtectionButton.accessibilityLabel = hasSecureContent ?
                     .TabLocationETPOffSecureAccessibilityLabel : .TabLocationETPOffNotSecureAccessibilityLabel
             }
