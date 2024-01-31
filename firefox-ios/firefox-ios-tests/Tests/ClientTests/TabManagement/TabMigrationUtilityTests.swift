@@ -15,7 +15,7 @@ class TabMigrationUtilityTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        tabDataWindowUUID = WindowUUID()
+        tabDataWindowUUID = WindowUUID.XCTestDefaultUUID
         profile = MockProfile()
         tabDataStore = MockTabDataStore()
     }

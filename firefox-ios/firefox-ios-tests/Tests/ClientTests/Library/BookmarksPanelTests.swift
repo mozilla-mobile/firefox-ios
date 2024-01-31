@@ -167,6 +167,7 @@ class BookmarksPanelTests: XCTestCase {
 
         // Pushing bookmark detail panel as if we are truly in .itemEditMode
         let bookmarkDetailPanel = BookmarkDetailPanel(profile: MockProfile(),
+                                                      windowUUID: .XCTestDefaultUUID,
                                                       bookmarkNode: LocalDesktopFolder(),
                                                       parentBookmarkFolder: LocalDesktopFolder())
         mockNavigationController.setViewControllers([panel, bookmarkDetailPanel], animated: false)
@@ -182,6 +183,7 @@ class BookmarksPanelTests: XCTestCase {
 
         // Pushing bookmark detail panel as if we are truly in .itemEditMode
         let bookmarkDetailPanel = BookmarkDetailPanel(profile: MockProfile(),
+                                                      windowUUID: .XCTestDefaultUUID,
                                                       withNewBookmarkNodeType: .bookmark,
                                                       parentBookmarkFolder: LocalDesktopFolder())
         mockNavigationController.setViewControllers([panel, bookmarkDetailPanel], animated: false)
@@ -304,7 +306,7 @@ private extension BookmarksPanelTests {
         let profile = MockProfile()
         let viewModel = BookmarksPanelViewModel(profile: profile, bookmarkFolderGUID: "TestGuid")
         viewModel.bookmarkFolder = LocalDesktopFolder()
-        return SpyBookmarksPanel(viewModel: viewModel)
+        return SpyBookmarksPanel(viewModel: viewModel, windowUUID: .XCTestDefaultUUID)
     }
 }
 

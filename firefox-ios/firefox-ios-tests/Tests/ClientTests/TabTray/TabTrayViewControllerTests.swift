@@ -91,7 +91,7 @@ final class TabTrayViewControllerTests: XCTestCase {
     private func createSubject(selectedSegment: TabTrayPanelType = .tabs,
                                file: StaticString = #file,
                                line: UInt = #line) -> TabTrayViewController {
-        let subject = TabTrayViewController(selectedTab: selectedSegment)
+        let subject = TabTrayViewController(selectedTab: selectedSegment, windowUUID: .XCTestDefaultUUID)
         subject.delegate = delegate
         subject.childPanelControllers = makeChildPanels()
         subject.setupOpenPanel(panelType: selectedSegment)
@@ -112,9 +112,9 @@ final class TabTrayViewControllerTests: XCTestCase {
     }
 
     private func makeChildPanels() -> [UINavigationController] {
-        let regularTabsPanel = TabDisplayPanel(isPrivateMode: false)
-        let privateTabsPanel = TabDisplayPanel(isPrivateMode: true)
-        let syncTabs = RemoteTabsPanel()
+        let regularTabsPanel = TabDisplayPanel(isPrivateMode: false, windowUUID: .XCTestDefaultUUID)
+        let privateTabsPanel = TabDisplayPanel(isPrivateMode: true, windowUUID: .XCTestDefaultUUID)
+        let syncTabs = RemoteTabsPanel(windowUUID: .XCTestDefaultUUID)
         return [
             ThemedNavigationController(rootViewController: regularTabsPanel),
             ThemedNavigationController(rootViewController: privateTabsPanel),

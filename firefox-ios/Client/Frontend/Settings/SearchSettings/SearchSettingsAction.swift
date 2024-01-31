@@ -2,14 +2,11 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
 import Redux
 
-enum GeneralBrowserAction: Action {
-    case showToast(ToastType)
-
+enum SearchSettingsAction: Action {
     var windowUUID: UUID? {
-        // TODO: [8188] Update to be non-optional and return windowUUID. Forthcoming.
+        // TODO: [8188] Revisit UUIDs here.
         switch self {
         default: return nil
         }

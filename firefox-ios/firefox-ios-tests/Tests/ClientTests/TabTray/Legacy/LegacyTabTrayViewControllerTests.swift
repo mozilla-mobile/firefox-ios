@@ -23,7 +23,7 @@ final class LegacyTabTrayViewControllerTests: XCTestCase {
 
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
-        manager = TabManagerImplementation(profile: profile)
+        manager = TabManagerImplementation(profile: profile, uuid: .XCTestDefaultUUID)
         urlBar = MockURLBarView()
         overlayManager = MockOverlayModeManager()
         overlayManager.setURLBar(urlBarView: urlBar)

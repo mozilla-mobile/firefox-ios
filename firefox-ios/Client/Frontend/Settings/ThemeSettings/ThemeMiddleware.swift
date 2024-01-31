@@ -6,13 +6,14 @@ import Common
 import Redux
 
 protocol ThemeManagerProvider {
-    func getCurrentThemeManagerState() -> ThemeSettingsState
+    func getCurrentThemeManagerState(windowUUID: WindowUUID?) -> ThemeSettingsState
     func toggleUseSystemAppearance(_ enabled: Bool)
     func toggleAutomaticBrightness(_ enabled: Bool)
     func updateManualTheme(_ theme: ThemeType)
     func updateUserBrightness(_ value: Float)
 }
 
+// TODO: [8188] Middlewares are currently handling actions globally. Need updates for multi-window. Forthcoming.
 class ThemeManagerMiddleware: ThemeManagerProvider {
     var themeManager: ThemeManager
 
@@ -23,7 +24,7 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
     lazy var themeManagerProvider: Middleware<AppState> = { state, action in
         switch action {
         case ThemeSettingsAction.themeSettingsDidAppear:
-            let currentThemeState = self.getCurrentThemeManagerState()
+            let currentThemeState = self.getCurrentThemeManagerState(windowUUID: action.windowUUID)
             store.dispatch(ThemeSettingsAction.receivedThemeManagerValues(currentThemeState))
         case ThemeSettingsAction.toggleUseSystemAppearance(let enabled):
             self.toggleUseSystemAppearance(enabled)
@@ -51,8 +52,10 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
     }
 
     // MARK: - Helper func
-    func getCurrentThemeManagerState() -> ThemeSettingsState {
-        ThemeSettingsState(useSystemAppearance: themeManager.systemThemeIsOn,
+    func getCurrentThemeManagerState(windowUUID: WindowUUID?) -> ThemeSettingsState {
+        // TODO: [8188] Revisit UUID handling, needs additional investigation.
+        ThemeSettingsState(windowUUID: windowUUID ?? WindowUUID.unavailable,
+                           useSystemAppearance: themeManager.systemThemeIsOn,
                            isAutomaticBrightnessEnable: themeManager.automaticBrightnessIsOn,
                            manualThemeSelected: themeManager.currentTheme.type,
                            userBrightnessThreshold: themeManager.automaticBrightnessValue,

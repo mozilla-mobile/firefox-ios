@@ -38,15 +38,18 @@ class BookmarksCoordinator: BaseCoordinator, BookmarksCoordinatorDelegate {
 
     private let profile: Profile
     private weak var parentCoordinator: LibraryCoordinatorDelegate?
+    private let windowUUID: WindowUUID
 
     // MARK: - Initializers
 
     init(
         router: Router,
         profile: Profile,
+        windowUUID: WindowUUID,
         parentCoordinator: LibraryCoordinatorDelegate?
     ) {
         self.profile = profile
+        self.windowUUID = windowUUID
         self.parentCoordinator = parentCoordinator
         super.init(router: router)
     }
@@ -55,7 +58,7 @@ class BookmarksCoordinator: BaseCoordinator, BookmarksCoordinatorDelegate {
 
     func start(from folder: FxBookmarkNode) {
         let viewModel = BookmarksPanelViewModel(profile: profile, bookmarkFolderGUID: folder.guid)
-        let controller = BookmarksPanel(viewModel: viewModel)
+        let controller = BookmarksPanel(viewModel: viewModel, windowUUID: windowUUID)
         controller.bookmarkCoordinatorDelegate = self
         controller.libraryPanelDelegate = parentCoordinator
         router.push(controller)
@@ -64,6 +67,7 @@ class BookmarksCoordinator: BaseCoordinator, BookmarksCoordinatorDelegate {
     func showBookmarkDetail(for node: FxBookmarkNode, folder: FxBookmarkNode) {
         TelemetryWrapper.recordEvent(category: .action, method: .change, object: .bookmark, value: .bookmarksPanel)
         let detailController = BookmarkDetailPanel(profile: profile,
+                                                   windowUUID: windowUUID,
                                                    bookmarkNode: node,
                                                    parentBookmarkFolder: folder)
         router.push(detailController)
@@ -76,6 +80,7 @@ class BookmarksCoordinator: BaseCoordinator, BookmarksCoordinatorDelegate {
     ) {
         let detailController = BookmarkDetailPanel(
             profile: profile,
+            windowUUID: windowUUID,
             withNewBookmarkNodeType: bookmarkType,
             parentBookmarkFolder: parentBookmarkFolder
         ) {

@@ -26,7 +26,7 @@ class DependencyHelperMock {
             quality: UIConstants.ScreenshotQuality)
         AppContainer.shared.register(service: diskImageStore)
 
-        let windowUUID = WindowUUID()
+        let windowUUID = WindowUUID.XCTestDefaultUUID
         let tabManager: TabManager =
         injectedTabManager ?? TabManagerImplementation(profile: profile, uuid: windowUUID)
 
