@@ -4,12 +4,15 @@ project_type: ios
 pipelines:
   pipeline_build_and_test:
     stages:
+    - determine_application: {}
     - build_application: {}
     - run_tests: {}
 stages:
-  build_application:
+  determine_application:
     workflows:
     - determine_apps_affected: {}
+  build_application:
+    workflows:
     - configure_build_fennec:
         run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
     - L10nBuild:
