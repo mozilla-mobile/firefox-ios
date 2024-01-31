@@ -461,8 +461,8 @@ class TabTrayViewController: UIViewController,
     }
 
     @objc
-    private func newTabButtonTapped(uuid: WindowUUID) {
-        let context = AddNewTabContext(urlRequest: nil, isPrivate: tabTrayState.isPrivateMode, windowUUID: uuid)
+    private func newTabButtonTapped() {
+        let context = AddNewTabContext(urlRequest: nil, isPrivate: tabTrayState.isPrivateMode, windowUUID: windowUUID)
         store.dispatch(TabPanelAction.addNewTab(context))
     }
 
