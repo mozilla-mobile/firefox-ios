@@ -5,6 +5,7 @@
 import Foundation
 import Redux
 
+// TODO: [8188] Middlewares are currently handling actions globally. Need updates for multi-window. Forthcoming.
 class FeltPrivacyMiddleware {
     var privacyManager: FeltPrivacyManager
 

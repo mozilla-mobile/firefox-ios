@@ -17,4 +17,9 @@ enum FakespotAction: Action {
     case adsImpressionEventSendFor(productId: String)
     case adsExposureEventSendFor(productId: String)
     case surfaceDisplayedEventSend
+
+    var windowUUID: UUID? {
+        // TODO: [8188] Update to return the windowUUID
+        return nil
+    }
 }

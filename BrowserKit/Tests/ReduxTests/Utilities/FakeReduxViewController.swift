@@ -5,6 +5,7 @@
 import UIKit
 
 @testable import Redux
+
 class FakeReduxViewController: UIViewController, StoreSubscriber {
     typealias SubscriberStateType = FakeReduxState
 

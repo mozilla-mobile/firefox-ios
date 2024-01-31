@@ -12,8 +12,11 @@ public protocol EngineSessionDelegate: AnyObject {
     /// Event to indicate that this session has had a long press.
     func onLongPress(touchPoint: CGPoint)
 
-    /// Event to indicate the title has changed.
+    /// Event to indicate the title on the session has changed.
     func onTitleChange(title: String)
+
+    /// Event to indicate the URL on the session has changed.
+    func onLocationChange(url: String)
 
     /// Event to indicate the loading progress has been updated.
     func onProgress(progress: Double)

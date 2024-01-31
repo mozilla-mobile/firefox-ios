@@ -2,7 +2,7 @@
 "FirefoxHomepage.FeltDeletion.Link.v122" = "Дані приватного перегляду стерто";
 
 /* The body of the message for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. Placeholder refers to app name. */
-"FirefoxHomepage.FeltPrivacyUI.Body.v122" = "%@ видаляє ваші куки, історію і дані сайтів після закриття всіх приватних вкладок.";
+"FirefoxHomepage.FeltPrivacyUI.Body.v122" = "%@ видаляє ваші файли cookie, історію і дані сайтів після закриття всіх приватних вкладок.";
 
 /* The link for the card that educates users about how private mode works. The link redirects to an external site for more information. The card shows up on the homepage when in the new privacy mode. */
 "FirefoxHomepage.FeltPrivacyUI.Link.v122" = "Хто може бачити мою діяльність?";

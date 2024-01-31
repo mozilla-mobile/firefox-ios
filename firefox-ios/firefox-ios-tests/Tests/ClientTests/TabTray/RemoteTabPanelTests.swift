@@ -40,7 +40,7 @@ final class RemoteTabPanelTests: XCTestCase {
     // MARK: - Private
 
     private func generateEmptyState() -> RemoteTabsPanelState {
-        return RemoteTabsPanelState()
+        return RemoteTabsPanelState(windowUUID: .XCTestDefaultUUID)
     }
 
     private func generateStateOneClientTwoTabs() -> RemoteTabsPanelState {
@@ -49,13 +49,15 @@ final class RemoteTabPanelTests: XCTestCase {
                              title: "Mozilla Homepage",
                              history: [],
                              lastUsed: 0,
-                             icon: nil)
+                             icon: nil,
+                             inactive: false)
         let tab2 = RemoteTab(clientGUID: "123",
                              URL: URL(string: "https://google.com")!,
                              title: "Google Homepage",
                              history: [],
                              lastUsed: 0,
-                             icon: nil)
+                             icon: nil,
+                             inactive: false)
         let fakeTabs: [RemoteTab] = [tab1, tab2]
         let client = RemoteClient(guid: "123",
                                   name: "Client",
@@ -66,7 +68,8 @@ final class RemoteTabPanelTests: XCTestCase {
                                   version: "v1.0",
                                   fxaDeviceId: "12345")
         let fakeData = [ClientAndTabs(client: client, tabs: fakeTabs)]
-        return RemoteTabsPanelState(refreshState: .idle,
+        return RemoteTabsPanelState(windowUUID: .XCTestDefaultUUID,
+                                    refreshState: .idle,
                                     allowsRefresh: true,
                                     clientAndTabs: fakeData,
                                     showingEmptyState: nil)
@@ -75,7 +78,7 @@ final class RemoteTabPanelTests: XCTestCase {
     private func createSubject(state: RemoteTabsPanelState,
                                file: StaticString = #file,
                                line: UInt = #line) -> RemoteTabsPanel {
-        let subject = RemoteTabsPanel()
+        let subject = RemoteTabsPanel(windowUUID: .XCTestDefaultUUID)
         subject.newState(state: state)
 
         trackForMemoryLeaks(subject, file: file, line: line)

@@ -7,7 +7,7 @@ import Redux
 
 enum ThemeSettingsAction: Action {
     // UI trigger actions
-    case themeSettingsDidAppear
+    case themeSettingsDidAppear(ActionContext)
     case toggleUseSystemAppearance(Bool)
     case enableAutomaticBrightness(Bool)
     case switchManualTheme(ThemeType)
@@ -21,4 +21,12 @@ enum ThemeSettingsAction: Action {
     case manualThemeChanged(ThemeType)
     case userBrightnessChanged(Float)
     case systemBrightnessChanged(Float)
+
+    var windowUUID: UUID? {
+        // TODO: [8188] Update to be non-optional and return windowUUID. Forthcoming.
+        switch self {
+        case .themeSettingsDidAppear(let context): return context.windowUUID
+        default: return nil
+        }
+    }
 }

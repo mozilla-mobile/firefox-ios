@@ -24,6 +24,7 @@ class SiteTableViewController: UIViewController,
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
     let profile: Profile
+    let windowUUID: WindowUUID
 
     var data: Cursor<Site> = Cursor<Site>(status: .success, msg: "No data set")
     lazy var tableView: UITableView = .build { [weak self] table in
@@ -63,10 +64,12 @@ class SiteTableViewController: UIViewController,
     }
 
     init(profile: Profile,
+         windowUUID: WindowUUID,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          windowManager: WindowManager = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.profile = profile
+        self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         self.windowManager = windowManager

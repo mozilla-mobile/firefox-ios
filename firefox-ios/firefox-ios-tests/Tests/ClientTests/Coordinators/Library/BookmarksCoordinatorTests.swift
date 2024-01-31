@@ -69,6 +69,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
         let subject = BookmarksCoordinator(
             router: router,
             profile: profile,
+            windowUUID: .XCTestDefaultUUID,
             parentCoordinator: parentCoordinator
         )
         trackForMemoryLeaks(subject)

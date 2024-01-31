@@ -9,6 +9,7 @@ import Storage
 protocol LibraryPanelDelegate: AnyObject {
     func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
     func libraryPanel(didSelectURL url: URL, visitType: VisitType)
+    var libraryPanelWindowUUID: WindowUUID { get }
 }
 
 protocol LibraryPanel: UIViewController {

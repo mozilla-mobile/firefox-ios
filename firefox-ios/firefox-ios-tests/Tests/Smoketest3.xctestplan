@@ -90,6 +90,7 @@
         "NavigationTest\/testWriteToChildPopupTab()",
         "NewTabSettingsTest\/testChangeNewTabSettingsLabel()",
         "NewTabSettingsTest\/testChangeNewTabSettingsShowFirefoxHome()",
+        "NewTabSettingsTest\/testKeyboardRaisedWhenTabOpenedFromTabTray()",
         "NightModeTests",
         "OnboardingTests\/testCloseTour()",
         "OnboardingTests\/testFirstRunTour()",

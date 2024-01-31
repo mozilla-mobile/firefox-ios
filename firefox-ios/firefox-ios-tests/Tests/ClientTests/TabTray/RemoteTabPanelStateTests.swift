@@ -22,7 +22,7 @@ final class RemoteTabPanelStateTests: XCTestCase {
     }
 
     func testTabsRefreshSkippedIfNotAllowed() {
-        let initialState = RemoteTabsPanelState()
+        let initialState = RemoteTabsPanelState(windowUUID: .XCTestDefaultUUID)
         XCTAssertEqual(initialState.refreshState,
                        RemoteTabsPanelRefreshState.idle)
 
@@ -66,7 +66,7 @@ final class RemoteTabPanelStateTests: XCTestCase {
     }
 
     private func generateEmptyState() -> RemoteTabsPanelState {
-        return RemoteTabsPanelState()
+        return RemoteTabsPanelState(windowUUID: .XCTestDefaultUUID)
     }
 
     private func generateOneClientTwoTabs() -> [ClientAndTabs] {
@@ -75,13 +75,15 @@ final class RemoteTabPanelStateTests: XCTestCase {
                              title: "Mozilla Homepage",
                              history: [],
                              lastUsed: 0,
-                             icon: nil)
+                             icon: nil,
+                             inactive: false)
         let tab2 = RemoteTab(clientGUID: "123",
                              URL: URL(string: "https://google.com")!,
                              title: "Google Homepage",
                              history: [],
                              lastUsed: 0,
-                             icon: nil)
+                             icon: nil,
+                             inactive: false)
         let fakeTabs: [RemoteTab] = [tab1, tab2]
         let client = RemoteClient(guid: "123",
                                   name: "Client",
@@ -96,7 +98,7 @@ final class RemoteTabPanelStateTests: XCTestCase {
     }
 
     private func createSubject() -> RemoteTabsPanelState {
-        let subject = RemoteTabsPanelState()
+        let subject = RemoteTabsPanelState(windowUUID: .XCTestDefaultUUID)
         return subject
     }
 }

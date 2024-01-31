@@ -17,12 +17,26 @@ actor MockRustFirefoxSuggest: RustFirefoxSuggestActor {
         includeSponsored: Bool,
         includeNonSponsored: Bool
     ) async throws -> [RustFirefoxSuggestion] {
-        return [RustFirefoxSuggestion(title: "Mozilla",
-                                      url: URL(string: "https://mozilla.org")!,
-                                      isSponsored: true,
-                                      iconImage: nil,
-                                      fullKeyword: "mozilla"
-                                     )]
+        var suggestions = [RustFirefoxSuggestion]()
+        if includeSponsored {
+            suggestions.append(RustFirefoxSuggestion(
+                title: "Mozilla",
+                url: URL(string: "https://mozilla.org")!,
+                isSponsored: true,
+                iconImage: nil,
+                fullKeyword: "mozilla"
+            ))
+        }
+        if includeNonSponsored {
+            suggestions.append(RustFirefoxSuggestion(
+                title: "California",
+                url: URL(string: "https://wikipedia.org/California")!,
+                isSponsored: false,
+                iconImage: nil,
+                fullKeyword: "california"
+            ))
+        }
+        return suggestions
     }
     nonisolated func interruptReader() {
     }
@@ -31,6 +45,7 @@ actor MockRustFirefoxSuggest: RustFirefoxSuggestActor {
 @MainActor
 class SearchViewControllerTest: XCTestCase {
     var profile: MockProfile!
+    var engines: SearchEngines!
     var searchViewController: SearchViewController!
     var remoteClient: RemoteClient!
 
@@ -42,7 +57,7 @@ class SearchViewControllerTest: XCTestCase {
         LegacyFeatureFlagsManager.shared.set(feature: .firefoxSuggestFeature, to: true)
 
         let mockSearchEngineProvider = MockSearchEngineProvider()
-        let engines = SearchEngines(
+        engines = SearchEngines(
             prefs: profile.prefs,
             files: profile.files,
             engineProvider: mockSearchEngineProvider
@@ -78,17 +93,17 @@ class SearchViewControllerTest: XCTestCase {
         profile.prefs.setBool(true, forKey: PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions)
         await searchViewController.loadFirefoxSuggestions()?.value
 
-        XCTAssertEqual(searchViewController.firefoxSuggestions.count, 1)
+        XCTAssertEqual(searchViewController.firefoxSuggestions.count, 2)
     }
 
     func testFirefoxSuggestionReturnsNoSuggestions() async throws {
-        profile.prefs.setBool(false, forKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions )
+        profile.prefs.setBool(false, forKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions)
         profile.prefs.setBool(false, forKey: PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions)
         await searchViewController.loadFirefoxSuggestions()?.value
         XCTAssertEqual(searchViewController.firefoxSuggestions.count, 0)
     }
 
-    func testHistoryandBookmarksAreFilteredWhenShowSponsoredSuggestionsIsTrue() {
+    func testHistoryAndBookmarksAreFilteredWhenShowSponsoredSuggestionsIsTrue() {
         profile.prefs.setBool(true, forKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions)
         let data = ArrayCursor<Site>(data: [ Site(url: "https://example.com?mfadid=adm", title: "Test1"),
                                              Site(url: "https://example.com", title: "Test2"),
@@ -106,7 +121,7 @@ class SearchViewControllerTest: XCTestCase {
         XCTAssertEqual(searchViewController.data.count, 3)
     }
 
-    func testSyncTabsAreFilteredWhenShowSponsoredSuggestionsIsTrue() {
+    func testSyncedTabsAreFilteredWhenShowSponsoredSuggestionsIsTrue() {
         profile.prefs.setBool(true, forKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions)
         let remoteTab1 = RemoteTab(
             clientGUID: "1",
@@ -114,7 +129,8 @@ class SearchViewControllerTest: XCTestCase {
             title: "Mozilla 1",
             history: [],
             lastUsed: UInt64(1),
-            icon: nil
+            icon: nil,
+            inactive: false
         )
         let remoteTab2 = RemoteTab(
             clientGUID: "2",
@@ -122,7 +138,8 @@ class SearchViewControllerTest: XCTestCase {
             title: "Mozilla 2",
             history: [],
             lastUsed: UInt64(2),
-            icon: nil
+            icon: nil,
+            inactive: false
         )
         let remoteTab3 = RemoteTab(
             clientGUID: "3",
@@ -130,7 +147,8 @@ class SearchViewControllerTest: XCTestCase {
             title: "Mozilla 3",
             history: [],
             lastUsed: UInt64(3),
-            icon: nil
+            icon: nil,
+            inactive: false
         )
         searchViewController.remoteClientTabs = [ClientTabsSearchWrapper(client: remoteClient, tab: remoteTab1),
                                                  ClientTabsSearchWrapper(client: remoteClient, tab: remoteTab2),
@@ -139,7 +157,7 @@ class SearchViewControllerTest: XCTestCase {
         XCTAssertEqual(searchViewController.filteredRemoteClientTabs.count, 2)
     }
 
-    func testSyncedTabssAreNotFilteredWhenShowSponsoredSuggestionsIsTrue() {
+    func testSyncedTabsAreNotFilteredWhenShowSponsoredSuggestionsIsFalse() {
         profile.prefs.setBool(false, forKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions)
 
         let remoteTab1 = RemoteTab(
@@ -148,7 +166,8 @@ class SearchViewControllerTest: XCTestCase {
             title: "Mozilla 1",
             history: [],
             lastUsed: UInt64(1),
-            icon: nil
+            icon: nil,
+            inactive: false
         )
         let remoteTab2 = RemoteTab(
             clientGUID: "2",
@@ -156,7 +175,8 @@ class SearchViewControllerTest: XCTestCase {
             title: "Mozilla 2",
             history: [],
             lastUsed: UInt64(2),
-            icon: nil
+            icon: nil,
+            inactive: false
         )
         let remoteTab3 = RemoteTab(
             clientGUID: "3",
@@ -164,12 +184,45 @@ class SearchViewControllerTest: XCTestCase {
             title: "Mozilla 3",
             history: [],
             lastUsed: UInt64(3),
-            icon: nil
+            icon: nil,
+            inactive: false
         )
         searchViewController.remoteClientTabs = [ClientTabsSearchWrapper(client: remoteClient, tab: remoteTab1),
                                                  ClientTabsSearchWrapper(client: remoteClient, tab: remoteTab2),
                                                  ClientTabsSearchWrapper(client: remoteClient, tab: remoteTab3)]
         searchViewController.searchRemoteTabs(for: "Mozilla")
         XCTAssertEqual(searchViewController.filteredRemoteClientTabs.count, 3)
+    }
+
+    func testSponsoredSuggestionsAreNotShownInPrivateBrowsingMode() async throws {
+        let viewModel = SearchViewModel(isPrivate: true, isBottomSearchBar: false)
+        let searchViewController = SearchViewController(
+            profile: profile,
+            viewModel: viewModel,
+            model: engines,
+            tabManager: MockTabManager()
+        )
+
+        profile.prefs.setBool(true, forKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions)
+        profile.prefs.setBool(true, forKey: PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions)
+        await searchViewController.loadFirefoxSuggestions()?.value
+
+        XCTAssert(searchViewController.firefoxSuggestions.isEmpty)
+    }
+
+    func testNonSponsoredSuggestionsAreNotShownInPrivateBrowsingMode() async throws {
+        let viewModel = SearchViewModel(isPrivate: true, isBottomSearchBar: false)
+        let searchViewController = SearchViewController(
+            profile: profile,
+            viewModel: viewModel,
+            model: engines,
+            tabManager: MockTabManager()
+        )
+
+        profile.prefs.setBool(true, forKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions)
+        profile.prefs.setBool(true, forKey: PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions)
+        await searchViewController.loadFirefoxSuggestions()?.value
+
+        XCTAssert(searchViewController.firefoxSuggestions.isEmpty)
     }
 }
