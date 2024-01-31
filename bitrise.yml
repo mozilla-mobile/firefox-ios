@@ -9,6 +9,7 @@ pipelines:
 stages:
   build_application:
     workflows:
+    - determine_apps_affected: {}
     - configure_build_fennec:
         run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
     - L10nBuild:
@@ -26,7 +27,7 @@ workflows:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
-    - determine_apps_affected
+    #- determine_apps_affected
     - Decision_to_run_UI_Tests
     steps:
     - activate-ssh-key@4:
@@ -341,6 +342,7 @@ workflows:
         machine_type_id: g2-m1.8core
   determine_apps_affected:
     steps:
+    - git-clone@6.2:
     - script@1:
         title: Determine which application to base configuration
         inputs:
