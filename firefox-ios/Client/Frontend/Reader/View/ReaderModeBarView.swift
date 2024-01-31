@@ -25,8 +25,8 @@ enum ReaderModeBarButtonType {
 
     private var imageName: String {
         switch self {
-        case .markAsRead: return StandardImageIdentifiers.Small.notificationDotFill
-        case .markAsUnread: return StandardImageIdentifiers.Small.notificationDot
+        case .markAsRead: return StandardImageIdentifiers.Large.notificationDotFill
+        case .markAsUnread: return StandardImageIdentifiers.Large.notificationDot
         case .settings: return "SettingsSerif"
         case .addToReadingList: return StandardImageIdentifiers.Large.readingListAdd
         case .removeFromReadingList: return StandardImageIdentifiers.Large.delete

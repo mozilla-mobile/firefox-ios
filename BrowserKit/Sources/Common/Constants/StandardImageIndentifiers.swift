@@ -65,6 +65,8 @@ public struct StandardImageIdentifiers {
         public static let link = "linkLarge"
         public static let login = "loginLarge"
         public static let nightMode = "nightModeLarge"
+        public static let notificationDotFill = "notificationDotFillLarge"
+        public static let notificationDot = "notificationDotLarge"
         public static let packaging = "packagingLarge"
         public static let pin = "pinLarge"
         public static let pinSlash = "pinSlashLarge"
