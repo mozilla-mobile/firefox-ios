@@ -73,5 +73,4 @@ public struct ImageIdentifiers {
     public static let zoomIn = "menu-ZoomIn"
     public static let customizeHomepage = "editLarge"
     public static let help = "helpCircleLarge"
-    public static let share = "Share"
 }
