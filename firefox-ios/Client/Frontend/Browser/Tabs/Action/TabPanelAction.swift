@@ -89,7 +89,6 @@ class RefreshInactiveTabsContext: ActionContext {
     }
 }
 
-
 enum TabPanelAction: Action {
     case tabPanelDidLoad(BoolValueContext)
     case tabPanelDidAppear(BoolValueContext)
