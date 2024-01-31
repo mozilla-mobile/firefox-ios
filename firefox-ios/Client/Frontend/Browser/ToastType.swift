@@ -32,12 +32,12 @@ enum ToastType: Equatable {
         return .TabsTray.CloseTabsToast.Action
     }
 
-    var reduxAction: TabPanelAction? {
+    func reduxAction(for uuid: WindowUUID) -> TabPanelAction? {
         switch self {
-        case .singleTab: return .undoClose
-        case .singleInactiveTabs: return .undoCloseInactiveTab
-        case .allTabs: return .undoCloseAllTabs
-        case .allInactiveTabs: return .undoCloseAllInactiveTabs
+        case .singleTab: return .undoClose(uuid.context)
+        case .singleInactiveTabs: return .undoCloseInactiveTab(uuid.context)
+        case .allTabs: return .undoCloseAllTabs(uuid.context)
+        case .allInactiveTabs: return .undoCloseAllInactiveTabs(uuid.context)
         case .copyURL, .addBookmark: return nil
         }
     }

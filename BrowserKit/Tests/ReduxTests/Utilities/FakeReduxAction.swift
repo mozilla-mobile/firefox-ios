@@ -16,4 +16,13 @@ enum FakeReduxAction: Action {
     case counterIncreased(Int)
     case counterDecreased(Int)
     case setPrivateModeTo(Bool)
+<<<<<<< HEAD
+=======
+
+    var windowUUID: UUID {
+        // TODO: [8188] Currently these unit tests do not make use of UUIDs. This will be updated soon.
+        // For now, we can just return UUID().
+        return UUID()
+    }
+>>>>>>> 31337cfc7 (Refactor FXIOS-8188 [v124] [Multi-window] Redux refactors (Tab, BVC, Toasts) for multi-window (#18458))
 }

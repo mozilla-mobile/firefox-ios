@@ -533,10 +533,11 @@ class BrowserViewController: UIViewController,
         let viewModel = ButtonToastViewModel(
             labelText: toast.title,
             buttonText: toast.buttonText)
+        let uuid = windowUUID
         let toast = ButtonToast(viewModel: viewModel,
                                 theme: themeManager.currentTheme,
                                 completion: { buttonPressed in
-            if let action = toast.reduxAction, buttonPressed {
+            if let action = toast.reduxAction(for: uuid), buttonPressed {
                 store.dispatch(action)
             }
         })

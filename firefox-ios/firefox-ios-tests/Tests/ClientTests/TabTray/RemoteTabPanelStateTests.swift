@@ -28,7 +28,8 @@ final class RemoteTabPanelStateTests: XCTestCase {
 
         let reducer = remoteTabsPanelReducer()
 
-        let newState = reducer(initialState, RemoteTabsPanelAction.refreshTabs)
+        let context = WindowUUID.XCTestDefaultUUID.context
+        let newState = reducer(initialState, RemoteTabsPanelAction.refreshTabs(context))
 
         // Refresh should fail since Profile.hasSyncableAccount
         // is false for unit test, expected state is .idle
@@ -43,7 +44,8 @@ final class RemoteTabPanelStateTests: XCTestCase {
 
         XCTAssertEqual(initialState.clientAndTabs.count, 0)
 
-        let newState = reducer(initialState, RemoteTabsPanelAction.refreshDidSucceed(testTabs))
+        let context = RemoteTabsRefreshSuccessContext(clientAndTabs: testTabs, windowUUID: .XCTestDefaultUUID)
+        let newState = reducer(initialState, RemoteTabsPanelAction.refreshDidSucceed(context))
 
         XCTAssertEqual(newState.clientAndTabs.count, 1)
         XCTAssertEqual(newState.clientAndTabs.first!.tabs.count, 2)
@@ -53,7 +55,8 @@ final class RemoteTabPanelStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = remoteTabsPanelReducer()
 
-        let newState = reducer(initialState, RemoteTabsPanelAction.refreshDidFail(.failedToSync))
+        let context = RemoteTabsRefreshDidFailContext(reason: .failedToSync, windowUUID: .XCTestDefaultUUID)
+        let newState = reducer(initialState, RemoteTabsPanelAction.refreshDidFail(context))
 
         XCTAssertEqual(newState.refreshState, RemoteTabsPanelRefreshState.idle)
         XCTAssertNotNil(newState.showingEmptyState)
