@@ -103,13 +103,6 @@ class TabPeekViewController: UIViewController,
             })
         }
         if tabPeekState.showSendToDevice {
-<<<<<<< HEAD
-            actions.append(UIAction(title: .AppMenu.TouchActions.SendToDeviceTitle,
-                                    image: UIImage.templateImageNamed("menu-Send"),
-                                    identifier: nil) { _ in
-                store.dispatch(TabPeekAction.sendToDevice(tabID: self.tab.tabUUID))
-                return
-=======
             actions.append(UIAction(
                 title: .AppMenu.TouchActions.SendToDeviceTitle,
                 image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.shareApple),
@@ -118,7 +111,6 @@ class TabPeekViewController: UIViewController,
                                                  windowUUID: self.windowUUID)
                     store.dispatch(TabPeekAction.sendToDevice(context))
                     return
->>>>>>> 31337cfc7 (Refactor FXIOS-8188 [v124] [Multi-window] Redux refactors (Tab, BVC, Toasts) for multi-window (#18458))
             })
         }
         if tabPeekState.showCopyURL {
