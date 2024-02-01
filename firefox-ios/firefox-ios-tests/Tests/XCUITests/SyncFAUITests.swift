@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Common
 
 let getEndPoint = "http://restmail.net/mail/test-256a5b5b18"
 let postEndPoint = "https://api-accounts.stage.mozaws.net/v1/recovery_email/verify_code"
@@ -21,7 +22,7 @@ class SyncUITests: BaseTestCase {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(app.tables["Context Menu"].otherElements[ImageIdentifiers.sync])
+        mozWaitForElementToExist(app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.sync])
         navigator.goto(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
         verifyFxASigninScreen()

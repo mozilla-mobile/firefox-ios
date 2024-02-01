@@ -15,7 +15,7 @@ class SyncNowSetting: WithAccountSetting {
         CGSize(width: 30, height: 30),
         color: UIColor.clear
     )
-    private let syncBlueIcon = UIImage(named: "FxA-Sync-Blue")
+    private let syncIcon = UIImage(named: StandardImageIdentifiers.Large.sync)
 
     // Animation used to rotate the Sync icon 360 degrees while syncing is in progress.
     private let continuousRotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
@@ -89,17 +89,15 @@ class SyncNowSetting: WithAccountSetting {
     override var accessoryType: UITableViewCell.AccessoryType { return .none }
 
     override var image: UIImage? {
-        let syncIcon = UIImage(named: "FxA-Sync")?.tinted(withColor: theme.colors.iconPrimary)
-
         guard let syncStatus = profile.syncManager.syncDisplayState else {
-            return syncIcon
+            return syncIcon?.tinted(withColor: theme.colors.iconPrimary)
         }
 
         switch syncStatus {
         case .inProgress:
-            return syncBlueIcon
+            return syncIcon?.tinted(withColor: theme.colors.iconAction)
         default:
-            return syncIcon
+            return syncIcon?.tinted(withColor: theme.colors.iconPrimary)
         }
     }
 
@@ -168,7 +166,7 @@ class SyncNowSetting: WithAccountSetting {
         guard let self = self else { return }
         troubleshootButton.setTitle(.FirefoxSyncTroubleshootTitle, for: .normal)
         troubleshootButton.addTarget(self, action: #selector(self.troubleshoot), for: .touchUpInside)
-        troubleshootButton.setTitleColor(self.theme.colors.actionPrimary, for: .normal)
+        troubleshootButton.setTitleColor(self.theme.colors.textWarning, for: .normal)
         troubleshootButton.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
                                                                                      size: 12,
                                                                                      weight: .regular)
@@ -182,11 +180,15 @@ class SyncNowSetting: WithAccountSetting {
     }
 
     private lazy var warningIcon: UIImageView = {
-        return UIImageView(image: UIImage(named: ImageIdentifiers.amberCaution))
+        let image = UIImage(named: StandardImageIdentifiers.Large.warningFill)?
+            .tinted(withColor: theme.colors.iconWarning)
+        return UIImageView(image: image)
     }()
 
     private lazy var errorIcon: UIImageView = {
-        return UIImageView(image: UIImage(named: ImageIdentifiers.redCaution))
+        let image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.warningFill)?
+            .tinted(withColor: theme.colors.iconWarning)
+        return UIImageView(image: image)
     }()
 
     private let syncSUMOURL = SupportUtils.URLForTopic("sync-status-ios")
@@ -261,7 +263,7 @@ class SyncNowSetting: WithAccountSetting {
         DispatchQueue.main.async { [weak self] in
             guard let troubleshootButton = self?.troubleshootButton else { return }
             self?.accessoryViewContainer.addArrangedSubview(image)
-            self?.accessoryViewContainer.addArrangedSubview(troubleshootButton )
+            self?.accessoryViewContainer.addArrangedSubview(troubleshootButton)
             cell.accessoryView = self?.accessoryViewContainer
         }
     }

@@ -57,7 +57,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         view.backgroundColor = .clear
     }
 
-    private lazy var signinSyncQRImage = UIImage(named: ImageIdentifiers.signinSyncQRButton)
+    private lazy var signinSyncQRImage = UIImage(named: StandardImageIdentifiers.Large.qrCode)
 
     private let qrSignInLabel: UILabel = .build { label in
         label.textAlignment = .center

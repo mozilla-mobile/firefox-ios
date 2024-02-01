@@ -199,7 +199,7 @@ private extension JumpBackInViewModel {
         let itemURL = item.tab.URL.absoluteString
         let site = Site(url: itemURL, title: item.tab.title)
         let descriptionText = item.client.name
-        let image = UIImage(named: ImageIdentifiers.syncedDevicesIcon)
+        let image = UIImage(named: StandardImageIdentifiers.Large.syncTabs)
 
         let cellViewModel = SyncedTabCellViewModel(
             profile: profile,

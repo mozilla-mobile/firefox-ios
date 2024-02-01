@@ -228,7 +228,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     )
     fileprivate let appMenuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuBadge)
     fileprivate let warningMenuBadge = BadgeWithBackdrop(
-        imageName: ImageIdentifiers.menuWarning,
+        imageName: StandardImageIdentifiers.Large.warningFill,
         imageMask: ImageIdentifiers.menuWarningMask
     )
 
