@@ -64,10 +64,11 @@ struct TabsPanelState: ScreenState, Equatable {
 
     static let reducer: Reducer<Self> = { state, action in
         // Only process actions for the current window
-        guard action.windowUUID == nil || action.windowUUID == state.windowUUID else { return state }
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
 
         switch action {
-        case TabPanelAction.didLoadTabPanel(let tabsModel):
+        case TabPanelAction.didLoadTabPanel(let context):
+            let tabsModel = context.tabDisplayModel
             let selectedTabIndex = tabsModel.tabs.firstIndex(where: { $0.isSelected })
             return TabsPanelState(windowUUID: state.windowUUID,
                                   isPrivateMode: tabsModel.isPrivateMode,
@@ -75,7 +76,8 @@ struct TabsPanelState: ScreenState, Equatable {
                                   inactiveTabs: tabsModel.inactiveTabs,
                                   isInactiveTabsExpanded: tabsModel.isInactiveTabsExpanded,
                                   scrollToIndex: selectedTabIndex)
-        case TabPanelAction.refreshTab(let tabModel):
+        case TabPanelAction.refreshTab(let context):
+            let tabModel = context.tabDisplayModel
             var selectedTabIndex: Int?
             if tabModel.shouldScrollToTab {
                 selectedTabIndex = tabModel.tabs.firstIndex(where: { $0.isSelected })
@@ -92,13 +94,15 @@ struct TabsPanelState: ScreenState, Equatable {
                                   tabs: state.tabs,
                                   inactiveTabs: state.inactiveTabs,
                                   isInactiveTabsExpanded: !state.isInactiveTabsExpanded)
-        case TabPanelAction.refreshInactiveTabs(let inactiveTabs):
+        case TabPanelAction.refreshInactiveTabs(let context):
+            let inactiveTabs = context.inactiveTabModels
             return TabsPanelState(windowUUID: state.windowUUID,
                                   isPrivateMode: state.isPrivateMode,
                                   tabs: state.tabs,
                                   inactiveTabs: inactiveTabs,
                                   isInactiveTabsExpanded: state.isInactiveTabsExpanded)
-        case TabPanelAction.showToast(let type):
+        case TabPanelAction.showToast(let context):
+            let type = context.toastType
             return TabsPanelState(windowUUID: state.windowUUID,
                                   isPrivateMode: state.isPrivateMode,
                                   tabs: state.tabs,

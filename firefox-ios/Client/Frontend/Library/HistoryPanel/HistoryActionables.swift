@@ -50,7 +50,7 @@ struct HistoryActionablesModel: Hashable {
                                 title: History.RecentlyClosedTabsButtonTitle,
                                 a11yId: a11y.recentlyClosedCell,
                                 itemIdentity: .recentlyClosed),
-        HistoryActionablesModel(imageName: ImageIdentifiers.syncedDevicesIcon,
+        HistoryActionablesModel(imageName: StandardImageIdentifiers.Large.syncTabs,
                                 title: History.SyncedHistory,
                                 a11yId: a11y.syncedHistoryCell,
                                 itemIdentity: .syncHistory)

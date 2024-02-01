@@ -62,6 +62,7 @@ public struct StandardImageIdentifiers {
         public static let link = "linkLarge"
         public static let login = "loginLarge"
         public static let packaging = "packagingLarge"
+        public static let pageZoom = "pageZoomLarge"
         public static let pin = "pinLarge"
         public static let pinSlash = "pinSlashLarge"
         public static let plus = "plusLarge"
@@ -78,8 +79,12 @@ public struct StandardImageIdentifiers {
         public static let shield = "shieldLarge"
         public static let shipping = "shippingLarge"
         public static let shopping = "shoppingLarge"
+        public static let sync = "syncLarge"
+        public static let syncTabs = "syncTabsLarge"
         public static let tabTray = "tabTrayLarge"
         public static let warningFill = "warningFillLarge"
+        public static let warning = "warningLarge"
+        public static let whatsNew = "whatsNewLarge"
     }
 
     // Icon size 30x30

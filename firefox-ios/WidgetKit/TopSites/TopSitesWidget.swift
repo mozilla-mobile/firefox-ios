@@ -92,7 +92,7 @@ struct TopSitesView: View {
             }.padding([.bottom, .horizontal])
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background((UIColor(red: 0.11, green: 0.11, blue: 0.13, alpha: 1.00).color))
+        .widgetBackground(UIColor(red: 0.11, green: 0.11, blue: 0.13, alpha: 1.00).color)
     }
 
     private func linkToContainingApp(_ urlSuffix: String = "", query: String) -> URL {
