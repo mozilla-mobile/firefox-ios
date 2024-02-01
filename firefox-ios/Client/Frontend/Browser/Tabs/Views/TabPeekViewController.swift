@@ -105,7 +105,7 @@ class TabPeekViewController: UIViewController,
         if tabPeekState.showSendToDevice {
             actions.append(UIAction(
                 title: .AppMenu.TouchActions.SendToDeviceTitle,
-                image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.shareApple),
+                image: UIImage.templateImageNamed("menu-Send"),
                 identifier: nil) { _ in
                     let context = TabUUIDContext(tabUUID: self.tab.tabUUID,
                                                  windowUUID: self.windowUUID)
