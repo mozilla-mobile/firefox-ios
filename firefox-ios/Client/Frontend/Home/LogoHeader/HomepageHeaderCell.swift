@@ -58,7 +58,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell {
     private lazy var privateModeButton: UIButton = .build { button in
         let maskImage = UIImage(named: ImageIdentifiers.privateMaskSmall)?.withRenderingMode(.alwaysTemplate)
         button.setImage(maskImage, for: .normal)
-        button.addTarget(self, action: #selector(self.switchMode), for: .touchUpInside)
         button.imageView?.contentMode = .scaleAspectFit
         button.accessibilityLabel = .TabTrayToggleAccessibilityLabel
         button.accessibilityHint = .TabTrayToggleAccessibilityHint
