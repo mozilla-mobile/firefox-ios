@@ -14,10 +14,6 @@ ChromeUtils.defineESModuleGetters(lazy, {
   LabelUtils: "resource://gre/modules/shared/LabelUtils.sys.mjs",
 });
 
-ChromeUtils.defineLazyGetter(lazy, "log", () =>
-  FormAutofill.defineLogGetter(lazy, "FormAutofillHeuristics")
-);
-
 /**
  * To help us classify sections, we want to know what fields can appear
  * multiple times in a row.
@@ -601,40 +597,18 @@ export const FormAutofillHeuristics = {
   },
 
   /**
-   * Get form elements that are of credit card or address type and filtered by either
-   * visibility or focusability - depending on the interactivity mode (default = focusability)
-   * This distinction is only temporary as we want to test switching from visibility mode
-   * to focusability mode. The visibility mode is then removed.
+   * Get focusable form elements that are of credit card or address type
    *
    * @param {HTMLElement} form
-   * @returns {Array<HTMLElement>} elements filtered by interactivity mode (visibility or focusability)
+   * @returns {Array<HTMLElement>} focusable elements
    */
   getFormElements(form) {
-    let elements = Array.from(form.elements).filter(element =>
-      lazy.FormAutofillUtils.isCreditCardOrAddressFieldType(element)
-    );
-    const interactivityMode = lazy.FormAutofillUtils.interactivityCheckMode;
-
-    if (interactivityMode == "focusability") {
-      elements = elements.filter(element =>
+    let elements = Array.from(form.elements).filter(
+      element =>
+        lazy.FormAutofillUtils.isCreditCardOrAddressFieldType(element) &&
         lazy.FormAutofillUtils.isFieldFocusable(element)
-      );
-    } else if (interactivityMode == "visibility") {
-      // Due to potential performance impact while running visibility check on
-      // a large amount of elements, a comprehensive visibility check
-      // (considering opacity and CSS visibility) is only applied when the number
-      // of eligible elements is below a certain threshold.
-      const runVisiblityCheck =
-        elements.length < lazy.FormAutofillUtils.visibilityCheckThreshold;
-      if (!runVisiblityCheck) {
-        lazy.log.debug(
-          `Skip running visibility check, because of too many elements (${elements.length})`
-        );
-      }
-      elements = elements.filter(element =>
-        lazy.FormAutofillUtils.isFieldVisible(element, runVisiblityCheck)
-      );
-    }
+    );
+
     return elements;
   },
 

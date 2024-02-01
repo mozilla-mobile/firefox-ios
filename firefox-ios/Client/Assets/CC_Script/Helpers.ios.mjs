@@ -12,9 +12,23 @@ HTMLFormElement.isInstance = element => element instanceof HTMLFormElement;
 ShadowRoot.isInstance = element => element instanceof ShadowRoot;
 
 HTMLElement.prototype.ownerGlobal = window;
+
 HTMLInputElement.prototype.setUserInput = function (value) {
   this.value = value;
-  this.dispatchEvent(new Event("input", { bubbles: true }));
+
+  // In React apps, setting .value may not always work reliably.
+  // We dispatch change, input as a workaround.
+  // There are other more "robust" solutions:
+  // - Dispatching keyboard events and comparing the value after setting it
+  //   (https://github.com/fmeum/browserpass-extension/blob/5efb1f9de6078b509904a83847d370c8e92fc097/src/inject.js#L412-L440)
+  // - Using the native setter
+  //   (https://github.com/facebook/react/issues/10135#issuecomment-401496776)
+  // These are a bit more bloated. We can consider using these later if we encounter any further issues.
+  ["input", "change"].forEach(eventName => {
+    this.dispatchEvent(new Event(eventName, { bubbles: true }));
+  });
+
+  this.dispatchEvent(new Event("blur", { bubbles: true }));
 };
 
 // Mimic the behavior of .getAutocompleteInfo()
@@ -29,12 +43,6 @@ HTMLElement.prototype.getAutocompleteInfo = function () {
       ? autocomplete
       : "",
   };
-};
-
-// Bug 1835024. Webkit doesn't support `checkVisibility` API
-// https://drafts.csswg.org/cssom-view-1/#dom-element-checkvisibility
-HTMLElement.prototype.checkVisibility = function (options) {
-  throw new Error(`Not implemented: WebKit doesn't support checkVisibility `);
 };
 
 // This function  helps us debug better when an error occurs because a certain mock is missing
