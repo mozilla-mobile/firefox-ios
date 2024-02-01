@@ -13,6 +13,7 @@ struct TabsPanelState: ScreenState, Equatable {
     var toastType: ToastType?
     var windowUUID: WindowUUID
     var scrollToIndex: Int?
+    var tabMoved: Bool?
 
     var isPrivateTabsEmpty: Bool {
         guard isPrivateMode else { return false }

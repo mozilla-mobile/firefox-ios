@@ -1493,6 +1493,13 @@ class BrowserViewController: UIViewController,
 
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
             self.tabManager.addTab(URLRequest(url: url))
+            if TabTrayFlagManager.isRefactorEnabled {
+                let context = AddNewTabContext(urlRequest: nil, isPrivate: false, windowUUID: self.windowUUID)
+                store.dispatch(TabPanelAction.addNewTab(context))
+            } else {
+                self.tabManager.addTab(URLRequest(url: url))
+            }
+
             self.debugOpen(numberOfNewTabs: numberOfNewTabs - 1, at: url)
         })
     }
