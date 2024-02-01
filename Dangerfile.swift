@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import BrowserKit
 import Danger
 import DangerSwiftCoverage
 import Foundation
@@ -215,6 +216,6 @@ func checkAlphabeticalOrder(inFile filePath: String) {
             }
         }
     } catch {
-        print("Failed to read or process file \(filePath): \(error)") // Changed to print for simplicity
+        danger.warn("Failed to read or process file \(filePath): \(error)")
     }
 }
