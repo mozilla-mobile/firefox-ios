@@ -417,7 +417,7 @@ public class RustLoginEncryptionKeys {
             let secret = try createKey()
             let canary = try createCanary(text: canaryPhrase, encryptionKey: secret)
 
-            DispatchQueue.global(qos: .background).async {
+            DispatchQueue.global(qos: .background).sync {
                 self.keychain.set(secret,
                                   forKey: self.loginPerFieldKeychainKey,
                                   withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
@@ -867,7 +867,7 @@ public class RustLogins {
     }
 
     private func getKeychainData(rustKeys: RustLoginEncryptionKeys, completion: @escaping (String?, String?) -> Void) {
-        queue.async {
+        DispatchQueue.global(qos: .background).sync {
             let key = rustKeys.keychain.string(forKey: rustKeys.loginPerFieldKeychainKey)
             let encryptedCanaryPhrase = rustKeys.keychain.string(forKey: rustKeys.canaryPhraseKey)
             completion(key, encryptedCanaryPhrase)

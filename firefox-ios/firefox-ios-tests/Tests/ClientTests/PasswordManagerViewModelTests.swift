@@ -56,7 +56,7 @@ class PasswordManagerViewModelTests: XCTestCase {
         XCTAssertTrue(logins.isSuccess)
         XCTAssertNotNil(logins.successValue)
 
-        waitForExpectations(timeout: 15.0, handler: nil)
+        waitForExpectations(timeout: 10.0, handler: nil)
     }
 
     func testQueryLogins() {
