@@ -77,9 +77,14 @@ export class FormAutofillChild {
   }
 
   onSubmit(evt) {
+    if (!this.fieldDetailsManager.activeHandler) {
+      return;
+    }
+
     this.fieldDetailsManager.activeHandler.onFormSubmitted();
     const records = this.fieldDetailsManager.activeHandler.createRecords();
-    if (records.creditCard) {
+
+    if (records.creditCard.length) {
       // Normalize record format so we always get a consistent
       // credit card record format: {cc-number, cc-name, cc-exp-month, cc-exp-year}
       const creditCardRecords = records.creditCard.map(entry => {
