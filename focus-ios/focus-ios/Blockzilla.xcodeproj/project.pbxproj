@@ -6563,7 +6563,7 @@
 			repositoryURL = "https://github.com/SnapKit/SnapKit";
 			requirement = {
 				kind = exactVersion;
-				version = 5.6.0;
+				version = 5.7.0;
 			};
 		};
 		F8324CB8264DC8ED007E4BFA /* XCRemoteSwiftPackageReference "Fuzi" */ = {
