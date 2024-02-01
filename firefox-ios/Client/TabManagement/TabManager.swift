@@ -41,7 +41,7 @@ protocol TabManager: AnyObject {
     func removeTabs(_ tabs: [Tab])
     func undoCloseTab(tab: Tab, position: Int?)
     func getMostRecentHomepageTab() -> Tab?
-    func getTabFor(_ url: URL, reversed: Bool) -> Tab?
+    func getTabFor(_ url: URL, reversed: Bool, isPrivate: Bool?) -> Tab?
     func clearAllTabsHistory()
     func willSwitchTabMode(leavingPBM: Bool)
     func cleanupClosedTabs(_ closedTabs: [Tab], previous: Tab?, isPrivate: Bool)
@@ -94,8 +94,8 @@ protocol TabManager: AnyObject {
 }
 
 extension TabManager {
-    func getTabFor(_ url: URL, reversed: Bool = false) -> Tab? {
-        getTabFor(url, reversed: reversed)
+    func getTabFor(_ url: URL, reversed: Bool = false, isPrivate: Bool? = nil) -> Tab? {
+        getTabFor(url, reversed: reversed, isPrivate: isPrivate)
     }
 
     func removeDelegate(_ delegate: TabManagerDelegate) {
