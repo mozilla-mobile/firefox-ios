@@ -7,7 +7,8 @@ import Shared
 
 @testable import Client
 @testable import Storage
-
+// FXIOS-8331: Disable History Highlight tests while FXIOS-8059 (Epic) is in progress
+// FXIOS-8367: Added a ticket to enable these tests when we re-enable history highlights
 class HistoryHighlightsTests: XCTestCase {
     private var manager: HistoryHighlightsManager!
     private var profile: MockProfile!
