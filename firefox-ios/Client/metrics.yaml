@@ -4266,12 +4266,9 @@ urlbar:
           - suggest_sponsor
           - suggest_non_sponsor
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9930
+      - https://github.com/mozilla-mobile/firefox-ios/pull/18507
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9930
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9930
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/18507
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
