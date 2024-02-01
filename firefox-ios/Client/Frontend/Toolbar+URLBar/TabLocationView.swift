@@ -60,8 +60,6 @@ class TabLocationView: UIView, FeatureFlaggable {
         }
     }
 
-    private let menuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuBadge, backdropCircleSize: 32)
-
     var url: URL? {
         willSet { handleShoppingAdsCacheURLChange(newURL: newValue) }
         didSet {
@@ -247,8 +245,6 @@ class TabLocationView: UIView, FeatureFlaggable {
         dragInteraction.allowsSimultaneousRecognitionDuringLift = true
         self.addInteraction(dragInteraction)
 
-        menuBadge.add(toParent: contentView)
-        menuBadge.show(false)
         hideTrackingProtectionButton()
     }
 
@@ -546,7 +542,6 @@ extension TabLocationView: ThemeApplicable {
         trackingProtectionButton.applyTheme(theme: theme)
         shareButton.applyTheme(theme: theme)
         reloadButton.applyTheme(theme: theme)
-        menuBadge.badge.tintBackground(color: theme.colors.layer3)
         shoppingButton.tintColor = theme.colors.textPrimary
         shoppingButton.setImage(UIImage(named: StandardImageIdentifiers.Large.shopping)?
             .withTintColor(theme.colors.actionPrimary),
