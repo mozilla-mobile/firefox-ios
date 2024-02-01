@@ -23,7 +23,7 @@ class PasswordManagerTableViewCell: ThemedTableViewCell {
 
     private let breachAlertSize: CGFloat = 24
     lazy var breachAlertImageView: UIImageView = .build { imageView in
-        imageView.image = UIImage(named: ImageIdentifiers.breachedWebsite)?
+        imageView.image = UIImage(named: StandardImageIdentifiers.Large.warningFill)?
             .withRenderingMode(.alwaysTemplate)
         imageView.isHidden = true
     }

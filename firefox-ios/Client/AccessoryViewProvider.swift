@@ -38,7 +38,7 @@ class AccessoryViewProvider: UIView, Themeable {
     }
 
     private lazy var previousButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: UIImage(systemName: "chevron.up"),
+        let button = UIBarButtonItem(image: UIImage(named: StandardImageIdentifiers.Large.chevronUp),
                                      style: .plain,
                                      target: self,
                                      action: #selector(tappedPreviousButton))
@@ -47,7 +47,7 @@ class AccessoryViewProvider: UIView, Themeable {
     }()
 
     private lazy var nextButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: UIImage(systemName: "chevron.down"),
+        let button = UIBarButtonItem(image: UIImage(named: StandardImageIdentifiers.Large.chevronDown),
                                      style: .plain,
                                      target: self,
                                      action: #selector(tappedNextButton))

@@ -91,6 +91,7 @@
         "NewTabSettingsTest\/testChangeNewTabSettingsLabel()",
         "NewTabSettingsTest\/testChangeNewTabSettingsShowFirefoxHome()",
         "NewTabSettingsTest\/testKeyboardRaisedWhenTabOpenedFromTabTray()",
+        "NewTabSettingsTest\/testNewTabCustomURLKeyboardNotRaised()",
         "NightModeTests",
         "OnboardingTests\/testCloseTour()",
         "OnboardingTests\/testFirstRunTour()",

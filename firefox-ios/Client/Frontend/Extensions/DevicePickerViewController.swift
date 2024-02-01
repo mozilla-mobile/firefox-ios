@@ -51,6 +51,12 @@ class DevicePickerViewController: UITableViewController {
     private struct UX {
         static let tableHeaderRowHeight: CGFloat = 50
         static let deviceRowHeight: CGFloat = 50
+        static let tabTitleTextFont = UIFont.boldSystemFont(ofSize: 16)
+    }
+
+    private lazy var tabTitleLabel: UILabel = .build { label in
+        label.font = UX.tabTitleTextFont
+        label.textColor = self.themeManager.currentTheme.colors.textPrimary
     }
 
     private var devices = [RemoteDevice]()
@@ -79,7 +85,9 @@ class DevicePickerViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = .SendToTitle
+        let tabTitle = tabTitleLabel
+        tabTitle.text = .SendToTitle
+        navigationItem.titleView = tabTitle
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
         navigationItem.leftBarButtonItem = UIBarButtonItem(
@@ -98,6 +106,8 @@ class DevicePickerViewController: UITableViewController {
         tableView.tableFooterView = UIView(frame: .zero)
 
         tableView.allowsSelection = true
+        tableView.backgroundColor = themeManager.currentTheme.colors.layer2
+        tableView.separatorStyle = .none
 
         notification = NotificationCenter.default.addObserver(forName: Notification.Name.constellationStateUpdate,
                                                               object: nil,

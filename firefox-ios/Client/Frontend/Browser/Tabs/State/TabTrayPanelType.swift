@@ -39,7 +39,7 @@ enum TabTrayPanelType: Int, CaseIterable {
         case .privateTabs:
             return UIImage(named: StandardImageIdentifiers.Large.privateMode)
         case .syncedTabs:
-            return UIImage(named: ImageIdentifiers.syncedDevicesIcon)
+            return UIImage(named: StandardImageIdentifiers.Large.syncTabs)
         }
     }
 }

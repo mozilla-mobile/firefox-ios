@@ -11,7 +11,7 @@
 "Engagement.Notification.Treatment.A.Title.v114" = "Користуйтеся інтернетом, не залишаючи слідів";
 
 /* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is the app name. */
-"Engagement.Notification.Treatment.B.Body.v114" = "Переглядайте без збереження кук чи історії у %@.";
+"Engagement.Notification.Treatment.B.Body.v114" = "Переглядайте без збереження файлів cookie чи історії у %@.";
 
 /* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
 "Engagement.Notification.Treatment.B.Title.v114" = "Спробуйте приватний перегляд";

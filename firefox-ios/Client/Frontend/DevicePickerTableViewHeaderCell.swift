@@ -45,5 +45,6 @@ class DevicePickerTableViewHeaderCell: UITableViewCell, ReusableCell, ThemeAppli
     func applyTheme(theme: Theme) {
         let colors = theme.colors
         nameLabel.textColor = colors.textSecondary
+        backgroundColor = colors.layer2
     }
 }

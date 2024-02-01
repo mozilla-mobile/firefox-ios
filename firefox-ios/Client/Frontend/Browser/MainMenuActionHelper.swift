@@ -330,7 +330,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         let zoomLevel = NumberFormatter.localizedString(from: NSNumber(value: tab.pageZoom), number: .percent)
         let title = String(format: .AppMenu.ZoomPageTitle, zoomLevel)
         let zoomAction = SingleActionViewModel(title: title,
-                                               iconString: ImageIdentifiers.zoomIn) { _ in
+                                               iconString: StandardImageIdentifiers.Large.pageZoom) { _ in
             self.delegate?.showZoomPage(tab: tab)
         }.items
         return zoomAction
@@ -506,7 +506,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
         guard let userProfile = rustAccount.userProfile else {
             return SingleActionViewModel(title: .AppMenu.SyncAndSaveData,
-                                         iconString: ImageIdentifiers.sync,
+                                         iconString: StandardImageIdentifiers.Large.sync,
                                          tapHandler: action).items
         }
 
@@ -517,7 +517,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             return userProfile.displayName ?? userProfile.email
         }()
 
-        let iconString = needsReAuth ? ImageIdentifiers.menuWarning : StandardImageIdentifiers.Large.avatarCircle
+        let warningImage = StandardImageIdentifiers.Large.warningFill
+        let avatarImage = StandardImageIdentifiers.Large.avatarCircle
+        let iconString = needsReAuth ? warningImage : avatarImage
 
         var iconURL: URL?
         if let str = rustAccount.userProfile?.avatarUrl,
@@ -548,7 +550,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         }
 
         whatsNewAction = SingleActionViewModel(title: .AppMenu.WhatsNewString,
-                                               iconString: ImageIdentifiers.whatsNew,
+                                               iconString: StandardImageIdentifiers.Large.whatsNew,
                                                isEnabled: showBadgeForWhatsNew) { _ in
             if let whatsNewURL = SupportUtils.URLForWhatsNew {
                 TelemetryWrapper.recordEvent(category: .action, method: .open, object: .whatsNew)

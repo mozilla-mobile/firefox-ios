@@ -14,6 +14,9 @@ class AddressAutofillSettingsViewModel {
     /// Model for managing the state of the address autofill toggle.
     lazy var toggleModel = ToggleModel(isEnabled: isAutofillEnabled, delegate: self)
 
+    /// ViewModel for managing the list of addresses.
+    lazy var addressListViewModel = AddressListViewModel(profile: profile)
+
     /// RustAutofill instance for handling autofill functionality.
     var autofill: RustAutofill?
 
@@ -40,12 +43,11 @@ class AddressAutofillSettingsViewModel {
     // MARK: Initializer
 
     /// Initializes the AddressAutofillSettingsViewModel.
-    /// - Parameters:
-    ///   - profile: The profile associated with the address autofill settings.
+    /// - Parameter profile: The profile associated with the address autofill settings.
     init(profile: Profile) {
         self.profile = profile
-        guard let profile = profile as? BrowserProfile else { return }
-        self.autofill = profile.autofill
+        guard let browserProfile = profile as? BrowserProfile else { return }
+        self.autofill = browserProfile.autofill
     }
 }
 

@@ -76,7 +76,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     // MARK: - Redux
 
     func subscribeToRedux() {
-        store.dispatch(ThemeSettingsAction.themeSettingsDidAppear(ActionContext(windowUUID: windowUUID)))
+        store.dispatch(ThemeSettingsAction.themeSettingsDidAppear(windowUUID.context))
         let uuid = windowUUID
         store.subscribe(self, transform: {
             $0.select({ appState in

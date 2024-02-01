@@ -6,12 +6,12 @@ import Foundation
 import Redux
 
 enum GeneralBrowserAction: Action {
-    case showToast(ToastType)
+    case showToast(ToastTypeContext)
 
-    var windowUUID: UUID? {
-        // TODO: [8188] Update to be non-optional and return windowUUID. Forthcoming.
+    var windowUUID: UUID {
         switch self {
-        default: return nil
+        case .showToast(let context as ActionContext):
+            return context.windowUUID
         }
     }
 }

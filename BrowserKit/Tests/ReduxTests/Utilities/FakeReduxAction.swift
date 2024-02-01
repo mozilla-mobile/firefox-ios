@@ -5,9 +5,8 @@
 import Foundation
 
 @testable import Redux
-/*
-enum FakeReduxAction: Action {
 
+enum FakeReduxAction: Action {
     // User action
     case requestInitialValue
     case increaseCounter
@@ -18,5 +17,10 @@ enum FakeReduxAction: Action {
     case counterIncreased(Int)
     case counterDecreased(Int)
     case setPrivateModeTo(Bool)
+
+    var windowUUID: UUID {
+        // TODO: [8188] Currently these unit tests do not make use of UUIDs. This will be updated soon.
+        // For now, we can just return UUID().
+        return UUID()
+    }
 }
-*/
