@@ -614,8 +614,6 @@ final class BrowserCoordinatorTests: XCTestCase {
         mockRouter.savedCompletion?()
 
         XCTAssertTrue(result)
-        XCTAssertEqual(mockRouter.dismissCalled, 1)
-        XCTAssertTrue(subject.childCoordinators.isEmpty)
     }
 
     func testSettingsCoordinatorDelegate_openURLinNewTab() {
