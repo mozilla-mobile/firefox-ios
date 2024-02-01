@@ -4149,6 +4149,133 @@ installed_mozilla_products:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
 
+# URLbar related telemetry
+urlbar:
+  impression:
+    type: event
+    description: |
+      Recorded when urlbar results are shown to the user
+    extra_keys:
+      reason:
+        type: string
+        description: |
+          Reason for the impression. pause - recorded when the results were shown for at least 1s. Only one pause
+                  is recorded for each search session.
+          …In the future there may be other reasons, for now it’s just `pause`.
+      sap:
+        type: string
+        description: |
+          Where the user action started.
+        enum:
+          - urlbar
+          - handoff
+          - urlbar_newtab
+          - urlbar_addonpage
+      interaction:
+        type: string
+        description: |
+          How the user started the search.
+        enum:
+          - typed
+          - pasted
+          - topsite_search
+          - returned
+          - restarted
+          - refined
+          - persisted_search_terms - started
+          - persisted_search_terms_restarted
+          - persisted_search_terms_refined
+          - topsites
+      search_mode:
+        type: string
+        description: |
+          If the urlbar is in search mode, thus restricting results to a 
+          specific search engine or local source, this is set to the search
+          mode source.
+        enum:
+          - actions
+          - bookmarks
+          - history
+          - tabs
+          - unknown
+          - search_inactive
+      n_chars:
+        type: quantity
+        description: |
+         Number of typed characters
+      n_words:
+        type: quantity
+        description: |
+         Number of typed words (doesn’t support CJK languages)
+      n_results:
+        type: quantity
+        description: |
+         Number of results, if this is high the results
+         list below may be incomplete due to size limits
+      groups:
+        type: string
+        description: |
+          Comma separated list of result groups in order, groups may be        
+          repeated, since the list will match 1:1 the results list, so we
+          Can link each result to a group
+        enum:
+          - heuristic
+          - adaptive_history
+          - search_history
+          - search_suggest
+          - top_pick
+          - top_site
+          - remote_tab
+          - addon
+          - general
+          - suggest
+      results:
+        type: string
+        description: |
+          Comma separated list of result types in order.
+        enum:
+          - unknown
+          - autofill_about
+          - autofill_adaptive
+          - autofill_origin
+          - autofill_url
+          - autofill_unknown
+          - bookmark
+          - history
+          - keyword
+          - search_engine
+          - search_suggest
+          - search_history
+          - trending_search
+          - url
+          - action
+          - tab
+          - remote_tab
+          - addon
+          - tip_onboard
+          - tip_redirect
+          - tip_persist
+          - tip_unknown
+          - intervention_clear
+          - intervention_refresh
+          - intervention_update
+          - tab_to_search
+          - top_site
+          - calc
+          - unit
+          - suggest_sponsor
+          - suggest_non_sponsor
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9930
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9930
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9930
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
+
 # Awesomebar related telemetry
 
 awesomebar:

@@ -832,6 +832,53 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Awesomebar.searchResultTap)
     }
 
+    func test_AwesomebarImpressions_GleanIsCalled() {
+        let groupsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.groups.rawValue
+        let groups = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Groups.adaptiveHistory.rawValue
+
+        let interactionKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.interaction.rawValue
+        let interaction = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Interaction.persistedSearchTerms.rawValue
+
+        let nCharsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nChars.rawValue
+        let nChars: Int32 = 5
+
+        let nResultsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nResults.rawValue
+        let nResults: Int32 = 12
+
+        let nWordsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nWords.rawValue
+        let nWords: Int32 = 1 // extras?[EventExtraKey.UrlbarTelemetry.nWords.rawValue]
+
+        let reasonKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.reason.rawValue
+        let reason = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Reason.pause.rawValue
+
+        let resultsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.results.rawValue
+        let results = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Results.searchEngine.rawValue + ","
+                      + TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Results.tabToSearch.rawValue
+
+        let sapKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.sap.rawValue
+        let sap = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Sap.urlbar.rawValue
+
+        let searchModeKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.searchMode.rawValue
+        let searchMode = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.SearchMode.bookmarks.rawValue
+
+        let extraDetails = [groupsKey: groups,
+                       interactionKey: interaction,
+                            nCharsKey: nChars,
+                          nResultsKey: nResults,
+                            nWordsKey: nWords,
+                            reasonKey: reason,
+                           resultsKey: results,
+                               sapKey: sap,
+                        searchModeKey: searchMode] as [String: Any]
+
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .view,
+                                     object: .urlbarImpression,
+                                     extras: extraDetails)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Urlbar.impression)
+    }
+
     // MARK: - Page Action Menu
 
     func test_createNewTab_GleanIsCalled() {

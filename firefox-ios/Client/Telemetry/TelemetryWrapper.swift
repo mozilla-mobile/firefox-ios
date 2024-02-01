@@ -526,6 +526,7 @@ extension TelemetryWrapper {
         case sponsoredShortcuts = "sponsored-shortcuts"
         case fxSuggest = "fx-suggest"
         case webview = "webview"
+        case urlbarImpression = "urlbar-impression"
     }
 
     public enum EventValue: String {
@@ -731,6 +732,81 @@ extension TelemetryWrapper {
             // Extra Keys for `surface_displayed` event
             case halfView = "half-view"
             case fullView = "full-view"
+        }
+
+        // Awesomebar
+        public enum UrlbarTelemetry: String {
+            case nChars = "n_chars"
+            case nResults = "n_results"
+            case nWords = "n_words"
+            case selectedResult = "selected_result"
+            case selectedResultSubtype = "selected_result_subtype"
+            case engagementType = "engagement_type"
+            case provider
+            case reason
+            enum Reason: String {
+                case pause
+            }
+
+            case sap
+            enum Sap: String {
+                case urlbar
+                case urlbarNewtab = "urlbar_newtab"
+            }
+
+            case interaction
+            enum Interaction: String {
+                case typed
+                case pasted
+                case returned
+                case restarted
+                case refined
+                case persistedSearchTerms = "persisted_search_terms"
+                case persistedSearchTermsRestarted = "persisted_search_terms_restarted"
+                case persistedSearchTermsRefined = "persisted_search_terms_refined"
+            }
+
+            case searchMode
+            enum SearchMode: String {
+                case actions
+                case bookmarks
+                case history
+                case tabs
+                case unknown
+                case inactive = "" // Empty string for inactive search mode
+            }
+
+            case groups
+            enum Groups: String {
+                case heuristic
+                case adaptiveHistory = "adaptive_history"
+                case searchHistory = "search_history"
+                case searchSuggest = "search_suggest"
+                case topPick = "top_pick"
+                case topSite = "top_site"
+                case remoteTab = "remote_tab"
+                case general
+                case suggest
+            }
+
+            case results
+            enum Results: String {
+                case unknown
+                case bookmark
+                case history
+                case keyword
+                case searchEngine = "search_engine"
+                case searchSuggest = "search_suggest"
+                case searchHistory = "search_history"
+                case url
+                case action
+                case tab
+                case remoteTab = "remote_tab"
+                case tabToSearch = "tab_to_search"
+                case topSite = "top_site"
+                case suggestSponsor = "suggest_sponsor"
+                case suggestNonSponsor = "suggest_non_sponsor"
+            }
         }
     }
 
@@ -1064,6 +1140,35 @@ extension TelemetryWrapper {
             if let tapValue = extras?[EventExtraKey.awesomebarSearchTapType.rawValue] as? String {
                 let awesomebarExtraValue = GleanMetrics.Awesomebar.SearchResultTapExtra(type: tapValue)
                 GleanMetrics.Awesomebar.searchResultTap.record(awesomebarExtraValue)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
+        case(.information, .view, .urlbarImpression, _, let extras):
+            if let groups = extras?[EventExtraKey.UrlbarTelemetry.groups.rawValue]
+                as? String,
+               let interaction = extras?[EventExtraKey.UrlbarTelemetry.interaction.rawValue]
+                as? String,
+               let nChars = extras?[EventExtraKey.UrlbarTelemetry.nChars.rawValue]
+                as? Int32,
+               let nResults = extras?[EventExtraKey.UrlbarTelemetry.nResults.rawValue]
+                as? Int32,
+               let nWords = extras?[EventExtraKey.UrlbarTelemetry.nWords.rawValue]
+                as? Int32,
+               let reason = extras?[EventExtraKey.UrlbarTelemetry.reason.rawValue]
+                as? String,
+               let results = extras?[EventExtraKey.UrlbarTelemetry.results.rawValue]
+                as? String,
+               let sap = extras?[EventExtraKey.UrlbarTelemetry.sap.rawValue]
+                as? String,
+               let searchMode = extras?[EventExtraKey.UrlbarTelemetry.searchMode.rawValue]
+                as? String {
+                let extraDetails = GleanMetrics.Urlbar.ImpressionExtra(groups: groups, interaction: interaction, nChars: nChars, nResults: nResults, nWords: nWords, reason: reason, results: results, sap: sap, searchMode: searchMode)
+                GleanMetrics.Urlbar.impression.record(extraDetails)
             } else {
                 recordUninstrumentedMetrics(
                     category: category,
