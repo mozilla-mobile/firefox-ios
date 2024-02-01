@@ -752,6 +752,8 @@
 		8AABBD012A001ADF0089941E /* ApplicationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AABBD002A001ADF0089941E /* ApplicationHelper.swift */; };
 		8AABBD032A001CBC0089941E /* MockApplicationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AABBD022A001CBC0089941E /* MockApplicationHelper.swift */; };
 		8AABBD052A0041380089941E /* MockCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AABBD042A0041380089941E /* MockCoordinator.swift */; };
+		8AB30EC82B6C038600BD9A9B /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 8AB30EC72B6C038600BD9A9B /* Lottie */; };
+		8AB30ECA2B6C03C700BD9A9B /* FeltDeletionAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB30EC92B6C03C700BD9A9B /* FeltDeletionAnimation.swift */; };
 		8AB5958828413F6C0090F4AE /* RecentlySavedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB5958728413F6C0090F4AE /* RecentlySavedCell.swift */; };
 		8AB5958A284145B30090F4AE /* HomepageSectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB59589284145B30090F4AE /* HomepageSectionHandler.swift */; };
 		8AB8571D27D929350075C173 /* TopSitesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8571C27D929350075C173 /* TopSitesViewModel.swift */; };
@@ -5717,6 +5719,7 @@
 		8AABBD042A0041380089941E /* MockCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCoordinator.swift; sourceTree = "<group>"; };
 		8AAD4900BB6F4DF6056B581F /* ml */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ml; path = ml.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		8AB04613B101195AADCC1F1B /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = "cs.lproj/Default Browser.strings"; sourceTree = "<group>"; };
+		8AB30EC92B6C03C700BD9A9B /* FeltDeletionAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeltDeletionAnimation.swift; sourceTree = "<group>"; };
 		8AB5958728413F6C0090F4AE /* RecentlySavedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlySavedCell.swift; sourceTree = "<group>"; };
 		8AB59589284145B30090F4AE /* HomepageSectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageSectionHandler.swift; sourceTree = "<group>"; };
 		8AB8571C27D929350075C173 /* TopSitesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesViewModel.swift; sourceTree = "<group>"; };
@@ -7734,6 +7737,7 @@
 				E6231C051B90A472005ABB0D /* libxml2.2.tbd in Frameworks */,
 				E6231C011B90A44F005ABB0D /* libz.tbd in Frameworks */,
 				E4B3348A1BBF23F9004E2BFF /* AdSupport.framework in Frameworks */,
+				8AB30EC82B6C038600BD9A9B /* Lottie in Frameworks */,
 				5A871488292EA1440039A5BD /* Fuzi in Frameworks */,
 				432BD0242790EBD000A0F3C3 /* Adjust in Frameworks */,
 				0B8E0FF41A932BD500161DC3 /* ImageIO.framework in Frameworks */,
@@ -8983,6 +8987,7 @@
 				810FF3532B178343009F062C /* FeltPrivacyMiddleware.swift */,
 				810FF3572B1784E7009F062C /* PrivateModeAction.swift */,
 				810FF3552B1783B0009F062C /* FeltPrivacyManager.swift */,
+				8AB30EC92B6C03C700BD9A9B /* FeltDeletionAnimation.swift */,
 			);
 			path = FeltPrivacy;
 			sourceTree = "<group>";
@@ -11451,7 +11456,6 @@
 				3B39EDB91E16E18900EF029F /* CustomSearchEnginesTest.swift */,
 				431C0D1C25C9D76B00395CE4 /* DefaultBrowserOnboardingTests */,
 				D82ED2631FEB3C420059570B /* DefaultSearchPrefsTests.swift */,
-				814A62452B587A3E00608195 /* DefaultThemeManagerTests.swift */,
 				5A70EF17295E2DF400790249 /* DependencyInjection */,
 				8A11C8122731E54800AC7318 /* DictionaryExtensionsTests.swift */,
 				6ADB651A285C03B100947EA4 /* DownloadHelperTests.swift */,
@@ -11488,7 +11492,6 @@
 				8A11C8102731CFD700AC7318 /* ReaderModeStyleTests.swift */,
 				03CCC9171AF05E7300DBF30D /* RelativeDatesTests.swift */,
 				F80D53CD2A09A30F0047ED14 /* RustSyncManagerTests.swift */,
-				253648E02B2111C100D5C2C5 /* SearchViewControllerTests.swift */,
 				8A5D1CA12A30CF2E005AD35C /* Settings */,
 				8C6DA7D02A6FE78F00DE264F /* ShoppingProductTests.swift */,
 				8A04136A2825ABEA00D20B10 /* SponsoredTileTelemetryTests.swift */,
@@ -12122,6 +12125,7 @@
 				5A06135929D6052E008F3D38 /* TabDataStore */,
 				216A0D752A40E7AB008077BA /* Redux */,
 				8AF2D0FB2A5F272A00C7DD69 /* ComponentLibrary */,
+				8AB30EC72B6C038600BD9A9B /* Lottie */,
 			);
 			productName = Client;
 			productReference = F84B21BE1A090F8100AAB793 /* Client.app */;
@@ -12440,6 +12444,7 @@
 				43AFC0E027967BFA0039DDF4 /* XCRemoteSwiftPackageReference "Fuzi" */,
 				43C6A47D27A0679300C79856 /* XCRemoteSwiftPackageReference "MappaMundi" */,
 				5A37861729A2C337006B3A34 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
+				8AB30EC62B6C038600BD9A9B /* XCRemoteSwiftPackageReference "lottie-ios" */,
 			);
 			productRefGroup = F84B21BF1A090F8100AAB793 /* Products */;
 			projectDirPath = "";
@@ -14006,6 +14011,7 @@
 				D5D237782640BBA600326204 /* ExperimentsSettingsViewController.swift in Sources */,
 				D3972BF31C22412B00035B87 /* ShareExtensionHelper.swift in Sources */,
 				F35B8D2D1D6383E9008E3D61 /* SessionRestoreHelper.swift in Sources */,
+				8AB30ECA2B6C03C700BD9A9B /* FeltDeletionAnimation.swift in Sources */,
 				8A19ACB62A3290F9001C2147 /* NotificationsSetting.swift in Sources */,
 				43D16B8229831E6A009F8279 /* CreditCardInputField.swift in Sources */,
 				EB98550124226EF70040F24B /* AppDelegate+SyncSentTabs.swift in Sources */,
@@ -21011,6 +21017,14 @@
 				version = 8.20.0;
 			};
 		};
+		8AB30EC62B6C038600BD9A9B /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
+			requirement = {
+				kind = exactVersion;
+				version = 4.4.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -21186,6 +21200,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer" */;
 			productName = GCDWebServers;
+		};
+		8AB30EC72B6C038600BD9A9B /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8AB30EC62B6C038600BD9A9B /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
 		};
 		8AF2D0FB2A5F272A00C7DD69 /* ComponentLibrary */ = {
 			isa = XCSwiftPackageProductDependency;
