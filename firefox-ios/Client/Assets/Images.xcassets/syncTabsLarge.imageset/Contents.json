@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "deleteLarge.pdf",
+      "filename" : "syncTabsLarge.pdf",
       "idiom" : "universal"
     }
   ],
@@ -10,7 +10,6 @@
     "version" : 1
   },
   "properties" : {
-    "preserves-vector-representation" : true,
-    "template-rendering-intent" : "template"
+    "preserves-vector-representation" : true
   }
 }
