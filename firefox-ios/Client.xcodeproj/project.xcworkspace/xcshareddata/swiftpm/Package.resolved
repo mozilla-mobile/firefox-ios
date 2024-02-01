@@ -73,6 +73,15 @@
       }
     },
     {
+      "identity" : "lottie-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/airbnb/lottie-ios.git",
+      "state" : {
+        "revision" : "f522990668c2f9132323a2e68d924c7dcb9130b4",
+        "version" : "4.4.0"
+      }
+    },
+    {
       "identity" : "mappamundi",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mozilla-mobile/MappaMundi.git",
