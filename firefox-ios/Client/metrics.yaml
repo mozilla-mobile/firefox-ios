@@ -2074,9 +2074,9 @@ homepage:
        description: |
         Set to true when you enter private browsing mode, false when you are going back to normal mode.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/#####
+      - https://github.com/mozilla-mobile/firefox-ios/issues/18522
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/#####
+      - https://github.com/mozilla-mobile/firefox-ios/pull/18518
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
