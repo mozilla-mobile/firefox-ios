@@ -70,8 +70,8 @@ public struct StandardImageIdentifiers {
         public static let qrCode = "qrCodeLarge"
         public static let quality = "qualityLarge"
         public static let readerView = "readerViewLarge"
-        public static let readingListAdd = "readingListAddLarge"
         public static let readingList = "readingListLarge"
+        public static let readingListAdd = "readingListAddLarge"
         public static let search = "searchLarge"
         public static let settings = "settingsLarge"
         public static let shareApple = "shareAppleLarge"
@@ -82,8 +82,8 @@ public struct StandardImageIdentifiers {
         public static let sync = "syncLarge"
         public static let syncTabs = "syncTabsLarge"
         public static let tabTray = "tabTrayLarge"
-        public static let warningFill = "warningFillLarge"
         public static let warning = "warningLarge"
+        public static let warningFill = "warningFillLarge"
         public static let whatsNew = "whatsNewLarge"
     }
 
