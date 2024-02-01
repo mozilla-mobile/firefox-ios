@@ -142,8 +142,6 @@ class MockTabToolbar: TabToolbarProtocol {
 
     func privateModeBadge(visible: Bool) { }
 
-    func appMenuBadge(setVisible: Bool) { }
-
     func warningMenuBadge(setVisible: Bool) { }
 
     func addUILargeContentViewInteraction(interaction: UILargeContentViewerInteraction) { }

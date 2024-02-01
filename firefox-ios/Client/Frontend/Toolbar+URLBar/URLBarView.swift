@@ -226,7 +226,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         imageName: ImageIdentifiers.privateModeBadge,
         isPrivateBadge: true
     )
-    fileprivate let appMenuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuBadge)
+
     fileprivate let warningMenuBadge = BadgeWithBackdrop(
         imageName: StandardImageIdentifiers.Large.warningFill,
         imageMask: ImageIdentifiers.menuWarningMask
@@ -274,7 +274,6 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         profile.searchEngines.delegate = self
 
         privateModeBadge.add(toParent: self)
-        appMenuBadge.add(toParent: self)
         warningMenuBadge.add(toParent: self)
 
         helper = TabToolbarHelper(toolbar: self)
@@ -357,7 +356,6 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         }
 
         privateModeBadge.layout(onButton: tabsButton)
-        appMenuBadge.layout(onButton: appMenuButton)
         warningMenuBadge.layout(onButton: appMenuButton)
     }
 
@@ -634,7 +632,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         multiStateButton.isHidden = !toolbarIsShowing || inOverlayMode
 
         // badge isHidden is tied to private mode on/off, use alpha to hide in this case
-        [privateModeBadge, appMenuBadge, warningMenuBadge].forEach {
+        [privateModeBadge, warningMenuBadge].forEach {
             $0.badge.alpha = (!toolbarIsShowing || inOverlayMode) ? 0 : 1
             $0.backdrop.alpha = (!toolbarIsShowing || inOverlayMode) ? 0 : BadgeWithBackdrop.UX.backdropAlpha
         }
@@ -687,16 +685,7 @@ extension URLBarView: TabToolbarProtocol {
         }
     }
 
-    func appMenuBadge(setVisible: Bool) {
-        // Warning badges should take priority over the standard badge
-        guard warningMenuBadge.badge.isHidden else { return }
-
-        appMenuBadge.show(setVisible)
-    }
-
     func warningMenuBadge(setVisible: Bool) {
-        // Disable other menu badges before showing the warning.
-        if !appMenuBadge.badge.isHidden { appMenuBadge.show(false) }
         warningMenuBadge.show(setVisible)
     }
 
@@ -898,7 +887,6 @@ extension URLBarView: ThemeApplicable {
         locationContainer.backgroundColor = theme.colors.layer3
 
         privateModeBadge.badge.tintBackground(color: theme.colors.layer1)
-        appMenuBadge.badge.tintBackground(color: theme.colors.layer1)
         warningMenuBadge.badge.tintBackground(color: theme.colors.layer1)
     }
 }
