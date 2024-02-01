@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher.git",
       "state" : {
-        "revision" : "b6f62758f21a8c03cd64f4009c037cfa580a256e",
-        "version" : "7.9.1"
+        "revision" : "3ec0ab0bca4feb56e8b33e289c9496e89059dd08",
+        "version" : "7.10.2"
       }
     },
     {

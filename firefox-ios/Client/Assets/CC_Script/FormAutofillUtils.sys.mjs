@@ -302,26 +302,6 @@ FormAutofillUtils = {
   },
 
   /**
-   * Determines if an element is visually hidden or not.
-   *
-   * @param {HTMLElement} element
-   * @param {boolean} visibilityCheck true to run visiblity check against
-   *                  element.checkVisibility API. Otherwise, test by only checking
-   *                  `hidden` and `display` attributes
-   * @returns {boolean} true if the element is visible
-   */
-  isFieldVisible(element, visibilityCheck = true) {
-    if (visibilityCheck && element.checkVisibility) {
-      return element.checkVisibility({
-        checkOpacity: true,
-        checkVisibilityCSS: true,
-      });
-    }
-
-    return !element.hidden && element.style.display != "none";
-  },
-
-  /**
    * Determines if an element is focusable
    * and accessible via keyboard navigation or not.
    *
@@ -1138,20 +1118,6 @@ XPCOMUtils.defineLazyPreferenceGetter(
   null,
   null,
   pref => parseFloat(pref)
-);
-
-XPCOMUtils.defineLazyPreferenceGetter(
-  FormAutofillUtils,
-  "visibilityCheckThreshold",
-  "extensions.formautofill.heuristics.visibilityCheckThreshold",
-  200
-);
-
-XPCOMUtils.defineLazyPreferenceGetter(
-  FormAutofillUtils,
-  "interactivityCheckMode",
-  "extensions.formautofill.heuristics.interactivityCheckMode",
-  "focusability"
 );
 
 // This is only used in iOS
