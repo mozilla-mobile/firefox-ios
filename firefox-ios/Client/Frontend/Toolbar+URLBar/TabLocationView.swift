@@ -45,17 +45,18 @@ class TabLocationView: UIView, FeatureFlaggable {
     var contentView: UIStackView!
 
     var notificationCenter: NotificationProtocol = NotificationCenter.default
+    private var themeManager: ThemeManager = AppContainer.shared.resolve()
 
     /// Tracking protection button, gets updated from tabDidChangeContentBlocking
     var blockerStatus: BlockerStatus = .noBlockedURLs {
         didSet {
-            if oldValue != blockerStatus { setTrackingProtection() }
+            if oldValue != blockerStatus { setTrackingProtection(theme: themeManager.currentTheme) }
         }
     }
 
     var hasSecureContent = false {
         didSet {
-            if oldValue != hasSecureContent { setTrackingProtection() }
+            if oldValue != hasSecureContent { setTrackingProtection(theme: themeManager.currentTheme) }
         }
     }
 
@@ -411,7 +412,7 @@ class TabLocationView: UIView, FeatureFlaggable {
         }
     }
 
-    private func setTrackingProtection(themeManager: ThemeManager = AppContainer.shared.resolve()) {
+    private func setTrackingProtection(theme: Theme) {
         var lockImage: UIImage?
         if !hasSecureContent {
             lockImage = UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.lockSlash)
@@ -550,6 +551,7 @@ extension TabLocationView: ThemeApplicable {
         shoppingButton.setImage(UIImage(named: StandardImageIdentifiers.Large.shopping)?
             .withTintColor(theme.colors.actionPrimary),
                                 for: .selected)
+        setTrackingProtection(theme: theme)
     }
 }
 
