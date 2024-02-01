@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "Focus",
-    platforms: [.iOS(.v13)],
+    platforms: [.iOS(.v15)],
     products: [
         .library(
             name: "UIHelpers",
