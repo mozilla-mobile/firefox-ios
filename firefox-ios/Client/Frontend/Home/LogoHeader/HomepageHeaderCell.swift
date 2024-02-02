@@ -35,7 +35,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell {
     }
 
     var viewModel: HomepageHeaderCellViewModel?
-    var actionButtonAction: (() -> Void)?
 
     private lazy var stackContainer: UIStackView = .build { stackView in
         stackView.axis = .horizontal
@@ -47,20 +46,15 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell {
         return logoHeader
     }()
 
-    private lazy var circularView: UIView = .build { view in
-        view.frame = UX.circleSize
-        view.backgroundColor = UIColor.white
-        view.layer.cornerRadius = view.frame.size.width / 2
-        view.isUserInteractionEnabled = true
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.switchMode)))
-    }
-
-    private lazy var privateModeButton: UIButton = .build { button in
+    private lazy var privateModeButton: UIButton = .build { [weak self] button in
         let maskImage = UIImage(named: ImageIdentifiers.privateMaskSmall)?.withRenderingMode(.alwaysTemplate)
         button.setImage(maskImage, for: .normal)
-        button.imageView?.contentMode = .scaleAspectFit
+        button.frame = UX.circleSize
+        button.layer.cornerRadius = button.frame.size.width / 2
+        button.addTarget(self, action: #selector(self?.switchMode), for: .touchUpInside)
         button.accessibilityLabel = .TabTrayToggleAccessibilityLabel
         button.accessibilityHint = .TabTrayToggleAccessibilityHint
+        button.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.privateModeToggleButton
     }
 
     // MARK: - Initializers
@@ -78,7 +72,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell {
     func setupView() {
         let isiPad = UIDevice.current.userInterfaceIdiom == .pad
         let topAnchorConstant = isiPad ? UX.iPadTopConstant : UX.iPhoneTopConstant
-        privateModeButton.insertSubview(circularView, belowSubview: privateModeButton.imageView ?? privateModeButton)
+
         stackContainer.addArrangedSubview(logoHeaderCell.contentView)
         stackContainer.addArrangedSubview(privateModeButton)
         contentView.addSubview(stackContainer)
@@ -91,12 +85,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell {
 
             logoHeaderCell.contentView.centerYAnchor.constraint(equalTo: stackContainer.centerYAnchor),
             privateModeButton.centerYAnchor.constraint(equalTo: stackContainer.centerYAnchor),
-            privateModeButton.widthAnchor.constraint(equalToConstant: UX.circleSize.width),
-
-            circularView.topAnchor.constraint(equalTo: privateModeButton.topAnchor),
-            circularView.trailingAnchor.constraint(equalTo: privateModeButton.trailingAnchor),
-            circularView.leadingAnchor.constraint(equalTo: privateModeButton.leadingAnchor),
-            circularView.bottomAnchor.constraint(equalTo: privateModeButton.bottomAnchor),
+            privateModeButton.widthAnchor.constraint(equalToConstant: UX.circleSize.width)
         ])
     }
 
@@ -116,6 +105,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell {
         privateModeButton.isHidden = viewModel.hidePrivateModeButton
         let privateModeButtonTintColor = viewModel.isPrivate ? theme.colors.layer2 : theme.colors.iconPrimary
         privateModeButton.imageView?.tintColor = privateModeButtonTintColor
-        circularView.backgroundColor = viewModel.isPrivate ? .white : .clear
+        privateModeButton.backgroundColor = viewModel.isPrivate ? .white : .clear
     }
 }
