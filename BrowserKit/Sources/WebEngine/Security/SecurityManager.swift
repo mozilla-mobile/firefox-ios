@@ -11,6 +11,30 @@ public protocol SecurityManager {
 
 public class DefaultSecurityManager: SecurityManager {
     public func canNavigateWith(browsingContext: BrowsingContext) -> NavigationDecisionType {
-        return .allowed // Laurie
+        guard let url = URL(string: browsingContext.url) else {
+            // The URL is not a URL, refuse the navigation
+            return .refused
+        }
+
+        switch browsingContext.type {
+        case .externalNavigation:
+            return handleExternalNavigation(url: url)
+        case .internalNavigation:
+            return handleInternalNavigation(url: url)
+        case .redirectionNavigation:
+            return handleRedirectionNavigation(url: url)
+        }
+    }
+
+    private func handleExternalNavigation(url: URL) -> NavigationDecisionType {
+        return .allowed
+    }
+
+    private func handleInternalNavigation(url: URL) -> NavigationDecisionType {
+        return .allowed
+    }
+
+    private func handleRedirectionNavigation(url: URL) -> NavigationDecisionType {
+        return .allowed
     }
 }

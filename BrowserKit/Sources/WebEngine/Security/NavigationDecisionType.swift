@@ -6,10 +6,10 @@ import Foundation
 
 /// The navigation decision given by the Security Manager for a given BrowsingContext
 public enum NavigationDecisionType {
-    /// The Browsing Context is permitted
+    /// The Browsing Context is permitted and will be navigated to
     case allowed
 
-    /// The Browser Context was not permitted
+    /// The Browser Context was not permitted, the search will be made as a search term instead
     case refused
 
     /// The Browsing Context needs the user input before we can navigate to it
