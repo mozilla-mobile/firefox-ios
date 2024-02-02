@@ -58,7 +58,7 @@ class AuthenticationTests: KIFTestCase {
 
         // Add a private tab.
         tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.tabsButton)
-        tester().tapView(withAccessibilityLabel: "smallPrivateMask")
+        tester().tapView(withAccessibilityLabel: "privateModeLarge")
         tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.newTabButton)
         tester().waitForAnimationsToFinish()
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")

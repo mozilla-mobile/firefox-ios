@@ -141,7 +141,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
 
     private func makeSlider(parent: UIView) -> UISlider {
         let size = CGSize(width: UX.moonSunIconSize, height: UX.moonSunIconSize)
-        let images = [ImageIdentifiers.nightMode, "themeBrightness"].map { name in
+        let images = [StandardImageIdentifiers.Medium.nightMode, StandardImageIdentifiers.Medium.sun].map { name in
             UIImage(imageLiteralResourceName: name)
                 .createScaled(size)
                 .tinted(withColor: themeManager.currentTheme.colors.iconSecondary)

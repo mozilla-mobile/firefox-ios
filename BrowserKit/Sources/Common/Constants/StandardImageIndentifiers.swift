@@ -10,6 +10,8 @@ import Foundation
 public struct StandardImageIdentifiers {
     // Icon size 16x16
     public struct Small {
+        public static let notificationDot = "notificationDotSmall"
+        public static let notificationDotFill = "notificationDotFillSmall"
         public static let pinBadgeFill = "pinBadgeFillSmall"
     }
 
@@ -17,6 +19,8 @@ public struct StandardImageIdentifiers {
     public struct Medium {
         public static let bookmarkBadgeFillBlue50 = "bookmarkBadgeFillMediumBlue50"
         public static let cross = "crossMedium"
+        public static let nightMode = "nightModeMedium"
+        public static let sun = "sunMedium"
     }
 
     // Icon size 24x24
@@ -61,12 +65,16 @@ public struct StandardImageIdentifiers {
         public static let lightbulb = "lightbulbLarge"
         public static let link = "linkLarge"
         public static let login = "loginLarge"
+        public static let nightMode = "nightModeLarge"
+        public static let notificationDotFill = "notificationDotFillLarge"
+        public static let notificationDot = "notificationDotLarge"
         public static let packaging = "packagingLarge"
         public static let pageZoom = "pageZoomLarge"
         public static let pin = "pinLarge"
         public static let pinSlash = "pinSlashLarge"
         public static let plus = "plusLarge"
         public static let price = "priceLarge"
+        public static let privateMode = "privateModeLarge"
         public static let quality = "qualityLarge"
         public static let qrCode = "qrCodeLarge"
         public static let readerView = "readerViewLarge"

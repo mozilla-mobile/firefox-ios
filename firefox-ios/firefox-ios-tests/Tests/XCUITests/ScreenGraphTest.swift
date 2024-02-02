@@ -4,6 +4,7 @@
 
 import MappaMundi
 import XCTest
+import Common
 
 class ScreenGraphTest: XCTestCase {
     var navigator: MMNavigator<TestUserState>!
@@ -87,7 +88,7 @@ class TestUserState: MMUserState {
 let WebPageLoading = "WebPageLoading"
 
 private class TestActions {
-    static let ToggleNightMode = ImageIdentifiers.nightMode
+    static let ToggleNightMode = StandardImageIdentifiers.Large.nightMode
     static let LoadURL = "LoadURL"
     static let LoadURLByTyping = "LoadURLByTyping"
     static let LoadURLByPasting = "LoadURLByPasting"
@@ -146,7 +147,7 @@ private func createTestGraph(for test: XCTestCase, with app: XCUIApplication) ->
         screenState.tap(app.tables.cells["Settings"], to: SettingsScreen)
 
         screenState.tap(
-            app.otherElements.cells.otherElements[ImageIdentifiers.nightMode],
+            app.otherElements.cells.otherElements[StandardImageIdentifiers.Large.nightMode],
             forAction: TestActions.ToggleNightMode,
             transitionTo: BrowserTabMenu
         ) { userState in
