@@ -28,20 +28,20 @@ class BrowserViewController: UIViewController,
         static let ActionSheetTitleMaxLength = 120
     }
 
-    /// Describes how the user completed their interaction with the URL bar.
-    /// This state is used to record search engagement telemetry.
-    enum SearchEngagementState {
-        /// The user is currently interacting with the URL bar. The URL bar's
-        /// text field is focused, but the search controller may be hidden
-        /// if the text field is empty.
+    /// Describes the state of the current search session. This state is used
+    /// to record search engagement and abandonment telemetry.
+    enum SearchSessionState {
+        /// The user is currently searching. The URL bar's text field
+        /// is focused, but the search controller may be hidden if the
+        /// text field is empty.
         case active
 
-        /// The user completed their interaction by navigating to a destination,
-        /// either by tapping on a suggestion, or by entering a search term or
-        /// a URL.
+        /// The user completed their search by navigating to a destination,
+        /// either by tapping on a suggestion, or by entering a search term
+        /// or a URL.
         case engaged
 
-        /// The user completed their interaction by dismissing the URL bar.
+        /// The user abandoned their search by dismissing the URL bar.
         case abandoned
     }
 
@@ -67,7 +67,7 @@ class BrowserViewController: UIViewController,
     var readerModeCache: ReaderModeCache
     var statusBarOverlay: StatusBarOverlay = .build { _ in }
     var searchController: SearchViewController?
-    var searchEngagementState: SearchEngagementState?
+    var searchSessionState: SearchSessionState?
     var screenshotHelper: ScreenshotHelper!
     var searchTelemetry: SearchTelemetry?
     var searchLoader: SearchLoader?
@@ -1161,7 +1161,7 @@ class BrowserViewController: UIViewController,
         searchLoader.addListener(searchController)
 
         self.searchController = searchController
-        self.searchEngagementState = .active
+        self.searchSessionState = .active
         self.searchLoader = searchLoader
     }
 
@@ -1212,7 +1212,7 @@ class BrowserViewController: UIViewController,
         hideSearchController()
 
         searchController = nil
-        searchEngagementState = nil
+        searchSessionState = nil
         searchLoader = nil
     }
 
@@ -2386,7 +2386,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
     }
 
     func searchViewControllerWillHide(_ searchViewController: SearchViewController) {
-        switch searchEngagementState {
+        switch searchSessionState {
         case .engaged:
             let visibleSuggestionsTelemetryInfo = searchViewController.visibleSuggestionsTelemetryInfo
             visibleSuggestionsTelemetryInfo.forEach { trackVisibleSuggestion(telemetryInfo: $0) }
@@ -2410,7 +2410,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
         switch info {
         // A sponsored or non-sponsored suggestion from Firefox Suggest.
         case let .firefoxSuggestion(telemetryInfo, position, didTap):
-            let didAbandonSearchSession = searchEngagementState == .abandoned
+            let didAbandonSearchSession = searchSessionState == .abandoned
             TelemetryWrapper.gleanRecordEvent(
                 category: .action,
                 method: .view,

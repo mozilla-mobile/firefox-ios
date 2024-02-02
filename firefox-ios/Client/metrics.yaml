@@ -4242,8 +4242,8 @@ awesomebar:
   engagement:
     type: event
     description: |
-      Recorded when the user completes their interaction with the awesomebar
-      by tapping a search result, or entering a URL or a search term.
+      Recorded when the user completes their search session by
+      tapping a search result, or entering a URL or a search term.
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-8326
     data_reviews:
