@@ -369,19 +369,36 @@ workflows:
 
             if [[ $BITRISEIO_GIT_BRANCH_DEST = release* ]] || [[ $BITRISEIO_GIT_BRANCH_DEST = epic* ]]; then
                 BASE_BRANCH="$BITRISEIO_GIT_BRANCH_DEST"
+                echo $BASE_BRANCH
             elif [[ $BITRISE_GIT_BRANCH = release* ]] || [[ $BITRISE_GIT_BRANCH = epic* ]]; then
                 BASE_BRANCH="$BITRISE_GIT_BRANCH"
+                echo $BASE_BRANCH
             else
                 BASE_BRANCH="origin/main"
+                echo $BASE_BRANCH
             fi
 
             # Determine apps affected by the changes
             APPS_AFFECTED=$(git diff --name-only $BASE_BRANCH..."$BITRISE_GIT_COMMIT" | xargs -n1 dirname | sort | uniq)
 
+            echo "This are the files changed"
+            echo $APPS_AFFECTED
+
             # Initialize all application flags as "false" by default
             BUILD_FIREFOX_IOS="false"
             BUILD_FOCUS_IOS="false"
             BUILD_SAMPLE_BROWSER_IOS="false"
+
+            # Manual triggers leave empty commits.
+            # Check for empty commit/PR and exit blacklist check if found to avoid erroring out.
+            echo "Files changed in commit/PR: $APPS_AFFECTED"
+            if [[ -z "$APPS_AFFECTED" ]]; then
+                echo "No files changed in commit/PR. Skipping Blacklist check..."
+                BUILD_FIREFOX_IOS="true"
+                BUILD_FOCUS_IOS="true"
+                BUILD_SAMPLE_BROWSER_IOS="true"
+                exit 0
+            fi
 
             # Check for specific applications and set flags accordingly
             for app in $APPS_AFFECTED; do
