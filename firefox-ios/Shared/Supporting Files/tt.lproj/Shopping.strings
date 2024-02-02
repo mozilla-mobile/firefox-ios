@@ -17,9 +17,6 @@
 "Shopping.AdCard.Title.v121" = "Тагын нәрсәгә игътибар итү";
 
 /* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
-"Shopping.AdjustedRating.Description.v120" = "Ышанычсыз бәяләмәлер бетерелде";
-
-/* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
 "Shopping.AdjustedRating.Description.v121" = "Ышанычлы бәяләмәлергә нигезләнгән";
 
 /* Accessibility label, associated to adjusted rating stars. %@ is a decimal value from 0 to 5 that will only use a tenth (example: 3.5). */

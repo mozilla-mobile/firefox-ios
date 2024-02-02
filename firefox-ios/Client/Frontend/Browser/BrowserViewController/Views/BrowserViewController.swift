@@ -28,6 +28,23 @@ class BrowserViewController: UIViewController,
         static let ActionSheetTitleMaxLength = 120
     }
 
+    /// Describes how the user completed their interaction with the URL bar.
+    /// This state is used to record search engagement telemetry.
+    enum SearchEngagementState {
+        /// The user is currently interacting with the URL bar. The URL bar's
+        /// text field is focused, but the search controller may be hidden
+        /// if the text field is empty.
+        case active
+
+        /// The user completed their interaction by navigating to a destination,
+        /// either by tapping on a suggestion, or by entering a search term or
+        /// a URL.
+        case engaged
+
+        /// The user completed their interaction by dismissing the URL bar.
+        case abandoned
+    }
+
     typealias SubscriberStateType = BrowserViewControllerState
 
     private let KVOs: [KVOConstants] = [
@@ -37,6 +54,7 @@ class BrowserViewController: UIViewController,
         .canGoForward,
         .URL,
         .title,
+        .hasOnlySecureContent
     ]
 
     weak var browserDelegate: BrowserDelegate?
@@ -49,6 +67,7 @@ class BrowserViewController: UIViewController,
     var readerModeCache: ReaderModeCache
     var statusBarOverlay: StatusBarOverlay = .build { _ in }
     var searchController: SearchViewController?
+    var searchEngagementState: SearchEngagementState?
     var screenshotHelper: ScreenshotHelper!
     var searchTelemetry: SearchTelemetry?
     var searchLoader: SearchLoader?
@@ -66,10 +85,12 @@ class BrowserViewController: UIViewController,
     var dataClearanceContextHintVC: ContextualHintViewController
     let shoppingContextHintVC: ContextualHintViewController
     private var backgroundTabLoader: DefaultBackgroundTabLoader
+    var windowUUID: WindowUUID { return tabManager.windowUUID }
 
     // MARK: Telemetry Variables
     var webviewTelemetry = WebViewLoadMeasurementTelemetry()
     var privateBrowsingTelemetry = PrivateBrowsingTelemetry()
+    var appStartupTelemetry = AppStartupTelemetry()
 
     // popover rotation handling
     var displayedPopoverController: UIViewController?
@@ -226,6 +247,10 @@ class BrowserViewController: UIViewController,
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        unscubscribeFromRedux()
     }
 
     override var prefersStatusBarHidden: Bool {
@@ -482,10 +507,22 @@ class BrowserViewController: UIViewController,
     // MARK: - Redux
 
     func subscribeToRedux() {
-        store.dispatch(ActiveScreensStateAction.showScreen(.browserViewController))
+        store.dispatch(ActiveScreensStateAction.showScreen(
+            ScreenActionContext(screen: .browserViewController, windowUUID: windowUUID)
+        ))
+        let uuid = self.windowUUID
         store.subscribe(self, transform: {
-            $0.select(BrowserViewControllerState.init)
+            $0.select({ appState in
+                return BrowserViewControllerState(appState: appState, uuid: uuid)
+            })
         })
+    }
+
+    func unscubscribeFromRedux() {
+        store.dispatch(ActiveScreensStateAction.closeScreen(
+            ScreenActionContext(screen: .browserViewController, windowUUID: windowUUID)
+        ))
+        // Note: actual `store.unsubscribe()` is not strictly needed; Redux uses weak subscribers
     }
 
     func newState(state: BrowserViewControllerState) {
@@ -516,10 +553,11 @@ class BrowserViewController: UIViewController,
         let viewModel = ButtonToastViewModel(
             labelText: toast.title,
             buttonText: toast.buttonText)
+        let uuid = windowUUID
         let toast = ButtonToast(viewModel: viewModel,
                                 theme: themeManager.currentTheme,
                                 completion: { buttonPressed in
-            if let action = toast.reduxAction, buttonPressed {
+            if let action = toast.reduxAction(for: uuid), buttonPressed {
                 store.dispatch(action)
             }
         })
@@ -1123,6 +1161,7 @@ class BrowserViewController: UIViewController,
         searchLoader.addListener(searchController)
 
         self.searchController = searchController
+        self.searchEngagementState = .active
         self.searchLoader = searchLoader
     }
 
@@ -1173,6 +1212,7 @@ class BrowserViewController: UIViewController,
         hideSearchController()
 
         searchController = nil
+        searchEngagementState = nil
         searchLoader = nil
     }
 
@@ -1248,6 +1288,7 @@ class BrowserViewController: UIViewController,
             else { return }
 
             let detailController = BookmarkDetailPanel(profile: self.profile,
+                                                       windowUUID: self.windowUUID,
                                                        bookmarkNode: bookmarkNode,
                                                        parentBookmarkFolder: bookmarkFolder,
                                                        presentedFromToast: true)
@@ -1267,7 +1308,7 @@ class BrowserViewController: UIViewController,
 
     override func accessibilityPerformEscape() -> Bool {
         if overlayManager.inOverlayMode {
-            overlayManager.finishEditing(shouldCancelLoading: true)
+            overlayManager.cancelEditing(shouldCancelLoading: true)
             return true
         } else if let selectedTab = tabManager.selectedTab, selectedTab.canGoBack {
             selectedTab.goBack()
@@ -1287,7 +1328,7 @@ class BrowserViewController: UIViewController,
     func setupMiddleButtonStatus(isLoading: Bool) {
         // Setting the default state to search to account for no tab or starting page tab
         // `state` will be modified later if needed
-        var state: MiddleButtonState = .search
+        let state: MiddleButtonState = .search
 
         // No tab
         guard let tab = tabManager.selectedTab else {
@@ -1398,6 +1439,9 @@ class BrowserViewController: UIViewController,
                   let canGoForward = change?[.newKey] as? Bool
             else { break }
             navigationToolbar.updateForwardStatus(canGoForward)
+        case .hasOnlySecureContent:
+            urlBar.locationView.hasSecureContent = webView.hasOnlySecureContent
+            urlBar.locationView.showTrackingProtectionButton(for: webView.url)
         default:
             assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
         }
@@ -1430,7 +1474,6 @@ class BrowserViewController: UIViewController,
                 isPrivate: tab.isPrivate)
         }
         urlBar.currentURL = tab.url?.displayURL
-        urlBar.locationView.tabDidChangeContentBlocking(tab)
         urlBar.locationView.updateShoppingButtonVisibility(for: tab)
         let isPage = tab.url?.displayURL?.isWebPage() ?? false
         navigationToolbar.updatePageStatus(isPage)
@@ -1498,18 +1541,7 @@ class BrowserViewController: UIViewController,
     }
 
     func handleQRCode() {
-        if CoordinatorFlagManager.isQRCodeCoordinatorEnabled {
-            navigationHandler?.showQRCode(delegate: self)
-        } else {
-            let qrCodeViewController = QRCodeViewController()
-            qrCodeViewController.qrCodeDelegate = self
-            presentedViewController?.dismiss(animated: true)
-            present(
-                UINavigationController(rootViewController: qrCodeViewController),
-                animated: true,
-                completion: nil
-            )
-        }
+        navigationHandler?.showQRCode(delegate: self)
     }
 
     func handleClosePrivateTabs() {
@@ -1671,10 +1703,6 @@ class BrowserViewController: UIViewController,
         guard let webView = tab.webView else { return }
 
         if let url = webView.url {
-            if tab === tabManager.selectedTab {
-                urlBar.locationView.tabDidChangeContentBlocking(tab)
-            }
-
             if (!InternalURL.isValid(url: url) || url.isReaderModeURL) && !url.isFileURL {
                 postLocationChangeNotificationForTab(tab, navigation: navigation)
                 tab.readabilityResult = nil
@@ -2014,6 +2042,10 @@ class BrowserViewController: UIViewController,
         self.show(toast: toast)
     }
 
+    var libraryPanelWindowUUID: WindowUUID {
+        return windowUUID
+    }
+
     // MARK: - RecentlyClosedPanelDelegate
 
     func openRecentlyClosedSiteInSameTab(_ url: URL) {
@@ -2349,6 +2381,45 @@ extension BrowserViewController: SearchViewControllerDelegate {
     func searchViewController(_ searchViewController: SearchViewController, didAppend text: String) {
         self.urlBar.setLocation(text, search: false)
     }
+
+    func searchViewControllerWillHide(_ searchViewController: SearchViewController) {
+        guard searchEngagementState == .engaged else { return }
+        let visibleSuggestionsTelemetryInfo = searchViewController.visibleSuggestionsTelemetryInfo
+        for info in visibleSuggestionsTelemetryInfo {
+            trackEngagedSearchTelemetry(visibleSuggestionInfo: info)
+        }
+    }
+
+    /// Records telemetry for a suggestion that was visible during an engaged
+    /// search. The user may have tapped on this suggestion or on a different
+    /// suggestion, or typed in a search term or a URL.
+    func trackEngagedSearchTelemetry(visibleSuggestionInfo info: SearchViewVisibleSuggestionTelemetryInfo) {
+        switch info {
+        // A sponsored or non-sponsored suggestion from Firefox Suggest.
+        case let .firefoxSuggestion(telemetryInfo, position, didTap):
+            TelemetryWrapper.gleanRecordEvent(
+                category: .action,
+                method: .view,
+                object: TelemetryWrapper.EventObject.fxSuggest,
+                extras: [
+                    TelemetryWrapper.EventValue.fxSuggestionTelemetryInfo.rawValue: telemetryInfo,
+                    TelemetryWrapper.EventValue.fxSuggestionPosition.rawValue: position,
+                    TelemetryWrapper.EventValue.fxSuggestionDidTap.rawValue: didTap,
+                ]
+            )
+            if didTap {
+                TelemetryWrapper.gleanRecordEvent(
+                    category: .action,
+                    method: .tap,
+                    object: TelemetryWrapper.EventObject.fxSuggest,
+                    extras: [
+                        TelemetryWrapper.EventValue.fxSuggestionTelemetryInfo.rawValue: telemetryInfo,
+                        TelemetryWrapper.EventValue.fxSuggestionPosition.rawValue: position,
+                    ]
+                )
+            }
+        }
+    }
 }
 
 extension BrowserViewController: TabManagerDelegate {
@@ -2365,7 +2436,9 @@ extension BrowserViewController: TabManagerDelegate {
 
         if let tab = selected, let webView = tab.webView {
             updateURLBarDisplayURL(tab)
-            if urlBar.inOverlayMode, tab.url?.displayURL != nil { urlBar.leaveOverlayMode(didCancel: false) }
+            if urlBar.inOverlayMode, tab.url?.displayURL != nil {
+                urlBar.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
+            }
 
             if previous == nil || tab.isPrivate != previous?.isPrivate {
                 applyTheme()
@@ -2612,7 +2685,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
         // If keyboard is dismiss leave edition mode Homepage case is handled in HomepageVC
         let newTabChoice = NewTabAccessors.getNewTabPage(profile.prefs)
         if newTabChoice != .topSites, newTabChoice != .blankPage {
-            overlayManager.finishEditing(shouldCancelLoading: false)
+            overlayManager.cancelEditing(shouldCancelLoading: false)
         }
     }
 }
@@ -2746,6 +2819,7 @@ extension BrowserViewController {
     func trackTelemetry() {
         trackAccessibility()
         trackNotificationPermission()
+        appStartupTelemetry.sendStartupTelemetry()
     }
 
     func trackAccessibility() {

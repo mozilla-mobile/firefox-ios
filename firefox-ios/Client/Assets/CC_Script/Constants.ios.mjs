@@ -9,6 +9,8 @@ const IOS_DEFAULT_PREFERENCES = {
   "extensions.formautofill.creditCards.heuristics.fathom.testConfidence": 0,
   "extensions.formautofill.creditCards.heuristics.fathom.types":
     "cc-number,cc-name",
+  "extensions.formautofill.addresses.capture.requiredFields":
+    "street-address,postal-code,address-level1,address-level2",
   "extensions.formautofill.loglevel": "Warn",
   "extensions.formautofill.addresses.supported": "off",
   "extensions.formautofill.creditCards.supported": "detect",
@@ -16,7 +18,6 @@ const IOS_DEFAULT_PREFERENCES = {
   "extensions.formautofill.creditCards.supportedCountries": "US,CA,GB,FR,DE",
   "extensions.formautofill.addresses.enabled": false,
   "extensions.formautofill.addresses.capture.enabled": false,
-  "extensions.formautofill.addresses.capture.v2.enabled": false,
   "extensions.formautofill.addresses.supportedCountries": "",
   "extensions.formautofill.creditCards.enabled": true,
   "extensions.formautofill.reauth.enabled": true,
@@ -26,10 +27,6 @@ const IOS_DEFAULT_PREFERENCES = {
   "extensions.formautofill.addresses.ignoreAutocompleteOff": true,
   "extensions.formautofill.heuristics.enabled": true,
   "extensions.formautofill.section.enabled": true,
-  // WebKit doesn't support the checkVisibility API, setting the threshold value to 0 to ensure
-  // `IsFieldVisible` function doesn't use it
-  "extensions.formautofill.heuristics.visibilityCheckThreshold": 0,
-  "extensions.formautofill.heuristics.interactivityCheckMode": "focusability",
   "extensions.formautofill.heuristics.captureOnFormRemoval": false,
   "extensions.formautofill.heuristics.captureOnPageNavigation": false,
   "extensions.formautofill.focusOnAutofill": false,

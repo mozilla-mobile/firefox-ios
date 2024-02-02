@@ -45,10 +45,7 @@ public enum KVOConstants: String {
     case canGoBack
     case canGoForward
     case contentSize
-}
-
-public struct KeychainKey {
-    public static let apnsToken = "apnsToken"
+    case hasOnlySecureContent
 }
 
 public class AppConstants {

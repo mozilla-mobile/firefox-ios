@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Common
 
 class FindInPageTests: BaseTestCase {
     private func openFindInPageFromMenu(openSite: String) {
@@ -28,8 +29,9 @@ class FindInPageTests: BaseTestCase {
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from XCUITests-Runner"])
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 15)
         app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
-        mozWaitForElementToExist(app.tables["Context Menu"].otherElements[ImageIdentifiers.findInPage], timeout: 10)
-        app.tables["Context Menu"].otherElements[ImageIdentifiers.findInPage].tap()
+        mozWaitForElementToExist(app.tables["Context Menu"]
+            .otherElements[StandardImageIdentifiers.Large.search], timeout: 10)
+        app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.search].tap()
 
         // Enter some text to start finding
         app.textFields["FindInPage.searchField"].typeText("Book")
@@ -95,7 +97,7 @@ class FindInPageTests: BaseTestCase {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 15)
         app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
         // Enter some text to start finding
-        app.tables["Context Menu"].otherElements[ImageIdentifiers.findInPage].tap()
+        app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.search].tap()
         app.textFields["FindInPage.searchField"].typeText("The Book of")
         mozWaitForElementToExist(app.textFields["The Book of"], timeout: 15)
         XCTAssertEqual(app.staticTexts["FindInPage.matchCount"].label, "1/500+", "The book word count does match")

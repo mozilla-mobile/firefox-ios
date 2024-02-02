@@ -89,7 +89,7 @@ class TabTrayViewController: UIViewController,
         label.font = TabsButton.UX.titleFont
         label.layer.cornerRadius = TabsButton.UX.cornerRadius
         label.textAlignment = .center
-        label.text = self.tabTrayState.normalTabsCount
+        label.text = "0"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -180,12 +180,16 @@ class TabTrayViewController: UIViewController,
         }
     }
 
+    private let windowUUID: WindowUUID
+
     init(selectedTab: TabTrayPanelType,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
+         windowUUID: WindowUUID,
          and notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.tabTrayState = TabTrayState(panelType: selectedTab)
+        self.tabTrayState = TabTrayState(windowUUID: windowUUID, panelType: selectedTab)
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.windowUUID = windowUUID
 
         super.init(nibName: nil, bundle: nil)
         self.applyTheme()
@@ -248,30 +252,42 @@ class TabTrayViewController: UIViewController,
     // MARK: - Redux
 
     func subscribeToRedux() {
-        store.dispatch(ActiveScreensStateAction.showScreen(.tabsTray))
-        store.dispatch(TabTrayAction.tabTrayDidLoad(tabTrayState.selectedPanel))
+        store.dispatch(ActiveScreensStateAction.showScreen(
+            ScreenActionContext(screen: .tabsTray, windowUUID: windowUUID)
+        ))
+        let context = TabTrayPanelContext(panelType: tabTrayState.selectedPanel, windowUUID: windowUUID)
+        store.dispatch(TabTrayAction.tabTrayDidLoad(context))
+        let uuid = windowUUID
         store.subscribe(self, transform: {
-            return $0.select(TabTrayState.init)
+            $0.select({ appState in
+                return TabTrayState(appState: appState, uuid: uuid)
+            })
         })
     }
 
     func unsubscribeFromRedux() {
-        store.dispatch(ActiveScreensStateAction.closeScreen(.tabsTray))
+        store.dispatch(ActiveScreensStateAction.closeScreen(
+            ScreenActionContext(screen: .tabsTray, windowUUID: windowUUID)
+        ))
         store.unsubscribe(self)
     }
 
     func newState(state: TabTrayState) {
         tabTrayState = state
+        updateTabCountImage(count: state.normalTabsCount)
 
         if tabTrayState.shouldDismiss {
             delegate?.didFinish()
         }
         if let url = tabTrayState.shareURL {
             navigationHandler?.shareTab(url: url, sourceView: self.view)
-
-            // Reload to clear the share sheet item
-            store.dispatch(TabTrayAction.tabTrayDidLoad(tabTrayState.selectedPanel))
         }
+    }
+
+    func updateTabCountImage(count: String) {
+        countLabel.text = count
+        segmentedControl.setImage(TabTrayPanelType.tabs.image!.overlayWith(image: countLabel),
+                                  forSegmentAt: 0)
     }
 
     // MARK: Themeable
@@ -435,17 +451,19 @@ class TabTrayViewController: UIViewController,
               tabTrayState.selectedPanel != panelType else { return }
 
         setupOpenPanel(panelType: panelType)
-        store.dispatch(TabTrayAction.changePanel(panelType))
+        let context = TabTrayPanelContext(panelType: panelType, windowUUID: windowUUID)
+        store.dispatch(TabTrayAction.changePanel(context))
     }
 
     @objc
     private func deleteTabsButtonTapped() {
-        store.dispatch(TabPanelAction.closeAllTabs)
+        store.dispatch(TabPanelAction.closeAllTabs(windowUUID.context))
     }
 
     @objc
     private func newTabButtonTapped() {
-        store.dispatch(TabPanelAction.addNewTab(nil, tabTrayState.isPrivateMode))
+        let context = AddNewTabContext(urlRequest: nil, isPrivate: tabTrayState.isPrivateMode, windowUUID: windowUUID)
+        store.dispatch(TabPanelAction.addNewTab(context))
     }
 
     @objc
@@ -457,6 +475,6 @@ class TabTrayViewController: UIViewController,
 
     @objc
     private func syncTabsTapped() {
-        store.dispatch(RemoteTabsPanelAction.refreshTabs)
+        store.dispatch(RemoteTabsPanelAction.refreshTabs(windowUUID.context))
     }
 }

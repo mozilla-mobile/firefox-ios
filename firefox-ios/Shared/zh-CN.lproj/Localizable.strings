@@ -694,9 +694,6 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "筛选";
 
-/* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "保存的登录信息将显示于此处。若您在其他设备保存过登录信息，请登录您的 Firefox 账户。";
-
 /* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
 "LoginsList.NoLoginsFound.Description.v119" = "保存的登录信息将显示于此处。若您在其他设备上的 %@ 中保存过登录信息，请登录您的账户。";
 
@@ -1068,15 +1065,6 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "确定";
-
-/* Accessibility label for default search engine setting. */
-"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "默认搜索引擎";
-
-/* Title for default search engine settings section. */
-"SearchSettings.Title.DefaultSearchEngine.v106" = "默认搜索引擎";
-
-/* Navigation title for search settings. */
-"SearchSettings.Title.Search.v106" = "搜索";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "发送一则崩溃报告给 Mozilla，以便我们修复此问题？";

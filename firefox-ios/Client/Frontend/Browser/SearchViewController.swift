@@ -22,7 +22,7 @@ private struct SearchViewControllerUX {
     static let EngineButtonWidth = EngineButtonHeight * 1.4
     static let EngineButtonBackgroundColor = UIColor.clear.cgColor
 
-    static let SearchImage = "search"
+    static let SearchImage = StandardImageIdentifiers.Large.search
     static let SearchEngineTopBorderWidth = 0.5
     static let SuggestionMargin: CGFloat = 8
 
@@ -49,6 +49,7 @@ protocol SearchViewControllerDelegate: AnyObject {
         _ searchViewController: SearchViewController,
         didAppend text: String
     )
+    func searchViewControllerWillHide(_ searchViewController: SearchViewController)
 }
 
 // Note: ClientAndTabs data structure contains all tabs under a remote client. To make traversal and search easier
@@ -63,6 +64,22 @@ struct SearchViewModel {
     let isBottomSearchBar: Bool
 }
 
+/// Type-specific information to record in telemetry about a visible search
+/// suggestion.
+enum SearchViewVisibleSuggestionTelemetryInfo {
+    /// Information to record in telemetry about a visible sponsored or
+    /// non-sponsored suggestion from Firefox Suggest.
+    ///
+    /// `position` is the 1-based position of this suggestion relative to the
+    /// top of the search results view. `didTap` indicates if the user
+    /// tapped on this suggestion.
+    case firefoxSuggestion(
+        RustFirefoxSuggestionTelemetryInfo,
+        position: Int,
+        didTap: Bool
+    )
+}
+
 class SearchViewController: SiteTableViewController,
                             KeyboardHelperDelegate,
                             LoaderListener,
@@ -74,14 +91,16 @@ class SearchViewController: SiteTableViewController,
     private let viewModel: SearchViewModel
     private let model: SearchEngines
     private var suggestClient: SearchSuggestClient?
-    private var remoteClientTabs = [ClientTabsSearchWrapper]()
-    private var filteredRemoteClientTabs = [ClientTabsSearchWrapper]()
+    var remoteClientTabs = [ClientTabsSearchWrapper]()
+    var filteredRemoteClientTabs = [ClientTabsSearchWrapper]()
     private var openedTabs = [Tab]()
     private var filteredOpenedTabs = [Tab]()
     private var tabManager: TabManager
     private var searchHighlights = [HighlightItem]()
     var firefoxSuggestions = [RustFirefoxSuggestion]()
     private var highlightManager: HistoryHighlightsManagerProtocol
+
+    private var selectedIndexPath: IndexPath?
 
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
     // scrollable container; searchEngineScrollViewContent contains the actual set of search engine buttons.
@@ -96,8 +115,16 @@ class SearchViewController: SiteTableViewController,
     }()
 
     private lazy var openAndSyncTabBadge: UIImage = {
-        return UIImage(named: "sync_open_tab")!
+        return UIImage(named: ImageIdentifiers.syncOpenTab)!
     }()
+
+    private lazy var searchButton: UIButton = .build { button in
+        let image = UIImage(named: StandardImageIdentifiers.Large.search)?.withRenderingMode(.alwaysTemplate)
+        button.setImage(image, for: [])
+        button.imageView?.contentMode = .scaleAspectFit
+        button.addTarget(self, action: #selector(self.didClickSearchButton), for: .touchUpInside)
+        button.accessibilityLabel = String(format: .SearchSettingsAccessibilityLabel)
+    }
 
     var suggestions: [String]? = []
     var savedQuery: String = ""
@@ -124,7 +151,7 @@ class SearchViewController: SiteTableViewController,
         self.tabManager = tabManager
         self.searchFeature = featureConfig
         self.highlightManager = highlightManager
-        super.init(profile: profile)
+        super.init(profile: profile, windowUUID: tabManager.windowUUID)
 
         tableView.sectionHeaderTopPadding = 0
     }
@@ -181,9 +208,25 @@ class SearchViewController: SiteTableViewController,
         }
     }
 
+    /// Whether to show sponsored suggestions from Firefox Suggest.
+    ///
+    /// Sponsored suggestions can be toggled by the user, and are never shown in
+    /// private browsing mode, even if "Show Suggestions in Private Browsing"
+    /// is switched on.
+    private var shouldShowSponsoredSuggestions: Bool {
+        !viewModel.isPrivate &&
+            profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowSponsoredSuggestions) ?? true
+    }
+
+    /// Whether to show non-sponsored suggestions from Firefox Suggest.
+    private var shouldShowNonSponsoredSuggestions: Bool {
+        !viewModel.isPrivate &&
+            profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions) ?? true
+    }
+
     func loadFirefoxSuggestions() -> Task<(), Never>? {
-        let includeNonSponsored = profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions) ?? false
-        let includeSponsored = profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowSponsoredSuggestions) ?? false
+        let includeNonSponsored = shouldShowNonSponsoredSuggestions
+        let includeSponsored = shouldShowSponsoredSuggestions
         guard featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser)
                 && (includeNonSponsored || includeSponsored)
         else { return nil }
@@ -220,6 +263,11 @@ class SearchViewController: SiteTableViewController,
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         searchFeature.recordExposure()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        searchDelegate?.searchViewControllerWillHide(self)
+        super.viewWillDisappear(animated)
     }
 
     private func layoutSearchEngineScrollView() {
@@ -321,6 +369,29 @@ class SearchViewController: SiteTableViewController,
         }
     }
 
+    /// Information to record in telemetry for the currently visible
+    /// suggestions.
+    var visibleSuggestionsTelemetryInfo: [SearchViewVisibleSuggestionTelemetryInfo] {
+        let visibleIndexPaths = tableView.indexPathsForVisibleRows ?? []
+        return visibleIndexPaths.enumerated().compactMap { (position, indexPath) in
+            switch SearchListSection(rawValue: indexPath.section)! {
+            case .firefoxSuggestions:
+                let firefoxSuggestion = firefoxSuggestions[safe: indexPath.row]
+                guard let telemetryInfo = firefoxSuggestion?.telemetryInfo else {
+                    return nil
+                }
+                return .firefoxSuggestion(
+                    telemetryInfo,
+                    position: position + 1,
+                    didTap: indexPath == selectedIndexPath
+                )
+
+            default:
+                return nil
+            }
+        }
+    }
+
     override func reloadData() {
         querySuggestClient()
     }
@@ -341,14 +412,6 @@ class SearchViewController: SiteTableViewController,
     func reloadSearchEngines() {
         searchEngineScrollViewContent.subviews.forEach { $0.removeFromSuperview() }
         var leftEdge = searchEngineScrollViewContent.leadingAnchor
-
-        // search settings icon
-        let searchButton: UIButton = .build()
-        searchButton.setImage(UIImage(named: "quickSearch"), for: [])
-        searchButton.imageView?.contentMode = .scaleAspectFit
-        searchButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
-        searchButton.addTarget(self, action: #selector(didClickSearchButton), for: .touchUpInside)
-        searchButton.accessibilityLabel = String(format: .SearchSettingsAccessibilityLabel)
 
         if let imageView = searchButton.imageView {
             NSLayoutConstraint.activate([
@@ -433,6 +496,7 @@ class SearchViewController: SiteTableViewController,
             assertionFailure()
             return
         }
+
         let extras = [
             ExtraKey.recordSearchLocation.rawValue: SearchLocation.quickSearch,
             ExtraKey.recordSearchEngineID.rawValue: engine.engineID as Any
@@ -561,6 +625,11 @@ class SearchViewController: SiteTableViewController,
                 return false
             }
 
+            if shouldShowSponsoredSuggestions &&
+                SponsoredContentFilterUtility().containsSearchParam(url: tab.URL) {
+                return false
+            }
+
             if tab.title.lowercased().contains(searchString.lowercased()) {
                 return true
             }
@@ -616,7 +685,12 @@ class SearchViewController: SiteTableViewController,
     }
 
     func loader(dataLoaded data: Cursor<Site>) {
-        self.data = data
+        self.data = if shouldShowSponsoredSuggestions {
+            ArrayCursor<Site>(data: SponsoredContentFilterUtility().filterSponsoredSites(from: data.asArray()))
+        } else {
+            data
+        }
+
         tableView.reloadData()
     }
 
@@ -642,20 +716,24 @@ class SearchViewController: SiteTableViewController,
                                               method: .tap,
                                               object: .recordSearch,
                                               extras: extras)
+            selectedIndexPath = indexPath
             searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: suggestion)
         case .openedTabs:
             recordSearchListSelectionTelemetry(type: .openedTabs)
             let tab = self.filteredOpenedTabs[indexPath.row]
+            selectedIndexPath = indexPath
             searchDelegate?.searchViewController(self, uuid: tab.tabUUID)
         case .remoteTabs:
             recordSearchListSelectionTelemetry(type: .remoteTabs)
             let remoteTab = self.filteredRemoteClientTabs[indexPath.row].tab
+            selectedIndexPath = indexPath
             searchDelegate?.searchViewController(self, didSelectURL: remoteTab.URL, searchTerm: nil)
         case .bookmarksAndHistory:
             if let site = data[indexPath.row] {
                 recordSearchListSelectionTelemetry(type: .bookmarksAndHistory,
                                                    isBookmark: site.bookmarked ?? false)
                 if let url = URL(string: site.url, invalidCharacters: false) {
+                    selectedIndexPath = indexPath
                     searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
                 }
             }
@@ -663,21 +741,12 @@ class SearchViewController: SiteTableViewController,
             if let urlString = searchHighlights[indexPath.row].urlString,
                 let url = URL(string: urlString, invalidCharacters: false) {
                 recordSearchListSelectionTelemetry(type: .searchHighlights)
+                selectedIndexPath = indexPath
                 searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
             }
         case .firefoxSuggestions:
             let firefoxSuggestion = firefoxSuggestions[indexPath.row]
-            if let clickInfo = firefoxSuggestion.clickInfo {
-                // The 1-based position of this suggestion, relative to the top of the table.
-                let position = SearchListSection.allCases.filter { $0.rawValue < indexPath.section }
-                    .reduce(0) { $0 + self.tableView(tableView, numberOfRowsInSection: $1.rawValue) }
-                + indexPath.row + 1
-                recordFirefoxSuggestSelectionTelemetry(
-                    clickInfo: clickInfo,
-                    position: position
-                )
-            }
-
+            selectedIndexPath = indexPath
             searchDelegate?.searchViewController(
                 self,
                 didSelectURL: firefoxSuggestion.url,
@@ -770,6 +839,11 @@ class SearchViewController: SiteTableViewController,
     override func applyTheme() {
         super.applyTheme()
         view.backgroundColor = themeManager.currentTheme.colors.layer5
+
+        // search settings icon
+        searchButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
+        searchButton.tintColor = themeManager.currentTheme.colors.iconPrimary
+
         searchEngineContainerView.layer.backgroundColor = themeManager.currentTheme.colors.layer1.cgColor
         searchEngineContainerView.layer.shadowColor = themeManager.currentTheme.colors.shadowDefault.cgColor
         reloadData()
@@ -811,7 +885,7 @@ class SearchViewController: SiteTableViewController,
                 oneLineCell.leftImageView.contentMode = .center
                 oneLineCell.leftImageView.layer.borderWidth = 0
                 oneLineCell.leftImageView.manuallySetImage(
-                    UIImage(named: SearchViewControllerUX.SearchImage) ?? UIImage()
+                    UIImage(named: SearchViewControllerUX.SearchImage)?.withRenderingMode(.alwaysTemplate) ?? UIImage()
                 )
                 oneLineCell.leftImageView.tintColor = themeManager.currentTheme.colors.iconPrimary
                 oneLineCell.leftImageView.backgroundColor = nil
@@ -975,16 +1049,6 @@ private extension SearchViewController {
                                      method: .tap,
                                      object: .awesomebarResults,
                                      extras: [key: extra])
-    }
-
-    func recordFirefoxSuggestSelectionTelemetry(clickInfo: RustFirefoxSuggestionInteractionInfo, position: Int) {
-        TelemetryWrapper.gleanRecordEvent(category: .action,
-                                          method: .tap,
-                                          object: TelemetryWrapper.EventObject.fxSuggest,
-                                          extras: [
-                                            TelemetryWrapper.EventValue.fxSuggestionClickInfo.rawValue: clickInfo,
-                                            TelemetryWrapper.EventValue.fxSuggestionPosition.rawValue: position
-                                          ])
     }
 }
 

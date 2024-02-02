@@ -13,6 +13,57 @@
 /* The title on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
 "DefaultBrowserPopup.Title.v114" = "切換您的預設瀏覽器";
 
+/* String used to describe the option to continue to the next onboarding card in Firefox Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Customization.Intro.Continue.Action.v123" = "自訂 %@";
+
+/* String used to describe the description label of the customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Intro.Description.v123" = "用您的風格決定佈景主題與工具列位置。";
+
+/* String used to describe the option to skip the customization cards in Firefox Onboarding screens and start browsing. */
+"Onboarding.Customization.Intro.Skip.Action.v123" = "開始上網";
+
+/* String used to describe the title of the customization onboarding page in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Customization.Intro.Title.v123" = "%@ 讓您可自行控制線上生活";
+
+/* String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens. */
+"Onboarding.Customization.Theme.Continue.Action.v123" = "儲存並繼續";
+
+/* On the theme customization onboarding card, the string used to describe the option to set the theme to dark theme from the available choices. */
+"Onboarding.Customization.Theme.Dark.Action.v123" = "暗色";
+
+/* String used to describe the description label of the theme customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Theme.Description.v123" = "用最適合您的色調上網。";
+
+/* On the theme customization onboarding card, the string used to describe the option to set the theme to light theme from the available choices. */
+"Onboarding.Customization.Theme.Light.Action.v123" = "亮色";
+
+/* String used to describe the option to skip the theme customization in Firefox Onboarding screens. */
+"Onboarding.Customization.Theme.Skip.Action.v123" = "略過";
+
+/* On the theme customization onboarding card, the string used to describe the option to set the theme to system theme from the available choices. */
+"Onboarding.Customization.Theme.System.Action.v123" = "自動使用系統色調";
+
+/* String used to describe the title of the theme customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Theme.Title.v123" = "挑選佈景主題";
+
+/* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
+"Onboarding.Customization.Toolbar.Bottom.Action.v123" = "底部";
+
+/* String used to describe the option to save set preferences and leave onboarding to start browsing in the app. */
+"Onboarding.Customization.Toolbar.Continue.Action.v123" = "儲存並開始上網";
+
+/* String used to describe the description label of the toolbar customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Toolbar.Description.v123" = "讓搜尋觸手可及。";
+
+/* String used to describe the option to skip the toolbar customization in Firefox Onboarding screens and start browisg in the app. */
+"Onboarding.Customization.Toolbar.Skip.Action.v123" = "略過";
+
+/* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Toolbar.Title.v123" = "挑選工具列要放置的位置";
+
+/* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen. */
+"Onboarding.Customization.Toolbar.Top.Action.v123" = "頂端";
+
 /* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. Indie means small independant. */
 "Onboarding.IntroDescriptionPart1.v114" = "獨立。非營利。為了做好事。";
 
@@ -39,6 +90,9 @@
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Sync.Description.v120" = "登入並同步資料後就更安全了，%@ 會加密您的密碼、書籤等資料再同步。";
+
+/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Sync.Description.v123" = "%@ 會在同步您的密碼、書籤等資料時自動加密。";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.SignIn.Action.v114" = "登入";
@@ -77,10 +131,10 @@
 "Onboarding.Welcome.Close.AccessibilityLabel.v121" = "結束並關閉 %@ 使用教學";
 
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
-"Onboarding.Welcome.Description.TreatementA.v120" = "我們這套由非營利組織所開發的瀏覽器會自動封鎖讓大企業在網路上偷偷跟蹤您的程式。";
+"Onboarding.Welcome.Description.TreatementA.v120" = "我們這套由非營利組織所開發的瀏覽器，會自動封鎖讓大企業在網路上偷偷跟蹤您的程式。";
 
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Description.v120" = "我們這套由非營利組織所開發的瀏覽器會自動封鎖讓大企業在網路上偷偷跟蹤您的程式。";
+"Onboarding.Welcome.Description.v120" = "我們這套由非營利組織所開發的瀏覽器，會自動封鎖讓大企業在網路上偷偷跟蹤您的程式。";
 
 /* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Link.Action.v114" = "可以到我們的隱私權公告了解更多資訊";

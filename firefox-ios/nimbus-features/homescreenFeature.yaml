@@ -12,12 +12,6 @@ features:
             "jump-back-in": true,
             "recent-explorations": false,
           }
-      pocket-sponsored-stories:
-        description: >
-          This property defines whether pocket sponsored
-          stories appear on the homepage.
-        type: Boolean
-        default: false
       prefer-switch-to-open-tab:
         description: >
            Enables the feature to automatically switch to an existing tab
@@ -31,7 +25,6 @@ features:
             "jump-back-in": true,
             "recent-explorations": false,
           },
-          "pocket-sponsored-stories": true,
           "prefer-switch-to-open-tab": true
         }
       - channel: beta
@@ -40,7 +33,6 @@ features:
             "jump-back-in": true,
             "recent-explorations": false,
           },
-          "pocket-sponsored-stories": false,
           "prefer-switch-to-open-tab": false
         }
 

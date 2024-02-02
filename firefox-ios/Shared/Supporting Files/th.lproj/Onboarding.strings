@@ -13,6 +13,57 @@
 /* The title on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
 "DefaultBrowserPopup.Title.v114" = "เปลี่ยนเบราว์เซอร์เริ่มต้นของคุณ";
 
+/* String used to describe the option to continue to the next onboarding card in Firefox Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Customization.Intro.Continue.Action.v123" = "ปรับแต่ง %@";
+
+/* String used to describe the description label of the customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Intro.Description.v123" = "ตั้งค่าชุดตกแต่งและแถบเครื่องมือของคุณให้ตรงกับสไตล์การท่องเว็บที่เป็นเอกลักษณ์ของคุณ";
+
+/* String used to describe the option to skip the customization cards in Firefox Onboarding screens and start browsing. */
+"Onboarding.Customization.Intro.Skip.Action.v123" = "เริ่มการท่องเว็บ";
+
+/* String used to describe the title of the customization onboarding page in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Customization.Intro.Title.v123" = "%@ ให้คุณได้ควบคุม";
+
+/* String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens. */
+"Onboarding.Customization.Theme.Continue.Action.v123" = "บันทึกและดำเนินการต่อ";
+
+/* On the theme customization onboarding card, the string used to describe the option to set the theme to dark theme from the available choices. */
+"Onboarding.Customization.Theme.Dark.Action.v123" = "มืด";
+
+/* String used to describe the description label of the theme customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Theme.Description.v123" = "รับชมเว็บด้วยแสงที่ดีที่สุด";
+
+/* On the theme customization onboarding card, the string used to describe the option to set the theme to light theme from the available choices. */
+"Onboarding.Customization.Theme.Light.Action.v123" = "สว่าง";
+
+/* String used to describe the option to skip the theme customization in Firefox Onboarding screens. */
+"Onboarding.Customization.Theme.Skip.Action.v123" = "ข้าม";
+
+/* On the theme customization onboarding card, the string used to describe the option to set the theme to system theme from the available choices. */
+"Onboarding.Customization.Theme.System.Action.v123" = "ระบบอัตโนมัติ";
+
+/* String used to describe the title of the theme customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Theme.Title.v123" = "เลือกชุดตกแต่ง";
+
+/* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
+"Onboarding.Customization.Toolbar.Bottom.Action.v123" = "ด้านล่าง";
+
+/* String used to describe the option to save set preferences and leave onboarding to start browsing in the app. */
+"Onboarding.Customization.Toolbar.Continue.Action.v123" = "บันทึกและเริ่มการเรียกดู";
+
+/* String used to describe the description label of the toolbar customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Toolbar.Description.v123" = "ให้การค้นหาอยู่ใกล้แค่เอื้อม";
+
+/* String used to describe the option to skip the toolbar customization in Firefox Onboarding screens and start browisg in the app. */
+"Onboarding.Customization.Toolbar.Skip.Action.v123" = "ข้าม";
+
+/* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Toolbar.Title.v123" = "เลือกตำแหน่งแถบเครื่องมือ";
+
+/* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen. */
+"Onboarding.Customization.Toolbar.Top.Action.v123" = "ด้านบน";
+
 /* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. Indie means small independant. */
 "Onboarding.IntroDescriptionPart1.v114" = "อินดี้ ไม่แสวงหาผลกำไร เพื่อความถูกต้อง";
 
@@ -39,6 +90,9 @@
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Sync.Description.v120" = "เมื่อคุณลงชื่อเข้าและซิงค์แล้ว คุณจะปลอดภัยยิ่งขึ้น %@ จะเข้ารหัสลับรหัสผ่าน ที่คั่นหน้า และอื่น ๆ ของคุณ";
+
+/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Sync.Description.v123" = "%@ เข้ารหัสรหัสผ่าน ที่คั่นหน้า และอื่นๆ ของคุณเมื่อคุณซิงค์";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.SignIn.Action.v114" = "ลงชื่อเข้า";

@@ -685,9 +685,6 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filter";
 
-/* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "Info masuk tersimpan akan muncul di sini. Jika Anda menyimpan info masuk ke Firefox pada perangkat yang berbeda, masuk ke Firefox Account Anda.";
-
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Tidak ada info masuk ditemukan";
 
@@ -1053,15 +1050,6 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "Oke";
-
-/* Accessibility label for default search engine setting. */
-"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Mesin Pencari Baku";
-
-/* Title for default search engine settings section. */
-"SearchSettings.Title.DefaultSearchEngine.v106" = "Mesin Pencari Baku";
-
-/* Navigation title for search settings. */
-"SearchSettings.Title.Search.v106" = "Cari";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Kirimkan laporan mogok agar Mozilla bisa memperbaikinya?";

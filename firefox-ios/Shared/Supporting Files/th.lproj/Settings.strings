@@ -1,3 +1,9 @@
+/* On the autofill settings screen, a label under the title label to add additional context for user in regards to what the toggle switch that allow saving and autofilling of addresses for webpages does, letting users know that this action includes phone numbers and email addresses. */
+"Addresses.Settings.EditCard.Switch.Description.v124" = "รวมหมายเลขโทรศัพท์และที่อยู่อีเมล";
+
+/* Title label for user to use the toggle settings to allow saving and autofilling of addresses for webpages. */
+"Addresses.Settings.EditCard.Switch.Title.v124" = "บันทึกและเติมที่อยู่อัตโนมัติ";
+
 /* Accessibility label for the add button in autofill settings screen. Pressing this button presents a modal that allows users to add a card by entering the credit card information. */
 "CreditCard.Settings.AddCard.AccessibilityLabel.v121" = "เพิ่มบัตร";
 
@@ -6,6 +12,9 @@
 
 /* Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered. */
 "CreditCard.Settings.EmptyListTitle.v112" = "บันทึกบัตรเครดิตไปยัง %@";
+
+/* Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered. */
+"CreditCard.Settings.EmptyListTitle.v122" = "บันทึกบัตรลงใน %@";
 
 /* Accessibility label for a credit card list item in autofill settings screen. The first parameter is the credit card issuer (e.g. Visa). The second parameter is is the name of the credit card holder. The third parameter is the last 4 digits of the credit card. The fourth parameter is the card's expiration date. */
 "CreditCard.Settings.ListItemA11y.v118" = "%1$@, ออกให้กับ %2$@, ลงท้ายด้วย %3$@, หมดอายุ %4$@";
@@ -24,6 +33,9 @@
 
 /* When a user is in the process or has finished making a purchase with a remembered card, and if the credit card information doesn't match the contents of the stored information of that card, we show this string. We ask this user if they would like Firefox update the staled information of that credit card. */
 "CreditCard.Settings.UpdateThisCard.v112" = "ต้องการปรับปรุงบัตรนี้หรือไม่?";
+
+/* When a user is in the process or has finished making a purchase with a remembered card, and if the credit card information doesn't match the contents of the stored information of that card, we show this string. We ask this user if they would like Firefox update the staled information of that credit card. */
+"CreditCard.Settings.UpdateThisCard.v122" = "ต้องการอัปเดตบัตรหรือไม่?";
 
 /* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string asks users to confirm if they would like Firefox to remember the card that is being used. */
 "CreditCard.Settings.Yes.v112" = "ใช่";
@@ -48,6 +60,9 @@
 
 /* Settings section title for the old Firefox account */
 "FxA.FirefoxAccount.v119" = "บัญชี";
+
+/* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
+"Settings.AddressAutofill.Title.v124" = "เติมที่อยู่อัตโนมัติ";
 
 /* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
 "Settings.AutofillCreditCard.Title.v122" = "วิธีการชำระเงิน";
@@ -82,11 +97,20 @@
 /* Accessibility label for default search engine setting. */
 "Settings.Search.Accessibility.DefaultSearchEngine.v121" = "เครื่องมือค้นหาเริ่มต้น";
 
+/* Accessibility label for Learn more about Firefox Suggest. */
+"Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "เรียนรู้เพิ่มเติมเกี่ยวกับ Firefox Suggest";
+
+/* Footer for for the `default search engine` settings section in the Search Settings page, which explains in more details what the `Show Search Suggestions` setting includes. */
+"Settings.Search.DefaultSearchEngine.Footer.v122" = "ผลลัพธ์จากการค้นหา ประวัติ ที่คั่นหน้า และอื่นๆ";
+
 /* Title for the `default search engine` settings section in the Search page in the Settings menu. */
 "Settings.Search.DefaultSearchEngine.Title.v121" = "เครื่องมือค้นหาเริ่มต้น";
 
 /* Navigation title for search page in the Settings menu. */
 "Settings.Search.PageTitle.v121" = "ค้นหา";
+
+/* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in the Private Session section in the Search page in the Settings menu. */
+"Settings.Search.PrivateSession.Setting.v122" = "แสดงคำแนะนำในการเรียกดูแบบส่วนตัว";
 
 /* Title for the `Private Browsing` settings section in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Title.v122" = "การท่องเว็บแบบส่วนตัว";
@@ -96,4 +120,22 @@
 
 /* Label for the `show search suggestions` setting, in the Search Settings page. */
 "Settings.Search.ShowSuggestions.v121" = "แสดงข้อเสนอแนะการค้นหา";
+
+/* In the Search page of the Settings menu, the title for the Firefox Suggest settings section. */
+"Settings.Search.Suggest.AddressBarSetting.Title.v124" = "แถบที่อยู่ - Firefox Suggest";
+
+/* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
+"Settings.Search.Suggest.LearnAboutSuggestions.v124" = "เรียนรู้เพิ่มเติมเกี่ยวกับ Firefox Suggest";
+
+/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. */
+"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124" = "รับคำแนะนำจากเว็บที่เกี่ยวข้องกับการค้นหาของคุณ";
+
+/* In the Search page of the Settings menu, the title for setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
+"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124" = "คำแนะนำจาก %@";
+
+/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from sponsors. Placeholder is for the app name - Firefox. */
+"Settings.Search.Suggest.ShowSponsoredSuggestions.Description.v124" = "สนับสนุน %@ ด้วยคำแนะนำจากผู้สนับสนุนซึ่งแสดงเป็นครั้งคราว";
+
+/* In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors. */
+"Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "คำแนะนำจากผู้สนับสนุน";
 

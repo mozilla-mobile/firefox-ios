@@ -129,7 +129,9 @@ class ShareViewController: UIViewController {
     private func setupRows() {
         let pageInfoRow = makePageInfoRow(addTo: stackView)
         pageInfoRowTitleLabel = pageInfoRow.titleLabel
+        pageInfoRowTitleLabel?.textColor = themeManager.currentTheme.colors.textPrimary
         pageInfoRowUrlLabel = pageInfoRow.urlLabel
+        pageInfoRowUrlLabel?.textColor = themeManager.currentTheme.colors.textPrimary
         makeSeparator(addTo: stackView)
 
         if shareItem?.isUrlType() ?? true {
@@ -157,7 +159,7 @@ class ShareViewController: UIViewController {
             makeActionRow(
                 addTo: stackView,
                 label: .ShareAddToReadingList,
-                imageName: "AddToReadingList",
+                imageName: "readingListAddLarge",
                 action: #selector(actionAddToReadingList),
                 hasNavigation: false
             )
@@ -174,7 +176,7 @@ class ShareViewController: UIViewController {
             makeActionRow(
                 addTo: stackView,
                 label: .ShareSearchInFirefox,
-                imageName: "quickSearch",
+                imageName: "searchLarge",
                 action: #selector(actionSearchInFirefox),
                 hasNavigation: false
             )

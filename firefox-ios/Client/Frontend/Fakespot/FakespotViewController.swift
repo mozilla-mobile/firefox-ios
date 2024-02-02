@@ -44,6 +44,7 @@ class FakespotViewController: UIViewController,
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     private var viewModel: FakespotViewModel
+    private let windowUUID: WindowUUID
     var fakespotState: FakespotState
 
     private var adView: FakespotAdView?
@@ -104,14 +105,16 @@ class FakespotViewController: UIViewController,
 
     // MARK: - Initializers
     init(
+        windowUUID: WindowUUID,
         viewModel: FakespotViewModel,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         themeManager: ThemeManager = AppContainer.shared.resolve()
     ) {
         self.viewModel = viewModel
+        self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
-        fakespotState = FakespotState()
+        fakespotState = FakespotState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
         listenToStateChange()
     }
@@ -140,8 +143,11 @@ class FakespotViewController: UIViewController,
     // MARK: - Redux
 
     func subscribeToRedux() {
+        let uuid = windowUUID
         store.subscribe(self, transform: {
-            $0.select(BrowserViewControllerState.init)
+            $0.select({ appState in
+                return BrowserViewControllerState(windowUUID: uuid)
+            })
         })
     }
 
@@ -437,7 +443,11 @@ class FakespotViewController: UIViewController,
             return view
 
         case .highlightsCard:
-            guard let cardViewModel = viewModel.highlightsCardViewModel else { return nil }
+            guard var cardViewModel = viewModel.highlightsCardViewModel else { return nil }
+            cardViewModel.expandState = fakespotState.isHighlightsSectionExpanded ? .expanded : .collapsed
+            cardViewModel.onExpandStateChanged = { state in
+                store.dispatch(FakespotAction.highlightsDidChange(isExpanded: state == .expanded))
+            }
             let view: FakespotHighlightsCardView = .build()
             view.configure(cardViewModel)
             return view
@@ -449,7 +459,7 @@ class FakespotViewController: UIViewController,
                 store.dispatch(FakespotAction.setAppearanceTo(false))
             }
             viewModel.reviewQualityCardViewModel.onExpandStateChanged = { state in
-                store.dispatch(FakespotAction.reviewQualityDidChange)
+                store.dispatch(FakespotAction.reviewQualityDidChange(isExpanded: state == .expanded))
             }
             reviewQualityCardView.configure(viewModel.reviewQualityCardViewModel)
 
@@ -469,7 +479,7 @@ class FakespotViewController: UIViewController,
                 self?.viewModel.toggleAdsEnabled()
             }
             viewModel.settingsCardViewModel.onExpandStateChanged = { state in
-                store.dispatch(FakespotAction.settingsStateDidChange)
+                store.dispatch(FakespotAction.settingsStateDidChange(isExpanded: state == .expanded))
             }
             view.configure(viewModel.settingsCardViewModel)
 

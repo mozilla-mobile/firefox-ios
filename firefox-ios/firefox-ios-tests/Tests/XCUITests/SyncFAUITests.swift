@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Common
 
 let getEndPoint = "http://restmail.net/mail/test-256a5b5b18"
 let postEndPoint = "https://api-accounts.stage.mozaws.net/v1/recovery_email/verify_code"
@@ -21,7 +22,7 @@ class SyncUITests: BaseTestCase {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(app.tables["Context Menu"].otherElements[ImageIdentifiers.sync])
+        mozWaitForElementToExist(app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.sync])
         navigator.goto(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
         verifyFxASigninScreen()
@@ -76,13 +77,14 @@ class SyncUITests: BaseTestCase {
 
         // Enter invalid (too short, it should be at least 8 chars) and incorrect password
         userState.fxaPassword = "foo"
+        mozWaitForElementToExist(app.secureTextFields.element(boundBy: 0))
         navigator.performAction(Action.FxATypePassword)
         mozWaitForElementToExist(app.webViews.staticTexts["At least 8 characters"])
 
         // Enter valid but incorrect, it does not exists, password
         userState.fxaPassword = "atleasteight"
         navigator.performAction(Action.FxATypePassword)
-        mozWaitForElementToExist(app.secureTextFields["Repeat password"], timeout: 10)
+        mozWaitForElementToExist(app.webViews.staticTexts["Repeat password"], timeout: 10)
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2449603
@@ -117,11 +119,13 @@ class SyncUITests: BaseTestCase {
         navigator.performAction(Action.FxATapOnContinueButton)
         // Typing on Password should show Show (password) option
         userState.fxaPassword = "f"
+        mozWaitForElementToExist(app.secureTextFields.element(boundBy: 0))
         navigator.performAction(Action.FxATypePassword)
-        mozWaitForElementToExist(app.webViews.otherElements["Show password"], timeout: 3)
+        let passMessage = "Show password as plain text. Your password will be visible on screen."
+        mozWaitForElementToExist(app.webViews.otherElements.buttons[passMessage], timeout: 3)
         // Remove the password typed, Show (password) option should not be shown
         app.secureTextFields.element(boundBy: 0).typeText(XCUIKeyboardKey.delete.rawValue)
-        mozWaitForElementToNotExist(app.webViews.staticTexts["Show password"])
+        mozWaitForElementToNotExist(app.webViews.staticTexts.buttons[passMessage])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2449605

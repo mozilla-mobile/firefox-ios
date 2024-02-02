@@ -694,9 +694,6 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "ᱪᱷᱟᱹᱱᱤ";
 
-/* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "ᱥᱟᱺᱪᱟᱣ ᱠᱟᱱ ᱞᱚᱜᱤᱱ ᱠᱚ ᱱᱚᱰᱮ ᱫᱮᱠᱷᱟᱣᱜᱼᱟ ᱾ ᱡᱩᱫᱤ ᱟᱢ ᱵᱷᱮᱜᱟᱨ ᱥᱟᱫᱷᱚᱱ ᱨᱮ Firefox ᱨᱮᱭᱟᱜ ᱵᱚᱞᱚ ᱠᱚ ᱥᱟᱺᱪᱟᱣ ᱟᱠᱟᱫᱟᱢ, Firefox ᱠᱷᱟᱛᱟ ᱨᱮ ᱥᱩᱦᱤ ᱮᱢ ᱢᱮ ᱾";
-
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "ᱵᱚᱞᱚ ᱠᱚ ᱵᱟᱭ ᱧᱟᱢ ᱞᱮᱱᱟ";
 
@@ -1065,15 +1062,6 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "ᱴᱷᱤᱠ";
-
-/* Accessibility label for default search engine setting. */
-"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "ᱢᱩᱞ ᱥᱮᱸᱫᱽᱨᱟ ᱤᱧᱡᱤᱱ";
-
-/* Title for default search engine settings section. */
-"SearchSettings.Title.DefaultSearchEngine.v106" = "ᱢᱩᱞ ᱥᱮᱸᱫᱽᱨᱟ ᱤᱧᱡᱤᱱ";
-
-/* Navigation title for search settings. */
-"SearchSettings.Title.Search.v106" = "ᱥᱮᱸᱫᱽᱨᱟ";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "ᱨᱚᱯᱩᱫ ᱨᱤᱯᱳᱨᱴ ᱠᱩᱞ ᱢᱮ ᱛᱚᱵᱚᱠᱷᱟᱱ ᱢᱚᱡᱤᱞᱟ ᱫᱤᱜᱫᱷᱷᱟ ᱴᱟ ᱴᱷᱤᱠ ᱫᱟᱲᱤᱟᱭ?";

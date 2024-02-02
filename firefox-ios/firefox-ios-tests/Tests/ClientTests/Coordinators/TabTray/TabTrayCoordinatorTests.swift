@@ -75,7 +75,8 @@ final class TabTrayCoordinatorTests: XCTestCase {
                                line: UInt = #line) -> TabTrayCoordinator {
         let subject = TabTrayCoordinator(router: mockRouter,
                                          tabTraySection: panelType,
-                                         profile: profile)
+                                         profile: profile,
+                                         tabManager: tabManager)
         subject.parentCoordinator = parentCoordinator
 
         trackForMemoryLeaks(subject, file: file, line: line)

@@ -1,0 +1,18 @@
+/* Prompt for saving the username in the Save Logins prompt. */
+"LoginsHelper.PromptSaveLogin.Title.v122" = "사용자 이름을 저장하시겠습니까?";
+
+/* Prompt for saving a password in the Save Logins prompt. */
+"LoginsHelper.PromptSavePassword.Title.v122" = "비밀번호를 저장하시겠습니까?";
+
+/* Prompt for updating the password in the Update Password prompt. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg.v122" = "비밀번호를 수정하시겠습니까?";
+
+/* Prompt for updating a password in the Update Password prompt. */
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg.v122" = "비밀번호를 수정하시겠습니까?";
+
+/* Placeholder text for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder.v122" = "비밀번호 검색";
+
+/* Title for the list of logins saved by the app */
+"LoginsList.Title.v122" = "저장된 비밀번호";
+

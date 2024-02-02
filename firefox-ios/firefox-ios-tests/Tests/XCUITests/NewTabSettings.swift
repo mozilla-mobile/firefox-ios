@@ -107,4 +107,72 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.goto(SettingsScreen)
         XCTAssertEqual(app.tables.cells["NewTab"].label, "New Tab, Firefox Home")
     }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306877
+    // Smoketest
+    func testKeyboardRaisedWhenTabOpenedFromTabTray() {
+        // Add New tab and set it as Blank
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(NewTabSettings)
+        mozWaitForElementToExist(app.navigationBars["New Tab"])
+        navigator.performAction(Action.SelectNewTabAsBlankPage)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+
+        validateKeyboardIsRaisedAndDismissed()
+
+        // Switch to Private Browsing
+        navigator.nowAt(NewTabScreen)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+
+        validateKeyboardIsRaisedAndDismissed()
+    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306875
+    // Smoketest
+    func testNewTabCustomURLKeyboardNotRaised() {
+        // Set a custom URL
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(NewTabSettings)
+        navigator.performAction(Action.SelectNewTabAsCustomURL)
+        // Check the value typed
+        app.textFields["NewTabAsCustomURLTextField"].typeText("mozilla.org")
+        mozWaitForValueContains(app.textFields["NewTabAsCustomURLTextField"], value: "mozilla")
+        // Open new page and check that the custom url is used and he keyboard is not raised up
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        waitUntilPageLoad()
+        mozWaitForValueContains(app.textFields["url"], value: "mozilla")
+        XCTAssertFalse(app.textFields["url"].isSelected, "The URL has the focus")
+        XCTAssertFalse(app.keyboards.element.isVisible(), "The keyboard is shown")
+        app.textFields["url"].tap()
+
+        validateKeyboardIsRaisedAndDismissed()
+
+        // Switch to Private Browsing
+        navigator.nowAt(NewTabScreen)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        mozWaitForValueContains(app.textFields["url"], value: "mozilla")
+        XCTAssertFalse(app.textFields["url"].isSelected, "The URL has the focus")
+        XCTAssertFalse(app.keyboards.element.isVisible(), "The keyboard is shown")
+        app.textFields["url"].tap()
+
+        validateKeyboardIsRaisedAndDismissed()
+    }
+
+    private func validateKeyboardIsRaisedAndDismissed() {
+        // The keyboard is raised up
+        let addressBar = app.textFields["address"]
+        XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
+        XCTAssertTrue(app.keyboards.element.isVisible(), "The keyboard is not shown")
+        // Tap the back button
+        mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+        navigator.performAction(Action.CloseURLBarOpen)
+        // The keyboard is dismissed and the URL is unfocused
+        mozWaitForElementToExist(app.textFields["url"])
+        XCTAssertFalse(app.textFields["url"].isSelected, "The URL has the focus")
+        XCTAssertFalse(app.keyboards.element.isVisible(), "The keyboard is shown")
+    }
 }

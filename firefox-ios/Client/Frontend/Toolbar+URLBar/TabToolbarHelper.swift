@@ -53,11 +53,11 @@ enum MiddleButtonState {
 @objcMembers
 open class TabToolbarHelper: NSObject {
     let toolbar: TabToolbarProtocol
-    let ImageSearch = UIImage.templateImageNamed("search")
+    let ImageSearch = UIImage.templateImageNamed(StandardImageIdentifiers.Large.search)
     let ImageNewTab = UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus)
     let ImageHome = UIImage.templateImageNamed(StandardImageIdentifiers.Large.home)
     let ImageBookmark = UIImage.templateImageNamed(StandardImageIdentifiers.Large.bookmarkTrayFill)
-    let ImageFire = UIImage.templateImageNamed(StandardImageIdentifiers.Large.fire)
+    let ImageFire = UIImage.templateImageNamed(StandardImageIdentifiers.Large.dataClearance)
 
     func setMiddleButtonState(_ state: MiddleButtonState) {
         let device = UIDevice.current.userInterfaceIdiom

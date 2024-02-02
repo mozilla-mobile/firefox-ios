@@ -39,7 +39,7 @@ class StatefulButton: UIButton {
             savedReloadButtonState = newReloadButtonState
             switch savedReloadButtonState {
             case .reload:
-                setImage(UIImage.templateImageNamed("nav-refresh"), for: .normal)
+                setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.arrowClockwise), for: .normal)
             case .stop:
                 setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross), for: .normal)
             case .disabled:

@@ -90,7 +90,7 @@ struct ImageButtonWithLabel: View {
                         }
                         Spacer()
                         if link == .search && isSmall {
-                            Image("search-button")
+                            Image("searchLarge")
                                 .scaledToFit()
                                 .frame(height: 24.0)
                         } else {

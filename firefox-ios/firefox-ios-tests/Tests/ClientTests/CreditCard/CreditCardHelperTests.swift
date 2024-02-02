@@ -92,8 +92,8 @@ class FormAutofillHelperTests: XCTestCase {
         let json = FormAutofillHelper.injectionJSONBuilder(card: card)
         XCTAssertEqual(json["cc-name"] as? String, "John Doe")
         XCTAssertEqual(json["cc-number"] as? String, "1234567812345678")
-        XCTAssertEqual(json["cc-exp-month"] as? String, "12")
-        XCTAssertEqual(json["cc-exp-year"] as? String, "2023")
+        XCTAssertEqual(json["cc-exp-month"] as? Int64, 12)
+        XCTAssertEqual(json["cc-exp-year"] as? Int64, 2023)
         XCTAssertEqual(json["cc-exp"] as? String, "12/2023")
     }
 
@@ -107,8 +107,8 @@ class FormAutofillHelperTests: XCTestCase {
         let json = FormAutofillHelper.injectionJSONBuilder(card: card)
         XCTAssertEqual(json["cc-name"] as? String, "&lt;John Doe&gt;")
         XCTAssertEqual(json["cc-number"] as? String, "1234567812345678")
-        XCTAssertEqual(json["cc-exp-month"] as? String, "12")
-        XCTAssertEqual(json["cc-exp-year"] as? String, "2023")
+        XCTAssertEqual(json["cc-exp-month"] as? Int64, 12)
+        XCTAssertEqual(json["cc-exp-year"] as? Int64, 2023)
         XCTAssertEqual(json["cc-exp"] as? String, "12/2023")
     }
 
@@ -122,8 +122,8 @@ class FormAutofillHelperTests: XCTestCase {
         let json = FormAutofillHelper.injectionJSONBuilder(card: card)
         XCTAssertEqual(json["cc-name"] as? String, "&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;")
         XCTAssertEqual(json["cc-number"] as? String, "1234567812345678")
-        XCTAssertEqual(json["cc-exp-month"] as? String, "12")
-        XCTAssertEqual(json["cc-exp-year"] as? String, "2023")
+        XCTAssertEqual(json["cc-exp-month"] as? Int64, 12)
+        XCTAssertEqual(json["cc-exp-year"] as? Int64, 2023)
         XCTAssertEqual(json["cc-exp"] as? String, "12/2023")
     }
 
@@ -137,8 +137,8 @@ class FormAutofillHelperTests: XCTestCase {
         let json = FormAutofillHelper.injectionJSONBuilder(card: card)
         XCTAssertEqual(json["cc-name"] as? String, "&amp;quot;John Doe&amp;quot;")
         XCTAssertEqual(json["cc-number"] as? String, "1234567812345678")
-        XCTAssertEqual(json["cc-exp-month"] as? String, "12")
-        XCTAssertEqual(json["cc-exp-year"] as? String, "2023")
+        XCTAssertEqual(json["cc-exp-month"] as? Int64, 12)
+        XCTAssertEqual(json["cc-exp-year"] as? Int64, 2023)
         XCTAssertEqual(json["cc-exp"] as? String, "12/2023")
     }
 

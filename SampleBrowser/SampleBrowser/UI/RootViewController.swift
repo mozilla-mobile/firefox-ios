@@ -143,6 +143,10 @@ class RootViewController: UIViewController,
         toolbar.updateBackForwardButtons(canGoBack: canGoBack, canGoForward: canGoForward)
     }
 
+    func onURLChange(url: String) {
+        searchBar.setSearchBarText(url)
+    }
+
     // MARK: - SearchBarDelegate
 
     func searchSuggestions(searchTerm: String) {
@@ -169,7 +173,8 @@ class RootViewController: UIViewController,
     // MARK: - MenuDelegate
 
     func didClickMenu() {
-        // Not implementing Settings for now, will see later on if this is needed or not
+        let settingsVC = SettingsViewController()
+        present(settingsVC, animated: true)
     }
 
     // MARK: - SearchViewDelegate

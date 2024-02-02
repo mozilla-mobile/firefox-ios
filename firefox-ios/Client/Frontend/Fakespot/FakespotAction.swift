@@ -6,8 +6,9 @@ import Common
 import Redux
 
 enum FakespotAction: Action {
-    case settingsStateDidChange
-    case reviewQualityDidChange
+    case settingsStateDidChange(isExpanded: Bool)
+    case reviewQualityDidChange(isExpanded: Bool)
+    case highlightsDidChange(isExpanded: Bool)
     case tabDidChange(tabUIDD: String)
     case tabDidReload(tabUIDD: String, productId: String)
     case pressedShoppingButton
@@ -17,4 +18,9 @@ enum FakespotAction: Action {
     case adsImpressionEventSendFor(productId: String)
     case adsExposureEventSendFor(productId: String)
     case surfaceDisplayedEventSend
+
+    var windowUUID: UUID {
+        // TODO: [8188] Update to return the windowUUID
+        return .unavailable
+    }
 }

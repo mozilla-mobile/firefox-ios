@@ -10,9 +10,9 @@ import Common
 private struct ReadingListTableViewCellUX {
     static let RowHeight: CGFloat = 86
 
-    static let ReadIndicatorWidth: CGFloat = 12  // image width
-    static let ReadIndicatorHeight: CGFloat = 12 // image height
-    static let ReadIndicatorLeftOffset: CGFloat = 18
+    static let ReadIndicatorWidth: CGFloat = 16  // image width
+    static let ReadIndicatorHeight: CGFloat = 16 // image height
+    static let ReadIndicatorLeftOffset: CGFloat = 16
     static let ReadAccessibilitySpeechPitch: Float = 0.7 // 1.0 default, 0.0 lowest, 2.0 highest
 
     static let TitleLabelTopOffset: CGFloat = 14 - 4
@@ -52,8 +52,10 @@ class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
 
     var unread = true {
         didSet {
+            let markAsRead = StandardImageIdentifiers.Small.notificationDotFill
+            let markAsUnread = StandardImageIdentifiers.Small.notificationDot
             readStatusImageView.image = UIImage(
-                named: unread ? "MarkAsRead" : "MarkAsUnread"
+                named: unread ? markAsRead : markAsUnread
             )?.withRenderingMode(.alwaysTemplate)
             updateAccessibilityLabel()
         }
@@ -342,7 +344,8 @@ class ReadingListPanel: UITableViewController,
         }
         let readerModeImageView: UIImageView = .build { imageView in
             imageView.contentMode = .scaleAspectFit
-            imageView.image = UIImage(named: "ReaderModeCircle")?.withRenderingMode(.alwaysTemplate)
+            imageView.image = UIImage(named: StandardImageIdentifiers.Large.readerView)?
+                .withRenderingMode(.alwaysTemplate)
             imageView.tintColor = self.themeManager.currentTheme.colors.textSecondary
         }
         let readingListLabel: UILabel = .build { label in
@@ -353,7 +356,8 @@ class ReadingListPanel: UITableViewController,
         }
         let readingListImageView: UIImageView = .build { imageView in
             imageView.contentMode = .scaleAspectFit
-            imageView.image = UIImage(named: "AddToReadingListCircle")?.withRenderingMode(.alwaysTemplate)
+            imageView.image = UIImage(named: StandardImageIdentifiers.Large.readingListAdd)?
+                .withRenderingMode(.alwaysTemplate)
             imageView.tintColor = self.themeManager.currentTheme.colors.textSecondary
         }
         let emptyStateViewWrapper: UIView = .build { view in

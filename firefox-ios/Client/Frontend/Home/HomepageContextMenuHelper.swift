@@ -94,7 +94,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     func getOpenInNewPrivateTabAction(siteURL: URL, sectionType: HomepageSectionType) -> PhotonRowActions {
         return SingleActionViewModel(
             title: .OpenInNewPrivateTabContextMenuTitle,
-            iconString: ImageIdentifiers.newPrivateTab,
+            iconString: StandardImageIdentifiers.Large.privateMode,
             allowIconScaling: true
         ) { _ in
             self.delegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
@@ -229,7 +229,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     /// - Returns: Share action
     private func getShareAction(site: Site, sourceView: UIView?) -> PhotonRowActions {
         return SingleActionViewModel(title: .ShareContextMenuTitle,
-                                     iconString: ImageIdentifiers.share,
+                                     iconString: StandardImageIdentifiers.Large.shareApple,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
             guard let url = URL(string: site.url, invalidCharacters: false) else { return }
@@ -305,7 +305,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
     private func getSettingsAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .FirefoxHomepage.ContextualMenu.Settings,
-                                     iconString: ImageIdentifiers.settings,
+                                     iconString: StandardImageIdentifiers.Large.settings,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
             self.delegate?.homePanelDidRequestToOpenSettings(at: .topSites)

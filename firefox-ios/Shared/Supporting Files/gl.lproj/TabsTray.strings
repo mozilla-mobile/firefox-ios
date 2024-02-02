@@ -13,9 +13,6 @@
 /* Users can disable syncing tabs from other devices. In the Sync Tabs panel of the Tab Tray, we inform the user tab syncing can be switched back on to view those tabs. */
 "TabsTray.Sync.SyncTabsDisabled.v116" = "Active a sincronización de lapelas para ver a lista de lapelas doutros dispositivos.";
 
-/* Button label to sync tabs in your Firefox Account */
-"TabsTray.SyncTabs.SyncTabsButton.Title.v109" = "Sincronizar lapelas";
-
 /* Button label to sync tabs in your account */
 "TabsTray.SyncTabs.SyncTabsButton.Title.v119" = "Sincronizar lapelas";
 

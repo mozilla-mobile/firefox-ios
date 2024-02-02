@@ -7,8 +7,22 @@ import Redux
 
 enum PrivateModeMiddlewareAction: Action {
     case privateModeUpdated(Bool)
+
+    var windowUUID: UUID {
+       // TODO: [8188] Use of .unavailable UUID is temporary as part of early MW refactors. WIP. 
+        switch self {
+        default: return .unavailable
+        }
+    }
 }
 
 enum PrivateModeUserAction: Action {
     case setPrivateModeTo(Bool)
+
+    var windowUUID: UUID {
+       // TODO: [8188] Use of .unavailable UUID is temporary as part of early MW refactors. WIP. 
+        switch self {
+        default: return .unavailable
+        }
+    }
 }

@@ -27,7 +27,7 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
     private lazy var titleIcon: UIImageView = .build { imageView in
         imageView.accessibilityTraits = .image
         imageView.accessibilityLabel = "Breach Alert Icon"
-        imageView.image = UIImage(named: ImageIdentifiers.breachedWebsite)?.withRenderingMode(.alwaysTemplate)
+        imageView.image = UIImage(named: StandardImageIdentifiers.Large.warningFill)?.withRenderingMode(.alwaysTemplate)
     }
 
     private lazy var titleIconContainer: UIView = .build()

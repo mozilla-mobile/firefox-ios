@@ -161,14 +161,17 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         // If the setting exists at the key location, use that value. Otherwise record the default
         // value for that preference to ensure it makes it into the metrics ping.
         let prefs = profile.prefs
+
         // FxA Account Login status
         GleanMetrics.Preferences.fxaLoggedIn.set(profile.hasSyncableAccount())
+
         // Record New Tab setting
         if let newTabChoice = prefs.stringForKey(NewTabAccessors.HomePrefKey) {
             GleanMetrics.Preferences.newTabExperience.set(newTabChoice)
         } else {
             GleanMetrics.Preferences.newTabExperience.set(NewTabAccessors.Default.rawValue)
         }
+
         // Record `Home` setting, where Firefox Home is "Home", a custom URL is "other" and blank is "Blank".
         let homePageSetting = NewTabAccessors.getHomePage(prefs)
         switch homePageSetting {
@@ -181,45 +184,54 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         default:
             GleanMetrics.Preferences.homePageSetting.set(homePageSetting.rawValue)
         }
+
         // Notifications
         GleanMetrics.Preferences.tipsAndFeaturesNotifs.set(UserDefaults.standard.bool(forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications))
         GleanMetrics.Preferences.syncNotifs.set(UserDefaults.standard.bool(forKey: PrefsKeys.Notifications.SyncNotifications))
+
         // Save logins
         if let saveLogins = prefs.boolForKey(PrefsKeys.LoginsSaveEnabled) {
             GleanMetrics.Preferences.saveLogins.set(saveLogins)
         } else {
             GleanMetrics.Preferences.saveLogins.set(true)
         }
+
         // Show clipboard bar
         if let showClipboardBar = prefs.boolForKey("showClipboardBar") {
             GleanMetrics.Preferences.showClipboardBar.set(showClipboardBar)
         } else {
             GleanMetrics.Preferences.showClipboardBar.set(false)
         }
+
         // Close private tabs
         if let closePrivateTabs = prefs.boolForKey("settings.closePrivateTabs") {
             GleanMetrics.Preferences.closePrivateTabs.set(closePrivateTabs)
         } else {
             GleanMetrics.Preferences.closePrivateTabs.set(false)
         }
+
         // Tracking protection - enabled
         if let tpEnabled = prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) {
             GleanMetrics.TrackingProtection.enabled.set(tpEnabled)
         } else {
             GleanMetrics.TrackingProtection.enabled.set(true)
         }
+
         // Tracking protection - strength
         if let tpStrength = prefs.stringForKey(ContentBlockingConfig.Prefs.StrengthKey) {
             GleanMetrics.TrackingProtection.strength.set(tpStrength)
         } else {
             GleanMetrics.TrackingProtection.strength.set("basic")
         }
+
         // System theme enabled
         let themeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
-        GleanMetrics.Theme.useSystemTheme.set(themeManager.isSystemThemeOn)
+        GleanMetrics.Theme.useSystemTheme.set(themeManager.systemThemeIsOn)
+
         // Installed Mozilla applications
         GleanMetrics.InstalledMozillaProducts.focus.set(UIApplication.shared.canOpenURL(URL(string: "firefox-focus://")!))
         GleanMetrics.InstalledMozillaProducts.klar.set(UIApplication.shared.canOpenURL(URL(string: "firefox-klar://")!))
+
         // Device Authentication
         GleanMetrics.Device.authentication.set(AppAuthenticator().canAuthenticateDeviceOwner)
 
@@ -613,8 +625,9 @@ extension TelemetryWrapper {
         case crashedLastLaunch = "crashed_last_launch"
         case cpuException = "cpu_exception"
         case hangException = "hang-exception"
-        case fxSuggestionClickInfo = "fx-suggestion-click-info"
+        case fxSuggestionTelemetryInfo = "fx-suggestion-telemetry-info"
         case fxSuggestionPosition = "fx-suggestion-position"
+        case fxSuggestionDidTap = "fx-suggestion-did-tap"
         case webviewFail = "webview-fail"
         case webviewFailProvisional = "webview-fail-provisional"
         case webviewShowErrorPage = "webview-show-error-page"
@@ -1028,14 +1041,15 @@ extension TelemetryWrapper {
                     value: value,
                     extras: extras)
             }
+
         // MARK: Start Search Button
         case (.action, .tap, .startSearchButton, _, _):
             GleanMetrics.Search.startSearchPressed.add()
         case(.action, .tap, .recordSearch, _, let extras):
             if let searchLocation = extras?[EventExtraKey.recordSearchLocation.rawValue]
                 as? SearchLocation,
-               let searchEngineID = extras?[EventExtraKey.recordSearchEngineID.rawValue] as? String? {
-                GleanMetrics.Search.counts["\(searchEngineID ?? "custom").\(searchLocation.rawValue)"].add()
+               let searchEngineID = extras?[EventExtraKey.recordSearchEngineID.rawValue] as? String? ?? "custom" {
+                GleanMetrics.Search.counts["\(searchEngineID).\(searchLocation.rawValue)"].add()
             } else {
                 recordUninstrumentedMetrics(
                     category: category,
@@ -1850,34 +1864,55 @@ extension TelemetryWrapper {
             }
 
         // MARK: - FX Suggest
-        case(.action, .tap, .fxSuggest, _, let extras ):
+        case(.action, .tap, .fxSuggest, _, let extras):
             guard let contextIdString = TelemetryContextualIdentifier.contextId,
                   let contextId = UUID(uuidString: contextIdString),
-                  let interactionInfo = extras?[EventValue.fxSuggestionClickInfo.rawValue] as? RustFirefoxSuggestionInteractionInfo else {
+                  let telemetryInfo = extras?[EventValue.fxSuggestionTelemetryInfo.rawValue] as? RustFirefoxSuggestionTelemetryInfo,
+                  let position = extras?[EventValue.fxSuggestionPosition.rawValue] as? Int else {
                 return recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
-            switch interactionInfo {
-            case let .amp(blockId, advertiser, iabCategory, reportingURL):
-                GleanMetrics.FxSuggest.contextId.set(contextId)
-                GleanMetrics.FxSuggest.pingType.set("fxsuggest-click")
+            GleanMetrics.FxSuggest.contextId.set(contextId)
+            GleanMetrics.FxSuggest.pingType.set("fxsuggest-click")
+            GleanMetrics.FxSuggest.isClicked.set(true)
+            GleanMetrics.FxSuggest.position.set(Int64(position))
+            switch telemetryInfo {
+            case let .amp(blockId, advertiser, iabCategory, _, clickReportingURL):
                 GleanMetrics.FxSuggest.blockId.set(blockId)
                 GleanMetrics.FxSuggest.advertiser.set(advertiser)
                 GleanMetrics.FxSuggest.iabCategory.set(iabCategory)
-                if let reportingURL {
-                    GleanMetrics.FxSuggest.reportingUrl.set(url: reportingURL)
-                }
-                if let position = extras?[EventValue.fxSuggestionPosition.rawValue] as? Int {
-                    GleanMetrics.FxSuggest.position.set(Int64(position))
+                if let clickReportingURL {
+                    GleanMetrics.FxSuggest.reportingUrl.set(url: clickReportingURL)
                 }
             case .wikipedia:
-                GleanMetrics.FxSuggest.pingType.set("fxsuggest-click")
-                GleanMetrics.FxSuggest.contextId.set(contextId)
                 GleanMetrics.FxSuggest.advertiser.set("wikipedia")
-                if let position = extras?[EventValue.fxSuggestionPosition.rawValue] as? Int {
-                    GleanMetrics.FxSuggest.position.set(Int64(position))
-                }
             }
             GleanMetrics.Pings.shared.fxSuggest.submit()
+        case(.action, .view, .fxSuggest, _, let extras):
+            guard let contextIdString = TelemetryContextualIdentifier.contextId,
+                  let contextId = UUID(uuidString: contextIdString),
+                  let telemetryInfo = extras?[EventValue.fxSuggestionTelemetryInfo.rawValue] as? RustFirefoxSuggestionTelemetryInfo,
+                  let position = extras?[EventValue.fxSuggestionPosition.rawValue] as? Int,
+                  let didTap = extras?[EventValue.fxSuggestionDidTap.rawValue] as? Bool else {
+                return recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+            GleanMetrics.FxSuggest.contextId.set(contextId)
+            GleanMetrics.FxSuggest.pingType.set("fxsuggest-impression")
+            GleanMetrics.FxSuggest.isClicked.set(didTap)
+            GleanMetrics.FxSuggest.position.set(Int64(position))
+            switch telemetryInfo {
+            case let .amp(blockId, advertiser, iabCategory, impressionReportingURL, _):
+                GleanMetrics.FxSuggest.blockId.set(blockId)
+                GleanMetrics.FxSuggest.advertiser.set(advertiser)
+                GleanMetrics.FxSuggest.iabCategory.set(iabCategory)
+                if let impressionReportingURL {
+                    GleanMetrics.FxSuggest.reportingUrl.set(url: impressionReportingURL)
+                }
+            case .wikipedia:
+                GleanMetrics.FxSuggest.advertiser.set("wikipedia")
+            }
+            GleanMetrics.Pings.shared.fxSuggest.submit()
+
+        // MARK: - Uninstrumented
         default:
             recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
         }

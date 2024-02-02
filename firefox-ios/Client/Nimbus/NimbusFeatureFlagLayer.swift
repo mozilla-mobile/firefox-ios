@@ -11,6 +11,9 @@ final class NimbusFeatureFlagLayer {
                                      from nimbus: FxNimbus = FxNimbus.shared
     ) -> Bool {
         switch featureID {
+        case .accountSettingsRedux:
+            return checkAccountSettingsRedux(from: nimbus)
+
         case .addressAutofill:
             return checkAddressAutofill(from: nimbus)
 
@@ -44,9 +47,6 @@ final class NimbusFeatureFlagLayer {
         case .firefoxSuggestFeature:
             return checkFirefoxSuggestFeature(from: nimbus)
 
-        case .historyGroups:
-            return checkGroupingFeature(for: featureID, from: nimbus)
-
         case .feltPrivacySimplifiedUI, .feltPrivacyFeltDeletion:
             return checkFeltPrivacyFeature(for: featureID, from: nimbus)
 
@@ -56,8 +56,8 @@ final class NimbusFeatureFlagLayer {
         case .preferSwitchToOpenTabOverDuplicate:
             return checkPreferSwitchToOpenTabOverDuplicate(from: nimbus)
 
-        case .qrCodeCoordinatorRefactor:
-            return checkQRCodeCoordinatorRefactorFeature(from: nimbus)
+        case .reduxSearchSettings:
+            return checkReduxSearchSettingsFeature(from: nimbus)
 
         case .reportSiteIssue:
             return checkGeneralFeature(for: featureID, from: nimbus)
@@ -75,6 +75,10 @@ final class NimbusFeatureFlagLayer {
     }
 
     // MARK: - Private methods
+    private func checkAccountSettingsRedux(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.accountSettingsReduxFeature.value().enabled
+    }
+
     private func checkGeneralFeature(for featureID: NimbusFeatureFlagID,
                                      from nimbus: FxNimbus
     ) -> Bool {
@@ -137,10 +141,6 @@ final class NimbusFeatureFlagLayer {
         return status
     }
 
-    private func checkQRCodeCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.qrCodeCoordinatorRefactor.value().enabled
-    }
-
     private func checkTabTrayRefactorFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.tabTrayRefactorFeature.value()
         return config.enabled
@@ -198,23 +198,6 @@ final class NimbusFeatureFlagLayer {
         return status
     }
 
-    private func checkGroupingFeature(
-        for featureID: NimbusFeatureFlagID,
-        from nimbus: FxNimbus
-    ) -> Bool {
-        let config = nimbus.features.searchTermGroupsFeature.value()
-        var nimbusID: SearchTermGroups
-
-        switch featureID {
-        case .historyGroups: nimbusID = SearchTermGroups.historyGroups
-        default: return false
-        }
-
-        guard let status = config.groupingEnabled[nimbusID] else { return false }
-
-        return status
-    }
-
     private func checkFakespotFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.shopping2023.value()
 
@@ -253,5 +236,10 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.firefoxSuggestFeature.value()
 
         return config.status
+    }
+
+    private func checkReduxSearchSettingsFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.reduxSearchSettingsFeature.value()
+        return config.enabled
     }
 }

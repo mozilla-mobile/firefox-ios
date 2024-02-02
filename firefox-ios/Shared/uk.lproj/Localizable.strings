@@ -605,7 +605,7 @@
 "LibraryPanel.History.ClearGroupedTabsTitle.v100" = "Видалити всі сайти в %@?";
 
 /* Within the History Panel, users can open an action menu to clear recent history. */
-"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Вилучає історію (включно з історією, синхронізованою з інших пристроїв), куки та інші дані вебперегляду.";
+"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Вилучає історію (включно з історією, синхронізованою з інших пристроїв), файли cookie та інші дані вебперегляду.";
 
 /* Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item. */
 "LibraryPanel.History.DeleteGroupedItem.v104" = "Видалити";
@@ -693,9 +693,6 @@
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Фільтр";
-
-/* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "Збережені паролі з'являтимуться тут. Якщо ви зберегли свої паролі у Firefox на іншому пристрої, увійдіть у свій обліковий запис Firefox.";
 
 /* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
 "LoginsList.NoLoginsFound.Description.v119" = "Збережені паролі з'являтимуться тут. Якщо ви зберегли свої паролі у %@ на іншому пристрої, увійдіть у свій обліковий запис.";
@@ -857,7 +854,7 @@
 "Menu.TrackingProtectionDescription.ContentTrackers" = "Вебсайти можуть завантажувати зовнішню рекламу, відео, а також інший вміст з прихованим кодом стеження. Блокування такого вмісту може допомогти сайтам швидше завантажуватись, але при цьому деякі кнопки, поля форм і входів можуть не працювати.";
 
 /* Description of cross-site trackers. */
-"Menu.TrackingProtectionDescription.CrossSiteNew" = "Ці куки переслідують вас від одного сайту до іншого, з метою збирання даних про вашу діяльність онлайн. Вони встановлюються сторонніми рекламними й аналітичними компаніями.";
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "Ці файли cookie переслідують вас від одного сайту до іншого, щоб збирати дані про вашу діяльність онлайн. Вони встановлюються сторонніми рекламними й аналітичними компаніями.";
 
 /* Description of cryptominers. */
 "Menu.TrackingProtectionDescription.CryptominersNew" = "Криптомайнери використовують ресурси вашої системи для добування криптовалют. Скрипти для добування криптовалют споживають заряд вашого акумулятора, сповільнюють роботу комп'ютера, а також можуть збільшити ваші витрати на електроенергію.";
@@ -1068,15 +1065,6 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "Гаразд";
-
-/* Accessibility label for default search engine setting. */
-"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Типовий засіб пошуку";
-
-/* Title for default search engine settings section. */
-"SearchSettings.Title.DefaultSearchEngine.v106" = "Типовий засіб пошуку";
-
-/* Navigation title for search settings. */
-"SearchSettings.Title.Search.v106" = "Пошук";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Надіслати звіт про збій, щоб Mozilla змогла виправити цю проблему?";

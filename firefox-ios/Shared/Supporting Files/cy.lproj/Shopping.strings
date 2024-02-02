@@ -17,9 +17,6 @@
 "Shopping.AdCard.Title.v121" = "Rhagor i feddwl amdano";
 
 /* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
-"Shopping.AdjustedRating.Description.v120" = "Dilëwyd adolygiadau annibynadwy";
-
-/* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
 "Shopping.AdjustedRating.Description.v121" = "Ar sail adolygiadau dibynadwy";
 
 /* Accessibility label, associated to adjusted rating stars. %@ is a decimal value from 0 to 5 that will only use a tenth (example: 3.5). */
@@ -121,14 +118,11 @@
 /* Title for card displayed when a shopping product has not been analysed yet. */
 "Shopping.NoAnalysisCard.HeadlineLabel.Title.v120" = "Dim gwybodaeth am yr adolygiadau hyn eto";
 
-/* Description for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
-"Shopping.NoAnalysisCard.InProgress.Body.Label.v120" = "Gall hyn gymryd tua 60 eiliad.";
-
-/* Title for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
-"Shopping.NoAnalysisCard.InProgress.Headline.Title.v120" = "Yn gwirio ansawdd adolygiadau";
-
 /* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replaced by the Fakespot app name. After the colon, what appears are two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
 "Shopping.OptInCard.Disclaimer.Text.v120" = "Wrth ddewis “Iawn, Rhowch gynnig arni” rydych yn cytuno i’r canlynol gan %@:";
+
+/* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). After the colon, there will be two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
+"Shopping.OptInCard.Disclaimer.Text.v123" = "Trwy ddewis “Iawn, Rhoi cynnig arni” rydych chi'n cytuno i'r eitemau hyn:";
 
 /* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. This string is almost identical with 'Shopping.OptInCard.FirstParagraph.Description', but without Best Buy and Walmart websites, which are not available in many locales. */
 "Shopping.OptInCard.FirstParagraph.AmazonOnly.Description.v122" = "Gallwch weld pa mor ddibynadwy yw adolygiadau cynnyrch ar %1$@ cyn i chi brynu. Mae’r Gwirydd Adolygiadau, nodwedd arbrofol gan %2$@, wedi’i gynnwys yn y porwr.";
@@ -148,6 +142,9 @@
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
 "Shopping.OptInCard.PrivacyPolicy.Button.Title.v120" = "Polisi preifatrwydd";
 
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Firefox app name. */
+"Shopping.OptInCard.PrivacyPolicy.Button.Title.v123" = "Hysbysiad preifatrwydd %@";
+
 /* Text for the secondary button of the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.SecondaryButton.Title.v120" = "Nid nawr";
 
@@ -156,6 +153,9 @@
 
 /* Show Firefox Browser Terms of Use page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
 "Shopping.OptInCard.TermsOfUse.Button.Title.v120" = "Amodau defnydd";
+
+/* Show Fakespot Terms of Use page in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Fakespot name. */
+"Shopping.OptInCard.TermsOfUse.Button.Title.v123" = "Amodau defnydd %@";
 
 /* Accessibility label for the Grade labels used in 'How we determine review quality' card and 'How reliable are these reviews' card displayed in the shopping review quality bottom sheet. The placeholder will be replaced by a grade letter (e.g. A). The grading system contains letters from A-F. */
 "Shopping.ReliabilityScore.Grade.A11y.Label.v120" = "Gradd %@";

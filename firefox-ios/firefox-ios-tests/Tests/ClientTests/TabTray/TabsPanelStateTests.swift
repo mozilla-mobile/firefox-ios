@@ -30,8 +30,10 @@ final class TabPanelStateTests: XCTestCase {
                                               tabs: tabs,
                                               normalTabsCount: "\(tabs.count)",
                                               inactiveTabs: [InactiveTabsModel](),
-                                              isInactiveTabsExpanded: false)
-        let newState = reducer(initialState, TabPanelAction.didLoadTabPanel(tabDisplayModel))
+                                              isInactiveTabsExpanded: false,
+                                              shouldScrollToTab: false)
+        let context = TabDisplayModelContext(tabDisplayModel: tabDisplayModel, windowUUID: .XCTestDefaultUUID)
+        let newState = reducer(initialState, TabPanelAction.didLoadTabPanel(context))
         XCTAssertFalse(newState.tabs.isEmpty)
     }
 
@@ -39,7 +41,7 @@ final class TabPanelStateTests: XCTestCase {
         let initialState = createInitialState()
         XCTAssertFalse(initialState.isInactiveTabsExpanded)
         let reducer = tabsPanelReducer()
-        let newState = reducer(initialState, TabPanelAction.toggleInactiveTabs)
+        let newState = reducer(initialState, TabPanelAction.toggleInactiveTabs(WindowUUID.XCTestDefaultUUID.context))
         XCTAssertTrue(newState.isInactiveTabsExpanded)
     }
 
@@ -49,7 +51,7 @@ final class TabPanelStateTests: XCTestCase {
     }
 
     private func createInitialState() -> TabsPanelState {
-        return TabsPanelState()
+        return TabsPanelState(windowUUID: .XCTestDefaultUUID)
     }
 
     private func createTabs() -> [TabModel] {

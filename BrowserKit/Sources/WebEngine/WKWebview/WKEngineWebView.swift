@@ -15,11 +15,15 @@ protocol WKEngineWebViewDelegate: AnyObject {
 /// Abstraction on top of the `WKWebView`
 protocol WKEngineWebView: UIView {
     var navigationDelegate: WKNavigationDelegate? { get set }
+    var uiDelegate: WKUIDelegate? { get set }
+    var delegate: WKEngineWebViewDelegate? { get set }
+
     var allowsBackForwardNavigationGestures: Bool { get set }
     var allowsLinkPreview: Bool { get set }
     var backgroundColor: UIColor? { get set }
     var interactionState: Any? { get set }
     var url: URL? { get }
+    var title: String? { get }
     var scrollView: UIScrollView { get }
     var engineConfiguration: WKEngineConfiguration { get }
 
@@ -129,11 +133,6 @@ extension WKEngineWebView {
 class DefaultWKEngineWebView: WKWebView, WKEngineWebView {
     var engineConfiguration: WKEngineConfiguration
     weak var delegate: WKEngineWebViewDelegate?
-    func configure(delegate: WKEngineWebViewDelegate,
-                   navigationDelegate: WKNavigationDelegate?) {
-        self.delegate = delegate
-        self.navigationDelegate = navigationDelegate
-    }
 
     required init?(frame: CGRect, configurationProvider: WKEngineConfigurationProvider) {
         let configuration = configurationProvider.createConfiguration()

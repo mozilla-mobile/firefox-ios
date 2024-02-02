@@ -409,8 +409,8 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
         navigator.goto(URLBarOpen)
         navigator.back()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
-        mozWaitForElementToExist(app.buttons["smallPrivateMask"])
-        XCTAssertTrue(app.buttons["smallPrivateMask"].isEnabled)
+        mozWaitForElementToExist(app.buttons["privateModeLarge"])
+        XCTAssertTrue(app.buttons["privateModeLarge"].isEnabled)
         XCTAssertTrue(userState.isPrivate)
     }
 
@@ -459,7 +459,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
         mozWaitForElementToExist(app.textFields["url"], timeout: 5)
         mozWaitForValueContains(app.textFields["url"], value: "iana")
         navigator.goto(TabTray)
-        XCTAssertTrue(app.buttons["smallPrivateMask"].isEnabled)
+        XCTAssertTrue(app.buttons["privateModeLarge"].isEnabled)
     }
 }
 

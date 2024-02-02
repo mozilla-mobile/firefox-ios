@@ -47,12 +47,7 @@ class ToolbarTests: BaseTestCase {
         XCTAssertEqual(valueMozilla, urlValueLong)
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
         XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
-        if iPad() {
-            XCTAssertTrue(app.buttons["Reload"].isEnabled)
-        } else {
-            XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].isEnabled)
-        }
-
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].isEnabled)
         navigator.openURL(website2)
         waitUntilPageLoad()
         mozWaitForValueContains(app.textFields["url"], value: "localhost:\(serverPort)")

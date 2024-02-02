@@ -694,9 +694,6 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "ფილტრი";
 
-/* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "შენახული ანგარიშები აქ გამოჩნდება. თუ სხვა მოწყობილობის Firefox-ზე ინახავთ, შედით თქვენი Firefox-ანგარიშით.";
-
 /* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
 "LoginsList.NoLoginsFound.Description.v119" = "შენახული ანგარიშები აქ გამოჩნდება. თუ თქვენი შესვლის მონაცემებს სხვა მოწყობილობის %@ ინახავს, შედით ანგარიშზე.";
 
@@ -1068,15 +1065,6 @@
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "კარგი";
-
-/* Accessibility label for default search engine setting. */
-"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "ნაგულისხმევი საძიებო";
-
-/* Title for default search engine settings section. */
-"SearchSettings.Title.DefaultSearchEngine.v106" = "ნაგულისხმევი საძიებო";
-
-/* Navigation title for search settings. */
-"SearchSettings.Title.Search.v106" = "ძიება";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "მოგვახსენებთ, უეცარი გათიშვის შესახებ, რომ Mozilla-მ შეძლოს ხარვეზის აღმოფხვრა?";

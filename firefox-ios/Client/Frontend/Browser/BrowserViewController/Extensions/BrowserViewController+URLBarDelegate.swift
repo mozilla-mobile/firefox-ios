@@ -170,14 +170,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressQRButton(_ urlBar: URLBarView) {
-        if CoordinatorFlagManager.isQRCodeCoordinatorEnabled {
-            navigationHandler?.showQRCode(delegate: self)
-        } else {
-            let qrCodeViewController = QRCodeViewController()
-            qrCodeViewController.qrCodeDelegate = self
-            let controller = QRCodeNavigationController(rootViewController: qrCodeViewController)
-            self.present(controller, animated: true, completion: nil)
-        }
+        navigationHandler?.showQRCode(delegate: self)
     }
 
     func urlBarDidTapShield(_ urlBar: URLBarView) {
@@ -418,7 +411,12 @@ extension BrowserViewController: URLBarDelegate {
         urlBar.applyTheme(theme: themeManager.currentTheme)
     }
 
-    func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView) {
+    func urlBar(_ urlBar: URLBarView, didLeaveOverlayModeForReason reason: URLBarLeaveOverlayModeReason) {
+        searchEngagementState = switch reason {
+        case .finished: .engaged
+        case .cancelled: .abandoned
+        }
+
         destroySearchController()
         updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
 

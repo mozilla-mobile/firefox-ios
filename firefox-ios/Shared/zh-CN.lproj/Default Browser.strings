@@ -26,7 +26,7 @@
 "DefaultBrowserCard.Title" = "切换默认浏览器";
 
 /* Button string to open settings that allows user to switch their default browser to Firefox. */
-"DefaultBrowserOnboarding.Button" = "前往设置";
+"DefaultBrowserOnboarding.Button" = "前往“设置”";
 
 /* Description for default browser onboarding card. */
 "DefaultBrowserOnboarding.Description1" = "1. 前往“设置”";

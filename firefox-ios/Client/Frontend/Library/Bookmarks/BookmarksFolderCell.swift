@@ -11,6 +11,7 @@ protocol BookmarksFolderCell {
     func getViewModel() -> OneLineTableViewCellViewModel
 
     func didSelect(profile: Profile,
+                   windowUUID: WindowUUID,
                    libraryPanelDelegate: LibraryPanelDelegate?,
                    navigationController: UINavigationController?,
                    logger: Logger)
@@ -32,12 +33,13 @@ extension BookmarkFolderData: BookmarksFolderCell {
     }
 
     func didSelect(profile: Profile,
+                   windowUUID: WindowUUID,
                    libraryPanelDelegate: LibraryPanelDelegate?,
                    navigationController: UINavigationController?,
                    logger: Logger) {
         let viewModel = BookmarksPanelViewModel(profile: profile,
                                                 bookmarkFolderGUID: guid)
-        let nextController = BookmarksPanel(viewModel: viewModel)
+        let nextController = BookmarksPanel(viewModel: viewModel, windowUUID: windowUUID)
         if isRoot, let localizedString = LocalizedRootBookmarkFolderStrings[guid] {
             nextController.title = localizedString
         } else {
@@ -64,6 +66,7 @@ extension BookmarkItemData: BookmarksFolderCell {
     }
 
     func didSelect(profile: Profile,
+                   windowUUID: WindowUUID,
                    libraryPanelDelegate: LibraryPanelDelegate?,
                    navigationController: UINavigationController?,
                    logger: Logger) {

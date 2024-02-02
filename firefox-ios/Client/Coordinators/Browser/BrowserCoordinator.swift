@@ -327,9 +327,10 @@ class BrowserCoordinator: BaseCoordinator,
         add(child: settingsCoordinator)
         settingsCoordinator.start(with: section)
 
-        router.present(navigationController) { [weak self] in
+        navigationController.onViewDismissed = { [weak self] in
             self?.didFinishSettings(from: settingsCoordinator)
         }
+        router.present(navigationController)
     }
 
     private func showLibrary(with homepanelSection: Route.HomepanelSection) {
@@ -395,6 +396,10 @@ class BrowserCoordinator: BaseCoordinator,
     func libraryPanel(didSelectURL url: URL, visitType: Storage.VisitType) {
         browserViewController.libraryPanel(didSelectURL: url, visitType: visitType)
         router.dismiss()
+    }
+
+    var libraryPanelWindowUUID: WindowUUID {
+        return windowUUID
     }
 
     func didFinishLibrary(from coordinator: LibraryCoordinator) {
@@ -598,7 +603,8 @@ class BrowserCoordinator: BaseCoordinator,
         let tabTrayCoordinator = TabTrayCoordinator(
             router: DefaultRouter(navigationController: navigationController),
             tabTraySection: selectedPanel,
-            profile: profile
+            profile: profile,
+            tabManager: tabManager
         )
         tabTrayCoordinator.parentCoordinator = self
         add(child: tabTrayCoordinator)

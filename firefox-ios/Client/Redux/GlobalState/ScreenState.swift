@@ -4,5 +4,10 @@
 
 import Foundation
 
-/// Defines the state related to a screen used `AppState` reducer to retrieve the state for a specific screen
-protocol ScreenState {}
+/// Defines the state related to a screen used `AppState` reducer to 
+/// retrieve the state for a specific screen. All ScreenStates should
+/// have the capability of being associated with a specific window,
+/// to ensure screens can be displayed across multiple windows on iPad.
+protocol ScreenState {
+    var windowUUID: WindowUUID { get }
+}

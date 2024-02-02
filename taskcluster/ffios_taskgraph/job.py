@@ -16,12 +16,6 @@ secret_schema = {
     Optional("json"): bool,
 }
 
-dummy_secret_schema = {
-    Required("content"): str,
-    Required("path"): str,
-    Optional("json"): bool,
-}
-
 run_commands_schema = Schema({
     Required("using"): "run-commands",
     Optional("pre-commands"): [[str]],
@@ -29,7 +23,6 @@ run_commands_schema = Schema({
     Required("workdir"): str,
     Optional("use-caches"): bool,
     Optional("secrets"): [secret_schema],
-    Optional("dummy-secrets"): [dummy_secret_schema],
 })
 
 
@@ -37,9 +30,6 @@ run_commands_schema = Schema({
 def configure_run_commands_schema(config, task, taskdesc):
     run = task["run"]
     pre_commands = run.pop("pre-commands", [])
-    pre_commands += [
-        _generate_dummy_secret_command(secret) for secret in run.pop("dummy-secrets", [])
-    ]
     pre_commands += [
         _generate_secret_command(secret) for secret in run.get("secrets", [])
     ]
@@ -54,24 +44,11 @@ def configure_run_commands_schema(config, task, taskdesc):
 
 def _generate_secret_command(secret):
     secret_command = [
-        "python3",  # XXX Other mobile projects run this script under python2
+        "python3",
         "taskcluster/scripts/get-secret.py",
         "-s", secret["name"],
         "-k", secret["key"],
         "-f", secret["path"],
-    ]
-    if secret.get("json"):
-        secret_command.append("--json")
-
-    return secret_command
-
-
-def _generate_dummy_secret_command(secret):
-    secret_command = [
-        "python3",  # XXX Other mobile projects run this script under python2
-        "taskcluster/scripts/write-dummy-secret.py",
-        "-f", secret["path"],
-        "-c", secret["content"],
     ]
     if secret.get("json"):
         secret_command.append("--json")

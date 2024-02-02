@@ -57,7 +57,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         view.backgroundColor = .clear
     }
 
-    private lazy var signinSyncQRImage = UIImage(named: ImageIdentifiers.signinSyncQRButton)
+    private lazy var signinSyncQRImage = UIImage(named: StandardImageIdentifiers.Large.qrCode)
 
     private let qrSignInLabel: UILabel = .build { label in
         label.textAlignment = .center
@@ -245,18 +245,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     /// Scan QR code button tapped
     @objc
     func scanbuttonTapped(_ sender: UIButton) {
-        if CoordinatorFlagManager.isQRCodeCoordinatorEnabled {
-            qrCodeNavigationHandler?.showQRCode(delegate: self, rootNavigationController: navigationController)
-        } else {
-            let qrCodeVC = QRCodeViewController()
-            qrCodeVC.qrCodeDelegate = self
-            presentThemedViewController(
-                navItemLocation: .Left,
-                navItemText: .Close,
-                vcBeingPresented: qrCodeVC,
-                topTabsVisible: true
-            )
-        }
+        qrCodeNavigationHandler?.showQRCode(delegate: self, rootNavigationController: navigationController)
         TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .tap, object: .syncSignInScanQRCode)
     }
 

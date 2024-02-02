@@ -330,7 +330,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         let zoomLevel = NumberFormatter.localizedString(from: NSNumber(value: tab.pageZoom), number: .percent)
         let title = String(format: .AppMenu.ZoomPageTitle, zoomLevel)
         let zoomAction = SingleActionViewModel(title: title,
-                                               iconString: ImageIdentifiers.zoomIn) { _ in
+                                               iconString: StandardImageIdentifiers.Large.pageZoom) { _ in
             self.delegate?.showZoomPage(tab: tab)
         }.items
         return zoomAction
@@ -338,7 +338,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getFindInPageAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .AppMenu.AppMenuFindInPageTitleString,
-                                     iconString: ImageIdentifiers.findInPage) { _ in
+                                     iconString: StandardImageIdentifiers.Large.search) { _ in
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .findInPage)
             self.delegate?.showFindInPage()
         }.items
@@ -444,7 +444,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getSettingsAction() -> PhotonRowActions {
         let openSettings = SingleActionViewModel(title: .AppMenu.AppMenuSettingsTitleString,
-                                                 iconString: ImageIdentifiers.settings) { _ in
+                                                 iconString: StandardImageIdentifiers.Large.settings) { _ in
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: .settings)
 
             // Wait to show settings in async dispatch since hamburger menu is still showing at that time
@@ -461,7 +461,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         let nightModeEnabled = NightModeHelper.isActivated()
         let nightModeTitle: String = nightModeEnabled ? .AppMenu.AppMenuTurnOffNightMode : .AppMenu.AppMenuTurnOnNightMode
         let nightMode = SingleActionViewModel(title: nightModeTitle,
-                                              iconString: ImageIdentifiers.nightMode,
+                                              iconString: StandardImageIdentifiers.Large.nightMode,
                                               isEnabled: nightModeEnabled) { _ in
             NightModeHelper.toggle(tabManager: self.tabManager)
 
@@ -472,8 +472,8 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             }
 
             // If we've enabled night mode and the theme is normal, enable dark theme
-            if NightModeHelper.isActivated(), LegacyThemeManager.instance.currentName == .normal {
-                LegacyThemeManager.instance.current = LegacyDarkTheme()
+            if NightModeHelper.isActivated(),
+               self.themeManager.currentTheme.type == .light {
                 self.themeManager.changeCurrentTheme(.dark)
                 NightModeHelper.setEnabledDarkTheme(darkTheme: true)
             }
@@ -481,8 +481,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             // If we've disabled night mode and dark theme was activated by it then disable dark theme
             if !NightModeHelper.isActivated(),
                NightModeHelper.hasEnabledDarkTheme(),
-               LegacyThemeManager.instance.currentName == .dark {
-                LegacyThemeManager.instance.current = LegacyNormalTheme()
+               self.themeManager.currentTheme.type == .dark {
                 self.themeManager.changeCurrentTheme(.light)
                 NightModeHelper.setEnabledDarkTheme(darkTheme: false)
             }
@@ -507,7 +506,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
         guard let userProfile = rustAccount.userProfile else {
             return SingleActionViewModel(title: .AppMenu.SyncAndSaveData,
-                                         iconString: ImageIdentifiers.sync,
+                                         iconString: StandardImageIdentifiers.Large.sync,
                                          tapHandler: action).items
         }
 
@@ -518,7 +517,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             return userProfile.displayName ?? userProfile.email
         }()
 
-        let iconString = needsReAuth ? ImageIdentifiers.menuWarning : StandardImageIdentifiers.Large.avatarCircle
+        let warningImage = StandardImageIdentifiers.Large.warningFill
+        let avatarImage = StandardImageIdentifiers.Large.avatarCircle
+        let iconString = needsReAuth ? warningImage : avatarImage
 
         var iconURL: URL?
         if let str = rustAccount.userProfile?.avatarUrl,
@@ -549,7 +550,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         }
 
         whatsNewAction = SingleActionViewModel(title: .AppMenu.WhatsNewString,
-                                               iconString: ImageIdentifiers.whatsNew,
+                                               iconString: StandardImageIdentifiers.Large.whatsNew,
                                                isEnabled: showBadgeForWhatsNew) { _ in
             if let whatsNewURL = SupportUtils.URLForWhatsNew {
                 TelemetryWrapper.recordEvent(category: .action, method: .open, object: .whatsNew)
@@ -567,7 +568,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getShareFileAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .AppMenu.AppMenuSharePageTitleString,
-                                     iconString: ImageIdentifiers.share) { _ in
+                                     iconString: StandardImageIdentifiers.Large.shareApple) { _ in
             guard let tab = self.selectedTab,
                   let url = tab.url
             else { return }
@@ -578,7 +579,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getShareAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .AppMenu.Share,
-                                     iconString: ImageIdentifiers.share) { _ in
+                                     iconString: StandardImageIdentifiers.Large.shareApple) { _ in
             guard let tab = self.selectedTab, let url = tab.canonicalURL?.displayURL else { return }
 
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
@@ -639,7 +640,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getReadingListLibraryAction() -> SingleActionViewModel {
         return SingleActionViewModel(title: .AppMenu.ReadingList,
-                                     iconString: ImageIdentifiers.readingList) { _ in
+                                     iconString: StandardImageIdentifiers.Large.readingList) { _ in
             self.delegate?.showLibrary(panel: .readingList)
         }
     }
@@ -650,7 +651,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getAddReadingListAction() -> SingleActionViewModel {
         return SingleActionViewModel(title: .AppMenu.AddReadingList,
-                                     iconString: ImageIdentifiers.addToReadingList) { _ in
+                                     iconString: StandardImageIdentifiers.Large.readingListAdd) { _ in
             guard let tab = self.selectedTab,
                   let url = self.tabUrl?.displayURL
             else { return }

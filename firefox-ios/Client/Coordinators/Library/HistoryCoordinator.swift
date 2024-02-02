@@ -18,6 +18,7 @@ class HistoryCoordinator: BaseCoordinator, HistoryCoordinatorDelegate {
     // MARK: - Properties
 
     private let profile: Profile
+    private let windowUUID: WindowUUID
     private let notificationCenter: NotificationProtocol
     private weak var parentCoordinator: LibraryCoordinatorDelegate?
 
@@ -25,11 +26,13 @@ class HistoryCoordinator: BaseCoordinator, HistoryCoordinatorDelegate {
 
     init(
         profile: Profile,
+        windowUUID: WindowUUID,
         router: Router,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         parentCoordinator: LibraryCoordinatorDelegate?
     ) {
         self.profile = profile
+        self.windowUUID = windowUUID
         self.parentCoordinator = parentCoordinator
         self.notificationCenter = notificationCenter
         super.init(router: router)
@@ -50,7 +53,7 @@ class HistoryCoordinator: BaseCoordinator, HistoryCoordinatorDelegate {
     // MARK: - HistoryCoordinatorDelegate
 
     func showRecentlyClosedTab() {
-        let controller = RecentlyClosedTabsPanel(profile: profile)
+        let controller = RecentlyClosedTabsPanel(profile: profile, windowUUID: windowUUID)
         controller.title = .RecentlyClosedTabsPanelTitle
         controller.libraryPanelDelegate = parentCoordinator
         controller.recentlyClosedTabsDelegate = parentCoordinator

@@ -12,6 +12,7 @@ struct FakespotState: ScreenState, Equatable {
     var expandState: [String: ExpandState] // tabUUID as key
     var telemetryState: [String: TelemetryState] // tabUUID as key
     var sendSurfaceDisplayedTelemetryEvent = true
+    var windowUUID: WindowUUID
 
     struct TelemetryState: Equatable {
         var adEvents: [String: AdTelemetryState] = [:] // productId as key
@@ -25,13 +26,16 @@ struct FakespotState: ScreenState, Equatable {
     struct ExpandState: Equatable {
         var isSettingsExpanded = false
         var isReviewQualityExpanded = false
+        var isHighlightsSectionExpanded = false
     }
 
     var isReviewQualityExpanded: Bool { expandState[currentTabUUID]?.isReviewQualityExpanded ?? false }
     var isSettingsExpanded: Bool { expandState[currentTabUUID]?.isSettingsExpanded ?? false }
+    var isHighlightsSectionExpanded: Bool { expandState[currentTabUUID]?.isHighlightsSectionExpanded ?? false }
 
     init(_ appState: BrowserViewControllerState) {
         self.init(
+            windowUUID: appState.windowUUID,
             isOpen: appState.fakespotState.isOpen,
             sidebarOpenForiPadLandscape: appState.fakespotState.sidebarOpenForiPadLandscape,
             currentTabUUID: appState.fakespotState.currentTabUUID,
@@ -40,8 +44,9 @@ struct FakespotState: ScreenState, Equatable {
         )
     }
 
-    init() {
+    init(windowUUID: WindowUUID) {
         self.init(
+            windowUUID: windowUUID,
             isOpen: false,
             sidebarOpenForiPadLandscape: false,
             currentTabUUID: "",
@@ -51,12 +56,14 @@ struct FakespotState: ScreenState, Equatable {
     }
 
     init(
+        windowUUID: WindowUUID,
         isOpen: Bool,
         sidebarOpenForiPadLandscape: Bool,
         currentTabUUID: String,
         expandState: [String: FakespotState.ExpandState] = [:],
         telemetryState: [String: TelemetryState] = [:]
     ) {
+        self.windowUUID = windowUUID
         self.isOpen = isOpen
         self.sidebarOpenForiPadLandscape = sidebarOpenForiPadLandscape
         self.currentTabUUID = currentTabUUID
@@ -66,14 +73,19 @@ struct FakespotState: ScreenState, Equatable {
 
     static let reducer: Reducer<Self> = { state, action in
         switch action {
-        case FakespotAction.settingsStateDidChange:
+        case FakespotAction.settingsStateDidChange(let isExpanded):
             var state = state
-            state.expandState[state.currentTabUUID, default: ExpandState()].isSettingsExpanded.toggle()
+            state.expandState[state.currentTabUUID, default: ExpandState()].isSettingsExpanded = isExpanded
             return state
 
-        case FakespotAction.reviewQualityDidChange:
+        case FakespotAction.reviewQualityDidChange(let isExpanded):
             var state = state
-            state.expandState[state.currentTabUUID, default: ExpandState()].isReviewQualityExpanded.toggle()
+            state.expandState[state.currentTabUUID, default: ExpandState()].isReviewQualityExpanded = isExpanded
+            return state
+
+        case FakespotAction.highlightsDidChange(let isExpanded):
+            var state = state
+            state.expandState[state.currentTabUUID, default: ExpandState()].isHighlightsSectionExpanded = isExpanded
             return state
 
         case FakespotAction.tabDidChange(let tabUUID):

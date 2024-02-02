@@ -88,6 +88,7 @@ class BookmarksPanel: SiteTableViewController,
     // MARK: - Init
 
     init(viewModel: BookmarksPanelViewModel,
+         windowUUID: WindowUUID,
          logger: Logger = DefaultLogger.shared) {
         self.viewModel = viewModel
         self.logger = logger
@@ -95,7 +96,7 @@ class BookmarksPanel: SiteTableViewController,
         let guidMatches = viewModel.bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID
         self.state = guidMatches ? .bookmarks(state: .mainView) : .bookmarks(state: .inFolder)
         self.bookmarksHandler = viewModel.profile.places
-        super.init(profile: viewModel.profile)
+        super.init(profile: viewModel.profile, windowUUID: windowUUID)
 
         setupNotifications(forObserver: self, observing: [.FirefoxAccountChanged])
 

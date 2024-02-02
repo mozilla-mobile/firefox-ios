@@ -1044,11 +1044,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(BrowserTabMenu) { screenState in
         screenState.tap(
-            app.tables.otherElements[ImageIdentifiers.settings],
+            app.tables.otherElements[StandardImageIdentifiers.Large.settings],
             to: SettingsScreen
         )
         screenState.tap(
-            app.tables.otherElements[ImageIdentifiers.sync],
+            app.tables.otherElements[StandardImageIdentifiers.Large.sync],
             to: Intro_FxASignin,
             if: "fxaUsername == nil"
         )
@@ -1069,7 +1069,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             to: LibraryPanel_Downloads
         )
         screenState.tap(
-            app.tables.otherElements[ImageIdentifiers.readingList],
+            app.tables.otherElements[StandardImageIdentifiers.Large.readingList],
             to: LibraryPanel_ReadingList
         )
         screenState.tap(
@@ -1078,7 +1078,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         )
 
         screenState.tap(
-            app.tables.otherElements[ImageIdentifiers.nightMode],
+            app.tables.otherElements[StandardImageIdentifiers.Large.nightMode],
             forAction: Action.ToggleNightMode,
             transitionTo: BrowserTabMenu
         ) { userState in
@@ -1086,7 +1086,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
 
         screenState.tap(
-            app.tables.otherElements[ImageIdentifiers.whatsNew],
+            app.tables.otherElements[StandardImageIdentifiers.Large.whatsNew],
             forAction: Action.OpenWhatsNewPage
         ) { userState in
         }
@@ -1097,7 +1097,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
 
         screenState.tap(
-            app.tables.otherElements[ImageIdentifiers.share],
+            app.tables.otherElements[StandardImageIdentifiers.Large.shareApple],
             forAction: Action.ShareBrowserTabMenuOption
         ) { userState in
         }
@@ -1111,7 +1111,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             to: RequestMobileSite
         )
         screenState.tap(
-            app.tables.otherElements[ImageIdentifiers.findInPage],
+            app.tables.otherElements[StandardImageIdentifiers.Large.search],
             to: FindInPage
         )
         // TODO: Add new state
@@ -1135,7 +1135,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             Action.Bookmark
         )
         screenState.tap(
-            app.tables.otherElements[ImageIdentifiers.addToReadingList],
+            app.tables.otherElements[StandardImageIdentifiers.Large.readingListAdd],
             forAction: Action.AddToReadingListBrowserTabMenu
         )
 

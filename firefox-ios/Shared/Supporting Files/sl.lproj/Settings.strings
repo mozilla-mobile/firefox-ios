@@ -1,3 +1,9 @@
+/* On the autofill settings screen, a label under the title label to add additional context for user in regards to what the toggle switch that allow saving and autofilling of addresses for webpages does, letting users know that this action includes phone numbers and email addresses. */
+"Addresses.Settings.EditCard.Switch.Description.v124" = "Vključuje telefonske številke in e-poštne naslove";
+
+/* Title label for user to use the toggle settings to allow saving and autofilling of addresses for webpages. */
+"Addresses.Settings.EditCard.Switch.Title.v124" = "Shranjuj in izpolnjuj naslove";
+
 /* Accessibility label for the add button in autofill settings screen. Pressing this button presents a modal that allows users to add a card by entering the credit card information. */
 "CreditCard.Settings.AddCard.AccessibilityLabel.v121" = "Dodaj kartico";
 
@@ -6,6 +12,9 @@
 
 /* Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered. */
 "CreditCard.Settings.EmptyListTitle.v112" = "Shrani kreditne kartice v %@";
+
+/* Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered. */
+"CreditCard.Settings.EmptyListTitle.v122" = "Shranjuj kartice v %@";
 
 /* Accessibility label for a credit card list item in autofill settings screen. The first parameter is the credit card issuer (e.g. Visa). The second parameter is is the name of the credit card holder. The third parameter is the last 4 digits of the credit card. The fourth parameter is the card's expiration date. */
 "CreditCard.Settings.ListItemA11y.v118" = "%1$@, imetnik %2$@, končuje se na %3$@, velja do %4$@";
@@ -99,4 +108,22 @@
 
 /* Label for the `show search suggestions` setting, in the Search Settings page. */
 "Settings.Search.ShowSuggestions.v121" = "Prikaži predloge iskanja";
+
+/* In the Search page of the Settings menu, the title for the Firefox Suggest settings section. */
+"Settings.Search.Suggest.AddressBarSetting.Title.v124" = "Naslovna vrstica – Firefoxovi predlogi";
+
+/* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
+"Settings.Search.Suggest.LearnAboutSuggestions.v124" = "Več o Firefoxovih predlogih";
+
+/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. */
+"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124" = "Prejemajte predloge s spleta, povezane z vašim iskanjem";
+
+/* In the Search page of the Settings menu, the title for setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
+"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124" = "Predlogi aplikacije %@";
+
+/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from sponsors. Placeholder is for the app name - Firefox. */
+"Settings.Search.Suggest.ShowSponsoredSuggestions.Description.v124" = "Podprite %@ z občasnimi sponzoriranimi predlogi";
+
+/* In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors. */
+"Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "Predlogi sponzorjev";
 

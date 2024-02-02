@@ -34,6 +34,8 @@ class TabLocationView: UIView, FeatureFlaggable {
         static let statusIconSize: CGFloat = 18
         static let buttonSize: CGFloat = 40
         static let urlBarPadding = 4
+        static let trackingProtectionAnimationDuration = 0.3
+        static let trackingProtectionxOffset = CGAffineTransform(translationX: 25, y: 0)
     }
 
     // MARK: Variables
@@ -43,20 +45,28 @@ class TabLocationView: UIView, FeatureFlaggable {
     var contentView: UIStackView!
 
     var notificationCenter: NotificationProtocol = NotificationCenter.default
+    private var themeManager: ThemeManager = AppContainer.shared.resolve()
 
     /// Tracking protection button, gets updated from tabDidChangeContentBlocking
-    private var blockerStatus: BlockerStatus = .noBlockedURLs
-    private var hasSecureContent = false
+    var blockerStatus: BlockerStatus = .noBlockedURLs {
+        didSet {
+            if oldValue != blockerStatus { setTrackingProtection(theme: themeManager.currentTheme) }
+        }
+    }
 
-    private let menuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuBadge, backdropCircleSize: 32)
+    var hasSecureContent = false {
+        didSet {
+            if oldValue != hasSecureContent { setTrackingProtection(theme: themeManager.currentTheme) }
+        }
+    }
 
     var url: URL? {
         willSet { handleShoppingAdsCacheURLChange(newURL: newValue) }
         didSet {
             hideButtons()
             updateTextWithURL()
-            trackingProtectionButton.isHidden = !isValidHttpUrlProtocol
-            shareButton.isHidden = !(shouldEnableShareButtonFeature && isValidHttpUrlProtocol)
+            hideTrackingProtectionButton()
+            shareButton.isHidden = !(shouldEnableShareButtonFeature && isValidHttpUrlProtocol(url))
             setNeedsUpdateConstraints()
         }
     }
@@ -125,7 +135,7 @@ class TabLocationView: UIView, FeatureFlaggable {
         shareButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.shareButton
         shareButton.accessibilityLabel = .TabLocationShareAccessibilityLabel
         shareButton.showsLargeContentViewer = true
-        shareButton.largeContentImage = .templateImageNamed(ImageIdentifiers.share)
+        shareButton.largeContentImage = .templateImageNamed(StandardImageIdentifiers.Large.shareApple)
         shareButton.largeContentTitle = .TabLocationShareButtonLargeContentTitle
     }
 
@@ -159,7 +169,7 @@ class TabLocationView: UIView, FeatureFlaggable {
                 selector: #selector(self.readerModeCustomAction))]
         readerModeButton.showsLargeContentViewer = true
         readerModeButton.largeContentTitle = .TabLocationReaderModeAccessibilityLabel
-        readerModeButton.largeContentImage = .templateImageNamed("reader")
+        readerModeButton.largeContentImage = .templateImageNamed(StandardImageIdentifiers.Large.readerView)
     }
 
     lazy var reloadButton: StatefulButton = {
@@ -240,8 +250,7 @@ class TabLocationView: UIView, FeatureFlaggable {
         dragInteraction.allowsSimultaneousRecognitionDuringLift = true
         self.addInteraction(dragInteraction)
 
-        menuBadge.add(toParent: contentView)
-        menuBadge.show(false)
+        hideTrackingProtectionButton()
     }
 
     required init(coder: NSCoder) {
@@ -387,6 +396,28 @@ class TabLocationView: UIView, FeatureFlaggable {
         }
     }
 
+    func hideTrackingProtectionButton() {
+        ensureMainThread {
+            self.trackingProtectionButton.isHidden = true
+        }
+    }
+
+    func showTrackingProtectionButton(for url: URL?) {
+        ensureMainThread {
+            let isValidHttpUrlProtocol = self.isValidHttpUrlProtocol(url)
+            if isValidHttpUrlProtocol, self.trackingProtectionButton.isHidden {
+                self.trackingProtectionButton.transform = UX.trackingProtectionxOffset
+                self.trackingProtectionButton.alpha = 0
+                self.trackingProtectionButton.isHidden = false
+                UIView.animate(withDuration: UX.trackingProtectionAnimationDuration) {
+                    self.trackingProtectionButton.alpha = 1
+                    self.trackingProtectionButton.transform = .identity
+                }
+            }
+            self.trackingProtectionButton.isHidden = !isValidHttpUrlProtocol
+        }
+    }
+
     private func setTrackingProtection(theme: Theme) {
         var lockImage: UIImage?
         if !hasSecureContent {
@@ -403,9 +434,12 @@ class TabLocationView: UIView, FeatureFlaggable {
                 .TabLocationETPOnSecureAccessibilityLabel : .TabLocationETPOnNotSecureAccessibilityLabel
         case .safelisted:
             if let smallDotImage = UIImage(
-                systemName: ImageIdentifiers.circleFill
-            )?.withTintColor(theme.colors.iconAccentBlue) {
-                trackingProtectionButton.setImage(lockImage?.overlayWith(image: smallDotImage), for: .normal)
+                named: StandardImageIdentifiers.Small.notificationDotFill
+            )?.withTintColor(themeManager.currentTheme.colors.iconAccentBlue) {
+                let image = lockImage?.overlayWith(image: smallDotImage,
+                                                   modifier: 0.4,
+                                                   origin: CGPoint(x: 15, y: 15))
+                trackingProtectionButton.setImage(image, for: .normal)
                 trackingProtectionButton.accessibilityLabel = hasSecureContent ?
                     .TabLocationETPOffSecureAccessibilityLabel : .TabLocationETPOffNotSecureAccessibilityLabel
             }
@@ -420,7 +454,7 @@ class TabLocationView: UIView, FeatureFlaggable {
 
 // MARK: - Private
 private extension TabLocationView {
-    var isValidHttpUrlProtocol: Bool {
+    func isValidHttpUrlProtocol(_ url: URL?) -> Bool {
         ["https", "http"].contains(url?.scheme ?? "")
     }
 
@@ -518,33 +552,30 @@ extension TabLocationView: ThemeApplicable {
         trackingProtectionButton.applyTheme(theme: theme)
         shareButton.applyTheme(theme: theme)
         reloadButton.applyTheme(theme: theme)
-        menuBadge.badge.tintBackground(color: theme.colors.layer3)
-        setTrackingProtection(theme: theme)
         shoppingButton.tintColor = theme.colors.textPrimary
         shoppingButton.setImage(UIImage(named: StandardImageIdentifiers.Large.shopping)?
             .withTintColor(theme.colors.actionPrimary),
                                 for: .selected)
+        setTrackingProtection(theme: theme)
     }
 }
 
 extension TabLocationView: TabEventHandler {
     func tabDidChangeContentBlocking(_ tab: Tab) {
-        updateBlockerStatus(forTab: tab)
-    }
-
-    private func updateBlockerStatus(forTab tab: Tab) {
         guard let blocker = tab.contentBlocker else { return }
 
         ensureMainThread { [self] in
-            trackingProtectionButton.alpha = 1.0
-            let themeManager: ThemeManager = AppContainer.shared.resolve()
             self.blockerStatus = blocker.status
-            self.hasSecureContent = (tab.webView?.hasOnlySecureContent ?? false)
-            setTrackingProtection(theme: themeManager.currentTheme)
         }
     }
 
     func tabDidGainFocus(_ tab: Tab) {
-        updateBlockerStatus(forTab: tab)
+        guard let blocker = tab.contentBlocker else { return }
+
+        ensureMainThread { [self] in
+            self.showTrackingProtectionButton(for: tab.webView?.url)
+            self.hasSecureContent = (tab.webView?.hasOnlySecureContent ?? false)
+            self.blockerStatus = blocker.status
+        }
     }
 }

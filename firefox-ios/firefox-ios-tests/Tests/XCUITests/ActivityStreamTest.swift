@@ -103,8 +103,13 @@ class ActivityStreamTest: BaseTestCase {
         }
         waitUntilPageLoad()
 
-        // Workaround to have visited website in top sites
-        navigator.performAction(Action.AcceptRemovingAllTabs)
+        // Workaround to avoid https://github.com/mozilla-mobile/firefox-ios/issues/16810 crash
+        // navigator.performAction(Action.AcceptRemovingAllTabs)
+        navigator.goto(TabTray)
+        mozWaitForElementToExist(app.collectionViews.buttons["crossLarge"])
+        app.collectionViews.buttons["crossLarge"].tap()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
 
         let topSitesCells = app.collectionViews.cells["TopSitesCell"]
@@ -251,7 +256,7 @@ class ActivityStreamTest: BaseTestCase {
         mozWaitForElementToExist(ContextMenuTable)
         mozWaitForElementToExist(ContextMenuTable.cells.otherElements["pinLarge"])
         mozWaitForElementToExist(ContextMenuTable.cells.otherElements["plusLarge"])
-        mozWaitForElementToExist(ContextMenuTable.cells.otherElements["quick_action_new_private_tab"])
+        mozWaitForElementToExist(ContextMenuTable.cells.otherElements["privateModeLarge"])
         mozWaitForElementToExist(ContextMenuTable.cells.otherElements["crossLarge"])
     }
 }

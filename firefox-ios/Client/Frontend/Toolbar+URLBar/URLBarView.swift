@@ -24,6 +24,15 @@ private struct URLBarViewUX {
     static let urlBarLineHeight = 0.5
 }
 
+/// Describes the reason for leaving overlay mode.
+enum URLBarLeaveOverlayModeReason {
+    /// The user committed their edits.
+    case finished
+
+    /// The user aborted their edits.
+    case cancelled
+}
+
 protocol URLBarDelegate: AnyObject {
     func urlBarDidPressTabs(_ urlBar: URLBarView)
     func urlBarDidPressReaderMode(_ urlBar: URLBarView)
@@ -34,7 +43,7 @@ protocol URLBarDelegate: AnyObject {
     func urlBarDidPressStop(_ urlBar: URLBarView)
     func urlBarDidPressReload(_ urlBar: URLBarView)
     func urlBarDidEnterOverlayMode(_ urlBar: URLBarView)
-    func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView)
+    func urlBar(_ urlBar: URLBarView, didLeaveOverlayModeForReason: URLBarLeaveOverlayModeReason)
     func urlBarDidLongPressLocation(_ urlBar: URLBarView)
     func urlBarDidPressQRButton(_ urlBar: URLBarView)
     func urlBarDidTapShield(_ urlBar: URLBarView)
@@ -53,13 +62,7 @@ protocol URLBarDelegate: AnyObject {
 protocol URLBarViewProtocol {
     var inOverlayMode: Bool { get }
     func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool)
-    func leaveOverlayMode(didCancel cancel: Bool)
-}
-
-extension URLBarViewProtocol {
-    func leaveOverlayMode(didCancel cancel: Bool = false) {
-        leaveOverlayMode(didCancel: cancel)
-    }
+    func leaveOverlayMode(reason: URLBarLeaveOverlayModeReason, shouldCancelLoading cancel: Bool)
 }
 
 class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchangeable,
@@ -223,9 +226,9 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         imageName: ImageIdentifiers.privateModeBadge,
         isPrivateBadge: true
     )
-    fileprivate let appMenuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuBadge)
+
     fileprivate let warningMenuBadge = BadgeWithBackdrop(
-        imageName: ImageIdentifiers.menuWarning,
+        imageName: StandardImageIdentifiers.Large.warningFill,
         imageMask: ImageIdentifiers.menuWarningMask
     )
 
@@ -271,7 +274,6 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         profile.searchEngines.delegate = self
 
         privateModeBadge.add(toParent: self)
-        appMenuBadge.add(toParent: self)
         warningMenuBadge.add(toParent: self)
 
         helper = TabToolbarHelper(toolbar: self)
@@ -354,7 +356,6 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         }
 
         privateModeBadge.layout(onButton: tabsButton)
-        appMenuBadge.layout(onButton: appMenuButton)
         warningMenuBadge.layout(onButton: appMenuButton)
     }
 
@@ -564,10 +565,10 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         }
     }
 
-    func leaveOverlayMode(didCancel cancel: Bool) {
+    func leaveOverlayMode(reason: URLBarLeaveOverlayModeReason, shouldCancelLoading cancel: Bool) {
         locationTextField?.resignFirstResponder()
         animateToOverlayState(overlayMode: false, didCancel: cancel)
-        delegate?.urlBarDidLeaveOverlayMode(self)
+        delegate?.urlBar(self, didLeaveOverlayModeForReason: reason)
     }
 
     func prepareOverlayAnimation() {
@@ -631,7 +632,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         multiStateButton.isHidden = !toolbarIsShowing || inOverlayMode
 
         // badge isHidden is tied to private mode on/off, use alpha to hide in this case
-        [privateModeBadge, appMenuBadge, warningMenuBadge].forEach {
+        [privateModeBadge, warningMenuBadge].forEach {
             $0.badge.alpha = (!toolbarIsShowing || inOverlayMode) ? 0 : 1
             $0.backdrop.alpha = (!toolbarIsShowing || inOverlayMode) ? 0 : BadgeWithBackdrop.UX.backdropAlpha
         }
@@ -668,7 +669,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
 
     @objc
     private func didClickCancel() {
-        leaveOverlayMode(didCancel: true)
+        leaveOverlayMode(reason: .cancelled, shouldCancelLoading: true)
     }
 
     @objc
@@ -684,16 +685,7 @@ extension URLBarView: TabToolbarProtocol {
         }
     }
 
-    func appMenuBadge(setVisible: Bool) {
-        // Warning badges should take priority over the standard badge
-        guard warningMenuBadge.badge.isHidden else { return }
-
-        appMenuBadge.show(setVisible)
-    }
-
     func warningMenuBadge(setVisible: Bool) {
-        // Disable other menu badges before showing the warning.
-        if !appMenuBadge.badge.isHidden { appMenuBadge.show(false) }
         warningMenuBadge.show(setVisible)
     }
 
@@ -852,7 +844,7 @@ extension URLBarView: AutocompleteTextFieldDelegate {
     }
 
     func autocompleteTextFieldDidCancel(_ autocompleteTextField: AutocompleteTextField) {
-        leaveOverlayMode(didCancel: true)
+        leaveOverlayMode(reason: .cancelled, shouldCancelLoading: true)
     }
 
     func autocompletePasteAndGo(_ autocompleteTextField: AutocompleteTextField) {
@@ -895,7 +887,6 @@ extension URLBarView: ThemeApplicable {
         locationContainer.backgroundColor = theme.colors.layer3
 
         privateModeBadge.badge.tintBackground(color: theme.colors.layer1)
-        appMenuBadge.badge.tintBackground(color: theme.colors.layer1)
         warningMenuBadge.badge.tintBackground(color: theme.colors.layer1)
     }
 }

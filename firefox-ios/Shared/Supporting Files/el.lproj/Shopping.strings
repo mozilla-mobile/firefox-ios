@@ -17,9 +17,6 @@
 "Shopping.AdCard.Title.v121" = "Περισσότερες εναλλακτικές";
 
 /* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
-"Shopping.AdjustedRating.Description.v120" = "Οι αναξιόπιστες κριτικές αφαιρέθηκαν";
-
-/* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
 "Shopping.AdjustedRating.Description.v121" = "Με βάση αξιόπιστες κριτικές";
 
 /* Accessibility label, associated to adjusted rating stars. %@ is a decimal value from 0 to 5 that will only use a tenth (example: 3.5). */
@@ -121,14 +118,11 @@
 /* Title for card displayed when a shopping product has not been analysed yet. */
 "Shopping.NoAnalysisCard.HeadlineLabel.Title.v120" = "Δεν υπάρχουν ακόμα πληροφορίες σχετικά με αυτές τις κριτικές";
 
-/* Description for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
-"Shopping.NoAnalysisCard.InProgress.Body.Label.v120" = "Αυτό μπορεί να διαρκέσει περίπου 60 δευτερόλεπτα.";
-
-/* Title for the card displayed when a shopping product has not been analysed yet but the analysis is in progress. */
-"Shopping.NoAnalysisCard.InProgress.Headline.Title.v120" = "Έλεγχος ποιότητας κριτικής";
-
 /* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replaced by the Fakespot app name. After the colon, what appears are two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
 "Shopping.OptInCard.Disclaimer.Text.v120" = "Επιλέγοντας «Έναρξη δοκιμής», συμφωνείτε με τα ακόλουθα από το %@:";
+
+/* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). After the colon, there will be two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
+"Shopping.OptInCard.Disclaimer.Text.v123" = "Επιλέγοντας «Έναρξη δοκιμής», συμφωνείτε με τα εξής:";
 
 /* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. This string is almost identical with 'Shopping.OptInCard.FirstParagraph.Description', but without Best Buy and Walmart websites, which are not available in many locales. */
 "Shopping.OptInCard.FirstParagraph.AmazonOnly.Description.v122" = "Δείτε πόσο αξιόπιστες είναι οι κριτικές των προϊόντων στο %1$@ πριν αγοράσετε. Ο έλεγχος κριτικών, μια πειραματική δυνατότητα από τo %2$@, ενσωματώνεται στο πρόγραμμα περιήγησης.";
@@ -148,6 +142,9 @@
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
 "Shopping.OptInCard.PrivacyPolicy.Button.Title.v120" = "Πολιτική απορρήτου";
 
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Firefox app name. */
+"Shopping.OptInCard.PrivacyPolicy.Button.Title.v123" = "Σημείωση απορρήτου του %@";
+
 /* Text for the secondary button of the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.SecondaryButton.Title.v120" = "Όχι τώρα";
 
@@ -156,6 +153,9 @@
 
 /* Show Firefox Browser Terms of Use page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
 "Shopping.OptInCard.TermsOfUse.Button.Title.v120" = "Όροι χρήσης";
+
+/* Show Fakespot Terms of Use page in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Fakespot name. */
+"Shopping.OptInCard.TermsOfUse.Button.Title.v123" = "Όροι χρήσης του %@";
 
 /* Accessibility label for the Grade labels used in 'How we determine review quality' card and 'How reliable are these reviews' card displayed in the shopping review quality bottom sheet. The placeholder will be replaced by a grade letter (e.g. A). The grading system contains letters from A-F. */
 "Shopping.ReliabilityScore.Grade.A11y.Label.v120" = "Βαθμός %@";
@@ -214,6 +214,9 @@
 /* Accessibility hint for the recommended products label and switch, grouped together. When the group is selected in VoiceOver mode, the hint is read to help the user understand what action can be performed. */
 "Shopping.SettingsCard.Expand.GroupedRecommendedProductsAndSwitch.AccessibilityHint.v123" = "Διπλό πάτημα για εναλλαγή ρύθμισης.";
 
+/* Accessibility label for the recommended products label and switch, grouped together. The first placeholder is for the recommended products label, and the second placeholder is for the state of the switch: On/Off. */
+"Shopping.SettingsCard.Expand.GroupedRecommendedProductsAndSwitch.AccessibilityLabel.v123" = "%1$@, κουμπί εναλλαγής, %2$@.";
+
 /* Action title of the footer underneath the Settings Card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
 "Shopping.SettingsCard.Footer.Action.v120" = "Ο έλεγχος κριτικών παρέχεται από το %1$@ της %2$@";
 
@@ -222,6 +225,12 @@
 
 /* Label of the switch from settings card displayed in the shopping review quality bottom sheet. The placeholder will be replaced with the app name. */
 "Shopping.SettingsCard.RecommendedProducts.Label.v120" = "Εμφάνιση προτεινόμενων προϊόντων από το %@";
+
+/* Toggled Off accessibility switch value from Settings Card within the shopping product review bottom sheet. */
+"Shopping.SettingsCard.SwitchValueOff.AccessibilityLabel.v123" = "Ανενεργό";
+
+/* Toggled On accessibility value, from Settings Card within the shopping product review bottom sheet. */
+"Shopping.SettingsCard.SwitchValueOn.AccessibilityLabel.v123" = "Ενεργό";
 
 /* Label of the button from settings card displayed in the shopping review quality bottom sheet. */
 "Shopping.SettingsCard.TurnOffButton.Title.v120" = "Απενεργοποίηση ελέγχου κριτικών";

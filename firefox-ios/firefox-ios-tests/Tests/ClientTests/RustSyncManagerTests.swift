@@ -51,6 +51,9 @@ class RustSyncManagerTests: XCTestCase {
         profile.prefs.removeObjectForKey(Keys.passwordsEnabledPrefKey)
         profile.prefs.removeObjectForKey(Keys.tabsStateChangedPrefKey)
         profile.prefs.removeObjectForKey(Keys.tabsEnabledPrefKey)
+        profile.prefs.removeObjectForKey(Keys.addressesEnabledPrefKey)
+        profile.prefs.removeObjectForKey(Keys.addressesStateChangedPrefKey)
+
         profile = nil
     }
 

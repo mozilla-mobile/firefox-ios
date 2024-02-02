@@ -137,7 +137,11 @@ extension PocketViewModel: HomepageViewModelProtocol {
             textColor: textColor)
     }
 
-    func section(for traitCollection: UITraitCollection, size: CGSize) -> NSCollectionLayoutSection {
+    func section(for traitCollection: UITraitCollection,
+                 size: CGSize,
+                 isPortrait: Bool = UIWindow.isPortrait,
+                 device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom
+    ) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .estimated(PocketStandardCell.UX.cellHeight)

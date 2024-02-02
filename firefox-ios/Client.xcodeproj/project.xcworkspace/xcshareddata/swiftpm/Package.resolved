@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mozilla/glean-swift",
       "state" : {
-        "revision" : "aa9172bfe715a9f918dd95bf49d8f1b2363500a0",
-        "version" : "56.0.0"
+        "revision" : "444f4cadb7b1b99f5c2126ca135437415eb26a5e",
+        "version" : "56.1.0"
       }
     },
     {
@@ -50,8 +50,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/adjust/ios_sdk.git",
       "state" : {
-        "revision" : "20c2666082c372f9f2c0adf871d8cef195d011f7",
-        "version" : "4.35.2"
+        "revision" : "f7a0ad4a9f99fcbfc4c73dcad557ea3c86c5aaf6",
+        "version" : "4.37.0"
       }
     },
     {
@@ -68,8 +68,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher.git",
       "state" : {
-        "revision" : "b6f62758f21a8c03cd64f4009c037cfa580a256e",
-        "version" : "7.9.1"
+        "revision" : "3ec0ab0bca4feb56e8b33e289c9496e89059dd08",
+        "version" : "7.10.2"
+      }
+    },
+    {
+      "identity" : "lottie-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/airbnb/lottie-ios.git",
+      "state" : {
+        "revision" : "f522990668c2f9132323a2e68d924c7dcb9130b4",
+        "version" : "4.4.0"
       }
     },
     {
@@ -86,8 +95,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mozilla/rust-components-swift.git",
       "state" : {
-        "revision" : "8583a6ffa2a3b54655dba05dfe7d27626271f70f",
-        "version" : "123.0.20240119050311"
+        "revision" : "538c6af86252fa0ca527b56b0529bfc082802952",
+        "version" : "124.0.20240201050339"
       }
     },
     {
@@ -95,8 +104,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa.git",
       "state" : {
-        "revision" : "3b9a8e69ca296bd8cd0e317ad7a448e5daf4a342",
-        "version" : "8.18.0"
+        "revision" : "b847a202a517a90763e8fd0656d8028aeee7b78d",
+        "version" : "8.20.0"
       }
     },
     {
@@ -104,8 +113,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SnapKit/SnapKit.git",
       "state" : {
-        "revision" : "f222cbdf325885926566172f6f5f06af95473158",
-        "version" : "5.6.0"
+        "revision" : "e74fe2a978d1216c3602b129447c7301573cc2d8",
+        "version" : "5.7.0"
       }
     },
     {

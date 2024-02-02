@@ -229,17 +229,22 @@ extension String {
 // MARK: - Address Autofill
 extension String {
     public struct Addresses {
-        public struct EditCard {
+        public struct Settings {
             public static let SwitchTitle = MZLocalizedString(
-                key: "Addresses.Settings.EditCard.Switch.Title.v124",
+                key: "Addresses.Settings.Switch.Title.v124",
                 tableName: "Settings",
                 value: "Save and Fill Addresses",
                 comment: "Title label for user to use the toggle settings to allow saving and autofilling of addresses for webpages.")
             public static let SwitchDescription = MZLocalizedString(
-                key: "Addresses.Settings.EditCard.Switch.Description.v124",
+                key: "Addresses.Settings.Switch.Description.v124",
                 tableName: "Settings",
                 value: "Includes phone numbers and email addresses",
                 comment: "On the autofill settings screen, a label under the title label to add additional context for user in regards to what the toggle switch that allow saving and autofilling of addresses for webpages does, letting users know that this action includes phone numbers and email addresses.")
+            public static let SavedAddressesSectionTitle = MZLocalizedString(
+                key: "Addresses.Settings.SavedAddressesSectionTitle.v124",
+                tableName: "Settings",
+                value: "SAVED ADDRESSES",
+                comment: "On the autofill settings screen, a label for the section that displays the list of saved addresses. This label adds additional context for users regarding the toggle switch that allows saving and autofilling of addresses for webpages.")
         }
     }
 }

@@ -17,7 +17,7 @@ enum QuickLink: Int {
         case .search:
             return "faviconFox"
         case .privateSearch:
-            return "smallPrivateMask"
+            return "privateModeLarge"
         case .copiedLink:
             return "tabTrayLarge"
         case .closePrivateTabs:

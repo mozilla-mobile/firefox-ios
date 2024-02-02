@@ -85,6 +85,9 @@
 /* Accessibility label for default search engine setting. */
 "Settings.Search.Accessibility.DefaultSearchEngine.v121" = "Amsedday n unadi amezwer";
 
+/* Accessibility label for Learn more about Firefox Suggest. */
+"Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "Issin ugar ɣef Firefox Suggest";
+
 /* Title for the `default search engine` settings section in the Search page in the Settings menu. */
 "Settings.Search.DefaultSearchEngine.Title.v121" = "Amsedday n unadi amezwer";
 
@@ -99,4 +102,22 @@
 
 /* Label for the `show search suggestions` setting, in the Search Settings page. */
 "Settings.Search.ShowSuggestions.v121" = "Sken isumar n unadi";
+
+/* In the Search page of the Settings menu, the title for the Firefox Suggest settings section. */
+"Settings.Search.Suggest.AddressBarSetting.Title.v124" = "Afeggag n tansiwin - Firefox isumer";
+
+/* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
+"Settings.Search.Suggest.LearnAboutSuggestions.v124" = "Issin ugar ɣef Firefox Suggest";
+
+/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. */
+"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124" = "Awi isumar seg web yeqqnen ɣer unadi-k·m";
+
+/* In the Search page of the Settings menu, the title for setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
+"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124" = "Isumar n %@";
+
+/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from sponsors. Placeholder is for the app name - Firefox. */
+"Settings.Search.Suggest.ShowSponsoredSuggestions.Description.v124" = "Mudd tallalt i %@ s uskan n yisumar i d-yettuwellhen sya ɣer da";
+
+/* In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors. */
+"Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "Isumar sɣur imendaden";
 

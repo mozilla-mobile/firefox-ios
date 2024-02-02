@@ -22,13 +22,14 @@ final class RemoteTabPanelStateTests: XCTestCase {
     }
 
     func testTabsRefreshSkippedIfNotAllowed() {
-        let initialState = RemoteTabsPanelState()
+        let initialState = RemoteTabsPanelState(windowUUID: .XCTestDefaultUUID)
         XCTAssertEqual(initialState.refreshState,
                        RemoteTabsPanelRefreshState.idle)
 
         let reducer = remoteTabsPanelReducer()
 
-        let newState = reducer(initialState, RemoteTabsPanelAction.refreshTabs)
+        let context = WindowUUID.XCTestDefaultUUID.context
+        let newState = reducer(initialState, RemoteTabsPanelAction.refreshTabs(context))
 
         // Refresh should fail since Profile.hasSyncableAccount
         // is false for unit test, expected state is .idle
@@ -43,7 +44,8 @@ final class RemoteTabPanelStateTests: XCTestCase {
 
         XCTAssertEqual(initialState.clientAndTabs.count, 0)
 
-        let newState = reducer(initialState, RemoteTabsPanelAction.refreshDidSucceed(testTabs))
+        let context = RemoteTabsRefreshSuccessContext(clientAndTabs: testTabs, windowUUID: .XCTestDefaultUUID)
+        let newState = reducer(initialState, RemoteTabsPanelAction.refreshDidSucceed(context))
 
         XCTAssertEqual(newState.clientAndTabs.count, 1)
         XCTAssertEqual(newState.clientAndTabs.first!.tabs.count, 2)
@@ -53,7 +55,8 @@ final class RemoteTabPanelStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = remoteTabsPanelReducer()
 
-        let newState = reducer(initialState, RemoteTabsPanelAction.refreshDidFail(.failedToSync))
+        let context = RemoteTabsRefreshDidFailContext(reason: .failedToSync, windowUUID: .XCTestDefaultUUID)
+        let newState = reducer(initialState, RemoteTabsPanelAction.refreshDidFail(context))
 
         XCTAssertEqual(newState.refreshState, RemoteTabsPanelRefreshState.idle)
         XCTAssertNotNil(newState.showingEmptyState)
@@ -66,7 +69,7 @@ final class RemoteTabPanelStateTests: XCTestCase {
     }
 
     private func generateEmptyState() -> RemoteTabsPanelState {
-        return RemoteTabsPanelState()
+        return RemoteTabsPanelState(windowUUID: .XCTestDefaultUUID)
     }
 
     private func generateOneClientTwoTabs() -> [ClientAndTabs] {
@@ -75,13 +78,15 @@ final class RemoteTabPanelStateTests: XCTestCase {
                              title: "Mozilla Homepage",
                              history: [],
                              lastUsed: 0,
-                             icon: nil)
+                             icon: nil,
+                             inactive: false)
         let tab2 = RemoteTab(clientGUID: "123",
                              URL: URL(string: "https://google.com")!,
                              title: "Google Homepage",
                              history: [],
                              lastUsed: 0,
-                             icon: nil)
+                             icon: nil,
+                             inactive: false)
         let fakeTabs: [RemoteTab] = [tab1, tab2]
         let client = RemoteClient(guid: "123",
                                   name: "Client",
@@ -96,7 +101,7 @@ final class RemoteTabPanelStateTests: XCTestCase {
     }
 
     private func createSubject() -> RemoteTabsPanelState {
-        let subject = RemoteTabsPanelState()
+        let subject = RemoteTabsPanelState(windowUUID: .XCTestDefaultUUID)
         return subject
     }
 }

@@ -18,7 +18,7 @@ class TabToolbarHelperTests: XCTestCase {
     let forwardButtonImage = UIImage.templateImageNamed(StandardImageIdentifiers.Large.forward)?
         .imageFlippedForRightToLeftLayoutDirection()
     let menuButtonImage = UIImage.templateImageNamed(StandardImageIdentifiers.Large.appMenu)
-    let searchButtonImage = UIImage.templateImageNamed("search")
+    let searchButtonImage = UIImage.templateImageNamed(StandardImageIdentifiers.Large.search)
     let imageNewTab = UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus)
     let imageHome = UIImage.templateImageNamed(StandardImageIdentifiers.Large.home)
 
@@ -123,7 +123,7 @@ class MockTabToolbar: TabToolbarProtocol {
 
     init() {
         profile = MockProfile()
-        tabManager = TabManagerImplementation(profile: profile)
+        tabManager = TabManagerImplementation(profile: profile, uuid: .XCTestDefaultUUID)
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         _tabToolBarDelegate = BrowserViewController(profile: profile, tabManager: tabManager)
     }
@@ -141,8 +141,6 @@ class MockTabToolbar: TabToolbarProtocol {
     func updateTabCount(_ count: Int, animated: Bool) { }
 
     func privateModeBadge(visible: Bool) { }
-
-    func appMenuBadge(setVisible: Bool) { }
 
     func warningMenuBadge(setVisible: Bool) { }
 
