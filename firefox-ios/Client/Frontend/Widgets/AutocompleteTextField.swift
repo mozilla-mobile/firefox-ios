@@ -383,9 +383,9 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 }
 
-extension AutocompleteTextField: MenuHelperInterface {
+extension AutocompleteTextField: MenuHelperURLBarInterface {
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-        if action == MenuHelper.SelectorPasteAndGo {
+        if action == MenuHelperURLBarModel.selectorPasteAndGo {
             return UIPasteboard.general.hasStrings
         }
 

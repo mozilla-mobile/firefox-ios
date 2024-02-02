@@ -26,4 +26,13 @@ public protocol EngineSessionDelegate: AnyObject {
 
     /// Event to indicate the loading state has changed
     func onLoadingStateChange(loading: Bool)
+
+    // MARK: Menu items
+    /// Relates to adding native `UIMenuController.shared.menuItems` in webview textfields
+
+    /// Event to indicate a webview text field menu item was selected to start a find in page action
+    func findInPage(with selection: String)
+
+    /// Event to indicate a webview text field menu item was selected to start a search action
+    func search(with selection: String)
 }

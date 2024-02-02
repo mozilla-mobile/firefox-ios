@@ -6,7 +6,6 @@ import Common
 import Foundation
 import WebKit
 
-// TODO: FXIOS-7895 #17640 Handle WKEngineWebView MenuHelperInterface
 protocol WKEngineWebViewDelegate: AnyObject {
     func tabWebView(_ webView: WKEngineWebView, findInPageSelection: String)
     func tabWebView(_ webView: WKEngineWebView, searchSelection: String)
@@ -130,7 +129,7 @@ extension WKEngineWebView {
 
 // TODO: FXIOS-7896 #17641 Handle WKEngineWebView ThemeApplicable
 // TODO: FXIOS-7897 #17642 Handle WKEngineWebView AccessoryViewProvider
-class DefaultWKEngineWebView: WKWebView, WKEngineWebView {
+class DefaultWKEngineWebView: WKWebView, WKEngineWebView, MenuHelperWebViewInterface {
     var engineConfiguration: WKEngineConfiguration
     weak var delegate: WKEngineWebViewDelegate?
 
@@ -150,7 +149,6 @@ class DefaultWKEngineWebView: WKWebView, WKEngineWebView {
         configuration.userContentController.removeAllScriptMessageHandlers()
     }
 
-    // TODO: FXIOS-7895 #17640 Handle WKEngineWebView MenuHelperInterface
     func menuHelperFindInPage() {
         evaluateJavascriptInDefaultContentWorld("getSelection().toString()") { result, _ in
             let selection = result as? String ?? ""
@@ -158,8 +156,7 @@ class DefaultWKEngineWebView: WKWebView, WKEngineWebView {
         }
     }
 
-    // TODO: FXIOS-7895 #17640 Handle WKEngineWebView MenuHelperInterface
-    func menuHelperSearchWithFirefox() {
+    func menuHelperSearchWith() {
         evaluateJavascriptInDefaultContentWorld("getSelection().toString()") { result, _ in
             let selection = result as? String ?? ""
             self.delegate?.tabWebView(self, searchSelection: selection)

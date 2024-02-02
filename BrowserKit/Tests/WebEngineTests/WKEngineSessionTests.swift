@@ -403,6 +403,32 @@ final class WKEngineSessionTests: XCTestCase {
         XCTAssertEqual(contentScriptManager.uninstallCalled, 1)
     }
 
+    // MARK: WKEngineWebViewDelegate
+
+    func testFindInPageGivenSelectionThenCallsDelegate() {
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+        let expectedSelection = "A search"
+
+        subject?.tabWebView(webViewProvider.webView, findInPageSelection: expectedSelection)
+
+        XCTAssertEqual(engineSessionDelegate.findInPageCalled, 1)
+        XCTAssertEqual(engineSessionDelegate.savedFindInPageSelection, expectedSelection)
+        prepareForTearDown(subject!)
+    }
+
+    func testSearchGivenSelectionThenCallsDelegate() {
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+        let expectedSelection = "Find in page"
+
+        subject?.tabWebView(webViewProvider.webView, searchSelection: expectedSelection)
+
+        XCTAssertEqual(engineSessionDelegate.searchCalled, 1)
+        XCTAssertEqual(engineSessionDelegate.savedSearchSelection, expectedSelection)
+        prepareForTearDown(subject!)
+    }
+
     // MARK: Helper
 
     func createSubject(file: StaticString = #file,

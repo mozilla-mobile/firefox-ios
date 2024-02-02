@@ -1502,7 +1502,6 @@
 		E63F71881DB7FBE200A995C9 /* TestSQLiteMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63F71871DB7FBE200A995C9 /* TestSQLiteMetadata.swift */; };
 		E65075541E37F6FC006961AC /* LegacyDynamicFontHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075531E37F6FC006961AC /* LegacyDynamicFontHelper.swift */; };
 		E650755C1E37F747006961AC /* Swizzling.m in Sources */ = {isa = PBXBuildFile; fileRef = E650755B1E37F747006961AC /* Swizzling.m */; };
-		E65075611E37F77D006961AC /* MenuHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075601E37F77D006961AC /* MenuHelper.swift */; };
 		E65075921E37F7AB006961AC /* Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075621E37F7AB006961AC /* Accessibility.swift */; };
 		E65075931E37F7AB006961AC /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075631E37F7AB006961AC /* AppConstants.swift */; };
 		E65075941E37F7AB006961AC /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075641E37F7AB006961AC /* AppInfo.swift */; };
@@ -7366,7 +7365,6 @@
 		E65075531E37F6FC006961AC /* LegacyDynamicFontHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LegacyDynamicFontHelper.swift; path = Helpers/LegacyDynamicFontHelper.swift; sourceTree = "<group>"; };
 		E650755A1E37F747006961AC /* Swizzling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Swizzling.h; sourceTree = "<group>"; };
 		E650755B1E37F747006961AC /* Swizzling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Swizzling.m; sourceTree = "<group>"; };
-		E65075601E37F77D006961AC /* MenuHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuHelper.swift; path = Helpers/MenuHelper.swift; sourceTree = "<group>"; };
 		E65075621E37F7AB006961AC /* Accessibility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Accessibility.swift; sourceTree = "<group>"; };
 		E65075631E37F7AB006961AC /* AppConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 		E65075641E37F7AB006961AC /* AppInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
@@ -8513,7 +8511,6 @@
 				8A7A26E429D4C0A800EA76F1 /* IntroScreenManager.swift */,
 				E65075531E37F6FC006961AC /* LegacyDynamicFontHelper.swift */,
 				DA27EEDA28BADF4700DD6F5D /* MenuBuilderHelper.swift */,
-				E65075601E37F77D006961AC /* MenuHelper.swift */,
 				E1463D012981DA190074E16E /* NotificationManager.swift */,
 				E18259DA29AEB34900E6BE76 /* OnboardingNotificationCardHelper.swift */,
 				8A8DDEBE276259A900E7B97A /* RatingPromptManager.swift */,
@@ -13735,7 +13732,6 @@
 				C81A8F2526D3ED1900EBA539 /* UIWindow+Extension.swift in Sources */,
 				EBC4869E2195F58300CDA48D /* AboutHomeHandler.swift in Sources */,
 				DDA24A431FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */,
-				E65075611E37F77D006961AC /* MenuHelper.swift in Sources */,
 				8A7A26E529D4C0A800EA76F1 /* IntroScreenManager.swift in Sources */,
 				8AB8574827D97CD40075C173 /* HomePanelType.swift in Sources */,
 				E174963A2992B42C0096900A /* CreditCardSectionHeader.swift in Sources */,
