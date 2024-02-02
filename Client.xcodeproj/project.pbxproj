@@ -9998,15 +9998,8 @@
 		C8742DB92729A69E00E724F6 /* LegacyThemeManager */ = {
 			isa = PBXGroup;
 			children = (
-<<<<<<< HEAD:Client.xcodeproj/project.pbxproj
-				2C49854D206173C800893DAE /* photon-colors.swift */,
-				EB9A179820E69A7E00B12184 /* LegacyThemeManager.swift */,
-				EB9A179920E69A7E00B12184 /* LegacyDarkTheme.swift */,
-				EB9A179A20E69A7E00B12184 /* LegacyTheme.swift */,
-=======
 				EB9A179A20E69A7E00B12184 /* LegacyTheme.swift */,
 				2C49854D206173C800893DAE /* photon-colors.swift */,
->>>>>>> eaa0121c1 (Remove FXIOS-5064/8318/3960 [v123] LegacyThemeManager removal (#18437)):firefox-ios/Client.xcodeproj/project.pbxproj
 			);
 			path = LegacyThemeManager;
 			sourceTree = "<group>";
@@ -13322,11 +13315,7 @@
 				C2A72A692A769460002ACCE2 /* ReadingListCoordinator.swift in Sources */,
 				F85C7F122721048E004BDBA4 /* Layout.swift in Sources */,
 				DF036E43274FD434002E834E /* HistoryHighlightsCell.swift in Sources */,
-<<<<<<< HEAD:Client.xcodeproj/project.pbxproj
-				EB9A179C20E69A7F00B12184 /* LegacyDarkTheme.swift in Sources */,
-=======
 				B2FEA68D2B460D390058E616 /* AddressAutofillSettingsViewController.swift in Sources */,
->>>>>>> eaa0121c1 (Remove FXIOS-5064/8318/3960 [v123] LegacyThemeManager removal (#18437)):firefox-ios/Client.xcodeproj/project.pbxproj
 				21618A8A2A4389F700A5189E /* ActiveScreenState.swift in Sources */,
 				DA52E1DA25F5961F0092204C /* LegacyTabTrayViewController.swift in Sources */,
 				8AD40FD327BB068F00672675 /* MainMenuActionHelper.swift in Sources */,
