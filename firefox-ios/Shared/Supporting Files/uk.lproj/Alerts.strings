@@ -1,5 +1,5 @@
 /* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the body text for the alert. */
-"Alerts.FeltDeletion.Body.v122" = "Закрити всі приватні вкладки й видалити історію, куки та всі інші дані сайтів.";
+"Alerts.FeltDeletion.Body.v122" = "Закрити всі приватні вкладки й видалити історію, файли cookie та всі інші дані сайтів.";
 
 /* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the cancel action for the alert, cancelling ending your session. */
 "Alerts.FeltDeletion.Button.Cancel.v122" = "Скасувати";
