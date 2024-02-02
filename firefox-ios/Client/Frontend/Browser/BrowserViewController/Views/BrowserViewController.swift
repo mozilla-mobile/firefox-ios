@@ -1997,11 +1997,12 @@ class BrowserViewController: UIViewController,
     // MARK: - LibraryPanelDelegate
 
     func libraryPanel(didSelectURL url: URL, visitType: VisitType) {
-        if isPreferSwitchToOpenTabOverDuplicateFeatureEnabled, let tab = tabManager.getTabFor(url, reversed: true) {
+        guard let tab = tabManager.selectedTab else { return }
+
+        if isPreferSwitchToOpenTabOverDuplicateFeatureEnabled,
+           let tab = tabManager.tabs.reversed().first(where: { $0.url == url && $0.isPrivate == tab.isPrivate }) {
             tabManager.selectTab(tab)
         } else {
-            guard let tab = tabManager.selectedTab else { return }
-
             // Handle keyboard shortcuts from homepage with url selection
             // (ex: Cmd + Tap on Link; which is a cell in this case)
             if navigateLinkShortcutIfNeeded(url: url) {
@@ -2267,10 +2268,12 @@ extension BrowserViewController: HomePanelDelegate {
     }
 
     func homePanel(didSelectURL url: URL, visitType: VisitType, isGoogleTopSite: Bool) {
-        if isPreferSwitchToOpenTabOverDuplicateFeatureEnabled, let tab = tabManager.getTabFor(url, reversed: true) {
+        guard let tab = tabManager.selectedTab else { return }
+
+        if isPreferSwitchToOpenTabOverDuplicateFeatureEnabled,
+           let tab = tabManager.tabs.reversed().first(where: { $0.url == url && $0.isPrivate == tab.isPrivate }) {
             tabManager.selectTab(tab)
         } else {
-            guard let tab = tabManager.selectedTab else { return }
             if isGoogleTopSite {
                 tab.urlType = .googleTopSite
                 searchTelemetry?.shouldSetGoogleTopSiteSearch = true
