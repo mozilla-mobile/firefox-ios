@@ -4845,16 +4845,16 @@ extension String {
         tableName: nil,
         value: "Add to Reading List",
         comment: "Accessibility label for action adding current page to reading list.")
-    public static let TabLocationReloadButtonMoreOptionsAccessibilityLabel = MZLocalizedString(
-        key: "Address.Bar.MoreOptions.v124",
-        tableName: nil,
-        value: "More Options",
-        comment: "Accessibility label for action showing more options")
     public static let TabLocationReloadAccessibilityLabel = MZLocalizedString(
         key: "Reload page",
         tableName: nil,
         value: nil,
         comment: "Accessibility label for the reload button")
+    public static let TabLocationReloadAccessibilityHint = MZLocalizedString(
+        key: "Address.Bar.Reload.A11y.Hint.v124",
+        tableName: "Reload Button",
+        value: "Double tap and hold for more options",
+        comment: "Accessibility hint for the reload button")
     public static let TabLocationShareAccessibilityLabel = MZLocalizedString(
         key: "TabLocation.Share.A11y.Label.v119",
         tableName: "TabLocation",
