@@ -183,16 +183,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         }
     }
 
-    private func brightnessChanged() {
-        let brightnessIsOn = userDefaults.bool(forKey: ThemeKeys.AutomaticBrightness.isOn)
-
-        if brightnessIsOn {
-            updateThemeBasedOnBrightness()
-        } else {
-            systemThemeChanged()
-        }
-    }
-
     private func updateThemeBasedOnBrightness() {
         let currentValue = Float(UIScreen.main.brightness)
 
