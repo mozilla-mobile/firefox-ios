@@ -91,6 +91,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell {
 
     func configure(with viewModel: HomepageHeaderCellViewModel) {
         self.viewModel = viewModel
+        privateModeButton.isHidden = viewModel.hidePrivateModeButton
     }
 
     @objc
@@ -102,7 +103,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell {
     func applyTheme(theme: Theme) {
         logoHeaderCell.applyTheme(theme: theme)
         guard let viewModel else { return }
-        privateModeButton.isHidden = viewModel.hidePrivateModeButton
         let privateModeButtonTintColor = viewModel.isPrivate ? theme.colors.layer2 : theme.colors.iconPrimary
         privateModeButton.imageView?.tintColor = privateModeButtonTintColor
         privateModeButton.backgroundColor = viewModel.isPrivate ? .white : .clear
