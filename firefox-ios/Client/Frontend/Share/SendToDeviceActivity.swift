@@ -8,7 +8,7 @@ import Shared
 class SendToDeviceActivity: CustomAppActivity {
     // Send to device is only available for URL that are files
     override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
-        return !url.isFile
+        return !url.isFileURL
     }
 
     override func prepare(withActivityItems activityItems: [Any]) {}

@@ -18,7 +18,7 @@ class ShareExtensionHelper: NSObject, FeatureFlaggable {
     private let pocketActionExtension = "com.ideashower.ReadItLaterPro.Action-Extension"
 
     var areShareSheetChangesEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.shareSheetChanges, checking: .buildOnly) && !url.isFile
+        return featureFlags.isFeatureEnabled(.shareSheetChanges, checking: .buildOnly) && !url.isFileURL
     }
 
     /// Exclude 'Add to Reading List' which currently uses Safari. If share sheet changes are enabled exclude
@@ -89,7 +89,7 @@ class ShareExtensionHelper: NSObject, FeatureFlaggable {
     /// - Returns: An array of elements to be shared
     private func getActivityItems(url: URL) -> [Any] {
         // If url is file return only url to be shared
-        guard !url.isFile else { return [url] }
+        guard !url.isFileURL else { return [url] }
 
         var activityItems = [Any]()
         let printInfo = UIPrintInfo(dictionary: nil)
@@ -153,7 +153,7 @@ extension ShareExtensionHelper: UIActivityItemSource {
         if isPasswordManager(activityType: activityType) {
             return browserFillIdentifier
         } else if isOpenByCopy(activityType: activityType) {
-            return url.isFile ? UTType.fileURL.identifier : UTType.url.identifier
+            return url.isFileURL ? UTType.fileURL.identifier : UTType.url.identifier
         }
 
         return activityType == nil ? browserFillIdentifier : UTType.url.identifier

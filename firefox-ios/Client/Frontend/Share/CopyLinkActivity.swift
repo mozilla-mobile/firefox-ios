@@ -7,7 +7,7 @@ import Foundation
 class CopyLinkActivity: CustomAppActivity {
     // Copy link is only available for URL that are not files
     override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
-        return !url.isFile
+        return !url.isFileURL
     }
 
     override func prepare(withActivityItems activityItems: [Any]) {}
