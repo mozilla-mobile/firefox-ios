@@ -64,6 +64,7 @@
         "IphoneOnlyTestCase",
         "JumpBackInTests",
         "LibraryTestsIpad",
+        "LoginTest\/testAddDuplicateLogin()",
         "LoginTest\/testDeleteLogin()",
         "LoginTest\/testDoNotSaveLogin()",
         "LoginTest\/testEditOneLoginEntry()",
