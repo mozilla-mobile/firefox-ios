@@ -30,13 +30,9 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
             store.dispatch(ThemeSettingsAction.systemThemeChanged(self.legacyThemeManager.systemThemeIsOn))
         case ThemeSettingsAction.enableAutomaticBrightness(let enabled):
             self.toggleAutomaticBrightness(enabled)
-<<<<<<< HEAD:Client/Frontend/Settings/ThemeSettings/ThemeMiddleware.swift
-            store.dispatch(ThemeSettingsAction.automaticBrightnessChanged(self.legacyThemeManager.automaticBrightnessIsOn))
-=======
             store.dispatch(
                 ThemeSettingsAction.automaticBrightnessChanged(self.themeManager.automaticBrightnessIsOn)
             )
->>>>>>> eaa0121c1 (Remove FXIOS-5064/8318/3960 [v123] LegacyThemeManager removal (#18437)):firefox-ios/Client/Frontend/Settings/ThemeSettings/ThemeMiddleware.swift
         case ThemeSettingsAction.switchManualTheme(let theme):
             self.updateManualTheme(theme)
             store.dispatch(ThemeSettingsAction.manualThemeChanged(theme))
@@ -55,17 +51,10 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
     }
 
     // MARK: - Helper func
-<<<<<<< HEAD:Client/Frontend/Settings/ThemeSettings/ThemeMiddleware.swift
-    func getCurrentThemeManagerState() -> ThemeSettingsState {
-        ThemeSettingsState(useSystemAppearance: legacyThemeManager.systemThemeIsOn,
-                           isAutomaticBrightnessEnable: legacyThemeManager.automaticBrightnessIsOn,
-=======
     func getCurrentThemeManagerState(windowUUID: WindowUUID?) -> ThemeSettingsState {
         // TODO: [8188] Revisit UUID handling, needs additional investigation.
-        ThemeSettingsState(windowUUID: windowUUID ?? WindowUUID.unavailable,
-                           useSystemAppearance: themeManager.systemThemeIsOn,
+        ThemeSettingsState(useSystemAppearance: themeManager.systemThemeIsOn,
                            isAutomaticBrightnessEnable: themeManager.automaticBrightnessIsOn,
->>>>>>> eaa0121c1 (Remove FXIOS-5064/8318/3960 [v123] LegacyThemeManager removal (#18437)):firefox-ios/Client/Frontend/Settings/ThemeSettings/ThemeMiddleware.swift
                            manualThemeSelected: themeManager.currentTheme.type,
                            userBrightnessThreshold: themeManager.automaticBrightnessValue,
                            systemBrightness: getScreenBrightness())
@@ -84,15 +73,8 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
         themeManager.setAutomaticBrightness(isOn: enabled)
     }
 
-<<<<<<< HEAD:Client/Frontend/Settings/ThemeSettings/ThemeMiddleware.swift
-    func updateManualTheme(_ theme: ThemeType) {
-        let isLightTheme = theme == .light
-        legacyThemeManager.current = isLightTheme ? LegacyNormalTheme() : LegacyDarkTheme()
-        themeManager.changeCurrentTheme(isLightTheme ? .light : .dark)
-=======
     func updateManualTheme(_ newTheme: ThemeType) {
         themeManager.changeCurrentTheme(newTheme)
->>>>>>> eaa0121c1 (Remove FXIOS-5064/8318/3960 [v123] LegacyThemeManager removal (#18437)):firefox-ios/Client/Frontend/Settings/ThemeSettings/ThemeMiddleware.swift
     }
 
     func updateUserBrightness(_ value: Float) {
