@@ -147,7 +147,7 @@ class IntegrationTests: BaseTestCase {
         mozWaitForElementToExist(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"], timeout: 10)
         XCTAssertEqual(
             app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"].value! as! String,
-            "Fennec (administrator) on iOS"
+            "Fennec (cso) on iOS"
         )
 
         // Sync again just to make sure to sync after new name is shown
@@ -264,6 +264,7 @@ class IntegrationTests: BaseTestCase {
         passcodeInput.tap()
         passcodeInput.typeText("foo\n")
 
+        mozWaitForElementToNotExist(passcodeInput)
         mozWaitForElementToExist(app.tables["Login List"], timeout: 3)
         // Verify the login
         mozWaitForElementToExist(app.staticTexts["https://accounts.google.com"])
