@@ -26,19 +26,19 @@ public class DefaultMenuHelper: NSObject, MenuHelper {
         }
 
         if let loginModel {
-            let openAndFillItem = UIMenuItem(title: loginModel.openAndFillTitle, 
+            let openAndFillItem = UIMenuItem(title: loginModel.openAndFillTitle,
                                              action: MenuHelperLoginModel.selectorOpenAndFill)
-            let revealPasswordItem = UIMenuItem(title: loginModel.revealPasswordTitle, 
+            let revealPasswordItem = UIMenuItem(title: loginModel.revealPasswordTitle,
                                                 action: MenuHelperLoginModel.selectorReveal)
-            let hidePasswordItem = UIMenuItem(title: loginModel.hidePasswordTitle, 
+            let hidePasswordItem = UIMenuItem(title: loginModel.hidePasswordTitle,
                                               action: MenuHelperLoginModel.selectorHide)
-            let copyItem = UIMenuItem(title: loginModel.copyItemTitle, 
+            let copyItem = UIMenuItem(title: loginModel.copyItemTitle,
                                       action: MenuHelperLoginModel.selectorCopy)
             menuItems.append(contentsOf: [openAndFillItem, revealPasswordItem, hidePasswordItem, copyItem])
         }
 
         if let urlBarModel {
-            let pasteAndGoItem = UIMenuItem(title: urlBarModel.pasteAndGoTitle, 
+            let pasteAndGoItem = UIMenuItem(title: urlBarModel.pasteAndGoTitle,
                                             action: MenuHelperURLBarModel.selectorPasteAndGo)
             menuItems.append(contentsOf: [pasteAndGoItem])
         }
