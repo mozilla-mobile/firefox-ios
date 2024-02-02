@@ -1910,19 +1910,12 @@ class BrowserViewController: UIViewController,
             tabManager.selectTab(tab)
         } else {
             guard let tab = tabManager.selectedTab else { return }
-
-<<<<<<< HEAD:Client/Frontend/Browser/BrowserViewController/Views/BrowserViewController.swift
-        // Handle keyboard shortcuts from homepage with url selection (ex: Cmd + Tap on Link; which is a cell in this case)
-        if navigateLinkShortcutIfNeeded(url: url) {
-            return
-=======
             // Handle keyboard shortcuts from homepage with url selection
             // (ex: Cmd + Tap on Link; which is a cell in this case)
             if navigateLinkShortcutIfNeeded(url: url) {
                 return
             }
             finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
->>>>>>> d4c5294fe (Add FXIOS-6836 [v123] Prefer switching to open tabs vs opening a duplicate tab (#18073)):firefox-ios/Client/Frontend/Browser/BrowserViewController/Views/BrowserViewController.swift
         }
     }
 
@@ -2155,20 +2148,11 @@ extension BrowserViewController: HomePanelDelegate {
                 tab.urlType = .googleTopSite
                 searchTelemetry?.shouldSetGoogleTopSiteSearch = true
             }
-
-<<<<<<< HEAD:Client/Frontend/Browser/BrowserViewController/Views/BrowserViewController.swift
-        // Handle keyboard shortcuts from homepage with url selection (ex: Cmd + Tap on Link; which is a cell in this case)
-        if navigateLinkShortcutIfNeeded(url: url) {
-            return
-        }
-=======
             // Handle keyboard shortcuts from homepage with url selection
             // (ex: Cmd + Tap on Link; which is a cell in this case)
             if navigateLinkShortcutIfNeeded(url: url) {
                 return
             }
->>>>>>> d4c5294fe (Add FXIOS-6836 [v123] Prefer switching to open tabs vs opening a duplicate tab (#18073)):firefox-ios/Client/Frontend/Browser/BrowserViewController/Views/BrowserViewController.swift
-
             finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
         }
     }
