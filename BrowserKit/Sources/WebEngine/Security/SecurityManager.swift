@@ -47,7 +47,8 @@ public class DefaultSecurityManager: SecurityManager {
     private func schemeIsInternalNavigationValid(for url: URL) -> Bool {
         guard let scheme = url.scheme else { return false }
 
-        let isValidScheme = SchemesDefinition.permanentURISchemes.contains(scheme.lowercased())
+        let schemesList = SchemesDefinition.permanentURISchemes + [SchemesDefinition.standardSchemes.internalURL.rawValue]
+        let isValidScheme = schemesList.contains(scheme.lowercased())
         let urlIsNotComposedOnlyOfAScheme = url.absoluteURL.absoluteString.lowercased() != scheme + ":"
         return isValidScheme && urlIsNotComposedOnlyOfAScheme
     }

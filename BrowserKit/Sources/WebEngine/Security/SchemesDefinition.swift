@@ -10,6 +10,7 @@ struct SchemesDefinition {
         case facetimeAudio = "facetime-audio"
         case appStore = "itms-apps"
         case appStores = "itms-appss"
+        case internalURL = "internal"
     }
 
     static let appStoreSchemes = [
