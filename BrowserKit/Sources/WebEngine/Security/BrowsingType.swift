@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import WebKit
 
 /// The BrowsingType determines what type of BrowsingContext we are in
 public enum BrowsingType {
@@ -13,5 +14,8 @@ public enum BrowsingType {
     case internalNavigation
 
     /// Redirection navigation refers to calls through the navigation delegation `WKNavigationDelegate`
-    case redirectionNavigation
+    /// This should not never be called by the Client
+    case redirectionNavigation(type: WKNavigationType)
 }
+
+

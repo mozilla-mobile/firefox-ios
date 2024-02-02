@@ -26,15 +26,53 @@ public class DefaultSecurityManager: SecurityManager {
         }
     }
 
+    // MARK: - External
+
     private func handleExternalNavigation(url: URL) -> NavigationDecisionType {
-        return .allowed
+        return schemeIsExternalNavigationValid(for: url) ? .allowed : .refused
     }
 
-    private func handleInternalNavigation(url: URL) -> NavigationDecisionType {
-        return .allowed
+    private func schemeIsExternalNavigationValid(for url: URL) -> Bool {
+        let acceptedSchemes = [SchemesDefinition.standardSchemes.data] + SchemesDefinition.webpageSchemes
+        return acceptedSchemes.contains { $0.rawValue == url.scheme }
     }
+
+    // MARK: - Internal
+
+    private func handleInternalNavigation(url: URL) -> NavigationDecisionType {
+        return schemeIsInternalNavigationValid(for: url) ? .allowed : .refused
+    }
+
+    /// Returns whether the URL's scheme is one of those listed on the official list of URI schemes
+    private func schemeIsInternalNavigationValid(for url: URL) -> Bool {
+        guard let scheme = url.scheme else { return false }
+
+        let isValidScheme = SchemesDefinition.permanentURISchemes.contains(scheme.lowercased())
+        let urlIsNotComposedOnlyOfAScheme = url.absoluteURL.absoluteString.lowercased() != scheme + ":"
+        return isValidScheme && urlIsNotComposedOnlyOfAScheme
+    }
+
+    // MARK: - Redirection
 
     private func handleRedirectionNavigation(url: URL) -> NavigationDecisionType {
         return .allowed
+        // TODO: FXIOS-XXXX - Handle redirection navigation
+//        if schemeIsRedirectionNavigationValid(for: url) {
+//            return .allowed
+//        } else if schemeIsRedirectionThirdPartyNavigationValid(for: url) {
+//            return .clientHandled
+//        } else {
+//            return .refused
+//        }
     }
+
+//    private func schemeIsRedirectionNavigationValid(for url: URL) -> Bool {
+//        let acceptedSchemes = [SchemesDefinition.standardSchemes.data] + SchemesDefinition.callingSchemes
+//        return acceptedSchemes.contains { $0.rawValue == url.scheme }
+//    }
+//
+//    private func schemeIsRedirectionThirdPartyNavigationValid(for url: URL) -> Bool {
+//        let acceptedSchemes = [SchemesDefinition.standardSchemes.mailto] + SchemesDefinition.appStoreSchemes + SchemesDefinition.callingSchemes
+//        return acceptedSchemes.contains { $0.rawValue == url.scheme }
+//    }
 }
