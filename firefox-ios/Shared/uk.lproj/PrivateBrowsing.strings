@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "Відкрити в приватній вкладці";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox не пам'ятатиме історію чи куки, але нові закладки будуть збережені.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox не пам'ятатиме історію чи файли cookie, але нові закладки будуть збережені.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "Докладніше";
