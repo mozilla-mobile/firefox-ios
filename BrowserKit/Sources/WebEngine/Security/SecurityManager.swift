@@ -73,7 +73,9 @@ public class DefaultSecurityManager: SecurityManager {
 //    }
 //
 //    private func schemeIsRedirectionThirdPartyNavigationValid(for url: URL) -> Bool {
-//        let acceptedSchemes = [SchemesDefinition.standardSchemes.mailto] + SchemesDefinition.appStoreSchemes + SchemesDefinition.callingSchemes
+//        let acceptedSchemes = [SchemesDefinition.standardSchemes.mailto]
+//        + SchemesDefinition.appStoreSchemes
+//        + SchemesDefinition.callingSchemes
 //        return acceptedSchemes.contains { $0.rawValue == url.scheme }
 //    }
 }

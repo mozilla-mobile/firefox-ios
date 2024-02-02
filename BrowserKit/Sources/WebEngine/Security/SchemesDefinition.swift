@@ -22,7 +22,7 @@ struct SchemesDefinition {
     static let allowedToBeOpenedAsPopups = [
         standardSchemes.http,
         standardSchemes.https,
-        standardSchemes.javascript, 
+        standardSchemes.javascript,
         standardSchemes.data,
         standardSchemes.about
     ]

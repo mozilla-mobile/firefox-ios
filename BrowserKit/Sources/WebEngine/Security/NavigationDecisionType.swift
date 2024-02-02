@@ -12,6 +12,7 @@ public enum NavigationDecisionType {
     /// The Browser Context was not permitted, the search will be made as a search term instead
     case refused
 
-    /// The Browser Context permits this URL, but the navigation is handled by the Client probably by opening a third-party app
+    /// The Browser Context permits this URL, but the navigation is handled by the 
+    /// Client probably by opening a third-party app
     case clientHandled
 }
