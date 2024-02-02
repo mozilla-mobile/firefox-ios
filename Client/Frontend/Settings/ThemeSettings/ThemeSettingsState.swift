@@ -12,30 +12,18 @@ struct ThemeSettingsState: ScreenState, Equatable {
     var userBrightnessThreshold: Float
     var systemBrightness: Float
 
-<<<<<<< HEAD:Client/Frontend/Settings/ThemeSettings/ThemeSettingsState.swift
-    init(_ appState: AppState) {
-        guard let themeState = store.state.screenState(ThemeSettingsState.self, for: .themeSettings) else {
-            self.init()
-            return
-        }
-
-        self.init(useSystemAppearance: themeState.useSystemAppearance,
-                  isAutomaticBrightnessEnable: themeState.isAutomaticBrightnessEnable,
-=======
-    init(appState: AppState, uuid: WindowUUID) {
+    init(appState: AppState) {
         guard let themeState = store.state.screenState(
             ThemeSettingsState.self,
             for: .themeSettings,
             window: uuid
         ) else {
-            self.init(windowUUID: uuid)
+            self.init()
             return
         }
 
-        self.init(windowUUID: themeState.windowUUID,
-                  useSystemAppearance: themeState.useSystemAppearance,
+        self.init(useSystemAppearance: themeState.useSystemAppearance,
                   isAutomaticBrightnessEnable: themeState.isAutomaticBrightnessEnabled,
->>>>>>> eaa0121c1 (Remove FXIOS-5064/8318/3960 [v123] LegacyThemeManager removal (#18437)):firefox-ios/Client/Frontend/Settings/ThemeSettings/ThemeSettingsState.swift
                   manualThemeSelected: themeState.manualThemeSelected,
                   userBrightnessThreshold: themeState.userBrightnessThreshold,
                   systemBrightness: themeState.systemBrightness)
@@ -66,17 +54,10 @@ struct ThemeSettingsState: ScreenState, Equatable {
         case ThemeSettingsAction.receivedThemeManagerValues(let themeState):
             return themeState
 
-<<<<<<< HEAD:Client/Frontend/Settings/ThemeSettings/ThemeSettingsState.swift
-        case ThemeSettingsAction.toggleUseSystemAppearance(let isEnabled), ThemeSettingsAction.systemThemeChanged(let isEnabled):
-            return ThemeSettingsState(useSystemAppearance: isEnabled,
-                                      isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnable,
-=======
         case ThemeSettingsAction.toggleUseSystemAppearance(let isEnabled),
             ThemeSettingsAction.systemThemeChanged(let isEnabled):
-            return ThemeSettingsState(windowUUID: state.windowUUID,
-                                      useSystemAppearance: isEnabled,
+            return ThemeSettingsState(useSystemAppearance: isEnabled,
                                       isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnabled,
->>>>>>> eaa0121c1 (Remove FXIOS-5064/8318/3960 [v123] LegacyThemeManager removal (#18437)):firefox-ios/Client/Frontend/Settings/ThemeSettings/ThemeSettingsState.swift
                                       manualThemeSelected: state.manualThemeSelected,
                                       userBrightnessThreshold: state.userBrightnessThreshold,
                                       systemBrightness: state.systemBrightness)
@@ -91,41 +72,23 @@ struct ThemeSettingsState: ScreenState, Equatable {
 
         case ThemeSettingsAction.switchManualTheme(let theme),
             ThemeSettingsAction.manualThemeChanged(let theme):
-<<<<<<< HEAD:Client/Frontend/Settings/ThemeSettings/ThemeSettingsState.swift
             return ThemeSettingsState(useSystemAppearance: state.useSystemAppearance,
-                                      isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnable,
-=======
-            return ThemeSettingsState(windowUUID: state.windowUUID,
-                                      useSystemAppearance: state.useSystemAppearance,
                                       isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnabled,
->>>>>>> eaa0121c1 (Remove FXIOS-5064/8318/3960 [v123] LegacyThemeManager removal (#18437)):firefox-ios/Client/Frontend/Settings/ThemeSettings/ThemeSettingsState.swift
                                       manualThemeSelected: theme,
                                       userBrightnessThreshold: state.userBrightnessThreshold,
                                       systemBrightness: state.systemBrightness)
 
         case ThemeSettingsAction.updateUserBrightness(let brightnessValue),
             ThemeSettingsAction.userBrightnessChanged(let brightnessValue):
-<<<<<<< HEAD:Client/Frontend/Settings/ThemeSettings/ThemeSettingsState.swift
             return ThemeSettingsState(useSystemAppearance: state.useSystemAppearance,
-                                      isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnable,
-=======
-            return ThemeSettingsState(windowUUID: state.windowUUID,
-                                      useSystemAppearance: state.useSystemAppearance,
                                       isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnabled,
->>>>>>> eaa0121c1 (Remove FXIOS-5064/8318/3960 [v123] LegacyThemeManager removal (#18437)):firefox-ios/Client/Frontend/Settings/ThemeSettings/ThemeSettingsState.swift
                                       manualThemeSelected: state.manualThemeSelected,
                                       userBrightnessThreshold: brightnessValue,
                                       systemBrightness: state.systemBrightness)
 
         case ThemeSettingsAction.systemBrightnessChanged(let brightnessValue):
-<<<<<<< HEAD:Client/Frontend/Settings/ThemeSettings/ThemeSettingsState.swift
             return ThemeSettingsState(useSystemAppearance: state.useSystemAppearance,
-                                      isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnable,
-=======
-            return ThemeSettingsState(windowUUID: state.windowUUID,
-                                      useSystemAppearance: state.useSystemAppearance,
                                       isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnabled,
->>>>>>> eaa0121c1 (Remove FXIOS-5064/8318/3960 [v123] LegacyThemeManager removal (#18437)):firefox-ios/Client/Frontend/Settings/ThemeSettings/ThemeSettingsState.swift
                                       manualThemeSelected: state.manualThemeSelected,
                                       userBrightnessThreshold: state.userBrightnessThreshold,
                                       systemBrightness: brightnessValue)
