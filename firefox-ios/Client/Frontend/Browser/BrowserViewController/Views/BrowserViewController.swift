@@ -1137,6 +1137,10 @@ class BrowserViewController: UIViewController,
             topTabsViewController?.refreshTabs()
         }
 
+        // This code snippet addresses an issue related to navigation between pages in the same tab FXIOS-7309.
+        // Specifically, it checks if the URL bar is not currently focused (`!focusUrlBar`) and if it is
+        // operating in an overlay mode (`urlBar.inOverlayMode`).
+
         if !focusUrlBar, urlBar.inOverlayMode {
             urlBar.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
         }
