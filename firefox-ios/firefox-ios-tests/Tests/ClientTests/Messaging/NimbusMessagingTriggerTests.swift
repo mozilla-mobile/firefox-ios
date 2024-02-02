@@ -13,7 +13,8 @@ import Shared
 
 final class NimbusMessagingTriggerTests: XCTestCase {
     lazy var feature: Messaging = {
-        FxNimbus.shared.features.messaging.value()
+        FxNimbus.shared.initialize(with: { nil })
+        return FxNimbusMessaging.shared.features.messaging.value()
     }()
 
     lazy var nimbus: NimbusInterface = {

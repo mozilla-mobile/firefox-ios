@@ -12,7 +12,11 @@ import Shared
 @testable import Client
 
 final class NimbusMessagingMessageTests: XCTestCase {
-    var feature = FxNimbus.shared.features.messaging.value()
+    lazy var feature = {
+        FxNimbus.shared.initialize(with: { nil })
+        return FxNimbusMessaging.shared.features.messaging.value()
+    }()
+
     lazy var subject = GleanPlumbMessageManager(
         messagingStore: MockGleanPlumbMessageStore(messageId: "")
     )

@@ -75,7 +75,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         messagingUtility: NimbusMessagingEvaluationUtility = NimbusMessagingEvaluationUtility(),
         messagingStore: GleanPlumbMessageStoreProtocol = GleanPlumbMessageStore(),
         applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
-        messagingFeature: FeatureHolder<Messaging> = FxNimbus.shared.features.messaging
+        messagingFeature: FeatureHolder<Messaging> = FxNimbusMessaging.shared.features.messaging
     ) {
         self.helperUtility = helperUtility
         self.evaluationUtility = messagingUtility
