@@ -46,7 +46,7 @@ class WKEngineSession: NSObject,
 
     // TODO: FXIOS-7903 #17648 no return from this load(url:), we need a way to recordNavigationInTab
     func load(url: String) {
-        // TODO: FXIOS-7981 Check scheme before loading
+        // Laurie
 
         // Convert about:reader?url=http://example.com URLs to local ReaderMode URLs
         if let url = URL(string: url),
