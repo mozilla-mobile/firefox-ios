@@ -1051,10 +1051,6 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-        return super.canPerformAction(action, withSender: sender) || action == MenuHelperWebViewModel.selectorFindInPage
-    }
-
     func menuHelperFindInPage() {
         evaluateJavascriptInDefaultContentWorld("getSelection().toString()") { result, _ in
             let selection = result as? String ?? ""
