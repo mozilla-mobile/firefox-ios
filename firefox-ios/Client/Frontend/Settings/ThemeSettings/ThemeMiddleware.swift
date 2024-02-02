@@ -57,19 +57,9 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
         ThemeSettingsState(windowUUID: windowUUID ?? WindowUUID.unavailable,
                            useSystemAppearance: themeManager.systemThemeIsOn,
                            isAutomaticBrightnessEnable: themeManager.automaticBrightnessIsOn,
-                           manualThemeSelected: getManuallySetTheme(),
+                           manualThemeSelected: themeManager.getNormalSavedTheme(),
                            userBrightnessThreshold: themeManager.automaticBrightnessValue,
                            systemBrightness: getScreenBrightness())
-    }
-
-    func getManuallySetTheme() -> ThemeType {
-        // We store the theme apart from .privateMode in below UserDefaults key.
-        // It is set/updated in DefaultThemeManager
-        if let savedThemeDescription = UserDefaults.standard.string(forKey: "prefKeyThemeName"),
-           let savedTheme = ThemeType(rawValue: savedThemeDescription) {
-            return savedTheme
-        }
-        return themeManager.currentTheme.type
     }
 
     func toggleUseSystemAppearance(_ enabled: Bool) {
