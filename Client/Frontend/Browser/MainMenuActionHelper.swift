@@ -473,14 +473,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             }
 
             // If we've disabled night mode and dark theme was activated by it then disable dark theme
-<<<<<<< HEAD:Client/Frontend/Browser/MainMenuActionHelper.swift
-            if !NightModeHelper.isActivated(), NightModeHelper.hasEnabledDarkTheme(), LegacyThemeManager.instance.currentName == .dark {
-                LegacyThemeManager.instance.current = LegacyNormalTheme()
-=======
             if !NightModeHelper.isActivated(),
                NightModeHelper.hasEnabledDarkTheme(),
                self.themeManager.currentTheme.type == .dark {
->>>>>>> eaa0121c1 (Remove FXIOS-5064/8318/3960 [v123] LegacyThemeManager removal (#18437)):firefox-ios/Client/Frontend/Browser/MainMenuActionHelper.swift
                 self.themeManager.changeCurrentTheme(.light)
                 NightModeHelper.setEnabledDarkTheme(darkTheme: false)
             }
