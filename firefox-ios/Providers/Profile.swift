@@ -308,12 +308,6 @@ open class BrowserProfile: Profile {
             name: .OnLocationChange,
             object: nil
         )
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(onPageMetadataFetched),
-            name: .OnPageMetadataFetched,
-            object: nil
-        )
 
         if AppInfo.isChinaEdition {
             // Set the default homepage.
@@ -414,30 +408,6 @@ open class BrowserProfile: Profile {
         }
     }
 
-    @objc
-    func onPageMetadataFetched(notification: NSNotification) {
-        let isPrivate = notification.userInfo?["isPrivate"] as? Bool ?? true
-        guard !isPrivate else {
-            logger.log("Private mode - Ignoring page metadata.",
-                       level: .debug,
-                       category: .lifecycle)
-            return
-        }
-        guard let pageURL = notification.userInfo?["tabURL"] as? URL,
-              let pageMetadata = notification.userInfo?["pageMetadata"] as? PageMetadata else {
-            logger.log("Metadata notification doesn't contain any metadata!",
-                       level: .debug,
-                       category: .lifecycle)
-            return
-        }
-        let defaultMetadataTTL: UInt64 = 3 * 24 * 60 * 60 * 1000 // 3 days for the metadata to live
-        self.metadata.storeMetadata(
-            pageMetadata,
-            forPageURL: pageURL,
-            expireAt: defaultMetadataTTL + Date.now()
-        )
-    }
-
     deinit {
         self.syncManager.endTimedSyncs()
     }
@@ -463,10 +433,6 @@ open class BrowserProfile: Profile {
     var pinnedSites: PinnedSites {
         return self.legacyPlaces
     }
-
-    lazy var metadata: Metadata = {
-        return SQLiteMetadata(db: self.database)
-    }()
 
     lazy var browserDbPath = URL(
         fileURLWithPath: directory
