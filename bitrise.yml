@@ -394,9 +394,9 @@ workflows:
             echo "Files changed in commit/PR: $APPS_AFFECTED"
             if [[ -z "$APPS_AFFECTED" ]]; then
                 echo "No files changed in commit/PR. Skipping Blacklist check..."
-                BUILD_FIREFOX_IOS="true"
-                BUILD_FOCUS_IOS="true"
-                BUILD_SAMPLE_BROWSER_IOS="true"
+                # Set environment variables
+                envman add --key BUILD_FIREFOX_IOS --value "true"
+                envman add --key BUILD_FOCUS_IOS --value "true"
                 exit 0
             fi
 
