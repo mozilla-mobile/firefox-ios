@@ -57,7 +57,7 @@ public class DefaultSecurityManager: SecurityManager {
 
     private func handleRedirectionNavigation(url: URL) -> NavigationDecisionType {
         return .allowed
-        // TODO: FXIOS-XXXX - Handle redirection navigation
+        // TODO: FXIOS-8375 - Handle redirection navigation
 //        if schemeIsRedirectionNavigationValid(for: url) {
 //            return .allowed
 //        } else if schemeIsRedirectionThirdPartyNavigationValid(for: url) {
