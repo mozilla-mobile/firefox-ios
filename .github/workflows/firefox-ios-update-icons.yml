@@ -1,0 +1,48 @@
+name: Update Icons
+
+on: 
+  workflow_dispatch:
+
+jobs:
+  update-icons:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Run the script
+        run: python3 taskcluster/scripts/acorn-icons-update.py
+
+      - name: Check for changes
+        id: diff
+        run: |
+          git diff --exit-code || echo "::set-output name=changes::true"
+
+      - name: Commit changes
+        if: steps.diff.outputs.changes == 'true'
+        run: |
+          git config --global user.name 'Mobile-TestEng'
+          git config --global user.email 'GitHub <noreply@github.com>'
+          git add .
+          git commit -m "Update icons"
+
+      - name: Create Pull Request
+        if: steps.diff.outputs.changes == 'true'
+        uses: peter-evans/create-pull-request@v3
+        with:
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          committer: GitHub <noreply@github.com>
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: update-icons-${{ github.run_id }}
+          title: "Update Icons"
+          body: "This is an automated PR to update the icons"
