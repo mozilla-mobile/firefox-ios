@@ -338,9 +338,8 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
                 cell.textLabel?.text = .DisplayThemeOptionDark
             }
 
-            let themeType = themeManager.currentTheme.type
-            if (indexPath.row == 0 && themeType == .light) ||
-                (indexPath.row == 1 && themeType == .dark) {
+            if (indexPath.row == 0 && manualThemeType == .light) ||
+                (indexPath.row == 1 && manualThemeType == .dark) {
                 cell.accessoryType = .checkmark
                 tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
             } else {
