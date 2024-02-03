@@ -399,9 +399,6 @@ workflows:
                 envman add --key BUILD_FOCUS_IOS --value "true"
                 exit 0
             fi
-            echo "BUILD_FIREFOX_IOS: $BUILD_FIREFOX_IOS"
-            echo "BUILD_FOCUS_IOS: $BUILD_FOCUS_IOS"
-            echo "BUILD_SAMPLE_BROWSER_IOS: $BUILD_SAMPLE_BROWSER_IOS"
 
             # Check for specific applications and set flags accordingly
             for app in $APPS_AFFECTED; do
@@ -423,9 +420,6 @@ workflows:
                         ;;
                 esac
             done
-            echo "BUILD_FIREFOX_IOS: $BUILD_FIREFOX_IOS"
-            echo "BUILD_FOCUS_IOS: $BUILD_FOCUS_IOS"
-            echo "BUILD_SAMPLE_BROWSER_IOS: $BUILD_SAMPLE_BROWSER_IOS"
 
             # Set environment variables
             envman add --key BUILD_FIREFOX_IOS --value "$BUILD_FIREFOX_IOS"
