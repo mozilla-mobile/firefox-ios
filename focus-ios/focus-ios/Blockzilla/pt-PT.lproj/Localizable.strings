@@ -98,7 +98,7 @@
 "Autocomplete.mySites" = "Meus sites";
 
 /* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"Autocomplete.mySitesDesc" = "Ativar para ter o %@ a concluir automaticamente os seus URLs favoritos.";
+"Autocomplete.mySitesDesc" = "Ativar para ter o %@ a concluir automaticamente os seus URL favoritos.";
 
 /* Label for enabling or disabling top sites */
 "Autocomplete.topSites" = "Sites mais visitados";

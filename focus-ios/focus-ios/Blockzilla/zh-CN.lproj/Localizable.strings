@@ -11,7 +11,7 @@
 "About.privateBullet2" = "拦截跟踪器（也可调整为允许跟踪器）";
 
 /* Label on About screen */
-"About.privateBullet3" = "清除 Cookie、搜索记录和浏览记录";
+"About.privateBullet3" = "清除 Cookie、搜索记录和浏览历史";
 
 /* Label on About screen */
 "About.privateBulletHeader" = "用作私密浏览器，可以：";
@@ -191,7 +191,7 @@
 "Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "跳过";
 
 /* Text for a label that indicates the first subtitle for the default browser onboarding screen version 2. */
-"Onboarding.DefaultBrowser.FirstSubtitle.V2" = "隐私保护考量，我们会在您关闭应用程序时，自动清除浏览记录。";
+"Onboarding.DefaultBrowser.FirstSubtitle.V2" = "我们会在您关闭应用时自动清除浏览历史，以增强隐私保护。";
 
 /* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
 "Onboarding.DefaultBrowser.SecondSubtitle.V2" = "将 %@ 设为默认浏览器，保护您的数据安全。";
@@ -581,7 +581,7 @@
 "TooltipBodyText.TrashIcon" = "随时轻点垃圾桶，清除当前会话的全部痕迹。";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
-"TooltipBodyText.TrashIcon.V2" = "轻点此处即可删除浏览记录、Cookie 等所有数据，并新建一个全新标签页。";
+"TooltipBodyText.TrashIcon.V2" = "轻点此处即可删除历史记录、Cookie 等所有数据，并新建一个全新标签页。";
 
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "保护您是我的首要职责";
