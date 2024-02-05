@@ -14,7 +14,7 @@ public protocol URLFormatter {
 public class DefaultURLFormatter: URLFormatter {
     private var securityManager: SecurityManager
 
-    init(securityManager: SecurityManager = DefaultSecurityManager()) {
+    public init(securityManager: SecurityManager = DefaultSecurityManager()) {
         self.securityManager = securityManager
     }
 

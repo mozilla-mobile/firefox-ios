@@ -112,7 +112,7 @@ class RootViewController: UIViewController,
 
     private func browse(to term: String) {
         searchBar.resignFirstResponder()
-        browserVC.loadUrlOrSearch(SearchTerm(searchTerm: term))
+        browserVC.loadUrlOrSearch(SearchTerm(term: term))
         searchVC.remove()
     }
 
