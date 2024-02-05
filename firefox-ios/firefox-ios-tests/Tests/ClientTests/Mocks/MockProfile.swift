@@ -157,10 +157,6 @@ open class MockProfile: Client.Profile {
         return MockTabQueue()
     }()
 
-    public lazy var metadata: Metadata = {
-        return SQLiteMetadata(db: self.database)
-    }()
-
     public lazy var isChinaEdition: Bool = {
         return Locale.current.identifier == "zh_CN"
     }()
