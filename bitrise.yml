@@ -841,8 +841,6 @@ workflows:
         stack: osx-xcode-15.2.x
         machine_type_id: g2-m1.8core
   L10nBuild:
-    before_run:
-    - determine_apps_affected
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
