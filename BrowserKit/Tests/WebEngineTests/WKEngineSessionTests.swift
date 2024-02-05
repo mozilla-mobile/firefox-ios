@@ -48,8 +48,7 @@ final class WKEngineSessionTests: XCTestCase {
 
         subject?.load(url: url)
 
-        // TODO: FXIOS-7981 Check scheme before loading
-        XCTAssertEqual(webViewProvider.webView.loadCalled, 1)
+        XCTAssertEqual(webViewProvider.webView.loadCalled, 0)
         prepareForTearDown(subject!)
     }
 

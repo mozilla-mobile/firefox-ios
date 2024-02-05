@@ -16,13 +16,15 @@ class WKEngineSession: NSObject,
     private var logger: Logger
     var sessionData: WKEngineSessionData
     private var contentScriptManager: WKContentScriptManager
+    private var securityManager: SecurityManager
 
     init?(userScriptManager: WKUserScriptManager,
           configurationProvider: WKEngineConfigurationProvider = DefaultWKEngineConfigurationProvider(),
           webViewProvider: WKWebViewProvider = DefaultWKWebViewProvider(),
           logger: Logger = DefaultLogger.shared,
           sessionData: WKEngineSessionData = WKEngineSessionData(),
-          contentScriptManager: WKContentScriptManager = DefaultContentScriptManager()) {
+          contentScriptManager: WKContentScriptManager = DefaultContentScriptManager(),
+          securityManager: SecurityManager = DefaultSecurityManager()) {
         guard let webView = webViewProvider.createWebview(configurationProvider: configurationProvider) else {
             logger.log("WKEngineWebView creation failed on configuration",
                        level: .fatal,
@@ -34,6 +36,7 @@ class WKEngineSession: NSObject,
         self.logger = logger
         self.sessionData = sessionData
         self.contentScriptManager = contentScriptManager
+        self.securityManager = securityManager
         super.init()
 
         self.setupObservers()
@@ -46,7 +49,8 @@ class WKEngineSession: NSObject,
 
     // TODO: FXIOS-7903 #17648 no return from this load(url:), we need a way to recordNavigationInTab
     func load(url: String) {
-        // TODO: FXIOS-7981 Check scheme before loading
+        let browsingContext = BrowsingContext(type: .internalNavigation, url: url)
+        guard securityManager.canNavigateWith(browsingContext: browsingContext) == .allowed else { return }
 
         // Convert about:reader?url=http://example.com URLs to local ReaderMode URLs
         if let url = URL(string: url),
