@@ -2143,7 +2143,6 @@ extension BrowserViewController: HomePanelDelegate {
 
     func homePanel(didSelectURL url: URL, visitType: VisitType, isGoogleTopSite: Bool) {
         guard let tab = tabManager.selectedTab else { return }
-        
         if isPreferSwitchToOpenTabOverDuplicateFeatureEnabled,
            let tab = tabManager.tabs.reversed().first(where: { $0.url == url && $0.isPrivate == tab.isPrivate }) {
             tabManager.selectTab(tab)
@@ -2158,7 +2157,6 @@ extension BrowserViewController: HomePanelDelegate {
             if navigateLinkShortcutIfNeeded(url: url) {
                 return
             }
-
             finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
         }
     }
