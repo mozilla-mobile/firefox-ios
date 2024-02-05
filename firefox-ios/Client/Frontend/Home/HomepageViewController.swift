@@ -202,7 +202,7 @@ class HomepageViewController:
     private func updateHeaderToShowPrivateModeToggle() {
         let featureFlagOn = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
         let showToggle = featureFlagOn && !shouldUseiPadSetup()
-        viewModel.headerViewModel.hidePrivateModeButton = !showToggle
+        viewModel.headerViewModel.showiPadSetup = !showToggle
     }
 
     // MARK: - Layout

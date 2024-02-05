@@ -60,6 +60,15 @@ final class PrivateHomepageViewController:
 
     private let scrollView: UIScrollView = .build()
 
+    private var headerViewModel: HomepageHeaderCellViewModel {
+        return HomepageHeaderCellViewModel(
+            isPrivate: true,
+            showiPadSetup: shouldUseiPadSetup(),
+            action: { [weak self] in
+                self?.parentCoordinator?.switchMode()
+            })
+    }
+
     private lazy var scrollContainer: UIStackView = .build { stackView in
         stackView.axis = .vertical
         stackView.spacing = UX.scrollContainerStackSpacing
@@ -80,14 +89,6 @@ final class PrivateHomepageViewController:
     private lazy var homepageHeaderCell: HomepageHeaderCell = {
         let header = HomepageHeaderCell()
         header.applyTheme(theme: themeManager.currentTheme)
-
-        let headerViewModel = HomepageHeaderCellViewModel(
-            isPrivate: true,
-            hidePrivateModeButton: shouldUseiPadSetup(),
-            action: { [weak self] in
-                self?.parentCoordinator?.switchMode()
-            })
-
         header.configure(with: headerViewModel)
         return header
     }()
@@ -121,7 +122,10 @@ final class PrivateHomepageViewController:
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         updateConstraintsForMultitasking()
-        homepageHeaderCell.viewModel?.hidePrivateModeButton = shouldUseiPadSetup()
+        if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
+            || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
+            homepageHeaderCell.configure(with: headerViewModel)
+        }
         applyTheme()
     }
 
