@@ -52,6 +52,7 @@ protocol TabManager: AnyObject {
     func getTabForUUID(uuid: String) -> Tab?
     func getTabForURL(_ url: URL) -> Tab?
     func expireSnackbars()
+    @discardableResult
     func switchPrivacyMode() -> SwitchPrivacyModeResult
     func addPopupForParentTab(profile: Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab
     func makeToastFromRecentlyClosedUrls(_ recentlyClosedTabs: [Tab],

@@ -6,25 +6,30 @@ import Common
 import Foundation
 import Shared
 
-class HomeLogoHeaderViewModel {
+// Header view model for the Firefox Normal Homepage
+class HomepageHeaderViewModel {
     struct UX {
         static let bottomSpacing: CGFloat = 30
+        static let topSpacing: CGFloat = 16
     }
 
     private let profile: Profile
+    private let tabManager: TabManager
     var onTapAction: ((UIButton) -> Void)?
+    var hidePrivateModeButton = true
     var theme: Theme
 
-    init(profile: Profile, theme: Theme) {
+    init(profile: Profile, theme: Theme, tabManager: TabManager) {
         self.profile = profile
         self.theme = theme
+        self.tabManager = tabManager
     }
 }
 
 // MARK: HomeViewModelProtocol
-extension HomeLogoHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
+extension HomepageHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     var sectionType: HomepageSectionType {
-        return .logoHeader
+        return .homepageHeader
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {
@@ -48,7 +53,7 @@ extension HomeLogoHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 
         let leadingInset = HomepageViewModel.UX.leadingInset(traitCollection: traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(
-            top: 0,
+            top: UX.topSpacing,
             leading: leadingInset,
             bottom: UX.bottomSpacing,
             trailing: leadingInset)
@@ -69,10 +74,18 @@ extension HomeLogoHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 }
 
-extension HomeLogoHeaderViewModel: HomepageSectionHandler {
+extension HomepageHeaderViewModel: HomepageSectionHandler {
     func configure(_ cell: UICollectionViewCell, at indexPath: IndexPath) -> UICollectionViewCell {
-        guard let logoHeaderCell = cell as? HomeLogoHeaderCell else { return UICollectionViewCell() }
-        logoHeaderCell.applyTheme(theme: theme)
-        return logoHeaderCell
+        guard let headerCell = cell as? HomepageHeaderCell else { return UICollectionViewCell() }
+        headerCell.applyTheme(theme: theme)
+        headerCell.configure(
+            with: HomepageHeaderCellViewModel(
+                isPrivate: false,
+                hidePrivateModeButton: hidePrivateModeButton,
+                action: { [weak self] in
+                    self?.tabManager.switchPrivacyMode()
+                })
+        )
+        return headerCell
     }
 }

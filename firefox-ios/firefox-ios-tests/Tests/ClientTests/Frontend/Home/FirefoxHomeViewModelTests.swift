@@ -35,7 +35,7 @@ class FirefoxHomeViewModelTests: XCTestCase {
                                           tabManager: MockTabManager(),
                                           theme: LightTheme())
         XCTAssertEqual(viewModel.shownSections.count, 2)
-        XCTAssertEqual(viewModel.shownSections[0], HomepageSectionType.logoHeader)
+        XCTAssertEqual(viewModel.shownSections[0], HomepageSectionType.homepageHeader)
         XCTAssertEqual(viewModel.shownSections[1], HomepageSectionType.customizeHome)
     }
 }
