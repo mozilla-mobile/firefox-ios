@@ -4852,7 +4852,7 @@ extension String {
         comment: "Accessibility label for the reload button")
     public static let TabLocationReloadAccessibilityHint = MZLocalizedString(
         key: "Address.Bar.Reload.A11y.Hint.v124",
-        tableName: "Reload Button",
+        tableName: "TabLocation",
         value: "Double tap and hold for more options",
         comment: "Accessibility hint for the reload button")
     public static let TabLocationShareAccessibilityLabel = MZLocalizedString(
