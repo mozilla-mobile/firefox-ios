@@ -991,6 +991,23 @@ shopping:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
 
+  surface_ads_setting_toggled:
+    type: event
+    description: |
+      Whether the user has opted in for ads
+    extra_keys:
+      is_enabled:
+        type: boolean
+        description: |
+          Is enabled when the user has opted in for ads
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17303
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17681
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
+
 shopping.settings:
   nimbus_disabled_shopping:
     type: boolean
