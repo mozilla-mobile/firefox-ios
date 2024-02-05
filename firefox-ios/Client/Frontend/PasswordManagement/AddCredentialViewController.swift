@@ -249,20 +249,20 @@ extension AddCredentialViewController: LoginDetailTableViewCellDelegate {
 
         // Menu actions for password
         if item == .passwordItem {
-            let revealAction = action == MenuHelper.SelectorReveal
-            let hideAction = action == MenuHelper.SelectorHide
+            let revealAction = action == MenuHelperLoginModel.selectorReveal
+            let hideAction = action == MenuHelperLoginModel.selectorHide
             let showRevealOption = cell.descriptionLabel.isSecureTextEntry ? revealAction : hideAction
-            return action == MenuHelper.SelectorCopy || showRevealOption
+            return action == MenuHelperLoginModel.selectorCopy || showRevealOption
         }
 
         // Menu actions for Website
         if item == .websiteItem {
-            return action == MenuHelper.SelectorCopy || action == MenuHelper.SelectorOpenAndFill
+            return action == MenuHelperLoginModel.selectorCopy || action == MenuHelperLoginModel.selectorOpenAndFill
         }
 
         // Menu actions for Username
         if item == .usernameItem {
-            return action == MenuHelper.SelectorCopy
+            return action == MenuHelperLoginModel.selectorCopy
         }
 
         return false

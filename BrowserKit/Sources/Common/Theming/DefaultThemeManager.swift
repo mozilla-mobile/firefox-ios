@@ -141,6 +141,15 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         }
     }
 
+    public func getNormalSavedTheme() -> ThemeType {
+        if let savedThemeDescription = userDefaults.string(forKey: ThemeKeys.themeName),
+           let savedTheme = ThemeType(rawValue: savedThemeDescription) {
+            return savedTheme
+        }
+
+        return getSystemThemeType()
+    }
+
     // MARK: - Private methods
 
     private func updateSavedTheme(to newTheme: ThemeType) {
@@ -167,13 +176,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         if privateModeIsOn { return .privateMode }
         if nightModeIsOn { return .dark }
 
-        var themeType = getSystemThemeType()
-        if let savedThemeDescription = userDefaults.string(forKey: ThemeKeys.themeName),
-           let savedTheme = ThemeType(rawValue: savedThemeDescription) {
-            themeType = savedTheme
-        }
-
-        return themeType
+        return getNormalSavedTheme()
     }
 
     private func getSystemThemeType() -> ThemeType {
