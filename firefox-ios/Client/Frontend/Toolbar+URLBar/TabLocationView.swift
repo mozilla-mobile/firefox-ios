@@ -181,6 +181,7 @@ class TabLocationView: UIView, FeatureFlaggable {
         reloadButton.contentHorizontalAlignment = .center
         reloadButton.accessibilityLabel = .TabLocationReloadAccessibilityLabel
         reloadButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.reloadButton
+        reloadButton.accessibilityHint = .TabLocationReloadAccessibilityHint
         reloadButton.isAccessibilityElement = true
         reloadButton.translatesAutoresizingMaskIntoConstraints = false
         reloadButton.showsLargeContentViewer = true
