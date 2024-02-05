@@ -28,20 +28,20 @@ class BrowserViewController: UIViewController,
         static let ActionSheetTitleMaxLength = 120
     }
 
-    /// Describes how the user completed their interaction with the URL bar.
-    /// This state is used to record search engagement telemetry.
-    enum SearchEngagementState {
-        /// The user is currently interacting with the URL bar. The URL bar's
-        /// text field is focused, but the search controller may be hidden
-        /// if the text field is empty.
+    /// Describes the state of the current search session. This state is used
+    /// to record search engagement and abandonment telemetry.
+    enum SearchSessionState {
+        /// The user is currently searching. The URL bar's text field
+        /// is focused, but the search controller may be hidden if the
+        /// text field is empty.
         case active
 
-        /// The user completed their interaction by navigating to a destination,
-        /// either by tapping on a suggestion, or by entering a search term or
-        /// a URL.
+        /// The user completed their search by navigating to a destination,
+        /// either by tapping on a suggestion, or by entering a search term
+        /// or a URL.
         case engaged
 
-        /// The user completed their interaction by dismissing the URL bar.
+        /// The user abandoned their search by dismissing the URL bar.
         case abandoned
     }
 
@@ -67,7 +67,7 @@ class BrowserViewController: UIViewController,
     var readerModeCache: ReaderModeCache
     var statusBarOverlay: StatusBarOverlay = .build { _ in }
     var searchController: SearchViewController?
-    var searchEngagementState: SearchEngagementState?
+    var searchSessionState: SearchSessionState?
     var screenshotHelper: ScreenshotHelper!
     var searchTelemetry: SearchTelemetry?
     var searchLoader: SearchLoader?
@@ -1161,7 +1161,7 @@ class BrowserViewController: UIViewController,
         searchLoader.addListener(searchController)
 
         self.searchController = searchController
-        self.searchEngagementState = .active
+        self.searchSessionState = .active
         self.searchLoader = searchLoader
     }
 
@@ -1212,7 +1212,7 @@ class BrowserViewController: UIViewController,
         hideSearchController()
 
         searchController = nil
-        searchEngagementState = nil
+        searchSessionState = nil
         searchLoader = nil
     }
 
@@ -2386,20 +2386,31 @@ extension BrowserViewController: SearchViewControllerDelegate {
     }
 
     func searchViewControllerWillHide(_ searchViewController: SearchViewController) {
-        guard searchEngagementState == .engaged else { return }
-        let visibleSuggestionsTelemetryInfo = searchViewController.visibleSuggestionsTelemetryInfo
-        for info in visibleSuggestionsTelemetryInfo {
-            trackEngagedSearchTelemetry(visibleSuggestionInfo: info)
+        switch searchSessionState {
+        case .engaged:
+            let visibleSuggestionsTelemetryInfo = searchViewController.visibleSuggestionsTelemetryInfo
+            visibleSuggestionsTelemetryInfo.forEach { trackVisibleSuggestion(telemetryInfo: $0) }
+            TelemetryWrapper.gleanRecordEvent(category: .action, method: .engagement, object: .locationBar)
+
+        case .abandoned:
+            let visibleSuggestionsTelemetryInfo = searchViewController.visibleSuggestionsTelemetryInfo
+            visibleSuggestionsTelemetryInfo.forEach { trackVisibleSuggestion(telemetryInfo: $0) }
+            TelemetryWrapper.gleanRecordEvent(category: .action, method: .abandonment, object: .locationBar)
+
+        default:
+            break
         }
     }
 
-    /// Records telemetry for a suggestion that was visible during an engaged
-    /// search. The user may have tapped on this suggestion or on a different
-    /// suggestion, or typed in a search term or a URL.
-    func trackEngagedSearchTelemetry(visibleSuggestionInfo info: SearchViewVisibleSuggestionTelemetryInfo) {
+    /// Records telemetry for a suggestion that was visible during an engaged or
+    /// abandoned search session. The user may have tapped on this suggestion
+    /// or on a different suggestion, typed in a search term or a URL, or
+    /// dismissed the URL bar without completing their search.
+    func trackVisibleSuggestion(telemetryInfo info: SearchViewVisibleSuggestionTelemetryInfo) {
         switch info {
         // A sponsored or non-sponsored suggestion from Firefox Suggest.
         case let .firefoxSuggestion(telemetryInfo, position, didTap):
+            let didAbandonSearchSession = searchSessionState == .abandoned
             TelemetryWrapper.gleanRecordEvent(
                 category: .action,
                 method: .view,
@@ -2408,6 +2419,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
                     TelemetryWrapper.EventValue.fxSuggestionTelemetryInfo.rawValue: telemetryInfo,
                     TelemetryWrapper.EventValue.fxSuggestionPosition.rawValue: position,
                     TelemetryWrapper.EventValue.fxSuggestionDidTap.rawValue: didTap,
+                    TelemetryWrapper.EventValue.fxSuggestionDidAbandonSearchSession.rawValue: didAbandonSearchSession,
                 ]
             )
             if didTap {

@@ -4183,6 +4183,25 @@ awesomebar:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
+  search_result_impression:
+    type: event
+    description: |
+      Recorded for an item that was visible in the list of search results
+      when the user finished interacting with the awesomebar.
+    extra_keys:
+      type:
+        description: |
+          Type: amp-suggestion, wikipedia-suggestion
+        type: string
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-8326
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/18452
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - interaction
+    expires: "2024-06-01"
   search_result_tap:
     type: event
     description: |
@@ -4192,13 +4211,15 @@ awesomebar:
       type:
         description: |
           Type: history-item, remote-tab, opened-tab,
-          bookmark-item, search-suggestion
+          bookmark-item, search-suggestion,
+          amp-suggestion, wikipedia-suggestion
         type: string
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/9996
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10867
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/18452
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     data_sensitivity:
@@ -4236,6 +4257,34 @@ awesomebar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
+  engagement:
+    type: event
+    description: |
+      Recorded when the user completes their search session by
+      tapping a search result, or entering a URL or a search term.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-8326
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/18452
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - interaction
+    expires: "2024-06-01"
+  abandonment:
+    type: event
+    description: |
+      Recorded when the user dismisses the awesomebar without completing their
+      search.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-8326
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/18452
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - interaction
     expires: "2024-06-01"
 
 # Share sheet specific metrics
