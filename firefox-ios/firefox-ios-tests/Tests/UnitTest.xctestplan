@@ -100,6 +100,7 @@
         "HistoryHighlightsDataAdaptorTests\/testReloadDataOnNotification()",
         "HistoryHighlightsTests",
         "IntroViewControllerTests\/testBasicSetupReturnsExpectedItems()",
+        "RustSyncManagerTests\/testGetEnginesAndKeys()",
         "RustSyncManagerTests\/testGetEnginesAndKeysWithNoKey()",
         "RustSyncManagerTests\/testUpdateEnginePrefs_addressesDisabled()",
         "RustSyncManagerTests\/testUpdateEnginePrefs_addressesEnabled()",

@@ -330,50 +330,59 @@ public class RustSyncManager: NSObject, SyncManager {
 
     func getEnginesAndKeys(engines: [RustSyncManagerAPI.TogglableEngine],
                            completion: @escaping (([String], [String: String])) -> Void) {
-       var localEncryptionKeys: [String: String] = [:]
-       var rustEngines: [String] = []
-       var registeredPlaces = false
+        var localEncryptionKeys: [String: String] = [:]
+        var rustEngines: [String] = []
+        var registeredPlaces = false
 
-       for engine in engines.filter({ syncManagerAPI.rustTogglableEngines.contains($0) }) {
-           switch engine {
-           case .tabs:
-               profile?.tabs.registerWithSyncManager()
-               rustEngines.append(engine.rawValue)
-           case .passwords:
-               profile?.logins.registerWithSyncManager()
-               if let key = try? profile?.logins.getStoredKey() {
-                   localEncryptionKeys[engine.rawValue] = key
-                   rustEngines.append(engine.rawValue)
-               } else {
-                   logger.log("Login encryption key could not be retrieved for syncing",
-                              level: .warning,
-                              category: .sync)
-               }
-           case .creditcards:
-               if self.creditCardAutofillEnabled {
-                   profile?.autofill.registerWithSyncManager()
-                   if let key = try? profile?.autofill.getStoredKey() {
-                       localEncryptionKeys[engine.rawValue] = key
-                       rustEngines.append(engine.rawValue)
-                   } else {
-                       logger.log("Credit card encryption key could not be retrieved for syncing",
-                                  level: .warning,
-                                  category: .sync)
-                   }
-               }
-           case .addresses:
-               profile?.autofill.registerWithSyncManager()
-               rustEngines.append(engine.rawValue)
-           case .bookmarks, .history:
-               if !registeredPlaces {
-                   profile?.places.registerWithSyncManager()
-                   registeredPlaces = true
-               }
-               rustEngines.append(engine.rawValue)
-           }
-       }
+        profile?.logins.getStoredKey { loginsResult in
+            var loginsKey: String?
 
-       completion((rustEngines, localEncryptionKeys))
+            switch loginsResult {
+            case .success(let key):
+                loginsKey = key
+            case .failure(let err):
+                self.logger.log("Login encryption key could not be retrieved for syncing: \(err)",
+                                level: .warning,
+                                category: .sync)
+            }
+
+            for engine in engines.filter({ self.syncManagerAPI.rustTogglableEngines.contains($0) }) {
+                switch engine {
+                case .tabs:
+                    self.profile?.tabs.registerWithSyncManager()
+                    rustEngines.append(engine.rawValue)
+                case .passwords:
+                    self.profile?.logins.registerWithSyncManager()
+                    if let key = loginsKey {
+                        localEncryptionKeys[engine.rawValue] = key
+                        rustEngines.append(engine.rawValue)
+                    }
+                case .creditcards:
+                    if self.creditCardAutofillEnabled {
+                        self.profile?.autofill.registerWithSyncManager()
+                        if let key = try? self.profile?.autofill.getStoredKey() {
+                            localEncryptionKeys[engine.rawValue] = key
+                            rustEngines.append(engine.rawValue)
+                        } else {
+                            self.logger.log("Credit card encryption key could not be retrieved for syncing",
+                                            level: .warning,
+                                            category: .sync)
+                        }
+                    }
+                case .addresses:
+                    self.profile?.autofill.registerWithSyncManager()
+                    rustEngines.append(engine.rawValue)
+                case .bookmarks, .history:
+                    if !registeredPlaces {
+                        self.profile?.places.registerWithSyncManager()
+                        registeredPlaces = true
+                    }
+                    rustEngines.append(engine.rawValue)
+                }
+            }
+
+            completion((rustEngines, localEncryptionKeys))
+        }
    }
 
     private func doSync(params: SyncParams, completion: @escaping (SyncResult) -> Void) {
