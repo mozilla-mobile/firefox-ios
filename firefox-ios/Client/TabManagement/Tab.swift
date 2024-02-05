@@ -764,7 +764,7 @@ class Tab: NSObject, ThemeApplicable {
     }
 
     func addSnackbar(_ bar: SnackBar) {
-        if bars.count > 2 { return } // maximum 3 snackbars allowed on a tab
+        guard bars.isEmpty else { return } // maximum 1 snackbar allowed on a tab
         bars.append(bar)
         tabDelegate?.tab(self, didAddSnackbar: bar)
     }
@@ -774,11 +774,6 @@ class Tab: NSObject, ThemeApplicable {
             bars.remove(at: index)
             tabDelegate?.tab(self, didRemoveSnackbar: bar)
         }
-    }
-
-    func removeAllSnackbars() {
-        // Enumerate backwards here because we'll remove items from the list as we go.
-        bars.reversed().forEach { removeSnackbar($0) }
     }
 
     func expireSnackbars() {
