@@ -546,6 +546,11 @@ class BrowserViewController: UIViewController,
             if let toast = state.toast {
                 self.showToastType(toast: toast)
             }
+
+            if state.keyboardState == true {
+                _ = urlBar.becomeFirstResponder()
+                
+            }
         }
     }
 

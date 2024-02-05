@@ -7,10 +7,13 @@ import Redux
 
 enum GeneralBrowserAction: Action {
     case showToast(ToastTypeContext)
+    case showKeyboard(KeyboardContext)
 
     var windowUUID: UUID {
         switch self {
         case .showToast(let context as ActionContext):
+            return context.windowUUID
+        case .showKeyboard(let context as ActionContext):
             return context.windowUUID
         }
     }

@@ -73,6 +73,14 @@ class ToastTypeContext: ActionContext {
     }
 }
 
+class KeyboardContext: ActionContext {
+    let keyboardShowing: Bool
+    init(keyboardShowing: Bool, windowUUID: WindowUUID) {
+        self.keyboardShowing = keyboardShowing
+        super.init(windowUUID: windowUUID)
+    }
+}
+
 class RefreshTabContext: ActionContext {
     let tabDisplayModel: TabDisplayModel
     init(tabDisplayModel: TabDisplayModel, windowUUID: WindowUUID) {
