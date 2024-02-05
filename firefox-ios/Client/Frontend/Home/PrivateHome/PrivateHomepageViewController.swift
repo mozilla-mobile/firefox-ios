@@ -10,10 +10,15 @@ import Shared
 // Delegate for coordinator to be able to handle navigation
 protocol PrivateHomepageDelegate: AnyObject {
     func homePanelDidRequestToOpenInNewTab(with url: URL, isPrivate: Bool, selectNewTab: Bool)
+    func switchMode()
 }
 
 // Displays the view for the private homepage when users create a new tab in private browsing
-final class PrivateHomepageViewController: UIViewController, ContentContainable, Themeable {
+final class PrivateHomepageViewController:
+    UIViewController,
+    ContentContainable,
+    Themeable,
+    FeatureFlaggable {
     enum UX {
         static let scrollContainerStackSpacing: CGFloat = 24
         static let defaultScrollContainerPadding: CGFloat = 16
@@ -72,10 +77,19 @@ final class PrivateHomepageViewController: UIViewController, ContentContainable,
         return messageCard
     }()
 
-    private lazy var logoHeaderCell: HomeLogoHeaderCell = {
-        let logoHeader = HomeLogoHeaderCell()
-        logoHeader.applyTheme(theme: themeManager.currentTheme)
-        return logoHeader
+    private lazy var homepageHeaderCell: HomepageHeaderCell = {
+        let header = HomepageHeaderCell()
+        header.applyTheme(theme: themeManager.currentTheme)
+
+        let headerViewModel = HomepageHeaderCellViewModel(
+            isPrivate: true,
+            hidePrivateModeButton: shouldUseiPadSetup(),
+            action: { [weak self] in
+                self?.parentCoordinator?.switchMode()
+            })
+
+        header.configure(with: headerViewModel)
+        return header
     }()
 
     init(themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -107,12 +121,14 @@ final class PrivateHomepageViewController: UIViewController, ContentContainable,
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         updateConstraintsForMultitasking()
+        homepageHeaderCell.viewModel?.hidePrivateModeButton = shouldUseiPadSetup()
+        applyTheme()
     }
 
     private func setupLayout() {
-        scrollContainer.addArrangedSubview(logoHeaderCell.contentView)
+        scrollContainer.addArrangedSubview(homepageHeaderCell.contentView)
         scrollContainer.addArrangedSubview(privateMessageCardCell)
-        scrollContainer.accessibilityElements = [logoHeaderCell.contentView, privateMessageCardCell]
+        scrollContainer.accessibilityElements = [homepageHeaderCell.contentView, privateMessageCardCell]
 
         view.layer.addSublayer(gradient)
         view.addSubview(scrollView)
@@ -176,7 +192,7 @@ final class PrivateHomepageViewController: UIViewController, ContentContainable,
     func applyTheme() {
         let theme = themeManager.currentTheme
         gradient.colors = theme.colors.layerHomepage.cgColors
-        logoHeaderCell.applyTheme(theme: theme)
+        homepageHeaderCell.applyTheme(theme: theme)
     }
 
     private func learnMore() {

@@ -136,6 +136,10 @@ class BrowserCoordinator: BaseCoordinator,
         )
     }
 
+    func switchMode() {
+        browserViewController.tabManager.switchPrivacyMode()
+    }
+
     func show(webView: WKWebView) {
         // Keep the webviewController in memory, update to newest webview when needed
         if let webviewController = webviewController {

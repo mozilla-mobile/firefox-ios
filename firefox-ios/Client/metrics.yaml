@@ -1552,7 +1552,7 @@ top_sites:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
-# HomePage
+# HomePage - Normal
 firefox_home_page:
   open_from_menu_home_button:
     type: counter
@@ -2058,6 +2058,25 @@ firefox_home_page:
       - https://github.com/mozilla-mobile/firefox-ios/pull/11171
       - https://github.com/mozilla-mobile/firefox-ios/pull/12334
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
+
+# HomePage - General
+homepage:
+  private_mode_toggle:
+    type: event
+    description: |
+      Records when the private browsing mode icon is toggled on homepage.
+    extra_keys:
+      is_private_mode:
+       type: boolean
+       description: |
+        Set to true when you enter private browsing mode, false when you are going back to normal mode.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/18522
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/18518
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
