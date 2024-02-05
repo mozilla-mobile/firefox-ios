@@ -47,7 +47,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell {
     }()
 
     private lazy var privateModeButton: UIButton = .build { [weak self] button in
-        let maskImage = UIImage(named: StandardImageIdentifiers.Large.privateMode)?.withRenderingMode(.alwaysTemplate)
+        let maskImage = UIImage(named: ImageIdentifiers.privateMaskSmall)?.withRenderingMode(.alwaysTemplate)
         button.setImage(maskImage, for: .normal)
         button.frame = UX.circleSize
         button.layer.cornerRadius = button.frame.size.width / 2
