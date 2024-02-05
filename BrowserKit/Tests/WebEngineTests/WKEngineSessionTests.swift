@@ -121,6 +121,19 @@ final class WKEngineSessionTests: XCTestCase {
         prepareForTearDown(subject!)
     }
 
+    // MARK: Scroll to top
+
+    func testScrollToTop() {
+        let subject = createSubject()
+
+        subject?.scrollToTop()
+
+        let scrollView = webViewProvider.webView.engineScrollView as? MockEngineScrollView
+        XCTAssertEqual(scrollView?.setContentOffsetCalled, 1)
+        XCTAssertEqual(scrollView?.savedContentOffset, CGPoint.zero)
+        prepareForTearDown(subject!)
+    }
+
     // MARK: Reload
 
     func testReloadThenCallsReloadFromOrigin() {

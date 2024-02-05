@@ -23,7 +23,7 @@ protocol WKEngineWebView: UIView {
     var interactionState: Any? { get set }
     var url: URL? { get }
     var title: String? { get }
-    var scrollView: UIScrollView { get }
+    var engineScrollView: WKScrollView! { get }
     var engineConfiguration: WKEngineConfiguration { get }
 
     var estimatedProgress: Double { get }
@@ -130,6 +130,7 @@ extension WKEngineWebView {
 // TODO: FXIOS-7896 #17641 Handle WKEngineWebView ThemeApplicable
 // TODO: FXIOS-7897 #17642 Handle WKEngineWebView AccessoryViewProvider
 class DefaultWKEngineWebView: WKWebView, WKEngineWebView, MenuHelperWebViewInterface {
+    var engineScrollView: WKScrollView!
     var engineConfiguration: WKEngineConfiguration
     weak var delegate: WKEngineWebViewDelegate?
 
@@ -137,7 +138,10 @@ class DefaultWKEngineWebView: WKWebView, WKEngineWebView, MenuHelperWebViewInter
         let configuration = configurationProvider.createConfiguration()
         self.engineConfiguration = configuration
         guard let configuration = configuration as? DefaultEngineConfiguration else { return nil }
+
         super.init(frame: frame, configuration: configuration.webViewConfiguration)
+
+        self.engineScrollView = scrollView
     }
 
     required init?(coder: NSCoder) {

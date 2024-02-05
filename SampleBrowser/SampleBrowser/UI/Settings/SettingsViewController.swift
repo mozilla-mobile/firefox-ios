@@ -14,6 +14,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate {
 
     private var tableView: UITableView
     private var dataSource = SettingsDataSource()
+    weak var delegate: SettingsDelegate?
 
     private lazy var titleLabel: UILabel = .build { label in
         label.font = UIFont.systemFont(ofSize: 30, weight: UIFont.Weight.medium)
@@ -85,9 +86,11 @@ class SettingsViewController: UIViewController, UITableViewDelegate {
         case .findInPage:
             break // TODO: FXIOS-8087 - Handle find in page in WebEngine
         case .scrollingToTop:
-            break // TODO: FXIOS-8092 - Handle scrolling to top in WebEngine
+            delegate?.scrollToTop()
         case .zoom:
             break // TODO: FXIOS-8089 - Handle zoom in WebEngine
         }
+
+        dismiss(animated: true)
     }
 }

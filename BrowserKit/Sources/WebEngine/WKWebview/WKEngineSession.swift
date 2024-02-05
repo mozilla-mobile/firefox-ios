@@ -112,6 +112,10 @@ class WKEngineSession: NSObject,
         logger.log("Go forward", level: .debug, category: .webview)
     }
 
+    func scrollToTop() {
+        webView.engineScrollView.setContentOffset(CGPoint.zero, animated: true)
+    }
+
     func goToHistory(index: Int) {
         // TODO: FXIOS-7907 #17651 Handle goToHistoryIndex in WKEngineSession (equivalent to goToBackForwardListItem)
     }

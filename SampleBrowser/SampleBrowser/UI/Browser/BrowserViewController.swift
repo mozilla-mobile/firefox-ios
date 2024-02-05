@@ -91,6 +91,10 @@ class BrowserViewController: UIViewController, EngineSessionDelegate {
         engineSession.stopLoading()
     }
 
+    func scrollToTop() {
+        engineSession.scrollToTop()
+    }
+
     // MARK: - Search
 
     func loadUrlOrSearch(_ searchTerm: SearchTerm) {
