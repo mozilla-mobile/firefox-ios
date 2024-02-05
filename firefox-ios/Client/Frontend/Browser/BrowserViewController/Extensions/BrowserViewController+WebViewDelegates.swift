@@ -636,7 +636,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 } else if UIApplication.shared.canOpenURL(url) {
                     UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { isAppInstalled in
                         if isAppInstalled {
-                            #warning("TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-7524")
+                           // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-7524
                         }
                     }
                 }
