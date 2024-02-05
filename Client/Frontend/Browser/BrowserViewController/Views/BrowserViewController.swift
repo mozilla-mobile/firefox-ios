@@ -1899,16 +1899,15 @@ class BrowserViewController: UIViewController,
         applyThemeForPreferences(profile.prefs, contentScript: contentScript)
     }
 
+    var isPreferSwitchToOpenTabOverDuplicateFeatureEnabled: Bool {
+        featureFlags.isFeatureEnabled(.preferSwitchToOpenTabOverDuplicate, checking: .buildOnly)
+    }
+
     // MARK: - LibraryPanelDelegate
 
     func libraryPanel(didSelectURL url: URL, visitType: VisitType) {
         guard let tab = tabManager.selectedTab else { return }
 
-<<<<<<< HEAD:Client/Frontend/Browser/BrowserViewController/Views/BrowserViewController.swift
-        // Handle keyboard shortcuts from homepage with url selection (ex: Cmd + Tap on Link; which is a cell in this case)
-        if navigateLinkShortcutIfNeeded(url: url) {
-            return
-=======
         if isPreferSwitchToOpenTabOverDuplicateFeatureEnabled,
            let tab = tabManager.tabs.reversed().first(where: { $0.url == url && $0.isPrivate == tab.isPrivate }) {
             tabManager.selectTab(tab)
@@ -1919,10 +1918,7 @@ class BrowserViewController: UIViewController,
                 return
             }
             finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
->>>>>>> 6c72365bb (Bugfix FXIOS-8334 [v122.1] Users can be moved from private browsing tabs to regular tabs with prefer switch to open tab enabled (#18513)):firefox-ios/Client/Frontend/Browser/BrowserViewController/Views/BrowserViewController.swift
         }
-
-        finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
     }
 
     func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
@@ -2147,12 +2143,7 @@ extension BrowserViewController: HomePanelDelegate {
 
     func homePanel(didSelectURL url: URL, visitType: VisitType, isGoogleTopSite: Bool) {
         guard let tab = tabManager.selectedTab else { return }
-<<<<<<< HEAD:Client/Frontend/Browser/BrowserViewController/Views/BrowserViewController.swift
-        if isGoogleTopSite {
-            tab.urlType = .googleTopSite
-            searchTelemetry?.shouldSetGoogleTopSiteSearch = true
-=======
-
+        
         if isPreferSwitchToOpenTabOverDuplicateFeatureEnabled,
            let tab = tabManager.tabs.reversed().first(where: { $0.url == url && $0.isPrivate == tab.isPrivate }) {
             tabManager.selectTab(tab)
@@ -2169,15 +2160,7 @@ extension BrowserViewController: HomePanelDelegate {
             }
 
             finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
->>>>>>> 6c72365bb (Bugfix FXIOS-8334 [v122.1] Users can be moved from private browsing tabs to regular tabs with prefer switch to open tab enabled (#18513)):firefox-ios/Client/Frontend/Browser/BrowserViewController/Views/BrowserViewController.swift
         }
-
-        // Handle keyboard shortcuts from homepage with url selection (ex: Cmd + Tap on Link; which is a cell in this case)
-        if navigateLinkShortcutIfNeeded(url: url) {
-            return
-        }
-
-        finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
     }
 
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool = false) {
