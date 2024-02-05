@@ -4161,7 +4161,6 @@ urlbar:
         description: |
           Reason for the impression. pause - recorded when the results were shown for at least 1s. Only one pause
                   is recorded for each search session.
-          …In the future there may be other reasons, for now it’s just `pause`.
       sap:
         type: string
         description: |
