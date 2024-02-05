@@ -100,8 +100,7 @@ class SearchViewController: SiteTableViewController,
     var firefoxSuggestions = [RustFirefoxSuggestion]()
     private var highlightManager: HistoryHighlightsManagerProtocol
 
-    var interactionType: TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Interaction = .typed
-    var impressionTelemetryTimer: Timer?
+    var searchTelemetry: SearchTelemetry?
 
     private var selectedIndexPath: IndexPath?
 
@@ -154,6 +153,7 @@ class SearchViewController: SiteTableViewController,
         self.tabManager = tabManager
         self.searchFeature = featureConfig
         self.highlightManager = highlightManager
+        self.searchTelemetry = SearchTelemetry(tabManager: tabManager)
         super.init(profile: profile, windowUUID: tabManager.windowUUID)
 
         tableView.sectionHeaderTopPadding = 0
@@ -207,6 +207,7 @@ class SearchViewController: SiteTableViewController,
             resultCount: 3) { results in
             guard let results = results else { return }
             self.searchHighlights = results
+            self.searchTelemetry?.searchHighlights = results
             self.tableView.reloadData()
         }
     }
@@ -246,6 +247,7 @@ class SearchViewController: SiteTableViewController,
             await MainActor.run {
                 guard let self, self.searchQuery == tempSearchQuery else { return }
                 self.firefoxSuggestions = suggestions
+                self.searchTelemetry?.firefoxSuggestions = suggestions
                 self.tableView.reloadData()
             }
         }
@@ -267,15 +269,13 @@ class SearchViewController: SiteTableViewController,
         super.viewDidAppear(animated)
         searchFeature.recordExposure()
 
-        impressionTelemetryTimer?.invalidate()
-        impressionTelemetryTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(recordImpressionTelemetryEvent), userInfo: nil, repeats: false)
-
+        searchTelemetry?.startImpressionTimer()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         searchDelegate?.searchViewControllerWillHide(self)
+        searchTelemetry?.stopImpressionTimer()
         super.viewWillDisappear(animated)
-        impressionTelemetryTimer?.invalidate()
     }
 
     private func layoutSearchEngineScrollView() {
@@ -578,6 +578,7 @@ class SearchViewController: SiteTableViewController,
                         self.remoteClientTabs.append(ClientTabsSearchWrapper(client: value.client, tab: tab))
                     }
                 }
+                self.searchTelemetry?.remoteClientTabs = self.remoteClientTabs
             }
         }
     }
@@ -617,6 +618,7 @@ class SearchViewController: SiteTableViewController,
             let text = lines.joined(separator: "\n")
             return find(in: text)
         }
+        searchTelemetry?.filteredOpenedTabs = filteredOpenedTabs
     }
 
     func searchRemoteTabs(for searchString: String) {
@@ -648,6 +650,8 @@ class SearchViewController: SiteTableViewController,
 
             return false
         }
+
+        searchTelemetry?.filteredRemoteClientTabs = filteredRemoteClientTabs
     }
 
     private func querySuggestClient() {
@@ -684,10 +688,12 @@ class SearchViewController: SiteTableViewController,
                 self.suggestions = [self.searchQuery]
             }
 
+            self.searchTelemetry?.suggestions = self.suggestions
             self.searchTabs(for: self.searchQuery)
             self.searchRemoteTabs(for: self.searchQuery)
             // Reload the tableView to show the new list of search suggestions.
             self.savedQuery = tempSearchQuery
+            self.searchTelemetry?.savedQuery = tempSearchQuery
             self.tableView.reloadData()
         })
     }
@@ -699,6 +705,7 @@ class SearchViewController: SiteTableViewController,
             data
         }
 
+        searchTelemetry?.data = data
         tableView.reloadData()
     }
 
@@ -1003,6 +1010,7 @@ class SearchViewController: SiteTableViewController,
         if let indexPath = tableView.indexPathForRow(at: buttonPosition), let newQuery = suggestions?[indexPath.row] {
             searchDelegate?.searchViewController(self, didAppend: newQuery + " ")
             searchQuery = newQuery + " "
+            searchTelemetry?.searchQuery = searchQuery
         }
     }
 
@@ -1058,140 +1066,6 @@ private extension SearchViewController {
                                      method: .tap,
                                      object: .awesomebarResults,
                                      extras: [key: extra])
-    }
-
-    @objc
-    func recordImpressionTelemetryEvent() {
-        guard let tab = tabManager.selectedTab else { return }
-
-        let reasonKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.reason.rawValue
-        let reason = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Reason.pause.rawValue
-
-        let sapKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.sap.rawValue
-        let sap = checkSAP(for: tab).rawValue
-
-        let interactionKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.interaction.rawValue
-        let interaction = interactionType.rawValue
-
-        let searchModeKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.searchMode.rawValue
-        let searchMode = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.SearchMode.tabs.rawValue
-
-        let nCharsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nChars.rawValue
-        let nChars = Int32(searchQuery.count)
-
-        let nWordsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nWords.rawValue
-        let nWords = numberOfWords(in: searchQuery)
-
-        let nResultsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nResults.rawValue
-        let nResults = Int32(numberOfSearchResults())
-
-        let groupsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.groups.rawValue
-        let groups = listGroupTypes()
-
-        let resultsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.results.rawValue
-        let results = listResultTypes()
-
-        let extraDetails = [reasonKey: reason,
-                               sapKey: sap,
-                       interactionKey: interaction,
-                        searchModeKey: searchMode,
-                            nCharsKey: nChars,
-                            nWordsKey: nWords,
-                          nResultsKey: nResults,
-                            groupsKey: groups,
-                           resultsKey: results] as [String: Any]
-
-        TelemetryWrapper.recordEvent(category: .information,
-                                     method: .view,
-                                     object: .urlbarImpression,
-                                     extras: extraDetails)
-    }
-
-    func checkSAP(for tab: Tab?) -> TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Sap {
-        guard let tab = tab else { return .urlbar }
-        if tab.isFxHomeTab || tab.isCustomHomeTab {
-            return .urlbarNewtab
-        }
-        return .urlbar
-    }
-
-    func numberOfWords(in string: String) -> Int32 {
-        let words = string.components(separatedBy: CharacterSet.whitespacesAndNewlines)
-        let filteredWords = words.filter { !$0.isEmpty }
-        return Int32(filteredWords.count)
-    }
-
-    func numberOfSearchResults() -> Int {
-        return suggestions?.count ?? 0 + data.count + searchHighlights.count
-                + filteredOpenedTabs.count + firefoxSuggestions.count
-                + filteredRemoteClientTabs.count
-    }
-
-    // Comma separated list of result types in order.
-    func listResultTypes() -> String {
-        var resultTypes: [String] = []
-
-        // Iterate through each section
-        for sectionIndex in 0..<numberOfSections(in: tableView) {
-            let section = SearchListSection(rawValue: sectionIndex)!
-            // Iterate through each row in the section
-            for rowIndex in 0..<tableView(tableView, numberOfRowsInSection: sectionIndex) {
-                let indexPath = IndexPath(row: rowIndex, section: sectionIndex)
-                switch section {
-                case .searchSuggestions:
-                    resultTypes.append(TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Results.searchSuggest.rawValue)
-                case .openedTabs:
-                    resultTypes.append(TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Results.tab.rawValue)
-                case .remoteTabs:
-                    resultTypes.append(TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Results.remoteTab.rawValue)
-                case .bookmarksAndHistory:
-                    // Check if the item is a bookmark or a history item
-                    if let site = data[indexPath.row] {
-                        resultTypes.append(site.bookmarked ?? false ?
-                                           TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Results.bookmark.rawValue :
-                                            TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Results.history.rawValue)
-                    }
-                case .searchHighlights:
-                    resultTypes.append(TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Results.searchHistory.rawValue)
-                case .firefoxSuggestions:
-                    let firefoxSuggestion = firefoxSuggestions[indexPath.row]
-                    resultTypes.append(firefoxSuggestion.isSponsored ?
-                                       TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Results.suggestSponsor.rawValue :
-                                        TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Results.suggestNonSponsor.rawValue)
-                }
-            }
-        }
-
-        return resultTypes.joined(separator: ",")
-    }
-
-    // Comma separated list of result groups in order, groups may be
-    // repeated, since the list will match 1:1 the results list, so we
-    // Can link each result to a group
-    func listGroupTypes() -> String {
-        var groupTypes: [String] = []
-
-        for sectionIndex in 0..<numberOfSections(in: tableView) {
-            let section = SearchListSection(rawValue: sectionIndex)!
-            for _ in 0..<tableView(tableView, numberOfRowsInSection: sectionIndex) {
-                switch section {
-                case .searchSuggestions:
-                    groupTypes.append(TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Groups.searchSuggest.rawValue)
-                case .openedTabs:
-                    groupTypes.append(TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Groups.heuristic.rawValue)
-                case .remoteTabs:
-                    groupTypes.append(TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Groups.remoteTab.rawValue)
-                case .bookmarksAndHistory:
-                    groupTypes.append(TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Groups.general.rawValue)
-                case .searchHighlights:
-                    groupTypes.append(TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Groups.searchHistory.rawValue)
-                case .firefoxSuggestions:
-                    groupTypes.append(TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Groups.suggest.rawValue)
-                }
-            }
-        }
-
-        return groupTypes.joined(separator: ",")
     }
 }
 

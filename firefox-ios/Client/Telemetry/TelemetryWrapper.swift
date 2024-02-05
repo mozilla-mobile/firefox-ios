@@ -744,69 +744,11 @@ extension TelemetryWrapper {
             case engagementType = "engagement_type"
             case provider
             case reason
-            enum Reason: String {
-                case pause
-            }
-
             case sap
-            enum Sap: String {
-                case urlbar
-                case urlbarNewtab = "urlbar_newtab"
-            }
-
             case interaction
-            enum Interaction: String {
-                case typed
-                case pasted
-                case returned
-                case restarted
-                case refined
-                case persistedSearchTerms = "persisted_search_terms"
-                case persistedSearchTermsRestarted = "persisted_search_terms_restarted"
-                case persistedSearchTermsRefined = "persisted_search_terms_refined"
-            }
-
-            case searchMode
-            enum SearchMode: String {
-                case actions
-                case bookmarks
-                case history
-                case tabs
-                case unknown
-                case inactive = "" // Empty string for inactive search mode
-            }
-
+            case searchMode = "search_mode"
             case groups
-            enum Groups: String {
-                case heuristic
-                case adaptiveHistory = "adaptive_history"
-                case searchHistory = "search_history"
-                case searchSuggest = "search_suggest"
-                case topPick = "top_pick"
-                case topSite = "top_site"
-                case remoteTab = "remote_tab"
-                case general
-                case suggest
-            }
-
             case results
-            enum Results: String {
-                case unknown
-                case bookmark
-                case history
-                case keyword
-                case searchEngine = "search_engine"
-                case searchSuggest = "search_suggest"
-                case searchHistory = "search_history"
-                case url
-                case action
-                case tab
-                case remoteTab = "remote_tab"
-                case tabToSearch = "tab_to_search"
-                case topSite = "top_site"
-                case suggestSponsor = "suggest_sponsor"
-                case suggestNonSponsor = "suggest_non_sponsor"
-            }
         }
     }
 

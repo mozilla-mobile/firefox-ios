@@ -592,7 +592,7 @@ class BrowserViewController: UIViewController,
         let dropInteraction = UIDropInteraction(delegate: self)
         view.addInteraction(dropInteraction)
 
-        searchTelemetry = SearchTelemetry()
+        searchTelemetry = SearchTelemetry(tabManager: tabManager)
 
         // Awesomebar Location Telemetry
         SearchBarSettingsViewModel.recordLocationTelemetry(for: isBottomSearchBar ? .bottom : .top)
@@ -632,7 +632,7 @@ class BrowserViewController: UIViewController,
             guard let self else { return false }
             if let pasteboardContents = UIPasteboard.general.string {
                 self.urlBar(self.urlBar, didSubmitText: pasteboardContents)
-                searchController?.interactionType = .pasted
+                searchController?.searchTelemetry?.interactionType = .pasted
                 return true
             }
             return false
@@ -642,7 +642,7 @@ class BrowserViewController: UIViewController,
             if let pasteboardContents = UIPasteboard.general.string {
                 // Enter overlay mode and make the search controller appear.
                 self.overlayManager.openSearch(with: pasteboardContents)
-                searchController?.interactionType = .pasted
+                searchController?.searchTelemetry?.interactionType = .pasted
                 return true
             }
             return false
@@ -2380,12 +2380,12 @@ extension BrowserViewController: SearchViewControllerDelegate {
         didHighlightText text: String,
         search: Bool
     ) {
-        searchViewController.interactionType = .refined
+        searchViewController.searchTelemetry?.interactionType = .refined
         self.urlBar.setLocation(text, search: search)
     }
 
     func searchViewController(_ searchViewController: SearchViewController, didAppend text: String) {
-        searchViewController.interactionType = .pasted
+        searchViewController.searchTelemetry?.interactionType = .pasted
         self.urlBar.setLocation(text, search: false)
     }
 
