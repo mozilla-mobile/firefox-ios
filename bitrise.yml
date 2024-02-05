@@ -378,10 +378,10 @@ workflows:
                 echo $BASE_BRANCH
             fi
 
-            # Determine apps affected by the changes
+            # Determine apps affected by the changes introduced in the commit/PR
             APPS_AFFECTED=$(git diff --name-only $BASE_BRANCH..."$BITRISE_GIT_COMMIT" | xargs -n1 dirname | sort | uniq)
 
-            echo "This are the files changed"
+            echo "These are the files changed:"
             echo $APPS_AFFECTED
 
             # Initialize all application flags as "false" by default
@@ -401,6 +401,7 @@ workflows:
             fi
 
             # Check for specific applications and set flags accordingly
+            # Add more specific conditions for directories as needed; otherwise see default case
             for app in $APPS_AFFECTED; do
                 case "$app" in
                     "firefox-ios")
@@ -414,6 +415,12 @@ workflows:
                         ;;
                     ".")
                         # Root directory changes - build all applications
+                        BUILD_FIREFOX_IOS="true"
+                        BUILD_FOCUS_IOS="true"
+                        BUILD_SAMPLE_BROWSER_IOS="true"
+                        ;;
+                    *)
+                        # Default case - build all applications (e.g, BrowserKit)
                         BUILD_FIREFOX_IOS="true"
                         BUILD_FOCUS_IOS="true"
                         BUILD_SAMPLE_BROWSER_IOS="true"
