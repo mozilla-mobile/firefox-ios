@@ -7,7 +7,7 @@ import Common
 import Shared
 
 enum AccessoryType {
-    case standard, creditCard
+    case standard, creditCard, address
 }
 
 class AccessoryViewProvider: UIView, Themeable {
@@ -24,7 +24,7 @@ class AccessoryViewProvider: UIView, Themeable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
-    private var showCreditCard = false
+    private var currentAccessoryView: AutofillAccessoryView?
 
     // Stub closures - these closures will be given as selectors in a future task
     var previousClosure: (() -> Void)?
@@ -110,7 +110,7 @@ class AccessoryViewProvider: UIView, Themeable {
         // Reset showing of credit card when dismissing the view
         // This is required otherwise it will always show credit card view
         // even if the input isn't of type credit card
-        showCreditCard = false
+        currentAccessoryView = nil
         setupLayout()
     }
 
@@ -119,10 +119,12 @@ class AccessoryViewProvider: UIView, Themeable {
     func reloadViewFor(_ accessoryType: AccessoryType) {
         switch accessoryType {
         case .standard:
-            showCreditCard = false
+            currentAccessoryView = nil
         case .creditCard:
-            showCreditCard = true
+            currentAccessoryView = addressAutofillView
             sendCreditCardAutofillPromptShownTelemetry()
+        case .address:
+            currentAccessoryView = addressAutofillView
         }
 
         setNeedsLayout()
@@ -142,24 +144,16 @@ class AccessoryViewProvider: UIView, Themeable {
         setupSpacer(leadingFixedSpacer, width: UX.fixedLeadingSpacerWidth)
         setupSpacer(trailingFixedSpacer, width: UX.fixedTrailingSpacerWidth)
 
-        let toolbarItems: [UIBarButtonItem]
+        var toolbarItems: [UIBarButtonItem] = [
+            flexibleSpacer,
+            previousButton,
+            nextButton,
+            fixedSpacer,
+            doneButton
+        ]
 
-        if showCreditCard {
-            toolbarItems = [
-                previousButton,
-                nextButton,
-                fixedSpacer,
-                creditCardAutofillView,
-                flexibleSpacer,
-                doneButton
-            ]
-        } else {
-            toolbarItems = [
-                previousButton,
-                nextButton,
-                flexibleSpacer,
-                doneButton
-            ]
+        if let accessoryView = currentAccessoryView {
+            toolbarItems.insert(contentsOf: [ accessoryView], at: 0)
         }
 
         toolbar.setItems(toolbarItems, animated: false)
