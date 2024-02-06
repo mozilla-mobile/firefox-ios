@@ -58,9 +58,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
 
         AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(sceneCoordinator.windowUUID)]) { [weak self] in
-            self?.logger.log("Event queue: handle deeplink via connectionOptions",
-                             level: .debug,
-                             category: .deeplinks)
+            self?.logger.log("Event queue: handle deeplink via connectionOptions", level: .debug, category: .deeplinks)
             self?.handle(connectionOptions: connectionOptions)
         }
     }
