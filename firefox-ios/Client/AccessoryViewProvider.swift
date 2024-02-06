@@ -72,19 +72,25 @@ class AccessoryViewProvider: UIView, Themeable {
     private let trailingFixedSpacer: UIView = .build()
 
     private lazy var creditCardAutofillView: AutofillAccessoryView = {
-        .init(image: UIImage(named: StandardImageIdentifiers.Large.creditCard),
-              labelText: .CreditCard.Settings.UseSavedCardFromKeyboard,
-              tappedAction: { [weak self] in
-                self?.tappedCreditCardButton()
+        let accessoryView = AutofillAccessoryView(image: UIImage(named: StandardImageIdentifiers.Large.creditCard),
+                                                  labelText: .CreditCard.Settings.UseSavedCardFromKeyboard,
+                                                  tappedAction: { [weak self] in
+            self?.tappedCreditCardButton()
         })
+        accessoryView.accessibilityTraits = .button
+        accessoryView.accessibilityLabel = .CreditCard.Settings.UseSavedCardFromKeyboard
+        return accessoryView
     }()
 
     private lazy var addressAutofillView: AutofillAccessoryView = {
-        .init(image: UIImage(named: StandardImageIdentifiers.Large.location),
-              labelText: .Addresses.Settings.UseSavedAddressFromKeyboard,
-              tappedAction: { [weak self] in
-                self?.tappedAddressCardButton()
+        let accessoryView = AutofillAccessoryView(image: UIImage(named: StandardImageIdentifiers.Large.location),
+                                                  labelText: .Addresses.Settings.UseSavedAddressFromKeyboard,
+                                                  tappedAction: { [weak self] in
+            self?.tappedAddressCardButton()
         })
+        accessoryView.accessibilityTraits = .button
+        accessoryView.accessibilityLabel = .Addresses.Settings.UseSavedAddressFromKeyboard
+        return accessoryView
     }()
 
     // MARK: - Initialization
