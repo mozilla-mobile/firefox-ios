@@ -239,7 +239,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 logger.log("Deeplink tab check: success.", level: .debug, category: .deeplinks)
             } else {
                 // Indicates a Sent Tab or deeplink that failed to open. Log to Sentry. [FXIOS-8374]
-                logger.log("Deeplink tab check: failed. Tab not opened for incoming deeplink", level: .fatal, category: .deeplinks)
+                logger.log("Deeplink tab check: failed.", level: .fatal, category: .deeplinks)
             }
         }
     }
