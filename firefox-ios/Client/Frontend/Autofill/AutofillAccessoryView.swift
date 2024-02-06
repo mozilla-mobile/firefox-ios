@@ -28,7 +28,7 @@ class AutofillAccessoryView: UIBarButtonItem {
         static let accessoryImageViewSize: CGFloat = 24
         static let accessoryButtonStackViewSpacing: CGFloat = 2
         static let cornerRadius: CGFloat = 4
-        static let fontSize: Int = 16
+        static let fontSize: CGFloat = 16
     }
 
     // MARK: - Properties
