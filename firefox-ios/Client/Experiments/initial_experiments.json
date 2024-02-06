@@ -236,7 +236,7 @@
       "channel": "release",
       "userFacingName": "Set to Default reminder notification for iOS",
       "userFacingDescription": "This experiment will test a notification reminding users to set Firefox as their default browser.",
-      "isEnrollmentPaused": false,
+      "isEnrollmentPaused": true,
       "isRollout": false,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
