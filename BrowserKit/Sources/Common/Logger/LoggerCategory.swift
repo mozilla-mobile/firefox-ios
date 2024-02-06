@@ -17,6 +17,9 @@ public enum LoggerCategory: String {
     /// Related to anything about credit cards.
     case creditcard
 
+    /// Related to anything involving handling of external links.
+    case deeplinks
+
     /// Related to homepage UI and it's data management.
     case homepage
 

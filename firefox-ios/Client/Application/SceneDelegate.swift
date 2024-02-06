@@ -21,6 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var sceneCoordinator: SceneCoordinator?
     var routeBuilder = RouteBuilder()
+    private let logger: Logger = DefaultLogger.shared
 
     // MARK: - Connecting / Disconnecting Scenes
 
@@ -35,6 +36,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         options connectionOptions: UIScene.ConnectionOptions
     ) {
         guard !AppConstants.isRunningUnitTest else { return }
+        logWillConnectToSession(options: connectionOptions)
 
         // Add hooks for the nimbus-cli to test experiments on device or involving deeplinks.
         if let url = connectionOptions.urlContexts.first?.url {
@@ -48,9 +50,43 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.sceneCoordinator = sceneCoordinator
         sceneCoordinator.start()
 
+        // Before enqueueing deeplink handler in the Event Queue, log a message for the deeplink
+        let urls = sentTabsURLs(for: sentTabsUserInfoFromConnectionOptions(connectionOptions))
+        if let deeplinkURL = urls.first {
+            logEventForExpectedDeeplink(url: deeplinkURL, windowUUID: sceneCoordinator.windowUUID)
+            logWillConnectDeeplink(deeplinkURL)
+        }
+
         AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(sceneCoordinator.windowUUID)]) { [weak self] in
+            self?.logger.log("Event queue: handle deeplink via connectionOptions",
+                             level: .debug,
+                             category: .deeplinks)
             self?.handle(connectionOptions: connectionOptions)
         }
+    }
+
+    private func logWillConnectToSession(options: UIScene.ConnectionOptions) {
+        #if MOZ_CHANNEL_FENNEC
+        logger.log("Scene Delegate: willConnectTo session. Options: \(options)",
+                   level: .debug,
+                   category: .deeplinks)
+        #else
+        logger.log("Scene Delegate: willConnectTo session",
+                   level: .debug,
+                   category: .deeplinks)
+        #endif
+    }
+
+    private func logWillConnectDeeplink(_ deeplinkURL: URL) {
+        #if MOZ_CHANNEL_FENNEC
+        logger.log("Incoming deeplink (willConnectTo). URL: \(deeplinkURL)",
+                   level: .debug,
+                   category: .deeplinks)
+        #else
+        logger.log("Incoming deeplink (willConnectTo)",
+                   level: .debug,
+                   category: .deeplinks)
+        #endif
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -96,9 +132,25 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ) {
         guard let url = URLContexts.first?.url,
               let route = routeBuilder.makeRoute(url: url) else { return }
+
+        logger.log("SceneDelegate openURLContexts()", level: .debug, category: .deeplinks)
+        logOpenURLContextsDeeplink(URLContexts.first?.url)
+
+        if let coordinator = sceneCoordinator {
+            logEventForExpectedDeeplink(url: url, windowUUID: coordinator.windowUUID)
+        }
         sceneCoordinator?.findAndHandle(route: route)
 
         sessionManager.launchSessionProvider.openedFromExternalSource = true
+    }
+
+    private func logOpenURLContextsDeeplink(_ url: URL?) {
+        guard let url else { return }
+        #if MOZ_CHANNEL_FENNEC
+        logger.log("Incoming deeplink (openURLContext). URL: \(url)", level: .debug, category: .deeplinks)
+        #else
+        logger.log("Incoming deeplink (openURLContext)", level: .debug, category: .deeplinks)
+        #endif
     }
 
     // MARK: - Continuing User Activities
@@ -148,21 +200,59 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         // Check if our connection options include a user response to a push
         // notification that is for Sent Tabs. If so, route the related tab URLs.
+        if let sentTabsUserInfo = sentTabsUserInfoFromConnectionOptions(connectionOptions) {
+            handleConnectionOptionsSentTabs(sentTabsUserInfo)
+        }
+    }
+
+    private func sentTabsUserInfoFromConnectionOptions(_ options: UIScene.ConnectionOptions) -> [[String: Any]]? {
         let sentTabsKey = NotificationSentTabs.sentTabsKey
-        if let notification = connectionOptions.notificationResponse?.notification,
+        if let notification = options.notificationResponse?.notification,
            let userInfo = notification.request.content.userInfo[sentTabsKey] as? [[String: Any]] {
-            handleConnectionOptionsSentTabs(userInfo)
+            return userInfo
+        }
+        return nil
+    }
+
+    private func sentTabsURLs(for userInfo: [[String: Any]]?) -> [URL] {
+        guard let userInfo else { return [] }
+        return userInfo.compactMap {
+            guard let urlString = $0["url"] as? String, let url = URL(string: urlString) else { return nil }
+            return url
         }
     }
 
     private func handleConnectionOptionsSentTabs(_ userInfo: [[String: Any]]) {
         // For Sent Tab data structure, see also:
         // NotificationService.displayNewSentTabNotification()
-        for tab in userInfo {
-            guard let urlString = tab["url"] as? String,
-                  let url = URL(string: urlString),
-                  let route = routeBuilder.makeRoute(url: url) else { continue }
+        let urls = sentTabsURLs(for: userInfo)
+        urls.forEach {
+            guard let route = routeBuilder.makeRoute(url: $0) else { return }
             sceneCoordinator?.findAndHandle(route: route)
+        }
+    }
+
+    private func logEventForExpectedDeeplink(url: URL, windowUUID: WindowUUID) {
+        guard let urlScanner = URLScanner(url: url) else { return }
+        let targetURL: URL
+        if urlScanner.isOurScheme {
+            guard let parsedURL = urlScanner.fullURLQueryItem()?.asURL else { return }
+            targetURL = parsedURL
+        } else {
+            targetURL = url
+        }
+
+        let expectedEvent: AppEvent = .selectTab(targetURL, windowUUID)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) { [weak self] in
+            guard let self else { return }
+            if AppEventQueue.hasSignalled(expectedEvent) {
+                logger.log("Deeplink tab check: success.", level: .debug, category: .deeplinks)
+            } else {
+                // Indicates a Sent Tab or deeplink that failed to open. Log to Sentry. [FXIOS-8374]
+                logger.log("Deeplink tab check: failed. Tab not opened for incoming deeplink",
+                           level: .fatal,
+                           category: .deeplinks)
+            }
         }
     }
 }

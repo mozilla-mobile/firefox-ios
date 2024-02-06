@@ -83,7 +83,7 @@ public final class EventQueue<QueueEventType: Hashable> {
 
             // If a specific ID has been provided for this action, ensure
             guard !actions.contains(where: { $0.token == token }) else {
-                logger.log("Ignoring duplicate action (ID: \(token))", level: .info, category: .library)
+                logger.log("Ignoring duplicate action (ID: \(token))", level: .debug, category: .library)
                 return
             }
 
