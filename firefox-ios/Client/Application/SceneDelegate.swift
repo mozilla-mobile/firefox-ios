@@ -67,25 +67,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     private func logWillConnectToSession(options: UIScene.ConnectionOptions) {
         #if MOZ_CHANNEL_FENNEC
-        logger.log("Scene Delegate: willConnectTo session. Options: \(options)",
-                   level: .debug,
-                   category: .deeplinks)
+        logger.log("Scene Delegate: willConnectTo session. Options: \(options)", level: .debug, category: .deeplinks)
         #else
-        logger.log("Scene Delegate: willConnectTo session",
-                   level: .debug,
-                   category: .deeplinks)
+        logger.log("Scene Delegate: willConnectTo session", level: .debug, category: .deeplinks)
         #endif
     }
 
     private func logWillConnectDeeplink(_ deeplinkURL: URL) {
         #if MOZ_CHANNEL_FENNEC
-        logger.log("Incoming deeplink (willConnectTo). URL: \(deeplinkURL)",
-                   level: .debug,
-                   category: .deeplinks)
+        logger.log("Incoming deeplink (willConnectTo). URL: \(deeplinkURL)", level: .debug, category: .deeplinks)
         #else
-        logger.log("Incoming deeplink (willConnectTo)",
-                   level: .debug,
-                   category: .deeplinks)
+        logger.log("Incoming deeplink (willConnectTo)", level: .debug, category: .deeplinks)
         #endif
     }
 
