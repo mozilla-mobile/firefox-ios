@@ -8,9 +8,11 @@ import Foundation
 
 /// Reference at https://danger.systems/swift/reference.html
 let danger = Danger()
+let standardImageIdentifiersPath = "./BrowserKit/Sources/Common/Constants/StandardImageIndentifiers.swift"
 
-checkCodeCoverage()
+checkAlphabeticalOrder(inFile: standardImageIdentifiersPath)
 checkBigPullRequest()
+checkCodeCoverage()
 checkForPRDescription()
 checkForCodeUsage()
 changedFiles()
@@ -169,5 +171,50 @@ extension String {
         newString = newString.replacingOccurrences(of: ")", with: "\\)")
         newString = newString.replacingOccurrences(of: " ", with: "\\ ")
         return newString
+    }
+}
+
+func checkAlphabeticalOrder(inFile filePath: String) {
+    do {
+        let fileContent = try String(contentsOfFile: filePath, encoding: .utf8)
+
+        // Regex to find public structs and their bodies
+        let structRegex = try NSRegularExpression(pattern: "public struct (\\w+) \\{([^}]+)\\}", options: [])
+        // Regex to find public static let variables
+        let varRegex = try NSRegularExpression(pattern: "public static let (\\w+)", options: [])
+
+        let nsrange = NSRange(fileContent.startIndex..<fileContent.endIndex, in: fileContent)
+        structRegex.enumerateMatches(in: fileContent, options: [], range: nsrange) { match, _, _ in
+            guard let structMatch = match,
+                  let structRange = Range(structMatch.range(at: 1), in: fileContent),
+                  let bodyRange = Range(structMatch.range(at: 2), in: fileContent) else {
+                return
+            }
+
+            let structName = String(fileContent[structRange])
+            let bodyContent = String(fileContent[bodyRange])
+
+            let range = NSRange(bodyContent.startIndex..<bodyContent.endIndex, in: bodyContent)
+            let varMatches = varRegex.matches(in: bodyContent, options: [], range: range)
+
+            // Extract variable names from matches
+            let varNames = varMatches.compactMap { match -> String? in
+                guard let range = Range(match.range(at: 1), in: bodyContent) else { return nil }
+                return String(bodyContent[range])
+            }
+
+            // Sort by lowercase for case-insensitive comparison and then by length
+            let sortedVarNames = varNames.sorted {
+                $0.lowercased() == $1.lowercased() ? $0.count < $1.count : $0.lowercased() < $1.lowercased()
+            }
+
+            // Iterate through the list and report all variables that are out of order
+            for (index, varName) in varNames.enumerated() where varName.lowercased() != sortedVarNames[index].lowercased() {
+                let message = "Variable '\(varName)' in \(structName) is out of alphabetical order."
+                danger.warn(message)
+            }
+        }
+    } catch {
+        danger.warn("Failed to read or process file \(filePath): \(error)")
     }
 }
