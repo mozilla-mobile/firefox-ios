@@ -7,15 +7,15 @@ import UIKit
 import Common
 
 struct HomepageHeaderCellViewModel {
-    var hidePrivateModeButton: Bool
+    var showiPadSetup: Bool
     var isPrivate: Bool
 
     private var action: (() -> Void)
     private var homepageTelemetry = HomepageTelemetry()
 
-    init(isPrivate: Bool, hidePrivateModeButton: Bool, action: @escaping () -> Void) {
+    init(isPrivate: Bool, showiPadSetup: Bool, action: @escaping () -> Void) {
         self.isPrivate = isPrivate
-        self.hidePrivateModeButton = hidePrivateModeButton
+        self.showiPadSetup = showiPadSetup
         self.action = action
     }
 
@@ -27,7 +27,7 @@ struct HomepageHeaderCellViewModel {
 
 // Header for the homepage in both normal and private mode
 // Contains the firefox logo and the private browsing shortcut button
-class HomepageHeaderCell: UICollectionViewCell, ReusableCell {
+class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     enum UX {
         static let iPhoneTopConstant: CGFloat = 16
         static let iPadTopConstant: CGFloat = 54
@@ -38,7 +38,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell {
 
     private lazy var stackContainer: UIStackView = .build { stackView in
         stackView.axis = .horizontal
-        stackView.distribution = .fill
     }
 
     private lazy var logoHeaderCell: HomeLogoHeaderCell = {
@@ -60,7 +59,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell {
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupView()
     }
 
     required init?(coder: NSCoder) {
@@ -69,29 +67,38 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - UI Setup
 
-    func setupView() {
-        let isiPad = UIDevice.current.userInterfaceIdiom == .pad
-        let topAnchorConstant = isiPad ? UX.iPadTopConstant : UX.iPhoneTopConstant
-
+    private func setupView(with showiPadSetup: Bool) {
         stackContainer.addArrangedSubview(logoHeaderCell.contentView)
         stackContainer.addArrangedSubview(privateModeButton)
         contentView.addSubview(stackContainer)
 
-        NSLayoutConstraint.activate([
+        setupConstraints(for: showiPadSetup)
+    }
+
+    private var logoConstraints = [NSLayoutConstraint]()
+
+    private func setupConstraints(for iPadSetup: Bool) {
+        NSLayoutConstraint.deactivate(logoConstraints)
+        let topAnchorConstant = iPadSetup ? UX.iPadTopConstant : UX.iPhoneTopConstant
+        logoConstraints = [
             stackContainer.topAnchor.constraint(equalTo: contentView.topAnchor, constant: topAnchorConstant),
             stackContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             stackContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            stackContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            stackContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).priority(.defaultLow),
 
-            logoHeaderCell.contentView.centerYAnchor.constraint(equalTo: stackContainer.centerYAnchor),
+            privateModeButton.widthAnchor.constraint(equalToConstant: UX.circleSize.width),
             privateModeButton.centerYAnchor.constraint(equalTo: stackContainer.centerYAnchor),
-            privateModeButton.widthAnchor.constraint(equalToConstant: UX.circleSize.width)
-        ])
+            logoHeaderCell.contentView.centerYAnchor.constraint(equalTo: stackContainer.centerYAnchor)
+        ]
+
+        NSLayoutConstraint.activate(logoConstraints)
     }
 
     func configure(with viewModel: HomepageHeaderCellViewModel) {
         self.viewModel = viewModel
-        privateModeButton.isHidden = viewModel.hidePrivateModeButton
+        setupView(with: viewModel.showiPadSetup)
+        logoHeaderCell.configure(with: viewModel.showiPadSetup)
+        privateModeButton.isHidden = viewModel.showiPadSetup
     }
 
     @objc
