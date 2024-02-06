@@ -402,15 +402,16 @@ workflows:
 
             # Check for specific applications and set flags accordingly
             # Add more specific conditions for directories as needed; otherwise see default case
+            # Pattern matches (*) on directory names and reacts to subdirectory changes as well
             for app in $APPS_AFFECTED; do
                 case "$app" in
-                    "firefox-ios")
+                    firefox-ios*)
                         BUILD_FIREFOX_IOS="true"
                         ;;
-                    "focus-ios")
+                    focus-ios*)
                         BUILD_FOCUS_IOS="true"
                         ;;
-                    "SampleBrowser")
+                    SampleBrowser*)
                         BUILD_SAMPLE_BROWSER_IOS="true"
                         ;;
                     ".")
