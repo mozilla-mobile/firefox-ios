@@ -27,7 +27,7 @@ struct HomepageHeaderCellViewModel {
 
 // Header for the homepage in both normal and private mode
 // Contains the firefox logo and the private browsing shortcut button
-class HomepageHeaderCell: UICollectionViewCell, ReusableCell {
+class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     enum UX {
         static let iPhoneTopConstant: CGFloat = 16
         static let iPadTopConstant: CGFloat = 54
