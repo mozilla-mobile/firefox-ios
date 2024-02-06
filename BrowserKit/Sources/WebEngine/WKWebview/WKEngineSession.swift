@@ -45,6 +45,7 @@ class WKEngineSession: NSObject,
         webView.navigationDelegate = self
         webView.delegate = self
         userScriptManager.injectUserScriptsIntoWebView(webView)
+        addContentScripts()
     }
 
     // TODO: FXIOS-7903 #17648 no return from this load(url:), we need a way to recordNavigationInTab
@@ -219,6 +220,13 @@ class WKEngineSession: NSObject,
         if let url = webView.url {
             delegate?.onLocationChange(url: url.absoluteString)
         }
+    }
+
+    // MARK: - Content scripts
+
+    private func addContentScripts() {
+        let findInPage = FindInPageContentScript()
+        contentScriptManager.addContentScript(findInPage, name: FindInPageContentScript.name(), forSession: self)
     }
 
     // MARK: - WKUIDelegate
