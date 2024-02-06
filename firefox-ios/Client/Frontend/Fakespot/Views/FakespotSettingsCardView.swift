@@ -58,10 +58,10 @@ class FakespotSettingsCardViewModel {
 
     var footerModel: FakespotActionFooterViewModel {
         return FakespotActionFooterViewModel(title: footerTitle,
-                                     actionTitle: footerActionTitle,
-                                     a11yTitleIdentifier: footerA11yTitleIdentifier,
-                                     a11yActionIdentifier: footerA11yActionIdentifier,
-                                     onTap: { self.onTapButton() })
+                                             actionTitle: footerActionTitle,
+                                             a11yTitleIdentifier: footerA11yTitleIdentifier,
+                                             a11yActionIdentifier: footerA11yActionIdentifier,
+                                             onTap: { self.onTapButton() })
     }
 
     init(profile: Profile = AppContainer.shared.resolve(),
