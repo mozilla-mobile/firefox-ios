@@ -5,9 +5,9 @@
 import Foundation
 import Storage
 
-protocol PasswordManagerCoordinatorDelegate: AnyObject {
+protocol PasswordManagerCoordinatorDelegate: AnyObject, ParentCoordinatorDelegate {
     func settingsOpenURLInNewTab(_ url: URL)
-    func didFinishPasswordManager(from coordinator: PasswordManagerCoordinator)
+    func didFinishPasswordManager(from: PasswordManagerCoordinator)
 }
 
 protocol PasswordManagerFlowDelegate: AnyObject {
@@ -40,14 +40,20 @@ class PasswordManagerCoordinator: BaseCoordinator,
     func showPasswordManager() {
         let viewController = PasswordManagerListViewController(profile: profile)
         viewController.coordinator = self
-        router.push(viewController)
+        router.push(viewController) { [weak self] in
+            guard let self = self else { return }
+            parentCoordinator?.didFinish(from: self)
+        }
         passwordManager = viewController
     }
 
     func showPasswordOnboarding() {
         let viewController = PasswordManagerOnboardingViewController()
         viewController.coordinator = self
-        router.push(viewController)
+        router.push(viewController) { [weak self] in
+            guard let self = self else { return }
+            parentCoordinator?.didFinish(from: self)
+        }
     }
 
     func showDevicePassCode() {

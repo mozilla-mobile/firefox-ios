@@ -45,21 +45,20 @@ class TabLocationView: UIView, FeatureFlaggable {
     var contentView: UIStackView!
 
     var notificationCenter: NotificationProtocol = NotificationCenter.default
+    private var themeManager: ThemeManager = AppContainer.shared.resolve()
 
     /// Tracking protection button, gets updated from tabDidChangeContentBlocking
     var blockerStatus: BlockerStatus = .noBlockedURLs {
         didSet {
-            if oldValue != blockerStatus { setTrackingProtection() }
+            if oldValue != blockerStatus { setTrackingProtection(theme: themeManager.currentTheme) }
         }
     }
 
     var hasSecureContent = false {
         didSet {
-            if oldValue != hasSecureContent { setTrackingProtection() }
+            if oldValue != hasSecureContent { setTrackingProtection(theme: themeManager.currentTheme) }
         }
     }
-
-    private let menuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuBadge, backdropCircleSize: 32)
 
     var url: URL? {
         willSet { handleShoppingAdsCacheURLChange(newURL: newValue) }
@@ -182,6 +181,7 @@ class TabLocationView: UIView, FeatureFlaggable {
         reloadButton.contentHorizontalAlignment = .center
         reloadButton.accessibilityLabel = .TabLocationReloadAccessibilityLabel
         reloadButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.reloadButton
+        reloadButton.accessibilityHint = .TabLocationReloadAccessibilityHint
         reloadButton.isAccessibilityElement = true
         reloadButton.translatesAutoresizingMaskIntoConstraints = false
         reloadButton.showsLargeContentViewer = true
@@ -246,8 +246,6 @@ class TabLocationView: UIView, FeatureFlaggable {
         dragInteraction.allowsSimultaneousRecognitionDuringLift = true
         self.addInteraction(dragInteraction)
 
-        menuBadge.add(toParent: contentView)
-        menuBadge.show(false)
         hideTrackingProtectionButton()
     }
 
@@ -411,7 +409,7 @@ class TabLocationView: UIView, FeatureFlaggable {
         }
     }
 
-    private func setTrackingProtection(themeManager: ThemeManager = AppContainer.shared.resolve()) {
+    private func setTrackingProtection(theme: Theme) {
         var lockImage: UIImage?
         if !hasSecureContent {
             lockImage = UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.lockSlash)
@@ -427,9 +425,12 @@ class TabLocationView: UIView, FeatureFlaggable {
                 .TabLocationETPOnSecureAccessibilityLabel : .TabLocationETPOnNotSecureAccessibilityLabel
         case .safelisted:
             if let smallDotImage = UIImage(
-                systemName: ImageIdentifiers.circleFill
+                named: StandardImageIdentifiers.Small.notificationDotFill
             )?.withTintColor(themeManager.currentTheme.colors.iconAccentBlue) {
-                trackingProtectionButton.setImage(lockImage?.overlayWith(image: smallDotImage), for: .normal)
+                let image = lockImage?.overlayWith(image: smallDotImage,
+                                                   modifier: 0.4,
+                                                   origin: CGPoint(x: 15, y: 15))
+                trackingProtectionButton.setImage(image, for: .normal)
                 trackingProtectionButton.accessibilityLabel = hasSecureContent ?
                     .TabLocationETPOffSecureAccessibilityLabel : .TabLocationETPOffNotSecureAccessibilityLabel
             }
@@ -542,11 +543,11 @@ extension TabLocationView: ThemeApplicable {
         trackingProtectionButton.applyTheme(theme: theme)
         shareButton.applyTheme(theme: theme)
         reloadButton.applyTheme(theme: theme)
-        menuBadge.badge.tintBackground(color: theme.colors.layer3)
         shoppingButton.tintColor = theme.colors.textPrimary
         shoppingButton.setImage(UIImage(named: StandardImageIdentifiers.Large.shopping)?
             .withTintColor(theme.colors.actionPrimary),
                                 for: .selected)
+        setTrackingProtection(theme: theme)
     }
 }
 

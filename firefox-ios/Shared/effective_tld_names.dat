@@ -6710,7 +6710,7 @@ org.zw
 
 // newGTLDs
 
-// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2024-01-06T15:12:04Z
+// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2024-01-24T15:14:29Z
 // This list is auto-generated, don't edit it manually.
 // aaa : American Automobile Association, Inc.
 // https://www.iana.org/domains/root/db/aaa.html
@@ -7015,10 +7015,6 @@ baidu
 // banamex : Citigroup Inc.
 // https://www.iana.org/domains/root/db/banamex.html
 banamex
-
-// bananarepublic : The Gap, Inc.
-// https://www.iana.org/domains/root/db/bananarepublic.html
-bananarepublic
 
 // band : Dog Beach, LLC
 // https://www.iana.org/domains/root/db/band.html
@@ -8164,7 +8160,7 @@ ftr
 // https://www.iana.org/domains/root/db/fujitsu.html
 fujitsu
 
-// fun : Radix FZC DMCC
+// fun : Radix Technologies Inc.
 // https://www.iana.org/domains/root/db/fun.html
 fun
 
@@ -8500,7 +8496,7 @@ horse
 // https://www.iana.org/domains/root/db/hospital.html
 hospital
 
-// host : Radix FZC DMCC
+// host : Radix Technologies Inc.
 // https://www.iana.org/domains/root/db/host.html
 host
 
@@ -9392,10 +9388,6 @@ olayan
 // https://www.iana.org/domains/root/db/olayangroup.html
 olayangroup
 
-// oldnavy : The Gap, Inc.
-// https://www.iana.org/domains/root/db/oldnavy.html
-oldnavy
-
 // ollo : Dish DBS Corporation
 // https://www.iana.org/domains/root/db/ollo.html
 ollo
@@ -9416,7 +9408,7 @@ ong
 // https://www.iana.org/domains/root/db/onl.html
 onl
 
-// online : Radix FZC DMCC
+// online : Radix Technologies Inc.
 // https://www.iana.org/domains/root/db/online.html
 online
 
@@ -9620,7 +9612,7 @@ pramerica
 // https://www.iana.org/domains/root/db/praxi.html
 praxi
 
-// press : Radix FZC DMCC
+// press : Radix Technologies Inc.
 // https://www.iana.org/domains/root/db/press.html
 press
 
@@ -10072,7 +10064,7 @@ sina
 // https://www.iana.org/domains/root/db/singles.html
 singles
 
-// site : Radix FZC DMCC
+// site : Radix Technologies Inc.
 // https://www.iana.org/domains/root/db/site.html
 site
 
@@ -10152,7 +10144,7 @@ soy
 // https://www.iana.org/domains/root/db/spa.html
 spa
 
-// space : Radix FZC DMCC
+// space : Radix Technologies Inc.
 // https://www.iana.org/domains/root/db/space.html
 space
 
@@ -10204,7 +10196,7 @@ stockholm
 // https://www.iana.org/domains/root/db/storage.html
 storage
 
-// store : Radix FZC DMCC
+// store : Radix Technologies Inc.
 // https://www.iana.org/domains/root/db/store.html
 store
 
@@ -10320,7 +10312,7 @@ tdk
 // https://www.iana.org/domains/root/db/team.html
 team
 
-// tech : Radix FZC DMCC
+// tech : Radix Technologies Inc.
 // https://www.iana.org/domains/root/db/tech.html
 tech
 
@@ -10504,7 +10496,7 @@ unicom
 // https://www.iana.org/domains/root/db/university.html
 university
 
-// uno : Radix FZC DMCC
+// uno : Radix Technologies Inc.
 // https://www.iana.org/domains/root/db/uno.html
 uno
 
@@ -10668,7 +10660,7 @@ webcam
 // https://www.iana.org/domains/root/db/weber.html
 weber
 
-// website : Radix FZC DMCC
+// website : Radix Technologies Inc.
 // https://www.iana.org/domains/root/db/website.html
 website
 
@@ -11238,8 +11230,10 @@ activetrail.biz
 // Submitted by Ian Boston <boston@adobe.com> and Lars Trieloff <trieloff@adobe.com>
 adobeaemcloud.com
 *.dev.adobeaemcloud.com
+aem.live
 hlx.live
 adobeaemcloud.net
+aem.page
 hlx.page
 hlx3.page
 
@@ -12112,6 +12106,10 @@ beagleboard.io
 // Beget Ltd
 // Submitted by Lev Nekrasov <lnekrasov@beget.com>
 *.beget.app
+
+// Besties : https://besties.house
+// Submitted by Hazel Cora <hazy@besties.house>
+pages.gay
 
 // BetaInABox
 // Submitted by Adrian <adrian@betainabox.com>
@@ -13013,10 +13011,6 @@ url.tw
 // Fabrica Technologies, Inc. : https://www.fabrica.dev/
 // Submitted by Eric Jiang <eric@fabrica.dev>
 onfabrica.com
-
-// Facebook, Inc.
-// Submitted by Peter Ruibal <public-suffix@fb.com>
-apps.fbsbx.com
 
 // FAITID : https://faitid.org/
 // Submitted by Maxim Alzoba <tech.contact@faitid.org>
@@ -14045,6 +14039,11 @@ memset.net
 // Submitted by Ruben Schmidmeister <psl-maintainers@messerli.ch>
 messerli.app
 
+// Meta Platforms, Inc. : https://meta.com/
+// Submitted by Jacob Cordero <public-suffix@meta.com>
+atmeta.com
+apps.fbsbx.com
+
 // MetaCentrum, CESNET z.s.p.o. : https://www.metacentrum.cz/en/
 // Submitted by Zdeněk Šustr <zdenek.sustr@cesnet.cz>
 *.cloud.metacentrum.cz
@@ -14471,7 +14470,8 @@ on-web.fr
 
 // Platform.sh : https://platform.sh
 // Submitted by Nikola Kotur <nikola@platform.sh>
-bc.platform.sh
+*.upsun.app
+upsunapp.com
 ent.platform.sh
 eu.platform.sh
 us.platform.sh
@@ -14733,10 +14733,11 @@ from.tv
 sakura.tv
 
 // Salesforce.com, Inc. https://salesforce.com/
-// Submitted by Michael Biven <mbiven@salesforce.com>
+// Submitted by Michael Biven <mbiven@salesforce.com> and Aaron Romeo <aaron.romeo@salesforce.com>
 *.builder.code.com
 *.dev-builder.code.com
 *.stg-builder.code.com
+*.001.test.code-builder-stg.platform.salesforce.com
 
 // Sandstorm Development Group, Inc. : https://sandcats.io/
 // Submitted by Asheesh Laroia <asheesh@sandstorm.io>

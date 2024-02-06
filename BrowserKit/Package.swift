@@ -33,7 +33,7 @@ let package = Package(
             branch: "master"),
         .package(
             url: "https://github.com/onevcat/Kingfisher.git",
-            exact: "7.9.1"),
+            exact: "7.10.2"),
         .package(
             url: "https://github.com/AliSoftware/Dip.git",
             exact: "7.1.1"),
@@ -42,7 +42,7 @@ let package = Package(
             exact: "2.0.0"),
         .package(
             url: "https://github.com/getsentry/sentry-cocoa.git",
-            exact: "8.19.0"),
+            exact: "8.20.0"),
         .package(url: "https://github.com/nbhasin2/GCDWebServer.git",
                  branch: "master")
     ],

@@ -49,4 +49,6 @@ class MockThemeManager: ThemeManager {
     }
 
     func brightnessChanged() { }
+
+    func getNormalSavedTheme() -> ThemeType { return .light }
 }

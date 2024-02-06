@@ -16,13 +16,15 @@ class WKEngineSession: NSObject,
     private var logger: Logger
     var sessionData: WKEngineSessionData
     private var contentScriptManager: WKContentScriptManager
+    private var securityManager: SecurityManager
 
     init?(userScriptManager: WKUserScriptManager,
           configurationProvider: WKEngineConfigurationProvider = DefaultWKEngineConfigurationProvider(),
           webViewProvider: WKWebViewProvider = DefaultWKWebViewProvider(),
           logger: Logger = DefaultLogger.shared,
           sessionData: WKEngineSessionData = WKEngineSessionData(),
-          contentScriptManager: WKContentScriptManager = DefaultContentScriptManager()) {
+          contentScriptManager: WKContentScriptManager = DefaultContentScriptManager(),
+          securityManager: SecurityManager = DefaultSecurityManager()) {
         guard let webView = webViewProvider.createWebview(configurationProvider: configurationProvider) else {
             logger.log("WKEngineWebView creation failed on configuration",
                        level: .fatal,
@@ -34,6 +36,7 @@ class WKEngineSession: NSObject,
         self.logger = logger
         self.sessionData = sessionData
         self.contentScriptManager = contentScriptManager
+        self.securityManager = securityManager
         super.init()
 
         self.setupObservers()
@@ -42,14 +45,12 @@ class WKEngineSession: NSObject,
         webView.navigationDelegate = self
         webView.delegate = self
         userScriptManager.injectUserScriptsIntoWebView(webView)
-
-        // TODO: FXIOS-7901 #17646 Handle WKEngineSession tabDelegate
-//        tabDelegate?.tab(self, didCreateWebView: webView)
     }
 
     // TODO: FXIOS-7903 #17648 no return from this load(url:), we need a way to recordNavigationInTab
     func load(url: String) {
-        // TODO: FXIOS-7981 Check scheme before loading
+        let browsingContext = BrowsingContext(type: .internalNavigation, url: url)
+        guard securityManager.canNavigateWith(browsingContext: browsingContext) == .allowed else { return }
 
         // Convert about:reader?url=http://example.com URLs to local ReaderMode URLs
         if let url = URL(string: url),
@@ -111,6 +112,10 @@ class WKEngineSession: NSObject,
         logger.log("Go forward", level: .debug, category: .webview)
     }
 
+    func scrollToTop() {
+        webView.engineScrollView.setContentOffset(CGPoint.zero, animated: true)
+    }
+
     func goToHistory(index: Int) {
         // TODO: FXIOS-7907 #17651 Handle goToHistoryIndex in WKEngineSession (equivalent to goToBackForwardListItem)
     }
@@ -127,9 +132,6 @@ class WKEngineSession: NSObject,
         contentScriptManager.uninstall(session: self)
         webView.removeAllUserScripts()
         removeObservers()
-
-        // TODO: FXIOS-7901 #17646 Handle WKEngineSession tabDelegate
-//        tabDelegate?.tab(self, willDeleteWebView: webView)
 
         webView.navigationDelegate = nil
         webView.uiDelegate = nil
@@ -311,6 +313,7 @@ class WKEngineSession: NSObject,
                  decidePolicyFor navigationResponse: WKNavigationResponse,
                  decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
         // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
+        decisionHandler(.allow)
     }
 
     func webView(_ webView: WKWebView,
@@ -318,6 +321,7 @@ class WKEngineSession: NSObject,
                  preferences: WKWebpagePreferences,
                  decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> Void) {
         // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
+        decisionHandler(.allow, preferences)
     }
 
     func webView(_ webView: WKWebView,
@@ -329,15 +333,16 @@ class WKEngineSession: NSObject,
                  didReceive challenge: URLAuthenticationChallenge,
                  completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         // TODO: FXIOS-8276 - Handle didReceive challenge: URLAuthenticationChallenge (epic part 3)
+        completionHandler(.performDefaultHandling, nil)
     }
 
     // MARK: - WKEngineWebViewDelegate
 
     func tabWebView(_ webView: WKEngineWebView, findInPageSelection: String) {
-        // TODO: FXIOS-7901 - Handle WKEngineSession tabDelegate
+        delegate?.findInPage(with: findInPageSelection)
     }
 
     func tabWebView(_ webView: WKEngineWebView, searchSelection: String) {
-        // TODO: FXIOS-7901 - Handle WKEngineSession tabDelegate
+        delegate?.search(with: searchSelection)
     }
 }

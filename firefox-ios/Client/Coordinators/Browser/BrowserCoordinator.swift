@@ -136,6 +136,10 @@ class BrowserCoordinator: BaseCoordinator,
         )
     }
 
+    func switchMode() {
+        browserViewController.tabManager.switchPrivacyMode()
+    }
+
     func show(webView: WKWebView) {
         // Keep the webviewController in memory, update to newest webview when needed
         if let webviewController = webviewController {
@@ -327,9 +331,10 @@ class BrowserCoordinator: BaseCoordinator,
         add(child: settingsCoordinator)
         settingsCoordinator.start(with: section)
 
-        router.present(navigationController) { [weak self] in
+        navigationController.onViewDismissed = { [weak self] in
             self?.didFinishSettings(from: settingsCoordinator)
         }
+        router.present(navigationController)
     }
 
     private func showLibrary(with homepanelSection: Route.HomepanelSection) {

@@ -4,6 +4,9 @@
 /* Prompt for saving a password in the Save Logins prompt. */
 "LoginsHelper.PromptSavePassword.Title.v122" = "Sekles awal uffir?";
 
+/* Prompt for updating the password in the Update Password prompt. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg.v122" = "Leqqem awal uffir?";
+
 /* Prompt for updating a password in the Update Password prompt. */
 "LoginsHelper.PromptUpdateLogin.Title.TwoArg.v122" = "Leqqem awal uffir?";
 

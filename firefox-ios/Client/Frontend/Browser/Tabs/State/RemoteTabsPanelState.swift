@@ -89,7 +89,7 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
 
     static let reducer: Reducer<Self> = { state, action in
         // Only process actions for the current window
-        guard action.windowUUID == nil || action.windowUUID == state.windowUUID else { return state }
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
 
         switch action {
         case RemoteTabsPanelAction.refreshDidBegin:
@@ -99,8 +99,9 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
                                                 clientAndTabs: state.clientAndTabs,
                                                 showingEmptyState: state.showingEmptyState)
             return newState
-        case RemoteTabsPanelAction.refreshDidFail(let reason):
+        case RemoteTabsPanelAction.refreshDidFail(let context):
             // Refresh failed. Show error empty state.
+            let reason = context.reason
             let allowsRefresh = reason.allowsRefresh
             let newState = RemoteTabsPanelState(windowUUID: state.windowUUID,
                                                 refreshState: .idle,
@@ -108,7 +109,8 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
                                                 clientAndTabs: state.clientAndTabs,
                                                 showingEmptyState: reason)
             return newState
-        case RemoteTabsPanelAction.refreshDidSucceed(let newClientAndTabs):
+        case RemoteTabsPanelAction.refreshDidSucceed(let context):
+            let newClientAndTabs = context.clientAndTabs
             let newState = RemoteTabsPanelState(windowUUID: state.windowUUID,
                                                 refreshState: .idle,
                                                 allowsRefresh: true,

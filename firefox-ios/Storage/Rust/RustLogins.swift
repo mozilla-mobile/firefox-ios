@@ -394,8 +394,9 @@ public extension LoginEntry {
 }
 
 public enum LoginEncryptionKeyError: Error {
-    case illegalState
     case noKeyCreated
+    case illegalState
+    case dbRecordCountVerificationError(String)
 }
 
 public class RustLoginEncryptionKeys {
@@ -416,17 +417,14 @@ public class RustLoginEncryptionKeys {
             let secret = try createKey()
             let canary = try createCanary(text: canaryPhrase, encryptionKey: secret)
 
-            keychain.set(
-                secret,
-                forKey: loginPerFieldKeychainKey,
-                withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock
-            )
-            keychain.set(
-                canary,
-                forKey: canaryPhraseKey,
-                withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock
-            )
-
+            DispatchQueue.global(qos: .background).sync {
+                self.keychain.set(secret,
+                                  forKey: self.loginPerFieldKeychainKey,
+                                  withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
+                self.keychain.set(canary,
+                                  forKey: self.canaryPhraseKey,
+                                  withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
+            }
             return secret
         } catch let err as NSError {
             if let loginsStoreError = err as? LoginsStoreError {
@@ -728,12 +726,18 @@ public class RustLogins {
                 return
             }
 
-            do {
-                let key = try self.getStoredKey()
-                let id = try self.storage?.add(login: login, encryptionKey: key).record.id
-                deferred.fill(Maybe(success: id!))
-            } catch let err as NSError {
-                deferred.fill(Maybe(failure: err))
+            self.getStoredKey { result in
+                switch result {
+                case .success(let key):
+                    do {
+                        let id = try self.storage?.add(login: login, encryptionKey: key).record.id
+                        deferred.fill(Maybe(success: id!))
+                    } catch let err as NSError {
+                        deferred.fill(Maybe(failure: err))
+                    }
+                case .failure(let err):
+                    deferred.fill(Maybe(failure: err))
+                }
             }
         }
 
@@ -771,12 +775,18 @@ public class RustLogins {
                 return
             }
 
-            do {
-                let key = try self.getStoredKey()
-                _ = try self.storage?.update(id: id, login: login, encryptionKey: key)
-                deferred.fill(Maybe(success: ()))
-            } catch let err as NSError {
-                deferred.fill(Maybe(failure: err))
+            self.getStoredKey { result in
+                switch result {
+                case .success(let key):
+                    do {
+                        _ = try self.storage?.update(id: id, login: login, encryptionKey: key)
+                        deferred.fill(Maybe(success: ()))
+                    } catch let err as NSError {
+                        deferred.fill(Maybe(failure: err))
+                    }
+                case .failure(let err):
+                    deferred.fill(Maybe(failure: err))
+                }
             }
         }
 
@@ -835,76 +845,114 @@ public class RustLogins {
         }
     }
 
-    public func getStoredKey() throws -> String {
-        let rustKeys = RustLoginEncryptionKeys()
-        let key = rustKeys.keychain.string(forKey: rustKeys.loginPerFieldKeychainKey)
-        let encryptedCanaryPhrase = rustKeys.keychain.string(forKey: rustKeys.canaryPhraseKey)
-
-        switch(key, encryptedCanaryPhrase) {
-        case (.some(key), .some(encryptedCanaryPhrase)):
-            // We expected the key to be present, and it is.
-            do {
-                let canaryIsValid = try checkCanary(
-                    canary: encryptedCanaryPhrase!,
-                    text: rustKeys.canaryPhrase,
-                    encryptionKey: key!)
-                if canaryIsValid {
-                    return key!
-                } else {
-                    logger.log("Logins key was corrupted, new one generated",
-                               level: .warning,
-                               category: .storage)
-                    GleanMetrics.LoginsStoreKeyRegeneration.corrupt.record()
-                    _ = self.wipeLocalEngine()
-
-                    return try rustKeys.createAndStoreKey()
-                }
-            } catch let error as NSError {
-                logger.log("Error retrieving logins encryption key",
-                           level: .warning,
-                           category: .storage,
-                           description: error.localizedDescription)
+    private func resetLoginsAndKey(rustKeys: RustLoginEncryptionKeys,
+                                   completion: @escaping (Result<String, NSError>) -> Void) {
+        self.wipeLocalEngine().upon { result in
+            guard result.isSuccess else {
+                completion(.failure(result.failureValue! as NSError))
+                return
             }
-        case (.some(key), .none):
-            // The key is present, but we didn't expect it to be there.
-            do {
-                logger.log("Logins key lost due to storage malfunction, new one generated",
-                           level: .warning,
-                           category: .storage)
-                GleanMetrics.LoginsStoreKeyRegeneration.other.record()
-                _ = self.wipeLocalEngine()
 
-                return try rustKeys.createAndStoreKey()
-            } catch let error as NSError {
-                throw error
-            }
-        case (.none, .some(encryptedCanaryPhrase)):
-            // We expected the key to be present, but it's gone missing on us.
             do {
-                logger.log("Logins key lost, new one generated",
-                           level: .warning,
-                           category: .storage)
-                GleanMetrics.LoginsStoreKeyRegeneration.lost.record()
-                _ = self.wipeLocalEngine()
-
-                return try rustKeys.createAndStoreKey()
+                let key = try rustKeys.createAndStoreKey()
+                completion(.success(key))
             } catch let error as NSError {
-                throw error
+                self.logger.log("Error creating logins encryption key",
+                                level: .warning,
+                                category: .storage,
+                                description: error.localizedDescription)
+                completion(.failure(error))
             }
-        case (.none, .none):
-            // We didn't expect the key to be present, and it's not (which is the case for first-time calls).
-            do {
-                return try rustKeys.createAndStoreKey()
-            } catch let error as NSError {
-                throw error
-            }
-        default:
-            // If none of the above cases apply, we're in a state that shouldn't be possible
-            // but is disallowed nonetheless
-            throw LoginEncryptionKeyError.illegalState
         }
+    }
 
-        // This must be declared again for Swift's sake even though the above switch statement handles all cases
-        throw LoginEncryptionKeyError.illegalState
+    private func getKeychainData(rustKeys: RustLoginEncryptionKeys, completion: @escaping (String?, String?) -> Void) {
+        DispatchQueue.global(qos: .background).sync {
+            let key = rustKeys.keychain.string(forKey: rustKeys.loginPerFieldKeychainKey)
+            let encryptedCanaryPhrase = rustKeys.keychain.string(forKey: rustKeys.canaryPhraseKey)
+            completion(key, encryptedCanaryPhrase)
+        }
+    }
+
+    public func getStoredKey(completion: @escaping (Result<String, NSError>) -> Void) {
+        let rustKeys = RustLoginEncryptionKeys()
+        getKeychainData(rustKeys: rustKeys) { (key, encryptedCanaryPhrase) in
+            switch(key, encryptedCanaryPhrase) {
+            case (.some(key), .some(encryptedCanaryPhrase)):
+                // We expected the key to be present, and it is.
+                do {
+                    let canaryIsValid = try checkCanary(canary: encryptedCanaryPhrase!,
+                                                        text: rustKeys.canaryPhrase,
+                                                        encryptionKey: key!)
+                    if canaryIsValid {
+                        completion(.success(key!))
+                    } else {
+                        self.logger.log("Logins key was corrupted, new one generated",
+                                        level: .warning,
+                                        category: .storage)
+                        GleanMetrics.LoginsStoreKeyRegeneration.corrupt.record()
+                        self.resetLoginsAndKey(rustKeys: rustKeys, completion: completion)
+                    }
+                } catch let error as NSError {
+                    self.logger.log("Error validating logins encryption key",
+                                    level: .warning,
+                                    category: .storage,
+                                    description: error.localizedDescription)
+                    completion(.failure(error))
+                }
+            case (.some(key), .none):
+                // The key is present, but we didn't expect it to be there.
+
+                self.logger.log("Logins key lost due to storage malfunction, new one generated",
+                                level: .warning,
+                                category: .storage)
+                GleanMetrics.LoginsStoreKeyRegeneration.other.record()
+                self.resetLoginsAndKey(rustKeys: rustKeys, completion: completion)
+            case (.none, .some(encryptedCanaryPhrase)):
+                // We expected the key to be present, but it's gone missing on us.
+
+                self.logger.log("Logins key lost, new one generated",
+                                level: .warning,
+                                category: .storage)
+                GleanMetrics.LoginsStoreKeyRegeneration.lost.record()
+                self.resetLoginsAndKey(rustKeys: rustKeys, completion: completion)
+            case (.none, .none):
+                // We didn't expect the key to be present, which either means this is a first-time
+                // call or the key data has been cleared from the keychain.
+
+                self.hasSyncedLogins().upon { result in
+                    guard result.failureValue == nil else {
+                        completion(.failure(result.failureValue! as NSError))
+                        return
+                    }
+
+                    guard let hasLogins = result.successValue else {
+                        let msg = "Failed to verify logins count before attempting to reset key"
+                        completion(.failure(LoginEncryptionKeyError.dbRecordCountVerificationError(msg) as NSError))
+                        return
+                    }
+
+                    if hasLogins {
+                        // Since the key data isn't present and we have login records in
+                        // the database, we both clear the databbase and the reset the key.
+                        GleanMetrics.LoginsStoreKeyRegeneration.keychainDataLost.record()
+                        self.resetLoginsAndKey(rustKeys: rustKeys, completion: completion)
+                    } else {
+                        // There are no records in the database so we don't need to wipe any
+                        // existing login records. We just need to create a new key.
+                        do {
+                            let key = try rustKeys.createAndStoreKey()
+                            completion(.success(key))
+                        } catch let error as NSError {
+                            completion(.failure(error))
+                        }
+                    }
+                }
+            default:
+                // If none of the above cases apply, we're in a state that shouldn't be
+                // possible but is disallowed nonetheless
+                completion(.failure(LoginEncryptionKeyError.illegalState as NSError))
+            }
+        }
     }
 }

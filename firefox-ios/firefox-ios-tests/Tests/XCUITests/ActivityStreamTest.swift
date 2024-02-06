@@ -256,7 +256,7 @@ class ActivityStreamTest: BaseTestCase {
         mozWaitForElementToExist(ContextMenuTable)
         mozWaitForElementToExist(ContextMenuTable.cells.otherElements["pinLarge"])
         mozWaitForElementToExist(ContextMenuTable.cells.otherElements["plusLarge"])
-        mozWaitForElementToExist(ContextMenuTable.cells.otherElements["quick_action_new_private_tab"])
+        mozWaitForElementToExist(ContextMenuTable.cells.otherElements["privateModeLarge"])
         mozWaitForElementToExist(ContextMenuTable.cells.otherElements["crossLarge"])
     }
 }

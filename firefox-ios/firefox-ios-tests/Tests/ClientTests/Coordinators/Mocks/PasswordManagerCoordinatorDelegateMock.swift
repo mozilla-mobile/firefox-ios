@@ -8,6 +8,7 @@ import Foundation
 class PasswordManagerCoordinatorDelegateMock: PasswordManagerCoordinatorDelegate {
     var settingsOpenURLInNewTabCalled = 0
     var didFinishPasswordManagerCalled = 0
+    var didFinishCalled = 0
     var url: URL?
 
     func settingsOpenURLInNewTab(_ url: URL) {
@@ -17,5 +18,9 @@ class PasswordManagerCoordinatorDelegateMock: PasswordManagerCoordinatorDelegate
 
     func didFinishPasswordManager(from coordinator: PasswordManagerCoordinator) {
         didFinishPasswordManagerCalled += 1
+    }
+
+    func didFinish(from childCoordinator: Coordinator) {
+        didFinishCalled += 1
     }
 }

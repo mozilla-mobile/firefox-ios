@@ -10,6 +10,8 @@ import Foundation
 public struct StandardImageIdentifiers {
     // Icon size 16x16
     public struct Small {
+        public static let notificationDot = "notificationDotSmall"
+        public static let notificationDotFill = "notificationDotFillSmall"
         public static let pinBadgeFill = "pinBadgeFillSmall"
     }
 
@@ -17,6 +19,8 @@ public struct StandardImageIdentifiers {
     public struct Medium {
         public static let bookmarkBadgeFillBlue50 = "bookmarkBadgeFillMediumBlue50"
         public static let cross = "crossMedium"
+        public static let nightMode = "nightModeMedium"
+        public static let sun = "sunMedium"
     }
 
     // Icon size 24x24
@@ -40,13 +44,13 @@ public struct StandardImageIdentifiers {
         public static let creditCard = "creditCardLarge"
         public static let criticalFill = "criticalFillLarge"
         public static let cross = "crossLarge"
+        public static let dataClearance = "dataClearanceLarge"
         public static let delete = "deleteLarge"
         public static let deviceDesktop = "deviceDesktopLarge"
         public static let deviceDesktopSend = "deviceDesktopSendLarge"
         public static let deviceMobile = "deviceMobileLarge"
         public static let download = "downloadLarge"
         public static let edit = "editLarge"
-        public static let fire = "fireLarge"
         public static let folder = "folderLarge"
         public static let forward = "forwardLarge"
         public static let globe = "globeLarge"
@@ -61,11 +65,16 @@ public struct StandardImageIdentifiers {
         public static let lightbulb = "lightbulbLarge"
         public static let link = "linkLarge"
         public static let login = "loginLarge"
+        public static let nightMode = "nightModeLarge"
+        public static let notificationDotFill = "notificationDotFillLarge"
+        public static let notificationDot = "notificationDotLarge"
         public static let packaging = "packagingLarge"
+        public static let pageZoom = "pageZoomLarge"
         public static let pin = "pinLarge"
         public static let pinSlash = "pinSlashLarge"
         public static let plus = "plusLarge"
         public static let price = "priceLarge"
+        public static let privateMode = "privateModeLarge"
         public static let quality = "qualityLarge"
         public static let qrCode = "qrCodeLarge"
         public static let readerView = "readerViewLarge"
@@ -78,8 +87,12 @@ public struct StandardImageIdentifiers {
         public static let shield = "shieldLarge"
         public static let shipping = "shippingLarge"
         public static let shopping = "shoppingLarge"
+        public static let sync = "syncLarge"
+        public static let syncTabs = "syncTabsLarge"
         public static let tabTray = "tabTrayLarge"
         public static let warningFill = "warningFillLarge"
+        public static let warning = "warningLarge"
+        public static let whatsNew = "whatsNewLarge"
     }
 
     // Icon size 30x30

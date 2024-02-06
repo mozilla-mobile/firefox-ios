@@ -33,7 +33,7 @@ class BrowserViewControllerTests: XCTestCase {
         super.tearDown()
     }
 
-    func testRecordEngagedSearchTelemetryForVisibleSuggestion() {
+    func testTrackVisibleSuggestion() {
         let expectation = expectation(description: "The Firefox Suggest ping was sent")
 
         GleanMetrics.Pings.shared.fxSuggest.testBeforeNextSubmit { _ in
@@ -51,7 +51,7 @@ class BrowserViewControllerTests: XCTestCase {
             expectation.fulfill()
         }
 
-        browserViewController.trackEngagedSearchTelemetry(visibleSuggestionInfo: .firefoxSuggestion(
+        browserViewController.trackVisibleSuggestion(telemetryInfo: .firefoxSuggestion(
             RustFirefoxSuggestionTelemetryInfo.amp(
                 blockId: 1,
                 advertiser: "test advertiser",

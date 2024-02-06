@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
 
 enum TabTrayPanelType: Int, CaseIterable {
     case tabs
@@ -36,9 +37,9 @@ enum TabTrayPanelType: Int, CaseIterable {
         case .tabs:
             return UIImage(named: ImageIdentifiers.navTabCounter)
         case .privateTabs:
-            return UIImage(named: ImageIdentifiers.privateMaskSmall)
+            return UIImage(named: StandardImageIdentifiers.Large.privateMode)
         case .syncedTabs:
-            return UIImage(named: ImageIdentifiers.syncedDevicesIcon)
+            return UIImage(named: StandardImageIdentifiers.Large.syncTabs)
         }
     }
 }

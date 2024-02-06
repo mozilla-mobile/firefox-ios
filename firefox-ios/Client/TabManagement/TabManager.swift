@@ -41,7 +41,7 @@ protocol TabManager: AnyObject {
     func removeTabs(_ tabs: [Tab])
     func undoCloseTab(tab: Tab, position: Int?)
     func getMostRecentHomepageTab() -> Tab?
-    func getTabFor(_ url: URL, reversed: Bool) -> Tab?
+    func getTabFor(_ url: URL) -> Tab?
     func clearAllTabsHistory()
     func willSwitchTabMode(leavingPBM: Bool)
     func cleanupClosedTabs(_ closedTabs: [Tab], previous: Tab?, isPrivate: Bool)
@@ -52,6 +52,7 @@ protocol TabManager: AnyObject {
     func getTabForUUID(uuid: String) -> Tab?
     func getTabForURL(_ url: URL) -> Tab?
     func expireSnackbars()
+    @discardableResult
     func switchPrivacyMode() -> SwitchPrivacyModeResult
     func addPopupForParentTab(profile: Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab
     func makeToastFromRecentlyClosedUrls(_ recentlyClosedTabs: [Tab],
@@ -94,10 +95,6 @@ protocol TabManager: AnyObject {
 }
 
 extension TabManager {
-    func getTabFor(_ url: URL, reversed: Bool = false) -> Tab? {
-        getTabFor(url, reversed: reversed)
-    }
-
     func removeDelegate(_ delegate: TabManagerDelegate) {
         removeDelegate(delegate, completion: nil)
     }

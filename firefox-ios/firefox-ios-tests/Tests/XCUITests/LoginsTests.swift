@@ -18,6 +18,7 @@ let mailLogin = "iosmztest@mailinator.com"
 // break; aka volatile. Let's keep them in one place.
 let loginsListURLLabel = "Website, \(domain)"
 let loginsListUsernameLabel = "Username, test@example.com"
+let loginsListUsernameLabelEdited = "Username, foo"
 let loginsListPasswordLabel = "Password"
 let defaultNumRowsLoginsList = 2
 let defaultNumRowsEmptyFilterList = 0
@@ -167,20 +168,37 @@ class LoginTest: BaseTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306966
-    func testEditOneLoginEntry() throws {
-        throw XCTSkip("This test has been disabled for some time now, investigation required")
-            /*
-            saveLogin(givenUrl: testLoginPage)
-            openLoginsSettings()
-            XCTAssertTrue(app.staticTexts[domain].exists)
-            XCTAssertTrue(app.staticTexts[domainLogin].exists)
-            app.staticTexts[domain].tap()
-            waitForExistence(app.tables["Login Detail List"])
-            XCTAssertTrue(app.tables.cells[loginsListURLLabel].exists)
-            XCTAssertTrue(app.tables.cells[loginsListUsernameLabel].exists)
-            XCTAssertTrue(app.tables.cells[loginsListPasswordLabel].exists)
-            XCTAssertTrue(app.tables.cells.staticTexts["Delete"].exists)
-            */
+    func testEditOneLoginEntry() {
+        // Go to test login page and save the login: test-password.html
+        saveLogin(givenUrl: testLoginPage)
+        // Go to Settings > Logins and tap on the username
+        openLoginsSettingsFromBrowserTab()
+        XCTAssertTrue(app.staticTexts[domain].exists)
+        XCTAssertTrue(app.staticTexts[domainLogin].exists)
+        app.staticTexts[domain].tap()
+        // The login details are available
+        waitForExistence(app.tables["Login Detail List"])
+        XCTAssertTrue(app.tables.cells[loginsListURLLabel].exists)
+        XCTAssertTrue(app.tables.cells[loginsListUsernameLabel].exists)
+        XCTAssertTrue(app.tables.cells[loginsListPasswordLabel].exists)
+        XCTAssertTrue(app.tables.cells.staticTexts["Delete"].exists)
+        // Change the username
+        app.buttons["Edit"].tap()
+        mozWaitForElementToExist(app.tables["Login Detail List"])
+        app.tables["Login Detail List"].cells.elementContainingText("Username").tap()
+        mozWaitForElementToExist(app.menuItems["Select All"])
+        app.menuItems["Select All"].tap()
+        mozWaitForElementToExist(app.menuItems["Cut"])
+        app.menuItems["Cut"].tap()
+        enterTextInField(typedText: "foo")
+        waitForExistence(app.buttons["Done"])
+        app.buttons["Done"].tap()
+        // The username is correctly changed
+        mozWaitForElementToExist(app.tables["Login Detail List"])
+        XCTAssertTrue(app.tables.cells[loginsListURLLabel].exists)
+        XCTAssertFalse(app.tables.cells[loginsListUsernameLabel].exists)
+        XCTAssertTrue(app.tables.cells[loginsListUsernameLabelEdited].exists)
+        XCTAssertTrue(app.tables.cells[loginsListPasswordLabel].exists)
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306964
@@ -253,6 +271,26 @@ class LoginTest: BaseTestCase {
         mozWaitForElementToExist(app.buttons["Edit"])
         XCTAssertFalse(app.buttons["Edit"].isEnabled)
         XCTAssertTrue(app.buttons["Add"].isEnabled)
+        createLoginManually()
+        XCTAssertTrue(app.tables["Login List"].staticTexts["https://testweb"].exists)
+    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306954
+    func testAddDuplicateLogin() {
+        // Add login credential
+        openLoginsSettingsFromBrowserTab()
+        createLoginManually()
+        // The login is correctly created.
+        XCTAssertTrue(app.tables["Login List"].staticTexts["https://testweb"].exists)
+        XCTAssertTrue(app.tables["Login List"].staticTexts["foo"].exists)
+        // Repeat previous step, adding the same login
+        createLoginManually()
+        // The login cannot be duplicated
+        XCTAssertEqual(app.staticTexts.matching(identifier: "https://testweb").count, 1, "Duplicate entry in the login list")
+        XCTAssertEqual(app.staticTexts.matching(identifier: "foo").count, 1, "Duplicate entry in the login list")
+    }
+
+    private func createLoginManually() {
         app.buttons["Add"].tap()
         mozWaitForElementToExist(app.tables["Add Credential"], timeout: 15)
         XCTAssertTrue(app.tables["Add Credential"].cells.staticTexts["Website"].exists)
@@ -270,7 +308,6 @@ class LoginTest: BaseTestCase {
 
         app.buttons["Save"].tap()
         mozWaitForElementToExist(app.tables["Login List"].otherElements["SAVED PASSWORDS"])
-        // XCTAssertTrue(app.cells.staticTexts["foo"].exists)
     }
 
     func enterTextInField(typedText: String) {

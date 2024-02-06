@@ -417,16 +417,16 @@ extension PasswordDetailViewController: LoginDetailTableViewCellDelegate {
         switch item {
         case .website:
             // Menu actions for Website
-            return action == MenuHelper.SelectorCopy || action == MenuHelper.SelectorOpenAndFill
+            return action == MenuHelperLoginModel.selectorCopy || action == MenuHelperLoginModel.selectorOpenAndFill
         case .username:
             // Menu actions for Username
-            return action == MenuHelper.SelectorCopy
+            return action == MenuHelperLoginModel.selectorCopy
         case .password:
             // Menu actions for password
-            let revealOption = action == MenuHelper.SelectorReveal
-            let hideOption = action == MenuHelper.SelectorHide
+            let revealOption = action == MenuHelperLoginModel.selectorReveal
+            let hideOption = action == MenuHelperLoginModel.selectorHide
             let showRevealOption = cell.descriptionLabel.isSecureTextEntry ? revealOption : hideOption
-            return action == MenuHelper.SelectorCopy || showRevealOption
+            return action == MenuHelperLoginModel.selectorCopy || showRevealOption
         default:
             return false
         }

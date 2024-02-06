@@ -18,10 +18,9 @@ enum FakeReduxAction: Action {
     case counterDecreased(Int)
     case setPrivateModeTo(Bool)
 
-    var windowUUID: UUID? {
-        // TODO: [8188] Update to be non-optional and return windowUUID. Forthcoming.
-        switch self {
-        default: return nil
-        }
+    var windowUUID: UUID {
+        // TODO: [8188] Currently these unit tests do not make use of UUIDs. This will be updated soon.
+        // For now, we can just return UUID().
+        return UUID()
     }
 }

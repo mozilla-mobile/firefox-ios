@@ -115,7 +115,7 @@ class SearchViewController: SiteTableViewController,
     }()
 
     private lazy var openAndSyncTabBadge: UIImage = {
-        return UIImage(named: "sync_open_tab")!
+        return UIImage(named: ImageIdentifiers.syncOpenTab)!
     }()
 
     private lazy var searchButton: UIButton = .build { button in
@@ -376,8 +376,8 @@ class SearchViewController: SiteTableViewController,
         return visibleIndexPaths.enumerated().compactMap { (position, indexPath) in
             switch SearchListSection(rawValue: indexPath.section)! {
             case .firefoxSuggestions:
-                let firefoxSuggestion = firefoxSuggestions[indexPath.row]
-                guard let telemetryInfo = firefoxSuggestion.telemetryInfo else {
+                let firefoxSuggestion = firefoxSuggestions[safe: indexPath.row]
+                guard let telemetryInfo = firefoxSuggestion?.telemetryInfo else {
                     return nil
                 }
                 return .firefoxSuggestion(

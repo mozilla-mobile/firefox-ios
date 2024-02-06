@@ -33,7 +33,7 @@ class LoginDetailTableViewCell: UITableViewCell,
                                 ThemeApplicable,
                                 ReusableCell,
                                 UITextFieldDelegate,
-                                MenuHelperInterface {
+                                MenuHelperLoginInterface {
     private struct UX {
         static let highlightedFontSize: CGFloat = 12
         static let descriptionFontSize: CGFloat = 16

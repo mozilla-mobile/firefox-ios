@@ -184,6 +184,8 @@ class RustSyncManagerTests: XCTestCase {
         XCTAssertNil(profile.prefs.boolForKey(Keys.tabsStateChangedPrefKey))
     }
 
+    // FXIOS-8331: Disable History Highlight tests while FXIOS-8059 (Epic) is in progress
+    // FXIOS-8367: Added a ticket to enable these tests when we re-enable history highlights
     func testUpdateEnginePrefs_addressesEnabled() throws {
         profile.prefs.setBool(true, forKey: Keys.addressesEnabledPrefKey)
         profile.prefs.setBool(true, forKey: Keys.addressesStateChangedPrefKey)
@@ -196,6 +198,8 @@ class RustSyncManagerTests: XCTestCase {
         XCTAssertNil(profile.prefs.boolForKey(Keys.addressesStateChangedPrefKey))
     }
 
+    // FXIOS-8331: Disable History Highlight tests while FXIOS-8059 (Epic) is in progress
+    // FXIOS-8367: Added a ticket to enable these tests when we re-enable history highlights
     func testUpdateEnginePrefs_addressesDisabled() throws {
         profile.prefs.setBool(false, forKey: Keys.addressesEnabledPrefKey)
         profile.prefs.setBool(false, forKey: Keys.addressesStateChangedPrefKey)

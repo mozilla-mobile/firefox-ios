@@ -1048,7 +1048,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             to: SettingsScreen
         )
         screenState.tap(
-            app.tables.otherElements[ImageIdentifiers.sync],
+            app.tables.otherElements[StandardImageIdentifiers.Large.sync],
             to: Intro_FxASignin,
             if: "fxaUsername == nil"
         )
@@ -1078,7 +1078,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         )
 
         screenState.tap(
-            app.tables.otherElements[ImageIdentifiers.nightMode],
+            app.tables.otherElements[StandardImageIdentifiers.Large.nightMode],
             forAction: Action.ToggleNightMode,
             transitionTo: BrowserTabMenu
         ) { userState in
@@ -1086,7 +1086,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
 
         screenState.tap(
-            app.tables.otherElements[ImageIdentifiers.whatsNew],
+            app.tables.otherElements[StandardImageIdentifiers.Large.whatsNew],
             forAction: Action.OpenWhatsNewPage
         ) { userState in
         }

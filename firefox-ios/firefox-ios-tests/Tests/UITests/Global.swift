@@ -227,7 +227,7 @@ class BrowserUtils {
         tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.tabsButton)
         
         // if in private mode, close all tabs
-        tester.tapView(withAccessibilityLabel: "smallPrivateMask")
+        tester.tapView(withAccessibilityLabel: "privateModeLarge")
 
         tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.closeAllTabsButton)
         tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
@@ -382,7 +382,7 @@ class SimplePageServer {
         let webServer: GCDWebServer = GCDWebServer()
 
         webServer.addHandler(forMethod: "GET", path: "/image.png", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
-            let img = UIImage(named: "goBack")!.pngData()!
+            let img = UIImage(named: StandardImageIdentifiers.Large.chevronLeft)!.pngData()!
             return GCDWebServerDataResponse(data: img, contentType: "image/png")
         }
 

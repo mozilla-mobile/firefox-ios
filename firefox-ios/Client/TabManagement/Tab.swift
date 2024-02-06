@@ -1003,7 +1003,7 @@ protocol TabWebViewDelegate: AnyObject {
     )
 }
 
-class TabWebView: WKWebView, MenuHelperInterface, ThemeApplicable {
+class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     var accessoryView = AccessoryViewProvider()
     private var logger: Logger = DefaultLogger.shared
     private weak var delegate: TabWebViewDelegate?
@@ -1051,10 +1051,6 @@ class TabWebView: WKWebView, MenuHelperInterface, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-        return super.canPerformAction(action, withSender: sender) || action == MenuHelper.SelectorFindInPage
-    }
-
     func menuHelperFindInPage() {
         evaluateJavascriptInDefaultContentWorld("getSelection().toString()") { result, _ in
             let selection = result as? String ?? ""
@@ -1062,7 +1058,7 @@ class TabWebView: WKWebView, MenuHelperInterface, ThemeApplicable {
         }
     }
 
-    func menuHelperSearchWithFirefox() {
+    func menuHelperSearchWith() {
         evaluateJavascriptInDefaultContentWorld("getSelection().toString()") { result, _ in
             let selection = result as? String ?? ""
             self.delegate?.tabWebViewSearchWithFirefox(self, didSelectSearchWithFirefoxForSelection: selection)

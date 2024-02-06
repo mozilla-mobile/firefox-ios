@@ -6,7 +6,6 @@ import Common
 import Foundation
 import WebKit
 
-// TODO: FXIOS-7895 #17640 Handle WKEngineWebView MenuHelperInterface
 protocol WKEngineWebViewDelegate: AnyObject {
     func tabWebView(_ webView: WKEngineWebView, findInPageSelection: String)
     func tabWebView(_ webView: WKEngineWebView, searchSelection: String)
@@ -24,7 +23,7 @@ protocol WKEngineWebView: UIView {
     var interactionState: Any? { get set }
     var url: URL? { get }
     var title: String? { get }
-    var scrollView: UIScrollView { get }
+    var engineScrollView: WKScrollView! { get }
     var engineConfiguration: WKEngineConfiguration { get }
 
     var estimatedProgress: Double { get }
@@ -130,7 +129,8 @@ extension WKEngineWebView {
 
 // TODO: FXIOS-7896 #17641 Handle WKEngineWebView ThemeApplicable
 // TODO: FXIOS-7897 #17642 Handle WKEngineWebView AccessoryViewProvider
-class DefaultWKEngineWebView: WKWebView, WKEngineWebView {
+class DefaultWKEngineWebView: WKWebView, WKEngineWebView, MenuHelperWebViewInterface {
+    var engineScrollView: WKScrollView!
     var engineConfiguration: WKEngineConfiguration
     weak var delegate: WKEngineWebViewDelegate?
 
@@ -138,7 +138,10 @@ class DefaultWKEngineWebView: WKWebView, WKEngineWebView {
         let configuration = configurationProvider.createConfiguration()
         self.engineConfiguration = configuration
         guard let configuration = configuration as? DefaultEngineConfiguration else { return nil }
+
         super.init(frame: frame, configuration: configuration.webViewConfiguration)
+
+        self.engineScrollView = scrollView
     }
 
     required init?(coder: NSCoder) {
@@ -150,7 +153,6 @@ class DefaultWKEngineWebView: WKWebView, WKEngineWebView {
         configuration.userContentController.removeAllScriptMessageHandlers()
     }
 
-    // TODO: FXIOS-7895 #17640 Handle WKEngineWebView MenuHelperInterface
     func menuHelperFindInPage() {
         evaluateJavascriptInDefaultContentWorld("getSelection().toString()") { result, _ in
             let selection = result as? String ?? ""
@@ -158,8 +160,7 @@ class DefaultWKEngineWebView: WKWebView, WKEngineWebView {
         }
     }
 
-    // TODO: FXIOS-7895 #17640 Handle WKEngineWebView MenuHelperInterface
-    func menuHelperSearchWithFirefox() {
+    func menuHelperSearchWith() {
         evaluateJavascriptInDefaultContentWorld("getSelection().toString()") { result, _ in
             let selection = result as? String ?? ""
             self.delegate?.tabWebView(self, searchSelection: selection)
