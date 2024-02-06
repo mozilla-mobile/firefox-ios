@@ -22,7 +22,7 @@ import Shared
 /// # Methods
 /// - `init(image:labelText:tappedAction:)`: Initializes the accessory view with an image, label, and optional tap action.
 /// - `tappedAccessoryButton()`: Handles the tap action on the accessory view.
-class AutofillAccessoryView: UIBarButtonItem {
+class AutofillAccessoryViewButtonItem: UIBarButtonItem {
     // MARK: - Constants
     private struct UX {
         static let accessoryImageViewSize: CGFloat = 24

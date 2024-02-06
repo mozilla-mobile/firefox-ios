@@ -24,7 +24,7 @@ class AccessoryViewProvider: UIView, Themeable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
-    private var currentAccessoryView: AutofillAccessoryView?
+    private var currentAccessoryView: AutofillAccessoryViewButtonItem?
 
     // Stub closures - these closures will be given as selectors in a future task
     var previousClosure: (() -> Void)?
@@ -71,8 +71,8 @@ class AccessoryViewProvider: UIView, Themeable {
     private let leadingFixedSpacer: UIView = .build()
     private let trailingFixedSpacer: UIView = .build()
 
-    private lazy var creditCardAutofillView: AutofillAccessoryView = {
-        let accessoryView = AutofillAccessoryView(image: UIImage(named: StandardImageIdentifiers.Large.creditCard),
+    private lazy var creditCardAutofillView: AutofillAccessoryViewButtonItem = {
+        let accessoryView = AutofillAccessoryViewButtonItem(image: UIImage(named: StandardImageIdentifiers.Large.creditCard),
                                                   labelText: .CreditCard.Settings.UseSavedCardFromKeyboard,
                                                   tappedAction: { [weak self] in
             self?.tappedCreditCardButton()
@@ -82,8 +82,8 @@ class AccessoryViewProvider: UIView, Themeable {
         return accessoryView
     }()
 
-    private lazy var addressAutofillView: AutofillAccessoryView = {
-        let accessoryView = AutofillAccessoryView(image: UIImage(named: StandardImageIdentifiers.Large.location),
+    private lazy var addressAutofillView: AutofillAccessoryViewButtonItem = {
+        let accessoryView = AutofillAccessoryViewButtonItem(image: UIImage(named: StandardImageIdentifiers.Large.location),
                                                   labelText: .Addresses.Settings.UseSavedAddressFromKeyboard,
                                                   tappedAction: { [weak self] in
             self?.tappedAddressCardButton()
