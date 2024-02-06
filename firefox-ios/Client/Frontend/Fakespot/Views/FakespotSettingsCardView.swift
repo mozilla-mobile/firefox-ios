@@ -127,7 +127,7 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
         button.addTarget(self, action: #selector(self.didTapTurnOffButton), for: .touchUpInside)
     }
 
-    private lazy var footerView: ActionFooterView = .build()
+    private lazy var footerView: FakespotActionFooterView = .build()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
