@@ -121,7 +121,7 @@ class AccessoryViewProvider: UIView, Themeable {
         case .standard:
             currentAccessoryView = nil
         case .creditCard:
-            currentAccessoryView = addressAutofillView
+            currentAccessoryView = creditCardAutofillView
             sendCreditCardAutofillPromptShownTelemetry()
         case .address:
             currentAccessoryView = addressAutofillView
