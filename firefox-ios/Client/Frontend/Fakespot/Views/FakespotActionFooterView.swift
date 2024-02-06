@@ -6,7 +6,7 @@ import UIKit
 import Common
 
 /// The view model used to configure a `ActionFooterView`
-public struct ActionFooterViewModel {
+public struct FakespotActionFooterViewModel {
     let title: String
     let actionTitle: String
     let a11yTitleIdentifier: String
@@ -28,7 +28,7 @@ public struct ActionFooterViewModel {
     }
 }
 
-public final class ActionFooterView: UIView, ThemeApplicable {
+public final class FakespotActionFooterView: UIView, ThemeApplicable {
     private struct UX {
         static let labelSize: CGFloat = 13
         static let buttonSize: CGFloat = 13
