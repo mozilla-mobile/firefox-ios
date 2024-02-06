@@ -72,7 +72,11 @@ class AutofillAccessoryViewButtonItem: UIBarButtonItem {
         }
 
         self.useAccessoryTextLabel = .build { label in
-            label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .title3, size: UX.fontSize, weight: .medium)
+            label.font = DefaultDynamicFontHelper.preferredFont(
+                withTextStyle: .title3,
+                size: UX.fontSize,
+                weight: .medium
+            )
             label.text = labelText
             label.numberOfLines = 0
             label.accessibilityTraits = .button
