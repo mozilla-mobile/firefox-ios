@@ -35,7 +35,7 @@ public final class FakespotActionFooterView: UIView, ThemeApplicable {
         static let buttonSize: CGFloat = 13
     }
 
-    private var viewModel: ActionFooterViewModel?
+    private var viewModel: FakespotActionFooterViewModel?
 
     private lazy var titleLabel: UILabel = .build { label in
         label.font = DefaultDynamicFontHelper.preferredFont(
@@ -63,7 +63,7 @@ public final class FakespotActionFooterView: UIView, ThemeApplicable {
         setupLayout()
     }
 
-    public func configure(viewModel: ActionFooterViewModel) {
+    public func configure(viewModel: FakespotActionFooterViewModel) {
         self.viewModel = viewModel
         titleLabel.text = viewModel.title
         linkButton.setTitle(viewModel.actionTitle, for: .normal)
