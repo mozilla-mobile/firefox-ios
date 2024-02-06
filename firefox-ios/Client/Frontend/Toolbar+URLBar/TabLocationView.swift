@@ -60,8 +60,6 @@ class TabLocationView: UIView, FeatureFlaggable {
         }
     }
 
-    private let menuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuBadge, backdropCircleSize: 32)
-
     var url: URL? {
         willSet { handleShoppingAdsCacheURLChange(newURL: newValue) }
         didSet {
@@ -183,6 +181,7 @@ class TabLocationView: UIView, FeatureFlaggable {
         reloadButton.contentHorizontalAlignment = .center
         reloadButton.accessibilityLabel = .TabLocationReloadAccessibilityLabel
         reloadButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.reloadButton
+        reloadButton.accessibilityHint = .TabLocationReloadAccessibilityHint
         reloadButton.isAccessibilityElement = true
         reloadButton.translatesAutoresizingMaskIntoConstraints = false
         reloadButton.showsLargeContentViewer = true
@@ -247,8 +246,6 @@ class TabLocationView: UIView, FeatureFlaggable {
         dragInteraction.allowsSimultaneousRecognitionDuringLift = true
         self.addInteraction(dragInteraction)
 
-        menuBadge.add(toParent: contentView)
-        menuBadge.show(false)
         hideTrackingProtectionButton()
     }
 
@@ -428,9 +425,12 @@ class TabLocationView: UIView, FeatureFlaggable {
                 .TabLocationETPOnSecureAccessibilityLabel : .TabLocationETPOnNotSecureAccessibilityLabel
         case .safelisted:
             if let smallDotImage = UIImage(
-                systemName: ImageIdentifiers.circleFill
-            )?.withTintColor(theme.colors.iconAccentBlue) {
-                trackingProtectionButton.setImage(lockImage?.overlayWith(image: smallDotImage), for: .normal)
+                named: StandardImageIdentifiers.Small.notificationDotFill
+            )?.withTintColor(themeManager.currentTheme.colors.iconAccentBlue) {
+                let image = lockImage?.overlayWith(image: smallDotImage,
+                                                   modifier: 0.4,
+                                                   origin: CGPoint(x: 15, y: 15))
+                trackingProtectionButton.setImage(image, for: .normal)
                 trackingProtectionButton.accessibilityLabel = hasSecureContent ?
                     .TabLocationETPOffSecureAccessibilityLabel : .TabLocationETPOffNotSecureAccessibilityLabel
             }
@@ -543,7 +543,6 @@ extension TabLocationView: ThemeApplicable {
         trackingProtectionButton.applyTheme(theme: theme)
         shareButton.applyTheme(theme: theme)
         reloadButton.applyTheme(theme: theme)
-        menuBadge.badge.tintBackground(color: theme.colors.layer3)
         shoppingButton.tintColor = theme.colors.textPrimary
         shoppingButton.setImage(UIImage(named: StandardImageIdentifiers.Large.shopping)?
             .withTintColor(theme.colors.actionPrimary),

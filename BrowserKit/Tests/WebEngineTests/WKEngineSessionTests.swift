@@ -48,8 +48,7 @@ final class WKEngineSessionTests: XCTestCase {
 
         subject?.load(url: url)
 
-        // TODO: FXIOS-7981 Check scheme before loading
-        XCTAssertEqual(webViewProvider.webView.loadCalled, 1)
+        XCTAssertEqual(webViewProvider.webView.loadCalled, 0)
         prepareForTearDown(subject!)
     }
 
@@ -119,6 +118,19 @@ final class WKEngineSessionTests: XCTestCase {
         subject?.goForward()
 
         XCTAssertEqual(webViewProvider.webView.goForwardCalled, 1)
+        prepareForTearDown(subject!)
+    }
+
+    // MARK: Scroll to top
+
+    func testScrollToTop() {
+        let subject = createSubject()
+
+        subject?.scrollToTop()
+
+        let scrollView = webViewProvider.webView.engineScrollView as? MockEngineScrollView
+        XCTAssertEqual(scrollView?.setContentOffsetCalled, 1)
+        XCTAssertEqual(scrollView?.savedContentOffset, CGPoint.zero)
         prepareForTearDown(subject!)
     }
 
@@ -401,6 +413,32 @@ final class WKEngineSessionTests: XCTestCase {
         subject?.close()
 
         XCTAssertEqual(contentScriptManager.uninstallCalled, 1)
+    }
+
+    // MARK: WKEngineWebViewDelegate
+
+    func testFindInPageGivenSelectionThenCallsDelegate() {
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+        let expectedSelection = "A search"
+
+        subject?.tabWebView(webViewProvider.webView, findInPageSelection: expectedSelection)
+
+        XCTAssertEqual(engineSessionDelegate.findInPageCalled, 1)
+        XCTAssertEqual(engineSessionDelegate.savedFindInPageSelection, expectedSelection)
+        prepareForTearDown(subject!)
+    }
+
+    func testSearchGivenSelectionThenCallsDelegate() {
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+        let expectedSelection = "Find in page"
+
+        subject?.tabWebView(webViewProvider.webView, searchSelection: expectedSelection)
+
+        XCTAssertEqual(engineSessionDelegate.searchCalled, 1)
+        XCTAssertEqual(engineSessionDelegate.savedSearchSelection, expectedSelection)
+        prepareForTearDown(subject!)
     }
 
     // MARK: Helper

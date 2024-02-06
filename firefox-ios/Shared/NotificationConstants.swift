@@ -28,9 +28,6 @@ extension Notification.Name {
     // Fired when the login synchronizer has finished applying remote changes
     public static let DataRemoteLoginChangesWereApplied = Notification.Name("DataRemoteLoginChangesWereApplied")
 
-    // Fired when a the page metadata extraction script has completed and is being passed back to the native client
-    public static let OnPageMetadataFetched = Notification.Name("OnPageMetadataFetched")
-
     public static let ProfileDidStartSyncing = Notification.Name("ProfileDidStartSyncing")
     public static let ProfileDidFinishSyncing = Notification.Name("ProfileDidFinishSyncing")
 

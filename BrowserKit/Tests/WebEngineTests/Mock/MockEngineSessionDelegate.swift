@@ -13,6 +13,8 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
     var onNavigationStateChangeCalled = 0
     var onLoadingStateChangeCalled = 0
     var onLocationChangedCalled = 0
+    var findInPageCalled = 0
+    var searchCalled = 0
 
     var savedScrollX: Int?
     var savedScrollY: Int?
@@ -23,6 +25,8 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
     var savedCanGoBack: Bool?
     var savedCanGoForward: Bool?
     var savedLoading: Bool?
+    var savedFindInPageSelection: String?
+    var savedSearchSelection: String?
 
     func onScrollChange(scrollX: Int, scrollY: Int) {
         onScrollChangeCalled += 1
@@ -59,5 +63,15 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
     func onLoadingStateChange(loading: Bool) {
         onLoadingStateChangeCalled += 1
         savedLoading = loading
+    }
+
+    func findInPage(with selection: String) {
+        findInPageCalled += 1
+        savedFindInPageSelection = selection
+    }
+
+    func search(with selection: String) {
+        searchCalled += 1
+        savedSearchSelection = selection
     }
 }

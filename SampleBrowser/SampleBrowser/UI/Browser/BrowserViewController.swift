@@ -91,6 +91,10 @@ class BrowserViewController: UIViewController, EngineSessionDelegate {
         engineSession.stopLoading()
     }
 
+    func scrollToTop() {
+        engineSession.scrollToTop()
+    }
+
     // MARK: - Search
 
     func loadUrlOrSearch(_ searchTerm: SearchTerm) {
@@ -108,7 +112,7 @@ class BrowserViewController: UIViewController, EngineSessionDelegate {
         engineSession.load(url: url.absoluteString)
     }
 
-    // MARK: - EngineSessionDelegate
+    // MARK: - EngineSessionDelegate general
 
     func onScrollChange(scrollX: Int, scrollY: Int) {
         // Handle view port with FXIOS-8086
@@ -138,5 +142,15 @@ class BrowserViewController: UIViewController, EngineSessionDelegate {
     func onNavigationStateChange(canGoBack: Bool, canGoForward: Bool) {
         navigationDelegate?.onNavigationStateChange(canGoBack: canGoBack,
                                                     canGoForward: canGoForward)
+    }
+
+    // MARK: - EngineSessionDelegate Menu items
+
+    func findInPage(with selection: String) {
+        // FXIOS-8087: Handle find in page in WebEngine
+    }
+
+    func search(with selection: String) {
+        loadUrlOrSearch(SearchTerm(searchTerm: selection))
     }
 }

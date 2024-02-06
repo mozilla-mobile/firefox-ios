@@ -232,8 +232,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     }
 
     // MARK: Get tabs
-    func getTabFor(_ url: URL, reversed: Bool = false) -> Tab? {
-        let tabs = reversed ? self.tabs.reversed() : self.tabs
+    func getTabFor(_ url: URL) -> Tab? {
         for tab in tabs {
             if let webViewUrl = tab.webView?.url,
                url.isEqual(webViewUrl) {

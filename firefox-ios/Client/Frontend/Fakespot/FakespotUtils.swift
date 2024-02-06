@@ -27,7 +27,7 @@ public struct FakespotUtils: FeatureFlaggable {
 
     public static var termsOfUseUrl: URL? {
         // Returns the predefined URL associated to terms of use button action.
-        return URL(string: "https://www.fakespot.com/privacy-policy?utm_source=review-checker&utm_campaign=privacy-policy&utm_medium=in-product&utm_term=opt-in-screen")
+        return URL(string: "https://www.fakespot.com/terms?utm_source=review-checker&utm_campaign=terms&utm_medium=in-product&utm_term=opt-in-screen")
     }
 
     public static var fakespotUrl: URL? {

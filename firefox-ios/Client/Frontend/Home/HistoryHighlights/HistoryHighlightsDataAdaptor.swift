@@ -57,6 +57,12 @@ class HistoryHighlightsDataAdaptorImplementation: HistoryHighlightsDataAdaptor, 
     // MARK: - Private Methods
 
     private func loadHistory() {
+        // FXIOS-8331: Disable History Highlight on URL Search Bar
+        // as it is causing the app to slow down on frequent calls
+        // "recent-explorations" in homescreenFeature.yaml has been set to false for all builds
+        // Note: This is also part of FXIOS-8107 and FXIOS-8059 (Epic)
+        guard featureFlags.isFeatureEnabled(.historyHighlights, checking: .buildOnly) else { return }
+
         historyManager.getHighlightsData(
             with: profile,
             and: tabManager.tabs,
@@ -85,11 +91,7 @@ extension HistoryHighlightsDataAdaptorImplementation: Notifiable {
         switch notification.name {
         case .HistoryUpdated,
                 .RustPlacesOpened:
-            // FXIOS-8107: Disabling loadHistory as it is causing the app to slow down on frequent calls
-            // "recent-explorations" in homescreenFeature.yaml has been set to false for all builds
-            if featureFlags.isFeatureEnabled(.historyHighlights, checking: .buildOnly) {
                 loadHistory()
-            }
         default:
             return
         }

@@ -60,6 +60,15 @@ final class PasswordManagerCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.pushedViewController is PasswordManagerListViewController)
     }
 
+    func testDismissPasswordManager_callsDismissOnParentCoordinator() {
+        let subject = createSubject()
+
+        subject.showPasswordManager()
+
+        mockRouter.popViewController(animated: false)
+        XCTAssertEqual(mockParentCoordinator.didFinishCalled, 1)
+    }
+
     func testShowPasswordOnboarding() {
         let subject = createSubject()
 
@@ -67,6 +76,15 @@ final class PasswordManagerCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(mockRouter.pushCalled, 1)
         XCTAssertTrue(mockRouter.pushedViewController is PasswordManagerOnboardingViewController)
+    }
+
+    func testDismissPasswordOnboarding_callsDismissOnParentCoordinator() {
+        let subject = createSubject()
+
+        subject.showPasswordOnboarding()
+
+        mockRouter.popViewController(animated: false)
+        XCTAssertEqual(mockParentCoordinator.didFinishCalled, 1)
     }
 
     func testPressedPasswordDetail() {
