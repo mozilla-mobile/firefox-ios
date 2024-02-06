@@ -56,8 +56,8 @@ class FakespotSettingsCardViewModel {
         )
     }
 
-    var footerModel: ActionFooterViewModel {
-        return ActionFooterViewModel(title: footerTitle,
+    var footerModel: FakespotActionFooterViewModel {
+        return FakespotActionFooterViewModel(title: footerTitle,
                                      actionTitle: footerActionTitle,
                                      a11yTitleIdentifier: footerA11yTitleIdentifier,
                                      a11yActionIdentifier: footerA11yActionIdentifier,
