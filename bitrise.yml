@@ -19,7 +19,7 @@ stages:
     #     run_if: '{{getenv "BUILD_FOCUS_IOS" | eq "true"}}'
   run_tests:
     workflows:
-    - build_and_test_1_SmokeTest:
+    - build_and_test_1_SmokeTest1:
         run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
     - build_and_test_2_SmokeTest2:
         run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
@@ -164,6 +164,14 @@ workflows:
         - text: Build status using latest Rust-Component
         - webhook_url: $WEBHOOK_SLACK_TOKEN_2
 
+  build_and_test_1_SmokeTest1:
+    envs:
+      - opts:
+          is_expand: false
+        SHARD: '1'
+    after_run:
+      - _build_and_test
+
   build_and_test_2_SmokeTest2:
     envs:
       - opts:
@@ -172,28 +180,6 @@ workflows:
     after_run:
       - _build_and_test
 
-  build_and_test_1_SmokeTest:
-    before_run:
-    - 0_detect_standalone_build
-    - 1_git_clone_and_post_clone
-    - decision_to_run_UI_Tests
-    - firefox_pull_and_unzip_dependencies
-    steps:
-    - xcode-test-without-building@0:
-        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
-        timeout: 1200
-        title: UI Smoketest
-        inputs:
-        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.2
-        - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"
-            "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
-            "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_SmokeXCUITests_iphonesimulator17.2-arm64.xctestrun"
-    - deploy-to-bitrise-io@2.1.1:
-        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
-        inputs:
-        - pipeline_intermediate_files: '$BITRISE_XCRESULT_PATH:BITRISE_UITESTS_XCRESULT_PATH'
-  
   build_and_test_3_SmokeTest3:
     envs:
       - opts:
@@ -209,7 +195,7 @@ workflows:
         SHARD: '4'
     after_run:
       - _build_and_test
-    
+
   _build_and_test:
     before_run:
     - 0_detect_standalone_build
@@ -220,7 +206,7 @@ workflows:
     - xcode-test-without-building@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         timeout: 1200
-        title: UI Smoketest${SHARD}
+        title: UI Smoketest$SHARD
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 15,OS=17.2
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"
