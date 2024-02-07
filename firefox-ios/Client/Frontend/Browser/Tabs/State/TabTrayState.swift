@@ -19,6 +19,7 @@ struct TabTrayState: ScreenState, Equatable {
     var shouldDismiss: Bool
     var shareURL: URL?
     var windowUUID: WindowUUID
+    var showCloseConfirmation: Bool
 
     var navigationTitle: String {
         return selectedPanel.navTitle
@@ -42,7 +43,8 @@ struct TabTrayState: ScreenState, Equatable {
                   normalTabsCount: panelState.normalTabsCount,
                   hasSyncableAccount: panelState.hasSyncableAccount,
                   shouldDismiss: panelState.shouldDismiss,
-                  shareURL: panelState.shareURL)
+                  shareURL: panelState.shareURL,
+                  showCloseConfirmation: panelState.showCloseConfirmation)
     }
 
     init(windowUUID: WindowUUID) {
@@ -68,7 +70,8 @@ struct TabTrayState: ScreenState, Equatable {
          normalTabsCount: String,
          hasSyncableAccount: Bool,
          shouldDismiss: Bool = false,
-         shareURL: URL? = nil) {
+         shareURL: URL? = nil,
+         showCloseConfirmation: Bool = false) {
         self.windowUUID = windowUUID
         self.isPrivateMode = isPrivateMode
         self.selectedPanel = selectedPanel
@@ -76,6 +79,7 @@ struct TabTrayState: ScreenState, Equatable {
         self.hasSyncableAccount = hasSyncableAccount
         self.shouldDismiss = shouldDismiss
         self.shareURL = shareURL
+        self.showCloseConfirmation = showCloseConfirmation
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -134,14 +138,25 @@ struct TabTrayState: ScreenState, Equatable {
             // Only update the nomal tab count if the tabs being refreshed are not private
             let tabModel = context.tabDisplayModel
             let isPrivate = tabModel.tabs.first?.isPrivate ?? false
-            let tabCount = tabModel.normalTabsCount
+            let tabCount = isPrivate ? state.normalTabsCount : tabModel.normalTabsCount
             return TabTrayState(windowUUID: state.windowUUID,
                                 isPrivateMode: state.isPrivateMode,
                                 selectedPanel: state.selectedPanel,
                                 normalTabsCount: tabCount,
                                 hasSyncableAccount: state.hasSyncableAccount)
+        case TabPanelAction.closeAllTabs(let context):
+            return TabTrayState(windowUUID: state.windowUUID,
+                                isPrivateMode: state.isPrivateMode,
+                                selectedPanel: state.selectedPanel,
+                                normalTabsCount: state.normalTabsCount,
+                                hasSyncableAccount: state.hasSyncableAccount,
+                                showCloseConfirmation: true)
         default:
-            return state
+            return TabTrayState(windowUUID: state.windowUUID,
+                                isPrivateMode: state.isPrivateMode,
+                                selectedPanel: state.selectedPanel,
+                                normalTabsCount: state.normalTabsCount,
+                                hasSyncableAccount: state.hasSyncableAccount)
         }
     }
 }
