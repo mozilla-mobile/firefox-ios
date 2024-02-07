@@ -14,11 +14,13 @@ class TelemetryWrapperTests: XCTestCase {
     override func setUp() {
         super.setUp()
         Glean.shared.resetGlean(clearStores: true)
+        Experiments.events.clearEvents()
     }
 
     override func tearDown() {
         super.tearDown()
         Glean.shared.resetGlean(clearStores: true)
+        Experiments.events.clearEvents()
     }
 
     // MARK: - Bookmarks
@@ -1322,33 +1324,43 @@ class TelemetryWrapperTests: XCTestCase {
     // MARK: - Nimbus Calls
 
     func test_appForeground_NimbusIsCalled() throws {
-        throw XCTSkip("Need to be investigated with #12567 so we can enable again")
-//        TelemetryWrapper.recordEvent(
-//            category: .action,
-//            method: .foreground,
-//            object: .app,
-//            value: nil
-//        )
-//        XCTAssertTrue(
-//            try Experiments.shared.createMessageHelper().evalJexl(
-//                expression: "'app_cycle.foreground'|eventSum('Days', 1, 0) > 0"
-//            )
-//        )
+        XCTAssertFalse(
+            try Experiments.createJexlHelper()!.evalJexl(
+                expression: "'app_cycle.foreground'|eventSum('Days', 1, 0) > 0"
+            )
+        )
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .foreground,
+            object: .app,
+            value: nil
+        )
+        Experiments.shared.waitForDbQueue()
+        XCTAssertTrue(
+            try Experiments.createJexlHelper()!.evalJexl(
+                expression: "'app_cycle.foreground'|eventSum('Days', 1, 0) > 0"
+            )
+        )
     }
 
     func test_syncLogin_NimbusIsCalled() throws {
-        throw XCTSkip("Need to be investigated with #12567 so we can enable again")
-//        TelemetryWrapper.recordEvent(
-//            category: .firefoxAccount,
-//            method: .view,
-//            object: .fxaLoginCompleteWebpage,
-//            value: nil
-//        )
-//        XCTAssertTrue(
-//            try Experiments.shared.createMessageHelper().evalJexl(
-//                expression: "'sync.login_completed_view'|eventSum('Days', 1, 0) > 0"
-//            )
-//        )
+        XCTAssertFalse(
+            try Experiments.createJexlHelper()!.evalJexl(
+                expression: "'sync.login_completed_view'|eventSum('Days', 1, 0) > 0"
+            )
+        )
+        TelemetryWrapper.recordEvent(
+            category: .firefoxAccount,
+            method: .view,
+            object: .fxaLoginCompleteWebpage,
+            value: nil
+        )
+        Experiments.shared.waitForDbQueue()
+        XCTAssertTrue(
+            try Experiments.createJexlHelper()!.evalJexl(
+                expression: "'sync.login_completed_view'|eventSum('Days', 1, 0) > 0"
+            )
+        )
     }
 
     // MARK: - App Errors
