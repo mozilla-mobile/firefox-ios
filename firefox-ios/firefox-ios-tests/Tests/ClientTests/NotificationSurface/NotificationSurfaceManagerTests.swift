@@ -30,17 +30,9 @@ class NotificationSurfaceManagerTests: XCTestCase {
         XCTAssertFalse(subject.shouldShowSurface)
     }
 
-    func testShouldShowSurface_expiredMessage() {
-        let subject = createSubject()
-        let message = createMessage(isExpired: true)
-        messageManager.message = message
-
-        XCTAssertFalse(subject.shouldShowSurface)
-    }
-
     func testShouldShowSurface_validMessage() {
         let subject = createSubject()
-        let message = createMessage(isExpired: false)
+        let message = createMessage()
         messageManager.message = message
 
         XCTAssertTrue(subject.shouldShowSurface)
@@ -57,22 +49,9 @@ class NotificationSurfaceManagerTests: XCTestCase {
         XCTAssertEqual(notificationManager.scheduledNotifications, 0)
     }
 
-    func testShowSurface_expiredMessage() {
-        let subject = createSubject()
-        let message = createMessage(isExpired: true)
-        messageManager.message = message
-
-        XCTAssertFalse(subject.shouldShowSurface)
-
-        subject.showNotificationSurface()
-
-        XCTAssertFalse(notificationManager.scheduleWithIntervalWasCalled)
-        XCTAssertEqual(notificationManager.scheduledNotifications, 0)
-    }
-
     func testShowSurface_validMessage() {
         let subject = createSubject()
-        let message = createMessage(isExpired: false)
+        let message = createMessage()
         messageManager.message = message
 
         XCTAssertTrue(subject.shouldShowSurface)
@@ -99,7 +78,7 @@ class NotificationSurfaceManagerTests: XCTestCase {
 
     func testDidTapNotification_openNewTabAction() {
         let subject = createSubject()
-        let message = createMessage(isExpired: false)
+        let message = createMessage()
         messageManager.message = message
 
         XCTAssertTrue(subject.shouldShowSurface)
@@ -111,7 +90,7 @@ class NotificationSurfaceManagerTests: XCTestCase {
 
     func testDidTapNotification_defaultAction() {
         let subject = createSubject()
-        let message = createMessage(isExpired: false, action: "test-action")
+        let message = createMessage(action: "test-action")
         messageManager.message = message
 
         XCTAssertTrue(subject.shouldShowSurface)
@@ -133,13 +112,12 @@ class NotificationSurfaceManagerTests: XCTestCase {
 
     private func createMessage(
         for surface: MessageSurfaceId = .notification,
-        isExpired: Bool,
         action: String = "://deep-link?url=homepanel/new-tab"
     ) -> GleanPlumbMessage {
         let metadata = GleanPlumbMessageMetaData(id: "",
                                                  impressions: 0,
                                                  dismissals: 0,
-                                                 isExpired: isExpired)
+                                                 isExpired: false)
 
         return GleanPlumbMessage(id: "test-notification",
                                  data: MockNotificationMessageDataProtocol(surface: surface),
