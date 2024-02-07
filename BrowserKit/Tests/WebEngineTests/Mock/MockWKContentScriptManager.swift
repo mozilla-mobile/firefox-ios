@@ -19,6 +19,7 @@ class MockWKContentScriptManager: NSObject, WKContentScriptManager {
     func addContentScript(_ script: WKContentScript,
                           name: String,
                           forSession session: WKEngineSession) {
+        scripts[name] = script
         savedContentScriptNames.append(name)
         addContentScriptCalled += 1
     }
@@ -26,6 +27,7 @@ class MockWKContentScriptManager: NSObject, WKContentScriptManager {
     func addContentScriptToPage(_ script: WKContentScript,
                                 name: String,
                                 forSession session: WKEngineSession) {
+        scripts[name] = script
         savedContentScriptPageNames.append(name)
         addContentScriptToPageCalled += 1
     }

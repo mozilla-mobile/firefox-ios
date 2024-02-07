@@ -11,6 +11,7 @@ final class WKEngineSessionTests: XCTestCase {
     private var contentScriptManager: MockWKContentScriptManager!
     private var userScriptManager: MockWKUserScriptManager!
     private var engineSessionDelegate: MockEngineSessionDelegate!
+    private var findInPageDelegate: MockFindInPageHelperDelegate!
 
     override func setUp() {
         super.setUp()
@@ -19,6 +20,7 @@ final class WKEngineSessionTests: XCTestCase {
         contentScriptManager = MockWKContentScriptManager()
         userScriptManager = MockWKUserScriptManager()
         engineSessionDelegate = MockEngineSessionDelegate()
+        findInPageDelegate = MockFindInPageHelperDelegate()
     }
 
     override func tearDown() {
@@ -28,6 +30,7 @@ final class WKEngineSessionTests: XCTestCase {
         contentScriptManager = nil
         userScriptManager = nil
         engineSessionDelegate = nil
+        findInPageDelegate = nil
     }
 
     // MARK: Load URL
@@ -194,6 +197,17 @@ final class WKEngineSessionTests: XCTestCase {
 
         XCTAssertEqual(webViewProvider.webView.evaluateJavaScriptCalled, 1)
         XCTAssertEqual(webViewProvider.webView.savedJavaScript, "__firefox__.findDone()")
+        prepareForTearDown(subject!)
+    }
+
+    func testFindInPageDelegateIsSetProperly() {
+        let subject = createSubject()
+
+        subject?.findInPageDelegate = findInPageDelegate
+        let script = contentScriptManager.scripts[FindInPageContentScript.name()] as! FindInPageContentScript
+        script.userContentController(didReceiveMessage: ["currentResult": 10])
+
+        XCTAssertEqual(findInPageDelegate.didUpdateCurrentResultCalled, 1)
         prepareForTearDown(subject!)
     }
 
