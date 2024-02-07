@@ -938,6 +938,7 @@
 		B15058812AA0A878008B7382 /* OpeningScreenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15058802AA0A878008B7382 /* OpeningScreenTests.swift */; };
 		B1664E9E2B163B7A005D4C71 /* CreditCardsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1664E9D2B163B7A005D4C71 /* CreditCardsTests.swift */; };
 		B26ADF852B339ED000C6E127 /* AddressAutofillSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26ADF842B339ED000C6E127 /* AddressAutofillSetting.swift */; };
+		B2981F8A2B71AD7A00132C1B /* AutofillAccessoryViewButtonItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2981F892B71AD7A00132C1B /* AutofillAccessoryViewButtonItem.swift */; };
 		B2999FED2B044A5900F0FEC1 /* UnencryptedCreditCardFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2999FEC2B044A5900F0FEC1 /* UnencryptedCreditCardFields.swift */; };
 		B2999FEF2B044B4E00F0FEC1 /* RustAutofillEncryptionKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2999FEE2B044B4E00F0FEC1 /* RustAutofillEncryptionKeys.swift */; };
 		B2999FF12B194A5800F0FEC1 /* CreditCardPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2999FF02B194A5800F0FEC1 /* CreditCardPayload.swift */; };
@@ -6207,6 +6208,7 @@
 		B26ADF842B339ED000C6E127 /* AddressAutofillSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressAutofillSetting.swift; sourceTree = "<group>"; };
 		B29049688244A8F79950DF35 /* af */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = af; path = af.lproj/Shared.strings; sourceTree = "<group>"; };
 		B2944B3EAFB1DA22E7F28520 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Shared.strings; sourceTree = "<group>"; };
+		B2981F892B71AD7A00132C1B /* AutofillAccessoryViewButtonItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillAccessoryViewButtonItem.swift; sourceTree = "<group>"; };
 		B2999FEC2B044A5900F0FEC1 /* UnencryptedCreditCardFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnencryptedCreditCardFields.swift; sourceTree = "<group>"; };
 		B2999FEE2B044B4E00F0FEC1 /* RustAutofillEncryptionKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustAutofillEncryptionKeys.swift; sourceTree = "<group>"; };
 		B2999FF02B194A5800F0FEC1 /* CreditCardPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardPayload.swift; sourceTree = "<group>"; };
@@ -8716,6 +8718,7 @@
 		43D00490296FC44B00CB0F31 /* Autofill */ = {
 			isa = PBXGroup;
 			children = (
+				B2981F892B71AD7A00132C1B /* AutofillAccessoryViewButtonItem.swift */,
 				B2FEA6892B460CEC0058E616 /* Address */,
 				43D00491296FC46E00CB0F31 /* CreditCard */,
 			);
@@ -13593,6 +13596,7 @@
 				EBB8950C21939E4100EB91A0 /* FirefoxTabContentBlocker.swift in Sources */,
 				21618A632A422A3900A5189E /* ThemeMiddleware.swift in Sources */,
 				219A0FDB2ACCCFFC009A6D1A /* InactiveTabsSectionManager.swift in Sources */,
+				B2981F8A2B71AD7A00132C1B /* AutofillAccessoryViewButtonItem.swift in Sources */,
 				211F00AC27F4D918001D9189 /* HistoryPanel+Search.swift in Sources */,
 				96EB6C3827D821B800A9D159 /* HistoryPanelViewModel.swift in Sources */,
 				AB52ED3B2A0E8873001067F5 /* UserConversionMetrics.swift in Sources */,
