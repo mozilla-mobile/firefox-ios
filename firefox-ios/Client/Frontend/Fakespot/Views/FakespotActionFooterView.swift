@@ -45,10 +45,11 @@ public final class FakespotActionFooterView: UIView, ThemeApplicable {
         label.adjustsFontForContentSizeCategory = true
     }
 
-    private lazy var linkButton: ResizableButton = .build { button in
+    private lazy var linkButton: LegacyResizableButton = .build { button in
         button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
             withTextStyle: .footnote,
             size: UX.buttonSize)
+        button.buttonEdgeSpacing = 0
         button.contentHorizontalAlignment = .leading
         button.addTarget(self, action: #selector(self.didTapButton), for: .touchUpInside)
     }
