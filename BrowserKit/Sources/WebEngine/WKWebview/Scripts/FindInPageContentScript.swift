@@ -39,10 +39,9 @@ class FindInPageContentScript: WKContentScript {
     }
 
     func userContentController(
-        _ userContentController: WKUserContentController,
-        didReceiveScriptMessage message: WKScriptMessage
+        didReceiveMessage message: Any
     ) {
-        guard let parameters = message.body as? [String: Int] else {
+        guard let parameters = message as? [String: Int] else {
             // TODO: FXIOS-6463 - Integrate message handler check
             logger.log("FindInPage.js sent wrong type of message",
                        level: .warning,

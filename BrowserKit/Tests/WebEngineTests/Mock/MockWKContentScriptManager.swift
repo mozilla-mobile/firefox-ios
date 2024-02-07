@@ -7,6 +7,7 @@ import WebKit
 @testable import WebEngine
 
 class MockWKContentScriptManager: NSObject, WKContentScriptManager {
+    var scripts = [String: WKContentScript]()
     var addContentScriptCalled = 0
     var addContentScriptToPageCalled = 0
     var uninstallCalled = 0

@@ -60,7 +60,7 @@ class DefaultContentScriptManager: NSObject, WKContentScriptManager {
     func userContentController(_ userContentController: WKUserContentController,
                                didReceive message: WKScriptMessage) {
         for script in scripts.values where script.scriptMessageHandlerNames().contains(message.name) {
-            script.userContentController(userContentController, didReceiveScriptMessage: message)
+            script.userContentController(didReceiveMessage: message.body)
             return
         }
     }
