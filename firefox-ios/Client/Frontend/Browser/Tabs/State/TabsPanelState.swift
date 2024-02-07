@@ -115,7 +115,7 @@ struct TabsPanelState: ScreenState, Equatable {
                                   tabs: state.tabs,
                                   inactiveTabs: state.inactiveTabs,
                                   isInactiveTabsExpanded: state.isInactiveTabsExpanded)
-        default: 
+        default:
             return TabsPanelState(windowUUID: state.windowUUID,
                                   isPrivateMode: state.isPrivateMode,
                                   tabs: state.tabs,
