@@ -15,7 +15,7 @@ class MockFindInPageHelperDelegate: FindInPageHelperDelegate {
         savedCurrentResult = currentResult
         didUpdateCurrentResultCalled += 1
     }
-    
+
     func findInPageHelper(didUpdateTotalResults totalResults: Int) {
         savedTotalResults = totalResults
         didUpdateTotalResultsCalled += 1

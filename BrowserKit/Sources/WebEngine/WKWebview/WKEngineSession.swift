@@ -14,7 +14,8 @@ class WKEngineSession: NSObject,
     weak var delegate: EngineSessionDelegate?
     weak var findInPageDelegate: FindInPageHelperDelegate? {
         didSet {
-            guard let findInPage = contentScriptManager.scripts[FindInPageContentScript.name()] as? FindInPageContentScript else { return }
+            let script = contentScriptManager.scripts[FindInPageContentScript.name()]
+            guard let findInPage = script as? FindInPageContentScript else { return }
             findInPage.delegate = findInPageDelegate
         }
     }
