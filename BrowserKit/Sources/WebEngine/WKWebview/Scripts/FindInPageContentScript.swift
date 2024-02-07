@@ -6,9 +6,20 @@ import Common
 import Foundation
 import WebKit
 
-protocol FindInPageHelperDelegate: AnyObject {
-    func findInPageHelper(_ findInPageContentScript: FindInPageContentScript, didUpdateCurrentResult currentResult: Int)
-    func findInPageHelper(_ findInPageContentScript: FindInPageContentScript, didUpdateTotalResults totalResults: Int)
+public enum FindInPageFunction: String {
+    /// Find all the occurences of this text in the page
+    case find
+
+    /// Find the next occurence of this text in the page
+    case findNext
+
+    /// Find the previous occurence of this text in the page
+    case findPrevious
+}
+
+public protocol FindInPageHelperDelegate: AnyObject {
+    func findInPageHelper(didUpdateCurrentResult currentResult: Int)
+    func findInPageHelper(didUpdateTotalResults totalResults: Int)
 }
 
 class FindInPageContentScript: WKContentScript {
@@ -31,21 +42,20 @@ class FindInPageContentScript: WKContentScript {
         _ userContentController: WKUserContentController,
         didReceiveScriptMessage message: WKScriptMessage
     ) {
-        guard let parameters = message.body as? [String: String],
-              let token = parameters["appIdToken"],
-              token == DefaultUserScriptManager.appIdToken else {
+        guard let parameters = message.body as? [String: Int] else {
+            // TODO: FXIOS-6463 - Integrate message handler check
             logger.log("FindInPage.js sent wrong type of message",
                        level: .warning,
                        category: .webview)
             return
         }
 
-        if let currentResult = parameters["currentResult"], let result = Int(currentResult) {
-            delegate?.findInPageHelper(self, didUpdateCurrentResult: result)
+        if let currentResult = parameters["currentResult"] {
+            delegate?.findInPageHelper(didUpdateCurrentResult: currentResult)
         }
 
-        if let totalResults = parameters["totalResults"], let result = Int(totalResults) {
-            delegate?.findInPageHelper(self, didUpdateTotalResults: result)
+        if let totalResults = parameters["totalResults"] {
+            delegate?.findInPageHelper(didUpdateTotalResults: totalResults)
         }
     }
 }

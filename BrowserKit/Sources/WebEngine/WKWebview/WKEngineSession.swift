@@ -12,6 +12,13 @@ class WKEngineSession: NSObject,
                         WKNavigationDelegate,
                         WKEngineWebViewDelegate {
     weak var delegate: EngineSessionDelegate?
+    weak var findInPageDelegate: FindInPageHelperDelegate? {
+        didSet {
+            guard let findInPage = contentScriptManager.scripts[FindInPageContentScript.name()] as? FindInPageContentScript else { return }
+            findInPage.delegate = findInPageDelegate
+        }
+    }
+
     private(set) var webView: WKEngineWebView
     private var logger: Logger
     var sessionData: WKEngineSessionData
@@ -115,6 +122,15 @@ class WKEngineSession: NSObject,
 
     func scrollToTop() {
         webView.engineScrollView.setContentOffset(CGPoint.zero, animated: true)
+    }
+
+    func findInPage(text: String, function: FindInPageFunction) {
+        let escaped = text.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\"")
+        webView.evaluateJavascriptInDefaultContentWorld("__firefox__.\(function.rawValue)(\"\(escaped)\")")
+    }
+
+    func findInPageDone() {
+        webView.evaluateJavascriptInDefaultContentWorld("__firefox__.findDone()")
     }
 
     func goToHistory(index: Int) {

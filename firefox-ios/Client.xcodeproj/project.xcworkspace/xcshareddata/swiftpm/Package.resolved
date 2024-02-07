@@ -10,15 +10,6 @@
       }
     },
     {
-      "identity" : "dip",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/AliSoftware/Dip.git",
-      "state" : {
-        "revision" : "c3b601df0ff22b06b6d5ff4943faf05c0bd3f9bb",
-        "version" : "7.1.1"
-      }
-    },
-    {
       "identity" : "fuzi",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/nbhasin2/Fuzi.git",
@@ -64,15 +55,6 @@
       }
     },
     {
-      "identity" : "kingfisher",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/onevcat/Kingfisher.git",
-      "state" : {
-        "revision" : "3ec0ab0bca4feb56e8b33e289c9496e89059dd08",
-        "version" : "7.10.2"
-      }
-    },
-    {
       "identity" : "lottie-ios",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/airbnb/lottie-ios.git",
@@ -115,15 +97,6 @@
       "state" : {
         "revision" : "e74fe2a978d1216c3602b129447c7301573cc2d8",
         "version" : "5.7.0"
-      }
-    },
-    {
-      "identity" : "swiftybeaver",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SwiftyBeaver/SwiftyBeaver.git",
-      "state" : {
-        "revision" : "1080914828ef1c9ca9cd2bad50667b3d847dabff",
-        "version" : "2.0.0"
       }
     }
   ],

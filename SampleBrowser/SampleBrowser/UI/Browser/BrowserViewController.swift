@@ -9,10 +9,16 @@ protocol NavigationDelegate: AnyObject {
     func onURLChange(url: String)
     func onLoadingStateChange(loading: Bool)
     func onNavigationStateChange(canGoBack: Bool, canGoForward: Bool)
+
+    func onFindInPage(selected: String)
+    func onFindInPage(currentResult: Int)
+    func onFindInPage(totalResults: Int)
 }
 
 // Holds different type of browser views, communicating through protocols with them
-class BrowserViewController: UIViewController, EngineSessionDelegate {
+class BrowserViewController: UIViewController,
+                                EngineSessionDelegate,
+                             FindInPageHelperDelegate {
     weak var navigationDelegate: NavigationDelegate?
     private lazy var progressView: UIProgressView = .build { _ in }
     private var engineSession: EngineSession!
@@ -27,6 +33,8 @@ class BrowserViewController: UIViewController, EngineSessionDelegate {
         self.engineView = engineProvider.view
         self.urlFormatter = urlFormatter
         super.init(nibName: nil, bundle: nil)
+
+        engineSession.findInPageDelegate = self
     }
 
     required init?(coder: NSCoder) {
@@ -98,6 +106,14 @@ class BrowserViewController: UIViewController, EngineSessionDelegate {
         engineSession.scrollToTop()
     }
 
+    func findInPage(text: String, function: FindInPageFunction) {
+        engineSession.findInPage(text: text, function: function)
+    }
+
+    func findInPageDone() {
+        engineSession.findInPageDone()
+    }
+
     // MARK: - Search
 
     func loadUrlOrSearch(_ searchTerm: SearchTerm) {
@@ -145,10 +161,20 @@ class BrowserViewController: UIViewController, EngineSessionDelegate {
     // MARK: - EngineSessionDelegate Menu items
 
     func findInPage(with selection: String) {
-        // FXIOS-8087: Handle find in page in WebEngine
+        navigationDelegate?.onFindInPage(selected: selection)
     }
 
     func search(with selection: String) {
         loadUrlOrSearch(SearchTerm(term: selection))
+    }
+
+    // MARK: - FindInPageHelperDelegate
+
+    func findInPageHelper(didUpdateCurrentResult currentResult: Int) {
+        navigationDelegate?.onFindInPage(currentResult: currentResult)
+    }
+
+    func findInPageHelper(didUpdateTotalResults totalResults: Int) {
+        navigationDelegate?.onFindInPage(totalResults: totalResults)
     }
 }
