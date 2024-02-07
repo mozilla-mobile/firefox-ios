@@ -149,7 +149,6 @@ final class WKEngineSessionTests: XCTestCase {
         prepareForTearDown(subject!)
     }
 
-
     func testFindInPageTextGivenFindNextThenJavascriptCalled() {
         let subject = createSubject()
 
@@ -176,13 +175,14 @@ final class WKEngineSessionTests: XCTestCase {
         subject?.findInPage(text: maliciousTextWithAlert, function: .find)
 
         XCTAssertEqual(webViewProvider.webView.evaluateJavaScriptCalled, 1)
-        XCTAssertEqual(webViewProvider.webView.savedJavaScript, "__firefox__.find(\"\'; alert(\'Malicious code injected!\'); \'\")")
+        let result = "__firefox__.find(\"\'; alert(\'Malicious code injected!\'); \'\")"
+        XCTAssertEqual(webViewProvider.webView.savedJavaScript, result)
         prepareForTearDown(subject!)
     }
 
     func testFindInPageTextGivenMaliciousBrokenJsStringCodeThenIsSanitized() {
         let subject = createSubject()
-        let maliciousText = "; maliciousFunction(); ";
+        let maliciousText = "; maliciousFunction(); "
         subject?.findInPage(text: maliciousText, function: .find)
 
         XCTAssertEqual(webViewProvider.webView.evaluateJavaScriptCalled, 1)

@@ -108,7 +108,7 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
         removeObserverCalled += 1
     }
 
-    func evaluateJavaScript(_ javaScript: String, 
+    func evaluateJavaScript(_ javaScript: String,
                             in frame: WKFrameInfo?,
                             in contentWorld: WKContentWorld,
                             completionHandler: ((Result<Any, Error>) -> Void)?) {
