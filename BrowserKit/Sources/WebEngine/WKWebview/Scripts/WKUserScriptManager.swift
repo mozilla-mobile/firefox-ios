@@ -12,7 +12,7 @@ protocol WKUserScriptManager {
 
 class DefaultUserScriptManager: WKUserScriptManager {
     // Scripts can use this to verify the application (not JS on the web) is calling into them
-    static let appIdToken = UUID().uuidString
+    private let appIdToken = UUID().uuidString
     private let scriptProvider: UserScriptProvider
     var compiledUserScripts = [String: WKUserScript]()
 
@@ -68,7 +68,7 @@ class DefaultUserScriptManager: WKUserScriptManager {
     private func injectFrameScript(name: String, userScriptInfo: UserScriptInfo) {
         guard let source = scriptProvider.getScript(for: name) else { return }
 
-        let wrappedSource = "(function() { const APP_ID_TOKEN = '\(DefaultUserScriptManager.appIdToken)'; \(source) })()"
+        let wrappedSource = "(function() { const APP_ID_TOKEN = '\(appIdToken)'; \(source) })()"
         // Create in default content world
         let userScript = WKUserScript(source: wrappedSource,
                                       injectionTime: userScriptInfo.injectionTime,
@@ -81,7 +81,7 @@ class DefaultUserScriptManager: WKUserScriptManager {
         let webcompatName = "Webcompat\(name)"
         guard let source = scriptProvider.getScript(for: webcompatName) else { return }
 
-        let wrappedSource = "(function() { const APP_ID_TOKEN = '\(DefaultUserScriptManager.appIdToken)'; \(source) })()"
+        let wrappedSource = "(function() { const APP_ID_TOKEN = '\(appIdToken)'; \(source) })()"
         // Create in page content world
         let userScript = WKUserScript(source: wrappedSource,
                                       injectionTime: userScriptInfo.injectionTime,
