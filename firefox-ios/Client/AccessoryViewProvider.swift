@@ -76,8 +76,8 @@ class AccessoryViewProvider: UIView, Themeable {
             image: UIImage(named: StandardImageIdentifiers.Large.creditCard),
             labelText: .CreditCard.Settings.UseSavedCardFromKeyboard,
             tappedAction: { [weak self] in
-            self?.tappedCreditCardButton()
-        })
+                self?.tappedCreditCardButton()
+            })
         accessoryView.accessibilityTraits = .button
         accessoryView.accessibilityLabel = .CreditCard.Settings.UseSavedCardFromKeyboard
         return accessoryView
@@ -88,8 +88,8 @@ class AccessoryViewProvider: UIView, Themeable {
             image: UIImage(named: StandardImageIdentifiers.Large.location),
             labelText: .Addresses.Settings.UseSavedAddressFromKeyboard,
             tappedAction: { [weak self] in
-            self?.tappedAddressCardButton()
-        })
+                self?.tappedAddressCardButton()
+            })
         accessoryView.accessibilityTraits = .button
         accessoryView.accessibilityLabel = .Addresses.Settings.UseSavedAddressFromKeyboard
         return accessoryView
