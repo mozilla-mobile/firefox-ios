@@ -188,7 +188,7 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
 
     /// Apply message data, including handling of cases where certain parts of the message are missing.
     private func applyGleanMessage(_ message: GleanPlumbMessage) {
-        if let buttonLabel = message.data.buttonLabel {
+        if let buttonLabel = message.buttonLabel {
             let buttonViewModel = PrimaryRoundedButtonViewModel(
                 title: buttonLabel,
                 a11yIdentifier: a11y.ctaButton
@@ -202,13 +202,13 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
             cardView.isUserInteractionEnabled = true
         }
 
-        if let title = message.data.title {
+        if let title = message.title {
             bannerTitle.text = title
         } else {
             textStackView.removeArrangedView(titleContainerView)
         }
 
-        descriptionText.text = message.data.text
+        descriptionText.text = message.text
     }
 
     // MARK: Actions
