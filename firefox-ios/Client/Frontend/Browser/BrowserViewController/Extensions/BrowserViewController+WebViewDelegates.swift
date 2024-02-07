@@ -624,6 +624,21 @@ extension BrowserViewController: WKNavigationDelegate {
             } else {
                 webView.customUserAgent = UserAgent.getUserAgent(domain: url.baseDomain ?? "")
             }
+
+            if navigationAction.navigationType == .linkActivated {
+                if tab.isPrivate {
+                    decisionHandler(.cancel)
+                    webView.load(navigationAction.request)
+                    return
+                } else if UIApplication.shared.canOpenURL(url) {
+                    UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { isAppInstalled in
+                        if isAppInstalled {
+                           // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-7524
+                        }
+                    }
+                }
+            }
+
             decisionHandler(.allow)
             return
         }
@@ -888,7 +903,7 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         // When tab url changes after web content starts loading on the page
-        // We notify the content blocker change so that content blocker status 
+        // We notify the content blocker change so that content blocker status
         // can be correctly shown on beside the URL bar
         tab.contentBlocker?.notifyContentBlockingChanged()
         self.scrollController.resetZoomState()
