@@ -29,6 +29,7 @@ class AutofillAccessoryViewButtonItem: UIBarButtonItem {
         static let accessoryButtonStackViewSpacing: CGFloat = 2
         static let cornerRadius: CGFloat = 4
         static let fontSize: CGFloat = 16
+        static let padding: CGFloat = 4
     }
 
     // MARK: - Properties
@@ -94,12 +95,34 @@ class AutofillAccessoryViewButtonItem: UIBarButtonItem {
     // MARK: - Setup
     private func setup() {
         let stackViewTapped = UITapGestureRecognizer(target: self, action: #selector(tappedAccessoryButton))
+
+        // Create a container view for the stack view
+        let containerView = UIView()
+
+        // Add the stack view to the container view
         let accessoryView = UIStackView(arrangedSubviews: [accessoryImageView, useAccessoryTextLabel])
         accessoryView.spacing = UX.accessoryButtonStackViewSpacing
         accessoryView.distribution = .equalCentering
-        accessoryView.layer.cornerRadius = UX.cornerRadius
-        accessoryView.addGestureRecognizer(stackViewTapped)
-        self.customView = accessoryView
+
+        // Add the stack view to the container view
+        containerView.addSubview(accessoryView)
+
+        // Add constraints to provide padding
+        accessoryView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            accessoryView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
+                                                   constant: UX.padding),
+            accessoryView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
+                                                    constant: -UX.padding),
+            accessoryView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            accessoryView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        ])
+
+        containerView.layer.cornerRadius = UX.cornerRadius
+        containerView.addGestureRecognizer(stackViewTapped)
+
+        // Set the custom view as the container view
+        self.customView = containerView
     }
 
     private func updateBackgroundColor() {
