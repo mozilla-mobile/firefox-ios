@@ -22,7 +22,7 @@ class MessageCardDataAdaptorImplementation: MessageCardDataAdaptor {
         }
     }
 
-    init(messagingManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared) {
+    init(messagingManager: GleanPlumbMessageManagerProtocol = Experiments.messaging) {
         self.messagingManager = messagingManager
     }
 

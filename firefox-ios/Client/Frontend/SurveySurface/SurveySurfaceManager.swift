@@ -32,7 +32,7 @@ class SurveySurfaceManager: SurveySurfaceDelegate {
     // MARK: - Initialization
     init(themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         and messagingManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared
+         and messagingManager: GleanPlumbMessageManagerProtocol = Experiments.messaging
     ) {
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter

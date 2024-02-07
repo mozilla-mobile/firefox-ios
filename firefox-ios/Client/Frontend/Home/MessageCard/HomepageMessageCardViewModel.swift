@@ -24,7 +24,7 @@ class HomepageMessageCardViewModel: MessageSurfaceProtocol {
 
     init(dataAdaptor: MessageCardDataAdaptor,
          theme: Theme,
-         messagingManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared
+         messagingManager: GleanPlumbMessageManagerProtocol = Experiments.messaging
     ) {
         self.dataAdaptor = dataAdaptor
         self.theme = theme
