@@ -225,8 +225,9 @@ class WKEngineSession: NSObject,
     // MARK: - Content scripts
 
     private func addContentScripts() {
-        let findInPage = FindInPageContentScript()
-        contentScriptManager.addContentScript(findInPage, name: FindInPageContentScript.name(), forSession: self)
+        contentScriptManager.addContentScript(FindInPageContentScript(),
+                                              name: FindInPageContentScript.name(),
+                                              forSession: self)
     }
 
     // MARK: - WKUIDelegate

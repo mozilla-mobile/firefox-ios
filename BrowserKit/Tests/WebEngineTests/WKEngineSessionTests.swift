@@ -407,6 +407,15 @@ final class WKEngineSessionTests: XCTestCase {
 
     // MARK: Content script manager
 
+    func testContentScriptGivenInitContentScriptsThenAreAddedAtInit() {
+        let subject = createSubject()
+
+        XCTAssertEqual(contentScriptManager.addContentScriptCalled, 1)
+        XCTAssertEqual(contentScriptManager.savedContentScriptNames.count, 1)
+        XCTAssertEqual(contentScriptManager.savedContentScriptNames[0], FindInPageContentScript.name())
+        prepareForTearDown(subject!)
+    }
+
     func testContentScriptWhenCloseCalledThenUninstallIsCalled() {
         let subject = createSubject()
 

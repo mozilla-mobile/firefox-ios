@@ -12,15 +12,20 @@ class MockWKContentScriptManager: NSObject, WKContentScriptManager {
     var uninstallCalled = 0
     var userContentControllerCalled = 0
 
+    var savedContentScriptNames = [String]()
+    var savedContentScriptPageNames = [String]()
+
     func addContentScript(_ script: WKContentScript,
                           name: String,
                           forSession session: WKEngineSession) {
+        savedContentScriptNames.append(name)
         addContentScriptCalled += 1
     }
 
     func addContentScriptToPage(_ script: WKContentScript,
                                 name: String,
                                 forSession session: WKEngineSession) {
+        savedContentScriptPageNames.append(name)
         addContentScriptToPageCalled += 1
     }
 
