@@ -282,6 +282,9 @@ class TabTrayViewController: UIViewController,
         if let url = tabTrayState.shareURL {
             navigationHandler?.shareTab(url: url, sourceView: self.view)
         }
+        if tabTrayState.showCloseConfirmation {
+            showCloseAllConfirmation()
+        }
     }
 
     func updateTabCountImage(count: String) {
@@ -458,6 +461,24 @@ class TabTrayViewController: UIViewController,
     @objc
     private func deleteTabsButtonTapped() {
         store.dispatch(TabPanelAction.closeAllTabs(windowUUID.context))
+    }
+
+    private func showCloseAllConfirmation() {
+        let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        controller.addAction(UIAlertAction(title: .AppMenu.AppMenuCloseAllTabsTitleString,
+                                           style: .default,
+                                           handler: { _ in self.confirmCloseAll() }),
+                             accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
+        controller.addAction(UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel,
+                                           style: .cancel,
+                                           handler: nil),
+                             accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
+        controller.popoverPresentationController?.barButtonItem = deleteButton
+        present(controller, animated: true, completion: nil)
+    }
+
+    private func confirmCloseAll() {
+        store.dispatch(TabPanelAction.confirmCloseAllTabs(windowUUID.context))
     }
 
     @objc
