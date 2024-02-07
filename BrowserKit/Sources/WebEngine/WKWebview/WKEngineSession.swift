@@ -126,8 +126,8 @@ class WKEngineSession: NSObject,
     }
 
     func findInPage(text: String, function: FindInPageFunction) {
-        let escaped = text.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\"")
-        webView.evaluateJavascriptInDefaultContentWorld("__firefox__.\(function.rawValue)(\"\(escaped)\")")
+        let sanitizedInput = text.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\"")
+        webView.evaluateJavascriptInDefaultContentWorld("__firefox__.\(function.rawValue)(\"\(sanitizedInput)\")")
     }
 
     func findInPageDone() {

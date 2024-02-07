@@ -134,6 +134,69 @@ final class WKEngineSessionTests: XCTestCase {
         prepareForTearDown(subject!)
     }
 
+    // MARK: Find in page
+
+    func testFindInPageTextGivenFindAllThenJavascriptCalled() {
+        let subject = createSubject()
+
+        subject?.findInPage(text: "Banana", function: .find)
+
+        XCTAssertEqual(webViewProvider.webView.evaluateJavaScriptCalled, 1)
+        XCTAssertEqual(webViewProvider.webView.savedJavaScript, "__firefox__.find(\"Banana\")")
+        prepareForTearDown(subject!)
+    }
+
+
+    func testFindInPageTextGivenFindNextThenJavascriptCalled() {
+        let subject = createSubject()
+
+        subject?.findInPage(text: "Banana", function: .findNext)
+
+        XCTAssertEqual(webViewProvider.webView.evaluateJavaScriptCalled, 1)
+        XCTAssertEqual(webViewProvider.webView.savedJavaScript, "__firefox__.findNext(\"Banana\")")
+        prepareForTearDown(subject!)
+    }
+
+    func testFindInPageTextGivenFindPreviousThenJavascriptCalled() {
+        let subject = createSubject()
+
+        subject?.findInPage(text: "Banana", function: .findPrevious)
+
+        XCTAssertEqual(webViewProvider.webView.evaluateJavaScriptCalled, 1)
+        XCTAssertEqual(webViewProvider.webView.savedJavaScript, "__firefox__.findPrevious(\"Banana\")")
+        prepareForTearDown(subject!)
+    }
+
+    func testFindInPageTextGivenMaliciousAlertCodeThenIsSanitized() {
+        let subject = createSubject()
+        let maliciousTextWithAlert = "'; alert('Malicious code injected!'); '"
+        subject?.findInPage(text: maliciousTextWithAlert, function: .find)
+
+        XCTAssertEqual(webViewProvider.webView.evaluateJavaScriptCalled, 1)
+        XCTAssertEqual(webViewProvider.webView.savedJavaScript, "__firefox__.find(\"\'; alert(\'Malicious code injected!\'); \'\")")
+        prepareForTearDown(subject!)
+    }
+
+    func testFindInPageTextGivenMaliciousBrokenJsStringCodeThenIsSanitized() {
+        let subject = createSubject()
+        let maliciousText = "; maliciousFunction(); ";
+        subject?.findInPage(text: maliciousText, function: .find)
+
+        XCTAssertEqual(webViewProvider.webView.evaluateJavaScriptCalled, 1)
+        XCTAssertEqual(webViewProvider.webView.savedJavaScript, "__firefox__.find(\"; maliciousFunction(); \")")
+        prepareForTearDown(subject!)
+    }
+
+    func testFindInPageDoneThenJavascriptCalled() {
+        let subject = createSubject()
+
+        subject?.findInPageDone()
+
+        XCTAssertEqual(webViewProvider.webView.evaluateJavaScriptCalled, 1)
+        XCTAssertEqual(webViewProvider.webView.savedJavaScript, "__firefox__.findDone()")
+        prepareForTearDown(subject!)
+    }
+
     // MARK: Reload
 
     func testReloadThenCallsReloadFromOrigin() {
