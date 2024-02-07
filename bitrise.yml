@@ -206,7 +206,6 @@ workflows:
     - xcode-test-without-building@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         timeout: 1200
-        title: UI Smoketest$SHARD
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 15,OS=17.2
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"
