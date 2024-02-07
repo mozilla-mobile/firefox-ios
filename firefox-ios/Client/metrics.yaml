@@ -4265,7 +4265,7 @@ urlbar:
           - suggest_sponsor
           - suggest_non_sponsor
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/18507
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-8109
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/18507
     notification_emails:

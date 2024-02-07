@@ -846,7 +846,7 @@ class TelemetryWrapperTests: XCTestCase {
         let nResults: Int32 = 12
 
         let nWordsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nWords.rawValue
-        let nWords: Int32 = 1 // extras?[EventExtraKey.UrlbarTelemetry.nWords.rawValue]
+        let nWords: Int32 = 1
 
         let reasonKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.reason.rawValue
         let reason = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Reason.pause.rawValue
