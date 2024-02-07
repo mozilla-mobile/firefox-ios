@@ -35,7 +35,7 @@ final class DefaultThemeManagerTests: XCTestCase {
     }
 
     func test_sutInitializesWithExpectedRegisteredValues() {
-        let _ = createSubject(with: userDefaults)
+        _ = createSubject(with: userDefaults)
         let expectedSystemResult = true
         let expectedNightModeResult = NSNumber(value: false)
         let expectedPrivateModeResult = false
