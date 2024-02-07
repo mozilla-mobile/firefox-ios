@@ -861,15 +861,17 @@ class TelemetryWrapperTests: XCTestCase {
         let searchModeKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.searchMode.rawValue
         let searchMode = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.SearchMode.bookmarks.rawValue
 
-        let extraDetails = [groupsKey: groups,
-                       interactionKey: interaction,
-                            nCharsKey: nChars,
-                          nResultsKey: nResults,
-                            nWordsKey: nWords,
-                            reasonKey: reason,
-                           resultsKey: results,
-                               sapKey: sap,
-                        searchModeKey: searchMode] as [String: Any]
+        let extraDetails = [
+            groupsKey: groups,
+            interactionKey: interaction,
+            nCharsKey: nChars,
+            nResultsKey: nResults,
+            nWordsKey: nWords,
+            reasonKey: reason,
+            resultsKey: results,
+            sapKey: sap,
+            searchModeKey: searchMode
+        ] as [String: Any]
 
         TelemetryWrapper.recordEvent(category: .information,
                                      method: .view,

@@ -1091,25 +1091,24 @@ extension TelemetryWrapper {
                     extras: extras)
             }
         case(.information, .view, .urlbarImpression, _, let extras):
-            if let groups = extras?[EventExtraKey.UrlbarTelemetry.groups.rawValue]
-                as? String,
-               let interaction = extras?[EventExtraKey.UrlbarTelemetry.interaction.rawValue]
-                as? String,
-               let nChars = extras?[EventExtraKey.UrlbarTelemetry.nChars.rawValue]
-                as? Int32,
-               let nResults = extras?[EventExtraKey.UrlbarTelemetry.nResults.rawValue]
-                as? Int32,
-               let nWords = extras?[EventExtraKey.UrlbarTelemetry.nWords.rawValue]
-                as? Int32,
-               let reason = extras?[EventExtraKey.UrlbarTelemetry.reason.rawValue]
-                as? String,
-               let results = extras?[EventExtraKey.UrlbarTelemetry.results.rawValue]
-                as? String,
-               let sap = extras?[EventExtraKey.UrlbarTelemetry.sap.rawValue]
-                as? String,
-               let searchMode = extras?[EventExtraKey.UrlbarTelemetry.searchMode.rawValue]
-                as? String {
-                let extraDetails = GleanMetrics.Urlbar.ImpressionExtra(groups: groups, interaction: interaction, nChars: nChars, nResults: nResults, nWords: nWords, reason: reason, results: results, sap: sap, searchMode: searchMode)
+            if let groups = extras?[EventExtraKey.UrlbarTelemetry.groups.rawValue] as? String,
+               let interaction = extras?[EventExtraKey.UrlbarTelemetry.interaction.rawValue] as? String,
+               let nChars = extras?[EventExtraKey.UrlbarTelemetry.nChars.rawValue] as? Int32,
+               let nResults = extras?[EventExtraKey.UrlbarTelemetry.nResults.rawValue] as? Int32,
+               let nWords = extras?[EventExtraKey.UrlbarTelemetry.nWords.rawValue] as? Int32,
+               let reason = extras?[EventExtraKey.UrlbarTelemetry.reason.rawValue] as? String,
+               let results = extras?[EventExtraKey.UrlbarTelemetry.results.rawValue] as? String,
+               let sap = extras?[EventExtraKey.UrlbarTelemetry.sap.rawValue] as? String,
+               let searchMode = extras?[EventExtraKey.UrlbarTelemetry.searchMode.rawValue] as? String {
+                let extraDetails = GleanMetrics.Urlbar.ImpressionExtra(groups: groups,
+                                                                       interaction: interaction,
+                                                                       nChars: nChars,
+                                                                       nResults: nResults,
+                                                                       nWords: nWords,
+                                                                       reason: reason,
+                                                                       results: results,
+                                                                       sap: sap,
+                                                                       searchMode: searchMode)
                 GleanMetrics.Urlbar.impression.record(extraDetails)
             } else {
                 recordUninstrumentedMetrics(

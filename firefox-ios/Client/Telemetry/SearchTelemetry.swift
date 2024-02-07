@@ -30,10 +30,7 @@ enum SearchEngine: String, CaseIterable {
     case none
 }
 
-// all the events explained: 
-// https://docs.google.com/document/d/1FFWyxU_uNgjJQATeNbNQKRiSpMztDJKsGc09McUqE0A/edit?pli=1
-// QA about the search bar telemetry:
-// https://docs.google.com/document/d/1Cb4oEoGPTmDCPf0DCbEHhYOS1DRKGRjemsrprhuziKY/edit
+// all the values explained: https://mozilla-hub.atlassian.net/browse/FXIOS-8109
 enum SearchTelemetryValues {
     enum Sap: String {
         case urlbar
