@@ -21,6 +21,8 @@
         "BookmarksTests",
         "BrowsingPDFTests",
         "ClipBoardTests",
+        "CreditCardsTests\/testAutofillCreditCardsToggleOnOoff()",
+        "CreditCardsTests\/testManageCreditCardsOption()",
         "DataManagementTests",
         "DatabaseFixtureTest",
         "DesktopModeTestsIpad",
