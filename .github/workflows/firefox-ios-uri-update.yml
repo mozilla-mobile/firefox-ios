@@ -39,7 +39,6 @@ jobs:
           echo "changes_detected=false" >> $GITHUB_ENV
         else
           echo "Changes detected, proceeding to create PR."
-          git commit --allow-empty -m "empty commit"
           git diff
           git add firefox-ios/Shared/Extensions/URLExtensions.swift
           echo "changes_detected=true" >> $GITHUB_ENV
