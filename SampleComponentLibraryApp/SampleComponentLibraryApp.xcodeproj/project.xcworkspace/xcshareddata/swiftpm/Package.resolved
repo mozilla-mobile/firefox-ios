@@ -19,6 +19,15 @@
       }
     },
     {
+      "identity" : "gcdwebserver",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nbhasin2/GCDWebServer.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "7674c93e79ee5aac17681acace324761325e7346"
+      }
+    },
+    {
       "identity" : "kingfisher",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher.git",

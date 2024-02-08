@@ -29,8 +29,6 @@
 		8ABC3CED2A6EED7C00B69244 /* BottomSheetComponentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABC3CEC2A6EED7C00B69244 /* BottomSheetComponentViewModel.swift */; };
 		8ABE7C5C2AB36E1900C2172C /* ButtonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABE7C5B2AB36E1900C2172C /* ButtonsViewController.swift */; };
 		8ABE7C5E2AB36E2600C2172C /* ButtonComponentsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABE7C5D2AB36E2600C2172C /* ButtonComponentsViewModel.swift */; };
-		8CD02BC92A9493B50029106A /* ActionFooterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD02BC82A9493B50029106A /* ActionFooterViewController.swift */; };
-		8CD02BCB2A9493B90029106A /* ActionFooterComponentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD02BCA2A9493B90029106A /* ActionFooterComponentViewModel.swift */; };
 		E19891C82A790AB700CD256D /* CollapsibleCardViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19891C62A790AB700CD256D /* CollapsibleCardViewViewController.swift */; };
 		E19891C92A790AB700CD256D /* CollapsibleCardViewComponentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19891C72A790AB700CD256D /* CollapsibleCardViewComponentViewModel.swift */; };
 		E1E0E8712A850479003D847E /* ShadowCardViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E0E86F2A850479003D847E /* ShadowCardViewViewController.swift */; };
@@ -64,8 +62,6 @@
 		8ABC3CEC2A6EED7C00B69244 /* BottomSheetComponentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetComponentViewModel.swift; sourceTree = "<group>"; };
 		8ABE7C5B2AB36E1900C2172C /* ButtonsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsViewController.swift; sourceTree = "<group>"; };
 		8ABE7C5D2AB36E2600C2172C /* ButtonComponentsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonComponentsViewModel.swift; sourceTree = "<group>"; };
-		8CD02BC82A9493B50029106A /* ActionFooterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionFooterViewController.swift; sourceTree = "<group>"; };
-		8CD02BCA2A9493B90029106A /* ActionFooterComponentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionFooterComponentViewModel.swift; sourceTree = "<group>"; };
 		E19891C62A790AB700CD256D /* CollapsibleCardViewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollapsibleCardViewViewController.swift; sourceTree = "<group>"; };
 		E19891C72A790AB700CD256D /* CollapsibleCardViewComponentViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollapsibleCardViewComponentViewModel.swift; sourceTree = "<group>"; };
 		E1E0E86F2A850479003D847E /* ShadowCardViewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShadowCardViewViewController.swift; sourceTree = "<group>"; };
@@ -108,7 +104,6 @@
 			isa = PBXGroup;
 			children = (
 				8ABE7C5A2AB36E0700C2172C /* Buttons */,
-				8CD02BCC2A94953B0029106A /* ActionFooterView */,
 				8ABC3CE92A6EED5C00B69244 /* BottomSheet */,
 				E1FC23E92A85341B0089E14D /* CardView */,
 				E19891C52A790AB700CD256D /* CollapsibleCardView */,
@@ -205,15 +200,6 @@
 				8ABE7C5D2AB36E2600C2172C /* ButtonComponentsViewModel.swift */,
 			);
 			path = Buttons;
-			sourceTree = "<group>";
-		};
-		8CD02BCC2A94953B0029106A /* ActionFooterView */ = {
-			isa = PBXGroup;
-			children = (
-				8CD02BC82A9493B50029106A /* ActionFooterViewController.swift */,
-				8CD02BCA2A9493B90029106A /* ActionFooterComponentViewModel.swift */,
-			);
-			path = ActionFooterView;
 			sourceTree = "<group>";
 		};
 		E19891C52A790AB700CD256D /* CollapsibleCardView */ = {
@@ -353,9 +339,7 @@
 				8A6EE0AC2A5869BE00B4D401 /* Presenter.swift in Sources */,
 				8A3BE7672AB1FDD900C7567C /* ContextualHintViewComponentViewModel.swift in Sources */,
 				E1FC23EC2A85341B0089E14D /* CardViewViewController.swift in Sources */,
-				8CD02BC92A9493B50029106A /* ActionFooterViewController.swift in Sources */,
 				8A2FE6542A55EE3D0036B6AF /* SceneDelegate.swift in Sources */,
-				8CD02BCB2A9493B90029106A /* ActionFooterComponentViewModel.swift in Sources */,
 				8A6EE0972A5730A100B4D401 /* ComponentData.swift in Sources */,
 				8A3BE7652AB1FDC900C7567C /* ContextualHintViewViewController.swift in Sources */,
 				8A6EE0A82A58659900B4D401 /* FadeScrollViewComponentViewModel.swift in Sources */,
