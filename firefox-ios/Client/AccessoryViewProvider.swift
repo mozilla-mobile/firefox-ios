@@ -60,9 +60,9 @@ class AccessoryViewProvider: UIView, Themeable {
 
     private lazy var doneButton: UIBarButtonItem = {
         let button = UIBarButtonItem(title: .CreditCard.Settings.Done,
-                                      style: .done,
-                                      target: self,
-                                      action: #selector(tappedDoneButton))
+                                     style: .done,
+                                     target: self,
+                                     action: #selector(tappedDoneButton))
         button.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.doneButton
         return button
     }()
