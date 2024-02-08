@@ -142,7 +142,7 @@ class AccessoryViewProvider: UIView, Themeable {
         case .standard:
             currentAccessoryView = nil
         case .creditCard:
-            currentAccessoryView = loginsAutofillView//creditCardAutofillView
+            currentAccessoryView = creditCardAutofillView
             sendCreditCardAutofillPromptShownTelemetry()
         case .address:
             currentAccessoryView = addressAutofillView
@@ -167,19 +167,22 @@ class AccessoryViewProvider: UIView, Themeable {
         setupSpacer(leadingFixedSpacer, width: UX.fixedLeadingSpacerWidth)
         setupSpacer(trailingFixedSpacer, width: UX.fixedTrailingSpacerWidth)
 
-        var toolbarItems: [UIBarButtonItem] = [
-            flexibleSpacer,
+        toolbar.items = [
             previousButton,
             nextButton,
             fixedSpacer,
+            currentAccessoryView,
+            flexibleSpacer,
             doneButton
-        ]
+        ].compactMap { $0 }
 
-        if let accessoryView = currentAccessoryView {
-            toolbarItems.insert(contentsOf: [ accessoryView], at: 0)
-        }
+        toolbar.accessibilityElements = [
+            previousButton,
+            nextButton,
+            currentAccessoryView,
+            doneButton
+        ].compactMap { $0 }
 
-        toolbar.setItems(toolbarItems, animated: false)
         addSubview(toolbar)
 
         NSLayoutConstraint.activate([
