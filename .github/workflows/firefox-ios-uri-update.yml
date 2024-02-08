@@ -78,7 +78,7 @@ jobs:
       if: env.changes_detected == 'true'
       uses: peter-evans/create-pull-request@v5
       with:
-        token: ${{ secrets.TEST_GITHUB_ACTION_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         commit-message: Automated URI update on ${{ github.event.inputs.branchName || 'main' }} ${{ env.date }}
         author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
         committer: GitHub <noreply@github.com>
