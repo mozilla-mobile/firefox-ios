@@ -36,11 +36,10 @@ Build Instructions
 3. Pull in the project dependencies:
 
   ```shell
-  cd focus-ios
   ./checkout.sh
   ```
 
-4. Open `Blockzilla.xcodeproj` in Xcode.
+4. Open `focus-ios/Blockzilla.xcodeproj` in Xcode.
 5. Build the `Focus` scheme in Xcode.
 
 
