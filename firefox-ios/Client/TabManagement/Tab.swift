@@ -912,12 +912,14 @@ extension Tab: TabWebViewDelegate {
     func tabWebView(_ tabWebView: TabWebView, didSelectFindInPageForSelection selection: String) {
         tabDelegate?.tab(self, didSelectFindInPageForSelection: selection)
     }
+
     func tabWebViewSearchWithFirefox(
         _ tabWebViewSearchWithFirefox: TabWebView,
         didSelectSearchWithFirefoxForSelection selection: String
     ) {
         tabDelegate?.tab(self, didSelectSearchWithFirefoxForSelection: selection)
     }
+
     func tabWebViewShouldShowAccessoryView(_ tabWebView: TabWebView) -> Bool {
         // Hide the default WKWebView accessory view panel for PDF documents
         return mimeType != MIMEType.PDF
