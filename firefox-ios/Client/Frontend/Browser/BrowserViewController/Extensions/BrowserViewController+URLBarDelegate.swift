@@ -311,6 +311,8 @@ extension BrowserViewController: URLBarDelegate {
         }
 
         searchController?.searchQuery = text
+        searchController?.searchTelemetry?.searchQuery = text
+        searchController?.searchTelemetry?.interactionType = .refined
         searchLoader?.setQueryWithoutAutocomplete(text)
     }
 
@@ -325,7 +327,9 @@ extension BrowserViewController: URLBarDelegate {
             theme: self.themeManager.currentTheme
         )
         searchController?.searchQuery = text
+        searchController?.searchTelemetry?.searchQuery = text
         searchLoader?.query = text
+        searchController?.searchTelemetry?.determineInteractionType()
     }
 
     func urlBar(_ urlBar: URLBarView, didSubmitText text: String) {

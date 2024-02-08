@@ -592,7 +592,7 @@ class BrowserViewController: UIViewController,
         let dropInteraction = UIDropInteraction(delegate: self)
         view.addInteraction(dropInteraction)
 
-        searchTelemetry = SearchTelemetry()
+        searchTelemetry = SearchTelemetry(tabManager: tabManager)
 
         // Awesomebar Location Telemetry
         SearchBarSettingsViewModel.recordLocationTelemetry(for: isBottomSearchBar ? .bottom : .top)
@@ -632,6 +632,7 @@ class BrowserViewController: UIViewController,
             guard let self else { return false }
             if let pasteboardContents = UIPasteboard.general.string {
                 self.urlBar(self.urlBar, didSubmitText: pasteboardContents)
+                searchController?.searchTelemetry?.interactionType = .pasted
                 return true
             }
             return false
@@ -641,7 +642,7 @@ class BrowserViewController: UIViewController,
             if let pasteboardContents = UIPasteboard.general.string {
                 // Enter overlay mode and make the search controller appear.
                 self.overlayManager.openSearch(with: pasteboardContents)
-
+                searchController?.searchTelemetry?.interactionType = .pasted
                 return true
             }
             return false
@@ -1149,7 +1150,8 @@ class BrowserViewController: UIViewController,
         guard self.searchController == nil else { return }
 
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        let searchViewModel = SearchViewModel(isPrivate: isPrivate, isBottomSearchBar: isBottomSearchBar)
+        let searchViewModel = SearchViewModel(isPrivate: isPrivate,
+                                              isBottomSearchBar: isBottomSearchBar)
         let searchController = SearchViewController(profile: profile,
                                                     viewModel: searchViewModel,
                                                     model: profile.searchEngines,
@@ -2385,10 +2387,12 @@ extension BrowserViewController: SearchViewControllerDelegate {
         didHighlightText text: String,
         search: Bool
     ) {
+        searchViewController.searchTelemetry?.interactionType = .refined
         self.urlBar.setLocation(text, search: search)
     }
 
     func searchViewController(_ searchViewController: SearchViewController, didAppend text: String) {
+        searchViewController.searchTelemetry?.interactionType = .pasted
         self.urlBar.setLocation(text, search: false)
     }
 
