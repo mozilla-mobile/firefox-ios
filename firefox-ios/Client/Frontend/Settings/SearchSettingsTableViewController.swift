@@ -445,26 +445,17 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
         targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath,
         toProposedIndexPath proposedDestinationIndexPath: IndexPath
     ) -> IndexPath {
-        // You can't drag or drop on the default engine.
-        if sourceIndexPath.section == Section.defaultEngine.rawValue
-            || proposedDestinationIndexPath.section == Section.defaultEngine.rawValue {
+        // Make drag or drop available only for quickEngines section
+        guard proposedDestinationIndexPath.section == Section.quickEngines.rawValue else {
             return sourceIndexPath
         }
 
-        // Can't drag/drop over "Add Custom Engine button"
-        let sourceIndexCheck = sourceIndexPath.item + 1 == model.orderedEngines.count
-        let destinationIndexCheck = proposedDestinationIndexPath.item + 1 == model.orderedEngines.count
-        if sourceIndexCheck || destinationIndexCheck {
+        // Can't drag/drop over "Add Search Engine button"
+        if [sourceIndexPath.item, proposedDestinationIndexPath.item]
+            .contains(where: { $0 + 1 == model.orderedEngines.count }) {
             return sourceIndexPath
         }
 
-        if sourceIndexPath.section != proposedDestinationIndexPath.section {
-            var row = 0
-            if sourceIndexPath.section < proposedDestinationIndexPath.section {
-                row = tableView.numberOfRows(inSection: sourceIndexPath.section) - 1
-            }
-            return IndexPath(row: row, section: sourceIndexPath.section)
-        }
         return proposedDestinationIndexPath
     }
 
