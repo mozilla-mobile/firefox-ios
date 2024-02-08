@@ -67,8 +67,12 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             style: .destructive,
             handler: { [weak self] _ in
                 self?.privateBrowsingTelemetry.sendDataClearanceTappedTelemetry(didConfirm: true)
-                self?.closePrivateTabsAndOpenNewPrivateHomepage()
-                self?.showDataClearanceConfirmationToast()
+                self?.setupDataClearanceAnimation {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        self?.closePrivateTabsAndOpenNewPrivateHomepage()
+                        self?.showDataClearanceConfirmationToast()
+                    }
+                }
             }
         )
 
@@ -90,6 +94,21 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
                 theme: self.themeManager.currentTheme
             )
         }
+    }
+
+    private func setupDataClearanceAnimation(completion: @escaping () -> Void) {
+        guard !UIAccessibility.isReduceMotionEnabled else {
+            completion()
+            return
+        }
+        let dataClearanceAnimation = DataClearanceAnimation()
+        dataClearanceAnimation.startAnimation(
+            with: view,
+            for: shouldShowTopTabsForTraitCollection(
+                traitCollection
+            )
+        )
+        completion()
     }
 
     func tabToolbarDidPressLibrary(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
