@@ -39,6 +39,7 @@ jobs:
           echo "changes_detected=false" >> $GITHUB_ENV
         else
           echo "Changes detected, proceeding to create PR."
+          git commit --allow-empty -m "empty commit"
           git diff
           git add firefox-ios/Shared/Extensions/URLExtensions.swift
           echo "changes_detected=true" >> $GITHUB_ENV
@@ -76,7 +77,7 @@ jobs:
       uses: peter-evans/create-pull-request@v5
       with:
         token: ${{ secrets.TEST_GITHUB_ACTION_TOKEN }}
-        commit-message: Refactor [v${{ env.next_version }}] Automated URI update on ${{ github.event.inputs.branchName || 'main' }}
+        commit-message: Automated URI update on ${{ github.event.inputs.branchName || 'main' }}
         author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
         committer: GitHub <noreply@github.com>
         title: Refactor [v${{ env.next_version }}] Automated URI update on ${{ github.event.inputs.branchName || 'main' }}
