@@ -5,12 +5,14 @@
 import Foundation
 
 /// The URLFormatter is used to ensure we properly format given URL entered by a user.
-/// The formatted URL is then input by the Client inside the SecurityManager to determine if the BrowsingContext can be navigated to.
-/// If no formatted URL is found, then we make a search with the entry as a search term.
+/// The formatted URL is then input by the Client inside the SecurityManager to determine
+/// if the BrowsingContext can be navigated to. If no formatted URL is found, then we make
+/// a search with the entry as a search term.
 public protocol URLFormatter {
     /// Try to get a URL from a user entry
     /// - Parameter entry: The text entered in the URL bar by the user
-    /// - Returns: The formatted URL if we could format it. If this is nil, we should make a search term out of the entry instead.
+    /// - Returns: The formatted URL if we could format it. If this is nil, we should make
+    /// a search term out of the entry instead.
     func getURL(entry: String) -> URL?
 }
 
@@ -22,7 +24,8 @@ public class DefaultURLFormatter: URLFormatter {
     }
 
     private var urlAllowed: CharacterSet {
-        return CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=%")
+        let allowed = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=%"
+        return CharacterSet(charactersIn: allowed)
     }
 
     public func getURL(entry: String) -> URL? {
@@ -65,7 +68,7 @@ public class DefaultURLFormatter: URLFormatter {
 
         // Check presence of top-level domain if scheme is "http://" or "https://"
         if entry.hasPrefix("http://") || entry.hasPrefix("https://") {
-            if entry.range(of: ".") == nil {
+            if !entry.contains(".") {
                 return nil
             }
         }
