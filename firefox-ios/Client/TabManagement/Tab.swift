@@ -918,6 +918,10 @@ extension Tab: TabWebViewDelegate {
     ) {
         tabDelegate?.tab(self, didSelectSearchWithFirefoxForSelection: selection)
     }
+    func tabWebViewShouldShowAccessoryView(_ tabWebView: TabWebView) -> Bool {
+        // Hide the default WKWebView accessory view panel for PDF documents
+        return mimeType != MIMEType.PDF
+    }
 }
 
 extension Tab: ContentBlockerTab {
@@ -1001,6 +1005,7 @@ protocol TabWebViewDelegate: AnyObject {
         _ tabWebViewSearchWithFirefox: TabWebView,
         didSelectSearchWithFirefoxForSelection selection: String
     )
+    func tabWebViewShouldShowAccessoryView(_ tabWebView: TabWebView) -> Bool
 }
 
 class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
@@ -1009,6 +1014,8 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     private weak var delegate: TabWebViewDelegate?
 
     override var inputAccessoryView: UIView? {
+        guard delegate?.tabWebViewShouldShowAccessoryView(self) ?? true else { return nil }
+
         translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
