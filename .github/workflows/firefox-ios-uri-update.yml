@@ -29,7 +29,7 @@ jobs:
         pip install pandas requests
 
     - name: Run URI update script
-      run: python uri_update.py
+      run: python taskcluster/scripts/uri_update.py
 
     - name: Check for changes
       id: git-check
