@@ -47,12 +47,30 @@ jobs:
           echo "changes_detected=true" >> $GITHUB_ENV
         fi
 
+    - name: Determine PR Version Number
+      id: versioning
+      run: |
+          
+          git fetch --all
+          # get highest current release/v branch, strip the numbers, and increment by one to get the current
+          # release version target based on that state 'main'
+          highest_version=$(git branch -r | grep 'release/v' | awk -F'/' '{print $NF}' | sort -Vr | head -n 1 | grep -o '[0-9]*')
+          if [[ ! -z "$highest_version" ]]; then
+            next_version=$((highest_version + 1))
+          else
+            echo "Couldn't determine current release version. Defaulting to [vXXX]"
+            next_version=XXX
+          fi
+          echo "Next version is v$next_version"
+          echo "next_version=$next_version" >> $GITHUB_ENV
+          echo "::set-output name=next_version::v$next_version"
+
     - name: Create Pull Request
       if: env.changes_detected == 'true'
       uses: peter-evans/create-pull-request@v5
       with:
-        token: ${{ secrets.TEST_GITHUB_ACTION_TOKEN }}
-        commit-message: Automated URI update
-        title: Automated URI update on ${{ github.event.inputs.branchName || 'main' }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: Refactor [v${{ steps.versioning.outputs.next_version}}] Automated URI update on ${{ github.event.inputs.branchName || 'main' }}
+        title: Refactor [v${{ steps.versioning.outputs.next_version}}] Automated URI update on ${{ github.event.inputs.branchName || 'main' }}
         branch: auto-update-${{ github.run_number }}
         body: This automated PR updates the URIs.
