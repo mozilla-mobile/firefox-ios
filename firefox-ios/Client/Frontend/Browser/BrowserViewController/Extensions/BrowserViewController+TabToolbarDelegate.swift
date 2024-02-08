@@ -56,7 +56,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
         let cancelAction = UIAlertAction(
             title: .Alerts.FeltDeletion.CancelButton,
-            style: .cancel,
+            style: .default,
             handler: { [weak self] _ in
                 self?.privateBrowsingTelemetry.sendDataClearanceTappedTelemetry(didConfirm: false)
             }
