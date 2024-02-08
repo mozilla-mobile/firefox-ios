@@ -51,7 +51,7 @@ jobs:
       if: env.changes_detected == 'true'
       uses: peter-evans/create-pull-request@v5
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.TEST_GITHUB_ACTION_TOKEN }}
         commit-message: Automated URI update
         title: Automated URI update on ${{ github.event.inputs.branchName || 'main' }}
         branch: auto-update-${{ github.run_number }}
