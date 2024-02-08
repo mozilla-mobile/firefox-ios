@@ -16,13 +16,16 @@ class BrowserViewController: UIViewController, EngineSessionDelegate {
     weak var navigationDelegate: NavigationDelegate?
     private lazy var progressView: UIProgressView = .build { _ in }
     private var engineSession: EngineSession!
-    private var engineView: EngineView!
+    private var engineView: EngineView
+    private let urlFormatter: URLFormatter
 
     // MARK: - Init
 
-    init(engineProvider: EngineProvider) {
-        engineSession = engineProvider.session
-        engineView = engineProvider.view
+    init(engineProvider: EngineProvider,
+         urlFormatter: URLFormatter = DefaultURLFormatter()) {
+        self.engineSession = engineProvider.session
+        self.engineView = engineProvider.view
+        self.urlFormatter = urlFormatter
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -98,18 +101,13 @@ class BrowserViewController: UIViewController, EngineSessionDelegate {
     // MARK: - Search
 
     func loadUrlOrSearch(_ searchTerm: SearchTerm) {
-        guard searchTerm.isValidUrl, let url = URL(string: searchTerm.searchTerm) else {
-            search(searchTerm)
-            return
+        if let url = urlFormatter.getURL(entry: searchTerm.term) {
+            // Search the entered URL
+            engineSession.load(url: url.absoluteString)
+        } else {
+            // Search term with Search Engine Bing
+            engineSession.load(url: searchTerm.urlWithSearchTerm)
         }
-
-        engineSession.load(url: url.absoluteString)
-    }
-
-    private func search(_ searchTerm: SearchTerm) {
-        guard let url = searchTerm.encodedURL else { return }
-
-        engineSession.load(url: url.absoluteString)
     }
 
     // MARK: - EngineSessionDelegate general
@@ -151,6 +149,6 @@ class BrowserViewController: UIViewController, EngineSessionDelegate {
     }
 
     func search(with selection: String) {
-        loadUrlOrSearch(SearchTerm(searchTerm: selection))
+        loadUrlOrSearch(SearchTerm(term: selection))
     }
 }
