@@ -834,10 +834,10 @@ class TelemetryWrapperTests: XCTestCase {
 
     func test_AwesomebarImpressions_GleanIsCalled() {
         let groupsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.groups.rawValue
-        let groups = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Groups.adaptiveHistory.rawValue
+        let groups = SearchTelemetryValues.Groups.adaptiveHistory.rawValue
 
         let interactionKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.interaction.rawValue
-        let interaction = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Interaction.persistedSearchTerms.rawValue
+        let interaction = SearchTelemetryValues.Interaction.persistedSearchTerms.rawValue
 
         let nCharsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nChars.rawValue
         let nChars: Int32 = 5
@@ -849,17 +849,17 @@ class TelemetryWrapperTests: XCTestCase {
         let nWords: Int32 = 1
 
         let reasonKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.reason.rawValue
-        let reason = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Reason.pause.rawValue
+        let reason = SearchTelemetryValues.Reason.pause.rawValue
 
         let resultsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.results.rawValue
-        let results = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Results.searchEngine.rawValue + ","
-                      + TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Results.tabToSearch.rawValue
+        let results = SearchTelemetryValues.Results.searchEngine.rawValue + ","
+                      + SearchTelemetryValues.Results.tabToSearch.rawValue
 
         let sapKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.sap.rawValue
-        let sap = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.Sap.urlbar.rawValue
+        let sap = SearchTelemetryValues.Sap.urlbar.rawValue
 
         let searchModeKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.searchMode.rawValue
-        let searchMode = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.SearchMode.bookmarks.rawValue
+        let searchMode = SearchTelemetryValues.SearchMode.bookmarks.rawValue
 
         let extraDetails = [
             groupsKey: groups,
