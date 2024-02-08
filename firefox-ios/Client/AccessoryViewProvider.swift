@@ -7,7 +7,7 @@ import Common
 import Shared
 
 enum AccessoryType {
-    case standard, creditCard, address, logins
+    case standard, creditCard, address, login
 }
 
 class AccessoryViewProvider: UIView, Themeable {
@@ -102,7 +102,7 @@ class AccessoryViewProvider: UIView, Themeable {
         return accessoryView
     }()
 
-    private lazy var loginsAutofillView: AutofillAccessoryViewButtonItem = {
+    private lazy var loginAutofillView: AutofillAccessoryViewButtonItem = {
         let accessoryView = AutofillAccessoryViewButtonItem(
             image: UIImage(named: StandardImageIdentifiers.Large.login),
             labelText: .Settings.Passwords.UseSavedLoginFromKeyboard,
@@ -110,7 +110,7 @@ class AccessoryViewProvider: UIView, Themeable {
                 self?.tappedLoginsButton()
             })
         accessoryView.accessibilityTraits = .button
-        accessoryView.accessibilityLabel = .Addresses.Settings.UseSavedAddressFromKeyboard
+        accessoryView.accessibilityLabel = .Settings.Passwords.UseSavedLoginFromKeyboard
         return accessoryView
     }()
 
@@ -152,8 +152,8 @@ class AccessoryViewProvider: UIView, Themeable {
             sendCreditCardAutofillPromptShownTelemetry()
         case .address:
             currentAccessoryView = addressAutofillView
-        case .logins:
-            currentAccessoryView = loginsAutofillView
+        case .login:
+            currentAccessoryView = loginAutofillView
         }
 
         setNeedsLayout()
@@ -208,7 +208,7 @@ class AccessoryViewProvider: UIView, Themeable {
             $0.customView?.tintColor = theme.colors.iconAccentBlue
         }
 
-        [creditCardAutofillView, addressAutofillView, loginsAutofillView].forEach {
+        [creditCardAutofillView, addressAutofillView, loginAutofillView].forEach {
             $0.accessoryImageViewTintColor = theme.colors.iconPrimary
             $0.backgroundColor = theme.colors.layer5Hover
         }
