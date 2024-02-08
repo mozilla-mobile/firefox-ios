@@ -39,24 +39,32 @@ class AccessoryViewProvider: UIView, Themeable {
     }
 
     private lazy var previousButton: UIBarButtonItem = {
-        .init(image: UIImage(named: StandardImageIdentifiers.Large.chevronUp),
-              style: .plain,
-              target: self,
-              action: #selector(tappedPreviousButton))
+        let button = UIBarButtonItem(image: UIImage(named: StandardImageIdentifiers.Large.chevronUp),
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(tappedPreviousButton))
+        button.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.previousButton
+        button.accessibilityLabel = .KeyboardAccessory.PreviousButtonA11yLabel
+        return button
     }()
 
     private lazy var nextButton: UIBarButtonItem = {
-        .init(image: UIImage(named: StandardImageIdentifiers.Large.chevronDown),
-              style: .plain,
-              target: self,
-              action: #selector(tappedNextButton))
+        let button = UIBarButtonItem(image: UIImage(named: StandardImageIdentifiers.Large.chevronDown),
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(tappedNextButton))
+        button.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.nextButton
+        button.accessibilityLabel = .KeyboardAccessory.NextButtonA11yLabel
+        return button
     }()
 
     private lazy var doneButton: UIBarButtonItem = {
-        .init(title: .CreditCard.Settings.Done,
-              style: .done,
-              target: self,
-              action: #selector(tappedDoneButton))
+        let button = UIBarButtonItem(title: .CreditCard.Settings.Done,
+                                     style: .done,
+                                     target: self,
+                                     action: #selector(tappedDoneButton))
+        button.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.doneButton
+        return button
     }()
 
     private lazy var fixedSpacer: UIBarButtonItem = {
@@ -80,6 +88,9 @@ class AccessoryViewProvider: UIView, Themeable {
             })
         accessoryView.accessibilityTraits = .button
         accessoryView.accessibilityLabel = .CreditCard.Settings.UseSavedCardFromKeyboard
+        accessoryView.accessibilityIdentifier =
+            AccessibilityIdentifiers.Browser.KeyboardAccessory.creditCardAutofillButton
+        accessoryView.isAccessibilityElement = true
         return accessoryView
     }()
 
@@ -92,6 +103,9 @@ class AccessoryViewProvider: UIView, Themeable {
             })
         accessoryView.accessibilityTraits = .button
         accessoryView.accessibilityLabel = .Addresses.Settings.UseSavedAddressFromKeyboard
+        accessoryView.accessibilityIdentifier =
+            AccessibilityIdentifiers.Browser.KeyboardAccessory.addressAutofillButton
+        accessoryView.isAccessibilityElement = true
         return accessoryView
     }()
 
