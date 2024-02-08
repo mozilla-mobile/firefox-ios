@@ -44,6 +44,7 @@ class AccessoryViewProvider: UIView, Themeable {
                                      target: self,
                                      action: #selector(tappedPreviousButton))
         button.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.previousButton
+        button.accessibilityLabel = .KeyboardAccessory.PreviousButtonA11yLabel
         return button
     }()
 
@@ -53,6 +54,7 @@ class AccessoryViewProvider: UIView, Themeable {
                                      target: self,
                                      action: #selector(tappedNextButton))
         button.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.nextButton
+        button.accessibilityLabel = .KeyboardAccessory.NextButtonA11yLabel
         return button
     }()
 
@@ -86,7 +88,7 @@ class AccessoryViewProvider: UIView, Themeable {
             })
         accessoryView.accessibilityTraits = .button
         accessoryView.accessibilityLabel = .CreditCard.Settings.UseSavedCardFromKeyboard
-        accessoryView.accessibilityIdentifier = 
+        accessoryView.accessibilityIdentifier =
             AccessibilityIdentifiers.Browser.KeyboardAccessory.creditCardAutofillButton
         accessoryView.isAccessibilityElement = true
         return accessoryView
