@@ -42,7 +42,7 @@ jobs:
           git diff
           git config --global user.name 'github-actions[bot]'
           git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit --alow-empty -m "empty commit" # add empty commit so when squashed the history with show PR title
+          git commit --allow-empty -m "empty commit" # add empty commit so when squashed the history with show PR title
           git add firefox-ios/Shared/Extensions/URLExtensions.swift
           echo "changes_detected=true" >> $GITHUB_ENV
           datetime=$(date +%Y%m%d)
