@@ -14,7 +14,6 @@ public protocol ThemeColourPalette {
     var layer3: UIColor { get }
     var layer4: UIColor { get }
     var layer5: UIColor { get }
-    var layer6: UIColor { get }
     var layer5Hover: UIColor { get }
     var layerScrim: UIColor { get }
     var layerGradient: Gradient { get }

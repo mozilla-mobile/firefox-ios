@@ -100,7 +100,7 @@ extension UIAlertController {
 
         let noOption = UIAlertAction(
             title: .ClearWebsiteDataAlertCancel,
-            style: .cancel,
+            style: .default,
             handler: nil
         )
 
@@ -124,7 +124,7 @@ extension UIAlertController {
 
         let noOption = UIAlertAction(
             title: .ClearWebsiteDataAlertCancel,
-            style: .cancel,
+            style: .default,
             handler: nil
         )
 
@@ -166,7 +166,7 @@ extension UIAlertController {
             )
         }
 
-        let cancelAction = UIAlertAction(title: .DeleteLoginAlertCancel, style: .cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: .DeleteLoginAlertCancel, style: .default, handler: nil)
         let deleteAction = UIAlertAction(title: .DeleteLoginAlertDelete, style: .destructive, handler: deleteCallback)
 
         deleteAlert.addAction(cancelAction)
