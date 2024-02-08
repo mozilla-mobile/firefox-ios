@@ -18,6 +18,7 @@ class AccessoryViewProvider: UIView, Themeable {
         static let fixedSpacerHeight: CGFloat = 30
         static let fixedLeadingSpacerWidth: CGFloat = 2
         static let fixedTrailingSpacerWidth: CGFloat = 3
+        static let doneButtonFontSize: CGFloat = 17
     }
 
     // MARK: - Properties
@@ -54,10 +55,15 @@ class AccessoryViewProvider: UIView, Themeable {
     }()
 
     private lazy var doneButton: UIBarButtonItem = {
-        .init(title: .CreditCard.Settings.Done,
-              style: .done,
-              target: self,
-              action: #selector(tappedDoneButton))
+        let button = UIButton(type: .system)
+        button.setTitle(.CreditCard.Settings.Done, for: .normal)
+        button.addTarget(self, action: #selector(self.tappedDoneButton), for: .touchUpInside)
+        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
+            withTextStyle: .body,
+            size: UX.doneButtonFontSize,
+            weight: .semibold
+        )
+        return UIBarButtonItem(customView: button)
     }()
 
     private lazy var fixedSpacer: UIBarButtonItem = {
@@ -197,7 +203,10 @@ class AccessoryViewProvider: UIView, Themeable {
         let theme = themeManager.currentTheme
 
         backgroundColor = theme.colors.layer5
-        [previousButton, nextButton, doneButton].forEach { $0.tintColor = theme.colors.iconAccentBlue }
+        [previousButton, nextButton, doneButton].forEach {
+            $0.tintColor = theme.colors.iconAccentBlue
+            $0.customView?.tintColor = theme.colors.iconAccentBlue
+        }
 
         [creditCardAutofillView, addressAutofillView, loginsAutofillView].forEach {
             $0.accessoryImageViewTintColor = theme.colors.iconPrimary
