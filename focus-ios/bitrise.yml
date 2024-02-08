@@ -95,7 +95,7 @@ workflows:
         inputs:
         - channel: "#mobile-alerts-ios"
         - message: "The build failed to build"
-        - webhook_url: "$SLACK_WEBHOOK"
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
   
   focus_ui_test:
     before_run:
@@ -147,7 +147,7 @@ workflows:
         inputs:
         - channel: "#mobile-alerts-ios"
         - message: "The build run the Focus testPlan: $TEST_PLAN_NAME"
-        - webhook_url: "$SLACK_WEBHOOK"
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
   
   klar_unit_test:
     before_run:
@@ -175,7 +175,7 @@ workflows:
         inputs:
         - channel: "#mobile-alerts-ios"
         - message: "The build run the Klar testPlan: UnitTests"
-        - webhook_url: "$SLACK_WEBHOOK"
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
 
   focus_unit_test:
     before_run:
@@ -203,7 +203,7 @@ workflows:
         inputs:
         - channel: "#mobile-alerts-ios"
         - message: "The build run the Focus testPlan: UnitTests"
-        - webhook_url: "$SLACK_WEBHOOK"
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
   
   # FOCUS UTILITIES WORKFLOWS
   focus-clone-and-build-dependencies:
@@ -270,7 +270,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -x
-            /usr/libexec/PlistBuddy -c "Add :NimbusServerURL string ${NIMBUS_SERVER_URL}" focus-ios/Blockzilla/Info.plist
+            /usr/libexec/PlistBuddy -c "Add :NimbusServerURL string ${NIMBUS_URL}" focus-ios/Blockzilla/Info.plist
             /usr/libexec/PlistBuddy -c "Add :NimbusStagingServerURL string ${NIMBUS_STAGING_SERVER_URL}" focus-ios/Blockzilla/Info.plist
             /usr/libexec/PlistBuddy -c "Set :NimbusAppName ${NIMBUS_APP_NAME}" focus-ios/Blockzilla/Info.plist
             /usr/libexec/PlistBuddy -c "Set :NimbusAppChannel ${NIMBUS_APP_CHANNEL}" focus-ios/Blockzilla/Info.plist
@@ -283,7 +283,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -x
-            /usr/libexec/PlistBuddy -c "Add :SentryDSN string ${SENTRY_DSN}" focus-ios/Blockzilla/Info.plist
+            /usr/libexec/PlistBuddy -c "Add :SentryDSN string ${SENTRY_DSN_FOCUS}" focus-ios/Blockzilla/Info.plist
 
   focus-set-default-browser-entitlement:
     steps:
@@ -426,7 +426,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -x
-            focus-ios/focus-ios-tests/tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+            focus-ios/focus-ios-tests/tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN_FOCUS" upload-dif \
               --org mozilla --project focus-ios "$BITRISE_DSYM_DIR_PATH"
     - xcode-archive@3:
         inputs:
@@ -445,7 +445,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -x
-            focus-ios/focus-ios-tests/tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+            focus-ios/focus-ios-tests/tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN_FOCUS" upload-dif \
               --org mozilla --project klar-ios "$BITRISE_DSYM_DIR_PATH"
 
   focus_SPM_Nightly:
@@ -494,7 +494,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -x
-            focus-ios/focus-ios-tests/tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+            focus-ios/focus-ios-tests/tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN_FOCUS" upload-dif \
               --org mozilla --project focus-ios "$BITRISE_DSYM_DIR_PATH"
     - xcode-archive@3:
         inputs:
@@ -513,7 +513,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -x
-            focus-ios/focus-ios-tests/tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+            focus-ios/focus-ios-tests/tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN_FOCUS" upload-dif \
               --org mozilla --project klar-ios "$BITRISE_DSYM_DIR_PATH"
 
   focus_release:
@@ -543,7 +543,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -x
-            focus-ios/focus-ios-tests/tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+            focus-ios/focus-ios-tests/tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN_FOCUS" upload-dif \
               --org mozilla --project focus-ios "$BITRISE_DSYM_DIR_PATH"
     - xcode-archive@3:
         inputs:
@@ -562,7 +562,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -x
-            focus-ios/focus-ios-tests/tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+            focus-ios/focus-ios-tests/tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN_FOCUS" upload-dif \
               --org mozilla --project klar-ios "$BITRISE_DSYM_DIR_PATH"
 
 app:
