@@ -54,13 +54,21 @@ jobs:
           git fetch --all
           # get highest current release/v branch, strip the numbers, and increment by one to get the current
           # release version target based on that state 'main'
-          highest_version=$(git branch -r | grep 'release/v' | awk -F'/' '{print $NF}' | sort -Vr | head -n 1 | grep -o '[0-9]*')
+          # if no release branch is found, default to an empty string to avoid exiting script
+          highest_version=$(git branch -r | \
+            { grep 'release/v' | \
+            awk -F'/' '{print $NF}' | \
+            sort -Vr | \
+            head -n 1 | \
+            grep -o '[0-9]*' || echo ""; })
+
           if [[ ! -z "$highest_version" ]]; then
             next_version=$((highest_version + 1))
           else
             echo "Couldn't determine current release version. Defaulting to [vXXX]"
             next_version=XXX
           fi
+          
           echo "Next version is v$next_version"
           echo "next_version=$next_version" >> $GITHUB_ENV
           echo "::set-output name=next_version::v$next_version"
