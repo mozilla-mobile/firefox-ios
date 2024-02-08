@@ -17,13 +17,13 @@ final class AppStartupTelemetry {
 
     // MARK: Logic
     public func sendStartupTelemetry() {
-        querryCreditCards()
-        querryLogins()
-        querryBookmarks()
+        queryCreditCards()
+        queryLogins()
+        queryBookmarks()
     }
 
     // MARK: Credit Cards
-    func querryCreditCards() {
+    func queryCreditCards() {
         _ = profile.autofill.reopenIfClosed()
         profile.autofill.listCreditCards(completion: { cards, error in
             guard let cards = cards, error == nil else { return }
@@ -32,7 +32,7 @@ final class AppStartupTelemetry {
     }
 
     // MARK: Logins
-    func querryLogins() {
+    func queryLogins() {
         let searchController = UISearchController()
         let loginsViewModel = PasswordManagerViewModel(
             profile: profile,
@@ -48,7 +48,7 @@ final class AppStartupTelemetry {
     }
 
     // MARK: Bookmarks
-    func querryBookmarks() {
+    func queryBookmarks() {
         profile.places
             .getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false)
             .uponQueue(.main) { result in
