@@ -54,7 +54,7 @@ class TabManagerMiddleware {
         case TabPanelAction.undoClose:
             self.undoCloseTab(state: state, uuid: uuid)
 
-        case TabPanelAction.closeAllTabs:
+        case TabPanelAction.confirmCloseAllTabs:
             self.closeAllTabs(state: state, uuid: uuid)
 
         case TabPanelAction.undoCloseAllTabs:

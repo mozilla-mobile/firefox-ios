@@ -42,6 +42,8 @@ class MockRouter: NSObject, Router {
 
     func popViewController(animated: Bool) {
         popViewControllerCalled += 1
+        savedCompletion?()
+        savedCompletion = nil
     }
 
     func setRootViewController(_ viewController: UIViewController, hideBar: Bool, animated: Bool) {

@@ -402,15 +402,16 @@ workflows:
 
             # Check for specific applications and set flags accordingly
             # Add more specific conditions for directories as needed; otherwise see default case
+            # Pattern matches (*) on directory names and reacts to subdirectory changes as well
             for app in $APPS_AFFECTED; do
                 case "$app" in
-                    "firefox-ios")
+                    firefox-ios*)
                         BUILD_FIREFOX_IOS="true"
                         ;;
-                    "focus-ios")
+                    focus-ios*)
                         BUILD_FOCUS_IOS="true"
                         ;;
-                    "SampleBrowser")
+                    SampleBrowser*)
                         BUILD_SAMPLE_BROWSER_IOS="true"
                         ;;
                     ".")
@@ -1088,7 +1089,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -x
-            firefox-ios/ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+            firefox-ios/ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN_FIREFOX" upload-dif \
               --org mozilla --project firefox-ios "$BITRISE_DSYM_DIR_PATH"
     - script@1:
         inputs:
@@ -1217,7 +1218,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -x
-            firefox-ios/ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+            firefox-ios/ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN_FIREFOX" upload-dif \
               --org mozilla --project firefox-ios "$BITRISE_DSYM_DIR_PATH"
     envs:
     - opts:
@@ -1316,7 +1317,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -x
-            firefox-ios/ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+            firefox-ios/ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN_FIREFOX" upload-dif \
               --org mozilla --project firefox-ios "$BITRISE_DSYM_DIR_PATH"
     envs:
     - opts:

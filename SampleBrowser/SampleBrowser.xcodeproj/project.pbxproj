@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8A0687612B6D9F990031427A /* SettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0687602B6D9F990031427A /* SettingsDelegate.swift */; };
 		8A0F446B2B56EDC900438589 /* EngineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0F446A2B56EDC900438589 /* EngineProvider.swift */; };
 		8A0F446E2B56EF1A00438589 /* WebEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 8A0F446D2B56EF1A00438589 /* WebEngine */; };
 		8A0F44712B56FD3600438589 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0F44702B56FD3600438589 /* SearchViewController.swift */; };
@@ -41,6 +42,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8A0687602B6D9F990031427A /* SettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDelegate.swift; sourceTree = "<group>"; };
 		8A0F44682B56ECBF00438589 /* BrowserKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = BrowserKit; path = ../BrowserKit; sourceTree = "<group>"; };
 		8A0F446A2B56EDC900438589 /* EngineProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngineProvider.swift; sourceTree = "<group>"; };
 		8A0F44702B56FD3600438589 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 				8A3DB3302B5AD3E000F89705 /* SettingsDataSource.swift */,
 				8A3DB3322B5AD3EC00F89705 /* SettingsCellViewModel.swift */,
 				8A3DB3342B5AD47500F89705 /* SettingsType.swift */,
+				8A0687602B6D9F990031427A /* SettingsDelegate.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -329,6 +332,7 @@
 				8A0F446B2B56EDC900438589 /* EngineProvider.swift in Sources */,
 				8A0F447F2B56FDAD00438589 /* BrowserError.swift in Sources */,
 				8A4601E72B0FE20500FFD17F /* SceneDelegate.swift in Sources */,
+				8A0687612B6D9F990031427A /* SettingsDelegate.swift in Sources */,
 				8A0F44812B56FDEA00438589 /* SearchDataProvider.swift in Sources */,
 				8A4602202B0FE52F00FFD17F /* UISearchbar+Extension.swift in Sources */,
 				8A3DB3312B5AD3E000F89705 /* SettingsDataSource.swift in Sources */,

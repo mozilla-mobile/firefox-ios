@@ -7,62 +7,57 @@ import Common
 import Shared
 
 enum AccessoryType {
-    case standard, creditCard, logins
+    case standard, creditCard, address, logins
 }
 
 class AccessoryViewProvider: UIView, Themeable {
+    // MARK: - Constants
     private struct UX {
         static let toolbarHeight: CGFloat = 50
-        static let cornerRadius: CGFloat = 4
-        static let imageViewSize: CGFloat = 24
         static let fixedSpacerWidth: CGFloat = 10
         static let fixedSpacerHeight: CGFloat = 30
         static let fixedLeadingSpacerWidth: CGFloat = 2
         static let fixedTrailingSpacerWidth: CGFloat = 3
-        static let cardButtonStackViewSpacing: CGFloat = 2
     }
 
+    // MARK: - Properties
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
-    private var accessoryType: AccessoryType = .standard
+    private var currentAccessoryView: AutofillAccessoryViewButtonItem?
 
-    // stubs - these closures will be given as selectors in a future task
+    // Stub closures - these closures will be given as selectors in a future task
     var previousClosure: (() -> Void)?
     var nextClosure: (() -> Void)?
     var doneClosure: (() -> Void)?
     var savedCardsClosure: (() -> Void)?
+    var savedAddressesClosure: (() -> Void)?
     var savedLoginsClosure: (() -> Void)?
 
-    private var toolbar: UIToolbar = .build { toolbar in
-        toolbar.sizeToFit()
+    // MARK: - UI Elements
+    private let toolbar: UIToolbar = .build {
+        $0.sizeToFit()
     }
 
     private lazy var previousButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: UIImage(named: StandardImageIdentifiers.Large.chevronUp),
-                                     style: .plain,
-                                     target: self,
-                                     action: #selector(tappedPreviousButton))
-
-        return button
+        .init(image: UIImage(named: StandardImageIdentifiers.Large.chevronUp),
+              style: .plain,
+              target: self,
+              action: #selector(tappedPreviousButton))
     }()
 
     private lazy var nextButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: UIImage(named: StandardImageIdentifiers.Large.chevronDown),
-                                     style: .plain,
-                                     target: self,
-                                     action: #selector(tappedNextButton))
-
-        return button
+        .init(image: UIImage(named: StandardImageIdentifiers.Large.chevronDown),
+              style: .plain,
+              target: self,
+              action: #selector(tappedNextButton))
     }()
 
     private lazy var doneButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: .CreditCard.Settings.Done,
-                                     style: .done,
-                                     target: self,
-                                     action: #selector(tappedDoneButton))
-
-        return button
+        .init(title: .CreditCard.Settings.Done,
+              style: .done,
+              target: self,
+              action: #selector(tappedDoneButton))
     }()
 
     private lazy var fixedSpacer: UIBarButtonItem = {
@@ -72,79 +67,48 @@ class AccessoryViewProvider: UIView, Themeable {
         fixedSpacer.width = CGFloat(UX.fixedSpacerWidth)
         return fixedSpacer
     }()
-    private let flexibleSpacer = UIBarButtonItem(systemItem: .flexibleSpace)
 
+    private let flexibleSpacer = UIBarButtonItem(systemItem: .flexibleSpace)
     private let leadingFixedSpacer: UIView = .build()
     private let trailingFixedSpacer: UIView = .build()
 
-    private lazy var cardImageView: UIImageView = .build { imageView in
-        imageView.image = UIImage(named: StandardImageIdentifiers.Large.creditCard)?.withRenderingMode(.alwaysTemplate)
-        imageView.contentMode = .scaleAspectFit
-        imageView.accessibilityElementsHidden = true
+    private lazy var creditCardAutofillView: AutofillAccessoryViewButtonItem = {
+        let accessoryView = AutofillAccessoryViewButtonItem(
+            image: UIImage(named: StandardImageIdentifiers.Large.creditCard),
+            labelText: .CreditCard.Settings.UseSavedCardFromKeyboard,
+            tappedAction: { [weak self] in
+                self?.tappedCreditCardButton()
+            })
+        accessoryView.accessibilityTraits = .button
+        accessoryView.accessibilityLabel = .CreditCard.Settings.UseSavedCardFromKeyboard
+        return accessoryView
+    }()
 
-        NSLayoutConstraint.activate([
-            imageView.widthAnchor.constraint(equalToConstant: UX.imageViewSize),
-            imageView.heightAnchor.constraint(equalToConstant: UX.imageViewSize)
-        ])
-    }
+    private lazy var addressAutofillView: AutofillAccessoryViewButtonItem = {
+        let accessoryView = AutofillAccessoryViewButtonItem(
+            image: UIImage(named: StandardImageIdentifiers.Large.location),
+            labelText: .Addresses.Settings.UseSavedAddressFromKeyboard,
+            tappedAction: { [weak self] in
+                self?.tappedAddressCardButton()
+            })
+        accessoryView.accessibilityTraits = .button
+        accessoryView.accessibilityLabel = .Addresses.Settings.UseSavedAddressFromKeyboard
+        return accessoryView
+    }()
 
-    private lazy var loginImageView: UIImageView = .build { imageView in
-        imageView.image = UIImage(named: StandardImageIdentifiers.Large.login)?.withRenderingMode(.alwaysTemplate)
-        imageView.contentMode = .scaleAspectFit
-        imageView.accessibilityElementsHidden = true
+    private lazy var loginsAutofillView: AutofillAccessoryViewButtonItem = {
+        let accessoryView = AutofillAccessoryViewButtonItem(
+            image: UIImage(named: StandardImageIdentifiers.Large.login),
+            labelText: .Settings.Passwords.UseSavedLoginFromKeyboard,
+            tappedAction: { [weak self] in
+                self?.tappedLoginsButton()
+            })
+        accessoryView.accessibilityTraits = .button
+        accessoryView.accessibilityLabel = .Addresses.Settings.UseSavedAddressFromKeyboard
+        return accessoryView
+    }()
 
-        NSLayoutConstraint.activate([
-            imageView.widthAnchor.constraint(equalToConstant: UX.imageViewSize),
-            imageView.heightAnchor.constraint(equalToConstant: UX.imageViewSize)
-        ])
-    }
-
-    private lazy var useCardTextLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .title3, size: 16, weight: .medium)
-        label.text = .CreditCard.Settings.UseSavedCardFromKeyboard
-        label.numberOfLines = 0
-        label.accessibilityTraits = .button
-    }
-
-    private lazy var useLoginTextLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .title3, size: 16, weight: .medium)
-        label.text = .Settings.Passwords.UseSavedLoginFromKeyboard
-        label.numberOfLines = 0
-        label.accessibilityTraits = .button
-    }
-
-    private lazy var cardButtonStackView: UIStackView = .build { [weak self] stackView in
-        guard let self = self else { return }
-
-        let stackViewTapped = UITapGestureRecognizer(target: self, action: #selector(self.tappedCardButton))
-
-        stackView.isUserInteractionEnabled = true
-        stackView.addArrangedSubview(self.leadingFixedSpacer)
-        stackView.addArrangedSubview(self.cardImageView)
-        stackView.addArrangedSubview(self.useCardTextLabel)
-        stackView.addArrangedSubview(self.trailingFixedSpacer)
-        stackView.spacing = UX.cardButtonStackViewSpacing
-        stackView.distribution = .equalCentering
-        stackView.layer.cornerRadius = UX.cornerRadius
-        stackView.addGestureRecognizer(stackViewTapped)
-    }
-
-    private lazy var loginsButtonStackView: UIStackView = .build { stackView in
-        let stackViewTapped = UITapGestureRecognizer(target: self, action: #selector(self.tappedLoginsButton))
-
-        stackView.isUserInteractionEnabled = true
-        stackView.addArrangedSubview(self.leadingFixedSpacer)
-        stackView.addArrangedSubview(self.loginImageView)
-        stackView.addArrangedSubview(self.useLoginTextLabel)
-        stackView.addArrangedSubview(self.trailingFixedSpacer)
-        stackView.spacing = UX.cardButtonStackViewSpacing
-        stackView.distribution = .equalCentering
-        stackView.layer.cornerRadius = UX.cornerRadius
-        stackView.addGestureRecognizer(stackViewTapped)
-    }
-
-    // MARK: Lifecycle
-
+    // MARK: - Initialization
     init(themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.themeManager = themeManager
@@ -167,21 +131,24 @@ class AccessoryViewProvider: UIView, Themeable {
         // Reset showing of credit card when dismissing the view
         // This is required otherwise it will always show credit card view
         // even if the input isn't of type credit card
-        accessoryType = .standard
+        currentAccessoryView = nil
         setupLayout()
     }
 
-    private func sendTelemetry(for accessoryType: AccessoryType) {
-        if accessoryType == .creditCard {
-            sendCreditCardAutofillPromptShownTelemetry()
-        }
-    }
-
-    // MARK: Layout and Theme
+    // MARK: - Theme and Layout
 
     func reloadViewFor(_ accessoryType: AccessoryType) {
-        self.accessoryType = accessoryType
-        sendTelemetry(for: accessoryType)
+        switch accessoryType {
+        case .standard:
+            currentAccessoryView = nil
+        case .creditCard:
+            currentAccessoryView = loginsAutofillView//creditCardAutofillView
+            sendCreditCardAutofillPromptShownTelemetry()
+        case .address:
+            currentAccessoryView = addressAutofillView
+        case .logins:
+            currentAccessoryView = loginsAutofillView
+        }
 
         setNeedsLayout()
         setupLayout()
@@ -197,60 +164,29 @@ class AccessoryViewProvider: UIView, Themeable {
     }
 
     private func setupLayout() {
-        translatesAutoresizingMaskIntoConstraints = false
         setupSpacer(leadingFixedSpacer, width: UX.fixedLeadingSpacerWidth)
         setupSpacer(trailingFixedSpacer, width: UX.fixedTrailingSpacerWidth)
-        switch accessoryType {
-        case .standard:
-            toolbar.items = [
-                previousButton,
-                nextButton,
-                flexibleSpacer,
-                doneButton
-            ]
-        case .creditCard:
-            let cardStackViewForBarButton = UIBarButtonItem(customView: cardButtonStackView)
-            cardStackViewForBarButton.accessibilityTraits = .button
-            cardStackViewForBarButton.accessibilityLabel = .CreditCard.Settings.UseSavedCardFromKeyboard
-            toolbar.items = [
-                previousButton,
-                nextButton,
-                fixedSpacer,
-                cardStackViewForBarButton,
-                flexibleSpacer,
-                doneButton
-            ]
-            toolbar.accessibilityElements = [
-                previousButton,
-                nextButton,
-                cardStackViewForBarButton,
-                doneButton
-            ]
-        case .logins:
-            let loginsStackViewForBarButton = UIBarButtonItem(customView: loginsButtonStackView)
-            loginsStackViewForBarButton.accessibilityTraits = .button
-            loginsStackViewForBarButton.accessibilityLabel = .Settings.Passwords.UseSavedLoginFromKeyboard
-            toolbar.items = [
-                previousButton,
-                nextButton,
-                fixedSpacer,
-                loginsStackViewForBarButton,
-                flexibleSpacer,
-                doneButton
-            ]
-            toolbar.accessibilityElements = [
-                previousButton,
-                nextButton,
-                loginsStackViewForBarButton,
-                doneButton
-            ]
+
+        var toolbarItems: [UIBarButtonItem] = [
+            flexibleSpacer,
+            previousButton,
+            nextButton,
+            fixedSpacer,
+            doneButton
+        ]
+
+        if let accessoryView = currentAccessoryView {
+            toolbarItems.insert(contentsOf: [ accessoryView], at: 0)
         }
 
+        toolbar.setItems(toolbarItems, animated: false)
         addSubview(toolbar)
 
         NSLayoutConstraint.activate([
-            toolbar.widthAnchor.constraint(equalTo: super.widthAnchor),
-            toolbar.heightAnchor.constraint(equalToConstant: UX.toolbarHeight)
+            toolbar.leadingAnchor.constraint(equalTo: leadingAnchor),
+            toolbar.trailingAnchor.constraint(equalTo: trailingAnchor),
+            toolbar.topAnchor.constraint(equalTo: topAnchor),
+            toolbar.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 
@@ -258,13 +194,12 @@ class AccessoryViewProvider: UIView, Themeable {
         let theme = themeManager.currentTheme
 
         backgroundColor = theme.colors.layer5
-        previousButton.tintColor = theme.colors.iconAccentBlue
-        nextButton.tintColor = theme.colors.iconAccentBlue
-        doneButton.tintColor = theme.colors.iconAccentBlue
-        cardImageView.tintColor = theme.colors.iconPrimary
-        loginImageView.tintColor = theme.colors.iconPrimary
-        cardButtonStackView.backgroundColor = theme.colors.layer5Hover
-        loginsButtonStackView.backgroundColor = theme.colors.layer5Hover
+        [previousButton, nextButton, doneButton].forEach { $0.tintColor = theme.colors.iconAccentBlue }
+
+        [creditCardAutofillView, addressAutofillView, loginsAutofillView].forEach {
+            $0.accessoryImageViewTintColor = theme.colors.iconPrimary
+            $0.backgroundColor = theme.colors.layer5Hover
+        }
     }
 
     // MARK: - Actions
@@ -285,8 +220,13 @@ class AccessoryViewProvider: UIView, Themeable {
     }
 
     @objc
-    private func tappedCardButton() {
+    private func tappedCreditCardButton() {
         savedCardsClosure?()
+    }
+
+    @objc
+    private func tappedAddressCardButton() {
+        savedAddressesClosure?()
     }
 
     @objc
@@ -294,7 +234,7 @@ class AccessoryViewProvider: UIView, Themeable {
         savedLoginsClosure?()
     }
 
-    // MARK: Telemetry
+    // MARK: - Telemetry
     fileprivate func sendCreditCardAutofillPromptShownTelemetry() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .view,

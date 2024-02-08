@@ -24,6 +24,9 @@ public protocol EngineSession {
     /// Navigates forward in the history of this session.
     func goForward()
 
+    /// Scroll the session to the top
+    func scrollToTop()
+
     /// Navigates to the specified index in the history of this session. The current index of
     /// this session's history  will be updated but the items within it will be unchanged.
     /// Invalid index values are ignored.

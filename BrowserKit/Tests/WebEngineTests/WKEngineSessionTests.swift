@@ -48,8 +48,7 @@ final class WKEngineSessionTests: XCTestCase {
 
         subject?.load(url: url)
 
-        // TODO: FXIOS-7981 Check scheme before loading
-        XCTAssertEqual(webViewProvider.webView.loadCalled, 1)
+        XCTAssertEqual(webViewProvider.webView.loadCalled, 0)
         prepareForTearDown(subject!)
     }
 
@@ -119,6 +118,19 @@ final class WKEngineSessionTests: XCTestCase {
         subject?.goForward()
 
         XCTAssertEqual(webViewProvider.webView.goForwardCalled, 1)
+        prepareForTearDown(subject!)
+    }
+
+    // MARK: Scroll to top
+
+    func testScrollToTop() {
+        let subject = createSubject()
+
+        subject?.scrollToTop()
+
+        let scrollView = webViewProvider.webView.engineScrollView as? MockEngineScrollView
+        XCTAssertEqual(scrollView?.setContentOffsetCalled, 1)
+        XCTAssertEqual(scrollView?.savedContentOffset, CGPoint.zero)
         prepareForTearDown(subject!)
     }
 

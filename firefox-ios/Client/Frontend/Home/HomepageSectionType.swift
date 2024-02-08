@@ -5,7 +5,7 @@
 import Foundation
 
 enum HomepageSectionType: Int, CaseIterable {
-    case logoHeader
+    case homepageHeader
     case messageCard
     case topSites
     case jumpBackIn
@@ -26,7 +26,7 @@ enum HomepageSectionType: Int, CaseIterable {
 
     var cellIdentifier: String {
         switch self {
-        case .logoHeader: return HomeLogoHeaderCell.cellIdentifier
+        case .homepageHeader: return HomepageHeaderCell.cellIdentifier
         case .messageCard: return HomepageMessageCardCell.cellIdentifier
         // Top sites has more than 1 cell type, dequeuing is done through FxHomeSectionHandler protocol
         case .topSites: return ""
@@ -41,7 +41,7 @@ enum HomepageSectionType: Int, CaseIterable {
     }
 
     static var cellTypes: [ReusableCell.Type] {
-        return [HomeLogoHeaderCell.self,
+        return [HomepageHeaderCell.self,
                 HomepageMessageCardCell.self,
                 TopSiteItemCell.self,
                 EmptyTopSiteCell.self,

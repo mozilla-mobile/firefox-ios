@@ -151,11 +151,7 @@ class NavigationTest: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306836
     // Smoketest
     func testLongPressLinkOptions() {
-        navigator.openURL(path(forTestPage: "test-example.html"))
-        mozWaitForElementToExist(app.webViews.links[website_2["link"]!], timeout: TIMEOUT_LONG)
-        app.webViews.links[website_2["link"]!].press(forDuration: 2)
-        mozWaitForElementToExist(app.otherElements.collectionViews.element(boundBy: 0), timeout: TIMEOUT)
-
+        openContextMenuForArticleLink()
         XCTAssertTrue(app.buttons["Open in New Tab"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Open in New Private Tab"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Copy Link"].exists, "The option is not shown")
@@ -422,5 +418,59 @@ class NavigationTest: BaseTestCase {
         mozWaitForValueContains(urlBar, value: "example.com/")
         XCTAssertFalse(app.keyboards.count > 0, "The keyboard is shown")
         // swiftlint:enable empty_count
+    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441772
+    func testOpenInNewTab() {
+        // Long-tap on an article link. Choose "Open in New Tab".
+        openContextMenuForArticleLink()
+        mozWaitForElementToExist(app.buttons["Open in New Tab"])
+        app.buttons["Open in New Tab"].tap()
+        // A new tab loading the article page should open
+        navigator.goto(TabTray)
+        let numTabs = app.otherElements["Tabs Tray"].cells.count
+        XCTAssertEqual(numTabs, 2, "Total number of opened tabs should be 2")
+        XCTAssertTrue(app.otherElements["Tabs Tray"].cells.elementContainingText("Example Domain.").exists)
+        XCTAssertTrue(app.otherElements["Tabs Tray"].cells.staticTexts["Example Domains"].exists)
+    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441773
+    func testOpenInNewPrivateTab() {
+        // Long-tap on an article link. Choose "Open in New Private Tab".
+        openContextMenuForArticleLink()
+        mozWaitForElementToExist(app.buttons["Open in New Private Tab"])
+        app.buttons["Open in New Private Tab"].tap()
+        // The article is loaded in a new private tab
+        navigator.goto(TabTray)
+        var numTabs = app.otherElements["Tabs Tray"].cells.count
+        XCTAssertEqual(numTabs, 1, "Total number of regulat opened tabs should be 1")
+        XCTAssertTrue(app.otherElements["Tabs Tray"].cells.elementContainingText("Example Domain.").exists)
+        if iPad() {
+            app.buttons["Private"].tap()
+        } else {
+            app.buttons["privateModeLarge"].tap()
+        }
+        numTabs = app.otherElements["Tabs Tray"].cells.count
+        XCTAssertEqual(numTabs, 1, "Total number of private opened tabs should be 1")
+        XCTAssertTrue(app.otherElements["Tabs Tray"].cells.staticTexts["Example Domains"].exists)
+    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441774
+    func testBookmarkLink() {
+        // Long-tap on an article link. Choose "Bookmark Link".
+        openContextMenuForArticleLink()
+        mozWaitForElementToExist(app.buttons["Bookmark Link"])
+        app.buttons["Bookmark Link"].tap()
+        // The link has been added to the Bookmarks panel in Library
+        navigator.goto(LibraryPanel_Bookmarks)
+        mozWaitForElementToExist(app.tables["Bookmarks List"], timeout: 5)
+        XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[website_2["link"]!].exists)
+    }
+
+    private func openContextMenuForArticleLink() {
+        navigator.openURL(path(forTestPage: "test-example.html"))
+        mozWaitForElementToExist(app.webViews.links[website_2["link"]!], timeout: TIMEOUT_LONG)
+        app.webViews.links[website_2["link"]!].press(forDuration: 2)
+        mozWaitForElementToExist(app.otherElements.collectionViews.element(boundBy: 0), timeout: TIMEOUT)
     }
  }

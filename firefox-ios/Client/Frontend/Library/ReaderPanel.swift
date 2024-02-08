@@ -566,8 +566,8 @@ class ReadingListPanel: UITableViewController,
 
     func applyTheme() {
         tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
-        view.backgroundColor = themeManager.currentTheme.colors.layer6
-        tableView.backgroundColor = themeManager.currentTheme.colors.layer6
+        view.backgroundColor = themeManager.currentTheme.colors.layer1
+        tableView.backgroundColor = themeManager.currentTheme.colors.layer1
         refreshReadingList()
     }
 }

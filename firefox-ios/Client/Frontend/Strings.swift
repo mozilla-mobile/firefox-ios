@@ -245,6 +245,11 @@ extension String {
                 tableName: "Settings",
                 value: "SAVED ADDRESSES",
                 comment: "On the autofill settings screen, a label for the section that displays the list of saved addresses. This label adds additional context for users regarding the toggle switch that allows saving and autofilling of addresses for webpages.")
+            public static let UseSavedAddressFromKeyboard = MZLocalizedString(
+                key: "Addresses.Settings.UseSavedAddressFromKeyboard.v124",
+                tableName: "Settings",
+                value: "Use saved address",
+                comment: "Displayed inside the keyboard hint when a user is entering their address and has at least one saved address. Indicates that there are stored addresses available for use in filling out a form.")
         }
     }
 }
@@ -4855,6 +4860,11 @@ extension String {
         tableName: nil,
         value: nil,
         comment: "Accessibility label for the reload button")
+    public static let TabLocationReloadAccessibilityHint = MZLocalizedString(
+        key: "Address.Bar.Reload.A11y.Hint.v124",
+        tableName: "TabLocation",
+        value: "Double tap and hold for more options",
+        comment: "Accessibility hint for the reload button")
     public static let TabLocationShareAccessibilityLabel = MZLocalizedString(
         key: "TabLocation.Share.A11y.Label.v119",
         tableName: "TabLocation",

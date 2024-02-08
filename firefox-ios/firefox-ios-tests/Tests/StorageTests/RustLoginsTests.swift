@@ -9,7 +9,6 @@ import Shared
 class RustLoginsTests: XCTestCase {
     var files: FileAccessor!
     var logins: RustLogins!
-    var encryptionKey: String!
 
     override func setUp() {
         super.setUp()
@@ -21,12 +20,6 @@ class RustLoginsTests: XCTestCase {
                 isDirectory: true
             ).appendingPathComponent("testLoginsPerField.db").path
             try? files.remove("testLoginsPerField.db")
-
-            if let key = try? createKey() {
-                encryptionKey = key
-            } else {
-                XCTFail("Encryption key wasn't created")
-            }
 
             logins = RustLogins(databasePath: databasePath)
             _ = logins.reopenIfClosed()
