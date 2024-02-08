@@ -68,17 +68,16 @@ jobs:
             echo "Couldn't determine current release version. Defaulting to [vXXX]"
             next_version=XXX
           fi
-          
+
           echo "Next version is v$next_version"
           echo "next_version=$next_version" >> $GITHUB_ENV
-          echo "::set-output name=next_version::v$next_version"
 
     - name: Create Pull Request
       if: env.changes_detected == 'true'
       uses: peter-evans/create-pull-request@v5
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        commit-message: Refactor [v${{ steps.versioning.outputs.next_version}}] Automated URI update on ${{ github.event.inputs.branchName || 'main' }}
-        title: Refactor [v${{ steps.versioning.outputs.next_version}}] Automated URI update on ${{ github.event.inputs.branchName || 'main' }}
+        token: ${{ secrets.TEST_GITHUB_ACTION_TOKEN }}
+        commit-message: Refactor [v${{ env.next_version }}] Automated URI update on ${{ github.event.inputs.branchName || 'main' }}
+        title: Refactor [v${{ env.next_version }}] Automated URI update on ${{ github.event.inputs.branchName || 'main' }}
         branch: auto-update-${{ github.run_number }}
         body: This automated PR updates the URIs.
