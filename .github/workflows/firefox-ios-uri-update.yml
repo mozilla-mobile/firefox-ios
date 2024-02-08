@@ -40,11 +40,10 @@ jobs:
         else
           echo "Changes detected, proceeding to create PR."
           git diff
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add .
-          git commit -m "Automated URI update"
+          git add firefox-ios/Shared/Extensions/URLExtensions.swift
           echo "changes_detected=true" >> $GITHUB_ENV
+          datetime=$(date +%Y%m%d)
+          echo "date=$datetime" >> $GITHUB_ENV
         fi
 
     - name: Determine PR Version Number
@@ -78,6 +77,8 @@ jobs:
       with:
         token: ${{ secrets.TEST_GITHUB_ACTION_TOKEN }}
         commit-message: Refactor [v${{ env.next_version }}] Automated URI update on ${{ github.event.inputs.branchName || 'main' }}
+        author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+        committer: GitHub <noreply@github.com>
         title: Refactor [v${{ env.next_version }}] Automated URI update on ${{ github.event.inputs.branchName || 'main' }}
-        branch: auto-update-${{ github.run_number }}
+        branch: update-uri-schemes-${{ env.date }}
         body: This automated PR updates the URIs.
