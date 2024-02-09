@@ -271,10 +271,30 @@ workflows:
                 exit 0
             fi
 
+            # Skip building on only markdown and/or LICENSE file changes
+            TOTAL_CHANGED_FILES_COUNT=$(git diff --name-only $BASE_BRANCH..."$BITRISE_GIT_COMMIT" | wc -l | xargs)
+            MD_AND_LICENSE_FILE_COUNT=$(git diff --name-only $BASE_BRANCH..."$BITRISE_GIT_COMMIT" | grep -Eci '(\.md$|^LICENSE$)' | xargs)
+
+            if [ "$TOTAL_CHANGED_FILES_COUNT" -eq "$MD_AND_LICENSE_FILE_COUNT" ] && [ "$MD_AND_LICENSE_FILE_COUNT" -ne 0 ]; then
+                echo "Only Markdown and/or LICENSE files have been changed. No build will be triggered."
+                exit 0
+            fi
+
             # Check for specific applications and set flags accordingly
             # Add more specific conditions for directories as needed; otherwise see default case
             # Pattern matches (*) on directory names and reacts to subdirectory changes as well
             for app in $APPS_AFFECTED; do
+                # Check for root directory changes
+                if [[ "$app" == "." ]]; then
+                    CHANGED_FILES=$(git diff --name-only $BASE_BRANCH..."$BITRISE_GIT_COMMIT")
+                    echo "Project root changes detected: $CHANGED_FILES"
+                    ROOT_SPECIFIC_FILES=$(echo "$CHANGED_FILES" | grep -E '^(bootstrap\.sh|content_blocker_update\.sh|Dangerfile|Dangerfile\.swift|Info\.plist|iOSNimbusFeatureUtility\.sh|package\.lock|Package\.json|Package\.resolved|Package\.swift|rust_components_local\.sh|setup_build_tools\.sh|update_version\.sh|\.swiftlint\.yml)$' || true)
+                    echo "Root specific files: $ROOT_SPECIFIC_FILES"
+                    if [ ! -z "$ROOT_SPECIFIC_FILES" ]; then
+                        BUILD_FIREFOX_IOS="true"
+                    fi
+                fi
+
                 case "$app" in
                     firefox-ios*)
                         BUILD_FIREFOX_IOS="true"
@@ -284,6 +304,11 @@ workflows:
                         ;;
                     SampleBrowser*)
                         BUILD_SAMPLE_BROWSER_IOS="true"
+                        ;;
+                    BrowserKit*|taskcluster*|test-fixtures*)
+                        # Explicity directory changes - build all applications
+                        BUILD_FIREFOX_IOS="true"
+                        BUILD_FOCUS_IOS="true"
                         ;;
                     ".")
                         # Root directory changes - build all applications
