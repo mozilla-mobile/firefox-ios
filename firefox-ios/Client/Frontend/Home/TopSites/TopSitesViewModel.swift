@@ -143,9 +143,7 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     func numberOfItemsInSection() -> Int {
-        // If the number of items is empty, double check to ensure there is indeed no data to show
-        // This is to go around an issue on fresh install where the numberOfItems variable isn't updated yet
-        return numberOfItems == 0 ? topSites.count : numberOfItems
+        return numberOfItems
     }
 
     func section(for traitCollection: UITraitCollection, size: CGSize) -> NSCollectionLayoutSection {
