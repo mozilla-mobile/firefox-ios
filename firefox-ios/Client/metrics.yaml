@@ -4260,7 +4260,7 @@ urlbar:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-8111
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/18507
+      - https://github.com/mozilla-mobile/firefox-ios/pull/18654
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
