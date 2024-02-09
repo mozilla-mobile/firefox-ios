@@ -67,8 +67,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             style: .destructive,
             handler: { [weak self] _ in
                 self?.privateBrowsingTelemetry.sendDataClearanceTappedTelemetry(didConfirm: true)
-                self?.setupDataClearanceAnimation {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                self?.setupDataClearanceAnimation { timingConstant in
+                    DispatchQueue.main.asyncAfter(deadline: .now() + timingConstant) {
                         self?.closePrivateTabsAndOpenNewPrivateHomepage()
                         self?.showDataClearanceConfirmationToast()
                     }
@@ -96,9 +96,14 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         }
     }
 
-    private func setupDataClearanceAnimation(completion: @escaping () -> Void) {
-        guard !UIAccessibility.isReduceMotionEnabled else {
-            completion()
+    /// Setup animation for data clearance flow unless reduce motion is enabled
+    /// - Parameter completion: returns the proper timing to match animation on when to close tabs and display toast
+    private func setupDataClearanceAnimation(completion: @escaping (Double) -> Void) {
+        let showAnimation = !UIAccessibility.isReduceMotionEnabled
+        let timingToMatchGradientOverlay = showAnimation ? 0.8 : 0.0
+
+        guard showAnimation else {
+            completion(timingToMatchGradientOverlay)
             return
         }
         let dataClearanceAnimation = DataClearanceAnimation()
@@ -108,7 +113,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
                 traitCollection
             )
         )
-        completion()
+
+        completion(timingToMatchGradientOverlay)
     }
 
     func tabToolbarDidPressLibrary(_ tabToolbar: TabToolbarProtocol, button: UIButton) {

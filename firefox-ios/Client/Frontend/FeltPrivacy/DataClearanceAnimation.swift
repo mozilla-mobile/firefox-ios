@@ -81,15 +81,11 @@ struct DataClearanceAnimation {
     /// - Parameters:
     ///   - view: parent view that contains the animation
     private func setupForiPad(with view: UIView) {
-        guard !UIAccessibility.isReduceMotionEnabled else {
-            return
-        }
         let gradientView = setup(with: AnimationType.gradient.name, contentMode: .scaleAspectFill)
         let animationView = setup(with: AnimationType.wave.name, contentMode: .scaleAspectFit)
 
         animationView.translatesAutoresizingMaskIntoConstraints = false
         gradientView.translatesAutoresizingMaskIntoConstraints = false
-
         view.addSubviews(gradientView, animationView)
 
         NSLayoutConstraint.activate([
