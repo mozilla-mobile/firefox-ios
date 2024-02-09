@@ -1783,6 +1783,11 @@ extension String {
                 tableName: nil,
                 value: "Use your fingerprint to access passwords now.",
                 comment: "Touch ID prompt subtitle when accessing logins and passwords")
+            public static let UseSavedLoginFromKeyboard = MZLocalizedString(
+                key: "", // Settings.Passwords.Autofill.UseSavedLoginFromKeyboard.v124
+                tableName: "Settings",
+                value: "Use saved login",
+                comment: "When a user is in the process of loggin in, and has at least one saved password, we show this label inside the keyboard hint. This indicates to the user that there are stored logins available for use on this pending authentication.")
         }
 
         public struct Sync {

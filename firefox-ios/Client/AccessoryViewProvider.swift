@@ -7,7 +7,7 @@ import Common
 import Shared
 
 enum AccessoryType {
-    case standard, creditCard, address
+    case standard, creditCard, address, login
 }
 
 class AccessoryViewProvider: UIView, Themeable {
@@ -18,6 +18,7 @@ class AccessoryViewProvider: UIView, Themeable {
         static let fixedSpacerHeight: CGFloat = 30
         static let fixedLeadingSpacerWidth: CGFloat = 2
         static let fixedTrailingSpacerWidth: CGFloat = 3
+        static let doneButtonFontSize: CGFloat = 17
     }
 
     // MARK: - Properties
@@ -32,6 +33,7 @@ class AccessoryViewProvider: UIView, Themeable {
     var doneClosure: (() -> Void)?
     var savedCardsClosure: (() -> Void)?
     var savedAddressesClosure: (() -> Void)?
+    var savedLoginsClosure: (() -> Void)?
 
     // MARK: - UI Elements
     private let toolbar: UIToolbar = .build {
@@ -59,12 +61,17 @@ class AccessoryViewProvider: UIView, Themeable {
     }()
 
     private lazy var doneButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: .CreditCard.Settings.Done,
-                                     style: .done,
-                                     target: self,
-                                     action: #selector(tappedDoneButton))
-        button.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.doneButton
-        return button
+        let button = UIButton(type: .system)
+        button.setTitle(.CreditCard.Settings.Done, for: .normal)
+        button.addTarget(self, action: #selector(self.tappedDoneButton), for: .touchUpInside)
+        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
+            withTextStyle: .body,
+            size: UX.doneButtonFontSize,
+            weight: .semibold
+        )
+        let barButton = UIBarButtonItem(customView: button)
+        barButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.doneButton
+        return barButton
     }()
 
     private lazy var fixedSpacer: UIBarButtonItem = {
@@ -109,6 +116,18 @@ class AccessoryViewProvider: UIView, Themeable {
         return accessoryView
     }()
 
+    private lazy var loginAutofillView: AutofillAccessoryViewButtonItem = {
+        let accessoryView = AutofillAccessoryViewButtonItem(
+            image: UIImage(named: StandardImageIdentifiers.Large.login),
+            labelText: .Settings.Passwords.UseSavedLoginFromKeyboard,
+            tappedAction: { [weak self] in
+                self?.tappedLoginsButton()
+            })
+        accessoryView.accessibilityTraits = .button
+        accessoryView.accessibilityLabel = .Settings.Passwords.UseSavedLoginFromKeyboard
+        return accessoryView
+    }()
+
     // MARK: - Initialization
     init(themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationCenter = NotificationCenter.default) {
@@ -147,6 +166,8 @@ class AccessoryViewProvider: UIView, Themeable {
             sendCreditCardAutofillPromptShownTelemetry()
         case .address:
             currentAccessoryView = addressAutofillView
+        case .login:
+            currentAccessoryView = loginAutofillView
         }
 
         setNeedsLayout()
@@ -166,19 +187,22 @@ class AccessoryViewProvider: UIView, Themeable {
         setupSpacer(leadingFixedSpacer, width: UX.fixedLeadingSpacerWidth)
         setupSpacer(trailingFixedSpacer, width: UX.fixedTrailingSpacerWidth)
 
-        var toolbarItems: [UIBarButtonItem] = [
-            flexibleSpacer,
+        toolbar.items = [
             previousButton,
             nextButton,
             fixedSpacer,
+            currentAccessoryView,
+            flexibleSpacer,
             doneButton
-        ]
+        ].compactMap { $0 }
 
-        if let accessoryView = currentAccessoryView {
-            toolbarItems.insert(contentsOf: [ accessoryView], at: 0)
-        }
+        toolbar.accessibilityElements = [
+            previousButton,
+            nextButton,
+            currentAccessoryView,
+            doneButton
+        ].compactMap { $0 }
 
-        toolbar.setItems(toolbarItems, animated: false)
         addSubview(toolbar)
 
         NSLayoutConstraint.activate([
@@ -193,9 +217,12 @@ class AccessoryViewProvider: UIView, Themeable {
         let theme = themeManager.currentTheme
 
         backgroundColor = theme.colors.layer5
-        [previousButton, nextButton, doneButton].forEach { $0.tintColor = theme.colors.iconAccentBlue }
+        [previousButton, nextButton, doneButton].forEach {
+            $0.tintColor = theme.colors.iconAccentBlue
+            $0.customView?.tintColor = theme.colors.iconAccentBlue
+        }
 
-        [creditCardAutofillView, addressAutofillView].forEach {
+        [creditCardAutofillView, addressAutofillView, loginAutofillView].forEach {
             $0.accessoryImageViewTintColor = theme.colors.iconPrimary
             $0.backgroundColor = theme.colors.layer5Hover
         }
@@ -226,6 +253,11 @@ class AccessoryViewProvider: UIView, Themeable {
     @objc
     private func tappedAddressCardButton() {
         savedAddressesClosure?()
+    }
+
+    @objc
+    private func tappedLoginsButton() {
+        savedLoginsClosure?()
     }
 
     // MARK: - Telemetry
