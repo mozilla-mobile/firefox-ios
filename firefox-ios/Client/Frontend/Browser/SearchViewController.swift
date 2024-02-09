@@ -712,12 +712,12 @@ class SearchViewController: SiteTableViewController,
     // MARK: - Table view delegate
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        var resultType = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.selectedResult
+        searchTelemetry?.engagementType = .tap
         switch SearchListSection(rawValue: indexPath.section)! {
         case .searchSuggestions:
             guard let defaultEngine = searchEngines?.defaultEngine else { return }
 
-            recordSearchListSelectionTelemetry(type: .searchSuggestions)
+            searchTelemetry?.selectedResult = .searchSuggest
             // Assume that only the default search engine can provide search suggestions.
             guard let suggestions = suggestions,
                   let suggestion = suggestions[safe: indexPath.row],
@@ -735,19 +735,18 @@ class SearchViewController: SiteTableViewController,
             selectedIndexPath = indexPath
             searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: suggestion)
         case .openedTabs:
-            recordSearchListSelectionTelemetry(type: .openedTabs)
+            searchTelemetry?.selectedResult = .tab
             let tab = self.filteredOpenedTabs[indexPath.row]
             selectedIndexPath = indexPath
             searchDelegate?.searchViewController(self, uuid: tab.tabUUID)
         case .remoteTabs:
-            recordSearchListSelectionTelemetry(type: .remoteTabs)
+            searchTelemetry?.selectedResult = .remoteTab
             let remoteTab = self.filteredRemoteClientTabs[indexPath.row].tab
             selectedIndexPath = indexPath
             searchDelegate?.searchViewController(self, didSelectURL: remoteTab.URL, searchTerm: nil)
         case .bookmarksAndHistory:
             if let site = data[indexPath.row] {
-                recordSearchListSelectionTelemetry(type: .bookmarksAndHistory,
-                                                   isBookmark: site.bookmarked ?? false)
+                searchTelemetry?.selectedResult = site.bookmarked ?? false ? .bookmark : .history
                 if let url = URL(string: site.url, invalidCharacters: false) {
                     selectedIndexPath = indexPath
                     searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
@@ -756,12 +755,13 @@ class SearchViewController: SiteTableViewController,
         case .searchHighlights:
             if let urlString = searchHighlights[indexPath.row].urlString,
                 let url = URL(string: urlString, invalidCharacters: false) {
-                recordSearchListSelectionTelemetry(type: .searchHighlights)
+                searchTelemetry?.selectedResult = .searchHistory
                 selectedIndexPath = indexPath
                 searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
             }
         case .firefoxSuggestions:
             let firefoxSuggestion = firefoxSuggestions[indexPath.row]
+            searchTelemetry?.selectedResult = firefoxSuggestion.isSponsored ? .suggestSponsor : .suggestNonSponsor
             selectedIndexPath = indexPath
             searchDelegate?.searchViewController(
                 self,
@@ -769,6 +769,8 @@ class SearchViewController: SiteTableViewController,
                 searchTerm: nil
             )
         }
+
+        searchTelemetry?.recordURLBarSearchEngagementTelemetryEvent()
     }
 
     override func tableView(
@@ -1038,34 +1040,6 @@ class SearchViewController: SiteTableViewController,
         default:
             break
         }
-    }
-}
-
-// MARK: - Telemetry
-private extension SearchViewController {
-    func recordSearchListSelectionTelemetry(type: SearchListSection, isBookmark: Bool = false) {
-        let key = TelemetryWrapper.EventExtraKey.awesomebarSearchTapType.rawValue
-        var extra: String
-        switch type {
-        case .searchSuggestions:
-            extra = TelemetryWrapper.EventValue.searchSuggestion.rawValue
-        case .remoteTabs:
-            extra = TelemetryWrapper.EventValue.remoteTab.rawValue
-        case .openedTabs:
-            extra = TelemetryWrapper.EventValue.openedTab.rawValue
-        case .bookmarksAndHistory:
-            extra = isBookmark ? TelemetryWrapper.EventValue.bookmarkItem.rawValue :
-                        TelemetryWrapper.EventValue.historyItem.rawValue
-        case .searchHighlights:
-            extra = TelemetryWrapper.EventValue.searchHighlights.rawValue
-        case .firefoxSuggestions:
-            return
-        }
-
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .awesomebarResults,
-                                     extras: [key: extra])
     }
 }
 
