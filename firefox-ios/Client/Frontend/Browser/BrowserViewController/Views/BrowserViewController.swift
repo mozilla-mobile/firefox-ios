@@ -250,7 +250,7 @@ class BrowserViewController: UIViewController,
     }
 
     deinit {
-        unscubscribeFromRedux()
+        unsubscribeFromRedux()
     }
 
     override var prefersStatusBarHidden: Bool {
@@ -518,7 +518,7 @@ class BrowserViewController: UIViewController,
         })
     }
 
-    func unscubscribeFromRedux() {
+    func unsubscribeFromRedux() {
         store.dispatch(ActiveScreensStateAction.closeScreen(
             ScreenActionContext(screen: .browserViewController, windowUUID: windowUUID)
         ))
