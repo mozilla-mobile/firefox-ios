@@ -67,6 +67,7 @@ class TabLocationView: UIView, FeatureFlaggable {
             updateTextWithURL()
             shareButton.isHidden = !(shouldEnableShareButtonFeature && isValidHttpUrlProtocol(url))
             setNeedsUpdateConstraints()
+            showTrackingProtectionButton(for: url)
         }
     }
 
