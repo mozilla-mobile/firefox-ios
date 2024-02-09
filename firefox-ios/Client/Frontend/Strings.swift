@@ -226,6 +226,22 @@ extension String {
     }
 }
 
+// MARK: - Keyboard Accessory View
+extension String {
+    public struct KeyboardAccessory {
+        public static let NextButtonA11yLabel = MZLocalizedString(
+            key: "KeyboardAccessory.NextButton.Accessibility.Label.v124",
+            tableName: "KeyboardAccessory",
+            value: "Next form field",
+            comment: "Accessibility label for next button that is displayed above the keyboard when a form field on a website was tapped.")
+        public static let PreviousButtonA11yLabel = MZLocalizedString(
+            key: "KeyboardAccessory.PreviousButton.Accessibility.Label.v124",
+            tableName: "KeyboardAccessory",
+            value: "Previous form field",
+            comment: "Accessibility label for previous button that is displayed above the keyboard when a form field on a website was tapped.")
+    }
+}
+
 // MARK: - Address Autofill
 extension String {
     public struct Addresses {

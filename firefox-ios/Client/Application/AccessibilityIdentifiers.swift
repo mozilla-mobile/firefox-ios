@@ -44,6 +44,14 @@ public struct AccessibilityIdentifiers {
             static let cancelButton = "urlBar-cancel"
             static let searchTextField = "address"
         }
+
+        struct KeyboardAccessory {
+            static let doneButton = "KeyboardAccessory.doneButton"
+            static let nextButton = "KeyboardAccessory.nextButton"
+            static let previousButton = "KeyboardAccessory.previousButton"
+            static let addressAutofillButton = "KeyboardAccessory.addressAutofillButton"
+            static let creditCardAutofillButton = "KeyboardAccessory.creditCardAutofillButton"
+        }
     }
 
     struct ContextualHints {

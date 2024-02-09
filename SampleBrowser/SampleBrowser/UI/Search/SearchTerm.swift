@@ -5,22 +5,14 @@
 import Foundation
 
 struct SearchTerm {
-    var baseURL = SearchDataProvider.SearchEndpoints.searchTerm.baseURL
-    var searchTerm: String
+    private var baseURL = SearchDataProvider.SearchEndpoints.searchTerm.baseURL
+    var term: String
 
-    var urlWithTerm: String {
-        return "\(baseURL)\(searchTerm)"
+    init(term: String) {
+        self.term = term
     }
 
-    var isValidUrl: Bool {
-        return searchTerm.validURL
-    }
-
-    var encodedURL: URL? {
-        guard let encodedURL = urlWithTerm.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-              let url = URL(string: encodedURL) else {
-            return nil
-        }
-        return url
+    var urlWithSearchTerm: String {
+        return "\(baseURL)\(term)"
     }
 }

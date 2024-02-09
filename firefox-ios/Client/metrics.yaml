@@ -4149,6 +4149,68 @@ installed_mozilla_products:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
 
+# URLbar related telemetry
+urlbar:
+  impression:
+    type: event
+    description: |
+      Recorded when urlbar results are shown to the user
+    extra_keys:
+      reason:
+        type: string
+        description: |
+          Reason for the impression. pause - recorded when the results
+          were shown for at least 1s. Only one pause
+                  is recorded for each search session.
+      sap:
+        type: string
+        description: |
+          Where the user action started, like urlbar or urlbar_newtab
+      interaction:
+        type: string
+        description: |
+          How the user started the search, by typing or pasting text
+      search_mode:
+        type: string
+        description: |
+          If the urlbar is in search mode, thus restricting results to a 
+          specific search engine or local source, this is set to the search
+          mode source. For iOS the search starts from tabs
+      n_chars:
+        type: quantity
+        description: |
+         Number of typed characters
+      n_words:
+        type: quantity
+        description: |
+         Number of typed words (doesn’t support CJK languages)
+      n_results:
+        type: quantity
+        description: |
+         Number of results, if this is high the results
+         list below may be incomplete due to size limits
+      groups:
+        type: string
+        description: |
+          Comma separated list of result groups in order, groups may be        
+          repeated, since the list will match 1:1 the results list, so we
+          Can link each result to a group, like  heuristic, adaptive_history,
+           search_history, search_suggest, top_pick, top_site, remote_tab, addon,
+            general, suggest
+      results:
+        type: string
+        description: |
+          Comma separated list of result types in order. Possible values are:
+           unknown, bookmark, history, search_engine, search_suggest, search_history,
+           tab, remote_tab, suggest_sponsor, suggest_non_sponsor
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-8109
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/18507
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
+
 # Awesomebar related telemetry
 
 awesomebar:

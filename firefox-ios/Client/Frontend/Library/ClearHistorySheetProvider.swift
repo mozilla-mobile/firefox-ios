@@ -106,7 +106,7 @@ class ClearHistorySheetProvider {
     }
 
     func addCancelAction(to alert: UIAlertController) {
-        let cancelAction = UIAlertAction(title: .CancelString, style: .cancel)
+        let cancelAction = UIAlertAction(title: .CancelString, style: .default)
         alert.addAction(cancelAction)
     }
 }

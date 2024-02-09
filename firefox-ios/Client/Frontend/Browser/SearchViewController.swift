@@ -100,6 +100,8 @@ class SearchViewController: SiteTableViewController,
     var firefoxSuggestions = [RustFirefoxSuggestion]()
     private var highlightManager: HistoryHighlightsManagerProtocol
 
+    var searchTelemetry: SearchTelemetry?
+
     private var selectedIndexPath: IndexPath?
 
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
@@ -151,6 +153,7 @@ class SearchViewController: SiteTableViewController,
         self.tabManager = tabManager
         self.searchFeature = featureConfig
         self.highlightManager = highlightManager
+        self.searchTelemetry = SearchTelemetry(tabManager: tabManager)
         super.init(profile: profile, windowUUID: tabManager.windowUUID)
 
         tableView.sectionHeaderTopPadding = 0
@@ -204,6 +207,7 @@ class SearchViewController: SiteTableViewController,
             resultCount: 3) { results in
             guard let results = results else { return }
             self.searchHighlights = results
+            self.searchTelemetry?.searchHighlights = results
             self.tableView.reloadData()
         }
     }
@@ -243,6 +247,7 @@ class SearchViewController: SiteTableViewController,
             await MainActor.run {
                 guard let self, self.searchQuery == tempSearchQuery else { return }
                 self.firefoxSuggestions = suggestions
+                self.searchTelemetry?.firefoxSuggestions = suggestions
                 self.tableView.reloadData()
             }
         }
@@ -263,10 +268,13 @@ class SearchViewController: SiteTableViewController,
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         searchFeature.recordExposure()
+
+        searchTelemetry?.startImpressionTimer()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         searchDelegate?.searchViewControllerWillHide(self)
+        searchTelemetry?.stopImpressionTimer()
         super.viewWillDisappear(animated)
     }
 
@@ -570,6 +578,7 @@ class SearchViewController: SiteTableViewController,
                         self.remoteClientTabs.append(ClientTabsSearchWrapper(client: value.client, tab: tab))
                     }
                 }
+                self.searchTelemetry?.remoteClientTabs = self.remoteClientTabs
             }
         }
     }
@@ -609,6 +618,7 @@ class SearchViewController: SiteTableViewController,
             let text = lines.joined(separator: "\n")
             return find(in: text)
         }
+        searchTelemetry?.filteredOpenedTabs = filteredOpenedTabs
     }
 
     func searchRemoteTabs(for searchString: String) {
@@ -640,6 +650,8 @@ class SearchViewController: SiteTableViewController,
 
             return false
         }
+
+        searchTelemetry?.filteredRemoteClientTabs = filteredRemoteClientTabs
     }
 
     private func querySuggestClient() {
@@ -676,10 +688,12 @@ class SearchViewController: SiteTableViewController,
                 self.suggestions = [self.searchQuery]
             }
 
+            self.searchTelemetry?.suggestions = self.suggestions
             self.searchTabs(for: self.searchQuery)
             self.searchRemoteTabs(for: self.searchQuery)
             // Reload the tableView to show the new list of search suggestions.
             self.savedQuery = tempSearchQuery
+            self.searchTelemetry?.savedQuery = tempSearchQuery
             self.tableView.reloadData()
         })
     }
@@ -691,12 +705,14 @@ class SearchViewController: SiteTableViewController,
             data
         }
 
+        searchTelemetry?.data = data
         tableView.reloadData()
     }
 
     // MARK: - Table view delegate
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        var resultType = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.selectedResult
         switch SearchListSection(rawValue: indexPath.section)! {
         case .searchSuggestions:
             guard let defaultEngine = searchEngines?.defaultEngine else { return }
@@ -994,6 +1010,7 @@ class SearchViewController: SiteTableViewController,
         if let indexPath = tableView.indexPathForRow(at: buttonPosition), let newQuery = suggestions?[indexPath.row] {
             searchDelegate?.searchViewController(self, didAppend: newQuery + " ")
             searchQuery = newQuery + " "
+            searchTelemetry?.searchQuery = searchQuery
         }
     }
 
