@@ -132,16 +132,23 @@ public func all<T>(_ deferreds: [Deferred<T>]) -> Deferred<[T]> {
     var results: [T] = []
     results.reserveCapacity(deferreds.count)
 
-    var block: ((T) -> ())!
-    block = { [weak combined] t in
-        results.append(t)
-        if results.count == deferreds.count {
-            combined?.fill(results)
-        } else {
-            deferreds[results.count].upon(block)
+    func processNext(_ index: Int) {
+        guard index < deferreds.count else {
+            combined.fill(results)
+            return
+        }
+        
+        deferreds[index].upon { t in
+            results.append(t)
+            processNext(index + 1)
         }
     }
-    deferreds[0].upon(block)
+
+    if !deferreds.isEmpty {
+        processNext(0)
+    } else {
+        combined.fill(results) // Directly fill if there are no deferreds to process.
+    }
 
     return combined
 }
