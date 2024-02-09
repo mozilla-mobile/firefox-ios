@@ -17,6 +17,7 @@ class HomepageHeaderViewModel {
     private let tabManager: TabManager
     var onTapAction: ((UIButton) -> Void)?
     var showiPadSetup = false
+    var showPrivateModeToggle = false
     var theme: Theme
 
     init(profile: Profile, theme: Theme, tabManager: TabManager) {
@@ -81,6 +82,7 @@ extension HomepageHeaderViewModel: HomepageSectionHandler {
             with: HomepageHeaderCellViewModel(
                 isPrivate: false,
                 showiPadSetup: showiPadSetup,
+                showPrivateModeToggle: showPrivateModeToggle,
                 action: { [weak self] in
                     self?.tabManager.switchPrivacyMode()
                 })
