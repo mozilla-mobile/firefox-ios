@@ -56,24 +56,26 @@ def get_uri_csv_with_retries(url):
     session.mount("http://", HTTPAdapter(max_retries=retries))
     session.mount("https://", HTTPAdapter(max_retries=retries))
 
-    response = session.get(url)
-    if response.status_code == 200:
+    try:
+        response = session.get(url)
+        response.raise_for_status()
         return response.content.decode("utf-8")
-    else:
-        raise Exception(f"Failed to download CSV: {response.status_code}")
+    except Exception as e:
+        logging.error(f"Failed to download CSV: {e}")
+        sys.exit(1)
 
 
-def parse_uri_csv(csv_content):
+def parse_uri_csv(api_response_csv):
     """
     Parses the given CSV content for permanent URI schemes.
 
     Parameters:
-    - csv_content (str): CSV content as a string.
+    - api_response_csv (str): The CSV content returned from the api as a string.
 
     Returns:
     - list: A list of permanent URI schemes.
     """
-    df = pd.read_csv(io.StringIO(csv_content))
+    df = pd.read_csv(io.StringIO(api_response_csv))
     filtered_df = df[
         (df["Status"] == "Permanent")
         & (~df["URI Scheme"].str.contains("OBSOLETE", na=False))
@@ -90,16 +92,20 @@ def update_swift_file(new_urischemes, swift_file_path):
     - swift_file_path (str): The file path of the Swift file to update.
 
     """
-    start_index, end_index = find_uris_section_indices(swift_file_path)
-    with open(swift_file_path, "r") as file:
-        lines = file.readlines()
+    try:
+        start_index, end_index = find_uris_section_indices(swift_file_path)
 
-    new_lines = ['    "{}",\n'.format(scheme) for scheme in new_urischemes]
-    # end_index needs to be non-inclusive otherwise the trailing list bracket
-    # will be removed when updated list is shorter than before
-    updated_lines = lines[:start_index] + new_lines + lines[end_index - 1 :]
-    with open(swift_file_path, "w") as file:
-        file.writelines(updated_lines)
+        with open(swift_file_path, "r") as file:
+            lines = file.readlines()
+
+        new_lines = [f'    "{scheme}",\n' for scheme in new_urischemes]
+        updated_lines = lines[:start_index] + new_lines + lines[end_index - 1 :]
+
+        with open(swift_file_path, "w") as file:
+            file.writelines(updated_lines)
+    except Exception as e:
+        logging.error(f"Failed to update the Swift file: {e}")
+        sys.exit(1)
 
 
 def find_uris_section_indices(swift_file_path):
@@ -115,21 +121,23 @@ def find_uris_section_indices(swift_file_path):
     start_index = -1
     end_index = -1
 
-    with open(swift_file_path, "r") as file:
-        for i, line in enumerate(
-            file, start=1
-        ):  # Use enumerate to iterate with 1-based index
-            if "private let permanentURISchemes" in line and start_index == -1:
-                start_index = i
-                continue
-            if start_index != -1 and "]" in line:
-                end_index = i
-                break
+    try:
+        with open(swift_file_path, "r") as file:
+            # Use enumerate to iterate with 1-based index
+            for i, line in enumerate(file, start=1):
+                if "private let permanentURISchemes" in line and start_index == -1:
+                    start_index = i
+                    continue
+                if start_index != -1 and "]" in line:
+                    end_index = i
+                    break
+    except Exception as e:
+        logging.error(f"An error occurred while reading {swift_file_path}: {e}")
+        sys.exit(1)
 
     if start_index == -1 or end_index == -1:
-        raise Exception(
-            "Could not find the 'permanentURISchemes' array in the Swift file."
-        )
+        logging.error(f"Could not find 'permanentURISchemes' array in the Swift file.")
+        sys.exit(1)
     return start_index, end_index
 
 
@@ -146,20 +154,25 @@ def extract_current_uris(swift_file_path):
     # start/end use 1-based index for true line number
     start_line, end_line = find_uris_section_indices(swift_file_path)
     uris = []
-    with open(swift_file_path, "r") as file:
-        # use enumerate and start i at 1 for 1-based index
-        for i, line in enumerate(file, start=1):
-            if start_line <= i <= end_line:
-                # Extract URI between the first pair of double quotes
-                match = re.search(r'"([^"]+)"', line)
-                if match:
-                    uris.append(match.group(1))
-            elif i == end_line:
-                break
+    try:
+        with open(swift_file_path, "r") as file:
+            # use enumerate and start i at 1 for 1-based index
+            for i, line in enumerate(file, start=1):
+                if start_line <= i <= end_line:
+                    # Extract URI between the first pair of double quotes
+                    match = re.search(r'"([^"]+)"', line)
+                    if match:
+                        uris.append(match.group(1))
+                elif i == end_line:
+                    break
+    except Exception as e:
+        logging.error(f"An error occurred while reading {swift_file_path}: {e}")
+        sys.exit(1)
     return uris
 
 
 def main():
+    logging.info(f"Current CONFIG for task:\n{CONFIG}")
     csv_url = CONFIG["URI_WEBSITE"]
     swift_file_path = f'{CONFIG["IOS_URI_PATH"]}/{CONFIG["IOS_URIS_FILE"]}'
 
@@ -173,11 +186,9 @@ def main():
             logging.info(f"Updating URIs with diff: {uri_diff}")
             update_swift_file(permanent_urischemes, swift_file_path)
         else:
-            logging.info(
-                "No update needed. Swift file already contains the latest permanent URI schemes."
-            )
+            logging.info("No update needed. File contains latest permanent URISchemes.")
     except Exception as e:
-        logging.info(f"Error occurred: {e}")
+        logging.error(f"Error occurred: {e}")
         sys.exit(1)
 
 
