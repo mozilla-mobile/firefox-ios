@@ -24,8 +24,16 @@ public protocol RustFirefoxSuggestActor: Actor {
 public actor RustFirefoxSuggest: RustFirefoxSuggestActor {
     private let store: SuggestStore
 
-    public init(databasePath: String, remoteSettingsConfig: RemoteSettingsConfig? = nil) throws {
-        store = try SuggestStore(path: databasePath, settingsConfig: remoteSettingsConfig)
+    public init(dataPath: String, cachePath: String, remoteSettingsConfig: RemoteSettingsConfig? = nil) throws {
+        var builder = SuggestStoreBuilder()
+            .dataPath(path: dataPath)
+            .cachePath(path: cachePath)
+
+        if let remoteSettingsConfig {
+            builder = builder.remoteSettingsConfig(config: remoteSettingsConfig)
+        }
+
+        store = try builder.build()
     }
 
     public func ingest() async throws {
