@@ -26,11 +26,7 @@ extension CustomizeHomepageSectionViewModel: HomepageViewModelProtocol {
         return .emptyHeader
     }
 
-    func section(for traitCollection: UITraitCollection,
-                 size: CGSize,
-                 isPortrait: Bool = UIWindow.isPortrait,
-                 device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom
-    ) -> NSCollectionLayoutSection {
+    func section(for traitCollection: UITraitCollection, size: CGSize) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                               heightDimension: .estimated(100))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)

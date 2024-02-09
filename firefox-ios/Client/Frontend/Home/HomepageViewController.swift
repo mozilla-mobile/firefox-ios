@@ -260,7 +260,7 @@ class HomepageViewController:
 
     func createLayout() -> UICollectionViewLayout {
         // swiftlint:disable line_length
-        return UICollectionViewCompositionalLayout { [weak self] (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
         // swiftlint:enable line_length
             guard let self = self,
                   let viewModel = self.viewModel.getSectionViewModel(shownSection: sectionIndex),
@@ -273,9 +273,10 @@ class HomepageViewController:
             )
             return viewModel.section(
                 for: layoutEnvironment.traitCollection,
-                size: layoutEnvironment.container.effectiveContentSize
+                size: self.view.frame.size
             )
         }
+        return layout
     }
 
     // MARK: Long press
@@ -318,7 +319,7 @@ class HomepageViewController:
         }
 
         // Force the entire collection view to re-layout
-        viewModel.updateEnabledSections()
+        viewModel.refreshData(for: traitCollection, size: newSize)
         collectionView.reloadData()
         collectionView.collectionViewLayout.invalidateLayout()
 
@@ -824,7 +825,7 @@ extension HomepageViewController: HomepageViewModelDelegate {
         ensureMainThread { [weak self] in
             guard let self = self else { return }
 
-            self.viewModel.updateEnabledSections()
+            self.viewModel.refreshData(for: self.traitCollection, size: self.view.frame.size)
             self.collectionView.reloadData()
             self.collectionView.collectionViewLayout.invalidateLayout()
             self.logger.log("Amount of sections shown is \(self.viewModel.shownSections.count)",
