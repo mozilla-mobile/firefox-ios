@@ -1,10 +1,30 @@
+#!/usr/bin/env python
+
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+"""
+This script updates the URI schemes in the iOS Swift file based on the latest CSV data from IANA.
+It fetches the CSV, parses it for permanent URI schemes, compares them with the existing ones in the Swift file,
+and updates the Swift file if there are new or removed URIs.
+
+Usage:
+    python uri_update.py
+"""
+
+
 import io
-import pandas as pd
+import logging
 import re
+import sys
+
+import pandas as pd
 import requests
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
-import sys
+
+# Setup logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s-%(levelname)s: %(message)s")
 
 CONFIG = {
     "URI_WEBSITE": "https://www.iana.org/assignments/uri-schemes/uri-schemes-1.csv",
@@ -18,6 +38,15 @@ CONFIG = {
 
 # use exponential backoff because why not
 def get_uri_csv_with_retries(url):
+    """
+    Fetches the URI CSV from the specified URL with retry logic.
+
+    Parameters:
+    - url (str): The URL to fetch the CSV from.
+
+    Returns:
+    - str: The content of the CSV file.
+    """
     session = requests.Session()
     retries = Retry(
         total=CONFIG["RETRIES"],
@@ -35,6 +64,15 @@ def get_uri_csv_with_retries(url):
 
 
 def parse_uri_csv(csv_content):
+    """
+    Parses the given CSV content for permanent URI schemes.
+
+    Parameters:
+    - csv_content (str): CSV content as a string.
+
+    Returns:
+    - list: A list of permanent URI schemes.
+    """
     df = pd.read_csv(io.StringIO(csv_content))
     filtered_df = df[
         (df["Status"] == "Permanent")
@@ -44,6 +82,14 @@ def parse_uri_csv(csv_content):
 
 
 def update_swift_file(new_urischemes, swift_file_path):
+    """
+    Updates the Swift file with new URI schemes.
+
+    Parameters:
+    - new_urischemes (list): A list of new URI schemes to update in the Swift file.
+    - swift_file_path (str): The file path of the Swift file to update.
+
+    """
     start_index, end_index = find_uris_section_indices(swift_file_path)
     with open(swift_file_path, "r") as file:
         lines = file.readlines()
@@ -57,6 +103,15 @@ def update_swift_file(new_urischemes, swift_file_path):
 
 
 def find_uris_section_indices(swift_file_path):
+    """
+    Finds the start and end indices of the URI schemes section in the Swift file.
+
+    Parameters:
+    - swift_file_path (str): The file path of the Swift file.
+
+    Returns:
+    - tuple: A tuple containing the start and end line numbers of the URI schemes section.
+    """
     start_index = -1
     end_index = -1
 
@@ -79,6 +134,15 @@ def find_uris_section_indices(swift_file_path):
 
 
 def extract_current_uris(swift_file_path):
+    """
+    Extracts the current URIs from the Swift file.
+
+    Parameters:
+    - swift_file_path (str): The file path of the Swift file.
+
+    Returns:
+    - list: A list of URIs extracted from the Swift file.
+    """
     # start/end use 1-based index for true line number
     start_line, end_line = find_uris_section_indices(swift_file_path)
     uris = []
@@ -106,14 +170,14 @@ def main():
         uri_diff = [uri for uri in permanent_urischemes if uri not in set(current_uris)]
 
         if uri_diff:
-            print(f"Updating URIs with diff: {uri_diff}")
+            logging.info(f"Updating URIs with diff: {uri_diff}")
             update_swift_file(permanent_urischemes, swift_file_path)
         else:
-            print(
+            logging.info(
                 "No update needed. Swift file already contains the latest permanent URI schemes."
             )
     except Exception as e:
-        print(f"Error occurred: {e}")
+        logging.info(f"Error occurred: {e}")
         sys.exit(1)
 
 
