@@ -1218,6 +1218,11 @@ extension String {
                 tableName: "Onboarding",
                 value: "3. Select *%@*",
                 comment: "The third label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. Placeholder is the app name. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
+            public static let DescriptionFooter = MZLocalizedString(
+                key: "DefaultBrowserPopup.DescriptionFooter.v124",
+                tableName: "Onboarding",
+                value: "*Is %@ already your default?* Close this message and tap Skip.",
+                comment: "The footer label on the Default Browser Popup, which is below all the instructions asking the users if their Firefox browser is the default browser. If it is then close this message and tap skip. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
             public static let ButtonTitle = MZLocalizedString(
                 key: "DefaultBrowserPopup.ButtonTitle.v114",
                 tableName: "Onboarding",
