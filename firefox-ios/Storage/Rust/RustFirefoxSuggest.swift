@@ -12,8 +12,7 @@ public protocol RustFirefoxSuggestActor: Actor {
     /// Searches the store for matching suggestions.
     func query(
         _ keyword: String,
-        includeSponsored: Bool,
-        includeNonSponsored: Bool
+        providers: [SuggestionProvider]
     ) async throws -> [RustFirefoxSuggestion]
 
     /// Interrupts any ongoing queries for suggestions.
@@ -39,16 +38,8 @@ public actor RustFirefoxSuggest: RustFirefoxSuggestActor {
 
     public func query(
         _ keyword: String,
-        includeSponsored: Bool,
-        includeNonSponsored: Bool
+        providers: [SuggestionProvider]
     ) async throws -> [RustFirefoxSuggestion] {
-        var providers = [SuggestionProvider]()
-        if includeSponsored {
-            providers.append(.amp)
-        }
-        if includeNonSponsored {
-            providers.append(.wikipedia)
-        }
         return try store.query(query: SuggestionQuery(
             keyword: keyword,
             providers: providers
