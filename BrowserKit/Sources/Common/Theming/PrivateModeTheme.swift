@@ -18,7 +18,6 @@ private struct PrivateModeColorPalette: ThemeColourPalette {
     var layer3: UIColor = FXColors.Ink90
     var layer4: UIColor = FXColors.DarkGrey20.withAlphaComponent(0.7)
     var layer5: UIColor = FXColors.Ink20
-    var layer6: UIColor = FXColors.DarkGrey60
     var layer5Hover: UIColor = FXColors.DarkGrey20
     var layerScrim: UIColor = FXColors.DarkGrey90.withAlphaComponent(0.95)
     var layerGradient = Gradient(colors: [FXColors.Violet40, FXColors.Violet70])
@@ -99,7 +98,7 @@ private struct PrivateModeColorPalette: ThemeColourPalette {
 
     // MARK: - Border
     var borderPrimary: UIColor = FXColors.DarkGrey05
-    var borderAccent: UIColor = FXColors.Blue30
+    var borderAccent: UIColor = FXColors.Purple60
     var borderAccentNonOpaque: UIColor = FXColors.Blue20.withAlphaComponent(0.2)
     var borderAccentPrivate: UIColor = FXColors.Purple60
     var borderInverted: UIColor = FXColors.DarkGrey90

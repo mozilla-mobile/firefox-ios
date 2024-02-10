@@ -246,7 +246,7 @@ class BookmarksPanel: SiteTableViewController,
                                                 message: .BookmarksDeleteFolderWarningDescription,
                                                 preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: .BookmarksDeleteFolderCancelButtonLabel,
-                                                style: .cancel))
+                                                style: .default))
         alertController.addAction(UIAlertAction(title: .BookmarksDeleteFolderDeleteButtonLabel,
                                                 style: .destructive) { [weak self] action in
             self?.deleteBookmarkNode(indexPath, bookmarkNode: bookmarkNode)

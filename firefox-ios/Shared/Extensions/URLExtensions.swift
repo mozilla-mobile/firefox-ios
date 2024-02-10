@@ -197,14 +197,6 @@ extension URL {
     }
 }
 
-// Extensions to deal with ReaderMode URLs
-
-extension URL {
-    public var isFile: Bool {
-        return self.scheme == "file"
-    }
-}
-
 // MARK: - Exported URL Schemes
 
 extension URL {

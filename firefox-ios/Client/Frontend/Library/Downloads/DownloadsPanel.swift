@@ -232,7 +232,7 @@ class DownloadsPanel: UIViewController,
 
     private func createEmptyStateOverlayView() -> UIView {
         let overlayView: UIView = .build { view in
-            view.backgroundColor = self.themeManager.currentTheme.colors.layer6
+            view.backgroundColor = self.themeManager.currentTheme.colors.layer1
             view.translatesAutoresizingMaskIntoConstraints = false
         }
         let logoImageView: UIImageView = .build { imageView in
@@ -400,7 +400,7 @@ class DownloadsPanel: UIViewController,
         emptyStateOverlayView = createEmptyStateOverlayView()
         updateEmptyPanelState()
 
-        tableView.backgroundColor = themeManager.currentTheme.colors.layer6
+        tableView.backgroundColor = themeManager.currentTheme.colors.layer1
         tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
 
         reloadData()

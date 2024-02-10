@@ -31,11 +31,17 @@
 /* On the theme customization onboarding card, the string used to describe the option to set the theme to dark theme from the available choices. */
 "Onboarding.Customization.Theme.Dark.Action.v123" = "Σκουρόχρωμο";
 
+/* String used to describe the description label of the theme customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Theme.Description.v123" = "Δείτε τον ιστό με την καλύτερη φωτεινότητα.";
+
 /* On the theme customization onboarding card, the string used to describe the option to set the theme to light theme from the available choices. */
 "Onboarding.Customization.Theme.Light.Action.v123" = "Ανοιχτόχρωμο";
 
 /* String used to describe the option to skip the theme customization in Firefox Onboarding screens. */
 "Onboarding.Customization.Theme.Skip.Action.v123" = "Παράλειψη";
+
+/* On the theme customization onboarding card, the string used to describe the option to set the theme to system theme from the available choices. */
+"Onboarding.Customization.Theme.System.Action.v123" = "Θέμα συστήματος";
 
 /* String used to describe the title of the theme customization onboarding page in our Onboarding screens. */
 "Onboarding.Customization.Theme.Title.v123" = "Επιλέξτε θέμα";
@@ -45,6 +51,9 @@
 
 /* String used to describe the option to save set preferences and leave onboarding to start browsing in the app. */
 "Onboarding.Customization.Toolbar.Continue.Action.v123" = "Αποθήκευση και έναρξη περιήγησης";
+
+/* String used to describe the description label of the toolbar customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Toolbar.Description.v123" = "Κρατήστε τις αναζητήσεις κοντά σας.";
 
 /* String used to describe the option to skip the toolbar customization in Firefox Onboarding screens and start browisg in the app. */
 "Onboarding.Customization.Toolbar.Skip.Action.v123" = "Παράλειψη";

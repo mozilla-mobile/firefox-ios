@@ -10,7 +10,8 @@ class RootViewController: UIViewController,
                           NavigationDelegate,
                           SearchBarDelegate,
                           SearchSuggestionDelegate,
-                          MenuDelegate {
+                          MenuDelegate,
+                          SettingsDelegate {
     private lazy var toolbar: BrowserToolbar = .build { _ in }
     private lazy var searchBar: BrowserSearchBar =  .build { _ in }
     private lazy var statusBarFiller: UIView =  .build { view in
@@ -111,7 +112,7 @@ class RootViewController: UIViewController,
 
     private func browse(to term: String) {
         searchBar.resignFirstResponder()
-        browserVC.loadUrlOrSearch(SearchTerm(searchTerm: term))
+        browserVC.loadUrlOrSearch(SearchTerm(term: term))
         searchVC.remove()
     }
 
@@ -174,6 +175,7 @@ class RootViewController: UIViewController,
 
     func didClickMenu() {
         let settingsVC = SettingsViewController()
+        settingsVC.delegate = self
         present(settingsVC, animated: true)
     }
 
@@ -182,5 +184,11 @@ class RootViewController: UIViewController,
     func tapOnSuggestion(term: String) {
         searchBar.setSearchBarText(term)
         browse(to: term)
+    }
+
+    // MARK: - SettingsDelegate
+
+    func scrollToTop() {
+        browserVC.scrollToTop()
     }
 }

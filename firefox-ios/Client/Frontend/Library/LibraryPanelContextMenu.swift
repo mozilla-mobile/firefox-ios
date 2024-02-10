@@ -54,7 +54,7 @@ extension LibraryPanelContextMenu {
 
         let openInNewPrivateTabAction = SingleActionViewModel(
             title: .OpenInNewPrivateTabContextMenuTitle,
-            iconString: ImageIdentifiers.newPrivateTab
+            iconString: StandardImageIdentifiers.Large.privateMode
         ) { _ in
             recentlyClosedPanelDelegate?.openRecentlyClosedSiteInNewTab(siteURL, isPrivate: true)
         }
@@ -77,7 +77,7 @@ extension LibraryPanelContextMenu {
 
         let openInNewPrivateTabAction = SingleActionViewModel(
             title: .OpenInNewPrivateTabContextMenuTitle,
-            iconString: ImageIdentifiers.newPrivateTab
+            iconString: StandardImageIdentifiers.Large.privateMode
         ) { _ in
             remotePanelDelegate?.remotePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }
@@ -96,8 +96,9 @@ extension LibraryPanelContextMenu {
             libraryPanelDelegate?.libraryPanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
         }.items
 
-        let openInNewPrivateTabAction = SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle,
-                                                              iconString: ImageIdentifiers.newPrivateTab) { _ in
+        let openInNewPrivateTabAction = SingleActionViewModel(
+            title: .OpenInNewPrivateTabContextMenuTitle,
+            iconString: StandardImageIdentifiers.Large.privateMode) { _ in
             libraryPanelDelegate?.libraryPanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }.items
 

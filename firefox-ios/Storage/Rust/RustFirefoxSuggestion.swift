@@ -25,15 +25,13 @@ public struct RustFirefoxSuggestion {
     public let url: URL
     public let isSponsored: Bool
     public let iconImage: UIImage?
-    public let fullKeyword: String
     public let telemetryInfo: RustFirefoxSuggestionTelemetryInfo?
 
-    public init(title: String, url: URL, isSponsored: Bool, iconImage: UIImage?, fullKeyword: String) {
+    public init(title: String, url: URL, isSponsored: Bool, iconImage: UIImage?) {
         self.title = title
         self.url = url
         self.isSponsored = isSponsored
         self.iconImage = iconImage
-        self.fullKeyword = fullKeyword
         self.telemetryInfo = nil
     }
 
@@ -50,7 +48,7 @@ public struct RustFirefoxSuggestion {
             urlString,
             _,
             iconBytes,
-            fullKeyword,
+            _,
             blockId,
             advertiser,
             iabCategory,
@@ -66,7 +64,6 @@ public struct RustFirefoxSuggestion {
             self.url = url
             self.isSponsored = true
             self.iconImage = iconBytes.flatMap { UIImage(data: Data($0)) }
-            self.fullKeyword = fullKeyword
             self.telemetryInfo = .amp(
                 blockId: blockId,
                 advertiser: advertiser.lowercased(),
@@ -74,14 +71,13 @@ public struct RustFirefoxSuggestion {
                 impressionReportingURL: URL(string: impressionUrlString),
                 clickReportingURL: URL(string: clickUrlString)
             )
-        } else if case let .wikipedia(title, urlString, iconBytes, fullKeyword) = suggestion {
+        } else if case let .wikipedia(title, urlString, iconBytes, _) = suggestion {
             // This use of `URL(string:)` is OK.
             guard let url = URL(string: urlString) else { return nil }
             self.title = title
             self.url = url
             self.isSponsored = false
             self.iconImage = iconBytes.flatMap { UIImage(data: Data($0)) }
-            self.fullKeyword = fullKeyword
             self.telemetryInfo = .wikipedia
         } else {
             return nil

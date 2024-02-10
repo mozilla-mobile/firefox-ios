@@ -241,7 +241,7 @@ class HistoryTests: BaseTestCase {
         app.tables.cells.staticTexts[bookOfMozilla["label"]!].press(forDuration: 1)
         mozWaitForElementToExist(app.tables["Context Menu"])
         XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.plus].exists)
-        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.newPrivateTab].exists)
+        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.privateMode].exists)
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307484
@@ -285,7 +285,7 @@ class HistoryTests: BaseTestCase {
         XCTAssertTrue(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
         app.tables.cells.staticTexts[bookOfMozilla["label"]!].press(forDuration: 1)
         mozWaitForElementToExist(app.tables["Context Menu"])
-        app.tables.otherElements[ImageIdentifiers.newPrivateTab].tap()
+        app.tables.otherElements[StandardImageIdentifiers.Large.privateMode].tap()
 
         // The page is opened only on the new private tab
         navigator.nowAt(NewTabScreen)

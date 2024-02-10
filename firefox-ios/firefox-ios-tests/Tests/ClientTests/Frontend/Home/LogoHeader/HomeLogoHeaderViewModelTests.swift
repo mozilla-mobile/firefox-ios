@@ -9,10 +9,12 @@ import Shared
 
 class HomeLogoHeaderViewModelTests: XCTestCase, FeatureFlaggable {
     private var profile: MockProfile!
+    private var tabManager: MockTabManager!
 
     override func setUp() {
         super.setUp()
         profile = MockProfile()
+        tabManager = MockTabManager()
         featureFlags.initializeDeveloperFeatures(with: profile)
     }
 
@@ -23,7 +25,7 @@ class HomeLogoHeaderViewModelTests: XCTestCase, FeatureFlaggable {
 
     func testDefaultHomepageViewModelProtocolValues() {
         let subject = createSubject()
-        XCTAssertEqual(subject.sectionType, .logoHeader)
+        XCTAssertEqual(subject.sectionType, .homepageHeader)
         XCTAssertEqual(subject.headerViewModel, LabelButtonHeaderViewModel.emptyHeader)
         XCTAssertEqual(subject.numberOfItemsInSection(), 1)
         XCTAssertTrue(subject.isEnabled)
@@ -31,8 +33,8 @@ class HomeLogoHeaderViewModelTests: XCTestCase, FeatureFlaggable {
 }
 
 extension HomeLogoHeaderViewModelTests {
-    func createSubject(file: StaticString = #file, line: UInt = #line) -> HomeLogoHeaderViewModel {
-        let subject = HomeLogoHeaderViewModel(profile: profile, theme: LightTheme())
+    func createSubject(file: StaticString = #file, line: UInt = #line) -> HomepageHeaderViewModel {
+        let subject = HomepageHeaderViewModel(profile: profile, theme: LightTheme(), tabManager: tabManager)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }

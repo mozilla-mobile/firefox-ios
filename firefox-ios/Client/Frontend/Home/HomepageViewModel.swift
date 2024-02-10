@@ -17,7 +17,7 @@ protocol HomepageDataModelDelegate: AnyObject {
 class HomepageViewModel: FeatureFlaggable {
     struct UX {
         static let spacingBetweenSections: CGFloat = 62
-        static let standardInset: CGFloat = 18
+        static let standardInset: CGFloat = 16
         static let iPadInset: CGFloat = 50
         static let iPadTopSiteInset: CGFloat = 25
 
@@ -89,7 +89,7 @@ class HomepageViewModel: FeatureFlaggable {
 
     // Child View models
     private var childViewModels: [HomepageViewModelProtocol]
-    var headerViewModel: HomeLogoHeaderViewModel
+    var headerViewModel: HomepageHeaderViewModel
     var messageCardViewModel: HomepageMessageCardViewModel
     var topSiteViewModel: TopSitesViewModel
     var recentlySavedViewModel: RecentlySavedViewModel
@@ -116,7 +116,7 @@ class HomepageViewModel: FeatureFlaggable {
         self.theme = theme
         self.logger = logger
 
-        self.headerViewModel = HomeLogoHeaderViewModel(profile: profile, theme: theme)
+        self.headerViewModel = HomepageHeaderViewModel(profile: profile, theme: theme, tabManager: tabManager)
         let messageCardAdaptor = MessageCardDataAdaptorImplementation()
         self.messageCardViewModel = HomepageMessageCardViewModel(dataAdaptor: messageCardAdaptor, theme: theme)
         messageCardAdaptor.delegate = messageCardViewModel
@@ -222,6 +222,16 @@ class HomepageViewModel: FeatureFlaggable {
         logger.log("Homepage amount of sections shown \(shownSections.count)",
                    level: .debug,
                    category: .homepage)
+    }
+
+    func refreshData(for traitCollection: UITraitCollection, size: CGSize) {
+        updateEnabledSections()
+        childViewModels.forEach {
+            $0.refreshData(for: traitCollection,
+                           size: size,
+                           isPortrait: UIWindow.isPortrait,
+                           device: UIDevice.current.userInterfaceIdiom)
+        }
     }
 
     // MARK: - Section ViewModel helper

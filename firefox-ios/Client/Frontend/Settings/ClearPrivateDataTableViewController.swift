@@ -216,7 +216,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
 
         let noOption = UIAlertAction(
             title: .ClearPrivateDataAlertCancel,
-            style: .cancel,
+            style: .default,
             handler: nil
         )
 
@@ -240,7 +240,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
 
         let noOption = UIAlertAction(
             title: .ClearSyncedHistoryAlertCancel,
-            style: .cancel,
+            style: .default,
             handler: nil
         )
 

@@ -28,20 +28,20 @@ class BrowserViewController: UIViewController,
         static let ActionSheetTitleMaxLength = 120
     }
 
-    /// Describes how the user completed their interaction with the URL bar.
-    /// This state is used to record search engagement telemetry.
-    enum SearchEngagementState {
-        /// The user is currently interacting with the URL bar. The URL bar's
-        /// text field is focused, but the search controller may be hidden
-        /// if the text field is empty.
+    /// Describes the state of the current search session. This state is used
+    /// to record search engagement and abandonment telemetry.
+    enum SearchSessionState {
+        /// The user is currently searching. The URL bar's text field
+        /// is focused, but the search controller may be hidden if the
+        /// text field is empty.
         case active
 
-        /// The user completed their interaction by navigating to a destination,
-        /// either by tapping on a suggestion, or by entering a search term or
-        /// a URL.
+        /// The user completed their search by navigating to a destination,
+        /// either by tapping on a suggestion, or by entering a search term
+        /// or a URL.
         case engaged
 
-        /// The user completed their interaction by dismissing the URL bar.
+        /// The user abandoned their search by dismissing the URL bar.
         case abandoned
     }
 
@@ -67,7 +67,7 @@ class BrowserViewController: UIViewController,
     var readerModeCache: ReaderModeCache
     var statusBarOverlay: StatusBarOverlay = .build { _ in }
     var searchController: SearchViewController?
-    var searchEngagementState: SearchEngagementState?
+    var searchSessionState: SearchSessionState?
     var screenshotHelper: ScreenshotHelper!
     var searchTelemetry: SearchTelemetry?
     var searchLoader: SearchLoader?
@@ -250,7 +250,7 @@ class BrowserViewController: UIViewController,
     }
 
     deinit {
-        unscubscribeFromRedux()
+        unsubscribeFromRedux()
     }
 
     override var prefersStatusBarHidden: Bool {
@@ -518,7 +518,7 @@ class BrowserViewController: UIViewController,
         })
     }
 
-    func unscubscribeFromRedux() {
+    func unsubscribeFromRedux() {
         store.dispatch(ActiveScreensStateAction.closeScreen(
             ScreenActionContext(screen: .browserViewController, windowUUID: windowUUID)
         ))
@@ -592,7 +592,7 @@ class BrowserViewController: UIViewController,
         let dropInteraction = UIDropInteraction(delegate: self)
         view.addInteraction(dropInteraction)
 
-        searchTelemetry = SearchTelemetry()
+        searchTelemetry = SearchTelemetry(tabManager: tabManager)
 
         // Awesomebar Location Telemetry
         SearchBarSettingsViewModel.recordLocationTelemetry(for: isBottomSearchBar ? .bottom : .top)
@@ -632,6 +632,7 @@ class BrowserViewController: UIViewController,
             guard let self else { return false }
             if let pasteboardContents = UIPasteboard.general.string {
                 self.urlBar(self.urlBar, didSubmitText: pasteboardContents)
+                searchController?.searchTelemetry?.interactionType = .pasted
                 return true
             }
             return false
@@ -641,7 +642,7 @@ class BrowserViewController: UIViewController,
             if let pasteboardContents = UIPasteboard.general.string {
                 // Enter overlay mode and make the search controller appear.
                 self.overlayManager.openSearch(with: pasteboardContents)
-
+                searchController?.searchTelemetry?.interactionType = .pasted
                 return true
             }
             return false
@@ -1149,7 +1150,8 @@ class BrowserViewController: UIViewController,
         guard self.searchController == nil else { return }
 
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        let searchViewModel = SearchViewModel(isPrivate: isPrivate, isBottomSearchBar: isBottomSearchBar)
+        let searchViewModel = SearchViewModel(isPrivate: isPrivate,
+                                              isBottomSearchBar: isBottomSearchBar)
         let searchController = SearchViewController(profile: profile,
                                                     viewModel: searchViewModel,
                                                     model: profile.searchEngines,
@@ -1161,7 +1163,7 @@ class BrowserViewController: UIViewController,
         searchLoader.addListener(searchController)
 
         self.searchController = searchController
-        self.searchEngagementState = .active
+        self.searchSessionState = .active
         self.searchLoader = searchLoader
     }
 
@@ -1212,7 +1214,7 @@ class BrowserViewController: UIViewController,
         hideSearchController()
 
         searchController = nil
-        searchEngagementState = nil
+        searchSessionState = nil
         searchLoader = nil
     }
 
@@ -1328,7 +1330,7 @@ class BrowserViewController: UIViewController,
     func setupMiddleButtonStatus(isLoading: Bool) {
         // Setting the default state to search to account for no tab or starting page tab
         // `state` will be modified later if needed
-        let state: MiddleButtonState = .search
+        var state: MiddleButtonState = .search
 
         // No tab
         guard let tab = tabManager.selectedTab else {
@@ -1492,7 +1494,14 @@ class BrowserViewController: UIViewController,
         else { return }
 
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
-            self.tabManager.addTab(URLRequest(url: url))
+            let urlRequest = URLRequest(url: url)
+            if TabTrayFlagManager.isRefactorEnabled {
+                let context = AddNewTabContext(urlRequest: urlRequest, isPrivate: false, windowUUID: self.windowUUID)
+                store.dispatch(TabPanelAction.addNewTab(context))
+            } else {
+                self.tabManager.addTab(urlRequest)
+            }
+
             self.debugOpen(numberOfNewTabs: numberOfNewTabs - 1, at: url)
         })
     }
@@ -2006,11 +2015,12 @@ class BrowserViewController: UIViewController,
     // MARK: - LibraryPanelDelegate
 
     func libraryPanel(didSelectURL url: URL, visitType: VisitType) {
-        if isPreferSwitchToOpenTabOverDuplicateFeatureEnabled, let tab = tabManager.getTabFor(url, reversed: true) {
+        guard let tab = tabManager.selectedTab else { return }
+
+        if isPreferSwitchToOpenTabOverDuplicateFeatureEnabled,
+           let tab = tabManager.tabs.reversed().first(where: { $0.url == url && $0.isPrivate == tab.isPrivate }) {
             tabManager.selectTab(tab)
         } else {
-            guard let tab = tabManager.selectedTab else { return }
-
             // Handle keyboard shortcuts from homepage with url selection
             // (ex: Cmd + Tap on Link; which is a cell in this case)
             if navigateLinkShortcutIfNeeded(url: url) {
@@ -2276,10 +2286,12 @@ extension BrowserViewController: HomePanelDelegate {
     }
 
     func homePanel(didSelectURL url: URL, visitType: VisitType, isGoogleTopSite: Bool) {
-        if isPreferSwitchToOpenTabOverDuplicateFeatureEnabled, let tab = tabManager.getTabFor(url, reversed: true) {
+        guard let tab = tabManager.selectedTab else { return }
+
+        if isPreferSwitchToOpenTabOverDuplicateFeatureEnabled,
+           let tab = tabManager.tabs.reversed().first(where: { $0.url == url && $0.isPrivate == tab.isPrivate }) {
             tabManager.selectTab(tab)
         } else {
-            guard let tab = tabManager.selectedTab else { return }
             if isGoogleTopSite {
                 tab.urlType = .googleTopSite
                 searchTelemetry?.shouldSetGoogleTopSiteSearch = true
@@ -2375,28 +2387,41 @@ extension BrowserViewController: SearchViewControllerDelegate {
         didHighlightText text: String,
         search: Bool
     ) {
+        searchViewController.searchTelemetry?.interactionType = .refined
         self.urlBar.setLocation(text, search: search)
     }
 
     func searchViewController(_ searchViewController: SearchViewController, didAppend text: String) {
+        searchViewController.searchTelemetry?.interactionType = .pasted
         self.urlBar.setLocation(text, search: false)
     }
 
     func searchViewControllerWillHide(_ searchViewController: SearchViewController) {
-        guard searchEngagementState == .engaged else { return }
-        let visibleSuggestionsTelemetryInfo = searchViewController.visibleSuggestionsTelemetryInfo
-        for info in visibleSuggestionsTelemetryInfo {
-            trackEngagedSearchTelemetry(visibleSuggestionInfo: info)
+        switch searchSessionState {
+        case .engaged:
+            let visibleSuggestionsTelemetryInfo = searchViewController.visibleSuggestionsTelemetryInfo
+            visibleSuggestionsTelemetryInfo.forEach { trackVisibleSuggestion(telemetryInfo: $0) }
+            TelemetryWrapper.gleanRecordEvent(category: .action, method: .engagement, object: .locationBar)
+
+        case .abandoned:
+            let visibleSuggestionsTelemetryInfo = searchViewController.visibleSuggestionsTelemetryInfo
+            visibleSuggestionsTelemetryInfo.forEach { trackVisibleSuggestion(telemetryInfo: $0) }
+            TelemetryWrapper.gleanRecordEvent(category: .action, method: .abandonment, object: .locationBar)
+
+        default:
+            break
         }
     }
 
-    /// Records telemetry for a suggestion that was visible during an engaged
-    /// search. The user may have tapped on this suggestion or on a different
-    /// suggestion, or typed in a search term or a URL.
-    func trackEngagedSearchTelemetry(visibleSuggestionInfo info: SearchViewVisibleSuggestionTelemetryInfo) {
+    /// Records telemetry for a suggestion that was visible during an engaged or
+    /// abandoned search session. The user may have tapped on this suggestion
+    /// or on a different suggestion, typed in a search term or a URL, or
+    /// dismissed the URL bar without completing their search.
+    func trackVisibleSuggestion(telemetryInfo info: SearchViewVisibleSuggestionTelemetryInfo) {
         switch info {
         // A sponsored or non-sponsored suggestion from Firefox Suggest.
         case let .firefoxSuggestion(telemetryInfo, position, didTap):
+            let didAbandonSearchSession = searchSessionState == .abandoned
             TelemetryWrapper.gleanRecordEvent(
                 category: .action,
                 method: .view,
@@ -2405,6 +2430,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
                     TelemetryWrapper.EventValue.fxSuggestionTelemetryInfo.rawValue: telemetryInfo,
                     TelemetryWrapper.EventValue.fxSuggestionPosition.rawValue: position,
                     TelemetryWrapper.EventValue.fxSuggestionDidTap.rawValue: didTap,
+                    TelemetryWrapper.EventValue.fxSuggestionDidAbandonSearchSession.rawValue: didAbandonSearchSession,
                 ]
             )
             if didTap {

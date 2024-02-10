@@ -169,12 +169,19 @@ class RustPlacesTests: XCTestCase {
         XCTAssertEqual(multipleItemsRead.successValue!.count, 2)
 
         // Observations for a different key unaffected.
-        XCTAssertEqual(multipleItemsRead.successValue![0].documentType, DocumentType.regular)
-        XCTAssertEqual(multipleItemsRead.successValue![0].title, "Another Mozilla")
-        XCTAssertEqual(multipleItemsRead.successValue![0].totalViewTime, 0)
-        XCTAssertEqual(multipleItemsRead.successValue![1].documentType, DocumentType.media)
-        XCTAssertEqual(multipleItemsRead.successValue![1].title, "Mozilla Test")
-        XCTAssertEqual(multipleItemsRead.successValue![1].totalViewTime, 15)
+        if let anotherMozilla = multipleItemsRead.successValue?.first(where: { $0.title == "Another Mozilla" }) {
+            XCTAssertEqual(anotherMozilla.documentType, DocumentType.regular)
+            XCTAssertEqual(anotherMozilla.totalViewTime, 0)
+        } else {
+            XCTFail("Expected to find 'Another Mozilla' with total time 0")
+        }
+
+        if let mozillaTest = multipleItemsRead.successValue?.first(where: { $0.title == "Mozilla Test" }) {
+            XCTAssertEqual(mozillaTest.documentType, DocumentType.media)
+            XCTAssertEqual(mozillaTest.totalViewTime, 15)
+        } else {
+            XCTFail("Expected to find 'Mozilla Test' with total time 15")
+        }
 
         XCTAssertTrue(places.noteHistoryMetadataObservation(
             key: metadataKey2,
@@ -187,12 +194,20 @@ class RustPlacesTests: XCTestCase {
         ).value.isSuccess)
         multipleItemsRead = places.getHistoryMetadataSince(since: 0).value
         XCTAssertEqual(multipleItemsRead.successValue!.count, 2)
-        XCTAssertEqual(multipleItemsRead.successValue![0].documentType, DocumentType.regular)
-        XCTAssertEqual(multipleItemsRead.successValue![0].title, "Another Mozilla")
-        XCTAssertEqual(multipleItemsRead.successValue![0].totalViewTime, 25)
-        XCTAssertEqual(multipleItemsRead.successValue![1].documentType, DocumentType.media)
-        XCTAssertEqual(multipleItemsRead.successValue![1].title, "Mozilla Test")
-        XCTAssertEqual(multipleItemsRead.successValue![1].totalViewTime, 15)
+
+        if let anotherMozilla = multipleItemsRead.successValue?.first(where: { $0.title == "Another Mozilla" }) {
+            XCTAssertEqual(anotherMozilla.documentType, DocumentType.regular)
+            XCTAssertEqual(anotherMozilla.totalViewTime, 25)
+        } else {
+            XCTFail("Expected to find 'Another Mozilla'")
+        }
+
+        if let mozillaTest = multipleItemsRead.successValue?.first(where: { $0.title == "Mozilla Test" }) {
+            XCTAssertEqual(mozillaTest.documentType, DocumentType.media)
+            XCTAssertEqual(mozillaTest.totalViewTime, 15)
+        } else {
+            XCTFail("Expected to find 'Mozilla Test'")
+        }
 
         // Able to query by title.
         var queryResults = places.queryHistoryMetadata(query: "another", limit: 0).value

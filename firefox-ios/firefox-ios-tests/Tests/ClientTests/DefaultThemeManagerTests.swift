@@ -35,7 +35,7 @@ final class DefaultThemeManagerTests: XCTestCase {
     }
 
     func test_sutInitializesWithExpectedRegisteredValues() {
-        let sut = createSubject(with: userDefaults)
+        _ = createSubject(with: userDefaults)
         let expectedSystemResult = true
         let expectedNightModeResult = NSNumber(value: false)
         let expectedPrivateModeResult = false
@@ -145,6 +145,21 @@ final class DefaultThemeManagerTests: XCTestCase {
             userDefaults.string(forKey: DefaultThemeManager.ThemeKeys.themeName),
             expectedResult
         )
+    }
+
+    // MARK: - Getting non-special themes
+
+    func testDTM_privateModeEnabled_originalThemeRemainsAccessibleAfterChange() {
+        let sut = createSubject(with: userDefaults)
+        let expectedResult = ThemeType.light
+        let currentThemeExpectedResult = ThemeType.privateMode
+
+        sut.changeCurrentTheme(.dark)
+        sut.setPrivateTheme(isOn: true)
+        sut.changeCurrentTheme(.light)
+
+        XCTAssertEqual(sut.currentTheme.type, currentThemeExpectedResult)
+        XCTAssertEqual(sut.getNormalSavedTheme(), expectedResult)
     }
 
     // MARK: - Brightness Tests

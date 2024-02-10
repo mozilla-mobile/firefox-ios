@@ -226,6 +226,22 @@ extension String {
     }
 }
 
+// MARK: - Keyboard Accessory View
+extension String {
+    public struct KeyboardAccessory {
+        public static let NextButtonA11yLabel = MZLocalizedString(
+            key: "KeyboardAccessory.NextButton.Accessibility.Label.v124",
+            tableName: "KeyboardAccessory",
+            value: "Next form field",
+            comment: "Accessibility label for next button that is displayed above the keyboard when a form field on a website was tapped.")
+        public static let PreviousButtonA11yLabel = MZLocalizedString(
+            key: "KeyboardAccessory.PreviousButton.Accessibility.Label.v124",
+            tableName: "KeyboardAccessory",
+            value: "Previous form field",
+            comment: "Accessibility label for previous button that is displayed above the keyboard when a form field on a website was tapped.")
+    }
+}
+
 // MARK: - Address Autofill
 extension String {
     public struct Addresses {
@@ -245,6 +261,11 @@ extension String {
                 tableName: "Settings",
                 value: "SAVED ADDRESSES",
                 comment: "On the autofill settings screen, a label for the section that displays the list of saved addresses. This label adds additional context for users regarding the toggle switch that allows saving and autofilling of addresses for webpages.")
+            public static let UseSavedAddressFromKeyboard = MZLocalizedString(
+                key: "Addresses.Settings.UseSavedAddressFromKeyboard.v124",
+                tableName: "Settings",
+                value: "Use saved address",
+                comment: "Displayed inside the keyboard hint when a user is entering their address and has at least one saved address. Indicates that there are stored addresses available for use in filling out a form.")
         }
     }
 }
@@ -1762,6 +1783,11 @@ extension String {
                 tableName: nil,
                 value: "Use your fingerprint to access passwords now.",
                 comment: "Touch ID prompt subtitle when accessing logins and passwords")
+            public static let UseSavedLoginFromKeyboard = MZLocalizedString(
+                key: "", // Settings.Passwords.Autofill.UseSavedLoginFromKeyboard.v124
+                tableName: "Settings",
+                value: "Use saved login",
+                comment: "When a user is in the process of loggin in, and has at least one saved password, we show this label inside the keyboard hint. This indicates to the user that there are stored logins available for use on this pending authentication.")
         }
 
         public struct Sync {
@@ -4850,6 +4876,11 @@ extension String {
         tableName: nil,
         value: nil,
         comment: "Accessibility label for the reload button")
+    public static let TabLocationReloadAccessibilityHint = MZLocalizedString(
+        key: "Address.Bar.Reload.A11y.Hint.v124",
+        tableName: "TabLocation",
+        value: "Double tap and hold for more options",
+        comment: "Accessibility hint for the reload button")
     public static let TabLocationShareAccessibilityLabel = MZLocalizedString(
         key: "TabLocation.Share.A11y.Label.v119",
         tableName: "TabLocation",

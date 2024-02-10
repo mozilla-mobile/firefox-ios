@@ -22,7 +22,6 @@ class TabToolbar: UIView, SearchBarLocationProvider {
 
     private let privateModeBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.privateModeBadge,
                                                      isPrivateBadge: true)
-    private let appMenuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuBadge)
     private let warningMenuBadge = BadgeWithBackdrop(imageName: StandardImageIdentifiers.Large.warningFill,
                                                      imageMask: ImageIdentifiers.menuWarningMask)
 
@@ -40,7 +39,6 @@ class TabToolbar: UIView, SearchBarLocationProvider {
         addButtons(actionButtons)
 
         privateModeBadge.add(toParent: contentView)
-        appMenuBadge.add(toParent: contentView)
         warningMenuBadge.add(toParent: contentView)
 
         contentView.axis = .horizontal
@@ -56,7 +54,6 @@ class TabToolbar: UIView, SearchBarLocationProvider {
 
     override func updateConstraints() {
         privateModeBadge.layout(onButton: tabsButton)
-        appMenuBadge.layout(onButton: appMenuButton)
         warningMenuBadge.layout(onButton: appMenuButton)
 
         NSLayoutConstraint.activate([
@@ -107,8 +104,6 @@ extension TabToolbar: TabToolbarProtocol {
     }
 
     func warningMenuBadge(setVisible: Bool) {
-        // Disable other menu badges before showing the warning.
-        if !appMenuBadge.badge.isHidden { appMenuBadge.show(false) }
         warningMenuBadge.show(setVisible)
     }
 
@@ -144,7 +139,6 @@ extension TabToolbar: ThemeApplicable, PrivateModeUI {
         actionButtons.forEach { $0.applyTheme(theme: theme) }
 
         privateModeBadge.badge.tintBackground(color: theme.colors.layer1)
-        appMenuBadge.badge.tintBackground(color: theme.colors.layer1)
         warningMenuBadge.badge.tintBackground(color: theme.colors.layer1)
     }
 

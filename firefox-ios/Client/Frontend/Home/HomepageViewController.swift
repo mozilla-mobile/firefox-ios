@@ -43,6 +43,7 @@ class HomepageViewController:
     private var syncTabContextualHintViewController: ContextualHintViewController
     private var collectionView: UICollectionView! = nil
     private var logger: Logger
+
     var contentType: ContentType = .homepage
 
     var themeManager: ThemeManager
@@ -95,7 +96,7 @@ class HomepageViewController:
         self.notificationCenter = notificationCenter
         self.logger = logger
         super.init(nibName: nil, bundle: nil)
-
+        updateHeaderToShowPrivateModeToggle()
         viewModel.isZeroSearch = isZeroSearch
 
         contextMenuHelper.delegate = self
@@ -188,11 +189,21 @@ class HomepageViewController:
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         applyTheme()
+        updateHeaderToShowPrivateModeToggle()
 
         if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
             || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
             reloadOnRotation(newSize: view.frame.size)
         }
+    }
+
+    // Displays or hides the private mode toggle button in the header
+    // Depends on feature flag and if user is on iPhone
+    private func updateHeaderToShowPrivateModeToggle() {
+        let featureFlagOn = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
+        let showToggle = featureFlagOn && !shouldUseiPadSetup()
+        viewModel.headerViewModel.showPrivateModeToggle = showToggle
+        viewModel.headerViewModel.showiPadSetup = shouldUseiPadSetup()
     }
 
     // MARK: - Layout
@@ -249,7 +260,7 @@ class HomepageViewController:
 
     func createLayout() -> UICollectionViewLayout {
         // swiftlint:disable line_length
-        return UICollectionViewCompositionalLayout { [weak self] (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
         // swiftlint:enable line_length
             guard let self = self,
                   let viewModel = self.viewModel.getSectionViewModel(shownSection: sectionIndex),
@@ -262,9 +273,10 @@ class HomepageViewController:
             )
             return viewModel.section(
                 for: layoutEnvironment.traitCollection,
-                size: layoutEnvironment.container.effectiveContentSize
+                size: self.view.frame.size
             )
         }
+        return layout
     }
 
     // MARK: Long press
@@ -307,7 +319,7 @@ class HomepageViewController:
         }
 
         // Force the entire collection view to re-layout
-        viewModel.updateEnabledSections()
+        viewModel.refreshData(for: traitCollection, size: newSize)
         collectionView.reloadData()
         collectionView.collectionViewLayout.invalidateLayout()
 
@@ -813,7 +825,7 @@ extension HomepageViewController: HomepageViewModelDelegate {
         ensureMainThread { [weak self] in
             guard let self = self else { return }
 
-            self.viewModel.updateEnabledSections()
+            self.viewModel.refreshData(for: self.traitCollection, size: self.view.frame.size)
             self.collectionView.reloadData()
             self.collectionView.collectionViewLayout.invalidateLayout()
             self.logger.log("Amount of sections shown is \(self.viewModel.shownSections.count)",
