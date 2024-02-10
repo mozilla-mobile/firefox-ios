@@ -548,8 +548,7 @@ class BrowserViewController: UIViewController,
             }
 
             if state.keyboardState == true {
-                _ = urlBar.becomeFirstResponder()
-                
+                overlayManager.openNewTab(url: nil, newTabSettings: newTabSettings)
             }
         }
     }
