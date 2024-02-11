@@ -30,7 +30,7 @@ jobs:
         pip install pandas pyarrow requests
 
     - name: Run URI update script
-      run: python taskcluster/scripts/uri_update.py
+      run: python test-fixtures/ci/uri_update.py
 
     - name: Check for changes
       id: git-check
@@ -60,28 +60,12 @@ jobs:
         #   4. Increments the highest version number found by 1 for the next release.
         #   5. Sets a default value if no matching release branches are found.
         
-        highest_version=$(git ls-remote --heads origin | \
-          grep 'refs/heads/release/v' | \
-          awk -F'/' '{print $NF}' | \
-          sort -Vr | \
-          head -n 1 | \
-          grep -o '[0-9]\+' | \
-          cut -d'.' -f1 | \
-          head -n 1 || echo "")
-
-        # Trim whitespace from $highest_version and ensure it's treated as a decimal number
-        highest_version=$(echo "$highest_version" | xargs)
-
-        # Verify highest_version is a number
-        if [[ "$highest_version" =~ ^[0-9]+$ ]]; then
-            next_version=$((highest_version + 1))
-        else
-            echo "Couldn't determine current release version. Defaulting to [vXXX]"
-            next_version=XXX
-        fi
-
-        echo "Next version is v$next_version"
-        echo "next_version=$next_version" >> $GITHUB_ENV
+        output=$(bash test-fixtures/ci/get-next-pr-version)
+        echo "$output"
+        test_next_version=$(echo "$output" | tail -1 | cut -d ' ' -f 3)
+        echo "Next version is v${test_next_version}"
+        echo "is it in github env: ${{ env.next_version }}"
+        echo "test_next_version=${test_next_version}" >> $GITHUB_ENV
 
     - name: Create Pull Request
       if: env.changes_detected == 'true'
@@ -91,6 +75,6 @@ jobs:
         commit-message: Automated URI update on ${{ github.event.inputs.branchName || 'main' }} ${{ env.date }}
         author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
         committer: GitHub <noreply@github.com>
-        title: Refactor [v${{ env.next_version }}] Automated URI update on ${{ github.event.inputs.branchName || 'main' }} ${{ env.date }}
+        title: Refactor [v${{ env.test_next_version }}] Automated URI update on ${{ github.event.inputs.branchName || 'main' }} ${{ env.date }}
         branch: update-uri-schemes-${{ env.date }}
         body: This automated PR updates the URIs.
