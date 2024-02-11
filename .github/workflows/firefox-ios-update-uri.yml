@@ -53,19 +53,15 @@ jobs:
     - name: Determine PR Version Number
       id: versioning
       run: |
-        # This script performs the following operations:
-        #   1. Fetches the list of branches from the remote repository.
-        #   2. Filters for branches that follow the 'release/v*' pattern.
-        #   3. Strips out any decimal points in version numbers (e.g., converts 'v123.1' to 'v123').
-        #   4. Increments the highest version number found by 1 for the next release.
-        #   5. Sets a default value if no matching release branches are found.
+        # This step is used to determine the next version number for the PR title
+        # The output includes debugging for the piped commands that generate
+        # the version number and the last line is the version number itself
         
         output=$(bash test-fixtures/ci/get-next-pr-version)
         echo "$output"
-        test_next_version=$(echo "$output" | tail -1 | cut -d ' ' -f 3)
-        echo "Next version is v${test_next_version}"
-        echo "is it in github env: ${{ env.next_version }}"
-        echo "test_next_version=${test_next_version}" >> $GITHUB_ENV
+        next_version=$(echo "$output" | tail -n 1) # get the last line of the output
+        echo "Next version is: v${next_version}"
+        echo "next_version=${next_version}" >> $GITHUB_ENV
 
     - name: Create Pull Request
       if: env.changes_detected == 'true'
@@ -75,6 +71,6 @@ jobs:
         commit-message: Automated URI update on ${{ github.event.inputs.branchName || 'main' }} ${{ env.date }}
         author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
         committer: GitHub <noreply@github.com>
-        title: Refactor [v${{ env.test_next_version }}] Automated URI update on ${{ github.event.inputs.branchName || 'main' }} ${{ env.date }}
+        title: Refactor [v${{ env.next_version }}] Automated URI update on ${{ github.event.inputs.branchName || 'main' }} ${{ env.date }}
         branch: update-uri-schemes-${{ env.date }}
         body: This automated PR updates the URIs.
