@@ -1,21 +1,48 @@
 #!/usr/bin/env bash
-#
-# Set the release version for PRs run on GitHub Actions.
-#
-# This script performs the following operations:
-#   1. Fetches the list of branches from the remote repository.
-#   2. Filters for branches that follow the 'release/v*' pattern.
-#   3. Strips out any decimal points in version numbers (e.g., converts 'v123.1' to 'v123').
-#   4. Increments the highest version number found by 1 for the next release.
-#   5. Sets a default value if no matching release branches are found.
 
-echo "running main"
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# Script Description:
+# This script is designed to fetch the next version number for a pull request based on the highest version
+# number found in the branch names of a given Git repository. It examines branches prefixed with 'release/v',
+# identifies the highest numerical version, increments it by one, and outputs the next version number for use
+# in automated processes, such as GitHub Actions.
+#
+# Usage:
+# Execute the script directly in a Bash shell. The script prints the next version number to standard output.
+# Example: ./get-next-pr-version
+#
+# Requirements:
+# - Bash version 4.0 or higher due to the usage of associative arrays and other advanced features.
+# - Access to Git and the repository from which to fetch version numbers.
+
 bash --version
 
-# cat mypipe  > output.txt &
-# cat_pid=$!
+# Get Bash version string
+bash_version="Bash Version: ${BASH_VERSION[0]}"
 
-# Run your pipeline and redirect the output to the named pipe
+# Calculate the length of the version string plus padding and asterisks
+len=${#bash_version}
+total_length=$((len + 8)) # Adding 6 for spaces and asterisks
+
+# Generate a line of asterisks of the required length
+line=$(printf '%*s' "$total_length" | tr ' ' '*')
+
+# Output
+echo "$line"
+echo "*** $bash_version ***"
+echo "$line"
+
+# Check for Bash version 4.0 or above
+if [ "${BASH_VERSINFO[0]}" -lt 4 ]; then
+    echo "Error: Bash version 4.0 or higher is required to run this script."
+    exit 1
+fi
+
+# Run pipeline and redirect the output to a temporary file
+temp_file=$(mktemp)
 git ls-remote --heads origin \
   | grep 'refs/heads/release/v' \
   | awk -F'/' '{print $NF}' \
@@ -23,20 +50,16 @@ git ls-remote --heads origin \
   | head -n 1 \
   | grep -o '[0-9]\+' \
   | head -n 1 \
-  | xargs > mypipe
+  | xargs > "${temp_file}"
 
 # Check the pipeline status
 return_codes=("${PIPESTATUS[@]}")
 
-# Wait for the `cat` command to finish
-# wait $cat_pid
-
-# Now, you can read the output from the file
-my_version=$(<mypipe)
+# Read the version from the temporary file
+my_version=$(<"${temp_file}")
 
 # Cleanup
-rm mypipe
-# rm output.txt
+rm "${temp_file}"
 
 commands=("git ls-remote" "grep 'refs/heads/release/v'" "awk -F'/'" "sort -Vr" "head -n 1 (first grep)" "grep -o '[0-9]\+'" "head -n 1 (second head)" "xargs")
 # Check each command for failure
@@ -49,7 +72,9 @@ for i in "${!return_codes[@]}"; do
 done
 
 # Echo the version captured
-echo "Captured version: ${my_version}"
+echo "Current version: ${my_version}"
 next_version=$((my_version + 1))
-echo "Next version: ${next_version}" >> $GITHUB_ENV
-echo "Next version: ${next_version}"
+
+# DO NOT MODIFY THE OUTPUT FORMAT
+# THIS IS USED BY GITHUB ACTIONS
+echo "${next_version}"
