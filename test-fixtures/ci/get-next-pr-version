@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+#
+# Set the release version for PRs run on GitHub Actions.
+#
+# This script performs the following operations:
+#   1. Fetches the list of branches from the remote repository.
+#   2. Filters for branches that follow the 'release/v*' pattern.
+#   3. Strips out any decimal points in version numbers (e.g., converts 'v123.1' to 'v123').
+#   4. Increments the highest version number found by 1 for the next release.
+#   5. Sets a default value if no matching release branches are found.
+
+echo "running main"
+bash --version
+
+# cat mypipe  > output.txt &
+# cat_pid=$!
+
+# Run your pipeline and redirect the output to the named pipe
+git ls-remote --heads origin \
+  | grep 'refs/heads/release/v' \
+  | awk -F'/' '{print $NF}' \
+  | sort -Vr \
+  | head -n 1 \
+  | grep -o '[0-9]\+' \
+  | head -n 1 \
+  | xargs > mypipe
+
+# Check the pipeline status
+return_codes=("${PIPESTATUS[@]}")
+
+# Wait for the `cat` command to finish
+# wait $cat_pid
+
+# Now, you can read the output from the file
+my_version=$(<mypipe)
+
+# Cleanup
+rm mypipe
+# rm output.txt
+
+commands=("git ls-remote" "grep 'refs/heads/release/v'" "awk -F'/'" "sort -Vr" "head -n 1 (first grep)" "grep -o '[0-9]\+'" "head -n 1 (second head)" "xargs")
+# Check each command for failure
+for i in "${!return_codes[@]}"; do
+  echo "Command ${commands[$i]} exited with code ${return_codes[$i]}"
+  if [ "${return_codes[$i]}" -ne 0 ]; then
+    echo "Failure in pipeline at command index: $i with exit code ${return_codes[$i]}"
+    # If necessary, exit or handle the error
+  fi
+done
+
+# Echo the version captured
+echo "Captured version: ${my_version}"
+next_version=$((my_version + 1))
+echo "Next version: ${next_version}" >> $GITHUB_ENV
+echo "Next version: ${next_version}"

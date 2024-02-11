@@ -23,8 +23,6 @@ import requests
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 
-# Setup logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s-%(levelname)s: %(message)s")
 
 CONFIG = {
     "URI_WEBSITE": "https://www.iana.org/assignments/uri-schemes/uri-schemes-1.csv",
@@ -37,7 +35,7 @@ CONFIG = {
 
 
 # use exponential backoff because why not
-def get_uri_csv_with_retries(url):
+def get_uri_csv(url):
     """
     Fetches the URI CSV from the specified URL with retry logic.
 
@@ -61,7 +59,7 @@ def get_uri_csv_with_retries(url):
         response.raise_for_status()
         return response.content.decode("utf-8")
     except Exception as e:
-        logging.error(f"Failed to download CSV: {e}")
+        logging.error("Failed to get CSV: %r", e)
         sys.exit(1)
 
 
@@ -99,12 +97,13 @@ def update_swift_file(new_urischemes, swift_file_path):
             lines = file.readlines()
 
         new_lines = [f'    "{scheme}",\n' for scheme in new_urischemes]
+        # end_index must be non-inclusive to avoid removing ']' when there are fewer URIs in the new list
         updated_lines = lines[:start_index] + new_lines + lines[end_index - 1 :]
 
         with open(swift_file_path, "w") as file:
             file.writelines(updated_lines)
     except Exception as e:
-        logging.error(f"Failed to update the Swift file: {e}")
+        logging.error("Failed to update the Swift file: %r", e)
         sys.exit(1)
 
 
@@ -132,11 +131,11 @@ def find_uris_section_indices(swift_file_path):
                     end_index = i
                     break
     except Exception as e:
-        logging.error(f"An error occurred while reading {swift_file_path}: {e}")
+        logging.error("An error occurred while reading %r: %r", swift_file_path, e)
         sys.exit(1)
 
     if start_index == -1 or end_index == -1:
-        logging.error(f"Could not find 'permanentURISchemes' array in the Swift file.")
+        logging.error("Could not find 'permanentURISchemes' array in the Swift file.")
         sys.exit(1)
     return start_index, end_index
 
@@ -166,18 +165,18 @@ def extract_current_uris(swift_file_path):
                 elif i == end_line:
                     break
     except Exception as e:
-        logging.error(f"An error occurred while reading {swift_file_path}: {e}")
+        logging.error("An error occurred while reading %r: %r", swift_file_path, e)
         sys.exit(1)
     return uris
 
 
 def main():
-    logging.info(f"Current CONFIG for task:\n{CONFIG}")
+    logging.info("Current CONFIG for task:\n%r", CONFIG)
     csv_url = CONFIG["URI_WEBSITE"]
-    swift_file_path = f'{CONFIG["IOS_URI_PATH"]}/{CONFIG["IOS_URIS_FILE"]}'
+    swift_file_path = "%s/%s" % (CONFIG["IOS_URI_PATH"], CONFIG["IOS_URIS_FILE"])
 
     try:
-        uri_response_csv = get_uri_csv_with_retries(csv_url)
+        uri_response_csv = get_uri_csv(csv_url)
         permanent_urischemes = parse_uri_csv(uri_response_csv)
         current_uris = extract_current_uris(swift_file_path)
         uri_diff = [uri for uri in permanent_urischemes if uri not in set(current_uris)]
@@ -188,9 +187,13 @@ def main():
         else:
             logging.info("No update needed. File contains latest permanent URISchemes.")
     except Exception as e:
-        logging.error(f"Error occurred: {e}")
+        logging.error("Error occurred: %r", e)
         sys.exit(1)
 
 
 if __name__ == "__main__":
+    # config logging here to avoid collisions during imports
+    logging.basicConfig(
+        level=logging.INFO, format="%(asctime)s-%(levelname)s: %(message)s"
+    )
     main()
