@@ -34,7 +34,7 @@ struct AddressCellView: View {
                         .foregroundColor(iconPrimary)
                         .offset(y: -14)
                     VStack(alignment: .leading) {
-                        Text(address.fullName)
+                        Text(address.name)
                             .font(.body)
                             .foregroundColor(textColor)
                         Text(address.streetAddress)
