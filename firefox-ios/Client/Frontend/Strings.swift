@@ -1832,26 +1832,21 @@ extension String {
                 tableName: "Settings",
                 value: "Default Search Engine",
                 comment: "Title for the `default search engine` settings section in the Search page in the Settings menu.")
-            public static let DefaultSearchEngineFooter = MZLocalizedString(
-                key: "Settings.Search.DefaultSearchEngine.Footer.v122",
+            public static let AlternateSearchEnginesTitle = MZLocalizedString(
+                key: "Settings.Search.AlternateSearchEngines.Title.v124",
                 tableName: "Settings",
-                value: "Results from searches, history, bookmarks, and more",
-                comment: "Footer for for the `default search engine` settings section in the Search Settings page, which explains in more details what the `Show Search Suggestions` setting includes.")
-            public static let QuickSearchEnginesTitle = MZLocalizedString(
-                key: "Settings.Search.QuickEnginesTitle.v121",
+                value: "Alternate Search Engines",
+                comment: "Title for alternate search engines settings section in the Search page in the Settings menu.")
+            public static let EnginesSuggestionsTitle = MZLocalizedString(
+                key: "Settings.Search.EnginesSuggestions.Title.v124",
                 tableName: "Settings",
-                value: "Quick-Search Engines",
-                comment: "Title for quick-search engines settings section in the Search page in the Settings menu.")
-            public static let PrivateSessionTitle = MZLocalizedString(
-                key: "Settings.Search.PrivateSession.Title.v122",
-                tableName: "Settings",
-                value: "Private Browsing",
-                comment: "Title for the `Private Browsing` settings section in the Search page in the Settings menu.")
+                value: "Suggestions from Search Engines",
+                comment: "Title for the `Suggestions from Search Engines` settings section in the Search page in the Settings menu.")
             public static let PrivateSessionSetting = MZLocalizedString(
-                key: "Settings.Search.PrivateSession.Setting.v122",
+                key: "Settings.Search.PrivateSession.Setting.v124",
                 tableName: "Settings",
-                value: "Show Suggestions in Private Browsing",
-                comment: "Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in the Private Session section in the Search page in the Settings menu.")
+                value: "Show in Private Sessions",
+                comment: "Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in `Suggestions from Search Engines` and `Address Bar - Firefox Suggest` sections in the Search page in the Settings menu.")
 
             public struct AccessibilityLabels {
                 public static let DefaultSearchEngine = MZLocalizedString(
@@ -1875,13 +1870,13 @@ extension String {
                 public static let ShowNonSponsoredSuggestionsTitle = MZLocalizedString(
                     key: "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124",
                     tableName: "Settings",
-                    value: "Suggestions from %@",
-                    comment: "In the Search page of the Settings menu, the title for setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox.")
+                    value: "Suggestions from the Web",
+                    comment: "In the Search page of the Settings menu, the title for setting to enable Suggestions from Firefox.")
                 public static let ShowNonSponsoredSuggestionsDescription = MZLocalizedString(
                     key: "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124",
                     tableName: "Settings",
-                    value: "Get suggestions from the web related to your search",
-                    comment: "In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox.")
+                    value: "Get suggestions from %@ related to your search",
+                    comment: "In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox.")
                 public static let ShowSponsoredSuggestionsTitle = MZLocalizedString(
                     key: "Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124",
                     tableName: "Settings",
@@ -1892,6 +1887,21 @@ extension String {
                     tableName: "Settings",
                     value: "Support %@ with occasional sponsored suggestions",
                     comment: "In the Search page of the Settings menu, the description for the setting to enable Suggestions from sponsors. Placeholder is for the app name - Firefox.")
+                public static let SearchBrowsingHistory = MZLocalizedString(
+                    key: "Settings.Search.Suggest.SearchBrowsingHistory.Title.v124",
+                    tableName: "Settings",
+                    value: "Search Browsing History",
+                    comment: "In the Search page of the Settings menu, the title for the setting to enable search browsing history.")
+                public static let SearchBookmarks = MZLocalizedString(
+                    key: "Settings.Search.Suggest.SearchSearchBookmarks.Title.v124",
+                    tableName: "Settings",
+                    value: "Search Bookmarks",
+                    comment: "In the Search page of the Settings menu, the title for the setting to enable search bookmarks.")
+                public static let SearchSyncedTabs = MZLocalizedString(
+                    key: "Settings.Search.Suggest.SearchSyncedTabs.Title.v124",
+                    tableName: "Settings",
+                    value: "Search Synced Tabs",
+                    comment: "In the Search page of the Settings menu, the title for the setting to enable synced tabs.")
                 public static let LearnAboutSuggestions = MZLocalizedString(
                     key: "Settings.Search.Suggest.LearnAboutSuggestions.v124",
                     tableName: "Settings",
@@ -6023,6 +6033,26 @@ extension String {
                 tableName: "Onboarding",
                 value: "When you’re signed in and synced, you’re safer. %@ encrypts your passwords, bookmarks, and more.",
                 comment: "String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name.")
+            public static let QuickSearchEnginesTitle = MZLocalizedString(
+                key: "Settings.Search.QuickEnginesTitle.v121",
+                tableName: "Settings",
+                value: "Quick-Search Engines",
+                comment: "Title for quick-search engines settings section in the Search page in the Settings menu.")
+            public static let PrivateSessionTitle = MZLocalizedString(
+                key: "Settings.Search.PrivateSession.Title.v122",
+                tableName: "Settings",
+                value: "Private Browsing",
+                comment: "Title for the `Private Browsing` settings section in the Search page in the Settings menu.")
+            public static let DefaultSearchEngineFooter = MZLocalizedString(
+                key: "Settings.Search.DefaultSearchEngine.Footer.v122",
+                tableName: "Settings",
+                value: "Results from searches, history, bookmarks, and more",
+                comment: "Footer for for the `default search engine` settings section in the Search Settings page, which explains in more details what the `Show Search Suggestions` setting includes.")
+            public static let PrivateSessionSetting = MZLocalizedString(
+                key: "Settings.Search.PrivateSession.Setting.v122",
+                tableName: "Settings",
+                value: "Show Suggestions in Private Browsing",
+                comment: "Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in the Private Session section in the Search page in the Settings menu.")
         }
     }
 }
