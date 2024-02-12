@@ -1844,63 +1844,120 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func creditCardAutofillSetup(_ tab: Tab, didCreateWebView webView: WKWebView) {
+    /// Returns whether the credit card autofill feature flag is enabled from Nimbus
+    func autofillCreditCardNimbusFeatureFlag() -> Bool {
+        return featureFlags.isFeatureEnabled(.creditCardAutofillStatus, checking: .buildOnly)
+    }
+
+    /// Returns whether credit card autofill settings are enabled based on user defaults key KeyAutofillCreditCardStatus
+    func autofillCreditCardSettingsUserDefaultIsEnabled() -> Bool {
         let userDefaults = UserDefaults.standard
         let keyCreditCardAutofill = PrefsKeys.KeyAutofillCreditCardStatus
 
-        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
-            .creditCardAutofillStatus, checking: .buildOnly)
+        return (userDefaults.object(forKey: keyCreditCardAutofill) as? Bool ?? true)
+    }
+
+    /// Returns whether the address autofill feature flag is enabled from Nimbus
+    func addressAutofillNimbusFeatureFlag() -> Bool {
+        return featureFlags.isFeatureEnabled(.addressAutofill, checking: .buildOnly)
+    }
+
+    /// Returns whether address autofill settings are enabled based on user defaults.
+    func addressAutofillSettingsUserDefaultsIsEnabled() -> Bool {
+        let userDefaults = UserDefaults.standard
+        let keyAddressAutofill = PrefsKeys.KeyAutofillAddressStatus
+
+        return (userDefaults.object(forKey: keyAddressAutofill) as? Bool ?? true)
+    }
+
+    /// Sets up credit card autofill handling.
+    private func creditCardAutofillSetup(_ tab: Tab, didCreateWebView webView: WKWebView) {
         let formAutofillHelper = FormAutofillHelper(tab: tab)
         tab.addContentScript(formAutofillHelper, name: FormAutofillHelper.name())
+
+        // Closure to handle found field values for credit card and address fields
         formAutofillHelper.foundFieldValues = { [weak self] fieldValues, type, frame in
-            guard let tabWebView = tab.webView,
-                  let type = type,
-                  userDefaults.object(forKey: keyCreditCardAutofill) as? Bool ?? true
-            else { return }
+            guard let strongSelf = self, let tabWebView = tab.webView else { return }
 
-            // FXIOS-7150: Telemetry for form input regardless of feature flag status
-            if type == .formInput {
-                TelemetryWrapper.recordEvent(category: .action,
-                                             method: .tap,
-                                             object: .creditCardFormDetected)
-            }
+            // Handle different field types
+            switch fieldValues.fieldValue {
+            case .address:
+                guard let addressPayload = fieldValues.fieldData as? UnencryptedAddressFields,
+                      strongSelf.addressAutofillSettingsUserDefaultsIsEnabled(),
+                      strongSelf.addressAutofillNimbusFeatureFlag(),
+                      let type = type else { return }
 
-            // Perform autofill operations based on feature flag status
-            guard autofillCreditCardStatus else { return }
-            switch type {
-            case .formInput:
-                self?.profile.autofill.listCreditCards(completion: { cards, error in
-                    guard let cards = cards, !cards.isEmpty, error == nil else { return }
-                    DispatchQueue.main.async {
-                        tabWebView.accessoryView.reloadViewFor(.creditCard)
-                        tabWebView.reloadInputViews()
-                    }
-                })
-            case .formSubmit:
-                self?.showCreditCardAutofillSheet(fieldValues: fieldValues)
-                break
-            case .fillAddressForm:
-                // TODO: FXIOS-7670 Address Autofill UX
-                return
-            case .captureAddressForm:
-                // TODO: FXIOS-7670 Address Autofill UX
-                return
-            }
-
-            tabWebView.accessoryView.savedCardsClosure = {
-                DispatchQueue.main.async { [weak self] in
-                    // Dismiss keyboard
-                    webView.resignFirstResponder()
-                    // Authenticate and show bottom sheet with select a card flow
-                    self?.authenticateSelectCreditCardBottomSheet(fieldValues: fieldValues,
-                                                                  frame: frame)
+                // Handle address form filling or capturing
+                switch type {
+                case .fillAddressForm:
+                    strongSelf.displayAddressAutofillAccessoryView(tabWebView: tabWebView)
+                case .captureAddressForm:
+                    break // No action needed for capturing address form
+                default:
+                    break
                 }
+
+            case .creditCard:
+                guard let creditCardPayload = fieldValues.fieldData as? UnencryptedCreditCardFields,
+                      let type = type,
+                      strongSelf.autofillCreditCardSettingsUserDefaultIsEnabled() else { return }
+
+                // Record telemetry for credit card form detection
+                if type == .formInput {
+                    TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardFormDetected)
+                }
+
+                guard strongSelf.autofillCreditCardNimbusFeatureFlag() else { return }
+
+                // Handle different types of credit card interactions
+                switch type {
+                case .formInput:
+                    strongSelf.displayAutofillCreditCardAccessoryView(tabWebView: tabWebView)
+                case .formSubmit:
+                    strongSelf.showCreditCardAutofillSheet(fieldValues: creditCardPayload)
+                default:
+                    break
+                }
+
+                // Handle action when saved cards button is tapped
+                strongSelf.handleSavedCardsButtonTap(tabWebView: tabWebView, webView: webView, frame: frame)
             }
         }
     }
 
-    private func authenticateSelectCreditCardBottomSheet(fieldValues: UnencryptedCreditCardFields,
-                                                         frame: WKFrameInfo? = nil) {
+    /// Displays the credit card autofill accessory view on the given tab web view.
+    private func displayAutofillCreditCardAccessoryView(tabWebView: TabWebView) {
+        profile.autofill.listCreditCards(completion: { cards, error in
+            guard let cards = cards, !cards.isEmpty, error == nil else { return }
+            DispatchQueue.main.async {
+                tabWebView.accessoryView.reloadViewFor(AccessoryType.creditCard)
+                tabWebView.reloadInputViews()
+            }
+        })
+    }
+
+    /// Displays the address autofill accessory view on the given tab web view.
+    private func displayAddressAutofillAccessoryView(tabWebView: TabWebView) {
+        profile.autofill.listCreditCards(completion: { addresses, error in
+            guard let addresses = addresses, !addresses.isEmpty, error == nil else { return }
+            DispatchQueue.main.async {
+                tabWebView.accessoryView.reloadViewFor(AccessoryType.address)
+                tabWebView.reloadInputViews()
+            }
+        })
+    }
+
+    /// Handles the action when the saved cards button is tapped on the tab web view.
+    private func handleSavedCardsButtonTap(tabWebView: TabWebView, webView: WKWebView, frame: WKFrameInfo?) {
+        tabWebView.accessoryView.savedCardsClosure = {
+            DispatchQueue.main.async { [weak self] in
+                webView.resignFirstResponder()
+                self?.authenticateSelectCreditCardBottomSheet(frame: frame)
+            }
+        }
+    }
+
+    private func authenticateSelectCreditCardBottomSheet(frame: WKFrameInfo? = nil) {
         appAuthenticator.getAuthenticationState { [unowned self] state in
             switch state {
             case .deviceOwnerAuthenticated:
