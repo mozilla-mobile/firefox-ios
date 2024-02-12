@@ -17,17 +17,10 @@ final class NimbusMessagingTriggerTests: XCTestCase {
         return FxNimbusMessaging.shared.features.messaging.value()
     }()
 
-    lazy var nimbus: NimbusInterface = {
-        Experiments.shared
-    }()
-
-    override func setUpWithError() throws {
-        try super.setUpWithError()
-        XCTAssert(nimbus is Nimbus)
-    }
-
     func testTriggers() throws {
-        let helper = NimbusMessagingHelperUtility().createNimbusMessagingHelper()!
+        Experiments.events.clearEvents()
+        Experiments.events.recordEvent("app_cycle.foreground")
+        let helper = Experiments.createJexlHelper()!
         let triggers = feature.triggers
 
         var badJexlExpressions = [String: String]()
