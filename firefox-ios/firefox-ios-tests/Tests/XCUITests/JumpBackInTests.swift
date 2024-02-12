@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Common
 
 class JumpBackInTests: BaseTestCase {
     func closeKeyboard() {
@@ -143,5 +144,27 @@ class JumpBackInTests: BaseTestCase {
 //        // mozWaitForElementToNotExist(app.cells["JumpBackInCell"].staticTexts["Amazon"])
 //        mozWaitForElementToExist(app.cells["JumpBackInCell"].staticTexts["Twitter"])
 //        mozWaitForElementToNotExist(app.cells["JumpBackInCell"].staticTexts["YouTube"])
+    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2445811
+    func testLongTapOnJumpBackInLink() {
+        // On homepage, go to the "Jump back in" section and long tap on one of the links
+        navigator.openURL(path(forTestPage: "test-example.html"))
+        mozWaitForElementToExist(app.webViews.links[website_2["link"]!], timeout: TIMEOUT_LONG)
+        app.webViews.links[website_2["link"]!].press(forDuration: 2)
+        mozWaitForElementToExist(app.otherElements.collectionViews.element(boundBy: 0), timeout: TIMEOUT)
+        mozWaitForElementToExist(app.buttons["Open in New Tab"])
+        app.buttons["Open in New Tab"].tap()
+        waitUntilPageLoad()
+        navigator.performAction(Action.GoToHomePage)
+        mozWaitForElementToExist(app.cells["JumpBackInCell"].firstMatch)
+        app.cells["JumpBackInCell"].firstMatch.press(forDuration: 2)
+        // The context menu opens, having the correct options
+        let ContextMenuTable = app.tables["Context Menu"]
+        mozWaitForElementToExist(ContextMenuTable)
+        mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.plus])
+        mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.privateMode])
+        mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.bookmark])
+        mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.shareApple])
     }
 }
