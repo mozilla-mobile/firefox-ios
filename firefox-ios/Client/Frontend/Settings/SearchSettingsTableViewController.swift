@@ -210,8 +210,7 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
                     prefKey: PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions,
                     defaultValue: profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions) ?? true,
                     titleText: String.localizedStringWithFormat(
-                        .Settings.Search.Suggest.ShowNonSponsoredSuggestionsTitle,
-                        AppName.shortName.rawValue
+                        .Settings.Search.Suggest.ShowNonSponsoredSuggestionsTitle
                     ),
                     statusText: String.localizedStringWithFormat(
                         .Settings.Search.Suggest.ShowNonSponsoredSuggestionsDescription,

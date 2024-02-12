@@ -1870,13 +1870,13 @@ extension String {
                 public static let ShowNonSponsoredSuggestionsTitle = MZLocalizedString(
                     key: "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124",
                     tableName: "Settings",
-                    value: "Suggestions from %@",
-                    comment: "In the Search page of the Settings menu, the title for setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox.")
+                    value: "Suggestions from the Web",
+                    comment: "In the Search page of the Settings menu, the title for setting to enable Suggestions from Firefox.")
                 public static let ShowNonSponsoredSuggestionsDescription = MZLocalizedString(
                     key: "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124",
                     tableName: "Settings",
-                    value: "Get suggestions from the web related to your search",
-                    comment: "In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox.")
+                    value: "Get suggestions from %@ related to your search",
+                    comment: "In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox.")
                 public static let ShowSponsoredSuggestionsTitle = MZLocalizedString(
                     key: "Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124",
                     tableName: "Settings",
@@ -1887,6 +1887,21 @@ extension String {
                     tableName: "Settings",
                     value: "Support %@ with occasional sponsored suggestions",
                     comment: "In the Search page of the Settings menu, the description for the setting to enable Suggestions from sponsors. Placeholder is for the app name - Firefox.")
+                public static let SearchBrowsingHistory = MZLocalizedString(
+                    key: "Settings.Search.Suggest.SearchBrowsingHistory.Title.v124",
+                    tableName: "Settings",
+                    value: "Search Browsing History",
+                    comment: "In the Search page of the Settings menu, the title for the setting to enable search browsing history.")
+                public static let SearchBookmarks = MZLocalizedString(
+                    key: "Settings.Search.Suggest.SearchSearchBookmarks.Title.v124",
+                    tableName: "Settings",
+                    value: "Search Bookmarks",
+                    comment: "In the Search page of the Settings menu, the title for the setting to enable search bookmarks.")
+                public static let SearchSyncedTabs = MZLocalizedString(
+                    key: "Settings.Search.Suggest.SearchSyncedTabs.Title.v124",
+                    tableName: "Settings",
+                    value: "Search Synced Tabs",
+                    comment: "In the Search page of the Settings menu, the title for the setting to enable synced tabs.")
                 public static let LearnAboutSuggestions = MZLocalizedString(
                     key: "Settings.Search.Suggest.LearnAboutSuggestions.v124",
                     tableName: "Settings",
