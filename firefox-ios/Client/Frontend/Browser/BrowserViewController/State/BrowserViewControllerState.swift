@@ -105,12 +105,13 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 keyboardState: state.keyboardState,
                 windowUUID: state.windowUUID)
         case GeneralBrowserAction.showKeyboard(let context):
+            let keyboardState = context.keyboardShowing
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 usePrivateHomepage: state.usePrivateHomepage,
                 showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
-                keyboardState: state.keyboardState,
+                keyboardState: keyboardState,
                 windowUUID: state.windowUUID)
         default:
             return state
