@@ -121,12 +121,6 @@
 /* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
 "Settings.Search.Suggest.LearnAboutSuggestions.v124" = "Firefox ਸੁਝਾਅ ਬਾਰੇ ਹੋਰ ਜਾਣੋ";
 
-/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. */
-"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124" = "ਆਪਣੀ ਖੋਜ ਨਾਲ ਸੰਬੰਧਿਤ ਵੈੱਬ ਤੋਂ ਸੁਝਾਅ ਲਵੋ";
-
-/* In the Search page of the Settings menu, the title for setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
-"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124" = "%@ ਤੋਂ ਸੁਝਾਅ";
-
 /* In the Search page of the Settings menu, the description for the setting to enable Suggestions from sponsors. Placeholder is for the app name - Firefox. */
 "Settings.Search.Suggest.ShowSponsoredSuggestions.Description.v124" = "ਕਦੇ ਕਦਾਈ ਸਪੌਂਸਰਾਂ ਵਲੋਂ ਸੁਝਾਆਵਾਂ ਰਾਹੀਂ %@ ਦੀ ਮਦਦ ਕਰੋ";
 

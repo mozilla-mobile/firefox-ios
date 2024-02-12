@@ -16,6 +16,9 @@
 /* String used to describe the option to continue to the next onboarding card in Firefox Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Customization.Intro.Continue.Action.v123" = "Sagen %@";
 
+/* String used to describe the description label of the customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Intro.Description.v123" = "Sbadu asentel-ik akked ufeggag n yifecka almend n tunigin-ik.";
+
 /* String used to describe the option to skip the customization cards in Firefox Onboarding screens and start browsing. */
 "Onboarding.Customization.Intro.Skip.Action.v123" = "Bdu tunigin";
 
@@ -28,6 +31,9 @@
 /* On the theme customization onboarding card, the string used to describe the option to set the theme to dark theme from the available choices. */
 "Onboarding.Customization.Theme.Dark.Action.v123" = "Aberkan";
 
+/* String used to describe the description label of the theme customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Theme.Description.v123" = "Wali web s tafat taceεlalt i tebɣiḍ.";
+
 /* On the theme customization onboarding card, the string used to describe the option to set the theme to light theme from the available choices. */
 "Onboarding.Customization.Theme.Light.Action.v123" = "Aceɛlal";
 
@@ -37,11 +43,23 @@
 /* On the theme customization onboarding card, the string used to describe the option to set the theme to system theme from the available choices. */
 "Onboarding.Customization.Theme.System.Action.v123" = "Asentel n unagraw - auto";
 
+/* String used to describe the title of the theme customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Theme.Title.v123" = "Fren asentel";
+
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
 "Onboarding.Customization.Toolbar.Bottom.Action.v123" = "Adda";
 
+/* String used to describe the option to save set preferences and leave onboarding to start browsing in the app. */
+"Onboarding.Customization.Toolbar.Continue.Action.v123" = "Sekles, tebduḍ tunigin";
+
+/* String used to describe the description label of the toolbar customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Toolbar.Description.v123" = "Eǧǧ inadiyen-ik ɣef wafus.";
+
 /* String used to describe the option to skip the toolbar customization in Firefox Onboarding screens and start browisg in the app. */
 "Onboarding.Customization.Toolbar.Skip.Action.v123" = "Suref";
+
+/* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Toolbar.Title.v123" = "Fren adeg deg ufeggag n yifecka";
 
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen. */
 "Onboarding.Customization.Toolbar.Top.Action.v123" = "Afella";
