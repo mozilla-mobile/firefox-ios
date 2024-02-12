@@ -131,6 +131,8 @@ class MockTabManager: TabManager {
                                          isPrivate: Bool,
                                          previousTabUUID: String) {}
 
+    func undoCloseAllTabsLegacy(recentlyClosedTabs: [Client.Tab], previousTabUUID: String, isPrivate: Bool) {}
+
     @discardableResult
     func addTab(_ request: URLRequest!,
                 configuration: WKWebViewConfiguration!,
