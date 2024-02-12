@@ -25,7 +25,10 @@ let package = Package(
             targets: ["ComponentLibrary"]),
         .library(
             name: "WebEngine",
-            targets: ["WebEngine"])
+            targets: ["WebEngine"]),
+        .library(
+            name: "LoginAutofill",
+            targets: ["LoginAutofill"])
     ],
     dependencies: [
         .package(
@@ -47,6 +50,11 @@ let package = Package(
                  branch: "master")
     ],
     targets: [
+        .target(
+            name: "LoginAutofill",
+            dependencies: [
+                "Common"
+            ]),
         .target(
             name: "ComponentLibrary",
             dependencies: ["Common"],
