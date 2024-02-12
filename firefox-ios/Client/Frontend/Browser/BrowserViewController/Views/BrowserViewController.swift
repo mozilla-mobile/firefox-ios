@@ -2407,7 +2407,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
             let visibleSuggestionsTelemetryInfo = searchViewController.visibleSuggestionsTelemetryInfo
             visibleSuggestionsTelemetryInfo.forEach { trackVisibleSuggestion(telemetryInfo: $0) }
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .abandonment, object: .locationBar)
-
+            searchViewController.searchTelemetry?.recordURLBarSearchAbandonmentTelemetryEvent()
         default:
             break
         }

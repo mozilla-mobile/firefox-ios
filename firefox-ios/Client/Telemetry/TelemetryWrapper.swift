@@ -529,6 +529,7 @@ extension TelemetryWrapper {
         case fxSuggest = "fx-suggest"
         case webview = "webview"
         case urlbarImpression = "urlbar-impression"
+        case urlbarAbandonment = "urlbar-abandonment"
     }
 
     public enum EventValue: String {
@@ -1113,6 +1114,33 @@ extension TelemetryWrapper {
                                                                        sap: sap,
                                                                        searchMode: searchMode)
                 GleanMetrics.Urlbar.impression.record(extraDetails)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
+
+        case(.action, .close, .urlbarAbandonment, _, let extras):
+            if let groups = extras?[EventExtraKey.UrlbarTelemetry.groups.rawValue] as? String,
+               let interaction = extras?[EventExtraKey.UrlbarTelemetry.interaction.rawValue] as? String,
+               let nChars = extras?[EventExtraKey.UrlbarTelemetry.nChars.rawValue] as? Int32,
+               let nResults = extras?[EventExtraKey.UrlbarTelemetry.nResults.rawValue] as? Int32,
+               let nWords = extras?[EventExtraKey.UrlbarTelemetry.nWords.rawValue] as? Int32,
+               let results = extras?[EventExtraKey.UrlbarTelemetry.results.rawValue] as? String,
+               let sap = extras?[EventExtraKey.UrlbarTelemetry.sap.rawValue] as? String,
+               let searchMode = extras?[EventExtraKey.UrlbarTelemetry.searchMode.rawValue] as? String {
+                let extraDetails = GleanMetrics.Urlbar.AbandonmentExtra(groups: groups,
+                                                                        interaction: interaction,
+                                                                        nChars: nChars,
+                                                                        nResults: nResults,
+                                                                        nWords: nWords,
+                                                                        results: results,
+                                                                        sap: sap,
+                                                                        searchMode: searchMode)
+                GleanMetrics.Urlbar.abandonment.record(extraDetails)
             } else {
                 recordUninstrumentedMetrics(
                     category: category,
