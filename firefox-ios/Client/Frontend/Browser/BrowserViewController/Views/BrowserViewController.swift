@@ -547,7 +547,7 @@ class BrowserViewController: UIViewController,
                 self.showToastType(toast: toast)
             }
 
-            if state.keyboardState == true {
+            if state.showOverlay == true {
                 overlayManager.openNewTab(url: nil, newTabSettings: newTabSettings)
             }
         }

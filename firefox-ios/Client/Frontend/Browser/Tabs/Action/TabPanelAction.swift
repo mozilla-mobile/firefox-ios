@@ -74,9 +74,9 @@ class ToastTypeContext: ActionContext {
 }
 
 class KeyboardContext: ActionContext {
-    let keyboardShowing: Bool
-    init(keyboardShowing: Bool, windowUUID: WindowUUID) {
-        self.keyboardShowing = keyboardShowing
+    let showOverlay: Bool
+    init(showOverlay: Bool, windowUUID: WindowUUID) {
+        self.showOverlay = showOverlay
         super.init(windowUUID: windowUUID)
     }
 }

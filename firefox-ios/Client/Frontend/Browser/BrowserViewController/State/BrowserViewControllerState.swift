@@ -12,7 +12,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
     var showDataClearanceFlow: Bool
     var fakespotState: FakespotState
     var toast: ToastType?
-    var keyboardState: Bool
+    var showOverlay: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let bvcState = store.state.screenState(
@@ -29,7 +29,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                   showDataClearanceFlow: bvcState.showDataClearanceFlow,
                   fakespotState: bvcState.fakespotState,
                   toast: bvcState.toast,
-                  keyboardState: bvcState.keyboardState,
+                  showOverlay: bvcState.showOverlay,
                   windowUUID: bvcState.windowUUID)
     }
 
@@ -40,7 +40,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             showDataClearanceFlow: false,
             fakespotState: FakespotState(windowUUID: windowUUID),
             toast: nil,
-            keyboardState: false,
+            showOverlay: false,
             windowUUID: windowUUID)
     }
 
@@ -50,7 +50,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         showDataClearanceFlow: Bool,
         fakespotState: FakespotState,
         toast: ToastType? = nil,
-        keyboardState: Bool = false,
+        showOverlay: Bool = false,
         windowUUID: WindowUUID
     ) {
         self.searchScreenState = searchScreenState
@@ -59,7 +59,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         self.fakespotState = fakespotState
         self.toast = toast
         self.windowUUID = windowUUID
-        self.keyboardState = keyboardState
+        self.showOverlay = showOverlay
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -101,14 +101,14 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 fakespotState: state.fakespotState,
                 toast: toastType,
                 windowUUID: state.windowUUID)
-        case GeneralBrowserAction.showKeyboard(let context):
-            let keyboardState = context.keyboardShowing
+        case GeneralBrowserAction.showOverlay(let context):
+            let showOverlay = context.showOverlay
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 usePrivateHomepage: state.usePrivateHomepage,
                 showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
-                keyboardState: keyboardState,
+                showOverlay: showOverlay,
                 windowUUID: state.windowUUID)
         default:
             return state
