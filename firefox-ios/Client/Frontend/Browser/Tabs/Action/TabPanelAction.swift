@@ -73,6 +73,14 @@ class ToastTypeContext: ActionContext {
     }
 }
 
+class KeyboardContext: ActionContext {
+    let showOverlay: Bool
+    init(showOverlay: Bool, windowUUID: WindowUUID) {
+        self.showOverlay = showOverlay
+        super.init(windowUUID: windowUUID)
+    }
+}
+
 class RefreshTabContext: ActionContext {
     let tabDisplayModel: TabDisplayModel
     init(tabDisplayModel: TabDisplayModel, windowUUID: WindowUUID) {
