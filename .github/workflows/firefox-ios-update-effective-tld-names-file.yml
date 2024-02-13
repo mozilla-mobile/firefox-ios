@@ -43,14 +43,28 @@ jobs:
           echo "create_pr=true" >> $GITHUB_ENV
           cp tmp.dat firefox-ios/Shared/effective_tld_names.dat
           echo "branch_name=refactor-update-effective-tld-names" >> $GITHUB_ENV
-          echo "pr_title=Refactor [vXXX] Update effective_tld_names file $current_date" >> $GITHUB_ENV
           echo "pr_body=This automated PR updates the effective_tld_names file" >> $GITHUB_ENV
           rm tmp.dat
         fi
+
+    - name: Determine PR Version Number
+      id: versioning
+      run: |
+        # This step is used to determine the next version number for the PR title
+        # The output includes debugging for the piped commands that generate
+        # the version number and the last line is the version number itself
+        
+        output=$(bash test-fixtures/ci/get-next-pr-version)
+        echo "$output"
+        next_version=$(echo "$output" | tail -n 1) # get the last line of the output
+        echo "Next version is: v${next_version}"
+        echo "next_version=${next_version}" >> $GITHUB_ENV
+    
     - name: Add Modified File to PR
       if: ${{ env.create_pr }}
       run: |-
         git diff || (git add firefox-ios/Shared/effective_tld_names.dat)
+
     - name: Create Pull Request
       if: ${{ env.create_pr }}
       uses: peter-evans/create-pull-request@v3
@@ -60,5 +74,5 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         commit-message: ${{ env.pr_title }}
         title: ${{ env.pr_title }}
-        branch: ${{ env.branch_name }}
+        branch: "Refactor [v${{ env.next_version }}] Update effective_tld_names file ${{ env.current_date }}"
         body: ${{ env.pr_body }}
