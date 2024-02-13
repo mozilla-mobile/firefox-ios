@@ -50,7 +50,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         showDataClearanceFlow: Bool,
         fakespotState: FakespotState,
         toast: ToastType? = nil,
-        keyboardState: Bool,
+        keyboardState: Bool = false,
         windowUUID: WindowUUID
     ) {
         self.searchScreenState = searchScreenState
@@ -73,7 +73,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 usePrivateHomepage: privacyState,
                 showDataClearanceFlow: privacyState,
                 fakespotState: state.fakespotState,
-                keyboardState: state.keyboardState,
                 windowUUID: state.windowUUID)
         case FakespotAction.pressedShoppingButton,
             FakespotAction.show,
@@ -92,7 +91,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 usePrivateHomepage: state.usePrivateHomepage,
                 showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: FakespotState.reducer(state.fakespotState, action),
-                keyboardState: state.keyboardState,
                 windowUUID: state.windowUUID)
         case GeneralBrowserAction.showToast(let context):
             let toastType = context.toastType
@@ -102,7 +100,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
                 toast: toastType,
-                keyboardState: state.keyboardState,
                 windowUUID: state.windowUUID)
         case GeneralBrowserAction.showKeyboard(let context):
             let keyboardState = context.keyboardShowing
