@@ -22,12 +22,15 @@ jobs:
         persist-credentials: false
         token: ${{ secrets.GITHUB_TOKEN }}
         ref: ${{ github.event.inputs.branchName }}
+
     - name: Select Xcode ${{ matrix.xcode }}
       run: sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode }}.app
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
+
     - name: Get PR info
       run: |
         current_date=$(date +"%Y-%m-%d")
@@ -45,12 +48,28 @@ jobs:
           echo "pr_title=Localize [$version] String import $current_date" >> $GITHUB_ENV
           echo "pr_body=This automated PR imports string changes into branch '$current_branch'" >> $GITHUB_ENV
         fi
+
+    - name: Determine PR Version Number
+      id: versioning
+      run: |
+        # This step is used to determine the next version number for the PR title
+        # The output includes debugging for the piped commands that generate
+        # the version number and the last line is the version number itself
+
+        output=$(bash test-fixtures/ci/get-next-pr-version)
+        echo "$output"
+        next_version=$(echo "$output" | tail -n 1) # get the last line of the output
+        echo "Next version is: v${next_version}"
+        echo "next_version=${next_version}" >> $GITHUB_ENV
+
     - name: Run script to import strings
       run: sh ./bootstrap.sh --importLocales
+
     - name: Update new strings
       run: |-
         git diff || (git add firefox-ios/Shared/*/*.lproj/* firefox-ios/Shared/*.lproj/* firefox-ios/WidgetKit/*.lproj/* firefox-ios/Client/*/*.lproj/* firefox-ios/Client/*.lproj/*)
         git restore firefox-ios/Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v5
       with:
@@ -58,6 +77,6 @@ jobs:
         committer: GitHub <noreply@github.com>
         token: ${{ secrets.GITHUB_TOKEN }}
         commit-message: ${{ env.pr_title }}
-        title: ${{ env.pr_title }}
+        title: "Localize [v${{ env.next_version }}] String import ${{ env.current_date }}"
         branch: ${{ env.branch_name }}
         body: ${{ env.pr_body }}
