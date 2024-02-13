@@ -73,6 +73,6 @@ jobs:
         committer: GitHub <noreply@github.com>
         token: ${{ secrets.GITHUB_TOKEN }}
         commit-message: ${{ env.pr_title }}
-        title: ${{ env.pr_title }}
-        branch: "Refactor [v${{ env.next_version }}] Update effective_tld_names file ${{ env.current_date }}"
+        title: "Refactor [v${{ env.next_version }}] Update effective_tld_names file ${{ env.current_date }}"
+        branch: ${{ env.branch_name }}
         body: ${{ env.pr_body }}
