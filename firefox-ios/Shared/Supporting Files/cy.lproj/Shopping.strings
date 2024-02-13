@@ -62,7 +62,7 @@
 "Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Title.v120" = "Methu Gwirio’r Adolygiadau Hyn";
 
 /* Description text for an information card used in the review checker section. This message is displayed when the reviews for a product are not yet available but are expected to be provided within the next 24 hours. It serves to inform users of the short wait for reviews and encourages them to return soon for the updated information. */
-"Shopping.InfoCard.InfoComingSoon.Description.v121" = "Dylai fod gennym dadansoddiad wedi’i ddiweddaru o fewn 24 awr. Dewch nôl i weld.";
+"Shopping.InfoCard.InfoComingSoon.Description.v121" = "Dylai fod gennym wybodaeth am adolygiadau'r cynnyrch hwn o fewn 24 awr. Dewch nôl.";
 
 /* Title for an information card that is displayed in the review checker section when certain details about a product or feature are not currently available but are expected to be provided soon. The message should imply that the user can look forward to receiving more information shortly. */
 "Shopping.InfoCard.InfoComingSoon.Title.v121" = "Gwybodaeth ar ei Ffordd";

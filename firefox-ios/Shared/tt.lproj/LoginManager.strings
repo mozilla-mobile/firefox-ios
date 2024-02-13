@@ -16,6 +16,21 @@
 /* Label for the button used to delete the current login. */
 "Delete" = "Бетерү";
 
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Баш тарту";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Бетерү";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "Сез бу гамәлне кире кайтара алмыйсыз.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Бу адым серсүзне барлык синхронланган җиһазларыгыздан бетерүгә китерәчәк.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Серсүз бетерелсенме?";
+
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "Берсен дә сайламау";
 
@@ -36,6 +51,9 @@
 
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "Логиннар табылмады";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Серсүзләр табылмады";
 
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "Aчу һәм тутыру";
