@@ -47,7 +47,7 @@
 "Add Tab" = "Ychwanegu Tab";
 
 /* Name for button adding current article to reading list in reader mode */
-"Add to Reading List" = "Ychwanegu i'r Rhestr Ddarllen";
+"Add to Reading List" = "Ychwanegu at y Rhestr Ddarllen";
 
 /* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
 "Added page to Reading List" = "Ychwanegwyd tudalen i'r Rhestr Ddarllen";
@@ -221,7 +221,7 @@
 "Could not load page." = "Methu llwytho'r dudalen.";
 
 /* Description for the new ETP mode i.e. standard vs strict */
-"CoverSheet.v24.ETP.Description" = "Mae Diogelwch rhag Tracio Uwch mewnol yn helpu i atal hysbysebion rhag eich dilyn. Trowch Llym ymlaen i rwystro rhagor o dracwyr, hysbysebion a llamlenni.";
+"CoverSheet.v24.ETP.Description" = "Mae Diogelwch Rhag Tracio Uwch mewnol yn helpu i atal hysbysebion rhag eich dilyn. Trowch Llym ymlaen i rwystro rhagor o dracwyr, hysbysebion a llamlenni.";
 
 /* Text for the new ETP settings button */
 "CoverSheet.v24.ETP.Settings.Button" = "Mynd i'r Gosodiadau";
@@ -962,7 +962,7 @@
 "ReaderMode.Available.VoiceOverAnnouncement" = "Modd Darllen ar Gael";
 
 /* Name for Mark as read button in reader mode */
-"ReaderModeBar.MarkAsRead.v106" = "Marcio wedi Darllen";
+"ReaderModeBar.MarkAsRead.v106" = "Marcio fel wedi ei Darllen";
 
 /* Name for Mark as unread button in reader mode */
 "ReaderModeBar.MarkAsUnread.v106" = "Marcio fel Heb ei Darllen";

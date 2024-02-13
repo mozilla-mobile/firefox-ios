@@ -2,10 +2,10 @@
 "ContextualHints.Shopping.NotOptedIn.v120" = "Prima di acquistare, scopri se puoi fidarti delle recensioni di questo prodotto.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing the Shopping feature. It indicates that a user can go directly to the Shopping feature by tapping the text of the action. */
-"ContextualHints.Shopping.NotOptedInAction.v120" = "Prova verifica recensioni";
+"ContextualHints.Shopping.NotOptedInAction.v120" = "Prova Verifica recensioni";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears after the user has opted in for the Shopping feature. It indicates that a user can directly open the review checker by tapping the text of the action. */
-"ContextualHints.Shopping.OptedInAction.v120" = "Apri verifica recensioni";
+"ContextualHints.Shopping.OptedInAction.v120" = "Apri Verifica recensioni";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one appears after the user has opted in and informs him if he wants use the review checker by tapping the Shopping button. */
 "ContextualHints.Shopping.OptedInBody.v120" = "Queste recensioni sono affidabili? Controlla ora per vedere la valutazione rettificata.";
@@ -233,13 +233,13 @@
 "Shopping.SettingsCard.SwitchValueOn.AccessibilityLabel.v123" = "Attiva";
 
 /* Label of the button from settings card displayed in the shopping review quality bottom sheet. */
-"Shopping.SettingsCard.TurnOffButton.Title.v120" = "Disattiva verifica recensioni";
+"Shopping.SettingsCard.TurnOffButton.Title.v120" = "Disattiva Verifica recensioni";
 
 /* Beta label for the header of the Shopping Experience (Fakespot) sheet */
 "Shopping.Sheet.Beta.Title.v120" = "BETA";
 
 /* Accessibility label for close button that dismisses the Shopping Experience (Fakespot) sheet. */
-"Shopping.Sheet.Close.AccessibilityLabel.v121" = "Chiudi verifica recensioni";
+"Shopping.Sheet.Close.AccessibilityLabel.v121" = "Chiudi Verifica recensioni";
 
 /* Label for the header of the Shopping Experience (Fakespot) sheet */
 "Shopping.Sheet.Title.v120" = "Verifica recensioni";
