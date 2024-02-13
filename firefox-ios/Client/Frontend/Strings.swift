@@ -1788,11 +1788,6 @@ extension String {
                 tableName: nil,
                 value: "Use your fingerprint to access passwords now.",
                 comment: "Touch ID prompt subtitle when accessing logins and passwords")
-            public static let UseSavedLoginFromKeyboard = MZLocalizedString(
-                key: "", // Settings.Passwords.Autofill.UseSavedLoginFromKeyboard.v124
-                tableName: "Settings",
-                value: "Use saved login",
-                comment: "When a user is in the process of loggin in, and has at least one saved password, we show this label inside the keyboard hint. This indicates to the user that there are stored logins available for use on this pending authentication.")
         }
 
         public struct Sync {
@@ -5756,6 +5751,32 @@ extension String {
         tableName: nil,
         value: "To use the AutoFill feature for Firefox, you must have a device passcode enabled.",
         comment: "Warning message shown when you try to enable or use native AutoFill without a device passcode setup")
+}
+
+// MARK: - Password autofill
+extension String {
+    public struct PasswordAutofill {
+        public static let UseSavedPasswordFromKeyboard = MZLocalizedString(
+            key: "PasswordAutofill.UseSavedPasswordFromKeyboard.v124",
+            tableName: "PasswordAutofill",
+            value: "Use saved password",
+            comment: "Displayed inside the keyboard hint when a user is entering their login credentials and has at least one saved password. Indicates that there are stored passwords available for use in filling out the login form.")
+        public static let UseSavedPasswordFromHeader = MZLocalizedString(
+            key: "PasswordAutofill.UseSavedPasswordFromHeader.v124",
+            tableName: "PasswordAutofill",
+            value: "Use saved password?",
+            comment: "This label is used in the password list screen header as a question, prompting the user if they want to use a saved password for logging in.")
+        public static let ManagePasswordsButton = MZLocalizedString(
+            key: "PasswordAutofill.ManagePasswordsButton.v124",
+            tableName: "PasswordAutofill",
+            value: "Manage passwords",
+            comment: "This label is used for a button in the password list screen allowing users to manage their saved passwords. It's meant to direct users to where they can add, remove, or edit their saved passwords.")
+        public static let SignInWithSavedPassword = MZLocalizedString(
+            key: "PasswordAutofill.SignInWithSavedPassword.v124",
+            tableName: "PasswordAutofill",
+            value: "You’ll sign into %@",
+            comment: "This phrase is used as a subtitle in the header of password list screen, indicating to the user that they will be logging into a specific website (represented by %@) using a saved password. It's providing clarity on which website the saved credentials apply to.")
+    }
 }
 
 // MARK: - v35 Strings
