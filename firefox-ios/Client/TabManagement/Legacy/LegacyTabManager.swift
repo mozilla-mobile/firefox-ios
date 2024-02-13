@@ -834,8 +834,8 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         let tabToSelect = tabs.first(where: { $0.tabUUID == previousTabUUID })
         let currentlySelectedTab = selectedTab
         if let tabToSelect = tabToSelect, let currentlySelectedTab = currentlySelectedTab {
-            // remove currently selected tab only for normal mode
-            if isPrivate {
+            // remove tab only in normal mode because we don't create a new tab after users closes all tabs in private mode
+            if !isPrivate {
                 removeTabs([currentlySelectedTab])
             }
             // select previous tab
