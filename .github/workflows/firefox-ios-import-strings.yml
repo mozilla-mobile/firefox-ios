@@ -31,24 +31,6 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Get PR info
-      run: |
-        current_date=$(date +"%Y-%m-%d")
-        # Use 'main' when triggered via cron
-        current_branch=${{ github.event.inputs.branchName || 'main' }}
-        echo "current_date=$current_date" >> $GITHUB_ENV
-        if [[ $current_branch == 'main' ]]; then
-          echo "branch_name=string-import-$current_date" >> $GITHUB_ENV
-          echo "pr_title=Localize [ver] String import $current_date" >> $GITHUB_ENV
-          echo "pr_body=This automated PR imports string changes" >> $GITHUB_ENV
-        else
-          # version: v105.0 -> v105
-          version=${current_branch%??}
-          echo "branch_name=string-import-$current_branch-$current_date" >> $GITHUB_ENV
-          echo "pr_title=Localize [$version] String import $current_date" >> $GITHUB_ENV
-          echo "pr_body=This automated PR imports string changes into branch '$current_branch'" >> $GITHUB_ENV
-        fi
-
     - name: Determine PR Version Number
       id: versioning
       run: |
@@ -61,6 +43,24 @@ jobs:
         next_version=$(echo "$output" | tail -n 1) # get the last line of the output
         echo "Next version is: v${next_version}"
         echo "next_version=${next_version}" >> $GITHUB_ENV
+  
+    - name: Get PR info
+      run: |
+        current_date=$(date +"%Y-%m-%d")
+        # Use 'main' when triggered via cron
+        current_branch=${{ github.event.inputs.branchName || 'main' }}
+        echo "current_date=$current_date" >> $GITHUB_ENV
+        if [[ $current_branch == 'main' ]]; then
+          echo "branch_name=string-import-$current_date" >> $GITHUB_ENV
+          echo "pr_title=Localize [v${{ env.next_version }}] String import $current_date" >> $GITHUB_ENV
+          echo "pr_body=This automated PR imports string changes" >> $GITHUB_ENV
+        else
+          # version: v105.0 -> v105
+          version=${current_branch%??}
+          echo "branch_name=string-import-$current_branch-$current_date" >> $GITHUB_ENV
+          echo "pr_title=Localize [$version] String import $current_date" >> $GITHUB_ENV
+          echo "pr_body=This automated PR imports string changes into branch '$current_branch'" >> $GITHUB_ENV
+        fi
 
     - name: Run script to import strings
       run: sh ./bootstrap.sh --importLocales
