@@ -70,6 +70,7 @@
         "HomePageSettingsUITests\/testTyping()",
         "IntegrationTests",
         "JumpBackInTests\/testJumpBackInSection()",
+        "JumpBackInTests\/testLongTapOnJumpBackInLink()",
         "LibraryTestsIpad",
         "LoginTest",
         "NavigationTest\/testBookmarkLink()",
