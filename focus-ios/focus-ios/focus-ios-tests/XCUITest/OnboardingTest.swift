@@ -38,6 +38,7 @@ class OnboardingTest: XCTestCase {
        }
 
     // Smoketest
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/394959
     func testPressingDots() throws {
         let pageIndicatorButton = app.pageIndicators.firstMatch
         XCTAssertEqual(pageIndicatorButton.value as? String, "page 1 of 2")
