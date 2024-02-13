@@ -217,6 +217,7 @@ class TabManagerMiddleware {
         let model = getTabsDisplayModel(for: isPrivate, shouldScrollToTab: true, uuid: uuid)
         store.dispatch(TabPanelAction.refreshTab(RefreshTabContext(tabDisplayModel: model, windowUUID: uuid)))
         store.dispatch(TabTrayAction.dismissTabTray(uuid.context))
+        store.dispatch(GeneralBrowserAction.showOverlay(KeyboardContext(showOverlay: true, windowUUID: uuid)))
     }
 
     /// Move tab on `TabManager` array to support drag and drop
