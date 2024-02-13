@@ -1,0 +1,107 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# Script Description:
+# This script is designed to fetch the next version number for a pull request based on the highest version
+# number found in the branch names of a given Git repository. It examines branches prefixed with 'release/v',
+# identifies the highest numerical version, increments it by one, and outputs the next version number for use
+# in automated processes, such as GitHub Actions.
+#
+# Usage:
+# Execute the script directly in a Bash shell. The script prints the next version number to standard output.
+# PLEASE NOTE: The output includes a debugging check for each command in the pipeline,
+#   and the last line will always be the version number.
+#   To get the version number, process the output of the script with 'tail -n 1'.
+#
+# Example for version number: new_version=$(bash get-next-pr-version | tail -n 1)
+# Example for full output with debugging info:
+#   output=$(bash get-next-pr-version)
+#   echo "$output"
+#   new_version=$(echo "$output" | tail -n 1)
+#
+# Example Full Output:
+#   GNU bash, version 5.2.26(1)-release (aarch64-apple-darwin23.2.0)
+#   Copyright (C) 2022 Free Software Foundation, Inc.
+#   License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+#
+#   This is free software; you are free to change and redistribute it.
+#   There is NO WARRANTY, to the extent permitted by law.
+#   ***************************************
+#   *** Bash Version: 5.2.26(1)-release ***
+#   ***************************************
+#   Command git ls-remote exited with code 0
+#   Command grep 'refs/heads/release/v' exited with code 0
+#   Command awk -F'/' exited with code 0
+#   Command sort -Vr exited with code 0
+#   Command head -n 1 (first grep) exited with code 0
+#   Command grep -o '[0-9]\+' exited with code 0
+#   Command head -n 1 (second head) exited with code 0
+#   Command xargs exited with code 0
+#   Current version: 123
+#   124
+#
+# Requirements:
+# - Bash version 3.0 or higher due to the usage of indexed arrays, redirection of read files, and process substitution.
+# - Access to Git and the repository from which to fetch version numbers.
+
+bash --version
+
+# Get Bash version string
+bash_version="Bash Version: ${BASH_VERSION[0]}"
+
+# Calculate the length of the version string plus padding and asterisks
+len=${#bash_version}
+total_length=$((len + 8)) # Adding 6 for spaces and asterisks
+
+# Generate a line of asterisks of the required length
+line=$(printf '%*s' "$total_length" | tr ' ' '*')
+
+# Output
+echo "$line"
+echo "*** $bash_version ***"
+echo "$line"
+
+# Check for Bash version 3.0 or above
+if [ "${BASH_VERSINFO[0]}" -lt 3 ]; then
+    echo "Error: Bash version 3.0 or higher is required to run this script."
+    exit 1
+fi
+
+# Run pipeline and redirect the output to a temporary file
+temp_file=$(mktemp)
+git ls-remote --heads origin \
+  | grep 'refs/heads/release/v' \
+  | awk -F'/' '{print $NF}' \
+  | sort -Vr \
+  | head -n 1 \
+  | grep -o '[0-9]\+' \
+  | head -n 1 \
+  | xargs > "${temp_file}"
+
+# Check the pipeline status
+return_codes=("${PIPESTATUS[@]}")
+
+# Read the version from the temporary file
+my_version=$(<"${temp_file}")
+
+# Cleanup
+rm "${temp_file}"
+
+commands=("git ls-remote" "grep 'refs/heads/release/v'" "awk -F'/'" "sort -Vr" "head -n 1 (first grep)" "grep -o '[0-9]\+'" "head -n 1 (second head)" "xargs")
+# Check each command for failure
+for i in "${!return_codes[@]}"; do
+  echo "Command ${commands[$i]} exited with code ${return_codes[$i]}"
+  if [ "${return_codes[$i]}" -ne 0 ]; then
+    echo "Failure in pipeline at command index: $i with exit code ${return_codes[$i]}"
+    exit 1
+  fi
+done
+
+# Echo the version captured
+echo "Current version: ${my_version}"
+next_version=$((my_version + 1))
+
+# DO NOT MODIFY THE OUTPUT FORMAT
+# THIS IS USED BY GITHUB ACTIONS
+echo "${next_version}"
