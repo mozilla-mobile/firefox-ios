@@ -7,10 +7,15 @@ import WebKit
 import Shared
 import Common
 
-class NightModeHelper: TabContentScript {
+class NightModeHelper: TabContentScript, FeatureFlaggable {
     private enum NightModeKeys {
         static let Status = "profile.NightModeStatus"
         static let DarkThemeEnabled = "NightModeEnabledDarkTheme"
+    }
+
+    private var isUnderExperiment: Bool {
+        guard featureFlags.isFeatureEnabled(.nightMode, checking: .buildOnly) else { return false }
+        return true
     }
 
     fileprivate weak var tab: Tab?
@@ -34,15 +39,19 @@ class NightModeHelper: TabContentScript {
         // Do nothing.
     }
 
-    static func toggle(_ userDefaults: UserDefaultsInterface = UserDefaults.standard,
-                       tabManager: TabManager) {
+    static func toggle(
+        _ userDefaults: UserDefaultsInterface = UserDefaults.standard,
+        tabManager: TabManager
+    ) {
         let isActive = userDefaults.bool(forKey: NightModeKeys.Status)
         setNightMode(userDefaults, tabManager: tabManager, enabled: !isActive)
     }
 
-    static func setNightMode(_ userDefaults: UserDefaultsInterface = UserDefaults.standard,
-                             tabManager: TabManager,
-                             enabled: Bool) {
+    static func setNightMode(
+        _ userDefaults: UserDefaultsInterface = UserDefaults.standard,
+        tabManager: TabManager,
+        enabled: Bool
+    ) {
         userDefaults.set(enabled, forKey: NightModeKeys.Status)
         for tab in tabManager.tabs {
             tab.nightMode = enabled
@@ -50,8 +59,10 @@ class NightModeHelper: TabContentScript {
         }
     }
 
-    static func setEnabledDarkTheme(_ userDefaults: UserDefaultsInterface = UserDefaults.standard,
-                                    darkTheme enabled: Bool) {
+    static func setEnabledDarkTheme(
+        _ userDefaults: UserDefaultsInterface = UserDefaults.standard,
+        darkTheme enabled: Bool
+    ) {
         userDefaults.set(enabled, forKey: NightModeKeys.DarkThemeEnabled)
     }
 
