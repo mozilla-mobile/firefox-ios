@@ -1863,12 +1863,12 @@ extension String {
                     value: "Address bar - Firefox Suggest",
                     comment: "In the Search page of the Settings menu, the title for the Firefox Suggest settings section.")
                 public static let ShowNonSponsoredSuggestionsTitle = MZLocalizedString(
-                    key: "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124",
+                    key: "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124.v2",
                     tableName: "Settings",
                     value: "Suggestions from the Web",
                     comment: "In the Search page of the Settings menu, the title for setting to enable Suggestions from Firefox.")
                 public static let ShowNonSponsoredSuggestionsDescription = MZLocalizedString(
-                    key: "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124",
+                    key: "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124.v2",
                     tableName: "Settings",
                     value: "Get suggestions from %@ related to your search",
                     comment: "In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox.")
@@ -6074,6 +6074,16 @@ extension String {
                 tableName: "Settings",
                 value: "Show Suggestions in Private Browsing",
                 comment: "Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in the Private Session section in the Search page in the Settings menu.")
+            public static let ShowNonSponsoredSuggestionsTitle = MZLocalizedString(
+                key: "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124",
+                tableName: "Settings",
+                value: "Suggestions from %@",
+                comment: "In the Search page of the Settings menu, the title for setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox.")
+            public static let ShowNonSponsoredSuggestionsDescription = MZLocalizedString(
+                key: "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124",
+                tableName: "Settings",
+                value: "Get suggestions from the web related to your search",
+                comment: "In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox.")
         }
     }
 }
