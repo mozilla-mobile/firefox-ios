@@ -1844,12 +1844,10 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    /// Returns whether the credit card autofill feature flag is enabled from Nimbus
     private func autofillCreditCardNimbusFeatureFlag() -> Bool {
         return featureFlags.isFeatureEnabled(.creditCardAutofillStatus, checking: .buildOnly)
     }
 
-    /// Returns whether credit card autofill settings are enabled based on user defaults key KeyAutofillCreditCardStatus
     private func autofillCreditCardSettingsUserDefaultIsEnabled() -> Bool {
         let userDefaults = UserDefaults.standard
         let keyCreditCardAutofill = PrefsKeys.KeyAutofillCreditCardStatus
@@ -1857,12 +1855,10 @@ class BrowserViewController: UIViewController,
         return (userDefaults.object(forKey: keyCreditCardAutofill) as? Bool ?? true)
     }
 
-    /// Returns whether the address autofill feature flag is enabled from Nimbus
     private func addressAutofillNimbusFeatureFlag() -> Bool {
         return featureFlags.isFeatureEnabled(.addressAutofill, checking: .buildOnly)
     }
 
-    /// Returns whether address autofill settings are enabled based on user defaults
     private func addressAutofillSettingsUserDefaultsIsEnabled() -> Bool {
         let userDefaults = UserDefaults.standard
         let keyAddressAutofill = PrefsKeys.KeyAutofillAddressStatus
@@ -1870,7 +1866,6 @@ class BrowserViewController: UIViewController,
         return (userDefaults.object(forKey: keyAddressAutofill) as? Bool ?? true)
     }
 
-    /// Sets up credit card autofill handling
     private func autofillSetup(_ tab: Tab, didCreateWebView webView: WKWebView) {
         let formAutofillHelper = FormAutofillHelper(tab: tab)
         tab.addContentScript(formAutofillHelper, name: FormAutofillHelper.name())
@@ -1930,7 +1925,6 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    /// Displays the credit card autofill accessory view on the given tab web view
     private func displayAutofillCreditCardAccessoryView(tabWebView: TabWebView) {
         profile.autofill.listCreditCards(completion: { cards, error in
             guard let cards = cards, !cards.isEmpty, error == nil else { return }
@@ -1941,7 +1935,6 @@ class BrowserViewController: UIViewController,
         })
     }
 
-    /// Displays the address autofill accessory view on the given tab web view
     private func displayAddressAutofillAccessoryView(tabWebView: TabWebView) {
         profile.autofill.listCreditCards(completion: { addresses, error in
             guard let addresses = addresses, !addresses.isEmpty, error == nil else { return }
