@@ -649,8 +649,10 @@ class BrowserCoordinator: BaseCoordinator,
             guard uuid == windowUUID else { return }
             // Additional cleanup performed when the current iPad window is closed.
             // This is necessary in order to ensure the BVC and other memory is freed correctly.
-            browserViewController.contentContainer.subviews.forEach { $0.removeFromSuperview() }
-            browserViewController.removeFromParent()
+
+            // TODO: Revisit for [FXIOS-8064]. Disabled temporarily to avoid potential KVO crash in WebKit. (FXIOS-8416)
+            // browserViewController.contentContainer.subviews.forEach { $0.removeFromSuperview() }
+            // browserViewController.removeFromParent()
         case .libraryOpened:
             // Auto-close library panel if it was opened in another iPad window. [FXIOS-8095]
             guard uuid != windowUUID else { return }
