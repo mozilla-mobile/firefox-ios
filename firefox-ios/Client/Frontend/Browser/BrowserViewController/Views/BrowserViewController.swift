@@ -1892,7 +1892,8 @@ class BrowserViewController: UIViewController,
                 case .fillAddressForm:
                     strongSelf.displayAddressAutofillAccessoryView(tabWebView: tabWebView)
                 case .captureAddressForm:
-                    break // No action needed for capturing address form
+                    // FXMO-376: No action needed for capturing address form as this is for Phase 2
+                    break
                 default:
                     break
                 }
