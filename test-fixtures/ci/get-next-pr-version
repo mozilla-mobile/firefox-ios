@@ -93,8 +93,9 @@ commands=("git ls-remote" "grep 'refs/heads/release/v'" "awk -F'/'" "sort -Vr" "
 for i in "${!return_codes[@]}"; do
   echo "Command ${commands[$i]} exited with code ${return_codes[$i]}"
   if [ "${return_codes[$i]}" -ne 0 ]; then
+    # Github Actions that use the branch name as a build parameter for the version number
+    # shouldn't fail if this script fails. Don't exit with a non-zero status here. 
     echo "Failure in pipeline at command index: $i with exit code ${return_codes[$i]}"
-    exit 1
   fi
 done
 
