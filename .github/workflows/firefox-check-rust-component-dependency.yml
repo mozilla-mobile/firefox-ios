@@ -70,7 +70,6 @@ jobs:
       run: |-
         git diff
         git diff --quiet || (git add firefox-ios/Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved firefox-ios/Client.xcodeproj/project.pbxproj)
-        git commit --allow-empty -m "empty commit for testing"
 
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v3
