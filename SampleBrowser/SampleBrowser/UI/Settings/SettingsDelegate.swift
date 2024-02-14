@@ -3,8 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Lottie
 
-struct FeltDeletionAnimation {
-    // TODO: Add animation https://mozilla-hub.atlassian.net/browse/FXIOS-8174
+protocol SettingsDelegate: AnyObject {
+    func scrollToTop()
+    func showFindInPage()
 }

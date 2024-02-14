@@ -311,6 +311,8 @@ extension BrowserViewController: URLBarDelegate {
         }
 
         searchController?.searchQuery = text
+        searchController?.searchTelemetry?.searchQuery = text
+        searchController?.searchTelemetry?.interactionType = .refined
         searchLoader?.setQueryWithoutAutocomplete(text)
     }
 
@@ -325,7 +327,9 @@ extension BrowserViewController: URLBarDelegate {
             theme: self.themeManager.currentTheme
         )
         searchController?.searchQuery = text
+        searchController?.searchTelemetry?.searchQuery = text
         searchLoader?.query = text
+        searchController?.searchTelemetry?.determineInteractionType()
     }
 
     func urlBar(_ urlBar: URLBarView, didSubmitText text: String) {
@@ -412,11 +416,18 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBar(_ urlBar: URLBarView, didLeaveOverlayModeForReason reason: URLBarLeaveOverlayModeReason) {
-        searchEngagementState = switch reason {
-        case .finished: .engaged
-        case .cancelled: .abandoned
+        if searchSessionState == .active {
+            // This delegate method may be called even if the user isn't
+            // currently searching, but we only want to update the search
+            // session state if they are.
+            searchSessionState = switch reason {
+            case .finished: .engaged
+            case .cancelled: .abandoned
+            }
         }
-
+        if reason == .finished {
+            searchController?.searchTelemetry?.recordURLBarSearchAbandonmentTelemetryEvent()
+        }
         destroySearchController()
         updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
 

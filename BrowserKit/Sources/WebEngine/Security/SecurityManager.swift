@@ -10,6 +10,8 @@ public protocol SecurityManager {
 }
 
 public class DefaultSecurityManager: SecurityManager {
+    public init() {}
+
     public func canNavigateWith(browsingContext: BrowsingContext) -> NavigationDecisionType {
         guard let url = URL(string: browsingContext.url) else {
             // The URL is not a URL, refuse the navigation

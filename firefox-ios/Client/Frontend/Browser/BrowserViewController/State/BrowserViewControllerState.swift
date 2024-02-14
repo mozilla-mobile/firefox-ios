@@ -12,6 +12,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
     var showDataClearanceFlow: Bool
     var fakespotState: FakespotState
     var toast: ToastType?
+    var showOverlay: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let bvcState = store.state.screenState(
@@ -28,6 +29,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                   showDataClearanceFlow: bvcState.showDataClearanceFlow,
                   fakespotState: bvcState.fakespotState,
                   toast: bvcState.toast,
+                  showOverlay: bvcState.showOverlay,
                   windowUUID: bvcState.windowUUID)
     }
 
@@ -38,6 +40,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             showDataClearanceFlow: false,
             fakespotState: FakespotState(windowUUID: windowUUID),
             toast: nil,
+            showOverlay: false,
             windowUUID: windowUUID)
     }
 
@@ -47,6 +50,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         showDataClearanceFlow: Bool,
         fakespotState: FakespotState,
         toast: ToastType? = nil,
+        showOverlay: Bool = false,
         windowUUID: WindowUUID
     ) {
         self.searchScreenState = searchScreenState
@@ -55,6 +59,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         self.fakespotState = fakespotState
         self.toast = toast
         self.windowUUID = windowUUID
+        self.showOverlay = showOverlay
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -95,6 +100,15 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
                 toast: toastType,
+                windowUUID: state.windowUUID)
+        case GeneralBrowserAction.showOverlay(let context):
+            let showOverlay = context.showOverlay
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                usePrivateHomepage: state.usePrivateHomepage,
+                showDataClearanceFlow: state.showDataClearanceFlow,
+                fakespotState: state.fakespotState,
+                showOverlay: showOverlay,
                 windowUUID: state.windowUUID)
         default:
             return state

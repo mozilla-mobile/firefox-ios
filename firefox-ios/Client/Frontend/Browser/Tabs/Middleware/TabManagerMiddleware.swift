@@ -54,11 +54,11 @@ class TabManagerMiddleware {
         case TabPanelAction.undoClose:
             self.undoCloseTab(state: state, uuid: uuid)
 
-        case TabPanelAction.closeAllTabs:
+        case TabPanelAction.confirmCloseAllTabs:
             self.closeAllTabs(state: state, uuid: uuid)
 
         case TabPanelAction.undoCloseAllTabs:
-            self.tabManager(for: uuid).undoCloseAllTabs()
+            self.undoCloseAllTabs(uuid: uuid)
 
         case TabPanelAction.selectTab(let context):
             let tabUUID = context.tabUUID
@@ -217,6 +217,7 @@ class TabManagerMiddleware {
         let model = getTabsDisplayModel(for: isPrivate, shouldScrollToTab: true, uuid: uuid)
         store.dispatch(TabPanelAction.refreshTab(RefreshTabContext(tabDisplayModel: model, windowUUID: uuid)))
         store.dispatch(TabTrayAction.dismissTabTray(uuid.context))
+        store.dispatch(GeneralBrowserAction.showOverlay(KeyboardContext(showOverlay: true, windowUUID: uuid)))
     }
 
     /// Move tab on `TabManager` array to support drag and drop
@@ -298,27 +299,33 @@ class TabManagerMiddleware {
         let tabManager = tabManager(for: uuid)
         guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: nil) else { return }
         Task {
-            let count = tabManager.tabs.count
+            let normalCount = tabManager.normalTabs.count
+            let privateCount = tabManager.privateTabs.count
             await tabManager.removeAllTabs(isPrivateMode: tabsState.isPrivateMode)
 
             ensureMainThread { [self] in
                 let model = getTabsDisplayModel(for: tabsState.isPrivateMode, shouldScrollToTab: false, uuid: uuid)
                 let context = RefreshTabContext(tabDisplayModel: model, windowUUID: uuid)
                 store.dispatch(TabPanelAction.refreshTab(context))
-                store.dispatch(TabTrayAction.dismissTabTray(uuid.context))
-                store.dispatch(GeneralBrowserAction.showToast(ToastTypeContext(toastType: .allTabs(count: count),
-                                                                               windowUUID: uuid)))
+                if tabsState.isPrivateMode {
+                    store.dispatch(TabPanelAction.showToast(ToastTypeContext(toastType: .allTabs(count: privateCount),
+                                                                             windowUUID: uuid)))
+                } else {
+                    store.dispatch(TabTrayAction.dismissTabTray(uuid.context))
+                    store.dispatch(GeneralBrowserAction.showToast(ToastTypeContext(toastType: .allTabs(count: normalCount),
+                                                                                   windowUUID: uuid)))
+                }
             }
         }
     }
 
-    /// Handles undo close all tabs. Adds back all tabs depending on mode
-    ///
-    /// - Parameter isPrivateMode: if private mode is active or not
-    private func undoCloseAllTabs(isPrivateMode: Bool, uuid: WindowUUID) {
-        // TODO: FXIOS-7978 Handle Undo close all tabs
+    private func undoCloseAllTabs(uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
         tabManager.undoCloseAllTabs()
+
+        // The private tab panel is the only panel that stays open after a close all tabs action
+        let model = getTabsDisplayModel(for: true, shouldScrollToTab: false, uuid: uuid)
+        store.dispatch(TabPanelAction.refreshTab(RefreshTabContext(tabDisplayModel: model, windowUUID: uuid)))
     }
 
     // MARK: - Inactive tabs helper

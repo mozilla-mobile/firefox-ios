@@ -59,6 +59,10 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
             return container
         }
 
+        updatedConfiguration.imageColorTransformer = UIConfigurationColorTransformer { [weak self] color in
+            return self?.foregroundColor ?? .white
+        }
+
         configuration = updatedConfiguration
     }
 

@@ -31,11 +31,10 @@ class MetadataParserHelper: TabEventHandler {
             }
 
             guard let dict = result as? [String: Any],
-                let pageURL = tab.url?.displayURL,
-                let pageMetadata = PageMetadata.fromDictionary(dict) else {
-                    TabEvent.post(.pageMetadataNotAvailable, for: tab)
-                    tab.pageMetadata = nil
-                    return
+                  let pageMetadata = PageMetadata.fromDictionary(dict) else {
+                TabEvent.post(.pageMetadataNotAvailable, for: tab)
+                tab.pageMetadata = nil
+                return
             }
 
             tab.pageMetadata = pageMetadata

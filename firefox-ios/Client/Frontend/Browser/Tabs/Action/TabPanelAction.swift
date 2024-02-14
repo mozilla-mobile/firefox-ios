@@ -73,6 +73,14 @@ class ToastTypeContext: ActionContext {
     }
 }
 
+class KeyboardContext: ActionContext {
+    let showOverlay: Bool
+    init(showOverlay: Bool, windowUUID: WindowUUID) {
+        self.showOverlay = showOverlay
+        super.init(windowUUID: windowUUID)
+    }
+}
+
 class RefreshTabContext: ActionContext {
     let tabDisplayModel: TabDisplayModel
     init(tabDisplayModel: TabDisplayModel, windowUUID: WindowUUID) {
@@ -96,6 +104,7 @@ enum TabPanelAction: Action {
     case closeTab(TabUUIDContext)
     case undoClose(ActionContext)
     case closeAllTabs(ActionContext)
+    case confirmCloseAllTabs(ActionContext)
     case undoCloseAllTabs(ActionContext)
     case moveTab(MoveTabContext)
     case toggleInactiveTabs(ActionContext)
@@ -122,6 +131,7 @@ enum TabPanelAction: Action {
                 .closeTab(let context as ActionContext),
                 .undoClose(let context),
                 .closeAllTabs(let context),
+                .confirmCloseAllTabs(let context),
                 .undoCloseAllTabs(let context),
                 .moveTab(let context as ActionContext),
                 .toggleInactiveTabs(let context),

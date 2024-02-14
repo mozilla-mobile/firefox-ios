@@ -65,9 +65,9 @@ class TabLocationView: UIView, FeatureFlaggable {
         didSet {
             hideButtons()
             updateTextWithURL()
-            hideTrackingProtectionButton()
             shareButton.isHidden = !(shouldEnableShareButtonFeature && isValidHttpUrlProtocol(url))
             setNeedsUpdateConstraints()
+            showTrackingProtectionButton(for: url)
         }
     }
 
@@ -181,6 +181,7 @@ class TabLocationView: UIView, FeatureFlaggable {
         reloadButton.contentHorizontalAlignment = .center
         reloadButton.accessibilityLabel = .TabLocationReloadAccessibilityLabel
         reloadButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.reloadButton
+        reloadButton.accessibilityHint = .TabLocationReloadAccessibilityHint
         reloadButton.isAccessibilityElement = true
         reloadButton.translatesAutoresizingMaskIntoConstraints = false
         reloadButton.showsLargeContentViewer = true
@@ -395,7 +396,9 @@ class TabLocationView: UIView, FeatureFlaggable {
     func showTrackingProtectionButton(for url: URL?) {
         ensureMainThread {
             let isValidHttpUrlProtocol = self.isValidHttpUrlProtocol(url)
-            if isValidHttpUrlProtocol, self.trackingProtectionButton.isHidden {
+            let isReaderModeURL = url?.isReaderModeURL ?? false
+            let isFxHomeUrl = url?.isFxHomeUrl ?? false
+            if !isFxHomeUrl, !isReaderModeURL, isValidHttpUrlProtocol, self.trackingProtectionButton.isHidden {
                 self.trackingProtectionButton.transform = UX.trackingProtectionxOffset
                 self.trackingProtectionButton.alpha = 0
                 self.trackingProtectionButton.isHidden = false
@@ -404,7 +407,7 @@ class TabLocationView: UIView, FeatureFlaggable {
                     self.trackingProtectionButton.transform = .identity
                 }
             }
-            self.trackingProtectionButton.isHidden = !isValidHttpUrlProtocol
+            self.trackingProtectionButton.isHidden = !isValidHttpUrlProtocol || isReaderModeURL || isFxHomeUrl
         }
     }
 
@@ -455,7 +458,9 @@ private extension TabLocationView {
         readerModeButton.isHidden = shoppingButton.isHidden ? newReaderModeState == .unavailable : true
         // When the user turns on the reader mode we need to hide the trackingProtectionButton (according to 16400),
         // we will hide it once the newReaderModeState == .active
-        self.trackingProtectionButton.isHidden = newReaderModeState == .active
+        if newReaderModeState == .active {
+            self.trackingProtectionButton.isHidden = true
+        }
 
         if wasHidden != readerModeButton.isHidden {
             UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)

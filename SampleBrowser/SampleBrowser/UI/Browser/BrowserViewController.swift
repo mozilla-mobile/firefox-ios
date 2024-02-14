@@ -9,21 +9,32 @@ protocol NavigationDelegate: AnyObject {
     func onURLChange(url: String)
     func onLoadingStateChange(loading: Bool)
     func onNavigationStateChange(canGoBack: Bool, canGoForward: Bool)
+
+    func onFindInPage(selected: String)
+    func onFindInPage(currentResult: Int)
+    func onFindInPage(totalResults: Int)
 }
 
 // Holds different type of browser views, communicating through protocols with them
-class BrowserViewController: UIViewController, EngineSessionDelegate {
+class BrowserViewController: UIViewController,
+                                EngineSessionDelegate,
+                             FindInPageHelperDelegate {
     weak var navigationDelegate: NavigationDelegate?
     private lazy var progressView: UIProgressView = .build { _ in }
     private var engineSession: EngineSession!
-    private var engineView: EngineView!
+    private var engineView: EngineView
+    private let urlFormatter: URLFormatter
 
     // MARK: - Init
 
-    init(engineProvider: EngineProvider) {
-        engineSession = engineProvider.session
-        engineView = engineProvider.view
+    init(engineProvider: EngineProvider,
+         urlFormatter: URLFormatter = DefaultURLFormatter()) {
+        self.engineSession = engineProvider.session
+        self.engineView = engineProvider.view
+        self.urlFormatter = urlFormatter
         super.init(nibName: nil, bundle: nil)
+
+        engineSession.findInPageDelegate = self
     }
 
     required init?(coder: NSCoder) {
@@ -91,21 +102,28 @@ class BrowserViewController: UIViewController, EngineSessionDelegate {
         engineSession.stopLoading()
     }
 
+    func scrollToTop() {
+        engineSession.scrollToTop()
+    }
+
+    func findInPage(text: String, function: FindInPageFunction) {
+        engineSession.findInPage(text: text, function: function)
+    }
+
+    func findInPageDone() {
+        engineSession.findInPageDone()
+    }
+
     // MARK: - Search
 
     func loadUrlOrSearch(_ searchTerm: SearchTerm) {
-        guard searchTerm.isValidUrl, let url = URL(string: searchTerm.searchTerm) else {
-            search(searchTerm)
-            return
+        if let url = urlFormatter.getURL(entry: searchTerm.term) {
+            // Search the entered URL
+            engineSession.load(url: url.absoluteString)
+        } else {
+            // Search term with Search Engine Bing
+            engineSession.load(url: searchTerm.urlWithSearchTerm)
         }
-
-        engineSession.load(url: url.absoluteString)
-    }
-
-    private func search(_ searchTerm: SearchTerm) {
-        guard let url = searchTerm.encodedURL else { return }
-
-        engineSession.load(url: url.absoluteString)
     }
 
     // MARK: - EngineSessionDelegate general
@@ -143,10 +161,20 @@ class BrowserViewController: UIViewController, EngineSessionDelegate {
     // MARK: - EngineSessionDelegate Menu items
 
     func findInPage(with selection: String) {
-        // FXIOS-8087: Handle find in page in WebEngine
+        navigationDelegate?.onFindInPage(selected: selection)
     }
 
     func search(with selection: String) {
-        loadUrlOrSearch(SearchTerm(searchTerm: selection))
+        loadUrlOrSearch(SearchTerm(term: selection))
+    }
+
+    // MARK: - FindInPageHelperDelegate
+
+    func findInPageHelper(didUpdateCurrentResult currentResult: Int) {
+        navigationDelegate?.onFindInPage(currentResult: currentResult)
+    }
+
+    func findInPageHelper(didUpdateTotalResults totalResults: Int) {
+        navigationDelegate?.onFindInPage(totalResults: totalResults)
     }
 }

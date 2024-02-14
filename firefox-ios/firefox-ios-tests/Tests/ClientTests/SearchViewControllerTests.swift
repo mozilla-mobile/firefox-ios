@@ -23,8 +23,7 @@ actor MockRustFirefoxSuggest: RustFirefoxSuggestActor {
                 title: "Mozilla",
                 url: URL(string: "https://mozilla.org")!,
                 isSponsored: true,
-                iconImage: nil,
-                fullKeyword: "mozilla"
+                iconImage: nil
             ))
         }
         if includeNonSponsored {
@@ -32,8 +31,7 @@ actor MockRustFirefoxSuggest: RustFirefoxSuggestActor {
                 title: "California",
                 url: URL(string: "https://wikipedia.org/California")!,
                 isSponsored: false,
-                iconImage: nil,
-                fullKeyword: "california"
+                iconImage: nil
             ))
         }
         return suggestions

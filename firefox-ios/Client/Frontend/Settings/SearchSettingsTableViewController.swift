@@ -25,9 +25,9 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
             case .defaultEngine:
                 return .Settings.Search.DefaultSearchEngineTitle
             case .quickEngines:
-                return .Settings.Search.QuickSearchEnginesTitle
+                return .Settings.Search.AlternateSearchEnginesTitle
             case .privateSession:
-                return .Settings.Search.PrivateSessionTitle
+                return .Settings.Search.EnginesSuggestionsTitle
             case .firefoxSuggestSettings:
                 return String.localizedStringWithFormat(
                     .Settings.Search.Suggest.AddressBarSettingsTitle,
@@ -210,8 +210,7 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
                     prefKey: PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions,
                     defaultValue: profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions) ?? true,
                     titleText: String.localizedStringWithFormat(
-                        .Settings.Search.Suggest.ShowNonSponsoredSuggestionsTitle,
-                        AppName.shortName.rawValue
+                        .Settings.Search.Suggest.ShowNonSponsoredSuggestionsTitle
                     ),
                     statusText: String.localizedStringWithFormat(
                         .Settings.Search.Suggest.ShowNonSponsoredSuggestionsDescription,
@@ -403,18 +402,6 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
         return headerView
     }
 
-    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        guard let footerView = tableView.dequeueReusableHeaderFooterView(
-            withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier
-        ) as? ThemedTableSectionHeaderFooterView else { return nil }
-        if case .defaultEngine = Section(rawValue: section) {
-            footerView.titleLabel.text = .Settings.Search.DefaultSearchEngineFooter
-            footerView.titleAlignment = .top
-        }
-        footerView.applyTheme(theme: themeManager.currentTheme)
-        return footerView
-    }
-
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         let section = Section(rawValue: sectionsToDisplay[indexPath.section].rawValue) ?? .defaultEngine
         switch section {
@@ -445,26 +432,17 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
         targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath,
         toProposedIndexPath proposedDestinationIndexPath: IndexPath
     ) -> IndexPath {
-        // You can't drag or drop on the default engine.
-        if sourceIndexPath.section == Section.defaultEngine.rawValue
-            || proposedDestinationIndexPath.section == Section.defaultEngine.rawValue {
+        // Make drag or drop available only for quickEngines section
+        guard proposedDestinationIndexPath.section == Section.quickEngines.rawValue else {
             return sourceIndexPath
         }
 
-        // Can't drag/drop over "Add Custom Engine button"
-        let sourceIndexCheck = sourceIndexPath.item + 1 == model.orderedEngines.count
-        let destinationIndexCheck = proposedDestinationIndexPath.item + 1 == model.orderedEngines.count
-        if sourceIndexCheck || destinationIndexCheck {
+        // Can't drag/drop over "Add Search Engine button"
+        if [sourceIndexPath.item, proposedDestinationIndexPath.item]
+            .contains(where: { $0 + 1 == model.orderedEngines.count }) {
             return sourceIndexPath
         }
 
-        if sourceIndexPath.section != proposedDestinationIndexPath.section {
-            var row = 0
-            if sourceIndexPath.section < proposedDestinationIndexPath.section {
-                row = tableView.numberOfRows(inSection: sourceIndexPath.section) - 1
-            }
-            return IndexPath(row: row, section: sourceIndexPath.section)
-        }
         return proposedDestinationIndexPath
     }
 

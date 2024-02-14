@@ -2,14 +2,14 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
 import UIKit
 
-extension String {
-    var validURL: Bool {
-        guard let url = URL(string: self) else {
-            return false
-        }
-        return UIApplication.shared.canOpenURL(url)
-    }
+/// The `WKEngineWebView` scroll view
+protocol WKScrollView {
+    func setContentOffset(
+        _ contentOffset: CGPoint,
+        animated: Bool
+    )
 }
+
+extension UIScrollView: WKScrollView {}

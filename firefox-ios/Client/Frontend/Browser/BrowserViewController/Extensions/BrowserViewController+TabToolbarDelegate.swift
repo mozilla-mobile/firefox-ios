@@ -56,7 +56,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
         let cancelAction = UIAlertAction(
             title: .Alerts.FeltDeletion.CancelButton,
-            style: .cancel,
+            style: .default,
             handler: { [weak self] _ in
                 self?.privateBrowsingTelemetry.sendDataClearanceTappedTelemetry(didConfirm: false)
             }
@@ -67,8 +67,12 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             style: .destructive,
             handler: { [weak self] _ in
                 self?.privateBrowsingTelemetry.sendDataClearanceTappedTelemetry(didConfirm: true)
-                self?.closePrivateTabsAndOpenNewPrivateHomepage()
-                self?.showDataClearanceConfirmationToast()
+                self?.setupDataClearanceAnimation { timingConstant in
+                    DispatchQueue.main.asyncAfter(deadline: .now() + timingConstant) {
+                        self?.closePrivateTabsAndOpenNewPrivateHomepage()
+                        self?.showDataClearanceConfirmationToast()
+                    }
+                }
             }
         )
 
@@ -92,10 +96,41 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         }
     }
 
+    /// Setup animation for data clearance flow unless reduce motion is enabled
+    /// - Parameter completion: returns the proper timing to match animation on when to close tabs and display toast
+    private func setupDataClearanceAnimation(completion: @escaping (Double) -> Void) {
+        let showAnimation = !UIAccessibility.isReduceMotionEnabled
+        let timingToMatchGradientOverlay = showAnimation ? 0.8 : 0.0
+
+        guard showAnimation else {
+            completion(timingToMatchGradientOverlay)
+            return
+        }
+        let dataClearanceAnimation = DataClearanceAnimation()
+        dataClearanceAnimation.startAnimation(
+            with: view,
+            for: shouldShowTopTabsForTraitCollection(
+                traitCollection
+            )
+        )
+
+        completion(timingToMatchGradientOverlay)
+    }
+
     func tabToolbarDidPressLibrary(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
     }
 
+    func dismissUrlBar() {
+        if urlBar.inOverlayMode {
+            urlBar.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
+        }
+    }
+
     func tabToolbarDidPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        // This code snippet addresses an issue related to navigation between pages in the same tab FXIOS-7309.
+        // Specifically, it checks if the URL bar is not currently focused (`!focusUrlBar`) and if it is
+        // operating in an overlay mode (`urlBar.inOverlayMode`).
+        dismissUrlBar()
         updateZoomPageBarVisibility(visible: false)
         tabManager.selectedTab?.goBack()
     }
@@ -105,6 +140,10 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        // This code snippet addresses an issue related to navigation between pages in the same tab FXIOS-7309.
+        // Specifically, it checks if the URL bar is not currently focused (`!focusUrlBar`) and if it is
+        // operating in an overlay mode (`urlBar.inOverlayMode`).
+        dismissUrlBar()
         updateZoomPageBarVisibility(visible: false)
         tabManager.selectedTab?.goForward()
     }
