@@ -498,7 +498,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
             }
         }
 
-        tab.nightMode = NightModeHelper.isActivated()
+        tab.nightMode = NightModeHelper().isActivated()
         tab.noImageMode = NoImageModeHelper.isActivated(profile.prefs)
 
         if flushToDisk {

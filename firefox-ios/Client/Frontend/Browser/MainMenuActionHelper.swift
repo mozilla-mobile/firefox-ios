@@ -458,7 +458,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     private func getNightModeAction() -> [PhotonRowActions] {
         var items: [PhotonRowActions] = []
 
-        let nightModeEnabled = NightModeHelper.isActivated()
+        let nightModeEnabled = NightModeHelper().isActivated()
         let nightModeTitle: String = nightModeEnabled ? .AppMenu.AppMenuTurnOffNightMode : .AppMenu.AppMenuTurnOnNightMode
         let nightMode = SingleActionViewModel(title: nightModeTitle,
                                               iconString: StandardImageIdentifiers.Large.nightMode,
@@ -472,14 +472,14 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             }
 
             // If we've enabled night mode and the theme is normal, enable dark theme
-            if NightModeHelper.isActivated(),
+            if NightModeHelper().isActivated(),
                self.themeManager.currentTheme.type == .light {
                 self.themeManager.changeCurrentTheme(.dark)
                 NightModeHelper.setEnabledDarkTheme(darkTheme: true)
             }
 
             // If we've disabled night mode and dark theme was activated by it then disable dark theme
-            if !NightModeHelper.isActivated(),
+            if !NightModeHelper().isActivated(),
                NightModeHelper.hasEnabledDarkTheme(),
                self.themeManager.currentTheme.type == .dark {
                 self.themeManager.changeCurrentTheme(.light)

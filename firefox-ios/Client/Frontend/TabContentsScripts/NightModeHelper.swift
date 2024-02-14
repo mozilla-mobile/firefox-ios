@@ -14,15 +14,10 @@ class NightModeHelper: TabContentScript, FeatureFlaggable {
     }
 
     private var isUnderExperiment: Bool {
-        guard featureFlags.isFeatureEnabled(.nightMode, checking: .buildOnly) else { return false }
-        return true
+        return featureFlags.isFeatureEnabled(.nightMode, checking: .buildOnly)
     }
 
-    fileprivate weak var tab: Tab?
-
-    required init(tab: Tab) {
-        self.tab = tab
-    }
+    init() { }
 
     static func name() -> String {
         return "NightMode"
@@ -70,7 +65,8 @@ class NightModeHelper: TabContentScript, FeatureFlaggable {
         return userDefaults.bool(forKey: NightModeKeys.DarkThemeEnabled)
     }
 
-    static func isActivated(_ userDefaults: UserDefaultsInterface = UserDefaults.standard) -> Bool {
+    func isActivated(_ userDefaults: UserDefaultsInterface = UserDefaults.standard) -> Bool {
+        if isUnderExperiment { return false }
         return userDefaults.bool(forKey: NightModeKeys.Status)
     }
 }
