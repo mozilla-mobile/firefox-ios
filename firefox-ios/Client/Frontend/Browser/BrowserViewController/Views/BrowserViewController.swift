@@ -1930,7 +1930,7 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    /// Displays the credit card autofill accessory view on the given tab web view.
+    /// Displays the credit card autofill accessory view on the given tab web view
     private func displayAutofillCreditCardAccessoryView(tabWebView: TabWebView) {
         profile.autofill.listCreditCards(completion: { cards, error in
             guard let cards = cards, !cards.isEmpty, error == nil else { return }
