@@ -1866,7 +1866,7 @@ extension String {
                     key: "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124.v2",
                     tableName: "Settings",
                     value: "Suggestions from the Web",
-                    comment: "In the Search page of the Settings menu, the title for setting to enable Suggestions from Firefox.")
+                    comment: "In the Search page of the Settings menu, the title for setting to enable Suggestions from the web in Firefox.")
                 public static let ShowNonSponsoredSuggestionsDescription = MZLocalizedString(
                     key: "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124.v2",
                     tableName: "Settings",

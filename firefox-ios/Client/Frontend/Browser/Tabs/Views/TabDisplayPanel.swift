@@ -54,6 +54,7 @@ class TabDisplayPanel: UIViewController,
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.accessibilityLabel = .TabTrayViewAccessibilityLabel
         setupView()
         listenForThemeChange(view)
         applyTheme()

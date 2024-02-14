@@ -33,16 +33,16 @@ const AUTOFILL_CREDITCARDS_AUTOCOMPLETE_OFF_PREF =
   "extensions.formautofill.creditCards.ignoreAutocompleteOff";
 const AUTOFILL_ADDRESSES_AUTOCOMPLETE_OFF_PREF =
   "extensions.formautofill.addresses.ignoreAutocompleteOff";
-const ENABLED_AUTOFILL_CAPTURE_ON_FORM_REMOVAL =
+const ENABLED_AUTOFILL_CAPTURE_ON_FORM_REMOVAL_PREF =
   "extensions.formautofill.heuristics.captureOnFormRemoval";
-const ENABLED_AUTOFILL_CAPTURE_ON_PAGE_NAVIGATION =
+const ENABLED_AUTOFILL_CAPTURE_ON_PAGE_NAVIGATION_PREF =
   "extensions.formautofill.heuristics.captureOnPageNavigation";
 
 export const FormAutofill = {
   ENABLED_AUTOFILL_ADDRESSES_PREF,
   ENABLED_AUTOFILL_ADDRESSES_CAPTURE_PREF,
-  ENABLED_AUTOFILL_CAPTURE_ON_FORM_REMOVAL,
-  ENABLED_AUTOFILL_CAPTURE_ON_PAGE_NAVIGATION,
+  ENABLED_AUTOFILL_CAPTURE_ON_FORM_REMOVAL_PREF,
+  ENABLED_AUTOFILL_CAPTURE_ON_PAGE_NAVIGATION_PREF,
   ENABLED_AUTOFILL_CREDITCARDS_PREF,
   ENABLED_AUTOFILL_CREDITCARDS_REAUTH_PREF,
   AUTOFILL_CREDITCARDS_AUTOCOMPLETE_OFF_PREF,
@@ -96,18 +96,6 @@ export const FormAutofill = {
     return this._isSupportedRegion(
       FormAutofill._isAutofillCreditCardsAvailable,
       FormAutofill._creditCardAutofillSupportedCountries
-    );
-  },
-  /**
-   * Determines if the address autofill feature is available to use in the browser.
-   * If the feature is not available, then there are no user facing ways to enable it.
-   *
-   * @returns {boolean} `true` if address autofill is available
-   */
-  get isAutofillAddressesAvailable() {
-    return this._isSupportedRegion(
-      FormAutofill._isAutofillAddressesAvailable,
-      FormAutofill._addressAutofillSupportedCountries
     );
   },
   /**
@@ -256,12 +244,12 @@ XPCOMUtils.defineLazyPreferenceGetter(
 XPCOMUtils.defineLazyPreferenceGetter(
   FormAutofill,
   "captureOnFormRemoval",
-  ENABLED_AUTOFILL_CAPTURE_ON_FORM_REMOVAL
+  ENABLED_AUTOFILL_CAPTURE_ON_FORM_REMOVAL_PREF
 );
 XPCOMUtils.defineLazyPreferenceGetter(
   FormAutofill,
   "captureOnPageNavigation",
-  ENABLED_AUTOFILL_CAPTURE_ON_PAGE_NAVIGATION
+  ENABLED_AUTOFILL_CAPTURE_ON_PAGE_NAVIGATION_PREF
 );
 XPCOMUtils.defineLazyPreferenceGetter(
   FormAutofill,
@@ -270,6 +258,12 @@ XPCOMUtils.defineLazyPreferenceGetter(
   null,
   null,
   val => val?.split(",").filter(v => !!v)
+);
+
+XPCOMUtils.defineLazyPreferenceGetter(
+  FormAutofill,
+  "isAutofillAddressesAvailable",
+  "extensions.formautofill.addresses.experiments.enabled"
 );
 
 ChromeUtils.defineLazyGetter(FormAutofill, "countries", () =>

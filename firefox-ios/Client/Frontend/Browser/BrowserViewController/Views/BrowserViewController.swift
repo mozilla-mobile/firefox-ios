@@ -546,6 +546,10 @@ class BrowserViewController: UIViewController,
             if let toast = state.toast {
                 self.showToastType(toast: toast)
             }
+
+            if state.showOverlay == true {
+                overlayManager.openNewTab(url: nil, newTabSettings: newTabSettings)
+            }
         }
     }
 
