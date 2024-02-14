@@ -6,4 +6,5 @@ import Foundation
 
 protocol SettingsDelegate: AnyObject {
     func scrollToTop()
+    func showFindInPage()
 }
