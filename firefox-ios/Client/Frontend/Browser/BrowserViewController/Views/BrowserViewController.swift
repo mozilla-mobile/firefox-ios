@@ -1923,7 +1923,9 @@ class BrowserViewController: UIViewController,
                 }
 
                 // Handle action when saved cards button is tapped
-                strongSelf.handleSavedCardsButtonTap(tabWebView: tabWebView, webView: webView, frame: frame)
+                handleSavedCardsButtonTap(tabWebView: tabWebView,
+                                          webView: webView,
+                                          frame: frame)
             }
         }
     }
