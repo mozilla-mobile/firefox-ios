@@ -1870,7 +1870,7 @@ class BrowserViewController: UIViewController,
         return (userDefaults.object(forKey: keyAddressAutofill) as? Bool ?? true)
     }
 
-    /// Sets up credit card autofill handling.
+    /// Sets up credit card autofill handling
     private func creditCardAutofillSetup(_ tab: Tab, didCreateWebView webView: WKWebView) {
         let formAutofillHelper = FormAutofillHelper(tab: tab)
         tab.addContentScript(formAutofillHelper, name: FormAutofillHelper.name())
