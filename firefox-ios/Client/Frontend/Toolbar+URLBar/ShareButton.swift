@@ -13,6 +13,12 @@ class ShareButton: UIButton {
     var unselectedTintColor: UIColor!
     var disabledTintColor: UIColor!
 
+    override open var isHighlighted: Bool {
+            didSet {
+                self.tintColor = isHighlighted ? selectedTintColor : unselectedTintColor
+            }
+        }
+
     override open var isEnabled: Bool {
         didSet {
             self.tintColor = isEnabled ? unselectedTintColor : disabledTintColor
@@ -45,10 +51,10 @@ class ShareButton: UIButton {
 
 extension ShareButton: ThemeApplicable {
     func applyTheme(theme: Theme) {
-        selectedTintColor = theme.colors.iconSecondary
+        selectedTintColor = theme.colors.iconDisabled
         disabledTintColor = theme.colors.iconDisabled
-        unselectedTintColor = theme.colors.iconDisabled
-        tintColor = isEnabled ? selectedTintColor : disabledTintColor
+        unselectedTintColor = theme.colors.iconSecondary
+        tintColor = isEnabled ? unselectedTintColor : disabledTintColor
         imageView?.tintColor = tintColor
     }
 }
