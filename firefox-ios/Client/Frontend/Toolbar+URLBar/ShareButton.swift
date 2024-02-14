@@ -51,10 +51,10 @@ class ShareButton: UIButton {
 
 extension ShareButton: ThemeApplicable {
     func applyTheme(theme: Theme) {
-        selectedTintColor = theme.colors.iconSecondary
+        selectedTintColor = theme.colors.iconDisabled
         disabledTintColor = theme.colors.iconDisabled
-        unselectedTintColor = theme.colors.iconDisabled
-        tintColor = isEnabled ? selectedTintColor : disabledTintColor
+        unselectedTintColor = theme.colors.iconSecondary
+        tintColor = isEnabled ? unselectedTintColor : disabledTintColor
         imageView?.tintColor = tintColor
     }
 }
