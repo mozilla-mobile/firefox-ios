@@ -245,7 +245,7 @@
             default = "YES">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:firefox-ios-tests/Tests/SmokeXCUITests.xctestplan">
+            reference = "container:firefox-ios-tests/Tests/Smoketest1.xctestplan">
          </TestPlanReference>
          <TestPlanReference
             reference = "container:firefox-ios-tests/Tests/Smoketest4.xctestplan">

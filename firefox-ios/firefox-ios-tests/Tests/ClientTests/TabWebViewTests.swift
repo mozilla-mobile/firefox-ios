@@ -101,6 +101,10 @@ class MockTabWebViewDelegate: TabWebViewDelegate {
 
     func tabWebViewSearchWithFirefox(_ tabWebViewSearchWithFirefox: TabWebView,
                                      didSelectSearchWithFirefoxForSelection selection: String) {}
+
+    func tabWebViewShouldShowAccessoryView(_ tabWebView: TabWebView) -> Bool {
+        return true
+    }
 }
 
 // MARK: - MockNavigationDelegate
