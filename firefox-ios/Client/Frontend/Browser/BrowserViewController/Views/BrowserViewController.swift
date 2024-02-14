@@ -1862,7 +1862,7 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.addressAutofill, checking: .buildOnly)
     }
 
-    /// Returns whether address autofill settings are enabled based on user defaults.
+    /// Returns whether address autofill settings are enabled based on user defaults
     func addressAutofillSettingsUserDefaultsIsEnabled() -> Bool {
         let userDefaults = UserDefaults.standard
         let keyAddressAutofill = PrefsKeys.KeyAutofillAddressStatus
