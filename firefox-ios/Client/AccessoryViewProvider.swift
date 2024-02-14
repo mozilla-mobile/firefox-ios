@@ -197,7 +197,7 @@ class AccessoryViewProvider: UIView, Themeable {
         ].compactMap { $0 }
 
         toolbar.accessibilityElements = [
-            currentAccessoryView,
+            currentAccessoryView?.customView,
             previousButton,
             nextButton,
             doneButton
