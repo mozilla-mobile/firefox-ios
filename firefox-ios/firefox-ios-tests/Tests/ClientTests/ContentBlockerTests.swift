@@ -8,11 +8,11 @@ import XCTest
 final class ContentBlockerTests: XCTestCase {
     func testCompileListsNotInStore_callsCompletionHandlerSuccessfully() {
         ensureAllRulesAreRemovedFromStore()
-        let excpectation = XCTestExpectation()
+        let expectation = XCTestExpectation()
         ContentBlocker.shared.compileListsNotInStore {
-            excpectation.fulfill()
+            expectation.fulfill()
         }
-        wait(for: [excpectation])
+        wait(for: [expectation])
     }
 
     private func ensureAllRulesAreRemovedFromStore() {
