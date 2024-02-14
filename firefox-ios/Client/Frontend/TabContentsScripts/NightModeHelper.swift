@@ -42,6 +42,13 @@ class NightModeHelper: TabContentScript, FeatureFlaggable {
         setNightMode(userDefaults, tabManager: tabManager, enabled: !isActive)
     }
 
+    func turnOff(
+        _ userDefaults: UserDefaultsInterface = UserDefaults.standard,
+        tabManager: TabManager
+    ) {
+        setNightMode(userDefaults, tabManager: tabManager, enabled: false)
+    }
+
     func setNightMode(
         _ userDefaults: UserDefaultsInterface = UserDefaults.standard,
         tabManager: TabManager,
