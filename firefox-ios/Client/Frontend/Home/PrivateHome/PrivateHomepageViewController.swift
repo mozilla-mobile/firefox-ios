@@ -64,6 +64,7 @@ final class PrivateHomepageViewController:
         return HomepageHeaderCellViewModel(
             isPrivate: true,
             showiPadSetup: shouldUseiPadSetup(),
+            showPrivateModeToggle: !shouldUseiPadSetup(),
             action: { [weak self] in
                 self?.parentCoordinator?.switchMode()
             })

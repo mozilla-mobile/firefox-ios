@@ -226,7 +226,7 @@ class SearchTelemetry {
         impressionTelemetryTimer?.invalidate()
         impressionTelemetryTimer = Timer.scheduledTimer(timeInterval: 1.0,
                                                         target: self,
-                                                        selector: #selector(recordImpressionTelemetryEvent),
+                                                        selector: #selector(recordURLBarSearchImpressionTelemetryEvent),
                                                         userInfo: nil,
                                                         repeats: false)
     }
@@ -236,7 +236,7 @@ class SearchTelemetry {
     }
 
     @objc
-    func recordImpressionTelemetryEvent() {
+    func recordURLBarSearchImpressionTelemetryEvent() {
         guard let tab = tabManager.selectedTab else { return }
         let reasonKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.reason.rawValue
         let reason = SearchTelemetryValues.Reason.pause.rawValue
@@ -282,8 +282,8 @@ class SearchTelemetry {
                                      object: .urlbarImpression,
                                      extras: extraDetails)
     }
-
-    // MARK: Engagement Telemetry
+  
+      // MARK: Engagement Telemetry
     func recordURLBarSearchEngagementTelemetryEvent() {
         guard let tab = tabManager.selectedTab else { return }
 
@@ -344,7 +344,50 @@ class SearchTelemetry {
                                      extras: extraDetails)
     }
 
-    // MARK: Helper Methods
+    func recordURLBarSearchAbandonmentTelemetryEvent() {
+        guard let tab = tabManager.selectedTab else { return }
+
+        let sapKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.sap.rawValue
+        let sap = checkSAP(for: tab).rawValue
+
+        let interactionKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.interaction.rawValue
+        let interaction = interactionType.rawValue
+
+        let searchModeKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.searchMode.rawValue
+        let searchMode = SearchTelemetryValues.SearchMode.tabs.rawValue
+
+        let nCharsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nChars.rawValue
+        let nChars = Int32(searchQuery.count)
+
+        let nWordsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nWords.rawValue
+        let nWords = numberOfWords(in: searchQuery)
+
+        let nResultsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nResults.rawValue
+        let nResults = Int32(numberOfSearchResults())
+
+        let groupsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.groups.rawValue
+        let groups = listGroupTypes()
+
+        let resultsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.results.rawValue
+        let results = listResultTypes()
+
+        let extraDetails = [
+            sapKey: sap,
+            interactionKey: interaction,
+            searchModeKey: searchMode,
+            nCharsKey: nChars,
+            nWordsKey: nWords,
+            nResultsKey: nResults,
+            groupsKey: groups,
+            resultsKey: results
+        ] as [String: Any]
+
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .close,
+                                     object: .urlbarAbandonment,
+                                     extras: extraDetails)
+    }
+
     func checkSAP(for tab: Tab?) -> SearchTelemetryValues.Sap {
         guard let tab = tab else { return .urlbar }
         if tab.isFxHomeTab || tab.isCustomHomeTab {

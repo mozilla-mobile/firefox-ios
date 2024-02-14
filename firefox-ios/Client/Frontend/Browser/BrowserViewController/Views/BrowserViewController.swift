@@ -250,7 +250,7 @@ class BrowserViewController: UIViewController,
     }
 
     deinit {
-        unscubscribeFromRedux()
+        unsubscribeFromRedux()
     }
 
     override var prefersStatusBarHidden: Bool {
@@ -518,7 +518,7 @@ class BrowserViewController: UIViewController,
         })
     }
 
-    func unscubscribeFromRedux() {
+    func unsubscribeFromRedux() {
         store.dispatch(ActiveScreensStateAction.closeScreen(
             ScreenActionContext(screen: .browserViewController, windowUUID: windowUUID)
         ))
@@ -545,6 +545,10 @@ class BrowserViewController: UIViewController,
 
             if let toast = state.toast {
                 self.showToastType(toast: toast)
+            }
+
+            if state.showOverlay == true {
+                overlayManager.openNewTab(url: nil, newTabSettings: newTabSettings)
             }
         }
     }
@@ -1330,7 +1334,7 @@ class BrowserViewController: UIViewController,
     func setupMiddleButtonStatus(isLoading: Bool) {
         // Setting the default state to search to account for no tab or starting page tab
         // `state` will be modified later if needed
-        let state: MiddleButtonState = .search
+        var state: MiddleButtonState = .search
 
         // No tab
         guard let tab = tabManager.selectedTab else {
@@ -2018,7 +2022,10 @@ class BrowserViewController: UIViewController,
         guard let tab = tabManager.selectedTab else { return }
 
         if isPreferSwitchToOpenTabOverDuplicateFeatureEnabled,
-           let tab = tabManager.tabs.reversed().first(where: { $0.url == url && $0.isPrivate == tab.isPrivate }) {
+           let tab = tabManager.tabs.reversed().first(where: {
+               // URL for reading mode comes encoded and we need a separate case to check if it's equal with the tab url
+               ($0.url == url || $0.url == url.safeEncodedUrl) && $0.isPrivate == tab.isPrivate
+           }) {
             tabManager.selectTab(tab)
         } else {
             // Handle keyboard shortcuts from homepage with url selection
@@ -2289,7 +2296,10 @@ extension BrowserViewController: HomePanelDelegate {
         guard let tab = tabManager.selectedTab else { return }
 
         if isPreferSwitchToOpenTabOverDuplicateFeatureEnabled,
-           let tab = tabManager.tabs.reversed().first(where: { $0.url == url && $0.isPrivate == tab.isPrivate }) {
+           let tab = tabManager.tabs.reversed().first(where: {
+               // URL for reading mode comes encoded and we need a separate case to check if it's equal with the tab url
+               ($0.url == url || $0.url == url.safeEncodedUrl) && $0.isPrivate == tab.isPrivate
+           }) {
             tabManager.selectTab(tab)
         } else {
             if isGoogleTopSite {
@@ -2408,7 +2418,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
             let visibleSuggestionsTelemetryInfo = searchViewController.visibleSuggestionsTelemetryInfo
             visibleSuggestionsTelemetryInfo.forEach { trackVisibleSuggestion(telemetryInfo: $0) }
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .abandonment, object: .locationBar)
-
+            searchViewController.searchTelemetry?.recordURLBarSearchAbandonmentTelemetryEvent()
         default:
             break
         }

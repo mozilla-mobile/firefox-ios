@@ -13,6 +13,57 @@
 /* The title on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
 "DefaultBrowserPopup.Title.v114" = "デフォルトブラウザーを切り替えましょう";
 
+/* String used to describe the option to continue to the next onboarding card in Firefox Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Customization.Intro.Continue.Action.v123" = "%@ をカスタマイズ";
+
+/* String used to describe the description label of the customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Intro.Description.v123" = "あなたののブラウジングスタイルに合わせてテーマとツールバーを設定しましょう。";
+
+/* String used to describe the option to skip the customization cards in Firefox Onboarding screens and start browsing. */
+"Onboarding.Customization.Intro.Skip.Action.v123" = "ブラウジングを開始";
+
+/* String used to describe the title of the customization onboarding page in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Customization.Intro.Title.v123" = "%@ でプライバシー保護";
+
+/* String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens. */
+"Onboarding.Customization.Theme.Continue.Action.v123" = "保存して続ける";
+
+/* On the theme customization onboarding card, the string used to describe the option to set the theme to dark theme from the available choices. */
+"Onboarding.Customization.Theme.Dark.Action.v123" = "Dark";
+
+/* String used to describe the description label of the theme customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Theme.Description.v123" = "最適な明るさでウェブをご覧ください。";
+
+/* On the theme customization onboarding card, the string used to describe the option to set the theme to light theme from the available choices. */
+"Onboarding.Customization.Theme.Light.Action.v123" = "Light";
+
+/* String used to describe the option to skip the theme customization in Firefox Onboarding screens. */
+"Onboarding.Customization.Theme.Skip.Action.v123" = "スキップ";
+
+/* On the theme customization onboarding card, the string used to describe the option to set the theme to system theme from the available choices. */
+"Onboarding.Customization.Theme.System.Action.v123" = "システムテーマ";
+
+/* String used to describe the title of the theme customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Theme.Title.v123" = "テーマの選択";
+
+/* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
+"Onboarding.Customization.Toolbar.Bottom.Action.v123" = "画面下部";
+
+/* String used to describe the option to save set preferences and leave onboarding to start browsing in the app. */
+"Onboarding.Customization.Toolbar.Continue.Action.v123" = "保存してブラウジングを開始";
+
+/* String used to describe the description label of the toolbar customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Toolbar.Description.v123" = "手元で検索。";
+
+/* String used to describe the option to skip the toolbar customization in Firefox Onboarding screens and start browisg in the app. */
+"Onboarding.Customization.Toolbar.Skip.Action.v123" = "スキップ";
+
+/* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Toolbar.Title.v123" = "ツールバーの配置を選択";
+
+/* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen. */
+"Onboarding.Customization.Toolbar.Top.Action.v123" = "画面上部";
+
 /* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. Indie means small independant. */
 "Onboarding.IntroDescriptionPart1.v114" = "健全な独立系で非営利。";
 
@@ -39,6 +90,9 @@
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Sync.Description.v120" = "ログインして同期すると、%@ がユーザーのパスワードやブックマークなどを暗号化して、より安全に使用できます。";
+
+/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Sync.Description.v123" = "%@ は同期時にパスワードやブックマークなどを暗号化します。";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.SignIn.Action.v114" = "ログイン";

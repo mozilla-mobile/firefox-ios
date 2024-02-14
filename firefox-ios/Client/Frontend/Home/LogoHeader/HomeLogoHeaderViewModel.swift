@@ -17,6 +17,7 @@ class HomepageHeaderViewModel {
     private let tabManager: TabManager
     var onTapAction: ((UIButton) -> Void)?
     var showiPadSetup = false
+    var showPrivateModeToggle = false
     var theme: Theme
 
     init(profile: Profile, theme: Theme, tabManager: TabManager) {
@@ -36,11 +37,7 @@ extension HomepageHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         return .emptyHeader
     }
 
-    func section(for traitCollection: UITraitCollection,
-                 size: CGSize,
-                 isPortrait: Bool = UIWindow.isPortrait,
-                 device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom
-    ) -> NSCollectionLayoutSection {
+    func section(for traitCollection: UITraitCollection, size: CGSize) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                               heightDimension: .estimated(100))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -81,6 +78,7 @@ extension HomepageHeaderViewModel: HomepageSectionHandler {
             with: HomepageHeaderCellViewModel(
                 isPrivate: false,
                 showiPadSetup: showiPadSetup,
+                showPrivateModeToggle: showPrivateModeToggle,
                 action: { [weak self] in
                     self?.tabManager.switchPrivacyMode()
                 })

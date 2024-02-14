@@ -25,9 +25,9 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
             case .defaultEngine:
                 return .Settings.Search.DefaultSearchEngineTitle
             case .quickEngines:
-                return .Settings.Search.QuickSearchEnginesTitle
+                return .Settings.Search.AlternateSearchEnginesTitle
             case .privateSession:
-                return .Settings.Search.PrivateSessionTitle
+                return .Settings.Search.EnginesSuggestionsTitle
             case .firefoxSuggestSettings:
                 return String.localizedStringWithFormat(
                     .Settings.Search.Suggest.AddressBarSettingsTitle,
@@ -210,8 +210,7 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
                     prefKey: PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions,
                     defaultValue: profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions) ?? true,
                     titleText: String.localizedStringWithFormat(
-                        .Settings.Search.Suggest.ShowNonSponsoredSuggestionsTitle,
-                        AppName.shortName.rawValue
+                        .Settings.Search.Suggest.ShowNonSponsoredSuggestionsTitle
                     ),
                     statusText: String.localizedStringWithFormat(
                         .Settings.Search.Suggest.ShowNonSponsoredSuggestionsDescription,
@@ -401,18 +400,6 @@ class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlagg
         headerView.titleLabel.text = section.title
 
         return headerView
-    }
-
-    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        guard let footerView = tableView.dequeueReusableHeaderFooterView(
-            withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier
-        ) as? ThemedTableSectionHeaderFooterView else { return nil }
-        if case .defaultEngine = Section(rawValue: section) {
-            footerView.titleLabel.text = .Settings.Search.DefaultSearchEngineFooter
-            footerView.titleAlignment = .top
-        }
-        footerView.applyTheme(theme: themeManager.currentTheme)
-        return footerView
     }
 
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
