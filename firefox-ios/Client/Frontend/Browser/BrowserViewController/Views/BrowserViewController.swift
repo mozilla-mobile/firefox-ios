@@ -1877,7 +1877,7 @@ class BrowserViewController: UIViewController,
 
         // Closure to handle found field values for credit card and address fields
         formAutofillHelper.foundFieldValues = { [weak self] fieldValues, type, frame in
-            guard let strongSelf = self, let tabWebView = tab.webView else { return }
+            guard let self, let tabWebView = tab.webView else { return }
 
             // Handle different field types
             switch fieldValues.fieldValue {
