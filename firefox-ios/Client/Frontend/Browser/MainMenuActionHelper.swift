@@ -463,7 +463,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         let nightMode = SingleActionViewModel(title: nightModeTitle,
                                               iconString: StandardImageIdentifiers.Large.nightMode,
                                               isEnabled: nightModeEnabled) { _ in
-            NightModeHelper.toggle(tabManager: self.tabManager)
+            NightModeHelper().toggle(tabManager: self.tabManager)
 
             if nightModeEnabled {
                 TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .nightModeEnabled)
@@ -475,15 +475,15 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             if NightModeHelper().isActivated(),
                self.themeManager.currentTheme.type == .light {
                 self.themeManager.changeCurrentTheme(.dark)
-                NightModeHelper.setEnabledDarkTheme(darkTheme: true)
+                NightModeHelper().setEnabledDarkTheme(darkTheme: true)
             }
 
             // If we've disabled night mode and dark theme was activated by it then disable dark theme
             if !NightModeHelper().isActivated(),
-               NightModeHelper.hasEnabledDarkTheme(),
+               NightModeHelper().hasEnabledDarkTheme(),
                self.themeManager.currentTheme.type == .dark {
                 self.themeManager.changeCurrentTheme(.light)
-                NightModeHelper.setEnabledDarkTheme(darkTheme: false)
+                NightModeHelper().setEnabledDarkTheme(darkTheme: false)
             }
         }.items
         items.append(nightMode)
