@@ -119,12 +119,12 @@ class AccessoryViewProvider: UIView, Themeable {
     private lazy var loginAutofillView: AutofillAccessoryViewButtonItem = {
         let accessoryView = AutofillAccessoryViewButtonItem(
             image: UIImage(named: StandardImageIdentifiers.Large.login),
-            labelText: .Settings.Passwords.UseSavedLoginFromKeyboard,
+            labelText: .PasswordAutofill.UseSavedPasswordFromKeyboard,
             tappedAction: { [weak self] in
                 self?.tappedLoginsButton()
             })
         accessoryView.accessibilityTraits = .button
-        accessoryView.accessibilityLabel = .Settings.Passwords.UseSavedLoginFromKeyboard
+        accessoryView.accessibilityLabel = .PasswordAutofill.UseSavedPasswordFromKeyboard
         return accessoryView
     }()
 
@@ -188,18 +188,18 @@ class AccessoryViewProvider: UIView, Themeable {
         setupSpacer(trailingFixedSpacer, width: UX.fixedTrailingSpacerWidth)
 
         toolbar.items = [
+            currentAccessoryView,
+            flexibleSpacer,
             previousButton,
             nextButton,
             fixedSpacer,
-            currentAccessoryView,
-            flexibleSpacer,
             doneButton
         ].compactMap { $0 }
 
         toolbar.accessibilityElements = [
+            currentAccessoryView?.customView,
             previousButton,
             nextButton,
-            currentAccessoryView?.customView,
             doneButton
         ].compactMap { $0 }
 
