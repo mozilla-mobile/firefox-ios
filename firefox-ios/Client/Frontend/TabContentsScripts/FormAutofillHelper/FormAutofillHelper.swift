@@ -8,7 +8,7 @@ import WebKit
 import Common
 import Storage
 
-enum AutofillFieldValue: String {
+enum AutofillFieldValueType: String {
     case address
     case creditCard
 }
