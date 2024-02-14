@@ -1904,7 +1904,9 @@ class BrowserViewController: UIViewController,
 
                 // Record telemetry for credit card form detection
                 if type == .formInput {
-                    TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardFormDetected)
+                    TelemetryWrapper.recordEvent(category: .action,
+                                                 method: .tap,
+                                                 object: .creditCardFormDetected)
                 }
 
                 guard strongSelf.autofillCreditCardNimbusFeatureFlag() else { return }
