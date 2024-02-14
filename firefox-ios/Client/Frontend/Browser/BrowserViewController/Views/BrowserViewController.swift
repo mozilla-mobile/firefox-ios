@@ -1941,7 +1941,7 @@ class BrowserViewController: UIViewController,
         })
     }
 
-    /// Displays the address autofill accessory view on the given tab web view.
+    /// Displays the address autofill accessory view on the given tab web view
     private func displayAddressAutofillAccessoryView(tabWebView: TabWebView) {
         profile.autofill.listCreditCards(completion: { addresses, error in
             guard let addresses = addresses, !addresses.isEmpty, error == nil else { return }
