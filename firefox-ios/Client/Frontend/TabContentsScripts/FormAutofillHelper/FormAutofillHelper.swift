@@ -50,9 +50,9 @@ class FormAutofillHelper: TabContentScript {
 
     // MARK: - Script Message Handler
 
-      func scriptMessageHandlerNames() -> [String]? {
-          return [HandlerName.addressFormMessageHandler.rawValue, HandlerName.creditCardFormMessageHandler.rawValue]
-      }
+    func scriptMessageHandlerNames() -> [String]? {
+        return [HandlerName.addressFormMessageHandler.rawValue, HandlerName.creditCardFormMessageHandler.rawValue]
+    }
 
     // MARK: - Deinitialization
 
@@ -210,11 +210,11 @@ class FormAutofillHelper: TabContentScript {
         let sanitizedName = card.ccName.htmlEntityEncodedString
         let sanitizedNumber = card.ccNumber.htmlEntityEncodedString
         let injectionJSON: [String: Any] = [
-                "cc-name": sanitizedName,
-                "cc-number": sanitizedNumber,
-                "cc-exp-month": card.ccExpMonth,
-                "cc-exp-year": card.ccExpYear,
-                "cc-exp": "\(card.ccExpMonth)/\(card.ccExpYear)",
+            "cc-name": sanitizedName,
+            "cc-number": sanitizedNumber,
+            "cc-exp-month": card.ccExpMonth,
+            "cc-exp-year": card.ccExpYear,
+            "cc-exp": "\(card.ccExpMonth)/\(card.ccExpYear)",
         ]
         return injectionJSON
     }

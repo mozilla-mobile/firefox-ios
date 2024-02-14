@@ -1845,12 +1845,12 @@ class BrowserViewController: UIViewController,
     }
 
     /// Returns whether the credit card autofill feature flag is enabled from Nimbus
-    func autofillCreditCardNimbusFeatureFlag() -> Bool {
+    private func autofillCreditCardNimbusFeatureFlag() -> Bool {
         return featureFlags.isFeatureEnabled(.creditCardAutofillStatus, checking: .buildOnly)
     }
 
     /// Returns whether credit card autofill settings are enabled based on user defaults key KeyAutofillCreditCardStatus
-    func autofillCreditCardSettingsUserDefaultIsEnabled() -> Bool {
+    private func autofillCreditCardSettingsUserDefaultIsEnabled() -> Bool {
         let userDefaults = UserDefaults.standard
         let keyCreditCardAutofill = PrefsKeys.KeyAutofillCreditCardStatus
 
@@ -1858,12 +1858,12 @@ class BrowserViewController: UIViewController,
     }
 
     /// Returns whether the address autofill feature flag is enabled from Nimbus
-    func addressAutofillNimbusFeatureFlag() -> Bool {
+    private func addressAutofillNimbusFeatureFlag() -> Bool {
         return featureFlags.isFeatureEnabled(.addressAutofill, checking: .buildOnly)
     }
 
     /// Returns whether address autofill settings are enabled based on user defaults
-    func addressAutofillSettingsUserDefaultsIsEnabled() -> Bool {
+    private func addressAutofillSettingsUserDefaultsIsEnabled() -> Bool {
         let userDefaults = UserDefaults.standard
         let keyAddressAutofill = PrefsKeys.KeyAutofillAddressStatus
 
@@ -1871,7 +1871,7 @@ class BrowserViewController: UIViewController,
     }
 
     /// Sets up credit card autofill handling
-    private func creditCardAutofillSetup(_ tab: Tab, didCreateWebView webView: WKWebView) {
+    private func autofillSetup(_ tab: Tab, didCreateWebView webView: WKWebView) {
         let formAutofillHelper = FormAutofillHelper(tab: tab)
         tab.addContentScript(formAutofillHelper, name: FormAutofillHelper.name())
 
@@ -1882,9 +1882,9 @@ class BrowserViewController: UIViewController,
             // Handle different field types
             switch fieldValues.fieldValue {
             case .address:
-                guard let addressPayload = fieldValues.fieldData as? UnencryptedAddressFields,
-                      addressAutofillSettingsUserDefaultsIsEnabled(),
+                guard addressAutofillSettingsUserDefaultsIsEnabled(),
                       addressAutofillNimbusFeatureFlag(),
+                      // FXMO-376: Phase 2 let addressPayload = fieldValues.fieldData as? UnencryptedAddressFields,
                       let type = type else { return }
 
                 // Handle address form filling or capturing
@@ -2258,7 +2258,7 @@ extension BrowserViewController: LegacyTabDelegate {
         }
 
         // Credit card autofill setup and callback
-        creditCardAutofillSetup(tab, didCreateWebView: webView)
+        autofillSetup(tab, didCreateWebView: webView)
 
         let contextMenuHelper = ContextMenuHelper(tab: tab)
         tab.addContentScript(contextMenuHelper, name: ContextMenuHelper.name())
