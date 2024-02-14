@@ -188,18 +188,18 @@ class AccessoryViewProvider: UIView, Themeable {
         setupSpacer(trailingFixedSpacer, width: UX.fixedTrailingSpacerWidth)
 
         toolbar.items = [
+            currentAccessoryView,
+            flexibleSpacer,
             previousButton,
             nextButton,
             fixedSpacer,
-            currentAccessoryView,
-            flexibleSpacer,
             doneButton
         ].compactMap { $0 }
 
         toolbar.accessibilityElements = [
+            currentAccessoryView,
             previousButton,
             nextButton,
-            currentAccessoryView,
             doneButton
         ].compactMap { $0 }
 
