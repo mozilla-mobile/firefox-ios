@@ -1883,14 +1883,14 @@ class BrowserViewController: UIViewController,
             switch fieldValues.fieldValue {
             case .address:
                 guard let addressPayload = fieldValues.fieldData as? UnencryptedAddressFields,
-                      strongSelf.addressAutofillSettingsUserDefaultsIsEnabled(),
-                      strongSelf.addressAutofillNimbusFeatureFlag(),
+                      addressAutofillSettingsUserDefaultsIsEnabled(),
+                      addressAutofillNimbusFeatureFlag(),
                       let type = type else { return }
 
                 // Handle address form filling or capturing
                 switch type {
                 case .fillAddressForm:
-                    strongSelf.displayAddressAutofillAccessoryView(tabWebView: tabWebView)
+                    displayAddressAutofillAccessoryView(tabWebView: tabWebView)
                 case .captureAddressForm:
                     // FXMO-376: No action needed for capturing address form as this is for Phase 2
                     break
@@ -1901,7 +1901,7 @@ class BrowserViewController: UIViewController,
             case .creditCard:
                 guard let creditCardPayload = fieldValues.fieldData as? UnencryptedCreditCardFields,
                       let type = type,
-                      strongSelf.autofillCreditCardSettingsUserDefaultIsEnabled() else { return }
+                      autofillCreditCardSettingsUserDefaultIsEnabled() else { return }
 
                 // Record telemetry for credit card form detection
                 if type == .formInput {
@@ -1910,14 +1910,14 @@ class BrowserViewController: UIViewController,
                                                  object: .creditCardFormDetected)
                 }
 
-                guard strongSelf.autofillCreditCardNimbusFeatureFlag() else { return }
+                guard autofillCreditCardNimbusFeatureFlag() else { return }
 
                 // Handle different types of credit card interactions
                 switch type {
                 case .formInput:
-                    strongSelf.displayAutofillCreditCardAccessoryView(tabWebView: tabWebView)
+                    displayAutofillCreditCardAccessoryView(tabWebView: tabWebView)
                 case .formSubmit:
-                    strongSelf.showCreditCardAutofillSheet(fieldValues: creditCardPayload)
+                    showCreditCardAutofillSheet(fieldValues: creditCardPayload)
                 default:
                     break
                 }

@@ -14,7 +14,7 @@ enum AutofillFieldValueType: String {
 }
 
 struct AutofillFieldValuePayload {
-    let fieldValue: AutofillFieldValue
+    let fieldValue: AutofillFieldValueType
     let fieldData: Any?
 }
 
