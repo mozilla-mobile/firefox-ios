@@ -14,10 +14,10 @@ class ShareButton: UIButton {
     var disabledTintColor: UIColor!
 
     override open var isHighlighted: Bool {
-            didSet {
-                self.tintColor = isHighlighted ? selectedTintColor : unselectedTintColor
-            }
+        didSet {
+            self.tintColor = isHighlighted ? selectedTintColor : unselectedTintColor
         }
+    }
 
     override open var isEnabled: Bool {
         didSet {
