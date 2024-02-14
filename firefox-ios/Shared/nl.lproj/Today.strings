@@ -29,7 +29,7 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "Privé zoeken";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Voeg een Firefox-snelkoppeling toe aan uw startscherm. Houd, nadat u deze hebt toegevoegd, de widget ingedrukt om deze te bewerken en een andere snelkoppeling te selecteren.";
+"TodayWidget.QuickActionGalleryDescription" = "Voeg een Ecosia-snelkoppeling toe aan uw startscherm. Houd, nadat u deze hebt toegevoegd, de widget ingedrukt om deze te bewerken en een andere snelkoppeling te selecteren.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Snelle acties";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Snel bekijken";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Zoeken in Firefox";
+"TodayWidget.SearchInFirefoxV2" = "Zoeken in Ecosia";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Zoeken in privétabblad";

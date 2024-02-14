@@ -311,7 +311,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Бұл қате баптаулар немесе шабуылшының зиянкес әрекеттері болуы мүмкін. Өз тәуекеліңізге қарай жалғастырыңыз.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "%@ иесі өз сайтын дұрыс емес баптаған. Ақпаратыңызды ұрланудан қорғау үшін, Firefox веб сайтпен байланыспады.";
+"ErrorPages.CertWarning.Description" = "%@ иесі өз сайтын дұрыс емес баптаған. Ақпаратыңызды ұрланудан қорғау үшін, Ecosia веб сайтпен байланыспады.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Бұл байланыс сенімсіз";
@@ -332,7 +332,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefox үй парағы";
+"Firefox.HomePage.Title" = "Ecosia үй парағы";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "Үй бетін баптау";
@@ -389,7 +389,7 @@
 "fxa.signin.camera-signin" = "Камерамен кіріңіз";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "Компьютеріңізде Firefox ашып, https://firefox.com/pair адресіне өтіңіз";
+"fxa.signin.qr-link-instruction" = "Компьютеріңізде Ecosia ашып, https://ecosia.org/pair адресіне өтіңіз";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Сканерлеуге дайын";
@@ -410,7 +410,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ сәтті ажыратылды.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Бұл құрылғы Firefox синхрондауынан ажыратылды.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Бұл құрылғы Ecosia синхрондауынан ажыратылды.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Синхрондау байланыспаған";
@@ -419,7 +419,7 @@
 "FxAPush_DeviceDisconnected_title" = "Синхрондау байланыспаған";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Құрылғы Firefox синхрондауынан ажыратылды";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Құрылғы Ecosia синхрондауынан ажыратылды";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
 "FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox логотипі - тұсқағазды өзгерту.";
@@ -893,7 +893,7 @@
 "Onboarding.WhatsNew.Button.Title" = "Шолуды бастау";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Қап! Firefox құлаған";
+"Oops! Firefox crashed" = "Қап! Ecosia құлаған";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Мақалаларды оқу режимінде ашу үшін, атау жолағындағы кітапша таңбашасы пайда болған кезде, оған шертіңіз.";
@@ -1004,7 +1004,7 @@
 "ScanQRCode.InvalidDataError.Message" = "Деректер жарамсыз";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "Құрылғының \"Баптаулар\" > \"Firefox\" бетін ашыңыз. Firefox үшін камераға қатынауға рұқсат етіңіз.";
+"ScanQRCode.PermissionError.Message.v100" = "Құрылғының \"Баптаулар\" > \"Ecosia\" бетін ашыңыз. Ecosia үшін камераға қатынауға рұқсат етіңіз.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR кодын сканерлеу";
@@ -1085,13 +1085,13 @@
 "SendTo.NavBar.Title" = "Бетті жіберу";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "Бұл Firefox тіркелгісіне байланысқан және синхрондау үшін қолжетерлік басқа құрылғыларыңыз жоқ.";
+"SendTo.NoDevicesFound.Message" = "Бұл Ecosia тіркелгісіне байланысқан және синхрондау үшін қолжетерлік басқа құрылғыларыңыз жоқ.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Жалғастыру үшін Firefox-ты ашып, баптауларға өтіңіз және тіркелгіге кіріңіз.";
+"SendTo.NotSignedIn.Message" = "Жалғастыру үшін Ecosia-ты ашып, баптауларға өтіңіз және тіркелгіге кіріңіз.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Сіз өз Firefox тіркелгіңізге кірген жоқсыз.";
+"SendTo.NotSignedIn.Title" = "Сіз өз Ecosia тіркелгіңізге кірген жоқсыз.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Жіберу";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Көбірек білу.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla тек Firefox қолданбасын әркім үшін ұсыну және жақсарту мақсатында керек деректерді жинауға тырысады.";
+"Settings.SendUsage.Message" = "Mozilla тек Ecosia қолданбасын әркім үшін ұсыну және жақсарту мақсатында керек деректерді жинауға тырысады.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Қолдану деректерін жіберу";
@@ -1466,7 +1466,7 @@
 "Settings.Siri.OpenTabShortcut" = "Жаңа бетті ашу";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Siri арқылы Firefox-ты жылдам ашу үшін Siri жарлықтарын қолдану";
+"Settings.Siri.SectionDescription" = "Siri арқылы Ecosia-ты жылдам ашу үшін Siri жарлықтарын қолдану";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri жарлықтары";
@@ -1793,7 +1793,7 @@
 "Yesterday" = "Кеше";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Басқа құрылғыларыңыздағы Firefox-та ашық беттер сізде жоқ.";
+"You don’t have any tabs open in Firefox on your other devices." = "Басқа құрылғыларыңыздағы Ecosia-та ашық беттер сізде жоқ.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Құқықтарыңыз";

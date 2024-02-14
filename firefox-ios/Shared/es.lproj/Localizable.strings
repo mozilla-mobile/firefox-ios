@@ -311,7 +311,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Puede ser una mala configuración o una falsificación de un atacante. Sigue adelante si aceptas el riesgo potencial.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "El dueño de %@ ha configurado su sitio web incorrectamente. Para evitar que roben tu información, Firefox no se ha conectado a este sitio web.";
+"ErrorPages.CertWarning.Description" = "El dueño de %@ ha configurado su sitio web incorrectamente. Para evitar que roben tu información, Ecosia no se ha conectado a este sitio web.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Tu conexión no está verificada";
@@ -332,7 +332,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Página de inicio de Firefox";
+"Firefox.HomePage.Title" = "Página de inicio de Ecosia";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "Personalizar la página de inicio";
@@ -377,7 +377,7 @@
 "Forward" = "Adelante";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Cuenta de Firefox";
+"FxA.FirefoxAccount" = "Cuenta de Ecosia";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Administrar cuenta y dispositivos";
@@ -389,7 +389,7 @@
 "fxa.signin.camera-signin" = "Inicia sesión con tu cámara";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "Abre Firefox en tu computador y ve a firefox.com/pair";
+"fxa.signin.qr-link-instruction" = "Abre Ecosia en tu computador y ve a ecosia.org/pair";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Listo para escanear";
@@ -410,7 +410,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ se ha desconectado correctamente.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Este dispositivo se ha desconectado correctamente de Firefox Sync.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Este dispositivo se ha desconectado correctamente de Ecosia Sync.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync desconectado";
@@ -419,10 +419,10 @@
 "FxAPush_DeviceDisconnected_title" = "Sync desconectado";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Se ha desconectado un dispositivo de Firefox Sync";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Se ha desconectado un dispositivo de Ecosia Sync";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "Logotipo de Firefox, cambiar el fondo de pantalla.";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Logotipo de Ecosia, cambiar el fondo de pantalla.";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Ayuda";
@@ -653,13 +653,13 @@
 "Logins.Onboarding.LearnMoreButtonTitle" = "Aprender más";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "Para utilizar la función de autocompletar en Firefox, debes tener habilitada una contraseña para el dispositivo.";
+"Logins.PasscodeRequirement.Warning" = "Para utilizar la función de autocompletar en Ecosia, debes tener habilitada una contraseña para el dispositivo.";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "Lleva tus contraseñas siempre contigo";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "Autocompletar contraseñas en Firefox";
+"Logins.WelcomeView.Title2" = "Autocompletar contraseñas en Ecosia";
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "Activar autocompletado";
@@ -704,7 +704,7 @@
 "LoginsList.Title" = "INICIOS DE SESIÓN GUARDADOS";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Parece que Firefox se cerró inesperadamente. ¿Te gustaría restaurar tus pestañas?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Parece que Ecosia se cerró inesperadamente. ¿Te gustaría restaurar tus pestañas?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Marcar como leído";
@@ -893,7 +893,7 @@
 "Onboarding.WhatsNew.Button.Title" = "Empieza a navegar";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "¡Vaya! Firefox se bloqueó";
+"Oops! Firefox crashed" = "¡Vaya! Ecosia se bloqueó";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Abre artículos en la vista de lectura pulsando el icono de libro cuando aparezca en la barra de títulos.";
@@ -917,7 +917,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Esto te permite guardar la imagen en tu Galería.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "A Firefox le gustaría acceder a tus fotos";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "A Ecosia le gustaría acceder a tus fotos";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Cerrar";
@@ -1004,7 +1004,7 @@
 "ScanQRCode.InvalidDataError.Message" = "La información no es válida";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "Vete a ‘Ajustes’ > ‘Firefox’. Permitir que Firefox acceda a la cámara.";
+"ScanQRCode.PermissionError.Message.v100" = "Vete a ‘Ajustes’ > ‘Ecosia’. Permitir que Ecosia acceda a la cámara.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Escanear código QR";
@@ -1019,7 +1019,7 @@
 "Search.Awesomebar.SwitchToTab" = "Cambiar a pestaña";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Sugerencia de Firefox";
+"Search.SuggestSectionTitle.v102" = "Sugerencia de Ecosia";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "El nuevo buscador aparecerá en la barra de búsqueda rápida.";
@@ -1085,13 +1085,13 @@
 "SendTo.NavBar.Title" = "Enviar pestaña";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "No tienes otros dispositivos conectados a esta cuenta de Firefox que estén disponibles para sincronizarse.";
+"SendTo.NoDevicesFound.Message" = "No tienes otros dispositivos conectados a esta cuenta de Ecosia que estén disponibles para sincronizarse.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Abre Firefox, ve a Ajustes e inicia sesión para continuar.";
+"SendTo.NotSignedIn.Message" = "Abre Ecosia, ve a Ajustes e inicia sesión para continuar.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "No has iniciado sesión en tu cuenta de Firefox.";
+"SendTo.NotSignedIn.Title" = "No has iniciado sesión en tu cuenta de Ecosia.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Enviar";
@@ -1241,7 +1241,7 @@
 "Settings.FxA.Sync.SectionName" = "Ajustes de sincronización";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Cuenta de Firefox";
+"Settings.FxA.Title" = "Cuenta de Ecosia";
 
 /* General settings section title */
 "Settings.General.SectionName" = "General";
@@ -1250,7 +1250,7 @@
 "Settings.Home.Current.Description.v101" = "Elige lo que se mostrará como página de inicio.";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description.v101" = "Elige lo que se incluirá en la página de inicio de Firefox.";
+"Settings.Home.Option.Description.v101" = "Elige lo que se incluirá en la página de inicio de Ecosia.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "Saltar hacia atrás";
@@ -1274,7 +1274,7 @@
 "Settings.Home.Option.StartAtHome.Always" = "Página de inicio";
 
 /* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
-"Settings.Home.Option.StartAtHome.Description" = "Elige que ver cuando regreses a Firefox.";
+"Settings.Home.Option.StartAtHome.Description" = "Elige que ver cuando regreses a Ecosia.";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "Última pestaña";
@@ -1289,25 +1289,25 @@
 "Settings.Home.Option.Wallpaper" = "Fondo de pantalla";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Fondo de pantalla de Firefox, motivo de amatista.";
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Fondo de pantalla de Ecosia, motivo de amatista.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Fondo de pantalla de Firefox, motivo de colinas de playa.";
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Fondo de pantalla de Ecosia, motivo de colinas de playa.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Fondo de pantalla de Firefox, motivo cerúleo.";
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Fondo de pantalla de Ecosia, motivo cerúleo.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Fondo de pantalla claro predeterminado.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Fondo de pantalla de Firefox, motivo de amanecer.";
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Fondo de pantalla de Ecosia, motivo de amanecer.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Botón de cambio cíclico del fondo de pantalla de la página de inicio";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Fondo de pantalla de Firefox, motivo de colinas al atardecer.";
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Fondo de pantalla de Ecosia, motivo de colinas al atardecer.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
 "Settings.Home.Option.Wallpaper.Classic.Title.v106" = "%@ clásico";
@@ -1328,7 +1328,7 @@
 "Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "Edición limitada";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
-"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Cambia el fondo de pantalla tocando el logotipo de la página de inicio de Firefox";
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Cambia el fondo de pantalla tocando el logotipo de la página de inicio de Ecosia";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "Fondo de pantalla";
@@ -1382,7 +1382,7 @@
 "Settings.NewTab.Option.Custom" = "Personalizado";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Inicio de Firefox";
+"Settings.NewTab.Option.FirefoxHome" = "Inicio de Ecosia";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Página de inicio";
@@ -1403,7 +1403,7 @@
 "Settings.NoImageModeBlockImages.Label.v99" = "Bloquear imágenes";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Al abrir Firefox";
+"Settings.OfferClipboardBar.Status" = "Al abrir Ecosia";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
 "Settings.OfferClipboardBar.Status.v128" = "Al abrir %@";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Descubrir más.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla se esfuerza para recopilar solo lo que necesita para poder ejecutar y mejorar Firefox para todos.";
+"Settings.SendUsage.Message" = "Mozilla se esfuerza para recopilar solo lo que necesita para poder ejecutar y mejorar Ecosia para todos.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Enviar datos de uso";
@@ -1466,7 +1466,7 @@
 "Settings.Siri.OpenTabShortcut" = "Abrir pestaña nueva";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Utilizar los atajos de Siri para abrir Firefox rápidamente vía Siri";
+"Settings.Siri.SectionDescription" = "Utilizar los atajos de Siri para abrir Ecosia rápidamente vía Siri";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Atajos de Siri";
@@ -1592,13 +1592,13 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "Cargar en segundo plano";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Cargando en Firefox";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Cargando en Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Abrir en Firefox";
+"ShareExtension.OpenInFirefoxAction.Title" = "Abrir en Ecosia";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Buscar en Firefox";
+"ShareExtension.SeachInFirefoxAction.Title" = "Buscar en Ecosia";
 
 /* Button in share sheet to copy the url of the current tab. */
 "ShareSheet.Copy.Title.v108" = "Copiar";
@@ -1745,7 +1745,7 @@
 "UIMenuItem.PasteGo" = "Pegar e ir";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Buscar con Firefox";
+"UIMenuItem.SearchWithFirefox" = "Buscar con Ecosia";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "no leído";
@@ -1793,7 +1793,7 @@
 "Yesterday" = "Ayer";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "No tienes ninguna pestaña abierta en Firefox en tus demás dispositivos.";
+"You don’t have any tabs open in Firefox on your other devices." = "No tienes ninguna pestaña abierta en Ecosia en tus demás dispositivos.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Tus derechos";

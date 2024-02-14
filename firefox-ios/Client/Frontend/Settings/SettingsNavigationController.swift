@@ -52,18 +52,21 @@ class ThemedNavigationController: DismissableNavigationViewController, Themeable
         let standardAppearance = UINavigationBarAppearance()
         standardAppearance.configureWithDefaultBackground()
         standardAppearance.backgroundColor = theme.colors.layer1
+        // Ecosia: Define `largeTitleTextAttributes` as done for ThemedDefaultNavigationController utilized in Widgets
+        standardAppearance.largeTitleTextAttributes = [.foregroundColor: theme.colors.textPrimary]
         standardAppearance.titleTextAttributes = [.foregroundColor: theme.colors.textPrimary]
+
+        // Ecosia: Update navigationBar properties
+        navigationBar.setBackgroundImage(UIImage(), for: .default)
+        standardAppearance.shadowImage = .init()
+        standardAppearance.shadowColor = nil
+        navigationBar.prefersLargeTitles = true
 
         navigationBar.standardAppearance = standardAppearance
         navigationBar.compactAppearance = standardAppearance
         navigationBar.scrollEdgeAppearance = standardAppearance
         navigationBar.compactScrollEdgeAppearance = standardAppearance
         navigationBar.tintColor = theme.colors.actionPrimary
-        
-        // Ecosia: Update navigationBar properties
-        navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navigationBar.shadowImage = UIImage()
-        navigationBar.prefersLargeTitles = true
     }
 
     func applyTheme() {

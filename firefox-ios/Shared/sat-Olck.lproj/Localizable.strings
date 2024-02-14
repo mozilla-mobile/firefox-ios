@@ -311,7 +311,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "ᱱᱚᱶᱟ ᱠᱟᱹᱢᱤ ᱫᱚ ᱟᱹᱲᱤᱰᱷᱟᱹᱲᱤ ᱞᱟᱹᱜᱤᱫ ᱟᱨ ᱵᱟᱝ ᱢᱩᱸᱦᱟᱹᱤᱡ ᱨᱮᱭᱟᱜ ᱠᱟᱹᱢᱤ ᱦᱩᱭ ᱠᱚᱜᱼᱟᱭ ᱾ ᱡᱚᱫᱤ ᱟᱢ ᱟᱢᱟᱜ ᱫᱟᱭᱛᱣᱚ ᱤᱫᱤ ᱥᱟᱱᱟᱢ ᱠᱷᱟᱱ ᱢᱟᱲᱟᱝ ᱥᱮᱱ ᱞᱟᱦᱟᱜ ᱢᱮ ᱾";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "%@ ᱨᱤᱱᱤᱡ ᱢᱟᱞᱤᱠ ᱫᱚ ᱣᱤᱵᱥᱟᱭᱤᱴ ᱵᱮᱥ ᱵᱟᱭ ᱴᱷᱤᱠ ᱞᱮᱹᱫᱟᱭ ᱾ ᱟᱢᱟᱜ ᱥᱟᱠᱷᱤᱭᱟᱹᱛ ᱟᱰ ᱫᱚᱦᱚ ᱟᱮ ᱟᱞᱚ ᱠᱩᱢᱰᱩᱼᱜ ᱞᱟᱹᱜᱤᱫ, Firefox ᱚᱱᱟ ᱣᱮᱵᱥᱟᱭᱤᱴ ᱨᱮ ᱵᱟᱭ ᱡᱩᱲᱟᱣ ᱞᱮᱱᱟᱭ ᱾";
+"ErrorPages.CertWarning.Description" = "%@ ᱨᱤᱱᱤᱡ ᱢᱟᱞᱤᱠ ᱫᱚ ᱣᱤᱵᱥᱟᱭᱤᱴ ᱵᱮᱥ ᱵᱟᱭ ᱴᱷᱤᱠ ᱞᱮᱹᱫᱟᱭ ᱾ ᱟᱢᱟᱜ ᱥᱟᱠᱷᱤᱭᱟᱹᱛ ᱟᱰ ᱫᱚᱦᱚ ᱟᱮ ᱟᱞᱚ ᱠᱩᱢᱰᱩᱼᱜ ᱞᱟᱹᱜᱤᱫ, Ecosia ᱚᱱᱟ ᱣᱮᱵᱥᱟᱭᱤᱴ ᱨᱮ ᱵᱟᱭ ᱡᱩᱲᱟᱣ ᱞᱮᱱᱟᱭ ᱾";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "ᱱᱚᱶᱟ ᱡᱩᱰᱟᱹᱣ ᱫᱚ ᱵᱟᱭ ᱯᱟᱹᱛᱤᱭᱟᱹᱣᱤᱡ ᱠᱟᱱᱟᱭ";
@@ -332,7 +332,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefox ᱚᱲᱟᱜ ᱥᱟᱦᱟᱴᱟ";
+"Firefox.HomePage.Title" = "Ecosia ᱚᱲᱟᱜ ᱥᱟᱦᱟᱴᱟ";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "ᱚᱲᱟᱜᱥᱟᱦᱴᱟ ᱠᱩᱥᱤᱛᱮ ᱫᱚᱦᱚᱭ ᱢᱮ";
@@ -389,7 +389,7 @@
 "fxa.signin.camera-signin" = "ᱟᱢᱟᱜ ᱠᱮᱢᱮᱨᱟ ᱛᱮ ᱵᱚᱞᱚᱱ ᱥᱩᱦᱤ ᱢᱮ";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "ᱟᱢᱟᱜ ᱠᱚᱢᱯᱤᱭᱩᱴᱚᱨ ᱨᱮ Firefox ᱡᱷᱤᱜ ᱢᱮ ᱟᱨ firefox.com/pair ᱨᱮ ᱪᱟᱞᱟ ᱢᱮ";
+"fxa.signin.qr-link-instruction" = "ᱟᱢᱟᱜ ᱠᱚᱢᱯᱤᱭᱩᱴᱚᱨ ᱨᱮ Ecosia ᱡᱷᱤᱜ ᱢᱮ ᱟᱨ ecosia.org/pair ᱨᱮ ᱪᱟᱞᱟ ᱢᱮ";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "ᱥᱠᱮᱱ ᱞᱚᱜᱤᱛ ᱛᱮ ᱛᱮᱭᱟᱨ ᱢᱮᱱᱟᱢ-ᱟ";
@@ -410,7 +410,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ ᱨᱟᱥ ᱞᱮᱠᱟᱛᱮ ᱵᱟᱰ ᱡᱚᱲᱟᱣ ᱦᱩᱭᱮᱱᱟ᱾";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "ᱱᱚᱶᱟ ᱥᱟᱫᱷᱚᱱ ᱫᱚ ᱨᱟᱥ ᱞᱮᱠᱟᱛᱮ ᱵᱟᱰ ᱡᱚᱲᱟᱣᱮᱱᱟ Firefox ᱛᱷᱟᱨ ᱠᱷᱚᱱ᱾";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "ᱱᱚᱶᱟ ᱥᱟᱫᱷᱚᱱ ᱫᱚ ᱨᱟᱥ ᱞᱮᱠᱟᱛᱮ ᱵᱟᱰ ᱡᱚᱲᱟᱣᱮᱱᱟ Ecosia ᱛᱷᱟᱨ ᱠᱷᱚᱱ᱾";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "ᱛᱷᱟᱨ ᱵᱟᱰ ᱡᱚᱲᱟᱣᱮᱱᱟ";
@@ -419,7 +419,7 @@
 "FxAPush_DeviceDisconnected_title" = "ᱛᱷᱟᱨ ᱵᱟᱰ ᱡᱚᱲᱟᱣᱮᱱᱟ";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "ᱢᱤᱫᱴᱟᱝ ᱥᱟᱫᱷᱚᱱ ᱵᱟᱰ ᱡᱚᱲᱟᱣᱮᱱᱟ Firefox ᱛᱚᱞ ᱡᱚᱠᱷᱟ ᱠᱷᱚᱱ";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "ᱢᱤᱫᱴᱟᱝ ᱥᱟᱫᱷᱚᱱ ᱵᱟᱰ ᱡᱚᱲᱟᱣᱮᱱᱟ Ecosia ᱛᱚᱞ ᱡᱚᱠᱷᱟ ᱠᱷᱚᱱ";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
 "FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox ᱪᱤᱱᱦᱟᱹᱯ, ᱠᱟᱸᱛᱷᱥᱟᱦᱴᱟ ᱾";
@@ -704,7 +704,7 @@
 "LoginsList.Title" = "ᱵᱚᱞᱚ ᱠᱚ ᱥᱟᱧᱪᱟᱣ";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "ᱡᱟᱦᱟ ᱵᱩᱡᱷᱟᱣᱩᱜ ᱠᱟᱱᱟ Firefox ᱢᱟᱲᱟᱝ ᱨᱟᱹᱯᱩᱫ ᱞᱮᱱᱟ ᱾ ᱟᱢ ᱴᱮᱵᱥ ᱠᱚ ᱫᱩᱦᱲᱟᱹ ᱫᱚᱦᱚ ᱥᱟᱱᱟᱢ ᱠᱟᱱᱟ ᱥᱮ?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "ᱡᱟᱦᱟ ᱵᱩᱡᱷᱟᱣᱩᱜ ᱠᱟᱱᱟ Ecosia ᱢᱟᱲᱟᱝ ᱨᱟᱹᱯᱩᱫ ᱞᱮᱱᱟ ᱾ ᱟᱢ ᱴᱮᱵᱥ ᱠᱚ ᱫᱩᱦᱲᱟᱹ ᱫᱚᱦᱚ ᱥᱟᱱᱟᱢ ᱠᱟᱱᱟ ᱥᱮ?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "ᱯᱟᱲᱦᱟᱣ ᱞᱮᱠᱟ ᱪᱤᱸᱦᱟᱭ ᱢᱮ";
@@ -893,7 +893,7 @@
 "Onboarding.WhatsNew.Button.Title" = "ᱯᱟᱱᱛᱮᱭᱟᱜ ᱮᱦᱚᱵ ᱢᱮ";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "ᱚᱦᱟᱭ! Firefox ᱨᱚᱯᱩᱫᱮᱱᱟ";
+"Oops! Firefox crashed" = "ᱚᱦᱟᱭ! Ecosia ᱨᱚᱯᱩᱫᱮᱱᱟ";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "ᱴᱚᱭᱴᱚᱞ ᱵᱟᱨ ᱨᱮᱭᱟᱜ ᱯᱚᱛᱚᱵ ᱟᱭᱠᱚᱱ ᱨᱮ ᱞᱤᱱ ᱠᱟᱛᱮ ᱯᱟᱲᱦᱟᱣ ᱧᱮᱞ ᱨᱮ ᱚᱱᱚᱞ ᱠᱷᱩᱞᱟᱹᱢᱮ ᱾";
@@ -905,7 +905,7 @@
 "Open Tabs" = "ᱴᱮᱵᱽ ᱠᱚ ᱡᱷᱤᱜ ᱢᱮ";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "ᱵᱟᱝ ᱴᱷᱤᱠ ᱴᱷᱤᱠᱬᱟᱹ ᱞᱟᱹᱜᱤᱫ Firefox ᱱᱚᱶᱟ ᱥᱟᱦᱴᱟ ᱵᱟᱝ ᱚᱰᱚᱠ ᱫᱟᱲᱮᱟᱜ ᱠᱟᱱᱟ ᱾";
+"OpenURL.Error.Message" = "ᱵᱟᱝ ᱴᱷᱤᱠ ᱴᱷᱤᱠᱬᱟᱹ ᱞᱟᱹᱜᱤᱫ Ecosia ᱱᱚᱶᱟ ᱥᱟᱦᱴᱟ ᱵᱟᱝ ᱚᱰᱚᱠ ᱫᱟᱲᱮᱟᱜ ᱠᱟᱱᱟ ᱾";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "ᱥᱟᱦᱴᱟ ᱵᱟᱞᱮ ᱠᱷᱩᱞᱟᱹᱣ ᱫᱟᱹᱲᱤ ᱭᱟᱫᱟ";
@@ -1004,7 +1004,7 @@
 "ScanQRCode.InvalidDataError.Message" = "ᱥᱟᱠᱷᱤᱭᱟᱛ ᱫᱚ ᱵᱟᱲ ᱵᱟᱛᱟᱣ ᱢᱮᱱᱟ-ᱟ";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "ᱥᱟᱫᱷᱚᱱ ‘ᱥᱟᱡᱟᱣ ᱠᱚ’> ‘Firefox’ ᱾ Firefox ᱫᱚ ᱠᱮᱢᱨᱟ ᱟᱫᱮᱨ ᱪᱷᱚᱣᱟᱭᱮᱢ ᱾";
+"ScanQRCode.PermissionError.Message.v100" = "ᱥᱟᱫᱷᱚᱱ ‘ᱥᱟᱡᱟᱣ ᱠᱚ’> ‘Ecosia’ ᱾ Ecosia ᱫᱚ ᱠᱮᱢᱨᱟ ᱟᱫᱮᱨ ᱪᱷᱚᱣᱟᱭᱮᱢ ᱾";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR ᱠᱚᱰ ᱥᱠᱟᱱ ᱢᱮ";
@@ -1085,13 +1085,13 @@
 "SendTo.NavBar.Title" = "ᱴᱮᱵᱽ ᱠᱩᱞ ᱢᱮ";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "ᱲᱟᱢ ᱴᱷᱮᱱ ᱚᱞᱜᱟ Firefox ᱠᱷᱟᱛᱟ ᱟᱹᱭᱨ ᱢᱤᱫ ᱞᱟᱹᱜᱤᱫ ᱟᱞᱜᱟ ᱥᱟᱫᱷᱚᱱ ᱡᱩᱰᱟᱹᱣ ᱵᱟᱹᱱᱩᱜᱟ ᱾";
+"SendTo.NoDevicesFound.Message" = "ᱲᱟᱢ ᱴᱷᱮᱱ ᱚᱞᱜᱟ Ecosia ᱠᱷᱟᱛᱟ ᱟᱹᱭᱨ ᱢᱤᱫ ᱞᱟᱹᱜᱤᱫ ᱟᱞᱜᱟ ᱥᱟᱫᱷᱚᱱ ᱡᱩᱰᱟᱹᱣ ᱵᱟᱹᱱᱩᱜᱟ ᱾";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "ᱫᱭᱟ ᱠᱟᱛᱮ Firefox ᱡᱷᱤᱜ ᱢᱮ, ᱥᱟᱡᱟᱣ ᱠᱚ ᱨᱮ ᱪᱟᱞᱟ ᱢᱮ ᱟᱨ ᱞᱮᱛᱟᱰ ᱞᱟᱹᱜᱤᱫ ᱛᱮ ᱵᱚᱞᱚᱱ ᱥᱩᱦᱤ ᱢᱮ᱾";
+"SendTo.NotSignedIn.Message" = "ᱫᱭᱟ ᱠᱟᱛᱮ Ecosia ᱡᱷᱤᱜ ᱢᱮ, ᱥᱟᱡᱟᱣ ᱠᱚ ᱨᱮ ᱪᱟᱞᱟ ᱢᱮ ᱟᱨ ᱞᱮᱛᱟᱰ ᱞᱟᱹᱜᱤᱫ ᱛᱮ ᱵᱚᱞᱚᱱ ᱥᱩᱦᱤ ᱢᱮ᱾";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "ᱟᱢ ᱟᱢᱟᱠ Firefox ᱠᱷᱟᱛᱟ ᱨᱮ ᱵᱚᱞᱚᱱ ᱥᱩᱦᱤ ᱵᱚᱱᱩᱢ-ᱟ ᱾";
+"SendTo.NotSignedIn.Title" = "ᱟᱢ ᱟᱢᱟᱠ Ecosia ᱠᱷᱟᱛᱟ ᱨᱮ ᱵᱚᱞᱚᱱ ᱥᱩᱦᱤ ᱵᱚᱱᱩᱢ-ᱟ ᱾";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "ᱵᱷᱮᱡᱟ";
@@ -1403,7 +1403,7 @@
 "Settings.NoImageModeBlockImages.Label.v99" = "ᱪᱤᱛᱟᱹᱨ ᱠᱚ ᱟᱴᱠᱟᱣ ᱢᱮ";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "ᱡᱚᱠᱷᱚᱱ Firefox ᱡᱷᱤᱜ ᱟᱢ";
+"Settings.OfferClipboardBar.Status" = "ᱡᱚᱠᱷᱚᱱ Ecosia ᱡᱷᱤᱜ ᱟᱢ";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
 "Settings.OfferClipboardBar.Status.v128" = "%@ ᱠᱷᱩᱞᱟᱹ ᱡᱷᱚᱜ";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "ᱰᱷᱮᱨ ᱥᱮᱲᱟᱭ ᱢᱮ᱾";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla ᱡᱟᱦᱟᱸ ᱩᱱ ᱡᱚᱠᱷᱟᱜ ᱡᱟᱣᱨᱟ ᱟᱭ ᱚᱠᱟ ᱡᱷᱚᱜ ᱫᱚᱨᱠᱟᱨᱚᱜᱼᱟ ᱚᱱᱟ ᱦᱚᱸ Firefox ᱟᱨ ᱡᱷᱚᱛᱚ ᱦᱚᱲ ᱠᱚ ᱞᱟᱹᱜᱤᱫ ᱵᱮᱥ ᱫᱚᱦᱚ ᱞᱟᱹᱜᱤᱫ ᱾";
+"Settings.SendUsage.Message" = "Mozilla ᱡᱟᱦᱟᱸ ᱩᱱ ᱡᱚᱠᱷᱟᱜ ᱡᱟᱣᱨᱟ ᱟᱭ ᱚᱠᱟ ᱡᱷᱚᱜ ᱫᱚᱨᱠᱟᱨᱚᱜᱼᱟ ᱚᱱᱟ ᱦᱚᱸ Ecosia ᱟᱨ ᱡᱷᱚᱛᱚ ᱦᱚᱲ ᱠᱚ ᱞᱟᱹᱜᱤᱫ ᱵᱮᱥ ᱫᱚᱦᱚ ᱞᱟᱹᱜᱤᱫ ᱾";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "ᱵᱮᱵᱷᱟᱨ ᱥᱟᱠᱷᱤᱭᱟᱛ ᱠᱩᱞ ᱢᱮ";
@@ -1466,7 +1466,7 @@
 "Settings.Siri.OpenTabShortcut" = "ᱱᱟᱶᱟ ᱴᱮᱵᱽ ᱠᱷᱩᱞᱟᱹᱭ ᱢᱮ";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "ᱥᱤᱨᱤ ᱠᱷᱟᱴᱚ ᱢᱟᱪᱷᱟ ᱵᱮᱵᱷᱟᱨ ᱢᱮ ᱞᱚᱜᱚᱱ ᱛᱮ Firefox ᱠᱷᱩᱞᱟᱹᱭ ᱞᱚᱜᱤᱛ ᱥᱤᱨᱤ ᱥᱟᱣ ᱛᱮ";
+"Settings.Siri.SectionDescription" = "ᱥᱤᱨᱤ ᱠᱷᱟᱴᱚ ᱢᱟᱪᱷᱟ ᱵᱮᱵᱷᱟᱨ ᱢᱮ ᱞᱚᱜᱚᱱ ᱛᱮ Ecosia ᱠᱷᱩᱞᱟᱹᱭ ᱞᱚᱜᱤᱛ ᱥᱤᱨᱤ ᱥᱟᱣ ᱛᱮ";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "ᱥᱤᱨᱤ ᱠᱷᱟᱴᱚ ᱢᱟᱪᱷᱟ ᱠᱚ";
@@ -1793,7 +1793,7 @@
 "Yesterday" = "ᱦᱚᱞᱟ";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "ᱟᱢ ᱴᱷᱮᱱ ᱚᱠᱟ ᱴᱮᱵᱽ ᱦᱚᱸ Firefox ᱨᱮᱭᱟᱜ ᱚᱞᱜᱟ ᱥᱟᱫᱷᱚᱸ ᱨᱮ ᱵᱟᱭ ᱠᱷᱩᱞᱟᱹ ᱟᱠᱟᱱᱟ ᱾";
+"You don’t have any tabs open in Firefox on your other devices." = "ᱟᱢ ᱴᱷᱮᱱ ᱚᱠᱟ ᱴᱮᱵᱽ ᱦᱚᱸ Ecosia ᱨᱮᱭᱟᱜ ᱚᱞᱜᱟ ᱥᱟᱫᱷᱚᱸ ᱨᱮ ᱵᱟᱭ ᱠᱷᱩᱞᱟᱹ ᱟᱠᱟᱱᱟ ᱾";
 
 /* Your Rights settings section title */
 "Your Rights" = "ᱟᱢᱟᱠ ᱦᱚᱠ";

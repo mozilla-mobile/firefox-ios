@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "Atverti naujoje privačioje kortelėje";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "„Firefox“ nekaups jūsų naršymo žurnalo ir neįsimins slapukų, tačiau nauji adresyno įrašai bus išsaugoti.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "„Ecosia“ nekaups jūsų naršymo žurnalo ir neįsimins slapukų, tačiau nauji adresyno įrašai bus išsaugoti.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "Sužinoti daugiau";

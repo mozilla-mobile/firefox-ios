@@ -311,7 +311,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Bu, hatalı yapılandırmadan veya saldırganların yaptığı tahrifattan kaynaklanabilir. Olası riski kabul ediyorsanız devam edebilirsiniz.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "%@ web sitesinin sahibi siteyi hatalı yapılandırmış. Bilgilerinizin çalınmasını önlemek için Firefox bu web sitesine bağlanmadı.";
+"ErrorPages.CertWarning.Description" = "%@ web sitesinin sahibi siteyi hatalı yapılandırmış. Bilgilerinizin çalınmasını önlemek için Ecosia bu web sitesine bağlanmadı.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Bu bağlantı güvenilir değil";
@@ -332,7 +332,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefox Giriş Sayfası";
+"Firefox.HomePage.Title" = "Ecosia Giriş Sayfası";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "Giriş sayfasını özelleştir";
@@ -389,7 +389,7 @@
 "fxa.signin.camera-signin" = "Kameranızla giriş yapın";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "Bilgisayarınızda Firefox’u açıp firefox.com/pair adresine gidin";
+"fxa.signin.qr-link-instruction" = "Bilgisayarınızda Ecosia’u açıp ecosia.org/pair adresine gidin";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Taramaya hazırım";
@@ -410,7 +410,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ adlı cihazın bağlantısı başarıyla kesildi.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Bu cihazın Firefox Sync bağlantısı başarıyla kesildi.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Bu cihazın Ecosia Sync bağlantısı başarıyla kesildi.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync bağlantısı kesildi";
@@ -905,7 +905,7 @@
 "Open Tabs" = "Açık sekmeler";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Adresi geçersiz olduğu için Firefox bu sayfayı açamıyor.";
+"OpenURL.Error.Message" = "Adresi geçersiz olduğu için Ecosia bu sayfayı açamıyor.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Sayfa açılamadı";
@@ -1004,7 +1004,7 @@
 "ScanQRCode.InvalidDataError.Message" = "Veri geçersiz";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "Cihazınızda ‘Ayarlar’ > ‘Firefox’a gidin. Firefox’un kameraya erişmesine izin verin.";
+"ScanQRCode.PermissionError.Message.v100" = "Cihazınızda ‘Ayarlar’ > ‘Ecosia’a gidin. Ecosia’un kameraya erişmesine izin verin.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR kodu tara";
@@ -1085,10 +1085,10 @@
 "SendTo.NavBar.Title" = "Sekmeyi Gönder";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "Bu Firefox Hesabı’na bağlanmış ve eşitleme yapabileceğiniz başka cihazınız yok.";
+"SendTo.NoDevicesFound.Message" = "Bu Ecosia Hesabı’na bağlanmış ve eşitleme yapabileceğiniz başka cihazınız yok.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Devam etmek için lütfen Firefox’u açın, Ayarlar’a gidin ve giriş yapın.";
+"SendTo.NotSignedIn.Message" = "Devam etmek için lütfen Ecosia’u açın, Ayarlar’a gidin ve giriş yapın.";
 
 /* See http://mzl.la/1ISlXnU */
 "SendTo.NotSignedIn.Title" = "Firefox Hesabı’nıza giriş yapmadınız.";
@@ -1328,7 +1328,7 @@
 "Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "Limited Edition";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
-"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Giriş sayfasındaki Firefox logosuna dokunarak duvar kâğıdını değiştirin";
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Giriş sayfasındaki Ecosia logosuna dokunarak duvar kâğıdını değiştirin";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "Duvar kâğıdı";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Ayrıntılı bilgi alın.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla, yalnızca Firefox’u daha da geliştirmek için ihtiyaç duyduğumuz verileri toplar.";
+"Settings.SendUsage.Message" = "Mozilla, yalnızca Ecosia’u daha da geliştirmek için ihtiyaç duyduğumuz verileri toplar.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Kullanım verilerini gönder";
@@ -1793,7 +1793,7 @@
 "Yesterday" = "Dün";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Diğer cihazlarınızdaki Firefox’larda hiç açık sekme yok.";
+"You don’t have any tabs open in Firefox on your other devices." = "Diğer cihazlarınızdaki Ecosia’larda hiç açık sekme yok.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Haklarınız";

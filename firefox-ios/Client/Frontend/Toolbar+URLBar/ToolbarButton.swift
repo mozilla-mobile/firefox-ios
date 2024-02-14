@@ -12,7 +12,7 @@ class ToolbarButton: UIButton {
  */
 class ToolbarButton: UIButton, ThemeApplicable {
     // MARK: - Variables
-    
+
     // Ecosia: Modify accessors
     // private var selectedTintColor: UIColor!
     // private var unselectedTintColor: UIColor!

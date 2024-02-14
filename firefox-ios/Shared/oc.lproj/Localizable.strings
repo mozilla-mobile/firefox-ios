@@ -260,7 +260,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Pagina d'acuèlh de Firefox";
+"Firefox.HomePage.Title" = "Pagina d'acuèlh de Ecosia";
 
 /* On each Pocket Stories on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes */
 "FirefoxHome.Pocket.Minutes.v99" = "%S min";
@@ -278,7 +278,7 @@
 "Forward" = "Pagina seguenta";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Compte Firefox";
+"FxA.FirefoxAccount" = "Compte Ecosia";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Gestion del compte";
@@ -299,7 +299,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ es estat corrèctament desconnectat.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Aqueste periferic es estat corrèctament desconnectat de Firefox Sync.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Aqueste periferic es estat corrèctament desconnectat de Ecosia Sync.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Sincronizacion desconnectada";
@@ -308,7 +308,7 @@
 "FxAPush_DeviceDisconnected_title" = "Sincronizacion desconnectada";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Un periferic es estat desconnectat de Firefox Sync";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Un periferic es estat desconnectat de Ecosia Sync";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Ajuda";
@@ -506,7 +506,7 @@
 "LoginsList.Search.Cancel" = "Anullar";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Sembla que Firefox a fracassat. Volètz restablir los onglets ?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Sembla que Ecosia a fracassat. Volètz restablir los onglets ?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Marcar coma legit";
@@ -794,13 +794,13 @@
 "SendTo.NavBar.Title" = "Enviar l’onglet";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "Avètz pas cap d'autre aparelh prèst a èsser sincronizat e connectat a aqueste compte Firefox.";
+"SendTo.NoDevicesFound.Message" = "Avètz pas cap d'autre aparelh prèst a èsser sincronizat e connectat a aqueste compte Ecosia.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Obrissètz Firefox, anatz als paramètres e connectatz per aviar.";
+"SendTo.NotSignedIn.Message" = "Obrissètz Ecosia, anatz als paramètres e connectatz per aviar.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Sètz pas connectat a vòstre compte Firefox.";
+"SendTo.NotSignedIn.Title" = "Sètz pas connectat a vòstre compte Ecosia.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Enviar";
@@ -920,7 +920,7 @@
 "Settings.FxA.Sync.SectionName" = "Paramètres de sincronizacion";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Compte Firefox";
+"Settings.FxA.Title" = "Compte Ecosia";
 
 /* General settings section title */
 "Settings.General.SectionName" = "General";
@@ -947,7 +947,7 @@
 "Settings.NewTab.Option.BlankPage" = "Pagina voida";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Acuèlh de Firefox";
+"Settings.NewTab.Option.FirefoxHome" = "Acuèlh de Ecosia";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Pagina d’acuèlh";
@@ -965,7 +965,7 @@
 "Settings.NewTab.TopSectionNameFooter" = "Causissètz çò que cal mostrar en dobrir un onglet novèl";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "En dobrir Firefox";
+"Settings.OfferClipboardBar.Status" = "En dobrir Ecosia";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.StatusV2" = "En dobrir Firefox";
@@ -986,7 +986,7 @@
 "Settings.SendUsage.Link" = "Ne saber mai.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla s’esfòrça de reculhir pas que las donadas necessàrias per vos ofrir e melhorar Firefox.";
+"Settings.SendUsage.Message" = "Mozilla s’esfòrça de reculhir pas que las donadas necessàrias per vos ofrir e melhorar Ecosia.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Mandar de donadas d’utilizacion";
@@ -998,7 +998,7 @@
 "Settings.Siri.OpenTabShortcut" = "Dobrir un onglet novèl";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Utilizar las acorcha Siri per obrir rapidament Firefox via Siri";
+"Settings.Siri.SectionDescription" = "Utilizar las acorcha Siri per obrir rapidament Ecosia via Siri";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Acorcha Siri";
@@ -1046,13 +1046,13 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "Cargar en rèire plan";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Cargament dins Firefox";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Cargament dins Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Dobrir dins Firefox";
+"ShareExtension.OpenInFirefoxAction.Title" = "Dobrir dins Ecosia";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Cercar dins Firefox";
+"ShareExtension.SeachInFirefoxAction.Title" = "Cercar dins Ecosia";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "Afichar las suggestions de recèrca";
@@ -1151,7 +1151,7 @@
 "UIMenuItem.PasteGo" = "Pegar e i anar";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Cercar amb Firefox";
+"UIMenuItem.SearchWithFirefox" = "Cercar amb Ecosia";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "pas legit";
@@ -1178,7 +1178,7 @@
 "Yesterday" = "Ièr";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Avètz pas cap d'onglet obèrt dins Firefox sus vòstres autres aparelhs.";
+"You don’t have any tabs open in Firefox on your other devices." = "Avètz pas cap d'onglet obèrt dins Ecosia sus vòstres autres aparelhs.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Vòstres dreits";

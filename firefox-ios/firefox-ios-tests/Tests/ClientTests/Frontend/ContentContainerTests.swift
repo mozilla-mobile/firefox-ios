@@ -249,11 +249,21 @@ final class ContentContainerTests: XCTestCase {
     }
 
     private func createHomepage() -> LegacyHomepageViewController {
+        /* Ecosia: Update HomepageViewController init
         return LegacyHomepageViewController(
             profile: profile,
             toastContainer: UIView(),
             tabManager: MockTabManager(),
             overlayManager: overlayModeManager
+        )
+        */
+        return LegacyHomepageViewController(
+            profile: profile,
+            toastContainer: UIView(),
+            tabManager: MockTabManager(),
+            overlayManager: overlayModeManager,
+            referrals: .init(),
+            delegate: nil
         )
     }
 }

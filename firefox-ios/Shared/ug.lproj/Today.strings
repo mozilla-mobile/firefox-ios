@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "شەخسىي \nبەتكۈچنى ياپ";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "باش بېتىڭىزگە Firefox تېزلەتمىسىنى قوشىدۇ.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "باش بېتىڭىزگە Ecosia تېزلەتمىسىنى قوشىدۇ.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "كۆچۈرۈلگەن ئۇلانمىغا يۆتكەل";
@@ -29,7 +29,7 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "شەخسىي ئىزدە";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "باش بېتىڭىزگە Firefox تېزلەتمىسىنى قوشىدۇ. ئەپچە قوشقاندىن كېيىن، بېسىپ تۇرسا ئۇنى تەھرىرلەيدۇ ۋە باشقا تېزلەتمە تاللىغىلى بولىدۇ.";
+"TodayWidget.QuickActionGalleryDescription" = "باش بېتىڭىزگە Ecosia تېزلەتمىسىنى قوشىدۇ. ئەپچە قوشقاندىن كېيىن، بېسىپ تۇرسا ئۇنى تەھرىرلەيدۇ ۋە باشقا تېزلەتمە تاللىغىلى بولىدۇ.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "تېز مەشغۇلات";

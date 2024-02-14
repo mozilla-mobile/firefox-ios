@@ -5,11 +5,11 @@
 import Foundation
 
 extension SimpleToast {
-    
+
     enum AccessoryImage {
         case named(String), view(UIView)
     }
-    
+
     @discardableResult
     // Ecosia: Migrated to be able to customize the accessory image shown, as well as bottom inset
     func showAlertWithText(
@@ -32,7 +32,7 @@ extension SimpleToast {
         animate(toast)
         return self
     }
-    
+
     fileprivate func createView(text: String, image: AccessoryImage) -> UIStackView {
         let stack = UIStackView()
         stack.axis = .horizontal
@@ -53,7 +53,7 @@ extension SimpleToast {
         toast.setContentHuggingPriority(.defaultLow, for: .horizontal)
 
         let imageView: UIView
-        
+
         switch image {
         case let .named(name):
             imageView = UIImageView(image: .init(named: name)?.withRenderingMode(.alwaysTemplate))

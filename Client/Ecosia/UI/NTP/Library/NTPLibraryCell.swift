@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
 import UIKit
@@ -18,7 +18,7 @@ class NTPLibraryCell: UICollectionViewCell, Themeable, ReusableCell {
         case history
         case readingList
         case downloads
-        
+
         var title: String {
             switch self {
             case .bookmarks: return .AppMenu.AppMenuBookmarksTitleString
@@ -27,6 +27,7 @@ class NTPLibraryCell: UICollectionViewCell, Themeable, ReusableCell {
             case .downloads: return .AppMenu.AppMenuDownloadsTitleString
             }
         }
+
         var image: UIImage? {
             switch self {
             case .bookmarks: return .init(named: "libraryFavorites")
@@ -35,12 +36,21 @@ class NTPLibraryCell: UICollectionViewCell, Themeable, ReusableCell {
             case .downloads: return .init(named: "libraryDownloads")
             }
         }
+
+        var analyticsProperty: Analytics.Property.Library {
+            switch self {
+            case .bookmarks: return .bookmarks
+            case .history: return .history
+            case .readingList: return .readingList
+            case .downloads: return .downloads
+            }
+        }
     }
 
     var shortcuts: [NTPLibraryShortcutView] = []
-    
+
     // MARK: - Themeable Properties
-    
+
     var themeManager: ThemeManager { AppContainer.shared.resolve() }
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
@@ -107,7 +117,9 @@ class NTPLibraryCell: UICollectionViewCell, Themeable, ReusableCell {
     }
 
     @objc func tapped(_ sender: UIButton) {
-        switch Item(rawValue: sender.tag) {
+        guard let item = Item(rawValue: sender.tag) else { return }
+        Analytics.shared.ntpLibraryItem(.click, property: item.analyticsProperty)
+        switch item {
         case .bookmarks:
             delegate?.libraryCellOpenBookmarks()
         case .history:
@@ -116,8 +128,6 @@ class NTPLibraryCell: UICollectionViewCell, Themeable, ReusableCell {
             delegate?.libraryCellOpenReadlist()
         case .downloads:
             delegate?.libraryCellOpenDownloads()
-        default:
-            break
         }
     }
 }

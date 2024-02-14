@@ -12,9 +12,9 @@ final class NTPCustomizationCell: UICollectionViewCell, Themeable, ReusableCell 
         static let verticalInset: CGFloat = 12
         static let imageTitlePadding: CGFloat = 4
     }
-    
+
     weak var delegate: NTPCustomizationCellDelegate?
-    
+
     private lazy var button: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -30,40 +30,43 @@ final class NTPCustomizationCell: UICollectionViewCell, Themeable, ReusableCell 
         button.clipsToBounds = true
         return button
     }()
-    
+
     // MARK: - Themeable Properties
-    
+
     var themeManager: ThemeManager { AppContainer.shared.resolve() }
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // MARK: - Init
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
         applyTheme()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setup()
         applyTheme()
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         applyTheme()
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         button.layer.cornerRadius = button.frame.height/2
     }
-    
+
     private func setup() {
+        isAccessibilityElement = true
+        accessibilityIdentifier = "customize_homepage"
+
         contentView.addSubview(button)
-        
+
         NSLayoutConstraint.activate([
             button.heightAnchor.constraint(equalToConstant: UX.buttonHeight),
             button.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
@@ -71,14 +74,14 @@ final class NTPCustomizationCell: UICollectionViewCell, Themeable, ReusableCell 
         ])
         listenForThemeChange(contentView)
     }
-    
+
     func applyTheme() {
         button.imageView?.tintColor = .legacyTheme.ecosia.secondaryButtonContent
         button.setTitleColor(.legacyTheme.ecosia.secondaryButtonContent, for: .normal)
         button.setBackgroundColor(.legacyTheme.ecosia.secondaryButtonBackground, forState: .normal)
         button.setBackgroundColor(.legacyTheme.ecosia.activeTransparentBackground, forState: .highlighted)
     }
-    
+
     @objc func touchButtonAction() {
         delegate?.openNTPCustomizationSettings()
     }

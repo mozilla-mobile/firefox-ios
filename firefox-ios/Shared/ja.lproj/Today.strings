@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "プライベートタブを閉じる";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "ホーム画面に Firefox のショートカットを追加します。";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "ホーム画面に Ecosia のショートカットを追加します。";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "コピーしたリンクを開く";

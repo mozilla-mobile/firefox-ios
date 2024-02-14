@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Užverti privačiąsias korteles";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Pridėkite „Firefox“ leistukų į savo pradžios ekraną.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Pridėkite „Ecosia“ leistukų į savo pradžios ekraną.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Atverti nukopijuotą saitą";
@@ -23,19 +23,19 @@
 "TodayWidget.NoOpenTabsLabel" = "Nėra atvertų kortelių.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Atverti „Firefox“";
+"TodayWidget.OpenFirefoxLabel" = "Atverti „Ecosia“";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Privačioji paieška";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Pridėkite „Firefox“ leistuką į savo pradžios ekraną. Pridėję valdiklį, palieskite ir palaikykite norėdami jį keisti, ir pasirinkti kitą leistuką.";
+"TodayWidget.QuickActionGalleryDescription" = "Pridėkite „Ecosia“ leistuką į savo pradžios ekraną. Pridėję valdiklį, palieskite ir palaikykite norėdami jį keisti, ir pasirinkti kitą leistuką.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Spartieji veiksmai";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "„Firefox“ leistukai";
+"TodayWidget.QuickActionsGalleryTitleV2" = "„Ecosia“ leistukai";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Pridėkite leistukų į savo atvertas korteles.";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Sparti peržiūra";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Ieškoti per „Firefox“";
+"TodayWidget.SearchInFirefoxV2" = "Ieškoti per „Ecosia“";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Atverti privačiojoje kortelėje";

@@ -42,22 +42,24 @@ final class LaunchCoordinatorTests: XCTestCase {
         let introScreenManager = IntroScreenManager(prefs: profile.prefs)
         let subject = createSubject(isIphone: false)
         subject.start(with: .intro(manager: introScreenManager))
-
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertEqual(mockRouter.setRootViewControllerCalled, 0)
         let presentedViewController = try XCTUnwrap(mockRouter.presentedViewController)
-        XCTAssertNotNil(presentedViewController as? IntroViewController)
+        // Ecosia: Update view controller being presented
+        // XCTAssertNotNil(presentedViewController as? IntroViewController)
+        XCTAssertNotNil(presentedViewController as? WelcomeNavigation)
     }
 
     func testStart_introIsIphone_setRootView() throws {
         let introScreenManager = IntroScreenManager(prefs: profile.prefs)
         let subject = createSubject(isIphone: true)
         subject.start(with: .intro(manager: introScreenManager))
-
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertEqual(mockRouter.setRootViewControllerCalled, 0)
         let pushedVC = try XCTUnwrap(mockRouter.presentedViewController)
-        XCTAssertNotNil(pushedVC as? IntroViewController)
+        // Ecosia: Update view controller being presented
+        // XCTAssertNotNil(pushedVC as? IntroViewController)
+        XCTAssertNotNil(pushedVC as? WelcomeNavigation)
     }
 
     // MARK: - Update
@@ -114,7 +116,7 @@ final class LaunchCoordinatorTests: XCTestCase {
         XCTAssertEqual(mockRouter.setRootViewControllerCalled, 0)
         XCTAssertNil(mockRouter.presentedViewController)
     }
-
+    /* Ecosia: Remove MockGleanPlumbMessageManagerProtocol ref
     func testStart_surveyWithMessage_setRootView() throws {
         let messageManager = MockGleanPlumbMessageManagerProtocol()
         let message = createMessage(isExpired: false)
@@ -130,6 +132,7 @@ final class LaunchCoordinatorTests: XCTestCase {
         let pushedVC = try XCTUnwrap(mockRouter.presentedViewController)
         XCTAssertNotNil(pushedVC as? SurveySurfaceViewController)
     }
+     */
 
     // MARK: - QRCodeNavigationHandler
 
@@ -154,6 +157,7 @@ final class LaunchCoordinatorTests: XCTestCase {
     }
 
     // MARK: - Delegates
+    /* Ecosia: Remove MockGleanPlumbMessageManagerProtocol ref
     func testStart_surveySetsDelegate() throws {
         let messageManager = MockGleanPlumbMessageManagerProtocol()
         let message = createMessage(isExpired: false)
@@ -167,6 +171,7 @@ final class LaunchCoordinatorTests: XCTestCase {
         let presentedVC = try XCTUnwrap(mockRouter.presentedViewController as? SurveySurfaceViewController)
         XCTAssertNotNil(presentedVC.delegate)
     }
+     */
 
     func testDidFinish_fromSurveySurfaceViewControllerDelegate() {
         let subject = createSubject(isIphone: false)
@@ -191,6 +196,7 @@ final class LaunchCoordinatorTests: XCTestCase {
         return subject
     }
 
+    /* Ecosia: Remove MockGleanPlumbMessageManagerProtocol ref
     private func createMessage(
         for surface: MessageSurfaceId = .survey,
         isExpired: Bool
@@ -208,4 +214,5 @@ final class LaunchCoordinatorTests: XCTestCase {
                                  style: MockStyleDataProtocol(),
                                  metadata: metadata)
     }
+     */
 }

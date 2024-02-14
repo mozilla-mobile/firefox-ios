@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Закрити приватні вкладки";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Додайте ярлики Firefox на головний екран.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Додайте ярлики Ecosia на головний екран.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Відкрити скопійоване посилання";
@@ -23,19 +23,19 @@
 "TodayWidget.NoOpenTabsLabel" = "Немає відкритих вкладок.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Відкрити Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Відкрити Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Приватний пошук";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Додайте ярлик Firefox на головний екран. Після додавання віджета торкніться й утримуйте, щоб змінити його та вибрати інший ярлик.";
+"TodayWidget.QuickActionGalleryDescription" = "Додайте ярлик Ecosia на головний екран. Після додавання віджета торкніться й утримуйте, щоб змінити його та вибрати інший ярлик.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Швидкі дії";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Ярлики Firefox";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ярлики Ecosia";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Додайте ярлики для відкритих вкладок.";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Швидкий перегляд";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Шукати в Firefox";
+"TodayWidget.SearchInFirefoxV2" = "Шукати в Ecosia";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Шукати у приватній вкладці";

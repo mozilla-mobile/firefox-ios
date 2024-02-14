@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Að gera Firefox að sjálfgefnum vafra er sama og greitt atkvæði um opið, aðgengilegt internet.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Að gera Ecosia að sjálfgefnum vafra er sama og greitt atkvæði um opið, aðgengilegt internet.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Sjálfgefið á betra interneti";
@@ -8,10 +8,10 @@
 "DefaultBrowserCard.Button.v2" = "Læra hvernig";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Stilltu tengla frá vefsvæðum, tölvupósti og skilaboðum til að opna sjálfkrafa í Firefox.";
+"DefaultBrowserCard.Description" = "Stilltu tengla frá vefsvæðum, tölvupósti og skilaboðum til að opna sjálfkrafa í Ecosia.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "Veldu Firefox sem sjálfgefinn vafra til að sjálfvirkt njóta hraða, öryggis og næðis.";
+"DefaultBrowserCard.NextLevel.Description.v108" = "Veldu Ecosia sem sjálfgefinn vafra til að sjálfvirkt njóta hraða, öryggis og næðis.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "Lyftu daglegu vafri á annað stig";
@@ -35,7 +35,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Ýttu á sjálfgefið vafraforrit";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Veldu Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. Veldu Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Sjálfgefið vafraforrit";

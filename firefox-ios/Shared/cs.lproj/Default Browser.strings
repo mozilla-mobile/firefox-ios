@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Nastavení Firefoxu jako výchozího prohlížeče je volbou pro otevřený a přístupný internet.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Nastavení Ecosiau jako výchozího prohlížeče je volbou pro otevřený a přístupný internet.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Výchozí nastavení pro lepší internet";
@@ -8,10 +8,10 @@
 "DefaultBrowserCard.Button.v2" = "Zjistit více";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Nastavte si automatické otevírání odkazů, e-mailů a zpráv ve Firefoxu.";
+"DefaultBrowserCard.Description" = "Nastavte si automatické otevírání odkazů, e-mailů a zpráv ve Ecosiau.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "Zvolte Firefox jako svůj výchozí prohlížeč, aby byla rychlost, bezpečnost a soukromí automatické.";
+"DefaultBrowserCard.NextLevel.Description.v108" = "Zvolte Ecosia jako svůj výchozí prohlížeč, aby byla rychlost, bezpečnost a soukromí automatické.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "Zvyšte úroveň každodenního prohlížení";
@@ -35,7 +35,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Klepněte na „Výchozí prohlížeč“";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Vyberte Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. Vyberte Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Výchozí prohlížeč";

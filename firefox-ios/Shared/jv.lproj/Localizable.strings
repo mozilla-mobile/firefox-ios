@@ -224,7 +224,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Mungkin ana ralat konfigurasi utawa rusak déning panyerang. Bacutaké yèn sampéyan nrima risikoné.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "Wong sing duwèni %@ bar ngatur situsé kang ora bener. Kanggo ngamanaké informasi sampéyan bèn ora dicolong, Firefox medhot konèksi menyang situs iki.";
+"ErrorPages.CertWarning.Description" = "Wong sing duwèni %@ bar ngatur situsé kang ora bener. Kanggo ngamanaké informasi sampéyan bèn ora dicolong, Ecosia medhot konèksi menyang situs iki.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Sambungan Iki ora Dipercaya";
@@ -245,13 +245,13 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Tepas Firefox";
+"Firefox.HomePage.Title" = "Tepas Ecosia";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Bacutaké";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Akun Firefox";
+"FxA.FirefoxAccount" = "Akun Ecosia";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Atur Akun & Piranti";
@@ -263,7 +263,7 @@
 "FxA.SyncNow" = "Sync Saiki";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Sync Firefox wis nyambung karo %@";
+"FxAPush_DeviceConnected_body" = "Sync Ecosia wis nyambung karo %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sync Nyambung";
@@ -272,7 +272,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ wis suksès dipedhot.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Piranti iki suksès pisah saka Firefox Sync.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Piranti iki suksès pisah saka Ecosia Sync.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync Dipedhot";
@@ -281,7 +281,7 @@
 "FxAPush_DeviceDisconnected_title" = "Sync Dipedhot";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Piranti wis dipedhot saka Sync Firefox";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Piranti wis dipedhot saka Sync Ecosia";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Pitulung";
@@ -512,7 +512,7 @@
 "Okay" = "Oké";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Dhuh! Firefoxé mogok";
+"Oops! Firefox crashed" = "Dhuh! Ecosiaé mogok";
 
 /* See http://mzl.la/1G7uHo7 */
 "Open Settings" = "Bukak Setélan";
@@ -599,7 +599,7 @@
 "SendTo.NavBar.Title" = "Kirim Tab";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Sampèyan durung mlebu menyang Akun Firefox.";
+"SendTo.NotSignedIn.Title" = "Sampèyan durung mlebu menyang Akun Ecosia.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Kirim";
@@ -677,7 +677,7 @@
 "Settings.FxA.DeviceName" = "Jeneng Piranti";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Akun Firefox";
+"Settings.FxA.Title" = "Akun Ecosia";
 
 /* General settings section title */
 "Settings.General.SectionName" = "Umum";
@@ -701,7 +701,7 @@
 "Settings.NewTab.TopSectionName" = "Tuduhaké";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Nalika Mbukak Firefox";
+"Settings.OfferClipboardBar.Status" = "Nalika Mbukak Ecosia";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.StatusV2" = "Nalika Mbukak Firefox";
@@ -743,13 +743,13 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "Amot ing Latar";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Ngamot ing Firefox";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Ngamot ing Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Bukak ing Firefox";
+"ShareExtension.OpenInFirefoxAction.Title" = "Bukak ing Ecosia";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Golèk ing Firefox";
+"ShareExtension.SeachInFirefoxAction.Title" = "Golèk ing Ecosia";
 
 /* Accessibility Label for the tab toolbar Stop button */
 "Stop" = "Lèrèn";

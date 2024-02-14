@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import Shared
@@ -27,7 +27,7 @@ final class EcosiaFindInPageBar: UIView, Themeable {
         static let closeButtonLeadingTrailingSpacing = 14
         static let topBorderHeight = 1
     }
-    
+
     private lazy var searchView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = (UX.barHeight - 2*UX.searchViewTopBottomSpacing)/2
@@ -82,7 +82,7 @@ final class EcosiaFindInPageBar: UIView, Themeable {
         return button
     }()
     private lazy var topBorder = UIView()
-    
+
     weak var delegate: EcosiaFindInPageBarDelegate?
 
     private static let savedTextKey = "findInPageSavedTextKey"
@@ -119,9 +119,9 @@ final class EcosiaFindInPageBar: UIView, Themeable {
             didTextChange(searchTextField)
         }
     }
-    
+
     // MARK: - Themeable Properties
-    
+
     var themeManager: ThemeManager { AppContainer.shared.resolve() }
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
@@ -130,7 +130,7 @@ final class EcosiaFindInPageBar: UIView, Themeable {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+
         addSubview(searchView)
         searchView.addSubview(searchTextField)
         searchView.addSubview(matchCountLabel)
@@ -141,23 +141,23 @@ final class EcosiaFindInPageBar: UIView, Themeable {
 
         applyTheme()
         setupConstraints()
-        
+
         listenForThemeChange(self)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    
+
     @discardableResult override func becomeFirstResponder() -> Bool {
         searchTextField.becomeFirstResponder()
         return super.becomeFirstResponder()
     }
-    
+
     @objc func applyTheme() {
         backgroundColor = .legacyTheme.ecosia.secondaryBackground
         searchView.backgroundColor = .legacyTheme.ecosia.tertiaryBackground
@@ -170,18 +170,18 @@ final class EcosiaFindInPageBar: UIView, Themeable {
         closeButton.setTitleColor(.legacyTheme.ecosia.primaryButton, for: .normal)
         topBorder.backgroundColor = .legacyTheme.ecosia.border
     }
-    
+
     private func setupConstraints() {
         self.snp.makeConstraints { make in
             make.height.equalTo(UX.barHeight)
         }
-        
+
         searchView.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(UX.searchViewLeadingOffset)
             make.top.equalToSuperview().offset(UX.searchViewTopBottomSpacing)
             make.bottom.equalToSuperview().inset(UX.searchViewTopBottomSpacing)
         }
-        
+
         searchTextField.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(UX.searchTextFieldLeadingOffset)
             make.centerY.equalToSuperview()

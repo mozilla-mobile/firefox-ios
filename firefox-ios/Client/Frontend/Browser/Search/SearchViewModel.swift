@@ -164,7 +164,10 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     func shouldShowHeader(for section: Int) -> Bool {
         switch section {
         case SearchListSection.firefoxSuggestions.rawValue:
+            /* Ecosia: Do not show header
             return hasFirefoxSuggestions
+            */
+            return false
         case SearchListSection.searchSuggestions.rawValue:
             return shouldShowSearchEngineSuggestions
         default:

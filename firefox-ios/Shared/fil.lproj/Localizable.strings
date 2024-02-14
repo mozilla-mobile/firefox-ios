@@ -299,7 +299,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Maaari ito ay isang maling pag-configure o pakikialam ng isang nang-aatake. Magpatuloy kung tatanggapin mo ang mga potensyal na panganib.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "Ang may-ari ng %@ ay maling nai-configure ang kanilang website. Upang maprotektahan and iyong impormasyon at hindi manakaw, Hindi kumonekta ang Firefox sa website.";
+"ErrorPages.CertWarning.Description" = "Ang may-ari ng %@ ay maling nai-configure ang kanilang website. Upang maprotektahan and iyong impormasyon at hindi manakaw, Hindi kumonekta ang Ecosia sa website.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Ang iyong koneksyon ay hindi pribado";
@@ -320,7 +320,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Home Page ng Firefox";
+"Firefox.HomePage.Title" = "Home Page ng Ecosia";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "Ipasadya ang Homepage";
@@ -371,7 +371,7 @@
 "FxA.SyncNow" = "I-sync Ngayon";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Konektado ang Firefox Sync sa %@";
+"FxAPush_DeviceConnected_body" = "Konektado ang Ecosia Sync sa %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "I-sync ang Konektado";
@@ -380,7 +380,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ ay matagumpay na naalis.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Matagumpay na na-disconnect ang device na ito mula sa Firefox Sync.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Matagumpay na na-disconnect ang device na ito mula sa Ecosia Sync.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Nakakonekta ang Sync";
@@ -389,7 +389,7 @@
 "FxAPush_DeviceDisconnected_title" = "Hindi nakakonekta ang Sync";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Ang isang aparato ay naka-disconnect mula sa Firefox Sync";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Ang isang aparato ay naka-disconnect mula sa Ecosia Sync";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Help";
@@ -617,7 +617,7 @@
 "Logins.WelcomeView.Tagline" = "Dalhin kahit saan ang mga password mo";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "i-AutoFill ang mga Firefox Password mo";
+"Logins.WelcomeView.Title2" = "i-AutoFill ang mga Ecosia Password mo";
 
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "Huwag I-save";
@@ -656,7 +656,7 @@
 "LoginsList.Title" = "SAVED LOGINS";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Mukhang bumagsak ang Firefox. Gusto mo bang ibalik ang iyong mga tab?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Mukhang bumagsak ang Ecosia. Gusto mo bang ibalik ang iyong mga tab?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Markahan bilang Nabasa";
@@ -806,7 +806,7 @@
 "Okay" = "Okay";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Oops! Bumagsak ang Firefox";
+"Oops! Firefox crashed" = "Oops! Bumagsak ang Ecosia";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Buksan ang basahin sa Reader View gamit ang book icon paglabas nito sa title bar.";
@@ -818,7 +818,7 @@
 "Open Tabs" = "Buksan ang mga Tab";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Hindi mabuksan ng Firefox ang pahina dahil ang address ay inbalido.";
+"OpenURL.Error.Message" = "Hindi mabuksan ng Ecosia ang pahina dahil ang address ay inbalido.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Hindi maaaring buksan ang pahina";
@@ -830,7 +830,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Ito ay pumapayag na i-save ang imahe sa iyong Camera Roll.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Gusto ng Firefox na mag-access ng iyong mga Larawan";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Gusto ng Ecosia na mag-access ng iyong mga Larawan";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Isarado";
@@ -974,13 +974,13 @@
 "SendTo.NavBar.Title" = "Ipadala ang Tab";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "Wala kang ibang mga aparato na konektado sa Firefox Account na magagamit upang mai-sync.";
+"SendTo.NoDevicesFound.Message" = "Wala kang ibang mga aparato na konektado sa Ecosia Account na magagamit upang mai-sync.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Mangyaring i-open ang Firefox, pumunta ng Settings at mag sign in para ipagpatuloy.";
+"SendTo.NotSignedIn.Message" = "Mangyaring i-open ang Ecosia, pumunta ng Settings at mag sign in para ipagpatuloy.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Hindi ka naka-sign in sa iyong Firefox Account.";
+"SendTo.NotSignedIn.Title" = "Hindi ka naka-sign in sa iyong Ecosia Account.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Ipadala";
@@ -1058,7 +1058,7 @@
 "Settings.DataManagement.Title" = "PAgsasaayos ng Data";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Hihinto ang Firefox sa pag-sync sa iyong account, ngunit hindi tatanggalin ang alinman sa iyong data sa pagba-browse sa device na ito.";
+"Settings.Disconnect.Body" = "Hihinto ang Ecosia sa pag-sync sa iyong account, ngunit hindi tatanggalin ang alinman sa iyong data sa pagba-browse sa device na ito.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Idiskonekta ang Pag-sync";
@@ -1163,7 +1163,7 @@
 "Settings.NewTab.TopSectionNameFooter" = "Piliin kung ano ang mag-load kapag binubuksan ang isang bagong tab";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Kapag Binubuksan ang Firefox";
+"Settings.OfferClipboardBar.Status" = "Kapag Binubuksan ang Ecosia";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.StatusV2" = "Kapag Binubuksan ang Firefox";
@@ -1190,7 +1190,7 @@
 "Settings.SendUsage.Link" = "Matuto ng higit pa.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Nagsusumikap ang Mozilla na kolektahin lamang kung ano ang kailangan naming ibigay at pagbutihin ang Firefox para sa lahat.";
+"Settings.SendUsage.Message" = "Nagsusumikap ang Mozilla na kolektahin lamang kung ano ang kailangan naming ibigay at pagbutihin ang Ecosia para sa lahat.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Ipadala ang Data ng Paggamit";
@@ -1205,7 +1205,7 @@
 "Settings.Siri.OpenTabShortcut" = "Magbukas ng Bagong Tab";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Gumamit ng mga shortcut sa Siri upang mabilis na buksan ang Firefox sa pamamagitan ng Siri";
+"Settings.Siri.SectionDescription" = "Gumamit ng mga shortcut sa Siri upang mabilis na buksan ang Ecosia sa pamamagitan ng Siri";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri Shortcuts";
@@ -1259,13 +1259,13 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "I-load sa Background";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Nagloload sa Firefox";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Nagloload sa Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Buksan sa Firefox";
+"ShareExtension.OpenInFirefoxAction.Title" = "Buksan sa Ecosia";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Hanapin sa Firefox";
+"ShareExtension.SeachInFirefoxAction.Title" = "Hanapin sa Ecosia";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "Ipakita ang Search Suggestions";
@@ -1382,7 +1382,7 @@
 "UIMenuItem.PasteGo" = "I-paste at Pumunta";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Maghanap gamit ang Firefox";
+"UIMenuItem.SearchWithFirefox" = "Maghanap gamit ang Ecosia";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "Hindi pa nabasa";
@@ -1412,7 +1412,7 @@
 "Yesterday" = "Kahapon";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Walang ibang bukas na mga tab sa Firefox sa ibang device.";
+"You don’t have any tabs open in Firefox on your other devices." = "Walang ibang bukas na mga tab sa Ecosia sa ibang device.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Ang iyong mga Karapatan";

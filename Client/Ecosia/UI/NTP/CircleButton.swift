@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import Shared
@@ -10,7 +10,7 @@ class CircleButton: ToolbarButton {
     enum Config {
         case search
         case newTab
-        
+
         var image: String {
             switch self {
             case .search: return "searchUrl"
@@ -38,7 +38,7 @@ class CircleButton: ToolbarButton {
         }
     }
     private var margin: CGFloat = 8
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -73,7 +73,7 @@ class CircleButton: ToolbarButton {
         circle.center = .init(x: bounds.width/2, y: bounds.height/2)
         circle.isHidden = config.shouldHideCircle
     }
-    
+
     override func applyTheme(theme: Theme) {
         circle.backgroundColor = .legacyTheme.ecosia.tertiaryBackground
         tintColor = config.shouldHideCircle ? .legacyTheme.ecosia.primaryText : .legacyTheme.ecosia.primaryButton

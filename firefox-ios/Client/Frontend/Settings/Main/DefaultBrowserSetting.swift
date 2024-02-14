@@ -20,7 +20,7 @@ class DefaultBrowserSetting: Setting {
          */
         super.init(title: .init(string: .localized(.setAsDefaultBrowser), attributes: [NSAttributedString.Key.foregroundColor: UIColor.legacyTheme.tableView.rowText]))
     }
-    
+
     // Ecosia: Override cell config to add image
     override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
         super.onConfigureCell(cell, theme: theme)
@@ -31,6 +31,10 @@ class DefaultBrowserSetting: Setting {
         TelemetryWrapper.gleanRecordEvent(category: .action,
                                           method: .open,
                                           object: .settingsMenuSetAsDefaultBrowser)
+
+        // Ecosia: Track default browser setting click
+        Analytics.shared.defaultBrowserSettings()
+
         DefaultApplicationHelper().openSettings()
     }
 }

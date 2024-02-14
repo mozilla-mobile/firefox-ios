@@ -233,7 +233,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "ही चुकीची संरचना किंवा आक्रमणकर्त्यातर्फे केलेली छेडछाड असू शकते. संभाव्य धोका पत्कारात असाल तर पुढे जा.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "%@ च्या मालकाने त्यांचे संकेतस्थळ चुकीच्या रितीने संरचीत केले आहे. आपली महिती चोरीला जाऊ नये म्हणून, Firefox ने या संकेतस्थळाशी जुळवणी केली नाही.";
+"ErrorPages.CertWarning.Description" = "%@ च्या मालकाने त्यांचे संकेतस्थळ चुकीच्या रितीने संरचीत केले आहे. आपली महिती चोरीला जाऊ नये म्हणून, Ecosia ने या संकेतस्थळाशी जुळवणी केली नाही.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "ही जोडणी अविश्वासार्ह आहे";
@@ -254,7 +254,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefox मुख्य पृष्ठ";
+"Firefox.HomePage.Title" = "Ecosia मुख्य पृष्ठ";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "पुढे";
@@ -281,7 +281,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ यशस्वीरित्या डिस्कनेक्ट केले.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "हे उपकरण यशस्वीरित्या Firefox Sync मधुन डिस्कनेक्ट केले आहे.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "हे उपकरण यशस्वीरित्या Ecosia Sync मधुन डिस्कनेक्ट केले आहे.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "ताळमेळ खंडीत";
@@ -290,7 +290,7 @@
 "FxAPush_DeviceDisconnected_title" = "ताळमेळ खंडीत";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "उपकरण Firefox Sync मधुन डिस्कनेक्ट केले आहे";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "उपकरण Ecosia Sync मधुन डिस्कनेक्ट केले आहे";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "मदत";
@@ -542,7 +542,7 @@
 "Okay" = "ठीक आहे";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "ओह! Firefox बंद पडला";
+"Oops! Firefox crashed" = "ओह! Ecosia बंद पडला";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "शीर्षक पट्टीमध्ये दिसल्यानंतर पुस्तक चिन्हावर टॅप करून लेख उघडा.";
@@ -701,13 +701,13 @@
 "SendTo.NavBar.Title" = "टॅब पाठवा";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "या Firefox खात्यासोबत सिंक करण्यासाठी आपल्यासोबत इतर कोणतीही उपकरणे जोडलेली नाहीत.";
+"SendTo.NoDevicesFound.Message" = "या Ecosia खात्यासोबत सिंक करण्यासाठी आपल्यासोबत इतर कोणतीही उपकरणे जोडलेली नाहीत.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "कृपया Firefox उघडा, सेटिंगवर जा आणि सुरू ठेवण्यासाठी साइन इन करा.";
+"SendTo.NotSignedIn.Message" = "कृपया Ecosia उघडा, सेटिंगवर जा आणि सुरू ठेवण्यासाठी साइन इन करा.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "आपण Firefox खात्यात साइन इन केलेले नाही.";
+"SendTo.NotSignedIn.Title" = "आपण Ecosia खात्यात साइन इन केलेले नाही.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "पाठवा";
@@ -917,7 +917,7 @@
 "Settings.SendUsage.Link" = "अधिक जाणा.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "सर्वांसाठी Firefox उपलब्ध करण्यास व सुधारण्यास जी माहिती गरजेची आहे फक्त तीच जमा करण्यास Mozilla तत्पर आहे.";
+"Settings.SendUsage.Message" = "सर्वांसाठी Ecosia उपलब्ध करण्यास व सुधारण्यास जी माहिती गरजेची आहे फक्त तीच जमा करण्यास Mozilla तत्पर आहे.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "वापर माहिती पाठवा";
@@ -929,7 +929,7 @@
 "Settings.Siri.OpenTabShortcut" = "नवीन टॅब उघडा";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Siri द्वारे Firefox त्वरीत उघडण्यासाठी Siri शॉर्टकट वापरा";
+"Settings.Siri.SectionDescription" = "Siri द्वारे Ecosia त्वरीत उघडण्यासाठी Siri शॉर्टकट वापरा";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri शॉर्टकट";
@@ -1112,7 +1112,7 @@
 "Yesterday" = "काल";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "इतर डिव्हाइस वर Firefox मध्ये आपल्या कुठल्याही टॅब उघड्या नाहीत.";
+"You don’t have any tabs open in Firefox on your other devices." = "इतर डिव्हाइस वर Ecosia मध्ये आपल्या कुठल्याही टॅब उघड्या नाहीत.";
 
 /* Your Rights settings section title */
 "Your Rights" = "आपले हक्क";

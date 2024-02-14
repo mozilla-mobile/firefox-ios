@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Gizlileri kapat";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Ana ekranınıza Firefox kısayollarını ekleyin.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Ana ekranınıza Ecosia kısayollarını ekleyin.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Kopyalanan linke git";
@@ -29,7 +29,7 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "Gizli arama";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Ana ekranınıza Firefox kısayolu ekleyin. Araç takımını ekledikten sonra düzenlemek isterseniz basılı tutup farklı bir kısayol seçebilirsiniz.";
+"TodayWidget.QuickActionGalleryDescription" = "Ana ekranınıza Ecosia kısayolu ekleyin. Araç takımını ekledikten sonra düzenlemek isterseniz basılı tutup farklı bir kısayol seçebilirsiniz.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Hızlı Eylemler";

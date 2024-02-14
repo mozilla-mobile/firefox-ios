@@ -9,6 +9,7 @@ import XCTest
 @testable import Client
 
 class SearchTests: XCTestCase {
+    /* Ecosia: Replace Google tests with Ecosia's
     func testParsing() {
         let parser = OpenSearchParser(pluginMode: true)
         let file = Bundle.main.path(forResource: "google-b-m", ofType: "xml", inDirectory: "SearchPlugins/")
@@ -22,6 +23,21 @@ class SearchTests: XCTestCase {
         // Test search suggestion queries.
         XCTAssertEqual(engine.suggestURLForQuery("foobar")!.absoluteString,
                        "https://www.google.com/complete/search?client=firefox&q=foobar")
+    }
+     */
+    func testParsing() {
+        let parser = OpenSearchParser(pluginMode: true)
+        let file = Bundle.main.path(forResource: "ecosia", ofType: "xml", inDirectory: "SearchPlugins/")
+        let engine: OpenSearchEngine! = parser.parse(file!, engineID: "ecosia")
+        XCTAssertEqual(engine.shortName, "Ecosia")
+
+        // Test regular search queries.
+        XCTAssertEqual(engine.searchURLForQuery("foobar")!.absoluteString,
+                       "https://www.ecosia-staging.xyz/search?q=foobar&tt=iosapp")
+
+        // Test search suggestion queries.
+        XCTAssertEqual(engine.suggestURLForQuery("foobar")!.absoluteString,
+                       "https://ac.ecosia.org/autocomplete?q=foobar&type=list")
     }
 
     func testURIFixup() {
@@ -146,8 +162,8 @@ class SearchTests: XCTestCase {
         let engine: OpenSearchEngine! = parser.parse(file!, engineID: "bing")
         XCTAssertEqual(engine.shortName, "Bing")
 
-        let containsPartnerCode = engine.searchTemplate.contains("pc=MOZW")
-        XCTAssertTrue(containsPartnerCode)
+         let containsPartnerCode = engine.searchTemplate.contains("pc=MOZW")
+         XCTAssertTrue(containsPartnerCode)
     }
 
     func testBingParsing_iPad_hasIpadPartnerCode() {
@@ -156,8 +172,8 @@ class SearchTests: XCTestCase {
         let engine: OpenSearchEngine! = parser.parse(file!, engineID: "bing")
         XCTAssertEqual(engine.shortName, "Bing")
 
-        let containsPartnerCode = engine.searchTemplate.contains("pc=MOZL")
-        XCTAssertTrue(containsPartnerCode)
+         let containsPartnerCode = engine.searchTemplate.contains("pc=MOZL")
+         XCTAssertTrue(containsPartnerCode)
     }
 }
 

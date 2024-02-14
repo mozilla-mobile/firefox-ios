@@ -137,7 +137,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Seans go bhfuil cumraíocht mhícheart ar an suíomh, nó go bhfuil duine éigin ag déanamh ionsaí air. Lean ar aghaidh má tá tú sásta dul sa bhearna bhaoil.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "Níor chumraigh úinéir %@ an suíomh mar is ceart. Níor cheangail Firefox leis an suíomh seo, chun do chuid faisnéise a chosaint.";
+"ErrorPages.CertWarning.Description" = "Níor chumraigh úinéir %@ an suíomh mar is ceart. Níor cheangail Ecosia leis an suíomh seo, chun do chuid faisnéise a chosaint.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Ceangal Neamhiontaofa é seo";
@@ -152,7 +152,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Leathanach Baile Firefox";
+"Firefox.HomePage.Title" = "Leathanach Baile Ecosia";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Ar Aghaidh";
@@ -272,7 +272,7 @@
 "LoginsHelper.Update.Button" = "Nuashonraigh";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Dealraíonn sé gur thuairteáil Firefox roimhe seo. An bhfuil fonn ort do chuid cluaisíní a athchóiriú?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Dealraíonn sé gur thuairteáil Ecosia roimhe seo. An bhfuil fonn ort do chuid cluaisíní a athchóiriú?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Marcáil “Léite”";
@@ -308,7 +308,7 @@
 "Okay" = "Tá";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Úps! Thuairteáil Firefox";
+"Oops! Firefox crashed" = "Úps! Thuairteáil Ecosia";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Tapáil an deilbhín leabhair sa bharra teidil chun alt a oscailt san Amharc Léitheoireachta.";
@@ -317,7 +317,7 @@
 "Open Settings" = "Oscail na Socruithe";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Ní féidir le Firefox an leathanach a oscailt mar gheall ar sheoladh neamhbhailí.";
+"OpenURL.Error.Message" = "Ní féidir le Ecosia an leathanach a oscailt mar gheall ar sheoladh neamhbhailí.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Ní féidir an leathanach a oscailt";
@@ -599,7 +599,7 @@
 "Yesterday" = "Inné";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Níl aon chluaisíní oscailte agat i bhFirefox ar do ghléasanna eile.";
+"You don’t have any tabs open in Firefox on your other devices." = "Níl aon chluaisíní oscailte agat i bhEcosia ar do ghléasanna eile.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Do Chearta";

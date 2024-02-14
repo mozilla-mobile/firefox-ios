@@ -19,7 +19,7 @@ enum CustomizableNTPSettingConfig: CaseIterable {
         case .aboutEcosia: return .aboutEcosia
         }
     }
-    
+
     var persistedFlag: Bool {
         get {
             switch self {
@@ -38,13 +38,22 @@ enum CustomizableNTPSettingConfig: CaseIterable {
             }
         }
     }
-    
+
     var analyticsLabel: Analytics.Label.NTP {
         switch self {
         case .topSites: return .topSites
         case .climateImpact: return .impact
         case .ecosiaNews: return .news
         case .aboutEcosia: return .about
+        }
+    }
+
+    var accessibilityIdentifierPrefix: String {
+        switch self {
+        case .topSites: "top_sites"
+        case .climateImpact: "climate_impact"
+        case .ecosiaNews: "ecosia_news"
+        case .aboutEcosia: "about_ecosia"
         }
     }
 }

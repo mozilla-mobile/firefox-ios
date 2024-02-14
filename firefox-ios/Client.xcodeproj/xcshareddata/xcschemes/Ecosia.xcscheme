@@ -136,14 +136,24 @@
                ReferencedContainer = "container:FxA/FxA.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "NO"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "2C6C90812C614A16007D9B43"
+               BuildableName = "EcosiaSnapshotTests.xctest"
+               BlueprintName = "EcosiaSnapshotTests"
+               ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-<<<<<<<< HEAD:firefox-ios/Client.xcodeproj/xcshareddata/xcschemes/Fennec.xcscheme
-      buildConfiguration = "Fennec_Testing"
-========
-      buildConfiguration = "Debug"
->>>>>>>> e06eb0f56b (Ecosia changes on Firefox v120):firefox-ios/Client.xcodeproj/xcshareddata/xcschemes/Ecosia.xcscheme
+      buildConfiguration = "BetaDebug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "NO"
@@ -519,6 +529,32 @@
                BuildableName = "ToolbarKitTests"
                BlueprintName = "ToolbarKitTests"
                ReferencedContainer = "container:../BrowserKit">
+               BlueprintIdentifier = "D39FA15E1A83E0EC00EE869C"
+               BuildableName = "UITests.xctest"
+               BlueprintName = "UITests"
+               ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "2CE2945A2B7FC51A006C22B2"
+               BuildableName = "EcosiaTests.xctest"
+               BlueprintName = "EcosiaTests"
+               ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "2C8F5AB72C613F8800000D12"
+               BuildableName = "EcosiaSnapshotsTests.xctest"
+               BlueprintName = "EcosiaSnapshotsTests"
+               ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>

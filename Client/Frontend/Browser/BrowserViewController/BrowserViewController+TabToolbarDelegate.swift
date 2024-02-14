@@ -95,13 +95,13 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
         updateZoomPageBarVisibility(visible: false)
         menuHelper.getToolbarActions(navigationController: navigationController) { actions in
-            /* Ecosia: custom UI/UX for main menu
             let shouldInverse = PhotonActionSheetViewModel.hasInvertedMainMenu(trait: self.traitCollection, isBottomSearchBar: self.isBottomSearchBar)
+            /* Ecosia: custom UI/UX for main menu
             let viewModel = PhotonActionSheetViewModel(actions: actions, modalStyle: .popover, isMainMenu: true, isMainMenuInverted: shouldInverse)
             self.presentSheetWith(viewModel: viewModel, on: self, from: button)
              */
             let isPhone = self.traitCollection.userInterfaceIdiom == .phone
-            let viewModel = PhotonActionSheetViewModel(actions: actions, modalStyle: isPhone ? .pageSheet : .popover, isMainMenu: true, isMainMenuInverted: false)
+            let viewModel = PhotonActionSheetViewModel(actions: actions, modalStyle: isPhone ? .pageSheet : .popover, isMainMenu: true, isMainMenuInverted: shouldInverse)
             self.presentSheetWith(viewModel: viewModel, on: self, from: button)
         }
         // Ecosia: Make `menuHelper` available at class level

@@ -6,7 +6,8 @@ import Common
 import Foundation
 import Shared
 
-class LegacyInactiveTabHeader: UITableViewHeaderFooterView, ReusableCell {
+// Ecosia: Add missing ThemeApplicable protocol declaration
+class LegacyInactiveTabHeader: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
     var state: ExpandButtonState? {
         willSet(state) {
             moreButton.setImage(state?.image, for: .normal)

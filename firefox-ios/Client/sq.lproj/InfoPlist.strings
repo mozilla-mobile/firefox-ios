@@ -8,7 +8,7 @@
 "NSCameraUsageDescription" = "Firefox-i përdor kamerën tuaj për të skanuar kode QR dhe për të bërë foto dhe video.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox-i lyp Face ID që të hyjë në fjalëkalimet dhe metoda pagesash tuajat të ruajtura.";
+"NSFaceIDUsageDescription" = "Ecosia-i lyp Face ID që të hyjë në fjalëkalimet dhe metoda pagesash tuajat të ruajtura.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Sajte që vizitoni mund të kërkojnë të njohin vendndodhjen tuaj.";

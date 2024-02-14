@@ -20,10 +20,12 @@ final class IntroScreenManagerTests: XCTestCase {
         prefs = nil
     }
 
+    /* Ecosia: we are basing the onboarding/intro on different flags
     func testHasntSeenIntroScreenYet_shouldShowIt() {
         let subject = IntroScreenManager(prefs: prefs)
         XCTAssertTrue(subject.shouldShowIntroScreen)
     }
+     */
 
     func testHasSeenIntroScreen_shouldNotShowIt() {
         let subject = IntroScreenManager(prefs: prefs)

@@ -29,7 +29,7 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "निजी खोजी";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "तपाईंको गृह स्क्रिनमा Firefox सर्टकट थप्नुहोस्। विजेट थपेपछि, यसलाई सम्पादन गर्न छुनुहोस् र होल्ड गर्नुहोस् र फरक सर्टकट चयन गर्नुहोस्।";
+"TodayWidget.QuickActionGalleryDescription" = "तपाईंको गृह स्क्रिनमा Ecosia सर्टकट थप्नुहोस्। विजेट थपेपछि, यसलाई सम्पादन गर्न छुनुहोस् र होल्ड गर्नुहोस् र फरक सर्टकट चयन गर्नुहोस्।";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "द्रुत कार्यहरु";

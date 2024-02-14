@@ -23,7 +23,7 @@
 "TodayWidget.NoOpenTabsLabel" = "Žiadne otvorené karty.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Otvoriť Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Otvoriť Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Súkromné vyhľadávanie";
@@ -35,7 +35,7 @@
 "TodayWidget.QuickActionsGalleryTitle" = "Rýchle akcie";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Skratky Firefoxu";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Skratky Ecosiau";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Pridajte si skratky na svoje otvorené karty.";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Rýchle zobrazenie";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Hľadať vo Firefoxe";
+"TodayWidget.SearchInFirefoxV2" = "Hľadať vo Ecosiae";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Hľadať v súkromnej karte";

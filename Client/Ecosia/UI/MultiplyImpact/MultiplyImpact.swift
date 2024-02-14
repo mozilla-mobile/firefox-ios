@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import Core
@@ -9,16 +9,16 @@ import MobileCoreServices
 import LinkPresentation
 import Common
 
-final class MultiplyImpact: UIViewController, Themeable {
-    
+class MultiplyImpact: UIViewController, Themeable {
+
     // MARK: - UX
-    
+
     private struct UX {
         private init() {}
         static let defaultPadding: CGFloat = 16
         static let subtitleTopMargin: CGFloat = 8
         static let defaultCornerRadius: CGFloat = 10
-        
+
         struct ForestAndWaves {
             private init() {}
             static let waveHeight: CGFloat = 34
@@ -38,7 +38,7 @@ final class MultiplyImpact: UIViewController, Themeable {
             static let cardTreeCountLeftMargin: CGFloat = 12
             static let cardTreeIconLeftMargin: CGFloat = 8
         }
-        
+
         struct InviteFriendsFeature {
             private init() {}
             static let copyControlBorderWidth: CGFloat = 1
@@ -49,7 +49,7 @@ final class MultiplyImpact: UIViewController, Themeable {
             static let cornerRadius: CGFloat = 22
             static let defaultHeight: CGFloat = 44
         }
-        
+
         struct Flow {
             private init() {}
             static let flowTitleStackTopMargin: CGFloat = 36
@@ -60,7 +60,7 @@ final class MultiplyImpact: UIViewController, Themeable {
 
     // MARK: - Properties
     weak var delegate: SharedHomepageCellDelegate?
-    
+
     private weak var subtitle: UILabel?
     private weak var topBackground: UIView?
     private weak var forestOverlay: UIView?
@@ -72,23 +72,23 @@ final class MultiplyImpact: UIViewController, Themeable {
         view.position = (0, 1)
         return view
     }()
-    
+
     var referralInfo: ClimateImpactInfo {
-        .referral(value: User.shared.referrals.impact, invites: User.shared.referrals.count)
+        .referral(value: User.shared.referrals.count)
     }
-    
+
     private weak var sharingYourLink: UILabel?
     private weak var sharing: UIView?
-    private weak var copyControl: UIControl?
+    private(set) weak var copyControl: UIControl?
     private weak var copyLink: UILabel?
     private weak var copyText: UILabel?
     private weak var copyDividerLeft: UIView?
     private weak var copyDividerRight: UIView?
     private weak var moreSharingMethods: UILabel?
-    private weak var inviteButton: EcosiaPrimaryButton!
-    
-    private weak var learnMoreButton: UIButton?
-    
+    private(set) weak var inviteButton: EcosiaPrimaryButton!
+
+    private(set) weak var learnMoreButton: UIButton?
+
     private weak var flowTitle: UILabel?
     private weak var flowBackground: UIView?
     private weak var flowStack: UIStackView?
@@ -99,21 +99,21 @@ final class MultiplyImpact: UIViewController, Themeable {
     private weak var fourthStep: MultiplyImpactStep?
 
     private weak var referrals: Referrals!
-    
+
     // MARK: - Themeable Properties
-    
+
     var themeManager: ThemeManager { AppContainer.shared.resolve() }
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // MARK: - Init
-    
+
     required init?(coder: NSCoder) { nil }
     init(referrals: Referrals) {
         self.referrals = referrals
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         title = .localized(.growingTogether)
@@ -125,11 +125,11 @@ final class MultiplyImpact: UIViewController, Themeable {
         scroll.translatesAutoresizingMaskIntoConstraints = false
         scroll.contentInsetAdjustmentBehavior = .scrollableAxes
         view.addSubview(scroll)
-        
+
         let content = UIView()
         content.translatesAutoresizingMaskIntoConstraints = false
         scroll.addSubview(content)
-        
+
         let topBackground = UIView()
         topBackground.translatesAutoresizingMaskIntoConstraints = false
         topBackground.backgroundColor = .legacyTheme.ecosia.primaryBrand.withAlphaComponent(0.2)
@@ -150,7 +150,7 @@ final class MultiplyImpact: UIViewController, Themeable {
         forest.translatesAutoresizingMaskIntoConstraints = false
         forest.contentMode = .bottom
         content.addSubview(forest)
-        
+
         let forestOverlay = UIView()
         forestOverlay.translatesAutoresizingMaskIntoConstraints = false
         forest.addSubview(forestOverlay)
@@ -166,17 +166,17 @@ final class MultiplyImpact: UIViewController, Themeable {
         yourInvites.text = .localized(.yourInvites)
         content.addSubview(yourInvites)
         self.yourInvites = yourInvites
-        
+
         content.addSubview(referralImpactRowView)
 
         let sharingYourLink = UILabel()
         sharingYourLink.text = .localized(.sharingYourLink)
         content.addSubview(sharingYourLink)
         self.sharingYourLink = sharingYourLink
-        
+
         let sharing = UIView()
         self.sharing = sharing
-        
+
         let copyControl = UIControl()
         copyControl.layer.cornerRadius = UX.defaultCornerRadius
         copyControl.layer.borderWidth = UX.InviteFriendsFeature.copyControlBorderWidth
@@ -186,7 +186,7 @@ final class MultiplyImpact: UIViewController, Themeable {
         copyControl.addTarget(self, action: #selector(unhover), for: .touchUpOutside)
         copyControl.addTarget(self, action: #selector(unhover), for: .touchCancel)
         self.copyControl = copyControl
-        
+
         let copyLink = UILabel()
         copyLink.translatesAutoresizingMaskIntoConstraints = false
         copyLink.adjustsFontForContentSizeCategory = true
@@ -195,7 +195,7 @@ final class MultiplyImpact: UIViewController, Themeable {
         copyLink.numberOfLines = 1
         copyControl.addSubview(copyLink)
         self.copyLink = copyLink
-        
+
         let copyText = UILabel()
         copyText.translatesAutoresizingMaskIntoConstraints = false
         copyText.text = .localized(.copy)
@@ -203,13 +203,13 @@ final class MultiplyImpact: UIViewController, Themeable {
         copyText.adjustsFontForContentSizeCategory = true
         copyControl.addSubview(copyText)
         self.copyText = copyText
-        
+
         let copyDividerLeft = UIView()
         self.copyDividerLeft = copyDividerLeft
-        
+
         let copyDividerRight = UIView()
         self.copyDividerRight = copyDividerRight
-        
+
         let moreSharingMethods = UILabel()
         moreSharingMethods.translatesAutoresizingMaskIntoConstraints = false
         moreSharingMethods.adjustsFontForContentSizeCategory = true
@@ -217,7 +217,7 @@ final class MultiplyImpact: UIViewController, Themeable {
         moreSharingMethods.text = .localized(.moreSharingMethods)
         sharing.addSubview(moreSharingMethods)
         self.moreSharingMethods = moreSharingMethods
-        
+
         let inviteFriends = EcosiaPrimaryButton(type: .custom)
         inviteFriends.setTitle(.localized(.inviteFriends), for: [])
         inviteFriends.titleLabel!.font = .preferredFont(forTextStyle: .callout)
@@ -225,7 +225,7 @@ final class MultiplyImpact: UIViewController, Themeable {
         inviteFriends.layer.cornerRadius = UX.InviteFriendsFeature.cornerRadius
         inviteFriends.addTarget(self, action: #selector(self.inviteFriends), for: .touchUpInside)
         self.inviteButton = inviteFriends
-        
+
         let flowTitleStack = UIStackView()
         flowTitleStack.translatesAutoresizingMaskIntoConstraints = false
         flowTitleStack.alignment = .fill
@@ -260,11 +260,11 @@ final class MultiplyImpact: UIViewController, Themeable {
         let firstStep = MultiplyImpactStep(title: .localized(.inviteYourFriends), subtitle: .localized(.sendAnInvite), image: "paperplane")
         flowStack.addArrangedSubview(firstStep)
         self.firstStep = firstStep
-        
+
         let secondStep = MultiplyImpactStep(title: .localized(.theyDownloadTheApp), subtitle: .localized(.viaTheAppStore), image: "libraryDownloads")
         flowStack.addArrangedSubview(secondStep)
         self.secondStep = secondStep
-        
+
         let thirdStep = MultiplyImpactStep(title: .localized(.theyOpenYourInviteLink), subtitle: .localized(.yourFriendClicks), image: "menu-Copy-Link")
         flowStack.addArrangedSubview(thirdStep)
         self.thirdStep = thirdStep
@@ -272,46 +272,46 @@ final class MultiplyImpact: UIViewController, Themeable {
         let fourthStep = MultiplyImpactStep(title: .localized(.eachOfYouHelpsPlant), subtitle: .localized(.whenAFriendUses), image: "myImpact")
         flowStack.addArrangedSubview(fourthStep)
         self.fourthStep = fourthStep
-        
+
         [yourInvites, sharingYourLink, flowTitle].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.font = .preferredFont(forTextStyle: .headline).bold()
             $0.adjustsFontForContentSizeCategory = true
             $0.setContentHuggingPriority(.defaultLow, for: .horizontal)
         }
-        
+
         [sharing, flowBackground].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.layer.cornerRadius = UX.defaultCornerRadius
             content.addSubview($0)
-            
+
             $0.leftAnchor.constraint(equalTo: content.leftAnchor, constant: UX.defaultPadding).isActive = true
             $0.rightAnchor.constraint(equalTo: content.rightAnchor, constant: -UX.defaultPadding).isActive = true
         }
-        
+
         [copyControl, inviteFriends].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             sharing.addSubview($0)
-            
+
             $0.leftAnchor.constraint(equalTo: sharing.leftAnchor, constant: UX.defaultPadding).isActive = true
             $0.rightAnchor.constraint(equalTo: sharing.rightAnchor, constant: -UX.defaultPadding).isActive = true
             $0.heightAnchor.constraint(equalToConstant: UX.InviteFriendsFeature.defaultHeight).isActive = true
         }
-        
+
         [copyDividerLeft, copyDividerRight].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.isUserInteractionEnabled = false
             sharing.addSubview($0)
-            
+
             $0.topAnchor.constraint(equalTo: copyControl.bottomAnchor, constant: UX.InviteFriendsFeature.defaultTopMargin).isActive = true
             $0.heightAnchor.constraint(equalToConstant: 1).isActive = true
         }
-        
+
         scroll.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         scroll.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
         scroll.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
         scroll.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        
+
         content.topAnchor.constraint(equalTo: scroll.contentLayoutGuide.topAnchor).isActive = true
         content.leftAnchor.constraint(equalTo: scroll.frameLayoutGuide.leftAnchor).isActive = true
         content.rightAnchor.constraint(equalTo: scroll.frameLayoutGuide.rightAnchor).isActive = true
@@ -347,10 +347,10 @@ final class MultiplyImpact: UIViewController, Themeable {
         topBackground.trailingAnchor.constraint(equalTo: content.trailingAnchor).isActive = true
         topBackground.topAnchor.constraint(equalTo: content.topAnchor).isActive = true
         topBackground.bottomAnchor.constraint(equalTo: waves.bottomAnchor).isActive = true
-        
+
         forestOverlay.leadingAnchor.constraint(equalTo: content.leadingAnchor).isActive = true
         forestOverlay.trailingAnchor.constraint(equalTo: content.trailingAnchor).isActive = true
-        
+
         yourInvites.leadingAnchor.constraint(equalTo: content.leadingAnchor, constant: UX.defaultPadding).isActive = true
         yourInvites.trailingAnchor.constraint(equalTo: content.trailingAnchor, constant: -UX.defaultPadding).isActive = true
         yourInvites.topAnchor.constraint(equalTo: waves.bottomAnchor, constant: UX.defaultPadding).isActive = true
@@ -358,38 +358,38 @@ final class MultiplyImpact: UIViewController, Themeable {
         referralImpactRowView.leftAnchor.constraint(equalTo: content.leftAnchor, constant: UX.defaultPadding).isActive = true
         referralImpactRowView.rightAnchor.constraint(equalTo: content.rightAnchor, constant: -UX.defaultPadding).isActive = true
         referralImpactRowView.topAnchor.constraint(equalTo: yourInvites.bottomAnchor, constant: UX.defaultPadding).isActive = true
-        
+
         sharingYourLink.leadingAnchor.constraint(equalTo: content.leadingAnchor, constant: UX.defaultPadding).isActive = true
         sharingYourLink.trailingAnchor.constraint(equalTo: content.trailingAnchor, constant: -UX.defaultPadding).isActive = true
         sharingYourLink.topAnchor.constraint(equalTo: referralImpactRowView.bottomAnchor, constant: UX.Card.distanceFromCardBottom).isActive = true
-        
+
         sharing.topAnchor.constraint(equalTo: sharingYourLink.bottomAnchor, constant: UX.defaultPadding).isActive = true
-        
+
         copyControl.topAnchor.constraint(equalTo: sharing.topAnchor, constant: UX.defaultPadding).isActive = true
-        
+
         copyLink.centerYAnchor.constraint(equalTo: copyControl.centerYAnchor).isActive = true
         copyLink.leftAnchor.constraint(equalTo: copyControl.leftAnchor, constant: UX.defaultPadding).isActive = true
         copyLink.rightAnchor.constraint(lessThanOrEqualTo: copyText.leftAnchor, constant: UX.InviteFriendsFeature.copyLinkRightMargin).isActive = true
-        
+
         copyText.centerYAnchor.constraint(equalTo: copyControl.centerYAnchor).isActive = true
         copyText.rightAnchor.constraint(equalTo: copyControl.rightAnchor, constant: UX.InviteFriendsFeature.copyTextRightMargin).isActive = true
-        
+
         copyDividerLeft.leftAnchor.constraint(equalTo: copyControl.leftAnchor).isActive = true
         copyDividerLeft.rightAnchor.constraint(equalTo: moreSharingMethods.leftAnchor, constant: UX.InviteFriendsFeature.copyDividerLeftRightMargin).isActive = true
         copyDividerRight.rightAnchor.constraint(equalTo: copyControl.rightAnchor).isActive = true
         copyDividerRight.leftAnchor.constraint(equalTo: moreSharingMethods.rightAnchor, constant: UX.InviteFriendsFeature.copyDividerLeftRightMargin).isActive = true
-        
+
         moreSharingMethods.centerXAnchor.constraint(equalTo: sharing.centerXAnchor).isActive = true
         moreSharingMethods.centerYAnchor.constraint(equalTo: copyDividerLeft.centerYAnchor).isActive = true
-        
+
         inviteFriends.topAnchor.constraint(equalTo: copyDividerLeft.bottomAnchor, constant: UX.InviteFriendsFeature.defaultTopMargin).isActive = true
         inviteFriends.bottomAnchor.constraint(equalTo: sharing.bottomAnchor, constant: -UX.defaultPadding).isActive = true
-        
+
         flowTitleStack.leftAnchor.constraint(equalTo: content.leftAnchor, constant: UX.defaultPadding).isActive = true
         flowTitleStack.rightAnchor.constraint(equalTo: content.rightAnchor, constant: -UX.defaultPadding).isActive = true
         flowTitleStack.topAnchor.constraint(equalTo: sharing.bottomAnchor, constant: UX.Flow.flowTitleStackTopMargin).isActive = true
 
-        flowBackground.topAnchor.constraint(equalTo: flowTitleStack.bottomAnchor,constant: UX.defaultPadding).isActive = true
+        flowBackground.topAnchor.constraint(equalTo: flowTitleStack.bottomAnchor, constant: UX.defaultPadding).isActive = true
         flowBackground.bottomAnchor.constraint(equalTo: content.bottomAnchor, constant: UX.Flow.flowBackgroundBottomMargin).isActive = true
 
         flowStack.leftAnchor.constraint(equalTo: flowBackground.leftAnchor, constant: UX.defaultPadding).isActive = true
@@ -405,17 +405,17 @@ final class MultiplyImpact: UIViewController, Themeable {
         updateInviteLink()
         refreshReferrals()
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        Analytics.shared.openInvitations()
+        Analytics.shared.referral(action: .view, label: .inviteScreen)
     }
-    
+
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         applyTheme()
     }
-    
+
     func applyTheme() {
         view.backgroundColor = .legacyTheme.ecosia.modalBackground
         inviteButton.backgroundColor = .legacyTheme.ecosia.primaryBrand
@@ -431,26 +431,26 @@ final class MultiplyImpact: UIViewController, Themeable {
         copyControl?.layer.borderColor = UIColor.legacyTheme.ecosia.border.cgColor
         moreSharingMethods?.textColor = .legacyTheme.ecosia.secondaryText
         copyText?.textColor = .legacyTheme.ecosia.primaryBrand
-        
+
         [yourInvites, sharingYourLink, flowTitle, copyLink].forEach {
             $0?.textColor = .legacyTheme.ecosia.primaryText
         }
-        
+
         [sharing, flowBackground].forEach {
             $0?.backgroundColor = .legacyTheme.ecosia.impactMultiplyCardBackground
         }
-        
+
         [firstStep, secondStep, thirdStep, fourthStep].forEach {
             $0?.applyTheme()
         }
-        
+
         [copyDividerLeft, copyDividerRight].forEach {
             $0?.backgroundColor = .legacyTheme.ecosia.border
         }
-        
+
         referralImpactRowView.customBackgroundColor = .legacyTheme.ecosia.impactMultiplyCardBackground
         referralImpactRowView.applyTheme()
-        
+
         updateBarAppearance()
     }
 
@@ -464,13 +464,13 @@ final class MultiplyImpact: UIViewController, Themeable {
         navigationItem.standardAppearance = appearance
         navigationItem.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.backgroundColor = .legacyTheme.ecosia.modalHeader
-        navigationController?.navigationBar.tintColor = UIColor.Dark.Text.primary
+        navigationController?.navigationBar.tintColor = themeManager.currentTheme.type == .light ? UIColor.Dark.Text.primary : .legacyTheme.ecosia.primaryBrand
     }
 
     private func updateInviteLink() {
         copyLink?.text = inviteLink ?? inviteLinkPlaceholder
     }
-    
+
     private func refreshReferrals() {
         Task { [weak self] in
             do {
@@ -483,35 +483,29 @@ final class MultiplyImpact: UIViewController, Themeable {
             }
         }
     }
-    
+
     @objc private func learnMore() {
         delegate?.openLink(url: Environment.current.urlProvider.referHelp)
         dismiss(animated: true)
-        Analytics.shared.inviteLearnMore()
+        Analytics.shared.referral(action: .click, label: .learnMore)
     }
-    
+
     @objc private func hover() {
         copyControl?.alpha = 0.3
     }
-    
+
     @objc private func unhover() {
         copyControl?.alpha = 1
     }
-    
+
     @objc private func copyCode() {
         unhover()
         guard let message = inviteMessage else { return }
-        
-        if #available(iOS 14.0, *) {
-            UIPasteboard.general.setValue(message, forPasteboardType: UTType.plainText.identifier)
-        } else {
-            UIPasteboard.general.setValue(message, forPasteboardType: kUTTypePlainText as String)
-        }
-        
+        UIPasteboard.general.setValue(message, forPasteboardType: UTType.plainText.identifier)
         copyText?.text = .localized(.copied)
-        Analytics.shared.inviteCopy()
+        Analytics.shared.referral(action: .click, label: .linkCopying)
     }
-    
+
     @objc private func inviteFriends() {
         guard let message = inviteMessage else {
             Task { [weak self] in
@@ -522,7 +516,6 @@ final class MultiplyImpact: UIViewController, Themeable {
                 } catch {
                     self?.showInviteFriendsError(error as? Referrals.Error ?? .genericError)
                 }
-                
             }
             return
         }
@@ -535,12 +528,12 @@ final class MultiplyImpact: UIViewController, Themeable {
         share.popoverPresentationController?.sourceView = inviteButton
         share.completionWithItemsHandler = { _, completed, _, _ in
             if completed {
-                Analytics.shared.sendInvite()
+                Analytics.shared.referral(action: .send, label: .invite)
             }
         }
         present(share, animated: true)
 
-        Analytics.shared.startInvite()
+        Analytics.shared.referral(action: .click, label: .invite)
     }
 
     private func showInviteFriendsError(_ error: Referrals.Error) {
@@ -568,26 +561,32 @@ final class MultiplyImpact: UIViewController, Themeable {
     @objc private func doneTapped() {
         dismiss(animated: true)
     }
-    
+
     private var inviteMessage: String? {
-        guard let link = inviteLink else { return nil }
-        
+        guard let inviteDeepLink, let inviteDeepLinkUrl = URL(string: inviteDeepLink) else { return nil }
+        guard let inviteLink else { return nil }
+
         return """
-\(String(format: .localized(.iThinkYouWillLikeThis), activeUsers))
+\(String(format: .localized(.messageMentioningActiveUsers), activeUsers))
 
-\(String.localized(.downloadTheApp))
-https://ecosia.co/install-ios
+\(inviteLink)
 
-\(String.localized(.useMyInviteLink))
-\(link)
+\(String.localized(.tapLinkToConfirm))
+
+\(inviteDeepLinkUrl.absoluteString)
 """
     }
-    
+
     private let inviteLinkPlaceholder = "-"
-    
+
     private var inviteLink: String? {
         guard let code = User.shared.referrals.code else { return nil }
-        return "ecosia://\(Referrals.host)/" + code
+        return "\(Referrals.sharingLinkRoot)\(code)"
+    }
+
+    private var inviteDeepLink: String? {
+        guard let code = User.shared.referrals.code else { return nil }
+        return "\(Referrals.deepLinkPath)\(code)"
     }
 
     // MARK: Number formatting
@@ -611,15 +610,15 @@ private final class SharingMessage: NSObject, UIActivityItemSource {
         String()
     }
 
-    func activityViewController(_: UIActivityViewController, itemForActivityType: UIActivity.ActivityType?) -> Any? {
+    func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType: UIActivity.ActivityType?) -> Any? {
         message
     }
 
-    func activityViewController(_: UIActivityViewController, subjectForActivityType: UIActivity.ActivityType?) -> String {
+    func activityViewController(_ activityViewController: UIActivityViewController, subjectForActivityType: UIActivity.ActivityType?) -> String {
         .localized(.plantTreesWithMe)
     }
-    
-    func activityViewControllerLinkMetadata(_ : UIActivityViewController) -> LPLinkMetadata? {
+
+    func activityViewControllerLinkMetadata(_ activityViewController: UIActivityViewController) -> LPLinkMetadata? {
         let metadata = LPLinkMetadata()
         metadata.title = .localized(.plantTreesWithMe)
         return metadata

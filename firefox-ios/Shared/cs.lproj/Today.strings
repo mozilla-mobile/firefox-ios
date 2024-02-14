@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Zavřít anonymní panely";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Přidejte si zkratku Firefoxu na domovskou obrazovku.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Přidejte si zkratku Ecosiau na domovskou obrazovku.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Přejít na zkopírovaný odkaz";
@@ -23,19 +23,19 @@
 "TodayWidget.NoOpenTabsLabel" = "Žádné otevřené panely.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Otevřít Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Otevřít Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Soukromé vyhledávání";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Přidejte si zkratku Firefoxu na domovskou obrazovku. Pro úpravu nebo výběr jiné zkratky na widgetu podržte prst.";
+"TodayWidget.QuickActionGalleryDescription" = "Přidejte si zkratku Ecosiau na domovskou obrazovku. Pro úpravu nebo výběr jiné zkratky na widgetu podržte prst.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Rychlé akce";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Zkratky Firefoxu";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Zkratky Ecosiau";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Přidejte si zkratky na vaše otevřené panely.";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Rychlý pohled";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Vyhledat ve Firefoxu";
+"TodayWidget.SearchInFirefoxV2" = "Vyhledat ve Ecosiau";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Vyhledat v anonymním panelu";

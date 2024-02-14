@@ -311,7 +311,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Ieu téh meureun salah setélan atawa diruksak ku panarajang. Tuluykeun wé mun anjeun narima kana poténsi résikona.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "Pamilik %@ nyetél raramatlokana teu mantes. Pikeun ngilungan sangkan émbaran anjeun teu dipaling, Firefox henteu nyambungkeun ka ieu raramatloka.";
+"ErrorPages.CertWarning.Description" = "Pamilik %@ nyetél raramatlokana teu mantes. Pikeun ngilungan sangkan émbaran anjeun teu dipaling, Ecosia henteu nyambungkeun ka ieu raramatloka.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Ieu Sambungan Teu Kapercaya";
@@ -332,7 +332,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Kaca Tepas Firefox";
+"Firefox.HomePage.Title" = "Kaca Tepas Ecosia";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "Kustomkeun Tepas";
@@ -377,7 +377,7 @@
 "Forward" = "Maju";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Akun Firefox";
+"FxA.FirefoxAccount" = "Akun Ecosia";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Atur Akun & Parangkat";
@@ -389,7 +389,7 @@
 "fxa.signin.camera-signin" = "Asup Maké Kaméra Anjeun";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "Dina komputer anjeun buka Firefox terus buka firefox.com/pair";
+"fxa.signin.qr-link-instruction" = "Dina komputer anjeun buka Ecosia terus buka ecosia.org/pair";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Siap Mindai";
@@ -401,7 +401,7 @@
 "FxA.SyncNow" = "Singkronkeun Ayeuna";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Singkronan Firefox geus nyambung ka %@";
+"FxAPush_DeviceConnected_body" = "Singkronan Ecosia geus nyambung ka %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Singkronan Nyambung";
@@ -410,7 +410,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ geus laksana dipegatkeun.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Ieu parangkat geus laksana dipegatkeun ti Singkronan Firefox";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Ieu parangkat geus laksana dipegatkeun ti Singkronan Ecosia";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Singkronan Pegat";
@@ -419,10 +419,10 @@
 "FxAPush_DeviceDisconnected_title" = "Singkronan Pegat";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Parangkat geus dipegarkeun tina Singkronan Firefox";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Parangkat geus dipegarkeun tina Singkronan Ecosia";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "Logo Firefox, ganti latar.";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Logo Ecosia, ganti latar.";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Pitulung";
@@ -455,7 +455,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Asup log pikeun nénjo daptar tab ti parangkat anjeun nu séjén.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Singkronan Firefox";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Singkronan Ecosia";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Jujutan";
@@ -653,13 +653,13 @@
 "Logins.Onboarding.LearnMoreButtonTitle" = "Lenyepan";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "Pikeun maké pitur AutoFill dina Firefox, anjeun kudu ngaktipkeun kode konci perangkat.";
+"Logins.PasscodeRequirement.Warning" = "Pikeun maké pitur AutoFill dina Ecosia, anjeun kudu ngaktipkeun kode konci perangkat.";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "Bawa kecap sandi anjeun kamanana";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "AutoFill Kecap Konci Firefox";
+"Logins.WelcomeView.Title2" = "AutoFill Kecap Konci Ecosia";
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "Aktipkeun AutoFill";
@@ -704,7 +704,7 @@
 "LoginsList.Title" = "ASUP LOG DITEUNDEUN";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Kawasna mah Firefox geus ruksak saméméhna. Anjeun rék malikkeun deui tabna?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Kawasna mah Ecosia geus ruksak saméméhna. Anjeun rék malikkeun deui tabna?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Cirian geus Dibaca";
@@ -893,7 +893,7 @@
 "Onboarding.WhatsNew.Button.Title" = "Mitembeyan Ngalanglang";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Euleuh! Firefoxna ruksak ning";
+"Oops! Firefox crashed" = "Euleuh! Ecosiana ruksak ning";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Buka artikel di Pidangan Baca ku cara noél ikon buku nalika éta bijil di wilah judul.";
@@ -1004,7 +1004,7 @@
 "ScanQRCode.InvalidDataError.Message" = "Data henteu sohéh";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "Buka ‘Setélan’ > ‘Firefox’. Idinan Firefox ngaksés kaméra.";
+"ScanQRCode.PermissionError.Message.v100" = "Buka ‘Setélan’ > ‘Ecosia’. Idinan Ecosia ngaksés kaméra.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Pindéy kodeu QR";
@@ -1085,13 +1085,13 @@
 "SendTo.NavBar.Title" = "Kirim Tab";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "Anjeun teu boga parangkat séjén anu nyambung kana Akun Firefox ieu anu bisa disaluyukeun.";
+"SendTo.NoDevicesFound.Message" = "Anjeun teu boga parangkat séjén anu nyambung kana Akun Ecosia ieu anu bisa disaluyukeun.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Mangga buka Firefox, buka Setélan sarta asup pikeun neruskeun.";
+"SendTo.NotSignedIn.Message" = "Mangga buka Ecosia, buka Setélan sarta asup pikeun neruskeun.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Anjeun can asup ka Akun Firefox.";
+"SendTo.NotSignedIn.Title" = "Anjeun can asup ka Akun Ecosia.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Kirim";
@@ -1112,7 +1112,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Toél jang ngamimitian";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Singkronisasi Firefox";
+"SentTab.NoTabArrivingNotification.title" = "Singkronisasi Ecosia";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Témbong";
@@ -1241,7 +1241,7 @@
 "Settings.FxA.Sync.SectionName" = "Setélan Singkronan";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Akun Firefox";
+"Settings.FxA.Title" = "Akun Ecosia";
 
 /* General settings section title */
 "Settings.General.SectionName" = "Umum";
@@ -1250,7 +1250,7 @@
 "Settings.Home.Current.Description.v101" = "Pilih naon anu némbogan salaku kaca tepas.";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description.v101" = "Pilih naon anu diasupkeun dina kaca tepas Firefox.";
+"Settings.Home.Option.Description.v101" = "Pilih naon anu diasupkeun dina kaca tepas Ecosia.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "Asup Deui";
@@ -1274,7 +1274,7 @@
 "Settings.Home.Option.StartAtHome.Always" = "Tepas";
 
 /* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
-"Settings.Home.Option.StartAtHome.Description" = "Pilih naon anu katempo nalika balik deui ka Firefox.";
+"Settings.Home.Option.StartAtHome.Description" = "Pilih naon anu katempo nalika balik deui ka Ecosia.";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "Tab panungtung";
@@ -1289,25 +1289,25 @@
 "Settings.Home.Option.Wallpaper" = "Latar";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Latar Firefox, pola kucubung.";
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Latar Ecosia, pola kucubung.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Latar Firefox, pola pasir basisir.";
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Latar Ecosia, pola pasir basisir.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Latar Firefox, pola biru langit.";
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Latar Ecosia, pola biru langit.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Latar polos baku.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Latar Firefox, pola balébat.";
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Latar Ecosia, pola balébat.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Atur daur latar tepas";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Latar Firefox, pola pasir layung.";
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Latar Ecosia, pola pasir layung.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
 "Settings.Home.Option.Wallpaper.Classic.Title.v106" = "%@ klasik";
@@ -1328,7 +1328,7 @@
 "Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "Édisi Diwates";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
-"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Robah latar ku cara noél logo tepas Firefox";
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Robah latar ku cara noél logo tepas Ecosia";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "Latar";
@@ -1382,7 +1382,7 @@
 "Settings.NewTab.Option.Custom" = "Sakahayang";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Tepas Firefox";
+"Settings.NewTab.Option.FirefoxHome" = "Tepas Ecosia";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Tepas";
@@ -1403,7 +1403,7 @@
 "Settings.NoImageModeBlockImages.Label.v99" = "Peungpeuk Gambar";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Nalika Muka Firefox";
+"Settings.OfferClipboardBar.Status" = "Nalika Muka Ecosia";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
 "Settings.OfferClipboardBar.Status.v128" = "Nalika muka %@";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Lenyepan.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla bakal kukumpul data nu diperlukeun hungkul jang nyadiakeun jeung ngoméan Firefox pikeun balaréa.";
+"Settings.SendUsage.Message" = "Mozilla bakal kukumpul data nu diperlukeun hungkul jang nyadiakeun jeung ngoméan Ecosia pikeun balaréa.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Kirim Data Pamakéan";
@@ -1466,7 +1466,7 @@
 "Settings.Siri.OpenTabShortcut" = "Buka Tab Anyar";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Paké tarabas Siri pikeun gancang muka Firefox tina Siri";
+"Settings.Siri.SectionDescription" = "Paké tarabas Siri pikeun gancang muka Ecosia tina Siri";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Tarabas Siri";
@@ -1592,13 +1592,13 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "Muat di Kasangtukang";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Ngamuat di Firefox";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Ngamuat di Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Buka di Firefox";
+"ShareExtension.OpenInFirefoxAction.Title" = "Buka di Ecosia";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Paluruh di Firefox";
+"ShareExtension.SeachInFirefoxAction.Title" = "Paluruh di Ecosia";
 
 /* Button in share sheet to copy the url of the current tab. */
 "ShareSheet.Copy.Title.v108" = "Tiron";
@@ -1745,7 +1745,7 @@
 "UIMenuItem.PasteGo" = "Terap & Indit";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Paluruh ku Firefox";
+"UIMenuItem.SearchWithFirefox" = "Paluruh ku Ecosia";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "can dibaca";
@@ -1793,7 +1793,7 @@
 "Yesterday" = "Kamari";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Anjeun teu miboga tab bukaeun na Firefox di parangkat séjén.";
+"You don’t have any tabs open in Firefox on your other devices." = "Anjeun teu miboga tab bukaeun na Ecosia di parangkat séjén.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Hak Anjeun";

@@ -111,7 +111,8 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     func getToolbarActions(navigationController: UINavigationController?,
                            completion: @escaping ([[PhotonRowActions]]) -> Void) {
         var actions: [[PhotonRowActions]] = []
-        let firstMiscSection = getFirstMiscSection(navigationController)
+        // Ecosia: Remove unused constant
+        // let firstMiscSection = getFirstMiscSection(navigationController)
 
         if isHomePage {
             actions.append(contentsOf: [
@@ -145,9 +146,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             })
         }
     }
-    
+
     // Ecosia: Readd sections from v104
-    
+
     private func getPageActionsSection(_ navigationController: UINavigationController?) -> [PhotonRowActions] {
         var section = [PhotonRowActions]()
 
@@ -164,6 +165,11 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         append(to: &section, action: copyAction)
 
         if !isHomePage && !isFileURL {
+
+            // Ecosia: Add Zoom Action
+            let zoomAction = getZoomAction()
+            append(to: &section, action: zoomAction)
+
             let findInPageAction = getFindInPageAction()
             append(to: &section, action: findInPageAction)
 
@@ -182,7 +188,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
         return section
     }
-    
+
     // MARK: - Ecosia Additions
 
     private func getOpenInSafariAction(_ navigationController: UINavigationController?) -> SingleActionViewModel? {
@@ -198,12 +204,11 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             let safari = SFSafariViewController(url: url, configuration: config)
             safari.dismissButtonStyle = .close
             navigationController.present(safari, animated: true, completion: nil)
-            Analytics.shared.menuClick("open_in_safari")
+            Analytics.shared.menuClick(.openInSafari)
         }
 
         return model
     }
-
 
     // MARK: - Update data
 
@@ -292,13 +297,13 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
             let bookmarkSection = getBookmarkSection()
             append(to: &section, action: bookmarkSection)
-            
+
             let historySection = getHistoryLibraryAction()
             append(to: &section, action: historySection)
-            
+
             let readingListSection = getReadingListSection()
             append(to: &section, action: readingListSection)
-            
+
             let downloadSection = getDownloadsLibraryAction()
             append(to: &section, action: downloadSection)
         }
@@ -312,7 +317,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getFirstMiscSection(_ navigationController: UINavigationController?) -> [PhotonRowActions] {
         var section = [PhotonRowActions]()
-        
+
         // Ecosia: Rearrange items
 
         if !isHomePage && !isFileURL {
@@ -327,7 +332,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             let desktopSiteAction = getRequestDesktopSiteAction()
             append(to: &section, action: desktopSiteAction)
         }
-        
+
         // Ecosia: Adding help button
         let helpAction = getHelpAction()
         section.append(helpAction)
@@ -340,7 +345,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         */
         let nightModeAction = getNightModeAction()
         append(to: &section, action: nightModeAction)
-        
+
         /* Ecosia: Disable Passwords option
         let passwordsAction = getPasswordAction(navigationController: navigationController)
         append(to: &section, action: passwordsAction)
@@ -407,7 +412,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
         let customizeHomePageAction = getCustomizeHomePageAction()
         append(to: &section, action: customizeHomePageAction)
-        
+
         let helpAction = getHelpAction()
         section.append(helpAction)
 
@@ -423,6 +428,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) != .homePage
             self.delegate?.openNewTabFromMenu(focusLocationField: shouldFocusLocationField, isPrivate: tab.isPrivate)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .createNewTab)
+
+            // Ecosia: Track new tab action
+            Analytics.shared.menuClick(.newTab)
         }.items
     }
 
@@ -431,6 +439,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                                      iconString: StandardImageIdentifiers.Large.history) { _ in
             self.delegate?.showLibrary(panel: .history)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .viewHistoryPanel)
+
+            // Ecosia: Track history action
+            Analytics.shared.menuClick(.history)
         }.items
     }
 
@@ -439,6 +450,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                                      iconString: StandardImageIdentifiers.Large.download) { _ in
             self.delegate?.showLibrary(panel: .downloads)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .viewDownloadsPanel)
+
+            // Ecosia: Track downloads action
+            Analytics.shared.menuClick(.downloads)
         }.items
     }
 
@@ -451,6 +465,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         let zoomAction = SingleActionViewModel(title: title,
                                                iconString: StandardImageIdentifiers.Large.pageZoom) { _ in
             self.delegate?.showZoomPage(tab: tab)
+
+            // Ecosia: Track zoom action
+            Analytics.shared.menuClick(.zoom)
         }.items
         return zoomAction
     }
@@ -464,6 +481,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                                      iconString: "menu-FindInPageUpdate") { _ in
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .findInPage)
             self.delegate?.showFindInPage()
+
+            // Ecosia: Track find in page action
+            Analytics.shared.menuClick(.findInPage)
         }.items
     }
 
@@ -496,6 +516,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                     isPrivate: tab.isPrivate
                 )
                 TelemetryWrapper.recordEvent(category: .action, method: .tap, object: siteTypeTelemetryObject)
+
+                // Ecosia: Track request desktop site action
+                Analytics.shared.menuClick(.requestDesktopSite)
             }
         }.items
     }
@@ -512,6 +535,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                 UIPasteboard.general.url = url
                 self.delegate?.showToast(message: .LegacyAppMenu.AppMenuCopyURLConfirmMessage, toastAction: .copyUrl)
             }
+
+            // Ecosia: Track copy link action
+            Analytics.shared.menuClick(.copyLink)
         }.items
     }
 
@@ -562,6 +588,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .help)
              */
             self.delegate?.openURLInCurrentTab(Environment.current.urlProvider.faq)
+            Analytics.shared.menuClick(.help)
         }.items
     }
 
@@ -570,6 +597,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                                      iconString: StandardImageIdentifiers.Large.edit) { _ in
             self.delegate?.showCustomizeHomePage()
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .customizeHomePage)
+
+            // Ecosia: Track customize homepage action
+            Analytics.shared.menuClick(.customizeHomepage)
         }.items
     }
 
@@ -596,23 +626,21 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         } else {
             .LegacyAppMenu.AppMenuTurnOnNightMode
         }
-        let nightMode = SingleActionViewModel(title: nightModeTitle,
-                                              iconString: ImageIdentifiers.nightMode,
-                                              isEnabled: nightModeEnabled) { _ in
-         */
-        let nightModeTitle: String = nightModeEnabled ? .localized(.turnOffDarkMode) : .localized(.forceDarkMode)
-        let nightMode = SingleActionViewModel(title: nightModeTitle, 
-                                              text: .localized(.invertColors),
-                                              iconString: nightModeEnabled ? "darkModeSolid" : "darkMode",
-                                              isEnabled: nightModeEnabled) { _ in
-            NightModeHelper.toggle(tabManager: self.tabManager)
-
         let nightMode = SingleActionViewModel(
             title: nightModeTitle,
             iconString: StandardImageIdentifiers.Large.nightMode,
             isEnabled: nightModeEnabled
         ) { _ in
+         */
+        let nightModeTitle: String = nightModeEnabled ? .localized(.turnOffDarkMode) : .localized(.forceDarkMode)
+        let nightMode = SingleActionViewModel(title: nightModeTitle,
+                                              text: .localized(.invertColors),
+                                              iconString: nightModeEnabled ? "darkModeSolid" : "darkMode",
+                                              isEnabled: nightModeEnabled) { _ in
             NightModeHelper.toggle()
+
+            // Ecosia: Track dark mode changes
+            Analytics.shared.menuStatus(changed: .darkMode, to: !nightModeEnabled)
 
             if NightModeHelper.isActivated() {
                 TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .nightModeEnabled)
@@ -712,6 +740,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             else { return }
 
             self.share(fileURL: url, buttonView: self.buttonView)
+
+            // Ecosia: Analytics
+            Analytics.shared.menuShare(.file)
         }.items
     }
 
@@ -723,8 +754,15 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             // guard let tab = self.selectedTab, let url = tab.canonicalURL?.displayURL else { return }
             guard let tab = self.selectedTab else { return }
             let url = tab.canonicalURL?.displayURL ?? Environment.current.urlProvider.root
-            
+
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
+
+            // Ecosia: Analytics
+            if tab.canonicalURL?.displayURL == nil {
+                Analytics.shared.menuShare(.ntp)
+            } else {
+                Analytics.shared.menuShare(.web)
+            }
 
             guard let temporaryDocument = tab.temporaryDocument else {
                 self.navigationHandler?.showShareExtension(
@@ -801,6 +839,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         return SingleActionViewModel(title: .LegacyAppMenu.ReadingList,
                                      iconString: "libraryReading") { _ in
             self.delegate?.showLibrary(panel: .readingList)
+
+            // Ecosia: Track reading list action
+            Analytics.shared.menuClick(.readingList)
         }
     }
 
@@ -831,6 +872,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                 value: .pageActionMenu
             )
             self.delegate?.showToast(message: .LegacyAppMenu.AddToReadingListConfirmMessage, toastAction: .addToReadingList)
+
+            // Ecosia: Track add reading list
+            Analytics.shared.menuStatus(changed: .readingList, to: true)
         }
     }
 
@@ -848,6 +892,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                                          method: .delete,
                                          object: .readingListItem,
                                          value: .pageActionMenu)
+
+            // Ecosia: Track remove reading list
+            Analytics.shared.menuStatus(changed: .readingList, to: false)
         }
     }
 
@@ -869,6 +916,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         return SingleActionViewModel(title: .LegacyAppMenu.Bookmarks,
                                      iconString: StandardImageIdentifiers.Large.bookmarkTrayFill) { _ in
             self.delegate?.showLibrary(panel: .bookmarks)
+
+            // Ecosia: Track reading list action
+            Analytics.shared.menuClick(.bookmarks)
         }
     }
 
@@ -895,6 +945,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                 object: .bookmark,
                 value: .pageActionMenu
             )
+
+            // Ecosia: Track add bookmark
+            Analytics.shared.menuStatus(changed: .bookmark, to: true)
         }
     }
 
@@ -920,6 +973,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                 object: .bookmark,
                 value: .pageActionMenu
             )
+
+            // Ecosia: Track remove bookmark
+            Analytics.shared.menuStatus(changed: .bookmark, to: false)
         }
     }
 
@@ -945,6 +1001,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             }
 
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .pinToTopSites)
+
+            // Ecosia: Track add shortcut
+            Analytics.shared.menuStatus(changed: .shortcut, to: true)
         }
     }
 
@@ -953,7 +1012,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         return SingleActionViewModel(title: .LegacyAppMenu.RemoveFromShortcuts,
                                      iconString: StandardImageIdentifiers.Large.pinSlash) { _ in
          */
-        return SingleActionViewModel(title: .AddToShortcutsActionTitle,
+        return SingleActionViewModel(title: .LegacyAppMenu.RemoveFromShortcuts,
                                      iconString: "action_unpin") { _ in
             guard let url = self.selectedTab?.url?.displayURL,
                   let title = self.selectedTab?.displayTitle else { return }
@@ -967,6 +1026,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                 }
             }
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .removePinnedSite)
+
+            // Ecosia: Track remove shortcut
+            Analytics.shared.menuStatus(changed: .shortcut, to: false)
         }
     }
 

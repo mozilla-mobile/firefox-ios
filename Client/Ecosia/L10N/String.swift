@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Core
@@ -9,19 +9,15 @@ extension String {
     static func localized(_ key: Key) -> String {
         localized(key.rawValue)
     }
-    
+
     static func localized(_ string: String) -> String {
         NSLocalizedString(string, tableName: "Ecosia", comment: "")
-    }
-    
-    static func localized(_ key: Key, incentiveRestrictedSearchAlternativeKey: Key) -> String {
-        localized(Unleash.isEnabled(.incentiveRestrictedSearch) ? incentiveRestrictedSearchAlternativeKey : key)
     }
 
     static func localizedPlural(_ key: Key, num: Int) -> String {
         String(format: NSLocalizedString(key.rawValue, tableName: "Plurals", comment: ""), num)
     }
-    
+
     enum Key: String {
         case allRegions = "All regions"
         case autocomplete = "Autocomplete"
@@ -115,16 +111,16 @@ extension String {
         case showTopSites = "Show Top Sites"
         case helpYourFriendsBecome = "Help your friends become climate active and plant trees together"
         case friendsJoined = "%d friend(s) joined"
-        case acceptedInvites = "%d accepted invite(s)"
+        case acceptedInvites = "accepted invite(s)"
         case invitingAFriend = "Inviting a friend"
         case inviteYourFriends = "Invite your friends"
         case sendAnInvite = "Send an invite with your unique invitation link"
         case theyDownloadTheApp = "They download the Ecosia app"
-        case viaTheAppStore = "Via the AppStore (invites for Android are coming soon)"
-        case theyOpenYourInviteLink = "They open your invite link"
-        case yourFriendClicks = "Your friend clicks on your unique link from the invite message"
-        case eachOfYouHelpsPlant = "Each of you helps plant a tree"
-        case whenAFriendUses = "When a friend uses your invite link, you both plant an extra tree"
+        case viaTheAppStore = "Via the App Store or Google Play"
+        case theyOpenYourInviteLink = "They open your invite link (iOS only)"
+        case yourFriendClicks = "Your friend opens the second link from the invite message"
+        case eachOfYouHelpsPlant = "You both are helping the planet"
+        case whenAFriendUses = "Using Ecosia, you’re both making a difference for the environment"
         case noBookmarksYet = "No bookmarks yet"
         case AddYourFavoritePages = "Add your favorite pages to your bookmarks and they will appear here"
         case noArticles = "No articles on your reading list"
@@ -134,22 +130,17 @@ extension String {
         case websitesYouHave = "Websites you’ve recently visited will show up here"
         case noDownloadsYet = "No downloads yet"
         case whenYouDownloadFiles = "When you download files they will show up here"
-        case iThinkYouWillLikeThis = "Hey, I think you’ll like this!\nDid you know that Ecosia is the only search engine that uses 100%% of their profits for climate action? 🌍\nJoin me and %@M+ others planting the right trees in the right places."
-        case downloadTheApp = "1. Download the app:"
-        case useMyInviteLink = "2. Use my ✨ invite link ✨ and we will both plant an extra tree 🌳\n(Android coming soon):"
+        case messageMentioningActiveUsers = "Check this out: Ecosia plants trees when you search the web! 🌳\nJoin me and %@M+ others and start planting today."
+        case tapLinkToConfirm = "If you’re using an iPhone or iPad, tap here to confirm you’ve joined:"
         case seeTheCollectiveImpact  = "See the collective impact you are having with the Ecosia community"
         case theSimplestWay = "The simplest way to be \n climate-active every day while \n browsing the web"
         case skipWelcomeTour = "Skip welcome tour"
-        case aBetterPlanet = "A better planet with every search"
-        case searchTheWeb = "Search the web and plant trees with the fast, free, and full-featured Ecosia browser"
         case grennestWayToSearch = "The greenest way to search"
         case planetFriendlySearch = "Ecosia is the world's most planet-friendly way to search - and it's free."
         case hundredPercentOfProfits = "100% of profits for the planet"
-        case weUseAllOurProfits = "We use all our profits for climate action, such as planting trees and generating solar energy."
+        case weUseAllOurProfits = "All our profits go directly to reforestation and renewable energy around the world."
         case collectiveAction = "Collective action starts here"
         case join15Million = "Join 15 million people growing the right trees in the right places."
-        case weWantTrees = "We want your trees, not your data"
-        case weDontCreateAProfile = "We don’t create a profile of you and will never sell your details to advertisers."
         case realResults = "Real results, transparent finances"
         case shownExactlyHowMuch = "You're shown exactly how much we earn and invest in trees and climate action."
         case totalIncome = "Total income"
@@ -159,20 +150,18 @@ extension String {
         case sustainableShoes = "sustainable shoes"
         case before = "Before ..."
         case after = "After"
-        case treesPlantedByTheCommunity = "trees planted by the Ecosia community"
-        case treesPlantedByTheCommunityCapitalized = "Trees planted by the Ecosia community"
-        case investedIntoClimateAction = "invested into climate action"
+        case treesPlantedByEcosia = "trees planted by Ecosia"
+        case treesPlantedByEcosiaCapitalized = "Trees planted by Ecosia"
+        case numberAsStringWithPlusSymbol = "%@+"
+        case dedicatedToClimateAction = "dedicated to climate action"
         case activeProjects = "Active projects"
         case countries = "Countries"
         case finishTour = "Start Planting"
         case treesPlantedPlural = "Tree(s) planted"
         case howItWorks = "How it works"
-        case friendInvitesPlural = "%d friend invite(s)"
         case openSettings = "Open settings"
         case maybeLater = "Maybe later"
-        case openAllLinksToPlantTrees = "Open all links with Ecosia to plant more trees"
         case openAllLinksAutomatically = "Open all links automatically with Ecosia"
-        case growYourImpact = "Grow your impact with your web searches"
         case beClimateActive = "Be climate active every day while browsing"
         case groupYourImpact = "Group your impact"
         case getATreeWithEveryFriend = "Get a tree with every friend who joins. They get one too!"
@@ -189,7 +178,7 @@ extension String {
         case buyTrees = "Buy trees in the Ecosia tree store to delight a friend - or treat yourself"
         case plantTreesAndEarn = "Plant trees and earn eco-friendly rewards with Treecard"
         case sponsored = "Sponsored"
-        case inviteYourFriendsToCheck = "Invite your friends to check out Ecosia. When they join, you both plant an extra tree."
+        case inviteYourFriendsToCheck = "Increase your positive impact on the planet by inviting your friends to join Ecosia."
         case sharingYourLink = "Sharing your link"
         case copy = "Copy"
         case moreSharingMethods = "More sharing methods"
@@ -213,8 +202,6 @@ extension String {
         case bookmarksEmptyViewItem1 = "You can also import bookmarks:"
         case bookmarksEmptyViewItem1NumberedItem0 = "Export your bookmarks from another browser."
         case bookmarksEmptyViewItem1NumberedItem1 = "Tap on the link below to import the file of your bookmarks"
-        case bookmarksNtpNudgeCardDescription = "You can now import bookmarks from other browsers to Ecosia."
-        case bookmarksNtpNudgeCardButtonTitle = "Open bookmarks"
         case bookmarksToolTipText = "Tap here to import bookmarks from other browsers."
         case cancel = "Cancel"
         case open = "Open"
@@ -229,19 +216,20 @@ extension String {
         case onboardingSkipTourButtonAccessibility = "Skip the onboarding"
         case onboardingContinueCTAButtonAccessibility = "Continue to the next onboarding page"
         case onboardingFinishCTAButtonAccessibility = "Finish onboarding and start contributing to Ecosia"
-        case onboardingIllustrationTour1 = "This onboarding illustration shows how by performing searches via the Ecosia app, you are leveling up your tree planting impact score. A small search screenshot and a tree counter example is shown. A forest can be seen on the background."
-        case onboardingIllustrationTour1Alternative = "This onboarding illustration shows how by performing searches via the Ecosia app, you are leveling up your planed-friendly lifestyle. A small search input field screenshot and result example containing the green icon is shown. A forest can be seen on the background."
+        case onboardingIllustrationTour1 = "This onboarding illustration shows how by performing searches via the Ecosia app, you are leveling up your planed-friendly lifestyle. A small search input field screenshot and result example containing the green icon is shown. A forest can be seen on the background."
         case onboardingIllustrationTour2 = "This onboarding illustration shows briefly an example of a before and after comparision of trees planted in a land. The image is a screenshot from the satellite view."
         case onboardingIllustrationTour3 = "This onboarding illustration shows a few numbers like the projects Ecosia is involved in, the total number of trees planted by the Ecosia community, alongisde the number of countries Ecosia is active. A small map of the planisphere with trees pins in few geographic location, background."
-        case onboardingIllustrationTour4 = "This onboarding illustration is a photo of a monkey climbing a tree. It function mainly as general decoration image."
-        case onboardingIllustrationTour4Alternative = "This onboarding illustration shows the latest financial reports of Ecosia. On the background there is an image of a person caring for tree seedlings"
+        case onboardingIllustrationTour4 = "This onboarding illustration shows the latest financial reports of Ecosia. On the background there is an image of a person caring for tree seedlings"
         case whatsNewViewTitle = "What's new"
-        case whatsNewFirstItemTitle = "Collective action"
-        case whatsNewFirstItemDescription = "See the climate impact you are having together with the rest of the Ecosia community."
-        case whatsNewSecondItemTitle = "Customizable home page"
-        case whatsNewSecondItemDescription = "Tailor your home page to show the information that’s most relevant to you."
-        case whatsNewFooterButtonTitle = "Discover"
-        case quickSearch = "Quick Search"
+        case whatsNewFirstItemTitle9_0_0 = "Collective action"
+        case whatsNewFirstItemDescription9_0_0 = "See the climate impact you are having together with the rest of the Ecosia community."
+        case whatsNewSecondItemTitle9_0_0 = "Customizable home page"
+        case whatsNewSecondItemDescription9_0_0 = "Tailor your home page to show the information that’s most relevant to you."
+        case whatsNewFirstItemTitle10_0_0 = "Zooming"
+        case whatsNewFirstItemDescription10_0_0 = "You can now easily zoom in and out on any page through options."
+        case whatsNewSecondItemTitle10_0_0 = "Password manager"
+        case whatsNewSecondItemDescription10_0_0 = "We’ve added 1Password to Ecosia to help you to manage your passwords securely."
+        case whatsNewFooterButtonTitle = "Got it"
         case apnConsentVariantNameControlHeaderTitle = "Keep up with Ecosia"
         case apnConsentVariantNameTest1HeaderTitle = "Turn on push notifications"
         case apnConsentVariantNameControlFirstItemTitle = "Discover the trees we plant and the impact they’re having"
@@ -250,5 +238,10 @@ extension String {
         case apnConsentVariantNameTest1SecondItemTitle = "Get tips on how to be climate active every day"
         case apnConsentCTAAllowButtonTitle = "Allow push notifications"
         case apnConsentSkipButtonTitle = "Not now"
+        case apnConsentLastReminderSkipButtonTitle = "No thanks"
+        case configurableNudgeCardCloseButtonAccessibilityLabel = "Close card button"
+        case newsletterNTPCardExperimentTitle = "Be the first to know"
+        case newsletterNTPCardExperimentDescription = "Subscribe to our monthly newsletter for updates on your climate impact."
+        case newsletterNTPCardExperimentButton = "Sign up"
     }
 }

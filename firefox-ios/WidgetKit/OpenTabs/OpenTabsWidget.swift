@@ -38,12 +38,17 @@ struct OpenTabsView: View {
                         (entry.favicons[tab.imageKey])!.resizable().frame(width: 16, height: 16)
                     } else {
                         Image(decorative: StandardImageIdentifiers.Large.globe)
+                            /* Ecosia: update color
                             .foregroundColor(Color.white)
+                            */
+                            .foregroundColor(.init("PrimaryText"))
                             .frame(width: 16, height: 16)
                     }
 
                     Text(tab.title!)
-                        .foregroundColor(Color.white)
+                        // Ecosia: update color
+                        // .foregroundColor(Color.white)
+                        .foregroundColor(.init("PrimaryText"))
                         .multilineTextAlignment(.leading)
                         .lineLimit(1)
                         .font(.system(size: 15, weight: .regular, design: .default))
@@ -51,7 +56,9 @@ struct OpenTabsView: View {
             }
 
             Rectangle()
-                .fill(Color(UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 0.3)))
+                // Ecosia: update color
+                // .fill(Color(UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 0.3)))
+                .fill(Color("Border"))
                 .frame(height: 0.5)
                 .padding(.leading, 45)
         }
@@ -59,9 +66,16 @@ struct OpenTabsView: View {
 
     var openFirefoxButton: some View {
         HStack(alignment: .center, spacing: 15) {
+            /* Ecosia: Update image and color
             Image(decorative: StandardImageIdentifiers.Small.externalLink).foregroundColor(Color.white)
-            Text("Open Firefox")
+            */
+            Image("openEcosia")
+                .foregroundColor(.init("PrimaryText"))
+            Text("Open Firefox") // TODO Ecosia Upgrade: Don't we need to update this text? (was already Firefox, prbably should use `String.OpenFirefoxLabel`)
+                /* Ecosia: update color
                 .foregroundColor(Color.white).lineLimit(1)
+                */
+                .foregroundColor(.init("PrimaryText")).lineLimit(1)
                 .font(.system(size: 13, weight: .semibold, design: .default))
             Spacer()
         }.padding([.horizontal])
@@ -82,13 +96,22 @@ struct OpenTabsView: View {
                     Text(String.NoOpenTabsLabel)
                     HStack {
                         Spacer()
+                        /* Ecosia: Update image
                         Image(decorative: StandardImageIdentifiers.Small.externalLink)
+                        */
+                        Image("openEcosia")
                         Text(String.OpenFirefoxLabel)
+                            /* Ecosia: Update color
                             .foregroundColor(Color.white).lineLimit(1)
+                            */
+                            .foregroundColor(.init("PrimaryText")).lineLimit(1)
                             .font(.system(size: 13, weight: .semibold, design: .default))
                         Spacer()
                     }.padding(10)
-                }.foregroundColor(Color.white)
+                }
+                // Ecosia: update color
+                // .foregroundColor(Color.white)
+                .foregroundColor(.init("PrimaryText"))
             } else {
                 VStack(spacing: 8) {
                     ForEach(entry.tabs.suffix(numberOfTabsToDisplay), id: \.self) { tab in
@@ -97,8 +120,12 @@ struct OpenTabsView: View {
 
                     if entry.tabs.count > numberOfTabsToDisplay {
                         HStack(alignment: .center, spacing: 15) {
+                            /* Update image and color 
                             Image(decorative: StandardImageIdentifiers.Small.externalLink)
                                 .foregroundColor(Color.white)
+                            */
+                            Image("openEcosia")
+                                .foregroundColor(.init("PrimaryText"))
                                 .frame(width: 16, height: 16)
                             Text(
                                 String.localizedStringWithFormat(
@@ -106,7 +133,10 @@ struct OpenTabsView: View {
                                     (entry.tabs.count - numberOfTabsToDisplay)
                                 )
                             )
+                            /* Ecosia: Update color
                             .foregroundColor(Color.white)
+                            */
+                            .foregroundColor(.init("PrimaryText"))
                             .lineLimit(1)
                             .font(.system(size: 13, weight: .semibold, design: .default))
                             Spacer()
@@ -120,7 +150,10 @@ struct OpenTabsView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        /* Ecosia: update color
         .widgetBackground(Color(UIColor(red: 0.11, green: 0.11, blue: 0.13, alpha: 1.00)))
+        */
+        .background((Color("PrimaryBackground")))
     }
 
     private func linkToContainingApp(_ urlSuffix: String = "", query: String) -> URL {

@@ -71,7 +71,9 @@ class StatusBarOverlay: UIView,
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
-        savedBackgroundColor = hasTopTabs ? theme.colors.layer3 : theme.colors.layer1
+        // Ecosia: update background
+        // savedBackgroundColor = hasTopTabs ? theme.colors.layer3 : theme.colors.layer1
+        savedBackgroundColor = .legacyTheme.ecosia.primaryBackground
         backgroundColor = savedBackgroundColor?.withAlphaComponent(scrollOffset)
     }
 

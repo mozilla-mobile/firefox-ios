@@ -110,7 +110,9 @@ class BackForwardTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
         if let url = URL(string: viewModel.site.url, invalidCharacters: false),
            InternalURL(url)?.isAboutHomeURL == true {
-            faviconView.manuallySetImage(UIImage(named: ImageIdentifiers.firefoxFavicon) ?? UIImage())
+            // Ecosia: Update image with Ecosia icon
+            // faviconView.manuallySetImage(UIImage(named: ImageIdentifiers.firefoxFavicon) ?? UIImage())
+            faviconView.manuallySetImage(.init(named: "ecosiaIcon") ?? .init())
         } else {
             faviconView.setFavicon(FaviconImageViewModel(siteURLString: viewModel.site.url,
                                                          faviconCornerRadius: UX.faviconCornerRadius))

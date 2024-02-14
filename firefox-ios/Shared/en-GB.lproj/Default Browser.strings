@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Making Firefox your default browser is a vote for an open, accessible internet.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Making Ecosia your default browser is a vote for an open, accessible internet.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Default to a Better Internet";
@@ -8,10 +8,10 @@
 "DefaultBrowserCard.Button.v2" = "Learn How";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Set links from web sites, emails, and Messages to open automatically in Firefox.";
+"DefaultBrowserCard.Description" = "Set links from web sites, emails, and Messages to open automatically in Ecosia.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "Choose Firefox as your default browser to make speed, safety, and privacy automatic.";
+"DefaultBrowserCard.NextLevel.Description.v108" = "Choose Ecosia as your default browser to make speed, safety, and privacy automatic.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "Elevate Everyday Browsing";
@@ -35,7 +35,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Tap Default Browser App";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Select Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. Select Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Default Browser App";

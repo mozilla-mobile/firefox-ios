@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Lat att private faner";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Legg til Firefox-snarvegar på heim-skjermen.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Legg til Ecosia-snarvegar på heim-skjermen.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Gå til kopiert lenke";
@@ -23,13 +23,13 @@
 "TodayWidget.NoOpenTabsLabel" = "Ingen opne faner.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Opne Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Opne Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Privat søk";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Legg til ein Firefox-snarveg til heim-skjermen. Når du har lagt til widgeten, trykkjer du på og held nede for å redigere han og vel ein annan snarveg.";
+"TodayWidget.QuickActionGalleryDescription" = "Legg til ein Ecosia-snarveg til heim-skjermen. Når du har lagt til widgeten, trykkjer du på og held nede for å redigere han og vel ein annan snarveg.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Hurtighandlingar";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Snøggtitt";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Søk i Firefox";
+"TodayWidget.SearchInFirefoxV2" = "Søk i Ecosia";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Søk i privat fane";

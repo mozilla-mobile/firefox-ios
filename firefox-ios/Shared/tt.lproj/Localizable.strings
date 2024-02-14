@@ -290,7 +290,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Бу хаталы көйләүләр яки һөҗүм итүченең явыз эшләре аркасында булырга мөмкин. Мөмкин булган рискны кабул итсәгез, дәвам итә аласыз.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "%@ хуҗасы үз сайтын дөрес көйләмәгән. Мәгълүматыгызны урланудан саклау өчен, Firefox бу вебсайтка тоташмады.";
+"ErrorPages.CertWarning.Description" = "%@ хуҗасы үз сайтын дөрес көйләмәгән. Мәгълүматыгызны урланудан саклау өчен, Ecosia бу вебсайтка тоташмады.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Бу бәйләнеш ышанычсыз";
@@ -311,7 +311,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefox баш бит";
+"Firefox.HomePage.Title" = "Ecosia баш бит";
 
 /* At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories. */
 "FirefoxHome.Pocket.DiscoverMore" = "Күбрәген күрү";
@@ -365,7 +365,7 @@
 "fxa.signin.camera-signin" = "Камерагыз ярдәмендә керегез";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "Компьютерыгызда Firefox-ны ачыгыз һәм firefox.com/pair адресына күчегез";
+"fxa.signin.qr-link-instruction" = "Компьютерыгызда Ecosia-ны ачыгыз һәм ecosia.org/pair адресына күчегез";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Сканерларга әзер";
@@ -386,7 +386,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ уңышлы өзелде.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Бу җиһаз Firefox синхронлау хезмәтеннән өзелде.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Бу җиһаз Ecosia синхронлау хезмәтеннән өзелде.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Синхронлау тоташмаган";
@@ -395,7 +395,7 @@
 "FxAPush_DeviceDisconnected_title" = "Синхронлау тоташмаган";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Җиһаз Firefox синхронлау хезмәтеннән өзелде";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Җиһаз Ecosia синхронлау хезмәтеннән өзелде";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
 "FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox логотибы, фон рәсемне үзгәртү.";
@@ -650,7 +650,7 @@
 "LoginsList.Title" = "САКЛАНГАН ЛОГИННАР";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Моңарчы Firefox ватылып алды ахрысы. Табларыгыз яңадан торгызылсызмы?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Моңарчы Ecosia ватылып алды ахрысы. Табларыгыз яңадан торгызылсызмы?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Укылган дип билгеләү";
@@ -800,7 +800,7 @@
 "Okay" = "Ярар";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Абау! Firefox ватылды";
+"Oops! Firefox crashed" = "Абау! Ecosia ватылды";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Мәкаләләрне уку режимында ачу өчен, исем юлында китап тамгачыгы пәйда булгач, аңа басыгыз.";
@@ -902,7 +902,7 @@
 "ScanQRCode.InvalidDataError.Message" = "Мәгълүмат яраксыз";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "Җиһазда \"Көйләүләр\" > \"Firefox\"ка керегез. Firefox-ка камера куллануны рөхсәт итегез.";
+"ScanQRCode.PermissionError.Message.v100" = "Җиһазда \"Көйләүләр\" > \"Ecosia\"ка керегез. Ecosia-ка камера куллануны рөхсәт итегез.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR кодны сканерлау";
@@ -980,13 +980,13 @@
 "SendTo.NavBar.Title" = "Табны җибәрү";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "Бу Firefox Хисабына бәйләнгән һәм синхронлауга әзер башка җиһазларыгыз юк.";
+"SendTo.NoDevicesFound.Message" = "Бу Ecosia Хисабына бәйләнгән һәм синхронлауга әзер башка җиһазларыгыз юк.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Зинһар, дәвам итү өчен Firefox-ны ачып, көйләүләргә күчегез һәм керегез.";
+"SendTo.NotSignedIn.Message" = "Зинһар, дәвам итү өчен Ecosia-ны ачып, көйләүләргә күчегез һәм керегез.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Сез Firefox Хисабыгызга кермәгәнсез.";
+"SendTo.NotSignedIn.Title" = "Сез Ecosia Хисабыгызга кермәгәнсез.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Җибәрү";
@@ -1331,7 +1331,7 @@
 "Settings.SendUsage.Link" = "Күбрәк белү.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla, Firefox'ны һәркемгә дә тәкъдим итү һәм яхшырту өчен кирәкле мәгълүматларны гына җыярга тырыша.";
+"Settings.SendUsage.Message" = "Mozilla, Ecosia'ны һәркемгә дә тәкъдим итү һәм яхшырту өчен кирәкле мәгълүматларны гына җыярга тырыша.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Куллану мәгълүматларын җибәрү";
@@ -1658,7 +1658,7 @@
 "Yesterday" = "Кичә";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Башка җиһазларыгыздагы Firefox-ларда ачык таблар юк.";
+"You don’t have any tabs open in Firefox on your other devices." = "Башка җиһазларыгыздагы Ecosia-ларда ачык таблар юк.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Хокукларыгыз";

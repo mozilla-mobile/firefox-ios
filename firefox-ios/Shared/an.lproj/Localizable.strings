@@ -257,7 +257,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Puede estar una mala configuración u una falsificación d'un atacant. Sigue enta debant si acceptas lo risgo potencial.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "Lo duenyo de %@ ha configurau lo suyo puesto web incorrectament. Pa privar que furten la tuya información, Firefox no s'ha connectau a este puesto web.";
+"ErrorPages.CertWarning.Description" = "Lo duenyo de %@ ha configurau lo suyo puesto web incorrectament. Pa privar que furten la tuya información, Ecosia no s'ha connectau a este puesto web.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "La tuya connexión no ye verificada";
@@ -278,13 +278,13 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Pachina d'inicio de Firefox";
+"Firefox.HomePage.Title" = "Pachina d'inicio de Ecosia";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Enta debant";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Cuenta de Firefox";
+"FxA.FirefoxAccount" = "Cuenta de Ecosia";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Administrar la cuenta y los dispositivos";
@@ -296,7 +296,7 @@
 "fxa.signin.camera-signin" = "Inicia sesión con a tuya camara";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "En o tuyo equipo, ubre Firefox y ves ta firefox.com/pair";
+"fxa.signin.qr-link-instruction" = "En o tuyo equipo, ubre Ecosia y ves ta ecosia.org/pair";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Listo pa escaniar";
@@ -317,7 +317,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ s'ha desconnectau correctament.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Este dispositivo s'ha desconnectau correctament de Firefox Sync.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Este dispositivo s'ha desconnectau correctament de Ecosia Sync.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync desconnectau";
@@ -326,7 +326,7 @@
 "FxAPush_DeviceDisconnected_title" = "Sync desconnectau";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "S'ha desconnectau un dispositivo de Firefox Sync";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "S'ha desconnectau un dispositivo de Ecosia Sync";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Aduya";
@@ -584,7 +584,7 @@
 "Okay" = "Acceptar";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Vai! Firefox s'ha blocau";
+"Oops! Firefox crashed" = "Vai! Ecosia s'ha blocau";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Ubre articlos en a vista de lectura pretando l'icono de libro quan amaneixca en a barra de titols.";
@@ -746,13 +746,13 @@
 "SendTo.NavBar.Title" = "Ninviar pestanya";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "No tiens garra atro dispositivo connectau a esta cuenta de Firefox disponible pa sincronizar-se.";
+"SendTo.NoDevicesFound.Message" = "No tiens garra atro dispositivo connectau a esta cuenta de Ecosia disponible pa sincronizar-se.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Ubre Firefox, ves ta Achustes y inicia una sesión pa continar.";
+"SendTo.NotSignedIn.Message" = "Ubre Ecosia, ves ta Achustes y inicia una sesión pa continar.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "No has iniciau sesión en a tuya cuenta de Firefox.";
+"SendTo.NotSignedIn.Title" = "No has iniciau sesión en a tuya cuenta de Ecosia.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Ninviar";
@@ -893,7 +893,7 @@
 "Settings.FxA.Sync.SectionName" = "Achustes de sincronización";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Cuenta de Firefox";
+"Settings.FxA.Title" = "Cuenta de Ecosia";
 
 /* General settings section title */
 "Settings.General.SectionName" = "Cheneral";
@@ -935,7 +935,7 @@
 "Settings.NewTab.TopSectionNameFooter" = "Triar qué cargar quan s'ubre una nueva pestanya";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "En ubrir Firefox";
+"Settings.OfferClipboardBar.Status" = "En ubrir Ecosia";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.StatusV2" = "En ubrir Firefox";
@@ -962,7 +962,7 @@
 "Settings.SendUsage.Link" = "Saber-ne mas.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla s'esfuerza a recopilar nomás lo que fa falta pa poder executar y amillorar Firefox pa totz.";
+"Settings.SendUsage.Message" = "Mozilla s'esfuerza a recopilar nomás lo que fa falta pa poder executar y amillorar Ecosia pa totz.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Ninviar datos d'uso";
@@ -983,7 +983,7 @@
 "Settings.Siri.OpenTabShortcut" = "Ubrir una nueva pestanya";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Usar alcorces de Siri pa ubrir rapidament Firefox vía Siri";
+"Settings.Siri.SectionDescription" = "Usar alcorces de Siri pa ubrir rapidament Ecosia vía Siri";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Alcorces de Siri";
@@ -1052,13 +1052,13 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "Cargar en segundo plano";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Cargando en Firefox";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Cargando en Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Ubrir en Firefox";
+"ShareExtension.OpenInFirefoxAction.Title" = "Ubrir en Ecosia";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Mirar en Firefox";
+"ShareExtension.SeachInFirefoxAction.Title" = "Mirar en Ecosia";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "Amostrar las sucherencias de busqueda";
@@ -1163,7 +1163,7 @@
 "UIMenuItem.PasteGo" = "Apegar y ir-ie";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Mirar con Firefox";
+"UIMenuItem.SearchWithFirefox" = "Mirar con Ecosia";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "no leito";
@@ -1193,7 +1193,7 @@
 "Yesterday" = "Ahiere";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "No tiens garra pestanya ubierta en Firefox en as tuyas demás dispositivos.";
+"You don’t have any tabs open in Firefox on your other devices." = "No tiens garra pestanya ubierta en Ecosia en as tuyas demás dispositivos.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Los tuyos dreitos";

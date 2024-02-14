@@ -1,13 +1,13 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Core
 import Shared
 import Common
 
-private var disclosureIndicator: UIImageView {
+var ecosiaDisclosureIndicator: UIImageView {
     let config = UIImage.SymbolConfiguration(pointSize: 16)
     let disclosureIndicator = UIImageView(image: .init(systemName: "chevron.right", withConfiguration: config))
     disclosureIndicator.contentMode = .center
@@ -17,7 +17,7 @@ private var disclosureIndicator: UIImageView {
 }
 
 final class SearchAreaSetting: Setting {
-    override var accessoryView: UIImageView? { return disclosureIndicator }
+    override var accessoryView: UIImageView? { return ecosiaDisclosureIndicator }
 
     override var style: UITableViewCell.CellStyle { return .value1 }
 
@@ -32,7 +32,7 @@ final class SearchAreaSetting: Setting {
     override func onClick(_ navigationController: UINavigationController?) {
         navigationController?.pushViewController(MarketsController(style: .insetGrouped), animated: true)
     }
-    
+
     override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
         super.onConfigureCell(cell, theme: theme)
         cell.detailTextLabel?.numberOfLines = 2
@@ -44,7 +44,7 @@ final class SearchAreaSetting: Setting {
 }
 
 final class SafeSearchSettings: Setting {
-    override var accessoryView: UIImageView? { return disclosureIndicator }
+    override var accessoryView: UIImageView? { return ecosiaDisclosureIndicator }
 
     override var style: UITableViewCell.CellStyle { return .value1 }
 
@@ -69,13 +69,15 @@ final class SafeSearchSettings: Setting {
 
 final class AutoCompleteSettings: BoolSetting {
     convenience init(prefs: Prefs, theme: Theme) {
-        self.init(prefs: prefs, theme: theme, prefKey: "", defaultValue: true,
-                titleText: .localized(.autocomplete),
-                statusText: .localized(.shownUnderSearchField), settingDidChange: { value in
-
-                    User.shared.autoComplete = value
-
-                })
+        self.init(prefs: prefs,
+                  theme: theme,
+                  prefKey: "",
+                  defaultValue: true,
+                  titleText: .localized(.autocomplete),
+                  statusText: .localized(.shownUnderSearchField),
+                  settingDidChange: { value in
+            User.shared.autoComplete = value
+        })
     }
 
     override func displayBool(_ control: UISwitch) {
@@ -89,11 +91,15 @@ final class AutoCompleteSettings: BoolSetting {
 
 final class PersonalSearchSettings: BoolSetting {
     convenience init(prefs: Prefs, theme: Theme) {
-        self.init(prefs: prefs, theme: theme, prefKey: "", defaultValue: false,
-                titleText: .localized(.personalizedResults),
-                statusText: .localized(.relevantResults), settingDidChange: { value in
-                    User.shared.personalized = value
-                })
+        self.init(prefs: prefs,
+                  theme: theme,
+                  prefKey: "",
+                  defaultValue: false,
+                  titleText: .localized(.personalizedResults),
+                  statusText: .localized(.relevantResults),
+                  settingDidChange: { value in
+            User.shared.personalized = value
+        })
     }
 
     override func displayBool(_ control: UISwitch) {
@@ -171,7 +177,8 @@ final class EcosiaTermsSetting: Setting {
 
 final class EcosiaSendAnonymousUsageDataSetting: BoolSetting {
     convenience init(prefs: Prefs, theme: Theme) {
-        self.init(prefs: prefs, theme: theme,
+        self.init(prefs: prefs,
+                  theme: theme,
                   prefKey: "",
                   defaultValue: true,
                   titleText: .localized(.sendUsageDataSettingsTitle),
@@ -194,7 +201,7 @@ final class EcosiaSendAnonymousUsageDataSetting: BoolSetting {
 final class HomepageSettings: Setting {
     private var profile: Profile
 
-    override var accessoryView: UIImageView? { disclosureIndicator }
+    override var accessoryView: UIImageView? { ecosiaDisclosureIndicator }
 
     init(settings: SettingsTableViewController, settingsDelegate: SettingsDelegate?) {
         self.profile = settings.profile
@@ -207,29 +214,6 @@ final class HomepageSettings: Setting {
         customizationViewController.profile = profile
         customizationViewController.settingsDelegate = delegate
         navigationController?.pushViewController(customizationViewController, animated: true)
-    }
-}
-
-// Ecosia: Quick Search Shortcuts Experiment
-// Opens the quick search settings panel
-final class QuickSearchSearchSetting: Setting {
-    let profile: Profile
-
-    override var accessoryView: UIImageView? { return disclosureIndicator }
-
-    override var style: UITableViewCell.CellStyle { return .value1 }
-
-    override var accessibilityIdentifier: String? { return .localized(.quickSearch) }
-
-    init(settings: SettingsTableViewController) {
-        self.profile = settings.profile
-        super.init(title: NSAttributedString(string: .localized(.quickSearch), attributes: [NSAttributedString.Key.foregroundColor: UIColor.legacyTheme.tableView.rowText]))
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        Analytics.shared.accessQuickSearchSettingsScreen()
-        let viewController = SearchSettingsTableViewController(profile: profile)
-        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 

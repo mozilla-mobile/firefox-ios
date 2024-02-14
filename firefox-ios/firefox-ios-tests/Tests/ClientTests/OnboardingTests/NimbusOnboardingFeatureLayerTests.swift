@@ -27,7 +27,9 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     // MARK: - Test placeholder methods
     func testLayer_placeholderNamingMethod_returnsExpectedStrigs() {
         setupNimbusForStringTesting()
-        let expectedPlaceholderString = "A string inside Firefox with a placeholder"
+        // Ecosia: Update placeholder
+        // let expectedPlaceholderString = "A string inside Firefox with a placeholder"
+        let expectedPlaceholderString = "A string inside Ecosia with a placeholder"
         let expectedNoPlaceholderString = "On Wednesday's, we wear pink"
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 

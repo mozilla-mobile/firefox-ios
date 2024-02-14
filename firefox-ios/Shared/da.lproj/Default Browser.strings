@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "At gøre Firefox til din standard-browser er en stemme for et åbent og tilgængeligt internet.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "At gøre Ecosia til din standard-browser er en stemme for et åbent og tilgængeligt internet.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Standard for et bedre internet";
@@ -8,10 +8,10 @@
 "DefaultBrowserCard.Button.v2" = "Læs hvordan";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Indstil links fra websteder, mails og beskeder til automatisk at blive åbnet i Firefox.";
+"DefaultBrowserCard.Description" = "Indstil links fra websteder, mails og beskeder til automatisk at blive åbnet i Ecosia.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "Vælg Firefox som din standard-browser for automatisk at få hastighed, sikkerhed og beskyttelse af dit privatliv.";
+"DefaultBrowserCard.NextLevel.Description.v108" = "Vælg Ecosia som din standard-browser for automatisk at få hastighed, sikkerhed og beskyttelse af dit privatliv.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "Bedre daglig browsing";
@@ -35,7 +35,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Tryk på Standardapp til browsing";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Vælg Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. Vælg Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Standardapp til browsing";

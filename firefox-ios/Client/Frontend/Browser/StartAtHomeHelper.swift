@@ -32,10 +32,16 @@ class StartAtHomeHelper: FeatureFlaggable {
 
     var startAtHomeSetting: StartAtHomeSetting {
         get {
+            /* Ecosia: Set to disabled
             if let prefs = prefs.stringForKey(PrefsKeys.UserFeatureFlagPrefs.StartAtHome) {
                 return StartAtHomeSetting(rawValue: prefs) ?? .afterFourHours
             }
             return .afterFourHours
+             */
+            if let prefs = prefs.stringForKey(PrefsKeys.UserFeatureFlagPrefs.StartAtHome) {
+                return StartAtHomeSetting(rawValue: prefs) ?? .disabled
+            }
+            return .disabled
         }
         set { prefs.setString(newValue.rawValue, forKey: PrefsKeys.UserFeatureFlagPrefs.StartAtHome) }
     }

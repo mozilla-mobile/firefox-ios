@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Ngajadikeun Firefox panyungsi baku téh minangka pangrojong kana internét anu nembrak & kahontal.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Ngajadikeun Ecosia panyungsi baku téh minangka pangrojong kana internét anu nembrak & kahontal.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Baku pikeun Internét anu Leuwih Hadé";
@@ -8,10 +8,10 @@
 "DefaultBrowserCard.Button.v2" = "Lenyepan Carana";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Setél tutumbu ti raramatloka, surélék, jeung Surat pikeun muka otomatis dina Firefox.";
+"DefaultBrowserCard.Description" = "Setél tutumbu ti raramatloka, surélék, jeung Surat pikeun muka otomatis dina Ecosia.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "Pilih Firefox salaku panyungsi baku pikeun ngarah otomatis gancang, aman, jeung pripasi.";
+"DefaultBrowserCard.NextLevel.Description.v108" = "Pilih Ecosia salaku panyungsi baku pikeun ngarah otomatis gancang, aman, jeung pripasi.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "Ronjatkeun Nyungsi Sapopoé";
@@ -35,7 +35,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Toél Aplikasi Panyungsi Baku";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Pilih Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. Pilih Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Aplikasi Panyungsi Baku";

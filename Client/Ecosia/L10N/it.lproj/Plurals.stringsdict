@@ -92,25 +92,7 @@
 			<string>Alberi piantati</string>
 		</dict>
 	</dict>
-	<key>%d friend invite(s)</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@friends@</string>
-		<key>friends</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>one</key>
-			<string>%d amico invitato</string>
-			<key>many</key>
-			<string>%d amici invitati</string>
-			<key>other</key>
-			<string>%d amici invitati</string>
-		</dict>
-	</dict>
-	<key>%d accepted invite(s)</key>
+	<key>accepted invite(s)</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@invites@</string>
@@ -121,11 +103,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d invito accettato</string>
+			<string>invito accettato</string>
 			<key>many</key>
-			<string>%d inviti accettati</string>
+			<string>inviti accettati</string>
 			<key>other</key>
-			<string>%d inviti accettati</string>
+			<string>inviti accettati</string>
 		</dict>
 	</dict>
 </dict>

@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Itxi fitxa pribatuak";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Gehitu Firefoxen lasterbideak zure hasierako pantailan.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Gehitu Ecosiaen lasterbideak zure hasierako pantailan.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Joan kopiatutako loturara";
@@ -23,13 +23,13 @@
 "TodayWidget.NoOpenTabsLabel" = "Irekitako fitxarik ez.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Ireki Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Ireki Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Bilaketa pribatua";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Gehitu Firefoxerako lasterbidea zure hasierako pantailan. Widget-a gehitu bezain laster, sakatu eta mantendu lasterbidea editatu eta beste bat hautatzeko.";
+"TodayWidget.QuickActionGalleryDescription" = "Gehitu Ecosiaerako lasterbidea zure hasierako pantailan. Widget-a gehitu bezain laster, sakatu eta mantendu lasterbidea editatu eta beste bat hautatzeko.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Ekintza bizkorrak";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Ikuspegi azkarra";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Bilatu Firefoxen";
+"TodayWidget.SearchInFirefoxV2" = "Bilatu Ecosiaen";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Bilatu fitxa pribatuan";

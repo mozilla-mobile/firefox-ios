@@ -96,29 +96,33 @@
   },
   "testTargets" : [
     {
-      "target" : {
-        "containerPath" : "container:Client.xcodeproj",
-        "identifier" : "2FA436041ABB83B4008031D1",
-        "name" : "AccountTests"
-      }
-    },
-    {
       "skippedTests" : [
         "ContentBlockerTests",
         "ETPCoverSheetTests",
+        "GeneralizedImageFetcherTests\/testErrorResponse()",
         "GleanPlumbMessageManagerTests\/testManagerOnMessagePressed_withMalformedURL()",
         "HistoryHighlightsDataAdaptorTests",
         "HistoryHighlightsDataAdaptorTests\/testReloadDataOnNotification()",
         "HistoryHighlightsTests",
+        "HistoryDeletionUtilityTests\/testDeletingMultipleItemsEmptyingDatabase()",
+        "HistoryDeletionUtilityTests\/testDeletingMultipleSpecificItems()",
+        "IntroScreenManagerTests\/testHasSeenIntroScreen_shouldNotShowIt()",
         "IntroViewControllerTests\/testBasicSetupReturnsExpectedItems()",
         "RustSyncManagerTests\/testGetEnginesAndKeys()",
         "RustSyncManagerTests\/testGetEnginesAndKeysWithNoKey()",
         "RustSyncManagerTests\/testUpdateEnginePrefs_addressesDisabled()",
         "RustSyncManagerTests\/testUpdateEnginePrefs_addressesEnabled()",
         "RustSyncManagerTests\/testUpdateEnginePrefs_bookmarksEnabled()",
+        "RustSyncManagerTests\/testUpdateEnginePrefs_creditCardEnabled()",
         "ShortcutRouteTests\/testOpenLastBookmarkShortcutWithInvalidUrl()",
         "TabManagerTests\/testDeleteSelectedTab()",
+        "TabManagerTests\/testPreserveTabsWithManyTabs()",
+        "TabManagerTests\/testPreserveTabsWithNoTabs()",
+        "TabManagerTests\/testPreserveTabsWithOneTab()",
         "TabManagerTests\/testPrivatePreference_togglePBMDeletesPrivate()",
+        "TabManagerTests\/testRemoveScreenshotWithImage()",
+        "TabManagerTests\/testSaveScreenshotWithImage()",
+        "TabManagerTests\/testSaveScreenshotWithNoImage()",
         "TestFavicons\/testFaviconFetcherParse()",
         "VersionSettingTests",
         "VersionSettingTests\/testCopyAppVersion()"

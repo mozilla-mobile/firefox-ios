@@ -7,7 +7,7 @@ import Common
 
 /// Extension handling previous version retrieval and saving current version.
 extension Version {
-    
+
     /// Save the specified app version to `UserDefaults`.
     ///
     /// This method takes a `Version` object and saves its description to `UserDefaults`
@@ -21,7 +21,7 @@ extension Version {
         guard let savedKey = prefs.string(forKey: key) else { return nil }
         return Version(savedKey)
     }
-    
+
     /// Update the specified app version to `UserDefaults`.
     ///
     /// This method takes a `String` key to utilize to its `UserDefaults`
@@ -41,7 +41,7 @@ extension Version {
 
 /// Extension handling the gather of the current Ecosia App Version.
 extension Version {
-    
+
     /// A string representation of the current Ecosia App Version.
     static var ecosiaCurrent: Version {
         Version(AppInfo.ecosiaAppVersion)!

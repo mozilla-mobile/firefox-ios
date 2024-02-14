@@ -3,6 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import WebKit
+// Ecosia
+import Core
 
 class UserScriptManager: FeatureFlaggable {
     // Scripts can use this to verify the *app* (not JS on the web) is calling into them.

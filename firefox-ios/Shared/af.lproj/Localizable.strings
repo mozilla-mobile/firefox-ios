@@ -110,7 +110,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Dit kan ’n opstellingsfout wees, of ’n gepeuter deur ’n aanvaller. Gaan voort op eie risiko.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "Die eienaar van %@ het hul webwerf verkeerd opgestel. Om u inligting van diefstal te beskerm, het Firefox nie aan dié webwerf verbind nie.";
+"ErrorPages.CertWarning.Description" = "Die eienaar van %@ het hul webwerf verkeerd opgestel. Om u inligting van diefstal te beskerm, het Ecosia nie aan dié webwerf verbind nie.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Hierdie verbinding is onvertroud";
@@ -125,7 +125,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefox-tuisblad";
+"Firefox.HomePage.Title" = "Ecosia-tuisblad";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Vorentoe";
@@ -218,7 +218,7 @@
 "LoginsHelper.Update.Button" = "Werk by";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Dit lyk of Firefox vantevore omgeval het. Wil u die oortjies herstel?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Dit lyk of Ecosia vantevore omgeval het. Wil u die oortjies herstel?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Merk as gelees";
@@ -248,7 +248,7 @@
 "OK" = "Goed";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Gits! Firefox het omgeval.";
+"Oops! Firefox crashed" = "Gits! Ecosia het omgeval.";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Open artikels in Leesaansig deur op die boekikoon te raak as dit op die titelbalk verskyn.";
@@ -491,7 +491,7 @@
 "Yesterday" = "Gister";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Daar is geen oortjies oop in Firefox op ander toestelle nie.";
+"You don’t have any tabs open in Firefox on your other devices." = "Daar is geen oortjies oop in Ecosia op ander toestelle nie.";
 
 /* Your Rights settings section title */
 "Your Rights" = "U regte";

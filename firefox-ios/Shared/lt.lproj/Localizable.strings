@@ -293,7 +293,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Taip gali būti dėl netinkamos konfigūracijos arba piktavalio „kišamų nagų“. Tęskite, jei sutinkate su galima rizika.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "%@ savininkas netinkamai sukonfigūravo savo svetainę. „Firefox“ nesijungė prie šios svetainės, kad apsaugotų jūsų duomenis nuo perėmimo.";
+"ErrorPages.CertWarning.Description" = "%@ savininkas netinkamai sukonfigūravo savo svetainę. „Ecosia“ nesijungė prie šios svetainės, kad apsaugotų jūsų duomenis nuo perėmimo.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Šis ryšys nepatikimas";
@@ -314,7 +314,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "„Firefox“ pradžios tinklalapis";
+"Firefox.HomePage.Title" = "„Ecosia“ pradžios tinklalapis";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "Tvarkyti pradžios tinklalapį";
@@ -332,7 +332,7 @@
 "Forward" = "Pirmyn";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "„Firefox“ paskyra";
+"FxA.FirefoxAccount" = "„Ecosia“ paskyra";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Tvarkyti paskyrą ir įrenginius";
@@ -344,7 +344,7 @@
 "fxa.signin.camera-signin" = "Prisijunkite su savo kamera";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "Atverkite „Firefox“ savo kompiuteryje, ir eikite į firefox.com/pair";
+"fxa.signin.qr-link-instruction" = "Atverkite „Ecosia“ savo kompiuteryje, ir eikite į ecosia.org/pair";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Pasiruošti nuskaitymui";
@@ -356,7 +356,7 @@
 "FxA.SyncNow" = "Sinchronizuoti dabar";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "„Firefox Sync“ prisijungė prie „%@“";
+"FxAPush_DeviceConnected_body" = "„Ecosia Sync“ prisijungė prie „%@“";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "„Sync“ prisijungė";
@@ -365,7 +365,7 @@
 "FxAPush_DeviceDisconnected_body" = "„%@“ buvo sėkmingai atjungtas.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Šis įrenginys buvo sėkmingai atjungtas nuo „Firefox Sync“.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Šis įrenginys buvo sėkmingai atjungtas nuo „Ecosia Sync“.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "„Sync“ atsijungė";
@@ -374,7 +374,7 @@
 "FxAPush_DeviceDisconnected_title" = "„Sync“ atsijungė";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Įrenginys buvo atjungtas nuo „Firefox Sync“";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Įrenginys buvo atjungtas nuo „Ecosia Sync“";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Žinynas";
@@ -407,7 +407,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Prisijunkite, norėdami peržiūrėti kituose įrenginiuose esančias korteles.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "„Firefox Sync“";
+"HistoryPanel.EmptySyncedTabsState.Title" = "„Ecosia Sync“";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Žurnalas";
@@ -566,13 +566,13 @@
 "Logins.Onboarding.LearnMoreButtonTitle" = "Sužinoti daugiau";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "Norėdami naudoti automatinio užpildymo funkciją su „Firefox“, turite įjungti įrenginio apsaugos kodą.";
+"Logins.PasscodeRequirement.Warning" = "Norėdami naudoti automatinio užpildymo funkciją su „Ecosia“, turite įjungti įrenginio apsaugos kodą.";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "Turėkite savo slaptažodžius visur";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "Automatiškai užpildykite „Firefox“ slaptažodžius";
+"Logins.WelcomeView.Title2" = "Automatiškai užpildykite „Ecosia“ slaptažodžius";
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "Įjungti automatinį užpildymą";
@@ -617,7 +617,7 @@
 "LoginsList.Title" = "ĮRAŠYTI PRISIJUNGIMAI";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Panašu, kad „Firefox“ praėjusį kartą užstrigo. Ar norite atkurti savo korteles?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Panašu, kad „Ecosia“ praėjusį kartą užstrigo. Ar norite atkurti savo korteles?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Pažymėti kaip skaitytą";
@@ -749,7 +749,7 @@
 "Onboarding.WhatsNew.Button.Title" = "Pradėti naršymą";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Oi! „Firefox“ užstrigo";
+"Oops! Firefox crashed" = "Oi! „Ecosia“ užstrigo";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Atverkite straipsnius skaitymo veiksenoje, bakstelėdami knygos piktogramą, pasirodančią antraštės juostoje.";
@@ -761,7 +761,7 @@
 "Open Tabs" = "Atvertos kortelės";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "„Firefox“ negali atverti nurodyto tinklalapio, nes jo adresas nėra tinkamas.";
+"OpenURL.Error.Message" = "„Ecosia“ negali atverti nurodyto tinklalapio, nes jo adresas nėra tinkamas.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Nepavyko atverti tinklalapio.";
@@ -773,7 +773,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Tai jums leis paveikslą įrašyti į „Camera Roll“.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "„Firefox“ prašo prieigos prie jūsų nuotraukų";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "„Ecosia“ prašo prieigos prie jūsų nuotraukų";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Užverti";
@@ -926,13 +926,13 @@
 "SendTo.NavBar.Title" = "Nusiųsti kortelę";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "Su šia „Firefox“ paskyra nesate susieję jokių kitų sinchronizuoti galinčių įrenginių.";
+"SendTo.NoDevicesFound.Message" = "Su šia „Ecosia“ paskyra nesate susieję jokių kitų sinchronizuoti galinčių įrenginių.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Jei norite tęsti, atverkite „Firefox“, eikite į nuostatas ir prisijunkite.";
+"SendTo.NotSignedIn.Message" = "Jei norite tęsti, atverkite „Ecosia“, eikite į nuostatas ir prisijunkite.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Jūs nesate prisijungę prie savo „Firefox“ paskyros.";
+"SendTo.NotSignedIn.Title" = "Jūs nesate prisijungę prie savo „Ecosia“ paskyros.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Siųsti";
@@ -1013,7 +1013,7 @@
 "Settings.DataManagement.Title" = "Duomenų tvarkymas";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "„Firefox“ nebesinchronizuos duomenų su jūsų paskyra, tačiau šiame įrenginyje esančių naršymo duomenų nepašalins.";
+"Settings.Disconnect.Body" = "„Ecosia“ nebesinchronizuos duomenų su jūsų paskyra, tačiau šiame įrenginyje esančių naršymo duomenų nepašalins.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Atjungti „Sync“";
@@ -1076,7 +1076,7 @@
 "Settings.FxA.Sync.SectionName" = "Sinchronizavimo nuostatos";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "„Firefox“ paskyra";
+"Settings.FxA.Title" = "„Ecosia“ paskyra";
 
 /* General settings section title */
 "Settings.General.SectionName" = "Bendrosios";
@@ -1103,7 +1103,7 @@
 "Settings.Home.Option.StartAtHome.Always" = "Pradžios tinklalapį";
 
 /* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
-"Settings.Home.Option.StartAtHome.Description" = "Pasirinkite, ką matysite sugrįžę į „Firefox“.";
+"Settings.Home.Option.StartAtHome.Description" = "Pasirinkite, ką matysite sugrįžę į „Ecosia“.";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "Paskutinę kortelę";
@@ -1148,7 +1148,7 @@
 "Settings.NewTab.Option.BlankPage" = "Tuščias puslapis";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "„Firefox“ pradžios tinklalapis";
+"Settings.NewTab.Option.FirefoxHome" = "„Ecosia“ pradžios tinklalapis";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Pradžios tinklalapis";
@@ -1166,7 +1166,7 @@
 "Settings.NewTab.TopSectionNameFooter" = "Pasirinkite, ką įkelti atveriant naują kortelę";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Kai atveriama „Firefox“";
+"Settings.OfferClipboardBar.Status" = "Kai atveriama „Ecosia“";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.StatusV2" = "Kai atveriama „Firefox“";
@@ -1193,7 +1193,7 @@
 "Settings.SendUsage.Link" = "Sužinoti daugiau.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "„Mozilla“ siekia rinkti tik tai, ko reikia norint pagerinti „Firefox“ visiems.";
+"Settings.SendUsage.Message" = "„Mozilla“ siekia rinkti tik tai, ko reikia norint pagerinti „Ecosia“ visiems.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Siųsti naudojimo duomenis";
@@ -1214,7 +1214,7 @@
 "Settings.Siri.OpenTabShortcut" = "Atverti naują kortelę";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Naudoti „Siri“ leistukus norint greitai atverti „Firefox“";
+"Settings.Siri.SectionDescription" = "Naudoti „Siri“ leistukus norint greitai atverti „Ecosia“";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "„Siri“ leistukai";
@@ -1223,7 +1223,7 @@
 "Settings.Studies.Toggle.Link" = "Sužinoti daugiau.";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "„Firefox“ retkarčiais gali įdiegti ir vykdyti tyrimus.";
+"Settings.Studies.Toggle.Message" = "„Ecosia“ retkarčiais gali įdiegti ir vykdyti tyrimus.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Tyrimai";
@@ -1316,13 +1316,13 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "Įkelti fone";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Įkeliama per „Firefox“";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Įkeliama per „Ecosia“";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Atverti per „Firefox“";
+"ShareExtension.OpenInFirefoxAction.Title" = "Atverti per „Ecosia“";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Ieškoti per „Firefox“";
+"ShareExtension.SeachInFirefoxAction.Title" = "Ieškoti per „Ecosia“";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "Rodyti paieškos žodžių siūlymus";
@@ -1448,7 +1448,7 @@
 "UIMenuItem.PasteGo" = "Įdėti ir atverti";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Ieškoti per „Firefox“";
+"UIMenuItem.SearchWithFirefox" = "Ieškoti per „Ecosia“";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "neskaityta";
@@ -1478,7 +1478,7 @@
 "Yesterday" = "Vakar";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Kituose savo įrenginiuose su „Firefox“ neturite atvertų kortelių.";
+"You don’t have any tabs open in Firefox on your other devices." = "Kituose savo įrenginiuose su „Ecosia“ neturite atvertų kortelių.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Jūsų teisės";

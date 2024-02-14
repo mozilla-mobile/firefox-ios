@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Închide filele private";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Adaugă scurtături Firefox în ecranul de pornire.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Adaugă scurtături Ecosia în ecranul de pornire.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Deschide linkul copiat";
@@ -23,13 +23,13 @@
 "TodayWidget.NoOpenTabsLabel" = "Nicio filă deschisă.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Deschide Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Deschide Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Căutare privată";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Adaugă o scurtătură Firefox în ecranul de pornire. După ce ai adăugat widgetul, ține-l atins pentru editare și selectează o scurtătură diferită.";
+"TodayWidget.QuickActionGalleryDescription" = "Adaugă o scurtătură Ecosia în ecranul de pornire. După ce ai adăugat widgetul, ține-l atins pentru editare și selectează o scurtătură diferită.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Acțiuni rapide";
@@ -38,7 +38,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Vizualizare rapidă";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Caută în Firefox";
+"TodayWidget.SearchInFirefoxV2" = "Caută în Ecosia";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Caută în filă privată";

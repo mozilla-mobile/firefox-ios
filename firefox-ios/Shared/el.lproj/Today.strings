@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Κλείσιμο ιδιωτικών καρτελών";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Προσθήκη συντομεύσεων Firefox στην αρχική οθόνη.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Προσθήκη συντομεύσεων Ecosia στην αρχική οθόνη.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Μετάβαση στον αντιγραμμένο σύνδεσμο";
@@ -23,19 +23,19 @@
 "TodayWidget.NoOpenTabsLabel" = "Καμία ανοικτή καρτέλα.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Άνοιγμα Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Άνοιγμα Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Ιδιωτική αναζήτηση";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Προσθέστε μια συντόμευση Firefox στην αρχική οθόνη. Αφού προσθέσετε το γραφικό στοιχείο, πατήστε παρατεταμένα για επεξεργασία και επιλογή διαφορετικής συντόμευσης.";
+"TodayWidget.QuickActionGalleryDescription" = "Προσθέστε μια συντόμευση Ecosia στην αρχική οθόνη. Αφού προσθέσετε το γραφικό στοιχείο, πατήστε παρατεταμένα για επεξεργασία και επιλογή διαφορετικής συντόμευσης.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Γρήγορες ενέργειες";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Συντομεύσεις Firefox";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Συντομεύσεις Ecosia";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Προσθήκη συντομεύσεων για ανοικτές καρτέλες.";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Γρήγορη προβολή";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Αναζήτηση στο Firefox";
+"TodayWidget.SearchInFirefoxV2" = "Αναζήτηση στο Ecosia";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Αναζήτηση σε ιδιωτική καρτέλα";

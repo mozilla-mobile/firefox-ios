@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "ব্যক্তিগত\nট্যাবগুলি বন্ধ করুন";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "আপনার হোম স্ক্রিনে Firefox শর্টকাট যুক্ত করুন।";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "আপনার হোম স্ক্রিনে Ecosia শর্টকাট যুক্ত করুন।";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "কপি করা লিঙ্কে যান";
@@ -29,7 +29,7 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "ব্যক্তিগত অনুসন্ধান";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "আপনার হোম স্ক্রিনে একটি Firefox শর্টকাট যুক্ত করুন। উইজেট যুক্ত করার পরে, এটি সম্পাদনা করতে স্পর্শ করুন এবং ধরে রাখুন এবং একটি আলাদা শর্টকাট নির্বাচন করুন।";
+"TodayWidget.QuickActionGalleryDescription" = "আপনার হোম স্ক্রিনে একটি Ecosia শর্টকাট যুক্ত করুন। উইজেট যুক্ত করার পরে, এটি সম্পাদনা করতে স্পর্শ করুন এবং ধরে রাখুন এবং একটি আলাদা শর্টকাট নির্বাচন করুন।";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "দ্রুত পদক্ষেপ";

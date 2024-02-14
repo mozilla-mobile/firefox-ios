@@ -52,7 +52,9 @@ class URLScannerTests: XCTestCase {
     }
 
     func testSimpleFullURLQueryItem() {
-        let urlString = "firefox://open-url?url=https://example.com/path"
+        // Ecosia: Update url
+        // let urlString = "firefox://open-url?url=https://example.com/path"
+        let urlString = "ecosia://open-url?url=https://example.com/path"
         let url = URL(string: urlString)!
         let scanner = URLScanner(url: url)!
         XCTAssertEqual(scanner.value(query: "url"), "https://example.com/path")
@@ -60,7 +62,9 @@ class URLScannerTests: XCTestCase {
     }
 
     func testPrecedingNonURLParamBeforeURLQueryItem() {
-        let urlString = "firefox://open-url?arg1=abc&url=https://example.com/path?arg1=a"
+        // Ecosia: Update url
+        // let urlString = "firefox://open-url?arg1=abc&url=https://example.com/path?arg1=a"
+        let urlString = "ecosia://open-url?arg1=abc&url=https://example.com/path?arg1=a"
         let url = URL(string: urlString)!
         let scanner = URLScanner(url: url)!
         XCTAssertEqual(scanner.value(query: "url"), "https://example.com/path?arg1=a")
@@ -69,7 +73,9 @@ class URLScannerTests: XCTestCase {
     }
 
     func testSingleQueryFullURLQueryItem() {
-        let urlString = "firefox://open-url?url=https://example.com/path?arg1=a"
+        // Ecosia: Update url
+        // let urlString = "firefox://open-url?url=https://example.com/path?arg1=a"
+        let urlString = "ecosia://open-url?url=https://example.com/path?arg1=a"
         let url = URL(string: urlString)!
         let scanner = URLScanner(url: url)!
         XCTAssertEqual(scanner.value(query: "url"), "https://example.com/path?arg1=a")
@@ -77,7 +83,9 @@ class URLScannerTests: XCTestCase {
     }
 
     func testTwoQueryParams() {
-        let urlString = "firefox://open-url?url=https://example.com/path?arg1=a&arg2=b"
+        // Ecosia: Update url
+        // let urlString = "firefox://open-url?url=https://example.com/path?arg1=a&arg2=b"
+        let urlString = "ecosia://open-url?url=https://example.com/path?arg1=a&arg2=b"
         let url = URL(string: urlString)!
         let scanner = URLScanner(url: url)!
         // Currently we do _not_ expect URLComponents to include all parameters to the URL.
@@ -88,7 +96,9 @@ class URLScannerTests: XCTestCase {
     }
 
     func testMultipleQueryParams() {
-        let urlString = "firefox://open-url?url=https://example.com/path?arg1=a&arg2=b&arg3=c"
+        // Ecosia: Update url
+        // let urlString = "firefox://open-url?url=https://example.com/path?arg1=a&arg2=b&arg3=c"
+        let urlString = "ecosia://open-url?url=https://example.com/path?arg1=a&arg2=b&arg3=c"
         let url = URL(string: urlString)!
         let scanner = URLScanner(url: url)!
         XCTAssertEqual(scanner.value(query: "url"), "https://example.com/path?arg1=a")
@@ -97,7 +107,9 @@ class URLScannerTests: XCTestCase {
     }
 
     func testMultipleLevelsOfNestedURLs() {
-        let urlString = "firefox://open-url?url=https://example.com/path?arg1=a&anotherURL=https://test.com"
+        // Ecosia: Update url
+        // let urlString = "firefox://open-url?url=https://example.com/path?arg1=a&anotherURL=https://test.com"
+        let urlString = "ecosia://open-url?url=https://example.com/path?arg1=a&anotherURL=https://test.com"
         let url = URL(string: urlString)!
         let scanner = URLScanner(url: url)!
         XCTAssertEqual(scanner.fullURLQueryItem(), "https://example.com/path?arg1=a&anotherURL=https://test.com")
@@ -113,7 +125,9 @@ class URLScannerTests: XCTestCase {
     }
 
     func testOurScheme() {
-        let urlString = "firefox://abcdefg/path/to/resource"
+        // Ecosia: Update url
+        // let urlString = "firefox://abcdefg/path/to/resource"
+        let urlString = "ecosia://abcdefg/path/to/resource"
         let url = URL(string: urlString)!
         let scanner = URLScanner(url: url)
         XCTAssertNotNil(scanner)

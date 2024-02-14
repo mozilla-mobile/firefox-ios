@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Glean
+// Ecosia: remove Glean dependency // import Glean
 
 protocol GleanWrapper {
     func handleDeeplinkUrl(url: URL)
@@ -16,12 +16,15 @@ struct DefaultGleanWrapper: GleanWrapper {
     public static let shared = DefaultGleanWrapper()
 
     func handleDeeplinkUrl(url: URL) {
-        Glean.shared.handleCustomUrl(url: url)
+        // Ecosia: remove Glean dependency
+        // Glean.shared.handleCustomUrl(url: url)
     }
     func setUpload(isEnabled: Bool) {
-        Glean.shared.setUploadEnabled(isEnabled)
+        // Ecosia: remove Glean dependency
+        // Glean.shared.setUploadEnabled(isEnabled)
     }
     func submitPing() {
-        GleanMetrics.Pings.shared.firstSession.submit()
+        // Ecosia: remove Glean dependency
+        // GleanMetrics.Pings.shared.firstSession.submit()
     }
 }

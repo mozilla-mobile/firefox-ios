@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import Common
@@ -33,9 +33,9 @@ final class WelcomeTourGreen: UIView, Themeable {
         label.textAlignment = .left
         return label
     }()
-    
+
     // MARK: - Themeable Properties
-    
+
     var themeManager: ThemeManager { AppContainer.shared.resolve() }
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
@@ -53,7 +53,7 @@ final class WelcomeTourGreen: UIView, Themeable {
 
     func setup(isCounterEnabled: Bool) {
         let iPadOffset: CGFloat = traitCollection.userInterfaceIdiom == .pad ? 60 : 0
-        
+
         let stack = UIStackView()
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .vertical
@@ -61,7 +61,7 @@ final class WelcomeTourGreen: UIView, Themeable {
         stack.alignment = .center
         stack.spacing = 24 + iPadOffset
         addSubview(stack)
-        
+
         stack.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         stack.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -50 - iPadOffset).isActive = true
 
@@ -83,7 +83,7 @@ final class WelcomeTourGreen: UIView, Themeable {
         if isCounterEnabled {
             bottomImage.addSubview(counterLabel)
             bottomImage.addSubview(counterSubtitleLabel)
-            
+
             NSLayoutConstraint.activate([
                 counterLabel.topAnchor.constraint(equalTo: bottomImage.topAnchor, constant: 28),
                 counterLabel.leadingAnchor.constraint(equalTo: bottomImage.leadingAnchor, constant: 65),
@@ -96,7 +96,7 @@ final class WelcomeTourGreen: UIView, Themeable {
             counterLabel.transform = .init(rotationAngle: angle)
             counterSubtitleLabel.transform = .init(rotationAngle: angle)
         }
-        
+
         // upscale images for iPad
         if traitCollection.userInterfaceIdiom == .pad {
             bottomImage.transform = bottomImage.transform.scaledBy(x: 1.5, y: 1.5)
@@ -109,7 +109,7 @@ final class WelcomeTourGreen: UIView, Themeable {
         counterLabel.textColor = .legacyTheme.ecosia.primaryText
         counterSubtitleLabel.textColor = .legacyTheme.ecosia.secondaryText
     }
-    
+
     func updateAccessibilitySettings() {
         isAccessibilityElement = false
         shouldGroupAccessibilityChildren = true

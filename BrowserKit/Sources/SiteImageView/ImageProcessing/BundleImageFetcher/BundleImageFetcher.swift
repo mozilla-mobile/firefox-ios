@@ -83,9 +83,14 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
          into the BrowserKit package, this would have resulted into macking a lot of changes into accessors to be able to make our own file outside of the BrowserKit context.
          */
 
-        let schemeStrippedFinancialUrlString = Environment.current.urlProvider.financialReports.absoluteString.replacingOccurrences(of: "https://", with: "")
-        if domain.bundleDomains.contains(schemeStrippedFinancialUrlString) {
-            return "blog.ecosia.finance"
+        let financialReportsURL = Environment.current.urlProvider.financialReports.absoluteString.replacingOccurrences(of: "https://", with: "")
+        let privacyURL = Environment.current.urlProvider.privacy.absoluteString.replacingOccurrences(of: "https://", with: "")
+        let urlMap = [
+            financialReportsURL: "blog.ecosia.finance",
+            privacyURL: "privacy.ecosia"
+        ]
+        if let matchingKey = urlMap.keys.first(where: { domain.bundleDomains.contains($0) }) {
+            return urlMap[matchingKey]
         }
         return domain.bundleDomains.first(where: { bundledImages[$0] != nil })
     }

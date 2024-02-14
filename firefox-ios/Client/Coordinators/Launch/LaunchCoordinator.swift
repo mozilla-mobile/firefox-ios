@@ -60,7 +60,9 @@ class LaunchCoordinator: BaseCoordinator,
             self.parentCoordinator?.didFinishLaunch(from: self)
         }
          */
-        let introViewController = Welcome(delegate: self)
+        let introViewController = WelcomeNavigation(rootViewController: Welcome(delegate: self))
+        introViewController.isNavigationBarHidden = true
+        introViewController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
         if isFullScreen {
             introViewController.modalPresentationStyle = .fullScreen
             router.present(introViewController, animated: false)

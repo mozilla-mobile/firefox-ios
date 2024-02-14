@@ -281,7 +281,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "यह समाकृति में एक चूक या एक आक्रमणकर्ता द्वारा छेड़छाड़ हो सकती है। यदि आप संभावित जोखिम स्वीकार करते हैं तो आगे बढ़ें।";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "%@ के उत्तराधिकारी ने वेबसाइट को गलत तरीके से कॉन्फ़िगर किया है। अपनी जानकारी को चोरी होने से सुरक्षित रखने के लिए, Firefox इस वेबसाइट से नहीं जुड़ा।";
+"ErrorPages.CertWarning.Description" = "%@ के उत्तराधिकारी ने वेबसाइट को गलत तरीके से कॉन्फ़िगर किया है। अपनी जानकारी को चोरी होने से सुरक्षित रखने के लिए, Ecosia इस वेबसाइट से नहीं जुड़ा।";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "यह संपर्क अविश्वसनीय है";
@@ -302,7 +302,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefox मुख्य पृष्ठ";
+"Firefox.HomePage.Title" = "Ecosia मुख्य पृष्ठ";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "मुखपृष्ठ मनपसंद बनाएँ";
@@ -323,7 +323,7 @@
 "fxa.signin.camera-signin" = "अपने कैमरे से साइन इन करें";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "अपने कंप्यूटर पर Firefox खोलें और firefox.com/pair पर जाएं";
+"fxa.signin.qr-link-instruction" = "अपने कंप्यूटर पर Ecosia खोलें और ecosia.org/pair पर जाएं";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "स्कैन के लिए तैयार";
@@ -344,7 +344,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ सफलतापूर्वक डिसकनेक्ट किया गया।";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "यह उपकरण Firefox सिंक से सफलतापूर्वक डिसकनेक्ट हो गया।";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "यह उपकरण Ecosia सिंक से सफलतापूर्वक डिसकनेक्ट हो गया।";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "सिंक डिस्कनेक्ट किया गया";
@@ -353,7 +353,7 @@
 "FxAPush_DeviceDisconnected_title" = "सिंक डिसकनेक्ट हुआ";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "एक उपकरण Firefox सिंक से डिस्कनेक्ट कर दिया है";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "एक उपकरण Ecosia सिंक से डिस्कनेक्ट कर दिया है";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "मदद";
@@ -545,7 +545,7 @@
 "Logins.WelcomeView.Tagline" = "हर जगह अपना पासवर्ड लेकर चलें";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "AutoFill Firefox पासवर्ड";
+"Logins.WelcomeView.Title2" = "AutoFill Ecosia पासवर्ड";
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "AutoFill चालू करें";
@@ -590,7 +590,7 @@
 "LoginsList.Title" = "लॉग इन सहेजा गया";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "ऐसा लगता है जैसे कि Firefox पूर्व में नष्ट हो गया। क्या आप अपने टैब को पूर्ववत करना चाहेंगे?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "ऐसा लगता है जैसे कि Ecosia पूर्व में नष्ट हो गया। क्या आप अपने टैब को पूर्ववत करना चाहेंगे?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "पठित चिह्नित करें";
@@ -722,7 +722,7 @@
 "Onboarding.WhatsNew.Button.Title" = "ब्राउजिंग शुरू करें";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "उफ़! Firefox नष्ट हो गया";
+"Oops! Firefox crashed" = "उफ़! Ecosia नष्ट हो गया";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "पुस्तक प्रतीक को दबाकर आलेखों को पाठक दृश्य में खोलें जब यह शीर्षक पट्टी में दिखाई देता है।";
@@ -899,13 +899,13 @@
 "SendTo.NavBar.Title" = "टैब भेजें";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "आपके पास सिंक के लिए इस Firefox खाते से जुड़े कोई अन्य उपकरण उपलब्ध नहीं हैं।";
+"SendTo.NoDevicesFound.Message" = "आपके पास सिंक के लिए इस Ecosia खाते से जुड़े कोई अन्य उपकरण उपलब्ध नहीं हैं।";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "कृपया Firefox खोलें, सेटिंग में जाएं और जारी रखने के लिए साइन इन करें।";
+"SendTo.NotSignedIn.Message" = "कृपया Ecosia खोलें, सेटिंग में जाएं और जारी रखने के लिए साइन इन करें।";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "आप अपने Firefox खाते में साइन इन नहीं हैं।";
+"SendTo.NotSignedIn.Title" = "आप अपने Ecosia खाते में साइन इन नहीं हैं।";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "भेजें";
@@ -1145,7 +1145,7 @@
 "Settings.SendUsage.Link" = "अधिक जानें।";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla मात्र उसे एकत्रित करने का प्रयास करता है जिसकी हमें आवश्यकता होती है तथा Firefox को सभी के लिए बेहतर बनता है।";
+"Settings.SendUsage.Message" = "Mozilla मात्र उसे एकत्रित करने का प्रयास करता है जिसकी हमें आवश्यकता होती है तथा Ecosia को सभी के लिए बेहतर बनता है।";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "उपयोगित डेटा भेजें";
@@ -1160,7 +1160,7 @@
 "Settings.Siri.OpenTabShortcut" = "नया टैब खोलें";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Siri के द्वारा तुरंत Firefox खोलने के लिए Siri शॉर्टकट का उपयोग करें";
+"Settings.Siri.SectionDescription" = "Siri के द्वारा तुरंत Ecosia खोलने के लिए Siri शॉर्टकट का उपयोग करें";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri शॉर्टकट";
@@ -1406,7 +1406,7 @@
 "Yesterday" = "कल";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "आपके अन्य उपकरणों पर Firefox में कोई टैब खुला नहीं है।";
+"You don’t have any tabs open in Firefox on your other devices." = "आपके अन्य उपकरणों पर Ecosia में कोई टैब खुला नहीं है।";
 
 /* Your Rights settings section title */
 "Your Rights" = "आपके अधिकार";

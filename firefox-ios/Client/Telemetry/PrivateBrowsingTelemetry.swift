@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Glean
+// Ecosia: remove Glean dependency // import Glean
 
 struct PrivateBrowsingTelemetry {
     func sendDataClearanceTappedTelemetry(didConfirm: Bool) {

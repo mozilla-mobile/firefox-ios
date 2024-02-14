@@ -5,16 +5,16 @@
 "New Tab" = "Nowy rejtarik";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox wašu kameru wužywa, aby QR-kody skannował a fota cynił a wideo nagrał.";
+"NSCameraUsageDescription" = "Ecosia wašu kameru wužywa, aby QR-kody skannował a fota cynił a wideo nagrał.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox Face ID trjeba, aby pśistup k wašym skłaźonym gronidłam a płaśeńskim metodam měł.";
+"NSFaceIDUsageDescription" = "Ecosia Face ID trjeba, aby pśistup k wašym skłaźonym gronidłam a płaśeńskim metodam měł.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Websedła, kótarež se woglědujośo, pominaju snaź wašo městno.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Firefox waš mikrofon wužywa, aby awdio registrěrował a nagrał.";
+"NSMicrophoneUsageDescription" = "Ecosia waš mikrofon wužywa, aby awdio registrěrował a nagrał.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Z tym móžośo fota składowaś.";

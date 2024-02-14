@@ -25,16 +25,16 @@ class PageActionsShortcutsHeader: UITableViewHeaderFooterView {
 
     var shortcuts: [NTPLibraryShortcutView] = []
 
-    let home = Panel(title: .localized(.home), 
+    let home = Panel(title: .localized(.home),
                      image: UIImage(named: StandardImageIdentifiers.Large.home),
                      tag: 0)
-    let newTab = Panel(title: .AppMenu.NewTab, 
+    let newTab = Panel(title: .AppMenu.NewTab,
                        image: UIImage(named: StandardImageIdentifiers.Large.plus),
                        tag: 1)
-    let share = Panel(title: .AppMenu.Share, 
+    let share = Panel(title: .AppMenu.Share,
                       image: UIImage(named: ImageIdentifiers.share),
                       tag: 2)
-    let settings = Panel(title: .AppMenu.AppMenuSettingsTitleString, 
+    let settings = Panel(title: .AppMenu.AppMenuSettingsTitleString,
                          image: UIImage(named: ImageIdentifiers.settings),
                          tag: 3)
 
@@ -56,7 +56,6 @@ class PageActionsShortcutsHeader: UITableViewHeaderFooterView {
             mainView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             mainView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
         ])
-
 
         // Ecosia: Custom options
         [home, newTab, share, settings].forEach { item in
@@ -108,5 +107,4 @@ class PageActionsShortcutsHeader: UITableViewHeaderFooterView {
             break
         }
     }
-
 }

@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "افتح في لسان خاص جديد";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "لن يتذكر Firefox أي من التأريخ، أو الكعكات، ولكن ستُحفظ العلامات الجديدة.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "لن يتذكر Ecosia أي من التأريخ، أو الكعكات، ولكن ستُحفظ العلامات الجديدة.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "اطّلع على المزيد";

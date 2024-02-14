@@ -31,23 +31,22 @@ class PrivateModeButton: ToggleButton, PrivateModeUI {
         accessibilityValue = isSelected ? .TabTrayToggleAccessibilityValueOn : .TabTrayToggleAccessibilityValueOff
         updateColors()
     }
-    
+
     func applyTheme(theme: Theme) {
         updateColors()
     }
 }
 
 extension PrivateModeButton {
-    
+
     private func updateColors() {
         let color = isPrivate
         ? UIColor.legacyTheme.ecosia.primaryBackground
         : UIColor.legacyTheme.ecosia.primaryText
-        
+
         setTitleColor(color, for: .normal)
         backgroundLayer.backgroundColor = isPrivate
             ? UIColor.legacyTheme.ecosia.privateButtonBackground.cgColor
             : UIColor.clear.cgColor
     }
 }
-

@@ -1,3 +1,7 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
 import Common
 import UIKit
 
@@ -17,6 +21,8 @@ public final class EcosiaThemeManager: ThemeManager, Notifiable {
             static let isOn = "profile.NightModeStatus"
         }
     }
+
+    public func setPrivateTheme(isOn: Bool) { }
 
     // MARK: - Variables
 
@@ -39,12 +45,9 @@ public final class EcosiaThemeManager: ThemeManager, Notifiable {
         self.mainQueue = mainQueue
         self.sharedContainerIdentifier = sharedContainerIdentifier
 
-        migrateDefaultsToUseStandard()
-
         self.userDefaults.register(defaults: [ThemeKeys.systemThemeIsOn: true,
                                               ThemeKeys.NightMode.isOn: NSNumber(value: false)])
-
-        changeCurrentTheme(loadInitialThemeType())
+        changeCurrentTheme(loadInitialStoredThemeType())
 
         setupNotifications(forObserver: self,
                            observing: [UIScreen.brightnessDidChangeNotification,
@@ -60,11 +63,7 @@ public final class EcosiaThemeManager: ThemeManager, Notifiable {
     public func changeCurrentTheme(_ newTheme: ThemeType) {
         guard currentTheme.type != newTheme else { return }
         currentTheme = newThemeForType(newTheme)
-
-        // overwrite the user interface style on the window attached to our scene
-        // once we have multiple scenes we need to update all of them
-        window?.overrideUserInterfaceStyle = currentTheme.type.getInterfaceStyle()
-
+        updateLegacyThemeIfSystemThemeON()
         mainQueue.ensureMainThread { [weak self] in
             self?.notificationCenter.post(name: .ThemeDidChange)
         }
@@ -76,7 +75,7 @@ public final class EcosiaThemeManager: ThemeManager, Notifiable {
               let nightModeIsOn = userDefaults.object(forKey: ThemeKeys.NightMode.isOn) as? NSNumber,
               nightModeIsOn.boolValue == false
         else { return }
-        changeCurrentTheme(getSystemThemeType())
+        changeCurrentTheme(Self.getSystemThemeType())
     }
 
     public func setSystemTheme(isOn: Bool) {
@@ -104,12 +103,12 @@ public final class EcosiaThemeManager: ThemeManager, Notifiable {
 
     // MARK: - Private methods
 
-    private func loadInitialThemeType() -> ThemeType {
+    private func loadInitialStoredThemeType() -> ThemeType {
         if let nightModeIsOn = userDefaults.object(forKey: ThemeKeys.NightMode.isOn) as? NSNumber,
            nightModeIsOn.boolValue == true {
             return .dark
         }
-        var themeType = getSystemThemeType()
+        var themeType = Self.getSystemThemeType()
         if let savedThemeDescription = userDefaults.string(forKey: ThemeKeys.themeName),
            let savedTheme = ThemeType(rawValue: savedThemeDescription) {
             themeType = savedTheme
@@ -117,7 +116,7 @@ public final class EcosiaThemeManager: ThemeManager, Notifiable {
         return themeType
     }
 
-    private func getSystemThemeType() -> ThemeType {
+    static func getSystemThemeType() -> ThemeType {
         return UIScreen.main.traitCollection.userInterfaceStyle == .dark ? ThemeType.dark : ThemeType.light
     }
 
@@ -182,6 +181,15 @@ public final class EcosiaThemeManager: ThemeManager, Notifiable {
             }
         default:
             return
+        }
+    }
+}
+
+extension EcosiaThemeManager {
+
+    func updateLegacyThemeIfSystemThemeON() {
+        if LegacyThemeManager.instance.systemThemeIsOn {
+            LegacyThemeManager.updateBasedOnCurrentSystemThemeType()
         }
     }
 }

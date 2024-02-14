@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Att göra Firefox till din standardwebbläsare är en röst för ett öppet, tillgängligt internet.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Att göra Ecosia till din standardwebbläsare är en röst för ett öppet, tillgängligt internet.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Standard för ett bättre internet";
@@ -8,10 +8,10 @@
 "DefaultBrowserCard.Button.v2" = "Lär dig hur";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Ställ in länkar från webbplatser, e-post och meddelanden så att de öppnas automatiskt i Firefox.";
+"DefaultBrowserCard.Description" = "Ställ in länkar från webbplatser, e-post och meddelanden så att de öppnas automatiskt i Ecosia.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "Välj Firefox som din standardwebbläsare för att automatiskt få hastighet, säkerhet och sekretess.";
+"DefaultBrowserCard.NextLevel.Description.v108" = "Välj Ecosia som din standardwebbläsare för att automatiskt få hastighet, säkerhet och sekretess.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "Förbättra din dagliga surfning";
@@ -35,7 +35,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Tryck på Standardwebbläsar-app";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Välj Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. Välj Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Standardwebbläsar-app ";

@@ -6,7 +6,7 @@ import Foundation
 
 final class WhatsNewViewModel {
     var items: [WhatsNewItem]
-    
+
     init(provider: WhatsNewDataProvider) {
         let providerItems = try? provider.getWhatsNewItemsInRange()
         self.items = providerItems ?? []

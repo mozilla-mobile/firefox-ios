@@ -10,17 +10,16 @@ import Foundation
 /// more info in `ErrorPageHandler`
 
 extension ErrorPageHandler {
-    
+
     var noConnectionErrorTitle: String {
         .localized(.noConnectionNSURLErrorTitle)
     }
-    
+
     var noConnectionErrorMessage: String {
         .localized(.noConnectionNSURLErrorMessage)
     }
-    
+
     var noConnectionErrorButtonTitle: String {
         .localized(.noConnectionNSURLErrorRefresh)
     }
-    
 }

@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Tornar o Firefox seu navegador padrão é um voto por uma internet aberta e acessível.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Tornar o Ecosia seu navegador padrão é um voto por uma internet aberta e acessível.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Torne padrão para uma Internet melhor";
@@ -8,19 +8,19 @@
 "DefaultBrowserCard.Button.v2" = "Saiba como";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Abra links, emails e mensagens automaticamente no Firefox.";
+"DefaultBrowserCard.Description" = "Abra links, emails e mensagens automaticamente no Ecosia.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "Escolha o Firefox como seu navegador padrão para tornar automático velocidade, segurança e privacidade.";
+"DefaultBrowserCard.NextLevel.Description.v108" = "Escolha o Ecosia como seu navegador padrão para tornar automático velocidade, segurança e privacidade.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "Melhore a rotina de navegação";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Description.v108" = "O Firefox bloqueia, em média, mais de 3.000 rastreadores por usuário a cada mês. Torne seu navegador padrão para ter tranquilidade em relação à privacidade.";
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "O Ecosia bloqueia, em média, mais de 3.000 rastreadores por usuário a cada mês. Torne seu navegador padrão para ter tranquilidade em relação à privacidade.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Title.v108" = "O Firefox tem proteção de privacidade";
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "O Ecosia tem proteção de privacidade";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Mude o navegador padrão";
@@ -35,7 +35,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Toque em App navegador padrão";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Selecione o Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. Selecione o Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "App navegador padrão";

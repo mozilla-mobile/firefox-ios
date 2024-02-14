@@ -13,6 +13,8 @@ class HomepageHeaderViewModel {
         // static let bottomSpacing: CGFloat = 30
         static let bottomSpacing: CGFloat = 8
         static let topSpacing: CGFloat = 16
+        // Ecosia: Update top inset for Seed Experiment
+        static let seedCounterNTPExperimentTopInset: CGFloat = 24
     }
 
     private let profile: Profile
@@ -49,7 +51,7 @@ extension HomepageHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
 
         let section = NSCollectionLayoutSection(group: group)
-        
+
         /* Ecosia: Migrate the top edge inset calculation from older app version
         let leadingInset = HomepageViewModel.UX.leadingInset(traitCollection: traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(
@@ -64,7 +66,9 @@ extension HomepageHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 
         let leadingInset = HomepageViewModel.UX.leadingInset(traitCollection: traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(
-            top: height * factor,
+            // Ecosia: Update top inset for Seed Experiment
+            // top: height * factor,
+            top: SeedCounterNTPExperiment.isEnabled ? UX.seedCounterNTPExperimentTopInset : height * factor,
             leading: 0,
             bottom: UX.bottomSpacing,
             trailing: 0)
@@ -85,8 +89,8 @@ extension HomepageHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 }
 
-extension HomepageHeaderViewModel: HomepageSectionHandler {
-    
+extension HomeLogoHeaderViewModel: HomepageSectionHandler {
+
     func configure(_ cell: UICollectionViewCell, at indexPath: IndexPath) -> UICollectionViewCell {
         /* Ecosia: Cell as NTPLogoCell
         guard let headerCell = cell as? LegacyHomepageHeaderCell else { return UICollectionViewCell() }

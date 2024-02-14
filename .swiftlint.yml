@@ -38,7 +38,8 @@ only_rules: # Only enforce these rules, ignore all others
   - redundant_objc_attribute
   - redundant_optional_initialization
   - redundant_string_enum_value
-  - redundant_void_return
+  # Ecosia: disabled
+  # - redundant_void_return
   - return_arrow_whitespace
   - statement_position
   - switch_case_alignment
@@ -57,7 +58,8 @@ only_rules: # Only enforce these rules, ignore all others
   - void_return
   - file_header
   - redundant_type_annotation
-  - attributes
+  # Ecosia: disabled
+  # - attributes
   - closing_brace
   - closure_end_indentation
   - contains_over_filter_count
@@ -80,10 +82,13 @@ only_rules: # Only enforce these rules, ignore all others
   - overridden_super_call
   - vertical_parameter_alignment_on_call
   - vertical_whitespace_closing_braces
-  - vertical_whitespace_opening_braces
+  # Ecosia: disabled
+  # - vertical_whitespace_opening_braces
   - yoda_condition
   - accessibility_label_for_image
   - accessibility_trait_for_button
+  # Ecosia: enabled
+  - custom_rules
 
 # These rules were originally opted into. Disabling for now to get
 # Swiftlint up and running.
@@ -98,6 +103,23 @@ line_length:
   warning: 125
   ignores_urls: true
   ignores_interpolated_strings: true
+
+custom_rules:
+  reassign_analytics_instance:
+    included:
+      - ".*\\.swift"
+    excluded:
+      - "EcosiaTests/*"
+    regex: "(Analytics.shared =)"
+    capture_group: 0
+    match_kinds:
+      - comment
+      - identifier
+    message: "We should not re-assign Analytics shared instance outside tests."
+    severity: error
+  no_hiding_in_strings:
+    regex: "(Analytics.shared =)"
+    match_kinds: string
 
 file_header:
   required_string: |
@@ -137,6 +159,8 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - firefox-ios/Build/Intermediates.noindex/Client.build/Fennec-iphoneos/WidgetKitExtension.build/DerivedSources/IntentDefinitionGenerated/WidgetIntents/*
   # Temporarly ignore focus-ios folder
   - focus-ios/
+  # Ecosia: Exclude Swift Packages
+  - SourcePackages
 
 included:
   - /Users/vagrant/git

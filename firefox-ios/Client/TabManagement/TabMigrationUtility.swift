@@ -43,10 +43,22 @@ class DefaultTabMigrationUtility: TabMigrationUtility {
         logger.log("Key exists - running migration? \(shouldRunMigration)",
                    level: .debug,
                    category: .tabs)
-        return shouldRunMigration
+        /* 
+         Ecosia: Tabs architecture implementation from ~v112 to ~116
+         This is temprorary in order to fix a migration error, can be removed after our Ecosia 10.0.0 has been well adopted
+         return shouldRunMigration
+         */
+        let hasLegacyTabData = legacyTabDataRetriever.getTabData() != nil
+        return shouldRunMigration || hasLegacyTabData
     }
 
     func getLegacyTabs() -> [LegacySavedTab] {
+
+        // Ecosia: Tabs architecture implementation from ~v112 to ~116
+        if let deprecatedMigratedTabs = getDeprecatedTabsToMigrate() {
+            return deprecatedMigratedTabs
+        }
+
         guard let tabData = legacyTabDataRetriever.getTabData() else {
             return []
         }
@@ -85,7 +97,10 @@ class DefaultTabMigrationUtility: TabMigrationUtility {
             let tabData = TabData(
                 id: savedTabUUID,
                 title: savedTab.title,
+                /* Ecosia: `savedTab.url` is sometimes not there after migration, so we fallback to the last url from the session data history
                 siteUrl: savedTab.url?.absoluteString ?? "",
+                */
+                siteUrl: savedTab.url?.absoluteString ?? savedTab.sessionData?.urls.last?.absoluteString ?? "",
                 faviconURL: savedTab.faviconURL,
                 isPrivate: savedTab.isPrivate,
                 lastUsedTime: Date.fromTimestamp(Date().toTimestamp()),
@@ -116,6 +131,49 @@ class DefaultTabMigrationUtility: TabMigrationUtility {
         // Save migration WindowData
         await tabDataStore.saveWindowData(window: windowData, forced: true)
         prefs.setBool(false, forKey: migrationKey)
+        // Ecosia: Tabs architecture implementation from ~v112 to ~116
+        clearDeprecatedArchive()
+        Analytics.shared.migration(true)
         return windowData
     }
 }
+
+// Ecosia: Tabs architecture implementation from ~v112 to ~116
+// This is temprorary in order to fix a migration error, can be removed after our Ecosia 10.0.0 has been well adopted
+
+extension DefaultTabMigrationUtility {
+
+    func getDeprecatedTabsToMigrate() -> [LegacySavedTab]? {
+        guard let tabData = legacyTabDataRetriever.getTabData()
+        else { return [LegacySavedTab]() }
+        let deprecatedUnarchiver = try NSKeyedUnarchiver(forReadingWith: tabData)
+        deprecatedUnarchiver.setClass(LegacySavedTab.self, forClassName: "Client.SavedTab")
+        deprecatedUnarchiver.setClass(LegacySessionData.self, forClassName: "Client.SessionData")
+        deprecatedUnarchiver.setClass(LegacyTabGroupData.self, forClassName: "Client.TabGroupData")
+        deprecatedUnarchiver.decodingFailurePolicy = .setErrorAndReturn
+        guard let migratedTabs = deprecatedUnarchiver.decodeObject(forKey: tabsKey) as? [LegacySavedTab] else {
+            let error = String(describing: deprecatedUnarchiver.error)
+            let message = "Deprecated unarchiver could not decode Saved tab with: \(error)"
+            logger.log(message, level: .warning, category: .tabs, description: error.localizedDescription)
+            Analytics.shared.migration(false)
+            Analytics.shared.migrationError(in: .tabs, message: message)
+            return nil
+        }
+        return migratedTabs
+    }
+
+    private func clearDeprecatedArchive() {
+        guard let deprecatedPath = legacyTabDataRetriever.tabsStateArchivePath else { return }
+
+        do {
+            try (legacyTabDataRetriever as? LegacyTabDataRetrieverImplementation)?.fileManager.removeItem(at: deprecatedPath)
+        } catch let error {
+            logger.log("Clear deprecated archive couldn't be completed",
+                       level: .warning,
+                       category: .tabs,
+                       description: error.localizedDescription)
+        }
+    }
+}
+
+// Ecosia: End Tabs architecture implementation from ~v112 to ~116

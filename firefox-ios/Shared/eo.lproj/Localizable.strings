@@ -311,7 +311,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Tion povas okazigi misagordo aŭ atakanto. Daŭrigu se vi akceptas la eblan riskon.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "La posedanto de %@ malĝuste agordis sian retejon. Por protekti vian informon de ŝtelo, Firefox ne konektiĝis al tiu ĉi retejo.";
+"ErrorPages.CertWarning.Description" = "La posedanto de %@ malĝuste agordis sian retejon. Por protekti vian informon de ŝtelo, Ecosia ne konektiĝis al tiu ĉi retejo.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Tiu ĉi konekto ne estas fidata";
@@ -332,7 +332,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Eka paĝo de Firefox";
+"Firefox.HomePage.Title" = "Eka paĝo de Ecosia";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "Personecigi la ekan paĝon";
@@ -377,7 +377,7 @@
 "Forward" = "Antaŭen";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Konto de Firefox";
+"FxA.FirefoxAccount" = "Konto de Ecosia";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Administri kontojn kaj aparatojn";
@@ -389,7 +389,7 @@
 "fxa.signin.camera-signin" = "Komencu seancon per via filmilo";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "En via komputilo malfermu Firefox kaj vizitu firefox.com/pair";
+"fxa.signin.qr-link-instruction" = "En via komputilo malfermu Ecosia kaj vizitu ecosia.org/pair";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Preta skani";
@@ -401,7 +401,7 @@
 "FxA.SyncNow" = "Speguli nun";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Spegulado de Firefox konektiĝis al %@";
+"FxAPush_DeviceConnected_body" = "Spegulado de Ecosia konektiĝis al %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Spegulado konektiĝis";
@@ -410,7 +410,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ estis sukcese malkonektita.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Tiu ĉi aparato estis sukcese malkonektita de la Spegulado de Firefox.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Tiu ĉi aparato estis sukcese malkonektita de la Spegulado de Ecosia.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Spegulado malkonektiĝis";
@@ -419,10 +419,10 @@
 "FxAPush_DeviceDisconnected_title" = "Spegulado malkonektiĝis";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Aparato malkonektiĝis de Spegulado de Firefox";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Aparato malkonektiĝis de Spegulado de Ecosia";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "Emblemo de Firefox, ŝanĝi ekranfonon.";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Emblemo de Ecosia, ŝanĝi ekranfonon.";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Helpo";
@@ -455,7 +455,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Komencu seancon por vidi liston de langetoj de viaj aliaj aparatoj.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Spegulado de Firefox";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Spegulado de Ecosia";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Historio";
@@ -653,13 +653,13 @@
 "Logins.Onboarding.LearnMoreButtonTitle" = "Pli da informo";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "Por uzi la aŭtomata pleniga trajto en Firefox, vi devas unue havi aparatan paskodon aktivita.";
+"Logins.PasscodeRequirement.Warning" = "Por uzi la aŭtomata pleniga trajto en Ecosia, vi devas unue havi aparatan paskodon aktivita.";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "Kunportu viajn pasvortojn ĉien";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "Aŭtomate plenigi pasvortojn de Firefox";
+"Logins.WelcomeView.Title2" = "Aŭtomate plenigi pasvortojn de Ecosia";
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "Ŝalti aŭtomatan plenigon";
@@ -704,7 +704,7 @@
 "LoginsList.Title" = "KONSERVITAJ AKREDITILOJ";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Ŝajne Firefox antaŭe paneis. Ĉu vi ŝatus restarigi viajn langetojn?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Ŝajne Ecosia antaŭe paneis. Ĉu vi ŝatus restarigi viajn langetojn?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Marki kiel legita";
@@ -893,7 +893,7 @@
 "Onboarding.WhatsNew.Button.Title" = "Komenci retumi";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Fuŝ! Firefox paneis";
+"Oops! Firefox crashed" = "Fuŝ! Ecosia paneis";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Malfermu artikolojn en legila vido per tuŝeto sur la emblemo de libro, kiam ĝi aperas en la titolstrio.";
@@ -1004,7 +1004,7 @@
 "ScanQRCode.InvalidDataError.Message" = "Nevalidaj datumoj";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "Iru al ‘Agordoj‘ > ‘Firefox‘ en la aparato. Permesu al Firefox aliri la filmilon.";
+"ScanQRCode.PermissionError.Message.v100" = "Iru al ‘Agordoj‘ > ‘Ecosia‘ en la aparato. Permesu al Ecosia aliri la filmilon.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Skani kodon QR";
@@ -1019,7 +1019,7 @@
 "Search.Awesomebar.SwitchToTab" = "Iri al langeto";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Sugestoj de Firefox";
+"Search.SuggestSectionTitle.v102" = "Sugestoj de Ecosia";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "La nova serĉilo aperos en la rapida serĉostrio.";
@@ -1085,13 +1085,13 @@
 "SendTo.NavBar.Title" = "Sendi langeton";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "Vi ne havas alian aparaton preta speguli kaj konektita al tiu ĉi konto de Firefox.";
+"SendTo.NoDevicesFound.Message" = "Vi ne havas alian aparaton preta speguli kaj konektita al tiu ĉi konto de Ecosia.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Bonvolu malfermi Firefox, iru al Agordoj kaj komencu seancon por daŭrigi.";
+"SendTo.NotSignedIn.Message" = "Bonvolu malfermi Ecosia, iru al Agordoj kaj komencu seancon por daŭrigi.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Vi ne komencis seancon en via konto de Firefox.";
+"SendTo.NotSignedIn.Title" = "Vi ne komencis seancon en via konto de Ecosia.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Sendi";
@@ -1112,7 +1112,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Tuŝetu por komenci";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Spegulado de Firefox";
+"SentTab.NoTabArrivingNotification.title" = "Spegulado de Ecosia";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Vidi";
@@ -1241,7 +1241,7 @@
 "Settings.FxA.Sync.SectionName" = "Spegulaj agordoj";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Konto de Firefox";
+"Settings.FxA.Title" = "Konto de Ecosia";
 
 /* General settings section title */
 "Settings.General.SectionName" = "Ĝenerala";
@@ -1250,7 +1250,7 @@
 "Settings.Home.Current.Description.v101" = "Elektu kion montri kiel ekan paĝon.";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description.v101" = "Elektu kion inkluzivi en la eka paĝo de Firefox.";
+"Settings.Home.Option.Description.v101" = "Elektu kion inkluzivi en la eka paĝo de Ecosia.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "Reiri";
@@ -1274,7 +1274,7 @@
 "Settings.Home.Option.StartAtHome.Always" = "Eka paĝo";
 
 /* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
-"Settings.Home.Option.StartAtHome.Description" = "Elektu kion vi vidas kiam vi reiras al Firefox.";
+"Settings.Home.Option.StartAtHome.Description" = "Elektu kion vi vidas kiam vi reiras al Ecosia.";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "Lasta langeto";
@@ -1289,25 +1289,25 @@
 "Settings.Home.Option.Wallpaper" = "Ekranfono";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Ekranfono de Firefox, modelo de ametisto.";
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Ekranfono de Ecosia, modelo de ametisto.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Ekranfono de Firefox, modelo de montoj ĉe strando.";
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Ekranfono de Ecosia, modelo de montoj ĉe strando.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Ekranfono de Firefox, modelo ĉielbula.";
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Ekranfono de Ecosia, modelo ĉielbula.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Norma malplena ekranfono.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Ekranfono de Firefox, modelo de eliranta suno.";
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Ekranfono de Ecosia, modelo de eliranta suno.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Ŝaltilo por la bukla ŝanĝiĝo de ekranfono de la eka paĝo";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Ekranfono de Firefox, modelo de monton je sunsubiro.";
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Ekranfono de Ecosia, modelo de monton je sunsubiro.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
 "Settings.Home.Option.Wallpaper.Classic.Title.v106" = "Klasika %@";
@@ -1328,7 +1328,7 @@
 "Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "Limigita eldono";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
-"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Ŝanĝi ekranfonon per tuŝeto de la emblemo de Firefox en la eka paĝo";
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Ŝanĝi ekranfonon per tuŝeto de la emblemo de Ecosia en la eka paĝo";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "Ekranfono";
@@ -1382,7 +1382,7 @@
 "Settings.NewTab.Option.Custom" = "Personecigita";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Eka paĝo de Firefox";
+"Settings.NewTab.Option.FirefoxHome" = "Eka paĝo de Ecosia";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Hejmpaĝo";
@@ -1403,7 +1403,7 @@
 "Settings.NoImageModeBlockImages.Label.v99" = "Bloki bildojn";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Dum malfermo de Firefox";
+"Settings.OfferClipboardBar.Status" = "Dum malfermo de Ecosia";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
 "Settings.OfferClipboardBar.Status.v128" = "Je malfermo de %@";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Pli da informo.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla penas kolekti nur la datumojn nepre bezonatajn por provizi kaj plibonigi Firefox por ĉiuj.";
+"Settings.SendUsage.Message" = "Mozilla penas kolekti nur la datumojn nepre bezonatajn por provizi kaj plibonigi Ecosia por ĉiuj.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Sendi datumojn pri uzo";
@@ -1466,7 +1466,7 @@
 "Settings.Siri.OpenTabShortcut" = "Malfermi novan langeton";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Uzi ŝparvojojn de Siri por rapide malfermi Firefox per Siri";
+"Settings.Siri.SectionDescription" = "Uzi ŝparvojojn de Siri por rapide malfermi Ecosia per Siri";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Ŝparvojoj de Siri";
@@ -1592,13 +1592,13 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "Fone ŝargi";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Ŝargata en Firefox";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Ŝargata en Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Malfermi en Firefox";
+"ShareExtension.OpenInFirefoxAction.Title" = "Malfermi en Ecosia";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Serĉi en Firefox";
+"ShareExtension.SeachInFirefoxAction.Title" = "Serĉi en Ecosia";
 
 /* Button in share sheet to copy the url of the current tab. */
 "ShareSheet.Copy.Title.v108" = "Kopii";
@@ -1745,7 +1745,7 @@
 "UIMenuItem.PasteGo" = "Alglui kaj iri";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Serĉi per Firefox";
+"UIMenuItem.SearchWithFirefox" = "Serĉi per Ecosia";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "ne legita";
@@ -1793,7 +1793,7 @@
 "Yesterday" = "Hieraŭ";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Vi ne havas langetojn malfermitajn en Firefox en viaj aliaj aparatoj.";
+"You don’t have any tabs open in Firefox on your other devices." = "Vi ne havas langetojn malfermitajn en Ecosia en viaj aliaj aparatoj.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Viaj rajtoj";

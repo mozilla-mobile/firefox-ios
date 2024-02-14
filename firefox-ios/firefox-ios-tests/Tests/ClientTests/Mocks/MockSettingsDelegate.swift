@@ -7,6 +7,8 @@ import Foundation
 @testable import Client
 
 class MockSettingsDelegate: SettingsDelegate {
+    // Ecosia: meet new conformance for SettingsDelegate
+    func reloadHomepage() {}
     func settingsOpenURLInNewTab(_ url: URL) { }
     func didFinish() {}
 }

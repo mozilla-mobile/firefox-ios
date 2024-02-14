@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import Common
@@ -13,14 +13,14 @@ final class NTPTooltip: UICollectionReusableView, Themeable {
         static let margin: CGFloat = 16
         static let containerMargin: CGFloat = 12
     }
-    
+
     static let key = String(describing: NTPTooltip.self)
     private weak var textLabel: UILabel!
     private weak var tail: UIImageView!
     private weak var closeButton: UIButton!
     private weak var background: UIView!
     weak var delegate: NTPTooltipDelegate?
-    
+
     private var tailLeadingConstraint: NSLayoutConstraint!
     private var tailCenterConstraint: NSLayoutConstraint!
     var tailPosition: TailPosition = .center {
@@ -28,16 +28,16 @@ final class NTPTooltip: UICollectionReusableView, Themeable {
             updateTailPosition()
         }
     }
-    
+
     private let linkButton: UIButton = {
         let button = UIButton()
         button.titleLabel?.font = .preferredFont(forTextStyle: .callout)
         button.isHidden = true
         return button
     }()
-    
+
     // MARK: - Themeable Properties
-    
+
     var themeManager: ThemeManager { AppContainer.shared.resolve() }
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
@@ -53,7 +53,7 @@ final class NTPTooltip: UICollectionReusableView, Themeable {
         super.init(coder: coder)
         commonInit()
     }
-    
+
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
         // Empty override required to prevent UICollectionViewRecursion on NTPLayout.adjustImpactTooltipFrame
         return layoutAttributes
@@ -77,7 +77,7 @@ final class NTPTooltip: UICollectionReusableView, Themeable {
         stack.axis = .horizontal
         stack.spacing = 12
         stack.distribution = .fill
-        
+
         let verticalStack = UIStackView()
         verticalStack.axis = .vertical
         verticalStack.alignment = .leading
@@ -90,10 +90,10 @@ final class NTPTooltip: UICollectionReusableView, Themeable {
         label.numberOfLines = 0
         verticalStack.addArrangedSubview(label)
         self.textLabel = label
-        
+
         linkButton.addTarget(self, action: #selector(linkButtonTapped), for: .touchDown)
         verticalStack.addArrangedSubview(linkButton)
-        
+
         stack.addArrangedSubview(verticalStack)
 
         let closeButton = UIButton()
@@ -123,7 +123,7 @@ final class NTPTooltip: UICollectionReusableView, Themeable {
         tailCenterConstraint = tail.centerXAnchor.constraint(equalTo: centerXAnchor)
         tailLeadingConstraint = tail.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16)
         updateTailPosition()
-        
+
         tail.topAnchor.constraint(equalTo: background.bottomAnchor, constant: -0.5).isActive = true
         tail.widthAnchor.constraint(equalToConstant: 28).isActive = true
 
@@ -142,12 +142,12 @@ final class NTPTooltip: UICollectionReusableView, Themeable {
         accessibilityTraits = .button
         isAccessibilityElement = true
     }
-    
+
     func removeLink() {
         linkButton.setTitle(nil, for: .normal)
         linkButton.isHidden = true
     }
-    
+
     func setLinkTitle(_ text: String) {
         let titleString = NSMutableAttributedString(string: text)
         titleString.addAttributes([
@@ -178,11 +178,11 @@ final class NTPTooltip: UICollectionReusableView, Themeable {
     @objc func tapped() {
         delegate?.ntpTooltipTapped(self)
     }
-    
+
     @objc private func closeTapped() {
         delegate?.ntpTooltipCloseTapped(self)
     }
-    
+
     @objc private func linkButtonTapped() {
         delegate?.ntpTooltipLinkTapped(self)
     }
@@ -191,7 +191,7 @@ final class NTPTooltip: UICollectionReusableView, Themeable {
         super.prepareForReuse()
         applyTheme()
     }
-    
+
     private func updateTailPosition() {
         switch tailPosition {
         case .center:

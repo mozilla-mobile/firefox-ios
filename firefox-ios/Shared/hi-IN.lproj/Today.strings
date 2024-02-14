@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "निजी टैब बंद करें";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "अपने होम स्क्रीन पर Firefox शॉर्टकट जोड़ें।";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "अपने होम स्क्रीन पर Ecosia शॉर्टकट जोड़ें।";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "कॉपी की गई लिंक पर जाएं";

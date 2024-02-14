@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "أغلِق الألسنة الخاصة";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "أضف اختصارات Firefox إلى شاشة البداية.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "أضف اختصارات Ecosia إلى شاشة البداية.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "انتقل إلى الرابط المنسوخ";
@@ -23,19 +23,19 @@
 "TodayWidget.NoOpenTabsLabel" = "لا ألسنة مفتوحة.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "افتح Firefox";
+"TodayWidget.OpenFirefoxLabel" = "افتح Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "بحث خاص";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "أضف اختصار Firefox إلى الشاشة الرئيسية. المس الأداة بعد أن تُضاف مدةً لتعديلها، ثمّ اختر اختصارًا آخر.";
+"TodayWidget.QuickActionGalleryDescription" = "أضف اختصار Ecosia إلى الشاشة الرئيسية. المس الأداة بعد أن تُضاف مدةً لتعديلها، ثمّ اختر اختصارًا آخر.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "إجراءات سريعة";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "اختصارات Firefox";
+"TodayWidget.QuickActionsGalleryTitleV2" = "اختصارات Ecosia";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "أضِف اختصارات إلى الألسنة المفتوحة.";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "منظور سريع";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "ابحث في Firefox";
+"TodayWidget.SearchInFirefoxV2" = "ابحث في Ecosia";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "ابحث في لسان خاص";

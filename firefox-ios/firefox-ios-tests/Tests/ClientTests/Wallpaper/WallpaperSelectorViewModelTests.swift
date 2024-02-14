@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Glean
+// Ecosia: remove Glean dependency // import Glean
 import XCTest
 
 @testable import Client
@@ -16,7 +16,8 @@ class WallpaperSelectorViewModelTests: XCTestCase {
         wallpaperManager = WallpaperManagerMock()
         addWallpaperCollections()
 
-        Glean.shared.resetGlean(clearStores: true)
+        // Ecosia: remove Glean dependency
+        // Glean.shared.resetGlean(clearStores: true)
     }
 
     override func tearDown() {
@@ -54,6 +55,7 @@ class WallpaperSelectorViewModelTests: XCTestCase {
         }
     }
 
+    /* Ecosia: remove Glean dependency
     func testRecordsWallpaperSelectorView() {
         wallpaperManager = WallpaperManager()
         let subject = createSubject()
@@ -69,7 +71,7 @@ class WallpaperSelectorViewModelTests: XCTestCase {
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.wallpaperSelectorClose)
     }
-
+     */
 //    func testClickingCell_recordsWallpaperChange() {
 //        let subject = createSubject()
 //

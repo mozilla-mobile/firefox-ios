@@ -32,11 +32,12 @@ class LibraryViewModel {
          UIImage(named: StandardImageIdentifiers.Large.download) ?? UIImage(),
          UIImage(named: ImageIdentifiers.libraryReadingList) ?? UIImage()]
          */
-        [UIImage(named: "libraryFavorites"),
-         UIImage(named: "libraryHistory"),
-         UIImage(named: "libraryReading"),
-         UIImage(named: "libraryDownloads")]
-            .compactMap({$0})
+        [
+            UIImage(named: "libraryFavorites"),
+            UIImage(named: "libraryHistory"),
+            UIImage(named: "libraryReading"),
+            UIImage(named: "libraryDownloads")
+        ].compactMap({ $0 })
     }
 
     init(withProfile profile: Profile, tabManager: TabManager) {

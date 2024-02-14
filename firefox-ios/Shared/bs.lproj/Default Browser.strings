@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Postavljanje Firefoxa kao zadanog pretraživača je glas za otvoren, pristupačan internet.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Postavljanje Ecosiaa kao zadanog pretraživača je glas za otvoren, pristupačan internet.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Zadano za bolji internet";
@@ -8,10 +8,10 @@
 "DefaultBrowserCard.Button.v2" = "Saznajte kako";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Postavi automatsko otvaranje linkova web stranica, e-maila i poruka u Firefoxu.";
+"DefaultBrowserCard.Description" = "Postavi automatsko otvaranje linkova web stranica, e-maila i poruka u Ecosiau.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "Odaberite Firefox kao svoj zadani pretraživač kako biste brzinu, sigurnost i privatnost učinili automatskim.";
+"DefaultBrowserCard.NextLevel.Description.v108" = "Odaberite Ecosia kao svoj zadani pretraživač kako biste brzinu, sigurnost i privatnost učinili automatskim.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "Unaprijedite svakodnevno pretraživanje";
@@ -35,7 +35,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Dodirni Zadana aplikacija pretraživača";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Odaberi Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. Odaberi Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Zadana aplikacija pretraživača";

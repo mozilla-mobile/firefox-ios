@@ -17,7 +17,10 @@ enum LegacyTabGroupTimerState: String, Codable {
     case none
 }
 
-class LegacyTabGroupData: Codable {
+// Ecosia: Tabs architecture implementation from ~v112 to ~116
+// class LegacyTabGroupData: Codable {
+class LegacyTabGroupData: NSObject, Codable, NSCoding {
+
     var tabAssociatedSearchTerm: String = ""
     var tabAssociatedSearchUrl: String = ""
     var tabAssociatedNextUrl: String = ""
@@ -38,7 +41,9 @@ class LegacyTabGroupData: Codable {
         case tabHistoryCurrentState
     }
 
-    convenience init() {
+    // Ecosia: Tabs architecture implementation from ~v112 to ~116
+    // convenience init() {
+    override convenience init() {
         self.init(searchTerm: "",
                   searchUrl: "",
                   nextReferralUrl: "",
@@ -50,5 +55,31 @@ class LegacyTabGroupData: Codable {
         self.tabAssociatedSearchUrl = searchUrl
         self.tabAssociatedNextUrl = nextReferralUrl
         self.tabHistoryCurrentState = tabHistoryCurrentState
+    }
+
+    // Ecosia: Tabs architecture implementation from ~v112 to ~116
+    // This is temprorary in order to fix a migration error, can be removed after our Ecosia 10.0.0 has been well adopted
+
+    var jsonDictionary: [String: Any] {
+        return [
+            CodingKeys.tabAssociatedSearchTerm.rawValue: String(self.tabAssociatedSearchTerm),
+            CodingKeys.tabAssociatedSearchUrl.rawValue: String(self.tabAssociatedSearchUrl),
+            CodingKeys.tabAssociatedNextUrl.rawValue: String(self.tabAssociatedNextUrl),
+            CodingKeys.tabHistoryCurrentState.rawValue: String(self.tabHistoryCurrentState),
+        ]
+    }
+
+    public required init?(coder: NSCoder) {
+        self.tabAssociatedSearchTerm = coder.decodeObject(forKey: CodingKeys.tabAssociatedSearchTerm.rawValue) as? String ?? ""
+        self.tabAssociatedSearchUrl = coder.decodeObject(forKey: CodingKeys.tabAssociatedSearchUrl.rawValue) as? String ?? ""
+        self.tabAssociatedNextUrl = coder.decodeObject(forKey: CodingKeys.tabAssociatedNextUrl.rawValue) as? String ?? ""
+        self.tabHistoryCurrentState = coder.decodeObject(forKey: CodingKeys.tabHistoryCurrentState.rawValue) as? String ?? ""
+    }
+
+    public func encode(with coder: NSCoder) {
+        coder.encode(tabAssociatedSearchTerm, forKey: CodingKeys.tabAssociatedSearchTerm.rawValue)
+        coder.encode(tabAssociatedSearchUrl, forKey: CodingKeys.tabAssociatedSearchUrl.rawValue)
+        coder.encode(tabAssociatedNextUrl, forKey: CodingKeys.tabAssociatedNextUrl.rawValue)
+        coder.encode(tabHistoryCurrentState, forKey: CodingKeys.tabHistoryCurrentState.rawValue)
     }
 }

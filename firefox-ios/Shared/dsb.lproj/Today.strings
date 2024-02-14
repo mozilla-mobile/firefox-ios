@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Priwatne\nrejtariki zacyniś";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Pśidajśo swójej startowej wobrazowce zwězanja Firefox";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Pśidajśo swójej startowej wobrazowce zwězanja Ecosia";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Ku kopěrowanemu wótkazoju";
@@ -29,13 +29,13 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "Priwatne pytanje";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Pśidajśo startowej wobrazowce zwězanje Firefox. Za tym až sćo pśidał asistent, pótusniśo asistent a źaržćo jen, aby wobźěłował a wubjeŕśo druge zwězanje.";
+"TodayWidget.QuickActionGalleryDescription" = "Pśidajśo startowej wobrazowce zwězanje Ecosia. Za tym až sćo pśidał asistent, pótusniśo asistent a źaržćo jen, aby wobźěłował a wubjeŕśo druge zwězanje.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Malsne akcije";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Zwězanja Firefox";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Zwězanja Ecosia";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Pśidajśo swójim wócynjonym rejtarikam zwězanja.";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Malsny naglěd";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "W Firefox pytaś";
+"TodayWidget.SearchInFirefoxV2" = "W Ecosia pytaś";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "W priwatnem rejtariku pytaś";

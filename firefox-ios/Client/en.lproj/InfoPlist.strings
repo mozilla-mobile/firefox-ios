@@ -1,8 +1,8 @@
 
 NSLocationWhenInUseUsageDescription = "Websites you visit may request your location.";
 NSPhotoLibraryAddUsageDescription = "This lets you save photos.";
-NSCameraUsageDescription = "Firefox uses your camera to scan QR codes and take photos and video.";
-NSMicrophoneUsageDescription = "Firefox uses your microphone to record and upload audio.";
+NSCameraUsageDescription = "Ecosia uses your camera to scan QR codes and take photos and video.";
+NSMicrophoneUsageDescription = "Ecosia uses your microphone to record and upload audio.";
 "New Tab" = "New Tab";
 "New Private Tab" = "New Private Tab";
 "Scan QR Code" = "Scan QR Code";

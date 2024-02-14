@@ -5,16 +5,16 @@
 "New Tab" = "ਨਵੀਂ ਟੈਬ";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox ਤੁਹਾਡੇ ਕੈਮਰੇ ਨੂੰ QR ਕੋਡ ਸਕੈਨ ਕਰਨ ਅਤੇ ਫੋਟੋ ਖਿੱਚ ਤੇ ਵੀਡੀਓ ਬਣਾਉਣ ਲਈ ਵਰਤਦਾ ਹੈ।";
+"NSCameraUsageDescription" = "Ecosia ਤੁਹਾਡੇ ਕੈਮਰੇ ਨੂੰ QR ਕੋਡ ਸਕੈਨ ਕਰਨ ਅਤੇ ਫੋਟੋ ਖਿੱਚ ਤੇ ਵੀਡੀਓ ਬਣਾਉਣ ਲਈ ਵਰਤਦਾ ਹੈ।";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox ਨੂੰ ਤੁਹਾਡੇ ਸੰਭਾਲੇ ਹੋਏ ਪਾਸਵਰਡਾਂ ਅਤੇ ਭੁਗਤਾਨ ਢੰਗਾਂ ਦੀ ਵਰਤੋਂ ਕਰਨ ਲਈ Face ID ਚਾਹੀਦਾ ਹੈ।";
+"NSFaceIDUsageDescription" = "Ecosia ਨੂੰ ਤੁਹਾਡੇ ਸੰਭਾਲੇ ਹੋਏ ਪਾਸਵਰਡਾਂ ਅਤੇ ਭੁਗਤਾਨ ਢੰਗਾਂ ਦੀ ਵਰਤੋਂ ਕਰਨ ਲਈ Face ID ਚਾਹੀਦਾ ਹੈ।";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "ਤੁਸੀਂ ਜਿਹਨਾਂ ਵੈੱਬਸਾਈਟਾਂ ਉੱਤੇ ਜਾਉਗੇ, ਉਹ ਤੁਹਾਡੇ ਟਿਕਾਣੇ ਦੀ ਬੇਨਤੀ ਕਰ ਸਕਦੀਆਂ ਹਨ।";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Firefox ਤੁਹਾਡੇ ਮਾਈਕਰੋਫ਼ੋਨ ਨੂੰ ਆਡੀਓ ਰਿਕਾਰਡ ਕਰਨ ਤੇ ਆਡੀਓ ਅੱਪਲੋਡ ਕਰਨ ਲਈ ਵਰਤਦਾ ਹੈ।";
+"NSMicrophoneUsageDescription" = "Ecosia ਤੁਹਾਡੇ ਮਾਈਕਰੋਫ਼ੋਨ ਨੂੰ ਆਡੀਓ ਰਿਕਾਰਡ ਕਰਨ ਤੇ ਆਡੀਓ ਅੱਪਲੋਡ ਕਰਨ ਲਈ ਵਰਤਦਾ ਹੈ।";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "ਇਹ ਤੁਹਾਨੂੰ ਫ਼ੋਟੋ ਸੰਭਾਲਣ ਦਿੰਦਾ ਹੈ।";

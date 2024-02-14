@@ -26,5 +26,7 @@
 	</array>
 	<key>aps-environment</key>
 	<string>development</string>
+	<key>com.apple.developer.browser.app-installation</key>
+	<true/>
 </dict>
 </plist>

@@ -311,7 +311,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Դա կարող է լինել հարցակվողի կողմից սխալ կազմաձևում կամ խախտում։ Առաջ անցեք, եթե դուք ընդունում եք հնարավոր վտանգը։";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "%@-ի սեփականատերը սխալ է տեղադրել իր կայքը։ Ձեր տեղեկատվությունը գողությունից պաշտպանելու համար Firefox֊ը չի միացել այս վեբ կայքին։";
+"ErrorPages.CertWarning.Description" = "%@-ի սեփականատերը սխալ է տեղադրել իր կայքը։ Ձեր տեղեկատվությունը գողությունից պաշտպանելու համար Ecosia֊ը չի միացել այս վեբ կայքին։";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Այս կապակցումն անվստահելի է";
@@ -332,7 +332,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefox-ի Տնային էջը";
+"Firefox.HomePage.Title" = "Ecosia-ի Տնային էջը";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "Հարմարեցնել տնէջը";
@@ -389,7 +389,7 @@
 "fxa.signin.camera-signin" = "Մուտք գործեք Ձեր տեսախցիկով";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "Ձեր համակարգչի վրա բացեք Firefox-ը և անցեք firefox.com/pair";
+"fxa.signin.qr-link-instruction" = "Ձեր համակարգչի վրա բացեք Ecosia-ը և անցեք ecosia.org/pair";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Պատրաստել սկանավորման";
@@ -410,7 +410,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@-ը հաջողությամբ կապախզվել է:";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "ԱՅս սարքը հաջողությամբ կապախզվել է Firefox Սինքից:";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "ԱՅս սարքը հաջողությամբ կապախզվել է Ecosia Սինքից:";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Համաժամեցումը կապախզված է";
@@ -419,7 +419,7 @@
 "FxAPush_DeviceDisconnected_title" = "Համաժամեցումը կապախզված է";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Սարքը կապախզվել է Firefox Սինքից";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Սարքը կապախզվել է Ecosia Սինքից";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
 "FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox լոգո, փոխել պաստառը";
@@ -704,7 +704,7 @@
 "LoginsList.Title" = "ՊԱՀՊԱՆՎԱԾ ՄՈՒՏՔԱՆՈՒՆՆԵՐ";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Կարծես Firefox-ը վթարվել է: Վերականգնե՞լ ներդիրները:";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Կարծես Ecosia-ը վթարվել է: Վերականգնե՞լ ներդիրները:";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Նշել որպես ընթերցված";
@@ -893,7 +893,7 @@
 "Onboarding.WhatsNew.Button.Title" = "Սկսել դիտարկումը";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Վա՜յ, Firefox-ը վթարվեց:";
+"Oops! Firefox crashed" = "Վա՜յ, Ecosia-ը վթարվեց:";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Բացեք հոդվածները Reader View֊ում՝ կտտացնելով գրքի պատկերակը, երբ այն հայտնվում է վերնագրի սանդղակում։";
@@ -1085,13 +1085,13 @@
 "SendTo.NavBar.Title" = "Ուղարկել ներդիրը";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "Դուք չունեք մի սարք, որը կապված է Firefox֊ի այս հաշվին և առկա է համաժամեցման համար։";
+"SendTo.NoDevicesFound.Message" = "Դուք չունեք մի սարք, որը կապված է Ecosia֊ի այս հաշվին և առկա է համաժամեցման համար։";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Խնդրում ենք բացել Firefox֊ը, անցեք ընտրանքներ և գրանցվեք ՝ շարունակելու համար։";
+"SendTo.NotSignedIn.Message" = "Խնդրում ենք բացել Ecosia֊ը, անցեք ընտրանքներ և գրանցվեք ՝ շարունակելու համար։";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Դուք մուտք չեք գործել Firefox-ի ձեր Հաշիվ։";
+"SendTo.NotSignedIn.Title" = "Դուք մուտք չեք գործել Ecosia-ի ձեր Հաշիվ։";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Ուղարկել";
@@ -1250,7 +1250,7 @@
 "Settings.Home.Current.Description.v101" = "Ընտրեք այն, ինչ ցուցադրվում է որպես գլխավոր էջ:";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description.v101" = "Ընտրեք բովանդակությունը, որը տեսնում եք Firefox-ի գլխավոր էջում:";
+"Settings.Home.Option.Description.v101" = "Ընտրեք բովանդակությունը, որը տեսնում եք Ecosia-ի գլխավոր էջում:";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "Վերադառնալ";
@@ -1274,7 +1274,7 @@
 "Settings.Home.Option.StartAtHome.Always" = "Տնային էջ";
 
 /* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
-"Settings.Home.Option.StartAtHome.Description" = "Ընտրեք այն, ինչ կտեսնեք Firefox-ին վերադառնալիս:";
+"Settings.Home.Option.StartAtHome.Description" = "Ընտրեք այն, ինչ կտեսնեք Ecosia-ին վերադառնալիս:";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "Վերջին ներդիրը";
@@ -1328,7 +1328,7 @@
 "Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "Սահմանափակ թողարկում";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
-"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Փոխեք պաստառը՝ կտտացնելով Firefox-ի գլխավոր էջի պատկերանշանին";
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Փոխեք պաստառը՝ կտտացնելով Ecosia-ի գլխավոր էջի պատկերանշանին";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "Պաստառներ";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Իմանալ ավելին:";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla-ն ձգտում է հավաքել միայն այն ինչ անհրաժեշտ է տրամադրել՝ Firefox-ը բոլորի համար լավարկել ու համար:";
+"Settings.SendUsage.Message" = "Mozilla-ն ձգտում է հավաքել միայն այն ինչ անհրաժեշտ է տրամադրել՝ Ecosia-ը բոլորի համար լավարկել ու համար:";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Ուղարկել օգտագործման տվյալները";
@@ -1466,7 +1466,7 @@
 "Settings.Siri.OpenTabShortcut" = "Բացել նոր ներդիր";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Օգտագործեք Siri-ի դյուրանցումները՝ Siri֊ի միջոցով Firefox-ը արագ բացելու համար";
+"Settings.Siri.SectionDescription" = "Օգտագործեք Siri-ի դյուրանցումները՝ Siri֊ի միջոցով Ecosia-ը արագ բացելու համար";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri֊ի դյուրանցումներ";
@@ -1595,10 +1595,10 @@
 "ShareExtension.LoadInBackgroundActionDone.Title" = "Բեռնում Firefox-ում";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Բացել Firefox-֊ում";
+"ShareExtension.OpenInFirefoxAction.Title" = "Բացել Ecosia-֊ում";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Որոնել Firefox֊-ում";
+"ShareExtension.SeachInFirefoxAction.Title" = "Որոնել Ecosia֊-ում";
 
 /* Button in share sheet to copy the url of the current tab. */
 "ShareSheet.Copy.Title.v108" = "Պատճենել";
@@ -1745,7 +1745,7 @@
 "UIMenuItem.PasteGo" = "Փակցնել և գնալ";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Որոնել Firefox֊-ով";
+"UIMenuItem.SearchWithFirefox" = "Որոնել Ecosia֊-ով";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "չընթերցված";
@@ -1793,7 +1793,7 @@
 "Yesterday" = "Երեկ";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Դուք չունեք բացված որևէ ներդիր Firefox-ում՝ ձեր մյուս սարքերում:";
+"You don’t have any tabs open in Firefox on your other devices." = "Դուք չունեք բացված որևէ ներդիր Ecosia-ում՝ ձեր մյուս սարքերում:";
 
 /* Your Rights settings section title */
 "Your Rights" = "Ձեր իրավունքները";

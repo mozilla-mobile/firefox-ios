@@ -7,13 +7,13 @@ import Common
 import Core
 
 struct FeatureManagement {
-    
+
     // MARK: - Initialization
-    
+
     private init() {}
-    
+
     // MARK: - Configuration
-    
+
     /// Fetches the feature configuration asynchronously.
     static func fetchConfiguration() async {
         do {
@@ -22,9 +22,9 @@ struct FeatureManagement {
             debugPrint(error)
         }
     }
-    
+
     // MARK: - Private Methods
-    
+
     /// Starts the feature management process asynchronously.
     ///
     /// - Throws: An error if the feature management process encounters an issue.
@@ -37,7 +37,7 @@ struct FeatureManagement {
             debugPrint(error)
         }
     }
-    
+
     /// Adds refreshing rules for feature management.
     private static func addRefreshingRules() {
         UnleashRefreshConfigurator()

@@ -311,7 +311,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Kyseessä saattaa olla ongelma palvelimen asetuksissa tai hyökkääjän suorittama toimenpide. Jatka, jos hyväksyt mahdollisen riskin.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "Sivuston %@ omistaja on määrittänyt sivustonsa asetukset väärin. Firefox ei muodostanut yhteyttä sivustoon suojellakseen tietojasi varkaudelta.";
+"ErrorPages.CertWarning.Description" = "Sivuston %@ omistaja on määrittänyt sivustonsa asetukset väärin. Ecosia ei muodostanut yhteyttä sivustoon suojellakseen tietojasi varkaudelta.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Tämä yhteys ei ole luotettu";
@@ -332,7 +332,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefoxin aloitussivu";
+"Firefox.HomePage.Title" = "Ecosiain aloitussivu";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "Mukauta kotisivua";
@@ -389,7 +389,7 @@
 "fxa.signin.camera-signin" = "Kirjaudu sisään kamerallasi";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "Avaa tietokoneellasi Firefox ja siirry osoitteeseen firefox.com/pair";
+"fxa.signin.qr-link-instruction" = "Avaa tietokoneellasi Ecosia ja siirry osoitteeseen ecosia.org/pair";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Valmiina skannaamaan";
@@ -410,7 +410,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ on irrotettu onnistuneesti.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Tämä laite on irrotettu onnistuneesti Firefox Sync -palvelusta.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Tämä laite on irrotettu onnistuneesti Ecosia Sync -palvelusta.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Synkronointi katkaistu";
@@ -419,7 +419,7 @@
 "FxAPush_DeviceDisconnected_title" = "Synkronointi poistettu käytöstä";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Laite on irrotettu Firefox Sync -palvelusta";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Laite on irrotettu Ecosia Sync -palvelusta";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
 "FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox-logo, vaihda taustakuva.";
@@ -653,13 +653,13 @@
 "Logins.Onboarding.LearnMoreButtonTitle" = "Lue lisää";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "Automaattinen täyttö -ominaisuuden käyttäminen Firefoxissa edellyttää, että laitteessa on pääsykoodi käytössä.";
+"Logins.PasscodeRequirement.Warning" = "Automaattinen täyttö -ominaisuuden käyttäminen Ecosiaissa edellyttää, että laitteessa on pääsykoodi käytössä.";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "Ota salasanasi mukaan kaikkialle";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "Täytä Firefox-salasanat automaattisesti";
+"Logins.WelcomeView.Title2" = "Täytä Ecosia-salasanat automaattisesti";
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "Ota automaattinen täyttö käyttöön";
@@ -704,7 +704,7 @@
 "LoginsList.Title" = "TALLENNETUT KIRJAUTUMISTIEDOT";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Näyttää siltä, että Firefox kaatui aiemmin. Haluatko palauttaa välilehdet?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Näyttää siltä, että Ecosia kaatui aiemmin. Haluatko palauttaa välilehdet?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Merkitse luetuksi";
@@ -893,7 +893,7 @@
 "Onboarding.WhatsNew.Button.Title" = "Aloita selaaminen";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Hups! Firefox kaatui";
+"Oops! Firefox crashed" = "Hups! Ecosia kaatui";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Avaa artikkelit lukunäkymässä napauttamalla kirjakuvaketta, kun se ilmestyy hakuriville.";
@@ -1004,7 +1004,7 @@
 "ScanQRCode.InvalidDataError.Message" = "Tiedot ovat virheellisiä";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "Siirry \"Asetukset\" > \"Firefox\". Salli Firefoxin käyttää kameraa.";
+"ScanQRCode.PermissionError.Message.v100" = "Siirry \"Asetukset\" > \"Ecosia\". Salli Ecosiain käyttää kameraa.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Skannaa QR-koodi";
@@ -1085,13 +1085,13 @@
 "SendTo.NavBar.Title" = "Lähetä välilehti";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "Sinulla ei ole muita tähän Firefox-tiliin kytkettyjä laitteita synkronointia varten.";
+"SendTo.NoDevicesFound.Message" = "Sinulla ei ole muita tähän Ecosia-tiliin kytkettyjä laitteita synkronointia varten.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Avaa Firefox, siirry asetuksiin ja kirjaudu sisään jatkaaksesi.";
+"SendTo.NotSignedIn.Message" = "Avaa Ecosia, siirry asetuksiin ja kirjaudu sisään jatkaaksesi.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Et ole kirjautuneena Firefox-tilillesi.";
+"SendTo.NotSignedIn.Title" = "Et ole kirjautuneena Ecosia-tilillesi.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Lähetä";
@@ -1250,7 +1250,7 @@
 "Settings.Home.Current.Description.v101" = "Valitse mitä näytetään kotisivuna.";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description.v101" = "Valitse mitä Firefoxin kotisivulla on.";
+"Settings.Home.Option.Description.v101" = "Valitse mitä Ecosiain kotisivulla on.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "Palaa takaisin";
@@ -1274,7 +1274,7 @@
 "Settings.Home.Option.StartAtHome.Always" = "Kotisivu";
 
 /* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
-"Settings.Home.Option.StartAtHome.Description" = "Valitse, mitä näet, kun palaat Firefoxiin.";
+"Settings.Home.Option.StartAtHome.Description" = "Valitse, mitä näet, kun palaat Ecosiaiin.";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "Viimeisin välilehti";
@@ -1328,7 +1328,7 @@
 "Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "Rajoitettu erä";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
-"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Vaihda taustakuvaa napauttamalla Firefoxin kotisivun logoa";
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Vaihda taustakuvaa napauttamalla Ecosiain kotisivun logoa";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "Taustakuva";
@@ -1403,7 +1403,7 @@
 "Settings.NoImageModeBlockImages.Label.v99" = "Estä kuvat";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Kun avaat Firefoxin";
+"Settings.OfferClipboardBar.Status" = "Kun avaat Ecosiain";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
 "Settings.OfferClipboardBar.Status.v128" = "Avattaessa %@";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Lue lisää.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla pyrkii keräämään vain tietoja, jotka ovat tarpeellisia ja auttavat Firefoxin kehittämisessä.";
+"Settings.SendUsage.Message" = "Mozilla pyrkii keräämään vain tietoja, jotka ovat tarpeellisia ja auttavat Ecosiain kehittämisessä.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Lähetä käyttötilastoja";
@@ -1466,7 +1466,7 @@
 "Settings.Siri.OpenTabShortcut" = "Avaa uusi välilehti";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Käytä Siri-oikoteitä avataksesi Firefoxin nopeasti Sirin kautta";
+"Settings.Siri.SectionDescription" = "Käytä Siri-oikoteitä avataksesi Ecosiain nopeasti Sirin kautta";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri-oikotiet";
@@ -1592,13 +1592,13 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "Lataa taustalla";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Ladataan Firefoxissa";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Ladataan Ecosiaissa";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Avaa Firefoxissa";
+"ShareExtension.OpenInFirefoxAction.Title" = "Avaa Ecosiaissa";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Hae Firefoxissa";
+"ShareExtension.SeachInFirefoxAction.Title" = "Hae Ecosiaissa";
 
 /* Button in share sheet to copy the url of the current tab. */
 "ShareSheet.Copy.Title.v108" = "Kopioi";
@@ -1745,7 +1745,7 @@
 "UIMenuItem.PasteGo" = "Liitä ja avaa";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Etsi Firefoxilla";
+"UIMenuItem.SearchWithFirefox" = "Etsi Ecosiailla";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "lukematon";
@@ -1793,7 +1793,7 @@
 "Yesterday" = "Eilen";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Sinulla ei ole Firefoxissa avoimia välilehtiä muilla laitteilla.";
+"You don’t have any tabs open in Firefox on your other devices." = "Sinulla ei ole Ecosiaissa avoimia välilehtiä muilla laitteilla.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Oikeutesi";

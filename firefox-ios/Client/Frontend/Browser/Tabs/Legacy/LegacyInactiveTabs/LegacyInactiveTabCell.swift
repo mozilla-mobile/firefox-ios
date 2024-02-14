@@ -226,6 +226,10 @@ extension LegacyInactiveTabCell: UITableViewDataSource, UITableViewDelegate {
             guard let headerView = tableView.dequeueReusableHeaderFooterView(
                 withIdentifier: LegacyInactiveTabHeader.cellIdentifier
             ) as? LegacyInactiveTabHeader else { return nil }
+            // Ecosia: add missing ThemeApplicable implementation
+            if let theme = inactiveTabsViewModel?.theme {
+                headerView.applyTheme(theme: theme)
+            }
             headerView.state = hasExpanded ? .down : .trailing
             headerView.title = String.TabsTrayInactiveTabsSectionTitle
             headerView.accessibilityLabel = hasExpanded ?

@@ -1,5 +1,1 @@
-Restez à jour sur Ecosia grâce aux notifications push
-* Recevez les dernières informations sur nos projets de plantation d'arbres dans le monde entier
-* Obtenez des conseils sur la manière de s'engager chaque jour pour le climat
-
-Nous travaillons sans relâche pour améliorer Ecosia pour vous. Si vous avez des questions ou des remarques, n'hésitez pas à les communiquer à notre équipe à l'adresse iosapp@ecosia.org. Nous serons ravis d'avoir de vos nouvelles !
+Nous avons résolu quelques problèmes et ajouté des améliorations en termes de stabilité.

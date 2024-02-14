@@ -2,7 +2,7 @@
 "DefaultBrowserCard.Button.v2" = "Lleer cómo";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Fai que los enllaces de sitios web, correos electrónicos y Mensaxes s'abran automáticamente en Firefox.";
+"DefaultBrowserCard.Description" = "Fai que los enllaces de sitios web, correos electrónicos y Mensaxes s'abran automáticamente en Ecosia.";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Cambéu del restolador predetermináu";
@@ -11,7 +11,7 @@
 "DefaultBrowserOnboarding.Description1" = "1. Vete p'Axustes";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Esbilla Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. Esbilla Ecosia";
 
 /* Menu option for setting Firefox as default browser. */
 "Settings.DefaultBrowserMenuItem" = "Predeterminar el restolador";

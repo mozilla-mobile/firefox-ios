@@ -1,0 +1,29 @@
+{
+  "configurations" : [
+    {
+      "id" : "F463F962-D1EE-45DE-BF5E-83E24419C3FD",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "skippedTests" : [
+        "NTPTests",
+        "SnapshotBaseTests"
+      ],
+      "target" : {
+        "containerPath" : "container:Client.xcodeproj",
+        "identifier" : "2C6C90812C614A16007D9B43",
+        "name" : "EcosiaSnapshotTests"
+      }
+    }
+  ],
+  "version" : 1
+}

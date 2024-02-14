@@ -5,16 +5,16 @@
 "New Tab" = "Nueva pestaña";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox usa la cámara para escanear los códigos QR, tomar fotos y grabar video.";
+"NSCameraUsageDescription" = "Ecosia usa la cámara para escanear los códigos QR, tomar fotos y grabar video.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox requiere Face ID para acceder a tus contraseñas guardadas y métodos de pago.";
+"NSFaceIDUsageDescription" = "Ecosia requiere Face ID para acceder a tus contraseñas guardadas y métodos de pago.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Los sitios web que visités pueden solicitar tu ubicación.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Firefox usa tu micrófono para grabar y cargar audio.";
+"NSMicrophoneUsageDescription" = "Ecosia usa tu micrófono para grabar y cargar audio.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Esto te permite guardar las fotos.";

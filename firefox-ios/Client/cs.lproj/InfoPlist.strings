@@ -5,16 +5,16 @@
 "New Tab" = "Nový panel";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox používá váš fotoaparát ke skenování QR kódů a pořizování fotografií a videí.";
+"NSCameraUsageDescription" = "Ecosia používá váš fotoaparát ke skenování QR kódů a pořizování fotografií a videí.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox vyžaduje Face ID pro přístup k uloženým heslům a platebním metodám.";
+"NSFaceIDUsageDescription" = "Ecosia vyžaduje Face ID pro přístup k uloženým heslům a platebním metodám.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Servery, které navštěvujete, mohou chtít znát vaše umístění.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Firefox používá váš mikrofon k zaznamenávání a odesílání zvuku.";
+"NSMicrophoneUsageDescription" = "Ecosia používá váš mikrofon k zaznamenávání a odesílání zvuku.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Toto vám umožní ukládat fotografie.";

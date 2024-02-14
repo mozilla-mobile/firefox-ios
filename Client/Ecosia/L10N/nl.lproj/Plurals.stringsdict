@@ -82,23 +82,7 @@
 			<string>Bomen geplant</string>
 		</dict>
 	</dict>
-	<key>%d friend invite(s)</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@friends@</string>
-		<key>friends</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>one</key>
-			<string>%d vriend uitgenodigd</string>
-			<key>other</key>
-			<string>%d vrienden uitgenodigd</string>
-		</dict>
-	</dict>
-	<key>%d accepted invite(s)</key>
+	<key>accepted invite(s)</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@invites@</string>
@@ -109,9 +93,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d geaccepteerde uitnodiging</string>
+			<string>geaccepteerde uitnodiging</string>
 			<key>other</key>
-			<string>%d geaccepteerde uitnodigingen</string>
+			<string>geaccepteerde uitnodigingen</string>
 		</dict>
 	</dict>
 </dict>

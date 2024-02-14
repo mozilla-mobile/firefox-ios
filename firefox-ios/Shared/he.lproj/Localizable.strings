@@ -311,7 +311,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "יתכן כי מדובר בהגדרות לקויות או בתוקף. ניתן להמשיך אם הסיכון האפשרי מקובל עליך.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "הבעלים של %@ הגדיר את האתר באופן לקוי. כדי להגן על המידע שלך מפני גניבה Firefox מנע את החיבור לאתר זה.";
+"ErrorPages.CertWarning.Description" = "הבעלים של %@ הגדיר את האתר באופן לקוי. כדי להגן על המידע שלך מפני גניבה Ecosia מנע את החיבור לאתר זה.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "חיבור זה אינו בטוח";
@@ -332,7 +332,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "דף הבית של Firefox";
+"Firefox.HomePage.Title" = "דף הבית של Ecosia";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "התאמה אישית של מסך הבית";
@@ -377,7 +377,7 @@
 "Forward" = "קדימה";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "חשבון Firefox";
+"FxA.FirefoxAccount" = "חשבון Ecosia";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "ניהול חשבון ומכשירים";
@@ -389,7 +389,7 @@
 "fxa.signin.camera-signin" = "התחברות באמצעות המצלמה שלך";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "במחשב שלך יש לפתוח את Firefox ולעבור לכתובת firefox.com/pair";
+"fxa.signin.qr-link-instruction" = "במחשב שלך יש לפתוח את Ecosia ולעבור לכתובת ecosia.org/pair";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "מוכן לסריקה";
@@ -401,7 +401,7 @@
 "FxA.SyncNow" = "סנכרון כעת";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "‏Firefox Sync התחבר ל־%@";
+"FxAPush_DeviceConnected_body" = "‏Ecosia Sync התחבר ל־%@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "‏Sync מחובר";
@@ -410,7 +410,7 @@
 "FxAPush_DeviceDisconnected_body" = "‏%@ נותק בהצלחה.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "מכשיר זה נותק בהצלחה מ־Firefox Sync.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "מכשיר זה נותק בהצלחה מ־Ecosia Sync.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "‏Sync מנותק";
@@ -419,10 +419,10 @@
 "FxAPush_DeviceDisconnected_title" = "‏Sync מנותק";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "נותק מכשיר מ־Firefox Sync";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "נותק מכשיר מ־Ecosia Sync";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "הלוגו של Firefox, החלפת תמונת הרקע.";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "הלוגו של Ecosia, החלפת תמונת הרקע.";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "עזרה";
@@ -653,13 +653,13 @@
 "Logins.Onboarding.LearnMoreButtonTitle" = "מידע נוסף";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "כדי להשתמש בתכונה של המילוי האוטומטי עבור Firefox, עליך להפעיל קוד גישה במכשיר.";
+"Logins.PasscodeRequirement.Warning" = "כדי להשתמש בתכונה של המילוי האוטומטי עבור Ecosia, עליך להפעיל קוד גישה במכשיר.";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "לקחת את הססמאות שלך לכל מקום";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "מילוי אוטומטי של ססמאות ב־Firefox";
+"Logins.WelcomeView.Title2" = "מילוי אוטומטי של ססמאות ב־Ecosia";
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "הפעלת מילוי אוטומטי";
@@ -704,7 +704,7 @@
 "LoginsList.Title" = "כניסות שמורות";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "נראה ש־Firefox קרס לאחרונה. האם ברצונך לשחזר את הלשוניות שלך?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "נראה ש־Ecosia קרס לאחרונה. האם ברצונך לשחזר את הלשוניות שלך?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "סימון כנקרא";
@@ -890,7 +890,7 @@
 "Onboarding.WhatsNew.Button.Title" = "התחלת גלישה";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "אבוי! Firefox קרס";
+"Oops! Firefox crashed" = "אבוי! Ecosia קרס";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "ניתן לפתוח מאמרים בתצוגת קריאה על־ידי נגיעה בסמל הספר כאשר הוא מופיע בשורת הכותרת.";
@@ -902,7 +902,7 @@
 "Open Tabs" = "פתיחת לשוניות";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "דפדפן Firefox אינו יכול לפתוח דף זה מאחר שהוא כולל כתובת שאינה חוקית.";
+"OpenURL.Error.Message" = "דפדפן Ecosia אינו יכול לפתוח דף זה מאחר שהוא כולל כתובת שאינה חוקית.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "לא ניתן לפתוח דף";
@@ -914,7 +914,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "תכונה זו מאפשרת לך לשמור תמונות בסליל המצלמה שלך.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "ל־Firefox יש צורך בגישה לתמונות שלך";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "ל־Ecosia יש צורך בגישה לתמונות שלך";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "סגירה";
@@ -1001,7 +1001,7 @@
 "ScanQRCode.InvalidDataError.Message" = "הנתונים שגויים";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "יש לעבור להגדרות במכשיר, לבחור ב־Firefox, ולאפשר ל־Firefox לגשת למצלמה.";
+"ScanQRCode.PermissionError.Message.v100" = "יש לעבור להגדרות במכשיר, לבחור ב־Ecosia, ולאפשר ל־Ecosia לגשת למצלמה.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "סריקת קוד QR";
@@ -1016,7 +1016,7 @@
 "Search.Awesomebar.SwitchToTab" = "מעבר ללשונית";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "הצעות של Firefox";
+"Search.SuggestSectionTitle.v102" = "הצעות של Ecosia";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "מנועי החיפוש החדשים יופיעו בסרגל החיפוש המהיר.";
@@ -1082,13 +1082,13 @@
 "SendTo.NavBar.Title" = "שליחת לשונית";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "אין לך מכשירים אחרים המחוברים לחשבון Firefox זה הזמינים לסנכרון.";
+"SendTo.NoDevicesFound.Message" = "אין לך מכשירים אחרים המחוברים לחשבון Ecosia זה הזמינים לסנכרון.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "נא לפתוח את Firefox, לעבור אל ההגדרות ולהתחבר, כדי להמשיך.";
+"SendTo.NotSignedIn.Message" = "נא לפתוח את Ecosia, לעבור אל ההגדרות ולהתחבר, כדי להמשיך.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "לא מחובר לחשבון Firefox.";
+"SendTo.NotSignedIn.Title" = "לא מחובר לחשבון Ecosia.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "שליחה";
@@ -1172,7 +1172,7 @@
 "Settings.DataManagement.Title" = "ניהול נתונים";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "‏Firefox יפסיק להסתנכרן עם החשבון שלך, אבל לא ימחק את נתוני הגלישה שלך ממכשיר זה.";
+"Settings.Disconnect.Body" = "‏Ecosia יפסיק להסתנכרן עם החשבון שלך, אבל לא ימחק את נתוני הגלישה שלך ממכשיר זה.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "התנתקות";
@@ -1238,7 +1238,7 @@
 "Settings.FxA.Sync.SectionName" = "הגדרות סנכרון";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "חשבון Firefox";
+"Settings.FxA.Title" = "חשבון Ecosia";
 
 /* General settings section title */
 "Settings.General.SectionName" = "כללי";
@@ -1247,7 +1247,7 @@
 "Settings.Home.Current.Description.v101" = "נא לבחור מה יופיע כדף הבית.";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description.v101" = "נא לבחור מה יופיע בדף הבית של Firefox.";
+"Settings.Home.Option.Description.v101" = "נא לבחור מה יופיע בדף הבית של Ecosia.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "המשך גלישה";
@@ -1271,7 +1271,7 @@
 "Settings.Home.Option.StartAtHome.Always" = "מסך הבית";
 
 /* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
-"Settings.Home.Option.StartAtHome.Description" = "בחירת התוכן שיוצג בפניך עם חזרה ל־Firefox.";
+"Settings.Home.Option.StartAtHome.Description" = "בחירת התוכן שיוצג בפניך עם חזרה ל־Ecosia.";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "הלשונית האחרונה";
@@ -1286,25 +1286,25 @@
 "Settings.Home.Option.Wallpaper" = "רקע";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "הרקע של Firefox, תבנית אמטיסט.";
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "הרקע של Ecosia, תבנית אמטיסט.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "הרקע של Firefox, תבנית גבעות חוף.";
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "הרקע של Ecosia, תבנית גבעות חוף.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "הרקע של Firefox, תבנית שמיים.";
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "הרקע של Ecosia, תבנית שמיים.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "הרקע החלק כברירת מחדל.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "הרקע של Firefox, תבנית זריחה.";
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "הרקע של Ecosia, תבנית זריחה.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "כפתור החלפת תמונת רקע";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "הרקע של Firefox, תבנית גבעות דמדומיות.";
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "הרקע של Ecosia, תבנית גבעות דמדומיות.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
 "Settings.Home.Option.Wallpaper.Classic.Title.v106" = "‏%@ קלאסי";
@@ -1325,7 +1325,7 @@
 "Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "מהדורה מוגבלת";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
-"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "החלפת הרקע על־ידי נגיעה בלוגו דף הבית של Firefox";
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "החלפת הרקע על־ידי נגיעה בלוגו דף הבית של Ecosia";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "תמונת רקע";
@@ -1379,7 +1379,7 @@
 "Settings.NewTab.Option.Custom" = "מותאם אישית";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "מסך הבית של Firefox";
+"Settings.NewTab.Option.FirefoxHome" = "מסך הבית של Ecosia";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "דף הבית";
@@ -1400,7 +1400,7 @@
 "Settings.NoImageModeBlockImages.Label.v99" = "חסימת תמונות";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "בעת פתיחת Firefox";
+"Settings.OfferClipboardBar.Status" = "בעת פתיחת Ecosia";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
 "Settings.OfferClipboardBar.Status.v128" = "בעת פתיחת %@";
@@ -1442,7 +1442,7 @@
 "Settings.SendUsage.Link" = "מידע נוסף.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "הגישה של Mozilla היא לאסוף רק מה שנדרש לצורך שיפור Firefox לטובת הכלל.";
+"Settings.SendUsage.Message" = "הגישה של Mozilla היא לאסוף רק מה שנדרש לצורך שיפור Ecosia לטובת הכלל.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "שליחת נתוני שימוש";
@@ -1463,7 +1463,7 @@
 "Settings.Siri.OpenTabShortcut" = "פתיחת לשונית חדשה";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "ניתן להשתמש בקיצורי דרך של Siri כדי לפתוח במהירות את Firefox באמצעות Siri";
+"Settings.Siri.SectionDescription" = "ניתן להשתמש בקיצורי דרך של Siri כדי לפתוח במהירות את Ecosia באמצעות Siri";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "קיצורי דרך של Siri";
@@ -1472,7 +1472,7 @@
 "Settings.Studies.Toggle.Link" = "מידע נוסף.";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "‏Firefox עשוי להתקין ולהריץ מחקרים מדי פעם בפעם.";
+"Settings.Studies.Toggle.Message" = "‏Ecosia עשוי להתקין ולהריץ מחקרים מדי פעם בפעם.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "מחקרים";
@@ -1589,13 +1589,13 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "טעינה ברקע";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "בטעינה ב־Firefox";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "בטעינה ב־Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "פתיחה ב־Firefox";
+"ShareExtension.OpenInFirefoxAction.Title" = "פתיחה ב־Ecosia";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "חיפוש ב־Firefox";
+"ShareExtension.SeachInFirefoxAction.Title" = "חיפוש ב־Ecosia";
 
 /* Button in share sheet to copy the url of the current tab. */
 "ShareSheet.Copy.Title.v108" = "העתקה";
@@ -1742,7 +1742,7 @@
 "UIMenuItem.PasteGo" = "הדבקה ומעבר";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "חיפוש עם Firefox";
+"UIMenuItem.SearchWithFirefox" = "חיפוש עם Ecosia";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "לא נקרא";
@@ -1790,7 +1790,7 @@
 "Yesterday" = "אתמול";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "אין לך לשוניות פתוחות ב־Firefox על שאר המכשירים שלך.";
+"You don’t have any tabs open in Firefox on your other devices." = "אין לך לשוניות פתוחות ב־Ecosia על שאר המכשירים שלך.";
 
 /* Your Rights settings section title */
 "Your Rights" = "הזכויות שלך";

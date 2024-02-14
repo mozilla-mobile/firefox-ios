@@ -7,6 +7,9 @@ import Foundation
 import WebKit
 import Storage
 import Shared
+// Ecosia
+import Core
+import Combine
 
 // MARK: - TabManagerDelegate
 protocol TabManagerDelegate: AnyObject {
@@ -185,6 +188,22 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
                                                selector: #selector(blockPopUpDidChange),
                                                name: .BlockPopup,
                                                object: nil)
+        // Ecosia: Cookie and settings observing
+        configuration.websiteDataStore.httpCookieStore.add(self)
+        searchSettingsObserver = NotificationCenter.default
+            .publisher(for: .searchSettingsChanged)
+            .sink { [privateConfiguration, configuration] _ in
+                configuration.websiteDataStore.httpCookieStore.setCookie(Cookie.makeStandardCookie())
+                privateConfiguration.websiteDataStore.httpCookieStore.setCookie(Cookie.makeIncognitoCookie())
+            }
+    }
+
+    // MARK: Ecosia: Observing Cookies and Search setting changes
+    var searchSettingsObserver: Cancellable?
+
+    deinit {
+        configuration.websiteDataStore.httpCookieStore.remove(self)
+        searchSettingsObserver?.cancel()
     }
 
     // MARK: - Delegates
@@ -231,13 +250,19 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         // We do this to go against the configuration of the <meta name="viewport">
         // tag to behave the same way as Safari :-(
         configuration.ignoresViewportScaleLimits = true
-        if isPrivate {
-            configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
-        } else {
-            configuration.websiteDataStore = WKWebsiteDataStore.default()
-        }
-
+            if isPrivate {
+                configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
+            } else {
+                configuration.websiteDataStore = WKWebsiteDataStore.default()
+            }
         configuration.setURLSchemeHandler(InternalSchemeHandler(), forURLScheme: InternalURL.scheme)
+        // Ecosia: inject cookie when config is created to make sure they are present
+        let cookie = isPrivate ? Cookie.makeIncognitoCookie() : Cookie.makeStandardCookie()
+        configuration.websiteDataStore.httpCookieStore.setCookie(cookie)
+        // Ecosia: inject consent cookie when config is created to make sure they are present
+        if let consentCookie = Cookie.makeConsentCookie() {
+            configuration.websiteDataStore.httpCookieStore.setCookie(consentCookie)
+        }
         return configuration
     }
 
@@ -1015,7 +1040,10 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     ) -> Tab? {
         let page = NewTabAccessors.getHomePage(profilePreferences)
         let customUrl = HomeButtonHomePageAccessors.getHomePage(profilePreferences)
-        let homeUrl = URL(string: "internal://local/about/home")
+        /* Ecosia: Use homepage url constant
+         let homeUrl = URL(string: "internal://local/about/home")
+         */
+        let homeUrl = URL(string: URL.homepageUrlString)
 
         if page == .homePage, let customUrl = customUrl {
             return existingTab ?? addTab(URLRequest(url: customUrl), isPrivate: privateMode)
@@ -1076,6 +1104,17 @@ extension LegacyTabManager: WKNavigationDelegate {
                 webView.reload()
             } else {
                 tab.consecutiveCrashes = 0
+            }
+        }
+    }
+}
+
+// Ecosia: Cookie observer
+extension LegacyTabManager: WKHTTPCookieStoreObserver {
+    func cookiesDidChange(in cookieStore: WKHTTPCookieStore) {
+        cookieStore.getAllCookies { cookies in
+            DispatchQueue.main.async {
+                Cookie.received(cookies)
             }
         }
     }

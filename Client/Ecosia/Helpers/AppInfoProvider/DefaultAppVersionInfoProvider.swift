@@ -6,7 +6,7 @@ import Shared
 import Common
 
 struct DefaultAppVersionInfoProvider: AppVersionInfoProvider {
-    
+
     var version: String {
         return AppInfo.ecosiaAppVersion
     }

@@ -5,16 +5,16 @@
 "New Tab" = "新分頁";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox 可使用您的攝影機掃描 QR Code 或為網站拍照、錄影上傳。";
+"NSCameraUsageDescription" = "Ecosia 可使用您的攝影機掃描 QR Code 或為網站拍照、錄影上傳。";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox 需要進行 Face ID 才能存取您儲存的密碼與付款方式資訊。";
+"NSFaceIDUsageDescription" = "Ecosia 需要進行 Face ID 才能存取您儲存的密碼與付款方式資訊。";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "您造訪的網站可能會詢問您的所在位置。";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Firefox 可使用您的麥克風為網站錄音上傳。";
+"NSMicrophoneUsageDescription" = "Ecosia 可使用您的麥克風為網站錄音上傳。";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "讓您可儲存相片。";

@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Mae gwneud Firefox yn borwr rhagosodedig yn bleidlais o blaid rhyngrwyd agored, hygyrch.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Mae gwneud Ecosia yn borwr rhagosodedig yn bleidlais o blaid rhyngrwyd agored, hygyrch.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Rhagosod i Rhyngrwyd Gwell";
@@ -8,19 +8,19 @@
 "DefaultBrowserCard.Button.v2" = "Dysgu Sut";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Gosod dolenni o wefannau, e-byst, a Messages i agor yn awtomatig yn Firefox.";
+"DefaultBrowserCard.Description" = "Gosod dolenni o wefannau, e-byst, a Messages i agor yn awtomatig yn Ecosia.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "Dewiswch Firefox fel eich porwr rhagosodedig a gwneud cyflymder, diogelwch a phreifatrwydd yn nodweddion awtomatig.";
+"DefaultBrowserCard.NextLevel.Description.v108" = "Dewiswch Ecosia fel eich porwr rhagosodedig a gwneud cyflymder, diogelwch a phreifatrwydd yn nodweddion awtomatig.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "Uwchraddio Pori Bob Dydd";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Ar gyfartaledd, mae Firefox yn rhwystro dros 3,000 o dracwyr fesul defnyddiwr bob mis. Gwnewch ni eich porwr rhagosodedig ar gyfer tawelwch meddwl preifatrwydd.";
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Ar gyfartaledd, mae Ecosia yn rhwystro dros 3,000 o dracwyr fesul defnyddiwr bob mis. Gwnewch ni eich porwr rhagosodedig ar gyfer tawelwch meddwl preifatrwydd.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Mae Firefox yn Sicrhau Preifatrwydd";
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Mae Ecosia yn Sicrhau Preifatrwydd";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Newid Eich Porwr Rhagosodedig";
@@ -35,7 +35,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Tapio Default Browser App";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Dewis Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. Dewis Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Ap Porwr Rhagosodedig";

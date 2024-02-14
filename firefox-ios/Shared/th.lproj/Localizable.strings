@@ -311,7 +311,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "สิ่งนี้อาจเป็นการกำหนดค่าที่ผิดพลาดหรือกำลังมีการดัดแปลงโดยผู้โจมตี ดำเนินการต่อหากคุณยอมรับในความเสี่ยงที่อาจเกิดขึ้น";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "เจ้าของ %@ ได้กำหนดค่าเว็บไซต์ของพวกเขาไม่เหมาะสม เพื่อปกป้องข้อมูลของคุณจากการถูกขโมย Firefox จึงไม่ได้เชื่อมต่อไปยังเว็บไซต์นี้";
+"ErrorPages.CertWarning.Description" = "เจ้าของ %@ ได้กำหนดค่าเว็บไซต์ของพวกเขาไม่เหมาะสม เพื่อปกป้องข้อมูลของคุณจากการถูกขโมย Ecosia จึงไม่ได้เชื่อมต่อไปยังเว็บไซต์นี้";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "การเชื่อมต่อนี้ไม่น่าเชื่อถือ";
@@ -332,7 +332,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "หน้าแรกของ Firefox";
+"Firefox.HomePage.Title" = "หน้าแรกของ Ecosia";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "ปรับแต่งหน้าแรก";
@@ -377,7 +377,7 @@
 "Forward" = "เดินหน้า";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "บัญชี Firefox";
+"FxA.FirefoxAccount" = "บัญชี Ecosia";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "จัดการบัญชีและอุปกรณ์";
@@ -389,7 +389,7 @@
 "fxa.signin.camera-signin" = "ลงชื่อเข้าด้วยกล้องของคุณ";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "บนคอมพิวเตอร์ของคุณ ให้เปิด Firefox แล้วไปที่ firefox.com/pair";
+"fxa.signin.qr-link-instruction" = "บนคอมพิวเตอร์ของคุณ ให้เปิด Ecosia แล้วไปที่ ecosia.org/pair";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "พร้อมที่จะสแกน";
@@ -410,7 +410,7 @@
 "FxAPush_DeviceDisconnected_body" = "ตัดการเชื่อมต่อ %@ สำเร็จ";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "ตัดการเชื่อมต่ออุปกรณ์นี้จาก Firefox Sync สำเร็จ";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "ตัดการเชื่อมต่ออุปกรณ์นี้จาก Ecosia Sync สำเร็จ";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "ตัดการเชื่อมต่อ Sync แล้ว";
@@ -419,10 +419,10 @@
 "FxAPush_DeviceDisconnected_title" = "ตัดการเชื่อมต่อ Sync แล้ว";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "อุปกรณ์ได้ตัดการเชื่อมต่อจาก Firefox Sync";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "อุปกรณ์ได้ตัดการเชื่อมต่อจาก Ecosia Sync";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "โลโก้ Firefoxเปลี่ยนวอลเปเปอร์";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "โลโก้ Ecosiaเปลี่ยนวอลเปเปอร์";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "ช่วยเหลือ";
@@ -653,13 +653,13 @@
 "Logins.Onboarding.LearnMoreButtonTitle" = "เรียนรู้เพิ่มเติม";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "ในการใช้คุณสมบัติป้อนอัตโนมัติสำหรับ Firefox คุณต้องเปิดใช้งานรหัสผ่านของอุปกรณ์";
+"Logins.PasscodeRequirement.Warning" = "ในการใช้คุณสมบัติป้อนอัตโนมัติสำหรับ Ecosia คุณต้องเปิดใช้งานรหัสผ่านของอุปกรณ์";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "นำรหัสผ่านของคุณไปทุกที่";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "ป้อนรหัสผ่าน Firefox อัตโนมัติ";
+"Logins.WelcomeView.Title2" = "ป้อนรหัสผ่าน Ecosia อัตโนมัติ";
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "เปิดการป้อนอัตโนมัติ";
@@ -704,7 +704,7 @@
 "LoginsList.Title" = "การเข้าสู่ระบบที่บันทึกไว้";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "ดูเหมือนว่า Firefox จะเกิดข้อขัดข้องก่อนหน้านี้ คุณต้องการเรียกคืนแท็บของคุณหรือไม่?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "ดูเหมือนว่า Ecosia จะเกิดข้อขัดข้องก่อนหน้านี้ คุณต้องการเรียกคืนแท็บของคุณหรือไม่?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "ทำเครื่องหมายว่าอ่านแล้ว";
@@ -893,7 +893,7 @@
 "Onboarding.WhatsNew.Button.Title" = "เริ่มการเรียกดู";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "อุปส์! Firefox เกิดข้อขัดข้อง";
+"Oops! Firefox crashed" = "อุปส์! Ecosia เกิดข้อขัดข้อง";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "เปิดบทความในมุมมองผู้อ่านโดยแตะไอคอนหนังสือเมื่อปรากฏในแถบหัวข้อ";
@@ -1004,7 +1004,7 @@
 "ScanQRCode.InvalidDataError.Message" = "ข้อมูลไม่ถูกต้อง";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "ไปที่ ‘การตั้งค่า’ ของอุปกรณ์ > ‘Firefox’ และอนุญาตให้ Firefox เข้าถึงกล้อง";
+"ScanQRCode.PermissionError.Message.v100" = "ไปที่ ‘การตั้งค่า’ ของอุปกรณ์ > ‘Ecosia’ และอนุญาตให้ Ecosia เข้าถึงกล้อง";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "สแกนคิวอาร์โค้ด";
@@ -1085,13 +1085,13 @@
 "SendTo.NavBar.Title" = "ส่งแท็บ";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "คุณไม่มีอุปกรณ์ใด ๆ ที่เชื่อมต่อกับบัญชี Firefox นี้ที่พร้อมซิงค์";
+"SendTo.NoDevicesFound.Message" = "คุณไม่มีอุปกรณ์ใด ๆ ที่เชื่อมต่อกับบัญชี Ecosia นี้ที่พร้อมซิงค์";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "โปรดเปิด Firefox ไปยังการตั้งค่าและลงชื่อเข้าเพื่อดำเนินการต่อ";
+"SendTo.NotSignedIn.Message" = "โปรดเปิด Ecosia ไปยังการตั้งค่าและลงชื่อเข้าเพื่อดำเนินการต่อ";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "คุณไม่ได้ลงชื่อเข้าบัญชี Firefox ของคุณ";
+"SendTo.NotSignedIn.Title" = "คุณไม่ได้ลงชื่อเข้าบัญชี Ecosia ของคุณ";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "ส่ง";
@@ -1241,7 +1241,7 @@
 "Settings.FxA.Sync.SectionName" = "การตั้งค่า Sync";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "บัญชี Firefox";
+"Settings.FxA.Title" = "บัญชี Ecosia";
 
 /* General settings section title */
 "Settings.General.SectionName" = "ทั่วไป";
@@ -1250,7 +1250,7 @@
 "Settings.Home.Current.Description.v101" = "เลือกสิ่งที่ต้องการให้แสดงบนหน้าแรก";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description.v101" = "เลือกสิ่งที่รวมอยู่ในหน้าแรกของ Firefox";
+"Settings.Home.Option.Description.v101" = "เลือกสิ่งที่รวมอยู่ในหน้าแรกของ Ecosia";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "กลับเข้าไป";
@@ -1274,7 +1274,7 @@
 "Settings.Home.Option.StartAtHome.Always" = "หน้าแรก";
 
 /* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
-"Settings.Home.Option.StartAtHome.Description" = "เลือกสิ่งที่คุณเห็นเมื่อคุณกลับเข้าสู่ Firefox";
+"Settings.Home.Option.StartAtHome.Description" = "เลือกสิ่งที่คุณเห็นเมื่อคุณกลับเข้าสู่ Ecosia";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "แท็บสุดท้าย";
@@ -1289,25 +1289,25 @@
 "Settings.Home.Option.Wallpaper" = "รูปพื้นหลัง";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "วอลล์เปเปอร์ Firefox, ลายอะเมทิสต์";
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "วอลล์เปเปอร์ Ecosia, ลายอะเมทิสต์";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "วอลล์เปเปอร์ Firefox, ลายเนินเขาชายหาด";
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "วอลล์เปเปอร์ Ecosia, ลายเนินเขาชายหาด";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "วอลล์เปเปอร์ Firefox, ลายซีรูเลียน";
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "วอลล์เปเปอร์ Ecosia, ลายซีรูเลียน";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "วอลล์เปเปอร์ว่างเริ่มต้น";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "วอลล์เปเปอร์ Firefox, ลายพระอาทิตย์ขึ้น";
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "วอลล์เปเปอร์ Ecosia, ลายพระอาทิตย์ขึ้น";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "เปลี่ยนวอลล์เปเปอร์ของหน้าแรกแบบหมุนเวียน";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "วอลล์เปเปอร์ Firefox, ลายทิวเขายามพลบค่ำ";
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "วอลล์เปเปอร์ Ecosia, ลายทิวเขายามพลบค่ำ";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
 "Settings.Home.Option.Wallpaper.Classic.Title.v106" = "คลาสสิค %@";
@@ -1328,7 +1328,7 @@
 "Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "เวลาจำกัด";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
-"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "เปลี่ยนวอลเปเปอร์โดยแตะโลโก้หน้าแรกของ Firefox";
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "เปลี่ยนวอลเปเปอร์โดยแตะโลโก้หน้าแรกของ Ecosia";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "รูปพื้นหลัง";
@@ -1382,7 +1382,7 @@
 "Settings.NewTab.Option.Custom" = "กำหนดเอง";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "หน้าแรก Firefox";
+"Settings.NewTab.Option.FirefoxHome" = "หน้าแรก Ecosia";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "หน้าแรก";
@@ -1403,7 +1403,7 @@
 "Settings.NoImageModeBlockImages.Label.v99" = "ปิดกั้นภาพ";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "เมื่อเปิด Firefox";
+"Settings.OfferClipboardBar.Status" = "เมื่อเปิด Ecosia";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
 "Settings.OfferClipboardBar.Status.v128" = "เมื่อเปิด %@";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "เรียนรู้เพิ่มเติม";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla มุ่งมั่นที่จะเก็บรวบรวมเฉพาะสิ่งที่เราจำเป็นต้องให้บริการและปรับปรุง Firefox สำหรับทุกคน";
+"Settings.SendUsage.Message" = "Mozilla มุ่งมั่นที่จะเก็บรวบรวมเฉพาะสิ่งที่เราจำเป็นต้องให้บริการและปรับปรุง Ecosia สำหรับทุกคน";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "ส่งข้อมูลการใช้งาน";
@@ -1466,7 +1466,7 @@
 "Settings.Siri.OpenTabShortcut" = "เปิดแท็บใหม่";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "ใช้คำสั่งลัด Siri เพื่อเปิด Firefox อย่างรวดเร็วผ่าน Siri";
+"Settings.Siri.SectionDescription" = "ใช้คำสั่งลัด Siri เพื่อเปิด Ecosia อย่างรวดเร็วผ่าน Siri";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "คำสั่งลัด Siri";
@@ -1592,13 +1592,13 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "โหลดในพื้นหลัง";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "กำลังโหลดใน Firefox";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "กำลังโหลดใน Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "เปิดใน Firefox";
+"ShareExtension.OpenInFirefoxAction.Title" = "เปิดใน Ecosia";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "ค้นหาใน Firefox";
+"ShareExtension.SeachInFirefoxAction.Title" = "ค้นหาใน Ecosia";
 
 /* Button in share sheet to copy the url of the current tab. */
 "ShareSheet.Copy.Title.v108" = "คัดลอก";
@@ -1745,7 +1745,7 @@
 "UIMenuItem.PasteGo" = "วางแล้วไป";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "ค้นหาด้วย Firefox";
+"UIMenuItem.SearchWithFirefox" = "ค้นหาด้วย Ecosia";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "ยังไม่ได้อ่าน";
@@ -1793,7 +1793,7 @@
 "Yesterday" = "เมื่อวานนี้";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "คุณไม่มีแท็บใด ๆ ที่เปิดอยู่ใน Firefox ในอุปกรณ์อื่น ๆ ของคุณ";
+"You don’t have any tabs open in Firefox on your other devices." = "คุณไม่มีแท็บใด ๆ ที่เปิดอยู่ใน Ecosia ในอุปกรณ์อื่น ๆ ของคุณ";
 
 /* Your Rights settings section title */
 "Your Rights" = "สิทธิของคุณ";

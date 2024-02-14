@@ -5,8 +5,8 @@
 import UIKit
 import Common
 
-final class EmptyBookmarksView: UIView, Themeable {    
-    
+final class EmptyBookmarksView: UIView, Themeable {
+
     private enum UX {
         static let TitleLabelFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: .systemFont(ofSize: 17, weight: .semibold))
         static let SectionLabelFont = UIFontMetrics(forTextStyle: .callout).scaledFont(for: .systemFont(ofSize: 16))
@@ -35,14 +35,14 @@ final class EmptyBookmarksView: UIView, Themeable {
         label.adjustsFontForContentSizeCategory = true
         return label
     }()
-    
+
     private let containerStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         return stackView
     }()
-    
+
     private let learnMoreButton: UIButton = {
        let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -50,7 +50,7 @@ final class EmptyBookmarksView: UIView, Themeable {
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
         return button
     }()
-    
+
     private let importBookmarksButton: UIButton = {
        let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -64,19 +64,19 @@ final class EmptyBookmarksView: UIView, Themeable {
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
         return button
     }()
-    
+
     weak var delegate: EmptyBookmarksViewDelegate?
-    
+
     var bottomMarginConstraint: NSLayoutConstraint?
-    
+
     // MARK: - Themeable Properties
-    
+
     var themeManager: ThemeManager { AppContainer.shared.resolve() }
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // MARK: - Init
-    
+
     required init?(coder: NSCoder) {
         assertionFailure("This view is only supposed to be instantiated programmatically")
         return nil
@@ -88,12 +88,12 @@ final class EmptyBookmarksView: UIView, Themeable {
         super.init(frame: .zero)
         setup(initialBottomMargin)
     }
-    
+
     private func setup(_ initialBottomMargin: CGFloat) {
         addSubview(containerStackView)
-        
+
         bottomMarginConstraint = containerStackView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: initialBottomMargin)
-        
+
         NSLayoutConstraint.activate([
             containerStackView.leadingAnchor.constraint(greaterThanOrEqualTo: layoutMarginsGuide.leadingAnchor, constant: UX.LayoutMargingsInset),
             containerStackView.trailingAnchor.constraint(lessThanOrEqualTo: layoutMarginsGuide.trailingAnchor, constant: -UX.LayoutMargingsInset),
@@ -101,22 +101,22 @@ final class EmptyBookmarksView: UIView, Themeable {
             bottomMarginConstraint,
             containerStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
         ].compactMap { $0 })
-        
+
         // title
         containerStackView.addArrangedSubview(titleLabel)
-        
+
         // space between title and first section
         let spacerOne = UIView.build {
             $0.heightAnchor.constraint(equalToConstant: UX.TitleSpacerHeight).isActive = true
         }
         containerStackView.addArrangedSubview(spacerOne)
-        
+
         addSection(imageNamed: "bookmarkAdd", text: .localized(.bookmarksEmptyViewItem0))
         addSection(imageNamed: "exportShare", text: .localized(.bookmarksEmptyViewItem1), listItems: [
             .localized(.bookmarksEmptyViewItem1NumberedItem0),
             .localized(.bookmarksEmptyViewItem1NumberedItem1)
         ])
-        
+
         let buttonsContainerCenterView = UIView.build { centerView in
             let buttonsContainer = UIView.build { view in
                 view.addSubview(self.learnMoreButton)
@@ -137,28 +137,28 @@ final class EmptyBookmarksView: UIView, Themeable {
                 buttonsContainer.topAnchor.constraint(equalTo: centerView.topAnchor)
             ])
         }
-        
+
         containerStackView.addArrangedSubview(buttonsContainerCenterView)
-        
+
         // setup buttons
         learnMoreButton.addTarget(self, action: #selector(onLearnMoreTapped), for: .touchUpInside)
         importBookmarksButton.addTarget(self, action: #selector(onImportTapped), for: .touchUpInside)
 
         applyTheme()
-        
+
         listenForThemeChange(self)
     }
-    
+
     private func addSection(imageNamed: String, text: String, listItems: [String]? = nil) {
         // first section (tap the bookmark icon when you find a page you want to share)
         let sectionStackView = UIStackView()
         sectionStackView.axis = .horizontal
         sectionStackView.alignment = .top
-        
+
         if traitCollection.userInterfaceIdiom == .pad {
             sectionStackView.addArrangedSubview(createSpacerView(width: UX.SectionSpacerWidth))
         }
-        
+
         let sectionIcon = UIImageView()
         sectionIcon.contentMode = .scaleAspectFit
         sectionIcon.image = UIImage.templateImageNamed(imageNamed)
@@ -166,14 +166,14 @@ final class EmptyBookmarksView: UIView, Themeable {
         sectionIcon.setContentHuggingPriority(.required, for: .horizontal)
         sectionIcon.translatesAutoresizingMaskIntoConstraints = false
         sectionIcon.widthAnchor.constraint(equalToConstant: UX.SectionIconWidth).priority(.required).isActive = true
-        
+
         sectionStackView.addArrangedSubview(sectionIcon)
-        
+
         let sectionOneIconLabelSpacer = UIView.build {
             $0.widthAnchor.constraint(equalToConstant: UX.SectionIconLabelSpacerWidth).isActive = true
         }
         sectionStackView.addArrangedSubview(sectionOneIconLabelSpacer)
-        
+
         let sectionLabelsStackView = UIStackView()
         sectionLabelsStackView.axis = .vertical
         sectionStackView.addArrangedSubview(sectionLabelsStackView)
@@ -184,7 +184,7 @@ final class EmptyBookmarksView: UIView, Themeable {
         sectionLabel.text = text
         sectionLabel.adjustsFontForContentSizeCategory = true
         sectionLabelsStackView.addArrangedSubview(sectionLabel)
-        
+
         if let listItems = listItems {
             for (index, listItem) in listItems.enumerated() {
                 let enumerationLabel = UILabel()
@@ -199,10 +199,9 @@ final class EmptyBookmarksView: UIView, Themeable {
                     $0.setContentHuggingPriority(.required, for: .horizontal)
                     $0.setContentCompressionResistancePriority(.required, for: .horizontal)
                     $0.numberOfLines = 0
-                    $0.textColor = .legacyTheme.ecosia.secondaryText
                     $0.adjustsFontForContentSizeCategory = true
                 }
-                
+
                 let listItemStackView = UIStackView()
                 listItemStackView.axis = .horizontal
                 listItemStackView.alignment = .leading
@@ -215,40 +214,40 @@ final class EmptyBookmarksView: UIView, Themeable {
                     $0.setContentHuggingPriority(.required, for: .horizontal)
                     $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
                 })
-                
+
                 sectionLabelsStackView.addArrangedSubview(listItemStackView)
             }
         }
-        
+
         if traitCollection.userInterfaceIdiom == .pad {
             sectionStackView.addArrangedSubview(createSpacerView(width: UX.SectionSpacerWidth))
         }
-                
+
         containerStackView.addArrangedSubview(sectionStackView)
-        
+
         let sectionEndSpacer = UIView.build {
             $0.heightAnchor.constraint(equalToConstant: UX.SectionEndSpacerHeight).isActive = true
         }
-        
+
         containerStackView.addArrangedSubview(sectionEndSpacer)
     }
-    
+
     private func createSpacerView(width: CGFloat) -> UIView {
         UIView.build {
             $0.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
             $0.widthAnchor.constraint(equalToConstant: width).isActive = true
         }
     }
-    
-    @objc private func onLearnMoreTapped() {
+
+    @objc func onLearnMoreTapped() {
         Analytics.shared.bookmarksEmptyLearnMoreClicked()
         delegate?.emptyBookmarksViewLearnMoreTapped(self)
     }
-    
+
     @objc private func onImportTapped() {
         delegate?.emptyBookmarksViewImportBookmarksTapped(self)
     }
-    
+
     @objc func applyTheme() {
         backgroundColor = .legacyTheme.ecosia.homePanelBackground
         importBookmarksButton.layer.borderColor = UIColor.legacyTheme.ecosia.primaryText.cgColor
@@ -257,24 +256,37 @@ final class EmptyBookmarksView: UIView, Themeable {
         importBookmarksButton.setTitleColor(.legacyTheme.ecosia.primaryText, for: .normal)
         importBookmarksButton.titleLabel?.font = UX.ImportButtonLabelFont
         titleLabel.textColor = .legacyTheme.ecosia.primaryText
-        containerStackView.arrangedSubviews
-            .compactMap { ($0 as? UIStackView)?.arrangedSubviews }
-            .reduce([UIView](), { partialResult, subViews in
-                var finalResult = partialResult
-                finalResult.append(contentsOf: subViews)
-                subViews.compactMap { $0 as? UIStackView }.forEach { subStackView in
-                    finalResult.append(contentsOf: subStackView.arrangedSubviews)
-                }
-                return finalResult
-            })
-            .forEach {
-                switch $0 {
-                case let label as UILabel:
-                    label.textColor = .legacyTheme.ecosia.secondaryText
-                default:
-                    $0.tintColor = .legacyTheme.ecosia.secondaryText
-                    break
+        applyThemeToSectionsIn(containerStackView)
+    }
+
+    func applyThemeToSectionsIn(_ stackView: UIStackView) {
+        var finalResult = [UIView]()
+        var iterateThroughSubviews: ((UIStackView) -> Void)?
+
+        iterateThroughSubviews = { stackView in
+            for subview in stackView.arrangedSubviews {
+                if let subStackView = subview as? UIStackView {
+                    iterateThroughSubviews?(subStackView)
+                } else {
+                    finalResult.append(subview)
                 }
             }
+        }
+
+        stackView.arrangedSubviews.forEach {
+            if let stackView = $0 as? UIStackView {
+                iterateThroughSubviews?(stackView)
+            }
+        }
+
+        finalResult.forEach {
+            switch $0 {
+            case let label as UILabel:
+                label.textColor = .legacyTheme.ecosia.secondaryText
+            default:
+                $0.tintColor = .legacyTheme.ecosia.secondaryText
+                break
+            }
+        }
     }
 }

@@ -19,7 +19,6 @@ extension HomepageViewController: SharedHomepageCellDelegate {
     }
 }
 
-
 protocol SharedHomepageCellLayoutDelegate: AnyObject {
     func invalidateLayout(at indexPaths: [IndexPath])
 }
@@ -36,11 +35,11 @@ extension HomepageViewController: NTPTooltipDelegate {
     func ntpTooltipTapped(_ tooltip: NTPTooltip?) {
         handleTooltipTapped(tooltip)
     }
-    
+
     func ntpTooltipCloseTapped(_ tooltip: NTPTooltip?) {
         handleTooltipTapped(tooltip)
     }
-    
+
     private func handleTooltipTapped(_ tooltip: NTPTooltip?) {
         guard let ntpHighlight = NTPTooltip.highlight() else { return }
 
@@ -51,7 +50,7 @@ extension HomepageViewController: NTPTooltipDelegate {
             case .gotClaimed, .successfulInvite:
                 User.shared.referrals.accept()
             case .referralSpotlight:
-                Analytics.shared.openInvitePromo()
+                Analytics.shared.referral(action: .open, label: .promo)
                 User.shared.hideReferralSpotlight()
             case .collectiveImpactIntro:
                 User.shared.hideImpactIntro()
@@ -83,13 +82,29 @@ extension HomepageViewController: NTPLibraryDelegate {
     }
 }
 
+extension HomepageViewController: NTPConfigurableNudgeCardCellDelegate {
+    func nudgeCardRequestToPerformAction(for cardType: HomepageSectionType) {
+        switch cardType {
+        case .newsletterCard:
+            BrazeService.shared.logCustomEvent(.newsletterCardClick)
+            Analytics.shared.newsletterCardExperiment(action: .click)
+            NewsletterCardExperiment.setDismissed()
+        default:
+            return
+        }
+        reloadView()
+    }
+
+    func nudgeCardRequestToDimiss(for cardType: HomepageSectionType) {
+        Analytics.shared.newsletterCardExperiment(action: .dismiss)
+        NewsletterCardExperiment.setDismissed()
+        reloadView()
+    }
+}
+
 extension HomepageViewController: NTPImpactCellDelegate {
     func impactCellButtonClickedWithInfo(_ info: ClimateImpactInfo) {
         switch info {
-        case .search:
-            Analytics.shared.navigation(.open, label: .counter)
-            let url = Environment.current.urlProvider.aboutCounter
-            openLink(url: url)
         case .referral:
             let invite = MultiplyImpact(referrals: referrals)
             invite.delegate = self
@@ -111,22 +126,9 @@ extension HomepageViewController: NTPNewsCellDelegate {
     }
 }
 
-extension HomepageViewController: NTPBookmarkNudgeCellDelegate {
-    func nudgeCellOpenBookmarks() {
-        homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .bookmarks)
-        User.shared.hideBookmarksNTPNudgeCard()
-        reloadView()
-    }
-    
-    func nudgeCellDismiss() {
-        User.shared.hideBookmarksNTPNudgeCard()
-        reloadView()
-    }
-}
-
 extension HomepageViewController: NTPCustomizationCellDelegate {
     func openNTPCustomizationSettings() {
-        Analytics.shared.ntp(.click, label: .customize)
+        Analytics.shared.ntpCustomisation(.click, label: .customize)
         browserNavigationHandler?.show(settings: .homePage)
     }
 }

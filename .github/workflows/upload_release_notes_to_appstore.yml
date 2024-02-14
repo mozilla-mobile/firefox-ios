@@ -19,7 +19,7 @@ jobs:
       - name: Install gems
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.7
+          ruby-version: 3.3.0
           bundler-cache: true
     
       - name: Fastlane upload release notes

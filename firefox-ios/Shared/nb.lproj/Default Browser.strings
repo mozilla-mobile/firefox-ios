@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Å gjøre Firefox til din standardnettleser er en stemme for et åpent, tilgjengelig internett.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Å gjøre Ecosia til din standardnettleser er en stemme for et åpent, tilgjengelig internett.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Standard for et bedre internett";
@@ -8,10 +8,10 @@
 "DefaultBrowserCard.Button.v2" = "Finn ut hvordan";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Angi at lenker fra nettsteder, e-postmeldinger og meldinger skal åpnes automatisk i Firefox.";
+"DefaultBrowserCard.Description" = "Angi at lenker fra nettsteder, e-postmeldinger og meldinger skal åpnes automatisk i Ecosia.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "Velg Firefox som standard nettleser for å automatisk få fårt, sikkerhet og personvern.";
+"DefaultBrowserCard.NextLevel.Description.v108" = "Velg Ecosia som standard nettleser for å automatisk få fårt, sikkerhet og personvern.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "Forbedre din daglige surfing";
@@ -35,7 +35,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Trykk på Standard nettleserapp";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Velg Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. Velg Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Standard nettleser-app";

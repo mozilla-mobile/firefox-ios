@@ -17,18 +17,24 @@ runs:
 
     - uses: actions/setup-python@v4
       with:
-        python-version: '3.11'
+        python-version: '3.12.2'
         cache: 'pip'
 
     - name: Install gems
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 2.7
+        ruby-version: 3.3
         bundler-cache: true
 
     - name: Install npm
       uses: bahmutov/npm-install@v1
 
+    # lot of people are experiencing the same issue apparently
+    # found a workaround here https://github.com/actions/runner-images/issues/9577
+    - name: Delete Xcode.app
+      shell: bash
+      run: sudo rm -rf /Applications/Xcode.app
+      
     - name: Restore SPM Cache
       id: restore-spm-cache
       uses: actions/cache/restore@v3
@@ -48,43 +54,10 @@ runs:
         path: SourcePackages/
         key: ${{ runner.os }}-spm-cache-${{ hashFiles('Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}  
 
-    - name: Restore Content Blocker Cache
-      id: restore-content-blocker-cache
-      uses: actions/cache/restore@v3
-      with:
-        path: |
-            content-blocker-lib-ios/
-            shavar-prod-lists/
-            Client/Assets/AllFramesAtDocument*.js
-            Client/Assets/MainFrameAtDocument*.js
-            Client/Assets/*.js.LICENSE.txt
-        key: ${{ runner.os }}-content-blocker-cache-${{ hashFiles('content_blocker_commit_sha.txt') }}
-
-    - name: Run content blocker scripts if cache not found
+    - name: Extract Staging XCConfig
       shell: bash
-      if: steps.restore-content-blocker-cache.outputs.cache-hit != 'true'
-      run: ./content_blocker_update.sh
+      run: echo "$STAGING_XCCONFIG" | base64 --decode > Client/Configuration/Staging.xcconfig
 
-    - name: Save Content Blocker Cache if new
-      if: steps.restore-content-blocker-cache.outputs.cache-hit != 'true'
-      uses: actions/cache/save@v3
-      with:
-        path: |
-            content-blocker-lib-ios/
-            shavar-prod-lists/
-            Client/Assets/AllFramesAtDocument*.js
-            Client/Assets/MainFrameAtDocument*.js
-            Client/Assets/*.js.LICENSE.txt
-        key: ${{ runner.os }}-content-blocker-cache-${{ hashFiles('content_blocker_commit_sha.txt') }}
-
-    - name: Create empty Staging xcconfig
+    - name: Run bootstrap script
       shell: bash
-      run: touch Client/Configuration/Staging.xcconfig
-
-    - name: Update Xcodebuild settings
-      shell: bash
-      run: |
-        defaults write com.apple.dt.xcodebuild IgnoreFileSystemDeviceInodeChanges -bool YES
-        defaults write com.apple.dt.xcodebuild PBXNumberOfParallelBuildSubtasks 8
-        defaults write com.apple.dt.xcodebuild IDEBuildOperationMaxNumberOfConcurrentCompileTasks 8
-        defaults write com.apple.dt.xcodebuild BuildSystemScheduleInherentlyParallelCommandsExclusively -bool YES
+      run: ./bootstrap.sh

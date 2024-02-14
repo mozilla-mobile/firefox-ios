@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import Glean
+// Ecosia: remove Glean dependency // import Glean
 import Shared
 import XCTest
 
@@ -18,7 +18,8 @@ class WallpaperSettingsViewModelTests: XCTestCase {
         wallpaperManager = WallpaperManagerMock()
         addWallpaperCollections()
 
-        Glean.shared.resetGlean(clearStores: true)
+        // Ecosia: remove Glean dependency
+        // Glean.shared.resetGlean(clearStores: true)
     }
 
     override func tearDown() {

@@ -9,7 +9,7 @@ extension UIView {
         static let top = Positions(rawValue: 1)
         static let bottom = Positions(rawValue: 1 << 1)
         let rawValue: Int8
-        
+
         static func derive(row: Int, totalCount: Int) -> Positions {
             var pos = Positions()
             if row == 0 { pos.insert(.top) }
@@ -17,7 +17,7 @@ extension UIView {
             return pos
         }
     }
-    
+
     /// Updates `layer.maskedCorners` based on the position of the view inside any sort of list.
     /// It masks top left and right if the view is the first of the list and bottom left and right if the view is the last.
     /// - Parameters:

@@ -5,7 +5,7 @@
 "New Tab" = "Новая картка";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox выкарыстоўвае камеру, каб сканаваць QR-коды, здымаць фота і відэа.";
+"NSCameraUsageDescription" = "Ecosia выкарыстоўвае камеру, каб сканаваць QR-коды, здымаць фота і відэа.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox патрабуе Face ID для доступу да захаваных пароляў і спосабаў аплаты.";
@@ -14,7 +14,7 @@
 "NSLocationWhenInUseUsageDescription" = "Вэб-сайты, якія вы наведваеце, могуць запытваць ваша месцазнаходжанне.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Firefox выкарыстоўвае мікрафон для запісу і зацягвання аўдыя.";
+"NSMicrophoneUsageDescription" = "Ecosia выкарыстоўвае мікрафон для запісу і зацягвання аўдыя.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Гэта дазваляе захоўваць фота.";

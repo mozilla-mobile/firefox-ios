@@ -23,19 +23,19 @@
 "TodayWidget.NoOpenTabsLabel" = "Dim tabiau agored";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Agor Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Agor Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Chwilio Preifat";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Ychwanegwch llwybr byr Firefox i'ch sgrin Cartref. Ar ôl ychwanegu'r teclyn, cyffwrdd a dal i'w olygu a dewis llwybr byr gwahanol.";
+"TodayWidget.QuickActionGalleryDescription" = "Ychwanegwch llwybr byr Ecosia i'ch sgrin Cartref. Ar ôl ychwanegu'r teclyn, cyffwrdd a dal i'w olygu a dewis llwybr byr gwahanol.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Gweithredoedd Cyflym";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Llwybrau Byr Firefox";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Llwybrau Byr Ecosia";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Ychwanegwch lwybrau byr i'ch tabiau agored.";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Golwg Gyflym";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Chwilio yn Firefox";
+"TodayWidget.SearchInFirefoxV2" = "Chwilio yn Ecosia";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Chwilio mewn Tab Preifat";

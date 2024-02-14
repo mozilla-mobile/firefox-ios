@@ -390,11 +390,11 @@
     "domain": "fr.blog.ecosia.org"
   },
   {
-    "title": "info.ecosia",
-    "url": "https://info.ecosia.org/privacy",
+    "title": "privacy.ecosia",
+    "url": "https://www.ecosia.org/privacy",
     "image_url": "info-ecosia-org.png",
     "background_color": "#fff",
-    "domain": "info.ecosia.org"
+    "domain": "www.ecosia.org/privacy"
   },
   {
     "title": "blog.ecosia.finance",

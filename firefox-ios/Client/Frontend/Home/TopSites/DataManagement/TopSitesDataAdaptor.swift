@@ -188,7 +188,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
         }
         return pinnedSites
     }
-    
+
     /* Ecosia: remove sponsored tiles
     // MARK: - Google Tile
 

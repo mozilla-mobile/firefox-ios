@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "ປິດແທັບສ່ວນຕົວ";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "ເພີ່ມທາງລັດເຂົ້າ Firefox ໄປຫນ້າຈໍຫລັກຂອງທ່ານ";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "ເພີ່ມທາງລັດເຂົ້າ Ecosia ໄປຫນ້າຈໍຫລັກຂອງທ່ານ";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "ໄປທີ່ລີ້ງໄດ້ກັອບປີ້ໄວ້";
@@ -23,19 +23,19 @@
 "TodayWidget.NoOpenTabsLabel" = "ບໍ່ມີແທັບທີ່ເປີດຢູ່";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "ເປີດ Firefox";
+"TodayWidget.OpenFirefoxLabel" = "ເປີດ Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "ຄົ້ນຫາແບບສ່ວນຕົວ";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "ເພີ່ມທາງລັດເຂົ້າ Firefox ໄປໄວ້ໃນຫນ້າທຳອິດ. ຫລັງຈາກການເພີ່ມ widget ແລ້ວ ໃຫ້ແຕະຄ້າງໄວ້ເພື່ອແກ້ໄຂ ແລະ ເລືອກທາງລັດອື່ນ.";
+"TodayWidget.QuickActionGalleryDescription" = "ເພີ່ມທາງລັດເຂົ້າ Ecosia ໄປໄວ້ໃນຫນ້າທຳອິດ. ຫລັງຈາກການເພີ່ມ widget ແລ້ວ ໃຫ້ແຕະຄ້າງໄວ້ເພື່ອແກ້ໄຂ ແລະ ເລືອກທາງລັດອື່ນ.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "ການກະທຳດ່ວນ";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "ທາງລັດເຂົ້າ Firefox";
+"TodayWidget.QuickActionsGalleryTitleV2" = "ທາງລັດເຂົ້າ Ecosia";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "ເພີ່ມທາງລັດໄປຫາແທັບທີ່ເປີດຢູ່ຂອງທ່ານ.";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "ການເບິງແບບດ່ວນ";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "ຄົ້ນຫາໃນ\nFirefox";
+"TodayWidget.SearchInFirefoxV2" = "ຄົ້ນຫາໃນ\nEcosia";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "ຄົ້ນຫາໃນ\nແທັບສ່ວນຕົວ";

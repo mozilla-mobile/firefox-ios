@@ -332,7 +332,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefox ホームページ";
+"Firefox.HomePage.Title" = "Ecosia ホームページ";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "ホームページをカスタマイズ";
@@ -389,7 +389,7 @@
 "fxa.signin.camera-signin" = "カメラを使ってログイン";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "コンピューターの Firefox で firefox.com/pair を開いてください";
+"fxa.signin.qr-link-instruction" = "コンピューターの Ecosia で ecosia.org/pair を開いてください";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "スキャンの準備ができました";
@@ -410,7 +410,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ の接続が正常に解除されました。";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "この端末は Firefox Sync から正常に切断されました。";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "この端末は Ecosia Sync から正常に切断されました。";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync から切断されました";
@@ -419,7 +419,7 @@
 "FxAPush_DeviceDisconnected_title" = "Sync から切断されました";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "端末のひとつが Firefox Sync から切断されました";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "端末のひとつが Ecosia Sync から切断されました";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
 "FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox ロゴ、壁紙を変更します。";
@@ -905,7 +905,7 @@
 "Open Tabs" = "タブを開く";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "アドレスが正しくないため、Firefox はこのページを開けません。";
+"OpenURL.Error.Message" = "アドレスが正しくないため、Ecosia はこのページを開けません。";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "ページを開けません";
@@ -1004,7 +1004,7 @@
 "ScanQRCode.InvalidDataError.Message" = "データが無効です";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "端末の [設定] > [Firefox] を開き、Firefox にカメラへのアクセスを許可してください。";
+"ScanQRCode.PermissionError.Message.v100" = "端末の [設定] > [Ecosia] を開き、Ecosia にカメラへのアクセスを許可してください。";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR コードを読み取り";
@@ -1085,10 +1085,10 @@
 "SendTo.NavBar.Title" = "タブを送る";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "この Firefox アカウントに接続された同期可能な端末はありません。";
+"SendTo.NoDevicesFound.Message" = "この Ecosia アカウントに接続された同期可能な端末はありません。";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "続けるには、Firefox を開いて環境設定からログインしてください。";
+"SendTo.NotSignedIn.Message" = "続けるには、Ecosia を開いて環境設定からログインしてください。";
 
 /* See http://mzl.la/1ISlXnU */
 "SendTo.NotSignedIn.Title" = "Firefox アカウントにログインしていません。";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "詳細情報。";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla は Firefox を皆さんに提供し改善するために必要な情報だけを収集するよう努めています。";
+"Settings.SendUsage.Message" = "Mozilla は Ecosia を皆さんに提供し改善するために必要な情報だけを収集するよう努めています。";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "利用統計データを送信";
@@ -1466,7 +1466,7 @@
 "Settings.Siri.OpenTabShortcut" = "新規タブを開く";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Siri ショートカットを使用して Siri から Firefox を素早く開きましょう";
+"Settings.Siri.SectionDescription" = "Siri ショートカットを使用して Siri から Ecosia を素早く開きましょう";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri ショートカット";
@@ -1793,7 +1793,7 @@
 "Yesterday" = "昨日";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "他の端末の Firefox で開いているタブはありません。";
+"You don’t have any tabs open in Firefox on your other devices." = "他の端末の Ecosia で開いているタブはありません。";
 
 /* Your Rights settings section title */
 "Your Rights" = "あなたの権利";

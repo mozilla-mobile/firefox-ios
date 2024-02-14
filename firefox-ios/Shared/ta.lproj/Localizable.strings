@@ -284,7 +284,7 @@
 "fxa.signin.camera-signin" = "பகைப்படக்கருவி மூலம் உள்நுழைக";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "உங்கள் கணினியில் பயர்பாக்சைத் திறந்து firefox.com/pair பக்கத்திற்கு செல்லவும்";
+"fxa.signin.qr-link-instruction" = "உங்கள் கணினியில் பயர்பாக்சைத் திறந்து ecosia.org/pair பக்கத்திற்கு செல்லவும்";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "வருடி தயார்";

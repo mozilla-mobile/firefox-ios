@@ -236,7 +236,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Може да е погрешна конфигурация или хакерски опит. Продължете, ако поемате понециалния риск.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "Собственикът на %@ е настроил страницата неправилно. За да ви защити от кражба на информация, Firefox отказа да направи връзката с тази страница.";
+"ErrorPages.CertWarning.Description" = "Собственикът на %@ е настроил страницата неправилно. За да ви защити от кражба на информация, Ecosia отказа да направи връзката с тази страница.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Вашата връзка не е лична";
@@ -257,7 +257,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Начална страница на Firefox";
+"Firefox.HomePage.Title" = "Начална страница на Ecosia";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Напред";
@@ -284,7 +284,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ е успешно изключено.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Устройството е изключено успешно от Firefox Sync.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Устройството е изключено успешно от Ecosia Sync.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync е изключен";
@@ -293,7 +293,7 @@
 "FxAPush_DeviceDisconnected_title" = "Sync е изключен";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Устройство е изключено успешно от Firefox Sync";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Устройство е изключено успешно от Ecosia Sync";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Помощ";
@@ -326,7 +326,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Впишете се, за да видите списък с раздели от други ваши устройства.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Синхронизиране на Firefox";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Синхронизиране на Ecosia";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "История";
@@ -452,7 +452,7 @@
 "LoginsHelper.Update.Button" = "Обновяване";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Изглежда, че Firefox се е сринал преди. Искате ли разделите да бъдат възстановени?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Изглежда, че Ecosia се е сринал преди. Искате ли разделите да бъдат възстановени?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Отбелязване като прочетено";
@@ -524,7 +524,7 @@
 "Okay" = "Добре";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Ами сега! Firefox се срина";
+"Oops! Firefox crashed" = "Ами сега! Ecosia се срина";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Отваряйте статии в изгледа за четене, докосвайки пиктограмата на книга, когато е налична в заглавната лента.";
@@ -815,7 +815,7 @@
 "Settings.NewTab.TopSectionNameFooter" = "Изберете какво да виждате в нов раздел";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "При отваряне на Firefox";
+"Settings.OfferClipboardBar.Status" = "При отваряне на Ecosia";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.StatusV2" = "При отваряне на Firefox";
@@ -839,7 +839,7 @@
 "Settings.SendUsage.Link" = "Научете повече.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla се старае да събира само нужните данни за подобряване на Firefox за всички.";
+"Settings.SendUsage.Message" = "Mozilla се старае да събира само нужните данни за подобряване на Ecosia за всички.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Изпращане данни за използването";
@@ -848,7 +848,7 @@
 "Settings.Siri.OpenTabShortcut" = "Отваряне в раздел";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Използване на действия чрез Siri за бързо отваряне на Firefox чрез Siri";
+"Settings.Siri.SectionDescription" = "Използване на действия чрез Siri за бързо отваряне на Ecosia чрез Siri";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Действия чрез Siri";
@@ -902,13 +902,13 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "Зареждане във фонов режим";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Зареждане в Firefox";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Зареждане в Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Отваряне в Firefox";
+"ShareExtension.OpenInFirefoxAction.Title" = "Отваряне в Ecosia";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Търсене в Firefox";
+"ShareExtension.SeachInFirefoxAction.Title" = "Търсене в Ecosia";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "Предложения при търсене";
@@ -1001,7 +1001,7 @@
 "UIMenuItem.PasteGo" = "Поставяне и посещаване";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Търсене с Firefox";
+"UIMenuItem.SearchWithFirefox" = "Търсене с Ecosia";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "непрочетена";
@@ -1028,7 +1028,7 @@
 "Yesterday" = "Вчера";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Нямате отворени във Firefox раздели от другите ваши устройства.";
+"You don’t have any tabs open in Firefox on your other devices." = "Нямате отворени във Ecosia раздели от другите ваши устройства.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Вашите права";

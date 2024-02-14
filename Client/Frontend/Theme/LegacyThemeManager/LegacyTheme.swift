@@ -28,6 +28,7 @@ class TableViewColor {
     var accessoryViewTint: UIColor { return .Light.Text.secondary }
     var headerBackground: UIColor { .Light.Background.tertiary }
     var separator: UIColor { .Light.border }
+    var rowBackground: UIColor { return .Light.Background.primary }
 }
 
 class BrowserColor {

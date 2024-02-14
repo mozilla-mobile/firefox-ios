@@ -29,7 +29,7 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "ᱱᱤᱡᱮᱨᱟᱠ ᱥᱮᱸᱫᱽᱨᱟ";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "ᱢᱤᱫ ᱴᱟᱝ Firefox ᱠᱷᱟᱴᱚᱢᱟᱪᱷᱟ ᱚᱲᱟᱜ ᱤᱥᱠᱨᱤᱱ ᱨᱮ ᱥᱮᱞᱮᱫ ᱛᱟᱞᱟᱝ ᱢᱮ. ᱣᱤᱡᱮᱴ ᱥᱮᱞᱮᱫ ᱠᱟᱛᱮ ᱡᱚᱴᱮᱫ ᱢᱮ ᱟᱨ ᱚᱛᱟ ᱫᱚᱦᱚᱭ ᱢᱮ ᱥᱟᱯᱲᱟᱣ ᱞᱚᱜᱤᱛ ᱛᱮ ᱟᱨ ᱮᱴᱟᱜ-ᱟ ᱠᱷᱟᱴᱚᱢᱟᱪᱷᱟ ᱵᱟᱪᱷᱟᱣ ᱛᱟᱞᱟᱝ ᱢᱮ.";
+"TodayWidget.QuickActionGalleryDescription" = "ᱢᱤᱫ ᱴᱟᱝ Ecosia ᱠᱷᱟᱴᱚᱢᱟᱪᱷᱟ ᱚᱲᱟᱜ ᱤᱥᱠᱨᱤᱱ ᱨᱮ ᱥᱮᱞᱮᱫ ᱛᱟᱞᱟᱝ ᱢᱮ. ᱣᱤᱡᱮᱴ ᱥᱮᱞᱮᱫ ᱠᱟᱛᱮ ᱡᱚᱴᱮᱫ ᱢᱮ ᱟᱨ ᱚᱛᱟ ᱫᱚᱦᱚᱭ ᱢᱮ ᱥᱟᱯᱲᱟᱣ ᱞᱚᱜᱤᱛ ᱛᱮ ᱟᱨ ᱮᱴᱟᱜ-ᱟ ᱠᱷᱟᱴᱚᱢᱟᱪᱷᱟ ᱵᱟᱪᱷᱟᱣ ᱛᱟᱞᱟᱝ ᱢᱮ.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "ᱞᱚᱜᱚᱱ ᱛᱮᱭᱟ ᱠᱚᱢᱤ";

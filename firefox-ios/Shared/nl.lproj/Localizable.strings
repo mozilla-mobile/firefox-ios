@@ -311,7 +311,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Het kan een misconfiguratie zijn, of geknoei door een aanvaller. Ga door als u het mogelijke risico accepteert.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "De eigenaar van %@ heeft zijn of haar website niet juist geconfigureerd. Om uw gegevens tegen diefstal te beschermen, heeft Firefox geen verbinding met deze website gemaakt.";
+"ErrorPages.CertWarning.Description" = "De eigenaar van %@ heeft zijn of haar website niet juist geconfigureerd. Om uw gegevens tegen diefstal te beschermen, heeft Ecosia geen verbinding met deze website gemaakt.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Deze verbinding is niet beveiligd";
@@ -332,7 +332,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefox-startpagina";
+"Firefox.HomePage.Title" = "Ecosia-startpagina";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "Startpagina aanpassen";
@@ -389,7 +389,7 @@
 "fxa.signin.camera-signin" = "Meld u aan met uw camera";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "Open Firefox op uw computer en ga naar firefox.com/pair";
+"fxa.signin.qr-link-instruction" = "Open Ecosia op uw computer en ga naar ecosia.org/pair";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Klaar om te scannen";
@@ -410,7 +410,7 @@
 "FxAPush_DeviceDisconnected_body" = "De verbinding van %@ is met succes verbroken.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "De verbinding van dit apparaat met Firefox-synchronisatie is met succes verbroken.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "De verbinding van dit apparaat met Ecosia-synchronisatie is met succes verbroken.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Synchronisatie verbroken";
@@ -419,7 +419,7 @@
 "FxAPush_DeviceDisconnected_title" = "Synchronisatie verbroken";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Een apparaat heeft de verbinding met Firefox-synchronisatie verbroken";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Een apparaat heeft de verbinding met Ecosia-synchronisatie verbroken";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
 "FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox-logo, de achtergrond wijzigen.";
@@ -653,7 +653,7 @@
 "Logins.Onboarding.LearnMoreButtonTitle" = "Meer info";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "Om de functie Automatisch invullen voor Firefox te gebruiken, moet u een apparaattoegangscode hebben ingeschakeld.";
+"Logins.PasscodeRequirement.Warning" = "Om de functie Automatisch invullen voor Ecosia te gebruiken, moet u een apparaattoegangscode hebben ingeschakeld.";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "Neem uw wachtwoorden overal mee naartoe";
@@ -704,7 +704,7 @@
 "LoginsList.Title" = "OPGESLAGEN AANMELDINGEN";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Het lijkt erop dat Firefox eerder is gecrasht. Wilt u uw tabbladen herstellen?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Het lijkt erop dat Ecosia eerder is gecrasht. Wilt u uw tabbladen herstellen?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Markeren als gelezen";
@@ -893,7 +893,7 @@
 "Onboarding.WhatsNew.Button.Title" = "Beginnen met surfen";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Oeps! Firefox is gecrasht";
+"Oops! Firefox crashed" = "Oeps! Ecosia is gecrasht";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Open artikelen in de lezerweergave door op het boekpictogram te tikken zodra dit in de titelbalk verschijnt.";
@@ -1004,7 +1004,7 @@
 "ScanQRCode.InvalidDataError.Message" = "De gegevens zijn ongeldig";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "Ga op uw apparaat naar ‘Instellingen’ > ‘Firefox’. Geef Firefox toegang tot uw camera.";
+"ScanQRCode.PermissionError.Message.v100" = "Ga op uw apparaat naar ‘Instellingen’ > ‘Ecosia’. Geef Ecosia toegang tot uw camera.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR-code scannen";
@@ -1085,13 +1085,13 @@
 "SendTo.NavBar.Title" = "Tabblad verzenden";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "U hebt geen andere aan deze Firefox-account gekoppelde apparaten beschikbaar voor synchronisatie.";
+"SendTo.NoDevicesFound.Message" = "U hebt geen andere aan deze Ecosia-account gekoppelde apparaten beschikbaar voor synchronisatie.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Open Firefox, ga naar Instellingen en meld u aan om door te gaan.";
+"SendTo.NotSignedIn.Message" = "Open Ecosia, ga naar Instellingen en meld u aan om door te gaan.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "U bent niet aangemeld bij uw Firefox-account.";
+"SendTo.NotSignedIn.Title" = "U bent niet aangemeld bij uw Ecosia-account.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Verzenden";
@@ -1250,7 +1250,7 @@
 "Settings.Home.Current.Description.v101" = "Kies wat wordt getoond als de startpagina.";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description.v101" = "Kies wat er op de Firefox-startpagina staat.";
+"Settings.Home.Option.Description.v101" = "Kies wat er op de Ecosia-startpagina staat.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "Terugspringen";
@@ -1274,7 +1274,7 @@
 "Settings.Home.Option.StartAtHome.Always" = "Startpagina";
 
 /* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
-"Settings.Home.Option.StartAtHome.Description" = "Kies wat u ziet als u Firefox opnieuw opent.";
+"Settings.Home.Option.StartAtHome.Description" = "Kies wat u ziet als u Ecosia opnieuw opent.";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "Laatste tabblad";
@@ -1328,7 +1328,7 @@
 "Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "Limited Edition";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
-"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Wijzig uw achtergrond door op het Firefox-startpaginalogo te tikken";
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Wijzig uw achtergrond door op het Ecosia-startpaginalogo te tikken";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "Achtergrond";
@@ -1403,7 +1403,7 @@
 "Settings.NoImageModeBlockImages.Label.v99" = "Afbeeldingen blokkeren";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Bij het openen van Firefox";
+"Settings.OfferClipboardBar.Status" = "Bij het openen van Ecosia";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
 "Settings.OfferClipboardBar.Status.v128" = "Bij het openen van %@";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Meer info.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla streeft ernaar alleen te verzamelen wat nodig is om Firefox voor iedereen aan te bieden en te verbeteren.";
+"Settings.SendUsage.Message" = "Mozilla streeft ernaar alleen te verzamelen wat nodig is om Ecosia voor iedereen aan te bieden en te verbeteren.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Gebruiksgegevens verzenden";
@@ -1466,7 +1466,7 @@
 "Settings.Siri.OpenTabShortcut" = "Nieuw tabblad openen";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Siri-snelkoppelingen gebruiken om Firefox snel te openen via Siri";
+"Settings.Siri.SectionDescription" = "Siri-snelkoppelingen gebruiken om Ecosia snel te openen via Siri";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri-snelkoppelingen";
@@ -1592,13 +1592,13 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "Laden op de achtergrond";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Laden in Firefox";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Laden in Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Openen in Firefox";
+"ShareExtension.OpenInFirefoxAction.Title" = "Openen in Ecosia";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Zoeken in Firefox";
+"ShareExtension.SeachInFirefoxAction.Title" = "Zoeken in Ecosia";
 
 /* Button in share sheet to copy the url of the current tab. */
 "ShareSheet.Copy.Title.v108" = "Kopiëren";
@@ -1745,7 +1745,7 @@
 "UIMenuItem.PasteGo" = "Plakken & Gaan";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Zoeken met Firefox";
+"UIMenuItem.SearchWithFirefox" = "Zoeken met Ecosia";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "ongelezen";
@@ -1793,7 +1793,7 @@
 "Yesterday" = "Gisteren";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "U hebt geen tabbladen geopend in Firefox op uw andere apparaten.";
+"You don’t have any tabs open in Firefox on your other devices." = "U hebt geen tabbladen geopend in Ecosia op uw andere apparaten.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Uw rechten";

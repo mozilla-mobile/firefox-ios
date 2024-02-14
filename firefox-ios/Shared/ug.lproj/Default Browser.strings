@@ -8,10 +8,10 @@
 "DefaultBrowserCard.Button.v2" = "قانداق ئىشلىتىشنى ئۆگىنىش";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "تور بېكەت، ئېلخەت ۋە ئۇچۇر ئۇلانمىلىرىنى Firefox تا ئاپتوماتىك ئېچىشقا تەڭشەيدۇ.";
+"DefaultBrowserCard.Description" = "تور بېكەت، ئېلخەت ۋە ئۇچۇر ئۇلانمىلىرىنى Ecosia تا ئاپتوماتىك ئېچىشقا تەڭشەيدۇ.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "سۈرئەت، بىخەتەرلىك ۋە مەخپىيەتلىكنى ئاپتوماتىك قىلىش ئۈچۈن Firefox نى كۆڭۈلدىكى توركۆرگۈڭىز قىلىپ تاللاڭ.";
+"DefaultBrowserCard.NextLevel.Description.v108" = "سۈرئەت، بىخەتەرلىك ۋە مەخپىيەتلىكنى ئاپتوماتىك قىلىش ئۈچۈن Ecosia نى كۆڭۈلدىكى توركۆرگۈڭىز قىلىپ تاللاڭ.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "كۈندىلىك زىيارەتنى يۈكسەلتىدۇ";
@@ -35,7 +35,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. كۆڭۈلدىكى توركۆرگۈ ئەپنى چېكىڭ";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Firefox نى تاللاڭ";
+"DefaultBrowserOnboarding.Description3" = "3. Ecosia نى تاللاڭ";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "كۆڭۈلدىكى توركۆرگۈ ئەپى";

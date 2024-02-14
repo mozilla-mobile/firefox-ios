@@ -4,7 +4,8 @@
 
 import XCTest
 @testable import Client
-import Shared
+// Ecosia: Remove Shared as we import Client
+// import Shared
 import Common
 
 class VersionSettingTests: XCTestCase {

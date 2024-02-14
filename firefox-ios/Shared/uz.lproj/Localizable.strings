@@ -164,7 +164,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Bunga sabab noto‘g‘ri sozlash yoki xakkerlar harakati sabab bo‘lishi mumkin. Kuchli xavfni o‘z bo‘yningizga olsangiz, davom etishingiz mumkin.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "%@ egasi saytni noto‘g‘ri sozlagan. Ma’lumotlarni o‘g‘rilanishidan saqlash uchun Firefox bu saytga ulanmadi.";
+"ErrorPages.CertWarning.Description" = "%@ egasi saytni noto‘g‘ri sozlagan. Ma’lumotlarni o‘g‘rilanishidan saqlash uchun Ecosia bu saytga ulanmadi.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Ushbu ulanish ishonchsiz.";
@@ -179,7 +179,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefox bosh sahifasi";
+"Firefox.HomePage.Title" = "Ecosia bosh sahifasi";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Oldinga";
@@ -335,7 +335,7 @@
 "Okay" = "OK";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Obbo! Firefox’da nosozlik ro‘y berdi";
+"Oops! Firefox crashed" = "Obbo! Ecosia’da nosozlik ro‘y berdi";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Kitobning rasmchasi nom panelida paydo bo‘lsa, uning ustiga bosib, maqolalarni \"O‘qish rejimi\"da ochishingiz mumkin.";
@@ -344,7 +344,7 @@
 "Open Settings" = "Sozlamalarni ochish";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Xato manzil kiritilganligi uchun Firefox bu sahifani ocha olmaydi.";
+"OpenURL.Error.Message" = "Xato manzil kiritilganligi uchun Ecosia bu sahifani ocha olmaydi.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Sahifa ochilmadi";
@@ -602,7 +602,7 @@
 "Yesterday" = "Kecha";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Bosha qurilmalarda Firefox’da ochilgan hech qanday ichki oynalaringiz yo‘q.";
+"You don’t have any tabs open in Firefox on your other devices." = "Bosha qurilmalarda Ecosia’da ochilgan hech qanday ichki oynalaringiz yo‘q.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Huquqlaringiz";

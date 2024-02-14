@@ -311,7 +311,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Eventualmain sa tracti d'ina configuraziun mala u da l'emprova dad in attatgader. Cuntinuescha sche ti acceptas il ristg potenzial.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "Il possessur da %@ ha configurà mal sia website. Per proteger tias infurmaziuns dad enguladitschs n'ha Firefox betg stabilì ina connexiun cun questa website.";
+"ErrorPages.CertWarning.Description" = "Il possessur da %@ ha configurà mal sia website. Per proteger tias infurmaziuns dad enguladitschs n'ha Ecosia betg stabilì ina connexiun cun questa website.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Questa connexiun n'è betg segira";
@@ -332,7 +332,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Pagina da partenza da Firefox";
+"Firefox.HomePage.Title" = "Pagina da partenza da Ecosia";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "Persunalisar la pagina da partenza";
@@ -377,7 +377,7 @@
 "Forward" = "Renviar";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Conto da Firefox";
+"FxA.FirefoxAccount" = "Conto da Ecosia";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Administrar il conto ed ils apparats";
@@ -389,7 +389,7 @@
 "fxa.signin.camera-signin" = "T'annunzia cun tia camera";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "Avra Firefox sin tes computer e visita firefox.com/pair";
+"fxa.signin.qr-link-instruction" = "Avra Ecosia sin tes computer e visita ecosia.org/pair";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Pront per scannar";
@@ -410,7 +410,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ è vegnì deconnetà cun success.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Quest apparat è vegnì deconnectà cun success da Firefox Sync.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Quest apparat è vegnì deconnectà cun success da Ecosia Sync.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync è deconnectà";
@@ -419,10 +419,10 @@
 "FxAPush_DeviceDisconnected_title" = "Sync è deconnectà";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "In apparat è vegnì deconnectà da Firefox Sync";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "In apparat è vegnì deconnectà da Ecosia Sync";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "Logo da Firefox, midar il maletg dal fund davos.";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Logo da Ecosia, midar il maletg dal fund davos.";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Agid";
@@ -653,13 +653,13 @@
 "Logins.Onboarding.LearnMoreButtonTitle" = "Ulteriuras infurmaziuns";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "Per utilisar la funcziun d'endataziun automatica per Firefox, stos ti activar in code-clav per l'apparat.";
+"Logins.PasscodeRequirement.Warning" = "Per utilisar la funcziun d'endataziun automatica per Ecosia, stos ti activar in code-clav per l'apparat.";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "Prenda tes pleds-clav adina cun tai";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "Endataziun automatica da pleds-clav en Firefox";
+"Logins.WelcomeView.Title2" = "Endataziun automatica da pleds-clav en Ecosia";
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "Activar l'endataziun automatica";
@@ -704,7 +704,7 @@
 "LoginsList.Title" = "INFURMAZIUNS D'ANNUNZIA MEMORISADAS";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "I para che Firefox saja collabà dacurt. Vuls ti restaurar tes tabs?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "I para che Ecosia saja collabà dacurt. Vuls ti restaurar tes tabs?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Marcar sco legì";
@@ -893,7 +893,7 @@
 "Onboarding.WhatsNew.Button.Title" = "Cumenzar a navigar";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Oha! Firefox è collabà";
+"Oops! Firefox crashed" = "Oha! Ecosia è collabà";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Avra artitgels en la vista da lectura cun smatgar sin l'icona da cudesch sch'ella cumpara en la trav dal titel.";
@@ -1004,7 +1004,7 @@
 "ScanQRCode.InvalidDataError.Message" = "Las datas èn nunvalidas";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "Ir als parameters da l'apparat > «Firefox». Permetter a Firefox dad acceder a la camera.";
+"ScanQRCode.PermissionError.Message.v100" = "Ir als parameters da l'apparat > «Ecosia». Permetter a Ecosia dad acceder a la camera.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Scannar in code QR";
@@ -1085,13 +1085,13 @@
 "SendTo.NavBar.Title" = "Trametter il tab";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "Ti n'has betg connectà auters apparats cun quest conto da Firefox che pudessan vegnir sincronisads.";
+"SendTo.NoDevicesFound.Message" = "Ti n'has betg connectà auters apparats cun quest conto da Ecosia che pudessan vegnir sincronisads.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Avra p.pl. Firefox, va en las preferenzas e t'annunzia per cuntinuar.";
+"SendTo.NotSignedIn.Message" = "Avra p.pl. Ecosia, va en las preferenzas e t'annunzia per cuntinuar.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Ti n'es betg annunzià cun tes conto da Firefox.";
+"SendTo.NotSignedIn.Title" = "Ti n'es betg annunzià cun tes conto da Ecosia.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Trametter";
@@ -1241,7 +1241,7 @@
 "Settings.FxA.Sync.SectionName" = "Parameters da Sync";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Conto da Firefox";
+"Settings.FxA.Title" = "Conto da Ecosia";
 
 /* General settings section title */
 "Settings.General.SectionName" = "General";
@@ -1250,7 +1250,7 @@
 "Settings.Home.Current.Description.v101" = "Tscherna tge che vegn mussà sco pagina da partenza.";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description.v101" = "Tscherna il cuntegn da la pagina da partenza da Firefox.";
+"Settings.Home.Option.Description.v101" = "Tscherna il cuntegn da la pagina da partenza da Ecosia.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "Returnar nà qua";
@@ -1274,7 +1274,7 @@
 "Settings.Home.Option.StartAtHome.Always" = "Pagina da partenza";
 
 /* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
-"Settings.Home.Option.StartAtHome.Description" = "Tscherna tge mussar cura che ti turnas tar Firefox.";
+"Settings.Home.Option.StartAtHome.Description" = "Tscherna tge mussar cura che ti turnas tar Ecosia.";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "Ultim tab";
@@ -1289,25 +1289,25 @@
 "Settings.Home.Option.Wallpaper" = "Maletg dal fund davos";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Fund davos da Firefox, motiv cun ametist.";
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Fund davos da Ecosia, motiv cun ametist.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Fund davos da Firefox, motiv cun dunas e riva.";
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Fund davos da Ecosia, motiv cun dunas e riva.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Fund davos da Firefox, motiv azur.";
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Fund davos da Ecosia, motiv azur.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Fund davos cler predefinì.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Fund davos da Firefox, motiv cun aurora.";
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Fund davos da Ecosia, motiv cun aurora.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Buttun per activar/deactivar il ciclus dal maletg dal fund davos da la pagina da partenza";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Fund davos da Firefox, motiv cun collinas tranter di e notg.";
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Fund davos da Ecosia, motiv cun collinas tranter di e notg.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
 "Settings.Home.Option.Wallpaper.Classic.Title.v106" = "%@ classic";
@@ -1328,7 +1328,7 @@
 "Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "Ediziun limitada";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
-"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Mida il maletg dal fund davos cun tutgar il logo da Firefox sin la pagina da partenza";
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Mida il maletg dal fund davos cun tutgar il logo da Ecosia sin la pagina da partenza";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "Maletg dal fund davos";
@@ -1382,7 +1382,7 @@
 "Settings.NewTab.Option.Custom" = "Persunalisà";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Pagina da partenza da Firefox";
+"Settings.NewTab.Option.FirefoxHome" = "Pagina da partenza da Ecosia";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Pagina da partenza";
@@ -1403,7 +1403,7 @@
 "Settings.NoImageModeBlockImages.Label.v99" = "Bloccar las graficas";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Cun avrir Firefox";
+"Settings.OfferClipboardBar.Status" = "Cun avrir Ecosia";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
 "Settings.OfferClipboardBar.Status.v128" = "Cun avrir %@";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Ulteriuras infurmaziuns.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla vul mo rimnar las datas necessarias per porscher e meglierar Firefox per in e scadin.";
+"Settings.SendUsage.Message" = "Mozilla vul mo rimnar las datas necessarias per porscher e meglierar Ecosia per in e scadin.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Trametter datas davart l'utilisaziun";
@@ -1466,7 +1466,7 @@
 "Settings.Siri.OpenTabShortcut" = "Avrir in nov tab";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Utilisar scursanidas da Siri per avrir pli spert Firefox";
+"Settings.Siri.SectionDescription" = "Utilisar scursanidas da Siri per avrir pli spert Ecosia";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Scursanidas da Siri";
@@ -1592,13 +1592,13 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "Chargiar davos las culissas";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Chargiar en Firefox";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Chargiar en Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Avrir en Firefox";
+"ShareExtension.OpenInFirefoxAction.Title" = "Avrir en Ecosia";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Tschertgar en Firefox";
+"ShareExtension.SeachInFirefoxAction.Title" = "Tschertgar en Ecosia";
 
 /* Button in share sheet to copy the url of the current tab. */
 "ShareSheet.Copy.Title.v108" = "Copiar";
@@ -1745,7 +1745,7 @@
 "UIMenuItem.PasteGo" = "Encollar & dai";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Tschertgar cun Firefox";
+"UIMenuItem.SearchWithFirefox" = "Tschertgar cun Ecosia";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "nunlegì";
@@ -1793,7 +1793,7 @@
 "Yesterday" = "Ier";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Ti n'has nagins tabs da Firefox averts sin auters apparats.";
+"You don’t have any tabs open in Firefox on your other devices." = "Ti n'has nagins tabs da Ecosia averts sin auters apparats.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Tes dretgs";

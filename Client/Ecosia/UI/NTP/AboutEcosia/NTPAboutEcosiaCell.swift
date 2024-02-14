@@ -61,7 +61,7 @@ final class NTPAboutEcosiaCell: UICollectionViewCell, ReusableCell {
         label.setContentCompressionResistancePriority(.init(rawValue: 0), for: .horizontal)
         return label
     }()
-    private lazy var learnMoreButton: UIButton = {
+    private(set) lazy var learnMoreButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.borderWidth = 1
@@ -87,41 +87,41 @@ final class NTPAboutEcosiaCell: UICollectionViewCell, ReusableCell {
         view.isUserInteractionEnabled = false
         return view
     }()
-    
+
     var expandedHeight: CGFloat {
         disclosureView.frame.maxY + (isLastSection ? 16 : 0)
     }
-    
+
     // MARK: - Themeable Properties
-    
+
     var themeManager: ThemeManager { AppContainer.shared.resolve() }
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // MARK: - Init
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
         applyTheme()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setup()
         applyTheme()
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         applyTheme()
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         dividerView.isHidden = isLastSection || frame.height > UX.height
     }
-    
+
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
         let isExpanded = viewModel?.expandedIndex == layoutAttributes.indexPath
         rotateIndicator(isExpanded: isExpanded)
@@ -134,7 +134,7 @@ final class NTPAboutEcosiaCell: UICollectionViewCell, ReusableCell {
                                      verticalFittingPriority: .fittingSizeLevel)
         return layoutAttributes
     }
-    
+
     private func setup() {
         contentView.addSubview(outlineView)
         outlineView.addSubview(imageView)
@@ -145,42 +145,42 @@ final class NTPAboutEcosiaCell: UICollectionViewCell, ReusableCell {
         disclosureView.addSubview(subtitleLabel)
         disclosureView.addSubview(learnMoreButton)
         learnMoreButton.addSubview(learnMoreLabel)
-        
+
         NSLayoutConstraint.activate([
             outlineView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             outlineView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             outlineView.topAnchor.constraint(equalTo: contentView.topAnchor),
             outlineView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            
+
             imageView.centerXAnchor.constraint(equalTo: outlineView.leftAnchor, constant: 38),
             imageView.centerYAnchor.constraint(equalTo: outlineView.topAnchor, constant: UX.height / 2),
-            
+
             titleLabel.centerYAnchor.constraint(equalTo: imageView.centerYAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: outlineView.leadingAnchor, constant: 72),
             titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: indicatorImageView.leadingAnchor, constant: -5),
-            
+
             indicatorImageView.centerYAnchor.constraint(equalTo: imageView.centerYAnchor),
             indicatorImageView.trailingAnchor.constraint(equalTo: outlineView.trailingAnchor, constant: -16),
-            
+
             disclosureView.topAnchor.constraint(equalTo: outlineView.topAnchor, constant: UX.height),
             disclosureView.leadingAnchor.constraint(equalTo: outlineView.leadingAnchor, constant: 16),
             disclosureView.trailingAnchor.constraint(equalTo: outlineView.trailingAnchor, constant: -16),
             disclosureView.bottomAnchor.constraint(equalTo: learnMoreButton.bottomAnchor, constant: 14),
-            
+
             subtitleLabel.topAnchor.constraint(equalTo: disclosureView.topAnchor, constant: 12),
             subtitleLabel.leadingAnchor.constraint(equalTo: disclosureView.leadingAnchor, constant: 12),
             subtitleLabel.widthAnchor.constraint(lessThanOrEqualToConstant: frame.width - 56),
             subtitleLabel.trailingAnchor.constraint(lessThanOrEqualTo: disclosureView.trailingAnchor, constant: -12),
             subtitleLabel.widthAnchor.constraint(equalToConstant: frame.width - 56).priority(.defaultLow),
-            
+
             learnMoreButton.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 10),
             learnMoreButton.leadingAnchor.constraint(equalTo: subtitleLabel.leadingAnchor),
             learnMoreButton.heightAnchor.constraint(equalToConstant: 40),
             learnMoreButton.trailingAnchor.constraint(equalTo: learnMoreLabel.trailingAnchor, constant: 16),
-            
+
             learnMoreLabel.leadingAnchor.constraint(equalTo: learnMoreButton.leadingAnchor, constant: 16),
             learnMoreLabel.centerYAnchor.constraint(equalTo: learnMoreButton.centerYAnchor),
-            
+
             dividerView.leadingAnchor.constraint(equalTo: outlineView.leadingAnchor, constant: 16),
             dividerView.trailingAnchor.constraint(equalTo: outlineView.trailingAnchor, constant: -16),
             dividerView.bottomAnchor.constraint(equalTo: outlineView.bottomAnchor),
@@ -188,18 +188,20 @@ final class NTPAboutEcosiaCell: UICollectionViewCell, ReusableCell {
         ])
         listenForThemeChange(contentView)
     }
-    
+
     func rotateIndicator(isExpanded: Bool) {
         indicatorImageView.transform = isExpanded ? .init(rotationAngle: .pi) : .identity
     }
-    
+
     func configure(section: AboutEcosiaSection,
                    viewModel: NTPAboutEcosiaCellViewModel) {
         self.section = section
         self.viewModel = viewModel
-        
+
         titleLabel.text = section.title
         imageView.image = UIImage(named: section.image)
+        imageView.accessibilityIdentifier = "\(section.accessibilityIdentifierPrefix)_image"
+        indicatorImageView.accessibilityIdentifier = "\(section.accessibilityIdentifierPrefix)_dropdown"
         subtitleLabel.text = section.subtitle
         dividerView.isHidden = isLastSection
         outlineView.setMaskedCornersUsingPosition(
@@ -207,22 +209,22 @@ final class NTPAboutEcosiaCell: UICollectionViewCell, ReusableCell {
             totalCount: viewModel.sections.count
         )
     }
-    
+
     func updateAccessibility(isExpanded: Bool) {
         titleLabel.accessibilityTraits = .button
         titleLabel.accessibilityHint = isExpanded ? .localized(.aboutEcosiaCollapseAccessibility) : .localized(.aboutEcosiaExpandAccessibility)
         subtitleLabel.isAccessibilityElement = isExpanded
         learnMoreButton.isAccessibilityElement = isExpanded
     }
-    
+
     @objc private func highlighted() {
         learnMoreLabel.alpha = 0.2
     }
-    
+
     @objc private func unhighlighted() {
         learnMoreLabel.alpha = 1
     }
-    
+
     @objc private func learnMoreAction() {
         guard let section = section else { return }
         viewModel?.delegate?.openLink(url: section.url)
@@ -231,7 +233,7 @@ final class NTPAboutEcosiaCell: UICollectionViewCell, ReusableCell {
 }
 
 extension NTPAboutEcosiaCell: Themeable {
-    
+
     func applyTheme() {
         outlineView.backgroundColor = .legacyTheme.ecosia.ntpCellBackground
         titleLabel.textColor = .legacyTheme.ecosia.primaryText

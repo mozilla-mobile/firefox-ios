@@ -281,7 +281,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefox होम पेज";
+"Firefox.HomePage.Title" = "Ecosia होम पेज";
 
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "हटैइयै";
@@ -314,7 +314,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ सफलतापूर्ण डिसकनेक्ट करलो गेल।";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "कंप्यूटर रो Firefox सिंक सेॅ पूरी तरह से डिसकनेक्ट भे गेल";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "कंप्यूटर रो Ecosia सिंक सेॅ पूरी तरह से डिसकनेक्ट भे गेल";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "सिंक डिसकनेक्ट भेल";
@@ -323,7 +323,7 @@
 "FxAPush_DeviceDisconnected_title" = "सिंक डिसकनेक्ट भेल";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "ई उपकरण Firefox सिंक सेॅ डिसकनेक्ट होय गेल छै";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "ई उपकरण Ecosia सिंक सेॅ डिसकनेक्ट होय गेल छै";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "मदद";
@@ -704,7 +704,7 @@
 "Settings.SendUsage.Link" = "बेसी जानकारी";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "मोजिला खलि ओ चीज के जमा करै छै जकरा Firefox मे सभक लेली सुधार करै के आवश्यक्ता छै.";
+"Settings.SendUsage.Message" = "मोजिला खलि ओ चीज के जमा करै छै जकरा Ecosia मे सभक लेली सुधार करै के आवश्यक्ता छै.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "उपयोग डेटा भेजियै";

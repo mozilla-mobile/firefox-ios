@@ -29,6 +29,7 @@ class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlagga
     // MARK: - Methods
     override func generateSettings() -> [SettingSection] {
         var sections = [Setting]()
+        /* Ecosia: custom top site setting
         let topSitesSetting = BoolSetting(
             prefs: profile.prefs,
             theme: themeManager.getCurrentTheme(for: windowUUID),
@@ -46,6 +47,11 @@ class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlagga
             titleText: .Settings.Homepage.Shortcuts.SponsoredShortcutsToggle
         )
         sections.append(sponsoredShortcutSetting)
+         */
+        let topSitesSetting = NTPCustomizationSetting(prefs: profile.prefs,
+                                                      theme: themeManager.currentTheme,
+                                                      config: .topSites)
+        sections.append(topSitesSetting)
 
         let toggleSection = SettingSection(title: nil,
                                            children: sections)

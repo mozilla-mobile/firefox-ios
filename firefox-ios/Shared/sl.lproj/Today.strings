@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Zapri zasebne zavihke";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Dodajte Firefoxove bližnjice na domač zaslon.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Dodajte Ecosiaove bližnjice na domač zaslon.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Pojdi na kopirano povezavo";
@@ -23,19 +23,19 @@
 "TodayWidget.NoOpenTabsLabel" = "Ni odprtih zavihkov.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Odpri Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Odpri Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Zasebno iskanje";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Dodajte bližnjico do Firefoxa na domač zaslon. Po dodajanju pripomočka se ga dotaknite in ga zadržite, da ga uredite in izberete drugo bližnjico.";
+"TodayWidget.QuickActionGalleryDescription" = "Dodajte bližnjico do Ecosiaa na domač zaslon. Po dodajanju pripomočka se ga dotaknite in ga zadržite, da ga uredite in izberete drugo bližnjico.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Hitra dejanja";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Bližnjice za Firefox";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Bližnjice za Ecosia";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Dodajte bližnjice do svojih odprtih zavihkov.";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Hitri pogled";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Išči v Firefoxu";
+"TodayWidget.SearchInFirefoxV2" = "Išči v Ecosiau";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Išči v zasebnem zavihku";

@@ -23,7 +23,7 @@
 "TodayWidget.NoOpenTabsLabel" = "没有打开的标签页。";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "打开 Firefox";
+"TodayWidget.OpenFirefoxLabel" = "打开 Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "隐私搜索";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "快速浏览";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "在 Firefox 中搜索";
+"TodayWidget.SearchInFirefoxV2" = "在 Ecosia 中搜索";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "在隐私标签页中搜索";

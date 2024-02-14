@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Hdyž Firefox k swojemu standardnemu wobhladowakej činiće, je to hłós za wotewrjeny, přistupny internet.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Hdyž Ecosia k swojemu standardnemu wobhladowakej činiće, je to hłós za wotewrjeny, přistupny internet.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Standard za lěpši internet";
@@ -8,10 +8,10 @@
 "DefaultBrowserCard.Button.v2" = "Zhońće, kak to dźe";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Nastajće wotkazy z websydłow, mejlkow a powěsćow, zo bychu so awtomatisce we Firefox wočinili.";
+"DefaultBrowserCard.Description" = "Nastajće wotkazy z websydłow, mejlkow a powěsćow, zo bychu so awtomatisce we Ecosia wočinili.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "Wubjerće Firefox jako swój standardny wobhladowak, zo byšće spěšnosć, wěstotu a priwatnosć awtomatisce dóstał.";
+"DefaultBrowserCard.NextLevel.Description.v108" = "Wubjerće Ecosia jako swój standardny wobhladowak, zo byšće spěšnosć, wěstotu a priwatnosć awtomatisce dóstał.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "Wšědne přehladowanje – hišće lěpše";
@@ -35,7 +35,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Standardneho nałoženja wobhladowaka so podótknyć";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Firefox wubrać";
+"DefaultBrowserOnboarding.Description3" = "3. Ecosia wubrać";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Standardne nałoženje wobhladowaka";

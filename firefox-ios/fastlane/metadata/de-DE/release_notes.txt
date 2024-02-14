@@ -1,5 +1,1 @@
-Bleib auf dem Laufenden mit den Push-Benachrichtigungen von Ecosia
-* Erhalte Updates zu unseren Baumpflanzprojekten auf der ganzen Welt
-* Erhalte Tipps, wie du jeden Tag klimaaktiv sein kannst
-
-Wir arbeiten immer hart daran, Ecosia für dich zu verbessern. Schicke uns gerne Fragen oder Feedback an iosapp@ecosia.org. Wir freuen uns, von dir zu hören!
+Wir haben einige Bugs behoben und die Stabilität verbessert.

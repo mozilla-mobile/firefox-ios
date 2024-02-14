@@ -86,7 +86,7 @@ class LegacyHomepageViewController:
          // Ecosia: Add Referrals
          referrals: Referrals,
          // Ecosia: Add HomePageViewControllerDelegate
-         delegate: HomepageViewControllerDelegate
+         delegate: HomepageViewControllerDelegate?
     ) {
         self.overlayManager = overlayManager
         self.tabManager = tabManager
@@ -131,7 +131,10 @@ class LegacyHomepageViewController:
         setupNotifications(forObserver: self,
                            observing: [.HomePanelPrefsChanged,
                                        .TabsPrivacyModeChanged,
-                                       .WallpaperDidChange])
+                                       .WallpaperDidChange,
+                                       // Ecosia: Seed Counter Experiment
+                                       SeedCounterNTPExperiment.progressManagerType.levelUpNotification,
+                                       UIApplication.didBecomeActiveNotification])
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -169,7 +172,7 @@ class LegacyHomepageViewController:
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.recordViewAppeared()
-        
+
         // Ecosia: Refresh referral claims
         Task {
             try? await referrals.refresh()
@@ -192,7 +195,7 @@ class LegacyHomepageViewController:
 
         // Ecosia
         viewModel.aboutEcosiaViewModel.deselectExpanded()
-        
+
         jumpBackInContextualHintViewController.stopTimer()
         syncTabContextualHintViewController.stopTimer()
         viewModel.recordViewDisappeared()
@@ -324,10 +327,8 @@ class LegacyHomepageViewController:
         /* Ecosia: Update Layout type
         let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment)
         */
-        // swiftlint: disable line_length
         let layout = NTPLayout { [weak self] (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment)
             -> NSCollectionLayoutSection? in
-        // swiftlint: enable line_length
             guard let self,
                   let viewModel = self.viewModel.getSectionViewModel(shownSection: sectionIndex),
                   viewModel.shouldShow
@@ -663,7 +664,7 @@ extension LegacyHomepageViewController: UICollectionViewDelegate, UICollectionVi
             tooltip.delegate = self
             return tooltip
         }
-        
+
         // Ecosia: footer for impact
         if sectionViewModel.sectionType == .impact, kind == UICollectionView.elementKindSectionFooter {
             return collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: NTPImpactDividerFooter.cellIdentifier, for: indexPath)
@@ -679,7 +680,6 @@ extension LegacyHomepageViewController: UICollectionViewDelegate, UICollectionVi
         let headerViewModel = sectionViewModel.shouldShow ? sectionViewModel.headerViewModel : LabelButtonHeaderViewModel.emptyHeader
         headerView.configure(viewModel: headerViewModel, theme: themeManager.currentTheme)
         return headerView
-
     }
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -852,11 +852,12 @@ private extension LegacyHomepageViewController {
          */
         // Ecosia: Adjust HomePageViewController's CollectionView
         viewModel.libraryViewModel.delegate = self
-        viewModel.bookmarkNudgeViewModel.delegate = self
+        viewModel.newsletterCardViewModel.delegate = self
         viewModel.impactViewModel.delegate = self
         viewModel.newsViewModel.delegate = self
         viewModel.aboutEcosiaViewModel.delegate = self
         viewModel.ntpCustomizationViewModel.delegate = self
+        viewModel.climateImpactCounterViewModel.delegate = self
     }
 
     private func openHistoryHighlightsSearchGroup(item: HighlightItem) {
@@ -1040,6 +1041,12 @@ extension LegacyHomepageViewController: HomepageViewModelDelegate {
     }
 }
 
+extension HomepageViewController: NTPSeedCounterDelegate {
+    func didTapSeedCounter() {
+        SeedCounterNTPExperiment.trackTapOnSeedCounter()
+    }
+}
+
 // MARK: - Notifiable
 extension LegacyHomepageViewController: Notifiable {
     func handleNotifications(_ notification: Notification) {
@@ -1055,6 +1062,12 @@ extension LegacyHomepageViewController: Notifiable {
                     .WallpaperDidChange:
                 self.reloadView()
 
+            // Ecosia: Seed Counter Experiment
+            case SeedCounterNTPExperiment.progressManagerType.levelUpNotification:
+                SeedCounterNTPExperiment.trackSeedLevellingUp()
+            case UIApplication.didBecomeActiveNotification:
+                SeedCounterNTPExperiment.trackSeedCollectionIfNewDayAppOpening()
+                SeedCounterNTPExperiment.progressManagerType.collectDailySeed()
             default: break
             }
         }

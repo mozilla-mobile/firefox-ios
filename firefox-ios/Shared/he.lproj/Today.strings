@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "סגירת לשוניות פרטיות";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "הוספת קיצורי דרך של Firefox למסך הבית שלך.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "הוספת קיצורי דרך של Ecosia למסך הבית שלך.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "מעבר לקישור שהועתק";
@@ -23,19 +23,19 @@
 "TodayWidget.NoOpenTabsLabel" = "אין לשוניות פתוחות.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "פתיחת Firefox";
+"TodayWidget.OpenFirefoxLabel" = "פתיחת Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "חיפוש פרטי";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "ניתן להוסיף קיצור דרך ל־Firefox למסך הבית שלך. לאחר הוספת הוידג’ט, יש ללחוץ ולהחזיק כדי לערוך אותו ולבחור בקיצור דרך שונה.";
+"TodayWidget.QuickActionGalleryDescription" = "ניתן להוסיף קיצור דרך ל־Ecosia למסך הבית שלך. לאחר הוספת הוידג’ט, יש ללחוץ ולהחזיק כדי לערוך אותו ולבחור בקיצור דרך שונה.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "פעולות מהירות";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "קיצורי דרך של Firefox";
+"TodayWidget.QuickActionsGalleryTitleV2" = "קיצורי דרך של Ecosia";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "הוספת קיצורי דרך ללשוניות הפתוחות שלך.";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "תצוגה מהירה";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "חיפוש ב־Firefox";
+"TodayWidget.SearchInFirefoxV2" = "חיפוש ב־Ecosia";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "חיפוש בלשונית פרטית";

@@ -152,17 +152,25 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
     }()
 
     private lazy var segmentedControlIpad: UISegmentedControl = {
-        let items = TabTrayPanelType.allCases.map { $0.label }
+        // Ecosia: Update button items
+        // let items = TabTrayPanelType.allCases.map { $0.label }
+        let items: [String] = [TabTrayPanelType.tabs,
+                               TabTrayPanelType.privateTabs].map { $0.label }
         return createSegmentedControl(items: items,
                                       action: #selector(segmentIpadChanged),
                                       a11yId: AccessibilityIdentifiers.TabTray.navBarSegmentedControl)
     }()
 
     private lazy var segmentedControlIphone: UISegmentedControl = {
+        /* Ecosia: Update button items
+         let items = [
+             TabTrayPanelType.tabs.image!.overlayWith(image: countLabel),
+             TabTrayPanelType.privateTabs.image!,
+             TabTrayPanelType.syncedTabs.image!]
+         */
         let items = [
             TabTrayPanelType.tabs.image!.overlayWith(image: countLabel),
-            TabTrayPanelType.privateTabs.image!,
-            TabTrayPanelType.syncedTabs.image!]
+            TabTrayPanelType.privateTabs.image!]
         return createSegmentedControl(items: items,
                                       action: #selector(segmentIphoneChanged),
                                       a11yId: AccessibilityIdentifiers.TabTray.navBarSegmentedControl)

@@ -311,7 +311,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Konfigurazio okerra edo erasotzaile baten faltsutze-saiakera izan daiteke. Jarraitu balizko arriskua onartzen baduzu.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "%@ gunearen jabeak webgunea gaizki konfiguratu du. Zure informazioa lapurtzea saihesteko, Firefox ez da webgune honetara konektatu.";
+"ErrorPages.CertWarning.Description" = "%@ gunearen jabeak webgunea gaizki konfiguratu du. Zure informazioa lapurtzea saihesteko, Ecosia ez da webgune honetara konektatu.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Konexio hau ez da fidagarria";
@@ -332,7 +332,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefoxen hasiera-orria";
+"Firefox.HomePage.Title" = "Ecosiaen hasiera-orria";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "Pertsonalizatu hasiera-orria";
@@ -389,7 +389,7 @@
 "fxa.signin.camera-signin" = "Hasi saioa zure kamerarekin";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "Ireki Firefox zure ordenagailuan eta zoaz firefox.com/pair helbidera";
+"fxa.signin.qr-link-instruction" = "Ireki Ecosia zure ordenagailuan eta zoaz ecosia.org/pair helbidera";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Eskaneatzeko prest";
@@ -410,7 +410,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ gailua ondo deskonektatu da.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Gailu hau Firefox Sync-etik ondo deskonektatu da.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Gailu hau Ecosia Sync-etik ondo deskonektatu da.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync deskonektatuta";
@@ -419,7 +419,7 @@
 "FxAPush_DeviceDisconnected_title" = "Sync deskonektatuta";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Gailu bat Firefox Sync-etik deskonektatu da";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Gailu bat Ecosia Sync-etik deskonektatu da";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
 "FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox logoa, aldatu horma-papera.";
@@ -659,7 +659,7 @@
 "Logins.WelcomeView.Tagline" = "Eraman pasahitzak alboan";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "Osatu automatikoki Firefoxen pasahitzak";
+"Logins.WelcomeView.Title2" = "Osatu automatikoki Ecosiaen pasahitzak";
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "Aktibatu osatze automatikoa";
@@ -704,7 +704,7 @@
 "LoginsList.Title" = "GORDETAKO SAIO-HASIERAK";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Badirudi Firefoxek aurretik huts egin duela. Zure fitxak berreskuratu nahi dituzu?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Badirudi Ecosiaek aurretik huts egin duela. Zure fitxak berreskuratu nahi dituzu?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Markatu irakurritako gisa";
@@ -893,7 +893,7 @@
 "Onboarding.WhatsNew.Button.Title" = "Hasi nabigatzen";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Ene! Firefoxek huts egin du";
+"Oops! Firefox crashed" = "Ene! Ecosiaek huts egin du";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Ireki artikuluak irakurtzeko ikuspegian liburuaren ikonoa sakatuz izenburu-barran agertzen denean.";
@@ -1004,7 +1004,7 @@
 "ScanQRCode.InvalidDataError.Message" = "Datuak baliogabeak dira";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "Zoaz 'Ezarpenak' > 'Firefox' menu-aukerara eta baimendu Firefoxi zure gailuaren kamerarako sarbidea.";
+"ScanQRCode.PermissionError.Message.v100" = "Zoaz 'Ezarpenak' > 'Ecosia' menu-aukerara eta baimendu Ecosiai zure gailuaren kamerarako sarbidea.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Eskaneatu QR kodea";
@@ -1085,13 +1085,13 @@
 "SendTo.NavBar.Title" = "Bidali fitxa";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "Ez daukazu Firefox kontu honetara sinkronizatzeko konektatutako beste gailurik.";
+"SendTo.NoDevicesFound.Message" = "Ez daukazu Ecosia kontu honetara sinkronizatzeko konektatutako beste gailurik.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Jarraitzeko, ireki Firefox, joan ezarpenetara eta hasi saioa.";
+"SendTo.NotSignedIn.Message" = "Jarraitzeko, ireki Ecosia, joan ezarpenetara eta hasi saioa.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Ez duzu zure Firefox kontuan saiorik hasi.";
+"SendTo.NotSignedIn.Title" = "Ez duzu zure Ecosia kontuan saiorik hasi.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Bidali";
@@ -1250,7 +1250,7 @@
 "Settings.Home.Current.Description.v101" = "Aukeratu zer bistaratzen den hasierako orri gisa.";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description.v101" = "Aukeratu zer sartzen den Firefoxen hasierako orrian.";
+"Settings.Home.Option.Description.v101" = "Aukeratu zer sartzen den Ecosiaen hasierako orrian.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "Itzuli zeudenera";
@@ -1274,7 +1274,7 @@
 "Settings.Home.Option.StartAtHome.Always" = "Hasiera-orria";
 
 /* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
-"Settings.Home.Option.StartAtHome.Description" = "Aukeratu zer ikusi Firefoxera itzultzen zarenean.";
+"Settings.Home.Option.StartAtHome.Description" = "Aukeratu zer ikusi Ecosiaera itzultzen zarenean.";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "Azken fitxa";
@@ -1328,7 +1328,7 @@
 "Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "Edizio mugatua";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
-"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Aldatu horma-papera Firefoxen hasiera-orriko logoa sakatuz";
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Aldatu horma-papera Ecosiaen hasiera-orriko logoa sakatuz";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "Horma-papera";
@@ -1466,7 +1466,7 @@
 "Settings.Siri.OpenTabShortcut" = "Ireki fitxa berria";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Erabili Siri lasterbideak Firefox Siri bidez irekitzeko";
+"Settings.Siri.SectionDescription" = "Erabili Siri lasterbideak Ecosia Siri bidez irekitzeko";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri lasterbideak";
@@ -1475,7 +1475,7 @@
 "Settings.Studies.Toggle.Link" = "Argibide gehiago.";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Noizean behin esperimentuak instala eta exekuta litzake Firefoxek.";
+"Settings.Studies.Toggle.Message" = "Noizean behin esperimentuak instala eta exekuta litzake Ecosiaek.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Esperimentuak";
@@ -1595,10 +1595,10 @@
 "ShareExtension.LoadInBackgroundActionDone.Title" = "Firefoxen kargatzen";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Ireki Firefoxen";
+"ShareExtension.OpenInFirefoxAction.Title" = "Ireki Ecosiaen";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Bilatu Firefoxen";
+"ShareExtension.SeachInFirefoxAction.Title" = "Bilatu Ecosiaen";
 
 /* Button in share sheet to copy the url of the current tab. */
 "ShareSheet.Copy.Title.v108" = "Kopiatu";
@@ -1745,7 +1745,7 @@
 "UIMenuItem.PasteGo" = "Itsatsi eta joan";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Bilatu Firefox erabiliz";
+"UIMenuItem.SearchWithFirefox" = "Bilatu Ecosia erabiliz";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "irakurri gabe";
@@ -1793,7 +1793,7 @@
 "Yesterday" = "Atzo";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Ez daukazu fitxarik irekita beste gailuetako Firefoxetan.";
+"You don’t have any tabs open in Firefox on your other devices." = "Ez daukazu fitxarik irekita beste gailuetako Ecosiaetan.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Zure eskubideak";

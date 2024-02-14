@@ -51,4 +51,13 @@ chmod +x .git/hooks/*
 ./content_blocker_update.sh
 
 # Ecosia: Create Staging.xcconfig if not existing
-touch Client/Configuration/Staging.xcconfig
+file_path="Client/Configuration/Staging.xcconfig"
+
+# Check if the file exists
+if [ ! -f "$file_path" ]; then
+    # If the file doesn't exist, create it using the touch command
+    touch "$file_path"
+    echo "File $file_path created."
+else
+    echo "File $file_path already exists."
+fi

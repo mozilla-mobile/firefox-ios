@@ -42,7 +42,6 @@ class ButtonToast: Toast {
         stackView.distribution = .fill
         stackView.spacing = 8
         stackView.layer.cornerRadius = UX.standardCornerRadius
-        
     }
 
     private var imageView: UIImageView = .build { imageView in
@@ -64,7 +63,7 @@ class ButtonToast: Toast {
         label.font = FXFontStyles.Bold.subheadline.scaledFont()
         */
         label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                                size: UX.titleFontSize)
+                                                            size: UX.titleFontSize)
         label.numberOfLines = 0
         // Ecosia: Review ToastView to look like v104
         label.adjustsFontForContentSizeCategory = true
@@ -77,7 +76,7 @@ class ButtonToast: Toast {
         label.font = FXFontStyles.Bold.footnote.scaledFont()
         */
         label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                                size: UX.descriptionFontSize)
+                                                            size: UX.descriptionFontSize)
         label.numberOfLines = 0
     }
 
@@ -128,7 +127,7 @@ class ButtonToast: Toast {
     }
 
     private func createView(viewModel: ButtonToastViewModel) -> UIView {
-        
+
         // Ecosia: Review ToastView to look like v104
         let space = UIView()
         space.widthAnchor.constraint(equalToConstant: UX.padding).isActive = true
@@ -174,7 +173,7 @@ class ButtonToast: Toast {
             horizontalStackView.topAnchor.constraint(equalTo: toastView.topAnchor),
             horizontalStackView.heightAnchor.constraint(equalToConstant: Toast.UX.toastHeight - Toast.UX.toastOffset),
         ])
-        
+
         // Ecosia: Review ToastView to look like v104
         toastView.layer.cornerRadius = UX.standardCornerRadius
         toastView.layer.masksToBounds = true

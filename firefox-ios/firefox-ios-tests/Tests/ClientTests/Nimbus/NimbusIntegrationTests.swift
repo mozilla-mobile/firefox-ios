@@ -17,7 +17,11 @@ class NimbusIntegrationTests: XCTestCase {
             value: nil,
             table: nil
         )
+
+        /* Use Ecosia title
         XCTAssertEqual(stringWithNoTable, "Open in Firefox")
+        */
+        XCTAssertEqual(stringWithNoTable, "Open in Ecosia")
 
         let stringWithTable = Strings.bundle.localizedString(
             forKey: "DefaultBrowserCard.Title",
@@ -33,7 +37,7 @@ class NimbusIntegrationTests: XCTestCase {
             Strings.bundle.fallbackTranslationBundle(language: "es"),
         ].compactMap { $0 }
         let stringWithNoTable = bundles.getString(named: "ShareExtension.OpenInFirefoxAction.Title")
-        XCTAssertEqual(stringWithNoTable, "Abrir en Firefox")
+        XCTAssertEqual(stringWithNoTable, "Abrir en Ecosia")
 
         let stringWithTable = bundles.getString(named: "Default Browser/DefaultBrowserCard.Title")
         XCTAssertEqual(stringWithTable, "Cambia tu navegador predeterminado")
@@ -45,7 +49,7 @@ class NimbusIntegrationTests: XCTestCase {
             Strings.bundle.fallbackTranslationBundle(),
         ].compactMap { $0 }
         let stringWithNoTable = bundles.getString(named: "ShareExtension.OpenInFirefoxAction.Title")
-        XCTAssertEqual(stringWithNoTable, "Open in Firefox")
+        XCTAssertEqual(stringWithNoTable, "Open in Ecosia")
 
         let stringWithTable = bundles.getString(named: "Default Browser/DefaultBrowserCard.Title")
         XCTAssertEqual(stringWithTable, "Switch Your Default Browser")
@@ -58,7 +62,11 @@ class NimbusIntegrationTests: XCTestCase {
             bundle: Strings.bundle,
             comment: ""
         )
+
+        /* Use Ecosia title
         XCTAssertEqual(stringWithNoTable, "Open in Firefox")
+        */
+        XCTAssertEqual(stringWithNoTable, "Open in Ecosia")
 
         let stringWithTable = NSLocalizedString(
             "DefaultBrowserCard.Title",

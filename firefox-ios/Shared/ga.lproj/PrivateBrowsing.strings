@@ -2,7 +2,7 @@
 "Close Private Tabs" = "Dún Cluaisíní Príobháideacha";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Ní choinneoidh Firefox do stair bhrabhsála ná fianáin, ach sábhálfar leabharmharcanna nua.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Ní choinneoidh Ecosia do stair bhrabhsála ná fianáin, ach sábhálfar leabharmharcanna nua.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "Tuilleadh Eolais";

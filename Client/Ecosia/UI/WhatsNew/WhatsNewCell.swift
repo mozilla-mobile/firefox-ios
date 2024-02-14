@@ -7,14 +7,14 @@ import Core
 import Common
 
 final class WhatsNewCell: UITableViewCell, Themeable {
-    
+
     // MARK: - Properties
 
     private var item: WhatsNewItem!
     private var contentConfigurationToUpdate: Any?
-    
+
     // MARK: - Themeable Properties
-    
+
     var themeManager: ThemeManager { AppContainer.shared.resolve() }
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
@@ -29,7 +29,7 @@ final class WhatsNewCell: UITableViewCell, Themeable {
         applyTheme()
         listenForThemeChange(contentView)
     }
-    
+
     private func configureBasedOnOSVersion() {
         if #available(iOS 14, *) {
             configureForiOS14(item: item)
@@ -37,7 +37,7 @@ final class WhatsNewCell: UITableViewCell, Themeable {
             configureForiOS13(item: item)
         }
     }
-    
+
     @available(iOS 14, *)
     private func configureForiOS14(item: WhatsNewItem) {
         var newConfiguration = defaultContentConfiguration()
@@ -54,7 +54,7 @@ final class WhatsNewCell: UITableViewCell, Themeable {
         newConfiguration.imageProperties.maximumSize = CGSize(width: 24, height: 24)
         contentConfigurationToUpdate = newConfiguration
     }
-    
+
     private func configureForiOS13(item: WhatsNewItem) {
         textLabel?.text = item.title
         textLabel?.lineBreakMode = .byTruncatingTail
@@ -67,7 +67,7 @@ final class WhatsNewCell: UITableViewCell, Themeable {
         detailTextLabel?.adjustsFontForContentSizeCategory = true
         detailTextLabel?.adjustsFontSizeToFitWidth = true
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         if #available(iOS 14, *) {
@@ -82,7 +82,7 @@ final class WhatsNewCell: UITableViewCell, Themeable {
 }
 
 extension WhatsNewCell {
-    
+
     func applyTheme() {
         if #available(iOS 14, *) {
             guard var updatedConfiguration = contentConfigurationToUpdate as? UIListContentConfiguration else { return }

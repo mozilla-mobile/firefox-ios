@@ -162,14 +162,14 @@ struct CreditCardItemRow_Previews: PreviewProvider {
 // Note: We use a clear view because Color.clear doesn't work
 // well if we embed a SwiftUI View inside a UIHostingController
 // and it displays black instead of clear color
-//struct ClearBackgroundView: UIViewRepresentable {
-//    func makeUIView(context: Context) -> UIView {
-//        let view = UIView()
-//        DispatchQueue.main.async {
-//            view.superview?.superview?.backgroundColor = .clear
-//        }
-//        return view
-//    }
+// struct ClearBackgroundView: UIViewRepresentable {
+//     func makeUIView(context: Context) -> UIView {
+//         let view = UIView()
+//         DispatchQueue.main.async {
+//             view.superview?.superview?.backgroundColor = .clear
+//         }
+//         return view
+//     }
 //
-//    func updateUIView(_ uiView: UIView, context: Context) {}
-//}
+//     func updateUIView(_ uiView: UIView, context: Context) {}
+// }

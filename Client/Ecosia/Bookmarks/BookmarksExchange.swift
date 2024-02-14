@@ -13,11 +13,11 @@ protocol BookmarksExchangable {
 }
 
 final class BookmarksExchange: BookmarksExchangable {
-    
+
     enum Error: Swift.Error {
         case couldNotReadData
     }
-    
+
     private let profile: Profile
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -25,32 +25,32 @@ final class BookmarksExchange: BookmarksExchangable {
         formatter.timeStyle = .short
         return formatter
     }()
-    
+
     init(profile: Profile) {
         self.profile = profile
     }
-    
+
     @MainActor
     func export(bookmarks: [Core.BookmarkItem], in viewController: UIViewController, barButtonItem: UIBarButtonItem) async throws {
         guard let view = viewController.view else { return }
-        
+
         let activityIndicator = UIActivityIndicatorView(style: .medium)
         activityIndicator.color = UIColor.legacyTheme.ecosia.primaryBrand
         activityIndicator.startAnimating()
-        
+
         let toast = SimpleToast()
-        
+
         toast.showAlertWithText(
             .localized(.exportingBookmarks),
             image: .view(activityIndicator),
             bottomContainer: view,
             bottomInset: view.layoutMargins.bottom
         )
-        
+
         let serializer = BookmarkSerializer()
-        
+
         let htmlExport = try await serializer.serializeBookmarks(bookmarks)
-        
+
         let exportedBooksmarksUrl = FileManager.default.temporaryDirectory.appendingPathComponent("Bookmarks.html")
         try htmlExport.data(using: .utf8)?.write(to: exportedBooksmarksUrl)
 
@@ -67,15 +67,15 @@ final class BookmarksExchange: BookmarksExchangable {
         }
         viewController.present(activityViewController, animated: true) {}
     }
-    
+
     @MainActor
     func `import`(from fileURL: URL, in viewController: UIViewController) async throws {
         guard let view = viewController.view else { return }
-        
+
         let activityIndicator = UIActivityIndicatorView(style: .medium)
         activityIndicator.color = .init(named: "splashLogoTint")
         activityIndicator.startAnimating()
-        
+
         let toast = SimpleToast()
 
         toast.showAlertWithText(
@@ -97,7 +97,7 @@ final class BookmarksExchange: BookmarksExchangable {
             throw error
         }
     }
-    
+
     private func importBookmarks(
         _ bookmarks: [Core.BookmarkItem],
         viewController: UIViewController,
@@ -105,24 +105,24 @@ final class BookmarksExchange: BookmarksExchangable {
     ) async throws {
         /// create folder with date by import
         let importGuid: GUID
-        
+
         if await hasBookmarks() {
             importGuid = try await createFolder(
                 parentGUID: .mobileBookmarksGUID,
-               title: .init(format: .localized(.importedBookmarkFolderName), dateFormatter.string(from: Date()))
+                title: .init(format: .localized(.importedBookmarkFolderName), dateFormatter.string(from: Date()))
            )
         } else {
             importGuid = .mobileBookmarksGUID
         }
-                
+
         try await processBookmarks(bookmarks, parentGUID: importGuid)
-        
+
         await showImportSuccess(using: toast, in: viewController.view)
     }
-    
+
     @MainActor
     private func showImportSuccess(using toast: SimpleToast, in view: UIView) async {
-        
+
         SimpleToast().showAlertWithText(
             .localized(.bookmarksImported),
             image: .named("bookmarkSuccess"),
@@ -130,7 +130,7 @@ final class BookmarksExchange: BookmarksExchangable {
             bottomInset: view.layoutMargins.bottom
         )
     }
-    
+
     private func hasBookmarks() async -> Bool {
         await withCheckedContinuation { continuation in
             profile.places.getBookmark(guid: .mobileBookmarksGUID).uponQueue(DispatchQueue.main) { result in
@@ -144,7 +144,7 @@ final class BookmarksExchange: BookmarksExchangable {
             }
         }
     }
-    
+
     private func processBookmarks(_ bookmarks: [Core.BookmarkItem], parentGUID: GUID) async throws {
         for bookmark in bookmarks {
             switch bookmark {
@@ -173,7 +173,7 @@ private extension BookmarksExchange {
                 }
         }
     }
-    
+
     @discardableResult
     func createBookmark(parentGUID: GUID, url: String, title: String?, position: UInt32? = nil) async throws -> GUID {
         try await withCheckedThrowingContinuation { continuation in

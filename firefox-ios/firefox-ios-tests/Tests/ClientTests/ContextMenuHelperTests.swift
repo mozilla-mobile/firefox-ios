@@ -29,10 +29,17 @@ class ContextMenuHelperTests: XCTestCase {
     }
 
     func testHistoryHighlightsTelemetry() {
+        /* Ecosia: Update Viewmodel
         let viewModel = HomepageViewModel(profile: profile,
                                           isPrivate: false,
                                           tabManager: MockTabManager(),
                                           theme: LightTheme())
+         */
+        let viewModel = HomepageViewModel(profile: profile,
+                                          isPrivate: false,
+                                          tabManager: MockTabManager(),
+                                          referrals: .init(),
+                                          theme: EcosiaLightTheme())
         let helper = HomepageContextMenuHelper(viewModel: viewModel, toastContainer: UIView())
 
         helper.sendHistoryHighlightContextualTelemetry(type: .remove)

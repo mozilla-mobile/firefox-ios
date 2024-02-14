@@ -5,7 +5,7 @@
 import Foundation
 
 struct ConnectionStatusImage {
-    
+
     static var connectionSecureImage: UIImage? {
         UIImage.templateImageNamed("secureLock")?.tinted(withColor: .legacyTheme.ecosia.secondaryIcon)
     }

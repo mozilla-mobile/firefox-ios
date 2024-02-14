@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Loka\nhuliðsflipum";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Bættu Firefox flýtileiðum við upphafsskjáinn þinn.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Bættu Ecosia flýtileiðum við upphafsskjáinn þinn.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Fara á afritaða tengilinn";
@@ -23,13 +23,13 @@
 "TodayWidget.NoOpenTabsLabel" = "Engir opnir flipar.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Opna Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Opna Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Huliðsleit";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Bættu Firefox-flýtileið við upphafsskjáinn þinn. Eftir að græjunni hefur verið bætt við skaltu ýta og halda inni til að breyta henni og velja aðra flýtileið.";
+"TodayWidget.QuickActionGalleryDescription" = "Bættu Ecosia-flýtileið við upphafsskjáinn þinn. Eftir að græjunni hefur verið bætt við skaltu ýta og halda inni til að breyta henni og velja aðra flýtileið.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Flýtiaðgerðir";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Flýtiskoðun";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Leita í \nFirefox";
+"TodayWidget.SearchInFirefoxV2" = "Leita í \nEcosia";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Leita í\n huliðsflipa";

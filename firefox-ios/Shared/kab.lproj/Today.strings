@@ -23,19 +23,19 @@
 "TodayWidget.NoOpenTabsLabel" = "Ulac iccaren yeldin,";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Ldi Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Ldi Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Anadi uslig";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Rnu anegzum n Firefox ɣer ugdil-ik·im agejdan. Seld timerna n uwiǧit, sit s useɣzef i wakken ad t-tẓergeḍ syen ad tferneḍ anegzum-nniḍen.";
+"TodayWidget.QuickActionGalleryDescription" = "Rnu anegzum n Ecosia ɣer ugdil-ik·im agejdan. Seld timerna n uwiǧit, sit s useɣzef i wakken ad t-tẓergeḍ syen ad tferneḍ anegzum-nniḍen.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Tigawin tirurad";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Inegzumen n Firefox";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Inegzumen n Ecosia";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Rnu inegzumen ɣer waccaren-ik·im i yeldin.";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Taskant taruradt";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Nadi deg firefox";
+"TodayWidget.SearchInFirefoxV2" = "Nadi deg Ecosia";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Nadi deg yiccer uslig";

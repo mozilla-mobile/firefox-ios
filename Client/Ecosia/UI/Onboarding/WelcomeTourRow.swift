@@ -14,7 +14,7 @@ final class WelcomeTourRow: UIView, Themeable {
     weak var textLabel: UILabel!
 
     // MARK: - Themeable Properties
-    
+
     var themeManager: ThemeManager { AppContainer.shared.resolve() }
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
@@ -52,7 +52,7 @@ final class WelcomeTourRow: UIView, Themeable {
         imageView.heightAnchor.constraint(equalToConstant: 33).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: 33).isActive = true
         stack.addArrangedSubview(imageView)
-        
+
         let trailingStack = UIStackView()
         trailingStack.spacing = 5
         trailingStack.axis = .vertical

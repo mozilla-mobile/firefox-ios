@@ -2,7 +2,7 @@
 "DefaultBrowserCard.Button.v2" = "Sužinoti kaip";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Leiskite saitams iš svetainių, el. laiškų, ir „Messages“ būti automatiškai atvertiems per „Firefox“.";
+"DefaultBrowserCard.Description" = "Leiskite saitams iš svetainių, el. laiškų, ir „Messages“ būti automatiškai atvertiems per „Ecosia“.";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Pakeiskite numatytąją naršyklę";
@@ -17,7 +17,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Bakstelėkite „Numatytoji naršyklė“";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Pasirinkite „Firefox“";
+"DefaultBrowserOnboarding.Description3" = "3. Pasirinkite „Ecosia“";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Numatytoji naršyklė";

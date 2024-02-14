@@ -107,11 +107,21 @@ class TabTrayViewController: UIViewController,
     }()
 
     var segmentControlItems: [Any] {
+        /* Ecosia: Update button items
         let iPhoneItems = [
             TabTrayPanelType.tabs.image!.overlayWith(image: countLabel),
             TabTrayPanelType.privateTabs.image!,
             TabTrayPanelType.syncedTabs.image!]
+        let iPhoneItems = [
+            TabTrayPanelType.tabs.image!.overlayWith(image: countLabel),
+            TabTrayPanelType.privateTabs.image!]
         return isRegularLayout ? TabTrayPanelType.allCases.map { $0.label } : iPhoneItems
+         */
+        let iPhoneItems = [
+            TabTrayPanelType.tabs.image!.overlayWith(image: countLabel),
+            TabTrayPanelType.privateTabs.image!]
+        let regularLayoutItems: [TabTrayPanelType] = [.tabs, .privateTabs]
+        return isRegularLayout ? regularLayoutItems.map { $0.label } : iPhoneItems
     }
 
     private lazy var deleteButton: UIBarButtonItem = {

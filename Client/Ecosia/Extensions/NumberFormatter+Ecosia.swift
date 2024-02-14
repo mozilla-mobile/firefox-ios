@@ -14,4 +14,11 @@ extension NumberFormatter {
         formatter.currencyGroupingSeparator = ","
         return formatter
     }
+
+    static func ecosiaDecimalNumberFormatter() -> NumberFormatter {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.usesGroupingSeparator = true
+        return formatter
+    }
 }

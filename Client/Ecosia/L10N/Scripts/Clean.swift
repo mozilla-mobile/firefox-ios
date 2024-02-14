@@ -1,12 +1,12 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 
 private final class Translations {
     private var keys = Set<String>()
-    private let strings: [String : String]
+    private let strings: [String: String]
     private static let directory = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
     private static let strings = directory.appendingPathComponent("Client/Ecosia/L10N/en.lproj/Ecosia.strings")
     private static let keys = directory.appendingPathComponent("Client/Ecosia/L10N/String.swift")
@@ -24,7 +24,7 @@ private final class Translations {
                 print("repeated \(key)")
             }
         }
-        
+
         keys = Translations.keys.asLines.filter {
             $0.hasPrefix("case")
         }.reduce(into: []) {
@@ -32,15 +32,15 @@ private final class Translations {
             $0.insert(.init(equals.last!.dropLast()))
         }
     }
-    
+
     func save() {
         let filtered = strings.filter { keys.contains($0.0) }.keys.sorted()
         let result = filtered.reduce(into: "") {
             $0 += "\"" + $1 + "\" = \"" + strings[$1]! + "\";\n"
         }
-        
-        try! Data(result.utf8).write(to: Translations.strings, options: .atomic)
-        
+
+        try? Data(result.utf8).write(to: Translations.strings, options: .atomic)
+
         print("Read: \(strings.count); wrote: \(filtered.count) translations!")
     }
 }
@@ -51,9 +51,9 @@ private extension URL {
             .components(separatedBy: "\n")
             .map { $0.trimmingCharacters(in: .whitespaces) }
     }
-    
+
     var content: String {
-        try! String(data: .init(contentsOf: self), encoding: .utf8)!
+        try? String(data: .init(contentsOf: self), encoding: .utf8)!
             .trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }

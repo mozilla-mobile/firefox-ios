@@ -1,0 +1,32 @@
+name: Snapshot Tests
+
+on:
+  pull_request:
+    paths:
+      - 'Client/Configuration/Common.xcconfig'
+
+jobs:
+  execute_snapshot_tests:
+    runs-on: macos-14
+    name: Execute Snapshot Tests
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Check for MARKETING_VERSION change
+        id: check_marketing_version
+        run: sh ./check_marketing_version.sh
+
+      - name: Prepare environment
+        if : ( steps.check_marketing_version.outputs.skipnext  != 'true' )
+        uses: ./.github/actions/prepare_environment
+        with:
+          core-token: ${{ secrets.IOS_CORE_TOKEN }}
+
+      - name: Perform Snapshot Tests and Publish Test reports
+        if : ( steps.check_marketing_version.outputs.skipnext  != 'true' )
+        id: perform-snapshot-tests
+        uses: ./.github/actions/perform_snapshot_tests
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Đặt Firefox làm trình duyệt mặc định của bạn là một phiếu bầu cho một Internet mở, có thể truy cập.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Đặt Ecosia làm trình duyệt mặc định của bạn là một phiếu bầu cho một Internet mở, có thể truy cập.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Đặt làm mặc định cho Internet tốt hơn";
@@ -8,10 +8,10 @@
 "DefaultBrowserCard.Button.v2" = "Tìm hiểu cách thức";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Đặt các liên kết từ trang web, email và tin nhắn để tự động mở trong Firefox.";
+"DefaultBrowserCard.Description" = "Đặt các liên kết từ trang web, email và tin nhắn để tự động mở trong Ecosia.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "Chọn Firefox làm trình duyệt mặc định của bạn để tự động tăng tốc độ, an toàn và quyền riêng tư.";
+"DefaultBrowserCard.NextLevel.Description.v108" = "Chọn Ecosia làm trình duyệt mặc định của bạn để tự động tăng tốc độ, an toàn và quyền riêng tư.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "Nâng cao trình duyệt hàng ngày";
@@ -35,7 +35,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Nhấn vào Ứng dụng trình duyệt mặc định";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Chọn Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. Chọn Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Ứng dụng trình duyệt mặc định";

@@ -23,13 +23,13 @@
 "TodayWidget.NoOpenTabsLabel" = "Չկան բաց ներդիրներ:";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Բացել Firefox-ը";
+"TodayWidget.OpenFirefoxLabel" = "Բացել Ecosia-ը";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Գաղտնի որոնում";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Ձեր Հիմնական էկրանին ավելացրեք Firefox դյուրանցում: Վիջեթն ավելացնելուց հետո հպեք և պահեք այն խմբագրելու համար և ընտրեք այլ դյուրանցում:";
+"TodayWidget.QuickActionGalleryDescription" = "Ձեր Հիմնական էկրանին ավելացրեք Ecosia դյուրանցում: Վիջեթն ավելացնելուց հետո հպեք և պահեք այն խմբագրելու համար և ընտրեք այլ դյուրանցում:";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Արագ գործողություններ";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Արագ դիտում";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Որոնել Firefox֊ում";
+"TodayWidget.SearchInFirefoxV2" = "Որոնել Ecosia֊ում";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Որոնել\nգաղտնի ներդիրում";

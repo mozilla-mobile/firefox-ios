@@ -5,7 +5,7 @@
 "New Tab" = "Tab Baru";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox menggunakan kamera Anda untuk memindai kode QR dan mengambil foto dan video.";
+"NSCameraUsageDescription" = "Ecosia menggunakan kamera Anda untuk memindai kode QR dan mengambil foto dan video.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox memerlukan Face ID untuk mengakses kata sandi dan metode pembayaran Anda yang tersimpan.";
@@ -14,7 +14,7 @@
 "NSLocationWhenInUseUsageDescription" = "Situs web yang Anda kunjungi dapat meminta lokasi Anda.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Firefox menggunakan mikrofon Anda untuk merekam dan mengunggah audio.";
+"NSMicrophoneUsageDescription" = "Ecosia menggunakan mikrofon Anda untuk merekam dan mengunggah audio.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Ini memungkinkan Anda menyimpan foto.";

@@ -44,8 +44,13 @@ open class ResizableButton: UIButton {
         }
 
         let size = title.sizeThatFits(CGSize(width: availableWidth, height: .greatestFiniteMagnitude))
+        /* Ecosia: Update Size calculation
         return CGSize(width: size.width + widthContentInset,
                       height: size.height + heightContentInset)
+         */
+        let boundingBox = title.text?.boundingRect(with: size, options: .usesLineFragmentOrigin, context: nil) ?? .zero
+        return CGSize(width: boundingBox.width + widthContentInset,
+                      height: boundingBox.height + heightContentInset)
     }
 
     override public func layoutSubviews() {

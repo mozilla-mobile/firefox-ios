@@ -178,7 +178,7 @@ class OneLineTableViewCell: UITableViewCell,
         } else {
             self.backgroundColor = .Light.Background.primary
         }
-        
+
         bottomSeparatorView.backgroundColor = theme.colors.borderPrimary
         accessoryView?.tintColor = theme.colors.iconSecondary
         leftImageView.tintColor = theme.colors.textPrimary

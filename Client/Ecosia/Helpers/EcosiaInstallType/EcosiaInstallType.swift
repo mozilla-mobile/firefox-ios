@@ -6,26 +6,26 @@ import Foundation
 
 /// Represents the type of Ecosia installation.
 enum EcosiaInstallType: String {
-    
+
     /// Represents a fresh installation of Ecosia.
     case fresh
-    
+
     /// Represents an upgrade from a previous version of Ecosia.
     case upgrade
-    
+
     /// Represents an unknown installation type.
     case unknown
 
     // MARK: - Internal Properties
-    
+
     /// The key used to store and retrieve the install type from UserDefaults.
     static let installTypeKey = "ecosiaInstallTypeKey"
-    
+
     /// The key used to store and retrieve the current installed version from UserDefaults.
     static let currentInstalledVersionKey = "ecosiaCurrentInstalledVersionKey"
-    
+
     // MARK: - Public Methods
-    
+
     /// Retrieves the current Ecosia install type from UserDefaults.
     ///
     /// - Returns: The current Ecosia install type. If not found, returns `.unknown`.

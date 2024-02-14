@@ -5,6 +5,8 @@
 import Foundation
 import Shared
 import Common
+// Ecosia: import Core
+import Core
 
 class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggable {
     // MARK: - Variables
@@ -261,12 +263,18 @@ extension HomePageSettingViewController {
 
         override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
         override var accessibilityIdentifier: String? {
+            /* Ecosia: Override accessibilityIdentifier
             return AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Shortcuts.settingsPage
+            */
+            return CustomizableNTPSettingConfig.topSites.accessibilityIdentifierPrefix
         }
         override var style: UITableViewCell.CellStyle { return .value1 }
 
         override var status: NSAttributedString {
+            /* Ecosia: Update contidion
             let areShortcutsOn = profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.TopSiteSection) ?? true
+            */
+            let areShortcutsOn = User.shared.showTopSites
             typealias Shortcuts = String.Settings.Homepage.Shortcuts
             let status: String = areShortcutsOn ? Shortcuts.ToggleOn : Shortcuts.ToggleOff
             return NSAttributedString(string: String(format: status))
@@ -275,7 +283,10 @@ extension HomePageSettingViewController {
         init(settings: SettingsTableViewController) {
             self.profile = settings.profile
             self.windowUUID = settings.windowUUID
+            /* Ecosia: rename to Top Sites
             super.init(title: NSAttributedString(string: .Settings.Homepage.Shortcuts.ShortcutsPageTitle))
+            */
+            super.init(title: NSAttributedString(string: .localized(.topSites)))
         }
 
         override func onClick(_ navigationController: UINavigationController?) {

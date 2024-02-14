@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Glean
+// Ecosia: remove Glean dependency // import Glean
 
 // Contextual identifier used for the sponsored tiles in top sites and the suggestions in the search view
 struct TelemetryContextualIdentifier {
@@ -23,10 +23,12 @@ struct TelemetryContextualIdentifier {
     static func setupContextId() {
         // Use existing client UUID, if doesn't exists create a new one
         if let stringContextId = contextId, let clientUUID = UUID(uuidString: stringContextId) {
-            GleanMetrics.TopSites.contextId.set(clientUUID)
+            // Ecosia: remove Glean dependency
+            // GleanMetrics.TopSites.contextId.set(clientUUID)
         } else {
             let newUUID = UUID()
-            GleanMetrics.TopSites.contextId.set(newUUID)
+            // Ecosia: remove Glean dependency
+            // GleanMetrics.TopSites.contextId.set(newUUID)
             contextId = newUUID.uuidString
         }
     }

@@ -57,7 +57,7 @@ struct SimpleToast: ThemeApplicable {
             }
         )
     }
-    
+
     // Ecosia: Modify privacy for func
     // private func animate(_ toast: UIView) {
     func animate(_ toast: UIView) {

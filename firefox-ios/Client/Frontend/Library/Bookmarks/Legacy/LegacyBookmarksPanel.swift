@@ -86,7 +86,7 @@ class LegacyBookmarksPanel: SiteTableViewController,
         button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomLeftButton
         return button
     }()
-    
+
     // Ecosia: Import Bookmarks Helper
     // Add `moreButton`
     lazy var moreButton: UIBarButtonItem = {
@@ -108,10 +108,10 @@ class LegacyBookmarksPanel: SiteTableViewController,
         button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomRightButton
         return button
     }()
-    
+
     // Ecosia: add bookmarks empty state
     private lazy var emptyHeader = EmptyHeader(icon: "bookmarksEmpty", title: .localized(.noBookmarksYet), subtitle: .localized(.AddYourFavoritePages))
-    
+
     // Ecosia: Tooltip
     private let bookmarksTooltip: NTPTooltip = {
         let tooltip = NTPTooltip()
@@ -163,11 +163,11 @@ class LegacyBookmarksPanel: SiteTableViewController,
         tableView.backgroundColor = themeManager.currentTheme.colors.layer6
         tableView.contentInset.top = 32
     }
-    
+
     // Ecosia: Tooltip
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
+
         if EcosiaInstallType.get() == .upgrade && User.shared.showsBookmarksImportExportTooltip {
             showBookmarksTooltip()
         }
@@ -190,12 +190,12 @@ class LegacyBookmarksPanel: SiteTableViewController,
             if self?.viewModel.shouldFlashRow ?? false {
                 self?.flashRow()
             }
-            
+
             // Ecosia: add bookmarks empty state
             self?.updateEmptyView()
         }
     }
-    
+
     // Ecosia: add bookmarks empty state
     private func updateEmptyView() {
         switch (viewModel.isRootNode, viewModel.bookmarkNodes.isEmpty) {
@@ -721,7 +721,7 @@ extension BookmarksPanel: EmptyBookmarksViewDelegate {
             visitType: .link
         )
     }
-    
+
     func emptyBookmarksViewImportBookmarksTapped(_ view: EmptyBookmarksView) {
         importBookmarksActionHandler()
     }
@@ -732,11 +732,11 @@ extension BookmarksPanel: NTPTooltipDelegate {
     func ntpTooltipTapped(_ tooltip: NTPTooltip?) {
         hideBookmarksTooltip()
     }
-    
+
     func ntpTooltipCloseTapped(_ tooltip: NTPTooltip?) {
         hideBookmarksTooltip()
     }
-    
+
     func ntpTooltipLinkTapped(_ tooltip: NTPTooltip?) {
         libraryPanelDelegate?.libraryPanel(
             didSelectURL: Environment.current.urlProvider.bookmarksHelp,
@@ -747,17 +747,17 @@ extension BookmarksPanel: NTPTooltipDelegate {
 
 // Ecosia: Import Bookmarks Helper
 extension BookmarksPanel {
-    
+
     func importBookmarksActionHandler() {
         Analytics.shared.bookmarksPerformImportExport(.import)
         viewModel.bookmarkImportSelected(in: self) { [weak self] url, error in
             self?.moreButton.isEnabled = true
-            
+
             guard error != nil else {
                 self?.reloadData()
                 return
             }
-            
+
             let alert = UIAlertController(title: .localized(.bookmarksImportFailedTitle), message: .localized(.bookmarksImportExportFailedMessage), preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: .CancelString, style: .cancel))
             let retryAction = UIAlertAction(title: .localized(.retryMessage), style: .default) { [weak self] _ in
@@ -769,17 +769,17 @@ extension BookmarksPanel {
             self?.present(alert, animated: true)
         }
     }
-    
+
     func exportBookmarksActionHandler() {
         Analytics.shared.bookmarksPerformImportExport(.export)
         viewModel.bookmarkExportSelected(in: self) { [weak self] error in
             self?.moreButton.isEnabled = true
-            
+
             guard error != nil else {
                 self?.reloadData()
                 return
             }
-            
+
             let alert = UIAlertController(title: .localized(.bookmarksExportFailedTitle), message: .localized(.bookmarksImportExportFailedMessage), preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: .CancelString, style: .cancel))
             let retryAction = UIAlertAction(title: .localized(.retryMessage), style: .default) { [weak self] _ in
@@ -789,7 +789,7 @@ extension BookmarksPanel {
             self?.present(alert, animated: true)
         }
     }
-    
+
     @objc private func showMoreDialog() {
         hideBookmarksTooltip()
         moreButton.isEnabled = false
@@ -800,14 +800,15 @@ extension BookmarksPanel {
             self?.moreButton.isEnabled = true
         }
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alert.view.tintColor = UIColor.legacyTheme.ecosia.primaryButton
         alert.popoverPresentationController?.barButtonItem = moreButton
         [importAction, exportAction, cancelAction].forEach(alert.addAction)
         present(alert, animated: true)
     }
-    
+
     private func showBookmarksTooltip() {
         guard bookmarksTooltip.superview == nil else { return }
-        
+
         bookmarksTooltip.delegate = self
         bookmarksTooltip.alpha = 0.0
         view.addSubview(self.bookmarksTooltip)
@@ -817,31 +818,30 @@ extension BookmarksPanel {
             bookmarksTooltip.trailingAnchor.constraint(lessThanOrEqualTo: view.layoutMarginsGuide.trailingAnchor, constant: 0),
             bookmarksTooltip.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: 0),
         ]
-                
+
         if traitCollection.userInterfaceIdiom == .pad {
             constraints.append(
                 bookmarksTooltip.widthAnchor.constraint(lessThanOrEqualToConstant: view.bounds.width / 2).priority(.defaultHigh)
             )
         }
-        
+
         NSLayoutConstraint.activate(constraints)
-        
+
         UIView.animate(withDuration: 0.3) {
             self.bookmarksTooltip.alpha = 1.0
         }
     }
-    
+
     private func hideBookmarksTooltip() {
         User.shared.hideBookmarksImportExportTooltip()
-        
+
         guard bookmarksTooltip.superview != nil else { return }
         bookmarksTooltip.delegate = nil
-        
+
         UIView.animate(withDuration: 0.3, animations: {
             self.bookmarksTooltip.alpha = 0.0
         }) { _ in
             self.bookmarksTooltip.removeFromSuperview()
         }
     }
-
 }

@@ -106,13 +106,15 @@ class BrowserCoordinator: BaseCoordinator,
         homepageController.scrollToTop()
         // We currently don't support full page screenshot of the homepage
         screenshotService.screenshotableView = nil
-        
+
         // Ecosia: show any of the insighful sheets if needed
         // Workaround for time of experiment
         // -> delay of 0.5s to wait for animations and dismissals to finish
         if inline, !User.shared.firstTime {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
                 self?.browserViewController.presentInsightfulSheetsIfNeeded()
+                // Ecosia: at this stage, we consider it a safe place where storing the current version
+                EcosiaInstallType.evaluateCurrentEcosiaInstallType(storeUpgradeVersion: true)
             }
         }
     }
@@ -185,6 +187,8 @@ class BrowserCoordinator: BaseCoordinator,
 
         logger.log("Handling a route", level: .info, category: .coordinator)
         switch route {
+        // Ecosia: Add Referrals route
+        case 
         case let .searchQuery(query):
             handle(query: query)
             return true
@@ -233,6 +237,21 @@ class BrowserCoordinator: BaseCoordinator,
             }
             return true
         }
+
+        // Ecosia: Add Referrals route
+        case let .referrals(code):
+            openBlankNewTabAndClaimReferral(code: code)
+            return true
+        }
+    }
+
+    private func openBlankNewTabAndClaimReferral(code: String) {
+        User.shared.referrals.pendingClaim = code
+        // on first start, browser is not in view hierarchy yet
+        guard !User.shared.firstTime else { return }
+        browserViewController.openBlankNewTab(focusLocationField: false)
+        // Intro logic will trigger claiming referral
+        browserViewController.presentIntroViewController()
     }
 
     private func showIntroOnboarding() -> Bool {
@@ -342,6 +361,12 @@ class BrowserCoordinator: BaseCoordinator,
     func didFinishSettings(from coordinator: SettingsCoordinator) {
         router.dismiss(animated: true, completion: nil)
         remove(child: coordinator)
+    }
+
+    // Ecosia: Add debug method to open tabs
+    func openDebugTestTabs(count: Int) {
+        guard let url = URL(string: "https://www.ecosia.org") else { return }
+        browserViewController.debugOpen(numberOfNewTabs: count, at: url)
     }
 
     // MARK: - LibraryCoordinatorDelegate

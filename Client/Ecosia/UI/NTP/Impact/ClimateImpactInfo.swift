@@ -6,16 +6,13 @@ import Foundation
 import Core
 
 enum ClimateImpactInfo: Equatable {
-    case search(value: Int, searches: Int)
-    case referral(value: Int, invites: Int)
+    case referral(value: Int)
     case totalTrees(value: Int)
     case totalInvested(value: Int)
-    
+
     var title: String {
         switch self {
-        case .search(let value, _):
-            return "\(value)"
-        case .referral(let value, _):
+        case .referral(let value):
             return "\(value)"
         case .totalTrees(let value):
             return NumberFormatter.ecosiaCurrency(withoutEuroSymbol: true)
@@ -25,37 +22,42 @@ enum ClimateImpactInfo: Equatable {
                 .string(from: .init(integerLiteral: value)) ?? ""
         }
     }
-    
+
     var subtitle: String {
         switch self {
-        case .search(_, let searches):
-            return .localizedPlural(.searches, num: searches)
-        case .referral(_, let invites):
-            return .localizedPlural(.friendInvitesPlural, num: invites)
+        case .referral(let value):
+            return .localizedPlural(.acceptedInvites, num: value)
         case .totalTrees:
-            return .localized(.treesPlantedByTheCommunity)
+            return .localized(.treesPlantedByEcosia)
         case .totalInvested:
-            return .localized(.investedIntoClimateAction)
+            return .localized(.dedicatedToClimateAction)
         }
     }
-    
+
     var accessibilityLabel: String {
         switch self {
-        case .search(let value, let searches):
-            return accessiblityLabelTreesPlanted(value: value) + .localizedPlural(.searches, num: searches)
-        case .referral(let value, let invites):
-            return accessiblityLabelTreesPlanted(value: value) + .localizedPlural(.friendInvitesPlural, num: invites)
+        case .referral(let value):
+            return accessiblityLabelTreesPlanted(value: value) + .localizedPlural(.acceptedInvites, num: value)
         case .totalTrees(let value):
-            return value.spelledOutString + " " + .localized(.treesPlantedByTheCommunity)
+            return value.spelledOutString + " " + .localized(.treesPlantedByEcosia)
         case .totalInvested(let value):
-            return value.spelledOutString + " " + .localized(.investedIntoClimateAction)
+            return value.spelledOutString + " " + .localized(.dedicatedToClimateAction)
         }
     }
-    
+
+    var accessibilityIdentifier: String? {
+        switch self {
+        case .referral:
+            "friends_and_trees_invites_counter"
+        case .totalTrees:
+            "total_trees_count"
+        case .totalInvested:
+            "total_invested_count"
+        }
+    }
+
     var image: UIImage? {
         switch self {
-        case .search:
-            return .init(named: "yourImpact")
         case .referral:
             return .init(named: "groupYourImpact")
         case .totalTrees:
@@ -64,52 +66,48 @@ enum ClimateImpactInfo: Equatable {
             return .init(named: "financialReports")
         }
     }
-    
+
     var buttonTitle: String? {
         switch self {
-        case .search:
-            return .localized(.howItWorks)
         case .referral:
             return .localized(.inviteFriends)
         case .totalTrees, .totalInvested:
             return nil
         }
     }
-    
+
     var accessibilityHint: String? {
         switch self {
-        case .search:
-            return .localized(.howItWorks)
         case .referral:
             return .localized(.inviteFriends)
         case .totalTrees, .totalInvested:
             return nil
         }
     }
-    
-    var progressIndicatorValue: Double? {
+
+    var imageAccessibilityIdentifier: String? {
         switch self {
-        case .search:
-            return User.shared.progress
-        case .referral, .totalInvested, .totalTrees:
-            return nil
+        case .referral:
+            "referral_image"
+        case .totalTrees:
+            "total_trees_image"
+        case .totalInvested:
+            "total_invested_image"
         }
     }
-    
+
     /// Created to be used for comparison without taking the associated types arguments into consideration.
     var rawValue: Int {
         switch self {
-        case .search:
-            return 0
         case .referral:
-            return 1
+            return 0
         case .totalTrees:
-            return 2
+            return 1
         case .totalInvested:
-            return 3
+            return 2
         }
     }
-    
+
     private func accessiblityLabelTreesPlanted(value: Int) -> String {
         value.spelledOutString + " " + .localizedPlural(.treesPlanted, num: value) + ";"
     }

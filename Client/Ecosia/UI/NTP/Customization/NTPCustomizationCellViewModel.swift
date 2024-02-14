@@ -12,7 +12,7 @@ protocol NTPCustomizationCellDelegate: AnyObject {
 final class NTPCustomizationCellViewModel {
     weak var delegate: NTPCustomizationCellDelegate?
     var theme: Theme
-    
+
     init(delegate: NTPCustomizationCellDelegate? = nil, theme: Theme) {
         self.delegate = delegate
         self.theme = theme
@@ -20,17 +20,17 @@ final class NTPCustomizationCellViewModel {
 }
 
 extension NTPCustomizationCellViewModel: HomepageViewModelProtocol {
-    
+
     func setTheme(theme: Theme) {
         self.theme = theme
     }
-    
+
     var sectionType: HomepageSectionType { .ntpCustomization }
-    
+
     var headerViewModel: LabelButtonHeaderViewModel { .emptyHeader }
-    
+
     var isEnabled: Bool { true }
-    
+
     func section(for traitCollection: UITraitCollection, size: CGSize) -> NSCollectionLayoutSection {
         let item = NSCollectionLayoutItem(
             layoutSize: .init(widthDimension: .fractionalWidth(1),
@@ -46,12 +46,12 @@ extension NTPCustomizationCellViewModel: HomepageViewModelProtocol {
         section.contentInsets = sectionType.sectionInsets(traitCollection)
         return section
     }
-    
+
     func numberOfItemsInSection() -> Int { 1 }
 }
 
 extension NTPCustomizationCellViewModel: HomepageSectionHandler {
-    
+
     func configure(_ cell: UICollectionViewCell, at indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = cell as? NTPCustomizationCell else {
             return UICollectionViewCell()

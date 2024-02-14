@@ -4,6 +4,6 @@
 
 import Foundation
 
-//struct FxNimbus {
-//    static var shared = FxNimbus()
-//}
+struct FxNimbus {
+    static var shared = FxNimbus()
+}

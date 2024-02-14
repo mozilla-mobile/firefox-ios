@@ -8,7 +8,8 @@ import XCTest
 @testable import Client
 
 final class LaunchScreenViewModelTests: XCTestCase {
-    private var messageManager: MockGleanPlumbMessageManagerProtocol!
+    // Ecosia: Remove MockGleanPlumbMessageManagerProtocol ref
+    // private var messageManager: MockGleanPlumbMessageManagerProtocol!
     private var profile: MockProfile!
     private var delegate: MockLaunchFinishedLoadingDelegate!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
@@ -19,7 +20,8 @@ final class LaunchScreenViewModelTests: XCTestCase {
         profile = MockProfile()
         delegate = MockLaunchFinishedLoadingDelegate()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
-        messageManager = MockGleanPlumbMessageManagerProtocol()
+        // Ecosia: Remove MockGleanPlumbMessageManagerProtocol ref
+        // messageManager = MockGleanPlumbMessageManagerProtocol()
 
         UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusFeatureTestsOverride)
     }
@@ -28,7 +30,8 @@ final class LaunchScreenViewModelTests: XCTestCase {
         super.tearDown()
         AppContainer.shared.reset()
         profile = nil
-        messageManager = nil
+        // Ecosia: Remove MockGleanPlumbMessageManagerProtocol ref
+        // messageManager = nil
         delegate = nil
 
         UserDefaults.standard.set(false, forKey: PrefsKeys.NimbusFeatureTestsOverride)
@@ -41,7 +44,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
         XCTAssertEqual(delegate.launchBrowserCalled, 0)
         XCTAssertEqual(delegate.launchWithTypeCalled, 0)
     }
-
+    /* Ecosia: Versioning is testes in a dedicated Ecosia test
     func testLaunchType_intro() async {
         let subject = createSubject()
         subject.delegate = delegate
@@ -70,7 +73,9 @@ final class LaunchScreenViewModelTests: XCTestCase {
         XCTAssertEqual(delegate.launchBrowserCalled, 0)
         XCTAssertEqual(delegate.launchWithTypeCalled, 1)
     }
+     */
 
+    /* Ecosia: Comment test with no mean to Launch survey
     func testLaunchType_survey() async {
         profile.prefs.setString("112.0", forKey: PrefsKeys.AppVersion.Latest)
         profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
@@ -88,8 +93,11 @@ final class LaunchScreenViewModelTests: XCTestCase {
         XCTAssertEqual(delegate.launchBrowserCalled, 0)
         XCTAssertEqual(delegate.launchWithTypeCalled, 1)
     }
+     */
 
+    /* Ecosia: Versioning is testes in a dedicated Ecosia test
     func testSplashScreenExperiment_afterShown_returnsTrue() {
+
         let subject = createSubject()
         let value = subject.getSplashScreenExperimentHasShown()
         XCTAssertFalse(value)
@@ -99,6 +107,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
         let updatedValue = subject.getSplashScreenExperimentHasShown()
         XCTAssertTrue(updatedValue)
     }
+     */
 
     // MARK: - Helpers
     private func createSubject(file: StaticString = #file,
@@ -107,12 +116,13 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
         let subject = LaunchScreenViewModel(windowUUID: windowUUID,
                                             profile: profile,
-                                            messageManager: messageManager,
+                                            // Ecosia: Remove MockGleanPlumbMessageManagerProtocol ref
+                                            // messageManager: messageManager,
                                             onboardingModel: onboardingModel)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
-
+    /* Ecosia: Remove MockGleanPlumbMessageManagerProtocol ref
     private func createMessage(
         for surface: MessageSurfaceId = .survey,
         action: String = "OPEN_NEW_TAB"
@@ -130,6 +140,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
                                  style: MockStyleDataProtocol(),
                                  metadata: metadata)
     }
+     */
 
     func createOnboardingViewModel() -> OnboardingViewModel {
         let cards: [OnboardingCardInfoModel] = [

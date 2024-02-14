@@ -260,7 +260,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Aceasta poate fi o configurare greșită sau un fals de la un atacator. Continuă dacă accepți riscul potențial.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "Proprietarul %@ și-a configurat site-ul web necorespunzător. Pentru a proteja informațiile împotriva furtului, Firefox nu s-a conectat la acest site web.";
+"ErrorPages.CertWarning.Description" = "Proprietarul %@ și-a configurat site-ul web necorespunzător. Pentru a proteja informațiile împotriva furtului, Ecosia nu s-a conectat la acest site web.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Această conexiune nu prezintă încredere";
@@ -281,13 +281,13 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Pagina de start Firefox";
+"Firefox.HomePage.Title" = "Pagina de start Ecosia";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Înainte";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Cont Firefox";
+"FxA.FirefoxAccount" = "Cont Ecosia";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Gestionează contul și dispozitivele";
@@ -299,7 +299,7 @@
 "fxa.signin.camera-signin" = "Autentifică-te cu camera";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "Deschide Firefox pe calculator și intră pe firefox.com/pair";
+"fxa.signin.qr-link-instruction" = "Deschide Ecosia pe calculator și intră pe ecosia.org/pair";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Gata de scanare";
@@ -320,7 +320,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ a fost deconectat cu succes.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Acest dispozitiv a fost deconectat cu succes de la Firefox Sync.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Acest dispozitiv a fost deconectat cu succes de la Ecosia Sync.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Sincronizare deconectată";
@@ -329,7 +329,7 @@
 "FxAPush_DeviceDisconnected_title" = "Sincronizare deconectată";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Un dispozitiv a fost deconectat de la Firefox Sync";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Un dispozitiv a fost deconectat de la Ecosia Sync";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Ajutor";
@@ -491,7 +491,7 @@
 "LoginsList.Title" = "DATE DE AUTENTIFICARE SALVATE";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Se pare că Firefox s-a închis neașteptat anterior. Dorești să restaurezi filele?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Se pare că Ecosia s-a închis neașteptat anterior. Dorești să restaurezi filele?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Marchează ca citit";
@@ -593,7 +593,7 @@
 "Okay" = "Ok";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Ups! Firefox s-a închis neașteptat";
+"Oops! Firefox crashed" = "Ups! Ecosia s-a închis neașteptat";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Deschide articole în modul de lectură atingând pictograma carte când apare în bara de titlu.";
@@ -758,13 +758,13 @@
 "SendTo.NavBar.Title" = "Trimite fila";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "Nu mai ai niciun alt dispozitiv conectat la acest cont Firefox disponibil pentru sincronizare.";
+"SendTo.NoDevicesFound.Message" = "Nu mai ai niciun alt dispozitiv conectat la acest cont Ecosia disponibil pentru sincronizare.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Te rugăm să deschizi Firefox, intră în Setări și autentifică-te pentru a continua.";
+"SendTo.NotSignedIn.Message" = "Te rugăm să deschizi Ecosia, intră în Setări și autentifică-te pentru a continua.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Nu ești autentificat(ă) în contul tău Firefox.";
+"SendTo.NotSignedIn.Title" = "Nu ești autentificat(ă) în contul tău Ecosia.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Trimite";
@@ -905,7 +905,7 @@
 "Settings.FxA.Sync.SectionName" = "Setări de sincronizare";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Cont Firefox";
+"Settings.FxA.Title" = "Cont Ecosia";
 
 /* General settings section title */
 "Settings.General.SectionName" = "General";
@@ -929,7 +929,7 @@
 "Settings.NewTab.Option.BlankPage" = "Pagină goală";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Pagină de start Firefox";
+"Settings.NewTab.Option.FirefoxHome" = "Pagină de start Ecosia";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Pagina de start";
@@ -947,7 +947,7 @@
 "Settings.NewTab.TopSectionNameFooter" = "Alege ce se încarcă la deschiderea unei file noi";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Când se deschide Firefox";
+"Settings.OfferClipboardBar.Status" = "Când se deschide Ecosia";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.StatusV2" = "Când se deschide Firefox";
@@ -974,7 +974,7 @@
 "Settings.SendUsage.Link" = "Află mai multe.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla se străduiește să colecteze doar strictul necesar pentru a furniza și a îmbunătăți Firefox pentru toți.";
+"Settings.SendUsage.Message" = "Mozilla se străduiește să colecteze doar strictul necesar pentru a furniza și a îmbunătăți Ecosia pentru toți.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Trimite date privind utilizarea";
@@ -995,7 +995,7 @@
 "Settings.Siri.OpenTabShortcut" = "Deschide o filă nouă";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Folosește scurtături Siri pentru a deschide Firefox rapid prin intermediul Siri";
+"Settings.Siri.SectionDescription" = "Folosește scurtături Siri pentru a deschide Ecosia rapid prin intermediul Siri";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Scurtături Siri";
@@ -1067,13 +1067,13 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "Încarcă în fundal";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Se încarcă în Firefox";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Se încarcă în Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Deschide în Firefox";
+"ShareExtension.OpenInFirefoxAction.Title" = "Deschide în Ecosia";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Caută în Firefox";
+"ShareExtension.SeachInFirefoxAction.Title" = "Caută în Ecosia";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "Afișează sugestii de căutare";
@@ -1178,7 +1178,7 @@
 "UIMenuItem.PasteGo" = "Lipește și accesează";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Caută cu Firefox";
+"UIMenuItem.SearchWithFirefox" = "Caută cu Ecosia";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "necitit";
@@ -1208,7 +1208,7 @@
 "Yesterday" = "Ieri";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Nu ai nicio filă deschisă în Firefox pe celelalte dispozitive ale tale.";
+"You don’t have any tabs open in Firefox on your other devices." = "Nu ai nicio filă deschisă în Ecosia pe celelalte dispozitive ale tale.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Drepturile tale";

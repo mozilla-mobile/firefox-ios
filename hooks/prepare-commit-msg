@@ -1,0 +1,35 @@
+#!/usr/bin/env python3
+
+import sys
+import re
+from subprocess import check_output, CalledProcessError
+
+commit_msg_filepath = sys.argv[1]
+
+try:
+    # Try to get the current branch name
+    branch = check_output(
+        ["git", "symbolic-ref", "--short", "HEAD"]
+    ).strip().decode()
+
+    # Define the regex to match the JIRA ticket in the branch name
+    regex = r"(?i)([A-Za-z]+[-_]\d+)"
+    match = re.search(regex, branch)
+
+    if match:
+        # Extract the JIRA ticket from the branch name and format it correctly
+        jira_ticket = match.group(0).upper().replace('_', '-')  # Ensure ticket uses hyphen
+        with open(commit_msg_filepath, "r+") as fh:
+            commit_msg = fh.read().strip()
+
+            # Prefix the commit message with the JIRA ticket
+            updated_commit_msg = f"[{jira_ticket}] {commit_msg}"
+
+            # Write the updated commit message back to the file
+            fh.seek(0, 0)
+            fh.write(updated_commit_msg)
+            fh.truncate()
+
+except CalledProcessError:
+    # If we're in a detached HEAD state (such as during rebase), skip the branch name lookup
+    print("Detached HEAD state detected. Skipping branch name extraction.")

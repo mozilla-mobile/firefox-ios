@@ -1,3 +1,7 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
 /*
  Ecosia: This file replaces the one contained in Client/Frontend/Home/TopSites/Cell
  It is done so that we will have minimum conflicts when major updates are needed
@@ -158,7 +162,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
              */
             rootContainer.widthAnchor.constraint(equalToConstant: UX.imageBackgroundSize.width),
             rootContainer.heightAnchor.constraint(equalToConstant: UX.imageBackgroundSize.height),
-            
+
             imageView.topAnchor.constraint(equalTo: rootContainer.topAnchor,
                                            constant: UX.imageTopSpace),
             imageView.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor,
@@ -169,7 +173,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
                                               constant: -UX.imageBottomSpace),
             imageView.widthAnchor.constraint(equalToConstant: UX.iconSize.width),
             imageView.heightAnchor.constraint(equalToConstant: UX.iconSize.height),
-            
+
             titleLabel.topAnchor.constraint(equalTo: rootContainer.bottomAnchor, constant: UX.titleOffset),
             titleLabel.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -UX.bottomSpace),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.textSafeSpace),

@@ -485,11 +485,22 @@ extension BrowserViewController: WKNavigationDelegate {
             DispatchQueue.main.asyncAfter(deadline: .now() + tabManager.delaySelectingNewPopupTab + 0.1) {
                 // Show only if no other snack bar
                 guard let tab = self.tabManager.selectedTab, tab.bars.isEmpty else { return }
+                /* Ecosia: Change to native alert controller (showSnackbar() contains the Ecosia change)
                 TimerSnackBar.showAppStoreConfirmationBar(
                     forTab: tab,
                     appStoreURL: url,
                     theme: self.currentTheme()
                 ) { _ in
+                    // If a new window was opened for this URL (it will have no history), close it.
+                    if tab.historyList.isEmpty {
+                        self.tabManager.removeTab(tab)
+                    }
+                }
+                */
+                self.showSnackbar(forExternalUrl: url, tab: tab) { isOK in
+                    if isOK {
+                        UIApplication.shared.open(url, options: [:])
+                    }
                     // If a new window was opened for this URL (it will have no history), close it.
                     if tab.historyList.isEmpty {
                         self.tabManager.removeTab(tab)
@@ -564,6 +575,12 @@ extension BrowserViewController: WKNavigationDelegate {
                 }
             }
 
+            decisionHandler(.allow)
+            return
+        }
+
+        // Ecosia: Allow MarketplaceKit requests for iOS 17.4+
+        if #available(iOS 17.4, *), url.scheme == "marketplace-kit" {
             decisionHandler(.allow)
             return
         }
@@ -938,6 +955,7 @@ private extension BrowserViewController {
 
     // Use for sms and mailto links, which do not show a confirmation before opening.
     func showSnackbar(forExternalUrl url: URL, tab: Tab, completion: @escaping (Bool) -> Void) {
+        /* Ecosia: Change to native alert controller
         let snackBar = TimerSnackBar(text: .ExternalLinkGenericConfirmation + "\n\(url.absoluteString)", img: nil)
         let ok = SnackButton(title: .OKString, accessibilityIdentifier: "AppOpenExternal.button.ok") { bar in
             tab.removeSnackbar(bar)
@@ -958,6 +976,21 @@ private extension BrowserViewController {
         snackBar.addButton(ok)
         snackBar.addButton(cancel)
         tab.addSnackbar(snackBar)
+         */
+        let alert = UIAlertController(title: .localized(.openExternalLinkTitle),
+                                      message: String(format: .localized(.openExternalLinkDescription), url.absoluteString),
+                                      preferredStyle: .alert)
+        alert.view.tintColor = .legacyTheme.ecosia.primaryButton
+        let cancelAction = UIAlertAction(title: .localized(.cancel), style: .default) { _ in
+            completion(false)
+        }
+        alert.addAction(cancelAction)
+        let openAction = UIAlertAction(title: .localized(.open), style: .default) { _ in
+            completion(true)
+        }
+        alert.addAction(openAction)
+        alert.preferredAction = openAction
+        present(alert, animated: true)
     }
 
     func shouldRequestBeOpenedAsPopup(_ request: URLRequest) -> Bool {

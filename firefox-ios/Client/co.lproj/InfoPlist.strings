@@ -5,16 +5,16 @@
 "New Tab" = "Nova unghjetta";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox impiega u vostru apparechju-fotò per analizà i codici QR è per piglià fotò è video.";
+"NSCameraUsageDescription" = "Ecosia impiega u vostru apparechju-fotò per analizà i codici QR è per piglià fotò è video.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox richiede Face ID per accede à e vostre parolle d’intesa è metode di pagamentu arregistrate.";
+"NSFaceIDUsageDescription" = "Ecosia richiede Face ID per accede à e vostre parolle d’intesa è metode di pagamentu arregistrate.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "I siti web chì vò visitate ponu richiede à cunnosce a vostra lucalizazione.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Firefox impiega u vostru microfonu per arregistrà è incaricà schedarii audio.";
+"NSMicrophoneUsageDescription" = "Ecosia impiega u vostru microfonu per arregistrà è incaricà schedarii audio.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Quessu vi permette d’arregistrà fotò.";

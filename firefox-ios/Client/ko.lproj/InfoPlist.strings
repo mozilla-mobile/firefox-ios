@@ -5,16 +5,16 @@
 "New Tab" = "새 탭";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox가 QR code 를 스캔하거나 사진, 영상을 찍기 위해 카메라를 사용합니다.";
+"NSCameraUsageDescription" = "Ecosia가 QR code 를 스캔하거나 사진, 영상을 찍기 위해 카메라를 사용합니다.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox가 저장된 비밀번호와 결제 방법에 접근하려면 Face ID가 필요합니다.";
+"NSFaceIDUsageDescription" = "Ecosia가 저장된 비밀번호와 결제 방법에 접근하려면 Face ID가 필요합니다.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "방문한 웹사이트에서 위치 정보를 요청할 수 있습니다.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Firefox가 오디오 녹음 및 업로드를 하기 위해 마이크를 사용합니다.";
+"NSMicrophoneUsageDescription" = "Ecosia가 오디오 녹음 및 업로드를 하기 위해 마이크를 사용합니다.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "사진을 저장할 수 있게 합니다.";

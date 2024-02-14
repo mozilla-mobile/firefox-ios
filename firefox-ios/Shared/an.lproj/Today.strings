@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Zarrar pestanyas privadas";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Anyade alcorces de Firefox ta la tuya pantalla d'inicio";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Anyade alcorces de Ecosia ta la tuya pantalla d'inicio";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Ir ta lo vinclo copiau";
@@ -23,13 +23,13 @@
 "TodayWidget.NoOpenTabsLabel" = "No i hai garra pestanya ubierta.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Ubrir Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Ubrir Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Busqueda privada";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Anyade un alcorce de Firefox a la tuya pantalla d'inicio. Dimpués anyade lo widget, toca y mantén ta editar-lo y seleccionar un alcorce diferent.";
+"TodayWidget.QuickActionGalleryDescription" = "Anyade un alcorce de Ecosia a la tuya pantalla d'inicio. Dimpués anyade lo widget, toca y mantén ta editar-lo y seleccionar un alcorce diferent.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Accions rapidas";
@@ -41,7 +41,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Vista rapida";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Mirar en Firefox";
+"TodayWidget.SearchInFirefoxV2" = "Mirar en Ecosia";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Mirar en una Pestanya Privada";

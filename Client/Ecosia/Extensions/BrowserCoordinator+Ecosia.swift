@@ -6,6 +6,4 @@ import Foundation
 import Shared
 import Core
 
-extension BrowserCoordinator {
-    
-}
+extension BrowserCoordinator { }

@@ -1,0 +1,55 @@
+name: 'Perform Snapshot Tests'
+description: 'This action contains all the usual steps needed to perform the snapshot tests'
+
+inputs:
+  github-token:
+    description: 'The GitHub Token'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+
+      - name: Set up Homebrew and Install Dependencies
+        shell: bash
+        run: |
+          # Update Homebrew to ensure formulae are up to date
+          brew update
+
+          # Install jq and the latest bash
+          brew install jq bash
+
+          # Determine Homebrew's installation prefix
+          HOMEBREW_PREFIX=$(brew --prefix)
+
+          # Add Homebrew's bash to the beginning of PATH
+          export PATH="$HOMEBREW_PREFIX/bin:$PATH"
+
+          # Verify the installation and Bash version
+          echo "Bash version:"
+          bash --version
+
+          echo "jq version:"
+          jq --version
+
+      - name: Validate JSON Configuration
+        shell: bash
+        run: |
+          jq empty "EcosiaTests/SnapshotTests/snapshot_configuration.json"
+          echo "JSON configuration is valid."
+
+      - name: Run Snapshot Tests
+        shell: bash
+        run: |
+          mkdir -p EcosiaTests/Results/
+          ./perform_snapshot_tests.sh "EcosiaTests/SnapshotTests/snapshot_configuration.json" "EcosiaTests/SnapshotTests/environment.json" "EcosiaTests/Results" "EcosiaSnapshotTests"
+
+      - name: Process xcresult files
+        uses: kishikawakatsumi/xcresulttool@v1
+        with:
+          path: 'EcosiaTests/Results/all_tests.xcresult'
+          token: ${{ inputs.github-token }}
+          show-passed-tests: false
+          show-code-coverage: false
+          upload-bundles: 'failure'
+        if: success() || failure()

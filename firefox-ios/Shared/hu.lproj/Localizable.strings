@@ -311,7 +311,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Lehet hibás beállítás vagy egy támadó műve. Akkor haladjon tovább, ha elfogadja a lehetséges kockázatot.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "A(z) %@ tulajdonosa rosszul állította be a webhelyet. Hogy megvédje az információit az ellopásuktól, a Firefox nem kapcsolódott ehhez a webhelyhez.";
+"ErrorPages.CertWarning.Description" = "A(z) %@ tulajdonosa rosszul állította be a webhelyet. Hogy megvédje az információit az ellopásuktól, a Ecosia nem kapcsolódott ehhez a webhelyhez.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Ez a kapcsolat nem megbízható";
@@ -332,7 +332,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefox kezdőlap";
+"Firefox.HomePage.Title" = "Ecosia kezdőlap";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "Kezdőoldal testreszabása";
@@ -389,7 +389,7 @@
 "fxa.signin.camera-signin" = "Jelentkezzen be a kamerájával";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "A számítógépen nyissa meg a Firefoxot, és ugorjon a firefox.com/pair oldalra";
+"fxa.signin.qr-link-instruction" = "A számítógépen nyissa meg a Ecosiaot, és ugorjon a ecosia.org/pair oldalra";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Leolvasásra kész";
@@ -401,7 +401,7 @@
 "FxA.SyncNow" = "Szinkronizálás most";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "A Firefox Sync kapcsolódott ehhez: %@";
+"FxAPush_DeviceConnected_body" = "A Ecosia Sync kapcsolódott ehhez: %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sync kapcsolódva";
@@ -410,7 +410,7 @@
 "FxAPush_DeviceDisconnected_body" = "A(z) %@ sikeresen lekapcsolódott.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Ez az eszköz sikeresen lekapcsolódott a Firefox Syncről.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Ez az eszköz sikeresen lekapcsolódott a Ecosia Syncről.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync leválasztva";
@@ -419,7 +419,7 @@
 "FxAPush_DeviceDisconnected_title" = "Sync leválasztva";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Egy eszköz lekapcsolódott a Firefox szinkronizálásról";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Egy eszköz lekapcsolódott a Ecosia szinkronizálásról";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
 "FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox logó, háttérkép megváltoztatása.";
@@ -653,7 +653,7 @@
 "Logins.Onboarding.LearnMoreButtonTitle" = "További tudnivalók";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "A Firefox automatikus kitöltési funkciójának használatához engedélyeznie kell az eszköz jelkódját.";
+"Logins.PasscodeRequirement.Warning" = "A Ecosia automatikus kitöltési funkciójának használatához engedélyeznie kell az eszköz jelkódját.";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "Vigye magával a jelszavait bárhová";
@@ -704,7 +704,7 @@
 "LoginsList.Title" = "MENTETT BEJELENTKEZÉSEK";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Úgy néz ki, hogy a Firefox előzőleg összeomlott. Szeretné helyreállítani a lapjait?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Úgy néz ki, hogy a Ecosia előzőleg összeomlott. Szeretné helyreállítani a lapjait?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Megjelölés olvasottként";
@@ -893,7 +893,7 @@
 "Onboarding.WhatsNew.Button.Title" = "Böngészés megkezdése";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Hoppá! A Firefox összeomlott";
+"Oops! Firefox crashed" = "Hoppá! A Ecosia összeomlott";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Nyissa meg a cikkeket olvasó nézetben a könyv ikonra kattintva a címsávban.";
@@ -905,7 +905,7 @@
 "Open Tabs" = "Nyitott lapok";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "A Firefox nem tudja megnyitni az oldalt, mert a címe érvénytelen.";
+"OpenURL.Error.Message" = "A Ecosia nem tudja megnyitni az oldalt, mert a címe érvénytelen.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Az oldal nem nyitható meg";
@@ -917,7 +917,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Ez lehetővé teszi, hogy mentse a képet a Filmtekercsébe.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "A Firefox szeretne hozzáférni a fényképeihez";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "A Ecosia szeretne hozzáférni a fényképeihez";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Bezárás";
@@ -1004,7 +1004,7 @@
 "ScanQRCode.InvalidDataError.Message" = "Az adatok érvénytelenek";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "Ugorjon az eszköz „Beállítások” > „Firefox” menüpontjához. Engedélyezze a Firefox számára a kamera elérését.";
+"ScanQRCode.PermissionError.Message.v100" = "Ugorjon az eszköz „Beállítások” > „Ecosia” menüpontjához. Engedélyezze a Ecosia számára a kamera elérését.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR-kód leolvasása";
@@ -1085,13 +1085,13 @@
 "SendTo.NavBar.Title" = "Lap küldése";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "Nincs más eszköze ezzel a Firefox fiókkal összekötve, amellyel szinkronizálhatna.";
+"SendTo.NoDevicesFound.Message" = "Nincs más eszköze ezzel a Ecosia fiókkal összekötve, amellyel szinkronizálhatna.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Nyissa meg a Firefoxot, menjen a beállításokhoz, és jelentkezzen be a folytatáshoz.";
+"SendTo.NotSignedIn.Message" = "Nyissa meg a Ecosiaot, menjen a beállításokhoz, és jelentkezzen be a folytatáshoz.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Nincs bejelentkezve a Firefox fiókjába.";
+"SendTo.NotSignedIn.Title" = "Nincs bejelentkezve a Ecosia fiókjába.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Küldés";
@@ -1175,7 +1175,7 @@
 "Settings.DataManagement.Title" = "Adatkezelés";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "A Firefox leállítja a szinkronizációt a fiókjával, de nem töröl semmilyen böngészési adatot erről az eszközről.";
+"Settings.Disconnect.Body" = "A Ecosia leállítja a szinkronizációt a fiókjával, de nem töröl semmilyen böngészési adatot erről az eszközről.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Leválás a Syncről";
@@ -1250,7 +1250,7 @@
 "Settings.Home.Current.Description.v101" = "Válasszon, hogy mi jelenjen meg kezdőlapként.";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description.v101" = "Válassza ki, hogy mi szerepeljen a Firefox kezdőoldalon.";
+"Settings.Home.Option.Description.v101" = "Válassza ki, hogy mi szerepeljen a Ecosia kezdőoldalon.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "Ugrás vissza";
@@ -1274,7 +1274,7 @@
 "Settings.Home.Option.StartAtHome.Always" = "Kezdőlap";
 
 /* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
-"Settings.Home.Option.StartAtHome.Description" = "Válassza ki, hogy mit lásson, amikor visszatér a Firefoxhoz.";
+"Settings.Home.Option.StartAtHome.Description" = "Válassza ki, hogy mit lásson, amikor visszatér a Ecosiahoz.";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "Legutóbbi lap";
@@ -1328,7 +1328,7 @@
 "Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "Korlátozott kiadás";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
-"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "A háttérkép módosításához koppintson a Firefox kezdőlap logójára";
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "A háttérkép módosításához koppintson a Ecosia kezdőlap logójára";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "Háttérkép";
@@ -1403,7 +1403,7 @@
 "Settings.NoImageModeBlockImages.Label.v99" = "Képek blokkolása";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "A Firefox megnyitásakor";
+"Settings.OfferClipboardBar.Status" = "A Ecosia megnyitásakor";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
 "Settings.OfferClipboardBar.Status.v128" = "A %@ megnyitásakor";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "További tudnivalók";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "A Mozilla arra törekszik, hogy csak azt gyűjtse, ami a Firefox fejlesztéséhez és támogatásához szükséges.";
+"Settings.SendUsage.Message" = "A Mozilla arra törekszik, hogy csak azt gyűjtse, ami a Ecosia fejlesztéséhez és támogatásához szükséges.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Használati adatok küldése";
@@ -1466,7 +1466,7 @@
 "Settings.Siri.OpenTabShortcut" = "Új lap megnyitása";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "A Siri gyors parancsok segítségével gyorsan megnyithatja a Firefoxot a Sirivel";
+"Settings.Siri.SectionDescription" = "A Siri gyors parancsok segítségével gyorsan megnyithatja a Ecosiaot a Sirivel";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri gyors parancsok";
@@ -1475,7 +1475,7 @@
 "Settings.Studies.Toggle.Link" = "További tudnivalók.";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "A Firefox időről időre tanulmányokat telepíthet és futtathat.";
+"Settings.Studies.Toggle.Message" = "A Ecosia időről időre tanulmányokat telepíthet és futtathat.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Tanulmányok";
@@ -1592,13 +1592,13 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "Betöltés a háttérben";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Betöltés a Firefoxban";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Betöltés a Ecosiaban";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Megnyitás a Firefoxban";
+"ShareExtension.OpenInFirefoxAction.Title" = "Megnyitás a Ecosiaban";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Keresés a Firefoxban";
+"ShareExtension.SeachInFirefoxAction.Title" = "Keresés a Ecosiaban";
 
 /* Button in share sheet to copy the url of the current tab. */
 "ShareSheet.Copy.Title.v108" = "Másolás";
@@ -1745,7 +1745,7 @@
 "UIMenuItem.PasteGo" = "Beillesztés és ugrás";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Keresés a Firefoxszal";
+"UIMenuItem.SearchWithFirefox" = "Keresés a Ecosiaszal";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "olvasatlan";
@@ -1793,7 +1793,7 @@
 "Yesterday" = "Tegnap";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Nincs egyetlen lap sem nyitva a Firefoxban a többi eszközén.";
+"You don’t have any tabs open in Firefox on your other devices." = "Nincs egyetlen lap sem nyitva a Ecosiaban a többi eszközén.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Az Ön jogai";

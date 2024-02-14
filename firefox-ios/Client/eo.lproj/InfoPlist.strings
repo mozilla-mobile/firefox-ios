@@ -8,7 +8,7 @@
 "NSCameraUsageDescription" = "Tio ĉi permesas al vi preni kaj alŝuti fotojn.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox postulas Face ID por aliri viajn konservitajn legitimilojn kaj pagmetodojn.";
+"NSFaceIDUsageDescription" = "Ecosia postulas Face ID por aliri viajn konservitajn legitimilojn kaj pagmetodojn.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Retejoj vizititaj de vi povas peti vian lokon.";

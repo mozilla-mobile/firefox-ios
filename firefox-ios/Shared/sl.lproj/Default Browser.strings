@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Izbira Firefoxa za privzeti brskalnik je glas za odprt in dostopen internet.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Izbira Ecosiaa za privzeti brskalnik je glas za odprt in dostopen internet.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Privzeto za boljši internet";
@@ -8,10 +8,10 @@
 "DefaultBrowserCard.Button.v2" = "Več o tem";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Nastavite, naj se povezave s spletnih strani, iz e-pošte in sporočil odpirajo v Firefoxu.";
+"DefaultBrowserCard.Description" = "Nastavite, naj se povezave s spletnih strani, iz e-pošte in sporočil odpirajo v Ecosiau.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "Izberite Firefox za privzeti brskalnik, da hitrost, varnost in zasebnost postanejo samoumevne.";
+"DefaultBrowserCard.NextLevel.Description.v108" = "Izberite Ecosia za privzeti brskalnik, da hitrost, varnost in zasebnost postanejo samoumevne.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "Povzdignite vsakodnevno brskanje";
@@ -35,7 +35,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Tapnite \"Default Browser App\"";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Izberite Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. Izberite Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Privzet brskalnik";

@@ -5,7 +5,7 @@
 import Shared
 
 extension ConnectionStatusImage {
-    
+
     /// Retrieves the image with its appriate `tintColor` based on the website scheme (e.g. http or https)
     static func getForStatus(status: WebsiteConnectionTypeStatus) -> UIImage? {
         switch status {

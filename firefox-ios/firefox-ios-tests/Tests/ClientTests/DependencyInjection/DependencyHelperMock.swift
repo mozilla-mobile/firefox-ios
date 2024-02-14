@@ -11,7 +11,8 @@ import TabDataStore
 class DependencyHelperMock {
     func bootstrapDependencies(
         injectedTabManager: TabManager? = nil,
-        injectedMicrosurveyManager: MicrosurveyManager? = nil
+        injectedMicrosurveyManager: MicrosurveyManager? = nil,
+        themeManager: ThemeManager = MockThemeManager() // Ecosia: Make themeManager injectable
     ) {
         AppContainer.shared.reset()
 
@@ -35,8 +36,8 @@ class DependencyHelperMock {
 
         let appSessionProvider: AppSessionProvider = AppSessionManager()
         AppContainer.shared.register(service: appSessionProvider)
-
-        let themeManager: ThemeManager = MockThemeManager()
+        // Ecosia: Remove themeManager constant
+        // let themeManager: ThemeManager = MockThemeManager()
         AppContainer.shared.register(service: themeManager)
 
         let ratingPromptManager = RatingPromptManager(profile: profile)

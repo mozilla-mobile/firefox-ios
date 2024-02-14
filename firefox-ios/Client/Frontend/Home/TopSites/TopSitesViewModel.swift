@@ -6,6 +6,8 @@ import Common
 import Foundation
 import Shared
 import Storage
+// Ecosia: importing Core
+import Core
 
 class TopSitesViewModel {
     struct UX {
@@ -58,7 +60,31 @@ class TopSitesViewModel {
 
     func tilePressed(site: TopSite, position: Int) {
         topSitePressTracking(homeTopSite: site, position: position)
+        // Ecosia: Track Top Site click
+        trackTopSitePressed(topSite: site, position: position)
         tilePressedHandler?(site.site, site.isGoogleURL)
+    }
+
+    // MARK: - Ecosia Top Sites Analytics
+
+    private func ecosiaAnalyticsProperty(forSite site: Site) -> Analytics.Property.TopSite {
+        if (site as? PinnedSite) != nil {
+            return .pinned
+        } else if topSiteHistoryManager.isDefaultTopSite(site: site) {
+            return .default
+        } else {
+            return .mostVisited
+        }
+    }
+
+    func trackTopSitePressed(topSite: TopSite, position: Int) {
+        let property = ecosiaAnalyticsProperty(forSite: topSite.site)
+        Analytics.shared.ntpTopSite(.click, property: property, position: position as NSNumber)
+    }
+
+    func trackTopSiteMenuAction(site: Site, action: Analytics.Action.TopSite) {
+        let property = ecosiaAnalyticsProperty(forSite: site)
+        Analytics.shared.ntpTopSite(action, property: property)
     }
 
     // MARK: - Telemetry
@@ -146,7 +172,9 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     var isEnabled: Bool {
-        return profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.TopSiteSection) ?? true
+        // Ecosia: Check against different value
+        // return profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.TopSiteSection) ?? true
+        User.shared.showTopSites
     }
 
     func numberOfItemsInSection() -> Int {
@@ -200,6 +228,9 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
                      size: CGSize,
                      isPortrait: Bool = UIWindow.isPortrait,
                      device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
+        // Ecosia: correctly assign the latest set `numberOfRows` and calculate based on all top sites
+        numberOfRows = topSitesDataAdaptor.numberOfRows
+        topSites = unfilteredTopSites
         let interface = TopSitesUIInterface(trait: traitCollection,
                                             availableWidth: size.width)
         numberOfRows = topSitesDataAdaptor.numberOfRows
@@ -208,7 +239,8 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
                                                                     numberOfRows: numberOfRows,
                                                                     interface: interface)
         numberOfItems = sectionDimension.numberOfRows * sectionDimension.numberOfTilesPerRow
-        topSites = unfilteredTopSites
+        // Ecosia: Move topsite declaration up
+        // topSites = unfilteredTopSites
         if numberOfItems < unfilteredTopSites.count {
             let range = numberOfItems..<unfilteredTopSites.count
             topSites.removeSubrange(range)

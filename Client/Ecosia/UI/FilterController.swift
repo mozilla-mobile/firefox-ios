@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Core
 import UIKit
@@ -18,9 +18,9 @@ final class FilterController: UIViewController, UITableViewDataSource, UITableVi
     static var current: String? {
         items.first(where: { $0.0 == User.shared.adultFilter }).map { $0.1 }
     }
-    
+
     // MARK: - Themeable Properties
-    
+
     var themeManager: ThemeManager { AppContainer.shared.resolve() }
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
@@ -32,7 +32,7 @@ final class FilterController: UIViewController, UITableViewDataSource, UITableVi
 
         navigationItem.title = .localized(.safeSearch)
         navigationItem.largeTitleDisplayMode = .never
-        
+
         let table = UITableView(frame: .zero, style: .insetGrouped)
         table.translatesAutoresizingMaskIntoConstraints = false
         table.delegate = self
@@ -41,7 +41,7 @@ final class FilterController: UIViewController, UITableViewDataSource, UITableVi
 
         view.addSubview(table)
         self.table = table
-        
+
         table.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         table.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         table.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
@@ -54,13 +54,13 @@ final class FilterController: UIViewController, UITableViewDataSource, UITableVi
         items.count
     }
 
-    func tableView(_ : UITableView, cellForRowAt: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt: IndexPath) -> UITableViewCell {
         let cell = table.dequeueReusableCell(withIdentifier: identifier) ?? ThemedTableViewCell(style: .default, reuseIdentifier: identifier)
         cell.textLabel!.text = items[cellForRowAt.row].1
         cell.accessoryType = User.shared.adultFilter == items[cellForRowAt.row].0 ? .checkmark : .none
         return cell
     }
-    
+
     func tableView(_: UITableView, didSelectRowAt: IndexPath) {
         User.shared.adultFilter = items[didSelectRowAt.row].0
         table.reloadData()

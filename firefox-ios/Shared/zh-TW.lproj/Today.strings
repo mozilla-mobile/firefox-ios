@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "關閉隱私分頁";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "將 Firefox 捷徑加入主畫面。";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "將 Ecosia 捷徑加入主畫面。";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "開啟複製的鏈結";
@@ -23,13 +23,13 @@
 "TodayWidget.NoOpenTabsLabel" = "沒有開啟的分頁。";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "開啟 Firefox";
+"TodayWidget.OpenFirefoxLabel" = "開啟 Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "隱私搜尋";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "把 Firefox 捷徑加到主畫面。新增小工具之後，請長按小工具選擇不同的捷徑。";
+"TodayWidget.QuickActionGalleryDescription" = "把 Ecosia 捷徑加到主畫面。新增小工具之後，請長按小工具選擇不同的捷徑。";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "快速操作";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "快速檢視";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "用 Firefox 搜尋";
+"TodayWidget.SearchInFirefoxV2" = "用 Ecosia 搜尋";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "用隱私分頁搜尋";

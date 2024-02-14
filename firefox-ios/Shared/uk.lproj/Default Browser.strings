@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Зробивши Firefox типовим браузером, ви голосуєте за відкритий, доступний інтернет.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Зробивши Ecosia типовим браузером, ви голосуєте за відкритий, доступний інтернет.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Перейдіть до усталено кращого інтернету";
@@ -8,10 +8,10 @@
 "DefaultBrowserCard.Button.v2" = "Навчитися";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Відкривайте посилання з пошти й повідомлень автоматично в Firefox.";
+"DefaultBrowserCard.Description" = "Відкривайте посилання з пошти й повідомлень автоматично в Ecosia.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "Оберіть Firefox типовим браузером, щоб швидкість, безпека та приватність стали автоматичними.";
+"DefaultBrowserCard.NextLevel.Description.v108" = "Оберіть Ecosia типовим браузером, щоб швидкість, безпека та приватність стали автоматичними.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "Поліпшуйте повсякденний вебперегляд";
@@ -35,7 +35,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Торкніться Типовий браузер";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Виберіть Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. Виберіть Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Типовий браузер";

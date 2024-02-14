@@ -34,6 +34,14 @@ class EmptyPrivateTabsView: UIView {
 
     private lazy var containerView: UIView = .build { _ in }
 
+    // Ecosia: Add StackView to center items without corrupting the containerView as affect the ScrollView and its parent view
+    private lazy var containerStackView: UIStackView = .build { stackView in
+        stackView.spacing = UX.paddingInBetweenItems
+        stackView.axis = .vertical
+        stackView.alignment = .center
+        stackView.distribution = .fill
+    }
+
     private let titleLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = FXFontStyles.Regular.title2.scaledFont()
@@ -91,7 +99,12 @@ class EmptyPrivateTabsView: UIView {
                                   for: .touchUpInside)
         containerView.addSubviews(iconImageView, titleLabel, descriptionLabel, learnMoreButton)
          */
-        containerView.addSubviews(iconImageView, titleLabel, descriptionLabel)
+        // Ecosia: Move subviews to stackview
+        // containerView.addSubviews(iconImageView, titleLabel, descriptionLabel)
+        containerStackView.addArrangedSubview(iconImageView)
+        containerStackView.addArrangedSubview(titleLabel)
+        containerStackView.addArrangedSubview(descriptionLabel)
+        containerView.addSubview(containerStackView)
         scrollView.addSubview(containerView)
         addSubview(scrollView)
 
@@ -112,6 +125,16 @@ class EmptyPrivateTabsView: UIView {
             scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
             scrollView.contentLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
 
+            // Ecosia: Update costraints
+            containerStackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+            containerStackView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor,
+                                                        constant: -UX.horizontalPadding*2),
+            containerStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            containerStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            iconImageView.heightAnchor.constraint(equalToConstant: UX.imageSize.height),
+            iconImageView.widthAnchor.constraint(equalToConstant: UX.imageSize.width),
+
+            /* Ecosia: Remove unneded costraints
             iconImageView.topAnchor.constraint(equalTo: containerView.topAnchor,
                                                constant: UX.paddingInBetweenItems),
             iconImageView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
@@ -127,7 +150,7 @@ class EmptyPrivateTabsView: UIView {
                                                   constant: UX.paddingInBetweenItems),
             descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            /* Ecosia: Remove Learn More button
+            
             learnMoreButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor,
                                                  constant: UX.paddingInBetweenItems),
             learnMoreButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),

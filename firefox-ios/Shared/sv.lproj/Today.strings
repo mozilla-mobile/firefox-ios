@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Stäng privata flikar";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Lägg till Firefox-genvägar på din hemskärm.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Lägg till Ecosia-genvägar på din hemskärm.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Gå till kopierad länk";
@@ -23,13 +23,13 @@
 "TodayWidget.NoOpenTabsLabel" = "Inga öppna flikar.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Öppna Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Öppna Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Privat sökning";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Lägg till en Firefox-genväg till din startskärm. När du har lagt till widgeten håller du ned den för att redigera och välja en annan genväg.";
+"TodayWidget.QuickActionGalleryDescription" = "Lägg till en Ecosia-genväg till din startskärm. När du har lagt till widgeten håller du ned den för att redigera och välja en annan genväg.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Snabbåtgärder";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Snabbtitt";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Sök i Firefox";
+"TodayWidget.SearchInFirefoxV2" = "Sök i Ecosia";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Sök i privat flik";

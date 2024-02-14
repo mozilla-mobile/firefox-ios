@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Fermer les onglets privés";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Ajoutez des raccourcis Firefox à votre écran d’accueil.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Ajoutez des raccourcis Ecosia à votre écran d’accueil.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Ouvrir le lien copié";
@@ -23,19 +23,19 @@
 "TodayWidget.NoOpenTabsLabel" = "Aucun onglet ouvert.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Ouvrir Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Ouvrir Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Recherche privée";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Ajoutez un raccourci Firefox à votre écran d’accueil. Après avoir ajouté le widget, appuyez de manière prolongée pour le modifier et sélectionnez un autre raccourci.";
+"TodayWidget.QuickActionGalleryDescription" = "Ajoutez un raccourci Ecosia à votre écran d’accueil. Après avoir ajouté le widget, appuyez de manière prolongée pour le modifier et sélectionnez un autre raccourci.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Actions rapides";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Raccourcis Firefox";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Raccourcis Ecosia";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Ajoutez des raccourcis vers vos onglets ouverts.";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Aperçu rapide";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Rechercher dans Firefox";
+"TodayWidget.SearchInFirefoxV2" = "Rechercher dans Ecosia";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Rechercher dans un onglet privé";

@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "ການເຮັດໃຫ້ Firefox ເປັນຕົວທ່ອງເວັບເລີ່ມຕົ້ນຂອງທ່ານເປັນການລົງຄະແນນສຽງສໍາລັບອິນເຕີເນັດທີ່ເປີດ, ເຂົ້າເຖິງໄດ້.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "ການເຮັດໃຫ້ Ecosia ເປັນຕົວທ່ອງເວັບເລີ່ມຕົ້ນຂອງທ່ານເປັນການລົງຄະແນນສຽງສໍາລັບອິນເຕີເນັດທີ່ເປີດ, ເຂົ້າເຖິງໄດ້.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "ຄ່າເລີ່ມຕົ້ນເປັນອິນເຕີເນັດທີ່ດີກວ່າ";
@@ -8,10 +8,10 @@
 "DefaultBrowserCard.Button.v2" = "ຮຽນຮູ້ວິທີການ";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "ຕັ້ງໃຫ້ເປີດລີ້ງຈາກເວັບໄຊທ, ອີເມລ ແລະ ຂໍ້ຄວາມແບບອັດຕະໂນມັດໃນ Firefox.";
+"DefaultBrowserCard.Description" = "ຕັ້ງໃຫ້ເປີດລີ້ງຈາກເວັບໄຊທ, ອີເມລ ແລະ ຂໍ້ຄວາມແບບອັດຕະໂນມັດໃນ Ecosia.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "ເລືອກ Firefox ເປັນຕົວທ່ອງເວັບເລີ່ມຕົ້ນຂອງທ່ານເພື່ອເຮັດໃຫ້ຄວາມໄວ, ຄວາມປອດໄພ, ແລະຄວາມເປັນສ່ວນຕົວອັດຕະໂນມັດ.";
+"DefaultBrowserCard.NextLevel.Description.v108" = "ເລືອກ Ecosia ເປັນຕົວທ່ອງເວັບເລີ່ມຕົ້ນຂອງທ່ານເພື່ອເຮັດໃຫ້ຄວາມໄວ, ຄວາມປອດໄພ, ແລະຄວາມເປັນສ່ວນຕົວອັດຕະໂນມັດ.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "ຍົກລະດັບການຊອກຫາປະຈໍາວັນ";
@@ -35,7 +35,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. ແຕະໃສ່ແອັບບຣາວເຊີຫລັກ";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. ເລືອກ Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. ເລືອກ Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "ບຣາວເຊີຫລັກ";

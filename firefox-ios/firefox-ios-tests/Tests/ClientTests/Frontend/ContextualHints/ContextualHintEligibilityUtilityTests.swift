@@ -165,6 +165,11 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
         XCTAssertFalse(result)
     }
 
+    /*
+     Ecosia: Remove faulty `JumpBackIn` tests
+     depending on the overlay state as for new tabs
+     the overlay state is false by default
+     
     func test_shouldNotPresentJumpBackHint_WithOverlayMode() {
         subject = ContextualHintEligibilityUtility(with: profile,
                                                    overlayState: overlayState,
@@ -173,6 +178,7 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
         let result = subject.canPresent(.jumpBackIn)
         XCTAssertFalse(result)
     }
+     */
 
     func test_shouldNotPresentJumpBackInWhenSyncedTabConfigured() {
         profile.prefs.setBool(true, forKey: CFRPrefsKeys.jumpBackInSyncedTabConfiguredKey.rawValue)
@@ -188,6 +194,11 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
         XCTAssertFalse(result)
     }
 
+    /*
+     Ecosia: Remove faulty `JumpBackIn` tests
+     depending on the overlay state as for new tabs
+     the overlay state is false by default
+     
     func test_shouldNotPresentSyncedHint_WithOverlayMode() {
         subject = ContextualHintEligibilityUtility(with: profile,
                                                    overlayState: overlayState,
@@ -196,6 +207,7 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
         let result = subject.canPresent(.jumpBackInSyncedTab)
         XCTAssertFalse(result)
     }
+     */
 
     // Test Shopping CFRs
     func test_canPresentShoppingCFR_FirstDisplay_UserHasNotOptedIn() {

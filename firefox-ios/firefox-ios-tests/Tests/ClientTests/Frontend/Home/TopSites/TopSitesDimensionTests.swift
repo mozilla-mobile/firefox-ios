@@ -37,7 +37,9 @@ class TopSitesDimensionTests: XCTestCase {
 
         let dimension = subject.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
-        XCTAssertEqual(dimension.numberOfTilesPerRow, 8)
+        // Ecosia: update number of items
+        // XCTAssertEqual(dimension.numberOfTilesPerRow, 8)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
     }
 
     func testSectionDimension_portraitiPadRegular_defaultRowNumber() {
@@ -50,7 +52,9 @@ class TopSitesDimensionTests: XCTestCase {
 
         let dimension = subject.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
-        XCTAssertEqual(dimension.numberOfTilesPerRow, 7)
+        // Ecosia: update number of items
+        // XCTAssertEqual(dimension.numberOfTilesPerRow, 7)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
     }
 
     func testSectionDimension_landscapeiPadRegular_defaultRowNumber() {
@@ -63,7 +67,9 @@ class TopSitesDimensionTests: XCTestCase {
 
         let dimension = subject.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
-        XCTAssertEqual(dimension.numberOfTilesPerRow, 10)
+        // Ecosia: update number of items
+        // XCTAssertEqual(dimension.numberOfTilesPerRow, 10)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
     }
 
     func testSectionDimension_portraitiPadCompact_defaultRowNumber() {
@@ -102,7 +108,9 @@ class TopSitesDimensionTests: XCTestCase {
 
         let dimension = subject.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
-        XCTAssertEqual(dimension.numberOfTilesPerRow, 7)
+        // Ecosia: update number of items
+        // XCTAssertEqual(dimension.numberOfTilesPerRow, 7)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
     }
 
     func testSectionDimension_landscapeiPadUnspecified_defaultRowNumber() {
@@ -115,7 +123,9 @@ class TopSitesDimensionTests: XCTestCase {
 
         let dimension = subject.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
-        XCTAssertEqual(dimension.numberOfTilesPerRow, 11)
+        // Ecosia: udpate number of items
+        // XCTAssertEqual(dimension.numberOfTilesPerRow, 11)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
     }
 
     // MARK: Section dimension with stubbed data

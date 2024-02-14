@@ -311,7 +311,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Może to być skutkiem błędnej konfiguracji lub próby ataku. Kontynuuj tylko, jeśli akceptujesz potencjalne ryzyko.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "Właściciel witryny %@ niepoprawnie ją skonfigurował. Firefox nie połączył się z nią, by chronić użytkownika przed kradzieżą informacji.";
+"ErrorPages.CertWarning.Description" = "Właściciel witryny %@ niepoprawnie ją skonfigurował. Ecosia nie połączył się z nią, by chronić użytkownika przed kradzieżą informacji.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Połączenie nie jest bezpieczne";
@@ -332,7 +332,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Strona startowa Firefoksa";
+"Firefox.HomePage.Title" = "Strona startowa Ecosii";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "Dostosuj stronę startową";
@@ -389,7 +389,7 @@
 "fxa.signin.camera-signin" = "Zaloguj się za pomocą aparatu";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "Otwórz Firefoksa na komputerze i wejdź na stronę firefox.com/pair";
+"fxa.signin.qr-link-instruction" = "Otwórz Firefoksa na komputerze i wejdź na stronę ecosia.org/pair";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Gotowy do skanowania";
@@ -704,7 +704,7 @@
 "LoginsList.Title" = "Zachowane dane logowania";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Wygląda na to, że Firefox uległ poprzednio awarii. Czy przywrócić karty?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Wygląda na to, że Ecosia uległ poprzednio awarii. Czy przywrócić karty?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Oznacz jako przeczytaną";
@@ -1004,7 +1004,7 @@
 "ScanQRCode.InvalidDataError.Message" = "Dane są nieprawidłowe";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "Otwórz „Ustawienia” urządzenia → „Firefox” i zezwól Firefoksowi na dostęp do aparatu.";
+"ScanQRCode.PermissionError.Message.v100" = "Otwórz „Ustawienia” urządzenia → „Ecosia” i zezwól Firefoksowi na dostęp do aparatu.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Skanowanie kodu QR";

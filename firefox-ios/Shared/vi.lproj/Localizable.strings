@@ -311,7 +311,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Nó có thể là một cấu hình sai hoặc giả mạo bởi kẻ tấn công. Tiến hành nếu bạn chấp nhận rủi ro tiềm ẩn.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "Chủ sở hữu của %@ đã cấu hình trang web của họ không đúng cách. Để bảo vệ thông tin của bạn khỏi bị đánh cắp, Firefox đã không kết nối với trang web này.";
+"ErrorPages.CertWarning.Description" = "Chủ sở hữu của %@ đã cấu hình trang web của họ không đúng cách. Để bảo vệ thông tin của bạn khỏi bị đánh cắp, Ecosia đã không kết nối với trang web này.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Kết nối này không đáng tin";
@@ -332,7 +332,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Trang chủ Firefox";
+"Firefox.HomePage.Title" = "Trang chủ Ecosia";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "Tùy chỉnh trang chủ";
@@ -377,7 +377,7 @@
 "Forward" = "Tiến";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Tài khoản Firefox";
+"FxA.FirefoxAccount" = "Tài khoản Ecosia";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Quản lý tài khoản và thiết bị";
@@ -389,7 +389,7 @@
 "fxa.signin.camera-signin" = "Đăng nhập bằng máy ảnh của bạn";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "Trên máy tính của bạn, hãy mở Firefox và truy cập firefox.com/pair";
+"fxa.signin.qr-link-instruction" = "Trên máy tính của bạn, hãy mở Ecosia và truy cập ecosia.org/pair";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Sẵn sàng để quét";
@@ -401,7 +401,7 @@
 "FxA.SyncNow" = "Đồng bộ ngay";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Đồng bộ hóa Firefox đã kết nối với %@";
+"FxAPush_DeviceConnected_body" = "Đồng bộ hóa Ecosia đã kết nối với %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Đồng bộ hóa được kết nối";
@@ -410,7 +410,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ đã ngắt kết nối thành công.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Thiết bị này đã được ngắt kết nối thành công khỏi Đồng bộ hóa Firefox.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Thiết bị này đã được ngắt kết nối thành công khỏi Đồng bộ hóa Ecosia.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Đồng bộ hóa đã bị ngắt kết nối";
@@ -419,10 +419,10 @@
 "FxAPush_DeviceDisconnected_title" = "Đồng bộ hóa đã bị ngắt kết nối";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Một thiết bị đã ngắt kết nối khỏi Đồng bộ hóa Firefox";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Một thiết bị đã ngắt kết nối khỏi Đồng bộ hóa Ecosia";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "Logo Firefox, thay đổi hình nền.";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Logo Ecosia, thay đổi hình nền.";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Trợ giúp";
@@ -455,7 +455,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Đăng nhập để xem danh sách thẻ từ các thiết bị khác của bạn.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Đồng bộ hóa Firefox";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Đồng bộ hóa Ecosia";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Lịch sử";
@@ -653,13 +653,13 @@
 "Logins.Onboarding.LearnMoreButtonTitle" = "Tìm hiểu thêm";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "Để sử dụng tính năng tự động điền của Firefox, bạn phải bật mật mã thiết bị.";
+"Logins.PasscodeRequirement.Warning" = "Để sử dụng tính năng tự động điền của Ecosia, bạn phải bật mật mã thiết bị.";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "Mang mật khẩu của bạn đi khắp mọi nơi";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "Tự động điền mật khẩu Firefox";
+"Logins.WelcomeView.Title2" = "Tự động điền mật khẩu Ecosia";
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "Bật Tự động điền";
@@ -704,7 +704,7 @@
 "LoginsList.Title" = "THÔNG TIN ĐĂNG NHẬP ĐÃ LƯU";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Có vẻ như Firefox đã gặp sự cố trước đó. Bạn có muốn khôi phục các thẻ của bạn?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Có vẻ như Ecosia đã gặp sự cố trước đó. Bạn có muốn khôi phục các thẻ của bạn?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Đánh dấu là đã đọc";
@@ -893,7 +893,7 @@
 "Onboarding.WhatsNew.Button.Title" = "Bắt đầu duyệt web";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Oops! Firefox đã gặp sự cố";
+"Oops! Firefox crashed" = "Oops! Ecosia đã gặp sự cố";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Mở bài viết trong chế độ đọc sách bằng cách nhấn vào biểu tượng sách khi nó xuất hiện trên thanh tiêu đề.";
@@ -1004,7 +1004,7 @@
 "ScanQRCode.InvalidDataError.Message" = "Dữ liệu không hợp lệ";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "Đi tới ‘Cài đặt’ của thiết bị > ‘Firefox’. Cho phép Firefox truy cập máy ảnh.";
+"ScanQRCode.PermissionError.Message.v100" = "Đi tới ‘Cài đặt’ của thiết bị > ‘Ecosia’. Cho phép Ecosia truy cập máy ảnh.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Quét mã QR";
@@ -1019,7 +1019,7 @@
 "Search.Awesomebar.SwitchToTab" = "Chuyển sang thẻ";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Đề xuất của Firefox";
+"Search.SuggestSectionTitle.v102" = "Đề xuất của Ecosia";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Công cụ tìm kiếm mới sẽ xuất hiện trong thanh tìm kiếm nhanh.";
@@ -1085,13 +1085,13 @@
 "SendTo.NavBar.Title" = "Gửi thẻ";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "Bạn không có thiết bị nào khác được kết nối với tài khoản Firefox này để đồng bộ hóa.";
+"SendTo.NoDevicesFound.Message" = "Bạn không có thiết bị nào khác được kết nối với tài khoản Ecosia này để đồng bộ hóa.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Vui lòng mở Firefox, truy cập Cài đặt và đăng nhập để tiếp tục.";
+"SendTo.NotSignedIn.Message" = "Vui lòng mở Ecosia, truy cập Cài đặt và đăng nhập để tiếp tục.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Bạn chưa đăng nhập vào tài khoản Firefox của mình.";
+"SendTo.NotSignedIn.Title" = "Bạn chưa đăng nhập vào tài khoản Ecosia của mình.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Gửi";
@@ -1112,7 +1112,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Chạm để bắt đầu";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Đồng bộ hóa Firefox";
+"SentTab.NoTabArrivingNotification.title" = "Đồng bộ hóa Ecosia";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Xem";
@@ -1241,7 +1241,7 @@
 "Settings.FxA.Sync.SectionName" = "Cài đặt đồng bộ hóa";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Tài khoản Firefox";
+"Settings.FxA.Title" = "Tài khoản Ecosia";
 
 /* General settings section title */
 "Settings.General.SectionName" = "Tổng quát";
@@ -1250,7 +1250,7 @@
 "Settings.Home.Current.Description.v101" = "Chọn những gì hiển thị làm trang chủ.";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description.v101" = "Chọn những gì được hiển thị trên trang chủ Firefox.";
+"Settings.Home.Option.Description.v101" = "Chọn những gì được hiển thị trên trang chủ Ecosia.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "Trang đã xem gần đây";
@@ -1274,7 +1274,7 @@
 "Settings.Home.Option.StartAtHome.Always" = "Trang chủ";
 
 /* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
-"Settings.Home.Option.StartAtHome.Description" = "Chọn những gì bạn sẽ thấy khi quay lại Firefox.";
+"Settings.Home.Option.StartAtHome.Description" = "Chọn những gì bạn sẽ thấy khi quay lại Ecosia.";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "Thẻ cuối cùng";
@@ -1289,25 +1289,25 @@
 "Settings.Home.Option.Wallpaper" = "Hình nền";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Hình nền Firefox, mẫu thạch anh tím.";
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Hình nền Ecosia, mẫu thạch anh tím.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Hình nền Firefox, mô hình đồi bãi biển.";
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Hình nền Ecosia, mô hình đồi bãi biển.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Hình nền Firefox, mẫu cerulean.";
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Hình nền Ecosia, mẫu cerulean.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Hình nền rõ ràng mặc định.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Hình nền Firefox, mô hình mặt trời mọc.";
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Hình nền Ecosia, mô hình mặt trời mọc.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Chuyển đổi xoay hình nền trang chủ";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Hình nền Firefox, mô hình đồi hoàng hôn.";
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Hình nền Ecosia, mô hình đồi hoàng hôn.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
 "Settings.Home.Option.Wallpaper.Classic.Title.v106" = "%@ cổ điển";
@@ -1328,7 +1328,7 @@
 "Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "Phiên bản giới hạn";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
-"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Thay đổi hình nền bằng cách nhấn vào biểu trưng trang chủ của Firefox";
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Thay đổi hình nền bằng cách nhấn vào biểu trưng trang chủ của Ecosia";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "Hình nền";
@@ -1382,7 +1382,7 @@
 "Settings.NewTab.Option.Custom" = "Tùy chỉnh";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Trang chủ Firefox";
+"Settings.NewTab.Option.FirefoxHome" = "Trang chủ Ecosia";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Trang chủ";
@@ -1403,7 +1403,7 @@
 "Settings.NoImageModeBlockImages.Label.v99" = "Chặn hình ảnh";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Khi mở Firefox";
+"Settings.OfferClipboardBar.Status" = "Khi mở Ecosia";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
 "Settings.OfferClipboardBar.Status.v128" = "Khi mở %@";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Tìm hiểu thêm.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla chỉ thu thập những gì chúng tôi cần cung cấp và cải tiến Firefox cho tất cả mọi người.";
+"Settings.SendUsage.Message" = "Mozilla chỉ thu thập những gì chúng tôi cần cung cấp và cải tiến Ecosia cho tất cả mọi người.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Gửi dữ liệu sử dụng";
@@ -1466,7 +1466,7 @@
 "Settings.Siri.OpenTabShortcut" = "Mở thẻ mới";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Sử dụng phím tắt Siri để nhanh chóng mở Firefox qua Siri";
+"Settings.Siri.SectionDescription" = "Sử dụng phím tắt Siri để nhanh chóng mở Ecosia qua Siri";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Phím tắt Siri";
@@ -1592,13 +1592,13 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "Tải trong nền";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Đang tải trong Firefox";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Đang tải trong Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Mở trong Firefox";
+"ShareExtension.OpenInFirefoxAction.Title" = "Mở trong Ecosia";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Tìm kiếm trong Firefox";
+"ShareExtension.SeachInFirefoxAction.Title" = "Tìm kiếm trong Ecosia";
 
 /* Button in share sheet to copy the url of the current tab. */
 "ShareSheet.Copy.Title.v108" = "Sao chép";
@@ -1745,7 +1745,7 @@
 "UIMenuItem.PasteGo" = "Dán & mở";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Tìm kiếm bằng Firefox";
+"UIMenuItem.SearchWithFirefox" = "Tìm kiếm bằng Ecosia";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "chưa đọc";
@@ -1793,7 +1793,7 @@
 "Yesterday" = "Hôm qua";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Bạn không có bất kỳ thẻ nào mở trong Firefox trên các thiết bị khác của bạn.";
+"You don’t have any tabs open in Firefox on your other devices." = "Bạn không có bất kỳ thẻ nào mở trong Ecosia trên các thiết bị khác của bạn.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Quyền lợi của bạn";

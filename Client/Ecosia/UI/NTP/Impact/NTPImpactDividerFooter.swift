@@ -13,15 +13,15 @@ final class NTPImpactDividerFooter: UICollectionReusableView, ReusableCell, Them
         static let dividerInset: CGFloat = 16
         static let estimatedHeight = dividerHeight + dividerTop + dividerBottom
     }
-    
+
     private lazy var dividerView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
+
     // MARK: - Themeable Properties
-    
+
     var themeManager: ThemeManager { AppContainer.shared.resolve() }
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
@@ -41,9 +41,9 @@ final class NTPImpactDividerFooter: UICollectionReusableView, ReusableCell, Them
             dividerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.dividerInset),
             dividerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.dividerBottom)
         ])
-        
+
         applyTheme()
-        
+
         listenForThemeChange(self)
     }
 

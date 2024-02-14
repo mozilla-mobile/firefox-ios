@@ -5,16 +5,16 @@
 "New Tab" = "Fitxa berria";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefoxek zure kamera erabiltzen du QR kodeak eskaneatu, argazkiak atera eta bideoak grabatzeko.";
+"NSCameraUsageDescription" = "Ecosiaek zure kamera erabiltzen du QR kodeak eskaneatu, argazkiak atera eta bideoak grabatzeko.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefoxek Face ID behar du zure gordetako pasahitz eta ordainketa metodoetara sarbidea izateko.";
+"NSFaceIDUsageDescription" = "Ecosiaek Face ID behar du zure gordetako pasahitz eta ordainketa metodoetara sarbidea izateko.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Bisitatutako webguneek zure kokapena eska lezakete.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Firefoxek zure mikrofonoa erabiltzen du audioa grabatu eta igotzeko.";
+"NSMicrophoneUsageDescription" = "Ecosiaek zure mikrofonoa erabiltzen du audioa grabatu eta igotzeko.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Honekin argazkiak gorde ditzakezu.";

@@ -1,0 +1,18 @@
+settings:
+  language_mapping:
+    en_GB: en-GB
+    fr: fr-FR
+    it: it
+    nl: nl-NL
+    de: de-DE
+    es: es-ES
+    es_MX: es-MX
+    en_AU: en-AU
+
+filters:
+
+  - filter_type: file
+    source_language: en
+    source_file: fastlane/metadata/en-US/release_notes.txt
+    file_format: TXT
+    translation_files_expression: 'fastlane/metadata/<lang>/release_notes.txt'

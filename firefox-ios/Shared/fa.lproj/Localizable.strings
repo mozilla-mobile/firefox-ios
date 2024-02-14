@@ -320,7 +320,7 @@
 "fxa.signin.camera-signin" = "با دوربین خود وارد شوید";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "بر روی کامپیوتر خود فایرفاکس را باز کرده و به firefox.com/pair بروید";
+"fxa.signin.qr-link-instruction" = "بر روی کامپیوتر خود فایرفاکس را باز کرده و به ecosia.org/pair بروید";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "آماده برای اسکن";

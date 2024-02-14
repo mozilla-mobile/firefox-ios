@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Dùin na tabaichean prìobhaideach";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Cuir ath-ghoiridean Firefox ris an sgrìn-dhachaigh agad.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Cuir ath-ghoiridean Ecosia ris an sgrìn-dhachaigh agad.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Tadhail air a’ cheangal a rinn thu lethbhreac dheth";
@@ -23,19 +23,19 @@
 "TodayWidget.NoOpenTabsLabel" = "Chan eil taba fosgailte ann.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Fosgail Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Fosgail Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Lorg prìobhaideach";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Cuir ath-ghoirid Firefox ris an sgrìn-dhachaigh agad. An dèidh dhut a’ widget a chur ris, bean ris is cùm e airson a dheasachadh agus ath-ghoirid eadar-dhealaichte a thaghadh.";
+"TodayWidget.QuickActionGalleryDescription" = "Cuir ath-ghoirid Ecosia ris an sgrìn-dhachaigh agad. An dèidh dhut a’ widget a chur ris, bean ris is cùm e airson a dheasachadh agus ath-ghoirid eadar-dhealaichte a thaghadh.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Grad-ghnìomhan";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Ath-ghoiridean Firefox";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ath-ghoiridean Ecosia";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Cuir ath-ghoiridean ris na tabaichean fosgailte agad.";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Grad-shealladh";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Lorg ann am Firefox";
+"TodayWidget.SearchInFirefoxV2" = "Lorg ann am Ecosia";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Lorg ann an taba prìobhaideach";

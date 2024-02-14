@@ -311,7 +311,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "ມັນອາດຈະເກີດມາຈາກການຕັ້ງຄ່າຜິດພາດ ຫລື ເປັນການດັດແປງໂດຍນັກເຈາະຂໍ້ມູນ. ດຳເນີນການຕໍ່ໄປຖ້າຫາກວ່າທ່ານຍອມຮັບຄວາມສ່ຽງທີ່ອາດເກີດຂື້ນນີ້ໄດ້.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "ເຈົ້າຂອງ %@ ໄດ້ຕັ້ງຄ່າເວັບໄຊທ໌ຂອງພວກເຂົາບໍ່ເຫມາະສົມ. ເພື່ອເປັນການປົກປ້ອງຂໍ້ມູນຂອງທ່ານຈາກການຖືກໂຈລະກຳ, Firefox ຈຶ່ງໄດ້ຕັດການເຊື່ອມຕໍ່ໄປຫາເວັບໄຊທ໌ນີ້.";
+"ErrorPages.CertWarning.Description" = "ເຈົ້າຂອງ %@ ໄດ້ຕັ້ງຄ່າເວັບໄຊທ໌ຂອງພວກເຂົາບໍ່ເຫມາະສົມ. ເພື່ອເປັນການປົກປ້ອງຂໍ້ມູນຂອງທ່ານຈາກການຖືກໂຈລະກຳ, Ecosia ຈຶ່ງໄດ້ຕັດການເຊື່ອມຕໍ່ໄປຫາເວັບໄຊທ໌ນີ້.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "ການເຊື່ອມຕໍ່ນີ້ບໍ່ນ່າເຊື່ອຖື";
@@ -332,7 +332,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "ຫນ້າທຳອິດຂອງ Firefox";
+"Firefox.HomePage.Title" = "ຫນ້າທຳອິດຂອງ Ecosia";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "ປັບແຕ່ງຫນ້າທຳອິດ";
@@ -377,7 +377,7 @@
 "Forward" = "ໄປຂ້າງຫນ້າ";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "ບັນຊີ Firefox";
+"FxA.FirefoxAccount" = "ບັນຊີ Ecosia";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "ຈັດການບັນຊີ ແລະ ອຸປະກອນ";
@@ -389,7 +389,7 @@
 "fxa.signin.camera-signin" = "ເຂົ້າລະບົບດ້ວຍກ້ອງຂອງທ່ານ";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "ເປີດ Firefox ໃນຄອມພິວເຕີຂອງທ່ານ ແລະ ໄປທີ່ firefox.com/pair";
+"fxa.signin.qr-link-instruction" = "ເປີດ Ecosia ໃນຄອມພິວເຕີຂອງທ່ານ ແລະ ໄປທີ່ ecosia.org/pair";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "ກຽມພ້ອມທີ່ຈະສະແກນ";
@@ -410,7 +410,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ ໄດ້ຕັດການເຊື່ອມຕໍ່ແລ້ວ.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "ອຸປະກອນນີ້ໄດ້ຕັດການເຊື່ອຕໍ່ກັບ Firefox Sync ແລ້ວ.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "ອຸປະກອນນີ້ໄດ້ຕັດການເຊື່ອຕໍ່ກັບ Ecosia Sync ແລ້ວ.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "ຕັດການເຊື່ອມຕໍກັບ Sync ແລ້ວ";
@@ -419,10 +419,10 @@
 "FxAPush_DeviceDisconnected_title" = "ຕັດການເຊື່ອມຕໍກັບ Sync ແລ້ວ";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "ອຸປະກອນບໍ່ໄດ້ເຊື່ອມຕໍ່ກັບ Firefox Sync";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "ອຸປະກອນບໍ່ໄດ້ເຊື່ອມຕໍ່ກັບ Ecosia Sync";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "ໂລໂກ້ Firefox, ປ່ຽນພາບຫນ້າຈໍ.";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "ໂລໂກ້ Ecosia, ປ່ຽນພາບຫນ້າຈໍ.";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "ວິທີໃຊ້";
@@ -653,13 +653,13 @@
 "Logins.Onboarding.LearnMoreButtonTitle" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "ເພື່ອນຳໃຊ້ການຕື່ມໃສ່ອັດຕະໂນມັດສຳລັບ Firefox ທ່ານຕ້ອງໄດ້ເປີດນຳໃຊ້ພາສໂຄດ.";
+"Logins.PasscodeRequirement.Warning" = "ເພື່ອນຳໃຊ້ການຕື່ມໃສ່ອັດຕະໂນມັດສຳລັບ Ecosia ທ່ານຕ້ອງໄດ້ເປີດນຳໃຊ້ພາສໂຄດ.";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "ນຳເອົາລະຫັດຜ່ານຂອງທ່ານໄປນຳທຸກບ່ອນ";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "ປ້ອນລະຫັດຜ່ານ Firefox ແບບອັດຕະໂນມັດ";
+"Logins.WelcomeView.Title2" = "ປ້ອນລະຫັດຜ່ານ Ecosia ແບບອັດຕະໂນມັດ";
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "ເປີດການຕື່ມໃສ່ອັດຕະໂນມັດ";
@@ -704,7 +704,7 @@
 "LoginsList.Title" = "ບັກທຶກການເຂົ້າສູ່ລະບົບໄວ້";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "ເບິງຄ້າຍຄືວ່າ Firefox ເກີດມີຂໍ້ຜິດພາດກ່ອນຫນ້ານີ້. ທ່ານຕ້ອງການກູ້ຄືນແທັບຂອງທ່ານຫລືບໍ?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "ເບິງຄ້າຍຄືວ່າ Ecosia ເກີດມີຂໍ້ຜິດພາດກ່ອນຫນ້ານີ້. ທ່ານຕ້ອງການກູ້ຄືນແທັບຂອງທ່ານຫລືບໍ?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "ໝາຍໄວ້ວ່າໄດ້ອ່ານແລ້ວ";
@@ -893,7 +893,7 @@
 "Onboarding.WhatsNew.Button.Title" = "ເລີ່ມການທ່ອງເວັບ";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Oops! Firefox ມີຂໍ້ຜິດພາດ";
+"Oops! Firefox crashed" = "Oops! Ecosia ມີຂໍ້ຜິດພາດ";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "ເປີດຫົວຂໍ້ນີ້ໃນ Reader View ໂດຍການເຕະໄອຄອນປື້ມເມື່ອມັນປະກົດຂື້ນໃນ Title bar.";
@@ -1004,7 +1004,7 @@
 "ScanQRCode.InvalidDataError.Message" = "ຂໍ້ມູນບໍ່ຖືກຕ້ອງ";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "ໄປທີ່ອຸປະກອນ ‘ການຕັ້ງຄ່າ’> ‘Firefox’. ອະນຸຍາດໃຫ້ Firefox ເຂົ້າເຖິງກ້ອງຖ່າຍຮູບ.";
+"ScanQRCode.PermissionError.Message.v100" = "ໄປທີ່ອຸປະກອນ ‘ການຕັ້ງຄ່າ’> ‘Ecosia’. ອະນຸຍາດໃຫ້ Ecosia ເຂົ້າເຖິງກ້ອງຖ່າຍຮູບ.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "ສະແກນລະຫັດ QR";
@@ -1085,13 +1085,13 @@
 "SendTo.NavBar.Title" = "ສົ່ງແທັບ";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "ທ່ານບໍ່ມີອຸປະກອນໃດໆທີ່ເຊື່ອມຕໍ່ກັບບັນຊີ Firefox ນີ້ຢູ່ເພື່ອສາມາດໃຊ້ການ Sync ໄດ້.";
+"SendTo.NoDevicesFound.Message" = "ທ່ານບໍ່ມີອຸປະກອນໃດໆທີ່ເຊື່ອມຕໍ່ກັບບັນຊີ Ecosia ນີ້ຢູ່ເພື່ອສາມາດໃຊ້ການ Sync ໄດ້.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "ກະລຸນາເປີດ Firefox, ໄປທີ່ການຕັ້ງຄ່າ ແລະ ລົງຊື່ເຂົ້າໃຊ້ເພື່ອດຳເນີນການຕໍໄປ.";
+"SendTo.NotSignedIn.Message" = "ກະລຸນາເປີດ Ecosia, ໄປທີ່ການຕັ້ງຄ່າ ແລະ ລົງຊື່ເຂົ້າໃຊ້ເພື່ອດຳເນີນການຕໍໄປ.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "ທ່ານຍັງບໍ່ໄດ້ລົງຊື່ເຂົ້າໃຊ້ບັນຊີ Firefox ຂອງທ່ານເທືອ.";
+"SendTo.NotSignedIn.Title" = "ທ່ານຍັງບໍ່ໄດ້ລົງຊື່ເຂົ້າໃຊ້ບັນຊີ Ecosia ຂອງທ່ານເທືອ.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "ສົ່ງ";
@@ -1241,7 +1241,7 @@
 "Settings.FxA.Sync.SectionName" = "ການຕັ້ງຄ່າ Sync";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "ບັນຊີ Firefox";
+"Settings.FxA.Title" = "ບັນຊີ Ecosia";
 
 /* General settings section title */
 "Settings.General.SectionName" = "ທົ່ວໄປ";
@@ -1250,7 +1250,7 @@
 "Settings.Home.Current.Description.v101" = "ເລືອກສິ່ງທີ່ສະແດງເປັນຫນ້າທໍາອິດ.";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description.v101" = "ເລືອກສິ່ງທີ່ຢູ່ໃນຫນ້າທໍາອິດຂອງ Firefox.";
+"Settings.Home.Option.Description.v101" = "ເລືອກສິ່ງທີ່ຢູ່ໃນຫນ້າທໍາອິດຂອງ Ecosia.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "ກັບໄປໃນ";
@@ -1274,7 +1274,7 @@
 "Settings.Home.Option.StartAtHome.Always" = "ຫນ້າທຳອິດ";
 
 /* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
-"Settings.Home.Option.StartAtHome.Description" = "ເລືອກສິ່ງທີ່ທ່ານເຫັນເມື່ອທ່ານກັບຄືນໄປຫາ Firefox.";
+"Settings.Home.Option.StartAtHome.Description" = "ເລືອກສິ່ງທີ່ທ່ານເຫັນເມື່ອທ່ານກັບຄືນໄປຫາ Ecosia.";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "ແທັບສຸດທ້າຍ";
@@ -1289,25 +1289,25 @@
 "Settings.Home.Option.Wallpaper" = "ພາບພື້ນຫຼັງ";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "ຮູບວໍເປເປີ Firefox, ຮູບແບບ amethyst.";
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "ຮູບວໍເປເປີ Ecosia, ຮູບແບບ amethyst.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "ຮູບວໍເປເປີ Firefox, ຮູບແບບເນີນພູຫາດຊາຍ.";
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "ຮູບວໍເປເປີ Ecosia, ຮູບແບບເນີນພູຫາດຊາຍ.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "ຮູບວໍເປເປີ Firefox, ຮູບແບບ cerulean.";
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "ຮູບວໍເປເປີ Ecosia, ຮູບແບບ cerulean.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "ພາບພື້ນຫຼັງທີ່ຊັດເຈນເປັນຄ່າເລີ່ມຕົ້ນ.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "ຮູບວໍເປເປີ Firefox, ຮູບແບບຕາເວັນຂຶ້ນ.";
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "ຮູບວໍເປເປີ Ecosia, ຮູບແບບຕາເວັນຂຶ້ນ.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "ປ່ຽນພາບພື້ນຫຼັງໜ້າທຳອິດແບບໝູນວຽນ";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "ຮູບວໍເປເປີ Firefox, ຮູບແບບເນີນພູ twilight.";
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "ຮູບວໍເປເປີ Ecosia, ຮູບແບບເນີນພູ twilight.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
 "Settings.Home.Option.Wallpaper.Classic.Title.v106" = "ຄລາດສິກ %@";
@@ -1328,7 +1328,7 @@
 "Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "ມີ​ຈໍາ​ນວນ​ຈໍາ​ກັດ";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
-"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "ປ່ຽນຮູບວໍເປເປີໂດຍການແຕະໃສ່ໂລໂກ້ຂອງໜ້າຫຼັກຂອງ Firefox";
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "ປ່ຽນຮູບວໍເປເປີໂດຍການແຕະໃສ່ໂລໂກ້ຂອງໜ້າຫຼັກຂອງ Ecosia";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "ພາບພື້ນຫຼັງ";
@@ -1382,7 +1382,7 @@
 "Settings.NewTab.Option.Custom" = "ປັບແຕ່ງ";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "ຫນ້າຫລັກຂອງ Firefox";
+"Settings.NewTab.Option.FirefoxHome" = "ຫນ້າຫລັກຂອງ Ecosia";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "ຫນ້າທຳອິດ";
@@ -1403,7 +1403,7 @@
 "Settings.NoImageModeBlockImages.Label.v99" = "ບັອກຮູບພາບ";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "ເມື່ອເປີດ Firefox";
+"Settings.OfferClipboardBar.Status" = "ເມື່ອເປີດ Ecosia";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
 "Settings.OfferClipboardBar.Status.v128" = "ເມື່ອເປີດ %@";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "ຮຽນຮູ້ເພີ່ມເຕີມ.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla ພະຍາຍາມທີ່ຈະເກັບຮວບຮ່ວມສະເພາະສິ່ງທີ່ຈຳເປັນຕໍ່ການປັບປູງ Firefox ສຳລັບທຸກໆຄົນ.";
+"Settings.SendUsage.Message" = "Mozilla ພະຍາຍາມທີ່ຈະເກັບຮວບຮ່ວມສະເພາະສິ່ງທີ່ຈຳເປັນຕໍ່ການປັບປູງ Ecosia ສຳລັບທຸກໆຄົນ.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "ສົ່ງຂໍ້ມູນການນຳໃຊ້";
@@ -1466,7 +1466,7 @@
 "Settings.Siri.OpenTabShortcut" = "ເປີດແທັບໃໝ່";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "ໃຊ້ທາງລັດ Siri ເພື່ອເປີດ Firefox ຢ່າງວ່ອງໄວຜ່ານ Siri";
+"Settings.Siri.SectionDescription" = "ໃຊ້ທາງລັດ Siri ເພື່ອເປີດ Ecosia ຢ່າງວ່ອງໄວຜ່ານ Siri";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "ທາງລັດ Siri";
@@ -1592,13 +1592,13 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "ໂຫລດໃນເບື້ອງຫລັງ";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "ກຳລັງໂຫລດໃນ Firefox";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "ກຳລັງໂຫລດໃນ Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "ເປີດໃນ Firefox";
+"ShareExtension.OpenInFirefoxAction.Title" = "ເປີດໃນ Ecosia";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "ຊອກຫາໃນ Firefox";
+"ShareExtension.SeachInFirefoxAction.Title" = "ຊອກຫາໃນ Ecosia";
 
 /* Button in share sheet to copy the url of the current tab. */
 "ShareSheet.Copy.Title.v108" = "ສຳເນົາ";
@@ -1745,7 +1745,7 @@
 "UIMenuItem.PasteGo" = "ວາງ & ໄປ";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "ຄົ້ນຫາດ້ວຍ Firefox";
+"UIMenuItem.SearchWithFirefox" = "ຄົ້ນຫາດ້ວຍ Ecosia";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "ຍັງບໍ່ທັນອ່ານ";
@@ -1793,7 +1793,7 @@
 "Yesterday" = "ມື້ວານ";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "ທ່ານບໍ່ມີແທັບໃດທີ່ເປີດໃນ Firefox ໃນອຸປະກອນອື່ນໆຂອງທ່ານ.";
+"You don’t have any tabs open in Firefox on your other devices." = "ທ່ານບໍ່ມີແທັບໃດທີ່ເປີດໃນ Ecosia ໃນອຸປະກອນອື່ນໆຂອງທ່ານ.";
 
 /* Your Rights settings section title */
 "Your Rights" = "ສິດທິຂອງທ່ານ";

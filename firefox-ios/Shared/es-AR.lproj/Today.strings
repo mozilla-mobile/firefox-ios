@@ -23,7 +23,7 @@
 "TodayWidget.NoOpenTabsLabel" = "No hay pestañas abiertas.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Abrir Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Abrir Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Búsqueda privada";
@@ -35,7 +35,7 @@
 "TodayWidget.QuickActionsGalleryTitle" = "Acciones rápidas";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Accesos directos de Firefox";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Accesos directos de Ecosia";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Agregar atajos a las pestañas abiertas.";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Vista rápida";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Buscar en Firefox";
+"TodayWidget.SearchInFirefoxV2" = "Buscar en Ecosia";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Buscar en pestaña privada";

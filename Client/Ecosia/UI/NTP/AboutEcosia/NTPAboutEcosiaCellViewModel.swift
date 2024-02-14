@@ -13,11 +13,11 @@ final class NTPAboutEcosiaCellViewModel {
     weak var delegate: NTPAboutEcosiaCellDelegate?
     var expandedIndex: IndexPath?
     var theme: Theme
-    
+
     init(theme: Theme) {
         self.theme = theme
     }
-    
+
     func deselectExpanded() {
         guard let index = expandedIndex else { return }
         expandedIndex = nil
@@ -26,24 +26,24 @@ final class NTPAboutEcosiaCellViewModel {
 }
 
 extension NTPAboutEcosiaCellViewModel: HomepageViewModelProtocol {
-            
+
     func setTheme(theme: Theme) {
         self.theme = theme
     }
-    
+
     var isEnabled: Bool {
         User.shared.showAboutEcosia
     }
-    
+
     var sectionType: HomepageSectionType {
         .aboutEcosia
     }
-    
+
     var headerViewModel: LabelButtonHeaderViewModel {
         .init(title: .localized(.aboutEcosia),
               isButtonHidden: true)
     }
-    
+
     func section(for traitCollection: UITraitCollection, size: CGSize) -> NSCollectionLayoutSection {
         let item = NSCollectionLayoutItem(
             layoutSize: .init(widthDimension: .fractionalWidth(1),
@@ -65,14 +65,14 @@ extension NTPAboutEcosiaCellViewModel: HomepageViewModelProtocol {
         ]
         return section
     }
-    
+
     func numberOfItemsInSection() -> Int {
         sections.count
     }
 }
 
 extension NTPAboutEcosiaCellViewModel: HomepageSectionHandler {
-    
+
     func configure(_ cell: UICollectionViewCell, at indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = cell as? NTPAboutEcosiaCell else {
             return UICollectionViewCell()
@@ -80,7 +80,7 @@ extension NTPAboutEcosiaCellViewModel: HomepageSectionHandler {
         cell.configure(section: sections[indexPath.row], viewModel: self)
         return cell
     }
-    
+
     func didSelectItem(at indexPath: IndexPath, homePanelDelegate: HomePanelDelegate?, libraryPanelDelegate: LibraryPanelDelegate?) {
         guard let previousIndex = expandedIndex else {
             expandedIndex = indexPath

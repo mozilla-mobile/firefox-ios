@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Serriñ an ivinelloù prevez";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Ouzhpennañ berradennoù Firefox d’ho skramm degemer.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Ouzhpennañ berradennoù Ecosia d’ho skramm degemer.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Mont d’an ere eilet";
@@ -23,19 +23,19 @@
 "TodayWidget.NoOpenTabsLabel" = "Ivinell digor ebet.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Digeriñ Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Digeriñ Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Klask prevez";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Ouzhpennit ur verradenn Firefox d’ho skramm degemer. Goude bezañ ouzhpennet ar widjet, klikit ha dalc’hit evit kemmañ ha diuzit ur verradenn all.";
+"TodayWidget.QuickActionGalleryDescription" = "Ouzhpennit ur verradenn Ecosia d’ho skramm degemer. Goude bezañ ouzhpennet ar widjet, klikit ha dalc’hit evit kemmañ ha diuzit ur verradenn all.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Oberoù prim";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Berradennoù Firefox";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Berradennoù Ecosia";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Ouzhpennit berradennoù betek hoc’h ivinelloù digor.";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Alberz prim";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Klask e Firefox";
+"TodayWidget.SearchInFirefoxV2" = "Klask e Ecosia";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Klask en un ivinell brevez";

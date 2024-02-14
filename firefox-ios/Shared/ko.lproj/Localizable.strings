@@ -311,7 +311,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "설정이 잘 못 되었거나 공격자의 간섭일 수 있습니다. 잠재적인 위험을 감수한다면 진행하세요.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "%@의 소유자가 웹사이트를 적절하게 설정하지 않았습니다. 정보를 보호하기 위해서 Firefox가 웹사이트에 접속을 하지 않았습니다.";
+"ErrorPages.CertWarning.Description" = "%@의 소유자가 웹사이트를 적절하게 설정하지 않았습니다. 정보를 보호하기 위해서 Ecosia가 웹사이트에 접속을 하지 않았습니다.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "연결이 안전하지 않음";
@@ -332,7 +332,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefox 홈 페이지";
+"Firefox.HomePage.Title" = "Ecosia 홈 페이지";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "홈페이지 개인화";
@@ -389,7 +389,7 @@
 "fxa.signin.camera-signin" = "카메라로 로그인";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "컴퓨터에서 Firefox를 열고 firefox.com/pair 로 이동하세요";
+"fxa.signin.qr-link-instruction" = "컴퓨터에서 Ecosia를 열고 ecosia.org/pair 로 이동하세요";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "스캔 준비 완료";
@@ -410,7 +410,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@가 성공적으로 연결이 해제되었습니다.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "기기는 Firefox Sync와 연결이 끊어졌습니다.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "기기는 Ecosia Sync와 연결이 끊어졌습니다.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "동기화 연결끊김";
@@ -419,7 +419,7 @@
 "FxAPush_DeviceDisconnected_title" = "동기화 연결끊김";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "기기가 Firefox Sync와 연결이 끊김";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "기기가 Ecosia Sync와 연결이 끊김";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
 "FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox 로고, 배경 화면 변경";
@@ -704,7 +704,7 @@
 "LoginsList.Title" = "저장된 로그인";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "이전에 Firefox가 강제 종료되었습니다. 탭을 복구하시겠습니까?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "이전에 Ecosia가 강제 종료되었습니다. 탭을 복구하시겠습니까?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "읽음으로 표시";
@@ -893,7 +893,7 @@
 "Onboarding.WhatsNew.Button.Title" = "사용하기";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "이런! Firefox가 종료됐습니다.";
+"Oops! Firefox crashed" = "이런! Ecosia가 종료됐습니다.";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "제목줄 옆에 나오는 책모양 아이콘을 눌러서 읽기 모드로 글을 열어보세요.";
@@ -1004,7 +1004,7 @@
 "ScanQRCode.InvalidDataError.Message" = "올바르지 않은 데이터";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "기기의 ‘설정’ > ‘Firefox’에서 Firefox가 카메라에 접근할 수 있게 허용해 주세요.";
+"ScanQRCode.PermissionError.Message.v100" = "기기의 ‘설정’ > ‘Ecosia’에서 Ecosia가 카메라에 접근할 수 있게 허용해 주세요.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR 코드 스캔";
@@ -1085,7 +1085,7 @@
 "SendTo.NavBar.Title" = "탭 보내기";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "이 Firefox Account에 동기화 할 수 있는 다른 기기가 연결되어 있지 않습니다.";
+"SendTo.NoDevicesFound.Message" = "이 Ecosia Account에 동기화 할 수 있는 다른 기기가 연결되어 있지 않습니다.";
 
 /* See http://mzl.la/1ISlXnU */
 "SendTo.NotSignedIn.Message" = "Firefox를 열고 설정으로 이동 한 다음 로그인하여 계속하세요.";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "자세히 알아보기";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla는 Firefox를 개선하기 위한 정보만 수집하기 위해 노력합니다.";
+"Settings.SendUsage.Message" = "Mozilla는 Ecosia를 개선하기 위한 정보만 수집하기 위해 노력합니다.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "사용현황 데이터 보내기";
@@ -1466,7 +1466,7 @@
 "Settings.Siri.OpenTabShortcut" = "새 탭 열기";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Siri를 통해 Firefox를 빠르게 열기 위한 Siri 단축키 사용";
+"Settings.Siri.SectionDescription" = "Siri를 통해 Ecosia를 빠르게 열기 위한 Siri 단축키 사용";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri 단축키";

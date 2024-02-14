@@ -2,12 +2,15 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+// This is a version of the Ecosia Beta config for the staging environment.
+
 #include "Common.xcconfig"
 #include "Release.xcconfig"
 #include "Staging.xcconfig"
 
 MOZ_BUNDLE_DISPLAY_NAME = Ecosia Beta
 MOZ_BUNDLE_ID = com.ecosia.ecosiaapp.firefox
-CODE_SIGN_ENTITLEMENTS = Client/Entitlements/EcosiaBeta.entitlements
+CODE_SIGN_ENTITLEMENTS = Client/Ecosia/Entitlements/EcosiaBeta.entitlements
 OTHER_SWIFT_FLAGS = $(OTHER_SWIFT_FLAGS_common) -DMOZ_CHANNEL_BETA
 MOZ_INTERNAL_URL_SCHEME = ecosia
+DEVELOPMENT_TEAM = 33YMRSYD2L

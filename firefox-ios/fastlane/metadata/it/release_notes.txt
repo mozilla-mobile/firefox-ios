@@ -1,5 +1,1 @@
-Resta al passo con Ecosia grazie alle notifiche push
-* Ricevi aggiornamenti sui nostri progetti di riforestazione in tutto il mondo
-* Ricevi suggerimenti su come proteggere l'ambiente ogni giorno
-
-Siamo sempre al lavoro per migliorare la tua esperienza con Ecosia. Puoi inviare domande o osservazioni al nostro team a iosapp@ecosia.org. Saremo felici di ascoltare la tua opinione!
+Abbiamo risolto alcuni bug e aggiunto alcuni miglioramenti della stabilità.

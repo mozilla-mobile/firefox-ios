@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "Fosgail ann an taba prìobhaideach ùr";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Cha chuimhnich Firefox gin dhen eachdraidh no briosgaidean ach ma shàbhaileas tu comharra-lìn ùr, thèid a ghlèidheadh.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Cha chuimhnich Ecosia gin dhen eachdraidh no briosgaidean ach ma shàbhaileas tu comharra-lìn ùr, thèid a ghlèidheadh.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "Barrachd fiosrachaidh";

@@ -2,7 +2,7 @@
 "DefaultBrowserCard.Button.v2" = "Qanday amalga oshirishni oʻrganish";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Saytlar, elektron pochta va xabarlar havolalarini Firefoxda avtomatik ravishda ochiladigan qilib sozlang.";
+"DefaultBrowserCard.Description" = "Saytlar, elektron pochta va xabarlar havolalarini Ecosiada avtomatik ravishda ochiladigan qilib sozlang.";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Standart brauzeringizga almashing";
@@ -17,7 +17,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Standart brauzer ilovasi ustiga bosing";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Firefoxni tanlang";
+"DefaultBrowserOnboarding.Description3" = "3. Ecosiani tanlang";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Standart brauzer ilovasi";

@@ -8,10 +8,10 @@
 "DefaultBrowserCard.Button.v2" = "ᱪᱮᱫᱢᱮ ᱚᱠᱟᱞᱠᱟ";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "ᱞᱤᱱᱠ ᱠᱚ ᱥᱟᱡᱟᱣ ᱢᱮ ᱣᱮᱵᱥᱟᱭᱤᱴ, ᱤᱢᱮᱞ, ᱟᱨ ᱢᱮᱥᱮᱡ ᱠᱷᱚᱱ Firefox ᱨᱮ ᱟᱪᱛᱮ ᱡᱷᱤᱜ ᱞᱚᱜᱤᱛ.";
+"DefaultBrowserCard.Description" = "ᱞᱤᱱᱠ ᱠᱚ ᱥᱟᱡᱟᱣ ᱢᱮ ᱣᱮᱵᱥᱟᱭᱤᱴ, ᱤᱢᱮᱞ, ᱟᱨ ᱢᱮᱥᱮᱡ ᱠᱷᱚᱱ Ecosia ᱨᱮ ᱟᱪᱛᱮ ᱡᱷᱤᱜ ᱞᱚᱜᱤᱛ.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "ᱛᱮᱡᱽ, ᱨᱩᱠᱷᱤᱭᱟᱹ, ᱟᱨ ᱱᱤᱥᱚᱱ ᱟᱡ ᱛᱮ ᱫᱚᱦᱚ ᱪᱷᱚ ᱞᱟᱹᱜᱤᱫ Firefox ᱫᱚ ᱢᱩᱞ ᱵᱽᱨᱟᱣᱡᱚᱨ ᱞᱮᱠᱷᱟ ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾";
+"DefaultBrowserCard.NextLevel.Description.v108" = "ᱛᱮᱡᱽ, ᱨᱩᱠᱷᱤᱭᱟᱹ, ᱟᱨ ᱱᱤᱥᱚᱱ ᱟᱡ ᱛᱮ ᱫᱚᱦᱚ ᱪᱷᱚ ᱞᱟᱹᱜᱤᱫ Ecosia ᱫᱚ ᱢᱩᱞ ᱵᱽᱨᱟᱣᱡᱚᱨ ᱞᱮᱠᱷᱟ ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "ᱫᱤᱱ ᱨᱮᱭᱟᱜ ᱵᱽᱨᱟᱣᱡᱤᱝ ᱠᱟᱹᱢᱤ ᱠᱚ ᱵᱚᱰᱷᱟᱣ ᱢᱮ";
@@ -35,7 +35,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. ᱢᱩᱞ ᱵᱽᱨᱟᱣᱩᱡᱽᱟᱹᱨ ᱮᱯ ᱨᱮ ᱚᱛᱟᱭ ᱢᱮ";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Firefox ᱵᱟᱪᱷᱟᱣᱢᱮ";
+"DefaultBrowserOnboarding.Description3" = "3. Ecosia ᱵᱟᱪᱷᱟᱣᱢᱮ";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "ᱢᱩᱞ ᱵᱽᱨᱟᱣᱩᱡᱽᱟᱹᱨ ᱮᱯ";

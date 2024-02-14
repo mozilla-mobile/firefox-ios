@@ -8,10 +8,10 @@
 "DefaultBrowserCard.Button.v2" = "Ничеклеген белү";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Вебсайтлардан, эл. почталардан һәм хәбәрләрдән сылтамаларны автоматик рәвештә Firefox'та ачу.";
+"DefaultBrowserCard.Description" = "Вебсайтлардан, эл. почталардан һәм хәбәрләрдән сылтамаларны автоматик рәвештә Ecosia'та ачу.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "Тизлекне, иминлекны һәм хосусыйлыкны автоматлаштыру өчен стандарт браузер итеп Firefox-ны сайлагыз.";
+"DefaultBrowserCard.NextLevel.Description.v108" = "Тизлекне, иминлекны һәм хосусыйлыкны автоматлаштыру өчен стандарт браузер итеп Ecosia-ны сайлагыз.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "Көндәлек гизүегезне яхшыртыгыз";
@@ -35,7 +35,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Төп браузер кушымтасына басыгыз";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Firefox-ны сайлагыз";
+"DefaultBrowserOnboarding.Description3" = "3. Ecosia-ны сайлагыз";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Төп браузер кушымтасы";

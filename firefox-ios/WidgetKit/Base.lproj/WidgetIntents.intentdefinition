@@ -73,18 +73,18 @@
 	<key>INIntentDefinitionNamespace</key>
 	<string>5W2MbK</string>
 	<key>INIntentDefinitionSystemVersion</key>
-	<string>20E5196f</string>
+	<string>23C71</string>
 	<key>INIntentDefinitionToolsBuildVersion</key>
-	<string>12D4e</string>
+	<string>15C500b</string>
 	<key>INIntentDefinitionToolsVersion</key>
-	<string>12.4</string>
+	<string>15.2</string>
 	<key>INIntents</key>
 	<array>
 		<dict>
 			<key>INIntentCategory</key>
 			<string>information</string>
 			<key>INIntentDescription</key>
-			<string>Quick access to various Firefox actions</string>
+			<string>Quick access to various Ecosia actions</string>
 			<key>INIntentDescriptionID</key>
 			<string>ctDNmu</string>
 			<key>INIntentEligibleForWidgets</key>

@@ -31,7 +31,11 @@ final class ToggleImpactIntro: HiddenSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        User.shared.shouldShowImpactIntro ? User.shared.hideImpactIntro() : User.shared.showImpactIntro()
+        if User.shared.shouldShowImpactIntro {
+            User.shared.hideImpactIntro()
+        } else {
+            User.shared.showImpactIntro()
+        }
         settings.tableView.reloadData()
     }
 }
@@ -53,7 +57,6 @@ final class ShowTour: HiddenSetting, WelcomeDelegate {
     }
 }
 
-
 final class CreateReferralCode: HiddenSetting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: "Debug: Referral Code \(User.shared.referrals.code ?? "-")", attributes: [NSAttributedString.Key.foregroundColor: UIColor.legacyTheme.tableView.rowText])
@@ -62,7 +65,6 @@ final class CreateReferralCode: HiddenSetting {
     override var status: NSAttributedString? {
         return .init(string: "Toggle to create or erase code")
     }
-
 
     override func onClick(_ navigationController: UINavigationController?) {
 
@@ -160,16 +162,21 @@ final class ChangeSearchCount: HiddenSetting {
     }
 }
 
-final class UnleashDefaultBrowserSetting: HiddenSetting {
-    override var title: NSAttributedString? {
+class UnleashVariantResetSetting: HiddenSetting {
+    var titleName: String? { return nil }
+    var variant: Unleash.Variant? { return nil }
+    var unleashEnabled: Bool? { return nil }
 
-        return NSAttributedString(string: "Debug: Unleash Reset", attributes: [NSAttributedString.Key.foregroundColor: UIColor.legacyTheme.tableView.rowText])
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: "Debug: Unleash \(titleName ?? "Unknown") variant", attributes: [NSAttributedString.Key.foregroundColor: UIColor.legacyTheme.tableView.rowText])
     }
 
     override var status: NSAttributedString? {
-        let variant = Unleash.getVariant(.defaultBrowser).name
-
-        return NSAttributedString(string: "\(variant) (Click to reset)", attributes: [NSAttributedString.Key.foregroundColor: UIColor.legacyTheme.tableView.rowText])
+        var statusName = variant?.name ?? "Unknown"
+        if statusName == "Unknown", let unleashEnabled = unleashEnabled {
+            statusName = unleashEnabled ? "enabled" : "disabled"
+        }
+        return NSAttributedString(string: "\(statusName) (Click to reset)", attributes: [NSAttributedString.Key.foregroundColor: UIColor.legacyTheme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -181,36 +188,76 @@ final class UnleashDefaultBrowserSetting: HiddenSetting {
             }
             await MainActor.run {
                 self.settings.tableView.reloadData()
-                let alert = AlertController(title: "Unleash reset ✅", 
+                let alert = AlertController(title: "Unleash reset ✅",
                                             message: "The local Unleash cache has been wiped out",
                                             preferredStyle: .alert)
                 alert.addAction(.init(title: "Ok", style: .default))
-                navigationController?.topViewController?.show(alert, sender: nil)
+                navigationController?.topViewController?.present(alert, animated: true)
             }
         }
     }
 }
 
-final class EngagementServiceIdentifierSetting: HiddenSetting {
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: "Debug: Engagement Service Identifier parameter", attributes: [NSAttributedString.Key.foregroundColor: UIColor.legacyTheme.tableView.rowText])
+final class UnleashBrazeIntegrationSetting: UnleashVariantResetSetting {
+    override var titleName: String? {
+        "Braze Integration"
     }
 
-    override var status: NSAttributedString? {
-        
-        let attributes = [NSAttributedString.Key.foregroundColor: UIColor.legacyTheme.tableView.rowText]
-        
-        guard let identifier = ClientEngagementService.shared.identifier else {
-            return NSAttributedString(string: "n/a", attributes: attributes)
-        }
-        let variant = Unleash.getVariant(.defaultBrowser).name
-        return NSAttributedString(string: "\(identifier) (Click to copy)", attributes: attributes)
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        guard let identifier = ClientEngagementService.shared.identifier else { return }
-        let pasteBoard = UIPasteboard.general
-        pasteBoard.string = identifier
+    override var unleashEnabled: Bool? {
+        Unleash.isEnabled(.brazeIntegration)
     }
 }
 
+final class UnleashAPNConsent: UnleashVariantResetSetting {
+    override var titleName: String? {
+        "APN Consent Feature Rollout"
+    }
+
+    override var variant: Unleash.Variant? {
+        Unleash.getVariant(.apnConsent)
+    }
+}
+
+final class AnalyticsIdentifierSetting: HiddenSetting {
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: "Debug: Analytics Identifier", attributes: [NSAttributedString.Key.foregroundColor: UIColor.legacyTheme.tableView.rowText])
+    }
+
+    var analyticsIdentifier: String { User.shared.analyticsId.uuidString }
+
+    override var status: NSAttributedString? {
+        let attributes = [NSAttributedString.Key.foregroundColor: UIColor.legacyTheme.tableView.rowText]
+        return NSAttributedString(string: "\(analyticsIdentifier) (Click to copy)", attributes: attributes)
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        UIPasteboard.general.string = analyticsIdentifier
+    }
+}
+
+final class UnleashNewsletterCardSetting: UnleashVariantResetSetting {
+    override var titleName: String? {
+        "Newsletter Card"
+    }
+
+    override var unleashEnabled: Bool? {
+        Unleash.isEnabled(.newsletterCard)
+    }
+}
+
+final class NewsletterCardDismissSetting: HiddenSetting {
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: "Debug: Unset Newsletter card dismissed", attributes: [NSAttributedString.Key.foregroundColor: UIColor.legacyTheme.tableView.rowText])
+    }
+
+    override var status: NSAttributedString? {
+        let attributes = [NSAttributedString.Key.foregroundColor: UIColor.legacyTheme.tableView.rowText]
+        let hintText = NewsletterCardExperiment.isDismissed ? "dismissed (Click to unset)" : "showing (Nothing to do here)"
+        return NSAttributedString(string: "Card is currently \(hintText)", attributes: attributes)
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        NewsletterCardExperiment.unsetDismissed()
+        self.settings.tableView.reloadData()
+    }
+}

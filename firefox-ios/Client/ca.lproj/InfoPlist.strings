@@ -5,7 +5,7 @@
 "New Tab" = "Pestanya nova";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "El Firefox usa la càmera per a escanejar codis QR i fer fotos i vídeos.";
+"NSCameraUsageDescription" = "El Ecosia usa la càmera per a escanejar codis QR i fer fotos i vídeos.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "El Firefox necessita el Face ID per accedir a les contrasenyes i formes de pagament que heu desat.";

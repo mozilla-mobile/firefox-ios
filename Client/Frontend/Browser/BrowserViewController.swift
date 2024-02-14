@@ -34,6 +34,8 @@ class BrowserViewController: UIViewController,
         .canGoForward,
         .URL,
         .title,
+        // Ecosia: Update show/hide locker icon based on Firefox v128
+        .hasOnlySecureContent
     ]
 
     weak var browserDelegate: BrowserDelegate?
@@ -171,24 +173,19 @@ class BrowserViewController: UIViewController,
 
     fileprivate var shouldShowDefaultBrowserPromo: Bool {
         profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil &&
-        DefaultBrowserExperiment.minPromoSearches() <= User.shared.searchCount
+        DefaultBrowser.minPromoSearches <= User.shared.searchCount
     }
     fileprivate var shouldShowWhatsNewPageScreen: Bool { whatsNewDataProvider.shouldShowWhatsNewPage }
-    fileprivate var shouldShowAPNConsentScreen: Bool {
-        EngagementServiceExperiment.isEnabled &&
-        EngagementServiceExperiment.minSearches() <= User.shared.searchCount &&
-        User.shared.shouldShowAPNConsentScreen
-    }
 
     let whatsNewDataProvider = WhatsNewLocalDataProvider()
     let referrals = Referrals()
-    
+
     // Ecosia: Make `menuHelper` available at class level
     var menuHelper: MainMenuActionHelper?
-    
+
     // Ecosia: Add init to separate from Ecosia Properties
     // MARK: - Init
-    
+
     init(
         profile: Profile,
         tabManager: TabManager,
@@ -380,7 +377,7 @@ class BrowserViewController: UIViewController,
             navigationToolbar.updateBackStatus(webView.canGoBack)
             navigationToolbar.updateForwardStatus(webView.canGoForward)
         }
-        
+
         // Ecosia: Update toolbar search/add button
         toolbar.circleButton.config = isBottomSearchBar ? .newTab : .search
     }
@@ -515,6 +512,7 @@ class BrowserViewController: UIViewController,
         statusBarOverlay.hasTopTabs = shouldShowTopTabsForTraitCollection(traitCollection)
         statusBarOverlay.applyTheme(theme: theme)
 
+        /* Ecosia: Remove Credit Cards Save/Autofill
         // Feature flag for credit card until we fully enable this feature
         let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
             .creditCardAutofillStatus, checking: .buildOnly)
@@ -524,6 +522,7 @@ class BrowserViewController: UIViewController,
         profile.syncManager.updateCreditCardAutofillStatus(value: autofillCreditCardStatus)
         // Credit card initial setup telemetry
         creditCardInitialSetupTelemetry()
+         */
 
         // Send settings telemetry for Fakespot
         FakespotUtils().addSettingTelemetry()
@@ -606,7 +605,9 @@ class BrowserViewController: UIViewController,
 
     func addSubviews() {
         webViewContainerBackdrop = UIView()
-        webViewContainerBackdrop.backgroundColor = UIColor.Photon.Ink90
+        // Ecosia: Update background overlay for private tabs
+        // webViewContainerBackdrop.backgroundColor = UIColor.Photon.Ink90
+        webViewContainerBackdrop.backgroundColor = .legacyTheme.ecosia.primaryBackground
         webViewContainerBackdrop.alpha = 0
         view.addSubview(webViewContainerBackdrop)
         view.addSubview(contentContainer)
@@ -757,9 +758,15 @@ class BrowserViewController: UIViewController,
     }
 
     private func updateLegacyTheme() {
-        if !NightModeHelper.isActivated() && LegacyThemeManager.instance.systemThemeIsOn {
+        if let state = browserViewControllerState,
+           !NightModeHelper.isActivated()
+            && LegacyThemeManager.instance.systemThemeIsOn
+            && !state.usePrivateHomepage {
+            /* Ecosia: Update legacy theme accoridng correctly
             let userInterfaceStyle = traitCollection.userInterfaceStyle
             LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? LegacyDarkTheme() : LegacyNormalTheme()
+             */
+            LegacyThemeManager.updateBasedOnCurrentSystemThemeType()
         }
     }
 
@@ -946,7 +953,7 @@ class BrowserViewController: UIViewController,
         }
     }
      */
-    
+
     // MARK: - Manage embedded content
 
     func frontEmbeddedContent(_ viewController: ContentContainable) {
@@ -1129,7 +1136,9 @@ class BrowserViewController: UIViewController,
         urlBar.currentURL = url
         overlayManager.finishEditing(shouldCancelLoading: false)
 
-        if let nav = tab.loadRequest(URLRequest(url: url)) {
+        // Ecosia: Update url with currentURL (ecosified)
+        // if let nav = tab.loadRequest(URLRequest(url: url)) {
+        if let nav = tab.loadRequest(URLRequest(url: urlBar.currentURL!)) {
             self.recordNavigationInTab(tab, navigation: nav, visitType: visitType)
         }
     }
@@ -1325,6 +1334,10 @@ class BrowserViewController: UIViewController,
                   let canGoForward = change?[.newKey] as? Bool
             else { break }
             navigationToolbar.updateForwardStatus(canGoForward)
+        // Ecosia: Update show/hide locker icon based on Firefox v128
+        case .hasOnlySecureContent:
+            urlBar.locationView.hasSecureContent = webView.hasOnlySecureContent
+            urlBar.locationView.showTrackingProtectionButton(for: webView.url)
         default:
             assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
         }
@@ -1356,7 +1369,8 @@ class BrowserViewController: UIViewController,
                 isPrivate: tab.isPrivate)
         }
         urlBar.currentURL = tab.url?.displayURL
-        urlBar.locationView.tabDidChangeContentBlocking(tab)
+        // Ecosia: Update show/hide locker icon based on Firefox v128
+        // urlBar.locationView.tabDidChangeContentBlocking(tab)
         urlBar.locationView.updateShoppingButtonVisibility(for: tab)
         let isPage = tab.url?.displayURL?.isWebPage() ?? false
         navigationToolbar.updatePageStatus(isPage)
@@ -1478,7 +1492,7 @@ class BrowserViewController: UIViewController,
         tabManager.selectTab(tab)
         return tab
     }
-    
+
     /*
      Ecosia: Add ToolBarActionMenuDelegate additional delegate function
      to handle the opening of URLs as part of the current tab
@@ -1644,9 +1658,11 @@ class BrowserViewController: UIViewController,
         guard let webView = tab.webView else { return }
 
         if let url = webView.url {
+            /* Ecosia: Update show/hide locker icon based on Firefox v128
             if tab === tabManager.selectedTab {
                 urlBar.locationView.tabDidChangeContentBlocking(tab)
             }
+             */
 
             if (!InternalURL.isValid(url: url) || url.isReaderModeURL) && !url.isFileURL {
                 postLocationChangeNotificationForTab(tab, navigation: navigation)
@@ -1853,7 +1869,14 @@ class BrowserViewController: UIViewController,
     func applyTheme() {
         let currentTheme = themeManager.currentTheme
         statusBarOverlay.hasTopTabs = shouldShowTopTabsForTraitCollection(traitCollection)
-        keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
+        // Ecosia: update background
+        // keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
+
+        // Ecosia: background additions
+        keyboardBackdrop?.backgroundColor = .legacyTheme.browser.background
+        navigationController?.view.backgroundColor = .legacyTheme.browser.background
+        header.backgroundColor = statusBarOverlay.backgroundColor
+
         setNeedsStatusBarAppearanceUpdate()
 
         // Update the `background-color` of any blank webviews.
@@ -1867,6 +1890,9 @@ class BrowserViewController: UIViewController,
 
         guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
         applyThemeForPreferences(profile.prefs, contentScript: contentScript)
+
+        // Ecosia: Update URLBar following PrivateModeUI
+        updateURLBarFollowingPrivateModeUI()
     }
 
     // MARK: - LibraryPanelDelegate
@@ -2014,8 +2040,10 @@ extension BrowserViewController: LegacyTabDelegate {
             tab.addContentScript(logins, name: LoginsHelper.name())
         }
 
+        /* Ecosia: Remove Credit Cards Save/Autofill
         // Credit card autofill setup and callback
         creditCardAutofillSetup(tab, didCreateWebView: webView)
+         */
 
         let contextMenuHelper = ContextMenuHelper(tab: tab)
         contextMenuHelper.delegate = self
@@ -2217,6 +2245,8 @@ extension BrowserViewController: TabManagerDelegate {
 
             if previous == nil || tab.isPrivate != previous?.isPrivate {
                 applyTheme()
+                // Ecosia: Update search engine icon
+                urlBar.updateSearchEngineImage()
 
                 let ui: [PrivateModeUI?] = [toolbar, topTabsViewController, urlBar]
                 ui.forEach { $0?.applyUIMode(isPrivate: tab.isPrivate, theme: themeManager.currentTheme) }
@@ -2379,7 +2409,7 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 }
 
 extension BrowserViewController {
-    
+
     public func showBottomSheetCardViewController(creditCard: CreditCard?,
                                                   decryptedCard: UnencryptedCreditCardFields?,
                                                   viewType state: CreditCardBottomSheetState,
@@ -2410,15 +2440,14 @@ extension BrowserViewController {
     }
 
     private func showLoadingScreen(for user: User) -> Bool {
-        (user.migrated != true && !user.firstTime)
-                || user.referrals.pendingClaim != nil
+        user.referrals.pendingClaim != nil
     }
 
+    // Ecosia: Function that presents the Ecosia cards at given priority if needed
     func presentInsightfulSheetsIfNeeded() {
         guard isHomePage(),
-              presentedViewController == nil,
               !showLoadingScreen(for: .shared) else { return }
-        
+
         // TODO: To review this logic as part of the upgrade
         /*
          We are not fan of this one, but given the current approach a refactor
@@ -2430,8 +2459,7 @@ extension BrowserViewController {
          */
         let presentationFunctions: [() -> Bool] = [
             presentDefaultBrowserPromoIfNeeded,
-            presentWhatsNewPageIfNeeded,
-            presentAPNConsentIfNeeded
+            presentWhatsNewPageIfNeeded
         ]
 
         _ = presentationFunctions.first(where: { $0() })
@@ -2448,18 +2476,11 @@ extension BrowserViewController {
         WhatsNewViewController.presentOn(self, viewModel: viewModel)
         return true
     }
-    
-    @discardableResult
-    private func presentAPNConsentIfNeeded() -> Bool {
-        guard shouldShowAPNConsentScreen else { return false }
-        APNConsentViewController.presentOn(self, viewModel: UnleashAPNConsentViewModel())
-        return true
-    }
 
     @discardableResult
     private func presentDefaultBrowserPromoIfNeeded() -> Bool {
         guard shouldShowDefaultBrowserPromo else { return false }
-        
+
         if #available(iOS 14, *) {
             let defaultPromo = DefaultBrowser(delegate: self)
             present(defaultPromo, animated: true)
@@ -2736,8 +2757,6 @@ extension BrowserViewController: TabTrayDelegate {
     func tabTrayDidDismiss(_ tabTray: LegacyGridTabViewController) {
         // Ecosia: unused method
         // resetBrowserChrome()
-        // Ecosia: check if any sheet needs display
-        presentInsightfulSheetsIfNeeded()
     }
 
     func tabTrayDidAddTab(_ tabTray: LegacyGridTabViewController, tab: Tab) {}
@@ -2861,7 +2880,7 @@ extension BrowserViewController {
 
 // Ecosia
 extension BrowserViewController {
-    
+
     // Ecosia: Handle Referral
     func openBlankNewTabAndClaimReferral(code: String) {
         User.shared.referrals.pendingClaim = code

@@ -15,6 +15,7 @@ private class DarkTableViewColor: TableViewColor {
     override var accessoryViewTint: UIColor { return .Dark.Text.secondary }
     override var headerBackground: UIColor { .Dark.Background.primary }
     override var separator: UIColor { .Dark.border }
+    override var rowBackground: UIColor { return .Dark.Background.secondary }
 }
 
 private class DarkTabTrayColor: TabTrayColor {

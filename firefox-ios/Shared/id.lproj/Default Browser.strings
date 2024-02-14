@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Menjadikan Firefox peramban baku Anda adalah pilihan untuk Internet yang terbuka dan mudah diakses.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Menjadikan Ecosia peramban baku Anda adalah pilihan untuk Internet yang terbuka dan mudah diakses.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Pilihan Baku untuk Internet yang Lebih Baik";
@@ -8,10 +8,10 @@
 "DefaultBrowserCard.Button.v2" = "Pelajari Caranya";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Setel agar tautan dari situs web, surel, dan Pesan dibuka di Firefox secara otomatis.";
+"DefaultBrowserCard.Description" = "Setel agar tautan dari situs web, surel, dan Pesan dibuka di Ecosia secara otomatis.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "Pilih Firefox sebagai peramban baku Anda untuk menghadirkan kecepatan, keamanan, dan privasi otomatis.";
+"DefaultBrowserCard.NextLevel.Description.v108" = "Pilih Ecosia sebagai peramban baku Anda untuk menghadirkan kecepatan, keamanan, dan privasi otomatis.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "Tingkatkan Penjelajahan Sehari-hari";
@@ -35,7 +35,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Ketuk App Browser Default";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Pilih Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. Pilih Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "App Browser Default";

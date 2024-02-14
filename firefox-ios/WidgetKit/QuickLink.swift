@@ -16,13 +16,21 @@ enum QuickLink: Int {
     public var imageName: String {
         switch self {
         case .search:
-            return "faviconFox"
+            // Ecosia: update image
+            // return "faviconFox"
+            return "openEcosia"
         case .privateSearch:
+            /* Ecosia: update image
             return StandardImageIdentifiers.Large.privateMode
+            */
+            return "ecosiaSmallPrivateMask"
         case .copiedLink:
             return StandardImageIdentifiers.Large.tabTray
         case .closePrivateTabs:
-            return StandardImageIdentifiers.Large.delete
+            /* Ecosia: update image
+            StandardImageIdentifiers.Large.delete
+            */
+            return "ecosiaDelete"
         }
     }
 
@@ -65,6 +73,7 @@ enum QuickLink: Int {
         }
     }
 
+    /* Ecosia: Update colors
     public var backgroundColors: [Color] {
         switch self {
         case .search:
@@ -75,6 +84,38 @@ enum QuickLink: Int {
             return [Color("goToCopiedLinkSolid")]
         case .closePrivateTabs:
             return [Color("privateGradientThree"), Color("privateGradientTwo"), Color("privateGradientOne")]
+        }
+    }
+     */
+
+    public var backgroundColors: [Color] {
+        switch self {
+        case .search:
+            return [Color("PrimaryBrand")]
+        case .privateSearch:
+            return [Color("TertiaryBackground")]
+        case .copiedLink:
+            return [Color("TertiaryBackground")]
+        case .closePrivateTabs:
+            return [Color("TertiaryBackground")]
+        }
+    }
+
+    public var textColor: Color {
+        switch self {
+        case .search:
+            return .init("PrimaryBackground")
+        default:
+            return .init("PrimaryText")
+        }
+    }
+
+    public var iconColor: Color {
+        switch self {
+        case .search:
+            return .init("PrimaryBackground")
+        default:
+            return .init("SecondaryIcon")
         }
     }
 }

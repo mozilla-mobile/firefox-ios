@@ -11,7 +11,7 @@ struct TopSitesWidget: Widget {
 
      var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: TabProvider()) { entry in
-            OpenTabsView(entry: entry)//TopSitesView(entry: entry)
+            OpenTabsView(entry: entry)// TopSitesView(entry: entry)
         }
         .supportedFamilies([.systemMedium])
         .configurationDisplayName(String.TopSitesGalleryTitleV2)
@@ -31,7 +31,9 @@ struct TopSitesView: View {
                 (entry.favicons[site.imageKey])!.resizable().frame(width: 60, height: 60).mask(maskShape)
             } else {
                 Rectangle()
-                    .fill(UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 0.3).color)
+                    // Ecosia: Update color
+                    // .fill(UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 0.3).color)
+                    .fill(Color("TertiaryBackground"))
                     .frame(width: 60, height: 60)
             }
         }
@@ -43,7 +45,9 @@ struct TopSitesView: View {
 
     var emptySquare: some View {
         maskShape
-            .fill(UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 0.3).color)
+            // Ecosia: Update color
+            // .fill(UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 0.3).color)
+            .fill(Color("TertiaryBackground"))
             .frame(width: 60, height: 60)
             .background(Color.clear).frame(maxWidth: .infinity)
     }
@@ -91,7 +95,9 @@ struct TopSitesView: View {
             }.padding([.bottom, .horizontal])
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background((UIColor(red: 0.11, green: 0.11, blue: 0.13, alpha: 1.00).color))
+        // Ecosia: update color
+        // .background((UIColor(red: 0.11, green: 0.11, blue: 0.13, alpha: 1.00).color))
+        .background((Color("PrimaryBackground")))
     }
 
     private func linkToContainingApp(_ urlSuffix: String = "", query: String) -> URL {

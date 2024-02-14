@@ -123,15 +123,21 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
         // Ecosia: Remove message Card  from HomePage
         // return messageCardViewModel.shouldDisplayMessageCard
     }
-    
+
     // Ecosia: Add Ecosia's ViewModels
-    var bookmarkNudgeViewModel: NTPBookmarkNudgeCellViewModel
     var libraryViewModel: NTPLibraryCellViewModel
+    var newsletterCardViewModel: NTPNewsletterCardViewModel
     var impactViewModel: NTPImpactCellViewModel
     var newsViewModel: NTPNewsCellViewModel
     var aboutEcosiaViewModel: NTPAboutEcosiaCellViewModel
     var ntpCustomizationViewModel: NTPCustomizationCellViewModel
-    
+    var climateImpactCounterViewModel: NTPSeedCounterViewModel
+    /* 
+     Ecosia: Represents the container that stores some of the `HomepageSectionType`s.
+     The earlier a section type appears in the array, the higher its priority.
+     */
+    private let cardsPrioritySectionTypes: [HomepageSectionType] = [.newsletterCard]
+
     // MARK: - Initializers
     init(profile: Profile,
          isPrivate: Bool,
@@ -159,11 +165,12 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
                                                   wallpaperManager: wallpaperManager)
         // Ecosia: Add Ecosia's ViewModels
         self.libraryViewModel = NTPLibraryCellViewModel(theme: theme)
-        self.bookmarkNudgeViewModel = NTPBookmarkNudgeCellViewModel(theme: theme)
+        self.newsletterCardViewModel = NTPNewsletterCardViewModel(theme: theme)
         self.impactViewModel = NTPImpactCellViewModel(referrals: referrals, theme: theme)
         self.newsViewModel = NTPNewsCellViewModel(theme: theme)
         self.aboutEcosiaViewModel = NTPAboutEcosiaCellViewModel(theme: theme)
         self.ntpCustomizationViewModel = NTPCustomizationCellViewModel(theme: theme)
+        self.climateImpactCounterViewModel = NTPSeedCounterViewModel(profile: profile, theme: theme)
 
         self.wallpaperManager = wallpaperManager
         /* Ecosia: Remove `jumpBackIn` section reference
@@ -202,7 +209,7 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
          */
         // Ecosia: Remove `customizeHome` reference
         // self.customizeButtonViewModel = CustomizeHomepageSectionViewModel(theme: theme)
-        
+
         /* 
          Ecosia: Replace view models.
         self.childViewModels = [headerViewModel,
@@ -215,8 +222,10 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
                                 customizeButtonViewModel
         ]
          */
-        self.childViewModels = [headerViewModel,
-                                bookmarkNudgeViewModel,
+        // Ecosia: Those models needs to follow strictly the order defined in `enum HomepageSectionType`
+        self.childViewModels = [climateImpactCounterViewModel,
+                                headerViewModel,
+                                newsletterCardViewModel,
                                 libraryViewModel,
                                 topSiteViewModel,
                                 impactViewModel,
@@ -272,17 +281,19 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
                                      object: .firefoxHomepage,
                                      value: trackingValue,
                                      extras: nil)
-        childViewModels.forEach { $0.screenWasShown() }
-        
+        // Ecosia: Only execute screenWasShown for shown sections
+        // childViewModels.forEach { $0.screenWasShown() }
+        shownSections.forEach { section in
+            if let viewModel = childViewModels.first(where: { $0.sectionType == section }) {
+                viewModel.screenWasShown()
+            }
+        }
+
         // Ecosia
         if NTPTooltip.highlight() == .referralSpotlight {
-            Analytics.shared.showInvitePromo()
+            Analytics.shared.referral(action: .view, label: .promo)
         }
-        
-        if User.shared.showsBookmarksNTPNudgeCard() {
-            Analytics.shared.bookmarksNtp(action: .view)
-        }
-        
+
         impactViewModel.subscribeToProjections()
     }
 
@@ -297,9 +308,28 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
     func updateEnabledSections() {
         shownSections.removeAll()
 
+        /* Ecosia: Handle priority of cards view models
+         childViewModels.forEach {
+             if $0.shouldShow { shownSections.append($0.sectionType) }
+         }
+         */
+        var prioritySectionAdded = false
         childViewModels.forEach {
-            if $0.shouldShow { shownSections.append($0.sectionType) }
+            if $0.shouldShow {
+                if cardsPrioritySectionTypes.contains($0.sectionType) {
+                    if !prioritySectionAdded {
+                        shownSections.append($0.sectionType)
+                        prioritySectionAdded = true
+                    }
+                    // If a priority section has already been added, skip the rest
+                } else {
+                    // Non-priority section, add if shouldShow is true
+                    shownSections.append($0.sectionType)
+                }
+            }
+            // If shouldShow is false, skip this viewModel
         }
+
         logger.log("Homepage amount of sections shown \(shownSections.count)",
                    level: .debug,
                    category: .legacyHomepage)

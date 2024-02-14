@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Sulge\nprivaatsed kaardid";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Lisa Firefoxi otsetee oma avaekraanile.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Lisa Ecosiai otsetee oma avaekraanile.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Mine kopeeritud lingile";
@@ -23,13 +23,13 @@
 "TodayWidget.NoOpenTabsLabel" = "Avatud kaarte pole.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Ava Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Ava Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Privaatne otsing";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Lisa Firefoxi otsetee oma avaekraanile. Pärast lisamist saad seda pikalt puudutades muuta ning soovi korral valida teise otsetee.";
+"TodayWidget.QuickActionGalleryDescription" = "Lisa Ecosiai otsetee oma avaekraanile. Pärast lisamist saad seda pikalt puudutades muuta ning soovi korral valida teise otsetee.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Kiired tegevused";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Kiire vaade";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Otsi\nFirefoxis";
+"TodayWidget.SearchInFirefoxV2" = "Otsi\nEcosiais";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Otsi\nprivaatsel kaardil";

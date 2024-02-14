@@ -1,0 +1,47 @@
+{
+  "locales": [
+    "en",
+    "it",
+    "de",
+    "es",
+    "nl"
+  ],
+  "devices": [
+    {
+      "name": "iPhone SE (3rd generation)",
+      "orientation": "portrait",
+      "os": "17.5"
+    },
+    {
+      "name": "iPhone 15 Pro",
+      "orientation": "portrait",
+      "os": "17.5",
+      "isDefaultTestDevice": true
+    },
+    {
+      "name": "iPhone 15 Pro Max",
+      "orientation": "landscape"
+    },
+    {
+      "name": "iPad Pro (12.9-inch) (6th generation)",
+      "orientation": "portrait"
+    }
+  ],
+  "testPlans": [
+    {
+      "name": "EcosiaSnapshotTests",
+      "testClasses": [
+        {
+          "name": "OnboardingTests",
+          "devices": ["all", "portrait"],
+          "locales": ["all"]
+        },
+        {
+          "name": "NTPComponentTests",
+          "devices": ["iPhone 15 Pro"],
+          "locales": ["all"]
+        }
+      ]
+    }
+  ]
+}

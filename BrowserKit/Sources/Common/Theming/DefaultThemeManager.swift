@@ -165,10 +165,12 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     private func applyThemeChanges(for window: WindowUUID, using newTheme: ThemeType) {
+        /* Ecosia: Remove `overrideUserInterfaceStyle` window set
         // Overwrite the user interface style on the window attached to our scene
         // once we have multiple scenes we need to update all of them
         let style = self.getCurrentTheme(for: window).type.getInterfaceStyle()
         self.windows[window]?.overrideUserInterfaceStyle = style
+        */
         notifyCurrentThemeDidChange(for: window)
     }
 

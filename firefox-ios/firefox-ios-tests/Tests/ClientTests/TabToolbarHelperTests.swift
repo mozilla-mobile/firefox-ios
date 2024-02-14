@@ -4,7 +4,7 @@
 
 @testable import Client
 
-import Glean
+// Ecosia: remove Glean dependency // import Glean
 import XCTest
 import Common
 import Shared
@@ -15,9 +15,15 @@ class TabToolbarHelperTests: XCTestCase {
     let forwardButtonImage = UIImage.templateImageNamed(StandardImageIdentifiers.Large.forward)?
         .imageFlippedForRightToLeftLayoutDirection()
     let menuButtonImage = UIImage.templateImageNamed(StandardImageIdentifiers.Large.appMenu)
+    /* Ecosia: update search image
     let searchButtonImage = UIImage.templateImageNamed(StandardImageIdentifiers.Large.search)
+    */
+    let searchButtonImage = UIImage.templateImageNamed("searchUrl")
     let imageNewTab = UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus)
+    /* Ecosia: update home image
     let imageHome = UIImage.templateImageNamed(StandardImageIdentifiers.Large.home)
+    */
+    let imageHome = UIImage.templateImageNamed("menu-Home")
 
     override func setUp() {
         super.setUp()
@@ -50,6 +56,7 @@ class TabToolbarHelperTests: XCTestCase {
         XCTAssertEqual(mockToolbar.multiStateButton.image(for: .normal), imageHome)
     }
 
+    /* Ecosia: remove Glean dependency
     func testTelemetryForSiteMenu() {
         Glean.shared.resetGlean(clearStores: true)
         let mockToolbar = MockTabToolbar()
@@ -58,7 +65,7 @@ class TabToolbarHelperTests: XCTestCase {
         testCounterMetricRecordingSuccess(metric: GleanMetrics.AppMenu.siteMenu)
         Glean.shared.resetGlean(clearStores: true)
     }
-
+     */
     func test_tabToolBarHelper_basicCreation_doesntLeak() {
         let tabToolBar = TabToolbar()
         let subject = TabToolbarHelper(toolbar: tabToolBar)
@@ -103,9 +110,13 @@ class MockTabToolbar: TabToolbarProtocol {
 
     var _bookmarksButton = MockToolbarButton()
     var bookmarksButton: ToolbarButton { return _bookmarksButton }
-
+    /* Ecosia: Change `addNewTabButton` to configurable CircleButton
     var _addNewTabButton = MockToolbarButton()
     var addNewTabButton: ToolbarButton { return _addNewTabButton }
+     */
+
+    var _circleButton: Client.CircleButton = CircleButton()
+    var circleButton: Client.CircleButton { return _circleButton }
 
     var _appMenuButton = MockToolbarButton()
     var appMenuButton: ToolbarButton { return _appMenuButton }

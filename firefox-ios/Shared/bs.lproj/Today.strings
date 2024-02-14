@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Zatvori\nprivatne tabove";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Dodajte Firefox prečice na svoj početni ekran.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Dodajte Ecosia prečice na svoj početni ekran.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Idite na kopirani link";
@@ -23,13 +23,13 @@
 "TodayWidget.NoOpenTabsLabel" = "Nema otvorenih tabova.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Otvori Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Otvori Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Privatna pretraga";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Dodajte Firefox prečicu na vaš početni ekran. Nakon što dodate widget, dodirnite i držite da ga uredite i odaberete drugu prečicu.";
+"TodayWidget.QuickActionGalleryDescription" = "Dodajte Ecosia prečicu na vaš početni ekran. Nakon što dodate widget, dodirnite i držite da ga uredite i odaberete drugu prečicu.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Brze akcije";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Brzi pogled";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Traži u\nFirefoxu";
+"TodayWidget.SearchInFirefoxV2" = "Traži u\nEcosiau";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Traži u\nprivatnom tabu";

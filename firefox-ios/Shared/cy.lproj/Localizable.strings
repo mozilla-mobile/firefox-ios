@@ -311,7 +311,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Gall fod yn un ai cam ffurfweddu neu ymyrraeth gan ymosodwr. Parhewch os ydych yn derbyn y risg posib.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "Mae perchennog %@ wedi cam ffurfweddu eu gwefan. I rwystro eich manylion rhag cael eu dwyn, nid yw Firefox wedi cysylltu â'r wefan hon.";
+"ErrorPages.CertWarning.Description" = "Mae perchennog %@ wedi cam ffurfweddu eu gwefan. I rwystro eich manylion rhag cael eu dwyn, nid yw Ecosia wedi cysylltu â'r wefan hon.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Dim Ymddiriedaeth i'r Cysylltiad";
@@ -332,7 +332,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Tudalen Cartref Firefox";
+"Firefox.HomePage.Title" = "Tudalen Cartref Ecosia";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "Cyfaddasu’r Dudalen Cartref";
@@ -377,7 +377,7 @@
 "Forward" = "Ymlaen";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Cyfrif Firefox";
+"FxA.FirefoxAccount" = "Cyfrif Ecosia";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Rheoli Cyfrif a Dyfeisiau";
@@ -389,7 +389,7 @@
 "fxa.signin.camera-signin" = "Mewngofnodi gyda’ch camera";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "Ar eich cyfrifiadur, agorwch Firefox ac ewch i firefox.com/pair";
+"fxa.signin.qr-link-instruction" = "Ar eich cyfrifiadur, agorwch Ecosia ac ewch i ecosia.org/pair";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Yn Barod i Sganio";
@@ -401,7 +401,7 @@
 "FxA.SyncNow" = "Cydweddu Nawr";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Mae Firefox Sync wedi cysylltu i %@";
+"FxAPush_DeviceConnected_body" = "Mae Ecosia Sync wedi cysylltu i %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Mae Sync wedi Cysylltu";
@@ -410,7 +410,7 @@
 "FxAPush_DeviceDisconnected_body" = "Mae %@ wedi ei ddatgysylltu'n llwyddiannus.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Mae'r ddyfais wedi'i ddatgysylltu'n llwyddiannus o Firefox Sync.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Mae'r ddyfais wedi'i ddatgysylltu'n llwyddiannus o Ecosia Sync.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Datgysylltodd Sync";
@@ -419,10 +419,10 @@
 "FxAPush_DeviceDisconnected_title" = "Datgysylltodd Sync";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Mae'r ddyfais wedi'i ddatgysylltu o Firefox Sync";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Mae'r ddyfais wedi'i ddatgysylltu o Ecosia Sync";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "Logo Firefox, newid y papur wal.";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Logo Ecosia, newid y papur wal.";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Cymorth";
@@ -653,13 +653,13 @@
 "Logins.Onboarding.LearnMoreButtonTitle" = "Dysgu Rhagor";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "I ddefnyddio nodwedd AwtoLanw Firefox, mae'n rhaid bod gennych god pas dyfais wedi'i alluogi.";
+"Logins.PasscodeRequirement.Warning" = "I ddefnyddio nodwedd AwtoLanw Ecosia, mae'n rhaid bod gennych god pas dyfais wedi'i alluogi.";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "Ewch â'ch cyfrineiriau i bob man";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "Cyfrineiriau AwtoLanw Firefox";
+"Logins.WelcomeView.Title2" = "Cyfrineiriau AwtoLanw Ecosia";
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "Troi AwtoLanw Ymlaen";
@@ -704,7 +704,7 @@
 "LoginsList.Title" = "MEWNGOFNODION WEDI'U CADW";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Bosib fod Firefox wedi chwalu y tro diwethaf. Hoffech chi adfer eich tabiau?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Bosib fod Ecosia wedi chwalu y tro diwethaf. Hoffech chi adfer eich tabiau?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Marcio fel wedi ei Darllen";
@@ -893,7 +893,7 @@
 "Onboarding.WhatsNew.Button.Title" = "Cychwyn Pori";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Wps! Mae Firefox wedi chwalu";
+"Oops! Firefox crashed" = "Wps! Mae Ecosia wedi chwalu";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Agorwch erthyglau yn y Golwg Darllen drwy dapio ar yr eicon llyfr pan mae'n ymddangos yn y bar teitl.";
@@ -905,7 +905,7 @@
 "Open Tabs" = "Agor Tabiau";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Nid yw Firefox yn gallu agor y dudalen gan fod ganddo gyfeiriad annilys.";
+"OpenURL.Error.Message" = "Nid yw Ecosia yn gallu agor y dudalen gan fod ganddo gyfeiriad annilys.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Methu Agor Tudalen";
@@ -917,7 +917,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Mae hyn yn caniatáu i chi gadw'r ddelwedd i'ch Camera Roll.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Hoffai Firefox gael mynediad at eich Lluniau";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Hoffai Ecosia gael mynediad at eich Lluniau";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Cau";
@@ -1004,7 +1004,7 @@
 "ScanQRCode.InvalidDataError.Message" = "Mae'r data'n annilys";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "Ewch i ‘Gosodiadau’ > ‘Firefox’ y ddyfais. Caniatewch i Firefox gael mynediad i’r camera.";
+"ScanQRCode.PermissionError.Message.v100" = "Ewch i ‘Gosodiadau’ > ‘Ecosia’ y ddyfais. Caniatewch i Ecosia gael mynediad i’r camera.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Sganiwch y Cod QR";
@@ -1019,7 +1019,7 @@
 "Search.Awesomebar.SwitchToTab" = "Newid i'r tab";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Awgrymadau Firefox";
+"Search.SuggestSectionTitle.v102" = "Awgrymadau Ecosia";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Bydd y peiriant chwilio newydd yn ymddangos yn y bar chwilio cyflym.";
@@ -1085,13 +1085,13 @@
 "SendTo.NavBar.Title" = "Anfon Tab";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "Nid oes gennych unrhyw ddyfeisiau eraill sy'n gysylltiedig â'r Cyfrif Firefox sydd ar gael i'w gydweddu.";
+"SendTo.NoDevicesFound.Message" = "Nid oes gennych unrhyw ddyfeisiau eraill sy'n gysylltiedig â'r Cyfrif Ecosia sydd ar gael i'w gydweddu.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Agorwch Firefox, ewch i'r Gosodiadau a mewngofnodi i barhau.";
+"SendTo.NotSignedIn.Message" = "Agorwch Ecosia, ewch i'r Gosodiadau a mewngofnodi i barhau.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Nid ydych wedi eich mewngofnodi i'ch Cyfrif Firefox.";
+"SendTo.NotSignedIn.Title" = "Nid ydych wedi eich mewngofnodi i'ch Cyfrif Ecosia.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Anfon";
@@ -1175,7 +1175,7 @@
 "Settings.DataManagement.Title" = "Rheoli Data";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Bydd Firefox yn peidio cydweddu eich cyfrif ond ni fydd yn dileu eich data pori ar y ddyfais hon.";
+"Settings.Disconnect.Body" = "Bydd Ecosia yn peidio cydweddu eich cyfrif ond ni fydd yn dileu eich data pori ar y ddyfais hon.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Datgysylltu Sync";
@@ -1241,7 +1241,7 @@
 "Settings.FxA.Sync.SectionName" = "Gosodiadau Sync";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Cyfrif Firefox";
+"Settings.FxA.Title" = "Cyfrif Ecosia";
 
 /* General settings section title */
 "Settings.General.SectionName" = "Cyffredinol";
@@ -1250,7 +1250,7 @@
 "Settings.Home.Current.Description.v101" = "Dewis beth yw eich tudalen cartref.";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description.v101" = "Dewis beth sydd ar dudalen cartref Firefox.";
+"Settings.Home.Option.Description.v101" = "Dewis beth sydd ar dudalen cartref Ecosia.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "Mynd Nôl I";
@@ -1274,7 +1274,7 @@
 "Settings.Home.Option.StartAtHome.Always" = "Tudalen Cartref";
 
 /* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
-"Settings.Home.Option.StartAtHome.Description" = "Dewis beth rydych yn ei weld pan fyddwch yn dychwelyd i Firefox.";
+"Settings.Home.Option.StartAtHome.Description" = "Dewis beth rydych yn ei weld pan fyddwch yn dychwelyd i Ecosia.";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "Y tab diwethaf";
@@ -1289,25 +1289,25 @@
 "Settings.Home.Option.Wallpaper" = "Papur Wal";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Papur wal Firefox, patrwm amethyst.";
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Papur wal Ecosia, patrwm amethyst.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Papur wal Firefox, patrwm bryniau traethog.";
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Papur wal Ecosia, patrwm bryniau traethog.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Papur wal Firefox, patrwm ceruleaidd.";
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Papur wal Ecosia, patrwm ceruleaidd.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Papur wal clir rhagosodedig.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Papur wal Firefox, patrwm gwawrio.";
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Papur wal Ecosia, patrwm gwawrio.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Togl cylchu papur wal tudalen cartref";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Papur wal Firefox, patrwm bryniau'r gwyll.";
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Papur wal Ecosia, patrwm bryniau'r gwyll.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
 "Settings.Home.Option.Wallpaper.Classic.Title.v106" = "Clasurol %@";
@@ -1328,7 +1328,7 @@
 "Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "Fersiynau Cyfyngedig";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
-"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Newidiwch y papur wal trwy dapio logo tudalen cartref Firefox";
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Newidiwch y papur wal trwy dapio logo tudalen cartref Ecosia";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "Papur Wal";
@@ -1382,7 +1382,7 @@
 "Settings.NewTab.Option.Custom" = "Cyfaddasu";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Cartref Firefox";
+"Settings.NewTab.Option.FirefoxHome" = "Cartref Ecosia";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Tudalen Cartref";
@@ -1403,7 +1403,7 @@
 "Settings.NoImageModeBlockImages.Label.v99" = "Rhwystro Delweddau";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Wrth Agor Firefox";
+"Settings.OfferClipboardBar.Status" = "Wrth Agor Ecosia";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
 "Settings.OfferClipboardBar.Status.v128" = "Wrth agor %@";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Dysgu Rhagor.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mae Mozilla'n ceisio casglu dim ond yr hyn sydd ei angen arnom i ddarparu a gwella Firefox ar gyfer pawb.";
+"Settings.SendUsage.Message" = "Mae Mozilla'n ceisio casglu dim ond yr hyn sydd ei angen arnom i ddarparu a gwella Ecosia ar gyfer pawb.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Anfon Data Defnydd";
@@ -1466,7 +1466,7 @@
 "Settings.Siri.OpenTabShortcut" = "Agor Tab Newydd";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Defnyddio llwybrau byr Siri ni agor Firefox yn sydyn drwy Siri";
+"Settings.Siri.SectionDescription" = "Defnyddio llwybrau byr Siri ni agor Ecosia yn sydyn drwy Siri";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Llwybrau Byr Siri";
@@ -1475,7 +1475,7 @@
 "Settings.Studies.Toggle.Link" = "Dysgu Rhagor.";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Gall Firefox osod a rhedeg astudiaethau o bryd i'w gilydd.";
+"Settings.Studies.Toggle.Message" = "Gall Ecosia osod a rhedeg astudiaethau o bryd i'w gilydd.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Astudiaethau";
@@ -1592,13 +1592,13 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "Llwytho yn y Cefndir";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Llwytho yn Firefox";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Llwytho yn Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Agor yn Firefox";
+"ShareExtension.OpenInFirefoxAction.Title" = "Agor yn Ecosia";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Chwilio yn Firefox";
+"ShareExtension.SeachInFirefoxAction.Title" = "Chwilio yn Ecosia";
 
 /* Button in share sheet to copy the url of the current tab. */
 "ShareSheet.Copy.Title.v108" = "Copïo";
@@ -1745,7 +1745,7 @@
 "UIMenuItem.PasteGo" = "Gludo a Mynd";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Chwilio gyda Firefox";
+"UIMenuItem.SearchWithFirefox" = "Chwilio gyda Ecosia";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "heb ei ddarllen";
@@ -1793,7 +1793,7 @@
 "Yesterday" = "Ddoe";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Nid oes gennych unrhyw dabiau ar agor yn Firefox ar eich dyfeisiau eraill.";
+"You don’t have any tabs open in Firefox on your other devices." = "Nid oes gennych unrhyw dabiau ar agor yn Ecosia ar eich dyfeisiau eraill.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Eich Hawliau";

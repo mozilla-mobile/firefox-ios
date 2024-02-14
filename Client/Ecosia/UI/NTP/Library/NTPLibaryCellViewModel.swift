@@ -17,7 +17,7 @@ protocol NTPLibraryDelegate: AnyObject {
 final class NTPLibraryCellViewModel {
     weak var delegate: NTPLibraryDelegate?
     var theme: Theme
-    
+
     init(delegate: NTPLibraryDelegate? = nil, theme: Theme) {
         self.delegate = delegate
         self.theme = theme
@@ -26,7 +26,7 @@ final class NTPLibraryCellViewModel {
 
 // MARK: HomeViewModelProtocol
 extension NTPLibraryCellViewModel: HomepageViewModelProtocol {
-        
+
     func setTheme(theme: Theme) {
         self.theme = theme
     }

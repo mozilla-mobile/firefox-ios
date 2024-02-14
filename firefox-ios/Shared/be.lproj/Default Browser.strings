@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Зрабіўшы Firefox прадвызначаным браўзерам, вы галасуеце за адкрыты, даступны Інтэрнэт.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Зрабіўшы Ecosia прадвызначаным браўзерам, вы галасуеце за адкрыты, даступны Інтэрнэт.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Перайдзіце да лепшага Інтэрнэту";
@@ -8,10 +8,10 @@
 "DefaultBrowserCard.Button.v2" = "Даведацца, як";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Наладзьце аўтаматычнае адкрыццё спасылак з сайтаў, пошты і паведамленняў у Firefox.";
+"DefaultBrowserCard.Description" = "Наладзьце аўтаматычнае адкрыццё спасылак з сайтаў, пошты і паведамленняў у Ecosia.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "Выберыце Firefox у якасці прадвызначанага браўзера, каб хуткасць, бяспека і прыватнасць сталі аўтаматычнымі.";
+"DefaultBrowserCard.NextLevel.Description.v108" = "Выберыце Ecosia у якасці прадвызначанага браўзера, каб хуткасць, бяспека і прыватнасць сталі аўтаматычнымі.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "Палепшыце штодзённае вэб-агляданне";
@@ -35,7 +35,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Націсніце Default Browser App";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Выберыце Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. Выберыце Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Default Browser App";

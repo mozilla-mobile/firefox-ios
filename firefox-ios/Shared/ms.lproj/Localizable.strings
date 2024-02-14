@@ -179,7 +179,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Mungkin salah konfigurasi atau diganggu oleh penyerang. Teruskan jika anda terima potensi risikonya.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "Pemilik %@ mengkonfigurasi laman web mereka secara tidak wajar. Untuk melindungi maklumat anda daripada dicuri, Firefox tidak menyambungkan ke laman web ini.";
+"ErrorPages.CertWarning.Description" = "Pemilik %@ mengkonfigurasi laman web mereka secara tidak wajar. Untuk melindungi maklumat anda daripada dicuri, Ecosia tidak menyambungkan ke laman web ini.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Sambungan Ini Tidak dipercayai";
@@ -197,13 +197,13 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Halaman Utama Firefox";
+"Firefox.HomePage.Title" = "Halaman Utama Ecosia";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Seterusnya";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Akaun Firefox";
+"FxA.FirefoxAccount" = "Akaun Ecosia";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Urus Akaun & Peranti";
@@ -224,7 +224,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ telah berjaya memutuskan sambungan.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Peranti ini telah berjaya memutuskan sambungan dengan Firefox Sync.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Peranti ini telah berjaya memutuskan sambungan dengan Ecosia Sync.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync Terputus";
@@ -233,7 +233,7 @@
 "FxAPush_DeviceDisconnected_title" = "Sync Terputus";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Peranti telah berjaya memutuskan hubungan dengan Firefox Sync";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Peranti telah berjaya memutuskan hubungan dengan Ecosia Sync";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Bantuan";
@@ -425,7 +425,7 @@
 "Okay" = "Okay";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Oops! Firefox ranap";
+"Oops! Firefox crashed" = "Oops! Ecosia ranap";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Buka artikel dalam Reader View dengan menekan ikon buku apabila muncul dalam tajuk bar.";
@@ -668,7 +668,7 @@
 "Settings.FxA.Sync.SectionName" = "Tetapan Sync";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Akaun Firefox";
+"Settings.FxA.Title" = "Akaun Ecosia";
 
 /* General settings section title */
 "Settings.General.SectionName" = "Umum";
@@ -701,7 +701,7 @@
 "Settings.NewTab.TopSectionNameFooter" = "Pilih paparan apabila anda buka tab baru";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Apabila Membuka Firefox";
+"Settings.OfferClipboardBar.Status" = "Apabila Membuka Ecosia";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.StatusV2" = "Apabila Membuka Firefox";
@@ -725,7 +725,7 @@
 "Settings.SendUsage.Link" = "Ketahui Selanjutnya.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla mengumpulkan hanya yang diperlukan untuk menyedia dan meningkatkan Firefox bagi manfaat semua pengguna.";
+"Settings.SendUsage.Message" = "Mozilla mengumpulkan hanya yang diperlukan untuk menyedia dan meningkatkan Ecosia bagi manfaat semua pengguna.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Hantar Data Penggunaan";
@@ -734,7 +734,7 @@
 "Settings.Siri.OpenTabShortcut" = "Buka Tab Baru";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Guna pintasan Siri supaya pantas membuka Firefox via Siri";
+"Settings.Siri.SectionDescription" = "Guna pintasan Siri supaya pantas membuka Ecosia via Siri";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Pintasan Siri";
@@ -773,13 +773,13 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "Memuatkan dalam Latar belakang";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Memuatkan dalam Firefox";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Memuatkan dalam Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Buka dalam Firefox";
+"ShareExtension.OpenInFirefoxAction.Title" = "Buka dalam Ecosia";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Cari dalam Firefox";
+"ShareExtension.SeachInFirefoxAction.Title" = "Cari dalam Ecosia";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "Papar Cadangan Carian";
@@ -869,7 +869,7 @@
 "UIMenuItem.PasteGo" = "Tampal & Lancarkan";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Cari dengan Firefox";
+"UIMenuItem.SearchWithFirefox" = "Cari dengan Ecosia";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "belum baca";
@@ -896,7 +896,7 @@
 "Yesterday" = "Semalam";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Anda tidak mempunyai apa-apa tab yang dibuka pada Firefox diperanti anda yang lain.";
+"You don’t have any tabs open in Firefox on your other devices." = "Anda tidak mempunyai apa-apa tab yang dibuka pada Ecosia diperanti anda yang lain.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Hak Anda";

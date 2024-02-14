@@ -44,7 +44,9 @@ extension PhotonActionSheetProtocol {
                     let margins = viewModel.getMainMenuPopOverMargins(trait: trait, view: view, presentedOn: viewController)
                     popoverVC.popoverLayoutMargins = margins
                 }
-                popoverVC.permittedArrowDirections = [.up]
+                // Ecosia: Update permitted arrow dimensions
+                // popoverVC.permittedArrowDirections = [.up]
+                popoverVC.permittedArrowDirections = viewModel.getPossibleArrowDirections(trait: trait)
             }
 
             viewController.present(sheet, animated: true, completion: nil)

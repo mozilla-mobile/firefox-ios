@@ -278,7 +278,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = " Firefox ပင်မစာမျက်နှာ";
+"Firefox.HomePage.Title" = " Ecosia ပင်မစာမျက်နှာ";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "လွှဲပြောင်းပို့ရန်";
@@ -296,7 +296,7 @@
 "fxa.signin.camera-signin" = "သင်၏ကင်မရာဖြင့်ဝင်ပါ";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "<b>https://firefox.com/pair</b> ကိုသွားပြီး သင့်ကွန်ပျူတာတွင် Firefox ဖွင့်ပါ။";
+"fxa.signin.qr-link-instruction" = "<b>https://ecosia.org/pair</b> ကိုသွားပြီး သင့်ကွန်ပျူတာတွင် Ecosia ဖွင့်ပါ။";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "စကင်ဖတ်ရန်အဆင်သင့်";
@@ -317,7 +317,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ သည် ချိတ်ဆက်မှုကို ဖြုတ်ပြီးပြီ။";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "ယခုကိရိယာသည် Firefox Sync ထံသို့ ချိတ်ဆက်မှုကို အောင်မြင်စွာ ဖြုတ်ပြီးပြီ။";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "ယခုကိရိယာသည် Ecosia Sync ထံသို့ ချိတ်ဆက်မှုကို အောင်မြင်စွာ ဖြုတ်ပြီးပြီ။";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync ကို ချိတ်ဆက်မထားပါ";
@@ -326,7 +326,7 @@
 "FxAPush_DeviceDisconnected_title" = "Sync ကို ချိတ်ဆက်မထားပါ";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "ကိရိယာသည် Firefox Sync သို့ ချိတ်ဆက်မထားပါ";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "ကိရိယာသည် Ecosia Sync သို့ ချိတ်ဆက်မထားပါ";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "အကူအညီ";
@@ -596,7 +596,7 @@
 "Open Tabs" = "တပ်ဗ်များကို ဖွင့်";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "လိပ်စာ မှားယွင်းနေသောကြောင့် Firefox သည် စာမျက်နှာကို မဖွင့်နိုင်ပါ။";
+"OpenURL.Error.Message" = "လိပ်စာ မှားယွင်းနေသောကြောင့် Ecosia သည် စာမျက်နှာကို မဖွင့်နိုင်ပါ။";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "စာမျက်နှာကို မဖွင့်နိုင်ပါ";
@@ -608,7 +608,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "ရုပ်ပုံများကို သင့် Camera Roll တွင် သိမ်းနိုင်စေမည်။";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "သင့် Photos များကို Firefox က ရယူအသုံးပြုခွင့် ရှိချင်သည်";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "သင့် Photos များကို Ecosia က ရယူအသုံးပြုခွင့် ရှိချင်သည်";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "ပိတ်";
@@ -752,7 +752,7 @@
 "SendTo.NotSignedIn.Message" = "Firefox ကို ကျေးဇူးပြု၍ ဖွင့်ပါ၊ အပြင်အဆင်များသို့ သွားပါ၊ ပြီးနောက် ဆက်လက်ဆောင်ရွက်ရန် ဝင်ရောက်ပါ။";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "သင့် Firefox Account သို့ ဝင်ရောက်ထားခြင်း မရှိပါ။";
+"SendTo.NotSignedIn.Title" = "သင့် Ecosia Account သို့ ဝင်ရောက်ထားခြင်း မရှိပါ။";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "ပို့ရန်";
@@ -962,7 +962,7 @@
 "Settings.SendUsage.Link" = "ပိုမိုလေ့လာရန်။";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla သည် လူတိုင်းအတွက် Firefox ကို ပေးစွမ်းရန်နှင့် တိုးတက်ကောင်းမွန်စေရန်အတွက်သာ ကောက်ခံမှုပြုခြင်း ဖြစ်ပါသည်။";
+"Settings.SendUsage.Message" = "Mozilla သည် လူတိုင်းအတွက် Ecosia ကို ပေးစွမ်းရန်နှင့် တိုးတက်ကောင်းမွန်စေရန်အတွက်သာ ကောက်ခံမှုပြုခြင်း ဖြစ်ပါသည်။";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "အသုံးပြုမှုဆိုင်ရာ အချက်အလက်များကို ပေးပို့ရန်";
@@ -983,7 +983,7 @@
 "Settings.Siri.OpenTabShortcut" = "တပ်ဗ်အသစ် ဖွင့်ပါ";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Siri မှတဆင့် Firefox ကို မြန်မြန်ဆန်ဆန် ဖွင့်ရန် Siri နည်းလမ်းတိုများကို အသုံးပြုပါ";
+"Settings.Siri.SectionDescription" = "Siri မှတဆင့် Ecosia ကို မြန်မြန်ဆန်ဆန် ဖွင့်ရန် Siri နည်းလမ်းတိုများကို အသုံးပြုပါ";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri နည်းလမ်းတိုများ";

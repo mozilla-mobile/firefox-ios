@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import Core
@@ -10,13 +10,13 @@ final class NTPImpactCell: UICollectionViewCell, Themeable, ReusableCell {
     struct UX {
         static let cellsSpacing: CGFloat = 12
     }
-    
+
     weak var delegate: NTPImpactCellDelegate? {
         didSet {
             impactRows.forEach { $0.delegate = delegate }
         }
     }
-    
+
     private lazy var containerStack: UIStackView = {
         let stack = UIStackView()
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -27,15 +27,15 @@ final class NTPImpactCell: UICollectionViewCell, Themeable, ReusableCell {
     private var impactRows: [NTPImpactRowView] {
         containerStack.arrangedSubviews.compactMap { $0 as? NTPImpactRowView }
     }
-    
+
     // MARK: - Themeable Properties
-    
+
     var themeManager: ThemeManager { AppContainer.shared.resolve() }
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // MARK: - Init
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -47,7 +47,7 @@ final class NTPImpactCell: UICollectionViewCell, Themeable, ReusableCell {
         setup()
         applyTheme()
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         setupConstraints()
@@ -58,7 +58,7 @@ final class NTPImpactCell: UICollectionViewCell, Themeable, ReusableCell {
         setupConstraints()
         listenForThemeChange(contentView)
     }
-    
+
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             containerStack.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -73,10 +73,10 @@ final class NTPImpactCell: UICollectionViewCell, Themeable, ReusableCell {
             (view as? Themeable)?.applyTheme()
         }
     }
-    
+
     func configure(items: [ClimateImpactInfo]) {
         containerStack.removeAllArrangedViews() // Remove existing view upon reuse
-        
+
         for (index, info) in items.enumerated() {
             let row = NTPImpactRowView(info: info)
             row.position = (index, items.count)
@@ -84,7 +84,7 @@ final class NTPImpactCell: UICollectionViewCell, Themeable, ReusableCell {
             containerStack.addArrangedSubview(row)
         }
     }
-    
+
     func refresh(items: [ClimateImpactInfo]) {
         impactRows.forEach { row in
             let matchingInfo = items.first { $0.rawValue == row.info.rawValue }

@@ -296,7 +296,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "यो एक आक्रमणकारीको छेडछाड वा एक गलत कन्फिगरेसन हुन सक्छ। तपाईँ सम्भावित जोखिम स्वीकार गर्नुहुन्छ भने मात्र अघि बढ्नुहोस्।";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "%@ को मालिकले अनुचित ढङ्गले आफ्नो वेबसाइट कन्फिगर गरेको छ। तपाईँको जानकारी चोरी हुनबाट रक्षा गर्न, Firefox ले यो वेबसाइटमा जडान गरेको छैन।";
+"ErrorPages.CertWarning.Description" = "%@ को मालिकले अनुचित ढङ्गले आफ्नो वेबसाइट कन्फिगर गरेको छ। तपाईँको जानकारी चोरी हुनबाट रक्षा गर्न, Ecosia ले यो वेबसाइटमा जडान गरेको छैन।";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "यो जडान अविश्वासिलो छ";
@@ -317,7 +317,7 @@
 "Facebook" = "फेसबुक";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefox गृह पृष्ठ";
+"Firefox.HomePage.Title" = "Ecosia गृह पृष्ठ";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "गृहपृष्ठलाई अनुकूलित गर्नुहोस्";
@@ -350,7 +350,7 @@
 "fxa.signin.camera-signin" = "आफ्नो क्यामराको साथमा साइन इन गर्नुहोस्";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "आफ्नो कम्प्युटरमा Firefox खोल्नुहोस् र firefox.com/pair मा जानुहोस्";
+"fxa.signin.qr-link-instruction" = "आफ्नो कम्प्युटरमा Ecosia खोल्नुहोस् र ecosia.org/pair मा जानुहोस्";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "स्क्यान गर्न तयार छ";
@@ -371,7 +371,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ सफलतापूर्वक विच्छेद भएको छ ।";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "यो यन्त्र सफलतापूर्वक Firefox सिङ्क बाट विच्छेद भयो ।";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "यो यन्त्र सफलतापूर्वक Ecosia सिङ्क बाट विच्छेद भयो ।";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "सिङ्क विच्छेद भयो";
@@ -380,7 +380,7 @@
 "FxAPush_DeviceDisconnected_title" = "सिङ्क विच्छेद भयो";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "एक उपकरण Firefox सिङ्कबाट बिच्छेद भएको छ";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "एक उपकरण Ecosia सिङ्कबाट बिच्छेद भएको छ";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
 "FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox लोगो, वालपेपर परिवर्तन गर्नुहोस्।";
@@ -809,7 +809,7 @@
 "Onboarding.WhatsNew.Button.Title" = "ब्राउजिङ्ग सुरु गर्नुहोस्";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "ओहो! Firefox क्रयास भयो";
+"Oops! Firefox crashed" = "ओहो! Ecosia क्रयास भयो";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Reader View मा लेखहरू हेर्न शीर्षक पट्टीमा रहेको पुस्तक चिनोमा थिच्नुहोस्।";
@@ -821,7 +821,7 @@
 "Open Tabs" = "ट्याबहरू खोल्नुहोस्";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "ठेगाना नमिलेको कारण Firefox ले यो पृष्ठ खोल्न सकेन।";
+"OpenURL.Error.Message" = "ठेगाना नमिलेको कारण Ecosia ले यो पृष्ठ खोल्न सकेन।";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "पृष्ठ खोल्न सकिएन";
@@ -986,13 +986,13 @@
 "SendTo.NavBar.Title" = "ट्याब पठाउनुहोस्";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "तपाईँको यो Firefox खातामा कुनै पनि अरू यन्त्रहरू जडान भएको छैन।";
+"SendTo.NoDevicesFound.Message" = "तपाईँको यो Ecosia खातामा कुनै पनि अरू यन्त्रहरू जडान भएको छैन।";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "कृपया Firefox खोल्नुहोस्, अगाडि जानका लागि सेटिङ्गहरुमा गएर साइन इन गर्नुहोस्।";
+"SendTo.NotSignedIn.Message" = "कृपया Ecosia खोल्नुहोस्, अगाडि जानका लागि सेटिङ्गहरुमा गएर साइन इन गर्नुहोस्।";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "तपाईँ आफ्नो Firefox खातामा साइन इन हुनुहुन्न।";
+"SendTo.NotSignedIn.Title" = "तपाईँ आफ्नो Ecosia खातामा साइन इन हुनुहुन्न।";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "पठाउनुहोस्";
@@ -1163,7 +1163,7 @@
 "Settings.Home.Option.StartAtHome.Always" = "गृहपृष्ठ";
 
 /* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
-"Settings.Home.Option.StartAtHome.Description" = "तपाईंले Firefox मा फर्किँदा के देख्नुहुन्छ छनौट गर्नुहोस्।";
+"Settings.Home.Option.StartAtHome.Description" = "तपाईंले Ecosia मा फर्किँदा के देख्नुहुन्छ छनौट गर्नुहोस्।";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "अन्तिम ट्याब";
@@ -1271,7 +1271,7 @@
 "Settings.SendUsage.Link" = "अझ जान्नुहोस् |";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla सबैको लागि Firefox प्रदान र सुधार गर्न आवश्यक कुरा मात्र संकलन गर्ने प्रयास गर्दछ ।";
+"Settings.SendUsage.Message" = "Mozilla सबैको लागि Ecosia प्रदान र सुधार गर्न आवश्यक कुरा मात्र संकलन गर्ने प्रयास गर्दछ ।";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "उपयोग डाटा पठाउनुहोस्";
@@ -1292,7 +1292,7 @@
 "Settings.Siri.OpenTabShortcut" = "नयाँ ट्याब खोल्नुहोस्";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "सिरी मार्फत Firefox छिटो खोल्नका लागि सिरी सर्टकटहरू प्रयोग गर्नुहोस्";
+"Settings.Siri.SectionDescription" = "सिरी मार्फत Ecosia छिटो खोल्नका लागि सिरी सर्टकटहरू प्रयोग गर्नुहोस्";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "सिरी सर्टकटहरु";
@@ -1556,7 +1556,7 @@
 "Yesterday" = "हिजो";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "तपाईँको अन्य यन्त्रहरूको Firefox मा कुनै पनि ट्याबहरू खुला छैन।";
+"You don’t have any tabs open in Firefox on your other devices." = "तपाईँको अन्य यन्त्रहरूको Ecosia मा कुनै पनि ट्याबहरू खुला छैन।";
 
 /* Your Rights settings section title */
 "Your Rights" = "तपाईँका अधिकारहरू";

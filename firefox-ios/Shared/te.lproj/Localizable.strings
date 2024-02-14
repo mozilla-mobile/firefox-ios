@@ -272,7 +272,7 @@
 "Facebook" = "ఫేస్‌బుక్";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefox ముంగిలి పేజీ";
+"Firefox.HomePage.Title" = "Ecosia ముంగిలి పేజీ";
 
 /* On each Pocket Stories on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes */
 "FirefoxHome.Pocket.Minutes.v99" = "%d నిమి";
@@ -680,7 +680,7 @@
 "Okay" = "సరే";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "అయ్యో! Firefox క్రాష్ అయింది";
+"Oops! Firefox crashed" = "అయ్యో! Ecosia క్రాష్ అయింది";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "టైటిల్ బార్ లో కనిపించినపుడు పుస్తకం చిహ్నాన్ని నొక్కడం ద్వారా రీడర్ లో వ్యాసాలు చూడండి.";
@@ -692,7 +692,7 @@
 "Open Tabs" = "తెరిచివున్న ట్యాబులు";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "అది ఒక చెల్లని చిరునామాను కలిగి ఉండటం వలన Firefox పేజీని తెరవలేదు.";
+"OpenURL.Error.Message" = "అది ఒక చెల్లని చిరునామాను కలిగి ఉండటం వలన Ecosia పేజీని తెరవలేదు.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "పేజీలను తెరవలేదు";
@@ -842,13 +842,13 @@
 "SendTo.NavBar.Title" = "ట్యాబును పంపు";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "సింక్రనించడానికి ఈ Firefox ఖాతాకు అనుసంధానించబడిన పరికరాలు ఏమీ మీకు లేవు.";
+"SendTo.NoDevicesFound.Message" = "సింక్రనించడానికి ఈ Ecosia ఖాతాకు అనుసంధానించబడిన పరికరాలు ఏమీ మీకు లేవు.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "కొనసాగించడానికి, దయచేసి Firefoxను తెరిచి, అమరికలకు వెళ్లి, ప్రవేశించండి.";
+"SendTo.NotSignedIn.Message" = "కొనసాగించడానికి, దయచేసి Ecosiaను తెరిచి, అమరికలకు వెళ్లి, ప్రవేశించండి.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "మీరు మీ Firefox ఖాతా లోనికి ప్రవేశించిలేరు.";
+"SendTo.NotSignedIn.Title" = "మీరు మీ Ecosia ఖాతా లోనికి ప్రవేశించిలేరు.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "పంపించు";
@@ -1079,7 +1079,7 @@
 "Settings.SendUsage.Link" = "ఇంకా తెలుసుకోండి.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla ప్రతి ఒక్కరికీ Firefoxను అందించడానికి మరియు మెరుగుపరచడానికి మాత్రమే అవసరమైనవి మాత్రమే సేకరించేందుకు కృషి చేస్తుంది.";
+"Settings.SendUsage.Message" = "Mozilla ప్రతి ఒక్కరికీ Ecosiaను అందించడానికి మరియు మెరుగుపరచడానికి మాత్రమే అవసరమైనవి మాత్రమే సేకరించేందుకు కృషి చేస్తుంది.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "వినియోగించిన డేటాను పంపు";
@@ -1100,7 +1100,7 @@
 "Settings.Siri.OpenTabShortcut" = "కొత్త ట్యాబును తెరువు";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "సిరి ద్వారా Firefoxను త్వరగా తెరవడానికి సిరి షార్టుకట్లను వాడుకోండి";
+"Settings.Siri.SectionDescription" = "సిరి ద్వారా Ecosiaను త్వరగా తెరవడానికి సిరి షార్టుకట్లను వాడుకోండి";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "సిరిలో సత్వరమార్గాలు";
@@ -1310,7 +1310,7 @@
 "Yesterday" = "నిన్నటి రోజు";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "మీరు మీ ఇతర పరికరాల్లో Firefoxలో ఏ ట్యాబులు తెరిచి లేదు.";
+"You don’t have any tabs open in Firefox on your other devices." = "మీరు మీ ఇతర పరికరాల్లో Ecosiaలో ఏ ట్యాబులు తెరిచి లేదు.";
 
 /* Your Rights settings section title */
 "Your Rights" = "మీ హక్కులు";

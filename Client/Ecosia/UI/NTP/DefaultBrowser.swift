@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import Common
@@ -12,7 +12,10 @@ protocol DefaultBrowserDelegate: AnyObject {
 
 @available(iOS 14, *)
 final class DefaultBrowser: UIViewController, Themeable {
-    
+
+    /// The minimum amount of searches required to show the Default Browser
+    static var minPromoSearches = 50
+
     weak var content: UIView!
     weak var image: UIImageView!
     weak var waves: UIImageView!
@@ -24,9 +27,9 @@ final class DefaultBrowser: UIViewController, Themeable {
     weak var cta: UIButton!
     weak var skip: UIButton!
     weak var delegate: DefaultBrowserDelegate?
-    
+
     // MARK: - Themeable Properties
-    
+
     var themeManager: ThemeManager { AppContainer.shared.resolve() }
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
@@ -168,7 +171,7 @@ final class DefaultBrowser: UIViewController, Themeable {
         self.arrow1 = arrow1
 
         let text1 = UILabel()
-        text1.text = .localized(.openAllLinksToPlantTrees, incentiveRestrictedSearchAlternativeKey: .openAllLinksAutomatically)
+        text1.text = .localized(.openAllLinksAutomatically)
         text1.translatesAutoresizingMaskIntoConstraints = false
         text1.font = .preferredFont(forTextStyle: .subheadline)
         text1.adjustsFontForContentSizeCategory = true
@@ -190,7 +193,7 @@ final class DefaultBrowser: UIViewController, Themeable {
         self.arrow2 = arrow2
 
         let text2 = UILabel()
-        text2.text = .localized(.growYourImpact, incentiveRestrictedSearchAlternativeKey: .beClimateActive)
+        text2.text = .localized(.beClimateActive)
         text2.translatesAutoresizingMaskIntoConstraints = false
         text2.font = .preferredFont(forTextStyle: .subheadline)
         text2.adjustsFontForContentSizeCategory = true

@@ -227,13 +227,13 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Páxina d'aniciu de Firefox";
+"Firefox.HomePage.Title" = "Páxina d'aniciu de Ecosia";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Avanzar";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Cuenta de Firefox";
+"FxA.FirefoxAccount" = "Cuenta de Ecosia";
 
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "Ensin conexón d'internet";
@@ -242,7 +242,7 @@
 "fxa.signin.camera-signin" = "Aniciu de sesión cola cámara";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "Nun ordenador, abri Firefox y vete a https://firefox.com/pair";
+"fxa.signin.qr-link-instruction" = "Nun ordenador, abri Ecosia y vete a https://ecosia.org/pair";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Escaniar";
@@ -263,7 +263,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ desconectóse correutamente.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Esti preséu desconectóse de Firefox Sync correutamente.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Esti preséu desconectóse de Ecosia Sync correutamente.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync desconectóse";
@@ -272,7 +272,7 @@
 "FxAPush_DeviceDisconnected_title" = "Sync desconectóse";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Un preséu desconectóse de Firefox Sync";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Un preséu desconectóse de Ecosia Sync";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Ayuda";
@@ -440,7 +440,7 @@
 "LoginsList.Title" = "ANICIOS DE SESIÓN GUARDAOS";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Paez que Firefox cascó enantes. ¿Quies restaurar les llingüetes?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Paez que Ecosia cascó enantes. ¿Quies restaurar les llingüetes?";
 
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "Amestóse'l marcador";
@@ -539,7 +539,7 @@
 "Okay" = "Val";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "¡Meca! Firefox cascó";
+"Oops! Firefox crashed" = "¡Meca! Ecosia cascó";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Abri artículos na Vista de Llectora calcando l'iconu del llibru cuando apaeza na barra de títulos.";
@@ -695,13 +695,13 @@
 "SendTo.Error.Title" = "L'enllaz que tentes de compartir nun se pue compartir.";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "Nun tienes más preseos conectaos a esta cuenta de Firefox disponible pa sincronizar.";
+"SendTo.NoDevicesFound.Message" = "Nun tienes más preseos conectaos a esta cuenta de Ecosia disponible pa sincronizar.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Abri Firefox, vete p'Axustes y anicia sesión pa siguir.";
+"SendTo.NotSignedIn.Message" = "Abri Ecosia, vete p'Axustes y anicia sesión pa siguir.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Nun aniciesti sesión na to cuenta de Firefox.";
+"SendTo.NotSignedIn.Title" = "Nun aniciesti sesión na to cuenta de Ecosia.";
 
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_body" = "Aportaron llingüetes nueves d'otru preséu.";
@@ -809,7 +809,7 @@
 "Settings.FxA.Sync.SectionName" = "Axustes de sincronización";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Cuenta de Firefox";
+"Settings.FxA.Title" = "Cuenta de Ecosia";
 
 /* General settings section title */
 "Settings.General.SectionName" = "Xeneral";
@@ -848,7 +848,7 @@
 "Settings.NewTab.TopSectionNameFooter" = "Escueyi lo que se carga al abrir una llingüeta nueva";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Al abrir Firefox";
+"Settings.OfferClipboardBar.Status" = "Al abrir Ecosia";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.StatusV2" = "Al abrir Firefox";
@@ -875,7 +875,7 @@
 "Settings.SendUsage.Link" = "Lleer más.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla esfuérciase en recoyer namás lo que precisa pa fornir y ameyorar Firefox pa tol mundu.";
+"Settings.SendUsage.Message" = "Mozilla esfuérciase en recoyer namás lo que precisa pa fornir y ameyorar Ecosia pa tol mundu.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Unviar datos d'usu";
@@ -1022,7 +1022,7 @@
 "UIMenuItem.PasteGo" = "Apegar y dir";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Buscar con Firefox";
+"UIMenuItem.SearchWithFirefox" = "Buscar con Ecosia";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "ensin lleer";
@@ -1049,7 +1049,7 @@
 "Yesterday" = "Ayeri";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Nun tienes llingüetes abiertes nel Firefox d'otros preseos.";
+"You don’t have any tabs open in Firefox on your other devices." = "Nun tienes llingüetes abiertes nel Ecosia d'otros preseos.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Los tos derechos";

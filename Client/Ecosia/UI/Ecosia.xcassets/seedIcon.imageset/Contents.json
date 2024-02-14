@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "seedIcon.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

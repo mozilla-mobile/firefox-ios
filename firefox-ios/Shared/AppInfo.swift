@@ -57,7 +57,9 @@ extension AppInfo {
     }()
 
     // The App Store page identifier for the Firefox iOS application
-    public static var appStoreId = "id989804926"
+    // Ecosia: update App Store ID
+    // public static var appStoreId = "id989804926"
+    public static var appStoreId = "id670881887"
 
     /// Return the shared container identifier (also known as the app group) to be used with for example background
     /// http requests. It is the base bundle identifier with a "group." prefix.
@@ -72,5 +74,19 @@ extension AppInfo {
         return "group." + bundleIdentifier
          */
         ecosiaSharedContainerIdentifier
+    }
+}
+
+// Ecosia: Add file specific info here to avoid issues with dependencies
+extension AppInfo {
+    /// Return the shared container identifier (also known as the app group) to be used with for example background
+    /// http requests. It is the base bundle identifier with a "group." prefix.
+    public static var ecosiaSharedContainerIdentifier: String {
+        return "\("group.")\(baseBundleIdentifier)"
+    }
+
+    /// Return the keychain access group.
+    public static func ecosiaKeychainAccessGroupWithPrefix(_ prefix: String) -> String {
+        return "\(prefix).\(baseBundleIdentifier)"
     }
 }

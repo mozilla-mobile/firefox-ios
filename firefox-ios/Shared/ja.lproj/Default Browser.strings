@@ -8,10 +8,10 @@
 "DefaultBrowserCard.Button.v2" = "手順を見る";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "ウェブサイト、メール、メッセージのリンクを自動的に Firefox で開くように設定します。";
+"DefaultBrowserCard.Description" = "ウェブサイト、メール、メッセージのリンクを自動的に Ecosia で開くように設定します。";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "速さと安全性、プライバシー保護を自動化するには、Firefox をデフォルトウェブブラウザーに選んでください。";
+"DefaultBrowserCard.NextLevel.Description.v108" = "速さと安全性、プライバシー保護を自動化するには、Ecosia をデフォルトウェブブラウザーに選んでください。";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "日々のブラウジングを向上させる";
@@ -35,7 +35,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. デフォルトブラウザーアプリをタップ";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Firefox を選択してください";
+"DefaultBrowserOnboarding.Description3" = "3. Ecosia を選択してください";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "デフォルトブラウザーアプリ";

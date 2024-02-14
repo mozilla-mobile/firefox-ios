@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import SnapKit
 import Shared
@@ -112,8 +112,8 @@ class LegacyTabTrayViewController: UIViewController, Themeable {
 
     lazy var fixedSpace: UIBarButtonItem = {
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace,
-                               target: nil,
-                               action: nil)
+                                         target: nil,
+                                         action: nil)
         fixedSpace.width = CGFloat(UX.NavigationMenu.height)
         return fixedSpace
     }()
@@ -195,11 +195,11 @@ class LegacyTabTrayViewController: UIViewController, Themeable {
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         self.viewModel = LegacyTabTrayViewModel(tabTrayDelegate: tabTrayDelegate,
-                                          profile: profile,
-                                          tabToFocus: tabToFocus,
-                                          tabManager: tabManager,
-                                          overlayManager: overlayManager,
-                                          segmentToFocus: focusedSegment)
+                                                profile: profile,
+                                                tabToFocus: tabToFocus,
+                                                tabManager: tabManager,
+                                                overlayManager: overlayManager,
+                                                segmentToFocus: focusedSegment)
 
         super.init(nibName: nil, bundle: nil)
         modalPresentationCapturesStatusBarAppearance = true
@@ -354,7 +354,7 @@ class LegacyTabTrayViewController: UIViewController, Themeable {
         addChild(panel)
         panel.beginAppearanceTransition(true, animated: true)
         view.addSubview(panel.view)
-        //Ecosia: view.bringSubviewToFront(navigationToolbar)
+        // Ecosia: view.bringSubviewToFront(navigationToolbar)
         // Ecosia: hide Toolbar
         // let topEdgeInset = shouldUseiPadSetup() ? 0 : GridTabTrayControllerUX.NavigationToolbarHeight
         let topEdgeInset: CGFloat = 0
@@ -414,21 +414,18 @@ class LegacyTabTrayViewController: UIViewController, Themeable {
 }
 
 extension LegacyTabTrayViewController: TabTrayController {
-    
-    func remotePanelDidRequestToSignIn() {
-        
-    }
-    
+
+    func remotePanelDidRequestToSignIn() { }
+
     func remotePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
         self.openInNewTab?(url, isPrivate)
         self.dismissVC()
     }
-    
+
     func remotePanel(didSelectURL url: URL, visitType: VisitType) {
         self.didSelectUrl?(url, visitType)
         self.dismissVC()
     }
-
 }
 
 // MARK: - Notifiable protocol
@@ -450,11 +447,11 @@ extension LegacyTabTrayViewController: Notifiable {
 
 // MARK: - Theme protocol
 extension LegacyTabTrayViewController {
-    
+
      @objc func applyTheme() {
          view.backgroundColor = UIColor.legacyTheme.tabTray.background
-         //Ecosia: navigationToolbar.barTintColor = UIColor.theme.tabTray.toolbar
-         //Ecosia: navigationToolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
+         // Ecosia: navigationToolbar.barTintColor = UIColor.theme.tabTray.toolbar
+         // Ecosia: navigationToolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
          navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.legacyTheme.ecosia.primaryText]
          // viewModel.syncedTabsController.applyTheme()
 
@@ -468,7 +465,7 @@ extension LegacyTabTrayViewController {
          addNewTabButton.applyTheme(theme: themeManager.currentTheme)
          // Ecosia: Change close all button title color
          (deleteButton.customView as? UIButton)?.setTitleColor(.legacyTheme.ecosia.warning, for: .normal)
-         
+
          if shouldUseiPadSetup() {
              navigationItem.leftBarButtonItem?.tintColor = UIColor.legacyTheme.ecosia.primaryButton
              navigationItem.rightBarButtonItem?.tintColor = UIColor.legacyTheme.ecosia.primaryButton

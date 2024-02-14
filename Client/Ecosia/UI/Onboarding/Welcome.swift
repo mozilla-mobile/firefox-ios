@@ -1,9 +1,10 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import Core
+import Common
 
 protocol WelcomeDelegate: AnyObject {
     func welcomeDidFinish(_ welcome: Welcome)
@@ -46,10 +47,8 @@ final class Welcome: UIViewController {
         addBackground()
         addStack()
 
-        if LegacyThemeManager.instance.systemThemeIsOn {
-            let userInterfaceStyle = traitCollection.userInterfaceStyle
-            LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? LegacyDarkTheme() : LegacyNormalTheme()
-        }
+        let themeManager: ThemeManager = AppContainer.shared.resolve()
+        (themeManager as? EcosiaThemeManager)?.updateLegacyThemeIfSystemThemeON()
 
         Task.detached {
             // Fetching FinancialReports async as some onboarding steps might use it
@@ -59,11 +58,14 @@ final class Welcome: UIViewController {
 
     private var didAppear = false
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         guard !didAppear else { return }
         addMask()
         fadeIn()
         didAppear = true
         Analytics.shared.introDisplaying(page: .start, at: 0)
+
+        MMP.sendEvent(.onboardingStart)
     }
 
     private func addOverlay() {
@@ -246,7 +248,7 @@ final class Welcome: UIViewController {
             self.stackBottonConstraint.isActive = true
             self.view.layoutIfNeeded()
             self.setNeedsStatusBarAppearanceUpdate()
-        } completion: { _ in }
+        }
     }
 
     // MARK: Helper

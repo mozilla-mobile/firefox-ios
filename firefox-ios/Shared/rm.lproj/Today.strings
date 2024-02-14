@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Serrar ils tabs privats";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Agiuntar scursanidas a Firefox a tes visur da partenza.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Agiuntar scursanidas a Ecosia a tes visur da partenza.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Ir a la colliaziun copiada";
@@ -23,19 +23,19 @@
 "TodayWidget.NoOpenTabsLabel" = "Nagins tabs averts.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Avrir Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Avrir Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Tschertga privata";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Agiuntescha ina scursanida a Firefox a tes visur da partenza. Suenter l'avair agiuntà, tutga e tegna il widget per l'editar e tscherna in'autra scursanida.";
+"TodayWidget.QuickActionGalleryDescription" = "Agiuntescha ina scursanida a Ecosia a tes visur da partenza. Suenter l'avair agiuntà, tutga e tegna il widget per l'editar e tscherna in'autra scursanida.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Acziuns sveltas";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Scursanidas da Firefox";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Scursanidas da Ecosia";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Agiuntescha scursanidas a tes tabs averts.";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Vista svelta";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Tschertgar en Firefox";
+"TodayWidget.SearchInFirefoxV2" = "Tschertgar en Ecosia";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Tschertgar en in tab privat";

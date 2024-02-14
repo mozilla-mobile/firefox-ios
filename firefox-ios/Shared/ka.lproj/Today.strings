@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "პირადი ჩანართების\nდახურვა";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "დაამატეთ სხვადასხვა Firefox-მალსახმობი მთავარ ეკრანზე.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "დაამატეთ სხვადასხვა Ecosia-მალსახმობი მთავარ ეკრანზე.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "აღებულ ბმულზე გადასვლა";
@@ -23,13 +23,13 @@
 "TodayWidget.NoOpenTabsLabel" = "გახსნილი ჩანართები არაა.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "გახსენით Firefox";
+"TodayWidget.OpenFirefoxLabel" = "გახსენით Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "პირადი ძიება";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "დაამატეთ Firefox-მალსახმობი მთავარ ეკრანზე. დამატების შემდგომ, დიდხანს შეეხეთ, ჩასასწორებლად ან სხვა მალსახმობის შესარჩევად.";
+"TodayWidget.QuickActionGalleryDescription" = "დაამატეთ Ecosia-მალსახმობი მთავარ ეკრანზე. დამატების შემდგომ, დიდხანს შეეხეთ, ჩასასწორებლად ან სხვა მალსახმობის შესარჩევად.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "სწრაფი მოქმედებები";

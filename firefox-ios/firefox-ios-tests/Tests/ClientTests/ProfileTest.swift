@@ -3,7 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 @testable import Client
-@testable import Account
+// Ecosia: Remove Account import
+// @testable import Account
 import Foundation
 import Shared
 import Storage

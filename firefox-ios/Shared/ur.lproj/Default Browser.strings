@@ -2,7 +2,7 @@
 "DefaultBrowserCard.Button.v2" = "کیسے  سیکھیں ";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "ویب سائٹ، ای میل اور میسج کے لنک Firefox میں خود بخود کھلنے کے لئے سیٹ کریں۔";
+"DefaultBrowserCard.Description" = "ویب سائٹ، ای میل اور میسج کے لنک Ecosia میں خود بخود کھلنے کے لئے سیٹ کریں۔";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "اپنا طے شدہ  براؤزر سوئچ کریں";
@@ -17,7 +17,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. طے شدہ براؤزر ایپ کو ٹیپ کریں";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Firefox کو منتخب کریں";
+"DefaultBrowserOnboarding.Description3" = "3. Ecosia کو منتخب کریں";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "طے شدہ براؤزر ایپ";

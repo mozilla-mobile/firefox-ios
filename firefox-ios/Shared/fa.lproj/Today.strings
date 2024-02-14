@@ -29,7 +29,7 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "جست‌و‌جوی خصوصی";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "یک میانبر Firefox به صفحه اصلی خود اضافه کنید. پس از افزودن ابزارک ، آن را لمس کنید و نگه دارید تا ویرایش شود و یک میانبر دیگر انتخاب کنید.";
+"TodayWidget.QuickActionGalleryDescription" = "یک میانبر Ecosia به صفحه اصلی خود اضافه کنید. پس از افزودن ابزارک ، آن را لمس کنید و نگه دارید تا ویرایش شود و یک میانبر دیگر انتخاب کنید.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "اقدامات سریع";

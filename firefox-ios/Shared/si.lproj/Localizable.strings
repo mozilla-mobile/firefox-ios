@@ -389,7 +389,7 @@
 "fxa.signin.camera-signin" = "රූගතය සමඟ පිවිසෙන්න";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "පරිගණකයෙහි ෆයර්ෆොක්ස් විවෘත කර firefox.com/pair වෙත යන්න";
+"fxa.signin.qr-link-instruction" = "පරිගණකයෙහි ෆයර්ෆොක්ස් විවෘත කර ecosia.org/pair වෙත යන්න";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "පරිලෝකනයට ඔබන්න";

@@ -5,7 +5,7 @@
 // Disabling `line_length` for this whole file because it is going to get refactored/replaced soon.
 // swiftlint:disable line_length
 import Common
-import Glean
+// Ecosia: remove Glean dependency // import Glean
 import Shared
 import Account
 import Sync
@@ -45,7 +45,10 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
 
     static let shared = TelemetryWrapper()
 
+    /* Ecosia: remove Glean dependency 
     let glean = Glean.shared
+    */
+
     // Boolean flag to temporarily remember if we crashed during the
     // last run of the app. We cannot simply use `Sentry.crashedLastLaunch`
     // because we want to clear this flag after we've already reported it
@@ -92,6 +95,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
     }
 
     func initGlean(_ profile: Profile, sendUsageData: Bool) {
+        /* Ecosia: remove Glean dependency
+
         // Record default search engine setting to avoid sending a `null` value.
         // If there's no default search engine, (there's not, at this point), we will
         // send "unavailable" in order not to send `null`, but still differentiate
@@ -138,10 +143,12 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
             name: UIApplication.didFinishLaunchingNotification,
             object: nil
         )
+         */
     }
 
     @objc
     func recordFinishedLaunchingPreferenceMetrics(notification: NSNotification) {
+        /* Ecosia: remove Glean dependency
         guard let profile = self.profile else { return }
         // Pocket stories visible
         if let pocketStoriesVisible = profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) {
@@ -149,12 +156,14 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         } else {
             GleanMetrics.FirefoxHomePage.pocketStoriesVisible.set(true)
         }
+         */
     }
 
     // Function for recording metrics that are better recorded when going to background due
     // to the particular measurement, or availability of the information.
     @objc
     func recordEnteredBackgroundPreferenceMetrics(notification: NSNotification) {
+        /* Ecosia: remove Glean dependency
         guard let profile = self.profile else {
             assertionFailure("Error unwrapping profile")
             return
@@ -268,6 +277,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
 
         let startAtHomeOption = prefs.stringForKey(PrefsKeys.UserFeatureFlagPrefs.StartAtHome) ?? StartAtHomeSetting.afterFourHours.rawValue
         GleanMetrics.Preferences.openingScreen.set(startAtHomeOption)
+         */
     }
 }
 
@@ -799,6 +809,7 @@ extension TelemetryWrapper {
     }
 
     static func gleanRecordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue? = nil, extras: [String: Any]? = nil) {
+        /* Ecosia: remove Glean dependency
         switch (category, method, object, value, extras) {
         // MARK: Bookmarks
         case (.action, .view, .bookmarksPanel, let from?, _):
@@ -2141,6 +2152,7 @@ extension TelemetryWrapper {
         default:
             recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
         }
+         */
     }
 
     private static func recordUninstrumentedMetrics(

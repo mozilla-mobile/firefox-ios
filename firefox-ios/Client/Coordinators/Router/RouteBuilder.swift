@@ -124,9 +124,19 @@ final class RouteBuilder {
             }
         } else if urlScanner.isHTTPScheme {
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
+
+            // Ecosia: Track app open as default browser
+            Analytics.shared.appOpenAsDefaultBrowser()
+
             RatingPromptManager.isBrowserDefault = true
             // Use the last browsing mode the user was in
             return .search(url: url, isPrivate: isPrivate, options: [.focusLocationField])
+
+        // Ecosia: Referral deeplink
+        } else if urlScanner.scheme == "ecosia", urlScanner.host == "invite" {
+            let paths = url.absoluteString.split(separator: "/")
+            guard let componentPath = paths[safe: 2] else { return nil }
+            return .referrals(code: String(componentPath))
         } else {
             return nil
         }

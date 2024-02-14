@@ -15,13 +15,13 @@ final class ProgressView: UIView {
             (layer as! CAShapeLayer).strokeColor = color.cgColor
         }
     }
-    
+
     override class var layerClass: AnyClass {
         CAShapeLayer.self
     }
-    
+
     required init?(coder: NSCoder) { nil }
-    
+
     init(size: CGSize, lineWidth: CGFloat) {
         super.init(frame: .init(size: size))
         isUserInteractionEnabled = false
@@ -32,7 +32,7 @@ final class ProgressView: UIView {
         (layer as! CAShapeLayer).lineWidth = lineWidth
         (layer as! CAShapeLayer).lineCap = .round
         layer.masksToBounds = true
-        
+
         (layer as! CAShapeLayer).path = { path in
             path
                 .addArc(center: .init(x: size.width/2, y: size.width/2),
@@ -41,6 +41,6 @@ final class ProgressView: UIView {
                         endAngle: 0.2,
                         clockwise: false)
             return path
-        } (CGMutablePath())
+        }(CGMutablePath())
     }
 }

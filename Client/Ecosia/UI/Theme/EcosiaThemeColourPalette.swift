@@ -21,101 +21,109 @@ public struct EcosiaLightTheme: Theme {
     public var type: ThemeType = .light
     public var colors: ThemeColourPalette = EcosiaLightColourPalette()
 
-    public init() {}
+    public init() {
+        (colors as? EcosiaLightColourPalette)?.fallbackDefaultThemeManager.changeCurrentTheme(.light)
+    }
 }
 
 public struct EcosiaDarkTheme: Theme {
     public var type: ThemeType = .dark
     public var colors: ThemeColourPalette = EcosiaDarkColourPalette()
 
-    public init() {}
+    public init() {
+        (colors as? EcosiaLightColourPalette)?.fallbackDefaultThemeManager.changeCurrentTheme(.dark)
+    }
 }
 
-private class EcosiaDarkColourPalette: EcosiaLightColourPalette {}
+private class EcosiaDarkColourPalette: EcosiaLightColourPalette {
+    override var layer1: UIColor { .legacyTheme.ecosia.primaryBackground }
+}
 
 private class EcosiaLightColourPalette: ThemeColourPalette {
-    
-    private static var fallbackDefaultThemeManager: ThemeManager = {
-        DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
-    }()
-        
+
+    let fallbackDefaultThemeManager: ThemeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
+
     // MARK: - Layers
-    var layer1: UIColor = .legacyTheme.ecosia.primaryBackground
-    var layer2: UIColor = fallbackDefaultThemeManager.currentTheme.colors.layer2
-    var layer3: UIColor = .legacyTheme.ecosia.primaryBackground
-    var layer4: UIColor = fallbackDefaultThemeManager.currentTheme.colors.layer4
-    var layer5: UIColor = .legacyTheme.ecosia.secondaryBackground
-    var layer6: UIColor = .legacyTheme.ecosia.homePanelBackground
-    var layer5Hover: UIColor = .legacyTheme.ecosia.secondarySelectedBackground
-    var layerScrim: UIColor = fallbackDefaultThemeManager.currentTheme.colors.layerScrim
-    var layerGradient = fallbackDefaultThemeManager.currentTheme.colors.layerGradient
-    var layerGradientOverlay = fallbackDefaultThemeManager.currentTheme.colors.layerGradientOverlay
-    var layerAccentNonOpaque: UIColor = .legacyTheme.ecosia.primaryButton
-    var layerAccentPrivate: UIColor = fallbackDefaultThemeManager.currentTheme.colors.layerAccentPrivate
-    var layerAccentPrivateNonOpaque: UIColor = .legacyTheme.ecosia.primaryText
-    var layerLightGrey30: UIColor = fallbackDefaultThemeManager.currentTheme.colors.layerLightGrey30
-    var layerSepia: UIColor = fallbackDefaultThemeManager.currentTheme.colors.layerSepia
-    var layerInfo: UIColor = fallbackDefaultThemeManager.currentTheme.colors.layerInfo
-    var layerConfirmation: UIColor = fallbackDefaultThemeManager.currentTheme.colors.layerConfirmation
-    var layerWarning: UIColor = .legacyTheme.ecosia.warning
-    var layerError: UIColor = fallbackDefaultThemeManager.currentTheme.colors.layerError
-    var layerRatingA: UIColor = fallbackDefaultThemeManager.currentTheme.colors.layerRatingA
-    var layerRatingASubdued: UIColor = fallbackDefaultThemeManager.currentTheme.colors.layerRatingASubdued
-    var layerRatingB: UIColor = fallbackDefaultThemeManager.currentTheme.colors.layerRatingB
-    var layerRatingBSubdued: UIColor = fallbackDefaultThemeManager.currentTheme.colors.layerRatingBSubdued
-    var layerRatingC: UIColor = fallbackDefaultThemeManager.currentTheme.colors.layerRatingC
-    var layerRatingCSubdued: UIColor = fallbackDefaultThemeManager.currentTheme.colors.layerRatingCSubdued
-    var layerRatingD: UIColor = fallbackDefaultThemeManager.currentTheme.colors.layerRatingD
-    var layerRatingDSubdued: UIColor = fallbackDefaultThemeManager.currentTheme.colors.layerRatingDSubdued
-    var layerRatingF: UIColor = fallbackDefaultThemeManager.currentTheme.colors.layerRatingF
-    var layerRatingFSubdued: UIColor = fallbackDefaultThemeManager.currentTheme.colors.layerRatingFSubdued
+    var layer1: UIColor { .legacyTheme.ecosia.tertiaryBackground }
+    var layer2: UIColor { fallbackDefaultThemeManager.currentTheme.colors.layer2 }
+    var layer3: UIColor { .legacyTheme.ecosia.ntpBackground }
+    var layer4: UIColor { fallbackDefaultThemeManager.currentTheme.colors.layer4 }
+    var layer5: UIColor { .legacyTheme.ecosia.secondaryBackground }
+    var layer6: UIColor { .legacyTheme.ecosia.homePanelBackground }
+    var layer5Hover: UIColor { .legacyTheme.ecosia.secondarySelectedBackground }
+    var layerScrim: UIColor { fallbackDefaultThemeManager.currentTheme.colors.layerScrim }
+    var layerGradient: Common.Gradient { fallbackDefaultThemeManager.currentTheme.colors.layerGradient }
+    var layerGradientOverlay: Common.Gradient { fallbackDefaultThemeManager.currentTheme.colors.layerGradientOverlay }
+    var layerAccentNonOpaque: UIColor { .legacyTheme.ecosia.primaryButton }
+    var layerAccentPrivate: UIColor { fallbackDefaultThemeManager.currentTheme.colors.layerAccentPrivate }
+    var layerAccentPrivateNonOpaque: UIColor { .legacyTheme.ecosia.primaryText }
+    var layerLightGrey30: UIColor { fallbackDefaultThemeManager.currentTheme.colors.layerLightGrey30 }
+    var layerSepia: UIColor { fallbackDefaultThemeManager.currentTheme.colors.layerSepia }
+    var layerInfo: UIColor { fallbackDefaultThemeManager.currentTheme.colors.layerInfo }
+    var layerConfirmation: UIColor { fallbackDefaultThemeManager.currentTheme.colors.layerConfirmation }
+    var layerWarning: UIColor { .legacyTheme.ecosia.warning }
+    var layerError: UIColor { fallbackDefaultThemeManager.currentTheme.colors.layerError }
+    var layerRatingA: UIColor { fallbackDefaultThemeManager.currentTheme.colors.layerRatingA }
+    var layerRatingASubdued: UIColor { fallbackDefaultThemeManager.currentTheme.colors.layerRatingASubdued }
+    var layerRatingB: UIColor { fallbackDefaultThemeManager.currentTheme.colors.layerRatingB }
+    var layerRatingBSubdued: UIColor { fallbackDefaultThemeManager.currentTheme.colors.layerRatingBSubdued }
+    var layerRatingC: UIColor { fallbackDefaultThemeManager.currentTheme.colors.layerRatingC }
+    var layerRatingCSubdued: UIColor { fallbackDefaultThemeManager.currentTheme.colors.layerRatingCSubdued }
+    var layerRatingD: UIColor { fallbackDefaultThemeManager.currentTheme.colors.layerRatingD }
+    var layerRatingDSubdued: UIColor { fallbackDefaultThemeManager.currentTheme.colors.layerRatingDSubdued }
+    var layerRatingF: UIColor { fallbackDefaultThemeManager.currentTheme.colors.layerRatingF }
+    var layerRatingFSubdued: UIColor { fallbackDefaultThemeManager.currentTheme.colors.layerRatingFSubdued }
+    var layerHomepage: Common.Gradient { fallbackDefaultThemeManager.currentTheme.colors.layerHomepage }
+    var layerSearch: UIColor { fallbackDefaultThemeManager.currentTheme.colors.layerSearch }
+    var layerGradientURL: Common.Gradient { fallbackDefaultThemeManager.currentTheme.colors.layerGradientURL }
+    var actionTabActive: UIColor { fallbackDefaultThemeManager.currentTheme.colors.actionTabActive }
+    var actionTabInactive: UIColor { fallbackDefaultThemeManager.currentTheme.colors.actionTabInactive }
+    var borderToolbarDivider: UIColor { fallbackDefaultThemeManager.currentTheme.colors.borderToolbarDivider }
 
     // MARK: - Actions
-    var actionPrimary: UIColor = .legacyTheme.ecosia.primaryButton
-    var actionPrimaryHover: UIColor = .legacyTheme.ecosia.primaryButtonActive
-    var actionSecondary: UIColor = .legacyTheme.ecosia.secondaryButton
-    var actionSecondaryHover: UIColor = fallbackDefaultThemeManager.currentTheme.colors.actionSecondaryHover
-    var formSurfaceOff: UIColor = fallbackDefaultThemeManager.currentTheme.colors.formSurfaceOff
-    var formKnob: UIColor = fallbackDefaultThemeManager.currentTheme.colors.formKnob
-    var indicatorActive: UIColor = fallbackDefaultThemeManager.currentTheme.colors.indicatorActive
-    var indicatorInactive: UIColor = fallbackDefaultThemeManager.currentTheme.colors.indicatorInactive
-    var actionConfirmation: UIColor = fallbackDefaultThemeManager.currentTheme.colors.actionConfirmation
-    var actionWarning: UIColor = .legacyTheme.ecosia.warning
-    var actionError: UIColor = fallbackDefaultThemeManager.currentTheme.colors.actionError
+    var actionPrimary: UIColor { .legacyTheme.ecosia.primaryButton }
+    var actionPrimaryHover: UIColor { .legacyTheme.ecosia.primaryButtonActive }
+    var actionSecondary: UIColor { .legacyTheme.ecosia.secondaryButton }
+    var actionSecondaryHover: UIColor { fallbackDefaultThemeManager.currentTheme.colors.actionSecondaryHover }
+    var formSurfaceOff: UIColor { fallbackDefaultThemeManager.currentTheme.colors.formSurfaceOff }
+    var formKnob: UIColor { fallbackDefaultThemeManager.currentTheme.colors.formKnob }
+    var indicatorActive: UIColor { fallbackDefaultThemeManager.currentTheme.colors.indicatorActive }
+    var indicatorInactive: UIColor { fallbackDefaultThemeManager.currentTheme.colors.indicatorInactive }
+    var actionConfirmation: UIColor { fallbackDefaultThemeManager.currentTheme.colors.actionConfirmation }
+    var actionWarning: UIColor { .legacyTheme.ecosia.warning }
+    var actionError: UIColor { fallbackDefaultThemeManager.currentTheme.colors.actionError }
 
     // MARK: - Text
-    var textPrimary: UIColor = .legacyTheme.ecosia.primaryText
-    var textSecondary: UIColor = .legacyTheme.ecosia.secondaryText
-    var textSecondaryAction: UIColor = fallbackDefaultThemeManager.currentTheme.colors.textSecondaryAction
-    var textDisabled: UIColor = fallbackDefaultThemeManager.currentTheme.colors.textDisabled
-    var textWarning: UIColor = fallbackDefaultThemeManager.currentTheme.colors.textWarning
-    var textAccent: UIColor = .legacyTheme.ecosia.primaryButton
-    var textOnDark: UIColor = fallbackDefaultThemeManager.currentTheme.colors.textOnDark
-    var textOnLight: UIColor = fallbackDefaultThemeManager.currentTheme.colors.textOnLight
-    var textInverted: UIColor = .legacyTheme.ecosia.primaryTextInverted
+    var textPrimary: UIColor { .legacyTheme.ecosia.primaryText }
+    var textSecondary: UIColor { .legacyTheme.ecosia.secondaryText }
+    var textDisabled: UIColor { fallbackDefaultThemeManager.currentTheme.colors.textDisabled }
+    var textWarning: UIColor { fallbackDefaultThemeManager.currentTheme.colors.textWarning }
+    var textAccent: UIColor { .legacyTheme.ecosia.primaryButton }
+    var textOnDark: UIColor { fallbackDefaultThemeManager.currentTheme.colors.textOnDark }
+    var textOnLight: UIColor { fallbackDefaultThemeManager.currentTheme.colors.textOnLight }
+    var textInverted: UIColor { .legacyTheme.ecosia.primaryTextInverted }
 
     // MARK: - Icons
-    var iconPrimary: UIColor = .legacyTheme.ecosia.primaryIcon
-    var iconSecondary: UIColor = .legacyTheme.ecosia.secondaryIcon
-    var iconDisabled: UIColor = fallbackDefaultThemeManager.currentTheme.colors.iconDisabled
-    var iconAction: UIColor = fallbackDefaultThemeManager.currentTheme.colors.iconAction
-    var iconOnColor: UIColor = fallbackDefaultThemeManager.currentTheme.colors.iconOnColor
-    var iconWarning: UIColor = fallbackDefaultThemeManager.currentTheme.colors.iconWarning
-    var iconSpinner: UIColor = fallbackDefaultThemeManager.currentTheme.colors.iconSpinner
-    var iconAccentViolet: UIColor = fallbackDefaultThemeManager.currentTheme.colors.iconAccentViolet
-    var iconAccentBlue: UIColor = fallbackDefaultThemeManager.currentTheme.colors.iconAccentBlue
-    var iconAccentPink: UIColor = fallbackDefaultThemeManager.currentTheme.colors.iconAccentPink
-    var iconAccentGreen: UIColor = fallbackDefaultThemeManager.currentTheme.colors.iconAccentGreen
-    var iconAccentYellow: UIColor = fallbackDefaultThemeManager.currentTheme.colors.iconAccentYellow
+    var iconPrimary: UIColor { .legacyTheme.ecosia.primaryIcon }
+    var iconSecondary: UIColor { .legacyTheme.ecosia.secondaryIcon }
+    var iconDisabled: UIColor { fallbackDefaultThemeManager.currentTheme.colors.iconDisabled }
+    var iconAction: UIColor { fallbackDefaultThemeManager.currentTheme.colors.iconAction }
+    var iconOnColor: UIColor { fallbackDefaultThemeManager.currentTheme.colors.iconOnColor }
+    var iconWarning: UIColor { .legacyTheme.ecosia.warning }
+    var iconSpinner: UIColor { fallbackDefaultThemeManager.currentTheme.colors.iconSpinner }
+    var iconAccentViolet: UIColor { fallbackDefaultThemeManager.currentTheme.colors.iconAccentViolet }
+    var iconAccentBlue: UIColor { fallbackDefaultThemeManager.currentTheme.colors.iconAccentBlue }
+    var iconAccentPink: UIColor { fallbackDefaultThemeManager.currentTheme.colors.iconAccentPink }
+    var iconAccentGreen: UIColor { fallbackDefaultThemeManager.currentTheme.colors.iconAccentGreen }
+    var iconAccentYellow: UIColor { fallbackDefaultThemeManager.currentTheme.colors.iconAccentYellow }
 
     // MARK: - Border
-    var borderPrimary: UIColor = .legacyTheme.ecosia.barSeparator
-    var borderAccent: UIColor = fallbackDefaultThemeManager.currentTheme.colors.borderAccent
-    var borderAccentNonOpaque: UIColor = fallbackDefaultThemeManager.currentTheme.colors.borderAccentNonOpaque
-    var borderAccentPrivate: UIColor = fallbackDefaultThemeManager.currentTheme.colors.borderAccentPrivate
-    var borderInverted: UIColor = fallbackDefaultThemeManager.currentTheme.colors.borderInverted
+    var borderPrimary: UIColor { .legacyTheme.ecosia.barSeparator }
+    var borderAccent: UIColor { actionPrimary }
+    var borderAccentNonOpaque: UIColor { actionPrimary }
+    var borderAccentPrivate: UIColor { actionPrimary }
+    var borderInverted: UIColor { fallbackDefaultThemeManager.currentTheme.colors.borderInverted }
 
     // MARK: - Shadow
-    var shadowDefault: UIColor = fallbackDefaultThemeManager.currentTheme.colors.shadowDefault
+    var shadowDefault: UIColor { fallbackDefaultThemeManager.currentTheme.colors.shadowDefault }
 }
-

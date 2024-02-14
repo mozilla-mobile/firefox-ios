@@ -263,7 +263,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Bu səhv konfiqurasiya və ya pis niyyətli birinin hücumu ola bilər. Əgər potensial riski qəbul edirsinizsə davam edin.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "%@ saytının sahibi saytı səhv konfiqurasiya edib. Məlumatlarınızı oğurlanmaqdan qorumaq üçün Firefox bu sayta qoşulmadı.";
+"ErrorPages.CertWarning.Description" = "%@ saytının sahibi saytı səhv konfiqurasiya edib. Məlumatlarınızı oğurlanmaqdan qorumaq üçün Ecosia bu sayta qoşulmadı.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Bu bağlantı etibarlı deyil";
@@ -284,7 +284,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefox Ana Səhifə";
+"Firefox.HomePage.Title" = "Ecosia Ana Səhifə";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "İrəli";
@@ -311,7 +311,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ uğurla ayrıldı.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Bu cihaz uğurla Firefox Sync-dən ayrıldı.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Bu cihaz uğurla Ecosia Sync-dən ayrıldı.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync əlaqə kəsildi";
@@ -320,7 +320,7 @@
 "FxAPush_DeviceDisconnected_title" = "Sync əlaqə kəsildi";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Cihaz Firefox Sync-dən ayrıldı";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Cihaz Ecosia Sync-dən ayrıldı";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Kömək";
@@ -470,7 +470,7 @@
 "LoginsList.Title" = "SAXLANMIŞ GİRİŞLƏR";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Görünür Firefox keçən dəfə çöküb. Vərəqlərinizi bərpa etmək istərdiniz?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Görünür Ecosia keçən dəfə çöküb. Vərəqlərinizi bərpa etmək istərdiniz?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Oxunmuş olaraq işarətlə";
@@ -587,7 +587,7 @@
 "Okay" = "Tamam";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Vaxsey! Firefox çökdü";
+"Oops! Firefox crashed" = "Vaxsey! Ecosia çökdü";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Kitab ikonu başlıq sətrində göründüyündə ona basaraq məqalələri Oxuyucu Görünüşündə açın.";
@@ -749,10 +749,10 @@
 "SendTo.NavBar.Title" = "Vərəqi Göndər";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "Sizin bu Firefox Hesabınıza qoşulmuş sinxornlaşdırmaya uyğun başqa cihaz yoxdur.";
+"SendTo.NoDevicesFound.Message" = "Sizin bu Ecosia Hesabınıza qoşulmuş sinxornlaşdırmaya uyğun başqa cihaz yoxdur.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Lütfən, davam etmək üçün Firefox-u açın, Tənzimləmələrə gedin və daxil olun.";
+"SendTo.NotSignedIn.Message" = "Lütfən, davam etmək üçün Ecosia-u açın, Tənzimləmələrə gedin və daxil olun.";
 
 /* See http://mzl.la/1ISlXnU */
 "SendTo.NotSignedIn.Title" = "Firefox Hesabınıza daxil olmamısınız.";
@@ -965,7 +965,7 @@
 "Settings.SendUsage.Link" = "Ətraflı öyrən.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla ancaq Firefox-u hamı üçün yaxşılaşdırmağa lazım olan məlumatları yığır.";
+"Settings.SendUsage.Message" = "Mozilla ancaq Ecosia-u hamı üçün yaxşılaşdırmağa lazım olan məlumatları yığır.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "İstifadə məlumatlarını göndər";
@@ -1202,7 +1202,7 @@
 "Yesterday" = "Dünən";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Digər cihazlarınızdaki Firefox-da heç bir açıq vərəq yoxdur.";
+"You don’t have any tabs open in Firefox on your other devices." = "Digər cihazlarınızdaki Ecosia-da heç bir açıq vərəq yoxdur.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Hüquqlarınız";

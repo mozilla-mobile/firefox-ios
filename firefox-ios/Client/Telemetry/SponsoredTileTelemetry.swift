@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Glean
+// Ecosia: remove Glean dependency // import Glean
 
 // Telemetry for the Sponsored tiles located in the Top sites on the Firefox home page
 // Using Pings to send the telemetry events
@@ -12,6 +12,7 @@ struct SponsoredTileTelemetry {
     static let source = "newtab"
 
     static func sendImpressionTelemetry(tile: SponsoredTile, position: Int) {
+        /* Ecosia: remove Glean dependency
         let extra = GleanMetrics.TopSites.ContileImpressionExtra(
             position: Int32(position),
             source: SponsoredTileTelemetry.source
@@ -22,9 +23,11 @@ struct SponsoredTileTelemetry {
         GleanMetrics.TopSites.contileAdvertiser.set(tile.title)
         GleanMetrics.TopSites.contileReportingUrl.set(tile.impressionURL)
         GleanMetrics.Pings.shared.topsitesImpression.submit()
+         */
     }
 
     static func sendClickTelemetry(tile: SponsoredTile, position: Int) {
+        /* Ecosia: remove Glean dependency
         let extra = GleanMetrics.TopSites.ContileClickExtra(
             position: Int32(position),
             source: SponsoredTileTelemetry.source
@@ -35,5 +38,6 @@ struct SponsoredTileTelemetry {
         GleanMetrics.TopSites.contileAdvertiser.set(tile.title)
         GleanMetrics.TopSites.contileReportingUrl.set(tile.clickURL)
         GleanMetrics.Pings.shared.topsitesImpression.submit()
+         */
     }
 }

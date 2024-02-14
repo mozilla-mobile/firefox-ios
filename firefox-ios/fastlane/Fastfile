@@ -9,7 +9,8 @@ fastlane_version "2.210.0"
 
 default_platform :ios
 
-project_path="Client.xcodeproj"
+target_name = "Client" 
+project_path = "#{target_name}.xcodeproj"
 pbx_project_file = "#{project_path}/project.pbxproj"
 
 if ENV['IS_CIRCLECI']
@@ -17,6 +18,8 @@ if ENV['IS_CIRCLECI']
     url: 'git@github.com:mozilla/firefox-ios-build-tools.git',
     clone_folder: "../build-tools",
   )
+  ENV["IPA_PATH"] = "/Users/distiller/project/#{target_name}.ipa"
+  ENV["DSYM_PATH"] = "/Users/distiller/project/#{target_name}.app.dSYM.zip"
 end
 
 #move all the build tools to the right places
@@ -49,8 +52,8 @@ platform :ios do
     setup_circle_ci
   end
 
-  desc "Deploy to MS App-Center"
-  lane :appcenter do
+  desc "Build Ecosia App"
+  lane :build_ecosia_app do
     match(
       app_identifier: ['com.ecosia.ecosiaapp.firefox', 'com.ecosia.ecosiaapp.firefox.WidgetKit', 'com.ecosia.ecosiaapp.firefox.ShareTo'], 
       type: "adhoc",
@@ -66,12 +69,38 @@ platform :ios do
       configuration: "Development_AppCenter",
       export_options: {iCloudContainerEnvironment: 'Development'}
     )
+  end
+
+  desc "Upload to Browserstack AppAutomate"
+  lane :upload_to_browserstack do
+    ensure_env_vars(
+      env_vars: [
+        'IPA_PATH', 
+        'BROWSERSTACK_USERNAME',
+        'BROWSERSTACK_ACCESS_KEY']
+    )
+    upload_to_browserstack_app_automate(
+      browserstack_username: ENV["BROWSERSTACK_USERNAME"],
+      browserstack_access_key: ENV["BROWSERSTACK_ACCESS_KEY"],
+      file_path: ENV["IPA_PATH"]
+    )
+  end
+
+  desc "Upload to MS App-Center"
+  lane :upload_to_appcenter do
+    ensure_env_vars(
+      env_vars: [
+        'IPA_PATH',
+        'DSYM_PATH',
+        'APPCENTER_API_TOKEN',
+        'APPCENTER_OWNER_NAME']
+    )
     appcenter_upload(
       api_token: ENV["APPCENTER_API_TOKEN"],
       owner_name: ENV["APPCENTER_OWNER_NAME"],
       app_name: "iOS-FF-Beta",
-      file: ENV["IPA_OUTPUT_PATH"],
-      dsym: ENV["DSYM_OUTPUT_PATH"],
+      file: ENV["IPA_PATH"],
+      dsym: ENV["DSYM_PATH"],
       should_clip: false,
       release_notes: ENV["CIRCLE_BRANCH"],
       notify_testers: false
@@ -112,7 +141,7 @@ platform :ios do
   lane :testflight_live do
 
     version_number = get_xcconfig_value(
-      path: 'Client/Configuration/Common.xcconfig',
+      path: "#{target_name}/Configuration/Common.xcconfig",
       name: 'MARKETING_VERSION'
     )
 
@@ -158,7 +187,7 @@ platform :ios do
     inject_appstore_connect_api
 
     version_number = get_xcconfig_value(
-      path: 'Client/Configuration/Common.xcconfig',
+      path: "#{target_name}/Configuration/Common.xcconfig",
       name: 'MARKETING_VERSION'
     )
 

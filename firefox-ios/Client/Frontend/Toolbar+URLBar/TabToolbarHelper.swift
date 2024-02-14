@@ -270,7 +270,7 @@ open class TabToolbarHelper: NSObject {
             toolbar.tabToolbarDelegate?.tabToolbarDidPressDataClearance(toolbar, button: toolbar.multiStateButton)
         }
     }
-    
+
     // Ecosia: Change addNewTabButton to configurable CircleButton
     func didClickCircleButton() {
         switch toolbar.circleButton.config {

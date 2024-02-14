@@ -44,6 +44,8 @@ protocol OverlayModeManager: OverlayStateProtocol {
 }
 
 class DefaultOverlayModeManager: OverlayModeManager {
+    // Ecosia: Add override to manage the overlay mode in case of other pages being shown
+    var overrideShouldEnterOverlayMode: Bool?
     private var urlBarView: URLBarViewProtocol?
 
     var inOverlayMode: Bool {
@@ -82,10 +84,20 @@ class DefaultOverlayModeManager: OverlayModeManager {
     }
 
     private func shouldEnterOverlay(for url: URL?, newTabSettings: NewTabPage) -> Bool {
+        // Ecosia: Add override to manage the overlay mode in case of other pages being shown
+        guard overrideShouldEnterOverlayMode == nil else {
+            return overrideShouldEnterOverlayMode!
+        }
         // The NewTabPage cases are weird topSites = homepage
         // and homepage = customURL
         switch newTabSettings {
-        case .topSites: return url?.isFxHomeUrl ?? true
+        /*
+         Ecosia: Given the upper comment, we'll return `false` for `topSites`
+         so that it won't go in overlay mode as soon as we open a new tab
+         and present the New Tab Page.
+         */
+        // case .topSites: return url?.isFxHomeUrl ?? true
+        case .topSites: return false
         case .blankPage: return true
         case .homePage: return false
         }

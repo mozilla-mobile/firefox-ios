@@ -108,6 +108,9 @@ private extension SearchBarSettingsViewModel {
 
         let notificationObject = [PrefsKeys.FeatureFlags.SearchBarPosition: searchBarPosition]
         notificationCenter.post(name: .SearchBarPositionDidChange, withObject: notificationObject)
+
+        // Ecosia: Track toolbar position change
+        Analytics.shared.searchbarChanged(to: searchBarPosition.rawValue)
     }
 
     func recordPreferenceChange(_ searchBarPosition: SearchBarPosition) {

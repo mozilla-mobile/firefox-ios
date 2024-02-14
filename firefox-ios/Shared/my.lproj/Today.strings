@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "ကိုယ်ပိုင်သုံးတဗ်များကိုပိတ်ပါ။";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "သင်၏မူလမြင်ကွင်းသို့ Firefox ဖြတ်လမ်းများကိုထည့်ပါ။";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "သင်၏မူလမြင်ကွင်းသို့ Ecosia ဖြတ်လမ်းများကိုထည့်ပါ။";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "ကူးယူထားသည့်လင့်သို့ သွားပါ။";
@@ -29,7 +29,7 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "ကိုယ်ပိုင်ရှာဖွေမှု";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "သင်၏မူလမြင်ကွင်းသို့ Firefox ဖြတ်လမ်းများကိုထည့်ပါ။ ဤအရာကိုထည့်ပြီးလျှင်အခြားဖြတ်လမ်းများကိုရွေးချယ်၍ထားရှိပါ။";
+"TodayWidget.QuickActionGalleryDescription" = "သင်၏မူလမြင်ကွင်းသို့ Ecosia ဖြတ်လမ်းများကိုထည့်ပါ။ ဤအရာကိုထည့်ပြီးလျှင်အခြားဖြတ်လမ်းများကိုရွေးချယ်၍ထားရှိပါ။";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "လျင်မြန်စွာလုပ်ဆောင်ချက်များ";

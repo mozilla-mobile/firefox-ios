@@ -1,0 +1,28 @@
+{
+    "DEVICES": [
+  {
+    "name": "iPhone SE (3rd generation)",
+    "orientation": "portrait"
+  },
+  {
+    "name": "iPhone 14 Pro",
+    "orientation": "portrait"
+  },
+  {
+    "name": "iPhone 14 Pro Max",
+    "orientation": "landscape"
+  },
+  {
+    "name": "iPad Pro (12.9-inch) (6th generation)",
+    "orientation": "portrait"
+  }
+],
+    "LOCALES": [
+  "en",
+  "it",
+  "de",
+  "es",
+  "nl"
+],
+    "SIMULATOR_DEVICE_NAME": "iPhone 14 Pro"
+  }

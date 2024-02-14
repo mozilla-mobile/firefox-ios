@@ -104,8 +104,12 @@ class AppSettingsTableViewControllerTests: XCTestCase {
         subject.pressedShowTour()
 
         XCTAssertEqual(delegate.didFinishShowingSettingsCalled, 1)
+        /* Ecosia: Update deeplink
         XCTAssertEqual(applicationHelper.lastOpenURL,
                        URL(string: "fennec://deep-link?url=/action/show-intro-onboarding")!)
+         */
+        XCTAssertEqual(applicationHelper.lastOpenURL,
+                       URL(string: "ecosia://deep-link?url=/action/show-intro-onboarding")!)
     }
 
     func testShowExperiments_openExperiments() {

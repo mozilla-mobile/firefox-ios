@@ -206,7 +206,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Tā varētu būt nepareizas uzstādīšanas vai uzbrukuma pazīme. Turpiniet tikai ja jūs pieņemat iespējamo risku.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "%@ īpašnieks ir nepareizi uzstādījis savu mājaslapu. Lai aizsargātu jūsu informāciju no zagšanas, Firefox nav pieslēdzies šai mājaslapai.";
+"ErrorPages.CertWarning.Description" = "%@ īpašnieks ir nepareizi uzstādījis savu mājaslapu. Lai aizsargātu jūsu informāciju no zagšanas, Ecosia nav pieslēdzies šai mājaslapai.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Šis savienojums nav drošs";
@@ -224,7 +224,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefox sākuma lapu";
+"Firefox.HomePage.Title" = "Ecosia sākuma lapu";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Pārsūtīt";
@@ -251,7 +251,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ ir veiksmīgi atienota.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Šī ierīce ir veiksmīgi atvienota no Firefox Sync.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Šī ierīce ir veiksmīgi atvienota no Ecosia Sync.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync atvienots";
@@ -260,7 +260,7 @@
 "FxAPush_DeviceDisconnected_title" = "Sync atvienots";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Ierīce ir atvienota no Firefox Sync";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Ierīce ir atvienota no Ecosia Sync";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Palīdzība";
@@ -404,7 +404,7 @@
 "LoginsList.LoginsListSearchPlaceholder" = "Filtrs";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Izskatās, ka Firefox iepriekš avarēja. Vai vēlaties atjaunot cilnes?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Izskatās, ka Ecosia iepriekš avarēja. Vai vēlaties atjaunot cilnes?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Atzīmēt kā lasītu";
@@ -467,7 +467,7 @@
 "Okay" = "Labi";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Ak vai! Firefox avarēja";
+"Oops! Firefox crashed" = "Ak vai! Ecosia avarēja";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Atveriet rakstus lasīšanas režīmā pieskaroties grāmatas ikonai, kad tā parādās virsraksta joslā.";
@@ -746,7 +746,7 @@
 "Settings.NewTab.TopSectionNameFooter" = "Izvēlieties ko rādīt atverot jaunu cilni";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Atverot Firefox";
+"Settings.OfferClipboardBar.Status" = "Atverot Ecosia";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.StatusV2" = "Atverot Firefox";
@@ -770,7 +770,7 @@
 "Settings.SendUsage.Link" = "Uzzināt vairāk.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla cenšas vākt tikai tos datus, kas ir nepieciešami, lai uzlabotu Firefox ikvienam.";
+"Settings.SendUsage.Message" = "Mozilla cenšas vākt tikai tos datus, kas ir nepieciešami, lai uzlabotu Ecosia ikvienam.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Sūtīt izmantošanas datus";
@@ -779,7 +779,7 @@
 "Settings.Siri.OpenTabShortcut" = "Atvērt jaunu cilni";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Izmantojiet Siri saīsnes, lai ātri atvērtu Firefox caur Siri";
+"Settings.Siri.SectionDescription" = "Izmantojiet Siri saīsnes, lai ātri atvērtu Ecosia caur Siri";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri saīsnes";
@@ -812,13 +812,13 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "Ielādēt fonā";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Ielādē Firefox";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Ielādē Ecosia";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Atvērt ar Firefox";
+"ShareExtension.OpenInFirefoxAction.Title" = "Atvērt ar Ecosia";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Meklēt ar Firefox";
+"ShareExtension.SeachInFirefoxAction.Title" = "Meklēt ar Ecosia";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "Rādīt meklēšanas ieteikumus";
@@ -914,7 +914,7 @@
 "UIMenuItem.PasteGo" = "Ievietot un atvērt";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Meklēt ar Firefox";
+"UIMenuItem.SearchWithFirefox" = "Meklēt ar Ecosia";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "nelasīts";
@@ -941,7 +941,7 @@
 "Yesterday" = "Vakar";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Citu ierīču Firefox nav atvērta neviena cilne.";
+"You don’t have any tabs open in Firefox on your other devices." = "Citu ierīču Ecosia nav atvērta neviena cilne.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Jūsu tiesības";

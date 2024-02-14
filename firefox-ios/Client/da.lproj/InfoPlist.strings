@@ -5,16 +5,16 @@
 "New Tab" = "Nyt faneblad";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox bruger dit kamera til at skanne QR-koder, tage billeder og optage video.";
+"NSCameraUsageDescription" = "Ecosia bruger dit kamera til at skanne QR-koder, tage billeder og optage video.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox kræver Face ID for at få adgang til dine gemte adgangskoder og betalingsmetoder.";
+"NSFaceIDUsageDescription" = "Ecosia kræver Face ID for at få adgang til dine gemte adgangskoder og betalingsmetoder.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Websteder du besøger kan bede om din position.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Firefox bruger din mikrofon til at optage og uploade lyd.";
+"NSMicrophoneUsageDescription" = "Ecosia bruger din mikrofon til at optage og uploade lyd.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Lader dig gemme fotos.";

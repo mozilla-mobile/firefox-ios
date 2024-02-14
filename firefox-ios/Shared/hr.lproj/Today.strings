@@ -23,19 +23,19 @@
 "TodayWidget.NoOpenTabsLabel" = "Nema otvorenih kartica.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Otvori Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Otvori Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Privatna pretraga";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Dodaj prečac za Firefox na početni ekran. Nakon dodavanja widgeta dodirni i zadrži ga dodirnutim, kako bi se mogao urediti i odabrati jedan drugi prečac.";
+"TodayWidget.QuickActionGalleryDescription" = "Dodaj prečac za Ecosia na početni ekran. Nakon dodavanja widgeta dodirni i zadrži ga dodirnutim, kako bi se mogao urediti i odabrati jedan drugi prečac.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Brze radnje";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Prečaci za Firefox";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Prečaci za Ecosia";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Dodaj prečace svojim otvorenim karticama.";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Brzi pogled";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Traži u Firefoxu";
+"TodayWidget.SearchInFirefoxV2" = "Traži u Ecosiau";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Traži u privatnoj kartici";

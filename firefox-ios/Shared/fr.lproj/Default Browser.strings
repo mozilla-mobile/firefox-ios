@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Faire de Firefox votre navigateur par défaut, c’est voter pour un Internet ouvert et accessible.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Faire de Ecosia votre navigateur par défaut, c’est voter pour un Internet ouvert et accessible.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Par défaut vers un meilleur Internet";
@@ -8,10 +8,10 @@
 "DefaultBrowserCard.Button.v2" = "Me montrer comment";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Faites en sorte que les liens des sites web, des e-mails et des messages s’ouvrent automatiquement dans Firefox.";
+"DefaultBrowserCard.Description" = "Faites en sorte que les liens des sites web, des e-mails et des messages s’ouvrent automatiquement dans Ecosia.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "Choisissez Firefox comme navigateur par défaut pour rendre la vitesse, la sécurité et la confidentialité automatiques.";
+"DefaultBrowserCard.NextLevel.Description.v108" = "Choisissez Ecosia comme navigateur par défaut pour rendre la vitesse, la sécurité et la confidentialité automatiques.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "Améliorez votre navigation ordinaire";
@@ -35,7 +35,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Appuyez sur App du navigateur par défaut";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Sélectionnez Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. Sélectionnez Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "App du navigateur par défaut";

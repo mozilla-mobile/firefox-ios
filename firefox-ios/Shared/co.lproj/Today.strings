@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Chjode\nl’unghjette private";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Aghjunghjite accurtatoghji Firefox à u vostru screnu d’accolta.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Aghjunghjite accurtatoghji Ecosia à u vostru screnu d’accolta.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Apre u liame cupiatu";
@@ -23,19 +23,19 @@
 "TodayWidget.NoOpenTabsLabel" = "Alcuna unghjetta aperta.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Apre Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Apre Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Ricerca privata";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Aghjunghjite un accurtatoghju Firefox à u vostru screnu d’accolta. Dopu l’aghjuntu di u widget, tuccatelu è mantenelu per mudificalu è selezziunate un altru accurtatoghju.";
+"TodayWidget.QuickActionGalleryDescription" = "Aghjunghjite un accurtatoghju Ecosia à u vostru screnu d’accolta. Dopu l’aghjuntu di u widget, tuccatelu è mantenelu per mudificalu è selezziunate un altru accurtatoghju.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Azzioni preste";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Accurtatoghji Firefox";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Accurtatoghji Ecosia";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Aghjunghjite accurtatoghji à e vostre unghjette aperte.";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Vista presta";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Ricercà\nin Firefox";
+"TodayWidget.SearchInFirefoxV2" = "Ricercà\nin Ecosia";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Ricercà in un’\nunghjetta privata";

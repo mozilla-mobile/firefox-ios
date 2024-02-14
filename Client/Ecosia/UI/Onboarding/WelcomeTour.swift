@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import Core
@@ -10,14 +10,14 @@ protocol WelcomeTourDelegate: AnyObject {
     func welcomeTourDidFinish(_ tour: WelcomeTour)
 }
 
-final class WelcomeTour: UIViewController,  Themeable {
+final class WelcomeTour: UIViewController, Themeable {
 
     private weak var navStack: UIStackView!
     private weak var labelStack: UIStackView!
     private weak var titleLabel: UILabel!
     private weak var subtitleLabel: UILabel!
     private weak var backButton: UIButton!
-    private weak var skipButton: UIButton!
+    private weak var skipButton: UIButton?
     private weak var pageControl: UIPageControl!
     private weak var ctaButton: UIButton!
     private weak var waves: UIImageView!
@@ -35,20 +35,21 @@ final class WelcomeTour: UIViewController,  Themeable {
     private var steps: [Step]!
     private var current: Step?
     private weak var delegate: WelcomeTourDelegate?
-    
+
     // MARK: - Themeable Properties
-    
+
     var themeManager: ThemeManager { AppContainer.shared.resolve() }
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // MARK: - Init
 
-    init(delegate: WelcomeTourDelegate) {
+    init(delegate: WelcomeTourDelegate, startingStep: Step? = nil) {
         super.init(nibName: nil, bundle: nil)
         modalPresentationCapturesStatusBarAppearance = true
         self.delegate = delegate
         steps = Step.all
+        current = startingStep
     }
 
     required init?(coder: NSCoder) { return nil }
@@ -58,7 +59,7 @@ final class WelcomeTour: UIViewController,  Themeable {
         addStaticViews()
         addDynamicViews()
         applyTheme()
-        
+
         listenForThemeChange(self.view)
     }
 
@@ -106,7 +107,6 @@ final class WelcomeTour: UIViewController,  Themeable {
         skipButton.accessibilityLabel = .localized(.onboardingSkipTourButtonAccessibility)
         skipButton.titleLabel?.font = .preferredFont(forTextStyle: .body)
         skipButton.titleLabel?.adjustsFontForContentSizeCategory = true
-
         self.skipButton = skipButton
 
         let waves = UIImageView(image: .init(named: "onboardingWaves"))
@@ -186,7 +186,7 @@ final class WelcomeTour: UIViewController,  Themeable {
         ctaButton.leadingAnchor.constraint(equalTo: labelStack.leadingAnchor).isActive = true
         ctaButton.trailingAnchor.constraint(equalTo: labelStack.trailingAnchor).isActive = true
         ctaButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16).isActive = true
-        
+
         let firstTourImageName = WelcomeTour.Step.all.first?.background.image ?? "tour1"
         let imageView = UIImageView(image: .init(named: firstTourImageName))
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -213,9 +213,11 @@ final class WelcomeTour: UIViewController,  Themeable {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        if current == nil {
+        guard let current else {
             startTour()
+            return
         }
+        display(step: current)
     }
 
     private func startTour() {
@@ -263,11 +265,11 @@ final class WelcomeTour: UIViewController,  Themeable {
                 self.view.layoutIfNeeded()
             }
         }
-        
+
         Analytics.shared.introDisplaying(page: current?.analyticsValue, at: currentAnalyticsIndex)
         updateAccessibilityLabels(step: step)
     }
-    
+
     private func updateAccessibilityLabels(step: Step) {
         titleLabel.accessibilityLabel = step.title
         subtitleLabel.accessibilityLabel = step.text
@@ -321,8 +323,9 @@ final class WelcomeTour: UIViewController,  Themeable {
         display(step: steps[displayingStep])
         UIAccessibility.post(notification: .screenChanged, argument: titleLabel)
     }
-    
+
     private func complete() {
+        MMP.sendEvent(.onboardingComplete)
         delegate?.welcomeTourDidFinish(self)
     }
 
@@ -337,7 +340,7 @@ final class WelcomeTour: UIViewController,  Themeable {
         let index = steps.firstIndex(of: current) ?? 0
         return index
     }
-    
+
     private var currentAnalyticsIndex: Int {
         // Needed since the start screen is considered 0
         return currentIndex + 1
@@ -357,7 +360,7 @@ final class WelcomeTour: UIViewController,  Themeable {
         waves.tintColor = .legacyTheme.ecosia.welcomeBackground
         titleLabel.textColor = .legacyTheme.ecosia.primaryText
         subtitleLabel.textColor = .legacyTheme.ecosia.secondaryText
-        skipButton.tintColor = .legacyTheme.ecosia.primaryButton
+        skipButton?.tintColor = .legacyTheme.ecosia.primaryButton
         backButton.tintColor = .legacyTheme.ecosia.primaryButton
         pageControl.pageIndicatorTintColor = .legacyTheme.ecosia.disabled
         pageControl.currentPageIndicatorTintColor = .legacyTheme.ecosia.primaryButton

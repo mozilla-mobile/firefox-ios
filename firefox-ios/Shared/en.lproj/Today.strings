@@ -6,7 +6,7 @@
 Private Tabs";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Add Firefox shortcuts to your Home screen.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Add Ecosia shortcuts to your Home screen.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Go to copied link";
@@ -25,13 +25,13 @@ Copied Link";
 "TodayWidget.NoOpenTabsLabel" = "No open tabs.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Open Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Open Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Private Search";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Add a Firefox shortcut to your Home screen. After adding the widget, touch and hold to edit it and select a different shortcut.";
+"TodayWidget.QuickActionGalleryDescription" = "Add a Ecosia shortcut to your Home screen. After adding the widget, touch and hold to edit it and select a different shortcut.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Quick Actions";

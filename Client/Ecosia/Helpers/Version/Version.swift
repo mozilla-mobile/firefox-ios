@@ -8,11 +8,11 @@ import Foundation
 ///
 /// A semantic version is typically represented as a series of numbers separated by dots, e.g., "1.0.0".
 struct Version: CustomStringConvertible {
-    
+
     var major: Int
     var minor: Int
     var patch: Int
-    
+
     /// Initializes a new `Version` from a string representation.
     ///
     /// - Parameter versionString: A string containing the semantic version, e.g., "1.0.0".
@@ -24,12 +24,12 @@ struct Version: CustomStringConvertible {
               let patch = Int(components[2]) else {
             return nil
         }
-        
+
         self.major = major
         self.minor = minor
         self.patch = patch
     }
-    
+
     /// A string representation of the `Version`.
     var description: String {
         return "\(major).\(minor).\(patch)"
@@ -37,7 +37,7 @@ struct Version: CustomStringConvertible {
 }
 
 extension Version: Comparable {
-    
+
     /// Compares two `Version` instances for equality.
     ///
     /// - Parameters:
@@ -45,10 +45,10 @@ extension Version: Comparable {
     ///   - rhs: Another `Version`.
     ///
     /// - Returns: `true` if both instances represent the same version, `false` otherwise.
-    static func ==(lhs: Version, rhs: Version) -> Bool {
+    static func == (lhs: Version, rhs: Version) -> Bool {
         return lhs.major == rhs.major && lhs.minor == rhs.minor && lhs.patch == rhs.patch
     }
-    
+
     /// Compares two `Version` instances to determine their ordering.
     ///
     /// - Parameters:
@@ -56,7 +56,7 @@ extension Version: Comparable {
     ///   - rhs: Another `Version`.
     ///
     /// - Returns: `true` if the instance on the left should come before the one on the right, `false` otherwise.
-    static func <(lhs: Version, rhs: Version) -> Bool {
+    static func < (lhs: Version, rhs: Version) -> Bool {
         if lhs.major != rhs.major {
             return lhs.major < rhs.major
         }
@@ -68,7 +68,7 @@ extension Version: Comparable {
 }
 
 extension Version: Hashable {
-    
+
     /// Adds this value to the given hasher.
     ///
     /// - Parameter hasher: The hasher to use when combining the components of this instance.

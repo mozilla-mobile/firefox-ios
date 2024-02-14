@@ -8,10 +8,10 @@
 "DefaultBrowserCard.Button.v2" = "Իմանալ ինչպես";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Տեղադրեք հղումներ կայքերից, էլ. նամակներից և հաղորդագրություններից՝ Firefox-ում ավտոմատ կերպով բացելու համար:";
+"DefaultBrowserCard.Description" = "Տեղադրեք հղումներ կայքերից, էլ. նամակներից և հաղորդագրություններից՝ Ecosia-ում ավտոմատ կերպով բացելու համար:";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "Ընտրեք Firefox-ը որպես ձեր լռելյայն դիտարկիչ՝ արագությունը, անվտանգությունը և գաղտնիությունը ավտոմատ դարձնելու համար:";
+"DefaultBrowserCard.NextLevel.Description.v108" = "Ընտրեք Ecosia-ը որպես ձեր լռելյայն դիտարկիչ՝ արագությունը, անվտանգությունը և գաղտնիությունը ավտոմատ դարձնելու համար:";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "Բարձրացրեք ամենօրյա զննարկումը";
@@ -35,7 +35,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Հպեք սկզբնադիր դիտարկի հավելվածին";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Ընտրեք Firefox-ը";
+"DefaultBrowserOnboarding.Description3" = "3. Ընտրեք Ecosia-ը";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Դիտարկիչի սկզբնադիր հավելված";

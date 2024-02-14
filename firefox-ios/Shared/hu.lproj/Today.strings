@@ -29,7 +29,7 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "Privát keresés";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Adjon egy Firefox ikont a kezdőképernyőhöz. A widget hozzáadása után érintse meg és tartsa lenyomva a szerkesztéshez, majd válasszon egy másik ikont.";
+"TodayWidget.QuickActionGalleryDescription" = "Adjon egy Ecosia ikont a kezdőképernyőhöz. A widget hozzáadása után érintse meg és tartsa lenyomva a szerkesztéshez, majd válasszon egy másik ikont.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Gyors műveletek";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Gyors nézet";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Keresés a Firefoxban";
+"TodayWidget.SearchInFirefoxV2" = "Keresés a Ecosiaban";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Keresés privát lapon";

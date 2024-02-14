@@ -305,7 +305,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "یہ ایک حملہ آور کی طرف سے ایک غلط کنفیگریشن یا چھیڑنا ہو سکتا ہے. اگر آپ ممکنہ خطرے کو قبول کرتے ہیں تو آگے بڑھیں۔";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "%@ کے مالک نے انکی ویب سائٹ نامناسب طرحہ سے تشکیل کی ہیں۔ اپنی معلومات کو چوری ہونے سے حفاظت کے لئے، Firefox نے اس ویب سائٹ سے نہیں جڑا ہے۔";
+"ErrorPages.CertWarning.Description" = "%@ کے مالک نے انکی ویب سائٹ نامناسب طرحہ سے تشکیل کی ہیں۔ اپنی معلومات کو چوری ہونے سے حفاظت کے لئے، Ecosia نے اس ویب سائٹ سے نہیں جڑا ہے۔";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "اس کنکشن کا بھروسا نہیں ہے";
@@ -326,7 +326,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefox کا ابتائی صفحہ";
+"Firefox.HomePage.Title" = "Ecosia کا ابتائی صفحہ";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "ابتدائی صفحہ کی تخصیص کریں";
@@ -371,7 +371,7 @@
 "fxa.signin.camera-signin" = "اپنے کیمرے کے ساتھ سائن ان کریں";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "اپنے کمپیوٹر پر Firefox کھولیں اور firefox.com/pair پر جائیں";
+"fxa.signin.qr-link-instruction" = "اپنے کمپیوٹر پر Ecosia کھولیں اور ecosia.org/pair پر جائیں";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "اسکین کرنے کے لئے تیار";
@@ -392,7 +392,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ کو کامیابی سے منقطع کر دیا گیا ہے۔";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "اس آلہ کو Firefox ہمہ وقت سازی سے کامیابی سے منقیع کر دیا گیا ہے۔";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "اس آلہ کو Ecosia ہمہ وقت سازی سے کامیابی سے منقیع کر دیا گیا ہے۔";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "ہم وقت سازی منقطع کر دی گئی";
@@ -401,7 +401,7 @@
 "FxAPush_DeviceDisconnected_title" = "ہمہ وقت سازی منقطع ہو گئی";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "ایک آلہ Firefoxہمہ وقت سازی سے منقطع ہوا ہے";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "ایک آلہ Ecosiaہمہ وقت سازی سے منقطع ہوا ہے";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
 "FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox لوگو، وال پیپر تبدیل کریں۔";
@@ -671,7 +671,7 @@
 "LoginsList.Title" = "SAVED LOGINS";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "ایسا لگتا ہے Firefox پہلے تباہ ہوا ہے۔ کیا آپ اپنے ٹیب بحال کرنا چاہیں گے؟";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "ایسا لگتا ہے Ecosia پہلے تباہ ہوا ہے۔ کیا آپ اپنے ٹیب بحال کرنا چاہیں گے؟";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "بطور مطالعہ شدہ نشان زد کریں";
@@ -827,7 +827,7 @@
 "Onboarding.WhatsNew.Button.Title" = "براؤزنگ شروع کریں";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "اف! Firefox تباہ ہوگیا";
+"Oops! Firefox crashed" = "اف! Ecosia تباہ ہوگیا";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "عبارات کو پڑھنے کا نظارے میں تھابپ کر جب کتاب کا آئکن عنوان بار پر نظر آئے۔";
@@ -1007,13 +1007,13 @@
 "SendTo.NavBar.Title" = "ٹیب ارسال کریں";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "آپ کے کوئی بھی دیگر آلات ہمہ وقت سازی پر موجود Firefox اکائونٹ سے جڑے نہیں ہوئے۔";
+"SendTo.NoDevicesFound.Message" = "آپ کے کوئی بھی دیگر آلات ہمہ وقت سازی پر موجود Ecosia اکائونٹ سے جڑے نہیں ہوئے۔";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "براہ مہربانی Firefox کھولیں، سیٹینگز میں جائیں اور جاری رکھنے کے لیئے سائن ان کریں۔";
+"SendTo.NotSignedIn.Message" = "براہ مہربانی Ecosia کھولیں، سیٹینگز میں جائیں اور جاری رکھنے کے لیئے سائن ان کریں۔";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "آپ اپنے Firefox اکائونٹ میں سائن ان نہیں ہیں۔";
+"SendTo.NotSignedIn.Title" = "آپ اپنے Ecosia اکائونٹ میں سائن ان نہیں ہیں۔";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "ارسال کریں";
@@ -1298,7 +1298,7 @@
 "Settings.SendUsage.Link" = "مزید سیکھیں.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla صرف اس کو جمع کرنے کی کوشش کرتا ہے جو ہمیں ہر کسی کے لئے Firefox فراہم کرنے اور بہتر بنانے کی ضرورت ہے۔";
+"Settings.SendUsage.Message" = "Mozilla صرف اس کو جمع کرنے کی کوشش کرتا ہے جو ہمیں ہر کسی کے لئے Ecosia فراہم کرنے اور بہتر بنانے کی ضرورت ہے۔";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "استعمال شدہ کوائف ارسال کریں";
@@ -1601,7 +1601,7 @@
 "Yesterday" = "‏‏گزشتہ کل";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "آپ کے دوسرے آلات پر Firefox میں کوئی ٹیب نہیں کھلے ہوئِے ہیں۔";
+"You don’t have any tabs open in Firefox on your other devices." = "آپ کے دوسرے آلات پر Ecosia میں کوئی ٹیب نہیں کھلے ہوئِے ہیں۔";
 
 /* Your Rights settings section title */
 "Your Rights" = "آپ کے حقوق";

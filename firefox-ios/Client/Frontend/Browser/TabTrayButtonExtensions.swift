@@ -7,11 +7,15 @@ import UIKit
 import Shared
 
 class PrivateModeButton: ToggleButton, PrivateModeUI {
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         accessibilityLabel = .TabTrayToggleAccessibilityLabel
+        /* Ecosia: Update private image
         let maskImage = UIImage(named: StandardImageIdentifiers.Large.privateMode)?
             .withRenderingMode(.alwaysTemplate)
+        */
+        let maskImage = UIImage.templateImageNamed(ImageIdentifiers.newPrivateTab)
         setImage(maskImage, for: [])
         showsLargeContentViewer = true
         largeContentTitle = .TabTrayToggleAccessibilityLabel
@@ -25,8 +29,15 @@ class PrivateModeButton: ToggleButton, PrivateModeUI {
     func applyUIMode(isPrivate: Bool, theme: Theme) {
         isSelected = isPrivate
 
-        tintColor = isPrivate ? theme.colors.iconOnColor : theme.colors.iconPrimary
+        // Ecosia: Update tint
+        // tintColor = isPrivate ? theme.colors.iconOnColor : theme.colors.iconPrimary
+        tintColor = isPrivate ? .legacyTheme.ecosia.primaryBackground : .legacyTheme.ecosia.primaryText
         imageView?.tintColor = tintColor
+
+        // Ecosia: Modify background layer
+        backgroundLayer.backgroundColor = isPrivate
+            ? UIColor.legacyTheme.ecosia.privateButtonBackground.cgColor
+            : UIColor.clear.cgColor
 
         accessibilityValue = isSelected ? .TabTrayToggleAccessibilityValueOn : .TabTrayToggleAccessibilityValueOff
     }

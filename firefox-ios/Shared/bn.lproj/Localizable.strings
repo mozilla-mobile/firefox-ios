@@ -296,7 +296,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "এটা কোন ভুল কনফিগারেশনের অথবা একটি আক্রমণকারী দ্বারা গরমিল হতে পারে। ঝুঁকি নিতে হলে এগিয়ে যান।";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "%@ টির মালিক ওয়েবসাইট টাকে অন্যায় ভাবে কনফিগার করেছেন। আপানার তথ্য চুরি হওয়া থেকে রক্ষা করতে, Firefox ওয়েবসাইট টির সাথে সংযোগ করেনি।";
+"ErrorPages.CertWarning.Description" = "%@ টির মালিক ওয়েবসাইট টাকে অন্যায় ভাবে কনফিগার করেছেন। আপানার তথ্য চুরি হওয়া থেকে রক্ষা করতে, Ecosia ওয়েবসাইট টির সাথে সংযোগ করেনি।";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "এই সংযুক্তিটি বিশ্বাসযজ্ঞ নয়";
@@ -317,7 +317,7 @@
 "Facebook" = "ফেইসবুক";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefox Home Page";
+"Firefox.HomePage.Title" = "Ecosia Home Page";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "হোমপেজ কাস্টমাইজ করুন";
@@ -338,7 +338,7 @@
 "fxa.signin.camera-signin" = "আপনার ক্যামেরা দিয়ে সাইন ইন করুন";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "আপনার কম্পিউটারে Firefox খুলুন এবং firefox.com/pair এ যান";
+"fxa.signin.qr-link-instruction" = "আপনার কম্পিউটারে Ecosia খুলুন এবং ecosia.org/pair এ যান";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "স্ক্যান করার জন্য প্রস্তুত";
@@ -359,7 +359,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ সফলতার সহিত সংযোগ বিচ্ছিন্ন হয়েছে।";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "এই ডিভাইসটি Firefox সিঙ্ক থেকে সফলভাবে সংযোগ বিচ্ছিন্ন করেছে।";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "এই ডিভাইসটি Ecosia সিঙ্ক থেকে সফলভাবে সংযোগ বিচ্ছিন্ন করেছে।";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "সিঙ্ক সংযোগ বিচ্ছিন্ন হয়েছে";
@@ -368,7 +368,7 @@
 "FxAPush_DeviceDisconnected_title" = "সিঙ্ক সংযোগ বিচ্ছিন্ন হয়েছে";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "একটি ডিভাইস Firefox সিঙ্ক থেকে সংযোগ বিচ্ছিন্ন হয়েছে";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "একটি ডিভাইস Ecosia সিঙ্ক থেকে সংযোগ বিচ্ছিন্ন হয়েছে";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "সাহায্য";
@@ -605,7 +605,7 @@
 "LoginsList.Title" = "সংরক্ষিত লগইন";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "মনে হচ্ছে Firefox আগে ক্র্যাশ করেছে। আপনি কী আপনার ট্যাবগুলি পুনরুদ্ধার করতে চান?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "মনে হচ্ছে Ecosia আগে ক্র্যাশ করেছে। আপনি কী আপনার ট্যাবগুলি পুনরুদ্ধার করতে চান?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "পড়া হয়েছে হিসাবে চিহ্নিত করুন";
@@ -737,7 +737,7 @@
 "Onboarding.WhatsNew.Button.Title" = "ব্রাউজিং শুরু করুন";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "ওহহ! Firefox ক্রাশ করেছে";
+"Oops! Firefox crashed" = "ওহহ! Ecosia ক্রাশ করেছে";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "টাইটেলবারে বইয়ের আইকনটি এলে সেটিতে ট্যাপ করে রিডার ভিউতে আর্টিকেলগুলি দেখুন।";
@@ -914,13 +914,13 @@
 "SendTo.NavBar.Title" = "ট্যাব পাঠান";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "সিঙ্ক করার জন্য আপনার কোন ডিভাইস এই Firefox Account এর সাথে যুক্ত নেই।";
+"SendTo.NoDevicesFound.Message" = "সিঙ্ক করার জন্য আপনার কোন ডিভাইস এই Ecosia Account এর সাথে যুক্ত নেই।";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "অনুগ্রহ করে Firefox খুলুন, সেটিং এ যান এবং সাইন ইন করুন।";
+"SendTo.NotSignedIn.Message" = "অনুগ্রহ করে Ecosia খুলুন, সেটিং এ যান এবং সাইন ইন করুন।";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "আপনি আপনার Firefox Account এ সাইন ইন করেননি।";
+"SendTo.NotSignedIn.Title" = "আপনি আপনার Ecosia Account এ সাইন ইন করেননি।";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "পাঠান";
@@ -1151,7 +1151,7 @@
 "Settings.SendUsage.Link" = "আরও জানুন।";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla শুধু এমন কিছু সংগ্রহ করে যা অত্যাবশ্যক প্রয়োজনীয় এবং সকলের জন্যে আরও উন্নত Firefox সংস্করণ তৈরীতে ব্যবহার্য।";
+"Settings.SendUsage.Message" = "Mozilla শুধু এমন কিছু সংগ্রহ করে যা অত্যাবশ্যক প্রয়োজনীয় এবং সকলের জন্যে আরও উন্নত Ecosia সংস্করণ তৈরীতে ব্যবহার্য।";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "ব্যবহারের উপাত্ত প্রেরণ করুন";
@@ -1172,7 +1172,7 @@
 "Settings.Siri.OpenTabShortcut" = "নতুন ট্যাব খুলুন";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Siri ব্যবহার করে দ্রুত Firefox চালু করতে Siri শর্টকাট ব্যবহার করুন";
+"Settings.Siri.SectionDescription" = "Siri ব্যবহার করে দ্রুত Ecosia চালু করতে Siri শর্টকাট ব্যবহার করুন";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri শর্টকাটসমূহ";
@@ -1181,7 +1181,7 @@
 "Settings.Studies.Toggle.Link" = "আরও জানুন।";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "কিছু দিন পর Firefox স্টাডিস ইনস্টল করতে এবং চালাতে পারে।";
+"Settings.Studies.Toggle.Message" = "কিছু দিন পর Ecosia স্টাডিস ইনস্টল করতে এবং চালাতে পারে।";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "অধ্যয়ন";

@@ -2,72 +2,88 @@ version: 2.1
 
 setup: true
 
+environment_common: &environment_common
+  environment:
+    CI: true
+
+macos_common: &macos_common
+  macos:
+    xcode: "15.4"
+  resource_class: macos.m1.medium.gen1
+
 jobs:
 
   build-and-deploy-testflight-beta:
-    environment:
-      CI: true
-    macos:
-      xcode: "14.3.1"
-    resource_class: macos.x86.medium.gen2
+    <<: *environment_common
+    <<: *macos_common
     steps:
       - checkout
+      - macos/switch-ruby:
+          version: "3.2"
       - restore_cache:
           key: 1-gems-{{ checksum "Gemfile.lock" }}
-      - run: bundle check || bundle install --path vendor/bundle
+      - run:
+          name: Bundle install
+          command: bundle check || bundle install --path vendor/bundle
       - save_cache:
           key: 1-gems-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
       - run:
-          name: verify github
+          name: Verify github
           command: for ip in $(dig @8.8.8.8 github.com +short); do ssh-keyscan github.com,$ip; ssh-keyscan $ip; done 2>/dev/null >> ~/.ssh/known_hosts
       - run:
           name: extract Staging XCConfig
           command: echo "$STAGING_XCCONFIG" | base64 --decode > Client/Configuration/Staging.xcconfig
       - run:
-          name: clean packages
-          command: xcodebuild -scheme Ecosia -project Client.xcodeproj clean
-      - run:
-          name: setup content blocking scripts
-          command: ./content_blocker_update.sh
+          name: Execute bootstrap
+          command: ./bootstrap.sh
       - run:
           name: Build and deploy to Testflight
           command: bundle exec fastlane testflight_beta
 
-  build-and-deploy-appcenter:
-    environment:
-      CI: true
-    macos:
-      xcode: "14.3.1"
-    resource_class: macos.x86.medium.gen2
+  build-and-deploy-appcenter-and-browserstack:
+    <<: *environment_common
+    <<: *macos_common
     steps:
       - checkout
+      - macos/switch-ruby:
+          version: "3.2"
       - restore_cache:
           key: 1-gems-{{ checksum "Gemfile.lock" }}
-      - run: bundle check || bundle install --path vendor/bundle
+      - run:
+          name: Bundle install
+          command: bundle check || bundle install --path vendor/bundle
       - save_cache:
           key: 1-gems-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
       - run:
-          name: verify github
+          name: Verify github
           command: for ip in $(dig @8.8.8.8 github.com +short); do ssh-keyscan github.com,$ip; ssh-keyscan $ip; done 2>/dev/null >> ~/.ssh/known_hosts
       - run:
-          name: extract Staging XCConfig
+          name: Extract Staging XCConfig
           command: echo "$STAGING_XCCONFIG" | base64 --decode > Client/Configuration/Staging.xcconfig
       - run:
-          name: clean packages
-          command: xcodebuild -scheme Ecosia -project Client.xcodeproj clean
+          name: Execute bootstrap
+          command: ./bootstrap.sh
       - run:
-          name: setup content blocking scripts
-          command: ./content_blocker_update.sh
+          name: Build the Ecosia app
+          command: bundle exec fastlane build_ecosia_app
       - run:
-          name: Build and deploy to AppCenter
-          command: bundle exec fastlane appcenter
-
+          name: Upload to AppCenter
+          command: bundle exec fastlane upload_to_appcenter
+      - run:
+          name: Upload to Browserstack
+          command: bundle exec fastlane upload_to_browserstack
+      - jira/notify:
+          issue_regexp: "([A-Za-z]{2,30}-[0-9]+)"
+          pipeline_id: << pipeline.id >>
+          pipeline_number: << pipeline.number >>
 orbs:
   path-filtering: circleci/path-filtering@0.1.1
+  macos: circleci/macos@2
+  jira: circleci/jira@2.0
 
 workflows:
   build-and-upload-to-delivery-platforms:
@@ -88,9 +104,10 @@ workflows:
               only: /^beta.*/
             branches:
               ignore: /.*/
-      - build-and-deploy-appcenter:
-          name: Deploy ad-hoc version over AppCenter
+      - build-and-deploy-appcenter-and-browserstack:
+          name: Deploy ad-hoc version over AppCenter + Upload to Browserstack
           filters:
             branches:
               only: 
                 - /^.*main.*/
+          context: napps

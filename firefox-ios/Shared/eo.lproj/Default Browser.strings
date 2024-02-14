@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Igi Firefox via norma retumilo egalas al voĉdono por malfermita, alirebla interreto.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Igi Ecosia via norma retumilo egalas al voĉdono por malfermita, alirebla interreto.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Norme iri al pli bona interreto";
@@ -8,10 +8,10 @@
 "DefaultBrowserCard.Button.v2" = "Lernu kiel fari";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Aŭtomate malfermi ligilon en retejoj, retpoŝtoj kaj mesaĝoj per Firefox.";
+"DefaultBrowserCard.Description" = "Aŭtomate malfermi ligilon en retejoj, retpoŝtoj kaj mesaĝoj per Ecosia.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "Elektu Firefox kiel vian norman retumilon por aŭtomate havi rapidecon, sekurecon kaj privatecon.";
+"DefaultBrowserCard.NextLevel.Description.v108" = "Elektu Ecosia kiel vian norman retumilon por aŭtomate havi rapidecon, sekurecon kaj privatecon.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "Plibonigu vian ĉiutagan retumon";
@@ -35,7 +35,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Tuŝetu Norma retumila programo";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Elektu Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. Elektu Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Norma retumila programo";

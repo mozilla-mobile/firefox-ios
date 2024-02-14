@@ -8,7 +8,7 @@
 "DefaultBrowserCard.Button.v2" = "Saznaj kako";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Postavi automatsko otvaranje poveznica web lokacija, e-mailova i poruka u Firefoxu.";
+"DefaultBrowserCard.Description" = "Postavi automatsko otvaranje poveznica web lokacija, e-mailova i poruka u Ecosiau.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Description.v108" = "Odaberi Firefox kao standardni preglednik za automatsku brzinu, sigurnost i privatnost.";
@@ -35,7 +35,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Dodirni standardni preglednik";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Odaberi Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. Odaberi Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Standardni preglednik";

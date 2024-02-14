@@ -23,19 +23,19 @@
 "TodayWidget.NoOpenTabsLabel" = "Neniu malfermita langeto.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Malfermi Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Malfermi Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Privata serĉo";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Aldonu ŝparvojon de Firefox al via hejmekrano. Post la aldono de la elemento, tuŝu longe por modifi ĝin kaj elekti alian ŝparvojon.";
+"TodayWidget.QuickActionGalleryDescription" = "Aldonu ŝparvojon de Ecosia al via hejmekrano. Post la aldono de la elemento, tuŝu longe por modifi ĝin kaj elekti alian ŝparvojon.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Rapidaj agoj";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Ŝparvojoj de Firefox";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ŝparvojoj de Ecosia";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Aldoni ŝparvojojn al viaj malfermitaj langetoj.";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Rapida vido";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Serĉi en\nFirefox";
+"TodayWidget.SearchInFirefoxV2" = "Serĉi en\nEcosia";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Serĉi en\nprivata langeto";

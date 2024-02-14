@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Tutup Tab Pribadi";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Tambahkan pintasan Firefox ke layar Beranda Anda.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Tambahkan pintasan Ecosia ke layar Beranda Anda.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Buka tautan yang disalin";
@@ -23,19 +23,19 @@
 "TodayWidget.NoOpenTabsLabel" = "Tidak ada tab terbuka.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Buka Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Buka Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Pencarian Pribadi";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Tambahkan pintasan Firefox ke layar Beranda Anda. Setelah menambahkan widget, sentuh dan tahan untuk mengeditnya lalu pilih pintasan yang berbeda.";
+"TodayWidget.QuickActionGalleryDescription" = "Tambahkan pintasan Ecosia ke layar Beranda Anda. Setelah menambahkan widget, sentuh dan tahan untuk mengeditnya lalu pilih pintasan yang berbeda.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Aksi Cepat";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Pintasan Firefox";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Pintasan Ecosia";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Tambahkan pintasan ke tab terbuka Anda.";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Lihat Sekilas";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Cari di Firefox";
+"TodayWidget.SearchInFirefoxV2" = "Cari di Ecosia";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Cari di Tab Pribadi";

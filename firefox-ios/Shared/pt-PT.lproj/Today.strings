@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Fechar separadores privados";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Adicionar atalhos do Firefox ao seu ecrã inicial.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Adicionar atalhos do Ecosia ao seu ecrã inicial.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Ir para a ligação copiada";
@@ -23,19 +23,19 @@
 "TodayWidget.NoOpenTabsLabel" = "Sem separadores abertos.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Abrir o Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Abrir o Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Pesquisa privada";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Adicione um atalho do Firefox ao seu ecrã inicial. Depois de adicionar o widget, toque e aguarde para o editar e selecione um atalho diferente.";
+"TodayWidget.QuickActionGalleryDescription" = "Adicione um atalho do Ecosia ao seu ecrã inicial. Depois de adicionar o widget, toque e aguarde para o editar e selecione um atalho diferente.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Ações rápidas";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Atalhos do Firefox";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Atalhos do Ecosia";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Adicione atalhos para os seus separadores abertos.";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Vista rápida";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Pesquisar no Firefox";
+"TodayWidget.SearchInFirefoxV2" = "Pesquisar no Ecosia";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Pesquisar num separador privado";

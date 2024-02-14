@@ -1,7 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
-
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 import UIKit
 
 class NTPLibraryShortcutView: UIView {
@@ -47,11 +46,9 @@ class NTPLibraryShortcutView: UIView {
             title.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Self.titleMargin),
             title.heightAnchor.constraint(equalToConstant: 10).priority(.defaultHigh)
         ])
-
     }
 
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
 }

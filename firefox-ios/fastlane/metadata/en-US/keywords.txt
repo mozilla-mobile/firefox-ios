@@ -1,1 +1,0 @@
-climate,environment,co2,green,organic,fair,forest,browser,web,search,planting

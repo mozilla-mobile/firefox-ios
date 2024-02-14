@@ -119,6 +119,7 @@ class TabLocationView: UIView, FeatureFlaggable {
         trackingProtectionButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.trackingProtection
         trackingProtectionButton.showsLargeContentViewer = true
         trackingProtectionButton.largeContentImage = .templateImageNamed(StandardImageIdentifiers.Large.lock)
+        trackingProtectionButton.imageView?.contentMode = .scaleAspectFit
         trackingProtectionButton.largeContentTitle = .TabLocationLockButtonLargeContentTitle
         trackingProtectionButton.accessibilityLabel = .TabLocationLockButtonAccessibilityLabel
     }

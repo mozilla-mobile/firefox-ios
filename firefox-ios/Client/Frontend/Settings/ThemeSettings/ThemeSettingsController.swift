@@ -105,6 +105,16 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
                                              actionType: ThemeSettingsViewActionType.toggleUseSystemAppearance)
         store.dispatch(action)
 
+        // Ecosia: Update legacy theme
+        // TODO Ecosia Upgrade: Do we need this?
+        if control.isOn {
+            // Reset the user interface style to the default before choosing our theme
+            UIApplication.shared.delegate?.window??.overrideUserInterfaceStyle = .unspecified
+            LegacyThemeManager.updateBasedOnCurrentSystemThemeType()
+        } else if LegacyThemeManager.instance.automaticBrightnessIsOn {
+            LegacyThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
+        }
+
         // Switch animation must begin prior to scheduling table view update animation
         // (or the switch will be auto-synchronized to the slower tableview animation
         // and makes the switch behaviour feel slow and non-standard).

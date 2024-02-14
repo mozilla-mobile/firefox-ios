@@ -10,8 +10,9 @@
 import Foundation
 
 enum HomepageSectionType: Int, CaseIterable {
+    case climateImpactCounter
     case logoHeader
-    case bookmarkNudge
+    case newsletterCard
     case libraryShortcuts
     case topSites
     case impact
@@ -21,8 +22,9 @@ enum HomepageSectionType: Int, CaseIterable {
 
     var cellIdentifier: String {
         switch self {
+        case .climateImpactCounter: return NTPSeedCounterCell.cellIdentifier
         case .logoHeader: return NTPLogoCell.cellIdentifier
-        case .bookmarkNudge: return NTPBookmarkNudgeCell.cellIdentifier
+        case .newsletterCard: return NTPNewsletterCardCell.cellIdentifier
         case .libraryShortcuts: return NTPLibraryCell.cellIdentifier
         case .topSites: return "" // Top sites has more than 1 cell type, dequeuing is done through FxHomeSectionHandler protocol
         case .impact: return NTPImpactCell.cellIdentifier
@@ -34,8 +36,9 @@ enum HomepageSectionType: Int, CaseIterable {
 
     static var cellTypes: [ReusableCell.Type] {
         return [
+            NTPSeedCounterCell.self,
             NTPLogoCell.self,
-            NTPBookmarkNudgeCell.self,
+            NTPNewsletterCardCell.self,
             TopSiteItemCell.self,
             EmptyTopSiteCell.self,
             NTPLibraryCell.self,
@@ -56,17 +59,19 @@ private let MinimumInsets: CGFloat = 16
 extension HomepageSectionType {
     var customizableConfig: CustomizableNTPSettingConfig? {
         switch self {
-        case .logoHeader, .bookmarkNudge, .libraryShortcuts, .ntpCustomization: return nil
+        case .logoHeader, .newsletterCard, .libraryShortcuts, .ntpCustomization, .climateImpactCounter: return nil
         case .topSites: return .topSites
         case .impact: return .climateImpact
         case .aboutEcosia: return .aboutEcosia
         case .news: return .ecosiaNews
         }
     }
-    
-    func sectionInsets(_ traits: UITraitCollection, bottomSpacing: CGFloat = 32) -> NSDirectionalEdgeInsets {
+
+    func sectionInsets(_ traits: UITraitCollection,
+                       topSpacing: CGFloat = 0,
+                       bottomSpacing: CGFloat = 32) -> NSDirectionalEdgeInsets {
         switch self {
-        case .libraryShortcuts, .topSites, .impact, .news, .bookmarkNudge, .aboutEcosia, .ntpCustomization:
+        case .newsletterCard, .libraryShortcuts, .topSites, .impact, .news, .aboutEcosia, .ntpCustomization:
             guard let window = UIApplication.shared.windows.first(where: \.isKeyWindow) else {
                 return NSDirectionalEdgeInsets(top: 0,
                                                leading: MinimumInsets,
@@ -83,11 +88,11 @@ extension HomepageSectionType {
             if traits.horizontalSizeClass == .regular || (orientation.isLandscape && traits.userInterfaceIdiom == .phone) {
                 horizontal = window.bounds.width / 4
             }
-            return NSDirectionalEdgeInsets(top: 0,
+            return NSDirectionalEdgeInsets(top: topSpacing,
                                            leading: horizontal,
                                            bottom: bottomSpacing,
                                            trailing: horizontal)
-        case .logoHeader:
+        case .logoHeader, .climateImpactCounter:
             return .init(top: 0, leading: 0, bottom: 0, trailing: 0)
         }
     }

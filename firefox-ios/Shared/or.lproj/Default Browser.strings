@@ -11,7 +11,7 @@
 "DefaultBrowserCard.Description" = "Firefoxରେ ସ୍ୱତଃସ୍ପୃତ ଭାବେ ଖୋଲିବାକୁ ୱେବସାଇଟ୍, ଇମେଲ୍ ଏବଂ ମେସେଜଗୁଡିକରୁ ଲିଙ୍କ୍ ସେଟ୍ କରନ୍ତୁ।";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "ବେଗ, ନିରାପତ୍ତା ଏବଂ ଗୋପନୀୟତାକୁ ସ୍ୱୟଂଚାଳିତ କରିବାକୁ ଆପଣଙ୍କ ଡିଫଲ୍ଟ ବ୍ରାଉଜର୍ ଭାବରେ Firefox ଚୟନ କରନ୍ତୁ।";
+"DefaultBrowserCard.NextLevel.Description.v108" = "ବେଗ, ନିରାପତ୍ତା ଏବଂ ଗୋପନୀୟତାକୁ ସ୍ୱୟଂଚାଳିତ କରିବାକୁ ଆପଣଙ୍କ ଡିଫଲ୍ଟ ବ୍ରାଉଜର୍ ଭାବରେ Ecosia ଚୟନ କରନ୍ତୁ।";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "ଦୈନନ୍ଦିନ ବ୍ରାଉଜିଂକୁ ଉନ୍ନତ କରନ୍ତୁ";
@@ -35,7 +35,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. ଡିଫଲ୍ଟ ବ୍ରାଉଜର ଆପ୍ ଟ୍ୟାପ୍ କରନ୍ତୁ";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Firefox ଚୟନ କରନ୍ତୁ";
+"DefaultBrowserOnboarding.Description3" = "3. Ecosia ଚୟନ କରନ୍ତୁ";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "ପୂର୍ବନିର୍ଦ୍ଧାରିତ ବ୍ରାଉଜର ଆପ";

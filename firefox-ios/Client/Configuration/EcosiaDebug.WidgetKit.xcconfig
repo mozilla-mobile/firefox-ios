@@ -1,0 +1,10 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+#include "EcosiaDebug.xcconfig"
+
+ECOSIA_PRODUCT_NAME = WidgetKit
+PROVISIONING_PROFILE_SPECIFIER = match Development com.ecosia.ecosiaapp.WidgetKit
+CODE_SIGN_ENTITLEMENTS = Client/Ecosia/Entitlements/AppExtensions/Ecosia.entitlements
+PRODUCT_BUNDLE_IDENTIFIER = $(MOZ_BUNDLE_ID).$(ECOSIA_PRODUCT_NAME)
