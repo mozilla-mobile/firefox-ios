@@ -345,7 +345,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
             // But the option to add a Search Engine is.
             return model.orderedEngines.count
         case .searchEnginesSuggestions:
-            return 2
+            return SearchSuggestItem.allCases.count
         case .firefoxSuggestSettings:
             return FirefoxSuggestItem.allCases.count
         }
