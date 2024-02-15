@@ -238,11 +238,19 @@ class SearchViewController: SiteTableViewController,
         profile.firefoxSuggest?.interruptReader()
 
         let tempSearchQuery = searchQuery
+        let providers = [.amp, .wikipedia]
+            .filter { NimbusFirefoxSuggestFeatureLayer().isSuggestionProviderAvailable($0) }
+            .filter {
+                switch $0 {
+                case .amp: includeSponsored
+                case .wikipedia: includeNonSponsored
+                default: false
+                }
+            }
         return Task { [weak self] in
             guard let suggestions = try? await self?.profile.firefoxSuggest?.query(
                 tempSearchQuery,
-                includeSponsored: includeSponsored,
-                includeNonSponsored: includeNonSponsored
+                providers: providers
             ) else { return }
             await MainActor.run {
                 guard let self, self.searchQuery == tempSearchQuery else { return }

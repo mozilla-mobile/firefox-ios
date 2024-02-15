@@ -14,11 +14,10 @@ actor MockRustFirefoxSuggest: RustFirefoxSuggestActor {
     }
     func query(
         _ keyword: String,
-        includeSponsored: Bool,
-        includeNonSponsored: Bool
+        providers: [SuggestionProvider]
     ) async throws -> [RustFirefoxSuggestion] {
         var suggestions = [RustFirefoxSuggestion]()
-        if includeSponsored {
+        if providers.contains(.amp) {
             suggestions.append(RustFirefoxSuggestion(
                 title: "Mozilla",
                 url: URL(string: "https://mozilla.org")!,
@@ -26,7 +25,7 @@ actor MockRustFirefoxSuggest: RustFirefoxSuggestActor {
                 iconImage: nil
             ))
         }
-        if includeNonSponsored {
+        if providers.contains(.wikipedia) {
             suggestions.append(RustFirefoxSuggestion(
                 title: "California",
                 url: URL(string: "https://wikipedia.org/California")!,
@@ -86,19 +85,44 @@ class SearchViewControllerTest: XCTestCase {
         profile = nil
     }
 
+    func testFirefoxSuggestionReturnsNoSuggestions() async throws {
+        FxNimbus.shared.features.firefoxSuggestFeature.with(initializer: { _, _ in
+          FirefoxSuggestFeature(availableSuggestionsTypes: [.amp: false, .wikipedia: false])
+       })
+
+        profile.prefs.setBool(false, forKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions)
+        profile.prefs.setBool(false, forKey: PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions)
+        await searchViewController.loadFirefoxSuggestions()?.value
+        XCTAssertEqual(searchViewController.firefoxSuggestions.count, 0)
+
+        // Providers set to false, so regardless of the prefs, we shouldn't see anything
+        profile.prefs.setBool(true, forKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions)
+        profile.prefs.setBool(true, forKey: PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions)
+        await searchViewController.loadFirefoxSuggestions()?.value
+        XCTAssertEqual(searchViewController.firefoxSuggestions.count, 0)
+    }
+
+    func testFirefoxSuggestionReturnsNoSuggestionsWhenSuggestionSettingsFalse() async throws {
+        FxNimbus.shared.features.firefoxSuggestFeature.with(initializer: { _, _ in
+          FirefoxSuggestFeature(availableSuggestionsTypes: [.amp: true, .wikipedia: true])
+       })
+
+        profile.prefs.setBool(false, forKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions)
+        profile.prefs.setBool(false, forKey: PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions)
+        await searchViewController.loadFirefoxSuggestions()?.value
+        XCTAssertEqual(searchViewController.firefoxSuggestions.count, 0)
+    }
+
     func testFirefoxSuggestionReturnsSponsoredAndNonSponsored() async throws {
+        FxNimbus.shared.features.firefoxSuggestFeature.with(initializer: { _, _ in
+          FirefoxSuggestFeature(availableSuggestionsTypes: [.amp: true, .wikipedia: true])
+       })
+
         profile.prefs.setBool(true, forKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions)
         profile.prefs.setBool(true, forKey: PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions)
         await searchViewController.loadFirefoxSuggestions()?.value
 
         XCTAssertEqual(searchViewController.firefoxSuggestions.count, 2)
-    }
-
-    func testFirefoxSuggestionReturnsNoSuggestions() async throws {
-        profile.prefs.setBool(false, forKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions)
-        profile.prefs.setBool(false, forKey: PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions)
-        await searchViewController.loadFirefoxSuggestions()?.value
-        XCTAssertEqual(searchViewController.firefoxSuggestions.count, 0)
     }
 
     func testHistoryAndBookmarksAreFilteredWhenShowSponsoredSuggestionsIsTrue() {
