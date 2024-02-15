@@ -32,7 +32,7 @@ public struct FakespotActionFooterViewModel {
 public final class FakespotActionFooterView: UIView, ThemeApplicable {
     private struct UX {
         static let labelSize: CGFloat = 13
-        static let buttonSize: CGFloat = 16
+        static let buttonSize: CGFloat = 13
     }
 
     private var viewModel: FakespotActionFooterViewModel?
@@ -98,8 +98,6 @@ public final class FakespotActionFooterView: UIView, ThemeApplicable {
     public func applyTheme(theme: Theme) {
         let colors = theme.colors
         linkButton.applyTheme(theme: theme)
-        linkButton.setTitleColor(colors.actionPrimary, for: .normal)
-        linkButton.setTitleColor(colors.actionPrimaryHover, for: .highlighted)
         titleLabel.textColor = colors.textSecondary
     }
 }
