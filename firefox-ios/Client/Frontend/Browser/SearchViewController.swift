@@ -712,7 +712,7 @@ class SearchViewController: SiteTableViewController,
     // MARK: - Table view delegate
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        var resultType = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.selectedResult
+        _ = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.selectedResult
         switch SearchListSection(rawValue: indexPath.section)! {
         case .searchSuggestions:
             guard let defaultEngine = searchEngines?.defaultEngine else { return }

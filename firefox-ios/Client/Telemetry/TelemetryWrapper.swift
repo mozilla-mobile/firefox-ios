@@ -333,6 +333,7 @@ extension TelemetryWrapper {
         case downloadLinkButton = "download-link-button"
         case downloadNowButton = "download-now-button"
         case downloadsPanel = "downloads-panel"
+        // MARK: Fakespot
         case shoppingButton = "shopping-button"
         case shoppingBottomSheet = "shopping-bottom-sheet"
         case shoppingProductPageVisits = "product_page_visits"
@@ -354,6 +355,7 @@ extension TelemetryWrapper {
         case shoppingComponentOptedOut = "shopping-component-opted-out"
         case shoppingUserHasOnboarded = "shopping-user-has-onboarded"
         case shoppingAdsOptedOut = "shopping-ads-opted-out"
+        case shoppingAdsSettingToggle = "shopping-ads-setting-toggle"
         case keyCommand = "key-command"
         case locationBar = "location-bar"
         case messaging = "messaging"
@@ -529,6 +531,7 @@ extension TelemetryWrapper {
         case fxSuggest = "fx-suggest"
         case webview = "webview"
         case urlbarImpression = "urlbar-impression"
+        case urlbarAbandonment = "urlbar-abandonment"
     }
 
     public enum EventValue: String {
@@ -727,6 +730,7 @@ extension TelemetryWrapper {
             case interactionWithALink = "interaction-with-a-link"
             case swipingTheSurfaceHandle = "swiping-the-surface-handle"
             case optingOutOfTheFeature = "opting-out-of-the-feature"
+            case adsSettingToggle = "ads-setting-toggle"
             case closeButton = "close-button"
             case isNimbusDisabled = "is-nimbus-disabled"
             case isComponentOptedOut = "is-component-opted-out"
@@ -1121,6 +1125,33 @@ extension TelemetryWrapper {
                     value: value,
                     extras: extras)
             }
+
+        case(.action, .close, .urlbarAbandonment, _, let extras):
+            if let groups = extras?[EventExtraKey.UrlbarTelemetry.groups.rawValue] as? String,
+               let interaction = extras?[EventExtraKey.UrlbarTelemetry.interaction.rawValue] as? String,
+               let nChars = extras?[EventExtraKey.UrlbarTelemetry.nChars.rawValue] as? Int32,
+               let nResults = extras?[EventExtraKey.UrlbarTelemetry.nResults.rawValue] as? Int32,
+               let nWords = extras?[EventExtraKey.UrlbarTelemetry.nWords.rawValue] as? Int32,
+               let results = extras?[EventExtraKey.UrlbarTelemetry.results.rawValue] as? String,
+               let sap = extras?[EventExtraKey.UrlbarTelemetry.sap.rawValue] as? String,
+               let searchMode = extras?[EventExtraKey.UrlbarTelemetry.searchMode.rawValue] as? String {
+                let extraDetails = GleanMetrics.Urlbar.AbandonmentExtra(groups: groups,
+                                                                        interaction: interaction,
+                                                                        nChars: nChars,
+                                                                        nResults: nResults,
+                                                                        nWords: nWords,
+                                                                        results: results,
+                                                                        sap: sap,
+                                                                        searchMode: searchMode)
+                GleanMetrics.Urlbar.abandonment.record(extraDetails)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
         // MARK: Default Browser
         case (.action, .tap, .dismissDefaultBrowserCard, _, _):
             GleanMetrics.DefaultBrowserCard.dismissPressed.add()
@@ -1235,6 +1266,19 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.surfaceReanalyzeClicked.record()
         case (.action, .tap, .shoppingProductBackInStockButton, _, _):
             GleanMetrics.Shopping.surfaceReactivatedButtonClicked.record()
+        case(.action, .tap, .shoppingAdsSettingToggle, _, let extras):
+            if let isEnabled = extras?[EventExtraKey.Shopping.adsSettingToggle.rawValue]
+                as? Bool {
+                let isEnabledExtra = GleanMetrics.Shopping.SurfaceAdsSettingToggledExtra(isEnabled: isEnabled)
+                GleanMetrics.Shopping.surfaceAdsSettingToggled.record(isEnabledExtra)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
         case (.action, .navigate, .shoppingBottomSheet, _, _):
             GleanMetrics.Shopping.surfaceNoReviewReliabilityAvailable.record()
         case (.action, .view, .shoppingSurfaceStaleAnalysisShown, _, _):

@@ -6,6 +6,8 @@ import XCTest
 
 class CreditCardsTests: BaseTestCase {
     let creditCardsStaticTexts = AccessibilityIdentifiers.Settings.CreditCards.self
+    let useSavedCard = AccessibilityIdentifiers.Browser.KeyboardAccessory.creditCardAutofillButton.self
+    let manageCards = AccessibilityIdentifiers.RememberCreditCard.manageCardsButton.self
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306967
     // SmokeTest
@@ -106,14 +108,14 @@ class CreditCardsTests: BaseTestCase {
         mozWaitForElementToExist(cardNumber)
         cardNumber.tapOnApp()
         // Use saved card prompt is displayed
-        mozWaitForElementToExist(app.buttons["Use saved card"])
+        mozWaitForElementToExist(app.buttons[useSavedCard])
         // Expand the prompt
-        app.buttons["Use saved card"].tap()
+        app.buttons[useSavedCard].tap()
         unlockLoginsView()
         mozWaitForElementToExist(app.staticTexts["Use saved card"])
-        mozWaitForElementToExist(app.buttons["Manage cards"])
+        mozWaitForElementToExist(app.buttons[manageCards])
         // Tap on the "Manage credit cards" option
-        app.buttons["Manage cards"].tap()
+        app.buttons[manageCards].tap()
         unlockLoginsView()
         // The user is redirected to the "Credit cards" section in Settings
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
@@ -124,7 +126,7 @@ class CreditCardsTests: BaseTestCase {
         app.buttons["Done"].tap()
         // The user is returned to the webpage
         mozWaitForElementToExist(app.webViews["contentView"].webViews.staticTexts["Explore Checkout"])
-        mozWaitForElementToNotExist(app.buttons["Use saved card"])
+        mozWaitForElementToNotExist(app.buttons[useSavedCard])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306969
@@ -150,7 +152,7 @@ class CreditCardsTests: BaseTestCase {
         mozWaitForElementToExist(cardNumber)
         cardNumber.tapOnApp()
         // The autofill option (Use saved card prompt) is not displayed
-        mozWaitForElementToNotExist(app.buttons["Use saved card"])
+        mozWaitForElementToNotExist(app.buttons[useSavedCard])
         if app.staticTexts["TEST CARDS"].exists {
             app.staticTexts["TEST CARDS"].tap()
         }
@@ -172,7 +174,7 @@ class CreditCardsTests: BaseTestCase {
         mozWaitForElementToExist(cardNumber)
         cardNumber.tapOnApp()
         // The autofill option (Use saved card prompt) is displayed
-        mozWaitForElementToExist(app.buttons["Use saved card"])
+        mozWaitForElementToExist(app.buttons[useSavedCard])
     }
 
     private func addCardAndReachViewCardPage() {

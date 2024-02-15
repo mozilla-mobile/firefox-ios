@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import UIKit
 
 // Holds toolbar, search bar, search and browser VCs
@@ -11,7 +12,8 @@ class RootViewController: UIViewController,
                           SearchBarDelegate,
                           SearchSuggestionDelegate,
                           MenuDelegate,
-                          SettingsDelegate {
+                          SettingsDelegate,
+                          FindInPageBarDelegate {
     private lazy var toolbar: BrowserToolbar = .build { _ in }
     private lazy var searchBar: BrowserSearchBar =  .build { _ in }
     private lazy var statusBarFiller: UIView =  .build { view in
@@ -20,6 +22,7 @@ class RootViewController: UIViewController,
 
     private var browserVC: BrowserViewController
     private var searchVC: SearchViewController
+    private var findInPageBar: FindInPageBar?
 
     // MARK: - Init
 
@@ -148,6 +151,18 @@ class RootViewController: UIViewController,
         searchBar.setSearchBarText(url)
     }
 
+    func onFindInPage(selected: String) {
+        showFindInPage()
+    }
+
+    func onFindInPage(currentResult: Int) {
+        findInPageBar?.currentResult = currentResult
+    }
+
+    func onFindInPage(totalResults: Int) {
+        findInPageBar?.totalResults = totalResults
+    }
+
     // MARK: - SearchBarDelegate
 
     func searchSuggestions(searchTerm: String) {
@@ -190,5 +205,42 @@ class RootViewController: UIViewController,
 
     func scrollToTop() {
         browserVC.scrollToTop()
+    }
+
+    func showFindInPage() {
+        let findInPageBar = FindInPageBar()
+        findInPageBar.translatesAutoresizingMaskIntoConstraints = false
+        findInPageBar.delegate = self
+        self.findInPageBar = findInPageBar
+
+        view.addSubview(findInPageBar)
+
+        NSLayoutConstraint.activate([
+            findInPageBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            findInPageBar.bottomAnchor.constraint(equalTo: toolbar.topAnchor),
+            findInPageBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            findInPageBar.heightAnchor.constraint(equalToConstant: 46)
+        ])
+    }
+
+    // MARK: - FindInPageBarDelegate
+
+    func findInPage(_ findInPage: FindInPageBar, textChanged text: String) {
+        browserVC.findInPage(text: text, function: .find)
+    }
+
+    func findInPage(_ findInPage: FindInPageBar, findPreviousWithText text: String) {
+        browserVC.findInPage(text: text, function: .findPrevious)
+    }
+
+    func findInPage(_ findInPage: FindInPageBar, findNextWithText text: String) {
+        browserVC.findInPage(text: text, function: .findNext)
+    }
+
+    func findInPageDidPressClose(_ findInPage: FindInPageBar) {
+        browserVC.findInPageDone()
+        findInPageBar?.endEditing(true)
+        findInPageBar?.removeFromSuperview()
+        findInPageBar = nil
     }
 }

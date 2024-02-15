@@ -2,5 +2,8 @@
 "Biometry.Screen.UniversalAuthenticationReason.v115" = "Autentificer dig for at se adgangskoder.";
 
 /* Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks the user to enter their device passcode to access the protected screen for logins and encrypted cards. */
+"Biometry.Screen.UniversalAuthenticationReason.v122" = "Autentificer dig for at få adgang til dine gemte adgangskoder og betalingsmetoder.";
+
+/* Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks the user to enter their device passcode to access the protected screen for logins and encrypted cards. */
 "Biometry.Screen.UniversalAuthenticationReasonV2.v116" = "Autentificer dig for at få adgang til dine gemte logins og krypterede kort.";
 

@@ -12,10 +12,7 @@ protocol WKContentScript {
 
     func scriptMessageHandlerNames() -> [String]
 
-    func userContentController(
-        _ userContentController: WKUserContentController,
-        didReceiveScriptMessage message: WKScriptMessage
-    )
+    func userContentController(didReceiveMessage message: Any)
 
     func prepareForDeinit()
 }

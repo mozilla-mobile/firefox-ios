@@ -17,12 +17,22 @@ final class AppStartupTelemetry {
 
     // MARK: Logic
     public func sendStartupTelemetry() {
+        queryCreditCards()
+        queryLogins()
+        queryBookmarks()
+    }
+
+    // MARK: Credit Cards
+    func queryCreditCards() {
         _ = profile.autofill.reopenIfClosed()
         profile.autofill.listCreditCards(completion: { cards, error in
             guard let cards = cards, error == nil else { return }
             self.sendCreditCardsSavedAllTelemetry(numberOfSavedCreditCards: cards.count)
         })
+    }
 
+    // MARK: Logins
+    func queryLogins() {
         let searchController = UISearchController()
         let loginsViewModel = PasswordManagerViewModel(
             profile: profile,
@@ -35,6 +45,24 @@ final class AppStartupTelemetry {
         loginsViewModel.queryLogins("") { logins in
             self.sendLoginsSavedAllTelemetry(numberOfSavedLogins: logins.count)
         }
+    }
+
+    // MARK: Bookmarks
+    func queryBookmarks() {
+        profile.places
+            .getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false)
+            .uponQueue(.main) { result in
+                guard let mobileFolder = result.successValue as? BookmarkFolderData else {
+                    return
+                }
+
+                if let mobileBookmarks = mobileFolder.fxChildren, !mobileBookmarks.isEmpty {
+                    self.sendDoesHaveMobileBookmarksTelemetry()
+                    self.sendMobileBookmarksCountTelemetry(bookmarksCount: Int64(mobileBookmarks.count))
+                } else {
+                    self.sendDoesntHaveMobileBookmarksTelemetry()
+                }
+            }
     }
 
     // MARK: Telemetry Events
@@ -54,5 +82,31 @@ final class AppStartupTelemetry {
                                      method: .foreground,
                                      object: .creditCardSavedAll,
                                      extras: savedCardsExtra)
+    }
+
+    private func sendDoesHaveMobileBookmarksTelemetry() {
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .view,
+                                     object: .mobileBookmarks,
+                                     value: .doesHaveMobileBookmarks)
+    }
+
+    private func sendDoesntHaveMobileBookmarksTelemetry() {
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .view,
+                                     object: .mobileBookmarks,
+                                     value: .doesNotHaveMobileBookmarks)
+    }
+
+    private func sendMobileBookmarksCountTelemetry(bookmarksCount: Int64) {
+        let mobileBookmarksExtra = [
+            TelemetryWrapper.EventExtraKey.mobileBookmarksQuantity.rawValue: bookmarksCount
+        ]
+
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .view,
+                                     object: .mobileBookmarks,
+                                     value: .mobileBookmarksCount,
+                                     extras: mobileBookmarksExtra)
     }
 }
