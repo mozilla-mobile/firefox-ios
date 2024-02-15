@@ -616,6 +616,14 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceStaleAnalysisShown)
     }
 
+    func test_shoppingAdsSettingToggle_GleanIsCalled() {
+        let isEnabled = TelemetryWrapper.EventExtraKey.Shopping.adsSettingToggle.rawValue
+        let extras = [isEnabled: true]
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingAdsSettingToggle, extras: extras)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceAdsSettingToggled)
+    }
+
     func test_shoppingNimbusDisabled_GleanIsCalled() {
         TelemetryWrapper.recordEvent(
             category: .information,

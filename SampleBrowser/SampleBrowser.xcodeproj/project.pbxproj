@@ -37,6 +37,12 @@
 		8A46021E2B0FE50D00FFD17F /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A46021D2B0FE50D00FFD17F /* UIView+Extension.swift */; };
 		8A4602202B0FE52F00FFD17F /* UISearchbar+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A46021F2B0FE52F00FFD17F /* UISearchbar+Extension.swift */; };
 		8A4602222B0FE55300FFD17F /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4602212B0FE55300FFD17F /* UIViewController+Extension.swift */; };
+		8ADF72C62B73DB9700530E7A /* MainFrameAtDocumentStart.js in Resources */ = {isa = PBXBuildFile; fileRef = 8ADF72C12B73DB9700530E7A /* MainFrameAtDocumentStart.js */; };
+		8ADF72C72B73DB9700530E7A /* AllFramesAtDocumentStart.js in Resources */ = {isa = PBXBuildFile; fileRef = 8ADF72C22B73DB9700530E7A /* AllFramesAtDocumentStart.js */; };
+		8ADF72C82B73DB9700530E7A /* WebcompatAllFramesAtDocumentStart.js in Resources */ = {isa = PBXBuildFile; fileRef = 8ADF72C32B73DB9700530E7A /* WebcompatAllFramesAtDocumentStart.js */; };
+		8ADF72C92B73DB9700530E7A /* AllFramesAtDocumentEnd.js in Resources */ = {isa = PBXBuildFile; fileRef = 8ADF72C42B73DB9700530E7A /* AllFramesAtDocumentEnd.js */; };
+		8ADF72CA2B73DB9700530E7A /* MainFrameAtDocumentEnd.js in Resources */ = {isa = PBXBuildFile; fileRef = 8ADF72C52B73DB9700530E7A /* MainFrameAtDocumentEnd.js */; };
+		8ADF72CD2B73DE6A00530E7A /* FindInPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADF72CC2B73DE6A00530E7A /* FindInPage.swift */; };
 		8AEBDD712B69A8C300FE9192 /* AppLaunchUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEBDD702B69A8C300FE9192 /* AppLaunchUtil.swift */; };
 /* End PBXBuildFile section */
 
@@ -73,6 +79,12 @@
 		8A46021D2B0FE50D00FFD17F /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		8A46021F2B0FE52F00FFD17F /* UISearchbar+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISearchbar+Extension.swift"; sourceTree = "<group>"; };
 		8A4602212B0FE55300FFD17F /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		8ADF72C12B73DB9700530E7A /* MainFrameAtDocumentStart.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = MainFrameAtDocumentStart.js; sourceTree = "<group>"; };
+		8ADF72C22B73DB9700530E7A /* AllFramesAtDocumentStart.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = AllFramesAtDocumentStart.js; sourceTree = "<group>"; };
+		8ADF72C32B73DB9700530E7A /* WebcompatAllFramesAtDocumentStart.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebcompatAllFramesAtDocumentStart.js; sourceTree = "<group>"; };
+		8ADF72C42B73DB9700530E7A /* AllFramesAtDocumentEnd.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = AllFramesAtDocumentEnd.js; sourceTree = "<group>"; };
+		8ADF72C52B73DB9700530E7A /* MainFrameAtDocumentEnd.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = MainFrameAtDocumentEnd.js; sourceTree = "<group>"; };
+		8ADF72CC2B73DE6A00530E7A /* FindInPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindInPage.swift; sourceTree = "<group>"; };
 		8AEBDD702B69A8C300FE9192 /* AppLaunchUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchUtil.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -91,6 +103,7 @@
 		8A0F44692B56EDC000438589 /* Engine */ = {
 			isa = PBXGroup;
 			children = (
+				8ADF72C02B73D6F600530E7A /* Scripts */,
 				8A0F446A2B56EDC900438589 /* EngineProvider.swift */,
 			);
 			path = Engine;
@@ -206,6 +219,7 @@
 		8A4602152B0FE42300FFD17F /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				8ADF72CC2B73DE6A00530E7A /* FindInPage.swift */,
 				8A4602162B0FE43A00FFD17F /* BrowserSearchBar.swift */,
 				8A4602182B0FE45200FFD17F /* BrowserToolbar.swift */,
 			);
@@ -229,6 +243,18 @@
 				8A46021A2B0FE47C00FFD17F /* BrowserViewController.swift */,
 			);
 			path = Browser;
+			sourceTree = "<group>";
+		};
+		8ADF72C02B73D6F600530E7A /* Scripts */ = {
+			isa = PBXGroup;
+			children = (
+				8ADF72C42B73DB9700530E7A /* AllFramesAtDocumentEnd.js */,
+				8ADF72C22B73DB9700530E7A /* AllFramesAtDocumentStart.js */,
+				8ADF72C52B73DB9700530E7A /* MainFrameAtDocumentEnd.js */,
+				8ADF72C12B73DB9700530E7A /* MainFrameAtDocumentStart.js */,
+				8ADF72C32B73DB9700530E7A /* WebcompatAllFramesAtDocumentStart.js */,
+			);
+			path = Scripts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -292,8 +318,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8ADF72C92B73DB9700530E7A /* AllFramesAtDocumentEnd.js in Resources */,
+				8ADF72C82B73DB9700530E7A /* WebcompatAllFramesAtDocumentStart.js in Resources */,
 				8A4601F12B0FE20700FFD17F /* LaunchScreen.storyboard in Resources */,
 				8A4601EE2B0FE20700FFD17F /* Assets.xcassets in Resources */,
+				8ADF72C62B73DB9700530E7A /* MainFrameAtDocumentStart.js in Resources */,
+				8ADF72C72B73DB9700530E7A /* AllFramesAtDocumentStart.js in Resources */,
+				8ADF72CA2B73DB9700530E7A /* MainFrameAtDocumentEnd.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -321,6 +352,7 @@
 				8A0F44852B56FFFC00438589 /* SearchTerm.swift in Sources */,
 				8A3DB32F2B5AD3D400F89705 /* SettingsCell.swift in Sources */,
 				8A0F44792B56FD6E00438589 /* SuggestionCellViewModel.swift in Sources */,
+				8ADF72CD2B73DE6A00530E7A /* FindInPage.swift in Sources */,
 				8A3DB32D2B5AD3C700F89705 /* SettingsViewController.swift in Sources */,
 				8A4602192B0FE45200FFD17F /* BrowserToolbar.swift in Sources */,
 				8AEBDD712B69A8C300FE9192 /* AppLaunchUtil.swift in Sources */,

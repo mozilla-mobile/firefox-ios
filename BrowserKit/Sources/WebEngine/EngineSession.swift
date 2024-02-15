@@ -7,6 +7,7 @@ import Foundation
 /// Protocol representing a single engine session. In browsers usually a session corresponds to a tab.
 public protocol EngineSession {
     var delegate: EngineSessionDelegate? { get set }
+    var findInPageDelegate: FindInPageHelperDelegate? { get set }
 
     /// The engine received a request to load a URL.
     /// - Parameter url: The URL string that is requested
@@ -24,8 +25,17 @@ public protocol EngineSession {
     /// Navigates forward in the history of this session.
     func goForward()
 
-    /// Scroll the session to the top
+    /// Scroll the session to the top.
     func scrollToTop()
+
+    /// Find a text selection in this session.
+    /// - Parameters:
+    ///   - text: The text to search
+    ///   - function: The functionality the find in page should search with
+    func findInPage(text: String, function: FindInPageFunction)
+
+    /// Called whenever the find in page session should be ended.
+    func findInPageDone()
 
     /// Navigates to the specified index in the history of this session. The current index of
     /// this session's history  will be updated but the items within it will be unchanged.

@@ -36,6 +36,8 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
     var removeFromSuperviewCalled = 0
     var addObserverCalled = 0
     var removeObserverCalled = 0
+    var evaluateJavaScriptCalled = 0
+    var savedJavaScript: String?
 
     var loadFileReadAccessURL: URL?
 
@@ -104,5 +106,13 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
     override func removeObserver(_ observer: NSObject,
                                  forKeyPath keyPath: String) {
         removeObserverCalled += 1
+    }
+
+    func evaluateJavaScript(_ javaScript: String,
+                            in frame: WKFrameInfo?,
+                            in contentWorld: WKContentWorld,
+                            completionHandler: ((Result<Any, Error>) -> Void)?) {
+        evaluateJavaScriptCalled += 1
+        savedJavaScript = javaScript
     }
 }

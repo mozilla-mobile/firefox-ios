@@ -7,6 +7,8 @@ import WebKit
 
 /// Manager used to add and remove scripts inside a WKEngineSession
 protocol WKContentScriptManager: WKScriptMessageHandler {
+    var scripts: [String: WKContentScript] { get }
+
     func addContentScript(_ script: WKContentScript,
                           name: String,
                           forSession session: WKEngineSession)
@@ -19,12 +21,12 @@ protocol WKContentScriptManager: WKScriptMessageHandler {
 }
 
 class DefaultContentScriptManager: NSObject, WKContentScriptManager {
-    var scripts = [String: WKContentScript]()
+    private(set) var scripts = [String: WKContentScript]()
 
     func addContentScript(_ script: WKContentScript,
                           name: String,
                           forSession session: WKEngineSession) {
-        // If a script already exists on a tab, skip adding this duplicate.
+        // If a script already exists on a session, skip adding this duplicate.
         guard scripts[name] == nil else { return }
 
         scripts[name] = script
@@ -58,7 +60,7 @@ class DefaultContentScriptManager: NSObject, WKContentScriptManager {
     func userContentController(_ userContentController: WKUserContentController,
                                didReceive message: WKScriptMessage) {
         for script in scripts.values where script.scriptMessageHandlerNames().contains(message.name) {
-            script.userContentController(userContentController, didReceiveScriptMessage: message)
+            script.userContentController(didReceiveMessage: message.body)
             return
         }
     }
