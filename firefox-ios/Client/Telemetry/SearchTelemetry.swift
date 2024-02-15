@@ -283,7 +283,7 @@ class SearchTelemetry {
                                      extras: extraDetails)
     }
   
-      // MARK: Engagement Telemetry
+    // MARK: Engagement Telemetry
     func recordURLBarSearchEngagementTelemetryEvent() {
         guard let tab = tabManager.selectedTab else { return }
 
@@ -335,8 +335,8 @@ class SearchTelemetry {
             providerKey: provider,
             engagementTypeKey: engagementType,
             groupsKey: groups,
-            resultsKey: results]
-        as [String: Any]
+            resultsKey: results
+        ] as [String: Any]
 
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
