@@ -93,6 +93,21 @@ class FakespotTests: IphoneOnlyTestCase {
         XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Shopping.sheetCloseButton].label, "Close Review Checker")
     }
 
+    func testAccessibilityForOptIn() throws {
+        guard #available(iOS 17.0, *), !skipPlatform else { return }
+        reachReviewChecker()
+        try app.performAccessibilityAudit()
+    }
+
+    func testAccessibilityForReview() throws {
+        guard #available(iOS 17.0, *), !skipPlatform else { return }
+        reachReviewChecker()
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton])
+        app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton].tap()
+        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
+        try app.performAccessibilityAudit()
+    }
+
     private func validateHighlightsSection() {
         if app.staticTexts[AccessibilityIdentifiers.Shopping.HighlightsCard.title].exists {
             let highlights = AccessibilityIdentifiers.Shopping.HighlightsCard.self
