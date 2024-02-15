@@ -73,9 +73,6 @@ class FormAutofillHelper: TabContentScript {
         // to an embedded iframe on a webpage for injecting card info
         frame = message.frameInfo
 
-        // Check if tabWebView is available
-        guard let tabWebView = tab?.webView else { return }
-
         switch HandlerName(rawValue: message.name) {
         case .addressFormMessageHandler:
             // Parse message payload for address form autofill

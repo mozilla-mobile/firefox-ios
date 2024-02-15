@@ -149,7 +149,8 @@ class FormAutofillHelperTests: XCTestCase {
 
     func test_parseFieldType_valid() {
         let messageBodyDict = formAutofillHelper.getValidPayloadData(from: validMockWKMessage)
-        let messageFields = formAutofillHelper.parseFieldType(messageBody: messageBodyDict!)
+        let messageFields: FillCreditCardForm? = formAutofillHelper.parseFieldType(messageBody: messageBodyDict!,
+                                                                                   formType: FillCreditCardForm.self)
         XCTAssertNotNil(messageFields)
         XCTAssertEqual(messageFields!.type, FormAutofillPayloadType.formInput.rawValue)
         XCTAssertEqual(messageFields!.creditCardPayload.ccExpMonth, "03")
@@ -160,7 +161,8 @@ class FormAutofillHelperTests: XCTestCase {
 
     func test_parseFieldCaptureJsonType_valid() {
         let messageBodyDict = formAutofillHelper.getValidPayloadData(from: validPayloadCaptureMockWKMessage)
-        let messageFields = formAutofillHelper.parseFieldType(messageBody: messageBodyDict!)
+        let messageFields: FillCreditCardForm? = formAutofillHelper.parseFieldType(messageBody: messageBodyDict!,
+                                                                                   formType: FillCreditCardForm.self)
         XCTAssertNotNil(messageFields)
         XCTAssertEqual(messageFields!.type, FormAutofillPayloadType.formSubmit.rawValue)
         XCTAssertEqual(messageFields!.creditCardPayload.ccExpMonth, "03")
@@ -173,14 +175,18 @@ class FormAutofillHelperTests: XCTestCase {
 
     func test_getFieldTypeValues() {
         let messageBodyDict = formAutofillHelper.getValidPayloadData(from: validMockWKMessage)
-        let messageFields = formAutofillHelper.parseFieldType(messageBody: messageBodyDict!)
+        let messageFields: FillCreditCardForm? = formAutofillHelper.parseFieldType(messageBody: messageBodyDict!,
+                                                                                   formType: FillCreditCardForm.self)
+
         XCTAssertNotNil(messageFields)
-        let fieldValues = formAutofillHelper.getFieldTypeValues(payload: messageFields!.creditCardPayload)
-        XCTAssertEqual(fieldValues.ccExpMonth, 3)
-        XCTAssertEqual(fieldValues.ccExpYear, 2999)
-        XCTAssertEqual(fieldValues.ccName, "Josh Moustache")
-        XCTAssertEqual(fieldValues.ccNumberLast4, "6788")
-        XCTAssertEqual(fieldValues.ccType, "VISA")
+        if let fieldValues = formAutofillHelper.getFieldTypeValues(
+            payload: messageFields!.creditCardPayload).fieldData as? UnencryptedCreditCardFields {
+            XCTAssertEqual(fieldValues.ccExpMonth, 3)
+            XCTAssertEqual(fieldValues.ccExpYear, 2999)
+            XCTAssertEqual(fieldValues.ccName, "Josh Moustache")
+            XCTAssertEqual(fieldValues.ccNumberLast4, "6788")
+            XCTAssertEqual(fieldValues.ccType, "VISA")
+        }
     }
 
     // MARK: Leaks
