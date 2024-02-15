@@ -333,6 +333,7 @@ extension TelemetryWrapper {
         case downloadLinkButton = "download-link-button"
         case downloadNowButton = "download-now-button"
         case downloadsPanel = "downloads-panel"
+        // MARK: Fakespot
         case shoppingButton = "shopping-button"
         case shoppingBottomSheet = "shopping-bottom-sheet"
         case shoppingProductPageVisits = "product_page_visits"
@@ -354,6 +355,7 @@ extension TelemetryWrapper {
         case shoppingComponentOptedOut = "shopping-component-opted-out"
         case shoppingUserHasOnboarded = "shopping-user-has-onboarded"
         case shoppingAdsOptedOut = "shopping-ads-opted-out"
+        case shoppingAdsSettingToggle = "shopping-ads-setting-toggle"
         case keyCommand = "key-command"
         case locationBar = "location-bar"
         case messaging = "messaging"
@@ -728,6 +730,7 @@ extension TelemetryWrapper {
             case interactionWithALink = "interaction-with-a-link"
             case swipingTheSurfaceHandle = "swiping-the-surface-handle"
             case optingOutOfTheFeature = "opting-out-of-the-feature"
+            case adsSettingToggle = "ads-setting-toggle"
             case closeButton = "close-button"
             case isNimbusDisabled = "is-nimbus-disabled"
             case isComponentOptedOut = "is-component-opted-out"
@@ -1263,6 +1266,19 @@ extension TelemetryWrapper {
             GleanMetrics.Shopping.surfaceReanalyzeClicked.record()
         case (.action, .tap, .shoppingProductBackInStockButton, _, _):
             GleanMetrics.Shopping.surfaceReactivatedButtonClicked.record()
+        case(.action, .tap, .shoppingAdsSettingToggle, _, let extras):
+            if let isEnabled = extras?[EventExtraKey.Shopping.adsSettingToggle.rawValue]
+                as? Bool {
+                let isEnabledExtra = GleanMetrics.Shopping.SurfaceAdsSettingToggledExtra(isEnabled: isEnabled)
+                GleanMetrics.Shopping.surfaceAdsSettingToggled.record(isEnabledExtra)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
         case (.action, .navigate, .shoppingBottomSheet, _, _):
             GleanMetrics.Shopping.surfaceNoReviewReliabilityAvailable.record()
         case (.action, .view, .shoppingSurfaceStaleAnalysisShown, _, _):
