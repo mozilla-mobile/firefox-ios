@@ -19,9 +19,9 @@ struct LoginListView: View {
     // MARK: - Body
 
     var body: some View {
-        List {
-            if viewModel.showSection {
-                Section(header: Text("Saved Logins")) {
+        ScrollView {
+            VStack(alignment: .leading) {
+                if viewModel.showSection {
                     ForEach(viewModel.logins, id: \.id) { login in
                         LoginCellView(
                             login: login,
@@ -30,13 +30,11 @@ struct LoginListView: View {
                             }
                         )
                     }
+                    .font(.caption)
+                    .foregroundColor(customLightGray)
                 }
-                .font(.caption)
-                .foregroundColor(customLightGray)
             }
         }
-        .listStyle(.plain)
-        .listRowInsets(EdgeInsets())
         .onAppear {
             viewModel.fetchLogins()
             applyTheme(theme: themeVal.theme)
@@ -68,8 +66,8 @@ class MockLoginStorage: LoginStorage {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             // Return mock login data
             let mockLogins = [
-                Login(website: "http://firefox.com", username: "foo@example.com"),
-                Login(website: "http://firefox.com", username: "bar@example.com")
+                Login(website: "foo@example.com", username: "**********"),
+                Login(website: "bar@example.com", username: "**********")
             ]
             completion(mockLogins, nil)
         }

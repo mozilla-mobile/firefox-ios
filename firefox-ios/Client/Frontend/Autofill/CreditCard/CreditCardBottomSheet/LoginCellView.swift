@@ -3,22 +3,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import SwiftUI
-
-//import SwiftUI
 import Common
-//import Shared
-//import Storage
 
 // MARK: - LoginCellView
-
-extension EnvironmentValues {
-    public var themeType: SwiftUITheme {
-//        let themeManager: ThemeManager = AppContainer.shared.resolve()
-//        let swiftUITheme = SwiftUITheme(theme: themeManager.currentTheme)
-//        return swiftUITheme
-        SwiftUITheme(theme: LightTheme())
-    }
-}
 
 /// A view representing a cell displaying login information.
 struct LoginCellView: View {
@@ -29,43 +16,48 @@ struct LoginCellView: View {
     @State private var iconPrimary: Color = .clear
 
     private(set) var login: Login
-    @Environment(\.themeType)
-    var themeVal
+    @Environment(\.themeType) 
+    var theme
     private(set) var onTap: () -> Void
 
     // MARK: - Body
 
     var body: some View {
         Button(action: onTap) {
-            VStack(alignment: .leading, spacing: 0) {
-                HStack(spacing: 24) {
-                    Image(systemName: "person.fill")
-                        .padding(.leading, 16)
-                        .foregroundColor(iconPrimary)
-                        .offset(y: -14)
-                    VStack(alignment: .leading) {
-                        Text(login.website)
-                            .font(.body)
-                            .foregroundColor(textColor)
-                        Text(login.username)
-                            .font(.subheadline)
-                            .foregroundColor(customLightGray)
-                    }
-
-                    Spacer()
+            HStack(alignment: .firstTextBaseline, spacing: 24) {
+                Image(systemName: "key.horizontal.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 22)
+                    .padding(.leading, 16)
+                    .foregroundColor(iconPrimary)
+                VStack(alignment: .leading) {
+                    Text(login.website)
+                        .font(.body)
+                        .foregroundColor(textColor)
+                    Text(login.username)
+                        .font(.subheadline)
+                        .foregroundColor(customLightGray)
                 }
+
+                Spacer()
             }
             .padding()
-            Spacer().frame(height: 0)
-            Divider().frame(height: 1)
         }
-        .listRowInsets(EdgeInsets())
-        .buttonStyle(LoginButtonStyle(theme: themeVal.theme))
+        .overlay(
+            RoundedRectangle(
+                cornerRadius: 12,
+                style: .continuous
+            )
+            .stroke(style: StrokeStyle())
+            .foregroundColor(Color(theme.theme.colors.actionSecondary))
+        )
+        .buttonStyle(LoginButtonStyle(theme: theme.theme))
         .listRowSeparator(.hidden)
         .onAppear {
-            applyTheme(theme: themeVal.theme)
+            applyTheme(theme: theme.theme)
         }
-        .onChange(of: themeVal) { newThemeValue in
+        .onChange(of: theme) { newThemeValue in
             applyTheme(theme: newThemeValue.theme)
         }
     }
@@ -92,6 +84,7 @@ struct LoginButtonStyle: ButtonStyle {
         configuration.label
             .background(configuration.isPressed ? Color(theme.colors.layer1) : Color(theme.colors.layer2))
             .foregroundColor(.white)
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
 }
 
@@ -113,6 +106,7 @@ struct LoginCellView_Previews: PreviewProvider {
 
         // Render the LoginCellView
         LoginCellView(login: sampleLogin, onTap: {})
+            .padding()
     }
 }
 

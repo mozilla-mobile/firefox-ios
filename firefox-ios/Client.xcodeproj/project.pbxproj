@@ -861,6 +861,12 @@
 		8C92DE8B2A711ED60090BD28 /* FakespotClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C92DE8A2A711ED60090BD28 /* FakespotClient.swift */; };
 		8C92DE912A7128CB0090BD28 /* ProductAnalysisResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C92DE902A7128CB0090BD28 /* ProductAnalysisResponse.swift */; };
 		8C92DE932A7128DE0090BD28 /* ProductAdsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C92DE922A7128DE0090BD28 /* ProductAdsResponse.swift */; };
+		8CA6E8F62B7CF7C5003BCE07 /* LoginListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA6E8F02B7CF7C4003BCE07 /* LoginListView.swift */; };
+		8CA6E8F72B7CF7C5003BCE07 /* LoginCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA6E8F12B7CF7C4003BCE07 /* LoginCellView.swift */; };
+		8CA6E8F82B7CF7C5003BCE07 /* LoginListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA6E8F22B7CF7C4003BCE07 /* LoginListViewModel.swift */; };
+		8CA6E8F92B7CF7C5003BCE07 /* LoginAutoFillFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA6E8F32B7CF7C5003BCE07 /* LoginAutoFillFooterView.swift */; };
+		8CA6E8FA2B7CF7C5003BCE07 /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA6E8F42B7CF7C5003BCE07 /* SwiftUIView.swift */; };
+		8CA6E8FB2B7CF7C5003BCE07 /* LoginAutoFillHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA6E8F52B7CF7C5003BCE07 /* LoginAutoFillHeaderView.swift */; };
 		8CAF29A02AA5E76B00DC3486 /* FakespotMessageCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CAF299F2AA5E76B00DC3486 /* FakespotMessageCardView.swift */; };
 		8CBDE8E32AB09804001985BF /* ProductAnalyzeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBDE8E22AB09804001985BF /* ProductAnalyzeResponse.swift */; };
 		8CCCB08B2AE26B5C0073ADB9 /* ReportResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CCCB08A2AE26B5C0073ADB9 /* ReportResponse.swift */; };
@@ -5838,6 +5844,12 @@
 		8C92DE8A2A711ED60090BD28 /* FakespotClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotClient.swift; sourceTree = "<group>"; };
 		8C92DE902A7128CB0090BD28 /* ProductAnalysisResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductAnalysisResponse.swift; sourceTree = "<group>"; };
 		8C92DE922A7128DE0090BD28 /* ProductAdsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductAdsResponse.swift; sourceTree = "<group>"; };
+		8CA6E8F02B7CF7C4003BCE07 /* LoginListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginListView.swift; sourceTree = "<group>"; };
+		8CA6E8F12B7CF7C4003BCE07 /* LoginCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginCellView.swift; sourceTree = "<group>"; };
+		8CA6E8F22B7CF7C4003BCE07 /* LoginListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginListViewModel.swift; sourceTree = "<group>"; };
+		8CA6E8F32B7CF7C5003BCE07 /* LoginAutoFillFooterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginAutoFillFooterView.swift; sourceTree = "<group>"; };
+		8CA6E8F42B7CF7C5003BCE07 /* SwiftUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
+		8CA6E8F52B7CF7C5003BCE07 /* LoginAutoFillHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginAutoFillHeaderView.swift; sourceTree = "<group>"; };
 		8CA841E0986514988B705D97 /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/Menu.strings; sourceTree = "<group>"; };
 		8CAF299F2AA5E76B00DC3486 /* FakespotMessageCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakespotMessageCardView.swift; sourceTree = "<group>"; };
 		8CBDE8E22AB09804001985BF /* ProductAnalyzeResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductAnalyzeResponse.swift; sourceTree = "<group>"; };
@@ -9821,6 +9833,12 @@
 		ABEF80CD2A24BEF1003F52C4 /* CreditCardBottomSheet */ = {
 			isa = PBXGroup;
 			children = (
+				8CA6E8F02B7CF7C4003BCE07 /* LoginListView.swift */,
+				8CA6E8F32B7CF7C5003BCE07 /* LoginAutoFillFooterView.swift */,
+				8CA6E8F52B7CF7C5003BCE07 /* LoginAutoFillHeaderView.swift */,
+				8CA6E8F12B7CF7C4003BCE07 /* LoginCellView.swift */,
+				8CA6E8F22B7CF7C4003BCE07 /* LoginListViewModel.swift */,
+				8CA6E8F42B7CF7C5003BCE07 /* SwiftUIView.swift */,
 				ABEF80D02A24D2BE003F52C4 /* CreditCardBottomSheetViewModel.swift */,
 				AB42CC722A1F523F003C9594 /* CreditCardBottomSheetViewController.swift */,
 				AB42CC732A1F5240003C9594 /* CreditCardBottomSheetHeaderView.swift */,
@@ -13848,6 +13866,7 @@
 				C869912D28917688007ACC5C /* WallpaperImageLoader.swift in Sources */,
 				96A5F73829928B3700234E5F /* GeneralizedImageFetcher.swift in Sources */,
 				1D7B78992ADF328E0011E9F2 /* AppEvent.swift in Sources */,
+				8CA6E8FB2B7CF7C5003BCE07 /* LoginAutoFillHeaderView.swift in Sources */,
 				43F7952525795F69005AEE40 /* SearchTelemetry.swift in Sources */,
 				E65075541E37F6FC006961AC /* LegacyDynamicFontHelper.swift in Sources */,
 				8ADAE4242A33A126007BF926 /* StudiesToggleSetting.swift in Sources */,
@@ -13908,6 +13927,7 @@
 				E1A102D62AC19B30007B617A /* FakespotUtils.swift in Sources */,
 				5A2918CB2B522338002B197E /* GeneralBrowserAction.swift in Sources */,
 				8A5D1CC12A30DCA4005AD35C /* SettingDisclosureUtility.swift in Sources */,
+				8CA6E8FA2B7CF7C5003BCE07 /* SwiftUIView.swift in Sources */,
 				E1442FD5294782D9003680B0 /* UIView+SnapKit.swift in Sources */,
 				E1ADE23C2B0649F200FD17AA /* FakespotState.swift in Sources */,
 				2816F0001B33E05400522243 /* UIConstants.swift in Sources */,
@@ -13991,6 +14011,7 @@
 				21A43CDD291461C700B1206D /* ReaderModeFontTypeButton.swift in Sources */,
 				D3BE7B261B054D4400641031 /* main.swift in Sources */,
 				DFD104682B2341F900938418 /* ProductAdsCache.swift in Sources */,
+				8CA6E8F92B7CF7C5003BCE07 /* LoginAutoFillFooterView.swift in Sources */,
 				C2D71B992A384F6A003DEC7A /* ThemedLeftAlignedTableViewCell.swift in Sources */,
 				21A7C44E283539170071D996 /* IntroViewModel.swift in Sources */,
 				E1FF93E228A2E55700E6360E /* WallpaperSelectorViewController.swift in Sources */,
@@ -14029,6 +14050,7 @@
 				744ED5611DBFEB8D00A2B5BE /* MailtoLinkHandler.swift in Sources */,
 				8A720C622A4CBB370003018A /* SupportSettingsDelegate.swift in Sources */,
 				DF1E6AAB2A976FE7000D4854 /* FakespotNoAnalysisCardView.swift in Sources */,
+				8CA6E8F72B7CF7C5003BCE07 /* LoginCellView.swift in Sources */,
 				DA4F826729AD221600189590 /* ZoomPageBar.swift in Sources */,
 				59A68E0B4ABBF55E14819668 /* BookmarksPanel.swift in Sources */,
 				BD4B2DE429BB4D9A005FAA50 /* TimerSnackBar.swift in Sources */,
@@ -14041,6 +14063,7 @@
 				E1463D022981DA190074E16E /* NotificationManager.swift in Sources */,
 				219A0FD92ACC8C0F009A6D1A /* InactiveTabsFooterView.swift in Sources */,
 				884CA7492344A301002E4711 /* TextContentDetector.swift in Sources */,
+				8CA6E8F82B7CF7C5003BCE07 /* LoginListViewModel.swift in Sources */,
 				C8656D77270F858900E199EA /* TabsSettingsViewControler.swift in Sources */,
 				8A9F0B5627C595F300FE09AE /* ImageIdentifiers.swift in Sources */,
 				7B844E3D1BBDDB9D00E733A2 /* ChevronView.swift in Sources */,
@@ -14067,6 +14090,7 @@
 				F85C7EDD27109241004BDBA4 /* PasswordManagerOnboardingViewController.swift in Sources */,
 				D8FDEB57220CFE970069A582 /* UIImage+ImageEffects.m in Sources */,
 				EBB89506219398E500EB91A0 /* TabContentBlocker.swift in Sources */,
+				8CA6E8F62B7CF7C5003BCE07 /* LoginListView.swift in Sources */,
 				21F2A2D22B0BC85200626AEC /* InactiveTabsModel.swift in Sources */,
 				966206CD2698DE1E005C0A55 /* RecentlySavedViewModel.swift in Sources */,
 				D3E8EF101B97BE69001900FB /* ClearPrivateDataTableViewController.swift in Sources */,
