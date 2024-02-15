@@ -72,8 +72,8 @@ class HistoryTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(TabTray)
         navigator.performAction(Action.ToggleSyncMode)
-        mozWaitForElementToExist(app.tables.cells.staticTexts["Firefox Sync"])
-        XCTAssertTrue(app.tables.buttons["Sync and Save Data"].exists, "Sign in button does not appear")
+        mozWaitForElementToExist(app.otherElements.staticTexts["Firefox Sync"])
+        XCTAssertTrue(app.otherElements.buttons["Sync and Save Data"].exists, "Sign in button does not appear")
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307487
