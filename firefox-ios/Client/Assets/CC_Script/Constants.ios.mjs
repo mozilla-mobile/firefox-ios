@@ -16,7 +16,8 @@ const IOS_DEFAULT_PREFERENCES = {
   "extensions.formautofill.creditCards.supported": "detect",
   "browser.search.region": "US",
   "extensions.formautofill.creditCards.supportedCountries": "US,CA,GB,FR,DE",
-  "extensions.formautofill.addresses.enabled": false,
+  "extensions.formautofill.addresses.enabled": true,
+  "extensions.formautofill.addresses.experiments.enabled": false, // TODO(FXCM-765): fetch this value from swift
   "extensions.formautofill.addresses.capture.enabled": false,
   "extensions.formautofill.addresses.supportedCountries": "",
   "extensions.formautofill.creditCards.enabled": true,

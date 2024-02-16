@@ -58,6 +58,8 @@ protocol TabManager: AnyObject {
     func makeToastFromRecentlyClosedUrls(_ recentlyClosedTabs: [Tab],
                                          isPrivate: Bool,
                                          previousTabUUID: String)
+    func undoCloseAllTabsLegacy(recentlyClosedTabs: [Tab], previousTabUUID: String, isPrivate: Bool)
+
     @discardableResult
     func addTab(_ request: URLRequest!,
                 configuration: WKWebViewConfiguration!,

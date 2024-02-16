@@ -12,7 +12,25 @@ features:
           additional Search settings.
         type: Boolean
         default: false
+      available-suggestions-types:
+        description: >
+          A map of suggestion types to booleans that indicate whether or not the
+          provider should return suggestions of those types.
+        type: Map<SuggestionType, Boolean>
+        default:
+          amp: true
+          wikipedia: true
+        
     defaults:
       - channel: developer
         value:
           status: true
+
+enums:
+  SuggestionType:
+    description: The type of a Firefox Suggest search suggestion.
+    variants:
+      amp:
+        description: A Firefox Suggestion from adMarketplace.
+      wikipedia:
+        description: A Firefox Suggestion for a Wikipedia page.

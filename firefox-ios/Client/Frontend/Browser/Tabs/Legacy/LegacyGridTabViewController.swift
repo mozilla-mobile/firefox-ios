@@ -317,6 +317,13 @@ class LegacyGridTabViewController: UIViewController,
                     self.tabManager.cleanupClosedTabs(recentlyClosedTabs,
                                                       previous: previousTab,
                                                       isPrivate: isPrivateState)
+
+                    presentToastForClosingAllTabs(
+                        recentlyClosedTabs: recentlyClosedTabs,
+                        previousTabUUID: previousTabUUID,
+                        isPrivate: isPrivateState
+                    )
+
                     TelemetryWrapper.recordEvent(
                         category: .action,
                         method: .tap,
@@ -331,6 +338,17 @@ class LegacyGridTabViewController: UIViewController,
                 }
                 closeTabsTrayHelper()
             }
+        }
+    }
+
+    private func presentToastForClosingAllTabs(recentlyClosedTabs: [Tab], previousTabUUID: String, isPrivate: Bool) {
+        self.presentUndoToast(tabsCount: recentlyClosedTabs.count) { [weak self] undoButtonPressed in
+            guard undoButtonPressed else { return }
+            self?.tabManager.undoCloseAllTabsLegacy(
+                recentlyClosedTabs: recentlyClosedTabs,
+                previousTabUUID: previousTabUUID,
+                isPrivate: isPrivate
+            )
         }
     }
 

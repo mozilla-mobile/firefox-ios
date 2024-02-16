@@ -84,7 +84,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate {
         case .contentBlocking:
             break // TODO: FXIOS-8088 - Handle content blocking in WebEngine
         case .findInPage:
-            break // TODO: FXIOS-8087 - Handle find in page in WebEngine
+            delegate?.showFindInPage()
         case .scrollingToTop:
             delegate?.scrollToTop()
         case .zoom:

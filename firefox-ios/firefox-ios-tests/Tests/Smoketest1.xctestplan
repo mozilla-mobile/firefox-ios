@@ -54,6 +54,7 @@
         "BrowsingPDFTests",
         "ClipBoardTests\/testClipboard()",
         "CreditCardsTests\/testAccessingTheCreditCardsSection()",
+        "CreditCardsTests\/testCreditCardsAutofill()",
         "CreditCardsTests\/testDeleteButtonFromEditCard()",
         "CreditCardsTests\/testEditSavedCardsUI()",
         "CreditCardsTests\/testManageCreditCardsOption()",

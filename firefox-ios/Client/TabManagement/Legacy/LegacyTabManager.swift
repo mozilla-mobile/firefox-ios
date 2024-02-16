@@ -748,9 +748,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
                                 completion: { buttonPressed in
             // Handles undo to Close tabs
             if buttonPressed {
-                self.reAddTabs(tabsToAdd: recentlyClosedTabs,
-                               previousTabUUID: previousTabUUID)
-                NotificationCenter.default.post(name: .DidTapUndoCloseAllTabToast, object: nil)
+                self.undoCloseAllTabsLegacy(recentlyClosedTabs: recentlyClosedTabs, previousTabUUID: previousTabUUID)
             } else {
                 // Finish clean up for recently close tabs
                 DispatchQueue.global().async { [unowned self] in
@@ -763,6 +761,16 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
             }
         })
         delegates.forEach { $0.get()?.tabManagerDidRemoveAllTabs(self, toast: toast) }
+    }
+
+    /// Restore recently closed tabs when tab tray refactor is disabled
+    func undoCloseAllTabsLegacy(recentlyClosedTabs: [Tab], previousTabUUID: String, isPrivate: Bool = false) {
+        self.reAddTabs(
+            tabsToAdd: recentlyClosedTabs,
+            previousTabUUID: previousTabUUID,
+            isPrivate: isPrivate
+        )
+        NotificationCenter.default.post(name: .DidTapUndoCloseAllTabToast, object: nil)
     }
 
     func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {}
@@ -821,13 +829,15 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         }
     }
 
-    private func reAddTabs(tabsToAdd: [Tab], previousTabUUID: String) {
+    private func reAddTabs(tabsToAdd: [Tab], previousTabUUID: String, isPrivate: Bool = false) {
         tabs.append(contentsOf: tabsToAdd)
         let tabToSelect = tabs.first(where: { $0.tabUUID == previousTabUUID })
         let currentlySelectedTab = selectedTab
         if let tabToSelect = tabToSelect, let currentlySelectedTab = currentlySelectedTab {
-            // remove currently selected tab
-            removeTabs([currentlySelectedTab])
+            // remove tab only in normal mode because we don't create a new tab after users closes all tabs in private mode
+            if !isPrivate {
+                removeTabs([currentlySelectedTab])
+            }
             // select previous tab
             selectTab(tabToSelect, previous: nil)
         }

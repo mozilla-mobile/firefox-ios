@@ -11,6 +11,7 @@ final class WKEngineSessionTests: XCTestCase {
     private var contentScriptManager: MockWKContentScriptManager!
     private var userScriptManager: MockWKUserScriptManager!
     private var engineSessionDelegate: MockEngineSessionDelegate!
+    private var findInPageDelegate: MockFindInPageHelperDelegate!
 
     override func setUp() {
         super.setUp()
@@ -19,6 +20,7 @@ final class WKEngineSessionTests: XCTestCase {
         contentScriptManager = MockWKContentScriptManager()
         userScriptManager = MockWKUserScriptManager()
         engineSessionDelegate = MockEngineSessionDelegate()
+        findInPageDelegate = MockFindInPageHelperDelegate()
     }
 
     override func tearDown() {
@@ -28,6 +30,7 @@ final class WKEngineSessionTests: XCTestCase {
         contentScriptManager = nil
         userScriptManager = nil
         engineSessionDelegate = nil
+        findInPageDelegate = nil
     }
 
     // MARK: Load URL
@@ -131,6 +134,80 @@ final class WKEngineSessionTests: XCTestCase {
         let scrollView = webViewProvider.webView.engineScrollView as? MockEngineScrollView
         XCTAssertEqual(scrollView?.setContentOffsetCalled, 1)
         XCTAssertEqual(scrollView?.savedContentOffset, CGPoint.zero)
+        prepareForTearDown(subject!)
+    }
+
+    // MARK: Find in page
+
+    func testFindInPageTextGivenFindAllThenJavascriptCalled() {
+        let subject = createSubject()
+
+        subject?.findInPage(text: "Banana", function: .find)
+
+        XCTAssertEqual(webViewProvider.webView.evaluateJavaScriptCalled, 1)
+        XCTAssertEqual(webViewProvider.webView.savedJavaScript, "__firefox__.find(\"Banana\")")
+        prepareForTearDown(subject!)
+    }
+
+    func testFindInPageTextGivenFindNextThenJavascriptCalled() {
+        let subject = createSubject()
+
+        subject?.findInPage(text: "Banana", function: .findNext)
+
+        XCTAssertEqual(webViewProvider.webView.evaluateJavaScriptCalled, 1)
+        XCTAssertEqual(webViewProvider.webView.savedJavaScript, "__firefox__.findNext(\"Banana\")")
+        prepareForTearDown(subject!)
+    }
+
+    func testFindInPageTextGivenFindPreviousThenJavascriptCalled() {
+        let subject = createSubject()
+
+        subject?.findInPage(text: "Banana", function: .findPrevious)
+
+        XCTAssertEqual(webViewProvider.webView.evaluateJavaScriptCalled, 1)
+        XCTAssertEqual(webViewProvider.webView.savedJavaScript, "__firefox__.findPrevious(\"Banana\")")
+        prepareForTearDown(subject!)
+    }
+
+    func testFindInPageTextGivenMaliciousAlertCodeThenIsSanitized() {
+        let subject = createSubject()
+        let maliciousTextWithAlert = "'; alert('Malicious code injected!'); '"
+        subject?.findInPage(text: maliciousTextWithAlert, function: .find)
+
+        XCTAssertEqual(webViewProvider.webView.evaluateJavaScriptCalled, 1)
+        let result = "__firefox__.find(\"\'; alert(\'Malicious code injected!\'); \'\")"
+        XCTAssertEqual(webViewProvider.webView.savedJavaScript, result)
+        prepareForTearDown(subject!)
+    }
+
+    func testFindInPageTextGivenMaliciousBrokenJsStringCodeThenIsSanitized() {
+        let subject = createSubject()
+        let maliciousText = "; maliciousFunction(); "
+        subject?.findInPage(text: maliciousText, function: .find)
+
+        XCTAssertEqual(webViewProvider.webView.evaluateJavaScriptCalled, 1)
+        XCTAssertEqual(webViewProvider.webView.savedJavaScript, "__firefox__.find(\"; maliciousFunction(); \")")
+        prepareForTearDown(subject!)
+    }
+
+    func testFindInPageDoneThenJavascriptCalled() {
+        let subject = createSubject()
+
+        subject?.findInPageDone()
+
+        XCTAssertEqual(webViewProvider.webView.evaluateJavaScriptCalled, 1)
+        XCTAssertEqual(webViewProvider.webView.savedJavaScript, "__firefox__.findDone()")
+        prepareForTearDown(subject!)
+    }
+
+    func testFindInPageDelegateIsSetProperly() {
+        let subject = createSubject()
+
+        subject?.findInPageDelegate = findInPageDelegate
+        let script = contentScriptManager.scripts[FindInPageContentScript.name()] as! FindInPageContentScript
+        script.userContentController(didReceiveMessage: ["currentResult": 10])
+
+        XCTAssertEqual(findInPageDelegate.didUpdateCurrentResultCalled, 1)
         prepareForTearDown(subject!)
     }
 
@@ -406,6 +483,15 @@ final class WKEngineSessionTests: XCTestCase {
     }
 
     // MARK: Content script manager
+
+    func testContentScriptGivenInitContentScriptsThenAreAddedAtInit() {
+        let subject = createSubject()
+
+        XCTAssertEqual(contentScriptManager.addContentScriptCalled, 1)
+        XCTAssertEqual(contentScriptManager.savedContentScriptNames.count, 1)
+        XCTAssertEqual(contentScriptManager.savedContentScriptNames[0], FindInPageContentScript.name())
+        prepareForTearDown(subject!)
+    }
 
     func testContentScriptWhenCloseCalledThenUninstallIsCalled() {
         let subject = createSubject()

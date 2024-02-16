@@ -1788,11 +1788,6 @@ extension String {
                 tableName: nil,
                 value: "Use your fingerprint to access passwords now.",
                 comment: "Touch ID prompt subtitle when accessing logins and passwords")
-            public static let UseSavedLoginFromKeyboard = MZLocalizedString(
-                key: "", // Settings.Passwords.Autofill.UseSavedLoginFromKeyboard.v124
-                tableName: "Settings",
-                value: "Use saved login",
-                comment: "When a user is in the process of loggin in, and has at least one saved password, we show this label inside the keyboard hint. This indicates to the user that there are stored logins available for use on this pending authentication.")
         }
 
         public struct Sync {
@@ -1868,12 +1863,12 @@ extension String {
                     value: "Address bar - Firefox Suggest",
                     comment: "In the Search page of the Settings menu, the title for the Firefox Suggest settings section.")
                 public static let ShowNonSponsoredSuggestionsTitle = MZLocalizedString(
-                    key: "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124",
+                    key: "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124.v2",
                     tableName: "Settings",
                     value: "Suggestions from the Web",
-                    comment: "In the Search page of the Settings menu, the title for setting to enable Suggestions from Firefox.")
+                    comment: "In the Search page of the Settings menu, the title for setting to enable Suggestions from the web in Firefox.")
                 public static let ShowNonSponsoredSuggestionsDescription = MZLocalizedString(
-                    key: "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124",
+                    key: "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124.v2",
                     tableName: "Settings",
                     value: "Get suggestions from %@ related to your search",
                     comment: "In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox.")
@@ -5758,6 +5753,32 @@ extension String {
         comment: "Warning message shown when you try to enable or use native AutoFill without a device passcode setup")
 }
 
+// MARK: - Password autofill
+extension String {
+    public struct PasswordAutofill {
+        public static let UseSavedPasswordFromKeyboard = MZLocalizedString(
+            key: "PasswordAutofill.UseSavedPasswordFromKeyboard.v124",
+            tableName: "PasswordAutofill",
+            value: "Use saved password",
+            comment: "Displayed inside the keyboard hint when a user is entering their login credentials and has at least one saved password. Indicates that there are stored passwords available for use in filling out the login form.")
+        public static let UseSavedPasswordFromHeader = MZLocalizedString(
+            key: "PasswordAutofill.UseSavedPasswordFromHeader.v124",
+            tableName: "PasswordAutofill",
+            value: "Use saved password?",
+            comment: "This label is used in the password list screen header as a question, prompting the user if they want to use a saved password for logging in.")
+        public static let ManagePasswordsButton = MZLocalizedString(
+            key: "PasswordAutofill.ManagePasswordsButton.v124",
+            tableName: "PasswordAutofill",
+            value: "Manage passwords",
+            comment: "This label is used for a button in the password list screen allowing users to manage their saved passwords. It's meant to direct users to where they can add, remove, or edit their saved passwords.")
+        public static let SignInWithSavedPassword = MZLocalizedString(
+            key: "PasswordAutofill.SignInWithSavedPassword.v124",
+            tableName: "PasswordAutofill",
+            value: "You’ll sign into %@",
+            comment: "This phrase is used as a subtitle in the header of password list screen, indicating to the user that they will be logging into a specific website (represented by %@) using a saved password. It's providing clarity on which website the saved credentials apply to.")
+    }
+}
+
 // MARK: - v35 Strings
 extension String {
     public static let FirefoxHomeJumpBackInSectionTitle = MZLocalizedString(
@@ -6053,6 +6074,16 @@ extension String {
                 tableName: "Settings",
                 value: "Show Suggestions in Private Browsing",
                 comment: "Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in the Private Session section in the Search page in the Settings menu.")
+            public static let ShowNonSponsoredSuggestionsTitle = MZLocalizedString(
+                key: "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124",
+                tableName: "Settings",
+                value: "Suggestions from %@",
+                comment: "In the Search page of the Settings menu, the title for setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox.")
+            public static let ShowNonSponsoredSuggestionsDescription = MZLocalizedString(
+                key: "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124",
+                tableName: "Settings",
+                value: "Get suggestions from the web related to your search",
+                comment: "In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox.")
         }
     }
 }
