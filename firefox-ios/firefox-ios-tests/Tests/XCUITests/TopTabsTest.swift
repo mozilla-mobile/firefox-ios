@@ -336,6 +336,55 @@ class TopTabsTest: BaseTestCase {
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
         }
     }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307047
+    func testOpenTabsViewCurrentTabThumbnail() {
+        // Open ten or more tabs
+        navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
+        for _ in 1...10 {
+            navigator.createNewTab()
+            if app.keyboards.element.isVisible() && !iPad() {
+                mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+                navigator.performAction(Action.CloseURLBarOpen)
+            }
+        }
+        let numTab = app.buttons["Show Tabs"].value as? String
+        XCTAssertEqual("11", numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
+        // Scroll down to view all open tabs thumbnails
+        navigator.goto(TabTray)
+        app.swipeUp()
+        if !iPad() {
+            let navBarTabTray = AccessibilityIdentifiers.TabTray.navBarSegmentedControl
+            let navBarTabTrayButton = app.segmentedControls[navBarTabTray].buttons.firstMatch
+            mozWaitForElementToExist(navBarTabTrayButton)
+            let tabsOpenTabTray: String = navBarTabTrayButton.label
+            XCTAssertTrue(tabsOpenTabTray.hasSuffix(numTab!))
+        } else {
+            let navBarTabTrayButton = app.segmentedControls["Open Tabs"].buttons.firstMatch
+            mozWaitForElementToExist(navBarTabTrayButton)
+            XCTAssertTrue(navBarTabTrayButton.label.hasSuffix(numTab!))
+        }
+        let tabsTrayCell = app.otherElements["Tabs Tray"].cells
+        // Go to a tab that is below the fold of the scrollable “Open Tabs” view
+        if !iPad() {
+            tabsTrayCell.staticTexts.element(boundBy: 3).tap()
+        } else {
+            XCTAssertEqual(tabsTrayCell.count, Int(numTab!))
+            tabsTrayCell.staticTexts.element(boundBy: 6).tap()
+        }
+        // The current tab’s thumbnail is focused in the “Open Tabs” view
+        navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        app.swipeDown()
+        app.swipeUp()
+        if !iPad() {
+            XCTAssertEqual(tabsTrayCell.element(boundBy: 3).label, "Homepage. Currently selected tab.")
+        } else {
+            XCTAssertEqual(tabsTrayCell.element(boundBy: 6).label, "Homepage. Currently selected tab.")
+        }
+    }
 }
 
 fileprivate extension BaseTestCase {
