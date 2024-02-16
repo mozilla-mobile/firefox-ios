@@ -482,6 +482,11 @@ class BrowserViewController: UIViewController,
         AppEventQueue.started(.browserUpdatedForAppActivation(uuid))
         defer { AppEventQueue.completed(.browserUpdatedForAppActivation(uuid)) }
 
+        if !featureFlags.isFeatureEnabled(.nightMode, checking: .buildOnly) {
+            NightModeHelper.turnOff(tabManager: tabManager)
+            themeManager.reloadTheme()
+        }
+
         // Update lock icon without redrawing the whole locationView
         if let tab = tabManager.selectedTab {
             urlBar.locationView.tabDidChangeContentBlocking(tab)

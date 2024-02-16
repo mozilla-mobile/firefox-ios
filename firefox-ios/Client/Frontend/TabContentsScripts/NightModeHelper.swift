@@ -13,12 +13,6 @@ class NightModeHelper: TabContentScript, FeatureFlaggable {
         static let DarkThemeEnabled = "NightModeEnabledDarkTheme"
     }
 
-    private var isUnderExperiment: Bool {
-        return featureFlags.isFeatureEnabled(.nightMode, checking: .buildOnly)
-    }
-
-    init() { }
-
     static func name() -> String {
         return "NightMode"
     }
@@ -34,7 +28,7 @@ class NightModeHelper: TabContentScript, FeatureFlaggable {
         // Do nothing.
     }
 
-    func toggle(
+    static func toggle(
         _ userDefaults: UserDefaultsInterface = UserDefaults.standard,
         tabManager: TabManager
     ) {
@@ -42,14 +36,15 @@ class NightModeHelper: TabContentScript, FeatureFlaggable {
         setNightMode(userDefaults, tabManager: tabManager, enabled: !isActive)
     }
 
-    func turnOff(
+    static func turnOff(
         _ userDefaults: UserDefaultsInterface = UserDefaults.standard,
         tabManager: TabManager
     ) {
+        guard isActivated() else { return }
         setNightMode(userDefaults, tabManager: tabManager, enabled: false)
     }
 
-    func setNightMode(
+    static func setNightMode(
         _ userDefaults: UserDefaultsInterface = UserDefaults.standard,
         tabManager: TabManager,
         enabled: Bool
@@ -61,19 +56,18 @@ class NightModeHelper: TabContentScript, FeatureFlaggable {
         }
     }
 
-    func setEnabledDarkTheme(
+    static func setEnabledDarkTheme(
         _ userDefaults: UserDefaultsInterface = UserDefaults.standard,
         darkTheme enabled: Bool
     ) {
         userDefaults.set(enabled, forKey: NightModeKeys.DarkThemeEnabled)
     }
 
-    func hasEnabledDarkTheme(_ userDefaults: UserDefaultsInterface = UserDefaults.standard) -> Bool {
+    static func hasEnabledDarkTheme(_ userDefaults: UserDefaultsInterface = UserDefaults.standard) -> Bool {
         return userDefaults.bool(forKey: NightModeKeys.DarkThemeEnabled)
     }
 
-    func isActivated(_ userDefaults: UserDefaultsInterface = UserDefaults.standard) -> Bool {
-        if isUnderExperiment { return false }
+    static func isActivated(_ userDefaults: UserDefaultsInterface = UserDefaults.standard) -> Bool {
         return userDefaults.bool(forKey: NightModeKeys.Status)
     }
 }
