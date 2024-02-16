@@ -73,6 +73,13 @@ class FormAutofillHelper: TabContentScript {
         // to an embedded iframe on a webpage for injecting card info
         frame = message.frameInfo
 
+        guard let frame = frame, frame.isFrameLoadedInSecureContext else {
+            logger.log("Ignoring request as it came from an insecure context",
+                       level: .info,
+                       category: .webview)
+            return
+        }
+
         switch HandlerName(rawValue: message.name) {
         case .addressFormMessageHandler:
             // Parse message payload for address form autofill
@@ -86,7 +93,6 @@ class FormAutofillHelper: TabContentScript {
                            category: .webview)
                 return
             }
-
             let payloadData = fieldValues.addressPayload
             foundFieldValues?(getFieldTypeValues(payload: payloadData), payloadType, frame)
 

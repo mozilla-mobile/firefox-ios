@@ -224,25 +224,3 @@ class WebViewNavigationHandlerTests: XCTestCase {
                                            navigationAction: policy)
     }
 }
-
-// MARK: WKNavigationActionMock
-class WKNavigationActionMock: WKNavigationAction {
-    var overridenTargetFrame: WKFrameInfoMock?
-
-    override var targetFrame: WKFrameInfo? {
-        return overridenTargetFrame
-    }
-}
-
-// MARK: WKFrameInfoMock
-class WKFrameInfoMock: WKFrameInfo {
-    let overridenTargetFrame: Bool
-
-    init(isMainFrame: Bool) {
-        overridenTargetFrame = isMainFrame
-    }
-
-    override var isMainFrame: Bool {
-        return overridenTargetFrame
-    }
-}
