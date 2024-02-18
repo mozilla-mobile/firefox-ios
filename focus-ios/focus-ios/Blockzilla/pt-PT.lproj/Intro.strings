@@ -14,7 +14,7 @@
 "Intro.Slides.Search.Title" = "A sua pesquisa, à sua maneira";
 
 /* Button to skip onboarding in Focus */
-"Intro.Slides.Skip.Button" = "Saltar";
+"Intro.Slides.Skip.Button" = "Ignorar";
 
 /* Description for the 'Welcome' panel in the First Run tour. */
 "Intro.Slides.Welcome.Description" = "Leve a navegação privada ao próximo nível. Bloqueie anúncios e outro conteúdo que pode monitorizá-lo(a) através de sites e tornar o carregamento de páginas lento.";

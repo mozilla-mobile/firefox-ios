@@ -134,7 +134,7 @@
 "browserShortcutDescription.selectLocationBar" = "Selecionar barra de localização";
 
 /* Label on button to complete edits */
-"Done" = "Feito";
+"Done" = "Concluído";
 
 /* Label on button to allow edits */
 "Edit" = "Editar";
@@ -161,7 +161,7 @@
 "ExternalLink.emailButton" = "Email";
 
 /* Accessibility label for done button in Find in Page Toolbar. */
-"FindInPage.Done" = "Localizar na página feito";
+"FindInPage.Done" = "Localizar na página concluído";
 
 /* Accessibility label for next result button in Find in Page Toolbar. */
 "FindInPage.NextResult" = "Localizar seguinte na página";
