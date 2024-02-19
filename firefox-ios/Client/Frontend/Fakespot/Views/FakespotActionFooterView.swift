@@ -6,7 +6,7 @@ import UIKit
 import Common
 import ComponentLibrary
 
-/// The view model used to configure a `ActionFooterView`
+/// The view model used to configure a `FakespotActionFooterView`
 public struct FakespotActionFooterViewModel {
     let title: String
     let actionTitle: String
@@ -33,6 +33,7 @@ public final class FakespotActionFooterView: UIView, ThemeApplicable {
     private struct UX {
         static let labelSize: CGFloat = 13
         static let buttonSize: CGFloat = 13
+        static let buttonInsets = NSDirectionalEdgeInsets(top: 8, leading: 0, bottom: 17, trailing: 0)
     }
 
     private var viewModel: FakespotActionFooterViewModel?
@@ -45,12 +46,7 @@ public final class FakespotActionFooterView: UIView, ThemeApplicable {
         label.adjustsFontForContentSizeCategory = true
     }
 
-    private lazy var linkButton: LegacyResizableButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .footnote,
-            size: UX.buttonSize)
-        button.buttonEdgeSpacing = 0
-        button.contentHorizontalAlignment = .leading
+    private lazy var linkButton: LinkButton = .build { button in
         button.addTarget(self, action: #selector(self.didTapButton), for: .touchUpInside)
     }
 
@@ -66,11 +62,18 @@ public final class FakespotActionFooterView: UIView, ThemeApplicable {
 
     public func configure(viewModel: FakespotActionFooterViewModel) {
         self.viewModel = viewModel
-        titleLabel.text = viewModel.title
-        linkButton.setTitle(viewModel.actionTitle, for: .normal)
 
+        titleLabel.text = viewModel.title
         titleLabel.accessibilityIdentifier = viewModel.a11yTitleIdentifier
-        linkButton.accessibilityIdentifier = viewModel.a11yActionIdentifier
+
+        let linkButtonViewModel = LinkButtonViewModel(
+            title: viewModel.actionTitle,
+            a11yIdentifier: viewModel.a11yActionIdentifier,
+            fontSize: UX.buttonSize,
+            contentInsets: UX.buttonInsets,
+            contentHorizontalAlignment: .leading
+        )
+        linkButton.configure(viewModel: linkButtonViewModel)
     }
 
     @objc
@@ -79,8 +82,7 @@ public final class FakespotActionFooterView: UIView, ThemeApplicable {
     }
 
     private func setupLayout() {
-        addSubview(titleLabel)
-        addSubview(linkButton)
+        addSubviews(titleLabel, linkButton)
 
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: topAnchor),
@@ -95,9 +97,9 @@ public final class FakespotActionFooterView: UIView, ThemeApplicable {
     }
 
     // MARK: - ThemeApplicable
-    public func applyTheme(theme: Common.Theme) {
-        linkButton.setTitleColor(theme.colors.actionPrimary, for: .normal)
-        linkButton.setTitleColor(theme.colors.actionPrimaryHover, for: .highlighted)
-        titleLabel.textColor = theme.colors.textSecondary
+    public func applyTheme(theme: Theme) {
+        let colors = theme.colors
+        linkButton.applyTheme(theme: theme)
+        titleLabel.textColor = colors.textSecondary
     }
 }
