@@ -2266,8 +2266,7 @@ extension BrowserViewController: LegacyTabDelegate {
         KVOs.forEach { webView.addObserver(self, forKeyPath: $0.rawValue, options: .new, context: nil) }
     }
 
-    private func stopObserving(webView: WKWebView?) {
-        guard let webView else { return }
+    private func stopObserving(webView: WKWebView) {
         guard observedWebViews.contains(webView) else {
             logger.log("Duplicate KVO de-registration of webView", level: .warning, category: .webview)
             return
