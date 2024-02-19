@@ -234,21 +234,12 @@ class PrivateBrowsingTest: BaseTestCase {
 
 fileprivate extension BaseTestCase {
     func checkOpenTabsBeforeClosingPrivateMode() {
-        if !iPad() {
-            let numPrivTabs = app.otherElements["Tabs Tray"].cells.count
-            XCTAssertEqual(
-                numPrivTabs,
-                1,
-                "The number of tabs is not correct, the private tab should not have been closed"
-            )
-        } else {
-            let numPrivTabs = app.collectionViews["Top Tabs View"].cells.count
-            XCTAssertEqual(
-                numPrivTabs,
-                1,
-                "The number of tabs is not correct, the private tab should not have been closed"
-            )
-        }
+        let numPrivTabs = app.otherElements["Tabs Tray"].cells.count
+        XCTAssertEqual(
+            numPrivTabs,
+            1,
+            "The number of tabs is not correct, the private tab should not have been closed"
+        )
     }
 
     func checkOpenTabsAfterClosingPrivateMode() {

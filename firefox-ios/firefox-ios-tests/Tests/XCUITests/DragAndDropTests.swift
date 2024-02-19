@@ -95,10 +95,13 @@ class DragAndDropTests: BaseTestCase {
         )
 
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
-        XCTAssert(
-            secondWebsite.url.contains(app.textFields["url"].value! as! String),
-            "The tab has not been dropped correctly"
-        )
+        if !iPad() {
+            XCTAssert(
+                secondWebsite.url.contains(app.textFields["url"].value! as! String),
+                "The tab has not been dropped correctly"
+            ) } else {
+                XCTAssertEqual(app.otherElements["Tabs Tray"].cells.element(boundBy: 0).label, secondWebsite.tabName)
+            }
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2361192
@@ -116,10 +119,13 @@ class DragAndDropTests: BaseTestCase {
         )
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: homeTabName)
         // Check that focus is kept on last website open
-        XCTAssert(
-            secondWebsite.url.contains(app.textFields["url"].value! as! String),
-            "The tab has not been dropped correctly"
-        )
+        if !iPad() {
+            XCTAssert(
+                secondWebsite.url.contains(app.textFields["url"].value! as! String),
+                "The tab has not been dropped correctly"
+            ) } else {
+                XCTAssertEqual(app.otherElements["Tabs Tray"].cells.element(boundBy: 0).label, secondWebsite.tabName)
+            }
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2361193
