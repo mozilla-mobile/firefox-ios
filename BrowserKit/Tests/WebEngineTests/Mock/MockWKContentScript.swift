@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import WebKit
 @testable import WebEngine
 
 class MockWKContentScript: WKContentScript {
@@ -20,8 +19,7 @@ class MockWKContentScript: WKContentScript {
         return ["MockWKContentScriptHandler"]
     }
 
-    func userContentController(_ userContentController: WKUserContentController,
-                               didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(didReceiveMessage message: Any) {
         userContentControllerCalled += 1
     }
 

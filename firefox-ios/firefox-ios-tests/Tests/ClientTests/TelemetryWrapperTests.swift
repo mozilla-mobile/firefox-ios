@@ -616,6 +616,14 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceStaleAnalysisShown)
     }
 
+    func test_shoppingAdsSettingToggle_GleanIsCalled() {
+        let isEnabled = TelemetryWrapper.EventExtraKey.Shopping.adsSettingToggle.rawValue
+        let extras = [isEnabled: true]
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingAdsSettingToggle, extras: extras)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceAdsSettingToggled)
+    }
+
     func test_shoppingNimbusDisabled_GleanIsCalled() {
         TelemetryWrapper.recordEvent(
             category: .information,
@@ -879,6 +887,51 @@ class TelemetryWrapperTests: XCTestCase {
                                      extras: extraDetails)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Urlbar.impression)
+    }
+
+    func test_AwesomebarAbandonment_GleanIsCalled() {
+        let groupsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.groups.rawValue
+        let groups = SearchTelemetryValues.Groups.adaptiveHistory.rawValue
+
+        let interactionKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.interaction.rawValue
+        let interaction = SearchTelemetryValues.Interaction.persistedSearchTerms.rawValue
+
+        let nCharsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nChars.rawValue
+        let nChars: Int32 = 5
+
+        let nResultsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nResults.rawValue
+        let nResults: Int32 = 12
+
+        let nWordsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nWords.rawValue
+        let nWords: Int32 = 1
+
+        let resultsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.results.rawValue
+        let results = SearchTelemetryValues.Results.searchEngine.rawValue + ","
+        + SearchTelemetryValues.Results.tabToSearch.rawValue
+
+        let sapKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.sap.rawValue
+        let sap = SearchTelemetryValues.Sap.urlbar.rawValue
+
+        let searchModeKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.searchMode.rawValue
+        let searchMode = SearchTelemetryValues.SearchMode.bookmarks.rawValue
+
+        let extraDetails = [
+            groupsKey: groups,
+            interactionKey: interaction,
+            nCharsKey: nChars,
+            nResultsKey: nResults,
+            nWordsKey: nWords,
+            resultsKey: results,
+            sapKey: sap,
+            searchModeKey: searchMode
+        ] as [String: Any]
+
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .close,
+                                     object: .urlbarAbandonment,
+                                     extras: extraDetails)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Urlbar.abandonment)
     }
 
     // MARK: - Page Action Menu

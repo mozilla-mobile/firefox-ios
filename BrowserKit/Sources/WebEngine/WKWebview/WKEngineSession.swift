@@ -12,6 +12,14 @@ class WKEngineSession: NSObject,
                         WKNavigationDelegate,
                         WKEngineWebViewDelegate {
     weak var delegate: EngineSessionDelegate?
+    weak var findInPageDelegate: FindInPageHelperDelegate? {
+        didSet {
+            let script = contentScriptManager.scripts[FindInPageContentScript.name()]
+            guard let findInPage = script as? FindInPageContentScript else { return }
+            findInPage.delegate = findInPageDelegate
+        }
+    }
+
     private(set) var webView: WKEngineWebView
     private var logger: Logger
     var sessionData: WKEngineSessionData
@@ -45,6 +53,7 @@ class WKEngineSession: NSObject,
         webView.navigationDelegate = self
         webView.delegate = self
         userScriptManager.injectUserScriptsIntoWebView(webView)
+        addContentScripts()
     }
 
     // TODO: FXIOS-7903 #17648 no return from this load(url:), we need a way to recordNavigationInTab
@@ -114,6 +123,15 @@ class WKEngineSession: NSObject,
 
     func scrollToTop() {
         webView.engineScrollView.setContentOffset(CGPoint.zero, animated: true)
+    }
+
+    func findInPage(text: String, function: FindInPageFunction) {
+        let sanitizedInput = text.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\"")
+        webView.evaluateJavascriptInDefaultContentWorld("__firefox__.\(function.rawValue)(\"\(sanitizedInput)\")")
+    }
+
+    func findInPageDone() {
+        webView.evaluateJavascriptInDefaultContentWorld("__firefox__.findDone()")
     }
 
     func goToHistory(index: Int) {
@@ -219,6 +237,14 @@ class WKEngineSession: NSObject,
         if let url = webView.url {
             delegate?.onLocationChange(url: url.absoluteString)
         }
+    }
+
+    // MARK: - Content scripts
+
+    private func addContentScripts() {
+        contentScriptManager.addContentScript(FindInPageContentScript(),
+                                              name: FindInPageContentScript.name(),
+                                              forSession: self)
     }
 
     // MARK: - WKUIDelegate
