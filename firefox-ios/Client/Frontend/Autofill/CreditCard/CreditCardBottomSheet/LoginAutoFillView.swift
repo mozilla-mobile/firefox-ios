@@ -3,25 +3,28 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import SwiftUI
+import Shared
 
-struct SwiftUIView: View {
+struct LoginAutoFillView: View {
     @Environment(\.themeType)
     var themeVal
 
     var body: some View {
         VStack {
             LoginAutoFillHeaderView(
-                title: "Use this login?",
-                header: "You’ll sign into cnn.com"
+                title: String.PasswordAutofill.UseSavedPasswordFromHeader,
+                header: String(format: String.PasswordAutofill.SignInWithSavedPassword, "cnn.com")
             )
             LoginListView(
                 viewModel: LoginListViewModel(
                     loginStorage: MockLoginStorage(),
-                    logger: MockLogger()
+                    logger: MockLogger(),
+                    onLoginCellTap: { login in
+                    }
                 )
             )
             LoginAutoFillFooterView(
-                title: "Manage passwords",
+                title: String.PasswordAutofill.ManagePasswordsButton,
                 accessibilityIdentifier: "manageLoginInfoButton"
             )
         }
@@ -31,5 +34,5 @@ struct SwiftUIView: View {
 }
 
 #Preview {
-    SwiftUIView()
+    LoginAutoFillView()
 }

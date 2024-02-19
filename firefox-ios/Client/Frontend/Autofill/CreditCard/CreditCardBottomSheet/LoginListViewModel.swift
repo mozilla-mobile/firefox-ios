@@ -22,14 +22,19 @@ enum LogCategory {
 
 class LoginListViewModel: ObservableObject {
     @Published var logins: [Login] = []
-    @Published var showSection = false
 
     private let loginStorage: LoginStorage
     private let logger: LoggerProtocol
+    var onLoginCellTap: (Login) -> Void
 
-    init(loginStorage: LoginStorage, logger: LoggerProtocol) {
+    init(
+        loginStorage: LoginStorage,
+        logger: LoggerProtocol,
+        onLoginCellTap: @escaping (Login) -> Void
+    ) {
         self.loginStorage = loginStorage
         self.logger = logger
+        self.onLoginCellTap = onLoginCellTap
     }
 
     func fetchLogins() {
@@ -38,7 +43,6 @@ class LoginListViewModel: ObservableObject {
                 guard let self = self else { return }
                 if let logins = storedLogins {
                     self.logins = logins
-                    self.showSection = !logins.isEmpty
                 } else if let error = error {
                     self.logger.log("Error fetching logins",
                                     level: .warning,

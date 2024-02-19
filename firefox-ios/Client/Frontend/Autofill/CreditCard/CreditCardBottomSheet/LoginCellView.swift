@@ -7,6 +7,15 @@ import Common
 
 // MARK: - LoginCellView
 
+extension VerticalAlignment {
+    enum MidAccountAndName: AlignmentID {
+        static func defaultValue (in context: ViewDimensions) -> CGFloat {
+            context[.top]
+        }
+    }
+    static let midAccountAndName = VerticalAlignment(MidAccountAndName.self)
+}
+
 /// A view representing a cell displaying login information.
 struct LoginCellView: View {
     // MARK: - Properties
@@ -16,7 +25,7 @@ struct LoginCellView: View {
     @State private var iconPrimary: Color = .clear
 
     private(set) var login: Login
-    @Environment(\.themeType) 
+    @Environment(\.themeType)
     var theme
     private(set) var onTap: () -> Void
 
@@ -24,22 +33,23 @@ struct LoginCellView: View {
 
     var body: some View {
         Button(action: onTap) {
-            HStack(alignment: .firstTextBaseline, spacing: 24) {
-                Image(systemName: "key.horizontal.fill")
+            HStack(alignment: .midAccountAndName, spacing: 24) {
+                Image(StandardImageIdentifiers.Large.login)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 22)
                     .padding(.leading, 16)
                     .foregroundColor(iconPrimary)
+                    .alignmentGuide(.midAccountAndName) { $0[VerticalAlignment.center] }
                 VStack(alignment: .leading) {
                     Text(login.website)
                         .font(.body)
                         .foregroundColor(textColor)
+                        .alignmentGuide(.midAccountAndName) { $0[VerticalAlignment.center] }
                     Text(login.username)
                         .font(.subheadline)
                         .foregroundColor(customLightGray)
                 }
-
                 Spacer()
             }
             .padding()

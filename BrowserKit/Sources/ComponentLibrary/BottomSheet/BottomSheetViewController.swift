@@ -5,11 +5,18 @@
 import Common
 import Foundation
 import UIKit
+import SwiftUI
 
 /// Protocol followed by child of the bottom sheet, which holds the content shown in the bottom sheet.
 public protocol BottomSheetChild: UIViewController {
     /// Tells the child that the bottom sheet will get dismissed
     func willDismiss()
+}
+
+extension UIHostingController: BottomSheetChild {
+    public func willDismiss() {
+        
+    }
 }
 
 /// Protocol followed by the bottom sheet view controller. Gives the possibility to dismiss the bottom sheet.
@@ -36,7 +43,7 @@ public class BottomSheetViewController: UIViewController,
 
     private let viewModel: BottomSheetViewModel
     private var useDimmedBackground: Bool
-    private let childViewController: BottomSheetChild
+    let childViewController: BottomSheetChild
 
     // Views
     private lazy var scrollView: FadeScrollView = .build { scrollView in

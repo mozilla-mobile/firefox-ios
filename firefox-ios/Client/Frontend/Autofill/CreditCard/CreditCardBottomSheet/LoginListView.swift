@@ -13,7 +13,7 @@ struct LoginListView: View {
 
     @Environment(\.themeType)
     var themeVal
-    @ObservedObject var viewModel: LoginListViewModel
+    @StateObject var viewModel: LoginListViewModel
     @State private var customLightGray: Color = .clear
 
     // MARK: - Body
@@ -21,26 +21,22 @@ struct LoginListView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                if viewModel.showSection {
-                    ForEach(viewModel.logins, id: \.id) { login in
-                        LoginCellView(
-                            login: login,
-                            onTap: {
-                                // Handle action when login cell is tapped.
-                            }
-                        )
-                    }
-                    .font(.caption)
-                    .foregroundColor(customLightGray)
+                ForEach(viewModel.logins, id: \.id) { login in
+                    LoginCellView(
+                        login: login,
+                        onTap: { viewModel.onLoginCellTap(login) }
+                    )
                 }
+                .font(.caption)
+                .foregroundColor(customLightGray)
             }
         }
         .onAppear {
             viewModel.fetchLogins()
             applyTheme(theme: themeVal.theme)
         }
-        .onChange(of: themeVal) { newThemeValue in
-            applyTheme(theme: newThemeValue.theme)
+        .onChange(of: themeVal) {
+            applyTheme(theme: $0.theme)
         }
     }
 
@@ -56,7 +52,12 @@ struct LoginListView: View {
 
 struct LoginListView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginListView(viewModel: LoginListViewModel(loginStorage: MockLoginStorage(), logger: MockLogger()))
+        LoginListView(
+            viewModel: LoginListViewModel(
+                loginStorage: MockLoginStorage(),
+                logger: MockLogger(),
+                onLoginCellTap: { _ in })
+        )
     }
 }
 
@@ -67,7 +68,17 @@ class MockLoginStorage: LoginStorage {
             // Return mock login data
             let mockLogins = [
                 Login(website: "foo@example.com", username: "**********"),
-                Login(website: "bar@example.com", username: "**********")
+                Login(website: "bar@example.com", username: "**********"),
+                Login(website: "foo@example.com", username: "**********"),
+                Login(website: "bar@example.com", username: "**********"),
+                Login(website: "foo@example.com", username: "**********"),
+                Login(website: "bar@example.com", username: "**********"),
+                Login(website: "foo@example.com", username: "**********"),
+                Login(website: "bar@example.com", username: "**********"),
+                Login(website: "foo@example.com", username: "**********"),
+                Login(website: "bar@example.com", username: "**********"),
+                Login(website: "foo@example.com", username: "**********"),
+                Login(website: "bar@example.com", username: "**********"),
             ]
             completion(mockLogins, nil)
         }

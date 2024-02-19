@@ -8,6 +8,14 @@ import Storage
 import Shared
 import WebKit
 import ComponentLibrary
+import SwiftUI
+
+class SelfSizingHostingController<Content>: UIHostingController<Content> where Content: View {
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        self.view.invalidateIntrinsicContentSize()
+    }
+}
 
 class CredentialAutofillCoordinator: BaseCoordinator {
     // MARK: - Properties
@@ -110,6 +118,43 @@ class CredentialAutofillCoordinator: BaseCoordinator {
         } else if state == .selectSavedCard {
             sendCreditCardAutofillPromptExpandedTelemetry()
         }
+    }
+
+    func showSavedLoginAutofill(creditCard: CreditCard?,
+                                decryptedCard: UnencryptedCreditCardFields?,
+                                viewType state: CreditCardBottomSheetState,
+                                frame: WKFrameInfo?,
+                                alertContainer: UIView) {
+//        let creditCardControllerViewModel = CreditCardBottomSheetViewModel(profile: profile,
+//                                                                           creditCard: creditCard,
+//                                                                           decryptedCreditCard: decryptedCard,
+//                                                                           state: state)
+//        let viewController = CreditCardBottomSheetViewController(viewModel: creditCardControllerViewModel)
+//        viewController.didTapYesClosure = { [weak self] error in
+//        }
+//
+//        viewController.didTapManageCardsClosure = { [weak self] in
+//        }
+//
+//        viewController.didSelectCreditCardToFill = { [weak self] plainTextCard in
+//
+//        }
+
+        let loginAutofillView = LoginAutoFillView()
+
+        let viewController = SelfSizingHostingController(rootView: loginAutofillView)
+
+        var bottomSheetViewModel = BottomSheetViewModel(closeButtonA11yLabel: .CloseButtonTitle)
+        bottomSheetViewModel.shouldDismissForTapOutside = false
+
+//        let bottomSheetVC = BottomSheetViewController(
+//            viewModel: bottomSheetViewModel,
+//            childViewController: viewController
+//        )
+        if let sheet = viewController.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+        }
+        router.present(viewController)
     }
 
     func showPassCodeController() {

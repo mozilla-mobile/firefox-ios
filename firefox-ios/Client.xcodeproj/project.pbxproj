@@ -869,7 +869,7 @@
 		8CA6E8F72B7CF7C5003BCE07 /* LoginCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA6E8F12B7CF7C4003BCE07 /* LoginCellView.swift */; };
 		8CA6E8F82B7CF7C5003BCE07 /* LoginListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA6E8F22B7CF7C4003BCE07 /* LoginListViewModel.swift */; };
 		8CA6E8F92B7CF7C5003BCE07 /* LoginAutoFillFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA6E8F32B7CF7C5003BCE07 /* LoginAutoFillFooterView.swift */; };
-		8CA6E8FA2B7CF7C5003BCE07 /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA6E8F42B7CF7C5003BCE07 /* SwiftUIView.swift */; };
+		8CA6E8FA2B7CF7C5003BCE07 /* LoginAutoFillView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA6E8F42B7CF7C5003BCE07 /* LoginAutoFillView.swift */; };
 		8CA6E8FB2B7CF7C5003BCE07 /* LoginAutoFillHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA6E8F52B7CF7C5003BCE07 /* LoginAutoFillHeaderView.swift */; };
 		8CAF29A02AA5E76B00DC3486 /* FakespotMessageCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CAF299F2AA5E76B00DC3486 /* FakespotMessageCardView.swift */; };
 		8CBDE8E32AB09804001985BF /* ProductAnalyzeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBDE8E22AB09804001985BF /* ProductAnalyzeResponse.swift */; };
@@ -5863,7 +5863,7 @@
 		8CA6E8F12B7CF7C4003BCE07 /* LoginCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginCellView.swift; sourceTree = "<group>"; };
 		8CA6E8F22B7CF7C4003BCE07 /* LoginListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginListViewModel.swift; sourceTree = "<group>"; };
 		8CA6E8F32B7CF7C5003BCE07 /* LoginAutoFillFooterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginAutoFillFooterView.swift; sourceTree = "<group>"; };
-		8CA6E8F42B7CF7C5003BCE07 /* SwiftUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
+		8CA6E8F42B7CF7C5003BCE07 /* LoginAutoFillView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginAutoFillView.swift; sourceTree = "<group>"; };
 		8CA6E8F52B7CF7C5003BCE07 /* LoginAutoFillHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginAutoFillHeaderView.swift; sourceTree = "<group>"; };
 		8CA841E0986514988B705D97 /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/Menu.strings; sourceTree = "<group>"; };
 		8CAF299F2AA5E76B00DC3486 /* FakespotMessageCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakespotMessageCardView.swift; sourceTree = "<group>"; };
@@ -9872,7 +9872,7 @@
 				8CA6E8F52B7CF7C5003BCE07 /* LoginAutoFillHeaderView.swift */,
 				8CA6E8F12B7CF7C4003BCE07 /* LoginCellView.swift */,
 				8CA6E8F22B7CF7C4003BCE07 /* LoginListViewModel.swift */,
-				8CA6E8F42B7CF7C5003BCE07 /* SwiftUIView.swift */,
+				8CA6E8F42B7CF7C5003BCE07 /* LoginAutoFillView.swift */,
 				ABEF80D02A24D2BE003F52C4 /* CreditCardBottomSheetViewModel.swift */,
 				AB42CC722A1F523F003C9594 /* CreditCardBottomSheetViewController.swift */,
 				AB42CC732A1F5240003C9594 /* CreditCardBottomSheetHeaderView.swift */,
@@ -13966,7 +13966,7 @@
 				E1A102D62AC19B30007B617A /* FakespotUtils.swift in Sources */,
 				5A2918CB2B522338002B197E /* GeneralBrowserAction.swift in Sources */,
 				8A5D1CC12A30DCA4005AD35C /* SettingDisclosureUtility.swift in Sources */,
-				8CA6E8FA2B7CF7C5003BCE07 /* SwiftUIView.swift in Sources */,
+				8CA6E8FA2B7CF7C5003BCE07 /* LoginAutoFillView.swift in Sources */,
 				E1442FD5294782D9003680B0 /* UIView+SnapKit.swift in Sources */,
 				E1ADE23C2B0649F200FD17AA /* FakespotState.swift in Sources */,
 				2816F0001B33E05400522243 /* UIConstants.swift in Sources */,

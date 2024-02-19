@@ -6,14 +6,12 @@ import SwiftUI
 import Common
 
 struct LoginAutoFillHeaderView: View {
-
     // Constants for UI layout and styling
     private let headerElementsSpacing: CGFloat = 7.0
     private let mainContainerElementsSpacing: CGFloat = 10
     private let bottomSpacing: CGFloat = 24.0
     private let logoSize: CGFloat = 36.0
     private let closeButtonMarginAndWidth: CGFloat = 46.0
-    private let iconSize: CGFloat = 11
     private let buttonSize: CGFloat = 30
 
     @Environment(\.themeType)
@@ -45,20 +43,18 @@ struct LoginAutoFillHeaderView: View {
                 }
                 Spacer()
                 Button(action: {}) {
-                    Image(
-                        uiImage: UIImage(named: StandardImageIdentifiers.ExtraLarge.crossCircleFill)!
+                    Image(StandardImageIdentifiers.ExtraLarge.crossCircleFill)
+                    .resizable()
+                    .frame(
+                        width: buttonSize,
+                        height: buttonSize
                     )
-                        .resizable()
-                        .frame(
-                            width: iconSize,
-                            height: iconSize
-                        )
-                        .foregroundColor(Color(theme.theme.colors.iconSecondary))
-                        .padding(8)
-                        .background(
-                            Circle()
-                                .fill(Color(theme.theme.colors.layer4))
-                            )
+//                    .foregroundColor(Color(theme.theme.colors.iconSecondary))
+//                    .padding(8)
+//                    .background(
+//                        Circle()
+//                            .fill(Color(theme.theme.colors.layer4))
+//                    )
                 }
             }
         }

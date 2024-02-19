@@ -1900,6 +1900,36 @@ class BrowserViewController: UIViewController,
                                                                   frame: frame)
                 }
             }
+
+            tabWebView.accessoryView.savedLoginsClosure = {
+                DispatchQueue.main.async { [weak self] in
+                    // Dismiss keyboard
+                    webView.resignFirstResponder()
+                    // Authenticate and show bottom sheet with select a card flow
+                    self?.authenticateSelectSavedLoginsClosureBottomSheet(fieldValues: fieldValues,
+                                                                  frame: frame)
+                }
+            }
+        }
+    }
+
+    private func authenticateSelectSavedLoginsClosureBottomSheet(fieldValues: UnencryptedCreditCardFields,
+                                                         frame: WKFrameInfo? = nil) {
+        appAuthenticator.getAuthenticationState { [unowned self] state in
+            switch state {
+            case .deviceOwnerAuthenticated:
+                // Note: Since we are injecting card info, we pass on the frame
+                // for special iframe cases
+                self.navigationHandler?.showSavedLoginAutofill(creditCard: nil,
+                                                               decryptedCard: nil,
+                                                               viewType: .selectSavedCard,
+                                                               frame: frame,
+                                                               alertContainer: self.contentContainer)
+            case .deviceOwnerFailed:
+                break // Keep showing bvc
+            case .passCodeRequired:
+                self.navigationHandler?.showRequiredPassCode()
+            }
         }
     }
 
