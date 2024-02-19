@@ -2521,6 +2521,11 @@ extension String {
         tableName: "Credentials",
         value: "To save and automatically fill passwords, enable Face ID, Touch ID, or a device passcode.",
         comment: "Message shown when you enter Logins & Passwords without having a device passcode set.")
+    public static let PaymentMethodsDevicePasscodeRequiredMessage = MZLocalizedString(
+        key: "Logins.PaymentMethods.DevicePasscodeRequired.Message.v124",
+        tableName: "Credentials",
+        value: "To save and autofill credit cards cards, enable Face ID, Touch ID, or a device passcode.",
+        comment: "Message shown when you enter Payment Methods without having a device passcode set.")
     public static let LoginsDevicePasscodeRequiredLearnMoreButtonTitle = MZLocalizedString(
         key: "Logins.DevicePasscodeRequired.LearnMoreButtonTitle",
         tableName: nil,

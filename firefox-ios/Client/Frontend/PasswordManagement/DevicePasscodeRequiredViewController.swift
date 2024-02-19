@@ -6,6 +6,11 @@ import Common
 import UIKit
 import Shared
 
+enum ParentControllerType {
+    case passwords
+    case paymentMethods
+}
+
 class DevicePasscodeRequiredViewController: SettingsViewController {
     private var warningLabel: UILabel = {
         let label = UILabel()
@@ -26,10 +31,12 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
         return button
     }()
 
+    var parentType: ParentControllerType = .passwords
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = .Settings.Passwords.Title
 
+        configureView()
         self.view.addSubviews(warningLabel, learnMoreButton)
 
         NSLayoutConstraint.activate(
@@ -52,6 +59,17 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
                 )
             ]
         )
+    }
+
+    private func configureView() {
+        switch parentType {
+        case .passwords:
+            self.title = .Settings.Passwords.Title
+            warningLabel.text = .LoginsDevicePasscodeRequiredMessage
+        case .paymentMethods:
+            self.title = .SettingsAutofillCreditCard
+            warningLabel.text = .PaymentMethodsDevicePasscodeRequiredMessage
+        }
     }
 
     @objc

@@ -59,6 +59,7 @@ class PasswordManagerCoordinator: BaseCoordinator,
     func showDevicePassCode() {
         let passcodeViewController = DevicePasscodeRequiredViewController()
         passcodeViewController.profile = profile
+        passcodeViewController.parentType = .passwords
         router.push(passcodeViewController)
     }
 
