@@ -1,3 +1,9 @@
+/* On the autofill settings screen, a label for the section that displays the list of saved addresses. This label adds additional context for users regarding the toggle switch that allows saving and autofilling of addresses for webpages. */
+"Addresses.Settings.SavedAddressesSectionTitle.v124" = "CHOMLEC’HIOÙ ENROLLET";
+
+/* Displayed inside the keyboard hint when a user is entering their address and has at least one saved address. Indicates that there are stored addresses available for use in filling out a form. */
+"Addresses.Settings.UseSavedAddressFromKeyboard.v124" = "Implijout ur chomlec’h enrollet";
+
 /* Accessibility label for the add button in autofill settings screen. Pressing this button presents a modal that allows users to add a card by entering the credit card information. */
 "CreditCard.Settings.AddCard.AccessibilityLabel.v121" = "Ouzhpennañ ur gartenn";
 
@@ -94,6 +100,9 @@
 /* Navigation title for search page in the Settings menu. */
 "Settings.Search.PageTitle.v121" = "Klask";
 
+/* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in `Suggestions from Search Engines` and `Address Bar - Firefox Suggest` sections in the Search page in the Settings menu. */
+"Settings.Search.PrivateSession.Setting.v124" = "Diskouez e-kerzh an estezioù prevez";
+
 /* Title for the `Private Browsing` settings section in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Title.v122" = "Merdeiñ prevez";
 
@@ -108,6 +117,15 @@
 
 /* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
 "Settings.Search.Suggest.LearnAboutSuggestions.v124" = "Gouzout hiroc’h diwar-benn ar pezh a vez aliet gant Firefox";
+
+/* In the Search page of the Settings menu, the title for the setting to enable search browsing history. */
+"Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "Klask er roll istor";
+
+/* In the Search page of the Settings menu, the title for the setting to enable search bookmarks. */
+"Settings.Search.Suggest.SearchSearchBookmarks.Title.v124" = "Klask er sinedoù";
+
+/* In the Search page of the Settings menu, the title for the setting to enable synced tabs. */
+"Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "Klask en ivinelloù goubredet";
 
 /* In the Search page of the Settings menu, the title for setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124" = "Kinnigoù eus %@";

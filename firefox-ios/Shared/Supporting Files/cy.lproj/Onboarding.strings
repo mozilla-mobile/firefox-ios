@@ -1,6 +1,9 @@
 /* The title of the button on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
 "DefaultBrowserPopup.ButtonTitle.v114" = "Mynd i’r Gosodiadau";
 
+/* The footer label on the Default Browser Popup, which is below all the instructions asking the users if their Firefox browser is the default browser. If it is then close this message and tap skip. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"DefaultBrowserPopup.DescriptionFooter.v124" = "*Ai %@ yw eich rhagosodiad yn barod?* Caewch y neges hon a thapiwch Hepgor.";
+
 /* The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "DefaultBrowserPopup.FirstLabel.v114" = "1. Mynd i'r *Gosodiadau*";
 

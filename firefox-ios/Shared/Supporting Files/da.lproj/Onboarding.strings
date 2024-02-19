@@ -86,7 +86,7 @@
 "Onboarding.Notification.Title.v120" = "Notifikationer gør dig mere sikker, når du bruger %@";
 
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
-"Onboarding.Notification.TurnOnNotifications.Action.v114" = "Slå beskeder til";
+"Onboarding.Notification.TurnOnNotifications.Action.v114" = "Slå notifikationer til";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Sync.Description.v120" = "Du er mere sikker, når du er logget ind og har synkroniseret dine data. %@ krypterer dine adgangskoder, bogmærker med mere.";

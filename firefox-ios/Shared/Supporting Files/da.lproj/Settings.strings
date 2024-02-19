@@ -71,7 +71,7 @@
 "Settings.Notifications.SyncNotificationsTitle.v112" = "Sync";
 
 /* This is the footer title informing the user needs to turn on notifications in iOS Settings. Both placeholders will be replaced with the app name. */
-"Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "Du har slået alle meddelelser i %1$@ fra. Slå dem til ved at gå til enhedens indstillinger > Notifikationer > %2$@";
+"Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "Du har slået alle notifikationer i %1$@ fra. Slå dem til ved at gå til enhedens indstillinger > Notifikationer > %2$@";
 
 /* This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. The placeholder will be replaced with the app name. */
 "Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "Lær mere om nyttige funktioner og hvordan, du får mest ud af %@.";
@@ -80,13 +80,13 @@
 "Settings.Notifications.TipsAndFeaturesNotificationsTitle.v112" = "Tips og funktioner";
 
 /* In the settings menu, in the Privacy section, this is the title for Notifications customization section. */
-"Settings.Notifications.Title.v112" = "Beskeder";
+"Settings.Notifications.Title.v112" = "Notifikationer";
 
 /* This is the title informing the user needs to turn on notifications in iOS Settings. The placeholder will be replaced with the app name. */
-"Settings.Notifications.TurnOnNotificationsMessage.v112" = "Gå til din enheds indstillinger og slå beskeder til for %@";
+"Settings.Notifications.TurnOnNotificationsMessage.v112" = "Gå til din enheds indstillinger og slå notifikationer til for %@";
 
 /* This is the title informing the user needs to turn on notifications in iOS Settings. */
-"Settings.Notifications.TurnOnNotificationsTitle.v112" = "Slå beskeder til";
+"Settings.Notifications.TurnOnNotificationsTitle.v112" = "Slå notifikationer til";
 
 /* Accessibility label for default search engine setting. */
 "Settings.Search.Accessibility.DefaultSearchEngine.v121" = "Standardsøgetjeneste";
