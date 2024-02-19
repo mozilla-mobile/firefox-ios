@@ -2258,13 +2258,20 @@ extension BrowserViewController: LegacyTabDelegate {
     }
 
     private func beginObserving(webView: WKWebView) {
-        guard !observedWebViews.contains(webView) else { return }
+        guard !observedWebViews.contains(webView) else {
+            logger.log("Duplicate observance of webView", level: .warning, category: .webview)
+            return
+        }
         observedWebViews.insert(webView)
         KVOs.forEach { webView.addObserver(self, forKeyPath: $0.rawValue, options: .new, context: nil) }
     }
 
     private func stopObserving(webView: WKWebView?) {
         guard let webView else { return }
+        guard observedWebViews.contains(webView) else {
+            logger.log("Duplicate KVO de-registration of webView", level: .warning, category: .webview)
+            return
+        }
         observedWebViews.remove(webView)
         KVOs.forEach { webView.removeObserver(self, forKeyPath: $0.rawValue) }
     }
