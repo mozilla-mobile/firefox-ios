@@ -4,6 +4,8 @@
 
 import UIKit
 import SnapKit
+import Shared
+import Common
 
 private let ToolbarBaseAnimationDuration: CGFloat = 0.2
 class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvider {
@@ -41,6 +43,7 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
     weak var bottomContainer: BaseAlphaStackView?
 
     weak var zoomPageBar: ZoomPageBar?
+    private var observedScrollViews = WeakList<UIScrollView>()
 
     var overKeyboardContainerConstraint: Constraint?
     var bottomContainerConstraint: Constraint?
@@ -49,6 +52,8 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
     private var lastContentOffset: CGFloat = 0
     private var scrollDirection: ScrollDirection = .down
     var toolbarState: ToolbarState = .visible
+
+    private let logger: Logger
 
     private var toolbarsShowing: Bool {
         let bottomShowing = overKeyboardContainerOffset == 0 && bottomContainerOffset == 0
@@ -115,7 +120,12 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
             contentSize.height
     }
 
-    override init() {
+    deinit {
+        observedScrollViews.forEach({ stopObserving(scrollView: $0) })
+    }
+
+    init(logger: Logger = DefaultLogger.shared) {
+        self.logger = logger
         super.init()
     }
 
@@ -164,6 +174,26 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
             overKeyboardOffset: 0,
             alpha: 1,
             completion: nil)
+    }
+
+    func beginObserving(scrollView: UIScrollView) {
+        guard !observedScrollViews.contains(scrollView) else {
+            logger.log("Duplicate observance of scroll view", level: .warning, category: .webview)
+            return
+        }
+
+        observedScrollViews.insert(scrollView)
+        scrollView.addObserver(self, forKeyPath: KVOConstants.contentSize.rawValue, options: .new, context: nil)
+    }
+
+    func stopObserving(scrollView: UIScrollView) {
+        guard observedScrollViews.contains(scrollView) else {
+            logger.log("Duplicate KVO de-registration for scroll view", level: .warning, category: .webview)
+            return
+        }
+
+        observedScrollViews.remove(scrollView)
+        scrollView.removeObserver(self, forKeyPath: KVOConstants.contentSize.rawValue)
     }
 
     override func observeValue(

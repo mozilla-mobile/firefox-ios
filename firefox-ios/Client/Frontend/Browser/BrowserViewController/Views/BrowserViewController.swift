@@ -85,6 +85,7 @@ class BrowserViewController: UIViewController,
     let shoppingContextHintVC: ContextualHintViewController
     private var backgroundTabLoader: DefaultBackgroundTabLoader
     var windowUUID: WindowUUID { return tabManager.windowUUID }
+    private var observedWebViews = WeakList<WKWebView>()
 
     // MARK: Telemetry Variables
     var webviewTelemetry = WebViewLoadMeasurementTelemetry()
@@ -246,6 +247,7 @@ class BrowserViewController: UIViewController,
 
     deinit {
         unsubscribeFromRedux()
+        observedWebViews.forEach({ stopObserving(webView: $0) })
     }
 
     override var prefersStatusBarHidden: Bool {
@@ -2253,20 +2255,8 @@ extension BrowserViewController: LegacyTabDelegate {
     func tab(_ tab: Tab, didCreateWebView webView: WKWebView) {
         webView.frame = contentContainer.frame
         // Observers that live as long as the tab. Make sure these are all cleared in willDeleteWebView below!
-        KVOs.forEach {
-            webView.addObserver(
-                self,
-                forKeyPath: $0.rawValue,
-                options: .new,
-                context: nil
-            )
-        }
-        webView.scrollView.addObserver(
-            self.scrollController,
-            forKeyPath: KVOConstants.contentSize.rawValue,
-            options: .new,
-            context: nil
-        )
+        beginObserving(webView: webView)
+        self.scrollController.beginObserving(scrollView: webView.scrollView)
         webView.uiDelegate = self
 
         let formPostHelper = FormPostHelper(tab: tab)
@@ -2372,8 +2362,8 @@ extension BrowserViewController: LegacyTabDelegate {
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
-            KVOs.forEach { webView.removeObserver(self, forKeyPath: $0.rawValue) }
-            webView.scrollView.removeObserver(self.scrollController, forKeyPath: KVOConstants.contentSize.rawValue)
+            stopObserving(webView: webView)
+            self.scrollController.stopObserving(scrollView: webView.scrollView)
             webView.uiDelegate = nil
             webView.scrollView.delegate = nil
             webView.removeFromSuperview()
@@ -2387,6 +2377,24 @@ extension BrowserViewController: LegacyTabDelegate {
 
     func tab(_ tab: Tab, didSelectSearchWithFirefoxForSelection selection: String) {
         openSearchNewTab(isPrivate: tab.isPrivate, selection)
+    }
+
+    private func beginObserving(webView: WKWebView) {
+        guard !observedWebViews.contains(webView) else {
+            logger.log("Duplicate observance of webView", level: .warning, category: .webview)
+            return
+        }
+        observedWebViews.insert(webView)
+        KVOs.forEach { webView.addObserver(self, forKeyPath: $0.rawValue, options: .new, context: nil) }
+    }
+
+    private func stopObserving(webView: WKWebView) {
+        guard observedWebViews.contains(webView) else {
+            logger.log("Duplicate KVO de-registration of webView", level: .warning, category: .webview)
+            return
+        }
+        observedWebViews.remove(webView)
+        KVOs.forEach { webView.removeObserver(self, forKeyPath: $0.rawValue) }
     }
 
     // MARK: Snack bar
