@@ -1,3 +1,6 @@
+/* Accessibility hint for the reload button */
+"Address.Bar.Reload.A11y.Hint.v124" = "Ýttu tvisvar og haltu til að sjá fleiri valkosti";
+
 /* Accessibility label for the security icon in url bar */
 "TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "Tenging er ekki örugg. Slökkt er á aukinni rakningarvörn.";
 

@@ -1,3 +1,6 @@
+/* Accessibility hint for the reload button */
+"Address.Bar.Reload.A11y.Hint.v124" = "Nhấn đúp và giữ để có thêm tùy chọn";
+
 /* Accessibility label for the security icon in url bar */
 "TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "Kết nối không an toàn. Trình chống theo dõi nâng cao bị tắt.";
 
