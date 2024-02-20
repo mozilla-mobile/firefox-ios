@@ -1900,31 +1900,16 @@ class BrowserViewController: UIViewController,
                                                                   frame: frame)
                 }
             }
-
-            tabWebView.accessoryView.savedLoginsClosure = {
-                DispatchQueue.main.async { [weak self] in
-                    // Dismiss keyboard
-                    webView.resignFirstResponder()
-                    // Authenticate and show bottom sheet with select a card flow
-                    self?.authenticateSelectSavedLoginsClosureBottomSheet(fieldValues: fieldValues,
-                                                                  frame: frame)
-                }
-            }
         }
     }
 
-    private func authenticateSelectSavedLoginsClosureBottomSheet(fieldValues: UnencryptedCreditCardFields,
-                                                         frame: WKFrameInfo? = nil) {
+    private func authenticateSelectSavedLoginsClosureBottomSheet() {
         appAuthenticator.getAuthenticationState { [unowned self] state in
             switch state {
             case .deviceOwnerAuthenticated:
                 // Note: Since we are injecting card info, we pass on the frame
                 // for special iframe cases
-                self.navigationHandler?.showSavedLoginAutofill(creditCard: nil,
-                                                               decryptedCard: nil,
-                                                               viewType: .selectSavedCard,
-                                                               frame: frame,
-                                                               alertContainer: self.contentContainer)
+                self.navigationHandler?.showSavedLoginAutofill()
             case .deviceOwnerFailed:
                 break // Keep showing bvc
             case .passCodeRequired:
@@ -2230,6 +2215,24 @@ extension BrowserViewController: LegacyTabDelegate {
                 theme: themeManager.currentTheme
             )
             tab.addContentScript(logins, name: LoginsHelper.name())
+            logins.foundFieldValues = { field in
+//                self?.profile.autofill.listCreditCards(completion: { cards, error in
+//                    guard let cards = cards, !cards.isEmpty, error == nil else { return }
+                    DispatchQueue.main.async {
+                        tab.webView?.accessoryView.reloadViewFor(.login)
+                        tab.webView?.reloadInputViews()
+                    }
+//                })
+
+                tab.webView?.accessoryView.savedLoginsClosure = {
+                    DispatchQueue.main.async { [weak self] in
+                        // Dismiss keyboard
+                        webView.resignFirstResponder()
+                        // Authenticate and show bottom sheet with select a card flow
+                        self?.authenticateSelectSavedLoginsClosureBottomSheet()
+                    }
+                }
+            }
         }
 
         // Credit card autofill setup and callback

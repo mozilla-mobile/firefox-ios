@@ -70,11 +70,7 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
                                 frame: WKFrameInfo?,
                                 alertContainer: UIView)
 
-    func showSavedLoginAutofill(creditCard: CreditCard?,
-                                decryptedCard: UnencryptedCreditCardFields?,
-                                viewType state: CreditCardBottomSheetState,
-                                frame: WKFrameInfo?,
-                                alertContainer: UIView)
+    func showSavedLoginAutofill()
 
     /// Shows authentication view controller to authorize access to sensitive data.
     func showRequiredPassCode()

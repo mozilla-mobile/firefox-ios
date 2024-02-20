@@ -13,7 +13,7 @@ struct LoginListView: View {
 
     @Environment(\.themeType)
     var themeVal
-    @StateObject var viewModel: LoginListViewModel
+    @ObservedObject var viewModel: LoginListViewModel
     @State private var customLightGray: Color = .clear
 
     // MARK: - Body
@@ -21,7 +21,7 @@ struct LoginListView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                ForEach(viewModel.logins, id: \.id) { login in
+                ForEach(viewModel.logins, id: \.self) { login in
                     LoginCellView(
                         login: login,
                         onTap: { viewModel.onLoginCellTap(login) }
@@ -31,8 +31,8 @@ struct LoginListView: View {
                 .foregroundColor(customLightGray)
             }
         }
-        .onAppear {
-            viewModel.fetchLogins()
+        .task {
+            await viewModel.fetchLogins()
             applyTheme(theme: themeVal.theme)
         }
         .onChange(of: themeVal) {
@@ -56,32 +56,57 @@ struct LoginListView_Previews: PreviewProvider {
             viewModel: LoginListViewModel(
                 loginStorage: MockLoginStorage(),
                 logger: MockLogger(),
-                onLoginCellTap: { _ in })
+                onLoginCellTap: { _ in },
+                manageLoginInfoAction: { }
+            )
         )
     }
 }
 
-class MockLoginStorage: LoginStorage {
-    func listAllLogins(completion: @escaping ([Login]?, Error?) -> Void) {
-        // Simulate a delay to fetch logins
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            // Return mock login data
-            let mockLogins = [
-                Login(website: "foo@example.com", username: "**********"),
-                Login(website: "bar@example.com", username: "**********"),
-                Login(website: "foo@example.com", username: "**********"),
-                Login(website: "bar@example.com", username: "**********"),
-                Login(website: "foo@example.com", username: "**********"),
-                Login(website: "bar@example.com", username: "**********"),
-                Login(website: "foo@example.com", username: "**********"),
-                Login(website: "bar@example.com", username: "**********"),
-                Login(website: "foo@example.com", username: "**********"),
-                Login(website: "bar@example.com", username: "**********"),
-                Login(website: "foo@example.com", username: "**********"),
-                Login(website: "bar@example.com", username: "**********"),
-            ]
-            completion(mockLogins, nil)
+import Storage
+
+extension RustLogins: LoginStorage {
+    func listLogins() async throws -> [Login] {
+        return try await withCheckedThrowingContinuation { continuation in
+            self.listLogins().upon { result in
+                switch result {
+                case .success(let logins):
+                    continuation.resume(returning: logins.map(Login.init(encryptedLogin:)))
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
         }
+    }
+}
+
+protocol LoginStorage {
+    func listLogins() async throws -> [Login]
+}
+
+class MockLoginStorage: LoginStorage {
+    func listLogins() async throws -> [Login] {
+        // Simulate a delay to fetch logins
+        try await Task.sleep(nanoseconds: 1 * NSEC_PER_SEC) // 0.5 seconds
+
+        // Return mock login data
+        let mockLogins = [
+            Login(website: "foo@example.com", username: "**********"),
+            Login(website: "bar@example.com", username: "**********"),
+            Login(website: "foo@example.com", username: "**********"),
+            Login(website: "bar@example.com", username: "**********"),
+            Login(website: "foo@example.com", username: "**********"),
+            Login(website: "bar@example.com", username: "**********"),
+            Login(website: "foo@example.com", username: "**********"),
+            Login(website: "bar@example.com", username: "**********"),
+            Login(website: "foo@example.com", username: "**********"),
+            Login(website: "bar@example.com", username: "**********"),
+            Login(website: "foo@example.com", username: "**********"),
+            Login(website: "bar@example.com", username: "**********"),
+            // Repeat as needed
+        ]
+
+        return mockLogins
     }
 }
 

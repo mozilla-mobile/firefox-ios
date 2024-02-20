@@ -13,12 +13,6 @@ public protocol BottomSheetChild: UIViewController {
     func willDismiss()
 }
 
-extension UIHostingController: BottomSheetChild {
-    public func willDismiss() {
-        
-    }
-}
-
 /// Protocol followed by the bottom sheet view controller. Gives the possibility to dismiss the bottom sheet.
 public protocol BottomSheetDismissProtocol {
     func dismissSheetViewController(completion: (() -> Void)?)

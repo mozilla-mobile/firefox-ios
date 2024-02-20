@@ -13,15 +13,19 @@ struct LoginAutoFillFooterView: View {
         static let actionButtonBottomSpace: CGFloat = 24
     }
 
-    var actionButtonTitle: String
-    var accessibilityIdentifier: String
+    private let actionButtonTitle: String
+    private let manageLoginInfoAction: () -> Void
 
-    init(title: String, accessibilityIdentifier: String) {
+    init(
+        title: String,
+        manageLoginInfoAction: @escaping () -> Void
+    ) {
         self.actionButtonTitle = title
-        self.accessibilityIdentifier = accessibilityIdentifier
+        self.manageLoginInfoAction = manageLoginInfoAction
     }
 
-    @Environment(\.themeType) var theme
+    @Environment(\.themeType)
+    var theme
 
     var body: some View {
         VStack {
@@ -31,20 +35,18 @@ struct LoginAutoFillFooterView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding([.leading, .trailing], UX.actionButtonLeadingSpace)
-            .accessibility(identifier: accessibilityIdentifier)
+            .accessibility(identifier: AccessibilityIdentifiers.LoginAutofill.managePasswordsButton)
         }
-    }
-
-    // Action for managing login information
-    private func manageLoginInfoAction() {
-        // Implement the action for managing login information
     }
 }
 
 struct LoginAutoFillFooterView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginAutoFillFooterView(title: "Manage Login Info", accessibilityIdentifier: "manageLoginInfoButton")
-            .previewLayout(.sizeThatFits)
-            .padding()
+        LoginAutoFillFooterView(
+            title: "Manage Login Info",
+            manageLoginInfoAction: { }
+        )
+        .previewLayout(.sizeThatFits)
+        .padding()
     }
 }

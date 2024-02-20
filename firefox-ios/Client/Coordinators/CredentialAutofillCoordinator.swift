@@ -10,11 +10,12 @@ import WebKit
 import ComponentLibrary
 import SwiftUI
 
-class SelfSizingHostingController<Content>: UIHostingController<Content> where Content: View {
+class SelfSizingHostingController<Content>: UIHostingController<Content>, BottomSheetChild where Content: View {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         self.view.invalidateIntrinsicContentSize()
     }
+    public func willDismiss() {}
 }
 
 class CredentialAutofillCoordinator: BaseCoordinator {
@@ -120,41 +121,27 @@ class CredentialAutofillCoordinator: BaseCoordinator {
         }
     }
 
-    func showSavedLoginAutofill(creditCard: CreditCard?,
-                                decryptedCard: UnencryptedCreditCardFields?,
-                                viewType state: CreditCardBottomSheetState,
-                                frame: WKFrameInfo?,
-                                alertContainer: UIView) {
-//        let creditCardControllerViewModel = CreditCardBottomSheetViewModel(profile: profile,
-//                                                                           creditCard: creditCard,
-//                                                                           decryptedCreditCard: decryptedCard,
-//                                                                           state: state)
-//        let viewController = CreditCardBottomSheetViewController(viewModel: creditCardControllerViewModel)
-//        viewController.didTapYesClosure = { [weak self] error in
-//        }
-//
-//        viewController.didTapManageCardsClosure = { [weak self] in
-//        }
-//
-//        viewController.didSelectCreditCardToFill = { [weak self] plainTextCard in
-//
-//        }
-
-        let loginAutofillView = LoginAutoFillView()
+    func showSavedLoginAutofill() {
+        let viewModel = LoginListViewModel(
+            loginStorage: profile.logins,
+            logger: MockLogger(),
+            onLoginCellTap: { login in
+            },
+            manageLoginInfoAction: {
+            }
+        )
+        let loginAutofillView = LoginAutoFillView(viewModel: viewModel)
 
         let viewController = SelfSizingHostingController(rootView: loginAutofillView)
 
         var bottomSheetViewModel = BottomSheetViewModel(closeButtonA11yLabel: .CloseButtonTitle)
         bottomSheetViewModel.shouldDismissForTapOutside = false
 
-//        let bottomSheetVC = BottomSheetViewController(
-//            viewModel: bottomSheetViewModel,
-//            childViewController: viewController
-//        )
-        if let sheet = viewController.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-        }
-        router.present(viewController)
+        let bottomSheetVC = BottomSheetViewController(
+            viewModel: bottomSheetViewModel,
+            childViewController: viewController
+        )
+        router.present(bottomSheetVC)
     }
 
     func showPassCodeController() {

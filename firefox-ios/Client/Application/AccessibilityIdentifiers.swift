@@ -51,6 +51,7 @@ public struct AccessibilityIdentifiers {
             static let previousButton = "KeyboardAccessory.previousButton"
             static let addressAutofillButton = "KeyboardAccessory.addressAutofillButton"
             static let creditCardAutofillButton = "KeyboardAccessory.creditCardAutofillButton"
+            static let loginAutofillButton = "KeyboardAccessory.loginAutofillButton"
         }
     }
 
@@ -617,5 +618,10 @@ public struct AccessibilityIdentifiers {
         static let manageCardsButton = "RememberCreditCard.manageCardsButton"
         static let notNowButton = "RememberCreditCard.notNowButton"
     }
+
+    enum LoginAutofill {
+        static let managePasswordsButton = "RememberCreditCard.managePasswordsButton"
+    }
+
 }
 // swiftlint:enable line_length

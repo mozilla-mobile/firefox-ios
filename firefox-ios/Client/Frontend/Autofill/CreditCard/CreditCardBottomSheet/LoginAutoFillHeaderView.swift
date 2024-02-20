@@ -7,12 +7,14 @@ import Common
 
 struct LoginAutoFillHeaderView: View {
     // Constants for UI layout and styling
-    private let headerElementsSpacing: CGFloat = 7.0
-    private let mainContainerElementsSpacing: CGFloat = 10
-    private let bottomSpacing: CGFloat = 24.0
-    private let logoSize: CGFloat = 36.0
-    private let closeButtonMarginAndWidth: CGFloat = 46.0
-    private let buttonSize: CGFloat = 30
+    private struct UX {
+        static let headerElementsSpacing: CGFloat = 7.0
+        static let mainContainerElementsSpacing: CGFloat = 10
+        static let bottomSpacing: CGFloat = 24.0
+        static let logoSize: CGFloat = 36.0
+        static let closeButtonMarginAndWidth: CGFloat = 46.0
+        static let buttonSize: CGFloat = 30
+    }
 
     @Environment(\.themeType)
     var theme
@@ -26,12 +28,12 @@ struct LoginAutoFillHeaderView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: mainContainerElementsSpacing) {
+        VStack(alignment: .leading, spacing: UX.mainContainerElementsSpacing) {
             HStack {
                 Image(uiImage: UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoBall))
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: logoSize, height: logoSize)
+                    .frame(width: UX.logoSize, height: UX.logoSize)
                     .foregroundColor(.accentColor) // Use your theme's accent color
                 VStack(alignment: .leading) {
                     Text(title)
@@ -42,24 +44,10 @@ struct LoginAutoFillHeaderView: View {
                         .foregroundColor(Color(theme.theme.colors.textSecondary))
                 }
                 Spacer()
-                Button(action: {}) {
-                    Image(StandardImageIdentifiers.ExtraLarge.crossCircleFill)
-                    .resizable()
-                    .frame(
-                        width: buttonSize,
-                        height: buttonSize
-                    )
-//                    .foregroundColor(Color(theme.theme.colors.iconSecondary))
-//                    .padding(8)
-//                    .background(
-//                        Circle()
-//                            .fill(Color(theme.theme.colors.layer4))
-//                    )
-                }
             }
         }
-        .padding([.leading, .trailing], headerElementsSpacing)
-        .padding(.bottom, bottomSpacing)
+        .padding([.leading, .trailing], UX.headerElementsSpacing)
+        .padding(.bottom, UX.bottomSpacing)
     }
 }
 
@@ -69,7 +57,7 @@ struct LoginAutoFillHeaderView_Previews: PreviewProvider {
                 title: "Use this login?",
                 header: "You’ll sign into cnn.com"
         )
-            .previewLayout(.sizeThatFits)
-            .padding()
+        .previewLayout(.sizeThatFits)
+        .padding()
     }
 }

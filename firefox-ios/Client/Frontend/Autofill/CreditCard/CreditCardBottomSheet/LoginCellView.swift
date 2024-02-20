@@ -98,15 +98,6 @@ struct LoginButtonStyle: ButtonStyle {
     }
 }
 
-import SwiftUI
-
-// Assuming `Login` is your model for login details
-struct Login: Identifiable {
-    var id = UUID()
-    var website: String
-    var username: String
-}
-
 // MARK: - LoginCellView Preview
 
 struct LoginCellView_Previews: PreviewProvider {
@@ -119,4 +110,3 @@ struct LoginCellView_Previews: PreviewProvider {
             .padding()
     }
 }
-

@@ -152,6 +152,8 @@ class LoginsHelper: TabContentScript {
         }
     }
 
+    var foundFieldValues: ((FocusFieldType) -> Void)?
+
     private func sendMessageType(_ message: FieldFocusMessage) {
         // NOTE: This is a partial stub / placeholder
         // FXIOS-3856 will further enhance the logs into actual callback
@@ -165,6 +167,7 @@ class LoginsHelper: TabContentScript {
                        level: .debug,
                        category: .webview)
         }
+        foundFieldValues?(message.fieldType)
     }
 
     private func parseFieldFocusMessage(from dictionary: [String: Any]) -> FieldFocusMessage? {

@@ -9,23 +9,18 @@ struct LoginAutoFillView: View {
     @Environment(\.themeType)
     var themeVal
 
+    @ObservedObject var viewModel: LoginListViewModel
+
     var body: some View {
         VStack {
             LoginAutoFillHeaderView(
                 title: String.PasswordAutofill.UseSavedPasswordFromHeader,
                 header: String(format: String.PasswordAutofill.SignInWithSavedPassword, "cnn.com")
             )
-            LoginListView(
-                viewModel: LoginListViewModel(
-                    loginStorage: MockLoginStorage(),
-                    logger: MockLogger(),
-                    onLoginCellTap: { login in
-                    }
-                )
-            )
+            LoginListView(viewModel: viewModel)
             LoginAutoFillFooterView(
                 title: String.PasswordAutofill.ManagePasswordsButton,
-                accessibilityIdentifier: "manageLoginInfoButton"
+                manageLoginInfoAction: viewModel.manageLoginInfoAction
             )
         }
         .padding()
@@ -34,5 +29,12 @@ struct LoginAutoFillView: View {
 }
 
 #Preview {
-    LoginAutoFillView()
+    LoginAutoFillView(
+        viewModel: LoginListViewModel(
+            loginStorage: MockLoginStorage(),
+            logger: MockLogger(),
+            onLoginCellTap: { _ in },
+            manageLoginInfoAction: { }
+        )
+    )
 }

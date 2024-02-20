@@ -4,10 +4,6 @@
 
 import Foundation
 
-protocol LoginStorage {
-    func listAllLogins(completion: @escaping ([Login]?, Error?) -> Void)
-}
-
 protocol LoggerProtocol {
     func log(_ message: String, level: LogLevel, category: LogCategory, description: String)
 }
@@ -25,31 +21,29 @@ class LoginListViewModel: ObservableObject {
 
     private let loginStorage: LoginStorage
     private let logger: LoggerProtocol
-    var onLoginCellTap: (Login) -> Void
+    let onLoginCellTap: (Login) -> Void
+    let manageLoginInfoAction: () -> Void
 
     init(
         loginStorage: LoginStorage,
         logger: LoggerProtocol,
-        onLoginCellTap: @escaping (Login) -> Void
+        onLoginCellTap: @escaping (Login) -> Void,
+        manageLoginInfoAction: @escaping () -> Void
     ) {
         self.loginStorage = loginStorage
         self.logger = logger
         self.onLoginCellTap = onLoginCellTap
+        self.manageLoginInfoAction = manageLoginInfoAction
     }
 
-    func fetchLogins() {
-        loginStorage.listAllLogins { [weak self] storedLogins, error in
-            DispatchQueue.main.async {
-                guard let self = self else { return }
-                if let logins = storedLogins {
-                    self.logins = logins
-                } else if let error = error {
-                    self.logger.log("Error fetching logins",
-                                    level: .warning,
-                                    category: .login,
-                                    description: "Error fetching logins: \(error.localizedDescription)")
-                }
-            }
+    func fetchLogins() async {
+        do {
+            self.logins = try await loginStorage.listLogins()
+        } catch {
+            self.logger.log("Error fetching logins",
+                            level: .warning,
+                            category: .login,
+                            description: "Error fetching logins: \(error.localizedDescription)")
         }
     }
 }

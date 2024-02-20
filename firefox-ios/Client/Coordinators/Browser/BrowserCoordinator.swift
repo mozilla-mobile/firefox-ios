@@ -551,20 +551,9 @@ class BrowserCoordinator: BaseCoordinator,
         )
     }
 
-    func showSavedLoginAutofill(creditCard: MozillaAppServices.CreditCard?,
-                                decryptedCard: Storage.UnencryptedCreditCardFields?,
-                                viewType state: CreditCardBottomSheetState,
-                                frame: WKFrameInfo?,
-                                alertContainer: UIView
-    ) {
+    func showSavedLoginAutofill() {
         let bottomSheetCoordinator = makeCredentialAutofillCoordinator()
-        bottomSheetCoordinator.showSavedLoginAutofill(
-            creditCard: creditCard,
-            decryptedCard: decryptedCard,
-            viewType: state,
-            frame: frame,
-            alertContainer: alertContainer
-        )
+        bottomSheetCoordinator.showSavedLoginAutofill()
     }
 
     func showRequiredPassCode() {
