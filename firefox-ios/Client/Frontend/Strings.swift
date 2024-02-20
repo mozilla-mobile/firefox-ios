@@ -1828,9 +1828,9 @@ extension String {
                 value: "Default Search Engine",
                 comment: "Title for the `default search engine` settings section in the Search page in the Settings menu.")
             public static let AlternateSearchEnginesTitle = MZLocalizedString(
-                key: "Settings.Search.AlternateSearchEngines.Title.v124",
+                key: "Settings.Search.AlternateSearchEngines.Title.v124.v2",
                 tableName: "Settings",
-                value: "Alternate Search Engines",
+                value: "Alternative Search Engines",
                 comment: "Title for alternate search engines settings section in the Search page in the Settings menu.")
             public static let EnginesSuggestionsTitle = MZLocalizedString(
                 key: "Settings.Search.EnginesSuggestions.Title.v124",
