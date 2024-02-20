@@ -46,6 +46,10 @@ struct GleanPlumbMessage {
         metadata.isExpired || metadata.impressions >= style.maxDisplayCount
     }
 
+    var isInteractedWith: Bool {
+        metadata.isExpired || metadata.dismissals > 0
+    }
+
     var buttonLabel: String? {
         data.buttonLabel
     }
