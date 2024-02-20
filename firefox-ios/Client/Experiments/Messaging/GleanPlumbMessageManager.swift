@@ -310,7 +310,10 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         // Ascertain a Message's style, to know priority and max impressions.
         guard let style = sanitizeStyle(message.style, table: lookupTables.styles) else { return .failure(.malformed) }
 
-        guard let triggers = sanitizeTriggers(message.trigger, table: lookupTables.triggers) else {
+        guard let triggerIfAll = sanitizeTriggers(message.triggerIfAll, table: lookupTables.triggers) else {
+            return .failure(.malformed)
+        }
+        guard let exceptIfAny = sanitizeTriggers(message.exceptIfAny, table: lookupTables.triggers) else {
             return .failure(.malformed)
         }
 
@@ -319,7 +322,8 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
             GleanPlumbMessage(id: messageId,
                               data: message,
                               action: action,
-                              triggers: triggers,
+                              triggerIfAll: triggerIfAll,
+                              exceptIfAny: exceptIfAny,
                               style: style,
                               metadata: messageMetadata)
         )

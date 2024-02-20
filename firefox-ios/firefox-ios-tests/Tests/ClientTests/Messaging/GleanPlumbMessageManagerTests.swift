@@ -46,7 +46,8 @@ class GleanPlumbMessageManagerTests: XCTestCase {
                 "messaging": [
                     "messages": [
                         "default-browser": [
-                            "trigger": ["ALWAYS"]
+                            "trigger-if-all": ["ALWAYS"],
+                            "except-if-any": []
                         ]
                     ]
                 ]
@@ -62,6 +63,46 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         subject.onMessageDisplayed(message)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.shown)
         XCTAssertEqual(hardcodedNimbusFeatures.getExposureCount(featureId: "messaging"), 0)
+    }
+
+    func testManagerGetMessageExceptIfAnyOne() {
+        let hardcodedNimbusFeatures =
+            HardcodedNimbusFeatures(with: [
+                "messaging": [
+                    "messages": [
+                        "default-browser": [
+                            "trigger-if-all": [],
+                            "except-if-any": ["ALWAYS"]
+                        ]
+                    ]
+                ]
+            ]
+        )
+        hardcodedNimbusFeatures.connect(with: FxNimbus.shared)
+
+        if subject.getNextMessage(for: .newTabCard) != nil {
+            XCTFail("Expected not to retrieve message because it was excluded")
+        }
+    }
+
+    func testManagerGetMessageExceptIfAnySome() {
+        let hardcodedNimbusFeatures =
+            HardcodedNimbusFeatures(with: [
+                "messaging": [
+                    "messages": [
+                        "default-browser": [
+                            "trigger-if-all": [],
+                            "except-if-any": ["NEVER", "ALWAYS"]
+                        ]
+                    ]
+                ]
+            ]
+        )
+        hardcodedNimbusFeatures.connect(with: FxNimbus.shared)
+
+        if subject.getNextMessage(for: .newTabCard) != nil {
+            XCTFail("Expected not to retrieve message because it was excluded")
+        }
     }
 
     func testManagerGetMessage_happyPath_bySurface() throws {
@@ -274,12 +315,13 @@ class GleanPlumbMessageManagerTests: XCTestCase {
             surface: surface,
             text: "text-\(messageId)",
             title: "title-\(messageId)",
-            trigger: trigger)
+            triggerIfAll: trigger)
 
         return GleanPlumbMessage(id: messageId,
                                  data: data,
                                  action: action,
-                                 triggers: trigger,
+                                 triggerIfAll: trigger,
+                                 exceptIfAny: [],
                                  style: styleData,
                                  metadata: messageMetadata)
     }

@@ -134,13 +134,24 @@ objects:
           The style as described in a
           `StyleData` from the styles table.
         default: DEFAULT
-      trigger:
+
+      trigger-if-all:
+        type: List<TriggerName>
+        description: >
+          A list of strings corresponding to targeting expressions.
+          All named expressions must evaluate to true if the message is
+          to be eligible to be shown.
+        default:
+          - ALWAYS
+
+      except-if-any:
         type: List<TriggerName>
         description: >
           A list of strings corresponding to
-          targeting expressions. The message will be
-          shown if all expressions `true`.
+          targeting expressions. If any of these expressions evaluate to
+          `true`, the message will not be eligible.
         default: []
+
       surface:
         type: MessageSurfaceId
         description: Each message will tell us the surface it is targeting with this.
