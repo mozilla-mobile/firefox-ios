@@ -18,7 +18,7 @@ class LaunchScreenViewModel {
     weak var delegate: LaunchFinishedLoadingDelegate?
 
     init(profile: Profile = AppContainer.shared.resolve(),
-         messageManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared,
+         messageManager: GleanPlumbMessageManagerProtocol = Experiments.messaging,
          onboardingModel: OnboardingViewModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)) {
         self.introScreenManager = IntroScreenManager(prefs: profile.prefs)
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)

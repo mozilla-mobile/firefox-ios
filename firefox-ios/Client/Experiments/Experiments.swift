@@ -215,6 +215,12 @@ enum Experiments {
     }
 }
 
+extension Experiments {
+    public static var messaging: GleanPlumbMessageManagerProtocol = {
+        GleanPlumbMessageManager()
+    }()
+}
+
 private extension AppBuildChannel {
     var nimbusString: String {
         switch self {
