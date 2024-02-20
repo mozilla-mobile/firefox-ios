@@ -76,7 +76,6 @@ extension WKUserScript {
     }
 }
 
-
 extension WKFrameInfo {
     // We check both the top and current frame protocol. This is to also check for mixed content.
     // For most cases checking the top frame protocol.`hasOnlySecureContent` is deliberatly not used here
