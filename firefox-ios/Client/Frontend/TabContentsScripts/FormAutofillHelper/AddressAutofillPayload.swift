@@ -4,8 +4,24 @@
 
 import Foundation
 
-// TO DO: FXIOS-7872 Implement Address Autofill Payloads
-// struct AddressAutofillPayload: Codable {
-//     enum CodingKeys: String, CodingKey, CaseIterable {
-//     }
-// }
+struct AddressAutofillPayload: Codable {
+    let addressLevel1: String
+    let organization: String
+    let country: String
+    let addressLevel2: String
+    let email: String
+    let streetAddress: String
+    let name: String
+    let postalCode: String
+
+    enum CodingKeys: String, CodingKey, CaseIterable {
+        case addressLevel1 = "address-level1"
+        case organization = "organization"
+        case country = "country"
+        case addressLevel2 = "address-level2"
+        case email = "email"
+        case streetAddress = "street-address"
+        case name = "name"
+        case postalCode = "postal-code"
+    }
+}
